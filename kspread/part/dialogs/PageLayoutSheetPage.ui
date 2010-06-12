@@ -1,7 +1,8 @@
-<ui version="4.0" >
- <author>Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;</author>
  <comment>This file is part of the KDE project
-Copyright 2008 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net>
+Copyright 2008 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -18,8 +19,8 @@ License along with this library; see the file COPYING.LIB.  If not,
 write to the Free Software Foundation, Inc., 51 Franklin Street,
 Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  <class>SheetPage</class>
- <widget class="QWidget" name="SheetPage" >
-  <property name="geometry" >
+ <widget class="QWidget" name="SheetPage">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -27,89 +28,89 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <height>444</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4" >
-   <item row="0" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Print settings</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" >
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="gridCheckBox" >
-        <property name="text" >
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="gridCheckBox">
+        <property name="text">
          <string>Grid</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QCheckBox" name="commentCheckBox" >
-        <property name="text" >
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="commentCheckBox">
+        <property name="text">
          <string>Comment indicator</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
-       <widget class="QCheckBox" name="chartsCheckBox" >
-        <property name="enabled" >
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="chartsCheckBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Charts</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
-       <widget class="QCheckBox" name="objectsCheckBox" >
-        <property name="enabled" >
+      <item row="0" column="3">
+       <widget class="QCheckBox" name="objectsCheckBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Objects</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="zeroValuesCheckBox" >
-        <property name="enabled" >
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="zeroValuesCheckBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Zero values</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QCheckBox" name="formulaCheckBox" >
-        <property name="text" >
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="formulaCheckBox">
+        <property name="text">
          <string>Formula indicator</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="QCheckBox" name="drawingsCheckBox" >
-        <property name="enabled" >
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="drawingsCheckBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Drawings</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="3" >
-       <widget class="QCheckBox" name="headersCheckBox" >
-        <property name="enabled" >
-         <bool>false</bool>
+      <item row="1" column="3">
+       <widget class="QCheckBox" name="headersCheckBox">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Headers</string>
         </property>
        </widget>
@@ -117,25 +118,25 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
       <string>Page order</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" >
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QRadioButton" name="ltrButton" >
-        <property name="text" >
+       <widget class="QRadioButton" name="ltrButton">
+        <property name="text">
          <string>From left to right, then down</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="ttbButton" >
-        <property name="text" >
+       <widget class="QRadioButton" name="ttbButton">
+        <property name="text">
          <string>From top to bottom, then across</string>
         </property>
        </widget>
@@ -143,22 +144,22 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QGroupBox" name="groupBox_5" >
-     <property name="title" >
+   <item row="1" column="1">
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="title">
       <string>Table alignment on page</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2" >
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QCheckBox" name="horizontalCheckBox" >
-        <property name="text" >
+       <widget class="QCheckBox" name="horizontalCheckBox">
+        <property name="text">
          <string>Center horizontally</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="verticalCheckBox" >
-        <property name="text" >
+       <widget class="QCheckBox" name="verticalCheckBox">
+        <property name="text">
          <string>Center vertically</string>
         </property>
        </widget>
@@ -166,92 +167,92 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox_3" >
-     <property name="title" >
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
       <string>Repetitions on each page</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2" >
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="columnsCheckBox" >
-        <property name="enabled" >
-         <bool>false</bool>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="columnsCheckBox">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Columns from</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="rowsCheckBox" >
-        <property name="enabled" >
-         <bool>false</bool>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="rowsCheckBox">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Rows from</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
          <string>to</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="label_1" >
-        <property name="text" >
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_1">
+        <property name="text">
          <string>to</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="KComboBox" name="startRowComboBox" >
-        <property name="enabled" >
+      <item row="1" column="1">
+       <widget class="KComboBox" name="startRowComboBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KComboBox" name="startColumnComboBox" >
-        <property name="enabled" >
+      <item row="0" column="1">
+       <widget class="KComboBox" name="startColumnComboBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="3" >
-       <widget class="KComboBox" name="endRowComboBox" >
-        <property name="enabled" >
+      <item row="1" column="3">
+       <widget class="KComboBox" name="endRowComboBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
-       <widget class="KComboBox" name="endColumnComboBox" >
-        <property name="enabled" >
+      <item row="0" column="3">
+       <widget class="KComboBox" name="endColumnComboBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item rowspan="2" row="0" column="4" >
-       <spacer name="horizontalSpacer_2" >
-        <property name="orientation" >
+      <item row="0" column="4" rowspan="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
           <height>20</height>
@@ -262,35 +263,35 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox_4" >
-     <property name="title" >
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
       <string>Scaling</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3" >
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="zoomButton" >
-        <property name="text" >
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="zoomButton">
+        <property name="text">
          <string>Fixed zoom:</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KComboBox" name="zoomComboBox" >
-        <property name="editable" >
+      <item row="0" column="1">
+       <widget class="KComboBox" name="zoomComboBox">
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item rowspan="3" row="0" column="3" >
-       <spacer name="horizontalSpacer" >
-        <property name="orientation" >
+      <item row="0" column="3" rowspan="3">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0" >
+        <property name="sizeHint" stdset="0">
          <size>
           <width>143</width>
           <height>88</height>
@@ -298,49 +299,49 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
         </property>
        </spacer>
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="pageLimitsButton" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="pageLimitsButton">
+        <property name="text">
          <string>Page limits:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QLabel" name="label_3" >
-        <property name="enabled" >
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="enabled">
          <bool>true</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Horizontal</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="KComboBox" name="horizontalComboBox" >
-        <property name="enabled" >
+      <item row="1" column="2">
+       <widget class="KComboBox" name="horizontalComboBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QLabel" name="label_4" >
-        <property name="enabled" >
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_4">
+        <property name="enabled">
          <bool>true</bool>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Vertical</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
-       <widget class="KComboBox" name="verticalComboBox" >
-        <property name="enabled" >
+      <item row="2" column="2">
+       <widget class="KComboBox" name="verticalComboBox">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="editable" >
+        <property name="editable">
          <bool>true</bool>
         </property>
        </widget>

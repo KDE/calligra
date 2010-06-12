@@ -46,12 +46,13 @@
 #include <kspread/CalculationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/part/Doc.h>
+#include <kspread/HeaderFooter.h>
 #include <kspread/Limits.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
+#include <kspread/PrintSettings.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
-#include <kspread/SheetPrint.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Util.h>
@@ -463,7 +464,7 @@ bool OpenCalcExport::exportBody(QDomDocument & doc, QDomElement & content, const
         }
         name = name.replace(' ', "_");
 
-        QRect _printRange = sheet->print()->printRange();
+        QRect _printRange = sheet->printSettings()->printRegion().lastRange();
         if (_printRange != (QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)))) {
             QString range = Odf::convertRangeToRef(name, _printRange);
             //kDebug(30518)<<" range :"<<range;
@@ -791,8 +792,8 @@ void OpenCalcExport::exportPageAutoStyles(QDomDocument & doc, QDomElement & auto
     float height = 29.699;
 
     if (sheet) {
-        width  = sheet->print()->settings()->pageLayout().width / 10;
-        height = sheet->print()->settings()->pageLayout().height / 10;
+        width  = sheet->printSettings()->pageLayout().width / 10;
+        height = sheet->printSettings()->pageLayout().height / 10;
     }
 
     QString sWidth  = QString("%1cm").arg(width);
@@ -851,12 +852,13 @@ void OpenCalcExport::exportMasterStyles(QDomDocument & doc, QDomElement & master
     QString footerRight;
 
     if (sheet) {
-        headerLeft   = sheet->print()->headLeft();
-        headerCenter = sheet->print()->headMid();
-        headerRight  = sheet->print()->headRight();
-        footerLeft   = sheet->print()->footLeft();
-        footerCenter = sheet->print()->footMid();
-        footerRight  = sheet->print()->footRight();
+    const HeaderFooter *const headerFooter = sheet->headerFooter();
+    headerLeft   = headerFooter->headLeft();
+    headerCenter = headerFooter->headMid();
+    headerRight  = headerFooter->headRight();
+    footerLeft   = headerFooter->footLeft();
+    footerCenter = headerFooter->footMid();
+    footerRight  = headerFooter->footRight();
     }
 
     if ((headerLeft.length() > 0) || (headerCenter.length() > 0)

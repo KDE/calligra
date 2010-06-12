@@ -48,12 +48,13 @@
 #include <kspread/Condition.h>
 #include <kspread/part/Doc.h>
 #include <kspread/Global.h>
+#include <kspread/HeaderFooter.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
+#include <kspread/PrintSettings.h>
 #include <kspread/Region.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
-#include <kspread/SheetPrint.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Validity.h>
@@ -1095,8 +1096,8 @@ void OpenCalcImport::loadTableMasterStyle(Sheet * table,
         }
     }
 
-    table->print()->setHeadFootLine(hleft, hmiddle, hright,
-                                    fleft, fmiddle, fright);
+    table->headerFooter()->setHeadFootLine(hleft, hmiddle, hright,
+                                           fleft, fmiddle, fright);
     if (style->hasAttributeNS(ooNS::style, "page-master-name")) {
         QString masterPageLayoutStyleName = style->attributeNS(ooNS::style, "page-master-name", QString());
         kDebug(30518) << "masterPageLayoutStyleName :" << masterPageLayoutStyleName;
@@ -1162,7 +1163,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage(Sheet * table, KoStyleStack &styl
             //todo implement it into kspread
         }
         if (str.contains("grid")) {
-            table->print()->settings()->setPrintGrid(true);
+            table->printSettings()->setPrintGrid(true);
         }
         if (str.contains("annotations")) {
             //todo it's not implemented
@@ -1207,7 +1208,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage(Sheet * table, KoStyleStack &styl
     pageLayout.rightMargin  = rightMargin;
     pageLayout.topMargin    = topMargin;
     pageLayout.bottomMargin = bottomMargin;
-    table->print()->settings()->setPageLayout(pageLayout);
+    table->printSettings()->setPageLayout(pageLayout);
 
     kDebug(30518) << " left margin :" << leftMargin << " right :" << rightMargin
     << " top :" << topMargin << " bottom :" << bottomMargin;
@@ -1333,7 +1334,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
             kDebug(30518) << "Print table:" << region.firstSheet()->sheetName();
 
             if (table == region.firstSheet())
-                table->print()->setPrintRange(region.firstRange());
+                table->printSettings()->setPrintRegion(region);
         }
 
         if (!readColLayouts(t, table))

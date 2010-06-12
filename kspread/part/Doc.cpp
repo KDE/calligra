@@ -79,10 +79,12 @@
 #include "Formula.h"
 #include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "HeaderFooter.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
+#include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -688,8 +690,8 @@ void Doc::loadPaper(KoXmlElement const & paper)
     fright  = fright.replace("<table>", "<sheet>");
 
     foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->print()->setHeadFootLine(hleft, hcenter, hright,
-                                        fleft, fcenter, fright);
+        sheet->print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright,
+                                                        fleft, fcenter, fright);
     }
 }
 
@@ -748,8 +750,28 @@ void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* sheet, bool 
 {
     Q_UNUSED(drawCursor);
 
-    QPixmap thumbnail = sheet->generateThumbnail(rect.size());
-    painter.drawPixmap(rect, thumbnail);
+    if (rect.isEmpty()) {
+        return;
+    }
+    const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
+    QPixmap thumbnail(pageLayout.width, pageLayout.height);
+    thumbnail.fill(Qt::white);
+
+    SheetView sheetView(sheet);
+    sheetView.setPaintDevice(&thumbnail);
+
+    const qreal zoom = sheet->printSettings()->zoom();
+    KoZoomHandler zoomHandler;
+    zoomHandler.setZoom(zoom);
+    sheetView.setViewConverter(&zoomHandler);
+
+    sheetView.setPaintCellRange(sheet->print()->cellRange(1)); // first page
+
+    QPainter pixmapPainter(&thumbnail);
+    sheetView.paintCells(&thumbnail, pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0,0));
+
+    // The pixmap gets scaled to fit the rectangle.
+    painter.drawPixmap(rect & QRect(0, 0, 100, 100), thumbnail);
 }
 
 void Doc::paintUpdates()

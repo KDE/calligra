@@ -140,6 +140,15 @@ Things not in bugzilla
     row/column 1.   Also it is not possible to enter just one
     row/column into the dialog, it always has to be a range (2:3).
   + Insert manual page break					      2 done
+  + If the used increases(/decreases) and the print settings are      2 ----
+    configured to have page limits, trigger an update. The
+    calculation of the zoom factor for page limits is an expensive
+    operation. Better move it into an own thread first.
+  + Expand selection to page                                          3 ----
+  + Fit selection to page                                             3 done
+    Use page limits of one page in each direction and print just the
+    selection.
+  + Multiline headers/footers                                         3 ----
 
 * OpenDocument file format
   - see TODO.opendocument					      1 ----
@@ -216,6 +225,9 @@ Things not in bugzilla
     - implement single cell restriction (maybe in Selection)
     - jump back to parent dialog on closing the mini dialog
   + Scrollbar that supports jumping one row/column forward or back    2 ----
+  + New dialog for conditional cell styles                            3 ----
+    The dialog should allow to define a variable amount of
+    conditional styles - not just three.
 
 * Formula/Value engine
   + DependencyManager / RecalcManager				      3 ----
@@ -266,11 +278,6 @@ Not yet sorted (will be entered into categories above)
   define action if pressed, or selection changes,...
 - Button + Drop-Down-List support (within cells)
 - interface for mail merge
-- Printing enhancements:
-  + Expand selection to page
-  + Fit selection to page
-- new dialog for conditional cell attributes
-- multiline header/footer support
 - for formulas: fit precision so the result fits in the cell or resize the cell
 
 - changing text angle should resize the cell height automatically

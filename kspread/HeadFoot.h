@@ -23,6 +23,8 @@
 #ifndef KSPREAD_HEADFOOT
 #define KSPREAD_HEADFOOT
 
+#include <QString>
+
 namespace KSpread
 {
 

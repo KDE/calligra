@@ -78,7 +78,7 @@ PrintSettings::PrintSettings()
     d->printGraphics = true;
     d->printCommentIndicator = false;
     d->printFormulaIndicator = false;
-    d->printHeaders = false;
+    d->printHeaders = true;
     d->printZeroValues = false;
     d->centerHorizontally = false;
     d->centerVertically = false;
@@ -134,6 +134,27 @@ void PrintSettings::setPageOrientation(KoPageFormat::Orientation orientation)
 {
     d->pageLayout.orientation = orientation;
     d->calculatePageDimensions();
+}
+
+QString PrintSettings::paperFormatString() const
+{
+    if (d->pageLayout.format == KoPageFormat::CustomSize) {
+        QString tmp;
+        tmp.sprintf("%fx%f", d->pageLayout.width, d->pageLayout.height);
+        return tmp;
+    }
+    return KoPageFormat::formatString(d->pageLayout.format);
+}
+
+QString PrintSettings::orientationString() const
+{
+    switch (d->pageLayout.orientation) {
+    case QPrinter::Portrait:
+    default:
+        return "Portrait";
+    case QPrinter::Landscape:
+        return "Landscape";
+    }
 }
 
 double PrintSettings::printWidth() const
@@ -315,6 +336,77 @@ const QPair<int, int>& PrintSettings::repeatedRows() const
 void PrintSettings::setRepeatedRows(const QPair<int, int>& repeatedRows)
 {
     d->repeatedRows = repeatedRows;
+}
+
+QString PrintSettings::saveOdfPageLayout(KoGenStyles &mainStyles,
+                                         bool formulas, bool zeros)
+{
+    // Create a page layout style.
+    // 15.2.1 Page Size
+    // 15.2.4 Print Orientation
+    // 15.2.5 Margins
+    KoGenStyle pageLayout = d->pageLayout.saveOdf();
+
+    // 15.2.13 Print
+    QString printParameter;
+    if (d->printHeaders) {
+        printParameter = "headers ";
+    }
+    if (d->printGrid) {
+        printParameter += "grid ";
+    }
+/*    if (d->printComments) {
+        printParameter += "annotations ";
+    }*/
+    if (d->printObjects) {
+      printParameter += "objects ";
+    }
+    if (d->printCharts) {
+      printParameter += "charts ";
+    }
+/*    if (d->printDrawings) {
+        printParameter += "drawings ";
+    }*/
+    if (formulas) {
+        printParameter += "formulas ";
+    }
+    if (zeros) {
+        printParameter += "zero-values ";
+    }
+    if (!printParameter.isEmpty()) {
+        printParameter += "drawings"; //default print style attributes in OO
+        pageLayout.addProperty("style:print", printParameter);
+    }
+
+    // 15.2.14 Print Page Order
+    const QString pageOrder = (d->pageOrder == LeftToRight) ? "ltr" : "ttb";
+    pageLayout.addProperty("style:print-page-order", pageOrder);
+
+    // 15.2.16 Scale
+    // FIXME handle cases where only one direction is limited
+    if (d->pageLimits.width() > 0 && d->pageLimits.height() > 0) {
+        const int pages = d->pageLimits.width() * d->pageLimits.height();
+        pageLayout.addProperty("style:scale-to-pages", pages);
+    } else if (d->zoom != 1.0) {
+        pageLayout.addProperty("style:scale-to", qRound(d->zoom * 100)); // in %
+    }
+
+    // 15.2.17 Table Centering
+    if (d->centerHorizontally && d->centerVertically) {
+        pageLayout.addProperty("style:table-centering", "both");
+    } else if (d->centerHorizontally) {
+        pageLayout.addProperty("style:table-centering", "horizontal");
+    } else if (d->centerHorizontally) {
+        pageLayout.addProperty("style:table-centering", "vertical");
+    } else {
+        pageLayout.addProperty("style:table-centering", "none");
+    }
+
+    // this is called from Sheet::saveOdfSheetStyleName for writing the SytleMaster so
+    // the style has to be in the styles.xml file and only there
+    pageLayout.setAutoStyleInStylesDotXml(true);
+
+    return mainStyles.insert(pageLayout, "pm");
 }
 
 void PrintSettings::operator=(const PrintSettings & other)

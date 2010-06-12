@@ -25,7 +25,6 @@
 #include <QClipboard>
 #include <QHash>
 #include <QList>
-#include <QPixmap>
 #include <QRect>
 //#include <QWidget>
 
@@ -68,10 +67,10 @@ class FormulaStorage;
 class Doc;
 class FusionStorage;
 class LinkStorage;
+class HeaderFooter;
 class Map;
 class OdfLoadingContext;
 class OdfSavingContext;
-class PrintManager;
 class PrintSettings;
 class Region;
 class RowFormat;
@@ -141,13 +140,6 @@ public:
      * \return the shapes this sheet contains
      */
     QList<KoShape*> shapes() const;
-
-    /**
-     *  \param size of the thumbnail
-     *  Creates thumbnail of the sheet
-     *  \return the thumbnail of this sheet
-     */
-    QPixmap generateThumbnail(const QSize& size);
 
     //////////////////////////////////////////////////////////////////////////
     //
@@ -398,11 +390,6 @@ public:
      * \ingroup OpenDocument
      */
     void saveOdfSettings(KoXmlWriter &settingsWriter) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void saveOdfPrintStyleLayout(KoGenStyle &style) const;
 
     //
     //END Methods related to the OpenDocument file format
@@ -877,6 +864,11 @@ public:
     SheetPrint * print() const;
     PrintSettings* printSettings() const;
     void setPrintSettings(const PrintSettings& settings);
+
+    /**
+     * \return the header & footer object
+     */
+    HeaderFooter *headerFooter() const;
 
 #ifndef NDEBUG
     void printDebug();

@@ -64,6 +64,7 @@
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Map.h"
+#include "PrintSettings.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -1292,16 +1293,18 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         return;
 
     SheetPrint* const print = cell.sheet()->print();
+    const PrintSettings *const settings = cell.sheet()->printSettings();
+    const QRect printRange = settings->printRegion().lastRange();
 
     // Draw page borders
     QLineF line;
 
-    if (cell.column() >= print->printRange().left()
-            && cell.column() <= print->printRange().right() + 1
-            && cell.row() >= print->printRange().top()
-            && cell.row() <= print->printRange().bottom() + 1) {
+    if (cell.column() >= printRange.left()
+        && cell.column() <= printRange.right() + 1
+        && cell.row() >= printRange.top()
+        && cell.row() <= printRange.bottom() + 1) {
         if (print->isColumnOnNewPage(cell.column())
-                && cell.row() <= print->printRange().bottom()) {
+            && cell.row() <= printRange.bottom()) {
             painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
 
             if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
@@ -1314,7 +1317,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         }
 
         if (print->isRowOnNewPage(cell.row()) &&
-                (cell.column() <= print->printRange().right())) {
+            (cell.column() <= printRange.right())) {
             painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
             line = QLineF(coordinate.x(),  coordinate.y(),
                           coordinate.x() + d->width, coordinate.y());
@@ -1323,7 +1326,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (paintBorder & RightBorder) {
             if (print->isColumnOnNewPage(cell.column() + 1)
-                    && cell.row() <= print->printRange().bottom()) {
+                && cell.row() <= printRange.bottom()) {
                 painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
 
                 if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
@@ -1338,7 +1341,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (paintBorder & BottomBorder) {
             if (print->isRowOnNewPage(cell.row() + 1)
-                    && cell.column() <= print->printRange().right()) {
+                && cell.column() <= printRange.right()) {
                 painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
                 line = QLineF(coordinate.x(),  coordinate.y() + d->height,
                               coordinate.x() + d->width, coordinate.y() + d->height);

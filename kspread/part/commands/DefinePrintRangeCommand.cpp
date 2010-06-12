@@ -23,6 +23,7 @@
 
 #include "Localization.h"
 #include "Map.h"
+#include "PrintSettings.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 
@@ -42,12 +43,10 @@ void DefinePrintRangeCommand::redo()
     if (m_firstrun) {
         m_oldPrintRegion = m_sheet->printSettings()->printRegion();
     }
-    m_sheet->print()->setPrintRange(lastRange());
     m_sheet->printSettings()->setPrintRegion(*this);
 }
 
 void DefinePrintRangeCommand::undo()
 {
-    m_sheet->print()->setPrintRange(m_oldPrintRegion.lastRange());
     m_sheet->printSettings()->setPrintRegion(m_oldPrintRegion);
 }

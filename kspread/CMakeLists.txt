@@ -175,6 +175,7 @@ SET (kspreadcommon_LIB_SRCS
 	FunctionModuleRegistry.cpp
 	Functions.cpp
 	GenValidationStyle.cpp
+        HeaderFooter.cpp
 	Localization.cpp
 	Map.cpp
         MapModel.cpp
@@ -193,6 +194,7 @@ SET (kspreadcommon_LIB_SRCS
 	Sheet.cpp
         SheetModel.cpp
 	SheetPrint.cpp
+        SheetPrint_p.cpp
 	RectStorage.cpp
 	Style.cpp
 	StyleManager.cpp

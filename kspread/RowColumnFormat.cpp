@@ -117,8 +117,7 @@ void RowFormat::setHeight(double height)
 
     d->height = height;
 
-    d->sheet->print()->updatePrintRepeatRowsHeight();
-    d->sheet->print()->updateNewPageListY(row());
+    d->sheet->print()->updateVerticalPageParameters(row());
 
     d->sheet->emit_updateRow(this, d->row);
 }
@@ -369,8 +368,7 @@ void ColumnFormat::setWidth(double width)
 
     d->width = width;
 
-    d->sheet->print()->updatePrintRepeatColumnsWidth();
-    d->sheet->print()->updateNewPageListX(column());
+    d->sheet->print()->updateHorizontalPageParameters(column());
 
     d->sheet->emit_updateColumn(this, d->column);
 }

@@ -34,6 +34,7 @@
 #include <kdebug.h>
 
 #include "Map.h"
+#include "PrintSettings.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Region.h"
@@ -401,12 +402,12 @@ float SheetAdaptor::paperBottomBorder()const
 
 QString SheetAdaptor::paperFormat() const
 {
-    return m_sheet->print()->paperFormatString();
+    return m_sheet->printSettings()->paperFormatString();
 }
 
 QString SheetAdaptor::paperOrientation() const
 {
-    return m_sheet->print()->orientationString();
+    return m_sheet->printSettings()->orientationString();
 }
 
 void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder,

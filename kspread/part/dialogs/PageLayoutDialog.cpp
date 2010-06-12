@@ -112,7 +112,8 @@ void PageLayoutDialog::Private::setup()
 
     // Setup the page limits comboboxes.
     const QSize pageLimits = settings->pageLimits();
-    sheetPage.pageLimitsButton->setChecked(pageLimits.isValid());
+    const bool pageLimitsSet = pageLimits.width() > 0 || pageLimits.height() > 0;
+    sheetPage.pageLimitsButton->setChecked(pageLimitsSet);
     QStringList limits;
     limits.append(i18n("No Limit"));
     for (int limit = 1; limit <= 20; ++limit)

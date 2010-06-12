@@ -30,7 +30,6 @@
 #include <QMimeData>
 #include <QStack>
 #include <QTextStream>
-#include <QPainter>
 #include <QImage>
 
 #include <kdebug.h>
@@ -66,12 +65,14 @@
 #include "part/Doc.h" // FIXME detach from part
 #include "FormulaStorage.h"
 #include "Global.h"
+#include "HeaderFooter.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
+#include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
@@ -568,6 +569,11 @@ PrintSettings* Sheet::printSettings() const
 void Sheet::setPrintSettings(const PrintSettings& settings)
 {
     d->print->setSettings(settings);
+}
+
+HeaderFooter *Sheet::headerFooter() const
+{
+    return d->print->headerFooter();
 }
 
 QSizeF Sheet::documentSize() const
@@ -1887,8 +1893,8 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
 
     // paper parameters
     QDomElement paper = dd.createElement("paper");
-    paper.setAttribute("format", print()->paperFormatString());
-    paper.setAttribute("orientation", print()->orientationString());
+    paper.setAttribute("format", printSettings()->paperFormatString());
+    paper.setAttribute("orientation", printSettings()->orientationString());
     sheet.appendChild(paper);
 
     QDomElement borders = dd.createElement("borders");
@@ -1901,42 +1907,42 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
 
     QDomElement head = dd.createElement("head");
     paper.appendChild(head);
-    if (!print()->headLeft().isEmpty()) {
+    if (!print()->headerFooter()->headLeft().isEmpty()) {
         QDomElement left = dd.createElement("left");
         head.appendChild(left);
-        left.appendChild(dd.createTextNode(print()->headLeft()));
+        left.appendChild(dd.createTextNode(print()->headerFooter()->headLeft()));
     }
-    if (!print()->headMid().isEmpty()) {
+    if (!print()->headerFooter()->headMid().isEmpty()) {
         QDomElement center = dd.createElement("center");
         head.appendChild(center);
-        center.appendChild(dd.createTextNode(print()->headMid()));
+        center.appendChild(dd.createTextNode(print()->headerFooter()->headMid()));
     }
-    if (!print()->headRight().isEmpty()) {
+    if (!print()->headerFooter()->headRight().isEmpty()) {
         QDomElement right = dd.createElement("right");
         head.appendChild(right);
-        right.appendChild(dd.createTextNode(print()->headRight()));
+        right.appendChild(dd.createTextNode(print()->headerFooter()->headRight()));
     }
     QDomElement foot = dd.createElement("foot");
     paper.appendChild(foot);
-    if (!print()->footLeft().isEmpty()) {
+    if (!print()->headerFooter()->footLeft().isEmpty()) {
         QDomElement left = dd.createElement("left");
         foot.appendChild(left);
-        left.appendChild(dd.createTextNode(print()->footLeft()));
+        left.appendChild(dd.createTextNode(print()->headerFooter()->footLeft()));
     }
-    if (!print()->footMid().isEmpty()) {
+    if (!print()->headerFooter()->footMid().isEmpty()) {
         QDomElement center = dd.createElement("center");
         foot.appendChild(center);
-        center.appendChild(dd.createTextNode(print()->footMid()));
+        center.appendChild(dd.createTextNode(print()->headerFooter()->footMid()));
     }
-    if (!print()->footRight().isEmpty()) {
+    if (!print()->headerFooter()->footRight().isEmpty()) {
         QDomElement right = dd.createElement("right");
         foot.appendChild(right);
-        right.appendChild(dd.createTextNode(print()->footRight()));
+        right.appendChild(dd.createTextNode(print()->headerFooter()->footRight()));
     }
 
     // print range
     QDomElement printrange = dd.createElement("printrange-rect");
-    QRect _printRange = print()->printRange();
+    QRect _printRange = printSettings()->printRegion().lastRange();
     int left = _printRange.left();
     int right = _printRange.right();
     int top = _printRange.top();
@@ -1959,22 +1965,23 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
 
     // Print repeat columns
     QDomElement printRepeatColumns = dd.createElement("printrepeatcolumns");
-    printRepeatColumns.setAttribute("left", print()->printRepeatColumns().first);
-    printRepeatColumns.setAttribute("right", print()->printRepeatColumns().second);
+    printRepeatColumns.setAttribute("left", printSettings()->repeatedColumns().first);
+    printRepeatColumns.setAttribute("right", printSettings()->repeatedColumns().second);
     sheet.appendChild(printRepeatColumns);
 
     // Print repeat rows
     QDomElement printRepeatRows = dd.createElement("printrepeatrows");
-    printRepeatRows.setAttribute("top", print()->printRepeatRows().first);
-    printRepeatRows.setAttribute("bottom", print()->printRepeatRows().second);
+    printRepeatRows.setAttribute("top", printSettings()->repeatedRows().first);
+    printRepeatRows.setAttribute("bottom", printSettings()->repeatedRows().second);
     sheet.appendChild(printRepeatRows);
 
     //Save print zoom
-    sheet.setAttribute("printZoom", print()->zoom());
+    sheet.setAttribute("printZoom", printSettings()->zoom());
 
     //Save page limits
-    sheet.setAttribute("printPageLimitX", print()->pageLimitX());
-    sheet.setAttribute("printPageLimitY", print()->pageLimitY());
+    const QSize pageLimits = printSettings()->pageLimits();
+    sheet.setAttribute("printPageLimitX", pageLimits.width());
+    sheet.setAttribute("printPageLimitY", pageLimits.height());
 
     // Save all cells.
     const QRect usedArea = this->usedArea();
@@ -2133,8 +2140,8 @@ bool Sheet::loadSheetStyleFormat(KoXmlElement *style)
         fleft.append(getPart(footer));
     }
 
-    print()->setHeadFootLine(hleft, hmiddle, hright,
-                             fleft, fmiddle, fright);
+    print()->headerFooter()->setHeadFootLine(hleft, hmiddle, hright,
+                                             fleft, fmiddle, fright);
     return true;
 }
 
@@ -2478,7 +2485,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
         QString range = sheetElement.attributeNS(KoXmlNS::table, "print-ranges", QString());
         Region region(Region::loadOdf(range));
         if (!region.firstSheet() || sheetName() == region.firstSheet()->sheetName())
-            print()->setPrintRange(region.firstRange());
+            printSettings()->setPrintRegion(region);
     }
 
     if (sheetElement.attributeNS(KoXmlNS::table, "protected", QString()) == "true") {
@@ -2961,13 +2968,13 @@ bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tabl
 
 void Sheet::saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const
 {
-    QString headerLeft = print()->headLeft();
-    QString headerCenter = print()->headMid();
-    QString headerRight = print()->headRight();
+    QString headerLeft = print()->headerFooter()->headLeft();
+    QString headerCenter= print()->headerFooter()->headMid();
+    QString headerRight = print()->headerFooter()->headRight();
 
-    QString footerLeft = print()->footLeft();
-    QString footerCenter = print()->footMid();
-    QString footerRight = print()->footRight();
+    QString footerLeft = print()->headerFooter()->footLeft();
+    QString footerCenter= print()->headerFooter()->footMid();
+    QString footerRight = print()->headerFooter()->footRight();
 
     xmlWriter.startElement("style:header");
     if ((!headerLeft.isEmpty())
@@ -3255,7 +3262,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString(str));
     }
-    QRect _printRange = print()->printRange();
+    QRect _printRange = printSettings()->printRegion().lastRange();
     if (_printRange != (QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)))) {
         const Region region(_printRange, this);
         if (region.isValid()) {
@@ -3295,29 +3302,15 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
     return true;
 }
 
-void Sheet::saveOdfPrintStyleLayout(KoGenStyle &style) const
-{
-    QString printParameter;
-    if (print()->settings()->printGrid())
-        printParameter = "grid ";
-    if (print()->settings()->printObjects())
-        printParameter += "objects ";
-    if (print()->settings()->printCharts())
-        printParameter += "charts ";
-    if (getShowFormula())
-        printParameter += "formulas ";
-    if (!printParameter.isEmpty()) {
-        printParameter += "drawings zero-values"; //default print style attributes in OO
-        style.addProperty("style:print", printParameter);
-    }
-}
-
 QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 {
     KoGenStyle pageStyle(KoGenStyle::TableAutoStyle, "table"/*FIXME I don't know if name is sheet*/);
 
     KoGenStyle pageMaster(KoGenStyle::MasterPageStyle);
-    pageMaster.addAttribute("style:page-layout-name", print()->saveOdfSheetStyleLayout(mainStyles));
+    const QString pageLayoutName = printSettings()->saveOdfPageLayout(mainStyles,
+                                                                      getShowFormula(),
+                                                                      !getHideZero());
+    pageMaster.addAttribute("style:page-layout-name", pageLayoutName);
 
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
@@ -3813,7 +3806,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
             if (!right.isNull())
                 fright = right.text();
         }
-        print()->setHeadFootLine(hleft, hcenter, hright, fleft, fcenter, fright);
+        print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
     // load print range
@@ -3831,14 +3824,15 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
             top = 1;
             bottom = KS_rowMax;
         }
-        print()->setPrintRange(QRect(QPoint(left, top), QPoint(right, bottom)));
+        const Region region(QRect(QPoint(left, top), QPoint(right, bottom)), this);
+        printSettings()->setPrintRegion(region);
     }
 
     // load print zoom
     if (sheet.hasAttribute("printZoom")) {
         double zoom = sheet.attribute("printZoom").toDouble(&ok);
         if (ok) {
-            print()->setZoom(zoom);
+            printSettings()->setZoom(zoom);
         }
     }
 
@@ -3846,7 +3840,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
     if (sheet.hasAttribute("printPageLimitX")) {
         int pageLimit = sheet.attribute("printPageLimitX").toInt(&ok);
         if (ok) {
-            print()->setPageLimitX(pageLimit);
+            printSettings()->setPageLimits(QSize(pageLimit, 0));
         }
     }
 
@@ -3854,7 +3848,8 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
     if (sheet.hasAttribute("printPageLimitY")) {
         int pageLimit = sheet.attribute("printPageLimitY").toInt(&ok);
         if (ok) {
-            print()->setPageLimitY(pageLimit);
+            const int horizontalLimit = printSettings()->pageLimits().width();
+            printSettings()->setPageLimits(QSize(horizontalLimit, pageLimit));
         }
     }
 
@@ -3909,7 +3904,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
     if (!printrepeatcolumns.isNull()) {
         int left = printrepeatcolumns.attribute("left").toInt();
         int right = printrepeatcolumns.attribute("right").toInt();
-        print()->setPrintRepeatColumns(qMakePair(left, right));
+        printSettings()->setRepeatedColumns(qMakePair(left, right));
     }
 
     // load print repeat rows
@@ -3917,7 +3912,7 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
     if (!printrepeatrows.isNull()) {
         int top = printrepeatrows.attribute("top").toInt();
         int bottom = printrepeatrows.attribute("bottom").toInt();
-        print()->setPrintRepeatRows(qMakePair(top, bottom));
+        printSettings()->setRepeatedRows(qMakePair(top, bottom));
     }
 
     if (!sheet.hasAttribute("borders1.2")) {
@@ -4161,18 +4156,6 @@ void Sheet::convertObscuringBorders()
         }
     }
 #endif
-}
-
-QPixmap Sheet::generateThumbnail(const QSize& size)
-{
-    if (size.isEmpty())
-        return QPixmap();
-
-    QPixmap pixmap( size.width(), size.height() );
-    pixmap.fill( Qt::white );
-    QPainter painter( &pixmap );
-    d->print->generateThumbnail(painter);
-    return pixmap;
 }
 
 /**********************

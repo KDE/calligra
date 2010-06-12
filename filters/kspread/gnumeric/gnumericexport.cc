@@ -44,10 +44,11 @@
 #include <kspread/CellStorage.h>
 #include <kspread/Currency.h>
 #include <kspread/part/Doc.h>
+#include <kspread/HeaderFooter.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
+#include <kspread/PrintSettings.h>
 #include <kspread/Sheet.h>
-#include <kspread/SheetPrint.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Validity.h>
 #include <kspread/part/View.h>
@@ -1051,10 +1052,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     int i = 0;
     int indexActiveTable = 0;
     foreach(Sheet* table, ksdoc->map()->sheetList()) {
-        if (table->print()->settings()->pageLayout().format == KoPageFormat::CustomSize) {
+        if (table->printSettings()->pageLayout().format == KoPageFormat::CustomSize) {
             customSize = gnumeric_doc.createElement("gmr:Geometry");
-            customSize.setAttribute("Width", POINT_TO_MM(table->print()->settings()->pageLayout().width));
-            customSize.setAttribute("Height", POINT_TO_MM(table->print()->settings()->pageLayout().width));
+            customSize.setAttribute("Width", POINT_TO_MM(table->printSettings()->pageLayout().width));
+            customSize.setAttribute("Height", POINT_TO_MM(table->printSettings()->pageLayout().width));
             sheets.appendChild(customSize);
             //<gmr:Geometry Width="768" Height="365"/>
         }
@@ -1106,22 +1107,22 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         margins = gnumeric_doc.createElement("gmr:Margins");
 
         topMargin = gnumeric_doc.createElement("gmr:top");
-        topMargin.setAttribute("Points", table->print()->settings()->pageLayout().topMargin);
+        topMargin.setAttribute("Points", table->printSettings()->pageLayout().topMargin);
         topMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(topMargin);
 
         bottomMargin = gnumeric_doc.createElement("gmr:bottom");
-        bottomMargin.setAttribute("Points", table->print()->settings()->pageLayout().bottomMargin);
+        bottomMargin.setAttribute("Points", table->printSettings()->pageLayout().bottomMargin);
         bottomMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(bottomMargin);
 
         leftMargin = gnumeric_doc.createElement("gmr:left");
-        leftMargin.setAttribute("Points", table->print()->settings()->pageLayout().leftMargin);
+        leftMargin.setAttribute("Points", table->printSettings()->pageLayout().leftMargin);
         leftMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(leftMargin);
 
         rightMargin = gnumeric_doc.createElement("gmr:right");
-        rightMargin.setAttribute("Points", table->print()->settings()->pageLayout().rightMargin);
+        rightMargin.setAttribute("Points", table->printSettings()->pageLayout().rightMargin);
         rightMargin.setAttribute("PrefUnit", "mm");
         margins.appendChild(rightMargin);
 
@@ -1129,7 +1130,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         sheet.appendChild(tmp);
 
         orientation = gnumeric_doc.createElement("gmr:orientation");
-        QString orientString = table->print()->settings()->pageLayout().orientation == KoPageFormat::Landscape ? "landscape" : "portrait";
+        QString orientString = table->printSettings()->pageLayout().orientation == KoPageFormat::Landscape ? "landscape" : "portrait";
         orientation.appendChild(gnumeric_doc.createTextNode(orientString));
         tmp.appendChild(orientation);
 
@@ -1137,16 +1138,16 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         //<gmr:repeat_top value="A1:IV5"/>
         //<gmr:repeat_left value="B1:D65536"/>
 
-        int _tmpRepeatColumnStart = table->print()->printRepeatColumns().first;
-        int _tmpRepeatColumnEnd = table->print()->printRepeatColumns().second;
+        int _tmpRepeatColumnStart = table->printSettings()->repeatedColumns().first;
+        int _tmpRepeatColumnEnd = table->printSettings()->repeatedColumns().second;
         if (_tmpRepeatColumnStart != 0) {
             repeatColumns = gnumeric_doc.createElement("gmr:repeat_left");
             QString value = Cell::columnName(_tmpRepeatColumnStart) + "1:" + Cell::columnName(_tmpRepeatColumnEnd) + "65536";
             repeatColumns.setAttribute("value", value);
             tmp.appendChild(repeatColumns);
         }
-        int _tmpRepeatRowStart = table->print()->printRepeatRows().first;
-        int _tmpRepeatRowEnd = table->print()->printRepeatRows().second;
+        int _tmpRepeatRowStart = table->printSettings()->repeatedRows().first;
+        int _tmpRepeatRowEnd = table->printSettings()->repeatedRows().second;
         if (_tmpRepeatRowStart != 0) {
             repeatRows = gnumeric_doc.createElement("gmr:repeat_top");
             QString value = 'A' + QString::number(_tmpRepeatRowStart) + ":IV" + QString::number(_tmpRepeatRowEnd);
@@ -1154,20 +1155,21 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
             tmp.appendChild(repeatRows);
         }
 
+        const HeaderFooter *const headerFooter = table->headerFooter();
         header = gnumeric_doc.createElement("gmr:Header");
-        header.setAttribute("Left", convertVariable(table->print()->headLeft()));
-        header.setAttribute("Middle", convertVariable(table->print()->headMid()));
-        header.setAttribute("Right", convertVariable(table->print()->headRight()));
+        header.setAttribute("Left", convertVariable(headerFooter->headLeft()));
+        header.setAttribute("Middle", convertVariable(headerFooter->headMid()));
+        header.setAttribute("Right", convertVariable(headerFooter->headRight()));
         tmp.appendChild(header);
 
         footer = gnumeric_doc.createElement("gmr:Footer");
-        footer.setAttribute("Left", convertVariable(table->print()->footLeft()));
-        footer.setAttribute("Middle", convertVariable(table->print()->footMid()));
-        footer.setAttribute("Right", convertVariable(table->print()->footRight()));
+        footer.setAttribute("Left", convertVariable(headerFooter->footLeft()));
+        footer.setAttribute("Middle", convertVariable(headerFooter->footMid()));
+        footer.setAttribute("Right", convertVariable(headerFooter->footRight()));
         tmp.appendChild(footer);
 
         paper = gnumeric_doc.createElement("gmr:paper");
-        paper.appendChild(gnumeric_doc.createTextNode(table->print()->paperFormatString()));
+        paper.appendChild(gnumeric_doc.createTextNode(table->printSettings()->paperFormatString()));
         tmp.appendChild(paper);
 
         styles = gnumeric_doc.createElement("gmr:Styles");

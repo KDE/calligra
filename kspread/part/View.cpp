@@ -114,6 +114,7 @@
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "Factory.h"
+#include "HeaderFooter.h"
 #include "LoadingInfo.h"
 #include "Canvas.h"
 #include "Global.h"
@@ -121,6 +122,7 @@
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
+#include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
@@ -999,18 +1001,6 @@ void View::initConfig()
     const KConfigGroup colorGroup = config->group("KSpread Color");
     doc()->map()->settings()->setGridColor(colorGroup.readEntry("GridColor", QColor(Qt::lightGray)));
     doc()->map()->settings()->changePageBorderColor(colorGroup.readEntry("PageBorderColor", QColor(Qt::red)));
-
-// Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
-    /*
-        const KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
-        if ( d->activeSheet->isEmpty())
-        {
-        d->activeSheet->setPaperFormat((KoPageFormat::Format)pageLayoutGroup.readEntry("Default size page",1));
-
-        d->activeSheet->setPaperOrientation((KoPageFormat::Orientation)pageLayoutGroup.readEntry("Default orientation page",0));
-        d->activeSheet->setPaperUnit((KoUnit)pageLayoutGroup.readEntry("Default unit page",0));
-    }
-    */
     doc()->map()->settings()->setCaptureAllArrowKeys(config->group("Editor").readEntry("CaptureAllArrowKeys", true));
 
     initCalcMenu();
@@ -1837,13 +1827,14 @@ void View::paperLayoutDlg()
 
     KoPageLayout pl = print->settings()->pageLayout();
 
+    const HeaderFooter *const headerFooter = print->headerFooter();
     HeadFoot hf;
-    hf.headLeft  = print->localizeHeadFootLine(print->headLeft());
-    hf.headRight = print->localizeHeadFootLine(print->headRight());
-    hf.headMid   = print->localizeHeadFootLine(print->headMid());
-    hf.footLeft  = print->localizeHeadFootLine(print->footLeft());
-    hf.footRight = print->localizeHeadFootLine(print->footRight());
-    hf.footMid   = print->localizeHeadFootLine(print->footMid());
+    hf.headLeft  = headerFooter->localizeHeadFootLine(headerFooter->headLeft());
+    hf.headRight = headerFooter->localizeHeadFootLine(headerFooter->headRight());
+    hf.headMid   = headerFooter->localizeHeadFootLine(headerFooter->headMid());
+    hf.footLeft  = headerFooter->localizeHeadFootLine(headerFooter->footLeft());
+    hf.footRight = headerFooter->localizeHeadFootLine(headerFooter->footRight());
+    hf.footMid   = headerFooter->localizeHeadFootLine(headerFooter->footMid());
 
     KoUnit unit = doc()->unit();
 

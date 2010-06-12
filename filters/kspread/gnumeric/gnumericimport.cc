@@ -42,13 +42,14 @@
 #include <kspread/ApplicationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/part/Doc.h>
+#include <kspread/HeaderFooter.h>
 #include <kspread/LoadingInfo.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
+#include <kspread/PrintSettings.h>
 #include <kspread/Region.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
-#include <kspread/SheetPrint.h>
 #include <kspread/Util.h>
 #include <kspread/Validity.h>
 
@@ -869,7 +870,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
         if (!repeate.isEmpty()) {
             const KSpread::Region region(repeate);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
-            table->print()->setPrintRepeatRows(qMakePair(region.firstRange().top(), region.firstRange().bottom()));
+            table->printSettings()->setRepeatedRows(qMakePair(region.firstRange().top(), region.firstRange().bottom()));
         }
     }
 
@@ -881,7 +882,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
             repeate = repeate.replace("65536", "32500");
             const KSpread::Region region(repeate);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
-            table->print()->setPrintRepeatColumns(qMakePair(region.firstRange().left(), region.firstRange().right()));
+            table->printSettings()->setRepeatedColumns(qMakePair(region.firstRange().left(), region.firstRange().right()));
         }
     }
 
@@ -901,10 +902,10 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     pageLayout.rightMargin  = fright;
     pageLayout.topMargin    = ftop;
     pageLayout.bottomMargin = fbottom;
-    table->print()->settings()->setPageLayout(pageLayout);
+    table->printSettings()->setPageLayout(pageLayout);
 
-    table->print()->setHeadFootLine(headLeft, headMiddle, headRight,
-                                    footLeft, footMiddle, footRight);
+    table->headerFooter()->setHeadFootLine(headLeft, headMiddle, headRight,
+                                          footLeft, footMiddle, footRight);
 }
 
 void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspread_cell)
