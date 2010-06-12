@@ -31,6 +31,7 @@ using namespace KSpread;
 
 DeleteCommand::DeleteCommand(QUndoCommand *parent)
     : AbstractDataManipulator(parent)
+    , m_mode(Everything)
 {
     setText(i18n("Delete"));
     m_checkLock = true;
@@ -40,6 +41,11 @@ DeleteCommand::~DeleteCommand()
 {
     qDeleteAll(m_columnFormats);
     qDeleteAll(m_rowFormats);
+}
+
+void DeleteCommand::setMode(Mode mode)
+{
+    m_mode = mode;
 }
 
 bool DeleteCommand::process(Element* element)
@@ -60,6 +66,9 @@ bool DeleteCommand::process(Element* element)
                 m_sheet->cellStorage()->take(col, cell.row());
                 cell = m_sheet->cellStorage()->nextInColumn(col, cell.row());
             }
+            if (m_mode == OnlyCells) {
+                continue;
+            }
 
             const ColumnFormat* columnFormat = m_sheet->columnFormat(col);
             if (m_firstrun && !columnFormat->isDefault()) {
@@ -77,6 +86,9 @@ bool DeleteCommand::process(Element* element)
             while (!cell.isNull()) {
                 m_sheet->cellStorage()->take(cell.column(), row);
                 cell = m_sheet->cellStorage()->nextInRow(cell.column(), row);
+            }
+            if (m_mode == OnlyCells) {
+                continue;
             }
 
             const RowFormat* rowFormat = m_sheet->rowFormat(row);

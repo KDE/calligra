@@ -42,6 +42,13 @@ public:
      */
     virtual ~DeleteCommand();
 
+    enum Mode
+    {
+        Everything,     ///< Delete also column and row formats.
+        OnlyCells       ///< Delete only cell contents, styles, etc.
+    };
+    void setMode(Mode mode);
+
 protected:
     /**
      * Processes \p element , a Region::Point or a Region::Range .
@@ -59,6 +66,7 @@ protected:
 protected:
     QSet<ColumnFormat*> m_columnFormats;
     QSet<RowFormat*>   m_rowFormats;
+    Mode m_mode;
 };
 
 } // namespace KSpread
