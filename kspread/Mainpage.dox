@@ -76,5 +76,25 @@
  * Classes and methods related to cell values.
  */
 
+/**
+ * \defgroup ColumnRowFormat Column/Row Formats
+ * Classes and methods related to column/row formats.
+ */
+
+/**
+ * \defgroup Page Page Layout
+ * Classes and methods related to page layouting.
+ */
+
+/**
+ * \defgroup Coordinates Coordinate Systems
+ * Classes and methods related to document/view/cell coordinates.
+ */
+
+/**
+ * \defgroup Commands Commands
+ * Classes and methods related to commands.
+ */
+
 #EXAMPLE_PATH=. doc
 #EXAMPLE_RECURSIVE=NO

@@ -400,12 +400,14 @@ public:
     //
 
     /**
+     * \ingroup ColumnRowFormat
      * \return the row format of row \p _row . The default row format,
      * if no special one exists.
      */
     const RowFormat* rowFormat(int _row) const;
 
     /**
+     * \ingroup ColumnRowFormat
      * If no special RowFormat exists for this row, then a new one is created.
      *
      * @return a non default RowFormat for this row.
@@ -413,10 +415,14 @@ public:
     RowFormat* nonDefaultRowFormat(int _row, bool force_creation = true);
 
     /**
+     * \ingroup ColumnRowFormat
      * \return the first non-default row format
      */
     RowFormat* firstRow() const;
 
+    /**
+     * \ingroup ColumnRowFormat
+     */
     void setDefaultHeight(double height);
 
     //
@@ -428,12 +434,14 @@ public:
     //
 
     /**
+     * \ingroup ColumnRowFormat
      * \return the column format of column \p _column . The default column format,
      * if no special one exists.
      */
     const ColumnFormat* columnFormat(int _column) const;
 
     /**
+     * \ingroup ColumnRowFormat
      * If no special ColumnFormat exists for this column, then a new one is created.
      *
      * @return a non default ColumnFormat for this column.
@@ -441,10 +449,14 @@ public:
     ColumnFormat* nonDefaultColumnFormat(int _column, bool force_creation = true);
 
     /**
+     * \ingroup ColumnRowFormat
      * \return the first non-default row format
      */
     ColumnFormat* firstCol() const;
 
+    /**
+     * \ingroup ColumnRowFormat
+     */
     void setDefaultWidth(double width);
 
     //
@@ -456,6 +468,7 @@ public:
     //
 
     /**
+     * \ingroup Storage
      * \return the cell storage
      */
     CellStorage* cellStorage() const;
@@ -470,6 +483,8 @@ public:
     const ValueStorage* valueStorage() const;
 
     /**
+     * \ingroup Coordinates
+     * \ingroup Storage
      * Determines the used area, i.e. the area spanning from A1 to the maximum
      * occupied column and row.
      * \return the used area
@@ -485,6 +500,7 @@ public:
     //
 
     /**
+     * \ingroup Coordinates
      * Determines the row for a given position \p _ypos . If the position is
      * on the border between two cells, the upper row is returned. Also, the offset
      * between the coordinate system root and the upper row border is determined.
@@ -497,6 +513,7 @@ public:
     int topRow(double _ypos, double &_top) const;
 
     /**
+     * \ingroup Coordinates
      * Determines the row for a given position \p _ypos . If the position is
      * on the border between two cells, the lower row is returned.
      *
@@ -507,6 +524,7 @@ public:
     int bottomRow(double _ypos) const;
 
     /**
+     * \ingroup Coordinates
      * Determines the column for a given position \p _xpos . If the position is
      * on the border between two cells, the left column is returned. Also, the offset
      * between the coordinate system root and the left column border is determined.
@@ -519,6 +537,7 @@ public:
     int leftColumn(double _xpos, double &_left) const;
 
     /**
+     * \ingroup Coordinates
      * Determines the column for a given position \p _xpos . If the position is
      * on the border between two cells, the right column is returned.
      *
@@ -529,6 +548,7 @@ public:
     int rightColumn(double _xpos) const;
 
     /**
+     * \ingroup Coordinates
      * Calculates the region in document coordinates occupied by a range of cells.
      * \param cellRange the range of cells
      * \return the document area covered by the cells
@@ -536,6 +556,7 @@ public:
     QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
 
     /**
+     * \ingroup Coordinates
      * Calculates the cell range covering a document area.
      * \param area the document area
      * \return the cell range covering the area
@@ -543,6 +564,7 @@ public:
     QRect documentToCellCoordinates(const QRectF& area) const;
 
     /**
+     * \ingroup Coordinates
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
@@ -551,6 +573,7 @@ public:
     double columnPosition(int col) const;
 
     /**
+     * \ingroup Coordinates
      * @return the top corner of the row as double.
      * Use this method, when you later calculate other positions depending on this one
      * to avoid rounding problems
@@ -559,23 +582,27 @@ public:
     double rowPosition(int _row) const;
 
     /**
+     * \ingroup Coordinates
      * \return the document size
      */
     QSizeF documentSize() const;
 
     /**
+     * \ingroup Coordinates
      * Adjusts the internal reference of the sum of the widths of all columns.
      * Used in resizing of columns.
      */
     void adjustDocumentWidth(double deltaWidth);
 
     /**
+     * \ingroup Coordinates
      * Adjusts the internal reference of the sum of the heights of all rows.
      * Used in resizing of rows.
      */
     void adjustDocumentHeight(double deltaHeight);
 
     /**
+     * \ingroup Commands
      * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
      * This is used, for example, by the Data Sort dialog, to guess the names of columns
      * within the selected area.  An empty string may be returned if guessColumnTitle does not think
@@ -586,6 +613,7 @@ public:
     QString guessColumnTitle(QRect& area, int col);
 
     /**
+     * \ingroup Commands
      * Attempts to guess the title (or 'header') of a row, within a given area of the sheet
      * This is used, for example, by the Data Sort dialog, to guess the names of rows within the selected area.
      * An empty string may be returned if guessRowTitle does not think that row @p row has a title.
@@ -603,15 +631,19 @@ public:
     //
 
     /**
+     * \ingroup Commands
      * @param selection the selection of cells to work on
      */
     void copySelection(Selection* selection);
+
     /**
+     * \ingroup Commands
      * @param selection the selection of cells to work on
      */
     void cutSelection(Selection* selection);
 
     /**
+     * \ingroup UI
      * @return @c true if there are text value in cell
      * so you can create list selection
      * @param selection the selection of cells to work on
@@ -619,14 +651,19 @@ public:
     bool testListChoose(Selection* selection);
 
     /**
+     * \ingroup Commands
      * returns the text to be copied to the clipboard
      * @param selection the selection of cells to work on
      */
     QString copyAsText(Selection* selection);
 
+    /**
+     * \ingroup Commands
+     */
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
     /**
+     * \ingroup Commands
      * Deletes all cells in the given rectangle.
      * The display is NOT updated by this function.
      * This function can be used to clear an area before you paste something from the clipboard
@@ -645,6 +682,7 @@ public:
     //
 
     /**
+     * \ingroup Commands
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
@@ -653,11 +691,15 @@ public:
                bool insert = false, int insertTo = 0, bool pasteFC = false,
                QClipboard::Mode clipboardMode = QClipboard::Clipboard);
 
+    /**
+     * \ingroup Commands
+     */
     void paste(const QByteArray & data, const QRect & pasteArea,
                bool makeUndo = false, Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
                bool insert = false, int insertTo = 0, bool pasteFC = false);
 
     /**
+     * \ingroup Commands
      * A function which allows to paste a text plain from the clipboard
      */
     void pasteTextPlain(const QString& _text, const QRect& pasteArea);
@@ -671,30 +713,35 @@ public:
     //
 
     /**
+     * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
     void insertShiftRight(const QRect& rect);
 
     /**
+     * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
     void insertShiftDown(const QRect& rect);
 
     /**
+     * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
     void removeShiftUp(const QRect& rect);
 
     /**
+     * \ingroup Commands
      * Helper method.
      * \see ShiftManipulator
      */
     void removeShiftLeft(const QRect& rect);
 
     /**
+     * \ingroup ColumnRowFormat
      * Helper method.
      * \see InsertDeleteColumnManipulator
      * Moves all columns which are >= \p col \p number positions to the right
@@ -711,6 +758,7 @@ public:
     void insertRows(int row, int numbers);
 
     /**
+     * \ingroup ColumnRowFormat
      * Helper method.
      * \see InsertDeleteColumnManipulator
      * Deletes \p number columns beginning at \p col .
@@ -718,6 +766,7 @@ public:
     void removeColumns(int row, int numbers);
 
     /**
+     * \ingroup ColumnRowFormat
      * Helper method.
      * \see InsertDeleteRowManipulator
      * Deletes \p number rows beginning at \p row .
@@ -745,6 +794,7 @@ public:
     void hideSheet(bool _hide);
 
     /**
+     * \ingroup Value
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
      * For example the formula =Sheet1!A1 is changed into =Sheet1!B1 if a Column
@@ -762,26 +812,31 @@ public:
                            const QString& sheetName, int number);
 
     /**
+     * \ingroup ColumnRowFormat
      * Insert the non-default column format \p columnFormat.
      */
     void insertColumnFormat(ColumnFormat* columnFormat);
 
     /**
+     * \ingroup ColumnRowFormat
      * Inserts the non-default row format \p rowFormat.
      */
     void insertRowFormat(RowFormat* rowFormat);
 
     /**
+     * \ingroup ColumnRowFormat
      * Deletes the column format at \p column.
      */
     void deleteColumnFormat(int column);
 
     /**
+     * \ingroup ColumnRowFormat
      * Deletes the row format at \p row.
      */
     void deleteRowFormat(int row);
 
     /**
+     * \ingroup Commands
      * @param era set this to true if you want to encode relative references
      *            absolutely (they will be switched back to relative
      *            references during decoding) - used for cut to clipboard
@@ -789,6 +844,7 @@ public:
     QDomDocument saveCellRegion(const Region&, bool era = false);
 
     /**
+     * \ingroup Commands
      * insertTo defined if you insert to the bottom or right
      * insert to bottom if insertTo==1
      * insert to right if insertTo ==-1
@@ -800,10 +856,15 @@ public:
                        Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
                        bool insert = false, int insertTo = 0, bool paste = false);
 
+    /**
+     * \ingroup Commands
+     * \see loadSelection()
+     */
     void loadSelectionUndo(const KoXmlDocument & doc, const QRect &loadArea,
                            int _xshift, int _yshift, bool insert, int insertTo);
 
     /**
+     * \ingroup Commands
      * Used when you insert and paste cell
      * return true if it's a area
      * false if it's a column/row
@@ -828,6 +889,9 @@ public:
      */
     void setRegionPaintDirty(const Region & region);
 
+    /**
+     * \see setRegionPaintDirty(const Region &)
+     */
     void setRegionPaintDirty(const QRect & rect);
 
     /**
@@ -861,11 +925,26 @@ public:
     void updateLocale();
 
 
-    SheetPrint * print() const;
+    /**
+     * \ingroup Page
+     * The page layout manager.
+     */
+    SheetPrint *print() const;
+
+    /**
+     * \ingroup Page
+     * Print settings.
+     */
     PrintSettings* printSettings() const;
+
+    /**
+     * \ingroup Page
+     * Sets the print settings.
+     */
     void setPrintSettings(const PrintSettings& settings);
 
     /**
+     * \ingroup Page
      * \return the header & footer object
      */
     HeaderFooter *headerFooter() const;
@@ -892,10 +971,19 @@ signals:
 
     void sig_SheetHidden(Sheet* sheet);
     void sig_SheetShown(Sheet* sheet);
-    void sig_SheetRemoved(Sheet* sheet);
-    void sig_SheetActivated(Sheet*);
-    void sig_RefreshView(Sheet*);
-    void documentSizeChanged(const QSizeF&);
+
+    /**
+     * Emitted, if the document size changed.
+     * E.g. if some columns were inserted.
+     * \param size new size
+     */
+    void documentSizeChanged(const QSizeF &size);
+
+    /**
+     * Emitted, if the visible size changed.
+     * E.g. if the document size changed or the user selected an area,
+     * which was not visible before.
+     */
     void visibleSizeChanged();
 
     /**
@@ -903,11 +991,24 @@ signals:
      * for \p timeout msecs.
      */
     void statusMessage(const QString& message, int timeout);
+
+    /**
+     * \ingroup Embedding
+     * Emitted, if a \p shape was added.
+     * \param sheet this sheet (for the View to determine, if it's the active one)
+     */
     void shapeAdded(Sheet *sheet, KoShape *shape);
+
+    /**
+     * \ingroup Embedding
+     * Emitted, if a \p shape was removed.
+     * \param sheet this sheet (for the View to determine, if it's the active one)
+     */
     void shapeRemoved(Sheet *sheet, KoShape *shape);
 
 protected:
     /**
+     * \ingroup Value
      * Change the name of a sheet in all formulas.
      * When you change name sheet Sheet1 -> Price
      * for all cell which refere to Sheet1, this function changes the name.
@@ -1013,9 +1114,16 @@ protected:
     //////////////////////////////////////////////////////////////////////////
     //
 
-    // helper function for areaIsEmpty
+    /**
+     * \ingroup Commands
+     * \see areaIsEmpty()
+     */
     bool cellIsEmpty(const Cell& cell, TestType _type);
 
+    /**
+     * \ingroup Value
+     * \see changeNameCellRef()
+     */
     QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                                     int NbCol, const QPoint& point, bool isColumnFixed,
                                     bool isRowFixed);
