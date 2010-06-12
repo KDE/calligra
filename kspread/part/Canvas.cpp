@@ -108,6 +108,7 @@
 #include "View.h"
 
 // commands
+#include "commands/CopyCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/PasteCommand.h"
 #include "commands/StyleCommand.h"
@@ -633,7 +634,7 @@ void Canvas::startTheDrag()
     // right area for start dragging
     setCursor(Qt::PointingHandCursor);
 
-    QDomDocument doc = sheet->saveCellRegion(*selection(), true);
+    QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
 
     // Save to buffer
     QBuffer buffer;

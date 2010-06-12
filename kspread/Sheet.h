@@ -796,14 +796,6 @@ public:
      */
     void deleteRowFormat(int row);
 
-    /**
-     * \ingroup Commands
-     * @param era set this to true if you want to encode relative references
-     *            absolutely (they will be switched back to relative
-     *            references during decoding) - used for cut to clipboard
-     */
-    QDomDocument saveCellRegion(const Region&, bool era = false);
-
     //
     //END UNSORTED METHODS
     //

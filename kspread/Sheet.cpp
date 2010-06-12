@@ -89,6 +89,7 @@
 #include "ValueStorage.h"
 
 // commands
+#include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
 #include "commands/MergeCommand.h"
@@ -1230,7 +1231,7 @@ QString Sheet::copyAsText(Selection* selection)
 
 void Sheet::copySelection(Selection* selection)
 {
-    QDomDocument doc = saveCellRegion(*selection);
+    QDomDocument doc = CopyCommand::saveAsXml(*selection);
 
     // Save to buffer
     QBuffer buffer;
@@ -1249,7 +1250,7 @@ void Sheet::copySelection(Selection* selection)
 
 void Sheet::cutSelection(Selection* selection)
 {
-    QDomDocument doc = saveCellRegion(*selection, true);
+    QDomDocument doc = CopyCommand::saveAsXml(*selection, true);
     doc.documentElement().setAttribute("cut", selection->Region::name());
 
     // Save to buffer
@@ -1326,113 +1327,6 @@ void Sheet::updateView(const Region& region)
     emit sig_updateView(this, region);
 }
 
-
-// era: absolute references
-QDomDocument Sheet::saveCellRegion(const Region& region, bool era)
-{
-    QDomDocument dd("spreadsheet-snippet");
-    dd.appendChild(dd.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-    QDomElement root = dd.createElement("spreadsheet-snippet");
-    dd.appendChild(root);
-
-    // find the upper left corner of the selection
-    QRect boundingRect = region.boundingRect();
-    int left = boundingRect.left();
-    int top = boundingRect.top();
-
-    // for tiling the clipboard content in the selection
-    root.setAttribute("rows", boundingRect.height());
-    root.setAttribute("columns", boundingRect.width());
-
-    Region::ConstIterator endOfList = region.constEnd();
-    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
-        QRect range = (*it)->rect();
-
-        //
-        // Entire rows selected?
-        //
-        if ((*it)->isRow()) {
-            QDomElement rows = dd.createElement("rows");
-            rows.setAttribute("count", range.height());
-            rows.setAttribute("row", range.top() - top + 1);
-            root.appendChild(rows);
-
-            // Save all cells.
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell = d->cellStorage->firstInRow(row);
-                for (; !cell.isNull(); cell = d->cellStorage->nextInRow(cell.column(), cell.row())) {
-                    if (!cell.isPartOfMerged())
-                        root.appendChild(cell.save(dd, 0, top - 1, era));
-                }
-            }
-
-            // TODO Stefan: Inefficient, use cluster functionality
-            // Save the row formats if there are any
-            const RowFormat* format;
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                format = rowFormat(row);
-                if (format && !format->isDefault()) {
-                    QDomElement e = format->save(dd, top - 1);
-                    if (!e.isNull()) {
-                        rows.appendChild(e);
-                    }
-                }
-            }
-            continue;
-        }
-
-        //
-        // Entire columns selected?
-        //
-        if ((*it)->isColumn()) {
-            QDomElement columns = dd.createElement("columns");
-            columns.setAttribute("count", range.width());
-            columns.setAttribute("column", range.left() - left + 1);
-            root.appendChild(columns);
-
-            // Save all cells.
-            for (int col = range.left(); col <= range.right(); ++col) {
-                Cell cell = d->cellStorage->firstInColumn(col);
-                for (; !cell.isNull(); cell = d->cellStorage->nextInColumn(cell.column(), cell.row())) {
-                    if (!cell.isPartOfMerged()) {
-                        root.appendChild(cell.save(dd, left - 1, 0, era));
-                    }
-                }
-            }
-
-            // TODO Stefan: Inefficient, use the cluster functionality
-            // Save the column formats if there are any
-            const ColumnFormat* format;
-            for (int col = range.left(); col <= range.right(); ++col) {
-                format = columnFormat(col);
-                if (format && !format->isDefault()) {
-                    QDomElement e = format->save(dd, left - 1);
-                    if (!e.isNull()) {
-                        columns.appendChild(e);
-                    }
-                }
-            }
-            continue;
-        }
-
-        // Save all cells.
-        Cell cell;
-        for (int row = range.top(); row <= range.bottom(); ++row) {
-            if (range.left() == 1) {
-                cell = d->cellStorage->firstInRow(row);
-            } else {
-                cell = d->cellStorage->nextInRow(range.left() - 1, row);
-            }
-            while (!cell.isNull() && cell.column() >= range.left() && cell.column() <= range.right()) {
-                if (!cell.isPartOfMerged()) {
-                    root.appendChild(cell.save(dd, left - 1, top - 1, era));
-                }
-                cell = d->cellStorage->nextInRow(cell.column(), cell.row());
-            }
-        }
-    }
-    return dd;
-}
 
 QDomElement Sheet::saveXML(QDomDocument& dd)
 {

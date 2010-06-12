@@ -36,6 +36,8 @@
 #include <QMimeData>
 #include <QTextStream>
 
+#include "commands/CopyCommand.h"
+
 using namespace KSpread;
 
 class DragAndDropStrategy::Private
@@ -94,7 +96,7 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else if (d->cell == Cell(selection()->activeSheet(), col, row)) {
     } else {
-        QDomDocument doc = selection()->activeSheet()->saveCellRegion(*selection(), true);
+        QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
 
         // Save to buffer
         QBuffer buffer;
