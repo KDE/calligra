@@ -53,8 +53,6 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
     setModal(true);
 
     m_selection = selection;
-    rect = m_selection->firstRange();
-    Q_ASSERT(! rect.isNull());
     insRem = _mode;
 
     QWidget *page = new QWidget();
@@ -96,14 +94,14 @@ void InsertDialog::slotOk()
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftRight);
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftRight);
             manipulator->setReverse(true);
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
     } else if (rb2->isChecked()) {
@@ -111,40 +109,40 @@ void InsertDialog::slotOk()
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
             manipulator->setReverse(true);
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
     } else if (rb3->isChecked()) {
         if (insRem == Insert) {
             InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
             manipulator->setSheet(m_selection->activeSheet());
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
             InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setReverse(true);
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
     } else if (rb4->isChecked()) {
         if (insRem == Insert) {
             InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
             manipulator->setSheet(m_selection->activeSheet());
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         } else if (insRem == Remove) {
             InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setReverse(true);
-            manipulator->add(Region(rect));
+            manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
     } else {

@@ -30,7 +30,6 @@
 #include <kdialog.h>
 
 class QRadioButton;
-class QRect;
 
 namespace KSpread
 {
@@ -54,7 +53,6 @@ private:
     QRadioButton *rb2;
     QRadioButton *rb3;
     QRadioButton *rb4;
-    QRect  rect;
     Mode insRem;
 };
 
