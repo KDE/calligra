@@ -97,10 +97,17 @@ public:
     void setFiltered(bool filtered);
     bool isFiltered() const;
 
-    void setPageBreak(bool pageBreak);
-    bool isPageBreakSet();
-
     bool isHiddenOrFiltered() const;
+
+    /**
+     * Sets a page break before this row, if \p enable is \c true.
+     */
+    void setPageBreak(bool enable);
+
+    /**
+     * \return \c true, if there's a page break set before this row.
+     */
+    bool hasPageBreak() const;
 
     bool operator==(const RowFormat& other) const;
     inline bool operator!=(const RowFormat& other) const {
@@ -174,8 +181,15 @@ public:
 
     bool isHiddenOrFiltered() const;
 
-    void setPageBreak(bool pageBreak);
-    bool isPageBreakSet();
+    /**
+     * Sets a page break before this row, if \p enable is \c true.
+     */
+    void setPageBreak(bool enable);
+
+    /**
+     * \return \c true, if there's a page break set before this row.
+     */
+    bool hasPageBreak() const;
 
     bool operator==(const ColumnFormat& other) const;
     inline bool operator!=(const ColumnFormat& other) const {

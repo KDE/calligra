@@ -247,6 +247,8 @@ protected Q_SLOTS:
     void listChoosePopupMenu();
     void listChooseItemSelected(QAction*);
     void documentSettingsDialog();
+    void breakBeforeColumn(bool);
+    void breakBeforeRow(bool);
 
 private:
     Q_DISABLE_COPY(CellToolBase)

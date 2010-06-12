@@ -40,6 +40,7 @@ SET (commands_DIR_SRCS
 	commands/LinkCommand.cpp
 	commands/MergeCommand.cpp
 	commands/NamedAreaCommand.cpp
+        commands/PageBreakCommand.cpp
 	commands/PrecisionCommand.cpp
 	commands/RowColumnManipulators.cpp
 	commands/SheetCommands.cpp

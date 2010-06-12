@@ -265,27 +265,24 @@ void SheetPrint::updateHorizontalPageParameters( int _col )
         return;
     }
 
-    if ( _col < d->m_lnewPageListX.last().startItem() )
-    {
-        //Find the page entry for this column
-        int index = d->m_lnewPageListX.indexOf( PrintNewPageEntry( _col ) );
-        while ( ( index == -1 ) && _col > 0 )
-        {
-            _col--;
-            index = d->m_lnewPageListX.indexOf( PrintNewPageEntry( _col ) );
+    if (_col <= d->m_lnewPageListX.last().endItem()) {
+        // Find the page entry for this column
+        int index = d->m_lnewPageListX.count() - 1;
+        while (_col < d->m_lnewPageListX[index].startItem()) {
+            --index;
         }
 
         //Remove later pages
         while ( index != d->m_lnewPageListX.count() )
             d->m_lnewPageListX.removeAt( index );
+
+        d->m_maxCheckedNewPageX = d->m_lnewPageListX.isEmpty() ? 0 : d->m_lnewPageListX.last().endItem();
     }
 
     // The column is not beyond the repeated columns?
     if (_col <= d->m_settings->repeatedColumns().second) {
         d->updateRepeatedColumnsWidth();
     }
-
-    d->m_maxCheckedNewPageX = _col;
 }
 
 void SheetPrint::updateVerticalPageParameters( int _row )
@@ -300,27 +297,24 @@ void SheetPrint::updateVerticalPageParameters( int _row )
         return;
     }
 
-    if ( _row < d->m_lnewPageListY.last().startItem() )
-    {
-        //Find the page entry for this row
-        int index = d->m_lnewPageListY.indexOf( PrintNewPageEntry( _row ) );
-        while ( ( index == -1 ) && _row > 0 )
-        {
-            _row--;
-            index = d->m_lnewPageListY.indexOf( PrintNewPageEntry( _row ) );
+    if (_row <= d->m_lnewPageListY.last().endItem()) {
+        // Find the page entry for this row
+        int index = d->m_lnewPageListY.count() - 1;
+        while (_row < d->m_lnewPageListY[index].startItem()) {
+            --index;
         }
 
         //Remove later pages
         while ( index != d->m_lnewPageListY.count() )
             d->m_lnewPageListY.removeAt( index );
+
+        d->m_maxCheckedNewPageY = d->m_lnewPageListY.isEmpty() ? 0 : d->m_lnewPageListY.last().endItem();
     }
 
     // The row is not beyond the repeated rows?
     if (_row <= d->m_settings->repeatedRows().second) {
         d->updateRepeatedRowsHeight();
     }
-
-    d->m_maxCheckedNewPageY = _row;
 }
 
 void SheetPrint::insertColumn( int col, int nbCol )

@@ -131,6 +131,11 @@
     <Action name="definePrintRange"/>
     <Action name="resetPrintRange"/>
   </Menu>
+  <Menu>
+    <text>Manual Page Breaks</text>
+    <Action name="format_break_before_column"/>
+    <Action name="format_break_before_row"/>
+  </Menu>
   <Separator/>
   <Action name="shapeAnchor"/>
   <Separator/>

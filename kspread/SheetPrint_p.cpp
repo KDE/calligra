@@ -97,7 +97,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters( int _column )
             kDebug() << "loop:" << "startCol:" << startCol << "col:" << col
                      << "x:" << x << "offset:" << offset;
             // end of page?
-            if (x > printWidth) {
+            if (x > printWidth || m_pSheet->columnFormat(col)->hasPageBreak()) {
                 //Now store into the previous entry the enditem and the width
                 m_lnewPageListX.last().setEndItem(col - 1);
                 m_lnewPageListX.last().setSize(x - m_pSheet->columnFormat(col)->width());
@@ -121,7 +121,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters( int _column )
         while (m_lnewPageListX.last().endItem() == 0) {
             kDebug() << "loop to end" << "col:" << col << "x:" << x << "offset:" << offset
                         << "m_maxCheckedNewPageX:" << m_maxCheckedNewPageX;
-            if (x > printWidth) {
+            if (x > printWidth || m_pSheet->columnFormat(col)->hasPageBreak()) {
                 // Now store into the previous entry the enditem and the width
                 m_lnewPageListX.last().setEndItem(col - 1);
                 m_lnewPageListX.last().setSize(x - m_pSheet->columnFormat(col)->width());
@@ -207,8 +207,8 @@ void SheetPrint::Private::calculateVerticalPageParameters( int _row )
 
         while ( ( row <= _row ) && ( row < printRange.bottom() ) )
         {
-            if ( y > printHeight )
-            {
+            // end of page?
+            if (y > printHeight || m_pSheet->rowFormat(row)->hasPageBreak()) {
                 //Now store into the previous entry the enditem and the width
                 m_lnewPageListY.last().setEndItem(row - 1);
                 m_lnewPageListY.last().setSize(y - m_pSheet->rowFormat(row)->height());
@@ -229,7 +229,7 @@ void SheetPrint::Private::calculateVerticalPageParameters( int _row )
 
         // Iterate to the end of the page.
         while (m_lnewPageListY.last().endItem() == 0) {
-            if (y > printHeight) {
+            if (y > printHeight || m_pSheet->rowFormat(row)->hasPageBreak()) {
                 // Now store into the previous entry the enditem and the width
                 m_lnewPageListY.last().setEndItem(row - 1);
                 m_lnewPageListY.last().setSize(y - m_pSheet->rowFormat(row)->height());

@@ -62,9 +62,9 @@ public:
     double      height;
     bool        hide;
     bool        filtered;
+    bool        pageBreak; // before row
     RowFormat*  next;
     RowFormat*  prev;
-    bool        pageBreak;
 };
 
 RowFormat::RowFormat()
@@ -75,9 +75,9 @@ RowFormat::RowFormat()
     d->height   = 0.0;
     d->hide     = false;
     d->filtered = false;
+    d->pageBreak = false;
     d->next     = 0;
     d->prev     = 0;
-    d->pageBreak= false;
 }
 
 RowFormat::RowFormat(const RowFormat& other)
@@ -274,6 +274,16 @@ bool RowFormat::isDefault() const
     return !d->sheet;
 }
 
+void RowFormat::setPageBreak(bool enable)
+{
+    d->pageBreak = enable;
+}
+
+bool RowFormat::hasPageBreak() const
+{
+    return d->pageBreak;
+}
+
 bool RowFormat::operator==(const RowFormat& other) const
 {
     // NOTE Stefan: Don't compare sheet and cell.
@@ -283,19 +293,10 @@ bool RowFormat::operator==(const RowFormat& other) const
         return false;
     if (d->filtered != other.d->filtered)
         return false;
-    if (d->pageBreak != other.d->pageBreak)
+    if (d->pageBreak != other.d->pageBreak) {
         return false;
+    }
     return true;
-}
-
-void RowFormat::setPageBreak(bool pageBreak)
-{
-    d->pageBreak = pageBreak;
-}
-
-bool RowFormat::isPageBreakSet()
-{
-    return d->pageBreak;
 }
 
 
@@ -313,9 +314,9 @@ public:
     double          width;
     bool            hide;
     bool            filtered;
+    bool            pageBreak; // before column
     ColumnFormat*   next;
     ColumnFormat*   prev;
-    bool            pageBreak;
 };
 
 ColumnFormat::ColumnFormat()
@@ -326,9 +327,9 @@ ColumnFormat::ColumnFormat()
     d->width    = 0.0;
     d->hide     = false;
     d->filtered = false;
+    d->pageBreak = false;
     d->next     = 0;
     d->prev     = 0;
-    d->pageBreak= false;
 }
 
 ColumnFormat::ColumnFormat(const ColumnFormat& other)
@@ -526,6 +527,16 @@ bool ColumnFormat::isDefault() const
     return !d->sheet;
 }
 
+void ColumnFormat::setPageBreak(bool enable)
+{
+    d->pageBreak = enable;
+}
+
+bool ColumnFormat::hasPageBreak() const
+{
+    return d->pageBreak;
+}
+
 bool ColumnFormat::operator==(const ColumnFormat& other) const
 {
     // NOTE Stefan: Don't compare sheet and cell.
@@ -535,18 +546,8 @@ bool ColumnFormat::operator==(const ColumnFormat& other) const
         return false;
     if (d->filtered != other.d->filtered)
         return false;
-    if (d->pageBreak != other.d->pageBreak)
+    if (d->pageBreak != other.d->pageBreak) {
         return false;
+    }
     return true;
 }
-
-void ColumnFormat::setPageBreak(bool pageBreak)
-{
-    d->pageBreak = pageBreak;
-}
-
-bool ColumnFormat::isPageBreakSet()
-{
-    return d->pageBreak;
-}
-

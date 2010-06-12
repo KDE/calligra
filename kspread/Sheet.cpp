@@ -2656,6 +2656,8 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
         } else
             kDebug(36003) << " str :" << str;
         isNonDefaultColumn = true;
+    } else if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
+        // TODO
     }
 
     // If it's a default column, we can return here.
@@ -2676,6 +2678,9 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 
             if (width != -1.0)   //safe
                 cf->setWidth(width);
+            if (insertPageBreak) {
+                cf->setPageBreak(true);
+            }
             if (visibility == Collapsed)
                 cf->setHidden(true);
             else if (visibility == Filtered)
@@ -2789,6 +2794,8 @@ int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
         //  else
         //      kDebug(36003)<<" str :"<<str;
         isNonDefaultRow = true;
+    } else if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
+        // TODO
     }
 
 //     kDebug(36003)<<" create non defaultrow format :"<<rowIndex<<" repeate :"<<number<<" height :"<<height;
@@ -2797,6 +2804,9 @@ int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
             RowFormat* rowFormat = nonDefaultRowFormat(rowIndex + r);
             if (height != -1.0)
                 rowFormat->setHeight(height);
+            if (insertPageBreak) {
+                rowFormat->setPageBreak(true);
+            }
             if (visibility == Collapsed)
                 rowFormat->setHidden(true);
             else if (visibility == Filtered)
@@ -3414,7 +3424,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         if (!column->isDefault()) {
             KoGenStyle currentColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
             currentColumnStyle.addPropertyPt("style:column-width", column->width());
-            currentColumnStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
+            if (column->hasPageBreak()) {
+                currentColumnStyle.addProperty("fo:break-before", "page");
+            }
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentColumnStyle, "co"));
         }
         if (!column->isDefault() || !style.isDefault()) {
@@ -3453,7 +3465,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         if (!row->isDefault()) {
             KoGenStyle currentRowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
             currentRowStyle.addPropertyPt("style:row-height", row->height());
-            currentRowStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
+            if (row->hasPageBreak()) {
+                currentRowStyle.addProperty("fo:break-before", "page");
+            }
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 

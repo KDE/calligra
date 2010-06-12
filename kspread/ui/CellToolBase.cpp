@@ -59,6 +59,7 @@
 #include "commands/IndentationCommand.h"
 #include "commands/LinkCommand.h"
 #include "commands/MergeCommand.h"
+#include "commands/PageBreakCommand.h"
 #include "commands/PrecisionCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SortManipulator.h"
@@ -817,6 +818,18 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("documentSettingsDialog", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(documentSettingsDialog()));
     action->setToolTip(i18n("Show document settings dialog"));
+
+    action = new KToggleAction(i18n("Break Before Column"), this);
+    addAction("format_break_before_column", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(breakBeforeColumn(bool)));
+    action->setIconText(i18n("Column Break"));
+    action->setToolTip(i18n("Set a manual page break before the column"));
+
+    action = new KToggleAction(i18n("Break Before Row"), this);
+    addAction("format_break_before_row", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(breakBeforeRow(bool)));
+    action->setIconText(i18n("Row Break"));
+    action->setToolTip(i18n("Set a manual page break before the row"));
 }
 
 CellToolBase::~CellToolBase()
@@ -1269,6 +1282,27 @@ void CellToolBase::selectionChanged(const Region& region)
     // if we're in ref viewing mode, do nothing here
     if (editor() && selection()->referenceSelection() && (!selection()->referenceSelectionMode()))
         return;
+
+    // State of manual page breaks before columns/rows.
+    bool columnBreakChecked = false;
+    bool columnBreakEnabled = false;
+    bool rowBreakChecked = false;
+    bool rowBreakEnabled = false;
+    const Region::ConstIterator end(selection()->constEnd());
+    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
+        const Sheet *const sheet = (*it)->sheet();
+        const QRect range = (*it)->rect();
+        const int column = range.left();
+        const int row = range.top();
+        columnBreakChecked |= sheet->columnFormat(column)->hasPageBreak();
+        columnBreakEnabled |= (column != 1);
+        rowBreakChecked |= sheet->rowFormat(row)->hasPageBreak();
+        rowBreakEnabled |= (row != 1);
+    }
+    action("format_break_before_column")->setChecked(columnBreakChecked);
+    action("format_break_before_column")->setEnabled(columnBreakEnabled);
+    action("format_break_before_row")->setChecked(rowBreakChecked);
+    action("format_break_before_row")->setEnabled(rowBreakEnabled);
 
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
     if (!cell) {
@@ -3347,4 +3381,24 @@ void CellToolBase::documentSettingsDialog()
 {
     DocumentSettingsDialog dialog(selection(), canvas()->canvasWidget());
     dialog.exec();
+}
+
+void CellToolBase::breakBeforeColumn(bool enable)
+{
+    PageBreakCommand *command = new PageBreakCommand();
+    command->setSheet(selection()->activeSheet());
+    command->setMode(PageBreakCommand::BreakBeforeColumn);
+    command->setReverse(!enable);
+    command->add(*selection());
+    command->execute(canvas());
+}
+
+void CellToolBase::breakBeforeRow(bool enable)
+{
+    PageBreakCommand *command = new PageBreakCommand();
+    command->setSheet(selection()->activeSheet());
+    command->setMode(PageBreakCommand::BreakBeforeRow);
+    command->setReverse(!enable);
+    command->add(*selection());
+    command->execute(canvas());
 }
