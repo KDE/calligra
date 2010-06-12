@@ -1122,6 +1122,9 @@ void View::initialPosition()
 
     updateShowSheetMenu();
 
+    // Initialize shape anchoring action.
+    shapeSelectionChanged();
+
     if (koDocument()->isReadWrite())
         initConfig();
 
