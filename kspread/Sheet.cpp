@@ -1815,11 +1815,12 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool era)
             root.appendChild(columns);
 
             // Save all cells.
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell = d->cellStorage->firstInRow(row);
-                for (; !cell.isNull(); cell = d->cellStorage->nextInRow(cell.column(), cell.row())) {
-                    if (!cell.isPartOfMerged())
+            for (int col = range.left(); col <= range.right(); ++col) {
+                Cell cell = d->cellStorage->firstInColumn(col);
+                for (; !cell.isNull(); cell = d->cellStorage->nextInColumn(cell.column(), cell.row())) {
+                    if (!cell.isPartOfMerged()) {
                         root.appendChild(cell.save(dd, left - 1, 0, era));
+                    }
                 }
             }
 
@@ -1840,10 +1841,17 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool era)
 
         // Save all cells.
         Cell cell;
-        for (int col = range.left(); col <= range.right(); ++col) {
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                cell = Cell(this, col, row);
-                root.appendChild(cell.save(dd, left - 1, top - 1, era));
+        for (int row = range.top(); row <= range.bottom(); ++row) {
+            if (range.left() == 1) {
+                cell = d->cellStorage->firstInRow(row);
+            } else {
+                cell = d->cellStorage->nextInRow(range.left() - 1, row);
+            }
+            while (!cell.isNull() && cell.column() >= range.left() && cell.column() <= range.right()) {
+                if (!cell.isPartOfMerged()) {
+                    root.appendChild(cell.save(dd, left - 1, top - 1, era));
+                }
+                cell = d->cellStorage->nextInRow(cell.column(), cell.row());
             }
         }
     }
