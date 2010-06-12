@@ -60,6 +60,7 @@
 #include "commands/LinkCommand.h"
 #include "commands/MergeCommand.h"
 #include "commands/PageBreakCommand.h"
+#include "commands/PasteCommand.h"
 #include "commands/PrecisionCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SortManipulator.h"
@@ -2920,9 +2921,12 @@ bool CellToolBase::paste()
 
     if (!editor()) {
         //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
-        selection()->activeSheet()->paste(selection()->lastRange(), true,
-                                          Paste::Normal, Paste::OverWrite,
-                                          false, 0, true);
+        PasteCommand *const command = new PasteCommand();
+        command->setSheet(selection()->activeSheet());
+        command->add(*selection());
+        command->setMimeData(QApplication::clipboard()->mimeData());
+        command->setPasteFC(true);
+        command->execute(canvas());
         d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
     } else {
         editor()->paste();
@@ -2941,9 +2945,14 @@ void CellToolBase::specialPaste()
 
 void CellToolBase::pasteWithInsertion()
 {
-    if (!selection()->activeSheet()->testAreaPasteInsert()) {
-        selection()->activeSheet()->paste(selection()->lastRange(), true,
-                                          Paste::Normal, Paste::OverWrite, true);
+    const QMimeData *const mimeData = QApplication::clipboard()->mimeData();
+    if (!PasteCommand::unknownShiftDirection(mimeData)) {
+        PasteCommand *const command = new PasteCommand();
+        command->setSheet(selection()->activeSheet());
+        command->add(*selection());
+        command->setMimeData(mimeData);
+        command->setInsertionMode(PasteCommand::ShiftCells);
+        command->execute(canvas());
     } else {
         PasteInsertDialog dialog(canvas()->canvasWidget(), selection());
         dialog.exec();

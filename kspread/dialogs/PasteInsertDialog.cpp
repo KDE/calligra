@@ -23,6 +23,7 @@
 // Local
 #include "PasteInsertDialog.h"
 
+#include <QApplication>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <klocale.h>
@@ -31,6 +32,8 @@
 #include <QRadioButton>
 #include <QCheckBox>
 
+#include "commands/PasteCommand.h"
+#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -65,15 +68,16 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
 
 void PasteInsertDialog::slotOk()
 {
-    if (rb1->isChecked())
-        m_selection->activeSheet()->paste(m_selection->lastRange(),
-                                          true, Paste::Normal, Paste::OverWrite,
-                                          true, -1);
-    else if (rb2->isChecked())
-        m_selection->activeSheet()->paste(m_selection->lastRange(),
-                                          true, Paste::Normal, Paste::OverWrite,
-                                          true, + 1);
-
+    PasteCommand *const command = new PasteCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->add(*m_selection);
+    command->setMimeData(QApplication::clipboard()->mimeData());
+    if (rb1->isChecked()) {
+        command->setInsertionMode(PasteCommand::ShiftCellsRight);
+    } else if (rb2->isChecked()) {
+        command->setInsertionMode(PasteCommand::ShiftCellsDown);
+    }
+    m_selection->activeSheet()->map()->addCommand(command);
     accept();
 }
 

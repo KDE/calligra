@@ -109,6 +109,7 @@
 
 // commands
 #include "commands/DeleteCommand.h"
+#include "commands/PasteCommand.h"
 #include "commands/StyleCommand.h"
 #include "commands/Undo.h"
 
@@ -801,85 +802,68 @@ void Canvas::dragLeaveEvent(QDragLeaveEvent *)
 {
 }
 
-void Canvas::dropEvent(QDropEvent * _ev)
+void Canvas::dropEvent(QDropEvent *event)
 {
     d->dragging = false;
     d->view->disableAutoScroll();
     register Sheet * const sheet = activeSheet();
+    // FIXME Sheet protection: Not all cells have to be protected.
     if (!sheet || sheet->isProtected()) {
-        _ev->ignore();
+        event->ignore();
         return;
     }
 
-    double xpos = sheet->columnPosition(selection()->lastRange().left());
-    double ypos = sheet->rowPosition(selection()->lastRange().top());
-    double width  = sheet->columnFormat(selection()->lastRange().left())->width();
-    double height = sheet->rowFormat(selection()->lastRange().top())->height();
+    const QMimeData* mimeData = event->mimeData();
+    if (!PasteCommand::supports(mimeData)) {
+        event->ignore();
+        return;
+    }
+
+    // Do not allow dropping onto the same position.
+    const QPoint topLeft(selection()->boundingRect().topLeft());
+    const double xpos = sheet->columnPosition(topLeft.x());
+    const double ypos = sheet->rowPosition(topLeft.y());
+    const double width  = sheet->columnFormat(topLeft.x())->width();
+    const double height = sheet->rowFormat(topLeft.y())->height();
 
     const QRectF noGoArea(xpos - 1, ypos - 1, width + 3, height + 3);
 
     double ev_PosX;
-    if (sheet->layoutDirection() == Qt::RightToLeft)
-        ev_PosX = this->width() - viewConverter()->viewToDocumentX(_ev->pos().x()) + xOffset();
-    else
-        ev_PosX = viewConverter()->viewToDocumentX(_ev->pos().x()) + xOffset();
-
-    double ev_PosY = viewConverter()->viewToDocumentY(_ev->pos().y()) + yOffset();
+    if (sheet->layoutDirection() == Qt::RightToLeft) {
+        ev_PosX = this->width() - viewConverter()->viewToDocumentX(event->pos().x()) + xOffset();
+    } else {
+        ev_PosX = viewConverter()->viewToDocumentX(event->pos().x()) + xOffset();
+    }
+    double ev_PosY = viewConverter()->viewToDocumentY(event->pos().y()) + yOffset();
 
     if (noGoArea.contains(QPointF(ev_PosX, ev_PosY))) {
-        _ev->ignore();
+        event->ignore();
         return;
-    } else
-        _ev->setAccepted(true);
-
-    double tmp;
-    int col = sheet->leftColumn(ev_PosX, tmp);
-    int row = sheet->topRow(ev_PosY, tmp);
-
-    const QMimeData* mimeData = _ev->mimeData();
-    if (!mimeData->hasText() && !mimeData->hasFormat("application/x-kspread-snippet")) {
-        _ev->ignore();
-        return;
-    }
-
-    QByteArray b;
-
-    bool makeUndo = true;
-
-    if (mimeData->hasFormat("application/x-kspread-snippet")) {
-        if (_ev->source() == this) {
-            UndoDragDrop * undo
-            = new UndoDragDrop(sheet, *selection(),
-                               Region(QRect(col, row,
-                                            selection()->boundingRect().width(),
-                                            selection()->boundingRect().height())),
-                               selection());
-            d->view->doc()->addCommand(undo);
-            makeUndo = false;
-
-            DeleteCommand* command = new DeleteCommand();
-            command->setSheet(activeSheet());
-            command->add(*selection());
-            command->setRegisterUndo(false);
-            command->execute();
-        }
-
-
-        b = mimeData->data("application/x-kspread-snippet");
-        sheet->paste(b, QRect(col, row, 1, 1), makeUndo);
-
-        //Select the pasted cells
-        selection()->initialize(QRect(col, row,
-                                      selection()->boundingRect().width(),
-                                      selection()->boundingRect().height()), sheet);
-
-        _ev->setAccepted(true);
     } else {
-        QString text = mimeData->text();
-        sheet->pasteTextPlain(text, QRect(col, row, 1, 1));
-        _ev->setAccepted(true);
-        return;
+        event->setAccepted(true);
     }
+
+    // The destination cell location.
+    double tmp;
+    const int col = sheet->leftColumn(ev_PosX, tmp);
+    const int row = sheet->topRow(ev_PosY, tmp);
+
+    PasteCommand *const command = new PasteCommand();
+    command->setSheet(sheet);
+    command->add(Region(col, row, 1, 1, sheet));
+    command->setMimeData(mimeData);
+    if (event->source() == this) {
+        DeleteCommand *const deleteCommand = new DeleteCommand(command);
+        deleteCommand->setSheet(sheet);
+        deleteCommand->add(*selection()); // selection is still, where the drag started
+        deleteCommand->setRegisterUndo(false);
+    }
+    command->execute();
+
+    // Select the pasted cells
+    const int columns = selection()->boundingRect().width();
+    const int rows = selection()->boundingRect().height();
+    selection()->initialize(QRect(col, row, columns, rows), sheet);
 }
 
 void Canvas::slotAutoScroll(const QPoint &scrollDistance)

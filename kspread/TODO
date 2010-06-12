@@ -195,12 +195,6 @@ Things not in bugzilla
       or of the previous (default) column/row is used on insertion.
     - Launch the garbage collection in a separate thread.		----
 
-  + Commands							      2 ----
-    Convert UndoActions and related logic to Commands.
-    - Paste								----
-    - Paste Special							----
-    - Paste with insertion						----
-
   + Rich text in cells.						      1 ----
     - Use KoText.    							----
       Add a RichTextStorage containing one(!) QTextDocument consisting

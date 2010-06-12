@@ -678,37 +678,6 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to cut & paste
-    //
-
-    /**
-     * \ingroup Commands
-     * A convenience function which retrieves the data to be pasted
-     * from the clipboard.
-     */
-    void paste(const QRect & pasteArea, bool makeUndo = true,
-               Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
-               bool insert = false, int insertTo = 0, bool pasteFC = false,
-               QClipboard::Mode clipboardMode = QClipboard::Clipboard);
-
-    /**
-     * \ingroup Commands
-     */
-    void paste(const QByteArray & data, const QRect & pasteArea,
-               bool makeUndo = false, Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
-               bool insert = false, int insertTo = 0, bool pasteFC = false);
-
-    /**
-     * \ingroup Commands
-     * A function which allows to paste a text plain from the clipboard
-     */
-    void pasteTextPlain(const QString& _text, const QRect& pasteArea);
-
-    //
-    //END Methods related to cut & paste
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
     //BEGIN Methods related to column/row operations
     //
 
@@ -842,36 +811,6 @@ public:
      *            references during decoding) - used for cut to clipboard
      */
     QDomDocument saveCellRegion(const Region&, bool era = false);
-
-    /**
-     * \ingroup Commands
-     * insertTo defined if you insert to the bottom or right
-     * insert to bottom if insertTo==1
-     * insert to right if insertTo ==-1
-     * insertTo used just for insert/paste an area
-     * @see paste
-     */
-    bool loadSelection(const KoXmlDocument& doc, const QRect &pasteArea,
-                       int _xshift, int _yshift, bool makeUndo,
-                       Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
-                       bool insert = false, int insertTo = 0, bool paste = false);
-
-    /**
-     * \ingroup Commands
-     * \see loadSelection()
-     */
-    void loadSelectionUndo(const KoXmlDocument & doc, const QRect &loadArea,
-                           int _xshift, int _yshift, bool insert, int insertTo);
-
-    /**
-     * \ingroup Commands
-     * Used when you insert and paste cell
-     * return true if it's a area
-     * false if it's a column/row
-     * it's used to select if you want to insert at the bottom or right
-     * @see paste
-     */
-    bool testAreaPasteInsert()const;
 
     //
     //END UNSORTED METHODS

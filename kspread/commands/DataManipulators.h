@@ -79,7 +79,7 @@ protected:
 class AbstractDFManipulator : public AbstractDataManipulator
 {
 public:
-    AbstractDFManipulator();
+    AbstractDFManipulator(QUndoCommand *parent = 0);
     virtual ~AbstractDFManipulator();
     virtual bool process(Element* element);
 

@@ -42,6 +42,7 @@ SET (commands_DIR_SRCS
 	commands/MergeCommand.cpp
 	commands/NamedAreaCommand.cpp
         commands/PageBreakCommand.cpp
+        commands/PasteCommand.cpp
 	commands/PrecisionCommand.cpp
 	commands/RowColumnManipulators.cpp
         commands/RowStyleCommand.cpp
@@ -49,7 +50,6 @@ SET (commands_DIR_SRCS
 	commands/SortManipulator.cpp
 	commands/SpellCheckCommand.cpp
 	commands/StyleCommand.cpp
-	commands/Undo.cpp
 	commands/ValidityCommand.cpp
 	)
 

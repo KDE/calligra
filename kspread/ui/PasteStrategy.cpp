@@ -19,11 +19,13 @@
 
 #include "PasteStrategy.h"
 
+#include <QApplication>
+#include <QClipboard>
+
 #include "Global.h"
+#include "commands/PasteCommand.h"
 #include "Selection.h"
 #include "Sheet.h"
-
-#include <QClipboard>
 
 using namespace KSpread;
 
@@ -46,7 +48,9 @@ PasteStrategy::~PasteStrategy()
 
 QUndoCommand* PasteStrategy::createCommand()
 {
-    selection()->activeSheet()->paste(selection()->lastRange(), true, Paste::Normal,
-                                      Paste::OverWrite, false, 0, false, QClipboard::Selection);
-    return 0;
+    PasteCommand *const command = new PasteCommand();
+    command->setSheet(selection()->activeSheet());
+    command->add(*selection());
+    command->setMimeData(QApplication::clipboard()->mimeData(QClipboard::Selection));
+    return command;
 }

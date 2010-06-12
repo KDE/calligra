@@ -27,6 +27,8 @@
 
 #include <klocale.h>
 
+#include "commands/PasteCommand.h"
+#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -88,8 +90,13 @@ void SpecialPasteDialog::slotOk()
     if (divisionButton->isChecked())
         op = Paste::Div;
 
-    m_selection->activeSheet()->paste(m_selection->lastRange(), true, sp, op);
-    m_selection->emitModified();
+    PasteCommand *const command = new PasteCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->add(*m_selection);
+    command->setMimeData(QApplication::clipboard()->mimeData());
+    command->setMode(sp);
+    command->setOperation(op);
+    m_selection->activeSheet()->map()->addCommand(command);
     accept();
 }
 
