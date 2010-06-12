@@ -28,6 +28,8 @@
 
 namespace KSpread
 {
+class ColumnFormat;
+class RowFormat;
 
 /**
    * \class ResizeColumnManipulator
@@ -155,6 +157,7 @@ public:
     InsertDeleteColumnManipulator(QUndoCommand *parent = 0);
     virtual ~InsertDeleteColumnManipulator();
 
+    void setTemplate(const ColumnFormat &columnFormat);
     virtual void setReverse(bool reverse);
 
 protected:
@@ -166,6 +169,7 @@ protected:
 private:
     enum Mode { Insert, Delete };
     Mode m_mode;
+    ColumnFormat *m_template;
 };
 
 
@@ -180,6 +184,7 @@ public:
     InsertDeleteRowManipulator(QUndoCommand *parent = 0);
     virtual ~InsertDeleteRowManipulator();
 
+    void setTemplate(const RowFormat &rowFormat);
     virtual void setReverse(bool reverse);
 
 protected:
@@ -191,6 +196,7 @@ protected:
 private:
     enum Mode { Insert, Delete };
     Mode m_mode;
+    RowFormat *m_template;
 };
 
 }  // namespace KSpread

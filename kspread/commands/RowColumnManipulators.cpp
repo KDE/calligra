@@ -535,12 +535,20 @@ QString AdjustColumnRowManipulator::name() const
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(QUndoCommand *parent)
     : AbstractRegionCommand(parent)
         , m_mode(Insert)
+    , m_template(0)
 {
     setText(i18n("Insert Columns"));
 }
 
 InsertDeleteColumnManipulator::~InsertDeleteColumnManipulator()
 {
+    delete m_template;
+}
+
+void InsertDeleteColumnManipulator::setTemplate(const ColumnFormat &columnFormat)
+{
+    delete m_template;
+    m_template = new ColumnFormat(columnFormat);
 }
 
 void InsertDeleteColumnManipulator::setReverse(bool reverse)
@@ -561,6 +569,14 @@ bool InsertDeleteColumnManipulator::process(Element* element)
     if (!m_reverse) { // insertion
         // insert rows
         m_sheet->insertColumns(pos, num);
+        if (m_template) {
+            m_template->setSheet(m_sheet);
+            const int end = pos + num - 1;
+            for (int col = pos; col <= end; ++col) {
+                m_template->setColumn(col);
+                m_sheet->insertColumnFormat(m_template);
+            }
+        }
         m_sheet->cellStorage()->insertColumns(pos, num);
 
         // undo deletion
@@ -642,12 +658,20 @@ bool InsertDeleteColumnManipulator::postProcessing()
 InsertDeleteRowManipulator::InsertDeleteRowManipulator(QUndoCommand *parent)
     : AbstractRegionCommand(parent)
         , m_mode(Insert)
+    , m_template(0)
 {
     setText(i18n("Insert Rows"));
 }
 
 InsertDeleteRowManipulator::~InsertDeleteRowManipulator()
 {
+    delete m_template;
+}
+
+void InsertDeleteRowManipulator::setTemplate(const RowFormat &rowFormat)
+{
+    delete m_template;
+    m_template = new RowFormat(rowFormat);
 }
 
 void InsertDeleteRowManipulator::setReverse(bool reverse)
@@ -668,6 +692,14 @@ bool InsertDeleteRowManipulator::process(Element* element)
     if (!m_reverse) { // insertion
         // insert rows
         m_sheet->insertRows(pos, num);
+        if (m_template) {
+            m_template->setSheet(m_sheet);
+            const int end = pos + num - 1;
+            for (int row = pos; row <= end; ++row) {
+                m_template->setRow(row);
+                m_sheet->insertRowFormat(m_template);
+            }
+        }
         m_sheet->cellStorage()->insertRows(pos, num);
 
         // undo deletion
