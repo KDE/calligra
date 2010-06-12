@@ -30,7 +30,6 @@
 
 namespace KSpread
 {
-class CellStorageUndoData;
 
 /**
  * Provides an abstract method for the actual setting of new values.
@@ -72,9 +71,6 @@ protected:
      * Stops the undo recording and stores the old data.
      */
     virtual bool postProcessing();
-
-private:
-    CellStorageUndoData* m_undoData;
 };
 
 /**
@@ -221,11 +217,12 @@ public:
 
 protected:
     bool process(Element*);
-    bool postProcessing();
+    virtual bool preProcessing();
+    virtual bool mainProcessing();
+    virtual bool postProcessing();
 
 private:
     Direction m_direction;
-    CellStorageUndoData* m_undoData;
 
     enum Mode { Insert, Delete };
     Mode m_mode;

@@ -24,8 +24,8 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "CellStorage_p.h"
 #include "Damages.h"
+#include "Formula.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "ValueCalc.h"
@@ -410,10 +410,6 @@ void ShiftManipulator::setReverse(bool reverse)
 
 bool ShiftManipulator::process(Element* element)
 {
-    // create undo for styles, comments, conditions, validity
-    if (m_firstrun)
-        m_sheet->cellStorage()->startUndoRecording();
-
     const QRect range = element->rect();
     if (!m_reverse) { // insertion
         if (m_direction == ShiftBottom) {
@@ -442,14 +438,82 @@ bool ShiftManipulator::process(Element* element)
             QUndoCommand::undo(); // undo child commands
         }
     }
-
-    if (m_firstrun)
-        m_sheet->cellStorage()->stopUndoRecording(this);
     return true;
+}
+
+namespace KSpread
+{
+bool topRowLessThan(const Region::Element *e1, const Region::Element *e2)
+{
+    return e1->rect().top() < e2->rect().top();
+}
+
+bool leftColumnLessThan(const Region::Element *e1, const Region::Element *e2)
+{
+    return e1->rect().top() < e2->rect().top();
+}
+} // namespace KSpread
+
+bool ShiftManipulator::preProcessing()
+{
+    if (m_firstrun) {
+        // If we have an NCS, create a child command for each element.
+        if (cells().count() > 1) { // non-contiguous selection
+            // Sort the elements by their top row.
+            if (m_direction == ShiftBottom) {
+                qStableSort(cells().begin(), cells().end(), topRowLessThan);
+            } else { // ShiftRight
+                qStableSort(cells().begin(), cells().end(), leftColumnLessThan);
+            }
+            // Create sub-commands.
+            const Region::ConstIterator end(constEnd());
+            for (Region::ConstIterator it = constBegin(); it != end; ++it) {
+                ShiftManipulator *const command = new ShiftManipulator(this);
+                command->setSheet(m_sheet);
+                command->add(Region((*it)->rect(), (*it)->sheet()));
+                if (m_mode == Delete) {
+                    command->setReverse(true);
+                }
+                command->setDirection(m_direction);
+            }
+        } else { // contiguous selection
+            m_sheet->cellStorage()->startUndoRecording();
+        }
+    }
+    return AbstractRegionCommand::preProcessing();
+}
+
+bool ShiftManipulator::mainProcessing()
+{
+    if (cells().count() > 1) { // non-contiguous selection
+        if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
+            QUndoCommand::undo(); // process all sub-commands
+        } else {
+            QUndoCommand::redo(); // process all sub-commands
+        }
+        return true;
+    }
+    return AbstractRegionCommand::mainProcessing(); // calls process(Element*)
 }
 
 bool ShiftManipulator::postProcessing()
 {
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    if (cells().count() > 1) { // non-contiguous selection
+        return true;
+    }
+    if (m_firstrun) {
+        m_sheet->cellStorage()->stopUndoRecording(this);
+    }
+    CellDamage *damage = 0;
+    if (m_direction == ShiftBottom) {
+        const QPoint bottomRight(lastRange().right(), KS_rowMax);
+        const Region region(QRect(lastRange().topLeft(), bottomRight), m_sheet);
+        damage = new CellDamage(m_sheet, region, CellDamage::Appearance);
+    } else { // ShiftRight
+        const QPoint bottomRight(KS_colMax, lastRange().bottom());
+        const Region region(QRect(lastRange().topLeft(), bottomRight), m_sheet);
+        damage = new CellDamage(m_sheet, region, CellDamage::Appearance);
+    }
+    m_sheet->map()->addDamage(damage);
     return true;
 }
