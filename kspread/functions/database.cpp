@@ -176,7 +176,7 @@ void DBConditions::parse(Value conds)
     // if rows or cols is zero or negative, then we don't need to parse anything
     if(count <= 0)
         return;
-    
+
     cond = new Condition* [count];
     for (int r = 0; r < count; ++r)
         cond[r] = 0;
@@ -287,8 +287,6 @@ Value func_dcount(valVector args, ValueCalc *calc, FuncExtra *)
     Value database = args[0];
     Value conditions = args[2];
     int fieldIndex = getFieldIndex(calc, args[1], database);
-    if (fieldIndex < 0)
-        return Value::errorVALUE();
 
     DBConditions conds(calc, database, conditions);
 
@@ -296,10 +294,15 @@ Value func_dcount(valVector args, ValueCalc *calc, FuncExtra *)
     int count = 0;
     for (int r = 0; r < rows; ++r)
         if (conds.matches(r)) {
-            Value val = database.element(fieldIndex, r + 1);
-            // include this value in the result
-            if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+            // fieldIndex is optional, if no field is specified count all rows matching the conditions
+            if (fieldIndex < 0)
                 count++;
+            else {
+                Value val = database.element(fieldIndex, r + 1);
+                // include this value in the result
+                if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+                    count++;
+            }
         }
 
     return Value(count);
@@ -311,8 +314,6 @@ Value func_dcounta(valVector args, ValueCalc *calc, FuncExtra *)
     Value database = args[0];
     Value conditions = args[2];
     int fieldIndex = getFieldIndex(calc, args[1], database);
-    if (fieldIndex < 0)
-        return Value::errorVALUE();
 
     DBConditions conds(calc, database, conditions);
 
@@ -320,10 +321,15 @@ Value func_dcounta(valVector args, ValueCalc *calc, FuncExtra *)
     int count = 0;
     for (int r = 0; r < rows; ++r)
         if (conds.matches(r)) {
-            Value val = database.element(fieldIndex, r + 1);
-            // include this value in the result
-            if (!val.isEmpty())
+            // fieldIndex is optional, if no field is specified count all rows matching the conditions
+            if (fieldIndex < 0)
                 count++;
+            else {
+                Value val = database.element(fieldIndex, r + 1);
+                // include this value in the result
+                if (!val.isEmpty())
+                    count++;
+            }
         }
 
     return Value(count);
