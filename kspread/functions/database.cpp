@@ -147,13 +147,13 @@ public:
 private:
     void parse(Value conds);
     ValueCalc *calc;
-    Condition **cond;
+    QList<QList<Condition*> > cond;
     int rows, cols;
     Value db;
 };
 
 DBConditions::DBConditions(ValueCalc *vc, Value database,
-                           Value conds) : calc(vc), cond(0), rows(0), cols(0), db(database)
+                           Value conds) : calc(vc), rows(0), cols(0), db(database)
 {
     parse(conds);
 }
@@ -162,8 +162,7 @@ DBConditions::~DBConditions()
 {
     int count = rows * cols;
     for (int r = 0; r < count; ++r)
-        delete cond[r];
-    delete[] cond;
+        qDeleteAll(cond[r]);
 }
 
 void DBConditions::parse(Value conds)
@@ -177,9 +176,8 @@ void DBConditions::parse(Value conds)
     if(count <= 0)
         return;
 
-    cond = new Condition* [count];
     for (int r = 0; r < count; ++r)
-        cond[r] = 0;
+        cond.append(QList<Condition*>());
 
     // perform the parsing itself
     int cc = conds.columns();
@@ -193,9 +191,10 @@ void DBConditions::parse(Value conds)
             Value cnd = conds.element(c, r + 1);
             if (cnd.isEmpty()) continue;
             int idx = r * cols + col;
-            if (cond[idx]) delete cond[idx];
-            cond[idx] = new Condition;
-            calc->getCond(*cond[idx], cnd);
+            //if (cond[idx]) delete cond[idx];
+            Condition* theCond = new Condition;
+            calc->getCond(*theCond, cnd);
+            cond[idx].append(theCond);
         }
     }
 }
@@ -211,10 +210,12 @@ bool DBConditions::matches(unsigned row)
         bool match = true;
         for (int c = 0; c < cols; ++c) {
             int idx = r * cols + c;
-            if (!cond[idx]) continue;
-            if (!calc->matches(*cond[idx], db.element(c, row + 1))) {
-                match = false;  // didn't match
-                break;
+            if (cond[idx].isEmpty()) continue;
+            for (int i = 0; i < cond[idx].size(); i++) {
+                if (!calc->matches(*cond[idx][i], db.element(c, row + 1))) {
+                    match = false;  // didn't match
+                    break;
+                }
             }
         }
         if (match)  // all conditions in this row matched
