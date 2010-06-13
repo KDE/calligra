@@ -67,7 +67,9 @@ static double GammaHelp(double& x, bool& reflect)
 
 void awSum(ValueCalc *c, Value &res, Value val, Value)
 {
-    if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()) && (!val.isError()))
+    if (val.isError())
+        res = val;
+    else if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
         res = c->add(res, val);
 }
 
@@ -2203,6 +2205,7 @@ void ValueCalc::getCond(Condition &cond, Value val)
         cond.type = string;
         cond.stringValue = text;
     }
+    //TODO: date values
 }
 
 bool ValueCalc::matches(const Condition &cond, Value val)
