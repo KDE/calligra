@@ -73,7 +73,7 @@ Value func_fvschedule(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv_annuity(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_intrate(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ipmt(valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_irr (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_irr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ispmt(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_level_coupon(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *);
@@ -211,7 +211,7 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
   add(f);
     f = new Function("FV", func_fv);
     f->setParamCount(3, 5);
-  add(f);  
+  add(f);
     f = new Function("FVSCHEDULE", func_fvschedule);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE");
     f->setParamCount(2);
@@ -227,9 +227,10 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("IPMT", func_ipmt);
     f->setParamCount(4, 6);
   add(f);
-//   f = new Function ("IRR", func_irr);
-//   f->setParamCount (1, 2);
-//   add(f);
+    f = new Function ("IRR", func_irr);
+    f->setParamCount (1, 2);
+    f->setAcceptArray();
+  add(f);
     f = new Function("ISPMT", func_ispmt);
     f->setParamCount(4);
   add(f);
@@ -1362,6 +1363,50 @@ Value func_ipmt(valVector args, ValueCalc *calc, FuncExtra *)
     return helper_ipmt(calc, rate, per, nper, pv, fv, type);
 }
 
+static double irrResult(Value sec, ValueCalc *calc, double rate)
+{
+    double res = 0;
+    for (unsigned i = 0; i < sec.count(); i++) {
+        double val = calc->conv()->asFloat(sec.element(i)).asFloat();
+        res += val / pow(1.0 + rate, double(i));
+    }
+    return res;
+}
+
+static double irrResultDerive(Value sec, ValueCalc *calc, double rate)
+{
+    double res = 0;
+    for (unsigned i = 0; i < sec.count(); i++) {
+        double val = calc->conv()->asFloat(sec.element(i)).asFloat();
+        res += -double(i) * val / pow(1.0 + rate, double(i + 1));
+    }
+    return res;
+}
+
+//
+// Function: IRR
+//
+Value func_irr(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    static const double maxEpsilon = 1e-10;
+    static const int maxIter = 50;
+
+    Value seq = args[0];
+
+    double rate = 0.1;
+    if (args.count() > 1) rate = calc->conv()->asFloat(args[1]).asFloat();
+
+    bool contLoop;
+    int i = 0;
+    do {
+        double newRate = rate - irrResult(seq, calc, rate) / irrResultDerive(seq, calc, rate);
+        double rateEpsilon = fabs(newRate - rate);
+        rate = newRate;
+        contLoop = (rateEpsilon > maxEpsilon) && (fabs(rate) > maxEpsilon);
+    } while (contLoop && (++i < maxIter));
+
+    return Value(rate);
+}
 
 //
 // Function: ISPMT

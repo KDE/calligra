@@ -73,7 +73,7 @@
           <Related>ACCRINT</Related>
         </Help>
       </Function>
-  
+
       <Function>
         <Name>AMORDEGRC</Name>
         <Type>Float</Type>
@@ -173,7 +173,7 @@
           <Example>CONTINUOUS(1000;0.1;1) equals 1105.17</Example>
         </Help>
       </Function>
-    
+
       <Function>
         <Name>COUPNUM</Name>
         <Type>Float</Type>
@@ -204,7 +204,7 @@
           <Related>COUPPCD</Related>
         </Help>
       </Function>
-  
+
       <Function>
       <Name>CUMIPMT</Name>
       <Type>Float</Type>
@@ -668,6 +668,24 @@
         <Related>PPMT</Related>
         <Related>PV</Related>
         <Related>PMT</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IRR</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Guess</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The IRR function calculates the internal rate of return for a series of cash flows.</Text>
+        <Syntax>IRR( Values[; Guess = 0.1 ] )</Syntax>
+        <Related>XIRR</Related>
       </Help>
     </Function>
 
@@ -1357,7 +1375,7 @@
         <Related>IRR</Related>
       </Help>
     </Function>
-    
+
     <Function>
       <Name>XNPV</Name>
       <Type>Float</Type>
