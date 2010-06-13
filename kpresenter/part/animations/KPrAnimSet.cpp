@@ -1,6 +1,7 @@
 
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +29,7 @@
 #include <KoTextBlockData.h>
 #include "KPrAnimationCache.h"
 #include "KPrTextBlockPaintStrategy.h"
-
+#include "KPrShapeAnimation.h"
 #include <kdebug.h>
 
 KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
@@ -53,7 +54,7 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     else {
         kWarning(33003) << "attributeName" << attributeName << "not yet supported";
     }
-
+    m_duration = 1;
     return retval;
 }
 
@@ -63,25 +64,16 @@ void KPrAnimSet::saveOdf(KoShapeSavingContext &context) const
 }
 
 
-void KPrAnimSet::init(KPrAnimationCache *animationCache, int step) const
+void KPrAnimSet::init(KPrAnimationCache *animationCache, int step)
 {
-#if 0
-    QPair<KoShape *, KoTextBlockData *> m_shapeAnimation->animationShape() const;
-
-    if (m_textBlockData) {
-        dynamic_cast<KPrTextBlockPaintStrategy*>(m_textBlockData->paintStrategy())->setAnimationCache(animationCache);
-        if (!animationCache->hasValue(m_textBlockData, "visibility")) {
-            animationCache->setValue(m_textBlockData, "visibility", !m_visible);
-        }
-    }
-    else {
-        if (!animationCache->hasValue(m_shape, "visibility")) {
-            animationCache->setValue(m_shape, "visibility", !m_visible);
-        }
-    }
-#endif
+    m_animationCache = animationCache;
+    animationCache->init(step, m_shapeAnimation->shape(), "visibility", !m_visible);
+    animationCache->init(step + 1, m_shapeAnimation->shape(), "visibility", m_visible);
 }
 
 void KPrAnimSet::updateCurrentTime(int currentTime)
 {
+    m_animationCache->update(m_shapeAnimation->shape(), "visibility", m_visible);
 }
+
+#include "KPrAnimSet.moc"

@@ -20,7 +20,7 @@
 
 #include <KPrShapeApplicationData.h>
 
-#include "shapeanimations/KPrShapeAnimationOld.h"
+#include "animations/KPrShapeAnimation.h"
 
 KPrShapeApplicationData::KPrShapeApplicationData()
 {
@@ -31,7 +31,7 @@ KPrShapeApplicationData::~KPrShapeApplicationData()
     qDeleteAll( m_animations );
 }
 
-QSet<KPrShapeAnimationOld *> & KPrShapeApplicationData::animations()
+QSet<KPrShapeAnimation *> & KPrShapeApplicationData::animations()
 {
     return m_animations;
 }

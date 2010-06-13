@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 
 
 #include "KPrAnimationStep.h"
+#include "KPrAnimationSubStep.h"
 
 KPrAnimationStep::KPrAnimationStep()
 {
@@ -26,4 +28,14 @@ KPrAnimationStep::KPrAnimationStep()
 
 KPrAnimationStep::~KPrAnimationStep()
 {
+}
+
+void KPrAnimationStep::init(KPrAnimationCache *animationCache, int step)
+{
+    for(int i=0;i < this->animationCount(); i++) {
+        QAbstractAnimation * animation = this->animationAt(i);
+        if (KPrAnimationSubStep * a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+            a->init(animationCache, step);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
- *
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -125,7 +125,6 @@ bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &contex
     if (!KoPAPageBase::loadOdf(element, context)) {
         return false;
     }
-
     KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
     Q_ASSERT( data );
 
@@ -145,12 +144,14 @@ bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &contex
                         loadOldTransition = false;
                     }
                     // check that the id is the correct one.
+
                 }
                 if (animationElement.tagName() == "seq") {
                     QString nodeType(animationElement.attributeNS(KoXmlNS::presentation, "node-type"));
                     if (nodeType == "main-sequence") {
                         KPrAnimationLoader al;
                         al.loadOdf(animationElement, context);
+                        animations().init(al.animations());
                     }
                     else {
                         // not yet supported

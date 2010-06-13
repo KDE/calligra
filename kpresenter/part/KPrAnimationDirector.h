@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,12 +22,12 @@
 #define KPRANIMATIONDIRECTOR_H
 
 #include <QList>
-#include <QMap>
 #include <QObject>
 #include <QPair>
 #include <QTimeLine>
 
 #include <KoZoomHandler.h>
+#include "KPrShapeAnimations.h"
 
 class QPainter;
 class QPaintEvent;
@@ -39,8 +40,9 @@ class KoPAView;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrAnimationData;
+class KPrPage;
 class KPrPageData;
-class KPrShapeAnimationOld;
+class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
 {
@@ -99,7 +101,7 @@ public:
      * Check if the shape is shown
      *
      * A shape is visible when there are no animations on it or when it
-     * is animated at the moment even when it is a disappear animation. 
+     * is animated at the moment even when it is a disappear animation.
      */
     bool shapeShown( KoShape * shape );
 
@@ -109,7 +111,7 @@ public:
      * @param shape which should be animated
      * @return pair of the animation and the animation data for the shape or a 0, 0 if there is no animation
      */
-    QPair<KPrShapeAnimationOld *, KPrAnimationData *> shapeAnimation( KoShape * shape );
+    KPrShapeAnimation shapeAnimation( KoShape * shape );
 
 protected:
     // set the page to be shon and update the UI
@@ -147,19 +149,14 @@ protected:
      */
     void startTimeLine( int duration );
 
-    void animateShapes( int currentTime );
-
-    // set the animations to the current m_stepIndex
-    void updateAnimations();
-
-    // helper method for updateAnimations
-    void insertAnimations( KPrPageData * controller, KoShapeManager * shapeManager );
-
     // helper method for freeing the resources of the animations
     void clearAnimations();
 
     // check if there is a set animation in m_animations
     bool hasAnimation();
+
+    void updatePageAnimation();
+    void updateStepAnimation();
 
 protected slots:
     // update the zoom value
@@ -177,15 +174,14 @@ private:
     QRect m_pageRect;
 
     KPrPageEffectRunner * m_pageEffectRunner;
-    // TODO remove when we read the effect from the page
-    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> > m_animations;
+    QList<KPrAnimationStep *> m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
     int m_stepIndex;
-    QList<int> m_steps;
     int m_maxShapeDuration;
     // true when there is an animtion in this step
     bool m_hasAnimation;
+    KPrAnimationCache * m_animationCache;
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */

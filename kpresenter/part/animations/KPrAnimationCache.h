@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2010 Casper Boemann <cbo@boemannn.dk>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include <QMap>
 #include <QString>
 #include <QVariant>
+#include <QList>
 
 class KoShape;
 class KoTextBlockData;
@@ -77,7 +79,7 @@ public:
      * @param id The id of the value
      * @param value The value is should have
      */
-    void setValue(KoShape *shape, const QString &id, const QVariant &value);
+    void setValue(int step, KoShape *shape, const QString &id, const QVariant &value);
 
     /**
      * Sets a value, either initially or updating it
@@ -92,7 +94,7 @@ public:
     void setValue(KoTextBlockData *textBlockData, const QString &id, const QVariant &value);
 
     /**
-     * The value 
+     * The value
      *
      * Everyone can use this method to query a value.
      *
@@ -134,7 +136,7 @@ public:
     // step 0 is the value the object has before any animation is started
     // step n is the value of the object after the animation, only needed when there is a change to the real value of the object
     // e.g. the object has been moved to its original position, one the animation is done the value is removed
-    void init(int step, KoShape *shape, const QString &id, const QVariant &value, const QVariant &backValue);
+    void init(int step, KoShape *shape, const QString &id, const QVariant &value);
 
     // update step value by values
     // will do different things depending on type of QVariant
@@ -144,25 +146,25 @@ public:
     // the step in update must match the step of startStep
     // this will update the values used for the animation.
     // maybe have an internal method to also use it for updating the stack while init
-    void update(int step, KoShape *shape, const QString &id, const QVariant &value);
+    void update(KoShape *shape, const QString &id, const QVariant &value);
 
     // trigger copying of data from the last step to the current one
     // these values will be updated by update.
     // the step in update must match the step of startStep
     void startStep(int step);
+    void endStep(int step);
 
     QVariant value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue);
+    QVariant value(int step, KoShape *shape, const QString &id);
 
     bool hasValue(int step, KoShape *shape, const QString &id);
 
     // ending and animation will just activate the values of the step
 private:
-    QMap<KoShape *, QMap<QString, QVariant> > m_shapeValues;
-    QMap<KoTextBlockData *, QMap<QString, QVariant> > m_textBlockDataValues;
-
     QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
     QList<QMap<KoTextBlockData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
-    int stackPos;
+    QMap<KoShape *, QMap<QString, QVariant> > m_currentShapeValues;
+    int m_step;
 };
 
 

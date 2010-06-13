@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,12 +22,14 @@
 #define KPRANIMATIONSUBSTEP_H
 
 #include <QParallelAnimationGroup>
+#include "KPrAnimationData.h"
 
-class KPrAnimationSubStep : public QParallelAnimationGroup
+class KPrAnimationSubStep : public QParallelAnimationGroup, KPrAnimationData
 {
 public:
     KPrAnimationSubStep();
     virtual ~KPrAnimationSubStep();
+    virtual void init(KPrAnimationCache *animationCache, int step);
 };
 
 #endif /* KPRANIMATIONSUBSTEP_H */

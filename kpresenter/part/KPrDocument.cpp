@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
+  Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -182,7 +183,7 @@ KoOdf::DocumentType KPrDocument::documentType() const
     return KoOdf::Presentation;
 }
 
-void KPrDocument::addAnimation( KPrShapeAnimationOld * animation )
+void KPrDocument::addAnimation( KPrShapeAnimation * animation )
 {
     KoShape * shape = animation->shape();
 
@@ -200,7 +201,7 @@ void KPrDocument::addAnimation( KPrShapeAnimationOld * animation )
     applicationData->animations().insert( animation );
 }
 
-void KPrDocument::removeAnimation( KPrShapeAnimationOld * animation, bool removeFromApplicationData )
+void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData )
 {
     KoShape * shape = animation->shape();
 
@@ -223,8 +224,8 @@ void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
         // reinsert animations. this is needed on undo of a delete shape that had a animations
-        QSet<KPrShapeAnimationOld *> animations = applicationData->animations();
-        for ( QSet<KPrShapeAnimationOld *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
+        QSet<KPrShapeAnimation *> animations = applicationData->animations();
+        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
             addAnimation( *it );
         }
     }
@@ -235,8 +236,8 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     Q_UNUSED( page );
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
-        QSet<KPrShapeAnimationOld *> animations = applicationData->animations();
-        for ( QSet<KPrShapeAnimationOld *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
+        QSet<KPrShapeAnimation *> animations = applicationData->animations();
+        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
             // remove animations, don't remove from shape application data so that it can be reinserted on undo.
             removeAnimation( *it, false );
         }

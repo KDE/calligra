@@ -76,13 +76,6 @@ set( kpresenterprivate_LIB_SRCS
      pageeffects/KPrPageEffectFactory.cpp
      pageeffects/KPrPageEffectRegistry.cpp
 
-     shapeanimations/KPrShapeAnimationOld.cpp
-     shapeanimations/KPrTranslateAnimation.cpp
-     shapeanimations/KPrAnimationMoveAppear.cpp
-     shapeanimations/KPrAnimationDisappear.cpp
-     shapeanimations/KPrShapeAnimationFactory.cpp
-     shapeanimations/KPrShapeAnimationRegistry.cpp
-
      animations/KPrAnimationBase.cpp
      animations/KPrAnimSet.cpp
      animations/KPrAnimate.cpp
@@ -97,6 +90,7 @@ set( kpresenterprivate_LIB_SRCS
      animations/KPrAnimationStep.cpp
      animations/KPrAnimationSubStep.cpp
      animations/KPrAnimationLoader.cpp
+     animations/KPrAnimationData.cpp
 
      pagelayout/KPrPlaceholder.cpp
      pagelayout/KPrPageLayout.cpp

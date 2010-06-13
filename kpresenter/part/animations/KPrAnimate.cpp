@@ -89,7 +89,7 @@ void KPrAnimate::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void KPrAnimate::init(KPrAnimationCache *animationCache, int step) const
+void KPrAnimate::init(KPrAnimationCache *animationCache, int step)
 {
     Q_UNUSED(animationCache);
 }

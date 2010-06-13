@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,7 +77,7 @@ bool KPrAnimationLoader::loadOdf(const KoXmlElement &element, KoShapeLoadingCont
         }
         else {
             Q_ASSERT( 0 );
-            // accoring to spec there should be onla par elements 
+            // accoring to spec there should be onla par elements
         }
     }
 
@@ -128,7 +129,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
         // if there is allready an aniation create a new step
-        if ((*animationStep)->animationCount() != 0) {
+        if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
             m_animations.append(*animationStep);
             *animationStep = new KPrAnimationStep();
         }
@@ -159,7 +160,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     }
 
     KPrShapeAnimation *shapeAnimation = 0;
-    // The shape info and create a KPrShapeAnimation. If there is 
+    // The shape info and create a KPrShapeAnimation. If there is
     KoXmlElement e;
     forEachElement(e, element) {
         // TODO add a check that the shape animation is still the correct one
@@ -201,4 +202,9 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         subStep->addAnimation(shapeAnimation);
     }
     return true;
+}
+
+QList<KPrAnimationStep *> KPrAnimationLoader::animations()
+{
+    return m_animations;
 }

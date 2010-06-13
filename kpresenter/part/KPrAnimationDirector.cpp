@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,12 +44,12 @@
 #include "KPrPageSelectStrategyActive.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
-#include "shapeanimations/KPrAnimationData.h"
-#include "shapeanimations/KPrShapeAnimationOld.h"
 
 #include <KoShapeLayer.h>
 #include <KoPAMasterPage.h>
 #include <KoSelection.h>
+#include "KPrShapeAnimations.h"
+#include "animations/KPrAnimationCache.h"
 
 KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )
 : m_view( view )
@@ -58,6 +59,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
 , m_stepIndex( 0 )
 , m_maxShapeDuration( 0 )
 , m_hasAnimation( false )
+, m_animationCache( 0 )
 {
     Q_ASSERT( !m_pages.empty() );
 
@@ -67,8 +69,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
         updateActivePage( currentPage );
 
     m_pageIndex = m_pages.indexOf( m_view->activePage() );
+    updatePageAnimation();
+    m_animationCache->startStep(m_stepIndex);
 
-    updateAnimations();
     connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
     connect( m_canvas, SIGNAL( sizeChanged( const QSize & ) ), this, SLOT( updateZoom( const QSize & ) ) );
@@ -81,7 +84,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
                                                              new KPrPageSelectStrategyActive( m_view ) ) );
 
     if ( hasAnimation() ) {
-        startTimeLine( m_maxShapeDuration );
+        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
     }
 }
 
@@ -89,7 +92,6 @@ KPrAnimationDirector::~KPrAnimationDirector()
 {
     // free used resources
     delete m_pageEffectRunner;
-    clearAnimations();
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
     m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager(),
@@ -105,7 +107,6 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
         bool finished = m_pageEffectRunner->isFinished();
         if ( !m_pageEffectRunner->paint( painter ) )
         {
-            kDebug(33001) << "XXXXXXXXXXXXXX delete old runner" << m_pageEffectRunner;
             delete m_pageEffectRunner;
             m_pageEffectRunner = 0;
 
@@ -119,22 +120,21 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
                 }
                 else {
                     // start the animations
-                    startTimeLine( m_maxShapeDuration );
+                    startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
                 }
             }
         }
     }
-    else
-    {
+    else {
         QRect clipRect = m_pageRect.intersected( event->rect() );
         painter.setClipRect( clipRect );
         painter.setRenderHint( QPainter::Antialiasing );
         paintStep( painter );
     }
     // This is needed as otherwise on some ATI graphic cards it leads to
-    // 100% CPU load of the x server and no more key events are received 
+    // 100% CPU load of the x server and no more key events are received
     // until the page effect is finished. With it is made sure that key
-    // events still get through so that it is possible to cancel the 
+    // events still get through so that it is possible to cancel the
     // events. It looks like this is not a problem with nvidia graphic
     // cards.
     KApplication::kApplication()->syncX();
@@ -157,7 +157,7 @@ int KPrAnimationDirector::currentPage() const
 
 int KPrAnimationDirector::numStepsInPage() const
 {
-    return m_steps.size();
+    return m_animations.size();
 }
 
 int KPrAnimationDirector::currentStep() const
@@ -176,7 +176,6 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
         finished = true;
     }
     else if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
-        Q_ASSERT( !m_animations.isEmpty() );
         finishAnimations();
         m_timeLine.stop();
         finished = true;
@@ -216,7 +215,6 @@ void KPrAnimationDirector::navigateToPage( int index )
         m_timeLine.stop();
     }
     else if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
-        Q_ASSERT( !m_animations.isEmpty() );
         finishAnimations();
         m_timeLine.stop();
     }
@@ -227,26 +225,26 @@ void KPrAnimationDirector::navigateToPage( int index )
     m_stepIndex = 0;
 
     updateActivePage( page );
-    updateAnimations();
-
+    updatePageAnimation();
+    m_animationCache->startStep(m_stepIndex);
     // trigger a repaint
     m_canvas->update();
 
     if ( hasAnimation() ) {
-        startTimeLine( m_maxShapeDuration );
+        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
     }
 }
 
 bool KPrAnimationDirector::shapeShown( KoShape * shape )
 {
-    return !m_animations.contains( shape ) || m_animations[shape].first != 0;
+    if(hasAnimation()){
+        return m_animationCache->value(shape, "visibility", true).toBool();
+    }
+    return true;
 }
 
-QPair<KPrShapeAnimationOld *, KPrAnimationData *> KPrAnimationDirector::shapeAnimation( KoShape * shape )
+KPrShapeAnimation KPrAnimationDirector::shapeAnimation( KoShape * shape )
 {
-    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.find( shape ) );
-
-    return ( it != m_animations.end() ) ? it.value() : QPair<KPrShapeAnimationOld *, KPrAnimationData *>( 0, 0 );
 }
 
 
@@ -281,15 +279,34 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
     // it can be that the pages have different sizes. So we need to recalulate
     // the zoom when we change the page
     updateZoom( m_canvas->size() );
-
     KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
     Q_ASSERT( kprPage );
-    KPrPageData * pageData = dynamic_cast<KPrPageData*>( kprPage->masterPage() );
-    Q_ASSERT( pageData );
-    QSet<int> steps = kprPage->animations().steps().toSet();
-    steps.unite( pageData->animations().steps().toSet() );
-    m_steps = steps.toList();
+    m_pageIndex = m_pages.indexOf(page);
+    //updatePageAnimation(kprPage);
+    m_animations = kprPage->animations().steps();
 }
+
+void KPrAnimationDirector::updatePageAnimation()
+{
+    if(m_animationCache != 0){
+        delete(m_animationCache);
+    }
+    KoPAPageBase * page = m_pages[m_pageIndex];
+    KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
+    m_animationCache = new KPrAnimationCache();
+
+    int i = 0;
+    foreach(KPrAnimationStep * step, m_animations){
+        step->init(m_animationCache, i);
+        i++;
+    }
+}
+
+void KPrAnimationDirector::updateStepAnimation()
+{
+    m_animationCache->startStep(m_stepIndex);
+}
+
 
 bool KPrAnimationDirector::changePage( Navigation navigation )
 {
@@ -325,14 +342,14 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
     m_stepIndex = 0;
 
     updateActivePage( m_pages[m_pageIndex] );
-    updateAnimations();
+    updatePageAnimation();
+    m_animationCache->startStep(m_stepIndex);
 
     // trigger a repaint
     m_canvas->update();
 
-    //TODO start animations on step 0
     if ( hasAnimation() ) {
-        startTimeLine( m_maxShapeDuration );
+        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
     }
 
     return false;
@@ -366,11 +383,11 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
 
 bool KPrAnimationDirector::nextStep()
 {
-    if ( ! m_steps.isEmpty() && m_stepIndex < m_steps.size() - 1 ) {
+    if ( m_stepIndex < numStepsInPage() - 1 ) {
         // if there are sub steps go to the next substep
         ++m_stepIndex;
-        updateAnimations();
-        startTimeLine( m_maxShapeDuration );
+        updateStepAnimation();
+        startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
     }
     else {
         // if there are no more sub steps go to the next page
@@ -392,8 +409,8 @@ bool KPrAnimationDirector::nextStep()
             m_canvas->render( &oldPage );
 
             updateActivePage( m_pages[m_pageIndex] );
-            updateAnimations();
-
+            updatePageAnimation();
+            m_animationCache->startStep(m_stepIndex);
             QPixmap newPage( m_canvas->size() );
             newPage.fill( Qt::white ); // TODO
             QPainter newPainter( &newPage );
@@ -401,18 +418,16 @@ bool KPrAnimationDirector::nextStep()
             newPainter.setRenderHint( QPainter::Antialiasing );
             paintStep( newPainter );
 
-            KPrPageEffectRunner *oldRunner = m_pageEffectRunner;
             m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
-            kDebug(33001) << "XXXXXXXXXXXXXX new pageEffecrRunner old:" << oldRunner << "new:" << m_pageEffectRunner;
             startTimeLine( effect->duration() );
         }
         else {
             updateActivePage( m_pages[m_pageIndex] );
-            updateAnimations();
-
+            updatePageAnimation();
+            m_animationCache->startStep(m_stepIndex);
             m_canvas->update();
             if ( hasAnimation() ) {
-                startTimeLine( m_maxShapeDuration );
+                startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
             }
         }
     }
@@ -423,17 +438,17 @@ void KPrAnimationDirector::previousStep()
 {
     if ( m_stepIndex > 0 ) {
         --m_stepIndex;
+        m_animationCache->endStep(m_stepIndex);
         // trigger a repaint of the running animations
         finishAnimations();
-        updateAnimations();
     }
     else {
         if ( m_pageIndex > 0 ) {
             --m_pageIndex;
             updateActivePage( m_pages[m_pageIndex] );
-            Q_ASSERT( m_steps.size() > 0 );
-            m_stepIndex = m_steps.size() - 1;
-            updateAnimations();
+            m_stepIndex = m_animations.size() - 1;
+            updatePageAnimation();
+            m_animationCache->endStep(m_stepIndex);
             // trigger repaint
             m_canvas->update();
             // cancel a running page effect
@@ -445,57 +460,10 @@ void KPrAnimationDirector::previousStep()
     finishAnimations();
 }
 
-void KPrAnimationDirector::updateAnimations()
-{
-    clearAnimations();
-    if ( m_steps.size() > m_stepIndex ) {
-        m_maxShapeDuration = 0;
-
-        KPrPage * page = dynamic_cast<KPrPage *>( m_pages[m_pageIndex] );
-        KPrPageData * pageData = dynamic_cast<KPrPageData*>( page->masterPage() );
-        Q_ASSERT( page );
-        Q_ASSERT( pageData );
-
-        m_hasAnimation = false;
-        insertAnimations( page, m_canvas->shapeManager() );
-        insertAnimations( pageData, m_canvas->masterShapeManager() );
-    }
-}
-
-void KPrAnimationDirector::insertAnimations( KPrPageData * controller, KoShapeManager * shapeManager )
-{
-    KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-    QRectF pageRect( 0, 0, pageLayout.width, pageLayout.height );
-
-    QMap<KoShape *, KPrShapeAnimationOld *> animations = controller->animations().animations( m_steps[m_stepIndex] );
-    QMap<KoShape *, KPrShapeAnimationOld *>::iterator it( animations.begin() );
-    for ( ; it != animations.end(); ++it ) {
-        KPrShapeAnimationOld * animation = it.value();
-        if ( animation ) {
-            m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas, shapeManager, pageRect ) ) );
-            m_hasAnimation = true;
-            if ( animation->duration() > m_maxShapeDuration ) {
-                m_maxShapeDuration = animation->duration();
-            }
-        }
-        else {
-            m_animations.insert( it.key(), QPair<KPrShapeAnimationOld *, KPrAnimationData *>( 0, 0 ) );
-        }
-    }
-}
-
-void KPrAnimationDirector::clearAnimations()
-{
-    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.begin() );
-    for ( ; it != m_animations.end(); ++it ) {
-        delete it.value().second;
-    }
-    m_animations.clear();
-}
 
 bool KPrAnimationDirector::hasAnimation()
 {
-    return m_hasAnimation;
+    return m_animations.size() > 0;
 }
 
 void KPrAnimationDirector::animate()
@@ -503,39 +471,27 @@ void KPrAnimationDirector::animate()
     if ( m_pageEffectRunner ) {
         m_pageEffectRunner->next( m_timeLine.currentTime() );
     }
-    else if ( ! m_animations.empty() ) { //if there are animnations
-        animateShapes( m_timeLine.currentTime() );
+    else if ( hasAnimation() ) { //if there are animnations
+        // set current time, to the current step
+        m_animations.at(m_stepIndex)->setCurrentTime(m_timeLine.currentTime());
+        m_canvas->update();
     }
 }
 
 void KPrAnimationDirector::finishAnimations()
 {
-    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.begin() );
-    for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimationOld * animation = it.value().first;
-        if ( animation ) {
-            animation->finish( it.value().second );
-            it.value().second->m_shapeManager->notifyShapeChanged( it.key() );
-        }
-    }
-}
-
-
-void KPrAnimationDirector::animateShapes( int currentTime )
-{
-    QMap<KoShape *, QPair<KPrShapeAnimationOld *, KPrAnimationData *> >::iterator it( m_animations.begin() );
-    for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimationOld * animation = it.value().first;
-        if ( animation ) {
-            animation->next( currentTime, it.value().second );
-            it.value().second->m_shapeManager->notifyShapeChanged( it.key() );
-        }
-    }
+    m_canvas->update();
 }
 
 void KPrAnimationDirector::startTimeLine( int duration )
 {
-    m_timeLine.setDuration( duration );
+    if (duration == 0) {
+        m_timeLine.setDuration( 1 );
+    }
+    else {
+        kDebug() << duration;
+       m_timeLine.setDuration( duration );
+    }
     m_timeLine.setCurrentTime( 0 );
     m_timeLine.start();
 }

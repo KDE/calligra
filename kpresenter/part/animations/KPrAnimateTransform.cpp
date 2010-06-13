@@ -27,6 +27,7 @@
 KPrAnimateTransform::KPrAnimateTransform(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)
 {
+    m_duration = 1;
 }
 
 KPrAnimateTransform::~KPrAnimateTransform()
@@ -45,7 +46,7 @@ void KPrAnimateTransform::saveOdf(KoShapeSavingContext &context) const
     Q_UNUSED(context);
 }
 
-void KPrAnimateTransform::init(KPrAnimationCache *animationCache, int step) const
+void KPrAnimateTransform::init(KPrAnimationCache *animationCache, int step)
 {
     Q_UNUSED(animationCache);
 }

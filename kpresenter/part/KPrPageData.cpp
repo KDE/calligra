@@ -18,6 +18,7 @@
  */
 
 #include "KPrPageData.h"
+#include "KPrShapeAnimations.h"
 
 KPrPageData::KPrPageData()
 {

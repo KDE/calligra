@@ -26,7 +26,7 @@
 #include "KPrCustomSlideShows.h"
 
 class KPrDeclarations;
-class KPrShapeAnimationOld;
+class KPrShapeAnimation;
 class KPrShapeAnimations;
 
 class KPrDocument : public KoPADocument
@@ -49,7 +49,7 @@ public:
      *
      * @param animation animation to add to shape
      */
-    void addAnimation( KPrShapeAnimationOld * animation );
+    void addAnimation( KPrShapeAnimation * animation );
 
     /**
      * @brief Remove animation from shape
@@ -58,7 +58,7 @@ public:
      * @param removeFromApplicationData if true the animation will also be removed from the 
      *        application data
      */
-    void removeAnimation( KPrShapeAnimationOld * animation, bool removeFromApplicationData = true );
+    void removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData = true );
 
     /**
      * @brief get the slideShows defined for this document

@@ -37,7 +37,7 @@ void KPrAnimTransitionFilter::saveOdf(KoShapeSavingContext &context) const
 {
 }
 
-void KPrAnimTransitionFilter::init(KPrAnimationCache *animationCache, int step) const
+void KPrAnimTransitionFilter::init(KPrAnimationCache *animationCache, int step)
 {
 }
 

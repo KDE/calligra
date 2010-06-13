@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,23 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATECOLOR_H
-#define KPRANIMATECOLOR_H
+#ifndef KPRANIMATIONDATA_H
+#define KPRANIMATIONDATA_H
 
-#include "KPrAnimationBase.h"
+class KPrAnimationCache;
 
-class KPrAnimateColor : public KPrAnimationBase
+class KPrAnimationData
 {
 public:
-    KPrAnimateColor(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimateColor();
-
-    virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
-    virtual void saveOdf( KoShapeSavingContext &context ) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
-
-protected:
-    virtual void updateCurrentTime(int currentTime);
+    KPrAnimationData();
+    virtual ~KPrAnimationData();
+    virtual void init(KPrAnimationCache *animationCache, int step) = 0;
 };
 
-#endif /* KPRANIMATECOLOR_H */
+#endif // KPRANIMATIONDATA_H

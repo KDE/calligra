@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define KPRSHAPEANIMATION_H
 
 #include <QParallelAnimationGroup>
+#include "KPrAnimationData.h"
 #include <QPair>
 
 class KoShape;
@@ -30,7 +32,7 @@ class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KPrAnimationCache;
 
-class KPrShapeAnimation : public QParallelAnimationGroup
+class KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
 {
 public:
     KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
@@ -39,7 +41,18 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     void saveOdf(KoShapeSavingContext &context) const;
 
-    void init(KPrAnimationCache *animationCache, int step) const;
+    KoShape * shape() const;
+    virtual void init(KPrAnimationCache *animationCache, int step);
+
+    /**
+     * @return true if this shape animation change the visibility
+     */
+    bool visibilityChange();
+
+    /**
+     * @return true if this shape animation enable visibility of the shape
+     */
+    bool visible();
 
     /**
      * Read the value from the first KPrAnimationBase object

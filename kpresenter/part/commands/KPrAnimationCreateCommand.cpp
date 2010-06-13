@@ -24,7 +24,7 @@
 #include "KPrDocument.h"
 #include "shapeanimations/KPrShapeAnimationOld.h"
 
-KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimationOld * animation )
+KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
 : m_doc( doc )
 , m_animation( animation )
 , m_deleteAnimation( true )

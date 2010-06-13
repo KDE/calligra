@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,16 +48,11 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
 
 void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
-    if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
+        if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
         if ( m_animationDirector->shapeShown( shape ) ) {
-            //kDebug() << shape;
             painter.save();
             painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
             // animate shape
-            QPair<KPrShapeAnimationOld *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
-            if ( animation.first ) {
-                animation.first->animate( painter, converter, animation.second );
-            }
             // paint shape
             shapeManager()->paintShape( shape, painter, converter, forPrint );
             painter.restore();  // for the matrix
@@ -66,8 +62,4 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
 
 void KPrShapeManagerAnimationStrategy::adapt( KoShape * shape, QRectF & rect )
 {
-    QPair<KPrShapeAnimationOld *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
-    if ( animation.first ) {
-        animation.first->animateRect( rect, animation.second );
-    }
 }

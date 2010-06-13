@@ -21,6 +21,7 @@
 #define KPRANIMATIONBASE_H
 
 #include <QAbstractAnimation>
+#include "KPrAnimationData.h"
 
 class KoXmlElement;
 class KoShapeLoadingContext;
@@ -30,7 +31,7 @@ class KoTextBlockData;
 class KPrAnimationCache;
 class KPrShapeAnimation;
 
-class KPrAnimationBase : public QAbstractAnimation
+class KPrAnimationBase : public QAbstractAnimation, KPrAnimationData
 {
 public:
     KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
@@ -38,11 +39,6 @@ public:
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
     virtual void saveOdf(KoShapeSavingContext &context) const = 0;
-
-    /**
-     * initialize the case and set the cache onto each of the animated objects (textBlocks and shapes)
-     */
-    virtual void init(KPrAnimationCache *animationCache, int step) const = 0;
 
 #if XXX
     // how do I know which step we are in? only animations for the current step should do something
@@ -52,7 +48,7 @@ public:
     // 1. Init cache with values that take effect even before the animation is started
     //    This information should be kept in the first stack entry
     //    I think this is only needed for visibility as the other take only effect in the presentation step
-    // 2. For the animation on 1. step 
+    // 2. For the animation on 1. step
     //    copy falues form previous step that are still there.
     //    update values with the values from the animations of that current step
     //    when all is finished start with the next step
@@ -62,11 +58,12 @@ public:
 #endif
 
     virtual int duration() const;
-
+    virtual void init(KPrAnimationCache *animationCache, int step) = 0;
 protected:
     virtual void updateCurrentTime(int currentTime) = 0;
 
     KPrShapeAnimation *m_shapeAnimation; // we could also use the group() but that would mean we need to cast all the time
+    KPrAnimationCache * m_animationCache;
     int m_begin; // in milliseconds
     int m_duration; // in milliseconds
 };

@@ -43,7 +43,6 @@
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
 #include "dockers/KPrPageLayoutDocker.h"
-#include "shapeanimations/KPrAnimationMoveAppear.h"
 
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrCustomSlideShowsDialog.h"
@@ -215,10 +214,10 @@ void KPrView::createAnimation()
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     foreach( KoShape * shape, selectedShapes )
     {
-        KPrShapeAnimationOld * animation = new KPrAnimationMoveAppear( shape, animationcount );
+        /*KPrShapeAnimationOld * animation = new KPrAnimationMoveAppear( shape, animationcount );
         KPrDocument * doc = static_cast<KPrDocument *>( kopaDocument() );
         KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( doc, animation );
-        kopaCanvas()->addCommand( command );
+        kopaCanvas()->addCommand( command );*/
     }
     animationcount = ( animationcount + 1 ) % 3;
 }

@@ -30,7 +30,7 @@ public:
 
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext &context ) const;
-    virtual void init(KPrAnimationCache *animationCache, int step) const;
+    virtual void init(KPrAnimationCache *animationCache, int step);
 
 protected:
     virtual void updateCurrentTime(int currentTime);
