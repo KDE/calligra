@@ -243,11 +243,6 @@ bool KPrAnimationDirector::shapeShown( KoShape * shape )
     return true;
 }
 
-KPrShapeAnimation KPrAnimationDirector::shapeAnimation( KoShape * shape )
-{
-}
-
-
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
     if ( m_canvas == m_view->kopaCanvas() ) {

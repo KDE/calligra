@@ -75,6 +75,7 @@ QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id)
 {
     if (m_shapeValuesStack[step].contains(shape))
         return m_shapeValuesStack[step].value(shape).value(id);
+    return QVariant();
 }
 
 
