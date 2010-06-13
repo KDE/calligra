@@ -26,7 +26,6 @@
 #include <QRectF>
 
 #include "kspread_export.h"
-#include "HeadFoot.h"
 
 class QPainter;
 

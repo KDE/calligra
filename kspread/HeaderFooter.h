@@ -26,8 +26,6 @@
 
 #include <QString>
 
-#include "HeadFoot.h"
-
 #include "kspread_export.h"
 
 namespace KSpread
@@ -77,11 +75,6 @@ public:
      * Replaces in _text all i18n-versions of the page macros by the internal version of the macros
      */
     QString delocalizeHeadFootLine ( const QString &_text ) const;
-
-    /**
-     * Returns the head and foot line of the print out
-     */
-    HeadFoot headFootLine() const;
 
     /**
      * Sets the head and foot line of the print out

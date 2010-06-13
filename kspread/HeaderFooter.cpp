@@ -109,19 +109,6 @@ QString HeaderFooter::delocalizeHeadFootLine ( const QString &_text ) const
     return tmp;
 }
 
-HeadFoot HeaderFooter::headFootLine() const
-{
-    HeadFoot hf;
-    hf.headLeft  = m_headLeft;
-    hf.headRight = m_headRight;
-    hf.headMid   = m_headMid;
-    hf.footLeft  = m_footLeft;
-    hf.footRight = m_footRight;
-    hf.footMid   = m_footMid;
-
-    return hf;
-}
-
 void HeaderFooter::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                                          const QString &_footl, const QString &_footm, const QString &_footr )
 {

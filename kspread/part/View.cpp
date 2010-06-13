@@ -661,7 +661,7 @@ View::~View()
     delete d->calcLabel;
     delete d->actions;
     delete d->zoomHandler;
-    
+
     // NOTE sebsauer: first unregister the event-handler, then delete the canvas and then we are save to
     // call removeCanvasController without crashing.
     //d->canvasController->canvas()->canvasWidget()->removeEventFilter(d->canvasController);
@@ -1300,7 +1300,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->actions->showPageBorders->blockSignals(true);
     d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
     d->actions->showPageBorders->blockSignals(false);
-    
+
     d->actions->protectSheet->blockSignals(true);
     d->actions->protectSheet->setChecked(d->activeSheet->isProtected());
     d->actions->protectSheet->blockSignals(false);
@@ -1791,14 +1791,14 @@ void View::paperLayoutDlg()
     KoPageLayout pl = print->settings()->pageLayout();
 
     const HeaderFooter *const headerFooter = print->headerFooter();
-    HeadFoot hf;
+/*    HeadFoot hf;
     hf.headLeft  = headerFooter->localizeHeadFootLine(headerFooter->headLeft());
     hf.headRight = headerFooter->localizeHeadFootLine(headerFooter->headRight());
     hf.headMid   = headerFooter->localizeHeadFootLine(headerFooter->headMid());
     hf.footLeft  = headerFooter->localizeHeadFootLine(headerFooter->footLeft());
     hf.footRight = headerFooter->localizeHeadFootLine(headerFooter->footRight());
     hf.footMid   = headerFooter->localizeHeadFootLine(headerFooter->footMid());
-
+*/
     KoUnit unit = doc()->unit();
 
     PageLayoutDialog dialog(this, d->activeSheet);
