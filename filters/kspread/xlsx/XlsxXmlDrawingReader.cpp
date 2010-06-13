@@ -26,6 +26,8 @@
 #include "XlsxXmlWorksheetReader.h"
 #include "XlsxXmlChartReader.h"
 #include "XlsxImport.h"
+#include "Charting.h"
+#include "ChartExport.h"
 
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
@@ -42,6 +44,10 @@ XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderC
 
 XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
 {
+    foreach(XlsxXmlChartReaderContext* c, charts) {
+        delete c->m_chart;
+        delete c->m_chartExport;
+    }
 }
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
@@ -175,8 +181,22 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
         const QString file = QString("chart%1.xml").arg(++m_chartNumber);
         const QString filepath = path + "/" + file;
 
+        Charting::Chart* chart = new Charting::Chart;
+        chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
+        if(m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
+            XlsxXmlDrawingReaderContext::Position f = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+            chart->m_fromRow = f.m_row;
+            chart->m_fromColumn = f.m_col;
+            if(m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
+                f = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
+                chart->m_toRow = f.m_row;
+                chart->m_toColumn = f.m_col;
+            }
+        }
+        ChartExport* chartexport = new ChartExport(chart);
+
         KoStore* storeout = m_context->worksheetReaderContext->import->outputStore();
-        XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(m_context, storeout);
+        XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(storeout, chartexport);
         
         XlsxXmlChartReader reader(this);
         const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, context);

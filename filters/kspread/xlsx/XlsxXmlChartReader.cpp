@@ -24,8 +24,6 @@
  */
 
 #include "XlsxXmlChartReader.h"
-#include "XlsxXmlDrawingReader.h"
-#include "XlsxXmlWorksheetReader.h"
 
 #include "Charting.h"
 #include "ChartExport.h"
@@ -68,18 +66,16 @@ QString columnName(uint column)
     return s;
 }
 
-XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext, KoStore* _storeout)
+XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout, ChartExport* _chartExport)
     : MSOOXML::MsooXmlReaderContext()
-    , drawingReaderContext(_drawingReaderContext)
     , m_storeout(_storeout)
-    , m_chart(0)
-    , m_chartExport(0)
+    , m_chart(_chartExport->chart())
+    , m_chartExport(_chartExport)
 {
 }
 
 XlsxXmlChartReaderContext::~XlsxXmlChartReaderContext()
 {
-    delete m_chart;
 }
 
 XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
@@ -98,8 +94,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
 {
     m_context = dynamic_cast<XlsxXmlChartReaderContext*>(context);
     Q_ASSERT(m_context);
-    Q_ASSERT(m_context->drawingReaderContext);
-    Q_ASSERT(m_context->drawingReaderContext->worksheetReaderContext);
 
     readNext();
     if (!isStartDocument()) {
@@ -110,12 +104,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     if (!expectEl("c:chartSpace")) {
         return KoFilter::WrongFormat;
     }
-
-    delete m_context->m_chart;
-    m_context->m_chart = new Charting::Chart;
-
-    delete m_context->m_chartExport;
-    m_context->m_chartExport = new ChartExport(m_context->m_chart);
 
     while (!atEnd()) {
         QXmlStreamReader::TokenType tokenType = readNext();
@@ -136,31 +124,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
     // static is fine here cause we only need to take care that that number is unique in the
     // exported ODS file and do not take if the number is continuous or whatever.
     static int chartNumber = 0;
-
     m_context->m_chartExport->m_href = QString("Chart%1").arg(++chartNumber);
-    QMap<XlsxXmlDrawingReaderContext::AnchorType, XlsxXmlDrawingReaderContext::Position> positions = m_context->drawingReaderContext->m_positions;
-    const QString sheetName = m_context->drawingReaderContext->worksheetReaderContext->worksheetName;
-    if(! sheetName.isEmpty()) {
-        m_context->m_chartExport->m_endCellAddress += sheetName + '.';
-    }
 
-    if(positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
-        XlsxXmlDrawingReaderContext::Position f = positions[XlsxXmlDrawingReaderContext::FromAnchor];
-        m_context->m_chartExport->m_endCellAddress += columnName(f.m_col) + QString::number(f.m_row);
-        m_context->m_chartExport->m_x = columnWidth(f.m_col-1, 0 /*f.m_colOff*/);
-        m_context->m_chartExport->m_y = rowHeight(f.m_row-1, 0 /*f.m_rowOff*/);
-        if(positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
-            XlsxXmlDrawingReaderContext::Position t = positions[XlsxXmlDrawingReaderContext::ToAnchor];
-            m_context->m_chartExport->m_width = columnWidth( t.m_col - f.m_col - 1, 0 /*t.m_colOff*/);
-            m_context->m_chartExport->m_height = rowHeight( t.m_row - f.m_row - 1, 0 /*t.m_rowOff*/);
+    Charting::Chart* c = m_context->m_chart;
+    if(!c->m_sheetName.isEmpty()) {
+        m_context->m_chartExport->m_endCellAddress += c->m_sheetName + '.';
+    }
+    if(c->m_fromColumn > 0 && c->m_fromRow > 0) {
+        m_context->m_chartExport->m_endCellAddress += columnName(c->m_fromColumn) + QString::number(c->m_fromRow);
+        m_context->m_chartExport->m_x = columnWidth(c->m_fromColumn-1, 0 /*f.m_colOff*/);
+        m_context->m_chartExport->m_y = rowHeight(c->m_fromRow-1, 0 /*f.m_rowOff*/);
+        if(c->m_toColumn > 0 && c->m_toRow > 0) {
+            m_context->m_chartExport->m_width = columnWidth( c->m_toColumn - c->m_fromColumn - 1, 0 /*t.m_colOff*/);
+            m_context->m_chartExport->m_height = rowHeight( c->m_toRow - c->m_fromRow - 1, 0 /*t.m_rowOff*/);
         }
     }
 
-    if (!m_context->m_chart->m_cellRangeAddress.isNull() ) {
+    if (!c->m_cellRangeAddress.isNull() ) {
         m_context->m_chartExport->m_cellRangeAddress.clear();
-        if (!sheetName.isEmpty()) m_context->m_chartExport->m_cellRangeAddress += sheetName + '.';
-        m_context->m_chartExport->m_cellRangeAddress += columnName(m_context->m_chart->m_cellRangeAddress.left()) + QString::number(m_context->m_chart->m_cellRangeAddress.top()) + ":" +
-                                                        columnName(m_context->m_chart->m_cellRangeAddress.right()) + QString::number(m_context->m_chart->m_cellRangeAddress.bottom());
+        if (!c->m_sheetName.isEmpty())
+            m_context->m_chartExport->m_cellRangeAddress += c->m_sheetName + '.';
+        m_context->m_chartExport->m_cellRangeAddress += columnName(c->m_cellRangeAddress.left()) + QString::number(c->m_cellRangeAddress.top()) + ":" +
+                                                        columnName(c->m_cellRangeAddress.right()) + QString::number(c->m_cellRangeAddress.bottom());
     }
 
     m_context->m_chartExport->m_notifyOnUpdateOfRanges = m_currentSeries->m_valuesCellRangeAddress; //m_cellRangeAddress
@@ -170,7 +155,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
 
     // write the embedded object file
     m_context->m_chartExport->saveContent(m_context->m_storeout, manifest);
-
+    
     m_context = 0;
     return KoFilter::OK;
 }

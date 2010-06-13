@@ -38,7 +38,7 @@ public:
     ~ChartExport();
     Charting::Chart* chart() const { return m_chart; }
 
-
+    bool m_drawLayer;
     QString m_href;
     QString m_cellRangeAddress;
     QString m_endCellAddress;

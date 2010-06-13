@@ -25,40 +25,22 @@
 #ifndef XLSXXMLCHARTREADER_H
 #define XLSXXMLCHARTREADER_H
 
-//#include <KoGenStyle.h>
-//#include <styles/KoCharacterStyle.h>
-//#include <KoUnit.h>
-//#include <KoXmlWriter.h>
-//#include <KoGenStyles.h>
-//#include <KoOdfNumberStyles.h>
-//#include <KoOdfGraphicStyles.h>
-//#include <styles/KoCharacterStyle.h>
-
 #include <MsooXmlCommonReader.h>
-//#include <MsooXmlThemesReader.h>
-//#include "XlsxSharedString.h"
-//#include <kspread/Util.h>
-//#include <math.h>
-//#include <QBrush>
-//#include <QRegExp>
-//#include "NumberFormatParser.h"
 
 namespace Charting {
     class Series;
     class Chart;
 }
 
-class XlsxXmlDrawingReaderContext;
 class ChartExport;
 
 class XlsxXmlChartReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlDrawingReaderContext* drawingReaderContext;
     KoStore* m_storeout;
     Charting::Chart* m_chart;
     ChartExport* m_chartExport;
-    explicit XlsxXmlChartReaderContext(XlsxXmlDrawingReaderContext* _drawingReaderContext, KoStore* _storeout);
+    explicit XlsxXmlChartReaderContext(KoStore* _storeout, ChartExport* _chartExport);
     virtual ~XlsxXmlChartReaderContext();
 };
 

@@ -25,23 +25,7 @@
 #ifndef XLSXXMLDRAWINGREADER_H
 #define XLSXXMLDRAWINGREADER_H
 
-//#include <KoGenStyle.h>
-//#include <styles/KoCharacterStyle.h>
-//#include <KoUnit.h>
-//#include <KoXmlWriter.h>
-//#include <KoGenStyles.h>
-//#include <KoOdfNumberStyles.h>
-//#include <KoOdfGraphicStyles.h>
-//#include <styles/KoCharacterStyle.h>
-
 #include <MsooXmlCommonReader.h>
-//#include <MsooXmlThemesReader.h>
-//#include "XlsxSharedString.h"
-//#include <kspread/Util.h>
-//#include <math.h>
-//#include <QBrush>
-//#include <QRegExp>
-//#include "NumberFormatParser.h"
 
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;

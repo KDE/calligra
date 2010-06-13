@@ -34,6 +34,7 @@ ChartExport::ChartExport(Charting::Chart* chart)
     : m_chart(chart)
 {
     Q_ASSERT(m_chart);
+    m_drawLayer = false;
 }
 
 ChartExport::~ChartExport()
@@ -66,23 +67,31 @@ QString normalizeCellRange(QString range)
 
 bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
 {
-    if(!chart() || m_href.isEmpty() || m_endCellAddress.isEmpty() || m_notifyOnUpdateOfRanges.isEmpty())
+    if(!chart() || m_href.isEmpty())
         return false;
 
     xmlWriter->startElement("draw:frame");
-    //xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H20");
-    //xmlWriter->addAttribute("table:end-x", "0.2953in");
-    //xmlWriter->addAttribute("table:end-y", "0.0232in");
-    xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
+
+    // used in opendocumentpresentation for layers
+    if(m_drawLayer)
+        xmlWriter->addAttribute("draw:layer", "layout");
+    
+    // used in opendocumentspreadsheet to reference cells
+    if(!m_endCellAddress.isEmpty())
+        xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
+
     xmlWriter->addAttributePt("svg:x", m_x);
     xmlWriter->addAttributePt("svg:y", m_y);
     if(m_width > 0)
         xmlWriter->addAttributePt("svg:width", m_width);
     if(m_height > 0)
         xmlWriter->addAttributePt("svg:height", m_height);
-    xmlWriter->addAttribute("draw:z-index", "0");
+    
+    //xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
-    xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
+    //TODO don't show on e.g. presenter
+    if(!m_notifyOnUpdateOfRanges.isEmpty())
+        xmlWriter->addAttribute("draw:notify-on-update-of-ranges", m_notifyOnUpdateOfRanges);
     xmlWriter->addAttribute("xlink:href", "./" + m_href);
     xmlWriter->addAttribute("xlink:type", "simple");
     xmlWriter->addAttribute("xlink:show", "embed");
