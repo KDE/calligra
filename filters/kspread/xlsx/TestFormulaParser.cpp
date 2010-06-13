@@ -44,7 +44,7 @@ void TestFormulaParser::testConvertFormula_data()
         << "=AREAS((A1:A3~B3:C5))";
     QTest::newRow("nested function calls")
         << "IF(OR(C12=\"\",D12=\"\"),\"\",IF(C12=D12,\"Pass\",\"Fail\"))"
-        << "=IF(OR(C12=\'\';D12=\"\");\"\";IF(C12=D12;\"Pass\";\"Fail\"))";
+        << "=IF(OR(C12=\"\";D12=\"\");\"\";IF(C12=D12;\"Pass\";\"Fail\"))";
     QTest::newRow("intersection operator")
         << "AREAS((A1:C5 B2:B3))"
         << "=AREAS((A1:C5!B2:B3))";

@@ -45,7 +45,7 @@ QString MSOOXML::convertFormula(const QString& formula)
                 state = InSheetOrAreaName;
             else if (ch == ',')
                 result[i] = ';'; // replace argument delimiter
-            else if (ch == '(')
+            else if (ch == '(' && !result[i-1].isLetterOrNumber())
                 state = InParenthesizedArgument;
             break;
         case InParenthesizedArgument:
