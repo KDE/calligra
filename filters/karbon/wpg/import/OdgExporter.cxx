@@ -257,18 +257,16 @@ void OdgExporter::setFillRule(FillRule rule)
         m_fillRule = rule;
 }
 
-void OdgExporter::startLayer(unsigned int id)
+void OdgExporter::startLayer(unsigned int)
 {
-        Q_UNUSED(id);
 }
 
 void OdgExporter::endLayer(unsigned int)
 {
 }
 
-void OdgExporter::drawRectangle(const libwpg::WPGRect& rect, double rx, double ry)
+void OdgExporter::drawRectangle(const libwpg::WPGRect& rect, double rx, double )
 {
-        Q_UNUSED(ry)
         writeStyle();
         OpenTagGraphicsElement *pDrawRectElement = new OpenTagGraphicsElement("draw:rect");
         m_value.str("");
