@@ -56,6 +56,7 @@ protected:
 //! @internal form-level action for handling "on click" actions
 class KFORMEDITOR_EXPORT KexiFormEventAction : public KAction
 {
+    Q_OBJECT
 public:
     //! A structure used in currentActionName()
     class KFORMEDITOR_EXPORT ActionData
@@ -91,7 +92,7 @@ public:
 public slots:
     //! Activates the action. If the object supports executing (macro, script),
     //! it is executed; otherwise (table, query, form,...) it is opened in its data view.
-    virtual void trigger();
+    void slotTrigger();
 
 private:
     QString m_actionName, m_objectName, m_actionOption;
