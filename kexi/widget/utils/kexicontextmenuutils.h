@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 public:
     /*! Updates title for context menu.
      \return true if the title has been updated. */
-    static bool updateTitle(QMenu *menu, const QString& objectName,
+    static bool updateTitle(KMenu *menu, const QString& objectName,
                             const QString& objectTypeName, const QString& iconName);
 };
 
@@ -60,7 +60,7 @@ public:
     /*! Updates title for context menu.
      Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
      \return true if the title has been updated. */
-    static bool updateTitle(QMenu *menu, const QString& title,
+    static bool updateTitle(KMenu *menu, const QString& title,
                             const QString& iconName = QString());
 
 public slots:
