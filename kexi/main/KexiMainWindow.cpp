@@ -2468,7 +2468,8 @@ KexiMainWindow::storeSettings()
     if (d->nav)
         mainWindowGroup.writeEntry("ProjectNavigatorSize", d->nav->parentWidget()->size());
 
-    mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
+    if (d->propEditorDockableWidget)
+        mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
 
     KGlobal::config()->sync();
     return;
@@ -4081,12 +4082,21 @@ bool KexiMainWindow::eventFilter(QObject *obj, QEvent * e)
 }
 #endif
 
-bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode)
+bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode, QString* errorMessage)
 {
+    kDebug() << viewMode;
     //! @todo this can be more complex once we deliver ACLs...
     if (!d->userMode)
         return true;
     KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
+    if (!part) {
+        if (errorMessage) {
+            *errorMessage = Kexi::partManager().errorMsg();
+        }
+    }
+    kDebug() << part << item->partClass();
+    if (part)
+        kDebug() << item->partClass() << part->supportedUserViewModes();
     return part && (part->supportedUserViewModes() & viewMode);
 }
 
@@ -4104,7 +4114,7 @@ KexiWindow *
 KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
                            QMap<QString, QVariant>* staticObjectArgs, QString* errorMessage)
 {
-    if (!openingAllowed(item, viewMode)) {
+    if (!openingAllowed(item, viewMode, errorMessage)) {
         if (errorMessage)
             *errorMessage = i18nc(
                                 "opening is not allowed in \"data view/design view/text view\" mode",

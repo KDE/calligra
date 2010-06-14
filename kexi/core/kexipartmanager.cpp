@@ -117,6 +117,8 @@ Part* Manager::part(Info *i)
     clearError();
     if (!i)
         return 0;
+    if (!lookup())
+        return 0;
 
     if (i->isBroken()) {
         setError(i->errorMessage());
@@ -175,15 +177,14 @@ static QString realPartClass(const QString &className)
 
 Part* Manager::partForClass(const QString &className)
 {
-    const QString realClass = realPartClass(className);
-    Part *p = realClass.isEmpty() ? 0 : m_parts.value(realClass);
-    if (!p)
-        setError(i18n("No plugin for class \"%1\"", realClass));
-    return p;
+    Info* info = infoForClass(className);
+    return part(info);
 }
 
 Info* Manager::infoForClass(const QString &className)
 {
+    if (!lookup())
+        return 0;
     const QString realClass = realPartClass(className);
     Info *i = realClass.isEmpty() ? 0 : m_partsByClass.value(realClass);
     if (i)
@@ -195,6 +196,8 @@ Info* Manager::infoForClass(const QString &className)
 void Manager::insertStaticPart(StaticPart* part)
 {
     if (!part)
+        return;
+    if (!lookup())
         return;
 //    part->info()->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
     m_partlist.append(part->info());
