@@ -109,6 +109,10 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+2010-06-13
+Forms
+*display title in the drop-down menu for image boxes; regression in 2.x; also fixes image boxes in table view
+
 2010-06-11
 Main Window
 *fix autoopening (--open) for User Mode
