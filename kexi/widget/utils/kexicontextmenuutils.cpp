@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,7 +57,6 @@ public:
     , *propertiesAction
 #endif
     ;
-    QAction *titleAction;
 };
 
 //------------
@@ -66,7 +65,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
         : KMenu(parent)
         , d(new Private(this))
 {
-    d->titleAction = addTitle(QString());
+    addTitle(QString());
 
     d->actionCollection.addAction("insert",
                                   d->insertFromFileAction = new KAction(
@@ -284,7 +283,7 @@ KActionCollection* KexiImageContextMenu::actionCollection() const
 }
 
 //static
-bool KexiImageContextMenu::updateTitle(QMenu *menu, const QString& title,
+bool KexiImageContextMenu::updateTitle(KMenu *menu, const QString& title,
                                        const QString& iconName)
 {
     return KexiContextMenuUtils::updateTitle(menu, title, i18n("Image"), iconName);
@@ -293,7 +292,7 @@ bool KexiImageContextMenu::updateTitle(QMenu *menu, const QString& title,
 // -------------------------------------------
 
 //static
-bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
+bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
                                        const QString& objectTypeName, const QString& iconName)
 {
     if (!menu || objectName.isEmpty() || objectTypeName.isEmpty())
@@ -306,28 +305,14 @@ bool KexiContextMenuUtils::updateTitle(QMenu *menu, const QString& objectName,
     if (!action || !action->defaultWidget())
         return false;
 
-// const int id = menu->idAt(0);
-// QMenuItem *item = menu->findItem(id);
-// if (!item)
-//  return false;
-// KPopupTitle *title = dynamic_cast<KPopupTitle *>(item->widget());
-// if (!title)
-//  return false;
-
     /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
      (see doc/dev/settings.txt) */
     QString realTitle(i18nc("Object name : Object type", "%1 : %2",
                             objectName[0].toUpper() + objectName.mid(1),
                             objectTypeName));
 
-    action->setIcon(KIcon(iconName));
-    action->setText(realTitle);
-    /*if (iconName.isEmpty())
-      title->setTitle(realTitle);
-    else {
-      QPixmap pixmap(SmallIcon( iconName ));
-      title->setTitle(realTitle, &pixmap);
-    }*/
+    menu->addTitle(KIcon(iconName), realTitle, action /*before old*/);
+    menu->removeAction(action);
     return true;
 }
 
