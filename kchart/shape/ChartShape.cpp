@@ -958,7 +958,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
 #ifndef NWORKAROUND_ODF_BUGS
     if ( !background() ) {
         const QColor color = KoOdfWorkaround::fixMissingFillColor( chartElement, context );
-        if(color.isValid()) // invalid color means do not set KoColorBackground but be transparent instead
+        if (color.isValid()) // invalid color means do not set KoColorBackground but be transparent instead
             setBackground( new KoColorBackground( color ) );
     }
 #endif

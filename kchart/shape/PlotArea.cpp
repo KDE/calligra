@@ -565,8 +565,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // First step is to load the axis. Datasets are attached to an
     // axis and we need the axis to check for categories.
 
-    //remove the default axes first
-    while( !d->axes.isEmpty() ) {
+    // Remove the default axes first.
+    while ( !d->axes.isEmpty() ) {
         Axis *axis = d->axes.takeLast();
         Q_ASSERT( axis );
         if ( axis->title() )
@@ -586,14 +586,14 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         }
     }
 
-    //2 axes are mandatory, check that we have them
-    if( !xAxis() ) {
+    // 2 axes are mandatory, check that we have them.
+    if ( !xAxis() ) {
         Axis *xAxis = new Axis( this );
         xAxis->setPosition( BottomAxisPosition );
         xAxis->setVisible( false );
         addAxis( xAxis );
     }
-    if( !yAxis() ) {
+    if ( !yAxis() ) {
         Axis *yAxis = new Axis( this );
         yAxis->setPosition( LeftAxisPosition );
         yAxis->setVisible( false );
@@ -601,8 +601,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     }
 
     CellRegion cellRangeAddress;
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
-    {
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
         cellRangeAddress = CellRegion( plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
     }
 
@@ -719,8 +718,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     setCellRangeAddress( cellRangeAddress );
 
-    if ( sheetAccessModel )
-    {
+    if ( sheetAccessModel ) {
         const QString sheetName = cellRangeAddress.sheetName();
         int sheetIndex = 0;
         // Find sheet that this cell range address is associated with
@@ -760,6 +758,15 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             //if ( !d->floor )
             //    d->floor = new Surface( this );
             //d->floor->loadOdf( n, context );
+        }
+        else if (d->chartType == StockChartType && n.localName() == "stock-gain-marker" ) {
+            // FIXME
+        }
+        else if (d->chartType == StockChartType && n.localName() == "stock-loss-marker" ) {
+            // FIXME
+        }
+        else if (d->chartType == StockChartType && n.localName() == "stock-range-line" ) {
+            // FIXME
         }
         else if ( n.localName() != "axis" && n.localName() != "series" ) {
             qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
