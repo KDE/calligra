@@ -267,6 +267,11 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numFmt()
         else if (val == "bullet") {
             m_bulletStyle = true;
         }
+        else if (val == "ordinal") {
+            // in ooxml this means having 1st, 2nd etc. but currently there's no real support for it
+            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
+            m_currentListStyleProperties->setListItemSuffix(".");
+        }
     }
 
     readNext();
