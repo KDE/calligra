@@ -2392,8 +2392,8 @@ int Sheet::loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
 
 QRect Sheet::usedArea(bool onlyContent) const
 {
-    int maxCols = d->cellStorage->columns();
-    int maxRows = d->cellStorage->rows();
+    int maxCols = d->cellStorage->columns(!onlyContent);
+    int maxRows = d->cellStorage->rows(!onlyContent);
 
     if (!onlyContent) {
         const RowFormat * row = firstRow();

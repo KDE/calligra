@@ -1272,13 +1272,13 @@ Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
     return Cell(d->sheet, newCol, row);
 }
 
-int CellStorage::columns() const
+int CellStorage::columns(bool includeStyles) const
 {
     int max = 0;
     max = qMax(max, d->commentStorage->usedArea().right());
     max = qMax(max, d->conditionsStorage->usedArea().right());
     max = qMax(max, d->fusionStorage->usedArea().right());
-    max = qMax(max, d->styleStorage->usedArea().right());
+    if (includeStyles) max = qMax(max, d->styleStorage->usedArea().right());
     max = qMax(max, d->validityStorage->usedArea().right());
     max = qMax(max, d->formulaStorage->columns());
     max = qMax(max, d->linkStorage->columns());
@@ -1290,13 +1290,13 @@ int CellStorage::columns() const
     return max;
 }
 
-int CellStorage::rows() const
+int CellStorage::rows(bool includeStyles) const
 {
     int max = 0;
     max = qMax(max, d->commentStorage->usedArea().bottom());
     max = qMax(max, d->conditionsStorage->usedArea().bottom());
     max = qMax(max, d->fusionStorage->usedArea().bottom());
-    max = qMax(max, d->styleStorage->usedArea().bottom());
+    if (includeStyles) max = qMax(max, d->styleStorage->usedArea().bottom());
     max = qMax(max, d->validityStorage->usedArea().bottom());
     max = qMax(max, d->formulaStorage->rows());
     max = qMax(max, d->linkStorage->rows());

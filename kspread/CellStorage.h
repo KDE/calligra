@@ -110,7 +110,7 @@ public:
      * \return the sheet this CellStorage is for.
      */
     Sheet* sheet() const;
-    
+
     /**
      * Removes all data at \p col , \p row .
      */
@@ -337,13 +337,13 @@ public:
      * The maximum occupied column, i.e. the horizontal storage dimension.
      * \return the maximum column
      */
-    int columns() const;
+    int columns(bool includeStyles = true) const;
 
     /**
      * The maximum occupied row, i.e. the vertical storage dimension.
      * \return the maximum row
      */
-    int rows() const;
+    int rows(bool includeStyles = true) const;
 
     /**
      * Creates a substorage consisting of the values in \p region.
