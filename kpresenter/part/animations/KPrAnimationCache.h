@@ -91,7 +91,7 @@ public:
      * @param id The id of the value
      * @param value The value is should have
      */
-    void setValue(KoTextBlockData *textBlockData, const QString &id, const QVariant &value);
+    void setValue(int step, KoTextBlockData *textBlockData, const QString &id, const QVariant &value);
 
     /**
      * The value
@@ -164,6 +164,7 @@ private:
     QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
     QList<QMap<KoTextBlockData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
     QMap<KoShape *, QMap<QString, QVariant> > m_currentShapeValues;
+    QMap<KoTextBlockData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
     int m_step;
 };
 

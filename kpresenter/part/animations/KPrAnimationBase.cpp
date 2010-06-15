@@ -22,6 +22,7 @@
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
+,m_duration(1)
 {
 }
 

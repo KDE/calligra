@@ -39,15 +39,15 @@ KPrAnimationCache::~KPrAnimationCache()
 
 bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id)
 {
-    if (m_shapeValuesStack[m_step].contains(shape))
-        return m_shapeValuesStack[m_step].value(shape).contains(id);
+    if (m_currentShapeValues.contains(shape))
+        return m_currentShapeValues.value(shape).contains(id);
     return false;
 }
 
 bool KPrAnimationCache::hasValue(KoTextBlockData *textBlockData, const QString &id)
 {
-    if (m_textBlockDataValuesStack[m_step].contains(textBlockData))
-        return m_textBlockDataValuesStack[m_step].value(textBlockData).contains(id);
+    if (m_currentTextBlockDataValues.contains(textBlockData))
+        return m_currentTextBlockDataValues.value(textBlockData).contains(id);
     return false;
 }
 
@@ -56,9 +56,9 @@ void KPrAnimationCache::setValue(int step, KoShape *shape, const QString &id, co
     m_shapeValuesStack[step][shape][id] = value;
 }
 
-void KPrAnimationCache::setValue(KoTextBlockData *textBlockData, const QString &id, const QVariant &value)
+void KPrAnimationCache::setValue(int step, KoTextBlockData *textBlockData, const QString &id, const QVariant &value)
 {
-    m_textBlockDataValuesStack[m_step][textBlockData][id] = value;
+    m_textBlockDataValuesStack[step][textBlockData][id] = value;
 }
 
 QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVariant &defaultValue)
@@ -66,9 +66,6 @@ QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVari
     if (m_currentShapeValues.contains(shape))
         return m_currentShapeValues.value(shape).value(id, defaultValue);
     return defaultValue;
-    /*if (m_shapeValuesStack[m_step].contains(shape))
-        return m_shapeValuesStack[m_step].value(shape).value(id, defaultValue);
-    return defaultValue;*/
 }
 
 QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id)
@@ -81,8 +78,8 @@ QVariant KPrAnimationCache::value(int step, KoShape *shape, const QString &id)
 
 QVariant KPrAnimationCache::value(KoTextBlockData *textBlockData, const QString &id, const QVariant &defaultValue)
 {
-    if (m_textBlockDataValuesStack[m_step].contains(textBlockData))
-        return m_textBlockDataValuesStack[m_step].value(textBlockData).value(id, defaultValue);
+    if (m_currentTextBlockDataValues.contains(textBlockData))
+        return m_currentTextBlockDataValues.value(textBlockData).value(id, defaultValue);
     return defaultValue;
 }
 
@@ -125,16 +122,14 @@ void KPrAnimationCache::update(KoShape *shape, const QString &id, const QVariant
 
 void KPrAnimationCache::startStep(int step)
 {
-    m_step = step;
     if(m_shapeValuesStack.size() > step)
-        m_currentShapeValues = m_shapeValuesStack[m_step];
+        m_currentShapeValues = m_shapeValuesStack[step];
 }
 
 void KPrAnimationCache::endStep(int step)
 {
-    m_step = step;
     if(m_shapeValuesStack.size() > step)
-        m_currentShapeValues = m_shapeValuesStack[m_step+1];
+        m_currentShapeValues = m_shapeValuesStack[step+1];
 }
 
 

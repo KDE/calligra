@@ -30,6 +30,8 @@
 #include "KPrAnimationCache.h"
 #include "KPrTextBlockPaintStrategy.h"
 #include "KPrShapeAnimation.h"
+#include "KPrDurationParser.h"
+
 #include <kdebug.h>
 
 KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
@@ -54,7 +56,8 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     else {
         kWarning(33003) << "attributeName" << attributeName << "not yet supported";
     }
-    m_duration = 1;
+    m_duration = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "dur"));
+
     return retval;
 }
 

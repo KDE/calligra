@@ -433,9 +433,6 @@ void KPrAnimationDirector::previousStep()
 {
     if ( m_stepIndex > 0 ) {
         --m_stepIndex;
-        m_animationCache->endStep(m_stepIndex);
-        // trigger a repaint of the running animations
-        finishAnimations();
     }
     else {
         if ( m_pageIndex > 0 ) {
@@ -443,7 +440,6 @@ void KPrAnimationDirector::previousStep()
             updateActivePage( m_pages[m_pageIndex] );
             m_stepIndex = m_animations.size() - 1;
             updatePageAnimation();
-            m_animationCache->endStep(m_stepIndex);
             // trigger repaint
             m_canvas->update();
             // cancel a running page effect
@@ -475,6 +471,7 @@ void KPrAnimationDirector::animate()
 
 void KPrAnimationDirector::finishAnimations()
 {
+    m_animationCache->endStep(m_stepIndex);
     m_canvas->update();
 }
 
