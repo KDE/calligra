@@ -63,6 +63,7 @@ public:
         Left = 1,
         Center = 2,
         Right = 3,
+        Justified = 4,
         HAlignUndefined = 0
     };
 

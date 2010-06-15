@@ -335,10 +335,12 @@ void Style::loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const Ko
         QString str = styleStack.property(KoXmlNS::fo, "text-align");
         if (str == "center")
             setHAlign(Style::Center);
-        else if (str == "end")
+        else if (str == "end" || str=="right")
             setHAlign(Style::Right);
-        else if (str == "start")
+        else if (str == "start" || str=="left")
             setHAlign(Style::Left);
+        else if (str == "justify")
+            setHAlign(Style::Justified);
         else
             setHAlign(Style::HAlignUndefined);
         kDebug(36003) << "\t\t text-align:" << str;
@@ -1218,6 +1220,9 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
             break;
         case Left:
             value = "start";
+            break;
+        case Justified:
+            value = "justify";
             break;
         case HAlignUndefined:
             break;
