@@ -33,7 +33,7 @@ public:
     virtual void init(KPrAnimationCache *animationCache, int step);
 
 protected:
-    virtual void updateCurrentTime(int currentTime);
+    virtual void next(int currentTime);
 
 private:
     bool m_visible;

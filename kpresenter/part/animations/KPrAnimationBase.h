@@ -60,7 +60,8 @@ public:
     virtual int duration() const;
     virtual void init(KPrAnimationCache *animationCache, int step) = 0;
 protected:
-    virtual void updateCurrentTime(int currentTime) = 0;
+    virtual void updateCurrentTime(int currentTime);
+    virtual void next(int currentTime) = 0;
 
     KPrShapeAnimation *m_shapeAnimation; // we could also use the group() but that would mean we need to cast all the time
     KPrAnimationCache * m_animationCache;

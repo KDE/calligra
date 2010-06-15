@@ -50,6 +50,6 @@ void KPrAnimateColor::init(KPrAnimationCache *animationCache, int step)
     Q_UNUSED(animationCache);
 }
 
-void KPrAnimateColor::updateCurrentTime(int currentTime)
+void KPrAnimateColor::next(int currentTime)
 {
 }

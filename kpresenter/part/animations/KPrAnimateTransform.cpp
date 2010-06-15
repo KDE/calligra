@@ -50,6 +50,6 @@ void KPrAnimateTransform::init(KPrAnimationCache *animationCache, int step)
     Q_UNUSED(animationCache);
 }
 
-void KPrAnimateTransform::updateCurrentTime(int currentTime)
+void KPrAnimateTransform::next(int currentTime)
 {
 }

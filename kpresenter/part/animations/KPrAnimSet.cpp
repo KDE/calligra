@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
@@ -73,7 +72,7 @@ void KPrAnimSet::init(KPrAnimationCache *animationCache, int step)
     animationCache->init(step + 1, m_shapeAnimation->shape(), "visibility", m_visible);
 }
 
-void KPrAnimSet::updateCurrentTime(int currentTime)
+void KPrAnimSet::next(int currentTime)
 {
     m_animationCache->update(m_shapeAnimation->shape(), "visibility", m_visible);
 }

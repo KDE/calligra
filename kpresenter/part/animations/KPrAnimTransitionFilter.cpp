@@ -42,6 +42,6 @@ void KPrAnimTransitionFilter::init(KPrAnimationCache *animationCache, int step)
 {
 }
 
-void KPrAnimTransitionFilter::updateCurrentTime(int currentTime)
+void KPrAnimTransitionFilter::next(int currentTime)
 {
 }

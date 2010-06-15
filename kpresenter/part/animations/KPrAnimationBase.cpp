@@ -40,5 +40,20 @@ int KPrAnimationBase::duration() const
 
 bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    m_begin = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "begin"));
+    if (m_begin == -1) {
+        m_begin = 0;
+    }
     m_duration = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "dur"));
+    if (m_duration == -1) {
+        m_duration = 1;
+    }
+    m_duration += m_begin;
+}
+
+void KPrAnimationBase::updateCurrentTime(int currentTime)
+{
+    if (currentTime >= m_begin) {
+        next(currentTime - m_begin);
+    }
 }
