@@ -42,7 +42,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <config-endian.h> // WORDS_BIGENDIAN
+#include <KoConfig.h> // WORDS_BIGENDIAN
 
 #include <kdebug.h>
 #include <kcodecs.h>
