@@ -52,7 +52,7 @@ int KPrDurationParser::durationMs(const QString & duration)
             }
         }
         bool ok = true;
-        ms = qreal(result[1].toDouble(&ok)) * factor;
+        ms = qRound(qreal(result[1].toDouble(&ok) * factor));
     }
     return ms;
 }
