@@ -1855,9 +1855,15 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
 
     if (!align.isNull()) {
         switch (align.alignX()) {
-        case Format::Left: style.addProperty("fo:text-align", "start", KoGenStyle::ParagraphType); break;
-        case Format::Center: style.addProperty("fo:text-align", "center", KoGenStyle::ParagraphType); break;
-        case Format::Right: style.addProperty("fo:text-align", "end", KoGenStyle::ParagraphType); break;
+        case Format::Left:
+            style.addProperty("fo:text-align", "start", KoGenStyle::ParagraphType); break;
+        case Format::Center:
+            style.addProperty("fo:text-align", "center", KoGenStyle::ParagraphType); break;
+        case Format::Right:
+            style.addProperty("fo:text-align", "end", KoGenStyle::ParagraphType); break;
+        case Format::Justify:
+        case Format::Distributed:
+            style.addProperty("fo:text-align", "justify", KoGenStyle::ParagraphType); break;
         }
 
         if (align.indentLevel() != 0)

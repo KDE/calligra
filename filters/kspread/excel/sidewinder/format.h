@@ -644,7 +644,7 @@ public:
     void setTopLeftBorder(const Pen& pen);
     const Pen& bottomLeftBorder() const;
     void setBottomLeftBorder(const Pen& pen);
-    
+
     /**
      * Returns true if this background is equal to f; otherwise returns false.
      */
@@ -766,7 +766,7 @@ public:
      */
     void setValueFormat(const UString& valueFormat);
 
-    enum { Standard = -1, Left, Center, Right };
+    enum { Standard = -1, Left, Center, Right, Justify, Distributed };
 
     enum { Top, Middle, Bottom, VJustify, VDistributed };
 

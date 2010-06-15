@@ -474,8 +474,14 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
         alignment.setAlignX(Format::Right); break;
     case XFRecord::Centered:
         alignment.setAlignX(Format::Center); break;
+    case XFRecord::Justified:
+        alignment.setAlignX(Format::Justify); break;
+    case XFRecord::Distributed:
+        alignment.setAlignX(Format::Distributed); break;
+    case XFRecord::Filled:
+    case XFRecord::CenteredSelection:
     default: break;
-        // FIXME still unsupported: Repeat, Justified, Filled, Distributed
+        // FIXME still unsupported: CenteredSelection, Filled
     }
 
     switch (xf.verticalAlignment()) {

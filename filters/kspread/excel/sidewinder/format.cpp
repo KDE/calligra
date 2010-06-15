@@ -309,7 +309,7 @@ void FormatAlignment::setAlignY(unsigned ya)
 
 bool FormatAlignment::wrap() const
 {
-    return d->wrap || d->alignY == Format::VJustify || d->alignY == Format::VDistributed;
+    return d->wrap || d->alignY == Format::VJustify || d->alignY == Format::VDistributed || d->alignX == Format::Justify || d->alignX == Format::Distributed;
 }
 
 void FormatAlignment::setWrap(bool w)
@@ -607,7 +607,7 @@ void FormatBorders::setBottomLeftBorder(const Pen& pen)
     d->bottomLeftBorder = pen;
     d->null = false;
 }
-    
+
 bool FormatBorders::operator==(const FormatBorders& font) const
 {
     return
