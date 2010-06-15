@@ -2,6 +2,9 @@
 
 <kpartgui name="kpresenter" version="119">
     <MenuBar>
+        <Menu name="file">
+            <Action name="file_export_html" />
+        </Menu>
         <Menu name="edit"><text>&amp;Edit</text>
             <Action name="edit_undo"/>
             <Action name="edit_redo"/>

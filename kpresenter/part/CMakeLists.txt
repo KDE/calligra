@@ -60,6 +60,8 @@ set( kpresenterprivate_LIB_SRCS
      KPrPageSelectStrategyFixed.cpp
      KPrPageSelectStrategyActive.cpp
      KPrDurationParser.cpp
+     KPrHtmlExport.cpp
+     KPrHtmlExportUiDelegate.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
@@ -102,6 +104,7 @@ set( kpresenterprivate_LIB_SRCS
      ui/KPrConfigureSlideShowDialog.cpp
      ui/KPrConfigurePresenterViewDialog.cpp
      ui/KPrPresentationToolWidget.cpp
+     ui/KPrHtmlExportDialog.cpp
 
      tools/KPrPlaceholderTool.cpp
      tools/KPrPlaceholderToolFactory.cpp
@@ -112,11 +115,12 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
      ui/KPrPresentationTool.ui
+     ui/KPrHtmlExport.ui
    )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY})
+target_link_libraries(kpresenterprivate kopageapp kowidgets ${KDE4_PHONON_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
 target_link_libraries(kpresenterprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

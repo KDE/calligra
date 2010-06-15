@@ -1,7 +1,9 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.org>
-   
+   Copyright (C) 2009 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2009 Yannick Motta <yannick.motta@gmail.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -23,12 +25,15 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kmessagebox.h>
+#include <kfiledialog.h>
 
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
 #include <KoPACanvas.h>
 #include <KoPADocumentStructureDocker.h>
+#include <KoDocumentInfo.h>
 
 #include "KPrDocument.h"
 #include "KPrPage.h"
@@ -43,12 +48,12 @@
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
 #include "dockers/KPrPageLayoutDocker.h"
-
+#include "KPrHtmlExport.h"
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrCustomSlideShowsDialog.h"
 #include "ui/KPrConfigureSlideShowDialog.h"
 #include "ui/KPrConfigurePresenterViewDialog.h"
-#include <QDebug>
+#include "ui/KPrHtmlExportDialog.h"
 #include <QtGui/QDesktopWidget>
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
@@ -140,6 +145,10 @@ void KPrView::initActions()
        setXMLFile( "kpresenter.rc" );
 
     // do special kpresenter stuff here
+    m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
+    actionCollection()->addAction("file_export_html", m_actionExportHtml);
+    connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
+    
     m_actionViewModeNormal = new KAction(i18n("Normal"), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
@@ -273,6 +282,23 @@ void KPrView::configurePresenterView()
         doc->setPresenterViewEnabled( dialog->presenterViewEnabled() );
     }
     delete dialog;
+}
+
+void KPrView::exportToHtml()
+{
+    KPrHtmlExportDialog *dialog = new KPrHtmlExportDialog(kopaDocument()->pages(),koDocument()->documentInfo()->aboutInfo("title"),
+                                                          koDocument()->documentInfo()->authorInfo("creator"), this);
+    if (dialog->exec() == QDialog::Accepted && !dialog->checkedSlides().isEmpty()) {
+        // Get the export directory
+        KUrl directoryUrl = KFileDialog::getExistingDirectoryUrl();
+        if (directoryUrl.isValid()) {
+            directoryUrl.adjustPath(KUrl::AddTrailingSlash);
+            KPrHtmlExport exportHtml;
+            exportHtml.exportHtml(KPrHtmlExport::Parameter(dialog->templateUrl(), this, dialog->checkedSlides(),
+                                                           directoryUrl, dialog->author(),
+                                                           dialog->title(), dialog->slidesNames(), dialog->openBrowser()));
+        }
+   }
 }
 
 #include "KPrView.moc"

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2009 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -91,6 +92,7 @@ protected slots:
     void dialogCustomSlideShows();
     void configureSlideShow();
     void configurePresenterView();
+    void exportToHtml();
 
 private:
     KActionMenu *m_actionStartPresentation;
@@ -98,6 +100,7 @@ private:
     KAction *m_actionViewModeNormal;
     KAction *m_actionViewModeNotes;
     KAction *m_actionCreateCustomSlideShowsDialog;
+    KAction *m_actionExportHtml;
 
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
