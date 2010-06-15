@@ -36,8 +36,7 @@ KPrAnimateTransform::~KPrAnimateTransform()
 
 bool KPrAnimateTransform::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(element);
-    Q_UNUSED(context);
+    KPrAnimationBase::loadOdf(element, context);
     return true;
 }
 

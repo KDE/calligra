@@ -44,6 +44,7 @@ KPrAnimate::~KPrAnimate()
 
 bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    KPrAnimationBase::loadOdf(element, context);
     bool retval = false;
 #if 0
     QString targetElement(element.attributeNS(KoXmlNS::smil, "targetElement", QString()));

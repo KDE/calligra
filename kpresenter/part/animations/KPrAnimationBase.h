@@ -37,7 +37,7 @@ public:
     KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimationBase();
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) = 0;
+    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const = 0;
 
 #if XXX

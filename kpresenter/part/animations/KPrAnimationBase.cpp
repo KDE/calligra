@@ -19,6 +19,9 @@
 
 #include "KPrAnimationBase.h"
 
+#include <KoXmlNS.h>
+#include "KPrDurationParser.h"
+#include "KoXmlReader.h"
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
@@ -33,4 +36,9 @@ KPrAnimationBase::~KPrAnimationBase()
 int KPrAnimationBase::duration() const
 {
     return m_duration;
+}
+
+bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    m_duration = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "dur"));
 }

@@ -30,6 +30,7 @@ KPrAnimTransitionFilter::~KPrAnimTransitionFilter()
 
 bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    KPrAnimationBase::loadOdf(element, context);
     return true;
 }
 
