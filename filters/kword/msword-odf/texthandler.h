@@ -75,6 +75,7 @@ public:
 
     virtual void sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep);
     virtual void sectionEnd();
+    virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
     virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
@@ -190,6 +191,7 @@ private:
     QDomElement m_oldLayout;
 
     KWord::Table* m_currentTable;
+
     //pointer to paragraph object
     Paragraph *m_paragraph;
 #if 1
@@ -236,6 +238,10 @@ private:
     QList<QString> m_hyperLinkList;
     bool m_hyperLinkActive;
     QList<QString> m_bookmarkRef;
+
+    //set to TRUE if a manual page break (an end-of-section character
+    //not at the end of a section) was found in the main document
+    bool m_breakBeforePage;
 };
 
 #endif // TEXTHANDLER_H

@@ -88,6 +88,7 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_currentListID(0)
     , m_previousListID(0)
     , m_hyperLinkActive(false)
+    , m_breakBeforePage(false)
 {
 #ifdef IMAGE_IMPORT
     kDebug(30513) << "we have image support";
@@ -237,6 +238,11 @@ void KWordTextHandler::sectionEnd()
     if (m_sep->ccolM1 > 0 || m_sep->bkc == 0) {
         m_bodyWriter->endElement();//text:section
     }
+}
+
+void KWordTextHandler::pageBreak(void)
+{
+    m_breakBeforePage = true;
 }
 
 //signal that there's another subDoc to parse
@@ -731,12 +737,19 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         kWarning() << "paragraphProperties was NOT set";
     }
 
-    //check if we need a master page name attribute
+    KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
+
+    //check if the master-page-name attribute is required
     if (document()->writeMasterPageName() && !document()->writingHeader()) {
-        m_paragraph->getOdfParagraphStyle()->addAttribute("style:master-page-name",
-							  document()->masterPageName());
+        style->addAttribute("style:master-page-name", document()->masterPageName());
         document()->set_writeMasterPageName(false);
     }
+    //check if the break-before property is required
+    if (m_breakBeforePage) {
+        style->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
+        m_breakBeforePage = false;
+    }
+
 } //end paragraphStart()
 
 void KWordTextHandler::paragraphEnd()
