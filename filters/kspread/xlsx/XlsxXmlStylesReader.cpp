@@ -287,17 +287,17 @@ static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyl
 {
     const QColor bgColor = bg.theme >= 0 ? bg.themeColor( themes ) : bg.rgb.isValid() ? bg.rgb : QColor( Qt::white );
     const QColor fgColor = fg.theme >= 0 ? fg.themeColor( themes ) : fg.rgb;//.isValid() ? fg.rgb : QColor( Qt::black );
-    
+
     QColor result( Qt::white );
     if( bgColor.isValid() ) {
-        result = QColor( bgColor.red() * percent, 
-                         bgColor.green() * percent, 
-                         bgColor.blue() * percent, 
+        result = QColor( bgColor.red() * percent,
+                         bgColor.green() * percent,
+                         bgColor.blue() * percent,
                          bgColor.alpha() );
     }
     if( fgColor.isValid() ) {
-        result = QColor( result.red()   + fgColor.red() * ( 1.0 - percent ), 
-                         result.green() + fgColor.green() * ( 1.0 - percent ), 
+        result = QColor( result.red()   + fgColor.red() * ( 1.0 - percent ),
+                         result.green() + fgColor.green() * ( 1.0 - percent ),
                          result.blue()  + fgColor.blue() * ( 1.0 - percent ),
                          bgColor.isValid() ? bgColor.alpha() : fgColor.alpha() );
     }
@@ -675,6 +675,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
         break;
     case JustifyHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "justify", KoGenStyle::ParagraphType);
+        wrapOption = 1;
         break;
     case FillHorizontalAlignment:
     default:;
@@ -687,7 +688,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     case TopVerticalAlignment:
         cellStyle->addProperty("style:vertical-align", "top");
         break;
-    case JustifyVerticalAlignment: // ok?        
+    case JustifyVerticalAlignment: // ok?
     case DistributedVerticalAlignment:
         cellStyle->addProperty("style:vertical-align", "top");
         cellStyle->addProperty("koffice:vertical-distributed", "distributed");
@@ -950,7 +951,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_numFmts()
  the numeric value of a cell.
 
  No child elements.
- 
+
  Parent elements:
  - dxf (§18.8.14)
  - ndxf (§18.11.1.4)
