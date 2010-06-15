@@ -3837,7 +3837,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
  - cNvGraphicFramePr (Common DrawingML Non-Visual Properties) §20.4.2.4
  - [done] docPr (Drawing Object Non-Visual Properties) §20.4.2.5
  - effectExtent (Object Extents Including Effects) §20.4.2.6
- - extent (Drawing Object Size) §20.4.2.7
+ - [done] extent (Drawing Object Size) §20.4.2.7
  - [done] graphic (Graphic Object) §20.1.2.2.16
 
  Attributes:
@@ -3853,13 +3853,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_inline = true; // for pic
+    m_svgWidth = m_svgHeight = 100; // define a default size
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
+            ELSE_TRY_READ_IF_NS(wp, extent)
             ELSE_TRY_READ_IF(docPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL extent
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_extent()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS(cx)
+    STRING_TO_INT(cx, m_svgWidth, "ext@cx")
+    READ_ATTR_WITHOUT_NS(cy)
+    STRING_TO_INT(cy, m_svgHeight, "ext@cy")
+
+    while (!atEnd()) {
+        readNext();
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE

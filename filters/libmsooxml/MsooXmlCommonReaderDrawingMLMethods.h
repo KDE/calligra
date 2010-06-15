@@ -31,6 +31,7 @@ protected:
 void initDrawingML();
 
 // All the readers
+KoFilter::ConversionStatus read_chart();
 KoFilter::ConversionStatus read_pic();
 KoFilter::ConversionStatus read_nvPicPr();
 enum cNvPrCaller {

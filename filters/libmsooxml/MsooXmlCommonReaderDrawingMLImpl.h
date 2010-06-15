@@ -43,6 +43,10 @@
 #endif
 
 #include <KoXmlWriter.h>
+#include <MsooXmlUnits.h>
+#include "Charting.h"
+#include "ChartExport.h"
+#include "XlsxXmlChartReader.h"
 
 // ================================================================
 
@@ -91,6 +95,61 @@ QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
 // DrawingML tags
 // ================================================================
 
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "c"
+
+#undef CURRENT_EL
+#define CURRENT_EL chart
+//! chart handler (Charting diagrams)
+/*!
+@todo documentation
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (!r_id.isEmpty()) {
+        QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
+        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath;
+
+        Charting::Chart* chart = new Charting::Chart;
+        ChartExport* chartexport = new ChartExport(chart);
+        chartexport->m_drawLayer = true;
+        chartexport->m_x = 0;
+        chartexport->m_y = 0;
+        chartexport->m_width = EMU_TO_POINT(m_svgWidth);
+        chartexport->m_height = EMU_TO_POINT(m_svgHeight);
+
+        KoStore* storeout = m_context->import->outputStore();
+        XlsxXmlChartReaderContext context(storeout, chartexport);
+        XlsxXmlChartReader reader(this);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        if (result != KoFilter::OK) {
+            raiseError(reader.errorString());
+            delete chart;
+            delete chartexport;
+            return result;
+        }
+
+        chartexport->saveIndex(body);
+        delete chart;
+        delete chartexport;
+    }
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef MSOOXML_CURRENT_NS
+#ifndef NO_DRAWINGML_NS
+#define MSOOXML_CURRENT_NS DRAWINGML_NS
+#endif
 
 #undef CURRENT_EL
 #define CURRENT_EL pic
@@ -1824,6 +1883,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
+            ELSE_TRY_READ_IF_NS(c, chart)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
