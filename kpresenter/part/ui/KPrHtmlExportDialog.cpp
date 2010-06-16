@@ -132,11 +132,11 @@ void KPrHtmlExportDialog::loadTemplatesList()
 {
     KStandardDirs std;
     QStringList dirs = std.findDirs("data", "kpresenter/templates/exportHTML/templates");
-    for (QStringList::ConstIterator path=dirs.begin(); path!=dirs.end(); ++path) {
+    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
         QDir dir(*path);
         dir.setFilter(QDir::Files);
         QStringList entries = dir.entryList();
-        for (QStringList::ConstIterator entry=entries.begin(); entry!=entries.end(); ++entry) {
+        for (QStringList::ConstIterator entry=entries.constBegin(); entry!=entries.constEnd(); ++entry) {
             if (*entry != "." && *entry != "..") {
                 QString name = *entry;
                 if(name.endsWith(".zip", Qt::CaseInsensitive)){
@@ -286,7 +286,7 @@ bool KPrHtmlExportDialog::selectedTemplateIsSystemFavorite()
     QString dir;
 
     QStringList dirs(KStandardDirs().findDirs("data", "kpresenter/templates/exportHTML"));
-    for (QStringList::ConstIterator path=dirs.begin(); path!=dirs.end(); ++path) {
+    for (QStringList::ConstIterator path=dirs.constBegin(); path!=dirs.constEnd(); ++path) {
         if (!path->contains(KStandardDirs::locateLocal("data","kpresenter/templates/exportHTML"))) {
             dir = *path;
         }
