@@ -49,6 +49,7 @@ bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
         m_duration = 1;
     }
     m_duration += m_begin;
+    return true;
 }
 
 void KPrAnimationBase::updateCurrentTime(int currentTime)
