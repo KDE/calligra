@@ -532,7 +532,9 @@ void RowHeader::paintEvent(QPaintEvent* event)
     int y = sheet->topRow(paintRect.y() + m_pCanvas->yOffset(), yPos);
     // Align to the offset
     yPos = yPos - m_pCanvas->yOffset();
-    double width = YBORDER_WIDTH;
+
+    const KoViewConverter *converter = m_pCanvas->viewConverter();
+    const double width = converter->viewToDocumentX(this->width() - 1);
 
     QSet<int> selectedRows;
     QSet<int> affectedRows;
@@ -1224,8 +1226,8 @@ void ColumnHeader::paintEvent(QPaintEvent* event)
         xPos = xPos - m_pCanvas->xOffset();
     }
 
-    //double height = painter.fontMetrics().height();
-    double height = XBORDER_HEIGHT;
+    const KoViewConverter *converter = m_pCanvas->viewConverter();
+    const double height = converter->viewToDocumentY(this->height() - 1);
 
     if (sheet->layoutDirection() == Qt::RightToLeft) {
         if (x > KS_colMax)
@@ -1412,17 +1414,9 @@ SelectAllButton::~SelectAllButton()
 
 void SelectAllButton::paintEvent(QPaintEvent* event)
 {
-    // painting rectangle
-    const QRectF paintRect = m_canvasBase->viewConverter()->viewToDocument(event->rect());
-
     // the painter
     QPainter painter(this);
-    qreal zoomX;
-    qreal zoomY;
-    m_canvasBase->viewConverter()->zoom(&zoomX, &zoomY);
-    painter.scale(zoomX, zoomY);
-
-    painter.setClipRect(paintRect);
+    painter.setClipRect(event->rect());
 
     // if all cells are selected
     if (m_selection->isAllSelected() &&
@@ -1442,9 +1436,7 @@ void SelectAllButton::paintEvent(QPaintEvent* event)
         painter.setPen(backgroundColor.dark(150));
         painter.setBrush(backgroundBrush);
     }
-    double width = YBORDER_WIDTH;
-    double height = painter.fontMetrics().height();
-    painter.drawRect(QRectF(0, 0, width, height));
+    painter.drawRect(rect().adjusted(0, 0, -1, -1));
 }
 
 void SelectAllButton::mousePressEvent(QMouseEvent* event)

@@ -24,6 +24,7 @@ Fix undo of pasting comments.
 Fix crash in cell insertion/removal dialog.
 Fix the cell shift command and its cell repainting for non-contiguous selections.
 Properly update the canvas on changing sheets.
+Fix the border painting of the column/row headers and the select all button.
 
 Developer-Visible Only
 ----------------------
