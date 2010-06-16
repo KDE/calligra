@@ -195,7 +195,7 @@ private:
     //pointer to paragraph object
     Paragraph *m_paragraph;
 #if 1
-    bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap 
+    bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
     int        m_dcs_fdct;
     int        m_dcs_lines;
     qreal      m_dropCapDistance;

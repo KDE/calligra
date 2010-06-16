@@ -70,7 +70,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 public:
     Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
              KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
-             KoStore* store, POLE::Storage* storage, 
+             KoStore* store, POLE::Storage* storage,
              LEInputStream* data, LEInputStream* table, LEInputStream* wdoc);
     virtual ~Document();
 
@@ -143,7 +143,7 @@ public slots:
 
     void slotFootnoteFound(const wvWare::FunctorBase* functor, int data);
 
-    void slotBookmarkFound(const wvWare::FunctorBase* functor, int data);
+    void slotBookmarkFound(const wvWare::FunctorBase* functor);
 
     void slotAnnotationFound(const wvWare::FunctorBase* functor, int data);
 
