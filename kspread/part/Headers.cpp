@@ -171,7 +171,9 @@ void RowHeader::mousePressEvent(QMouseEvent * _ev)
         if (!sheet->isProtected())
             paintSizeIndicator(_ev->pos().y());
     } else {
-        m_bSelection = true;
+        if (_ev->button() != Qt::RightButton) {
+            m_bSelection = true;
+        }
 
         double tmp;
         int hit_row = sheet->topRow(ev_PosY, tmp);
@@ -784,7 +786,9 @@ void ColumnHeader::mousePressEvent(QMouseEvent * _ev)
 
         // kDebug() <<"Column:" << m_iResizedColumn;
     } else {
-        m_bSelection = true;
+        if (_ev->button() != Qt::RightButton) {
+            m_bSelection = true;
+        }
 
         double tmp;
         int hit_col = sheet->leftColumn(ev_PosX, tmp);
