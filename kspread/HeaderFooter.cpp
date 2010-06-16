@@ -203,5 +203,3 @@ QString HeaderFooter::completeHeading( const QString &_data, int _page, const QS
 
     return tmp;
 }
-
-#include "HeaderFooter.moc"
