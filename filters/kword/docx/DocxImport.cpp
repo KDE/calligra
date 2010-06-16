@@ -33,6 +33,7 @@
 #include "DocxXmlStylesReader.h"
 #include "DocxXmlNumberingReader.h"
 #include "DocxXmlFootnoteReader.h"
+#include "DocxXmlCommentsReader.h"
 #include "DocxXmlFontTableReader.h"
 
 #include <QColor>
@@ -301,7 +302,16 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 footnotePath, &footnoteReader, writers, errorMessage, &context) )
         }
 
-    // 6. parse document
+    // 6. parse comments
+        const QString commentPath(relationships->targetForType(documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/comments"));
+        DocxXmlCommentReader commentReader(writers);
+        if (!commentPath.isEmpty()) {
+            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+                commentPath, &commentReader, writers, errorMessage, &context) )
+        }
+
+    // 7. parse document
         DocxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

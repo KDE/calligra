@@ -24,49 +24,25 @@
 #ifndef DOCXXMLCOMMENTSREADER_H
 #define DOCXXMLCOMMENTSREADER_H
 
-#include <MsooXmlReader.h>
-#include <QMap>
-#include <QDateTime>
+#include <DocxXmlDocumentReader.h>
 
-//! Data structure for a single comment
-class DocxComment
+/*! We're deriving from DocxXmlDocumentReader because within the hdr
+element, the content of the element is similar to the content of the
+body (§17.2.2) element, and contains what is referred to as
+block-level markup - markup which can exist as a sibling element to
+paragraphs in a WordprocessingML document.
+*/
+//! A class reading headers
+class DocxXmlCommentReader : public DocxXmlDocumentReader
 {
 public:
-    DocxComment() : m_null(true) {}
-    bool isNull() const { return m_null; }
-    QString author() const { return m_author; }
-    void setAuthor(const QString& author) { m_author = author; m_null = false; }
-    QDateTime dateTime() const { return m_dateTime; }
-    void setDateTime(const QDateTime& dateTime) { m_dateTime = dateTime; m_null = false; }
-    QString text() const { return m_text; }
-    void setText(const QString& text) { m_text = text; m_null = false; }
-private:
-    QString m_author;
-    QDateTime m_dateTime;
-    QString m_text;
-    bool m_null;
-};
-
-//! A context structure for DocxXmlCommentsReader
-class DocxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
-{
-public:
-    DocxXmlCommentsReaderContext(QMap<int, DocxComment>& _comments);
-    QMap<int, DocxComment> *comments;
-};
-
-//! A class reading MSOOXML comments - comments.xml part.
-class DocxXmlCommentsReader : public MSOOXML::MsooXmlReader
-{
-public:
-    explicit DocxXmlCommentsReader(KoOdfWriters *writers);
-    virtual ~DocxXmlCommentsReader();
+    explicit DocxXmlCommentReader(KoOdfWriters *writers);
+    virtual ~DocxXmlCommentReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
     KoFilter::ConversionStatus read_comments();
     KoFilter::ConversionStatus read_comment();
-    DocxXmlCommentsReaderContext* m_context;
 
 private:
     void init();
@@ -74,4 +50,4 @@ private:
     Private* const d;
 };
 
-#endif //DOCXXMLCOMMENTSREADER_H
+#endif //DOCXXMLCOMMENTREADER_H

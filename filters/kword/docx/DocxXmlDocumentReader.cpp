@@ -49,23 +49,8 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
-        themes(&_themes), m_commentsLoaded(false), m_endnotesLoaded(false)
+        themes(&_themes), m_endnotesLoaded(false)
 {
-}
-
-KoFilter::ConversionStatus DocxXmlDocumentReaderContext::loadComments(KoOdfWriters *writers)
-{
-    if (m_commentsLoaded)
-        return KoFilter::OK;
-    m_commentsLoaded = true;
-    DocxXmlCommentsReaderContext context(m_comments);
-    DocxXmlCommentsReader reader(writers);
-    QString errorMessage;
-    const KoFilter::ConversionStatus status
-        = import->loadAndParseDocument(&reader, "word/comments.xml", errorMessage, &context);
-    if (status != KoFilter::OK)
-        reader.raiseError(errorMessage);
-    return status;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReaderContext::loadEndnotes(KoOdfWriters *writers)
@@ -81,13 +66,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReaderContext::loadEndnotes(KoOdfWrite
     if (status != KoFilter::OK)
         reader.raiseError(errorMessage);
     return status;
-}
-
-DocxComment DocxXmlDocumentReaderContext::comment(KoOdfWriters *writers, int id)
-{
-    if (KoFilter::OK != loadComments(writers))
-        return DocxComment();
-    return m_comments.value(id);
 }
 
 DocxNote DocxXmlDocumentReaderContext::endnote(KoOdfWriters *writers, int id)
@@ -983,6 +961,55 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
 
 #undef CURRENT_EL
 #define CURRENT_EL commentRangeStart
+//! commentRangeStart handler
+/*!
+
+ Parent elements:
+ - bdo (§17.3.2.3)
+ - body (§17.2.2)
+ - comment (§17.13.4.2)
+ - customXml (§17.5.1.6)
+ - customXml (§17.5.1.4)
+ - customXml (§17.5.1.5)
+ - customXml (§17.5.1.3)
+ - deg (§22.1.2.26)
+ - del (§17.13.5.14)
+ - den (§22.1.2.28)
+ - dir (§17.3.2.8)
+ - docPartBody (§17.12.6)
+ - e (§22.1.2.32)
+ - endnote (§17.11.2)
+ - fldSimple (§17.16.19)
+ - fName (§22.1.2.37)
+ - footnote (§17.11.10)
+ - ftr (§17.10.3)
+ - hdr (§17.10.4)
+ - hyperlink (§17.16.22)
+ - ins (§17.13.5.18)
+ - lim (§22.1.2.52)
+ - moveFrom (§17.13.5.22)
+ - moveTo (§17.13.5.25)
+ - num (§22.1.2.75)
+ - oMath (§22.1.2.77)
+ - [done] p (§17.3.1.22)
+ - rt (§17.3.3.24)
+ - rubyBase (§17.3.3.27)
+ - sdtContent (§17.5.2.34)
+ - sdtContent (§17.5.2.33)
+ - sdtContent (§17.5.2.35)
+ - sdtContent (§17.5.2.36)
+ - smartTag (§17.5.1.9)
+ - sub (§22.1.2.112)
+ - sup (§22.1.2.114)
+ - tbl (§17.4.38)
+ - tc (§17.4.66)
+ - tr (§17.4.79)
+
+ Child elements:
+ - none
+
+*/
+//! @todo support all attributes etc.
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_commentRangeStart()
 {
     READ_PROLOGUE
@@ -990,35 +1017,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_commentRangeStart()
     const QXmlStreamAttributes attrs(attributes());
 
     READ_ATTR(id)
-    int idNumber = -1;
-    STRING_TO_INT(id, idNumber, "commentRangeStart@id")
-    const DocxComment comment(m_context->comment(this, idNumber));
-    if (comment.isNull()) {
-        raiseError(i18n("Comment \"%1\" not found", id));
-        return KoFilter::WrongFormat;
-    }
 
     body->startElement("office:annotation");
 
-    body->startElement("dc:creator");
-    body->addTextSpan(comment.author());
-    body->endElement(); // dc:creator
-
-    body->startElement("dc:date");
-    //! @todo date ok?
-    body->addTextSpan(comment.dateTime().toString(Qt::ISODate));
-    body->endElement(); // dc:date
-
-    body->startElement("text:p");
-    //! @todo hardcoded style
-    body->addAttribute("text:style-name", "P1");
-    body->startElement("text:span");
-    body->addTextSpan(comment.text());
-    body->endElement(); // text:span
-    body->endElement(); // text:p
+    body->addCompleteElement(m_context->m_comments[id].toUtf8());
 
     body->endElement(); // office:annotation
-    return KoFilter::OK;
+
+    readNext();
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL

@@ -21,7 +21,7 @@
  *
  */
 
-#ifndef DOCXXMLFOOTNOTEEADER_H
+#ifndef DOCXXMLFOOTNOTREADER_H
 #define DOCXXMLFOONOTEREADER_H
 
 #include <DocxXmlDocumentReader.h>

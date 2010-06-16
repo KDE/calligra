@@ -29,7 +29,6 @@
 
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
-#include "DocxXmlCommentsReader.h"
 #include "DocxXmlNotesReader.h"
 
 #include <KoXmlWriter.h>
@@ -290,9 +289,6 @@ public:
     const QString path;
     const QString file;
 
-    //! @return comment for identifier @a id. Use Comment::isNull() to check if the item was found.
-    DocxComment comment(KoOdfWriters *writers, int id);
-
     //! @return endnote for identifier @a id. Use Comment::isNull() to check if the item was found.
     DocxNote endnote(KoOdfWriters *writers, int id);
 
@@ -301,13 +297,13 @@ public:
     // Contains footnotes when read, the styles of footnotes are already put to correct files.
     QMap<QString, QString> m_footnotes;
 
+    QMap<QString, QString> m_comments;
+
 private:
-    KoFilter::ConversionStatus loadComments(KoOdfWriters *writers);
     KoFilter::ConversionStatus loadEndnotes(KoOdfWriters *writers);
 
-    QMap<int, DocxComment> m_comments;
     QMap<int, DocxNote> m_endnotes;
-    bool m_commentsLoaded;
+
     bool m_endnotesLoaded;
 };
 
