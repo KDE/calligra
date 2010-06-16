@@ -1,7 +1,9 @@
-include_directories( ${CMAKE_SOURCE_DIR}/kchart
-                     ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
+add_subdirectory( kdchart )
+
+include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
+                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
                      ${CMAKE_SOURCE_DIR}/interfaces
-                     ${CMAKE_SOURCE_DIR}/kchart/shape/dialogs
                      ${KOMAIN_INCLUDES}
 )
 
@@ -34,7 +36,7 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
-    ../commands/ChartTypeCommand.cpp
+    commands/ChartTypeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS

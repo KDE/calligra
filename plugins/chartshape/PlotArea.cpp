@@ -770,7 +770,20 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             // FIXME
         }
         else if (d->chartType == StockChartType && n.localName() == "stock-range-line" ) {
-            // FIXME
+            if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+                context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+                KoStyleStack  &styleStack = context.odfLoadingContext().styleStack();
+
+                // stroke-color
+                const QString strokeColor = styleStack.property( KoXmlNS::svg, "stroke-color" );
+                // FIXME: There seem to be no way to set this for the StockChart in KDChart. :-/
+                //QPen( QColor( strokeColor) );
+
+                // FIXME: svg:stroke-width
+
+                styleStack.pop();
+            }
         }
         else if ( n.localName() != "axis" && n.localName() != "series" ) {
             qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();

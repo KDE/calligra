@@ -95,7 +95,7 @@
 #include "SheetAccessModel.h"
 
 // chart shape
-#include "kchart/shape/ChartShape.h"
+#include "plugins/chartshape/ChartShape.h"
 #include "chart/ChartDialog.h"
 
 // ui

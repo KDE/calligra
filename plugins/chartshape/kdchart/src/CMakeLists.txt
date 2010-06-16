@@ -118,6 +118,7 @@ target_link_libraries(kdchart  ${QT_QTSVG_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGU
 
 set_target_properties(kdchart PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kdchart  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#add_subdirectory( kdchart )
 
 
 ########### install files ###############

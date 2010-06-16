@@ -28,7 +28,7 @@
 #include <QDebug>
 
 // KChart
-#include "ChartProxyModel.h"
+#include "DataSetFactory.h"
 #include "DataSet.h"
 #include "ChartTableModel.h"
 #include "CellRegion.h"

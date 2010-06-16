@@ -1,8 +1,6 @@
 
 project(kchart)
 
-add_subdirectory( kdchart )
-add_subdirectory( shape )
 add_subdirectory( toolbar )
 add_subdirectory( pics )
 add_subdirectory( templates )
@@ -31,9 +29,6 @@ set(kchartcommon_LIB_SRCS
 
    dialogs/KCPageLayout.cpp
    dialogs/KCPrinterDialog.cpp
-
-   # FIXME: Remove this
-#   kdchart/examples/tools/TableModel.cpp
 )
 
 kde4_add_kcfg_files(kchartcommon_LIB_SRCS prefs.kcfgc)
