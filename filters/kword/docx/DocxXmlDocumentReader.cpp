@@ -27,7 +27,6 @@
 #include "DocxXmlNotesReader.h"
 #include "DocxXmlHeaderReader.h"
 #include "DocxXmlFooterReader.h"
-#include "DocxXmlNumberingReader.h"
 #include "DocxImport.h"
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -50,8 +49,7 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
-        themes(&_themes), m_commentsLoaded(false), m_endnotesLoaded(false), 
-        m_footnotesLoaded(false)
+        themes(&_themes), m_commentsLoaded(false), m_endnotesLoaded(false)
 {
 }
 
@@ -85,22 +83,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReaderContext::loadEndnotes(KoOdfWrite
     return status;
 }
 
-KoFilter::ConversionStatus DocxXmlDocumentReaderContext::loadFootnotes(KoOdfWriters *writers)
-{
-    if (m_footnotesLoaded)
-        return KoFilter::OK;
-    m_footnotesLoaded = true;
-    DocxXmlNotesReaderContext context(m_footnotes);
-    DocxXmlNotesReader reader(writers);
-    QString errorMessage;
-    const KoFilter::ConversionStatus status
-        = import->loadAndParseDocument(&reader, "word/footnotes.xml", errorMessage, &context);
-    if (status != KoFilter::OK)
-        reader.raiseError(errorMessage);
-
-    return status;
-}
-
 DocxComment DocxXmlDocumentReaderContext::comment(KoOdfWriters *writers, int id)
 {
     if (KoFilter::OK != loadComments(writers))
@@ -113,13 +95,6 @@ DocxNote DocxXmlDocumentReaderContext::endnote(KoOdfWriters *writers, int id)
     if (KoFilter::OK != loadEndnotes(writers))
         return DocxNote();
     return m_endnotes.value(id);
-}
-
-DocxNote DocxXmlDocumentReaderContext::footnote(KoOdfWriters *writers, int id)
-{
-    if (KoFilter::OK != loadFootnotes(writers))
-        return DocxNote();
-    return m_footnotes.value(id);
 }
 
 // ---------------------------------------------------------------------
@@ -324,7 +299,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - docGrid (Document Grid) §17.6.5
  - endnotePr (Section-Wide Endnote Properties) §17.11.5
  - [done] footerReference (Footer Reference) §17.10.2
- - footnotePr (Section-Wide Footnote Properties) §17.11.11
+ - [done] footnotePr (Section-Wide Footnote Properties) §17.11.11
  - formProt (Only Allow Editing of Form Fields) §17.6.6
  - [done] headerReference (Header Reference) §17.10.5
  - lnNumType (Line Numbering Settings) §17.6.8
@@ -375,6 +350,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(headerReference)
             ELSE_TRY_READ_IF(footerReference)
             ELSE_TRY_READ_IF(cols)
+            ELSE_TRY_READ_IF(footnotePr)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -664,6 +640,89 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         headerContent.append(reader.content());
         headerContent.append("</style:header>");
         m_headers["default"] = headerContent;
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL footnotePr
+//! w:footnotePr handler (Footnote properties)
+/*
+ Parent elements:
+ - [done] sectPr (§17.6.17)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
+
+ Child elements:
+ - [done] numFmt (Footnote Numbering Format) §17.11.18
+ - numRestart (Footnote and Endnote Numbering Restart Location) §17.11.19
+ - numStart (Footnote and Endnote Numbering Starting Value) §17.11.20
+ - pos (Footnote Placement) §17.11.21
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
+{
+    READ_PROLOGUE
+
+    QBuffer buffer;
+    KoXmlWriter *oldBody = body;
+    body = new KoXmlWriter(&buffer);
+
+    body->startElement("text:notes-configuration");
+    body->addAttribute("text:note-class", "footnote");
+    body->addAttribute("text:footnotes-position", "page");
+    body->addAttribute("text:start-numbering-at", "document");
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(numFmt)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    body->endElement(); // text:notes-configuration
+
+    QString footStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+
+    delete body;
+    body = oldBody;
+
+    mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, footStyle.toUtf8());
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL numFmt
+//! w:numFmt handler (Footnote Numbering format)
+/*
+ Parent elements:
+ - [done] footnotePr (§17.11.12)
+ - [done] footnotePr (§17.11.11)
+
+ Child elements:
+ - none
+
+*/
+//! @toodo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_numFmt()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "upperLetter") {
+            body->addAttribute("style:num-format", "A");
+        }
+    }
+    else { // For now let's use letter format as the default
+        body->addAttribute("style:num-format", "A");
     }
 
     readNext();
@@ -1009,6 +1068,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnoteReference()
 #define CURRENT_EL footnoteReference
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 {
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    READ_ATTR(id)
+
     /*
     # example endnote from odt document converted with OpenOffice
     <text:note text:id="ftn1" text:note-class="footnote">
@@ -1020,8 +1083,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
     </text:note-body>
     </text:note>
     */
-    const QXmlStreamAttributes attrs(attributes());
-    READ_ATTR(id)
+
+/*
+
     int idNumber = -1;
     STRING_TO_INT(id, idNumber, "footnoteReference@id")
     const DocxNote note(m_context->footnote(this, idNumber));
@@ -1029,23 +1093,29 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
         raiseError(i18n("Footnote \"%1\" not found", id));
         return KoFilter::WrongFormat;
     }
+*/
     body->startElement("text:note");
-    body->addAttribute("text:id", "ftn1");
+    body->addAttribute("text:id", QString("ftn").append(id));
     body->addAttribute("text:note-class", "footnote");
 
     body->startElement("text:note-citation");
-    body->addTextSpan(QString::number(note.number)); // this needs to be improved in future!
+
+    // Note, this line is meaningless in the sense that office programs are supposed to autogenerate
+    // the value based on the footnote style, it is hardcoded for the moment as koffice has no support
+    // for it
+    body->addTextSpan(id);
+
     body->endElement(); // text:note-citation
 
     body->startElement("text:note-body");
-    body->startElement("text:p");
-    body->addAttribute("text:style-name", "Footnote");
-    body->addTextSpan(note.text);
-    body->endElement(); // text:p
-    body->endElement(); // text:note-body
 
+    body->addCompleteElement(m_context->m_footnotes[id].toUtf8());
+
+    body->endElement(); // text:note-body
     body->endElement(); // text:note
-    return KoFilter::OK;
+
+    readNext();
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
