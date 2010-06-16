@@ -399,7 +399,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     // *******************************
     // page-layout style
     // *******************************
-    kDebug(30513) << "creating page-layout styles for this section";
+    kDebug(30513) << "preparing page-layout styles";
 
     KoGenStyle* pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
     QString pageLayoutStyleName("Mpm");
@@ -443,8 +443,6 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     // *******************************
     // master-page style
     // *******************************
-    kDebug(30513) << "creating master-page styles for this section";
-
     KoGenStyle* masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
     QString masterStyleName("Standard");
 
@@ -490,6 +488,10 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     }
     // required by handlers
     m_writeMasterPageName = true;
+
+    for (int i = 0; i < m_masterPageName_list.size(); i++) {
+        kDebug(30513) << "prepared master-page style:" << m_masterPageName_list[i];
+    }
 }
 
 void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
@@ -499,7 +501,7 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
     KoGenStyle* pageLayoutStyle = 0;
 
     for (int i = 0; i < m_masterPageName_list.size(); i++) {
-        //get a pointer to the object in the collection.
+        //get a pointer to the object in the styles collection
         masterPageStyle = m_mainStyles->styleForModification(m_masterPageName_list[i]);
         Q_ASSERT(masterPageStyle);
         pageLayoutStyle = m_mainStyles->styleForModification(m_pageLayoutName_list[i]);
@@ -624,16 +626,19 @@ void Document::headerEnd()
     }
     else {
         KoGenStyle* masterPageStyle = 0;
+        QString name = 0;
         if (m_firstOpen) {
-	    masterPageStyle = m_mainStyles->styleForModification(m_masterPageName_list.first());
+	    name = m_masterPageName_list.first();
+            m_firstOpen = false;
 	}
 	else {
-	    masterPageStyle = m_mainStyles->styleForModification(m_masterPageName_list.last());
+	    name = m_masterPageName_list.last();
 	}
-	Q_ASSERT(masterPageStyle);
-        m_headerWriter->endElement();//style:header/footer
+        masterPageStyle = m_mainStyles->styleForModification(name);
+        Q_ASSERT(masterPageStyle);
+        m_headerWriter->endElement(); //style:header/footer
 
-        //add the even header/footer stuff here
+        //add the even header/footer content here
         if (m_bufferEven) {
             m_headerWriter->addCompleteElement(m_bufferEven);
             delete m_bufferEven;
@@ -641,6 +646,7 @@ void Document::headerEnd()
         }
         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
         masterPageStyle->addChildElement(QString::number(m_headerCount), contents);
+	kDebug(30513) << "updating master-page style:" << name;
 
 	delete m_buffer;
 	m_buffer = 0;

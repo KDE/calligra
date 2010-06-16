@@ -78,16 +78,17 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
 
         // Add needed attribute to paragraph style.
         //
-        // Note: This logic breaks down if this isn't the first string
-        //       in the paragraph, or there are other strings with
-        //       another colBreak later in the same paragraph.
+        // NOTE: This logic breaks down if this isn't the first string in the
+        //       paragraph, or there are other strings with another colBreak
+        //       later in the same paragraph.
         m_odfParagraphStyle->addProperty("fo:break-before", "column", KoGenStyle::ParagraphType);
         // Remove character that signaled a column break
         text.remove(QChar(0xE));
     }
 
-    // if it's inner paragraph, push back true
-    // this is an m_textStyles.push_back(NULL) complement if we still need the style applied
+    // if it's inner paragraph, push back true this is an
+    // m_textStyles.push_back(NULL) complement if we still need the style
+    // applied
     m_addCompleteElement.push_back(addCompleteElement);
 
     // Add text string to list.
@@ -207,63 +208,84 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
         int dxaAbs = 0;
+        int dyaAbs = 0;
         const wvWare::Word97::PAP& pap = m_paragraphProperties->pap();
+
         //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
-        if (pap.dxaAbs == -4)   // center
+        // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside 
+        if (pap.dxaAbs == -4) {
             userStyle.addProperty("style:horizontal-pos","center");
-        else if (pap.dxaAbs == -8)  // right
+        }
+        else if (pap.dxaAbs == -8) {
             userStyle.addProperty("style:horizontal-pos","right");
-        else if (pap.dxaAbs == -12)  // inside
+        }
+        else if (pap.dxaAbs == -12) {
             userStyle.addProperty("style:horizontal-pos","inside");
-        else if (pap.dxaAbs == -16)  // outside
+        }
+        else if (pap.dxaAbs == -16) {
             userStyle.addProperty("style:horizontal-pos","outside");
-        else { //
+        }
+        else {
             dxaAbs = pap.dxaAbs;
             userStyle.addProperty("style:horizontal-pos","from-left");
         }
-
-        int dyaAbs = 0;
         //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
-        if (pap.dyaAbs == -4)   // top
+        // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside, 
+	// (-20) - outside
+        if (pap.dyaAbs == -4) {
             userStyle.addProperty("style:vertical-pos","top");
-        else if (pap.dyaAbs == -8)  // middle
+        }
+        else if (pap.dyaAbs == -8) {
             userStyle.addProperty("style:vertical-pos","middle");
-        else if (pap.dyaAbs == -12)  // bottom
+        }
+        else if (pap.dyaAbs == -12) {
             userStyle.addProperty("style:vertical-pos","bottom");
-        else if (pap.dyaAbs == -16)  // inside
+        }
+        else if (pap.dyaAbs == -16) {
             userStyle.addProperty("style:vertical-pos","inline");
-        else if (pap.dyaAbs == -20)  // outside
+        }
+        else if (pap.dyaAbs == -20) {
             userStyle.addProperty("style:vertical-pos","inline");
-        else {//
+        }
+        else {
             dyaAbs = pap.dyaAbs;
             userStyle.addProperty("style:vertical-pos","from-top");
         }
-
         //MS-DOC - PositionCodeOperand - anchor vertical position
-        if (pap.pcVert == 0)   // margin
+	// 0 - margin, 1 - page, 2 - paragraph
+        if (pap.pcVert == 0) {
             userStyle.addProperty("style:vertical-rel","page-content");
-        else if (pap.pcVert == 1)  // page
+        }
+        else if (pap.pcVert == 1) {
             userStyle.addProperty("style:vertical-rel","page");
-        else if (pap.pcVert == 2)  // paragraph
+        }
+        else if (pap.pcVert == 2) {
             userStyle.addProperty("style:vertical-rel","paragraph");
-
+        }
         //MS-DOC - PositionCodeOperand - anchor horizontal position
-        if (pap.pcHorz == 0)   // current column
+	// 0 - current column, 1 - margin, 2 - page
+        if (pap.pcHorz == 0) {
             userStyle.addProperty("style:horizontal-rel","paragraph");
-        else if (pap.pcHorz == 1)  // margin
+        }
+        else if (pap.pcHorz == 1) {
             userStyle.addProperty("style:horizontal-rel","page-content");
-        else if (pap.pcHorz == 2)  // page
+        }
+        else if (pap.pcHorz == 2) {
             userStyle.addProperty("style:horizontal-rel","page");
+        }
 
         drawStyleName = "fr";
         drawStyleName = m_mainStyles->insert(userStyle, drawStyleName);
         writer->startElement("draw:frame");
         writer->addAttribute("draw:style-name", drawStyleName.toUtf8());
         writer->addAttribute("text:anchor-type", "paragraph");
-        if (pap.dxaWidth != 0)
+
+        if (pap.dxaWidth != 0) {
             writer->addAttributePt("svg:width", (double)pap.dxaWidth/20);
-        if (pap.dyaHeight != 0)
+        }
+        if (pap.dyaHeight != 0) {
             writer->addAttributePt("svg:height", (double)pap.dyaHeight/20);
+        }
         writer->addAttributePt("svg:x", (double)dxaAbs/20);
         writer->addAttributePt("svg:y", (double)dyaAbs/20);
         writer->startElement("draw:text-box");
@@ -279,65 +301,60 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
 
     writer->addAttribute("text:style-name", textStyleName.toUtf8());
 
-    //just close the paragraph if there's no content
-    //if (m_textStrings.empty()) {
-    if (m_textStrings.isEmpty()) {
-        writer->endElement(); //text:p
-        return;
-    }
-
-    // Loop through each text strings and styles (equal # of both) and
-    // write them to the file.
-    kDebug(30513) << "writing text spans now";
-    QString oldStyleName;
-    bool startedSpan = false;
-    for (int i = 0; i < m_textStrings.size(); i++) {
-        if (m_textStyles[i] == 0) {
-            //if style is null, we have an inner paragraph and add the
-            // complete paragraph element to writer
-            //need to get const char* from the QString
-            kDebug(30513) << "complete element: " << m_textStrings[i].toLocal8Bit().constData();
-            writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
-        } else {
-            //add text style to collection
-            //put style into m_mainStyles & get its name
-            //kDebug(30513) << m_textStyles[i]->type();
-            textStyleName = 'T';
-            textStyleName = m_mainStyles->insert(*m_textStyles[i], textStyleName);
-
-            if (oldStyleName != textStyleName) {
-                if (startedSpan) {
-                    writer->endElement(); //text:span
-                    startedSpan = false;
-                }
-                if (textStyleName != "DefaultParagraphFont") {
-                    writer->startElement("text:span");
-                    writer->addAttribute("text:style-name", textStyleName.toUtf8());
-                    startedSpan = true;
-                }
-                oldStyleName = textStyleName;
-            }
-            // Write text string to writer.
-            // Now I just need to write the text:span to the header tag.
-            kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
-            if (m_addCompleteElement[i] == false) {
-                writer->addTextSpan(m_textStrings[i]);
-            } else {            // special case we need style applied and complete element added
+    //if there's any paragraph content
+    if (!m_textStrings.isEmpty()) {
+        //Loop through each text strings and styles (equal # of both) and write
+        //them to the file.
+        kDebug(30513) << "writing text spans now";
+        QString oldStyleName;
+        bool startedSpan = false;
+        for (int i = 0; i < m_textStrings.size(); i++) {
+            if (m_textStyles[i] == 0) {
+                //if style is null, we have an inner paragraph and add the
+                //complete paragraph element to writer need to get const char*
+                //from the QString
+                kDebug(30513) << "complete element: " << 
+                                 m_textStrings[i].toLocal8Bit().constData();
                 writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
-            }
+            } else {
+                //put style into m_mainStyles & get its name
+                textStyleName = 'T';
+                textStyleName = m_mainStyles->insert(*m_textStyles[i], textStyleName);
+                //kDebug(30513) << m_textStyles[i]->type();
 
-            //cleanup
-            //delete m_textStyles[i];
-            m_textStyles[i] = 0;
+                if (oldStyleName != textStyleName) {
+                    if (startedSpan) {
+                        writer->endElement(); //text:span
+                        startedSpan = false;
+                    }
+                    if (textStyleName != "DefaultParagraphFont") {
+                        writer->startElement("text:span");
+                        writer->addAttribute("text:style-name", textStyleName.toUtf8());
+                        startedSpan = true;
+                    }
+                    oldStyleName = textStyleName;
+                }
+                //Write text string to writer.  Now I just need to write the
+                //text:span to the header tag.
+                kDebug(30513) << "Writing \"" << m_textStrings[i] << "\"";
+                if (m_addCompleteElement[i] == false) {
+                    writer->addTextSpan(m_textStrings[i]);
+                }
+                //special case we need style applied and complete element added
+                else {
+                    writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
+                }
+                //cleanup
+                delete m_textStyles[i];
+                m_textStyles[i] = 0;
+            }
+        }
+        // If we have an unfinished text:span, finish it now.
+        if (startedSpan) {
+            writer->endElement(); //text:span
+            startedSpan = false;
         }
     }
-
-    // If we have an unfinished text:span, finish it now.
-    if (startedSpan) {
-        writer->endElement(); //text:span
-        startedSpan = false;
-    }
-
     //close the <text:p> or <text:h> tag we opened
     writer->endElement();
 
@@ -346,8 +363,8 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
          (m_paragraphProperties->pap().dxaAbs != 0 || m_paragraphProperties->pap().dyaAbs) )
     {
         writer->endElement(); //draw:text-box
-        writer->endElement(); // draw:frame
-        writer->endElement(); // close the <text:p>
+        writer->endElement(); //draw:frame
+        writer->endElement(); //close the <text:p>
     }
 }
 

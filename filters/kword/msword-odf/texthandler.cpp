@@ -152,7 +152,8 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
         //check for vertical separator
         if (sep->fLBetween) {
             writer.startElement("style:column-sep");
-            writer.addAttribute("style:width", "0.0693in");//just a random default for now
+            //NOTE: just a random default for now
+            writer.addAttribute("style:width", "0.0693in");
             writer.endElement();//style:column-sep
         }
         //individual column styles
@@ -167,12 +168,12 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
         writer.endElement();//style:columns
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         sectionStyle.addChildElement("style:columns", contents);
-        /*
-                QString footconfig("<text:notes-configuration ");
-                footconfig.append("style:num-format=\"a\"");
-                footconfig.append("/>");
-                sectionStyle.addChildElement("text:notes-configuration", footconfig);
-        */
+
+//         QString footconfig("<text:notes-configuration ");
+//         footconfig.append("style:num-format=\"a\"");
+//         footconfig.append("/>");
+//         sectionStyle.addChildElement("text:notes-configuration", footconfig);
+
         //add style to the collection
         sectionStyleName = m_mainStyles->insert(sectionStyle, sectionStyleName,
                                                 KoGenStyles::DontAddNumberToName);
@@ -183,19 +184,19 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
         m_bodyWriter->addAttribute("text:name", sectionName);
         m_bodyWriter->addAttribute("text:style-name", sectionStyleName);
     }
-
-    if (sep->nLnnMod != 0) {    // if line numbering modulus is not 0, do line numbering
+    // if line numbering modulus is not 0, do line numbering
+    if (sep->nLnnMod != 0) {
         if (m_mainStyles) {
-            QString lineNumbersStyleName = QString("Standard");     // set default line numbers style
-
-            if (m_document) {                                       // if we have m_document
+            // set default line numbers style
+            QString lineNumbersStyleName = QString("Standard");
+            // if we have m_document
+            if (m_document) {
                 QString lineNumbersStyleNameTemp = m_document->lineNumbersStyleName();
-
-                if (lineNumbersStyleNameTemp.isEmpty() == false) {      // if the style name is not empty
-                    lineNumbersStyleName = lineNumbersStyleNameTemp;    // use it
+                // if the style name is not empty, use it
+                if (lineNumbersStyleNameTemp.isEmpty() == false) {
+                    lineNumbersStyleName = lineNumbersStyleNameTemp;
                 }
             }
-
             // prepare string for line numbering configuration
             QString lineNumberingConfig("<text:linenumbering-configuration text:style-name=\"%1\" "
                                         "style:num-format=\"1\" text:number-position=\"left\" text:increment=\"1\"/>");
@@ -215,7 +216,6 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
 
         }
     }
-
 }
 
 void KWordTextHandler::sectionEnd()
@@ -249,7 +249,7 @@ void KWordTextHandler::pageBreak(void)
 void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 {
     kDebug(30513);
-    //only parse headers if we're in a section that can have new headers
+    //NOTE: only parse headers if we're in a section that can have new headers
     //ie. new sections for columns trigger this function again, but we've
     //already parsed the headers
     if (m_sep->bkc != 1) {

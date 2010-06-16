@@ -213,9 +213,13 @@ OLEStreamReader* Parser9x::getTable()
 void Parser9x::parseHeaders( const HeaderData& data )
 {
     m_subDocumentHandler->headersStart();
-    for ( unsigned char mask = HeaderData::HeaderEven; mask <= HeaderData::FooterFirst; mask <<= 1 )
-        if ( mask & data.headerMask )
+    for ( unsigned char mask = HeaderData::HeaderEven; 
+          mask <= HeaderData::FooterFirst; mask <<= 1 ) 
+    {
+        if ( mask & data.headerMask ) {
             parseHeader( data, mask );
+        }
+    }
     m_subDocumentHandler->headersEnd();
 }
 
@@ -510,7 +514,8 @@ void Parser9x::parseHelper( Position startPos )
 
         U32 limit = it.currentRun(); // Number of characters in this piece
 
-        // Check whether the text starts somewhere within the piece, reset at the end of the loop body
+        // Check whether the text starts somewhere within the piece, reset at
+        // the end of the loop body
         if ( startPos.offset != 0 ) {
             fc += unicode ? startPos.offset * 2 : startPos.offset;
             limit -= startPos.offset;
@@ -557,55 +562,54 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
     while ( index < limit ) {
         switch( string[ index ] ) {
         case SECTION_MARK:
-            {
-                if ( !m_currentParagraph->empty() || start != index ) {
-                    // No "index - start + 1" here, as we don't want to copy the section mark!
-                    UString ustring( processPieceStringHelper( string, start, index ) );
-                    m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
-                                                          fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
-                    processParagraph( fc + index * sizeof( String ) );
-                }
-                start = ++index;
+        {
+            if ( !m_currentParagraph->empty() || start != index ) {
+                // No "index - start + 1" here, as we don't want to copy the section mark!
+                UString ustring( processPieceStringHelper( string, start, index ) );
+                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
 
-                SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( m_fib.ccpText - m_remainingChars + index ) );
-                if ( sep ) {
-                    // It's not only a page break, it's a new section
-                    m_textHandler->sectionEnd();
-                    m_textHandler->sectionStart( sep );
-                    emitHeaderData( sep );
-                }
-                else
-                    m_textHandler->pageBreak();
-                break;
+                processParagraph( fc + index * sizeof( String ) );
             }
+            start = ++index;
+
+            SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( m_fib.ccpText - m_remainingChars + index ) );
+            if ( sep ) {
+                // It's not only a page break, it's a new section
+                m_textHandler->sectionEnd();
+                m_textHandler->sectionStart( sep );
+                emitHeaderData( sep );
+            }
+            else {
+                m_textHandler->pageBreak();
+            }
+            break;
+        }
         case CELL_MARK: // same ASCII code as a ROW_MARK
             m_cellMarkFound = true;
             // Fall-through intended. A row/cell end is also a paragraph end.
         case PARAGRAPH_MARK:
-            {
-                // No "index - start + 1" here, as we don't want to copy the paragraph mark!
-                //
-                // FIXME: This is a workaround.  The original code
-                //        didn't have a pointer here, as you can see
-                //        below.  For some reason, we get a memory
-                //        corruption in the test files for drop caps,
-                //        thus exchanging the drop cap character for
-                //        some other random character.
+        {
+            // No "index - start + 1" here, as we don't want to copy the
+            // paragraph mark!
+            //
+            // FIXME: This is a workaround.  The original code didn't have a
+            //        pointer here, as you can see below.  For some reason, we
+            //        get a memory corruption in the test files for drop caps,
+            //        thus exchanging the drop cap character for some other
+            //        random character.
 #if 1
-                UString *ustring = new UString( processPieceStringHelper( string, start, index ) );
-                m_currentParagraph->push_back( Chunk( *ustring, Position( position.piece, position.offset + start ),
-                                                      fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+            UString *ustring = new UString( processPieceStringHelper( string, start, index ) );
+            m_currentParagraph->push_back( Chunk( *ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
 #else
-                UString ustring( processPieceStringHelper( string, start, index ) );
-                m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
-                                                      fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+            UString ustring( processPieceStringHelper( string, start, index ) );
+            m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
 #endif
-                processParagraph( fc + index * sizeof( String ) );
-                m_cellMarkFound = false;
-                start = ++index;
-                break;
-            }
-            // "Special" characters
+            processParagraph( fc + index * sizeof( String ) );
+            m_cellMarkFound = false;
+            start = ++index;
+            break;
+        }
+        // "Special" characters
         case TAB:
             string[ index ] = m_inlineHandler->tab();
             ++index;
@@ -636,10 +640,10 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
         }
     }
     if ( start < limit ) {
-        // Finally we have to add the remaining text to the current paragaph (if there is any)
+        // Finally we have to add the remaining text to the current paragraph
+        // (if there is any)
         UString ustring( processPieceStringHelper( string, start, limit ) );
-        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ),
-                                              fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
+        m_currentParagraph->push_back( Chunk( ustring, Position( position.piece, position.offset + start ), fc + start * sizeof( String ), sizeof( String ) == sizeof( XCHAR ) ) );
     }
     delete [] string;
 }
@@ -687,9 +691,7 @@ void Parser9x::processParagraph( U32 fc )
             // We decrement the length by 1 that the trailing row mark doesn't emit
             // one empty paragraph during parsing.
             m_textHandler->tableRowFound( make_functor( *this, &Parser9x::parseTableRow,
-                                                        TableRowData( m_tableRowStart->piece, m_tableRowStart->offset,
-                                                                      m_tableRowLength - 1, static_cast<int>( m_subDocument ),
-                                                                      sharedTap ) ),
+                                                        TableRowData( m_tableRowStart->piece, m_tableRowStart->offset, m_tableRowLength - 1, static_cast<int>( m_subDocument ), sharedTap ) ),
                                           sharedTap );
             delete m_tableRowStart;
             m_tableRowStart = 0;
@@ -784,11 +786,8 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
         U32 startCP = currentStart + chunk.m_position.offset + index;
 
         if ( disruption >= startCP && disruption < startCP + length ) {
-#ifdef WV2_DEBUG_FOOTNOTES
-            wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << endl;
-#endif
 
-#ifdef WV2_DEBUG_BOOKMARK
+#if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
             wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << endl;
 #endif
             U32 disLen = disruption - startCP;
@@ -980,8 +979,9 @@ void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const
 void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
 {
     // We don't care about non-existant headers
-    if ( !m_headers )
+    if ( !m_headers ) {
         return;
+    }
 
     // MS Word stores headers in a very strange way, so we have to keep track
     // of the section numbers. We use a 0-based index for convenience inside
@@ -996,10 +996,12 @@ void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
         m_headers->headerMask( sep->grpfIhdt );
     }
     else {
-        if ( sep->fTitlePage )
+        if ( sep->fTitlePage ) {
             data.headerMask |= HeaderData::HeaderFirst | HeaderData::FooterFirst;
-        if ( dop().fFacingPages )
+        }
+        if ( dop().fFacingPages ) {
             data.headerMask |= HeaderData::HeaderEven | HeaderData::FooterEven;
+        }
     }
     m_textHandler->headersFound( make_functor( *this, &Parser9x::parseHeaders, data ) );
 }
@@ -1045,18 +1047,12 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     picf->dump();
 #endif
 
-    // up2date offset into the data stream for the GraphicsHandler
+    //offset into the data stream for the GraphicsHandler
     int offset = 0;
     //update the offset information
     offset += chp->fcPic_fcObj_lTagObj + picf->cbHeader;
 
-#ifdef WV2_DEBUG_PICTURES
-    wvlog << "picf->lcb: " << picf->lcb << endl;
-    wvlog << "picf->cbHeader: " << picf->cbHeader << endl;
-    wvlog << "picf->mfp.mm: " << hex << picf->mfp.mm << endl;
-#endif
-
-    //read cchPicName and stPicName in case of a shape file
+    //read cchPicName and stPicName in case of a shape file, MS-DOC p.422/609
     if ( picf->mfp.mm == 0x0066 )
     {
         U8 cchPicName = stream->readU8();
@@ -1069,7 +1065,7 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
         wvlog << "cchPicName: " << cchPicName << endl;
         wvlog << "stPicName: " << stPicName << endl;
 #endif
-	//update the offset information
+	//update the offset
 	offset += cchPicName + 1;
 	delete [] stPicName;
     }
@@ -1227,7 +1223,8 @@ int Parser9x::accumulativeLength( int len, const Parser9x::Chunk& chunk )
  *  OBSOLETE STUFF -> handled by GraphicsHanler
  * ************************************************
  */
-#ifdef OBSOLETE
+#undef PARSER9X_OBSOLETE
+#ifdef PARSER9X_OBSOLETE
 
 void Parser9x::parsePicture( const PictureData& data )
 {
@@ -1522,4 +1519,4 @@ void Parser9x::parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeA
         delete [] s;
     }
 }
-#endif //OBSOLETE
+#endif //PARSER9X_OBSOLETE
