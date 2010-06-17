@@ -116,8 +116,16 @@ void KPrAnimationCache::init(int step, KoShape *shape, const QString &id, const 
 
 void KPrAnimationCache::update(KoShape *shape, const QString &id, const QVariant &value)
 {
-    // we need special handling for some types of value but that is for later
-    m_currentShapeValues[shape][id] = value;
+    if (id == "transform" && !m_next) {
+        QTransform transform = m_currentShapeValues[shape][id].value<QTransform>();
+        m_currentShapeValues[shape][id] = transform * value.value<QTransform>();
+    }
+    else {
+        m_currentShapeValues[shape][id] = value;
+    }
+    if (id == "transform") {
+        m_next = false;
+    }
 }
 
 void KPrAnimationCache::startStep(int step)
@@ -130,6 +138,11 @@ void KPrAnimationCache::endStep(int step)
 {
     if(m_shapeValuesStack.size() > step)
         m_currentShapeValues = m_shapeValuesStack[step+1];
+}
+
+void KPrAnimationCache::next()
+{
+    m_next = true;
 }
 
 

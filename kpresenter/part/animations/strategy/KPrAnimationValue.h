@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATE_H
-#define KPRANIMATE_H
+#ifndef KPRANIMATIONVALUE_H
+#define KPRANIMATIONVALUE_H
 
-#include "KPrAnimationBase.h"
+#include <QtGlobal>
 
-class KPrAnimationValue;
-class KPrAnimationAttribute;
 
-class KPrAnimate : public KPrAnimationBase
+class KPrAnimationValue
 {
 public:
-    KPrAnimate(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimate();
+    KPrAnimationValue();
+    virtual ~KPrAnimationValue();
+    virtual qreal value(qreal time) const = 0;
+    virtual qreal startValue() const = 0;
+    virtual qreal endValue() const = 0;
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
-
+    enum SmilCalcMode{
+        discrete,
+        linear,
+        paced,
+        spline
+    };
 protected:
-    virtual void next(int currentTime);
-
-private:
-    KPrAnimationAttribute * m_attribute;
-    KPrAnimationValue * m_values;
+    SmilCalcMode m_calcMode;
 };
 
-#endif /* KPRANIMATE_H */
+#endif // KPRANIMATIONVALUE_H

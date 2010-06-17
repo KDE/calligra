@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QPair>
 #include <QTimeLine>
-
+#include <QTransform>
 #include <KoZoomHandler.h>
 #include "KPrShapeAnimations.h"
 
@@ -104,6 +104,7 @@ public:
      * is animated at the moment even when it is a disappear animation.
      */
     bool shapeShown( KoShape * shape );
+    QTransform shapeTransform( KoShape * shape );
 
     /**
      * Get the animation for the shape

@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QWidget>
+#include <QVariant>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <KoPageLayout.h>
@@ -241,6 +242,14 @@ bool KPrAnimationDirector::shapeShown( KoShape * shape )
         return m_animationCache->value(shape, "visibility", true).toBool();
     }
     return true;
+}
+
+QTransform KPrAnimationDirector::shapeTransform( KoShape * shape )
+{
+    if(hasAnimation()){
+        return m_animationCache->value(shape, "transform", QTransform()).value<QTransform>();
+    }
+    return QTransform();
 }
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
@@ -464,6 +473,7 @@ void KPrAnimationDirector::animate()
     }
     else if ( hasAnimation() ) { //if there are animnations
         // set current time, to the current step
+        m_animationCache->next();
         m_animations.at(m_stepIndex)->setCurrentTime(m_timeLine.currentTime());
         m_canvas->update();
     }

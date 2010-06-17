@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,25 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMPAR_H
-#define KPRANIMPAR_H
+#include "KPrAnimationAttribute.h"
 
-#include "KPrAnimationBase.h"
-
-#include <QList>
-
-class KPrAnimPar : public KPrAnimationBase
+KPrAnimationAttribute::KPrAnimationAttribute()
 {
-public:
-    KPrAnimPar();
-    virtual ~KPrAnimPar();
+}
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual void init(KPrAnimationCache *animationCache, int step) const;
-
-protected:
-    QList<KPrAnimationBase*> m_animations;
-};
-
-#endif /* KPRANIMPAR_H */
+KPrAnimationAttribute::~KPrAnimationAttribute()
+{
+}

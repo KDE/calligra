@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATE_H
-#define KPRANIMATE_H
+#ifndef KPRANIMATIONATTRIBUTE_H
+#define KPRANIMATIONATTRIBUTE_H
 
-#include "KPrAnimationBase.h"
+#include <QtGlobal>
 
-class KPrAnimationValue;
-class KPrAnimationAttribute;
+class KPrAnimationCache;
+class KoShape;
 
-class KPrAnimate : public KPrAnimationBase
+class KPrAnimationAttribute
 {
 public:
-    KPrAnimate(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimate();
+    KPrAnimationAttribute();
+    virtual ~KPrAnimationAttribute();
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
-
-protected:
-    virtual void next(int currentTime);
-
-private:
-    KPrAnimationAttribute * m_attribute;
-    KPrAnimationValue * m_values;
+    virtual void updateCache(KPrAnimationCache * cache, KoShape *shape, qreal value) = 0;
+    virtual void initCache(KPrAnimationCache * cache, int step, KoShape * shape, qreal startValue, qreal endValue) = 0;
 };
 
-#endif /* KPRANIMATE_H */
+#endif // KPRANIMATIONATTRIBUTE_H

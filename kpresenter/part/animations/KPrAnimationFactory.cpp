@@ -19,9 +19,7 @@
 
 #include "KPrAnimationFactory.h"
 
-#include "KPrAnimSeq.h"
 #include "KPrAnimSet.h"
-#include "KPrAnimPar.h"
 #include "KPrAnimate.h"
 #include "KPrAnimateColor.h"
 #include "KPrAnimateMotion.h"

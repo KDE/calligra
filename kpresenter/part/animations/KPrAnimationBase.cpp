@@ -22,6 +22,9 @@
 #include <KoXmlNS.h>
 #include "KPrDurationParser.h"
 #include "KoXmlReader.h"
+#include "KPrAnimationCache.h"
+#include "KPrShapeAnimation.h"
+
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
@@ -52,9 +55,19 @@ bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
     return true;
 }
 
+void KPrAnimationBase::updateCache(const QString &id, const QVariant &value)
+{
+    m_animationCache->update(m_shapeAnimation->shape(), id, value);
+}
+
 void KPrAnimationBase::updateCurrentTime(int currentTime)
 {
     if (currentTime >= m_begin) {
         next(currentTime - m_begin);
     }
+}
+
+int KPrAnimationBase::animationDuration() const
+{
+    return totalDuration() - m_begin;
 }

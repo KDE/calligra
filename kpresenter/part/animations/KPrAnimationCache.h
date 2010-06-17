@@ -153,7 +153,7 @@ public:
     // the step in update must match the step of startStep
     void startStep(int step);
     void endStep(int step);
-
+    void next();
     QVariant value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue);
     QVariant value(int step, KoShape *shape, const QString &id);
 
@@ -166,6 +166,7 @@ private:
     QMap<KoShape *, QMap<QString, QVariant> > m_currentShapeValues;
     QMap<KoTextBlockData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
     int m_step;
+    bool m_next;
 };
 
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATE_H
-#define KPRANIMATE_H
+#include "KPrAttributeX.h"
+#include "../KPrAnimationCache.h"
+#include "KoShape.h"
 
-#include "KPrAnimationBase.h"
+#include "kdebug.h"
 
-class KPrAnimationValue;
-class KPrAnimationAttribute;
-
-class KPrAnimate : public KPrAnimationBase
+KPrAttributeX::KPrAttributeX()
 {
-public:
-    KPrAnimate(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimate();
+}
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
+void KPrAttributeX::updateCache(KPrAnimationCache *cache, KoShape *shape, qreal value)
+{
+    QTransform transform;
+    transform.translate(value - shape->position().x(), 0);
+    cache->update(shape, "transform", transform);
+}
 
-protected:
-    virtual void next(int currentTime);
-
-private:
-    KPrAnimationAttribute * m_attribute;
-    KPrAnimationValue * m_values;
-};
-
-#endif /* KPRANIMATE_H */
+void KPrAttributeX::initCache(KPrAnimationCache *animationCache, int step, KoShape * shape, qreal startValue, qreal endValue)
+{
+    animationCache->init(step, shape, "transform", QTransform().translate(startValue - shape->position().x(), 0));
+    animationCache->init(step + 1, shape, "transform", QTransform().translate(endValue - shape->position().x(), 0));
+}

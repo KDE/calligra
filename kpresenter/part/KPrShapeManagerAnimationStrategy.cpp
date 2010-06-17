@@ -29,8 +29,6 @@
 #include "KPrPlaceholderShape.h"
 #include "KPrAnimationDirector.h"
 #include "KPrPageSelectStrategyBase.h"
-#include "shapeanimations/KPrShapeAnimationOld.h"
-
 #include "kdebug.h"
 
 KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationDirector * animationDirector,
@@ -48,14 +46,21 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
 
 void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
-        if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
+    if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
         if ( m_animationDirector->shapeShown( shape ) ) {
+
+            qreal zoom;
+            converter.zoom(&zoom, &zoom);
             painter.save();
-            painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
-            // animate shape
+            QTransform animationTransform = m_animationDirector->shapeTransform(shape);
+            animationTransform.translate(animationTransform.dx() * (zoom - 1), animationTransform.dy() * zoom);
+            QTransform transform(painter.matrix() * shape->absoluteTransformation( &converter ));
+            transform *= animationTransform;
+
+            painter.setTransform(transform);
             // paint shape
             shapeManager()->paintShape( shape, painter, converter, forPrint );
-            painter.restore();  // for the matrix
+            painter.restore();  // for the transform
         }
     }
 }

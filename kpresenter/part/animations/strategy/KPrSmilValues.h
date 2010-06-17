@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,30 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATE_H
-#define KPRANIMATE_H
+#ifndef KPRSMILVALUES_H
+#define KPRSMILVALUES_H
 
-#include "KPrAnimationBase.h"
+#include "KPrAnimationValue.h"
+#include <QList>
+#include <QPair>
 
-class KPrAnimationValue;
-class KPrAnimationAttribute;
-
-class KPrAnimate : public KPrAnimationBase
+class KPrSmilValues : public KPrAnimationValue
 {
 public:
-    KPrAnimate(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimate();
-
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
+    KPrSmilValues();
+    virtual qreal value(qreal time) const;
+    virtual qreal endValue() const;
+    virtual qreal startValue() const;
+    bool loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode);
 
 protected:
-    virtual void next(int currentTime);
-
-private:
-    KPrAnimationAttribute * m_attribute;
-    KPrAnimationValue * m_values;
+    QList<qreal> m_values;
+    QList<qreal> m_times;
+    QList<qreal> m_splines;
 };
 
-#endif /* KPRANIMATE_H */
+#endif // KPRSMILVALUES_H
