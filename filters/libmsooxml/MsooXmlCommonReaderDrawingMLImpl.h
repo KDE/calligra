@@ -822,17 +822,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
     if (!r_id.isEmpty()) {
-        QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
-        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath;
+        const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
         ChartExport* chartexport = new ChartExport(chart);
         chartexport->m_drawLayer = true;
-        chartexport->m_x = 0;
-        chartexport->m_y = 0;
-        chartexport->m_width = EMU_TO_POINT(m_svgWidth);
-        chartexport->m_height = EMU_TO_POINT(m_svgHeight);
+        chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
+        chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
+        chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
+        chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
 
+        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath<<"position="<<QString("%1:%2").arg(chartexport->m_x).arg(chartexport->m_y)<<"size="<<QString("%1x%2").arg(chartexport->m_width).arg(chartexport->m_height);
+        
         KoStore* storeout = m_context->import->outputStore();
         XlsxXmlChartReaderContext context(storeout, chartexport);
         XlsxXmlChartReader reader(this);
@@ -1386,8 +1387,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 
     bool off_read = false;
     bool ext_read = false;
-    while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
+    while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(off)) {
@@ -1399,6 +1399,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             }
         }
 //! @todo add ELSE_WRONG_FORMAT
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     /*//! @todo
@@ -1445,6 +1446,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
 
     READ_EPILOGUE
 }
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "a"
 
 //! off handler (Offset)
 //! DrawingML ECMA-376, 20.1.7.4, p. 3185.

@@ -85,10 +85,10 @@
 #endif
 
 #define READ_PROLOGUE2(method) \
-    PUSH_NAME_INTERNAL \
     if (!expectEl(QUALIFIED_NAME(CURRENT_EL))) { \
         return KoFilter::WrongFormat; \
-    }
+    } \
+    PUSH_NAME_INTERNAL \
 
 #define READ_PROLOGUE \
     READ_PROLOGUE2(CURRENT_EL)

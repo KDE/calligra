@@ -121,10 +121,6 @@ public:
     Private() {
     }
     ~Private() {
-        foreach(ChartExport* chartexport, charts) {
-            delete chartexport->chart();
-            delete chartexport;
-        }
     }
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
@@ -134,7 +130,6 @@ public:
     uint shapeNumber;
     QString qualifiedNameOfMainElement;
     QString phType; //! set by read_ph()
-    QList<ChartExport*> charts;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -416,10 +411,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                                        m_context->slideLayoutProperties->styleName;
                     body->addAttribute("presentation:presentation-page-layout-name",
                                        m_context->slideLayoutProperties->styleName);
-                }
-
-                foreach(ChartExport* chartexport, d->charts) {
-                    chartexport->saveIndex(body);
                 }
 
 //                body->addCompleteElement(&drawPageBuf);
@@ -944,64 +935,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 {
     READ_PROLOGUE
-    enum State { Start, InXfrm, inGraphicData };
-    State state = Start;
-    QString x, y, cx, cy;
+    m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
     while (!atEnd()) {
         readNext();
-        switch(state) {
-            case Start:
-                if(isStartElement() && qualifiedName() == QLatin1String("p:xfrm"))
-                    state = InXfrm;
-                break;
-            case InXfrm:
-                if (isStartElement()) {
-                    if(qualifiedName() == QLatin1String("a:graphicData")) {
-                        state = inGraphicData;
-                    } else if(qualifiedName() == QLatin1String("a:off")) {
-                        const QXmlStreamAttributes attrs(attributes());
-                        TRY_READ_ATTR(x)
-                        TRY_READ_ATTR(y)
-                    } else if(qualifiedName() == QLatin1String("a:ext")) {
-                        const QXmlStreamAttributes attrs(attributes());
-                        TRY_READ_ATTR(cx)
-                        TRY_READ_ATTR(cy)
-                    }
-                }
-                break;
-            case inGraphicData:
-                if (isStartElement() && qualifiedName() == QLatin1String("c:chart")) {
-                    const QXmlStreamAttributes attrs(attributes());
-                    TRY_READ_ATTR_WITH_NS(r, id)
-                    if (!r_id.isEmpty()) {
-                        QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
-                        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath;
-
-                        Charting::Chart* chart = new Charting::Chart;
-                        ChartExport* chartexport = new ChartExport(chart);
-                        chartexport->m_drawLayer = true;
-                        chartexport->m_x = x.toDouble();
-                        chartexport->m_y = y.toDouble();
-                        chartexport->m_width = cx.toDouble() - chartexport->m_x;
-                        chartexport->m_height = cy.toDouble() - chartexport->m_y;
-
-                        KoStore* storeout = m_context->import->outputStore();
-                        XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(storeout, chartexport);
-                        
-                        XlsxXmlChartReader reader(this);
-                        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
-                        if (result != KoFilter::OK) {
-                            raiseError(reader.errorString());
-                            delete context;
-                            delete chart;
-                            delete chartexport;
-                            return result;
-                        }
-
-                        d->charts << chartexport;
-                    }
-                }
-                break;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, graphic)
+            else if (qualifiedName() == "p:xfrm") {
+                read_xfrm_p();
+            }
+//! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -1041,6 +983,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPr()
         if (isStartElement()) {
             TRY_READ_IF(ph)
 //! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "p"
+
+#undef CURRENT_EL
+#define CURRENT_EL xfrm
+//! p:xfrm handler that redirects to a:xfrm
+KoFilter::ConversionStatus PptxXmlSlideReader::read_xfrm_p()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:off")) {
+                TRY_READ(off);
+            } else if (qualifiedName() == QLatin1String("a:ext")) {
+                TRY_READ(ext);
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }

@@ -131,6 +131,7 @@ protected:
     KoFilter::ConversionStatus read_ph();
     KoFilter::ConversionStatus read_txBody();
     KoFilter::ConversionStatus read_graphicFrame();
+    KoFilter::ConversionStatus read_xfrm_p();
 
 //    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;

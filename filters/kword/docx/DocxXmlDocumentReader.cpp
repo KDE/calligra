@@ -3974,7 +3974,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_inline = true; // for pic
-    m_svgWidth = m_svgHeight = 100; // define a default size
+    m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
