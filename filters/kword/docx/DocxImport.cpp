@@ -233,7 +233,6 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         "\n        </style:list-level-properties>"
         "\n      </text:outline-level-style>"
         "\n    </text:outline-style>"
-        "\n    <text:linenumbering-configuration text:number-lines=\"false\" text:offset=\"0.499cm\" style:num-format=\"1\" text:number-position=\"left\" text:increment=\"5\"/>"
         "\n    <!-- /COPIED -->"
     );
 

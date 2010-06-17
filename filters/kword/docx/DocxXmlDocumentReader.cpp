@@ -257,7 +257,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
  - [done] footnotePr (Section-Wide Footnote Properties) §17.11.11
  - formProt (Only Allow Editing of Form Fields) §17.6.6
  - [done] headerReference (Header Reference) §17.10.5
- - lnNumType (Line Numbering Settings) §17.6.8
+ - [done] lnNumType (Line Numbering Settings) §17.6.8
  - noEndnote (Suppress Endnotes In Document) §17.11.16
  - paperSrc (Paper Source Information) §17.6.9
  - [done] pgBorders (Page Borders) §17.6.10
@@ -307,6 +307,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(cols)
             ELSE_TRY_READ_IF(footnotePr)
             ELSE_TRY_READ_IF(endnotePr)
+            ELSE_TRY_READ_IF(lnNumType)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -597,6 +598,52 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         headerContent.append("</style:header>");
         m_headers["default"] = headerContent;
     }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lnNumType
+//! w:lnNumType handler (Line Numbering type)
+/*
+ Parents elements:
+ - [done] sectPr (§17.6.17)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
+
+ Child elements:
+ - none
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_lnNumType()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(countBy)
+    //TRY_READ_ATTR(restart)
+    //TRY_READ_ATTR(start)
+
+    QBuffer buffer;
+    KoXmlWriter temp(&buffer);
+
+    temp.startElement("text:linenumbering-configuration");
+
+    // These should maybe be somehow determined from attributes
+    temp.addAttribute("text:number-position", "left");
+    temp.addAttribute("style:num-format", "1");
+    temp.addAttribute("text:offset", "0.1965in");
+
+    if (!countBy.isEmpty()) {
+        temp.addAttribute("text:increment", countBy);
+    }
+
+    temp.endElement(); // text:linenumbering-configuration
+
+    QString lineStyle = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles, lineStyle.toUtf8());
 
     readNext();
     READ_EPILOGUE

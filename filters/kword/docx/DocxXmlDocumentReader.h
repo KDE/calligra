@@ -95,6 +95,7 @@ protected:
     KoFilter::ConversionStatus read_footnoteReference();
     KoFilter::ConversionStatus read_footnotePr();
     KoFilter::ConversionStatus read_endnotePr();
+    KoFilter::ConversionStatus read_lnNumType();
     KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_drawing();
