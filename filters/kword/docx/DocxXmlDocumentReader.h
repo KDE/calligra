@@ -94,6 +94,7 @@ protected:
     KoFilter::ConversionStatus read_endnoteReference();
     KoFilter::ConversionStatus read_footnoteReference();
     KoFilter::ConversionStatus read_footnotePr();
+    KoFilter::ConversionStatus read_endnotePr();
     KoFilter::ConversionStatus read_numFmt();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_drawing();
@@ -289,9 +290,6 @@ public:
     const QString path;
     const QString file;
 
-    //! @return endnote for identifier @a id. Use Comment::isNull() to check if the item was found.
-    DocxNote endnote(KoOdfWriters *writers, int id);
-
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
 
     // Contains footnotes when read, the styles of footnotes are already put to correct files.
@@ -299,12 +297,9 @@ public:
 
     QMap<QString, QString> m_comments;
 
+    QMap<QString, QString> m_endnotes;
+
 private:
-    KoFilter::ConversionStatus loadEndnotes(KoOdfWriters *writers);
-
-    QMap<int, DocxNote> m_endnotes;
-
-    bool m_endnotesLoaded;
 };
 
 #endif //DOCXXMLDOCREADER_H

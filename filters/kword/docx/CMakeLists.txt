@@ -17,6 +17,7 @@ set(docximport_PART_SRCS
     DocxXmlFooterReader.cpp
     DocxXmlNumberingReader.cpp
     DocxXmlFootnoteReader.cpp
+    DocxXmlEndnoteReader.cpp
     DocxImport.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp

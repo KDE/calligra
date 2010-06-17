@@ -34,6 +34,7 @@
 #include "DocxXmlNumberingReader.h"
 #include "DocxXmlFootnoteReader.h"
 #include "DocxXmlCommentsReader.h"
+#include "DocxXmlEndnoteReader.h"
 #include "DocxXmlFontTableReader.h"
 
 #include <QColor>
@@ -232,7 +233,6 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         "\n        </style:list-level-properties>"
         "\n      </text:outline-level-style>"
         "\n    </text:outline-style>"
-        "\n    <text:notes-configuration text:note-class=\"endnote\" style:num-format=\"i\" text:start-value=\"0\"/>"
         "\n    <text:linenumbering-configuration text:number-lines=\"false\" text:offset=\"0.499cm\" style:num-format=\"1\" text:number-position=\"left\" text:increment=\"5\"/>"
         "\n    <!-- /COPIED -->"
     );
@@ -311,7 +311,16 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
                 commentPath, &commentReader, writers, errorMessage, &context) )
         }
 
-    // 7. parse document
+    // 7. parse endnotes
+        const QString endnotePath(relationships->targetForType(documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/endnotes"));
+        DocxXmlEndnoteReader endnoteReader(writers);
+        if (!endnotePath.isEmpty()) {
+            RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
+                endnotePath, &endnoteReader, writers, errorMessage, &context) )
+        }
+
+    // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef DOCXXMLFOOTNOTEREADER_H
-#define DOCXXMLFOOTNOTEREADER_H
+#ifndef DOCXXMLENDNOTEREADER_H
+#define DOCXXMLENDNOTEREADER_H
 
 #include <DocxXmlDocumentReader.h>
 
@@ -33,16 +33,16 @@ block-level markup - markup which can exist as a sibling element to
 paragraphs in a WordprocessingML document.
 */
 //! A class reading headers
-class DocxXmlFootnoteReader : public DocxXmlDocumentReader
+class DocxXmlEndnoteReader : public DocxXmlDocumentReader
 {
 public:
-    explicit DocxXmlFootnoteReader(KoOdfWriters *writers);
-    virtual ~DocxXmlFootnoteReader();
+    explicit DocxXmlEndnoteReader(KoOdfWriters *writers);
+    virtual ~DocxXmlEndnoteReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
-    KoFilter::ConversionStatus read_footnotes();
-    KoFilter::ConversionStatus read_footnote();
+    KoFilter::ConversionStatus read_endnotes();
+    KoFilter::ConversionStatus read_endnote();
 
 private:
     void init();
@@ -50,4 +50,4 @@ private:
     Private* const d;
 };
 
-#endif //DOCXXMLFOOTNOTEREADER_H
+#endif //DOCXXMLENDNOTEREADER_H
