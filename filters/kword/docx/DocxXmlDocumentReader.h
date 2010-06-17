@@ -97,6 +97,7 @@ protected:
     KoFilter::ConversionStatus read_endnotePr();
     KoFilter::ConversionStatus read_lnNumType();
     KoFilter::ConversionStatus read_numFmt();
+    KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_drawing();
     KoFilter::ConversionStatus read_ptab();

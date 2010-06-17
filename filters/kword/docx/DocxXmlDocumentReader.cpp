@@ -1945,7 +1945,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - snapToGrid (Use Document Grid Settings for Inter-Line Paragraph Spacing) §17.3.1.32
  - [done] spacing (Spacing Between Lines and Above/Below Paragraph) §17.3.1.33
  - suppressAutoHyphens (Suppress Hyphenation for Paragraph) §17.3.1.34
- - suppressLineNumbers (Suppress Line Numbers for Paragraph) §17.3.1.35
+ - [done] suppressLineNumbers (Suppress Line Numbers for Paragraph) §17.3.1.35
  - suppressOverlap (Prevent Text Frames From Overlapping) §17.3.1.36
  - [done] tabs (Set of Custom Tab Stops) §17.3.1.38
  - textAlignment (Vertical Character Alignment on Line) §17.3.1.39
@@ -1980,6 +1980,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(pBdr)
             ELSE_TRY_READ_IF(framePr)
             ELSE_TRY_READ_IF(ind)
+            ELSE_TRY_READ_IF(suppressLineNumbers)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2308,6 +2309,29 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
     }
 
 //! @todo more attributes
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL suppressLineNumbers
+//! w:suppressLineNumbers handler
+/*
+ Parent elements:
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_suppressLineNumbers()
+{
+    READ_PROLOGUE
+
+    m_currentParagraphStyle.addProperty("text:number-lines", "false");
 
     readNext();
     READ_EPILOGUE
