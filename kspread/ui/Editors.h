@@ -266,8 +266,7 @@ class LocationComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    LocationComboBox(QWidget* parent, Selection* selection);
-    void setSelection(Selection* selection);
+    LocationComboBox(CellToolBase *cellTool, QWidget *parent = 0);
 
 public slots:
     void slotAddAreaName(const QString &);
@@ -286,7 +285,7 @@ class LocationEditWidget : public KLineEdit
 {
     Q_OBJECT
 public:
-    LocationEditWidget(QWidget *parent, Selection* selection);
+    LocationEditWidget(CellToolBase *cellTool, QWidget *parent = 0);
 
     void addCompletionItem(const QString &_item);
     void removeCompletionItem(const QString &_item);
@@ -297,7 +296,7 @@ private slots:
 protected:
     virtual void keyPressEvent(QKeyEvent * _ev);
 private:
-    Selection* m_selection;
+    CellToolBase *m_cellTool;
     KCompletion completionList;
     bool activateItem();
 };

@@ -1199,14 +1199,15 @@ void CellEditor::slotSelectionDestroyed()
  *
  ****************************************************************************/
 
-LocationComboBox::LocationComboBox(QWidget* _parent, Selection* selection)
+LocationComboBox::LocationComboBox(CellToolBase *cellTool, QWidget *_parent)
         : KComboBox(_parent)
 {
-    m_locationWidget = new LocationEditWidget(_parent, selection);
+    m_locationWidget = new LocationEditWidget(cellTool, _parent);
     setLineEdit(m_locationWidget);
     insertItem(0, "");
 
-    const QList<QString> areaNames = selection->activeSheet()->map()->namedAreaManager()->areaNames();
+    Map *const map = cellTool->selection()->activeSheet()->map();
+    const QList<QString> areaNames = map->namedAreaManager()->areaNames();
     for (int i = 0; i < areaNames.count(); ++i)
         slotAddAreaName(areaNames[i]);
     connect(this, SIGNAL(activated(const QString &)), m_locationWidget, SLOT(slotActivateItem()));
@@ -1238,9 +1239,9 @@ void LocationComboBox::slotRemoveAreaName(const QString &_name)
  *
  ****************************************************************************/
 
-LocationEditWidget::LocationEditWidget(QWidget* _parent, Selection* selection)
+LocationEditWidget::LocationEditWidget(CellToolBase *cellTool, QWidget *_parent)
         : KLineEdit(_parent),
-        m_selection(selection)
+      m_cellTool(cellTool)
 {
     setCompletionObject(&completionList, true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
@@ -1261,26 +1262,30 @@ void LocationEditWidget::removeCompletionItem(const QString &_item)
 
 void LocationEditWidget::slotActivateItem()
 {
-    activateItem();
+    if (activateItem()) {
+        m_cellTool->scrollToCell(m_cellTool->selection()->cursor());
+    }
 }
 
 bool LocationEditWidget::activateItem()
 {
+    Selection *const selection = m_cellTool->selection();
+
     // Set the focus back on the canvas.
     parentWidget()->setFocus();
 
     const QString text = this->text();
     // check whether an already existing named area was entered
-    Region region = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(text);
+    Region region = selection->activeSheet()->map()->namedAreaManager()->namedArea(text);
     if (region.isValid()) {
-        m_selection->initialize(Region(text, m_selection->activeSheet()->map(), m_selection->activeSheet()));
+        selection->initialize(Region(text, selection->activeSheet()->map(), selection->activeSheet()));
         return true;
     }
 
     // check whether a valid cell region was entered
-    region = Region(text, m_selection->activeSheet()->map(), m_selection->activeSheet());
+    region = Region(text, selection->activeSheet()->map(), selection->activeSheet());
     if (region.isValid()) {
-        m_selection->initialize(region);
+        selection->initialize(region);
         return true;
     }
 
@@ -1295,9 +1300,9 @@ bool LocationEditWidget::activateItem()
     }
     if (validName) {
         NamedAreaCommand* command = new NamedAreaCommand();
-        command->setSheet(m_selection->activeSheet());
+        command->setSheet(selection->activeSheet());
         command->setAreaName(text);
-        command->add(Region(m_selection->lastRange(), m_selection->activeSheet()));
+        command->add(Region(selection->lastRange(), selection->activeSheet()));
         if (command->execute())
             return true;
         else
@@ -1309,6 +1314,8 @@ bool LocationEditWidget::activateItem()
 
 void LocationEditWidget::keyPressEvent(QKeyEvent * _ev)
 {
+    Selection *const selection = m_cellTool->selection();
+
     // Do not handle special keys and accelerators. This is
     // done by KLineEdit.
     if (_ev->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
@@ -1323,22 +1330,24 @@ void LocationEditWidget::keyPressEvent(QKeyEvent * _ev)
     switch (_ev->key()) {
     case Qt::Key_Return:
     case Qt::Key_Enter: {
-        if (activateItem())
+        if (activateItem()) {
+            m_cellTool->scrollToCell(selection->cursor());
             return;
+        }
         _ev->accept(); // QKeyEvent
     }
     break;
     // Escape pressed, restore original value
     case Qt::Key_Escape:
-        if (m_selection->isSingular()) {
-            setText(Cell::columnName(m_selection->marker().x())
-                    + QString::number(m_selection->marker().y()));
+        if (selection->isSingular()) {
+            setText(Cell::columnName(selection->marker().x())
+                    + QString::number(selection->marker().y()));
         } else {
-            setText(Cell::columnName(m_selection->lastRange().left())
-                    + QString::number(m_selection->lastRange().top())
+            setText(Cell::columnName(selection->lastRange().left())
+                    + QString::number(selection->lastRange().top())
                     + ':'
-                    + Cell::columnName(m_selection->lastRange().right())
-                    + QString::number(m_selection->lastRange().bottom()));
+                    + Cell::columnName(selection->lastRange().right())
+                    + QString::number(selection->lastRange().bottom()));
         }
         parentWidget()->setFocus();
         _ev->accept(); // QKeyEvent

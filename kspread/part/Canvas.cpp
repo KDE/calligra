@@ -150,9 +150,6 @@ Canvas::Canvas(View *view)
     d->mousePressed = false;
     d->dragging = false;
 
-    connect(d->view, SIGNAL(autoScroll(const QPoint &)),
-            this, SLOT(slotAutoScroll(const QPoint &)));
-
     installEventFilter(this);   // for TAB key processing, otherwise focus change
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
@@ -385,31 +382,6 @@ void Canvas::validateSelection()
     }
 }
 
-
-void Canvas::scrollToCell(const QPoint& location) const
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-    if (d->view->isLoading())
-        return;
-
-    // Adjust the maximum accessed column and row for the scrollbars.
-    view()->sheetView(sheet)->updateAccessedCellRange(location);
-
-    // The cell geometry expanded by the size of one column or one row, resp., in each direction.
-    const Cell cell = Cell(sheet, location).masterCell();
-    const double xpos = sheet->columnPosition(cell.cellPosition().x());
-    const double ypos = sheet->rowPosition(cell.cellPosition().y());
-    const double width = sheet->map()->defaultColumnFormat()->width();
-    const double height = sheet->map()->defaultRowFormat()->height();
-    QRectF rect(xpos, ypos, cell.width(), cell.height());
-    rect.adjust(-width - 2, -height - 2, width + 2, height + 2);
-    rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
-
-    d->view->canvasController()->ensureVisible(rect, true);
-}
-
 void Canvas::setDocumentOffset(const QPoint& offset)
 {
     const QPoint delta = offset - viewConverter()->documentToView(d->offset).toPoint();
@@ -424,115 +396,6 @@ void Canvas::setDocumentSize(const QSizeF& size)
     const QSize s = viewConverter()->documentToView(size).toSize();
     emit documentSizeChanged(s);
 }
-
-#if 0
-void Canvas::slotScrollHorz(int _value)
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-
-    kDebug(36005) << "slotScrollHorz: value =" << _value;
-    //kDebug(36005) << kBacktrace();
-
-    if (sheet->layoutDirection() == Qt::RightToLeft)
-        _value = horzScrollBar()->maximum() - _value;
-
-    if (_value < 0) {
-        kDebug(36001)
-        << "Canvas::slotScrollHorz: value out of range (_value: "
-        << _value << ')' << endl;
-        _value = 0;
-    }
-
-    double xpos = sheet->columnPosition(qMin(KS_colMax, sheet->maxColumn() + 10)) - d->xOffset;
-    if (_value > (xpos + d->xOffset))
-        _value = (int)(xpos + d->xOffset);
-
-    // Relative movement
-    // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
-    int dx = qRound(viewConverter()->documentToViewX(d->xOffset - _value));
-
-    // New absolute position
-    // NOTE Stefan: Always store whole pixels, otherwise we'll get offsets.
-    d->xOffset -=  viewConverter()->viewToDocumentX(dx);
-    if (d->xOffset < 0.05)
-        d->xOffset = 0.0;
-
-    // scrolling the widgets in the right direction
-    if (sheet->layoutDirection() == Qt::RightToLeft)
-        dx = -dx;
-    scroll(dx, 0);
-    columnHeader()->scroll(dx, 0);
-}
-
-void Canvas::slotScrollVert(int _value)
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-
-    if (_value < 0) {
-        _value = 0;
-        kDebug(36001) << "Canvas::slotScrollVert: value out of range (_value:" <<
-        _value << ')' << endl;
-    }
-
-    double ypos = sheet->rowPosition(qMin(KS_rowMax, sheet->maxRow() + 10));
-    if (_value > ypos)
-        _value = (int) ypos;
-
-    // Relative movement
-    // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
-    int dy = qRound(viewConverter()->documentToViewY(d->yOffset - _value));
-    scroll(0, dy);
-    rowHeader()->scroll(0, dy);
-
-    // New absolute position
-    // NOTE Stefan: Always store whole pixels, otherwise we'll get offsets.
-    d->yOffset -= viewConverter()->viewToDocumentY(dy);
-    if (d->yOffset < 0.05)
-        d->yOffset = 0.0;
-}
-
-void Canvas::slotMaxColumn(int _max_column)
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-
-    int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
-    double xpos = sheet->columnPosition(qMin(KS_colMax, _max_column + 10)) - xOffset();
-    double unzoomWidth = viewConverter()->viewToDocumentX(width());
-
-    //Don't go beyond the maximum column range (KS_colMax)
-    double sizeMaxX = sheet->documentSize().width();
-    if (xpos > sizeMaxX - xOffset() - unzoomWidth)
-        xpos = sizeMaxX - xOffset() - unzoomWidth;
-
-    horzScrollBar()->setRange(0, (int)(xpos + xOffset()));
-
-    if (sheet->layoutDirection() == Qt::RightToLeft)
-        horzScrollBar()->setValue(horzScrollBar()->maximum() - oldValue);
-}
-
-void Canvas::slotMaxRow(int _max_row)
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-
-    double ypos = sheet->rowPosition(qMin(KS_rowMax, _max_row + 10)) - yOffset();
-    double unzoomHeight = viewConverter()->viewToDocumentY(height());
-
-    //Don't go beyond the maximum row range (KS_rowMax)
-    double sizeMaxY = sheet->documentSize().height();
-    if (ypos > sizeMaxY - yOffset() - unzoomHeight)
-        ypos = sizeMaxY - yOffset() - unzoomHeight;
-
-    vertScrollBar()->setRange(0, (int)(ypos + yOffset()));
-}
-#endif
 
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
@@ -870,17 +733,6 @@ void Canvas::dropEvent(QDropEvent *event)
     const int columns = selection()->boundingRect().width();
     const int rows = selection()->boundingRect().height();
     selection()->initialize(QRect(col, row, columns, rows), sheet);
-}
-
-void Canvas::slotAutoScroll(const QPoint &scrollDistance)
-{
-    // NOTE Stefan: This slot is triggered by the same signal as
-    //              ColumnHeader::slotAutoScroll and RowHeader::slotAutoScroll.
-    //              Therefore, nothing has to be done except the scrolling was
-    //              initiated in the canvas.
-    if (!d->mousePressed)
-        return;
-    d->view->canvasController()->scrollContentsBy(scrollDistance.x(), scrollDistance.y());
 }
 
 QRect Canvas::viewToCellCoordinates(const QRectF& viewRect) const

@@ -75,6 +75,11 @@ public:
     bool createEditor(bool clear = true, bool focus = true);
     CellEditor* editor() const;
 
+    /**
+     * Scrolls to the cell located at \p location.
+     */
+    void scrollToCell(const QPoint &location);
+
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();

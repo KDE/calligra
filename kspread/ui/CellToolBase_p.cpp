@@ -56,7 +56,8 @@
 #include "commands/DataManipulators.h"
 #include "commands/StyleCommand.h"
 
-// dialogs
+// ui
+#include "ui/SheetView.h"
 
 // KOffice
 #include <KoCanvasBase.h>
@@ -370,6 +371,7 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
         } else {
             q->selection()->initialize(destination, sheet);
         }
+        q->scrollToCell(destination);
         event->accept(); // QKeyEvent
     }
     return true;
@@ -409,6 +411,7 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
         } else {
             q->selection()->initialize(destination, sheet);
         }
+        q->scrollToCell(destination);
         event->accept(); // QKeyEvent
     }
     return true;
@@ -430,6 +433,7 @@ bool CellToolBase::Private::processPriorKey(QKeyEvent *event)
     } else {
         q->selection()->initialize(destination, q->selection()->activeSheet());
     }
+    q->scrollToCell(destination);
     event->accept(); // QKeyEvent
     return true;
 }
@@ -451,6 +455,7 @@ bool CellToolBase::Private::processNextKey(QKeyEvent *event)
     } else {
         q->selection()->initialize(destination, q->selection()->activeSheet());
     }
+    q->scrollToCell(destination);
     event->accept(); // QKeyEvent
     return true;
 }
@@ -795,6 +800,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     } else {
         q->selection()->initialize(destination, sheet);
     }
+    q->scrollToCell(destination);
     return true;
 }
 
@@ -956,6 +962,7 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
     } else {
         q->selection()->initialize(destination, sheet);
     }
+    q->scrollToCell(destination);
     updateEditor(Cell(q->selection()->activeSheet(), q->selection()->cursor()));
 
     return QRect(cursor, destination);

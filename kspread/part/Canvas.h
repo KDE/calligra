@@ -167,34 +167,9 @@ public:
      */
     void validateSelection();
 
-
-    /**
-     * Makes sure a cell is visible onscreen by scrolling up/down and left/right
-     * @param location the cell coordinates to scroll to
-     */
-    void scrollToCell(const QPoint& location) const;
-
 public Q_SLOTS:
     void setDocumentOffset(const QPoint& offset);
     void setDocumentSize(const QSizeF& size);
-#if 0
-    void slotScrollVert(int _value);
-    void slotScrollHorz(int _value);
-
-    /**
-     * Updates the scrollbar.
-     * If the maximum used column index @p maxColumn was increased,
-     * the scrollbar range will be increased accordingly.
-     */
-    void slotMaxColumn(int maxColumn);
-
-    /**
-     * Updates the scrollbar.
-     * If the maximum used column index @p maxRow was increased,
-     * the scrollbar range will be increased accordingly.
-     */
-    void slotMaxRow(int maxRow);
-#endif
 
 Q_SIGNALS:
     void documentSizeChanged(const QSize&);
@@ -229,13 +204,6 @@ protected:
      * @return @c true if there is a size grip at the specified position, @c false otherwise.
      */
     bool highlightRangeSizeGripAt(double x, double y);
-
-private slots:
-
-    /**
-     * Scroll canvas when receiving this signal
-     */
-    void slotAutoScroll(const QPoint &scrollDist);
 
 private:
     virtual bool eventFilter(QObject *o, QEvent *e);

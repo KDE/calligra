@@ -1965,8 +1965,6 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     }
 
     d->canvas->validateSelection();
-
-    d->canvas->scrollToCell(selection()->marker());
 }
 
 void View::slotScrollChoice(const KSpread::Region& changedRegion)
@@ -1974,7 +1972,6 @@ void View::slotScrollChoice(const KSpread::Region& changedRegion)
     if (!selection()->referenceSelectionMode() || !changedRegion.isValid()) {
         return;
     }
-    d->canvas->scrollToCell(selection()->marker());
 }
 
 void View::calcStatusBarOp()

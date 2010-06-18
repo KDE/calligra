@@ -892,7 +892,9 @@ void CellToolBase::mousePressEvent(KoPointerEvent* event)
         const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
         const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
 
-        selection()->update(QPoint(col, row));
+        const QPoint destination(col, row);
+        selection()->update(destination);
+        scrollToCell(destination);
         return;
     }
 
@@ -999,7 +1001,7 @@ void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
     }
 
    KoInteractionTool::mouseReleaseEvent(event);
-
+    scrollToCell(selection()->cursor());
     // Cleanup the event replacement for right to left layouts.
     if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
         delete event;
@@ -1020,6 +1022,7 @@ void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
     }
     
     cancelCurrentStrategy();
+    scrollToCell(selection()->cursor());
     createEditor(false /* keep content */);
 
     // Cleanup the event replacement for right to left layouts.
@@ -1216,7 +1219,7 @@ QWidget* CellToolBase::createOptionWidget()
     d->cancelButton->setAutoRaise(true);
     d->cancelButton->setIcon(KIcon("dialog-cancel"));
 
-    d->locationComboBox = new LocationComboBox(widget, selection());
+    d->locationComboBox = new LocationComboBox(this, widget);
     d->locationComboBox->setMinimumWidth(100);
 
     d->widgetLayout->addWidget(d->formulaButton, 0, 0);
@@ -1392,6 +1395,27 @@ void CellToolBase::selectionChanged(const Region& region)
             }
         }
     }
+}
+
+void CellToolBase::scrollToCell(const QPoint &location)
+{
+    Sheet *const sheet = selection()->activeSheet();
+
+    // Adjust the maximum accessed column and row for the scrollbars.
+    sheetView(sheet)->updateAccessedCellRange(location);
+
+    // The cell geometry expanded by some pixels in each direction.
+    const Cell cell = Cell(sheet, location).masterCell();
+    const double xpos = sheet->columnPosition(cell.cellPosition().x());
+    const double ypos = sheet->rowPosition(cell.cellPosition().y());
+    const double pixelWidth = canvas()->viewConverter()->viewToDocumentX(1);
+    const double pixelHeight = canvas()->viewConverter()->viewToDocumentY(1);
+    QRectF rect(xpos, ypos, cell.width(), cell.height());
+    rect.adjust(-2*pixelWidth, -2*pixelHeight, +2*pixelWidth, +2*pixelHeight);
+    rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
+
+    // Scroll to cell.
+    canvas()->canvasController()->ensureVisible(rect, true);
 }
 
 CellEditor* CellToolBase::editor() const
@@ -3317,6 +3341,7 @@ void CellToolBase::gotoCell()
 {
     GotoDialog dialog(canvas()->canvasWidget(), selection());
     dialog.exec();
+    scrollToCell(selection()->cursor());
 }
 
 void CellToolBase::spellCheck()
