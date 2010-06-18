@@ -624,14 +624,12 @@ View::View(QWidget *_parent, Doc *_doc)
 
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
 
-    // Delay the setting of the initial position, because
-    // we have to wait for the widget to be shown. Otherwise,
-    // we get a wrong widget size.
-    // This is the last operation for the "View loading" process.
-    // The loading flag will be unset at its end.
-    // Don't try to delay this init cause following operations will assume
-    // the sheets are already fully setup.
-    initialPosition();
+    // Delay the setting of the initial position, because we need to have
+    // a sensible widget size, which is not always the case from the beginning
+    // of the View's lifetime.
+    // Therefore, initialPosition(), the last operation in the "View loading"
+    // process, is called from resizeEvent(). The loading flag will be unset
+    // at the end of initialPosition().
 
     new ViewAdaptor(this);
     d->canvas->setFocus();
@@ -1784,10 +1782,6 @@ void View::refreshView()
     d->selectAllButton->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
 }
 
-void View::resizeEvent(QResizeEvent *)
-{
-}
-
 void View::paperLayoutDlg()
 {
     selection()->emitCloseEditor(true); // save changes
@@ -2083,6 +2077,12 @@ QWidget* View::canvas() const
 
 void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
 {
+    // We need a width/height > 0 for setting the initial position properly.
+    // This is not always the case from the beginning of the View's lifetime.
+    if (ev->activated()) {
+        initialPosition();
+    }
+
     if (d->activeSheet) {
         if (ev->activated()) {
             if (d->calcLabel)

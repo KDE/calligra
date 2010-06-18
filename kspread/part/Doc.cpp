@@ -701,13 +701,10 @@ bool Doc::completeLoading(KoStore* store)
 
     d->isLoading = false;
 
-    foreach(KoView* view, views())
-    static_cast<View *>(view)->initialPosition();
-
-    kDebug(36001) << "------------------------ COMPLETION DONE --------------------";
-
     setModified(false);
     bool ok = map()->completeLoading(store);
+
+  kDebug(36001) <<"------------------------ COMPLETION DONE --------------------";
     return ok;
 }
 

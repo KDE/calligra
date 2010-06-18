@@ -351,7 +351,6 @@ public:
 protected:
 
     virtual void keyPressEvent(QKeyEvent * _ev);
-    virtual void resizeEvent(QResizeEvent *_ev);
 
     /**
      * Activates the formula editor for the current cell.

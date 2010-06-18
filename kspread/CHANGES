@@ -25,6 +25,7 @@ Fix crash in cell insertion/removal dialog.
 Fix the cell shift command and its cell repainting for non-contiguous selections.
 Properly update the canvas on changing sheets.
 Fix right-to-left layouts (except for shapes).
+Prevent the canvas from staying blank at startup.
 Fix the border painting of the column/row headers and the select all button.
 Fix the right mouse button interaction for the column/row headers.
 
