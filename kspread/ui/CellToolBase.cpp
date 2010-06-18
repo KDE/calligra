@@ -865,20 +865,6 @@ void CellToolBase::paintSelection(QPainter &painter, const QRectF &paintRect)
 
 void CellToolBase::mousePressEvent(KoPointerEvent* event)
 {
-    if (event->modifiers() & Qt::ShiftModifier) {
-        // find the cell that the user clicked
-        QPointF position = event->point - offset();
-        double xpos;
-        double ypos;
-        const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
-        const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
-
-        const QPoint destination(col, row);
-        selection()->update(destination);
-        scrollToCell(destination);
-        return;
-    }
-
     KoInteractionTool::mousePressEvent(event);
 }
 

@@ -96,6 +96,8 @@ SelectionStrategy::SelectionStrategy(KoToolBase *parent, Selection *selection,
             if (modifiers & Qt::ControlModifier) {
                 // Extend selection, if control modifier is pressed.
                 selection->extend(QPoint(col, row), sheet);
+            } else if (modifiers & Qt::ShiftModifier) {
+                selection->update(QPoint(col, row));
             } else {
                 selection->initialize(QPoint(col, row), sheet);
             }
