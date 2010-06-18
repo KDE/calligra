@@ -106,7 +106,6 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
     const QRectF gripArea(-2 * pixelX, -2 * pixelY, 5 * pixelX, 5 * pixelY);
 
     Sheet *const sheet = selection->activeSheet();
-    const bool rtl = sheet->layoutDirection() == Qt::RightToLeft;
 
     int column, row;
     if (selection->isColumnOrRowSelected()) {
@@ -116,13 +115,13 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
         row = marker.y();
     } else {
         const QRect range = selection->lastRange();
-        column = rtl ? range.left() : range.right();
+        column = range.right();
         row = range.bottom();
     }
 
     const double xpos = sheet->columnPosition(column);
     const double ypos = sheet->rowPosition(row);
-    const double width = rtl ? 0.0 : sheet->columnFormat(column)->width();
+    const double width = sheet->columnFormat(column)->width();
     const double height = sheet->rowFormat(row)->height();
     return gripArea.translated(xpos + width, ypos + height).contains(position);
 }
@@ -151,8 +150,7 @@ bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas,
         }
         const QRect range = (*it)->rect();
         const QRectF area = sheet->cellCoordinatesToDocument(range);
-        const bool rtl = sheet->layoutDirection() == Qt::RightToLeft;
-        const QPointF corner(rtl ? area.bottomLeft() : area.bottomRight());
+        const QPointF corner(area.bottomRight());
         if (gripArea.translated(corner).contains(position)) {
             return true;
         }
