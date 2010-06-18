@@ -34,7 +34,7 @@
 #include "KPrShapeAnimation.h"
 
 #include "strategy/KPrSmilValues.h"
-#include "strategy/KPrAnimationValue.h""
+#include "strategy/KPrAnimationValue.h"
 #include "strategy/KPrAnimationAttribute.h"
 #include "strategy/KPrAttributeX.h"
 #include "strategy/KPrAttributeY.h"
