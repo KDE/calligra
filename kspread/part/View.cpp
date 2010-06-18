@@ -154,6 +154,7 @@
 #include "ui/CellView.h"
 #include "ui/Editors.h"
 #include "ui/MapViewModel.h"
+#include "ui/RightToLeftPaintingStrategy.h"
 #include "ui/SheetView.h"
 
 // D-Bus
@@ -705,7 +706,7 @@ void View::initView()
     d->canvas = new Canvas(this);
     d->canvasController = new KoCanvasController(this);
     d->canvasController->setCanvas(d->canvas);
-    d->canvasController->setCanvasMode(KoCanvasController::Infinite);
+    d->canvasController->setCanvasMode(KoCanvasController::Spreadsheet);
     d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -786,6 +787,8 @@ void View::initView()
     d->tabScrollBarLayout->setMargin(0);
     d->tabScrollBarLayout->setSpacing(0);
     d->tabBar = new TabBar(0);
+    // FIXME Stefan: Adjust KoTabBar to use QWidget::layoutDirection instead.
+    d->tabBar->setReverseLayout(QApplication::isRightToLeft());
     d->tabScrollBarLayout->addWidget(d->tabBar, 0, 0);
     d->horzScrollBar = new QScrollBar(0);
     d->canvasController->setHorizontalScrollBar(d->horzScrollBar);
@@ -1256,8 +1259,23 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     // Tell the Canvas about the new visible sheet size.
     sheetView(d->activeSheet)->updateAccessedCellRange();
 
-    if (oldSheet && oldSheet->layoutDirection() != d->activeSheet->layoutDirection())
+    // If there was no sheet before or the layout directions differ.
+    if (!oldSheet || oldSheet->layoutDirection() != d->activeSheet->layoutDirection()) {
         refreshView();
+        // Propagate the layout direction to the canvas and horz. scrollbar.
+        const Qt::LayoutDirection direction = d->activeSheet->layoutDirection();
+        d->canvas->setLayoutDirection(direction);
+        d->horzScrollBar->setLayoutDirection(direction);
+        // Replace the painting strategy for painting shapes.
+        KoShapeManager *const shapeManager = d->canvas->shapeManager();
+        KoShapeManagerPaintingStrategy *paintingStrategy = 0;
+        if (direction == Qt::LeftToRight) {
+            paintingStrategy = new KoShapeManagerPaintingStrategy(shapeManager);
+        } else {
+            paintingStrategy = new RightToLeftPaintingStrategy(shapeManager, d->canvas);
+        }
+        shapeManager->setPaintingStrategy(paintingStrategy);
+    }
 
     // Restore the old scrolling offset.
     QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
@@ -1409,8 +1427,8 @@ void View::sheetProperties()
 
     if (directionChanged) {
         // the scrollbar and hborder remain reversed otherwise
-        d->horzScrollBar->setValue(d->horzScrollBar->maximum() -
-                                   d->horzScrollBar->value());
+        d->canvas->setLayoutDirection(d->activeSheet->layoutDirection()); // for scrolling
+        d->horzScrollBar->setLayoutDirection(d->activeSheet->layoutDirection());
         d->columnHeader->update();
     }
 }
@@ -1764,19 +1782,6 @@ void View::refreshView()
     d->rowHeader->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
     d->selectAllButton->setMinimumHeight(qRound(zoomHandler()->zoomItY(font.pointSizeF() + 3)));
     d->selectAllButton->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
-
-    Qt::LayoutDirection sheetDir = sheet->layoutDirection();
-    bool interfaceIsRTL = QApplication::isRightToLeft();
-
-//   kDebug(36004)<<" sheetDir == Qt::LeftToRight :"<<( sheetDir == Qt::LeftToRight );
-    if ((sheetDir == Qt::LeftToRight && !interfaceIsRTL) ||
-            (sheetDir == Qt::RightToLeft && interfaceIsRTL)) {
-        d->viewLayout->setOriginCorner(Qt::TopLeftCorner);
-        d->tabBar->setReverseLayout(interfaceIsRTL);
-    } else {
-        d->viewLayout->setOriginCorner(Qt::TopRightCorner);
-        d->tabBar->setReverseLayout(!interfaceIsRTL);
-    }
 }
 
 void View::resizeEvent(QResizeEvent *)

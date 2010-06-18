@@ -875,6 +875,15 @@ void CellToolBase::mousePressEvent(KoPointerEvent* event)
 
 void CellToolBase::mousePressEvent(KoPointerEvent* event)
 {
+    // Replace the event for right to left layouts.
+    KoPointerEvent* const originalEvent(event);
+    QMouseEvent* tmpEvent = 0;
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        const QPoint position(canvas()->canvasWidget()->width() - event->x(), event->y());
+        tmpEvent = new QMouseEvent(QEvent::MouseButtonPress, position, event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        event = new KoPointerEvent(tmpEvent, canvas()->viewConverter()->viewToDocument(position) + this->canvasOffset());
+    }
+
     if (event->modifiers() & Qt::ShiftModifier) {
         // find the cell that the user clicked
         QPointF position = event->point - offset();
@@ -888,10 +897,26 @@ void CellToolBase::mousePressEvent(KoPointerEvent* event)
     }
 
     KoInteractionTool::mousePressEvent(event);
+
+    // Cleanup the event replacement for right to left layouts.
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        delete event;
+        delete tmpEvent;
+        event = originalEvent;
+    }
 }
 
 void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
 {
+    // Replace the event for right to left layouts.
+    KoPointerEvent* const originalEvent(event);
+    QMouseEvent* tmpEvent = 0;
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        const QPoint position(canvas()->canvasWidget()->width() - event->x(), event->y());
+        tmpEvent = new QMouseEvent(QEvent::MouseMove, position, event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        event = new KoPointerEvent(tmpEvent, canvas()->viewConverter()->viewToDocument(position) + this->canvasOffset());
+    }
+
     // Special handling for drag'n'drop.
     if (dynamic_cast<DragAndDropStrategy*>(currentStrategy())) {
         KoInteractionTool::mouseMoveEvent(event);
@@ -904,9 +929,6 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
 
     // Get info about where the event occurred.
     QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-        position.setX(size().width() - position.x());
-    }
 
     // Diagonal cursor, if the selection handle was hit.
     if (selection()->selectionHandleArea(canvas()->viewConverter()).contains(position)) {
@@ -956,18 +978,56 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     // Reset to normal cursor.
     useCursor(Qt::ArrowCursor);
     KoInteractionTool::mouseMoveEvent(event);
+
+    // Cleanup the event replacement for right to left layouts.
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        delete event;
+        delete tmpEvent;
+        event = originalEvent;
+    }
 }
 
 void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
 {
-    KoInteractionTool::mouseReleaseEvent(event);
+    // Replace the event for right to left layouts.
+    KoPointerEvent* const originalEvent(event);
+    QMouseEvent* tmpEvent = 0;
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        const QPoint position(canvas()->canvasWidget()->width() - event->x(), event->y());
+        tmpEvent = new QMouseEvent(QEvent::MouseButtonRelease, position, event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        event = new KoPointerEvent(tmpEvent, canvas()->viewConverter()->viewToDocument(position) + this->canvasOffset());
+    }
+
+   KoInteractionTool::mouseReleaseEvent(event);
+
+    // Cleanup the event replacement for right to left layouts.
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        delete event;
+        delete tmpEvent;
+        event = originalEvent;
+    }
 }
 
 void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
 {
-    Q_UNUSED(event);
+    // Replace the event for right to left layouts.
+    KoPointerEvent* const originalEvent(event);
+    QMouseEvent* tmpEvent = 0;
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        const QPoint position(canvas()->canvasWidget()->width() - event->x(), event->y());
+        tmpEvent = new QMouseEvent(QEvent::MouseButtonDblClick, position, event->globalPos(), event->button(), event->buttons(), event->modifiers());
+        event = new KoPointerEvent(tmpEvent, canvas()->viewConverter()->viewToDocument(position) + this->canvasOffset());
+    }
+    
     cancelCurrentStrategy();
     createEditor(false /* keep content */);
+
+    // Cleanup the event replacement for right to left layouts.
+    if (this->selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        delete event;
+        delete tmpEvent;
+        event = originalEvent;
+    }
 }
 
 void CellToolBase::keyPressEvent(QKeyEvent* event)
@@ -1184,8 +1244,6 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 {
     // Get info about where the event occurred.
     QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
-    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
-        position.setX(size().width() - position.x());
 
     // Autofilling or merging, if the selection handle was hit.
     if (selection()->selectionHandleArea(canvas()->viewConverter()).contains(position)) {

@@ -172,6 +172,11 @@ QSizeF TableTool::size() const
     return d->tableShape->size();
 }
 
+QPointF TableTool::canvasOffset() const
+{
+    return QPointF();
+}
+
 int TableTool::maxCol() const
 {
     return d->tableShape->columns();

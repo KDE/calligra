@@ -202,12 +202,19 @@ void SheetView::invalidate()
 void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
                            const QPointF& topLeft)
 {
+    // paintRect:   the canvas area, that should be painted; in document coordinates;
+    //              no layout direction consideration; scrolling offset applied;
+    //              independent from painter transformations
+    // topLeft:     the document coordinate of the top left cell's top left corner;
+    //              no layout direction consideration; independent from painter
+    //              transformations
+
     // NOTE Stefan: The painting is splitted into several steps. In each of these all cells in
     //              d->visibleRect are traversed. This may appear suboptimal at the first look, but
     //              ensures that the borders are not erased by the background of adjacent cells.
 
-// kDebug() <<"paintRect:" << paintRect;
-// kDebug() <<"topLeft:" << topLeft;
+// kDebug() << "paintRect:" << paintRect;
+// kDebug() << "topLeft:" << topLeft;
 
     // 0. Paint the sheet background
     if (!sheet()->backgroundImage().isNull()) {
@@ -248,11 +255,11 @@ void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const Q
     // location on the canvas, meaning that column A will be the rightmost column
     // on screen, column B will be to the left of it and so on. Here we change
     // the horizontal coordinate at which we start painting the cell in case the
-    // sheet's direction is RTL. We do this only if paintingObscured is 0,
-    // otherwise the cell's painting location will flip back and forth in
-    // consecutive calls to paintCell when painting obscured cells.
+    // sheet's direction is RTL.
     const bool rightToLeft = sheet()->layoutDirection() == Qt::RightToLeft;
-    QPointF coordinate(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
+    const QPointF startCoordinate(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
+    QPointF coordinate(startCoordinate);
+// kDebug() << "start coordinate:" << coordinate;
     QSet<Cell> processedMergedCells;
     QSet<Cell> processedObscuredCells;
     for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
@@ -287,7 +294,7 @@ void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const Q
     // 2. Paint the cell content including markers (formula, comment, ...)
     processedMergedCells.clear();
     processedObscuredCells.clear();
-    coordinate = QPointF(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
+    coordinate = startCoordinate;
     for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -317,7 +324,7 @@ void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const Q
     }
 
     // 3. Paint the default borders
-    coordinate = QPointF(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
+    coordinate = startCoordinate;
     for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -341,7 +348,7 @@ void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const Q
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
-    coordinate = QPointF(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
+    coordinate = startCoordinate;
     for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;

@@ -151,6 +151,7 @@ void CellTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
     KoShape::applyConversion(painter, viewConverter);
     const double xOffset = viewConverter.viewToDocumentX(canvas()->canvasController()->canvasOffsetX());
     const double yOffset = viewConverter.viewToDocumentY(canvas()->canvasController()->canvasOffsetY());
+    // The visible area in document coordinates:
     const QRectF paintRect = QRectF(QPointF(-xOffset, -yOffset), size());
 
     /* paint the selection */
@@ -529,6 +530,11 @@ QPointF CellTool::offset() const
 QSizeF CellTool::size() const
 {
     return canvas()->viewConverter()->viewToDocument(d->canvas->size());
+}
+
+QPointF CellTool::canvasOffset() const
+{
+    return d->canvas->offset();
 }
 
 int CellTool::maxCol() const

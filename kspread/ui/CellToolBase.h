@@ -86,8 +86,17 @@ protected:
     virtual QWidget* createOptionWidget();
     void applyUserInput(bool expandMatrix = false);
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+
+    /**
+     * The shape offset in document coordinates.
+     */
     virtual QPointF offset() const = 0;
     virtual QSizeF size() const = 0;
+
+    /**
+     * The canvas scrolling offset in document coordinates.
+     */
+    virtual QPointF canvasOffset() const = 0;
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;

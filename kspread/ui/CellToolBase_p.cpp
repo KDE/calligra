@@ -966,6 +966,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
     if (q->selection()->referenceSelection() || q->editor()) {
         return;
     }
+    Sheet *const sheet = q->selection()->activeSheet();
 
     // save the painter state
     painter.save();
@@ -996,11 +997,26 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
         double top =    positions[1];
         double right =  positions[2];
         double bottom = positions[3];
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
+            // The painter's origin is translated by the negative canvas offset.
+            // viewRect.left() is the canvas offset. Add it once to the
+            // coordinates. Then, the upper left corner of the canvas has to
+            // match the correct document position, which is the scrolling
+            // offset (viewRect.left()) plus the width of the visible area
+            // (viewRect.width()); that's the right border (left+width).
+            const qreal offset = 2 * viewRect.left() + viewRect.width();
+            left = offset - positions[2];
+            right = offset - positions[0];
+        }
 
         bool paintLeft =   paintSides[0];
         bool paintTop =    paintSides[1];
         bool paintRight =  paintSides[2];
         bool paintBottom = paintSides[3];
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
+            paintLeft  = paintSides[2];
+            paintRight = paintSides[0];
+        }
 
         const double unzoomedPixelX = q->canvas()->viewConverter()->viewToDocumentX(1.0);
         const double unzoomedPixelY = q->canvas()->viewConverter()->viewToDocumentY(1.0);
@@ -1010,10 +1026,19 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
         if (current) {
             // save old clip region
             const QRegion clipRegion = painter.clipRegion();
-            // clip out the marker region
-            const QRect effMarker = selection->extendToMergedAreas(QRect(selection->marker(), selection->marker()));
-            const QRectF markerRect = selection->activeSheet()->cellCoordinatesToDocument(effMarker);
-            painter.setClipRegion(clipRegion.subtracted(markerRect.toRect()));
+            // clip out the cursor region
+            const QRect cursor = QRect(selection->cursor(), selection->cursor());
+            const QRect extCursor = selection->extendToMergedAreas(cursor);
+            QRectF cursorRect = sheet->cellCoordinatesToDocument(extCursor);
+            if (sheet->layoutDirection() == Qt::RightToLeft) {
+                // See comment above.
+                const qreal offset = 2 * viewRect.left() + viewRect.width();
+                const qreal left = offset - cursorRect.right();
+                const qreal right = offset - cursorRect.left();
+                cursorRect.setLeft(left);
+                cursorRect.setRight(right);
+            }
+            painter.setClipRegion(clipRegion.subtracted(cursorRect.toRect()));
             // draw the transparent selection background
             painter.fillRect(QRectF(left, top, right - left, bottom - top), selectionColor);
             // restore clip region
@@ -1111,6 +1136,15 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
         // that multiple highlighted cells look nicer together as the borders do not clash)
         unzoomedRect.adjust(unzoomedPixelX, unzoomedPixelY, -unzoomedPixelX, -unzoomedPixelY);
 
+        if ((*it)->sheet()->layoutDirection() == Qt::RightToLeft) {
+            // See comment in paintSelection().
+            const qreal offset = 2 * viewRect.left() + viewRect.width();
+            const qreal left = offset - unzoomedRect.right();
+            const qreal right = offset - unzoomedRect.left();
+            unzoomedRect.setLeft(left);
+            unzoomedRect.setRight(right);
+        }
+
         painter.setBrush(QBrush());
         painter.setPen(colors[(index) % colors.size()]);
         painter.drawRect(unzoomedRect);
@@ -1134,6 +1168,9 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
 void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRectF &viewRect,
         double positions[], bool paintSides[])
 {
+    // Everything is in document coordinates here.
+    // The layout direction, which is view dependent, is applied afterwards.
+
     const Sheet* sheet = q->selection()->activeSheet();
     const QRectF visibleRect = sheet->cellCoordinatesToDocument(cellRange);
 
@@ -1142,11 +1179,6 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
     qreal top = visibleRect.top();
     qreal right = visibleRect.right();
     qreal bottom = visibleRect.bottom();
-    if (sheet->layoutDirection() == Qt::RightToLeft) {
-        const double docWidth = q->size().width();
-        left = docWidth - visibleRect.right();
-        right = docWidth - visibleRect.left();
-    }
 
     /* left, top, right, bottom */
     paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&

@@ -57,6 +57,7 @@ protected:
     virtual Selection* selection();
     virtual QPointF offset() const;
     virtual QSizeF size() const;
+    virtual QPointF canvasOffset() const;
     virtual int maxCol() const;
     virtual int maxRow() const;
     virtual SheetView* sheetView(const Sheet* sheet) const;

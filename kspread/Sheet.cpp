@@ -197,7 +197,7 @@ Sheet::Sheet(Map* map, const QString& sheetName)
     d->id = s_id++;
     s_mapSheets->insert(d->id, this);
 
-    d->layoutDirection = Qt::LeftToRight;
+    d->layoutDirection = QApplication::layoutDirection();
 
     d->name = sheetName;
 
@@ -1682,7 +1682,6 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     const QHash<QString, Conditions>& conditionalStyles)
 {
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
-    setLayoutDirection(Qt::LeftToRight);
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
         QString stylename = sheetElement.attributeNS(KoXmlNS::table, "style-name", QString());
         //kDebug(36003)<<" style of table :"<<stylename;
@@ -1996,7 +1995,15 @@ void Sheet::loadOdfMasterLayoutPage(KoStyleStack &styleStack)
     }
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {
         kDebug(36003) << "styleStack.hasAttribute( style:writing-mode ) :" << styleStack.hasProperty(KoXmlNS::style, "writing-mode");
-        setLayoutDirection((styleStack.property(KoXmlNS::style, "writing-mode") == "lr-tb") ? Qt::LeftToRight : Qt::RightToLeft);
+        const QString writingMode = styleStack.property(KoXmlNS::style, "writing-mode");
+        if (writingMode == "lr-tb") {
+            setLayoutDirection(Qt::LeftToRight);
+        } else if (writingMode == "rl-tb") {
+            setLayoutDirection(Qt::RightToLeft);
+        } else {
+            // Set the layout direction to the direction of the sheet name.
+            checkContentDirection(sheetName());
+        }
         //TODO
         //<value>lr-tb</value>
         //<value>rl-tb</value>
@@ -2007,6 +2014,9 @@ void Sheet::loadOdfMasterLayoutPage(KoStyleStack &styleStack)
         //<value>tb</value>
         //<value>page</value>
 
+    } else {
+        // Set the layout direction to the direction of the sheet name.
+        checkContentDirection(sheetName());
     }
     if (styleStack.hasProperty(KoXmlNS::style, "print-orientation")) {
         pageLayout.orientation = (styleStack.property(KoXmlNS::style, "print-orientation") == "landscape")
@@ -3139,7 +3149,6 @@ bool Sheet::loadXML(const KoXmlElement& sheet)
     }
 
     bool detectDirection = true;
-    setLayoutDirection(Qt::LeftToRight);
     QString layoutDir = sheet.attribute("layoutDirection");
     if (!layoutDir.isEmpty()) {
         if (layoutDir == "rtl") {

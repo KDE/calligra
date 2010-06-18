@@ -667,18 +667,21 @@ void Canvas::paintEvent(QPaintEvent* event)
 //     ElapsedTime et("Painting cells", ElapsedTime::PrintOnlyTime);
 
     QPainter painter(this);
-    const QPointF offset = viewConverter()->documentToView(this->offset());
-    painter.translate(-offset);
-    painter.setClipRegion(event->region().translated(offset.x(), offset.y()));
+    painter.setClipRegion(event->region());
     painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
     painter.save();
 
+    // After the scaling, the painter methods need document coordinates!
     qreal zoomX, zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 
+    const bool layoutReversed = sheet->layoutDirection() == Qt::RightToLeft;
+    const QPointF offset(layoutReversed ? -this->offset().x() : this->offset().x(), this->offset().y());
+    painter.translate(-offset);
+
     // erase background
-    const QRectF paintRect = viewConverter()->viewToDocument(rect()).translated(this->offset());
+    const QRectF paintRect(viewConverter()->viewToDocument(rect()).translated(offset));
     painter.fillRect(paintRect, painter.background());
 
     // paint visible cells
@@ -689,6 +692,8 @@ void Canvas::paintEvent(QPaintEvent* event)
 
     // flake
     painter.restore();
+    // d->offset is the negated CanvasController offset in document coordinates.
+    painter.translate(-viewConverter()->documentToView(offset));
     d->shapeManager->paint(painter, *viewConverter(), false);
     painter.setRenderHint(QPainter::Antialiasing, false);
     if(d->toolProxy)
@@ -884,7 +889,8 @@ QRect Canvas::viewToCellCoordinates(const QRectF& viewRect) const
     if (!sheet)
         return QRect();
 
-    const QRectF rect = d->view->zoomHandler()->viewToDocument(viewRect).translated(offset());
+    // NOTE Stefan: Do not consider the layout direction in this case.
+    const QRectF rect = viewConverter()->viewToDocument(viewRect.normalized()).translated(offset());
 
     double tmp;
     const int left = sheet->leftColumn(rect.left(), tmp);

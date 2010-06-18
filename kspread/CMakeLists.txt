@@ -156,6 +156,7 @@ SET (ui_DIR_SRCS
         ui/MapViewModel.cpp
 	ui/MergeStrategy.cpp
 	ui/PasteStrategy.cpp
+        ui/RightToLeftPaintingStrategy.cpp
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp
 	ui/CharSelectDia.cpp
