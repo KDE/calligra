@@ -42,6 +42,8 @@
 #include <kmessagebox.h>
 #include <KStandardGuiItem>
 
+#include <KoCanvasBase.h>
+
 // KSpread
 #include "Localization.h"
 #include "Map.h"

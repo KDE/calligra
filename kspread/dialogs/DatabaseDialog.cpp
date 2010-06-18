@@ -29,6 +29,8 @@
 
 #include "commands/DataManipulators.h"
 
+#include <KoCanvasBase.h>
+
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>

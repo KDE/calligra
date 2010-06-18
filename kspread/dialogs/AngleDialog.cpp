@@ -31,6 +31,8 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include <KoCanvasBase.h>
+
 #include "Cell.h"
 #include "Selection.h"
 #include "Sheet.h"

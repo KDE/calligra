@@ -24,7 +24,6 @@
 #include <QColor>
 #include <QList>
 
-#include <KoCanvasBase.h>
 #include <KoToolSelection.h>
 
 #include <kdebug.h>

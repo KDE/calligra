@@ -32,6 +32,7 @@
 #include "Style.h"
 
 // KOffice
+#include <KoCanvasBase.h>
 #include <KoDpi.h>
 #include <KoViewConverter.h>
 

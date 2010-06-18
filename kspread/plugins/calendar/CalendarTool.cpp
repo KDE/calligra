@@ -26,6 +26,8 @@
 #include <commands/DataManipulators.h>
 #include <part/Doc.h>
 
+#include <KoCanvasBase.h>
+
 #include <KCalendarSystem>
 #include <KGenericFactory>
 #include <KMessageBox>

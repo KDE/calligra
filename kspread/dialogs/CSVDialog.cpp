@@ -29,6 +29,8 @@
 #include <QString>
 #include <QTimer>
 
+#include <KoCanvasBase.h>
+
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
