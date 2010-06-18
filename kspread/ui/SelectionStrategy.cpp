@@ -43,7 +43,7 @@ SelectionStrategy::SelectionStrategy(KoToolBase *parent, Selection *selection,
 {
     d->startCell = Cell();
 
-    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
     Sheet *const sheet = this->selection()->activeSheet();
 
@@ -76,7 +76,7 @@ SelectionStrategy::SelectionStrategy(KoToolBase *parent, Selection *selection,
         d->startCell = Cell(sheet, col, row);
         if (selection->referenceSelectionMode()) {
             selection->emitRequestFocusEditor();
-            const bool sizeGripHit = hitTestReferenceSizeGrip(canvas, selection, position);
+            const bool sizeGripHit = hitTestReferenceSizeGrip(tool()->canvas(), selection, position);
             const bool shiftPressed = modifiers & Qt::ShiftModifier;
             if (sizeGripHit || shiftPressed) {
                 selection->update(QPoint(col, row));

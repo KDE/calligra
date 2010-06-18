@@ -69,7 +69,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
         return;
     }
     // Test whether mouse is over the Selection.handle
-    if (hitTestSelectionSizeGrip(m_canvas, d->selection, position)) {
+    if (hitTestSelectionSizeGrip(tool()->canvas(), d->selection, position)) {
         // If the cursor is over the handle, than it might be already on the next cell.
         // Recalculate the cell position!
         col = d->selection->activeSheet()->leftColumn(position.x() - tool()->canvas()->viewConverter()->viewToDocumentX(2.0), xpos);
