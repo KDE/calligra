@@ -98,6 +98,7 @@ set( kpresenterprivate_LIB_SRCS
      animations/strategy/KPrAnimationAttribute.cpp
      animations/strategy/KPrSmilValues.cpp
      animations/strategy/KPrAttributeX.cpp
+     animations/strategy/KPrAttributeY.cpp
 
      pagelayout/KPrPlaceholder.cpp
      pagelayout/KPrPageLayout.cpp
