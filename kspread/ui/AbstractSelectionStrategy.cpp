@@ -20,6 +20,7 @@
 #include "AbstractSelectionStrategy.h"
 
 #include "Limits.h"
+#include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -68,8 +69,7 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
         return;
     }
     // Test whether mouse is over the Selection.handle
-    const QRectF selectionHandle = d->selection->selectionHandleArea(tool()->canvas()->viewConverter());
-    if (selectionHandle.contains(position)) {
+    if (hitTestSelectionSizeGrip(m_canvas, d->selection, position)) {
         // If the cursor is over the handle, than it might be already on the next cell.
         // Recalculate the cell position!
         col = d->selection->activeSheet()->leftColumn(position.x() - tool()->canvas()->viewConverter()->viewToDocumentX(2.0), xpos);
@@ -89,6 +89,75 @@ void AbstractSelectionStrategy::finishInteraction(Qt::KeyboardModifiers modifier
 {
     Q_UNUSED(modifiers)
     tool()->repaintDecorations();
+}
+
+// static
+bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
+                                                         Selection *selection,
+                                                         const QPointF &position)
+{
+    if (selection->referenceSelectionMode() || !selection->isValid()) {
+        return false;
+    }
+
+    // Define the (normal) selection size grip.
+    const qreal pixelX = canvas->viewConverter()->viewToDocumentX(1);
+    const qreal pixelY = canvas->viewConverter()->viewToDocumentY(1);
+    const QRectF gripArea(-2 * pixelX, -2 * pixelY, 5 * pixelX, 5 * pixelY);
+
+    Sheet *const sheet = selection->activeSheet();
+    const bool rtl = sheet->layoutDirection() == Qt::RightToLeft;
+
+    int column, row;
+    if (selection->isColumnOrRowSelected()) {
+        // complete rows/columns are selected, use the marker.
+        const QPoint marker = selection->marker();
+        column = marker.x();
+        row = marker.y();
+    } else {
+        const QRect range = selection->lastRange();
+        column = rtl ? range.left() : range.right();
+        row = range.bottom();
+    }
+
+    const double xpos = sheet->columnPosition(column);
+    const double ypos = sheet->rowPosition(row);
+    const double width = rtl ? 0.0 : sheet->columnFormat(column)->width();
+    const double height = sheet->rowFormat(row)->height();
+    return gripArea.translated(xpos + width, ypos + height).contains(position);
+}
+
+// static
+bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas,
+                                                         Selection *selection,
+                                                         const QPointF &position)
+{
+    if (!selection->referenceSelectionMode() || !selection->isValid()) {
+        return false;
+    }
+
+    // Define the reference selection size grip.
+    const qreal pixelX = canvas->viewConverter()->viewToDocumentX(1);
+    const qreal pixelY = canvas->viewConverter()->viewToDocumentY(1);
+    const QRectF gripArea(-3 * pixelX, -3 * pixelY, 6 * pixelX, 6 * pixelY);
+
+    // Iterate over the referenced ranges.
+    const Region::ConstIterator end(selection->constEnd());
+    for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
+        Sheet *const sheet = (*it)->sheet();
+        // Only check the ranges on the active sheet.
+        if (sheet != selection->activeSheet()) {
+            continue;
+        }
+        const QRect range = (*it)->rect();
+        const QRectF area = sheet->cellCoordinatesToDocument(range);
+        const bool rtl = sheet->layoutDirection() == Qt::RightToLeft;
+        const QPointF corner(rtl ? area.bottomLeft() : area.bottomRight());
+        if (gripArea.translated(corner).contains(position)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 Selection* AbstractSelectionStrategy::selection() const

@@ -24,6 +24,8 @@
 
 #include <Qt>
 
+class KoCanvasBase;
+
 namespace KSpread
 {
 class Selection;
@@ -54,6 +56,30 @@ public:
     virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QUndoCommand* createCommand();
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+
+    /**
+     * Checks, if there is a size grip for the (normal) selection at
+     * \p position.
+     * \param canvas the canvas
+     * \param selection the selection
+     * \param position the document coordinate (relative to the shape's origin)
+     * to check
+     * \return \c true if there is a size grip; \c false otherwise.
+     */
+    static bool hitTestSelectionSizeGrip(KoCanvasBase *canvas, Selection *selection,
+                                         const QPointF &position);
+
+    /**
+     * Checks, if there is a size grip for the reference selection at
+     * \p position.
+     * \param canvas the canvas
+     * \param selection the selection
+     * \param position the document coordinate (relative to the shape's origin)
+     * to check
+     * \return \c true if there is a size grip; \c false otherwise.
+     */
+    static bool hitTestReferenceSizeGrip(KoCanvasBase *canvas, Selection *selection,
+                                         const QPointF &position);
 
 protected:
     Selection* selection() const;

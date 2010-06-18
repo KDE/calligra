@@ -863,16 +863,6 @@ void CellToolBase::paintSelection(QPainter &painter, const QRectF &paintRect)
     d->paintSelection(painter, paintRect);
 }
 
-#if 0 // KSPREAD_MOUSE_STRATEGIES
-void CellToolBase::mousePressEvent(KoPointerEvent* event)
-{
-    if (event->button() == Qt::RightButton) {
-        // Setup the context menu.
-        setPopupActionList(d->popupActionList());
-    }
-}
-#endif
-
 void CellToolBase::mousePressEvent(KoPointerEvent* event)
 {
     // Replace the event for right to left layouts.
@@ -924,16 +914,19 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
         KoInteractionTool::mouseMoveEvent(event);
         return;
     }
-    // Indicators are not necessary for protected sheets or if there's a strategy.
-    if (selection()->activeSheet()->isProtected() || currentStrategy()) {
+    // Indicators are not necessary if there's a strategy.
+    if (currentStrategy()) {
         return KoInteractionTool::mouseMoveEvent(event);
     }
+
+    Sheet *const sheet = selection()->activeSheet();
 
     // Get info about where the event occurred.
     QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
 
     // Diagonal cursor, if the selection handle was hit.
-    if (selection()->selectionHandleArea(canvas()->viewConverter()).contains(position)) {
+    if (SelectionStrategy::hitTestReferenceSizeGrip(canvas(), selection(), position) ||
+        SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
         if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
             useCursor(Qt::SizeBDiagCursor);
         } else {
@@ -943,12 +936,14 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     }
 
     // Hand cursor, if the selected area was hit.
-    Region::ConstIterator end = selection()->constEnd();
-    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
-        const QRect range = (*it)->rect();
-        if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
-            useCursor(Qt::PointingHandCursor);
-            return KoInteractionTool::mouseMoveEvent(event);
+    if (!selection()->referenceSelectionMode()) {
+        const Region::ConstIterator end(selection()->constEnd());
+        for (Region::ConstIterator it(selection()->constBegin()); it != end; ++it) {
+            const QRect range = (*it)->rect();
+            if (sheet->cellCoordinatesToDocument(range).contains(position)) {
+                useCursor(Qt::PointingHandCursor);
+                return KoInteractionTool::mouseMoveEvent(event);
+            }
         }
     }
 
@@ -1249,7 +1244,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
 
     // Autofilling or merging, if the selection handle was hit.
-    if (selection()->selectionHandleArea(canvas()->viewConverter()).contains(position)) {
+    if (SelectionStrategy::hitTestSelectionSizeGrip(canvas(), selection(), position)) {
         if (event->button() == Qt::LeftButton)
             return new AutoFillStrategy(this, selection(), event->point, event->modifiers());
         else if (event->button() == Qt::MidButton)
@@ -1328,7 +1323,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     }
 
     // Drag & drop, if the selected area was hit.
-    if (hitSelection) {
+    if (hitSelection && !selection()->referenceSelectionMode()) {
         return new DragAndDropStrategy(this, selection(), event->point, event->modifiers());
     }
 

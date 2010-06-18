@@ -21,10 +21,7 @@
 #ifndef CANVAS_PRIVATE_H
 #define CANVAS_PRIVATE_H
 
-#include <QPen>
-#include <QPoint>
 #include <QPointer>
-
 #include "Canvas.h"
 
 class QLabel;
@@ -34,7 +31,6 @@ class KoToolProxy;
 
 namespace KSpread
 {
-class CellEditor;
 class View;
 
 class Canvas::Private
@@ -51,17 +47,11 @@ public:
 
     QLabel *validationInfo;
 
-    // true if the user is to choose a cell.
-    bool chooseCell;
-
-    // True when the mouse button is pressed
-    bool mousePressed;
-    bool dragging;
-
     // flake
     KoShapeManager* shapeManager;
     QPointer<KoToolProxy> toolProxy;
 };
 
 } //namespace KSpread
+
 #endif

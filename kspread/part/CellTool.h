@@ -40,20 +40,10 @@ public:
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-#if 0 // KSPREAD_MOUSE_STRATEGIES
-    virtual void mousePressEvent(KoPointerEvent* event) ;
-    virtual void mouseReleaseEvent(KoPointerEvent* event);
-    virtual void mouseMoveEvent(KoPointerEvent* event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
-#endif
-
 public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
 
 protected:
-#if 0 // KSPREAD_MOUSE_STRATEGIES
-    virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
-#endif
     virtual Selection* selection();
     virtual QPointF offset() const;
     virtual QSizeF size() const;

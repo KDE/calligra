@@ -51,6 +51,8 @@ public:
      */
     virtual ~SelectionStrategy();
 
+    virtual void handleMouseMove(const QPointF &position, Qt::KeyboardModifiers modifiers);
+
 private:
     class Private;
     Private * const d;

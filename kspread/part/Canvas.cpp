@@ -147,8 +147,6 @@ Canvas::Canvas(View *view)
     d->view = view;
 
     setMouseTracking(true);
-    d->mousePressed = false;
-    d->dragging = false;
 
     installEventFilter(this);   // for TAB key processing, otherwise focus change
     setAcceptDrops(true);
@@ -464,60 +462,6 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
         d->toolProxy->inputMethodEvent(event);
 }
 
-bool Canvas::highlightRangeSizeGripAt(double x, double y)
-{
-    if (!selection()->referenceSelectionMode())
-        return false;
-
-    Region::ConstIterator end = selection()->constEnd();
-    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
-        // TODO Stefan: adapt to Selection::selectionHandleArea
-        QRectF visibleRect = activeSheet()->cellCoordinatesToDocument((*it)->rect());
-
-        QPoint bottomRight((int) visibleRect.right(), (int) visibleRect.bottom());
-        QRect handle(((int) bottomRight.x() - 6),
-                     ((int) bottomRight.y() - 6),
-                     (6),
-                     (6));
-
-        if (handle.contains(QPoint((int) x, (int) y))) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void Canvas::startTheDrag()
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-
-    // right area for start dragging
-    setCursor(Qt::PointingHandCursor);
-
-    QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
-
-    // Save to buffer
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    QTextStream str(&buffer);
-    str.setCodec("UTF-8");
-    str << doc;
-    buffer.close();
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setText(sheet->copyAsText(selection()));
-    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    drag->start();
-
-    setCursor(Qt::ArrowCursor);
-}
-
 void Canvas::paintEvent(QPaintEvent* event)
 {
     if (d->view->doc()->isLoading() || d->view->isLoading())
@@ -575,8 +519,6 @@ void Canvas::focusInEvent(QFocusEvent*)
 
 void Canvas::focusOutEvent(QFocusEvent*)
 {
-    d->mousePressed = false;
-    d->view->disableAutoScroll();
 }
 
 void Canvas::dragEnterEvent(QDragEnterEvent* event)
@@ -673,8 +615,6 @@ void Canvas::dragLeaveEvent(QDragLeaveEvent *)
 
 void Canvas::dropEvent(QDropEvent *event)
 {
-    d->dragging = false;
-    d->view->disableAutoScroll();
     register Sheet * const sheet = activeSheet();
     // FIXME Sheet protection: Not all cells have to be protected.
     if (!sheet || sheet->isProtected()) {

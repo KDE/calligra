@@ -75,10 +75,6 @@ class View;
 
 /**
  * The scrollable area showing the cells.
- *
- * Especially most of the user interface logic is implemented here.
- * That means that this class knows what to do when a key is pressed
- * or if the mouse button was clicked.
  */
 class KSPREAD_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
@@ -90,18 +86,6 @@ class KSPREAD_EXPORT Canvas : public QWidget, public KoCanvasBase
     Q_OBJECT
 
 public:
-    /**
-     * The current action associated with the mouse.
-     * Default is 'NoAction'.
-     */
-    enum MouseActions {
-        NoAction,       /**< No mouse action (default) */
-        Mark,           /**< Marking action */
-        ResizeCell,     /**< Merging cell */
-        AutoFill,       /**< Autofilling */
-        ResizeSelection /**< Resizing the selection */
-    };
-
     explicit Canvas(View* view);
     ~Canvas();
 
@@ -194,17 +178,6 @@ protected:
     /// reimplemented method from superclass
     virtual void tabletEvent(QTabletEvent *e);
 
-    /**
-     * Checks to see if there is a size grip for a highlight range at a given position.
-     * Note that both X and Y coordinates are UNZOOMED.  To translate from a zoomed coordinate (eg. position of a mouse event) to
-     * an unzoomed coordinate, use Doc::unzoomItX and Doc::unzoomItY.  The document object
-     * can be accessed via view()->doc()
-     * @param x Unzoomed x coordinate to check
-     * @param y Unzoomed y coordinate to check
-     * @return @c true if there is a size grip at the specified position, @c false otherwise.
-     */
-    bool highlightRangeSizeGripAt(double x, double y);
-
 private:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
@@ -231,8 +204,6 @@ private:
     QRectF cellCoordinatesToView(const QRect& cellRange) const;
 
 private:
-    void startTheDrag();
-
     /**
      * Determines the cell at @p point and shows its tooltip.
      * @param point the position for which a tooltip is requested

@@ -24,8 +24,6 @@
 #include <kdebug.h>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
-#include <KoViewConverter.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -614,41 +612,6 @@ const QPoint& Selection::marker() const
 bool Selection::isSingular() const
 {
     return Region::isSingular();
-}
-
-QRectF Selection::selectionHandleArea(const KoViewConverter* viewConverter) const
-{
-    if (d->referenceMode) {
-        return QRectF();
-    }
-    int column, row;
-
-    // complete rows/columns are selected, use the marker.
-    if (isColumnOrRowSelected()) {
-        column = d->marker.x();
-        row = d->marker.y();
-    } else {
-        if (!isValid()) {
-            return QRectF();
-        }
-        column = lastRange().right();
-        row = lastRange().bottom();
-    }
-    const Cell cell(d->activeSheet, column, row);
-
-    double xpos = d->activeSheet->columnPosition(column);
-    double ypos = d->activeSheet->rowPosition(row);
-    double width = cell.width();
-    double height = cell.height();
-
-    const double unzoomedXPixel = viewConverter->viewToDocumentX(1.0);
-    const double unzoomedYPixel = viewConverter->viewToDocumentY(1.0);
-
-    QRectF handle(xpos + width - 2 * unzoomedXPixel,
-                  ypos + height - 2 * unzoomedYPixel,
-                  5 * unzoomedXPixel,
-                  5 * unzoomedYPixel);
-    return handle;
 }
 
 QString Selection::name(Sheet* sheet) const

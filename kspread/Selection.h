@@ -31,7 +31,6 @@
 #include "Region.h"
 
 class KoCanvasBase;
-class KoViewConverter;
 
 namespace KSpread
 {
@@ -169,11 +168,6 @@ public:
      * Checks whether the region consists only of one point
      */
     bool isSingular() const;
-
-    /**
-     * @return the area that the 'handle' of the selection is located in painting coordinates
-     */
-    QRectF selectionHandleArea(const KoViewConverter* viewConverter) const;
 
     /**
      * @return the name of the region (e.g. "A1:A2")

@@ -1120,52 +1120,59 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
     // save painter state
     painter.save();
 
+    // Define the reference selection handle.
+    const qreal pixelX = q->canvas()->viewConverter()->viewToDocumentX(1);
+    const qreal pixelY = q->canvas()->viewConverter()->viewToDocumentY(1);
+    const QRectF handleArea(-3 * pixelX, -3 * pixelY, 6 * pixelX, 6 * pixelY);
+
+    // The colors for the referenced ranges and the color index.
     const QList<QColor> colors = q->selection()->colors();
-    const double unzoomedPixelX = q->canvas()->viewConverter()->viewToDocumentX(1.0);
-    const double unzoomedPixelY = q->canvas()->viewConverter()->viewToDocumentY(1.0);
     int index = 0;
-    Region::ConstIterator end(q->selection()->constEnd());
-    for (Region::ConstIterator it = q->selection()->constBegin(); it != end; ++it) {
+
+    // Iterate over the referenced ranges.
+    const Region::ConstIterator end(q->selection()->constEnd());
+    for (Region::ConstIterator it(q->selection()->constBegin()); it != end; ++it) {
+        Sheet *const sheet = (*it)->sheet();
         // Only paint ranges or cells on the current sheet
-        if ((*it)->sheet() != q->selection()->activeSheet()) {
+        if (sheet != q->selection()->activeSheet()) {
             index++;
             continue;
         }
 
         const QRect range = q->selection()->extendToMergedAreas((*it)->rect());
-
-        QRectF unzoomedRect = q->selection()->activeSheet()->cellCoordinatesToDocument(range);
+        QRectF area = sheet->cellCoordinatesToDocument(range);
 
         // Convert region from sheet coordinates to canvas coordinates for use with the painter
         // retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
         // Now adjust the highlight rectangle is slightly inside the cell borders (this means
         // that multiple highlighted cells look nicer together as the borders do not clash)
-        unzoomedRect.adjust(unzoomedPixelX, unzoomedPixelY, -unzoomedPixelX, -unzoomedPixelY);
+        area.adjust(pixelX, pixelY, -pixelX, -pixelY);
 
+        // The current color.
+        const QColor color = colors[index++ % colors.size()];
+
+        // Paint the reference range's outline.
         if ((*it)->sheet()->layoutDirection() == Qt::RightToLeft) {
             // See comment in paintSelection().
             const qreal offset = 2 * viewRect.left() + viewRect.width();
-            const qreal left = offset - unzoomedRect.right();
-            const qreal right = offset - unzoomedRect.left();
-            unzoomedRect.setLeft(left);
-            unzoomedRect.setRight(right);
+            const qreal left = offset - area.right();
+            const qreal right = offset - area.left();
+            area.setLeft(left);
+            area.setRight(right);
         }
 
         painter.setBrush(QBrush());
-        painter.setPen(colors[(index) % colors.size()]);
-        painter.drawRect(unzoomedRect);
+        painter.setPen(color);
+        painter.drawRect(area);
 
         // Now draw the size grip (the little rectangle on the bottom right-hand corner of
         // the range which the user can click and drag to resize the region)
         painter.setPen(Qt::white);
-        painter.setBrush(colors[(index) % colors.size()]);
-
-        painter.drawRect(QRectF(unzoomedRect.right() - 3 * unzoomedPixelX,
-                                unzoomedRect.bottom() - 3 * unzoomedPixelY,
-                                6 * unzoomedPixelX,
-                                6 * unzoomedPixelY));
-        index++;
+        painter.setBrush(color);
+        const bool rtl = sheet->layoutDirection() == Qt::RightToLeft;
+        const QPointF corner(rtl ? area.bottomLeft() : area.bottomRight());
+        painter.drawRect(handleArea.translated(corner));
     }
 
     // restore painter state
