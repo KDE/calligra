@@ -31,6 +31,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to select the direction for the paste with insertion action.
+ */
 class PasteInsertDialog : public KDialog
 {
     Q_OBJECT

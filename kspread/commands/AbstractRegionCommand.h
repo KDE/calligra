@@ -32,6 +32,7 @@ class Sheet;
 
 /**
  * \class AbstractRegionCommand
+ * \ingroup Commands
  * \brief Abstract base class for all region related operations.
  */
 class KSPREAD_EXPORT AbstractRegionCommand : public Region, public QUndoCommand

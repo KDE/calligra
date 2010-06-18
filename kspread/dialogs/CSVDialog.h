@@ -31,6 +31,7 @@ namespace KSpread
 class Selection;
 
 /**
+ * \ingroup UI
  * Provides dialog for managing CSV (comma separated value) data.
  *
  * Currently CSVDialog is used for converting text into columns,

@@ -32,6 +32,10 @@ namespace KSpread
 {
 class Sheet;
 
+/**
+ * \ingroup Commands
+ * Alters the print settings.
+ */
 class PageLayoutCommand : public QUndoCommand
 {
 public:

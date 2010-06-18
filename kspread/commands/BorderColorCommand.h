@@ -28,6 +28,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Applies a color to an exising border.
+ */
 class BorderColorCommand : public AbstractRegionCommand
 {
 public:

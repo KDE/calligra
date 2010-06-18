@@ -33,6 +33,11 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to show a hidden sheet.
+ * \todo Rename to ShowSheetDialog.
+ */
 class ShowDialog: public KDialog
 {
     Q_OBJECT

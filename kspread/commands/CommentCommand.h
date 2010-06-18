@@ -27,6 +27,7 @@ namespace KSpread
 
 /**
  * \class CommentCommand
+ * \ingroup Commands
  * \brief Adds/Removes comments to/of a cell region.
  */
 class CommentCommand : public AbstractRegionCommand

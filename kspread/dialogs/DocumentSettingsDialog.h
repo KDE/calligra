@@ -55,6 +55,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog page to show the current locale used by the document.
+ */
 class parameterLocale :  public QObject
 {
     Q_OBJECT
@@ -76,6 +80,10 @@ protected:
 };
 
 
+/**
+ * \ingroup UI
+ * Dialog to alter document settings.
+ */
 class DocumentSettingsDialog : public KPageDialog
 {
     Q_OBJECT

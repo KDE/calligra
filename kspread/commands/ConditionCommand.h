@@ -30,6 +30,7 @@ namespace KSpread
 
 /**
  * \class CondtionCommand
+ * \ingroup Commands
  * \brief Adds/Removes condtional formatting to/of a cell region.
  */
 class CondtionCommand : public AbstractRegionCommand

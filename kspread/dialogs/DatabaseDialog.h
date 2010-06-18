@@ -47,6 +47,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to import data from a database.
+ */
 class DatabaseDialog : public KAssistantDialog
 {
     Q_OBJECT

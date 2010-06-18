@@ -36,6 +36,10 @@ namespace KSpread
 class Selection;
 class Sheet;
 
+/**
+ * \ingroup UI
+ * Dialog to insert a value series.
+ */
 class SeriesDialog : public KDialog
 {
     Q_OBJECT

@@ -32,6 +32,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Adds/Removes a hyperlink.
+ */
 class LinkCommand : public QUndoCommand
 {
 public:

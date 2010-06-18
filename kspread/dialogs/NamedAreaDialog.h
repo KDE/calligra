@@ -40,6 +40,10 @@ namespace KSpread
 class Region;
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to manage named areas.
+ */
 class NamedAreaDialog : public KDialog
 {
     Q_OBJECT
@@ -62,6 +66,10 @@ private:
 };
 
 
+/**
+ * \ingroup UI
+ * Dialog to edit a named area.
+ */
 class EditNamedAreaDialog : public KDialog
 {
     Q_OBJECT

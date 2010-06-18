@@ -33,11 +33,9 @@ class Map;
 class Sheet;
 
 /**
- * Class RenameSheetCommand implements a command for renaming a sheet.
- *
- * \sa Sheet::setSheetName
+ * \ingroup Commands
+ * \brief Renames a sheet.
  */
-
 class RenameSheetCommand : public QUndoCommand
 {
 public:
@@ -52,6 +50,11 @@ protected:
     QString newName;
 };
 
+
+/**
+ * \ingroup Commands
+ * \brief Hides a sheet.
+ */
 class HideSheetCommand : public QUndoCommand
 {
 public:
@@ -65,6 +68,11 @@ protected:
     QString sheetName;
 };
 
+
+/**
+ * \ingroup Commands
+ * \brief Shows a hidden sheet.
+ */
 class ShowSheetCommand : public QUndoCommand
 {
 public:
@@ -79,6 +87,10 @@ protected:
 };
 
 
+/**
+ * \ingroup Commands
+ * \brief Adds a sheet.
+ */
 class AddSheetCommand : public QUndoCommand
 {
 public:
@@ -93,6 +105,10 @@ protected:
 };
 
 
+/**
+ * \ingroup Commands
+ * \brief Duplicates a sheet.
+ */
 class DuplicateSheetCommand : public QUndoCommand
 {
 public:
@@ -110,6 +126,10 @@ protected:
 };
 
 
+/**
+ * \ingroup Commands
+ * \brief Removes a sheet.
+ */
 class RemoveSheetCommand : public QUndoCommand
 {
 public:
@@ -125,9 +145,9 @@ protected:
 
 
 /**
- * Class SheetPropertiesCommand implements a command for changing sheet properties.
+ * \ingroup Commands
+ * \brief Changes sheet properties.
  */
-
 class SheetPropertiesCommand : public QUndoCommand
 {
 public:

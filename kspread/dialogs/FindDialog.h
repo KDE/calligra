@@ -32,6 +32,10 @@ class KComboBox;
 namespace KSpread
 {
 
+/**
+ * \ingroup UI
+ * Options for finding and replacing cell values.
+ */
 class FindOption : public QObject
 {
     Q_OBJECT
@@ -59,6 +63,11 @@ private:
     KComboBox *m_searchDirection;
 };
 
+
+/**
+ * \ingroup UI
+ * Dialog for finding cell values.
+ */
 class FindDlg : public KFindDialog
 {
     Q_OBJECT
@@ -84,6 +93,11 @@ private:
     FindOption *m_findOptions;
 };
 
+
+/**
+ * \ingroup UI
+ * Dialog for replacing cell values.
+ */
 class SearchDlg : public KReplaceDialog
 {
     Q_OBJECT

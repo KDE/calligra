@@ -32,6 +32,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to add a named area.
+ */
 class AddNamedAreaDialog : public KDialog
 {
     Q_OBJECT

@@ -33,6 +33,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to go to a specific cell location.
+ */
 class GotoDialog : public KDialog
 {
     Q_OBJECT

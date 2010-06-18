@@ -35,6 +35,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to insert/remove cell by shifting other cells.
+ */
 class InsertDialog : public KDialog
 {
     Q_OBJECT

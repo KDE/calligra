@@ -33,6 +33,10 @@ namespace KSpread
 {
 class Sheet;
 
+/**
+ * \ingroup Commands
+ * Defines a print range.
+ */
 class DefinePrintRangeCommand : public AbstractRegionCommand
 {
 public:

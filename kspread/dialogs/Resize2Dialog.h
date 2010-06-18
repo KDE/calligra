@@ -34,6 +34,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to resize rows.
+ */
 class ResizeRow: public KDialog
 {
     Q_OBJECT
@@ -51,6 +55,10 @@ protected:
     KoUnitDoubleSpinBox *m_pHeight;
 };
 
+/**
+ * \ingroup UI
+ * Dialog to resize columns.
+ */
 class ResizeColumn: public KDialog
 {
     Q_OBJECT

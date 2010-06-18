@@ -36,6 +36,10 @@ namespace KSpread
 class Selection;
 class Style;
 
+/**
+ * \ingroup UI
+ * Widget representing a conditional cell style.
+ */
 class ConditionalWidget : public QWidget
 {
     Q_OBJECT
@@ -66,6 +70,10 @@ public slots:
 };
 
 
+/**
+ * \ingroup UI
+ * Dialog to set conditional cell styles.
+ */
 class ConditionalDialog : public KDialog
 {
     Q_OBJECT

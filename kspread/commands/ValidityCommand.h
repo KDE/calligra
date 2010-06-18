@@ -29,6 +29,7 @@ namespace KSpread
 
 /**
  * \class ValidityCommand
+ * \ingroup Commands
  * \brief Adds/Removes validity checks to/of a cell region.
  */
 class ValidityCommand : public AbstractRegionCommand

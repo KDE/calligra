@@ -38,6 +38,10 @@ namespace KSpread
 {
 class View;
 
+/**
+ * \ingroup UI
+ * Dialog to set the application preferences.
+ */
 class PreferenceDialog : public KPageDialog
 {
     Q_OBJECT

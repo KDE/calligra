@@ -32,6 +32,7 @@ class Style;
 
 /**
  * \class StyleCommand
+ * \ingroup Commands
  * \brief Manipulates the style of a cell region.
  */
 class StyleCommand : public AbstractRegionCommand

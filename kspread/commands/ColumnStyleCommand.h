@@ -27,7 +27,8 @@ namespace KSpread
 class ColumnFormat;
 
 /**
- * Command to set a row style.
+ * \ingroup Commands
+ * \brief Sets column styles.
  */
 class ColumnStyleCommand : public AbstractRegionCommand
 {

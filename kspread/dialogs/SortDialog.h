@@ -47,6 +47,10 @@ namespace KSpread
 class Selection;
 class Sheet;
 
+/**
+ * \ingroup UI
+ * Dialog to set options for the sort cell values command.
+ */
 class SortDialog : public KDialog
 {
     Q_OBJECT

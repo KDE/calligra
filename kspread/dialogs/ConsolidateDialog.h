@@ -43,6 +43,10 @@ namespace KSpread
 class Selection;
 class Sheet;
 
+/**
+ * \ingroup UI
+ * Dialog to consolidate cell values.
+ */
 class ConsolidateDialog : public KDialog
 {
     Q_OBJECT

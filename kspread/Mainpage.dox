@@ -96,5 +96,10 @@
  * Classes and methods related to commands.
  */
 
+/**
+ * \defgroup UI User Interface
+ * Classes and methods related to the user interface.
+ */
+
 #EXAMPLE_PATH=. doc
 #EXAMPLE_RECURSIVE=NO

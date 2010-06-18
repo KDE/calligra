@@ -37,6 +37,10 @@ public:
     }
 };
 
+/**
+ * \ingroup UI
+ * Dialog to set sheet properties.
+ */
 class SheetPropertiesDialog : public KDialog
 {
     Q_OBJECT

@@ -26,7 +26,8 @@ namespace KSpread
 {
 
 /**
- * Command to set/unset manual page breaks.
+ * \ingroup Commands
+ * \brief Sets/Unsets manual page breaks.
  */
 class PageBreakCommand : public AbstractRegionCommand
 {

@@ -32,7 +32,8 @@ namespace KSpread
 {
 
 /**
- * An undo command for StyleStorage data.
+ * \ingroup Commands
+ * \brief An undo command for StyleStorage data.
  *
  * Implements undo functionality only. Glue it to another command,
  * that provides the appropriate applying (redoing).

@@ -33,7 +33,8 @@ namespace KSpread
 {
 
 /**
- * Command to paste cell data.
+ * \ingroup Commands
+ * \brief Command to paste cell data.
  */
 class PasteCommand : public AbstractRegionCommand
 {

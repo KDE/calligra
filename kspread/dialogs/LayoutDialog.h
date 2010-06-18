@@ -93,6 +93,10 @@ enum BorderShortcutType {
     BorderShortcutType_END
 };
 
+/**
+ * \ingroup UI
+ * Widget to select a background pattern.
+ */
 class PatternSelect : public QFrame
 {
     Q_OBJECT
@@ -147,6 +151,11 @@ protected:
     bool undefined;
 };
 
+/**
+ * \ingroup UI
+ * Dialog page to select the cell style inheritance.
+ * Only shown when modifying a named cell style.
+ */
 class GeneralTab : public QWidget
 {
     Q_OBJECT
@@ -176,6 +185,8 @@ private:
 };
 
 /**
+ * \ingroup UI
+ * Dialog page to choose the used font.
  */
 class CellFormatPageFont : public QWidget, public Ui::FontWidget
 {
@@ -215,9 +226,8 @@ private:
 };
 
 /**
- * Format of numbers.
- * This widget is part of the format dialog.
- * It allows the user to cinfigure the way numbers are formatted.
+ * \ingroup UI
+ * Dialog page to select the value formatting.
  */
 class CellFormatPageFloat : public QWidget
 {
@@ -264,6 +274,10 @@ protected:
     bool m_bFormatColorChanged;
 };
 
+/**
+ * \ingroup UI
+ * Dialog page to set up the cell dimension, value alignment, etc.
+ */
 class CellFormatPagePosition : public QWidget, public Ui::PositionWidget
 {
     Q_OBJECT
@@ -296,6 +310,10 @@ protected:
 
 
 
+/**
+ * \ingroup UI
+ * The cell border preview.
+ */
 class Border : public QFrame
 {
     Q_OBJECT
@@ -311,6 +329,10 @@ protected:
     bool oneRow;
 };
 
+/**
+ * \ingroup UI
+ * A button to set/unset a cell border.
+ */
 class BorderButton : public QPushButton
 {
     Q_OBJECT
@@ -353,6 +375,10 @@ protected:
 
 };
 
+/**
+ * \ingroup UI
+ * Dialog page to select the cell borders.
+ */
 class CellFormatPageBorder : public QWidget
 {
     Q_OBJECT
@@ -410,6 +436,10 @@ private:
     void applyDiagonalOutline(StyleCommand* obj);
 };
 
+/**
+ * \ingroup UI
+ * Widget to preview a background brush.
+ */
 class BrushSelect : public QFrame
 {
     Q_OBJECT
@@ -447,6 +477,10 @@ protected:
 };
 
 
+/**
+ * \ingroup UI
+ * Dialog page to set the cell background.
+ */
 class CellFormatPagePattern : public QWidget
 {
     Q_OBJECT
@@ -490,6 +524,11 @@ protected:
     CellFormatDialog *dlg;
 };
 
+
+/**
+ * \ingroup UI
+ * Dialog page to set up cell protection.
+ */
 class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
 {
     Q_OBJECT
@@ -510,7 +549,8 @@ protected:
 };
 
 /**
- * Dialog for the "Cell Format..." action
+ * \ingroup UI
+ * Dialog to set the cell style.
  */
 class CellFormatDialog : public KPageDialog
 {

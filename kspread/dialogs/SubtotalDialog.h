@@ -35,6 +35,10 @@ namespace KSpread
 class Selection;
 class Sheet;
 
+/**
+ * \ingroup UI
+ * Dialog to add subtotals.
+ */
 class SubtotalDialog : public KDialog, public ::Ui::SubtotalWidget
 {
     Q_OBJECT

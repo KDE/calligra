@@ -50,6 +50,10 @@ class CellEditor;
 class FunctionDescription;
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to compose a formula.
+ */
 class FormulaDialog : public KDialog
 {
     Q_OBJECT

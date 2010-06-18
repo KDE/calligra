@@ -32,8 +32,9 @@ class ColumnFormat;
 class RowFormat;
 
 /**
-   * \class ResizeColumnManipulator
-   * \brief Resize column operation.
+ * \class ResizeColumnManipulator
+ * \ingroup Commands
+ * \brief Resizes a column.
  */
 class ResizeColumnManipulator : public AbstractRegionCommand
 {
@@ -54,10 +55,10 @@ private:
 };
 
 
-
 /**
-   * \class ResizeRowManipulator
-   * \brief Resize row operation.
+ * \class ResizeRowManipulator
+ * \ingroup Commands
+ * \brief Resizes a row.
  */
 class ResizeRowManipulator : public AbstractRegionCommand
 {
@@ -80,6 +81,7 @@ private:
 
 /**
  * \class AdjustColumnRowManipulator
+ * \ingroup Commands
  * \brief Optimizes the height and the width of rows and columns, respectively.
  */
 class AdjustColumnRowManipulator : public AbstractRegionCommand
@@ -118,7 +120,8 @@ bool m_adjustRow    : 1;
 
 /**
  * \class HideShowManipulator
- * \brief Hides and shows columns and rows.
+ * \ingroup Commands
+ * \brief Hides/Shows columns and/or rows.
  */
 class HideShowManipulator : public AbstractRegionCommand
 {
@@ -149,7 +152,8 @@ bool m_manipulateRows    : 1;
 
 /**
  * \class InsertDeleteColumnManipulator
- * \brief Inserts and deletes rows.
+ * \ingroup Commands
+ * \brief Inserts/Removes columns.
  */
 class InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
@@ -176,7 +180,8 @@ private:
 
 /**
  * \class InsertDeleteRowManipulator
- * \brief Inserts and deletes rows.
+ * \ingroup Commands
+ * \brief Inserts/Removes rows.
  */
 class InsertDeleteRowManipulator : public AbstractRegionCommand
 {

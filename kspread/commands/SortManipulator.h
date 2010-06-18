@@ -28,7 +28,8 @@ namespace KSpread
 class CellStorage;
 
 /**
- * Sorts the range that it gets, using various criteria.
+ * \ingroup Commands
+ * \brief Sorts the values in a cell range.
  */
 class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator
 {

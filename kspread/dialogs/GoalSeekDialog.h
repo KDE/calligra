@@ -51,6 +51,10 @@ namespace KSpread
 class RegionSelector;
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to seek a specific value for a set of parameter values.
+ */
 class GoalSeekDialog : public KDialog
 {
     Q_OBJECT

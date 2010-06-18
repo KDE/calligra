@@ -27,6 +27,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup UI
+ * Dialog to edit custom value lists.
+ */
 class ListDialog: public KDialog
 {
     Q_OBJECT

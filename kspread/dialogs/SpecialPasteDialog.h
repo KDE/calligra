@@ -34,6 +34,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog for the special paste action.
+ */
 class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT

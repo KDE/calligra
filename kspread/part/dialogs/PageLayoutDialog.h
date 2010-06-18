@@ -26,6 +26,10 @@ namespace KSpread
 {
 class Sheet;
 
+/**
+ * \ingroup UI
+ * Dialog to set the page layout.
+ */
 class PageLayoutDialog : public KoPageLayoutDialog
 {
     Q_OBJECT

@@ -29,6 +29,10 @@ namespace KSpread
 class ColumnFormat;
 class RowFormat;
 
+/**
+ * \ingroup Commands
+ * \brief Deletes cell contents and column/row styles.
+ */
 class DeleteCommand : public AbstractDataManipulator
 {
 public:

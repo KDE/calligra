@@ -34,7 +34,8 @@ namespace KSpread
 class Selection;
 
 /**
- * Dialog for the "Auto-Format..." action
+ * \ingroup UI
+ * Dialog for the "Auto-Format..." action.
  */
 class AutoFormatDialog : public KDialog
 {

@@ -32,6 +32,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to add a comment.
+ */
 class CommentDialog : public KDialog
 {
     Q_OBJECT

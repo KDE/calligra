@@ -31,6 +31,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to insert a hyperlink.
+ */
 class LinkDialog : public KPageDialog
 {
     Q_OBJECT

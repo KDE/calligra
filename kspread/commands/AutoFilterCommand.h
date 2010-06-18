@@ -25,6 +25,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Adds an auto-filter to a cell range.
+ */
 class AutoFilterCommand : public AbstractRegionCommand
 {
 public:

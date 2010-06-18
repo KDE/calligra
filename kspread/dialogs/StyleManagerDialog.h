@@ -34,6 +34,10 @@ namespace KSpread
 class Selection;
 class StyleManager;
 
+/**
+ * \ingroup UI
+ * Dialog to manage names cell styles.
+ */
 class StyleManagerDialog : public KDialog
 {
     Q_OBJECT

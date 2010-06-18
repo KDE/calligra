@@ -34,6 +34,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to show hidden columns/rows.
+ */
 class ShowColRow: public KDialog
 {
     Q_OBJECT

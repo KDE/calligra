@@ -38,6 +38,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog for setting cell validations.
+ */
 class ValidityDialog : public KPageDialog
 {
     Q_OBJECT

@@ -32,6 +32,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup UI
+ * Dialog to rotate the cell contents.
+ */
 class AngleDialog : public KDialog
 {
     Q_OBJECT

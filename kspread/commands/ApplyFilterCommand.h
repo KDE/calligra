@@ -28,6 +28,10 @@ namespace KSpread
 {
 class Filter;
 
+/**
+ * \ingroup Commands
+ * \brief Filtering a cell range.
+ */
 class ApplyFilterCommand : public AbstractRegionCommand
 {
 public:

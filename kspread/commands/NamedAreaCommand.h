@@ -26,6 +26,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Attaches a name to a cell range.
+ */
 class NamedAreaCommand : public AbstractRegionCommand
 {
 public:

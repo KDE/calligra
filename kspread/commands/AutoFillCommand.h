@@ -39,6 +39,10 @@ namespace KSpread
 class AutoFillSequence;
 class Cell;
 
+/**
+ * \ingroup Commands
+ * \brief Auto-filling of a cell range.
+ */
 class AutoFillCommand : public AbstractDataManipulator
 {
 public:

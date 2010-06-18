@@ -32,7 +32,8 @@ namespace KSpread
 {
 
 /**
- * Provides an abstract method for the actual setting of new values.
+ * \ingroup Commands
+ * \brief Abstract command for setting values.
  */
 class KSPREAD_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
@@ -74,8 +75,9 @@ protected:
 };
 
 /**
- * Extends AbstractDataManipulator with the option of copying cell styles.
-*/
+ * \ingroup Commands
+ * \brief Abstract command for setting values/styles.
+ */
 class AbstractDFManipulator : public AbstractDataManipulator
 {
 public:
@@ -100,8 +102,8 @@ bool m_changeformat : 1;
 
 
 /**
- * DataManipulator - allows setting values on one range.
- * If multiple ranges are selected, they all get set to the same values
+ * \ingroup Commands
+ * \brief Sets values of a cell range.
  */
 class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator
 {
@@ -135,6 +137,11 @@ bool m_parsing : 1;
 bool m_expandMatrix : 1;
 };
 
+
+/**
+ * \ingroup Commands
+ * \brief Fills a value series into a cell range.
+ */
 class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator
 {
 public:
@@ -156,7 +163,11 @@ protected:
     int m_last;
 };
 
-/** the FillManipulator is used in the Fill operation */
+
+/**
+ * \ingroup Commands
+ * \brief Fills values into a cell range.
+ */
 class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator
 {
 public:
@@ -175,7 +186,11 @@ protected:
     Direction m_dir;
 };
 
-/** CaseManipulator converts data to uppercase/lowercase/... */
+
+/**
+ * \ingroup Commands
+ * \brief Converts string values to upper-/lowercase.
+ */
 class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator
 {
 public:
@@ -203,7 +218,10 @@ protected:
 };
 
 
-
+/**
+ * \ingroup Commands
+ * \brief Inserts/Removes cells by shifting other cells.
+ */
 class ShiftManipulator : public AbstractRegionCommand
 {
 public:

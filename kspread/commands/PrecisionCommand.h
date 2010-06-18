@@ -25,6 +25,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Sets the decimal precision level.
+ */
 class PrecisionCommand : public AbstractRegionCommand
 {
 public:

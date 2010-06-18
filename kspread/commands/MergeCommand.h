@@ -29,6 +29,7 @@ class Selection;
 
 /**
  * \class MergeCommand
+ * \ingroup Commands
  * \brief Merges and splits the cells of a cell region.
  */
 class MergeCommand : public AbstractRegionCommand

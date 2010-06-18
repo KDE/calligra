@@ -27,6 +27,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Parses CSV data an fills it into a cell range.
+ */
 class CSVDataCommand : public AbstractDataManipulator
 {
 public:

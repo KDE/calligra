@@ -28,6 +28,10 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * \ingroup Commands
+ * \brief Spellchecks a cell range.
+ */
 class SpellCheckCommand : public Sonnet::BackgroundChecker
 {
     Q_OBJECT

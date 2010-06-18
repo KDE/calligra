@@ -27,6 +27,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup Commands
+ * \brief Changes the indentation level.
+ */
 class IndentationCommand : public AbstractRegionCommand
 {
 public:

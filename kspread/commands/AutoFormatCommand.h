@@ -28,6 +28,10 @@ namespace KSpread
 {
 class Style;
 
+/**
+ * \ingroup Commands
+ * \brief Formats a cell range using a pre-defined style for the table layout.
+ */
 class AutoFormatCommand : public AbstractRegionCommand
 {
 public:

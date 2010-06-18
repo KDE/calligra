@@ -27,7 +27,8 @@ namespace KSpread
 class Region;
 
 /**
- * Command to copy cell data
+ * \ingroup Commands
+ * \brief Command to copy cell data
  */
 namespace CopyCommand
 {
