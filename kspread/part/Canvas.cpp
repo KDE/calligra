@@ -656,7 +656,7 @@ void Canvas::dragMoveEvent(QDragMoveEvent* event)
     // determine the current position
     double eventPosX;
     if (sheet->layoutDirection() == Qt::RightToLeft) {
-        eventPosX = this->width() - viewConverter()->viewToDocumentX(event->pos().x()) + xOffset();
+        eventPosX = viewConverter()->viewToDocumentX(this->width() - event->pos().x()) + xOffset();
     } else {
         eventPosX = viewConverter()->viewToDocumentX(event->pos().x()) + xOffset();
     }
@@ -707,7 +707,7 @@ void Canvas::dropEvent(QDropEvent *event)
 
     double ev_PosX;
     if (sheet->layoutDirection() == Qt::RightToLeft) {
-        ev_PosX = this->width() - viewConverter()->viewToDocumentX(event->pos().x()) + xOffset();
+        ev_PosX = viewConverter()->viewToDocumentX(this->width() - event->pos().x()) + xOffset();
     } else {
         ev_PosX = viewConverter()->viewToDocumentX(event->pos().x()) + xOffset();
     }
