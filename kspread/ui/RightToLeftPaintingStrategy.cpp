@@ -54,7 +54,8 @@ void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
     painter.save();
     const double width = d->canvas->canvasWidget()->width();
     const double offsetX = d->canvas->canvasController()->canvasOffsetX();
-    painter.translate(-2 * offsetX + width, 0);
+    painter.translate(/*-2 * offsetX*/ + width, 0);
+//     painter.scale(-1, 1);
 
     painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
 
@@ -71,5 +72,9 @@ void RightToLeftPaintingStrategy::adapt(KoShape *shape, QRectF &rect)
     Q_UNUSED(rect)
 /*    const double width = d->canvas->canvasWidget()->width();
     const double offsetX = d->canvas->canvasController()->canvasOffsetX();
-    rect.translate(-2 * offsetX + width, 0);*/
+    const qreal left = width - rect.right();
+    const qreal right = width - rect.left();
+    rect.setLeft(left);
+    rect.setRight(right);*/
+//     rect.translate(/*-2 * offsetX +*/ width, 0);
 }

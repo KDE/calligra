@@ -1011,7 +1011,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
             // match the correct document position, which is the scrolling
             // offset (viewRect.left()) plus the width of the visible area
             // (viewRect.width()); that's the right border (left+width).
-            const qreal offset = 2 * viewRect.left() + viewRect.width();
+            const qreal offset = /*2 * viewRect.left() +*/ viewRect.width();
             left = offset - positions[2];
             right = offset - positions[0];
         }
@@ -1039,7 +1039,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
             QRectF cursorRect = sheet->cellCoordinatesToDocument(extCursor);
             if (sheet->layoutDirection() == Qt::RightToLeft) {
                 // See comment above.
-                const qreal offset = 2 * viewRect.left() + viewRect.width();
+                const qreal offset = /*2 * viewRect.left() +*/ viewRect.width();
                 const qreal left = offset - cursorRect.right();
                 const qreal right = offset - cursorRect.left();
                 cursorRect.setLeft(left);
@@ -1155,7 +1155,7 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
         // Paint the reference range's outline.
         if ((*it)->sheet()->layoutDirection() == Qt::RightToLeft) {
             // See comment in paintSelection().
-            const qreal offset = 2 * viewRect.left() + viewRect.width();
+            const qreal offset = /*2 * viewRect.left() +*/ viewRect.width();
             const qreal left = offset - area.right();
             const qreal right = offset - area.left();
             area.setLeft(left);

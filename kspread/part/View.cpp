@@ -1428,6 +1428,15 @@ void View::sheetProperties()
         d->canvas->setLayoutDirection(d->activeSheet->layoutDirection()); // for scrolling
         d->horzScrollBar->setLayoutDirection(d->activeSheet->layoutDirection());
         d->columnHeader->update();
+        // Replace the painting strategy for painting shapes.
+        KoShapeManager *const shapeManager = d->canvas->shapeManager();
+        KoShapeManagerPaintingStrategy *paintingStrategy = 0;
+        if (d->activeSheet->layoutDirection() == Qt::LeftToRight) {
+            paintingStrategy = new KoShapeManagerPaintingStrategy(shapeManager);
+        } else {
+            paintingStrategy = new RightToLeftPaintingStrategy(shapeManager, d->canvas);
+        }
+        shapeManager->setPaintingStrategy(paintingStrategy);
     }
 }
 

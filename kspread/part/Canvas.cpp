@@ -397,9 +397,28 @@ void Canvas::setDocumentSize(const QSizeF& size)
 
 void Canvas::mousePressEvent(QMouseEvent* event)
 {
+    QMouseEvent *const origEvent = event;
+    QPointF documentPosition;
+    if (layoutDirection() == Qt::LeftToRight) {
+        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+    } else {
+        const QPoint position(width() - event->x(), event->y());
+        const QPointF offset(this->offset().x(), this->offset().y());
+        documentPosition = viewConverter()->viewToDocument(position) + offset;
+kDebug() << "----------------------------";
+kDebug() << "event->pos():" << event->pos();
+kDebug() << "event->globalPos():" << event->globalPos();
+kDebug() << "position:" << position;
+kDebug() << "offset:" << offset;
+kDebug() << "documentPosition:" << documentPosition;
+        event = new QMouseEvent(QEvent::MouseButtonPress, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
+kDebug() << "newEvent->pos():" << event->pos();
+kDebug() << "newEvent->globalPos():" << event->globalPos();
+    }
+
     // flake
     if(d->toolProxy) {
-        d->toolProxy->mousePressEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+        d->toolProxy->mousePressEvent(event, documentPosition);
 
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
             d->view->unplugActionList("toolproxy_action_list");
@@ -407,32 +426,77 @@ void Canvas::mousePressEvent(QMouseEvent* event)
             QMenu* menu = dynamic_cast<QMenu*>(d->view->factory()->container("default_canvas_popup", d->view));
             // Only show the menu, if there are items. The plugged action list counts as one action.
             if (menu && menu->actions().count() > 1) {
-                menu->exec(event->globalPos());
+                menu->exec(origEvent->globalPos());
             }
-            event->setAccepted(true);
+            origEvent->setAccepted(true);
         }
+    }
+    if (layoutDirection() == Qt::RightToLeft) {
+        delete event;
     }
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent* event)
 {
+    QPointF documentPosition;
+    if (layoutDirection() == Qt::LeftToRight) {
+        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+    } else {
+        const QPoint position(width() - event->x(), event->y());
+        const QPointF offset(this->offset().x(), this->offset().y());
+        documentPosition = viewConverter()->viewToDocument(position) + offset;
+        event = new QMouseEvent(QEvent::MouseButtonRelease, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
+    }
+
     // flake
     if(d->toolProxy)
-        d->toolProxy->mouseReleaseEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+        d->toolProxy->mouseReleaseEvent(event, documentPosition);
+
+    if (layoutDirection() == Qt::RightToLeft) {
+        delete event;
+    }
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent* event)
 {
+    QPointF documentPosition;
+    if (layoutDirection() == Qt::LeftToRight) {
+        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+    } else {
+        const QPoint position(width() - event->x(), event->y());
+        const QPointF offset(this->offset().x(), this->offset().y());
+        documentPosition = viewConverter()->viewToDocument(position) + offset;
+        event = new QMouseEvent(QEvent::MouseMove, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
+    }
+
     // flake
     if(d->toolProxy)
-        d->toolProxy->mouseMoveEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+        d->toolProxy->mouseMoveEvent(event, documentPosition);
+
+    if (layoutDirection() == Qt::RightToLeft) {
+        delete event;
+    }
 }
 
 void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    QPointF documentPosition;
+    if (layoutDirection() == Qt::LeftToRight) {
+        documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
+    } else {
+        const QPoint position(width() - event->x(), event->y());
+        const QPointF offset(this->offset().x(), this->offset().y());
+        documentPosition = viewConverter()->viewToDocument(position) + offset;
+        event = new QMouseEvent(QEvent::MouseButtonDblClick, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
+    }
+
     // flake
     if(d->toolProxy)
-        d->toolProxy->mouseDoubleClickEvent(event, viewConverter()->viewToDocument(event->pos()) + offset());
+        d->toolProxy->mouseDoubleClickEvent(event, documentPosition);
+
+    if (layoutDirection() == Qt::RightToLeft) {
+        delete event;
+    }
 }
 
 void Canvas::keyPressEvent(QKeyEvent* event)
@@ -500,8 +564,12 @@ void Canvas::paintEvent(QPaintEvent* event)
     // flake
     painter.restore();
     // d->offset is the negated CanvasController offset in document coordinates.
+//     painter.save();
     painter.translate(-viewConverter()->documentToView(offset));
     d->shapeManager->paint(painter, *viewConverter(), false);
+//     painter.restore();
+//     const QPointF p = -viewConverter()->documentToView(this->offset());
+//     painter.translate(p.x() /*+ width()*/, p.y());
     painter.setRenderHint(QPainter::Antialiasing, false);
     if(d->toolProxy)
         d->toolProxy->paint(painter, *viewConverter());
