@@ -1050,6 +1050,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
                 cursorRect.setLeft(left);
                 cursorRect.setRight(right);
             }
+            cursorRect.adjust(unzoomedPixelX, unzoomedPixelY, unzoomedPixelX, unzoomedPixelY);
             painter.setClipRegion(clipRegion.subtracted(cursorRect.toRect()));
             // draw the transparent selection background
             painter.fillRect(QRectF(left, top, right - left, bottom - top), selectionColor);
