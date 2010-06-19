@@ -301,74 +301,42 @@ void Canvas::validateSelection()
         return;
 
     if (selection()->isSingular()) {
-        int col = selection()->marker().x();
-        int row = selection()->marker().y();
-        Cell cell(sheet, col, row);
+        const Cell cell = Cell(sheet, selection()->marker()).masterCell();
         Validity validity = cell.validity();
         if (validity.displayValidationInformation()) {
-            QString title = validity.titleInfo();
+            const QString title = validity.titleInfo();
             QString message = validity.messageInfo();
             if (title.isEmpty() && message.isEmpty())
                 return;
 
-            if (!d->validationInfo)
+            if (!d->validationInfo) {
                 d->validationInfo = new QLabel(this);
-            kDebug(36001) << " display info validation";
-            double u = cell.width();
-            double v = cell.height();
-            double xpos = sheet->columnPosition(selection()->marker().x()) - xOffset();
-            double ypos = sheet->rowPosition(selection()->marker().y()) - yOffset();
-            // Special treatment for obscured cells.
-            if (cell.isPartOfMerged()) {
-                cell = cell.masterCell();
-                int moveX = cell.column();
-                int moveY = cell.row();
-
-                // Use the obscuring cells dimensions
-                u = cell.width();
-                v = cell.height();
-                xpos = sheet->columnPosition(moveX);
-                ypos = sheet->rowPosition(moveY);
+                QPalette palette = d->validationInfo->palette();
+                palette.setBrush(QPalette::Window, palette.toolTipBase());
+                palette.setBrush(QPalette::WindowText, palette.toolTipText());
+                d->validationInfo->setPalette(palette);
+//                 d->validationInfo->setWindowFlags(Qt::ToolTip);
+                d->validationInfo->setFrameShape(QFrame::Box);
+                d->validationInfo->setAlignment(Qt::AlignVCenter);
+                d->validationInfo->setTextFormat(Qt::RichText);
             }
-            //d->validationInfo->setGeometry( 3, y + 3, len + 2, hei + 2 );
-            d->validationInfo->setAlignment(Qt::AlignVCenter);
-            QPainter painter;
-            painter.begin(this);
-            int len = 0;
-            int hei = 0;
-            QString resultText;
+
+            QString resultText("<html><body>");
             if (!title.isEmpty()) {
-                len = painter.fontMetrics().width(title);
-                hei = painter.fontMetrics().height();
-                resultText = title + '\n';
+                resultText += "<h2>" + title + "</h2>";
             }
             if (!message.isEmpty()) {
-                int i = 0;
-                int pos = 0;
-                QString t;
-                do {
-                    i = message.indexOf("\n", pos);
-                    if (i == -1)
-                        t = message.mid(pos, message.length() - pos);
-                    else {
-                        t = message.mid(pos, i - pos);
-                        pos = i + 1;
-                    }
-                    hei += painter.fontMetrics().height();
-                    len = qMax(len, painter.fontMetrics().width(t));
-                } while (i != -1);
-                resultText += message;
+                message.replace(QChar('\n'), QString("<br>"));
+                resultText += "<p>" + message + "</p>";
             }
-            painter.end();
+            resultText += "</body></html>";
             d->validationInfo->setText(resultText);
 
-            QRectF unzoomedMarker(xpos - xOffset() + u,
-                                  ypos - yOffset() + v,
-                                  len,
-                                  hei);
-            QRectF marker(viewConverter()->documentToView(unzoomedMarker));
-
-            d->validationInfo->setGeometry(marker.toRect());
+            const double xpos = sheet->columnPosition(cell.column()) + cell.width();
+            const double ypos = sheet->rowPosition(cell.row()) + cell.height();
+            const QPointF position = QPointF(xpos, ypos) - offset();
+            const QPoint viewPosition = viewConverter()->documentToView(position).toPoint();
+            d->validationInfo->move(/*mapToGlobal*/(viewPosition)); // Qt::ToolTip!
             d->validationInfo->show();
         } else {
             delete d->validationInfo;
