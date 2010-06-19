@@ -24,6 +24,7 @@
 
 #include <Sheet.h>
 #include <part/Doc.h>
+#include <Value.h>
 
 #include <KoCanvasBase.h>
 
