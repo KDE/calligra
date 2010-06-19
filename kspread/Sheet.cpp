@@ -125,7 +125,6 @@ public:
     SheetAdaptor* dbus;
 
     QString name;
-    int id;
 
     Qt::LayoutDirection layoutDirection;
 
@@ -163,16 +162,6 @@ public:
     Sheet::BackgroundImageProperties backgroundProperties;
 };
 
-int Sheet::s_id = 0;
-QHash<int, Sheet*>* Sheet::s_mapSheets;
-
-Sheet* Sheet::find(int _id)
-{
-    if (!s_mapSheets)
-        return 0;
-
-    return (*s_mapSheets)[ _id ];
-}
 
 Sheet::Sheet(Map* map, const QString& sheetName)
     : KoShapeUserData(map)
@@ -185,14 +174,8 @@ Sheet::Sheet(Map* map, const QString& sheetName)
         variant.setValue<void*>(map->doc()->sheetAccessModel());
         resourceManager()->setResource(75751149, variant); // duplicated in kchart.
     }
-    if (s_mapSheets == 0)
-        s_mapSheets = new QHash<int, Sheet*>;
-
     d->workbook = map;
     d->model = new SheetModel(this);
-
-    d->id = s_id++;
-    s_mapSheets->insert(d->id, this);
 
     d->layoutDirection = QApplication::layoutDirection();
 
@@ -261,9 +244,6 @@ Sheet::Sheet(const Sheet& other)
     }
     QDBusConnection::sessionBus().registerObject(dbusPath, this);
 
-    d->id = s_id++;
-    s_mapSheets->insert(d->id, this);
-
     d->layoutDirection = other.d->layoutDirection;
     d->hide = other.d->hide;
     d->showGrid = other.d->showGrid;
@@ -308,14 +288,6 @@ Sheet::~Sheet()
     //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
     //causing a crash.
     setAutoCalculationEnabled(false);
-
-    s_mapSheets->remove(d->id);
-
-    //when you remove all sheet (close file)
-    //you must reinit s_id otherwise there is not
-    //the good name between map and sheet
-    if (s_mapSheets->count() == 0)
-        s_id = 0;
 
     delete d->print;
     delete d->cellStorage;

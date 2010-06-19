@@ -992,10 +992,6 @@ protected:
                                     int NbCol, const QPoint& point, bool isColumnFixed,
                                     bool isRowFixed);
 
-    static Sheet* find(int _id);
-    static int s_id;
-    static QHash<int, Sheet*>* s_mapSheets;
-
 private:
     /**
      * \ingroup NativeFormat
