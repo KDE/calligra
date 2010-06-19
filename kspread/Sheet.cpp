@@ -567,6 +567,11 @@ PrintSettings* Sheet::printSettings() const
 void Sheet::setPrintSettings(const PrintSettings& settings)
 {
     d->print->setSettings(settings);
+    // Repaint, if page borders are shown and this is the active sheet.
+    if (isShowPageBorders()) {
+        // Just repaint everything visible; no need to invalidate the visual cache.
+        map()->addDamage(new SheetDamage(this, SheetDamage::ContentChanged));
+    }
 }
 
 HeaderFooter *Sheet::headerFooter() const

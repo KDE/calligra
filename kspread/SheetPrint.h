@@ -22,7 +22,6 @@
 #ifndef KSPREAD_SHEET_PRINT
 #define KSPREAD_SHEET_PRINT
 
-#include <QObject>
 #include <QRectF>
 
 #include "kspread_export.h"
@@ -42,9 +41,8 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class KSPREAD_TEST_EXPORT SheetPrint : public QObject
+class KSPREAD_TEST_EXPORT SheetPrint
 {
-    Q_OBJECT
 public:
     explicit SheetPrint(Sheet * sheet = 0);
     SheetPrint(const SheetPrint &other);
@@ -150,8 +148,6 @@ public:
      */
     void operator=(const SheetPrint &);
 
-Q_SIGNALS:
-    void sig_updateView(Sheet *_sheet);
 
 private:
     class Private;

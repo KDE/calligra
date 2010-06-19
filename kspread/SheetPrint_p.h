@@ -22,6 +22,8 @@
 #ifndef KSPREAD_SHEET_PRINT_P
 #define KSPREAD_SHEET_PRINT_P
 
+#include <QList>
+
 namespace KSpread
 {
 class HeaderFooter;

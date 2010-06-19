@@ -589,7 +589,7 @@ View::View(QWidget *_parent, Doc *_doc)
     connect(doc()->map(), SIGNAL(sheetRemoved(Sheet*)),
             this, SLOT(removeSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRevived(Sheet*)),
-            this, SLOT(reviveSheet(Sheet*)));
+            this, SLOT(addSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
     if (statusBar()) {
@@ -1155,18 +1155,6 @@ void View::createTemplate()
 
     Factory::global().dirs()->addResourceType("kspread_template",
             "data", "kspread/templates/");
-}
-
-void View::addSheet(Sheet * _t)
-{
-    reviveSheet(_t);
-
-    // Connect some signals
-    connect(_t->print(), SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
-    connect(_t, SIGNAL(shapeAdded(Sheet *, KoShape *)),
-            d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
-    connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
-            d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
@@ -1970,27 +1958,33 @@ void View::updateBorderButton()
         d->actions->showPageBorders->setChecked(d->activeSheet->isShowPageBorders());
 }
 
-void View::removeSheet(Sheet *_t)
+void View::addSheet(Sheet *sheet)
 {
-    QString m_tablName = _t->sheetName();
-    d->tabBar->removeTab(m_tablName);
-    setActiveSheet(doc()->map()->findSheet(doc()->map()->visibleSheets().first()));
-
-    bool state = doc()->map()->visibleSheets().count() > 1;
+    if (!sheet->isHidden()) {
+        d->tabBar->addTab(sheet->sheetName());
+    }
+    const bool state = (doc()->map()->visibleSheets().count() > 1);
     d->actions->deleteSheet->setEnabled(state);
     d->actions->hideSheet->setEnabled(state);
+
+    // Connect some signals
+    connect(sheet, SIGNAL(shapeAdded(Sheet *, KoShape *)),
+            d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
+    connect(sheet, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
+            d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
 }
 
-void View::reviveSheet(Sheet* sheet)
+void View::removeSheet(Sheet *sheet)
 {
-    QString tabName = sheet->sheetName();
-    if (!sheet->isHidden()) {
-        d->tabBar->addTab(tabName);
-    }
+    d->tabBar->removeTab(sheet->sheetName());
+    setActiveSheet(doc()->map()->sheet(0));
 
-    bool state = (doc()->map()->visibleSheets().count() > 1);
+    const bool state = (doc()->map()->visibleSheets().count() > 1);
     d->actions->deleteSheet->setEnabled(state);
     d->actions->hideSheet->setEnabled(state);
+
+    // Disconnect signals.
+    disconnect(sheet, 0, d->mapViewModel, 0);
 }
 
 QColor View::borderColor() const

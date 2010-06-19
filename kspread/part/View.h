@@ -366,9 +366,6 @@ private Q_SLOTS:
     /** Removes \p sheet from the displayed sheets. */
     void removeSheet(Sheet* sheet);
 
-    /** Reinserts \p sheet to the displayed sheets. */
-    void reviveSheet(Sheet* sheet);
-
 private:
     Q_DISABLE_COPY(View)
 

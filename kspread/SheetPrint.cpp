@@ -36,8 +36,7 @@
 using namespace KSpread;
 
 SheetPrint::SheetPrint(Sheet *sheet)
-    : QObject(sheet)
-    , d(new Private(this))
+    : d(new Private(this))
 {
     d->m_pSheet = sheet;
 
@@ -51,8 +50,7 @@ SheetPrint::SheetPrint(Sheet *sheet)
 }
 
 SheetPrint::SheetPrint(const SheetPrint &other)
-    : QObject(other.d->m_pSheet)
-    , d(new Private(this))
+    : d(new Private(this))
 {
     d->m_pSheet = other.d->m_pSheet;
 
@@ -181,11 +179,6 @@ void SheetPrint::setSettings(const PrintSettings &settings, bool force)
         d->calculateZoomForPageLimitY();
     } else if (row <= KS_rowMax) {
         updateVerticalPageParameters(row);
-    }
-
-    // Repaint, if page borders are shown and this is the active sheet.
-    if (d->m_pSheet->isShowPageBorders()) {
-        emit sig_updateView(d->m_pSheet);
     }
 }
 
@@ -539,5 +532,3 @@ void SheetPrint::operator=(const SheetPrint &other)
     d->m_lnewPageListX = other.d->m_lnewPageListX;
     d->m_lnewPageListY = other.d->m_lnewPageListY;
 }
-
-#include "SheetPrint.moc"
