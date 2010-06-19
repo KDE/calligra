@@ -53,9 +53,8 @@
   <ActionList name="view_closeallviews"/>
   <Separator/>
   <ActionList name="view_split" />
-  <Action name="gotoCell"/>
   <Action name="showPageBorders"/>
-  <Action name="showCommentIndicator"/>
+<!--   <Action name="showCommentIndicator"/> -->
   <Separator/>
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
@@ -64,6 +63,7 @@
  <Menu name="go"><text>&amp;Go</text>
    <Action name="go_next"/>
    <Action name="go_previous"/>
+   <Action name="gotoCell"/>
    <Separator/>
    <Action name="go_first"/>
    <Action name="go_last"/>
@@ -75,7 +75,7 @@
   <Action name="comment"/>
   <Action name="insertMathExpr"/>
   <Action name="insertFormula"/>
-  <Action name="series"/>
+  <Action name="insertSeries"/>
   <Action name="insertHyperlink"/>
   <Action name="insertSpecialChar"/>
   <Separator/>
@@ -127,7 +127,7 @@
   </Menu>
   <Separator/>
   <Action name="paperLayout"/>
-  <Menu name="Comment"><text>&amp;Print Range</text>
+  <Menu name="PrintRange"><text>&amp;Print Range</text>
     <Action name="definePrintRange"/>
     <Action name="resetPrintRange"/>
   </Menu>
