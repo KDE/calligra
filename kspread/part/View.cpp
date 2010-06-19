@@ -1512,7 +1512,12 @@ void View::toggleProtectSheet(bool mode)
 
     doc()->setModified(true);
     d->adjustActions(!mode);
-    // d->activeSheet->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
+
+    // The sheet protection change may hide/unhide some values or formulas,
+    // so the cached visual data has become invalid.
+    refreshSheetViews();
+    d->canvas->repaint();
+
     refreshView();
     // inform the cell tool
     emit sheetProtectionToggled(mode);
@@ -1732,7 +1737,6 @@ void View::paperLayoutDlg()
 
     PageLayoutDialog dialog(this, d->activeSheet);
     dialog.exec();
-//     dialog.show(); // Use show() to make selecting columns/rows possible.
 }
 
 void View::resetPrintRange()
