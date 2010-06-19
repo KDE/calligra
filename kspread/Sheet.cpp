@@ -1480,8 +1480,6 @@ void Sheet::checkContentDirection(QString const & name)
         setLayoutDirection(Qt::RightToLeft);
     else
         setLayoutDirection(Qt::LeftToRight);
-
-    emit sig_refreshView();
 }
 
 bool Sheet::loadSheetStyleFormat(KoXmlElement *style)

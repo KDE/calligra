@@ -404,8 +404,9 @@ void PreferenceDialog::slotApply()
 
     d->spellCheckPage->save();
 
-    d->view->doc()->refreshInterface();
-    d->view->slotUpdateView(d->view->activeSheet());
+    // The changes affect the document, not just a single view,
+    // so all user interfaces have to be updated.
+    d->view->doc()->updateAllViews();
 }
 
 void PreferenceDialog::slotDefault()

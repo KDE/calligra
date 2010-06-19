@@ -184,13 +184,6 @@ public:
     virtual KoZoomController *zoomController() const;
 
 public Q_SLOTS:
-    /**
-     * Adjusts the activation state of the actions.
-     * Updates the view's components (headers, scrollbars).
-     * Primarily called after a change of the visual settings.
-     */
-    void refreshView();
-
     /** Clears all visual cached data. */
     void refreshSheetViews();
 
@@ -337,9 +330,6 @@ protected slots:
     void slotRename();
 
 public slots:
-    /** Triggers a repaint of the canvas, column/row headers and calls refreshView(). */
-    void slotRefreshView();
-
     /**
      * Invalidates the visual cached data for the visible cells.
      * \param _sheet action is only taken, if this matches the active sheet
@@ -426,7 +416,8 @@ private:
     /** Creates and initializes the canvas and other child widgets. */
     void initView();
 
-    friend class Private;
+    /** Sets the column/row headers minima according to the zoom level. */
+    void setHeaderMinima();
 };
 
 } // namespace KSpread

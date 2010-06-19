@@ -595,8 +595,6 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 
     kDebug(36001) << "Loading took" << (float)(dt.elapsed()) / 1000.0 << " seconds";
 
-    emit sig_refreshView();
-
     return true;
 }
 
@@ -723,9 +721,9 @@ void Doc::paintContent(QPainter& painter, const QRect& rect)
     painter.drawPixmap(rect & QRect(0, 0, 100, 100), thumbnail);
 }
 
-void Doc::refreshInterface()
+void Doc::updateAllViews()
 {
-    emit sig_refreshView();
+    emit updateView();
 }
 
 void Doc::updateBorderButton()

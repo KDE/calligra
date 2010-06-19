@@ -193,21 +193,20 @@ public:
 
 
     SheetAccessModel *sheetAccessModel() const;
-public Q_SLOTS:
-    void refreshInterface();
 
+    /**
+     * Requests an update of all attached user interfaces (views).
+     */
+    void updateAllViews();
+
+public Q_SLOTS:
     virtual void initEmpty();
 
 Q_SIGNALS:
     /**
-     * Emitted if all views have to be updated.
+     * Emitted, if all user interfaces (views) have to be updated.
      */
-    void sig_updateView();
-
-    /**
-     * Emitted if all interfaces have to be updated.
-     */
-    void sig_refreshView();
+    void updateView();
 
 protected Q_SLOTS:
     virtual void openTemplate(const KUrl& url);

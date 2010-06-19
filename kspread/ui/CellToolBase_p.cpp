@@ -161,6 +161,11 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     ACTION_EXEC("percent", setChecked(ft == Format::Percentage));
     ACTION_EXEC("currency", setChecked(ft == Format::Money));
 
+    const bool showFormulas = q->selection()->activeSheet()->getShowFormula();
+    q->action("alignLeft")->setEnabled(showFormulas);
+    q->action("alignCenter")->setEnabled(showFormulas);
+    q->action("alignRight")->setEnabled(showFormulas);
+
     if (!q->selection()->activeSheet()->isProtected() || style.notProtected()) {
         q->action("clearComment")->setEnabled(!cell.comment().isEmpty());
         q->action("decreaseIndentation")->setEnabled(style.indentation() > 0.0);

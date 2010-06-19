@@ -576,8 +576,14 @@ View::View(QWidget *_parent, Doc *_doc)
 
     d->initActions();
 
-    connect(doc(), SIGNAL(sig_refreshView()), this, SLOT(slotRefreshView()));
-
+    // Connect updateView() signal to View::update() in order to repaint its
+    // child widgets: the column/row headers and the select all button.
+    // Connect to Canvas::update() explicitly as it lives in the viewport
+    // of the KoCanvasController.
+    connect(doc(), SIGNAL(updateView()),
+            this, SLOT(update()));
+    connect(doc(), SIGNAL(updateView()),
+            d->canvas, SLOT(update()));
     connect(doc()->map(), SIGNAL(sheetAdded(Sheet*)),
             this, SLOT(addSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRemoved(Sheet*)),
@@ -1098,7 +1104,7 @@ void View::finishLoading()
     d->loading = false;
     doc()->map()->deleteLoadingInfo();
 
-    refreshView();
+    setHeaderMinima();
 
     // Activate the cell tool.
     if (shell())
@@ -1125,6 +1131,7 @@ void View::updateReadWrite(bool readwrite)
         d->actions->hideSheet->setEnabled(true);
     }
     d->actions->showPageBorders->setEnabled(true);
+    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
 }
 
 void View::createTemplate()
@@ -1155,7 +1162,6 @@ void View::addSheet(Sheet * _t)
     reviveSheet(_t);
 
     // Connect some signals
-    connect(_t, SIGNAL(sig_refreshView()), SLOT(slotRefreshView()));
     connect(_t, SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
     connect(_t->print(), SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
     connect(_t, SIGNAL(sig_updateView(Sheet *, const Region&)),
@@ -1202,7 +1208,6 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     // If there was no sheet before or the layout directions differ.
     if (!oldSheet || oldSheet->layoutDirection() != d->activeSheet->layoutDirection()) {
-        refreshView();
         // Propagate the layout direction to the canvas and horz. scrollbar.
         const Qt::LayoutDirection direction = d->activeSheet->layoutDirection();
         d->canvas->setLayoutDirection(direction);
@@ -1216,6 +1221,11 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
             paintingStrategy = new RightToLeftPaintingStrategy(shapeManager, d->canvas);
         }
         shapeManager->setPaintingStrategy(paintingStrategy);
+    }
+    // If there was no sheet before or the formula visibilities differ.
+    if (!oldSheet || oldSheet->getShowFormula() != d->activeSheet->getShowFormula()) {
+        const bool showFormulas = d->activeSheet->getShowFormula();
+        stateChanged("show_formulas", showFormulas ? StateNoReverse : StateReverse);
     }
 
     // Restore the old scrolling offset.
@@ -1330,6 +1340,7 @@ void View::sheetProperties()
     if (d->activeSheet->isProtected()) return;
 
     bool directionChanged = false;
+    bool formulaVisibilityChanged = false;
 
     SheetPropertiesDialog* dlg = new SheetPropertiesDialog(this);
     dlg->setLayoutDirection(d->activeSheet->layoutDirection());
@@ -1349,6 +1360,9 @@ void View::sheetProperties()
 
         if (d->activeSheet->layoutDirection() != dlg->layoutDirection())
             directionChanged = true;
+        if (d->activeSheet->getShowFormula() != dlg->showFormula()) {
+            formulaVisibilityChanged = true;
+        }
 
         command->setLayoutDirection(dlg->layoutDirection());
         command->setAutoCalculationEnabled(dlg->autoCalc());
@@ -1380,6 +1394,12 @@ void View::sheetProperties()
             paintingStrategy = new RightToLeftPaintingStrategy(shapeManager, d->canvas);
         }
         shapeManager->setPaintingStrategy(paintingStrategy);
+    }
+    if (formulaVisibilityChanged) {
+        const bool showFormulas = d->activeSheet->getShowFormula();
+        stateChanged("show_formulas", showFormulas ? StateNoReverse : StateReverse);
+        sheetView(d->activeSheet)->invalidate();
+        d->canvas->update();
     }
 }
 
@@ -1490,6 +1510,7 @@ void View::toggleProtectDoc(bool mode)
 
     doc()->setModified(true);
     stateChanged("map_is_protected", mode ? StateNoReverse : StateReverse);
+    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
 }
 
 void View::toggleProtectSheet(bool mode)
@@ -1516,9 +1537,8 @@ void View::toggleProtectSheet(bool mode)
     // The sheet protection change may hide/unhide some values or formulas,
     // so the cached visual data has become invalid.
     refreshSheetViews();
-    d->canvas->repaint();
+    d->canvas->update();
 
-    refreshView();
     // inform the cell tool
     emit sheetProtectionToggled(mode);
 }
@@ -1533,49 +1553,53 @@ void View::togglePageBorders(bool mode)
 
 void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
 {
-    Q_UNUSED(zoom);
+    Q_UNUSED(zoom)
 #ifdef NDEBUG
     Q_UNUSED(mode);
 #endif
     Q_ASSERT(mode == KoZoomMode::ZOOM_CONSTANT);
     selection()->emitCloseEditor(true); // save changes
-    doc()->refreshInterface();
+    setHeaderMinima();
 }
 
 void View::showColumnHeader(bool enable)
 {
     doc()->map()->settings()->setShowColumnHeader(enable);
-    refreshView();
+    d->columnHeader->setVisible(enable);
+    d->selectAllButton->setVisible(enable && d->rowHeader->isVisible());
 }
 
 void View::showRowHeader(bool enable)
 {
     doc()->map()->settings()->setShowRowHeader(enable);
-    refreshView();
+    d->rowHeader->setVisible(enable);
+    d->selectAllButton->setVisible(enable && d->columnHeader->isVisible());
 }
 
 void View::showHorizontalScrollBar(bool enable)
 {
     doc()->map()->settings()->setShowHorizontalScrollBar(enable);
-    refreshView();
+    d->horzScrollBar->setVisible(enable);
 }
 
 void View::showVerticalScrollBar(bool enable)
 {
     doc()->map()->settings()->setShowVerticalScrollBar(enable);
-    refreshView();
+    d->vertScrollBar->setVisible(enable);
 }
 
-void View::showStatusBar(bool b)
+void View::showStatusBar(bool enable)
 {
-    doc()->map()->settings()->setShowStatusBar(b);
-    refreshView();
+    doc()->map()->settings()->setShowStatusBar(enable);
+    if (statusBar()) {
+        statusBar()->setVisible(enable);
+    }
 }
 
-void View::showTabBar(bool b)
+void View::showTabBar(bool enable)
 {
-    doc()->map()->settings()->setShowTabBar(b);
-    refreshView();
+    doc()->map()->settings()->setShowTabBar(enable);
+    d->tabBar->setVisible(enable);
 }
 
 void View::optionsNotifications()
@@ -1586,11 +1610,7 @@ void View::optionsNotifications()
 void View::preference()
 {
     PreferenceDialog dialog(this);
-    if (dialog.exec()) {
-        d->canvas->update();
-        d->columnHeader->update();
-        d->rowHeader->update();
-    }
+    dialog.exec();
 }
 
 void View::nextSheet()
@@ -1677,39 +1697,10 @@ int View::bottomBorder() const
     return d->horzScrollBar->height();
 }
 
-void View::refreshView()
+void View::setHeaderMinima()
 {
     if (d->loading)   // "View Loading" not finished yet
         return;
-    kDebug(36004) << "refreshing view";
-
-    Sheet * sheet = activeSheet();
-    if (!sheet)
-        return;
-
-  // FIXME Is this really needed here?!
-    d->adjustActions(!sheet->isProtected());
-
-    bool active = sheet->getShowFormula();
-    Q_UNUSED(active);
-    if (sheet && !sheet->isProtected()) {
-        // FIXME Stefan: action move
-//     d->actions->alignLeft->setEnabled( !active );
-//     d->actions->alignCenter->setEnabled( !active );
-//     d->actions->alignRight->setEnabled( !active );
-    }
-
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
-
-    d->columnHeader->setVisible(doc()->map()->settings()->showColumnHeader());
-    d->rowHeader->setVisible(doc()->map()->settings()->showRowHeader());
-    d->selectAllButton->setVisible(doc()->map()->settings()->showColumnHeader() && doc()->map()->settings()->showRowHeader());
-    d->vertScrollBar->setVisible(doc()->map()->settings()->showVerticalScrollBar());
-    d->horzScrollBar->setVisible(doc()->map()->settings()->showHorizontalScrollBar());
-    d->tabBar->setVisible(doc()->map()->settings()->showTabBar());
-    if (statusBar()) statusBar()->setVisible(doc()->map()->settings()->showStatusBar());
-
-  // FIXME Is this really the right place for this?!
     QFont font(KoGlobal::defaultFont());
     d->columnHeader->setMinimumHeight(qRound(zoomHandler()->zoomItY(font.pointSizeF() + 3)));
     d->rowHeader->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
@@ -1808,15 +1799,6 @@ void View::slotRename()
 // Document signals
 //
 //------------------------------------------------
-
-void View::slotRefreshView()
-{
-    refreshView();
-    d->canvas->repaint();
-    d->rowHeader->repaint();
-    d->columnHeader->repaint();
-    d->selectAllButton->repaint();
-}
 
 void View::slotUpdateView(Sheet *_sheet)
 {
@@ -2123,7 +2105,6 @@ void View::saveCurrentSheetSelection()
 
 void View::handleDamages(const QList<Damage*>& damages)
 {
-    bool refreshView = false;
     QRegion paintRegion;
     bool paintClipped = true;
 
@@ -2151,7 +2132,6 @@ void View::handleDamages(const QList<Damage*>& damages)
 
             if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
                 d->activeSheet->setRegionPaintDirty(d->canvas->visibleCells());
-                refreshView = true;
             }
             if (sheetDamage->changes() & SheetDamage::ColumnsChanged)
                 columnHeader()->update();
@@ -2180,8 +2160,6 @@ void View::handleDamages(const QList<Damage*>& damages)
         canvas()->update(paintRegion);
     else
         canvas()->update();
-    if (refreshView)
-        this->refreshView();
 }
 
 KoPrintJob * View::createPrintJob()

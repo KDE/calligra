@@ -408,4 +408,12 @@
     <Action name="backgroundColor"/>
   </disable>
 </State>
+
+<State name="show_formulas">
+  <disable>
+    <Action name="alignLeft"/>
+    <Action name="alignCenter"/>
+    <Action name="alignRight"/>
+  </disable>
+</State>
 </gui>
