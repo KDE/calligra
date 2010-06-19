@@ -886,14 +886,6 @@ signals:
     void sig_updateView(Sheet *_sheet, const Region&);
 
     /**
-     * @see setSheetName
-     */
-    void sig_nameChanged(Sheet* sheet, const QString& old_name);
-
-    void sig_SheetHidden(Sheet* sheet);
-    void sig_SheetShown(Sheet* sheet);
-
-    /**
      * Emitted, if the document size changed.
      * E.g. if some columns were inserted.
      * \param size new size

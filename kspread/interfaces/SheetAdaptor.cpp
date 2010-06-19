@@ -33,6 +33,7 @@
 
 #include <kdebug.h>
 
+#include "Damages.h"
 #include "Map.h"
 #include "PrintSettings.h"
 #include "Sheet.h"
@@ -51,9 +52,8 @@ SheetAdaptor::SheetAdaptor(Sheet* t)
 {
     setAutoRelaySignals(false);
     m_sheet = t;
-    connect(t, SIGNAL(sig_nameChanged(Sheet*, QString)), this, SIGNAL(nameChanged()));
-    connect(t, SIGNAL(sig_SheetShown(Sheet*)), this, SIGNAL(showChanged()));
-    connect(t, SIGNAL(sig_SheetHidden(Sheet*)), this, SIGNAL(hideChanged()));
+    connect(m_sheet->map(), SIGNAL(damagesFlushed(const QList<Damage*> &)),
+            this, SLOT(handleDamages(const QList<Damage*> &)));
 }
 
 SheetAdaptor::~SheetAdaptor()
@@ -507,6 +507,36 @@ bool SheetAdaptor::isProtected() const
 void SheetAdaptor::setProtected(const QByteArray& passwd)
 {
     m_sheet->setProtected(passwd);
+}
+
+void SheetAdaptor::handleDamages(const QList<Damage*>& damages)
+{
+    const QList<Damage*>::ConstIterator end(damages.end());
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        const Damage *const damage = *it;
+        if (!damage) {
+            continue;
+        }
+        if (damage->type() == Damage::Sheet) {
+            const SheetDamage *const sheetDamage = static_cast<const SheetDamage *>(damage);
+            // Only process the sheet this adaptor works for.
+            if (sheetDamage->sheet() != m_sheet) {
+                continue;
+            }
+            kDebug(36007) << *sheetDamage;
+            const SheetDamage::Changes changes = sheetDamage->changes();
+            if (changes & SheetDamage::Name) {
+                emit nameChanged();
+            }
+            if (changes & SheetDamage::Shown) {
+                emit showChanged();
+            }
+            if (changes & SheetDamage::Hidden) {
+                emit hideChanged();
+            }
+            continue;
+        }
+    }
 }
 
 #include "SheetAdaptor.moc"

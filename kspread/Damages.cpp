@@ -195,6 +195,9 @@ kdbgstream operator<<(kdbgstream str, const KSpread::SheetDamage& d)
     case SheetDamage::PropertiesChanged:  return str << " Properties";
     case SheetDamage::Hidden:             return str << " Hidden";
     case SheetDamage::Shown:              return str << " Shown";
+      case SheetDamage::Name:               return str << "Name";
+      case SheetDamage::ColumnsChanged:     return str << "Columns";
+      case SheetDamage::RowsChanged:        return str << "Rows";
     }
     return str;
 }

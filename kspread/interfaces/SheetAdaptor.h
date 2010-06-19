@@ -33,6 +33,7 @@
 
 namespace KSpread
 {
+class Damage;
 class Sheet;
 class CellProxy;
 
@@ -171,6 +172,13 @@ Q_SIGNALS:
     void showChanged();
     /** This signal got emitted if the sheet got hidden. */
     void hideChanged();
+
+private Q_SLOTS:
+    /**
+     * \ingroup Damages
+     * Handles changes of the sheet name and visibility.
+     */
+    void handleDamages(const QList<Damage*>& damages);
 
 private:
     Sheet* m_sheet;

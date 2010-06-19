@@ -1166,12 +1166,6 @@ void View::addSheet(Sheet * _t)
     connect(_t->print(), SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
     connect(_t, SIGNAL(sig_updateView(Sheet *, const Region&)),
             SLOT(slotUpdateView(Sheet*, const Region&)));
-    connect(_t, SIGNAL(sig_nameChanged(Sheet*, const QString&)),
-            this, SLOT(slotSheetRenamed(Sheet*, const QString&)));
-    connect(_t, SIGNAL(sig_SheetHidden(Sheet*)),
-            this, SLOT(slotSheetHidden(Sheet*)));
-    connect(_t, SIGNAL(sig_SheetShown(Sheet*)),
-            this, SLOT(slotSheetShown(Sheet*)));
     connect(_t, SIGNAL(shapeAdded(Sheet *, KoShape *)),
             d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
     connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
@@ -1283,22 +1277,6 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->doc->map()->calculationSettings()->setAutoCalculationEnabled(autoCalc);
 
     calcStatusBarOp();
-}
-
-void View::slotSheetRenamed(Sheet* sheet, const QString& old_name)
-{
-    d->tabBar->renameTab(old_name, sheet->sheetName());
-}
-
-void View::slotSheetHidden(Sheet*)
-{
-    updateShowSheetMenu();
-}
-
-void View::slotSheetShown(Sheet*)
-{
-    d->tabBar->setTabs(doc()->map()->visibleSheets());
-    updateShowSheetMenu();
 }
 
 void View::changeSheet(const QString& _name)
@@ -2106,11 +2084,18 @@ void View::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            kDebug(36007) << *sheetDamage;
+            const SheetDamage::Changes changes = sheetDamage->changes();
+            if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
+                d->tabBar->setTabs(doc()->map()->visibleSheets());
+            }
+            if (changes & (SheetDamage::Shown | SheetDamage::Hidden)) {
+                updateShowSheetMenu();
+            }
+            // The following changes only affect the active sheet.
             if (sheetDamage->sheet() != d->activeSheet) {
                 continue;
             }
-            kDebug(36007) << "Processing\t" << *sheetDamage;
-
             if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
                 d->activeSheet->setRegionPaintDirty(d->canvas->visibleCells());
             }

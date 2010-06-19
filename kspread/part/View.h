@@ -348,15 +348,6 @@ public slots:
     /** Reacts on reference selection changes. */
     void slotScrollChoice(const Region&);
 
-    /** Reacts on name changes of \p sheet with the former name \p old_name. */
-    void slotSheetRenamed(Sheet* sheet, const QString& old_name);
-
-    /** Reacts on hiding \p _sheet. Updates the show sheet menu. */
-    void slotSheetHidden(Sheet*_sheet);
-
-    /** Reacts on unhiding \p sheet. Updates the tab bar and the show sheet menu. */
-    void slotSheetShown(Sheet*_sheet);
-
     /** Updates the shape anchoring action. */
     void shapeSelectionChanged();
 

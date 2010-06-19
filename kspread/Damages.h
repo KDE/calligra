@@ -112,7 +112,8 @@ public:
         ContentChanged    = 0x01,
         PropertiesChanged = 0x02,
         Hidden            = 0x04,
-        Shown             = 0x10,
+        Shown             = 0x08,
+        Name              = 0x10,
         ColumnsChanged    = 0x20,
         RowsChanged       = 0x40
     };

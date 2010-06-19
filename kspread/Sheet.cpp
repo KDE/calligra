@@ -3493,9 +3493,9 @@ void Sheet::hideSheet(bool _hide)
 {
     setHidden(_hide);
     if (_hide)
-        emit sig_SheetHidden(this);
+        map()->addDamage(new SheetDamage(this, SheetDamage::Hidden));
     else
-        emit sig_SheetShown(this);
+        map()->addDamage(new SheetDamage(this, SheetDamage::Shown));
 }
 
 bool Sheet::setSheetName(const QString& name, bool init)
@@ -3523,7 +3523,7 @@ bool Sheet::setSheetName(const QString& name, bool init)
         sheet->changeCellTabName(old_name, name);
     }
 
-    emit sig_nameChanged(this, old_name);
+    map()->addDamage(new SheetDamage(this, SheetDamage::Name));
 
     setObjectName(name.toUtf8());
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
