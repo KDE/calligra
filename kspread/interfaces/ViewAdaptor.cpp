@@ -153,7 +153,14 @@ void ViewAdaptor::nextSheet()
 
 bool ViewAdaptor::showSheet(const QString& sheetName)
 {
-    return m_view->showSheet(sheetName);
+    Sheet *const sheet = m_view->doc()->map()->findSheet(sheetName);
+    if (!sheet) {
+        kDebug(36001) << "Unknown sheet" << sheetName;
+        return false;
+    }
+    m_view->selection()->emitCloseEditor(true); // save changes
+    m_view->setActiveSheet(sheet);
+    return true;
 }
 
 void ViewAdaptor::previousSheet()

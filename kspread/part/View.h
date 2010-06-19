@@ -144,6 +144,11 @@ public:
 
     Selection* selection() const;
 
+    /**
+     * Updates the action, that unhides a hidden sheet.
+     * If there are no hidden sheets or the map is protected,
+     * the show sheet action will be disabled.
+     */
     void updateShowSheetMenu();
 
     /**
