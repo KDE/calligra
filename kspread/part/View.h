@@ -87,37 +87,37 @@ class KSPREAD_EXPORT View : public KoView
     Q_OBJECT
 
 public:
-
-    /** Creates a new view */
-    View(QWidget *_parent, Doc *doc);
+    /** Creates a new view displaying \p document and with \p parent as parent. */
+    View(QWidget *parent, Doc *document);
 
     /** Destroys the view */
     ~View();
 
+    /** \return the document this view displays. */
     Doc* doc() const;
 
-    /** Returns the canvas of the view */
+    /** \return the canvas of the view */
     Canvas* canvasWidget() const;
 
     // KoView interface
     virtual QWidget *canvas() const;
 
-    /** Returns the canvas controller of the view */
+    /** \return the canvas controller of the view */
     KoCanvasController* canvasController() const;
 
-    /** Returns the column header */
+    /** \return the column header */
     ColumnHeader* columnHeader() const;
 
-    /** Returns the row header */
+    /** \return the row header */
     RowHeader* rowHeader() const;
 
-    /** Returns the horizontal scrollbar */
+    /** \return the horizontal scrollbar */
     QScrollBar* horzScrollBar() const;
 
-    /** Returns the vertical scrollbar */
+    /** \return the vertical scrollbar */
     QScrollBar* vertScrollBar() const;
 
-    /** Returns the tab bar */
+    /** \return the tab bar */
     TabBar* tabBar() const;
 
     /** \return the zoom handler */
@@ -131,17 +131,24 @@ public:
      */
     SheetView* sheetView(const Sheet* sheet) const;
 
+    /** Loads the view settings. */
     void initConfig();
 
-
+    /** Initializes the on-the-fly calculation method. */
     void initCalcMenu();
 
+    /** Changes the maximum number of entries in the recent files menu. */
     void changeNbOfRecentFiles(int _nb);
 
+    /** Updates the state of the 'Show Page Borders' action (for DBus). */
     void updateBorderButton();
 
+    /** \return the color for cell borders \deprecated */
     QColor borderColor() const;
 
+    /**
+     * \return the current cell selection.
+     */
     Selection* selection() const;
 
     /**
@@ -173,22 +180,34 @@ public:
      */
     bool isLoading() const;
 
+    // KoView interface
     virtual KoZoomController *zoomController() const;
-
 
 public Q_SLOTS:
     /**
-    * refresh view when you hide/show vertical scrollbar
-    */
+     * Adjusts the activation state of the actions.
+     * Updates the view's components (headers, scrollbars).
+     * Primarily called after a change of the visual settings.
+     */
     void refreshView();
+
+    /** Clears all visual cached data. */
     void refreshSheetViews();
+
+    /** Invalidates all visual cached data for the cells in \p region. */
     void refreshSelection(const Region& region);
-    void aboutToModify(const Region& region);
-    void initialPosition();
+
     void finishLoading();
     /**
-     * Actions
+     * Prepares this view for a modification of \p region, e.g. closes the cell
+     * editor.
      */
+    void aboutToModify(const Region& region);
+
+    /** Sets the initial scrolling offset and selection after loading. */
+    void initialPosition();
+
+    //BEGIN Actions
     void createTemplate();
     void recalcWorkBook();
     void recalcWorkSheet();
@@ -204,12 +223,11 @@ public Q_SLOTS:
     void deleteSheet();
     void hideSheet();
     void showSheet();
-    void helpUsing();
 
     void optionsNotifications();
     void preference();
 
-    void copyAsText();
+    void copyAsText(); // DBus related
 
     void moveSheet(unsigned sheet, unsigned target);
 
@@ -217,8 +235,13 @@ public Q_SLOTS:
      * Shows the sheet properties dialog.
      */
     void sheetProperties();
+    //END Actions
 
-    void setActiveSheet(Sheet* sheet, bool updatesheet = true);
+    /**
+     * Sets the currently displayed \p sheet.
+     * \param updateTabBar if \c true, updates the tab bar
+     */
+    void setActiveSheet(Sheet* sheet, bool updateTabBar = true);
 
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
@@ -257,7 +280,10 @@ public Q_SLOTS:
      */
     void setShapeAnchoring(const QString& mode);
 
+    /** Shows the context menu for the on-the-fly calculation method. */
     void statusBarClicked(const QPoint& pos);
+
+    /** Updates the on-the-fly calculation method menu. */
     void menuCalc(bool);
 
     /**
@@ -301,52 +327,94 @@ public Q_SLOTS:
      */
     void handleDamages(const QList<Damage*>& damages);
 
-    void initialiseMarkerFromSheet(Sheet *_sheet, const QPoint &point);
-
     /**
      * write in statusBar result of calc (Min, or Max, average, sum, count)
      */
     void calcStatusBarOp();
 
 protected slots:
+    /** Renames the active sheet. */
     void slotRename();
 
 public slots:
-    // Document signals
+    /** Triggers a repaint of the canvas, column/row headers and calls refreshView(). */
     void slotRefreshView();
+
+    /**
+     * Invalidates the visual cached data for the visible cells.
+     * \param _sheet action is only taken, if this matches the active sheet
+     */
     void slotUpdateView(Sheet *_sheet);
+
+    /**
+     * Invalidates the visual cached data for the cells in \p region.
+     * \param _sheet action is only taken, if this matches the active sheet
+     */
     void slotUpdateView(Sheet *_sheet, const Region&);
+
+    /**
+     * Triggers a repaint of the column header.
+     * \param _sheet action is only taken, if this matches the active sheet
+     */
     void slotUpdateColumnHeader(Sheet *_sheet);
+
+    /**
+     * Triggers a repaint of the row header.
+     * \param _sheet action is only taken, if this matches the active sheet
+     */
     void slotUpdateRowHeader(Sheet *_sheet);
+
+    /** Reacts on selection changes. */
     void slotChangeSelection(const Region&);
+
+    /** Reacts on reference selection changes. */
     void slotScrollChoice(const Region&);
+
+    /** Reacts on name changes of \p sheet with the former name \p old_name. */
     void slotSheetRenamed(Sheet* sheet, const QString& old_name);
+
+    /** Reacts on hiding \p _sheet. Updates the show sheet menu. */
     void slotSheetHidden(Sheet*_sheet);
+
+    /** Reacts on unhiding \p sheet. Updates the tab bar and the show sheet menu. */
     void slotSheetShown(Sheet*_sheet);
+
+    /** Updates the shape anchoring action. */
     void shapeSelectionChanged();
+
+    /** Calls KoToolProxy::deleteSelection(). */
     void editDeleteSelection();
 
 public:
+    // KoView interface
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;
     virtual int bottomBorder() const;
 
 protected:
-
+    // QWidget interface
     virtual void keyPressEvent(QKeyEvent * _ev);
+    // KoView interface
     virtual void updateReadWrite(bool readwrite);
-
     virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);
-
     virtual KoPrintJob * createPrintJob();
 
 Q_SIGNALS:
+    /** Indicates that the document's read/write state has changed. */
     void documentReadWriteToggled(bool readwrite);
+
+    /** Indicates that the sheet's protection state has changed. */
     void sheetProtectionToggled(bool protect);
 
 private Q_SLOTS:
+    /** Adds \p sheet to the displayed sheets. */
+    void addSheet(Sheet *sheet);
+
+    /** Removes \p sheet from the displayed sheets. */
     void removeSheet(Sheet* sheet);
+
+    /** Reinserts \p sheet to the displayed sheets. */
     void reviveSheet(Sheet* sheet);
 
 private:
@@ -355,6 +423,7 @@ private:
     class Private;
     Private * const d;
 
+    /** Creates and initializes the canvas and other child widgets. */
     void initView();
 
     friend class Private;
