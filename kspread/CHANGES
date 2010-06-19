@@ -13,6 +13,7 @@ Bug Fixes
 ---------
 Fix: Unhiding a sheet depends on the map protection, not on the sheet's.
 Fix the context menu choice of selected text values. Do not crash/freeze on selection changes.
+Initially disable the apply and cancel button in the cell tool option widget.
 Fix the dependency calculation after region changes and after sheet additions/removals.
 Fix text/background/border color actions by using KoColorPopupAction (if pigment is built).
 Fix map/sheet protection action.

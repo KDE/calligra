@@ -1131,12 +1131,14 @@ QWidget* CellToolBase::createOptionWidget()
     d->applyButton->setToolTip(i18n("Apply changes"));
     d->applyButton->setAutoRaise(true);
     d->applyButton->setIcon(KIcon("dialog-ok"));
+    d->applyButton->setEnabled(false);
 
     d->cancelButton = new QToolButton(widget);
     d->cancelButton->setText(i18n("Cancel"));
     d->cancelButton->setToolTip(i18n("Discard changes"));
     d->cancelButton->setAutoRaise(true);
     d->cancelButton->setIcon(KIcon("dialog-cancel"));
+    d->cancelButton->setEnabled(false);
 
     d->locationComboBox = new LocationComboBox(this, widget);
     d->locationComboBox->setMinimumWidth(100);
