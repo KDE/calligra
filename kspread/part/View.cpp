@@ -2187,7 +2187,7 @@ QColor View::borderColor() const
 void View::updateShowSheetMenu()
 {
     if (d->activeSheet) {
-        if (d->activeSheet->isProtected())
+        if (d->activeSheet->map()->isProtected())
             d->actions->showSheet->setEnabled(false);
         else
             d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
