@@ -64,23 +64,20 @@ class RowHeader;
 class View;
 class TabBar;
 
-/** @class View
- *
+/**
+ * @class View
  * @brief The View class displays a KSpread document.
- *
- *
  * View is used to display a spreadsheet document and provide
  * the interface for the user to perform editing and data analysis.
  *
  * A view consists of several parts:
  *  \li canvas to display cells in a sheet
- *  \li line editor to display and edit cell contents
- *  \li location editor to show marker and/or selection
  *  \li column header to show columns
  *  \li row header to show rows
+ *  \li corner button to select all cells
  *  \li horizontal and vertical scrollbars for navigation
  *  \li tab bar to select active worksheet
- *
+ *  \li status bar to show status messages
  */
 class KSPREAD_EXPORT View : public KoView
 {
@@ -98,9 +95,6 @@ public:
 
     /** \return the canvas of the view */
     Canvas* canvasWidget() const;
-
-    // KoView interface
-    virtual QWidget *canvas() const;
 
     /** \return the canvas controller of the view */
     KoCanvasController* canvasController() const;
@@ -175,13 +169,12 @@ public:
     void saveCurrentSheetSelection();
 
     /**
-     * @return @c true if document is being loaded. It is useful to suppress scrolling
-     * while the "View loading" process.
+     * The state of the 'View loading' process.
+     * Useful to suppress the painting of the canvas and setting the initial
+     * scrolling and selection positions, which need a fully built View.
+     * \return \c true if the view is not being fully created yet.
      */
     bool isLoading() const;
-
-    // KoView interface
-    virtual KoZoomController *zoomController() const;
 
 public Q_SLOTS:
     /** Clears all visual cached data. */
@@ -342,20 +335,22 @@ public slots:
     /** Calls KoToolProxy::deleteSelection(). */
     void editDeleteSelection();
 
-public:
+public: // reimplementations
     // KoView interface
+    virtual QWidget *canvas() const;
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;
     virtual int bottomBorder() const;
 
-protected:
+protected: // reimplementations
     // QWidget interface
     virtual void keyPressEvent(QKeyEvent * _ev);
     // KoView interface
     virtual void updateReadWrite(bool readwrite);
     virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);
     virtual KoPrintJob * createPrintJob();
+    virtual KoZoomController *zoomController() const;
 
 Q_SIGNALS:
     /** Indicates that the document's read/write state has changed. */
