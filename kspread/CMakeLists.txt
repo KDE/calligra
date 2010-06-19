@@ -99,6 +99,7 @@ SET (dialogs_DIR_SRCS
 
 kde4_add_ui_files(dialogs_DIR_SRCS
 	dialogs/FontWidget.ui
+        dialogs/GoalSeekWidget.ui
 	dialogs/PositionWidget.ui
 	dialogs/ProtectionWidget.ui
 	dialogs/SpecialPasteWidget.ui

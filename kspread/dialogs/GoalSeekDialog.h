@@ -26,29 +26,12 @@
 #ifndef KSPREAD_GOALSEEK_DIALOG
 #define KSPREAD_GOALSEEK_DIALOG
 
-#include <QPoint>
-#include <QRect>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QGridLayout>
-#include <QFrame>
-#include <QCloseEvent>
-
 #include <kdialog.h>
 
-#include "Cell.h"
-
-class QFrame;
-class QGridLayout;
-class QHBoxLayout;
-class QLabel;
-class QPushButton;
-class QVBoxLayout;
+class QCloseEvent;
 
 namespace KSpread
 {
-class RegionSelector;
 class Selection;
 
 /**
@@ -63,45 +46,22 @@ public:
     GoalSeekDialog(QWidget* parent, Selection* selection);
     ~GoalSeekDialog();
 
-public slots:
-    void buttonOkClicked();
-    void buttonCancelClicked();
-
 protected:
     virtual void closeEvent(QCloseEvent *);
 
-    QGridLayout * GoalSeekDialogLayout;
-    QGridLayout * m_startFrameLayout;
-    QGridLayout * m_resultFrameLayout;
+protected Q_SLOTS:
+    void textChanged();
 
-private:
-    Selection   * m_selection;
-    Cell          m_sourceCell;
-    Cell          m_targetCell;
-    double        m_result;
-    int           m_maxIter;
-    bool          m_restored;
-    double        m_oldSource;
+protected Q_SLOTS: // reimplementations
+    // KDialog interface
+    virtual void accept();
+    virtual void reject();
 
-    QString       m_oldText;
-    QString       m_sheetName;
-
-    QFrame      * m_startFrame;
-    QPushButton * m_buttonOk;
-    QPushButton * m_buttonCancel;
-    QFrame      * m_resultFrame;
-    QLabel      * m_newValueDesc;
-    QLabel      * m_currentValueLabel;
-    QLabel      * m_newValue;
-    QLabel      * m_currentValue;
-    QLabel      * m_resultText;
-
-    RegionSelector* m_selector1;
-    RegionSelector* m_selector2;
-    RegionSelector* m_selector3;
+ private:
+    class Private;
+    Private *const d;
 
     void startCalc(double _start, double _goal);
-    void chooseCleanup();
 };
 
 } // namespace KSpread
