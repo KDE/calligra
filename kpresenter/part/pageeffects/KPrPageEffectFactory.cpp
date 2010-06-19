@@ -110,7 +110,7 @@ KPrPageEffect * KPrPageEffectFactory::createPageEffect( const KoXmlElement & ele
     if ( element.hasAttributeNS( KoXmlNS::smil, "subtype" ) ) {
         QString smilSubType( element.attributeNS( KoXmlNS::smil, "subtype" ) );
         bool reverse = false;
-        if ( element.hasAttributeNS( KoXmlNS::smil, "direction" ) && element.attributeNS( KoXmlNS::smil, "direction" ) == "reverse" ) {
+        if ( element.attributeNS( KoXmlNS::smil, "direction" ) == "reverse" ) {
             reverse = true;
         }
 
@@ -134,7 +134,7 @@ KPrPageEffect * KPrPageEffectFactory::createPageEffect( const KoXmlElement & ele
 
         if ( it != d->strategies.get<1>().end() ) {
             strategy = *it;
-            //strategy->loadOdf( element element )
+            strategy->loadOdfSmilAttributes( element );
             pageEffect = new KPrPageEffect( duration, d->id, strategy );
         }
         else {

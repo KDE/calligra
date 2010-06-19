@@ -62,10 +62,6 @@ KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & el
     Q_UNUSED(element);
 
     KPrPageEffect * pageEffect = 0;
-    //TODO
-    // get the correct factory 
-    // we need the smil:type to get the factory so we need a mapping from the type to the factory
-    // this should be based on the smil:type and maybe smil:reverse
     if ( element.hasAttributeNS( KoXmlNS::smil, "type" ) ) {
         QString smilType( element.attributeNS( KoXmlNS::smil, "type" ) );
         bool reverse = false;
