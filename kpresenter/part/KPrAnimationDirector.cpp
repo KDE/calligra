@@ -292,15 +292,12 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
 void KPrAnimationDirector::updatePageAnimation()
 {
-    if(m_animationCache != 0){
-        delete(m_animationCache);
-    }
-    KoPAPageBase * page = m_pages[m_pageIndex];
-    KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
+    // TODO add a clear method to the cache so we don't need to recreated it again
+    delete m_animationCache;
     m_animationCache = new KPrAnimationCache();
 
     int i = 0;
-    foreach(KPrAnimationStep * step, m_animations){
+    foreach (KPrAnimationStep *step, m_animations) {
         step->init(m_animationCache, i);
         i++;
     }
@@ -447,7 +444,7 @@ void KPrAnimationDirector::previousStep()
         if ( m_pageIndex > 0 ) {
             --m_pageIndex;
             updateActivePage( m_pages[m_pageIndex] );
-            m_stepIndex = m_animations.size() - 1;
+            m_stepIndex = m_animations.size();
             updatePageAnimation();
             // trigger repaint
             m_canvas->update();
