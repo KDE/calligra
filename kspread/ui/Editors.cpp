@@ -1695,6 +1695,7 @@ RegionSelector::RegionSelector(QWidget* parent)
 RegionSelector::~RegionSelector()
 {
     d->selection->endReferenceSelection();
+  d->selection->setSelectionMode(Selection::MultipleCells);
     delete d;
 }
 

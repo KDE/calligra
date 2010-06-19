@@ -34,6 +34,7 @@ Reactivate the 'Insert series..' action.
 Fix repainting after sheet protection changes.
 Fix the border painting of the column/row headers and the select all button.
 Fix the right mouse button interaction for the column/row headers.
+Allow to select multiple cells after using a reference selection widget (e.g. in goal seek dialog).
 
 Developer-Visible Only
 ----------------------
