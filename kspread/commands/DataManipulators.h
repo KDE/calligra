@@ -25,8 +25,6 @@
 #include "Global.h"
 #include "Style.h"
 #include "Value.h"
-#include "kspread_export.h"
-
 
 namespace KSpread
 {
@@ -35,7 +33,7 @@ namespace KSpread
  * \ingroup Commands
  * \brief Abstract command for setting values.
  */
-class KSPREAD_EXPORT AbstractDataManipulator : public AbstractRegionCommand
+class AbstractDataManipulator : public AbstractRegionCommand
 {
 public:
     AbstractDataManipulator(QUndoCommand* parent = 0);
@@ -105,7 +103,7 @@ bool m_changeformat : 1;
  * \ingroup Commands
  * \brief Sets values of a cell range.
  */
-class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator
+class DataManipulator : public AbstractDataManipulator
 {
 public:
     DataManipulator(QUndoCommand* parent = 0);
@@ -142,7 +140,7 @@ bool m_expandMatrix : 1;
  * \ingroup Commands
  * \brief Fills a value series into a cell range.
  */
-class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator
+class SeriesManipulator : public AbstractDataManipulator
 {
 public:
     enum Series { Column, Row, Linear, Geometric };
@@ -168,7 +166,7 @@ protected:
  * \ingroup Commands
  * \brief Fills values into a cell range.
  */
-class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator
+class FillManipulator : public AbstractDFManipulator
 {
 public:
     FillManipulator();
@@ -191,7 +189,7 @@ protected:
  * \ingroup Commands
  * \brief Converts string values to upper-/lowercase.
  */
-class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator
+class CaseManipulator: public AbstractDataManipulator
 {
 public:
     CaseManipulator();

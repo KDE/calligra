@@ -19,7 +19,9 @@
 
 #include "ColumnStyleCommand.h"
 
+#include "Damages.h"
 #include "Limits.h"
+#include "Map.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
@@ -92,9 +94,11 @@ bool ColumnStyleCommand::mainProcessing()
             }
             deltaWidth += m_sheet->columnFormat(column)->width();
         }
+        // Possible visual cache invalidation due to dimension change; rebuild it.
+        const Region region(range.left(), 1, KS_colMax - range.right() + 1, KS_rowMax, m_sheet);
+        m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
     }
     m_sheet->adjustDocumentWidth(deltaWidth);
-    m_sheet->emitHideColumn();
     m_sheet->print()->updateHorizontalPageParameters(0);
     return true;
 }

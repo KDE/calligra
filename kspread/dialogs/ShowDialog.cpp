@@ -31,6 +31,7 @@
 
 #include <klocale.h>
 
+#include "Damages.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -92,7 +93,8 @@ void ShowDialog::accept()
         new ShowSheetCommand(sheet, macroCommand);
     }
     map->addCommand(macroCommand);
-    m_selection->activeSheet()->updateView();
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    map->addDamage(new SheetDamage(m_selection->activeSheet(), SheetDamage::ContentChanged));
     KDialog::accept();
 }
 

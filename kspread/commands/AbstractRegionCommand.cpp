@@ -28,6 +28,7 @@
 #include <KoCanvasBase.h>
 
 #include "Cell.h"
+#include "Damages.h"
 #include "Map.h"
 #include "Sheet.h"
 
@@ -96,7 +97,8 @@ void AbstractRegionCommand::redo()
     }
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    m_sheet->setRegionPaintDirty(*this);
+    // FIXME Stefan: Does every derived command damage the visual cache? No!
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 
     successfully = mainProcessing();
     if (!successfully) {

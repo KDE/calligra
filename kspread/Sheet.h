@@ -734,16 +734,6 @@ public:
      */
     void removeRows(int row, int number);
 
-    /**
-     * Updates vertical border and view.
-     */
-    void emitHideRow();
-
-    /**
-     * Updates horizontal border and view.
-     */
-    void emitHideColumn();
-
     //
     //END Methods related column/row operations
     //
@@ -801,44 +791,8 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Methods related to painting
-    //
-
-    /**
-     * \ingroup Painting
-     * set a region of the spreadsheet to be 'paint dirty' meaning it
-     * needs repainted.  This is not a flag on the cell itself since quite
-     * often this needs set on a default cell
-     */
-    void setRegionPaintDirty(const Region & region);
-
-    /**
-     * \see setRegionPaintDirty(const Region &)
-     */
-    void setRegionPaintDirty(const QRect & rect);
-
-    /**
-     * \ingroup Painting
-     * repaints all visible cells
-     */
-    void updateView();
-
-    /**
-     * \ingroup Painting
-     * repaints all visible cells in \p region
-     */
-    void updateView(const Region& region);
-
-    //
-    //END Methods related to painting
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
     //BEGIN UNSORTED METHODS !!!
     //
-
-    void emit_updateRow(RowFormat* rowFormat, int _row, bool repaint = true);
-    void emit_updateColumn(ColumnFormat* columnFormat, int _column);
 
     /**
      * Shows a status \p message in the status bar for \p timeout msecs.
@@ -882,9 +836,6 @@ public:
     //////////////////////////////////////////////////////////////////////////
 
 signals:
-    void sig_updateView(Sheet *_sheet);
-    void sig_updateView(Sheet *_sheet, const Region&);
-
     /**
      * Emitted, if the document size changed.
      * E.g. if some columns were inserted.

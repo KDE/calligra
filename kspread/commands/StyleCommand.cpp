@@ -27,6 +27,8 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Damages.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"
@@ -127,7 +129,7 @@ bool StyleCommand::process(Element* element)
                 tmpStyle.setRightBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.left() - 1, range.top(), 1, range.height()));
                 m_sheet->cellStorage()->setStyle(region, tmpStyle);
-                m_sheet->setRegionPaintDirty(region);
+                m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
             }
         }
         if (hasRightPen) {
@@ -141,7 +143,7 @@ bool StyleCommand::process(Element* element)
                 tmpStyle.setLeftBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.right() + 1, range.top(), 1, range.height()));
                 m_sheet->cellStorage()->setStyle(region, tmpStyle);
-                m_sheet->setRegionPaintDirty(region);
+                m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
             }
         }
         if (hasTopPen) {
@@ -155,7 +157,7 @@ bool StyleCommand::process(Element* element)
                 tmpStyle.setBottomBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.left(), range.top() - 1, range.width(), 1));
                 m_sheet->cellStorage()->setStyle(region, tmpStyle);
-                m_sheet->setRegionPaintDirty(region);
+                m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
             }
         }
         if (hasBottomPen) {
@@ -169,7 +171,7 @@ bool StyleCommand::process(Element* element)
                 tmpStyle.setTopBorderPen(QPen(Qt::NoPen));
                 const Region region(QRect(range.left(), range.bottom() + 1, range.width(), 1));
                 m_sheet->cellStorage()->setStyle(region, tmpStyle);
-                m_sheet->setRegionPaintDirty(region);
+                m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
             }
         }
     }

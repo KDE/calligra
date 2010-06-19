@@ -330,18 +330,6 @@ protected slots:
     void slotRename();
 
 public slots:
-    /**
-     * Invalidates the visual cached data for the visible cells.
-     * \param _sheet action is only taken, if this matches the active sheet
-     */
-    void slotUpdateView(Sheet *_sheet);
-
-    /**
-     * Invalidates the visual cached data for the cells in \p region.
-     * \param _sheet action is only taken, if this matches the active sheet
-     */
-    void slotUpdateView(Sheet *_sheet, const Region&);
-
     /** Reacts on selection changes. */
     void slotChangeSelection(const Region&);
 

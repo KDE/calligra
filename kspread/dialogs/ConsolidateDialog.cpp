@@ -627,11 +627,6 @@ void ConsolidateDialog::setText(Sheet* sheet, int _row, int _column,
     command->setParsing(!asString);
     command->add(QPoint(_column, _row));
     command->execute();
-
-    //refresh anchor
-    if ((!_text.isEmpty()) && (_text.at(0) == '!')) {
-        sheet->updateView(Region(_column, _row, sheet));
-    }
 }
 
 #include "ConsolidateDialog.moc"

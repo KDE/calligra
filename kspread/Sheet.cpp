@@ -151,9 +151,6 @@ public:
     // hold the print object
     SheetPrint* print;
 
-    // cells that need painting
-    Region paintDirtyList;
-
     // Indicates whether the sheet should paint the page breaks.
     // Doing so costs some time, so by default it should be turned off.
     bool showPageBorders;
@@ -875,20 +872,6 @@ void Sheet::removeRows(int row, int number)
     d->print->removeRow(row, number);
 }
 
-void Sheet::emitHideRow()
-{
-    emit visibleSizeChanged();
-    map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
-    emit sig_updateView(this);
-}
-
-void Sheet::emitHideColumn()
-{
-    emit visibleSizeChanged();
-    map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
-    emit sig_updateView(this);
-}
-
 QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                                        int nbCol, const QPoint& point, bool isColumnFixed,
                                        bool isRowFixed)
@@ -1249,16 +1232,6 @@ void Sheet::deleteCells(const Region& region)
         Cell cell = cellStack.pop();
         d->cellStorage->take(cell.column(), cell.row());
     }
-}
-
-void Sheet::updateView()
-{
-    emit sig_updateView(this);
-}
-
-void Sheet::updateView(const Region& region)
-{
-    emit sig_updateView(this, region);
 }
 
 
@@ -3380,7 +3353,10 @@ void Sheet::setShowPageBorders(bool b)
         return;
 
     d->showPageBorders = b;
-    emit sig_updateView(this);
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    if (!map()->isLoading()) {
+        map()->addDamage(new SheetDamage(this, SheetDamage::ContentChanged));
+    }
 }
 
 QImage Sheet::backgroundImage() const
@@ -3433,38 +3409,6 @@ void Sheet::deleteRowFormat(int row)
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     }
-}
-
-void Sheet::emit_updateRow(RowFormat *_format, int _row, bool repaint)
-{
-    Q_UNUSED(_format);
-    if (map()->isLoading()) {
-        return;
-    }
-
-    if (repaint) {
-        //All the cells in this row, or below this row will need to be repainted
-        //So add that region of the sheet to the paint dirty list.
-        setRegionPaintDirty(Region(QRect(QPoint(0, _row), QPoint(KS_colMax, KS_rowMax))));
-
-        map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
-        emit sig_updateView(this);
-    }
-}
-
-void Sheet::emit_updateColumn(ColumnFormat *_format, int _column)
-{
-    Q_UNUSED(_format);
-    if (map()->isLoading()) {
-        return;
-    }
-
-    //All the cells in this column or to the right of it will need to be repainted if the column
-    //has been resized or hidden, so add that region of the sheet to the paint dirty list.
-    setRegionPaintDirty(Region(QRect(QPoint(_column, 1), QPoint(KS_colMax, KS_rowMax))));
-
-    map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
-    emit sig_updateView(this);
 }
 
 void Sheet::showStatusMessage(const QString &message, int timeout)
@@ -3534,14 +3478,14 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
 void Sheet::updateLocale()
 {
-    setRegionPaintDirty(Region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax))));
-
     for (int c = 0; c < valueStorage()->count(); ++c) {
         Cell cell(this, valueStorage()->col(c), valueStorage()->row(c));
         QString text = cell.userInput();
         cell.parseUserInput(text);
     }
-    emit sig_updateView(this);
+    // Affects the displayed value; rebuild the visual cache.
+    const Region region(1, 1, KS_colMax, KS_rowMax, this);
+    map()->addDamage(new CellDamage(this, region, CellDamage::Appearance));
 }
 
 void Sheet::convertObscuringBorders()
@@ -3594,23 +3538,6 @@ void Sheet::convertObscuringBorders()
 /**********************
  * Printout Functions *
  **********************/
-
-void Sheet::setRegionPaintDirty(const Region & region)
-{
-    if (isLoading())
-        return;
-    if (!region.isValid())
-        return;
-
-    map()->addDamage(new CellDamage(this, region, CellDamage::Appearance));
-
-//     kDebug(36004) <<"setRegionPaintDirty"<< static_cast<const Region*>(&region)->name(this);
-}
-
-void Sheet::setRegionPaintDirty(const QRect& rect)
-{
-    setRegionPaintDirty(Region(rect));
-}
 
 #ifndef NDEBUG
 void Sheet::printDebug()

@@ -118,8 +118,6 @@ void RowFormat::setHeight(double height)
     d->height = height;
 
     d->sheet->print()->updateVerticalPageParameters(row());
-
-    d->sheet->emit_updateRow(this, d->row);
 }
 
 double RowFormat::height() const
@@ -239,12 +237,10 @@ void RowFormat::setHidden(bool _hide, bool repaint)
             // Lower maximum size by height of row
             d->sheet->adjustDocumentHeight(- height());
             d->hide = _hide; //hide must be set after we requested the height
-            d->sheet->emit_updateRow(this, d->row, repaint);
         } else {
             // Rise maximum size by height of row
             d->hide = _hide; //unhide must be set before we request the height
             d->sheet->adjustDocumentHeight(height());
-            d->sheet->emit_updateRow(this, d->row, repaint);
         }
     }
 }
@@ -370,8 +366,6 @@ void ColumnFormat::setWidth(double width)
     d->width = width;
 
     d->sheet->print()->updateHorizontalPageParameters(column());
-
-    d->sheet->emit_updateColumn(this, d->column);
 }
 
 double ColumnFormat::width() const
@@ -492,12 +486,10 @@ void ColumnFormat::setHidden(bool _hide)
             // Lower maximum size by width of column
             d->sheet->adjustDocumentWidth(- width());
             d->hide = _hide; //hide must be set after we requested the width
-            //  d->sheet->emit_updateColumn( this, d->column );
         } else {
             // Rise maximum size by width of column
             d->hide = _hide; //unhide must be set before we request the width
             d->sheet->adjustDocumentWidth(width());
-            //   d->sheet->emit_updateColumn( this, d->column );
         }
     }
 }

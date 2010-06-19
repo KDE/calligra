@@ -40,6 +40,8 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Damages.h"
+#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -185,6 +187,12 @@ void CSVDialog::accept()
     if (!command->execute(m_selection->canvas()))
         delete command;
 
+    QRect range = m_selection->lastRange();
+    range.setWidth(numCols);
+    range.setHeight(numRows);
+    // TODO Stefan: Move this damaging into the model.
+    const CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Value | CellDamage::Formula;
+    sheet->map()->addDamage(new CellDamage(sheet, Region(range, sheet), changes));
     m_selection->emitModified();
     KoCsvImportDialog::accept();
 }

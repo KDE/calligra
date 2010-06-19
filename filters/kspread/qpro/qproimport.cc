@@ -29,7 +29,6 @@
 #include <kspread/Sheet.h>
 #include <kspread/Cell.h>
 #include <kspread/Map.h>
-#include <kspread/commands/DataManipulators.h>
 
 #include <qproimport.h>
 
@@ -256,16 +255,12 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
 
 void QpImport::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
 {
-    DataManipulator* const command = new DataManipulator();
-    command->setSheet(sheet);
-    command->setValue(Value(_text));
-    command->setParsing(!asString);
-    command->add(QPoint(_column, _row));
-    command->execute();
-
-    //refresh anchor
-    if ((!_text.isEmpty()) && (_text.at(0) == '!')) {
-        sheet->updateView(KSpread::Region(_column, _row, sheet));
+    Cell cell(sheet, _column, _row);
+    if (asString) {
+        cell.setUserInput(_text);
+        cell.setValue(Value(_text));
+    } else {
+        cell.parseUserInput(_text);
     }
 }
 

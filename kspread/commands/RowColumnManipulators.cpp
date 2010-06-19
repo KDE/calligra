@@ -60,6 +60,8 @@ bool ResizeColumnManipulator::process(Element* element)
             m_oldSizes[col] = format->width();
         format->setWidth(qMax(2.0, m_reverse ? m_oldSizes[col] : m_newSize));
     }
+  // Just repaint everything visible; no need to invalidate the visual cache.
+  m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     return true;
 }
 
@@ -88,6 +90,8 @@ bool ResizeRowManipulator::process(Element* element)
             m_oldSizes[row] = rl->height();
         rl->setHeight(qMax(2.0, m_reverse ? m_oldSizes[row] : m_newSize));
     }
+  // Just repaint everything visible; no need to invalidate the visual cache.
+  m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     return true;
 }
 
@@ -189,13 +193,8 @@ bool HideShowManipulator::preProcessing()
 
 bool HideShowManipulator::postProcessing()
 {
-    if (m_manipulateColumns) {
-        m_sheet->emitHideColumn();
-    }
-    if (m_manipulateRows) {
-        m_sheet->emitHideRow();
-    }
-
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     return true;
 }
 

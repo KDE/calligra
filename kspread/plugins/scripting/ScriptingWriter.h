@@ -33,7 +33,6 @@
 #include <Region.h>
 #include <Cell.h>
 #include <Value.h>
-#include <DataManipulators.h>
 
 /**
 * The ScriptingWriter class provides abstract high-level functionality to write
@@ -221,12 +220,14 @@ public Q_SLOTS:
         }
         //KSpread::Cell* c = getCell();
         //c->setValue(v);
-        KSpread::DataManipulator *dm = new KSpread::DataManipulator();
-        dm->setSheet(m_sheet);
-        dm->setValue(v);
-        dm->setParsing(parse);
-        dm->add(QPoint(m_column, m_row));
-        return dm->execute();
+        KSpread::Cell cell(m_sheet, m_column, m_row);
+        if (!parse) {
+            cell.setUserInput(value.toString());
+            cell.setValue(v);
+        } else {
+            cell.parseUserInput(value.toString());
+        }
+        return true;
     }
 
     /**

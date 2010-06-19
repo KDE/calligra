@@ -19,6 +19,8 @@
 
 #include "PageBreakCommand.h"
 
+#include "Damages.h"
+#include "Map.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
@@ -63,7 +65,7 @@ bool PageBreakCommand::postProcessing()
         m_sheet->print()->updateVerticalPageParameters(range.top() - 1);
     }
     if (m_sheet->isShowPageBorders()) {
-        m_sheet->updateView();
+        m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     }
     return AbstractRegionCommand::postProcessing();
 }

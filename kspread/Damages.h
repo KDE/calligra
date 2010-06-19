@@ -65,14 +65,21 @@ class KSPREAD_EXPORT CellDamage : public Damage
 {
 public:
     enum Change {
-        Appearance = 0x01, ///< triggers a layout update and then a repaint
         Binding    = 0x02, ///< on value changes; always triggered; for binding updates
         Formula    = 0x04, ///< triggers a dependency update
         NamedArea  = 0x10, ///< triggers a named area update
         /// This indicates a value change. It is not triggered while a recalculation is in progress.
         /// RecalcManager takes over in this case. Otherwise, circular dependencies would cause
         /// infinite loops and the cells would be recalculated in arbitrary order.
-        Value      = 0x20
+        Value      = 0x20,
+        /// On style changes; invalidates the style storage cache.
+        StyleCache  = 0x40,
+        /// The visual cache gets damaged, if any of CellView's data members is
+        /// affected. E.g. the displayed text, the cell dimension or the merging.
+        VisualCache = 0x80,
+        // TODO Stefan: Detach the style cache from the CellView cache.
+        /// Updates the caches and triggers a repaint of the cell region.
+        Appearance = StyleCache | VisualCache
     };
     Q_DECLARE_FLAGS(Changes, Change)
 

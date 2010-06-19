@@ -60,6 +60,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
+#include "StyleStorage.h"
 #include "Validity.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -942,7 +943,13 @@ void Map::handleDamages(const QList<Damage*>& damages)
             kDebug(36007) << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
             const Region region = cellDamage->region();
+            const CellDamage::Changes changes = cellDamage->changes();
 
+            // TODO Stefan: Detach the style cache from the CellView cache.
+            if ((changes.testFlag(CellDamage::Appearance))) {
+                // Rebuild the style storage cache.
+                damagedSheet->styleStorage()->invalidateCache(); // FIXME more fine-grained
+            }
             if ((cellDamage->changes() & CellDamage::Binding) &&
                     !workbookChanges.testFlag(WorkbookDamage::Value)) {
                 bindingChangedRegion.add(region, damagedSheet);

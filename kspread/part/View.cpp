@@ -1162,10 +1162,7 @@ void View::addSheet(Sheet * _t)
     reviveSheet(_t);
 
     // Connect some signals
-    connect(_t, SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
     connect(_t->print(), SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
-    connect(_t, SIGNAL(sig_updateView(Sheet *, const Region&)),
-            SLOT(slotUpdateView(Sheet*, const Region&)));
     connect(_t, SIGNAL(shapeAdded(Sheet *, KoShape *)),
             d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
     connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
@@ -1774,24 +1771,6 @@ void View::slotRename()
 //
 //------------------------------------------------
 
-void View::slotUpdateView(Sheet *_sheet)
-{
-    // Do we display this sheet ?
-    if ((!activeSheet()) || (_sheet != d->activeSheet))
-        return;
-
-    d->activeSheet->setRegionPaintDirty(d->canvas->visibleCells());
-}
-
-void View::slotUpdateView(Sheet * _sheet, const Region& region)
-{
-    // Do we display this sheet ?
-    if (_sheet != d->activeSheet)
-        return;
-
-    d->activeSheet->setRegionPaintDirty(region);
-}
-
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
 {
     if (!changedRegion.isValid())
@@ -2062,7 +2041,7 @@ void View::saveCurrentSheetSelection()
 void View::handleDamages(const QList<Damage*>& damages)
 {
     QRegion paintRegion;
-    bool paintClipped = true;
+    enum { Nothing, Everything, Clipped } paintMode = Nothing;
 
     QList<Damage*>::ConstIterator end(damages.end());
     for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
@@ -2077,7 +2056,7 @@ void View::handleDamages(const QList<Damage*>& damages)
 
             if (cellDamage->changes() & CellDamage::Appearance) {
                 sheetView(damagedSheet)->invalidateRegion(region);
-                paintClipped = false;
+                paintMode = Everything;
             }
             continue;
         }
@@ -2088,16 +2067,23 @@ void View::handleDamages(const QList<Damage*>& damages)
             const SheetDamage::Changes changes = sheetDamage->changes();
             if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
                 d->tabBar->setTabs(doc()->map()->visibleSheets());
+                paintMode = Everything;
             }
             if (changes & (SheetDamage::Shown | SheetDamage::Hidden)) {
                 updateShowSheetMenu();
+                paintMode = Everything;
             }
             // The following changes only affect the active sheet.
             if (sheetDamage->sheet() != d->activeSheet) {
                 continue;
             }
-            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
-                d->activeSheet->setRegionPaintDirty(d->canvas->visibleCells());
+            if (changes.testFlag(SheetDamage::ContentChanged)) {
+                update();
+                paintMode = Everything;
+            }
+            if (changes.testFlag(SheetDamage::PropertiesChanged)) {
+                sheetView(d->activeSheet)->invalidate();
+                paintMode = Everything;
             }
             if (sheetDamage->changes() & SheetDamage::ColumnsChanged)
                 columnHeader()->update();
@@ -2111,9 +2097,11 @@ void View::handleDamages(const QList<Damage*>& damages)
             kDebug(36007) << "Processing\t" << *selectionDamage;
             const Region region = selectionDamage->region();
 
-            if (paintClipped) {
+            if (paintMode == Clipped) {
                 const QRectF rect = canvasWidget()->cellCoordinatesToView(region.boundingRect());
                 paintRegion += rect.toRect().adjusted(-3, -3, 4, 4);
+            } else {
+                paintMode = Everything;
             }
             continue;
         }
@@ -2122,10 +2110,11 @@ void View::handleDamages(const QList<Damage*>& damages)
     }
 
     // At last repaint the dirty cells.
-    if (paintClipped)
+    if (paintMode == Clipped) {
         canvas()->update(paintRegion);
-    else
+    } else if (paintMode == Everything) {
         canvas()->update();
+    }
 }
 
 KoPrintJob * View::createPrintJob()
