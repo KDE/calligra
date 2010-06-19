@@ -206,16 +206,8 @@ public:
     QMap<Sheet*, QPoint> savedMarkers;
     QMap<Sheet*, QPointF> savedOffsets;
 
-    // the tools
-    struct ToolEntry {
-        QString command;
-        KDataToolInfo info;
-    };
-    QList<ToolEntry*> toolList;
-
     void initActions();
     void adjustActions(bool mode);
-    QAbstractButton* newIconButton(const char *_file, bool _kbutton = false, QWidget *_parent = 0);
 
     // On timeout this will execute the status bar operation (e.g. SUM).
     // This is delayed to speed up the selection.
@@ -285,8 +277,6 @@ void View::Private::initActions()
     actions = new ViewActions;
 
     KActionCollection* ac = view->actionCollection();
-
-    // -- cell operation actions --
 
     // -- sheet/workbook actions --
     actions->sheetProperties  = new KAction(i18n("Sheet Properties"), view);
@@ -555,22 +545,6 @@ void View::Private::adjustActions(bool mode)
         selection->update();
 }
 
-QAbstractButton* View::Private::newIconButton(const char *_file, bool _kbutton, QWidget *_parent)
-{
-    if (_parent == 0)
-        _parent = view;
-
-    if (!_kbutton) {
-        QPushButton* pb = new QPushButton(_parent);
-        pb->setIcon(KIcon(_file));
-        return pb;
-    } else {
-        QToolButton* pb = new QToolButton(_parent);
-        pb->setIcon(KIcon(_file));
-        return pb;
-    }
-}
-
 
 /*****************************************************************************
  *
@@ -583,7 +557,6 @@ View::View(QWidget *_parent, Doc *_doc)
         , d(new Private)
 {
     ElapsedTime et("View constructor");
-//     kDebug() <<"sizeof(Cell)=" << sizeof(Cell);
 
     d->view = this;
     d->doc = _doc;
@@ -606,7 +579,7 @@ View::View(QWidget *_parent, Doc *_doc)
     connect(doc(), SIGNAL(sig_refreshView()), this, SLOT(slotRefreshView()));
 
     connect(doc()->map(), SIGNAL(sheetAdded(Sheet*)),
-            this, SLOT(slotAddSheet(Sheet*)));
+            this, SLOT(addSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRemoved(Sheet*)),
             this, SLOT(removeSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRevived(Sheet*)),
@@ -616,10 +589,6 @@ View::View(QWidget *_parent, Doc *_doc)
     if (statusBar()) {
         connect(doc()->map(), SIGNAL(statusMessage(const QString&, int)),
                 statusBar(), SLOT(showMessage(const QString&, int)));
-    }
-
-    if (!doc()->isReadWrite()) {
-        setZoom(100, true);
     }
 
     connect(&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
@@ -637,7 +606,6 @@ View::View(QWidget *_parent, Doc *_doc)
 
 View::~View()
 {
-    //  ElapsedTime el( "~View" );
     if (doc()->isReadWrite())   // make sure we're not embedded in Konq
         selection()->emitCloseEditor(true); // save changes
 
@@ -686,7 +654,6 @@ Doc* View::doc() const
 
 // should be called only once, from the constructor
 /*
- * Top part is the formula bar.
  * Central part is the canvas, row header and vertical scrollbar.
  * Bottom part is the tab bar and horizontal scrollbar.
  *
@@ -775,7 +742,6 @@ void View::initView()
     d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar(this);
     d->canvasController->setVerticalScrollBar(d->vertScrollBar);
-//     d->vertScrollBar->setRange( 0, 4096 );
     d->vertScrollBar->setOrientation(Qt::Vertical);
     d->vertScrollBar->setSingleStep(60);  //just random guess based on what feels okay
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
@@ -792,7 +758,6 @@ void View::initView()
     d->canvasController->setHorizontalScrollBar(d->horzScrollBar);
     d->tabScrollBarLayout->addWidget(d->horzScrollBar, 0, 1, 2, 1, Qt::AlignVCenter);
 
-//     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation(Qt::Horizontal);
     d->horzScrollBar->setSingleStep(60); //just random guess based on what feels okay
     d->horzScrollBar->setPageStep(60);
@@ -830,8 +795,6 @@ void View::initView()
     }
 
     // signal slot
-//     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
-//     connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
     connect(d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
             d->canvasController, SLOT(setDocumentSize(const QSize&)));
     connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
@@ -895,12 +858,7 @@ Selection* View::selection() const
     return d->selection;
 }
 
-const Sheet* View::activeSheet() const
-{
-    return d->activeSheet;
-}
-
-Sheet* View::activeSheet()
+Sheet* View::activeSheet() const
 {
     return d->activeSheet;
 }
@@ -1147,10 +1105,6 @@ void View::finishLoading()
         KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 
-void View::activateFormulaEditor()
-{
-}
-
 void View::updateReadWrite(bool readwrite)
 {
     // inform the cell tool
@@ -1196,11 +1150,6 @@ void View::createTemplate()
             "data", "kspread/templates/");
 }
 
-void View::helpUsing()
-{
-    KToolInvocation::invokeHelp();
-}
-
 void View::addSheet(Sheet * _t)
 {
     reviveSheet(_t);
@@ -1225,12 +1174,6 @@ void View::addSheet(Sheet * _t)
             d->mapViewModel, SLOT(addShape(Sheet *, KoShape *)));
     connect(_t, SIGNAL(shapeRemoved(Sheet *, KoShape *)),
             d->mapViewModel, SLOT(removeShape(Sheet *, KoShape *)));
-}
-
-void View::removeAllSheets()
-{
-    d->tabBar->clear();
-    setActiveSheet(0);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
@@ -1594,17 +1537,6 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
     doc()->refreshInterface();
 }
 
-void View::setZoom(int zoom, bool /*updateViews*/)
-{
-    kDebug(36005) << "---------SetZoom:" << zoom;
-
-    // Set the zoom in KoView (for embedded views)
-    zoomHandler()->setZoomAndResolution(zoom, KoDpi::dpiX(), KoDpi::dpiY());
-    //KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
-
-    doc()->refreshInterface();
-}
-
 void View::showColumnHeader(bool enable)
 {
     doc()->map()->settings()->setShowColumnHeader(enable);
@@ -1654,19 +1586,6 @@ void View::preference()
         d->columnHeader->update();
         d->rowHeader->update();
     }
-}
-
-bool View::showSheet(const QString& sheetName)
-{
-    Sheet *t = doc()->map()->findSheet(sheetName);
-    if (!t) {
-        kDebug(36001) << "Unknown sheet" << sheetName;
-        return false;
-    }
-    selection()->emitCloseEditor(true); // save changes
-    setActiveSheet(t);
-
-    return true;
 }
 
 void View::nextSheet()
@@ -1763,6 +1682,7 @@ void View::refreshView()
     if (!sheet)
         return;
 
+  // FIXME Is this really needed here?!
     d->adjustActions(!sheet->isProtected());
 
     bool active = sheet->getShowFormula();
@@ -1784,6 +1704,7 @@ void View::refreshView()
     d->tabBar->setVisible(doc()->map()->settings()->showTabBar());
     if (statusBar()) statusBar()->setVisible(doc()->map()->settings()->showStatusBar());
 
+  // FIXME Is this really the right place for this?!
     QFont font(KoGlobal::defaultFont());
     d->columnHeader->setMinimumHeight(qRound(zoomHandler()->zoomItY(font.pointSizeF() + 3)));
     d->rowHeader->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
@@ -1874,8 +1795,6 @@ void View::slotRename()
         QUndoCommand* command = new RenameSheetCommand(sheet, newName);
         doc()->addCommand(command);
 
-        //sheet->setSheetName( newName );
-
         doc()->setModified(true);
     }
 }
@@ -1885,11 +1804,6 @@ void View::slotRename()
 // Document signals
 //
 //------------------------------------------------
-
-void View::slotAddSheet(Sheet *_sheet)
-{
-    addSheet(_sheet);
-}
 
 void View::slotRefreshView()
 {
@@ -1911,8 +1825,6 @@ void View::slotUpdateView(Sheet *_sheet)
 
 void View::slotUpdateView(Sheet * _sheet, const Region& region)
 {
-    // qDebug("void View::slotUpdateView( Sheet *_sheet, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
-
     // Do we display this sheet ?
     if (_sheet != d->activeSheet)
         return;
@@ -1922,8 +1834,6 @@ void View::slotUpdateView(Sheet * _sheet, const Region& region)
 
 void View::slotUpdateColumnHeader(Sheet * _sheet)
 {
-    // kDebug(36001)<<"void View::slotUpdateColumnHeader( Sheet *_sheet )";
-
     // Do we display this sheet ?
     if (_sheet != d->activeSheet)
         return;
@@ -1933,8 +1843,6 @@ void View::slotUpdateColumnHeader(Sheet * _sheet)
 
 void View::slotUpdateRowHeader(Sheet *_sheet)
 {
-    // kDebug("void View::slotUpdateRowHeader( Sheet *_sheet )";
-
     // Do we display this sheet ?
     if (_sheet != d->activeSheet)
         return;
@@ -2070,16 +1978,6 @@ void View::menuCalc(bool)
     calcStatusBarOp();
 }
 
-
-QMatrix View::matrix() const
-{
-    QMatrix m;
-    m.scale(zoomHandler()->zoomedResolutionX(),
-            zoomHandler()->zoomedResolutionY());
-    m.translate(- d->canvas->xOffset(), - d->canvas->yOffset());
-    return m;
-}
-
 QWidget* View::canvas() const
 {
     return d->canvas;
@@ -2097,11 +1995,6 @@ void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
         if (ev->activated()) {
             if (d->calcLabel)
                 calcStatusBarOp();
-        } else {
-            /*if (d->calcLabel)
-              {
-              disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
-              }*/
         }
     }
 
@@ -2192,25 +2085,6 @@ void View::updateShowSheetMenu()
         else
             d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
     }
-}
-
-void View::markSelectionAsDirty()
-{
-    doc()->map()->addDamage(new SelectionDamage(*selection()));
-}
-
-void View::paintUpdates()
-{
-    /* don't do any begin/end operation here -- this is what is called at an
-       endOperation
-    */
-    d->canvas->update();
-}
-
-void View::initialiseMarkerFromSheet(Sheet* sheet, const QPoint& point)
-{
-    d->savedMarkers.remove(sheet);
-    d->savedMarkers.insert(sheet, point);
 }
 
 QPoint View::markerFromSheet(Sheet* sheet) const

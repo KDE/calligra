@@ -99,6 +99,9 @@ public:
     /** Returns the canvas of the view */
     Canvas* canvasWidget() const;
 
+    // KoView interface
+    virtual QWidget *canvas() const;
+
     /** Returns the canvas controller of the view */
     KoCanvasController* canvasController() const;
 
@@ -120,21 +123,13 @@ public:
     /** \return the zoom handler */
     KoZoomHandler* zoomHandler() const;
 
-    void setZoom(int zoom, bool updateViews);   // change the zoom value
-
-    void addSheet(Sheet *_t);
-    //void removesheet( Sheet *_t );
-    void removeAllSheets();
-
-    const Sheet* activeSheet() const;
-    Sheet* activeSheet();
+    /** \return the sheet, that is currently displayed */
+    Sheet* activeSheet() const;
 
     /**
      * \return the SheetView for \p sheet
      */
     SheetView* sheetView(const Sheet* sheet) const;
-
-    virtual QWidget *canvas() const;
 
     void initConfig();
 
@@ -150,19 +145,6 @@ public:
     Selection* selection() const;
 
     void updateShowSheetMenu();
-
-    /**
-     * Mark all selected cells / regions of cells as 'dirty' (ie. requiring a repaint)
-     * They will be repainted on the next call to paintUpdates()
-     */
-    void markSelectionAsDirty();
-
-    /**
-     * Repaint any cell with the paintDirty flag that is visible in this view
-     */
-    void paintUpdates();
-
-    bool showSheet(const QString& sheetName);
 
     /**
      * @return marker for @p sheet
@@ -185,8 +167,6 @@ public:
      * while the "View loading" process.
      */
     bool isLoading() const;
-
-    virtual QMatrix matrix() const;
 
     virtual KoZoomController *zoomController() const;
 
@@ -335,7 +315,6 @@ public slots:
     void slotUpdateRowHeader(Sheet *_sheet);
     void slotChangeSelection(const Region&);
     void slotScrollChoice(const Region&);
-    void slotAddSheet(Sheet *_sheet);
     void slotSheetRenamed(Sheet* sheet, const QString& old_name);
     void slotSheetHidden(Sheet*_sheet);
     void slotSheetShown(Sheet*_sheet);
@@ -351,14 +330,6 @@ public:
 protected:
 
     virtual void keyPressEvent(QKeyEvent * _ev);
-
-    /**
-     * Activates the formula editor for the current cell.
-     * This function is usually called if the user presses
-     * a button in the formula toolbar.
-     */
-    void activateFormulaEditor();
-
     virtual void updateReadWrite(bool readwrite);
 
     virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);

@@ -164,14 +164,6 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         oldPageBorderColor = pageBorderColor;
     }
 
-#if 0 // UNDOREDOLIMIT
-    int const newUndo = m_undoRedoLimit->value();
-    if (newUndo != m_oldNbRedo) {
-        config->group("Misc").writeEntry("UndoRedo", newUndo);
-        view->doc()->map()->settings()->setUndoRedoLimit(newUndo);
-        m_oldNbRedo = newUndo;
-    }
-#endif
 #if 0 // KSPREAD_COMPLETION_MODE_SETTING
     KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionNone;
     switch (typeCompletion->currentIndex()) {
@@ -208,9 +200,6 @@ void PreferenceDialog::Private::defaultInterfaceOptions()
     interfaceOptions.m_indentationStep->changeValue(10.0);
     interfaceOptions.m_gridColor->setColor(Qt::lightGray);
     interfaceOptions.m_pageBorderColor->setColor(Qt::red);
-#if 0 // UNDOREDOLIMIT
-    m_undoRedoLimit->setValue(30);
-#endif
 #if 0 // KSPREAD_COMPLETION_MODE_SETTING
     typeCompletion->setCurrentIndex(3);
 #endif
@@ -451,14 +440,6 @@ void PreferenceDialog::unitChanged(int index)
     d->interfaceOptions.m_indentationStep->setUnit(unit);
 }
 
-
-#if 0 // UNDOREDOLIMIT
-m_oldNbRedo = config->group("Misc").readEntry("UndoRedo", m_oldNbRedo);
-
-m_undoRedoLimit = new KIntNumInput(m_oldNbRedo, tmpQGroupBox);
-m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
-m_undoRedoLimit->setRange(10, 60, 1);
-#endif
 
 #if 0 // KSPREAD_COMPLETION_MODE_SETTING
 QLabel *label = new QLabel(i18n("&Completion mode:"), tmpQGroupBox);

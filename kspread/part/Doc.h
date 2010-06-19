@@ -72,9 +72,6 @@ class KSPREAD_EXPORT Doc : public KoDocument
 {
     Q_OBJECT
     Q_PROPERTY(int syntaxVersion READ syntaxVersion)
-#if 0 // UNDOREDOLIMIT
-    Q_PROPERTY(int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit)
-#endif
 
 public:
     /**
@@ -175,22 +172,10 @@ public:
 
     virtual void addView(KoView *_view);
 
-    /**
-     * updates all properties after zoom changed
-     */
-    void newZoomAndResolution(bool updateViews, bool forPrint);
-
     bool docData(QString const & xmlTag, QDomElement & data);
 
-    /**
-     * \ingroup Painting
-     */
+    // reimplemented; paints the thumbnail
     virtual void paintContent(QPainter & painter, const QRect & rect);
-
-    /**
-     * \ingroup Painting
-     */
-    void paintContent(QPainter & painter, const QRect & rect, Sheet * sheet, bool drawCursor = true);
 
     void initConfig();
     void saveConfig();
@@ -206,16 +191,8 @@ public:
     void loadConfigFromFile();
     bool configLoadFromFile() const;
 
-    // repaint (update) all views
-    void repaint(const QRectF&);
 
     SheetAccessModel *sheetAccessModel() const;
-
-#if 0 // UNDOREDOLIMIT
-    int undoRedoLimit() const;
-    void setUndoRedoLimit(int _val);
-#endif
-
 public Q_SLOTS:
     void refreshInterface();
 
@@ -254,22 +231,9 @@ private:
     class Private;
     Private * const d;
 
-    /* helper functions for painting */
-
     /**
-     * \ingroup Painting
-     * This function is called at the end of an operation and is responsible
-     * for painting any changes that have occurred in the meantime
+     * \ingroup NativeFormat
      */
-    void paintUpdates();
-
-    /**
-     * \ingroup Painting
-     */
-    void paintRegion(QPainter& painter, const QRectF &viewRegion,
-                     View* view, const QRect &paintRegion,
-                     const Sheet* sheet);
-
     void loadPaper(KoXmlElement const & paper);
 
     /**

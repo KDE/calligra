@@ -218,9 +218,6 @@ void Doc::saveConfig()
     if (isEmbedded() || !isReadWrite())
         return;
     KSharedConfigPtr config = Factory::global().config();
-#ifdef KSPREAD_DOC_ZOOM
-    config->group("Parameters").writeEntry("Zoom", zoomInPercent());
-#endif // KSPREAD_DOC_ZOOM
 }
 
 void Doc::initConfig()
@@ -229,16 +226,6 @@ void Doc::initConfig()
 
     const int page = config->group("KSpread Page Layout").readEntry("Default unit page", 0);
     setUnit(KoUnit((KoUnit::Unit) page));
-
-#if 0 // UNDOREDOLIMIT
-    const int undo = config->group("Misc").readEntry("UndoRedo", 30);
-    setUndoRedoLimit(undo);
-#endif
-
-#ifdef KSPREAD_DOC_ZOOM
-    const int zoom = config->group("Parameters").readEntry("Zoom", 100);
-    setZoomAndResolution(zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
-#endif // KSPREAD_DOC_ZOOM
 }
 
 int Doc::syntaxVersion() const
@@ -708,27 +695,13 @@ QStringList Doc::spellListIgnoreAll() const
     return d->spellListIgnoreAll;
 }
 
-void Doc::newZoomAndResolution(bool updateViews, bool /*forPrint*/)
-{
-    /*    layout();
-        updateAllFrames();*/
-    if (updateViews) {
-        emit sig_refreshView();
-    }
-}
-
 void Doc::paintContent(QPainter& painter, const QRect& rect)
 {
-    paintContent(painter, rect, map()->sheet(0), false);
-}
-
-void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* sheet, bool drawCursor)
-{
-    Q_UNUSED(drawCursor);
-
     if (rect.isEmpty()) {
         return;
     }
+    Sheet *const sheet = d->map->sheet(0);
+
     const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
     QPixmap thumbnail(pageLayout.width, pageLayout.height);
     thumbnail.fill(Qt::white);
@@ -748,49 +721,6 @@ void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* sheet, bool 
 
     // The pixmap gets scaled to fit the rectangle.
     painter.drawPixmap(rect & QRect(0, 0, 100, 100), thumbnail);
-}
-
-void Doc::paintUpdates()
-{
-    foreach(KoView* view, views()) {
-        static_cast<View *>(view)->paintUpdates();
-    }
-}
-
-void Doc::paintRegion(QPainter &painter, const QRectF &viewRegion,
-                      View* view, const QRect &cellRegion, const Sheet* sheet)
-{
-    // cellRegion has cell coordinates (col,row) while viewRegion has
-    // world coordinates.  cellRegion is the cells to update and
-    // viewRegion is the area actually onscreen.
-
-    if (cellRegion.left() <= 0 || cellRegion.top() <= 0)
-        return;
-
-    const QRectF viewRegionF(viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height());
-
-    // Get the world coordinates of the upper left corner of the
-    // cellRegion The view is 0, when cellRegion is called from
-    // paintContent, which itself is only called, when we should paint
-    // the output for INACTIVE embedded view.  If inactive embedded,
-    // then there is no view and we alwas start at top/left, so the
-    // offset is 0.
-    //
-    QPointF topLeft;
-    if (view == 0)   //Most propably we are embedded and inactive, so no offset
-        topLeft = QPointF(sheet->columnPosition(cellRegion.left()),
-                          sheet->rowPosition(cellRegion.top()));
-    else
-        topLeft = QPointF(sheet->columnPosition(cellRegion.left()) - view->canvasWidget()->xOffset(),
-                          sheet->rowPosition(cellRegion.top()) - view->canvasWidget()->yOffset());
-
-    SheetView sheetView(sheet);   // FIXME Stefan: make member, otherwise cache lost
-    if (view) {
-        sheetView.setPaintDevice(view->canvasWidget());
-        sheetView.setViewConverter(view->zoomHandler());
-    }
-    sheetView.setPaintCellRange(cellRegion);
-    sheetView.paintCells(view ? view->canvasWidget() : 0, painter, viewRegionF, topLeft);
 }
 
 void Doc::refreshInterface()
@@ -832,37 +762,8 @@ bool Doc::configLoadFromFile() const
     return d->configLoadFromFile;
 }
 
-void Doc::repaint(const QRectF& rect)
-{
-    QRectF r;
-    foreach(KoView* koview, views()) {
-        const View* view = static_cast<View*>(koview);
-        Canvas* canvas = view->canvasWidget();
-
-        r = view->zoomHandler()->documentToView(rect);
-        r.translate(-canvas->xOffset() * view->zoomHandler()->zoomedResolutionX(),
-                    -canvas->yOffset() * view->zoomHandler()->zoomedResolutionY());
-        canvas->update(r.toRect());
-    }
-}
-
 SheetAccessModel *Doc::sheetAccessModel() const
 {
     return d->sheetAccessModel;
 }
-
-#if 0 // UNDOREDOLIMIT
-int Doc::undoRedoLimit() const
-{
-    return d->commandHistory->undoLimit();
-}
-
-void Doc::setUndoRedoLimit(int val)
-{
-    d->commandHistory->setUndoLimit(val);
-    d->commandHistory->setRedoLimit(val);
-}
-#endif
-
 #include "Doc.moc"
-
