@@ -234,8 +234,8 @@ bool Map::isReadWrite() const
 bool Map::completeLoading(KoStore *store)
 {
     Q_UNUSED(store);
-    // update all dependencies and recalc all cells
-    addDamage(new WorkbookDamage(this, WorkbookDamage::Formula | WorkbookDamage::Value));
+    // Initial build of all cell dependencies.
+    d->dependencyManager->updateAllDependencies(this);
     return true;
 }
 
@@ -849,7 +849,8 @@ void Map::increaseLoadedRowsCounter(int number)
 
 bool Map::isLoading() const
 {
-    return d->isLoading;
+    // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
+    return d->isLoading || (d->doc && d->doc->isLoading());
 }
 
 int Map::syntaxVersion() const

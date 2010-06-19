@@ -117,10 +117,6 @@ public:
     static QList<Doc*> s_docs;
     static int s_docId;
 
-    // true if loading is in process, otherwise false.
-    // This flag is used to avoid updates etc. during loading.
-    bool isLoading;
-
     // document properties
     bool configLoadFromFile : 1;
     QStringList spellListIgnoreAll;
@@ -151,8 +147,6 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 
     setComponentData(Factory::global(), false);
     setTemplateType("kspread_template");
-
-    d->isLoading = false;
 
     d->sheetAccessModel = new SheetAccessModel(d->map);
 
@@ -245,12 +239,6 @@ void Doc::initConfig()
     const int zoom = config->group("Parameters").readEntry("Zoom", 100);
     setZoomAndResolution(zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
 #endif // KSPREAD_DOC_ZOOM
-}
-
-bool Doc::isLoading() const
-{
-    // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
-    return d->isLoading || KoDocument::isLoading();
 }
 
 int Doc::syntaxVersion() const
@@ -450,7 +438,6 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
     dt.start();
 
     emit sigProgress(0);
-    d->isLoading = true;
     d->spellListIgnoreAll.clear();
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -483,7 +470,6 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
 
     // all <sheet:sheet> goes to workbook
     if (!map()->loadOdf(body, context)) {
-        d->isLoading = false;
         map()->deleteLoadingInfo();
         return false;
     }
@@ -506,13 +492,11 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     dt.start();
 
     emit sigProgress(0);
-    d->isLoading = true;
     d->spellListIgnoreAll.clear();
     // <spreadsheet>
     KoXmlElement spread = doc.documentElement();
 
     if (spread.attribute("mime") != "application/x-kspread" && spread.attribute("mime") != "application/vnd.kde.kspread") {
-        d->isLoading = false;
         setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime")));
         return false;
     }
@@ -575,7 +559,6 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     if (!styles.isNull()) {
         if (!map()->styleManager()->loadXML(styles)) {
             setErrorMessage(i18n("Styles cannot be loaded."));
-            d->isLoading = false;
             return false;
         }
     }
@@ -584,11 +567,9 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     KoXmlElement mymap = spread.namedItem("map").toElement();
     if (mymap.isNull()) {
         setErrorMessage(i18n("Invalid document. No map tag."));
-        d->isLoading = false;
         return false;
     }
     if (!map()->loadXML(mymap)) {
-        d->isLoading = false;
         return false;
     }
 
@@ -698,8 +679,6 @@ void Doc::loadPaper(KoXmlElement const & paper)
 bool Doc::completeLoading(KoStore* store)
 {
     kDebug(36001) << "------------------------ COMPLETING --------------------";
-
-    d->isLoading = false;
 
     setModified(false);
     bool ok = map()->completeLoading(store);

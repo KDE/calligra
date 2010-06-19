@@ -528,7 +528,7 @@ void Canvas::inputMethodEvent(QInputMethodEvent *event)
 
 void Canvas::paintEvent(QPaintEvent* event)
 {
-    if (d->view->doc()->isLoading() || d->view->isLoading())
+    if (d->view->doc()->map()->isLoading() || d->view->isLoading())
         return;
 
     register Sheet * const sheet = activeSheet();

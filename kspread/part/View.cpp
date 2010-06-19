@@ -1957,8 +1957,9 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->statusBarOpTimer.setSingleShot(true);
     d->statusBarOpTimer.start(250);
 
-    if (!d->loading)
+    if (!d->loading && !doc()->map()->isLoading()) {
         doc()->map()->addDamage(new SelectionDamage(changedRegion));
+    }
     d->rowHeader->update();
     d->columnHeader->update();
     d->selectAllButton->update();

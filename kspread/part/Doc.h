@@ -180,11 +180,6 @@ public:
      */
     void newZoomAndResolution(bool updateViews, bool forPrint);
 
-    /**
-     * @return true if the document is currently loading.
-     */
-    bool isLoading() const;
-
     bool docData(QString const & xmlTag, QDomElement & data);
 
     /**
