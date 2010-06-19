@@ -757,8 +757,6 @@ void View::initView()
     d->tabScrollBarLayout->setMargin(0);
     d->tabScrollBarLayout->setSpacing(0);
     d->tabBar = new TabBar(0);
-    // FIXME Stefan: Adjust KoTabBar to use QWidget::layoutDirection instead.
-    d->tabBar->setReverseLayout(QApplication::isRightToLeft());
     d->tabScrollBarLayout->addWidget(d->tabBar, 0, 0);
     d->horzScrollBar = new QScrollBar(0);
     d->canvasController->setHorizontalScrollBar(d->horzScrollBar);

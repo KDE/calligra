@@ -91,12 +91,6 @@ public:
     bool readOnly() const;
 
     /**
-     * Returns true if tabs and scroll buttons will be laid out in a mirrored
-     * (right to left) fashion.
-     */
-    bool reverseLayout() const;
-
-    /**
      * Returns all the tab as list of strings.
      */
     QStringList tabs() const;
@@ -148,12 +142,6 @@ public slots:
     void setReadOnly(bool ro);
 
     /**
-     * If reverse is true, dialogs and scroll buttonswidgets will be laid out in a mirrored
-     * as if the sheet is in right to left languages (such as Arabic and Hebrew)
-     */
-    void setReverseLayout(bool reverse);
-
-    /**
      * Adds a tab to the tab bar.
      */
     void addTab(const QString& text);
@@ -184,7 +172,7 @@ public slots:
 
     /**
      * Scrolls one tab back. Does nothing if the leftmost tab (rightmost tab
-     * when reverseLayout is true) is already the first tab.
+     * for right-to-left layouts) is already the first tab.
      *
      * \sa canScrollBack
      */
@@ -192,7 +180,7 @@ public slots:
 
     /**
      * Scrolls one tab forward. Does nothing if the rightmost tab (leftmost tab
-     * when reverseLayout is true) is already the last tab.
+     * for right-to-left layouts) is already the last tab.
      *
      * \sa canScrollForward
      */
@@ -200,7 +188,7 @@ public slots:
 
     /**
      * Scrolls to the first tab. Does nothing if the leftmost tab (rightmost tab
-     * when reverseLayout is true) is already the first tab.
+     * for right-to-left layouts) is already the first tab.
      *
      * \sa canScrollBack
      */
@@ -208,7 +196,7 @@ public slots:
 
     /**
      * Scrolls to the last tab. Does nothing if the rightmost tab (leftmost tab
-     * when reverseLayout is true) is already the last tab.
+     * for right-to-left layouts) is already the last tab.
      *
      * \sa canScrollForward
      */
