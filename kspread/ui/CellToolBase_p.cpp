@@ -57,6 +57,7 @@
 #include "commands/StyleCommand.h"
 
 // ui
+#include "ui/CellToolOptionWidget.h"
 #include "ui/SheetView.h"
 
 // KOffice
@@ -83,47 +84,12 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
     const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
-        userInput->setPlainText(theCell.displayText());
+        optionWidget->editor()->setPlainText(theCell.displayText());
     } else if (q->selection()->activeSheet()->isProtected() && style.hideAll()) {
-        userInput->clear();
+        optionWidget->editor()->clear();
     } else {
-        userInput->setPlainText(theCell.userInput());
+        optionWidget->editor()->setPlainText(theCell.userInput());
     }
-}
-
-void CellToolBase::Private::updateLocationComboBox()
-{
-    QString address;
-    const QList< QPair<QRectF, QString> > names = q->selection()->activeSheet()->cellStorage()->namedAreas(*q->selection());
-    {
-        QRect range;
-        if (q->selection()->isSingular()) range = QRect(q->selection()->marker(), QSize(1, 1));
-        else range = q->selection()->lastRange();
-        for (int i = 0; i < names.size(); i++) {
-            if (names[i].first.toRect() == range) {
-                address = names[i].second;
-            }
-        }
-    }
-    if (address.isEmpty()) {
-        if (q->selection()->activeSheet()->getLcMode()) {
-            if (q->selection()->isSingular()) {
-                address = 'L' + QString::number(q->selection()->marker().y()) +
-                        'C' + QString::number(q->selection()->marker().x());
-            } else {
-                const QRect lastRange = q->selection()->lastRange();
-                address = QString::number(lastRange.bottom() - lastRange.top() + 1) + "Lx";
-                if (Region::Range(lastRange).isRow())
-                    address += QString::number(q->maxCol() - lastRange.left() + 1) + 'C';
-                else
-                    address += QString::number(lastRange.right() - lastRange.left() + 1) + 'C';
-            }
-        } else {
-            address = q->selection()->name();
-        }
-    }
-    if (address != locationComboBox->lineEdit()->text())
-        locationComboBox->lineEdit()->setText(address);
 }
 
 #define ACTION_EXEC( name, command ) { \
@@ -214,8 +180,8 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     const QList<KAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
-    formulaButton->setEnabled(enable);
-    userInput->setEnabled(enable);
+    optionWidget->formulaButton()->setEnabled(enable);
+    optionWidget->editor()->setEnabled(enable);
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
@@ -498,11 +464,11 @@ void CellToolBase::Private::processDeleteKey(QKeyEvent* event)
 
 void CellToolBase::Private::processF2Key(QKeyEvent*  event)
 {
-    userInput->setFocus();
+    optionWidget->editor()->setFocus();
     if (q->editor()) {
-        QTextCursor textCursor = userInput->textCursor();
+        QTextCursor textCursor = optionWidget->editor()->textCursor();
         textCursor.setPosition(q->editor()->cursorPosition());
-        userInput->setTextCursor(textCursor);
+        optionWidget->editor()->setTextCursor(textCursor);
     }
     event->accept(); // QKeyEvent
 }
@@ -513,9 +479,9 @@ void CellToolBase::Private::processF4Key(QKeyEvent* event)
     */
     if (q->editor()) {
         q->editor()->handleKeyPressEvent(event);
-        QTextCursor textCursor = userInput->textCursor();
+        QTextCursor textCursor = optionWidget->editor()->textCursor();
         textCursor.setPosition(q->editor()->cursorPosition());
-        userInput->setTextCursor(textCursor);
+        optionWidget->editor()->setTextCursor(textCursor);
     }
 }
 
@@ -1413,16 +1379,3 @@ bool CellToolBase::Private::testListChoose(Selection *selection) const
     }
     return false;
 }
-
-void CellToolBase::Private::relayoutDocker(bool wide)
-{
-    // user input is moved accordingly to the "wide" param, the rest stays in one place
-    if (userInput->hasFocus()) return;  // do nothing while the user input has focus
-    widgetLayout->removeWidget(userInput);
-    if (wide)
-        widgetLayout->addWidget(userInput, 0, 3);
-    else
-        widgetLayout->addWidget(userInput, 1, 0, 1, 5);
-    hasWideLayout = wide;
-}
-

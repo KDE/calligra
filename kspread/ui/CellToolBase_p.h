@@ -52,6 +52,7 @@ class KReplace;
 
 namespace KSpread
 {
+class CellToolOptionWidget;
 class Sheet;
 
 class CellToolBase::Private
@@ -64,12 +65,8 @@ public:
     // Insert special character dialog
     CharSelectDia* specialCharDialog;
     // Option widget elements
-    QGridLayout *widgetLayout;
-    ExternalEditor *userInput;
+    CellToolOptionWidget *optionWidget;
     QPointer<FormulaDialog> formulaDialog;
-    QToolButton *formulaButton, *applyButton, *cancelButton;
-    LocationComboBox* locationComboBox;
-    bool hasWideLayout;
     // Actions with extended names for the popup menu
     QHash<QString, QAction*> popupMenuActions;
     // Initialization flag.
@@ -103,7 +100,6 @@ public:
 
 public:
     void updateEditor(const Cell& cell);
-    void updateLocationComboBox();
     void updateActions(const Cell& cell);
     void setProtectedActionsEnabled(bool enable);
 
@@ -156,8 +152,6 @@ public:
     QList<QAction*> popupActionList() const;
     void createPopupMenuActions();
 
-    /** Relayout the tool option docker. */
-    void relayoutDocker(bool wide);
 
     /**
      * \ingroup UI

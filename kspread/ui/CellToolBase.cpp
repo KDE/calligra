@@ -34,6 +34,7 @@
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
+#include "CellToolOptionWidget.h"
 #include "CellView.h"
 #include "Damages.h"
 #include "database/Database.h"
@@ -146,7 +147,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->cellEditor = 0;
     d->formulaDialog = 0;
     d->specialCharDialog = 0;
-    d->locationComboBox = 0;
+    d->optionWidget = 0;
     d->initialized = false;
     d->popupListChoose = 0;
 
@@ -1113,55 +1114,15 @@ void CellToolBase::init()
 
 QWidget* CellToolBase::createOptionWidget()
 {
-    QWidget* widget = new QWidget(canvas()->canvasWidget());
-    d->widgetLayout = new QGridLayout(widget);
-
-    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-
-    d->userInput = new ExternalEditor;
-    d->userInput->setCellTool(this);
-
-    d->formulaButton = new QToolButton(widget);
-    d->formulaButton->setText(i18n("Formula"));
-    d->formulaButton->setAutoRaise(true);
-    d->formulaButton->setDefaultAction(action("insertFormula"));
-
-    d->applyButton = new QToolButton(widget);
-    d->applyButton->setText(i18n("Apply"));
-    d->applyButton->setToolTip(i18n("Apply changes"));
-    d->applyButton->setAutoRaise(true);
-    d->applyButton->setIcon(KIcon("dialog-ok"));
-    d->applyButton->setEnabled(false);
-
-    d->cancelButton = new QToolButton(widget);
-    d->cancelButton->setText(i18n("Cancel"));
-    d->cancelButton->setToolTip(i18n("Discard changes"));
-    d->cancelButton->setAutoRaise(true);
-    d->cancelButton->setIcon(KIcon("dialog-cancel"));
-    d->cancelButton->setEnabled(false);
-
-    d->locationComboBox = new LocationComboBox(this, widget);
-    d->locationComboBox->setMinimumWidth(100);
-
-    d->widgetLayout->addWidget(d->formulaButton, 0, 0);
-    d->widgetLayout->addWidget(d->applyButton, 0, 1);
-    d->widgetLayout->addWidget(d->cancelButton, 0, 2);
-    d->widgetLayout->addWidget(d->locationComboBox, 0, 4);
-    d->widgetLayout->setColumnStretch(3, 1);
-    d->relayoutDocker(false);
-
-    // install an event filter to catch resize events
-    widget->installEventFilter(this);
+    d->optionWidget = new CellToolOptionWidget(this);
 
     connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
-            d->locationComboBox, SLOT(slotAddAreaName(const QString&)));
+            d->optionWidget->locationComboBox(), SLOT(slotAddAreaName(const QString&)));
     connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
-            d->locationComboBox, SLOT(slotRemoveAreaName(const QString&)));
-    connect(d->applyButton, SIGNAL(clicked(bool)), d->userInput, SLOT(applyChanges()));
-    connect(d->cancelButton, SIGNAL(clicked(bool)), d->userInput, SLOT(discardChanges()));
+            d->optionWidget->locationComboBox(), SLOT(slotRemoveAreaName(const QString&)));
 
     selection()->update(); // initialize the location combobox
-    return widget;
+    return d->optionWidget;
 }
 
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
@@ -1259,7 +1220,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 void CellToolBase::selectionChanged(const Region& region)
 {
     Q_UNUSED(region);
-    if (!d->locationComboBox) {
+    if (!d->optionWidget) {
         return;
     }
     // if we're in ref viewing mode, do nothing here
@@ -1292,7 +1253,6 @@ void CellToolBase::selectionChanged(const Region& region)
         return;
     }
     d->updateEditor(cell);
-    d->updateLocationComboBox();
     d->updateActions(cell);
     if (selection()->referenceSelectionMode() && editor()) {
         editor()->updateChoice();
@@ -1355,11 +1315,11 @@ bool CellToolBase::createEditor(bool clear, bool focus)
                                        selection()->activeSheet()->map()->settings()->captureAllArrowKeys());
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
-                d->userInput, SLOT(setText(const QString &)));
-        connect(d->userInput, SIGNAL(textChanged(const QString &)),
+                d->optionWidget->editor(), SLOT(setText(const QString &)));
+        connect(d->optionWidget->editor(), SIGNAL(textChanged(const QString &)),
                 d->cellEditor, SLOT(setText(const QString &)));
-        d->applyButton->setEnabled(true);
-        d->cancelButton->setEnabled(true);
+        d->optionWidget->applyButton()->setEnabled(true);
+        d->optionWidget->cancelButton()->setEnabled(true);
 
         double w = cell.width();
         double h = cell.height();
@@ -1448,23 +1408,9 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->applyButton->setEnabled(false);
-    d->cancelButton->setEnabled(false);
+    d->optionWidget->applyButton()->setEnabled(false);
+    d->optionWidget->cancelButton()->setEnabled(false);
     canvas()->canvasWidget()->setFocus();
-}
-
-bool CellToolBase::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() != QEvent::Resize)
-        return QObject::eventFilter(obj, event);
-    QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
-    // relayout the tool docker if needed
-    QSize s = resizeEvent->size();
-    bool needWide = (s.width() > 2 * s.height());
-    if (s.width() < 400) needWide = false;
-    if (needWide != d->hasWideLayout)
-        d->relayoutDocker(needWide);
-    return QObject::eventFilter(obj, event);
 }
 
 void CellToolBase::activeSheetChanged(Sheet* sheet)
@@ -1489,7 +1435,7 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
 
 void CellToolBase::updateEditor()
 {
-    if (!d->locationComboBox) {
+    if (!d->optionWidget) {
         return;
     }
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
@@ -1507,14 +1453,14 @@ void CellToolBase::focusEditorRequested()
         if (selection()->lastEditorWithFocus() == Selection::EmbeddedEditor) {
             editor()->setFocus();
         } else {
-            d->userInput->setFocus();
+            d->optionWidget->editor()->setFocus();
         }
     }
 }
 
 void CellToolBase::applyUserInput(bool expandMatrix)
 {
-    QString text = d->userInput->toPlainText();
+    QString text = d->optionWidget->editor()->toPlainText();
     if (!text.isEmpty() && text.at(0) == '=') {
         //a formula
         int openParenthese = text.count('(');
@@ -1545,7 +1491,7 @@ void CellToolBase::applyUserInput(bool expandMatrix)
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
-    if (!d->locationComboBox) {
+    if (!d->optionWidget) {
         return;
     }
     d->setProtectedActionsEnabled(readWrite);
@@ -1553,7 +1499,7 @@ void CellToolBase::documentReadWriteToggled(bool readWrite)
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
-    if (!d->locationComboBox) {
+    if (!d->optionWidget) {
         return;
     }
     d->setProtectedActionsEnabled(!protect);
