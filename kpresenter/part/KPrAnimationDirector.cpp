@@ -444,7 +444,12 @@ void KPrAnimationDirector::previousStep()
         if ( m_pageIndex > 0 ) {
             --m_pageIndex;
             updateActivePage( m_pages[m_pageIndex] );
-            m_stepIndex = m_animations.size();
+            if(hasAnimation()) {
+                m_stepIndex = m_animations.size() - 1;
+            }
+            else {
+                m_stepIndex = m_animations.size();
+            }
             updatePageAnimation();
             // trigger repaint
             m_canvas->update();
