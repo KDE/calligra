@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
-#include <KoZoomController.h>
+#include <KoZoomHandler.h>
 #include <QApplication>
 #include <QList>
 #include <QFile>
@@ -1097,7 +1097,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         // KSpread 200% gives zoom() = 2.5, this in GNumeric = 250%
         tmp = gnumeric_doc.createElement("gmr:Zoom");
         if (view)
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(view->zoomController()->zoomAction()->effectiveZoom())));
+            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(view->zoomHandler()->zoom())));
         else
             tmp.appendChild(gnumeric_doc.createTextNode("1.0"));
         sheet.appendChild(tmp);
