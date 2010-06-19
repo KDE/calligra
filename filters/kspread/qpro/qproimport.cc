@@ -28,6 +28,7 @@
 #include <kspread/part/Doc.h>
 #include <kspread/Sheet.h>
 #include <kspread/Cell.h>
+#include <kspread/Value.h>
 #include <kspread/Map.h>
 
 #include <qproimport.h>
