@@ -884,8 +884,7 @@ public:
 signals:
     void sig_updateView(Sheet *_sheet);
     void sig_updateView(Sheet *_sheet, const Region&);
-    void sig_updateColumnHeader(Sheet *_sheet);
-    void sig_updateRowHeader(Sheet *_sheet);
+
     /**
      * @see setSheetName
      */

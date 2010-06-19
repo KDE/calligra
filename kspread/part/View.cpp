@@ -1166,10 +1166,6 @@ void View::addSheet(Sheet * _t)
     connect(_t->print(), SIGNAL(sig_updateView(Sheet*)), SLOT(slotUpdateView(Sheet*)));
     connect(_t, SIGNAL(sig_updateView(Sheet *, const Region&)),
             SLOT(slotUpdateView(Sheet*, const Region&)));
-    connect(_t, SIGNAL(sig_updateColumnHeader(Sheet *)),
-            SLOT(slotUpdateColumnHeader(Sheet *)));
-    connect(_t, SIGNAL(sig_updateRowHeader(Sheet *)),
-            SLOT(slotUpdateRowHeader(Sheet *)));
     connect(_t, SIGNAL(sig_nameChanged(Sheet*, const QString&)),
             this, SLOT(slotSheetRenamed(Sheet*, const QString&)));
     connect(_t, SIGNAL(sig_SheetHidden(Sheet*)),
@@ -1818,24 +1814,6 @@ void View::slotUpdateView(Sheet * _sheet, const Region& region)
     d->activeSheet->setRegionPaintDirty(region);
 }
 
-void View::slotUpdateColumnHeader(Sheet * _sheet)
-{
-    // Do we display this sheet ?
-    if (_sheet != d->activeSheet)
-        return;
-
-    d->columnHeader->update();
-}
-
-void View::slotUpdateRowHeader(Sheet *_sheet)
-{
-    // Do we display this sheet ?
-    if (_sheet != d->activeSheet)
-        return;
-
-    d->rowHeader->update();
-}
-
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
 {
     if (!changedRegion.isValid())
@@ -2128,6 +2106,9 @@ void View::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Sheet) {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            if (sheetDamage->sheet() != d->activeSheet) {
+                continue;
+            }
             kDebug(36007) << "Processing\t" << *sheetDamage;
 
             if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {

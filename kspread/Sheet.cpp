@@ -878,14 +878,14 @@ void Sheet::removeRows(int row, int number)
 void Sheet::emitHideRow()
 {
     emit visibleSizeChanged();
-    emit sig_updateRowHeader(this);
+    map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     emit sig_updateView(this);
 }
 
 void Sheet::emitHideColumn()
 {
     emit visibleSizeChanged();
-    emit sig_updateColumnHeader(this);
+    map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
     emit sig_updateView(this);
 }
 
@@ -3447,7 +3447,7 @@ void Sheet::emit_updateRow(RowFormat *_format, int _row, bool repaint)
         //So add that region of the sheet to the paint dirty list.
         setRegionPaintDirty(Region(QRect(QPoint(0, _row), QPoint(KS_colMax, KS_rowMax))));
 
-        emit sig_updateRowHeader(this);
+        map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
         emit sig_updateView(this);
     }
 }
@@ -3463,7 +3463,7 @@ void Sheet::emit_updateColumn(ColumnFormat *_format, int _column)
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
     setRegionPaintDirty(Region(QRect(QPoint(_column, 1), QPoint(KS_colMax, KS_rowMax))));
 
-    emit sig_updateColumnHeader(this);
+    map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
     emit sig_updateView(this);
 }
 

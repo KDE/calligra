@@ -342,18 +342,6 @@ public slots:
      */
     void slotUpdateView(Sheet *_sheet, const Region&);
 
-    /**
-     * Triggers a repaint of the column header.
-     * \param _sheet action is only taken, if this matches the active sheet
-     */
-    void slotUpdateColumnHeader(Sheet *_sheet);
-
-    /**
-     * Triggers a repaint of the row header.
-     * \param _sheet action is only taken, if this matches the active sheet
-     */
-    void slotUpdateRowHeader(Sheet *_sheet);
-
     /** Reacts on selection changes. */
     void slotChangeSelection(const Region&);
 
