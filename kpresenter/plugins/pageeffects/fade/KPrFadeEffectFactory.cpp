@@ -23,6 +23,7 @@
 #include <klocale.h>
 
 #include "KPrFadeCrossStrategy.h"
+#include "KPrFadeOverColorStrategy.h"
 
 #define FadeEffectId "FadeEffect"
 
@@ -30,6 +31,7 @@ KPrFadeEffectFactory::KPrFadeEffectFactory()
 : KPrPageEffectFactory(FadeEffectId, i18n("Fade"))
 {
     addStrategy(new KPrFadeCrossStrategy());
+    addStrategy(new KPrFadeOverColorStrategy());
 }
 
 KPrFadeEffectFactory::~KPrFadeEffectFactory()
@@ -37,7 +39,8 @@ KPrFadeEffectFactory::~KPrFadeEffectFactory()
 }
 
 static const char* s_subTypes[] = {
-    I18N_NOOP("Crossfade")
+    I18N_NOOP("Crossfade"),
+    I18N_NOOP("Fade over Color")
 };
 
 QString KPrFadeEffectFactory::subTypeName(int subType) const

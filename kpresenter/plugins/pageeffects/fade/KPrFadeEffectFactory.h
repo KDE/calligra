@@ -31,7 +31,8 @@ public:
     virtual QString subTypeName(int subType) const;
 
     enum SubType {
-        CrossFade
+        CrossFade,
+        FadeOverColor
     };
 };
 
