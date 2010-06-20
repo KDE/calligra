@@ -23,6 +23,7 @@
 #include <QWidget>
 
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KoGenStyle.h>
 
 KPrPageEffectStrategy::KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse, bool graphicsView )
