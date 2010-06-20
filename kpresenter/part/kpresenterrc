@@ -1,7 +1,7 @@
 [koffice]
 ColorSpacePlugins=
 ColorSpacePluginsDisabled=kritakscolorspacesplugin,krita_ctlcs_plugin,kolcmsengine
-FlakePluginsDisabled=
+FlakePluginsDisabled=kexirelationdesignshape
 TextEditingPluginsDisabled=thesaurustool,spellcheck
 
 [DockerManager]                                                               
