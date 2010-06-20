@@ -94,6 +94,17 @@ public:
     QString styleName;
 };
 
+//! Data structure collecting information about master
+class PptxSlideMasterPageProperties
+{
+public:
+    PptxSlideMasterPageProperties();
+    void addDrawingPageProperty(const QByteArray& property, const QByteArray& value);
+    void saveDrawingPageProperties(KoGenStyle* style);
+private:
+    QMap<QByteArray, QByteArray> m_drawingPageProperties;
+};
+
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
 class PptxXmlSlideReader : public MSOOXML::MsooXmlCommonReader
 {
@@ -163,6 +174,7 @@ public:
         const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
         PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
         PptxSlideLayoutProperties* _slideLayoutProperties,
+        PptxSlideMasterPageProperties* _slideMasterPageProperties,
         MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport* import;
     const QString path;
@@ -172,6 +184,8 @@ public:
     PptxXmlSlideReader::Type type;
     PptxSlideProperties* slideProperties;
     PptxSlideLayoutProperties* slideLayoutProperties;
+    PptxSlideMasterPageProperties* slideMasterPageProperties;
+    QString pageDrawStyleName; //!< written in read_sldInternal()
 };
 
 #endif

@@ -1636,6 +1636,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
     m_fillImageRenderingStyleStretch = true;
     m_currentDrawStyle.addProperty("style:repeat", QLatin1String("stretch"));
 
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideMaster) {
+        // pass the properties from master to slides
+        m_context->slideMasterPageProperties->addDrawingPageProperty("style:repeat", "stretch");
+        m_context->slideMasterPageProperties->addDrawingPageProperty("draw:fill", "bitmap");
+        m_context->slideMasterPageProperties->addDrawingPageProperty("draw:fill-image-name", "A1");
+        m_context->slideMasterPageProperties->addDrawingPageProperty("presentation:visibility", "visible");
+    }
+#endif
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;

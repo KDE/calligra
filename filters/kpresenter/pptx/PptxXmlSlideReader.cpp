@@ -100,6 +100,26 @@ PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
     qDeleteAll(placeholders);
 }
 
+PptxSlideMasterPageProperties::PptxSlideMasterPageProperties()
+{
+}
+
+void PptxSlideMasterPageProperties::addDrawingPageProperty(
+    const QByteArray& property, const QByteArray& value)
+{
+    kDebug() << "Inserting" << property << "->" << value;
+    m_drawingPageProperties.insert(property, value);
+}
+
+void PptxSlideMasterPageProperties::saveDrawingPageProperties(KoGenStyle* style)
+{
+    for (QMap<QByteArray, QByteArray>::ConstIterator it = m_drawingPageProperties.constBegin();
+         it != m_drawingPageProperties.constEnd(); ++it)
+    {
+        style->addProperty(QString(it.key()), it.value().constData());
+    }
+}
+
 // -------------------
 
 PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
@@ -107,11 +127,13 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     uint _slideNumber, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
     PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
     PptxSlideLayoutProperties* _slideLayoutProperties,
+    PptxSlideMasterPageProperties* _slideMasterPageProperties,
     MSOOXML::MsooXmlRelationships& _relationships)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(&_themes), type(_type),
-        slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties)
+        slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
+        slideMasterPageProperties(_slideMasterPageProperties)
 {
 }
 
@@ -360,6 +382,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         m_currentDrawStyle = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
         m_currentDrawStyle.addProperty("presentation:background-visible", true);   // CASE #P111
         m_currentDrawStyle.addProperty("presentation:background-objects-visible", true);   // CASE #P112
+        m_context->slideMasterPageProperties->saveDrawingPageProperties(&m_currentDrawStyle);
+    }
+    else if (m_context->type == SlideMaster) {
+        m_currentDrawStyle = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
+        m_currentDrawStyle.addProperty("presentation:visibility", "visible");
+        m_currentDrawStyle.addProperty("presentation:background-objects-visible", false);
     }
     else if (m_context->type == SlideLayout) {
         m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
@@ -401,6 +429,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber+1)); //optional; CASE #P303
                 body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
                 //! @todo presentation:use-date-time-name //optional; CASE #P304
+
+/*
+    <style:style style:family="drawing-page" style:name="a393">
+      <style:drawing-page-properties draw:fill="bitmap" draw:fill-image-name="a392" style:repeat="readerh".
+      presentation:visibility="visible" draw:background-size="border" presentation:background-objects-visible="true".
+      presentation:background-visible="true" presentation:display-header="false" presentation:display-footer="false" presentation:display-page-number="false".
+      presentation:display-date-time="false"/>
+    </style:style>
+*/
+                
                 const QString currentPageStyleName(mainStyles->insert(m_currentDrawStyle, "dp"));
                 body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
                 kDebug() << "currentPageStyleName:" << currentPageStyleName;
@@ -417,6 +455,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                 (void)drawPageBuf.releaseWriter();
                 body->endElement(); //draw:page
             }
+        }
+        else if (m_context->type == SlideMaster) {
+            m_context->pageDrawStyleName = mainStyles->insert(m_currentDrawStyle, "dp");
+            mainStyles->markStyleForStylesXml(m_context->pageDrawStyleName);
+            kDebug() << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName
+                << "m_context->type:" << m_context->type;
         }
     }
 
@@ -616,6 +660,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 //! cSld handler (Common Slide Data)
 /*! ECMA-376, 19.3.1.16, p. 2833.
  This element specifies a container for slide information that is relevant to all of the slide types.
+
  Parent elements:
     - [done] presentation (§19.2.1.26)
     - handoutMaster (§19.3.1.24)
@@ -651,7 +696,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 #undef CURRENT_EL
 #define CURRENT_EL bg
 // bg handler (Slide Background)
-/*! ECMA-376, 19.3.1.1
+/*! ECMA-376, 19.3.1.1, p. 2815.
  This element specifies the background appearance information for a
  slide. The slide background covers the entire slide and is visible
  where no objects exist and as the background for transparent objects.
@@ -664,6 +709,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
     - [done] bgPr (Background Properties) §19.3.1.2
     - bgRef (Background Style Reference) §19.3.1.3
 */
+//! @todo support all elements
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 {
     READ_PROLOGUE
@@ -682,10 +728,27 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 #undef CURRENT_EL
 #define CURRENT_EL bgPr
 //! 19.3.1.2 bgPr (Background Properties)
-// This element specifies visual effects used to render the slide
-// background. This includes any fill, image, or effects that are to
-// make up the background of the slide.
+/*! ECMA-376, 19.3.1.2, p. 2815.
+ This element specifies visual effects used to render the slide
+ background. This includes any fill, image, or effects that are to
+ make up the background of the slide.
 
+ Parent elements:
+ - bg (§19.3.1.1)
+ Attributes:
+ - shadeToTitle
+ Child elements:
+ - [done] blipFill (Picture Fill) §20.1.8.14
+ - effectDag (Effect Container) §20.1.8.25
+ - effectLst (Effect Container) §20.1.8.26
+ - extLst (Extension List) §19.2.1.12
+ - gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - [done] solidFill (Solid Fill) §20.1.8.54
+*/
+//! @todo support all elements
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 {
     READ_PROLOGUE
@@ -722,14 +785,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         //! Setup slide's bitmap fill
         m_currentDrawStyle.addProperty("draw:fill", "bitmap");
         m_currentDrawStyle.addProperty("draw:fill-image-name", fillImageName);
-        if (!m_recentSourceName.isEmpty()) {
-            const QSize size(imageSize(m_recentSourceName));
-            kDebug() << "SIZE:" << size;
-            if (size.isValid()) {
-                m_currentDrawStyle.addProperty("draw:fill-image-width",
-                    MSOOXML::Utils::cmString(POINT_TO_CM(size.width())));
-                m_currentDrawStyle.addProperty("draw:fill-image-height",
-                    MSOOXML::Utils::cmString(POINT_TO_CM(size.height())));
+        if (m_context->type != SlideMaster) {
+            if (!m_recentSourceName.isEmpty()) {
+                const QSize size(imageSize(m_recentSourceName));
+                kDebug() << "SIZE:" << size;
+                if (size.isValid()) {
+                    m_currentDrawStyle.addProperty("draw:fill-image-width",
+                        MSOOXML::Utils::cmString(POINT_TO_CM(size.width())));
+                    m_currentDrawStyle.addProperty("draw:fill-image-height",
+                        MSOOXML::Utils::cmString(POINT_TO_CM(size.height())));
+                }
             }
         }
     }

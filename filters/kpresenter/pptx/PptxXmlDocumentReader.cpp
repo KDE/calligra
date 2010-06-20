@@ -51,7 +51,7 @@ class PptxXmlDocumentReader::Private
 {
 public:
     Private()
-            : slideNumber(0) {
+    {
     }
     ~Private() {
         qDeleteAll(masterSlidePropertiesMap);
@@ -60,6 +60,11 @@ public:
     QMap<QString, PptxSlideProperties*> masterSlidePropertiesMap;
     QMap<QString, PptxSlideLayoutProperties*> slideLayoutPropertiesMap;
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
+    bool sldSzRead;
+    KoPageLayout pageLayout;
+    QString masterPageDrawStyleName;
+    KoGenStyle masterPageStyle;
+    PptxSlideMasterPageProperties slideMasterPageProperties;
 private:
 };
 
@@ -85,7 +90,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 {
     m_context = dynamic_cast<PptxXmlDocumentReaderContext*>(context);
     Q_ASSERT(m_context);
+    d->slideNumber = 0;
+    d->sldSzRead = false;
+    d->pageLayout = KoPageLayout();
+    d->masterPageDrawStyleName.clear();
+    d->masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
+    d->slideMasterPageProperties = PptxSlideMasterPageProperties();
+
     const KoFilter::ConversionStatus result = readInternal();
+
     m_context = 0;
     return result;
 }
@@ -157,8 +170,9 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         slideLayoutPath, slideLayoutFile,
         0/*unused*/, *m_context->themes,
         PptxXmlSlideReader::SlideLayout,
-        0,
+        0, //PptxSlideProperties
         result,
+        0, //PptxSlideMasterPageProperties
         *m_context->relationships
     );
     PptxXmlSlideReader slideLayoutReader(this);
@@ -210,6 +224,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         PptxXmlSlideReader::Slide,
         0,
         slideLayoutProperties,
+        &d->slideMasterPageProperties,
         *m_context->relationships
     );
     PptxXmlSlideReader slideReader(this);
@@ -258,6 +273,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         PptxXmlSlideReader::SlideMaster,
         masterSlideProperties,
         0,
+        &d->slideMasterPageProperties,
         *m_context->relationships
     );
     PptxXmlSlideReader slideMasterReader(this);
@@ -269,6 +285,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     }
     d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
     masterSlidePropertiesSetter.release();
+    d->masterPageDrawStyleName = context.pageDrawStyleName;
+    kDebug() << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleName;
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
@@ -349,33 +367,22 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
     STRING_TO_INT(cy, intCy, "sldSz@cy")
     //! @todo check "type" attr, e.g. 4x3
 
-    KoPageLayout pageLayout;
-    pageLayout.width = EMU_TO_POINT(qreal(intCx));
-    pageLayout.height = EMU_TO_POINT(qreal(intCy));
-    pageLayout.leftMargin = 0.0;
-    pageLayout.rightMargin = 0.0;
-    pageLayout.topMargin = 0.0;
-    pageLayout.bottomMargin = 0.0;
+    d->pageLayout.width = EMU_TO_POINT(qreal(intCx));
+    d->pageLayout.height = EMU_TO_POINT(qreal(intCy));
+    d->pageLayout.leftMargin = 0.0;
+    d->pageLayout.rightMargin = 0.0;
+    d->pageLayout.topMargin = 0.0;
+    d->pageLayout.bottomMargin = 0.0;
     //! @todo orientation heristics - OK?
-    pageLayout.orientation = pageLayout.width > pageLayout.height ? KoPageFormat::Landscape : KoPageFormat::Portrait;
-
-    KoGenStyle pageLayoutStyle(pageLayout.saveOdf()); // (KoGenStyle::PageLayoutStyle)
-    const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
-    mainStyles->markStyleForStylesXml(pageLayoutStyleName);
-    kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
-
-    //! @todo insert draw:frame child elements read from master slide
-    //<style:master-page style:name="Default" style:page-layout-name="PMpredef1" draw:style-name="dppredef1">
-    // <draw:frame presentation:style-name=...
-    KoGenStyle masterPageStyle(KoGenStyle::MasterPageStyle);
-    masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
-    const QString masterPageStyleName(mainStyles->insert(masterPageStyle, "Default", KoGenStyles::DontAddNumberToName));
-    kDebug() << "masterPageStyleName:" << masterPageStyleName;
+    d->pageLayout.orientation = d->pageLayout.width > d->pageLayout.height
+        ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
     }
+
+    d->sldSzRead = true;
     READ_EPILOGUE
 }
 
@@ -426,5 +433,23 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+    if (d->sldSzRead) {
+        KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
+        const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
+        mainStyles->markStyleForStylesXml(pageLayoutStyleName);
+        kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
+
+        //! @todo insert draw:frame child elements read from master slide
+        //<style:master-page style:name="Default" style:page-layout-name="PMpredef1" draw:style-name="dppredef1">
+        // <draw:frame presentation:style-name=...
+        d->masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
+    }
+    if (!d->masterPageDrawStyleName.isEmpty()) {
+        d->masterPageStyle.addAttribute("draw:style-name", d->masterPageDrawStyleName);
+    }
+    const QString masterPageStyleName(
+        mainStyles->insert(d->masterPageStyle, "Default", KoGenStyles::DontAddNumberToName));
+    //mainStyles->markStyleForStylesXml(masterPageStyleName);
+    kDebug() << "masterPageStyleName:" << masterPageStyleName;
     READ_EPILOGUE
 }
