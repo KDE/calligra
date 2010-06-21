@@ -25,6 +25,7 @@
 #include "KoXmlReader.h"
 #include <KLocale>
 #include <QtCore/QRect>
+#include <QtCore/QVector>
 #include <QtGui/QPainter>
 #include <cmath>
 
@@ -138,7 +139,7 @@ QImage ConvolveMatrixEffect::processImage(const QImage &image, const KoFilterEff
 
     // setup mask
     const int maskSize = rx*ry;
-    QPoint offset[maskSize];
+    QVector<QPoint> offset(maskSize);
     int index = 0;
     for (int y = 0; y < ry; ++y) {
         for (int x = 0; x < rx; ++x) {

@@ -21,6 +21,7 @@
 #include "FilterRegionChangeCommand.h"
 #include <KoShape.h>
 #include <KoFilterEffect.h>
+#include <KoViewConverter.h>
 #include <QtGui/QPainter>
 
 FilterRegionEditStrategy::FilterRegionEditStrategy(KoToolBase* parent, KoShape * shape, KoFilterEffect *effect, KarbonFilterEffectsTool::EditMode mode)
