@@ -279,24 +279,28 @@
 </record>
 
 <record name="Header" id="0x0014">
-  <if predicate="version() &lt; Excel97">
-    <field name="headerLength" type="unsigned" size="8" />
-    <field name="header"       type="bytestring" length="headerLength" />
-  </if>
-  <if predicate="version() >= Excel97">
-    <field name="headerLength" type="unsigned" size="16" />
-    <field name="header"       type="unicodestring" length="headerLength" />
+  <if predicate="recordSize() > 0">
+    <if predicate="version() &lt; Excel97">
+      <field name="headerLength" type="unsigned" size="8" />
+      <field name="header"       type="bytestring" length="headerLength" />
+    </if>
+    <if predicate="version() >= Excel97">
+      <field name="headerLength" type="unsigned" size="16" />
+      <field name="header"       type="unicodestring" length="headerLength" />
+    </if>
   </if>
 </record>
 
 <record name="Footer" id="0x0015">
-  <if predicate="version() &lt; Excel97">
-    <field name="footerLength" type="unsigned" size="8" />
-    <field name="footer"       type="bytestring" length="footerLength" />
-  </if>
-  <if predicate="version() >= Excel97">
-    <field name="footerLength" type="unsigned" size="16" />
-    <field name="footer"       type="unicodestring" length="footerLength" />
+  <if predicate="recordSize() > 0">
+    <if predicate="version() &lt; Excel97">
+      <field name="footerLength" type="unsigned" size="8" />
+      <field name="footer"       type="bytestring" length="footerLength" />
+    </if>
+    <if predicate="version() >= Excel97">
+      <field name="footerLength" type="unsigned" size="16" />
+      <field name="footer"       type="unicodestring" length="footerLength" />
+    </if>
   </if>
 </record>
 

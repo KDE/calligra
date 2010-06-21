@@ -196,6 +196,7 @@ Record::Record(Workbook *book)
     stream_position = 0;
     ver = Excel97;
     valid = true;
+    m_size = 0;
 }
 
 Record::~Record()

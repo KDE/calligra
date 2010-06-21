@@ -201,6 +201,14 @@ public:
         return ver;
     }
 
+    void setRecordSize(unsigned size) {
+        m_size = size;
+    }
+
+    unsigned recordSize() const {
+        return m_size;
+    }
+
     /**
       Sets the data for this record.
      */
@@ -240,6 +248,8 @@ protected:
     unsigned ver;
     // is the record valid?
     bool valid;
+    // size of the record
+    unsigned m_size;
 };
 
 typedef Record*(*RecordFactory)(Workbook*);
