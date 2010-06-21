@@ -248,6 +248,10 @@ KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessag
                                            const QString& sourceName, KoStore *outputStore,
                                            const QString& destinationName)
 {
+    if (outputStore->hasFile(destinationName)) {
+        return KoFilter::OK;
+    }
+
     KoFilter::ConversionStatus status;
     std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(zip, errorMessage, sourceName, status));
     if (!inputDevice.get()) {
