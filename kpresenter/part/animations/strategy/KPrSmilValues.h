@@ -21,20 +21,21 @@
 #define KPRSMILVALUES_H
 
 #include "KPrAnimationValue.h"
+#include "KPrValueParser.h"
 #include <QList>
 #include <QPair>
 
 class KPrSmilValues : public KPrAnimationValue
 {
 public:
-    KPrSmilValues();
+    KPrSmilValues(KoShape * shape);
     virtual qreal value(qreal time) const;
     virtual qreal endValue() const;
     virtual qreal startValue() const;
     bool loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode);
 
 protected:
-    QList<qreal> m_values;
+    QList<KPrValueParser> m_values;
     QList<qreal> m_times;
     QList<qreal> m_splines;
 };

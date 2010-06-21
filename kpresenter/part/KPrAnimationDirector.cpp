@@ -296,6 +296,8 @@ void KPrAnimationDirector::updatePageAnimation()
     delete m_animationCache;
     m_animationCache = new KPrAnimationCache();
 
+    m_animationCache->setPageSize(m_pages[m_pageIndex]->size());
+
     int i = 0;
     foreach (KPrAnimationStep *step, m_animations) {
         step->init(m_animationCache, i);

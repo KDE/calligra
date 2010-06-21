@@ -30,12 +30,15 @@ KPrAttributeY::KPrAttributeY()
 void KPrAttributeY::updateCache(KPrAnimationCache *cache, KoShape *shape, qreal value)
 {
     QTransform transform;
+    value *= cache->pageSize().height();
     transform.translate(0, value - shape->position().y());
     cache->update(shape, "transform", transform);
 }
 
 void KPrAttributeY::initCache(KPrAnimationCache *animationCache, int step, KoShape * shape, qreal startValue, qreal endValue)
 {
-    animationCache->init(step, shape, "transform", QTransform().translate(0, startValue - shape->position().y()));
-    animationCache->init(step + 1, shape, "transform", QTransform().translate(0, endValue - shape->position().y()));
+    qreal v1 = startValue * animationCache->pageSize().height() - shape->position().y();
+    qreal v2 = endValue * animationCache->pageSize().height() - shape->position().y();
+    animationCache->init(step, shape, "transform", QTransform().translate(0, v1));
+    animationCache->init(step + 1, shape, "transform", QTransform().translate(0, v2));
 }

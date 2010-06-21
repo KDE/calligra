@@ -101,14 +101,15 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     // value
     QString formula = element.attributeNS(KoXmlNS::anim, "formula", QString());
     if (!formula.isEmpty()) {
-        // formula
+        kWarning(33003) << "formula not yes supported";
+        retval = false;
     }
     else {
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
         if (!values.isEmpty()) {
             QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
             QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
-            KPrSmilValues * smilValue = new KPrSmilValues();
+            KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation->shape());
             retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode);
             m_values = smilValue;
         }
@@ -116,7 +117,8 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
             QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
             QString by = element.attributeNS(KoXmlNS::smil, "by", "0");
-
+            kWarning(33003) << "from to by not yes supported";
+            retval = false;
         }
     }
     return retval;
@@ -130,6 +132,7 @@ void KPrAnimate::saveOdf(KoShapeSavingContext &context) const
 void KPrAnimate::init(KPrAnimationCache *animationCache, int step)
 {
     m_animationCache = animationCache;
+    m_values->setCache(m_animationCache);
     m_attribute->initCache(animationCache, step, m_shapeAnimation->shape(), m_values->startValue(), m_values->endValue());
 }
 

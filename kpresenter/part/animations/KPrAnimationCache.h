@@ -25,6 +25,7 @@
 #include <QString>
 #include <QVariant>
 #include <QList>
+#include <QSizeF>
 
 class KoShape;
 class KoTextBlockData;
@@ -160,6 +161,8 @@ public:
     bool hasValue(int step, KoShape *shape, const QString &id);
 
     // ending and animation will just activate the values of the step
+    QSizeF pageSize() const;
+    void setPageSize(const QSizeF size);
 private:
     QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
     QList<QMap<KoTextBlockData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
@@ -167,6 +170,7 @@ private:
     QMap<KoTextBlockData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
     int m_step;
     bool m_next;
+    QSizeF m_pageSize;
 };
 
 

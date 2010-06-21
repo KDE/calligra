@@ -21,20 +21,22 @@
 #include <QStringList>
 #include "kdebug.h"
 
-KPrSmilValues::KPrSmilValues()
+KPrSmilValues::KPrSmilValues(KoShape *shape) : KPrAnimationValue(shape)
 {
 }
 
 qreal KPrSmilValues::value(qreal time) const{
-    qreal value;
+    qreal value, value1, value2;
     for(int i =0; i < m_values.size(); i++ != 0){
         if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
-            value = (time - m_times.at(i)) * (m_values.at(i+1) - m_values.at(i));
+            value1 = m_values.at(i).eval(m_cache);
+            value2 = m_values.at(i+1).eval(m_cache);
+            value = (time - m_times.at(i)) * (value2 - value1);
             value = value / (m_times.at(i+1) - m_times.at(i));
-            value += m_values.at(i);
+            value += value1;
         }
         else if (time == m_times.at(i)){
-            value = m_values.at(i);
+            value = m_values.at(i).eval(m_cache);;
         }
     }
     return value;
@@ -42,12 +44,12 @@ qreal KPrSmilValues::value(qreal time) const{
 
 qreal KPrSmilValues::startValue() const
 {
-    return value(0);
+    return m_values.at(0).eval(m_cache);
 }
 
 qreal KPrSmilValues::endValue() const
 {
-    return value(1);
+    return m_values.at(m_values.size() - 1).eval(m_cache);
 }
 
 bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
@@ -58,9 +60,14 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     if (valuesList.size() < 2) {
         return false;
     }
-    // TODO parse value
-    m_values.append(0);
-    m_values.append(500);
+
+    foreach (QString value, valuesList) {
+        KPrValueParser parser(value, m_shape);
+        if (!parser.valid()) {
+            return false;
+        }
+        m_values.append(parser);
+    }
 
     // keyTimes
     if (keyTimes.isEmpty()) {

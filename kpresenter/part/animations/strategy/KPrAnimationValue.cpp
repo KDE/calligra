@@ -19,10 +19,16 @@
 
 #include "KPrAnimationValue.h"
 
-KPrAnimationValue::KPrAnimationValue()
+KPrAnimationValue::KPrAnimationValue(KoShape * shape)
+    : m_shape(shape)
 {
 }
 
 KPrAnimationValue::~KPrAnimationValue()
 {
+}
+
+void KPrAnimationValue::setCache(KPrAnimationCache *cache)
+{
+    m_cache = cache;
 }

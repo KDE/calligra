@@ -154,3 +154,13 @@ bool KPrAnimationCache::hasValue(int step, KoShape *shape, const QString &id)
         return m_shapeValuesStack[step].value(shape).contains(id);
     return false;
 }
+
+void KPrAnimationCache::setPageSize(const QSizeF size)
+{
+    m_pageSize = size;
+}
+
+QSizeF KPrAnimationCache::pageSize() const
+{
+    return m_pageSize;
+}

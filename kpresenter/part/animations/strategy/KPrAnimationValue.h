@@ -21,17 +21,18 @@
 #define KPRANIMATIONVALUE_H
 
 #include <QtGlobal>
-
+class KoShape;
+class KPrAnimationCache;
 
 class KPrAnimationValue
 {
 public:
-    KPrAnimationValue();
+    KPrAnimationValue(KoShape * shape);
     virtual ~KPrAnimationValue();
     virtual qreal value(qreal time) const = 0;
     virtual qreal startValue() const = 0;
     virtual qreal endValue() const = 0;
-
+    virtual void setCache(KPrAnimationCache * cache);
     enum SmilCalcMode{
         discrete,
         linear,
@@ -40,6 +41,8 @@ public:
     };
 protected:
     SmilCalcMode m_calcMode;
+    KPrAnimationCache * m_cache;
+    KoShape * m_shape;
 };
 
 #endif // KPRANIMATIONVALUE_H
