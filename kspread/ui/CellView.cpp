@@ -1133,7 +1133,7 @@ void CellView::paintText(QPainter& painter,
         QSharedPointer<QTextDocument> doc = d->richText;
         doc->setDefaultTextOption(d->textOptions());
         const QPointF position(coordinate.x() + indent,
-                               coordinate.y() + d->textY);
+                               coordinate.y() + d->textY - d->textHeight);
         painter.translate(position);
 
         QAbstractTextDocumentLayout::PaintContext ctx;
@@ -1643,7 +1643,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
     case Style::VJustified:
     case Style::Top: {
         if (tmpAngle == 0 && tmpRichText) {
-            d->textY = effTop;
+            d->textY = effTop + d->textHeight;
         } else if (tmpAngle == 0) {
             d->textY = effTop + ascent;
         } else if (tmpAngle < 0) {
@@ -1676,7 +1676,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                 }
             }
         } else if (tmpRichText) {
-            d->textY = effBottom - d->textHeight;
+            d->textY = effBottom;
         } else if (tmpMultiRow && !tmpVerticalText) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
@@ -1719,7 +1719,7 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
                 }
             }
         } else if (tmpRichText && !tmpVerticalText) {
-            d->textY = (h - d->textHeight) / 2;
+            d->textY = (h - d->textHeight) / 2 + d->textHeight;
         } else if (tmpMultiRow && !tmpVerticalText) {
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
