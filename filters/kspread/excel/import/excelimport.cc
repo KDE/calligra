@@ -185,9 +185,9 @@ public:
     void processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* writer);
     void processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter);
-    void processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter);
+    void processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel);
     void processColumnForStyle(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter);
-    int processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter);
+    int processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel);
     int processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter);
     void processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
@@ -752,8 +752,13 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     }
 
     const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
+    unsigned outlineLevel = 0;
     for (unsigned i = 0; i <= columnCount; ++i) {
-        processColumnForBody(sheet, i, xmlWriter);
+        processColumnForBody(sheet, i, xmlWriter, outlineLevel);
+    }
+    while (outlineLevel > 0) {
+        xmlWriter->endElement(); // table:table-column-group
+        outlineLevel--;
     }
 
     // in odf default-cell-style's only apply to cells/rows/columns that are present in the file while in Excel
@@ -769,7 +774,11 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     // add rows
     const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
     for (unsigned i = 0; i <= rowCount;) {
-        i += processRowForBody(store, sheet, i, xmlWriter);
+        i += processRowForBody(store, sheet, i, xmlWriter, outlineLevel);
+    }
+    while (outlineLevel > 0) {
+        xmlWriter->endElement(); // table:table-row-group
+        outlineLevel--;
     }
 
     // same we did above with columns is also needed for rows.
@@ -930,11 +939,24 @@ void ExcelImport::Private::processHeaderFooterStyle (UString text, KoXmlWriter* 
 }
 
 // Processes a column in a sheet.
-void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter)
+void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel)
 {
     Column* column = sheet->column(columnIndex, false);
 
     if (!xmlWriter) return;
+
+    int newOutlineLevel = column ? column->outlineLevel() : 0;
+    while (newOutlineLevel > outlineLevel) {
+        xmlWriter->startElement("table:table-column-group");
+        outlineLevel++;
+        if (outlineLevel == newOutlineLevel && column->collapsed())
+            xmlWriter->addAttribute("table:display", "false");
+    }
+    while (newOutlineLevel < outlineLevel) {
+        xmlWriter->endElement(); // table:table-column-group
+        outlineLevel--;
+    }
+
     if (!column) {
         xmlWriter->startElement("table:table-column");
         Q_ASSERT(defaultColumnStyleIndex < defaultColumnStyles.count());
@@ -977,12 +999,26 @@ void ExcelImport::Private::processColumnForStyle(Sheet* sheet, int columnIndex, 
 }
 
 // Processes a row in a sheet.
-int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter)
+int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel)
 {
     int repeat = 1;
 
     if (!xmlWriter) return repeat;
     Row *row = sheet->row(rowIndex, false);
+
+    int newOutlineLevel = row ? row->outlineLevel() : 0;
+    while (newOutlineLevel > outlineLevel) {
+        xmlWriter->startElement("table:table-row-group");
+        outlineLevel++;
+        if (outlineLevel == newOutlineLevel && row->collapsed())
+            xmlWriter->addAttribute("table:display", "false");
+    }
+    while (newOutlineLevel < outlineLevel) {
+        xmlWriter->endElement(); // table:table-row-group
+        outlineLevel--;
+    }
+
+
     if (!row) {
         xmlWriter->startElement("table:table-row");
         xmlWriter->endElement();

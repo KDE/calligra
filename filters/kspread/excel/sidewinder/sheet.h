@@ -218,6 +218,11 @@ public:
     bool visible() const;
     void setVisible(bool v);
 
+    unsigned outlineLevel() const;
+    void setOutlineLevel(unsigned level);
+    bool collapsed() const;
+    void setCollapsed(bool collapsed);
+
     bool operator==(const Column &other) const;
     bool operator!=(const Column &other) const;
 
@@ -250,6 +255,11 @@ public:
 
     bool visible() const;
     void setVisible(bool v);
+
+    unsigned outlineLevel() const;
+    void setOutlineLevel(unsigned level);
+    bool collapsed() const;
+    void setCollapsed(bool collapsed);
 
     bool operator==(const Row &other) const;
     bool operator!=(const Row &other) const;

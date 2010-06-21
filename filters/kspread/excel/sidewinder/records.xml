@@ -162,10 +162,12 @@
   <field name="reserved0"                    size="7" />
   <field name="outlineLevel" type="unsigned" size="3" />
   <field name="reserved1"                    size="1" />
-  <field name="collapsed"    type="bool"     size="1" />
+  <field name="notCollapsed" type="bool"     size="1" />
   <field name="reserved2"                    size="3" />
 
   <field name="reserved3"                    size="16" />
+
+  <computedField name="isCollapsed" ctype="bool" value="!isNotCollapsed()" />
 </record>
 
 <record name="DataTable" id="0x0236">
@@ -381,12 +383,14 @@
   <field name="reserved1"                       size="16" />
   <field name="outlineLevel"    type="unsigned" size="3" />
   <field name="reserved2"                       size="1" />
-  <field name="collapsed"       type="bool"     size="1" />
+  <field name="notCollapsed"    type="bool"     size="1" />
   <field name="hidden"          type="bool"     size="1" />
   <field name="reserved3"                       size="2" />
   <field name="reserved4"                       size="8" />
   <field name="xfIndex"         type="unsigned" size="12" />
   <field name="reserved5"                       size="4" />
+
+  <computedField name="isCollapsed" ctype="bool" value="!isNotCollapsed()" />
 </record>
 
 <!-- TODO: RString -->

@@ -125,7 +125,7 @@ void Sheet::clear()
     // delete all rows
     qDeleteAll(d->rows);
     d->rows.clear();
-    
+
     d->name = "Sheet"; // FIXME better name ?
     d->maxRow = 0;
     d->maxColumn = 0;
@@ -173,7 +173,7 @@ Cell* Sheet::cell(unsigned columnIndex, unsigned rowIndex, bool autoCreate)
 
         if (rowIndex > d->maxRow) d->maxRow = rowIndex;
         if (columnIndex > d->maxColumn) d->maxColumn = columnIndex;
-        
+
         if(!d->maxCellsInRow.contains(rowIndex) || columnIndex > d->maxCellsInRow[rowIndex])
             d->maxCellsInRow[rowIndex] = columnIndex;
     }
@@ -427,7 +427,7 @@ void Sheet::setPageBreakViewEnabled(bool enabled)
 {
     d->isPageBreakViewEnabled = enabled;
 }
-    
+
 unsigned long Sheet::password() const
 {
     return d->passwd;
@@ -477,6 +477,8 @@ public:
     double width;
     Format format;
     bool visible;
+    unsigned outlineLevel;
+    bool collapsed;
 };
 
 Column::Column(Sheet* sheet, unsigned index)
@@ -486,6 +488,8 @@ Column::Column(Sheet* sheet, unsigned index)
     d->index   = index;
     d->width   = 0.0;
     d->visible = true;
+    d->outlineLevel = 0;
+    d->collapsed = false;
 }
 
 Column::~Column()
@@ -536,11 +540,32 @@ void Column::setVisible(bool b)
     d->visible = b;
 }
 
+unsigned Column::outlineLevel() const
+{
+    return d->outlineLevel;
+}
+
+void Column::setOutlineLevel(unsigned level)
+{
+    d->outlineLevel = level;
+}
+
+bool Column::collapsed() const
+{
+    return d->collapsed;
+}
+
+void Column::setCollapsed(bool collapsed)
+{
+    d->collapsed = collapsed;
+}
+
 bool Column::operator==(const Column &other) const
 {
     return width() == other.width() &&
            visible() == other.visible() &&
-           format() == other.format();
+           format() == other.format() &&
+           outlineLevel() == other.outlineLevel();
 }
 
 bool Column::operator!=(const Column &other) const
@@ -575,6 +600,8 @@ public:
     double height;
     Format format;
     bool visible;
+    unsigned outlineLevel;
+    bool collapsed;
 };
 
 Row::Row(Sheet* sheet, unsigned index)
@@ -584,6 +611,8 @@ Row::Row(Sheet* sheet, unsigned index)
     d->index   = index;
     d->height  = 12;
     d->visible = true;
+    d->outlineLevel = 0;
+    d->collapsed = false;
 }
 
 Row::~Row()
@@ -631,11 +660,32 @@ void Row::setVisible(bool b)
     d->visible = b;
 }
 
+unsigned Row::outlineLevel() const
+{
+    return d->outlineLevel;
+}
+
+void Row::setOutlineLevel(unsigned level)
+{
+    d->outlineLevel = level;
+}
+
+bool Row::collapsed() const
+{
+    return d->collapsed;
+}
+
+void Row::setCollapsed(bool collapsed)
+{
+    d->collapsed = collapsed;
+}
+
 bool Row::operator==(const Row &other) const
 {
     return height() == other.height() &&
            visible() == other.visible() &&
-           format() == other.format();
+           format() == other.format() &&
+           outlineLevel() == other.outlineLevel();
 }
 
 bool Row::operator!=(const Row &other) const

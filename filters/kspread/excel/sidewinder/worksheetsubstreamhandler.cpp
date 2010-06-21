@@ -446,6 +446,8 @@ void WorksheetSubStreamHandler::handleColInfo(ColInfoRecord* record)
             column->setWidth( Column::columnUnitsToPts((double)width) );
             column->setFormat(d->globals->convertedFormat(xfIndex));
             column->setVisible(!hidden);
+            column->setOutlineLevel(record->outlineLevel());
+            column->setCollapsed(record->isCollapsed());
         }
     }
 }
@@ -797,6 +799,8 @@ void WorksheetSubStreamHandler::handleRow(RowRecord* record)
         row->setHeight(height / 20.0);
         row->setFormat(d->globals->convertedFormat(xfIndex));
         row->setVisible(!hidden);
+        row->setOutlineLevel(record->outlineLevel());
+        row->setCollapsed(record->isCollapsed());
     }
 }
 
