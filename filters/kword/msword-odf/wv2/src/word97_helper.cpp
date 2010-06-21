@@ -106,7 +106,7 @@ typedef enum
     sprmPCrLf = 0x2444,
     sprmPFUsePgsuSettings = 0x2447,
     sprmPFAdjustRight = 0x2448,
-    sprmPNLvlAnmFake = 0x25FF,       // Fake entry!
+    sprmPNLvlAnmFake = 0x25FF, // Fake entry!
     sprmPIncLvl = 0x2602,
     sprmPIlvl = 0x260A,
     sprmPPc = 0x261B,
@@ -136,7 +136,7 @@ typedef enum
     sprmSFPgnRestart = 0x3011,
     sprmSFEndnote = 0x3012,
     sprmSLnc = 0x3013,
-    sprmSGprfIhdt = 0x3014,
+    sprmSGprfIhdt = 0x3014, //MS Word 6.0, header/footer related group of bit flags
     sprmSLBetween = 0x3019,
     sprmSVjc = 0x301A,
     sprmSBOrientation = 0x301D,
@@ -240,11 +240,11 @@ typedef enum
     sprmTSetShdOdd = 0x7628,
     sprmTTextFlow = 0x7629,
     sprmPDxaRight = 0x840E,
-    sprmPDxaRightFE = 0x845D,  // Undocumented. According to OOo it's the asian equivalent to sprmPDxaRight
+    sprmPDxaRightFE = 0x845D, // Undocumented. According to OOo it's the asian equivalent to sprmPDxaRight
     sprmPDxaLeft = 0x840F,
-    sprmPDxaLeftFE = 0x845E,  // Undocumented. According to OOo it's the asian equivalent to sprmPDxaLeft
+    sprmPDxaLeftFE = 0x845E, // Undocumented. According to OOo it's the asian equivalent to sprmPDxaLeft
     sprmPDxaLeft1 = 0x8411,
-    sprmPDxaLeft1FE = 0x8460,  // Undocumented. According to OOo it's the asian equivalent to sprmPDxaLeft1
+    sprmPDxaLeft1FE = 0x8460, // Undocumented. According to OOo it's the asian equivalent to sprmPDxaLeft1
     sprmPDxaAbs = 0x8418,
     sprmPDyaAbs = 0x8419,
     sprmPDxaWidth = 0x841A,
@@ -1936,8 +1936,8 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     wvlog << "sprm: 0x" << hex << sprm << dec << endl;
     wvlog << "sprmLength: " << sprmLength << endl;
 #endif
-    // Is it a TAP sprm? Not really an error if it's none, as all TAP sprms live
-    // inside PAP grpprls
+    // Is it a TAP sprm? Not really an error if it's none, as all TAP sprms
+    // live inside PAP grpprls
     if ( ( ( sprm & 0x1C00 ) >> 10 ) != 5 && 
          (sprm != SPRM::sprmPHugePapx) &&
          (sprm != SPRM::sprmPHugePapx2) &&
@@ -1959,11 +1959,12 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     case SPRM::sprmTDxaLeft:
     {
+        //NOTE: no recalculation of the horizontal origin, use rgdxaCenter[0]
+
 //         const S16 dxaNew = readS16( ptr ) - ( rgdxaCenter[ 0 ] + dxaGapHalf );
 //         std::transform( rgdxaCenter.begin(), rgdxaCenter.end(), rgdxaCenter.begin(), 
 //                         std::bind1st( std::plus<S16>(), dxaNew ) );
 
-        //NOTE: calculation of the horizontal origin moved to TableHandler
         dxaLeft = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
         wvlog << "dxaLeft: " << dxaLeft << endl;
@@ -1972,13 +1973,14 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTDxaGapHalf:
     {
+        //NOTE: no recalculation of the horizontal origin, use rgdxaCenter[0]
+
 //         const S16 dxaGapHalfNew = readS16( ptr );
 //         if ( !rgdxaCenter.empty() ) {
 //             rgdxaCenter[ 0 ] += dxaGapHalf - dxaGapHalfNew;
 //         }
 
-        //NOTE: calculation of the horizontal origin moved to TableHandler
-        dxaGapHalf = readS16( ptr );
+	dxaGapHalf = readS16( ptr );
 #ifdef WV2_DEBUG_SPRMS
         wvlog << "dxaGapHalf: " << dxaGapHalf << endl;
 #endif
@@ -2125,62 +2127,63 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTInsert:
     {
+        //NOTE: don't process before sprmTDefTable
+	if ( itcMac == 0 ) {
+            wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
+            break;
+        }
+	// Sanity check
+        if ( static_cast<std::vector<S16>::size_type>( itcMac ) + 1 != rgdxaCenter.size() ) {
+            wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << endl;
+            itcMac = rgdxaCenter.size() - 1;
+        }
+
         const U8 itcFirst = *ptr;
         const U8 ctc = *( ptr + 1 );
         const U16 dxaCol = readU16( ptr + 2 );
 
-        //NOTE: don't process before sprmTDefTable
-        if (itcMac) {
-            // Sanity check
-            if ( static_cast<std::vector<S16>::size_type>( itcMac ) + 1 != rgdxaCenter.size() ) {
-                wvlog << "Bug: Somehow itcMac and the rgdxaCenter.size() aren't in sync anymore!" << endl;
-                itcMac = rgdxaCenter.size() - 1;
+        if ( itcMac < itcFirst ) {
+            // Shaky, no idea why we would have to subtract ctc here?  The
+            // implementation below is a guess from me, but it looks like this
+            // never happens in real documents.
+            wvlog << "Warning: sprmTInsert: Debug me ########################################" << endl;
+
+            S16 runningDxaCol = 0;
+            if ( !rgdxaCenter.empty() ) {
+                runningDxaCol = rgdxaCenter.back();
             }
 
-            if ( itcMac < itcFirst ) {
-                // Shaky, no idea why we would have to subtract ctc here?  The
-                // implementation below is a guess from me, but it looks like
-                // this never happens in real documents.
-                wvlog << "Warning: sprmTInsert: Debug me ########################################" << endl;
-
-                S16 runningDxaCol = 0;
-                if ( !rgdxaCenter.empty() ) {
-                    runningDxaCol = rgdxaCenter.back();
-                }
-
-                for ( ; itcMac < itcFirst; ++itcMac ) {
-                    // If the index is bigger than our current array we just
-                    // fill the hole with dummy cells (dxaCol wide, default TC)
-                    // as suggested in the documentation
-                    runningDxaCol += dxaCol;
-                    rgdxaCenter.push_back( runningDxaCol );
-                    rgtc.push_back( TC() );
-                }
+            for ( ; itcMac < itcFirst; ++itcMac ) {
+                // If the index is bigger than our current array we just fill
+                // the hole with dummy cells (dxaCol wide, default TC) as
+                // suggested in the documentation
+                runningDxaCol += dxaCol;
+                rgdxaCenter.push_back( runningDxaCol );
+                rgtc.push_back( TC() );
             }
-            else {
-                S16 runningDxaCol;
-                if ( itcFirst > 0 ) {
-                    runningDxaCol = rgdxaCenter[ itcFirst - 1 ] + dxaCol;
-                }
-                // preserve the position of the table row 
-                else { 
-                    runningDxaCol = rgdxaCenter[ 0 ];
-                }
-                for ( int i = 0; i < ctc; ++i ) {
-                    std::vector<S16>::iterator dxaIt = rgdxaCenter.begin() + itcFirst + i;
-                    rgdxaCenter.insert( dxaIt, runningDxaCol );
-                    runningDxaCol += dxaCol;
-                }
-
-                rgtc.insert( rgtc.begin() + itcFirst, ctc, TC() );
-                rgshd.insert( rgshd.begin() + itcFirst, ctc, SHD() );
-                itcMac += ctc;
-
-                // Adjust all successive items (+= ctc * dxaCol)
-                std::transform( rgdxaCenter.begin() + itcFirst + ctc, rgdxaCenter.end(),
-                                rgdxaCenter.begin() + itcFirst + ctc, 
-                                std::bind1st( std::plus<S16>(), ctc * dxaCol ) );
+        } else {
+            S16 runningDxaCol;
+            if ( itcFirst > 0 ) {
+                runningDxaCol = rgdxaCenter[ itcFirst - 1 ] + dxaCol;
             }
+            // preserve the position of the table row 
+            else { 
+                runningDxaCol = rgdxaCenter[ 0 ];
+            }
+            for ( int i = 0; i < ctc; ++i ) {
+                std::vector<S16>::iterator dxaIt = rgdxaCenter.begin() + itcFirst + i;
+                rgdxaCenter.insert( dxaIt, runningDxaCol );
+                runningDxaCol += dxaCol;
+            }
+
+            rgtc.insert( rgtc.begin() + itcFirst, ctc, TC() );
+            rgshd.insert( rgshd.begin() + itcFirst, ctc, SHD() );
+            itcMac += ctc;
+
+            // Adjust all successive items (+= ctc * dxaCol)
+            std::transform( rgdxaCenter.begin() + itcFirst + ctc, rgdxaCenter.end(),
+                            rgdxaCenter.begin() + itcFirst + ctc, 
+                            std::bind1st( std::plus<S16>(), ctc * dxaCol ) );
         }
         break;
     }
@@ -2199,24 +2202,27 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTDxaCol:
     {
+        //NOTE: don't process before sprmTDefTable
+	if ( itcMac == 0 ) {
+            wvlog << "Bug: Assumption about sprmTDefTable not true" << endl;
+            break;
+        }
+
         U8 itcFirst = *ptr;
         U8 itcLim = *( ptr + 1 );
         const S16 dxaCol = readS16( ptr + 2 );
 
-        //NOTE: don't process before sprmTDefTable
-        if (itcMac) {
-            cropIndices( itcFirst, itcLim, rgdxaCenter.size() );
-            S16 shift = 0;
-            for ( ; itcFirst < itcLim; ++itcFirst ) {
-                shift += rgdxaCenter[ itcFirst + 1 ] - rgdxaCenter[ itcFirst ] - dxaCol;
-                rgdxaCenter[ itcFirst + 1 ] = rgdxaCenter[ itcFirst ] + dxaCol;
-            }
-            // Adjust all the following columns
-            ++itcFirst;
-            std::transform( rgdxaCenter.begin() + itcFirst, rgdxaCenter.end(),
-                            rgdxaCenter.begin() + itcFirst, 
-                            std::bind2nd( std::minus<S16>(), shift ) );
+        cropIndices( itcFirst, itcLim, rgdxaCenter.size() );
+        S16 shift = 0;
+        for ( ; itcFirst < itcLim; ++itcFirst ) {
+            shift += rgdxaCenter[ itcFirst + 1 ] - rgdxaCenter[ itcFirst ] - dxaCol;
+            rgdxaCenter[ itcFirst + 1 ] = rgdxaCenter[ itcFirst ] + dxaCol;
         }
+        // Adjust all the following columns
+        ++itcFirst;
+        std::transform( rgdxaCenter.begin() + itcFirst, rgdxaCenter.end(),
+                        rgdxaCenter.begin() + itcFirst, 
+                        std::bind2nd( std::minus<S16>(), shift ) );
         break;
     }
     case SPRM::sprmTMerge:

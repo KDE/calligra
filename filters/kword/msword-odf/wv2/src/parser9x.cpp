@@ -53,7 +53,6 @@
 
 using namespace wvWare;
 
-
 Parser9x::Position::Position( U32 cp, const PLCF<Word97::PCD>* plcfpcd ) :
         piece( 0 ), offset( cp )
 {
@@ -295,7 +294,7 @@ void Parser9x::parseTableRow( const TableRowData& data )
 {
 #ifdef WV2_DEBUG_TABLES
     wvlog << "Parser9x::parseTableRow(): startPiece=" << data.startPiece << " startOffset="
-            << data.startOffset << " length=" << data.length << endl;
+          << data.startOffset << " length=" << data.length << endl;
 #endif
 
     if ( data.length == 0 ) // idiot safe ;-)
@@ -333,8 +332,8 @@ void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
 
     PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( 0 ) );
 
-    for(size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
-        if(it.current()->lid == (S32)lid) {
+    for (size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
+        if (it.current()->lid == (S32)lid) {
             saveState( it.currentLim() - it.currentStart(), TextBox );
 
             U32 offset = m_fib.ccpText + it.currentStart();
@@ -385,7 +384,6 @@ void Parser9x::init()
     if ( m_fib.ccpAtn != 0 ) {
         m_annotations = new Annotations( m_table, m_fib );
     }
-
 }
 
 bool Parser9x::readPieceTable()
@@ -676,8 +674,8 @@ void Parser9x::processParagraph( U32 fc )
                     << m_tableRowStart->offset << endl;
 #endif
         }
-        m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(),
-                                             1, &Parser9x::accumulativeLength ); // init == 1 because of the parag. mark!
+        // init == 1 because of the parag. mark!
+        m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(), 1, &Parser9x::accumulativeLength );
         if ( props->pap().fTtp ) {
             // Restore the table properties of this row
             Word97::TAP* tap = m_properties->fullSavedTap( fc, m_data );
@@ -702,7 +700,8 @@ void Parser9x::processParagraph( U32 fc )
         // Now that we have the complete PAP, let's see if this paragraph belongs to a list
         props->createListInfo( *m_lists );
 
-        SharedPtr<const ParagraphProperties> sharedProps( props ); // keep it that way, else the ParagraphProperties get deleted!
+        // keep it that way, else the ParagraphProperties get deleted!
+        SharedPtr<const ParagraphProperties> sharedProps( props );
         m_textHandler->paragraphStart( sharedProps );
 
         // Get the appropriate style for this paragraph
@@ -728,7 +727,8 @@ void Parser9x::processParagraph( U32 fc )
                 length = length > limit - index ? limit - index : length;
 
                 m_properties->applyClxGrpprl( pcdIt.current(), m_fib.fcClx, chp, style );
-                SharedPtr<const Word97::CHP> sharedChp( chp ); // keep it that way, else the CHP gets deleted!
+                // keep it that way, else the CHP gets deleted!
+                SharedPtr<const Word97::CHP> sharedChp( chp );
                 processChunk( *it, chp, length, index, pcdIt.currentStart() );
                 index += length;
             }
@@ -978,29 +978,30 @@ void Parser9x::emitAnnotation( UString characters, U32 globalCP, SharedPtr<const
 
 void Parser9x::emitHeaderData( SharedPtr<const Word97::SEP> sep )
 {
-    // We don't care about non-existant headers
+    // We don't care about non-existent headers
     if ( !m_headers ) {
         return;
     }
-
-    // MS Word stores headers in a very strange way, so we have to keep track
-    // of the section numbers. We use a 0-based index for convenience inside
-    // the header reading code. (Werner)
+    // NOTE: MS Word stores headers in a very strange way, so we have to keep
+    // track of the section numbers.  We use a 0-based index for convenience
+    // inside the header reading code. (Werner)
     //
-    // Of course the file format has changed between Word 6/7 and Word 8, so
-    // I had to add a workaround... oh well.
+    // Of course the file format has changed between Word 6/7 and Word 8, so I
+    // had to add a workaround... oh well.
     HeaderData data( m_sectionNumber++ );
-
+    
     if ( m_fib.nFib < Word8nFib ) {
         data.headerMask = sep->grpfIhdt;
-        m_headers->headerMask( sep->grpfIhdt );
+        m_headers->set_headerMask( sep->grpfIhdt );
     }
     else {
-        if ( sep->fTitlePage ) {
-            data.headerMask |= HeaderData::HeaderFirst | HeaderData::FooterFirst;
-        }
+	//check if an even header/footer is expected
         if ( dop().fFacingPages ) {
             data.headerMask |= HeaderData::HeaderEven | HeaderData::FooterEven;
+        }
+	//check if a first page header/footer is expected
+        if ( sep->fTitlePage ) {
+            data.headerMask |= HeaderData::HeaderFirst | HeaderData::FooterFirst;
         }
     }
     m_textHandler->headersFound( make_functor( *this, &Parser9x::parseHeaders, data ) );
@@ -1074,6 +1075,7 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
     PictureData data( offset, sharedPicf );
     m_textHandler->inlineObjectFound(data, chp);
 
+    //NOTE: the depreciated approach to parse an inline object follows
 //     PictureFunctor fnct = make_functor( *this, &Parser9x::parsePicture,
 //				 PictureData( static_cast<U32>( chp->fcPic_fcObj_lTagObj ),
 //					     sharedPicf ) );

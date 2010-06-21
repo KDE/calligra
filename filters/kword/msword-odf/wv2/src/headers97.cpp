@@ -27,6 +27,11 @@ Headers97::Headers97( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStrea
 
 std::pair<U32, U32> Headers97::findHeader( int sectionNumber, unsigned char mask ) const
 {
+    // NOTE: An empty header/footer story specifies that the previous section's
+    // header/footer of the corresponding type is used.  For the first section,
+    // an empty header/footer story specifies that it does not have a
+    // header/footer of this type.  MS-DOC, p.34
+
     U32 start = 0;
     U32 lim = 0;
     const int offset = maskToOffset( mask );

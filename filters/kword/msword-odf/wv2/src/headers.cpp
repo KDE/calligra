@@ -26,31 +26,45 @@ const int Headers::headerTypes = 6;
 
 Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version )
 {
-    if ( lcbPlcfhdd == 0 )
+    if ( lcbPlcfhdd == 0 ) {
         return;
+    }
 
     tableStream->push();
 #ifdef WV2_DEBUG_HEADERS
     wvlog << "Headers::Headers(): fc=" << fcPlcfhdd << " lcb=" << lcbPlcfhdd << endl;
-    if ( version == Word8 )
-        wvlog << "   there is/are " << lcbPlcfhdd / 4 - 2 << " header(s)" << endl;
+
+    //number of stories in PlcfHdd, first six stories specify footnote and
+    //endnote separators, MS-DOC, p.33
+    if ( version == Word8 ) {
+	//second-to-last CP ends the last story, last CP must be ignored
+	int n = lcbPlcfhdd / 4 - 2;
+	wvlog << "num. of stories in PlcfHdd:" << n << endl; 
+        wvlog << "num. of header/footer stories:" << n - 6 << endl;
+    }
 #endif
 
-    // remove later (do we want asserts in here???)
-    if ( lcbPlcfhdd % 4 )
+    //remove later (do we want asserts in here???)
+    if ( lcbPlcfhdd % 4 ) {
         wvlog << "Bug: m_fib.lcbPlcfhdd % 4 != 0!" << endl;
-    else if ( version == Word8 && ( lcbPlcfhdd / 4 - 2 ) % headerTypes )
+    }
+    else if ( version == Word8 && ( lcbPlcfhdd / 4 - 2 ) % headerTypes ) {
         wvlog << "Bug: #headers % " << headerTypes << " != 0!" << endl;
+    }
 
     tableStream->seek( fcPlcfhdd, G_SEEK_SET );
 
     U32 i = 0;
-    if ( version == Word8 )
-        for ( ; i < headerTypes * sizeof( U32 ); i += sizeof( U32 ) )
-            if ( tableStream->readU32() )
-                wvlog << "Bug: Read a value != 0 where I expected a 0!" << endl;
-    for ( ; i < lcbPlcfhdd; i += sizeof( U32 ) )
+    if ( version == Word8 ) {
+        //footnote/endnote separators related stories
+        for ( ; i < 6 * sizeof( U32 ); i += sizeof( U32 ) ) {
+            tableStream->readU32();
+        }
+    }
+    //header/footer related stories
+    for ( ; i < lcbPlcfhdd; i += sizeof( U32 ) ) {
         m_headers.push_back( tableStream->readU32() );
+    }
 
     tableStream->pop();
 }
@@ -59,6 +73,6 @@ Headers::~Headers()
 {
 }
 
-void Headers::headerMask( U8 /*sep_grpfIhdt*/ )
+void Headers::set_headerMask( U8 /*sep_grpfIhdt*/ )
 {
 }

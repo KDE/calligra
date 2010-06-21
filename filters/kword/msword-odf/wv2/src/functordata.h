@@ -35,10 +35,13 @@ namespace wvWare
     struct WV2_EXPORT HeaderData
     {
         enum Type { HeaderEven = 0x01, HeaderOdd = 0x02, FooterEven = 0x04,
-                    FooterOdd = 0x08, HeaderFirst = 0x10, FooterFirst = 0x20 };
+                    FooterOdd = 0x08, HeaderFirst = 0x10, FooterFirst = 0x20 }; 
 
-        HeaderData( int sectionNum ) : sectionNumber( sectionNum ),
-        headerMask( HeaderOdd | FooterOdd ) {}
+        enum Empty { NoHeaderEven = 0xfe, NoFooterEven = 0xfb, 
+                     NoHeaderFirst = 0x2f, NoFooterFirst = 0x1f};
+
+        HeaderData( int sectionNum ) : 
+        sectionNumber( sectionNum ), headerMask( HeaderOdd | FooterOdd ) {}
 
         int sectionNumber;
         unsigned char headerMask;

@@ -8120,7 +8120,7 @@ struct SEP : public Shared {
 
     // Data
     /**
-     * break code:
+     * type of the section break:
      * 0 Continuous section break. The next section starts on the next line.
      * 1 New column section break. The next section starts in the next column.
      * 2 New page section break. The next section starts on the next page.

@@ -40,7 +40,7 @@ std::pair<U32, U32> Headers95::findHeader( int sectionNumber, unsigned char mask
     return std::make_pair( m_headers[ ihdd ], m_headers[ ihdd + 1 ] );
 }
 
-void Headers95::headerMask( U8 sep_grpfIhdt )
+void Headers95::set_headerMask( U8 sep_grpfIhdt )
 {
     m_grpfIhdt.push_back( sep_grpfIhdt );
     m_headerCount.push_back( countOnes( sep_grpfIhdt, 0x40 ) + m_headerCount.back() );

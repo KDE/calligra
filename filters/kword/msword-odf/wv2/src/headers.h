@@ -51,7 +51,7 @@ namespace wvWare
         /**
          * A helper method to implement Word 6 support.
          */
-        virtual void headerMask( U8 sep_grpfIhdt );
+        virtual void set_headerMask( U8 sep_grpfIhdt );
 
     protected:
         std::vector<U32> m_headers;

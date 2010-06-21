@@ -41,7 +41,7 @@ namespace wvWare
          */
         virtual std::pair<U32, U32> findHeader( int sectionNumber, unsigned char mask ) const;
 
-        virtual void headerMask( U8 sep_grpfIhdt );
+        virtual void set_headerMask( U8 sep_grpfIhdt );
 
     private:
         // Counts the '1' bits in <mask> from the lsb up to <limit> (exclusively)
