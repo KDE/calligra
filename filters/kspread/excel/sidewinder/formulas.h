@@ -89,7 +89,9 @@ public:
         Ref3d       = 0x3a,
         Area3d      = 0x3b,
         RefErr3d    = 0x3c,
-        AreaErr3d   = 0x3d
+        AreaErr3d   = 0x3d,
+
+        AttrChoose  = 0x04
     };
 
     FormulaToken();

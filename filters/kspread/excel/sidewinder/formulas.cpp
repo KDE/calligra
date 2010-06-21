@@ -153,7 +153,10 @@ const char* FormulaToken::idAsString() const
     case MemFunc:      s = "MemFunc"; break;
     case MemAreaN:     s = "MemAreaN"; break;
     case MemNoMemN:    s = "MemNoMemN"; break;
-    case Attr:         s = "Attr"; break;
+    case Attr: switch (attr()) {
+        case AttrChoose:    s = "AttrChoose"; break;
+        default:            s = "Attr"; break;
+    } break;
     case 0:            s = ""; break; // NOPE...
     default:
         s = "Unknown";
@@ -193,7 +196,10 @@ unsigned FormulaToken::size() const
         s = 0; break;
 
     case Attr:
-        s = 3; break;
+        switch (attr()) {
+            case AttrChoose:    s = 3 + 2 * (1+readU16(&(d->data[1]))); break;
+            default:            s = 3; break;
+        } break;
 
     case ErrorCode:
     case Bool:
@@ -757,7 +763,7 @@ unsigned FormulaToken::functionParams() const
 unsigned FormulaToken::attr() const
 {
     unsigned attr = 0;
-    if (d->id == Attr) {
+    if (d->id == Attr && d->data.size() > 0) {
         attr = (unsigned) d->data[0];
     }
     return attr;
