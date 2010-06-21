@@ -534,13 +534,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         m_currentShapeProperties = new PptxShapeProperties();
         m_context->slideProperties->shapes.append(m_currentShapeProperties);
         m_currentMasterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
+#ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
+#endif
     }
     else if (m_context->type == SlideLayout) {
         //m_currentShapeProperties = new PptxShapeProperties();
         //m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
         m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicStyle);
+#ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
+#endif
     }
     m_isPlaceHolder = false;
     m_phType.clear();
