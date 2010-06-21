@@ -86,7 +86,7 @@ public:
     std::vector<unsigned long>& charts() const;
 
     virtual void handleRecord(Record* record);
-    
+
 public:
     // from FormulaDecoder
     virtual const std::vector<UString>& externSheets() const;
@@ -121,7 +121,7 @@ private:
     void handleSharedFormula(SharedFormulaRecord* record);
     void handleString(StringRecord* record);
     void handleTopMargin(TopMarginRecord* record);
-    void handleLink(HLinkRecord* record);
+    void handleHLink(HLinkRecord* record);
     void handleNote(NoteRecord* record);
     void handleObj(ObjRecord* record);
     void handleTxO(TxORecord* record);

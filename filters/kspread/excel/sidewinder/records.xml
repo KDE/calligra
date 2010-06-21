@@ -1200,4 +1200,68 @@
 <record name="RRDInfo" id="0x0196" />
 <record name="RRDHead" id="0x0138" />
 
+<record name="HLink" id="0x01b8">
+  <field name="firstRow"        type="unsigned" size="16" />
+  <field name="lastRow"         type="unsigned" size="16" />
+  <field name="firstColumn"     type="unsigned" size="16" />
+  <field name="lastColumn"      type="unsigned" size="16" />
+  <field name="hlinkClsid"      type="uuid" />
+  <field name="streamVersion"   type="unsigned" size="32" />
+  <if predicate="streamVersion() != 2"><fail /></if>
+  <field name="hasMoniker"            type="bool" size="1" />
+  <field name="isAbsolute"            type="bool" size="1" />
+  <field name="siteGaveDisplayName"   type="bool" size="1" />
+  <field name="hasLocationStr"        type="bool" size="1" />
+  <field name="hasDisplayName"        type="bool" size="1" />
+  <field name="hasGUID"               type="bool" size="1" />
+  <field name="hasCreationTime"       type="bool" size="1" />
+  <field name="hasFrameName"          type="bool" size="1" />
+  <field name="monikerSavedAsStr"     type="bool" size="1" />
+  <field name="absFromGetdataRel"     type="bool" size="1" />
+  <field name="reserved"                          size="22" />
+  <if predicate="hasDisplayName()">
+    <field name="displayNameLength" type="unsigned" size="32" />
+    <field name="displayName" type="unicodestring" length="displayNameLength" />
+  </if>
+  <if predicate="hasFrameName()">
+    <field name="frameNameLength" type="unsigned" size="32" />
+    <field name="frameName" type="unicodechars" length="frameNameLength" />
+  </if>
+  <if predicate="hasMoniker()">
+    <if predicate="isMonikerSavedAsStr()">
+      <field name="monikerLength" type="unsigned" size="32" />
+      <field name="moniker" type="unicodechars" length="monikerLength" />
+    </if>
+    <if predicate="!isMonikerSavedAsStr()">
+      <field name="oleMonikerClsid"   type="uuid" />
+      <choose>
+        <option predicate="oleMonikerClsid() == &quot;{79eac9e0-baf9-11ce-8282-00aa004ba90b}&quot;">
+          <field name="urlMonikerSize"    type="unsigned" size="32" />
+          <field name="urlMonikerUrl"     type="unicodechars" />
+          <choose>
+            <option predicate="int(urlMonikerSize()) == 2+24+urlMonikerUrl().length()*2">
+              <field name="urlMonikerSerialGUID"      type="uuid" />
+              <field name="urlMonikerSerialVersion"   type="unsigned" size="32" />
+              <field name="urlMonikerURIFlags"        type="unsigned" size="32" />
+            </option>
+            <option predicate="int(urlMonikerSize()) == 2+urlMonikerUrl().length()*2" />
+            <option><fail /></option>
+          </choose>
+        </option>
+        <option>
+          <fail /> <!-- todo: add support for other class ids -->
+        </option>
+      </choose>
+    </if>
+  </if>
+  <if predicate="hasLocationStr()">
+    <field name="locationLength" type="unsigned" size="32" />
+    <field name="location" type="unicodechars" length="locationLength" />
+  </if>
+  <if predicate="hasGUID()">
+    <field name="guid" type="uuid" />
+  </if>
+  <!-- not included creation time yet -->
+</record>
+
 </records>
