@@ -429,10 +429,19 @@
   per-sheet. So, we probably need to create one default-style per sheet...
 -->
 <record name="DefaultRowHeight" id="0x225">
-  <field name="opts"             type="unsigned" size="16" />
-  <field name="miyRw"            type="signed" size="16" /> <!-- in twips -->
-  <field name="miyRwHidden"      type="signed" size="16" />
+  <field name="unsynced"        type="bool" size="1" />
+  <field name="dyZero"          type="bool" size="1" />
+  <field name="exAsc"           type="bool" size="1" />
+  <field name="exDsc"           type="bool" size="1" />
+  <field name="reserved"                    size="12" />
+  <if predicate="!isDyZero()">
+    <field name="miyRw"            type="signed" size="16" /> <!-- in twips -->
+  </if>
+  <if predicate="isDyZero()">
+    <field name="miyRwHidden"      type="signed" size="16" />
+  </if>
 </record>
+
 <record name="DefaultColWidth" id="0x55">
   <field name="cchdefColWidth"   type="unsigned" size="16" />
 </record>
