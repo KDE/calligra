@@ -27,7 +27,7 @@
 #include <kdebug.h>
 
 #include "Formula.h"
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"

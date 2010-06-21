@@ -64,7 +64,7 @@
 #include "Canvas.h"
 #include "Canvas_p.h"
 #include "Doc.h"
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "PrintSettings.h"
 #include "Selection.h"
 #include "Sheet.h"

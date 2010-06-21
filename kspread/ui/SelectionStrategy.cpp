@@ -19,7 +19,7 @@
 
 #include "SelectionStrategy.h"
 
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "Selection.h"
 #include "Sheet.h"
 

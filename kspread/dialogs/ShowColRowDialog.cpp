@@ -32,7 +32,7 @@
 #include <klocale.h>
 
 // KSpread
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"

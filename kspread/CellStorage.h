@@ -25,7 +25,7 @@
 #include <QTextDocument>
 
 #include "Cell.h"
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "PointStorage.h"
 
 #include "database/Database.h"

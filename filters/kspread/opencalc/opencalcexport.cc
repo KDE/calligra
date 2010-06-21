@@ -47,7 +47,7 @@
 #include <kspread/Cell.h>
 #include <kspread/part/Doc.h>
 #include <kspread/HeaderFooter.h>
-#include <kspread/Limits.h>
+#include <kspread/kspread_limits.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
 #include <kspread/PrintSettings.h>

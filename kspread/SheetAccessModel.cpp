@@ -19,7 +19,7 @@
 
 // Ours
 #include "SheetAccessModel.h"
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "Map.h"
 #include "Binding.h"
 #include "BindingManager.h"

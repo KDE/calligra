@@ -19,7 +19,7 @@
 
 #include "AbstractSelectionStrategy.h"
 
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"

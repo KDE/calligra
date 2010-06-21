@@ -27,7 +27,7 @@
 
 #include <KoRTree.h>
 
-#include "Limits.h"
+#include "kspread_limits.h"
 
 namespace KSpread
 {

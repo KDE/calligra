@@ -24,7 +24,7 @@
 #include "PrintSettings.h"
 
 // KSpread
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "Region.h"
 
 // KOffice

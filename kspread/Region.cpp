@@ -25,7 +25,7 @@
 #include <kdebug.h>
 
 #include "Cell.h"
-#include "Limits.h"
+#include "kspread_limits.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Sheet.h"
