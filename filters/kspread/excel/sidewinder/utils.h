@@ -25,6 +25,7 @@
 #include <map>
 
 #include <QtCore/QString>
+#include <QtCore/QUuid>
 
 namespace Swinder
 {
@@ -95,6 +96,13 @@ static inline double readFixed32(const void* p)
     return a + (b / 65536.0);
 }
 
+static inline QUuid readUuid(const void* p)
+{
+    const unsigned char* ptr = (const unsigned char*) p;
+    return QUuid(readU32(ptr), readU16(ptr+4), readU16(ptr+6),
+        ptr[9], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
+}
+
 typedef double& data_64;
 static inline void convert_64(data_64 convert)
 {
@@ -145,12 +153,14 @@ static inline double readFloat64(const void*p)
 enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
 
 UString readByteString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0);
-UString readTerminatedUnicodeChars(const void* data, unsigned* size = 0);
+UString readTerminatedUnicodeChars(const void* data, unsigned* size = 0, unsigned maxSize = -1, bool* error = 0);
 UString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1, unsigned offset = 0, bool unicode = true, bool asianPhonetics = false, bool richText = false);
 UString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
+UString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
 
 std::ostream& operator<<(std::ostream& s, Swinder::UString ustring);
 std::ostream& operator<<(std::ostream& s, const QByteArray& data);
+std::ostream& operator<<(std::ostream& s, const QUuid& uuid);
 
 inline QString string(const Swinder::UString& str)
 {

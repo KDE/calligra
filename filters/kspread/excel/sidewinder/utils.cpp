@@ -44,7 +44,7 @@ UString readByteString(const void* p, unsigned length, unsigned maxSize, bool* e
     return str;
 }
 
-UString readTerminatedUnicodeChars(const void* p, unsigned* pSize)
+UString readTerminatedUnicodeChars(const void* p, unsigned* pSize, unsigned maxSize, bool* error)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
 
@@ -52,6 +52,10 @@ UString readTerminatedUnicodeChars(const void* p, unsigned* pSize)
     unsigned offset = 0;
     unsigned size = offset;
     while (true) {
+        if (size+2 > maxSize) {
+            if (*error) *error = true;
+            return UString::null;
+        }
         unsigned uchar = readU16(data + offset);
         size += 2;
         if (uchar == '\0') break;
@@ -154,6 +158,15 @@ UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
     return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, offset, unicode, asianPhonetics, richText);
 }
 
+UString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+{
+    if (length == unsigned(-1)) { // null terminated string
+        return readTerminatedUnicodeChars(p, pSize, maxSize, error);
+    } else {
+        return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, 0, true, false, false);
+    }
+}
+
 std::ostream& operator<<(std::ostream& s, Swinder::UString ustring)
 {
     char* str = ustring.ascii();
@@ -166,6 +179,11 @@ std::ostream& operator<<(std::ostream& s, const QByteArray& d)
     s << std::hex << std::setfill('0');
     for (int i = 0; i < d.size(); i++) s << " " << std::setw(2) << int((unsigned char)d[i]);
     return s;
+}
+
+std::ostream& operator<<(std::ostream& s, const QUuid& uuid)
+{
+    return s << uuid.toString().toAscii().data();
 }
 
 Value errorAsValue(int errorCode)

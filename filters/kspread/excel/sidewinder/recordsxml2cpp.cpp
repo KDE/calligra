@@ -44,7 +44,7 @@ struct Field {
     Field(QString name = QString(), QString type = QString()) : name(name), type(type), isArray(false), isArrayLength(false), isStringLength(false), isEnum(false) {}
 
     QString getterName() const {
-        if (type == "bool") {
+        if (type == "bool" && !(name.startsWith("has") || name.startsWith("is"))) {
             return "is" + ucFirst(name);
         } else {
             return name;
@@ -64,8 +64,9 @@ static QString getFieldType(QString xmlType, unsigned bits, QString otherType, c
     else if (xmlType == "signed") return "int";
     else if (xmlType == "float" || xmlType == "fixed") return "double";
     else if (xmlType == "bool") return "bool";
-    else if (xmlType == "bytestring" || xmlType == "unicodestring") return "UString";
+    else if (xmlType == "bytestring" || xmlType == "unicodestring" || xmlType == "unicodechars") return "UString";
     else if (xmlType == "blob") return "QByteArray";
+    else if (xmlType == "uuid") return "QUuid";
     else if (extraTypes.contains(xmlType)) return getFieldType(extraTypes[xmlType], bits, otherType, extraTypes);
     return "ERROR";
 }
@@ -213,6 +214,10 @@ static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, 
     for (QDomElement e = firstField; !e.isNull(); e = e.nextSiblingElement()) {
         if (e.tagName() != "field") break;
         unsigned bits = e.attribute("size", "0").toUInt();
+        if (bits == 0 && e.attribute("type") == "uuid") {
+            bits = 128;
+            e.setAttribute("size", "128");
+        }
         if (bits == 0) break;
         size += bits;
     }
@@ -233,7 +238,10 @@ static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, 
 
 static void processFieldElement(QString indent, QTextStream& out, QDomElement field, unsigned& offset, bool& dynamicOffset, QMap<QString, Field>& fieldsMap, QString setterArgs = QString())
 {
-    if (field.tagName() == "field") {
+    if (field.tagName() == "fail") {
+        out << indent << "setIsValid(false);\n";
+        out << indent << "return;\n";
+    } else if (field.tagName() == "field") {
         unsigned bits = field.attribute("size").toUInt();
         QString name = field.attribute("name");
         if (!name.startsWith("reserved")) {
@@ -256,10 +264,17 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
 
                 if (field.attribute("type") == "unicodestring")
                     out << "readUnicodeString(";
+                else if (field.attribute("type") == "unicodechars")
+                    out << "readUnicodeCharArray(";
                 else
                     out << "readByteString(";
 
-                out << "data + curOffset, " << field.attribute("length") << ", size - curOffset"
+                out << "data + curOffset, ";
+                if (field.hasAttribute("length") || field.attribute("type") != "unicodechars")
+                    out << field.attribute("length");
+                else
+                    out << "-1";
+                out << ", size - curOffset"
                 << ", &stringLengthError, &stringSize));\n";
                 out << indent << "if (stringLengthError) {\n"
                 << indent << "    setIsValid(false);\n"
@@ -274,6 +289,12 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 if (dynamicOffset) out << " + curOffset";
                 if (offset) out << " + " << (offset / 8);
                 out << "), " << (bits / 8) << "));\n";
+            } else if (f.type == "QUuid") {
+                out << indent << f.setterName() << "(" << setterArgs;
+                out << "readUuid(data";
+                if (dynamicOffset) out << " + curOffset";
+                if (offset) out << " + " << (offset / 8);
+                out << "));\n";
             } else if (bits % 8 == 0) {
                 if (f.isStringLength)
                     out << indent << "unsigned " << name << " = ";
@@ -350,6 +371,44 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         out << indent << "}\n";
         offset = 0;
         sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+    } else if (field.tagName() == "choose") {
+        if (offset % 8 != 0)
+            qFatal("Choose tags should always be byte-aligned");
+        if (!dynamicOffset)
+            out << indent << "curOffset = " << (offset / 8) << ";\n";
+        else
+            if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        offset = 0; dynamicOffset = true;
+
+        bool isFirst = true;
+
+        for (QDomElement childField = field.firstChildElement(); !childField.isNull(); childField = childField.nextSiblingElement()) {
+            if (childField.tagName() != "option") {
+                qFatal("only option tags are allowed inside a choose tag");
+            }
+
+            if (isFirst) out << indent; else out << " ";
+            if (!isFirst) out << "else ";
+            isFirst = false;
+            if (childField.hasAttribute("predicate"))
+                out << "if (" << childField.attribute("predicate") << ") ";
+            out << "{\n";
+
+            sizeCheck(indent + "    ", out, childField.firstChildElement(), offset, dynamicOffset);
+
+            for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+                processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap);
+            }
+
+            if (offset % 8 != 0)
+                qFatal("options should contain an integer number of bytes");
+
+            if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
+            out << indent << "}";
+            offset = 0;
+        }
+        out << "\n";
+        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
     } else if (field.tagName() == "array") {
         if (offset % 8 != 0)
             qFatal("Arrays should always be byte-aligned");
@@ -419,6 +478,23 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
             processFieldElementForDump(indent + "    ", out, e, fieldsMap);
         out << indent << "}\n";
+    } else if (field.tagName() == "choose") {
+        bool isFirst = true;
+        for (QDomElement childField = field.firstChildElement(); !childField.isNull(); childField = childField.nextSiblingElement()) {
+            if (isFirst) out << indent; else out << " ";
+            if (!isFirst) out << "else ";
+            isFirst = false;
+            if (childField.hasAttribute("predicate"))
+                out << "if (" << childField.attribute("predicate") << ") ";
+            out << "{\n";
+
+            for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+                processFieldElementForDump(indent + "    ", out, child, fieldsMap);
+            }
+
+            out << indent << "}";
+        }
+        out << "\n";
     } else if (field.tagName() == "array") {
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
