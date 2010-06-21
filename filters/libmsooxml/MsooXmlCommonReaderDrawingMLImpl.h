@@ -1897,6 +1897,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
             ELSE_TRY_READ_IF_NS(c, chart)
+#ifdef PPTXXMLSLIDEREADER_CPP
+            ELSE_TRY_READ_IF_NS(p, oleObj)
+#endif
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);

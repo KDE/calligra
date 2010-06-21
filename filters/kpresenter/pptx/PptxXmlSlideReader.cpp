@@ -554,6 +554,55 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL oleObj
+//! oleObj handler (Global Element for Embedded objects and Controls)
+/*!
+ Parent elements:
+
+ Child elements:
+ - embed (Embedded Object or Control) §19.3.2.2
+ - link (Linked Object or Control) §19.3.2.3
+ - pic (Picture) §19.3.1.37
+
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs( attributes() );
+    TRY_READ_ATTR_WITH_NS(r, id);
+    TRY_READ_ATTR_WITHOUT_NS(imgW);
+    TRY_READ_ATTR_WITHOUT_NS(imgH);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (!r_id.isEmpty()) {
+        // The file which we get here is oble object, it should be unpacked.
+        // @todo : implement this
+        /*
+        body->startElement("draw:image");
+        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+        if (sourceName.isEmpty()) {
+            return KoFilter::FileNotFound;
+        }
+        QString destinationName;
+        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+        addManifestEntryForPicturesDir();
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); //draw:image
+        */
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL titleStyle
 //! titleStyle handler (Slide Master Title Text)
 /*!
