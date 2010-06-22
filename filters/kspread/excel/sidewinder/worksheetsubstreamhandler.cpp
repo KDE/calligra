@@ -725,7 +725,8 @@ void WorksheetSubStreamHandler::handleHLink(HLinkRecord* record)
     //FIXME we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
     Cell *cell = d->sheet->cell(record->firstColumn(), record->firstRow());
     if (cell) {
-        cell->setHyperlink(record->displayName(), record->urlMonikerUrl(), record->frameName());
+        UString url = record->urlMonikerUrl() + UString('#') + record->location();
+        cell->setHyperlink(record->displayName(), url, record->frameName());
     }
 }
 
