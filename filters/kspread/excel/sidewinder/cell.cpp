@@ -161,6 +161,15 @@ void Cell::setColumnSpan(unsigned span)
 {
     if (span < 1) return;
     d->columnSpan = span;
+    // correctly set right border
+    if (span > 1) {
+        Cell* lastCell = d->sheet->cell(d->column + span - 1, d->row, false);
+        if (lastCell) {
+            Format curFormat = format();
+            curFormat.borders().setRightBorder(lastCell->format().borders().rightBorder());
+            setFormat(curFormat);
+        }
+    }
 }
 
 unsigned Cell::rowSpan() const
@@ -172,6 +181,15 @@ void Cell::setRowSpan(unsigned span)
 {
     if (span < 1) return;
     d->rowSpan = span;
+    // correctly set bottom border
+    if (span > 1) {
+        Cell* lastCell = d->sheet->cell(d->column, d->row + span - 1, false);
+        if (lastCell) {
+            Format curFormat = format();
+            curFormat.borders().setBottomBorder(lastCell->format().borders().bottomBorder());
+            setFormat(curFormat);
+        }
+    }
 }
 
 bool Cell::isCovered() const
@@ -193,7 +211,7 @@ void Cell::setColumnRepeat(int repeat)
 {
     d->columnRepeat = repeat;
 }
-    
+
 bool Cell::hasHyperlink() const
 {
     return d->hasHyperlink;
