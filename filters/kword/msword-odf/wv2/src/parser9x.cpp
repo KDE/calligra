@@ -931,7 +931,7 @@ void Parser9x::emitBookmark( UString characters, U32 globalCP, SharedPtr<const W
 
     if (ok) {
         // We introduce the name of the bookmark here with data.name
-        m_textHandler->bookmarkFound( characters, data.name, chp, make_functor( *this, &Parser9x::parseBookmark, data ));
+        m_textHandler->bookmarkFound( characters, data.name, chp);
     }
 }
 
