@@ -1355,10 +1355,11 @@ ObjRecord::~ObjRecord()
 
 void ObjRecord::dump(std::ostream& out) const
 {
-    Q_ASSERT(m_object);
     out << "Obj" << std::endl;
-    out << "  id: " << m_object->id() << std::endl;
-    out << "  type: " << m_object->type() << std::endl;
+    if (m_object) {
+        out << "  id: " << m_object->id() << std::endl;
+        out << "  type: " << m_object->type() << std::endl;
+    }
 }
 
 void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
