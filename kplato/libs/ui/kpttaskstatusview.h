@@ -33,12 +33,22 @@
 
 #include <QSplitter>
 
+#include "KDChartBarDiagram"
+
 class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
 
 class KAction;
+
+namespace KDChart
+{
+    class Chart;
+    class CartesianCoordinatePlane;
+    class CartesianAxis;
+    class Legend;
+};
 
 namespace KPlato
 {
@@ -52,7 +62,6 @@ class NodeItemModel;
 class PerformanceStatusViewSettingsPanel;
 
 typedef QList<Node*> NodeList;
-
 
 class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 {
@@ -165,6 +174,47 @@ public:
 
 };
 
+struct PerformanceChartInfo
+{
+    bool showBarChart;
+    bool showLineChart;
+
+    bool showCost;
+    bool showBCWSCost;
+    bool showBCWPCost;
+    bool showACWPCost;
+
+    bool showEffort;
+    bool showBCWSEffort;
+    bool showBCWPEffort;
+    bool showACWPEffort;
+
+    bool bcwsCost() const { return showCost && showBCWSCost; }
+    bool bcwpCost() const { return showCost && showBCWPCost; }
+    bool acwpCost() const { return showCost && showACWPCost; }
+    bool bcwsEffort() const { return showEffort && showBCWSEffort; }
+    bool bcwpEffort() const { return showEffort && showBCWPEffort; }
+    bool acwpEffort() const { return showEffort && showACWPEffort; }
+
+    PerformanceChartInfo() {
+        showBarChart = false; showLineChart = true;
+        showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
+        showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
+    }
+    bool operator!=( const PerformanceChartInfo &o ) const { return ! operator==( o ); }
+    bool operator==( const PerformanceChartInfo &o ) const {
+        return showBarChart == o.showBarChart && showLineChart == o.showLineChart &&
+                showCost == o.showCost && 
+                showBCWSCost == o.showBCWSCost &&
+                showBCWPCost == o.showBCWPCost &&
+                showACWPCost == o.showACWPCost &&
+                showEffort == o.showEffort &&
+                showBCWSEffort == o.showBCWSEffort &&
+                showBCWPEffort == o.showBCWPEffort &&
+                showACWPEffort == o.showACWPEffort;
+    }
+};
+
 //----------------------------------
 class PerformanceStatusBase : public QWidget, public Ui::PerformanceStatus
 {
@@ -176,14 +226,11 @@ public:
     void setScheduleManager( ScheduleManager *sm );
 
     void draw();
-    NodeChartModel *model() const { return const_cast<NodeChartModel*>( &m_model ); }
+    ChartItemModel *model() const { return const_cast<ChartItemModel*>( &m_chartmodel ); }
     
-    void setDataShown( const NodeChartModel::DataShown &show ) {
-        model()->setDataShown( show );
-    }
-    NodeChartModel::DataShown dataShown() const {
-        return model()->dataShown();
-    }
+    void setupChart();
+    void setChartInfo( const PerformanceChartInfo &info );
+    PerformanceChartInfo chartInfo() const { return m_chartinfo; }
     
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &context );
@@ -192,6 +239,11 @@ public:
     
 protected:
     void contextMenuEvent( QContextMenuEvent *event );
+    
+    void setupBarChart();
+    void createBarChart();
+    void setupLineChart();
+    void createLineChart();
     
     void drawValues();
     void drawPlot( Project &p, ScheduleManager &sm );
@@ -202,12 +254,28 @@ protected:
 protected slots:
     void slotReset();
     void slotUpdate();
+    void slotLocaleChanged();
 
 private:
     Project *m_project;
     ScheduleManager *m_manager;
     NodeChartModel m_model;
+    PerformanceChartInfo m_chartinfo;
+
+    ChartItemModel m_chartmodel;
+    KDChart::Legend *m_legend;
+    KDChart::BarDiagram m_legenddiagram;
+    struct ChartContainer {
+        ChartProxyModel costproxy;
+        ChartProxyModel effortproxy;
     
+        KDChart::CartesianCoordinatePlane *effortplane;
+        KDChart::CartesianCoordinatePlane *costplane;
+        KDChart::CartesianAxis *hours_axis;
+        KDChart::CartesianAxis *cost_axis;
+    };
+    struct ChartContainer m_barchart;
+    struct ChartContainer m_linechart;
 };
 
 //----------------------------------

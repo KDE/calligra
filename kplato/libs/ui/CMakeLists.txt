@@ -2,6 +2,8 @@
 include (${CMAKE_SOURCE_DIR}/kdgantt/CMakeLists.txt)
 
 include_directories(
+    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+
     ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
     ${CMAKE_SOURCE_DIR}/kplato/libs/models
     ${CMAKE_BINARY_DIR}/kplato/libs/models
@@ -22,7 +24,7 @@ include_directories(
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
-
+message ( STATUS "kdchar include: ${CMAKE_SOURCE_DIR}/kchart/kdchart/include" ) 
 #add_subdirectory( tests )
 
 ########### KPlato private library ###############
@@ -148,7 +150,7 @@ add_definitions(-DKDGANTT_STATICLIB)
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 
 set ( KPLATO_REPORTS_LIBS koreport koproperty )
-target_link_libraries(kplatoui ${KDE4_KABC_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kplatoui ${KDE4_KABC_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart  ${KDE4_KHTML_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

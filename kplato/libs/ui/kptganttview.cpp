@@ -408,7 +408,7 @@ void MyKDGanttView::addDependency( Relation *rel )
 {
     QModelIndex par = sfModel()->mapFromSource( model()->index( rel->parent() ) );
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
-    kDebug()<<"addDependency() "<<model()<<par.model();
+//    kDebug()<<"addDependency() "<<model()<<par.model();
     if ( par.isValid() && ch.isValid() ) {
         KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft, 
                                  static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/

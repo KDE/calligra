@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>573</width>
-    <height>284</height>
+    <width>561</width>
+    <height>313</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -72,6 +72,25 @@
            </property>
            <property name="text">
             <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="labelBCWS">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="text">
+            <string>BCWS</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -278,25 +297,6 @@
            </item>
           </layout>
          </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="labelBCWS">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="text">
-            <string>BCWS</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </item>
@@ -313,34 +313,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="KPlato::KPlotWidget" name="plotwidget">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="lineWidth">
-            <number>0</number>
-           </property>
-           <property name="backgroundColor" stdset="0">
-            <color>
-             <red>255</red>
-             <green>255</green>
-             <blue>255</blue>
-            </color>
-           </property>
-           <property name="foregroundColor" stdset="0">
-            <color>
-             <red>0</red>
-             <green>0</green>
-             <blue>0</blue>
-            </color>
-           </property>
-          </widget>
+          <widget class="KDChart::Chart" name="ui_chart" native="true"/>
          </item>
         </layout>
        </widget>
@@ -352,9 +325,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPlato::KPlotWidget</class>
-   <extends>QFrame</extends>
-   <header>plotting/kplotwidget.h</header>
+   <class>KDChart::Chart</class>
+   <extends>QWidget</extends>
+   <header>KDChartChart</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

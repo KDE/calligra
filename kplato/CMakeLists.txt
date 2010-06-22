@@ -18,6 +18,8 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/kplato
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
+    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
 
