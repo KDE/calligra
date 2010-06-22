@@ -1173,7 +1173,6 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
                     if ( e2.tagName() != "node" ) {
                         continue;
                     }
-                    kDebug()<<"node";
                     QString s = e2.attribute( "id" );
                     Node *node = status.project().findNode( s );
                     if ( node ) {
