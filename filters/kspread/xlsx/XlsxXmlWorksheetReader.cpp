@@ -1364,8 +1364,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(ref)
+    TRY_READ_ATTR_WITHOUT_NS(location)
     TRY_READ_ATTR_WITH_NS(r, id)
-    if (!ref.isEmpty() && !r_id.isEmpty()) {
+    if (!ref.isEmpty() && (!r_id.isEmpty() || !location.isEmpty())) {
         const int col = KSpread::Util::decodeColumnLabelText(ref) - 1;
         const int row = KSpread::Util::decodeRowLabelText(ref) - 1;
         if(col >= 0 && row >= 0) {
@@ -1373,6 +1374,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
             // it follows a hack to get right of the prepended m_context->path...
             if (link.startsWith(m_context->path))
                 link = link.mid(m_context->path.length()+1);
+
+            // append location
+            if (!location.isEmpty()) link += '#' + location;
 
             Cell* cell = d->sheet->cell(col, row, true);
             cell->hyperlink = link;
