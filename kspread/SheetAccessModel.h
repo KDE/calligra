@@ -23,6 +23,7 @@
 
 namespace KSpread {
 
+    class Damage;
     class Map;
     class Sheet;
 
@@ -52,7 +53,7 @@ namespace KSpread {
     public Q_SLOTS:
         void slotSheetAdded( Sheet *sheet );
         void slotSheetRemoved( Sheet *sheet );
-        void slotSheetNameChanged( Sheet *sheet, const QString &oldName );
+        void handleDamages(const QList<Damage*> &damages);
 
     private:
         class Private;

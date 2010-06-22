@@ -23,6 +23,7 @@
 #include "Map.h"
 #include "Binding.h"
 #include "BindingManager.h"
+#include "Damages.h"
 #include "Region.h"
 
 // Qt
@@ -58,6 +59,8 @@ SheetAccessModel::SheetAccessModel( Map *map )
              this, SLOT( slotSheetAdded(Sheet*) ) );
     connect( map, SIGNAL( sheetRemoved(Sheet*) ),
              this, SLOT( slotSheetRemoved(Sheet*) ) );
+    connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            this, SLOT(handleDamages(const QList<Damage*>&)));
 
     setRowCount( 1 );
     setColumnCount( 0 );
@@ -68,9 +71,6 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
     QStandardItem *item = new QStandardItem;
     QList<QStandardItem*> col;
     col.append( item );
-
-    connect( sheet, SIGNAL( sig_nameChanged( Sheet*, QString ) ),
-             this,  SLOT( slotSheetNameChanged( Sheet*, QString ) ) );
 
     // This region contains the entire sheet
     const Region region( 1, 1, KS_colMax, KS_rowMax, sheet );
@@ -86,20 +86,31 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
 
 void SheetAccessModel::slotSheetRemoved( Sheet *sheet )
 {
-    disconnect( sheet, SIGNAL( sig_nameChanged( Sheet*, QString ) ),
-                this,  SLOT( slotSheetNameChanged( Sheet*, QString ) ) );
-
     removeColumn( d->map->indexOf( sheet ), QModelIndex() );
 }
 
-void SheetAccessModel::slotSheetNameChanged( Sheet *sheet, const QString &oldName )
+void SheetAccessModel::handleDamages(const QList<Damage*>& damages)
 {
-    Q_UNUSED( oldName );
+    QList<Damage*>::ConstIterator end(damages.end());
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage* damage = *it;
+        if (!damage) {
+            continue;
+        }
 
-    const int sheetIndex = d->map->indexOf( sheet );
-    // We should never receive signals from sheets that are not in our model
-    Q_ASSERT( sheetIndex >= 0 );
-    setHeaderData( sheetIndex, Qt::Horizontal, sheet->sheetName() );
+        if (damage->type() == Damage::Sheet) {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            kDebug(36007) << "Processing\t" << *sheetDamage;
+
+            if (sheetDamage->changes() & SheetDamage::Name) {
+                const int sheetIndex = d->map->indexOf(sheetDamage->sheet());
+                // We should never receive signals from sheets that are not in our model
+                Q_ASSERT( sheetIndex >= 0 );
+                setHeaderData(sheetIndex, Qt::Horizontal, sheetDamage->sheet()->sheetName());
+            }
+            continue;
+        }
+    }
 }
 
 } // namespace KSpread
