@@ -1230,7 +1230,7 @@
   <field name="reserved"                          size="22" />
   <if predicate="hasDisplayName()">
     <field name="displayNameLength" type="unsigned" size="32" />
-    <field name="displayName" type="unicodestring" length="displayNameLength" />
+    <field name="displayName" type="unicodechars" length="displayNameLength" />
   </if>
   <if predicate="hasFrameName()">
     <field name="frameNameLength" type="unsigned" size="32" />
