@@ -3939,7 +3939,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 //! CASE #1340
 //! CASE #1410
 //! CASE #1420
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
 {
     READ_PROLOGUE
     m_hasPosOffsetH = false;
@@ -4039,7 +4039,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_anchor()
  - distT (Distance From Text on Top Edge)
 */
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
 {
     READ_PROLOGUE
     m_docPrName.clear();
@@ -4061,7 +4061,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_inline()
 
 #undef CURRENT_EL
 #define CURRENT_EL extent
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_extent()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_extent()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
@@ -4103,7 +4103,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_extent()
 */
 //! CASE #1340
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_docPr()
 {
     READ_PROLOGUE
 
@@ -4148,7 +4148,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_docPr()
  Attributes:
  - [done] relativeFrom (Horizontal Position Relative Base)
 */
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionH()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
@@ -4192,7 +4192,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionH()
  Attributes:
  - [done] relativeFrom (Horizontal Position Relative Base)
 */
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionV()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
@@ -4228,7 +4228,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_positionV()
  No child elements.
 */
 //! CASE #1360
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset(posOffsetCaller caller)
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_posOffset(posOffsetCaller caller)
 {
     READ_PROLOGUE
 
@@ -4279,7 +4279,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_posOffset(posOffsetCaller
  - [done] wrapText (Text Wrapping Location)
 */
 //! CASE #1410
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapSquare()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapSquare()
 {
     READ_PROLOGUE
     readWrap();
@@ -4315,7 +4315,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapSquare()
  - [done] wrapText (Text Wrapping Location)
 */
 //! CASE #1410
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapTight()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapTight()
 {
     READ_PROLOGUE
     readWrap();
@@ -4351,7 +4351,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapTight()
  - [done] wrapText (Text Wrapping Location)
 */
 //! CASE #1410
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
 {
     READ_PROLOGUE
     readWrap();
@@ -4383,7 +4383,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrapThrough()
  No child elements.
 */
 //! CASE #1340
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_align(alignCaller caller)
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
 {
     READ_PROLOGUE
     switch (caller) {
