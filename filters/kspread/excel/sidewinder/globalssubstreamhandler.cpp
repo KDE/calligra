@@ -710,6 +710,7 @@ void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
         d->decryption = new RC4Decryption(record->salt(), record->encryptedVerifier(), record->encryptedVerifierHash());
         if (!d->decryption->checkPassword("VelvetSweatshop")) {
             delete d->decryption;
+            d->decryption = 0;
             fprintf(stderr, "Invalid password\n");
         } else {
             d->decryption->setInitialPosition(record->position() + 54+4);

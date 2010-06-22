@@ -21,7 +21,7 @@
 using namespace Swinder;
 
 RC4Decryption::RC4Decryption(const QByteArray& salt, const QByteArray& encryptedVerifier, const QByteArray& encryptedVerifierHash)
-    : m_salt(salt), m_encryptedVerifier(encryptedVerifier), m_encryptedVerifierHash(encryptedVerifierHash)
+    : m_salt(salt), m_encryptedVerifier(encryptedVerifier), m_encryptedVerifierHash(encryptedVerifierHash), m_rc4(0)
 {
 }
 
