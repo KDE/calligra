@@ -942,7 +942,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         //nothing
      } else {
          body = textPBuf.originalWriter();
-         if (m_lstStyleFound) {
+         if (m_lstStyleFound || m_currentListLevel > 0) {
              int listDepth = 0;
              while (listDepth <= m_currentListLevel) {
                  body->startElement("text:list");
@@ -978,7 +978,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          body->startElement("text:p", false);
          setupParagraphStyle();
          (void)textPBuf.releaseWriter();
-         if (m_lstStyleFound) {
+         if (m_lstStyleFound || m_currentListLevel > 0) {
              int listDepth = 0;
              while (listDepth <= m_currentListLevel) {
                  body->endElement(); // text:list-item
