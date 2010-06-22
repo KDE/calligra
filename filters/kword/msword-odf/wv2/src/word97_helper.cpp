@@ -257,6 +257,8 @@ typedef enum
     sprmSDyaBottom = 0x9024,
     sprmSDyaLinePitch = 0x9031,
     sprmTDyaRowHeight = 0x9407,
+    sprmTDxaAbs = 0x940E,
+    sprmTDyaAbs = 0x940F,
     sprmTDxaLeft = 0x9601,
     sprmTDxaGapHalf = 0x9602,
     sprmPDyaBefore = 0xA413,
@@ -2099,6 +2101,12 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     case SPRM::sprmTFBiDi:
         wvlog << "Warning: sprmTFBiDi not implemented" << endl;
+        break;
+    case SPRM::sprmTDxaAbs:
+        dxaAbs = readS16( ptr );
+        break;
+    case SPRM::sprmTDyaAbs:
+        dyaAbs = readS16( ptr );
         break;
     case SPRM::sprmTHTMLProps:
         wvlog << "Warning: sprmTHTMLProps not implemented" << endl;

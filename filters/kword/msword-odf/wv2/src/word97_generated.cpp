@@ -1447,6 +1447,8 @@ bool TAP::read(OLEStreamReader *stream, bool preservePos) {
     fCantSplit=stream->readU8();
     fTableHeader=stream->readU8();
     tlp.read(stream, false);
+    dxaAbs=stream->readS16();
+    dyaAbs=stream->readS16();
     lwHTMLProps=stream->readS32();
     shifterU16=stream->readU16();
     fCaFull=shifterU16;
@@ -1500,6 +1502,8 @@ bool TAP::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(dxaAdjust);
     stream->write(dxaScale);
     stream->write(dxsInch);
+    stream->write(dxaAbs);
+    stream->write(dyaAbs);
     // skipping the std::vector rgdxaCenter
     // skipping the std::vector rgdxaCenterPrint
     // skipping the std::vector rgtc
@@ -1521,6 +1525,8 @@ void TAP::clear() {
     fCantSplit=0;
     fTableHeader=0;
     tlp.clear();
+    dxaAbs=0;
+    dyaAbs=0;
     lwHTMLProps=0;
     fCaFull=0;
     fFirstRow=0;
@@ -1565,6 +1571,10 @@ std::string TAP::toString() const
     s += uint2string( fTableHeader );
     s += "\ntlp=";
     s += "\n{" + tlp.toString() + "}\n";
+    s += "\ndxaAbs=";
+    s += int2string( dxaAbs );
+    s += "\ndyaAbs=";
+    s += int2string( dyaAbs );
     s += "\nlwHTMLProps=";
     s += int2string( lwHTMLProps );
     s += "\nfCaFull=";

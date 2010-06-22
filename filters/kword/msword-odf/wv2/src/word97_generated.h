@@ -1337,6 +1337,18 @@ struct TAP : public Shared {
     TLP tlp;
 
     /**
+     * Specifies the horizontal position of the table relative to the table's
+     * horizontal anchor.
+     */
+    S16 dxaAbs;
+
+    /**
+     * Specifies downward vertical position of the table relative to the
+     * table's vertical anchor.
+     */
+    S16 dyaAbs;
+
+    /**
      * reserved for future use
      */
     S32 lwHTMLProps;
