@@ -71,6 +71,7 @@ private slots:
     void slotPrintReport();
     void slotRenderKSpread();
     void slotExportHTML();
+    void slotRenderODT();
 };
 
 #endif

@@ -33,6 +33,7 @@
 #include "krscriptfunctions.h"
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
+#include <KRun>
 
 #include <renderobjects.h>
 #include <KoReportPreRenderer.h>
@@ -71,14 +72,12 @@ KexiReportView::KexiReportView(QWidget *parent)
     a->setWhatsThis(i18n("Prints the current report."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotPrintReport()));
 
-#if 0
-    viewActions << (a = new KAction(KIcon("kword"), i18n("Open in KWord"), this));
-    a->setObjectName("open_in_kword");
-    a->setToolTip(i18n("Open the report in KWord"));
-    a->setWhatsThis(i18n("Opens the current report in KWord."));
-    a->setEnabled(false);
-//! @todo connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKWord()));
-#endif
+    viewActions << (a = new KAction(KIcon("kword"), i18n("Save to KWord"), this));
+    a->setObjectName("save_to_kword");
+    a->setToolTip(i18n("Save the report to a KWord document"));
+    a->setWhatsThis(i18n("Save the report to a KWord document"));
+    a->setEnabled(true);
+    connect(a, SIGNAL(triggered()), this, SLOT(slotRenderODT()));
 
     viewActions << (a = new KAction(KIcon("kspread"), i18n("Save to KSpread"), this));
     a->setObjectName("save_to_kspread");
@@ -171,7 +170,7 @@ void KexiReportView::slotRenderKSpread()
     renderer = m_factory.createInstance("ods");
 
     if (renderer) {
-        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), QString(), this, i18n("Save Report to.."));
+        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), "*.ods", this, i18n("Save Report to.."));
         if (!cxt.destinationUrl.isValid()) {
             KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
             return;
@@ -185,6 +184,36 @@ void KexiReportView::slotRenderKSpread()
         }
         if (!renderer->render(cxt, m_reportDocument)) {
             KMessageBox::error(this, i18n("Failed to open %1 in KSpread", cxt.destinationUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
+        } else {
+            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+        }
+    }
+}
+
+void KexiReportView::slotRenderODT()
+{
+    KoReportRendererBase *renderer;
+    KoReportRendererContext cxt;
+
+    renderer = m_factory.createInstance("odt");
+
+    if (renderer) {
+        cxt.destinationUrl = KFileDialog::getSaveUrl(KUrl(), "*.odt", this, i18n("Save Report to.."));
+        if (!cxt.destinationUrl.isValid()) {
+            KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
+            return;
+        }
+
+        if (KIO::NetAccess::exists(cxt.destinationUrl, KIO::NetAccess::DestinationSide, this)) {
+            int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", cxt.destinationUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+            if (wantSave != KMessageBox::Continue) {
+                return;
+            }
+        }
+        if (!renderer->render(cxt, m_reportDocument)) {
+            KMessageBox::error(this, i18n("Failed to save %1 to KWord", cxt.destinationUrl.prettyUrl()) , i18n("Saving to KWord failed"));
+        } else {
+            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -224,6 +253,7 @@ void KexiReportView::slotExportHTML()
         KMessageBox::error(this, i18n("Exporting report to %1 failed", cxt.destinationUrl.prettyUrl()), i18n("Exporting failed"));
     } else {
         KMessageBox::information(this, i18n("Report exported to %1", cxt.destinationUrl.prettyUrl()) , i18n("Exporting Succeeded"));
+        KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
     }
 }
 
