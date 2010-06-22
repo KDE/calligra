@@ -174,13 +174,23 @@ public:
     }
     Duration effortOnDate(const QDate &date) const {
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            kError()<<"Date not valid";
             return Duration::zeroDuration;
         }
         if (m_days.contains(date)) {
             return m_days[date].effort();
         }
         return Duration::zeroDuration;
+    }
+    double hoursOnDate(const QDate &date) const {
+        if (!date.isValid()) {
+            kError()<<"Date not valid";
+            return 0.0;
+        }
+        if (m_days.contains(date)) {
+            return m_days[date].hours();
+        }
+        return 0.0;
     }
     double bcwpCostOnDate(const QDate &date) const {
         if (!date.isValid()) {
@@ -189,6 +199,16 @@ public:
         }
         if (m_days.contains(date)) {
             return m_days[date].bcwpCost();
+        }
+        return 0.0;
+    }
+    double bcwpEffortOnDate(const QDate &date) const {
+        if (!date.isValid()) {
+            kError()<<"Date not valid"<<endl;
+            return 0.0;
+        }
+        if (m_days.contains(date)) {
+            return m_days[date].bcwpEffort();
         }
         return 0.0;
     }
@@ -231,7 +251,26 @@ public:
         }
         return eff;
     }
-
+    double hoursTo( const QDate &date ) const {
+        double eff = 0.0;
+        EffortCostDayMap::const_iterator it;
+        for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
+            if ( it.key() > date ) {
+                break;
+            }
+            eff += it.value().hours();
+        }
+        return eff;
+    }
+    /// Return the BCWP cost to @p date. (BSWP is cumulative)
+    double bcwpCost( const QDate &date ) const {
+        return m_days.value( date ).bcwpCost();
+    }
+    /// Return the BCWP effort to @p date. (BSWP is cumulative)
+    double bcwpEffort( const QDate &date ) const {
+        return m_days.value( date ).bcwpEffort();
+    }
+    /// Return the BCWP total cost. Since BCWP is cumulative this is the last entry.
     double bcwpTotalCost() const {
         double cost = 0.0;
         if ( ! m_days.isEmpty() ) {
@@ -239,6 +278,7 @@ public:
         }
         return cost;
     }
+    /// Return the BCWP total cost. Since BCWP is cumulative this is the last entry.
     double bcwpTotalEffort() const {
         double eff = 0.0;
         if ( ! m_days.isEmpty() ) {
