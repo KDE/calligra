@@ -237,6 +237,9 @@ bool Map::completeLoading(KoStore *store)
     Q_UNUSED(store);
     // Initial build of all cell dependencies.
     d->dependencyManager->updateAllDependencies(this);
+    // Recalc the whole workbook now, since there may be formulas other spreadsheets support,
+    // but KSpread does not.
+    d->recalcManager->recalcMap();
     return true;
 }
 
@@ -894,7 +897,8 @@ void Map::addDamage(Damage* damage)
 {
     // Do not create a new Damage, if we are in loading process. Check for it before
     // calling this function. This prevents unnecessary memory allocations (new).
-    Q_ASSERT(!isLoading());
+    // see FIXME in Sheet::setSheetName().
+//     Q_ASSERT(!isLoading());
     Q_CHECK_PTR(damage);
 
 #ifndef NDEBUG
