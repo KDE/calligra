@@ -100,7 +100,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
-                this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));;
+                this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(annotationFound(const wvWare::FunctorBase*,int)),
                 this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
