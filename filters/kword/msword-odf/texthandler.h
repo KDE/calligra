@@ -81,7 +81,8 @@ public:
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
     virtual void bookmarkFound(wvWare::UString characters, wvWare::UString name,
-                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+                               wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+                               const wvWare::BookmarkFunctor& parseBookmark);
     virtual void annotationFound(wvWare::UString characters,
                                  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                  const wvWare::AnnotationFunctor& parseAnnotation);

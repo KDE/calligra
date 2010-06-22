@@ -416,7 +416,7 @@ namespace wvWare {
         * and invokes the functor.
         */
         virtual void bookmarkFound( UString characters, UString name,
-                                    SharedPtr<const Word97::CHP> chp);
+                                    SharedPtr<const Word97::CHP> chp, const BookmarkFunctor& parseBookmark);
         /**
          * The parser found an annotation. The passed functor will trigger the parsing of this
          * annotation, the default implementation just emits the passed character with
