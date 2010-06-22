@@ -212,8 +212,8 @@ OLEStreamReader* Parser9x::getTable()
 void Parser9x::parseHeaders( const HeaderData& data )
 {
     m_subDocumentHandler->headersStart();
-    for ( unsigned char mask = HeaderData::HeaderEven; 
-          mask <= HeaderData::FooterFirst; mask <<= 1 ) 
+    for ( unsigned char mask = HeaderData::HeaderEven;
+          mask <= HeaderData::FooterFirst; mask <<= 1 )
     {
         if ( mask & data.headerMask ) {
             parseHeader( data, mask );
@@ -244,30 +244,6 @@ void Parser9x::parseFootnote( const FootnoteData& data )
     wvlog << "Parser9x::parseFootnote() done ################" << endl;
 #endif
 }
-
-void Parser9x::parseBookmark( const BookmarkData& data )
-{
-#ifdef WV2_DEBUG_BOOKMARK
-    wvlog << "Parser9x::parseBookmark()" << endl;
-#endif
-    if ( data.startCP == 0 ) // shouldn't happen, but well...
-        return;
-
-    saveState( data.limCP - data.startCP, Bookmark );
-    m_subDocumentHandler->bookmarkStart();
-
-
-    U32 offset = data.startCP;
-
-    parseHelper( Position( offset, m_plcfpcd ) );
-
-    m_subDocumentHandler->bookmarkEnd();
-    restoreState();
-#ifdef WV2_DEBUG_BOOKMARK
-    wvlog << "Parser9x::parseBookmark() done" << endl;
-#endif
-}
-
 
 void Parser9x::parseAnnotation( const AnnotationData& data )
 {

@@ -128,7 +128,6 @@ namespace wvWare
         void parseAnnotation( const AnnotationData& data );
         void parseTableRow( const TableRowData& data );
         void parsePicture( const PictureData& data );
-        void parseBookmark( const BookmarkData& data );
         //I can't create Functor for textbox in advance because i don't know lid
         virtual void parseTextBox( uint lid, bool bodyDrawing);
 

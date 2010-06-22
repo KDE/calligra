@@ -134,7 +134,6 @@ signals:
     void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void subDocFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void bookmarkFound(const wvWare::FunctorBase* parsingFunctor);
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void tableFound(KWord::Table* table);

@@ -97,9 +97,6 @@ public:
     virtual void annotationStart();
     virtual void annotationEnd();
 
-    virtual void bookmarkStart();
-    virtual void bookmarkEnd();
-
     bool parse();
 
     void processSubDocQueue();
@@ -142,8 +139,6 @@ public slots:
     void slotSubDocFound(const wvWare::FunctorBase* functor, int data);
 
     void slotFootnoteFound(const wvWare::FunctorBase* functor, int data);
-
-    void slotBookmarkFound(const wvWare::FunctorBase* functor);
 
     void slotAnnotationFound(const wvWare::FunctorBase* functor, int data);
 

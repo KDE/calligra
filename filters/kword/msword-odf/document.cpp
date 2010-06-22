@@ -100,9 +100,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
-                this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));
-        connect(m_textHandler, SIGNAL(bookmarkFound(const wvWare::FunctorBase*)),
-                this, SLOT(slotBookmarkFound(const wvWare::FunctorBase*)));
+                this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));;
         connect(m_textHandler, SIGNAL(annotationFound(const wvWare::FunctorBase*,int)),
                 this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
@@ -679,14 +677,6 @@ void Document::annotationEnd()
 {
 }
 
-void Document::bookmarkStart()
-{
-}
-
-void Document::bookmarkEnd()
-{
-}
-
 //disable this for now - we should be able to do everything in TableHandler
 //create frame for the table cell?
 //void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
@@ -793,15 +783,6 @@ void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
     SubDocument subdoc(functor, data, QString(), QString());
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
-}
-
-void Document::slotBookmarkFound(const wvWare::FunctorBase* functor)
-{
-    kDebug(30513) ;
-    SubDocument subdoc(functor, 0, QString(), QString());
-    (*subdoc.functorPtr)();
-    delete subdoc.functorPtr;
-
 }
 
 void Document::slotAnnotationFound(const wvWare::FunctorBase* functor, int data)

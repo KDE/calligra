@@ -433,13 +433,6 @@ void KWordTextHandler::bookmarkFound( wvWare::UString characters, wvWare::UStrin
     m_bookmarkWriter->addAttribute("text:name", bookmarkName);
     m_bookmarkWriter->endElement();
 
-    //save the state of tables & paragraphs because we'll get new ones in the footnote
-    saveState();
-    //signal Document to parse the bookmark
-    emit bookmarkFound(new wvWare::BookmarkFunctor(parseBookmark));
-    //and now restore state
-    restoreState();
-
     m_insideBookmark = false;
 
     QString contents = QString::fromUtf8(m_bookmarkBuffer->buffer(), m_bookmarkBuffer->buffer().size());
