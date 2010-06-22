@@ -43,23 +43,27 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     if (fib.lcbPlcfbkf != 0)
     {
+        int n = fib.lcbPlcfbkf / Word97::BKF::sizeOf;
+        wvlog << "number of PlcfBkf entries: " << n << endl;
+
         tableStream->seek( fib.fcPlcfbkf, G_SEEK_SET );
 
         m_start = new PLCF<Word97::BKF>(fib.lcbPlcfbkf, tableStream);
         m_startIt = new PLCFIterator<Word97::BKF>(*m_start);
-    }
+
 #ifdef WV2_DEBUG_BOOKMARK
-    wvlog << "Bookmark m_start init done" << endl;
-    m_start->dumpCPs();
+        wvlog << "Bookmark m_start init done" << endl;
+        m_start->dumpCPs();
 #endif
+    }
 
     if ( fib.lcbSttbfbkmk != 0 )
     {
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbfbkmk ) {
             tableStream->seek( fib.fcSttbfbkmk, G_SEEK_SET );
         }
-
-        U16 usLid = 0x409; // The bookmark names in the STTBF are always Unicode, the lid doesn't matter
+        // The bookmark names in the STTBF are always Unicode, the lid doesn't matter
+        U16 usLid = 0x409;
         STTBF* name = new STTBF( usLid, tableStream, false );
         for ( U32 i = 0; i < fib.lcbSttbfbkmk; i += sizeof( U32 ) ) {
             U32 txt = tableStream->readU32();
@@ -79,6 +83,9 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     if (fib.lcbPlcfbkl != 0)
     {
+        int n = fib.lcbPlcfbkl / Word97::BKL::sizeOf;
+        wvlog << "number of PlcfBkl entries: " << n << endl;
+
         tableStream->seek( fib.fcPlcfbkl, G_SEEK_SET );
 
         m_end = new PLCF<Word97::BKL>(fib.lcbPlcfbkl, tableStream);
@@ -104,14 +111,15 @@ Bookmarks::~Bookmarks()
 BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_BOOKMARK
-    wvlog << "Bookmarks::bookmark(): globalCP=" << globalCP << endl;
+    wvlog << " globalCP=" << globalCP << endl;
 #endif
     ok = true;
 
     if ( m_startIt && m_startIt->currentStart() == globalCP &&
         m_textIt != m_text.end() && m_nameIt != m_name.end()) {
 
-        ++( *m_startIt ); // yay, but it is hard to make that more elegant
+        // yay, but it is hard to make that more elegant
+        ++( *m_startIt );
         ++( *m_endIt );
 
         U32 start = *m_textIt;
