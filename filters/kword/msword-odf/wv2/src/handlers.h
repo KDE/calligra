@@ -38,7 +38,6 @@ namespace wvWare {
     typedef Functor<Parser9x, TableRowData> TableRowFunctor;
     typedef Functor<Parser9x, FootnoteData> FootnoteFunctor;
     typedef Functor<Parser9x, PictureData> PictureFunctor;
-    typedef Functor<Parser9x, BookmarkData> BookmarkFunctor;
 
     /**
      * This class allows to replace the character values of some
@@ -410,13 +409,11 @@ namespace wvWare {
                                     SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
 
         /**
-        * The parser found a bookmark. The passed functor will trigger the parsing of this
-        * bookmark start/end, the default implementation just emits the passed character
-        * with runOfText (that it doesn't get lost if someone doesn't override this method)
-        * and invokes the functor.
+        * The parser found a bookmark. The default implementation just emits the passed character
+        * with runOfText (that it doesn't get lost if someone doesn't override this method).
         */
         virtual void bookmarkFound( UString characters, UString name,
-                                    SharedPtr<const Word97::CHP> chp, const BookmarkFunctor& parseBookmark);
+                                    SharedPtr<const Word97::CHP> chp);
         /**
          * The parser found an annotation. The passed functor will trigger the parsing of this
          * annotation, the default implementation just emits the passed character with

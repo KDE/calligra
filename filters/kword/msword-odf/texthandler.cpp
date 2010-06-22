@@ -387,8 +387,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //varElem.appendChild( footnoteElem );
 }
 
-void KWordTextHandler::bookmarkFound( wvWare::UString characters, wvWare::UString name, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                                      const wvWare::BookmarkFunctor& parseBookmark)
+void KWordTextHandler::bookmarkFound( wvWare::UString characters, wvWare::UString name, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
     // Get the text between the bookmark-start and the bookmark-end
     QString bookmarkText;

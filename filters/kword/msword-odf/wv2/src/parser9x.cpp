@@ -748,7 +748,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             disruption = nextFtn < nextEnd ? nextFtn : nextEnd;
 #ifdef WV2_DEBUG_FOOTNOTES
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd << " disruption="
-                    << disruption << " length=" << length << endl;
+                  << disruption << " length=" << length << endl;
 #endif
         } else if ( m_bookmark ) {
             U32 nextBkf = m_bookmark->nextBookmarkStart();
@@ -756,7 +756,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             disruption = nextBkf < nextBkl ? nextBkf : nextBkl;
 #ifdef WV2_DEBUG_BOOKMARK
             wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << " disruption="
-                    << disruption << " length=" << length << endl;
+                  << disruption << " length=" << length << endl;
 #endif
         }
         U32 startCP = currentStart + chunk.m_position.offset + index;
@@ -764,11 +764,13 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
         if ( disruption >= startCP && disruption < startCP + length ) {
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
-            wvlog << "startCP=" << startCP << " len=" << length << " disruption=" << disruption << endl;
+            wvlog << "startCP=" << startCP << " len=" << length << " disruption=" 
+                  << disruption << endl;
 #endif
             U32 disLen = disruption - startCP;
-            if ( disLen != 0 )
+            if ( disLen != 0 ) {
                 processRun( chunk, chp, disLen, index, currentStart );
+            }
             length -= disLen;
             index += disLen;
 
@@ -781,12 +783,11 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 emitBookmark( m_bookmarkText, disruption, chp, length );
                 m_bookmarkText = "";
             }
-            index+=length;
-            length=0;
+            index += length;
+            length = 0;
         }
         else {
-
-            // common case, no disruption at all (or the end of a disrupted chunk)
+            //common case, no disruption at all (or the end of a disrupted chunk)
             //In case of custom footnotes do not add label to footnote body.
             if ( m_footnotes ) {
                 if (m_customFootnote.find(chunk.m_text.substr(index, length), 0) != 0)
@@ -923,15 +924,15 @@ void Parser9x::emitBookmark( UString characters, U32 globalCP, SharedPtr<const W
         wvlog << "Bug: Found a bookmark, but m_bookmark == 0!" << endl;
         return;
     }
-#ifdef WV2_DEBUG_BOOKMARK
-    wvlog << "Bookmark found: CP=" << globalCP << endl;
-#endif
     bool ok;
     BookmarkData data( m_bookmark->bookmark( globalCP, ok ) );
 
     if (ok) {
+#ifdef WV2_DEBUG_BOOKMARK
+    wvlog << "Bookmark found: CP=" << globalCP << endl;
+#endif
         // We introduce the name of the bookmark here with data.name
-        m_textHandler->bookmarkFound( characters, data.name, chp, make_functor( *this, &Parser9x::parseBookmark, data ));
+        m_textHandler->bookmarkFound( characters, data.name, chp);
     }
 }
 

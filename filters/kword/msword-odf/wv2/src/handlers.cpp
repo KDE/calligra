@@ -221,10 +221,9 @@ void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters
 }
 
 void TextHandler::bookmarkFound( UString characters, UString name,
-                                 SharedPtr<const Word97::CHP> chp, const BookmarkFunctor& parseBookmark)
+                                 SharedPtr<const Word97::CHP> chp)
 {
     runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number
-    parseBookmark();
 }
 
 void TextHandler::annotationFound( UString characters,
