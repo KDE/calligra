@@ -30,6 +30,7 @@
 
 KPrAnimationCache::KPrAnimationCache()
 {
+    clear();
 }
 
 KPrAnimationCache::~KPrAnimationCache()
@@ -163,4 +164,26 @@ void KPrAnimationCache::setPageSize(const QSizeF size)
 QSizeF KPrAnimationCache::pageSize() const
 {
     return m_pageSize;
+}
+
+void KPrAnimationCache::setZoom(const qreal zoom)
+{
+    m_zoom = zoom;
+}
+
+qreal KPrAnimationCache::zoom() const
+{
+    return m_zoom;
+}
+
+void KPrAnimationCache::clear()
+{
+    m_zoom = 1;
+    m_pageSize = QSizeF();
+    m_currentShapeValues.clear();
+    m_currentTextBlockDataValues.clear();
+    m_shapeValuesStack.clear();
+    m_textBlockDataValuesStack.clear();
+    m_next = false;
+    m_step = 0;
 }

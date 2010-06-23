@@ -38,6 +38,8 @@
 #include "strategy/KPrAnimationAttribute.h"
 #include "strategy/KPrAttributeX.h"
 #include "strategy/KPrAttributeY.h"
+#include "strategy/KPrAttributeWidth.h"
+#include "strategy/KPrAttributeHeight.h"
 
 #include "KoShape.h"
 #include <kdebug.h>
@@ -68,6 +70,12 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     }
     else if (attributeName == "y") {
         m_attribute = new KPrAttributeY();
+    }
+    else if (attributeName == "width") {
+        m_attribute = new KPrAttributeWidth();
+    }
+    else if (attributeName == "height") {
+        m_attribute = new KPrAttributeHeight();
     }
     else {
         kWarning(33003) << "attributeName" << attributeName << "not yet supported";

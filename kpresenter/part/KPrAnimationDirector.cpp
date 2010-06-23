@@ -63,15 +63,15 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
 , m_animationCache( 0 )
 {
     Q_ASSERT( !m_pages.empty() );
-
+    m_animationCache = new KPrAnimationCache();
     if( !currentPage || !pages.contains(currentPage))
         updateActivePage( m_pages[0] );
     else
         updateActivePage( currentPage );
 
     m_pageIndex = m_pages.indexOf( m_view->activePage() );
-    updatePageAnimation();
-    m_animationCache->startStep(m_stepIndex);
+
+    // updatePageAnimation was called from updateZoom() [updateActivePage()]
 
     connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
@@ -93,6 +93,7 @@ KPrAnimationDirector::~KPrAnimationDirector()
 {
     // free used resources
     delete m_pageEffectRunner;
+    delete m_animationCache;
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
     m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager(),
@@ -227,7 +228,7 @@ void KPrAnimationDirector::navigateToPage( int index )
 
     updateActivePage( page );
     updatePageAnimation();
-    m_animationCache->startStep(m_stepIndex);
+    updateStepAnimation();
     // trigger a repaint
     m_canvas->update();
 
@@ -280,24 +281,24 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
         }
     }
 
-    // it can be that the pages have different sizes. So we need to recalulate
-    // the zoom when we change the page
-    updateZoom( m_canvas->size() );
     KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
     Q_ASSERT( kprPage );
     m_pageIndex = m_pages.indexOf(page);
-    //updatePageAnimation(kprPage);
     m_animations = kprPage->animations().steps();
+
+    // it can be that the pages have different sizes. So we need to recalulate
+    // the zoom when we change the page
+    updateZoom( m_canvas->size() );
 }
 
 void KPrAnimationDirector::updatePageAnimation()
 {
-    // TODO add a clear method to the cache so we don't need to recreated it again
-    delete m_animationCache;
-    m_animationCache = new KPrAnimationCache();
+    m_animationCache->clear();
 
     m_animationCache->setPageSize(m_pages[m_pageIndex]->size());
-
+    qreal zoom;
+    m_zoomHandler.zoom(&zoom, &zoom);
+    m_animationCache->setZoom(zoom);
     int i = 0;
     foreach (KPrAnimationStep *step, m_animations) {
         step->init(m_animationCache, i);
@@ -346,7 +347,7 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
 
     updateActivePage( m_pages[m_pageIndex] );
     updatePageAnimation();
-    m_animationCache->startStep(m_stepIndex);
+    updateStepAnimation();
 
     // trigger a repaint
     m_canvas->update();
@@ -364,6 +365,10 @@ void KPrAnimationDirector::updateZoom( const QSize & size )
     KoPAUtil::setZoom( pageLayout, size, m_zoomHandler );
     m_pageRect = KoPAUtil::pageRect( pageLayout, size, m_zoomHandler );
     m_canvas->setDocumentOffset( -m_pageRect.topLeft() );
+
+    // reinit page animation, because somi init method contain zoom
+    updatePageAnimation();
+    updateStepAnimation();
 }
 
 void KPrAnimationDirector::paintStep( QPainter & painter )
@@ -413,7 +418,7 @@ bool KPrAnimationDirector::nextStep()
 
             updateActivePage( m_pages[m_pageIndex] );
             updatePageAnimation();
-            m_animationCache->startStep(m_stepIndex);
+            updateStepAnimation();
             QPixmap newPage( m_canvas->size() );
             newPage.fill( Qt::white ); // TODO
             QPainter newPainter( &newPage );
@@ -427,7 +432,7 @@ bool KPrAnimationDirector::nextStep()
         else {
             updateActivePage( m_pages[m_pageIndex] );
             updatePageAnimation();
-            m_animationCache->startStep(m_stepIndex);
+            updateStepAnimation();
             m_canvas->update();
             if ( hasAnimation() ) {
                 startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
@@ -495,7 +500,6 @@ void KPrAnimationDirector::startTimeLine( int duration )
         m_timeLine.setDuration( 1 );
     }
     else {
-        kDebug() << duration;
        m_timeLine.setDuration( duration );
     }
     m_timeLine.setCurrentTime( 0 );

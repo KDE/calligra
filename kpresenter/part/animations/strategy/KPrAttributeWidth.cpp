@@ -17,30 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrAttributeX.h"
+#include "KPrAttributeWidth.h"
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
 
 #include "kdebug.h"
 
-KPrAttributeX::KPrAttributeX()
+KPrAttributeWidth::KPrAttributeWidth()
 {
 }
 
-void KPrAttributeX::updateCache(KPrAnimationCache *cache, KoShape *shape, qreal value)
+void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KoShape *shape, qreal value)
 {
     QTransform transform;
-    value = value * cache->pageSize().width();
-    value = value - shape->position().x();
-    value = value * cache->zoom();
-    transform.translate(value, 0);
+    value = value * cache->pageSize().width() / shape->size().width();
+    qreal tx = shape->size().width() * cache->zoom() / 2;
+    qreal ty = shape->size().height() * cache->zoom() / 2;
+    transform.translate(tx, ty).scale(value, 1).translate(-tx, -ty);
     cache->update(shape, "transform", transform);
 }
 
-void KPrAttributeX::initCache(KPrAnimationCache *animationCache, int step, KoShape * shape, qreal startValue, qreal endValue)
+void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, KoShape * shape, qreal startValue, qreal endValue)
 {
-    qreal v1 = startValue * animationCache->pageSize().width() - shape->position().x();
-    qreal v2 = endValue * animationCache->pageSize().width() - shape->position().x();
-    animationCache->init(step, shape, "transform", QTransform().translate(v1, 0));
-    animationCache->init(step + 1, shape, "transform", QTransform().translate(v2, 0));
+    qreal v1 = startValue * animationCache->pageSize().width() / shape->size().width();
+    qreal v2 = endValue * animationCache->pageSize().width() / shape->size().width();
+    //qreal tx = shape->size().width() * cache->zoom() / 2;
+    //qreal ty = shape->size().height() * cache->zoom() / 2;
+    animationCache->init(step, shape, "transform", QTransform().scale(v1, 1));
+    animationCache->init(step + 1, shape, "transform", QTransform().scale(v2, 1));
 }

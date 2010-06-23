@@ -48,14 +48,16 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
 {
     if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
         if ( m_animationDirector->shapeShown( shape ) ) {
-
             qreal zoom;
             converter.zoom(&zoom, &zoom);
             painter.save();
             QTransform animationTransform = m_animationDirector->shapeTransform(shape);
-            animationTransform.translate(animationTransform.dx() * (zoom - 1), animationTransform.dy() * zoom);
             QTransform transform(painter.matrix() * shape->absoluteTransformation( &converter ));
-            transform *= animationTransform;
+            if (animationTransform.isScaling()) {
+                transform = animationTransform * transform;
+            } else {
+                transform = transform * animationTransform;
+            }
 
             painter.setTransform(transform);
             // paint shape

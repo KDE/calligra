@@ -25,9 +25,10 @@ KPrSmilValues::KPrSmilValues(KoShape *shape) : KPrAnimationValue(shape)
 {
 }
 
-qreal KPrSmilValues::value(qreal time) const{
+qreal KPrSmilValues::value(qreal time) const
+{
     qreal value, value1, value2;
-    for(int i =0; i < m_values.size(); i++ != 0){
+    for (int i = 0; i < m_values.size(); i++) {
         if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
             value1 = m_values.at(i).eval(m_cache);
             value2 = m_values.at(i+1).eval(m_cache);

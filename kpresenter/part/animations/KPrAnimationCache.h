@@ -163,6 +163,9 @@ public:
     // ending and animation will just activate the values of the step
     QSizeF pageSize() const;
     void setPageSize(const QSizeF size);
+    qreal zoom() const;
+    void setZoom(const qreal zoom);
+    void clear();
 private:
     QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
     QList<QMap<KoTextBlockData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
@@ -171,6 +174,7 @@ private:
     int m_step;
     bool m_next;
     QSizeF m_pageSize;
+    qreal m_zoom;
 };
 
 
