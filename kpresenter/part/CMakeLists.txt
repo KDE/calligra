@@ -102,6 +102,7 @@ set( kpresenterprivate_LIB_SRCS
      animations/strategy/KPrAttributeY.cpp
      animations/strategy/KPrAttributeWidth.cpp
      animations/strategy/KPrAttributeHeight.cpp
+     animations/strategy/KPrAttributeRotate.cpp
 
      pagelayout/KPrPlaceholder.cpp
      pagelayout/KPrPageLayout.cpp
