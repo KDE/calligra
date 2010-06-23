@@ -387,6 +387,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
     if (caller == cNvPr_nvSpPr || caller == cNvPr_nvPicPr) { // for sanity, p:nvGrpSpPr can be also the caller
         READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
         kDebug() << "id:" << m_cNvPrId;
+#ifdef PPTXXMLSLIDEREADER_H
+        if(m_context->type == Slide && m_context->slideLayoutProperties->styles.contains(m_cNvPrId)) {
+            m_currentParagraphStyle = m_context->slideLayoutProperties->styles[m_cNvPrId];
+            m_currentParagraphStylePredefined = true;
+        }
+#endif        
         TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_cNvPrName)
         kDebug() << "name:" << m_cNvPrName;
         TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_cNvPrDescr)
@@ -910,7 +916,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+        if (!m_currentParagraphStylePredefined) {
+            m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
+        }
     }
 
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
@@ -979,7 +987,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
              }
          }
          body->startElement("text:p", false);
+#ifdef PPTXXMLSLIDEREADER_H
+         if(m_context->type == SlideLayout) {
+            if(!m_cNvPrId.isEmpty())
+                m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
+         } else if(m_context->type == Slide) {
+             setupParagraphStyle();
+             m_currentParagraphStylePredefined = false;
+         }
+#else
          setupParagraphStyle();
+#endif         
          (void)textPBuf.releaseWriter();
          if (m_lstStyleFound || m_currentListLevel > 0) {
              int listDepth = 0;

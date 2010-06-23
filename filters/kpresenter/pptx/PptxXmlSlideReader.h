@@ -92,6 +92,7 @@ public:
     ~PptxSlideLayoutProperties();
     QMap<QString, PptxPlaceholder*> placeholders; //! placeholders objects are owned by this object
     QString styleName;
+    QMap<QString, KoGenStyle> styles;
 };
 
 //! Data structure collecting information about master
