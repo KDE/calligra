@@ -750,6 +750,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+    // Set the fill color if it was set in the shape properties, and if
+    // so reset the current color.
+    if (solidFill_read) {
+        m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+        m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+        m_currentColor = QColor();
+    }
+
 #ifdef PPTXXMLSLIDEREADER_H
 //! @todo
     if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
