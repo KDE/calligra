@@ -139,7 +139,11 @@ KoFilter::ConversionStatus copyFile(
  This method caches the result for efficiency. */
 QSize imageSize(const QString& sourceName);
 
-KoGenStyle *m_currentDrawStyle; //!< set by read_drawing() and read_object(), used by read_pic() and read_object()
+QList<KoGenStyle*>  m_drawStyleStack;
+KoGenStyle         *m_currentDrawStyle; //! used by all classes that need a graphics style.
+void pushCurrentDrawStyle(KoGenStyle *newStyle);
+void popCurrentDrawStyle();
+
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
 
