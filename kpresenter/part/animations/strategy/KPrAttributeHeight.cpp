@@ -41,6 +41,8 @@ void KPrAttributeHeight::initCache(KPrAnimationCache *animationCache, int step, 
 {
     qreal v1 = startValue * animationCache->pageSize().height() / shape->size().height();
     qreal v2 = endValue * animationCache->pageSize().height() / shape->size().height();
-    animationCache->init(step, shape, "transform", QTransform().scale(1, v1));
-    animationCache->init(step + 1, shape, "transform", QTransform().scale(1, v2));
+    qreal tx = shape->size().width() * animationCache->zoom() / 2;
+    qreal ty = shape->size().height() * animationCache->zoom() / 2;
+    animationCache->init(step, shape, "transform", QTransform().translate(tx, ty).scale(1, v1).translate(-tx, -ty));
+    animationCache->init(step + 1, shape, "transform", QTransform().translate(tx, ty).scale(1, v2).translate(-tx, -ty));
 }
