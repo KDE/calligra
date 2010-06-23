@@ -1,3 +1,8 @@
+23-jun-2010
+I clearly havnt been keeping this up to date!
+Implemented a simple table based ODT renderer, supporting text and images.
+Moved koreport plugins to /plugins so as not to clutter up the libs/ dir
+
 06-Oct-2009
 Finished most of the features of the widget.
 Can now set column type and pkey state
