@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KWord DICOM Structured Report Import Filter
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/dicom
+X-KDE-Weight=1
+X-KDE-Library=libdcmimport
+X-KDE-ServiceTypes=KOfficeFilter

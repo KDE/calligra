@@ -1,3 +1,6 @@
+macro_optional_find_package(DCMTK)
+macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http://dicom.offis.de/dcmtk.php.en" FALSE "" "Required for processing DICOM strutured reports")
+
 # check whether we can compile wv2
 
 macro_optional_find_package(GObject)
@@ -83,6 +86,10 @@ if (NOT TINY)
     add_subdirectory( oowriter )
     add_subdirectory( palmdoc )
     add_subdirectory( wml )
+
+    if(DCMTK_FOUND)
+    	add_subdirectory( dcm )
+    endif(DCMTK_FOUND)
 
     if(WPD_FOUND)
     	add_subdirectory( wordperfect )
