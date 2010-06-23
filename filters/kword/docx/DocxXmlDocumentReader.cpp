@@ -995,7 +995,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     m_imagedataPath.clear();
     m_shapeAltText.clear();
 
-    m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
 
     while (!atEnd()) {
         readNext();
@@ -1009,7 +1009,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     if (m_objectRectInitialized) {
-        m_currentDrawStyle.addProperty("draw:fill", "bitmap");
+        m_currentDrawStyle->addProperty("draw:fill", "bitmap");
         if (!m_imagedataPath.isEmpty()) {
             // create bitmap fill-style for styles.xml
             KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
@@ -1026,12 +1026,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             fillImageStyle.addAttribute("xlink:show", "embed");
             fillImageStyle.addAttribute("xlink:actuate", "onLoad");
             const QString fillImageStyleName(mainStyles->insert(fillImageStyle, "FillImage"));
-            m_currentDrawStyle.addProperty("draw:fill-image-name", fillImageStyleName);
+            m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageStyleName);
         }
         writeRect();
     }
 
-    m_currentDrawStyle = KoGenStyle();
+    m_currentDrawStyle = new KoGenStyle();
     READ_EPILOGUE
 }
 
@@ -1495,6 +1495,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
+#if 0
         // MS2007 has a different way of marking drop cap, it divides them to two paragraphs
         // here we apply the status to current paragraph if previous one had dropCap
         if (m_dropCapStatus == DropCapDone) {
@@ -1508,6 +1509,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
             m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
         }
+#endif
     }
 
     while (!atEnd()) {
@@ -1658,6 +1660,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 
     KoXmlWriter* oldWriter = body;
 
+    // DropCapRead means we have read the w:dropCap attribute on this
+    //             paragraph and now have to save the text.
+    // DropCapDone means we are in the next paragraph and want to add
+    //             the saved text to this paragraph.
     if (m_dropCapStatus == DropCapRead) {
        m_dropCapStatus = DropCapDone;
        m_dropCapBuffer.open(QIODevice::ReadWrite);
@@ -2246,8 +2252,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 {
     READ_PROLOGUE
 
-    m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-    m_currentDrawStyle.addAttribute("style:parent-style-name", QLatin1String("Graphics"));
+    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    m_currentDrawStyle->addAttribute("style:parent-style-name", QLatin1String("Graphics"));
 
     m_drawing_anchor = false;
     m_drawing_inline = false;
@@ -2287,9 +2293,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_framePr()
     TRY_READ_ATTR(lines)
     TRY_READ_ATTR(hSpace)
 
-    // MS 2007 behaves so that it ignores text and paragraph styles
-    // in case of drop cap for the first letter(s), here we mark a variable
-    // to show we have encountered drop cap
+    // MS 2007 behaves so that it ignores text and paragraph styles in
+    // case of drop cap for the first letter(s), here we set a
+    // variable to show we have encountered a drop cap.
     if (!dropCap.isEmpty()) {
         m_dropCapStatus = DropCapRead;
         m_dropCapDistance = 0;
@@ -3807,9 +3813,8 @@ void DocxXmlDocumentReader::writeRect()
     // //! @todo fix hardcoded text:style-name=Standard?
     //body->addAttribute("text:style-name", "Standard");
     body->startElement("draw:rect");
-    if (!m_currentDrawStyle.isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(
-            m_currentDrawStyle, "gr") );
+    if (!m_currentDrawStyle->isEmpty()) {
+        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
         body->addAttribute("draw:style-name", drawStyleName);
     }
 
@@ -3981,8 +3986,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 if (!expectElEnd(QUALIFIED_NAME(wrapNone)))
                     return KoFilter::WrongFormat;
                 saveStyleWrap("run-through");
-                m_currentDrawStyle.addProperty(QLatin1String("style:run-through"),
-                                               (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
+                m_currentDrawStyle->addProperty(QLatin1String("style:run-through"),
+                                                (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
                                                KoGenStyle::GraphicType);
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)

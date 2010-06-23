@@ -982,8 +982,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         KoCharacterStyle cellCharacterStyle;
         cellFormat->setupCharacterStyle(m_context->styles, &cellCharacterStyle);
 
-        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript ||
-                cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
+        if( cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSuperScript 
+            || cellCharacterStyle.verticalAlignment() == QTextCharFormat::AlignSubScript ) {
             KoGenStyle charStyle( KoGenStyle::TextStyle, "text" );
             cellCharacterStyle.saveOdf( charStyle );
             charStyleName = mainStyles->insert( charStyle, "T" );
@@ -994,14 +994,14 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         }
 
         /* depending on type: 18.18.11 ST_CellType (Cell Type), p. 2679:
-            b (Boolean) Cell containing a boolean.
-            d (Date) Cell contains a date in the ISO 8601 format.
-            e (Error) Cell containing an error.
-            inlineStr (Inline String) Cell containing an (inline) rich string, i.e., one not in
-            the shared string table. If this cell type is used, then
-            the cell value is in the is element rather than the v
-            element in the cell (c element).
-            n (Number) Cell containing a number.
+            b (Boolean)  Cell containing a boolean.
+            d (Date)     Cell contains a date in the ISO 8601 format.
+            e (Error)    Cell containing an error.
+            inlineStr    (Inline String) Cell containing an (inline) rich string, i.e. 
+                         one not in the shared string table. If this cell type is used,
+                         then the cell value is in the is element rather than the v
+                         element in the cell (c element).
+            n (Number)   Cell containing a number.
             s (Shared String) Cell containing a shared string.
             str (String) Cell containing a formula string.
 

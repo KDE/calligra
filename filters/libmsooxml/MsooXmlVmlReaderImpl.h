@@ -55,7 +55,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 
     body->startElement("draw:frame");
 
-    m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
@@ -92,7 +92,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
         body->addAttribute("svg:y", y_mar);
     }
     if (!m_shapeColor.isEmpty()) {
-        m_currentDrawStyle.addProperty("fo:background-color", m_shapeColor);
+        m_currentDrawStyle->addProperty("fo:background-color", m_shapeColor);
     }
 
     if (!m_imagedataPath.isEmpty()) {
@@ -104,9 +104,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
         body->endElement(); // draw:image
     }
 
-    if (!m_currentDrawStyle.isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(
-            m_currentDrawStyle, "gr") );
+    if (!m_currentDrawStyle->isEmpty()) {
+        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
         body->addAttribute("draw:style-name", drawStyleName);
     }
 

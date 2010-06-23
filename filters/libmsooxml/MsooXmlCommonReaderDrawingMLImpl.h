@@ -177,10 +177,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //todo        body->addAttribute("presentation:style-name", styleName);
 //! @todo for pptx: maybe use KoGenStyle::PresentationAutoStyle?
         if (m_noFill)
-            m_currentDrawStyle.addAttribute("style:fill", constNone);
+            m_currentDrawStyle->addAttribute("style:fill", constNone);
 
 #ifdef DOCXXMLDOCREADER_H
-        QString currentDrawStyleName(mainStyles->insert(m_currentDrawStyle, "gr"));
+        QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #endif
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
 //! @todo hardcoded draw:style-name = grpredef1
@@ -266,7 +266,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
                 mirror = "none";
         }
         //! @todo: horizontal-on-{odd,even}?
-        m_currentDrawStyle.addProperty("style:mirror", mirror);
+        m_currentDrawStyle->addProperty("style:mirror", mirror);
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
@@ -541,7 +541,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     else if (m_context->type == SlideLayout) {
         //m_currentShapeProperties = new PptxShapeProperties();
         //m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
-        m_currentDrawStyle = KoGenStyle(KoGenStyle::GraphicStyle);
+        m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicStyle);
 #ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
 #endif
@@ -644,11 +644,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
             }
         }
-        // FIXME: Adapt this to apply to the current graphics style and use that.
-        //if (m_currentColor.isValid()) {
-        //  m_currentDrawStyle.addProperty("fo:background-color", m_currentColor.name());
-        //  m_currentColor = QColor();
-        //}
 
 #else
 #ifdef __GNUC__
@@ -759,22 +754,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 //! @todo
     if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
         /*if (m_context->slideLayoutProperties) {
-            kDebug() << "m_context->slideLayoutProperties->shapes.count()" << m_context->slideLayoutProperties->shapes.count()
-                     << "d->shapeNumber" << d->shapeNumber;
-            if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
-                // for inheritance
-                m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
-                kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
+          kDebug() << "m_context->slideLayoutProperties->shapes.count()" << m_context->slideLayoutProperties->shapes.count()
+          << "d->shapeNumber" << d->shapeNumber;
+          if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
+          // for inheritance
+          m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
+          kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
 
-                m_svgX = m_currentShapeProperties->x;
-                m_svgY = m_currentShapeProperties->y;
-                kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
-                m_svgWidth = m_currentShapeProperties->width;
-                m_svgHeight = m_currentShapeProperties->height;
-                kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
-            }
-        }
-        else*/
+          m_svgX = m_currentShapeProperties->x;
+          m_svgY = m_currentShapeProperties->y;
+          kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
+          m_svgWidth = m_currentShapeProperties->width;
+          m_svgHeight = m_currentShapeProperties->height;
+          kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
+          }
+          }
+          else*/
         if (m_context->slideProperties) {
             kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
                      << "d->shapeNumber" << d->shapeNumber;
@@ -792,7 +787,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             } else {
                 m_currentShapeProperties = 0;
                 kWarning() << QString("No shape #%1 found in master slide; shapes count = %2").arg(d->shapeNumber)
-                .arg(m_context->slideProperties->shapes.count());
+                    .arg(m_context->slideProperties->shapes.count());
             }
         }
     }
@@ -1079,6 +1074,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 {    
     READ_PROLOGUE2(DrawingML_rPr)
+
+    // Indicate that if any color is read, it's for text color.
     m_colorType = TextColor;
 
     m_hyperLink = false;
@@ -1111,6 +1108,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         }
     }
 
+    // Set the text color if it was set in the text properties, and if
+    // so reset the current color.
     if (m_currentColor.isValid()) {
         m_currentTextStyleProperties->setForeground(m_currentColor);
         m_currentColor = QColor();
@@ -1127,7 +1126,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentTextStyleProperties->setFontItalic(
             MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
-        }
+    }
 
     if (attrs.hasAttribute("cap")) {
         const QString capValue = attrs.value("cap").toString();
@@ -1638,7 +1637,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
     READ_PROLOGUE
 
     m_fillImageRenderingStyleStretch = true;
-    m_currentDrawStyle.addProperty("style:repeat", QLatin1String("stretch"));
+    m_currentDrawStyle->addProperty("style:repeat", QLatin1String("stretch"));
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideMaster) {
@@ -1689,7 +1688,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_biLevel()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("mono"));
+    m_currentDrawStyle->addProperty("draw:color-mode", QLatin1String("mono"));
 //! @todo thresh attribute (no real counterpoint in ODF)
 
     readNext();
@@ -1719,7 +1718,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grayscl()
 {
     READ_PROLOGUE
 
-    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("greyscale"));
+    m_currentDrawStyle->addProperty("draw:color-mode", QLatin1String("greyscale"));
 
     readNext();
     READ_EPILOGUE
@@ -1751,7 +1750,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 //! @todo attributes -- even though there is no counterpart in ODF.
-    m_currentDrawStyle.addProperty("draw:color-mode", QLatin1String("watermark"));
+    m_currentDrawStyle->addProperty("draw:color-mode", QLatin1String("watermark"));
 
     readNext();
     READ_EPILOGUE
@@ -1779,9 +1778,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tile()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    m_currentDrawStyle.addProperty("style:repeat", QLatin1String("repeat"));
+    m_currentDrawStyle->addProperty("style:repeat", QLatin1String("repeat"));
 //! @todo algn - convert to "ODF's Fill Image Tile Reference Point"
-    m_currentDrawStyle.addProperty("draw:fill-image-ref-point", "top-left");
+    m_currentDrawStyle->addProperty("draw:fill-image-ref-point", "top-left");
 //! @todo flip
 //! @todo sx
 //! @todo sy
@@ -2046,7 +2045,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_background()
 
 void MSOOXML_CURRENT_CLASS::saveStyleWrap(const char * style)
 {
-    m_currentDrawStyle.addProperty("style:wrap", style, KoGenStyle::GraphicType);
+    m_currentDrawStyle->addProperty("style:wrap", style, KoGenStyle::GraphicType);
 }
 
 void MSOOXML_CURRENT_CLASS::algnToODF(const char * odfEl, const QString& ov)
@@ -2074,7 +2073,7 @@ void MSOOXML_CURRENT_CLASS::distToODF(const char * odfEl, const QString& emuValu
         return;
     QString s = MSOOXML::Utils::EMU_to_ODF(emuValue);
     if (!s.isEmpty()) {
-        m_currentDrawStyle.addProperty(QLatin1String(odfEl), s, KoGenStyle::GraphicType);
+        m_currentDrawStyle->addProperty(QLatin1String(odfEl), s, KoGenStyle::GraphicType);
     }
 }
 
@@ -2414,13 +2413,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             case BackgroundColor:
             {
                 QBrush brush(col, Qt::SolidPattern);
-                KoOdfGraphicStyles::saveOdfFillStyle(m_currentDrawStyle, *mainStyles, brush);
+                KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
             }
             break;
             case OutlineColor:
             {
                 m_currentPen.setColor(col);
-                KoOdfGraphicStyles::saveOdfStrokeStyle(m_currentDrawStyle, *mainStyles, m_currentPen);
+                KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
             }
             break;
             case TextColor:
