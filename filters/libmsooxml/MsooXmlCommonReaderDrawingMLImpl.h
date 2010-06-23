@@ -2136,10 +2136,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     READ_PROLOGUE
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
-    while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
-        //! @todo read children
+    while (!atEnd()) {
         readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lvl1pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl2pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl3pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl4pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl5pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl6pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl7pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl8pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     m_lstStyleFound = !m_currentListStyle.isEmpty();
 
