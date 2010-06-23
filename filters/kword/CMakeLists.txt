@@ -1,5 +1,5 @@
 macro_optional_find_package(DCMTK)
-macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http://dicom.offis.de/dcmtk.php.en" FALSE "" "Required for processing DICOM strutured reports")
+macro_log_feature(DCMTK_FOUND "DCMTK" "DICOM document processing toolkit" "http://dicom.offis.de/dcmtk.php.en" FALSE "" "Required for processing DICOM structured reports")
 
 # check whether we can compile wv2
 
