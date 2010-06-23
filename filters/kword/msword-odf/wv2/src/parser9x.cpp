@@ -69,8 +69,9 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         Parser( storage, wordDocument ), m_fib( fib ), m_table( 0 ), m_data( 0 ), m_properties( 0 ),
         m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ), m_footnotes( 0 ), m_annotations( 0 ),
         m_fonts( 0 ), m_drawings( 0 ), m_bookmark(0), m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ),
-        m_cellMarkFound( false ), m_remainingCells( 0 ), m_currentParagraph( new Paragraph ),
-        m_remainingChars( 0 ), m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
+        m_cellMarkFound( false ), m_remainingCells( 0 ), m_firstParagraphInRowProperties( 0 ),
+        m_currentParagraph( new Paragraph ), m_remainingChars( 0 ), m_sectionNumber( 0 ), m_subDocument( None ),
+        m_parsingMode( Default )
 {
     if ( !isOk() )
         return;
@@ -645,6 +646,9 @@ void Parser9x::processParagraph( U32 fc )
         if ( !m_tableRowStart ) {
             m_tableRowStart = new Position( m_currentParagraph->front().m_position );
             m_tableRowLength = 0;
+
+            // save paragraph property of first paragraph in row, because it is needed, when table is created
+            m_firstParagraphInRowProperties = props;
 #ifdef WV2_DEBUG_TABLES
             wvlog << "Start of a table row: piece=" << m_tableRowStart->piece << " offset="
                     << m_tableRowStart->offset << endl;
@@ -666,11 +670,13 @@ void Parser9x::processParagraph( U32 fc )
             // one empty paragraph during parsing.
             m_textHandler->tableRowFound( make_functor( *this, &Parser9x::parseTableRow,
                                                         TableRowData( m_tableRowStart->piece, m_tableRowStart->offset, m_tableRowLength - 1, static_cast<int>( m_subDocument ), sharedTap ) ),
-                                          sharedTap );
+                                          sharedTap, m_firstParagraphInRowProperties );
             delete m_tableRowStart;
             m_tableRowStart = 0;
         }
-        delete props;
+
+        if (m_firstParagraphInRowProperties != props)
+            delete props;
     }
     else {
         // Now that we have the complete PAP, let's see if this paragraph belongs to a list

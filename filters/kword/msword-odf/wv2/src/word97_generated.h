@@ -1426,6 +1426,20 @@ struct TAP : public Shared {
      */
     BRC rgbrcTable[6];
 
+    /**
+     * An XAS_nonNeg that specifies the minimum horizontal distance between the physical left edge
+     * of the table and the physical right edge of the text that wraps around the table. By default,
+     *  the minimum horizontal distance between a table and wrapping text is 0 twips.
+     */
+    U16 dxaFromText;
+
+    /**
+     * An XAS_nonNeg that specifies the minimum horizontal distance between the physical right edge
+     * of the table and the physical left edge of the text that wraps around the table. By default,
+     * the minimum horizontal distance between a table and wrapping text is 0 twips.
+     */
+    U16 dxaFromTextRight;
+
 }; // TAP
 
 bool operator==(const TAP &lhs, const TAP &rhs);

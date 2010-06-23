@@ -37,7 +37,8 @@
 
 using Conversion::twipsToPt;
 
-KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
+KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles) :
+m_floatingTable(false)
 {
     // This strange value (-2), is used to create a check that e.g.  a
     // table row is not written before a table:table is started.
@@ -70,6 +71,102 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_row = -1;
     m_currentY = 0;
 
+    //check if the paragraph is inside of an absolutely positioned frame
+    if ( (table->paragraphProperties->pap().dxaAbs != 0 || table->paragraphProperties->pap().dyaAbs) )
+    {
+        KoGenStyle userStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+        QString drawStyleName;
+
+        writer->startElement("text:p", false);
+        writer->addAttribute("text:style-name", "Standard");
+
+        int dxaAbs = 0;
+        const wvWare::Word97::PAP& pap = table->paragraphProperties->pap();
+        //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
+        // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside
+        if (pap.dxaAbs == -4) {
+           userStyle.addProperty("style:horizontal-pos","center");
+           userStyle.addPropertyPt("fo:margin-left",(double)table->tap->dxaFromText/20);
+           userStyle.addPropertyPt("fo:margin-right",(double)table->tap->dxaFromTextRight/20);
+        }
+        else if (pap.dxaAbs == -8)  {
+           userStyle.addProperty("style:horizontal-pos","right");
+           userStyle.addPropertyPt("fo:margin-left",(double)table->tap->dxaFromTextRight/20);
+           userStyle.addPropertyPt("fo:margin-right",0);
+        }
+        else if (pap.dxaAbs == -12)
+           userStyle.addProperty("style:horizontal-pos","inside");
+        else if (pap.dxaAbs == -16)
+           userStyle.addProperty("style:horizontal-pos","outside");
+        else { //
+           dxaAbs = pap.dxaAbs;
+           userStyle.addProperty("style:horizontal-pos","from-left");
+           userStyle.addPropertyPt("fo:margin-left",0);
+           userStyle.addPropertyPt("fo:margin-right",(double)table->tap->dxaFromText/20);
+        }
+
+        int dyaAbs = 0;
+        //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
+        // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside,
+        // (-20) - outside
+        if (pap.dyaAbs == -4) {
+            userStyle.addProperty("style:vertical-pos","top");
+        }
+        else if (pap.dyaAbs == -8) {
+            userStyle.addProperty("style:vertical-pos","middle");
+        }
+        else if (pap.dyaAbs == -12) {
+            userStyle.addProperty("style:vertical-pos","bottom");
+        }
+        else if (pap.dyaAbs == -16) {
+            userStyle.addProperty("style:vertical-pos","inline");
+        }
+        else if (pap.dyaAbs == -20) {
+            userStyle.addProperty("style:vertical-pos","inline");
+        }
+        else {
+            dyaAbs = pap.dyaAbs;
+            userStyle.addProperty("style:vertical-pos","from-top");
+        }
+        //MS-DOC - PositionCodeOperand - anchor vertical position
+        // 0 - margin, 1 - page, 2 - paragraph
+        if (pap.pcVert == 0) {
+            userStyle.addProperty("style:vertical-rel","page-content");
+        }
+        else if (pap.pcVert == 1) {
+            userStyle.addProperty("style:vertical-rel","page");
+        }
+        else if (pap.pcVert == 2) {
+            userStyle.addProperty("style:vertical-rel","paragraph");
+        }
+        //MS-DOC - PositionCodeOperand - anchor horizontal position
+        // 0 - current column, 1 - margin, 2 - page
+        if (pap.pcHorz == 0) {
+            userStyle.addProperty("style:horizontal-rel","paragraph");
+        }
+        else if (pap.pcHorz == 1) {
+            userStyle.addProperty("style:horizontal-rel","page-content");
+        }
+        else if (pap.pcHorz == 2) {
+            userStyle.addProperty("style:horizontal-rel","page");
+        }
+
+        drawStyleName = "fr";
+        drawStyleName = m_mainStyles->insert(userStyle, drawStyleName);
+        writer->startElement("draw:frame");
+        writer->addAttribute("draw:style-name", drawStyleName.toUtf8());
+        writer->addAttribute("text:anchor-type", "paragraph");
+
+        writer->addAttributePt("svg:width", (double)(table->m_cellEdges[table->m_cellEdges.size()-1]
+                                            - table->m_cellEdges[0]) / 20.0);
+
+        writer->addAttributePt("svg:x", (double)(dxaAbs + tap->rgdxaCenter[0])/20);
+        writer->addAttributePt("svg:y", (double)dyaAbs/20);
+        writer->startElement("draw:text-box");
+
+        m_floatingTable = true;
+    }
+
     //table style
     KoGenStyle tableStyle(KoGenStyle::TableAutoStyle, "table");
 
@@ -97,8 +194,10 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     tableStyle.addProperty("style:border-model", "collapsing");
 
     //process the margin information 
-    int margin = tap->rgdxaCenter[0];
-    tableStyle.addPropertyPt("fo:margin-left", twipsToPt(margin));
+    if (m_floatingTable != true) {
+        int margin = tap->rgdxaCenter[0];
+        tableStyle.addPropertyPt("fo:margin-left", twipsToPt(margin));
+    }
 
     //check if we need a master page name attribute.
     if (document()->writeMasterPageName() && !document()->writingHeader()) {
@@ -141,6 +240,17 @@ void KWordTableHandler::tableEnd()
     kDebug(30513) ;
     m_currentTable = 0L; // we don't own it, Document does
     KoXmlWriter*  writer = currentWriter();
+
+    //check if the paragraph is inside of an absolutely positioned frame
+    if ( m_floatingTable == true )
+    {
+        writer->endElement(); //draw:text-box
+        writer->endElement(); // draw:frame
+        writer->endElement(); // close the <text:p>
+
+        m_floatingTable = false;
+    }
+
     //end table in content
     writer->endElement();//table:table
 }

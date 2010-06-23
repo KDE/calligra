@@ -257,6 +257,8 @@ typedef enum
     sprmSDyaBottom = 0x9024,
     sprmSDyaLinePitch = 0x9031,
     sprmTDyaRowHeight = 0x9407,
+    sprmTDxaFromText = 0x9410,
+    sprmTDxaFromTextRight = 0x941E,
     sprmTDxaAbs = 0x940E,
     sprmTDyaAbs = 0x940F,
     sprmTDxaLeft = 0x9601,
@@ -2445,6 +2447,16 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             wvlog << "Error: no data stream!" << endl;
         }
         wvlog << "<-- PrcData parsed successfully" << endl;
+        break;
+    }
+    case SPRM::sprmTDxaFromText:
+    {
+        dxaFromText = readS16( ptr );
+        break;
+    }
+    case SPRM::sprmTDxaFromTextRight:
+    {
+        dxaFromTextRight = readS16( ptr );
         break;
     }
     default:

@@ -1464,6 +1464,8 @@ bool TAP::read(OLEStreamReader *stream, bool preservePos) {
     dxaAdjust=stream->readS32();
     dxaScale=stream->readS32();
     dxsInch=stream->readS32();
+    dxaFromText=stream->readU16();
+    dxaFromTextRight=stream->readU16();
     // skipping the std::vector rgdxaCenter
     // skipping the std::vector rgdxaCenterPrint
     // skipping the std::vector rgtc
@@ -1491,6 +1493,8 @@ bool TAP::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(fCantSplit);
     stream->write(fTableHeader);
     tlp.write(stream, false);
+    stream->write(dxaAbs);
+    stream->write(dyaAbs);
     stream->write(lwHTMLProps);
     shifterU16=fCaFull;
     shifterU16|=fFirstRow << 1;
@@ -1502,8 +1506,8 @@ bool TAP::write(OLEStreamWriter *stream, bool preservePos) const {
     stream->write(dxaAdjust);
     stream->write(dxaScale);
     stream->write(dxsInch);
-    stream->write(dxaAbs);
-    stream->write(dyaAbs);
+    stream->write(dxaFromText);
+    stream->write(dxaFromTextRight);
     // skipping the std::vector rgdxaCenter
     // skipping the std::vector rgdxaCenterPrint
     // skipping the std::vector rgtc
@@ -1537,6 +1541,8 @@ void TAP::clear() {
     dxaAdjust=0;
     dxaScale=0;
     dxsInch=0;
+    dxaFromText=0;
+    dxaFromTextRight=0;
     rgdxaCenter.clear();
     rgdxaCenterPrint.clear();
     rgtc.clear();
@@ -1595,6 +1601,11 @@ std::string TAP::toString() const
     s += int2string( dxaScale );
     s += "\ndxsInch=";
     s += int2string( dxsInch );
+    s += "\ndxaFromText=";
+    s += uint2string( dxaFromText );
+    s += "\ndxaFromTextRight=";
+    s += uint2string( dxaFromTextRight );
+
     s += "\nrgdxaCenter=";
     // skipping the std::vector rgdxaCenter
     s += "\nrgdxaCenterPrint=";

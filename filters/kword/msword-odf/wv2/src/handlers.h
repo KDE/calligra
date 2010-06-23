@@ -460,7 +460,8 @@ namespace wvWare {
          * ones you'll get when invoking the functor, but by having them here,
          * you can do some preprocessing on the whole table first.
          */
-        virtual void tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> tap );
+        virtual void tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> tap,
+                                    SharedPtr<const ParagraphProperties> /*paragraphProperties*/);
 
         /**
          * This method is called every time we find an inline object.

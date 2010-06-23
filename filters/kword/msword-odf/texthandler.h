@@ -93,7 +93,8 @@ public:
     virtual void fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
     virtual void runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 
-    virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
+    virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap,
+                               wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);
 
 #ifdef IMAGE_IMPORT
     virtual void inlineObjectFound(const wvWare::PictureData& data, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);

@@ -257,7 +257,8 @@ void TextHandler::fieldEnd( const FLD* /*fld*/, SharedPtr<const Word97::CHP> /*c
 {
 }
 
-void TextHandler::tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> /*tap*/ )
+void TextHandler::tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> /*tap*/,
+                                 SharedPtr<const ParagraphProperties> /*paragraphProperties*/)
 {
     tableRow();
 }

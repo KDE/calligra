@@ -25,6 +25,7 @@
 
 #include <wv2/src/functor.h>
 #include <wv2/src/word97_generated.h> // for TAP
+#include <wv2/src/paragraphproperties.h> //for PAP
 #include <wv2/src/handlers.h>
 #include <QString>
 #include <QObject>
@@ -50,6 +51,7 @@ namespace KWord
 {
 typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
 typedef wvWare::SharedPtr<const wvWare::Word97::TAP> TAPptr;
+typedef wvWare::SharedPtr<const wvWare::ParagraphProperties> PAPptr;
 
 // Data for a given row table. This struct is used by the Table struct.
 struct Row {
@@ -78,6 +80,8 @@ struct Table {
 
     // table properties
     TAPptr tap;
+    // first paragraph in table properties
+    PAPptr paragraphProperties;
 
     void cacheCellEdge(int cellEdge);
     int columnNumber(int cellEdge) const;
@@ -131,6 +135,8 @@ private:
 
     QString m_borderStyle[6];
     QString m_margin[6];
+
+    bool m_floatingTable; //true - table is floatin table; false - table is not floating table
 };
 
 #endif // TABLEHANDLER_H
