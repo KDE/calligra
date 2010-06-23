@@ -1432,6 +1432,7 @@ TAP::TAP(OLEStreamReader *stream, bool preservePos) : Shared() {
     read(stream, preservePos);
 }
 
+/* TODO: updated required! */
 bool TAP::read(OLEStreamReader *stream, bool preservePos) {
 
     U16 shifterU16;
@@ -1478,6 +1479,7 @@ bool TAP::read(OLEStreamReader *stream, bool preservePos) {
     return true;
 }
 
+/* TODO: updated required! */
 bool TAP::write(OLEStreamWriter *stream, bool preservePos) const {
 
     U16 shifterU16;
@@ -1529,6 +1531,8 @@ void TAP::clear() {
     fCantSplit=0;
     fTableHeader=0;
     tlp.clear();
+    pcVert=0;
+    pcHorz=0;
     dxaAbs=0;
     dyaAbs=0;
     lwHTMLProps=0;
@@ -1577,6 +1581,10 @@ std::string TAP::toString() const
     s += uint2string( fTableHeader );
     s += "\ntlp=";
     s += "\n{" + tlp.toString() + "}\n";
+    s += "\npcVert=";
+    s += uint2string( pcVert );
+    s += "\npcHorz=";
+    s += uint2string( pcHorz );
     s += "\ndxaAbs=";
     s += int2string( dxaAbs );
     s += "\ndyaAbs=";

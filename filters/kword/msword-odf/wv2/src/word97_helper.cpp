@@ -146,6 +146,7 @@ typedef enum
     sprmSFRTLGutter = 0x322A,
     sprmTFCantSplit = 0x3403,
     sprmTTableHeader = 0x3404,
+    sprmTPc = 0x360D,
     sprmTUndocumented1 = 0x3615,
     sprmPWHeightAbs = 0x442B,
     sprmPDcs = 0x442C,
@@ -2092,10 +2093,12 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     }
     case SPRM::sprmTDefTableShd2nd:
     {
+        wvlog << "Warning: sprmTDefTableShd2nd not implemented" << endl;
         break;
     }
     case SPRM::sprmTDefTableShd3rd:
     {
+        wvlog << "Warning: sprmTDefTableShd3rd not implemented" << endl;
         break;
     }
     case SPRM::sprmTTlp:
@@ -2104,6 +2107,12 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTFBiDi:
         wvlog << "Warning: sprmTFBiDi not implemented" << endl;
         break;
+    case SPRM::sprmTPc:
+    {
+        pcVert = ( *ptr & 0x30 ) >> 4;
+        pcHorz = ( *ptr & 0xC0 ) >> 6;
+        break;
+    } 
     case SPRM::sprmTDxaAbs:
         dxaAbs = readS16( ptr );
         break;
@@ -2357,11 +2366,11 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         }
         break;
     case SPRM::sprmTUndocumented8:
-            // ###### TODO
-            //wvlog << "sprmTUndocumented8: some undocumented spacing thingy, TODO" << endl;
-        break;
+       wvlog << "sprmTUndocumented8: some undocumented spacing thingy, TODO" << endl;
+       break;
     case SPRM::sprmTUndocumented1:
     case SPRM::sprmTUndocumented2:
+        wvlog << "Warning: undocumented SPRM";
         break;
     case SPRM::sprmTBrcTopCv:
     {
@@ -2401,6 +2410,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
     case SPRM::sprmTUndocumented10:
     case SPRM::sprmTUndocumented11:
     case SPRM::sprmTUndocumented12:
+        wvlog << "Warning: undocumented SPRM";
         break;
     case SPRM::sprmTWidthIndent:
     {

@@ -1337,14 +1337,46 @@ struct TAP : public Shared {
     TLP tlp;
 
     /**
+     * Vertical position code.  Specifies the location of an anchor point for
+     * an absolutely positioned table.
+     * 0 - relative to the top page margin
+     * 1 - relative to the top edge of the page
+     * 2 - relative to the paragraph bottom of the pragraph that precedes it.
+     * 3 - None. The table is not absolutely positioned.
+     */
+    U8 pcVert:2;
+
+    /**
+     * Horizontal position code.  Specifies the location of an anchor point for
+     * an absolutely positioned table.
+     * 0 - relative to the left edge of the current column
+     * 1 - relative to the left page margin
+     * 2 - relative to the left edge of the page
+     * 3 - None. The table is not absolutely positioned.
+     */
+    U8 pcHorz:2;
+
+    /**
      * Specifies the horizontal position of the table relative to the table's
-     * horizontal anchor.
+     * horizontal anchor. The physical left origin of the table.  Values have
+     * the following meaning:
+     *   0 - table adjusted left within reference frame
+     *  -4 - table centered horizontally within reference frame
+     *  -8 - table adjusted right within reference frame
+     * -12 - table placed inside of reference frame
+     * -16 - table placed outside of reference frame
      */
     S16 dxaAbs;
 
     /**
      * Specifies downward vertical position of the table relative to the
-     * table's vertical anchor.
+     * table's vertical anchor.  Values have the following meaning:
+     *   0 - inline (default value)
+     *  -4 - table is placed at top of reference frame
+     *  -8 - table is centered vertically within reference frame
+     * -12 - table is placed at bottom of reference frame
+     * -16 - table placed inside of reference frame
+     * -20 - table placed outside of reference frame
      */
     S16 dyaAbs;
 
