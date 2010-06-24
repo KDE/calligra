@@ -61,6 +61,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_t()
         kDebug() << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
+#ifdef PPTXXMLSLIDEREADER_H
+            d->textBoxHasContent = true;
+#endif
         }
 //! @todo add ELSE_WRONG_FORMAT
         BREAK_IF_END_OF(CURRENT_EL);

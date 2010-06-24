@@ -555,6 +555,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_svgHeight = -1;
 
 #ifdef PPTXXMLSLIDEREADER_H
+    //We assume that the textbox is empty by default
+    d->textBoxHasContent = false;
+
     // If called from the pptx converter, handle different contexts
     // (Slide, SlideMaster, SlideLayout)
     kDebug() << "type:" << m_context->type;
@@ -643,6 +646,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 #ifdef PPTXXMLSLIDEREADER_H
         body->addAttribute("draw:layer", "layout");
+        if( !d->textBoxHasContent ) {
+            body->addAttribute("presentation:placeholder", "true");
+        }
 
 //todo        body->addAttribute("presentation:style-name", styleName);
 # ifdef HARDCODED_PRESENTATIONSTYLENAME

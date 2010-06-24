@@ -152,6 +152,9 @@ public:
     uint shapeNumber;
     QString qualifiedNameOfMainElement;
     QString phType; //! set by read_ph()
+    //!set by read_t as true whenever some characters are copied to a textbox,
+    //!used to figure out if a shape is a placeholder or not
+    bool textBoxHasContent;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
