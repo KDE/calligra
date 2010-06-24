@@ -46,7 +46,7 @@
   <Action name="view_show_guides"/>
   <Separator/>
   <Action name="view_zoom"/>
-  <Action name="view_fullscreen"/>+
+  <Action name="view_fullscreen"/>
   <Action name="view_toggledockers"/>
  </Menu>
  <Menu name="insert"><text context="Insert menu">&amp;Insert</text>
