@@ -66,7 +66,7 @@ void MSOOXML_CURRENT_CLASS::pushCurrentDrawStyle(KoGenStyle *newStyle)
 {
     m_drawStyleStack.append(m_currentDrawStyle);
 
-    // This step also takes ownership.
+    // This step also takes ownership, so we have to delete it when popping.
     m_currentDrawStyle = newStyle;
 }
 
@@ -177,6 +177,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //    KoXmlWriter *origBody = body;
 //    body = new KoXmlWriter(&drawFrameBuf);
 
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -204,15 +206,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             m_currentDrawStyle->addAttribute("style:fill", constNone);
 
 #ifdef DOCXXMLDOCREADER_H
-        QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+        //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #endif
 #ifdef HARDCODED_PRESENTATIONSTYLENAME
 //! @todo hardcoded draw:style-name = grpredef1
         QString currentDrawStyleName("grpredef1");
 #endif
 #if defined(DOCXXMLDOCREADER_H) || defined(HARDCODED_PRESENTATIONSTYLENAME)
-        kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
-        body->addAttribute("draw:style-name", currentDrawStyleName);
+        //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
+        //body->addAttribute("draw:style-name", currentDrawStyleName);
 #endif
 
 //! @todo CASE #1341: images within w:hdr should be anchored as paragraph (!wp:inline) or as-char (wp:inline)
@@ -249,6 +251,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             // m_rot is in 1/60,000th of a degree
             body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
         }
+
+        const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+        body->addAttribute("draw:style-name", styleName);
 
         // Now it's time to link to the actual picture.  Only do it if
         // there is an image to link to.  If so, this was created in
@@ -296,6 +301,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //        body->addCompleteElement(&drawFrameBuf);
         body->endElement(); //draw:frame
     }
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
@@ -718,6 +725,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     }
     d->shapeNumber++;
 #endif
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
