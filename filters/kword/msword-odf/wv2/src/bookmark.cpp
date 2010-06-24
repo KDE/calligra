@@ -27,10 +27,10 @@
 using namespace wvWare;
 
 Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
-            m_start(0), m_startIt(0), m_end(0), m_endIt(0)
+    m_start(0), m_startIt(0), m_end(0), m_endIt(0), m_nFib(fib.nFib)
 {
 #ifdef WV2_DEBUG_BOOKMARK
-    wvlog   << "Bookmark::Bookmark()" << endl
+    wvlog   << endl
             << "   fcPlcfbkf=" << fib.fcPlcfbkf << " lcbPlcfbkf=" << fib.lcbPlcfbkf << endl
             << "   fcPlcfbkl=" << fib.fcPlcfbkl << " lcbPlcfbkl=" << fib.lcbPlcfbkl << endl
             << "   lcbSttbfbkmk=" << fib.fcSttbfbkmk << " lcbSttbfbkmk=" << fib.lcbSttbfbkmk << endl;
@@ -43,16 +43,14 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     if (fib.lcbPlcfbkf != 0)
     {
-        int n = fib.lcbPlcfbkf / Word97::BKF::sizeOf;
-        wvlog << "number of PlcfBkf entries: " << n << endl;
-
         tableStream->seek( fib.fcPlcfbkf, G_SEEK_SET );
 
         m_start = new PLCF<Word97::BKF>(fib.lcbPlcfbkf, tableStream);
         m_startIt = new PLCFIterator<Word97::BKF>(*m_start);
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Bookmark m_start init done" << endl;
+        wvlog << "Num. of bookmarks to start: " << m_start->count() << endl;
+        wvlog << "m_start init done" << endl;
         m_start->dumpCPs();
 #endif
     }
@@ -83,13 +81,32 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     if (fib.lcbPlcfbkl != 0)
     {
-        int n = fib.lcbPlcfbkl / Word97::BKL::sizeOf;
-        wvlog << "number of PlcfBkl entries: " << n << endl;
-
+        int count = 0;
         tableStream->seek( fib.fcPlcfbkl, G_SEEK_SET );
 
-        m_end = new PLCF<Word97::BKL>(fib.lcbPlcfbkl, tableStream);
-        m_endIt = new PLCFIterator<Word97::BKL>(*m_end);
+        //Word Version 6,7
+        if ( fib.nFib < Word8nFib ) {
+            m_end = new PLCF<Word97::BKL>(fib.lcbPlcfbkl, tableStream);
+            m_endIt = new PLCFIterator<Word97::BKL>(*m_end);
+            count = m_end->count();
+        }
+        //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is
+        //instead reconstructed from the plcfbkf or plcfatnbkf when the file is
+        //opened.  Microsoft Word 97 (aka Version 8)
+        else {
+            count = (fib.lcbPlcfbkl - 4) / 4;
+            for ( int i = 0; i < count + 1; i++ ) {
+                m_endCP.push_back( tableStream->readU32() );
+            }
+        }
+#ifdef WV2_DEBUG_BOOKMARK
+        wvlog << "Num. of bookmarks to end: " << count << endl;
+        wvlog << "m_end/m_endCP init done" << endl;
+
+        for ( int i = 0; i < count + 1; i++ ) {
+            wvlog << "dumpCPs:   " << m_endCP[i] << endl;
+        }
+#endif
     }
 
 
@@ -115,19 +132,24 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 #endif
     ok = true;
 
-    if ( m_startIt && m_startIt->currentStart() == globalCP &&
-        m_textIt != m_text.end() && m_nameIt != m_name.end()) {
-
+    if ( m_startIt &&
+         (m_startIt->currentStart() == globalCP) &&
+         (m_textIt != m_text.end()) &&
+         (m_nameIt != m_name.end()) )
+    {
         // yay, but it is hard to make that more elegant
         ++( *m_startIt );
-        ++( *m_endIt );
+
+        if (m_nFib < Word8nFib) {
+            ++( *m_endIt );
+        }
 
         U32 start = *m_textIt;
         ++m_textIt;
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Bookmarks::bookmark(): start = " << start << endl;
-        wvlog << "Bookmarks::bookmark(): name = " << (*m_nameIt).ascii() << endl;
+        wvlog << "start = " << start << endl;
+        wvlog << "name = " << (*m_nameIt).ascii() << endl;
 #endif
         UString name = *m_nameIt;
         ++m_nameIt;
@@ -146,5 +168,16 @@ U32 Bookmarks::nextBookmarkStart() const
 
 U32 Bookmarks::nextBookmarkEnd() const
 {
-    return m_endIt && m_endIt->current() ? m_endIt->currentStart() : 0xffffffff;
+    U32 ret = 0xffffffff;
+    if (m_nFib < Word8nFib) {
+        if (m_endIt && m_endIt->current()) {
+            ret = m_endIt->currentStart();
+        }
+    } else {
+        if (m_startIt->current()) {
+            S16 n = (m_startIt->current())->ibkl;
+            ret = m_endCP[n];
+        }
+    }
+    return ret;
 }

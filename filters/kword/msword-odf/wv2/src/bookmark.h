@@ -77,12 +77,20 @@ namespace wvWare
             std::vector<U32> m_text;
             std::vector<U32>::const_iterator m_textIt;
 
-            PLCF<Word97::BKL>* m_end;
-            PLCFIterator<Word97::BKL>* m_endIt;
-
             std::vector<UString> m_name;
             std::vector<UString>::const_iterator m_nameIt;
 
+            //Used for MS Word Version 6,7 documents.
+            PLCF<Word97::BKL>* m_end;
+            PLCFIterator<Word97::BKL>* m_endIt;
+
+            //Used instead of m_end for MS Word 97 (aka Version 8)
+            //documents.
+            std::vector<U32> m_endCP;
+
+            //A copy of fib.nFib to identify the document type durig
+            //processing of bookmarks.
+            U16 m_nFib;
     };
 
 } // namespace wvWare
