@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KWord DICOM Structured Report Import Filter
+Name[x-test]=xxKWord DICOM Structured Report Import Filterxx
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/dicom
 X-KDE-Weight=1
