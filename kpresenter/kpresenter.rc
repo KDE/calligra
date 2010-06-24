@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="116">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="117">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -46,6 +46,7 @@
   <Action name="add_guideline"/>
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
+  <Action name="view_toggledockers"/>
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>

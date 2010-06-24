@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="kivio" version="30">
+<kpartgui name="kivio" version="31">
     <MenuBar>
         <Menu name="edit">
             <Text>&amp;Edit</Text>
@@ -38,6 +38,7 @@
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
             <Action name="view_show_guides"/>
+            <Action name="view_toggledockers"/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="insert_variable"/> <!-- menu -->
