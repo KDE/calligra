@@ -1,4 +1,4 @@
-set(dcmimport_PART_SRCS dcmimport.cc DCMImportDialog.cc )
+set(dcmimport_PART_SRCS dcmimport.cpp DCMImportDialog.cpp )
 kde4_add_ui_files(dcmimport_PART_SRCS DCMImportDialog.ui )
 
 INCLUDE_DIRECTORIES( ${DCMTK_INCLUDE_DIR} )

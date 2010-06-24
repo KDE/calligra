@@ -19,33 +19,49 @@
 */
 
 
-#ifndef DCMIMPORTDIALOG_H
-#define DCMIMPORTDIALOG_H
+#include "DCMImportDialog.h"
+#include "ui_DCMImportDialog.h"
 
-#include <QDialog>
-
-namespace Ui
+DCMImportDialog::DCMImportDialog(QWidget *parent) :
+        QDialog(parent),
+        ui(new Ui::DCMImportDialog)
 {
-class DCMImportDialog;
+    ui->setupUi(this);
 }
 
-class DCMImportDialog : public QDialog
+DCMImportDialog::~DCMImportDialog()
 {
-    Q_OBJECT
-public:
-    DCMImportDialog(QWidget *parent = 0);
-    ~DCMImportDialog();
+    delete ui;
+}
 
-    bool getDigitalSignature();
-    bool getIgnoreRelationshipConstraints();
-    bool getIgnoreContentItemErrors();
-    bool getSkipInvalidSubtree();
+void DCMImportDialog::changeEvent(QEvent *e)
+{
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
 
-protected:
-    void changeEvent(QEvent *e);
+bool DCMImportDialog::getDigitalSignature()
+{
+    return ui->readDigitalSignatures->checkState();
+}
 
-private:
-    Ui::DCMImportDialog *ui;
-};
+bool DCMImportDialog::getIgnoreRelationshipConstraints()
+{
+    return ui->readIgnoreRelationshipConstraints->checkState();
+}
 
-#endif // DCMIMPORTDIALOG_H
+bool DCMImportDialog::getIgnoreContentItemErrors()
+{
+    return ui->readIgnoreContentItemErrors->checkState();
+}
+
+bool DCMImportDialog::getSkipInvalidSubtree()
+{
+    return ui->readSkipInvlaidSubtree->checkState();
+}

@@ -21,21 +21,21 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QCheckBox" name="readDS">
+       <widget class="QCheckBox" name="readDigitalSignatures">
         <property name="text">
          <string>Read digital signatures from the dataset</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="readIRC">
+       <widget class="QCheckBox" name="readIgnoreRelationshipConstraints">
         <property name="text">
          <string>Ignore relationship constraints</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="readICIE">
+       <widget class="QCheckBox" name="readIgnoreContentItemErrors">
         <property name="text">
          <string>Do not abort on content item errors
 (e.g. missing value type specific attributes)</string>
@@ -43,7 +43,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="readSICI">
+       <widget class="QCheckBox" name="readSkipInvlaidSubtree">
         <property name="text">
          <string>Skip invalid content item subtree</string>
         </property>
