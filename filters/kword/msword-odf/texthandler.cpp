@@ -247,7 +247,7 @@ void KWordTextHandler::sectionEnd()
     if (m_sep->bkc != 1) {
         emit sectionEnd(m_sep);
     }
-    if (m_sep->ccolM1 > 0 || m_sep->bkc == 0) {
+    if (m_sep->ccolM1 > 0) {
         m_bodyWriter->endElement();//text:section
     }
 }
