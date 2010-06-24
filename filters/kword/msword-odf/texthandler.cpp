@@ -120,10 +120,8 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     m_sectionNumber++;
     m_sep = sep; //store sep for section end
 
-    //break code
+    //type of the section break
     kDebug(30513) << "sep->bkc = " << sep->bkc;
-
-    int numColumns = sep->ccolM1 + 1;
 
     //page layout could change
     if (sep->bkc != 1) {
@@ -132,9 +130,23 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     //check for a column break
     if (sep->bkc == 1) {
     }
-    //check for change in number of columns, too if sep->bkc isn't 0, just
+    int numColumns = sep->ccolM1 + 1;
+
+    //NOTE: We used to save the content of a section having a "continuous
+    //section break" (sep-bkc == 0) into the <text:section> element.  We are
+    //now creating a <master-page> for it because the page layout or
+    //header/footer content could change.
+    //
+    //But now the section content is placed at a new page, which is wrong.
+    //There's actually no direct support for "continuous section break" in ODF.
+    //
+    //TODO: Let's check if the <page-layout> and header/footer content changed.
+    //If not, then we can store the content directly into <text:section>.  But
+    //this is not the full support for "continuous section break".
+
     //check to see if we have more than the usual one column
-    if (numColumns > 1 || sep->bkc == 0) {
+    if ( numColumns > 1 )
+    {
         QString sectionStyleName = "Sect";
         sectionStyleName.append(QString::number(m_sectionNumber));
         KoGenStyle sectionStyle(KoGenStyle::SectionAutoStyle, "section");
