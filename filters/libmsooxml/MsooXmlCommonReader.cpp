@@ -46,6 +46,7 @@ MsooXmlCommonReader::MsooXmlCommonReader(QIODevice* io, KoOdfWriters *writers)
 MsooXmlCommonReader::~MsooXmlCommonReader()
 {
     delete m_currentTextStyleProperties;
+    delete m_currentListStyleProperties;
 }
 
 void MsooXmlCommonReader::init()

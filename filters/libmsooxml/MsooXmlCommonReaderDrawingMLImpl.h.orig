@@ -119,19 +119,6 @@ QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
 // DrawingML tags
 // ================================================================
 
-static QString mirrorToOdf(bool flipH, bool flipV)
-{
-    if (!flipH && !flipV)
-        return QString();
-    if (flipH && flipV)
-        return QLatin1String("horizontal vertical");
-    if (flipH)
-        return QLatin1String("horizontal");
-    if (flipV)
-        return QLatin1String("vertical");
-    return QLatin1String("none");
-}
-
 #undef CURRENT_EL
 #define CURRENT_EL pic
 //! pic handler (Picture)
@@ -296,11 +283,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
 
         // Add style information
-        //! @todo: horizontal-on-{odd,even}?
-        const QString mirror(mirrorToOdf(m_flipH, m_flipV));
-        if (!mirror.isEmpty()) {
-            m_currentDrawStyle->addProperty("style:mirror", mirror);
+        QString  mirror;
+        if (m_flipH || m_flipV) {
+            if (m_flipH && m_flipV)
+                mirror = "horizontal vertical";
+            else if (m_flipH)
+                mirror = "horizontal";
+            else if (m_flipV)
+                mirror = "vertical";
+            else
+                mirror = "none";
         }
+        //! @todo: horizontal-on-{odd,even}?
+        m_currentDrawStyle->addProperty("style:mirror", mirror);
 
         (void)drawFrameBuf.releaseWriter();
 //        body->addCompleteElement(&drawFrameBuf);
@@ -592,6 +587,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #endif
     }
     m_isPlaceHolder = false;
+    m_phType.clear();
 #endif
 
     m_cNvPrId.clear();
@@ -651,9 +647,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 //        body = origBody;
         body = drawFrameBuf.originalWriter();
         body->startElement("draw:frame"); // CASE #P475
-        if (!m_cNvPrName.isEmpty()) {
-            body->addAttribute("draw:name", m_cNvPrName);
-        }
+
         const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
         body->addAttribute("draw:style-name", styleName);
 
@@ -1093,17 +1087,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     READ_EPILOGUE
 }
 
-static QFont::Capitalization capToOdf(const QString& cap)
-{
-    if (cap == QLatin1String("small")) {
-        return QFont::SmallCaps;
-    }
-    else if (cap == QLatin1String("all")) {
-        return QFont::AllUppercase;
-    }
-    return QFont::MixedCase;
-}
-
 #undef CURRENT_EL
 #define CURRENT_EL rPr
 //! rPr handler (Text Run Properties) DrawingML ECMA-376, 21.1.2.3.9, p.3624.
@@ -1215,43 +1198,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 //kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(cap);
-    if (!cap.isEmpty()) {
-        m_currentTextStyleProperties->setFontCapitalization(capToOdf(cap));
-    }
-
-    TRY_READ_ATTR_WITHOUT_NS(spc)
-    if (!spc.isEmpty()) {
-        int spcInt;
-        STRING_TO_INT(spc, spcInt, "rPr@spc")
-        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
-    }
-
-#ifdef PPTXXMLSLIDEREADER_H
-    kDebug() << "d->phType ____" << d->phType;
-    PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-#endif
-
-    TRY_READ_ATTR_WITHOUT_NS(sz)
-    QVariant szInt;
-    if (sz.isEmpty()) {
-#ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == Slide) {
-            // pass properties from master to slide
-//! @todo hardcoded list index
-            PptxSlideMasterListLevelTextStyle *listStyle = listStyle = slideMasterTextStyle->listStyle(0);
-            if (listStyle) {
-                kDebug() << "try from master!!! sz=" << listStyle->sz;
-                szInt = listStyle->sz;
-            }
+    if (attrs.hasAttribute("cap")) {
+        const QString capValue = attrs.value("cap").toString();
+        if (capValue == "small") {
+            m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);
         }
-#endif
+        else if (capValue == "all") {
+            m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
+        }
     }
-    else {
-        STRING_TO_INT(sz, szInt, "rPr@sz")
+
+    bool ok = false;
+    TRY_READ_ATTR_WITHOUT_NS(spc)
+    const int pointSize = spc.toInt(&ok)/100;
+    if (ok) {
+        m_currentTextStyleProperties->setFontLetterSpacing(pointSize);
     }
-    if (!szInt.isNull()) {
-        m_currentTextStyleProperties->setFontPointSize(szInt.toDouble() / 100.0);
+
+    if (attrs.hasAttribute("sz")) {
+        bool ok = false;
+        const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
+        if (ok) {
+            m_currentTextStyleProperties->setFontPointSize(pointSize);
+        }
     }
     // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
     TRY_READ_ATTR_WITHOUT_NS(strike)
@@ -2950,8 +2919,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - defaultTextStyle (§19.2.1.8)
   - lstStyle (§21.1.2.4.12)
   - notesStyle (§19.3.1.28)
-  - [done] otherStyle (§19.3.1.35)
-  - [done] titleStyle (§19.3.1.49)
+  - otherStyle (§19.3.1.35)
+  - titleStyle (§19.3.1.49)
 
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet)     §21.1.2.4.1
@@ -3443,15 +3412,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
     if (!sz.isEmpty()) {
-        int szInt;
-        STRING_TO_INT(sz, szInt, "defRPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-#ifdef PPTXXMLSLIDEREADER_H
-//! @todo level, 0 is hardcoded
-        PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(0);
-        kDebug() << "=====" << szInt;
-        slideMasterListLevelTextStyle->sz = szInt;
-#endif
+        bool ok = false;
+        const qreal pointSize = qreal(attrs.value("sz").toString().toUInt(&ok)) / 100.0;
+        if (ok) {
+            m_currentTextStyleProperties->setFontPointSize(pointSize);
+        }
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);

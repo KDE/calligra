@@ -95,13 +95,44 @@ public:
     QMap<QString, KoGenStyle> styles;
 };
 
-//! Data structure collecting information about master
+//! Data structure collecting information about single text style for one list level defined by master slide
+//! This can be bodyStyle, otherStyle, tileStyle
+//! Used by PptxSlideMasterTextStyle
+//! Attributes here are of type QVariant, so it is possible to test if these are present.
+class PptxSlideMasterListLevelTextStyle
+{
+public:
+    PptxSlideMasterListLevelTextStyle();
+    QVariant sz;
+};
+
+//! Data structure collecting information about single text style defined by master slide
+//! This can be bodyStyle, otherStyle, tileStyle
+class PptxSlideMasterTextStyle
+{
+public:
+    PptxSlideMasterTextStyle();
+    ~PptxSlideMasterTextStyle();
+    //! @return text style for list level @a level
+    //! @par level can be 0..8, otherwise 0 is returned.
+    //! Returned object is owned by PptxSlideMasterTextStyle.
+    PptxSlideMasterListLevelTextStyle *listStyle(uint level);
+private:
+    QVector<PptxSlideMasterListLevelTextStyle*> m_listStyles;
+};
+
+//! Data structure collecting information about master slide
 class PptxSlideMasterPageProperties
 {
 public:
     PptxSlideMasterPageProperties();
     void addDrawingPageProperty(const QByteArray& property, const QByteArray& value);
     void saveDrawingPageProperties(KoGenStyle* style);
+
+    PptxSlideMasterTextStyle* textStyle(const QString& style);
+    PptxSlideMasterTextStyle titleStyle;
+    PptxSlideMasterTextStyle bodyStyle;
+    PptxSlideMasterTextStyle otherStyle;
 private:
     QMap<QByteArray, QByteArray> m_drawingPageProperties;
 };

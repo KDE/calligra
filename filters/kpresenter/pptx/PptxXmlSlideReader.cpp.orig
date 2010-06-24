@@ -60,8 +60,6 @@ PptxShapeProperties::PptxShapeProperties()
 {
 }
 
-// -------------------
-
 PptxSlideProperties::PptxSlideProperties()
 {
 }
@@ -76,8 +74,6 @@ void PptxSlideProperties::clear()
     qDeleteAll(shapes);
     shapes.clear();
 }
-
-// -------------------
 
 PptxPlaceholder::PptxPlaceholder()
 {
@@ -94,39 +90,6 @@ void PptxPlaceholder::writeAttributes(KoXmlWriter* writer)
     writer->addAttribute("svg:width", width);
     writer->addAttribute("svg:height", height);
 }
-
-// -------------------
-
-PptxSlideMasterListLevelTextStyle::PptxSlideMasterListLevelTextStyle()
-{
-}
-
-// -------------------
-
-PptxSlideMasterTextStyle::PptxSlideMasterTextStyle()
- : m_listStyles(9)
-{
-}
-
-PptxSlideMasterTextStyle::~PptxSlideMasterTextStyle()
-{
-    for (int i = 0; i < m_listStyles.size(); i++) {
-        delete m_listStyles[i];
-    }
-}
-
-PptxSlideMasterListLevelTextStyle* PptxSlideMasterTextStyle::listStyle(uint level)
-{
-    if (level >= (uint)m_listStyles.size())
-        return 0;
-    PptxSlideMasterListLevelTextStyle* result = m_listStyles.at(level);
-    if (!result) {
-        m_listStyles[level] = result = new PptxSlideMasterListLevelTextStyle;
-    }
-    return result;
-}
-
-// -------------------
 
 PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 {
@@ -155,17 +118,6 @@ void PptxSlideMasterPageProperties::saveDrawingPageProperties(KoGenStyle* style)
     {
         style->addProperty(QString(it.key()), it.value().constData());
     }
-}
-
-PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString& style)
-{
-    if (style == QLatin1String("title") || style == QLatin1String("ctrTitle")) {
-        return &titleStyle;
-    }
-    else if (style == "body" || style == "subTitle") {
-        return &bodyStyle;
-    }
-    return &otherStyle;
 }
 
 // -------------------
@@ -199,8 +151,7 @@ public:
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
     QString qualifiedNameOfMainElement;
-    QString phType; //!< set by read_ph()
-    PptxSlideMasterTextStyle* currentSlideMasterTextStyle; //!< set by read_*Style()
+    QString phType; //! set by read_ph()
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
@@ -233,7 +184,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 {
     m_context = dynamic_cast<PptxXmlSlideReaderContext*>(context);
     Q_ASSERT(m_context);
-    d->currentSlideMasterTextStyle = 0;
     switch (m_context->type) {
     case Slide:
         d->qualifiedNameOfMainElement = "p:sld";
@@ -582,8 +532,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 
     QString currentListStyleName = "bodyList";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
-    d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->bodyStyle;
-    MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
 
     while (!atEnd()) {
         readNext();
@@ -684,8 +632,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
 
     QString currentListStyleName = "titleList";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
-    d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->titleStyle;
-    MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
 
     while (!atEnd()) {
         readNext();
@@ -737,8 +683,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 
     QString currentListStyleName = "otherList";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
-    d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->otherStyle;
-    MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
 
     while (!atEnd()) {
         readNext();
@@ -1146,7 +1090,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     - wavAudioFile (Audio from WAV File) §20.1.3.7
 */
 //! @todo support all child elements
-KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPr()
 {
     READ_PROLOGUE
     d->phType.clear();

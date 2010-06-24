@@ -89,7 +89,6 @@ KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
 bool    m_isPlaceHolder; //! set by read_ph()
-QString m_phType; //! set by read_ph()
 
 KoFilter::ConversionStatus read_fld();
 
@@ -154,8 +153,8 @@ int m_svgX; //!< set by read_off()
 int m_svgY; //!< set by read_off()
 int m_svgWidth; //! set by read_ext()
 int m_svgHeight; //! set by read_ext()
-int m_flipH; //! set by read_xfrm()
-int m_flipV; //! set by read_xfrm()
+bool m_flipH; //! set by read_xfrm()
+bool m_flipV; //! set by read_xfrm()
 int m_rot; //! set by read_xfrm()
 
 //! true if no fill should be applied for element; used e.g. by pic:spPr/a:noFill elem.

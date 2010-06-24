@@ -1,0 +1,12 @@
+--- filters/kpresenter/pptx/PptxXmlSlideReader.cpp	(revision 1141890)
++++ filters/kpresenter/pptx/PptxXmlSlideReader.cpp	(working copy)
+@@ -199,7 +247,8 @@
+     //! Used to index shapes in master slide when inheriting properties
+     uint shapeNumber;
+     QString qualifiedNameOfMainElement;
+-    QString phType; //! set by read_ph()
++    QString phType; //!< set by read_ph()
++    PptxSlideMasterTextStyle* currentSlideMasterTextStyle; //!< set by read_*Style()
+ };
+ 
+ PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)

@@ -817,7 +817,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n        </draw:text-box>"
         "\n      </draw:frame>"
         "\n    </style:master-page>"*/
-        "\n    <!-- COPIED -->"
+        "\n    <!-- /COPIED -->"
     );
 
     writers->mainStyles->insertRawOdfStyles(
