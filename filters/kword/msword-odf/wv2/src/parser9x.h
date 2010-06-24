@@ -63,7 +63,6 @@ namespace wvWare
     class Drawings;
     class Bookmarks;
     template<class T> class PLCF;
-    class ParagraphProperties;
 
     // Helper structures for the Functor-based approach
     struct HeaderData;
@@ -299,7 +298,6 @@ namespace wvWare
         U32 m_tableRowLength;           // Lenght of the table row (in characters). Only valid
         bool m_cellMarkFound;           // if m_tableRowStart != 0
         int m_remainingCells;           // The number of remaining cells for the processed row
-        SharedPtr<const ParagraphProperties>  m_firstParagraphInRowProperties;
 
         Paragraph* m_currentParagraph;
 

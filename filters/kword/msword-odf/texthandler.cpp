@@ -528,8 +528,7 @@ QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
     return varElem;
 }
 
-void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap,
-                                     wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
+void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
     kDebug(30513) ;
     if (!m_currentTable) {
@@ -540,7 +539,6 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber);
         m_currentTable->tap = tap;
-        m_currentTable->paragraphProperties = paragraphProperties;
         //insertAnchor( m_currentTable->name );
     }
 

@@ -157,7 +157,7 @@ void PictureHandler::externalImage( const UString& /*name*/, SharedPtr<const Wor
 {
 }
 
-void PictureHandler::officeArt(wvWare::OfficeArtProperties *artProperties)
+void PictureHandler::officeArt(wvWare::OfficeArtProperties* /*artProperties*/)
 {
 }
 
@@ -257,8 +257,7 @@ void TextHandler::fieldEnd( const FLD* /*fld*/, SharedPtr<const Word97::CHP> /*c
 {
 }
 
-void TextHandler::tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> /*tap*/,
-                                 SharedPtr<const ParagraphProperties> /*paragraphProperties*/)
+void TextHandler::tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> /*tap*/ )
 {
     tableRow();
 }

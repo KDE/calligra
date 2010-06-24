@@ -71,83 +71,84 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     m_row = -1;
     m_currentY = 0;
 
-    //check if the paragraph is inside of an absolutely positioned frame
-    if ( (table->paragraphProperties->pap().dxaAbs != 0 || table->paragraphProperties->pap().dyaAbs) )
+    //check if the table is inside of an absolutely positioned frame
+    if ( (tap->dxaAbs != 0 || tap->dyaAbs) )
     {
         KoGenStyle userStyle(KoGenStyle::GraphicAutoStyle, "graphic");
         QString drawStyleName;
+        int dxaAbs = 0;
 
         writer->startElement("text:p", false);
         writer->addAttribute("text:style-name", "Standard");
 
-        int dxaAbs = 0;
-        const wvWare::Word97::PAP& pap = table->paragraphProperties->pap();
         //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
         // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside
-        if (pap.dxaAbs == -4) {
+        if (tap->dxaAbs == -4) {
            userStyle.addProperty("style:horizontal-pos","center");
-           userStyle.addPropertyPt("fo:margin-left",(double)table->tap->dxaFromText/20);
-           userStyle.addPropertyPt("fo:margin-right",(double)table->tap->dxaFromTextRight/20);
+           userStyle.addPropertyPt("fo:margin-left", (double) tap->dxaFromText / 20);
+           userStyle.addPropertyPt("fo:margin-right", (double) tap->dxaFromTextRight / 20);
         }
-        else if (pap.dxaAbs == -8)  {
+        else if (tap->dxaAbs == -8)  {
            userStyle.addProperty("style:horizontal-pos","right");
-           userStyle.addPropertyPt("fo:margin-left",(double)table->tap->dxaFromTextRight/20);
-           userStyle.addPropertyPt("fo:margin-right",0);
+           userStyle.addPropertyPt("fo:margin-left", (double) tap->dxaFromTextRight / 20);
+           userStyle.addPropertyPt("fo:margin-right", 0);
         }
-        else if (pap.dxaAbs == -12)
+        else if (tap->dxaAbs == -12) {
            userStyle.addProperty("style:horizontal-pos","inside");
-        else if (pap.dxaAbs == -16)
+        }
+        else if (tap->dxaAbs == -16) {
            userStyle.addProperty("style:horizontal-pos","outside");
-        else { //
-           dxaAbs = pap.dxaAbs;
+        }
+        else {
+           dxaAbs = tap->dxaAbs;
            userStyle.addProperty("style:horizontal-pos","from-left");
-           userStyle.addPropertyPt("fo:margin-left",0);
-           userStyle.addPropertyPt("fo:margin-right",(double)table->tap->dxaFromText/20);
+           userStyle.addPropertyPt("fo:margin-left", 0);
+           userStyle.addPropertyPt("fo:margin-right", (double) tap->dxaFromText / 20);
         }
 
         int dyaAbs = 0;
         //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
         // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside,
         // (-20) - outside
-        if (pap.dyaAbs == -4) {
+        if (tap->dyaAbs == -4) {
             userStyle.addProperty("style:vertical-pos","top");
         }
-        else if (pap.dyaAbs == -8) {
+        else if (tap->dyaAbs == -8) {
             userStyle.addProperty("style:vertical-pos","middle");
         }
-        else if (pap.dyaAbs == -12) {
+        else if (tap->dyaAbs == -12) {
             userStyle.addProperty("style:vertical-pos","bottom");
         }
-        else if (pap.dyaAbs == -16) {
+        else if (tap->dyaAbs == -16) {
             userStyle.addProperty("style:vertical-pos","inline");
         }
-        else if (pap.dyaAbs == -20) {
+        else if (tap->dyaAbs == -20) {
             userStyle.addProperty("style:vertical-pos","inline");
         }
         else {
-            dyaAbs = pap.dyaAbs;
+            dyaAbs = tap->dyaAbs;
             userStyle.addProperty("style:vertical-pos","from-top");
         }
         //MS-DOC - PositionCodeOperand - anchor vertical position
         // 0 - margin, 1 - page, 2 - paragraph
-        if (pap.pcVert == 0) {
+        if (tap->pcVert == 0) {
             userStyle.addProperty("style:vertical-rel","page-content");
         }
-        else if (pap.pcVert == 1) {
+        else if (tap->pcVert == 1) {
             userStyle.addProperty("style:vertical-rel","page");
         }
-        else if (pap.pcVert == 2) {
+        else if (tap->pcVert == 2) {
             userStyle.addProperty("style:vertical-rel","paragraph");
         }
         //MS-DOC - PositionCodeOperand - anchor horizontal position
         // 0 - current column, 1 - margin, 2 - page
-        if (pap.pcHorz == 0) {
+        if (tap->pcHorz == 0) {
             userStyle.addProperty("style:horizontal-rel","paragraph");
         }
-        else if (pap.pcHorz == 1) {
+        else if (tap->pcHorz == 1) {
             userStyle.addProperty("style:horizontal-rel","page-content");
         }
-        else if (pap.pcHorz == 2) {
+        else if (tap->pcHorz == 2) {
             userStyle.addProperty("style:horizontal-rel","page");
         }
 
@@ -157,8 +158,9 @@ void KWordTableHandler::tableStart(KWord::Table* table)
         writer->addAttribute("draw:style-name", drawStyleName.toUtf8());
         writer->addAttribute("text:anchor-type", "paragraph");
 
-        writer->addAttributePt("svg:width", (double)(table->m_cellEdges[table->m_cellEdges.size()-1]
-                                            - table->m_cellEdges[0]) / 20.0);
+        writer->addAttributePt("svg:width", 
+                               (double)(table->m_cellEdges[table->m_cellEdges.size() - 1] - 
+                               table->m_cellEdges[0]) / 20.0);
 
         writer->addAttributePt("svg:x", (double)(dxaAbs + tap->rgdxaCenter[0])/20);
         writer->addAttributePt("svg:y", (double)dyaAbs/20);
@@ -177,7 +179,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
 
     //process horizontal align information
     QString align;
-    switch (table->tap->jc) {
+    switch (tap->jc) {
     case wvWare::hAlignLeft:
         align = QString("left");
         break;
@@ -224,10 +226,11 @@ void KWordTableHandler::tableStart(KWord::Table* table)
                                        (table->m_cellEdges[r+1] - table->m_cellEdges[r]) / 20.0);
 
         QString tableColumnStyleName;
-        if (r >= 26)
+        if (r >= 26) {
             tableColumnStyleName = m_mainStyles->insert(tableColumnStyle, tableStyleName + ".A" + QChar('A' + r - 26), KoGenStyles::DontAddNumberToName);
-        else
+        } else {
             tableColumnStyleName = m_mainStyles->insert(tableColumnStyle, tableStyleName + '.' + QChar('A' + r), KoGenStyles::DontAddNumberToName);
+        }
 
         writer->startElement("table:table-column");
         writer->addAttribute("table:style-name", tableColumnStyleName);
@@ -241,18 +244,17 @@ void KWordTableHandler::tableEnd()
     m_currentTable = 0L; // we don't own it, Document does
     KoXmlWriter*  writer = currentWriter();
 
-    //check if the paragraph is inside of an absolutely positioned frame
+    writer->endElement();//table:table
+
+    //check if the table is inside of an absolutely positioned frame
     if ( m_floatingTable == true )
     {
         writer->endElement(); //draw:text-box
-        writer->endElement(); // draw:frame
-        writer->endElement(); // close the <text:p>
+        writer->endElement(); //draw:frame
+        writer->endElement(); //close the <text:p>
 
         m_floatingTable = false;
     }
-
-    //end table in content
-    writer->endElement();//table:table
 }
 
 void KWordTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
