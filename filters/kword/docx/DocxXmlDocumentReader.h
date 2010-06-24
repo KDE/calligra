@@ -120,6 +120,8 @@ protected:
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
     KoFilter::ConversionStatus read_rStyle();
+    KoFilter::ConversionStatus read_tblStyle();
+    KoFilter::ConversionStatus read_tblBorders();
     KoFilter::ConversionStatus read_fldSimple();
     KoFilter::ConversionStatus read_lastRenderedPageBreak();
     KoFilter::ConversionStatus read_instrText();
@@ -241,7 +243,6 @@ private:
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
-    KoGenStyle m_currentTableStyle;
     KoGenStyle m_currentTableRowStyle;
     KoGenStyle m_currentTableCellStyle;
     QString m_currentTableName;

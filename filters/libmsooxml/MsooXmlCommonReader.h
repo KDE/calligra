@@ -54,6 +54,8 @@ protected:
     KoGenStyle m_currentParagraphStyle;
     bool m_currentParagraphStylePredefined; //!< true if m_currentParagraphStyle shouldn't be created in read_pPr
 
+    KoGenStyle m_currentTableStyle;
+
     void setupParagraphStyle();
 
     KoGenStyle m_currentTextStyle;

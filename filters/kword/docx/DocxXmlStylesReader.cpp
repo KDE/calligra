@@ -357,6 +357,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         else if (type == "paragraph") {
             m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, odfType.toLatin1());
         }
+        else if (type == "table") {
+            m_currentTableStyle = KoGenStyle(KoGenStyle::TableStyle, odfType.toLatin1());
+        }
     }
     MSOOXML::Utils::Setter<bool> currentTextStylePredefinedSetter(&m_currentTextStylePredefined, false);
     MSOOXML::Utils::Setter<bool> currentParagraphStylePredefinedSetter(&m_currentParagraphStylePredefined, false);
@@ -372,6 +375,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             TRY_READ_IF(name)
             ELSE_TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF(pPr)
+            ELSE_TRY_READ_IF(tblPr)
             else if (QUALIFIED_NAME_IS(basedOn)) {
                 READ_ATTR(val)
                 if (type == "character") {
@@ -466,6 +470,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
             styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
 
+        }
+        else if (type == "table") {
+            styleName = mainStyles->insert(m_currentTableStyle, styleName, insertionFlags);
         }
         if (!nextStyleName.isEmpty()) {
             mainStyles->insertStyleRelation(styleName, nextStyleName, "style:next-style-name");

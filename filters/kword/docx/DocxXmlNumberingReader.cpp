@@ -530,7 +530,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_rFonts_numbering()
 
     if (!ascii.isEmpty()) {
         m_bulletFont = ascii;
-qDebug() << "Font is " << m_bulletFont;
     }
 
     readNext();

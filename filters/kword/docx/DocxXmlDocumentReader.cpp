@@ -2689,8 +2689,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
  - [done] pPr (§17.7.8.2)
 
  No child elements.
-
- @todo support all elements
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 {
@@ -2699,7 +2697,76 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
     TRY_READ_ATTR(val)
 
     m_currentParagraphStyle.setParentName(val);
-    SKIP_EVERYTHING
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblBorders
+//! tblBorders handler (Table borders)
+/*!
+ Parent elements:
+ - [done] tblPr (§17.4.60)
+ - [done] tblPr (§17.4.59)
+ - [done] tblPr (§17.7.6.4)
+ - [done] tblPr (§17.7.6.3)
+
+ Child elements:
+ - ...
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(top)) {
+                RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+// @todo: Finish this, most likely top should be saved as a separate
+// style using predefined name if available, then with referenced table style
+// also each cell style could have a parent style with border set
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblStyle
+//! tblStyle handler (Referenced table style)
+/*!
+ Parent elements:
+ - [done] tblPr (§17.4.60)
+ - [done] tblPr (§17.4.59)
+ - [done] tblPr (§17.7.6.4)
+ - [done] tblPr (§17.7.6.3)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblStyle()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+
+    m_currentTableStyle.setParentName(val);
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2721,8 +2788,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
  - rPr (§17.3.2.27)
 
  No child elements.
-
- @todo support all elements
 */
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
 {
@@ -2732,7 +2797,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
 
     m_currentTextStyle.setParentName(val);
 
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3411,7 +3476,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
  - bidiVisual (Visually Right to Left Table) §17.4.1
  - jc (Table Alignment) §17.4.29
  - shd (Table Shading) §17.4.32
- - tblBorders (Table Borders) §17.4.39
+ - [done] tblBorders (Table Borders) §17.4.39
  - tblCaption (Table Caption) §17.4.41
  - tblCellMar (Table Cell Margin Defaults) §17.4.43
  - tblCellSpacing (Table Cell Spacing Default) §17.4.46
@@ -3422,7 +3487,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
  - tblOverlap (Floating Table Allows Other Tables to Overlap) §17.4.57
  - tblpPr (Floating Table Positioning) §17.4.58
  - tblPrChange (Revision Information for Table Properties) §17.13.5.34
- - tblStyle (Referenced Table Style) §17.4.63
+ - [done] tblStyle (Referenced Table Style) §17.4.63
  - tblStyleColBandSize (Number of Columns in Column Band) §17.7.6.5
  - tblStyleRowBandSize (Number of Rows in Row Band) §17.7.6.7
  - tblW (Preferred Table Width) §17.4.64
@@ -3434,12 +3499,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-//! @todo add tblStyle to get parent table style
-//            TRY_READ_IF(..)
+            TRY_READ_IF(tblStyle)
+            ELSE_TRY_READ_IF(tblBorders)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
     READ_EPILOGUE
 }
 
