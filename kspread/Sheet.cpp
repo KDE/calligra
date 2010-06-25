@@ -56,6 +56,8 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoStore.h>
+#include <KoText.h>
+#include <KoStyleManager.h>
 
 #include "CellStorage.h"
 #include "Cluster.h"
@@ -1563,6 +1565,10 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     const Styles& autoStyles,
                     const QHash<QString, Conditions>& conditionalStyles)
 {
+    QVariant variant;
+    variant.setValue(map()->textStyleManager());
+    resourceManager()->setResource(KoText::StyleManager, variant);
+
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
         QString stylename = sheetElement.attributeNS(KoXmlNS::table, "style-name", QString());
