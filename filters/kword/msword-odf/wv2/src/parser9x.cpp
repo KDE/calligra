@@ -513,12 +513,14 @@ void Parser9x::parseHelper( Position startPos )
                     string[ j ] &= 0x00ff;
                 }
             }
-            processPiece<XCHAR>( string, fc, limit, startPos ); // also takes care to delete [] string
+            // also takes care to delete [] string
+            processPiece<XCHAR>( string, fc, limit, startPos );
         }
         else {
             U8* string = new U8[ limit ];
             m_wordDocument->read( string, limit );
-            processPiece<U8>( string, fc, limit, startPos ); // also takes care to delete [] string
+            // also takes care to delete [] string
+            processPiece<U8>( string, fc, limit, startPos );
         }
         m_remainingChars -= limit;
         ++it;
@@ -555,6 +557,7 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
                 emitHeaderData( sep );
             }
             else {
+                //manual page break
                 m_textHandler->pageBreak();
             }
             break;
@@ -817,6 +820,10 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 }
             } else {
                 processRun( chunk, chp, length, index, currentStart );
+                //bookmark check for the next to last CP (paragraph mark)
+                if ( m_bookmark ) {
+                    emitBookmark( m_bookmarkText, disruption, chp );
+                }
             }
             break;   // should be faster than messing with length...
         }
@@ -939,15 +946,17 @@ void Parser9x::emitBookmark( UString characters, U32 globalCP, SharedPtr<const W
         wvlog << "Bug: Found a bookmark, but m_bookmark == 0!" << endl;
         return;
     }
-    bool ok;
+    bool ok = false;
     BookmarkData data( m_bookmark->bookmark( globalCP, ok ) );
 
-    if (ok) {
+    //there might be more bookmarks for the current CP
+    while (ok) {
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Bookmark found: CP=" << globalCP << endl;
 #endif
         // We introduce the name of the bookmark here with data.name
         m_textHandler->bookmarkFound( characters, data.name, chp);
+        data = m_bookmark->bookmark( globalCP, ok );
     }
 }
 

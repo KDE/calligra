@@ -157,7 +157,7 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
     }
 
     ok = false;
-    return  BookmarkData( 0, 0, wvWare::UString("") );
+    return BookmarkData( 0, 0, wvWare::UString("") );
 
 }
 
