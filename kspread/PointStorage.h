@@ -25,7 +25,6 @@
 #include <QVector>
 
 #include "Region.h"
-#include "kspread_limits.h"
 
 // #define KSPREAD_POINT_STORAGE_HASH
 
