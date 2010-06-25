@@ -87,8 +87,10 @@ void KoTextShapeContainerModel::remove(KoShape *child)
 {
     Relation *relation = d->children.value(child);
     d->children.remove(child);
-    if (relation && relation->anchor)
+    if (relation && relation->anchor) {
+        relation->anchor->detachFromModel();
         d->shapeRemovedAnchors.append(relation->anchor);
+    }
     delete relation;
 }
 

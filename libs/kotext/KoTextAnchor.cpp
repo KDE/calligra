@@ -428,3 +428,9 @@ bool KoTextAnchor::isPositionedInline() const
     Q_D(const KoTextAnchor);
     return d->isPositionedInline;
 }
+
+void KoTextAnchor::detachFromModel()
+{
+    Q_D(KoTextAnchor);
+    d->model = 0;
+}
