@@ -713,6 +713,10 @@ void Parser9x::processParagraph( U32 fc )
                 processChunk( *it, chp, length, index, pcdIt.currentStart() );
                 index += length;
             }
+            //bookmark check for the next to last CP (paragraph mark)
+            if ( m_bookmark ) {
+                emitBookmark( m_bookmarkText, ( *it ).m_position.offset + limit, NULL );
+            }
         }
         m_textHandler->paragraphEnd();
 
@@ -762,9 +766,9 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             U32 nextBkl = m_bookmark->nextBookmarkEnd();
             bkmk_length = nextBkl - nextBkf;
 
-            //FIXME: Is it possible that (nextBkf < nextBkl) ?
-            disruption = nextBkf < nextBkl ? nextBkf : nextBkl;
+            //it shouldn't be possible that (nextBkf < nextBkl)
             Q_ASSERT (nextBkf <= nextBkl);
+            disruption = nextBkf;
 
 #ifdef WV2_DEBUG_BOOKMARK
             wvlog << "nextBkf=" << nextBkf << " nextBkl=" << nextBkl << 
@@ -773,7 +777,7 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
         }
         U32 startCP = currentStart + chunk.m_position.offset + index;
 
-        if ( disruption >= startCP && disruption < startCP + length ) {
+        if ( (disruption >= startCP) && (disruption < (startCP + length)) ) {
 
 #if defined WV2_DEBUG_FOOTNOTES || defined WV2_DEBUG_BOOKMARK
             wvlog << "startCP=" << startCP << " disruption=" << disruption << 
@@ -791,25 +795,25 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 m_customFootnote = chunk.m_text.substr(index, length);
                 emitFootnote( m_customFootnote, disruption, chp, length );
                 m_customFootnote = "";
-            } else if ( m_bookmark ) {
+
+                length = 0;
+                index += length;
+            } 
+            else if ( m_bookmark ) {
                 if (bkmk_length == 0) {
                     emitBookmark( m_bookmarkText, disruption, chp );
                     processRun( chunk, chp, length, index, currentStart );
                 } else {
-                    //TODO: check if this is the correct way, becasue we don't
-                    //care where does the bookmark end
-                    m_bookmarkText = chunk.m_text.substr(index, length);
+                    //let's check the bookmark end
+                    Q_ASSERT (bkmk_length <= length);
 
-#ifdef WV2_DEBUG_BOOKMARK
-                    wvlog << "m_bookmarkText.length(): " << m_bookmarkText.length() << endl;
-#endif
-
+                    m_bookmarkText = chunk.m_text.substr(index, bkmk_length);
                     emitBookmark( m_bookmarkText, disruption, chp );
                     m_bookmarkText = "";
                 }
+                length -= bkmk_length;
+                index += bkmk_length;
             }
-            index += length;
-            length = 0;
         }
         else {
             //common case, no disruption at all (or the end of a disrupted chunk)
@@ -820,10 +824,6 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 }
             } else {
                 processRun( chunk, chp, length, index, currentStart );
-                //bookmark check for the next to last CP (paragraph mark)
-                if ( m_bookmark ) {
-                    emitBookmark( m_bookmarkText, disruption, chp );
-                }
             }
             break;   // should be faster than messing with length...
         }
