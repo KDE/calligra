@@ -62,6 +62,7 @@ Outline::Outline(KoShape *shape, const QMatrix &matrix)
             // make the shape take the full width of the text area
             m_side = Empty;
         } else if (frame->textRunAround() == KWord::RunThrough) {
+            m_distance = 0;
             // We don't exist.
             return;
         }
