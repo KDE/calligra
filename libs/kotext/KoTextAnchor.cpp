@@ -21,6 +21,7 @@
 #include "KoInlineObject_p.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextShapeContainerModel.h"
+#include "KoTextShapeData.h"
 
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
@@ -61,10 +62,14 @@ public:
 
     void relayout()
     {
-        if (document) {
+        if (document && shape->parent()) {
+            KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(shape->parent()->userData());
+            Q_ASSERT(data);
+            data->foul();
             KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
             if (lay)
-                lay->documentChanged(position, 0, 0);
+                lay->interruptLayout();
+            data->fireResizeEvent();
         }
     }
 
