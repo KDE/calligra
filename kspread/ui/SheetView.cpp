@@ -380,15 +380,19 @@ void SheetView::invalidateRange(const QRect& range)
             if (!d->cache.contains(QPoint(col, row)))
                 continue;
             const CellView cellView = this->cellView(col, row);
-            if (cellView.obscuresCells())
-                invalidateRange(QRect(range.topLeft(), cellView.obscuredRange()));
-            else if (cellView.isObscured())
+            if ( cellView.obscuresCells() ) {
+                // First, delete the obscuring CellView; otherwise: recursion.
+                d->cache.remove(QPoint(col, row));
+                // Remove the obscured range.
+                invalidateRange(QRect(range.topLeft(), cellView.obscuredRange() + QSize(1, 1)));
+                continue; // already removed from cache
+            } else if ( cellView.isObscured() )
                 if (!range.contains(cellView.obscuringCell()))
                     invalidateRange(QRect(cellView.obscuringCell(), QSize(1, 1)));
             d->cache.remove(QPoint(col, row));
-            d->cachedArea -= QRect(col, row, 1, 1);
         }
     }
+    d->cachedArea -= range;
 }
 
 void SheetView::obscureCells(const QRect& range, const QPoint& position)

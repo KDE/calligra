@@ -42,6 +42,7 @@ Do not leave reference selection mode after selecting a cell (range).
 Fix the position of the function auto-completion popup.
 Fix default cell height: Let cell with two-lined text obscure only two rows.
 Fix the function auto-completion: Close the hint label properly and do not crash, if there's no help text.
+Properly remove cell obscuring.
 
 Developer-Visible Only
 ----------------------
