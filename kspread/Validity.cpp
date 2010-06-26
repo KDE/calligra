@@ -696,17 +696,20 @@ bool Validity::testValidity(const Cell* cell) const
                 KMessageBox::error((QWidget*)0, d->message, d->title);
                 break;
             case Warning:
-                KMessageBox::warningYesNo((QWidget*)0, d->message, d->title);
+                if (KMessageBox::warningYesNo((QWidget*)0, d->message, d->title) == KMessageBox::Yes) {
+                    valid = true;
+                }
                 break;
             case Information:
                 KMessageBox::information((QWidget*)0, d->message, d->title);
+                valid = true;
                 break;
             }
         }
 
         cell->sheet()->showStatusMessage(i18n("Validation for cell %1 failed", cell->fullName()));
     }
-    return (valid || d->action != Stop);
+    return valid;
 }
 
 void Validity::operator=(const Validity & other)
