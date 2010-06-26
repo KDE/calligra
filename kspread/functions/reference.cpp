@@ -19,6 +19,7 @@
 */
 
 // built-in reference functions
+#include "ReferenceModule.h"
 
 #include "Cell.h"
 #include "Region.h"
@@ -28,9 +29,8 @@
 
 #include "CellStorage.h"
 #include "Formula.h"
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
-#include "ReferenceModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 

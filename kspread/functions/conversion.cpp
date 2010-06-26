@@ -21,8 +21,9 @@
 // built-in conversion functions
 
 #include "ConversionModule.h"
+
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 

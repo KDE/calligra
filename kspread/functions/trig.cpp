@@ -19,10 +19,10 @@
 */
 
 // built-in trigonometric functions
-
-#include "FunctionModuleRegistry.h"
-#include "Functions.h"
 #include "TrigonometryModule.h"
+
+#include "Function.h"
+#include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 
 #include <KGenericFactory>

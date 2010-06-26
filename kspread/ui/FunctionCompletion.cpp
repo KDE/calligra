@@ -21,7 +21,9 @@
 
 // KSpread
 #include "CellEditor.h"
-#include "Functions.h"
+#include "Function.h"
+#include "FunctionDescription.h"
+#include "FunctionRepository.h"
 
 // KOffice
 

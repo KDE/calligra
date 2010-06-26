@@ -20,6 +20,8 @@
 
 // built-in information functions
 
+#include "InformationModule.h"
+
 #include <kofficeversion.h>
 #include <sys/utsname.h>
 
@@ -29,9 +31,8 @@
 #include <KLocale>
 
 #include "CalculationSettings.h"
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
-#include "InformationModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "Sheet.h"

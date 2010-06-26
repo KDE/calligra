@@ -35,13 +35,15 @@
 
 #include "CalculationSettings.h"
 #include "Cell.h"
+#include "Function.h"
+#include "FunctionDescription.h"
+#include "FunctionRepository.h"
 #include "Util.h"
 #include "ui/CellEditor.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "Functions.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>

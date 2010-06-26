@@ -20,10 +20,11 @@
 
 // built-in date/time functions
 
-#include "CalculationSettings.h"
 #include "DateTimeModule.h"
+
+#include "CalculationSettings.h"
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"

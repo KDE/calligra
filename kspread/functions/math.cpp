@@ -23,6 +23,7 @@
 */
 
 // built-in math functions
+#include "MathModule.h"
 
 // needed for RANDBINOM and so
 #include <math.h>
@@ -32,8 +33,8 @@
 #include <KLocale>
 
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
-#include "MathModule.h"
+#include "Function.h"
+#include "FunctionRepository.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 

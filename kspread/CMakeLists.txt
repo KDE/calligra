@@ -183,9 +183,11 @@ SET (kspreadcommon_LIB_SRCS
 	DependencyManager.cpp
 	Format.cpp
 	Formula.cpp
+        Function.cpp
+        FunctionDescription.cpp
 	FunctionModule.cpp
 	FunctionModuleRegistry.cpp
-	Functions.cpp
+        FunctionRepository.cpp
 	GenValidationStyle.cpp
         HeaderFooter.cpp
 	Localization.cpp

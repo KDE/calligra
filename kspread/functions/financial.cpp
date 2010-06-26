@@ -27,12 +27,11 @@
 
 // built-in financial functions
 
-#include <math.h>
+#include "FinancialModule.h"
 
 #include "CalculationSettings.h"
-#include "FinancialModule.h"
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -40,6 +39,8 @@
 #include <kcalendarsystem.h>
 #include <KGenericFactory>
 #include <KLocale>
+
+#include <math.h>
 
 using namespace KSpread;
 

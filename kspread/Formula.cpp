@@ -23,6 +23,8 @@
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Function.h"
+#include "FunctionRepository.h"
 #include "Sheet.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
@@ -32,8 +34,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
-
-#include "Functions.h"
 
 #include <limits.h>
 

@@ -19,7 +19,7 @@
 
 #include "FunctionModule.h"
 
-#include "Functions.h"
+#include "Function.h"
 
 #include <QList>
 

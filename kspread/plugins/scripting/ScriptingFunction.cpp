@@ -29,7 +29,9 @@
 //#include <View.h>
 #include <Value.h>
 #include <Number.h>
-#include <Functions.h>
+#include <Function.h>
+#include <FunctionDescription.h>
+#include <FunctionRepository.h>
 
 //#define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <kross/core/manager.h>

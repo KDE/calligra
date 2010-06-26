@@ -21,8 +21,9 @@
 // built-in database functions
 
 #include "DatabaseModule.h"
+
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 

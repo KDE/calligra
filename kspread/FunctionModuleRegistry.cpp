@@ -18,8 +18,10 @@
 */
 
 #include "FunctionModuleRegistry.h"
+
+#include "Function.h"
 #include "FunctionModule.h"
-#include "Functions.h"
+#include "FunctionRepository.h"
 
 #include <KDebug>
 #include <KGlobal>

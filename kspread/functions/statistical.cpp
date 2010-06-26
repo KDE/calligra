@@ -20,10 +20,10 @@
 */
 
 // built-in statistical functions
-
-#include "FunctionModuleRegistry.h"
-#include "Functions.h"
 #include "StatisticalModule.h"
+
+#include "Function.h"
+#include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 

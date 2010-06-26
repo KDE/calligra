@@ -20,16 +20,16 @@
 
 
 // built-in text functions
-// please keep it in alphabetical order
+#include "TextModule.h"
 
+// please keep it in alphabetical order
 #include <QRegExp>
 #include <kdebug.h>
 #include <math.h>
 
 #include "CalculationSettings.h"
+#include "Function.h"
 #include "FunctionModuleRegistry.h"
-#include "Functions.h"
-#include "TextModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
