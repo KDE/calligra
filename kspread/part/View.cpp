@@ -152,7 +152,6 @@
 
 // ui
 #include "ui/CellView.h"
-#include "ui/Editors.h"
 #include "ui/MapViewModel.h"
 #include "ui/RightToLeftPaintingStrategy.h"
 #include "ui/SheetView.h"

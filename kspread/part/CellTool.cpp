@@ -76,7 +76,6 @@
 #include "commands/DefinePrintRangeCommand.h"
 
 #include "ui/CellView.h"
-#include "ui/Editors.h"
 #include "ui/SheetView.h"
 
 using namespace KSpread;

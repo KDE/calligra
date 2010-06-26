@@ -19,8 +19,8 @@
 
 #include "SelectionStrategy.h"
 
+#include "CellEditor.h"
 #include "CellToolBase.h"
-#include "Editors.h"
 #include "kspread_limits.h"
 #include "Selection.h"
 #include "Sheet.h"

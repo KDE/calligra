@@ -25,9 +25,11 @@
 
 #include "GoalSeekDialog.h"
 
+#include <KTextEdit>
+
 #include "CalculationSettings.h"
 #include "Cell.h"
-#include "ui/Editors.h"
+#include "ui/RegionSelector.h"
 #include "Formula.h"
 #include "Map.h"
 #include "Selection.h"

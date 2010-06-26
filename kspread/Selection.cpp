@@ -27,11 +27,12 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "ui/Editors.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 
 #include "commands/DataManipulators.h"
+
+#include "ui/CellEditor.h"
 
 using namespace KSpread;
 

@@ -31,8 +31,6 @@
 
 // KSpread
 #include "CellToolBase.h"
-#include "Editors.h"
-#include "CharSelectDia.h"
 
 // dialogs
 #include "dialogs/FindDialog.h"
@@ -50,8 +48,11 @@ class QUndoCommand;
 class KFind;
 class KReplace;
 
+class CharSelectDia;
+
 namespace KSpread
 {
+class CellEditor;
 class CellToolOptionWidget;
 class Sheet;
 

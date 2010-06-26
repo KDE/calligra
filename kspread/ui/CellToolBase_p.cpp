@@ -57,7 +57,9 @@
 #include "commands/StyleCommand.h"
 
 // ui
+#include "ui/CellEditor.h"
 #include "ui/CellToolOptionWidget.h"
+#include "ui/ExternalEditor.h"
 #include "ui/SheetView.h"
 
 // KOffice

@@ -21,7 +21,8 @@
 
 #include "CellStorage.h"
 #include "CellToolBase.h"
-#include "Editors.h"
+#include "ExternalEditor.h"
+#include "LocationComboBox.h"
 #include "Sheet.h"
 #include "Selection.h"
 
@@ -32,6 +33,7 @@
 #include <KLocale>
 
 #include <QGridLayout>
+#include <QResizeEvent>
 #include <QToolButton>
 
 using namespace KSpread;

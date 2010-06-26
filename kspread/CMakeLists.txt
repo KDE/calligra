@@ -148,16 +148,21 @@ kde4_add_ui_files(part_DIR_SRCS
 SET (ui_DIR_SRCS
 	ui/AbstractSelectionStrategy.cpp
 	ui/AutoFillStrategy.cpp
+        ui/CellEditor.cpp
 	ui/CellToolBase.cpp
 	ui/CellToolBase_p.cpp
         ui/CellToolOptionWidget.cpp
 	ui/CellView.cpp
 	ui/DragAndDropStrategy.cpp
-	ui/Editors.cpp
+        ui/FormulaEditorHighlighter.cpp
+        ui/FunctionCompletion.cpp
+        ui/ExternalEditor.cpp
 	ui/HyperlinkStrategy.cpp
+        ui/LocationComboBox.cpp
         ui/MapViewModel.cpp
 	ui/MergeStrategy.cpp
 	ui/PasteStrategy.cpp
+        ui/RegionSelector.cpp
         ui/RightToLeftPaintingStrategy.cpp
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp

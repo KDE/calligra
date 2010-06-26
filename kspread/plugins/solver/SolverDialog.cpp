@@ -20,7 +20,7 @@
 // Local
 #include "SolverDialog.h"
 
-#include <Editors.h>
+#include "ui/RegionSelector.h"
 
 using namespace KSpread::Plugins;
 

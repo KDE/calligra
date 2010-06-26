@@ -112,7 +112,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
   <customwidget>
    <class>KSpread::RegionSelector</class>
    <extends>QWidget</extends>
-   <header location="global">ui/Editors.h</header>
+   <header location="global">ui/RegionSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

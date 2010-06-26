@@ -116,7 +116,6 @@
 
 // ui
 #include "ui/CellView.h"
-#include "ui/Editors.h"
 #include "ui/SheetView.h"
 
 #define MIN_SIZE 10

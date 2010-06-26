@@ -59,8 +59,6 @@
 #include "Sheet.h"
 #include "part/View.h"
 
-#include "ui/Editors.h"
-
 #include "ui_FileOptionsWidget.h"
 #include "ui_InterfaceOptionsWidget.h"
 
