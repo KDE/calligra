@@ -339,7 +339,8 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
         d->completionListBox->setMouseTracking(true);
     }
 
-    connect(d->completionListBox, SIGNAL(activated(QModelIndex)), SLOT(doneCompletion()));
+    connect(d->completionListBox, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(doneCompletion()));
     layout->addWidget(d->completionListBox);
 
     d->hintLabel = new QLabel(0, Qt::FramelessWindowHint | Qt::Tool |  Qt::X11BypassWindowManagerHint);
@@ -374,7 +375,8 @@ void FunctionCompletion::itemSelected(QListWidgetItem* listItem)
         return;
     }
 
-    QString helpText = desc->helpText().isEmpty() ? QString() : desc->helpText()[0];
+    const QStringList helpTexts = desc->helpText();
+    QString helpText = helpTexts.isEmpty() ? QString() : helpTexts.first();
     if (helpText.isEmpty()) {
         d->hintLabel->hide();
         return;
@@ -423,6 +425,10 @@ bool FunctionCompletion::eventFilter(QObject *obj, QEvent *ev)
             QApplication::sendEvent(d->editor, ev);
             return true;
         }
+    }
+
+    if (ev->type() == QEvent::Close) {
+        d->hintLabel->hide();
     }
 
     if (ev->type() == QEvent::MouseButtonDblClick) {
