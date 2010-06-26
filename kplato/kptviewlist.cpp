@@ -325,7 +325,7 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
     m_sfModel.setDynamicSortFilter ( true );
     m_sfModel.setSourceModel( &m_model );
     m_currentSchedule->setModel( &m_sfModel );
-    
+
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     l->addWidget( m_viewlist );
@@ -357,7 +357,7 @@ void ViewListWidget::setReadWrite( bool rw )
     }
 }
 
-void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
+void ViewListWidget::slotItemChanged( QTreeWidgetItem */*item*/, int /*col */)
 {
     //kDebug();
 }

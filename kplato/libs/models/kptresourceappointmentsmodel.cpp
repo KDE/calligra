@@ -1437,7 +1437,7 @@ const QMetaEnum ResourceAppointmentsRowModel::columnMap() const
     return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
 }
 
-int ResourceAppointmentsRowModel::columnCount( const QModelIndex & parent ) const
+int ResourceAppointmentsRowModel::columnCount( const QModelIndex & /*parent */) const
 {
     return columnMap().keyCount();
 }
@@ -1779,7 +1779,7 @@ void ResourceAppointmentsRowModel::slotResourceGroupToBeInserted( const Resource
     beginInsertRows( QModelIndex(), row, row );
 }
 
-void ResourceAppointmentsRowModel::slotResourceGroupInserted( const ResourceGroup*group )
+void ResourceAppointmentsRowModel::slotResourceGroupInserted( const ResourceGroup*/*group*/ )
 {
     endInsertRows();
 }

@@ -51,7 +51,7 @@ UsedEffortItemModel::UsedEffortItemModel ( QWidget *parent )
 
 Qt::ItemFlags UsedEffortItemModel::flags ( const QModelIndex &index ) const
 {
-    
+
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     if ( ! index.isValid() || index.column() == 8 ) {
         return flags;
@@ -159,12 +159,12 @@ bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &valu
             if ( idx.column() == 0 ) {
                 const Resource *er = resource( idx );
                 Q_ASSERT( er != 0 );
-                
+
                 Q_ASSERT ( m_editlist.count() > value.toInt() );
 
                 const Resource *v = m_editlist.values().value( value.toInt() );
                 Q_ASSERT( v != 0 );
-                
+
                 int x = m_resourcelist.indexOf( er );
                 Q_ASSERT( x != -1 );
                 m_resourcelist.replace( x, v );
@@ -339,9 +339,9 @@ UsedEffortEditor::UsedEffortEditor( QWidget *parent )
 {
     UsedEffortItemModel *m = new UsedEffortItemModel(this );
     setModel( m );
-    
+
     setItemDelegateForColumn ( 0, new EnumDelegate( this ) );
-    
+
     setItemDelegateForColumn ( 1, new DoubleSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 2, new DoubleSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 3, new DoubleSpinBoxDelegate( this ) );
@@ -349,9 +349,9 @@ UsedEffortEditor::UsedEffortEditor( QWidget *parent )
     setItemDelegateForColumn ( 5, new DoubleSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 6, new DoubleSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 7, new DoubleSpinBoxDelegate( this ) );
-    
+
     connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
-    
+
     connect ( m, SIGNAL( rowInserted( const QModelIndex& ) ), SIGNAL( resourceAdded() ) );
 }
 
@@ -426,8 +426,8 @@ Qt::ItemFlags CompletionEntryItemModel::flags ( const QModelIndex &index ) const
 QVariant CompletionEntryItemModel::date ( int row, int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole: 
-        case Qt::EditRole: 
+        case Qt::DisplayRole:
+        case Qt::EditRole:
             return m_datelist.value( row );
         default: break;
     }
@@ -441,8 +441,8 @@ QVariant CompletionEntryItemModel::percentFinished ( int row, int role ) const
         return QVariant();
     }
     switch ( role ) {
-        case Qt::DisplayRole: 
-        case Qt::EditRole: 
+        case Qt::DisplayRole:
+        case Qt::EditRole:
             return e->percentFinished;
         default: break;
     }
@@ -528,7 +528,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
     return QVariant();
 }
 
-QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
+QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
 {
     if ( m_node == 0 || m_manager == 0 ) {
         return QVariant();
@@ -690,7 +690,7 @@ QVariant CompletionEntryItemModel::headerData ( int section, Qt::Orientation ori
     return QVariant();
 }
 
-int CompletionEntryItemModel::columnCount(const QModelIndex & parent ) const
+int CompletionEntryItemModel::columnCount(const QModelIndex & /*parent */) const
 {
     return 5;
 }
@@ -796,11 +796,11 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
 {
     CompletionEntryItemModel *m = new CompletionEntryItemModel(this );
     setModel( m );
-    
+
     setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );
     setItemDelegateForColumn ( 2, new DurationSpinBoxDelegate( this ) );
     setItemDelegateForColumn ( 3, new DurationSpinBoxDelegate( this ) );
-    
+
     connect ( m, SIGNAL( rowInserted( const QDate ) ), SIGNAL( rowInserted( const QDate ) ) );
     connect ( m, SIGNAL( rowRemoved( const QDate ) ), SIGNAL( rowRemoved( const QDate ) ) );
     connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );

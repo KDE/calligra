@@ -66,13 +66,13 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new CalendarItemModel() );
-    
+
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionModel( new QItemSelectionModel( model() ) );
 
     setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
-    
+
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
 }
 
@@ -325,7 +325,7 @@ void CalendarDayView::setCurrentCalendar( Calendar *calendar )
     model()->setCalendar( calendar );
 }
 
-void CalendarDayView::headerContextMenuRequested( const QPoint &pos )
+void CalendarDayView::headerContextMenuRequested( const QPoint &/*pos*/ )
 {
 //    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
@@ -340,9 +340,9 @@ void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
     menu.addAction( actionSetWork );
     menu.addAction( actionSetVacation );
     menu.addAction( actionSetUndefined );
-    
+
     menu.exec( event->globalPos(), actionSetWork );
-    
+
     //emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
@@ -390,7 +390,7 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_model( new DateTableDataModel( this ) )
 {
-    setWhatsThis( i18nc( "@info:whatsthis", 
+    setWhatsThis( i18nc( "@info:whatsthis",
         "<title>Work & Vacation Editor</title>"
         "<para>"
         "A calendar defines availability for resources or tasks of type <emphasis>Duration</emphasis>. "
@@ -403,21 +403,21 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
         ) );
 
     setupGui();
-    
+
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     QSplitter *sp = new QSplitter( this );
     l->addWidget( sp );
 
     m_calendarview = new CalendarTreeView( sp );
-    
+
     QFrame *f = new QFrame( sp );
     l = new QVBoxLayout( f );
     l->setMargin( 0 );
 
     m_dayview = new CalendarDayView( f );
     l->addWidget( m_dayview );
-    
+
     sp = new QSplitter( f );
     l->addWidget( sp );
     m_datePicker = new KDatePicker( sp );
@@ -443,17 +443,17 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     KDateTable::BackgroundMode bgMode = KDateTable::CircleMode;
     const QColor bgColor( Qt::lightGray);
     m_datePicker->dateTable()->setCustomDatePainting( date, fgColor, bgMode, bgColor );*/
-    
-    
+
+
     m_calendarview->setEditTriggers( m_calendarview->editTriggers() | QAbstractItemView::EditKeyPressed );
-    
+
     m_dayview->setEditTriggers( m_dayview->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     m_calendarview->setDragDropMode( QAbstractItemView::InternalMove );
     m_calendarview->setDropIndicatorShown ( true );
     m_calendarview->setDragEnabled ( true );
     m_calendarview->setAcceptDrops( true );
-    
+
     connect( m_calendarview->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     connect( m_dayview->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     connect( m_dayview, SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
@@ -461,16 +461,16 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     connect( m_calendarview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentCalendarChanged( QModelIndex ) ) );
     connect( m_calendarview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotCalendarSelectionChanged( const QModelIndexList ) ) );
     connect( m_calendarview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuCalendar( QModelIndex, const QPoint& ) ) );
-    
+
     connect( m_dayview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentDayChanged( QModelIndex ) ) );
     connect( m_dayview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotDaySelectionChanged( const QModelIndexList ) ) );
     connect( m_dayview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuDay( QModelIndex, const QPoint& ) ) );
 
     connect( m_dayview->model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotEnableActions() ) );
-    
+
     connect( m_calendarview, SIGNAL( focusChanged() ), this, SLOT( slotEnableActions() ) );
     connect( m_dayview, SIGNAL( focusChanged() ), this, SLOT( slotEnableActions() ) );
-    
+
 }
 
 void CalendarEditor::draw( Project &project )
@@ -523,7 +523,7 @@ void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
     menu->addAction( actionSetUndefined );
 }
 
-void CalendarEditor::slotContextMenuCalendar( QModelIndex index, const QPoint& pos )
+void CalendarEditor::slotContextMenuCalendar( QModelIndex /*index*/, const QPoint& pos )
 {
     if ( ! isReadWrite() ) {
         return;
@@ -576,7 +576,7 @@ void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex & )
     }
 }
 
-void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList list )
+void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList /*list */)
 {
     //kDebug()<<list.count();
     updateActionsEnabled( true );
@@ -612,26 +612,26 @@ void CalendarEditor::setupGui()
 {
     KActionCollection *coll = actionCollection();
     QString name = "calendareditor_calendar_list";
-    
+
     actionAddCalendar   = new KAction(KIcon( "resource-calendar-insert" ), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddCalendar () ) );
-    
+
     actionAddSubCalendar   = new KAction(KIcon( "resource-calendar-child-insert" ), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
-    
+
     actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Calendar"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );
-    
+
     addAction( name, actionAddCalendar  );
     addAction( name, actionAddSubCalendar  );
     addAction( name, actionDeleteSelection );
-    
+
     actionSetWork = new KAction( i18n( "Work..." ), this );
     connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
     actionSetVacation = new KAction( i18n( "Non-working" ), this );

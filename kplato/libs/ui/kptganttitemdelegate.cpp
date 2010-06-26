@@ -215,7 +215,7 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
     if ( !idx.isValid() ) return KDGantt::Span();
 
     QRectF itemRect = opt.itemRect;
-    
+
     int typ = idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt();
     QString txt = itemText( idx, typ );
     int tw = 0;
@@ -289,19 +289,19 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
 void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
 {
     if ( !idx.isValid() ) return;
-    
+
     int specialtype = idx.model()->data( idx, GanttItemModel::SpecialItemTypeRole ).toInt();
     if ( specialtype > 0 ) {
         return paintSpecialItem( painter, opt, idx, specialtype );
     }
     const KDGantt::ItemType typ = static_cast<KDGantt::ItemType>( idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt() );
-    
+
     QString txt = itemText( idx, typ );
     QRectF itemRect = opt.itemRect;
     QRectF boundingRect = opt.boundingRect;
     boundingRect.setY( itemRect.y() );
     boundingRect.setHeight( itemRect.height() );
-    
+
     QRectF textRect = itemRect;
     if ( ! txt.isEmpty() ) {
         int tw = opt.fontMetrics.width( txt ) + static_cast<int>( itemRect.height()/1.5 );
@@ -400,7 +400,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                 painter->setBrush( m_criticalBrush );
             }
             painter->drawRect( r );
-            
+
             if ( showProgress ) {
                 bool ok;
                 qreal completion = idx.model()->data( idx, KDGantt::TaskCompletionRole ).toDouble( &ok );
@@ -480,7 +480,7 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             path.lineTo( delta, 2.*delta );
             path.lineTo( 0., delta );
             path.closeSubpath();
-            
+
             painter->save();
             painter->translate( r.topLeft() );
             painter->translate( 0.5, 0.5 );
@@ -503,13 +503,13 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
 
 /*! Paints the gantt item \a idx using \a painter and \a opt
  */
-void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ )
+void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& /*idx*/, int typ )
 {
     QRectF itemRect = opt.itemRect;
     QRectF boundingRect = opt.boundingRect;
     boundingRect.setY( itemRect.y() );
     boundingRect.setHeight( itemRect.height() );
-    
+
     painter->save();
 
     QPen pen = defaultPen( KDGantt::TypeEvent );
@@ -766,7 +766,7 @@ void ResourceGanttItemDelegate::paintResourceItem( QPainter* painter, const KDGa
     // TODO check load vs units properly, it's not as simple as below!
     foreach ( const AppointmentInterval &i, tot.intervals() ) {
         int il = i.load();
-        QString txt = KGlobal::locale()->formatNumber( (double)il / (double)rl, 1 ); 
+        QString txt = KGlobal::locale()->formatNumber( (double)il / (double)rl, 1 );
         QPen pen = painter->pen();
         if ( il > rl ) {
             painter->setBrush( m_overloadBrush );

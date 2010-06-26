@@ -119,8 +119,8 @@ GanttViewSettingsDialog::GanttViewSettingsDialog( TreeViewBase *view, GanttItemD
     : ItemViewSettupDialog( view, true, parent )
 {
     GanttChartDisplayOptionsPanel *panel = new GanttChartDisplayOptionsPanel( delegate );
-    KPageWidgetItem *page = insertWidget( 1, panel, i18n( "Chart" ), i18n( "Gantt Chart Settings" ) );
-    
+    /*KPageWidgetItem *page = */insertWidget( 1, panel, i18n( "Chart" ), i18n( "Gantt Chart Settings" ) );
+
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }
@@ -175,9 +175,9 @@ QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
     GanttPrintingOptions *w = new GanttPrintingOptions();
     //w->setPrintRowLabels( m_printRowLabels );
     w->setSinglePage( m_singlePage );
-    
+
     const_cast<GanttPrintingDialog*>( this )->m_options = w;
-    
+
     return QList<QWidget*>() << createPageLayoutWidget() << m_options;
 }
 
@@ -221,9 +221,9 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 {
     disconnect( header() );
     setHeader( new HeaderView );
-    
+
     setSelectionMode( QAbstractItemView::ExtendedSelection );
-    
+
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
@@ -244,7 +244,7 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     setLeftView( tv );
     setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
     tv->header()->setStretchLastSection( true );
-    
+
     NodeSortFilterProxyModel *m = new NodeSortFilterProxyModel( &m_defaultModel, this );
     KDGantt::View::setModel( m );
 }
@@ -297,7 +297,7 @@ void GanttViewBase::saveContext( QDomElement &settings ) const
 {
     kDebug();
     treeView()->saveContext( model()->columnMap(), settings );
-    
+
     QDomElement e = settings.ownerDocument().createElement( "ganttchart" );
     settings.appendChild( e );
     e.setAttribute( "show-dependencies", m_ganttdelegate->showTaskLinks );
@@ -336,15 +336,15 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
     m->setRole( KDGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
     m->setRole( KDGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
-    
+
     m->setColumn( KDGantt::ItemTypeRole, NodeModel::NodeType );
     m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
-    
+
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
     //static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( treeView()->alternatingRowColors() );
-    
+
     connect( model(), SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
 
@@ -410,7 +410,7 @@ void MyKDGanttView::addDependency( Relation *rel )
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
 //    kDebug()<<"addDependency() "<<model()<<par.model();
     if ( par.isValid() && ch.isValid() ) {
-        KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft, 
+        KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft,
                                  static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
                                );
         if ( ! constraintModel()->hasConstraint( con ) ) {
@@ -423,7 +423,7 @@ void MyKDGanttView::removeDependency( Relation *rel )
 {
     QModelIndex par = sfModel()->mapFromSource( model()->index( rel->parent() ) );
     QModelIndex ch = sfModel()->mapFromSource( model()->index( rel->child() ) );
-    KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft, 
+    KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft,
                              static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
                            );
     constraintModel()->removeConstraint( con );
@@ -464,11 +464,11 @@ GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
     m_gantt = new MyKDGanttView( m_splitter );
 
     setupGui();
-    
+
     updateReadWrite( readWrite );
     //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
     kDebug() <<m_gantt->constraintModel();
-    
+
     connect( m_gantt->treeView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
 
     connect( m_gantt->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
@@ -652,13 +652,13 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m_manager( 0 )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------";
-    
+
     setItemModel( new MilestoneItemModel( this ) );
-    
+
     sfModel()->setFilterRole ( Qt::EditRole );
     sfModel()->setFilterFixedString( QString::number( Node::Type_Milestone ) );
     sfModel()->setFilterKeyColumn( NodeModel::NodeType );
-    
+
     QList<int> show;
     show << NodeModel::NodeName
             << NodeModel::NodeStartTime;
@@ -670,13 +670,13 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
         }
     }
     treeView()->setRootIsDecorated ( false );
-    
+
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
-    
+
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
     m->setRole( KDGantt::StartTimeRole, Qt::EditRole ); // To provide correct format
     m->setRole( KDGantt::EndTimeRole, Qt::EditRole ); // To provide correct format
-    
+
     m->setColumn( KDGantt::ItemTypeRole, NodeModel::NodeType );
     m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
@@ -897,7 +897,7 @@ ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, 
     m_gantt->setLeftView( tv );
     m_gantt->setRowController( new KDGantt::TreeViewRowController( tv, m_gantt->ganttProxyModel() ) );
     tv->header()->setStretchLastSection( true );
-    
+
 
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( m_gantt->ganttProxyModel() );
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );

@@ -62,7 +62,7 @@ MacroCommand *RequestResourcesPanel::buildCommand()
         return 0;
     }
     MacroCommand *cmd = new MacroCommand( i18n( "Modify resource allocations" ) );
-    Project *p = m_view->project();
+    /*Project *p = */m_view->project();
     const QMap<const Resource*, ResourceRequest*> &rmap = m_view->resourceCache();
 
     // First remove all that should be removed

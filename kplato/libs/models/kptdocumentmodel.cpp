@@ -148,7 +148,7 @@ int DocumentModel::propertyCount()
     return 4;
 }
 
-bool DocumentModel::setData( Document *doc, int property, const QVariant & value, int role )
+bool DocumentModel::setData( Document *doc, int property, const QVariant & /*value*/, int role )
 {
     Q_UNUSED(doc);
     Q_UNUSED(property);

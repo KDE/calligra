@@ -38,11 +38,11 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent)
     is_acwp_draw=false;
 
     clear();
-    
+
     kDebug() << "ChartWidget :: Constructor Ended";
 }
 
-void ChartWidget::clear() 
+void ChartWidget::clear()
 {
     weeks.clear();
     bcwpPoints.clear();
@@ -50,7 +50,7 @@ void ChartWidget::clear()
     acwpPoints.clear();
 }
 
-void ChartWidget::draw( Project &p, ScheduleManager &sm )
+void ChartWidget::draw( Project &/*p*/, ScheduleManager &/*sm */)
 {
     /*clear();
     chartEngine.calculateWeeks(weeks,p,sm);
@@ -59,7 +59,7 @@ void ChartWidget::draw( Project &p, ScheduleManager &sm )
     chartEngine.calculateBCWP(bcwpPoints,weeks,p,sm);
     chartEngine.calculateActualCost(acwpPoints,weeks,p,sm);
     chartEngine.calculatePlannedCost(bcwsPoints,weeks,p,sm);
-    
+
     chartEngine.setMaxCost(bcwsPoints);
 
     chartEngine.costToPercent(bcwpPoints);
@@ -78,7 +78,7 @@ void ChartWidget::draw( Project &p, ScheduleManager &sm )
     chartEngine.init_display(bcwpPoints_display,bcwsPoints_display,acwpPoints_display,weeks.size());*/
 }
 
-void ChartWidget::paintEvent(QPaintEvent * ev)
+void ChartWidget::paintEvent(QPaintEvent * /*ev*/)
 {
    kDebug()<<size();
     //this->updateGeometry();
@@ -120,14 +120,14 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
 void ChartWidget::drawBasicChart(QPainter & painter)
     /* Calculate the percentage of the cost and replace the result in the vector */
 {
-    int j=0;
-    int k=0;
+//    int j=0;
+//    int k=0;
     int Ypercent=0;
-    int Xpercent=0;
+//    int Xpercent=0;
     maxXPercent=100;
     char Xchar[30];
     char Ychar[30];
-    
+
 /* CHANGE COLORS !! */
     painter.setPen(QColor(Qt::blue));
 
@@ -144,6 +144,7 @@ void ChartWidget::drawBasicChart(QPainter & painter)
     while(Ypercent<=maxYPercent)
     {
             int n=sprintf(Ychar,"%d",Ypercent);
+            Q_UNUSED(n);
             char * Yaffichage =strcat(Ychar,"%");
             //error first time FIX ME
             painter.drawText(2,size().height()-BOTTOMMARGIN-MarginY,QString(Yaffichage));
@@ -166,16 +167,16 @@ void ChartWidget::drawBasicChart(QPainter & painter)
    while(i<weeks.size())
    {
         QString txt = weeks[ i ].toString();
-        
+
         int x = MarginX+LEFTMARGIN;
         int y1 = size().height()-BOTTOMMARGIN;
         int y2 = y1+4;
         painter.drawLine(QLine( x, y1, x, y2 ) );
-        
+
         QRect r = painter.boundingRect( QRect(), Qt::AlignLeft, txt );
         x = QMAX( 0, x - r.width()/2 );
         painter.drawText( x, y2+10, txt );
-        
+
         MarginX+=MarginX_base;
         strcpy(Xchar,"");
         i++;
@@ -212,7 +213,7 @@ void ChartWidget::undrawACWP(){
 
 /* API CURVES TO GET POINTS*/
 
-/* GETTERS AND SETTERS */ 
+/* GETTERS AND SETTERS */
 
 void ChartWidget::setPointsBCPW(QVector<QPointF> vec)
 {

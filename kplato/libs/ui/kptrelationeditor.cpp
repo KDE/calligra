@@ -61,7 +61,7 @@ RelationTreeView::RelationTreeView( QWidget *parent )
     setRootIsDecorated ( false );
 
     createItemDelegates( m );
-    
+
     //HACK to simulate SingleSelection *and* get indication of current item
     connect( selectionModel(), SIGNAL( currentChanged(const QModelIndex&, const QModelIndex& ) ), SLOT( slotCurrentChanged(const QModelIndex&, const QModelIndex& ) ) );
 }
@@ -83,17 +83,17 @@ RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     //kDebug()<<m_view->actionSplitView();
     setupGui();
-    
+
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
-    
+
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
-    
+
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
-    
+
 }
 
 void RelationEditor::updateReadWrite( bool rw )
@@ -110,17 +110,17 @@ void RelationEditor::draw()
 {
 }
 
-void RelationEditor::setGuiActive( bool activate )
+void RelationEditor::setGuiActive( bool /*activate */)
 {
 }
 
-void RelationEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
+void RelationEditor::slotCurrentChanged(  const QModelIndex &/*curr*/, const QModelIndex & )
 {
     //kDebug()<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
-void RelationEditor::slotSelectionChanged( const QModelIndexList list)
+void RelationEditor::slotSelectionChanged( const QModelIndexList /*list*/)
 {
     //kDebug()<<list.count();
     slotEnableActions();
@@ -157,7 +157,7 @@ void RelationEditor::slotEnableActions()
     updateActionsEnabled( true );
 }
 
-void RelationEditor::updateActionsEnabled( bool on )
+void RelationEditor::updateActionsEnabled( bool /*on */)
 {
 }
 

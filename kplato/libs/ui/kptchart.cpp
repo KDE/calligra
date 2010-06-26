@@ -40,11 +40,11 @@ Chart::Chart()
 }
 
 //******************
-// CALCULATE DATA 
+// CALCULATE DATA
 //******************
 
 
-QVector<QDate> Chart::calculateWeeks(const Project & p,const ScheduleManager &sm)
+QVector<QDate> Chart::calculateWeeks(const Project & /*p*/,const ScheduleManager &/*sm*/)
 {
     QVector<QDate> lWeeks;
     //Schedule *s = p.findSchedule( sm.id() );
@@ -108,7 +108,7 @@ void Chart::calculateActualCost(const Project & p, const ScheduleManager &sm)
 {
     //kDebug()<<"calculateActualCost()"<<weeks<<vect;
     mACWPPoints.clear();
-    
+
     const QVector<QDate>  lWeeks = calculateWeeks(p,sm);
     QVector<QDate>::const_iterator it_weeks = lWeeks.begin();
     float sum=0;
@@ -258,10 +258,10 @@ void Chart::api(QVector<QPointF> &data, QVector<QPointF> &display, const QSize &
 
 /* Calculate the new value of every Y-axis when the window hab been re-sized */
 void Chart::reCalculateY(QVector<QPointF> & vect, QVector<QPointF> & vect_display, int maximumHeight)// WORKS, TESTED
-{    
+{
     float inverse;
     float tmp;
-    
+
     kDebug()<<maximumHeight;
     QVector<QPointF>::iterator it= vect.begin();
     QVector<QPointF>::iterator it_display= vect_display.begin();
@@ -276,7 +276,7 @@ void Chart::reCalculateY(QVector<QPointF> & vect, QVector<QPointF> & vect_displa
 /* Calculate the new value of X-axis when the window had been re-sized */
 void Chart::reCalculateX(QVector<QPointF> & vect, QVector<QPointF> & vect_display, int maximumWidth)// WORKS, TESTED
 {
-    float tmp; 
+    float tmp;
     //kDebug()<<maximumWidth;
     QVector<QPointF>::iterator it= vect.begin();
     QVector<QPointF>::iterator it_display= vect_display.begin();
@@ -288,19 +288,19 @@ void Chart::reCalculateX(QVector<QPointF> & vect, QVector<QPointF> & vect_displa
     }
 }
 
-// Set a variable to know how much is the higher percent of Y 
+// Set a variable to know how much is the higher percent of Y
 void Chart::setMaxTime( )// WORKS, TESTED
 {
     mTotalTime = 0.0;
 
-    
+
     if( !mBCWPPoints.isEmpty())
     {
         if( !mBCWSPoints.isEmpty() )
         {
             if( (mBCWPPoints.last()).y() <=  mBCWSPoints.last().y() )
             {
-    
+
                 if( !mACWPPoints.isEmpty() )
                 {
                         if(   (mBCWSPoints.last()).y() <=  (mACWPPoints.last()).y() )

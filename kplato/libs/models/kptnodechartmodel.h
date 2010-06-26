@@ -35,7 +35,7 @@
 
 namespace KPlato
 {
-    
+
 class Project;
 class ScheduleManager;
 class Node;
@@ -69,7 +69,8 @@ public:
     void reset() { QSortFilterProxyModel::reset(); }
 
 protected:
-    bool filterAcceptsColumn ( int source_column, const QModelIndex &source_parent ) const {
+    bool filterAcceptsColumn ( int source_column, const QModelIndex &/*source_parent */) const {
+
         //kDebug()<<this<<source_column<<m_columns<<(! m_columns.contains( source_column ));
         return ! m_rejects.contains( source_column );
     }
@@ -84,20 +85,20 @@ class KPLATOMODELS_EXPORT ChartItemModel : public ItemModelBase
     Q_OBJECT
 public:
     ChartItemModel( QObject *parent = 0 );
-    
+
 //    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
 
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const;
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
 
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    
+
     const EffortCostMap &bcwp() const { return m_bcws; }
     const EffortCostMap &acwp() const { return m_acwp; }
 
@@ -121,7 +122,7 @@ protected:
     double bcwsCost( int day ) const;
     QVariant bcwpCost( int day ) const;
     double acwpCost( int day ) const;
-    
+
 private:
     QList<Node*> m_nodes;
     EffortCostMap m_bcws;
@@ -139,11 +140,11 @@ class KPLATOMODELS_EXPORT NodeChartModel : public AbstractChartModel
 public:
     NodeChartModel( QObject *parent = 0 );
     virtual ~NodeChartModel() {}
-    
+
     enum UserId { None = 0, AxisSet = None, BCWS, BCWP, ACWP, X_AxisSet, Y_AxisSet, X_Axis, Y_Axis };
-    
+
     void setProject( Project *project );
-    
+
     /// Return the number of data sets that shall be plotted against the axis set @p index
     virtual int dataSetCount( const ChartAxisIndex &index ) const;
     virtual int childCount( const ChartDataIndex &index ) const;
@@ -154,7 +155,7 @@ public:
     virtual ChartDataIndex index( int dataset, const ChartAxisIndex &index ) const;
     /// Create an index for the @p number in the axis set @p index
     ChartDataIndex index( int number, const ChartDataIndex &idx ) const;
-    
+
     /// Return the parent ChartAxisIndex of @p index
     virtual ChartAxisIndex parent( const ChartAxisIndex &index ) const;
     /// Return the number if axis sets with @p parent in this model
@@ -166,20 +167,20 @@ public:
 
     const EffortCostMap &bcwp() const { return m_bcwp; }
     const EffortCostMap &acwp() const { return m_acwp; }
-    
+
     void setNodes( const QList<Node*> &nodes );
     void addNode( Node *node );
     void clearNodes();
-    
+
     QDate startDate() const;
     QDate endDate() const;
-    
+
     struct DataShown {
         bool showCost;
         bool showBCWSCost;
         bool showBCWPCost;
         bool showACWPCost;
-        
+
         bool showEffort;
         bool showBCWSEffort;
         bool showBCWPEffort;
@@ -188,22 +189,22 @@ public:
 
     void setDataShown( const DataShown &show );
     DataShown dataShown() const { return m_dataShown; }
-            
+
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeChanged( Node *node );
-    
+
 protected:
     void calculate();
-    
+
 private:
     Project *m_project;
     ScheduleManager *m_manager;
     QList<Node*> m_nodes;
-    
+
     EffortCostMap m_bcwp;
     EffortCostMap m_acwp;
-    
+
     DataShown m_dataShown;
 
 };

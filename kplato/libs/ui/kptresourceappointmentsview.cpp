@@ -93,7 +93,7 @@ ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( Resource
     ResourceAppointmentsDisplayOptionsPanel *panel = new ResourceAppointmentsDisplayOptionsPanel( model );
     KPageWidgetItem *page = addPage( panel, i18n( "General" ) );
     page->setHeader( i18n( "Resource Assignments View Settings" ) );
-    
+
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }
@@ -104,17 +104,17 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     m_rightview->setStretchLastSection( false );
-    
+
     ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel( this );
     setModel( m );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     QList<int> lst1; lst1 << 2 << -1;
     QList<int> lst2; lst2 << 0 << 1;
     hideColumns( lst1, lst2 );
-    
+
     m_leftview->resizeColumnToContents ( 1 );
     connect( m, SIGNAL( modelReset() ), SLOT( slotRefreshed() ) );
-    
+
     m_rightview->setObjectName( "ResourceAppointments" );
 }
 
@@ -163,22 +163,22 @@ ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *p
     kDebug()<<"------------------- ResourceAppointmentsView -----------------------";
 
     setupGui();
-    
+
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new ResourceAppointmentsTreeView( this );
     l->addWidget( m_view );
-    
+
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
-    
+
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
-    
+
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
 }
@@ -263,7 +263,7 @@ void ResourceAppointmentsView::slotEnableActions( bool on )
     updateActionsEnabled( on );
 }
 
-void ResourceAppointmentsView::updateActionsEnabled(  bool on )
+void ResourceAppointmentsView::updateActionsEnabled(  bool /*on*/ )
 {
 /*    bool o = on && m_view->project();
 
@@ -271,11 +271,11 @@ void ResourceAppointmentsView::updateActionsEnabled(  bool on )
     bool nogroup = groupList.isEmpty();
     bool group = groupList.count() == 1;
     QList<Resource*> resourceList = m_view->selectedResources();
-    bool noresource = resourceList.isEmpty(); 
+    bool noresource = resourceList.isEmpty();
     bool resource = resourceList.count() == 1;
-    
+
     bool any = !nogroup || !noresource;
-    
+
     actionAddResource->setEnabled( o && ( (group  && noresource) || (resource && nogroup) ) );
     actionAddGroup->setEnabled( o );
     actionDeleteSelection->setEnabled( o && any );*/

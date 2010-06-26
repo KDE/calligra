@@ -35,6 +35,7 @@ class Debug
         Debug() {}
 static
 void print( Calendar *c, const QString &str, bool full = true ) {
+    Q_UNUSED(full);
     qDebug()<<"Debug info: Calendar"<<c->name()<<str;
     for ( int wd = 1; wd <= 7; ++wd ) {
         CalendarDay *d = c->weekday( wd );
@@ -52,6 +53,7 @@ void print( Calendar *c, const QString &str, bool full = true ) {
 }
 static
 void print( Resource *r, const QString &str, bool full = true ) {
+    Q_UNUSED(full)
     qDebug()<<"Debug info: Resource"<<r->name()<<str;
     qDebug()<<"Group:"<<r->parentGroup()->name()<<"Type:"<<r->parentGroup()->typeToString();
     qDebug()<<"Available:"<<r->availableFrom().toString()<<r->availableUntil().toString()<<r->units()<<"%";
@@ -71,6 +73,7 @@ void print( Project *p, const QString &str ) {
 }
 static
 void print( Project *p, Task *t, const QString &str, bool full = true ) {
+    Q_UNUSED(full);
     print( p, str );
     print( t );
 }
@@ -81,6 +84,7 @@ void print( Task *t, const QString &str, bool full = true ) {
 }
 static
 void print( Task *t, bool full = true ) {
+    Q_UNUSED(full);
     qDebug()<<"Task"<<t->name()<<t->typeToString()<<t->constraintToString();
     qDebug()<<"     earlyStart:"<<t->earlyStart().toString();
     qDebug()<<"      lateStart:"<<t->lateStart().toString();

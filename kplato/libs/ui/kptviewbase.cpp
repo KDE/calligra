@@ -45,7 +45,7 @@
 
 namespace KPlato
 {
-    
+
 PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget *parent )
     : QWidget( parent )
 {
@@ -58,7 +58,7 @@ PrintingHeaderFooter::~PrintingHeaderFooter()
 {
     //kDebug();
 }
-    
+
 void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
 {
     m_options = options;
@@ -67,13 +67,13 @@ void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
     ui_headerDate->setCheckState( m_options.headerOptions.date );
     ui_headerManager->setCheckState( m_options.headerOptions.manager );
     ui_headerPage->setCheckState( m_options.headerOptions.page );
-    
+
     ui_footer->setChecked( m_options.footerOptions.group );
     ui_footerProject->setCheckState( m_options.footerOptions.project );
     ui_footerDate->setCheckState( m_options.footerOptions.date );
     ui_footerManager->setCheckState( m_options.footerOptions.manager );
     ui_footerPage->setCheckState( m_options.footerOptions.page );
-    
+
 }
 
 PrintingOptions PrintingHeaderFooter::options() const
@@ -85,7 +85,7 @@ PrintingOptions PrintingHeaderFooter::options() const
     opt.headerOptions.date = ui_headerDate->checkState();
     opt.headerOptions.manager = ui_headerManager->checkState();
     opt.headerOptions.page = ui_headerPage->checkState();
-    
+
     opt.footerOptions.group = ui_footer->isChecked();
     opt.footerOptions.project = ui_footerProject->checkState();
     opt.footerOptions.date = ui_footerDate->checkState( );
@@ -176,7 +176,7 @@ QList<QWidget*> PrintingDialog::createOptionWidgets() const
     //kDebug();
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
     const_cast<PrintingDialog*>( this )->m_widget = w;
-    
+
     return QList<QWidget*>() << m_widget;
 }
 
@@ -239,7 +239,7 @@ void PrintingDialog::paintHeaderFooter( QPainter &p, const PrintingOptions &opti
 void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, const QRect &rect,  int pageNumber, const Project &project )
 {
     p.save();
-    
+
     p.setPen( Qt::black );
     p.drawRect( rect );
     QRect projectRect;
@@ -310,7 +310,7 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
         projectRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, projectName );
         projectRect.setHeight( rect_1.height() );
     }
-    
+
     if ( options.page == Qt::Checked ) {
         p.drawText( pageRect, Qt::AlignHCenter|Qt::AlignBottom, page );
     }
@@ -349,7 +349,7 @@ ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
     m_schedulemanager( 0 )
 {
 }
-    
+
 ViewBase::~ViewBase()
 {
     if ( koDocument() ) {
@@ -453,7 +453,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
     int hHeight = headerRect().height();
     int fHeight = footerRect().height();
     QRect pageRect = const_cast<TreeViewPrintingDialog*>( this )->printer().pageRect();
-    
+
     int gap = 8;
     int pageHeight = pageRect.height() - height;
     if ( hHeight > 0 ) {
@@ -463,7 +463,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
         pageHeight -= ( fHeight + gap );
     }
     int rowsPrPage = pageHeight / height;
-    
+
     int rows = m_tree->model()->rowCount();
     int row = -1;
     for ( int i = 0; i < rows; ++i ) {
@@ -502,9 +502,9 @@ QList<QWidget*> TreeViewPrintingDialog::createOptionWidgets() const
 void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
-    
+
     m_firstRow = firstRow( page );
-    
+
     QHeaderView *mh = m_tree->header();
     int length = mh->length();
     int height = mh->height();
@@ -513,19 +513,19 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect pageRect = printer().pageRect();
     pageRect.moveTo( 0, 0 );
     QRect paperRect = printer().paperRect();
-    
+
     QAbstractItemModel *model = m_tree->model();
-    
+
     kDebug()<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );
 
     painter.setClipping( true );
-    
+
     if ( m_project ) {
         paintHeaderFooter( painter, m_view->printingOptions(), page, *(m_project) );
     }
-    
+
     int gap = 8;
     int pageHeight = pageRect.height() - height;
     if ( hRect.isValid() ) {
@@ -535,11 +535,11 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
         pageHeight -= ( fRect.height() + gap );
     }
     int rowsPrPage = pageHeight / height;
-    
+
     double sx = pageRect.width() > length ? 1.0 : (double)pageRect.width() / (double)length;
     double sy = 1.0;
     painter.scale( sx, sy );
-    
+
     int h = 0;
 
     painter.translate( 0, hRect.height() + gap );
@@ -869,8 +869,8 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
     Delegate::EndEditHint endHint = delegate->endEditHint();
     // Close editor, do nothing else
     QTreeView::closeEditor( editor, QAbstractItemDelegate::NoHint );
-    
-    
+
+
     QModelIndex index;
     switch ( endHint ) {
         case Delegate::EditLeftItem:
@@ -946,7 +946,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
     switch (cursorAction) {
         case MoveDown: {
             // TODO: span
-            
+
             // Fetch the index below current.
             // This should be the next non-hidden row, same column as current,
             // that has a column in current.column()
@@ -958,11 +958,11 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
             if ( ix.isValid() ) {
                 ix = model()->index( ix.row(), col, ix.parent() );
             } // else Here we could go to the top
-            return ix; 
+            return ix;
         }
         case MoveUp: {
             // TODO: span
-            
+
             // Fetch the index above current.
             // This should be the previous non-hidden row, same column as current,
             // that has a column in current.column()
@@ -1250,7 +1250,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
     int hHeight = headerRect().height();
     int fHeight = footerRect().height();
     QRect pageRect = const_cast<DoubleTreeViewPrintingDialog*>( this )->printer().pageRect();
-    
+
     int gap = 8;
     int pageHeight = pageRect.height() - height;
     if ( hHeight > 0 ) {
@@ -1260,7 +1260,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
         pageHeight -= ( fHeight + gap );
     }
     int rowsPrPage = pageHeight / height;
-    
+
     int rows = m_tree->model()->rowCount();
     int row = -1;
     for ( int i = 0; i < rows; ++i ) {
@@ -1299,9 +1299,9 @@ QList<QWidget*> DoubleTreeViewPrintingDialog::createOptionWidgets() const
 void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
-    
+
     m_firstRow = firstRow( page );
-    
+
     QHeaderView *mh = m_tree->masterView()->header();
     QHeaderView *sh = m_tree->slaveView()->header();
     int length = mh->length() + sh->length();
@@ -1311,7 +1311,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect pageRect = printer().pageRect();
     pageRect.moveTo( 0, 0 );
     QRect paperRect = printer().paperRect();
-    
+
     QAbstractItemModel *model = m_tree->model();
     Q_ASSERT( model != 0 );
     kDebug()<<pageRect<<paperRect;
@@ -1319,7 +1319,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
     painter.translate( pageRect.topLeft() );
 
     painter.setClipping( true );
-    
+
     if ( m_project ) {
         paintHeaderFooter( painter, printingOptions(), page, *(m_project) );
     }
@@ -1332,11 +1332,11 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
         pageHeight -= ( fRect.height() + gap );
     }
     int rowsPrPage = pageHeight / height;
-    
+
     double sx = pageRect.width() > length ? 1.0 : (double)pageRect.width() / (double)length;
     double sy = 1.0;
     painter.scale( sx, sy );
-    
+
     int h = 0;
 
     painter.translate( 0, hRect.height() + gap );
@@ -1403,7 +1403,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
  * This makes it possible to keep columns visible in one view when scrolling the other view horizontally.
  */
 
-DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
+DoubleTreeViewBase::DoubleTreeViewBase( bool /*mode*/, QWidget *parent )
     : QSplitter( parent ),
     m_rightview( 0 ),
     m_selectionmodel( 0 ),
@@ -1472,7 +1472,7 @@ void DoubleTreeViewBase::init()
 
     connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
-    
+
     connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
 
@@ -1488,10 +1488,10 @@ void DoubleTreeViewBase::init()
 
     connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
-    
+
     connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), m_leftview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
-    
+
     connect( m_leftview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
     connect( m_rightview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
 
@@ -1499,18 +1499,18 @@ void DoubleTreeViewBase::init()
     setViewSplitMode( true );
 
     connect( m_leftview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotLeftSortIndicatorChanged( int, Qt::SortOrder ) ) );
-    
+
     connect( m_rightview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotRightSortIndicatorChanged( int, Qt::SortOrder ) ) );
 }
 
-void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int logicalIndex, Qt::SortOrder order )
+void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int /*logicalIndex*/, Qt::SortOrder /*order*/ )
 {
     m_leftview->header()->setSortIndicatorShown( true );
     // sorting controlled by left treeview, turn right off
     m_rightview->header()->setSortIndicatorShown( false );
 }
 
-void DoubleTreeViewBase::slotRightSortIndicatorChanged( int logicalIndex, Qt::SortOrder order )
+void DoubleTreeViewBase::slotRightSortIndicatorChanged( int /*logicalIndex*/, Qt::SortOrder /*order*/ )
 {
     m_rightview->header()->setSortIndicatorShown( true );
     // sorting controlled by right treeview, turn left off
@@ -1627,16 +1627,16 @@ void DoubleTreeViewBase::setModel( QAbstractItemModel *model )
     m_rightview->setModel( model );
     if ( m_selectionmodel ) {
         disconnect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
-    
+
         disconnect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
     }
     m_selectionmodel = m_leftview->selectionModel();
     m_rightview->setSelectionModel( m_selectionmodel );
-    
+
     connect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
 
     connect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
-    
+
     setReadWrite( m_readWrite );
 }
 
@@ -1799,7 +1799,7 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
         m_actionSplitView->setText( i18n( "Split View" ) );
         m_actionSplitView->setIcon( KIcon( "view-split-left-right" ) );
     }
-    
+
     if ( m_mode == split ) {
         return;
     }

@@ -212,13 +212,14 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         }
     }
     emit sigProgress( 5 );
-
+/*
 #ifdef KOXML_USE_QDOM
     int numNodes = plan.childNodes().count();
 #else
     int numNodes = plan.childNodesCount();
 #endif
-#if 0 
+*/
+#if 0
 This test does not work any longer. KoXml adds a couple of elements not present in the file!!
     if ( numNodes > 2 ) {
         //TODO: Make a proper bitching about this
@@ -281,7 +282,7 @@ QDomDocument Part::saveXML()
 
     // Save the project
     m_project->save( doc );
-    
+
     return document;
 }
 
@@ -312,7 +313,7 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *reso
 
     // Save the project
     m_project->saveWorkPackageXML( doc, node, id );
-    
+
     return document;
 }
 
@@ -343,7 +344,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
 
     QByteArray mimeType = "application/x-vnd.kde.kplato.work";
     kDebug() <<"MimeType=" << mimeType;
-    
+
     KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
 /*    if ( d->m_specialOutputFlag == SaveEncrypted && !d->m_password.isNull( ) ) {
         store->setPassword( d->m_password );
@@ -368,7 +369,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
         return false;
     }
     node->documents().saveToStore( store );
-    
+
     kDebug() <<"Saving done of url:" << file;
     if ( !store->finalize() ) {
         delete store;
@@ -466,13 +467,13 @@ Project *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
         }
     }
     m_xmlLoader.setVersion( plan.attribute( "kplato-version", KPLATO_FILE_SYNTAX_VERSION ) );
-
+/*
 #ifdef KOXML_USE_QDOM
     int numNodes = plan.childNodes().count();
 #else
     int numNodes = plan.childNodesCount();
 #endif
-
+*/
     bool ok = true;
     QString timeTag;
     m_xmlLoader.startLoad();

@@ -36,7 +36,7 @@ Context::Context()
 {
     ganttview.ganttviewsize = -1;
     ganttview.taskviewsize = -1;
-    
+
     accountsview.accountsviewsize = -1;
     accountsview.periodviewsize = -1;
 
@@ -62,7 +62,7 @@ bool Context::setContent( const QString &str )
 
 bool Context::load( const KoXmlDocument &document ) {
     m_document = document; // create a copy, document is deleted under our feet
-    
+
     // Check if this is the right app
     KoXmlElement elm = m_document.documentElement();
     QString value = elm.attribute( "mime", QString() );
@@ -86,13 +86,13 @@ bool Context::load( const KoXmlDocument &document ) {
             return false;
         }*/
     }
-
+/*
 #ifdef KOXML_USE_QDOM
     int numNodes = elm.childNodes().count();
 #else
     int numNodes = elm.childNodesCount();
 #endif
-    
+*/
     KoXmlNode n = elm.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -119,11 +119,11 @@ QDomDocument Context::save( const View *view ) const {
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato" );
     doc.setAttribute( "version", 0.0 );
     document.appendChild( doc );
-    
+
     QDomElement e = doc.ownerDocument().createElement("context");
     doc.appendChild( e );
     view->saveContext( e );
-    
+
     return document;
 }
 

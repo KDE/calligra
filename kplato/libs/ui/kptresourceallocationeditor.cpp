@@ -61,7 +61,7 @@ ResourceAllocationTreeView::ResourceAllocationTreeView( QWidget *parent )
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     ResourceAllocationItemModel *m = new ResourceAllocationItemModel( this );
     setModel( m );
-    
+
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
 
@@ -84,13 +84,13 @@ ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *p
     m_view = new ResourceAllocationTreeView( this );
     l->addWidget( m_view );
     setupGui();
-    
+
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2; lst2 << 0;
     m_view->hideColumns( lst1, lst2 );
-    
+
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
     for ( int c = 1; c < model()->columnCount(); ++c ) {
@@ -105,7 +105,7 @@ ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *p
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
-    
+
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
 }
@@ -175,7 +175,7 @@ void ResourceAllocationEditor::slotEnableActions( bool on )
     updateActionsEnabled( on );
 }
 
-void ResourceAllocationEditor::updateActionsEnabled(  bool on )
+void ResourceAllocationEditor::updateActionsEnabled(  bool /*on */)
 {
 }
 
@@ -184,7 +184,7 @@ void ResourceAllocationEditor::setupGui()
     // Add the context menu actions for the view options
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
-    
+
     createOptionAction();
 }
 

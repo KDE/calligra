@@ -89,9 +89,9 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setStretchLastSection( false );
-    
+
     createItemDelegates( m );
-    
+
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
@@ -106,7 +106,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
             << NodeModel::NodeActualFinish
             << NodeModel::NodeStatusNote;
 
-    QList<int> lst2; 
+    QList<int> lst2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
             lst2 << i;
@@ -169,7 +169,7 @@ void TaskStatusTreeView::setProject( Project *project )
     model()->setProject( project );
 }
 
-void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
+void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
 {
 /*    if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction)))
@@ -226,7 +226,7 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
-    
+
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
@@ -241,7 +241,7 @@ void TaskStatusView::setScheduleManager( ScheduleManager *sm )
     static_cast<TaskStatusItemModel*>( m_view->model() )->setScheduleManager( sm );
 }
 
-Node *TaskStatusView::currentNode() const 
+Node *TaskStatusView::currentNode() const
 {
     return m_view->model()->node( m_view->selectionModel()->currentIndex() );
 }
@@ -309,7 +309,7 @@ void TaskStatusView::setupGui()
     // Add the context menu actions for the view options
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
-    
+
     createOptionAction();
 }
 
@@ -339,9 +339,9 @@ bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug();
     m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
-    
+
     m_view->setPeriodType( context.attribute( "periodtype", QString("%1").arg( m_view->defaultPeriodType() ) ).toInt() );
-    
+
     m_view->setWeekday( context.attribute( "weekday", QString("%1").arg( m_view->defaultWeekday() ) ).toInt() );
     return m_view->loadContext( model()->columnMap(), context );
 }
@@ -366,7 +366,7 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
     m_view( view )
 {
     setupUi( this );
-    
+
     QStringList lst;
     for ( int i = 1; i <= 7; ++i ) {
         lst << KGlobal::locale()->calendar()->weekDayName( i );
@@ -379,7 +379,7 @@ TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *vi
         default: break;
     }
     weekdays->setCurrentIndex( m_view->weekday() - 1 );
-    
+
     connect( period, SIGNAL( valueChanged( int ) ), SIGNAL( changed() ) );
     connect( useWeekday, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
     connect( useCurrentDate, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
@@ -419,7 +419,7 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
     setCurrentPage( page );
     //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    
+
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }
@@ -436,7 +436,7 @@ ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
 
     setupGui();
-    
+
     connect( m_view, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
 
@@ -521,7 +521,7 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m_legend = new Legend( ui_chart );
     ui_chart->replaceLegend( m_legend );
     m_legend->setObjectName( "Chart legend" );
-    
+
     backgroundAttrs = m_legend->backgroundAttributes();
     m_legend->setBackgroundAttributes( backgroundAttrs );
     backgroundAttrs.setVisible( true );
@@ -567,16 +567,16 @@ void PerformanceStatusBase::createBarChart()
 
     BarDiagram *effort_diag = new BarDiagram( ui_chart, m_barchart.effortplane );
     effort_diag->setObjectName( "Effort diagram" );
-    
+
     CartesianAxis *date_axis = new CartesianAxis( effort_diag );
     date_axis->setPosition( CartesianAxis::Bottom );
     effort_diag->addAxis( date_axis );
-    
+
     m_barchart.hours_axis = new CartesianAxis( effort_diag );
     m_barchart.hours_axis->setPosition( CartesianAxis::Left );
     effort_diag->addAxis( m_barchart.hours_axis );
     m_barchart.effortplane->addDiagram( effort_diag );
-    
+
     // Hide cost in effort diagram
     effort_diag->setHidden( 0, true );
     effort_diag->setHidden( 1, true );
@@ -617,16 +617,16 @@ void PerformanceStatusBase::createLineChart()
 
     LineDiagram *effort_diag = new LineDiagram( ui_chart, m_linechart.effortplane );
     effort_diag->setObjectName( "Effort diagram" );
-    
+
     CartesianAxis *date_axis = new CartesianAxis( effort_diag );
     date_axis->setPosition( CartesianAxis::Bottom );
     effort_diag->addAxis( date_axis );
-    
+
     m_linechart.hours_axis = new CartesianAxis( effort_diag );
     m_linechart.hours_axis->setPosition( CartesianAxis::Left );
     effort_diag->addAxis( m_linechart.hours_axis );
     m_linechart.effortplane->addDiagram( effort_diag );
-    
+
     // Hide cost in effort diagram
     effort_diag->setHidden( 0, true );
     effort_diag->setHidden( 1, true );
@@ -652,17 +652,18 @@ void PerformanceStatusBase::createLineChart()
     m_linechart.costproxy.setZeroColumns( QList<int>() << 3 << 4 << 5 );
     m_linechart.costproxy.setSourceModel( &m_chartmodel );
     cost_diag->setModel( &(m_linechart.costproxy) );
-    
-    
+
+
 }
 
 void PerformanceStatusBase::setupChart()
 {
-    // BUG in kdchart: 
+    // BUG in kdchart:
     foreach ( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
         p->setReferenceCoordinatePlane( 0 );
     }
     foreach ( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
+        Q_UNUSED(p);
         ui_chart->takeCoordinatePlane( ui_chart->coordinatePlanes().last() );
     }
     if ( m_chartinfo.showBarChart ) {
@@ -743,10 +744,10 @@ void PerformanceStatusBase::setupBarChart()
     m_barchart.effortplane->diagram()->setHidden( 3, ! ( info.showEffort && info.showBCWSEffort ) );
     m_barchart.effortplane->diagram()->setHidden( 4, ! ( info.showEffort && info.showBCWPEffort ) );
     m_barchart.effortplane->diagram()->setHidden( 5, ! ( info.showEffort && info.showACWPEffort ) );
-    
+
     m_barchart.effortproxy.reset();
     m_barchart.costproxy.reset();
-    
+
 /*    kDebug()<<"Effort:"<<"reject="<<m_barchart.effortproxy.rejectColumns()<<"zero="<<m_barchart.effortproxy.zeroColumns()
     <<endl<<0<<m_barchart.effortplane->diagram()->isHidden(0)
     <<endl<<1<<m_barchart.effortplane->diagram()->isHidden(1)
@@ -762,7 +763,7 @@ void PerformanceStatusBase::setupBarChart()
     <<endl<<3<<m_barchart.costplane->diagram()->isHidden(3)
     <<endl<<4<<m_barchart.costplane->diagram()->isHidden(4)
     <<endl<<5<<m_barchart.costplane->diagram()->isHidden(5);*/
-    
+
     if ( info.showCost ) kDebug()<<ui_chart->coordinatePlanes().contains( m_barchart.costplane )<<m_barchart.costplane->referenceCoordinatePlane();
     if ( ! info.showEffort ) {
         Q_ASSERT(  m_barchart.costplane->referenceCoordinatePlane() == 0 );
@@ -818,7 +819,7 @@ void PerformanceStatusBase::setupLineChart()
 
     m_linechart.effortproxy.reset();
     m_linechart.costproxy.reset();
-    
+
 /*    kDebug()<<"Effort:"<<"reject="<<m_linechart.effortproxy.rejectColumns()<<"zero="<<m_linechart.effortproxy.zeroColumns()
     <<endl<<0<<m_linechart.effortplane->diagram()->isHidden(0)
     <<endl<<1<<m_linechart.effortplane->diagram()->isHidden(1)
@@ -834,7 +835,7 @@ void PerformanceStatusBase::setupLineChart()
     <<endl<<3<<m_linechart.costplane->diagram()->isHidden(3)
     <<endl<<4<<m_linechart.costplane->diagram()->isHidden(4)
     <<endl<<5<<m_linechart.costplane->diagram()->isHidden(5);*/
-    
+
     if ( info.showCost ) kDebug()<<ui_chart->coordinatePlanes().contains( m_linechart.costplane )<<m_linechart.costplane->referenceCoordinatePlane();
 }
 
@@ -861,7 +862,7 @@ void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
     //kDebug();
     m_manager = sm;
     m_model.setScheduleManager( sm );
-    
+
     m_chartmodel.setScheduleManager( sm );
 }
 
@@ -880,7 +881,7 @@ void PerformanceStatusBase::setProject( Project *project )
     m_chartmodel.addNode( project );
 
     slotLocaleChanged();
-    
+
     m_legend->setBrushesFromDiagram( &m_legenddiagram );
     kDebug()<<"legend brushes set:"<<m_legend->brushes();
 }
@@ -922,13 +923,13 @@ void PerformanceStatusBase::drawValues()
     bcwsCost->setText( locale->formatMoney( budget.totalCost() ) );
     bcwpCost->setText( locale->formatMoney( budget.bcwpTotalCost() ) );
     acwpCost->setText( locale->formatMoney( actual.totalCost() ) );
-    
+
     double cpi_ = 0.0;
     if ( actual.totalCost() > 0.0 ) {
         cpi_ = budget.bcwpTotalCost() / actual.totalCost();
     }
     cpi->setText( locale->formatNumber( cpi_ ) );
-    
+
     double bh = budget.totalEffort().toDouble( Duration::Unit_h);
     bcwsEffort->setText( locale->formatNumber( bh ) );
     bcwpEffort->setText( locale->formatNumber( budget.bcwpTotalEffort() ) );
@@ -941,7 +942,7 @@ void PerformanceStatusBase::drawValues()
     spi->setText( locale->formatNumber( spi_ ) );
 }
 
-void PerformanceStatusBase::drawPlot( Project &p, ScheduleManager &sm ) 
+void PerformanceStatusBase::drawPlot( Project &/*p*/, ScheduleManager &/*sm*/ )
 {
     //kDebug();
 /*    plotwidget->resetPlot();
@@ -967,7 +968,7 @@ void PerformanceStatusBase::drawPlot( Project &p, ScheduleManager &sm )
    */
 }
 
-QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx ) 
+QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &/*idx*/ )
 {
     //kDebug();
     return QList<QPointF>();
@@ -984,15 +985,15 @@ QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
             range.prepend ( QPointF ( m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble(), m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble() ) );
             if ( idx.number() == 0 ) {
                 plotwidget->axis( KPlotWidget::BottomAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
-                
+
                 plotwidget->axis( KPlotWidget::BottomAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
                 plotwidget->axis( KPlotWidget::BottomAxis )->setTickLabelFormat( 'd' );
             } else {
                 plotwidget->axis( KPlotWidget::TopAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
-                
+
                 plotwidget->axis( KPlotWidget::TopAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
                 plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelFormat( 'w' );
-                
+
                 plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelsShown( true );
             }
         } else if ( type == AbstractChartModel::Axis_Y ) {
@@ -1002,15 +1003,15 @@ QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
                 QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
                 //kDebug()<<"LeftAxis:"<<s;
                 plotwidget->axis( KPlotWidget::LeftAxis )->setLabel( s );
-                
+
                 plotwidget->axis( KPlotWidget::LeftAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
             } else {
                 QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
                 //kDebug()<<"RightAxis:"<<s;
                 plotwidget->axis( KPlotWidget::RightAxis )->setLabel( s );
-            
+
                 plotwidget->axis( KPlotWidget::RightAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
-            
+
                 plotwidget->axis( KPlotWidget::RightAxis )->setTickLabelsShown( true );
             }
         }
@@ -1019,7 +1020,7 @@ QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
     return range;*/
 }
 
-void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet ) 
+void PerformanceStatusBase::drawData( const ChartAxisIndex &/*axisSet*/ )
 {
     //kDebug()<<axisSet;
 /*    int dataCount = m_model.dataSetCount( axisSet );
@@ -1043,7 +1044,7 @@ void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet )
     }*/
 }
 
-void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet )
+void PerformanceStatusBase::drawData( const ChartDataIndex &/*index*/, const ChartAxisIndex &/*axisSet */)
 {
     //kDebug()<<index;
 /*    QVariantList data;
@@ -1082,7 +1083,7 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showBCWSCost = context.attribute( "show-bcws-cost", "1" ).toInt();
     m_chartinfo.showBCWPCost = context.attribute( "show-bcwp-cost", "1" ).toInt();
     m_chartinfo.showACWPCost = context.attribute( "show-acwp-cost", "1" ).toInt();
-    
+
     m_chartinfo.showEffort = context.attribute( "show-effort", "1" ).toInt();
     m_chartinfo.showBCWSEffort = context.attribute( "show-bcws-effort", "1" ).toInt();
     m_chartinfo.showBCWPEffort = context.attribute( "show-bcwp-effort", "1" ).toInt();
@@ -1097,7 +1098,7 @@ void PerformanceStatusBase::saveContext( QDomElement &context ) const
     context.setAttribute( "show-bcws-cost", m_chartinfo.showBCWSCost );
     context.setAttribute( "show-bcwp-cost", m_chartinfo.showBCWPCost );
     context.setAttribute( "show-acwp-cost", m_chartinfo.showACWPCost );
-    
+
     context.setAttribute( "show-effort",  m_chartinfo.showEffort );
     context.setAttribute( "show-bcws-effort", m_chartinfo.showBCWSEffort );
     context.setAttribute( "show-bcwp-effort", m_chartinfo.showBCWPEffort );
@@ -1116,10 +1117,10 @@ PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
     m_tree->setColumnsHidden( lst1 );
     m_tree->setSelectionMode( QAbstractItemView::ExtendedSelection );
     addWidget( m_tree );
-    
+
     m_chart = new PerformanceStatusBase( this );
     addWidget( m_chart );
-    
+
     connect( m_tree->selectionModel(), SIGNAL( selectionChanged( const QItemSelection &, const QItemSelection & ) ), SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
 }
 
@@ -1166,7 +1167,7 @@ void PerformanceStatusTreeView::setProject( Project *project )
 bool PerformanceStatusTreeView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    
+
     bool res = false;
     res = m_chart->loadContext( context.namedItem( "chart" ).toElement() );
     res &= m_tree->loadContext( nodeModel()->columnMap(), context.namedItem( "tree" ).toElement() );
@@ -1178,7 +1179,7 @@ void PerformanceStatusTreeView::saveContext( QDomElement &context ) const
     QDomElement c = context.ownerDocument().createElement( "chart" );
     context.appendChild( c );
     m_chart->saveContext( c );
-    
+
     QDomElement t = context.ownerDocument().createElement( "tree" );
     context.appendChild( t );
     m_tree->saveContext( nodeModel()->columnMap(), t );
@@ -1193,7 +1194,7 @@ PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent 
     l->setMargin( 0 );
     m_view = new PerformanceStatusTreeView( this );
     l->addWidget( m_view );
-    
+
     setupGui();
 
     connect( m_view->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
@@ -1217,7 +1218,7 @@ void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, 
     slotContextMenuRequested( node, pos );
 }
 
-Node *PerformanceStatusView::currentNode() const 
+Node *PerformanceStatusView::currentNode() const
 {
     return m_view->nodeModel()->node( m_view->treeView()->selectionModel()->currentIndex() );
 }
@@ -1304,7 +1305,7 @@ PerformanceStatusViewSettingsPanel::PerformanceStatusViewSettingsPanel( Performa
     m_view( view )
 {
     setupUi( this );
-    
+
     PerformanceChartInfo info = m_view->chartInfo();
 
     ui_linechart->setChecked( info.showLineChart );
@@ -1362,7 +1363,7 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
     setCurrentPage( page );
     //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    
+
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }
@@ -1377,7 +1378,7 @@ ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( PerformanceSta
     addPage( page );
 
     //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    
+
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }

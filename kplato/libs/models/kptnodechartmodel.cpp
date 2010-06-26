@@ -50,7 +50,7 @@ int ChartItemModel::columnCount( const QModelIndex &/*parent*/ ) const
     return 6;
 }
 
-int ChartItemModel::rowCount( const QModelIndex &parent ) const
+int ChartItemModel::rowCount( const QModelIndex &/*parent */) const
 {
     return startDate().daysTo( endDate() ) + 1;
 }

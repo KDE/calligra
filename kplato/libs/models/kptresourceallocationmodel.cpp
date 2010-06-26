@@ -119,9 +119,9 @@ QVariant ResourceAllocationModel::type( const Resource *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return res->typeToStringList( true );
-        case Role::EnumListValue: 
+        case Role::EnumListValue:
             return (int)res->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -139,9 +139,9 @@ QVariant ResourceAllocationModel::type( const ResourceGroup *res, int role ) con
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->typeToString( true );
-        case Role::EnumList: 
+        case Role::EnumList:
             return res->typeToStringList( true );
-        case Role::EnumListValue: 
+        case Role::EnumListValue:
             return (int)res->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -371,7 +371,7 @@ void ResourceAllocationItemModel::slotResourceToBeInserted( const ResourceGroup 
     beginInsertRows( index( group ), row, row );
 }
 
-void ResourceAllocationItemModel::slotResourceInserted( const Resource *resource )
+void ResourceAllocationItemModel::slotResourceInserted( const Resource */*resource */)
 {
     //kDebug()<<resource->name();
     endInsertRows();
@@ -385,19 +385,19 @@ void ResourceAllocationItemModel::slotResourceToBeRemoved( const Resource *resou
     beginRemoveRows( index( resource->parentGroup() ), row, row );
 }
 
-void ResourceAllocationItemModel::slotResourceRemoved( const Resource *resource )
+void ResourceAllocationItemModel::slotResourceRemoved( const Resource */*resource */)
 {
     //kDebug()<<resource->name();
     endRemoveRows();
 }
 
-void ResourceAllocationItemModel::slotResourceGroupToBeInserted( const ResourceGroup *group, int row )
+void ResourceAllocationItemModel::slotResourceGroupToBeInserted( const ResourceGroup */*group*/, int row )
 {
     //kDebug()<<group->name();
     beginInsertRows( QModelIndex(), row, row );
 }
 
-void ResourceAllocationItemModel::slotResourceGroupInserted( const ResourceGroup *group )
+void ResourceAllocationItemModel::slotResourceGroupInserted( const ResourceGroup */*group */)
 {
     //kDebug()<<group->name();
     endInsertRows();
@@ -410,7 +410,7 @@ void ResourceAllocationItemModel::slotResourceGroupToBeRemoved( const ResourceGr
     beginRemoveRows( QModelIndex(), row, row );
 }
 
-void ResourceAllocationItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
+void ResourceAllocationItemModel::slotResourceGroupRemoved( const ResourceGroup */*group */)
 {
     //kDebug()<<group->name();
     endRemoveRows();
@@ -421,45 +421,45 @@ void ResourceAllocationItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
-        
+
         disconnect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
-        
+
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         connect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceGroupToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupToBeRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupToBeRemoved( const ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceToBeAdded( const ResourceGroup*, int ) ), this, SLOT( slotResourceToBeInserted( const ResourceGroup*, int ) ) );
-        
+
         connect( m_project, SIGNAL( resourceToBeRemoved( const Resource* ) ), this, SLOT( slotResourceToBeRemoved( const Resource* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupAdded( const ResourceGroup* ) ), this, SLOT( slotResourceGroupInserted( const ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceGroupRemoved( const ResourceGroup* ) ), this, SLOT( slotResourceGroupRemoved( const ResourceGroup* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceAdded( const Resource* ) ), this, SLOT( slotResourceInserted( const Resource* ) ) );
-        
+
         connect( m_project, SIGNAL( resourceRemoved( const Resource* ) ), this, SLOT( slotResourceRemoved( const Resource* ) ) );
-    
+
     }
     m_model.setProject( m_project );
 }
@@ -552,7 +552,7 @@ QModelIndex ResourceAllocationItemModel::parent( const QModelIndex &index ) cons
         int row = m_project->indexOf(  r->parentGroup() );
         return createIndex( row, 0, r->parentGroup() );
     }
-    
+
     return QModelIndex();
 }
 
@@ -829,7 +829,7 @@ bool ResourceAllocationItemModel::setData( const QModelIndex &index, const QVari
     Resource *r = qobject_cast<Resource*>( obj );
     if ( r ) {
         switch (index.column()) {
-            case ResourceAllocationModel::RequestAllocation: 
+            case ResourceAllocationModel::RequestAllocation:
                 if ( setAllocation( r, value, role ) ) {
                     emit dataChanged( index, index );
                     QModelIndex idx = this->index( index.row(), ResourceAllocationModel::RequestAllocation, parent( parent( index ) ) );
@@ -940,7 +940,8 @@ const QList<Resource*> &ResourceAllocationItemModel::required( const QModelIndex
     Resource *r = resource( idx );
     Q_ASSERT( r );
     if ( m_resourceCache.contains( r ) ) {
-        return m_resourceCache[ r ]->requiredResources();
+        ResourceRequest* request = m_resourceCache[ r ];
+        return request->requiredResources();
     }
     return r->requiredResources();
 }

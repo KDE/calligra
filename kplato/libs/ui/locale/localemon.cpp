@@ -65,10 +65,10 @@ LocaleConfigMoney::LocaleConfigMoney(KLocale *locale,
 
 //   connect( m_edMonDecSym, SIGNAL( textChanged(const QString &) ),
 //            SLOT( slotMonDecSymChanged(const QString &) ) );
-// 
+//
 //   connect( m_edMonThoSep, SIGNAL( textChanged(const QString &) ),
 //            SLOT( slotMonThoSepChanged(const QString &) ) );
-// 
+//
    connect( m_inMonFraDig, SIGNAL( valueChanged(int) ),
             SLOT( slotMonFraDigChanged(int) ) );
 
@@ -89,7 +89,7 @@ LocaleConfigMoney::LocaleConfigMoney(KLocale *locale,
 
   m_inMonFraDig->setRange(0, 10, 1);
   m_inMonFraDig->setSliderEnabled(false);
-  
+
   slotTranslate();
   slotLocaleChanged();
 }
@@ -190,7 +190,7 @@ void LocaleConfigMoney::slotLocaleChanged()
 //  m_cmbMonDigSet->setCurrentIndex( m_locale->monetaryDigitSet() );
 }
 
-void LocaleConfigMoney::slotMonCurSymChanged(const QString &t)
+void LocaleConfigMoney::slotMonCurSymChanged(const QString &/*t*/)
 {
   //m_locale->setCurrencySymbol(t);
   emit localeChanged();
@@ -208,7 +208,7 @@ void LocaleConfigMoney::slotMonCurSymChanged(const QString &t)
 //   emit localeChanged();
 // }
 
-void LocaleConfigMoney::slotMonFraDigChanged(int value)
+void LocaleConfigMoney::slotMonFraDigChanged(int /*value*/)
 {
   //m_locale->setFracDigits(value);
   emit localeChanged();
@@ -226,13 +226,13 @@ void LocaleConfigMoney::slotMonNegPreCurSymChanged()
   emit localeChanged();
 }
 
-void LocaleConfigMoney::slotMonPosMonSignPosChanged(int i)
+void LocaleConfigMoney::slotMonPosMonSignPosChanged(int /*i*/)
 {
   //m_locale->setPositiveMonetarySignPosition((KLocale::SignPosition)i);
   emit localeChanged();
 }
 
-void LocaleConfigMoney::slotMonNegMonSignPosChanged(int i)
+void LocaleConfigMoney::slotMonNegMonSignPosChanged(int /*i*/)
 {
   //m_locale->setNegativeMonetarySignPosition((KLocale::SignPosition)i);
   emit localeChanged();

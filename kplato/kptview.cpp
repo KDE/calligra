@@ -219,7 +219,7 @@ View::View( Part* part, QWidget* parent )
 
     // ------ View
     actionCollection()->addAction( KStandardAction::Redisplay, "view_refresh" , this, SLOT( slotRefreshView() ) );
-    
+
     actionViewSelector  = new KToggleAction(i18n("Show Selector"), this);
     actionCollection()->addAction("view_show_selector", actionViewSelector );
     connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
@@ -338,7 +338,7 @@ View::View( Part* part, QWidget* parent )
     connect( &m_progressBarTimer, SIGNAL( timeout() ), this, SLOT( removeProgressBarItems() ) );
 
     connect( &getProject(), SIGNAL(sigCalculationStarted(Project*, ScheduleManager*)), this, SLOT(slotCalculationStarted(Project*, ScheduleManager*)));
-    
+
     connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
 
     connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
@@ -1269,10 +1269,10 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
 
     v->setProject( &getProject() );
     v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
-    
+
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     emit currentScheduleManagerChanged( currentScheduleManager() );
-    
+
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
     v->updateReadWrite( m_readWrite );
@@ -1581,7 +1581,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     m_progress = new QProgressBar();
     m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
 //    addStatusBarItem( m_progress, 0, true );
-    
+
     connect( project, SIGNAL( maxProgress( int ) ), this, SLOT( slotMaxProgress( int ) ) );
     connect( project, SIGNAL( sigProgress( int ) ), this, SLOT( slotSetProgress( int ) ) );
     connect( project, SIGNAL( sigCalculationFinished( Project*, ScheduleManager* ) ), this, SLOT( slotCalculationFinished( Project*, ScheduleManager* ) ) );
@@ -1604,7 +1604,7 @@ void View::slotSetProgress( int p )
     }
 }
 
-void View::slotCalculationStarted( Project *project, ScheduleManager *sm )
+void View::slotCalculationStarted( Project */*project*/, ScheduleManager */*sm */)
 {
 }
 
@@ -1833,7 +1833,7 @@ void View::slotConfigure()
 /*    connect(dialog, SIGNAL(settingsChanged(const QString&)), mainWidget, SLOT(loadSettings()));
     connect(dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));*/
     dialog->show();
-    
+
 }
 
 void View::slotIntroduction()
@@ -2457,7 +2457,7 @@ void View::slotDeleteResourceObjects( QObjectList lst )
         }
         return;
     }
-    int num = 0;
+//    int num = 0;
     MacroCommand *cmd = 0, *rc = 0, *gc = 0;
     foreach ( QObject *o, lst ) {
         Resource *r = qobject_cast<Resource*>( o );
@@ -2679,7 +2679,7 @@ void View::slotEditReportDesign( ReportView *view )
     dlg->activateWindow();
 }
 
-void View::slotReportDesignFinished( int result )
+void View::slotReportDesignFinished( int /*result */)
 {
     if ( sender() ) {
         sender()->deleteLater();
@@ -3087,7 +3087,7 @@ void View::slotPrintCalendarDebug()
     QDate date = QDate::currentDate();
     KDateTime z( date, QTime(0,0,0), KDateTime::UTC );
     KDateTime t( date, QTime(0,0,0), KDateTime::LocalZone );
-    
+
     qDebug()<<"Offset:"<<date<<z<<t<<z.secsTo_long( t );
     getPart() ->getProject().printCalendarDebug( "" );
 }

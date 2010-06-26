@@ -34,7 +34,7 @@ namespace KPlato
 {
 
 //-----------------------------------
-PertEditor::PertEditor( KoDocument *part, QWidget *parent ) 
+PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_project( 0 )
 {
@@ -43,25 +43,25 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
 
     m_tasktree = widget.taskList;
     m_tasktree->setSelectionMode( QAbstractItemView::SingleSelection );
-    
+
     m_availableList = widget.available;
     m_availableList->setSelectionMode( QAbstractItemView::SingleSelection );
-    
+
     m_requiredList = widget.required;
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
     connect( m_requiredList->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     updateReadWrite( part->isReadWrite() && ! part->isEmbedded() );
-    
+
     widget.addBtn->setIcon( KIcon( "arrow-right" ) );
     widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
     slotAvailableChanged( 0 );
     slotRequiredChanged( QModelIndex() );
-    
+
     connect( m_tasktree, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ), SLOT( slotCurrentTaskChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ) );
     connect( m_availableList, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ), SLOT( slotAvailableChanged( QTreeWidgetItem * ) ) );
     connect( m_requiredList->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), SLOT( slotRequiredChanged( const QModelIndex& ) ) );
-    
+
     connect( widget.addBtn, SIGNAL(clicked()), this, SLOT(slotAddClicked() ) );
     connect( widget.removeBtn, SIGNAL(clicked() ), this, SLOT(slotRemoveClicked() ) );
 
@@ -213,7 +213,7 @@ void PertEditor::slotNodeAdded( Node *node )
     item->setText( 0, node->name() );
     item->setData( 0, NodeRole, node->id() );
     pitem->insertChild( index, item );
-    
+
     pitem = findNodeItem( parent, m_availableList->invisibleRootItem() );
     if ( pitem == 0 ) {
         pitem = m_availableList->invisibleRootItem();
@@ -251,7 +251,7 @@ void PertEditor::slotNodeRemoved( Node *node )
     }
 }
 
-void PertEditor::slotNodeMoved( Node *node )
+void PertEditor::slotNodeMoved( Node */*node */)
 {
     //kDebug();
     draw();
@@ -315,7 +315,7 @@ QTreeWidgetItem *PertEditor::findNodeItem( Node *node, QTreeWidgetItem *item ) {
 }
 
 
-void PertEditor::dispAvailableTasks( Relation *rel ){
+void PertEditor::dispAvailableTasks( Relation */*rel*/ ){
     dispAvailableTasks();
 }
 
@@ -345,9 +345,9 @@ void PertEditor::dispAvailableTasks()
         return;
     }
     Node *selectedTask = itemToNode( m_tasktree->currentItem() );
-    
+
     loadRequiredTasksList(selectedTask);
-    
+
     dispAvailableTasks( m_project, selectedTask );
 }
 
@@ -374,7 +374,7 @@ void PertEditor::setAvailableItemEnabled( QTreeWidgetItem *item )
     if ( node == 0 ) {
         return;
     }
-    
+
     Node *selected = itemToNode( m_tasktree->currentItem() );
     if ( selected == 0 || ! m_project->legalToLink( node, selected ) ) {
         //kDebug()<<"Disable:"<<node->name();

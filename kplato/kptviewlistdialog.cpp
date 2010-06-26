@@ -45,7 +45,7 @@ ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *p
     m_panel = new AddViewPanel( view, viewlist, this );
 
     setMainWidget( m_panel );
-    
+
     enableButtonOk(false);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
@@ -75,7 +75,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
       m_viewtipChanged( false )
 {
     widget.setupUi( this );
-    
+
     // NOTE: these lists must match switch in ok() FIXME: refactor
     m_viewtypes << "ResourceEditor"
             << "TaskEditor"
@@ -119,7 +119,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Tasks by Resources" );
     */
     widget.viewtype->addItems( lst );
-    
+
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
         m_categories.insert( item->text( 0 ), item );
     }
@@ -183,7 +183,7 @@ void AddViewPanel::fillAfter( ViewListItem *cat )
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
-        int idx = 0;
+//        int idx = 0;
         for ( int i = 0; i < cat->childCount(); ++i ) {
             ViewListItem *itm = static_cast<ViewListItem*>( cat->child( i ) );
             widget.insertAfter->addItem( itm->text( 0 ), QVariant::fromValue( (void*)itm ) );
@@ -202,7 +202,7 @@ bool AddViewPanel::ok()
     QString n = widget.category->currentText();
     ViewListItem *curr = m_categories.value( n );
     QString c = curr == 0 ? n : curr->tag();
-    
+
     ViewListItem *cat = m_viewlist.addCategory( c, n );
     if ( cat == 0 ) {
         return false;
@@ -287,7 +287,7 @@ ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewLi
     m_panel = new EditViewPanel( viewlist, item, this );
 
     setMainWidget( m_panel );
-    
+
     enableButtonOk(false);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
@@ -313,10 +313,10 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
       m_viewlist( viewlist )
 {
     widget.setupUi( this );
-    
+
     widget.viewname->setText( item->text( 0 ) );
     widget.tooltip->setText( item->toolTip( 0 ) );
-    
+
     QList<ViewListItem*> lst = m_viewlist.categories();
     if ( ! lst.isEmpty() ) {
         int idx = 0;
@@ -330,7 +330,7 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
         }
         widget.category->setCurrentIndex( idx );
     }
-    
+
     connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
@@ -352,7 +352,7 @@ bool EditViewPanel::ok()
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();
     m_viewlist.addViewListItem( m_item, cat, index );
-    
+
     return true;
 }
 
@@ -400,7 +400,7 @@ ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist
     m_panel = new EditCategoryPanel( viewlist, item, this );
 
     setMainWidget( m_panel );
-    
+
     enableButtonOk(false);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
@@ -426,12 +426,12 @@ EditCategoryPanel::EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *it
       m_viewlist( viewlist )
 {
     widget.setupUi( this );
-    
+
     widget.viewname->setText( item->text( 0 ) );
     widget.tooltip->setText( item->toolTip( 0 ) );
-    
+
     fillAfter();
-    
+
     connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
@@ -448,7 +448,7 @@ bool EditCategoryPanel::ok()
     m_viewlist.removeViewListItem( m_item );
     int index = widget.insertAfter->currentIndex();
     m_viewlist.addViewListItem( m_item, 0, index );
-    
+
     return true;
 }
 
@@ -487,7 +487,7 @@ ViewListReportsDialog::ViewListReportsDialog( View *view, ViewListWidget &viewli
     m_panel = new AddReportsViewPanel( view, viewlist, this );
 
     setMainWidget( m_panel );
-    
+
     enableButtonOk(true);
 
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
@@ -517,13 +517,13 @@ AddReportsViewPanel::AddReportsViewPanel( View *view, ViewListWidget &viewlist, 
       m_viewtipChanged( false )
 {
     widget.setupUi( this );
-    
+
     // NOTE: these lists must match switch in ok() FIXME: refactor
     m_viewtypes << "ReportView";
     QStringList lst;
     lst << i18n( "Report" );
     widget.viewtype->addItems( lst );
-    
+
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
         m_categories.insert( item->text( 0 ), item );
     }
@@ -587,7 +587,7 @@ void AddReportsViewPanel::fillAfter( ViewListItem *cat )
     widget.insertAfter->clear();
     if ( cat ) {
         widget.insertAfter->addItem( i18n( "Top" ) );
-        int idx = 0;
+//        int idx = 0;
         for ( int i = 0; i < cat->childCount(); ++i ) {
             ViewListItem *itm = static_cast<ViewListItem*>( cat->child( i ) );
             widget.insertAfter->addItem( itm->text( 0 ), QVariant::fromValue( (void*)itm ) );
@@ -606,7 +606,7 @@ bool AddReportsViewPanel::ok()
     QString n = widget.category->currentText();
     ViewListItem *curr = m_categories.value( n );
     QString c = curr == 0 ? n : curr->tag();
-    
+
     ViewListItem *cat = m_viewlist.addCategory( c, n );
     if ( cat == 0 ) {
         return false;

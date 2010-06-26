@@ -64,7 +64,7 @@ HtmlView::HtmlView( KoDocument *part, QWidget *parent )
 }
 
 
-void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &arguments, const KParts::BrowserArguments &browserArguments)
+void HtmlView::slotOpenUrlRequest(const KUrl &url, const KParts::OpenUrlArguments &/*arguments*/, const KParts::BrowserArguments &/*browserArguments*/)
 {
     emit openUrlRequest( this, url );
 }
@@ -74,7 +74,7 @@ bool HtmlView::openHtml( const KUrl &url )
     return m_htmlPart.openUrl( url );
 }
 
-void HtmlView::updateReadWrite( bool readwrite )
+void HtmlView::updateReadWrite( bool /*readwrite */)
 {
 }
 
@@ -83,7 +83,7 @@ void HtmlView::setGuiActive( bool activate )
     kDebug()<<activate;
 }
 
-void HtmlView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
+void HtmlView::slotContextMenuRequested( QModelIndex /*index*/, const QPoint& /*pos */)
 {
     //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
 }
@@ -93,7 +93,7 @@ void HtmlView::slotEnableActions( bool on )
     updateActionsEnabled( on );
 }
 
-void HtmlView::updateActionsEnabled(  bool on )
+void HtmlView::updateActionsEnabled(  bool /*on */)
 {
 }
 

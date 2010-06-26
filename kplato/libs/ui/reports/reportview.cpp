@@ -154,7 +154,7 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
     connect(m_pageSelector->ui_first, SIGNAL(clicked()), this, SLOT(firstPage()));
     connect(m_pageSelector->ui_last, SIGNAL(clicked()), this, SLOT(lastPage()));
     connect(m_pageSelector->ui_selector, SIGNAL(valueChanged(int)), SLOT(renderPage(int)));
-    
+
     refresh();
 }
 
@@ -163,7 +163,7 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     QMap<QString, QAbstractItemModel*> map;
     QSortFilterProxyModel *sf = 0;
     ItemModelBase *m = 0;
-    
+
     QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
     sf = new QSortFilterProxyModel( parent );
     sf->setFilterKeyColumn( NodeModel::NodeType );
@@ -178,7 +178,7 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
     map.insert( "tasks", sf );
-    
+
     //QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
     sf = new QSortFilterProxyModel( parent );
     sf->setFilterKeyColumn( NodeModel::NodeType );
@@ -362,7 +362,7 @@ void ReportView::exportToXHtml( KoReportRendererContext &context )
 
 void ReportView::setupGui()
 {
-    KActionCollection *coll = actionCollection();
+    /*KActionCollection *coll = actionCollection();*/
     KAction *a = 0;
     QString name = "reportview_list";
 
@@ -410,7 +410,7 @@ void ReportView::refresh()
     ReportData *rd = createReportData( e );
     m_preRenderer->setSourceData( rd );
     m_preRenderer->registerScriptObject(new ProjectAccess( rd ), "project");
-    
+
     m_reportDocument = m_preRenderer->generate();
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
     m_pageSelector->setCurrentPage( 1 );
@@ -423,7 +423,7 @@ void ReportView::refresh()
 
 ReportData *ReportView::createReportData( const QDomElement &element )
 {
-    // get the data source 
+    // get the data source
     QDomElement e = element.firstChildElement( "data-source" );
     QString modelname = e.attribute( "select-from" );
 
@@ -478,11 +478,11 @@ ReportNavigator::ReportNavigator( QWidget *parent )
     ui_last->setIcon( KIcon( "go-last-view-page" ) );
     ui_prev->setIcon( KIcon( "go-previous-view-page" ) );
     ui_next->setIcon( KIcon( "go-next-view-page" ) );
-    
+
     connect( ui_max, SIGNAL(valueChanged(int)), SLOT(slotMaxChanged(int)));
-    
+
     connect( ui_selector, SIGNAL(valueChanged(int)), SLOT(setButtonsEnabled()) );
-    
+
     ui_max->setValue( 1 );
 }
 
@@ -536,11 +536,11 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     setButtonIcon( KDialog::User1, KIcon( "window-new" ) );
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
-    
+
     m_panel = new ReportDesignPanel( project, manager, element, models, this );
 
     setMainWidget( m_panel );
-    
+
     connect( this, SIGNAL( user1Clicked() ), SLOT( slotSaveToView() ) );
     connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
 }
@@ -565,7 +565,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     m_panel = new ReportDesignPanel( project, manager, e, models, this );
 
     setMainWidget( m_panel );
-    
+
     connect( this, SIGNAL( user1Clicked() ), SLOT( slotSaveToView() ) );
     connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
 }
@@ -679,9 +679,9 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     m_sourceeditor = new ReportSourceEditor( sp2 );
     ReportSourceModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
-    
+
     m_propertyeditor = new KoProperty::EditorView( sp2 );
-    
+
     QScrollArea *sa = new QScrollArea( sp1 );
     m_designer = new KoReportDesigner( sa );
     sa->setWidget( m_designer );
@@ -720,7 +720,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     }
 }
 
-ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
+ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*manager*/, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent )
     : QWidget( parent ),
     m_modified( false )
 {
@@ -739,9 +739,9 @@ ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager
     ReportSourceModel *model = createSourceModel( m_sourceeditor );
     m_sourceeditor->setModel( model );
     m_sourceeditor->setSourceData( element.firstChildElement( "data-source" ) );
-    
+
     m_propertyeditor = new KoProperty::EditorView( sp2 );
-    
+
     QScrollArea *sa = new QScrollArea( sp1 );
     QDomElement e = element.firstChildElement( "report:content" );
     if ( e.isNull() ) {
@@ -754,7 +754,7 @@ ReportDesignPanel::ReportDesignPanel( Project *project, ScheduleManager *manager
     m_modelmap = models;
     m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
     slotPropertySetChanged();
-    
+
     connect( model, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
 
     connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
@@ -863,19 +863,19 @@ ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
     item->setEditable( false );
     int sfPos = lst.count();
     lst << item;
-    
+
     foreach ( QStandardItem *i, lst ) {
         m->setItem( lst.indexOf( i ), i );
         i->setEditable( false );
     }
-    int row = 0;
+//    int row = 0;
 /*    item = new QStandardItem( "KPlato Project" );
     item->setData( "KPlato Project" );
     m->setItem( row++, 1, item );
     item = new QStandardItem( "Internal" );
     item->setData( "Internal" );
     m->setItem( row++, 1, item );*/
-    
+
     // Child items
     QList<QStandardItem*> children;
     children << new QStandardItem( i18n( "Tasks" ) ) << new QStandardItem();
@@ -901,7 +901,7 @@ ReportSourceModel *ReportDesignPanel::createSourceModel( QObject *parent ) const
 //     children[ 1 ]->setCheckable( true );
 //     lst[ sfPos ]->appendRow( children );
 //     children.clear();
-// 
+//
 //     children << new QStandardItem( "Resourcegroups" ) << new QStandardItem();
 //     children[ 0 ]->setData( "resourcegroups", Reports::TagRole );
 //     children[ 1 ]->setCheckable( true );
@@ -931,7 +931,7 @@ ReportSourceModel::ReportSourceModel( int rows, int columns, QObject *parent )
     connect( this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SLOT( slotSourceChanged( const QModelIndex&, const QModelIndex& ) ) );
 }
 
-void ReportSourceModel::slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
+void ReportSourceModel::slotSourceChanged( const QModelIndex &topLeft, const QModelIndex &/*bottomRight */)
 {
     QModelIndex parent = topLeft.parent();
     if ( ! parent.isValid() ) {
