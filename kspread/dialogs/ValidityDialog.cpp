@@ -50,6 +50,10 @@
 
 using namespace KSpread;
 
+Q_DECLARE_METATYPE(Conditional::Type)
+Q_DECLARE_METATYPE(Validity::Action)
+Q_DECLARE_METATYPE(Validity::Restriction)
+
 ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
         : KPageDialog(parent)
 
@@ -75,16 +79,14 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     chooseType = new KComboBox(page1);
     tmpGridLayout->addWidget(chooseType, 0, 1);
-    QStringList listType;
-    listType += i18n("All");
-    listType += i18n("Number");
-    listType += i18n("Integer");
-    listType += i18n("Text");
-    listType += i18n("Date");
-    listType += i18n("Time");
-    listType += i18n("Text Length");
-    listType += i18n("List");
-    chooseType->insertItems(0, listType);
+    chooseType->addItem(i18n("All"), QVariant::fromValue(Validity::None));
+    chooseType->addItem(i18n("Number"), QVariant::fromValue(Validity::Number));
+    chooseType->addItem(i18n("Integer"), QVariant::fromValue(Validity::Integer));
+    chooseType->addItem(i18n("Text"), QVariant::fromValue(Validity::Text));
+    chooseType->addItem(i18n("Date"), QVariant::fromValue(Validity::Date));
+    chooseType->addItem(i18n("Time"), QVariant::fromValue(Validity::Time));
+    chooseType->addItem(i18n("Text Length"), QVariant::fromValue(Validity::TextLength));
+    chooseType->addItem(i18n("List"), QVariant::fromValue(Validity::List));
     chooseType->setCurrentIndex(0);
 
     allowEmptyCell = new QCheckBox(i18n("Allow blanks"), page1);
@@ -96,16 +98,14 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     choose = new KComboBox(page1);
     tmpGridLayout->addWidget(choose, 2, 1);
-    QStringList list;
-    list += i18n("equal to");
-    list += i18n("greater than");
-    list += i18n("less than");
-    list += i18n("equal to or greater than");
-    list += i18n("equal to or less than");
-    list += i18n("between");
-    list += i18n("different from");
-    list += i18n("different to");
-    choose->insertItems(0, list);
+    choose->addItem(i18n("equal to"), QVariant::fromValue(Conditional::Equal));
+    choose->addItem(i18n("greater than"), QVariant::fromValue(Conditional::Superior));
+    choose->addItem(i18n("less than"), QVariant::fromValue(Conditional::Inferior));
+    choose->addItem(i18n("equal to or greater than"), QVariant::fromValue(Conditional::SuperiorEqual));
+    choose->addItem(i18n("equal to or less than"), QVariant::fromValue(Conditional::InferiorEqual));
+    choose->addItem(i18n("between"), QVariant::fromValue(Conditional::Between));
+    choose->addItem(i18n("different from"), QVariant::fromValue(Conditional::Different));
+    choose->addItem(i18n("different to"), QVariant::fromValue(Conditional::DifferentTo));
     choose->setCurrentIndex(0);
 
     edit1 = new QLabel(page1);
@@ -172,11 +172,9 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     chooseAction = new KComboBox(page2);
     tmpGridLayout->addWidget(chooseAction, 1, 1);
-    QStringList list2;
-    list2 += i18n("Stop");
-    list2 += i18n("Warning");
-    list2 += i18n("Information");
-    chooseAction->insertItems(0, list2);
+    chooseAction->addItem(i18n("Stop"), QVariant::fromValue(Validity::Stop));
+    chooseAction->addItem(i18n("Warning"), QVariant::fromValue(Validity::Warning));
+    chooseAction->addItem(i18n("Information"), QVariant::fromValue(Validity::Information));
     chooseAction->setCurrentIndex(0);
 
     tmpQLabel = new QLabel(page2);
@@ -454,49 +452,8 @@ void ValidityDialog::init()
             chooseType->setCurrentIndex(0);
             break;
         }
-        switch (validity.action()) {
-        case Validity::Stop:
-            chooseAction->setCurrentIndex(0);
-            break;
-        case Validity::Warning:
-            chooseAction->setCurrentIndex(1);
-            break;
-        case Validity::Information:
-            chooseAction->setCurrentIndex(2);
-            break;
-        default :
-            chooseAction->setCurrentIndex(0);
-            break;
-        }
-        switch (validity.condition()) {
-        case Conditional::Equal:
-            choose->setCurrentIndex(0);
-            break;
-        case Conditional::Superior:
-            choose->setCurrentIndex(1);
-            break;
-        case Conditional::Inferior:
-            choose->setCurrentIndex(2);
-            break;
-        case Conditional::SuperiorEqual:
-            choose->setCurrentIndex(3);
-            break;
-        case Conditional::InferiorEqual:
-            choose->setCurrentIndex(4);
-            break;
-        case Conditional::Between:
-            choose->setCurrentIndex(5);
-            break;
-        case Conditional::Different:
-            choose->setCurrentIndex(6);
-            break;
-        case Conditional::DifferentTo:
-            choose->setCurrentIndex(7);
-            break;
-        default :
-            choose->setCurrentIndex(0);
-            break;
-        }
+        chooseAction->setCurrentIndex(chooseAction->findData(QVariant::fromValue(validity.action())));
+        choose->setCurrentIndex(choose->findData(QVariant::fromValue(validity.condition())));
         displayMessage->setChecked(validity.displayMessage());
         allowEmptyCell->setChecked(validity.allowEmptyCell());
         titleHelp->setText(validity.titleInfo());
@@ -594,76 +551,9 @@ void ValidityDialog::OkPressed()
         validity.setMinimumValue(Value());
         validity.setMaximumValue(Value());
     } else {
-        switch (chooseType->currentIndex()) {
-        case 0:
-            validity.setRestriction(Validity::None);
-            break;
-        case 1:
-            validity.setRestriction(Validity::Number);
-            break;
-        case 2:
-            validity.setRestriction(Validity::Integer);
-            break;
-        case 3:
-            validity.setRestriction(Validity::Text);
-            break;
-        case 4:
-            validity.setRestriction(Validity::Date);
-            break;
-        case 5:
-            validity.setRestriction(Validity::Time);
-            break;
-        case 6:
-            validity.setRestriction(Validity::TextLength);
-            break;
-        case 7:
-            validity.setRestriction(Validity::List);
-            break;
-
-        default :
-            break;
-        }
-        switch (chooseAction->currentIndex()) {
-        case 0:
-            validity.setAction(Validity::Stop);
-            break;
-        case 1:
-            validity.setAction(Validity::Warning);
-            break;
-        case 2:
-            validity.setAction(Validity::Information);
-            break;
-        default :
-            break;
-        }
-        switch (choose->currentIndex()) {
-        case 0:
-            validity.setCondition(Conditional::Equal);
-            break;
-        case 1:
-            validity.setCondition(Conditional::Superior);
-            break;
-        case 2:
-            validity.setCondition(Conditional::Inferior);
-            break;
-        case 3:
-            validity.setCondition(Conditional::SuperiorEqual);
-            break;
-        case 4:
-            validity.setCondition(Conditional::InferiorEqual);
-            break;
-        case 5:
-            validity.setCondition(Conditional::Between);
-            break;
-        case 6:
-            validity.setCondition(Conditional::Different);
-            break;
-        case 7:
-            validity.setCondition(Conditional::DifferentTo);
-            break;
-        default :
-            break;
-        }
+        validity.setRestriction(chooseType->itemData(chooseType->currentIndex()).value<Validity::Restriction>());
+        validity.setAction(chooseAction->itemData(chooseAction->currentIndex()).value<Validity::Action>());
+        validity.setCondition(choose->itemData(choose->currentIndex()).value<Conditional::Type>());
         validity.setMessage(message->toPlainText());
         validity.setTitle(title->text());
         validity.setMinimumValue(Value());
