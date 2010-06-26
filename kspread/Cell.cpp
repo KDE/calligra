@@ -59,7 +59,6 @@
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "Style.h"
