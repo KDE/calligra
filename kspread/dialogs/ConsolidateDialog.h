@@ -46,6 +46,15 @@ class Sheet;
 /**
  * \ingroup UI
  * Dialog to consolidate cell values.
+ *
+ * How it works:
+ * \li source cell ranges have to be of the same size
+ * \li the function works with the relative (unless headers are defined) cell
+ * references in the source cell ranges
+ * \li the first columns/rows can be handled as headers: then, the function is
+ * only applied to values, that have the same headings
+ * \li optionally you can link to the source data: then, formulas are used in
+ * the target cell range. Otherwise, only the formula results get stored.
  */
 class ConsolidateDialog : public KDialog
 {
