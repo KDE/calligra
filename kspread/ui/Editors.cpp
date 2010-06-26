@@ -569,8 +569,6 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
     // A choose should always start at the edited cell
 //  selection()->setChooseMarkerRow( selection()->d->selection->marker().y() );
 //  selection()->setChooseMarkerColumn( selection()->d->selection->marker().x() );
-
-    connect(d->selection, SIGNAL(destroyed()), SLOT(slotSelectionDestroyed()));
 }
 
 CellEditor::~CellEditor()
@@ -1023,8 +1021,9 @@ void CellEditor::updateChoice()
     d->updatingChoice = false;
 }
 
-void CellEditor::resizeEvent(QResizeEvent*)
+void CellEditor::resizeEvent(QResizeEvent *event)
 {
+    QWidget::resizeEvent(event);
     d->textEdit->setGeometry(0, 0, width(), height());
 }
 
@@ -1189,12 +1188,6 @@ void CellEditor::setCursorToRange(uint pos)
         }
     }
     d->updatingChoice = false;
-}
-
-void CellEditor::slotSelectionDestroyed()
-{
-    kDebug() << "editor destroyed";
-    d->selection = 0;
 }
 
 /*****************************************************************************

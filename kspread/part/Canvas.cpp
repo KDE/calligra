@@ -545,16 +545,18 @@ void Canvas::paintEvent(QPaintEvent* event)
     event->accept();
 }
 
-void Canvas::focusInEvent(QFocusEvent*)
+void Canvas::focusInEvent(QFocusEvent *event)
 {
     // If we are in editing mode, we redirect the
     // focus to the CellEditor or ExternalEditor.
     // This screws up <Tab> though (David)
     selection()->emitRequestFocusEditor();
+    QWidget::focusInEvent(event);
 }
 
-void Canvas::focusOutEvent(QFocusEvent*)
+void Canvas::focusOutEvent(QFocusEvent *event)
 {
+    QWidget::focusOutEvent(event);
 }
 
 void Canvas::dragEnterEvent(QDragEnterEvent* event)

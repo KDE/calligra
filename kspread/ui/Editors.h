@@ -233,7 +233,6 @@ private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged();
-    void  slotSelectionDestroyed();
 
 protected:
     void resizeEvent(QResizeEvent*);
