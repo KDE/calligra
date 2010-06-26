@@ -23,23 +23,17 @@
 #ifndef KSPREAD_SUBTOTAL_DIALOG
 #define KSPREAD_SUBTOTAL_DIALOG
 
-#include <QRect>
-
-#include <kdialog.h>
-
-#include <ui_SubtotalWidget.h>
-
+#include <KDialog>
 
 namespace KSpread
 {
 class Selection;
-class Sheet;
 
 /**
  * \ingroup UI
  * Dialog to add subtotals.
  */
-class SubtotalDialog : public KDialog, public ::Ui::SubtotalWidget
+class SubtotalDialog : public KDialog
 {
     Q_OBJECT
 
@@ -47,28 +41,22 @@ public:
     SubtotalDialog(QWidget* parent, Selection* selection);
     ~SubtotalDialog();
 
-    QRect const & selection() const {
-        return m_range;
-    }
-    Sheet * sheet() const {
-        return m_pSheet;
-    }
+public Q_SLOTS: // reimplemented
+    virtual void accept();
+    virtual void reject();
 
-private slots:
-    void slotOk();
-    void slotCancel();
+private Q_SLOTS:
     void slotUser1();
 
 private:
-    Selection *      m_selection;
-    Sheet *          m_pSheet;
-    QRect            m_range;
-
     void fillColumnBoxes();
     void fillFunctionBox();
     void removeSubtotalLines();
     bool addSubtotal(int mainCol, int column, int row, int topRow,
                      bool addRow, QString const & text);
+
+    class Private;
+    Private *const d;
 };
 
 } // namespace KSpread

@@ -22,6 +22,9 @@
 // Local
 #include "SubtotalDialog.h"
 
+#include "ui_SubtotalWidget.h"
+#include "ui_SubtotalsDetailsWidget.h"
+
 // Qt
 #include <QCheckBox>
 #include <QListWidget>
@@ -42,42 +45,54 @@
 
 using namespace KSpread;
 
-SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
-        : KDialog(parent),
-        m_selection(selection),
-        m_pSheet(m_selection->activeSheet()),
-        m_range(selection->lastRange())
+class SubtotalDialog::Private
 {
+public:
+    Selection *selection;
+    Ui::SubtotalsWidget mainWidget;
+    Ui::SubtotalsDetailsWidget detailsWidget;
+};
+
+SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
+        : KDialog(parent)
+        , d(new Private)
+{
+    d->selection = selection;
+
     setCaption(i18n("Subtotals"));
-    setButtons(Ok | Cancel | User1);
+    setButtons(Ok | Cancel | Details | User1);
     setButtonGuiItem(User1, KGuiItem(i18n("Remove All")));
-    setButtonsOrientation(Qt::Vertical);
 
     QWidget* widget = new QWidget(this);
-    setupUi(widget);
+    d->mainWidget.setupUi(widget);
     setMainWidget(widget);
+
+    widget = new QWidget(this);
+    d->detailsWidget.setupUi(widget);
+    setDetailsWidget(widget);
 
     fillColumnBoxes();
     fillFunctionBox();
     connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()));
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancel()));
-
 }
 
 SubtotalDialog::~SubtotalDialog()
 {
+    delete d;
 }
 
-void SubtotalDialog::slotOk()
+void SubtotalDialog::accept()
 {
-    int numOfCols = m_range.width();
+    Sheet *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
+
+    int numOfCols = range.width();
     QVector<int> columns(numOfCols);
 
     bool empty = true;
-    int left = m_range.left();
-    for (int i = 0; i < m_columnList->count(); ++i) {
-        QListWidgetItem* item = m_columnList->item(i);
+    int left = range.left();
+    for (int i = 0; i < d->mainWidget.m_columnList->count(); ++i) {
+        QListWidgetItem* item = d->mainWidget.m_columnList->item(i);
         if (item->checkState() == Qt::Checked) {
             columns[i] = left + i;
             empty = false;
@@ -90,26 +105,26 @@ void SubtotalDialog::slotOk()
         return;
     }
 
-    if (m_replaceSubtotals->isChecked())
+    if (d->detailsWidget.m_replaceSubtotals->isChecked())
         removeSubtotalLines();
 
-    int mainCol = left + m_columnBox->currentIndex();
-    int bottom = m_range.bottom();
-    int top    = m_range.top();
-    left       = m_range.left();
-    QString oldText = Cell(m_pSheet, mainCol, top).displayText();
+    int mainCol = left + d->mainWidget.m_columnBox->currentIndex();
+    int bottom = range.bottom();
+    int top    = range.top();
+    left       = range.left();
+    QString oldText = Cell(sheet, mainCol, top).displayText();
     QString newText;
     QString result(' ' + i18n("Result"));
     int lastChangedRow = top;
 
-    bool ignoreEmptyCells = m_IgnoreBox->isChecked();
+    bool ignoreEmptyCells = d->detailsWidget.m_IgnoreBox->isChecked();
     bool addRow;
-    if (!m_summaryOnly->isChecked()) {
+    if (!d->detailsWidget.m_summaryOnly->isChecked()) {
         int y = top + 1;
         kDebug() << "Starting in row" << y;
         while (y <= bottom) {
             addRow = true;
-            newText = Cell(m_pSheet, mainCol, y).displayText();
+            newText = Cell(sheet, mainCol, y).displayText();
 
             if (ignoreEmptyCells && (newText.length() == 0)) {
                 ++y;
@@ -151,9 +166,9 @@ void SubtotalDialog::slotOk()
         ++y;
     }
 
-    if (m_summaryBelow->isChecked()) {
+    if (d->detailsWidget.m_summaryBelow->isChecked()) {
         addRow = true;
-        int bottom = m_range.bottom();
+        int bottom = range.bottom();
         for (int x = 0; x < numOfCols; ++x) {
             if (columns[x] != -1) {
                 addSubtotal(mainCol, columns[x], bottom, top, addRow, i18n("Grand Total"));
@@ -162,38 +177,39 @@ void SubtotalDialog::slotOk()
         }
     }
 
-    m_selection->emitModified();
-    accept();
+    KDialog::accept();
 }
 
-void SubtotalDialog::slotCancel()
+void SubtotalDialog::reject()
 {
-    reject();
+    KDialog::reject();
 }
 
 void SubtotalDialog::slotUser1()
 {
     removeSubtotalLines();
-    m_selection->emitModified();
-    accept();
+    KDialog::accept();
 }
 
 void SubtotalDialog::removeSubtotalLines()
 {
     kDebug() << "Removing subtotal lines";
 
-    int r = m_range.right();
-    int l = m_range.left();
-    int t = m_range.top();
+    Sheet *const sheet = d->selection->lastSheet();
+    QRect range = d->selection->lastRange();
+
+    int r = range.right();
+    int l = range.left();
+    int t = range.top();
 
     Cell cell;
     QString text;
 
-    for (int y = m_range.bottom(); y >= t; --y) {
+    for (int y = range.bottom(); y >= t; --y) {
         kDebug() << "Checking row:" << y;
         bool containsSubtotal = false;
         for (int x = l; x <= r; ++x) {
-            cell = Cell(m_pSheet, x, y);
+            cell = Cell(sheet, x, y);
             if (!cell.isFormula())
                 continue;
 
@@ -206,24 +222,29 @@ void SubtotalDialog::removeSubtotalLines()
 
         if (containsSubtotal) {
             kDebug() << "Line" << y << " contains a subtotal";
-            QRect rect(l, y, m_range.width(), 1);
+            QRect rect(l, y, range.width(), 1);
 
             ShiftManipulator* manipulator = new ShiftManipulator();
-            manipulator->setSheet(m_pSheet);
+            manipulator->setSheet(sheet);
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
             manipulator->setReverse(true);
             manipulator->add(Region(rect));
-            manipulator->execute(m_selection->canvas());
-            m_range.setHeight(m_range.height() - 1);
+            manipulator->execute(d->selection->canvas());
+            range.setHeight(range.height() - 1);
         }
     }
+
+    d->selection->initialize(range, sheet);
     kDebug() << "Done removing subtotals";
 }
 
 void SubtotalDialog::fillColumnBoxes()
 {
-    int r = m_range.right();
-    int row = m_range.top();
+    Sheet *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
+
+    int r = range.right();
+    int row = range.top();
 
     Cell cell;
     QListWidgetItem * item;
@@ -231,8 +252,8 @@ void SubtotalDialog::fillColumnBoxes()
     QString text;
 
     int index = 0;
-    for (int i = m_range.left(); i <= r; ++i) {
-        cell = Cell(m_pSheet, i, row);
+    for (int i = range.left(); i <= r; ++i) {
+        cell = Cell(sheet, i, row);
         text = cell.displayText();
 
         //if ( text.length() > 0 )
@@ -240,12 +261,12 @@ void SubtotalDialog::fillColumnBoxes()
             text = i18n("Column '%1' ", Cell::columnName(i));
         }
 
-        m_columnBox->insertItem(index++, text);
+        d->mainWidget.m_columnBox->insertItem(index++, text);
 
         item = new QListWidgetItem(text);
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setCheckState(Qt::Unchecked);
-        m_columnList->addItem(item);
+        d->mainWidget.m_columnList->addItem(item);
     }
 }
 
@@ -263,25 +284,28 @@ void SubtotalDialog::fillFunctionBox()
     lst << i18n("Sum");
     lst << i18n("Var");
     lst << i18n("VarP");
-    m_functionBox->insertItems(0, lst);
+    d->mainWidget.m_functionBox->insertItems(0, lst);
 }
 
 bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
                                  bool addRow, QString const & text)
 {
+    Sheet *const sheet = d->selection->lastSheet();
+    QRect range = d->selection->lastRange();
+
     kDebug() << "Adding subtotal:" << mainCol << "," << column << ", Rows:" << row << "," << topRow
     << ": addRow: " << addRow << ", Text: " << text << endl;
     if (addRow) {
-        QRect rect(m_range.left(), row + 1, m_range.width(), 1);
+        QRect rect(range.left(), row + 1, range.width(), 1);
         ShiftManipulator* manipulator = new ShiftManipulator();
-        manipulator->setSheet(m_pSheet);
+        manipulator->setSheet(sheet);
         manipulator->setDirection(ShiftManipulator::ShiftBottom);
         manipulator->add(Region(rect));
-        manipulator->execute(m_selection->canvas());
+        manipulator->execute(d->selection->canvas());
 
-        m_range.setHeight(m_range.height() + 1);
+        range.setHeight(range.height() + 1);
 
-        Cell cell = Cell(m_pSheet, mainCol, row + 1);
+        Cell cell = Cell(sheet, mainCol, row + 1);
         cell.parseUserInput(text);
         Style style;
         style.setFontBold(true);
@@ -293,7 +317,7 @@ bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
     QString colName = Cell::columnName(column);
 
     QString formula("=SUBTOTAL(");
-    formula += QString::number(m_functionBox->currentIndex() + 1);
+    formula += QString::number(d->mainWidget.m_functionBox->currentIndex() + 1);
     formula += "; ";
     formula += colName;
     formula += QString::number(topRow);
@@ -305,13 +329,15 @@ bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
     }
     formula += ')';
 
-    Cell cell = Cell(m_pSheet, column, row + 1);
+    Cell cell = Cell(sheet, column, row + 1);
     cell.parseUserInput(formula);
     Style style;
     style.setFontBold(true);
     style.setFontItalic(true);
     style.setFontUnderline(true);
     cell.setStyle(style);
+
+    d->selection->initialize(range, sheet);
     return true;
 }
 

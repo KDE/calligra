@@ -106,6 +106,7 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 	dialogs/ProtectionWidget.ui
 	dialogs/SpecialPasteWidget.ui
 	dialogs/SubtotalWidget.ui
+        dialogs/SubtotalsDetailsWidget.ui
 	)
 
 SET (functions_DIR_SRCS

@@ -2778,10 +2778,7 @@ void CellToolBase::subtotals()
     }
 
     SubtotalDialog dialog(canvas()->canvasWidget(), selection());
-    if (dialog.exec()) {
-        selection()->initialize(QRect(dialog.selection().topLeft(), dialog.selection().bottomRight()));
-        selection()->emitModified();
-    }
+    dialog.exec();
 }
 
 void CellToolBase::setAreaName()

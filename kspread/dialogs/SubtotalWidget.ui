@@ -1,7 +1,8 @@
-<ui version="4.0" >
- <author>Norbert Andres &lt;nandres@web.de></author>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Norbert Andres &lt;nandres@web.de&gt;</author>
  <comment>This file is part of the KDE project
-Copyright (C) 2002 Norbert Andres &lt;nandres@web.de>
+Copyright (C) 2002 Norbert Andres &lt;nandres@web.de&gt;
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -17,172 +18,62 @@ You should have received a copy of the GNU Library General Public
 License along with this library; see the file COPYING.LIB.  If not,
 write to the Free Software Foundation, Inc., 51 Franklin Street,
 Fifth Floor, Boston, MA 02110-1301, USA.</comment>
- <class>SubtotalWidget</class>
- <widget class="QWidget" name="SubtotalWidget" >
-  <property name="geometry" >
+ <class>SubtotalsWidget</class>
+ <widget class="QWidget" name="SubtotalsWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>381</height>
+    <width>178</width>
+    <height>132</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Subtotal</string>
+  <property name="windowTitle">
+   <string/>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QTabWidget" name="TabWidget2" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Minimum" >
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="m_eachChangeLabel">
+     <property name="text">
+      <string>At each change in:</string>
      </property>
-     <property name="currentIndex" >
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
-       <string>Subtotal</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <item row="3" column="0" >
-        <widget class="KComboBox" name="m_functionBox" />
-       </item>
-       <item row="4" column="0" >
-        <widget class="QLabel" name="m_addSubtotalToLabel" >
-         <property name="text" >
-          <string>Add Subtotal to:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="m_useFunctionLabel" >
-         <property name="text" >
-          <string>Use function:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="KComboBox" name="m_columnBox" />
-       </item>
-       <item row="0" column="0" >
-        <widget class="QLabel" name="m_eachChangeLabel" >
-         <property name="text" >
-          <string>At each change in:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" >
-        <widget class="QListWidget" name="m_columnList" >
-         <column>
-          <property name="text" >
-           <string>Columns</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
-       <string>Options</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <item row="0" column="0" >
-        <widget class="QCheckBox" name="m_replaceSubtotals" >
-         <property name="text" >
-          <string>&amp;Replace current Subtotals</string>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QCheckBox" name="m_pageBreak" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="text" >
-          <string>&amp;Page break between groups</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QCheckBox" name="m_summaryBelow" >
-         <property name="text" >
-          <string>&amp;Summary below data</string>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-         <property name="tristate" >
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" >
-        <widget class="QCheckBox" name="m_summaryOnly" >
-         <property name="text" >
-          <string>Summary &amp;only</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>0</width>
-           <height>152</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0" >
-        <widget class="QCheckBox" name="m_IgnoreBox" >
-         <property name="text" >
-          <string>&amp;Ignore empty cells when looking for changes</string>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
     </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KComboBox" name="m_columnBox"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="m_useFunctionLabel">
+     <property name="text">
+      <string>Use function:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KComboBox" name="m_functionBox"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="m_addSubtotalToLabel">
+     <property name="text">
+      <string>Add Subtotal to:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QListWidget" name="m_columnList"/>
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
-  <customwidgets>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+ <customwidgets>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>TabWidget2</tabstop>
-  <tabstop>m_columnBox</tabstop>
-  <tabstop>m_functionBox</tabstop>
-  <tabstop>m_columnList</tabstop>
-  <tabstop>m_replaceSubtotals</tabstop>
-  <tabstop>m_pageBreak</tabstop>
-  <tabstop>m_summaryBelow</tabstop>
-  <tabstop>m_summaryOnly</tabstop>
-  <tabstop>m_IgnoreBox</tabstop>
- </tabstops>
  <includes>
-  <include location="global" >kdialog.h</include>
+  <include location="global">kdialog.h</include>
  </includes>
  <resources/>
  <connections/>
