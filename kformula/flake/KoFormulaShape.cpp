@@ -255,6 +255,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
 bool KoFormulaShape::loadOdfEmbedded( const KoXmlElement &topLevelElement,
                                       KoShapeLoadingContext &context )
 {
+    Q_UNUSED(context);
     kDebug(31000) << topLevelElement.nodeName();
 
 #if 0
