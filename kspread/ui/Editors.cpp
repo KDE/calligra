@@ -1134,7 +1134,7 @@ bool CellEditor::eventFilter(QObject* obj, QEvent* ev)
         return false;
 
     if (ev->type() == QEvent::FocusOut) {
-        selection()->setLastEditorWithFocus(Selection::EmbeddedEditor);
+        d->cellTool->setLastEditorWithFocus(CellToolBase::EmbeddedEditor);
         return false;
     }
 
@@ -1502,7 +1502,7 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
 void ExternalEditor::focusOutEvent(QFocusEvent* event)
 {
     Q_ASSERT(d->cellTool);
-    d->cellTool->selection()->setLastEditorWithFocus(Selection::ExternalEditor);
+    d->cellTool->setLastEditorWithFocus(CellToolBase::ExternalEditor);
     KTextEdit::focusOutEvent(event);
 }
 

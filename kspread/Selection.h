@@ -59,14 +59,6 @@ public:
     };
 
     /**
-     * The editor type.
-     */
-    enum Editor {
-        EmbeddedEditor,  ///< the embedded editor appearing in a cell
-        ExternalEditor   ///< the external editor located in the tool options
-    };
-
-    /**
      * Constructor.
      * Creates a new selection with (1,1) as initial location.
      * @param canvasBase the canvas interface
@@ -255,9 +247,6 @@ public:
     const QList<QColor>& colors() const;
 
     void selectAll();
-
-    void setLastEditorWithFocus(Editor type);
-    Editor lastEditorWithFocus() const;
 
     /** Start using a reference selection instead of normal one. */
     void startReferenceSelection(const Region& region = Region());

@@ -50,6 +50,15 @@ class KSPREAD_EXPORT CellToolBase : public KoInteractionTool
 
 public:
     /**
+     * The editor type.
+     */
+    enum Editor
+    {
+        EmbeddedEditor,  ///< the embedded editor appearing in a cell
+        ExternalEditor   ///< the external editor located in the tool options
+    };
+
+    /**
      * Constructor.
      */
     CellToolBase(KoCanvasBase* canvas);
@@ -74,6 +83,11 @@ public:
 
     bool createEditor(bool clear = true, bool focus = true);
     CellEditor* editor() const;
+
+    /**
+     * Sets the editor \p type, which had the focus at last.
+     */
+    void setLastEditorWithFocus(Editor type);
 
     /**
      * Scrolls to the cell located at \p location.

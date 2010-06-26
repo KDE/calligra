@@ -150,6 +150,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->optionWidget = 0;
     d->initialized = false;
     d->popupListChoose = 0;
+    d->lastEditorWithFocus = EmbeddedEditor;
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
@@ -1306,6 +1307,11 @@ CellEditor* CellToolBase::editor() const
     return d->cellEditor;
 }
 
+void CellToolBase::setLastEditorWithFocus(Editor editor)
+{
+    d->lastEditorWithFocus = editor;
+}
+
 bool CellToolBase::createEditor(bool clear, bool focus)
 {
     const Cell cell(selection()->activeSheet(), selection()->marker());
@@ -1451,7 +1457,7 @@ void CellToolBase::focusEditorRequested()
     // If we are in editing mode, we redirect the focus to the CellEditor or ExternalEditor.
     // This screws up <Tab> though (David)
     if (editor()) {
-        if (selection()->lastEditorWithFocus() == Selection::EmbeddedEditor) {
+        if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->setFocus();
         } else {
             d->optionWidget->editor()->setFocus();

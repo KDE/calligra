@@ -67,7 +67,6 @@ public:
 
         canvasBase = 0;
         referenceMode = false;
-        lastEditorWithFocus = EmbeddedEditor;
     }
 
     Sheet* activeSheet;
@@ -100,7 +99,6 @@ public:
     bool referenceMode : 1;
     Region formerSelection; // for reference selection mode
     Region oldSelection; // for select all
-    Editor lastEditorWithFocus;
 };
 
 /***************************************************************************
@@ -771,16 +769,6 @@ void Selection::selectAll()
         initialize(d->oldSelection);
         d->oldSelection.clear();
     }
-}
-
-void Selection::setLastEditorWithFocus(Editor editor)
-{
-    d->lastEditorWithFocus = editor;
-}
-
-Selection::Editor Selection::lastEditorWithFocus() const
-{
-    return d->lastEditorWithFocus;
 }
 
 void Selection::startReferenceSelection(const Region& region)

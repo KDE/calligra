@@ -73,6 +73,7 @@ public:
     bool initialized;
     // For "Selection List..." action
     QMenu* popupListChoose;
+    Editor lastEditorWithFocus;
 
     // Find and Replace context. We remember the options and
     // the strings used previously.
