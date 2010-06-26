@@ -1112,8 +1112,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
             if (d->captureAllKeyEvents) {
                 break; // pass to KTextEdit
             }
-            // Send directly to the parent.
-            QApplication::sendEvent(parent(), event);
+            event->ignore(); // pass to parent
             return;
         case Qt::Key_Return:
         case Qt::Key_Enter:
@@ -1121,8 +1120,7 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
             if (event->modifiers() & Qt::ShiftModifier) {
                 break; // pass to KTextEdit
             }
-            // Send directly to the parent.
-            QApplication::sendEvent(parent(), event);
+            event->ignore(); // pass to parent
             return;
     }
     KTextEdit::keyPressEvent(event);
