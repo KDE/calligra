@@ -43,6 +43,7 @@
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "ValueParser.h"
 
 // commands
 #include "commands/ValidityCommand.h"
@@ -394,7 +395,9 @@ void ValidityDialog::changeIndexCond(int _index)
 
 void ValidityDialog::init()
 {
-    const KLocale* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
+    const Map *const map = m_selection->activeSheet()->map();
+    const CalculationSettings *settings = map->calculationSettings();
+    const KLocale* locale = settings->locale();
     Validity validity = Cell(m_selection->activeSheet(), m_selection->marker()).validity();
     if (!validity.isEmpty()) {
         message->setPlainText(validity.message());
@@ -407,35 +410,35 @@ void ValidityDialog::init()
         case Validity::Number:
             chooseType->setCurrentIndex(1);
             if (validity.condition() >= 5)
-                val_max->setText(tmp.setNum(validity.maximumValue()));
-            val_min->setText(tmp.setNum(validity.minimumValue()));
+                val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
+            val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
             break;
         case Validity::Integer:
             chooseType->setCurrentIndex(2);
             if (validity.condition() >= 5)
-                val_max->setText(tmp.setNum(validity.maximumValue()));
-            val_min->setText(tmp.setNum(validity.minimumValue()));
+                val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
+            val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
             break;
         case Validity::TextLength:
             chooseType->setCurrentIndex(6);
             if (validity.condition() >= 5)
-                val_max->setText(tmp.setNum(validity.maximumValue()));
-            val_min->setText(tmp.setNum(validity.minimumValue()));
+                val_max->setText(tmp.setNum((double)numToDouble(validity.maximumValue().asFloat())));
+            val_min->setText(tmp.setNum((double)numToDouble(validity.minimumValue().asFloat())));
             break;
         case Validity::Text:
             chooseType->setCurrentIndex(3);
             break;
         case Validity::Date:
             chooseType->setCurrentIndex(4);
-            val_min->setText(locale->formatDate(validity.minimumDate(), KLocale::ShortDate));
+            val_min->setText(locale->formatDate(validity.minimumValue().asDate(settings), KLocale::ShortDate));
             if (validity.condition() >= 5)
-                val_max->setText(locale->formatDate(validity.maximumDate(), KLocale::ShortDate));
+                val_max->setText(locale->formatDate(validity.maximumValue().asDate(settings), KLocale::ShortDate));
             break;
         case Validity::Time:
             chooseType->setCurrentIndex(5);
-            val_min->setText(locale->formatTime(validity.minimumTime(), true));
+            val_min->setText(locale->formatTime(validity.minimumValue().asTime(settings), true));
             if (validity.condition() >= 5)
-                val_max->setText(locale->formatTime(validity.maximumTime(), true));
+                val_max->setText(locale->formatTime(validity.maximumValue().asTime(settings), true));
             break;
         case Validity::List: {
             chooseType->setCurrentIndex(7);
@@ -526,6 +529,7 @@ void ValidityDialog::clearAllPressed()
 void ValidityDialog::OkPressed()
 {
     const KLocale* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
+    const ValueParser *const parser = m_selection->activeSheet()->map()->parser();
     Validity validity;
     if (chooseType->currentIndex() == 1) {
         bool ok;
@@ -587,12 +591,8 @@ void ValidityDialog::OkPressed()
         validity.setCondition(Conditional::Equal);
         validity.setMessage(message->toPlainText());
         validity.setTitle(title->text());
-        validity.setMinimumValue(0);
-        validity.setMaximumValue(0);
-        validity.setMinimumTime(QTime(0, 0, 0));
-        validity.setMaximumTime(QTime(0, 0, 0));
-        validity.setMinimumDate(QDate(0, 0, 0));
-        validity.setMaximumDate(QDate(0, 0, 0));
+        validity.setMinimumValue(Value());
+        validity.setMaximumValue(Value());
     } else {
         switch (chooseType->currentIndex()) {
         case 0:
@@ -666,49 +666,49 @@ void ValidityDialog::OkPressed()
         }
         validity.setMessage(message->toPlainText());
         validity.setTitle(title->text());
-        validity.setMinimumValue(0);
-        validity.setMaximumValue(0);
-        validity.setMinimumTime(QTime(0, 0, 0));
-        validity.setMaximumTime(QTime(0, 0, 0));
-        validity.setMinimumDate(QDate(0, 0, 0));
-        validity.setMaximumDate(QDate(0, 0, 0));
+        validity.setMinimumValue(Value());
+        validity.setMaximumValue(Value());
 
         if (chooseType->currentIndex() == 1) {
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumValue(val_min->text().toDouble());
+                validity.setMinimumValue(Value(val_min->text().toDouble()));
             } else {
-                validity.setMinimumValue(qMin(val_min->text().toDouble(), val_max->text().toDouble()));
-                validity.setMaximumValue(qMax(val_max->text().toDouble(), val_min->text().toDouble()));
+                validity.setMinimumValue(Value(qMin(val_min->text().toDouble(), val_max->text().toDouble())));
+                validity.setMaximumValue(Value(qMax(val_max->text().toDouble(), val_min->text().toDouble())));
             }
         } else if (chooseType->currentIndex() == 2 || chooseType->currentIndex() == 6) {
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumValue(val_min->text().toInt());
+                validity.setMinimumValue(Value(val_min->text().toInt()));
             } else {
-                validity.setMinimumValue(qMin(val_min->text().toInt(), val_max->text().toInt()));
-                validity.setMaximumValue(qMax(val_max->text().toInt(), val_min->text().toInt()));
+                validity.setMinimumValue(Value(qMin(val_min->text().toInt(), val_max->text().toInt())));
+                validity.setMaximumValue(Value(qMax(val_max->text().toInt(), val_min->text().toInt())));
             }
         } else  if (chooseType->currentIndex() == 4) {
+            const Value minValue = parser->tryParseDate(val_min->text());
+            const Value maxValue = parser->tryParseDate(val_max->text());
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumDate(locale->readDate(val_min->text()));
+                validity.setMinimumValue(minValue);
             } else {
-                if (locale->readDate(val_min->text()) < locale->readDate(val_max->text())) {
-                    validity.setMinimumDate(locale->readDate(val_min->text()));
-                    validity.setMaximumDate(locale->readDate(val_max->text()));
+                if (minValue.less(maxValue)) {
+                    validity.setMinimumValue(minValue);
+                    validity.setMaximumValue(maxValue);
                 } else {
-                    validity.setMinimumDate(locale->readDate(val_max->text()));
-                    validity.setMaximumDate(locale->readDate(val_min->text()));
+                    validity.setMinimumValue(maxValue);
+                    validity.setMaximumValue(minValue);
                 }
             }
         } else  if (chooseType->currentIndex() == 5) {
+            const Value minValue = parser->tryParseTime(val_min->text());
+            const Value maxValue = parser->tryParseTime(val_max->text());
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumTime(locale->readTime(val_min->text()));
+                validity.setMinimumValue(minValue);
             } else {
-                if (locale->readTime(val_min->text()) < locale->readTime(val_max->text())) {
-                    validity.setMaximumTime(locale->readTime(val_max->text()));
-                    validity.setMinimumTime(locale->readTime(val_min->text()));
+                if (minValue.less(maxValue)) {
+                    validity.setMaximumValue(maxValue);
+                    validity.setMinimumValue(minValue);
                 } else {
-                    validity.setMaximumTime(locale->readTime(val_min->text()));
-                    validity.setMinimumTime(locale->readTime(val_max->text()));
+                    validity.setMaximumValue(minValue);
+                    validity.setMinimumValue(maxValue);
                 }
             }
         } else if (chooseType->currentIndex() == 7) {

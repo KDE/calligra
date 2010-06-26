@@ -103,12 +103,12 @@ private:
                          KSpread::Format::Type & formatType,
                          QString name);
     void checkForNamedAreas(QString & formula) const;
-    void loadOasisCellValidation(const KoXmlElement&body);
-    void loadOasisValidation(KSpread::Validity val, const QString& validationName);
-    void loadOasisValidationCondition(KSpread::Validity val, QString &valExpression);
+    void loadOasisCellValidation(const KoXmlElement&body, const KSpread::ValueParser *parser);
+    void loadOasisValidation(KSpread::Validity val, const QString& validationName, const KSpread::ValueParser *parser);
+    void loadOasisValidationCondition(KSpread::Validity val, QString &valExpression, const KSpread::ValueParser *parser);
     void loadOasisAreaName(const KoXmlElement&body);
     void loadOasisMasterLayoutPage(KSpread::Sheet * table, KoStyleStack &styleStack);
-    void loadOasisValidationValue(KSpread::Validity val, const QStringList &listVal);
+    void loadOasisValidationValue(KSpread::Validity val, const QStringList &listVal, const KSpread::ValueParser *parser);
     QString translatePar(QString & par) const;
     void loadCondition(const KSpread::Cell& cell, const KoXmlElement &property);
     void loadOasisCondition(const KSpread::Cell& cell, const KoXmlElement &property);

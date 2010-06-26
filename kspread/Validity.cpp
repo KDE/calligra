@@ -20,11 +20,6 @@
 // Local
 #include "Validity.h"
 
-#include <float.h>
-
-// Qt
-#include <QTimer>
-
 // KDE
 #include <kmessagebox.h>
 
@@ -39,6 +34,8 @@
 #include "OdfLoadingContext.h"
 #include "Sheet.h"
 #include "Value.h"
+#include "ValueConverter.h"
+#include "ValueParser.h"
 
 using namespace KSpread;
 
@@ -49,15 +46,11 @@ public:
     QString title;
     QString titleInfo;
     QString messageInfo;
-    double valMin;
-    double valMax;
+    Value minValue;
+    Value maxValue;
     Conditional::Type cond;
     Action action;
     Restriction restriction;
-    QTime  timeMin;
-    QTime  timeMax;
-    QDate  dateMin;
-    QDate  dateMax;
     bool displayMessage;
     bool allowEmptyCell;
     bool displayValidationInformation;
@@ -67,8 +60,6 @@ public:
 Validity::Validity()
         : d(new Private)
 {
-    d->valMin = 0.0;
-    d->valMax = 0.0;
     d->cond = Conditional::None;
     d->action = Stop;
     d->restriction = None;
@@ -93,6 +84,7 @@ bool Validity::isEmpty() const
 
 bool Validity::loadXML(Cell* const cell, const KoXmlElement& validityElement)
 {
+    ValueParser *const parser = cell->sheet()->map()->parser();
     bool ok = false;
     KoXmlElement param = validityElement.namedItem("param").toElement();
     if (!param.isNull()) {
@@ -112,12 +104,12 @@ bool Validity::loadXML(Cell* const cell, const KoXmlElement& validityElement)
                 return false;
         }
         if (param.hasAttribute("valmin")) {
-            d->valMin = param.attribute("valmin").toDouble(&ok);
+            d->minValue = parser->tryParseNumber(param.attribute("valmin"), &ok);
             if (!ok)
                 return false;
         }
         if (param.hasAttribute("valmax")) {
-            d->valMax = param.attribute("valmax").toDouble(&ok);
+            d->maxValue = parser->tryParseNumber(param.attribute("valmax"), &ok);
             if (!ok)
                 return false;
         }
@@ -153,24 +145,24 @@ bool Validity::loadXML(Cell* const cell, const KoXmlElement& validityElement)
     }
     KoXmlElement timeMinElement = validityElement.namedItem("timemin").toElement();
     if (!timeMinElement.isNull()) {
-        d->timeMin = cell->toTime(timeMinElement);
+        d->minValue = parser->tryParseTime(timeMinElement.text());
     }
     KoXmlElement timeMaxElement = validityElement.namedItem("timemax").toElement();
     if (!timeMaxElement.isNull()) {
-        d->timeMax = cell->toTime(timeMaxElement);
+        d->maxValue = parser->tryParseTime(timeMaxElement.text());
     }
     KoXmlElement dateMinElement = validityElement.namedItem("datemin").toElement();
     if (!dateMinElement.isNull()) {
-        d->dateMin = cell->toDate(dateMinElement);
+        d->minValue = parser->tryParseTime(dateMinElement.text());
     }
     KoXmlElement dateMaxElement = validityElement.namedItem("datemax").toElement();
     if (!dateMaxElement.isNull()) {
-        d->dateMax = cell->toDate(dateMaxElement);
+        d->maxValue = parser->tryParseTime(dateMaxElement.text());
     }
     return true;
 }
 
-QDomElement Validity::saveXML(QDomDocument& doc) const
+QDomElement Validity::saveXML(QDomDocument& doc, const ValueConverter *converter) const
 {
     QDomElement validityElement = doc.createElement("validity");
 
@@ -178,8 +170,8 @@ QDomElement Validity::saveXML(QDomDocument& doc) const
     param.setAttribute("cond", (int)d->cond);
     param.setAttribute("action", (int)d->action);
     param.setAttribute("allow", (int)d->restriction);
-    param.setAttribute("valmin", d->valMin);
-    param.setAttribute("valmax", d->valMax);
+    param.setAttribute("valmin", converter->asString(d->minValue).asString());
+    param.setAttribute("valmax", converter->asString(d->maxValue).asString());
     param.setAttribute("displaymessage", d->displayMessage);
     param.setAttribute("displayvalidationinformation", d->displayValidationInformation);
     param.setAttribute("allowemptycell", d->allowEmptyCell);
@@ -204,32 +196,36 @@ QDomElement Validity::saveXML(QDomDocument& doc) const
 
 
     QString tmp;
-    if (d->timeMin.isValid()) {
+    if (d->restriction == Time) {
         QDomElement timeMinElement = doc.createElement("timemin");
-        tmp = d->timeMin.toString();
+        tmp = converter->asString(d->minValue).asString();
         timeMinElement.appendChild(doc.createTextNode(tmp));
         validityElement.appendChild(timeMinElement);
-    }
-    if (d->timeMax.isValid()) {
-        QDomElement timeMaxElement = doc.createElement("timemax");
-        tmp = d->timeMax.toString();
-        timeMaxElement.appendChild(doc.createTextNode(tmp));
-        validityElement.appendChild(timeMaxElement);
+
+        if (d->cond == Conditional::Between || d->cond == Conditional::Different) {
+            QDomElement timeMaxElement = doc.createElement("timemax");
+            tmp = converter->asString(d->maxValue).asString();
+            timeMaxElement.appendChild(doc.createTextNode(tmp));
+            validityElement.appendChild(timeMaxElement);
+        }
     }
 
-    if (d->dateMin.isValid()) {
+    if (d->restriction == Date) {
         QDomElement dateMinElement = doc.createElement("datemin");
+        const QDate minDate = d->minValue.asDate(converter->settings());
         QString tmp("%1/%2/%3");
-        tmp = tmp.arg(d->dateMin.year()).arg(d->dateMin.month()).arg(d->dateMin.day());
+        tmp = tmp.arg(minDate.year()).arg(minDate.month()).arg(minDate.day());
         dateMinElement.appendChild(doc.createTextNode(tmp));
         validityElement.appendChild(dateMinElement);
-    }
-    if (d->dateMax.isValid()) {
-        QDomElement dateMaxElement = doc.createElement("datemax");
-        QString tmp("%1/%2/%3");
-        tmp = tmp.arg(d->dateMax.year()).arg(d->dateMax.month()).arg(d->dateMax.day());
-        dateMaxElement.appendChild(doc.createTextNode(tmp));
-        validityElement.appendChild(dateMaxElement);
+
+        if (d->cond == Conditional::Between || d->cond == Conditional::Different) {
+            QDomElement dateMaxElement = doc.createElement("datemax");
+            const QDate maxDate = d->maxValue.asDate(converter->settings());
+            QString tmp("%1/%2/%3");
+            tmp = tmp.arg(maxDate.year()).arg(maxDate.month()).arg(maxDate.day());
+            dateMaxElement.appendChild(doc.createTextNode(tmp));
+            validityElement.appendChild(dateMaxElement);
+        }
     }
     return validityElement;
 }
@@ -262,7 +258,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             kDebug(36003) << " valExpression = :" << valExpression;
             setRestriction(Validity::TextLength);
 
-            loadOdfValidationCondition(valExpression);
+            loadOdfValidationCondition(valExpression, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-is-text()")) {
             setRestriction(Validity::Text);
         }
@@ -274,7 +270,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             kDebug(36003) << " valExpression :" << valExpression;
             valExpression = valExpression.remove(')');
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-            loadOdfValidationValue(listVal);
+            loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             setRestriction(Validity::TextLength);
             setCondition(Conditional::Different);
@@ -283,7 +279,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
             valExpression = valExpression.remove(')');
             kDebug(36003) << " valExpression :" << valExpression;
             QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-            loadOdfValidationValue(listVal);
+            loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-is-in-list(")) {
             setRestriction(Validity::List);
             valExpression = valExpression.remove("oooc:cell-content-is-in-list(");
@@ -311,7 +307,7 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
 
             if (valExpression.contains("cell-content()")) {
                 valExpression = valExpression.remove("cell-content()");
-                loadOdfValidationCondition(valExpression);
+                loadOdfValidationCondition(valExpression, cell->sheet()->map()->parser());
             }
             //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
             //for the moment we support just int/double value, not text/date/time :(
@@ -319,14 +315,14 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
                 valExpression = valExpression.remove("cell-content-is-between(");
                 valExpression = valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-                loadOdfValidationValue(listVal);
+                loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
                 setCondition(Conditional::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
                 valExpression = valExpression.remove("cell-content-is-not-between(");
                 valExpression = valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
-                loadOdfValidationValue(listVal);
+                loadOdfValidationValue(listVal, cell->sheet()->map()->parser());
                 setCondition(Conditional::Different);
             }
         }
@@ -383,21 +379,21 @@ void Validity::loadOdfValidation(Cell* const cell, const QString& validationName
     cell->setValidity(validity);
 }
 
-void Validity::loadOdfValidationValue(const QStringList &listVal)
+void Validity::loadOdfValidationValue(const QStringList &listVal, const ValueParser *parser)
 {
     bool ok = false;
     kDebug(36003) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
 
     if (restriction() == Validity::Date) {
-        setMinimumDate(QDate::fromString(listVal[0]));
-        setMaximumDate(QDate::fromString(listVal[1]));
+        setMinimumValue(parser->tryParseDate(listVal[0]));
+        setMaximumValue(parser->tryParseDate(listVal[1]));
     } else if (restriction() == Validity::Time) {
-        setMinimumTime(QTime::fromString(listVal[0]));
-        setMaximumTime(QTime::fromString(listVal[1]));
+        setMinimumValue(parser->tryParseTime(listVal[0]));
+        setMaximumValue(parser->tryParseTime(listVal[1]));
     } else {
-        setMinimumValue(listVal[0].toDouble(&ok));
+        setMinimumValue(Value(listVal[0].toDouble(&ok)));
         if (!ok) {
-            setMinimumValue(listVal[0].toInt(&ok));
+            setMinimumValue(Value(listVal[0].toInt(&ok)));
             if (!ok)
                 kDebug(36003) << " Try to parse this value :" << listVal[0];
 
@@ -407,9 +403,9 @@ void Validity::loadOdfValidationValue(const QStringList &listVal)
 #endif
         }
         ok = false;
-        setMaximumValue(listVal[1].toDouble(&ok));
+        setMaximumValue(Value(listVal[1].toDouble(&ok)));
         if (!ok) {
-            setMaximumValue(listVal[1].toInt(&ok));
+            setMaximumValue(Value(listVal[1].toInt(&ok)));
             if (!ok)
                 kDebug(36003) << " Try to parse this value :" << listVal[1];
 
@@ -421,7 +417,7 @@ void Validity::loadOdfValidationValue(const QStringList &listVal)
     }
 }
 
-void Validity::loadOdfValidationCondition(QString &valExpression)
+void Validity::loadOdfValidationCondition(QString &valExpression, const ValueParser *parser)
 {
     if (isEmpty()) return;
     QString value;
@@ -447,14 +443,14 @@ void Validity::loadOdfValidationCondition(QString &valExpression)
     } else
         kDebug(36003) << " I don't know how to parse it :" << valExpression;
     if (restriction() == Validity::Date) {
-        setMinimumDate(QDate::fromString(value));
+        setMinimumValue(parser->tryParseDate(value));
     } else if (restriction() == Validity::Date) {
-        setMinimumTime(QTime::fromString(value));
+        setMinimumValue(parser->tryParseTime(value));
     } else {
         bool ok = false;
-        setMinimumValue(value.toDouble(&ok));
+        setMinimumValue(Value(value.toDouble(&ok)));
         if (!ok) {
-            setMinimumValue(value.toInt(&ok));
+            setMinimumValue(Value(value.toInt(&ok)));
             if (!ok)
                 kDebug(36003) << " Try to parse this value :" << value;
 
@@ -496,19 +492,9 @@ const QString& Validity::messageInfo() const
     return d->messageInfo;
 }
 
-const QDate& Validity::maximumDate() const
+const Value &Validity::maximumValue() const
 {
-    return d->dateMax;
-}
-
-const QTime& Validity::maximumTime() const
-{
-    return d->timeMax;
-}
-
-double Validity::maximumValue() const
-{
-    return d->valMax;
+    return d->maxValue;
 }
 
 const QString& Validity::message() const
@@ -516,19 +502,9 @@ const QString& Validity::message() const
     return d->message;
 }
 
-const QDate& Validity::minimumDate() const
+const Value &Validity::minimumValue() const
 {
-    return d->dateMin;
-}
-
-const QTime& Validity::minimumTime() const
-{
-    return d->timeMin;
-}
-
-double Validity::minimumValue() const
-{
-    return d->valMin;
+    return d->minValue;
 }
 
 Validity::Restriction Validity::restriction() const
@@ -576,19 +552,9 @@ void Validity::setDisplayValidationInformation(bool display)
     d->displayValidationInformation = display;
 }
 
-void Validity::setMaximumDate(const QDate& date)
+void Validity::setMaximumValue(const Value &value)
 {
-    d->dateMax = date;
-}
-
-void Validity::setMaximumTime(const QTime& time)
-{
-    d->timeMax = time;
-}
-
-void Validity::setMaximumValue(double value)
-{
-    d->valMax = value;
+    d->maxValue = value;
 }
 
 void Validity::setMessage(const QString& msg)
@@ -601,19 +567,9 @@ void Validity::setMessageInfo(const QString& info)
     d->messageInfo = info;
 }
 
-void Validity::setMinimumDate(const QDate& date)
+void Validity::setMinimumValue(const Value &value)
 {
-    d->dateMin = date;
-}
-
-void Validity::setMinimumTime(const QTime& time)
-{
-    d->timeMin = time;
-}
-
-void Validity::setMinimumValue(double value)
-{
-    d->valMin = value;
+    d->minValue = value;
 }
 
 void Validity::setRestriction(Restriction restriction)
@@ -638,47 +594,44 @@ void Validity::setValidityList(const QStringList& list)
 
 bool Validity::testValidity(const Cell* cell) const
 {
-    const CalculationSettings* settings = cell->sheet()->map()->calculationSettings();
     bool valid = false;
     if (d->restriction != None) {
         //fixme
         if (d->allowEmptyCell && cell->userInput().isEmpty())
             return true;
 
-        if (cell->value().isNumber() &&
+        if ((cell->value().isNumber() &&
                 (d->restriction == Number ||
                  (d->restriction == Integer &&
-                  numToDouble(cell->value().asFloat()) == ceil(numToDouble(cell->value().asFloat()))))) {
+                  numToDouble(cell->value().asFloat()) == ceil(numToDouble(cell->value().asFloat())))))
+            || (d->restriction == Time && cell->isTime())
+            || (d->restriction == Date && cell->isDate())) {
             switch (d->cond) {
             case Conditional::Equal:
-                valid = (cell->value().asFloat() - d->valMin < DBL_EPSILON
-                         && cell->value().asFloat() - d->valMin >
-                         (0.0 - DBL_EPSILON));
+                valid = cell->value().equal(d->minValue);
                 break;
             case Conditional::DifferentTo:
-                valid = !((cell->value().asFloat() - d->valMin < DBL_EPSILON
-                           && cell->value().asFloat() - d->valMin >
-                           (0.0 - DBL_EPSILON)));
+                valid = !cell->value().equal(d->minValue);
                 break;
             case Conditional::Superior:
-                valid = (cell->value().asFloat() > d->valMin);
+                valid = cell->value().greater(d->minValue);
                 break;
             case Conditional::Inferior:
-                valid = (cell->value().asFloat()  < d->valMin);
+                valid = cell->value().less(d->minValue);
                 break;
             case Conditional::SuperiorEqual:
-                valid = (cell->value().asFloat() >= d->valMin);
+                valid = (cell->value().compare(d->minValue)) >= 0;
                 break;
             case Conditional::InferiorEqual:
-                valid = (cell->value().asFloat() <= d->valMin);
+                valid = (cell->value().compare(d->minValue)) <= 0;
                 break;
             case Conditional::Between:
-                valid = (cell->value().asFloat() >= d->valMin &&
-                         cell->value().asFloat() <= d->valMax);
+                valid = (cell->value().compare(d->minValue) >= 0 &&
+                         cell->value().compare(d->maxValue) <= 0);
                 break;
             case Conditional::Different:
-                valid = (cell->value().asFloat() < d->valMin ||
-                         cell->value().asFloat() > d->valMax);
+                valid = (cell->value().compare(d->minValue) < 0 ||
+                         cell->value().compare(d->maxValue) > 0);
                 break;
             default :
                 break;
@@ -692,106 +645,44 @@ bool Validity::testValidity(const Cell* cell) const
         } else if (d->restriction == TextLength) {
             if (cell->value().isString()) {
                 int len = cell->displayText().length();
+                const int min = d->minValue.asInteger();
+                const int max = d->maxValue.asInteger();
                 switch (d->cond) {
                 case Conditional::Equal:
-                    if (len == d->valMin)
+                    if (len == min)
                         valid = true;
                     break;
                 case Conditional::DifferentTo:
-                    if (len != d->valMin)
+                    if (len != min)
                         valid = true;
                     break;
                 case Conditional::Superior:
-                    if (len > d->valMin)
+                    if (len > min)
                         valid = true;
                     break;
                 case Conditional::Inferior:
-                    if (len < d->valMin)
+                    if (len < min)
                         valid = true;
                     break;
                 case Conditional::SuperiorEqual:
-                    if (len >= d->valMin)
+                    if (len >= min)
                         valid = true;
                     break;
                 case Conditional::InferiorEqual:
-                    if (len <= d->valMin)
+                    if (len <= min)
                         valid = true;
                     break;
                 case Conditional::Between:
-                    if (len >= d->valMin && len <= d->valMax)
+                    if (len >= min && len <= max)
                         valid = true;
                     break;
                 case Conditional::Different:
-                    if (len < d->valMin || len > d->valMax)
+                    if (len < min || len > max)
                         valid = true;
                     break;
                 default :
                     break;
                 }
-            }
-        } else if (d->restriction == Time && cell->isTime()) {
-            switch (d->cond) {
-            case Conditional::Equal:
-                valid = (cell->value().asTime(settings) == d->timeMin);
-                break;
-            case Conditional::DifferentTo:
-                valid = (cell->value().asTime(settings) != d->timeMin);
-                break;
-            case Conditional::Superior:
-                valid = (cell->value().asTime(settings) > d->timeMin);
-                break;
-            case Conditional::Inferior:
-                valid = (cell->value().asTime(settings) < d->timeMin);
-                break;
-            case Conditional::SuperiorEqual:
-                valid = (cell->value().asTime(settings) >= d->timeMin);
-                break;
-            case Conditional::InferiorEqual:
-                valid = (cell->value().asTime(settings) <= d->timeMin);
-                break;
-            case Conditional::Between:
-                valid = (cell->value().asTime(settings) >= d->timeMin &&
-                         cell->value().asTime(settings) <= d->timeMax);
-                break;
-            case Conditional::Different:
-                valid = (cell->value().asTime(settings) < d->timeMin ||
-                         cell->value().asTime(settings) > d->timeMax);
-                break;
-            default :
-                break;
-
-            }
-        } else if (d->restriction == Date && cell->isDate()) {
-            switch (d->cond) {
-            case Conditional::Equal:
-                valid = (cell->value().asDate(settings) == d->dateMin);
-                break;
-            case Conditional::DifferentTo:
-                valid = (cell->value().asDate(settings) != d->dateMin);
-                break;
-            case Conditional::Superior:
-                valid = (cell->value().asDate(settings) > d->dateMin);
-                break;
-            case Conditional::Inferior:
-                valid = (cell->value().asDate(settings) < d->dateMin);
-                break;
-            case Conditional::SuperiorEqual:
-                valid = (cell->value().asDate(settings) >= d->dateMin);
-                break;
-            case Conditional::InferiorEqual:
-                valid = (cell->value().asDate(settings) <= d->dateMin);
-                break;
-            case Conditional::Between:
-                valid = (cell->value().asDate(settings) >= d->dateMin &&
-                         cell->value().asDate(settings) <= d->dateMax);
-                break;
-            case Conditional::Different:
-                valid = (cell->value().asDate(settings) < d->dateMin ||
-                         cell->value().asDate(settings) > d->dateMax);
-                break;
-            default :
-                break;
-
             }
         }
     } else {
@@ -829,15 +720,11 @@ bool Validity::operator==(const Validity& other) const
             d->title == other.d->title &&
             d->titleInfo == other.d->titleInfo &&
             d->messageInfo == other.d->messageInfo &&
-            d->valMin == other.d->valMin &&
-            d->valMax == other.d->valMax &&
+            d->minValue == other.d->minValue &&
+            d->maxValue == other.d->maxValue &&
             d->cond == other.d->cond &&
             d->action == other.d->action &&
             d->restriction == other.d->restriction &&
-            d->timeMin == other.d->timeMin &&
-            d->timeMax == other.d->timeMax &&
-            d->dateMin == other.d->dateMin &&
-            d->dateMax == other.d->dateMax &&
             d->displayMessage == other.d->displayMessage &&
             d->allowEmptyCell == other.d->allowEmptyCell &&
             d->displayValidationInformation == other.d->displayValidationInformation &&

@@ -51,6 +51,7 @@
 #include <kspread/Sheet.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Validity.h>
+#include <kspread/ValueConverter.h>
 #include <kspread/part/View.h>
 
 using namespace KSpread;
@@ -223,6 +224,8 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc, const Cell
 
 QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& cell)
 {
+    ValueConverter *const converter = cell.sheet()->map()->converter();
+
     //<gmr:Validation Style="1" Type="1" Operator="7" AllowBlank="true" UseDropdown="false" Title="ghhg" Message="ghghhhjfhfghjfghj&#10;fg&#10;hjgf&#10;hj">
     //        <gmr:Expression0>45</gmr:Expression0>
     //      </gmr:Validation>
@@ -293,17 +296,17 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Conditional::InferiorEqual:
         case Conditional::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.minimumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.minimumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
             tmp = gnumeric_doc.createElement("gmr:Expression1");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.maximumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
@@ -328,17 +331,17 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Conditional::InferiorEqual:
         case Conditional::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(kspread_validity.minimumTime().toString()));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(kspread_validity.minimumTime().toString()));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
             tmp = gnumeric_doc.createElement("gmr:Expression1");
-            tmp.appendChild(gnumeric_doc.createTextNode(kspread_validity.maximumTime().toString()));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
@@ -358,17 +361,17 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Conditional::InferiorEqual:
         case Conditional::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(kspread_validity.minimumDate().toString()));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(kspread_validity.minimumDate().toString()));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
             tmp = gnumeric_doc.createElement("gmr:Expression1");
-            tmp.appendChild(gnumeric_doc.createTextNode(kspread_validity.maximumDate().toString()));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
@@ -388,17 +391,17 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Conditional::InferiorEqual:
         case Conditional::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.minimumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.minimumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
             tmp = gnumeric_doc.createElement("gmr:Expression1");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.maximumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
@@ -417,17 +420,17 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         case Conditional::InferiorEqual:
         case Conditional::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.minimumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
         case Conditional::Between:
         case Conditional::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.minimumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
             tmp = gnumeric_doc.createElement("gmr:Expression1");
-            tmp.appendChild(gnumeric_doc.createTextNode(QString::number(kspread_validity.maximumValue())));
+            tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.maximumValue()).asString()));
             val.appendChild(tmp);
         }
         break;

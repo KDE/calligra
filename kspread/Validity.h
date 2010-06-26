@@ -53,6 +53,8 @@
 namespace KSpread
 {
 class OdfLoadingContext;
+class ValueConverter;
+class ValueParser;
 
 /**
  * \class Validity
@@ -121,7 +123,7 @@ public:
      * \ingroup NativeFormat
      * Saves validity checks.
      */
-    QDomElement saveXML(QDomDocument& doc) const;
+    QDomElement saveXML(QDomDocument& doc, const ValueConverter *converter) const;
 
     /**
      * \ingroup OpenDocument
@@ -133,16 +135,15 @@ public:
     Action action() const;
     bool allowEmptyCell() const;
     Conditional::Type condition() const;
+
     bool displayMessage() const;
     bool displayValidationInformation() const;
     const QString& messageInfo() const;
-    const QDate& maximumDate() const;
-    const QTime& maximumTime() const;
-    double maximumValue() const;
     const QString& message() const;
-    const QDate& minimumDate() const;
-    const QTime& minimumTime() const;
-    double minimumValue() const;
+
+    const Value &maximumValue() const;
+    const Value &minimumValue() const;
+
     Restriction restriction() const;
     const QString& title() const;
     const QString& titleInfo() const;
@@ -151,16 +152,15 @@ public:
     void setAction(Action action);
     void setAllowEmptyCell(bool allow);
     void setCondition(Conditional::Type condition);
+
     void setDisplayMessage(bool display);
     void setDisplayValidationInformation(bool display);
-    void setMaximumDate(const QDate& date);
-    void setMaximumTime(const QTime& time);
-    void setMaximumValue(double value);
     void setMessage(const QString& message);
     void setMessageInfo(const QString& info);
-    void setMinimumDate(const QDate& date);
-    void setMinimumTime(const QTime& time);
-    void setMinimumValue(double value);
+
+    void setMaximumValue(const Value &value);
+    void setMinimumValue(const Value &value);
+
     void setRestriction(Restriction restriction);
     void setTitle(const QString& title);
     void setTitleInfo(const QString& info);
@@ -183,13 +183,13 @@ private:
      * \ingroup OpenDocument
      * Helper method for loadOdfValidation().
      */
-    void loadOdfValidationCondition(QString &valExpression);
+    void loadOdfValidationCondition(QString &valExpression, const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
      * Helper method for loadOdfValidation().
      */
-    void loadOdfValidationValue(const QStringList &listVal);
+    void loadOdfValidationValue(const QStringList &listVal, const ValueParser *parser);
 
     class Private;
     QSharedDataPointer<Private> d;

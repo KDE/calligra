@@ -32,6 +32,7 @@ class KoXmlWriter;
 namespace KSpread
 {
 class Validity;
+class ValueConverter;
 class GenValidationStyles;
 
 /**
@@ -41,8 +42,8 @@ class GenValidationStyles;
 class GenValidationStyle
 {
 public:
-    explicit GenValidationStyle(Validity *_val = 0) {
-        initVal(_val);
+    explicit GenValidationStyle(Validity *_val = 0, const ValueConverter *converter = 0) {
+        initVal(_val, converter);
     }
 
 
@@ -60,14 +61,14 @@ public:
         return false;
     }
 private:
-    QString createValidationCondition(Validity* _val);
+    QString createValidationCondition(Validity* _val, const ValueConverter *converter);
     QString createTextValidationCondition(Validity* _val);
-    QString createTimeValidationCondition(Validity* _val);
-    QString createDateValidationCondition(Validity* _val);
+    QString createTimeValidationCondition(Validity* _val, const ValueConverter *converter);
+    QString createDateValidationCondition(Validity* _val, const ValueConverter *converter);
     QString createNumberValidationCondition(Validity* _val);
     QString createListValidationCondition(Validity* _val);
 
-    void initVal(Validity *_val);
+    void initVal(Validity *_val, const ValueConverter *converter);
 
     QString allowEmptyCell;
     QString condition;

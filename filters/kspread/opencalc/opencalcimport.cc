@@ -328,6 +328,8 @@ void OpenCalcImport::convertFormula(QString & text, QString const & f) const
 
 bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, int & columns)
 {
+    ValueParser *const parser = table->map()->parser();
+
     bool ok = true;
     int spanC = 1;
     int spanR = 1;
@@ -481,7 +483,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
         }
         if (e.hasAttributeNS(ooNS::table, "validation-name")) {
             kDebug(30518) << " Celle has a validation :" << e.attributeNS(ooNS::table, "validation-name", QString());
-            loadOasisValidation(Cell(table, columns, row).validity(), e.attributeNS(ooNS::table, "validation-name", QString()));
+            loadOasisValidation(Cell(table, columns, row).validity(), e.attributeNS(ooNS::table, "validation-name", QString()), parser);
         }
         if (e.hasAttributeNS(ooNS::table, "value-type")) {
             if (!cell)
@@ -1201,7 +1203,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
         return false;
 
     loadOasisAreaName(body.toElement());
-    loadOasisCellValidation(body.toElement());
+    loadOasisCellValidation(body.toElement(), m_doc->map()->parser());
 
     Sheet * table;
     KoXmlNode sheet = KoXml::namedItemNS(body, ooNS::table, "table");
@@ -1398,7 +1400,7 @@ void OpenCalcImport::loadOasisAreaName(const KoXmlElement&body)
     }
 }
 
-void OpenCalcImport::loadOasisCellValidation(const KoXmlElement&body)
+void OpenCalcImport::loadOasisCellValidation(const KoXmlElement&body, const ValueParser *parser)
 {
     KoXmlNode validation = KoXml::namedItemNS(body, ooNS::table, "content-validations");
     if (!validation.isNull()) {
@@ -2070,7 +2072,7 @@ bool OpenCalcImport::createStyleMap(KoXmlDocument const & styles)
     return true;
 }
 
-void OpenCalcImport::loadOasisValidation(Validity validity, const QString& validationName)
+void OpenCalcImport::loadOasisValidation(Validity validity, const QString& validationName, const ValueParser *parser)
 {
     kDebug(30518) << "validationName:" << validationName;
     KoXmlElement element = m_validationList[validationName];
@@ -2096,7 +2098,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
             kDebug(30518) << " valExpression = :" << valExpression;
             validity.setRestriction(Validity::TextLength);
 
-            loadOasisValidationCondition(validity, valExpression);
+            loadOasisValidationCondition(validity, valExpression, parser);
         }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
         else if (valExpression.contains("cell-content-text-length-is-between")) {
@@ -2106,7 +2108,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
             kDebug(30518) << " valExpression :" << valExpression;
             valExpression = valExpression.remove(')');
             QStringList listVal = valExpression.split(',');
-            loadOasisValidationValue(validity, listVal);
+            loadOasisValidationValue(validity, listVal, parser);
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             validity.setRestriction(Validity::TextLength);
             validity.setCondition(Conditional::Different);
@@ -2115,7 +2117,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
             valExpression = valExpression.remove(')');
             kDebug(30518) << " valExpression :" << valExpression;
             QStringList listVal = valExpression.split(',');
-            loadOasisValidationValue(validity, listVal);
+            loadOasisValidationValue(validity, listVal, parser);
 
         }
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
@@ -2137,7 +2139,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
 
             if (valExpression.contains("cell-content()")) {
                 valExpression = valExpression.remove("cell-content()");
-                loadOasisValidationCondition(validity, valExpression);
+                loadOasisValidationCondition(validity, valExpression, parser);
             }
             //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
             //for the moment we support just int/double value, not text/date/time :(
@@ -2145,7 +2147,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
                 valExpression = valExpression.remove("cell-content-is-between(");
                 valExpression = valExpression.remove(')');
                 QStringList listVal = valExpression.split(',');
-                loadOasisValidationValue(validity, listVal);
+                loadOasisValidationValue(validity, listVal, parser);
 
                 validity.setCondition(Conditional::Between);
             }
@@ -2153,7 +2155,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
                 valExpression = valExpression.remove("cell-content-is-not-between(");
                 valExpression = valExpression.remove(')');
                 QStringList listVal = valExpression.split(',');
-                loadOasisValidationValue(validity, listVal);
+                loadOasisValidationValue(validity, listVal, parser);
                 validity.setCondition(Conditional::Different);
             }
         }
@@ -2203,46 +2205,17 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
     }
 }
 
-void OpenCalcImport::loadOasisValidationValue(Validity validity, const QStringList &listVal)
+void OpenCalcImport::loadOasisValidationValue(Validity validity, const QStringList &listVal, const ValueParser *parser)
 {
     bool ok = false;
     kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
 
-    if (validity.restriction() == Validity::Date) {
-        validity.setMinimumDate(QDate::fromString(listVal[0]));
-        validity.setMaximumDate(QDate::fromString(listVal[1]));
-    } else if (validity.restriction() == Validity::Time) {
-        validity.setMinimumTime(QTime::fromString(listVal[0]));
-        validity.setMaximumTime(QTime::fromString(listVal[1]));
-    } else {
-        validity.setMinimumValue(listVal[0].toDouble(&ok));
-        if (!ok) {
-            validity.setMinimumValue(listVal[0].toInt(&ok));
-            if (!ok)
-                kDebug(30518) << " Try to parse this value :" << listVal[0];
-
-#if 0
-            if (!ok)
-                validity.setMinimumValue(listVal[0]);
-#endif
-        }
-        ok = false;
-        validity.setMaximumValue(listVal[1].toDouble(&ok));
-        if (!ok) {
-            validity.setMaximumValue(listVal[1].toInt(&ok));
-            if (!ok)
-                kDebug(30518) << " Try to parse this value :" << listVal[1];
-
-#if 0
-            if (!ok)
-                validity.setMaximumValue(listVal[1]);
-#endif
-        }
-    }
+    validity.setMinimumValue(parser->parse(listVal[0]));
+    validity.setMaximumValue(parser->parse(listVal[1]));
 }
 
 
-void OpenCalcImport::loadOasisValidationCondition(Validity validity, QString &valExpression)
+void OpenCalcImport::loadOasisValidationCondition(Validity validity, QString &valExpression, const ValueParser *parser)
 {
     QString value;
     if (valExpression.contains("<=")) {
@@ -2266,25 +2239,9 @@ void OpenCalcImport::loadOasisValidationCondition(Validity validity, QString &va
         validity.setCondition(Conditional::Equal);
     } else
         kDebug(30518) << " I don't know how to parse it :" << valExpression;
-    kDebug(30518) << " value :" << value;
-    if (validity.restriction() == Validity::Date) {
-        validity.setMinimumDate(QDate::fromString(value));
-    } else if (validity.restriction() == Validity::Date) {
-        validity.setMinimumTime(QTime::fromString(value));
-    } else {
-        bool ok = false;
-        validity.setMinimumValue(value.toDouble(&ok));
-        if (!ok) {
-            validity.setMinimumValue(value.toInt(&ok));
-            if (!ok)
-                kDebug(30518) << " Try to parse this value :" << value;
 
-#if 0
-            if (!ok)
-                validity.setMinimumValue(value);
-#endif
-        }
-    }
+    kDebug(30518) << " value :" << value;
+    validity.setMinimumValue(parser->parse(value));
 }
 
 

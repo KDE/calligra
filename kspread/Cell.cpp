@@ -955,7 +955,7 @@ QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
 
     Validity validity = this->validity();
     if (!validity.isEmpty()) {
-        QDomElement validityElement = validity.saveXML(doc);
+        QDomElement validityElement = validity.saveXML(doc, sheet()->map()->converter());
         if (!validityElement.isNull())
             cell.appendChild(validityElement);
     }
@@ -1162,7 +1162,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 
     Validity validity = Cell(sheet(), column, row).validity();
     if (!validity.isEmpty()) {
-        GenValidationStyle styleVal(&validity);
+        GenValidationStyle styleVal(&validity, sheet()->map()->converter());
         xmlwriter.addAttribute("table:validation-name", tableContext.valStyle.insert(styleVal));
     }
     if (isFormula()) {
