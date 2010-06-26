@@ -23,7 +23,10 @@ S	Involves string changes.  Must be done before the freeze.
 
 BUGS
 ====
+ ---    Painting shapes in RTL layouted sheet is still broken.
+ ---    Printing shapes is broken.
  ---    AutoFormatCommand does not redo() properly.
+ ---    Undo of "Subtotals..." action crashes.
 
 
 
@@ -34,19 +37,117 @@ Things to do after the release of KOffice 2.0
 Item										Prio	Status
 ----------------------------------------------------------------------------------------------
 
+* Overhaul/Redesign dialogs:
+  - "Conditional Styles...": port to .ui file(s); use QTableWidget;             3       ----
+    allow more than three conditions; list all cell ranges holding a condition,
+    that intersect the cell selection; display the cell range in an extra column
+    in the list; allow to choose between those cell ranges and the current cell
+    selection; if there are no stored condtions yet or the only stored one's
+    range matches the cell selection, hide the list's cell range column; extend
+    the conditions to allow cell content text length comparisons and formulas;
+    'Reset' button to restore conditions; 'Clear'/'Defaults' button to clear all
+    intersecting conditions or just the selected part of them (obsoletes 'Remove
+    Conditional Styles' action); rename to just "Conditional Styles..."
+  - "Validity...": same as for "Conditional Styles..."; move the error message
+    and information panel into the list by using KExtenableItemDelegate
+  - "Named Areas...": port to .ui file(s); use QTableWidget; move the cell range
+    display into the list editable with a RegionSelector; remove the ability to
+    select a named area by moving this functionality into the "Bookmarks" menu
+  - "Custom Lists...": port to .ui file(s); use QListWidget; display as is, but
+    edit with KTextEdit (one item per row); find a common place for storing
+    the (pre-)defined lists (maybe store them all in the config file; if a
+    predefined list gets removed, one can restore it by pressing "Defaults");
+    the lists are used by the sort dialog and for auto-filling
+  - "Insert Comment...": 'Reset' button to restore former comment after editing;
+    'Clear'/'Defaults' button to remove comment (obsoletes 'Remove Comment'
+    action); rename to just "Comment..."; range-based: put the cell ranges into
+    the list as planned for "Conditional Styles..."?
+  - "Insert Link...": same as for "Insert Comment...", if applicable
+
+* Source code organization                                                      3       ----
+  - Move the .cpp/.h files in kspread/ to kspread/core/.
+  - Move kspread/functions/ to kspread/plugins/functions/.
+  - Move kspread/dialogs/ to kspread/ui/dialogs/.
+  - Move kspread/commands/ to kspread/core/commands/.
+
 * User Interface                                                                1       ----
   - Add a 'Go' ('Navigation') menu to select the active sheet. Reuse the actions
     from the 'Navigation' toolbar and add a sheet list (use KSelectAction?).
     'View' -> 'Goto Cell' should be moved there, too.
   - 'Rename sheet', 'Duplicate sheet' are also missing in the menu. Move
     them into 'Edit' -> 'Sheet'?
+  - 'Auto-Fill' (selection change with size grip) is missing in the menu.
   - Improve conformance to the standard menu layout:
     `kde4-config --install config`/ui/ui_standards.rc
+  - Figure out, if it's feasible to add a 'Bookmarks' menu that handles
+    named areas.
+  - Figure out, if the 'Insert' menu could be merged into the 'Data' menu
+    and the 'Data' menu moved in front of the 'Format' menu.
+  - Figure out, which 'Data' entries are 'Tools'. They are all affecting
+    the data, but also they act like tools. E.g. inserting a comment
+    is not tool-like, it's definitely belonging to the 'Data' menu.
+  - Would a 'Document' menu containing cell, column, row and sheet related
+    actions be a sensible choice?
+    'Document': actions, that act on the document (map/sheet) structure
+    'Data': actions, that insert new data or remove data
+    'Format': actions, that act on the visualization of existing data
+    'Tools': actions, that manipulate existing data
+    'Edit': difference to 'Data'? only standard editing actions?
+  - Alternatives to 'Document':
+    'Layout', 'Design', 'Structure', 'Scheme'
+    two menus: 'Workbook' and 'Sheet', 'Table'
+  - disable sub-menu entries, if all of their actions are disabled (KDElibs!)
+
+* Inform the user about unreachable/unsupported document data on loading.       1       ----
+
+* Load/Save of embedded objects for the old XML format                          1       ----
+  see KSPREAD_KOPART_EMBEDDING
+
+* Copy shapes on copying sheet                                                  1       ----
+  see KSPREAD_WIP_COPY_SHEET_(SHAPES)
+
+* Loading of old document attributes.                                           1       ----
+  see KOXML_USE_QDOM
+
+* Check, if the DTD of the old XML format is up to date.                        2       ----
+  Specifically, the border handling (see Sheet::convertObscuringBorders()).
   Implement conditional style saving for 1.1, 1.2 syntax.
+
+* User Interaction:                                                             2       ----
+  The canvas does not react on context menu key events.
+
+* Loading/Saving of unreachable (e.g. rows > KS_rowMax) document data.          2       ----
+
+* Commands
+  Undo of cell border setting does not restore the border of the adjacent cell. 2       ----
+  see KSPREAD_WIP_STYLE_BORDER
+
+* User Interaction:                                                             2       ----
+  Check, if the edit widget in the CellTool acts like the EditWidget before.
+  see KSPREAD_DISCARD_FORMULA_BAR
+
+* User Interaction                                                              3       ----
+  Implement a completion aware KTextEdit. (see Editors.cpp)
+  see KSPREAD_COMPLETION_MODE_SETTING
 
 * Commands                                                                      3       ----
   CellStorage: Replace CellStorageUndoData* by a QStack<CellStorageUndoData>,
   so that cascaded undo recordings become possible.
+
+* Style-/RectStorage: Check, if QSharedPointer can be used instead of           3       ----
+  Q(Explicitly)SharedDataPointer. This would automagically remove unused
+  pointers/data.
+
+* SpellCheck: Save the ignored words to document.                               3       ----
+  Doc::addIgnoreWord() et al.
+
+* D-Bus support                                                                 3       ----
+  Some old DCOP code parts were not converted yet.
+
+* User Interaction:                                                             3       ----
+  Implement a drag indicator. If possible in DragAndDropStrategy, but this
+  needs KoInteractionTool/-Strategy to handle dragMove-/dropEvents.
+  see KSPREAD_WIP_DRAG_REFERENCE_SELECTION
 
 * Thread support                                                                3       ----
   Move the dependency calculation and cell recalculation into a separate
@@ -69,6 +170,8 @@ Item										Prio	Status
   layout. The pages should be based on KoShapeContainer, so that the TableShape
   becomes a child of it and can rely on its dimension to layout the table
   pages.
+  The column/row header have to be adjusted to be usable with the table shape.
+  Or new, specialised classes take care of this.
 
 * Source-/TargetRange concept							3	----
   Currently, cell ranges, which data is exported, are called Binding. The
@@ -114,6 +217,111 @@ Item										Prio	Status
   2. Refactor Database, so that it refers to a TargetRangeModel.
   3. DatabaseStorage becomes TargetRangeStorage.
 
+* Port the editor's function auto-completion to KCompletion.                    3       ----
+
+* Implement a QValidator accepting cell locations, cell ranges and named areas. 3       ----
+  Usable for LocationComboBox and RegionSelector.
+
+* Elaborate, if for the user input validation (Validity) a QValidator can be    3       ----
+  used for the embedded/external editor.
+
+* Implement a PointStorage::Iterator, which iterates over the non-default data  3       ----
+  in a cell range/region in horizontal or vertical direction.
+
+* Harmonize conditions for content validation, filters and conditional styles.  3       ----
+     8.5.3 Table Cell Content Validations
+            Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
+            TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time() | cell-content-is-text()
+            ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
+            TrueCondition ::= GetFunction | cell-content() Operator Value
+            GetFunction ::= cell-content-is-between(Value, Value) | cell- content-is-not-between(Value, Value)
+            ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
+            Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
+            Value ::= NumberValue | String | Formula
+            StringList ::= StringList ';' String | String
+            A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for
+            more information.
+            A String comprises one or more characters surrounded by quotation marks.
+            A NumberValue is a whole or decimal number. It must not contain comma separators for
+            numbers of 1000 or greater.
+     8.7.4 Filter Condition
+            match (matches)
+            !match (does not match)
+            In both case, the table:value attribute contains the regular expression that the table cells have
+            to match or must not match.
+            The relational operators that do not use regular expressions are:
+            = (Equal to)
+            != (Not equal to)
+            < (Less than)
+            > (Greater than)
+            <= (Less than or equal to)
+            >= (Greater than or equal to)
+            In addition, operators “empty”, “!empty”, “bottom values”, “top values”, “bottom percent”, and “top
+            percent” can be used. To filter for example the lowest and highest percentage values, the latter
+            two operators can be used.
+    14.1.1 Style Mappings (Conditional Styles)
+            is-true-formula(formula)
+            cell-content-is-between(value, value)
+            cell-content-is-not-between(value, value)
+            cell-content() operator value, where operator is one of; '<', '>', '<=', '>=',
+            '=' or '!=', and value is a numberValue, a string or a formula.
+            A numberValue is a whole or decimal number. The number cannot contain comma
+            separators for numbers of 1000 or greater.
+            A string comprises one or more characters surrounded by quotation marks.
+            A formula is a formula (see 8.1.3) without the equals (=) sign at the beginning.
+
+* MapViewModel aka. ViewController (or CanvasController?)                       3       ----
+    Inherit from QAbstractProxyModel with MapModel as source.
+    Manages:
+        - active sheet handling incl. sheet navigation ("Go" menu) and shape
+          additions/removals
+        - named areas ("Bookmarks" menu)
+
+* Modularization                                                                3       ----
+    The goal is to make KSpread more modular. Functionality like cell content
+    validation (Validity), source and target cell ranges for external data or
+    named areas should become optional. Maybe even more like (conditional)
+    styles, comments, cell fusions, etc, so that what's left is the bare
+    minimum: user inputs, formulas and values (btw: all stored with
+    PointStorage).
+    [Point- and RectStorage could also become (low-level) plugins, in order to
+    replace them more easily in the future. The storage plugins and the 'core'
+    storages should then use these low-level plugins.]
+    Plugin categories:
+        - FunctionModule
+            a set of functions
+        - Tool
+            cell tool derivative, that works with Selection; should leave actions from other tools
+            working with Selection activated; viewers do not need editing tools
+        - Storage
+            viewers do not need all of them, e.g. cell content validation or cell range locks
+        - Manager
+        - (Dialog) [could be part of a tool]
+            viewers do not need all of them
+        - (Command) [could be part of a tool]
+            not needed by viewers
+        - (Feature) [could also be achieved with plugin dependencies]
+            combines other categories, e.g. loads a storage, dialog and command for cell content
+            validation
+    Steps to go:
+    - Extract an interface for RectStorages (or even better for both, Point-
+      and RectStorage) based on QAbstractItemModel.
+    - Refactor CellStorage to load storage plugins.
+    - Combine these plugins with the neccessary dialogs/commands acting on the
+      cell selection (they could all be placed in one shared object/library, if
+      each plugin (storage/dialog/command) gets a corresponding .desktop file).
+    - Some extra logic needs to be hard-coded into 'core', e.g. the check
+      wether the user input fulfills the restrictions set by Validity. Those
+      could hopefully be coded with the help of Qt's model system (item data
+      roles). If not, extra interfaces have to be defined, at least for
+      non-standard, non-Qt types.
+
+* Convert actions to CellTool/KPart plugins:                                    3       ----
+    - "Consolidate..."
+    - "Goal Seek..."
+    - "Subtotals..."
+    - "Text to Columns..."
+    - "Validity..."
 
 
 Things to do before the release of KOffice 2.0

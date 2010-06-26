@@ -262,7 +262,7 @@ Sheet::Sheet(const Sheet& other)
     d->columns = other.d->columns;
 
     // flake
-#if 0
+#if 0 // KSPREAD_WIP_COPY_SHEET_(SHAPES)
     //FIXME This does not work as copySettings does not work. Also createDefaultShapeAndInit without the correct settings can not work
     //I think this should use saveOdf and loadOdf for copying
     KoShape* shape;
@@ -272,7 +272,7 @@ Sheet::Sheet(const Sheet& other)
         shape->copySettings(shapes[i]);
         addShape(shape);
     }
-#endif
+#endif // KSPREAD_WIP_COPY_SHEET_(SHAPES)
 
     d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
 
