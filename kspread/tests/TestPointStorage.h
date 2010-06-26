@@ -50,6 +50,9 @@ private Q_SLOTS:
     void testPrevInColumn();
     void testPrevInRow();
     void testIteration();
+    void testColumnIteration();
+    void testRowIteration();
+    void testDimension();
     void testSubStorage();
 };
 
