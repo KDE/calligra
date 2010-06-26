@@ -1044,47 +1044,6 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
     return true;
 }
 
-QString Sheet::guessColumnTitle(QRect& area, int col)
-{
-    if ((!Region(area, this).isValid()) || (col < area.left()) || (col > area.right()))
-        return QString();
-
-    //The current guess logic is fairly simple - if the top row of the given area
-    //appears to contain headers (ie. there is text in each column) the text in the column at
-    //the top row of the area is returned.
-
-    /*  for (int i=area.left();i<=area.right();i++)
-      {
-        Value cellValue=value(i,area.top());
-
-        if (!cellValue.isString())
-          return QString();
-      }*/
-
-    Value cellValue = cellStorage()->value(col, area.top());
-    return cellValue.asString();
-}
-
-QString Sheet::guessRowTitle(QRect& area, int row)
-{
-    if ((!Region(area, this).isValid()) || (row < area.top()) || (row > area.bottom()))
-        return QString();
-
-    //The current guess logic is fairly simple - if the leftmost column of the given area
-    //appears to contain headers (ie. there is text in each row) the text in the row at
-    //the leftmost column of the area is returned.
-    /*for (int i=area.top();i<=area.bottom();i++)
-    {
-      Value cellValue=value(area.left(),i);
-
-      if (!cellValue.isString())
-        return QString();
-    }*/
-
-    Value cellValue = cellStorage()->value(area.left(), row);
-    return cellValue.asString();
-}
-
 QDomElement Sheet::saveXML(QDomDocument& dd)
 {
     QDomElement sheet = dd.createElement("table");

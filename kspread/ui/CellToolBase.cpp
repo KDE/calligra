@@ -2485,7 +2485,7 @@ void CellToolBase::sortInc()
     bool sortCols = selection()->isRowSelected();
     sortCols = sortCols || (range.top() == range.bottom());
     command->setSortRows(!sortCols);
-    command->addSortBy(0, true);  // by first one, ascending order
+    command->addCriterion(0, Qt::AscendingOrder, Qt::CaseInsensitive);
     command->add(*selection());
     command->execute(canvas());
 
@@ -2507,7 +2507,7 @@ void CellToolBase::sortDec()
     bool sortCols = selection()->isRowSelected();
     sortCols = sortCols || (range.top() == range.bottom());
     command->setSortRows(!sortCols);
-    command->addSortBy(0, false);  // by first one, descending order
+    command->addCriterion(0, Qt::DescendingOrder, Qt::CaseInsensitive);
     command->add(*selection());
     command->execute(canvas());
 

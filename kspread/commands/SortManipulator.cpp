@@ -36,7 +36,6 @@ SortManipulator::SortManipulator()
     m_changeformat = false;
     m_rows = true;
     m_skipfirst = false;
-    m_cs = false;
     m_usecustomlist = false;
 
     setText(i18n("Sort Data"));
@@ -95,16 +94,18 @@ bool SortManipulator::postProcessing()
     return AbstractDFManipulator::postProcessing();
 }
 
-void SortManipulator::addSortBy(int v, bool asc)
+void SortManipulator::addCriterion(int index, Qt::SortOrder order, Qt::CaseSensitivity caseSensitivity)
 {
-    m_sortby.push_back(v);
-    m_sortorder.push_back(asc);
+    Criterion criterion;
+    criterion.index = index;
+    criterion.order = order;
+    criterion.caseSensitivity = caseSensitivity;
+    m_criteria.append(criterion);
 }
 
-void SortManipulator::clearSortOrder()
+void SortManipulator::clearCriteria()
 {
-    m_sortby.clear();
-    m_sortorder.clear();
+    m_criteria.clear();
 }
 
 Value SortManipulator::newValue(Element *element, int col, int row,
@@ -179,11 +180,11 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
     int firstrow = range.top();
     int firstcol = range.left();
 
-    QList<int>::iterator it = m_sortby.begin();
-    QList<bool>::iterator it2 = m_sortorder.begin();
-    for (; it != m_sortby.end(); ++it, ++it2) {
-        int which = *it;
-        int ascending = *it2;
+    for (int i = 0; i < m_criteria.count(); ++i) {
+        int which = m_criteria[i].index;
+        bool ascending = m_criteria[i].order == Qt::AscendingOrder;
+        bool caseSensitive = m_criteria[i].caseSensitivity == Qt::CaseSensitive;
+
         // figure out coordinates of the cells
         int row1 = firstrow + (m_rows ? first : which);
         int row2 = firstrow + (m_rows ? second : which);
@@ -217,10 +218,10 @@ bool SortManipulator::shouldReorder(Element *element, int first, int second)
                 return (pos1 > pos2);
         }
 
-        if (calc->naturalGreater(val1, val2, m_cs))
+        if (calc->naturalGreater(val1, val2, caseSensitive))
             // first one greater - must reorder if ascending, don't reorder if not
             return ascending;
-        if (calc->naturalLower(val1, val2, m_cs))
+        if (calc->naturalLower(val1, val2, caseSensitive))
             // first one lower - don't reorder if ascending, reorder if not
             return !ascending;
         // equal - don't know yet, continue

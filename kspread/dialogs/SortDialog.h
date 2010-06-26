@@ -28,24 +28,13 @@
 #ifndef KSPREAD_SORT_DIALOG
 #define KSPREAD_SORT_DIALOG
 
+#include <KDialog>
 
-#include <kdialog.h>
-#include <QStringList>
-//Added by qt3to4:
-#include <QLabel>
-
-class QCheckBox;
-class KComboBox;
-class QLabel;
-class KLineEdit;
-class QRadioButton;
-class KTabWidget;
-class QWidget;
+class QTableWidgetItem;
 
 namespace KSpread
 {
 class Selection;
-class Sheet;
 
 /**
  * \ingroup UI
@@ -54,59 +43,30 @@ class Sheet;
 class SortDialog : public KDialog
 {
     Q_OBJECT
-
 public:
-    enum Orientation {
-        SortColumns = 0,
-        SortRows = 1
-    };
-
-    explicit SortDialog(QWidget* parent, Selection* selection);
+    SortDialog(QWidget* parent, Selection* selection);
     ~SortDialog();
 
-protected:
-    Orientation guessDataOrientation();
-    QRect       sourceArea();
-
-private slots:
-    void sortKey2textChanged(int);
-    void useCustomListsStateChanged(int);
-    void firstRowHeaderChanged(int);
-    virtual void slotOk();
-    void slotOrientationChanged(int id);
+public Q_SLOTS: // reimplementations
+    virtual void accept();
+    virtual void slotButtonClicked(int button);
 
 private:
     void init();
 
-    Selection    * m_selection;
+private Q_SLOTS:
+    void useHeaderChanged(bool);
+    void orientationChanged(bool horizontal);
+    void itemActivated(QTableWidgetItem *item);
+    void itemSelectionChanged();
+    void addCriterion();
+    void removeCriterion();
+    void moveCriterionUp();
+    void moveCriterionDown();
 
-    QStringList    m_listColumn;
-    QStringList    m_listRow;
-
-    QWidget      * m_page1;
-    QWidget      * m_page2;
-
-    KTabWidget   * m_tabWidget;
-
-    KComboBox    * m_sortKey1;
-    KComboBox    * m_sortOrder1;
-    KComboBox    * m_sortKey2;
-    KComboBox    * m_sortOrder2;
-    KComboBox    * m_sortKey3;
-    KComboBox    * m_sortOrder3;
-
-    QCheckBox    * m_useCustomLists;
-    KComboBox    * m_customList;
-
-    QRadioButton * m_sortColumn;
-    QRadioButton * m_sortRow;
-
-    QCheckBox    * m_copyLayout;
-    QCheckBox    * m_firstRowOrColHeader;
-    QCheckBox    * m_respectCase;
-
-    /*KComboBox    * m_outputSheet;
-    KLineEdit    * m_outputCell;*/
+private:
+    class Private;
+    Private *const d;
 };
 
 } // namespace KSpread

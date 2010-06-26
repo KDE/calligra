@@ -47,10 +47,6 @@ public:
     void setSkipFirst(bool v) {
         m_skipfirst = v;
     }
-    /** case sensitive sorting */
-    void setCaseSensitive(bool v) {
-        m_cs = v;
-    }
     /** set whether cell formats should be moved with data */
     void setCopyFormat(bool v) {
         setChangeFormat(v);
@@ -64,10 +60,15 @@ public:
         m_customlist = l;
     }
 
-    /** Add new sort type. Indexed from 0. Sort types are used in order
-    in which they're added. */
-    void addSortBy(int v, bool asc);
-    void clearSortOrder();
+    /** 
+     * Adds a sort criterion.
+     * Sort criteria are used in order in which they're added.
+     * \param index the column/row index. Indexed from 0.
+     * \param order sort order (ascending/descending)
+     * \param caseSensitivity case sensitivity
+     */
+    void addCriterion(int index, Qt::SortOrder order, Qt::CaseSensitivity caseSensitivity);
+    void clearCriteria();
 
 protected:
     virtual bool preProcessing();
@@ -80,10 +81,15 @@ protected:
     void sort(Element *element);
     bool shouldReorder(Element *element, int first, int second);
 
-    bool m_rows, m_skipfirst, m_usecustomlist, m_cs;
+    bool m_rows, m_skipfirst, m_usecustomlist;
     QStringList m_customlist;
-    QList<int> m_sortby;
-    QList<bool> m_sortorder;
+
+    struct Criterion {
+        int index;
+        Qt::SortOrder order;
+        Qt::CaseSensitivity caseSensitivity;
+    };
+    QList<Criterion> m_criteria;
 
     /** sorted order - which row/column will move to where */
     QMap<int, int> sorted;
