@@ -25,7 +25,6 @@
 
 namespace KSpread
 {
-class Selection;
 
 /**
  * A strategy for automatic filling values into selected cells.
@@ -39,8 +38,7 @@ public:
     /**
      * Constructor.
      */
-    AutoFillStrategy(KoToolBase *parent, Selection *selection,
-                     const QPointF position, Qt::KeyboardModifiers modifiers);
+    AutoFillStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

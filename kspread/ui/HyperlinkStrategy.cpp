@@ -44,10 +44,10 @@ public:
     QString url;
 };
 
-HyperlinkStrategy::HyperlinkStrategy(KoToolBase* parent, Selection* selection,
+HyperlinkStrategy::HyperlinkStrategy(CellToolBase *cellTool,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers,
                                      const QString& url, const QRectF& textRect)
-        : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
+        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)
 {
     d->lastPoint = documentPos;

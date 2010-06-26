@@ -25,7 +25,6 @@
 
 namespace KSpread
 {
-class Selection;
 
 /**
  * A strategy for pasting the global mouse selection.
@@ -40,8 +39,7 @@ public:
     /**
      * Constructor.
      */
-    PasteStrategy(KoToolBase *parent, Selection *selection,
-                  const QPointF position, Qt::KeyboardModifiers modifiers);
+    PasteStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

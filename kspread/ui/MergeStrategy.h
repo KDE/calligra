@@ -25,7 +25,6 @@
 
 namespace KSpread
 {
-class Selection;
 
 /**
  * A strategy for merging cells.
@@ -39,8 +38,7 @@ public:
     /**
      * Constructor.
      */
-    MergeStrategy(KoToolBase *parent, Selection *selection,
-                  const QPointF position, Qt::KeyboardModifiers modifiers);
+    MergeStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

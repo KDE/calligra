@@ -28,6 +28,7 @@ class KoCanvasBase;
 
 namespace KSpread
 {
+class CellToolBase;
 class Selection;
 
 /**
@@ -45,8 +46,7 @@ public:
     /**
      * Constructor.
      */
-    AbstractSelectionStrategy(KoToolBase* parent, Selection* selection,
-                              const QPointF position, Qt::KeyboardModifiers modifiers);
+    AbstractSelectionStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.
@@ -82,6 +82,7 @@ public:
                                          const QPointF &position);
 
 protected:
+    CellToolBase *cellTool() const;
     Selection* selection() const;
     const QPointF& startPosition() const;
 

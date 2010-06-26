@@ -19,6 +19,7 @@
 
 #include "AbstractSelectionStrategy.h"
 
+#include "CellToolBase.h"
 #include "kspread_limits.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
@@ -27,24 +28,23 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KoToolBase.h>
 
 using namespace KSpread;
 
 class AbstractSelectionStrategy::Private
 {
 public:
-    Selection* selection;
+    CellToolBase *cellTool;
     QPointF start;
 };
 
-AbstractSelectionStrategy::AbstractSelectionStrategy(KoToolBase *parent, Selection *selection,
+AbstractSelectionStrategy::AbstractSelectionStrategy(CellToolBase *cellTool,
         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : KoInteractionStrategy(parent)
+        : KoInteractionStrategy(cellTool)
         , d(new Private)
 {
     Q_UNUSED(modifiers)
-    d->selection = selection;
+    d->cellTool = cellTool;
     d->start = documentPos;
 }
 
@@ -56,27 +56,28 @@ AbstractSelectionStrategy::~AbstractSelectionStrategy()
 void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers)
-    const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
+    Selection *const selection = d->cellTool->selection();
+    const KoShape* shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
     // In which cell did the user click?
     double xpos;
     double ypos;
-    int col = d->selection->activeSheet()->leftColumn(position.x(), xpos);
-    int row = d->selection->activeSheet()->topRow(position.y(), ypos);
+    int col = selection->activeSheet()->leftColumn(position.x(), xpos);
+    int row = selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax) {
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
         return;
     }
     // Test whether mouse is over the Selection.handle
-    if (hitTestSelectionSizeGrip(tool()->canvas(), d->selection, position)) {
+    if (hitTestSelectionSizeGrip(tool()->canvas(), selection, position)) {
         // If the cursor is over the handle, than it might be already on the next cell.
         // Recalculate the cell position!
-        col = d->selection->activeSheet()->leftColumn(position.x() - tool()->canvas()->viewConverter()->viewToDocumentX(2.0), xpos);
-        row = d->selection->activeSheet()->topRow(position.y() - tool()->canvas()->viewConverter()->viewToDocumentY(2.0), ypos);
+        col = selection->activeSheet()->leftColumn(position.x() - tool()->canvas()->viewConverter()->viewToDocumentX(2.0), xpos);
+        row = selection->activeSheet()->topRow(position.y() - tool()->canvas()->viewConverter()->viewToDocumentY(2.0), ypos);
     }
     // Update the selection.
-    d->selection->update(QPoint(col, row));
+    selection->update(QPoint(col, row));
     tool()->repaintDecorations();
 }
 
@@ -158,9 +159,14 @@ bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas,
     return false;
 }
 
+CellToolBase *AbstractSelectionStrategy::cellTool() const
+{
+    return d->cellTool;
+}
+
 Selection* AbstractSelectionStrategy::selection() const
 {
-    return d->selection;
+    return d->cellTool->selection();
 }
 
 const QPointF& AbstractSelectionStrategy::startPosition() const

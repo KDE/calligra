@@ -50,12 +50,13 @@ public:
     bool started;
 };
 
-DragAndDropStrategy::DragAndDropStrategy(KoToolBase *parent, Selection *selection,
+DragAndDropStrategy::DragAndDropStrategy(CellToolBase *cellTool,
         const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
+        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)
 {
     d->lastPoint = documentPos;
+    Selection *const selection = this->selection();
     const KoShape *shape = tool()->canvas()->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 

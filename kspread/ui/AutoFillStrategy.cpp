@@ -33,12 +33,12 @@ public:
     QRect autoFillSource;
 };
 
-AutoFillStrategy::AutoFillStrategy(KoToolBase *parent, Selection *selection,
+AutoFillStrategy::AutoFillStrategy(CellToolBase *cellTool,
                                    const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-        : AbstractSelectionStrategy(parent, selection, documentPos, modifiers)
+        : AbstractSelectionStrategy(cellTool, documentPos, modifiers)
         , d(new Private)
 {
-    d->autoFillSource = selection->lastRange();
+    d->autoFillSource = selection()->lastRange();
 }
 
 AutoFillStrategy::~AutoFillStrategy()

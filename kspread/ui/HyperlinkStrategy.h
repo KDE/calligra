@@ -27,7 +27,6 @@
 
 namespace KSpread
 {
-class Selection;
 
 /**
  * A strategy for visiting a hyperlink.
@@ -42,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    HyperlinkStrategy(KoToolBase* parent, Selection* selection,
+    HyperlinkStrategy(CellToolBase *cellTool,
                       const QPointF position, Qt::KeyboardModifiers modifiers,
                       const QString& url, const QRectF& textRect);
 

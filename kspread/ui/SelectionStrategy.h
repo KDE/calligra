@@ -25,7 +25,6 @@
 
 namespace KSpread
 {
-class Selection;
 
 /**
  * A strategy for selecting cell ranges.
@@ -43,8 +42,7 @@ public:
     /**
      * Constructor.
      */
-    SelectionStrategy(KoToolBase *parent, Selection *selection,
-                      const QPointF position, Qt::KeyboardModifiers modifiers);
+    SelectionStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.

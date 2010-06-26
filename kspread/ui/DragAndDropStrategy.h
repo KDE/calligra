@@ -25,7 +25,6 @@
 
 namespace KSpread
 {
-class Selection;
 
 /**
  * A strategy for dragging cells.
@@ -39,8 +38,7 @@ public:
     /**
      * Constructor.
      */
-    DragAndDropStrategy(KoToolBase* parent, Selection* selection,
-                        const QPointF position, Qt::KeyboardModifiers modifiers);
+    DragAndDropStrategy(CellToolBase *cellTool, const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.
