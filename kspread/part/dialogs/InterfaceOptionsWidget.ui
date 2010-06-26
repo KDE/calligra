@@ -1,299 +1,313 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>InterfaceOptionsWidget</class>
- <widget class="QWidget" name="InterfaceOptionsWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="InterfaceOptionsWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>342</width>
-    <height>263</height>
+    <width>326</width>
+    <height>264</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Cursor movement after pressing Enter:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>m_cursorMovement</cstring>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="KComboBox" name="m_cursorMovement" >
-     <property name="whatsThis" >
+   <item row="0" column="1">
+    <widget class="KComboBox" name="m_cursorMovement">
+     <property name="whatsThis">
       <string>When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting.</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Function shown in status bar:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>m_statusBarFunction</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="KComboBox" name="m_statusBarFunction" >
-     <property name="whatsThis" >
+   <item row="1" column="1">
+    <widget class="KComboBox" name="m_statusBarFunction">
+     <property name="whatsThis">
       <string>This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function.</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_6" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
       <string>Unit:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>m_unit</cstring>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="KComboBox" name="m_unit" >
-     <property name="whatsThis" >
+   <item row="2" column="1">
+    <widget class="KComboBox" name="m_unit">
+     <property name="whatsThis">
       <string>Choose the default unit that will be used in your sheets.
-Note that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog.</string>
+Note that you can overwrite the unit for the current sheet using the Format -&gt; Page Layout... dialog.</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="m_indentationLabel" >
-     <property name="text" >
+   <item row="3" column="0">
+    <widget class="QLabel" name="m_indentationLabel">
+     <property name="text">
       <string>Indentation step:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>m_indentationStep</cstring>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="KoUnitDoubleSpinBox" name="m_indentationStep" >
-     <property name="whatsThis" >
+   <item row="3" column="1">
+    <widget class="KoUnitDoubleSpinBox" name="m_indentationStep">
+     <property name="whatsThis">
       <string>Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu.</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+   <item row="6" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>318</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>Colors</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label_4" >
-        <property name="text" >
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
          <string>Grid:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>m_gridColor</cstring>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KColorCombo" name="m_gridColor" >
-        <property name="whatsThis" >
+      <item row="0" column="1">
+       <widget class="KColorCombo" name="m_gridColor">
+        <property name="whatsThis">
          <string>Click here to change the grid color ie the color of the borders of each cell.</string>
         </property>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>Custom...</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_5" >
-        <property name="text" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
          <string>Page border:</string>
         </property>
-        <property name="buddy" >
+        <property name="buddy">
          <cstring>m_pageBorderColor</cstring>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="KColorCombo" name="m_pageBorderColor" >
-        <property name="whatsThis" >
-         <string>When the View ->Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red.</string>
+      <item row="1" column="1">
+       <widget class="KColorCombo" name="m_pageBorderColor">
+        <property name="whatsThis">
+         <string>When the View -&gt;Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red.</string>
         </property>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>Custom...</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string/>
          </property>
         </item>
@@ -302,18 +316,15 @@ Note that you can overwrite the unit for the current sheet using the Format -> P
      </layout>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
+   <item row="4" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_captureAllArrowKeys">
+     <property name="whatsThis">
+      <string>Captures all navigation keys, i.e. the arrow keys, page up/down, tabulator and backward tabulator key, while editing a cell with the embedded editor. The embedded editor is the one appearing directly in the cell. If captured, these keys are used for navigating in the editor. Otherwise, they are used for cell navigation.</string>
      </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>318</width>
-       <height>16</height>
-      </size>
+     <property name="text">
+      <string>Capture all navigation keys while editing</string>
      </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>
