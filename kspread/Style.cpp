@@ -1264,10 +1264,10 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
     if (keysToStore.contains(BackgroundColor) && backgroundColor().isValid())
         style.addProperty("fo:background-color", colorName(backgroundColor()));
 
-    if (keysToStore.contains(MultiRow) && keysToStore.contains(MultiRow))
+    if (keysToStore.contains(MultiRow) && wrapText())
         style.addProperty("fo:wrap-option", "wrap");
 
-    if (keysToStore.contains(VerticalText) && keysToStore.contains(VerticalText)) {
+    if (keysToStore.contains(VerticalText) && verticalText()) {
         style.addProperty("style:direction", "ttb");
         style.addProperty("style:rotation-angle", "0");
         style.addProperty("style:rotation-align", "none");
