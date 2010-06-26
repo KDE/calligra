@@ -279,7 +279,7 @@ void View::Private::initActions()
     KActionCollection* ac = view->actionCollection();
 
     // -- sheet/workbook actions --
-    actions->sheetProperties  = new KAction(i18n("Sheet Properties"), view);
+    actions->sheetProperties  = new KAction(i18n("Sheet Properties..."), view);
     ac->addAction("sheetProperties", actions->sheetProperties);
     connect(actions->sheetProperties, SIGNAL(triggered(bool)), view, SLOT(sheetProperties()));
     actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));

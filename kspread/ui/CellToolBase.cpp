@@ -191,7 +191,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(setDefaultStyle()));
     action->setToolTip(i18n("Resets to the default format"));
 
-    action = new KAction(i18n("Style Manager"), this);
+    action = new KAction(i18n("Style Manager..."), this);
     addAction("styleDialog", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(styleDialog()));
     action->setToolTip(i18n("Edit and organize cell styles"));
