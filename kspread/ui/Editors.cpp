@@ -483,6 +483,7 @@ void FunctionCompletion::showCompletion(const QStringList &choices)
 class CellEditor::Private
 {
 public:
+    CellToolBase*             cellTool;
     Cell                      cell;
     Selection*                selection;
     KTextEdit*                textEdit;
@@ -506,15 +507,16 @@ bool updatingChoice      : 1;
 };
 
 
-CellEditor::CellEditor(QWidget* parent, Selection* selection, bool captureAllKeyEvents)
+CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
         : QWidget(parent)
         , d(new Private)
 {
-    d->cell = Cell(selection->activeSheet(), selection->marker());
-    d->selection = selection;
+    d->cellTool = cellTool;
+    d->selection = cellTool->selection();
+    d->cell = Cell(d->selection->activeSheet(), d->selection->marker());
     d->textEdit = new KTextEdit(this);
     d->globalCursorPos = QPoint();
-    d->captureAllKeyEvents = captureAllKeyEvents;
+    d->captureAllKeyEvents = d->selection->activeSheet()->map()->settings()->captureAllArrowKeys();
     d->checkChoice = true;
     d->updateChoice = true;
     d->updatingChoice = false;
@@ -536,7 +538,7 @@ CellEditor::CellEditor(QWidget* parent, Selection* selection, bool captureAllKey
     d->textEdit->setLineWidth(0);
     d->textEdit->installEventFilter(this);
 
-    d->highlighter = new FormulaEditorHighlighter(d->textEdit, selection);
+    d->highlighter = new FormulaEditorHighlighter(d->textEdit, d->selection);
 
     d->functionCompletion = new FunctionCompletion(this);
     d->functionCompletionTimer = new QTimer(this);

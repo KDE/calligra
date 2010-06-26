@@ -1313,8 +1313,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         return false;
 
     if (!editor()) {
-        d->cellEditor = new CellEditor(canvas()->canvasWidget(), selection(),
-                                       selection()->activeSheet()->map()->settings()->captureAllArrowKeys());
+        d->cellEditor = new CellEditor(this, canvas()->canvasWidget());
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
                 d->optionWidget->editor(), SLOT(setText(const QString &)));
