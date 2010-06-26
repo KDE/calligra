@@ -1057,13 +1057,6 @@ void CellEditor::selectionChanged()
 void CellEditor::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
-        case Qt::Key_F4:
-            if (!d->selection->referenceSelection()) {
-                return; // do NOT pass to KTextEdit
-            }
-            permuteFixation();
-            event->accept();
-            return;
         case Qt::Key_Left:
         case Qt::Key_Right:
         case Qt::Key_Up:
@@ -1168,6 +1161,11 @@ QString permuteLocationFixation(const QString &regionName, int &i,
 
 void CellEditor::permuteFixation()
 {
+    // Nothing to do, if not in reference selection mode.
+    if (!d->selection->referenceSelection()) {
+        return;
+    }
+
     // Search for the last range before or the range at the cursor.
     int index = -1;
     const int cursorPosition = textCursor().position() - 1; // - '='

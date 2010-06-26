@@ -474,19 +474,6 @@ void CellToolBase::Private::processF2Key(QKeyEvent*  event)
     event->accept(); // QKeyEvent
 }
 
-void CellToolBase::Private::processF4Key(QKeyEvent* event)
-{
-    /* passes F4 to the editor (if any), which will process it
-    */
-    if (q->editor()) {
-        QApplication::sendEvent(q->editor(), event);
-        // Update the cursor position of the external editor.
-        QTextCursor textCursor = optionWidget->editor()->textCursor();
-        textCursor.setPosition(q->editor()->cursorPosition());
-        optionWidget->editor()->setTextCursor(textCursor);
-    }
-}
-
 void CellToolBase::Private::processOtherKey(QKeyEvent *event)
 {
     register Sheet * const sheet = q->selection()->activeSheet();

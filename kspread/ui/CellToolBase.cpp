@@ -833,6 +833,15 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(breakBeforeRow(bool)));
     action->setIconText(i18n("Row Break"));
     action->setToolTip(i18n("Set a manual page break before the row"));
+
+    // Editor actions:
+    // Set up the permutation of the reference fixations action.
+    action = new KAction(i18n("Permute reference fixation"), this);
+    addAction("permuteFixation", action);
+    action->setShortcut(Qt::Key_F4);
+    // connect on creation of the embedded editor
+    action->setIconText(i18n("Permute fixation"));
+    action->setToolTip(i18n("Permute the fixation of the reference at the text cursor"));
 }
 
 CellToolBase::~CellToolBase()
@@ -1047,12 +1056,6 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
         d->processF2Key(event);
         return;
         break;
-
-    case Qt::Key_F4:
-        d->processF4Key(event);
-        return;
-        break;
-
     default:
         d->processOtherKey(event);
         return;
@@ -1330,6 +1333,8 @@ bool CellToolBase::createEditor(bool clear, bool focus)
     if (!editor()) {
         d->cellEditor = new CellEditor(this, canvas()->canvasWidget());
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
+        connect(action("permuteFixation"), SIGNAL(triggered(bool)),
+                d->cellEditor, SLOT(permuteFixation()));
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
                 d->optionWidget->editor(), SLOT(setText(const QString &)));
         connect(d->optionWidget->editor(), SIGNAL(textChanged(const QString &)),
