@@ -61,22 +61,49 @@ sort the header files alphabetically. </p>
 <p>Write test cases. This will ease further maintenance. See also the section on Test
 Framework above.</p>
 
-<p>Do not use the term <i>table</i>. It was incorrectly invented quite likely
-because of the term <i>Tabelle</i> (German, literally means table). The correct
-term is <i>sheet</i> or <i>worksheet</i>. The English version of Microsoft
-uses <i>sheet</i> while the German version uses <i>Tabelle</i>.</p>
-
 <p>Use <a href="http://techbase.kde.org/Policies/Library_Code_Policy#D-Pointers">d-pointer</a> trick (also known pimpl) whenever possible. Such practice will help when later on
 we want to expose the API and need to maintain binary compatibility. But the
 most important thing is to separate the interface and the implementation.
 Furthermore, build time is reduced since modifications on the implementation
 would not cause tons of recompile.</p>
 
+
+\section classes Class Naming
 <p>When creating a new class, use the namespace KSpread instead of the KSpread prefix.
-Example: use <tt>KSpread::FooBar</tt> instead of <tt>KSpreadFooBar</tt>.
-Also, source file names should not contain the kspread prefix anymore,
+Example: use <tt>KSpread::FooBar</tt> instead of <tt>KSpreadFooBar</tt>.</p>
+
+<p>Do not use the term <i>table</i>. It was incorrectly invented quite likely
+because of the term <i>Tabelle</i> (German, literally means table). The correct
+term is <i>sheet</i> or <i>worksheet</i>. The English version of Microsoft
+uses <i>sheet</i> while the German version uses <i>Tabelle</i>.</p>
+\subsection classes-dos Dos:
+\li <kbd>Sheet</kbd>
+\li <kbd>KSpread::FooBar</kbd>
+
+\subsection classes-donts Donts:
+\li <kbd style="text-decoration: line-through;">Table</kbd> (use <kbd>Sheet</kbd>)
+\li <kbd style="text-decoration: line-through;">KSpreadFooBar</kbd> (use <kbd>KSpread::FooBar</kbd>)
+
+
+\section filenames File Names
+<p>Source file names should not contain the kspread prefix anymore,
 but CamelCase form and .cpp extension, i.e.
 <tt>FooBar.h</tt> and <tt>FooBar.cpp</tt> (but not <tt>kspread_foo_bar.h</tt> or
 <tt>kspread_foo_bar.cc</tt>) for the above example.</p>
+\subsection filenames-dos Dos:
+\li <kbd>FooBar.cpp</kbd>
+\li <kbd>FooBar.h</kbd>
 
+\subsection filenames-donts Donts:
+\li <kbd style="text-decoration: line-through;">kspread_foo_bar.cpp</kbd> (use <kbd>FooBar.cpp</kbd>)
+\li <kbd style="text-decoration: line-through;">kspread_foo_bar.cc</kbd> (use <kbd>FooBar.cpp</kbd>)
+\li <kbd style="text-decoration: line-through;">kspread_foo_bar.h</kbd> (use <kbd>FooBar.h</kbd>)
+
+
+\section astyle Automatic Source Code Formatting
+Use <tt>astyle</tt> for auto-formatting the source code:
+\code
+astyle --indent=spaces=4 --brackets=linux --indent-labels --pad=oper --unpad=paren
+       --one-line=keep-statements --convert-tabs --indent-preprocessor
+\endcode
 */
