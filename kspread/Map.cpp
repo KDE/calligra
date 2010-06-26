@@ -160,8 +160,8 @@ Map::Map ( Doc* doc, int syntaxVersion)
     d->defaultRowFormat = new RowFormat();
 
     QFont font(KoGlobal::defaultFont());
-    d->defaultRowFormat->setHeight(font.pointSizeF() + 3);
-    d->defaultColumnFormat->setWidth((font.pointSizeF() + 3) * 5);
+    d->defaultRowFormat->setHeight(font.pointSizeF() + 4);
+    d->defaultColumnFormat->setWidth((font.pointSizeF() + 4) * 5);
 
     d->isLoading = false;
 

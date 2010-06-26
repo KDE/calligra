@@ -39,6 +39,7 @@ Fix the goal seek dialog/command.
 Change to the desired sheet, if an address is entered in the location combobox.
 Do not leave reference selection mode after selecting a cell (range).
 Fix the position of the function auto-completion popup.
+Fix default cell height: Let cell with two-lined text obscure only two rows.
 
 Developer-Visible Only
 ----------------------
