@@ -48,6 +48,8 @@ public:
     virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QUndoCommand* createCommand();
 
+    bool dragStarted() const;
+
 private:
     class Private;
     Private * const d;

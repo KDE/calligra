@@ -887,7 +887,12 @@ void CellToolBase::mousePressEvent(KoPointerEvent* event)
 void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
 {
     // Special handling for drag'n'drop.
-    if (dynamic_cast<DragAndDropStrategy*>(currentStrategy())) {
+    if (DragAndDropStrategy *const strategy = dynamic_cast<DragAndDropStrategy*>(currentStrategy())) {
+        // FIXME Stefan: QDrag*Event and QDropEvent are not handled by KoInteractionTool YET:
+        // Cancel the strategy after the drag has started.
+        if (strategy->dragStarted()) {
+            cancelCurrentStrategy();
+        }
         KoInteractionTool::mouseMoveEvent(event);
         return;
     }

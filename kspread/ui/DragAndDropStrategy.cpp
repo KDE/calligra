@@ -136,3 +136,8 @@ QUndoCommand* DragAndDropStrategy::createCommand()
     }
     return 0;
 }
+
+bool DragAndDropStrategy::dragStarted() const
+{
+    return d->started;
+}
