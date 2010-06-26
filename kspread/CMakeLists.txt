@@ -98,6 +98,8 @@ SET (dialogs_DIR_SRCS
 
 
 kde4_add_ui_files(dialogs_DIR_SRCS
+        dialogs/ConsolidateWidget.ui
+        dialogs/ConsolidateDetailsWidget.ui
 	dialogs/FontWidget.ui
         dialogs/GoalSeekWidget.ui
 	dialogs/PositionWidget.ui

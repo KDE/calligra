@@ -45,6 +45,7 @@ Fix the function auto-completion: Close the hint label properly and do not crash
 Properly remove cell obscuring.
 Properly repaint the cells and the column/row header(s) after column/row adjustment.
 Fix OpenDocument saving of wrapping and vertical text.
+Fix the "Consolidate..." action.
 
 Developer-Visible Only
 ----------------------

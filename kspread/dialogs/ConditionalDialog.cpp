@@ -28,7 +28,6 @@
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "Style.h"
 #include "StyleManager.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
@@ -524,8 +523,6 @@ void ConditionalDialog::slotOk()
         return;
 
     kDebug() << "Input data is valid";
-
-    //StyleManager * manager = m_selection->activeSheet()->map()->styleManager();
 
     QLinkedList<Conditional> newList;
 

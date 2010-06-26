@@ -29,14 +29,7 @@
 #ifndef KSPREAD_CONSOLIDATE_DIALOG
 #define KSPREAD_CONSOLIDATE_DIALOG
 
-#include <QStringList>
-#include <kdialog.h>
-
-class KLineEdit;
-class QPushButton;
-class KComboBox;
-class QCheckBox;
-class QListWidget;
+#include <KDialog>
 
 namespace KSpread
 {
@@ -62,34 +55,20 @@ class ConsolidateDialog : public KDialog
 public:
     ConsolidateDialog(QWidget* parent, Selection* selection);
     virtual ~ConsolidateDialog();
-    QStringList refs();
 
-public slots:
-    virtual void slotOk();
-    virtual void slotCancel();
+public Q_SLOTS:
+    virtual void accept();
+
+private Q_SLOTS:
     void slotAdd();
     void slotRemove();
 
     void slotSelectionChanged();
     void slotReturnPressed();
 
-protected:
-    void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
-
-protected:
-    Selection* m_selection;
-    KLineEdit* m_pRef;
-    QListWidget* m_pRefs;
-    KComboBox* m_pFunction;
-    QPushButton* m_pAdd;
-    QPushButton* m_pRemove;
-    QCheckBox* m_pRow;
-    QCheckBox* m_pCol;
-    QCheckBox* m_pCopy;
-
-    QString evaluate(const QString& formula, Sheet* sheet);
-
-    enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
+private:
+    class Private;
+    Private *const d;
 };
 
 } // namespace KSpread
