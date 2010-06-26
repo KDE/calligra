@@ -1581,10 +1581,6 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
         event->accept();
         return;
     }
-    if (event->key() == Qt::Key_F2) {
-        // Switch the focus back to the embedded editor.
-        d->cellTool->editor()->setFocus();
-    }
     // call inherited handler
     KTextEdit::keyPressEvent(event);
 }

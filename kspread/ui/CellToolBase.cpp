@@ -745,7 +745,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     action = new KAction(KIcon("cell_edit"), i18n("Modify Cell"), this);
     addAction("editCell", action);
-    action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
+    action->setShortcuts(QList<QKeySequence>() << Qt::Key_F2 << QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
     action->setToolTip(i18n("Edit the highlighted cell"));
 
@@ -1052,10 +1052,6 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
         return;
         break;
 
-    case Qt::Key_F2:
-        d->processF2Key(event);
-        return;
-        break;
     default:
         d->processOtherKey(event);
         return;
@@ -2806,10 +2802,17 @@ void CellToolBase::formulaSelection(const QString& expression)
 
 void CellToolBase::edit()
 {
-    if (editor())
-        return;
-
-    createEditor(false /* keep content */);
+    // Not yet in edit mode?
+    if (!editor()) {
+        createEditor(false /* keep content */);
+    } else {
+        // Switch focus.
+        if (editor()->hasFocus()) {
+            d->optionWidget->editor()->setFocus();
+        } else {
+            editor()->setFocus();
+        }
+    }
 }
 
 void CellToolBase::cut()
