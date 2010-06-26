@@ -1227,9 +1227,11 @@ void CellToolBase::selectionChanged(const Region& region)
     if (!d->optionWidget) {
         return;
     }
-    // if we're in ref viewing mode, do nothing here
-    if (editor() && selection()->referenceSelection() && (!selection()->referenceSelectionMode()))
+    // Update the editor, if the reference selection is enabled.
+    if (editor() && selection()->referenceSelectionMode()) {
+        editor()->updateChoice();
         return;
+    }
 
     // State of manual page breaks before columns/rows.
     bool columnBreakChecked = false;
@@ -1258,9 +1260,6 @@ void CellToolBase::selectionChanged(const Region& region)
     }
     d->updateEditor(cell);
     d->updateActions(cell);
-    if (selection()->referenceSelectionMode() && editor()) {
-        editor()->updateChoice();
-    }
 
     if (selection()->activeSheet()->isProtected()) {
         const Style style = cell.style();
