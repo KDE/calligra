@@ -1086,45 +1086,6 @@ QString Sheet::guessRowTitle(QRect& area, int row)
     return cellValue.asString();
 }
 
-static QString cellAsText(const Cell& cell, bool addTab)
-{
-    QString result;
-    if (!cell.isDefault()) {
-        result += cell.displayText();
-    }
-    if (addTab) {
-        result += '\t';
-    }
-    return result;
-}
-
-QString Sheet::copyAsText(Selection* selection)
-{
-    // Only one cell selected? => copy active cell
-    if (selection->isSingular()) {
-        Cell cell(this, selection->marker());
-        return cell.displayText();
-    }
-
-    QRect lastRange(selection->lastRange());
-
-    // Find area
-    int top = lastRange.bottom();
-    int bottom = lastRange.top();
-    int left = lastRange.right();
-    int right = lastRange.left();
-
-    QString result;
-    for (int y = top; y <= bottom; ++y) {
-        for (int x = left; x <= right; ++x) {
-            Cell cell(this, x, y);
-            result += cellAsText(cell, x != right);
-        }
-        result += '\n';
-    }
-    return result;
-}
-
 void Sheet::copySelection(Selection* selection)
 {
     QDomDocument doc = CopyCommand::saveAsXml(*selection);
@@ -1138,7 +1099,7 @@ void Sheet::copySelection(Selection* selection)
     buffer.close();
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setText(copyAsText(selection));
+    mimeData->setText(CopyCommand::saveAsPlainText(*selection));
     mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
     QApplication::clipboard()->setMimeData(mimeData);
@@ -1158,7 +1119,7 @@ void Sheet::cutSelection(Selection* selection)
     buffer.close();
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setText(copyAsText(selection));
+    mimeData->setText(CopyCommand::saveAsPlainText(*selection));
     mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
     QApplication::clipboard()->setMimeData(mimeData);

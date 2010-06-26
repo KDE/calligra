@@ -42,6 +42,12 @@ namespace CopyCommand
 QDomDocument saveAsXml(const Region&, bool era = false);
 
 /**
+ * Saves the cell \p region as plain text.
+ * \param region the cell region to process
+ */
+QString saveAsPlainText(const Region &region);
+
+/**
  * Saves the cell \p region as HTML.
  */
 QDomDocument saveAsHtml(const Region& region);

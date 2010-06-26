@@ -138,6 +138,45 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
     return xmlDoc;
 }
 
+static QString cellAsText(const Cell& cell, bool addTab)
+{
+    QString result;
+    if (!cell.isDefault()) {
+        result += cell.displayText();
+    }
+    if (addTab) {
+        result += '\t';
+    }
+    return result;
+}
+
+QString CopyCommand::saveAsPlainText(const Region &region)
+{
+    // Only one cell selected? => copy active cell
+    if (region.isSingular()) {
+        const Cell cell(region.firstSheet(), region.firstRange().topLeft());
+        return cell.displayText();
+    }
+
+    QRect lastRange(region.lastRange());
+
+    // Find area
+    int top = lastRange.bottom();
+    int bottom = lastRange.top();
+    int left = lastRange.right();
+    int right = lastRange.left();
+
+    QString result;
+    for (int row = top; row <= bottom; ++row) {
+        for (int col = left; col <= right; ++col) {
+            Cell cell(region.lastSheet(), col, row);
+            result += cellAsText(cell, col != right);
+        }
+        result += '\n';
+    }
+    return result;
+}
+
 QDomDocument CopyCommand::saveAsHtml(const Region &region)
 {
     QDomDocument doc("spreadsheet-html");

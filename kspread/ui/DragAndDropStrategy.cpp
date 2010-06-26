@@ -108,7 +108,7 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
         buffer.close();
 
         QMimeData* mimeData = new QMimeData();
-        mimeData->setText(selection()->activeSheet()->copyAsText(selection()));
+        mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
         mimeData->setData("application/x-kspread-snippet", buffer.buffer());
 
         QDrag *drag = new QDrag(tool()->canvas()->canvasWidget());

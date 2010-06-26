@@ -139,6 +139,7 @@
 #include "PrintJob.h"
 
 // commands
+#include "commands/CopyCommand.h"
 #include "commands/DefinePrintRangeCommand.h"
 #include "commands/SheetCommands.h"
 #include "commands/Undo.h"
@@ -1430,7 +1431,10 @@ void View::copyAsText()
 {
     if (!d->activeSheet)
         return;
-    d->activeSheet->copyAsText(selection());
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
+
+    QApplication::clipboard()->setMimeData(mimeData);
 }
 
 

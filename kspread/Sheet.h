@@ -644,13 +644,6 @@ public:
 
     /**
      * \ingroup Commands
-     * returns the text to be copied to the clipboard
-     * @param selection the selection of cells to work on
-     */
-    QString copyAsText(Selection* selection);
-
-    /**
-     * \ingroup Commands
      */
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
