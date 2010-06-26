@@ -34,7 +34,7 @@ to look up the constant in the constants pool.</p>
 Yes, this is really minimalist but yet does the job fairly well.
 The following provides brief description for each type of bytecode.</p>
 
-<blockquote>
+<div style="margin-left: 4em">
 
 <p><i>Nop</i> means no operation.</p>
 
@@ -89,7 +89,7 @@ comparison because it can be regarded as &quot;equal&quot; followed by
 &quot;not&quot; byte codes. Same goes for &quot;less than or equal to&quot; and
 &quot;greater than or equal to&quot;.</p>
 
-</blockquote>
+</div>
 
 <p>The expression scanner is based on finite state acceptor. The state denotes
 the position of cursor, e.g. inside a cell token, inside an identifier, etc.
@@ -107,7 +107,7 @@ thus requires the use of a syntax stack.</p>
 
 <p>The parser algorithm is given as follows:</p>
 
-<blockquote>
+<div style="margin-left: 4em">
 Repeat the following steps:<br>
 Step 1: Get next token<br>
 Step 2: If it is an identifier<br>
@@ -120,7 +120,7 @@ Step 4: If it is an operator<br>
 - check for reduce rules<br>
 <br>
 - when no more rules applies, push token to the syntax stack<br>
-</blockquote>
+</div>
 
 <p>The reduce rules are:</p>
 
