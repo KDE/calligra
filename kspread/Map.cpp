@@ -45,7 +45,6 @@
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
-#include "part/Canvas.h" // FIXME detach from part
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "part/Doc.h" // FIXME detach from part
@@ -57,7 +56,6 @@
 #include "OdfSavingContext.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
@@ -66,7 +64,6 @@
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
-#include "part/View.h" // FIXME detach from part
 
 // database
 #include "database/DatabaseManager.h"
@@ -403,41 +400,6 @@ void Map::loadOdfSettings(KoOasisSettings &settings)
     }
 }
 
-void Map::saveOdfSettings(KoXmlWriter &settingsWriter)
-{
-    settingsWriter.addConfigItem("ViewId", QString::fromLatin1("View1"));
-    // Save visual info for the first view, such as active sheet and active cell
-    // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View * view = d->doc->views().isEmpty() ? 0 : static_cast<View*>(d->doc->views().first());
-    if (view) { // no view if embedded document
-        // save current sheet selection before to save marker, otherwise current pos is not saved
-        view->saveCurrentSheetSelection();
-        //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        if(Sheet* sheet = view->activeSheet())
-            settingsWriter.addConfigItem("ActiveTable",  sheet->sheetName());
-    }
-
-    //<config:config-item-map-named config:name="Tables">
-    settingsWriter.startElement("config:config-item-map-named");
-    settingsWriter.addAttribute("config:name", "Tables");
-    foreach(Sheet* sheet, d->lstSheets) {
-        settingsWriter.startElement("config:config-item-map-entry");
-        settingsWriter.addAttribute("config:name", sheet->sheetName());
-        if (view) {
-            QPoint marker = view->markerFromSheet(sheet);
-            QPointF offset = view->offsetFromSheet(sheet);
-            settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
-            settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
-            settingsWriter.addConfigItem("xOffset", offset.x());
-            settingsWriter.addConfigItem("yOffset", offset.y());
-        }
-        sheet->saveOdfSettings(settingsWriter);
-        settingsWriter.endElement();
-    }
-    settingsWriter.endElement();
-}
-
-
 bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
 {
     // Saving the custom cell styles including the default cell style.
@@ -496,17 +458,6 @@ QDomElement Map::save(QDomDocument& doc)
     spread.appendChild(s);
 
     QDomElement mymap = doc.createElement("map");
-    // Save visual info for the first view, such as active sheet and active cell
-    // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View * view = d->doc->views().isEmpty() ? 0 : static_cast<View*>(d->doc->views().first());
-    if (view) { // no view if embedded document
-        Canvas * canvas = view->canvasWidget();
-        mymap.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
-        mymap.setAttribute("markerColumn", view->selection()->marker().x());
-        mymap.setAttribute("markerRow",    view->selection()->marker().y());
-        mymap.setAttribute("xOffset",      canvas->xOffset());
-        mymap.setAttribute("yOffset",      canvas->yOffset());
-    }
 
     QByteArray password;
     this->password(password);

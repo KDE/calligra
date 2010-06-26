@@ -200,11 +200,6 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    void saveOdfSettings(KoXmlWriter &settingsWriter);
-
-    /**
-     * \ingroup OpenDocument
-     */
     void loadOdfSettings(KoOasisSettings &settings);
 
     /**

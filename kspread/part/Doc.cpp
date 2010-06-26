@@ -289,6 +289,17 @@ QDomDocument Doc::saveXML()
     }
 
     QDomElement e = map()->save(doc);
+    if (!views().isEmpty()) { // no view if embedded document
+        // Save visual info for the first view, such as active sheet and active cell
+        // It looks like a hack, but reopening a document creates only one view anyway (David)
+        View *const view = static_cast<View*>(views().first());
+        Canvas *const canvas = view->canvasWidget();
+        e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
+        e.setAttribute("markerColumn", view->selection()->marker().x());
+        e.setAttribute("markerRow",    view->selection()->marker().y());
+        e.setAttribute("xOffset",      canvas->xOffset());
+        e.setAttribute("yOffset",      canvas->yOffset());
+    }
     spread.appendChild(e);
 
     setModified(false);
@@ -402,7 +413,37 @@ void Doc::saveOdfSettings(KoXmlWriter &settingsWriter)
     settingsWriter.startElement("config:config-item-map-indexed");
     settingsWriter.addAttribute("config:name", "Views");
     settingsWriter.startElement("config:config-item-map-entry");
-    map()->saveOdfSettings(settingsWriter);
+    settingsWriter.addConfigItem("ViewId", QString::fromLatin1("View1"));
+    if (!views().isEmpty()) { // no view if embedded document
+        // Save visual info for the first view, such as active sheet and active cell
+        // It looks like a hack, but reopening a document creates only one view anyway (David)
+        View *const view = static_cast<View*>(views().first());
+        // save current sheet selection before to save marker, otherwise current pos is not saved
+        view->saveCurrentSheetSelection();
+        //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
+        if (Sheet *sheet = view->activeSheet()) {
+            settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
+        }
+    }
+    //<config:config-item-map-named config:name="Tables">
+    settingsWriter.startElement("config:config-item-map-named");
+    settingsWriter.addAttribute("config:name", "Tables");
+    foreach (Sheet *sheet, map()->sheetList()) {
+        settingsWriter.startElement("config:config-item-map-entry");
+        settingsWriter.addAttribute("config:name", sheet->sheetName());
+        if (!views().isEmpty()) {
+            View *const view = static_cast<View*>(views().first());
+            QPoint marker = view->markerFromSheet(sheet);
+            QPointF offset = view->offsetFromSheet(sheet);
+            settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
+            settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
+            settingsWriter.addConfigItem("xOffset", offset.x());
+            settingsWriter.addConfigItem("yOffset", offset.y());
+        }
+        sheet->saveOdfSettings(settingsWriter);
+        settingsWriter.endElement();
+    }
+    settingsWriter.endElement();
     settingsWriter.endElement();
     settingsWriter.endElement();
 }
