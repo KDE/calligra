@@ -303,7 +303,7 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
 
     if (q->editor()) {
         // We are in edit mode -> go beginning of line
-        q->editor()->handleKeyPressEvent(event);
+        QApplication::sendEvent(q->editor(), event);
         return false;
     } else {
         QPoint destination;
@@ -442,7 +442,7 @@ void CellToolBase::Private::processDeleteKey(QKeyEvent* event)
         // Switch to editing mode
         q->createEditor();
     }
-    q->editor()->handleKeyPressEvent(event);
+    QApplication::sendEvent(q->editor(), event);
 
     // TODO Stefan: Actually this check belongs into the command!
     if (sheet->areaIsEmpty(*q->selection()))
@@ -466,6 +466,7 @@ void CellToolBase::Private::processF2Key(QKeyEvent*  event)
 {
     optionWidget->editor()->setFocus();
     if (q->editor()) {
+        // Update the cursor position of the external editor.
         QTextCursor textCursor = optionWidget->editor()->textCursor();
         textCursor.setPosition(q->editor()->cursorPosition());
         optionWidget->editor()->setTextCursor(textCursor);
@@ -478,7 +479,8 @@ void CellToolBase::Private::processF4Key(QKeyEvent* event)
     /* passes F4 to the editor (if any), which will process it
     */
     if (q->editor()) {
-        q->editor()->handleKeyPressEvent(event);
+        QApplication::sendEvent(q->editor(), event);
+        // Update the cursor position of the external editor.
         QTextCursor textCursor = optionWidget->editor()->textCursor();
         textCursor.setPosition(q->editor()->cursorPosition());
         optionWidget->editor()->setTextCursor(textCursor);
@@ -498,7 +500,8 @@ void CellToolBase::Private::processOtherKey(QKeyEvent *event)
             // Switch to editing mode
             q->createEditor();
         }
-        q->editor()->handleKeyPressEvent(event);
+        // Send it to the embedded editor.
+        QApplication::sendEvent(q->editor(), event);
     }
 }
 
@@ -1097,6 +1100,8 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
     const qreal pixelY = q->canvas()->viewConverter()->viewToDocumentY(1);
     const QRectF handleArea(-3 * pixelX, -3 * pixelY, 6 * pixelX, 6 * pixelY);
 
+    // A list of already found regions to color the same region with the same color.
+    QSet<QString> alreadyFoundRegions;
     // The colors for the referenced ranges and the color index.
     const QList<QColor> colors = q->selection()->colors();
     int index = 0;
@@ -1110,6 +1115,11 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
             index++;
             continue;
         }
+        // Only paint a reference once.
+        if (alreadyFoundRegions.contains((*it)->name())) {
+            continue;
+        }
+        alreadyFoundRegions.insert((*it)->name());
 
         const QRect range = q->selection()->extendToMergedAreas((*it)->rect());
         QRectF area = sheet->cellCoordinatesToDocument(range);

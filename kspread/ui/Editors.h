@@ -179,11 +179,10 @@ private:
 /**
  * class CellEditor
  */
-class CellEditor : public QWidget
+class CellEditor : public KTextEdit
 {
     Q_OBJECT
 public:
-
     /**
     * Creates a new CellEditor.
     * \param cellTool the cell tool
@@ -192,39 +191,29 @@ public:
     explicit CellEditor(CellToolBase *cellTool, QWidget *parent = 0);
     ~CellEditor();
 
-    const Cell& cell() const;
     Selection* selection() const;
 
-    void handleKeyPressEvent(QKeyEvent* _ev);
-    void handleInputMethodEvent(QInputMethodEvent  * _ev);
     void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter);
 
     int cursorPosition() const;
     void setCursorPosition(int pos);
 
-    /** wrapper to KTextEdit::text() */
-    QString text() const;
-
-    /** wrapper to KTextEdit::cut() */
-    void cut();
-    /** wrapper to KTextEdit::paste() */
-    void paste();
-    /** wrapper to KTextEdit::copy() */
-    void copy();
-
     QPoint globalCursorPosition() const;
 
-    bool checkChoice();
-    void setCheckChoice(bool b);
+    /**
+     * Replaces the current formula token(/reference) with the name of the
+     * selection's active sub-region name.
+     * This is called after selection changes to sync the formula expression.
+     */
+    void selectionChanged();
 
-    void updateChoice();
-    void setUpdateChoice(bool);
-
-    void setCursorToRange(uint);
+    /**
+     * Activates the sub-region belonging to the \p index 'th range.
+     */
+    void setActiveSubRegion(int index);
 
 Q_SIGNALS:
     void textChanged(const QString &text);
-    void modificationChanged(bool changed);
 
 public slots:
     void setText(const QString& text, int cursorPos = -1);
@@ -234,13 +223,10 @@ private slots:
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged();
 
-protected:
-    void resizeEvent(QResizeEvent*);
-    /**
-     * Steals some key events from the KLineEdit and sends
-     * it to the KSpread::Canvas ( its parent ) instead.
-     */
-    bool eventFilter(QObject* o, QEvent* e);
+protected: // reimplementations
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void focusInEvent(QFocusEvent *event);
+    virtual void focusOutEvent(QFocusEvent *event);
 
 protected slots:
     void checkFunctionAutoComplete();
@@ -325,6 +311,7 @@ protected:
 
 private slots:
     void slotTextChanged();
+    void slotCursorPositionChanged();
 
 private:
     Q_DISABLE_COPY(ExternalEditor)

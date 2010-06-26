@@ -1062,7 +1062,10 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
 
 void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
 {
-    editor()->handleInputMethodEvent(event);
+    // Send it to the embedded editor.
+    if (editor()) {
+        QApplication::sendEvent(editor(), event);
+    }
 }
 
 void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -1229,7 +1232,13 @@ void CellToolBase::selectionChanged(const Region& region)
     }
     // Update the editor, if the reference selection is enabled.
     if (editor() && selection()->referenceSelectionMode()) {
-        editor()->updateChoice();
+        // First, update the formula expression. This will send a signal with
+        // the new expression to the external editor, which does not have focus
+        // yet (the canvas has). If it would have, it would also send a signal
+        // to inform the embedded editor about a changed text.
+        editor()->selectionChanged();
+        // Focus the embedded or external editor after updating the expression.
+        focusEditorRequested();
         return;
     }
 
@@ -1400,6 +1409,7 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     if (!d->cellEditor) {
         return;
     }
+    const QString userInput = editor()->toPlainText();
     editor()->hide();
     // Delete the cell editor first and after that update the document.
     // That means we get a synchronous repaint after the cell editor
@@ -1411,7 +1421,7 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     d->formulaDialog = 0;
 
     if (saveChanges) {
-        applyUserInput(expandMatrix);
+        applyUserInput(userInput, expandMatrix);
     } else {
         selection()->update();
     }
@@ -1436,8 +1446,8 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
         } else {
             editor()->show();
         }
-        editor()->updateChoice();
     }
+    focusEditorRequested();
 }
 
 void CellToolBase::updateEditor()
@@ -1454,9 +1464,17 @@ void CellToolBase::updateEditor()
 
 void CellToolBase::focusEditorRequested()
 {
+    // Nothing to do, if not in editing mode.
+    if (!editor()) {
+        return;
+    }
     // If we are in editing mode, we redirect the focus to the CellEditor or ExternalEditor.
     // This screws up <Tab> though (David)
-    if (editor()) {
+    if (selection()->originSheet() != selection()->activeSheet()) {
+        // Always focus the external editor, if not on the origin sheet.
+        d->optionWidget->editor()->setFocus();
+    } else {
+        // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->setFocus();
         } else {
@@ -1465,9 +1483,9 @@ void CellToolBase::focusEditorRequested()
     }
 }
 
-void CellToolBase::applyUserInput(bool expandMatrix)
+void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 {
-    QString text = d->optionWidget->editor()->toPlainText();
+    QString text = userInput;
     if (!text.isEmpty() && text.at(0) == '=') {
         //a formula
         int openParenthese = text.count('(');
@@ -1661,7 +1679,7 @@ void CellToolBase::font(const QString& font)
     if (editor()) {
         const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
         editor()->setEditorFont(style.font(), true, canvas()->viewConverter());
-        editor()->setFocus();
+        focusEditorRequested();
     } else {
         canvas()->canvasWidget()->setFocus();
     }
@@ -1679,7 +1697,7 @@ void CellToolBase::fontSize(int size)
     if (editor()) {
         const Cell cell(selection()->activeSheet(), selection()->marker());
         editor()->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
-        editor()->setFocus();
+        focusEditorRequested();
     } else {
         canvas()->canvasWidget()->setFocus();
     }

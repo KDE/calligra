@@ -549,6 +549,12 @@ void Canvas::focusInEvent(QFocusEvent *event)
 {
     // If we are in editing mode, we redirect the
     // focus to the CellEditor or ExternalEditor.
+    // Using a focus proxy does not work here, because in reference selection
+    // mode clicking on the canvas to select a reference should end up in the
+    // editor, which got the focus before. This is determined by storing the
+    // last editor with focus. It is set by the editors on getting focus by user
+    // interaction. Setting a focus proxy would always result in the proxy being
+    // the last editor, because clicking the canvas is a user interaction.
     // This screws up <Tab> though (David)
     selection()->emitRequestFocusEditor();
     QWidget::focusInEvent(event);

@@ -191,14 +191,16 @@ public:
     Sheet* originSheet() const;
 
     /**
-     * Sets the element, which has @p point as anchor, as active
+     * Activates the cell location/range, that has \p cell as bottom left or
+     * right cell. If more than one occurence would fit, the first one is taken.
+     * \return the index of the activated range or \c -1, if nothing fits
      */
-    void setActiveElement(const QPoint& point, CellEditor* cellEditor);
+    int setActiveElement(const Cell &cell);
 
     /**
-     * Sets the @p number 'th element as active
+     * Sets the element, which has @p point as anchor, as active
      */
-    void setActiveElement(int number);
+    void setActiveElement( const QPoint& point, CellEditor* cellEditor );
 
     /**
      * @return the active element
@@ -206,10 +208,20 @@ public:
     Element* activeElement() const;
 
     /**
-     * Sets the starting position and the length of a subregion in a selection
-     * which allows multiple occurrences of elements.
+     * Sets the starting position and the length of a sub-region.
+     * On inserting/updating the selection the sub-region gets replaced
+     * by the new cell location/range.
+     * A \p length of \c 0 results in no replacement, but just in inserting the
+     * new cell location/range before the range index \p start.
+     * \param start The index of a range in this selection. It has to be a valid
+     * index; otherwise the sub-region will be set to the whole region.
+     * \param length The amount of ranges in the sub-region. If it exceeds the
+     * amount of ranges, beginning from \p start to the end of range list, it
+     * will be adjusted.
+     * \param active The active element within the sub-region.
+     * \verbatim start <= active <= start + length \endverbatim
      */
-    void setActiveSubRegion(uint start, uint length);
+    void setActiveSubRegion(int start, int length, int active = -1);
 
     /**
      *
@@ -249,7 +261,7 @@ public:
     void selectAll();
 
     /** Start using a reference selection instead of normal one. */
-    void startReferenceSelection(const Region& region = Region());
+    void startReferenceSelection();
     /** End using reference selection. */
     void endReferenceSelection(bool saveChanges = true);
     /** Enable/disable reference choosing mode. */

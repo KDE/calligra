@@ -20,6 +20,7 @@
 #include "SelectionStrategy.h"
 
 #include "CellToolBase.h"
+#include "Editors.h"
 #include "kspread_limits.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -79,7 +80,16 @@ SelectionStrategy::SelectionStrategy(CellToolBase *cellTool,
             selection->emitRequestFocusEditor();
             const bool sizeGripHit = hitTestReferenceSizeGrip(tool()->canvas(), selection, position);
             const bool shiftPressed = modifiers & Qt::ShiftModifier;
-            if (sizeGripHit || shiftPressed) {
+            if (sizeGripHit) {
+                // FIXME The size grip is partly located in the adjacent cells.
+                // Activate the selection's location/range.
+                const int index = selection->setActiveElement(d->startCell);
+                // If successful, activate the editor's location/range.
+                if (index >= 0 && cellTool->editor()) {
+                    cellTool->editor()->setActiveSubRegion(index);
+                }
+                selection->update(QPoint(col, row));
+            } else if (shiftPressed) {
                 selection->update(QPoint(col, row));
             } else if (modifiers & Qt::ControlModifier) {
                 // Extend selection, if control modifier is pressed.

@@ -230,7 +230,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* 
     // Save the name of the active sheet.
     m_sheetName = m_selection->activeSheet()->sheetName();
     // Save the cells current text.
-    QString tmp_oldText = m_editor->text();
+    QString tmp_oldText = m_editor->toPlainText();
     // Position of the cell.
     m_column = m_selection->marker().x();
     m_row = m_selection->marker().y();
