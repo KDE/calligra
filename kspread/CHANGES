@@ -38,6 +38,7 @@ Allow to select multiple cells after using a reference selection widget (e.g. in
 Fix the goal seek dialog/command.
 Change to the desired sheet, if an address is entered in the location combobox.
 Do not leave reference selection mode after selecting a cell (range).
+Fix the position of the function auto-completion popup.
 
 Developer-Visible Only
 ----------------------

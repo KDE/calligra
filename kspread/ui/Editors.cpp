@@ -679,7 +679,7 @@ void CellEditor::slotCursorPositionChanged()
     if (!checkChoice())
         return;
 
-    d->globalCursorPos = d->textEdit->mapToGlobal(d->textEdit->cursorRect().topLeft());
+    d->globalCursorPos = d->textEdit->mapToGlobal(d->textEdit->cursorRect().bottomLeft());
 
     d->highlighter->rehighlight();
 
