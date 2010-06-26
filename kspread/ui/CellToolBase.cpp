@@ -1092,6 +1092,8 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
             this, SLOT(updateEditor()));
     connect(selection(), SIGNAL(activeSheetChanged(Sheet*)),
             this, SLOT(activeSheetChanged(Sheet*)));
+    connect(selection(), SIGNAL(requestFocusEditor()),
+            this, SLOT(focusEditorRequested()));
     connect(selection(), SIGNAL(documentReadWriteToggled(bool)),
             this, SLOT(documentReadWriteToggled(bool)));
     connect(selection(), SIGNAL(sheetProtectionToggled(bool)),
