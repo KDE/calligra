@@ -1056,48 +1056,14 @@ void CellEditor::selectionChanged()
 
 void CellEditor::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_F4) {
-        QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
-
-    int cur = textCursor().position();
-        QString tmp, tmp2;
-        int n = -1;
-
-        // this is ugly, and sort of hack
-        // FIXME rewrite to use the real Tokenizer
-        unsigned i;
-        for (i = 0; i < 10; i++) {
-      tmp =  toPlainText().left( cur+i );
-      tmp2 = toPlainText().right( toPlainText().length() - cur - i );
-
-            n = exp.indexIn(tmp);
-            if (n >= 0) break;
-        }
-
-        if (n == -1) return;
-
-        QString newPart;
-        if ((exp.cap(1) == "$") && (exp.cap(3) == "$"))
-            newPart = '$' + exp.cap(2) + exp.cap(4);
-        else if ((exp.cap(1) != "$") && (exp.cap(3) != "$"))
-            newPart = '$' + exp.cap(2) + '$' + exp.cap(4);
-        else if ((exp.cap(1) == "$") && (exp.cap(3) != "$"))
-            newPart = exp.cap(2) + '$' + exp.cap(4);
-        else if ((exp.cap(1) != "$") && (exp.cap(3) == "$"))
-            newPart = exp.cap(2) + exp.cap(4);
-
-        QString newString = tmp.left(n);
-        newString += newPart;
-        cur = newString.length() - i;
-        newString += tmp2;
-
-    setPlainText(newString);
-        setCursorPosition(cur);
-
-        event->accept(); // QKeyEvent
-        return;
-    }
     switch (event->key()) {
+        case Qt::Key_F4:
+            if (!d->selection->referenceSelection()) {
+                return; // do NOT pass to KTextEdit
+            }
+            permuteFixation();
+            event->accept();
+            return;
         case Qt::Key_Left:
         case Qt::Key_Right:
         case Qt::Key_Up:
@@ -1158,6 +1124,126 @@ void CellEditor::setText(const QString& text, int cursorPos)
         }
         setCursorPosition(cursorPos);
     }
+}
+
+// helper for CellEditor::permuteFixation()
+QString permuteLocationFixation(const QString &regionName, int &i,
+                                bool columnFixed, bool rowFixed)
+{
+    QString result;
+    if (columnFixed) {
+        result += '$';
+    }
+    // copy the column letter(s)
+    while (i < regionName.count()) {
+        if (!regionName[i].isLetter()) {
+            if (regionName[i] == '$') {
+                // swallow the old fixation
+                ++i;
+                continue;
+            }
+            // stop, if not a column letter
+            break;
+        }
+        result += regionName[i++];
+    }
+    if (rowFixed) {
+        result += '$';
+    }
+    // copy the row number(s)
+    while (i < regionName.count()) {
+        if (!regionName[i].isNumber()) {
+            if (regionName[i] == '$') {
+                // swallow the old fixation
+                ++i;
+                continue;
+            }
+            // stop, if not a row number
+            break;
+        }
+        result += regionName[i++];
+    }
+    return result;
+}
+
+void CellEditor::permuteFixation()
+{
+    // Search for the last range before or the range at the cursor.
+    int index = -1;
+    const int cursorPosition = textCursor().position() - 1; // - '='
+    const Tokens tokens = d->highlighter->formulaTokens();
+    for (int i = 0; i < tokens.count(); ++i) {
+        const Token token = tokens[i];
+        if (token.pos() > cursorPosition) {
+            break; // for loop
+        }
+        if (token.type() == Token::Cell || token.type() == Token::Range) {
+            index = i;
+        }
+    }
+    // Quit, if no range was found.
+    if (index == -1) {
+        return;
+    }
+
+    const Token token = tokens[index];
+    Map *const map = d->selection->activeSheet()->map();
+    QString regionName = token.text();
+    // Filter sheet; truncates regionName; range without sheet name resides.
+    Sheet *const sheet = Region(QString(), map).filterSheetName(regionName);
+    const Region region(regionName, map, 0);
+    // TODO Stefan: Skip named areas.
+    if (!region.isValid()) {
+        return;
+    }
+    // FIXME Stefan: need access to fixation, thus to Region::Range; must use iterator
+    Region::Element *range = (*region.constBegin());
+    QString result(sheet ? (sheet->sheetName() + '!') : QString());
+    // Permute fixation.
+    if (region.isSingular()) {
+        char fixation = 0x00;
+        if (range->isRowFixed()) {
+            fixation += 0x01;
+        }
+        if (range->isColumnFixed()) {
+            fixation += 0x02;
+        }
+        fixation += 0x01;
+
+        int i = 0;
+        result += permuteLocationFixation(regionName, i, fixation & 0x02, fixation & 0x01);
+    } else {
+        char fixation = 0x00;
+        if (range->isBottomFixed()) {
+            fixation += 0x01;
+        }
+        if (range->isRightFixed()) {
+            fixation += 0x02;
+        }
+        if (range->isTopFixed()) {
+            fixation += 0x04;
+        }
+        if (range->isLeftFixed()) {
+            fixation += 0x08;
+        }
+        fixation += 0x01;
+
+        int i = 0;
+        result += permuteLocationFixation(regionName, i, fixation & 0x08, fixation & 0x04);
+        Q_ASSERT(regionName[i] == ':');
+        ++i;
+        result += ':';
+        result += permuteLocationFixation(regionName, i, fixation & 0x02, fixation & 0x01);
+    }
+    // Replace the range in the formula's expression.
+    QString text = toPlainText();
+    const int start = token.pos() + 1; // + '='
+    const int length = token.text().length();
+    setPlainText(text.replace(start, length, result));
+    // Set the cursor to the end of the range.
+    QTextCursor textCursor = this->textCursor();
+    textCursor.setPosition(start + result.length());
+    setTextCursor(textCursor);
 }
 
 int CellEditor::cursorPosition() const

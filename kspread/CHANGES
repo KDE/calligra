@@ -8,6 +8,7 @@ Manual page breaks.
 Enhancements
 ------------
 Display status bar messages instead of notifications (in a few cases).
+Fixation permutation for cell ranges, not only for locations (by F4 in editor).
 
 Bug Fixes
 ---------

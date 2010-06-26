@@ -218,6 +218,12 @@ Q_SIGNALS:
 public slots:
     void setText(const QString& text, int cursorPos = -1);
 
+    /**
+     * Permutes the fixation of the reference, at which the editor's cursor
+     * is placed. It is only active, if a formula is edited.
+     */
+    void permuteFixation();
+
 private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
