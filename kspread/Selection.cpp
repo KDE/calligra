@@ -80,9 +80,21 @@ public:
     bool multipleOccurences : 1;
     Mode selectionMode : 2;
 
-    int activeElement;
-    int activeSubRegionStart;
-    int activeSubRegionLength;
+    // For reference selections this selection represents all references in a
+    // formula. The user can place the text cursor at any reference while
+    // editing the formula. Such a reference may not just be a contiguous range,
+    // but a non-contiguous sub-region.
+    // (Even though the text delimiter that separates ranges in a sub-region,
+    // ';', is also used as delimiter for function arguments. Functions, that
+    // accept two or more adjacent references as arguments cannot cope with
+    // non-contiguous references for this reason. In this case it's up to the
+    // user to select references, that serve the function's needs.)
+    // That's what the next three variables are for.
+    // For 'normal' selections these variables are actually superfluous, but may
+    // be used in conjunction with the reference selection where appropriate.
+    int activeElement; // the active range in a referenced sub-region
+    int activeSubRegionStart; // the start of a referenced sub-region
+    int activeSubRegionLength; // the length of a referenced sub-region
 
     KoCanvasBase* canvasBase;
     bool referenceMode : 1;
@@ -100,8 +112,6 @@ Selection::Selection(KoCanvasBase* canvasBase)
         , Region(1, 1)
         , d(new Private())
 {
-    d->activeSubRegionStart = 0;
-    d->activeSubRegionLength = 1;
     d->canvasBase = canvasBase;
 }
 
@@ -112,6 +122,7 @@ Selection::Selection(const Selection& selection)
 {
     d->activeSheet = selection.d->activeSheet;
     d->originSheet = selection.d->originSheet;
+    d->activeElement = cells().count() - 1;
     d->activeSubRegionStart = 0;
     d->activeSubRegionLength = cells().count();
     d->canvasBase = selection.d->canvasBase;
@@ -264,7 +275,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
 
     if (d->selectionMode == SingleCell) {
         if (!cells().isEmpty())
-            initialize(cells()[0]->rect().bottomRight(), sheet);
+     	 initialize(region.firstRange().bottomRight(), sheet);
         return;
     }
 
@@ -334,12 +345,17 @@ void Selection::update(const QPoint& point)
 
     if (d->selectionMode == SingleCell) {
         initialize(point);
+    d->activeElement = 0;
+    d->activeSubRegionStart = 0;
+    d->activeSubRegionLength = 1;
         return;
     }
 
     if (cells().isEmpty()) {
         add(point);
-        d->activeSubRegionLength += cells().count() - count;
+    d->activeElement = 0;
+    d->activeSubRegionStart = 0;
+    d->activeSubRegionLength = 1;
         return;
     }
     if (d->activeElement == cells().count()) {
@@ -350,7 +366,9 @@ void Selection::update(const QPoint& point)
     Sheet* sheet = cells()[d->activeElement]->sheet();
     if (sheet != d->activeSheet) {
         extend(point);
-        d->activeSubRegionLength += cells().count() - count;
+    d->activeElement = cells().count() - 1;
+    d->activeSubRegionStart = cells().count() - 1;
+    d->activeSubRegionLength = 1;
         return;
     }
 
