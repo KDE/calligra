@@ -60,8 +60,8 @@ private:
 };
 
 StyleStorageUndoCommand::StyleStorageUndoCommand(StyleStorage *storage, QUndoCommand *parent)
-    : QUndoCommand(parent)
-    , m_storage(storage)
+        : QUndoCommand(parent)
+        , m_storage(storage)
 {
 }
 

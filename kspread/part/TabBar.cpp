@@ -195,7 +195,7 @@ void TabBarPrivate::layoutTabs()
     painter.setFont(f);
     QFontMetrics fm = painter.fontMetrics();
 
-    if(tabbar->isLeftToRight()) {
+    if (tabbar->isLeftToRight()) {
         // left to right
         int x = 0;
         for (int c = 0; c < tabs.count(); c++) {
@@ -281,9 +281,8 @@ void TabBarPrivate::drawTab(QPainter& painter, QRect& rect, const QString& text,
     // draw the lines
     painter.setPen(tabbar->palette().color(QPalette::Dark));
     painter.setRenderHint(QPainter::Antialiasing);
-    if (!active)
-    {
-      const bool reverseLayout = tabbar->isRightToLeft();
+    if (!active) {
+        const bool reverseLayout = tabbar->isRightToLeft();
         painter.drawLine(rect.x() - (reverseLayout ? 5 : 0), rect.y(),
                          rect.right() + (reverseLayout ? 0 : 5), rect.top());
     }

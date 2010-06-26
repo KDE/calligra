@@ -84,7 +84,8 @@ private:
  * This namespace collects enumerations related to
  * pasting operations.
  */
-namespace Paste {
+namespace Paste
+{
 /**
  * The pasted content
  */

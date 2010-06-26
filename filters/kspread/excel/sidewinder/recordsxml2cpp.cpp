@@ -257,8 +257,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
 
                 if (!dynamicOffset)
                     out << indent << "curOffset = " << (offset / 8) << ";\n";
-                else
-                    if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+                else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
                 out << indent << f.setterName() << "(" << setterArgs;
                 dynamicOffset = true; offset = 0;
 
@@ -352,8 +351,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             qFatal("Ifs should always be byte-aligned");
         if (!dynamicOffset)
             out << indent << "curOffset = " << (offset / 8) << ";\n";
-        else
-            if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
 
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
 
@@ -415,8 +413,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
 
         if (!dynamicOffset)
             out << indent << "curOffset = " << (offset / 8) << ";\n";
-        else
-            if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
 
         QString length = field.attribute("length");
         if (fieldsMap.contains(length))
@@ -675,7 +672,7 @@ int main(int argc, char** argv)
         f.close();
         errorMsg = "Error parsing file: " + errorMsg + "\n";
         errorMsg += QString::fromAscii("In line ")  + QString::number(errorLine)
-                  + QString::fromAscii(", column ") + QString::number(errorCol);
+                    + QString::fromAscii(", column ") + QString::number(errorCol);
         qFatal("%s", errorMsg.toAscii().constData());
     }
     f.close();

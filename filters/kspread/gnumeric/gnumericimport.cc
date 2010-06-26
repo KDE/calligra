@@ -903,7 +903,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     table->printSettings()->setPageLayout(pageLayout);
 
     table->headerFooter()->setHeadFootLine(headLeft, headMiddle, headRight,
-                                          footLeft, footMiddle, footRight);
+                                           footLeft, footMiddle, footRight);
 }
 
 void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspread_cell)

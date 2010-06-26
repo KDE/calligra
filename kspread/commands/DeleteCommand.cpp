@@ -30,8 +30,8 @@
 using namespace KSpread;
 
 DeleteCommand::DeleteCommand(QUndoCommand *parent)
-    : AbstractDataManipulator(parent)
-    , m_mode(Everything)
+        : AbstractDataManipulator(parent)
+        , m_mode(Everything)
 {
     setText(i18n("Delete"));
     m_checkLock = true;

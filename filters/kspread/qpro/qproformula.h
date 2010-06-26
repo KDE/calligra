@@ -23,7 +23,8 @@
 
 namespace KSpread
 {
-namespace QuattroPro {
+namespace QuattroPro
+{
 
 class Formula : public QpFormula
 {

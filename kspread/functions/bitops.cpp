@@ -44,25 +44,25 @@ KSPREAD_EXPORT_FUNCTION_MODULE("bitops", BitOpsModule)
 
 
 BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("BITAND", func_bitand);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("BITOR", func_bitor);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("BITXOR", func_bitxor);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("BITLSHIFT", func_bitlshift);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("BITRSHIFT", func_bitrshift);
     f->setParamCount(2);
-  add(f);
+    add(f);
 }
 
 QString BitOpsModule::descriptionFileName() const

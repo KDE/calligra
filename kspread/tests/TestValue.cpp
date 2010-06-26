@@ -176,7 +176,7 @@ void TestValue::testTime()
     v1 = new Value();
     *v1 = Value(Value(QTime(0, 0, 0), &calculationSettings));
     QCOMPARE(v1->type(), Value::Float);
-    for (unsigned ms = 0;ms < 1000;ms++) {
+    for (unsigned ms = 0; ms < 1000; ms++) {
         QTime t1 = QTime(1, 14, 2, ms);
         *v1 = Value(Value(t1, &calculationSettings));
         QTime t2 = v1->asTime(&calculationSettings);

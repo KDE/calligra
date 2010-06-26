@@ -41,8 +41,7 @@
 #include <KoDocumentAdaptor.h>
 #include <KoApplicationAdaptor.h>
 
-extern "C"
-{
+extern "C" {
     KDE_EXPORT QObject* krossmodule() {
         return new ScriptingModule();
     }

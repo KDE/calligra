@@ -339,7 +339,7 @@ void PrintSettings::setRepeatedRows(const QPair<int, int>& repeatedRows)
 }
 
 QString PrintSettings::saveOdfPageLayout(KoGenStyles &mainStyles,
-                                         bool formulas, bool zeros)
+        bool formulas, bool zeros)
 {
     // Create a page layout style.
     // 15.2.1 Page Size
@@ -355,18 +355,18 @@ QString PrintSettings::saveOdfPageLayout(KoGenStyles &mainStyles,
     if (d->printGrid) {
         printParameter += "grid ";
     }
-/*    if (d->printComments) {
-        printParameter += "annotations ";
-    }*/
+    /*    if (d->printComments) {
+            printParameter += "annotations ";
+        }*/
     if (d->printObjects) {
-      printParameter += "objects ";
+        printParameter += "objects ";
     }
     if (d->printCharts) {
-      printParameter += "charts ";
+        printParameter += "charts ";
     }
-/*    if (d->printDrawings) {
-        printParameter += "drawings ";
-    }*/
+    /*    if (d->printDrawings) {
+            printParameter += "drawings ";
+        }*/
     if (formulas) {
         printParameter += "formulas ";
     }

@@ -40,7 +40,7 @@ using namespace KSpread;
 
 class RegionSelector::Private
 {
-  public:
+public:
     Selection* selection;
     QDialog* parentDialog;
     KDialog* dialog;
@@ -55,51 +55,51 @@ class RegionSelector::Private
 RegionSelector* RegionSelector::Private::s_focussedSelector = 0;
 
 RegionSelector::RegionSelector(QWidget* parent)
-  : QWidget( parent ),
-    d( new Private )
+        : QWidget(parent),
+        d(new Private)
 {
-  setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-  d->displayMode = Widget;
-  d->parentDialog = 0;
-  d->selection = 0;
-  d->dialog = 0;
-  d->button = new QToolButton( this );
-  d->button->setCheckable( true );
-  d->button->setIcon( KIcon( "selection" ) );
-  d->highlighter = 0;
-  d->textEdit = new KTextEdit( this );
-  d->textEdit->setLineWrapMode( QTextEdit::NoWrap );
-  d->textEdit->setWordWrapMode( QTextOption::NoWrap );
-  d->textEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-  d->textEdit->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-  d->textEdit->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-  d->textEdit->setFixedHeight( d->button->height() - 2*d->textEdit->frameWidth() ); // FIXME
-  d->textEdit->setTabChangesFocus( true );
+    d->displayMode = Widget;
+    d->parentDialog = 0;
+    d->selection = 0;
+    d->dialog = 0;
+    d->button = new QToolButton(this);
+    d->button->setCheckable(true);
+    d->button->setIcon(KIcon("selection"));
+    d->highlighter = 0;
+    d->textEdit = new KTextEdit(this);
+    d->textEdit->setLineWrapMode(QTextEdit::NoWrap);
+    d->textEdit->setWordWrapMode(QTextOption::NoWrap);
+    d->textEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    d->textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->textEdit->setFixedHeight(d->button->height() - 2*d->textEdit->frameWidth());   // FIXME
+    d->textEdit->setTabChangesFocus(true);
 
-  QHBoxLayout* layout = new QHBoxLayout( this );
-  layout->setMargin( 0 );
-  layout->setSpacing( 2 );
-  layout->addWidget( d->textEdit );
-  layout->addWidget( d->button );
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(2);
+    layout->addWidget(d->textEdit);
+    layout->addWidget(d->button);
 
-  d->button->installEventFilter( this );
-  d->textEdit->installEventFilter( this );
-  connect( d->button, SIGNAL( toggled(bool) ),
-           this, SLOT( switchDisplayMode(bool) ) );
+    d->button->installEventFilter(this);
+    d->textEdit->installEventFilter(this);
+    connect(d->button, SIGNAL(toggled(bool)),
+            this, SLOT(switchDisplayMode(bool)));
 }
 
 RegionSelector::~RegionSelector()
 {
-  d->selection->endReferenceSelection();
-  d->selection->setSelectionMode(Selection::MultipleCells);
-  delete d;
+    d->selection->endReferenceSelection();
+    d->selection->setSelectionMode(Selection::MultipleCells);
+    delete d;
 }
 
-void RegionSelector::setSelectionMode( SelectionMode mode )
+void RegionSelector::setSelectionMode(SelectionMode mode)
 {
-  d->selectionMode = mode;
-  // TODO adjust selection
+    d->selectionMode = mode;
+    // TODO adjust selection
 }
 
 void RegionSelector::setSelection(Selection* selection)
@@ -109,106 +109,92 @@ void RegionSelector::setSelection(Selection* selection)
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(choiceChanged()));
 }
 
-void RegionSelector::setDialog( QDialog* dialog )
+void RegionSelector::setDialog(QDialog* dialog)
 {
-  d->parentDialog = dialog;
+    d->parentDialog = dialog;
 }
 
 KTextEdit* RegionSelector::textEdit() const
 {
-  return d->textEdit;
+    return d->textEdit;
 }
 
-bool RegionSelector::eventFilter( QObject* object, QEvent* event )
+bool RegionSelector::eventFilter(QObject* object, QEvent* event)
 {
-  if ( event->type() == QEvent::Close )
-  {
-    if ( object == d->dialog  && d->button->isChecked() )
-    {
-      // TODO Stefan: handle as button click
+    if (event->type() == QEvent::Close) {
+        if (object == d->dialog  && d->button->isChecked()) {
+            // TODO Stefan: handle as button click
 //       d->button->toggle();
-      event->ignore();
-      return true; // eat it
+            event->ignore();
+            return true; // eat it
+        }
+    } else if (event->type() == QEvent::FocusIn) {
+        Private::s_focussedSelector = this;
+        d->selection->startReferenceSelection();
+        if (d->selectionMode == SingleCell) {
+            d->selection->setSelectionMode(Selection::SingleCell);
+        } else {
+            d->selection->setSelectionMode(Selection::MultipleCells);
+        }
+        // TODO Stefan: initialize choice
     }
-  }
-  else if ( event->type() == QEvent::FocusIn )
-  {
-    Private::s_focussedSelector = this;
-    d->selection->startReferenceSelection();
-    if (d->selectionMode == SingleCell)
-    {
-      d->selection->setSelectionMode( Selection::SingleCell );
-    }
-    else
-    {
-      d->selection->setSelectionMode( Selection::MultipleCells );
-    }
-    // TODO Stefan: initialize choice
-  }
-  return QObject::eventFilter( object, event );
+    return QObject::eventFilter(object, event);
 }
 
-void RegionSelector::switchDisplayMode( bool state )
+void RegionSelector::switchDisplayMode(bool state)
 {
-  Q_UNUSED(state)
-      kDebug() ;
+    Q_UNUSED(state)
+    kDebug() ;
 
-  if ( d->displayMode == Widget )
-  {
-    d->displayMode = Dialog;
+    if (d->displayMode == Widget) {
+        d->displayMode = Dialog;
 
-    d->dialog = new KDialog( d->parentDialog->parentWidget(), Qt::Tool );
-    d->dialog->resize( d->parentDialog->width(), 20 );
-    d->dialog->move( d->parentDialog->pos() );
-    d->dialog->setButtons( 0 );
-    d->dialog->setModal( false );
+        d->dialog = new KDialog(d->parentDialog->parentWidget(), Qt::Tool);
+        d->dialog->resize(d->parentDialog->width(), 20);
+        d->dialog->move(d->parentDialog->pos());
+        d->dialog->setButtons(0);
+        d->dialog->setModal(false);
 
-    if ( d->selectionMode == SingleCell )
-    {
-      d->dialog->setCaption( i18n("Select Single Cell") );
+        if (d->selectionMode == SingleCell) {
+            d->dialog->setCaption(i18n("Select Single Cell"));
+        } else { // if ( d->selectionMode == MultipleCells )
+            d->dialog->setCaption(i18n("Select Multiple Cells"));
+        }
+
+        QWidget* widget = new QWidget(d->dialog);
+        QHBoxLayout* layout = new QHBoxLayout(widget);
+        layout->setMargin(0);
+        layout->setSpacing(0);
+        layout->addWidget(d->textEdit);
+        layout->addWidget(d->button);
+
+        d->dialog->setMainWidget(widget);
+        d->dialog->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        d->dialog->installEventFilter(this);
+        d->dialog->show();
+        d->parentDialog->hide();
+    } else {
+        d->displayMode = Widget;
+
+        layout()->addWidget(d->textEdit);
+        layout()->addWidget(d->button);
+
+        d->parentDialog->move(d->dialog->pos());
+        d->parentDialog->show();
+        delete d->dialog;
+        d->dialog = 0;
     }
-    else // if ( d->selectionMode == MultipleCells )
-    {
-      d->dialog->setCaption( i18n("Select Multiple Cells") );
-    }
-
-    QWidget* widget = new QWidget( d->dialog );
-    QHBoxLayout* layout = new QHBoxLayout( widget );
-    layout->setMargin( 0 );
-    layout->setSpacing( 0 );
-    layout->addWidget( d->textEdit );
-    layout->addWidget( d->button );
-
-    d->dialog->setMainWidget( widget );
-    d->dialog->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    d->dialog->installEventFilter( this );
-    d->dialog->show();
-    d->parentDialog->hide();
-  }
-  else
-  {
-    d->displayMode = Widget;
-
-    layout()->addWidget( d->textEdit );
-    layout()->addWidget( d->button );
-
-    d->parentDialog->move( d->dialog->pos() );
-    d->parentDialog->show();
-    delete d->dialog;
-    d->dialog = 0;
-  }
 }
 
 void RegionSelector::choiceChanged()
 {
-  if ( Private::s_focussedSelector != this )
-    return;
+    if (Private::s_focussedSelector != this)
+        return;
 
-  if ( d->selection->isValid() )
-  {
-    QString area = d->selection->name();
-    d->textEdit->setPlainText( area );
-  }
+    if (d->selection->isValid()) {
+        QString area = d->selection->name();
+        d->textEdit->setPlainText(area);
+    }
 }
 
 #include "RegionSelector.moc"

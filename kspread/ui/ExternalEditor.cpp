@@ -47,8 +47,8 @@ public:
 };
 
 ExternalEditor::ExternalEditor(QWidget *parent)
-    : KTextEdit(parent)
-    , d(new Private)
+        : KTextEdit(parent)
+        , d(new Private)
 {
     d->cellTool = 0;
     d->highlighter = 0;
@@ -60,7 +60,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     document()->setDocumentMargin(1);
     setMinimumHeight(fontMetrics().height() + 2 * frameWidth() + 1);
 
-    connect (this, SIGNAL (textChanged()), this, SLOT (slotTextChanged ()));
+    connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
     connect(this, SIGNAL(cursorPositionChanged()),
             this, SLOT(slotCursorPositionChanged()));
 }
@@ -126,14 +126,14 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
 
     // the Enter and Esc key are handled by the embedded editor
     if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter) ||
-        (event->key() == Qt::Key_Escape)) {
+            (event->key() == Qt::Key_Escape)) {
         d->cellTool->editor()->setFocus();
-        QApplication::sendEvent (d->cellTool->editor(), event);
+        QApplication::sendEvent(d->cellTool->editor(), event);
         event->accept();
         return;
     }
     // call inherited handler
-    KTextEdit::keyPressEvent (event);
+    KTextEdit::keyPressEvent(event);
 }
 
 void ExternalEditor::focusInEvent(QFocusEvent* event)
@@ -157,10 +157,10 @@ void ExternalEditor::focusOutEvent(QFocusEvent* event)
     KTextEdit::focusOutEvent(event);
 }
 
-void ExternalEditor::slotTextChanged ()
+void ExternalEditor::slotTextChanged()
 {
-  if (!hasFocus()) return;  // only report change if we have focus
-  emit textChanged (toPlainText());
+    if (!hasFocus()) return;  // only report change if we have focus
+    emit textChanged(toPlainText());
     // Update the cursor position again, because this slot is invoked after
     // slotCursorPositionChanged().
     if (d->cellTool->editor()) {

@@ -824,7 +824,7 @@ void WorksheetSubStreamHandler::handleZoomLevel(ZoomLevelRecord *record)
     if (!record) return;
     if (!d->sheet) return;
     if (record->denominator() == 0) return;
-    d->sheet->setZoomLevel( record->numerator() / double(record->denominator()) );
+    d->sheet->setZoomLevel(record->numerator() / double(record->denominator()));
 }
 
 void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)

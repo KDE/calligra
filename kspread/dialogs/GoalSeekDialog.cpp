@@ -65,8 +65,8 @@ public:
 
 
 GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
-    : KDialog(parent)
-    , d(new Private)
+        : KDialog(parent)
+        , d(new Private)
 {
     d->selection = selection;
     d->result = 0.0;
@@ -155,7 +155,7 @@ void GoalSeekDialog::accept()
         }
 
         bool ok = false;
-        double goal = d->selection->activeSheet()->map()->calculationSettings()->locale()->readNumber(d->widget.selector2->textEdit()->toPlainText(), &ok );
+        double goal = d->selection->activeSheet()->map()->calculationSettings()->locale()->readNumber(d->widget.selector2->textEdit()->toPlainText(), &ok);
         if (!ok) {
             KMessageBox::error(this, i18n("Target value is invalid."));
             d->widget.selector2->textEdit()->selectAll();
@@ -222,7 +222,7 @@ void GoalSeekDialog::reject()
 
 void GoalSeekDialog::startCalc(double _start, double _goal)
 {
-    d->widget.label4->setText( i18n( "Starting..." ) );
+    d->widget.label4->setText(i18n("Starting..."));
     d->widget.label5->setText(i18n("Iteration:"));
 
     // lets be optimistic
@@ -235,18 +235,18 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     double resultA, resultB;
 
     // save old value
-  if (d->firstRun) {
-    d->firstRun = false;
-    d->oldSource = numToDouble(d->sourceCell.value().asFloat());
-  }
-  resultA = numToDouble(d->targetCell.value().asFloat()) - _goal;
+    if (d->firstRun) {
+        d->firstRun = false;
+        d->oldSource = numToDouble(d->sourceCell.value().asFloat());
+    }
+    resultA = numToDouble(d->targetCell.value().asFloat()) - _goal;
 
     // initialize start value
     startB = _start;
     double x = startB + 0.5;
 
-  int iterations = d->maxIter;
-  const Formula formula = d->targetCell.formula();
+    int iterations = d->maxIter;
+    const Formula formula = d->targetCell.formula();
 
     // while the result is not close enough to zero
     // or while the max number of iterations is not reached...
@@ -295,30 +295,30 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
 //         kDebug() <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" << iterations;
 
-    --iterations;
-    if ( iterations % 20 == 0 )
-      d->widget.newValue->setText( QString::number(iterations) );
+        --iterations;
+        if (iterations % 20 == 0)
+            d->widget.newValue->setText(QString::number(iterations));
     }
 
-  d->widget.label5->setText( i18n( "New value:" ) );
+    d->widget.label5->setText(i18n("New value:"));
     if (ok) {
-    d->sourceCell.setValue( Value(startA ) );
+        d->sourceCell.setValue(Value(startA));
 
-    d->widget.label4->setText( i18n( "Goal seeking with cell %1 found a solution:",
-                                 d->widget.selector3->textEdit()->toPlainText() ) );
-    d->widget.newValue->setText( d->selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber( startA ) );
-    d->widget.currentValue->setText( d->selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber( d->oldSource ) );
+        d->widget.label4->setText(i18n("Goal seeking with cell %1 found a solution:",
+                                       d->widget.selector3->textEdit()->toPlainText()));
+        d->widget.newValue->setText(d->selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber(startA));
+        d->widget.currentValue->setText(d->selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber(d->oldSource));
     } else {
         // restore the old value
-    d->sourceCell.setValue( Value( d->oldSource ) );
-    d->widget.label4->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
-                                 d->widget.selector3->textEdit()->toPlainText() ) );
-    d->widget.newValue->setText( "" );
-    d->widget.currentValue->setText( d->selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber( d->oldSource ) );
+        d->sourceCell.setValue(Value(d->oldSource));
+        d->widget.label4->setText(i18n("Goal seeking with cell %1 has found NO solution.",
+                                       d->widget.selector3->textEdit()->toPlainText()));
+        d->widget.newValue->setText("");
+        d->widget.currentValue->setText(d->selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber(d->oldSource));
     }
 
-  enableButtonOk(ok);
-  enableButtonCancel(true);
+    enableButtonOk(ok);
+    enableButtonCancel(true);
 }
 
 #include "GoalSeekDialog.moc"

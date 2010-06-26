@@ -48,8 +48,8 @@ public:
 };
 
 SheetModel::SheetModel(Sheet* sheet)
-    : QAbstractTableModel(sheet)
-    , d(new Private)
+        : QAbstractTableModel(sheet)
+        , d(new Private)
 {
     d->sheet = sheet;
 }
@@ -89,7 +89,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     if (role == Qt::DisplayRole) {
         // Display a formula if warranted.  If not, simply display the value.
         if (cell.isFormula() && d->sheet->getShowFormula() &&
-            !(d->sheet->isProtected() && style.hideFormula())) {
+                !(d->sheet->isProtected() && style.hideFormula())) {
             return QVariant(cell.userInput());
         } else if (d->sheet->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0.0) {
             // Hide zero.
@@ -98,9 +98,9 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
             // Format the value appropriately and set the display text.
             // The format of the resulting value is used below to determine the alignment.
             Value value = d->sheet->map()->formatter()->formatText(cell.value(), style.formatType(),
-                                                                   style.precision(), style.floatFormat(),
-                                                                   style.prefix(), style.postfix(),
-                                                                   style.currency().symbol());
+                          style.precision(), style.floatFormat(),
+                          style.prefix(), style.postfix(),
+                          style.currency().symbol());
             return value.asString();
         }
     } else if (role == Qt::EditRole) {
@@ -124,22 +124,20 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     const int row = index.row() + 1;
     CellStorage *const storage = d->sheet->cellStorage();
     switch (role) {
-        case UserInputRole:
-            return storage->userInput(column, row);
-        case FormulaRole:
-        {
-            QVariant data;
-            data.setValue(storage->formula(column, row));
-            return data;
-        }
-        case ValueRole:
-        {
-            QVariant data;
-            data.setValue(storage->value(column, row));
-            return data;
-        }
-        case LinkRole:
-            return storage->link(column, row);
+    case UserInputRole:
+        return storage->userInput(column, row);
+    case FormulaRole: {
+        QVariant data;
+        data.setValue(storage->formula(column, row));
+        return data;
+    }
+    case ValueRole: {
+        QVariant data;
+        data.setValue(storage->value(column, row));
+        return data;
+    }
+    case LinkRole:
+        return storage->link(column, row);
     }
     return QVariant();
 }
@@ -224,23 +222,23 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();
     CellStorage *const storage = d->sheet->cellStorage();
     switch (role) {
-        case Qt::EditRole:
-            cell.parseUserInput(value.toString());
-            break;
-        case UserInputRole:
-            storage->setUserInput(column, row, value.toString());
-            break;
-        case FormulaRole:
-            storage->setFormula(column, row, value.value<Formula>());
-            break;
-        case ValueRole:
-            storage->setValue(column, row, value.value<Value>());
-            break;
-        case LinkRole:
-            storage->setLink(column, row, value.toString());
-            break;
-        default:
-            return false;
+    case Qt::EditRole:
+        cell.parseUserInput(value.toString());
+        break;
+    case UserInputRole:
+        storage->setUserInput(column, row, value.toString());
+        break;
+    case FormulaRole:
+        storage->setFormula(column, row, value.value<Formula>());
+        break;
+    case ValueRole:
+        storage->setValue(column, row, value.value<Value>());
+        break;
+    case LinkRole:
+        storage->setLink(column, row, value.toString());
+        break;
+    default:
+        return false;
     }
     emit dataChanged(index, index);
     return true;
@@ -251,38 +249,38 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
     const Region region(toRange(range), d->sheet);
     CellStorage *const storage = d->sheet->cellStorage();
     switch (role) {
-        case CommentRole:
-            storage->setComment(region, value.toString());
+    case CommentRole:
+        storage->setComment(region, value.toString());
+        break;
+    case ConditionRole:
+        storage->setConditions(region, value.value<Conditions>());
+        break;
+    case FusionedRangeRole:
+        // TODO
+//         storage->setFusion(region, value.value<bool>());
+        break;
+    case LockedRangeRole:
+        // TODO
+//         storage->setMatrix(region, value.value<bool>());
+        break;
+    case NamedAreaRole:
+        storage->emitInsertNamedArea(region, value.toString());
             break;
-        case ConditionRole:
-            storage->setConditions(region, value.value<Conditions>());
-            break;
-        case FusionedRangeRole:
-            // TODO
-//             storage->setFusion(region, value.value<bool>());
-            break;
-        case LockedRangeRole:
-            // TODO
-//             storage->setMatrix(region, value.value<bool>());
-            break;
-        case NamedAreaRole:
-            storage->emitInsertNamedArea(region, value.toString());
-            break;
-        case SourceRangeRole:
-            storage->setBinding(region, value.value<Binding>());
-            break;
-        case StyleRole:
-            // TODO
-//             storage->setStyle(region, value.value<Style>());
-            break;
-        case TargetRangeRole:
-            storage->setDatabase(region, value.value<Database>());
-            break;
-        case ValidityRole:
-            storage->setValidity(region, value.value<Validity>());
-            break;
-        default:
-            return false;
+    case SourceRangeRole:
+        storage->setBinding(region, value.value<Binding>());
+        break;
+    case StyleRole:
+        // TODO
+//         storage->setStyle(region, value.value<Style>());
+        break;
+    case TargetRangeRole:
+        storage->setDatabase(region, value.value<Database>());
+        break;
+    case ValidityRole:
+        storage->setValidity(region, value.value<Validity>());
+        break;
+    default:
+        return false;
     }
     emit dataChanged(range.topLeft(), range.bottomRight());
     return true;

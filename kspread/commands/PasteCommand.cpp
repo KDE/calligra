@@ -46,16 +46,14 @@ class PasteCellCommand : public AbstractRegionCommand
 {
 public:
     PasteCellCommand(QUndoCommand *parent = 0)
-        : AbstractRegionCommand(parent)
-        , m_pasteMode(Paste::Normal)
-        , m_pasteOperation(Paste::OverWrite)
-        , m_pasteFC(false)
-    {
+            : AbstractRegionCommand(parent)
+            , m_pasteMode(Paste::Normal)
+            , m_pasteOperation(Paste::OverWrite)
+            , m_pasteFC(false) {
     }
     virtual ~PasteCellCommand() {}
 
-    void addXmlElement(const Cell &cell, const KoXmlElement &element)
-    {
+    void addXmlElement(const Cell &cell, const KoXmlElement &element) {
         add(cell.cellPosition(), m_sheet);
         m_elements.insert(cell, element);
     }
@@ -65,8 +63,7 @@ public:
     bool                m_pasteFC; // FIXME What's that? ForceConditions?
 
 protected:
-    bool process(Element *element)
-    {
+    bool process(Element *element) {
         // Destination cell:
         Cell cell(m_sheet, element->rect().topLeft());
         const int xOffset = cell.column() - m_elements[cell].attribute("column").toInt();
@@ -75,16 +72,14 @@ protected:
                          m_pasteMode, m_pasteOperation, m_pasteFC);
     }
 
-    bool preProcessing()
-    {
+    bool preProcessing() {
         if (m_firstrun) {
             m_sheet->cellStorage()->startUndoRecording();
         }
         return true;
     }
 
-    bool mainProcessing()
-    {
+    bool mainProcessing() {
         if (m_reverse) {
             QUndoCommand::undo(); // undo child commands
             return true;
@@ -92,8 +87,7 @@ protected:
         return AbstractRegionCommand::mainProcessing();
     }
 
-    bool postProcessing()
-    {
+    bool postProcessing() {
         if (m_firstrun) {
             m_sheet->cellStorage()->stopUndoRecording(this);
         }
@@ -107,13 +101,13 @@ private:
 
 
 PasteCommand::PasteCommand(QUndoCommand *parent)
-    : AbstractRegionCommand(parent)
-    , m_mimeData(0)
-    , m_xmlDocument(0)
-    , m_insertMode(NoInsertion)
-    , m_pasteMode(Paste::Normal)
-    , m_operation(Paste::OverWrite)
-    , m_pasteFC(false)
+        : AbstractRegionCommand(parent)
+        , m_mimeData(0)
+        , m_xmlDocument(0)
+        , m_insertMode(NoInsertion)
+        , m_pasteMode(Paste::Normal)
+        , m_operation(Paste::OverWrite)
+        , m_pasteFC(false)
 {
 }
 
@@ -199,7 +193,7 @@ bool PasteCommand::unknownShiftDirection(const QMimeData *mimeData)
     if (!d.setContent(byteArray, false, &errorMsg, &errorLine, &errorColumn)) {
         // an error occurred
         kDebug() << "An error occurred."
-                 << "line:" << errorLine << "col:" << errorColumn << errorMsg;
+        << "line:" << errorLine << "col:" << errorColumn << errorMsg;
         return false;
     }
 
@@ -213,7 +207,7 @@ bool PasteCommand::unknownShiftDirection(const QMimeData *mimeData)
     }
 
     KoXmlElement c = e.firstChild().toElement();
-    for(; !c.isNull(); c = c.nextSibling().toElement()) {
+    for (; !c.isNull(); c = c.nextSibling().toElement()) {
         if (c.tagName() == "cell") {
             return true;
         }
@@ -241,12 +235,12 @@ bool PasteCommand::mainProcessing()
                 if (!m_xmlDocument->setContent(data, false, &errorMsg, &errorLine, &errorColumn)) {
                     // an error occurred
                     kDebug(36005) << "An error occurred." << "line:" << errorLine
-                                  << "col:" << errorColumn << errorMsg;
+                    << "col:" << errorColumn << errorMsg;
                     return false;
                 }
-           } else if (m_mimeData->hasText()) {
-               // TODO Maybe prepare the string list here?!
-           }
+            } else if (m_mimeData->hasText()) {
+                // TODO Maybe prepare the string list here?!
+            }
 
             // Iterate over all region elements and build the sub-commands.
             const QList<Element *> elements = cells();
@@ -300,9 +294,9 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
     const bool biggerSelectedHeight = pasteArea.height() >= sourceHeight;
 
     const int pasteWidth  = biggerSelectedWidth && noRowsSelected && noRowsInClipboard
-                          ? pasteArea.width() : sourceWidth;
+                            ? pasteArea.width() : sourceWidth;
     const int pasteHeight = biggerSelectedHeight && noColumnsSelected && noColumnsInClipboard
-                          ? pasteArea.height() : sourceHeight;
+                            ? pasteArea.height() : sourceHeight;
 
     const int xOffset = noRowsInClipboard ? pasteArea.left() - 1 : 0;
     const int yOffset = noColumnsInClipboard ? pasteArea.top() - 1 : 0;
@@ -534,9 +528,9 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
             // tile the selection with the clipboard contents
             for (int roff = 0; row + roff <= pasteHeight; roff += sourceHeight) {
                 for (int coff = 0; col + coff <= pasteWidth; coff += sourceWidth) {
-                    kDebug(36005) << "cell at" << (col+xOffset+coff) << ',' << (row+yOffset+roff)
-                                  << " with roff,coff=" << roff << ',' << coff
-                                  << ", xOffset:" << xOffset << ", yOffset:" << yOffset << endl;
+                    kDebug(36005) << "cell at" << (col + xOffset + coff) << ',' << (row + yOffset + roff)
+                    << " with roff,coff=" << roff << ',' << coff
+                    << ", xOffset:" << xOffset << ", yOffset:" << yOffset << endl;
 
                     // Destination cell:
                     const Cell cell(sheet, col + xOffset + coff, row + yOffset + roff);
@@ -573,7 +567,7 @@ bool PasteCommand::processTextPlain(Element *element)
     }
 
     // FIXME Determine and tile the destination area.
-    Region range (mx, my, 1, list.size());
+    Region range(mx, my, 1, list.size());
 
     // create a command, configure it and execute it
     DataManipulator *command = new DataManipulator(this);

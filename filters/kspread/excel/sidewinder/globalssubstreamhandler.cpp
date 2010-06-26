@@ -272,7 +272,7 @@ FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
 Color GlobalsSubStreamHandler::convertedColor(unsigned index) const
 {
     if ((index >= 8) && (index < 0x40))
-        return customColor(index -8);
+        return customColor(index - 8);
 
     // FIXME the following colors depend on system color settings
     // 0x0040  system window text color for border lines
@@ -502,7 +502,7 @@ Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     alignment.setWrap(xf.textWrap());
 
     unsigned angle = xf.rotationAngle();
-    if (angle > 90) angle = 360-(angle-90);
+    if (angle > 90) angle = 360 - (angle - 90);
     alignment.setRotationAngle(angle);
 
     alignment.setStackedLetters(xf.stackedLetters());
@@ -779,7 +779,7 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
 
     d->stringTable.clear();
     d->formatRunsTable.clear();
-    for (unsigned i = 0; i < record->count();i++) {
+    for (unsigned i = 0; i < record->count(); i++) {
         UString str = record->stringAt(i);
         d->stringTable.push_back(str);
         std::map<unsigned, unsigned> formatRunsRaw = record->formatRunsAt(i);
@@ -800,11 +800,11 @@ void GlobalsSubStreamHandler::handleXF(XFRecord* record)
 
 void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
 {
-  if (!record) return;
+    if (!record) return;
 
-  if (record->isLocked()) {
-      std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
-  }
+    if (record->isLocked()) {
+        std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
+    }
 }
 
 void GlobalsSubStreamHandler::handleWindow1(Window1Record* record)

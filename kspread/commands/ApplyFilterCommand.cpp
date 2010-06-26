@@ -91,7 +91,7 @@ void ApplyFilterCommand::undo()
         sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::RowsChanged));
     else // database.orientation() == Qt::Horizontal
         sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::ColumnsChanged));
-    
+
     m_sheet->cellStorage()->setDatabase(*this, Database());
     m_sheet->cellStorage()->setDatabase(*this, database);
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));

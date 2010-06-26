@@ -89,9 +89,9 @@ bool Swinder::isNaN(double d)
 #ifdef HAVE_FUNC_ISNAN
     return isnan(d);
 #elif defined HAVE_FLOAT_H
-    return _isnan(d) != 0;
+return _isnan(d) != 0;
 #else
-    return !(d == d);
+return !(d == d);
 #endif
 }
 #endif
@@ -107,11 +107,11 @@ bool Swinder::isPosInf(double d)
 #if defined(HAVE_FUNC_ISINF)
     return (isinf(d) == 1);
 #elif HAVE_FUNC_FINITE
-    return finite(d) == 0 && d == d; // ### can we distinguish between + and - ?
+return finite(d) == 0 && d == d; // ### can we distinguish between + and - ?
 #elif HAVE_FUNC__FINITE
-    return _finite(d) == 0 && d == d; // ###
+return _finite(d) == 0 && d == d; // ###
 #else
-    return false;
+return false;
 #endif
 }
 #endif
@@ -127,11 +127,11 @@ bool Swinder::isNegInf(double d)
 #if defined(HAVE_FUNC_ISINF)
     return (isinf(d) == -1);
 #elif HAVE_FUNC_FINITE
-    return finite(d) == 0 && d == d; // ###
+return finite(d) == 0 && d == d; // ###
 #elif HAVE_FUNC__FINITE
-    return _finite(d) == 0 && d == d; // ###
+return _finite(d) == 0 && d == d; // ###
 #else
-    return false;
+return false;
 #endif
 }
 #endif
@@ -536,7 +536,7 @@ int UString::find(const UString &f, int pos) const
     const UChar *end = data() + length() - f.length();
     for (const UChar *c = data() + pos; c <= end; c++)
         if (!memcmp(c, f.data(), fsize))
-            return (c -data());
+            return (c - data());
 
     return -1;
 }
@@ -550,7 +550,7 @@ int UString::rfind(const UString &f, int pos) const
     long fsize = f.length() * sizeof(UChar);
     for (const UChar *c = data() + pos; c >= data(); c--) {
         if (!memcmp(c, f.data(), fsize))
-            return (c -data());
+            return (c - data());
     }
 
     return -1;

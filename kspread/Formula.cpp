@@ -398,7 +398,7 @@ const Token& TokenStack::top()
 const Token& TokenStack::top(unsigned index)
 {
     if (topIndex > index)
-        return at(topIndex -index - 1);
+        return at(topIndex - index - 1);
     return Token::null;
 }
 
@@ -1352,24 +1352,24 @@ Value Formula::Private::valueOrElement(const Map* map, int index, FuncExtra &fe,
 Value numericOrError(const ValueConverter* converter, const Value &v)
 {
     switch (v.type()) {
-        case Value::Empty:
-        case Value::Boolean:
-        case Value::Integer:
-        case Value::Float:
-        case Value::Complex:
-        case Value::Error:
+    case Value::Empty:
+    case Value::Boolean:
+    case Value::Integer:
+    case Value::Float:
+    case Value::Complex:
+    case Value::Error:
+        return v;
+    case Value::String: {
+        if (v.asString().isEmpty())
             return v;
-        case Value::String: {
-            if( v.asString().isEmpty() )
-                return v;
-            bool ok;
-            converter->asNumeric(v, &ok);
-            if(ok)
-                return v;
-        } break;
-        case Value::Array:
-        case Value::CellRange:
+        bool ok;
+        converter->asNumeric(v, &ok);
+        if (ok)
             return v;
+    } break;
+    case Value::Array:
+    case Value::CellRange:
+        return v;
     }
     return Value::errorVALUE();
 }
@@ -1612,9 +1612,9 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             entry.reset();
 
             const Region region(c, map, d->sheet);
-            if( ! region.isValid() ) {
+            if (! region.isValid()) {
                 val1 = Value::errorREF();
-            } else if ( region.isSingular()) {
+            } else if (region.isSingular()) {
                 const QPoint position = region.firstRange().topLeft();
                 if (cellIndirections.isEmpty())
                     val1 = Cell(region.firstSheet(), position).value();

@@ -119,7 +119,7 @@ bool AbstractDataManipulator::postProcessing()
 }
 
 AbstractDFManipulator::AbstractDFManipulator(QUndoCommand *parent)
-    : AbstractDataManipulator(parent)
+        : AbstractDataManipulator(parent)
 {
     m_changeformat = true;
 }

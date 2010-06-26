@@ -193,7 +193,7 @@ void ListDialog::init()
     d->config = KGlobal::activeComponent().config();
     const QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
-    for (QStringList::ConstIterator it = other.begin(); it != other.end();++it) {
+    for (QStringList::ConstIterator it = other.begin(); it != other.end(); ++it) {
         if ((*it) != "\\") {
             tmp += (*it) + ", ";
         } else if (it != other.begin()) {

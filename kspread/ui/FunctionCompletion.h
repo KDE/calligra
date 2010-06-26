@@ -47,19 +47,19 @@ class FunctionCompletion : public QObject
 
 public:
 
-    FunctionCompletion( CellEditor* editor );
+    FunctionCompletion(CellEditor* editor);
     ~FunctionCompletion();
 
     /**
     * Handles various keyboard and mouse actions which may occur on the autocompletion popup list
     */
-    bool eventFilter( QObject *o, QEvent *e );
+    bool eventFilter(QObject *o, QEvent *e);
 
     /**
     * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.
     * @param choices A list of possible function names which match the characters that the user has already entered.
     */
-    void showCompletion( const QStringList &choices );
+    void showCompletion(const QStringList &choices);
 
 public slots:
     /**
@@ -68,19 +68,19 @@ public slots:
     void doneCompletion();
 
 private slots:
-    void itemSelected( QListWidgetItem* item = 0 );
+    void itemSelected(QListWidgetItem* item = 0);
 
 signals:
     /**
     * Emitted, if the user selects a function name from the list.
     */
-    void selectedCompletion( const QString& item );
+    void selectedCompletion(const QString& item);
 
 private:
     class Private;
     Private * const d;
-    FunctionCompletion( const FunctionCompletion& );
-    FunctionCompletion& operator=( const FunctionCompletion& );
+    FunctionCompletion(const FunctionCompletion&);
+    FunctionCompletion& operator=(const FunctionCompletion&);
 };
 
 } // namespace KSpread

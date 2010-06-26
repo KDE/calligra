@@ -60,8 +60,8 @@ bool ResizeColumnManipulator::process(Element* element)
             m_oldSizes[col] = format->width();
         format->setWidth(qMax(2.0, m_reverse ? m_oldSizes[col] : m_newSize));
     }
-  // Just repaint everything visible; no need to invalidate the visual cache.
-  m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     return true;
 }
 
@@ -90,8 +90,8 @@ bool ResizeRowManipulator::process(Element* element)
             m_oldSizes[row] = rl->height();
         rl->setHeight(qMax(2.0, m_reverse ? m_oldSizes[row] : m_newSize));
     }
-  // Just repaint everything visible; no need to invalidate the visual cache.
-  m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     return true;
 }
 
@@ -473,7 +473,7 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
             offsetFont = fontMetrics.underlinePos() + 1;
 
         size.setHeight((fontMetrics.ascent() + fontMetrics.descent() + offsetFont)
-                       * (text.count('\n') + 1));
+                       *(text.count('\n') + 1));
     } else if (style.angle() != 0) {
         // Rotated text.
 
@@ -555,9 +555,9 @@ QString AdjustColumnRowManipulator::name() const
 ****************************************************************************/
 
 InsertDeleteColumnManipulator::InsertDeleteColumnManipulator(QUndoCommand *parent)
-    : AbstractRegionCommand(parent)
+        : AbstractRegionCommand(parent)
         , m_mode(Insert)
-    , m_template(0)
+        , m_template(0)
 {
     setText(i18n("Insert Columns"));
 }
@@ -678,9 +678,9 @@ bool InsertDeleteColumnManipulator::postProcessing()
 ****************************************************************************/
 
 InsertDeleteRowManipulator::InsertDeleteRowManipulator(QUndoCommand *parent)
-    : AbstractRegionCommand(parent)
+        : AbstractRegionCommand(parent)
         , m_mode(Insert)
-    , m_template(0)
+        , m_template(0)
 {
     setText(i18n("Insert Rows"));
 }

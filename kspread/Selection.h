@@ -200,7 +200,7 @@ public:
     /**
      * Sets the element, which has @p point as anchor, as active
      */
-    void setActiveElement( const QPoint& point, CellEditor* cellEditor );
+    void setActiveElement(const QPoint& point, CellEditor* cellEditor);
 
     /**
      * @return the active element

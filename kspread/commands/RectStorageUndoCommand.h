@@ -64,10 +64,10 @@ private:
 
 template<typename T>
 RectStorageUndoCommand<T>::RectStorageUndoCommand(QAbstractItemModel *const model,
-                                                  int role, QUndoCommand *parent)
-    : QUndoCommand(parent)
-    , m_model(model)
-    , m_role(role)
+        int role, QUndoCommand *parent)
+        : QUndoCommand(parent)
+        , m_model(model)
+        , m_role(role)
 {
 }
 

@@ -38,8 +38,7 @@ namespace KSpread
 class KSPREAD_EXPORT ProtectableObject
 {
 public:
-    enum Mode
-    {
+    enum Mode {
         Lock,
         Unlock
     };

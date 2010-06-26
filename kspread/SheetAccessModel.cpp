@@ -37,9 +37,10 @@
 //#include <KoXmlWriter.h>
 //#include <KoShapeSavingContext.h>
 
-Q_DECLARE_METATYPE( QPointer<QAbstractItemModel> )
+Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-namespace KSpread {
+namespace KSpread
+{
 
 class SheetAccessModel::Private
 {
@@ -47,33 +48,33 @@ public:
     Map *map;
 };
 
-SheetAccessModel::SheetAccessModel( Map *map )
-    : d( new Private )
+SheetAccessModel::SheetAccessModel(Map *map)
+        : d(new Private)
 {
     d->map = map;
 
-    connect( map, SIGNAL( sheetAdded(Sheet*) ),
-             this, SLOT( slotSheetAdded(Sheet*) ) );
+    connect(map, SIGNAL(sheetAdded(Sheet*)),
+            this, SLOT(slotSheetAdded(Sheet*)));
     // FIXME: Check if we can simply connect sheetRevived() to slotSheetAdded()
-    connect( map, SIGNAL( sheetRevived(Sheet*) ),
-             this, SLOT( slotSheetAdded(Sheet*) ) );
-    connect( map, SIGNAL( sheetRemoved(Sheet*) ),
-             this, SLOT( slotSheetRemoved(Sheet*) ) );
+    connect(map, SIGNAL(sheetRevived(Sheet*)),
+            this, SLOT(slotSheetAdded(Sheet*)));
+    connect(map, SIGNAL(sheetRemoved(Sheet*)),
+            this, SLOT(slotSheetRemoved(Sheet*)));
     connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
 
-    setRowCount( 1 );
-    setColumnCount( 0 );
+    setRowCount(1);
+    setColumnCount(0);
 }
 
-void SheetAccessModel::slotSheetAdded( Sheet *sheet )
+void SheetAccessModel::slotSheetAdded(Sheet *sheet)
 {
     QStandardItem *item = new QStandardItem;
     QList<QStandardItem*> col;
-    col.append( item );
+    col.append(item);
 
     // This region contains the entire sheet
-    const Region region( 1, 1, KS_colMax, KS_rowMax, sheet );
+    const Region region(1, 1, KS_colMax, KS_rowMax, sheet);
     const QPointer<QAbstractItemModel> model = const_cast<QAbstractItemModel*>( d->map->bindingManager()->createModel( region.name() ) );
 
     item->setData( qVariantFromValue( model ), Qt::DisplayRole );
@@ -84,9 +85,9 @@ void SheetAccessModel::slotSheetAdded( Sheet *sheet )
     setHeaderData( sheetIndex, Qt::Horizontal, sheet->sheetName() );
 }
 
-void SheetAccessModel::slotSheetRemoved( Sheet *sheet )
+void SheetAccessModel::slotSheetRemoved(Sheet *sheet)
 {
-    removeColumn( d->map->indexOf( sheet ), QModelIndex() );
+    removeColumn(d->map->indexOf(sheet), QModelIndex());
 }
 
 void SheetAccessModel::handleDamages(const QList<Damage*>& damages)

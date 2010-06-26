@@ -2559,7 +2559,7 @@ void CellFormatPageBorder::InitializeGrids()
     grid2->addWidget(size, 7, 1);
     size->setValidator(new KIntValidator(size));
     QString tmp;
-    for (int i = 0;i < 10;i++) {
+    for (int i = 0; i < 10; i++) {
         tmp = tmp.setNum(i);
         size->insertItem(i, tmp);
     }

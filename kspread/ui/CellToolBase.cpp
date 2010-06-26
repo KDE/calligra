@@ -955,7 +955,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
 
 void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
 {
-   KoInteractionTool::mouseReleaseEvent(event);
+    KoInteractionTool::mouseReleaseEvent(event);
     scrollToCell(selection()->cursor());
 }
 
@@ -1500,7 +1500,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
         int closeParenthese = text.count(')');
         int diff = qAbs(openParenthese - closeParenthese);
         if (openParenthese > closeParenthese) {
-            for (int i = 0; i < diff;i++) {
+            for (int i = 0; i < diff; i++) {
                 text += ')';
             }
         }
@@ -3327,7 +3327,7 @@ void CellToolBase::listChoosePopupMenu()
         }
     }
 
-    for (QStringList::Iterator it = itemList.begin(); it != itemList.end();++it) {
+    for (QStringList::Iterator it = itemList.begin(); it != itemList.end(); ++it) {
         d->popupListChoose->addAction((*it));
     }
 

@@ -51,18 +51,18 @@ class CellEditor::Private
 {
 public:
     CellToolBase*             cellTool;
-  Selection*                selection;
-  KTextEdit*                textEdit;
-  FormulaEditorHighlighter* highlighter;
-  FunctionCompletion*       functionCompletion;
-  QTimer*                   functionCompletionTimer;
+    Selection*                selection;
+    KTextEdit*                textEdit;
+    FormulaEditorHighlighter* highlighter;
+    FunctionCompletion*       functionCompletion;
+    QTimer*                   functionCompletionTimer;
 
-  QPoint globalCursorPos;
+    QPoint globalCursorPos;
 
-  bool captureAllKeyEvents : 1;
-  bool selectionChangedLocked     : 1;
+    bool captureAllKeyEvents : 1;
+    bool selectionChangedLocked     : 1;
 
-  int currentToken;
+    int currentToken;
 
 public:
     void updateActiveSubRegion(const Tokens &tokens);
@@ -71,8 +71,8 @@ public:
 
 void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 {
-     // Index of the token, at which the text cursor is positioned.
-     // For sub-regions it is the start range.
+    // Index of the token, at which the text cursor is positioned.
+    // For sub-regions it is the start range.
     currentToken = 0;
 
     if (tokens.isEmpty()) {
@@ -121,34 +121,34 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
 
         // Can the token be replaced by a reference?
         switch (type) {
-            case Token::Cell:
-            case Token::Range:
-                if (state == Anywhere) {
-                    currentToken = i;
-                    regionStart = rangeCounter;
-                    state = InRegion;
-                }
-                regionEnd = rangeCounter; // length = 1
-                currentRange = ++rangeCounter; // point behind the last
-                continue;
-            case Token::Unknown:
-            case Token::Boolean:
-            case Token::Integer:
-            case Token::Float:
-            case Token::String:
-            case Token::Error:
-                // Set the active sub-region start to the next range but
-                // with a length of 0, which results in inserting a new range
-                // to the selection on calling Selection::initialize() or
-                // Selection::update().
+        case Token::Cell:
+        case Token::Range:
+            if (state == Anywhere) {
                 currentToken = i;
-                regionStart = rangeCounter; // position of the next range
-                regionEnd = rangeCounter - 1; // length = 0
-                currentRange = rangeCounter;
-                continue;
-            case Token::Operator:
-            case Token::Identifier:
-                continue;
+                regionStart = rangeCounter;
+                state = InRegion;
+            }
+            regionEnd = rangeCounter; // length = 1
+            currentRange = ++rangeCounter; // point behind the last
+            continue;
+        case Token::Unknown:
+        case Token::Boolean:
+        case Token::Integer:
+        case Token::Float:
+        case Token::String:
+        case Token::Error:
+            // Set the active sub-region start to the next range but
+            // with a length of 0, which results in inserting a new range
+            // to the selection on calling Selection::initialize() or
+            // Selection::update().
+            currentToken = i;
+            regionStart = rangeCounter; // position of the next range
+            regionEnd = rangeCounter - 1; // length = 0
+            currentRange = rangeCounter;
+            continue;
+        case Token::Operator:
+        case Token::Identifier:
+            continue;
         }
     }
 
@@ -160,87 +160,87 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
         // It was processed, but maybe a reference can be placed behind it.
         // Check, if the token can be replaced by a reference.
         switch (type) {
-            case Token::Operator:
-                // Possible to place a reference behind the operator?
-                switch (token.asOperator()) {
-                    case Token::Plus:
-                    case Token::Minus:
-                    case Token::Asterisk:
-                    case Token::Slash:
-                    case Token::Caret:
-                    case Token::LeftPar:
-                    case Token::Semicolon:
-                    case Token::Equal:
-                    case Token::NotEqual:
-                    case Token::Less:
-                    case Token::Greater:
-                    case Token::LessEqual:
-                    case Token::GreaterEqual:
-                        // Append new references by pointing behind the last.
-                        currentToken = tokens.count();
-                        regionStart = rangeCounter;
-                        regionEnd = rangeCounter - 1; // length = 0
-                        currentRange = rangeCounter;
-                        break;
-                    case Token::InvalidOp:
-                    case Token::RightPar:
-                    case Token::Comma:
-                    case Token::Ampersand:
-                    case Token::Percent:
-                    case Token::CurlyBra:
-                    case Token::CurlyKet:
-                    case Token::Pipe:
-                        // reference cannot be placed behind
-                        break;
-                }
-                break;
-            case Token::Unknown:
-            case Token::Boolean:
-            case Token::Integer:
-            case Token::Float:
-            case Token::String:
-            case Token::Identifier:
-            case Token::Error:
-                // currentToken = tokens.count() - 1; // already set
-                // Set the active sub-region start to the end of the selection
-                // with a length of 0, which results in appending a new range
-                // to the selection on calling Selection::initialize() or
-                // Selection::update().
+        case Token::Operator:
+            // Possible to place a reference behind the operator?
+            switch (token.asOperator()) {
+            case Token::Plus:
+            case Token::Minus:
+            case Token::Asterisk:
+            case Token::Slash:
+            case Token::Caret:
+            case Token::LeftPar:
+            case Token::Semicolon:
+            case Token::Equal:
+            case Token::NotEqual:
+            case Token::Less:
+            case Token::Greater:
+            case Token::LessEqual:
+            case Token::GreaterEqual:
+                // Append new references by pointing behind the last.
+                currentToken = tokens.count();
                 regionStart = rangeCounter;
                 regionEnd = rangeCounter - 1; // length = 0
                 currentRange = rangeCounter;
                 break;
-            case Token::Cell:
-            case Token::Range:
-                // currentToken = tokens.count() - 1; // already set
-                // Set the last range as active one. It is not a sub-region,
-                // otherwise the state would have been InRegion.
-                regionStart = rangeCounter - 1;
-                regionEnd = rangeCounter - 1; // length = 1
-                currentRange = rangeCounter; // point behind the last
+            case Token::InvalidOp:
+            case Token::RightPar:
+            case Token::Comma:
+            case Token::Ampersand:
+            case Token::Percent:
+            case Token::CurlyBra:
+            case Token::CurlyKet:
+            case Token::Pipe:
+                // reference cannot be placed behind
                 break;
+            }
+            break;
+        case Token::Unknown:
+        case Token::Boolean:
+        case Token::Integer:
+        case Token::Float:
+        case Token::String:
+        case Token::Identifier:
+        case Token::Error:
+            // currentToken = tokens.count() - 1; // already set
+            // Set the active sub-region start to the end of the selection
+            // with a length of 0, which results in appending a new range
+            // to the selection on calling Selection::initialize() or
+            // Selection::update().
+            regionStart = rangeCounter;
+            regionEnd = rangeCounter - 1; // length = 0
+            currentRange = rangeCounter;
+            break;
+        case Token::Cell:
+        case Token::Range:
+            // currentToken = tokens.count() - 1; // already set
+            // Set the last range as active one. It is not a sub-region,
+            // otherwise the state would have been InRegion.
+            regionStart = rangeCounter - 1;
+            regionEnd = rangeCounter - 1; // length = 1
+            currentRange = rangeCounter; // point behind the last
+            break;
         }
     }
 
     const int regionLength = regionEnd - regionStart + 1;
     kDebug() << "currentRange:" << currentRange << "regionStart:" << regionStart
-             << "regionEnd:" << regionEnd << "regionLength:" << regionLength;
+    << "regionEnd:" << regionEnd << "regionLength:" << regionLength;
 
     selection->setActiveSubRegion(regionStart, regionLength, currentRange);
 }
 
 
 CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
-    : KTextEdit(parent)
-    , d( new Private )
+        : KTextEdit(parent)
+        , d(new Private)
 {
     d->cellTool = cellTool;
     d->selection = cellTool->selection();
     d->textEdit = this;
-  d->globalCursorPos = QPoint();
+    d->globalCursorPos = QPoint();
     d->captureAllKeyEvents = d->selection->activeSheet()->map()->settings()->captureAllArrowKeys();
-  d->selectionChangedLocked = false;
-  d->currentToken = 0;
+    d->selectionChangedLocked = false;
+    d->currentToken = 0;
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -251,44 +251,44 @@ CellEditor::CellEditor(CellToolBase *cellTool, QWidget* parent)
 
     d->highlighter = new FormulaEditorHighlighter(this, d->selection);
 
-  d->functionCompletion = new FunctionCompletion( this );
-  d->functionCompletionTimer = new QTimer( this );
-  connect( d->functionCompletion, SIGNAL( selectedCompletion( const QString& ) ),
-    SLOT( functionAutoComplete( const QString& ) ) );
-  connect( this, SIGNAL( textChanged() ), SLOT( checkFunctionAutoComplete() ) );
-  connect( d->functionCompletionTimer, SIGNAL( timeout() ),
-    SLOT( triggerFunctionAutoComplete() ) );
+    d->functionCompletion = new FunctionCompletion(this);
+    d->functionCompletionTimer = new QTimer(this);
+    connect(d->functionCompletion, SIGNAL(selectedCompletion(const QString&)),
+            SLOT(functionAutoComplete(const QString&)));
+    connect(this, SIGNAL(textChanged()), SLOT(checkFunctionAutoComplete()));
+    connect(d->functionCompletionTimer, SIGNAL(timeout()),
+            SLOT(triggerFunctionAutoComplete()));
 
     const Cell cell(d->selection->activeSheet(), d->selection->marker());
     const bool wrapText = cell.style().wrapText();
-    d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap: QTextOption::NoWrap);
+    d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
 
 #if 0 // FIXME Implement a completion aware KTextEdit.
-  setCompletionMode(selection()->view()->doc()->completionMode());
-  setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
+    setCompletionMode(selection()->view()->doc()->completionMode());
+    setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
 #endif
 
-  connect( this, SIGNAL( cursorPositionChanged() ), this, SLOT (slotCursorPositionChanged()));
-  connect( this, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
+    connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 // connect( this, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
 }
 
 CellEditor::~CellEditor()
 {
-  if (selection())
-    selection()->endReferenceSelection();
+    if (selection())
+        selection()->endReferenceSelection();
 
-  delete d;
+    delete d;
 }
 
 Selection* CellEditor::selection() const
 {
-  return d->selection;
+    return d->selection;
 }
 
 QPoint CellEditor::globalCursorPosition() const
 {
-  return d->globalCursorPos;
+    return d->globalCursorPos;
 }
 
 void CellEditor::checkFunctionAutoComplete()
@@ -298,72 +298,72 @@ void CellEditor::checkFunctionAutoComplete()
         return;
     }
 
-  d->functionCompletionTimer->stop();
-  d->functionCompletionTimer->setSingleShot( true );
-  d->functionCompletionTimer->start( 2000 );
+    d->functionCompletionTimer->stop();
+    d->functionCompletionTimer->setSingleShot(true);
+    d->functionCompletionTimer->start(2000);
 }
 
 void CellEditor::triggerFunctionAutoComplete()
 {
-  // tokenize the expression (don't worry, this is very fast)
-  int curPos = textCursor().position();
-  QString subtext = toPlainText().left( curPos );
+    // tokenize the expression (don't worry, this is very fast)
+    int curPos = textCursor().position();
+    QString subtext = toPlainText().left(curPos);
 
-  KSpread::Formula f;
-  KSpread::Tokens tokens = f.scan( subtext );
-  if( !tokens.valid() ) return;
-  if( tokens.count()<1 ) return;
+    KSpread::Formula f;
+    KSpread::Tokens tokens = f.scan(subtext);
+    if (!tokens.valid()) return;
+    if (tokens.count() < 1) return;
 
-  KSpread::Token lastToken = tokens[ tokens.count()-1 ];
+    KSpread::Token lastToken = tokens[ tokens.count()-1 ];
 
-  // last token must be an identifier
-  if( !lastToken.isIdentifier() ) return;
-  QString id = lastToken.text();
-  if( id.length() < 1 ) return;
+    // last token must be an identifier
+    if (!lastToken.isIdentifier()) return;
+    QString id = lastToken.text();
+    if (id.length() < 1) return;
 
-  // find matches in function names
-  QStringList fnames = KSpread::FunctionRepository::self()->functionNames();
-  QStringList choices;
-  for( int i=0; i<fnames.count(); i++ )
-    if( fnames[i].startsWith( id, Qt::CaseInsensitive ) )
-      choices.append( fnames[i] );
-  choices.sort();
+    // find matches in function names
+    QStringList fnames = KSpread::FunctionRepository::self()->functionNames();
+    QStringList choices;
+    for (int i = 0; i < fnames.count(); i++)
+        if (fnames[i].startsWith(id, Qt::CaseInsensitive))
+            choices.append(fnames[i]);
+    choices.sort();
 
-  // no match, don't bother with completion
-  if( !choices.count() ) return;
+    // no match, don't bother with completion
+    if (!choices.count()) return;
 
-  // single perfect match, no need to give choices
-  if( choices.count()==1 )
-    if( choices[0].toLower() == id.toLower() )
-      return;
+    // single perfect match, no need to give choices
+    if (choices.count() == 1)
+        if (choices[0].toLower() == id.toLower())
+            return;
 
-  // present the user with completion choices
-  d->functionCompletion->showCompletion( choices );
+    // present the user with completion choices
+    d->functionCompletion->showCompletion(choices);
 }
 
-void CellEditor::functionAutoComplete( const QString& item )
+void CellEditor::functionAutoComplete(const QString& item)
 {
-  if( item.isEmpty() ) return;
+    if (item.isEmpty()) return;
 
-  QTextCursor textCursor = this->textCursor();
-  int curPos = textCursor.position();
-  QString subtext = toPlainText().left( curPos );
+    QTextCursor textCursor = this->textCursor();
+    int curPos = textCursor.position();
+    QString subtext = toPlainText().left(curPos);
 
-  KSpread::Formula f;
-  KSpread::Tokens tokens = f.scan( subtext );
-  if( !tokens.valid() ) return;
-  if( tokens.count()<1 ) return;
+    KSpread::Formula f;
+    KSpread::Tokens tokens = f.scan(subtext);
+    if (!tokens.valid()) return;
+    if (tokens.count() < 1) return;
 
-  KSpread::Token lastToken = tokens[ tokens.count()-1 ];
-  if( !lastToken.isIdentifier() ) return;
+    KSpread::Token lastToken = tokens[ tokens.count()-1 ];
+    if (!lastToken.isIdentifier()) return;
 
-  blockSignals( true );
+    blockSignals(true);
     // Select the incomplete function name in order to replace it.
-  textCursor.setPosition( lastToken.pos() + 1 );
-  textCursor.setPosition( lastToken.pos() + lastToken.text().length() + 1,
-                            QTextCursor::KeepAnchor );
-  setTextCursor( textCursor );
-  blockSignals( false );
+    textCursor.setPosition(lastToken.pos() + 1);
+    textCursor.setPosition(lastToken.pos() + lastToken.text().length() + 1,
+                           QTextCursor::KeepAnchor);
+    setTextCursor(textCursor);
+    blockSignals(false);
     // Replace the incomplete function name with the selected one.
     insertPlainText(item);
 }
@@ -457,7 +457,7 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoView
 
 void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
 {
-  selection()->activeSheet()->map()->settings()->setCompletionMode( _completion );
+    selection()->activeSheet()->map()->settings()->setCompletionMode(_completion);
 }
 
 void CellEditor::slotTextChanged()
@@ -545,14 +545,11 @@ void CellEditor::selectionChanged()
     Tokens tokens = d->highlighter->formulaTokens();
     uint start = 1;
     uint length = 0;
-    if (!tokens.empty())
-    {
-        if ( d->currentToken < tokens.count() )
-        {
+    if (!tokens.empty()) {
+        if (d->currentToken < tokens.count()) {
             Token token = tokens[d->currentToken];
             Token::Type type = token.type();
-            if (type == Token::Cell || type == Token::Range)
-            {
+            if (type == Token::Cell || type == Token::Range) {
                 start = token.pos() + 1; // don't forget the '='!
                 length = token.text().length();
                 // Iterate to the end of the sub-region.
@@ -560,29 +557,25 @@ void CellEditor::selectionChanged()
                     token = tokens[i];
                     type = token.type();
                     switch (type) {
-                        case Token::Cell:
-                        case Token::Range:
-                            length += token.text().length();
+                    case Token::Cell:
+                    case Token::Range:
+                        length += token.text().length();
+                        continue;
+                    case Token::Operator:
+                        if (token.asOperator() == Token::Semicolon) {
+                            ++length;
                             continue;
-                        case Token::Operator:
-                            if (token.asOperator() == Token::Semicolon) {
-                                ++length;
-                                continue;
-                            }
-                        default:
-                            break;
+                        }
+                    default:
+                        break;
                     }
                     break;
                 }
-            }
-            else
-            {
+            } else {
                 start = token.pos() + 1; // don't forget the '='!
                 length = token.text().length();
             }
-        }
-        else
-        {
+        } else {
             // sanitize
             d->currentToken = tokens.count();
             start = textLength;
@@ -617,30 +610,30 @@ void CellEditor::selectionChanged()
 void CellEditor::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
-        case Qt::Key_Left:
-        case Qt::Key_Right:
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-        case Qt::Key_PageDown:
-        case Qt::Key_PageUp:
-        case Qt::Key_Tab:
-        case Qt::Key_Backtab:
-            // Forward left/right arrows to parent, so that pressing left/right
-            // in this editor leaves editing mode, unless this editor has been
-            // set to capture arrow key events.
-            if (d->captureAllKeyEvents) {
-                break; // pass to KTextEdit
-            }
-            event->ignore(); // pass to parent
-            return;
-        case Qt::Key_Return:
-        case Qt::Key_Enter:
-            // Shift + Return: manual line wrap
-            if (event->modifiers() & Qt::ShiftModifier) {
-                break; // pass to KTextEdit
-            }
-            event->ignore(); // pass to parent
-            return;
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_PageDown:
+    case Qt::Key_PageUp:
+    case Qt::Key_Tab:
+    case Qt::Key_Backtab:
+        // Forward left/right arrows to parent, so that pressing left/right
+        // in this editor leaves editing mode, unless this editor has been
+        // set to capture arrow key events.
+        if (d->captureAllKeyEvents) {
+            break; // pass to KTextEdit
+        }
+        event->ignore(); // pass to parent
+        return;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        // Shift + Return: manual line wrap
+        if (event->modifiers() & Qt::ShiftModifier) {
+            break; // pass to KTextEdit
+        }
+        event->ignore(); // pass to parent
+        return;
     }
     KTextEdit::keyPressEvent(event);
 }
@@ -806,14 +799,14 @@ void CellEditor::permuteFixation()
 
 int CellEditor::cursorPosition() const
 {
-  return textCursor().position();
+    return textCursor().position();
 }
 
-void CellEditor::setCursorPosition( int pos )
+void CellEditor::setCursorPosition(int pos)
 {
-    QTextCursor textCursor( this->textCursor() );
-    textCursor.setPosition( pos );
-    setTextCursor( textCursor );
+    QTextCursor textCursor(this->textCursor());
+    textCursor.setPosition(pos);
+    setTextCursor(textCursor);
 }
 
 // Called by the cell tool when setting the active element with a cell location.
@@ -826,29 +819,29 @@ void CellEditor::setActiveSubRegion(int index)
     for (int i = 0; i < tokens.count(); ++i) {
         const Token token = tokens[i];
         switch (token.type()) {
-            case Token::Cell:
-            case Token::Range:
-                if (!subRegion) {
-                    d->currentToken = i;
-                    subRegion = true;
+        case Token::Cell:
+        case Token::Range:
+            if (!subRegion) {
+                d->currentToken = i;
+                subRegion = true;
+            }
+            if (counter == index) {
+                setCursorPosition(token.pos() + token.text().length() + 1);
+                return;
+            }
+            ++counter;
+            continue;
+        case Token::Operator:
+            if (token.asOperator() == Token::Semicolon) {
+                if (subRegion) {
+                    continue;
                 }
-                if (counter == index) {
-                    setCursorPosition(token.pos() + token.text().length() + 1);
-                    return;
-                }
-                ++counter;
-                continue;
-            case Token::Operator:
-                if (token.asOperator() == Token::Semicolon) {
-                    if (subRegion) {
-                        continue;
-                    }
-                }
-                subRegion = false;
-                continue;
-            default:
-                subRegion = false;
-                continue;
+            }
+            subRegion = false;
+            continue;
+        default:
+            subRegion = false;
+            continue;
         }
     }
 }

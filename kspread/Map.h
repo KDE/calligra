@@ -285,7 +285,7 @@ public:
      * @return index of @p sheet in this map
      * @return @c 0 if the index exceeds the list boundaries
      */
-    int indexOf( Sheet* sheet ) const;
+    int indexOf(Sheet* sheet) const;
 
     /**
      * @return the list of sheets in this map

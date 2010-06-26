@@ -248,16 +248,14 @@ void OpenCalcStyles::addCellStyles(QDomDocument & doc, QDomElement & autoStyles)
 
         if (t->hideAll)
             prop.setAttribute("style:cell-protect", "hidden-and-protected");
-        else
-            if (t->notProtected && !t->hideFormula)
-                prop.setAttribute("style:cell-protect", "none");
-            else
-                if (t->notProtected && t->hideFormula)
-                    prop.setAttribute("style:cell-protect", "formula-hidden");
-                else if (t->hideFormula)
-                    prop.setAttribute("style:cell-protect", "protected formula-hidden");
-                else if (!t->notProtected)
-                    prop.setAttribute("style:cell-protect", "protected");
+        else if (t->notProtected && !t->hideFormula)
+            prop.setAttribute("style:cell-protect", "none");
+        else if (t->notProtected && t->hideFormula)
+            prop.setAttribute("style:cell-protect", "formula-hidden");
+        else if (t->hideFormula)
+            prop.setAttribute("style:cell-protect", "protected formula-hidden");
+        else if (!t->notProtected)
+            prop.setAttribute("style:cell-protect", "protected");
 
 
         if ((t->left == t->right) && (t->left == t->top) && (t->left == t->bottom)) {

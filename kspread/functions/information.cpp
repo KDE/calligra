@@ -72,63 +72,63 @@ KSPREAD_EXPORT_FUNCTION_MODULE("information", InformationModule)
 
 
 InformationModule::InformationModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("ERRORTYPE", func_errortype);
-  add(f);
+    add(f);
     f = new Function("FILENAME", func_filename);
     f->setParamCount(0);
-  add(f);
+    add(f);
     f = new Function("FORMULA", func_formula);
     f->setParamCount(1);
     f->setNeedsExtra(true);
     add(f);
     f = new Function("INFO", func_info);
-  add(f);
+    add(f);
     f = new Function("ISBLANK", func_isblank);
-  add(f);
+    add(f);
     f = new Function("ISDATE", func_isdate);
-  add(f);
+    add(f);
     f = new Function("ISERR", func_iserr);
-  add(f);
+    add(f);
     f = new Function("ISERROR", func_iserror);
-  add(f);
+    add(f);
     f = new Function("ISEVEN", func_iseven);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN");
     add(f);
     f = new Function("ISLOGICAL", func_islogical);
-  add(f);
+    add(f);
     f = new Function("ISNA", func_isna);
-  add(f);
+    add(f);
     f = new Function("ISNONTEXT", func_isnottext);
-  add(f);
+    add(f);
     f = new Function("ISNOTTEXT", func_isnottext);
-  add(f);
+    add(f);
     f = new Function("ISNUM", func_isnum);
-  add(f);
+    add(f);
     f = new Function("ISNUMBER", func_isnum);
-  add(f);
+    add(f);
     f = new Function("ISODD", func_isodd);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISODD");
     add(f);
     f = new Function("ISREF", func_isref);
     f->setNeedsExtra(true);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("ISTEXT", func_istext);
-  add(f);
+    add(f);
     f = new Function("ISTIME", func_istime);
-  add(f);
+    add(f);
     f = new Function("N", func_n);
-  add(f);
+    add(f);
     f = new Function("NA", func_na);
     f->setParamCount(0);
-  add(f);
+    add(f);
     f = new Function("TYPE", func_type);
     f->setAcceptArray();
-  add(f);
+    add(f);
 }
 
 QString InformationModule::descriptionFileName() const
@@ -190,10 +190,10 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (type == "recalc") {
         QString result;
-      if (!calc->settings()->isAutoCalculationEnabled())
-        result = i18n ("Manual");
-      else
-        result = i18n("Automatic");
+        if (!calc->settings()->isAutoCalculationEnabled())
+            result = i18n("Manual");
+        else
+            result = i18n("Automatic");
         return Value(result);
     }
 

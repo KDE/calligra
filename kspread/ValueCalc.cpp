@@ -131,10 +131,9 @@ void awMaxA(ValueCalc *c, Value &res, Value val, Value)
         if (res.isEmpty())
             // convert to number, so that we don't return string/bool
             res = c->conv()->asNumeric(val);
-        else
-            if (c->greater(val, res))
-                // convert to number, so that we don't return string/bool
-                res = c->conv()->asNumeric(val);
+        else if (c->greater(val, res))
+            // convert to number, so that we don't return string/bool
+            res = c->conv()->asNumeric(val);
     }
 }
 
@@ -143,8 +142,7 @@ void awMin(ValueCalc *c, Value &res, Value val, Value)
     if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString())) {
         if (res.isEmpty())
             res = val;
-        else
-            if (c->lower(val, res)) res = val;
+        else if (c->lower(val, res)) res = val;
     }
 }
 
@@ -154,10 +152,9 @@ void awMinA(ValueCalc *c, Value &res, Value val, Value)
         if (res.isEmpty())
             // convert to number, so that we don't return string/bool
             res = c->conv()->asNumeric(val);
-        else
-            if (c->lower(val, res))
-                // convert to number, so that we don't return string/bool
-                res = c->conv()->asNumeric(val);
+        else if (c->lower(val, res))
+            // convert to number, so that we don't return string/bool
+            res = c->conv()->asNumeric(val);
     }
 }
 
@@ -708,7 +705,7 @@ Value ValueCalc::eps()
 
 Value ValueCalc::random(Number range)
 {
-    return Value(range * (double) rand() / (RAND_MAX + 1.0));
+    return Value(range *(double) rand() / (RAND_MAX + 1.0));
 }
 
 Value ValueCalc::random(Value range)
@@ -910,7 +907,7 @@ Value ValueCalc::asin(const Value &number)
     if (!ok)
         return Value::errorVALUE();
     const double d = numToDouble(n);
-    if (d < -1.0 || d > 1.0 )
+    if (d < -1.0 || d > 1.0)
         return Value::errorVALUE();
 
     errno = 0;
@@ -930,7 +927,7 @@ Value ValueCalc::acos(const Value &number)
     if (!ok)
         return Value::errorVALUE();
     const double d = numToDouble(n);
-    if (d < -1.0 || d > 1.0 )
+    if (d < -1.0 || d > 1.0)
         return Value::errorVALUE();
 
     errno = 0;
@@ -1547,7 +1544,7 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
         cf *= ::pow(x, fA)*::pow(1.0 - x, fB) / (fA * b1);
     }
     if (bReflect)
-        return Value(1.0 -cf);
+        return Value(1.0 - cf);
     else
         return Value(cf);
 }
@@ -1570,7 +1567,7 @@ Value ValueCalc::GetBeta(Value _x, Value _alpha,
 static double ccmath_gaml(double x)
 {
     double g, h = 0; /* NB must be called with 0<=x<29 */
-    for (g = 1.; x < 30. ;g *= x, x += 1.) h = x * x;
+    for (g = 1.; x < 30. ; g *= x, x += 1.) h = x * x;
     g = (x - .5) * log(x) - x + .918938533204672 - log(g);
     g += (1. - (1. / 6. - (1. / 3. - 1. / (4.*h)) / (7.*h)) / (5.*h)) / (12.*x);
     return g;
@@ -1579,7 +1576,7 @@ static double ccmath_gaml(double x)
 static double ccmath_psi(int m)
 {
     double s = -.577215664901533; int k;
-    for (k = 1; k < m ;++k) s += 1. / k;
+    for (k = 1; k < m ; ++k) s += 1. / k;
     return s;
 }
 
@@ -1593,14 +1590,14 @@ static double ccmath_ibes(double v, double x)
         else {
             if (v > 0.) return 0.; else if (v == 0.) return 1.;
         }
-        for (p = 1, x *= x;;++p) {
+        for (p = 1, x *= x;; ++p) {
             t *= x / (p * (v += 1.)); s += t;
             if (p > m && t < 1.e-13*s) break;
         }
     } else {
         double u, a0 = 1.57079632679490;
         s = t = 1. / sqrt(x * a0); x *= 2.; u = 0.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ;++p, y += 1.) {
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
             t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) >= tp) break;
             if (!(p&1)) s += t; else u -= t;
         }
@@ -1623,18 +1620,18 @@ static double ccmath_kbes(double v, double x)
                 k = (int)y; tp *= v;
                 f = 2.*log(x) - ccmath_psi(1) - ccmath_psi(k + 1);
                 t /= 2.; if (!(k&1)) t = -t; s = f * t;
-                for (p = 1, x *= x;;++p) {
+                for (p = 1, x *= x;; ++p) {
                     f -= 1. / p + 1. / (v += 1.);
                     t *= x / (p * v); s += (y = t * f);
                     if (p > m && fabs(y) < 1.e-14) break;
                 }
                 if (k > 0) {
                     x = -x; s += (t = 1. / (tp * 2.));
-                    for (p = 1, --k; k > 0 ;++p, --k) s += (t *= x / (p * k));
+                    for (p = 1, --k; k > 0 ; ++p, --k) s += (t *= x / (p * k));
                 }
             } else {
                 f = 1. / (t * v * 2.); t *= a0 / sin(2.*a0 * v); s = f - t;
-                for (p = 1, x *= x, tp = v;;++p) {
+                for (p = 1, x *= x, tp = v;; ++p) {
                     t *= x / (p * (v += 1.)); f *= -x / (p * (tp -= 1.));
                     s += (y = f - t); if (p > m && fabs(y) < 1.e-14) break;
                 }
@@ -1643,18 +1640,18 @@ static double ccmath_kbes(double v, double x)
             double tq, h, w, z, r;
             t = 12. / pow(x, .333); k = (int)(t * t); y = 2.*(x + k);
             m = (int)v; v -= m; tp = v * v - .25; v += 1.; tq = v * v - .25;
-            for (s = h = 1., r = f = z = w = 0.; k > 0 ;--k, y -= 2.) {
+            for (s = h = 1., r = f = z = w = 0.; k > 0 ; --k, y -= 2.) {
                 t = (y * h - (k + 1) * z) / (k - 1 - tp / k); z = h; f += (h = t);
                 t = (y * s - (k + 1) * w) / (k - 1 - tq / k); w = s; r += (s = t);
             }
             t = sqrt(a0 / x) * exp(-x); s *= t / r; h *= t / f; x /= 2.; if (m == 0) s = h;
-            for (k = 1; k < m ;++k) {
+            for (k = 1; k < m ; ++k) {
                 t = v * s / x + h; h = s; s = t; v += 1.;
             }
         }
     } else {
         s = t = sqrt(a0 / x); x *= 2.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ;++p, y += 1.) {
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
             t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) >= tp) break; s += t;
         }
         s *= exp(-x / 2.);
@@ -1672,14 +1669,14 @@ static double ccmath_jbes(double v, double x)
         else {
             if (v > 0.) return 0.; else if (v == 0.) return 1.;
         }
-        for (p = 1, x *= -x;;++p) {
+        for (p = 1, x *= -x;; ++p) {
             t *= x / (p * (v += 1.)); s += t;
             if (p > m && fabs(t) < 1.e-13) break;
         }
     } else {
         double u, a0 = 1.57079632679490;
         s = t = 1. / sqrt(x * a0); x *= 2.; u = 0.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ;++p, y += 1.) {
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
             t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) >= tp) break;
             if (!(p&1)) {
                 t = -t; s += t;
@@ -1702,24 +1699,24 @@ static double ccmath_nbes(double v, double x)
             k = (int)y; u *= v;
             f = 2.*log(x) - ccmath_psi(1) - ccmath_psi(k + 1);
             t /= a0; x *= -x; s = f * t;
-            for (p = 1;;++p) {
+            for (p = 1;; ++p) {
                 f -= 1. / p + 1. / (v += 1.);
                 t *= x / (p * v); s += (y = t * f); if (p > m && fabs(y) < 1.e-13) break;
             }
             if (k > 0) {
                 x = -x; s -= (t = 1. / (u * a0));
-                for (p = 1, --k; k > 0 ;++p, --k) s -= (t *= x / (p * k));
+                for (p = 1, --k; k > 0 ; ++p, --k) s -= (t *= x / (p * k));
             }
         } else {
             f = 1. / (t * v * a0); t /= tan(a0 * v); s = t - f;
-            for (p = 1, x *= x, u = v;;++p) {
+            for (p = 1, x *= x, u = v;; ++p) {
                 t *= -x / (p * (v += 1.)); f *= x / (p * (u -= 1.));
                 s += (y = t - f); if (p > m && fabs(y) < 1.e-13) break;
             }
         }
     } else {
         x *= 2.; s = t = 2. / sqrt(x * a0); u = 0.;
-        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ;++p, y += 1.) {
+        for (p = 1, y = .5; (tp = fabs(t)) > 1.e-14 ; ++p, y += 1.) {
             t *= (v + y) * (v - y) / (p * x); if (y > v && fabs(t) > tp) break;
             if (!(p&1)) {
                 t = -t; s += t;
@@ -1919,13 +1916,12 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
                 tmp = sumIf(v, cond);
             if (tmp.isNumber()) {// only add numbers, no conversion from string allowed
                 res = add(res, tmp);
-            } else
-                if (matches(cond, v)) {
-                    if (v.isNumber()) {// only add numbers, no conversion from string allowed
-                        //kDebug()<<"add "<<v;
-                        res = add(res, v);
-                    }
+            } else if (matches(cond, v)) {
+                if (v.isNumber()) {// only add numbers, no conversion from string allowed
+                    //kDebug()<<"add "<<v;
+                    res = add(res, v);
                 }
+            }
         }
 
     return res;
@@ -1999,9 +1995,8 @@ int ValueCalc::countIf(const Value &range, const Condition &cond)
 
         if (v.isArray())
             res += countIf(v, cond);
-        else
-            if (matches(cond, v))
-                res++;
+        else if (matches(cond, v))
+            res++;
     }
 
     return res;

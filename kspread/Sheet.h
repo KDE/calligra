@@ -88,7 +88,7 @@ class View;
  * A sheet contains several cells.
  */
 class KSPREAD_EXPORT Sheet : public KoShapeUserData, public KoShapeControllerBase,
-                             public ProtectableObject
+        public ProtectableObject
 {
     Q_OBJECT
     Q_PROPERTY(QString sheetName READ sheetName)

@@ -52,62 +52,62 @@ KSPREAD_EXPORT_FUNCTION_MODULE("database", DatabaseModule)
 
 
 DatabaseModule::DatabaseModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("DAVERAGE",     func_daverage);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DCOUNT",       func_dcount);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DCOUNTA",      func_dcounta);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DGET",         func_dget);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DMAX",         func_dmax);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DMIN",         func_dmin);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DPRODUCT",     func_dproduct);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DSTDEV",       func_dstdev);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DSTDEVP",      func_dstdevp);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DSUM",         func_dsum);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DVAR",         func_dvar);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DVARP",        func_dvarp);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("GETPIVOTDATA", func_getpivotdata);  // partially Excel-compatible
     f->setParamCount(2);
     f->setAcceptArray();
-  add(f);
+    add(f);
 }
 
 QString DatabaseModule::descriptionFileName() const
@@ -387,9 +387,8 @@ Value func_dmax(valVector args, ValueCalc *calc, FuncExtra *)
                 if (!got) {
                     res = val;
                     got = true;
-                } else
-                    if (calc->greater(val, res))
-                        res = val;
+                } else if (calc->greater(val, res))
+                    res = val;
             }
         }
 
@@ -418,9 +417,8 @@ Value func_dmin(valVector args, ValueCalc *calc, FuncExtra *)
                 if (!got) {
                     res = val;
                     got = true;
-                } else
-                    if (calc->lower(val, res))
-                        res = val;
+                } else if (calc->lower(val, res))
+                    res = val;
             }
         }
 

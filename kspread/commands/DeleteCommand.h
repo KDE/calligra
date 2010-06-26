@@ -46,8 +46,7 @@ public:
      */
     virtual ~DeleteCommand();
 
-    enum Mode
-    {
+    enum Mode {
         Everything,     ///< Delete also column and row formats.
         OnlyCells       ///< Delete only cell contents, styles, etc.
     };

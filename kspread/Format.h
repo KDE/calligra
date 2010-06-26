@@ -37,7 +37,8 @@ namespace KSpread
  * \ingroup Style
  * Collection of string formatting enumeration and functions.
  */
-namespace Format {
+namespace Format
+{
 
 enum Type {
     Generic = 0,

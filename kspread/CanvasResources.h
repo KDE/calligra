@@ -28,7 +28,8 @@ namespace KSpread
 /**
  * KSpread specific canvas resources
  */
-namespace CanvasResource {
+namespace CanvasResource
+{
 enum {
     Selection = KoCanvasResource::KSpreadStart  ///< the cell selection
 };

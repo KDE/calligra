@@ -68,7 +68,7 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
             SHA1::getHash(password, hash);
         }
         m_password = hash;
-    } else /* Unlock */ {
+    } else { /* Unlock */
         KPasswordDialog dlg(parent);
         dlg.setPrompt(i18n("Enter the password."));
         dlg.setWindowTitle(title);

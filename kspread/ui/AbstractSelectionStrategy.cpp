@@ -94,8 +94,8 @@ void AbstractSelectionStrategy::finishInteraction(Qt::KeyboardModifiers modifier
 
 // static
 bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
-                                                         Selection *selection,
-                                                         const QPointF &position)
+        Selection *selection,
+        const QPointF &position)
 {
     if (selection->referenceSelectionMode() || !selection->isValid()) {
         return false;
@@ -129,8 +129,8 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
 
 // static
 bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas,
-                                                         Selection *selection,
-                                                         const QPointF &position)
+        Selection *selection,
+        const QPointF &position)
 {
     if (!selection->referenceSelectionMode() || !selection->isValid()) {
         return false;

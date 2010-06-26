@@ -308,7 +308,7 @@ bool Cluster::insertShiftDown(const QPoint& marker, bool& work)
     // Is there a cell at the right most position ?
     // In this case the shift is impossible.
     Cell** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 * (KSPREAD_CLUSTER_LEVEL1 - 1) + cx ];
-    if (cl && cl[ KSPREAD_CLUSTER_LEVEL2 * (KSPREAD_CLUSTER_LEVEL2 - 1) + dx ])
+    if (cl && cl[ KSPREAD_CLUSTER_LEVEL2 *(KSPREAD_CLUSTER_LEVEL2 - 1) + dx ])
         return false;
 
     bool a = autoDelete();
@@ -383,7 +383,7 @@ bool Cluster::insertRow(int row)
         Cell** cl = m_cluster[ KSPREAD_CLUSTER_LEVEL1 * (KSPREAD_CLUSTER_LEVEL1 - 1) + t1 ];
         if (cl)
             for (int t2 = 0; t2 < KSPREAD_CLUSTER_LEVEL2; ++t2)
-                if (cl[ KSPREAD_CLUSTER_LEVEL2 * (KSPREAD_CLUSTER_LEVEL2 - 1) + t2 ])
+                if (cl[ KSPREAD_CLUSTER_LEVEL2 *(KSPREAD_CLUSTER_LEVEL2 - 1) + t2 ])
                     return false;
     }
 

@@ -83,13 +83,13 @@ public:
     Filter* filter;
     SubtotalRules* subtotalRules;
     QString name;
-bool isSelection                    : 1;
-bool onUpdateKeepStyles             : 1;
-bool onUpdateKeepSize               : 1;
-bool hasPersistentData              : 1;
-enum { Row, Column } orientation    : 1;
-bool containsHeader                 : 1;
-bool displayFilterButtons           : 1;
+    bool isSelection                    : 1;
+    bool onUpdateKeepStyles             : 1;
+    bool onUpdateKeepSize               : 1;
+    bool hasPersistentData              : 1;
+    enum { Row, Column } orientation    : 1;
+    bool containsHeader                 : 1;
+    bool displayFilterButtons           : 1;
     Region targetRangeAddress;
     int refreshDelay;
 

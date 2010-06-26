@@ -37,8 +37,8 @@ public:
 
 
 RightToLeftPaintingStrategy::RightToLeftPaintingStrategy(KoShapeManager *shapeManager, KoCanvasBase *canvas)
-    : KoShapeManagerPaintingStrategy(shapeManager)
-    , d(new Private)
+        : KoShapeManagerPaintingStrategy(shapeManager)
+        , d(new Private)
 {
     d->canvas = canvas;
 }
@@ -70,11 +70,11 @@ void RightToLeftPaintingStrategy::adapt(KoShape *shape, QRectF &rect)
 {
     Q_UNUSED(shape)
     Q_UNUSED(rect)
-/*    const double width = d->canvas->canvasWidget()->width();
-    const double offsetX = d->canvas->canvasController()->canvasOffsetX();
-    const qreal left = width - rect.right();
-    const qreal right = width - rect.left();
-    rect.setLeft(left);
-    rect.setRight(right);*/
+    /*    const double width = d->canvas->canvasWidget()->width();
+        const double offsetX = d->canvas->canvasController()->canvasOffsetX();
+        const qreal left = width - rect.right();
+        const qreal right = width - rect.left();
+        rect.setLeft(left);
+        rect.setRight(right);*/
 //     rect.translate(/*-2 * offsetX +*/ width, 0);
 }

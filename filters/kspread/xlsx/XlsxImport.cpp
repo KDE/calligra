@@ -544,12 +544,12 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     QMap<QString, MSOOXML::DrawingMLTheme*> themes;
     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
     {
-        std::auto_ptr<MSOOXML::DrawingMLTheme> theme( new MSOOXML::DrawingMLTheme );
+        std::auto_ptr<MSOOXML::DrawingMLTheme> theme(new MSOOXML::DrawingMLTheme);
         MSOOXML::MsooXmlThemesReader themesReader(writers);
         MSOOXML::MsooXmlThemesReaderContext context(*theme.get());
         //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
-        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-            MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context))
         if (!theme.get()->name.isEmpty()) {
             // theme loaded
             themes.insert(theme.get()->name, theme.get());
@@ -561,16 +561,16 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         XlsxXmlSharedStringsReader sharedStringsReader(writers);
         XlsxXmlSharedStringsReaderContext context(sharedStrings);
-        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-            MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
     }
     // 3. parse styles
     XlsxStyles styles;
     {
         XlsxXmlStylesReader stylesReader(writers);
         XlsxXmlStylesReaderContext context(styles);
-        RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context) )
+        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
+                            MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context))
     }
     // 4. parse comments
     XlsxComments comments;
@@ -585,7 +585,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     {
         XlsxXmlDocumentReaderContext context(*this, themes, sharedStrings, comments, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
-        RETURN_IF_ERROR( loadAndParseDocument(
+        RETURN_IF_ERROR(loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
     }
     // more here...

@@ -38,57 +38,57 @@ class Tokens;
 class FormulaEditorHighlighter : public QSyntaxHighlighter
 {
 public:
-  /**
-   * Constructs a FormulaHighlighter to color-code cell references in a QTextEdit.
-   *
-   * @param textEdit The QTextEdit widget which the highlighter should operate on
-   * @param selection The Selection object
-   */
-  FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
-  virtual ~FormulaEditorHighlighter();
+    /**
+     * Constructs a FormulaHighlighter to color-code cell references in a QTextEdit.
+     *
+     * @param textEdit The QTextEdit widget which the highlighter should operate on
+     * @param selection The Selection object
+     */
+    FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
+    virtual ~FormulaEditorHighlighter();
 
 
-  /**
-   * Called automatically by KTextEditor to highlight text when modified.
-   */
-  virtual void highlightBlock(const QString& text);
-  /**
-   *
-   */
-  const Tokens& formulaTokens() const;
-  /**
-   *
-   */
-  uint rangeCount() const;
-  /**
-   * Returns true if any of the ranges or cells in the Formula.have changed since the
-   * last call to @ref FormulaEditorHighlighter::rangeChanged()
-   */
-  bool rangeChanged() const;
+    /**
+     * Called automatically by KTextEditor to highlight text when modified.
+     */
+    virtual void highlightBlock(const QString& text);
+    /**
+     *
+     */
+    const Tokens& formulaTokens() const;
+    /**
+     *
+     */
+    uint rangeCount() const;
+    /**
+     * Returns true if any of the ranges or cells in the Formula.have changed since the
+     * last call to @ref FormulaEditorHighlighter::rangeChanged()
+     */
+    bool rangeChanged() const;
 
-  /**
-   * Sets the highlighter's range changed flag to false.
-   */
-  void resetRangeChanged();
+    /**
+     * Sets the highlighter's range changed flag to false.
+     */
+    void resetRangeChanged();
 
 
 
 protected:
-  /**
-  * Returns the position of the brace matching the one found at position pos
-  */
-  int findMatchingBrace(int pos);
-  /**
-  * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
-  * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
-  */
-  void handleBrace(uint index);
+    /**
+    * Returns the position of the brace matching the one found at position pos
+    */
+    int findMatchingBrace(int pos);
+    /**
+    * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector
+    * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
+    */
+    void handleBrace(uint index);
 
 private:
-    Q_DISABLE_COPY( FormulaEditorHighlighter )
+    Q_DISABLE_COPY(FormulaEditorHighlighter)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

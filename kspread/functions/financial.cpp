@@ -114,32 +114,32 @@ KSPREAD_EXPORT_FUNCTION_MODULE("financial", FinancialModule)
 
 
 FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("ACCRINT", func_accrint);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETACCRINT");
     f->setParamCount(6, 7);
-  add(f);
+    add(f);
     f = new Function("ACCRINTM", func_accrintm);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETACCRINTM");
     f->setParamCount(3, 5);
-  add(f);
+    add(f);
     f = new Function("AMORDEGRC", func_amordegrc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORDEGRC");
     f->setParamCount(6, 7);
-  add(f);
+    add(f);
     f = new Function("AMORLINC", func_amorlinc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETAMORLINC");
     f->setParamCount(6, 7);
-  add(f);
+    add(f);
     f = new Function("COMPOUND", func_compound);
     f->setParamCount(4);
-  add(f);
+    add(f);
     f = new Function("CONTINUOUS", func_continuous);
     f->setParamCount(3);
-  add(f);
+    add(f);
 //   f = new Function ("COUPDAYBS", func_coupdaybs);
 //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPDAYBS");
 //   f->setParamCount (3, 4);
@@ -159,7 +159,7 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("COUPNUM", func_coupnum);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPNUM");
     f->setParamCount(3, 5);
-  add(f);
+    add(f);
 //   f = new Function ("COUPPCD", func_couppcd);
 //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCOUPPCD");
 //   f->setParamCount (3, 4);
@@ -167,96 +167,96 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("CUMIPMT", func_cumipmt);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMIPMT");
     f->setParamCount(6);
-  add(f);
+    add(f);
     f = new Function("CUMPRINC", func_cumprinc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETCUMPRINC");
     f->setParamCount(6);
-  add(f);
+    add(f);
     f = new Function("DB", func_db);
     f->setParamCount(4, 5);
-  add(f);
+    add(f);
     f = new Function("DDB", func_ddb);
     f->setParamCount(4, 5);
-  add(f);
+    add(f);
     f = new Function("DISC", func_disc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDISC");
     f->setParamCount(4, 5);
-  add(f);
+    add(f);
     f = new Function("DOLLARDE", func_dollarde);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARDE");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("DOLLARFR", func_dollarfr);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDOLLARFR");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("DURATION", func_duration);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETDURATION");
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("DURATION_ADD", func_duration_add);
     f->setParamCount(5, 6);
-  add(f);
+    add(f);
     f = new Function("EFFECT", func_effective);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEFFECT");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("EFFECTIVE", func_effective);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("EURO", func_euro);   // KSpread-specific, Gnumeric-compatible
     f->setParamCount(1);
-  add(f);
+    add(f);
     f = new Function("EUROCONVERT", func_euroconvert);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("FV", func_fv);
     f->setParamCount(3, 5);
-  add(f);
+    add(f);
     f = new Function("FVSCHEDULE", func_fvschedule);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFVSCHEDULE");
     f->setParamCount(2);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("FV_ANNUITY", func_fv_annuity);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("INTRATE", func_intrate);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETINTRATE");
     f->setParamCount(4, 5);
-  add(f);
+    add(f);
     f = new Function("IPMT", func_ipmt);
     f->setParamCount(4, 6);
-  add(f);
+    add(f);
     f = new Function ("IRR", func_irr);
     f->setParamCount (1, 2);
     f->setAcceptArray();
   add(f);
     f = new Function("ISPMT", func_ispmt);
     f->setParamCount(4);
-  add(f);
+    add(f);
     f = new Function("LEVEL_COUPON", func_level_coupon);
     f->setParamCount(5);
-  add(f);
+    add(f);
     f = new Function("MDURATION", func_mduration);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMDURATION");
     f->setParamCount(5, 6);
-  add(f);
+    add(f);
     f = new Function("MIRR", func_mirr);
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("NOMINAL", func_nominal);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNOMINAL");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("NPER", func_nper);
     f->setParamCount(3, 5);
-  add(f);
+    add(f);
     f = new Function("NPV", func_npv);
     f->setParamCount(2, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
 //   f = new Function ("ODDFPRICE", func_oddfprice);
 //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETODDFPRICE");
 //   f->setParamCount (8, 9);
@@ -268,20 +268,20 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("ODDLPRICE", func_oddlprice);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETODDLPRICE");
     f->setParamCount(7, 8);
-  add(f);
+    add(f);
     f = new Function("ODDLYIELD", func_oddlyield);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETODDLYIELD");
     f->setParamCount(7, 8);
-  add(f);
+    add(f);
     f = new Function("PDURATION", func_duration);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("PMT", func_pmt);
     f->setParamCount(3, 5);
-  add(f);
+    add(f);
     f = new Function("PPMT", func_ppmt);
     f->setParamCount(4, 6);
-  add(f);
+    add(f);
 //   f = new Function ("PRICE", func_price);
 //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICE");
 //   f->setParamCount (6, 7);
@@ -293,54 +293,54 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("PRICEMAT", func_pricemat);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETPRICEMAT");
     f->setParamCount(5, 6);
-  add(f);
+    add(f);
     f = new Function("PV", func_pv);
     f->setParamCount(3, 5);
-  add(f);
+    add(f);
     f = new Function("PV_ANNUITY", func_pv_annuity);
     f->setParamCount(3);
-  add(f);
+    add(f);
 //   f = new Function ("RATE", func_rate);
 //   f->setParamCount (3, 6);
 //   add(f);
     f = new Function("RECEIVED", func_received);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRECEIVED");
     f->setParamCount(4, 5);
-  add(f);
+    add(f);
     f = new Function("RRI", func_rri);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("SLN", func_sln);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("SYD", func_syd);
     f->setParamCount(4);
-  add(f);
+    add(f);
     f = new Function("TBILLEQ", func_tbilleq);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETTBILLEQ");
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("TBILLPRICE", func_tbillprice);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETTBILLPRICE");
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("TBILLYIELD", func_tbillyield);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETTBILLYIELD");
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("VDB", func_vdb);
     f->setParamCount(5, 7);
-  add(f);
+    add(f);
     f = new Function("XIRR", func_xirr);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETXIRR");
     f->setParamCount(2, 3);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("XNPV", func_xnpv);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETXNPV");
     f->setParamCount(3);
     f->setAcceptArray();
-  add(f);
+    add(f);
 //   f = new Function ("YIELD", func_yield);
 //   f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELD");
 //   f->setParamCount (6, 7);
@@ -348,14 +348,14 @@ FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
     f = new Function("YIELDDISC", func_yielddisc);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELDDISC");
     f->setParamCount(4, 5);
-  add(f);
+    add(f);
     f = new Function("YIELDMAT", func_yieldmat);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYIELDMAT");
     f->setParamCount(5, 6);
-  add(f);
+    add(f);
     f = new Function("ZERO_COUPON", func_zero_coupon);
     f->setParamCount(3);
-  add(f);
+    add(f);
 }
 
 QString FinancialModule::descriptionFileName() const
@@ -989,10 +989,10 @@ Value func_db(valVector args, ValueCalc *calc, FuncExtra *)
 
     for (int i = 1; i < life; ++i)
         if (i == period - 1)
-            return Value(rate * (cost - total));
+            return Value(rate *(cost - total));
         else total += rate * (cost - total);
 
-    return Value((cost -total) * rate * (12 - month) / 12);
+    return Value((cost - total) * rate *(12 - month) / 12);
 }
 
 
@@ -1074,7 +1074,7 @@ Value func_disc(valVector args, ValueCalc *calc, FuncExtra *)
     QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
     // res=(1-(price/redemption)/yearfrac)
-    return Value((1.0 -par.asFloat() / redemp.asFloat()) / yearFrac(date0, settlement, maturity, basis));
+    return Value((1.0 - par.asFloat() / redemp.asFloat()) / yearFrac(date0, settlement, maturity, basis));
 }
 
 

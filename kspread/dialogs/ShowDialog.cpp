@@ -42,8 +42,8 @@
 using namespace KSpread;
 
 ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
-    : KDialog(parent)
-    , m_selection(selection)
+        : KDialog(parent)
+        , m_selection(selection)
 {
     setCaption(i18n("Show Sheet"));
     setModal(true);
@@ -69,8 +69,8 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
         enableButtonOk(false);
-  connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-          this, SLOT(accept()));
+    connect(m_listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+            this, SLOT(accept()));
     resize(200, 150);
     setFocus();
 }

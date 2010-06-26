@@ -47,42 +47,42 @@ KSPREAD_EXPORT_FUNCTION_MODULE("logic", LogicModule)
 
 
 LogicModule::LogicModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("FALSE", func_false);
     f->setParamCount(0);
-  add(f);
+    add(f);
     f = new Function("TRUE", func_true);
     f->setParamCount(0);
-  add(f);
+    add(f);
     f = new Function("NOT", func_not);
     f->setParamCount(1);
-  add(f);
+    add(f);
     f = new Function("AND", func_and);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("NAND", func_nand);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("NOR", func_nor);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("OR", func_or);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("XOR", func_xor);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("IF", func_if);
     f->setParamCount(2, 3);
-  add(f);
+    add(f);
 }
 
 QString LogicModule::descriptionFileName() const

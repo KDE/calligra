@@ -166,7 +166,7 @@ public:
 
 
 Sheet::Sheet(Map* map, const QString& sheetName)
-    : KoShapeUserData(map)
+        : KoShapeUserData(map)
         , KoShapeControllerBase()
         , d(new Private)
 {
@@ -223,9 +223,9 @@ Sheet::Sheet(Map* map, const QString& sheetName)
 }
 
 Sheet::Sheet(const Sheet& other)
-    : KoShapeUserData(other.d->workbook)
+        : KoShapeUserData(other.d->workbook)
         , KoShapeControllerBase()
-    , ProtectableObject(other)
+        , ProtectableObject(other)
         , d(new Private)
 {
     d->workbook = other.d->workbook;
@@ -1503,7 +1503,7 @@ bool Sheet::loadSheetStyleFormat(KoXmlElement *style)
     }
 
     print()->headerFooter()->setHeadFootLine(hleft, hmiddle, hright,
-                                             fleft, fmiddle, fright);
+            fleft, fmiddle, fright);
     return true;
 }
 
@@ -2355,11 +2355,11 @@ bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tabl
 void Sheet::saveOdfHeaderFooter(KoXmlWriter &xmlWriter) const
 {
     QString headerLeft = print()->headerFooter()->headLeft();
-    QString headerCenter= print()->headerFooter()->headMid();
+    QString headerCenter = print()->headerFooter()->headMid();
     QString headerRight = print()->headerFooter()->headRight();
 
     QString footerLeft = print()->headerFooter()->footLeft();
-    QString footerCenter= print()->headerFooter()->footMid();
+    QString footerCenter = print()->headerFooter()->footMid();
     QString footerRight = print()->headerFooter()->footRight();
 
     xmlWriter.startElement("style:header");
@@ -2694,8 +2694,8 @@ QString Sheet::saveOdfSheetStyleName(KoGenStyles &mainStyles)
 
     KoGenStyle pageMaster(KoGenStyle::MasterPageStyle);
     const QString pageLayoutName = printSettings()->saveOdfPageLayout(mainStyles,
-                                                                      getShowFormula(),
-                                                                      !getHideZero());
+                                   getShowFormula(),
+                                   !getHideZero());
     pageMaster.addAttribute("style:page-layout-name", pageLayoutName);
 
     QBuffer buffer;
@@ -3490,7 +3490,7 @@ void Sheet::convertObscuringBorders()
     */
     Cell c = d->cellStorage->firstCell();
     QPen topPen, bottomPen, leftPen, rightPen;
-    for (;c; c = c->nextCell()) {
+    for (; c; c = c->nextCell()) {
         if (c->extraXCells() > 0 || c->extraYCells() > 0) {
             const Style* style = this->style(c->column(), c->row());
             topPen = style->topBorderPen();

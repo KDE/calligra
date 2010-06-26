@@ -69,7 +69,7 @@ public:
 
     QpIStream&   read(char* pBuf, QP_INT16 pLen);
 
-    operator void* ();
+    operator void*();
     int operator !();
 
     QpIStream& operator >> (QP_INT8  &pI8);

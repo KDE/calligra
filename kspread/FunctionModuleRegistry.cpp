@@ -99,8 +99,8 @@ void FunctionModuleRegistry::loadFunctionModules()
         // Let's be paranoid: do not believe the service type.
         if (loader.pluginVersion() < minKSpreadVersion) {
             kDebug(36002) << pluginInfo.name()
-                          << "was built against KSpread" << loader.pluginVersion()
-                          << "; required version >=" << minKSpreadVersion;
+            << "was built against KSpread" << loader.pluginVersion()
+            << "; required version >=" << minKSpreadVersion;
             continue;
         }
         if (pluginInfo.isPluginEnabled() && !contains(pluginInfo.pluginName())) {

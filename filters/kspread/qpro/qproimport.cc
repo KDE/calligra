@@ -88,7 +88,7 @@ QpImport::InitTableName(int pIdx, QString& pResult)
     if (pIdx < 26) {
         pResult = (char)('A' + pIdx);
     } else {
-        pResult = (char)('A' -1 + pIdx / 26);
+        pResult = (char)('A' - 1 + pIdx / 26);
         pResult += (char)('A' + pIdx % 26);
     }
 }

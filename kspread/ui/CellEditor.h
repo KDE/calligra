@@ -95,10 +95,10 @@ protected: // reimplementations
 protected slots:
     void checkFunctionAutoComplete();
     void triggerFunctionAutoComplete();
-    void functionAutoComplete( const QString& item );
+    void functionAutoComplete(const QString& item);
 
 private:
-    Q_DISABLE_COPY( CellEditor )
+    Q_DISABLE_COPY(CellEditor)
 
     class Private;
     Private * const d;

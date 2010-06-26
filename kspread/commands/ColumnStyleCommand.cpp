@@ -29,10 +29,10 @@
 using namespace KSpread;
 
 ColumnStyleCommand::ColumnStyleCommand(QUndoCommand *parent)
-    : AbstractRegionCommand(parent)
-    , m_width(0.0)
-    , m_hidden(false)
-    , m_pageBreak(false)
+        : AbstractRegionCommand(parent)
+        , m_width(0.0)
+        , m_hidden(false)
+        , m_pageBreak(false)
 {
 }
 

@@ -78,11 +78,10 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* 
     // Make sure that there is a cell editor running.
     if (cell.userInput().isEmpty())
         m_editor->setText("=");
+    else if (cell.userInput().at(0) != '=')
+        m_editor->setText('=' + cell.userInput());
     else
-        if (cell.userInput().at(0) != '=')
-            m_editor->setText('=' + cell.userInput());
-        else
-            m_editor->setText(cell.userInput());
+        m_editor->setText(cell.userInput());
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
@@ -750,7 +749,7 @@ void FormulaDialog::slotActivated(const QString& category)
     functionsModel->setStringList(lst);
 
     QStringList upperList;
-    for (QStringList::Iterator it = lst.begin(); it != lst.end();++it)
+    for (QStringList::Iterator it = lst.begin(); it != lst.end(); ++it)
         upperList.append((*it).toUpper());
     listFunct.setItems(upperList);
 

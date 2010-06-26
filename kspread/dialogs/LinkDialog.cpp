@@ -137,7 +137,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     // populate recent files
     int index = 0;
     const QStringList fileList = KRecentDocument::recentDocuments();
-    for (QStringList::ConstIterator it = fileList.constBegin();it != fileList.constEnd(); ++it) {
+    for (QStringList::ConstIterator it = fileList.constBegin(); it != fileList.constEnd(); ++it) {
         KDesktopFile f(*it);
         if (!f.readUrl().isEmpty())
             recentFile->insertItem(index++, f.readUrl());

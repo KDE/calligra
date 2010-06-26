@@ -42,34 +42,34 @@ class Selection;
  */
 class KSPREAD_EXPORT RegionSelector : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
-  enum DisplayMode { Widget, Dialog };
+    enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
+    enum DisplayMode { Widget, Dialog };
 
-  RegionSelector(QWidget* parent = 0);
-  ~RegionSelector();
+    RegionSelector(QWidget* parent = 0);
+    ~RegionSelector();
 
-  void setSelectionMode( SelectionMode mode );
-  void setSelection(Selection* selection);
-  void setDialog( QDialog* dialog );
-  void setLabel( const QString& text );
+    void setSelectionMode(SelectionMode mode);
+    void setSelection(Selection* selection);
+    void setDialog(QDialog* dialog);
+    void setLabel(const QString& text);
 
-  KTextEdit* textEdit() const;
+    KTextEdit* textEdit() const;
 
 protected:
-  bool eventFilter( QObject* obj, QEvent* event );
+    bool eventFilter(QObject* obj, QEvent* event);
 
 protected Q_SLOTS:
-  void switchDisplayMode( bool state );
-  void choiceChanged();
+    void switchDisplayMode(bool state);
+    void choiceChanged();
 
 private:
-    Q_DISABLE_COPY( RegionSelector )
+    Q_DISABLE_COPY(RegionSelector)
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

@@ -41,8 +41,8 @@
 using namespace KSpread;
 
 LocationComboBox::LocationComboBox(CellToolBase *cellTool, QWidget *_parent)
-    : KComboBox(true, _parent)
-    , m_cellTool(cellTool)
+        : KComboBox(true, _parent)
+        , m_cellTool(cellTool)
 {
     setCompletionObject(&completionList, true);
     setCompletionMode(KGlobalSettings::CompletionAuto);
@@ -90,37 +90,34 @@ void LocationComboBox::updateAddress()
     lineEdit()->setText(address);
 }
 
-void LocationComboBox::slotAddAreaName( const QString &_name)
+void LocationComboBox::slotAddAreaName(const QString &_name)
 {
-    insertItem( count(), _name );
+    insertItem(count(), _name);
     addCompletionItem(_name);
 }
 
-void LocationComboBox::slotRemoveAreaName( const QString &_name )
+void LocationComboBox::slotRemoveAreaName(const QString &_name)
 {
-    for ( int i = 0; i<count(); i++ )
-    {
-        if ( itemText(i) == _name )
-        {
-            removeItem( i );
+    for (int i = 0; i < count(); i++) {
+        if (itemText(i) == _name) {
+            removeItem(i);
             break;
         }
     }
     removeCompletionItem(_name);
 }
 
-void LocationComboBox::addCompletionItem( const QString &_item )
+void LocationComboBox::addCompletionItem(const QString &_item)
 {
-    if ( completionList.items().contains( _item) == 0 )
-    {
-        completionList.addItem( _item );
+    if (completionList.items().contains(_item) == 0) {
+        completionList.addItem(_item);
         kDebug(36005) << _item;
     }
 }
 
-void LocationComboBox::removeCompletionItem( const QString &_item )
+void LocationComboBox::removeCompletionItem(const QString &_item)
 {
-    completionList.removeItem( _item );
+    completionList.removeItem(_item);
 }
 
 void LocationComboBox::slotActivateItem()
@@ -140,8 +137,7 @@ bool LocationComboBox::activateItem()
     const QString text = lineEdit()->text();
     // check whether an already existing named area was entered
     Region region = selection->activeSheet()->map()->namedAreaManager()->namedArea(text);
-    if (region.isValid())
-    {
+    if (region.isValid()) {
         // TODO Stefan: Merge the sheet change into Selection.
         if (region.firstSheet() != selection->activeSheet()) {
             selection->emitVisibleSheetRequested(region.firstSheet());
@@ -152,8 +148,7 @@ bool LocationComboBox::activateItem()
 
     // check whether a valid cell region was entered
     region = Region(text, selection->activeSheet()->map(), selection->activeSheet());
-    if (region.isValid())
-    {
+    if (region.isValid()) {
         // TODO Stefan: Merge the sheet change into Selection.
         if (region.firstSheet() != selection->activeSheet()) {
             selection->emitVisibleSheetRequested(region.firstSheet());
@@ -165,16 +160,13 @@ bool LocationComboBox::activateItem()
     // A name for an area entered?
     // FIXME Stefan: allow all characters
     bool validName = true;
-    for (int i = 0; i < text.length(); ++i)
-    {
-        if (!text[i].isLetter())
-        {
+    for (int i = 0; i < text.length(); ++i) {
+        if (!text[i].isLetter()) {
             validName = false;
             break;
         }
     }
-    if (validName)
-    {
+    if (validName) {
         NamedAreaCommand* command = new NamedAreaCommand();
         command->setSheet(selection->activeSheet());
         command->setAreaName(text);
@@ -188,14 +180,13 @@ bool LocationComboBox::activateItem()
 }
 
 
-void LocationComboBox::keyPressEvent( QKeyEvent * _ev )
+void LocationComboBox::keyPressEvent(QKeyEvent * _ev)
 {
     Selection *const selection = m_cellTool->selection();
 
     // Do not handle special keys and accelerators. This is
     // done by KComboBox.
-    if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
-    {
+    if (_ev->modifiers() & (Qt::AltModifier | Qt::ControlModifier)) {
         KComboBox::keyPressEvent(_ev);
         // Never allow that keys are passed on to the parent.
         _ev->accept(); // QKeyEvent
@@ -204,11 +195,9 @@ void LocationComboBox::keyPressEvent( QKeyEvent * _ev )
     }
 
     // Handle some special keys here. Eve
-    switch( _ev->key() )
-    {
+    switch (_ev->key()) {
     case Qt::Key_Return:
-    case Qt::Key_Enter:
-    {
+    case Qt::Key_Enter: {
         if (activateItem()) {
             m_cellTool->scrollToCell(selection->cursor());
             return;

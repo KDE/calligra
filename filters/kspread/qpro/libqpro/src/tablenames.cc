@@ -63,7 +63,7 @@ QpTableNames::name(unsigned pIdx)
                 lResult[1] = '\0';
             } else {
                 lResult = cName[pIdx] = new char[2];
-                lResult[0] = (char)('A' -1 + pIdx / 26);
+                lResult[0] = (char)('A' - 1 + pIdx / 26);
                 lResult[1] = (char)('A' + pIdx % 26);
                 lResult[2] = '\0';
             }

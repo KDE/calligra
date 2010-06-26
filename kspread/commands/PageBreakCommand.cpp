@@ -28,8 +28,8 @@
 using namespace KSpread;
 
 PageBreakCommand::PageBreakCommand(QUndoCommand *parent)
-    : AbstractRegionCommand(parent)
-    , m_mode(BreakBeforeColumn)
+        : AbstractRegionCommand(parent)
+        , m_mode(BreakBeforeColumn)
 {
 }
 

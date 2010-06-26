@@ -102,8 +102,8 @@ public:
     Private() : sheet(0), column(0), row(0) {}
 
     Sheet*  sheet;
-uint    column  : 17; // KS_colMax
-uint    row     : 17; // KS_rowMax
+    uint    column  : 17; // KS_colMax
+    uint    row     : 17; // KS_rowMax
 };
 
 
@@ -1589,7 +1589,7 @@ KoXmlElement namedItemNSWithSpan(const KoXmlNode& node, const char* nsURI, const
             }
             if (n.localName() == "span" && n.namespaceURI() == nsURI) {
                 KoXmlElement e = KoXml::namedItemNS(n, nsURI, localName); // not recursive
-                if(!e.isNull()) {
+                if (!e.isNull()) {
                     return e;
                 }
             }

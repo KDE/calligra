@@ -109,8 +109,8 @@ protected:
     double adjustRowHelper(const Cell& cell);
 
 private:
-bool m_adjustColumn : 1;
-bool m_adjustRow    : 1;
+    bool m_adjustColumn : 1;
+    bool m_adjustRow    : 1;
     QMap<int, double> m_newWidths;
     QMap<int, double> m_oldWidths;
     QMap<int, double> m_newHeights;
@@ -145,8 +145,8 @@ protected:
     QString name() const;
 
 private:
-bool m_manipulateColumns : 1;
-bool m_manipulateRows    : 1;
+    bool m_manipulateColumns : 1;
+    bool m_manipulateRows    : 1;
 };
 
 

@@ -127,10 +127,10 @@ QModelIndex ReadOnlyTableModel::index(int row, int column, const QModelIndex &pa
     // A cell in our sheet?
     if (!parent.isValid()) {
         index = createIndex(row, column, d->sheet);
-    // Embedded in a MapModel?
+        // Embedded in a MapModel?
     } else if (parent.internalPointer() == d->sheet->map()) {
         index = createIndex(row, column, d->sheet);
-    // A sub-table?
+        // A sub-table?
     } else if (parent.internalPointer() == this) {
         // TODO sub-tables
     }

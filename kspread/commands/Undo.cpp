@@ -450,7 +450,7 @@ UndoHideRow::~UndoHideRow()
 void UndoHideRow::createList(QValueList<int>&list, Sheet *tab)
 {
     RowFormat *rl;
-    for (int i = m_iRow;i <= (m_iRow + m_iNbRow);i++) {
+    for (int i = m_iRow; i <= (m_iRow + m_iNbRow); i++) {
         rl = tab->nonDefaultRowFormat(i);
         if (!rl->isHiddenOrFiltered())
             list.append(rl->row());
@@ -506,7 +506,7 @@ UndoHideColumn::~UndoHideColumn()
 void UndoHideColumn::createList(QValueList<int>&list, Sheet *tab)
 {
     ColumnFormat *cl;
-    for (int i = m_iColumn;i <= (m_iColumn + m_iNbCol);i++) {
+    for (int i = m_iColumn; i <= (m_iColumn + m_iNbCol); i++) {
         cl = tab->nonDefaultColumnFormat(i);
         if (!cl->isHiddenOrFiltered())
             list.append(cl->column());
@@ -562,7 +562,7 @@ UndoShowRow::~UndoShowRow()
 void UndoShowRow::createList(QValueList<int>&list, Sheet *tab)
 {
     RowFormat *rl;
-    for (int i = m_iRow;i <= (m_iRow + m_iNbRow);i++) {
+    for (int i = m_iRow; i <= (m_iRow + m_iNbRow); i++) {
         rl = tab->nonDefaultRowFormat(i);
         if (rl->isHiddenOrFiltered())
             list.append(rl->row());
@@ -618,7 +618,7 @@ UndoShowColumn::~UndoShowColumn()
 void UndoShowColumn::createList(QValueList<int>&list, Sheet *tab)
 {
     ColumnFormat *cl;
-    for (int i = m_iColumn;i <= (m_iColumn + m_iNbCol);i++) {
+    for (int i = m_iColumn; i <= (m_iColumn + m_iNbCol); i++) {
         cl = tab->nonDefaultColumnFormat(i);
         if (cl->isHiddenOrFiltered())
             list.append(cl->column());

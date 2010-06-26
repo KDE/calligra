@@ -228,16 +228,15 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
 
     if (lPageRelative && (pPage == 0)) {
         // no - page is zero relative to this one
-    } else
-        if (pPage != cPage) {
-            // yes - not relative & page is a different one
+    } else if (pPage != cPage) {
+        // yes - not relative & page is a different one
 
-            QP_UINT8 lPage = (lPageRelative ? pPage + cPage : pPage);
+        QP_UINT8 lPage = (lPageRelative ? pPage + cPage : pPage);
 
-            QP_DEBUG("pTable.name((unsigned)lPage) = " <<  pTable.name((unsigned)lPage) << endl);
+        QP_DEBUG("pTable.name((unsigned)lPage) = " <<  pTable.name((unsigned)lPage) << endl);
 
-            lOut << pTable.name((unsigned)lPage) << '!'; // is '!' compat with QPRO???
-        }
+        lOut << pTable.name((unsigned)lPage) << '!'; // is '!' compat with QPRO???
+    }
 
     if (!lColRelative) {
         lOut << '$';
@@ -245,7 +244,7 @@ QpRecCell::cellRef(char* pText, QpTableNames& pTable, QP_INT16 /*pNoteBook*/, QP
     if (lCol < 26) {
         lOut << (char)('A' + lCol);
     } else {
-        lOut << (char)('A' -1 + lCol / 26)
+        lOut << (char)('A' - 1 + lCol / 26)
         << (char)('A' + lCol % 26);
     }
 

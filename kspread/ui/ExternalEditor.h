@@ -46,7 +46,7 @@ public:
     void setCellTool(CellToolBase* cellTool);
 
 Q_SIGNALS:
-    void textChanged (const QString &text);
+    void textChanged(const QString &text);
 
 public Q_SLOTS:
     void applyChanges();
@@ -59,7 +59,7 @@ protected:
     void focusOutEvent(QFocusEvent *event);
 
 private slots:
-    void slotTextChanged ();
+    void slotTextChanged();
     void slotCursorPositionChanged();
 
 private:

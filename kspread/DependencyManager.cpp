@@ -152,7 +152,7 @@ void DependencyManager::addSheet(Sheet *sheet)
     //               of the way the providers are stored. Now: only by cell.
     //               Future: QHash<Sheet*, QHash<Cell, Region> >
     const QList<Cell> consumers = d->providers.keys();
-    foreach (const Cell& cell, consumers) {
+    foreach(const Cell& cell, consumers) {
         if (cell.sheet() == sheet) {
             // Those cells may had got providing regions. Clear them first.
             // TODO

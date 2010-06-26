@@ -57,7 +57,7 @@ protected Q_SLOTS: // reimplementations
     virtual void accept();
     virtual void reject();
 
- private:
+private:
     class Private;
     Private *const d;
 

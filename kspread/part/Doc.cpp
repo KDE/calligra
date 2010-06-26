@@ -118,7 +118,7 @@ public:
     static int s_docId;
 
     // document properties
-    bool configLoadFromFile : 1;
+    bool configLoadFromFile       : 1;
     QStringList spellListIgnoreAll;
     SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
@@ -494,7 +494,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     if (map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                              "When you open it with this version of KSpread, some information may be lost.",map()->syntaxVersion()),
+                              "When you open it with this version of KSpread, some information may be lost.", map()->syntaxVersion()),
                       i18n("File Format Mismatch"), KStandardGuiItem::cont());
         if (ret == KMessageBox::Cancel) {
             setErrorMessage("USER_CANCELED");
@@ -657,7 +657,7 @@ void Doc::loadPaper(KoXmlElement const & paper)
 
     foreach(Sheet* sheet, map()->sheetList()) {
         sheet->print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright,
-                                                        fleft, fcenter, fright);
+                fleft, fcenter, fright);
     }
 }
 
@@ -668,7 +668,7 @@ bool Doc::completeLoading(KoStore* store)
     setModified(false);
     bool ok = map()->completeLoading(store);
 
-  kDebug(36001) <<"------------------------ COMPLETION DONE --------------------";
+    kDebug(36001) << "------------------------ COMPLETION DONE --------------------";
     return ok;
 }
 

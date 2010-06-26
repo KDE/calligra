@@ -169,8 +169,8 @@ public:
     bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
     void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
     void loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                       Conditions& conditions, const StyleManager* styleManager,
-                       const ValueParser *parser );
+                      Conditions& conditions, const StyleManager* styleManager,
+                      const ValueParser *parser);
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
@@ -405,7 +405,7 @@ public:
      */
     void loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                  const QString& name, Conditions& conditions,
-                  const StyleManager* styleManager, const ValueParser *parser);
+                 const StyleManager* styleManager, const ValueParser *parser);
 
     /**
      * @reimp

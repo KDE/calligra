@@ -178,11 +178,11 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
     if (insert(index, topLeft, sheet/*, true*/)) {
         // if the point was inserted
         clearSubRegion();
-    // Sets:
-    // d->activeElement = d->activeSubRegionStart + 1;
-    // d->activeSubRegionLength = 0;
-  } else {
-      kWarning() << "Unable to insert" << topLeft << "in" << sheet->sheetName();
+        // Sets:
+        // d->activeElement = d->activeSubRegionStart + 1;
+        // d->activeSubRegionLength = 0;
+    } else {
+        kWarning() << "Unable to insert" << topLeft << "in" << sheet->sheetName();
     }
     Element* element = cells()[d->activeSubRegionStart];
     // we end up with one element in the subregion
@@ -253,11 +253,11 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     if (insert(index, QRect(topLeft, bottomRight), sheet/*, true*/)) {
         // if the range was inserted
         clearSubRegion();
-    // Sets:
-    // d->activeElement = d->activeSubRegionStart + 1;
-    // d->activeSubRegionLength = 0;
-  } else {
-      kWarning() << "Unable to insert" << topLeft << "in" << sheet->sheetName();
+        // Sets:
+        // d->activeElement = d->activeSubRegionStart + 1;
+        // d->activeSubRegionLength = 0;
+    } else {
+        kWarning() << "Unable to insert" << topLeft << "in" << sheet->sheetName();
     }
     Element* element = cells()[d->activeSubRegionStart];
     // we end up with one element in the subregion
@@ -285,7 +285,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
 
     if (d->selectionMode == SingleCell) {
         if (!cells().isEmpty())
-     	 initialize(region.firstRange().bottomRight(), sheet);
+            initialize(region.firstRange().bottomRight(), sheet);
         return;
     }
 
@@ -353,9 +353,9 @@ void Selection::update(const QPoint& point)
 {
     if (d->selectionMode == SingleCell) {
         initialize(point);
-    d->activeElement = 1;
-    d->activeSubRegionStart = 0;
-    d->activeSubRegionLength = 1;
+        d->activeElement = 1;
+        d->activeSubRegionStart = 0;
+        d->activeSubRegionLength = 1;
         return;
     }
 
@@ -366,10 +366,10 @@ void Selection::update(const QPoint& point)
     }
 
     if (cells().isEmpty()) {
-    initialize(point);
-    d->activeElement = 1;
-    d->activeSubRegionStart = 0;
-    d->activeSubRegionLength = 1;
+        initialize(point);
+        d->activeElement = 1;
+        d->activeSubRegionStart = 0;
+        d->activeSubRegionLength = 1;
         return;
     }
 
@@ -384,9 +384,9 @@ void Selection::update(const QPoint& point)
     Sheet* sheet = cells()[d->activeElement]->sheet();
     if (sheet != d->activeSheet) {
         extend(point);
-    d->activeElement = cells().count();
-    d->activeSubRegionStart = cells().count() - 1;
-    d->activeSubRegionLength = 1;
+        d->activeElement = cells().count();
+        d->activeSubRegionStart = cells().count() - 1;
+        d->activeSubRegionLength = 1;
         return;
     }
 
@@ -760,8 +760,8 @@ void Selection::fixSubRegionDimension()
     }
     if (d->activeSubRegionStart + d->activeSubRegionLength > cells().count()) {
         kDebug() << "subregion (" << d->activeSubRegionStart << ".."
-                 << d->activeSubRegionStart + d->activeSubRegionLength
-                 << ") exceeds list" << cells().count();
+        << d->activeSubRegionStart + d->activeSubRegionLength
+        << ") exceeds list" << cells().count();
         d->activeSubRegionLength = cells().count() - d->activeSubRegionStart;
         return;
     }

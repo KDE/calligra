@@ -802,7 +802,7 @@ public:
       Returnsformat runs for the string at specified index.
       Format runs are a mapping from character-index -> font index.
      */
-    std::map<unsigned,unsigned> formatRunsAt(unsigned index) const;
+    std::map<unsigned, unsigned> formatRunsAt(unsigned index) const;
 
     virtual const char* name() const {
         return "SST";

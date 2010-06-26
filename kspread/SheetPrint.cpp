@@ -36,7 +36,7 @@
 using namespace KSpread;
 
 SheetPrint::SheetPrint(Sheet *sheet)
-    : d(new Private(this))
+        : d(new Private(this))
 {
     d->m_pSheet = sheet;
 
@@ -50,7 +50,7 @@ SheetPrint::SheetPrint(Sheet *sheet)
 }
 
 SheetPrint::SheetPrint(const SheetPrint &other)
-    : d(new Private(this))
+        : d(new Private(this))
 {
     d->m_pSheet = other.d->m_pSheet;
 
@@ -187,28 +187,25 @@ HeaderFooter *SheetPrint::headerFooter() const
     return d->m_headerFooter;
 }
 
-bool SheetPrint::isColumnOnNewPage( int _column )
+bool SheetPrint::isColumnOnNewPage(int _column)
 {
-    if( _column > d->m_maxCheckedNewPageX )
-        d->calculateHorizontalPageParameters( _column );
+    if (_column > d->m_maxCheckedNewPageX)
+        d->calculateHorizontalPageParameters(_column);
 
     //Are these the edges of the print range?
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( _column == printRange.left() || _column == printRange.right() )
-    {
+    if (_column == printRange.left() || _column == printRange.right()) {
         return true;
     }
 
     //beyond the print range it's always false
-    if ( _column < printRange.left() || _column > printRange.right() )
-    {
+    if (_column < printRange.left() || _column > printRange.right()) {
         return false;
     }
 
     //Now check if we find the column already in the list
-    if ( d->m_lnewPageListX.indexOf( PrintNewPageEntry( _column ) ) != -1 )
-    {
-        if( _column > d->m_maxCheckedNewPageX )
+    if (d->m_lnewPageListX.indexOf(PrintNewPageEntry(_column)) != -1) {
+        if (_column > d->m_maxCheckedNewPageX)
             d->m_maxCheckedNewPageX = _column;
         return true;
     }
@@ -217,28 +214,25 @@ bool SheetPrint::isColumnOnNewPage( int _column )
 
 
 
-bool SheetPrint::isRowOnNewPage( int _row )
+bool SheetPrint::isRowOnNewPage(int _row)
 {
-    if( _row > d->m_maxCheckedNewPageY )
-        d->calculateVerticalPageParameters( _row );
+    if (_row > d->m_maxCheckedNewPageY)
+        d->calculateVerticalPageParameters(_row);
 
     //Are these the edges of the print range?
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( _row == printRange.top() || _row == printRange.bottom() )
-    {
+    if (_row == printRange.top() || _row == printRange.bottom()) {
         return true;
     }
 
-     //beyond the print range it's always false
-    if ( _row < printRange.top() || _row > printRange.bottom() )
-    {
+    //beyond the print range it's always false
+    if (_row < printRange.top() || _row > printRange.bottom()) {
         return false;
     }
 
     //Now check if we find the row already in the list
-    if ( d->m_lnewPageListY.indexOf( PrintNewPageEntry( _row ) ) != -1 )
-    {
-        if( _row > d->m_maxCheckedNewPageY )
+    if (d->m_lnewPageListY.indexOf(PrintNewPageEntry(_row)) != -1) {
+        if (_row > d->m_maxCheckedNewPageY)
             d->m_maxCheckedNewPageY = _row;
         return true;
     }
@@ -246,12 +240,11 @@ bool SheetPrint::isRowOnNewPage( int _row )
     return false;
 }
 
-void SheetPrint::updateHorizontalPageParameters( int _col )
+void SheetPrint::updateHorizontalPageParameters(int _col)
 {
     //If the new range is after the first entry, we need to delete the whole list
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( d->m_lnewPageListX.isEmpty() || d->m_lnewPageListX.first().startItem() != printRange.left() || _col == 0 )
-    {
+    if (d->m_lnewPageListX.isEmpty() || d->m_lnewPageListX.first().startItem() != printRange.left() || _col == 0) {
         d->m_lnewPageListX.clear();
         d->m_maxCheckedNewPageX = 0;
         d->updateRepeatedColumnsWidth();
@@ -266,8 +259,8 @@ void SheetPrint::updateHorizontalPageParameters( int _col )
         }
 
         //Remove later pages
-        while ( index != d->m_lnewPageListX.count() )
-            d->m_lnewPageListX.removeAt( index );
+        while (index != d->m_lnewPageListX.count())
+            d->m_lnewPageListX.removeAt(index);
 
         d->m_maxCheckedNewPageX = d->m_lnewPageListX.isEmpty() ? 0 : d->m_lnewPageListX.last().endItem();
     }
@@ -278,12 +271,11 @@ void SheetPrint::updateHorizontalPageParameters( int _col )
     }
 }
 
-void SheetPrint::updateVerticalPageParameters( int _row )
+void SheetPrint::updateVerticalPageParameters(int _row)
 {
     //If the new range is after the first entry, we need to delete the whole list
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( d->m_lnewPageListY.isEmpty() || d->m_lnewPageListY.first().startItem() != printRange.top() || _row == 0 )
-    {
+    if (d->m_lnewPageListY.isEmpty() || d->m_lnewPageListY.first().startItem() != printRange.top() || _row == 0) {
         d->m_lnewPageListY.clear();
         d->m_maxCheckedNewPageY = 0;
         d->updateRepeatedRowsHeight();
@@ -298,8 +290,8 @@ void SheetPrint::updateVerticalPageParameters( int _row )
         }
 
         //Remove later pages
-        while ( index != d->m_lnewPageListY.count() )
-            d->m_lnewPageListY.removeAt( index );
+        while (index != d->m_lnewPageListY.count())
+            d->m_lnewPageListY.removeAt(index);
 
         d->m_maxCheckedNewPageY = d->m_lnewPageListY.isEmpty() ? 0 : d->m_lnewPageListY.last().endItem();
     }
@@ -310,25 +302,23 @@ void SheetPrint::updateVerticalPageParameters( int _row )
     }
 }
 
-void SheetPrint::insertColumn( int col, int nbCol )
+void SheetPrint::insertColumn(int col, int nbCol)
 {
     //update print range, when it has been defined
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
-    {
+    if (printRange != QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax))) {
         int left = printRange.left();
         int right = printRange.right();
 
-        for( int i = 0; i < nbCol; i++ )
-        {
-            if ( left >= col ) left++;
-            if ( right >= col ) right++;
+        for (int i = 0; i < nbCol; i++) {
+            if (left >= col) left++;
+            if (right >= col) right++;
         }
         //Validity checks
-        if ( left > KS_colMax ) left = KS_colMax;
-        if ( right > KS_colMax ) right = KS_colMax;
-        const Region region( QRect( QPoint( left, printRange.top() ),
-                              QPoint( right, printRange.bottom() ) ), d->m_pSheet);
+        if (left > KS_colMax) left = KS_colMax;
+        if (right > KS_colMax) right = KS_colMax;
+        const Region region(QRect(QPoint(left, printRange.top()),
+                                  QPoint(right, printRange.bottom())), d->m_pSheet);
         // Trigger an update by setting it indirectly.
         PrintSettings settings = *d->m_settings;
         settings.setPrintRegion(region);
@@ -336,25 +326,23 @@ void SheetPrint::insertColumn( int col, int nbCol )
     }
 }
 
-void SheetPrint::insertRow( int row, int nbRow )
+void SheetPrint::insertRow(int row, int nbRow)
 {
     //update print range, when it has been defined
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
-    {
+    if (printRange != QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax))) {
         int top = printRange.top();
         int bottom = printRange.bottom();
 
-        for( int i = 0; i < nbRow; i++ )
-        {
-            if ( top >= row ) top++;
-            if ( bottom >= row ) bottom++;
+        for (int i = 0; i < nbRow; i++) {
+            if (top >= row) top++;
+            if (bottom >= row) bottom++;
         }
         //Validity checks
-        if ( top > KS_rowMax ) top = KS_rowMax;
-        if ( bottom > KS_rowMax ) bottom = KS_rowMax;
-        const Region region( QRect( QPoint( printRange.left(), top ),
-                              QPoint( printRange.right(), bottom ) ), d->m_pSheet);
+        if (top > KS_rowMax) top = KS_rowMax;
+        if (bottom > KS_rowMax) bottom = KS_rowMax;
+        const Region region(QRect(QPoint(printRange.left(), top),
+                                  QPoint(printRange.right(), bottom)), d->m_pSheet);
         // Trigger an update by setting it indirectly.
         PrintSettings settings = *d->m_settings;
         settings.setPrintRegion(region);
@@ -362,88 +350,80 @@ void SheetPrint::insertRow( int row, int nbRow )
     }
 }
 
-void SheetPrint::removeColumn( int col, int nbCol )
+void SheetPrint::removeColumn(int col, int nbCol)
 {
     PrintSettings settings = *d->m_settings;
     //update print range, when it has been defined
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
-    {
+    if (printRange != QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax))) {
         int left = printRange.left();
         int right = printRange.right();
 
-        for( int i = 0; i < nbCol; i++ )
-        {
-            if ( left > col ) left--;
-            if ( right >= col ) right--;
+        for (int i = 0; i < nbCol; i++) {
+            if (left > col) left--;
+            if (right >= col) right--;
         }
         //Validity checks
-        if ( left < 1 ) left = 1;
-        if ( right < 1 ) right = 1;
-        const Region region( QRect( QPoint( left, printRange.top() ),
-                              QPoint( right, printRange.bottom() ) ), d->m_pSheet);
+        if (left < 1) left = 1;
+        if (right < 1) right = 1;
+        const Region region(QRect(QPoint(left, printRange.top()),
+                                  QPoint(right, printRange.bottom())), d->m_pSheet);
         settings.setPrintRegion(region);
     }
 
     //update repeat columns, when it has been defined
     const QPair<int, int> repeatedColumns = d->m_settings->repeatedColumns();
-    if ( repeatedColumns.first != 0 )
-    {
+    if (repeatedColumns.first != 0) {
         int left = repeatedColumns.first;
         int right = repeatedColumns.second;
 
-        for( int i = 0; i < nbCol; i++ )
-        {
-            if ( left > col ) left--;
-            if ( right >= col ) right--;
+        for (int i = 0; i < nbCol; i++) {
+            if (left > col) left--;
+            if (right >= col) right--;
         }
         //Validity checks
-        if ( left < 1 ) left = 1;
-        if ( right < 1 ) right = 1;
+        if (left < 1) left = 1;
+        if (right < 1) right = 1;
         settings.setRepeatedColumns(qMakePair(left, right));
     }
     // Trigger an update by setting them indirectly.
     setSettings(settings);
 }
 
-void SheetPrint::removeRow( int row, int nbRow )
+void SheetPrint::removeRow(int row, int nbRow)
 {
     PrintSettings settings = *d->m_settings;
     //update print range, when it has been defined
     const QRect printRange = d->m_settings->printRegion().lastRange();
-    if ( printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
-    {
+    if (printRange != QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax))) {
         int top = printRange.top();
         int bottom = printRange.bottom();
 
-        for( int i = 0; i < nbRow; i++ )
-        {
-            if ( top > row ) top--;
-            if ( bottom >= row ) bottom--;
+        for (int i = 0; i < nbRow; i++) {
+            if (top > row) top--;
+            if (bottom >= row) bottom--;
         }
         //Validity checks
-        if ( top < 1 ) top = 1;
-        if ( bottom < 1 ) bottom = 1;
-        const Region region( QRect( QPoint( printRange.left(), top ),
-                              QPoint( printRange.right(), bottom ) ), d->m_pSheet);
+        if (top < 1) top = 1;
+        if (bottom < 1) bottom = 1;
+        const Region region(QRect(QPoint(printRange.left(), top),
+                                  QPoint(printRange.right(), bottom)), d->m_pSheet);
         settings.setPrintRegion(region);
     }
 
     //update repeat rows, when it has been defined
     const QPair<int, int> repeatedRows = d->m_settings->repeatedRows();
-    if ( repeatedRows.first != 0 )
-    {
+    if (repeatedRows.first != 0) {
         int top = repeatedRows.first;
         int bottom = repeatedRows.second;
 
-        for( int i = 0; i < nbRow; i++ )
-        {
-            if ( top > row ) top--;
-            if ( bottom >= row ) bottom--;
+        for (int i = 0; i < nbRow; i++) {
+            if (top > row) top--;
+            if (bottom >= row) bottom--;
         }
         //Validity checks
-        if ( top < 1 ) top = 1;
-        if ( bottom < 1 ) bottom = 1;
+        if (top < 1) top = 1;
+        if (bottom < 1) bottom = 1;
         settings.setRepeatedRows(qMakePair(top, bottom));
     }
     // Trigger an update by setting them indirectly.
@@ -474,8 +454,8 @@ QRect SheetPrint::cellRange(int page) const
         horizontalIndex = (page - 1) / d->m_lnewPageListY.count();
         verticalIndex = (page - 1) % d->m_lnewPageListY.count();
     }
-    kDebug() << "horizontal:" << horizontalIndex+1 << "of" << d->m_lnewPageListX.count();
-    kDebug() << "vertical:" << verticalIndex+1 << "of" << d->m_lnewPageListY.count();
+    kDebug() << "horizontal:" << horizontalIndex + 1 << "of" << d->m_lnewPageListX.count();
+    kDebug() << "vertical:" << verticalIndex + 1 << "of" << d->m_lnewPageListY.count();
 
     const PrintNewPageEntry horizontalParameters = d->m_lnewPageListX[horizontalIndex];
     const PrintNewPageEntry verticalParameters = d->m_lnewPageListY[verticalIndex];
@@ -518,7 +498,7 @@ QRectF SheetPrint::documentArea(int page) const
     return documentArea;
 }
 
-void SheetPrint::operator=(const SheetPrint &other)
+void SheetPrint::operator=(const SheetPrint & other)
 {
     d->m_pSheet = other.d->m_pSheet;
 

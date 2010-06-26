@@ -79,7 +79,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
     if (defStyle) {
         kDebug(36003) << "StyleManager: Loading default cell style";
         Conditions conditions;
-      defaultStyle()->loadOdf(stylesReader, *defStyle, "Default", conditions, this, map->parser());
+        defaultStyle()->loadOdf(stylesReader, *defStyle, "Default", conditions, this, map->parser());
         defaultStyle()->setType(Style::BUILTIN);
         if (map) {
             // Load the default precision to be used, if the (default) cell style

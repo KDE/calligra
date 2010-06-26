@@ -43,11 +43,11 @@ class CalculationSettings::Private
 {
 public:
     KLocale* locale;
-bool caseSensitiveComparisons : 1;
-bool precisionAsShown         : 1;
-bool wholeCellSearchCriteria  : 1;
-bool automaticFindLabels      : 1;
-bool useRegularExpressions    : 1;
+    bool caseSensitiveComparisons : 1;
+    bool precisionAsShown         : 1;
+    bool wholeCellSearchCriteria  : 1;
+    bool automaticFindLabels      : 1;
+    bool useRegularExpressions    : 1;
     bool automaticCalculation     : 1;
     int refYear; // the reference year two-digit years are relative to
     QDate refDate; // the reference date all dates are relative to

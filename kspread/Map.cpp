@@ -127,7 +127,7 @@ public:
 };
 
 
-Map::Map ( Doc* doc, int syntaxVersion)
+Map::Map(Doc* doc, int syntaxVersion)
         : QObject(doc),
         d(new Private)
 {
@@ -459,7 +459,7 @@ bool Map::saveOdf(KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
     this->password(password);
     if (!password.isNull()) {
         xmlWriter.addAttribute("table:structure-protected", "true");
-        QByteArray str = KCodecs::base64Encode( password );
+        QByteArray str = KCodecs::base64Encode(password);
         // FIXME Stefan: see OpenDocument spec, ch. 17.3 Encryption
         xmlWriter.addAttribute("table:protection-key", QString(str.data()));
     }
@@ -654,7 +654,7 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
     Styles autoStyles = d->styleManager->loadOdfAutoStyles(odfContext.stylesReader(),
-                                                           conditionalStyles, parser());
+                        conditionalStyles, parser());
 
     // load the sheet
     sheetNode = body.firstChild();

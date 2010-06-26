@@ -84,11 +84,10 @@ QpRecFactory::nextRecord()
     for (Record* lRecord = gRecord; lResult == 0 ; ++lRecord) {
         if (lRecord->Func == 0) {
             lResult = new QpRecUnknown(lType, lLen, cIn);
-        } else
-            if (lRecord->Type == lType) {
-                // ??? check length
-                lResult = lRecord->Func(lLen, cIn);
-            }
+        } else if (lRecord->Type == lType) {
+            // ??? check length
+            lResult = lRecord->Func(lLen, cIn);
+        }
     }
 
     return lResult;

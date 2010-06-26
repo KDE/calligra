@@ -65,8 +65,8 @@ bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* m
 
 
 MapModel::MapModel(Map* map)
-    : QAbstractListModel(map)
-    , d(new Private)
+        : QAbstractListModel(map)
+        , d(new Private)
 {
     d->map = map;
     connect(d->map, SIGNAL(sheetAdded(Sheet *)),
@@ -92,20 +92,20 @@ QVariant MapModel::data(const QModelIndex &index, int role) const
     if (index.row() >= d->map->count()) {
         return QVariant();
     }
-    // 
+    //
     const Sheet* const sheet = d->map->sheet(index.row());
     switch (role) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return QVariant(sheet->sheetName());
-        case Qt::DecorationRole:
-            return QVariant(KIcon("x-office-spreadsheet"));
-        case VisibilityRole:
-            return QVariant(!sheet->isHidden());
-        case ProtectionRole:
-            return QVariant(sheet->isProtected());
-        default:
-            break;
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        return QVariant(sheet->sheetName());
+    case Qt::DecorationRole:
+        return QVariant(KIcon("x-office-spreadsheet"));
+    case VisibilityRole:
+        return QVariant(!sheet->isHidden());
+    case ProtectionRole:
+        return QVariant(sheet->isProtected());
+    default:
+        break;
     }
     return QVariant();
 }
@@ -151,7 +151,7 @@ QModelIndex MapModel::index(int row, int column, const QModelIndex &parent) cons
         if (parent.model() != this || parent.internalPointer() != d->map) {
             return QModelIndex();
         }
-         // If it is a cell, the parent (the sheet) has no parent.
+        // If it is a cell, the parent (the sheet) has no parent.
         if (parent.parent().isValid()) {
             return QModelIndex();
         }
@@ -185,24 +185,23 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
     if (index.isValid() && index.row() < d->map->count()) {
         Sheet* const sheet(d->map->sheet(index.row()));
         switch (role) {
-            case Qt::EditRole:
-            {
-                const QString name(value.toString());
-                if (!name.isEmpty()) {
-                    QUndoCommand* const command = new RenameSheetCommand(sheet, name);
-                    emit addCommandRequested(command);
-                    emit dataChanged(index, index);
-                    return true;
-                }
-                break;
+        case Qt::EditRole: {
+            const QString name(value.toString());
+            if (!name.isEmpty()) {
+                QUndoCommand* const command = new RenameSheetCommand(sheet, name);
+                emit addCommandRequested(command);
+                emit dataChanged(index, index);
+                return true;
             }
-            case VisibilityRole:
-                setHidden(sheet, value.toBool());
-                break;
-            case ProtectionRole:
-                break;
-            default:
-                break;
+            break;
+        }
+        case VisibilityRole:
+            setHidden(sheet, value.toBool());
+            break;
+        case ProtectionRole:
+            break;
+        default:
+            break;
         }
     }
     return false;

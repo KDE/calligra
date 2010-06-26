@@ -662,7 +662,7 @@ void PointStorageTest::testShiftDownUp()
             storage.m_data << (row * col);
             storage.m_cols << col;
         }
-        storage.m_rows << (5 * (row - 1));
+        storage.m_rows << (5 *(row - 1));
     }
     // qDebug() << "Origin:" << endl << qPrintable(storage.dump());
     // ( 1, 2, 3, 4, 5)
@@ -671,16 +671,16 @@ void PointStorageTest::testShiftDownUp()
     // ( 4, 8,12,16,20)
     // ( 5,10,15,20,25)
 
-    QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20 << 25 );
-    QVector<int> rows( QVector<int>() << 0 << 5 << 10 << 15 << 20 );
-    QVector<int> cols( QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 );
+    QVector<int> data(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20 << 25);
+    QVector<int> rows(QVector<int>() << 0 << 5 << 10 << 15 << 20);
+    QVector<int> cols(QVector<int>() << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5 << 1 << 2 << 3 << 4 << 5);
     QCOMPARE(storage.m_data, data);
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    QVector< QPair<QPoint,int> > old;
-    old = storage.insertShiftDown( QRect( 3, 2, 2, 2 ) );
-    QVERIFY( old.count() == 0 );
+    QVector< QPair<QPoint, int> > old;
+    old = storage.insertShiftDown(QRect(3, 2, 2, 2));
+    QVERIFY(old.count() == 0);
 
     // qDebug() << endl << qPrintable(storage.dump());
     // ( 1, 2, 3, 4, 5)
@@ -698,8 +698,8 @@ void PointStorageTest::testShiftDownUp()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    old = storage.removeShiftUp( QRect( 3, 2, 2, 2 ) );
-    QVERIFY( old.count() == 0 );
+    old = storage.removeShiftUp(QRect(3, 2, 2, 2));
+    QVERIFY(old.count() == 0);
 
     data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20 << 25;
     rows = QVector<int>() << 0 << 5 << 10 << 15 << 20;

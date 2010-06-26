@@ -39,10 +39,10 @@ using namespace KSpread;
 class FunctionRepository::Private
 {
 public:
-  QHash<QString, QSharedPointer<Function> > functions;
+    QHash<QString, QSharedPointer<Function> > functions;
     QHash<QString, QSharedPointer<Function> > alternates;
-  QHash<QString, FunctionDescription*> descriptions;
-  QStringList groups;
+    QHash<QString, FunctionDescription*> descriptions;
+    QStringList groups;
     bool initialized;
 };
 
@@ -63,9 +63,8 @@ FunctionRepository* FunctionRepository::self()
         QStringList missingDescriptions;
         typedef QHash<QString, QSharedPointer<Function> > Functions;
         Functions::ConstIterator end = s_instance->d->functions.constEnd();
-        for ( Functions::ConstIterator it = s_instance->d->functions.constBegin(); it != end; ++it )
-        {
-            if ( !s_instance->d->descriptions.contains( it.key() ) )
+        for (Functions::ConstIterator it = s_instance->d->functions.constBegin(); it != end; ++it) {
+            if (!s_instance->d->descriptions.contains(it.key()))
                 missingDescriptions << it.key();
         }
         if (missingDescriptions.count() > 0) {
@@ -80,32 +79,32 @@ FunctionRepository* FunctionRepository::self()
 }
 
 FunctionRepository::FunctionRepository()
-    : d( new Private )
+        : d(new Private)
 {
     d->initialized = false;
 }
 
 FunctionRepository::~FunctionRepository()
 {
-  qDeleteAll( d->descriptions );
-  delete d;
+    qDeleteAll(d->descriptions);
+    delete d;
 }
 
 void FunctionRepository::add(const QSharedPointer<Function>& function)
 {
-  if( !function ) return;
-  d->functions.insert( function->name().toUpper(), function );
+    if (!function) return;
+    d->functions.insert(function->name().toUpper(), function);
 
     if (!function->alternateName().isNull()) {
         d->alternates.insert(function->alternateName().toUpper(), function);
     }
 }
 
-void FunctionRepository::add( FunctionDescription *desc )
+void FunctionRepository::add(FunctionDescription *desc)
 {
-  if( !desc ) return;
-  if( !d->functions.contains( desc->name() ) ) return;
-  d->descriptions.insert (desc->name(), desc);
+    if (!desc) return;
+    if (!d->functions.contains(desc->name())) return;
+    d->descriptions.insert(desc->name(), desc);
 }
 
 void FunctionRepository::remove(const QSharedPointer<Function>& function)
@@ -125,80 +124,74 @@ QSharedPointer<Function> FunctionRepository::function(const QString& name)
     return !f.isNull() ? f : d->alternates.value(n);
 }
 
-FunctionDescription *FunctionRepository::functionInfo (const QString& name)
+FunctionDescription *FunctionRepository::functionInfo(const QString& name)
 {
-  return d->descriptions.value( name.toUpper() );
+    return d->descriptions.value(name.toUpper());
 }
 
 // returns names of function in certain group
-QStringList FunctionRepository::functionNames( const QString& group )
+QStringList FunctionRepository::functionNames(const QString& group)
 {
-  QStringList lst;
+    QStringList lst;
 
-  foreach ( FunctionDescription* description, d->descriptions )
-  {
-    if (group.isNull() || (description->group() == group))
-      lst.append (description->name());
-  }
+    foreach(FunctionDescription* description, d->descriptions) {
+        if (group.isNull() || (description->group() == group))
+            lst.append(description->name());
+    }
 
-  lst.sort();
-  return lst;
+    lst.sort();
+    return lst;
 }
 
-const QStringList& FunctionRepository::groups () const
+const QStringList& FunctionRepository::groups() const
 {
-  return d->groups;
+    return d->groups;
 }
 
 void FunctionRepository::addGroup(const QString& groupname)
 {
-  d->groups.append( groupname );
-  d->groups.sort();
+    d->groups.append(groupname);
+    d->groups.sort();
 }
 
 void FunctionRepository::loadFunctionDescriptions(const QString& filename)
 {
-  QFile file (filename);
-  if (!file.open (QIODevice::ReadOnly))
-    return;
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly))
+        return;
 
-  QDomDocument doc;
-  doc.setContent( &file );
-  file.close();
+    QDomDocument doc;
+    doc.setContent(&file);
+    file.close();
 
-  QString group = "";
+    QString group = "";
 
-  QDomNode n = doc.documentElement().firstChild();
-  for (; !n.isNull(); n = n.nextSibling())
-  {
-    if (!n.isElement())
-      continue;
-    QDomElement e = n.toElement();
-    if (e.tagName() == "Group")
-    {
-      group = i18n (e.namedItem ("GroupName").toElement().text().toUtf8());
-      addGroup(group);
+    QDomNode n = doc.documentElement().firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (!n.isElement())
+            continue;
+        QDomElement e = n.toElement();
+        if (e.tagName() == "Group") {
+            group = i18n(e.namedItem("GroupName").toElement().text().toUtf8());
+            addGroup(group);
 
-      QDomNode n2 = e.firstChild();
-      for (; !n2.isNull(); n2 = n2.nextSibling())
-      {
-        if (!n2.isElement())
-          continue;
-        QDomElement e2 = n2.toElement();
-        if (e2.tagName() == "Function")
-        {
-          FunctionDescription* desc = new FunctionDescription( e2 );
-          desc->setGroup (group);
-          if ( d->functions.contains( desc->name() ) )
-            d->descriptions.insert (desc->name(), desc);
-          else
-          {
-            kDebug(36005) << "Description for unknown function" << desc->name() << "found.";
-            delete desc;
-          }
+            QDomNode n2 = e.firstChild();
+            for (; !n2.isNull(); n2 = n2.nextSibling()) {
+                if (!n2.isElement())
+                    continue;
+                QDomElement e2 = n2.toElement();
+                if (e2.tagName() == "Function") {
+                    FunctionDescription* desc = new FunctionDescription(e2);
+                    desc->setGroup(group);
+                    if (d->functions.contains(desc->name()))
+                        d->descriptions.insert(desc->name(), desc);
+                    else {
+                        kDebug(36005) << "Description for unknown function" << desc->name() << "found.";
+                        delete desc;
+                    }
+                }
+            }
+            group = "";
         }
-      }
-      group = "";
     }
-  }
 }

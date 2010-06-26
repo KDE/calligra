@@ -55,8 +55,8 @@ K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 #define UNICODE_GBP 0x00A3
 #define UNICODE_JPY 0x00A5
 
-namespace Swinder {
-
+namespace Swinder
+{
 // qHash function to support hashing by Swinder::FormatFont instances.
 static inline uint qHash(const Swinder::FormatFont& font)
 {
@@ -183,8 +183,8 @@ public:
     void processWorkbookForStyle(Workbook* workbook, KoXmlWriter* xmlWriter);
     void processSheetForBody(KoOdfWriteStore* store, Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter);
-    void processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* writer);
-    void processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter);
+    void processSheetForHeaderFooter(Sheet* sheet, KoXmlWriter* writer);
+    void processHeaderFooterStyle(UString text, KoXmlWriter* xmlWriter);
     void processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel);
     void processColumnForStyle(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter);
     int processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel);
@@ -284,8 +284,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // header and footer are read from each sheet and saved in styles
     // So creating content before styles
     // store document content
-    if ( !d->createContent( &oasisStore ) )
-    {
+    if (!d->createContent(&oasisStore)) {
         kWarning() << "Couldn't open the file 'content.xml'.";
         delete d->workbook;
         delete d->storeout;
@@ -293,8 +292,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     // store document styles
-    if ( !d->createStyles( d->storeout, manifestWriter, d->mainStyles ) )
-    {
+    if (!d->createStyles(d->storeout, manifestWriter, d->mainStyles)) {
         kWarning() << "Couldn't open the file 'styles.xml'.";
         delete d->workbook;
         delete d->storeout;
@@ -679,7 +677,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
 
     QString contentElement;
     QString masterStyleName("Default");
-    QString pageLayoutStyleName ("Mpm");
+    QString pageLayoutStyleName("Mpm");
 
     KoGenStyle *pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
     pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
@@ -713,13 +711,12 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     pageLayoutStyle->addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
     pageLayoutStyleName = mainStyles->insert(*pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
-    for(unsigned i = 0; i < workbook->sheetCount(); i++)
-    {
+    for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         Sheet* sheet = workbook->sheet(i);
         processSheetForStyle(sheet, xmlWriter);
 
         buf.open(QIODevice::WriteOnly);
-        processSheetForHeaderFooter (workbook->sheet(0), &writer);
+        processSheetForHeaderFooter(workbook->sheet(0), &writer);
         contentElement = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         buf.close();
         QString childElementName = QString::number(i).append("master-style");
@@ -728,7 +725,7 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
         masterStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
 
         masterStyleName = mainStyles->insert(masterStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
-        masterStyle.addAttribute( "style:name", masterStyleName);
+        masterStyle.addAttribute("style:name", masterStyleName);
     }
 }
 
@@ -823,54 +820,54 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
 }
 
 // Processes headers and footers for a sheet.
-void ExcelImport::Private::processSheetForHeaderFooter ( Sheet* sheet, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processSheetForHeaderFooter(Sheet* sheet, KoXmlWriter* xmlWriter)
 {
-    if ( !sheet ) return;
-    if ( !xmlWriter ) return;
+    if (!sheet) return;
+    if (!xmlWriter) return;
 
-    xmlWriter->startElement( "style:header" );
-    if ( !sheet->leftHeader().isEmpty() ) {
-        xmlWriter->startElement( "style:region-left" );
-        xmlWriter->startElement( "text:p" );
-        processHeaderFooterStyle (sheet->leftHeader(), xmlWriter);
+    xmlWriter->startElement("style:header");
+    if (!sheet->leftHeader().isEmpty()) {
+        xmlWriter->startElement("style:region-left");
+        xmlWriter->startElement("text:p");
+        processHeaderFooterStyle(sheet->leftHeader(), xmlWriter);
         xmlWriter->endElement();
         xmlWriter->endElement();
     }
-    if ( !sheet->centerHeader().isEmpty() ) {
-        xmlWriter->startElement( "style:region-center" );
-        xmlWriter->startElement( "text:p" );
-        processHeaderFooterStyle (sheet->centerHeader(), xmlWriter);
+    if (!sheet->centerHeader().isEmpty()) {
+        xmlWriter->startElement("style:region-center");
+        xmlWriter->startElement("text:p");
+        processHeaderFooterStyle(sheet->centerHeader(), xmlWriter);
         xmlWriter->endElement();
         xmlWriter->endElement();
     }
-    if ( !sheet->rightHeader().isEmpty() ) {
-        xmlWriter->startElement( "style:region-right" );
-        xmlWriter->startElement( "text:p" );
-        processHeaderFooterStyle (sheet->rightHeader(), xmlWriter);
+    if (!sheet->rightHeader().isEmpty()) {
+        xmlWriter->startElement("style:region-right");
+        xmlWriter->startElement("text:p");
+        processHeaderFooterStyle(sheet->rightHeader(), xmlWriter);
         xmlWriter->endElement();
         xmlWriter->endElement();
     }
     xmlWriter->endElement();
 
-    xmlWriter->startElement( "style:footer" );
-    if ( !sheet->leftFooter().isEmpty() ) {
-        xmlWriter->startElement( "style:region-left" );
-        xmlWriter->startElement( "text:p" );
-        processHeaderFooterStyle (sheet->leftFooter(), xmlWriter);
+    xmlWriter->startElement("style:footer");
+    if (!sheet->leftFooter().isEmpty()) {
+        xmlWriter->startElement("style:region-left");
+        xmlWriter->startElement("text:p");
+        processHeaderFooterStyle(sheet->leftFooter(), xmlWriter);
         xmlWriter->endElement();
         xmlWriter->endElement();
     }
-    if ( !sheet->centerFooter().isEmpty() ) {
-        xmlWriter->startElement( "style:region-center" );
-        xmlWriter->startElement( "text:p" );
-        processHeaderFooterStyle (sheet->centerFooter(), xmlWriter);
+    if (!sheet->centerFooter().isEmpty()) {
+        xmlWriter->startElement("style:region-center");
+        xmlWriter->startElement("text:p");
+        processHeaderFooterStyle(sheet->centerFooter(), xmlWriter);
         xmlWriter->endElement();
         xmlWriter->endElement();
     }
-    if ( !sheet->rightFooter().isEmpty() ) {
-        xmlWriter->startElement( "style:region-right" );
-        xmlWriter->startElement( "text:p" );
-        processHeaderFooterStyle (sheet->rightFooter(), xmlWriter);
+    if (!sheet->rightFooter().isEmpty()) {
+        xmlWriter->startElement("style:region-right");
+        xmlWriter->startElement("text:p");
+        processHeaderFooterStyle(sheet->rightFooter(), xmlWriter);
         xmlWriter->endElement();
         xmlWriter->endElement();
     }
@@ -878,61 +875,61 @@ void ExcelImport::Private::processSheetForHeaderFooter ( Sheet* sheet, KoXmlWrit
 }
 
 // Processes the styles of a headers and footers for a sheet.
-void ExcelImport::Private::processHeaderFooterStyle (UString text, KoXmlWriter* xmlWriter)
+void ExcelImport::Private::processHeaderFooterStyle(UString text, KoXmlWriter* xmlWriter)
 {
     QString content;
     bool skipUnsupported = false;
     int lastPos;
     int pos = text.find(UString('&'));
     int len = text.length();
-    if ( (pos < 0) && (text.length() > 0) ) // If ther is no &
+    if ((pos < 0) && (text.length() > 0))   // If ther is no &
         xmlWriter->addTextNode(text.cstring().c_str());
     else if (pos > 0) // Some text and '&'
-        xmlWriter->addTextNode( text.substr( 0,  pos-1 ).cstring().c_str() );
+        xmlWriter->addTextNode(text.substr(0,  pos - 1).cstring().c_str());
 
     while (pos >= 0) {
-        switch (text[pos + 1].unicode() ) {
-            case 'D':
-                xmlWriter->startElement( "text:date");
-                xmlWriter->addTextNode( QDate::currentDate().toString("DD/MM/YYYY"));
-                xmlWriter->endElement();
-                break;
-            case 'T':
-                xmlWriter->startElement( "text:time");
-                xmlWriter->addTextNode( QTime::currentTime().toString("HH:MM:SS"));
-                xmlWriter->endElement();
-                break;
-            case 'P':
-                xmlWriter->startElement( "text:page-number");
-                xmlWriter->addTextNode( "1" );
-                xmlWriter->endElement();
-                break;
-            case 'N':
-                xmlWriter->startElement( "text:page-count");
-                xmlWriter->addTextNode( "999" );
-                xmlWriter->endElement();
-                break;
-            case 'F':
-                xmlWriter->startElement( "text:title");
-                xmlWriter->addTextNode( "???" );
-                xmlWriter->endElement();
-                break;
-            case 'A':
-                xmlWriter->startElement( "text:sheet-name");
-                xmlWriter->addTextNode( "???" );
-                xmlWriter->endElement();
-                break;
-            case '\"':
-            default:
-                skipUnsupported = true;
-                break;
+        switch (text[pos + 1].unicode()) {
+        case 'D':
+            xmlWriter->startElement("text:date");
+            xmlWriter->addTextNode(QDate::currentDate().toString("DD/MM/YYYY"));
+            xmlWriter->endElement();
+            break;
+        case 'T':
+            xmlWriter->startElement("text:time");
+            xmlWriter->addTextNode(QTime::currentTime().toString("HH:MM:SS"));
+            xmlWriter->endElement();
+            break;
+        case 'P':
+            xmlWriter->startElement("text:page-number");
+            xmlWriter->addTextNode("1");
+            xmlWriter->endElement();
+            break;
+        case 'N':
+            xmlWriter->startElement("text:page-count");
+            xmlWriter->addTextNode("999");
+            xmlWriter->endElement();
+            break;
+        case 'F':
+            xmlWriter->startElement("text:title");
+            xmlWriter->addTextNode("???");
+            xmlWriter->endElement();
+            break;
+        case 'A':
+            xmlWriter->startElement("text:sheet-name");
+            xmlWriter->addTextNode("???");
+            xmlWriter->endElement();
+            break;
+        case '\"':
+        default:
+            skipUnsupported = true;
+            break;
         }
         lastPos = pos;
         pos = text.find(UString('&'), lastPos + 1);
-        if ( !skipUnsupported && (pos > (lastPos + 1)) )
-            xmlWriter->addTextNode( text.substr( lastPos+2, (pos - lastPos - 2) ).cstring().c_str() );
-        else if ( !skipUnsupported && (pos < 0) )//Remaining text
-            xmlWriter->addTextNode( text.substr( lastPos+2, len - (lastPos + 2)).cstring().c_str() );
+        if (!skipUnsupported && (pos > (lastPos + 1)))
+            xmlWriter->addTextNode(text.substr(lastPos + 2, (pos - lastPos - 2)).cstring().c_str());
+        else if (!skipUnsupported && (pos < 0))  //Remaining text
+            xmlWriter->addTextNode(text.substr(lastPos + 2, len - (lastPos + 2)).cstring().c_str());
         else
             skipUnsupported = false;
     }
@@ -1127,21 +1124,21 @@ QString extractConditional(const QString &_text)
 {
     const QString text = removeEscaped(_text);
 #if 1
-    if ( text.startsWith('_') && text.length() >= 3 ) {
+    if (text.startsWith('_') && text.length() >= 3) {
         QChar end;
-        if(text[1] == '(') end = ')';
-        else if(text[1] == '_') end = '_';
-        else if(text[1] == ' ') end = ' ';
-        else kDebug() << "Probably unhandled condition=" << text[1] <<"in text=" << text;
-        if(! end.isNull()) {
+        if (text[1] == '(') end = ')';
+        else if (text[1] == '_') end = '_';
+        else if (text[1] == ' ') end = ' ';
+        else kDebug() << "Probably unhandled condition=" << text[1] << "in text=" << text;
+        if (! end.isNull()) {
             {
-                QString regex = QString( "^_%1(.*\"\\$\".*)%2;.*" ).arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QString regex = QString("^_%1(.*\"\\$\".*)%2;.*").arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
                 QRegExp ex(regex);
                 ex.setMinimal(true);
                 if (ex.indexIn(text) >= 0) return ex.cap(1);
             }
             {
-                QString regex = QString( "^_%1(.*\\[\\$.*\\].*)%2;.*" ).arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QString regex = QString("^_%1(.*\\[\\$.*\\].*)%2;.*").arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
                 QRegExp ex(regex);
                 ex.setMinimal(true);
                 if (ex.indexIn(text) >= 0) return ex.cap(1);
@@ -1149,7 +1146,7 @@ QString extractConditional(const QString &_text)
         }
     }
 #else
-    if ( text.startsWith('_') ) {
+    if (text.startsWith('_')) {
         return text.split(";").first();
     }
 #endif
@@ -1161,15 +1158,15 @@ QString extractConditional(const QString &_text)
 // [$EUR]\ #,##0.00"
 // [$₩-412]* #,##0.0000
 // * #,##0_)[$€-1]_
-static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0, QString *formatVal = 0)
+static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0, QString * formatVal = 0)
 {
     QString vf = extractConditional(valueFormat);
 
     // dollar is special cause it starts with a $
     QRegExp dollarRegEx("^\"\\$\"[*\\-\\s]*([#,]*[\\d]+(|.[#0]+)).*");
     if (dollarRegEx.indexIn(vf) >= 0) {
-        if(currencyVal) *currencyVal = "$";
-        if(formatVal) *formatVal = dollarRegEx.cap(1);
+        if (currencyVal) *currencyVal = "$";
+        if (formatVal) *formatVal = dollarRegEx.cap(1);
         return true;
     }
 
@@ -1177,10 +1174,10 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
     QRegExp crRegEx("\\[\\$(.*)\\]");
     crRegEx.setMinimal(true);
     if (crRegEx.indexIn(vf) >= 0) {
-        if(currencyVal) {
+        if (currencyVal) {
             *currencyVal = crRegEx.cap(1);
         }
-        if(formatVal) {
+        if (formatVal) {
             QRegExp vlRegEx("([#,]*[\\d]+(|.[#0]+))");
             *formatVal = vlRegEx.indexIn(vf) >= 0 ? vlRegEx.cap(1) : QString();
         }
@@ -1300,11 +1297,11 @@ static QString convertFraction(double serialNo, const QString& valueFormat)
 QString cellFormula(Cell* cell)
 {
     QString formula = string(cell->formula());
-    if(!formula.isEmpty()) {
+    if (!formula.isEmpty()) {
         if(formula.startsWith("ROUNDUP(") || formula.startsWith("ROUNDDOWN(") || formula.startsWith("ROUND(") || formula.startsWith("RAND(")) {
             // Special case Excel formulas that differ from OpenFormula
             formula.prepend("msoxl:=");
-        } else if(!formula.isEmpty()) {
+        } else if (!formula.isEmpty()) {
             formula.prepend("=");
         }
     }
@@ -1313,11 +1310,11 @@ QString cellFormula(Cell* cell)
 
 QString currencyValue(const QString &value)
 {
-    if(value.isEmpty()) return QString();
-    if(value[0] == '$') return "USD";
-    if(value[0] == QChar(UNICODE_EUR)) return "EUR";
-    if(value[0] == QChar(UNICODE_GBP)) return "GBP";
-    if(value[0] == QChar(UNICODE_JPY)) return "JPY";
+    if (value.isEmpty()) return QString();
+    if (value[0] == '$') return "USD";
+    if (value[0] == QChar(UNICODE_EUR)) return "EUR";
+    if (value[0] == QChar(UNICODE_GBP)) return "GBP";
+    if (value[0] == QChar(UNICODE_JPY)) return "JPY";
     QRegExp symbolRegEx("^([^a-zA-Z0-9\\-_\\s]+)");
     if (symbolRegEx.indexIn(value) >= 0) return symbolRegEx.cap(1);
     return QString();
@@ -1598,7 +1595,7 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
             if (roundRegExp.indexIn(formula) >= 0) {
                 bool ok = false;
                 int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
-                if(ok) {
+                if (ok) {
                     KoGenStyle style(KoGenStyle::NumericNumberStyle);
                     QBuffer buffer;
                     buffer.open(QIODevice::WriteOnly);

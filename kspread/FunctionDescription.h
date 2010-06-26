@@ -41,18 +41,24 @@ enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean
 class KSPREAD_EXPORT FunctionParameter
 {
 public:
-  FunctionParameter();
-  FunctionParameter( const FunctionParameter& param );
-  FunctionParameter( const QDomElement& element );
+    FunctionParameter();
+    FunctionParameter(const FunctionParameter& param);
+    FunctionParameter(const QDomElement& element);
 
-  QString helpText() const { return m_help; }
-  ParameterType type() const { return m_type; }
-  bool hasRange() const { return m_range; }
+    QString helpText() const {
+        return m_help;
+    }
+    ParameterType type() const {
+        return m_type;
+    }
+    bool hasRange() const {
+        return m_range;
+    }
 
 private:
-  QString m_help;
-  ParameterType m_type;
-  bool m_range;
+    QString m_help;
+    ParameterType m_type;
+    bool m_range;
 };
 
 /**
@@ -62,34 +68,54 @@ private:
 class KSPREAD_EXPORT FunctionDescription
 {
 public:
-  FunctionDescription();
-  FunctionDescription (const QDomElement& element);
-  FunctionDescription (const FunctionDescription& desc);
+    FunctionDescription();
+    FunctionDescription(const QDomElement& element);
+    FunctionDescription(const FunctionDescription& desc);
 
-  const QStringList& examples() { return m_examples; }
-  const QStringList& syntax() { return m_syntax; }
-  const QStringList& related() { return m_related; }
-  const QStringList& helpText() const { return m_help; }
-  QString name() const { return m_name; }
-  ParameterType type() const { return m_type; }
+    const QStringList& examples() {
+        return m_examples;
+    }
+    const QStringList& syntax() {
+        return m_syntax;
+    }
+    const QStringList& related() {
+        return m_related;
+    }
+    const QStringList& helpText() const {
+        return m_help;
+    }
+    QString name() const {
+        return m_name;
+    }
+    ParameterType type() const {
+        return m_type;
+    }
 
-  int params() const { return m_params.count(); }
-  FunctionParameter& param( int i ) { return m_params[ i ]; }
+    int params() const {
+        return m_params.count();
+    }
+    FunctionParameter& param(int i) {
+        return m_params[ i ];
+    }
 
-  void setGroup( const QString& g ) { m_group = g; }
-  QString group() const { return m_group; }
+    void setGroup(const QString& g) {
+        m_group = g;
+    }
+    QString group() const {
+        return m_group;
+    }
 
-  QString toQML() const;
+    QString toQML() const;
 
 private:
-  QString m_group;
-  QStringList m_examples;
-  QStringList m_syntax;
-  QStringList m_related;
-  QStringList m_help;
-  QString m_name;
-  ParameterType m_type;
-  QList<FunctionParameter> m_params;
+    QString m_group;
+    QStringList m_examples;
+    QStringList m_syntax;
+    QStringList m_related;
+    QStringList m_help;
+    QString m_name;
+    ParameterType m_type;
+    QList<FunctionParameter> m_params;
 };
 
 } // namespace KSpread

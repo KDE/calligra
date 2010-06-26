@@ -39,16 +39,16 @@ class FunctionDescription;
 class KSPREAD_EXPORT FunctionRepository
 {
 public:
-  FunctionRepository();
-  ~FunctionRepository();
+    FunctionRepository();
+    ~FunctionRepository();
 
-  static FunctionRepository *self();
+    static FunctionRepository *self();
 
     /**
      * Adds \p function to the repository.
      */
     void add(const QSharedPointer<Function>& function);
-  void add (FunctionDescription *desc);
+    void add(FunctionDescription *desc);
 
     /**
      * Removes \p function from the repository.
@@ -58,13 +58,13 @@ public:
 
     QSharedPointer<Function> function(const QString& name);
 
-  FunctionDescription *functionInfo (const QString& name);
+    FunctionDescription *functionInfo(const QString& name);
 
-  /** return functions within a group, or all if no group given */
-  QStringList functionNames (const QString& group = QString());
+    /** return functions within a group, or all if no group given */
+    QStringList functionNames(const QString& group = QString());
 
-  const QStringList &groups () const;
-  void addGroup(const QString& groupname);
+    const QStringList &groups() const;
+    void addGroup(const QString& groupname);
 
     /**
      * Loads function descriptions from an XML file.
@@ -73,12 +73,12 @@ public:
 
 private:
 
-  class Private;
-  Private * const d;
+    class Private;
+    Private * const d;
 
-  // no copy or assign
-  FunctionRepository( const FunctionRepository& );
-  FunctionRepository& operator=( const FunctionRepository& );
+    // no copy or assign
+    FunctionRepository(const FunctionRepository&);
+    FunctionRepository& operator=(const FunctionRepository&);
 };
 
 } // namespace KSpread

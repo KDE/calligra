@@ -124,7 +124,7 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
         else if (QUALIFIED_NAME_IS(t)) {
             TRY_READ(t)
 //! @todo
-kDebug() << "readResult += m_text" << readResult << m_text;
+            kDebug() << "readResult += m_text" << readResult << m_text;
             readResult += m_text;
         }
 //! @todo support rPr

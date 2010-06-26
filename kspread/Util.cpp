@@ -45,7 +45,7 @@ using namespace KSpread;
 int KSpread::Util::decodeColumnLabelText(const QString &labelText)
 {
     int col = 0;
-    const int offset = 'a' -'A';
+    const int offset = 'a' - 'A';
     int counterColumn = 0;
     const uint totalLength = labelText.length();
     uint labelTextLength;

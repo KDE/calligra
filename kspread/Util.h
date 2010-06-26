@@ -46,7 +46,8 @@ class Cell;
 class Map;
 class Sheet;
 
-namespace Util {
+namespace Util
+{
 /**
  * Call this function to decode the text of a column label to an integer,
  * e.g. 1 for A and 27 for AA.
@@ -79,7 +80,8 @@ int         penCompare(QPen const & pen1, QPen const & pen2);
  * This namespace collects methods related to KSpread's old native file format
  * encoding/decoding.
  */
-namespace NativeFormat {
+namespace NativeFormat
+{
 /**
  * \ingroup NativeFormat
  */
@@ -106,7 +108,8 @@ QPen        toPen(KoXmlElement & element);
  * This namespace collects methods related to OpenDocument
  * encoding/decoding.
  */
-namespace Odf {
+namespace Odf
+{
 /**
  * \ingroup OpenDocument
  * Creates OpenDocument pen attributes of the QPen \p pen .

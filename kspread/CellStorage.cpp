@@ -137,47 +137,47 @@ void CellStorage::Private::createCommand(QUndoCommand *parent) const
 {
     if (!undoData->bindings.isEmpty()) {
         RectStorageUndoCommand<Binding> *const command
-            = new RectStorageUndoCommand<Binding>(sheet->model(), SourceRangeRole, parent);
+        = new RectStorageUndoCommand<Binding>(sheet->model(), SourceRangeRole, parent);
         command->add(undoData->bindings);
     }
     if (!undoData->comments.isEmpty()) {
         RectStorageUndoCommand<QString> *const command
-            = new RectStorageUndoCommand<QString>(sheet->model(), CommentRole, parent);
+        = new RectStorageUndoCommand<QString>(sheet->model(), CommentRole, parent);
         command->add(undoData->comments);
     }
     if (!undoData->conditions.isEmpty()) {
         RectStorageUndoCommand<Conditions> *const command
-            = new RectStorageUndoCommand<Conditions>(sheet->model(), ConditionRole, parent);
+        = new RectStorageUndoCommand<Conditions>(sheet->model(), ConditionRole, parent);
         command->add(undoData->conditions);
     }
     if (!undoData->databases.isEmpty()) {
         RectStorageUndoCommand<Database> *const command
-            = new RectStorageUndoCommand<Database>(sheet->model(), TargetRangeRole, parent);
+        = new RectStorageUndoCommand<Database>(sheet->model(), TargetRangeRole, parent);
         command->add(undoData->databases);
     }
     if (!undoData->formulas.isEmpty()) {
         PointStorageUndoCommand<Formula> *const command
-            = new PointStorageUndoCommand<Formula>(sheet->model(), FormulaRole, parent);
+        = new PointStorageUndoCommand<Formula>(sheet->model(), FormulaRole, parent);
         command->add(undoData->formulas);
     }
     if (!undoData->fusions.isEmpty()) {
         RectStorageUndoCommand<bool> *const command
-            = new RectStorageUndoCommand<bool>(sheet->model(), FusionedRangeRole, parent);
+        = new RectStorageUndoCommand<bool>(sheet->model(), FusionedRangeRole, parent);
         command->add(undoData->fusions);
     }
     if (!undoData->links.isEmpty()) {
         PointStorageUndoCommand<QString> *const command
-            = new PointStorageUndoCommand<QString>(sheet->model(), LinkRole, parent);
+        = new PointStorageUndoCommand<QString>(sheet->model(), LinkRole, parent);
         command->add(undoData->links);
     }
     if (!undoData->matrices.isEmpty()) {
         RectStorageUndoCommand<bool> *const command
-            = new RectStorageUndoCommand<bool>(sheet->model(), LockedRangeRole, parent);
+        = new RectStorageUndoCommand<bool>(sheet->model(), LockedRangeRole, parent);
         command->add(undoData->matrices);
     }
     if (!undoData->namedAreas.isEmpty()) {
         RectStorageUndoCommand<QString> *const command
-            = new RectStorageUndoCommand<QString>(sheet->model(), NamedAreaRole, parent);
+        = new RectStorageUndoCommand<QString>(sheet->model(), NamedAreaRole, parent);
         command->add(undoData->namedAreas);
     }
     if (!undoData->richTexts.isEmpty()) {
@@ -187,22 +187,22 @@ void CellStorage::Private::createCommand(QUndoCommand *parent) const
     }
     if (!undoData->styles.isEmpty()) {
         StyleStorageUndoCommand *const command
-            = new StyleStorageUndoCommand(styleStorage, parent);
+        = new StyleStorageUndoCommand(styleStorage, parent);
         command->add(undoData->styles);
     }
     if (!undoData->userInputs.isEmpty()) {
         PointStorageUndoCommand<QString> *const command
-            = new PointStorageUndoCommand<QString>(sheet->model(), UserInputRole, parent);
+        = new PointStorageUndoCommand<QString>(sheet->model(), UserInputRole, parent);
         command->add(undoData->userInputs);
     }
     if (!undoData->validities.isEmpty()) {
         RectStorageUndoCommand<Validity> *const command
-            = new RectStorageUndoCommand<Validity>(sheet->model(), ValidityRole, parent);
+        = new RectStorageUndoCommand<Validity>(sheet->model(), ValidityRole, parent);
         command->add(undoData->validities);
     }
     if (!undoData->values.isEmpty()) {
         PointStorageUndoCommand<Value> *const command
-            = new PointStorageUndoCommand<Value>(sheet->model(), ValueRole, parent);
+        = new PointStorageUndoCommand<Value>(sheet->model(), ValueRole, parent);
         command->add(undoData->values);
     }
 }

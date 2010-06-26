@@ -126,12 +126,12 @@ public:
     // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
     //              But never both at the same time, so we can share the memory for this.
     union {
-    int obscuringCellX : 16; // KS_colMax
-    int obscuredCellsX : 16; // KS_colMax
+        int obscuringCellX : 16; // KS_colMax
+        int obscuredCellsX : 16; // KS_colMax
     };
     union {
-    int obscuringCellY : 16; // KS_rowMax
-    int obscuredCellsY : 16; // KS_rowMax
+        int obscuringCellY : 16; // KS_rowMax
+        int obscuredCellsY : 16; // KS_rowMax
     };
 
     // This is the text we want to display. Not necessarily the same
@@ -1110,15 +1110,15 @@ void CellView::paintText(QPainter& painter,
         qreal space = d->width - d->textWidth;
         if (space > 0) {
             switch (hAlign) {
-                case Style::Center:
-                case Style::HAlignUndefined:
-                    dx += space/2;
-                    break;
-                case Style::Right:
-                    dx += space;
-                    break;
-                default:
-                    break;
+            case Style::Center:
+            case Style::HAlignUndefined:
+                dx += space / 2;
+                break;
+            case Style::Right:
+                dx += space;
+                break;
+            default:
+                break;
             }
         }
         for (int i = 0; i < textLines.count(); ++i) {
@@ -1169,11 +1169,11 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     QLineF line;
 
     if (cell.column() >= printRange.left()
-        && cell.column() <= printRange.right() + 1
-        && cell.row() >= printRange.top()
-        && cell.row() <= printRange.bottom() + 1) {
+            && cell.column() <= printRange.right() + 1
+            && cell.row() >= printRange.top()
+            && cell.row() <= printRange.bottom() + 1) {
         if (print->isColumnOnNewPage(cell.column())
-            && cell.row() <= printRange.bottom()) {
+                && cell.row() <= printRange.bottom()) {
             painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
 
             if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
@@ -1186,7 +1186,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         }
 
         if (print->isRowOnNewPage(cell.row()) &&
-            (cell.column() <= printRange.right())) {
+                (cell.column() <= printRange.right())) {
             painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
             line = QLineF(coordinate.x(),  coordinate.y(),
                           coordinate.x() + d->width, coordinate.y());
@@ -1195,7 +1195,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (paintBorder & RightBorder) {
             if (print->isColumnOnNewPage(cell.column() + 1)
-                && cell.row() <= printRange.bottom()) {
+                    && cell.row() <= printRange.bottom()) {
                 painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
 
                 if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
@@ -1210,7 +1210,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (paintBorder & BottomBorder) {
             if (print->isRowOnNewPage(cell.row() + 1)
-                && cell.column() <= printRange.right()) {
+                    && cell.column() <= printRange.right()) {
                 painter.setPen(cell.sheet()->map()->settings()->pageBorderColor());
                 line = QLineF(coordinate.x(),  coordinate.y() + d->height,
                               coordinate.x() + d->width, coordinate.y() + d->height);
@@ -1903,9 +1903,9 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
 
     const bool tmpVerticalText = d->style.verticalText();
     const qreal lineWidth = tmpVerticalText ? fontMetrics.maxWidth() :
-                                        (d->width - 2 * s_borderSpace
-                                        - 0.5 * d->style.leftBorderPen().width()
-                                        - 0.5 * d->style.rightBorderPen().width());
+                            (d->width - 2 * s_borderSpace
+                             - 0.5 * d->style.leftBorderPen().width()
+                             - 0.5 * d->style.rightBorderPen().width());
 
     qreal offset = 1.0 - fontMetrics.ascent();
     for (int i = 0; i < textLines.count(); ++i) {
@@ -1923,7 +1923,7 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
             line.setLineWidth(lineWidth);
             height += leading;
             line.setPosition(QPointF((s_borderSpace + 0.5 * d->style.leftBorderPen().widthF()),
-                                    height));
+                                     height));
 
             height += line.height() + lineSpacing;
         }

@@ -1454,10 +1454,10 @@ void View::toggleProtectDoc(bool mode)
     bool success;
     if (mode) {
         success = doc()->map()->showPasswordDialog(this, ProtectableObject::Lock,
-                                                   i18n("Protect Document"));
+                  i18n("Protect Document"));
     } else {
         success = doc()->map()->showPasswordDialog(this, ProtectableObject::Unlock,
-                                                   i18n("Unprotect Document"));
+                  i18n("Unprotect Document"));
     }
     if (!success) {
         d->actions->protectDoc->setChecked(!mode);
@@ -1477,10 +1477,10 @@ void View::toggleProtectSheet(bool mode)
     bool success;
     if (mode) {
         success = activeSheet()->showPasswordDialog(this, ProtectableObject::Lock,
-                                                    i18n("Protect Sheet"));
+                  i18n("Protect Sheet"));
     } else {
         success = activeSheet()->showPasswordDialog(this, ProtectableObject::Unlock,
-                                                    i18n("Unprotect Sheet"));
+                  i18n("Unprotect Sheet"));
     }
     if (!success) {
         d->actions->protectSheet->setChecked(!mode);

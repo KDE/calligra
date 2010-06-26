@@ -39,25 +39,41 @@ class SheetPrint;
 class PrintNewPageEntry
 {
 public:
-    explicit PrintNewPageEntry( int startItem, int endItem = 0, double size = 0, double offset = 0 )
-        : m_iStartItem( startItem )
-        , m_iEndItem( endItem )
-        , m_dSize( size )
-        , m_dOffset( offset ) {}
+    explicit PrintNewPageEntry(int startItem, int endItem = 0, double size = 0, double offset = 0)
+            : m_iStartItem(startItem)
+            , m_iEndItem(endItem)
+            , m_dSize(size)
+            , m_dOffset(offset) {}
 
-    int startItem() const { return m_iStartItem; }
-    void setStartItem( int startItem ) { m_iStartItem = startItem; }
+    int startItem() const {
+        return m_iStartItem;
+    }
+    void setStartItem(int startItem) {
+        m_iStartItem = startItem;
+    }
 
-    int endItem() const { return m_iEndItem; }
-    void setEndItem( int endItem ) { m_iEndItem = endItem; }
+    int endItem() const {
+        return m_iEndItem;
+    }
+    void setEndItem(int endItem) {
+        m_iEndItem = endItem;
+    }
 
-    double size() const { return m_dSize; }
-    void setSize( double size ) { m_dSize = size; }
+    double size() const {
+        return m_dSize;
+    }
+    void setSize(double size) {
+        m_dSize = size;
+    }
 
-    double offset() const { return m_dOffset; }
-    void setOffset( double offset ) { m_dOffset = offset; }
+    double offset() const {
+        return m_dOffset;
+    }
+    void setOffset(double offset) {
+        m_dOffset = offset;
+    }
 
-    bool operator==( PrintNewPageEntry const & entry ) const;
+    bool operator==(PrintNewPageEntry const & entry) const;
 
 
 private:
@@ -86,12 +102,12 @@ public:
     /**
      * Calculates the missing horizontal page parameters up to \p column.
      */
-    void calculateHorizontalPageParameters( int column );
+    void calculateHorizontalPageParameters(int column);
 
     /**
      * Calculates the missing vertical page parameters up to \p row.
      */
-    void calculateVerticalPageParameters( int row );
+    void calculateVerticalPageParameters(int row);
 
     /**
      * Updates the pre-calculated width of the repeated columns.

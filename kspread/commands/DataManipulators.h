@@ -95,7 +95,7 @@ protected:
     /** this method should return new format for a given cell */
     virtual Style newFormat(Element *element, int col, int row) = 0;
 
-bool m_changeformat : 1;
+    bool m_changeformat : 1;
 };
 
 
@@ -131,8 +131,8 @@ protected:
 
     Value m_data;
     Format::Type m_format;
-bool m_parsing : 1;
-bool m_expandMatrix : 1;
+    bool m_parsing : 1;
+    bool m_expandMatrix : 1;
 };
 
 

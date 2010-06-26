@@ -32,7 +32,8 @@ namespace KSpread
 {
 class Selection;
 
-namespace Plugins {
+namespace Plugins
+{
 
 /**
  * \class SolverDialog

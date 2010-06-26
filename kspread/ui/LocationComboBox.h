@@ -56,8 +56,8 @@ public:
     void updateAddress();
 
 public slots:
-    void slotAddAreaName( const QString & );
-    void slotRemoveAreaName( const QString & );
+    void slotAddAreaName(const QString &);
+    void slotRemoveAreaName(const QString &);
 
 protected: // reimplementations
     virtual void keyPressEvent(QKeyEvent *event);

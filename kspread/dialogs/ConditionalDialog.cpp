@@ -301,14 +301,14 @@ void ConditionalDialog::init()
                 found = false;
                 for (it2 = otherList.begin(); !found && it2 != otherList.end(); ++it2) {
                     kDebug() << "Found:" << found;
-	  found = ( (*it1).value1 == (*it2).value1 &&
-                    (*it1).value2 == (*it2).value2 &&
+                    found = ((*it1).value1 == (*it2).value1 &&
+                             (*it1).value2 == (*it2).value2 &&
                              (*it1).cond == (*it2).cond);
 
                     if (!found)
                         continue;
 
-          if ( (*it1).styleName != (*it2).styleName )
+                    if ((*it1).styleName != (*it2).styleName)
                         found = false;
                 }
 
@@ -372,8 +372,8 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
         return;
     }
 
-  if (!tmp.styleName.isEmpty()) {
-    sb->setCurrentIndex(sb->findText(tmp.styleName));
+    if (!tmp.styleName.isEmpty()) {
+        sb->setCurrentIndex(sb->findText(tmp.styleName));
         sb->setEnabled(true);
     }
 
@@ -403,12 +403,12 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     case Conditional::Between :
         cb->setCurrentIndex(6);
-    kl2->setText(converter->asString(tmp.value2).asString());
+        kl2->setText(converter->asString(tmp.value2).asString());
         break;
 
     case Conditional::Different :
         cb->setCurrentIndex(7);
-    kl2->setText(converter->asString(tmp.value2).asString());
+        kl2->setText(converter->asString(tmp.value2).asString());
         break;
     case Conditional::DifferentTo :
         cb->setCurrentIndex(8);
@@ -417,7 +417,7 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     if (tmp.cond != Conditional::None) {
         kl1->setEnabled(true);
-    kl1->setText(converter->asString(tmp.value1).asString());
+        kl1->setText(converter->asString(tmp.value1).asString());
     }
 }
 
@@ -509,9 +509,9 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
     Map *const map = m_selection->activeSheet()->map();
     ValueParser *const parser = map->parser();
 
-  newCondition.value1 = parser->parse(edit1->text());
-  newCondition.value2 = parser->parse(edit2->text());
-  newCondition.styleName = sb->currentText();
+    newCondition.value1 = parser->parse(edit1->text());
+    newCondition.value2 = parser->parse(edit2->text());
+    newCondition.styleName = sb->currentText();
 
     return true;
 }

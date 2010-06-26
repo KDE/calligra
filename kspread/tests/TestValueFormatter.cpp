@@ -34,7 +34,7 @@ class PublicValueFormatter : public ValueFormatter
 {
 public:
     explicit PublicValueFormatter(const ValueConverter* converter)
-        : ValueFormatter(converter) {}
+            : ValueFormatter(converter) {}
 
     using ValueFormatter::fractionFormat;
 };

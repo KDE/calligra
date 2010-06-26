@@ -48,8 +48,8 @@ public:
 
 
 MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient)
-    : MapModel(map)
-    , d(new Private)
+        : MapModel(map)
+        , d(new Private)
 {
     d->activeSheet = 0;
     d->canvas = canvas;

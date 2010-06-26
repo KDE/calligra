@@ -507,7 +507,7 @@ int DirTree::parent(unsigned index)
     // and check if one of the children is 'index'
     for (unsigned j = 0; j < entryCount(); j++) {
         std::vector<unsigned> chi = children(j);
-        for (unsigned i = 0; i < chi.size();i++)
+        for (unsigned i = 0; i < chi.size(); i++)
             if (chi[i] == index)
                 return j;
     }
@@ -681,7 +681,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         e.next = readU32(buffer + 0x48 + p);
         e.child = readU32(buffer + 0x4C + p);
         e.dir = (type != 2);
-        
+
         // sanity checks
         if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
         if (name_len < 1) e.valid = false;
@@ -689,7 +689,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         // CLSID, contains a object class GUI if this entry is a storage or root
         // storage or all zero if not.
         printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%i size=%i clsid=%i.%i.%i.%i\n",
-               name.c_str(),type,e.prev,e.next,e.child,e.start,e.size,readU32(buffer+0x50+p),readU32(buffer+0x54+p),readU32(buffer+0x58+p),readU32(buffer+0x5C+p));
+               name.c_str(), type, e.prev, e.next, e.child, e.start, e.size, readU32(buffer + 0x50 + p), readU32(buffer + 0x54 + p), readU32(buffer + 0x58 + p), readU32(buffer + 0x5C + p));
 
         entries.push_back(e);
     }

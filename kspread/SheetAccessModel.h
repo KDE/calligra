@@ -21,43 +21,44 @@
 
 #include "Sheet.h"
 
-namespace KSpread {
+namespace KSpread
+{
 
     class Damage;
-    class Map;
-    class Sheet;
+class Map;
+class Sheet;
 
-    /**
-     * @brief Class that can be used by any shape embedded in KSpread to access sheet data,
-     * without the need to link against KSpread. It is available through the Doc's data center map,
-     * or KoShapeLoadingContext::dataCenterMap() in the process of loading a shape from ODF.
-     *
-     * Essentially, this model is a list of models to access a sheet's data. It contains a single row,
-     * and has exactly one sheet model per column. In short, a model containing models.
-     *
-     * To access the QAbstractItemModel instance for a sheet's data, take the following code as example:
-     * @code
-     * QAbstractItemModel *sheetAccessModel = dynamic_cast<QAbstractItemModel*>( dataCenterMap["SheetAccessModel"] );
-     * QModelIndex firstSheetIndex = sheetAccessModel->index( 0, 0 );
-     * QPointer<QAbstractItemModel> firstSheet = sheetAccessModel->data( firstSheetIndex ).value< QPointer<QAbstractItemModel> >();
-     * view->setModel( firstSheet.data() );
-     * @endcode
-     */
+/**
+ * @brief Class that can be used by any shape embedded in KSpread to access sheet data,
+ * without the need to link against KSpread. It is available through the Doc's data center map,
+ * or KoShapeLoadingContext::dataCenterMap() in the process of loading a shape from ODF.
+ *
+ * Essentially, this model is a list of models to access a sheet's data. It contains a single row,
+ * and has exactly one sheet model per column. In short, a model containing models.
+ *
+ * To access the QAbstractItemModel instance for a sheet's data, take the following code as example:
+ * @code
+ * QAbstractItemModel *sheetAccessModel = dynamic_cast<QAbstractItemModel*>( dataCenterMap["SheetAccessModel"] );
+ * QModelIndex firstSheetIndex = sheetAccessModel->index( 0, 0 );
+ * QPointer<QAbstractItemModel> firstSheet = sheetAccessModel->data( firstSheetIndex ).value< QPointer<QAbstractItemModel> >();
+ * view->setModel( firstSheet.data() );
+ * @endcode
+ */
     class SheetAccessModel : public QStandardItemModel
-    {
-        Q_OBJECT
+{
+    Q_OBJECT
 
-    public:
-        SheetAccessModel( Map *map );
+public:
+    SheetAccessModel(Map *map);
 
-    public Q_SLOTS:
-        void slotSheetAdded( Sheet *sheet );
-        void slotSheetRemoved( Sheet *sheet );
+public Q_SLOTS:
+    void slotSheetAdded(Sheet *sheet);
+    void slotSheetRemoved(Sheet *sheet);
         void handleDamages(const QList<Damage*> &damages);
 
-    private:
-        class Private;
-        Private * const d;
-    };
+private:
+    class Private;
+    Private * const d;
+};
 
 } // namespace KSpread

@@ -38,25 +38,49 @@ public:
     explicit HeaderFooter(Sheet* sheet);
     ~HeaderFooter();
 
-    QString headLeft( int _p, const QString &_t  )const { if ( m_headLeft.isNull() ) return "";
-    return completeHeading( m_headLeft, _p, _t ); }
-    QString headMid( int _p, const QString &_t )const { if ( m_headMid.isNull() ) return "";
-    return completeHeading( m_headMid, _p, _t ); }
-    QString headRight( int _p, const QString &_t )const { if ( m_headRight.isNull() ) return "";
-    return completeHeading( m_headRight, _p, _t ); }
-    QString footLeft( int _p, const QString &_t )const { if ( m_footLeft.isNull() ) return "";
-    return completeHeading( m_footLeft, _p, _t ); }
-    QString footMid( int _p, const QString &_t )const { if ( m_footMid.isNull() ) return "";
-    return completeHeading( m_footMid, _p, _t ); }
-    QString footRight( int _p, const QString &_t )const { if ( m_footRight.isNull() ) return "";
-    return completeHeading( m_footRight, _p, _t ); }
+    QString headLeft(int _p, const QString &_t)const {
+        if (m_headLeft.isNull()) return "";
+        return completeHeading(m_headLeft, _p, _t);
+    }
+    QString headMid(int _p, const QString &_t)const {
+        if (m_headMid.isNull()) return "";
+        return completeHeading(m_headMid, _p, _t);
+    }
+    QString headRight(int _p, const QString &_t)const {
+        if (m_headRight.isNull()) return "";
+        return completeHeading(m_headRight, _p, _t);
+    }
+    QString footLeft(int _p, const QString &_t)const {
+        if (m_footLeft.isNull()) return "";
+        return completeHeading(m_footLeft, _p, _t);
+    }
+    QString footMid(int _p, const QString &_t)const {
+        if (m_footMid.isNull()) return "";
+        return completeHeading(m_footMid, _p, _t);
+    }
+    QString footRight(int _p, const QString &_t)const {
+        if (m_footRight.isNull()) return "";
+        return completeHeading(m_footRight, _p, _t);
+    }
 
-    QString headLeft()const { if ( m_headLeft.isNull() ) return ""; return m_headLeft; }
-    QString headMid()const { if ( m_headMid.isNull() ) return ""; return m_headMid; }
-    QString headRight()const { if ( m_headRight.isNull() ) return ""; return m_headRight; }
-    QString footLeft()const { if ( m_footLeft.isNull() ) return ""; return m_footLeft; }
-    QString footMid()const { if ( m_footMid.isNull() ) return ""; return m_footMid; }
-    QString footRight()const { if ( m_footRight.isNull() ) return ""; return m_footRight; }
+    QString headLeft()const {
+        if (m_headLeft.isNull()) return ""; return m_headLeft;
+    }
+    QString headMid()const {
+        if (m_headMid.isNull()) return ""; return m_headMid;
+    }
+    QString headRight()const {
+        if (m_headRight.isNull()) return ""; return m_headRight;
+    }
+    QString footLeft()const {
+        if (m_footLeft.isNull()) return ""; return m_footLeft;
+    }
+    QString footMid()const {
+        if (m_footMid.isNull()) return ""; return m_footMid;
+    }
+    QString footRight()const {
+        if (m_footRight.isNull()) return ""; return m_footRight;
+    }
 
     /**
      * Replaces in _text all _search text parts by _replace text parts.
@@ -64,23 +88,23 @@ public:
      * The arguments should not include neither the beginning "<" nor the leading ">", this is already
      * included internally.
      */
-    void replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace ) const;
+    void replaceHeadFootLineMacro(QString &_text, const QString &_search, const QString &_replace) const;
 
     /**
      * Replaces in _text all page macros by the i18n-version of the macros
      */
-    QString localizeHeadFootLine ( const QString &_text ) const;
+    QString localizeHeadFootLine(const QString &_text) const;
 
     /**
      * Replaces in _text all i18n-versions of the page macros by the internal version of the macros
      */
-    QString delocalizeHeadFootLine ( const QString &_text ) const;
+    QString delocalizeHeadFootLine(const QString &_text) const;
 
     /**
      * Sets the head and foot line of the print out
      */
-    void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
-                          const QString &_footl, const QString &_footm, const QString &_footr );
+    void setHeadFootLine(const QString &_headl, const QString &_headm, const QString &_headr,
+                         const QString &_footl, const QString &_footm, const QString &_footr);
 
 private:
     /**
@@ -90,7 +114,7 @@ private:
      * @param _page is the page number for which the heading is produced.
      * @param _Sheet is the name of the Sheet for which we generate the headings.
      */
-    QString completeHeading( const QString &_data, int _page, const QString &_sheet ) const ;
+    QString completeHeading(const QString &_data, int _page, const QString &_sheet) const ;
 
     Sheet *m_pSheet;
 

@@ -422,14 +422,14 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
         return;
     }
 
-        // Reset the offset made for shape printing.
-        const double scale = POINT_TO_INCH(printer().resolution());
+    // Reset the offset made for shape printing.
+    const double scale = POINT_TO_INCH(printer().resolution());
     const QRect cellRange = d->pageManagers[sheet]->cellRange(sheetPageNumber);
     const QRectF pageRect = d->pageManagers[sheet]->documentArea(sheetPageNumber);
-        painter.translate(pageRect.left() * scale, pageRect.top() * scale);
+    painter.translate(pageRect.left() * scale, pageRect.top() * scale);
 
-        // Scale according to the printer's resolution.
-        painter.scale(scale, scale);
+    // Scale according to the printer's resolution.
+    painter.scale(scale, scale);
 
     const SheetPrint *const pageManager = d->pageManagers[sheet];
     const PrintSettings *const settings = pageManager->settings();

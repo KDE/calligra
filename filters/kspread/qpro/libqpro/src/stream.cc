@@ -100,13 +100,12 @@ QpIStream::get()
 
     if ((cIn == 0) || cIn->rdstate()) {
         lResult = EOF;
-    } else
-        if ((lResult = cIn->get()) == EOF) {
-            // note - clear() sets bits! not clears them
-            cIn->clear(ios::eofbit | ios::failbit);
-        } else {
-            ++cOffset;
-        }
+    } else if ((lResult = cIn->get()) == EOF) {
+        // note - clear() sets bits! not clears them
+        cIn->clear(ios::eofbit | ios::failbit);
+    } else {
+        ++cOffset;
+    }
 
     return lResult;
 }
@@ -121,7 +120,7 @@ QpIStream::read(char* pBuf, QP_INT16 pLen)
     return *this;
 }
 
-QpIStream::operator void* ()
+QpIStream::operator void*()
 {
     if (cIn == 0)
         return 0;

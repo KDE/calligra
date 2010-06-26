@@ -134,11 +134,11 @@ protected:
 
 protected:
     Sheet*  m_sheet;
-bool    m_reverse   : 1;
-bool    m_firstrun  : 1;
-bool    m_register  : 1;
-bool    m_success   : 1;
-bool    m_checkLock : 1;
+    bool    m_reverse   : 1;
+    bool    m_firstrun  : 1;
+    bool    m_register  : 1;
+    bool    m_success   : 1;
+    bool    m_checkLock : 1;
 };
 
 } // namespace KSpread

@@ -510,101 +510,100 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
                         style.setFormatType(Format::Money);
                     }
                 }
-            } else
-                if (type == "percentage") {
-                    dv = value.toDouble(&ok);
-                    if (ok) {
-                        if (!isFormula)
-                            cell.setValue(Value(dv));
-                        //TODO fixme
-                        //cell.setFactor( 100 );
-                        // TODO: replace with custom...
-                        style.setFormatType(Format::Percentage);
-                    }
-                } else if (type == "boolean") {
-                    if (value.isEmpty())
-                        value = e.attributeNS(ooNS::table, "boolean-value", QString());
-
-                    kDebug(30518) << "Type: boolean";
-                    if (value == "true")
-                        cell.setValue(Value(true));
-                    else
-                        cell.setValue(Value(false));
-                    ok = true;
-                    style.setFormatType(Format::Custom);
-                } else if (type == "date") {
-                    if (value.isEmpty())
-                        value = e.attributeNS(ooNS::table, "date-value", QString());
-                    kDebug(30518) << "Type: date, value:" << value;
-
-                    // "1980-10-15"
-                    int year = 0, month = 0, day = 0;
-                    ok = false;
-
-                    int p1 = value.indexOf('-');
-                    if (p1 > 0)
-                        year  = value.left(p1).toInt(&ok);
-
-                    kDebug(30518) << "year:" << value.left(p1);
-
-                    int p2 = value.indexOf('-', ++p1);
-
-                    if (ok)
-                        month = value.mid(p1, p2 - p1).toInt(&ok);
-
-                    kDebug(30518) << "month:" << value.mid(p1, p2 - p1);
-
-                    if (ok)
-                        day = value.right(value.length() - p2 - 1).toInt(&ok);
-
-                    kDebug(30518) << "day:" << value.right(value.length() - p2);
-
-                    if (ok) {
-                        QDateTime dt(QDate(year, month, day));
-                        //            KSpreadValue kval( dt );
-                        // cell.setValue( kval );
-                        cell.setValue(Value(QDate(year, month, day), cell.sheet()->map()->calculationSettings()));
-                        kDebug(30518) << "Set QDate:" << year << " -" << month << " -" << day;
-                    }
-                } else if (type == "time") {
-                    if (value.isEmpty())
-                        value = e.attributeNS(ooNS::table, "time-value", QString());
-
-                    kDebug(30518) << "Type: time:" << value;
-                    // "PT15H10M12S"
-                    int hours = 0, minutes = 0, seconds = 0;
-                    int l = value.length();
-                    QString num;
-
-                    for (int i = 0; i < l; ++i) {
-                        if (value[i].isNumber()) {
-                            num += value[i];
-                            continue;
-                        } else if (value[i] == 'H')
-                            hours   = num.toInt(&ok);
-                        else if (value[i] == 'M')
-                            minutes = num.toInt(&ok);
-                        else if (value[i] == 'S')
-                            seconds = num.toInt(&ok);
-                        else
-                            continue;
-
-                        kDebug(30518) << "Num:" << num;
-
-                        num = "";
-                        if (!ok)
-                            break;
-                    }
-
-                    kDebug(30518) << "Hours:" << hours << "," << minutes << "," << seconds;
-
-                    if (ok) {
-                        // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
-                        // cell.setValue( kval );
-                        cell.setValue(Value(QTime(hours % 24, minutes, seconds), cell.sheet()->map()->calculationSettings()));
-                        style.setFormatType(Format::Custom);
-                    }
+            } else if (type == "percentage") {
+                dv = value.toDouble(&ok);
+                if (ok) {
+                    if (!isFormula)
+                        cell.setValue(Value(dv));
+                    //TODO fixme
+                    //cell.setFactor( 100 );
+                    // TODO: replace with custom...
+                    style.setFormatType(Format::Percentage);
                 }
+            } else if (type == "boolean") {
+                if (value.isEmpty())
+                    value = e.attributeNS(ooNS::table, "boolean-value", QString());
+
+                kDebug(30518) << "Type: boolean";
+                if (value == "true")
+                    cell.setValue(Value(true));
+                else
+                    cell.setValue(Value(false));
+                ok = true;
+                style.setFormatType(Format::Custom);
+            } else if (type == "date") {
+                if (value.isEmpty())
+                    value = e.attributeNS(ooNS::table, "date-value", QString());
+                kDebug(30518) << "Type: date, value:" << value;
+
+                // "1980-10-15"
+                int year = 0, month = 0, day = 0;
+                ok = false;
+
+                int p1 = value.indexOf('-');
+                if (p1 > 0)
+                    year  = value.left(p1).toInt(&ok);
+
+                kDebug(30518) << "year:" << value.left(p1);
+
+                int p2 = value.indexOf('-', ++p1);
+
+                if (ok)
+                    month = value.mid(p1, p2 - p1).toInt(&ok);
+
+                kDebug(30518) << "month:" << value.mid(p1, p2 - p1);
+
+                if (ok)
+                    day = value.right(value.length() - p2 - 1).toInt(&ok);
+
+                kDebug(30518) << "day:" << value.right(value.length() - p2);
+
+                if (ok) {
+                    QDateTime dt(QDate(year, month, day));
+                    //            KSpreadValue kval( dt );
+                    // cell.setValue( kval );
+                    cell.setValue(Value(QDate(year, month, day), cell.sheet()->map()->calculationSettings()));
+                    kDebug(30518) << "Set QDate:" << year << " -" << month << " -" << day;
+                }
+            } else if (type == "time") {
+                if (value.isEmpty())
+                    value = e.attributeNS(ooNS::table, "time-value", QString());
+
+                kDebug(30518) << "Type: time:" << value;
+                // "PT15H10M12S"
+                int hours = 0, minutes = 0, seconds = 0;
+                int l = value.length();
+                QString num;
+
+                for (int i = 0; i < l; ++i) {
+                    if (value[i].isNumber()) {
+                        num += value[i];
+                        continue;
+                    } else if (value[i] == 'H')
+                        hours   = num.toInt(&ok);
+                    else if (value[i] == 'M')
+                        minutes = num.toInt(&ok);
+                    else if (value[i] == 'S')
+                        seconds = num.toInt(&ok);
+                    else
+                        continue;
+
+                    kDebug(30518) << "Num:" << num;
+
+                    num = "";
+                    if (!ok)
+                        break;
+                }
+
+                kDebug(30518) << "Hours:" << hours << "," << minutes << "," << seconds;
+
+                if (ok) {
+                    // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
+                    // cell.setValue( kval );
+                    cell.setValue(Value(QTime(hours % 24, minutes, seconds), cell.sheet()->map()->calculationSettings()));
+                    style.setFormatType(Format::Custom);
+                }
+            }
 
             cell.setStyle(style);
             if (!ok)   // just in case we couldn't set the value directly
@@ -694,7 +693,7 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
 }
 
 void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Conditional &newCondition,
-                                             const ValueParser *parser)
+        const ValueParser *parser)
 {
     QString val(styleCondition);
     if (val.contains("cell-content()")) {
@@ -707,7 +706,7 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
         val = val.remove("cell-content-is-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',');
-        kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];
+        kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
         newCondition.value1 = parser->parse(listVal[0]);
         newCondition.value2 = parser->parse(listVal[1]);
         newCondition.cond = Conditional::Between;
@@ -716,7 +715,7 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
         val = val.remove("cell-content-is-not-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',');
-        kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];
+        kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
         newCondition.value1 = parser->parse(listVal[0]);
         newCondition.value2 = parser->parse(listVal[1]);
         newCondition.cond = Conditional::Different;

@@ -227,7 +227,7 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
             size++;
         }
         str.append(UString(UChar(uchar)));
-        if (continuePositions && offset == *continuePositions-continuePositionsOffset && k < len - 1) {
+        if (continuePositions && offset == *continuePositions - continuePositionsOffset && k < len - 1) {
             unicode = data[offset] & 1;
             size++;
             offset++;
@@ -1012,7 +1012,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         d->definedName = UString(buffer);
         delete[] buffer;
     } else  if (version() == Excel97) {
-        if( d->builtin ) { // field is for a build-in name
+        if (d->builtin) { // field is for a build-in name
             const unsigned opts = readU8(data + 14);
             const bool fHighByte = opts & 0x01;
             const unsigned id = fHighByte ? readU16(data + 15) : readU8(data + 15) + 0x0*256;
@@ -1040,14 +1040,14 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
 
             // XLUnicodeStringNoCch
             UString str = UString();
-            if(fHighByte) {
+            if (fHighByte) {
                 for (unsigned k = 0; k < len*2; k++) {
                     unsigned zc = readU16(data + 15 + k * 2);
                     str.append(UString(zc));
                 }
             } else {
                 for (unsigned k = 0; k < len; k++) {
-                    unsigned char uc = readU8(data + 15 + k) + 0x0*256;
+                    unsigned char uc = readU8(data + 15 + k) + 0x0 * 256;
                     str.append(UString(uc));
                 }
             }
@@ -1055,7 +1055,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             // This is rather illogical and seems there is nothing in the specs about this,
             // but the string "_xlfn." may in front of the string we are looking for. So,
             // remove that one and ignore whatever it means...
-            if(str.substr(0,6)=="_xlfn.")
+            if (str.substr(0, 6) == "_xlfn.")
                 str = str.substr(6);
 
             d->definedName = str;
@@ -1419,16 +1419,16 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const unsigned long cb = readU16(startPict + 2);
         const unsigned long cf = readU16(startPict + 4);
         switch (cf) {
-          case 0x0002:
+        case 0x0002:
             static_cast<PictureObject*>(m_object)->setType(PictureObject::EnhancedMetafile);
             break;
-          case 0x0009:
+        case 0x0009:
             static_cast<PictureObject*>(m_object)->setType(PictureObject::Bitmap);
             break;
-          case 0xFFFF:
+        case 0xFFFF:
             static_cast<PictureObject*>(m_object)->setType(PictureObject::Unspecified);
             break;
-          default:
+        default:
             std::cerr << "ObjRecord::setData: invalid ObjRecord Picture" << std::endl;
             setIsValid(false);
             delete m_object;
@@ -1445,7 +1445,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const bool dPrintCalc = opts2 & 0x04;
         //const bool fIcon = opts2 & 0x08;
         fCtl = opts2 & 0x10; // ActiveX control?
-        Q_ASSERT( ! (fCtl && fDde) );
+        Q_ASSERT(!(fCtl && fDde));
         fPrstm = opts2 & 0x20;
         //const bool unused1 = opts2 & 0x60;
         //const bool fCamera = opts2 & 0xC0;
@@ -1533,27 +1533,27 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     }
 
     {
-      // FtMacro. Specs say it's optional by not when it's used. So, we need to check it by assuming
-      // a valid FtMacro starts with 0x0004... The following code is untested. The only thing we are
-      // interested in here is seeking to the structs after this one anyway.
-      const unsigned long ft = readU16(startPict);
-      if(ft == 0x0004) {
-        const unsigned long cmFmla = readU16(startPict + 2);
-        startPict += 4;
-        int sizeFmla = 0;
-        if(cmFmla > 0x0000) { // ObjectParseFormula
-            const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
-            // 4 bytes unused
-            sizeFmla = 2 + 4 + cce;
-            //startPict += sizeFmla;
+        // FtMacro. Specs say it's optional by not when it's used. So, we need to check it by assuming
+        // a valid FtMacro starts with 0x0004... The following code is untested. The only thing we are
+        // interested in here is seeking to the structs after this one anyway.
+        const unsigned long ft = readU16(startPict);
+        if (ft == 0x0004) {
+            const unsigned long cmFmla = readU16(startPict + 2);
+            startPict += 4;
+            int sizeFmla = 0;
+            if (cmFmla > 0x0000) { // ObjectParseFormula
+                const unsigned long cce = readU16(startPict) >> 1; // 15 bits cce + 1 bit reserved
+                // 4 bytes unused
+                sizeFmla = 2 + 4 + cce;
+                //startPict += sizeFmla;
+            }
+            // skip embedInfo cause we are not a FtPictFmla
+            startPict += cmFmla - sizeFmla - 0; // padding
         }
-        // skip embedInfo cause we are not a FtPictFmla
-        startPict += cmFmla - sizeFmla - 0; // padding
-      }
     }
 
     // pictFmla
-    if(ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
+    if (ot == Object::Picture && readU16(startPict) == 0x0009 /* checks ft */) {
         //const unsigned long cb = readU16(startPict + 2);
         startPict += 4;
 
@@ -1573,7 +1573,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         const unsigned long cbFmla = readU16(startPict);
         int cbFmlaSize = 0;
         int embedInfoSize = 0;
-        if(cbFmla > 0x0000) { // fmla variable, optional ObjectParsedFormula struct
+        if (cbFmla > 0x0000) { // fmla variable, optional ObjectParsedFormula struct
             const unsigned long cce = readU16(startPict + cbFmlaSize + 2) >> 1; // 15 bits cce + 1 bit reserved
             cbFmlaSize += 2 + 2 + 4; // 4 bytes unused
 
@@ -1584,23 +1584,23 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             token = FormulaToken(ptg);
             token.setVersion(version());
             std::cout << "ObjRecord::setData: Picture is of type id=" << token.id() << " name=" << token.idAsString() << std::endl;
-            if(token.size() > 0) {
+            if (token.size() > 0) {
                 token.setData(token.size(), startPict + cbFmlaSize);
                 cbFmlaSize += token.size();
             }
 
-            if(cce == 0x5 && token.id() == FormulaToken::Table) {
+            if (cce == 0x5 && token.id() == FormulaToken::Table) {
                 cbFmlaSize += 4;
             }
 
             // embededInfo variable, an optional PictFmlaEmbedInfo
-            if(token.id() == FormulaToken::Table) {
+            if (token.id() == FormulaToken::Table) {
                 const unsigned ttb = readU8(startPict + cbFmlaSize);
-                if(ttb == 0x03) {
+                if (ttb == 0x03) {
                     const unsigned cbClass = readU8(startPict + cbFmlaSize + embedInfoSize + 1);
                     //const unsigned reserved = readU8(startPict + cbFmlaSize + embedInfoSize + 2);
                     embedInfoSize += 3;
-                    if(cbClass > 0x0000) { // strClass specifies the class name of the embedded control
+                    if (cbClass > 0x0000) { // strClass specifies the class name of the embedded control
                         unsigned size = 0;
                         UString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, 0, &size);
                         embedInfoSize += size;
@@ -1614,9 +1614,9 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         startPict += cbFmla + 2;
 
         // IPosInCtlStm variable
-        if(token.id() == FormulaToken::Table) {
+        if (token.id() == FormulaToken::Table) {
             const unsigned int iposInCtlStm = readU32(startPict);
-            if(fPrstm) { // iposInCtlStm specifies the zero-based offset of this object's data within the control stream.
+            if (fPrstm) { // iposInCtlStm specifies the zero-based offset of this object's data within the control stream.
                 const unsigned int cbBufInCtlStm = readU32(startPict + 4);
                 startPict += 8;
                 static_cast<PictureObject*>(m_object)->setControlStream(iposInCtlStm, cbBufInCtlStm);
@@ -1628,12 +1628,12 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         }
 
         // key variable, PictFmlaKey struct
-        if(fCtl) {
+        if (fCtl) {
             std::string key;
             const unsigned int cbKey = readU32(startPict);
             startPict += 4;
-            for(uint i = 0; i < cbKey; ++i) {
-                if(key.size() > 0) key += ".";
+            for (uint i = 0; i < cbKey; ++i) {
+                if (key.size() > 0) key += ".";
                 key = readU32(startPict);
                 startPict += 4;
             }
@@ -2816,7 +2816,7 @@ void printEntries(POLE::Storage &storage, const std::string path = "/", int leve
     for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
         std::cout << std::setw(level + 1) << "ENTRY=" << *it << std::endl;
         std::string p = path == "/" ? "/" + *it + "/" : path + "/" + *it + "/";
-        if (storage.isDirectory(p) ) {
+        if (storage.isDirectory(p)) {
             printEntries(storage, p, level + 1);
         }
     }
@@ -2857,110 +2857,109 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     unsigned char small_buffer[128];  // small, fixed size buffer
 
     { // read document meta information
-      POLE::Stream *summarystream = new POLE::Stream( &storage, "/SummaryInformation" );
-      const unsigned long streamStartPosition = summarystream->tell();
-      unsigned bytes_read = summarystream->read( buffer, 8 );
-      //const unsigned long byteorder = readU16( buffer ); // must be 0xFFFE
-      //const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
-      //const unsigned long systemId = readU32( buffer + 4 );
+        POLE::Stream *summarystream = new POLE::Stream(&storage, "/SummaryInformation");
+        const unsigned long streamStartPosition = summarystream->tell();
+        unsigned bytes_read = summarystream->read(buffer, 8);
+        //const unsigned long byteorder = readU16( buffer ); // must be 0xFFFE
+        //const unsigned long version = readU16( buffer + 2 ); // must be 0x0000 or 0x0001
+        //const unsigned long systemId = readU32( buffer + 4 );
 
-      summarystream->seek( summarystream->tell() + 16 ); // skip CLSID
-      bytes_read = summarystream->read( buffer, 4 );
-      const unsigned long numPropertySets = bytes_read == 4 ? readU32( buffer ) : 0; // must be 0x00000001 or 0x00000002
-      for( uint i = 0; i < numPropertySets; ++ i ) {
-          summarystream->seek( summarystream->tell() + 16 ); // skip FMTIDO
-          bytes_read = summarystream->read( buffer, 4 );
-          if( bytes_read != 4 ) break;
-          const unsigned long firstPropertyOffset = readU32( buffer );
+        summarystream->seek(summarystream->tell() + 16);   // skip CLSID
+        bytes_read = summarystream->read(buffer, 4);
+        const unsigned long numPropertySets = bytes_read == 4 ? readU32(buffer) : 0;   // must be 0x00000001 or 0x00000002
+        for (uint i = 0; i < numPropertySets; ++ i) {
+            summarystream->seek(summarystream->tell() + 16);   // skip FMTIDO
+            bytes_read = summarystream->read(buffer, 4);
+            if (bytes_read != 4) break;
+            const unsigned long firstPropertyOffset = readU32(buffer);
 
-          const unsigned long p = summarystream->tell();
-          const unsigned long propertysetStartPosition = streamStartPosition + firstPropertyOffset;
-          summarystream->seek( propertysetStartPosition );
+            const unsigned long p = summarystream->tell();
+            const unsigned long propertysetStartPosition = streamStartPosition + firstPropertyOffset;
+            summarystream->seek(propertysetStartPosition);
 
-          bytes_read = summarystream->read( buffer, 8 );
-          if( bytes_read != 8 ) break;
-          //unsigned long size = readU32( buffer );
-          unsigned long propertyCount = readU32( buffer + 4 );
-          for( uint i = 0; i < propertyCount; ++i ) {
-              bytes_read = summarystream->read( buffer, 8 );
-              if( bytes_read != 8 ) break;
-              Workbook::PropertyType propertyId = Workbook::PropertyType( readU32( buffer ) );
+            bytes_read = summarystream->read(buffer, 8);
+            if (bytes_read != 8) break;
+            //unsigned long size = readU32( buffer );
+            unsigned long propertyCount = readU32(buffer + 4);
+            for (uint i = 0; i < propertyCount; ++i) {
+                bytes_read = summarystream->read(buffer, 8);
+                if (bytes_read != 8) break;
+                Workbook::PropertyType propertyId = Workbook::PropertyType(readU32(buffer));
 
-              // Offset (4 bytes): An unsigned integer representing the offset in bytes from the beginning of
-              // the PropertySet packet to the beginning of the Property field for the property represented.
-              // MUST be a multiple of 4 bytes.
-              unsigned long propertyOffset = readU32( buffer + 4 );
+                // Offset (4 bytes): An unsigned integer representing the offset in bytes from the beginning of
+                // the PropertySet packet to the beginning of the Property field for the property represented.
+                // MUST be a multiple of 4 bytes.
+                unsigned long propertyOffset = readU32(buffer + 4);
 
-              unsigned long p2 = summarystream->tell();
+                unsigned long p2 = summarystream->tell();
 
-              summarystream->seek( propertysetStartPosition + propertyOffset );
-              bytes_read = summarystream->read( buffer, 4 );
-              if( bytes_read != 4 ) break;
-              unsigned long type = readU16( buffer );
-              //unsigned long padding = readU16( buffer + 2 );
-              switch( propertyId ) {
-                  case Workbook::PIDSI_TITLE:
-                  case Workbook::PIDSI_SUBJECT:
-                  case Workbook::PIDSI_AUTHOR:
-                  case Workbook::PIDSI_KEYWORDS:
-                  case Workbook::PIDSI_COMMENTS:
-                  case Workbook::PIDSI_TEMPLATE:
-                  case Workbook::PIDSI_LASTAUTHOR:
-                  case Workbook::PIDSI_REVNUMBER:
-                  case Workbook::PIDSI_EDITTIME:
-                  case Workbook::PIDSI_LASTPRINTED_DTM:
-                  case Workbook::PIDSI_CREATE_DTM:
-                  case Workbook::PIDSI_LASTSAVED_DTM:
-                  case Workbook::PIDSI_APPNAME:
-                      switch( type ) {
-                          case 0x001E: { //VT_LPSTR
-                              bytes_read = summarystream->read( buffer, 4 );
-                              if( bytes_read != 4 ) break;
-                              const unsigned long length = readU32( buffer );
-                              bytes_read = summarystream->read( buffer, length );
-                              if( bytes_read != length ) break;
-                              UString u = readByteString( buffer, length );
-                              const QChar *c = reinterpret_cast<const QChar*>( u.data() );
-                              QString s = QString( c, u.length() );
-                              workbook->setProperty( propertyId, s );
-                          } break;
-                          case 0x0040: { //VT_FILETIME
-                              bytes_read = summarystream->read( buffer, 8 );
-                              if( bytes_read != 8 ) break;
-                              const unsigned long dwLowDateTime = readU32( buffer );
-                              const unsigned long dwHighDateTime = readU32( buffer + 4 );
-                              long long int time = dwHighDateTime;
-                              time <<= 32;
-                              time += (unsigned long) dwLowDateTime;
-                              time -= 116444736000000000LL;
-                              QString s( QDateTime::fromTime_t( time / 10000000.0 ).toString(Qt::ISODate) );
-                              workbook->setProperty( propertyId, s );
-                          } break;
-                          default:
-                              std::cout << "Ignoring property with known id=" << propertyId << " and unknown type=" << type;
-                              break;
-                      }
-                      break;
-                 default:
-                     if (propertyId != 0x0001 /* GKPIDDSI_CODEPAGE */ &&
-                         propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */ )
-                     {
+                summarystream->seek(propertysetStartPosition + propertyOffset);
+                bytes_read = summarystream->read(buffer, 4);
+                if (bytes_read != 4) break;
+                unsigned long type = readU16(buffer);
+                //unsigned long padding = readU16( buffer + 2 );
+                switch (propertyId) {
+                case Workbook::PIDSI_TITLE:
+                case Workbook::PIDSI_SUBJECT:
+                case Workbook::PIDSI_AUTHOR:
+                case Workbook::PIDSI_KEYWORDS:
+                case Workbook::PIDSI_COMMENTS:
+                case Workbook::PIDSI_TEMPLATE:
+                case Workbook::PIDSI_LASTAUTHOR:
+                case Workbook::PIDSI_REVNUMBER:
+                case Workbook::PIDSI_EDITTIME:
+                case Workbook::PIDSI_LASTPRINTED_DTM:
+                case Workbook::PIDSI_CREATE_DTM:
+                case Workbook::PIDSI_LASTSAVED_DTM:
+                case Workbook::PIDSI_APPNAME:
+                    switch (type) {
+                    case 0x001E: { //VT_LPSTR
+                        bytes_read = summarystream->read(buffer, 4);
+                        if (bytes_read != 4) break;
+                        const unsigned long length = readU32(buffer);
+                        bytes_read = summarystream->read(buffer, length);
+                        if (bytes_read != length) break;
+                        UString u = readByteString(buffer, length);
+                        const QChar *c = reinterpret_cast<const QChar*>(u.data());
+                        QString s = QString(c, u.length());
+                        workbook->setProperty(propertyId, s);
+                    } break;
+                    case 0x0040: { //VT_FILETIME
+                        bytes_read = summarystream->read(buffer, 8);
+                        if (bytes_read != 8) break;
+                        const unsigned long dwLowDateTime = readU32(buffer);
+                        const unsigned long dwHighDateTime = readU32(buffer + 4);
+                        long long int time = dwHighDateTime;
+                        time <<= 32;
+                        time += (unsigned long) dwLowDateTime;
+                        time -= 116444736000000000LL;
+                        QString s(QDateTime::fromTime_t(time / 10000000.0).toString(Qt::ISODate));
+                        workbook->setProperty(propertyId, s);
+                    } break;
+                    default:
+                        std::cout << "Ignoring property with known id=" << propertyId << " and unknown type=" << type;
+                        break;
+                    }
+                    break;
+                default:
+                    if (propertyId != 0x0001 /* GKPIDDSI_CODEPAGE */ &&
+                            propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */) {
                          std::cout << "Ignoring property with unknown id=" << propertyId << " and type=" << type << std::endl;
-                     }
-                     break;
-              }
-              summarystream->seek( p2 );
-          }
-          summarystream->seek( p );
-      }
-      delete summarystream;
+                    }
+                    break;
+                }
+                summarystream->seek(p2);
+            }
+            summarystream->seek(p);
+        }
+        delete summarystream;
     }
 
     { // read CompObj stream
-      POLE::Stream *combObjStream = new POLE::Stream( &storage, "/CompObj" );
+        POLE::Stream *combObjStream = new POLE::Stream(&storage, "/CompObj");
 
-      // header
-      unsigned bytes_read = combObjStream->read( buffer, 28 );
+        // header
+        unsigned bytes_read = combObjStream->read(buffer, 28);
       unsigned long length = 0;
       bool hasCombObjStream = bytes_read == 28;
       if(hasCombObjStream) {
@@ -3004,7 +3003,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
           }
           //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
       }
-      delete combObjStream;
+        delete combObjStream;
     }
 
     const unsigned long stream_size = stream->size();

@@ -54,48 +54,48 @@ KSPREAD_EXPORT_FUNCTION_MODULE("conversion", ConversionModule)
 
 
 ConversionModule::ConversionModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("ARABIC", func_arabic);
-  add(f);
+    add(f);
     f = new Function("CARX", func_carx);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("CARY", func_cary);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("DECSEX", func_decsex);
-  add(f);
+    add(f);
     f = new Function("POLR", func_polr);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("POLA", func_pola);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("ROMAN", func_roman);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("SEXDEC", func_sexdec);
     f->setParamCount(1, 3);
-  add(f);
+    add(f);
     f = new Function("ASCIITOCHAR", func_AsciiToChar);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("CHARTOASCII", func_CharToAscii);
-  add(f);
+    add(f);
     f = new Function("BOOL2INT", func_booltoint);
-  add(f);
+    add(f);
     f = new Function("INT2BOOL", func_inttobool);
-  add(f);
+    add(f);
     f = new Function("BOOL2STRING", func_ToString);
-  add(f);
+    add(f);
     f = new Function("NUM2STRING", func_ToString);
-  add(f);
+    add(f);
     f = new Function("STRING", func_ToString);
-  add(f);
+    add(f);
 }
 
 QString ConversionModule::descriptionFileName() const

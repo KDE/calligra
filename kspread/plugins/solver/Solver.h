@@ -33,7 +33,8 @@ class QStringList;
 
 namespace KSpread
 {
-namespace Plugins {
+namespace Plugins
+{
 
 /**
  * \class Solver Function Optimizer

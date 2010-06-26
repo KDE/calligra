@@ -52,8 +52,7 @@ public:
     /**
      * The editor type.
      */
-    enum Editor
-    {
+    enum Editor {
         EmbeddedEditor,  ///< the embedded editor appearing in a cell
         ExternalEditor   ///< the external editor located in the tool options
     };

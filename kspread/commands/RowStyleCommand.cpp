@@ -29,10 +29,10 @@
 using namespace KSpread;
 
 RowStyleCommand::RowStyleCommand(QUndoCommand *parent)
-    : AbstractRegionCommand(parent)
-    , m_height(0.0)
-    , m_hidden(false)
-    , m_pageBreak(false)
+        : AbstractRegionCommand(parent)
+        , m_height(0.0)
+        , m_hidden(false)
+        , m_pageBreak(false)
 {
 }
 

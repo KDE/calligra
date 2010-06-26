@@ -89,8 +89,8 @@ private:
 * Register a function module when it is contained in a loadable plugin
 */
 #define KSPREAD_EXPORT_FUNCTION_MODULE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(factory("kspread-functions-" #libname)) \
-K_EXPORT_PLUGIN_VERSION(KOFFICE_VERSION)
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+    K_EXPORT_PLUGIN(factory("kspread-functions-" #libname)) \
+    K_EXPORT_PLUGIN_VERSION(KOFFICE_VERSION)
 
 #endif // KSPREAD_FUNCTION_MODULE

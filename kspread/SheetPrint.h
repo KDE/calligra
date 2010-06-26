@@ -69,14 +69,14 @@ public:
      * case the left border of this column may be drawn highlighted to show
      * that this is a page break.
      */
-    bool isColumnOnNewPage( int column );
+    bool isColumnOnNewPage(int column);
 
     /**
      * Tests whether \p row is the first row of a new page. In this
      * case the top border of this row may be drawn highlighted to show
      * that this is a page break.
      */
-    bool isRowOnNewPage( int row );
+    bool isRowOnNewPage(int row);
 
     /**
      * Updates the page parameters in horizontal direction (for columns)
@@ -101,28 +101,28 @@ public:
      * \param col the column index
      * \param nbCol number of inserted columns
      */
-    void insertColumn( int col, int nbCol );
+    void insertColumn(int col, int nbCol);
 
     /**
      * Updates the print range, according to the removed columns
      * \param col the column index
      * \param nbCol number of removed columns
      */
-    void removeColumn( int col, int nbCol );
+    void removeColumn(int col, int nbCol);
 
     /**
      * Updates the print range, according to the inserted rows
      * \param row the row index
      * \param nbRow number of inserted rows
      */
-    void insertRow( int row, int nbRow );
+    void insertRow(int row, int nbRow);
 
     /**
      * Updates the print range, according to the removed rows
      * \param row the row index
      * \param nbRow number of removed rows
      */
-    void removeRow( int row, int nbRow );
+    void removeRow(int row, int nbRow);
 
     /**
      * The number of pages.

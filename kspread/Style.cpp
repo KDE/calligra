@@ -200,8 +200,8 @@ void Style::loadAttributes(const QList<SharedSubStyle>& subStyles)
 }
 
 void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                            Conditions& conditions, const StyleManager* styleManager,
-                          const ValueParser *parser)
+                         Conditions& conditions, const StyleManager* styleManager,
+                         const ValueParser *parser)
 {
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
@@ -569,7 +569,7 @@ Format::Type Style::dateType(const QString &_f)
     const QString dateFormatShort = convertDateFormat(KGlobal::locale()->dateFormatShort());
     const QString dateFormat = convertDateFormat(KGlobal::locale()->dateFormat());
     QString _format = _f;
-    _format.replace(' ','-');
+    _format.replace(' ', '-');
 
     if (_format == "d-MMM-yy" || _format == "dd-MMM-yy")
         return Format::Date1;
@@ -646,7 +646,7 @@ Format::Type Style::dateType(const QString &_f)
     else if (_format == dateFormat)
         return Format::TextDate;
     else {
-        kDebug() << "Unhandled date format="<<_format;
+        kDebug() << "Unhandled date format=" << _format;
         return Format::ShortDate;
     }
 }
@@ -2735,7 +2735,7 @@ QString CustomStyle::saveOdf(KoGenStyle& style, KoGenStyles &mainStyles,
 
 void CustomStyle::loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                           const QString& name, Conditions& conditions,
-                           const StyleManager* styleManager, const ValueParser *parser)
+                          const StyleManager* styleManager, const ValueParser *parser)
 {
     setName(name);
     if (style.hasAttributeNS(KoXmlNS::style, "parent-style-name"))

@@ -55,8 +55,8 @@ class Value::Private : public QSharedData
 {
 public:
 
-Value::Type type: 4;
-Value::Format format: 4;
+    Value::Type type: 4;
+    Value::Format format: 4;
 
     union { // 64 bits at max!
         bool b;

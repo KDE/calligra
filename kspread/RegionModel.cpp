@@ -35,8 +35,8 @@ public:
 
 
 RegionModel::RegionModel(const Region& region)
-    : SheetModel(region.lastSheet())
-    , d(new Private)
+        : SheetModel(region.lastSheet())
+        , d(new Private)
 {
     Q_ASSERT(region.isContiguous());
     Q_ASSERT(!region.isEmpty());

@@ -50,8 +50,8 @@ public:
 
 
 CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
-    : QWidget(parent->canvas()->canvasWidget())
-    , d(new Private)
+        : QWidget(parent->canvas()->canvasWidget())
+        , d(new Private)
 {
     setObjectName("CellToolOptionWidget");
 
@@ -139,7 +139,7 @@ void CellToolOptionWidget::resizeEvent(QResizeEvent *event)
     // different ways.
     // After a row got occupied, it does not vanish anymore, even if all items
     // get removed. Hence, check for the existance of the item in the 2nd row.
-    if (!d->layout->itemAtPosition(1, 0)) /* one row */ {
+    if (!d->layout->itemAtPosition(1, 0)) { /* one row */
         const int column = d->layout->count() - 1;
         QLayoutItem *const item = d->layout->itemAtPosition(0, column);
         if (!item) {
@@ -147,11 +147,11 @@ void CellToolOptionWidget::resizeEvent(QResizeEvent *event)
             return;
         }
         const int itemWidth = item->minimumSize().width();
-        if (newWidth <= 2 * (minWidth - itemWidth) + margin) {
+        if (newWidth <= 2 *(minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
             d->layout->addItem(item, 1, 0, 1, column + 1);
         }
-    } else /* two rows */ {
+    } else { /* two rows */
         if (newWidth > 2 * minWidth + margin) {
             QLayoutItem *const item = d->layout->itemAtPosition(1, 0);
             d->layout->removeItem(item);

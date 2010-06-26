@@ -372,15 +372,15 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         const QPoint position(width() - event->x(), event->y());
         const QPointF offset(this->offset().x(), this->offset().y());
         documentPosition = viewConverter()->viewToDocument(position) + offset;
-kDebug() << "----------------------------";
-kDebug() << "event->pos():" << event->pos();
-kDebug() << "event->globalPos():" << event->globalPos();
-kDebug() << "position:" << position;
-kDebug() << "offset:" << offset;
-kDebug() << "documentPosition:" << documentPosition;
+        kDebug() << "----------------------------";
+        kDebug() << "event->pos():" << event->pos();
+        kDebug() << "event->globalPos():" << event->globalPos();
+        kDebug() << "position:" << position;
+        kDebug() << "offset:" << offset;
+        kDebug() << "documentPosition:" << documentPosition;
         event = new QMouseEvent(QEvent::MouseButtonPress, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
-kDebug() << "newEvent->pos():" << event->pos();
-kDebug() << "newEvent->globalPos():" << event->globalPos();
+        kDebug() << "newEvent->pos():" << event->pos();
+        kDebug() << "newEvent->globalPos():" << event->globalPos();
     }
 
     // flake

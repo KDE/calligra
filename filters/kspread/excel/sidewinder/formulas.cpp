@@ -728,7 +728,7 @@ static const FunctionEntry FunctionEntries[] = {
     { "THAIMONTHOFYEAR", 1 },     // 371
     { "THAINUMSOUND",    1 },     // 372
     { "THAINUMSTRING",   1 },     // 373
-    { "THAISTRINGLENGTH",1 },     // 374
+    { "THAISTRINGLENGTH", 1 },    // 374
     { "ISTHAIDIGIT",     1 },     // 375
     { "ROUNDBAHTDOWN",   1 },     // 376
     { "ROUNDBAHTUP",     1 },     // 377

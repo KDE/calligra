@@ -57,52 +57,52 @@ KSPREAD_EXPORT_FUNCTION_MODULE("trigonometry", TrigonometryModule)
 
 
 TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     f = new Function("ACOS",   func_acos);
-  add(f);
+    add(f);
     f = new Function("ACOSH",  func_acosh);
-  add(f);
+    add(f);
     f = new Function("ACOT",   func_acot);
-  add(f);
+    add(f);
     f = new Function("ACOTH",  func_acoth);
-  add(f);
+    add(f);
     f = new Function("ASIN",   func_asin);
-  add(f);
+    add(f);
     f = new Function("ASINH",  func_asinh);
-  add(f);
+    add(f);
     f = new Function("ATAN",   func_atan);
-  add(f);
+    add(f);
     f = new Function("ATAN2",  func_atan2);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("ATANH",  func_atanh);
-  add(f);
+    add(f);
     f = new Function("COS",    func_cos);
-  add(f);
+    add(f);
     f = new Function("COSH",   func_cosh);
-  add(f);
+    add(f);
     f = new Function("COT",    func_cot);
-  add(f);
+    add(f);
     f = new Function("COTH",   func_coth);
-  add(f);
+    add(f);
     f = new Function("DEGREES", func_degrees);
-  add(f);
+    add(f);
     f = new Function("RADIANS", func_radians);
-  add(f);
+    add(f);
     f = new Function("SIN",    func_sin);
-  add(f);
+    add(f);
     f = new Function("SINH",   func_sinh);
-  add(f);
+    add(f);
     f = new Function("TAN",    func_tan);
-  add(f);
+    add(f);
     f = new Function("TANH",   func_tanh);
-  add(f);
+    add(f);
     f = new Function("PI",     func_pi);
     f->setParamCount(0);
-  add(f);
+    add(f);
 }
 
 QString TrigonometryModule::descriptionFileName() const

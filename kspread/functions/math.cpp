@@ -125,224 +125,224 @@ KSPREAD_EXPORT_FUNCTION_MODULE("math", MathModule)
 
 
 MathModule::MathModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     /*
       f = new Function ("MULTIPLEOPERATIONS", func_multipleOP);
-  add(f);
+    add(f);
     */
 
     // functions that don't take array parameters
     f = new Function("ABS",           func_abs);
-  add(f);
+    add(f);
     f = new Function("CEIL",          func_ceil);
-  add(f);
+    add(f);
     f = new Function("CEILING",       func_ceiling);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("CUR",           func_cur);
-  add(f);
+    add(f);
     f = new Function("EPS",           func_eps);
     f->setParamCount(0);
-  add(f);
+    add(f);
     f = new Function("EVEN",          func_even);
-  add(f);
+    add(f);
     f = new Function("EXP",           func_exp);
-  add(f);
+    add(f);
     f = new Function("FACT",          func_fact);
-  add(f);
+    add(f);
     f = new Function("FACTDOUBLE",    func_factdouble);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETFACTDOUBLE");
     add(f);
     f = new Function("FIB",           func_fib);  // KSpread-specific, like Quattro-Pro's FIB
-  add(f);
+    add(f);
     f = new Function("FLOOR",         func_floor);
     f->setParamCount(1, 3);
-  add(f);
+    add(f);
     f = new Function("GAMMA",         func_gamma);
-  add(f);
+    add(f);
     f = new Function("INT",           func_int);
-  add(f);
+    add(f);
     f = new Function("INV",           func_inv);
-  add(f);
+    add(f);
     f = new Function("LN",            func_ln);
-  add(f);
+    add(f);
     f = new Function("LOG",           func_logn);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("LOG2",          func_log2);
-  add(f);
+    add(f);
     f = new Function("LOG10",         func_log10);
-  add(f);
+    add(f);
     f = new Function("LOGN",          func_logn);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("MOD",           func_mod);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("MROUND",        func_mround);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMROUND");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("MULTINOMIAL",   func_multinomial);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETMULTINOMIAL");
     f->setParamCount(1, -1);
-  add(f);
+    add(f);
     f = new Function("ODD",           func_odd);
-  add(f);
+    add(f);
     f = new Function("POW",         func_pow);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("POWER",         func_pow);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("QUOTIENT",      func_quotient);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETQUOTIENT");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("RAND",          func_rand);
     f->setParamCount(0);
-  add(f);
+    add(f);
     f = new Function("RANDBERNOULLI", func_randbernoulli);
-  add(f);
+    add(f);
     f = new Function("RANDBETWEEN",   func_randbetween);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETRANDBETWEEN");
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("RANDBINOM",     func_randbinom);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("RANDEXP",       func_randexp);
-  add(f);
+    add(f);
     f = new Function("RANDNEGBINOM",  func_randnegbinom);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("RANDNORM",      func_randnorm);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("RANDPOISSON",   func_randpoisson);
-  add(f);
+    add(f);
     f = new Function("ROOTN",         func_rootn);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("ROUND",         func_round);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("ROUNDDOWN",     func_rounddown);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("ROUNDUP",       func_roundup);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("SIGN",          func_sign);
-  add(f);
+    add(f);
     f = new Function("SQRT",          func_sqrt);
-  add(f);
+    add(f);
     f = new Function("SQRTPI",        func_sqrtpi);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETSQRTPI");
     add(f);
     f = new Function("TRUNC",         func_trunc);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
 
     // functions that operate over arrays
     f = new Function("COUNT",         func_count);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("COUNTA",        func_counta);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("COUNTBLANK",    func_countblank);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("COUNTIF",       func_countif);
     f->setParamCount(2);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-  add(f);
+    add(f);
     f = new Function("DIV",           func_div);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("G_PRODUCT",     func_kproduct);  // Gnumeric compatibility
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("GCD",           func_gcd);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETGCD");
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("KPRODUCT",      func_kproduct);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("LCM",           func_lcm);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETLCM");
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MAX",           func_max);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MAXA",          func_maxa);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MDETERM",          func_mdeterm);
     f->setParamCount(1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MIN",           func_min);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MINA",          func_mina);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MINVERSE",         func_minverse);
     f->setParamCount(1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MMULT",          func_mmult);
     f->setParamCount(2);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MULTIPLY",      func_product);   // same as PRODUCT
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("MUNIT",         func_munit);
     f->setParamCount(1);
-  add(f);
+    add(f);
     f = new Function("PRODUCT",       func_product);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("SERIESSUM",     func_seriessum);
     f->setParamCount(3, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("SUM",           func_sum);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("SUMA",          func_suma);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("SUBTOTAL",      func_subtotal);
     f->setParamCount(2);
     f->setAcceptArray();
     f->setNeedsExtra(true);
-  add(f);
+    add(f);
     f = new Function("SUMIF",         func_sumif);
     f->setParamCount(2, 3);
     f->setAcceptArray();
@@ -351,11 +351,11 @@ MathModule::MathModule(QObject* parent, const QVariantList&)
     f = new Function("SUMSQ",         func_sumsq);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("TRANSPOSE",     func_transpose);
     f->setParamCount(1);
     f->setAcceptArray();
-  add(f);
+    add(f);
 }
 
 QString MathModule::descriptionFileName() const
@@ -992,9 +992,8 @@ Value func_countblank(valVector args, ValueCalc *, FuncExtra *)
                 for (int c = 0; c < cols; ++c)
                     if (args[i].element(c, r).isEmpty())
                         cnt++;
-        } else
-            if (args[i].isEmpty())
-                cnt++;
+        } else if (args[i].isEmpty())
+            cnt++;
     return Value(cnt);
 }
 
@@ -1237,7 +1236,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
 
     // Good. Now we can execute the necessary function on the range.
     Value res;
-  QSharedPointer<Function> f;
+    QSharedPointer<Function> f;
     valVector a;
     switch (function) {
     case 1: // Average

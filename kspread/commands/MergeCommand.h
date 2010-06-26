@@ -62,8 +62,8 @@ protected:
 
     bool m_merge;
 private:
-bool m_mergeHorizontal : 1;
-bool m_mergeVertical   : 1;
+    bool m_mergeHorizontal : 1;
+    bool m_mergeVertical   : 1;
     AbstractRegionCommand* m_unmerger; // to restore old merging
     Selection *m_selection;
 };

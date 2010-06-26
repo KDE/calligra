@@ -852,13 +852,13 @@ void OpenCalcExport::exportMasterStyles(QDomDocument & doc, QDomElement & master
     QString footerRight;
 
     if (sheet) {
-    const HeaderFooter *const headerFooter = sheet->headerFooter();
-    headerLeft   = headerFooter->headLeft();
-    headerCenter = headerFooter->headMid();
-    headerRight  = headerFooter->headRight();
-    footerLeft   = headerFooter->footLeft();
-    footerCenter = headerFooter->footMid();
-    footerRight  = headerFooter->footRight();
+        const HeaderFooter *const headerFooter = sheet->headerFooter();
+        headerLeft   = headerFooter->headLeft();
+        headerCenter = headerFooter->headMid();
+        headerRight  = headerFooter->headRight();
+        footerLeft   = headerFooter->footLeft();
+        footerCenter = headerFooter->footMid();
+        footerRight  = headerFooter->footRight();
     }
 
     if ((headerLeft.length() > 0) || (headerCenter.length() > 0)
@@ -1085,7 +1085,7 @@ QString OpenCalcExport::convertFormula(QString const & formula) const
         }
         if ((formula[i] == '=') && (formula[i + 1] == '=')) {
             s += '=';
-            ++i;++i;
+            ++i; ++i;
             continue;
         }
         if (formula[i] == '!') {

@@ -82,97 +82,97 @@ KSPREAD_EXPORT_FUNCTION_MODULE("text", TextModule)
 
 
 TextModule::TextModule(QObject* parent, const QVariantList&)
-    : FunctionModule(parent)
+        : FunctionModule(parent)
 {
     Function *f;
 
     // one-parameter functions
     f = new Function("ASC", func_asc);
-  add(f);
+    add(f);
     f = new Function("CHAR", func_char);
-  add(f);
+    add(f);
     f = new Function("CLEAN", func_clean);
-  add(f);
+    add(f);
     f = new Function("CODE", func_code);
-  add(f);
+    add(f);
     f = new Function("JIS", func_jis);
-  add(f);
+    add(f);
     f = new Function("LEN", func_len);
-  add(f);
+    add(f);
     f = new Function("LOWER", func_lower);
-  add(f);
+    add(f);
     f = new Function("PROPER", func_proper);
-  add(f);
+    add(f);
     f = new Function("ROT13", func_rot13);
     f->setAlternateName("COM.SUN.STAR.SHEET.ADDIN.DATEFUNCTIONS.GETROT13");
     add(f);
     f = new Function("SLEEK", func_sleek);
-  add(f);
+    add(f);
     f = new Function("T", func_t);
-  add(f);
+    add(f);
     f = new Function("TOGGLE", func_toggle);
-  add(f);
+    add(f);
     f = new Function("TRIM", func_trim);
-  add(f);
+    add(f);
     f = new Function("UNICHAR", func_unichar);
-  add(f);
+    add(f);
     f = new Function("UNICODE", func_unicode);
-  add(f);
+    add(f);
     f = new Function("UPPER", func_upper);
-  add(f);
+    add(f);
     f = new Function("VALUE", func_value);
-  add(f);
+    add(f);
 
     // other functions
     f = new Function("COMPARE", func_compare);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("CONCATENATE", func_concatenate);
     f->setParamCount(1, -1);
     f->setAcceptArray();
-  add(f);
+    add(f);
     f = new Function("DOLLAR", func_dollar);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("EXACT", func_exact);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("FIND", func_find);
     f->setParamCount(2, 3);
-  add(f);
+    add(f);
     f = new Function("FIXED", func_fixed);
     f->setParamCount(1, 3);
-  add(f);
+    add(f);
     f = new Function("LEFT", func_left);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("MID", func_mid);
     f->setParamCount(2, 3);
-  add(f);
+    add(f);
     f = new Function("REGEXP", func_regexp);
     f->setParamCount(2, 4);
-  add(f);
+    add(f);
     f = new Function("REGEXPRE", func_regexpre);
     f->setParamCount(3);
-  add(f);
+    add(f);
     f = new Function("REPLACE", func_replace);
     f->setParamCount(4);
-  add(f);
+    add(f);
     f = new Function("REPT", func_rept);
     f->setParamCount(2);
-  add(f);
+    add(f);
     f = new Function("RIGHT", func_right);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("SEARCH", func_search);
     f->setParamCount(2, 3);
-  add(f);
+    add(f);
     f = new Function("SUBSTITUTE", func_substitute);
     f->setParamCount(3, 4);
-  add(f);
+    add(f);
     f = new Function("TEXT", func_text);
     f->setParamCount(1, 2);
-  add(f);
+    add(f);
     f = new Function("BAHTTEXT", func_bahttext);
     f->setAlternateName("COM.MICROSOFT.BAHTTEXT");
     f->setParamCount(1);
@@ -749,27 +749,26 @@ Value func_value(valVector args, ValueCalc *calc, FuncExtra *)
 #define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
 #define UTF8_TH_MINUS   "\340\270\245\340\270\232"
 
-inline void lclSplitBlock( double& rfInt, qint32& rnBlock, double fValue, double fSize )
+inline void lclSplitBlock(double& rfInt, qint32& rnBlock, double fValue, double fSize)
 {
-    rnBlock = static_cast< qint32 >( modf( (fValue + 0.1) / fSize, &rfInt ) * fSize + 0.1 );
+    rnBlock = static_cast< qint32 >(modf((fValue + 0.1) / fSize, &rfInt) * fSize + 0.1);
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit( QString& rText, qint32 nDigit )
+void lclAppendDigit(QString& rText, qint32 nDigit)
 {
-    switch( nDigit )
-    {
-        case 0: rText += QString::fromUtf8( UTF8_TH_0 ); break;
-        case 1: rText += QString::fromUtf8( UTF8_TH_1 ); break;
-        case 2: rText += QString::fromUtf8( UTF8_TH_2 ); break;
-        case 3: rText += QString::fromUtf8( UTF8_TH_3 ); break;
-        case 4: rText += QString::fromUtf8( UTF8_TH_4 ); break;
-        case 5: rText += QString::fromUtf8( UTF8_TH_5 ); break;
-        case 6: rText += QString::fromUtf8( UTF8_TH_6 ); break;
-        case 7: rText += QString::fromUtf8( UTF8_TH_7 ); break;
-        case 8: rText += QString::fromUtf8( UTF8_TH_8 ); break;
-        case 9: rText += QString::fromUtf8( UTF8_TH_9 ); break;
-        default: kDebug() << "lclAppendDigit - illegal digit"; break;
+    switch (nDigit) {
+    case 0: rText += QString::fromUtf8(UTF8_TH_0); break;
+    case 1: rText += QString::fromUtf8(UTF8_TH_1); break;
+    case 2: rText += QString::fromUtf8(UTF8_TH_2); break;
+    case 3: rText += QString::fromUtf8(UTF8_TH_3); break;
+    case 4: rText += QString::fromUtf8(UTF8_TH_4); break;
+    case 5: rText += QString::fromUtf8(UTF8_TH_5); break;
+    case 6: rText += QString::fromUtf8(UTF8_TH_6); break;
+    case 7: rText += QString::fromUtf8(UTF8_TH_7); break;
+    case 8: rText += QString::fromUtf8(UTF8_TH_8); break;
+    case 9: rText += QString::fromUtf8(UTF8_TH_9); break;
+    default: kDebug() << "lclAppendDigit - illegal digit"; break;
     }
 }
 
@@ -777,60 +776,53 @@ void lclAppendDigit( QString& rText, qint32 nDigit )
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10( QString& rText, qint32 nDigit, qint32 nPow10 )
+void lclAppendPow10(QString& rText, qint32 nDigit, qint32 nPow10)
 {
-    Q_ASSERT( (1 <= nDigit) && (nDigit <= 9) ); // illegal digit?
-    lclAppendDigit( rText, nDigit );
-    switch( nPow10 )
-    {
-        case 2: rText += QString::fromUtf8( UTF8_TH_1E2 ); break;
-        case 3: rText += QString::fromUtf8( UTF8_TH_1E3 ); break;
-        case 4: rText += QString::fromUtf8( UTF8_TH_1E4 ); break;
-        case 5: rText += QString::fromUtf8( UTF8_TH_1E5 ); break;
-        default: kDebug() << "lclAppendPow10 - illegal power"; break;
+    Q_ASSERT((1 <= nDigit) && (nDigit <= 9));   // illegal digit?
+    lclAppendDigit(rText, nDigit);
+    switch (nPow10) {
+    case 2: rText += QString::fromUtf8(UTF8_TH_1E2); break;
+    case 3: rText += QString::fromUtf8(UTF8_TH_1E3); break;
+    case 4: rText += QString::fromUtf8(UTF8_TH_1E4); break;
+    case 5: rText += QString::fromUtf8(UTF8_TH_1E5); break;
+    default: kDebug() << "lclAppendPow10 - illegal power"; break;
     }
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock( QString& rText, qint32 nValue )
+void lclAppendBlock(QString& rText, qint32 nValue)
 {
-    Q_ASSERT( (1 <= nValue) && (nValue <= 999999) ); // illegal value?
-    if( nValue >= 100000 )
-    {
-        lclAppendPow10( rText, nValue / 100000, 5 );
+    Q_ASSERT((1 <= nValue) && (nValue <= 999999));   // illegal value?
+    if (nValue >= 100000) {
+        lclAppendPow10(rText, nValue / 100000, 5);
         nValue %= 100000;
     }
-    if( nValue >= 10000 )
-    {
-        lclAppendPow10( rText, nValue / 10000, 4 );
+    if (nValue >= 10000) {
+        lclAppendPow10(rText, nValue / 10000, 4);
         nValue %= 10000;
     }
-    if( nValue >= 1000 )
-    {
-        lclAppendPow10( rText, nValue / 1000, 3 );
+    if (nValue >= 1000) {
+        lclAppendPow10(rText, nValue / 1000, 3);
         nValue %= 1000;
     }
-    if( nValue >= 100 )
-    {
-        lclAppendPow10( rText, nValue / 100, 2 );
+    if (nValue >= 100) {
+        lclAppendPow10(rText, nValue / 100, 2);
         nValue %= 100;
     }
-    if( nValue > 0 )
-    {
+    if (nValue > 0) {
         qint32 nTen = nValue / 10;
         qint32 nOne = nValue % 10;
-        if( nTen >= 1 )
-        {
-            if( nTen >= 3 )
-                lclAppendDigit( rText, nTen );
-            else if( nTen == 2 )
-                rText += QString::fromUtf8( UTF8_TH_20 );
-            rText += QString::fromUtf8( UTF8_TH_10 );
+        if (nTen >= 1) {
+            if (nTen >= 3)
+                lclAppendDigit(rText, nTen);
+            else if (nTen == 2)
+                rText += QString::fromUtf8(UTF8_TH_20);
+            rText += QString::fromUtf8(UTF8_TH_10);
         }
-        if( (nTen > 0) && (nOne == 1) )
-            rText += QString::fromUtf8( UTF8_TH_11 );
-        else if( nOne > 0 )
-            lclAppendDigit( rText, nOne );
+        if ((nTen > 0) && (nOne == 1))
+            rText += QString::fromUtf8(UTF8_TH_11);
+        else if (nOne > 0)
+            lclAppendDigit(rText, nOne);
     }
 }
 
@@ -841,53 +833,47 @@ Value func_bahttext(valVector args, ValueCalc *calc, FuncExtra *)
 
     // sign
     bool bMinus = value < 0.0;
-    value = fabs( value );
+    value = fabs(value);
 
     // round to 2 digits after decimal point, value contains Satang as integer
-    value = floor( value * 100.0 + 0.5 );
+    value = floor(value * 100.0 + 0.5);
 
     // split Baht and Satang
     double fBaht = 0.0;
     qint32 nSatang = 0;
-    lclSplitBlock( fBaht, nSatang, value, 100.0 );
+    lclSplitBlock(fBaht, nSatang, value, 100.0);
 
     QString aText;
 
     // generate text for Baht value
-    if( fBaht == 0.0 )
-    {
-        if( nSatang == 0 )
+    if (fBaht == 0.0) {
+        if (nSatang == 0)
             aText += QString::fromUtf8(UTF8_TH_0);
-    }
-    else while( fBaht > 0.0 )
-    {
-        QString aBlock;
-        qint32 nBlock = 0;
-        lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
-        if( nBlock > 0 )
-            lclAppendBlock( aBlock, nBlock );
-        // add leading "million", if there will come more blocks
-        if( fBaht > 0.0 )
-            aBlock = QString::fromUtf8(UTF8_TH_1E6) + aBlock;
-        aText.insert( 0, aBlock );
-    }
-    if( aText.length() > 0 )
+    } else while (fBaht > 0.0) {
+            QString aBlock;
+            qint32 nBlock = 0;
+            lclSplitBlock(fBaht, nBlock, fBaht, 1.0e6);
+            if (nBlock > 0)
+                lclAppendBlock(aBlock, nBlock);
+            // add leading "million", if there will come more blocks
+            if (fBaht > 0.0)
+                aBlock = QString::fromUtf8(UTF8_TH_1E6) + aBlock;
+            aText.insert(0, aBlock);
+        }
+    if (aText.length() > 0)
         aText += QString::fromUtf8(UTF8_TH_BAHT);
 
     // generate text for Satang value
-    if( nSatang == 0 )
-    {
+    if (nSatang == 0) {
         aText += QString::fromUtf8(UTF8_TH_DOT0);
-    }
-    else
-    {
-        lclAppendBlock( aText, nSatang );
+    } else {
+        lclAppendBlock(aText, nSatang);
         aText += QString::fromUtf8(UTF8_TH_SATANG);
     }
 
     // add the minus sign
-    if( bMinus )
-        aText = QString::fromUtf8( UTF8_TH_MINUS ) + aText;
+    if (bMinus)
+        aText = QString::fromUtf8(UTF8_TH_MINUS) + aText;
 
     return Value(aText);
 }

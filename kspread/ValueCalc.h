@@ -328,7 +328,7 @@ inline bool approxEqual(double a, double b)
         return true;
     double x = a - b;
     return (x < 0.0 ? -x : x)
-           < ((a < 0.0 ? -a : a) * (1.0 / (16777216.0 * 16777216.0)));
+           < ((a < 0.0 ? -a : a) *(1.0 / (16777216.0 * 16777216.0)));
 }
 
 inline double approxFloor(double a)

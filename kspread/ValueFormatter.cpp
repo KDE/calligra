@@ -537,7 +537,7 @@ QString ValueFormatter::dateTimeFormat(const QDateTime &_dt, Format::Type fmtTyp
         return _dt.toString( formatString );
     }
 
-    Q_UNUSED( fmtType );
+    Q_UNUSED(fmtType);
     QString result;
     // pretty lame, just asssuming something for the format
     // TODO: locale-aware formatting
