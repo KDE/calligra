@@ -10,12 +10,12 @@
  ** your option) use any later version of the GNU General Public
  ** License if such license has been publicly approved by
  ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
+ **
  ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
  ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
  ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
  ** not expressly granted herein.
- ** 
+ **
  ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
@@ -212,8 +212,8 @@ Span ItemDelegate::itemBoundingSpan( const StyleOptionGanttItem& opt,
  * Override to implement new items or interactions.
  */
 ItemDelegate::InteractionState ItemDelegate::interactionStateFor( const QPointF& pos,
-								  const StyleOptionGanttItem& opt,
-								  const QModelIndex& idx ) const
+                                                                  const StyleOptionGanttItem& opt,
+                                                                  const QModelIndex& idx ) const
 {
     if ( !idx.isValid() ) return State_None;
     if ( !( idx.model()->flags( idx ) & Qt::ItemIsEditable ) ) return State_None;
@@ -391,16 +391,16 @@ void ItemDelegate::paintConstraintItem( QPainter* painter, const QStyleOptionGra
 {
     //qDebug()<<"ItemDelegate::paintConstraintItem"<<start<<end<<constraint;
     switch ( constraint.relationType() ) {
-        case Constraint::FinishStart: 
+        case Constraint::FinishStart:
             paintFinishStartConstraint( painter, opt, start, end, constraint );
             break;
-        case Constraint::FinishFinish: 
+        case Constraint::FinishFinish:
             paintFinishFinishConstraint( painter, opt, start, end, constraint );
             break;
-        case Constraint::StartStart: 
+        case Constraint::StartStart:
             paintStartStartConstraint( painter, opt, start, end, constraint );
             break;
-        case Constraint::StartFinish: 
+        case Constraint::StartFinish:
             paintStartFinishConstraint( painter, opt, start, end, constraint );
             break;
         default:
@@ -411,7 +411,7 @@ void ItemDelegate::paintConstraintItem( QPainter* painter, const QStyleOptionGra
 void ItemDelegate::paintFinishStartConstraint( QPainter* painter, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const Constraint &constraint )
 {
     Q_UNUSED( opt );
-    
+
     QPen pen;
     QVariant dataPen;
 
@@ -430,7 +430,7 @@ void ItemDelegate::paintFinishStartConstraint( QPainter* painter, const QStyleOp
 
     painter->setPen( pen );
     painter->setBrush( pen.color() );
-    
+
     painter->drawPolyline( finishStartLine( start, end ) );
     painter->drawPolygon( finishStartArrow( start, end ) );
 }
@@ -457,7 +457,7 @@ QPolygonF ItemDelegate::finishStartLine( const QPointF& start, const QPointF& en
     return poly;
 }
 
-QPolygonF ItemDelegate::finishStartArrow( const QPointF& start, const QPointF& end ) const
+QPolygonF ItemDelegate::finishStartArrow( const QPointF& /*start*/, const QPointF& end ) const
 {
     QPolygonF poly;
     poly << end
@@ -469,7 +469,7 @@ QPolygonF ItemDelegate::finishStartArrow( const QPointF& start, const QPointF& e
 void ItemDelegate::paintFinishFinishConstraint( QPainter* painter, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const Constraint &constraint )
 {
     Q_UNUSED( opt );
-    
+
     QPen pen;
     QVariant dataPen;
 
@@ -485,10 +485,10 @@ void ItemDelegate::paintFinishFinishConstraint( QPainter* painter, const QStyleO
     // data() pen
     if( qVariantCanConvert< QPen >( dataPen ) )
         pen = qVariantValue< QPen >( dataPen );
-    
+
     painter->setPen( pen );
     painter->setBrush( pen.color() );
-    
+
     painter->drawPolyline( finishFinishLine( start, end ) );
     painter->drawPolygon( finishFinishArrow( start, end ) );
 }
@@ -515,7 +515,7 @@ QPolygonF ItemDelegate::finishFinishLine( const QPointF& start, const QPointF& e
     return poly;
 }
 
-QPolygonF ItemDelegate::finishFinishArrow( const QPointF& start, const QPointF& end ) const
+QPolygonF ItemDelegate::finishFinishArrow( const QPointF& /*start*/, const QPointF& end ) const
 {
     QPolygonF poly;
     poly << end
@@ -527,7 +527,7 @@ QPolygonF ItemDelegate::finishFinishArrow( const QPointF& start, const QPointF& 
 void ItemDelegate::paintStartStartConstraint( QPainter* painter, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const Constraint &constraint )
 {
     Q_UNUSED( opt );
-        
+
     QPen pen;
     QVariant dataPen;
 
@@ -546,7 +546,7 @@ void ItemDelegate::paintStartStartConstraint( QPainter* painter, const QStyleOpt
 
     painter->setPen( pen );
     painter->setBrush( pen.color() );
-    
+
     painter->drawPolyline( startStartLine( start, end ) );
     painter->drawPolygon( startStartArrow( start, end ) );
 
@@ -555,8 +555,8 @@ void ItemDelegate::paintStartStartConstraint( QPainter* painter, const QStyleOpt
 QPolygonF ItemDelegate::startStartLine( const QPointF& start, const QPointF& end ) const
 {
     QPolygonF poly;
-    qreal midx = start.x() - TURN;
-    qreal midy = ( end.y()-start.y() )/2. + start.y();
+//    qreal midx = start.x() - TURN;
+//    qreal midy = ( end.y()-start.y() )/2. + start.y();
 
     if ( start.x() > end.x() ) {
         poly << start
@@ -573,7 +573,7 @@ QPolygonF ItemDelegate::startStartLine( const QPointF& start, const QPointF& end
     return poly;
 }
 
-QPolygonF ItemDelegate::startStartArrow( const QPointF& start, const QPointF& end ) const
+QPolygonF ItemDelegate::startStartArrow( const QPointF& /*start*/, const QPointF& end ) const
 {
     QPolygonF poly;
     poly << end
@@ -585,7 +585,7 @@ QPolygonF ItemDelegate::startStartArrow( const QPointF& start, const QPointF& en
 void ItemDelegate::paintStartFinishConstraint( QPainter* painter, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const Constraint &constraint )
 {
     Q_UNUSED( opt );
-        
+
     QPen pen;
     QVariant dataPen;
 
@@ -604,7 +604,7 @@ void ItemDelegate::paintStartFinishConstraint( QPainter* painter, const QStyleOp
 
     painter->setPen( pen );
     painter->setBrush( pen.color() );
-    
+
     painter->drawPolyline( startFinishLine( start, end ) );
     painter->drawPolygon( startFinishArrow( start, end ) );
 }
@@ -631,7 +631,7 @@ QPolygonF ItemDelegate::startFinishLine( const QPointF& start, const QPointF& en
     return poly;
 }
 
-QPolygonF ItemDelegate::startFinishArrow( const QPointF& start, const QPointF& end ) const
+QPolygonF ItemDelegate::startFinishArrow( const QPointF& /*start*/, const QPointF& end ) const
 {
     QPolygonF poly;
     poly << end

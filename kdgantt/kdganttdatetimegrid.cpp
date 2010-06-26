@@ -10,12 +10,12 @@
  ** your option) use any later version of the GNU General Public
  ** License if such license has been publicly approved by
  ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
+ **
  ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
  ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
  ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
  ** not expressly granted herein.
- ** 
+ **
  ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
@@ -129,8 +129,8 @@ void DateTimeGrid::setDayWidth( qreal w )
  */
 void DateTimeGrid::setScale( Scale s )
 {
-	d->scale = s;
-	emit gridChanged();
+        d->scale = s;
+        emit gridChanged();
 }
 
 /*! \returns The scale used to paint the grid.
@@ -141,7 +141,7 @@ void DateTimeGrid::setScale( Scale s )
  */
 DateTimeGrid::Scale DateTimeGrid::scale() const
 {
-	return d->scale;
+        return d->scale;
 }
 
 /*! \param factor The zoom factor
@@ -240,10 +240,10 @@ Span DateTimeGrid::mapToChart( const QModelIndex& idx ) const
     const QVariant sv = model()->data( idx, StartTimeRole );
     const QVariant ev = model()->data( idx, EndTimeRole );
     if( qVariantCanConvert<QDateTime>(sv) &&
-	qVariantCanConvert<QDateTime>(ev) &&
-	!(sv.type() == QVariant::String && qVariantValue<QString>(sv).isEmpty()) &&
-	!(ev.type() == QVariant::String && qVariantValue<QString>(ev).isEmpty())
-	) {
+        qVariantCanConvert<QDateTime>(ev) &&
+        !(sv.type() == QVariant::String && qVariantValue<QString>(sv).isEmpty()) &&
+        !(ev.type() == QVariant::String && qVariantValue<QString>(ev).isEmpty())
+        ) {
       QDateTime st = sv.toDateTime();
       QDateTime et = ev.toDateTime();
       if ( et.isValid() && st.isValid() ) {
@@ -337,9 +337,9 @@ void DateTimeGrid::paintGrid( QPainter* painter,
                               QWidget* widget )
 {
     //qDebug()<<"paintGrid()"<<scale()<<dayWidth();
-    
+
     paintRowGrid(painter,sceneRect,exposedRect,rowController,widget);
-    
+
     switch(scale()) {
         case ScaleHour:
             paintHourGrid(painter,sceneRect,exposedRect,rowController,widget);
@@ -373,10 +373,10 @@ void DateTimeGrid::paintGrid( QPainter* painter,
 }
 
 void DateTimeGrid::paintHourGrid( QPainter* painter,
-                              const QRectF& sceneRect,
+                              const QRectF& /*sceneRect*/,
                               const QRectF& exposedRect,
-                              AbstractRowController* rowController,
-                              QWidget* widget )
+                              AbstractRowController* /*rowController*/,
+                              QWidget* /*widget*/ )
 {
     //qDebug()<<"paintHourGrid()"<<scale()<<dayWidth();
     QDateTime dt = d->chartXtoDateTime( exposedRect.left() );
@@ -396,9 +396,9 @@ void DateTimeGrid::paintHourGrid( QPainter* painter,
 }
 
 void DateTimeGrid::paintDayGrid( QPainter* painter,
-                                  const QRectF& sceneRect,
+                                  const QRectF& /*sceneRect*/,
                                   const QRectF& exposedRect,
-                                  AbstractRowController* rowController,
+                                  AbstractRowController* /*rowController*/,
                                   QWidget* widget )
 {
     //qDebug()<<"paintDayGrid()"<<scale()<<dayWidth();
@@ -420,9 +420,9 @@ void DateTimeGrid::paintDayGrid( QPainter* painter,
 }
 
 void DateTimeGrid::paintWeekGrid( QPainter* painter,
-                                  const QRectF& sceneRect,
+                                  const QRectF& /*sceneRect*/,
                                   const QRectF& exposedRect,
-                                  AbstractRowController* rowController,
+                                  AbstractRowController* /*rowController*/,
                                   QWidget* widget )
 {
     //qDebug()<<"paintWeekGrid()"<<scale()<<dayWidth();
@@ -450,9 +450,9 @@ void DateTimeGrid::paintWeekGrid( QPainter* painter,
 }
 
 void DateTimeGrid::paintMonthGrid( QPainter* painter,
-                                  const QRectF& sceneRect,
+                                  const QRectF& /*sceneRect*/,
                                   const QRectF& exposedRect,
-                                  AbstractRowController* rowController,
+                                  AbstractRowController* /*rowController*/,
                                   QWidget* widget )
 {
     //qDebug()<<"paintMonthGrid()"<<scale()<<dayWidth();
@@ -489,10 +489,10 @@ void DateTimeGrid::paintFreeDay( QPainter* painter, qreal x, const QRectF& expos
 }
 
 void DateTimeGrid::paintRowGrid( QPainter* painter,
-                                  const QRectF& sceneRect,
+                                  const QRectF& /*sceneRect*/,
                                   const QRectF& exposedRect,
                                   AbstractRowController* rowController,
-                                  QWidget* widget )
+                                  QWidget* /*widget*/ )
 {
     if ( rowController && rowSeparators() ) {
         // First draw the rows
@@ -516,7 +516,7 @@ void DateTimeGrid::paintRowGrid( QPainter* painter,
 void DateTimeGrid::render( QPainter* painter,  const QRectF &target, const QRectF& headerRect, const QRectF& exposedRect, QWidget *widget, Qt::AspectRatioMode aspectRatioMode )
 {
     painter->save();
-    
+
     qreal xratio = target.width() / exposedRect.width();
     qreal yratio = target.height() / exposedRect.height();
     //qDebug()<<"QGraphicsScene::render()"<<xratio<<yratio;
@@ -533,7 +533,7 @@ void DateTimeGrid::render( QPainter* painter,  const QRectF &target, const QRect
     }
 
     //qDebug()<<"DateTimeGrid::render()"<<"target="<<target<<"exposedRect="<<exposedRect<<"xr="<<xratio<<"yr="<<yratio;
-    
+
     painter->setClipRect( target );
     QTransform painterTransform;
     painterTransform *= QTransform()
@@ -541,7 +541,7 @@ void DateTimeGrid::render( QPainter* painter,  const QRectF &target, const QRect
             .scale(xratio, yratio)
             .translate(-exposedRect.left(), -exposedRect.top());
     painter->setWorldTransform(painterTransform, true);
-    
+
     paintHeader( painter, headerRect, exposedRect, 0.0, widget );
     painter->restore();
 }
@@ -549,8 +549,8 @@ void DateTimeGrid::render( QPainter* painter,  const QRectF &target, const QRect
 void DateTimeGrid::paintHeader( QPainter* painter,  const QRectF& headerRect, const QRectF& exposedRect,
                                 qreal offset, QWidget* widget )
 {
-	switch(scale()) {
-		case ScaleHour: paintHourScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
+        switch(scale()) {
+                case ScaleHour: paintHourScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleDay: paintDayScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleWeek: paintWeekScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
         case ScaleMonth: paintMonthScaleHeader(painter,headerRect,exposedRect,offset,widget); break;
@@ -570,7 +570,7 @@ void DateTimeGrid::paintHeader( QPainter* painter,  const QRectF& headerRect, co
                     break;
             }
             break;
-	}
+        }
 }
 
 /*! Paints the hour scale header.
@@ -719,7 +719,7 @@ void DateTimeGrid::paintWeekScaleHeader( QPainter* painter,  const QRectF& heade
         if ( subopt.rect.isValid() ) {
             style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
         }
-        
+
         dt.setDate( next );
     }
 }
@@ -759,7 +759,7 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
         //qDebug()<<"paintMonthScaleHeader()"<<dt;
         QDate next = dt.date().addYears( 1 );
         next = next.addMonths( 1 - next.month() );
-        
+
         QStyleOptionHeader opt;
         opt.init( widget );
         opt.rect = QRectF( x2-offset, headerRect.top(), dayWidth()*dt.date().daysTo( next ), headerRect.height()/2. ).toRect();
@@ -772,7 +772,7 @@ void DateTimeGrid::paintMonthScaleHeader( QPainter* painter,  const QRectF& head
         if ( subopt.rect.isValid() ) {
             style->drawControl( QStyle::CE_HeaderLabel, &subopt, painter, widget );
         }
-        
+
         dt.setDate( next );
     }
 }

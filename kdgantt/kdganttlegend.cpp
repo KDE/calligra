@@ -10,12 +10,12 @@
  ** your option) use any later version of the GNU General Public
  ** License if such license has been publicly approved by
  ** Klarälvdalens Datakonsult AB (or its successors, if any).
- ** 
+ **
  ** This file is provided "AS IS" with NO WARRANTY OF ANY KIND,
  ** INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY AND FITNESS FOR
  ** A PARTICULAR PURPOSE. Klarälvdalens Datakonsult AB reserves all rights
  ** not expressly granted herein.
- ** 
+ **
  ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
  ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  **
@@ -58,12 +58,12 @@ Legend::~Legend()
 
 #define d d_func()
 
-QModelIndex Legend::indexAt( const QPoint& point ) const
+QModelIndex Legend::indexAt( const QPoint& /*point */) const
 {
     return QModelIndex();
 }
 
-QRect Legend::visualRect( const QModelIndex& index ) const
+QRect Legend::visualRect( const QModelIndex& /*index */) const
 {
     return QRect();
 }
@@ -132,7 +132,7 @@ StyleOptionGanttItem Legend::getStyleOption( const QModelIndex& index ) const
     return opt;
 }
 
-/*! Draws the legend item at \a index and all of it's children recursively 
+/*! Draws the legend item at \a index and all of it's children recursively
  *  at \a pos onto \a painter.
  *  Reimplement this if you want to draw items in an user defined way.
  *  \returns the rectangle drawn.
@@ -160,7 +160,7 @@ QRect Legend::drawItem( QPainter* painter, const QModelIndex& index, const QPoin
         yPos = r.bottom();
     }
 
-    
+
     const int rowCount = d->proxyModel.rowCount( index );
     for( int row = 0; row < rowCount; ++row )
     {
