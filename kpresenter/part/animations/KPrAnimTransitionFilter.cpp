@@ -36,12 +36,16 @@ bool KPrAnimTransitionFilter::loadOdf(const KoXmlElement &element, KoShapeLoadin
 
 void KPrAnimTransitionFilter::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
 }
 
 void KPrAnimTransitionFilter::init(KPrAnimationCache *animationCache, int step)
 {
+    Q_UNUSED(animationCache);
+    Q_UNUSED(step);
 }
 
 void KPrAnimTransitionFilter::next(int currentTime)
 {
+    Q_UNUSED(currentTime);
 }

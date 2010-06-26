@@ -48,8 +48,10 @@ void KPrAnimateColor::saveOdf(KoShapeSavingContext &context) const
 void KPrAnimateColor::init(KPrAnimationCache *animationCache, int step)
 {
     Q_UNUSED(animationCache);
+    Q_UNUSED(step);
 }
 
 void KPrAnimateColor::next(int currentTime)
 {
+    Q_UNUSED(currentTime);
 }

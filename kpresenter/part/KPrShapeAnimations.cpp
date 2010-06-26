@@ -38,10 +38,12 @@ void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
 
 void KPrShapeAnimations::add( KPrShapeAnimation * animation )
 {
+    Q_UNUSED(animation);
 }
 
 void KPrShapeAnimations::remove( KPrShapeAnimation * animation )
 {
+    Q_UNUSED(animation);
 }
 
 QList<KPrAnimationStep *> KPrShapeAnimations::steps() const

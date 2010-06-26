@@ -43,6 +43,7 @@ int KPrAnimationBase::duration() const
 
 bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(context)
     m_begin = KPrDurationParser::durationMs(element.attributeNS(KoXmlNS::smil, "begin"));
     if (m_begin == -1) {
         m_begin = 0;

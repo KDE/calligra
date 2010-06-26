@@ -74,7 +74,6 @@ void KPrAnimSet::init(KPrAnimationCache *animationCache, int step)
 
 void KPrAnimSet::next(int currentTime)
 {
+    Q_UNUSED(currentTime);
     updateCache("visibility", m_visible);
 }
-
-#include "KPrAnimSet.moc"

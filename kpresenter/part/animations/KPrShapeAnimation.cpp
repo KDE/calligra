@@ -33,11 +33,14 @@ KPrShapeAnimation::~KPrShapeAnimation()
 
 bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
     return false;
 }
 
 void KPrShapeAnimation::saveOdf(KoShapeSavingContext &context) const
 {
+    Q_UNUSED(context);
 }
 
 KoShape * KPrShapeAnimation::shape() const

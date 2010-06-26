@@ -23,6 +23,7 @@
 
 #include "KPrDocument.h"
 #include "shapeanimations/KPrShapeAnimationOld.h"
+#include "KPrShapeAnimations.h"
 
 KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
 : m_doc( doc )

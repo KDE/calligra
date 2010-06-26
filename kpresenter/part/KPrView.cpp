@@ -148,7 +148,7 @@ void KPrView::initActions()
     m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);
     actionCollection()->addAction("file_export_html", m_actionExportHtml);
     connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
-    
+
     m_actionViewModeNormal = new KAction(i18n("Normal"), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
@@ -175,7 +175,7 @@ void KPrView::initActions()
     m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
-    KAction* action = new KAction( i18n( "From Current Slide" ), 
+    KAction* action = new KAction( i18n( "From Current Slide" ),
 this );
     action->setShortcut(QKeySequence("Shift+F5"));
     m_actionStartPresentation->addAction( action );
@@ -223,6 +223,7 @@ void KPrView::createAnimation()
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     foreach( KoShape * shape, selectedShapes )
     {
+        Q_UNUSED(shape);
         /*KPrShapeAnimationOld * animation = new KPrAnimationMoveAppear( shape, animationcount );
         KPrDocument * doc = static_cast<KPrDocument *>( kopaDocument() );
         KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( doc, animation );

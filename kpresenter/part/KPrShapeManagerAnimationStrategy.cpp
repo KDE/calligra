@@ -69,4 +69,6 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
 
 void KPrShapeManagerAnimationStrategy::adapt( KoShape * shape, QRectF & rect )
 {
+    Q_UNUSED(shape)
+    Q_UNUSED(rect)
 }

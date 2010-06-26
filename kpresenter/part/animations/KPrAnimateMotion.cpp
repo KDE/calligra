@@ -49,8 +49,10 @@ void KPrAnimateMotion::saveOdf( KoShapeSavingContext &context ) const
 void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
 {
     Q_UNUSED(animationCache);
+    Q_UNUSED(step);
 }
 
 void KPrAnimateMotion::next(int currentTime)
 {
+    Q_UNUSED(currentTime);
 }
