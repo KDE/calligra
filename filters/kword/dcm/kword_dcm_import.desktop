@@ -4,6 +4,7 @@ Name=KWord DICOM Structured Report Import Filter
 Name[pt]=Filtro de Importação de Relatórios Estruturados DICOM para o KWord
 Name[uk]=Фільтр імпорту структурованих звітів DICOM для KWord
 Name[x-test]=xxKWord DICOM Structured Report Import Filterxx
+Name[zh_TW]=KWord DICOM 結構報告匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/dicom
 X-KDE-Weight=1
