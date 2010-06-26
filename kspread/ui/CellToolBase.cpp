@@ -1249,6 +1249,9 @@ void CellToolBase::selectionChanged(const Region& region)
     const Region::ConstIterator end(selection()->constEnd());
     for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
         const Sheet *const sheet = (*it)->sheet();
+        if (!sheet) {
+            continue;
+        }
         const QRect range = (*it)->rect();
         const int column = range.left();
         const int row = range.top();

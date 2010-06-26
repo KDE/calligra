@@ -62,7 +62,7 @@ private Q_SLOTS:
 
 private:
     void updateSheetsList();
-    virtual QWidget* createOptionWidget();
+    virtual QMap<QString, QWidget*> createOptionWidgets();
 
 private:
     Q_DISABLE_COPY(TableTool)

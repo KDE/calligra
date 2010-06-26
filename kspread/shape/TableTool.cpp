@@ -238,11 +238,11 @@ void TableTool::sheetsBtnClicked()
     delete dialog;
 }
 
-QWidget* TableTool::createOptionWidget()
+QMap<QString, QWidget*> TableTool::createOptionWidgets()
 {
-    QWidget* masterWidget = CellToolBase::createOptionWidget();
-
     QWidget* optionWidget = new QWidget();
+    optionWidget->setObjectName("TableTool/Table Options");
+
     QVBoxLayout* l = new QVBoxLayout(optionWidget);
     l->setMargin(0);
     optionWidget->setLayout(l);
@@ -307,8 +307,9 @@ QWidget* TableTool::createOptionWidget()
     tb->addAction(action("import"));
     tb->addAction(action("export"));
 
-    static_cast<QGridLayout*>(masterWidget->layout())->addWidget(optionWidget, 3, 0, 1, 5);
-    return masterWidget;
+    QMap<QString, QWidget*> ow = CellToolBase::createOptionWidgets();
+    ow.insert(i18n("Table Options"), optionWidget);
+    return ow;
 }
 
 #include "TableTool.moc"

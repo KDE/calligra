@@ -51,6 +51,8 @@ CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
     : QWidget(parent->canvas()->canvasWidget())
     , d(new Private)
 {
+    setObjectName("CellToolOptionWidget");
+
     d->cellTool = parent;
 
     d->locationComboBox = new LocationComboBox(d->cellTool, this);
@@ -78,6 +80,7 @@ CellToolOptionWidget::CellToolOptionWidget(CellToolBase *parent)
 //     d->editor->setMinimumHeight(d->locationComboBox->height());
 
     d->layout = new QGridLayout(this);
+    d->layout->setObjectName("CellToolOptionWidget::Layout");
     d->layout->addWidget(d->locationComboBox, 0, 0);
     d->layout->addWidget(d->formulaButton, 0, 1);
     d->layout->addWidget(d->applyButton, 0, 2);
@@ -137,6 +140,10 @@ void CellToolOptionWidget::resizeEvent(QResizeEvent *event)
     if (!d->layout->itemAtPosition(1, 0)) /* one row */ {
         const int column = d->layout->count() - 1;
         QLayoutItem *const item = d->layout->itemAtPosition(0, column);
+        if (!item) {
+            QWidget::resizeEvent(event);
+            return;
+        }
         const int itemWidth = item->minimumSize().width();
         if (newWidth <= 2 * (minWidth - itemWidth) + margin) {
             d->layout->removeItem(item);
