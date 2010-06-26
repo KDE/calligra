@@ -59,6 +59,7 @@
 #include "commands/BorderColorCommand.h"
 #include "commands/CommentCommand.h"
 #include "commands/ConditionCommand.h"
+#include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
 #include "commands/IndentationCommand.h"
@@ -2825,7 +2826,28 @@ void CellToolBase::edit()
 void CellToolBase::cut()
 {
     if (!editor()) {
-        selection()->activeSheet()->cutSelection(selection());
+        QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
+        doc.documentElement().setAttribute("cut", selection()->Region::name());
+
+        // Save to buffer
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        QTextStream str(&buffer);
+        str.setCodec("UTF-8");
+        str << doc;
+        buffer.close();
+
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
+        mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+
+        QApplication::clipboard()->setMimeData(mimeData);
+
+        DeleteCommand* command = new DeleteCommand();
+        command->setText(i18n("Cut"));
+        command->setSheet(selection()->activeSheet());
+        command->add(*selection());
+        command->execute();
     } else {
         editor()->cut();
     }
@@ -2836,7 +2858,21 @@ void CellToolBase::copy() const
 {
     Selection* selection = const_cast<CellToolBase*>(this)->selection();
     if (!editor()) {
-        selection->activeSheet()->copySelection(selection);
+        QDomDocument doc = CopyCommand::saveAsXml(*selection);
+
+        // Save to buffer
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        QTextStream str(&buffer);
+        str.setCodec("UTF-8");
+        str << doc;
+        buffer.close();
+
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setText(CopyCommand::saveAsPlainText(*selection));
+        mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+
+        QApplication::clipboard()->setMimeData(mimeData);
     } else {
         editor()->copy();
     }

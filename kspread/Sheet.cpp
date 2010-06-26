@@ -77,7 +77,6 @@
 #include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "ShapeApplicationData.h"
 #include "SheetPrint.h"
 #include "RectStorage.h"
@@ -1085,95 +1084,6 @@ QString Sheet::guessRowTitle(QRect& area, int row)
     Value cellValue = cellStorage()->value(area.left(), row);
     return cellValue.asString();
 }
-
-void Sheet::copySelection(Selection* selection)
-{
-    QDomDocument doc = CopyCommand::saveAsXml(*selection);
-
-    // Save to buffer
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    QTextStream str(&buffer);
-    str.setCodec("UTF-8");
-    str << doc;
-    buffer.close();
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setText(CopyCommand::saveAsPlainText(*selection));
-    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
-
-    QApplication::clipboard()->setMimeData(mimeData);
-}
-
-void Sheet::cutSelection(Selection* selection)
-{
-    QDomDocument doc = CopyCommand::saveAsXml(*selection, true);
-    doc.documentElement().setAttribute("cut", selection->Region::name());
-
-    // Save to buffer
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    QTextStream str(&buffer);
-    str.setCodec("UTF-8");
-    str << doc;
-    buffer.close();
-
-    QMimeData* mimeData = new QMimeData();
-    mimeData->setText(CopyCommand::saveAsPlainText(*selection));
-    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
-
-    QApplication::clipboard()->setMimeData(mimeData);
-
-    DeleteCommand* command = new DeleteCommand();
-    command->setText(i18n("Cut"));
-    command->setSheet(this);
-    command->add(*selection);
-    command->execute();
-}
-
-void Sheet::deleteCells(const Region& region)
-{
-    // A list of all cells we want to delete.
-    QStack<Cell> cellStack;
-
-    Region::ConstIterator endOfList = region.constEnd();
-    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
-        QRect range = (*it)->rect();
-
-        // The RecalcManager needs a valid sheet.
-        if (!(*it)->sheet())
-            (*it)->setSheet(this);
-
-        int right  = range.right();
-        int left   = range.left();
-        int bottom = range.bottom();
-        int col;
-        for (int row = range.top(); row <= bottom; ++row) {
-            Cell cell = d->cellStorage->firstInRow(row);
-            while (!cell.isNull()) {
-                col = cell.column();
-                if (col < left) {
-                    cell = d->cellStorage->nextInRow(left - 1, row);
-                    continue;
-                }
-                if (col > right)
-                    break;
-
-                if (!cell.isDefault())
-                    cellStack.push(cell);
-
-                cell = d->cellStorage->nextInRow(col, row);
-            }
-        }
-    }
-
-    // Remove the cells from the sheet
-    while (!cellStack.isEmpty()) {
-        Cell cell = cellStack.pop();
-        d->cellStorage->take(cell.column(), cell.row());
-    }
-}
-
 
 QDomElement Sheet::saveXML(QDomDocument& dd)
 {

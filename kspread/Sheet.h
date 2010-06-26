@@ -74,7 +74,6 @@ class OdfSavingContext;
 class PrintSettings;
 class Region;
 class RowFormat;
-class Selection;
 class Sheet;
 class SheetPrint;
 class Style;
@@ -632,31 +631,8 @@ public:
 
     /**
      * \ingroup Commands
-     * @param selection the selection of cells to work on
-     */
-    void copySelection(Selection* selection);
-
-    /**
-     * \ingroup Commands
-     * @param selection the selection of cells to work on
-     */
-    void cutSelection(Selection* selection);
-
-    /**
-     * \ingroup Commands
      */
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
-
-    /**
-     * \ingroup Commands
-     * Deletes all cells in the given rectangle.
-     * The display is NOT updated by this function.
-     * This function can be used to clear an area before you paste something from the clipboard
-     * in this area.
-     *
-     * @param region The region that contains the cells that should be deleted
-     */
-    void deleteCells(const Region& region);
 
     //
     //END Methods related to manipulations of selected cells
