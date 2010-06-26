@@ -260,7 +260,12 @@ private:
 
 
 /**
- * LocationComboBox
+ * \class LocationComboBox
+ * \ingroup UI
+ * The combobox, that shows the address string of the current cell selection.
+ *
+ * Depending on the sheet settings the address is displayed in normal form
+ * (e.g. A1 or B1:C3) or in LC (Line/Column) form (e.g. L1xC1 or 3Lx2C).
  */
 class LocationComboBox : public KComboBox
 {
@@ -268,37 +273,31 @@ class LocationComboBox : public KComboBox
 public:
     LocationComboBox(CellToolBase *cellTool, QWidget *parent = 0);
 
-public slots:
-    void slotAddAreaName(const QString &);
-    void slotRemoveAreaName(const QString &);
-private:
-    LocationEditWidget *m_locationWidget;
-};
-
-
-
-/**
- * A widget that allows the user to enter an arbitrary
- * cell location to goto or cell selection to highlight
- */
-class LocationEditWidget : public KLineEdit
-{
-    Q_OBJECT
-public:
-    LocationEditWidget(CellToolBase *cellTool, QWidget *parent = 0);
-
     void addCompletionItem(const QString &_item);
     void removeCompletionItem(const QString &_item);
 
-private slots:
+    /**
+     * Updates the address string according to the current cell selection
+     * and the current address mode (normal or LC mode).
+     */
+    void updateAddress();
+
+public slots:
+    void slotAddAreaName( const QString & );
+    void slotRemoveAreaName( const QString & );
+
+protected: // reimplementations
+    virtual void keyPressEvent(QKeyEvent *event);
+
+private Q_SLOTS:
     void slotActivateItem();
 
-protected:
-    virtual void keyPressEvent(QKeyEvent * _ev);
+private:
+    bool activateItem();
+
 private:
     CellToolBase *m_cellTool;
     KCompletion completionList;
-    bool activateItem();
 };
 
 

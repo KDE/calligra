@@ -36,6 +36,7 @@ Fix the border painting of the column/row headers and the select all button.
 Fix the right mouse button interaction for the column/row headers.
 Allow to select multiple cells after using a reference selection widget (e.g. in goal seek dialog).
 Fix the goal seek dialog/command.
+Change to the desired sheet, if an address is entered in the location combobox.
 
 Developer-Visible Only
 ----------------------

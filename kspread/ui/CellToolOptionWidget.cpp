@@ -157,37 +157,7 @@ void CellToolOptionWidget::updateLocationComboBox()
     if (d->cellTool->selection()->referenceSelectionMode()) {
         return;
     }
-    QString address;
-    const QList< QPair<QRectF, QString> > names = d->cellTool->selection()->activeSheet()->cellStorage()->namedAreas(*d->cellTool->selection());
-    {
-        QRect range;
-        if (d->cellTool->selection()->isSingular()) {
-            range = QRect(d->cellTool->selection()->marker(), QSize(1, 1));
-        } else {
-            range = d->cellTool->selection()->lastRange();
-        }
-        for (int i = 0; i < names.size(); i++) {
-            if (names[i].first.toRect() == range) {
-                address = names[i].second;
-            }
-        }
-    }
-    if (address.isEmpty()) {
-        Selection *const selection = d->cellTool->selection();
-        if (selection->activeSheet()->getLcMode()) {
-            if (selection->isSingular()) {
-                address = 'L' + QString::number(selection->marker().y()) +
-                        'C' + QString::number(selection->marker().x());
-            } else {
-                const QRect lastRange = selection->lastRange();
-                address = QString::number(lastRange.height()) + "Lx";
-                address += QString::number(lastRange.width()) + 'C';
-            }
-        } else {
-            address = selection->name();
-        }
-    }
-    d->locationComboBox->lineEdit()->setText(address);
+    d->locationComboBox->updateAddress();
 }
 
 #include "CellToolOptionWidget.moc"
