@@ -18,32 +18,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <csvexportdialog.h>
+#include "csvexportdialog.h"
 
-#include <kspread/Map.h>
-#include <kspread/Sheet.h>
+#include "kspread/Map.h"
+#include "kspread/Sheet.h"
 
-#include <q3buttongroup.h>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QCursor>
-#include <QLabel>
-#include <QLineEdit>
-#include <q3listview.h>
-#include <QList>
-#include <QRadioButton>
-#include <QTextStream>
-#include <QTabWidget>
+#include <KApplication>
+#include <KCharsets>
+#include <KMessageBox>
+
 #include <QTextCodec>
 #include <QValidator>
-
-#include <kapplication.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kcombobox.h>
-#include <kmessagebox.h>
-#include <kcharsets.h>
 
 using namespace KSpread;
 
@@ -158,19 +143,13 @@ void CSVExportDialog::saveSettings()
 void CSVExportDialog::fillSheet(Map * map)
 {
     m_dialog->m_sheetList->clear();
-    Q3CheckListItem * item;
+    QListWidgetItem *item;
 
     foreach(Sheet* sheet, map->sheetList()) {
-        item = new Q3CheckListItem(m_dialog->m_sheetList,
-                                   sheet->sheetName(),
-                                   Q3CheckListItem::CheckBox);
-        item->setOn(true);
-        m_dialog->m_sheetList->insertItem(item);
+        item = new QListWidgetItem(sheet->sheetName() ,m_dialog->m_sheetList);
+        item->setCheckState(Qt::Checked);
+        m_dialog->m_sheetList->addItem(item);
     }
-
-    m_dialog->m_sheetList->setSorting(0, true);
-    m_dialog->m_sheetList->sort();
-    m_dialog->m_sheetList->setSorting(-1);
 }
 
 QChar CSVExportDialog::getDelimiter() const
@@ -195,10 +174,12 @@ QString CSVExportDialog::getSheetDelimiter() const
 
 bool CSVExportDialog::exportSheet(QString const & sheetName) const
 {
-    for (Q3ListViewItem * item = m_dialog->m_sheetList->firstChild(); item; item = item->nextSibling()) {
-        if (((Q3CheckListItem *) item)->isOn()) {
-            if (((Q3CheckListItem *) item)->text() == sheetName)
+    for (int i = 0; i < m_dialog->m_sheetList->count(); ++i) {
+        QListWidgetItem *const item = m_dialog->m_sheetList->item(i);
+        if (item->checkState() == Qt::Checked) {
+            if (item->text() == sheetName) {
                 return true;
+            }
         }
     }
     return false;
@@ -216,7 +197,7 @@ void CSVExportDialog::slotCancel()
 
 void CSVExportDialog::returnPressed()
 {
-    if (m_dialog->m_delimiterBox->id(m_dialog->m_delimiterBox->selected()) != 4)
+    if (!m_dialog->m_radioOther->isChecked())
         return;
 
     m_delimiter = m_dialog->m_delimiterEdit->text();
@@ -312,11 +293,11 @@ QTextCodec* CSVExportDialog::getCodec(void) const
 QString CSVExportDialog::getEndOfLine(void) const
 {
     QString strReturn;
-    if (m_dialog->radioEndOfLineLF == m_dialog->buttonGroupEndOfLine->selected())
+    if (m_dialog->radioEndOfLineLF->isChecked())
         strReturn = "\n";
-    else if (m_dialog->radioEndOfLineCRLF == m_dialog->buttonGroupEndOfLine->selected())
+    else if (m_dialog->radioEndOfLineCRLF->isChecked())
         strReturn = "\r\n";
-    else if (m_dialog->radioEndOfLineCR == m_dialog->buttonGroupEndOfLine->selected())
+    else if (m_dialog->radioEndOfLineCR->isChecked())
         strReturn = "\r";
     else
         strReturn = "\n";
@@ -325,4 +306,3 @@ QString CSVExportDialog::getEndOfLine(void) const
 }
 
 #include "csvexportdialog.moc"
-

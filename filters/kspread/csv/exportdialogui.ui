@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ExportDialogUI</class>
- <widget class="QWidget" name="ExportDialogUI" >
-  <property name="geometry" >
+ <widget class="QWidget" name="ExportDialogUI">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,57 +10,57 @@
     <height>334</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <item row="1" column="0" >
-    <widget class="QTabWidget" name="m_tabWidget" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Minimum" >
+  <layout class="QGridLayout">
+   <item row="1" column="0">
+    <widget class="QTabWidget" name="m_tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="currentIndex" >
+     <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="encodingPage" >
-      <attribute name="title" >
+     <widget class="QWidget" name="encodingPage">
+      <attribute name="title">
        <string>Encoding</string>
       </attribute>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout">
        <item>
-        <layout class="QHBoxLayout" >
+        <layout class="QHBoxLayout">
          <item>
-          <widget class="QLabel" name="textLabel1" >
-           <property name="text" >
+          <widget class="QLabel" name="textLabel1">
+           <property name="text">
             <string>E&amp;ncoding:</string>
            </property>
-           <property name="textFormat" >
+           <property name="textFormat">
             <enum>Qt::PlainText</enum>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
-           <property name="buddy" >
+           <property name="buddy">
             <cstring>comboBoxEncoding</cstring>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="KComboBox" name="comboBoxEncoding" >
-           <property name="editable" >
+          <widget class="KComboBox" name="comboBoxEncoding">
+           <property name="editable">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeType" >
+           <property name="sizeType">
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>106</width>
              <height>20</height>
@@ -70,37 +71,37 @@
         </layout>
        </item>
        <item>
-        <widget class="Q3ButtonGroup" name="buttonGroupEndOfLine" >
-         <property name="title" >
+        <widget class="QGroupBox" name="buttonGroupEndOfLine">
+         <property name="title">
           <string>End of Line</string>
          </property>
-         <layout class="QVBoxLayout" >
+         <layout class="QVBoxLayout">
           <item>
-           <widget class="QRadioButton" name="radioEndOfLineLF" >
-            <property name="text" >
+           <widget class="QRadioButton" name="radioEndOfLineLF">
+            <property name="text">
              <string>&amp;UNIX style (recommended; line feed only)</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="radioEndOfLineCRLF" >
-            <property name="text" >
+           <widget class="QRadioButton" name="radioEndOfLineCRLF">
+            <property name="text">
              <string>&amp;Windows style (carriage return and line feed)</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>false</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="radioEndOfLineCR" >
-            <property name="text" >
+           <widget class="QRadioButton" name="radioEndOfLineCR">
+            <property name="text">
              <string>&amp;MacOS style (carriage return only)</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>false</bool>
             </property>
            </widget>
@@ -110,13 +111,13 @@
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Expanding</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>96</height>
@@ -126,77 +127,75 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
        <string>Sheets</string>
       </attribute>
-      <layout class="QGridLayout" >
-       <item row="2" column="0" >
-        <widget class="Q3ListView" name="m_sheetList" >
-         <column>
-          <property name="text" >
-           <string>Available Sheets</string>
-          </property>
-         </column>
+      <layout class="QGridLayout">
+       <item row="2" column="0">
+        <widget class="QListWidget" name="m_sheetList">
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="TextLabel4" >
-         <property name="text" >
+       <item row="1" column="0">
+        <widget class="QLabel" name="TextLabel4">
+         <property name="text">
           <string>Select sheets to export:</string>
          </property>
-         <property name="wordWrap" >
+         <property name="wordWrap">
           <bool>false</bool>
          </property>
         </widget>
        </item>
-       <item row="0" column="0" >
-        <widget class="QGroupBox" name="m_delimiterLineBox" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="m_delimiterLineBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="title" >
+         <property name="title">
           <string>Delimiter Line</string>
          </property>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="QLineEdit" name="m_sheetDelimiter" >
-            <property name="text" >
-             <string>********&lt;SHEETNAME>********</string>
+         <layout class="QGridLayout">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="m_sheetDelimiter">
+            <property name="text">
+             <string>********&lt;SHEETNAME&gt;********</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="TextLabel6" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+          <item row="1" column="0">
+           <widget class="QLabel" name="TextLabel6">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text" >
-             <string>&lt;SHEETNAME> gets replaced by the name of the next sheet.</string>
+            <property name="text">
+             <string>&lt;SHEETNAME&gt; gets replaced by the name of the next sheet.</string>
             </property>
-            <property name="alignment" >
+            <property name="alignment">
              <set>Qt::AlignVCenter</set>
             </property>
-            <property name="wordWrap" >
+            <property name="wordWrap">
              <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="2" column="0" >
-           <widget class="QCheckBox" name="m_delimiterAboveAll" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="m_delimiterAboveAll">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Print delimiter line above every sheet</string>
             </property>
            </widget>
@@ -206,76 +205,76 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab2" >
-      <attribute name="title" >
+     <widget class="QWidget" name="tab2">
+      <attribute name="title">
        <string>Cells</string>
       </attribute>
-      <layout class="QGridLayout" >
-       <item row="0" column="0" >
-        <widget class="Q3ButtonGroup" name="m_delimiterBox" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+      <layout class="QGridLayout">
+       <item row="0" column="0">
+        <widget class="KButtonGroup" name="m_delimiterBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="title" >
+         <property name="title">
           <string>Delimiter</string>
          </property>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="QRadioButton" name="m_radioComma" >
-            <property name="text" >
+         <layout class="QGridLayout">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="m_radioComma">
+            <property name="text">
              <string>Comma</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" >
-           <widget class="QRadioButton" name="m_radioSemicolon" >
-            <property name="text" >
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="m_radioSemicolon">
+            <property name="text">
              <string>Semicolon</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0" >
-           <widget class="QRadioButton" name="m_radioTab" >
-            <property name="text" >
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="m_radioTab">
+            <property name="text">
              <string>Tabulator</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1" >
-           <widget class="QRadioButton" name="m_radioSpace" >
-            <property name="text" >
+          <item row="1" column="1">
+           <widget class="QRadioButton" name="m_radioSpace">
+            <property name="text">
              <string>Space</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2" >
-           <widget class="QRadioButton" name="m_radioOther" >
-            <property name="text" >
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="m_radioOther">
+            <property name="text">
              <string>Other:</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="2" >
-           <widget class="QLineEdit" name="m_delimiterEdit" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="m_delimiterEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="maximumSize" >
+            <property name="maximumSize">
              <size>
               <width>30</width>
               <height>32767</height>
              </size>
             </property>
-            <property name="maxLength" >
+            <property name="maxLength">
              <number>1</number>
             </property>
            </widget>
@@ -283,55 +282,55 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QGroupBox" name="GroupBox1" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="GroupBox1">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="title" >
+         <property name="title">
           <string>Cells</string>
          </property>
-         <layout class="QHBoxLayout" >
+         <layout class="QHBoxLayout">
           <item>
-           <widget class="QLabel" name="m_quotesLabel" >
-            <property name="enabled" >
+           <widget class="QLabel" name="m_quotesLabel">
+            <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Quotes:</string>
             </property>
-            <property name="wordWrap" >
+            <property name="wordWrap">
              <bool>false</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="m_comboQuote" >
-            <property name="enabled" >
+           <widget class="QComboBox" name="m_comboQuote">
+            <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <item>
-             <property name="text" >
-              <string>"</string>
+             <property name="text">
+              <string>&quot;</string>
              </property>
             </item>
             <item>
-             <property name="text" >
+             <property name="text">
               <string>'</string>
              </property>
             </item>
@@ -340,15 +339,15 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2" >
+       <item row="1" column="0" colspan="2">
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Expanding</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>406</width>
            <height>121</height>
@@ -360,35 +359,21 @@
      </widget>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="Q3ButtonGroup" name="buttonGroup2" >
-     <property name="title" >
-      <string/>
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="m_selectionOnly">
+     <property name="text">
+      <string>Export selection only</string>
      </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="m_selectionOnly" >
-        <property name="text" >
-         <string>Export selection only</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
   </layout>
  </widget>
-  <customwidgets>
+ <customwidgets>
   <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
+   <class>KButtonGroup</class>
+   <extends>QGroupBox</extends>
+   <header>kbuttongroup.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ListView</class>
-   <extends>QFrame</extends>
-   <header>q3listview.h</header>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>
@@ -397,8 +382,8 @@
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local" >kcombobox.h</include>
-  <include location="local" >klineedit.h</include>
+  <include location="local">kcombobox.h</include>
+  <include location="local">kbuttongroup.h</include>
  </includes>
  <resources/>
  <connections/>
