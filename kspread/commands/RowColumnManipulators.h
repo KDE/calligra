@@ -92,6 +92,7 @@ public:
 
     virtual bool process(Element*);
     virtual bool preProcessing();
+    virtual bool postProcessing();
 
     void setAdjustColumn(bool state) {
         m_adjustColumn = state;

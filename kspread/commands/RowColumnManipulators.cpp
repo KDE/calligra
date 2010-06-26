@@ -307,6 +307,12 @@ bool AdjustColumnRowManipulator::process(Element* element)
             }
         }
     }
+    // The cell width(s) or height(s) changed, which are cached: rebuild them.
+    const Region region(m_adjustRow ? 1 : range.left(),
+                        m_adjustColumn ? 1 : range.top(),
+                        m_adjustRow ? KS_colMax : range.width(),
+                        m_adjustColumn ? KS_rowMax : range.height());
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
     return true;
 }
 
@@ -415,6 +421,23 @@ bool AdjustColumnRowManipulator::preProcessing()
         }
     }
     return AbstractRegionCommand::preProcessing();
+}
+
+bool AdjustColumnRowManipulator::postProcessing()
+{
+    if (!m_adjustColumn && !m_adjustRow) {
+        return false;
+    }
+    // Update the column/row header, if necessary.
+    SheetDamage::Changes changes = SheetDamage::None;
+    if (m_adjustColumn) {
+        changes |= SheetDamage::ColumnsChanged;
+    }
+    if (m_adjustRow) {
+        changes |= SheetDamage::RowsChanged;
+    }
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, changes));
+    return AbstractRegionCommand::postProcessing();
 }
 
 class DummyWidget : public QWidget
