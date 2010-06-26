@@ -653,7 +653,8 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = d->styleManager->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles);
+    Styles autoStyles = d->styleManager->loadOdfAutoStyles(odfContext.stylesReader(),
+                                                           conditionalStyles, parser());
 
     // load the sheet
     sheetNode = body.firstChild();

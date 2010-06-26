@@ -45,6 +45,7 @@ class Style;
 class StyleManager;
 class StyleManipulator;
 class SubStyle;
+class ValueParser;
 
 // used for preloading OASIS auto styles
 typedef QHash<QString, Style>       Styles;
@@ -168,7 +169,8 @@ public:
     bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
     void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
     void loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                      Conditions& conditions, const StyleManager* styleManager);
+                       Conditions& conditions, const StyleManager* styleManager,
+                       const ValueParser *parser );
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
@@ -238,7 +240,9 @@ protected:
     void saveOdfStyle(const QSet<Key>& subStyles, KoGenStyle &style,
                       KoGenStyles &mainStyles, const StyleManager* manager) const;
 
-    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element, Conditions& conditions, const StyleManager* styleManager);
+    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
+                          Conditions& conditions, const StyleManager* styleManager,
+                          const ValueParser *parser);
     void loadOdfParagraphProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
     void loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
     void loadOdfTextProperties(KoOdfStylesReader& stylesReader, const KoStyleStack& element);
@@ -401,7 +405,7 @@ public:
      */
     void loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                  const QString& name, Conditions& conditions,
-                 const StyleManager* styleManager);
+                  const StyleManager* styleManager, const ValueParser *parser);
 
     /**
      * @reimp

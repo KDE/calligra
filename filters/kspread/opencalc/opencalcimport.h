@@ -41,6 +41,7 @@ class Doc;
 class Sheet;
 class Style;
 class Validity;
+class ValueParser;
 }
 
 class OpenCalcImport : public KoFilter
@@ -111,9 +112,8 @@ private:
     QString translatePar(QString & par) const;
     void loadCondition(const KSpread::Cell& cell, const KoXmlElement &property);
     void loadOasisCondition(const KSpread::Cell& cell, const KoXmlElement &property);
-    void loadOasisConditionValue(const QString &styleCondition, KSpread::Conditional &newCondition);
-    void loadOasisCondition(QString &valExpression, KSpread::Conditional &newCondition);
-    void loadOasisValidationValue(const QStringList &listVal, KSpread::Conditional &newCondition);
+    void loadOasisConditionValue(const QString &styleCondition, KSpread::Conditional &newCondition, const KSpread::ValueParser *parser);
+    void loadOasisCondition(QString &valExpression, KSpread::Conditional &newCondition, const KSpread::ValueParser *parser);
     KoFilter::ConversionStatus loadAndParse(KoXmlDocument& doc, const QString& fileName, KoStore *m_store);
 
     KoFilter::ConversionStatus openFile();

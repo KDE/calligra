@@ -200,7 +200,8 @@ void Style::loadAttributes(const QList<SharedSubStyle>& subStyles)
 }
 
 void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
-                         Conditions& conditions, const StyleManager* styleManager)
+                            Conditions& conditions, const StyleManager* styleManager,
+                          const ValueParser *parser)
 {
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
@@ -215,15 +216,17 @@ void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& el
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.namespaceURI() == KoXmlNS::style && e.localName() == "map")
-            conditions.loadOdfConditions(styleManager, e);
+            conditions.loadOdfConditions(e, parser);
     }
 
-    loadOdfDataStyle(stylesReader, element, conditions, styleManager);
+    loadOdfDataStyle(stylesReader, element, conditions, styleManager, parser);
 }
 
 typedef QPair<QString,QString> StringPair;
 
-void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element, Conditions& conditions, const StyleManager* styleManager)
+void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
+                             Conditions& conditions, const StyleManager* styleManager,
+                             const ValueParser *parser)
 {
     QString str;
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
@@ -239,10 +242,10 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
                     dataStyle = stylesReader.dataFormats()[stylename];
 
                 for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
-                    const Conditional c = conditions.loadOdfCondition(styleManager, it->first, it->second);
-                    if (c.styleName && styleManager->style(*c.styleName) == 0) {
-                        CustomStyle* const s = new CustomStyle(*c.styleName);
-                        const KoOdfNumberStyles::NumericStyleFormat& ds = stylesReader.dataFormats()[*c.styleName];
+                    const Conditional c = conditions.loadOdfCondition(it->first, it->second, parser);
+                    if (styleManager->style(c.styleName) == 0) {
+                        CustomStyle* const s = new CustomStyle(c.styleName);
+                        const KoOdfNumberStyles::NumericStyleFormat& ds = stylesReader.dataFormats()[c.styleName];
                         s->setCustomFormat(ds.formatStr);
                         const_cast<StyleManager*>(styleManager)->insertStyle(s);
                     }
@@ -2732,7 +2735,7 @@ QString CustomStyle::saveOdf(KoGenStyle& style, KoGenStyles &mainStyles,
 
 void CustomStyle::loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                           const QString& name, Conditions& conditions,
-                          const StyleManager* styleManager)
+                           const StyleManager* styleManager, const ValueParser *parser)
 {
     setName(name);
     if (style.hasAttributeNS(KoXmlNS::style, "parent-style-name"))
@@ -2740,7 +2743,7 @@ void CustomStyle::loadOdf(KoOdfStylesReader& stylesReader, const KoXmlElement& s
 
     setType(CUSTOM);
 
-    Style::loadOdfStyle(stylesReader, style, conditions, styleManager);
+    Style::loadOdfStyle(stylesReader, style, conditions, styleManager, parser);
 }
 
 void CustomStyle::save(QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager)

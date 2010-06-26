@@ -350,8 +350,10 @@ Style Cell::effectiveStyle() const
 {
     Style style = sheet()->cellStorage()->style(d->column, d->row);
     // use conditional formatting attributes
-    if (Style* conditialStyle = conditions().testConditions(*this, sheet()->map()->styleManager()))
-        style.merge(*conditialStyle);
+    const Style conditionalStyle = conditions().testConditions(*this);
+    if (!conditionalStyle.isEmpty()) {
+        style.merge(conditionalStyle);
+    }
     return style;
 }
 
@@ -946,7 +948,7 @@ QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
 
     Conditions conditions = this->conditions();
     if (!conditions.isEmpty()) {
-        QDomElement conditionElement = conditions.saveConditions(doc);
+        QDomElement conditionElement = conditions.saveConditions(doc, sheet()->map()->converter());
         if (!conditionElement.isNull())
             cell.appendChild(conditionElement);
     }
@@ -1071,7 +1073,7 @@ QString Cell::saveOdfCellStyle(KoGenStyle &currentCellStyle, KoGenStyles &mainSt
     if (!conditions.isEmpty()) {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-        conditions.saveOdfConditions(currentCellStyle);
+        conditions.saveOdfConditions(currentCellStyle, sheet()->map()->converter());
     }
     return style().saveOdf(currentCellStyle, mainStyles, d->sheet->map()->styleManager());
 }
@@ -1831,7 +1833,9 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
     KoXmlElement conditionsElement = cell.namedItem("condition").toElement();
     if (!conditionsElement.isNull()) {
         Conditions conditions;
-        conditions.loadConditions(sheet()->map()->styleManager(), conditionsElement);
+        Map *const map = sheet()->map();
+        ValueParser *const valueParser = map->parser();
+        conditions.loadConditions(conditionsElement, valueParser);
         if (!conditions.isEmpty())
             setConditions(conditions);
     } else if (paste && (mode == Paste::Normal || mode == Paste::NoBorder)) {

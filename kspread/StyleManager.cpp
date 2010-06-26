@@ -79,7 +79,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
     if (defStyle) {
         kDebug(36003) << "StyleManager: Loading default cell style";
         Conditions conditions;
-        defaultStyle()->loadOdf(stylesReader, *defStyle, "Default", conditions, this);
+      defaultStyle()->loadOdf(stylesReader, *defStyle, "Default", conditions, this, map->parser());
         defaultStyle()->setType(Style::BUILTIN);
         if (map) {
             // Load the default precision to be used, if the (default) cell style
@@ -124,7 +124,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
             CustomStyle * style = new CustomStyle(name);
 
             Conditions conditions;
-            style->loadOdf(stylesReader, *styleElem, name, conditions, this);
+            style->loadOdf(stylesReader, *styleElem, name, conditions, this, map->parser());
             // TODO Stefan: conditions
             insertStyle(style);
             // insert it into the the map sorted the OpenDocument name
@@ -373,7 +373,9 @@ QStringList StyleManager::styleNames() const
     return list;
 }
 
-Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles)
+Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
+                                       QHash<QString, Conditions>& conditionalStyles,
+                                       const ValueParser *parser)
 {
     Styles autoStyles;
     foreach(KoXmlElement* element, stylesReader.autoStyles("table-cell")) {
@@ -382,7 +384,7 @@ Styles StyleManager::loadOdfAutoStyles(KoOdfStylesReader& stylesReader, QHash<QS
             kDebug(36003) << "StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove(name);
             Conditions conditions;
-            autoStyles[name].loadOdfStyle(stylesReader, *(element), conditions, this);
+            autoStyles[name].loadOdfStyle(stylesReader, *(element), conditions, this, parser);
             if (!conditions.isEmpty()) {
                 kDebug() << "\t\tCONDITIONS";
                 conditionalStyles[name] = conditions;

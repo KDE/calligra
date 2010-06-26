@@ -30,6 +30,8 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "ValueConverter.h"
+#include "ValueParser.h"
 
 // commands
 #include "commands/ConditionCommand.h"
@@ -299,56 +301,14 @@ void ConditionalDialog::init()
                 found = false;
                 for (it2 = otherList.begin(); !found && it2 != otherList.end(); ++it2) {
                     kDebug() << "Found:" << found;
-                    found = ((*it1).val1 == (*it2).val1 &&
-                             (*it1).val2 == (*it2).val2 &&
+	  found = ( (*it1).value1 == (*it2).value1 &&
+                    (*it1).value2 == (*it2).value2 &&
                              (*it1).cond == (*it2).cond);
 
-                    if ((*it1).strVal1 && !(*it2).strVal1)
-                        found = false;
-                    if (!(*it1).strVal1 && (*it2).strVal1)
-                        found = false;
-                    if ((*it1).strVal1 && (*it2).strVal1
-                            && (*(*it1).strVal1 != *(*it2).strVal1))
-                        found = false;
                     if (!found)
                         continue;
 
-                    if ((*it1).strVal2 && !(*it2).strVal2)
-                        found = false;
-                    if (!(*it1).strVal2 && (*it2).strVal2)
-                        found = false;
-                    if ((*it1).strVal2 && (*it2).strVal2
-                            && (*(*it1).strVal2 != *(*it2).strVal2))
-                        found = false;
-                    if (!found)
-                        continue;
-
-                    if ((*it1).colorcond && !(*it2).colorcond)
-                        found = false;
-                    if (!(*it1).colorcond && (*it2).colorcond)
-                        found = false;
-                    if ((*it1).colorcond && (*it2).colorcond
-                            && (*(*it1).colorcond != *(*it2).colorcond))
-                        found = false;
-                    if (!found)
-                        continue;
-
-                    if ((*it1).fontcond && !(*it2).fontcond)
-                        found = false;
-                    if (!(*it1).fontcond && (*it2).fontcond)
-                        found = false;
-                    if ((*it1).fontcond && (*it2).fontcond
-                            && (*(*it1).fontcond != *(*it2).fontcond))
-                        found = false;
-                    if (!found)
-                        continue;
-
-                    if ((*it1).styleName && !(*it2).styleName)
-                        found = false;
-                    if (!(*it1).styleName && (*it2).styleName)
-                        found = false;
-                    if ((*it1).styleName && (*it2).styleName
-                            && (*(*it1).styleName != *(*it2).styleName))
+          if ( (*it1).styleName != (*it2).styleName )
                         found = false;
                 }
 
@@ -386,6 +346,8 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
     KLineEdit * kl1 = 0;
     KLineEdit * kl2 = 0;
     QString value;
+    Map *const map = m_selection->activeSheet()->map();
+    ValueConverter *const converter = map->converter();
 
     switch (numCondition) {
     case 0:
@@ -410,8 +372,8 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
         return;
     }
 
-    if (tmp.styleName) {
-        sb->setCurrentIndex(sb->findText(*tmp.styleName));
+  if (!tmp.styleName.isEmpty()) {
+    sb->setCurrentIndex(sb->findText(tmp.styleName));
         sb->setEnabled(true);
     }
 
@@ -441,23 +403,12 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     case Conditional::Between :
         cb->setCurrentIndex(6);
-
-        if (tmp.strVal2)
-            kl2->setText(*tmp.strVal2);
-        else {
-            value = value.setNum(tmp.val2);
-            kl2->setText(value);
-        }
+    kl2->setText(converter->asString(tmp.value2).asString());
         break;
 
     case Conditional::Different :
         cb->setCurrentIndex(7);
-        if (tmp.strVal2)
-            kl2->setText(*tmp.strVal2);
-        else {
-            value = value.setNum(tmp.val2);
-            kl2->setText(value);
-        }
+    kl2->setText(converter->asString(tmp.value2).asString());
         break;
     case Conditional::DifferentTo :
         cb->setCurrentIndex(8);
@@ -466,13 +417,7 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     if (tmp.cond != Conditional::None) {
         kl1->setEnabled(true);
-
-        if (tmp.strVal1)
-            kl1->setText(*tmp.strVal1);
-        else {
-            value = value.setNum(tmp.val1);
-            kl1->setText(value);
-        }
+    kl1->setText(converter->asString(tmp.value1).asString());
     }
 }
 
@@ -561,33 +506,12 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
     if (newCondition.cond == Conditional::None)
         return false;
 
-    bool ok = false;
-    double d1 = edit1->text().toDouble(&ok);
-    double d2 = 0.0;
-    QString * s1 = 0;
-    QString * s2 = 0;
-    QString * sn = 0;
+    Map *const map = m_selection->activeSheet()->map();
+    ValueParser *const parser = map->parser();
 
-    if (ok) {
-        if (edit2->isEnabled())
-            d2 = edit2->text().toDouble(&ok);
-        // values are already checked...
-    } else {
-        d1 = 0.0;
-        s1 = new QString(edit1->text());
-
-        if (edit2->isEnabled())
-            s2 = new QString(edit2->text());
-    }
-    sn = new QString(sb->currentText());
-
-    newCondition.val1      = d1;
-    newCondition.val2      = d2;
-    newCondition.strVal1   = s1;
-    newCondition.strVal2   = s2;
-    newCondition.fontcond  = 0;
-    newCondition.colorcond = 0;
-    newCondition.styleName = sn;
+  newCondition.value1 = parser->parse(edit1->text());
+  newCondition.value2 = parser->parse(edit2->text());
+  newCondition.styleName = sb->currentText();
 
     return true;
 }

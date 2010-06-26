@@ -42,6 +42,7 @@ Item										Prio	Status
     them into 'Edit' -> 'Sheet'?
   - Improve conformance to the standard menu layout:
     `kde4-config --install config`/ui/ui_standards.rc
+  Implement conditional style saving for 1.1, 1.2 syntax.
 
 * Commands                                                                      3       ----
   CellStorage: Replace CellStorageUndoData* by a QStack<CellStorageUndoData>,

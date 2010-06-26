@@ -172,7 +172,10 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
         OdfLoadingContext tableContext(odfContext);
         QHash<QString, Conditions> conditionalStyles;
-        Styles autoStyles = sheet()->map()->styleManager()->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles);
+        Map *const map = sheet()->map();
+        StyleManager *const styleManager = map->styleManager();
+        ValueParser *const parser = map->parser();
+        Styles autoStyles = styleManager->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles, parser);
 
         if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
             sheet()->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);

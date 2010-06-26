@@ -21,6 +21,9 @@
 #ifndef KSPREAD_CONDITION_H
 #define KSPREAD_CONDITION_H
 
+#include "Style.h"
+#include "Value.h"
+
 #include <QDomElement>
 #include <QLinkedList>
 #include <QSharedData>
@@ -38,8 +41,8 @@ class KoGenStyle;
 namespace KSpread
 {
 class Cell;
-class Style;
-class StyleManager;
+class ValueConverter;
+class ValueParser;
 
 /**
  * \class Conditional
@@ -55,23 +58,14 @@ public:
                 InferiorEqual, Between, Different, DifferentTo
               };
 
-    double         val1;
-    double         val2;
-    QString *      strVal1;
-    QString *      strVal2;
-    QColor  *      colorcond;
-    QFont   *      fontcond;
-    QString *      styleName;
+    Value          value1;
+    Value          value2;
+    QString        styleName;
     Type           cond;
 
     Conditional();
-    ~Conditional();
-    Conditional(const Conditional&);
-    Conditional& operator=(const Conditional&);
-    bool operator==(const Conditional& other) const;
-    inline bool operator!=(const Conditional& other) const {
-        return !operator==(other);
-    }
+
+    bool operator==(const Conditional &other) const;
 };
 
 
@@ -106,7 +100,7 @@ public:
     /**
      * \return the style that matches first (or 0 if no condition matches)
      */
-    Style* testConditions(const Cell& cell, const StyleManager* styleManager) const;
+    Style testConditions(const Cell &cell) const;
 
     /**
      * Retrieve the current list of conditions we're checking
@@ -123,32 +117,33 @@ public:
      * Takes a parsed DOM element and recreates the conditions structure out of
      * it
      */
-    void loadConditions(const StyleManager* styleManager, const KoXmlElement & element);
+    void loadConditions(const KoXmlElement &element, const ValueParser *parser);
 
     /**
      * \ingroup NativeFormat
      * Saves the conditions to a DOM tree structure.
      * \return the DOM element for the conditions.
      */
-    QDomElement saveConditions(QDomDocument & doc) const;
+    QDomElement saveConditions(QDomDocument &doc, ValueConverter *converter) const;
 
     /**
      * \ingroup OpenDocument
      * Loads the condtional formatting.
      */
-    Conditional loadOdfCondition(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName);
+    Conditional loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
+                                 const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
      * Loads the condtional formattings.
      */
-    void loadOdfConditions(const StyleManager* styleManager, const KoXmlElement & element);
+    void loadOdfConditions(const KoXmlElement &element, const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
      * Saves the condtional formattings.
      */
-    void saveOdfConditions(KoGenStyle &currentCellStyle) const;
+    void saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const;
 
     /// \note fake implementation to make QMap happy
     bool operator<(const Conditions&) const {
@@ -176,22 +171,22 @@ private:
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfCondition(QString &valExpression, Conditional &newCondition);
+    void loadOdfCondition(QString &valExpression, Conditional &newCondition, const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfConditionValue(const QString &styleCondition, Conditional &newCondition);
+    void loadOdfConditionValue(const QString &styleCondition, Conditional &newCondition, const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition);
+    void loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
      */
-    QString saveOdfConditionValue(Conditional &cond) const;
+    QString saveOdfConditionValue(const Conditional &conditionalStyle, ValueConverter *converter) const;
 
     class Private;
     QSharedDataPointer<Private> d;

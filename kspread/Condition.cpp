@@ -24,10 +24,13 @@
 #include <float.h>
 
 #include "Cell.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "Util.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
+#include "ValueParser.h"
 
 #include <KoGenStyles.h>
 
@@ -45,70 +48,23 @@ using namespace KSpread;
 /////////////////////////////////////////////////////////////////////////////
 
 Conditional::Conditional()
-        : val1(0.0)
-        , val2(0.0)
-        , strVal1(0)
-        , strVal2(0)
-        , colorcond(0)
-        , fontcond(0)
-        , styleName(0)
-        , cond(None)
+    : cond(None)
 {
 }
 
-Conditional::~Conditional()
+bool Conditional::operator==(const Conditional &other) const
 {
-    delete strVal1;
-    delete strVal2;
-    delete colorcond;
-    delete fontcond;
-    delete styleName;
+    if (cond != other.cond) {
+        return false;
+    }
+    if (!value1.equal(other.value1)) {
+        return false;
+    }
+    if (!value2.equal(other.value2)) {
+        return false;
+    }
+    return styleName == other.styleName;
 }
-
-Conditional::Conditional(const Conditional& o)
-{
-    strVal1 = o.strVal1 ? new QString(*o.strVal1) : 0;
-    strVal2 = o.strVal2 ? new QString(*o.strVal2) : 0;
-    styleName = o.styleName ? new QString(*o.styleName) : 0;
-    fontcond = o.fontcond ? new QFont(*o.fontcond) : 0;
-    colorcond = o.colorcond ? new QColor(*o.colorcond) : 0;
-    val1  = o.val1;
-    val2  = o.val2;
-    cond  = o.cond;
-}
-
-Conditional& Conditional::operator=(const Conditional & o)
-{
-    delete strVal1;
-    delete strVal2;
-    delete styleName;
-    delete fontcond;
-    delete colorcond;
-    strVal1 = o.strVal1 ? new QString(*o.strVal1) : 0;
-    strVal2 = o.strVal2 ? new QString(*o.strVal2) : 0;
-    styleName = o.styleName ? new QString(*o.styleName) : 0;
-    fontcond = o.fontcond ? new QFont(*o.fontcond) : 0;
-    colorcond = o.colorcond ? new QColor(*o.colorcond) : 0;
-    val1  = o.val1;
-    val2  = o.val2;
-    cond  = o.cond;
-
-    return *this;
-}
-
-bool Conditional::operator==(const Conditional& other) const
-{
-    return (cond == other.cond &&
-            val1 == other.val1 &&
-            val2 == other.val2 &&
-            (strVal1 && other.strVal1) ? (*strVal1 == *other.strVal1) : (strVal1 == other.strVal1) &&
-            (strVal2 && other.strVal2) ? (*strVal2 == *other.strVal2) : (strVal2 == other.strVal2) &&
-            (colorcond && other.strVal2) ? (*colorcond == *other.colorcond) : (colorcond == other.colorcond) &&
-            (fontcond && other.fontcond) ? (*fontcond == *other.fontcond) : (fontcond == other.fontcond) &&
-            (styleName && other.styleName) ? (*styleName == *other.styleName) : (styleName == other.styleName) );
-}
-
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Conditions
@@ -140,113 +96,84 @@ bool Conditions::isEmpty() const
     return d->conditionList.isEmpty();
 }
 
-Style* Conditions::testConditions(const Cell& cell, const StyleManager* styleManager) const
+Style Conditions::testConditions( const Cell& cell ) const
 {
     Conditional condition;
-    if (currentCondition(cell, condition) && condition.styleName)
-        return styleManager->style(*condition.styleName);
-    else
-        return 0;
+    if (currentCondition(cell, condition)) {
+        StyleManager *const styleManager = cell.sheet()->map()->styleManager();
+        Style *const style = styleManager->style(condition.styleName);
+        return *style;
+    }
+    return Style();
 }
 
 bool Conditions::currentCondition(const Cell& cell, Conditional & condition) const
 {
     /* for now, the first condition that is true is the one that will be used */
 
+    const Value value = cell.value();
+    ValueCalc *const calc = cell.sheet()->map()->calc();
+
     QLinkedList<Conditional>::const_iterator it;
-    double value   = numToDouble(cell.value().asFloat());
-    QString strVal = cell.value().asString();
-
-
     for (it = d->conditionList.begin(); it != d->conditionList.end(); ++it) {
         condition = *it;
+//         kDebug() << "Checking condition resulting in applying" << it->styleName;
 
-        if (condition.strVal1 && cell.value().isNumber())
+        // The first value of the condition is always used and has to be
+        // comparable to the cell's value.
+        if (!value.allowComparison(condition.value1)) {
             continue;
+        }
 
         switch (condition.cond) {
         case Conditional::Equal:
-            if (condition.strVal1) {
-                if (strVal == *condition.strVal1)
-                    return true;
-            } else
-                if (value - condition.val1 < DBL_EPSILON &&
-                        value - condition.val1 > (0.0 - DBL_EPSILON)) {
-                    return true;
-                }
+            if (value.equal(condition.value1)) {
+                return true;
+            }
             break;
-
         case Conditional::Superior:
-            if (condition.strVal1) {
-                if (strVal > *condition.strVal1)
-                    return true;
-            } else
-                if (value > condition.val1) {
-                    return true;
-                }
+            if (value.greater(condition.value1)) {
+                return true;
+            }
             break;
-
         case Conditional::Inferior:
-            if (condition.strVal1) {
-                if (strVal < *condition.strVal1)
-                    return true;
-            } else
-                if (value < condition.val1) {
-                    return true;
-                }
+            if (value.less(condition.value1)) {
+                return true;
+            }
             break;
-
-        case Conditional::SuperiorEqual :
-            if (condition.strVal1) {
-                if (strVal >= *condition.strVal1)
-                    return true;
-            } else
-                if (value >= condition.val1) {
-                    return true;
-                }
+        case Conditional::SuperiorEqual:
+            if (value.compare(condition.value1) >= 0) {
+                return true;
+            }
             break;
-
-        case Conditional::InferiorEqual :
-            if (condition.strVal1) {
-                if (strVal <= *condition.strVal1)
-                    return true;
-            } else
-                if (value <= condition.val1) {
-                    return true;
-                }
+        case Conditional::InferiorEqual:
+            if (value.compare(condition.value1) <= 0) {
+                return true;
+            }
             break;
-
-        case Conditional::Between :
-            if (condition.strVal1 && condition.strVal2) {
-                if (strVal > *condition.strVal1 && strVal < *condition.strVal2)
-                    return true;
-            } else
-                if ((value > qMin(condition.val1, condition.val2))
-                        && (value < qMax(condition.val1, condition.val2))) {
-                    return true;
-                }
+        case Conditional::Between: {
+            const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
+            const Value min = calc->min(values);
+            const Value max = calc->max(values);
+            if (value.greater(min) && value.less(max)) { // FIXME correct?
+                return true;
+            }
             break;
-
-        case Conditional::Different :
-            if (condition.strVal1 && condition.strVal2) {
-                if (strVal < *condition.strVal1 || strVal > *condition.strVal2)
-                    return true;
-            } else
-                if ((value < qMin(condition.val1, condition.val2))
-                        || (value > qMax(condition.val1, condition.val2))) {
-                    return true;
-                }
+        }
+        case Conditional::Different: {
+            const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
+            const Value min = calc->min(values);
+            const Value max = calc->max(values);
+            if (value.greater(max) && value.less(min)) {
+                return true;
+            }
             break;
-        case Conditional::DifferentTo :
-            if (condition.strVal1) {
-                if (strVal != *condition.strVal1)
-                    return true;
-            } else
-                if (value != condition.val1) {
-                    return true;
-                }
+        }
+        case Conditional::DifferentTo:
+            if (!value.equal(condition.value1)) {
+                return true;
+            }
             break;
-
         default:
             break;
         }
@@ -264,7 +191,7 @@ void Conditions::setConditionList(const QLinkedList<Conditional> & list)
     d->conditionList = list;
 }
 
-void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle) const
+void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const
 {
     //todo fix me with kspread old format!!!
     if (d->conditionList.isEmpty())
@@ -275,14 +202,14 @@ void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle) const
         Conditional condition = *it;
         //<style:map style:condition="cell-content()=45" style:apply-style-name="Default" style:base-cell-address="Sheet1.E10"/>
         QMap<QString, QString> map;
-        map.insert("style:condition", saveOdfConditionValue(condition));
-        map.insert("style:apply-style-name",  *(condition.styleName));
+        map.insert("style:condition", saveOdfConditionValue(condition, converter));
+        map.insert("style:apply-style-name", condition.styleName);
         //map.insert( ""style:base-cell-address", "..." );//todo
         currentCellStyle.addStyleMap(map);
     }
 }
 
-QString Conditions::saveOdfConditionValue(Conditional &condition) const
+QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueConverter* converter) const
 {
     //we can also compare text value.
     //todo adapt it.
@@ -291,73 +218,35 @@ QString Conditions::saveOdfConditionValue(Conditional &condition) const
     case Conditional::None:
         break;
     case Conditional::Equal:
-        value = "cell-content()=";
-        if (condition.strVal1)
-            value += *condition.strVal1;
-        else
-            value += QString::number(condition.val1);
+        value = "cell-content()=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Superior:
-        value = "cell-content()>";
-        if (condition.strVal1)
-            value += *condition.strVal1;
-        else
-            value += QString::number(condition.val1);
+        value = "cell-content()>" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Inferior:
-        value = "cell-content()<";
-        if (condition.strVal1)
-            value += *condition.strVal1;
-        else
-            value += QString::number(condition.val1);
+        value = "cell-content()<" + converter->asString(condition.value1).asString();
         break;
     case Conditional::SuperiorEqual:
-        value = "cell-content()>=";
-        if (condition.strVal1)
-            value += *condition.strVal1;
-        else
-            value += QString::number(condition.val1);
+        value = "cell-content()>=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::InferiorEqual:
-        value = "cell-content()<=";
-        if (condition.strVal1)
-            value += *condition.strVal1;
-        else
-            value += QString::number(condition.val1);
+        value = "cell-content()<=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Between:
         value = "cell-content-is-between(";
-        if (condition.strVal1) {
-            value += *condition.strVal1;
-            value += ',';
-            if (condition.strVal2)
-                value += *condition.strVal2;
-        } else {
-            value += QString::number(condition.val1);
-            value += ',';
-            value += QString::number(condition.val2);
-        }
+        value += converter->asString(condition.value1).asString();
+        value += ',';
+        value += converter->asString(condition.value2).asString();
         value += ')';
         break;
     case Conditional::DifferentTo:
-        value = "cell-content()!="; //FIXME not good here !
-        if (condition.strVal1)
-            value += *condition.strVal1;
-        else
-            value += QString::number(condition.val1);
+        value = "cell-content()!=" + converter->asString(condition.value1).asString();
         break;
     case Conditional::Different:
         value = "cell-content-is-not-between(";
-        if (condition.strVal1) {
-            value += *condition.strVal1;
-            value += ',';
-            if (condition.strVal2)
-                value += *condition.strVal2;
-        } else {
-            value += QString::number(condition.val1);
-            value += ',';
-            value += QString::number(condition.val2);
-        }
+        value += converter->asString(condition.value1).asString();
+        value += ',';
+        value += converter->asString(condition.value2).asString();
         value += ')';
         break;
     }
@@ -365,7 +254,7 @@ QString Conditions::saveOdfConditionValue(Conditional &condition) const
 }
 
 
-QDomElement Conditions::saveConditions(QDomDocument & doc) const
+QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *converter) const
 {
     QDomElement conditions = doc.createElement("condition");
     QLinkedList<Conditional>::const_iterator it;
@@ -387,19 +276,17 @@ QDomElement Conditions::saveConditions(QDomDocument & doc) const
         child.setAttribute("cond", (int) condition.cond);
 
         // TODO: saving in KSpread 1.1 | KSpread 1.2 format
-        if (condition.strVal1) {
-            child.setAttribute("strval1", *condition.strVal1);
-            if (condition.strVal2)
-                child.setAttribute("strval2", *condition.strVal2);
+        if (condition.value1.isString()) {
+            child.setAttribute("strval1", condition.value1.asString());
+            if (!condition.value2.asString().isEmpty()) {
+                child.setAttribute("strval2", condition.value2.asString());
+            }
         } else {
-            child.setAttribute("val1", condition.val1);
-            child.setAttribute("val2", condition.val2);
+            child.setAttribute("val1", converter->asString(condition.value1).asString());
+            child.setAttribute("val2", converter->asString(condition.value2).asString());
         }
-        if (condition.styleName) {
-            child.setAttribute("style", *condition.styleName);
-        } else {
-            child.setAttribute("color", condition.colorcond->name());
-            child.appendChild(NativeFormat::createElement("font", *condition.fontcond, doc));
+        if (!condition.styleName.isEmpty()) {
+            child.setAttribute("style", condition.styleName);
         }
 
         conditions.appendChild(child);
@@ -415,24 +302,25 @@ QDomElement Conditions::saveConditions(QDomDocument & doc) const
     }
 }
 
-Conditional Conditions::loadOdfCondition(const StyleManager* styleManager, const QString &conditionValue, const QString &applyStyleName)
+Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
+                                         const ValueParser *parser)
 {
-    Q_UNUSED(styleManager);
     kDebug(36003) << "\tcondition:" << conditionValue;
     Conditional newCondition;
-    loadOdfConditionValue(conditionValue, newCondition);
+    loadOdfConditionValue(conditionValue, newCondition, parser);
     if (!applyStyleName.isNull()) {
         kDebug(36003) << "\tstyle:" << applyStyleName;
-        newCondition.styleName = new QString(applyStyleName);
+        newCondition.styleName = applyStyleName;
     }
     d->conditionList.append(newCondition);
     return newCondition;
 }
 
-void Conditions::loadOdfConditions(const StyleManager* styleManager, const KoXmlElement & element)
+void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParser *parser)
 {
     kDebug(36003) << "Loading conditional styles";
     KoXmlNode node(element);
+
     while (!node.isNull()) {
         KoXmlElement elementItem = node.toElement();
         if (elementItem.tagName() == "map" && elementItem.namespaceURI() == KoXmlNS::style) {
@@ -440,22 +328,21 @@ void Conditions::loadOdfConditions(const StyleManager* styleManager, const KoXml
             QString applyStyleName;
             if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name"))
                 applyStyleName = elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString());
-            loadOdfCondition(styleManager, conditionValue, applyStyleName);
+            loadOdfCondition(conditionValue, applyStyleName, parser);
         }
         node = node.nextSibling();
     }
 }
 
-void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditional &newCondition)
+void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditional &newCondition, const ValueParser *parser)
 {
     QString val(styleCondition);
     if (val.contains("cell-content()")) {
         val = val.remove("cell-content()");
-        loadOdfCondition(val, newCondition);
-    }
-    else if (val.contains("value()")) {
+        loadOdfCondition(val, newCondition, parser);
+    } else if (val.contains("value()")) {
         val = val.remove("value()");
-        loadOdfCondition(val, newCondition);
+        loadOdfCondition(val, newCondition, parser);
     }
 
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
@@ -464,19 +351,18 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         val = val.remove("cell-content-is-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
-        loadOdfValidationValue(listVal, newCondition);
+        loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Between;
-    }
-    else if (val.contains("cell-content-is-not-between(")) {
+    } else if (val.contains("cell-content-is-not-between(")) {
         val = val.remove("cell-content-is-not-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
-        loadOdfValidationValue(listVal, newCondition);
+        loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Different;
     }
 }
 
-void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondition)
+void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondition, const ValueParser *parser)
 {
     QString value;
     if (valExpression.indexOf("<=") == 0) {
@@ -501,54 +387,23 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
     } else
         kDebug(36003) << " I don't know how to parse it :" << valExpression;
     kDebug(36003) << "\tvalue:" << value;
-    bool ok = false;
-    newCondition.val1 = value.toDouble(&ok);
-    if (!ok) {
-        newCondition.val1 = value.toInt(&ok);
-        if (!ok) {
-            newCondition.strVal1 = new QString(value);
-            kDebug(36003) << " Try to parse this value :" << value;
-        }
-    }
+
+    newCondition.value1 = parser->parse(value);
 }
 
-void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition)
+void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser)
 {
-    bool ok = false;
     kDebug(36003) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
-
-    newCondition.val1 = listVal[0].toDouble(&ok);
-    if (!ok) {
-        newCondition.val1 = listVal[0].toInt(&ok);
-        if (!ok) {
-            newCondition.strVal1 = new QString(listVal[0]);
-            kDebug(36003) << " Try to parse this value :" << listVal[0];
-        }
-    }
-    ok = false;
-    newCondition.val2 = listVal[1].toDouble(&ok);
-    if (!ok) {
-        newCondition.val2 = listVal[1].toInt(&ok);
-        if (!ok) {
-            newCondition.strVal2 = new QString(listVal[1]);
-            kDebug(36003) << " Try to parse this value :" << listVal[1];
-        }
-    }
+    newCondition.value1 = parser->parse(listVal[0]);
+    newCondition.value2 = parser->parse(listVal[1]);
 }
 
-void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlElement & element)
+void Conditions::loadConditions(const KoXmlElement &element, const ValueParser *parser)
 {
-    Q_UNUSED(styleManager);
     Conditional newCondition;
 
     KoXmlElement conditionElement;
     forEachElement(conditionElement, element) {
-        newCondition.strVal1   = 0;
-        newCondition.strVal2   = 0;
-        newCondition.styleName = 0;
-        newCondition.fontcond  = 0;
-        newCondition.colorcond = 0;
-
         if (!conditionElement.hasAttribute("cond"))
             continue;
 
@@ -558,31 +413,21 @@ void Conditions::loadConditions(const StyleManager* styleManager, const KoXmlEle
             continue;
 
         if (conditionElement.hasAttribute("val1")) {
-            newCondition.val1 = conditionElement.attribute("val1").toDouble(&ok);
+            newCondition.value1 = parser->parse(conditionElement.attribute("val1"));
 
             if (conditionElement.hasAttribute("val2"))
-                newCondition.val2 = conditionElement.attribute("val2").toDouble(&ok);
+                newCondition.value2 = parser->parse(conditionElement.attribute("val2"));
         }
 
         if (conditionElement.hasAttribute("strval1")) {
-            newCondition.strVal1 = new QString(conditionElement.attribute("strval1"));
+            newCondition.value1 = Value(conditionElement.attribute("strval1"));
 
             if (conditionElement.hasAttribute("strval2"))
-                newCondition.strVal2 = new QString(conditionElement.attribute("strval2"));
+                newCondition.value2 = Value(conditionElement.attribute("strval2"));
         }
-
-        if (conditionElement.hasAttribute("color")) {
-            QColor color(conditionElement.attribute("color"));
-            if (color.isValid())
-                newCondition.colorcond = new QColor(color);
-        }
-
-        KoXmlElement font = conditionElement.namedItem("font").toElement();
-        if (!font.isNull())
-            newCondition.fontcond = new QFont(NativeFormat::toFont(font));
 
         if (conditionElement.hasAttribute("style")) {
-            newCondition.styleName = new QString(conditionElement.attribute("style"));
+            newCondition.styleName = conditionElement.attribute("style");
         }
 
         d->conditionList.append(newCondition);

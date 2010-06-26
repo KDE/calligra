@@ -59,6 +59,7 @@
 #include <kspread/StyleManager.h>
 #include <kspread/Validity.h>
 #include <kspread/Value.h>
+#include <kspread/ValueParser.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 
@@ -660,7 +661,8 @@ void OpenCalcImport::loadCondition(const Cell& cell, const KoXmlElement &propert
 void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &property)
 {
     KoXmlElement elementItem(property);
-    //StyleManager * manager = cell.sheet()->map()->styleManager();
+    Map *const map = cell.sheet()->map();
+    ValueParser *const parser = map->parser();
 
     QLinkedList<Conditional> cond;
     while (!elementItem.isNull()) {
@@ -670,11 +672,11 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
             bool ok = true;
             kDebug(30518) << "elementItem.attribute(style:condition ) :" << elementItem.attributeNS(ooNS::style, "condition", QString());
             Conditional newCondition;
-            loadOasisConditionValue(elementItem.attributeNS(ooNS::style, "condition", QString()), newCondition);
+            loadOasisConditionValue(elementItem.attributeNS(ooNS::style, "condition", QString()), newCondition, parser);
             if (elementItem.hasAttributeNS(ooNS::style, "apply-style-name")) {
                 kDebug(30518) << "elementItem.attribute( style:apply-style-name ) :" << elementItem.attributeNS(ooNS::style, "apply-style-name", QString());
-                newCondition.styleName = new QString(elementItem.attributeNS(ooNS::style, "apply-style-name", QString()));
-                ok = true;
+                newCondition.styleName = elementItem.attributeNS(ooNS::style, "apply-style-name", QString());
+                ok = !newCondition.styleName.isEmpty();
             }
 
             if (ok)
@@ -691,12 +693,13 @@ void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &pr
     }
 }
 
-void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Conditional &newCondition)
+void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Conditional &newCondition,
+                                             const ValueParser *parser)
 {
     QString val(styleCondition);
     if (val.contains("cell-content()")) {
         val = val.remove("cell-content()");
-        loadOasisCondition(val, newCondition);
+        loadOasisCondition(val, newCondition, parser);
     }
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
     //for the moment we support just int/double value, not text/date/time :(
@@ -704,21 +707,26 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
         val = val.remove("cell-content-is-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',');
-        loadOasisValidationValue(listVal, newCondition);
+        kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];
+        newCondition.value1 = parser->parse(listVal[0]);
+        newCondition.value2 = parser->parse(listVal[1]);
         newCondition.cond = Conditional::Between;
     }
     if (val.contains("cell-content-is-not-between(")) {
         val = val.remove("cell-content-is-not-between(");
         val = val.remove(')');
         QStringList listVal = val.split(',');
-        loadOasisValidationValue(listVal, newCondition);
+        kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];
+        newCondition.value1 = parser->parse(listVal[0]);
+        newCondition.value2 = parser->parse(listVal[1]);
         newCondition.cond = Conditional::Different;
     }
 
 }
 
 
-void OpenCalcImport::loadOasisCondition(QString &valExpression, Conditional &newCondition)
+void OpenCalcImport::loadOasisCondition(QString &valExpression, Conditional &newCondition,
+                                        const ValueParser *parser)
 {
     QString value;
     if (valExpression.indexOf("<=") == 0) {
@@ -743,43 +751,8 @@ void OpenCalcImport::loadOasisCondition(QString &valExpression, Conditional &new
     } else
         kDebug(30518) << " I don't know how to parse it :" << valExpression;
     kDebug(30518) << " value :" << value;
-    bool ok = false;
-    newCondition.val1 = value.toDouble(&ok);
-    if (!ok) {
-        newCondition.val1 = value.toInt(&ok);
-        if (!ok) {
-            newCondition.strVal1 = new QString(value);
-            kDebug(30518) << " Try to parse this value :" << value;
-        }
-
-    }
+    newCondition.value1 = parser->parse(value);
 }
-
-
-void OpenCalcImport::loadOasisValidationValue(const QStringList &listVal, Conditional &newCondition)
-{
-    bool ok = false;
-    kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
-
-    newCondition.val1 = listVal[0].toDouble(&ok);
-    if (!ok) {
-        newCondition.val1 = listVal[0].toInt(&ok);
-        if (!ok) {
-            newCondition.strVal1 = new QString(listVal[0]);
-            kDebug(30518) << " Try to parse this value :" << listVal[0];
-        }
-    }
-    ok = false;
-    newCondition.val2 = listVal[1].toDouble(&ok);
-    if (!ok) {
-        newCondition.val2 = listVal[1].toInt(&ok);
-        if (!ok) {
-            newCondition.strVal2 = new QString(listVal[1]);
-            kDebug(30518) << " Try to parse this value :" << listVal[1];
-        }
-    }
-}
-
 
 bool OpenCalcImport::readRowsAndCells(KoXmlElement & content, Sheet * table)
 {

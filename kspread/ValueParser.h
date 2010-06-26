@@ -26,6 +26,7 @@
 
 #include "Format.h"
 #include "Number.h"
+
 #include "kspread_export.h"
 
 namespace KSpread
@@ -38,7 +39,7 @@ class Value;
  * Generates a Value by parsing an user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */
-class KSPREAD_TEST_EXPORT ValueParser
+class KSPREAD_EXPORT ValueParser
 {
 public:
     /**

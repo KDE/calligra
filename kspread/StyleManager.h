@@ -37,6 +37,7 @@ namespace KSpread
 class Conditions;
 class Map;
 class StyleDialog;
+class ValueParser;
 
 /**
  * \class StyleManager
@@ -96,7 +97,9 @@ public:
      * @param stylesReader repository of styles
      * @return a hash of styles with the OpenDocument internal name as key
      */
-    Styles loadOdfAutoStyles(KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles);
+    Styles loadOdfAutoStyles(KoOdfStylesReader& stylesReader,
+                             QHash<QString, Conditions>& conditionalStyles,
+                             const ValueParser *parser);
 
     /**
      * Releases unused auto styles.
