@@ -1308,6 +1308,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = ReferenceComplexFieldCharType;
                 m_complexCharValue = instruction.left(instruction.indexOf(' '));
             }
+            else if (instruction.startsWith("GOTOBUTTON")) {
+                instruction.remove(0, 12); // removes GOTOBUTTON
+                m_complexCharType = InternalHyperlinkComplexFieldCharType;
+                m_complexCharValue = instruction;
+            }
             //! @todo: Add rest of the instructions
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1721,11 +1726,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 mainStyles->markStyleForStylesXml(currentTextStyleName);
             }
         }
-        if (m_complexCharStatus == InstrExecute) {
-            if (m_complexCharType == HyperlinkComplexFieldCharType) {
+        if (m_complexCharStatus == InstrExecute || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+            if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
                 body->startElement("text:a");
                 body->addAttribute("xlink:type", "simple");
-                body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+                if (m_complexCharType == HyperlinkComplexFieldCharType) {
+                    body->addAttribute("xlink:href", QUrl(m_complexCharValue).toEncoded());
+                }
+                else {
+                    int spacePosition = m_complexCharValue.indexOf(' ');
+                    QString textValue = "#";
+                    textValue.append(m_complexCharValue.left(spacePosition));
+                    m_complexCharValue.remove(0, textValue.length());
+                    body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
+                }
             }
             else if (m_complexCharType == ReferenceNextComplexFieldCharType) {
                 body->startElement("text:bookmark-ref");
@@ -1733,8 +1747,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->addAttribute("text:ref-name", m_complexCharValue);
             }
         }
+
         body->startElement("text:span", false);
         body->addAttribute("text:style-name", currentTextStyleName);
+
+        if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+            body->addTextSpan(m_complexCharValue);
+        }
 
         // Writing the internal body of read_t now
         body = buffer.releaseWriter();
@@ -1753,6 +1772,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                  body->endElement(); // text:a
              }
         }
+        else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+            body->endElement(); // text:a
+        //    m_complexCharType = NoComplexFieldCharType;
+        }
+
         if (m_closeHyperlink) {
             body->endElement(); //either text:bookmark-ref or text:a
             m_closeHyperlink = false;

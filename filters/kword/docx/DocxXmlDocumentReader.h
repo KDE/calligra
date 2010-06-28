@@ -212,7 +212,7 @@ private:
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,
-       ReferenceNextComplexFieldCharType
+       ReferenceNextComplexFieldCharType, InternalHyperlinkComplexFieldCharType
     };
     //! Type of complex field characters we have
     ComplexFieldCharType m_complexCharType;
