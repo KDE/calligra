@@ -64,7 +64,6 @@ public:
      */
     bool isPresentationRunning() const;
 
-
 public slots:
     /**
      * Activate the presentation view mode
@@ -93,6 +92,9 @@ protected slots:
     void configureSlideShow();
     void configurePresenterView();
     void exportToHtml();
+    void drawOnPresentation();
+    void highlightPresentation();
+    void blackPresentation();
 
 private:
     KActionMenu *m_actionStartPresentation;

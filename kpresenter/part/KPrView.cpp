@@ -56,6 +56,8 @@
 #include "ui/KPrHtmlExportDialog.h"
 #include <QtGui/QDesktopWidget>
 
+#include <KDebug>
+
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
   : KoPAView( document, parent )
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
@@ -118,6 +120,30 @@ KPrViewModePresentation * KPrView::presentationMode() const
 bool KPrView::isPresentationRunning() const
 {
     return ( viewMode() == m_presentationMode );
+}
+
+void KPrView::drawOnPresentation()
+{
+    if (isPresentationRunning())
+    {
+        m_presentationMode->presentationTool()->drawOnPresentation();
+    }
+}
+
+void KPrView::highlightPresentation()
+{
+    if (isPresentationRunning())
+    {
+        m_presentationMode->presentationTool()->highlightPresentation();
+    }
+}
+
+void KPrView::blackPresentation()
+{
+    if (isPresentationRunning())
+    {
+        m_presentationMode->presentationTool()->blackPresentation();
+    }
 }
 
 void KPrView::initGUI()
@@ -192,6 +218,24 @@ this );
     action = new KAction( i18n( "Configure Presenter View..." ), this );
     actionCollection()->addAction( "slideshow_presenterview", action );
     connect( action, SIGNAL( activated() ), this, SLOT( configurePresenterView() ) );
+
+    action = new KAction( i18n( "Draw on the presentation..." ), this );
+    action->setShortcut(Qt::Key_P);
+    action->setShortcutContext(Qt::ApplicationShortcut);
+    actionCollection()->addAction( "draw_on_presentation", action );
+    connect( action, SIGNAL( activated() ), this, SLOT( drawOnPresentation() ) );
+
+    action = new KAction( i18n( "Highlight the presentation..." ), this );
+    action->setShortcut(Qt::Key_H);
+    action->setShortcutContext(Qt::ApplicationShortcut);
+    actionCollection()->addAction( "highlight_presentation", action );
+    connect( action, SIGNAL( activated() ), this, SLOT( highlightPresentation() ) );
+
+    action = new KAction( i18n( "Blackscreen on the presentation..." ), this );
+    action->setShortcut(Qt::Key_B);
+    action->setShortcutContext(Qt::ApplicationShortcut);
+    actionCollection()->addAction( "black_presentation", action );
+    connect( action, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
 }
 
 void KPrView::startPresentation()

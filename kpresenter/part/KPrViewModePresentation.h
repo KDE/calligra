@@ -22,9 +22,10 @@
 
 #include <KoPAViewMode.h>
 #include "KPrAnimationDirector.h"
+#include "KPrPresentationTool.h"
 
 class QWidget;
-class KPrPresentationTool;
+//class KPrPresentationTool;
 class KPrPresenterViewTool;
 class KPrPresenterViewWidget;
 class KPrViewModePresenterView;
@@ -60,7 +61,7 @@ public:
     /**
      * @brief Activate the saved view mode
      *
-     * This ends the presentation mode. The view mode that was active before the 
+     * This ends the presentation mode. The view mode that was active before the
      * presentation will be restored.
      */
     void activateSavedViewMode();
@@ -101,6 +102,13 @@ public:
      * This assumes that the presentation is active.
      */
     int currentStep() const;
+
+    /**
+     * get the current Presentation Tool
+     *
+     * This assumes that the presentation is active.
+     */
+    KPrPresentationTool * presentationTool() const;
 
     /**
      * Navigate in the presentation.

@@ -37,7 +37,6 @@
 #include <KoZoomHandler.h>
 
 #include "KPrDocument.h"
-#include "KPrPresentationTool.h"
 #include "KPrPresenterViewWidget.h"
 #include "KPrEndOfSlideShowPage.h"
 
@@ -290,6 +289,12 @@ int KPrViewModePresentation::currentStep() const
 {
     Q_ASSERT( 0 != m_animationDirector );
     return m_animationDirector ? m_animationDirector->currentStep() : -1;
+}
+
+KPrPresentationTool * KPrViewModePresentation::presentationTool() const
+{
+    Q_ASSERT( 0 != m_animationDirector );
+    return m_tool;
 }
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
