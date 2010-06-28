@@ -135,8 +135,15 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
     }
     case KoTextAnchor::RightOfPage: {
         KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
-        if(pageInfo) {
+        if (pageInfo) {
             newPosition.setX(pageInfo->page().width() - containerBoundingRect.x() - boundingRect.width());
+        }
+        break;
+    }
+    case KoTextAnchor::CenterOfPage: {
+        KWPageTextInfo *pageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if (pageInfo) {
+            newPosition.setX(pageInfo->page().width()/2 - containerBoundingRect.x() - boundingRect.width()/2);
         }
         break;
     }
@@ -320,7 +327,8 @@ void KWAnchorStrategy::calculateKnowledgePoint()
     case KoTextAnchor::Right:
     case KoTextAnchor::Center:
     case KoTextAnchor::LeftOfPage:
-    case KoTextAnchor::RightOfPage: {
+    case KoTextAnchor::RightOfPage:
+    case KoTextAnchor::CenterOfPage: {
         if (m_anchor->shape()->parent() == 0) // not enough info yet.
             return;
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
