@@ -1479,7 +1479,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell", string(sheet->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
+        xmlWriter->addAttribute("table:end-cell-address", string(sheet->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
         xmlWriter->addAttribute("table:end-x", QString::number(dxR));
         xmlWriter->addAttribute("table:end-y", QString::number(dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
