@@ -1277,14 +1277,14 @@ void ColumnHeader::paintEvent(QPaintEvent* event)
 
             QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
             double len = painter.fontMetrics().width(colText);
-            if (!columnFormat->isHiddenOrFiltered())
+            if (!columnFormat->isHiddenOrFiltered() && width >= len) {
                 drawText(painter,
                          normalFont,
                          QPointF(xPos + (width - len) / 2,
                                  (height - painter.fontMetrics().ascent() - painter.fontMetrics().descent()) / 2),
                          colText,
                          width);
-
+            }
             xPos += columnFormat->width();
             --x;
         }
@@ -1329,7 +1329,7 @@ void ColumnHeader::paintEvent(QPaintEvent* event)
 
             QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
             int len = painter.fontMetrics().width(colText);
-            if (!columnFormat->isHiddenOrFiltered()) {
+            if (!columnFormat->isHiddenOrFiltered() && width >= len) {
 #if 0
                 switch (x % 3) {
                 case 0: colText = QString::number(height) + 'h'; break;
