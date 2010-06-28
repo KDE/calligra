@@ -3447,10 +3447,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         STRING_TO_INT(sz, szInt, "defRPr@sz")
         m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
 #ifdef PPTXXMLSLIDEREADER_H
+        if (d->currentSlideMasterTextStyle) {
 //! @todo level, 0 is hardcoded
-        PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(0);
-        kDebug() << "=====" << szInt;
-        slideMasterListLevelTextStyle->sz = szInt;
+            PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(0);
+            kDebug() << "=====" << szInt;
+            slideMasterListLevelTextStyle->sz = szInt;
+        }
 #endif
     }
 
