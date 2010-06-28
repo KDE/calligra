@@ -85,7 +85,7 @@ CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
 {
     const int col = cell.column();
     const int row = cell.row();
-    CellView cellView = sheetView->cellView(cell.column(), cell.row());
+    CellView cellView = sheetView->cellView(col, row);
     if (cellView.isObscured()) {
         // if the rect of visible cells contains the obscuring cell, it was already painted
         if (visibleRect.contains(cellView.obscuringCell())) {
