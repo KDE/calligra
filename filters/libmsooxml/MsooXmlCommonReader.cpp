@@ -52,6 +52,7 @@ MsooXmlCommonReader::~MsooXmlCommonReader()
 void MsooXmlCommonReader::init()
 {
     m_currentTextStyleProperties = 0;
+    m_currentListStyleProperties = 0;
     m_read_p_args = 0;
     m_lstStyleFound = false;
     m_pPr_lvl = 0;
