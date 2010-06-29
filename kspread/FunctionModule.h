@@ -71,6 +71,11 @@ public:
      * \return \c true on success; \c false on failure
      */
     bool isRemovable();
+	
+	/**
+	  * function of the KoGenericRegistry template, that has to be implemented
+	  */
+	QString id() const;
 
 protected:
     /**

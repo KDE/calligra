@@ -25,10 +25,10 @@
 #include <KoGenericRegistry.h>
 
 #include "kspread_export.h"
+#include "FunctionModule.h"
 
 namespace KSpread
 {
-class FunctionModule;
 
 /**
  * \ingroup Plugin

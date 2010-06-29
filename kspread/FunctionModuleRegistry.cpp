@@ -20,7 +20,6 @@
 #include "FunctionModuleRegistry.h"
 
 #include "Function.h"
-#include "FunctionModule.h"
 #include "FunctionRepository.h"
 
 #include <KDebug>

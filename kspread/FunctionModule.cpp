@@ -70,6 +70,11 @@ bool FunctionModule::isRemovable()
     return true;
 }
 
+QString FunctionModule::id() const
+{
+	return QString();
+}
+
 void FunctionModule::add(Function* function)
 {
     if (!function) {
