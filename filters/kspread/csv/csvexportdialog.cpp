@@ -39,7 +39,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
         m_textquote('"')
 {
     setButtons(KDialog::Ok | KDialog::Cancel);
-    setDefaultButton(KDialog::No);
+    setDefaultButton(KDialog::Ok);
     kapp->restoreOverrideCursor();
 
     QStringList encodings;
