@@ -74,10 +74,9 @@ QpFormulaStack::join(int pCnt, const char* pSeparator)
 {
     int lFirstIdx = 1 - pCnt;  // really 0 - pCnt +1
 
-    if (pCnt > 0 && (cIdx - lFirstIdx) >= 0) {
+    if (pCnt > 0 && (cIdx + lFirstIdx) >= 0) {
         int lSepLen = strlen(pSeparator);
         int lLen    = lSepLen * (pCnt - 1) + 1;  // +1 for null terminator
-
         for (int lIdx = lFirstIdx; lIdx <= 0; ++lIdx) {
             lLen += strlen(cStack[cIdx + lIdx]);
         }
