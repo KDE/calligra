@@ -219,27 +219,33 @@ this );
     actionCollection()->addAction( "slideshow_presenterview", action );
     connect( action, SIGNAL( activated() ), this, SLOT( configurePresenterView() ) );
 
-    action = new KAction( i18n( "Draw on the presentation..." ), this );
-    action->setShortcut(Qt::Key_P);
-    action->setShortcutContext(Qt::ApplicationShortcut);
-    actionCollection()->addAction( "draw_on_presentation", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( drawOnPresentation() ) );
+    m_actionDrawOnPresentation = new KAction( i18n( "Draw on the presentation..." ), this );
+    m_actionDrawOnPresentation->setShortcut(Qt::Key_P);
+    m_actionDrawOnPresentation->setShortcutContext(Qt::ApplicationShortcut);
+    actionCollection()->addAction( "draw_on_presentation", m_actionDrawOnPresentation );
+    connect( m_actionDrawOnPresentation, SIGNAL( activated() ), this, SLOT( drawOnPresentation() ) );
+    m_actionDrawOnPresentation->setEnabled(false);
 
-    action = new KAction( i18n( "Highlight the presentation..." ), this );
-    action->setShortcut(Qt::Key_H);
-    action->setShortcutContext(Qt::ApplicationShortcut);
-    actionCollection()->addAction( "highlight_presentation", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( highlightPresentation() ) );
+    m_actionHighlightPresentation = new KAction( i18n( "Highlight the presentation..." ), this );
+    m_actionHighlightPresentation->setShortcut(Qt::Key_H);
+    m_actionHighlightPresentation->setShortcutContext(Qt::ApplicationShortcut);
+    actionCollection()->addAction( "highlight_presentation", m_actionHighlightPresentation );
+    connect( m_actionHighlightPresentation, SIGNAL( activated() ), this, SLOT( highlightPresentation() ) );
+    m_actionHighlightPresentation->setEnabled(false);
 
-    action = new KAction( i18n( "Blackscreen on the presentation..." ), this );
-    action->setShortcut(Qt::Key_B);
-    action->setShortcutContext(Qt::ApplicationShortcut);
-    actionCollection()->addAction( "black_presentation", action );
-    connect( action, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
+    m_actionBlackPresentation = new KAction( i18n( "Blackscreen on the presentation..." ), this );
+    m_actionBlackPresentation->setShortcut(Qt::Key_B);
+    m_actionBlackPresentation->setShortcutContext(Qt::ApplicationShortcut);
+    actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
+    connect( m_actionBlackPresentation, SIGNAL( activated() ), this, SLOT( blackPresentation() ) );
+    m_actionBlackPresentation->setEnabled(false);
 }
 
 void KPrView::startPresentation()
 {
+    m_actionDrawOnPresentation->setEnabled(true);
+    m_actionHighlightPresentation->setEnabled(true);
+    m_actionBlackPresentation->setEnabled(true);
     setViewMode( m_presentationMode );
 }
 
@@ -255,6 +261,10 @@ void KPrView::startPresentationFromBeginning()
 
 void KPrView::stopPresentation()
 {
+    m_actionDrawOnPresentation->setEnabled(false);
+    m_actionHighlightPresentation->setEnabled(false);
+    m_actionBlackPresentation->setEnabled(false);
+
     if ( isPresentationRunning() ) {
         m_presentationMode->activateSavedViewMode();
     }

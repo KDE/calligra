@@ -103,6 +103,9 @@ private:
     KAction *m_actionViewModeNotes;
     KAction *m_actionCreateCustomSlideShowsDialog;
     KAction *m_actionExportHtml;
+    KAction *m_actionDrawOnPresentation;
+    KAction *m_actionHighlightPresentation;
+    KAction *m_actionBlackPresentation;
 
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
