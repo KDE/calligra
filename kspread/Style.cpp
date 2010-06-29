@@ -245,8 +245,10 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
                     const Conditional c = conditions.loadOdfCondition(it->first, it->second, parser);
                     if (styleManager->style(c.styleName) == 0) {
                         CustomStyle* const s = new CustomStyle(c.styleName);
-                        const KoOdfNumberStyles::NumericStyleFormat& ds = stylesReader.dataFormats()[c.styleName];
-                        s->setCustomFormat(ds.formatStr);
+                        if (stylesReader.dataFormats().contains(c.styleName)) {
+                            const KoOdfNumberStyles::NumericStyleFormat& ds = stylesReader.dataFormats()[c.styleName];
+                            s->setCustomFormat(ds.formatStr);
+                        }
                         const_cast<StyleManager*>(styleManager)->insertStyle(s);
                     }
                 }
