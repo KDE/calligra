@@ -63,16 +63,10 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
         // The bookmark names in the STTBF are always Unicode, the lid doesn't matter
         U16 usLid = 0x409;
         STTBF* name = new STTBF( usLid, tableStream, false );
-        for ( U32 i = 0; i < fib.lcbSttbfbkmk; i += sizeof( U32 ) ) {
-            U32 txt = tableStream->readU32();
-            m_text.push_back( txt );
-#ifdef WV2_DEBUG_BOOKMARK
-           wvlog << "read: " << m_text.back() << endl;
-           name->dumpStrings();
-#endif
-        }
-        m_textIt = m_text.begin();
 
+#ifdef WV2_DEBUG_BOOKMARK
+        name->dumpStrings();
+#endif
         for (unsigned int i = 0; i < name->count(); i++ ) {
             m_name.push_back(name->stringAt(i));
         }
@@ -98,7 +92,9 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
             for ( int i = 0; i < count + 1; i++ ) {
                 m_endCP.push_back( tableStream->readU32() );
             }
+            m_endCP_It = m_endCP.begin();
         }
+
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Num. of bookmarks to end: " << count << endl;
         wvlog << "m_end/m_endCP init done" << endl;
@@ -119,8 +115,10 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
 Bookmarks::~Bookmarks()
 {
-    delete m_endIt;
-    delete m_end;
+    if ( m_nFib < Word8nFib ) {
+        delete m_endIt;
+        delete m_end;
+    }
     delete m_startIt;
     delete m_start;
 }
@@ -134,31 +132,35 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 
     if ( m_startIt &&
          (m_startIt->currentStart() == globalCP) &&
-         (m_textIt != m_text.end()) &&
          (m_nameIt != m_name.end()) )
     {
+        U32 start = m_startIt->currentStart(); 
+        U32 end = start;
+
+        if (m_nFib < Word8nFib) {
+            end = m_endIt->currentStart();
+            ++( *m_endIt );
+        } else {
+            end = *m_endCP_It;
+            ++m_endCP_It;
+        }
+
         // yay, but it is hard to make that more elegant
         ++( *m_startIt );
 
-        if (m_nFib < Word8nFib) {
-            ++( *m_endIt );
-        }
-
-        U32 start = *m_textIt;
-        ++m_textIt;
+        UString name = *m_nameIt;
+        ++m_nameIt;
 
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "start = " << start << endl;
-        wvlog << "name = " << (*m_nameIt).ascii() << endl;
+        wvlog << "end = " << end << endl;
+        wvlog << "name = " << name.ascii() << endl;
 #endif
-        UString name = *m_nameIt;
-        ++m_nameIt;
-        return BookmarkData( start, *m_textIt, name );
+        return BookmarkData( start, end, name );
     }
 
     ok = false;
     return BookmarkData( 0, 0, wvWare::UString("") );
-
 }
 
 U32 Bookmarks::nextBookmarkStart() const

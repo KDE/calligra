@@ -149,7 +149,6 @@ namespace wvWare
 
     private:
         UString m_customFootnote;
-        UString m_bookmarkText;
         // Don't copy or assign us
         Parser9x( const Parser9x& rhs );
         Parser9x& operator=( const Parser9x& rhs );
@@ -250,7 +249,13 @@ namespace wvWare
         void emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<const Word97::CHP> chp );
         void emitFootnote( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
         void emitAnnotation( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp, U32 length=1 );
-        void emitBookmark( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp );
+
+        /**
+         * This function is only used to check if there are any bookmarks at
+         * the CP of the paragraph mark.  There's no support for bookmarks
+         * which mark a text range between more paragraphs.
+         */
+        void emitBookmark( U32 globalCP );
 
         void emitHeaderData( SharedPtr<const Word97::SEP> sep );
         void emitPictureData( SharedPtr<const Word97::CHP> chp );
@@ -287,7 +292,7 @@ namespace wvWare
         Annotations* m_annotations;
         FontCollection* m_fonts;
         Drawings* m_drawings;
-        Bookmarks* m_bookmark;
+        Bookmarks* m_bookmarks;
 
         PLCF<Word97::PCD>* m_plcfpcd;     // piece table
 

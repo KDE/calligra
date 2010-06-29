@@ -99,16 +99,6 @@ namespace wvWare {
         virtual void footnoteEnd();
 
         /**
-        * Every time you invoke a @ref BookmarkFunctor this method will be called.
-        * Note that @ref BookmarkFunctor is also emitted when we find endnotes.
-        */
-        virtual void bookmarkStart();
-        /**
-        * Once the bookmark characters are processed this method is called.
-        */
-        virtual void bookmarkEnd();
-
-        /**
          * 2.3.4
          *
          * Comments/Annotations (Microsoft isn't consistent)
@@ -409,12 +399,6 @@ namespace wvWare {
                                     SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
 
         /**
-        * The parser found a bookmark. The default implementation just emits the passed character
-        * with runOfText (that it doesn't get lost if someone doesn't override this method).
-        */
-        virtual void bookmarkFound( UString characters, UString name,
-                                    SharedPtr<const Word97::CHP> chp);
-        /**
          * The parser found an annotation. The passed functor will trigger the parsing of this
          * annotation, the default implementation just emits the passed character with
          * runOfText (that it doesn't get lost if someone doesn't override this method) and
@@ -474,6 +458,12 @@ namespace wvWare {
 	 * @param cp of a drawing
          */
         virtual void floatingObjectFound( unsigned int globalCP );
+
+        /**
+         * Denotes the start of a bookmark.
+         */
+        virtual void bookmarkStart( const BookmarkData& data );
+        virtual void bookmarkEnd( const BookmarkData& data );
     };
 
 } // namespace wvWare

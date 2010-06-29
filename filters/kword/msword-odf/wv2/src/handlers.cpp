@@ -79,14 +79,6 @@ void SubDocumentHandler::footnoteEnd()
 {
 }
 
-void SubDocumentHandler::bookmarkStart()
-{
-}
-
-void SubDocumentHandler::bookmarkEnd()
-{
-}
-
 void SubDocumentHandler::annotationStart()
 {
 }
@@ -220,12 +212,6 @@ void TextHandler::footnoteFound( FootnoteData::Type /*type*/, UString characters
     parseFootnote();
 }
 
-void TextHandler::bookmarkFound( UString characters, UString name,
-                                 SharedPtr<const Word97::CHP> chp)
-{
-    runOfText( characters, chp ); // The character shouldn't get lost unless it's the auto-number
-}
-
 void TextHandler::annotationFound( UString characters,
                                    SharedPtr<const Word97::CHP> chp, const AnnotationFunctor& parseAnnotation)
 {
@@ -267,5 +253,13 @@ void TextHandler::inlineObjectFound(const PictureData& /*data*/, SharedPtr<const
 }
 
 void TextHandler::floatingObjectFound( unsigned int /*globalCP*/ )
+{
+}
+
+void TextHandler::bookmarkStart( const BookmarkData& /*data*/ )
+{
+}
+
+void TextHandler::bookmarkEnd( const BookmarkData& /*data*/ )
 {
 }

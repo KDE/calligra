@@ -76,8 +76,6 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_insideFootnote(false)
     , m_footnoteWriter(0)
     , m_footnoteBuffer(0)
-    , m_insideBookmark(false)
-    , m_bookmarkWriter(0)
     , m_insideAnnotation(false)
     , m_annotationWriter(0)
     , m_annotationBuffer(0)
@@ -399,70 +397,56 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //varElem.appendChild( footnoteElem );
 }
 
-void KWordTextHandler::bookmarkFound( wvWare::UString characters, wvWare::UString name, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void KWordTextHandler::bookmarkStart( const wvWare::BookmarkData& data )
 {
-    //NOTE: Let's keep m_insideBookmark, m_bookmarkBuffer, m_bookmarkWriter
-    //global, we might need them. (uzak)
-
     //create temp writer for bookmark content that we'll add to m_paragraph
-    m_bookmarkBuffer = new QBuffer();
-    m_bookmarkBuffer->open(QIODevice::WriteOnly);
-    m_bookmarkWriter = new KoXmlWriter(m_bookmarkBuffer);
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buf);
 
-    // Get the name of the bookmark
+    //get the name of the bookmark
     QString bookmarkName;
     int nameIndex = 0;
-    int nameLength = name.length();
+    int nameLength = data.name.length();
     while (nameIndex != nameLength) {
-        bookmarkName.append(name[nameIndex].unicode());
+        bookmarkName.append(data.name[nameIndex].unicode());
         ++nameIndex;
     }
-//     m_insideBookmark = true;
-
-    if (characters.length()) {
-        // Get the text between the bookmark-start and the bookmark-end
-        QString bookmarkText;
-        int textIndex = 0;
-        int length = characters.length();
-        while (textIndex != length) {
-            bookmarkText.append(characters[textIndex].unicode());
-            ++textIndex;
-        }
-
-        // bookmark-start
-        m_bookmarkWriter->startElement("text:bookmark-start");
-        m_bookmarkWriter->addAttribute("text:name", bookmarkName);
-        m_bookmarkWriter->endElement();
-
-        // Text.  If we are in an hyperlink, we should not add the text because it
-        // will be out of control after that.
-        if (m_hyperLinkActive) {
-            m_hyperLinkList.last().append(bookmarkText);
-        } else {
-            m_bookmarkWriter->addTextNode(bookmarkText);
-        }
-
-        // bookmark-end
-        m_bookmarkWriter->startElement("text:bookmark-end");
-        m_bookmarkWriter->addAttribute("text:name", bookmarkName);
-        m_bookmarkWriter->endElement();
+    if ((data.limCP - data.startCP) > 0) {
+        writer.startElement("text:bookmark-start");
+        writer.addAttribute("text:name", bookmarkName);
+        writer.endElement();
     } else {
-        m_bookmarkWriter->startElement("text:bookmark");
-        m_bookmarkWriter->addAttribute("text:name", bookmarkName);
-        m_bookmarkWriter->endElement();
+        writer.startElement("text:bookmark");
+        writer.addAttribute("text:name", bookmarkName);
+        writer.endElement();
     }
-//     m_insideBookmark = false;
-
-    QString contents = QString::fromUtf8(m_bookmarkBuffer->buffer(), m_bookmarkBuffer->buffer().size());
-    m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet());
-
-    //cleanup
-    delete m_bookmarkWriter;
-    m_bookmarkWriter = 0;
-    delete m_bookmarkBuffer;
-    m_bookmarkBuffer = 0;
+    QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
 }
 
+void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
+{
+    //create temp writer for bookmark content that we'll add to m_paragraph
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter writer(&buf);
+
+    if ((data.limCP - data.startCP)) {
+        QString bookmarkName;
+        int nameIndex = 0;
+        int nameLength = data.name.length();
+        while (nameIndex != nameLength) {
+            bookmarkName.append(data.name[nameIndex].unicode());
+            ++nameIndex;
+        }
+        writer.startElement("text:bookmark-end");
+        writer.addAttribute("text:name", bookmarkName);
+        writer.endElement();
+    }
+    QString content = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+    m_paragraph->addRunOfText(content, 0, QString(""), m_parser->styleSheet(), 1);
+}
 
 void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                         const wvWare::AnnotationFunctor& parseAnnotation)
@@ -655,11 +639,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     bool inStylesDotXml = false;
     if (m_insideFootnote) {
         writer = m_footnoteWriter;
-    }
-//     else if (m_insideBookmark) {
-//         writer = m_bookmarkWriter;
-//     }
-    else if (m_insideDrawing) {
+    } else if (m_insideDrawing) {
         writer = m_drawingWriter;
         if (document()->writingHeader()) {
             inStylesDotXml = true;
@@ -667,8 +647,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     } else if (document()->writingHeader()) {
         writer = document()->headerWriter();
         inStylesDotXml = true;
-    }
-    else if (m_insideAnnotation) {
+    } else if (m_insideAnnotation) {
         writer = m_annotationWriter;
     } else {
         writer = m_bodyWriter;
@@ -793,12 +772,7 @@ void KWordTextHandler::paragraphEnd()
     if (m_insideFootnote) {
         kDebug(30513) << "writing a footnote";
         m_paragraph->writeToFile(m_footnoteWriter);
-    }
-//     else if (m_insideBookmark) {
-//         kDebug(30513) << "writing an bookmark";
-//         m_paragraph->writeToFile(m_bookmarkWriter);
-//     }
-    else if (m_insideAnnotation) {
+    } else if (m_insideAnnotation) {
         kDebug(30513) << "writing an annotation";
         m_paragraph->writeToFile(m_annotationWriter);
     } else if (m_insideDrawing) {

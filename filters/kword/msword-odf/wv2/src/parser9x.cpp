@@ -68,7 +68,7 @@ Parser9x::Position::Position( U32 cp, const PLCF<Word97::PCD>* plcfpcd ) :
 Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Word97::FIB& fib ) :
         Parser( storage, wordDocument ), m_fib( fib ), m_table( 0 ), m_data( 0 ), 
         m_properties( 0 ), m_headers( 0 ), m_lists( 0 ), m_textconverter( 0 ), m_fields( 0 ),
-        m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmark(0),
+        m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmarks(0),
         m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ), m_cellMarkFound( false ),
         m_remainingCells( 0 ), m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
         m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
@@ -356,7 +356,7 @@ void Parser9x::init()
         m_footnotes = new Footnotes97( m_table, m_fib );
 
     if (( m_fib.lcbPlcfbkf != 0 ) || ( m_fib.lcbPlcfbkl != 0 ))
-        m_bookmark = new Bookmarks( m_table, m_fib );
+        m_bookmarks = new Bookmarks( m_table, m_fib );
 
     if ( m_fib.ccpAtn != 0 ) {
         m_annotations = new Annotations( m_table, m_fib );
@@ -714,8 +714,8 @@ void Parser9x::processParagraph( U32 fc )
                 index += length;
             }
             //bookmark check for the next to last CP (paragraph mark)
-            if ( m_bookmark ) {
-                emitBookmark( m_bookmarkText, ( *it ).m_position.offset + limit, NULL );
+            if ( m_bookmarks ) {
+                emitBookmark( ( *it ).m_position.offset + limit );
             }
         }
         m_textHandler->paragraphEnd();
@@ -761,9 +761,9 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             wvlog << "nextFtn=" << nextFtn << " nextEnd=" << nextEnd <<
                      " disruption=" << disruption << " length=" << length << endl;
 #endif
-        } else if ( m_bookmark ) {
-            U32 nextBkf = m_bookmark->nextBookmarkStart();
-            U32 nextBkl = m_bookmark->nextBookmarkEnd();
+        } else if ( m_bookmarks ) {
+            U32 nextBkf = m_bookmarks->nextBookmarkStart();
+            U32 nextBkl = m_bookmarks->nextBookmarkEnd();
             bkmk_length = nextBkl - nextBkf;
 
             //it shouldn't be possible that (nextBkf < nextBkl)
@@ -799,20 +799,32 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
                 length = 0;
                 index += length;
             } 
-            else if ( m_bookmark ) {
-                if (bkmk_length == 0) {
-                    emitBookmark( m_bookmarkText, disruption, chp );
-                    processRun( chunk, chp, length, index, currentStart );
-                } else {
-                    //let's check the bookmark end
-                    Q_ASSERT (bkmk_length <= length);
+            else if ( m_bookmarks ) {
 
-                    m_bookmarkText = chunk.m_text.substr(index, bkmk_length);
-                    emitBookmark( m_bookmarkText, disruption, chp );
-                    m_bookmarkText = "";
+                //TODO: there might be a number of bookmarks having different
+                //lengths at the current CP
+
+                //TODO: there might be a number of overlapping bookmarks in
+                //this chunk
+
+                if ( !(bkmk_length <= length) ) {
+                    wvlog << "WARNING: overlapping bookmarks are not supported!";
+                    processRun( chunk, chp, length, index, currentStart );
+        
+                    length = 0;
+                    index += length;
+                } else {
+                    bool ok;
+                    BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
+                    m_textHandler->bookmarkStart( data );
+                    if (bkmk_length > 0) {
+                        processRun( chunk, chp, bkmk_length, index, currentStart );
+                        m_textHandler->bookmarkEnd( data );
+
+                        length -= bkmk_length;
+                        index += bkmk_length;
+                    }
                 }
-                length -= bkmk_length;
-                index += bkmk_length;
             }
         }
         else {
@@ -940,23 +952,23 @@ void Parser9x::emitFootnote( UString characters, U32 globalCP, SharedPtr<const W
         m_textHandler->footnoteFound( data.type, characters, chp, make_functor( *this, &Parser9x::parseFootnote, data ));
 }
 
-void Parser9x::emitBookmark( UString characters, U32 globalCP, SharedPtr<const Word97::CHP> chp )
+void Parser9x::emitBookmark( U32 globalCP )
 {
-    if ( !m_bookmark ) {
-        wvlog << "Bug: Found a bookmark, but m_bookmark == 0!" << endl;
-        return;
-    }
     bool ok = false;
-    BookmarkData data( m_bookmark->bookmark( globalCP, ok ) );
+    BookmarkData data( m_bookmarks->bookmark( globalCP, ok ) );
 
     //there might be more bookmarks for the current CP
     while (ok) {
+        if ((data.limCP - data.startCP) > 0) {
+            wvlog << "WARNING: bookmarks marking a text range between paragraphs not supported!";
+        } else {
+            m_textHandler->bookmarkStart( data );
+        }
+        data = m_bookmarks->bookmark( globalCP, ok );
+
 #ifdef WV2_DEBUG_BOOKMARK
         wvlog << "Bookmark found: CP=" << globalCP << endl;
 #endif
-        // We introduce the name of the bookmark here with data.name
-        m_textHandler->bookmarkFound( characters, data.name, chp);
-        data = m_bookmark->bookmark( globalCP, ok );
     }
 }
 

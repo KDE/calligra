@@ -181,7 +181,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         // We have only support for fdct=1, i.e. regular dropcaps.
         // There is no support for fdct=2, i.e. dropcaps in the margin (ODF doesn't support this).
         tmpWriter.addAttribute("style:length", m_dcs_fdct > 0 ? 1 : 0);
-        tmpWriter.endElement();//style:drop-cap
+        tmpWriter.endElement(); //style:drop-cap
         buf.close();
 
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
@@ -310,6 +310,11 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         bool startedSpan = false;
         for (int i = 0; i < m_textStrings.size(); i++) {
             if (m_textStyles[i] == 0) {
+                if (startedSpan) {
+                    writer->endElement(); //text:span
+                    startedSpan = false;
+                    oldStyleName = " ";
+                }
                 //if style is null, we have an inner paragraph and add the
                 //complete paragraph element to writer need to get const char*
                 //from the QString
