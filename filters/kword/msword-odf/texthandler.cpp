@@ -758,12 +758,15 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
 
     //check if the master-page-name attribute is required
-    if (document()->writeMasterPageName() && !document()->writingHeader()) {
+    if (document()->writeMasterPageName() && !document()->writingHeader()) 
+    {
         style->addAttribute("style:master-page-name", document()->masterPageName());
         document()->set_writeMasterPageName(false);
     }
     //check if the break-before property is required
-    if (m_breakBeforePage) {
+    if (m_breakBeforePage &&
+        !document()->writingHeader() && !paragraphProperties->pap().fInTable)
+    {
         style->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
         m_breakBeforePage = false;
     }
