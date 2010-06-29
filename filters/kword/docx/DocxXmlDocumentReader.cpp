@@ -2744,6 +2744,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
 {
     READ_PROLOGUE
 
+    m_borderStyles.clear();
+    m_borderPaddings.clear();
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -2759,13 +2762,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
             else if (QUALIFIED_NAME_IS(right)) {
                 RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
             }
+            else if (QUALIFIED_NAME_IS(insideV)) {
+                RETURN_IF_ERROR(readBorderElement(InsideV, "insideV"));
+            }
+            else if (QUALIFIED_NAME_IS(insideH)) {
+                RETURN_IF_ERROR(readBorderElement(InsideH, "insideH"));
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-
-// @todo: Finish this, most likely top should be saved as a separate
-// style using predefined name if available, then with referenced table style
-// also each cell style could have a parent style with border set
 
     READ_EPILOGUE
 }
@@ -3598,10 +3603,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
     }
     d->columnStyles.last().count++;
 
-    while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
-    }
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3657,6 +3659,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
     body = rowBuf.setWriter(body);
     m_currentTableColumnNumber = 0;
     m_currentTableRowStyle = KoGenStyle(KoGenStyle::TableRowAutoStyle, "table-row");
+    m_currentTableRowNumber = 0;
 
     while (!atEnd()) {
         readNext();
@@ -3819,8 +3822,61 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
     body = cellBuf.originalWriter();
     body->startElement("table:table-cell");
 
+    bool lastColumn = false;
+
+    READ_EPILOGUE_WITHOUT_RETURN
+
+    readNext();
+    if (QUALIFIED_NAME_IS(tr)) {
+        lastColumn = true;
+    }
+    undoReadNext();
+
+    m_currentTableCellStyle.addProperty("fo:border-bottom", "0.5pt solid #000000");
+
+    if (m_currentTableColumnNumber == 0) {
+        if (!m_borderStyles.key(LeftBorder).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(LeftBorder));
+        }
+        if (!m_borderPaddings.key(LeftBorder).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder));
+        }
+    }
+    else {
+        if (!m_borderStyles.key(InsideV).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(InsideV));
+        }
+        if (!m_borderPaddings.key(InsideV).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(InsideV));
+        }
+    }
+    if (lastColumn) {
+        if (!m_borderStyles.key(RightBorder).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:border-right", m_borderStyles.key(RightBorder));
+        }
+        if (!m_borderPaddings.key(RightBorder).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:padding-right", m_borderPaddings.key(RightBorder));
+        }
+    }
+    if (m_currentTableRowNumber == 0) {
+        if (!m_borderStyles.key(TopBorder).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(TopBorder));
+        }
+        if (!m_borderPaddings.key(TopBorder).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(TopBorder));
+        }
+    }
+    else {
+        if (!m_borderStyles.key(InsideH).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(InsideH));
+        }
+        if (!m_borderPaddings.key(InsideH).isEmpty()) {
+            m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(InsideH));
+        }
+    }
+
     //! @todo real border style get from w:tblPr/w:tblStyle@w:val
-    m_currentTableCellStyle.addProperty("fo:border", "0.5pt solid #000000");
+    //m_currentTableCellStyle.addProperty("fo:border", "0.5pt solid #000000");
 
     const QString tableCellStyleName(
         mainStyles->insert(
@@ -3838,7 +3894,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
     m_currentTableColumnNumber++;
 
-    READ_EPILOGUE
+    return KoFilter::OK;
 }
 
 #undef CURRENT_EL

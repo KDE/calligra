@@ -1301,18 +1301,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         body->endElement(); //text:span
         if (m_hyperLink) {
             body->endElement(); // text:a
-        }   
+        }
     }
     else {
         undoReadNext();
     }
-//kDebug() << "/text:span";
-
-#ifdef __GNUC__
-#warning implement read_DrawingML_rPr
-#endif
-
-//    READ_EPILOGUE
     return KoFilter::OK;
 }
 

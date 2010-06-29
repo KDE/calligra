@@ -182,7 +182,7 @@ private:
     void writeRect();
 
     enum BorderSide {
-        TopBorder, BottomBorder, LeftBorder, RightBorder
+        TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
     };
     //! Used for setting up properties for pages and paragraphs.
     //! It is reversed map, so detecting duplicates is easy in applyBorders().
