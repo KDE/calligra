@@ -82,49 +82,6 @@ qreal rowHeight(Sheet* sheet, unsigned long row) {
     return sheet->defaultRowHeight();
 }
 
-qreal heightOffset( Sheet* sheet, qreal rwT, qreal dyT, qreal rwB, qreal dyB ) {
-    return - offset( rowHeight(sheet, rwT), dyT)
-           + offset( rowHeight(sheet, rwB), dyB);
-}
-
-qreal widthOffset( Sheet* sheet, qreal colL, qreal dxL, qreal colR, qreal dxR  ) {
-    return - offset(columnWidth(sheet, colL), dxL)
-           + offset(columnWidth(sheet, colR), dxR);
-}
-
-qreal columnStart(Sheet* sheet, unsigned long col) {
-    double columnStart = 0.0;
-    for( unsigned long i = 0; i < col; ++i )
-        columnStart += columnWidth(sheet, i);
-
-    return columnStart;
-}
-
-qreal rowStart(Sheet* sheet, unsigned long row) {
-    double rowStart = 0.0;
-    for( unsigned long i = 0; i < row; ++i )
-        rowStart += rowHeight(sheet, i);
-
-    return rowStart;
-}
-
-qreal columnDistance(Sheet* sheet, unsigned long col1, unsigned long col2) {
-    double columnDistance = 0.0;
-
-    for( unsigned long i = col1; i < col2; ++i )
-        columnDistance += columnWidth(sheet, i);
-
-    return columnDistance;
-}
-
-qreal rowDistance(Sheet* sheet, unsigned long row1, unsigned long row2) {
-    double rowDistance = 0.0;
-    for( unsigned long i = row1; i < row2; ++i )
-        rowDistance += rowHeight(sheet, i);
-
-    return rowDistance;
-}
-
 }
 
 // Returns A for 1, B for 2, C for 3, etc.
@@ -1479,14 +1436,12 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell-address", string(sheet->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB));
-        xmlWriter->addAttribute("table:end-x", QString::number(dxR));
-        xmlWriter->addAttribute("table:end-y", QString::number(dyB));
+        xmlWriter->addAttribute("table:end-cell-address", string(sheet->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB+1));
+        xmlWriter->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR));
+        xmlWriter->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
-        xmlWriter->addAttributePt("svg:x", columnStart(sheet, colL) + offset(columnWidth(sheet, colL), dxL) );
-        xmlWriter->addAttributePt("svg:y", rowStart(sheet, rwT) + offset(rowHeight(sheet, rwT), dyT));
-        xmlWriter->addAttributePt("svg:width", columnDistance(sheet, colL, colR) + widthOffset(sheet, colL, dxL, colR, dxR) );
-        xmlWriter->addAttributePt("svg:height", rowDistance(sheet, rwT, rwB) + heightOffset(sheet, rwT, dyT, rwB, dyB) );
+        xmlWriter->addAttributePt("svg:x", offset(columnWidth(sheet, colL), dxL) );
+        xmlWriter->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT));
 
         xmlWriter->startElement("draw:image");
         xmlWriter->addAttribute("xlink:href", picture->m_filename.c_str());
@@ -1523,10 +1478,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         const unsigned long rwT = drawobj->m_rwT;
         const unsigned long dyB = drawobj->m_dyB;
 
-        c->m_x = columnStart(sheet, colL) + offset(columnWidth(sheet, colL), dxL);
-        c->m_y = rowStart(sheet, rwT) + offset(rowHeight(sheet, rwT), dyT);
-        c->m_width = columnDistance(sheet, colL, colR) + widthOffset(sheet, colL, dxL, colR, dxR);
-        c->m_height = rowDistance(sheet, rwT, rwB) + heightOffset(sheet, rwT, dyT, rwB, dyB);
+        c->m_x = offset(columnWidth(sheet, colL), dxL);
+        c->m_y = offset(rowHeight(sheet, rwT), dyT);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
             c->m_cellRangeAddress = string(sheet->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +

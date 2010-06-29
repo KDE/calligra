@@ -31,7 +31,7 @@
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart)
-    : m_chart(chart)
+    : m_width(0), m_height(0), m_chart(chart)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -75,7 +75,7 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     // used in opendocumentpresentation for layers
     if(m_drawLayer)
         xmlWriter->addAttribute("draw:layer", "layout");
-    
+
     // used in opendocumentspreadsheet to reference cells
     if(!m_endCellAddress.isEmpty())
         xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
@@ -86,7 +86,7 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
         xmlWriter->addAttributePt("svg:width", m_width);
     if(m_height > 0)
         xmlWriter->addAttributePt("svg:height", m_height);
-    
+
     //xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
     //TODO don't show on e.g. presenter
@@ -140,7 +140,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->startElement("chart:title");
         /* TODO we can't determine this because by default we need to center the title,
         in order to center it we need to know the textbox size, and to do that we need
-        the used font metrics. 
+        the used font metrics.
 
         Also, for now, the defualt implementation of KChart centers
         the title, so we get close to the expected behavior. We ignore any offset though.
@@ -298,10 +298,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         for(int i = chart()->m_series.count() - 1; i >= 0; --i)
             chart()->m_series.append( chart()->m_series.takeAt(i) );
     }
-    
+
     foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
-        
+
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
@@ -324,7 +324,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 bodyWriter->addAttribute("chart:label-cell-address", v->m_type == Charting::Value::CellRange ? normalizeCellRange(v->m_formula) : v->m_formula);
             }
         }
-        
+
         const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
         if(!valuesCellRangeAddress.isEmpty())
             bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
@@ -334,14 +334,14 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
             bodyWriter->endElement();
         }
-        
+
         for(int j = 0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
             //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
             //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
             bodyWriter->addAttribute("chart-style-name", styles.insert(gs, "ch"));
-            
+
             foreach(Charting::Text* t, series->m_texts) {
                 bodyWriter->startElement("chart:data-label");
                 bodyWriter->startElement("text:p");
@@ -352,7 +352,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
             bodyWriter->endElement();
         }
-        
+
         bodyWriter->endElement(); // chart:series
     }
 

@@ -792,8 +792,8 @@ void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* r
 {
     if (!record) return;
     if (!d->sheet) return;
-    if( record->miyRw() != 0.0 )
-        d->sheet->setDefaultRowHeight(record->miyRw());
+    if (!record->isDyZero() && record->miyRw() != 0.0)
+        d->sheet->setDefaultRowHeight(record->miyRw() / 20);
 }
 
 void WorksheetSubStreamHandler::handleDefaultColWidth(DefaultColWidthRecord* record)
