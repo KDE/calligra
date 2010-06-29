@@ -24,6 +24,7 @@
 #include "KoXmlReader.h"
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
+#include "KoShapeLoadingContext.h"
 
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)

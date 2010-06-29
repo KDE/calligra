@@ -18,6 +18,8 @@
  */
 
 #include "KPrAnimTransitionFilter.h"
+#include "KoShapeSavingContext.h"
+
 
 KPrAnimTransitionFilter::KPrAnimTransitionFilter(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)

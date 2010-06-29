@@ -21,6 +21,10 @@
 #include "KPrShapeAnimation.h"
 #include "KPrAnimationBase.h"
 #include "kdebug.h"
+#include "KoXmlReader.h"
+#include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
+
 KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
