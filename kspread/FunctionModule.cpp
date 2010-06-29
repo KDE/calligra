@@ -72,7 +72,7 @@ bool FunctionModule::isRemovable()
 
 QString FunctionModule::id() const
 {
-    return QString();
+    return descriptionFileName();
 }
 
 void FunctionModule::add(Function* function)

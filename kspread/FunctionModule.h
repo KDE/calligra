@@ -75,8 +75,6 @@ public:
     /**
      * Returns the identifier (if defined). Function of the KoGenericRegistry
      * template, that has to be implemented.
-     *
-     * TODO make pure virtual and fix classes that don't reimplement the id?
      */
     virtual QString id() const;
 
