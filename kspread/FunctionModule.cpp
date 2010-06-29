@@ -72,7 +72,7 @@ bool FunctionModule::isRemovable()
 
 QString FunctionModule::id() const
 {
-	return QString();
+    return QString();
 }
 
 void FunctionModule::add(Function* function)
