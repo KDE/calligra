@@ -23,6 +23,8 @@
 #include "KPrShapeAnimations.h"
 #include "pagelayout/KPrPlaceholders.h"
 
+class KprAnimationStep;
+
 class KPrPageData
 {
 public:
@@ -32,7 +34,7 @@ public:
     KPrShapeAnimations & animations();
     KPrPlaceholders & placeholders();
     const KPrPlaceholders & placeholders() const;
-
+    QList<KPrAnimationStep *> animationSteps() const;
 private:
     KPrShapeAnimations m_animations;
     KPrPlaceholders m_placeholders;

@@ -21,6 +21,7 @@
 
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
+#include "KoXmlWriter.h"
 
 KPrAnimationStep::KPrAnimationStep()
 {
@@ -39,3 +40,18 @@ void KPrAnimationStep::init(KPrAnimationCache *animationCache, int step)
         }
     }
 }
+
+bool KPrAnimationStep::saveOdf(KoPASavingContext & paContext) const
+{
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.startElement("anim:par");
+    for(int i=0;i < this->animationCount(); i++) {
+        QAbstractAnimation * animation = this->animationAt(i);
+        if (KPrAnimationSubStep * a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+            a->saveOdf(paContext);
+        }
+    }
+    writer.endElement();
+    return true;
+}
+

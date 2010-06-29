@@ -20,6 +20,8 @@
 #ifndef KPRANIMATIONDATA_H
 #define KPRANIMATIONDATA_H
 
+#include "KoPASavingContext.h"
+
 class KPrAnimationCache;
 
 class KPrAnimationData
@@ -28,6 +30,7 @@ public:
     KPrAnimationData();
     virtual ~KPrAnimationData();
     virtual void init(KPrAnimationCache *animationCache, int step) = 0;
+    virtual bool saveOdf(KoPASavingContext & paContext) const = 0;
 };
 
 #endif // KPRANIMATIONDATA_H

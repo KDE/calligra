@@ -30,7 +30,8 @@ public:
     virtual ~KPrAnimSet();
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    virtual bool saveOdf(KoPASavingContext & paContext) const;
+    virtual bool saveAttribute(KoPASavingContext &paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
 protected:
     virtual void next(int currentTime);

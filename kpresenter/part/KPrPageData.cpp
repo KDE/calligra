@@ -42,3 +42,8 @@ const KPrPlaceholders & KPrPageData::placeholders() const
 {
     return m_placeholders;
 }
+
+QList<KPrAnimationStep *> KPrPageData::animationSteps() const
+{
+    return m_animations.steps();
+}

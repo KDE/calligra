@@ -56,3 +56,14 @@ int KPrDurationParser::durationMs(const QString & duration)
     }
     return ms;
 }
+
+QString KPrDurationParser::msToString(const int ms)
+{
+    QString result;
+    if (ms%1000 == 0) {
+        result = QString("%1%2").arg(ms/1000).arg("s");
+    } else {
+        result = QString("%1%2").arg(ms).arg("ms");
+    }
+    return result;
+}

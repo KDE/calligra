@@ -70,6 +70,8 @@ class KPrDurationParser
 {
 public:
     static int durationMs(const QString & duration);
+    static QString msToString(const int ms);
+
 };
 
 #endif /* KPRDURATIONPARSER_H */

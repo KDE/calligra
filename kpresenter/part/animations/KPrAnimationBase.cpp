@@ -22,6 +22,7 @@
 #include <KoXmlNS.h>
 #include "KPrDurationParser.h"
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
 #include "KoShapeLoadingContext.h"
@@ -72,4 +73,13 @@ void KPrAnimationBase::updateCurrentTime(int currentTime)
 int KPrAnimationBase::animationDuration() const
 {
     return totalDuration() - m_begin;
+}
+
+bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
+{
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.addAttribute("smil:begin", KPrDurationParser::msToString(m_begin));
+    writer.addAttribute("smil:duration", KPrDurationParser::msToString(m_duration));
+    writer.addAttribute("smil:targetElement", paContext.drawId(m_shapeAnimation->shape(), false));
+    return true;
 }

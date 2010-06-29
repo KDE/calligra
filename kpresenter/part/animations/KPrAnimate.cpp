@@ -29,6 +29,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
+#include "KoXmlWriter.h"
 
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
@@ -136,9 +137,13 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return retval;
 }
 
-void KPrAnimate::saveOdf(KoShapeSavingContext &context) const
+bool KPrAnimate::saveOdf(KoPASavingContext & paContext) const
 {
-    Q_UNUSED(context);
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.startElement("anim:animate");
+    saveAttribute(paContext);
+    writer.endElement();
+    return true;
 }
 
 void KPrAnimate::init(KPrAnimationCache *animationCache, int step)

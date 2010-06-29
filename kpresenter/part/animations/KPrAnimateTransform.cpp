@@ -40,9 +40,10 @@ bool KPrAnimateTransform::loadOdf(const KoXmlElement &element, KoShapeLoadingCon
     return true;
 }
 
-void KPrAnimateTransform::saveOdf(KoShapeSavingContext &context) const
+bool KPrAnimateTransform::saveOdf(KoPASavingContext &paContext) const
 {
-    Q_UNUSED(context);
+    Q_UNUSED(paContext);
+    return true;
 }
 
 void KPrAnimateTransform::init(KPrAnimationCache *animationCache, int step)

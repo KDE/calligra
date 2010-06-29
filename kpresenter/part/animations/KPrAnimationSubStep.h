@@ -30,6 +30,7 @@ public:
     KPrAnimationSubStep();
     virtual ~KPrAnimationSubStep();
     virtual void init(KPrAnimationCache *animationCache, int step);
+    virtual bool saveOdf(KoPASavingContext & paContext) const;
 };
 
 #endif /* KPRANIMATIONSUBSTEP_H */

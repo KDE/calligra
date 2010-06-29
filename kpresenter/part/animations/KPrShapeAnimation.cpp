@@ -20,14 +20,15 @@
 
 #include "KPrShapeAnimation.h"
 #include "KPrAnimationBase.h"
-#include "kdebug.h"
+
 #include "KoXmlReader.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 
-KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
+KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData, NodeType nodeType)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
+, m_nodeType(nodeType)
 {
 }
 
@@ -42,9 +43,32 @@ bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
     return false;
 }
 
-void KPrShapeAnimation::saveOdf(KoShapeSavingContext &context) const
+bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext) const
 {
-    Q_UNUSED(context);
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.startElement("anim:par");
+    QString nodeType;
+    switch(m_nodeType)
+    {
+    case KPrShapeAnimation::OnClick:
+        nodeType = QString("on-click");
+        break;
+    case KPrShapeAnimation::AfterPrevious:
+        nodeType = QString("after-previous");
+        break;
+    default:
+        nodeType = QString("with-previous");
+    }
+
+    writer.addAttribute("presentation:node-type", nodeType);
+    for(int i=0;i < this->animationCount(); i++) {
+        QAbstractAnimation * animation = this->animationAt(i);
+        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+            a->saveOdf(paContext);
+        }
+    }
+    writer.endElement();
+    return true;
 }
 
 KoShape * KPrShapeAnimation::shape() const

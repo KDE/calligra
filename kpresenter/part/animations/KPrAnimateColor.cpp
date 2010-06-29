@@ -40,9 +40,10 @@ bool KPrAnimateColor::loadOdf(const KoXmlElement &element, KoShapeLoadingContext
     return false;
 }
 
-void KPrAnimateColor::saveOdf(KoShapeSavingContext &context) const
+bool KPrAnimateColor::saveOdf(KoPASavingContext & paContext) const
 {
-    Q_UNUSED(context);
+    Q_UNUSED(paContext);
+    return true;
 }
 
 void KPrAnimateColor::init(KPrAnimationCache *animationCache, int step)

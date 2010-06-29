@@ -37,11 +37,12 @@ public:
     KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimationBase();
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const = 0;
+    virtual bool saveOdf(KoPASavingContext &paContext) const = 0;
 
     virtual int duration() const;
     virtual void init(KPrAnimationCache *animationCache, int step) = 0;
     int animationDuration() const;
+    virtual bool saveAttribute(KoPASavingContext &paContext) const;
 protected:
     virtual void updateCurrentTime(int currentTime);
     virtual void next(int currentTime) = 0;

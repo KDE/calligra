@@ -29,7 +29,8 @@
 #include "KPrAnimationCache.h"
 #include "KPrTextBlockPaintStrategy.h"
 #include "KPrShapeAnimation.h"
-
+#include "KoXmlWriter.h"
+#include "KPrDurationParser.h"
 #include <kdebug.h>
 
 KPrAnimSet::KPrAnimSet(KPrShapeAnimation *shapeAnimation)
@@ -59,9 +60,27 @@ bool KPrAnimSet::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return retval;
 }
 
-void KPrAnimSet::saveOdf(KoShapeSavingContext &context) const
+bool KPrAnimSet::saveOdf(KoPASavingContext &paContext) const
 {
-    Q_UNUSED(context);
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.startElement("anim:set");
+    saveAttribute(paContext);
+    writer.endElement();
+    return true;
+}
+
+bool KPrAnimSet::saveAttribute(KoPASavingContext &paContext) const
+{
+    KPrAnimationBase::saveAttribute(paContext);
+    KoXmlWriter &writer = paContext.xmlWriter();
+    // Anim set allow only visibility change currently
+    writer.addAttribute("smil:attributeName","visibility");
+    if (m_visible) {
+        writer.addAttribute("smil:to", "visible");
+    } else {
+        writer.addAttribute("smil:to", "hidden");
+    }
+    return true;
 }
 
 
