@@ -632,11 +632,11 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // draw:fill-gradient-name
     // draw:fill-hatch-name
     // draw:fill-hatch-solid
-    // draw:fill-image-height
     // draw:fill-image-name
     // draw:fill-image-ref-point
     // draw:fill-image-ref-point-x
     // draw:fill-image-ref-point-y
+    // draw:fill-image-height
     // draw:fill-image-width
     // draw:fit-to-contour
     // draw:fit-to-size
@@ -757,16 +757,6 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // style:rel-height
     // style:rel-width
     // style:repeat
-
-    if (ds.fBehindDocument()) {
-        // The 'OpenDocument Essentials' say that if you want a frame in the background,
-        // you should set style:wrap="run-through" AND style:run-through="background"
-        style.addProperty("style:wrap", "run-through");
-        style.addProperty("style:run-through", "background");
-    }
-    else {
-        style.addProperty("style:run-through", "foreground");
-    }
     // style:shadow
     // svg:fill-rule
     // svg:height
@@ -864,7 +854,7 @@ void KWordGraphicsHandler::defineAnchorProperties(KoGenStyle& style, const DrawS
 
 void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa)
 {
-    //NOTE: margins are related to the style of text wrapping, (MS-DOC, page 464)
+    //process the wrapping style, (MS-DOC, page 464)
     if (spa != 0) {
         bool check_wrk = false;
         if (spa->wr == 0) {
@@ -874,23 +864,18 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
         else if (spa->wr == 1) {
             //top and bottom wrapping
             style.addProperty("style:wrap", "none");
-            style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700.);
-            style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700.);
         }
         else if (spa->wr == 2) {
             //square wrapping
             check_wrk = true;
-            style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700.);
-            style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700.);
         }
         else if (spa->wr == 3) {
             //in front or behind the text
             style.addProperty("style:wrap", "run-through");
-            //check if shape is behind the text
-            if (spa->fBelowText == 1) {
+	    //check if shape is behind the text
+            if ((spa->fBelowText == 1) || (ds.fBehindDocument())) {
                 style.addProperty("style:run-through", "background");
-            }
-            else if (spa->fBelowText == 0) {
+            } else {
                 style.addProperty("style:run-through", "foreground");
             }
         }
@@ -920,10 +905,24 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
             else if (spa->wrk == 3) {
                 style.addProperty("style:wrap", "dynamic");
             }
-            style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700.);
-            style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700.);
         }
     }
+    //no information from plcfSpa available 
+    else {
+        style.addProperty("style:wrap", "run-through");
+        if (ds.fBehindDocument()) {
+            style.addProperty("style:run-through", "background");
+        } else {
+            style.addProperty("style:run-through", "foreground");
+        }
+    }
+
+    //margins are related to text wrapping, 
+    style.addPropertyPt("style:margin-left", ds.dxWrapDistLeft()/12700.);
+    style.addPropertyPt("style:margin-right", ds.dxWrapDistRight()/12700.);
+    style.addPropertyPt("style:margin-top", ds.dyWrapDistTop()/12700.);
+    style.addPropertyPt("style:margin-bottom", ds.dyWrapDistBottom()/12700.);
+
     // style:number-wrapped-paragraphs
     // style:wrap-dynamic-treshold
 }
@@ -932,24 +931,22 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
 {
     QString styleName;
     DrawStyle ds(m_OfficeArtDggContainer,&o);
-    if (out.m_bodyDrawing) {
-        KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
-        defineGraphicProperties(style, ds);
-        defineAnchorProperties(style, ds);
-        styleName = out.styles.insert(style);
-    }
-    else {
-        KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
-        defineGraphicProperties(style, ds);
-        defineAnchorProperties(style, ds);
-        styleName = out.styles.insert(style);
-    }
-
     DrawStyle drawStyle(m_OfficeArtDggContainer,NULL,&o);
+    wvWare::Word97::FSPA* spa = out.m_pSpa;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+
+    if (!out.m_bodyDrawing) {
+        style.setAutoStyleInStylesDotXml(true);
+    }
+    defineGraphicProperties(style, ds);
+    defineWrappingProperties(style, ds, spa);
+    defineAnchorProperties(style, ds);
+    styleName = out.styles.insert(style);
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
     out.xml.addAttribute("text:anchor-type","char");
+
     switch(drawStyle.txflTextFlow()) {
     case 1: //msotxflTtoBA up-down
     case 3: //msotxflTtoBN up-down
@@ -984,18 +981,16 @@ void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,D
 {
     QString styleName;
     DrawStyle ds(m_OfficeArtDggContainer,&o);
-    if (out.m_bodyDrawing) {
-        KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
-        defineGraphicProperties(style, ds);
-        defineAnchorProperties(style, ds);
-        styleName = out.styles.insert(style);
+    wvWare::Word97::FSPA* spa = out.m_pSpa;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+
+    if (!out.m_bodyDrawing) {
+        style.setAutoStyleInStylesDotXml(true);
     }
-    else {
-        KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
-        defineGraphicProperties(style, ds);
-        defineAnchorProperties(style, ds);
-        styleName = out.styles.insert(style);
-    }
+    defineGraphicProperties(style, ds);
+    defineWrappingProperties(style, ds, spa);
+    defineAnchorProperties(style, ds);
+    styleName = out.styles.insert(style);
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
@@ -1018,12 +1013,12 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     QString styleName;
     DrawStyle ds(NULL, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
-    defineGraphicProperties(style, ds);
 
     //in case a header or footer is processed, save the style into styles.xml
     if (m_document->writingHeader()) {
         style.setAutoStyleInStylesDotXml(true);
     }
+    defineGraphicProperties(style, ds);
     styleName = out.styles.insert(style);
 
     QString url;
@@ -1065,10 +1060,16 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 
     QString styleName;
     DrawStyle ds(m_OfficeArtDggContainer, &o);
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
     wvWare::Word97::FSPA* spa = out.m_pSpa;
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+
+    //in case a header or footer is processed, save the style into styles.xml
+    if (m_document->writingHeader()) {
+        style.setAutoStyleInStylesDotXml(true);
+    }
     defineGraphicProperties(style, ds);
     defineWrappingProperties(style, ds, spa);
+    defineAnchorProperties(style, ds);
 
     //ODF-1.2: this property must be provided if wrap mode is in {left, right,
     //parallel, dynamic} and anchor type is in {char, paragraph}
@@ -1076,10 +1077,6 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         if ((spa->wr != 1) && (spa->wr != 3)) {
             style.addProperty("style:number-wrapped-paragraphs", "no-limit");
 	}
-    }
-    //in case a header or footer is processed, save the style into styles.xml
-    if (m_document->writingHeader()) {
-        style.setAutoStyleInStylesDotXml(true);
     }
     styleName = out.styles.insert(style);
 
@@ -1155,6 +1152,11 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     QString styleName;
     DrawStyle ds(NULL, &o);
     KoGenStyle style(KoGenStyle::GraphicAutoStyle, "graphic");
+
+    //in case a header or footer is processed, save the style into styles.xml
+    if (m_document->writingHeader()) {
+        style.setAutoStyleInStylesDotXml(true);
+    }
     defineGraphicProperties(style, ds);
 
     //NOTE: also the dxWidthHR propertie may store the width information
@@ -1186,11 +1188,6 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     }
     else {
         style.addProperty("draw:shadow", "visible");
-    }
-
-    //in case a header or footer is processed, save the style into styles.xml
-    if (m_document->writingHeader()) {
-        style.setAutoStyleInStylesDotXml(true);
     }
     styleName = out.styles.insert(style);
 
