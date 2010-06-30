@@ -22,6 +22,7 @@
 #include "KPrAnimationBase.h"
 
 #include "KoXmlReader.h"
+#include "KoXmlWriter.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 
