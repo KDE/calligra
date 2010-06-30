@@ -301,7 +301,8 @@ bool KPrPage::saveOdfAnimations(KoPASavingContext & paContext) const
     KPrPageApplicationData *data = dynamic_cast<KPrPageApplicationData *>(applicationData());
     Q_ASSERT(data);
     KPrPageEffect *pageEffect = data->pageEffect();
-    if (pageEffect || animationSteps().size() > 1) {
+    QList<KPrAnimationStep*> steps = animationSteps();
+    if (pageEffect || steps.size() > 1) {
         KoXmlWriter &writer = paContext.xmlWriter();
         writer.startElement("anim:par");
         writer.addAttribute("presentation:node-type", "timing-root");
@@ -315,9 +316,9 @@ bool KPrPage::saveOdfAnimations(KoPASavingContext & paContext) const
             writer.endElement(); // anim:par
         }
 
-        if (animationSteps().size() > 1) {
-            for (int i = 1; i < animationSteps().size(); i++) {
-                KPrAnimationStep *step = animationSteps().at(i);
+        if (steps.size() > 1) {
+            for (int i = 1; i < steps.size(); i++) {
+                KPrAnimationStep *step = steps.at(i);
                 writer.startElement("anim:seq");
                 writer.addAttribute("presentation:node-type", "main-sequence");
                 step->saveOdf(paContext);

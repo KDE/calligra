@@ -75,11 +75,7 @@ bool KPrAnimSet::saveAttribute(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     // Anim set allow only visibility change currently
     writer.addAttribute("smil:attributeName","visibility");
-    if (m_visible) {
-        writer.addAttribute("smil:to", "visible");
-    } else {
-        writer.addAttribute("smil:to", "hidden");
-    }
+    writer.addAttribute("smil:to", m_visible ? "visible" : "hidden");
     return true;
 }
 

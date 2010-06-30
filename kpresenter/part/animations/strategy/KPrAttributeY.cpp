@@ -23,7 +23,7 @@
 
 #include "kdebug.h"
 
-KPrAttributeY::KPrAttributeY()
+KPrAttributeY::KPrAttributeY() : KPrAnimationAttribute("y")
 {
 }
 

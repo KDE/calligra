@@ -23,7 +23,7 @@
 
 #include "kdebug.h"
 
-KPrAttributeRotate::KPrAttributeRotate()
+KPrAttributeRotate::KPrAttributeRotate() : KPrAnimationAttribute("rotate")
 {
 }
 

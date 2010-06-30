@@ -172,10 +172,16 @@ void TokenStack::ensureSpace()
  **********************/
 KPrValueParser::KPrValueParser(QString formula, KoShape *shape)
     : m_shape(shape)
+    , m_formula(formula)
     , m_compiled(false)
     , m_valid(false)
 {
     compile(scan(formula));
+}
+
+QString KPrValueParser::formula() const
+{
+    return m_formula;
 }
 
 Tokens KPrValueParser::scan(QString formula)

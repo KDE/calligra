@@ -33,7 +33,7 @@ public:
     virtual qreal endValue() const;
     virtual qreal startValue() const;
     bool loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode);
-
+    bool saveOdf(KoPASavingContext &paContext) const;
 protected:
     QList<KPrValueParser> m_values;
     QList<qreal> m_times;

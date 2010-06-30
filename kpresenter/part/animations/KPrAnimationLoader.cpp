@@ -125,14 +125,12 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
 
     kDebug() << "nodeType:" << nodeType;
-    KPrShapeAnimation::NodeType enumNodeType;
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
         // if there is allready an aniation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
             m_animations.append(*animationStep);
             *animationStep = new KPrAnimationStep();
-            enumNodeType = KPrShapeAnimation::OnClick;
         }
         subStep = new KPrAnimationSubStep();
         (*animationStep)->addAnimation(subStep);
@@ -143,7 +141,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // add par
         subStep = new KPrAnimationSubStep();
         (*animationStep)->addAnimation(subStep);
-        enumNodeType = KPrShapeAnimation::AfterPrevious;
         // add par animation
     }
     else {
@@ -158,7 +155,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
             subStep = new KPrAnimationSubStep();
             (*animationStep)->addAnimation(subStep);
         }
-        enumNodeType = KPrShapeAnimation::WithPrevious;
         // add par to current par
     }
 
@@ -185,7 +181,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
                 kDebug() << "shape:" << shape << "textBlockData" << textBlockData;
 
                 if (shape) {
-                    shapeAnimation = new KPrShapeAnimation(shape, textBlockData, enumNodeType);
+                    shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
                 }
                 else {
                     // shape animation not created

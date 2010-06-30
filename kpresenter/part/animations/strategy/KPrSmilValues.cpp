@@ -19,6 +19,7 @@
 
 #include "KPrSmilValues.h"
 #include <QStringList>
+#include "KoXmlWriter.h"
 #include "kdebug.h"
 
 KPrSmilValues::KPrSmilValues(KoShape *shape) : KPrAnimationValue(shape)
@@ -96,5 +97,31 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
         kWarning(33003) << "keySpline not yes supported";
         QStringList keySplinesList = keySplines.split(";");
     }
+    return true;
+}
+
+bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
+{
+    KoXmlWriter &writer = paContext.xmlWriter();
+    // values
+    QString values;
+    foreach (KPrValueParser valueParser, m_values) {
+        if (values.isEmpty()) {
+            values = QString("%1").arg(valueParser.formula());
+        } else {
+            values.append(QString(";%1").arg(valueParser.formula()));
+        }
+    }
+    writer.addAttribute("smil:values", values);
+    // keyTimes
+    QString keyTimes;
+    foreach (qreal time, m_times) {
+        if (keyTimes.isEmpty()) {
+            keyTimes = QString("%1").arg(time);
+        } else {
+            keyTimes.append(QString(";%1").arg(time));
+        }
+    }
+    writer.addAttribute("smil:keyTimes", keyTimes);
     return true;
 }

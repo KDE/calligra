@@ -21,6 +21,7 @@
 #define KPRANIMATIONVALUE_H
 
 #include <QtGlobal>
+#include "KoPASavingContext.h"
 class KoShape;
 class KPrAnimationCache;
 
@@ -33,6 +34,7 @@ public:
     virtual qreal startValue() const = 0;
     virtual qreal endValue() const = 0;
     virtual void setCache(KPrAnimationCache * cache);
+    virtual bool saveOdf(KoPASavingContext &paContext) const = 0;
     enum SmilCalcMode{
         discrete,
         linear,

@@ -61,9 +61,9 @@ QString KPrDurationParser::msToString(const int ms)
 {
     QString result;
     if (ms%1000 == 0) {
-        result = QString("%1%2").arg(ms/1000).arg("s");
+        result = QString("%1s").arg(ms/1000);
     } else {
-        result = QString("%1%2").arg(ms).arg("ms");
+        result = QString("%1ms").arg(ms);
     }
     return result;
 }

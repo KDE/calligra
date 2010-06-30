@@ -21,6 +21,7 @@
 #define KPRANIMATIONATTRIBUTE_H
 
 #include <QtGlobal>
+#include <QString>
 
 class KPrAnimationCache;
 class KoShape;
@@ -28,11 +29,14 @@ class KoShape;
 class KPrAnimationAttribute
 {
 public:
-    KPrAnimationAttribute();
+    KPrAnimationAttribute(QString attributeName);
     virtual ~KPrAnimationAttribute();
+    QString attributeName() const;
 
     virtual void updateCache(KPrAnimationCache * cache, KoShape *shape, qreal value) = 0;
     virtual void initCache(KPrAnimationCache * cache, int step, KoShape * shape, qreal startValue, qreal endValue) = 0;
+protected:
+    QString m_attributeName;
 };
 
 #endif // KPRANIMATIONATTRIBUTE_H

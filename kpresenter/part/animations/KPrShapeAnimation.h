@@ -35,17 +35,11 @@ class KPrAnimationCache;
 class KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimationData
 {
 public:
-    enum NodeType {
-        OnClick,
-        AfterPrevious,
-        WithPrevious
-    };
-
-    KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData, NodeType nodeType);
+    KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
     virtual ~KPrShapeAnimation();
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual bool saveOdf(KoPASavingContext &paContext) const;
+    virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const;
 
     KoShape * shape() const;
     virtual void init(KPrAnimationCache *animationCache, int step);
@@ -68,7 +62,6 @@ public:
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
-    NodeType m_nodeType;
 };
 
 #endif /* KPRSHAPEANIMATION_H */

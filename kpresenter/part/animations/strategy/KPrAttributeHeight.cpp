@@ -23,7 +23,7 @@
 
 #include "kdebug.h"
 
-KPrAttributeHeight::KPrAttributeHeight()
+KPrAttributeHeight::KPrAttributeHeight() : KPrAnimationAttribute("height")
 {
 }
 

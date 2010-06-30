@@ -158,3 +158,12 @@ void KPrAnimate::next(int currentTime)
     qreal value = m_values->value(qreal(currentTime)/qreal(animationDuration()));
     m_attribute->updateCache(m_animationCache, m_shapeAnimation->shape(), value);
 }
+
+bool KPrAnimate::saveAttribute(KoPASavingContext &paContext) const
+{
+    KPrAnimationBase::saveAttribute(paContext);
+    KoXmlWriter &writer = paContext.xmlWriter();
+    writer.addAttribute("smil:attributeName", m_attribute->attributeName());
+    m_values->saveOdf(paContext);
+    return true;
+}

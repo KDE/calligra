@@ -23,7 +23,7 @@
 
 #include "kdebug.h"
 
-KPrAttributeWidth::KPrAttributeWidth()
+KPrAttributeWidth::KPrAttributeWidth() : KPrAnimationAttribute("width")
 {
 }
 

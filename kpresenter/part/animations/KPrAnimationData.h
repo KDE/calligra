@@ -30,7 +30,6 @@ public:
     KPrAnimationData();
     virtual ~KPrAnimationData();
     virtual void init(KPrAnimationCache *animationCache, int step) = 0;
-    virtual bool saveOdf(KoPASavingContext & paContext) const = 0;
 };
 
 #endif // KPRANIMATIONDATA_H

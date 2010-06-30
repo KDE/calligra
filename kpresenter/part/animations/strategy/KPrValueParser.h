@@ -187,6 +187,7 @@ class KPrValueParser
 {
 public:
     KPrValueParser(QString formula, KoShape *shape);
+    QString formula() const;
     qreal eval(KPrAnimationCache * cache) const;
     bool valid() const;
 protected:
@@ -195,6 +196,7 @@ protected:
     qreal identifierToValue(QString identifier, KPrAnimationCache * cache) const;
 private:
     KoShape * m_shape;
+    QString m_formula;
     mutable bool m_compiled;
     mutable bool m_valid;
     mutable QVector<Opcode> m_codes;

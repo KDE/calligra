@@ -26,10 +26,9 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 
-KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData, NodeType nodeType)
+KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
-, m_nodeType(nodeType)
 {
 }
 
@@ -44,20 +43,18 @@ bool KPrShapeAnimation::loadOdf(const KoXmlElement &element, KoShapeLoadingConte
     return false;
 }
 
-bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext) const
+bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.startElement("anim:par");
     QString nodeType;
-    switch(m_nodeType)
-    {
-    case KPrShapeAnimation::OnClick:
+    if (startStep && startSubStep) {
         nodeType = QString("on-click");
-        break;
-    case KPrShapeAnimation::AfterPrevious:
+    }
+    else if (startSubStep) {
         nodeType = QString("after-previous");
-        break;
-    default:
+    }
+    else {
         nodeType = QString("with-previous");
     }
 

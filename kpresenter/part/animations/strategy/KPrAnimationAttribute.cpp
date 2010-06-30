@@ -19,10 +19,15 @@
 
 #include "KPrAnimationAttribute.h"
 
-KPrAnimationAttribute::KPrAnimationAttribute()
+KPrAnimationAttribute::KPrAnimationAttribute(QString attributeName):m_attributeName(attributeName)
 {
 }
 
 KPrAnimationAttribute::~KPrAnimationAttribute()
 {
+}
+
+QString KPrAnimationAttribute::attributeName() const
+{
+    return m_attributeName;
 }
