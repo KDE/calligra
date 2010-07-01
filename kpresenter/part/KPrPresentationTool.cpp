@@ -188,6 +188,7 @@ void KPrPresentationTool::activate(ToolActivation toolActivation, const QSet<KoS
 
 void KPrPresentationTool::deactivate()
 {
+    switchStrategy( new KPrPresentationStrategy( this ) );
     finishEventActions();
 }
 
