@@ -95,7 +95,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         m_textHandler->setDocument(this);
         m_tableHandler = new KWordTableHandler(bodyWriter, mainStyles);
         m_tableHandler->setDocument(this);
-        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles, m_picNames);
+        m_graphicsHandler = new KWordGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles);
 
         connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));

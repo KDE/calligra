@@ -211,8 +211,6 @@ private:
     LEInputStream* m_table_stream;
     LEInputStream* m_wdocument_stream;
     POLE::Storage* m_storage; // pointer to the pole storage
-
-    QMap<QByteArray, QString> m_picNames; //picture names shared in graphicshandler.cpp
 };
 
 #endif // DOCUMENT_H

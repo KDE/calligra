@@ -154,8 +154,7 @@ void DrawingWriter::SetClientRectangle(MSO::OfficeArtChildAnchor& anchor)
  */
 KWordGraphicsHandler::KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter,
                                          KoXmlWriter* manifestWriter, KoStore* store,
-                                         KoGenStyles* mainStyles,
-                                         QMap<QByteArray, QString>& picNames)
+                                         KoGenStyles* mainStyles)
 : QObject()
 , m_document(doc)
 , m_store(store)
@@ -166,7 +165,6 @@ KWordGraphicsHandler::KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWrite
 , m_fib(0)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
-, m_picNames(picNames)
 {
     kDebug(30513) ;
 }

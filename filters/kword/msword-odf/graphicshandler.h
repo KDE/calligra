@@ -92,8 +92,7 @@ class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
     Q_OBJECT
 public:
     KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
-                         KoStore* store, KoGenStyles* mainStyles,
-                         QMap<QByteArray, QString>& picNames);
+                         KoStore* store, KoGenStyles* mainStyles);
     ~KWordGraphicsHandler();
 
     /**
@@ -226,7 +225,7 @@ private:
     MSO::OfficeArtDgContainer * m_pOfficeArtHeaderDgContainer;
     MSO::OfficeArtDgContainer * m_pOfficeArtBodyDgContainer;
 
-    QMap<QByteArray, QString>& m_picNames; //picture names shared by picture & drawing handler
+    QMap<QByteArray, QString> m_picNames; //picture names
 };
 
 #endif // GRAPHICSHANDLER_H
