@@ -27,14 +27,14 @@
 
 #include "KPrShapeAnimations.h"
 #include "KPrPlaceholderShape.h"
-#include "KPrAnimationDirector.h"
+#include "animations/KPrAnimationCache.h"
 #include "KPrPageSelectStrategyBase.h"
 #include "kdebug.h"
 
-KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationDirector * animationDirector,
+KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager *shapeManager, KPrAnimationCache* animationCache,
                                                                     KPrPageSelectStrategyBase * strategy )
 : KoShapeManagerPaintingStrategy( shapeManager )
-, m_animationDirector( animationDirector )
+, m_animationCache( animationCache )
 , m_strategy( strategy )
 {
 }
@@ -47,11 +47,11 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
 void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
     if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) && m_strategy->page()->displayShape( shape ) ) {
-        if ( m_animationDirector->shapeShown( shape ) ) {
+        if ( m_animationCache->value(shape, "visibility", true).toBool() ) {
             qreal zoom;
             converter.zoom(&zoom, &zoom);
             painter.save();
-            QTransform animationTransform = m_animationDirector->shapeTransform(shape);
+            QTransform animationTransform = m_animationCache->value(shape, "transform", QTransform()).value<QTransform>();;
             QTransform transform(painter.matrix() * shape->absoluteTransformation( &converter ));
             if (animationTransform.isScaling()) {
                 transform = animationTransform * transform;

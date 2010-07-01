@@ -79,9 +79,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers
-    m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this,
+    m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), m_animationCache,
                                                        new KPrPageSelectStrategyActive( m_view ) ) );
-    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), this,
+    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), m_animationCache,
                                                              new KPrPageSelectStrategyActive( m_view ) ) );
 
     if ( hasAnimation() ) {
@@ -235,22 +235,6 @@ void KPrAnimationDirector::navigateToPage( int index )
     if ( hasAnimation() ) {
         startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
     }
-}
-
-bool KPrAnimationDirector::shapeShown( KoShape * shape )
-{
-    if(hasAnimation()){
-        return m_animationCache->value(shape, "visibility", true).toBool();
-    }
-    return true;
-}
-
-QTransform KPrAnimationDirector::shapeTransform( KoShape * shape )
-{
-    if(hasAnimation()){
-        return m_animationCache->value(shape, "transform", QTransform()).value<QTransform>();
-    }
-    return QTransform();
 }
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )

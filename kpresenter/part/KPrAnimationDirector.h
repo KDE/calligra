@@ -98,15 +98,6 @@ public:
     void navigateToPage( int index );
 
     /**
-     * Check if the shape is shown
-     *
-     * A shape is visible when there are no animations on it or when it
-     * is animated at the moment even when it is a disappear animation.
-     */
-    bool shapeShown( KoShape * shape );
-    QTransform shapeTransform( KoShape * shape );
-
-    /**
      * Get the animation for the shape
      *
      * @param shape which should be animated

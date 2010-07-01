@@ -22,13 +22,13 @@
 
 #include <KoShapeManagerPaintingStrategy.h>
 
-class KPrAnimationDirector;
+class KPrAnimationCache;
 class KPrPageSelectStrategyBase;
 
 class KPrShapeManagerAnimationStrategy : public KoShapeManagerPaintingStrategy
 {
 public:
-    KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationDirector * animationDirector,
+    KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationCache * animationCache,
                                       KPrPageSelectStrategyBase * strategy );
     virtual ~KPrShapeManagerAnimationStrategy();
 
@@ -39,7 +39,7 @@ public:
     virtual void adapt( KoShape * shape, QRectF & rect );
 
 private:
-    KPrAnimationDirector * m_animationDirector;
+    KPrAnimationCache * m_animationCache;
     KPrPageSelectStrategyBase * m_strategy;
 };
 
