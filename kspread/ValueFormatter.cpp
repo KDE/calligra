@@ -55,7 +55,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
     //if we have an array, use its first element
     if (value.isArray())
         return formatText(value.element(0, 0), fmtType, precision,
-                          floatFormat, prefix, postfix, currencySymbol);
+                          floatFormat, prefix, postfix, currencySymbol, formatString);
 
     Value result;
 
