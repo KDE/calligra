@@ -56,12 +56,12 @@ Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, W
 
     U32 i = 0;
     if ( version == Word8 ) {
-        //footnote/endnote separators related stories
+        //CPs of footnote/endnote separators related stories
         for ( ; i < 6 * sizeof( U32 ); i += sizeof( U32 ) ) {
             tableStream->readU32();
         }
     }
-    //header/footer related stories
+    //CPs of header/footer related stories (last one has to be ignored)
     for ( ; i < lcbPlcfhdd; i += sizeof( U32 ) ) {
         m_headers.push_back( tableStream->readU32() );
     }
@@ -71,6 +71,41 @@ Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, W
 
 Headers::~Headers()
 {
+}
+
+QList<bool> Headers::headersMask( void )
+{
+    //NOTE: Stories are considered empty if they have no contents and no guard
+    //paragraph mark.  Thus, an empty story is indicated by the story`s
+    //starting CP, as specified in PlcfHdd, being the same as the next CP in
+    //PlcfHdd.  MS-DOC, p.33
+
+    bool nempty;
+    QList<bool> mask;
+
+#ifdef WV2_DEBUG_HEADERS
+    for (U32 i = 0; i < (U32) m_headers.size(); i++) {
+        wvlog << "m_headers: " << m_headers[i];
+    }
+#endif
+    //second-to-last CP ends the last story, last CP must be ignored
+    for (U32 i = 0; i < (U32) (m_headers.size() - 2); i += 6) {
+        nempty = false;
+        for (U32 j = 0; j < 6; j++) {
+            if (m_headers[i + j] != m_headers[i + j + 1]) {
+                nempty = true;
+                break;
+            }
+        }
+        mask.push_back(nempty);
+    }
+
+#ifdef WV2_DEBUG_HEADERS
+    for (U32 i = 0; i < (U32) mask.size(); i++) {
+        wvlog << "Section" << i << ": new header/footer content: " << mask[i];
+    }
+#endif
+    return mask;
 }
 
 void Headers::set_headerMask( U8 /*sep_grpfIhdt*/ )

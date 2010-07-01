@@ -114,7 +114,8 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
 //emit firstSectionFound or check for pagebreak
 void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
-    kDebug(30513);
+    kDebug(30513) ;
+
     m_sectionNumber++;
     m_sep = sep; //store sep for section end
 
@@ -259,6 +260,11 @@ void KWordTextHandler::pageBreak(void)
 void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 {
     kDebug(30513);
+
+    if (m_document->omittMasterPage()) {
+        kDebug(30513) << "Omitting headers/footers because master-page was omitted!";
+        return;
+    }
     //NOTE: only parse headers if we're in a section that can have new headers
     //ie. new sections for columns trigger this function again, but we've
     //already parsed the headers

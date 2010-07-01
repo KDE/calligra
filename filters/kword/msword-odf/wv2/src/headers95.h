@@ -48,8 +48,8 @@ namespace wvWare
         int countOnes( U8 mask, U8 limit ) const;
 
         const int ihddOffset;
-        std::vector<U32> m_headerCount;
-        std::vector<U8> m_grpfIhdt;
+        QList<U32> m_headerCount;
+        QList<U8> m_grpfIhdt;
     };
 
 } // namespace wvWare

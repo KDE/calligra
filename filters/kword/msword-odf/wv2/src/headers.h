@@ -20,9 +20,9 @@
 #define HEADERS_H
 
 #include "global.h"
-#include <utility>
-#include <vector>
 #include "wv2_export.h"
+#include <utility>
+#include <QList>
 
 namespace wvWare
 {
@@ -53,8 +53,15 @@ namespace wvWare
          */
         virtual void set_headerMask( U8 sep_grpfIhdt );
 
+        /**
+         * Returns a binary mask providing the information of empty/nonempty
+         * header and footer stories for each section.  Size of the list equals
+         * the number of sections present in the document.
+         */
+        QList<bool> headersMask( void );
+
     protected:
-        std::vector<U32> m_headers;
+        QList<U32> m_headers;
         static const int headerTypes;
     };
 

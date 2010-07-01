@@ -168,6 +168,9 @@ bool Parser9x::parse()
             return false;
     }
 
+    //provide the headers mask to m_subDocumentHandler
+    m_subDocumentHandler->headersMask(m_headers->headersMask());
+
     // start parsing the body
     if ( !parseBody() )
         return false;

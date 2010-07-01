@@ -207,6 +207,13 @@ void KWordTableHandler::tableStart(KWord::Table* table)
         document()->set_writeMasterPageName(false);
     }
 
+    //check if the break-before property is required
+    if (document()->textHandler()->breakBeforePage() && !document()->writingHeader())
+    {
+        tableStyle.addProperty("fo:break-before", "page", KoGenStyle::TableType);
+        document()->textHandler()->set_breakBeforePage(false);
+    }
+
     QString tableStyleName = m_mainStyles->insert(tableStyle, QLatin1String("Table"), KoGenStyles::AllowDuplicates);
 
     //start table in content

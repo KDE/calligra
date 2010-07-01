@@ -149,6 +149,12 @@ namespace wvWare {
          * The end of the current header or footer.
          */
         virtual void headerEnd();
+        /**
+         * This method sends a binary mask providing the information of
+         * empty/nonempty header and footer stories for each section.  Size of
+         * the list equals the number of sections present in the document.
+         */
+        virtual void headersMask(QList<bool> mask);
 
     };
 

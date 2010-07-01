@@ -75,6 +75,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_buffer(0)
         , m_bufferEven(0)
         , m_writeMasterPageName(false)
+        , m_omittMasterPage(false)
         , m_data_stream(data)
         , m_table_stream(table)
         , m_wdocument_stream(wdocument)
@@ -384,13 +385,13 @@ void Document::bodyEnd()
                this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
 }
 
-//sets paper size
-//sets format & orientation
-//sets column information
-//sets up borders
+//create page-layout and master-page
 void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513) ;
+    m_omittMasterPage = false;
+    static KoGenStyle prevStyle(KoGenStyle::PageLayoutStyle);
+
     // does this section require a specific first page
     bool firstPage = sep->fTitlePage || sep->pgbApplyTo;
 
@@ -401,42 +402,61 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     KoGenStyle* pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
     QString pageLayoutStyleName("Mpm");
-    if (m_textHandler->m_sectionNumber > 1) {
-        pageLayoutStyleName.append(QString::number(m_textHandler->m_sectionNumber));
-    }
 
     // set page-layout attributes
     setPageLayoutStyle(pageLayoutStyle, sep, 0);
     pageLayoutStyle->setAutoStyleInStylesDotXml(true);
-    pageLayoutStyleName = m_mainStyles->insert(*pageLayoutStyle, pageLayoutStyleName,
-                                               KoGenStyles::DontAddNumberToName);
+    pageLayoutStyleName = m_mainStyles->insert(*pageLayoutStyle, pageLayoutStyleName);
     // add the name into the list
     m_pageLayoutName_list.prepend(pageLayoutStyleName);
+   
+    // check if a first-page specific page-layout has to be created
+    if (firstPage) {
+       KoGenStyle* fpageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
+       QString fPageLayoutStyleName("FMpm");
+
+       // set page-layout attributes for the first page
+       setPageLayoutStyle(fpageLayoutStyle, sep, 1);
+       fpageLayoutStyle->setAutoStyleInStylesDotXml(true);
+       fPageLayoutStyleName = m_mainStyles->insert(*fpageLayoutStyle, fPageLayoutStyleName);
+       // add the name into the list
+       m_pageLayoutName_list.prepend(fPageLayoutStyleName);
+
+       // delete the object, we've added it to the collection
+       delete fpageLayoutStyle;
+       fpageLayoutStyle = 0;
+    }
+    //NOTE: Each section may require a new page-layout.  If this is not the
+    //case and the header/footer content didn't change, a master-page can be
+    //omitted.  Except of continuous section break, insert a manual page break.
+    else {
+        //check changes in both the header/footer content and page-layout style
+        if ( (prevStyle == *pageLayoutStyle) &&
+             (m_headersMask[m_textHandler->m_sectionNumber - 1] == false) )
+        {
+            if (sep->bkc != 0) {
+                //FIXME: missing support for fo:break-before="page" in table
+                //properties, loadodf, kword  
+                textHandler()->set_breakBeforePage(true);
+            }
+            m_omittMasterPage = true;
+            kDebug(30513) << "omitting master-page creation";
+        }
+    }
+    //if the actual KoGenStyle differs, save it
+    if (!m_omittMasterPage) {
+        prevStyle = *pageLayoutStyle;
+    }
 
     // delete the object, we've added it to the collection
     delete pageLayoutStyle;
     pageLayoutStyle = 0;
 
-    // check if a first-page specific page-layout has to be created
-    if (firstPage) {
-       pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
-
-       QString fPageLayoutStyleName("FMpm");
-       if (m_textHandler->m_sectionNumber > 1) {
-          fPageLayoutStyleName.append(QString::number(m_textHandler->m_sectionNumber));
-       }
-       // set page-layout attributes for the first page
-       setPageLayoutStyle(pageLayoutStyle, sep, 1);
-       pageLayoutStyle->setAutoStyleInStylesDotXml(true);
-       fPageLayoutStyleName = m_mainStyles->insert(*pageLayoutStyle, fPageLayoutStyleName,
-                                                   KoGenStyles::DontAddNumberToName);
-       // add the name into the list
-       m_pageLayoutName_list.prepend(fPageLayoutStyleName);
-
-       // delete the object, we've added it to the collection
-       delete pageLayoutStyle;
-       pageLayoutStyle = 0;
+    if (m_omittMasterPage) {
+        return;
     }
+
+    //TODO: Even page/Odd page section break support
 
     // *******************************
     // master-page style
@@ -444,12 +464,8 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     KoGenStyle* masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
     QString masterStyleName("Standard");
 
-    if (m_textHandler->m_sectionNumber > 1) {
-        masterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
-    }
     masterStyle->addAttribute("style:display-name", masterStyleName);
-    masterStyleName = m_mainStyles->insert(*masterStyle, masterStyleName,
-                                           KoGenStyles::DontAddNumberToName);
+    masterStyleName = m_mainStyles->insert(*masterStyle, masterStyleName);
     // delete the object, we've added it to the collection
     delete masterStyle;
     masterStyle = 0;
@@ -464,15 +480,11 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     // check if a first-page specific master-page has to be created
     if (firstPage) {
         masterStyle = new KoGenStyle(KoGenStyle::MasterPageStyle);
-
         QString fMasterStyleName("First_page");
-        if (m_textHandler->m_sectionNumber > 1) {
-            fMasterStyleName.append(QString::number(m_textHandler->m_sectionNumber));
-        }
+
         masterStyle->addAttribute("style:display-name", fMasterStyleName);
         masterStyle->addAttribute("style:next-style-name", m_masterPageName_list.last());
-        fMasterStyleName = m_mainStyles->insert(*masterStyle, fMasterStyleName,
-                                                KoGenStyles::DontAddNumberToName);
+        fMasterStyleName = m_mainStyles->insert(*masterStyle, fMasterStyleName);
         // add the name into the list
         m_masterPageName_list.prepend(fMasterStyleName);
 
@@ -528,6 +540,12 @@ void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
     m_hasFooter_list.clear();
     //reset header data
     m_headerCount = 0;
+}
+
+void Document::headersMask(QList<bool> mask)
+{
+    kDebug(30513) ;
+    m_headersMask = mask;
 }
 
 //creates a frameset element with the header info

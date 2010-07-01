@@ -21,6 +21,7 @@
 #include "paragraphproperties.h"
 #include "functor.h"
 #include "wvlog.h"
+#include <QList>
 
 using namespace wvWare;
 
@@ -93,6 +94,10 @@ void SubDocumentHandler::headersStart()
 }
 
 void SubDocumentHandler::headersEnd()
+{
+}
+
+void SubDocumentHandler::headersMask( QList<bool> /*mask*/ )
 {
 }
 

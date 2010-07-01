@@ -127,6 +127,10 @@ public:
     int m_sectionNumber;
     QString getFont(unsigned fc) const;
 
+    // Provide access to private attributes for our handlers
+    void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
+    bool breakBeforePage(void) const { return m_breakBeforePage; }
+
     // Communication with Document, without having to know about Document
 signals:
     void sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
@@ -147,7 +151,7 @@ protected:
 
 private:
     // The document owning this text handler.
-    Document*     m_document;
+    Document* m_document;
 
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     QString m_listSuffixes[9]; // The suffix for every list level seen so far

@@ -90,6 +90,7 @@ public:
 
     virtual void headerStart(wvWare::HeaderData::Type type);
     virtual void headerEnd();
+    virtual void headersMask(QList<bool> mask);
 
     virtual void footnoteStart();
     virtual void footnoteEnd();
@@ -118,6 +119,7 @@ public:
     QString masterPageName(void) const { return m_masterPageName_list.first(); }
     void set_writeMasterPageName(bool val) { m_writeMasterPageName = val; }
     bool writeMasterPageName(void) const { return m_writeMasterPageName; }
+    bool omittMasterPage(void) const { return m_omittMasterPage; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
 
@@ -197,9 +199,13 @@ private:
     QList<bool> m_hasHeader_list; //does master-page/page-layout require a header element
     QList<bool> m_hasFooter_list; //does master-page/page-layout require a footer element
 
+    //information about section's empty/nonempty header/footer stories
+    QList<bool> m_headersMask;
+
     QStringList m_masterPageName_list; //master-page names
     QStringList m_pageLayoutName_list; //page-layout names
     bool m_writeMasterPageName; //whether to write the master-page name into a paragraph/table
+    bool m_omittMasterPage; //whether master-page style for current section has been omitted
 
     int m_initialFootnoteNumber;
     int m_initialEndnoteNumber;
