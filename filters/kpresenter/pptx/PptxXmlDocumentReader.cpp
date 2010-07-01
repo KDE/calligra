@@ -217,12 +217,19 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         raiseError(i18n("Slide layout \"%1\" not found", slidePath + '/' + slideFile));
         return KoFilter::WrongFormat;
     }
+    
+    const QString slideLayoutPathAndFile = m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout");
+    QString slideMasterPath, slideMasterFile;
+    MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideMasterPath, &slideMasterFile);
+    const QString slideMasterPathAndFile = m_context->relationships->target(slideMasterPath, slideMasterFile, "rId1"); //FIXME hardcoded id, can there be more then one masterslides or why those mapping?
+    PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
+    
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slidePath, slideFile,
         0/*unused*/, *m_context->themes,
         PptxXmlSlideReader::Slide,
-        0,
+        masterSlideProperties,
         slideLayoutProperties,
         &d->slideMasterPageProperties,
         *m_context->relationships
