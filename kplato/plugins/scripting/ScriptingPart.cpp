@@ -40,9 +40,26 @@
 
 #include <kptview.h>
 
-typedef KGenericFactory< KPlatoScriptingPart > KPlatoScriptingPartFactory;
-K_EXPORT_COMPONENT_FACTORY( krossmodulekplato, KPlatoScriptingPartFactory( "krossmodulekplato" ) )
+int kplatoScriptingDebugArea() {
+    static int s_area = KDebug::registerArea( "kplato (Scripting)" );
+    return s_area;
+}
 
+K_EXPORT_PLUGIN( KPlatoScriptingFactory )
+
+KPlatoScriptingFactory::KPlatoScriptingFactory(const char *componentName, const char *catalogName, QObject *parent )
+    : KPluginFactory( componentName, catalogName, parent )
+{
+    kDebug(kplatoScriptingDebugArea())<<parent;
+}
+
+QObject *KPlatoScriptingFactory::create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword)
+{
+    kDebug(kplatoScriptingDebugArea())<<iface<<parentWidget<<parent<<args<<keyword;
+    return new KPlatoScriptingPart( parent );
+}
+
+//---------------------
 /// \internal d-pointer class.
 class KPlatoScriptingPart::Private
 {
@@ -55,7 +72,7 @@ KPlatoScriptingPart::KPlatoScriptingPart(QObject* parent, const QStringList& arg
 {
     setComponentData(KPlatoScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kplato/kpartplugins/scripting.rc"), true);
-    kDebug(32010) <<"KPlatoScripting plugin. Class:" << metaObject()->className() <<", Parent:" << parent->metaObject()->className();
+    kDebug(kplatoScriptingDebugArea()) <<"KPlatoScripting plugin. Class:" << metaObject()->className() <<", Parent:" <<(parent?parent->metaObject()->className():"0");
 
 }
 

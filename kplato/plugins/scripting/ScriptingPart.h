@@ -22,7 +22,18 @@
 #ifndef KPlatoSCRIPTINGPART_H
 #define KPlatoSCRIPTINGPART_H
 
+#include <KPluginFactory>
+
 #include <KoScriptingPart.h>
+
+class KPlatoScriptingFactory : public KPluginFactory
+{
+public:
+    explicit KPlatoScriptingFactory(const char *componentName = 0, const char *catalogName = 0, QObject *parent = 0);
+
+     /// This function is called when the factory asked to create a KPlatoScriptingFactory object.
+    virtual QObject *create(const char *iface, QWidget *parentWidget, QObject *parent, const QVariantList &args, const QString &keyword);
+};
 
 /**
 * The KPlatoScriptingPart class implements a KPart component
@@ -32,7 +43,7 @@ class KPlatoScriptingPart : public KoScriptingPart
 {
         Q_OBJECT
     public:
-        KPlatoScriptingPart(QObject* parent, const QStringList&);
+        KPlatoScriptingPart(QObject* parent, const QStringList& args=QStringList());
         virtual ~KPlatoScriptingPart();
     private:
         /// \internal d-pointer class.
