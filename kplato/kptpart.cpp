@@ -163,7 +163,7 @@ KoView *Part::createViewInstance( QWidget *parent )
 {
     // syncronize view selector
     View *view = dynamic_cast<View*>( views().value( 0 ) );
-    if ( view ) {
+    if ( view && m_context ) {
         QDomDocument doc = m_context->save( view );
         m_context->setContent( doc.toString() );
     }
