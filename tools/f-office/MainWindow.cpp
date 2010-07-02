@@ -124,7 +124,7 @@ void MainWindow::init()
     menu->addAction(m_ui->actionAbout);
 
 
-   
+
     m_search = new QLineEdit(this);
     m_ui->SearchToolBar->insertWidget(m_ui->actionSearchOption, m_search);
     m_exactMatchCheckBox = new QCheckBox(i18n("Exact Match"), this);
@@ -144,7 +144,7 @@ void MainWindow::init()
 
     connect(m_ui->actionEdit, SIGNAL(toggled(bool)), this, SLOT(editToolBar(bool)));
     connect(m_ui->actionSearch, SIGNAL(toggled(bool)), this, SLOT(toggleToolBar(bool)));
- 
+
     connect(m_ui->actionEd,SIGNAL(triggered()),this,SLOT(hello()));
     connect(m_ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFileDialog()));
     connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
@@ -154,7 +154,7 @@ void MainWindow::init()
     m_ui->actionZoomIn->setShortcutContext(Qt::ApplicationShortcut);
     m_ui->actionZoomOut->setShortcuts(QKeySequence::ZoomOut);
     m_ui->actionZoomOut->setShortcutContext(Qt::ApplicationShortcut);
-    
+
     connect(m_ui->actionZoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
     connect(m_ui->actionZoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
     connect(m_ui->actionZoomLevel, SIGNAL(triggered()), this, SLOT(zoom()));
@@ -227,7 +227,7 @@ void MainWindow::hello()
 
 void MainWindow::openframe()
 {
-	 qDebug()<<"hello";
+         qDebug()<<"hello";
 
          QDialog *dlg = new QDialog(0);
 
@@ -238,8 +238,8 @@ void MainWindow::openframe()
          QToolButton *b3 = new QToolButton(0);
          b3->setText("Underline");
          QToolButton *b4 = new QToolButton(0);
-         b4->setText("S");    
-         
+         b4->setText("S");
+
          QToolButton *b5 = new QToolButton(0);
          b5->setText("B");
          QToolButton *b6 = new QToolButton(0);
@@ -247,14 +247,14 @@ void MainWindow::openframe()
          QToolButton *b7 = new QToolButton(0);
          b7->setText("U");
          QToolButton *b8 = new QToolButton(0);
-         b8->setText("P");  
+         b8->setText("P");
 
          QGridLayout *layout = new QGridLayout;
          int l, t, r, b;
          layout->getContentsMargins(&l, &t, &r, &b);
-    	 t *= 2;
+         t *= 2;
          layout->setContentsMargins(l, t, r, b);
-	 layout->addWidget(b1,0,0);
+         layout->addWidget(b1,0,0);
          layout->addWidget(b2,0,1);
          layout->addWidget(b3,0,2);
          layout->addWidget(b4,0,3);
@@ -262,19 +262,19 @@ void MainWindow::openframe()
          layout->addWidget(b6,1,1);
          layout->addWidget(b7,1,2);
          layout->addWidget(b8,1,3);
-         
+
          dlg->setLayout(layout);
          dlg->setFixedSize(80,80);
          dlg->setGeometry(400,400,80,80);
          dlg->show();
-         
+
 }
 
 void MainWindow::toggleToolBar(bool show)
 {
     if (show) {
         m_ui->viewToolBar->hide();
-	//m_ui->EditToolBar->show();
+        //m_ui->EditToolBar->show();
         m_ui->SearchToolBar->show();
         m_isViewToolBar = false;
         m_search->setFocus();
@@ -289,7 +289,7 @@ void MainWindow::toggleToolBar(bool show)
         KoToolManager::instance()->switchToolRequested(PanTool_ID);
     }
 
-   
+
 }
 /**modified new tool option**/
 void MainWindow::editToolBar(bool edit)
@@ -306,7 +306,7 @@ void MainWindow::editToolBar(bool edit)
         m_isViewToolBar = true;
         KoToolManager::instance()->switchToolRequested(PanTool_ID);
     }
-   
+
 }
 
 void MainWindow::showFullScreenPresentationIcons(void)
@@ -602,7 +602,7 @@ void MainWindow::fullScreen()
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
 
-    /******edit toolbar hidden******/	
+    /******edit toolbar hidden******/
     m_ui->EditToolBar->hide();
     showFullScreen();
     QSize size(this->frameSize());
@@ -683,7 +683,7 @@ void MainWindow::prevPage()
 }
 void MainWindow::nextPage()
 {
-    
+
     if (!m_controller)
        return ;
     //if ((m_doc->pageCount()>0) && triggerAction("page_next"))
@@ -779,7 +779,7 @@ static void findTextShapesRecursive(KoShapeContainer* con, KoPAPageBase* page,
                                     QList<QPair<KoPAPageBase*, KoShape*> >& shapes,
                                     QList<QTextDocument*>& docs)
 {
-    foreach(KoShape* shape, con->childShapes()) {
+    foreach(KoShape* shape, con->shapes()) {
         KoTextShapeData* tsd = qobject_cast<KoTextShapeData*> (shape->userData());
         if (tsd) {
             shapes.append(qMakePair(page, shape));
@@ -1167,7 +1167,7 @@ void MainWindow::checkDBusActivation()
 {
     if (m_splash && !this->isActiveWindow())
         openFileDialog();
-}	
+}
 
 void MainWindow::loadScrollAndQuit()
 {
