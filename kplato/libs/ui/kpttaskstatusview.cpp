@@ -658,10 +658,6 @@ void PerformanceStatusBase::createLineChart()
 
 void PerformanceStatusBase::setupChart()
 {
-    // BUG in kdchart:
-    foreach ( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
-        p->setReferenceCoordinatePlane( 0 );
-    }
     foreach ( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
         Q_UNUSED(p);
         ui_chart->takeCoordinatePlane( ui_chart->coordinatePlanes().last() );
@@ -674,24 +670,19 @@ void PerformanceStatusBase::setupChart()
         setupLineChart();
     }
     kDebug()<<"Planes:"<<ui_chart->coordinatePlanes();
-    //BUG in kdchart: hide grid only in the plane referencing another plane doesn't work
-/*    foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
+    foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
         CartesianCoordinatePlane *p = dynamic_cast<CartesianCoordinatePlane*>( pl );
         if ( p == 0 ) continue;
         GridAttributes ga = p->globalGridAttributes();
         ga.setGridVisible( p->referenceCoordinatePlane() == 0 );
         p->setGlobalGridAttributes( ga );
-        kDebug()<<p<<"grid visible="<<p->globalGridAttributes().isGridVisible();
-    }*/
+    }
     m_legend->setDatasetHidden( 0, ! ( m_chartinfo.showCost && m_chartinfo.showBCWSCost ) );
     m_legend->setDatasetHidden( 1, ! ( m_chartinfo.showCost && m_chartinfo.showBCWPCost ) );
     m_legend->setDatasetHidden( 2, ! ( m_chartinfo.showCost && m_chartinfo.showACWPCost ) );
     m_legend->setDatasetHidden( 3, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWSEffort ) );
     m_legend->setDatasetHidden( 4, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWPEffort ) );
     m_legend->setDatasetHidden( 5, ! ( m_chartinfo.showEffort && m_chartinfo.showACWPEffort ) );
-
-    ui_chart->takeLegend( m_legend );
-    ui_chart->addLegend( m_legend );
 }
 
 void PerformanceStatusBase::setupBarChart()
