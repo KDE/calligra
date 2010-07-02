@@ -33,7 +33,6 @@
 
 #include <QFileDialog>
 #include <QUrl>
-#include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QScrollBar>
@@ -99,7 +98,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_type(Text),
         m_splash(aSplash),
         m_panningCount(0),
-        m_isLoading(false)
+        m_isLoading(false),
+        m_pptTool(NULL),
+        m_fsPPTDrawHighlightButton(NULL),
+        m_fsPPTDrawPenButton(NULL)
 {
     init();
 }
@@ -152,6 +154,7 @@ void MainWindow::init()
     connect(m_ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFileDialog()));
     connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
     connect(m_ui->actionFullScreen, SIGNAL(triggered()), this, SLOT(fullScreen()));
+    
 
     m_ui->actionZoomIn->setShortcuts(QKeySequence::ZoomIn);
     m_ui->actionZoomIn->setShortcutContext(Qt::ApplicationShortcut);
@@ -200,6 +203,7 @@ void MainWindow::init()
 
     // Toolbar should be shown only when we open a document
     m_ui->viewToolBar->hide();
+
 }
 
 MainWindow::~MainWindow()
@@ -263,7 +267,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
         hScrlbarHeight = hScrlbar.height();
     }
 
-    if (!m_fsPPTBackButton) {
+    if (! m_fsPPTBackButton && ( m_pptTool ) && ( ! m_pptTool->toolsActivated() ) ) {
         m_fsPPTBackButton = new QPushButton(this);
         m_fsPPTBackButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
         m_fsPPTBackButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
@@ -273,7 +277,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
                                 size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
     }
 
-    if (!m_fsPPTForwardButton) {
+    if (! m_fsPPTForwardButton && ( m_pptTool ) && ( ! m_pptTool->toolsActivated() ) ) {
         m_fsPPTForwardButton = new QPushButton(this);
         m_fsPPTForwardButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
         m_fsPPTForwardButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
@@ -283,14 +287,38 @@ void MainWindow::showFullScreenPresentationIcons(void)
                                    size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
     }
 
-    if (m_currentPage < m_doc->pageCount()) {
+    if ( ( ! m_fsPPTDrawPenButton ) && ( m_pptTool ) ) {
+        m_fsPPTDrawPenButton = new QPushButton(this);
+        m_fsPPTDrawPenButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+        m_fsPPTDrawPenButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
+        m_fsPPTDrawPenButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/pen.png"));
+        m_fsPPTDrawPenButton->move(0 , size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+        connect(m_fsPPTDrawPenButton,SIGNAL(clicked()),m_pptTool,SLOT(togglePenTool()));
+    }
+
+    m_fsPPTDrawPenButton->show();
+    m_fsPPTDrawPenButton->raise();
+
+    if ( ( ! m_fsPPTDrawHighlightButton ) && ( m_pptTool ) ) {
+        m_fsPPTDrawHighlightButton = new QPushButton(this);
+        m_fsPPTDrawHighlightButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+        m_fsPPTDrawHighlightButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
+        m_fsPPTDrawHighlightButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/highlight.png"));
+        m_fsPPTDrawHighlightButton->move(FS_BUTTON_SIZE , size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+        connect(this->m_fsPPTDrawHighlightButton,SIGNAL(clicked()),m_pptTool,SLOT(toggleHighlightTool()));
+    }
+
+    m_fsPPTDrawHighlightButton->show();
+    m_fsPPTDrawHighlightButton->raise();
+
+    if (m_currentPage < m_doc->pageCount() && ( m_pptTool ) && ( ! m_pptTool->toolsActivated() ) ) {
         m_fsPPTForwardButton->move(size.width() - FS_BUTTON_SIZE*2 - vScrlbarWidth,
                                    size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
         m_fsPPTForwardButton->show();
         m_fsPPTForwardButton->raise();
     }
 
-    if (m_currentPage <= m_doc->pageCount() && m_currentPage != 1) {
+    if (m_currentPage <= m_doc->pageCount() && m_currentPage != 1 && ( m_pptTool ) && (! m_pptTool->toolsActivated())) {
         m_fsPPTBackButton->move(size.width() - FS_BUTTON_SIZE*3 - vScrlbarWidth,
                                 size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
         m_fsPPTBackButton->show();
@@ -517,6 +545,10 @@ void MainWindow::updateUI()
 
 void MainWindow::resourceChanged(int key, const QVariant &value)
 {
+    if( ( m_pptTool ) && m_pptTool->toolsActivated() && m_type == Presentation) {
+        return;
+    }
+
     if (KoCanvasResource::CurrentPage == key) {
         m_currentPage = value.toInt();
         if (m_type == Presentation && isFullScreen()) {
@@ -543,6 +575,7 @@ void MainWindow::fullScreen()
     int hScrlbarHeight = 0;
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
+
     showFullScreen();
     QSize size(this->frameSize());
 
@@ -563,8 +596,14 @@ void MainWindow::fullScreen()
     m_fsButton->raise();
     m_fsTimer->start(3000);
 
-    if (m_type == Presentation)
-        showFullScreenPresentationIcons();
+    if (m_type == Presentation) {
+        if((!m_pptTool)) {
+            m_pptTool=new PresentationTool(this, m_controller);  
+            connect(m_fsButton, SIGNAL(clicked()), m_pptTool, SLOT(deactivateTool()));      
+        }
+
+    showFullScreenPresentationIcons();
+    }
 }
 
 void MainWindow::zoomIn()
@@ -638,6 +677,10 @@ void MainWindow::fsTimer()
             m_fsPPTBackButton->hide();
         if (m_fsPPTForwardButton && m_fsPPTForwardButton->isVisible())
             m_fsPPTForwardButton->hide();
+        if (m_fsPPTDrawHighlightButton && m_fsPPTDrawHighlightButton->isVisible() )
+            m_fsPPTDrawHighlightButton->hide();
+        if (m_fsPPTDrawPenButton && m_fsPPTDrawPenButton->isVisible() )
+            m_fsPPTDrawPenButton->hide();
     }
 }
 
@@ -645,6 +688,9 @@ void MainWindow::fsButtonClicked()
 {
     if (!m_ui)
         return;
+    if(m_controller) {
+        m_controller->show();
+    }
 
     m_fsButton->hide();
 
@@ -654,13 +700,57 @@ void MainWindow::fsButtonClicked()
     if (m_fsPPTForwardButton && m_fsPPTForwardButton->isVisible())
         m_fsPPTForwardButton->hide();
 
-    if (m_isViewToolBar)
+    if (m_isViewToolBar) {
         m_ui->viewToolBar->show();
-    else
+    }
+    else {
         m_ui->SearchToolBar->show();
+    }
 
     showNormal();
 }
+
+
+
+void MainWindow::mousePressEvent( QMouseEvent *event )
+{
+    if( m_pptTool && m_pptTool->toolsActivated() ) {
+        m_pptTool->handleMainWindowMousePressEvent( event );
+    }
+}
+
+void MainWindow::mouseMoveEvent( QMouseEvent *event )
+{
+    if( m_pptTool && m_pptTool->toolsActivated() ) {
+        m_pptTool->handleMainWindowMouseMoveEvent( event );
+    }
+}
+
+void MainWindow::mouseReleaseEvent( QMouseEvent *event )
+{
+    if( m_pptTool && m_pptTool->toolsActivated() ) {
+        m_pptTool->handleMainWindowMouseReleaseEvent( event );
+    }
+}
+
+void MainWindow::paintEvent( QPaintEvent *event )
+{
+    if( !m_pptTool ) {
+	return;
+    }
+
+    if( m_pptTool->toolsActivated() ) {
+        QPainter painter(this);
+        QRectF target(0,0,800,480);
+        QRectF source(0,0,800,480);
+        painter.drawImage( target,*( m_pptTool->getImage() ), source );
+    }
+
+    if(( !m_pptTool->getPenToolStatus() ) && ( !m_pptTool->getHighlightToolStatus() ) && m_controller) {
+        m_controller->show();
+    }
+}
+
 
 void MainWindow::toggleSelection()
 {
@@ -983,7 +1073,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                 m_panningCount++;
         }
 
-        if (m_type == Presentation && m_slideChangePossible
+        if ( m_type == Presentation && m_slideChangePossible
                 && m_panningCount > 5 && (event->type() == QEvent::MouseMove
                                           || event->type() == QEvent::TabletMove)) {
             int sliderMin = m_controller->verticalScrollBar()->minimum();
@@ -1027,9 +1117,9 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     // change presentation slide in fullscreen mode if user taps on
     // left or right side of the screen
-    if (watched && event && m_type == Presentation && m_doc->pageCount() > 0
-            && this->isFullScreen()
-            && event->type() == QEvent::MouseButtonRelease) {
+    if ( ( m_pptTool && ( ! m_pptTool->toolsActivated() ) ) &&
+         watched && event && m_type == Presentation && m_doc->pageCount() > 0
+            && this->isFullScreen() && event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent *mouseEvent = reinterpret_cast<QMouseEvent*>(event);
         // check that event wasn't from full screen push button
         if (QString::compare("QPushButton", watched->metaObject()->className())) {
@@ -1128,4 +1218,22 @@ void MainWindow::loadScrollAndQuit()
         nextPage();
         QTimer::singleShot(20, this, SLOT(loadScrollAndQuit()));
     }
+}
+
+ void MainWindow::disableFullScreenPresentationNavigation()
+{
+    disconnect( m_fsPPTBackButton, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
+    disconnect( m_fsPPTForwardButton, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
+    m_fsPPTBackButton->hide();
+    m_fsPPTForwardButton->hide();
+}
+
+void MainWindow::enableFullScreenPresentationNavigation()
+{
+    connect( m_fsPPTBackButton, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
+    connect( m_fsPPTForwardButton, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
+    m_fsPPTBackButton->show();
+    m_fsPPTBackButton->raise();
+    m_fsPPTForwardButton->show();
+    m_fsPPTForwardButton->raise();
 }

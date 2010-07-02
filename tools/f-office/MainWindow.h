@@ -29,6 +29,7 @@
 #include <KoDocument.h>
 
 #include "Splash.h"
+#include "PresentationTool.h"
 
 class QPushButton;
 class QIcon;
@@ -46,6 +47,7 @@ class KoShape;
 class KoPAPageBase;
 class QShortcut;
 class QCheckBox;
+class PresentationTool;
 
 class OfficeInterface;
 
@@ -60,10 +62,14 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(Splash *aSplash, QWidget *parent = 0);
     ~MainWindow();
-    //void tabletEvent ( QTabletEvent * event );
-    //void mousePressEvent ( QMouseEvent * event );
-    //void mouseMoveEvent ( QMouseEvent * event );
-    //void mouseReleaseEvent ( QMouseEvent * event );
+
+    void mousePressEvent ( QMouseEvent * event );
+    void mouseMoveEvent ( QMouseEvent * event );
+    void mouseReleaseEvent ( QMouseEvent * event );
+    void paintEvent( QPaintEvent * event );
+
+    void disableFullScreenPresentationNavigation();
+    void enableFullScreenPresentationNavigation();
 
 private:
     Ui::MainWindow *m_ui;
@@ -148,6 +154,18 @@ private:
      * Pointer to splash class
      */
     Splash *m_splash;
+    /*!
+     * Pointer to pen draw button
+     */
+    QPushButton *m_fsPPTDrawPenButton;
+    /*!
+     * Pointer to highlight draw button
+     */
+    QPushButton *m_fsPPTDrawHighlightButton;
+    /*!
+     * Pointer to presentation drawing tools
+     */
+    PresentationTool *m_pptTool;
 
     void init();
     /*!
@@ -202,7 +220,7 @@ private:
      * automatically after D-Bus messages. This low level code sends
      * _NET_ACTIVE_WINDOW message to Matchbox and window is raised.
      */
-    void raiseWindow(void);
+    void raiseWindow(void);    
 
 private slots:
 
@@ -291,7 +309,8 @@ private slots:
     /*!
      * Slot for progress indicator
      */
-    //void slotProgress(int value);
+    //void slotProgress(int value); 
+
 public slots:
     /*!
      * Slot to  dialog fileSelected signal
@@ -343,7 +362,7 @@ private:
     /*!
      * Is document is currently being loaded
      */
-    bool m_isLoading;
+    bool m_isLoading;   
 };
 
 #endif // MAINWINDOW_H

@@ -1,5 +1,7 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>images/178x200/freoffice.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>images/178x200/freoffice.png</file>
+        <file>images/64x64/PresentationDrawTool/highlight.png</file>
+        <file>images/64x64/PresentationDrawTool/pen.png</file>
+    </qresource>
 </RCC>
