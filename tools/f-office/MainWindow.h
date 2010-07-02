@@ -27,7 +27,7 @@
 
 #include <QtGui/QMainWindow>
 #include <KoDocument.h>
-
+#include "previewwindow.h"
 #include "Splash.h"
 #include "PresentationTool.h"
 
@@ -334,6 +334,10 @@ public slots:
      */
     void loadScrollAndQuit();
 
+    void gotoPage(int page);
+
+    void showPreviewDialog();
+
 private:
 
     QMap<QString, OfficeInterface*> loadedPlugins;
@@ -363,6 +367,9 @@ private:
      * Is document is currently being loaded
      */
     bool m_isLoading;   
+
+    PreviewWindow *previewWindow;
+
 };
 
 #endif // MAINWINDOW_H

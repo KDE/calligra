@@ -75,6 +75,8 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include "flowlayout.h"
+#include "previewwindow.h"
 
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
@@ -203,6 +205,8 @@ void MainWindow::init()
 
     // Toolbar should be shown only when we open a document
     m_ui->viewToolBar->hide();
+    connect(m_ui->actionPageNumber,SIGNAL(triggered()),this,SLOT(showPreviewDialog()));
+    previewWindow=new PreviewWindow();
 
 }
 
@@ -220,7 +224,31 @@ MainWindow::~MainWindow()
     delete m_ui;
     m_ui = 0;
 }
-
+void MainWindow::showPreviewDialog()
+{
+    if(m_type == Presentation)
+    {
+    if(previewWindow->isHidden())
+    {
+        previewWindow->show();
+    }
+    }
+}
+void MainWindow::gotoPage(int page)
+{
+    if(page>=m_currentPage)
+    {
+        for(int i=m_currentPage;i<page;i++)
+            nextPage();
+    }
+    else
+    {
+        for(int i=m_currentPage;i>page;i--)
+        {
+            prevPage();
+        }
+    }
+}
 void MainWindow::openAboutDialog(void)
 {
     QList<HildonMenu *> all_dlg = this->findChildren<HildonMenu *>();
@@ -383,6 +411,18 @@ void MainWindow::closeDocument()
 void MainWindow::doOpenDocument()
 {
     openDocument(m_fileName);
+    if(m_type == Presentation)
+    {
+            QLabel *m_nextSlidePreview=new QLabel();
+        KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
+        for(int i=0;i<m_doc->pageCount();i++)
+        {
+            KoPAPageBase* papage = padoc->pageByIndex(i, false);
+            previewWindow->showThumbnail(papage->thumbnail());
+        }
+        previewWindow->hide();
+        connect(previewWindow,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+    }
 }
 
 void MainWindow::raiseWindow(void)
