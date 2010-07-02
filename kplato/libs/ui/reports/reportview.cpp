@@ -21,12 +21,12 @@
 #include "reportview.h"
 #include "report.h"
 #include "reportview_p.h"
-#include "reportpage.h"
 #include "reportdata.h"
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
 #include "reportexportpanel.h"
 
+#include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
 #include <renderobjects.h>
@@ -415,7 +415,7 @@ void ReportView::refresh()
     m_pageSelector->setMaximum( m_reportDocument ? m_reportDocument->pages() : 1 );
     m_pageSelector->setCurrentPage( 1 );
 
-    m_reportWidget = new ReportPage(this, m_reportDocument);
+    m_reportWidget = new KoReportPage(this, m_reportDocument);
     m_reportWidget->setObjectName("KPlatoReportPage");
     m_scrollArea->setWidget(m_reportWidget);
     return;

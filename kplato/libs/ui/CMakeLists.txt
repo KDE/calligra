@@ -32,7 +32,6 @@ message ( STATUS "kdchar include: ${CMAKE_SOURCE_DIR}/kchart/kdchart/include" )
 set(kplatoui_LIB_SRCS
     reports/reportview.cpp
     reports/reportdata.cpp
-    reports/reportpage.cpp
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
     reports/reportexportpanel.cpp

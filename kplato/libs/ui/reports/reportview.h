@@ -35,6 +35,7 @@
 class KoDocument;
 class KoShape;
 
+class KoReportPage;
 class KoReportData;
 class KoReportPreRenderer;
 class ORODocument;
@@ -62,7 +63,6 @@ namespace KPlato
 
 class Project;
 class ReportView;
-class ReportPage;
 class ReportData;
 class ReportSourceEditor;
 class ReportNavigator;
@@ -152,7 +152,7 @@ private:
     KoReportRendererFactory m_factory;
     ORODocument *m_reportDocument;
     QScrollArea *m_scrollArea;
-    ReportPage *m_reportWidget;
+    KoReportPage *m_reportWidget;
     ReportNavigator *m_pageSelector;
     int m_currentPage;
     int m_pageCount;
