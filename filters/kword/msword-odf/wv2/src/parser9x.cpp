@@ -1119,13 +1119,13 @@ void Parser9x::parseHeader( const HeaderData& data, unsigned char mask )
 #endif
     if ( length < 1 ) {
 #ifdef WV2_DEBUG_HEADERS
-        wvlog << "Warning: Didn't find a valid CPs for this header -- faking it" << endl;
+        wvlog << "Warning: Didn't find valid CPs for this header/footer -- ignoring it" << endl;
 #endif
-        m_subDocumentHandler->headerStart( static_cast<HeaderData::Type>( mask ) );
-        SharedPtr<const ParagraphProperties> sharedProps( new ParagraphProperties );
-        m_textHandler->paragraphStart( sharedProps );
-        m_textHandler->paragraphEnd();
-        m_subDocumentHandler->headerEnd();
+//         m_subDocumentHandler->headerStart( static_cast<HeaderData::Type>( mask ) );
+//         SharedPtr<const ParagraphProperties> sharedProps( new ParagraphProperties );
+//         m_textHandler->paragraphStart( sharedProps );
+//         m_textHandler->paragraphEnd();
+//         m_subDocumentHandler->headerEnd();
         return;
     }
     else if ( length > 1 )
