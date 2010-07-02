@@ -413,7 +413,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     //check changes in both the header/footer content and page-layout style
     if ( (prevStyle == *pageLayoutStyle) &&
-         (m_headersMask[m_textHandler->m_sectionNumber - 1] == false) &&
+         (headersChanged() == false) &&
          !firstPage )
     {
         if (sep->bkc != 0) {
@@ -1021,6 +1021,17 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
 
     return;
+}
+
+bool Document::headersChanged(void) const
+{
+    int n = m_textHandler->m_sectionNumber - 1;
+    bool ret = false;
+
+    if (n < m_headersMask.size()) {
+        ret = m_headersMask[n];
+    }
+    return ret;
 }
 
 #include "document.moc"

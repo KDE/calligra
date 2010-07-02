@@ -123,6 +123,12 @@ public:
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
 
+    /**
+     * Return the item from m_headersMask corresponding with the actually
+     * processed section.  Return false if the Header document doesn't exist.
+     */
+    bool headersChanged(void) const;
+
     POLE::Storage* storage(void) const { return m_storage; }
     LEInputStream* data_stream(void) const { return m_data_stream; }
     LEInputStream* table_stream(void) const { return m_table_stream; }

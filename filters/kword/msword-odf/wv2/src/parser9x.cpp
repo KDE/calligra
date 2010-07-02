@@ -169,8 +169,9 @@ bool Parser9x::parse()
     }
 
     //provide the headers mask to m_subDocumentHandler
-    m_subDocumentHandler->headersMask(m_headers->headersMask());
-
+    if (m_headers) {
+        m_subDocumentHandler->headersMask(m_headers->headersMask());
+    }
     // start parsing the body
     if ( !parseBody() )
         return false;
