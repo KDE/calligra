@@ -478,7 +478,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         //! @todo draw:master-page-name is hardcoded for now
         body->addAttribute("draw:master-page-name", "Default"); // required; CASE #P301
         //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
-        body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber+1)); //optional; CASE #P303
+        body->addAttribute("draw:name", i18n("Slide %1",m_context->slideNumber+1)); //optional; CASE #P303
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
         //! @todo presentation:use-date-time-name //optional; CASE #P304
 

@@ -221,13 +221,14 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     const QString slideLayoutPathAndFile = m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout");
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideMasterPath, &slideMasterFile);
-    const QString slideMasterPathAndFile = m_context->relationships->target(slideMasterPath, slideMasterFile, "rId1"); //FIXME hardcoded id, can there be more then one masterslides or why those mapping?
+    const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
     PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
     
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slidePath, slideFile,
-        0/*unused*/, *m_context->themes,
+        d->slideNumber,
+        *m_context->themes,
         PptxXmlSlideReader::Slide,
         masterSlideProperties,
         slideLayoutProperties,
@@ -241,6 +242,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         kDebug() << slideReader.errorString();
         return status;
     }
+    ++d->slideNumber;
+
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
