@@ -22,7 +22,6 @@
  *
  */
 
-#include "OfficeInterface.h"
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "Common.h"
@@ -33,6 +32,7 @@
 
 #include <QFileDialog>
 #include <QUrl>
+#include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QScrollBar>
@@ -48,6 +48,7 @@
 #include <QX11Info>
 #include <QShortcut>
 #include <QProcess>
+#include <QAction>
 
 #include <kfileitem.h>
 #include <kparts/part.h>
@@ -72,12 +73,16 @@
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
-
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-#include "flowlayout.h"
-#include "previewwindow.h"
-
+#include <QFrame>
+#include<QPushButton>
+#include<QGridLayout>
+#include<QDialog>
+#include<QGroupBox>
+#include<QHBoxLayout>
+#include<QToolButton>
+#include<QFormLayout>
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
         m_ui(new Ui::MainWindow),
@@ -100,75 +105,66 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_type(Text),
         m_splash(aSplash),
         m_panningCount(0),
-        m_isLoading(false),
-        m_pptTool(NULL),
-        m_fsPPTDrawHighlightButton(NULL),
-        m_fsPPTDrawPenButton(NULL)
+        m_isLoading(false)
 {
     init();
 }
 
 void MainWindow::init()
 {
+
     m_ui->setupUi(this);
 
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
+    menu->addAction(m_ui->actionNew);
+    menu->addAction(m_ui->actionEd);
+    menu->addAction(m_ui->actionSave);
+    menu->addAction(m_ui->actionClose);
     menu->addAction(m_ui->actionAbout);
-    
-    // false here means that they are not plugins
-    m_ui->actionOpen->setData(QVariant(false));
-    m_ui->actionAbout->setData(QVariant(false));
 
-    const QDir pluginDir("/usr/lib/freoffice/");
-    const QStringList plugins = pluginDir.entryList(QDir::Files);
 
-    for (int i = 0; i < plugins.size(); ++i) {
-        QPluginLoader test(pluginDir.absoluteFilePath(plugins.at(i)));
-        QObject *plug = test.instance();
-        plug->setParent(this);
-        if (plug != 0)
-        {
-            OfficeInterface* inter = qobject_cast<OfficeInterface*>(plug);
-            const QString plugName = inter->pluginName();
-            loadedPlugins[plugName] = inter;
-            connect(plug, SIGNAL(openDocument(bool, const QString&)), this, SLOT(pluginOpen(bool, const QString&)));
-            QAction *action = new QAction(plugName, this);
-            
-            // True states that this action is a plugin            
-            action->setData(QVariant(true));
-            menu->addAction(action);
-        }
-    }
-
-    connect(menu, SIGNAL(triggered(QAction*)), this, SLOT(menuClicked(QAction*)));
-
+   
     m_search = new QLineEdit(this);
     m_ui->SearchToolBar->insertWidget(m_ui->actionSearchOption, m_search);
     m_exactMatchCheckBox = new QCheckBox(i18n("Exact Match"), this);
     m_ui->SearchToolBar->insertWidget(m_ui->actionSearchOption, m_exactMatchCheckBox);
     m_ui->SearchToolBar->hide();
 
+
+    m_ui->EditToolBar->hide();
+
+    connect(m_ui->actionFormat,SIGNAL(triggered()),SLOT(openframe()));
+
     connect(m_search, SIGNAL(returnPressed()), SLOT(nextWord()));
     connect(m_search, SIGNAL(textEdited(QString)), SLOT(startSearch()));
 
+   /*connection establishment*/
+    //connect(m_ui->actionEdit, SIGNAL(triggered()), this, SLOT(editToolBar(bool)));
+
+    connect(m_ui->actionEdit, SIGNAL(toggled(bool)), this, SLOT(editToolBar(bool)));
     connect(m_ui->actionSearch, SIGNAL(toggled(bool)), this, SLOT(toggleToolBar(bool)));
+ 
+    connect(m_ui->actionEd,SIGNAL(triggered()),this,SLOT(hello()));
     connect(m_ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFileDialog()));
     connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
     connect(m_ui->actionFullScreen, SIGNAL(triggered()), this, SLOT(fullScreen()));
-    
 
     m_ui->actionZoomIn->setShortcuts(QKeySequence::ZoomIn);
     m_ui->actionZoomIn->setShortcutContext(Qt::ApplicationShortcut);
     m_ui->actionZoomOut->setShortcuts(QKeySequence::ZoomOut);
     m_ui->actionZoomOut->setShortcutContext(Qt::ApplicationShortcut);
+    
     connect(m_ui->actionZoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
     connect(m_ui->actionZoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
     connect(m_ui->actionZoomLevel, SIGNAL(triggered()), this, SLOT(zoom()));
-
     connect(m_ui->actionNextPage, SIGNAL(triggered()), this, SLOT(nextPage()));
+    //connect(m_ui->actionNextPage, SIGNAL(triggered()), this, SLOT(nextPage()));
+    //connect(m_ui->actionNextPage, SIGNAL(triggered()), this, SLOT(nextPage()));
+    //connect(m_ui->actionNextPage, SIGNAL(clicked()), this, SLOT(nextPage()));
     connect(m_ui->actionPrevPage, SIGNAL(triggered()), this, SLOT(prevPage()));
 
+    connect(m_ui->actionPanningOn, SIGNAL(triggered()), this, SLOT(toggleSelection()));
     m_ui->actionCopy->setEnabled(false);
     connect(m_ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
 
@@ -202,53 +198,15 @@ void MainWindow::init()
 
     m_copyShortcut = new QShortcut(QKeySequence::Copy, this);
     connect(m_copyShortcut, SIGNAL(activated()), this, SLOT(copy()));
-
-    // Toolbar should be shown only when we open a document
-    m_ui->viewToolBar->hide();
-    connect(m_ui->actionPageNumber,SIGNAL(triggered()),this,SLOT(showPreviewDialog()));
-    previewWindow=new PreviewWindow();
-
 }
 
 MainWindow::~MainWindow()
 {
     closeDocument();
-
-    QMapIterator<QString, OfficeInterface*> i(loadedPlugins);
-    while (i.hasNext())
-    {
-        i.next();
-        delete i.value();
-    }
-
     delete m_ui;
     m_ui = 0;
 }
-void MainWindow::showPreviewDialog()
-{
-    if(m_type == Presentation)
-    {
-    if(previewWindow->isHidden())
-    {
-        previewWindow->show();
-    }
-    }
-}
-void MainWindow::gotoPage(int page)
-{
-    if(page>=m_currentPage)
-    {
-        for(int i=m_currentPage;i<page;i++)
-            nextPage();
-    }
-    else
-    {
-        for(int i=m_currentPage;i>page;i--)
-        {
-            prevPage();
-        }
-    }
-}
+
 void MainWindow::openAboutDialog(void)
 {
     QList<HildonMenu *> all_dlg = this->findChildren<HildonMenu *>();
@@ -259,21 +217,96 @@ void MainWindow::openAboutDialog(void)
     dialog.exec();
 }
 
+void MainWindow::hello()
+{
+    qDebug()<<"hello hi";
+    m_ui->viewToolBar->hide();
+    m_ui->EditToolBar->show();
+    m_ui->SearchToolBar->hide();
+}
+
+void MainWindow::openframe()
+{
+	 qDebug()<<"hello";
+
+         QDialog *dlg = new QDialog(0);
+
+         QToolButton *b1 = new QToolButton(0);
+         b1->setText("Bold");
+         QToolButton *b2 = new QToolButton(0);
+         b2->setText("Italic");
+         QToolButton *b3 = new QToolButton(0);
+         b3->setText("Underline");
+         QToolButton *b4 = new QToolButton(0);
+         b4->setText("S");    
+         
+         QToolButton *b5 = new QToolButton(0);
+         b5->setText("B");
+         QToolButton *b6 = new QToolButton(0);
+         b6->setText("I");
+         QToolButton *b7 = new QToolButton(0);
+         b7->setText("U");
+         QToolButton *b8 = new QToolButton(0);
+         b8->setText("P");  
+
+         QGridLayout *layout = new QGridLayout;
+         int l, t, r, b;
+         layout->getContentsMargins(&l, &t, &r, &b);
+    	 t *= 2;
+         layout->setContentsMargins(l, t, r, b);
+	 layout->addWidget(b1,0,0);
+         layout->addWidget(b2,0,1);
+         layout->addWidget(b3,0,2);
+         layout->addWidget(b4,0,3);
+         layout->addWidget(b5,1,0);
+         layout->addWidget(b6,1,1);
+         layout->addWidget(b7,1,2);
+         layout->addWidget(b8,1,3);
+         
+         dlg->setLayout(layout);
+         dlg->setFixedSize(80,80);
+         dlg->setGeometry(400,400,80,80);
+         dlg->show();
+         
+}
+
 void MainWindow::toggleToolBar(bool show)
 {
     if (show) {
         m_ui->viewToolBar->hide();
+	//m_ui->EditToolBar->show();
         m_ui->SearchToolBar->show();
         m_isViewToolBar = false;
         m_search->setFocus();
         m_search->selectAll();
+
     } else {
         m_search->clearFocus();
         m_ui->SearchToolBar->hide();
+        //m_ui->EditToolBar->hide();
         m_ui->viewToolBar->show();
         m_isViewToolBar = true;
         KoToolManager::instance()->switchToolRequested(PanTool_ID);
     }
+
+   
+}
+/**modified new tool option**/
+void MainWindow::editToolBar(bool edit)
+{
+     qDebug()<<"hello";
+    if (edit) {
+        m_ui->viewToolBar->show();
+        m_ui->EditToolBar->hide();
+        m_isViewToolBar = false;
+
+        } else {
+        m_ui->EditToolBar->hide();
+        m_ui->viewToolBar->show();
+        m_isViewToolBar = true;
+        KoToolManager::instance()->switchToolRequested(PanTool_ID);
+    }
+   
 }
 
 void MainWindow::showFullScreenPresentationIcons(void)
@@ -295,7 +328,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
         hScrlbarHeight = hScrlbar.height();
     }
 
-    if (! m_fsPPTBackButton && ( m_pptTool ) && ( ! m_pptTool->toolsActivated() ) ) {
+    if (!m_fsPPTBackButton) {
         m_fsPPTBackButton = new QPushButton(this);
         m_fsPPTBackButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
         m_fsPPTBackButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
@@ -305,7 +338,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
                                 size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
     }
 
-    if (! m_fsPPTForwardButton && ( m_pptTool ) && ( ! m_pptTool->toolsActivated() ) ) {
+    if (!m_fsPPTForwardButton) {
         m_fsPPTForwardButton = new QPushButton(this);
         m_fsPPTForwardButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
         m_fsPPTForwardButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
@@ -315,38 +348,14 @@ void MainWindow::showFullScreenPresentationIcons(void)
                                    size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
     }
 
-    if ( ( ! m_fsPPTDrawPenButton ) && ( m_pptTool ) ) {
-        m_fsPPTDrawPenButton = new QPushButton(this);
-        m_fsPPTDrawPenButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
-        m_fsPPTDrawPenButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
-        m_fsPPTDrawPenButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/pen.png"));
-        m_fsPPTDrawPenButton->move(0 , size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
-        connect(m_fsPPTDrawPenButton,SIGNAL(clicked()),m_pptTool,SLOT(togglePenTool()));
-    }
-
-    m_fsPPTDrawPenButton->show();
-    m_fsPPTDrawPenButton->raise();
-
-    if ( ( ! m_fsPPTDrawHighlightButton ) && ( m_pptTool ) ) {
-        m_fsPPTDrawHighlightButton = new QPushButton(this);
-        m_fsPPTDrawHighlightButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
-        m_fsPPTDrawHighlightButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
-        m_fsPPTDrawHighlightButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/highlight.png"));
-        m_fsPPTDrawHighlightButton->move(FS_BUTTON_SIZE , size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
-        connect(this->m_fsPPTDrawHighlightButton,SIGNAL(clicked()),m_pptTool,SLOT(toggleHighlightTool()));
-    }
-
-    m_fsPPTDrawHighlightButton->show();
-    m_fsPPTDrawHighlightButton->raise();
-
-    if (m_currentPage < m_doc->pageCount() && ( m_pptTool ) && ( ! m_pptTool->toolsActivated() ) ) {
+    if (m_currentPage < m_doc->pageCount()) {
         m_fsPPTForwardButton->move(size.width() - FS_BUTTON_SIZE*2 - vScrlbarWidth,
                                    size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
         m_fsPPTForwardButton->show();
         m_fsPPTForwardButton->raise();
     }
 
-    if (m_currentPage <= m_doc->pageCount() && m_currentPage != 1 && ( m_pptTool ) && (! m_pptTool->toolsActivated())) {
+    if (m_currentPage <= m_doc->pageCount() && m_currentPage != 1) {
         m_fsPPTBackButton->move(size.width() - FS_BUTTON_SIZE*3 - vScrlbarWidth,
                                 size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
         m_fsPPTBackButton->show();
@@ -383,7 +392,7 @@ void MainWindow::openFileDialog()
 
 void MainWindow::closeDocument()
 {
-    setWindowTitle(i18n("Office Viewer"));
+    setWindowTitle(i18n("Office"));
     if (m_doc == NULL)  return;
     setCentralWidget(0);
     m_positions.clear();
@@ -405,24 +414,11 @@ void MainWindow::closeDocument()
 
     m_ui->actionZoomLevel->setText(i18n("%1 %", 100));
     m_ui->actionPageNumber->setText(i18n("%1 of %2", 0, 0));
-    m_ui->viewToolBar->hide();
 }
 
 void MainWindow::doOpenDocument()
 {
     openDocument(m_fileName);
-    if(m_type == Presentation)
-    {
-            QLabel *m_nextSlidePreview=new QLabel();
-        KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
-        for(int i=0;i<m_doc->pageCount();i++)
-        {
-            KoPAPageBase* papage = padoc->pageByIndex(i, false);
-            previewWindow->showThumbnail(papage->thumbnail());
-        }
-        previewWindow->hide();
-        connect(previewWindow,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-    }
 }
 
 void MainWindow::raiseWindow(void)
@@ -441,8 +437,6 @@ void MainWindow::raiseWindow(void)
 
 void MainWindow::openDocument(const QString &fileName)
 {
-    m_ui->viewToolBar->show();
-
     if (!checkFiletype(fileName))
         return;
 
@@ -500,8 +494,6 @@ void MainWindow::openDocument(const QString &fileName)
 
     if (!QString::compare(ext, EXT_ODP, Qt::CaseInsensitive) ||
             !QString::compare(ext, EXT_PPTX, Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_PPS, Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_PPSX, Qt::CaseInsensitive) ||
             !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive)) {
         m_type = Presentation;
     } else if (!QString::compare(ext, EXT_ODS, Qt::CaseInsensitive) ||
@@ -510,11 +502,9 @@ void MainWindow::openDocument(const QString &fileName)
         m_type = Spreadsheet;
     } else {
         m_type = Text;
-        // We need to get the page count again after layout rounds.
-        connect(m_doc, SIGNAL(pageSetupChanged()), this, SLOT(updateUI()));
     }
 
-    setWindowTitle(QString("%1 - %2").arg(i18n("Office Viewer"), fname));
+    setWindowTitle(QString("%1 - %2").arg(i18n("Office"), fname));
 
     m_controller->setProperty("FingerScrollable", true);
     setCentralWidget(m_controller);
@@ -546,8 +536,8 @@ bool MainWindow::checkFiletype(const QString &fileName)
     QList<QString> extensions;
     //Add Txt extension after adding ascii filter to koffice package
     /*extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \*/
-    extensions << EXT_DOC << EXT_DOCX << EXT_ODT << EXT_TXT \
-    << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_PPS << EXT_PPSX \
+    extensions << EXT_DOC << EXT_DOCX << EXT_ODT  \
+    << EXT_PPT << EXT_PPTX << EXT_ODP << EXT_RTF \
     << EXT_ODS << EXT_XLS << EXT_XLSX;
     QString ext = KMimeType::extractKnownExtension(fileName);
 
@@ -585,10 +575,6 @@ void MainWindow::updateUI()
 
 void MainWindow::resourceChanged(int key, const QVariant &value)
 {
-    if( ( m_pptTool ) && m_pptTool->toolsActivated() && m_type == Presentation) {
-        return;
-    }
-
     if (KoCanvasResource::CurrentPage == key) {
         m_currentPage = value.toInt();
         if (m_type == Presentation && isFullScreen()) {
@@ -616,6 +602,8 @@ void MainWindow::fullScreen()
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
 
+    /******edit toolbar hidden******/	
+    m_ui->EditToolBar->hide();
     showFullScreen();
     QSize size(this->frameSize());
 
@@ -636,14 +624,8 @@ void MainWindow::fullScreen()
     m_fsButton->raise();
     m_fsTimer->start(3000);
 
-    if (m_type == Presentation) {
-        if((!m_pptTool)) {
-            m_pptTool=new PresentationTool(this, m_controller);  
-            connect(m_fsButton, SIGNAL(clicked()), m_pptTool, SLOT(deactivateTool()));      
-        }
-
-    showFullScreenPresentationIcons();
-    }
+    if (m_type == Presentation)
+        showFullScreenPresentationIcons();
 }
 
 void MainWindow::zoomIn()
@@ -692,20 +674,27 @@ void MainWindow::prevPage()
 {
     if (!m_controller)
         return;
-    if ((m_doc->pageCount() > 0) && triggerAction("page_previous"))
-        return;
+    /***********condition not true**********/
+    //if ((m_doc->pageCount() > 0) && triggerAction("page_previous"))
+    if ((m_doc->pageCount() > 0) && nextnext("page_previous"))
+    return;
     m_vPage = m_controller->verticalScrollBar()->pageStep();
     m_controller->pan(QPoint(0, -m_vPage));
 }
-
 void MainWindow::nextPage()
 {
+    
     if (!m_controller)
-        return;
-    if ((m_doc->pageCount() > 0) && triggerAction("page_next"))
-        return;
+       return ;
+    //if ((m_doc->pageCount()>0) && triggerAction("page_next"))
+    if ((m_doc->pageCount()>0) && nextnext("page_next"))
+    return;
     m_vPage = m_controller->verticalScrollBar()->pageStep();
+    //qDebug()<<m_vPage;
     m_controller->pan(QPoint(0, m_vPage));
+    //if(m_doc->pageCount()>0)
+    //m_controller->pan(QPoint(0, 1065));
+
 }
 
 void MainWindow::fsTimer()
@@ -717,10 +706,6 @@ void MainWindow::fsTimer()
             m_fsPPTBackButton->hide();
         if (m_fsPPTForwardButton && m_fsPPTForwardButton->isVisible())
             m_fsPPTForwardButton->hide();
-        if (m_fsPPTDrawHighlightButton && m_fsPPTDrawHighlightButton->isVisible() )
-            m_fsPPTDrawHighlightButton->hide();
-        if (m_fsPPTDrawPenButton && m_fsPPTDrawPenButton->isVisible() )
-            m_fsPPTDrawPenButton->hide();
     }
 }
 
@@ -728,9 +713,6 @@ void MainWindow::fsButtonClicked()
 {
     if (!m_ui)
         return;
-    if(m_controller) {
-        m_controller->show();
-    }
 
     m_fsButton->hide();
 
@@ -740,57 +722,13 @@ void MainWindow::fsButtonClicked()
     if (m_fsPPTForwardButton && m_fsPPTForwardButton->isVisible())
         m_fsPPTForwardButton->hide();
 
-    if (m_isViewToolBar) {
+    if (m_isViewToolBar)
         m_ui->viewToolBar->show();
-    }
-    else {
+    else
         m_ui->SearchToolBar->show();
-    }
 
     showNormal();
 }
-
-
-
-void MainWindow::mousePressEvent( QMouseEvent *event )
-{
-    if( m_pptTool && m_pptTool->toolsActivated() ) {
-        m_pptTool->handleMainWindowMousePressEvent( event );
-    }
-}
-
-void MainWindow::mouseMoveEvent( QMouseEvent *event )
-{
-    if( m_pptTool && m_pptTool->toolsActivated() ) {
-        m_pptTool->handleMainWindowMouseMoveEvent( event );
-    }
-}
-
-void MainWindow::mouseReleaseEvent( QMouseEvent *event )
-{
-    if( m_pptTool && m_pptTool->toolsActivated() ) {
-        m_pptTool->handleMainWindowMouseReleaseEvent( event );
-    }
-}
-
-void MainWindow::paintEvent( QPaintEvent *event )
-{
-    if( !m_pptTool ) {
-	return;
-    }
-
-    if( m_pptTool->toolsActivated() ) {
-        QPainter painter(this);
-        QRectF target(0,0,800,480);
-        QRectF source(0,0,800,480);
-        painter.drawImage( target,*( m_pptTool->getImage() ), source );
-    }
-
-    if(( !m_pptTool->getPenToolStatus() ) && ( !m_pptTool->getHighlightToolStatus() ) && m_controller) {
-        m_controller->show();
-    }
-}
-
 
 void MainWindow::toggleSelection()
 {
@@ -841,7 +779,7 @@ static void findTextShapesRecursive(KoShapeContainer* con, KoPAPageBase* page,
                                     QList<QPair<KoPAPageBase*, KoShape*> >& shapes,
                                     QList<QTextDocument*>& docs)
 {
-    foreach(KoShape* shape, con->shapes()) {
+    foreach(KoShape* shape, con->childShapes()) {
         KoTextShapeData* tsd = qobject_cast<KoTextShapeData*> (shape->userData());
         if (tsd) {
             shapes.append(qMakePair(page, shape));
@@ -1051,15 +989,23 @@ void MainWindow::copy()
     m_controller->canvas()->toolProxy()->copy();
 }
 
-bool MainWindow::triggerAction(const char* name)
+//bool MainWindow::triggerAction(const char* name)
+bool MainWindow::nextnext(const char* name)
 {
+    QString strchar(name);
+    //qDebug()<<strchar;
     if (m_view) {
+
         // the cast in the next line is no longer needed for
         // koffice revision 1004085 and newer
-        QAction* action = ((KXMLGUIClient*)m_view)->action(name);
+       // QAction* action = ((KXMLGUIClient*)m_view)->action(name);
+        QAction* action = m_view->action(name);
         if (action) {
+            qDebug()<<strchar<<"inside";
             action->activate(QAction::Trigger);
+            qDebug()<<strchar<<"inside after trigger";
             return true;
+            qDebug()<<strchar<<"after trigger";
         }
     }
     return false;
@@ -1069,13 +1015,19 @@ void MainWindow::updateActions()
 {
     bool docLoaded = m_doc;
     m_ui->actionSearch->setEnabled(docLoaded);
+
+    /******ActionEdit Enabel*****/
+    m_ui->actionEdit->setEnabled(docLoaded);
+
     m_ui->actionFullScreen->setEnabled(docLoaded);
     m_ui->actionZoomIn->setEnabled(docLoaded);
     m_ui->actionZoomOut->setEnabled(docLoaded);
     m_ui->actionZoomLevel->setEnabled(docLoaded);
     m_ui->actionNextPage->setEnabled(docLoaded);
     m_ui->actionPrevPage->setEnabled(docLoaded);
+    m_ui->actionPanningOn->setEnabled(docLoaded);
 }
+
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
@@ -1113,7 +1065,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                 m_panningCount++;
         }
 
-        if ( m_type == Presentation && m_slideChangePossible
+        if (m_type == Presentation && m_slideChangePossible
                 && m_panningCount > 5 && (event->type() == QEvent::MouseMove
                                           || event->type() == QEvent::TabletMove)) {
             int sliderMin = m_controller->verticalScrollBar()->minimum();
@@ -1122,11 +1074,13 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             QPoint movePos = (reinterpret_cast<QMouseEvent*>(event))->pos();
             if (movePos.y() - m_pressPos.y() > 50 && sliderVal == sliderMin) {
                 m_slideChangePossible = false;
-                triggerAction("page_previous");
+                //triggerAction("page_previous");
+                nextnext("page_previous");
             }
             if (m_pressPos.y() - movePos.y() > 50 && sliderVal == sliderMax) {
                 m_slideChangePossible = false;
-                triggerAction("page_next");
+                //triggerAction("page_next");
+                nextnext("page_next");
             }
         }
     }
@@ -1157,17 +1111,19 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     // change presentation slide in fullscreen mode if user taps on
     // left or right side of the screen
-    if ( ( m_pptTool && ( ! m_pptTool->toolsActivated() ) ) &&
-         watched && event && m_type == Presentation && m_doc->pageCount() > 0
-            && this->isFullScreen() && event->type() == QEvent::MouseButtonRelease) {
+    if (watched && event && m_type == Presentation && m_doc->pageCount() > 0
+            && this->isFullScreen()
+            && event->type() == QEvent::MouseButtonRelease) {
         QMouseEvent *mouseEvent = reinterpret_cast<QMouseEvent*>(event);
         // check that event wasn't from full screen push button
         if (QString::compare("QPushButton", watched->metaObject()->className())) {
             QSize size(this->frameSize());
             if (mouseEvent->x() <= FS_BUTTON_SIZE) {
-                triggerAction("page_previous");
+                //triggerAction("page_previous");
+                nextnext("page_previous");
             } else if (mouseEvent->x() >= (size.width() - FS_BUTTON_SIZE)) {
-                triggerAction("page_next");
+                //triggerAction("page_next");
+                nextnext("page_next");
             }
         }
     }
@@ -1193,6 +1149,7 @@ void MainWindow::activeToolChanged(KoCanvasController* canvas, int)
 
     canvas->setProperty("FingerScrollable", true);
     m_ui->actionCopy->setEnabled(newTool == TextTool_ID);
+    m_ui->actionPanningOn->setChecked(newTool == TextTool_ID);
 }
 
 void MainWindow::setShowProgressIndicator(bool visible)
@@ -1210,26 +1167,7 @@ void MainWindow::checkDBusActivation()
 {
     if (m_splash && !this->isActiveWindow())
         openFileDialog();
-}
-
-void MainWindow::pluginOpen(bool newWindow, const QString& path)
-{
-    openDocument(path);
-}
-
-void MainWindow::menuClicked(QAction* action)
-{
-    if (!action->data().toBool())
-    {
-        return; // We return if it was not a plugin action
-    }
-
-    const QString activeText = action->text();
-    closeDocument();
-    OfficeInterface *nextPlugin = loadedPlugins[activeText];
-    nextPlugin->setDocument(m_doc);
-    setCentralWidget(nextPlugin->view());
-}
+}	
 
 void MainWindow::loadScrollAndQuit()
 {
@@ -1255,25 +1193,7 @@ void MainWindow::loadScrollAndQuit()
     if (done) {
         QTimer::singleShot(1, qApp, SLOT(quit()));
     } else {
-        nextPage();
-        QTimer::singleShot(20, this, SLOT(loadScrollAndQuit()));
+         nextPage();
+         QTimer::singleShot(20, this, SLOT(loadScrollAndQuit()));
     }
-}
-
- void MainWindow::disableFullScreenPresentationNavigation()
-{
-    disconnect( m_fsPPTBackButton, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
-    disconnect( m_fsPPTForwardButton, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
-    m_fsPPTBackButton->hide();
-    m_fsPPTForwardButton->hide();
-}
-
-void MainWindow::enableFullScreenPresentationNavigation()
-{
-    connect( m_fsPPTBackButton, SIGNAL( clicked() ), this, SLOT( prevPage() ) );
-    connect( m_fsPPTForwardButton, SIGNAL( clicked() ), this, SLOT( nextPage() ) );
-    m_fsPPTBackButton->show();
-    m_fsPPTBackButton->raise();
-    m_fsPPTForwardButton->show();
-    m_fsPPTForwardButton->raise();
 }

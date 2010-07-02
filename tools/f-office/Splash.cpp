@@ -26,8 +26,10 @@
 #include "Common.h"
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
-
+#include <QDialog>
+#include<QGridLayout>
 #include <klocalizedstring.h>
 
 Splash::Splash(QWidget *parent)
@@ -36,13 +38,13 @@ Splash::Splash(QWidget *parent)
         m_label(NULL),
         m_kOfficeLogo(SPLASH_LOGO_KOFFICE_PATH)
 {
-    m_label = new QLabel(this);
+    m_layout= new QVBoxLayout(this);
+    m_label=new QLabel(this);
     m_label->setPixmap(m_kOfficeLogo);
-    m_layout = new QVBoxLayout(this);
     m_layout->addWidget(m_label);
-    this->setLayout(m_layout);
-    this->setWindowTitle(i18n("Office Viewer"));
     m_label->setAlignment(Qt::AlignCenter);
+    this->setLayout(m_layout);
+    this->setWindowTitle(i18n("Office"));
 }
 
 Splash::~Splash()

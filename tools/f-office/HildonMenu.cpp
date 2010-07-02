@@ -58,17 +58,21 @@ HildonMenu::HildonMenu(QMainWindow* parent)
                     PropModeReplace, (unsigned char *) &hildonwinType, 1);
 
     QMenuBar* menu = parent->menuBar();
-    foreach(QAction* action, menu->actions()) {
+    foreach(QAction* action, menu->actions())
+    {
         addMenuItem(action);
     }
 }
 
 void HildonMenu::addMenuItem(QAction* action)
 {
-    if (m_col == 0) {
+    if (m_col == 0) 
+    {
         m_layout->setRowMinimumHeight(m_row, 64);
     }
+    
     QPushButton *b = new QPushButton(action->text(), this);
+    b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     connect(b, SIGNAL(clicked(bool)), SLOT(accept()));
     connect(b, SIGNAL(clicked(bool)), action, SIGNAL(triggered()));
     m_layout->addWidget(b, m_row, m_col);
@@ -78,7 +82,6 @@ void HildonMenu::addMenuItem(QAction* action)
         m_col = 0;
     }
 }
-
 void HildonMenu::paintEvent(QPaintEvent* event)
 {
     QDialog::paintEvent(event);

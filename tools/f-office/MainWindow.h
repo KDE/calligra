@@ -27,13 +27,14 @@
 
 #include <QtGui/QMainWindow>
 #include <KoDocument.h>
-#include "previewwindow.h"
+#include<QMessageBox>
 #include "Splash.h"
-#include "PresentationTool.h"
 
 class QPushButton;
 class QIcon;
 class QTextDocument;
+class QToolButton;
+class QFrame;
 
 namespace Ui
 {
@@ -47,9 +48,6 @@ class KoShape;
 class KoPAPageBase;
 class QShortcut;
 class QCheckBox;
-class PresentationTool;
-
-class OfficeInterface;
 
 /*!
  * \brief Main window of the application. KoCanvasController is set as
@@ -62,17 +60,28 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(Splash *aSplash, QWidget *parent = 0);
     ~MainWindow();
-
-    void mousePressEvent ( QMouseEvent * event );
-    void mouseMoveEvent ( QMouseEvent * event );
-    void mouseReleaseEvent ( QMouseEvent * event );
-    void paintEvent( QPaintEvent * event );
-
-    void disableFullScreenPresentationNavigation();
-    void enableFullScreenPresentationNavigation();
-
+    //void tabletEvent ( QTabletEvent * event );
+    //void mousePressEvent ( QMouseEvent * event );
+    //void mouseMoveEvent ( QMouseEvent * event );
+    //void mouseReleaseEvent ( QMouseEvent * event );
+    //QFrame *font_frame;
 private:
     Ui::MainWindow *m_ui;
+    
+    /****** QtoolButton Mandatory addition*******/
+    
+   /* QToolButton *m_font;
+    QToolButton *m_indent;
+    QToolButton *m_color;
+    QToolButton *m_undo;
+    QToolButton *m_redo;
+    QToolButton *m_dynamic1;
+    QToolButton *m_dynamic2;
+    QToolButton *m_dynamic3;
+    */
+   
+    /************QFrame opening**************/
+     
     /*!
      * line edit for search
      */
@@ -85,6 +94,10 @@ private:
      * Pointer to KoDocument
      */
     KoDocument *m_doc;
+
+   /*Pointer to KWDocument*/
+    //KWDocument *m_doc1;
+
     /*!
      * Pointer to KoView
      */
@@ -154,18 +167,6 @@ private:
      * Pointer to splash class
      */
     Splash *m_splash;
-    /*!
-     * Pointer to pen draw button
-     */
-    QPushButton *m_fsPPTDrawPenButton;
-    /*!
-     * Pointer to highlight draw button
-     */
-    QPushButton *m_fsPPTDrawHighlightButton;
-    /*!
-     * Pointer to presentation drawing tools
-     */
-    PresentationTool *m_pptTool;
 
     void init();
     /*!
@@ -189,8 +190,8 @@ private:
      * /param name The name of the action to trigger
      * /return bool Returns false if there was no action with the given name found
      */
-    bool triggerAction(const char* name);
-
+    //bool triggerAction(const char* name);
+     bool nextnext(const char* name);
     /*!
      * Update the enabled/disabled state of actions depending on if a document is currently
      * loaded.
@@ -220,21 +221,24 @@ private:
      * automatically after D-Bus messages. This low level code sends
      * _NET_ACTIVE_WINDOW message to Matchbox and window is raised.
      */
-    void raiseWindow(void);    
+    void raiseWindow(void);
 
 private slots:
-
-    void menuClicked(QAction* action);     
-    void pluginOpen(bool newWindow, const QString& path);
     void updateUI();
     void resourceChanged(int key, const QVariant &value);
     /*!
      * Slot to actionSearch toggled signal
      */
     void toggleToolBar(bool);
+    void editToolBar(bool);
+
+    /******Slot to InserToolBar toggled signal******/
+
+    //void toggleToolBar1(bool);
     /*!
      * Slot to actionZoomIn triggered signal
      */
+    
     void zoomIn();
     /*!
      * Slot to actionZoomOut triggered signal
@@ -250,6 +254,8 @@ private slots:
      * Slot to actionNextPage triggered signal
      */
     void nextPage();
+    
+    //void nextPages();
     /*!
      * Slot to actionPrevPage triggered signal
      */
@@ -309,8 +315,7 @@ private slots:
     /*!
      * Slot for progress indicator
      */
-    //void slotProgress(int value); 
-
+    //void slotProgress(int value);
 public slots:
     /*!
      * Slot to  dialog fileSelected signal
@@ -334,14 +339,12 @@ public slots:
      */
     void loadScrollAndQuit();
 
-    void gotoPage(int page);
+     /**opening frame for font option**/
+    void openframe();
 
-    void showPreviewDialog();
+    void hello();
 
 private:
-
-    QMap<QString, OfficeInterface*> loadedPlugins;
-
     void setShowProgressIndicator(bool visible);
     /*!
      * Opened file
@@ -366,10 +369,7 @@ private:
     /*!
      * Is document is currently being loaded
      */
-    bool m_isLoading;   
-
-    PreviewWindow *previewWindow;
-
+    bool m_isLoading;
 };
 
 #endif // MAINWINDOW_H

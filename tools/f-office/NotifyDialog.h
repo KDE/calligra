@@ -36,7 +36,7 @@ class NotifyDialog;
 }
 /*!
  * \brief Dialog is to notify user that selected document is not
- * supported by OfficeViewer
+ * supported by Office
  */
 class NotifyDialog : public QDialog
 {

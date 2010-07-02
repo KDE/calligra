@@ -26,10 +26,11 @@
 #define SPLASH_H
 
 #include <QSplashScreen>
-
+#include "Common.h"
 class QVBoxLayout;
 class QLabel;
-
+class QHBoxLayout;
+class QGridLayout;
 namespace Ui
 {
 class Splash;

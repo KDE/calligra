@@ -12,11 +12,11 @@ SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
 
 QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui)
-QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplication.h PresentationTool.h Splash.h NotifyDialog.h DBusAdaptor.h AboutDialog.h OfficeInterface.h previewwindow.h flowlayout.h)
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h AboutDialog.h)
 
-add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp PresentationTool.cpp Splash.cpp NotifyDialog.cpp DBusAdaptor.cpp AboutDialog.cpp previewwindow.cpp flowlayout.cpp
+add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp DBusAdaptor.cpp AboutDialog.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
-target_link_libraries(FreOffice ${QT_LIBRARIES} ${X11_X11_LIB} komain kopageapp)
+target_link_libraries(FreOffice ${QT_LIBRARIES} komain kopageapp)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)
 install(FILES FreOffice.desktop DESTINATION share/applications/hildon)
@@ -27,5 +27,3 @@ install(FILES images/48x48/freoffice_document.png DESTINATION share/icons/hicolo
 install(FILES images/48x48/freoffice_presentation.png DESTINATION share/icons/hicolor/48x48/hildon)
 install(FILES images/48x48/freoffice_text_selection.png DESTINATION share/icons/hicolor/48x48/hildon)
 install(FILES images/26x26/general_copy.png DESTINATION share/icons/hicolor/26x26/hildon)
-install(FILES OfficeInterface.h DESTINATION include/office)
-
