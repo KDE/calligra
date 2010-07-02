@@ -2047,9 +2047,9 @@ void View::handleDamages(const QList<Damage*>& damages)
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
             kDebug(36007) << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
-            const Region region = cellDamage->region();
 
             if (cellDamage->changes() & CellDamage::Appearance) {
+                const Region& region = cellDamage->region();
                 sheetView(damagedSheet)->invalidateRegion(region);
                 paintMode = Everything;
             }

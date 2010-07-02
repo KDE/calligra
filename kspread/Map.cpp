@@ -892,13 +892,12 @@ void Map::handleDamages(const QList<Damage*>& damages)
     QList<Damage*>::ConstIterator end(damages.end());
     for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
         Damage* damage = *it;
-        if (!damage) continue;
 
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
             kDebug(36007) << "Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
-            const Region region = cellDamage->region();
+            const Region& region = cellDamage->region();
             const CellDamage::Changes changes = cellDamage->changes();
 
             // TODO Stefan: Detach the style cache from the CellView cache.

@@ -1325,9 +1325,9 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
     //
     bool isFormula = false;
     if (element.hasAttributeNS(KoXmlNS::table, "formula")) {
-        kDebug(36003) << "cell:" << name() << "formula :" << element.attributeNS(KoXmlNS::table, "formula", QString());
         isFormula = true;
         QString oasisFormula(element.attributeNS(KoXmlNS::table, "formula", QString()));
+        kDebug(36003) << "cell:" << name() << "formula :" << oasisFormula;
         // each spreadsheet application likes to safe formulas with a different namespace
         // prefix, so remove all of them
         QStringList prefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
