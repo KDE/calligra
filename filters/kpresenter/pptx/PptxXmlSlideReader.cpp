@@ -446,81 +446,78 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
     }
 
-    {
-        MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
-        // style before style name is known
+    MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
+    // style before style name is known
 //        KoXmlWriter *origBody = body;
-        if (m_context->type == Slide) {
-            body = drawPageBuf.setWriter(body);
+    if (m_context->type == Slide) {
+        body = drawPageBuf.setWriter(body);
 //            body = new KoXmlWriter(&drawPageBuf, origBody->indentLevel()+1);
-        }
-        while (!atEnd()) {
-            readNext();
-            if (isStartElement()) {
-                TRY_READ_IF(cSld)
-                else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
-                    TRY_READ(txStyles)
-                }
+    }
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(cSld)
+            else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
+                TRY_READ(txStyles)
+            }
 //! @todo add ELSE_WRONG_FORMAT
-            }
-            if (isEndElement()) {
-                if (d->qualifiedNameOfMainElement == qualifiedName()) {
-                    break;
-                }
-            }
         }
-
-        if (m_context->type == Slide) {
-            body = drawPageBuf.originalWriter();
-//            delete body;
-//            body = origBody;
-            {
-                body->startElement("draw:page"); // CASE #P300
-                //! @todo draw:master-page-name is hardcoded for now
-                body->addAttribute("draw:master-page-name", "Default"); // required; CASE #P301
-                //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
-                body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber+1)); //optional; CASE #P303
-                body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
-                //! @todo presentation:use-date-time-name //optional; CASE #P304
-
-/*
-    <style:style style:family="drawing-page" style:name="a393">
-      <style:drawing-page-properties draw:fill="bitmap" draw:fill-image-name="a392" style:repeat="readerh".
-      presentation:visibility="visible" draw:background-size="border" presentation:background-objects-visible="true".
-      presentation:background-visible="true" presentation:display-header="false" presentation:display-footer="false" presentation:display-page-number="false".
-      presentation:display-date-time="false"/>
-    </style:style>
-*/
-                
-                const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
-                body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
-                kDebug() << "currentPageStyleName:" << currentPageStyleName;
-
-                if (!m_context->slideLayoutProperties->styleName.isEmpty()) {
-                    // CASE #P308
-                    kDebug() << "presentation:presentation-page-layout-name=" <<
-                                       m_context->slideLayoutProperties->styleName;
-                    body->addAttribute("presentation:presentation-page-layout-name",
-                                       m_context->slideLayoutProperties->styleName);
-                }
-
-//                body->addCompleteElement(&drawPageBuf);
-                (void)drawPageBuf.releaseWriter();
-                body->endElement(); //draw:page
+        if (isEndElement()) {
+            if (d->qualifiedNameOfMainElement == qualifiedName()) {
+                break;
             }
-        }
-        else if (m_context->type == SlideMaster) {
-            m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
-            mainStyles->markStyleForStylesXml(m_context->pageDrawStyleName);
-            kDebug() << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName
-                << "m_context->type:" << m_context->type;
         }
     }
 
-    if (m_context->type == SlideLayout) {
+    if (m_context->type == Slide) {
+        body = drawPageBuf.originalWriter();
+//            delete body;
+//            body = origBody;
+
+        body->startElement("draw:page"); // CASE #P300
+        //! @todo draw:master-page-name is hardcoded for now
+        body->addAttribute("draw:master-page-name", "Default"); // required; CASE #P301
+        //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
+        body->addAttribute("draw:name", QString("page%1").arg(m_context->slideNumber+1)); //optional; CASE #P303
+        body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
+        //! @todo presentation:use-date-time-name //optional; CASE #P304
+
+/*
+<style:style style:family="drawing-page" style:name="a393">
+    <style:drawing-page-properties draw:fill="bitmap" draw:fill-image-name="a392" style:repeat="readerh".
+    presentation:visibility="visible" draw:background-size="border" presentation:background-objects-visible="true".
+    presentation:background-visible="true" presentation:display-header="false" presentation:display-footer="false" presentation:display-page-number="false".
+    presentation:display-date-time="false"/>
+</style:style>
+*/
+            
+        const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
+        body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
+        kDebug() << "currentPageStyleName:" << currentPageStyleName;
+
+        if (!m_context->slideLayoutProperties->styleName.isEmpty()) {
+            // CASE #P308
+            kDebug() << "presentation:presentation-page-layout-name=" <<
+                                m_context->slideLayoutProperties->styleName;
+            body->addAttribute("presentation:presentation-page-layout-name",
+                                m_context->slideLayoutProperties->styleName);
+        }
+
+//                body->addCompleteElement(&drawPageBuf);
+        (void)drawPageBuf.releaseWriter();
+        body->endElement(); //draw:page
+    }
+    else if (m_context->type == SlideMaster) {
+        m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
+        mainStyles->markStyleForStylesXml(m_context->pageDrawStyleName);
+        kDebug() << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName
+            << "m_context->type:" << m_context->type;
+    }
+    else if (m_context->type == SlideLayout) {
         m_context->slideLayoutProperties->styleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
         kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->styleName;
     }
+
     return KoFilter::OK;
 }
 
