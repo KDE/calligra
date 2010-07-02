@@ -159,9 +159,8 @@ QMap<QString, int> KPrPageEffectFactory::subTypesByName() const
 void KPrPageEffectFactory::addStrategy( KPrPageEffectStrategy * strategy )
 {
     bool inserted = d->strategies.insert( strategy ).second;
-#ifdef NDEBUG
     Q_ASSERT( inserted == true );
-#else
+#ifdef NDEBUG
     Q_UNUSED(inserted);
 #endif
     d->subTypes.append( strategy->subType() );
