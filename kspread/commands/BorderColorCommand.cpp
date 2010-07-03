@@ -46,11 +46,11 @@ bool BorderColorCommand::preProcessing()
         ConstIterator endOfList = constEnd();
         for (ConstIterator it = constBegin(); it != endOfList; ++it) {
             for (int i = 0; i < undoData.count(); ++i) {
-                if (undoData[i].second->type() != Style::LeftPen ||
-                        undoData[i].second->type() != Style::RightPen ||
-                        undoData[i].second->type() != Style::TopPen ||
-                        undoData[i].second->type() != Style::BottomPen ||
-                        undoData[i].second->type() != Style::FallDiagonalPen ||
+                if (undoData[i].second->type() != Style::LeftPen &&
+                        undoData[i].second->type() != Style::RightPen &&
+                        undoData[i].second->type() != Style::TopPen &&
+                        undoData[i].second->type() != Style::BottomPen &&
+                        undoData[i].second->type() != Style::FallDiagonalPen &&
                         undoData[i].second->type() != Style::GoUpDiagonalPen) {
                     undoData.removeAt(i--);
                 }
