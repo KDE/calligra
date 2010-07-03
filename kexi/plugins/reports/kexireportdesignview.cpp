@@ -185,6 +185,7 @@ KexiReportPart::TempData* KexiReportDesignView::tempData() const
 void KexiReportDesignView::slotSetData(KoReportData* kodata)
 {
     m_reportDesigner->setReportData(kodata);
+    tempData()->connectionDefinition = m_sourceSelector->connectionData();
 }
 
 void KexiReportDesignView::triggerAction(const QString &action)
