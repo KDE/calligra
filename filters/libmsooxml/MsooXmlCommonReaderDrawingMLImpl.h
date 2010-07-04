@@ -815,7 +815,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
+    if (m_context->type == Slide && !xfrm_read) { // loading values from slideMaster/slideLayout is needed
         //Q_ASSERT(d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count());
         PptxShapeProperties* props = (d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count()) ? m_context->slideLayoutProperties->shapes[d->shapeNumber - 1] : 0;
         if (props) {
@@ -823,6 +823,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             m_svgY = props->y;
             m_svgWidth = props->width;
             m_svgHeight = props->height;
+            m_rot = props->rot;
+            m_isPlaceHolder = props->isPlaceHolder;
         }
     }
 #endif
