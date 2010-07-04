@@ -20,6 +20,24 @@
 
 #include "TestKspreadCommon.h"
 
+#include <part/Doc.h>
+#include <Map.h>
+#include <Sheet.h>
+
+using namespace KSpread;
+
+void TestLogicFunctions::init()
+{
+    m_doc = new Doc();
+    m_doc->map()->addNewSheet();
+    m_sheet = m_doc->map()->sheet(0);
+}
+
+void TestLogicFunctions::cleanup()
+{
+    delete m_doc;
+}
+
 void TestLogicFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
@@ -30,7 +48,7 @@ void TestLogicFunctions::initTestCase()
 
 Value TestLogicFunctions::evaluate(const QString& formula, Value& ex)
 {
-    Formula f;
+    Formula f(m_sheet);
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -102,6 +120,9 @@ void TestLogicFunctions::testIF()
     CHECK_EVAL("IF(\"\";7;8)", Value::errorVALUE());
     CHECK_EVAL("IF(FALSE();7)", Value(false));
     CHECK_EVAL("IF(FALSE();7;)", Value(0));
+    // Assuming A1 is an empty cell, using it in the following
+    // context should be different from passing no argument at all
+    CHECK_EVAL("IF(FALSE();7;A1)", Value(Value::Empty));
     CHECK_EVAL("IF(TRUE();4;1/0)", Value(4));
     CHECK_EVAL("IF(FALSE();1/0;5)", Value(5));
 }

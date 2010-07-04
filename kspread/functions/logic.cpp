@@ -178,7 +178,7 @@ Value func_if(valVector args, ValueCalc *calc, FuncExtra *)
         return args[1];
     // evaluated to false
     if (args.count() == 3) {
-        if (args[2].isEmpty()) {
+        if (args[2].isNull()) {
             return Value(0);
         } else {
             return args[2];

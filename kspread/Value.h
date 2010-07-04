@@ -185,6 +185,14 @@ public:
     Type type() const;
 
     /**
+     * Returns true if null.
+     *
+     * A null value is equal to an empty value (and the other way around) in
+     * every way, except for what isNull() returns.
+     */
+    bool isNull() const;
+
+    /**
      * Returns the format of the value, i.e. how should it be interpreted.
      */
     Format format() const;
@@ -367,6 +375,14 @@ public:
      * Returns constant reference to empty value.
      */
     static const Value& empty();
+
+    /*
+     * Returns a constant reference to a null value.
+     *
+     * A null value is equal to an empty value (and the other way around) in
+     * every way, except for what isNull() returns.
+     */
+    static const Value& null();
 
     /**
      * Returns constant reference to '\#CIRCLE!' error.

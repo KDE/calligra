@@ -1037,7 +1037,7 @@ void Formula::compile(const Tokens& tokens) const
                                             if (id.isIdentifier()) {
                                                 ruleFound = true;
                                                 syntaxStack.pop();
-                                                d->constants.append(Value());
+                                                d->constants.append(Value::null());
                                                 d->codes.append(Opcode(Opcode::Load, d->constants.count() - 1));
                                                 argCount++;
                                             }

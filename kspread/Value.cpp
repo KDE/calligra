@@ -59,6 +59,8 @@ public:
     Value::Format format: 4;
 
     union { // 64 bits at max!
+        // b is also secondarily used to indicate a null value if type == Empty,
+        // without using up space for an explicit member variable.
         bool b;
         qint64 i;
         Number f;
@@ -169,6 +171,7 @@ Value::Private* Value::Private::s_null = 0;
 
 // static things
 Value ks_value_empty;
+Value ks_value_null;
 Value ks_error_circle;
 Value ks_error_depend;
 Value ks_error_div0;
@@ -218,6 +221,7 @@ bool Value::operator==(const Value& o) const
     if (d->type != o.d->type)
         return false;
     switch (d->type) {
+    // null() (d->b == 1) and empty() (d->b == 0) are equal to this operator
     case Empty:   return true;
     case Boolean: return o.d->b == d->b;
     case Integer: return o.d->i == d->i;
@@ -364,6 +368,11 @@ Value::Value(const ValueStorage& array, const QSize& size)
 Value::Type Value::type() const
 {
     return d ? d->type : Empty;
+}
+
+bool Value::isNull() const
+{
+    return d ? d->type == Empty && d->b : false;
 }
 
 // get the value as boolean
@@ -577,6 +586,14 @@ unsigned Value::count() const
 const Value& Value::empty()
 {
     return ks_value_empty;
+}
+
+// reference to null value
+const Value& Value::null()
+{
+    if (!ks_value_null.isNull())
+        ks_value_null.d->b = true;
+    return ks_value_null;
 }
 
 // reference to #CIRCLE! error
