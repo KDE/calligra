@@ -58,8 +58,30 @@
 
 PptxShapeProperties::PptxShapeProperties()
 {
+    x = 0;
+    y = 0;
+    width = -1;
+    height = -1;
+    rot = 0;
+    isPlaceHolder = false;
 }
 
+PptxShapeProperties::PptxShapeProperties(const PptxShapeProperties &other)
+{
+    *this = other;
+}
+
+PptxShapeProperties& PptxShapeProperties::operator=(const PptxShapeProperties &other)
+{
+    x = other.x;
+    y = other.y;
+    width = other.width;
+    height = other.height;
+    rot = other.rot;
+    isPlaceHolder = other.isPlaceHolder;
+    return *this;
+}
+    
 // -------------------
 
 PptxSlideProperties::PptxSlideProperties()
@@ -134,6 +156,7 @@ PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 
 PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
 {
+    qDeleteAll(shapes);
     qDeleteAll(placeholders);
 }
 
@@ -937,6 +960,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     d->presentationStyleNameCount = 0;
 #endif
     d->shapeNumber = 0;
+
     QByteArray placeholderEl;
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);

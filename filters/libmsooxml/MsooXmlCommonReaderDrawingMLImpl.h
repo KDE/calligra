@@ -572,7 +572,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     // If called from the pptx converter, handle different contexts
     // (Slide, SlideMaster, SlideLayout)
-    kDebug() << "type:" << m_context->type;
     if (m_context->type == Slide) {
     }
     else if (m_context->type == SlideMaster) {
@@ -584,14 +583,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #endif
     }
     else if (m_context->type == SlideLayout) {
-        //m_currentShapeProperties = new PptxShapeProperties();
-        //m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
+        PptxShapeProperties* masterShapeProperties = (d->shapeNumber < m_context->slideProperties->shapes.count()) ? m_context->slideProperties->shapes[d->shapeNumber] : 0;
+        m_currentShapeProperties = masterShapeProperties ? new PptxShapeProperties(*masterShapeProperties) : new PptxShapeProperties();
+        m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
         m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle);
 #ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
 #endif
     }
     m_isPlaceHolder = false;
+    ++d->shapeNumber;
 #endif
 
     m_cNvPrId.clear();
@@ -729,7 +730,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         placeholder->writeAttributes(m_placeholderElWriter);
         m_placeholderElWriter->endElement();
     }
-    d->shapeNumber++;
 #endif
 
     popCurrentDrawStyle();
@@ -815,44 +815,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-//! @todo
     if (m_context->type == Slide && !xfrm_read) { // loading values from master is needed
-        /*if (m_context->slideLayoutProperties) {
-          kDebug() << "m_context->slideLayoutProperties->shapes.count()" << m_context->slideLayoutProperties->shapes.count()
-          << "d->shapeNumber" << d->shapeNumber;
-          if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
-          // for inheritance
-          m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
-          kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
-
-          m_svgX = m_currentShapeProperties->x;
-          m_svgY = m_currentShapeProperties->y;
-          kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
-          m_svgWidth = m_currentShapeProperties->width;
-          m_svgHeight = m_currentShapeProperties->height;
-          kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
-          }
-          }
-          else*/
-        if (m_context->slideProperties) {
-            kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count()
-                     << "d->shapeNumber" << d->shapeNumber;
-            if (m_context->slideProperties->shapes.count() > (int)d->shapeNumber) {
-                // for inheritance
-                m_currentShapeProperties = m_context->slideProperties->shapes.at(d->shapeNumber);
-                kDebug() << QString("Shape #%1 found in master slide").arg(d->shapeNumber);
-
-                m_svgX = m_currentShapeProperties->x;
-                m_svgY = m_currentShapeProperties->y;
-                kDebug() << "Inherited svg:x/y from master (m_currentShapeProperties)";
-                m_svgWidth = m_currentShapeProperties->width;
-                m_svgHeight = m_currentShapeProperties->height;
-                kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
-            } else {
-                m_currentShapeProperties = 0;
-                kWarning() << QString("No shape #%1 found in master slide; shapes count = %2").arg(d->shapeNumber)
-                    .arg(m_context->slideProperties->shapes.count());
-            }
+        //Q_ASSERT(d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count());
+        PptxShapeProperties* props = (d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count()) ? m_context->slideLayoutProperties->shapes[d->shapeNumber - 1] : 0;
+        if (props) {
+            m_svgX = props->x;
+            m_svgY = props->y;
+            m_svgWidth = props->width;
+            m_svgHeight = props->height;
         }
     }
 #endif
@@ -1522,24 +1492,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             raiseElNotFoundError("a:ext");
             return KoFilter::WrongFormat;
         }
-        if (m_currentShapeProperties) {
-            m_currentShapeProperties->x = m_svgX;
-            m_currentShapeProperties->y = m_svgY;
-            m_currentShapeProperties->width = m_svgWidth;
-            m_currentShapeProperties->height = m_svgHeight;
-            m_currentShapeProperties->rot = m_rot;
-            m_currentShapeProperties->isPlaceHolder = m_isPlaceHolder;
-            kDebug() << "Saved to m_currentShapeProperties";
-        }
+    }
+    if (m_currentShapeProperties && (m_context->type == SlideMaster || m_context->type == SlideLayout)) {
+        m_currentShapeProperties->x = m_svgX;
+        m_currentShapeProperties->y = m_svgY;
+        m_currentShapeProperties->width = m_svgWidth;
+        m_currentShapeProperties->height = m_svgHeight;
+        m_currentShapeProperties->rot = m_rot;
+        m_currentShapeProperties->isPlaceHolder = m_isPlaceHolder;
     }
 #endif
 
-    kDebug()
-    << "svg:x" << m_svgX
-    << "svg:y" << m_svgY
-    << "svg:width" << m_svgWidth
-    << "svg:height" << m_svgHeight
-    << "rotation" << m_rot;
+    kDebug() << "svg:x" << m_svgX << "svg:y" << m_svgY << "svg:width" << m_svgWidth << "svg:height" << m_svgHeight << "rotation" << m_rot;
 
     READ_EPILOGUE
 }

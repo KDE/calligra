@@ -43,6 +43,8 @@ class PptxShapeProperties
 {
 public:
     PptxShapeProperties();
+    PptxShapeProperties(const PptxShapeProperties &other);
+    PptxShapeProperties& operator=(const PptxShapeProperties &other);
 
     //! p:spPr/a:xfrm/a:off@x value in EMU
     int x;
@@ -90,7 +92,10 @@ class PptxSlideLayoutProperties
 public:
     PptxSlideLayoutProperties();
     ~PptxSlideLayoutProperties();
-    QMap<QString, PptxPlaceholder*> placeholders; //! placeholders objects are owned by this object
+    //! Shapes ordered by position
+    QList<PptxShapeProperties*> shapes;
+    //! placeholders objects are owned by this object
+    QMap<QString, PptxPlaceholder*> placeholders;
     QString styleName;
     QMap<QString, KoGenStyle> styles;
 };
@@ -133,6 +138,10 @@ public:
     PptxSlideMasterTextStyle titleStyle;
     PptxSlideMasterTextStyle bodyStyle;
     PptxSlideMasterTextStyle otherStyle;
+    
+    //! Shapes ordered by position
+    QList<PptxShapeProperties*> shapes;
+
 private:
     QMap<QByteArray, QByteArray> m_drawingPageProperties;
 };
