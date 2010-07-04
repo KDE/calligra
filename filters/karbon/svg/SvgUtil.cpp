@@ -87,10 +87,10 @@ QSizeF SvgUtil::userSpaceToObject(const QSizeF &size, const QRectF &objectBound)
     return QSizeF(w, h);
 }
 
-QMatrix SvgUtil::parseTransform(const QString &transform)
+QTransform SvgUtil::parseTransform(const QString &transform)
 {
-    QMatrix result;
-    
+    QTransform result;
+
     // Split string for handling 1 transform statement at a time
     QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
     QStringList::ConstIterator it = subtransforms.constBegin();
@@ -138,10 +138,10 @@ QMatrix SvgUtil::parseTransform(const QString &transform)
             result.shear(0.0F, tan(params[0].toDouble() * KarbonGlobal::pi_180));
         } else if (subtransform[0] == "matrix") {
             if (params.count() >= 6) {
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(),
-                                 params[2].toDouble(), params[3].toDouble(),
+                result.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
+                                 params[2].toDouble(), params[3].toDouble(), 0,
                                  SvgUtil::fromUserSpace(params[4].toDouble()),
-                                 SvgUtil::fromUserSpace(params[5].toDouble()));
+                                 SvgUtil::fromUserSpace(params[5].toDouble()), 1);
             }
         }
     }

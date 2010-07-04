@@ -75,15 +75,15 @@ private:
     void getStroke(KoShape * shape, QTextStream *stream);
     void getEffects(KoShape *shape, QTextStream *stream);
     void getColorStops(const QGradientStops & colorStops);
-    void getGradient(const QGradient * gradient, const QMatrix &gradientTransform);
+    void getGradient(const QGradient * gradient, const QTransform &gradientTransform);
     void getPattern(KoPatternBackground * pattern, KoShape * shape);
-    QString getTransform(const QMatrix &matrix, const QString &attributeName);
+    QString getTransform(const QTransform &matrix, const QString &attributeName);
 
     QString getID(const KoShape *obj);
     QString createID(const KoShape * obj);
 
     /// Checks if the matrix only has translation set
-    bool isTranslation(const QMatrix &);
+    bool isTranslation(const QTransform &);
 
     QTextStream* m_stream;
     QTextStream* m_defs;
@@ -94,7 +94,7 @@ private:
 
     QMap<const KoShape*, QString> m_shapeIds;
 
-    QMatrix m_userSpaceMatrix;
+    QTransform m_userSpaceMatrix;
 
 };
 

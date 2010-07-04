@@ -62,7 +62,7 @@ int KPrIrisWipeEffectStrategyBase::findMaxScaling( const KPrPageEffect::Data &da
     QPainterPath path;
     while( !path.contains( widget ) )
     {
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate( halfWidth, halfHeight );
         double maxScaling = (double) maxMeasure / (double) pathMaxMeasure;
         matrix.scale( maxScaling, maxScaling );
@@ -99,7 +99,7 @@ void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const K
         QRect rect( 0, 0, width, height );
         p.drawPixmap( pointZero, data.m_oldPage, rect );
 
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( currPos*scaleStep, currPos*scaleStep );
 
@@ -111,7 +111,7 @@ void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const K
         QRect rect( 0, 0, width, height );
         p.drawPixmap( pointZero, data.m_newPage, rect );
 
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( ( fullScale - currPos )*scaleStep, ( fullScale - currPos )*scaleStep );
 
@@ -142,14 +142,14 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
     QPainterPath newPath;
     if( !reverse() )
     {
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( currPos*scaleStep, currPos*scaleStep );
         newPath = matrix.map( m_shape );
     }
     else
     {
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( ( fullScale - lastPos - 3 )*scaleStep, ( fullScale - lastPos - 3 )*scaleStep );
         // NOTE: i have no idea why I can't just update the old rectangle and have to do this small hack (update a bigger rectangle) instead, we think that might be something floating-point related, but i think this will work just fine

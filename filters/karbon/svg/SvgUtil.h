@@ -22,7 +22,7 @@
 
 #include <QtCore/QPointF>
 #include <QtCore/QSizeF>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class QString;
 class QRectF;
@@ -79,7 +79,7 @@ public:
      * @param transform the transform attribute value
      * @return the resulting transformation matrix
      */
-    static QMatrix parseTransform(const QString &transform);
+    static QTransform parseTransform(const QString &transform);
 };
 
 #endif // SVGUTIL_H

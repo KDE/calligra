@@ -276,7 +276,7 @@ void KarbonCalligraphicShape::setSize(const QSizeF &newSize)
 QPointF KarbonCalligraphicShape::normalize()
 {
     QPointF offset(KoParameterShape::normalize());
-    QMatrix matrix;
+    QTransform matrix;
     matrix.translate(-offset.x(), -offset.y());
 
     for (int i = 0; i < m_points.size(); ++i) {

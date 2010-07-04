@@ -141,7 +141,7 @@ public:
 
     // update step value by values
     // will do different things depending on type of QVariant
-    // e.g. for QMatrix it will add the value to the matrix
+    // e.g. for QTransform it will add the value to the matrix
     // the default action when there is no special handling is to copy the value over
     // if QVariant is emty it will remove the id from the step
     // the step in update must match the step of startStep

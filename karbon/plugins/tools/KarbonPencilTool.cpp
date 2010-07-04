@@ -71,7 +71,7 @@ void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter
     if (m_shape) {
         painter.save();
 
-        painter.setMatrix(m_shape->absoluteTransformation(&converter) * painter.matrix());
+        painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
 
         painter.save();
         m_shape->paint(painter, converter);
@@ -88,7 +88,7 @@ void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter
 
     if (m_hoveredPoint) {
         painter.save();
-        painter.setMatrix(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
+        painter.setTransform(m_hoveredPoint->parent()->absoluteTransformation(&converter), true);
         KoShape::applyConversion(painter, converter);
 
         int handleRadius = canvas()->resourceManager()->handleRadius();

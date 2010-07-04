@@ -57,7 +57,7 @@ void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
     painter.translate(/*-2 * offsetX*/ + width, 0);
 //     painter.scale(-1, 1);
 
-    painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
+    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
     if (shapeManager()) {
         shapeManager()->paintShape(shape, painter, converter, forPrint);

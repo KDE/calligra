@@ -306,7 +306,7 @@ QString SvgExport::getID(const KoShape *obj)
     return QString(" id=\"%1\"").arg(createID(obj));
 }
 
-QString SvgExport::getTransform(const QMatrix &matrix, const QString &attributeName)
+QString SvgExport::getTransform(const QTransform &matrix, const QString &attributeName)
 {
     if (matrix.isIdentity())
         return "";
@@ -327,7 +327,7 @@ QString SvgExport::getTransform(const QMatrix &matrix, const QString &attributeN
     return transform + "\"";
 }
 
-bool SvgExport::isTranslation(const QMatrix &m)
+bool SvgExport::isTranslation(const QTransform &m)
 {
     return (m.m11() == 1.0 && m.m12() == 0.0 && m.m21() == 0.0 && m.m22() == 1.0);
 }
@@ -344,7 +344,7 @@ void SvgExport::getColorStops(const QGradientStops & colorStops)
     m_indent2--;
 }
 
-void SvgExport::getGradient(const QGradient * gradient, const QMatrix &gradientTransform)
+void SvgExport::getGradient(const QGradient * gradient, const QTransform &gradientTransform)
 {
     if (! gradient)
         return;
@@ -543,7 +543,7 @@ void SvgExport::getFill(KoShape * shape, QTextStream *stream)
     KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
     if (gbg) {
         *stream << " fill=\"";
-        getGradient(gbg->gradient(), gbg->matrix());
+        getGradient(gbg->gradient(), gbg->transform());
         *stream << "\"";
     }
     KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
@@ -571,7 +571,7 @@ void SvgExport::getStroke(KoShape *shape, QTextStream *stream)
     if (line->lineStyle() == Qt::NoPen)
         *stream << "none";
     else if (line->lineBrush().gradient())
-        getGradient(line->lineBrush().gradient(), line->lineBrush().matrix());
+        getGradient(line->lineBrush().gradient(), line->lineBrush().transform());
     else
         *stream << line->color().name();
     *stream << "\"";
@@ -671,7 +671,7 @@ void SvgExport::saveText(ArtisticTextShape * text)
 
     // check if we are set on a path
     if (text->layout() == ArtisticTextShape::Straight) {
-        QMatrix m = text->transformation();
+        QTransform m = text->transformation();
         if (isTranslation(m)) {
             QPointF position = text->position();
             *m_body << " x=\"" << position.x() + anchorOffset << "pt\"";
@@ -721,7 +721,7 @@ void SvgExport::saveImage(KoShape *picture)
     printIndentation(m_body, m_indent);
 
     *m_body << "<image" << getID(picture);
-    QMatrix m = picture->transformation();
+    QTransform m = picture->transformation();
     if (isTranslation(m)) {
         QPointF position = picture->position();
         *m_body << " x=\"" << position.x() << "pt\"";

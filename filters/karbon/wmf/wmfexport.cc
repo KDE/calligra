@@ -136,12 +136,12 @@ void WmfExport::paintShape(KoShape * shape)
         KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>(shape->background());
         if (gbg) {
             fill = QBrush(*gbg->gradient());
-            fill.setMatrix(gbg->matrix());
+            fill.setTransform(gbg->transform());
         }
         KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>(shape->background());
         if (pbg) {
             fill.setTextureImage(pbg->pattern());
-            fill.setMatrix(pbg->matrix());
+            fill.setTransform(pbg->transform());
         }
         mWmf->setBrush(fill);
         if (polygons.count() == 1)

@@ -151,7 +151,7 @@ void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
     // transform painter from view coordinate system to document coordinate system
     // remember that matrix multiplication is not commutative so painter.matrix
     // has to come last
-    painter.setMatrix( m_formulaShape->absoluteTransformation( &converter ) * painter.matrix());
+    painter.setTransform(m_formulaShape->absoluteTransformation(&converter) * painter.transform());
     KoShape::applyConversion(painter,converter);
     m_formulaShape->formulaRenderer()->paintElement(painter,m_formulaShape->formulaData()->formulaElement(),true);
     m_formulaEditor->paint( painter );

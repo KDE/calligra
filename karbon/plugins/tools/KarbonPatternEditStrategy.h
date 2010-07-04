@@ -115,7 +115,7 @@ protected:
     int m_selectedHandle;      ///< index of currently deleted handle or -1 if none selected
     KoPatternBackground m_oldFill;
     KoPatternBackground m_newFill;
-    QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
+    QTransform m_matrix;          ///< matrix to map handle into document coordinate system
 
 private:
 

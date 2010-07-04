@@ -59,14 +59,14 @@ public:
     QString filterId;       ///< the current filter id
     qreal opacity;          ///< the shapes opacity
 
-    QMatrix matrix;         ///< the current transformation matrix
+    QTransform matrix;      ///< the current transformation matrix
     QFont   font;           ///< the current font
     QColor  currentColor;   ///< the current color
     QString xmlBaseDir;     ///< the current base directory (used for loading external content)
 
     QRectF currentBoundbox; ///< the current bound box used for bounding box units
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
-    QMatrix viewboxTransform; ///< view box transformation
+    QTransform viewboxTransform; ///< view box transformation
 
     bool display;           ///< controls display of shape
 };

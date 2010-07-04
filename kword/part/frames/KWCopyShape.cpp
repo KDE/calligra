@@ -82,16 +82,16 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
         // container that is re-applied in shape->absoluteTransformation()
         // later on.  The transformation matrix of the container has already
         // been applied once before this function is called.
-        QMatrix baseMatrix = container->absoluteTransformation(&converter).inverted() * painter.matrix();
+        QTransform baseMatrix = container->absoluteTransformation(&converter).inverted() * painter.transform();
 
         foreach(KoShape *shape, sortedObjects) {
             painter.save();
-            painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
+            painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
             shape->paint(painter, converter);
             painter.restore();
             if (shape->border()) {
                 painter.save();
-                painter.setMatrix(shape->absoluteTransformation(&converter) * baseMatrix);
+                painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
                 shape->border()->paint(shape, painter, converter);
                 painter.restore();
             }

@@ -82,8 +82,8 @@ void KarbonCalligraphyTool::paint(QPainter &painter,
 
     painter.save();
 
-    painter.setMatrix(m_shape->absoluteTransformation(&converter) *
-                      painter.matrix());
+    painter.setTransform(m_shape->absoluteTransformation(&converter) *
+                      painter.transform());
     m_shape->paint(painter, converter);
 
     painter.restore();

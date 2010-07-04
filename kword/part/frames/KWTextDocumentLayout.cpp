@@ -384,7 +384,7 @@ void KWTextDocumentLayout::layout()
                         }
                         if (isChild)
                             continue;
-                        QMatrix matrix = (frame->outlineShape()
+                        QTransform matrix = (frame->outlineShape()
                                 ? frame->outlineShape()
                                 : frame->shape())->absoluteTransformation(0);
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
@@ -418,7 +418,7 @@ void KWTextDocumentLayout::layout()
                 foreach (Outline *outline, outlines) {
                     if (outline->shape() == strategy->anchoredShape()) {
                         ADEBUG << "  refreshing outline";
-                        QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
+                        QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outline->changeMatrix(matrix);
@@ -444,7 +444,7 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             ADEBUG << "  migrating strategy!";
             if (strategy->anchoredShape()) {
-                QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
+                QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                 matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                 matrix.translate(0, m_state->documentOffsetInShape());
                 outlines.append(new Outline(strategy->anchoredShape(), matrix));

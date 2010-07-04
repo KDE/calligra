@@ -390,7 +390,7 @@ QBrush KarbonImport::loadGradient(KoShape * shape, const KoXmlElement &element)
     vector.setY(element.attribute("vectorY", "0.0").toDouble());
 
     QSizeF shapeSize = shape->size();
-    QMatrix shapeMatrix = m_mirrorMatrix * shape->absoluteTransformation(0).inverted();
+    QTransform shapeMatrix = m_mirrorMatrix * shape->absoluteTransformation(0).inverted();
     origin = KoFlake::toRelative(shapeMatrix.map(origin), shapeSize);
     focal = KoFlake::toRelative(shapeMatrix.map(focal), shapeSize);
     vector = KoFlake::toRelative(shapeMatrix.map(vector), shapeSize);
@@ -478,7 +478,7 @@ void KarbonImport::loadPattern(KoShape * shape, const KoXmlElement &element)
     QPointF dirVec = vector - origin;
     double angle = atan2(dirVec.y(), dirVec.x()) * 180.0 / M_PI;
 
-    QMatrix m;
+    QTransform m;
     m.translate(origin.x(), origin.y());
     m.rotate(angle);
 
@@ -494,7 +494,7 @@ void KarbonImport::loadPattern(KoShape * shape, const KoXmlElement &element)
     if (imageCollection) {
         KoPatternBackground * newFill = new KoPatternBackground(imageCollection);
         newFill->setPattern(img.mirrored(false, true));
-        newFill->setMatrix(m);
+        newFill->setTransform(m);
         shape->setBackground(newFill);
     }
 }
@@ -582,7 +582,7 @@ void KarbonImport::loadFill(KoShape * shape, const KoXmlElement &element)
         if (e.tagName() == "GRADIENT") {
             QBrush brush = loadGradient(shape, e);
             KoGradientBackground * newFill = new KoGradientBackground(*brush.gradient());
-            newFill->setMatrix(brush.matrix());
+            newFill->setTransform(brush.transform());
             shape->setBackground(newFill);
         } else if (e.tagName() == "PATTERN") {
             loadPattern(shape, e);
@@ -929,7 +929,7 @@ KoShape * KarbonImport::loadSpiral(const KoXmlElement &element)
     QPointF topLeft = spiral->outline().boundingRect().topLeft();
     spiral->normalize();
 
-    QMatrix m;
+    QTransform m;
 
     // sadly it's not feasible to simply add angle while creation.
     // make cw-spiral start at mouse-pointer
@@ -977,7 +977,7 @@ KoShape * KarbonImport::loadStar(const KoXmlElement &element)
         paramStar->setConvex(type == polygon);
 
         QPointF centerPos = paramStar->absolutePosition(KoFlake::TopLeftCorner) + paramStar->starCenter();
-        QMatrix m;
+        QTransform m;
         m.translate(centerPos.x(), centerPos.y());
         m.rotate((angle + KarbonGlobal::pi) * KarbonGlobal::one_pi_180);
         paramStar->applyAbsoluteTransformation(m);
@@ -1133,7 +1133,7 @@ KoShape * KarbonImport::loadStar(const KoXmlElement &element)
     starShape->setFillRule(Qt::OddEvenFill);
 
     // translate path to center:
-    QMatrix m;
+    QTransform m;
     m.translate(cx, cy);
     starShape->applyAbsoluteTransformation(m);
 
@@ -1147,12 +1147,12 @@ KoShape * KarbonImport::loadStar(const KoXmlElement &element)
 KoShape * KarbonImport::loadImage(const KoXmlElement &element)
 {
     QString fname = element.attribute("fname");
-    QMatrix m(element.attribute("m11", "1.0").toDouble(),
-              element.attribute("m12", "0.0").toDouble(),
+    QTransform m(element.attribute("m11", "1.0").toDouble(),
+              element.attribute("m12", "0.0").toDouble(), 0,
               element.attribute("m21", "0.0").toDouble(),
-              element.attribute("m22", "1.0").toDouble(),
+              element.attribute("m22", "1.0").toDouble(), 0,
               element.attribute("dx", "0.0").toDouble(),
-              element.attribute("dy", "0.0").toDouble());
+              element.attribute("dy", "0.0").toDouble(), 1);
 
     QImage img;
     if (!img.load(fname)) {
@@ -1211,7 +1211,7 @@ KoShape * KarbonImport::loadText(const KoXmlElement &element)
         // if the path is only a single line
         KoPathShape * path = dynamic_cast<KoPathShape*>(loadPath(e));
         if (path) {
-            QMatrix matrix = path->absoluteTransformation(0);
+            QTransform matrix = path->absoluteTransformation(0);
             QPainterPath outline = matrix.map(path->outline());
             qreal outlineLength = outline.length();
             qreal textLength = textShape->size().width();
@@ -1276,7 +1276,7 @@ KoShape * KarbonImport::createShape(const QString &shapeID) const
     if (path && shapeID == KoPathShapeId)
         path->clear();
     // reset tranformation that might come from the default shape
-    shape->setTransformation(QMatrix());
+    shape->setTransformation(QTransform());
 
     return shape;
 }

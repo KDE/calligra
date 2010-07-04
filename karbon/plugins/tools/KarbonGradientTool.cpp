@@ -555,7 +555,7 @@ void KarbonGradientTool::gradientChanged()
                 QGradient * g = KarbonGradientHelper::convertGradient(oldFill->gradient(), type);
                 g->setSpread(spread);
                 g->setStops(stops);
-                newFill = new KoGradientBackground(g, oldFill->matrix());
+                newFill = new KoGradientBackground(g, oldFill->transform());
             }
             else {
                 QGradient * g = KarbonGradientHelper::defaultGradient(type, spread, stops);

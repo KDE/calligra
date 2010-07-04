@@ -55,9 +55,9 @@ public:
     QBrush adjustedFill(const QRectF &bound);
 
     /// Returns the gradient transformation
-    QMatrix transform() const;
+    QTransform transform() const;
     /// Sets the gradient transformation
-    void setTransform(const QMatrix &transform);
+    void setTransform(const QTransform &transform);
 
     /// Assigment operator
     SvgGradientHelper & operator = (const SvgGradientHelper & rhs);
@@ -70,11 +70,11 @@ public:
 private:
 
     /// Duplicates the given gradient and applies the given transformation
-    static QGradient *duplicateGradient(const QGradient * g, const QMatrix &transform);
+    static QGradient *duplicateGradient(const QGradient * g, const QTransform &transform);
 
     QGradient * m_gradient;
     Units m_gradientUnits;
-    QMatrix m_gradientTransform;
+    QTransform m_gradientTransform;
 };
 
 #endif // SVGGRADIENTHELPER_H

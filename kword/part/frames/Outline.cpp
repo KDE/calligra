@@ -25,7 +25,7 @@
 
 #include <qnumeric.h>
 
-Outline::Outline(KWFrame *frame, const QMatrix &matrix)
+Outline::Outline(KWFrame *frame, const QTransform &matrix)
     : m_side(None),
     m_shape(frame->shape())
 {
@@ -50,7 +50,7 @@ Outline::Outline(KWFrame *frame, const QMatrix &matrix)
         m_side = None;
 }
 
-Outline::Outline(KoShape *shape, const QMatrix &matrix)
+Outline::Outline(KoShape *shape, const QTransform &matrix)
     : m_side(None),
     m_shape(shape)
 {
@@ -71,13 +71,13 @@ Outline::Outline(KoShape *shape, const QMatrix &matrix)
     init(matrix, shape->outline(), distance);
 }
 
-void Outline::init(const QMatrix &matrix, const QPainterPath &outline, qreal distance)
+void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal distance)
 {
     m_distance = distance;
     QPainterPath path =  matrix.map(outline);
     m_bounds = path.boundingRect();
     if (distance >= 0.0) {
-        QMatrix grow = matrix;
+        QTransform grow = matrix;
         grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
         qreal scaleX = distance;
         if (m_bounds.width() > 0)
@@ -172,7 +172,7 @@ qreal Outline::xAtY(const QLineF &line, qreal y)
     return line.x1() + (y - line.y1()) / line.dy() * line.dx();
 }
 
-void Outline::changeMatrix(const QMatrix &matrix)
+void Outline::changeMatrix(const QTransform &matrix)
 {
     m_edges.clear();
     init(matrix, m_shape->outline(), m_distance);

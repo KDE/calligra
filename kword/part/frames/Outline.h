@@ -21,7 +21,7 @@
 #ifndef OUTLINE_H
 #define OUTLINE_H
 
-#include <QMatrix>
+#include <QTransform>
 #include <QMultiMap>
 #include <QPainterPath>
 
@@ -32,10 +32,10 @@ class KWFrame;
 class Outline
 {
 public:
-    Outline(KWFrame *frame, const QMatrix &matrix);
-    Outline(KoShape *shape, const QMatrix &matrix);
+    Outline(KWFrame *frame, const QTransform &matrix);
+    Outline(KoShape *shape, const QTransform &matrix);
 
-    void init(const QMatrix &matrix, const QPainterPath &outline, qreal distance);
+    void init(const QTransform &matrix, const QPainterPath &outline, qreal distance);
 
     QRectF limit(const QRectF &content);
 
@@ -43,7 +43,7 @@ public:
 
     static qreal xAtY(const QLineF &line, qreal y);
 
-    void changeMatrix(const QMatrix &matrix);
+    void changeMatrix(const QTransform &matrix);
 
 private:
     enum Side { None, Left, Right, Empty }; // TODO support Auto and Both

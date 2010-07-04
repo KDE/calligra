@@ -53,7 +53,7 @@ void KWCreateOutlineCommand::redo()
     } else {
         KoShape *child = m_frame->shape();
         m_container->setTransformation(child->absoluteTransformation(0));
-        QMatrix matrix;
+        QTransform matrix;
         child->setTransformation(matrix);
         m_container->addShape(child);
         m_container->setApplicationData(m_frame);

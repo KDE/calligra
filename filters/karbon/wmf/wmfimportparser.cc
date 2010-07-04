@@ -494,7 +494,7 @@ void WMFImportParser::drawText(int x, int y, int , int , int flags, const QStrin
     if (rotation) {
         // we rotate around the anchor point
         QPointF anchor(-xOffset, -yOffset);
-        QMatrix matrix;
+        QTransform matrix;
         matrix.translate(anchor.x(), anchor.y());
         matrix.rotate(rotation);
         matrix.translate(-anchor.x(), -anchor.y());
@@ -534,7 +534,7 @@ void WMFImportParser::appendBrush(KoShape& obj)
         if (imageCollection) {
             KoPatternBackground * bg = new KoPatternBackground(imageCollection);
             bg->setPattern(mBrush.textureImage());
-            bg->setMatrix(mBrush.matrix());
+            bg->setTransform(mBrush.transform());
             obj.setBackground(bg);
         }
         break;
@@ -543,7 +543,7 @@ void WMFImportParser::appendBrush(KoShape& obj)
     case Qt::RadialGradientPattern:
     case Qt::ConicalGradientPattern: {
         KoGradientBackground * bg = new KoGradientBackground(*mBrush.gradient());
-        bg->setMatrix(mBrush.matrix());
+        bg->setTransform(mBrush.transform());
         obj.setBackground(bg);
         break;
     }
@@ -605,7 +605,7 @@ KoShape * WMFImportParser::createShape(const QString &shapeID)
     if (path && shapeID == KoPathShapeId)
         path->clear();
     // reset tranformation that might come from the default shape
-    shape->setTransformation(QMatrix());
+    shape->setTransformation(QTransform());
 
     return shape;
 }

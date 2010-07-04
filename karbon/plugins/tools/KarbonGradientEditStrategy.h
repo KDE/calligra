@@ -159,7 +159,7 @@ protected:
     QBrush m_newBrush;         ///< the new background brush
     QList<QPointF> m_handles;  ///< the list of handles
     QGradientStops m_stops;    ///< the gradient stops
-    QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
+    QTransform m_matrix;          ///< matrix to map handle into document coordinate system
     KoLineBorder m_oldStroke;  ///< the old stroke
 private:
     typedef QPair<QPointF, QPointF> StopHandle;

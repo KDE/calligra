@@ -52,7 +52,7 @@ void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter
             converter.zoom(&zoom, &zoom);
             painter.save();
             QTransform animationTransform = m_animationCache->value(shape, "transform", QTransform()).value<QTransform>();;
-            QTransform transform(painter.matrix() * shape->absoluteTransformation( &converter ));
+            QTransform transform(painter.transform() * shape->absoluteTransformation(&converter));
             if (animationTransform.isScaling()) {
                 transform = animationTransform * transform;
             } else {

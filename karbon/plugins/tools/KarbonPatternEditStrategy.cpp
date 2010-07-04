@@ -131,10 +131,10 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy(KoShape * s, KoImageCollect
     // the fixed length of half the average shape dimension
     m_normalizedLength = 0.25 * (size.width() + size.height());
     // get the brush tranformation matrix
-    QMatrix brushMatrix;
+    QTransform brushMatrix;
     KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>(shape()->background());
     if (fill)
-        brushMatrix = fill->matrix();
+        brushMatrix = fill->transform();
 
     // the center handle at the center point of the shape
     //m_origin = QPointF( 0.5 * size.width(), 0.5 * size.height() );
@@ -219,14 +219,14 @@ KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
     // the direction vector controls the rotation of the pattern
     QPointF dirVec = m_handles[direction] - m_handles[center];
     qreal angle = atan2(dirVec.y(), dirVec.x()) * 180.0 / M_PI;
-    QMatrix matrix;
+    QTransform matrix;
     // the center handle controls the translation
     matrix.translate(m_handles[center].x(), m_handles[center].y());
     matrix.rotate(angle);
 
     KoPatternBackground newFill(imageCollection());
     newFill = m_oldFill;
-    newFill.setMatrix(matrix);
+    newFill.setTransform(matrix);
 
     return newFill;
 }
@@ -256,7 +256,7 @@ void KarbonOdfPatternEditStrategy::paint(QPainter &painter, const KoViewConverte
         return;
 
     painter.save();
-    painter.setMatrix(m_matrix * painter.matrix());
+    painter.setTransform(m_matrix * painter.transform());
     painter.setBrush(Qt::NoBrush);
     painter.drawRect(QRectF(m_handles[origin], m_handles[size]));
     painter.restore();

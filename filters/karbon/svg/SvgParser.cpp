@@ -180,7 +180,7 @@ void SvgParser::setupTransform(const KoXmlElement &e)
     SvgGraphicsContext *gc = m_gc.top();
 
     if (e.hasAttribute("transform")) {
-        QMatrix mat = SvgUtil::parseTransform(e.attribute("transform"));
+        QTransform mat = SvgUtil::parseTransform(e.attribute("transform"));
         gc->matrix = mat * gc->matrix;
     }
 }
@@ -1080,13 +1080,13 @@ void SvgParser::applyFillStyle(KoShape * shape)
             KoGradientBackground * bg = 0;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
                 bg = new KoGradientBackground(*gradient->gradient());
-                bg->setMatrix(gradient->transform());
+                bg->setTransform(gradient->transform());
             } else {
                 QGradient *convertedGradient = SvgGradientHelper::convertGradient(gradient->gradient(), shape->size());
                 bg = new KoGradientBackground(*convertedGradient);
                 delete convertedGradient;
-                QMatrix invShapematrix = shape->transformation().inverted();
-                bg->setMatrix(gradient->transform() * gc->matrix * invShapematrix);
+                QTransform invShapematrix = shape->transformation().inverted();
+                bg->setTransform(gradient->transform() * gc->matrix * invShapematrix);
             }
 
             shape->setBackground(bg);
@@ -1106,7 +1106,7 @@ void SvgParser::applyFillStyle(KoShape * shape)
 
             // the pattern establishes a new coordinate system with its
             // origin at the patterns x and y attributes
-            m_gc.top()->matrix = QMatrix();
+            m_gc.top()->matrix = QTransform();
             // object bounding box units are relative to the object the pattern is applied
             if (pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox) {
                 m_gc.top()->currentBoundbox = objectBound;
@@ -1212,12 +1212,12 @@ void SvgParser::applyStrokeStyle(KoShape * shape)
             QBrush brush;
             if (gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox) {
                 brush = *gradient->gradient();
-                brush.setMatrix(gradient->transform());
+                brush.setTransform(gradient->transform());
             } else {
                 QGradient *convertedGradient(SvgGradientHelper::convertGradient(gradient->gradient(), shape->size()));
                 brush = *convertedGradient;
                 delete convertedGradient;
-                brush.setMatrix(gradient->transform() * gc->matrix * shape->transformation().inverted());
+                brush.setTransform(gradient->transform() * gc->matrix * shape->transformation().inverted());
             }
             KoLineBorder * border = new KoLineBorder(gc->stroke);
             border->setLineBrush(brush);
@@ -1475,7 +1475,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF * fragmentSize
     gc->currentBoundbox = QRectF(QPointF(0, 0), svgFragmentSize);
 
     if (! isRootSvg) {
-        QMatrix move;
+        QTransform move;
         // x and y attribute has no meaning for outermost svg elements
         double x = e.hasAttribute("x") ? parseUnit(e.attribute("x")) : 0.0;
         double y = e.hasAttribute("y") ? parseUnit(e.attribute("y")) : 0.0;
@@ -1485,7 +1485,7 @@ QList<KoShape*> SvgParser::parseSvg(const KoXmlElement &e, QSizeF * fragmentSize
     }
 
     if (hasViewBox) {
-        QMatrix viewTransform;
+        QTransform viewTransform;
         viewTransform.translate(viewBox.x(), viewBox.y());
         viewTransform.scale(width / viewBox.width() , height / viewBox.height());
         gc->matrix = viewTransform * gc->matrix;
@@ -2029,7 +2029,7 @@ KoShape * SvgParser::createShape(const QString &shapeID)
         shape->setShapeId(factory->id());
 
     // reset tranformation that might come from the default shape
-    shape->setTransformation(QMatrix());
+    shape->setTransformation(QTransform());
 
     // reset border
     KoShapeBorderModel * oldBorder = shape->border();

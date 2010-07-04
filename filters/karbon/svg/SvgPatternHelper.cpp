@@ -55,12 +55,12 @@ SvgPatternHelper::Units SvgPatternHelper::patternContentUnits() const
     return m_patternContentUnits;
 }
 
-void SvgPatternHelper::setTransform(const QMatrix &transform)
+void SvgPatternHelper::setTransform(const QTransform &transform)
 {
     m_transform = transform;
 }
 
-QMatrix SvgPatternHelper::transform() const
+QTransform SvgPatternHelper::transform() const
 {
     return m_transform;
 }
@@ -125,7 +125,7 @@ QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<Ko
     if (tileSize.isEmpty())
         return QImage();
 
-    QMatrix viewMatrix;
+    QTransform viewMatrix;
 
     if (! m_patternContentViewbox.isNull()) {
         viewMatrix.translate(-m_patternContentViewbox.x(), -m_patternContentViewbox.y());
@@ -141,7 +141,7 @@ QImage SvgPatternHelper::generateImage(const QRectF &objectBound, const QList<Ko
     // setup the painter to paint the tile content
     QPainter tilePainter(&tile);
     tilePainter.setClipRect(tile.rect());
-    tilePainter.setWorldMatrix(viewMatrix);
+    tilePainter.setWorldTransform(viewMatrix);
     //tilePainter.setRenderHint(QPainter::Antialiasing);
 
     // paint the content into the tile image

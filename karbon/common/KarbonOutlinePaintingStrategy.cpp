@@ -53,7 +53,7 @@ KarbonOutlinePaintingStrategy::~KarbonOutlinePaintingStrategy()
 void KarbonOutlinePaintingStrategy::paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool)
 {
     painter.save();
-    painter.setMatrix(shape->absoluteTransformation(&converter) * painter.matrix());
+    painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
 
     m_border->paint(shape, painter, converter);
 

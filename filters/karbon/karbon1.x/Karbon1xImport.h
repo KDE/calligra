@@ -75,7 +75,7 @@ protected:
 
 private:
     KarbonDocument * m_document;
-    QMatrix m_mirrorMatrix;
+    QTransform m_mirrorMatrix;
 };
 
 #endif // KARBON_IMPORT_H

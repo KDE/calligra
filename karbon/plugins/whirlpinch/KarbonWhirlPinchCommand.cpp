@@ -74,7 +74,7 @@ public:
         qreal distToCenter = sqrt(delta.x() * delta.x() + delta.y() * delta.y());
 
         if (distToCenter < effectRadius) {
-            QMatrix m;
+            QTransform m;
 
             distToCenter /= effectRadius;
 

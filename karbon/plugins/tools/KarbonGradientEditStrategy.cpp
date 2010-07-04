@@ -51,11 +51,11 @@ GradientStrategy::GradientStrategy(KoShape *shape, const QGradient * gradient, T
     if (m_target == Fill) {
         KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
         if (fill)
-            m_matrix = fill->matrix() * m_shape->absoluteTransformation(0);
+            m_matrix = fill->transform() * m_shape->absoluteTransformation(0);
     } else {
         KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(m_shape->border());
         if (stroke)
-            m_matrix = stroke->lineBrush().matrix() * m_shape->absoluteTransformation(0);
+            m_matrix = stroke->lineBrush().transform() * m_shape->absoluteTransformation(0);
     }
     m_stops = gradient->stops();
 }
@@ -70,7 +70,7 @@ void GradientStrategy::setEditing(bool on)
             KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
             if (fill) {
                 m_oldBrush = QBrush(*fill->gradient());
-                m_oldBrush.setMatrix(fill->matrix());
+                m_oldBrush.setTransform(fill->transform());
             }
         } else {
             KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(m_shape->border());
@@ -167,12 +167,12 @@ void GradientStrategy::paintStops(QPainter &painter, const KoViewConverter &conv
         painter.setBrush(m_stops[i].second);
         painter.setPen(invertedColor(m_stops[i].second));
         if (m_selection == Stop && m_selectionIndex == i) {
-            QMatrix m;
+            QTransform m;
             m.translate(hr.center().x(), hr.center().y());
             m.rotate(45.0);
             m.translate(-hr.center().x(), -hr.center().y());
             painter.save();
-            painter.setWorldMatrix(m, true);
+            painter.setWorldTransform(m, true);
             painter.drawRect(hr);
             painter.restore();
         } else
@@ -234,7 +234,7 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
 {
     Q_UNUSED(modifiers)
 
-    QMatrix invMatrix = m_matrix.inverted();
+    QTransform invMatrix = m_matrix.inverted();
     switch (m_selection) {
     case Line: {
         uint handleCount = m_handles.count();
@@ -302,7 +302,7 @@ void GradientStrategy::applyChanges()
         KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
         if (fill) {
             fill->setGradient(*m_newBrush.gradient());
-            fill->setMatrix(m_newBrush.matrix());
+            fill->setTransform(m_newBrush.transform());
         }
     } else {
         KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(m_shape->border());
@@ -319,9 +319,9 @@ QUndoCommand * GradientStrategy::createCommand(QUndoCommand * parent)
     if (m_target == Fill) {
         KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>(m_shape->background());
         if (fill) {
-            KoGradientBackground * newFill = new KoGradientBackground(*fill->gradient(), fill->matrix());
+            KoGradientBackground * newFill = new KoGradientBackground(*fill->gradient(), fill->transform());
             fill->setGradient(*m_oldBrush.gradient());
-            fill->setMatrix(m_oldBrush.matrix());
+            fill->setTransform(m_oldBrush.transform());
             return new KoShapeBackgroundCommand(m_shape, newFill, parent);
         }
     } else {
@@ -390,7 +390,7 @@ GradientStrategy::Target GradientStrategy::target() const
 
 void GradientStrategy::startDrawing(const QPointF &mousePos)
 {
-    QMatrix invMatrix = m_matrix.inverted();
+    QTransform invMatrix = m_matrix.inverted();
 
     int handleCount = m_handles.count();
     for (int handleId = 0; handleId < handleCount; ++handleId)
@@ -520,7 +520,7 @@ QBrush LinearGradientStrategy::brush()
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());
     QBrush brush = QBrush(gradient);
-    brush.setMatrix(m_oldBrush.matrix());
+    brush.setTransform(m_oldBrush.transform());
     return brush;
 }
 
@@ -549,7 +549,7 @@ QBrush RadialGradientStrategy::brush()
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());
     QBrush brush = QBrush(gradient);
-    brush.setMatrix(m_oldBrush.matrix());
+    brush.setTransform(m_oldBrush.transform());
     return brush;
 }
 
@@ -576,6 +576,6 @@ QBrush ConicalGradientStrategy::brush()
     gradient.setStops(m_stops);
     gradient.setSpread(m_oldBrush.gradient()->spread());
     QBrush brush = QBrush(gradient);
-    brush.setMatrix(m_oldBrush.matrix());
+    brush.setTransform(m_oldBrush.transform());
     return brush;
 }

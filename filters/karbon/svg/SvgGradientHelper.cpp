@@ -77,7 +77,7 @@ void SvgGradientHelper::setGradient(QGradient * g)
 void SvgGradientHelper::copyGradient(QGradient * other)
 {
     delete m_gradient;
-    m_gradient = duplicateGradient(other, QMatrix());
+    m_gradient = duplicateGradient(other, QTransform());
 }
 
 QBrush SvgGradientHelper::adjustedFill(const QRectF &bound)
@@ -93,25 +93,25 @@ QBrush SvgGradientHelper::adjustedFill(const QRectF &bound)
     return brush;
 }
 
-QMatrix SvgGradientHelper::transform() const
+QTransform SvgGradientHelper::transform() const
 {
     return m_gradientTransform;
 }
 
-void SvgGradientHelper::setTransform(const QMatrix &transform)
+void SvgGradientHelper::setTransform(const QTransform &transform)
 {
     m_gradientTransform = transform;
 }
 
 QGradient * SvgGradientHelper::adjustedGradient(const QRectF &bound) const
 {
-    QMatrix matrix;
+    QTransform matrix;
     matrix.scale(0.01 * bound.width(), 0.01 * bound.height());
 
     return duplicateGradient(m_gradient, matrix);
 }
 
-QGradient * SvgGradientHelper::duplicateGradient(const QGradient * originalGradient, const QMatrix &transform)
+QGradient * SvgGradientHelper::duplicateGradient(const QGradient * originalGradient, const QTransform &transform)
 {
     if (! originalGradient)
         return 0;
@@ -161,7 +161,7 @@ QGradient *SvgGradientHelper::convertGradient(const QGradient *originalGradient,
         return 0;
 
     if (originalGradient->coordinateMode() != QGradient::LogicalMode) {
-        return duplicateGradient(originalGradient, QMatrix());
+        return duplicateGradient(originalGradient, QTransform());
     }
 
     QGradient *duplicatedGradient = 0;

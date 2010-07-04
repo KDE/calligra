@@ -28,7 +28,7 @@
 
 #include <kglobal.h>
 #include <QPointF>
-#include <QMatrix>
+#include <QTransform>
 
 // define some often used mathematical constants et al:
 

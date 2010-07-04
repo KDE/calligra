@@ -68,7 +68,7 @@ void KWClipFrameCommand::redo()
         }
         container->addShape(frame->shape());
         container->setClipped(frame->shape(), true);
-        frame->shape()->setTransformation(QMatrix());
+        frame->shape()->setTransformation(QTransform());
         foreach (KoView *view, m_document->views()) {
             KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
             canvas->shapeManager()->addShape(container);

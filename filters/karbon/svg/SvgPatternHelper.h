@@ -22,7 +22,7 @@
 
 #include <KoXmlReader.h>
 #include <QtGui/QImage>
-#include <QtGui/QMatrix>
+#include <QtGui/QTransform>
 
 class KoShape;
 
@@ -45,9 +45,9 @@ public:
     Units patternContentUnits() const;
 
     /// Sets the pattern transformation found in attribute "patternTransform"
-    void setTransform(const QMatrix &transform);
+    void setTransform(const QTransform &transform);
     /// Returns the pattern transform
-    QMatrix transform() const;
+    QTransform transform() const;
 
     /// Sets pattern tile position
     void setPosition(const QPointF & position);
@@ -77,7 +77,7 @@ private:
 
     Units m_patternUnits;
     Units m_patternContentUnits;
-    QMatrix m_transform;
+    QTransform m_transform;
     QPointF m_position;
     QSizeF m_size;
     KoXmlElement m_patternContent;

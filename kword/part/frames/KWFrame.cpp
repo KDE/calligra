@@ -150,7 +150,7 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     m_shape->setAdditionalAttribute("draw:z-index", QString::number(effectiveZIndex));
     m_shape->setAdditionalAttribute("text:anchor-type", "page");
     m_shape->setAdditionalAttribute("text:anchor-page-number", QString::number(page.pageNumber()));
-    context.addShapeOffset(m_shape, QMatrix(1, 0, 0 , 1, 0, -pagePos));
+    context.addShapeOffset(m_shape, QTransform(1, 0, 0 , 1, 0, -pagePos));
     m_shape->saveOdf(context);
     context.removeShapeOffset(m_shape);
     m_shape->removeAdditionalAttribute("draw:z-index");
