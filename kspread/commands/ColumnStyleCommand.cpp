@@ -102,5 +102,3 @@ bool ColumnStyleCommand::mainProcessing()
     m_sheet->print()->updateHorizontalPageParameters(0);
     return true;
 }
-
-#include "ColumnStyleCommand.moc"

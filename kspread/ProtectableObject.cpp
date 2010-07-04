@@ -110,5 +110,3 @@ void ProtectableObject::loadOdfProtection(const KoXmlElement& element)
         }
     }
 }
-
-#include "ProtectableObject.moc"

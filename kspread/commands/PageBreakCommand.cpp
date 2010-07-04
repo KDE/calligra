@@ -69,5 +69,3 @@ bool PageBreakCommand::postProcessing()
     }
     return AbstractRegionCommand::postProcessing();
 }
-
-#include "PageBreakCommand.moc"

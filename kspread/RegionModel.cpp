@@ -77,5 +77,3 @@ int RegionModel::rowCount(const QModelIndex &parent) const
     }
     return d->range.height();
 }
-
-#include "RegionModel.moc"

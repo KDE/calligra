@@ -577,5 +577,3 @@ bool PasteCommand::processTextPlain(Element *element)
     command->add(element->rect(), m_sheet);
     return true;
 }
-
-#include "PasteCommand.moc"

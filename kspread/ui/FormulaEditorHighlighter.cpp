@@ -255,5 +255,3 @@ void FormulaEditorHighlighter::resetRangeChanged()
 {
     d->rangeChanged = false;
 }
-
-#include "FormulaEditorHighlighter.moc"

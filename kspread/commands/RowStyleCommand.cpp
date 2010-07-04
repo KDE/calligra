@@ -102,5 +102,3 @@ bool RowStyleCommand::mainProcessing()
     m_sheet->print()->updateVerticalPageParameters(0);
     return true;
 }
-
-#include "RowStyleCommand.moc"
