@@ -78,7 +78,6 @@
 #include "kptaccountsview.h"
 #include "kptaccountseditor.h"
 #include "kptcalendareditor.h"
-#include "kptchartview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
 #include "kpttaskdescriptiondialog.h"
@@ -1223,32 +1222,6 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
     connect( resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
     resourceAssignmentView->updateReadWrite( m_readWrite );
     return resourceAssignmentView;
-}
-
-ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
-{
-    ChartView *v = new ChartView( getPart(), m_tab );
-    m_tab->addWidget( v );
-
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
-    ViewInfo vi = defaultViewInfo( "ChartView" );
-    if ( name.isEmpty() ) {
-        i->setText( 0, vi.name );
-    }
-    if ( tip == TIP_USE_DEFAULT_TEXT ) {
-        i->setToolTip( 0, vi.tip );
-    } else {
-        i->setToolTip( 0, tip );
-    }
-
-    v->setProject( &( getProject() ) );
-
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
-
-    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    v->updateReadWrite( m_readWrite );
-    return v;
-
 }
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
