@@ -75,7 +75,7 @@ CalculationSettings::CalculationSettings()
     d->automaticCalculation     = true;
     d->refYear = 1930;
     d->refDate = QDate(1899, 12, 30);
-    d->precision = 8;
+    d->precision = -1;
 }
 
 CalculationSettings::~CalculationSettings()
@@ -182,7 +182,7 @@ QDate CalculationSettings::referenceDate() const
 
 void CalculationSettings::setDefaultDecimalPrecision(int precision)
 {
-    d->precision = (precision < 0) ? 8 : precision;
+    d->precision = precision;
 }
 
 int CalculationSettings::defaultDecimalPrecision() const

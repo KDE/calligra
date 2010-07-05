@@ -265,10 +265,23 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             precision = 0;
         }
     }
-   
-    // NOTE: If precision (obtained from the cell style) is -1 (arbitrary),
-    //       use the document default decimal precision.
-    int p = (precision == -1) ? settings()->defaultDecimalPrecision() : precision;
+
+    int p = precision;
+    if (p == -1) {
+        // If precision (obtained from the cell style) is -1 (arbitrary), use the document default decimal precision
+        // and if that value is -1 too then use either automatic decimal place adjustment or a hardcoded default.
+        p = settings()->defaultDecimalPrecision();
+        if (p == -1) {
+            if (fmt == Format::Number) {
+                QString s = QString::number(double(numToDouble(value)));
+                int _p = s.indexOf('.');
+                p = _p >= 0 ? qMax(0, 10 - _p) : 0;
+            } else {
+                p = 2; // hardcoded default
+            }
+        }
+    }
+
     QString localizedNumber;
     int pos = 0;
 
