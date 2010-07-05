@@ -28,11 +28,17 @@
 namespace KSpread
 {
 
+class Doc;
+class Sheet;
+
 class TestLogicFunctions: public QObject
 {
     Q_OBJECT
 
 private slots:
+    void init();
+    void cleanup();
+
     void initTestCase();
     void testAND();
     void testFALSE();
@@ -42,6 +48,8 @@ private slots:
     void testTRUE();
     void testXOR();
 private:
+    Doc* m_doc;
+    Sheet* m_sheet;
     Value evaluate(const QString&, Value& ex);
 };
 
