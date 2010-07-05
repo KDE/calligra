@@ -31,11 +31,18 @@
 #define KSPREAD_LIMITS
 
 /* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
+#ifndef KS_rowMax
 #define KS_rowMax 0xFFFF
+#endif
+
 /* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
+#ifndef KS_colMax
 #define KS_colMax 0x7FFF
+#endif
 
 /* Definition of maximal supported columns/rows, which can be merged */
+#ifndef KS_spanMax
 #define KS_spanMax 0xFFF
+#endif
 
 #endif // KSPREAD_LIMITS
