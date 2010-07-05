@@ -225,7 +225,6 @@ public:
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
 
-    void draw();
     ChartItemModel *model() const { return const_cast<ChartItemModel*>( &m_chartmodel ); }
     
     void setupChart();
@@ -237,45 +236,45 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &context ) const;
     
+public slots:
+    void refreshChart();
+
 protected:
     void contextMenuEvent( QContextMenuEvent *event );
     
-    void setupBarChart();
     void createBarChart();
-    void setupLineChart();
     void createLineChart();
     
     void drawValues();
-    void drawPlot( Project &p, ScheduleManager &sm );
-    QList<QPointF> drawAxis( const ChartAxisIndex &idx );
-    void drawData( const ChartAxisIndex &idx );
-    void drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet );
 
 protected slots:
-    void slotReset();
     void slotUpdate();
     void slotLocaleChanged();
 
 private:
-    Project *m_project;
-    ScheduleManager *m_manager;
-    NodeChartModel m_model;
-    PerformanceChartInfo m_chartinfo;
-
-    ChartItemModel m_chartmodel;
-    KDChart::Legend *m_legend;
-    KDChart::BarDiagram m_legenddiagram;
-    struct ChartContainer {
+    struct ChartContents {
+        ~ChartContents() { delete dateaxis; }
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
     
         KDChart::CartesianCoordinatePlane *effortplane;
         KDChart::CartesianCoordinatePlane *costplane;
-        KDChart::CartesianAxis *hours_axis;
-        KDChart::CartesianAxis *cost_axis;
+        KDChart::CartesianAxis *effortaxis;
+        KDChart::CartesianAxis *costaxis;
+        KDChart::CartesianAxis *dateaxis;
     };
-    struct ChartContainer m_barchart;
-    struct ChartContainer m_linechart;
+    void setupChart( ChartContents &cc );
+
+private:
+    Project *m_project;
+    ScheduleManager *m_manager;
+    PerformanceChartInfo m_chartinfo;
+
+    ChartItemModel m_chartmodel;
+    KDChart::Legend *m_legend;
+    KDChart::BarDiagram m_legenddiagram;
+    struct ChartContents m_barchart;
+    struct ChartContents m_linechart;
 };
 
 //----------------------------------
@@ -293,9 +292,6 @@ public:
     virtual bool loadContext( const KoXmlElement &/*context*/ );
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
-
-    using ViewBase::draw;
-    virtual void draw();
 
 public slots:
     /// Activate/deactivate the gui
@@ -325,7 +321,6 @@ public:
     Project *project() const;
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
-    void draw();
 
     /// Loads context info into this view.
     virtual bool loadContext( const KoXmlElement &context );
@@ -360,9 +355,6 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &context ) const;
 
-    using ViewBase::draw;
-    virtual void draw();
-    
     Node *currentNode() const;
     
 public slots:

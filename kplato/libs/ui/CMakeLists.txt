@@ -36,10 +36,6 @@ set(kplatoui_LIB_SRCS
     reports/reportscripts.cpp
     reports/reportexportpanel.cpp
 
-    plotting/kplotaxis.cpp
-    plotting/kplotwidget.cpp
-    plotting/kplotobject.cpp
-    
     kptganttitemdelegate.cpp
 
     kptworkpackagesendpanel.cpp
@@ -86,11 +82,6 @@ set(kplatoui_LIB_SRCS
     kptwbsdefinitiondialog.cpp
     kptwbsdefinitionpanel.cpp
     kptresourceassignmentview.cpp
-    kptchartpanel.cpp
-    kptchartwidget.cpp
-    kptchart.cpp
-    kptchartview.cpp
-    kptplotwidget.cpp
 
     kptresourceallocationeditor.cpp
 
@@ -135,7 +126,6 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kpttaskgeneralpanelbase.ui
     kpttaskprogresspanelbase.ui
     kptperteditor.ui
-    kptchartpanelbase.ui
     kptresourceassignmentview.ui
     kpttaskstatusviewsettingspanel.ui
     kptperformancestatusviewsettingspanel.ui

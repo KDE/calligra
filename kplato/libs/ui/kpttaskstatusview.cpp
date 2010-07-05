@@ -45,6 +45,8 @@
 #include <QTextTableCell>
 #include <QLineEdit>
 #include <QItemSelection>
+#include <QApplication>
+#include <QResizeEvent>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -57,12 +59,6 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
-
-#include "plotting/kplotwidget.h"
-#include "plotting/kplotobject.h"
-#include "plotting/kplotaxis.h"
-
-#include <kplotpoint.h>
 
 #include "KDChartChart"
 #include "KDChartAbstractCoordinatePlane"
@@ -459,11 +455,6 @@ void ProjectStatusView::setProject( Project *project )
     m_view->setProject( project );
 }
 
-void ProjectStatusView::draw()
-{
-    m_view->draw();
-}
-
 void ProjectStatusView::setGuiActive( bool activate )
 {
     kDebug()<<activate;
@@ -544,7 +535,6 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     createLineChart();
     setupChart();
 
-    connect( &m_model, SIGNAL( reset() ), SLOT( slotReset() ) );
     connect(&m_chartmodel, SIGNAL(modelReset()), SLOT(slotUpdate()));
     setContextMenuPolicy ( Qt::DefaultContextMenu );
 }
@@ -557,6 +547,13 @@ void PerformanceStatusBase::setChartInfo( const PerformanceChartInfo &info )
     }
 }
 
+void PerformanceStatusBase::refreshChart()
+{
+    // NOTE: Force grid/axis recalculation, couldn't find a better way :(
+    QResizeEvent event( ui_chart->size(), QSize() );
+    QApplication::sendEvent( ui_chart, &event );
+}
+
 void PerformanceStatusBase::createBarChart()
 {
     m_barchart.effortplane = new CartesianCoordinatePlane( ui_chart );
@@ -565,44 +562,42 @@ void PerformanceStatusBase::createBarChart()
     m_barchart.costplane->setReferenceCoordinatePlane( m_barchart.effortplane );
     m_barchart.effortplane->setObjectName( "Bar chart, Cost" );
 
-    BarDiagram *effort_diag = new BarDiagram( ui_chart, m_barchart.effortplane );
-    effort_diag->setObjectName( "Effort diagram" );
+    BarDiagram *effortdiagram = new BarDiagram( ui_chart, m_barchart.effortplane );
+    effortdiagram->setObjectName( "Effort diagram" );
 
-    CartesianAxis *date_axis = new CartesianAxis( effort_diag );
-    date_axis->setPosition( CartesianAxis::Bottom );
-    effort_diag->addAxis( date_axis );
+    m_barchart.dateaxis = new CartesianAxis();
+    m_barchart.dateaxis->setPosition( CartesianAxis::Bottom );
 
-    m_barchart.hours_axis = new CartesianAxis( effort_diag );
-    m_barchart.hours_axis->setPosition( CartesianAxis::Left );
-    effort_diag->addAxis( m_barchart.hours_axis );
-    m_barchart.effortplane->addDiagram( effort_diag );
+    m_barchart.effortaxis = new CartesianAxis( effortdiagram );
+    m_barchart.effortaxis->setPosition( CartesianAxis::Right );
+    effortdiagram->addAxis( m_barchart.effortaxis );
+    m_barchart.effortplane->addDiagram( effortdiagram );
 
     // Hide cost in effort diagram
-    effort_diag->setHidden( 0, true );
-    effort_diag->setHidden( 1, true );
-    effort_diag->setHidden( 2, true );
+    effortdiagram->setHidden( 0, true );
+    effortdiagram->setHidden( 1, true );
+    effortdiagram->setHidden( 2, true );
     m_barchart.effortproxy.setZeroColumns( QList<int>() << 0 << 1 << 2 );
 
     m_barchart.effortproxy.setSourceModel( &m_chartmodel );
-    effort_diag->setModel( &(m_barchart.effortproxy) );
+    effortdiagram->setModel( &(m_barchart.effortproxy) );
 
-    BarDiagram *cost_diag = new BarDiagram( ui_chart, m_barchart.costplane );
-    cost_diag->setObjectName( "Cost diagram" );
-    cost_diag->addAxis( date_axis ); // shared
+    BarDiagram *costdiagram = new BarDiagram( ui_chart, m_barchart.costplane );
+    costdiagram->setObjectName( "Cost diagram" );
 
-    m_barchart.cost_axis = new CartesianAxis( cost_diag );
-    m_barchart.cost_axis->setPosition( CartesianAxis::Right );
-    cost_diag->addAxis( m_barchart.cost_axis );
-    m_barchart.costplane->addDiagram( cost_diag );
+    m_barchart.costaxis = new CartesianAxis( costdiagram );
+    m_barchart.costaxis->setPosition( CartesianAxis::Left );
+    costdiagram->addAxis( m_barchart.costaxis );
+    m_barchart.costplane->addDiagram( costdiagram );
 
     // Hide effort in cost diagram
-    cost_diag->setHidden( 3, true );
-    cost_diag->setHidden( 4, true );
-    cost_diag->setHidden( 5, true );
+    costdiagram->setHidden( 3, true );
+    costdiagram->setHidden( 4, true );
+    costdiagram->setHidden( 5, true );
     m_barchart.costproxy.setZeroColumns( QList<int>() << 3 << 4 << 5 );
 
     m_barchart.costproxy.setSourceModel( &m_chartmodel );
-    cost_diag->setModel( &(m_barchart.costproxy) );
+    costdiagram->setModel( &(m_barchart.costproxy) );
 }
 
 void PerformanceStatusBase::createLineChart()
@@ -615,59 +610,56 @@ void PerformanceStatusBase::createLineChart()
     m_linechart.costplane->setObjectName( "Line chart, Cost" );
     m_linechart.costplane->setRubberBandZoomingEnabled( true );
 
-    LineDiagram *effort_diag = new LineDiagram( ui_chart, m_linechart.effortplane );
-    effort_diag->setObjectName( "Effort diagram" );
+    LineDiagram *effortdiagram = new LineDiagram( ui_chart, m_linechart.effortplane );
+    effortdiagram->setObjectName( "Effort diagram" );
 
-    CartesianAxis *date_axis = new CartesianAxis( effort_diag );
-    date_axis->setPosition( CartesianAxis::Bottom );
-    effort_diag->addAxis( date_axis );
+    m_linechart.dateaxis = new CartesianAxis();
+    m_linechart.dateaxis->setPosition( CartesianAxis::Bottom );
 
-    m_linechart.hours_axis = new CartesianAxis( effort_diag );
-    m_linechart.hours_axis->setPosition( CartesianAxis::Left );
-    effort_diag->addAxis( m_linechart.hours_axis );
-    m_linechart.effortplane->addDiagram( effort_diag );
+    m_linechart.effortaxis = new CartesianAxis( effortdiagram );
+    m_linechart.effortaxis->setPosition( CartesianAxis::Right );
+    effortdiagram->addAxis( m_linechart.effortaxis );
+    m_linechart.effortplane->addDiagram( effortdiagram );
 
     // Hide cost in effort diagram
-    effort_diag->setHidden( 0, true );
-    effort_diag->setHidden( 1, true );
-    effort_diag->setHidden( 2, true );
+    effortdiagram->setHidden( 0, true );
+    effortdiagram->setHidden( 1, true );
+    effortdiagram->setHidden( 2, true );
     m_linechart.effortproxy.setZeroColumns( QList<int>() << 0 << 1 << 2 );
 
     m_linechart.effortproxy.setSourceModel( &m_chartmodel );
-    effort_diag->setModel( &(m_linechart.effortproxy) );
+    effortdiagram->setModel( &(m_linechart.effortproxy) );
 
-    LineDiagram *cost_diag = new LineDiagram( ui_chart, m_linechart.costplane );
-    cost_diag->setObjectName( "Cost diagram" );
-    cost_diag->addAxis( date_axis ); // shared
+    LineDiagram *costdiagram = new LineDiagram( ui_chart, m_linechart.costplane );
+    costdiagram->setObjectName( "Cost diagram" );
 
-    m_linechart.cost_axis = new CartesianAxis( cost_diag );
-    m_linechart.cost_axis->setPosition( CartesianAxis::Right );
-    cost_diag->addAxis( m_linechart.cost_axis );
-    m_linechart.costplane->addDiagram( cost_diag );
+    m_linechart.costaxis = new CartesianAxis( costdiagram );
+    m_linechart.costaxis->setPosition( CartesianAxis::Left );
+    costdiagram->addAxis( m_linechart.costaxis );
+    m_linechart.costplane->addDiagram( costdiagram );
     // Hide effort in cost diagram
-    cost_diag->setHidden( 3, true );
-    cost_diag->setHidden( 4, true );
-    cost_diag->setHidden( 5, true );
+    costdiagram->setHidden( 3, true );
+    costdiagram->setHidden( 4, true );
+    costdiagram->setHidden( 5, true );
 
     m_linechart.costproxy.setZeroColumns( QList<int>() << 3 << 4 << 5 );
     m_linechart.costproxy.setSourceModel( &m_chartmodel );
-    cost_diag->setModel( &(m_linechart.costproxy) );
+    costdiagram->setModel( &(m_linechart.costproxy) );
 
 
 }
 
 void PerformanceStatusBase::setupChart()
 {
-    foreach ( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
-        Q_UNUSED(p);
+    while ( ! ui_chart->coordinatePlanes().isEmpty() ) {
         ui_chart->takeCoordinatePlane( ui_chart->coordinatePlanes().last() );
     }
     if ( m_chartinfo.showBarChart ) {
-        setupBarChart();
+        setupChart( m_barchart );
     } else if ( m_chartinfo.showLineChart ) {
-        setupLineChart();
+        setupChart( m_linechart );
     } else {
-        setupLineChart();
+        setupChart( m_linechart );
     }
     kDebug()<<"Planes:"<<ui_chart->coordinatePlanes();
     foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
@@ -683,151 +675,79 @@ void PerformanceStatusBase::setupChart()
     m_legend->setDatasetHidden( 3, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWSEffort ) );
     m_legend->setDatasetHidden( 4, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWPEffort ) );
     m_legend->setDatasetHidden( 5, ! ( m_chartinfo.showEffort && m_chartinfo.showACWPEffort ) );
+    
+    refreshChart();
 }
 
-void PerformanceStatusBase::setupBarChart()
+void PerformanceStatusBase::setupChart( ChartContents &cc )
 {
     const PerformanceChartInfo &info = m_chartinfo;
+    kDebug()<<"cost="<<info.showCost<<"effort="<<info.showEffort;
+    static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->takeAxis( cc.dateaxis );
+    static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->takeAxis( cc.dateaxis );
     if ( info.showEffort ) {
         // column 0, 1 and 2 is reserved for cost if cost is shown
-        m_barchart.effortplane->diagram()->setHidden( 0, info.showCost );
-        m_barchart.effortplane->diagram()->setHidden( 1, info.showCost );
-        m_barchart.effortplane->diagram()->setHidden( 2, info.showCost );
-        // not used if cost is not shown
-        m_barchart.effortplane->diagram()->setHidden( 3, ! info.showCost );
-        m_barchart.effortplane->diagram()->setHidden( 4, ! info.showCost );
-        m_barchart.effortplane->diagram()->setHidden( 5, ! info.showCost );
+        cc.effortplane->diagram()->setHidden( 0, false );
+        cc.effortplane->diagram()->setHidden( 1, false );
+        cc.effortplane->diagram()->setHidden( 2, false );
         // filter cost columns if cost is *not* shown
-        m_barchart.effortproxy.setRejectColumns( info.showCost ? QList<int>() : QList<int>() << 0 << 1 << 2 );
+        cc.effortproxy.setRejectColumns( info.showCost ? QList<int>() : QList<int>() << 0 << 1 << 2 );
         // if cost is shown don't return a cost value or else it goes into the effort axis scale calculation
-        m_barchart.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>()  );
-        if ( ! ui_chart->coordinatePlanes().contains( m_barchart.effortplane ) ) {
-            ui_chart->addCoordinatePlane( m_barchart.effortplane );
-        }
-    } else {
-        m_barchart.costplane->setReferenceCoordinatePlane( 0 ); //BUG in kdchart
-        ui_chart->takeCoordinatePlane( m_barchart.effortplane );
+        cc.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>()  );
+        cc.effortaxis->setPosition( info.showCost ? CartesianAxis::Right : CartesianAxis::Left );
+        ui_chart->addCoordinatePlane( cc.effortplane );
+
+        static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->addAxis( cc.dateaxis );
+        cc.effortplane->setGridNeedsRecalculate();
+
+        // If cost is shown, effort is column 3, 4, 5, else 0, 1, 2
+        int col = info.showCost ? 3 : 0;
+        cc.effortplane->diagram()->setHidden( col, ! info.showBCWSEffort );
+        cc.effortplane->diagram()->setHidden( ++col, ! info.showBCWPEffort );
+        cc.effortplane->diagram()->setHidden( ++col, ! info.showACWPEffort );
     }
     if ( info.showCost ) {
         // remove effort columns from cost if no effort is shown
-        m_barchart.costproxy.setRejectColumns( info.showEffort ? QList<int>() : QList<int>() << 3 << 4 << 5 );
+        cc.costproxy.setRejectColumns( info.showEffort ? QList<int>() : QList<int>() << 3 << 4 << 5 );
         // Should never get any effort values in cost diagram
-        m_barchart.costproxy.setZeroColumns( QList<int>() << 3 << 4 << 5 );
-        if ( ui_chart->coordinatePlanes().contains( m_barchart.effortplane ) && m_barchart.costplane->referenceCoordinatePlane() == 0 ) {
-            ui_chart->takeCoordinatePlane( m_barchart.costplane );
-            m_barchart.costplane->setReferenceCoordinatePlane( m_barchart.effortplane );
-        }
-        if ( ! ui_chart->coordinatePlanes().contains( m_barchart.costplane ) ) {
-            ui_chart->addCoordinatePlane( m_barchart.costplane );
-        }
-        m_barchart.cost_axis->setPosition( info.showEffort ? CartesianAxis::Right : CartesianAxis::Left );
-    } else {
-        m_barchart.costplane->setReferenceCoordinatePlane( 0 ); //BUG in kdchart
-        ui_chart->takeCoordinatePlane( m_barchart.costplane );
+        cc.costproxy.setZeroColumns( QList<int>() << 3 << 4 << 5 );
+        cc.costplane->setReferenceCoordinatePlane( info.showEffort ? cc.effortplane : 0 );
+        ui_chart->addCoordinatePlane( cc.costplane );
+
+        static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->addAxis( cc.dateaxis );
+        cc.costplane->setGridNeedsRecalculate();
+
+        cc.costplane->diagram()->setHidden( 0, ! info.showBCWSCost );
+        cc.costplane->diagram()->setHidden( 1, ! info.showBCWPCost );
+        cc.costplane->diagram()->setHidden( 2, ! info.showACWPCost );
+        cc.costplane->diagram()->setHidden( 3, true );
+        cc.costplane->diagram()->setHidden( 4, true );
+        cc.costplane->diagram()->setHidden( 5, true );
     }
-    m_barchart.costplane->diagram()->setHidden( 0, ! ( info.showCost && info.showBCWSCost ) );
-    m_barchart.costplane->diagram()->setHidden( 1, ! ( info.showCost && info.showBCWPCost ) );
-    m_barchart.costplane->diagram()->setHidden( 2, ! ( info.showCost && info.showACWPCost ) );
-    m_barchart.costplane->diagram()->setHidden( 3, true );
-    m_barchart.costplane->diagram()->setHidden( 4, true );
-    m_barchart.costplane->diagram()->setHidden( 5, true );
-
-    m_barchart.effortplane->diagram()->setHidden( 3, ! ( info.showEffort && info.showBCWSEffort ) );
-    m_barchart.effortplane->diagram()->setHidden( 4, ! ( info.showEffort && info.showBCWPEffort ) );
-    m_barchart.effortplane->diagram()->setHidden( 5, ! ( info.showEffort && info.showACWPEffort ) );
-
-    m_barchart.effortproxy.reset();
-    m_barchart.costproxy.reset();
-
-/*    kDebug()<<"Effort:"<<"reject="<<m_barchart.effortproxy.rejectColumns()<<"zero="<<m_barchart.effortproxy.zeroColumns()
-    <<endl<<0<<m_barchart.effortplane->diagram()->isHidden(0)
-    <<endl<<1<<m_barchart.effortplane->diagram()->isHidden(1)
-    <<endl<<2<<m_barchart.effortplane->diagram()->isHidden(2)
-    <<endl<<3<<m_barchart.effortplane->diagram()->isHidden(3)
-    <<endl<<4<<m_barchart.effortplane->diagram()->isHidden(4)
-    <<endl<<5<<m_barchart.effortplane->diagram()->isHidden(5);
-
-    kDebug()<<"Cost:"<<"reject="<<m_barchart.costproxy.rejectColumns()<<"zero="<<m_barchart.costproxy.zeroColumns()
-    <<endl<<0<<m_barchart.costplane->diagram()->isHidden(0)
-    <<endl<<1<<m_barchart.costplane->diagram()->isHidden(1)
-    <<endl<<2<<m_barchart.costplane->diagram()->isHidden(2)
-    <<endl<<3<<m_barchart.costplane->diagram()->isHidden(3)
-    <<endl<<4<<m_barchart.costplane->diagram()->isHidden(4)
-    <<endl<<5<<m_barchart.costplane->diagram()->isHidden(5);*/
-
-    if ( info.showCost ) kDebug()<<ui_chart->coordinatePlanes().contains( m_barchart.costplane )<<m_barchart.costplane->referenceCoordinatePlane();
-    if ( ! info.showEffort ) {
-        Q_ASSERT(  m_barchart.costplane->referenceCoordinatePlane() == 0 );
-        Q_ASSERT(  ! ui_chart->coordinatePlanes().contains( m_barchart.effortplane ) );
-    }
-}
-
-void PerformanceStatusBase::setupLineChart()
-{
-    const PerformanceChartInfo &info = m_chartinfo;
     if ( info.showEffort ) {
-        // column 0, 1 and 2 is reserved for cost if cost is shown
-        m_linechart.effortplane->diagram()->setHidden( 0, info.showCost );
-        m_linechart.effortplane->diagram()->setHidden( 1, info.showCost );
-        m_linechart.effortplane->diagram()->setHidden( 2, info.showCost );
-        // filter cost columns if cost is *not* shown
-        m_linechart.effortproxy.setRejectColumns( info.showCost ? QList<int>() : QList<int>() << 0 << 1 << 2 );
-        // if cost is shown don't return a cost value or else it goes into the effort axis scale calculation
-        m_linechart.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>()  );
-        if ( ! ui_chart->coordinatePlanes().contains( m_linechart.effortplane ) ) {
-            ui_chart->addCoordinatePlane( m_linechart.effortplane );
-        }
-    } else {
-        m_linechart.costplane->setReferenceCoordinatePlane( 0 ); //BUG in kdchart
-        ui_chart->takeCoordinatePlane( m_linechart.effortplane );
+        cc.effortproxy.reset();
     }
     if ( info.showCost ) {
-        // remove effort columns from cost if no effort is shown
-        m_linechart.costproxy.setRejectColumns( info.showEffort ? QList<int>() : QList<int>() << 3 << 4 << 5 );
-        // Should never get any effort values in cost diagram
-        m_linechart.costproxy.setZeroColumns( QList<int>() << 3 << 4 << 5 );
-        m_linechart.cost_axis->setPosition( info.showEffort ? CartesianAxis::Right : CartesianAxis::Left );
-        if ( ui_chart->coordinatePlanes().contains( m_linechart.effortplane ) && m_linechart.costplane->referenceCoordinatePlane() == 0 ) {
-            ui_chart->takeCoordinatePlane( m_linechart.costplane );
-            m_linechart.costplane->setReferenceCoordinatePlane( m_linechart.effortplane );
-        }
-        if ( ! ui_chart->coordinatePlanes().contains( m_linechart.costplane ) ) {
-            ui_chart->addCoordinatePlane( m_linechart.costplane );
-        }
-    } else {
-        ui_chart->takeCoordinatePlane( m_linechart.costplane );
+        cc.costaxis->setCachedSizeDirty();
+        cc.costproxy.reset();
     }
-    m_linechart.costplane->diagram()->setHidden( 0, ! ( info.showCost && info.showBCWSCost ) );
-    m_linechart.costplane->diagram()->setHidden( 1, ! ( info.showCost && info.showBCWPCost ) );
-    m_linechart.costplane->diagram()->setHidden( 2, ! ( info.showCost && info.showACWPCost ) );
-    m_linechart.costplane->diagram()->setHidden( 3, true );
-    m_linechart.costplane->diagram()->setHidden( 4, true );
-    m_linechart.costplane->diagram()->setHidden( 5, true );
+#if 0
+    kDebug()<<"Effort:"<<info.showEffort<<"reject="<<cc.effortproxy.rejectColumns()<<"zero="<<cc.effortproxy.zeroColumns()
+    <<endl<<0<<(cc.effortplane->diagram()->isHidden(0)?"hide":"show")<<cc.effortproxy.headerData(0,Qt::Horizontal).toString()
+    <<endl<<1<<(cc.effortplane->diagram()->isHidden(1)?"hide":"show")<<cc.effortproxy.headerData(1,Qt::Horizontal).toString()
+    <<endl<<2<<(cc.effortplane->diagram()->isHidden(2)?"hide":"show")<<cc.effortproxy.headerData(2,Qt::Horizontal).toString()
+    <<endl<<3<<(cc.effortplane->diagram()->isHidden(3)?"hide":"show")<<cc.effortproxy.headerData(3,Qt::Horizontal).toString()
+    <<endl<<4<<(cc.effortplane->diagram()->isHidden(4)?"hide":"show")<<cc.effortproxy.headerData(4,Qt::Horizontal).toString()
+    <<endl<<5<<(cc.effortplane->diagram()->isHidden(5)?"hide":"show")<<cc.effortproxy.headerData(5,Qt::Horizontal).toString();
 
-    m_linechart.effortplane->diagram()->setHidden( 3, ! ( info.showEffort && info.showBCWSEffort ) );
-    m_linechart.effortplane->diagram()->setHidden( 4, ! ( info.showEffort && info.showBCWPEffort ) );
-    m_linechart.effortplane->diagram()->setHidden( 5, ! ( info.showEffort && info.showACWPEffort ) );
-
-    m_linechart.effortproxy.reset();
-    m_linechart.costproxy.reset();
-
-/*    kDebug()<<"Effort:"<<"reject="<<m_linechart.effortproxy.rejectColumns()<<"zero="<<m_linechart.effortproxy.zeroColumns()
-    <<endl<<0<<m_linechart.effortplane->diagram()->isHidden(0)
-    <<endl<<1<<m_linechart.effortplane->diagram()->isHidden(1)
-    <<endl<<2<<m_linechart.effortplane->diagram()->isHidden(2)
-    <<endl<<3<<m_linechart.effortplane->diagram()->isHidden(3)
-    <<endl<<4<<m_linechart.effortplane->diagram()->isHidden(4)
-    <<endl<<5<<m_linechart.effortplane->diagram()->isHidden(5);
-
-    kDebug()<<"Cost:"<<"reject="<<m_linechart.costproxy.rejectColumns()<<"zero="<<m_linechart.costproxy.zeroColumns()
-    <<endl<<0<<m_linechart.costplane->diagram()->isHidden(0)
-    <<endl<<1<<m_linechart.costplane->diagram()->isHidden(1)
-    <<endl<<2<<m_linechart.costplane->diagram()->isHidden(2)
-    <<endl<<3<<m_linechart.costplane->diagram()->isHidden(3)
-    <<endl<<4<<m_linechart.costplane->diagram()->isHidden(4)
-    <<endl<<5<<m_linechart.costplane->diagram()->isHidden(5);*/
-
-    if ( info.showCost ) kDebug()<<ui_chart->coordinatePlanes().contains( m_linechart.costplane )<<m_linechart.costplane->referenceCoordinatePlane();
+    kDebug()<<"Cost:"<<info.showCost<<"reject="<<cc.costproxy.rejectColumns()<<"zero="<<cc.costproxy.zeroColumns()
+    <<endl<<0<<(cc.costplane->diagram()->isHidden(0)?"hide":"show")<<cc.costproxy.headerData(0,Qt::Horizontal).toString()
+    <<endl<<1<<(cc.costplane->diagram()->isHidden(1)?"hide":"show")<<cc.costproxy.headerData(1,Qt::Horizontal).toString()
+    <<endl<<2<<(cc.costplane->diagram()->isHidden(2)?"hide":"show")<<cc.costproxy.headerData(2,Qt::Horizontal).toString()
+    <<endl<<3<<(cc.costplane->diagram()->isHidden(3)?"hide":"show")<<cc.costproxy.headerData(3,Qt::Horizontal).toString()
+    <<endl<<4<<(cc.costplane->diagram()->isHidden(4)?"hide":"show")<<cc.costproxy.headerData(4,Qt::Horizontal).toString()
+    <<endl<<5<<(cc.costplane->diagram()->isHidden(5)?"hide":"show")<<cc.costproxy.headerData(5,Qt::Horizontal).toString();
+#endif
 }
 
 void PerformanceStatusBase::contextMenuEvent( QContextMenuEvent *event )
@@ -836,24 +756,17 @@ void PerformanceStatusBase::contextMenuEvent( QContextMenuEvent *event )
     emit customContextMenuRequested( event->globalPos() );
 }
 
-void PerformanceStatusBase::slotReset()
-{
-    //kDebug();
-    draw();
-}
-
 void PerformanceStatusBase::slotUpdate()
 {
     //kDebug();
     drawValues();
+    refreshChart();
 }
 
 void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug();
     m_manager = sm;
-    m_model.setScheduleManager( sm );
-
     m_chartmodel.setScheduleManager( sm );
 }
 
@@ -863,13 +776,10 @@ void PerformanceStatusBase::setProject( Project *project )
         disconnect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
     }
     m_project = project;
-    m_model.setProject( project );
     if ( m_project ) {
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
     }
-    m_chartmodel.clearNodes();
     m_chartmodel.setProject( project );
-    m_chartmodel.addNode( project );
 
     slotLocaleChanged();
 
@@ -882,25 +792,16 @@ void PerformanceStatusBase::slotLocaleChanged()
     kDebug();
     KLocale *locale = m_project ? m_project->locale() : KGlobal::locale();
     if ( locale ) {
-        m_linechart.cost_axis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
-        m_linechart.hours_axis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
+        m_linechart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
+        m_linechart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
 
-        m_barchart.cost_axis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
-        m_barchart.hours_axis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
+        m_barchart.costaxis->setTitleText( i18nc( "Chart axis title 1=currency symbol", "Cost (%1)", m_project->locale()->currencySymbol() ) );
+        m_barchart.effortaxis->setTitleText( i18nc( "Chart axis title", "Effort (hours)" ) );
     }
     if ( m_project == 0 ) {
         return;
     }
     drawValues();
-}
-
-void PerformanceStatusBase::draw()
-{
-    if ( m_project == 0 || m_manager == 0 ) {
-        return;
-    }
-/*    drawValues();
-    drawPlot( *m_project, *m_manager );*/
 }
 
 void PerformanceStatusBase::drawValues()
@@ -933,143 +834,13 @@ void PerformanceStatusBase::drawValues()
     spi->setText( locale->formatNumber( spi_ ) );
 }
 
-void PerformanceStatusBase::drawPlot( Project &/*p*/, ScheduleManager &/*sm*/ )
-{
-    //kDebug();
-/*    plotwidget->resetPlot();
-    int axisCount = m_model.axisCount();
-    for ( int i = 0; i < axisCount; ++i ) {
-        kDebug()<<i<<"of"<<axisCount;
-        ChartAxisIndex ai = m_model.axisIndex( i );
-        if ( ! ai.isValid() ) {
-            continue;
-        }
-        QList<QPointF> range = drawAxis( ai );
-        kDebug()<<i<<range;
-        if ( i == 0 ) {
-            plotwidget->setLimits( range[0].x(), range[0].y(), range[1].x(), range[1].y()  );
-            //kDebug()<<"Primary:"<<plotwidget->dataRect();
-        }
-        if ( i == 1 ) {
-            plotwidget->setSecondaryLimits( range[0].x(), range[0].y(), range[1].x(), range[1].y() );
-            //kDebug()<<"Secondary:"<<plotwidget->secondaryDataRect();
-        }
-        drawData( ai );
-    }
-   */
-}
-
-QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &/*idx*/ )
-{
-    //kDebug();
-    return QList<QPointF>();
-/*    int axisCount = m_model.axisCount( idx );
-    QList<QPointF> range;
-    for ( int i = 0; i < axisCount; ++i ) {
-        ChartAxisIndex ai = m_model.axisIndex( i, idx );
-        if ( ! ai.isValid() ) {
-            continue;
-        }
-        int type = m_model.axisData( ai, AbstractChartModel::AxisTypeRole ).toInt();
-        if ( type == AbstractChartModel::Axis_X ) {
-            //kDebug()<<"add x-axis";
-            range.prepend ( QPointF ( m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble(), m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble() ) );
-            if ( idx.number() == 0 ) {
-                plotwidget->axis( KPlotWidget::BottomAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
-
-                plotwidget->axis( KPlotWidget::BottomAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
-                plotwidget->axis( KPlotWidget::BottomAxis )->setTickLabelFormat( 'd' );
-            } else {
-                plotwidget->axis( KPlotWidget::TopAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
-
-                plotwidget->axis( KPlotWidget::TopAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
-                plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelFormat( 'w' );
-
-                plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelsShown( true );
-            }
-        } else if ( type == AbstractChartModel::Axis_Y ) {
-            //kDebug()<<"add y-axis"<<idx<<ai;
-            range.append ( QPointF ( m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble(), m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble() ) );
-            if ( idx.number() == 0 ) {
-                QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
-                //kDebug()<<"LeftAxis:"<<s;
-                plotwidget->axis( KPlotWidget::LeftAxis )->setLabel( s );
-
-                plotwidget->axis( KPlotWidget::LeftAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
-            } else {
-                QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
-                //kDebug()<<"RightAxis:"<<s;
-                plotwidget->axis( KPlotWidget::RightAxis )->setLabel( s );
-
-                plotwidget->axis( KPlotWidget::RightAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
-
-                plotwidget->axis( KPlotWidget::RightAxis )->setTickLabelsShown( true );
-            }
-        }
-        //kDebug()<<range;
-    }
-    return range;*/
-}
-
-void PerformanceStatusBase::drawData( const ChartAxisIndex &/*axisSet*/ )
-{
-    //kDebug()<<axisSet;
-/*    int dataCount = m_model.dataSetCount( axisSet );
-    for ( int i = 0; i < dataCount; ++i ) {
-        ChartDataIndex di = m_model.index( i, axisSet );
-        if ( ! di.isValid() ) {
-            //kDebug()<<"Invalid index"<<di;
-            continue;
-        }
-        if ( m_model.hasChildren( di ) ) {
-            //kDebug()<<"sections";
-            int c = m_model.childCount( di );
-            for ( int ii = 0; ii < c; ++ii ) {
-                ChartDataIndex cidx = m_model.index( ii, di );
-                drawData( cidx, axisSet );
-            }
-        } else {
-            //kDebug()<<"no sections, go direct to data"<<di;
-            drawData( di, axisSet );
-        }
-    }*/
-}
-
-void PerformanceStatusBase::drawData( const ChartDataIndex &/*index*/, const ChartAxisIndex &/*axisSet */)
-{
-    //kDebug()<<index;
-/*    QVariantList data;
-    int axisCount = m_model.axisCount( axisSet );
-    for ( int i = 0; i < axisCount; ++i ) {
-        ChartAxisIndex axis = m_model.axisIndex( i, axisSet );
-        //kDebug()<<"data axis"<<axis<<" set="<<axisSet;
-        data << m_model.data( index, axis );
-    }
-    //kDebug()<<data;
-    QVariantList xlst = data[0].toList();
-    QVariantList ylst = data[1].toList();
-    QVariant color = m_model.data( index, axisSet, Qt::ForegroundRole );
-    QVariant label = m_model.data( index, axisSet, AbstractChartModel::DataLabelRole );
-    KPlotObject *kpo = new KPlotObject( color.value<QColor>(), KPlotObject::Lines, 4 );
-    double factor = plotwidget->dataRect().height() / plotwidget->secondaryDataRect().height();
-    for (int i = 0; i < ylst.count(); ++i ) {
-        //kDebug()<<"Add point:"<<x[i].toInt() << y[i].toDouble();
-        double y = ylst[i].toDouble();
-        if ( axisSet.number() == 1 ) {
-            y *= factor;
-        }
-        KPlotPoint *p = new KPlotPoint( xlst[i].toInt(), y );
-        if ( label.isValid() && i == ylst.count() / 2 ) {
-            p->setLabel( label.toString() );
-        }
-        kpo->addPoint( p );
-    }
-    plotwidget->addPlotObject( kpo );*/
-}
 
 bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
 {
     kDebug();
+    m_chartinfo.showBarChart = context.attribute( "show-bar-chart", "0" ).toInt();
+    m_chartinfo.showLineChart = context.attribute( "show-line-chart", "1" ).toInt();
+
     m_chartinfo.showCost = context.attribute( "show-cost", "1" ).toInt();
     m_chartinfo.showBCWSCost = context.attribute( "show-bcws-cost", "1" ).toInt();
     m_chartinfo.showBCWPCost = context.attribute( "show-bcwp-cost", "1" ).toInt();
@@ -1079,6 +850,8 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showBCWSEffort = context.attribute( "show-bcws-effort", "1" ).toInt();
     m_chartinfo.showBCWPEffort = context.attribute( "show-bcwp-effort", "1" ).toInt();
     m_chartinfo.showACWPEffort = context.attribute( "show-acwp-effort", "1" ).toInt();
+    kDebug()<<"Cost:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
+    kDebug()<<"Effort:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
     setupChart();
     return true;
 }
@@ -1126,11 +899,6 @@ void PerformanceStatusTreeView::slotSelectionChanged( const QItemSelection&, con
         }
     }
     m_chart->model()->setNodes( nodes );
-}
-
-void PerformanceStatusTreeView::draw()
-{
-    m_chart->draw();
 }
 
 NodeItemModel *PerformanceStatusTreeView::nodeModel() const
@@ -1249,11 +1017,6 @@ void PerformanceStatusView::setScheduleManager( ScheduleManager *sm )
 void PerformanceStatusView::setProject( Project *project )
 {
     m_view->setProject( project );
-}
-
-void PerformanceStatusView::draw()
-{
-    m_view->draw();
 }
 
 void PerformanceStatusView::setGuiActive( bool activate )
