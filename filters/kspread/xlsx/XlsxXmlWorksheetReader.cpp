@@ -224,7 +224,8 @@ public:
      : q( qq ),
        warningAboutWorksheetSizeDisplayed(false),
        drawingNumber(0),
-       sheet(new Sheet)
+       sheet(new Sheet),
+       numberOfOleObjects(0)
     {
     }
     ~Private()
@@ -238,6 +239,7 @@ public:
     int drawingNumber;
     Sheet* sheet;
     QHash<int, Cell*> sharedFormulas;
+    int numberOfOleObjects;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -547,6 +549,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             // the embedded object file was written by the XlsxXmlChartReader already
                             //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
                         }
+
+//                         foreach( XlsXmlOleObjectsReaderContext oleObject, drawing->oleObjects ) {
+//                         
+//                         }
                     }
                 }
                 body->endElement(); // table:table-cell
@@ -1451,11 +1457,24 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITH_NS(r, id)
+    READ_ATTR_WITH_NS(r, id)
+    READ_ATTR_WITHOUT_NS(progId);
+
+    //For now we just copy the preview emf file and the embeded document,
+    //later we might convert it into ODF too.
+    //Preview files exist only for some files, please add the program generator
+    //for the files we will try to copy the preview image from
+    if(progId != "PowerPoint.Slide.12")
+        return KoFilter::OK;
+
+    ++(d->numberOfOleObjects);
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "", fileName) )
+
+    QString previewFileName = QString("image%1.emf").arg(d->numberOfOleObjects);
+    RETURN_IF_ERROR( copyFile("xl/media/" + previewFileName, "Pictures/", previewFileName) )
 
     while (!atEnd()) {
         readNext();
