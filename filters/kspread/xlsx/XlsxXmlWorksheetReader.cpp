@@ -1483,7 +1483,13 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     //However, to make things worse, the relationship seems that is not saved by MS2007,
     //so, we must assume that the images in the media folder are ordered by appearance in the document
     QString previewFileName = QString("image%1.emf").arg(m_context->numberOfOleObjects);
-    RETURN_IF_ERROR( copyFile("xl/media/" + previewFileName, "Pictures/", previewFileName) )
+    QString originalPreviewFilePath = "xl/media/" + previewFileName;
+    RETURN_IF_ERROR( copyFile(originalPreviewFilePath, "Pictures/", previewFileName) )
+
+    //TODO find out which cell to pick
+    Cell* cell = d->sheet->cell(0, 0, true);
+
+    cell->oleObjects << qMakePair<QString,QString>(fileName,previewFileName);
 
     while (!atEnd()) {
         readNext();
