@@ -95,7 +95,7 @@ public:
     EffortCost effortCost(const QDate &date) const {
         EffortCost ec;
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            //kError()<<"Date not valid";
             return ec;
         }
         EffortCostDayMap::const_iterator it = m_days.find(date);
@@ -105,7 +105,7 @@ public:
     }
     void insert(const QDate &date, const Duration &effort, const double cost) {
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            //kError()<<"Date not valid";
             return;
         }
         m_days.insert(date, EffortCost(effort, cost));
@@ -123,7 +123,7 @@ public:
      */
     EffortCost &add(const QDate &date, const EffortCost &ec) {
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            //kError()<<"Date not valid";
             return zero();
         }
         //kDebug()<<date.toString();
@@ -164,7 +164,7 @@ public:
     }
     double costOnDate(const QDate &date) const {
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            //kError()<<"Date not valid";
             return 0.0;
         }
         if (m_days.contains(date)) {
@@ -194,7 +194,7 @@ public:
     }
     double bcwpCostOnDate(const QDate &date) const {
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            //kError()<<"Date not valid";
             return 0.0;
         }
         if (m_days.contains(date)) {
@@ -204,7 +204,7 @@ public:
     }
     double bcwpEffortOnDate(const QDate &date) const {
         if (!date.isValid()) {
-            kError()<<"Date not valid"<<endl;
+            //kError()<<"Date not valid";
             return 0.0;
         }
         if (m_days.contains(date)) {
