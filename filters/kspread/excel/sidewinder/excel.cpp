@@ -1806,7 +1806,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             readHeader(blipStoreOffset, &recVer, &recInstance, &recType, &blibRecLen);
             const unsigned char* blipItemOffset = blipStoreOffset + 8;
             if(recType == 0xF007) { // OfficeArtFBSE
-                if (blipItemOffset+44-data-size < 0) return;
+                if (blipItemOffset-data-size < 44) return;
                 std::cout << "MsoDrawingGroupRecord: OfficeArtFBSE" << std::endl;
                 const unsigned btWin32 = readU8(blipItemOffset);
                 //const unsigned btMacOS = readU8(blipItemOffset + 1);
