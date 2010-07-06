@@ -931,6 +931,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
 
+#ifdef PPTXXMLSLIDEREADER_H
+#else
+    m_prevListLevel = m_currentListLevel = 0;
+#endif
+
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
     if (args & read_p_Skip) {
@@ -974,13 +979,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         //nothing
     } else {
          body = textPBuf.originalWriter();
-         if (m_lstStyleFound || m_currentListLevel > 0 || m_prevListLevel > 0) {
+         if (/*m_lstStyleFound ||*/ m_currentListLevel > 0 || m_prevListLevel > 0) {
+#ifdef PPTXXMLSLIDEREADER_H
              if (m_prevListLevel < m_currentListLevel) {
                 for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                     body->startElement("text:list");
                     if (listDepth == 0) {
                         if (m_currentListStyle.isEmpty()) {
-#ifdef PPTXXMLSLIDEREADER_H
                             // for now the name is hardcoded...should be maybe fixed
                             if (d->phType == "title" || d->phType == "ctrTitle") {
                                 body->addAttribute("text:style-name", "titleList"); 
@@ -993,10 +998,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                                 // This hardcoded name should maybe changed to something else
                                 body->addAttribute("text:style-name", "otherList");
                             }
-#else
-                            //! @todo ok?
-                            body->addAttribute("text:style-name", "otherList");
-#endif
                         }
                         else {
                             QString listStyleName = mainStyles->insert(m_currentListStyle);
@@ -1020,6 +1021,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                     body->startElement("text:list-item");
                 }
              }
+#else
+             for(int i = 0; i < m_currentListLevel; ++i) {
+                 body->startElement("text:list");
+                 if (i == 0)
+                    body->addAttribute("text:style-name", "otherList");
+                 body->startElement("text:list-item");
+             }
+#endif
          }
 
          body->startElement("text:p", false);
@@ -1037,7 +1046,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          (void)textPBuf.releaseWriter();
          body->endElement(); //text:p
 
+#ifdef PPTXXMLSLIDEREADER_H
          m_prevListLevel = m_currentListLevel;
+#else
+         for(int i = 0; i < m_currentListLevel; ++i) {
+             body->endElement(); // text:list-item
+             body->endElement(); // text:list
+         }
+#endif
     }
     READ_EPILOGUE
 }
