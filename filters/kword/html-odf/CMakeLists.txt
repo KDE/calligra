@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES( ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_
 
 set(htmlodf_export_PART_SRCS
 htmlodfexport.cpp
+document.cpp
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")

@@ -70,7 +70,7 @@ if (NOT TINY)
     add_subdirectory( amipro )
     add_subdirectory( applixword )
     add_subdirectory( docbook )
-    #add_subdirectory( html-odf )
+    add_subdirectory( html-odf )
 
     #html FIXME: export dialog is Qt 3 version ui file
     if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
