@@ -429,6 +429,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(drawing)
             ELSE_TRY_READ_IF(hyperlinks)
             ELSE_TRY_READ_IF(picture)
+            ELSE_TRY_READ_IF(oleObjects)
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -1427,3 +1428,39 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_picture()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL oleObjects
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if( isStartElement() ) {
+            TRY_READ_IF(oleObject)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oleObject
+
+KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, id)
+
+    const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
+    QString fileName = link.right( link.lastIndexOf('/') +1 );
+    RETURN_IF_ERROR( copyFile(link, "", fileName) )
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
