@@ -269,8 +269,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderCo
     Q_ASSERT(m_context);
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
-    if (result == KoFilter::OK)
-        return KoFilter::OK;
+
     return result;
 }
 
