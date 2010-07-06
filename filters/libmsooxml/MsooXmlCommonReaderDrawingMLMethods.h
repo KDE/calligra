@@ -146,6 +146,7 @@ void popCurrentDrawStyle();
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
 
+int m_prevListLevel; //! set by drawingML_ppr
 int m_currentListLevel; //! set by drawingML_ppr
 
 // Shape properties

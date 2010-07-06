@@ -930,7 +930,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     const read_p_args args = m_read_DrawingML_p_args;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
-    m_currentListLevel = 0;
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
@@ -973,41 +972,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     if (args & read_p_Skip) {
         //nothing
-     } else {
+    } else {
          body = textPBuf.originalWriter();
-         if (m_lstStyleFound || m_currentListLevel > 0) {
-             int listDepth = 0;
-             while (listDepth <= m_currentListLevel) {
-                 body->startElement("text:list");
-                 if (listDepth == 0) {
-                     if (m_currentListStyle.isEmpty()) {
+         if (m_lstStyleFound || m_currentListLevel > 0 || m_prevListLevel > 0) {
+             if (m_prevListLevel < m_currentListLevel) {
+                for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+                    body->startElement("text:list");
+                    if (listDepth == 0) {
+                        if (m_currentListStyle.isEmpty()) {
 #ifdef PPTXXMLSLIDEREADER_H
-                         // for now the name is hardcoded...should be maybe fixed
-                         if (d->phType == "title" || d->phType == "ctrTitle") {
-                             body->addAttribute("text:style-name", "titleList"); 
-                         }
-                         else if (d->phType == "body" ) {
-                             // Fixme? : for now the master slide list style is called bodyList
-                             body->addAttribute("text:style-name", "bodyList");
-                         }
-                         else {
-                             // This hardcoded name should maybe changed to something else
-                             body->addAttribute("text:style-name", "otherList");
-                         }
+                            // for now the name is hardcoded...should be maybe fixed
+                            if (d->phType == "title" || d->phType == "ctrTitle") {
+                                body->addAttribute("text:style-name", "titleList"); 
+                            }
+                            else if (d->phType == "body" ) {
+                                // Fixme? : for now the master slide list style is called bodyList
+                                body->addAttribute("text:style-name", "bodyList");
+                            }
+                            else {
+                                // This hardcoded name should maybe changed to something else
+                                body->addAttribute("text:style-name", "otherList");
+                            }
 #else
-                         //! @todo ok?
-                         body->addAttribute("text:style-name", "otherList");
+                            //! @todo ok?
+                            body->addAttribute("text:style-name", "otherList");
 #endif
-                     }
-                     else {
-                         QString listStyleName = mainStyles->insert(m_currentListStyle);
-                         body->addAttribute("text:style-name", listStyleName);
-                     }
-                 }
-                 body->startElement("text:list-item");
-                 ++listDepth;                 
+                        }
+                        else {
+                            QString listStyleName = mainStyles->insert(m_currentListStyle);
+                            body->addAttribute("text:style-name", listStyleName);
+                        }
+                    }
+                    body->startElement("text:list-item");
+                }
+             } else if (m_prevListLevel > m_currentListLevel) {
+                for(int listDepth = m_prevListLevel; listDepth > m_currentListLevel; --listDepth) {
+                    body->endElement(); // text:list-item
+                    body->endElement(); // text:list
+                }
+                if (m_currentListLevel > 0) {
+                    body->endElement(); // text:list-item
+                    body->startElement("text:list-item");
+                }
+             } else { // m_prevListLevel==m_currentListLevel
+                if (m_currentListLevel > 0) {
+                    body->endElement(); // text:list-item
+                    body->startElement("text:list-item");
+                }
              }
          }
+
          body->startElement("text:p", false);
 #ifdef PPTXXMLSLIDEREADER_H
          if(m_context->type == SlideLayout) {
@@ -1021,17 +1035,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          setupParagraphStyle();
 #endif         
          (void)textPBuf.releaseWriter();
-         if (m_lstStyleFound || m_currentListLevel > 0) {
-             int listDepth = 0;
-             while (listDepth <= m_currentListLevel) {
-                 body->endElement(); // text:list-item
-                 body->endElement(); // text:list
-                 ++listDepth;
-             }
-         }
          body->endElement(); //text:p
-         kDebug() << "/text:p";
-     }
+
+         m_prevListLevel = m_currentListLevel;
+    }
     READ_EPILOGUE
 }
 
@@ -1382,6 +1389,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (!lvl.isEmpty()) {
         m_currentListStyleProperties->setLevel(lvl.toInt());
         m_currentListLevel = lvl.toInt();
+    } else {
+        if (m_currentListStyleProperties)
+            m_currentListStyleProperties->setLevel(0);
+        m_currentListLevel = 0;
     }
 
     while (!atEnd()) {

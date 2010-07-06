@@ -1064,6 +1064,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     body->startElement("draw:text-box"); // CASE #P436
 
     m_lstStyleFound = false;
+    m_prevListLevel = 0;
+    m_currentListLevel = 0;
     m_pPr_lvl = 0;
     const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType) == QLatin1String("outline");
 
@@ -1091,6 +1093,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (m_prevListLevel > 0) {
+        for(; m_prevListLevel > 0; --m_prevListLevel) {
+            body->endElement(); // text:list-item
+            body->endElement(); // text:list
+        }
     }
 
     if (m_lstStyleFound) {
