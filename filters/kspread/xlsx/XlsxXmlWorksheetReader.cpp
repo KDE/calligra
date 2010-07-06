@@ -50,6 +50,7 @@
 
 #include <QBrush>
 #include <QRegExp>
+#include <QString>
 
 #include "NumberFormatParser.h"
 
@@ -554,10 +555,34 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             // the embedded object file was written by the XlsxXmlChartReader already
                             //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
                         }
+                    }
 
-//                         foreach( XlsXmlOleObjectsReaderContext oleObject, drawing->oleObjects ) {
-//                         
-//                         }
+                    QPair<QString,QString> oleObject;
+                    foreach( oleObject, cell->oleObjects ) {
+                        const QString olePath = oleObject.first;
+                        const QString previewPath = oleObject.second;
+                        body->startElement("draw:frame");
+                        //TODO find out the proper values
+                        body->addAttribute("svg:x", "1cm");
+                        body->addAttribute("svg:y", "1cm");
+                        body->addAttribute("svg:width", "5cm");
+                        body->addAttribute("svg:height", "5cm");
+
+                        body->startElement("draw:object-ole");
+                        body->addAttribute("xlink:href", olePath);
+                        body->addAttribute("xlink:type", "simple");
+                        body->addAttribute("xlink:show", "embed");
+                        body->addAttribute("xlink:actuate", "onLoad");
+                        body->endElement(); // draw:object-ole
+
+                        body->startElement("draw:image");
+                        body->addAttribute("xlink:href", previewPath);
+                        body->addAttribute("xlink:type", "simple");
+                        body->addAttribute("xlink:show", "embed");
+                        body->addAttribute("xlink:actuate", "onLoad");
+                        body->endElement(); // draw:image
+
+                        body->endElement(); // draw:frame
                     }
                 }
                 body->endElement(); // table:table-cell
@@ -1489,7 +1514,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     //TODO find out which cell to pick
     Cell* cell = d->sheet->cell(0, 0, true);
 
-    cell->oleObjects << qMakePair<QString,QString>(fileName,previewFileName);
+    cell->oleObjects << qMakePair<QString,QString>(fileName, previewFileName);
 
     while (!atEnd()) {
         readNext();
