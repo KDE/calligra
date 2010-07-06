@@ -433,37 +433,6 @@ bool CellToolBase::Private::processNextKey(QKeyEvent *event)
     return true;
 }
 
-void CellToolBase::Private::processDeleteKey(QKeyEvent* event)
-{
-    register Sheet * const sheet = q->selection()->activeSheet();
-    if (!sheet)
-        return;
-
-    // Delete is also a valid editing key, process accordingly
-    if (!q->editor()) {
-        // Switch to editing mode
-        q->createEditor();
-    }
-    QApplication::sendEvent(q->editor(), event);
-
-    // TODO Stefan: Actually this check belongs into the command!
-    if (sheet->areaIsEmpty(*q->selection()))
-        return;
-
-    DataManipulator* command = new DataManipulator();
-    command->setSheet(sheet);
-    command->setText(i18n("Clear Text"));
-    // parsing gets set only so that parseUserInput is called as it should be,
-    // no actual parsing shall be done
-    command->setParsing(true);
-    command->setValue(Value(""));
-    command->add(*q->selection());
-    command->execute();
-
-    updateEditor(Cell(q->selection()->activeSheet(), q->selection()->cursor()));
-    event->accept(); // QKeyEvent
-}
-
 void CellToolBase::Private::processOtherKey(QKeyEvent *event)
 {
     register Sheet * const sheet = q->selection()->activeSheet();

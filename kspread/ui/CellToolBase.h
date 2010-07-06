@@ -80,6 +80,8 @@ public:
 
     virtual Selection* selection() = 0;
 
+    virtual void deleteSelection();
+
     bool createEditor(bool clear = true, bool focus = true);
     CellEditor* editor() const;
 

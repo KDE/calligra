@@ -1058,11 +1058,6 @@ void CellToolBase::keyPressEvent(QKeyEvent* event)
             return;
         break;
 
-    case Qt::Key_Delete:
-        d->processDeleteKey(event);
-        return;
-        break;
-
     default:
         d->processOtherKey(event);
         return;
@@ -2992,6 +2987,11 @@ void CellToolBase::pasteWithInsertion()
         dialog.exec();
     }
     d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
+}
+
+void CellToolBase::deleteSelection()
+{
+    clearContents();
 }
 
 void CellToolBase::selectAll()

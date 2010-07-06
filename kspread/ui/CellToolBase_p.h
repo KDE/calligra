@@ -112,7 +112,6 @@ public:
     bool processEndKey(QKeyEvent *event);
     bool processPriorKey(QKeyEvent *event);
     bool processNextKey(QKeyEvent *event);
-    void processDeleteKey(QKeyEvent *event);
     void processOtherKey(QKeyEvent *event);
     bool processControlArrowKey(QKeyEvent *event);
     bool formatKeyPress(QKeyEvent *event);
