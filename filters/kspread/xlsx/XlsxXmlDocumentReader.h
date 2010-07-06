@@ -48,6 +48,7 @@ public:
     const XlsxSharedStringVector* sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
+    int numberOfOleObjects;
 };
 
 //! A class reading MSOOXML XLSX markup - workbook.xml part.

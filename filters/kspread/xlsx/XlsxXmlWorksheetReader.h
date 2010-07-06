@@ -122,7 +122,8 @@ public:
         const XlsxComments& _comments,
         const XlsxStyles& _styles,
         MSOOXML::MsooXmlRelationships& _relationships,
-        XlsxImport* _import);
+        XlsxImport* _import,
+        int& numberOfOleObjects);
 
     const uint worksheetNumber;
     QString worksheetName;
@@ -135,6 +136,8 @@ public:
     XlsxImport* import;
     const QString path;
     const QString file;
+
+    int &numberOfOleObjects;
 };
 
 #endif

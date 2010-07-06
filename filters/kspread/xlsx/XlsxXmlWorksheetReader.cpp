@@ -82,7 +82,8 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
-    XlsxImport* _import
+    XlsxImport* _import,
+    int& numberOfOleObjects
 )
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , worksheetNumber(_worksheetNumber)
@@ -95,6 +96,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , import(_import)
         , path(_path)
         , file(_file)
+        , numberOfOleObjects(numberOfOleObjects)
 {
 }
 
@@ -1467,13 +1469,17 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     if(progId != "PowerPoint.Slide.12")
         return KoFilter::OK;
 
-    ++(d->numberOfOleObjects);
+    ++(m_context->numberOfOleObjects);
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "", fileName) )
 
-    QString previewFileName = QString("image%1.emf").arg(d->numberOfOleObjects);
+    //In the OOXML specification the preview image would be represented as a relationship
+    //it is not specified how exactly that relationship is to be picked.
+    //However, to make things worse, the relationship seems that is not saved by MS2007,
+    //so, we must assume that the images in the media folder are ordered by appearance in the document
+    QString previewFileName = QString("image%1.emf").arg(m_context->numberOfOleObjects);
     RETURN_IF_ERROR( copyFile("xl/media/" + previewFileName, "Pictures/", previewFileName) )
 
     while (!atEnd()) {
