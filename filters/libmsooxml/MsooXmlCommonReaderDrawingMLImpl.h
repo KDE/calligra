@@ -1406,8 +1406,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentListStyleProperties->setLevel(lvl.toInt());
         m_currentListLevel = lvl.toInt();
     } else {
-        if (m_currentListStyleProperties)
-            m_currentListStyleProperties->setLevel(0);
         m_currentListLevel = 0;
     }
 
