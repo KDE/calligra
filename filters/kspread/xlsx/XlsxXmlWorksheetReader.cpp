@@ -126,6 +126,9 @@ public:
     QString hyperlink;
     QList<XlsxXmlDrawingReaderContext*> drawings;
 
+    //QPair< oleObjectFile, imageReplacementFile>
+    QList< QPair<QString,QString> > oleObjects;
+
     Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
     ~Cell() { qDeleteAll(drawings); }
 };
