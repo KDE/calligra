@@ -1234,7 +1234,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         if (m_context->type == Slide) {
             // pass properties from master to slide
 //! @todo hardcoded list index
-            PptxSlideMasterListLevelTextStyle *listStyle = listStyle = slideMasterTextStyle->listStyle(0);
+            PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(0);
             if (listStyle) {
                 kDebug() << "try from master!!! sz=" << listStyle->sz;
                 szInt = listStyle->sz;
