@@ -277,7 +277,9 @@ void TaskProgressPanelImpl::slotEditmodeChanged( int idx )
 void TaskProgressPanelImpl::slotStartedChanged(bool state) {
     m_completion.setStarted( state );
     if (state) {
-        m_completion.setStartTime( KDateTime::currentLocalDateTime() );
+        QTime t = QTime::currentTime();
+        t.setHMS( t.hour(), t.minute(), 0 );
+        m_completion.setStartTime( KDateTime( QDateTime( QDate::currentDate(), t ) ) );
         startTime->setDateTime( m_completion.startTime().dateTime() );
         slotCalculateEffort();
     }
@@ -285,7 +287,9 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
 }
 
 void TaskProgressPanelImpl::setFinished() {
-    finishTime->setDateTime( QDateTime::currentDateTime() );
+    QTime t = QTime::currentTime();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    finishTime->setDateTime( QDateTime( QDate::currentDate(), t ) );
     slotFinishTimeChanged( finishTime->dateTime() );
 }
 
