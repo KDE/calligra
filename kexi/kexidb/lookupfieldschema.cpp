@@ -72,6 +72,12 @@ LookupFieldSchema::RowSource::RowSource()
 {
 }
 
+LookupFieldSchema::RowSource::RowSource(const RowSource& other)
+        : d(new Private)
+{
+    *d = *other.d;
+}
+
 LookupFieldSchema::RowSource::~RowSource()
 {
     delete d;

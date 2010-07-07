@@ -76,6 +76,7 @@ public:
             , internalFields(0)
             , fieldsExpandedWithInternalAndRowID(0)
             , fieldsExpandedWithInternal(0)
+            //, orderByColumnList(copy->orderByColumnList)
             , autoincFields(0)
             , columnsOrder(0)
             , columnsOrderWithoutAsterisks(0)

@@ -72,6 +72,7 @@ public:
         };
 
         RowSource();
+        RowSource(const RowSource& other);
         ~RowSource();
 
         /*! @return row source type: table, query, anonymous; in the future it will
@@ -218,7 +219,8 @@ public:
         LookupFieldSchema& lookup, const QByteArray& propertyName,
         const QVariant& value);
 
-protected:
+private:
+    Q_DISABLE_COPY(LookupFieldSchema)
     class Private;
     Private * const d;
 };
