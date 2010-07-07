@@ -284,11 +284,13 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // we are done!
     delete d->workbook;
     delete d->styles;
+    delete d->mainStyles;
     delete d->storeout;
     d->inputFile.clear();
     d->outputFile.clear();
     d->workbook = 0;
     d->styles = 0;
+    d->mainStyles = 0;
     d->cellStyles.clear();
     d->rowStyles.clear();
     d->colStyles.clear();
@@ -636,8 +638,8 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     QString masterStyleName("Default");
     QString pageLayoutStyleName("Mpm");
 
-    KoGenStyle *pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
-    pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
+    KoGenStyle pageLayoutStyle(KoGenStyle::PageLayoutStyle);
+    pageLayoutStyle.addProperty("style:writing-mode", "lr-tb");
 
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
@@ -665,8 +667,8 @@ void ExcelImport::Private::processWorkbookForStyle(Workbook* workbook, KoXmlWrit
     buf.close();
     buf.setData("", 0);
 
-    pageLayoutStyle->addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
-    pageLayoutStyleName = mainStyles->insert(*pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
+    pageLayoutStyle.addProperty("1header-footer-style", pageLyt, KoGenStyle::StyleChildElement);
+    pageLayoutStyleName = mainStyles->insert(pageLayoutStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
 
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         Sheet* sheet = workbook->sheet(i);
