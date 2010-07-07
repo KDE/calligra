@@ -26,6 +26,7 @@
 #include <QString>
 
 class KoShape;
+class KoTextBlockData;
 class KPrAnimationCache;
 
 class Token
@@ -186,7 +187,7 @@ public:
 class KPrValueParser
 {
 public:
-    KPrValueParser(QString formula, KoShape *shape);
+    KPrValueParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData);
     QString formula() const;
     qreal eval(KPrAnimationCache * cache) const;
     bool valid() const;
@@ -195,7 +196,8 @@ protected:
     void compile(const Tokens& tokens) const;
     qreal identifierToValue(QString identifier, KPrAnimationCache * cache) const;
 private:
-    KoShape * m_shape;
+    KoShape *m_shape;
+    KoTextBlockData *m_textBlockData;
     QString m_formula;
     mutable bool m_compiled;
     mutable bool m_valid;

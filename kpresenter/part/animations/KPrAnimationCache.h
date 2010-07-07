@@ -68,7 +68,7 @@ public:
      * @param id The id of the value we are asking if is set
      * @return true if the value is already set.
      */
-    bool hasValue(KoTextBlockData *textBlockData, const QString &id);
+    bool hasValue(int step, KoTextBlockData *textBlockData, const QString &id);
 
     /**
      * Sets a value, either initially or updating it
@@ -137,7 +137,7 @@ public:
     // step 0 is the value the object has before any animation is started
     // step n is the value of the object after the animation, only needed when there is a change to the real value of the object
     // e.g. the object has been moved to its original position, one the animation is done the value is removed
-    void init(int step, KoShape *shape, const QString &id, const QVariant &value);
+    void init(int step, KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value);
 
     // update step value by values
     // will do different things depending on type of QVariant
@@ -147,7 +147,7 @@ public:
     // the step in update must match the step of startStep
     // this will update the values used for the animation.
     // maybe have an internal method to also use it for updating the stack while init
-    void update(KoShape *shape, const QString &id, const QVariant &value);
+    void update(KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value);
 
     // trigger copying of data from the last step to the current one
     // these values will be updated by update.
@@ -158,7 +158,7 @@ public:
     QVariant value(int step, KoShape *shape, const QString &id, const QVariant &defaultValue);
     QVariant value(int step, KoShape *shape, const QString &id);
 
-    bool hasValue(int step, KoShape *shape, const QString &id);
+    virtual bool hasValue(int step, KoShape *shape, const QString &id);
 
     // ending and animation will just activate the values of the step
     QSizeF pageSize() const;

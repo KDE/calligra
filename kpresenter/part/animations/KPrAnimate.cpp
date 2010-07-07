@@ -122,7 +122,7 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         if (!values.isEmpty()) {
             QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
             QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
-            KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation->shape());
+            KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
             retval = retval && smilValue->loadValues(values, keyTimes, keySplines, smilCalcMode);
             m_values = smilValue;
         }
@@ -150,13 +150,13 @@ void KPrAnimate::init(KPrAnimationCache *animationCache, int step)
 {
     m_animationCache = animationCache;
     m_values->setCache(m_animationCache);
-    m_attribute->initCache(animationCache, step, m_shapeAnimation->shape(), m_values->startValue(), m_values->endValue());
+    m_attribute->initCache(animationCache, step, m_shapeAnimation, m_values->startValue(), m_values->endValue());
 }
 
 void KPrAnimate::next(int currentTime)
 {
     qreal value = m_values->value(qreal(currentTime)/qreal(animationDuration()));
-    m_attribute->updateCache(m_animationCache, m_shapeAnimation->shape(), value);
+    m_attribute->updateCache(m_animationCache, m_shapeAnimation, value);
 }
 
 bool KPrAnimate::saveAttribute(KoPASavingContext &paContext) const

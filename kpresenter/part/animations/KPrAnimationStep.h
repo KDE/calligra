@@ -31,6 +31,7 @@ public:
     virtual ~KPrAnimationStep();
     virtual void init(KPrAnimationCache *animationCache, int step);
     virtual bool saveOdf(KoPASavingContext & paContext) const;
+    virtual void deactivate();
 };
 
 #endif /* KPRANIMATIONSTEP_H */

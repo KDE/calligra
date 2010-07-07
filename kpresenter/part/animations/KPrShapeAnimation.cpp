@@ -26,6 +26,9 @@
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 
+#include "KoTextBlockData.h"
+#include "KPrTextBlockPaintStrategy.h"
+
 KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
@@ -74,8 +77,16 @@ KoShape * KPrShapeAnimation::shape() const
     return m_shape;
 }
 
+KoTextBlockData * KPrShapeAnimation::textBlockData() const
+{
+    return m_textBlockData;
+}
+
 void KPrShapeAnimation::init(KPrAnimationCache *animationCache, int step)
 {
+    if (m_textBlockData) {
+        m_textBlockData->setPaintStrategy(new KPrTextBlockPaintStrategy(m_textBlockData, animationCache));
+    }
     for (int i = 0; i < this->animationCount(); ++i) {
         QAbstractAnimation * animation = this->animationAt(i);
         if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
@@ -92,6 +103,11 @@ bool KPrShapeAnimation::visibilityChange()
 bool KPrShapeAnimation::visible()
 {
     return true;
+}
+
+void KPrShapeAnimation::deactivate()
+{
+    m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
 }
 
 // we could have a loader that would put the data into the correct pos

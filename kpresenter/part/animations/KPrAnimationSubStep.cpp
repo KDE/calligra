@@ -55,3 +55,13 @@ bool KPrAnimationSubStep::saveOdf(KoPASavingContext & paContext, bool startStep)
     writer.endElement();
     return true;
 }
+
+void KPrAnimationSubStep::deactivate()
+{
+    for (int i=0; i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+            a->deactivate();
+        }
+    }
+}

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,9 @@ KPrPageData::KPrPageData()
 
 KPrPageData::~KPrPageData()
 {
+    foreach (KPrAnimationStep *step, m_animations.steps()) {
+        delete step;
+    }
 }
 
 KPrShapeAnimations & KPrPageData::animations()

@@ -45,10 +45,17 @@ bool KPrAnimationCache::hasValue(KoShape *shape, const QString &id)
     return false;
 }
 
-bool KPrAnimationCache::hasValue(KoTextBlockData *textBlockData, const QString &id)
+bool KPrAnimationCache::hasValue(int step, KoTextBlockData *textBlockData, const QString &id)
 {
-    if (m_currentTextBlockDataValues.contains(textBlockData))
-        return m_currentTextBlockDataValues.value(textBlockData).contains(id);
+    if (m_textBlockDataValuesStack[step].contains(textBlockData))
+        return m_textBlockDataValuesStack[step].value(textBlockData).contains(id);
+    return false;
+}
+
+bool KPrAnimationCache::hasValue(int step, KoShape *shape, const QString &id)
+{
+    if (m_shapeValuesStack[step].contains(shape))
+        return m_shapeValuesStack[step].value(shape).contains(id);
     return false;
 }
 
@@ -84,45 +91,85 @@ QVariant KPrAnimationCache::value(KoTextBlockData *textBlockData, const QString 
     return defaultValue;
 }
 
-void KPrAnimationCache::init(int step, KoShape *shape, const QString &id, const QVariant &value)
+void KPrAnimationCache::init(int step, KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value)
 {
-    for (int i = m_shapeValuesStack.size(); i <= step; ++i) {
-        // copy previous values
-        if (i > 0) {
-            m_shapeValuesStack.append(m_shapeValuesStack[i-1]);
+    if (textBlockData) {
+        for (int i = m_textBlockDataValuesStack.size(); i <= step; ++i) {
+            // copy previous values
+            if (i > 0) {
+                m_textBlockDataValuesStack.append(m_textBlockDataValuesStack[i-1]);
+            }
+            else {
+                m_textBlockDataValuesStack.append(QMap<KoTextBlockData *, QMap<QString, QVariant> >());
+            }
+        }
+        // check if value is valid
+        if (value.isValid()) {
+            m_textBlockDataValuesStack[step][textBlockData][id] = value;
         }
         else {
-            m_shapeValuesStack.append(QMap<KoShape *, QMap<QString, QVariant> >());
+            m_textBlockDataValuesStack[step][textBlockData].remove(id);
+        }
+
+        // Check visibility
+        if (id == "visibility") {
+            for(int i = step - 1; i >= 0; i--)
+            {
+                if(!this->hasValue(i, textBlockData, id)){
+                    this->setValue(i, textBlockData, id, value.toBool());
+                }
+            }
         }
     }
-    // check if value is valid
-    if (value.isValid()) {
-        m_shapeValuesStack[step][shape][id] = value;
-    }
     else {
-        m_shapeValuesStack[step][shape].remove(id);
-    }
+        for (int i = m_shapeValuesStack.size(); i <= step; ++i) {
+            // copy previous values
+            if (i > 0) {
+                m_shapeValuesStack.append(m_shapeValuesStack[i-1]);
+            }
+            else {
+                m_shapeValuesStack.append(QMap<KoShape *, QMap<QString, QVariant> >());
+            }
+        }
+        // check if value is valid
+        if (value.isValid()) {
+            m_shapeValuesStack[step][shape][id] = value;
+        }
+        else {
+            m_shapeValuesStack[step][shape].remove(id);
+        }
 
-    // Check visibility
-    if(id == "visibility")
-    {
-        for(int i = step - 1; i >= 0; i--)
-        {
-            if(!this->hasValue(i, shape, id)){
-                this->setValue(i, shape, id, value.toBool());
+        // Check visibility
+        if (id == "visibility") {
+            for(int i = step - 1; i >= 0; i--)
+            {
+                if (!this->hasValue(i, shape, id)) {
+                    this->setValue(i, shape, id, value.toBool());
+                }
             }
         }
     }
 }
 
-void KPrAnimationCache::update(KoShape *shape, const QString &id, const QVariant &value)
+void KPrAnimationCache::update(KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value)
 {
-    if (id == "transform" && !m_next) {
-        QTransform transform = m_currentShapeValues[shape][id].value<QTransform>();
-        m_currentShapeValues[shape][id] = transform * value.value<QTransform>();
+    if (textBlockData) {
+        if (id == "transform" && !m_next) {
+            QTransform transform = m_currentTextBlockDataValues[textBlockData][id].value<QTransform>();
+            m_currentTextBlockDataValues[textBlockData][id] = transform * value.value<QTransform>();
+        }
+        else {
+            m_currentTextBlockDataValues[textBlockData][id] = value;
+        }
     }
     else {
-        m_currentShapeValues[shape][id] = value;
+        if (id == "transform" && !m_next) {
+            QTransform transform = m_currentShapeValues[shape][id].value<QTransform>();
+            m_currentShapeValues[shape][id] = transform * value.value<QTransform>();
+        }
+        else {
+            m_currentShapeValues[shape][id] = value;
+        }
     }
     if (id == "transform") {
         m_next = false;
@@ -131,14 +178,22 @@ void KPrAnimationCache::update(KoShape *shape, const QString &id, const QVariant
 
 void KPrAnimationCache::startStep(int step)
 {
-    if(m_shapeValuesStack.size() > step)
+    if (m_shapeValuesStack.size() > step) {
         m_currentShapeValues = m_shapeValuesStack[step];
+    }
+    if (m_textBlockDataValuesStack.size() > step) {
+        m_currentTextBlockDataValues = m_textBlockDataValuesStack[step];
+    }
 }
 
 void KPrAnimationCache::endStep(int step)
 {
-    if(m_shapeValuesStack.size() > step)
+    if (m_shapeValuesStack.size() > step) {
         m_currentShapeValues = m_shapeValuesStack[step+1];
+    }
+    if (m_textBlockDataValuesStack.size() > step) {
+        m_currentTextBlockDataValues = m_textBlockDataValuesStack[step+1];
+    }
 }
 
 void KPrAnimationCache::next()
@@ -147,14 +202,6 @@ void KPrAnimationCache::next()
 }
 
 
-bool KPrAnimationCache::hasValue(int step, KoShape *shape, const QString &id)
-{
-    // TODO optimize as using first contains and then value is a waste of resources
-    // add test if step exists
-    if (m_shapeValuesStack[step].contains(shape))
-        return m_shapeValuesStack[step].value(shape).contains(id);
-    return false;
-}
 
 void KPrAnimationCache::setPageSize(const QSizeF size)
 {

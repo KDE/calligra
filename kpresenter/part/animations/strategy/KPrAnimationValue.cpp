@@ -18,9 +18,11 @@
  */
 
 #include "KPrAnimationValue.h"
+#include "KPrShapeAnimations.h"
 
-KPrAnimationValue::KPrAnimationValue(KoShape * shape)
-    : m_shape(shape)
+KPrAnimationValue::KPrAnimationValue(KPrShapeAnimation *shapeAnimation)
+    : m_shape(shapeAnimation->shape())
+    , m_textBlockData(shapeAnimation->textBlockData())
 {
 }
 

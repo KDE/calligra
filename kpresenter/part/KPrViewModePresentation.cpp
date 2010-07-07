@@ -208,7 +208,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 void KPrViewModePresentation::deactivate()
 {
     emit deactivated();
-
+    m_animationDirector->deactivate();
     KoPAPageBase * page = m_view->activePage();
     if ( m_endOfSlideShowPage ) {
         if ( page == m_endOfSlideShowPage ) {

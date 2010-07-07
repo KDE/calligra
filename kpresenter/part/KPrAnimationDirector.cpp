@@ -19,7 +19,7 @@
  */
 
 #include "KPrAnimationDirector.h"
-
+#include <QList>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QWidget>
@@ -239,6 +239,8 @@ void KPrAnimationDirector::navigateToPage( int index )
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
+    deactivate();
+
     if ( m_canvas == m_view->kopaCanvas() ) {
         m_view->viewMode()->updateActivePage( page );
     }
@@ -488,6 +490,13 @@ void KPrAnimationDirector::startTimeLine( int duration )
     }
     m_timeLine.setCurrentTime( 0 );
     m_timeLine.start();
+}
+
+void KPrAnimationDirector::deactivate()
+{
+    foreach (KPrAnimationStep *step, m_animations) {
+        step->deactivate();
+    }
 }
 
 #include "KPrAnimationDirector.moc"

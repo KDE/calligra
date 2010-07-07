@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
 #include "KoXmlWriter.h"
@@ -56,3 +55,12 @@ bool KPrAnimationStep::saveOdf(KoPASavingContext & paContext) const
     return true;
 }
 
+void KPrAnimationStep::deactivate()
+{
+    for (int i=0; i < this->animationCount(); i++) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+            a->deactivate();
+        }
+    }
+}

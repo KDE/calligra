@@ -20,27 +20,30 @@
 #include "KPrAttributeX.h"
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
-
+#include "../KPrShapeAnimation.h"
 #include "kdebug.h"
 
+#include "KoTextBlockData.h"
 KPrAttributeX::KPrAttributeX() : KPrAnimationAttribute("x")
 {
 }
 
-void KPrAttributeX::updateCache(KPrAnimationCache *cache, KoShape *shape, qreal value)
+void KPrAttributeX::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
+    KoShape *shape = shapeAnimation->shape();
     QTransform transform;
     value = value * cache->pageSize().width();
     value = value - shape->position().x();
     value = value * cache->zoom();
     transform.translate(value, 0);
-    cache->update(shape, "transform", transform);
+    cache->update(shape, shapeAnimation->textBlockData(), "transform", transform);
 }
 
-void KPrAttributeX::initCache(KPrAnimationCache *animationCache, int step, KoShape * shape, qreal startValue, qreal endValue)
+void KPrAttributeX::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
 {
+    KoShape* shape = shapeAnimation->shape();
     qreal v1 = startValue * animationCache->pageSize().width() - shape->position().x();
     qreal v2 = endValue * animationCache->pageSize().width() - shape->position().x();
-    animationCache->init(step, shape, "transform", QTransform().translate(v1, 0));
-    animationCache->init(step + 1, shape, "transform", QTransform().translate(v2, 0));
+    animationCache->init(step, shape, shapeAnimation->textBlockData(), "transform", QTransform().translate(v1, 0));
+    animationCache->init(step + 1, shape, shapeAnimation->textBlockData(), "transform", QTransform().translate(v2, 0));
 }

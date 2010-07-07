@@ -31,7 +31,7 @@ class KoTextBlockData;
 class KPrTextBlockPaintStrategy : public KoTextBlockPaintStrategyBase
 {
 public:
-    KPrTextBlockPaintStrategy(KoTextBlockData *blockData);
+    KPrTextBlockPaintStrategy(KoTextBlockData *blockData, KPrAnimationCache *animationCache);
     virtual ~KPrTextBlockPaintStrategy();
     void setAnimationCache(KPrAnimationCache *animationCache);
     virtual QBrush background(const QBrush &defaultBackground);

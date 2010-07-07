@@ -25,10 +25,12 @@
 #include <QList>
 #include <QPair>
 
+class KPrShapeAnimation;
+
 class KPrSmilValues : public KPrAnimationValue
 {
 public:
-    KPrSmilValues(KoShape * shape);
+    KPrSmilValues(KPrShapeAnimation *shapeAnimation);
     virtual qreal value(qreal time) const;
     virtual qreal endValue() const;
     virtual qreal startValue() const;

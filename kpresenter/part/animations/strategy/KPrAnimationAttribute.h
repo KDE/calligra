@@ -24,7 +24,7 @@
 #include <QString>
 
 class KPrAnimationCache;
-class KoShape;
+class KPrShapeAnimation;
 
 class KPrAnimationAttribute
 {
@@ -33,8 +33,8 @@ public:
     virtual ~KPrAnimationAttribute();
     QString attributeName() const;
 
-    virtual void updateCache(KPrAnimationCache * cache, KoShape *shape, qreal value) = 0;
-    virtual void initCache(KPrAnimationCache * cache, int step, KoShape * shape, qreal startValue, qreal endValue) = 0;
+    virtual void updateCache(KPrAnimationCache * cache, KPrShapeAnimation * shapeAnimation, qreal value) = 0;
+    virtual void initCache(KPrAnimationCache * cache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue) = 0;
 protected:
     QString m_attributeName;
 };

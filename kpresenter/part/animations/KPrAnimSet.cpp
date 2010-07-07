@@ -83,8 +83,8 @@ bool KPrAnimSet::saveAttribute(KoPASavingContext &paContext) const
 void KPrAnimSet::init(KPrAnimationCache *animationCache, int step)
 {
     m_animationCache = animationCache;
-    animationCache->init(step, m_shapeAnimation->shape(), "visibility", !m_visible);
-    animationCache->init(step + 1, m_shapeAnimation->shape(), "visibility", m_visible);
+    animationCache->init(step, m_shapeAnimation->shape(), m_shapeAnimation->textBlockData(), "visibility", !m_visible);
+    animationCache->init(step + 1, m_shapeAnimation->shape(), m_shapeAnimation->textBlockData(), "visibility", m_visible);
 }
 
 void KPrAnimSet::next(int currentTime)

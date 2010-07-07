@@ -42,8 +42,11 @@ public:
     virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const;
 
     KoShape * shape() const;
+    KoTextBlockData * textBlockData() const;
+
     virtual void init(KPrAnimationCache *animationCache, int step);
 
+    virtual void deactivate();
     /**
      * @return true if this shape animation change the visibility
      */

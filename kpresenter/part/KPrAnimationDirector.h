@@ -105,6 +105,7 @@ public:
      */
     KPrShapeAnimation shapeAnimation( KoShape * shape );
 
+    void deactivate();
 protected:
     // set the page to be shon and update the UI
     void updateActivePage( KoPAPageBase * page );

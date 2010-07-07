@@ -20,9 +20,10 @@
 #include "KPrSmilValues.h"
 #include <QStringList>
 #include "KoXmlWriter.h"
+#include "KPrShapeAnimations.h"
 #include "kdebug.h"
 
-KPrSmilValues::KPrSmilValues(KoShape *shape) : KPrAnimationValue(shape)
+KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation) : KPrAnimationValue(shapeAnimation)
 {
 }
 
@@ -64,7 +65,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     }
 
     foreach (QString value, valuesList) {
-        KPrValueParser parser(value, m_shape);
+        KPrValueParser parser(value, m_shape, m_textBlockData);
         if (!parser.valid()) {
             return false;
         }

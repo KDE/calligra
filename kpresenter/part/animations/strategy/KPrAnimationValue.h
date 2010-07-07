@@ -23,12 +23,14 @@
 #include <QtGlobal>
 #include "KoPASavingContext.h"
 class KoShape;
+class KoTextBlockData;
 class KPrAnimationCache;
+class KPrShapeAnimation;
 
 class KPrAnimationValue
 {
 public:
-    KPrAnimationValue(KoShape * shape);
+    KPrAnimationValue(KPrShapeAnimation * shapeAnimation);
     virtual ~KPrAnimationValue();
     virtual qreal value(qreal time) const = 0;
     virtual qreal startValue() const = 0;
@@ -45,6 +47,7 @@ protected:
     SmilCalcMode m_calcMode;
     KPrAnimationCache * m_cache;
     KoShape * m_shape;
+    KoTextBlockData * m_textBlockData;
 };
 
 #endif // KPRANIMATIONVALUE_H

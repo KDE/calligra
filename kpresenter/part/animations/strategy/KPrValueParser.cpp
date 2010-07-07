@@ -26,8 +26,11 @@
 #include <math.h>
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
-
-
+#include "KoTextBlockData.h"
+#include <QTextLayout>
+#include "KoTextShapeData.h"
+#include <QTextDocument>
+#include <QTextBlock>
 
 static int opPrecedence(Token::Op op)
 {
@@ -170,8 +173,9 @@ void TokenStack::ensureSpace()
 /**********************
     KPrValueParser
  **********************/
-KPrValueParser::KPrValueParser(QString formula, KoShape *shape)
+KPrValueParser::KPrValueParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData)
     : m_shape(shape)
+    , m_textBlockData(textBlockData)
     , m_formula(formula)
     , m_compiled(false)
     , m_valid(false)
@@ -534,9 +538,37 @@ bool KPrValueParser::valid() const
 qreal KPrValueParser::identifierToValue(QString identifier, KPrAnimationCache * cache) const
 {
     if (identifier == "width") {
-        return m_shape->size().width() / cache->pageSize().width();
+        if (m_textBlockData) {
+            if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(m_shape->userData())) {
+                QTextDocument *textDocument = textShapeData->document();
+                for (int i = 0; i < textDocument->blockCount(); i++) {
+                    QTextBlock textBlock = textDocument->findBlockByNumber(i);
+                    if (textBlock.userData() == m_textBlockData) {
+                        QTextLayout *layout = textBlock.layout();
+                        return layout->minimumWidth() / cache->pageSize().width();
+                    }
+                }
+            }
+        }
+        else {
+            return m_shape->size().width() / cache->pageSize().width();
+        }
     } else if (identifier == "height") {
-        return m_shape->size().height() / cache->pageSize().height();
+        if (m_textBlockData) {
+            if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(m_shape->userData())) {
+                QTextDocument *textDocument = textShapeData->document();
+                for (int i = 0; i < textDocument->blockCount(); i++) {
+                    QTextBlock textBlock = textDocument->findBlockByNumber(i);
+                    if (textBlock.userData() == m_textBlockData) {
+                        QTextLayout *layout = textBlock.layout();
+                        return layout->boundingRect().height() / cache->pageSize().height();
+                    }
+                }
+            }
+        }
+        else {
+            return m_shape->size().height() / cache->pageSize().height();
+        }
     } else if (identifier == "x") {
         return m_shape->position().x() / cache->pageSize().width();
     } else if (identifier == "y") {

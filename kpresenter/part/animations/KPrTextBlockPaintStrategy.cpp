@@ -21,10 +21,14 @@
 
 #include <QBrush>
 #include "KPrAnimationCache.h"
+#include <QTransform>
+#include <QMatrix>
+#include <QPainter>
 
-
-KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(KoTextBlockData *blockData)
-    : m_animationCache(0)
+#include "kdebug.h"
+#include "KoTextBlockData.h"
+KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(KoTextBlockData *blockData, KPrAnimationCache *animationCache)
+    : m_animationCache(animationCache)
     , m_textBlockData(blockData)
 {
 }
@@ -45,7 +49,15 @@ QBrush KPrTextBlockPaintStrategy::background(const QBrush &defaultBackground)
 
 void KPrTextBlockPaintStrategy::applyStrategy(QPainter *painter)
 {
-    Q_UNUSED(painter);
+    QTransform animationTransform = m_animationCache->value(m_textBlockData, "transform", QTransform()).value<QTransform>();
+    QTransform transform(painter->matrix());
+      if (animationTransform.isScaling()) {
+        transform = animationTransform * transform;
+    } else {
+        transform = transform * animationTransform;
+    }
+    painter->setTransform(transform);
+    painter->setClipping(false);
 }
 
 bool KPrTextBlockPaintStrategy::isVisible()

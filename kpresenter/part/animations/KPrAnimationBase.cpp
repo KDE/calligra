@@ -60,7 +60,7 @@ bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
 
 void KPrAnimationBase::updateCache(const QString &id, const QVariant &value)
 {
-    m_animationCache->update(m_shapeAnimation->shape(), id, value);
+    m_animationCache->update(m_shapeAnimation->shape(), m_shapeAnimation->textBlockData(), id, value);
 }
 
 void KPrAnimationBase::updateCurrentTime(int currentTime)
