@@ -405,9 +405,10 @@ static unsigned convertPatternStyle(unsigned pattern)
 }
 
 // big task: convert Excel XFormat into Swinder::Format
-Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
+const Format& GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 {
-    if (index >= xformatCount()) return Format();
+    static const Format blankFormat;
+    if (index >= xformatCount()) return blankFormat;
 
     Format& format = d->formatCache[index];
     if (!format.isNull()) return format;
