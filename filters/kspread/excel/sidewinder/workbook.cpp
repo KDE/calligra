@@ -38,6 +38,7 @@ public:
     int activeTab;
     bool passwordProtected;
     unsigned long passwd;
+    std::vector<Format*> formats;
 };
 
 Workbook::Workbook(Store* store)
@@ -53,6 +54,8 @@ Workbook::~Workbook()
 {
     clear();
     delete d->store;
+    for (unsigned i = 0; i < d->formats.size(); i++)
+        delete d->formats[i];
     delete d;
 }
 
@@ -163,4 +166,15 @@ void Workbook::setPassword(unsigned long hash)
 void Workbook::emitProgress(int value)
 {
     emit sigProgress(value);
+}
+
+int Workbook::addFormat(const Format& format)
+{
+    d->formats.push_back(new Format(format));
+    return d->formats.size()-1;
+}
+
+Format* Workbook::format(int index)
+{
+    return d->formats[index];
 }

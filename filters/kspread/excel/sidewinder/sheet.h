@@ -213,7 +213,7 @@ public:
     void setWidth(double w);
 
     const Format& format() const;
-    void setFormat(const Format& f);
+    void setFormat(const Format* f);
 
     bool visible() const;
     void setVisible(bool v);
@@ -251,7 +251,7 @@ public:
     void setHeight(double w);
 
     const Format& format() const;
-    void setFormat(const Format& f);
+    void setFormat(const Format* f);
 
     bool visible() const;
     void setVisible(bool v);

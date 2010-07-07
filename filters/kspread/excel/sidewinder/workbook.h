@@ -44,6 +44,7 @@ public:
 };
 
 class Sheet;
+class Format;
 
 class Workbook : public QObject
 {
@@ -129,6 +130,9 @@ public:
 
     unsigned long password() const;
     void setPassword(unsigned long hash);
+
+    int addFormat(const Format& format);
+    Format* format(int index);
 
     void emitProgress(int value);
 

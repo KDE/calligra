@@ -68,7 +68,7 @@ public:
 
     // Returns the format of this cell.
     const Format& format() const;
-    void setFormat(const Format& format);
+    void setFormat(const Format* format);
 
     // Returns the optional column span.
     unsigned columnSpan() const;

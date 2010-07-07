@@ -475,7 +475,7 @@ public:
     Sheet* sheet;
     unsigned index;
     double width;
-    Format format;
+    const Format* format;
     bool visible;
     unsigned outlineLevel;
     bool collapsed;
@@ -490,6 +490,7 @@ Column::Column(Sheet* sheet, unsigned index)
     d->visible = true;
     d->outlineLevel = 0;
     d->collapsed = false;
+    d->format  = 0;
 }
 
 Column::~Column()
@@ -522,10 +523,12 @@ void Column::setWidth(double w)
 
 const Format& Column::format() const
 {
-    return d->format;
+    static const Format null;
+    if (!d->format) return null;
+    return *(d->format);
 }
 
-void Column::setFormat(const Format& f)
+void Column::setFormat(const Format* f)
 {
     d->format = f;
 }
@@ -598,7 +601,7 @@ public:
     Sheet* sheet;
     unsigned index;
     double height;
-    Format format;
+    const Format* format;
     bool visible;
     unsigned outlineLevel;
     bool collapsed;
@@ -613,6 +616,7 @@ Row::Row(Sheet* sheet, unsigned index)
     d->visible = true;
     d->outlineLevel = 0;
     d->collapsed = false;
+    d->format  = 0;
 }
 
 Row::~Row()
@@ -642,10 +646,12 @@ void Row::setHeight(double w)
 
 const Format& Row::format() const
 {
-    return d->format;
+    static const Format null;
+    if (!d->format) return null;
+    return *(d->format);
 }
 
-void Row::setFormat(const Format& f)
+void Row::setFormat(const Format* f)
 {
     d->format = f;
 }

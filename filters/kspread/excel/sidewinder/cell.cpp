@@ -37,7 +37,7 @@ public:
     unsigned column;
     Value value;
     UString formula;
-    Format format;
+    const Format* format;
     unsigned columnSpan;
     unsigned rowSpan;
     bool covered;
@@ -67,6 +67,7 @@ Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
     d->covered    = false;
     d->columnRepeat = 1;
     d->hasHyperlink = false;
+    d->format     = 0;
 }
 
 Cell::~Cell()
@@ -144,10 +145,12 @@ void Cell::setFormula(const UString& formula)
 
 const Format& Cell::format() const
 {
-    return d->format;
+    static const Format null;
+    if (!d->format) return null;
+    return *(d->format);
 }
 
-void Cell::setFormat(const Format& format)
+void Cell::setFormat(const Format* format)
 {
     d->format = format;
 }
@@ -167,7 +170,7 @@ void Cell::setColumnSpan(unsigned span)
         if (lastCell) {
             Format curFormat = format();
             curFormat.borders().setRightBorder(lastCell->format().borders().rightBorder());
-            setFormat(curFormat);
+            setFormat(sheet()->workbook()->format(sheet()->workbook()->addFormat(curFormat)));
         }
     }
 }
@@ -187,7 +190,7 @@ void Cell::setRowSpan(unsigned span)
         if (lastCell) {
             Format curFormat = format();
             curFormat.borders().setBottomBorder(lastCell->format().borders().bottomBorder());
-            setFormat(curFormat);
+            setFormat(sheet()->workbook()->format(sheet()->workbook()->addFormat(curFormat)));
         }
     }
 }

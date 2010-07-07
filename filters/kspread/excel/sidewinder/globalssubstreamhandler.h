@@ -86,7 +86,7 @@ public:
     unsigned xformatCount() const;//
     XFRecord xformat(unsigned index) const;  //
 
-    const Format& convertedFormat(unsigned index) const;
+    const Format* convertedFormat(unsigned index) const;
 
     UString valueFormat(unsigned index) const;  //
 
