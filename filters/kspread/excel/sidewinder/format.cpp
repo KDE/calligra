@@ -42,9 +42,10 @@ public:
 
 FormatFont::FormatFont()
 {
+    static const UString arial("Arial");
     d = new FormatFont::Private();
     d->null        = true;
-    d->fontFamily  = "Arial";
+    d->fontFamily  = arial;
     d->fontSize    = 11;
     d->bold        = false;
     d->italic      = false;
@@ -644,8 +645,9 @@ public:
 // create an empty format
 Format::Format()
 {
+    static const UString general("General");
     d = new Format::Private;
-    d->valueFormat = "General";
+    d->valueFormat = general;
 }
 
 // destructor
