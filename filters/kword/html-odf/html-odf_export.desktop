@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KWord HTML-ODF Export Filter
+Name[x-test]=xxKWord HTML-ODF Export Filterxx
 X-KDE-Export=text/html
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Weight=50
