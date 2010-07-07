@@ -64,6 +64,20 @@ const QString ABOUT_DIALOG_KOFFICE_PIXMAP("/usr/share/icons/hicolor/64x64/apps/f
 const QString ABOUT_DIALOG_NOKIA_PIXMAP("/usr/share/icons/hicolor/scalable/hildon/about_nokia_logo.png");
 
 /*!
+* Path New Document Template
+*/
+const QString NEW_WORDDOC("/usr/share/freoffice-templates/.templates/NewDocument.odt");
+/*!
+* Path New Presentation Template
+*/
+const QString NEW_PRESENTER("/usr/share/freoffice-templates/.templates/NewPresentation.odp");
+
+/*!
+* Path New Spreadsheet Template
+*/
+const QString NEW_SPREADSHEET("/usr/share/freoffice-templates/.templates/NewSpread.ods");
+
+/*!
 * extensions
 */
 const QString EXT_PPT("ppt");
@@ -93,7 +107,6 @@ const QString FREOFFICE_PATH("/com/nokia/FreOffice");
  * DBus FreOffice ServiceName
  */
 const QString FREOFFICE_SERVICE_NAME("com.nokia.FreOffice");
-
 const QString FILE_CHOOSER_FILTER("Document(*.doc *.docx *.odt *.txt);;Presentation(*.ppt *.pptx *.odp);;Spreadsheet(*.xls *.xlsx *.ods)");
 
 const QString FREOFFICE_APPLICATION_PATH("/usr/bin/FreOffice");

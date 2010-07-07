@@ -27,20 +27,24 @@
 
 #include <QtGui/QMainWindow>
 #include <KoDocument.h>
-#include<QMessageBox>
-#include "Splash.h"
+#include <KWView.h>
 
+#include "Splash.h"
+class KoListStyle;
+class KoTextEditor;
 class QPushButton;
 class QIcon;
 class QTextDocument;
 class QToolButton;
 class QFrame;
+class QLabel;
 
 namespace Ui
 {
 class MainWindow;
 }
 
+class QMessageBox;
 class QLineEdit;
 class KoCanvasController;
 class QTextCursor;
@@ -48,6 +52,14 @@ class KoShape;
 class KoPAPageBase;
 class QShortcut;
 class QCheckBox;
+class QComboBox;
+class QFontComboBox;
+class QTextListFormat;
+class QTextDocument;
+class QGridLayout;
+class QDialog;
+
+class OfficeInterface;
 
 /*!
  * \brief Main window of the application. KoCanvasController is set as
@@ -60,28 +72,57 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(Splash *aSplash, QWidget *parent = 0);
     ~MainWindow();
+    QString newdocumentype;
     //void tabletEvent ( QTabletEvent * event );
     //void mousePressEvent ( QMouseEvent * event );
     //void mouseMoveEvent ( QMouseEvent * event );
     //void mouseReleaseEvent ( QMouseEvent * event );
-    //QFrame *font_frame;
+
 private:
     Ui::MainWindow *m_ui;
-    
-    /****** QtoolButton Mandatory addition*******/
-    
-   /* QToolButton *m_font;
-    QToolButton *m_indent;
-    QToolButton *m_color;
-    QToolButton *m_undo;
-    QToolButton *m_redo;
-    QToolButton *m_dynamic1;
-    QToolButton *m_dynamic2;
-    QToolButton *m_dynamic3;
-    */
-   
-    /************QFrame opening**************/
-     
+    int m_count;
+    /*!
+     * Format frame declaration
+     */
+    QFrame * m_formatframe;
+    QGridLayout * m_formatframelayout;
+    QPushButton * m_bold;
+    QPushButton * m_italic;
+    QPushButton * m_underline;
+    QPushButton * m_alignleft;
+    QPushButton * m_alignright;
+    QPushButton * m_aligncenter;
+    QPushButton * m_numberedlist;
+    QPushButton * m_bulletlist;
+    QPushButton * m_alignjustify;
+    /*!
+     * Font style frame declaration
+     */
+    QFrame * m_fontstyleframe;
+    QGridLayout *m_fontstyleframelayout;
+    QFontComboBox *m_fontcombobox;
+    QComboBox *m_fontsizecombo;
+    QPushButton *m_textcolor;
+    QPushButton *m_superscript;
+    QPushButton *m_subscript;
+    QPushButton *m_textbackgroundcolor;
+    /*!
+     * New document chooser dialog
+     */
+    QDialog * m_docdialog;
+    QGridLayout * m_docdialoglayout;
+    QToolButton * m_document;
+    QToolButton * m_presenter;
+    QToolButton * m_spreadsheet;
+    /*!
+     * Confirmation dialog for closing new document
+     */
+    QDialog *m_confirmationdialog;
+    QGridLayout * m_confirmationdialoglayout;
+    QPushButton *m_yes;
+    QPushButton *m_no;
+    QPushButton *m_cancel;
+    QLabel *m_message;
     /*!
      * line edit for search
      */
@@ -91,13 +132,21 @@ private:
      */
     QCheckBox *m_exactMatchCheckBox;
     /*!
+     * Pointer to QTextDocument
+     */
+    QTextDocument *m_textDocument;
+    /*!
      * Pointer to KoDocument
      */
     KoDocument *m_doc;
-
-   /*Pointer to KWDocument*/
-    //KWDocument *m_doc1;
-
+    /*!
+     * Pointer to KoTextEditor
+     */
+    KoTextEditor *m_editor;
+    /*!
+     * Pointer to KWView
+     */
+    KWView * m_kwview;
     /*!
      * Pointer to KoView
      */
@@ -141,7 +190,7 @@ private:
      */
     QPushButton *m_fsPPTForwardButton;
 
-    /*
+    /*!
      * Current page number. Saved in MainWindow::resourceChanged() slot.
      */
     int m_currentPage;
@@ -174,6 +223,26 @@ private:
      */
     void closeDocument();
     /*!
+     * style formatting function
+     */
+    void doStyle(QTextListFormat::Style);
+    /*!
+     *opening a new document
+     */
+    void openNewDocument(DocumentType);
+    /*!
+     *Function to add formatframe components
+     */
+    QPushButton *addFormatFrameComponent(QString const& imagepath);
+    /*!
+     *Function to add fontstyleframe components
+     */
+    QPushButton *addFontStyleFrameComponent(QString const& imagepath);
+    /*!
+     *Function to create new document
+     */
+    QToolButton *addNewDocument(QString const& docname);
+    /*!
      * Find string from document
      * /param pointer to QTextDocument
      * /param reference to text to be searched
@@ -190,8 +259,8 @@ private:
      * /param name The name of the action to trigger
      * /return bool Returns false if there was no action with the given name found
      */
-    //bool triggerAction(const char* name);
-     bool nextnext(const char* name);
+    bool triggerAction(const char* name);
+
     /*!
      * Update the enabled/disabled state of actions depending on if a document is currently
      * loaded.
@@ -223,22 +292,132 @@ private:
      */
     void raiseWindow(void);
 
+    /*!
+     * counts initial undosteps of KoDocument
+     */
+    void initialUndoStepsCount();
+
 private slots:
+
+    void menuClicked(QAction* action);
+    void pluginOpen(bool newWindow, const QString& path);
     void updateUI();
     void resourceChanged(int key, const QVariant &value);
+    /*!
+     * Slot to perform UndoAction
+     */
+    void doUndo();
+    /*!
+     * Slot to perform RedoAction
+     */
+    void doRedo();
     /*!
      * Slot to actionSearch toggled signal
      */
     void toggleToolBar(bool);
-    void editToolBar(bool);
-
-    /******Slot to InserToolBar toggled signal******/
-
-    //void toggleToolBar1(bool);
     /*!
+     * Slot to actionEdit toggled signal
+     */
+    void editToolBar(bool);
+    /*!
+     * Slot to actionClose signal
+     */
+    void closeDoc();
+    /*!
+     *  Slot to convert character into bold
+     */
+    void doBold();
+    /*!
+     *  Slot to convert character into italic
+     */
+    void doItalic();
+    /*!
+     *  Slot to convert character into underline
+     */
+    void doUnderLine();
+    /*!
+     *  Slot for Left Alignment
+     */
+    void doLeftAlignment();
+    /*!
+     *  Slot for right Alignment
+     */
+    void doRightAlignment();
+    /*!
+     *  Slot for center Alignment
+     */
+    void doCenterAlignment();
+    /*!
+     *  Slot for justify Alignment
+     */
+    void doJustify();
+    /*!
+     *  Slot for adding Numbers
+     */
+    void doNumberList();
+    /*!
+     *  Slot for adding Bullets
+     */
+    void doBulletList();
+    /*!
+     *  Slot to perform sub Script action
+     */
+    void doSubScript();
+    /*!
+     *  Slot to perform super Script action
+     */
+    void doSuperScript();
+    /*!
+     *  Slot for font size Selection
+     */
+    void selectFontSize();
+    /*!
+     *  Slot for font type Selection
+     */
+    void selectFontType();
+    /*!
+     *  Slot for text color Selection
+     */
+    void selectTextColor();
+    /*!
+     *  Slot for text backgroundcolor Selection
+     */
+    void selectTextBackGroundColor();
+    /*!
+     * Slot to discard newDocument without performing save operation
+     */
+    void discardNewDocument();
+    /*!
+     *    Slot to return back from closing new document
+     */
+    void returnToDoc();
+    /*!
+     * Slot to display formatframe with all options
+     */
+    void openFormatFrame();
+    /*!
+     * Slot to display fontstyleframe with all options
+     */
+     void openFontStyleFrame();
+    /*!
+     * Slot to choose new document
+     */
+    void chooseDocumentType();
+    /*!
+     * Slot to open new documnet
+     */
+    void openNewDoc();
+    /*!
+     * Slot to open new presenter
+     */
+    void openNewPresenter();
+    /*!
+     * Slot to open new spreadsheet
+     */
+    void openNewSpreadSheet();
+     /*!
      * Slot to actionZoomIn triggered signal
      */
-    
     void zoomIn();
     /*!
      * Slot to actionZoomOut triggered signal
@@ -254,8 +433,6 @@ private slots:
      * Slot to actionNextPage triggered signal
      */
     void nextPage();
-    
-    //void nextPages();
     /*!
      * Slot to actionPrevPage triggered signal
      */
@@ -276,10 +453,6 @@ private slots:
      */
     void fsButtonClicked();
     /*!
-     * Slot for toggleing between selection and panning
-     */
-    void toggleSelection();
-    /*!
      * Slot for actionSearch triggered signal
      */
     void startSearch();
@@ -296,9 +469,17 @@ private slots:
      */
     void searchOptionChanged(int aCheckBoxState);
     /*!
-     * Slot for copying the selected text
+     * Slot to perform copy operation on selected text
      */
     void copy();
+      /*!
+     * Slot to perform cut operation on selected text
+     */
+    void cut();
+    /*!
+     * Slot to perform paste operation on selected text
+     */
+    void paste();
     /*!
      * Slot that shows a hildonized application menu
      */
@@ -307,6 +488,9 @@ private slots:
      * Slot that is invoked when the currently active tool changes.
      */
     void activeToolChanged(KoCanvasController *canvas, int uniqueToolId);
+    /*!
+     * function for opening existing document.
+     */
     void doOpenDocument();
     /*!
      * Slot to actionAbout triggered signal
@@ -317,6 +501,14 @@ private slots:
      */
     //void slotProgress(int value);
 public slots:
+    /*!
+     * Slot to perform save operation
+     */
+    void saveFile();
+    /*!
+     * Slot to perform save as operation
+     */
+    void saveFileAs();
     /*!
      * Slot to  dialog fileSelected signal
      * /param filename
@@ -339,17 +531,35 @@ public slots:
      */
     void loadScrollAndQuit();
 
-     /**opening frame for font option**/
-    void openframe();
-
-    void hello();
-
 private:
+
+    QMap<QString, OfficeInterface*> loadedPlugins;
+
     void setShowProgressIndicator(bool visible);
     /*!
      * Opened file
      */
     QString m_fileName;
+    /*!
+     * Double click detector
+     */
+    bool m_doubleClick;
+    /*!
+     * true if existing document is open
+     */
+    bool m_openCheck;
+    /*!
+     * true if new document is open
+     */
+    bool m_newDocOpen;
+    /*!
+     * flag for new file to existing file conversion
+     */
+    bool m_existingFile;
+    /*!
+     * true if already one document exists
+     */
+    bool m_docExist;
     /*!
      * QShortcut for copying text with Ctrl-c
      */

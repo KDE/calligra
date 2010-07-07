@@ -1,5 +1,32 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>images/178x200/freoffice.png</file>
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file>images/178x200/freoffice.png</file>
+        <file>images/48x48/editicon.jpg</file>
+        <file>images/48x48/Edittoolbaricons/increase_indent.png</file>
+        <file>images/48x48/Edittoolbaricons/help.png</file>
+        <file>images/48x48/Edittoolbaricons/fonticon.png</file>
+        <file>images/48x48/Edittoolbaricons/editicon.jpg</file>
+        <file>images/48x48/Presenter.png</file>
+        <file>images/48x48/Document.png</file>
+        <file>images/48x48/Edittoolbaricons/paste.png</file>
+        <file>images/48x48/Edittoolbaricons/undo.png</file>
+        <file>images/48x48/Edittoolbaricons/SuperScript.png</file>
+        <file>images/48x48/Edittoolbaricons/SubScript.png</file>
+        <file>images/48x48/Edittoolbaricons/redo.png</file>
+        <file>images/48x48/Edittoolbaricons/Number.png</file>
+        <file>images/48x48/Edittoolbaricons/Italic.png</file>
+        <file>images/48x48/Edittoolbaricons/TextColor.png</file>
+        <file>images/48x48/Edittoolbaricons/edit.png</file>
+        <file>images/48x48/Edittoolbaricons/cut.png</file>
+        <file>images/48x48/Edittoolbaricons/copy.png</file>
+        <file>images/48x48/Edittoolbaricons/AlignCenter.png</file>
+        <file>images/48x48/Edittoolbaricons/Bullets.png</file>
+        <file>images/48x48/Edittoolbaricons/Bold.png</file>
+        <file>images/48x48/Edittoolbaricons/AlignLeft.png</file>
+        <file>images/48x48/Edittoolbaricons/AlignRight.png</file>
+        <file>images/48x48/Edittoolbaricons/UnderLine.png</file>
+        <file>images/48x48/Edittoolbaricons/AlignJustify.png</file>
+        <file>images/48x48/Edittoolbaricons/TextBackgroundColor.png</file>
+        <file>images/48x48/SpreadSheet.png</file>
+    </qresource>
 </RCC>

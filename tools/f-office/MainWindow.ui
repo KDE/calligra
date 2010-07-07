@@ -45,20 +45,16 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <!--addaction name="actionEdit"/-->
+   <addaction name="actionEdit"/>
+   <addaction name="separator"/>
    <addaction name="actionSearch"/>
    <addaction name="separator"/>
    <addaction name="actionPrevPage"/>
    <addaction name="actionPageNumber"/>
    <addaction name="actionNextPage"/>
-   <addaction name="separator"/>
    <addaction name="actionZoomOut"/>
    <addaction name="actionZoomLevel"/>
    <addaction name="actionZoomIn"/>
-   <addaction name="separator"/>
-   <addaction name="actionPanningOn"/>
-   <addaction name="actionCopy"/>
-   <addaction name="separator"/>
    <addaction name="actionFullScreen"/>
   </widget>
   <widget class="QToolBar" name="SearchToolBar">
@@ -118,13 +114,21 @@
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
+   <addaction name="separator"/>
    <addaction name="actionEdit"/>
-   <addaction name="actionBold"/>
-   <addaction name="actionItalic"/>
-   <addaction name="actionUnderLine"/>
+   <addaction name="separator"/>
+   <addaction name="actionCopy"/>
+   <addaction name="separator"/>
+   <addaction name="actionPaste"/>
+   <addaction name="separator"/>
+   <addaction name="actionCut"/>
+   <addaction name="separator"/>
    <addaction name="actionUndo"/>
+   <addaction name="separator"/>
    <addaction name="actionRedo"/>
-   <addaction name="actionInsert"/>
+   <addaction name="separator"/>
+   <addaction name="actionStyle"/>
+   <addaction name="separator"/>
    <addaction name="actionFormat"/>
   </widget>
   <action name="actionSearch">
@@ -137,15 +141,6 @@
    <property name="icon">
     <iconset>
      <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_search.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_search.png</iconset>
-   </property>
-  </action>
-  <action name="actionPanningOn">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/freoffice_text_selection.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/freoffice_text_selection.png</iconset>
    </property>
   </action>
   <action name="actionPrevPage">
@@ -211,12 +206,6 @@
     <font/>
    </property>
   </action>
-  <action name="actionCopy">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/26x26/hildon/general_copy.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/26x26/hildon/general_copy.png</iconset>
-   </property>
-  </action>
   <action name="actionZoom">
    <property name="checkable">
     <bool>true</bool>
@@ -250,13 +239,37 @@
     <bool>false</bool>
    </property>
   </action>
-  <action name="actionEd">
+  <action name="actionSaveAs">
    <property name="icon">
     <iconset>
      <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</iconset>
    </property>
    <property name="text">
-    <string>Edit</string>
+    <string>SaveAs</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_toolbar_folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -337,9 +350,12 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/editicon.jpg</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/editicon.jpg</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/editicon.jpg</normaloff>:/images/48x48/editicon.jpg</iconset>
    </property>
    <property name="text">
     <string>Edit</string>
@@ -347,83 +363,70 @@
   </action>
   <action name="actionFormat">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/fonticon.png</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/fonticon.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/help.png</normaloff>:/images/48x48/Edittoolbaricons/help.png</iconset>
    </property>
    <property name="text">
     <string>Format</string>
    </property>
   </action>
-  <action name="actionInsert">
+  <action name="actionStyle">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/indentIcon.jpg</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/indentIcon.jpg</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/fonticon.png</normaloff>:/images/48x48/Edittoolbaricons/fonticon.png</iconset>
    </property>
    <property name="text">
     <string>Insert</string>
    </property>
   </action>
-  <action name="actionBold">
+  <action name="actionCopy">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/bold.png</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/bold.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/copy.png</normaloff>:/images/48x48/Edittoolbaricons/copy.png</iconset>
    </property>
    <property name="text">
-    <string>Bold</string>
-   </property>
-   <property name="toolTip">
-    <string>Bold</string>
+    <string>Copy</string>
    </property>
   </action>
-  <action name="actionItalic">
+  <action name="actionPaste">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/italic.png</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/italic.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/paste.png</normaloff>:/images/48x48/Edittoolbaricons/paste.png</iconset>
    </property>
    <property name="text">
-    <string>Italic</string>
-   </property>
-   <property name="toolTip">
-    <string>Italic</string>
+    <string>Paste</string>
    </property>
   </action>
-  <action name="actionUnderLine">
+  <action name="actionCut">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/underline.png</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/underline.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/cut.png</normaloff>:/images/48x48/Edittoolbaricons/cut.png</iconset>
    </property>
    <property name="text">
-    <string>UnderLine</string>
-   </property>
-   <property name="toolTip">
-    <string>UnderLine</string>
+    <string>Cut</string>
    </property>
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/Undo.png</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/Undo.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/undo.png</normaloff>:/images/48x48/Edittoolbaricons/undo.png</iconset>
    </property>
    <property name="text">
-    <string>Undo</string>
-   </property>
-   <property name="toolTip">
-    <string>Undo</string>
+    <string>undo</string>
    </property>
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset>
-     <normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/Redo.png</normaloff>/scratchbox/users/oem/home/oem/Koffice/src/koffice/tools/f-office/images/48x48/Edittoolbaricons/Redo.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/redo.png</normaloff>:/images/48x48/Edittoolbaricons/redo.png</iconset>
    </property>
    <property name="text">
-    <string>Redo</string>
-   </property>
-   <property name="toolTip">
-    <string>Redo</string>
+    <string>redo</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="FreOffice.qrc"/>
+ </resources>
  <connections/>
 </ui>
