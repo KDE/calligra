@@ -165,6 +165,12 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     // paragraph.
     if (m_dropCapStatus == IsDropCapPara) {
         kDebug(30513) << "returning with drop cap paragraph";
+        if (m_textStrings.size()) {
+            if (m_textStyles[0] != 0) {
+                m_dropCapStyleName= 'T';
+                m_dropCapStyleName = m_mainStyles->insert(*m_textStyles[0], m_dropCapStyleName);
+            }
+        }
         return;
     }
 
@@ -181,6 +187,10 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         // We have only support for fdct=1, i.e. regular dropcaps.
         // There is no support for fdct=2, i.e. dropcaps in the margin (ODF doesn't support this).
         tmpWriter.addAttribute("style:length", m_dcs_fdct > 0 ? 1 : 0);
+qDebug() << "dropcap style has textstyle " << m_dropCapStyleName;
+        if (!m_dropCapStyleName.isEmpty()) {
+            tmpWriter.addAttribute("style:style-name", m_dropCapStyleName.toUtf8());
+        }
         tmpWriter.endElement(); //style:drop-cap
         buf.close();
 
@@ -863,17 +873,18 @@ Paragraph::DropCapStatus Paragraph::dropCapStatus() const
     return m_dropCapStatus;
 }
 
-void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *distance) const
+void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *distance, QString *style) const
 {
     // As far as I can see there is only ever a single character as drop cap.
     *string = m_textStrings[0];
     *type = m_dcs_fdct;
     *lines = m_dcs_lines;
     *distance = m_dropCapDistance;
+    *style = m_dropCapStyleName;
 }
 
 
-void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance)
+void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance, QString style)
 {
     kDebug(30513) << "combining drop cap paragraph: " << string;
     if (m_dropCapStatus == IsDropCapPara) 
@@ -885,6 +896,7 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance)
     m_dcs_fdct        = type;
     m_dcs_lines       = lines;
     m_dropCapDistance = distance;
+    m_dropCapStyleName = style;
 
     // Add the actual text.
     // Here we assume that there will only be one text snippet for the drop cap.

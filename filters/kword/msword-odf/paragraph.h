@@ -62,8 +62,8 @@ public:
 
     typedef enum { NoDropCap, IsDropCapPara, HasDropCapIntegrated }  DropCapStatus;
     DropCapStatus dropCapStatus() const;
-    void getDropCapData(QString *string, int *type, int *lines, qreal *distance) const;
-    void addDropCap(QString &string, int type, int lines, qreal distance);
+    void getDropCapData(QString *string, int *type, int *lines, qreal *distance, QString *style) const;
+    void addDropCap(QString &string, int type, int lines, qreal distance, QString style);
 
     // debug:
     int  strings() const;
@@ -110,7 +110,7 @@ private:
     int   m_dcs_fdct;
     int   m_dcs_lines;
     qreal m_dropCapDistance;
-
+    QString m_dropCapStyleName;
     bool m_inHeaderFooter;
     bool m_containsPageNumberField;
     bool m_combinedCharacters;            // is true when the next characters are combined

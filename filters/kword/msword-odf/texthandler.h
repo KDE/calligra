@@ -203,7 +203,7 @@ private:
     qreal      m_dropCapDistance;
 #endif
     QString    m_dropCapString;
-    //Paragraph *m_dropCapParagraph; // These are stored separately by MS Office.
+    QString    m_dropCapStyleName;
 
     QString m_fieldValue;
     bool m_insideField;

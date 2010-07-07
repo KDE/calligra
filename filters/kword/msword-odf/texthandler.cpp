@@ -766,7 +766,7 @@ void KWordTextHandler::paragraphEnd()
     // this one.
     if (m_hasStoredDropCap) {
         kDebug(30513) << "combine paragraphs for drop cap" << m_dropCapString;
-        m_paragraph->addDropCap(m_dropCapString, m_dcs_fdct, m_dcs_lines, m_dropCapDistance);
+        m_paragraph->addDropCap(m_dropCapString, m_dcs_fdct, m_dcs_lines, m_dropCapDistance, m_dropCapStyleName);
     }
 
     //clear our paragraph flag
@@ -797,7 +797,7 @@ void KWordTextHandler::paragraphEnd()
         // a dropcap.
         if (!m_hasStoredDropCap && m_paragraph->dropCapStatus() == Paragraph::IsDropCapPara) {
             m_paragraph->getDropCapData(&m_dropCapString, &m_dcs_fdct, &m_dcs_lines,
-                                        &m_dropCapDistance);
+                                        &m_dropCapDistance, &m_dropCapStyleName);
             m_hasStoredDropCap = true;
             kDebug(30513) << "saving drop cap data in texthandler" << m_dropCapString;
         }
