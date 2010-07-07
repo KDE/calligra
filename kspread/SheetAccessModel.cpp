@@ -67,6 +67,11 @@ SheetAccessModel::SheetAccessModel(Map *map)
     setColumnCount(0);
 }
 
+SheetAccessModel::~SheetAccessModel()
+{
+    delete d;
+}
+
 void SheetAccessModel::slotSheetAdded(Sheet *sheet)
 {
     QStandardItem *item = new QStandardItem;

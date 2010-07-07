@@ -50,6 +50,7 @@ class Sheet;
 
 public:
     SheetAccessModel(Map *map);
+    virtual ~SheetAccessModel();
 
 public Q_SLOTS:
     void slotSheetAdded(Sheet *sheet);
