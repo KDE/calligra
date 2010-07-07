@@ -64,6 +64,9 @@ public:
 
     // table of format
     std::map<unsigned, UString> formatsTable;
+    
+    // cache of formats
+    std::map<unsigned, Format> formatCache;
 
     // shared-string table
     std::vector<UString> stringTable;
@@ -404,9 +407,10 @@ static unsigned convertPatternStyle(unsigned pattern)
 // big task: convert Excel XFormat into Swinder::Format
 Format GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 {
-    Format format;
+    if (index >= xformatCount()) return Format();
 
-    if (index >= xformatCount()) return format;
+    Format& format = d->formatCache[index];
+    if (!format.isNull()) return format;
 
     XFRecord xf = xformat(index);
 
