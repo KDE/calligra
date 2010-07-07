@@ -1067,7 +1067,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
-    const bool isOutline = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType) == QLatin1String("outline");
 
     MSOOXML::Utils::XmlWriteBuffer listBuf;
     body = listBuf.setWriter(body);
@@ -1078,17 +1077,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lstStyle)
             else if (qualifiedName() == QLatin1String("a:p")) {
-                // Buffer each text:p, because we have to write after
-                // the child elements are generated
-                MSOOXML::Utils::XmlWriteBuffer paragraphBuf;
-                if (isOutline) {
-                    //body = paragraphBuf.setWriter(body);
-                }
                 TRY_READ(DrawingML_p);
-                if (isOutline) { // CASE #P612
-                    //body = paragraphBuf.originalWriter();
-                    //(void)paragraphBuf.releaseWriter();
-                }
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
