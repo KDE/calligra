@@ -67,7 +67,7 @@ public:
     void setFormula(const UString& formula);
 
     // Returns the format of this cell.
-    Format format() const;
+    const Format& format() const;
     void setFormat(const Format& format);
 
     // Returns the optional column span.

@@ -142,7 +142,7 @@ void Cell::setFormula(const UString& formula)
     d->formula = formula;
 }
 
-Format Cell::format() const
+const Format& Cell::format() const
 {
     return d->format;
 }
