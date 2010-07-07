@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES( ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ../../libmso )
+INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} ../../libmso )
 
 set(htmlodf_export_PART_SRCS
 htmlodfexport.cpp
