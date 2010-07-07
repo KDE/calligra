@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="kpresenter" version="119">
+<kpartgui name="kpresenter" version="120">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -48,7 +48,8 @@
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="insert_variable"/> <!-- menu -->
-	        <Action name="import_document" />
+	        <Action name="import_document"/>
+	        <Action name="insert_pictures"/>
         </Menu>
         <Menu name="format"><text>F&amp;ormat</text>
             <Action name="format_masterpage"/> 

@@ -33,7 +33,10 @@
 #include <KoMainWindow.h>
 #include <KoPACanvas.h>
 #include <KoPADocumentStructureDocker.h>
+#include <KoPAPageInsertCommand.h>
 #include <KoDocumentInfo.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeLayer.h>
 
 #include "KPrDocument.h"
 #include "KPrPage.h"
@@ -44,6 +47,7 @@
 #include "KPrViewModeNotes.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
+#include "KPrPicturesImport.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
@@ -185,6 +189,10 @@ void KPrView::initActions()
     m_actionViewModeNotes->setCheckable(true);
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
+
+    m_actionInsertPictures = new KAction(i18n("Insert Pictures..."), this);
+    actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
+    connect(m_actionInsertPictures, SIGNAL(activated()), this, SLOT(insertPictures()));
 
     QActionGroup *viewModesGroup = new QActionGroup(this);
     viewModesGroup->addAction(m_actionViewModeNormal);
@@ -354,6 +362,17 @@ void KPrView::exportToHtml()
                                                            dialog->title(), dialog->slidesNames(), dialog->openBrowser()));
         }
    }
+}
+
+void KPrView::insertPictures()
+{
+    // Make sure that we are in the normal mode and not on master pages
+    setViewMode(m_normalMode);
+    if (viewMode()->masterMode()) {
+        setMasterMode(false);
+    }
+    KPrPicturesImport pictureImport;
+    pictureImport.import(this);
 }
 
 #include "KPrView.moc"

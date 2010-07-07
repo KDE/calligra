@@ -62,6 +62,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrDurationParser.cpp
      KPrHtmlExport.cpp
      KPrHtmlExportUiDelegate.cpp
+     KPrPicturesImport.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
