@@ -28,5 +28,7 @@
         <file>images/48x48/Edittoolbaricons/AlignJustify.png</file>
         <file>images/48x48/Edittoolbaricons/TextBackgroundColor.png</file>
         <file>images/48x48/SpreadSheet.png</file>
+        <file>images/64x64/PresentationDrawTool/highlight.png</file>
+        <file>images/64x64/PresentationDrawTool/pen.png</file>
     </qresource>
 </RCC>

@@ -54,12 +54,6 @@ void PresentationTool::handleMainWindowMousePressEvent( QMouseEvent * event )
             scribbling = true;
         }
     }
-
-    if( m_highlightToolActivated ) {
-        if ( event->button() == Qt::LeftButton ) {
-            scribbling = true;
-        }
-    }
 }
 
 void PresentationTool::handleMainWindowMouseMoveEvent( QMouseEvent * event )
@@ -71,7 +65,7 @@ void PresentationTool::handleMainWindowMouseMoveEvent( QMouseEvent * event )
     }
 
     if( m_highlightToolActivated ) {
-        if ( ( event->buttons() & Qt::LeftButton ) && scribbling ) {
+        if ( ( event->buttons() & Qt::LeftButton ) ) {
                  drawEllipse( event->pos() );
         }
     }
@@ -82,13 +76,6 @@ void PresentationTool::handleMainWindowMouseReleaseEvent( QMouseEvent * event )
     if( m_penToolActivated ) {
         if ( event->button() == Qt::LeftButton && scribbling ) {
             drawLineTo( event->pos() );
-            scribbling = false;
-        }
-    }
-
-    if( m_highlightToolActivated ) {
-        if ( event->button() == Qt::LeftButton && scribbling ) {
-            drawEllipse( event->pos() );
             scribbling = false;
         }
     }

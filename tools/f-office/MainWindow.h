@@ -30,6 +30,8 @@
 #include <KWView.h>
 
 #include "Splash.h"
+#include "PresentationTool.h"
+
 class KoListStyle;
 class KoTextEditor;
 class QPushButton;
@@ -38,6 +40,7 @@ class QTextDocument;
 class QToolButton;
 class QFrame;
 class QLabel;
+class PresentationTool;
 
 namespace Ui
 {
@@ -74,9 +77,13 @@ public:
     ~MainWindow();
     QString newdocumentype;
     //void tabletEvent ( QTabletEvent * event );
-    //void mousePressEvent ( QMouseEvent * event );
-    //void mouseMoveEvent ( QMouseEvent * event );
-    //void mouseReleaseEvent ( QMouseEvent * event );
+    void mousePressEvent ( QMouseEvent * event );
+    void mouseMoveEvent ( QMouseEvent * event );
+    void mouseReleaseEvent ( QMouseEvent * event );
+    void paintEvent( QPaintEvent * event );
+
+    void disableFullScreenPresentationNavigation();
+    void enableFullScreenPresentationNavigation();
 
 private:
     Ui::MainWindow *m_ui;
@@ -216,6 +223,18 @@ private:
      * Pointer to splash class
      */
     Splash *m_splash;
+    /*!
+     * Pointer to pen draw button
+     */
+    QPushButton *m_fsPPTDrawPenButton;
+    /*!
+     * Pointer to highlight draw button
+     */
+    QPushButton *m_fsPPTDrawHighlightButton;
+    /*!
+     * Pointer to presentation drawing tools
+     */
+    PresentationTool *m_pptTool;
 
     void init();
     /*!
