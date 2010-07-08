@@ -444,11 +444,13 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             ADEBUG << "  migrating strategy!";
             if (strategy->anchoredShape()) {
-                QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
-                matrix = matrix * currentShape->absoluteTransformation(0).inverted();
-                matrix.translate(0, m_state->documentOffsetInShape());
-                outlines.append(new Outline(strategy->anchoredShape(), matrix));
-
+                KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
+                if (! frame || frame->textRunAround() != KWord::RunThrough) {
+                    QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
+                    matrix = matrix * currentShape->absoluteTransformation(0).inverted();
+                    matrix.translate(0, m_state->documentOffsetInShape());
+                    outlines.append(new Outline(strategy->anchoredShape(), matrix));
+                 }
                 // if the anchor occupies the first character of our block, create one line for it.
                 const int cursorPosition = m_state->cursorPosition();
                 if (cursorPosition == startOfBlockText && strategy->anchor()->positionInDocument() == cursorPosition) {
