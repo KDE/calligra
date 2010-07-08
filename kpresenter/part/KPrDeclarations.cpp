@@ -132,19 +132,22 @@ const QString KPrDeclarations::declaration(Type type, const QString &key)
         QMap<QString, QVariant> dateTimeDefinition =
                 m_declarations.value(type).value(key).value<QMap<QString, QVariant> >();
 
-        if (dateTimeDefinition["fixed"].toBool()) {
-            retVal = dateTimeDefinition["fixed value"].toString();
-        }
-        else  {
-            QDateTime target = QDateTime::currentDateTime();
-
-            QString formatString = dateTimeDefinition["format"].toString();
-            if (!formatString.isEmpty()) {
-                retVal = target.toString(formatString);
+        // if there is no presenation declaration don't set a value
+        if (!dateTimeDefinition.isEmpty()) {
+            if (dateTimeDefinition["fixed"].toBool()) {
+                retVal = dateTimeDefinition["fixed value"].toString();
             }
-            else {
-                // XXX: What do we do here?
-                retVal = target.date().toString(Qt::ISODate);
+            else  {
+                QDateTime target = QDateTime::currentDateTime();
+
+                QString formatString = dateTimeDefinition["format"].toString();
+                if (!formatString.isEmpty()) {
+                    retVal = target.toString(formatString);
+                }
+                else {
+                    // XXX: What do we do here?
+                    retVal = target.date().toString(Qt::ISODate);
+                }
             }
         }
     }
