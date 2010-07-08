@@ -591,7 +591,7 @@ Format::Type Style::dateType(const QString &_f)
         return Format::Date8;
     else if (_format == "MMMM-yyyy")
         return Format::Date9;
-    else if (_format == "MMMMM-yy")
+    else if (_format == "MMMMM-yy" || _format == "X-yy")
         return Format::Date10;
     else if (_format == "dd/MMM")
         return Format::Date11;

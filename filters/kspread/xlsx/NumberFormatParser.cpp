@@ -367,6 +367,9 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
                 const bool isReallyReallyLong = isWayTooLong && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
                 if (isLongest && !isReallyReallyLong)
                     xmlWriter.addAttribute("number:style", "long");
+                if (isWayTooLong) {       // the month format is "mmmmm" then it's the extra-short format of month
+                    xmlWriter.addAttribute("koffice:number-length", "extra-short");
+                }
                 xmlWriter.addAttribute("number:textual", "true");
                 xmlWriter.endElement();
                 i += isLongest ? (isWayTooLong ? 4 : 3) : 2;
