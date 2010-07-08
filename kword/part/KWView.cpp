@@ -1409,8 +1409,11 @@ void KWView::selectionChanged()
         else
             m_actionAddBookmark->setEnabled(false);
     }
-    // actions need at least one shape selected
-    actionCollection()->action("create_linked_frame")->setEnabled(shape);
+    // actions that need at least one shape selected
+    QAction *action = actionCollection()->action("create_linked_frame");
+    if (action) action->setEnabled(shape);
+    action = actionCollection()->action("inline_frame");
+    if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
 
     foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
