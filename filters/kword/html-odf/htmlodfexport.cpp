@@ -66,8 +66,6 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             || from != "application/vnd.oasis.opendocument.text")
         return KoFilter::NotImplemented;
 
-    if (m_dialog->exec() == QDialog::Rejected)
-        return KoFilter::UserCancelled;
 
     kDebug(30513) << "######################## HTMLOdfExport::convert ########################";
 
