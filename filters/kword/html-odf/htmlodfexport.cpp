@@ -1,4 +1,5 @@
 /* This file is part of the KOffice project
+   Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -38,6 +39,7 @@
 
 #include <document.h>
 #include "pole.h"
+#include <exportdialog.h>
 
 //function prototypes of local functions
 bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
@@ -46,8 +48,8 @@ typedef KGenericFactory<HTMLOdfExport> HTMLOdfExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libhtmlodf_export, HTMLOdfExportFactory("kofficefilters"))
 
 
-HTMLOdfExport::HTMLOdfExport(QObject *parent, const QStringList&)
-        : KoFilter(parent)
+HTMLOdfExport::HTMLOdfExport(QObject* parent, const QStringList&) :
+KoFilter(parent), m_dialog(new ExportDialog())
 {
 }
 
@@ -60,14 +62,20 @@ HTMLOdfExport::~HTMLOdfExport()
 KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const QByteArray &to)
 {
     // check for proper conversion
-    if (to != "application/vnd.oasis.opendocument.text"
-            || from != "application/msword")
+    if (to != "text/html"
+            || from != "application/vnd.oasis.opendocument.text")
         return KoFilter::NotImplemented;
+
+    if (m_dialog->exec() == QDialog::Rejected)
+        return KoFilter::UserCancelled;
 
     kDebug(30513) << "######################## HTMLOdfExport::convert ########################";
 
     QString inputFile = m_chain->inputFile();
     QString outputFile = m_chain->outputFile();
+
+    if (m_dialog->exec() == QDialog::Rejected)
+        return KoFilter::UserCancelled;
 
     QBuffer buff3;
 

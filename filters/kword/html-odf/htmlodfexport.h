@@ -1,4 +1,5 @@
 /* This file is part of the KOffice project
+   Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -26,6 +27,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 
+class ExportDialog;
 class HTMLOdfExport : public KoFilter
 {
     Q_OBJECT
@@ -34,6 +36,9 @@ public:
     virtual ~HTMLOdfExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+
+private:
+    ExportDialog *m_dialog;
 
 
 };
