@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Fade
 Name[eo]=Dissolvi
+Name[fr]=Estomper
 Name[nb]=Ton ut
 Name[nds]=Utblennen
 Name[nl]=Vervagen
@@ -12,6 +13,7 @@ Name[uk]=Згасання
 Name[x-test]=xxFadexx
 Name[zh_TW]=淡出
 Comment=Fade Effect
+Comment[fr]=Effet de fondu
 Comment[nl]=Vervagingseffect
 Comment[pt]=Efeito de Desvanecimento
 Comment[pt_BR]=Efeito de desvanecimento
