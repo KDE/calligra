@@ -1,6 +1,6 @@
 /* This file is part of the KOffice project
-   Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
    Copyright (C) 2010 Pramod S G <pramod.xyle@gmail.com>
+   Copyright (C) 2010 Srihari Prasad G V <sri-hari@live.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public
@@ -192,7 +192,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     realManifestWriter->addManifestEntry("meta.xml", "text/xml");
     oasisStore.closeManifestWriter();
 
-    kDebug(30513) << "######################## MSWordOdfImport::convert done ####################";
+    kDebug(30513) << "######################## HTMLOdfExport::convert done ####################";
     return KoFilter::OK;
 }
 
