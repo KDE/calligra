@@ -46,7 +46,7 @@ public:
 
 private:
     ExportDialog *m_dialog;
-    QDomElement content(QDomDocument contentHTML);
+
 };
 
 #endif // HTMLODFEXPORT_H

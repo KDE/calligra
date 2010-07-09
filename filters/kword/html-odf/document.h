@@ -22,8 +22,6 @@
 #define DOCUMENT_H
 
 #include "generated/leinputstream.h"
-#include "pole.h"
-
 
 #include <QString>
 #include <qdom.h>
@@ -42,7 +40,7 @@
 
 class KoStoreDevice;
 
-namespace wvWare
+namespace kword
 {
 class Parser;
 class BRC;
@@ -96,12 +94,6 @@ public:
 
     bool headersChanged(void) const;
 
-    POLE::Storage* storage(void) const { return m_storage; }
-    LEInputStream* data_stream(void) const { return m_data_stream; }
-    LEInputStream* table_stream(void) const { return m_table_stream; }
-    LEInputStream* wdocument_stream(void) const { return m_wdocument_stream; }
-
-
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
 
 private:
@@ -148,11 +140,6 @@ private:
 
     QString m_lineNumbersStyleName;
 
-    //pointers to the POLE store content
-    LEInputStream* m_data_stream;
-    LEInputStream* m_table_stream;
-    LEInputStream* m_wdocument_stream;
-    POLE::Storage* m_storage; // pointer to the pole storage
 };
 
 #endif // DOCUMENT_H

@@ -35,7 +35,7 @@
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
 #include <KoStoreDevice.h>
-//#include <KoXmlWriter.h>
+#include <KoXmlWriter.h>
 
 #include <document.h>
 #include "pole.h"
