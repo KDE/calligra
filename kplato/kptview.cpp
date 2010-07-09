@@ -262,7 +262,7 @@ View::View( Part* part, QWidget* parent )
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
     // ------ Help
-    actionIntroduction  = new KAction( i18n("KPlato Introduction"), this);
+    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("KPlato Introduction"), this);
     actionCollection()->addAction("kplato_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
