@@ -970,25 +970,33 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     //NOTE: 3 - whole document, not mentioned in the "Word Binary File Format
     //(.doc) Structure Specification", but mentiond in word97_generated.h
     if ( (sep->pgbApplyTo == 0) ||
-	((sep->pgbApplyTo == 1) && firstPage) ||
-	((sep->pgbApplyTo == 2) && !firstPage))
+        ((sep->pgbApplyTo == 1) && firstPage) ||
+        ((sep->pgbApplyTo == 2) && !firstPage))
     {
         // FIXME: check if we can use fo:border instead of fo:border-left, etc.
         if (sep->brcLeft.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-left",
-					 Conversion::setBorderAttributes(sep->brcLeft));
+                                         Conversion::setBorderAttributes(sep->brcLeft));
+            pageLayoutStyle->addProperty("koffice:specialborder-left",
+                                         Conversion::borderKOfficeAttributes(sep->brcLeft));
         }
         if (sep->brcTop.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-top",
-					 Conversion::setBorderAttributes(sep->brcTop));
+                                         Conversion::setBorderAttributes(sep->brcTop));
+            pageLayoutStyle->addProperty("koffice:specialborder-top",
+                                         Conversion::borderKOfficeAttributes(sep->brcTop));
         }
         if (sep->brcRight.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-right",
-					 Conversion::setBorderAttributes(sep->brcRight));
-	}
+                                         Conversion::setBorderAttributes(sep->brcRight));
+            pageLayoutStyle->addProperty("koffice:specialborder-right",
+                                         Conversion::borderKOfficeAttributes(sep->brcRight));
+        }
         if (sep->brcBottom.brcType != 0) {
             pageLayoutStyle->addProperty("fo:border-bottom",
-					 Conversion::setBorderAttributes(sep->brcBottom));
+                                         Conversion::setBorderAttributes(sep->brcBottom));
+            pageLayoutStyle->addProperty("koffice:specialborder-bottom",
+                                         Conversion::borderKOfficeAttributes(sep->brcBottom));
         }
     }
     // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
