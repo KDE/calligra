@@ -1,33 +1,35 @@
 <RCC>
     <qresource prefix="/">
         <file>images/178x200/freoffice.png</file>
-        <file>images/48x48/editicon.jpg</file>
-        <file>images/48x48/Edittoolbaricons/increase_indent.png</file>
-        <file>images/48x48/Edittoolbaricons/help.png</file>
-        <file>images/48x48/Edittoolbaricons/fonticon.png</file>
-        <file>images/48x48/Edittoolbaricons/editicon.jpg</file>
         <file>images/48x48/Presenter.png</file>
         <file>images/48x48/Document.png</file>
-        <file>images/48x48/Edittoolbaricons/paste.png</file>
-        <file>images/48x48/Edittoolbaricons/undo.png</file>
-        <file>images/48x48/Edittoolbaricons/superscript.png</file>
-        <file>images/48x48/Edittoolbaricons/subscript.png</file>
-        <file>images/48x48/Edittoolbaricons/redo.png</file>
+        <file>images/48x48/Edittoolbaricons/SuperScript.png</file>
+        <file>images/48x48/Edittoolbaricons/SubScript.png</file>
         <file>images/48x48/Edittoolbaricons/Number.png</file>
-        <file>images/48x48/Edittoolbaricons/italic.png</file>
+        <file>images/48x48/Edittoolbaricons/Italic.png</file>
         <file>images/48x48/Edittoolbaricons/TextColor.png</file>
-        <file>images/48x48/Edittoolbaricons/edit.png</file>
-        <file>images/48x48/Edittoolbaricons/cut.png</file>
-        <file>images/48x48/Edittoolbaricons/copy.png</file>
         <file>images/48x48/Edittoolbaricons/AlignCenter.png</file>
         <file>images/48x48/Edittoolbaricons/Bullets.png</file>
-        <file>images/48x48/Edittoolbaricons/bold.png</file>
+        <file>images/48x48/Edittoolbaricons/Bold.png</file>
         <file>images/48x48/Edittoolbaricons/AlignLeft.png</file>
         <file>images/48x48/Edittoolbaricons/AlignRight.png</file>
-        <file>images/48x48/Edittoolbaricons/underline.png</file>
+        <file>images/48x48/Edittoolbaricons/UnderLine.png</file>
         <file>images/48x48/Edittoolbaricons/AlignJustify.png</file>
         <file>images/48x48/Edittoolbaricons/TextBackgroundColor.png</file>
         <file>images/48x48/SpreadSheet.png</file>
+        <file>images/48x48/Edittoolbaricons/Search.png</file>
+        <file>images/48x48/Edittoolbaricons/ZoomOut.png</file>
+        <file>images/48x48/Edittoolbaricons/ZoomIn.png</file>
+        <file>images/48x48/Edittoolbaricons/Undo.png</file>
+        <file>images/48x48/Edittoolbaricons/Redo.png</file>
+        <file>images/48x48/Edittoolbaricons/Previous.png</file>
+        <file>images/48x48/Edittoolbaricons/Paste.png</file>
+        <file>images/48x48/Edittoolbaricons/Next.png</file>
+        <file>images/48x48/Edittoolbaricons/Format.png</file>
+        <file>images/48x48/Edittoolbaricons/FontStyle.png</file>
+        <file>images/48x48/Edittoolbaricons/EditMode.png</file>
+        <file>images/48x48/Edittoolbaricons/Cut.png</file>
+        <file>images/48x48/Edittoolbaricons/Copy.png</file>
         <file>images/64x64/PresentationDrawTool/highlight.png</file>
         <file>images/64x64/PresentationDrawTool/pen.png</file>
     </qresource>

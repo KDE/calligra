@@ -28,11 +28,10 @@
 #include <QtGui/QMainWindow>
 #include <KoDocument.h>
 #include <KWView.h>
+#include <styles/KoListStyle.h>
 
-#include "Splash.h"
 #include "PresentationTool.h"
-
-class KoListStyle;
+#include "Splash.h"
 class KoTextEditor;
 class QPushButton;
 class QIcon;
@@ -215,10 +214,15 @@ private:
      */
     bool m_wholeWord;
     /*!
-     * Flag for seeing if open document is presentation
+     * flag for checking open document type
      */
     enum DocumentType { Text, Presentation, Spreadsheet };
     DocumentType m_type;
+    /*!
+     * Flag to make higlighting of alignment button enable
+     */
+    enum AlignmentType {Left=1,Right,Center,Justify};
+    AlignmentType m_alignType;
     /*!
      * Pointer to splash class
      */
@@ -244,7 +248,7 @@ private:
     /*!
      * style formatting function
      */
-    void doStyle(QTextListFormat::Style);
+    void doStyle(KoListStyle::Style);
     /*!
      *opening a new document
      */
@@ -422,6 +426,14 @@ private slots:
      * Slot to choose new document
      */
     void chooseDocumentType();
+    /*!
+     * Slot to find AlignmentType
+     */
+    void findAlignType();
+    /*!
+     * Slot for intial AlignmentTypeCheck
+     */
+    void initialAlignType();
     /*!
      * Slot to open new documnet
      */

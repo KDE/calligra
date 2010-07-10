@@ -48,7 +48,6 @@
    <addaction name="actionEdit"/>
    <addaction name="separator"/>
    <addaction name="actionSearch"/>
-   <addaction name="separator"/>
    <addaction name="actionPrevPage"/>
    <addaction name="actionPageNumber"/>
    <addaction name="actionNextPage"/>
@@ -139,14 +138,20 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_search.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_search.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Search.png</normaloff>:/images/48x48/Edittoolbaricons/Search.png</iconset>
+   </property>
+   <property name="text">
+    <string>ActionSearch</string>
    </property>
   </action>
   <action name="actionPrevPage">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_back.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_back.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Previous.png</normaloff>:/images/48x48/Edittoolbaricons/Previous.png</iconset>
+   </property>
+   <property name="text">
+    <string>PreviousPage</string>
    </property>
    <property name="autoRepeat">
     <bool>true</bool>
@@ -157,8 +162,8 @@
   </action>
   <action name="actionNextPage">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_forward.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_forward.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Next.png</normaloff>:/images/48x48/Edittoolbaricons/Next.png</iconset>
    </property>
    <property name="text">
     <string>NextPage</string>
@@ -166,14 +171,20 @@
   </action>
   <action name="actionZoomIn">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/pdf_zoomin.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/pdf_zoomin.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/ZoomIn.png</normaloff>:/images/48x48/Edittoolbaricons/ZoomIn.png</iconset>
+   </property>
+   <property name="text">
+    <string>ZoomIn</string>
    </property>
   </action>
   <action name="actionZoomOut">
    <property name="icon">
-    <iconset>
-     <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/pdf_zoomout.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/pdf_zoomout.png</iconset>
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/ZoomOut.png</normaloff>:/images/48x48/Edittoolbaricons/ZoomOut.png</iconset>
+   </property>
+   <property name="text">
+    <string>ZoomOut</string>
    </property>
   </action>
   <action name="actionFullScreen">
@@ -355,7 +366,7 @@
    </property>
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/editicon.jpg</normaloff>:/images/48x48/editicon.jpg</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/EditMode.png</normaloff>:/images/48x48/Edittoolbaricons/EditMode.png</iconset>
    </property>
    <property name="text">
     <string>Edit</string>
@@ -364,7 +375,7 @@
   <action name="actionFormat">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/help.png</normaloff>:/images/48x48/Edittoolbaricons/help.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/Format.png</normaloff>:/images/48x48/Edittoolbaricons/Format.png</iconset>
    </property>
    <property name="text">
     <string>Format</string>
@@ -373,16 +384,16 @@
   <action name="actionStyle">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/fonticon.png</normaloff>:/images/48x48/Edittoolbaricons/fonticon.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/FontStyle.png</normaloff>:/images/48x48/Edittoolbaricons/FontStyle.png</iconset>
    </property>
    <property name="text">
-    <string>Insert</string>
+    <string>FontStyle</string>
    </property>
   </action>
   <action name="actionCopy">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/copy.png</normaloff>:/images/48x48/Edittoolbaricons/copy.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/Copy.png</normaloff>:/images/48x48/Edittoolbaricons/Copy.png</iconset>
    </property>
    <property name="text">
     <string>Copy</string>
@@ -391,7 +402,7 @@
   <action name="actionPaste">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/paste.png</normaloff>:/images/48x48/Edittoolbaricons/paste.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/Paste.png</normaloff>:/images/48x48/Edittoolbaricons/Paste.png</iconset>
    </property>
    <property name="text">
     <string>Paste</string>
@@ -400,7 +411,7 @@
   <action name="actionCut">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/cut.png</normaloff>:/images/48x48/Edittoolbaricons/cut.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/Cut.png</normaloff>:/images/48x48/Edittoolbaricons/Cut.png</iconset>
    </property>
    <property name="text">
     <string>Cut</string>
@@ -409,7 +420,7 @@
   <action name="actionUndo">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/undo.png</normaloff>:/images/48x48/Edittoolbaricons/undo.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/Undo.png</normaloff>:/images/48x48/Edittoolbaricons/Undo.png</iconset>
    </property>
    <property name="text">
     <string>undo</string>
@@ -418,7 +429,7 @@
   <action name="actionRedo">
    <property name="icon">
     <iconset resource="FreOffice.qrc">
-     <normaloff>:/images/48x48/Edittoolbaricons/redo.png</normaloff>:/images/48x48/Edittoolbaricons/redo.png</iconset>
+     <normaloff>:/images/48x48/Edittoolbaricons/Redo.png</normaloff>:/images/48x48/Edittoolbaricons/Redo.png</iconset>
    </property>
    <property name="text">
     <string>redo</string>

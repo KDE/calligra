@@ -88,6 +88,8 @@
 #include <KoPAView.h>
 #include <KoStore.h>
 #include <KWCanvas.h>
+#include <styles/KoListLevelProperties.h>
+#include <KoList.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -163,6 +165,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_existingFile(false),
         m_docExist(false),
         m_count(0),
+        m_alignType(AlignmentType(0)),
         m_pptTool(NULL),
         m_fsPPTDrawHighlightButton(NULL),
         m_fsPPTDrawPenButton(NULL)
@@ -191,7 +194,6 @@ void MainWindow::init()
 
     const QDir pluginDir("/usr/lib/freoffice/");
     const QStringList plugins = pluginDir.entryList(QDir::Files);
-qDebug()<<"plugins"<<pluginDir;
 
     for (int i = 0; i < plugins.size(); ++i) {
         QPluginLoader test(pluginDir.absoluteFilePath(plugins.at(i)));
@@ -333,14 +335,14 @@ void MainWindow::openFormatFrame()
     m_numberedlist=addFormatFrameComponent(i18n("Number"));
     m_alignjustify=addFormatFrameComponent(i18n("AlignJustify"));
 
+    initialAlignType();
+
     m_formatframelayout->addWidget(m_bold,0,0);
     m_formatframelayout->addWidget(m_alignleft,0,1);
     m_formatframelayout->addWidget(m_numberedlist,0,2);
-
     m_formatframelayout->addWidget(m_italic,1,0);
     m_formatframelayout->addWidget(m_alignright,1,1);
     m_formatframelayout->addWidget(m_bulletlist,1,2);
-
     m_formatframelayout->addWidget(m_underline,2,0);
     m_formatframelayout->addWidget(m_aligncenter,2,1);
     m_formatframelayout->addWidget(m_alignjustify,2,2);
@@ -368,7 +370,6 @@ void MainWindow::openFontStyleFrame()
     if(m_formatframe)
         m_formatframe->hide();
 
-
     if(m_fontstyleframe && m_fontstyleframe->isVisible()) {
         m_fontstyleframe->hide();
         return;
@@ -386,13 +387,15 @@ void MainWindow::openFontStyleFrame()
 
     m_fontsizecombo=new QComboBox(this);
     Q_CHECK_PTR(m_fontsizecombo);
-    m_fontsizecombo->setMinimumSize(120,80);
+    m_fontsizecombo->setMinimumSize(160,76);
+    m_fontsizecombo->setEditable(true);
     int i;
-    for(i=4;i<=40;i++)
+    for(i=4;i<=100;i++)
     {
         QString f_size;
         m_fontsizecombo->addItem(f_size.setNum(i));
     }
+
     m_textcolor=addFontStyleFrameComponent(i18n("TextColor"));
     m_textbackgroundcolor=addFontStyleFrameComponent(i18n("TextBackgroundColor"));
     m_subscript=addFontStyleFrameComponent(i18n("SubScript"));
@@ -400,8 +403,8 @@ void MainWindow::openFontStyleFrame()
 
     m_fontcombobox=new QFontComboBox(this);
     Q_CHECK_PTR(m_fontcombobox);
-    m_fontcombobox->setMinimumSize(290,74);
-    m_fontcombobox->setFont(QFont("Bitstream Charter",12,QFont::Normal));
+    m_fontcombobox->setMinimumSize(255,76);
+    m_fontcombobox->setFont(QFont("Nokia Sans",12,QFont::Normal));
 
     m_fontstyleframelayout->addWidget(m_fontcombobox,0,0);
     m_fontstyleframelayout->addWidget(m_fontsizecombo,0,2);
@@ -430,8 +433,10 @@ void MainWindow::doSubScript()
    if (m_editor){
        if (m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript ){
            m_editor->setVerticalTextAlignment(Qt::AlignVCenter);
+           m_subscript->setStyleSheet("");
        } else {
            m_editor->setVerticalTextAlignment(Qt::AlignBottom);
+           m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
        }
        m_fontstyleframe->hide();
     }
@@ -442,8 +447,10 @@ void MainWindow::doSuperScript()
     if (m_editor) {
         if (m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript ) {
             m_editor->setVerticalTextAlignment(Qt::AlignVCenter);
+             m_superscript->setStyleSheet("");
         } else {
             m_editor->setVerticalTextAlignment(Qt::AlignTop);
+            m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
         }
         m_fontstyleframe->hide();
     }
@@ -452,10 +459,11 @@ void MainWindow::doSuperScript()
 void MainWindow::selectFontSize()
 {
     QString selectedSize=m_fontsizecombo->currentText();
-    bool fontButtonClicked=m_fontsizecombo->isEnabled();
-        int size=selectedSize.toInt();
+    int size=selectedSize.toInt();
     if (m_editor) {
         m_editor->setFontSize(size);
+        QTextCharFormat textchar=m_editor->charFormat();
+        textchar.setFontWeight(size);
         m_fontstyleframe->hide();
     }
 }
@@ -465,6 +473,8 @@ void MainWindow::selectFontType()
     QString selectedfont=m_fontcombobox->currentText();
     if (m_editor) {
         m_editor->setFontFamily(selectedfont);
+        QTextCharFormat textchar = m_editor->charFormat();
+        textchar.setFontFamily(selectedfont);
         m_fontstyleframe->hide();
     }
 }
@@ -493,8 +503,12 @@ void MainWindow::doBold()
         QTextCharFormat textchar = m_editor->charFormat();
         if (textchar.fontWeight()==QFont::Bold) {
             m_editor->bold(false);
+            textchar.setFontWeight(QFont::Normal);
+            m_bold->setStyleSheet("");
         } else {
+            textchar.setFontWeight(QFont::Bold);
             m_editor->bold(true);
+            m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
         m_formatframe->hide();
     }
@@ -503,12 +517,15 @@ void MainWindow::doBold()
 void MainWindow::doItalic()
 {
     if(m_editor) {
-        QTextCharFormat textchar=m_editor->charFormat();
-        bool italicCheck=textchar.fontItalic();
-        if (italicCheck) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if (textchar.fontItalic()) {
             m_editor->italic(false);
+            textchar.setFontItalic(false);
+            m_italic->setStyleSheet("");
         } else {
             m_editor->italic(true);
+            textchar.setFontItalic(true);
+            m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
         m_formatframe->hide();
     }
@@ -516,21 +533,30 @@ void MainWindow::doItalic()
 
 void MainWindow::doUnderLine()
 {
-    QTextCharFormat textchar=m_editor->charFormat();
     if(m_editor) {
+        QTextCharFormat textchar = m_editor->charFormat();
         if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
             m_editor->underline(false);
+            textchar.setProperty(KoCharacterStyle::UnderlineType,KoCharacterStyle::SingleLine);
+            textchar.setProperty(KoCharacterStyle::UnderlineStyle,KoCharacterStyle::SolidLine);
+            m_underline->setStyleSheet("");
         } else {
             m_editor->underline(true);
+            textchar.setProperty(KoCharacterStyle::UnderlineType,KoCharacterStyle::NoLineType);
+            textchar.setProperty(KoCharacterStyle::UnderlineStyle,KoCharacterStyle::NoLineStyle);
+            m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
     }
+    m_formatframe->hide();
 }
 
 void MainWindow::doLeftAlignment()
 {
     if (m_editor) {
-         m_editor->setHorizontalTextAlignment(Qt::AlignLeft);
-         m_formatframe->hide();
+          m_editor->setHorizontalTextAlignment(Qt::AlignLeft);
+          m_formatframe->hide();
+          m_alignType=Left;
+          findAlignType();
     }
 }
 
@@ -539,56 +565,108 @@ void MainWindow::doJustify()
     if (m_editor) {
         m_editor->setHorizontalTextAlignment(Qt::AlignJustify);
         m_formatframe->hide();
+        m_alignType=Justify;
+        findAlignType();
     }
 }
 
 void MainWindow::doRightAlignment()
 {
     if (m_editor) {
-         m_editor->setHorizontalTextAlignment(Qt::AlignRight);
-         m_formatframe->hide();
+        m_editor->setHorizontalTextAlignment(Qt::AlignRight);
+        m_formatframe->hide();
+        m_alignType=Right;
+        findAlignType();
     }
 }
 
 void MainWindow::doCenterAlignment()
 {
     if (m_editor) {
-         m_editor->setHorizontalTextAlignment(Qt::AlignCenter);
-         m_formatframe->hide();
+        m_editor->setHorizontalTextAlignment(Qt::AlignCenter);
+        m_formatframe->hide();
+        m_alignType=Center;
     }
+}
+
+void MainWindow::initialAlignType() {
+    QTextBlockFormat blk = m_editor->blockFormat();
+    Qt::Alignment textblock_align = blk.alignment();
+    switch(textblock_align) {
+        case Qt::AlignLeft :
+                        m_alignType = Left;
+                        break;
+        case Qt::AlignRight :
+                        m_alignType = Right;
+                        break;
+        case Qt::AlignCenter :
+                        m_alignType = Center;
+                        break;
+        case Qt::AlignJustify :
+                        m_alignType = Justify;
+                        break;
+    }
+    findAlignType();
+}
+
+void MainWindow::findAlignType()
+{
+    if(m_alignType) {
+        switch(m_alignType){
+            case Left:
+                        m_alignleft->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+                        m_alignjustify->setStyleSheet("");
+                        m_alignright->setStyleSheet("");
+                        m_aligncenter->setStyleSheet("");
+                        break;
+            case Right:
+                        m_alignright->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+                        m_alignjustify->setStyleSheet("");
+                        m_alignleft->setStyleSheet("");
+                        m_aligncenter->setStyleSheet("");
+                        break;
+            case Center:
+                        m_aligncenter->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+                        m_alignjustify->setStyleSheet("");
+                        m_alignright->setStyleSheet("");
+                        m_alignleft->setStyleSheet("");
+                        break;
+            case Justify:
+                        m_alignjustify->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+                        m_alignleft->setStyleSheet("");
+                        m_alignright->setStyleSheet("");
+                        m_aligncenter->setStyleSheet("");
+                        break;
+        }
+    }
+}
+
+void MainWindow::doNumberList()
+{
+    if(m_formatframe->isVisible())
+        m_formatframe->hide();
+    KoListStyle::Style style = KoListStyle::DecimalItem;
+    doStyle(style);
 }
 
 void MainWindow::doBulletList()
 {
     if(m_formatframe->isVisible())
         m_formatframe->hide();
-    QTextListFormat::Style style = QTextListFormat::ListDisc;
+    KoListStyle::Style style = KoListStyle::DiscItem;
     doStyle(style);
 }
 
-void MainWindow::doNumberList()
+void MainWindow::doStyle(KoListStyle::Style style)
 {
-    if(m_formatframe->isVisible()) {
-             m_formatframe->hide();
-    }
-    QTextListFormat::Style style = QTextListFormat::ListDecimal;
-    doStyle(style);
+    QTextBlock blk = m_editor->block();
+    KoList *list;
+    KoListStyle *liststyle = new KoListStyle();
+    KoListLevelProperties listlevelproperties;
+    listlevelproperties.setStyle(style);
+    liststyle->setLevelProperties(listlevelproperties);
+    list->applyStyle(blk,liststyle,list->level(blk));
 }
-
-void MainWindow::doStyle(QTextListFormat::Style style)
-{
-    QTextBlock block=m_editor->block();
-    QTextCursor cursor=QTextCursor(block);
-    QTextListFormat listFmt;
-    listFmt.setStyle(style);
-    cursor.beginEditBlock();
-    if (cursor.currentList()) {
-       listFmt = cursor.currentList()->format();
-       listFmt.setIndent(listFmt.indent() + 1);
-    }
-    cursor.insertList(listFmt);
-    cursor.endEditBlock();
- }
 
 void MainWindow::saveFile()
 {
@@ -602,7 +680,7 @@ void MainWindow::saveFile()
           m_doc->saveNativeFormat(m_fileName);
           msgBox.setText(i18n("The document has been saved successfully"));
           msgBox.exec();
-          m_existingFile=true;
+          m_existingFile = true;
 
           if(m_confirmationdialog) {
               closeDocument();
@@ -616,7 +694,7 @@ void MainWindow::saveFile()
               m_doc->saveNativeFormat(m_fileName);
               msgBox.setText(i18n("The document has been saved successfully"));
 
-              m_existingFile=true;
+              m_existingFile = true;
           } else {
               msgBox.setText(i18n("Saving operation supports only open document formats currently,Sorry"));
           }
@@ -636,7 +714,7 @@ void MainWindow::saveFileAs()
     if(m_doc) {
         QString ext;
         if(m_fileName.isEmpty()) {
-            m_fileName=NEW_WORDDOC;
+            m_fileName = NEW_WORDDOC;
             ext = KMimeType::extractKnownExtension(m_fileName);
         } else {
             ext = KMimeType::extractKnownExtension(m_fileName);
@@ -658,12 +736,10 @@ void MainWindow::saveFileAs()
 
             m_doc->saveNativeFormat(m_fileName);
             msgBox.setText(i18n("The document has been saved successfully"));
-
             m_existingFile=true;
        } else {
            msgBox.setText(i18n("Saving operation supports only open document formats currently,sorry"));
        }
-
     }  else {
         msgBox.setText(i18n("No Document is open to perform saveas operation ,invalid try"));
     }
@@ -677,16 +753,16 @@ void MainWindow::chooseDocumentType()
        msgBox.exec();
        return;
     } else {
-       m_docdialog=new QDialog(this);
+       m_docdialog = new QDialog(this);
        Q_CHECK_PTR(m_docdialog);
 
        m_docdialoglayout = new QGridLayout;
        Q_CHECK_PTR(m_docdialoglayout);
 
-       m_document=addNewDocument("Document");
-       m_presenter=addNewDocument("Presenter");
+       m_document = addNewDocument("Document");
+       m_presenter = addNewDocument("Presenter");
        m_presenter->setDisabled(true);
-       m_spreadsheet=addNewDocument("SpreadSheet");
+       m_spreadsheet = addNewDocument("SpreadSheet");
        m_spreadsheet->setDisabled(true);
 
        m_docdialoglayout->addWidget(m_document,0,0);
@@ -726,7 +802,7 @@ void MainWindow::openNewSpreadSheet()
 
 QPushButton * MainWindow::addFormatFrameComponent(QString const& imagepath)
 {
-    QPushButton * btn=new QPushButton(this);
+    QPushButton * btn = new QPushButton(this);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
     btn->setMaximumSize(165,70);
     Q_CHECK_PTR(btn);
@@ -734,7 +810,7 @@ QPushButton * MainWindow::addFormatFrameComponent(QString const& imagepath)
 }
 QPushButton * MainWindow::addFontStyleFrameComponent(QString const& imagepath)
 {
-    QPushButton * btn=new QPushButton(this);
+    QPushButton * btn = new QPushButton(this);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
     btn->setMinimumSize(200,70);
     Q_CHECK_PTR(btn);
@@ -743,7 +819,7 @@ QPushButton * MainWindow::addFontStyleFrameComponent(QString const& imagepath)
 
 QToolButton * MainWindow ::addNewDocument(QString const& docname)
 {
-    QToolButton * toolbutton=new QToolButton(this);
+    QToolButton * toolbutton = new QToolButton(this);
     Q_CHECK_PTR(toolbutton);
     toolbutton->setIcon(QIcon(":/images/48x48/"+docname+".png"));
     toolbutton->setToolTip(docname);
@@ -754,7 +830,7 @@ void MainWindow::openNewDocument(DocumentType type)
 {
     KUrl newurl;
     QString mimetype;
-    m_docExist=true;
+    m_docExist = true;
     switch(type) {
     case Text:
         newurl.setPath(NEW_WORDDOC);
@@ -796,7 +872,7 @@ void MainWindow::openNewDocument(DocumentType type)
     m_view = m_doc->createView();
 
     if(type == Text) {
-        m_doubleClick=true;
+        m_doubleClick = true;
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
     }
@@ -838,11 +914,11 @@ void MainWindow::openNewDocument(DocumentType type)
 
     m_ui->actionEdit->setVisible(true);
     m_ui->EditToolBar->show();
-    m_fileName=(char*)0;
-    m_newDocOpen=true;
+    m_fileName = (char*)0;
+    m_newDocOpen = true;
     m_type = type;
     //false when new document open
-    m_openCheck=false;
+    m_openCheck = false;
 }
 
 void MainWindow::closeDoc()
@@ -887,11 +963,11 @@ void MainWindow::editToolBar(bool edit)
              KoToolManager::instance()->switchToolRequested(PanTool_ID);
              m_ui->viewToolBar->show();
              m_ui->EditToolBar->hide();
-             m_openCheck=true;
+             m_openCheck = true;
         } else {
              m_ui->viewToolBar->hide();
              m_ui->EditToolBar->show();
-             m_openCheck=true;
+             m_openCheck = true;
              KoToolManager::instance()->switchToolRequested(TextTool_ID);
         }
     } else if (m_newDocOpen) {
@@ -941,7 +1017,7 @@ void MainWindow::doUndo()
         m_fontstyleframe->hide();
 
     if (m_doc && m_editor) {
-        m_textDocument=m_editor->document();
+        m_textDocument = m_editor->document();
         m_textDocument->availableUndoSteps();
         if (m_count<(m_textDocument->availableUndoSteps())) {
             m_textDocument->undo();
@@ -961,7 +1037,7 @@ void MainWindow::doRedo()
         m_fontstyleframe->hide();
 
     if(m_doc && m_editor) {
-        m_textDocument=m_editor->document();
+        m_textDocument = m_editor->document();
         m_textDocument->redo();
         m_textDocument->redo();
     }
@@ -979,8 +1055,9 @@ void MainWindow::copy()
 
 void MainWindow::cut()
 {
-    m_controller->canvas()->toolProxy()->cut();
-
+    if(m_editor && m_editor->hasSelection()) {
+         m_controller->canvas()->toolProxy()->cut();
+    }
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
     if(m_formatframe)
@@ -1113,15 +1190,15 @@ void MainWindow::closeDocument()
     if((m_fileName.isNull())&&(!m_existingFile)) {
         m_confirmationdialog = new QDialog(this);
         Q_CHECK_PTR(m_confirmationdialog);
-        m_confirmationdialoglayout=new QGridLayout;
+        m_confirmationdialoglayout = new QGridLayout;
         Q_CHECK_PTR(m_confirmationdialoglayout);
-        m_yes=new QPushButton(i18n("Save"),this);
+        m_yes = new QPushButton(i18n("Save"),this);
         Q_CHECK_PTR(m_yes);
-        m_no=new QPushButton(i18n("Discard"),this);
+        m_no = new QPushButton(i18n("Discard"),this);
         Q_CHECK_PTR(m_no);
-        m_cancel=new QPushButton(i18n("Cancel"),this);
+        m_cancel = new QPushButton(i18n("Cancel"),this);
         Q_CHECK_PTR(m_cancel);
-        m_message=new QLabel(i18n("Do u want to save newly created document before closing ?"),this);
+        m_message = new QLabel(i18n("Do u want to save newly created document before closing ?"),this);
         Q_CHECK_PTR(m_message);
         m_confirmationdialoglayout->addWidget(m_message,0,0,1,3,Qt::AlignCenter);
         m_confirmationdialoglayout->addWidget(m_yes,1,0);
@@ -1132,7 +1209,7 @@ void MainWindow::closeDocument()
         connect(m_no,SIGNAL(clicked()),this,SLOT(discardNewDocument()));
         connect(m_yes,SIGNAL(clicked()),this,SLOT(saveFile()));
         connect(m_cancel,SIGNAL(clicked()),this,SLOT(returnToDoc()));
-        m_existingFile=false;
+        m_existingFile = false;
      } else {
         setWindowTitle(i18n("Office"));
         setCentralWidget(0);
@@ -1171,47 +1248,84 @@ void MainWindow::closeDocument()
 
         m_ui->actionZoomLevel->setText(i18n("%1 %", 100));
         m_ui->actionPageNumber->setText(i18n("%1 of %2", 0, 0));
-
         m_existingFile=false;
 
         if(m_formatframe) {
             m_formatframe->close();
+            delete m_bold;
+            m_bold = 0;
+            delete m_italic;
+            m_italic = 0;
+            delete m_underline;
+            m_underline = 0;
+            delete m_alignright;
+            m_alignright = 0;
+            delete m_alignleft;
+            m_alignleft = 0;
+            delete m_alignjustify;
+            m_alignjustify = 0;
+            delete m_aligncenter;
+            m_aligncenter = 0;
+            delete m_numberedlist;
+            m_numberedlist = 0;
+            delete m_bulletlist;
+            m_bulletlist = 0;
             delete m_formatframe ;
-            m_formatframe=0;
+            m_formatframe = 0;
         }
 
         if(m_fontstyleframe) {
             m_fontstyleframe->close();
+            delete m_subscript;
+            m_subscript = 0;
+            delete m_superscript;
+            m_superscript = 0;
+            delete m_fontcombobox;
+            m_fontcombobox = 0;
+            delete m_fontsizecombo;
+            m_fontsizecombo = 0;
+            delete m_textcolor;
+            m_textcolor = 0;
+            delete m_textbackgroundcolor;
+            m_textbackgroundcolor = 0;
             delete m_fontstyleframe;
-            m_fontstyleframe=0;
+            m_fontstyleframe = 0;
         }
 
         if(m_confirmationdialog) {
             m_confirmationdialog->close();
+            delete m_yes;
+            m_yes = 0;
+            delete m_no;
+            m_no = 0;
+            delete m_cancel;
+            m_cancel = 0;
             delete m_confirmationdialog;
-            m_confirmationdialog=0;
+            m_confirmationdialog = 0;
         }
     }
     m_docExist=false;
     m_doubleClick=false;
     m_count=0;
 }
+
 void MainWindow::returnToDoc()
 {
     if(m_confirmationdialog) {
         m_confirmationdialog->close();
         delete m_confirmationdialog;
-        m_confirmationdialog=0;
+        m_confirmationdialog = 0;
     }
-    m_docExist=true;
+    m_docExist = true;
     return;
 }
+
 void MainWindow::discardNewDocument()
 {
-    m_fileName="safe";
+    m_fileName = "safe";
     closeDocument();
-    m_fileName=(char*)0;
-    m_existingFile=false;
+    m_fileName = (char*)0;
+    m_existingFile = false;
 }
 
 void MainWindow::doOpenDocument()
@@ -1308,7 +1422,7 @@ void MainWindow::openDocument(const QString &fileName)
     }
 
     if((m_type==Text) && (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive))) {
-        m_doubleClick=true;
+        m_doubleClick = true;
         m_ui->actionEdit->setVisible(true);
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
@@ -1340,9 +1454,9 @@ void MainWindow::openDocument(const QString &fileName)
         m_splash = 0;
    }
 
-   m_openCheck=true;
+   m_openCheck = true;
    //flag for not allowing to open a document if already one documnet is exists
-   m_docExist=true;
+   m_docExist = true;
 
    initialUndoStepsCount();
 }
@@ -1396,7 +1510,6 @@ void MainWindow::resourceChanged(int key, const QVariant &value)
     if( ( m_pptTool ) && m_pptTool->toolsActivated() && m_type == Presentation ) {
         return;
     }
-
     if (KoCanvasResource::CurrentPage == key) {
         m_currentPage = value.toInt();
         if (m_type == Presentation && isFullScreen()) {
@@ -1447,10 +1560,9 @@ void MainWindow::fullScreen()
     if (m_type == Presentation) {
         if((!m_pptTool))
         {
-            m_pptTool=new PresentationTool(this, m_controller);  
-            connect(m_fsButton, SIGNAL(clicked()), m_pptTool, SLOT(deactivateTool()));      
+            m_pptTool=new PresentationTool(this, m_controller);
+            connect(m_fsButton, SIGNAL(clicked()), m_pptTool, SLOT(deactivateTool()));
         }
-
         showFullScreenPresentationIcons();
     }
 }
@@ -1524,7 +1636,6 @@ void MainWindow::prevPage()
         return;
     if(m_currentPage == 1)
         return;
-
     int cur_page = m_currentPage;
     bool check = triggerAction("page_previous");
     if(check) {
@@ -1542,7 +1653,6 @@ void MainWindow::nextPage()
       return;
    }
    static int prev_curpage=0;
-
    if(prev_curpage != m_currentPage) {
         int cur_page = m_currentPage;
         prev_curpage = m_currentPage;
@@ -1550,7 +1660,8 @@ void MainWindow::nextPage()
         if(cur_page == m_currentPage)
            nextPage();
         return;
-   } else {
+   }
+   else {
         int cur_page = m_currentPage;
         int next_page = cur_page+1;
         while(next_page != cur_page) {
@@ -1587,7 +1698,6 @@ void MainWindow::fsButtonClicked()
     if(m_controller) {
         m_controller->show();
     }
-
     m_fsButton->hide();
 
     if (m_fsPPTBackButton && m_fsPPTBackButton->isVisible())
@@ -1596,11 +1706,10 @@ void MainWindow::fsButtonClicked()
     if (m_fsPPTForwardButton && m_fsPPTForwardButton->isVisible())
         m_fsPPTForwardButton->hide();
 
-    if (m_isViewToolBar) {
+    if (m_isViewToolBar)
         m_ui->viewToolBar->show();
-    } else {
+    else
         m_ui->SearchToolBar->show();
-    }
 
     showNormal();
 }
@@ -1890,7 +1999,6 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                 triggerAction("page_next");
             }
         }
-
     }
     // Maemo Qt hardcodes handling of F6 to toggling full screen directly, so
     // override that shortcut to do what we want it to do instead.
@@ -1935,18 +2043,64 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if(event && event->type()==QEvent::MouseButtonPress) {
+    if(event && event->type()==QEvent::MouseButtonPress && m_doc) {
         QMouseEvent *mouseEvent= reinterpret_cast<QMouseEvent*>(event);
         int xcordinate = mouseEvent->globalX ();
         int ycordinate = mouseEvent->globalY();
-        if(m_doc && m_formatframe) {
-                if((xcordinate<325) || (ycordinate<199))
-                    m_formatframe->hide();
+        if((m_formatframe) && (m_formatframe->isVisible())) {
+            if ((xcordinate<325) || (ycordinate<199))
+                m_formatframe->hide();
         }
-        if(m_doc && m_fontstyleframe) {
-             if((xcordinate<384) || (ycordinate<199))
+
+        if((m_fontstyleframe) && (m_fontstyleframe->isVisible())) {
+            if((xcordinate<384) || (ycordinate<199))
                 m_fontstyleframe->hide();
         }
+    }
+
+    if((event&&event->type()==QEvent::MouseButtonPress)&&(m_doc&&m_editor)) {
+        if(m_bold) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if (textchar.fontWeight()==QFont::Bold) {
+                m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+            } else {
+                m_bold->setStyleSheet("");
+            }
+        }
+        if(m_italic) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if (textchar.fontItalic()) {
+                m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+            } else {
+                m_italic->setStyleSheet("");
+            }
+        }
+        if(m_underline) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
+                m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+            } else {
+                m_underline->setStyleSheet("");
+            }
+        }
+        if(m_superscript) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
+                m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+            } else {
+                m_superscript->setStyleSheet("");
+            }
+        }
+        if(m_subscript) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
+                m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+            } else {
+                m_subscript->setStyleSheet("");
+            }
+        }
+        if(m_formatframe)
+            initialAlignType();
     }
 
     if(m_doubleClick) {
@@ -2065,7 +2219,7 @@ void MainWindow::mouseReleaseEvent( QMouseEvent *event )
 void MainWindow::paintEvent( QPaintEvent *event )
 {
     if( !m_pptTool ) {
-	return;
+        return;
     }
 
     if( m_pptTool->toolsActivated() ) {
