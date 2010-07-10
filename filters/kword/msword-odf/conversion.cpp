@@ -422,6 +422,10 @@ QString Conversion::setBorderAttributes(const wvWare::Word97::BRC& brc)
         style = "double"; //Note: odf only support double so that will have to do
         break;
 
+    case 25: // inset
+        style = "inset";
+        break;
+
     case 13: // thin-thick-thin small gap
     case 16: // thin-thick-thin medium gap
     case 19: // thin-thick-thin large gap
