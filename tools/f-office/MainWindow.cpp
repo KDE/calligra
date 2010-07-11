@@ -586,6 +586,7 @@ void MainWindow::doCenterAlignment()
         m_editor->setHorizontalTextAlignment(Qt::AlignCenter);
         m_formatframe->hide();
         m_alignType=Center;
+        findAlignType();
     }
 }
 
@@ -702,7 +703,7 @@ void MainWindow::saveFile()
        }
     }
     else {
-        msgBox.setText(i18n("No Document is open to perform save operation , invalid try"));
+        msgBox.setText(i18n("No document is open to perform save operation , invalid try"));
         msgBox.exec();
     }
 
@@ -741,7 +742,7 @@ void MainWindow::saveFileAs()
            msgBox.setText(i18n("Saving operation supports only open document formats currently,sorry"));
        }
     }  else {
-        msgBox.setText(i18n("No Document is open to perform saveas operation ,invalid try"));
+        msgBox.setText(i18n("No document is open to perform saveas operation ,invalid try"));
     }
     msgBox.exec();
 }
