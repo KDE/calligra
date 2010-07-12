@@ -135,7 +135,7 @@ void PresentationTool::drawEllipse( const QPoint &cpoint )
     QColor c( Qt::black );
     c.setAlphaF( 0.5 );
     QPainterPath ellipse;
-    ellipse.addEllipse( cpoint.x() - 75, cpoint.y() - 75, 150, 150 );
+    ellipse.addEllipse( cpoint.x() - 50, cpoint.y() - 50, 100, 100 );
     QPainterPath myPath;
     myPath.addRect( 0, 0, 800, 480);
     // We draw the difference
