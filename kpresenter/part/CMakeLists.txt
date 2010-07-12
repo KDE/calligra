@@ -55,6 +55,8 @@ set( kpresenterprivate_LIB_SRCS
      KPrPresentationHighlightStrategy.cpp
      KPrPresentationBlackStrategy.cpp
      KPrPresentationStrategyBase.cpp
+     KPrPresentationToolAdaptor.cpp
+     KPrPresentationToolEventForwarder.cpp
      KPrPresentationDrawStrategy.cpp
      KPrPageSelectStrategyBase.cpp
      KPrPageSelectStrategyFixed.cpp

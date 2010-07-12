@@ -21,8 +21,6 @@
 
 #include "KPrPresentationStrategyBase.h"
 
-class KPrPresentationBlackWidget;
-
 class KPrPresentationBlackStrategy : public KPrPresentationStrategyBase
 {
 public:
@@ -30,9 +28,6 @@ public:
     virtual ~KPrPresentationBlackStrategy();
 
     virtual bool keyPressEvent( QKeyEvent * event );
-
-private:
-    KPrPresentationBlackWidget * m_blackWidget;
 };
 
 #endif /* KPRPRESENTATIONBLACKSTRATEGY_H */

@@ -38,7 +38,7 @@
 #include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas)
-: QWidget(canvas)
+: KPrPresentationToolEventForwarder(canvas)
 , m_draw( false )
 , m_penSize( 10 )
 , m_penColor( Qt::black )
@@ -171,8 +171,20 @@ void KPrPresentationDrawWidget::updateSize( QAction *size )
     m_draw = false;
 }
 
+void KPrPresentationDrawWidget::updateSize(int size)
+{
+    m_penSize=size;
+    m_draw=false;
+}
+
 void KPrPresentationDrawWidget::updateColor( QAction *color )
 {
     m_penColor = color->property( "color" ).value<QColor>();
     m_draw = false;
+}
+
+void KPrPresentationDrawWidget::updateColor(const QString &color)
+{
+    m_penColor.setNamedColor(color);
+    m_draw=false;
 }

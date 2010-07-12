@@ -21,14 +21,13 @@
 #ifndef KPRPRESENTATIONBLACKWIDGET_H
 #define KPRPRESENTATIONBLACKWIDGET_H
 
+#include "KPrPresentationToolEventForwarder.h"
+
 #include <KoPACanvas.h>
 
 #include <QSize>
-#include <QWidget>
 
-class KPrPresentationBlackWidget;
-
-class KPrPresentationBlackWidget : public QWidget
+class KPrPresentationBlackWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT
 public:

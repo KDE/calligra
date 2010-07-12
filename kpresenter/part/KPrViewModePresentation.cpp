@@ -35,6 +35,7 @@
 #include <KoPADocument.h>
 #include <KoPAView.h>
 #include <KoZoomHandler.h>
+#include <KPrView.h>
 
 #include "KPrDocument.h"
 #include "KPrPresenterViewWidget.h"
@@ -49,6 +50,7 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_presenterViewCanvas( 0 )
 , m_presenterViewWidget( 0 )
 , m_endOfSlideShowPage( 0 )
+, m_view( static_cast<KPrView *>(view) )
 {
 }
 
@@ -174,6 +176,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     KCursor::setAutoHideCursor( m_canvas, true );
 
     if ( presenterViewEnabled ) {
+
         if ( desktop.numScreens() > 1 ) {
             int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
             QRect pvRect = desktop.screenGeometry( newscreen );
@@ -208,6 +211,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 void KPrViewModePresentation::deactivate()
 {
     emit deactivated();
+
     m_animationDirector->deactivate();
     KoPAPageBase * page = m_view->activePage();
     if ( m_endOfSlideShowPage ) {
@@ -333,4 +337,9 @@ void KPrViewModePresentation::navigateToPage( int index )
 
     emit pageChanged( m_animationDirector->currentPage(), m_animationDirector->numStepsInPage() );
     emit stepChanged( m_animationDirector->currentStep() );
+}
+
+bool KPrViewModePresentation::isActivated()
+{
+    return m_view->isPresentationRunning();
 }

@@ -22,11 +22,11 @@
 #ifndef KPRPRESENTATIONHIGHLIGHTWIDGET_H
 #define KPRPRESENTATIONHIGHLIGHTWIDGET_H
 
-#include <QWidget>
+#include "KPrPresentationToolEventForwarder.h"
 
 class KoPACanvas;
 
-class KPrPresentationHighlightWidget : public QWidget
+class KPrPresentationHighlightWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT
 public:

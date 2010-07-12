@@ -23,6 +23,7 @@
 
 class QWidget;
 class QKeyEvent;
+class KPrPresentationToolEventForwarder;
 class KoPACanvas;
 class KPrPresentationTool;
 
@@ -38,12 +39,15 @@ public:
      */
     virtual bool keyPressEvent( QKeyEvent * event ) = 0;
 
+    KPrPresentationToolEventForwarder * widget();
+
 protected:
     void setToolWidgetParent( QWidget * widget );
     void activateDefaultStrategy();
     KoPACanvas * canvas();
 
-    KPrPresentationTool * m_tool;
+    KPrPresentationToolEventForwarder *m_widget;
+    KPrPresentationTool *m_tool;
 };
 
 #endif /* KPRPRESENTATIONSTRATEGYBASE_H */

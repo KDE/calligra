@@ -41,13 +41,18 @@
 #include "KPrPresentationDrawStrategy.h"
 #include "KPrPresentationBlackStrategy.h"
 #include "ui/KPrPresentationToolWidget.h"
+#include "KPrPresentationToolAdaptor.h"
+#include "KPrViewModePresentation.h"
 
 
-KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
+KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
 : KoToolBase( viewMode.canvas() )
 , m_viewMode( viewMode )
 , m_strategy( new KPrPresentationStrategy( this ) )
+, m_bus ( new KPrPresentationToolAdaptor( this ) )
 {
+    QDBusConnection::sessionBus().registerObject("/kpresenter/PresentationTools", this);
+
     // tool box
     m_frame = new QFrame( m_viewMode.canvas() );
 
@@ -261,6 +266,22 @@ bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
         }
     }
     return false;
+}
+
+KPrPresentationStrategyBase *KPrPresentationTool::strategy()
+{
+    return m_strategy;
+}
+
+KPrViewModePresentation &KPrPresentationTool::viewModePresentation()
+{
+    return m_viewMode;
+}
+
+
+void KPrPresentationTool::normalPresentation()
+{
+   switchStrategy( new KPrPresentationStrategy( this ) );
 }
 
 #include "KPrPresentationTool.moc"

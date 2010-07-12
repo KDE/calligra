@@ -23,8 +23,6 @@
 
 #include "KPrPresentationStrategyBase.h"
 
-class KPrPresentationHighlightWidget;
-
 class KPrPresentationHighlightStrategy : public KPrPresentationStrategyBase
 {
 public :
@@ -32,9 +30,6 @@ public :
     ~KPrPresentationHighlightStrategy();
 
     bool keyPressEvent( QKeyEvent * event );
-
-private:
-    KPrPresentationHighlightWidget * m_highlightWidget;
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTSTRATEGY_H */

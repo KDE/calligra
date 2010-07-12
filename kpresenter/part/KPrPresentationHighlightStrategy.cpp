@@ -30,17 +30,15 @@
 
 KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyBase( tool )
-, m_highlightWidget( new KPrPresentationHighlightWidget( canvas() ) )
 {
-    setToolWidgetParent( m_highlightWidget );
-    m_highlightWidget->show();
-    m_highlightWidget->installEventFilter( m_tool );
+    m_widget = new KPrPresentationHighlightWidget( canvas() ) ;
+    setToolWidgetParent( m_widget );
+    m_widget->show();
+    m_widget->installEventFilter( m_tool );
 }
-
 KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
 {
     setToolWidgetParent( canvas() );
-    delete m_highlightWidget;
 }
 
 bool KPrPresentationHighlightStrategy::keyPressEvent( QKeyEvent * event )

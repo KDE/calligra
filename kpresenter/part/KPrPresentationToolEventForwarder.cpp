@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Alexia Allanic <alexia_allanic@yahoo.fr>
- * Copyright (C) 2009 Jérémy Lugagne <jejewindsurf@hotmail.com>
- * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2010 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,20 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrPresentationStrategy.h"
-#include <QtGlobal>
+#include "KPrPresentationToolEventForwarder.h"
 
-KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyBase( tool )
+#include <KoPACanvas.h>
+
+KPrPresentationToolEventForwarder::KPrPresentationToolEventForwarder(KoPACanvas *canvas)
+:QWidget(canvas)
 {
 }
 
-KPrPresentationStrategy::~KPrPresentationStrategy()
+KPrPresentationToolEventForwarder::~KPrPresentationToolEventForwarder()
 {
 }
 
-bool KPrPresentationStrategy::keyPressEvent( QKeyEvent * event )
+void KPrPresentationToolEventForwarder::receiveMousePressEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
-    return false;
+    mousePressEvent(event);
+}
+
+void KPrPresentationToolEventForwarder::receiveMouseMoveEvent(QMouseEvent *event)
+{
+    mouseMoveEvent(event);
+}
+
+void KPrPresentationToolEventForwarder::receiveMouseReleaseEvent(QMouseEvent *event)
+{
+    mouseReleaseEvent(event);
 }

@@ -21,15 +21,17 @@
 #define KPRVIEWMODEPRESENTATION_H
 
 #include <KoPAViewMode.h>
+
 #include "KPrAnimationDirector.h"
 #include "KPrPresentationTool.h"
 
 class QWidget;
-//class KPrPresentationTool;
-class KPrPresenterViewTool;
+class KPrPresentationTool;
 class KPrPresenterViewWidget;
 class KPrViewModePresenterView;
 class KPrEndOfSlideShowPage;
+class KoPAViewMode;
+class KPrView;
 
 class KPrViewModePresentation : public KoPAViewMode
 {
@@ -118,6 +120,11 @@ public:
     void navigateToPage( int index );
     void blackPresentation();
 
+    /**
+     * Returns whether the presentation is activated or not
+     */
+    bool isActivated();
+
 signals:
 
     /**
@@ -153,6 +160,7 @@ protected:
     KPrAnimationDirector * m_pvAnimationDirector;
     KoPACanvas * m_presenterViewCanvas;
     KPrPresenterViewWidget * m_presenterViewWidget;
+    KPrView *m_view;
 
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
 };

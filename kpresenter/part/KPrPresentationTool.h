@@ -33,13 +33,14 @@ class KoEventAction;
 class KPrViewModePresentation;
 class KPrPresentationToolWidget;
 class KPrPresentationStrategyBase;
+class KPrPresentationToolAdaptor;
 
 /// The tool used for presentations
 class KPrPresentationTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit KPrPresentationTool( KPrViewModePresentation & viewMode );
+    explicit KPrPresentationTool( KPrViewModePresentation &viewMode );
     ~KPrPresentationTool();
 
     bool wantsAutoScroll() const;
@@ -54,12 +55,16 @@ public:
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( KoPointerEvent * event );
 
+    KPrPresentationStrategyBase *strategy();
+    KPrViewModePresentation & viewModePresentation();
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
     void highlightPresentation();
     void drawOnPresentation();
     void blackPresentation();
+    void normalPresentation();
 
 private:
     void finishEventActions();
@@ -72,6 +77,7 @@ private:
     KPrPresentationToolWidget * m_presentationToolWidget;
     QFrame * m_frame;
     KPrPresentationStrategyBase * m_strategy;
+    KPrPresentationToolAdaptor *m_bus;
     friend class KPrPresentationStrategyBase;
 };
 

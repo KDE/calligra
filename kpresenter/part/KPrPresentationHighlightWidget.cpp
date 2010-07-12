@@ -28,7 +28,7 @@
 #include <QPainter>
 
 KPrPresentationHighlightWidget::KPrPresentationHighlightWidget( KoPACanvas * canvas )
-: QWidget( canvas )
+: KPrPresentationToolEventForwarder(canvas)
 , m_size( canvas->size() )
 {
     // The focus and the track for have the mouse position every time

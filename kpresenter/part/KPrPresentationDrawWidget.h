@@ -23,7 +23,8 @@
 #ifndef KPRPRESENTATIONDRAWWIDGET_H
 #define KPRPRESENTATIONDRAWWIDGET_H
 
-#include <QWidget>
+#include "KPrPresentationToolEventForwarder.h"
+
 #include <QtGui/QLabel>
 #include <QVarLengthArray>
 
@@ -37,7 +38,7 @@ struct Path
     int size;
 };
 
-class KPrPresentationDrawWidget : public QWidget
+class KPrPresentationDrawWidget : public KPrPresentationToolEventForwarder
 {
     Q_OBJECT
 
@@ -58,7 +59,9 @@ public :
 
 public slots:
     void updateColor( QAction * );
+    void updateColor( const QString &color );
     void updateSize( QAction * );
+    void updateSize( int size );
 
 private :
     QIcon buildIconColor( QColor );

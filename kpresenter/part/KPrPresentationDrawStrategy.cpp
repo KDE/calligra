@@ -32,8 +32,8 @@
 
 KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyBase( tool )
-, m_drawWidget( new KPrPresentationDrawWidget( canvas() ) )
 {
+    m_widget = new KPrPresentationDrawWidget(canvas());
     // TODO
     QString str("kpresenter");
     KIconLoader kicon(str);
@@ -46,16 +46,15 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
     QCursor cur(pix);
     QApplication::setOverrideCursor(cur);
 
-    setToolWidgetParent( m_drawWidget );
-    m_drawWidget->show();
-    m_drawWidget->installEventFilter( m_tool );
+    setToolWidgetParent( m_widget );
+    m_widget->show();
+    m_widget->installEventFilter( m_tool );
 }
 
 KPrPresentationDrawStrategy::~KPrPresentationDrawStrategy()
 {
     setToolWidgetParent( canvas() );
     QApplication::restoreOverrideCursor();
-    delete m_drawWidget;
 }
 
 bool KPrPresentationDrawStrategy::keyPressEvent( QKeyEvent * event )

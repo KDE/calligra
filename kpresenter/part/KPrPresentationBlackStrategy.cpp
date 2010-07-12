@@ -29,9 +29,9 @@
 #include "KPrPresentationBlackWidget.h"
 
 KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyBase( tool )
-, m_blackWidget( new KPrPresentationBlackWidget( canvas() ) )
-{
+: KPrPresentationStrategyBase( tool ) 
+{    
+    m_widget = new KPrPresentationBlackWidget( canvas() );
     // TODO
     QString str("kpresenter");
     KIconLoader kicon(str);
@@ -44,16 +44,15 @@ KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool 
     QCursor cur = QCursor(pix);
     QApplication::setOverrideCursor(cur);
 
-    setToolWidgetParent( m_blackWidget );
-    m_blackWidget->show();
-    m_blackWidget->installEventFilter( m_tool );
+    setToolWidgetParent( m_widget );
+    m_widget->show();
+    m_widget->installEventFilter( m_tool );
 }
 
 KPrPresentationBlackStrategy::~KPrPresentationBlackStrategy()
 {
     setToolWidgetParent( canvas() );
     QApplication::restoreOverrideCursor();
-    delete m_blackWidget;
 }
 
 bool KPrPresentationBlackStrategy::keyPressEvent( QKeyEvent * event )
