@@ -28,6 +28,8 @@
 #include <QBuffer>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QFileInfo>
+#include <QDir>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -80,7 +82,38 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     LEInputStream wdocument_stream(&buff3);
 
     // Create output files
-    KoStore *storeout;
+
+    QFile out(outputFile);
+        if (!out.open(QIODevice::WriteOnly)) {
+            kError(30501) << "Unable to open output file!" << endl;
+            out.close();
+            return KoFilter::FileNotFound;
+        }
+
+        out.write("<html><h1> The Filter is under construction</h1></html>");
+        QFileInfo base(outputFile);
+        QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
+        QString directory=base.absolutePath();
+        QDir dir(outputFile);
+        dir.mkdir(filenamewithoutext);
+        QString stylesheet=filenamewithoutext+"/style.css";
+        QFile css(stylesheet);
+        if (!css.open(QIODevice::WriteOnly)){
+            kError(30501) << "Unable to open stylesheet!" << endl;
+            css.close();
+            return KoFilter::FileNotFound;
+        }
+   //     QByteArray header;
+   //     header="<!DOCTYPE html><html><link rel=\"stylesheet\" type=\"text/css\" href=\"";
+   //     header+=stylesheet;
+   //     header+="<h1> The Filter is under construction</h1></html>";
+   //     out.write(header);
+
+       out.close();
+       css.close();
+
+
+
     struct Finalizer {
     public:
         Finalizer(KoStore *store) : m_store(store), m_genStyles(0), m_document(0), m_contentWriter(0), m_bodyWriter(0) { }
@@ -95,102 +128,6 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         KoXmlWriter* m_bodyWriter;
     };
 
-    storeout = KoStore::createStore(outputFile, KoStore::Write,
-                                    "application/vnd.oasis.opendocument.text", KoStore::Zip);
-    if (!storeout) {
-        kWarning(30513) << "Unable to open output file!";
-        return KoFilter::FileNotFound;
-    }
-    Finalizer finalizer(storeout);
-    storeout->disallowNameExpansion();
-    kDebug(30513) << "created storeout.";
-    KoOdfWriteStore oasisStore(storeout);
-
-    kDebug(30513) << "created oasisStore.";
-
-    //create KoGenStyles for writing styles while we're parsing
-    KoGenStyles* mainStyles = new KoGenStyles();
-    finalizer.m_genStyles = mainStyles; // will delete this as it goes out of scope.
-
-    //create a writer for meta.xml
-    QBuffer buf;
-    buf.open(QIODevice::WriteOnly);
-    KoXmlWriter metaWriter(&buf);
-
-    //create a writer for manifest.xml
-    QBuffer manifestBuf;
-    manifestBuf.open(QIODevice::WriteOnly);
-    KoXmlWriter manifestWriter(&manifestBuf);
-
-    //open contentWriter & bodyWriter *temp* writers
-    //so we can write picture files while we parse
-    QBuffer contentBuf;
-    QBuffer bodyBuf;
-    KoXmlWriter *contentWriter = new KoXmlWriter(&contentBuf);
-    finalizer.m_contentWriter = contentWriter;
-    KoXmlWriter *bodyWriter = new KoXmlWriter(&bodyBuf);
-    finalizer.m_bodyWriter = bodyWriter;
-    if (!bodyWriter || !contentWriter)
-        return KoFilter::CreationError; //not sure if this is the right error to return
-
-    kDebug(30513) << "created temp contentWriter and bodyWriter.";
-
-    //open tags in bodyWriter
-    bodyWriter->startElement("office:body");
-    bodyWriter->startElement("office:text");
-
-    //create our document object, writing to the temporary buffers
-
-    kDebug(30513) << "finished parsing.";
-
-    //save the office:automatic-styles & and fonts in content.xml
-    mainStyles->saveOdfStyles(KoGenStyles::FontFaceDecls, contentWriter);
-    mainStyles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
-
-    //close tags in bodyWriter
-    bodyWriter->endElement();//office:text
-    bodyWriter->endElement();//office:body
-
-    //now create real content/body writers & dump the information there
-    KoXmlWriter* realContentWriter = oasisStore.contentWriter();
-    realContentWriter->addCompleteElement(&contentBuf);
-    KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
-    realBodyWriter->addCompleteElement(&bodyBuf);
-
-    //now close content & body writers
-    if (!oasisStore.closeContentWriter()) {
-        kWarning(30513) << "Error closing content.";
-        return KoFilter::CreationError;
-    }
-
-    kDebug(30513) << "closed content & body writers.";
-
-    //create the manifest file
-    KoXmlWriter *realManifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.text");
-    //create the styles.xml file
-    mainStyles->saveOdfStylesDotXml(storeout, realManifestWriter);
-    realManifestWriter->addManifestEntry("content.xml", "text/xml");
-    realManifestWriter->addCompleteElement(&manifestBuf);
-
-    kDebug(30513) << "created manifest and styles.xml";
-
-    //create meta.xml
-    if (!storeout->open("meta.xml"))
-        return KoFilter::CreationError;
-
-    KoStoreDevice metaDev(storeout);
-    KoXmlWriter *meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
-    meta->startElement("office:meta");
-    meta->addCompleteElement(&buf);
-    meta->endElement(); //office:meta
-    meta->endElement(); //office:document-meta
-    meta->endDocument();
-    delete meta;
-    if (!storeout->close())
-        return KoFilter::CreationError;
-
-    realManifestWriter->addManifestEntry("meta.xml", "text/xml");
-    oasisStore.closeManifestWriter();
 
     kDebug(30513) << "######################## HTMLOdfExport::convert done ####################";
     return KoFilter::OK;
