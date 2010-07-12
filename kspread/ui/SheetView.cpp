@@ -40,7 +40,6 @@ class SheetView::Private
 public:
     const Sheet* sheet;
     const KoViewConverter* viewConverter;
-    QPaintDevice* paintDevice;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
     QRegion cachedArea;
@@ -118,7 +117,6 @@ SheetView::SheetView(const Sheet* sheet)
 {
     d->sheet = sheet;
     d->viewConverter = 0;
-    d->paintDevice = 0;
     d->visibleRect = QRect(1, 1, 0, 0);
     d->cache.setMaxCost(10000);
     d->defaultCellView = new CellView(this);
@@ -146,18 +144,6 @@ const KoViewConverter* SheetView::viewConverter() const
 {
     Q_ASSERT(d->viewConverter);
     return d->viewConverter;
-}
-
-void SheetView::setPaintDevice(QPaintDevice* paintDevice)
-{
-    Q_ASSERT(paintDevice);
-    d->paintDevice = paintDevice;
-}
-
-QPaintDevice* SheetView::paintDevice() const
-{
-    Q_ASSERT(d->paintDevice);
-    return d->paintDevice;
 }
 
 const CellView& SheetView::cellView(int col, int row)
@@ -199,8 +185,7 @@ void SheetView::invalidate()
     d->cachedArea = QRegion();
 }
 
-void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
-                           const QPointF& topLeft)
+void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft)
 {
     // paintRect:   the canvas area, that should be painted; in document coordinates;
     //              no layout direction consideration; scrolling offset applied;
@@ -313,7 +298,7 @@ void SheetView::paintCells(QPaintDevice* paintDevice, QPainter& painter, const Q
             CellView cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
             if (!cell)
                 continue;
-            cellView.paintCellContents(paintRect, painter, paintDevice, coordinate, cell, this);
+            cellView.paintCellContents(paintRect, painter, coordinate, cell, this);
             // restore coordinate
             coordinate = savedCoordinate;
             coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());

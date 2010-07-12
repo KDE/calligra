@@ -333,7 +333,7 @@ bool CellView::hitTestFilterButton(const Cell& cell, const QRect& cellRect, cons
 //              coordinates.
 //
 void CellView::paintCellContents(const QRectF& paintRect, QPainter& painter,
-                                 QPaintDevice* paintDevice, const QPointF& coordinate,
+                                 const QPointF& coordinate,
                                  const Cell& cell, SheetView* sheetView)
 {
     if (d->hidden)
@@ -382,7 +382,7 @@ void CellView::paintCellContents(const QRectF& paintRect, QPainter& painter,
             && (!dynamic_cast<QPrinter*>(painter.device()) || style().printText())
             && !(cell.sheet()->isProtected()
                  && style().hideAll())) {
-        paintText(painter, coordinate, paintDevice, cell);
+        paintText(painter, coordinate, cell);
     }
 }
 
@@ -978,10 +978,8 @@ static int fixAngle(int angle) {
 //
 void CellView::paintText(QPainter& painter,
                          const QPointF& coordinate,
-                         QPaintDevice* paintDevice, const Cell& cell)
+                         const Cell& cell)
 {
-    Q_UNUSED(paintDevice);
-
     QColor textColorPrint = d->style.fontColor();
     // Resolve the text color if invalid (=default).
     if (!textColorPrint.isValid()) {

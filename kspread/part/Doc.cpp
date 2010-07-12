@@ -746,7 +746,6 @@ void Doc::paintContent(QPainter& painter, const QRect& rect)
     thumbnail.fill(Qt::white);
 
     SheetView sheetView(sheet);
-    sheetView.setPaintDevice(&thumbnail);
 
     const qreal zoom = sheet->printSettings()->zoom();
     KoZoomHandler zoomHandler;
@@ -756,7 +755,7 @@ void Doc::paintContent(QPainter& painter, const QRect& rect)
     sheetView.setPaintCellRange(sheet->print()->cellRange(1)); // first page
 
     QPainter pixmapPainter(&thumbnail);
-    sheetView.paintCells(&thumbnail, pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0,0));
+    sheetView.paintCells(pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0,0));
 
     // The pixmap gets scaled to fit the rectangle.
     painter.drawPixmap(rect & QRect(0, 0, 100, 100), thumbnail);

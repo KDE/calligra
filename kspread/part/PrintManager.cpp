@@ -74,7 +74,7 @@ void PrintManager::Private::printPage(int page, QPainter& painter) const
 
     // Paint the cells.
     sheetView->setPaintCellRange(cellRange);
-    sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
+    sheetView->paintCells(painter, paintRect, topLeft);
     painter.restore();
 }
 
@@ -182,7 +182,6 @@ void PrintManager::printPage(int page, QPainter& painter)
     painter.setClipRect(0.0, 0.0, pageLayout.width / d->zoom, pageLayout.height / d->zoom);
 
     // setup the SheetView
-    d->sheetView->setPaintDevice(painter.device());
     KoZoomHandler zoomHandler;
     zoomHandler.setZoom(d->zoom);
     d->sheetView->setViewConverter(&zoomHandler);

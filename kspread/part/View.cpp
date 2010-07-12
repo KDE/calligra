@@ -872,7 +872,6 @@ SheetView* View::sheetView(const Sheet* sheet) const
     if (!d->sheetViews.contains(sheet)) {
         kDebug(36004) << "View: Creating SheetView for" << sheet->sheetName();
         d->sheetViews.insert(sheet, new SheetView(sheet));
-        d->sheetViews[ sheet ]->setPaintDevice(d->canvas);
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
         connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                 d->canvas, SLOT(setDocumentSize(const QSizeF&)));
@@ -1675,8 +1674,10 @@ void View::paperLayoutDlg()
 
     KoPageLayout pl = print->settings()->pageLayout();
 
+
+/*
     const HeaderFooter *const headerFooter = print->headerFooter();
-/*    HeadFoot hf;
+    HeadFoot hf;
     hf.headLeft  = headerFooter->localizeHeadFootLine(headerFooter->headLeft());
     hf.headRight = headerFooter->localizeHeadFootLine(headerFooter->headRight());
     hf.headMid   = headerFooter->localizeHeadFootLine(headerFooter->headMid());

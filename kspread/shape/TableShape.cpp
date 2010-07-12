@@ -159,9 +159,8 @@ void TableShape::paint(QPainter& painter, const KoViewConverter& converter)
     painter.setClipRect(paintRect, Qt::IntersectClip);
 
     // painting cell contents
-    d->sheetView->setPaintDevice(painter.device());
     d->sheetView->setViewConverter(&converter);
-    d->sheetView->paintCells(0 /*paintDevice*/, painter, paintRect, QPointF(0.0, 0.0));
+    d->sheetView->paintCells(painter, paintRect, QPointF(0.0, 0.0));
 }
 
 bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

@@ -123,6 +123,7 @@ SET (interfaces_DIR_SRCS
 
 SET (part_DIR_SRCS
 	part/Canvas.cpp
+#	part/CanvasItem.cpp
 	part/CellTool.cpp
 	part/CellToolFactory.cpp
 	part/Digest.cpp

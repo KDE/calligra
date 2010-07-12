@@ -526,7 +526,7 @@ void Canvas::paintEvent(QPaintEvent* event)
     const QRect visibleRect = visibleCells();
     const QPointF topLeft(sheet->columnPosition(visibleRect.left()), sheet->rowPosition(visibleRect.top()));
     view()->sheetView(sheet)->setPaintCellRange(visibleRect);
-    view()->sheetView(sheet)->paintCells(this, painter, paintRect, topLeft);
+    view()->sheetView(sheet)->paintCells(painter, paintRect, topLeft);
 
     // flake
     painter.restore();

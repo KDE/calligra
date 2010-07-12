@@ -453,7 +453,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     // setup the SheetView
     SheetView *const sheetView = d->view->sheetView(sheet);
     const KoViewConverter *const origViewConverter = sheetView->viewConverter();
-    sheetView->setPaintDevice(painter.device());
+
     KoZoomHandler zoomHandler;
     zoomHandler.setZoom(zoom);
     sheetView->setViewConverter(&zoomHandler);
@@ -489,7 +489,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
                                   QPoint(repeatedColumns.second, repeatedRows.second));
         const QRectF paintRect(0.0, 0.0, repeatedWidth, repeatedHeight);
         sheetView->setPaintCellRange(range);
-        sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
+        sheetView->paintCells(painter, paintRect, topLeft);
     }
 
     // Paint top part: the repeated rows, if present.
@@ -499,7 +499,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
                                   QPoint(cellRange.right(), repeatedRows.second));
         const QRectF paintRect(repeatedWidth, 0.0, pageRect.width(), repeatedHeight);
         sheetView->setPaintCellRange(range);
-        sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
+        sheetView->paintCells(painter, paintRect, topLeft);
     }
 
     // Paint left part: the repeated columns, if present.
@@ -509,14 +509,14 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
                                   QPoint(repeatedColumns.second, cellRange.bottom()));
         const QRectF paintRect(0.0, repeatedHeight, repeatedWidth, pageRect.height());
         sheetView->setPaintCellRange(range);
-        sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
+        sheetView->paintCells(painter, paintRect, topLeft);
     }
 
     // Paint the actual cell range.
     const QPointF topLeft(repeatedWidth, repeatedHeight);
     const QRectF paintRect(topLeft, pageRect.size());
     sheetView->setPaintCellRange(cellRange);
-    sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
+    sheetView->paintCells(painter, paintRect, topLeft);
 
     // restore painting flags
     sheet->setShowGrid(grid);

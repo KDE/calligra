@@ -27,7 +27,6 @@
 #include "kspread_export.h"
 
 class QPainter;
-class QPaintDevice;
 class QRect;
 class QRectF;
 class QSize;
@@ -79,16 +78,6 @@ public:
     const KoViewConverter* viewConverter() const;
 
     /**
-     * Sets the paint device used by this SheetView.
-     */
-    void setPaintDevice(QPaintDevice* paintDevice);
-
-    /**
-     * \return the paint device on which the Sheet is painted
-     */
-    QPaintDevice* paintDevice() const;
-
-    /**
      * Looks up a CellView for the position \p col , \p row in the cache.
      * If no CellView exists yet, one is created and inserted into the cache.
      *
@@ -115,8 +104,7 @@ public:
     /**
      * Paints the cells.
      */
-    void paintCells(QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
-                    const QPointF& topLeft);
+    void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft);
 
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());

@@ -42,7 +42,6 @@
 #include "Style.h"
 
 class QFontMetricsF;
-class QPaintDevice;
 class QRectF;
 
 namespace KSpread
@@ -93,12 +92,11 @@ public:
      * Paints the cell.
      * \param paintRegion the portion of the canvas that is actually in view
      * \param painter the used painter
-     * \param paintDevice the paintDevice of this data.
      * \param coordinate the top left coordinate (scroll offset dependent)
      * \param cell the Cell
      */
     void paintCellContents(const QRectF& paintRegion, QPainter& painter,
-                           QPaintDevice* paintDevice, const QPointF& coordinate,
+                           const QPointF& coordinate,
                            const Cell& cell, SheetView* sheetView);
 
     /**
@@ -263,8 +261,7 @@ private:
      * @see paintCell()
      * @internal
      */
-    void paintText(QPainter& painter, const QPointF& coordinate,
-                   QPaintDevice* paintDevice, const Cell& cell);
+    void paintText(QPainter& painter, const QPointF& coordinate, const Cell& cell);
 
     /**
      * helper function for paintCell() function
