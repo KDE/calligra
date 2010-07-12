@@ -1009,6 +1009,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     if (m_objectRectInitialized) {
+#if 1
+        // The draw:fill with a fillImage as done in the #else branch
+        // is probably more correct, but KOffice (kword) cannot handle
+        // that yet.  Use draw:frame instead until it can.
+
+        if (!m_imagedataPath.isEmpty()) {
+            // Create the frame with the image contents.
+            // FIXME: There should be a utility for this.
+            body->startElement("draw:frame");
+            body->addAttribute("svg:x", m_currentObjectXCm.isEmpty() ? "0cm" : m_currentObjectXCm);
+            body->addAttribute("svg:y", m_currentObjectYCm.isEmpty() ? "0cm" : m_currentObjectYCm);
+            body->addAttribute("svg:width", m_currentObjectWidthCm.isEmpty() ? "2cm" : m_currentObjectWidthCm);
+            body->addAttribute("svg:height", m_currentObjectHeightCm.isEmpty() ? "2cm" : m_currentObjectHeightCm);
+
+            // Add the image itself.
+            body->startElement("draw:image");
+            body->addAttribute("xlink:href", m_imagedataPath);
+            body->addAttribute("xlink:type", "simple");
+            body->addAttribute("xlink:show", "embed");
+            body->addAttribute("xlink:actuate", "onLoad");
+            body->endElement(); // draw:image
+
+            body->endElement(); // draw:frame
+        }
+#else
         m_currentDrawStyle->addProperty("draw:fill", "bitmap");
         if (!m_imagedataPath.isEmpty()) {
             // create bitmap fill-style for styles.xml
@@ -1029,6 +1054,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageStyleName);
         }
         writeRect();
+#endif
     }
 
     m_currentDrawStyle = new KoGenStyle();
