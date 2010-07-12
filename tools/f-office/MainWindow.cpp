@@ -1491,6 +1491,9 @@ void MainWindow::updateUI()
     updateActions();
     if (!m_view || !m_ui)
         return;
+    if(m_type==Spreadsheet) {
+        this->resize(this->frameSize());
+    }
     int factor = 100;
     QString pageNo = i18n("pg%1 - pg%2", 0, 0);
 
