@@ -1665,7 +1665,7 @@ void MainWindow::nextPage()
    else {
         int cur_page = m_currentPage;
         int next_page = cur_page+1;
-        while(next_page != cur_page) {
+        while(next_page != cur_page && m_type == Text) {
             m_controller->pan(QPoint(0, 1));
             cur_page = m_currentPage;
         }
