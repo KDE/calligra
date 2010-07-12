@@ -387,9 +387,8 @@ void MainWindow::openFontStyleFrame()
 
     m_fontsizecombo=new QComboBox(this);
     Q_CHECK_PTR(m_fontsizecombo);
-    m_fontsizecombo->setMinimumSize(160,76);
-    m_fontsizecombo->setEditable(true);
-    int i;
+    m_fontsizecombo->setMinimumSize(120,76);
+        int i;
     for(i=4;i<=100;i++)
     {
         QString f_size;
@@ -403,8 +402,9 @@ void MainWindow::openFontStyleFrame()
 
     m_fontcombobox=new QFontComboBox(this);
     Q_CHECK_PTR(m_fontcombobox);
-    m_fontcombobox->setMinimumSize(255,76);
-    m_fontcombobox->setFont(QFont("Nokia Sans",12,QFont::Normal));
+    m_fontcombobox->setMinimumSize(290,76);
+    m_fontcombobox->setFont(QFont("Nokia Sans",20,QFont::Normal));
+    m_fontcombobox->setEditable(false);
 
     m_fontstyleframelayout->addWidget(m_fontcombobox,0,0);
     m_fontstyleframelayout->addWidget(m_fontsizecombo,0,2);
@@ -2054,8 +2054,11 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         }
 
         if((m_fontstyleframe) && (m_fontstyleframe->isVisible())) {
-            if((xcordinate<384) || (ycordinate<199))
-                m_fontstyleframe->hide();
+            if(!this->isActiveWindow()){
+            } else {
+                    if((xcordinate<384) || (ycordinate<199))
+                        m_fontstyleframe->hide();
+            }
         }
     }
 
