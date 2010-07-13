@@ -599,7 +599,13 @@ void KWordTableHandler::tableCellStart()
     }
     cellStyle.addProperty("style:vertical-align", align);
 
-    //TODO: parse and process cell padding information
+    //process cell padding information
+    qreal padVert = twipsToPt(m_tap->padVert);
+    qreal padHorz = twipsToPt(m_tap->padHorz);
+    cellStyle.addPropertyPt("fo:padding-top", padVert);
+    cellStyle.addPropertyPt("fo:padding-bottom", padVert);
+    cellStyle.addPropertyPt("fo:padding-left", padHorz);
+    cellStyle.addPropertyPt("fo:padding-right", padHorz);
 
     QString cellStyleName = m_mainStyles->insert(cellStyle, QLatin1String("cell"));
 

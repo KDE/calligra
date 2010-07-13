@@ -1553,6 +1553,8 @@ void TAP::clear() {
     rgshd.clear();
     for(int _i=0; _i<(6); ++_i)
         rgbrcTable[_i].clear();
+    padHorz=0;
+    padVert=0;
 }
 
 void TAP::dump() const
@@ -1624,8 +1626,13 @@ std::string TAP::toString() const
     // skipping the std::vector rgshd
     for(int _i=0; _i<(6); ++_i) {
         s += "\nrgbrcTable[" + int2string( _i ) + "]=";
-    s += "\n{" + rgbrcTable[_i].toString() + "}\n";
+        s += "\n{" + rgbrcTable[_i].toString() + "}\n";
     }
+    s += "\npadHorz=";
+    s += uint2string( padHorz );
+    s += "\npadVert=";
+    s += uint2string( padVert );
+    s += "\n";
     s += "\nTAP Done.";
     return s;
 }

@@ -1433,8 +1433,9 @@ struct TAP : public Shared {
 
     /**
      * rgdxaCenter[0] is the left boundary of cell 0 measured relative to
-     * margin.. rgdxaCenter[tap.itcMac - 1] is left boundary of last cell. rgdxaCenter[tap.itcMac]
-     * is right boundary of last cell. (Changed the array to a vector)
+     * margin.. rgdxaCenter[tap.itcMac - 1] is left boundary of last
+     * cell. rgdxaCenter[tap.itcMac] is right boundary of last cell. (Changed
+     * the array to a vector)
      */
     std::vector<S16> rgdxaCenter;
 
@@ -1459,18 +1460,34 @@ struct TAP : public Shared {
     BRC rgbrcTable[6];
 
     /**
-     * An XAS_nonNeg that specifies the minimum horizontal distance between the physical left edge
-     * of the table and the physical right edge of the text that wraps around the table. By default,
-     *  the minimum horizontal distance between a table and wrapping text is 0 twips.
+     * An XAS_nonNeg that specifies the minimum horizontal distance between the
+     * physical left edge of the table and the physical right edge of the text
+     * that wraps around the table. By default, the minimum horizontal distance
+     * between a table and wrapping text is 0 twips.
      */
     U16 dxaFromText;
 
     /**
-     * An XAS_nonNeg that specifies the minimum horizontal distance between the physical right edge
-     * of the table and the physical left edge of the text that wraps around the table. By default,
-     * the minimum horizontal distance between a table and wrapping text is 0 twips.
+     * An XAS_nonNeg that specifies the minimum horizontal distance between the
+     * physical right edge of the table and the physical left edge of the text
+     * that wraps around the table. By default, the minimum horizontal distance
+     * between a table and wrapping text is 0 twips.
      */
     U16 dxaFromTextRight;
+
+    /**
+     * Specifies left and right cell margins.  Cell margin is the distance
+     * between the border of a cell and the nearest pixel in a character or
+     * digit of data in the cell.
+     */
+    U16 padHorz;
+
+    /**
+     * Specifies top and bottom cell margins.  Cell margin is the distance
+     * between the border of a cell and the nearest pixel in a character or
+     * digit of data in the cell.
+     */
+    U16 padVert;
 
 }; // TAP
 

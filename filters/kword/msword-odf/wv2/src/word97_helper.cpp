@@ -39,6 +39,25 @@ namespace wvWare
 namespace Word97
 {
 
+// The fts enumeration specifies how the preferred width for a table, table
+// indent, table cell, cell margin, or cell spacing is defined.  MS-DOC, p.362
+typedef enum
+{
+    ftsNil     = 0x00, //the size is undefined and must be ignored
+    ftsAuto    = 0x01, //no preferred width is specified
+    ftsPercent = 0x02, //preferred width is measured in units of 1/50 of a percent
+    ftsDxa     = 0x03, //absolute width measured in twips
+    ftsDxaSys  = 0x13  //absolute width measured in twips
+} FTS;
+
+typedef enum
+{
+    fbrcTop    = 0x01,
+    fbrcLeft   = 0x02,
+    fbrcBottom = 0x04,
+    fbrcRight  = 0x08
+} GRFBRC;
+
 namespace SPRM
 {
 
@@ -317,8 +336,9 @@ typedef enum
     sprmTVertMerge = 0xD62B,
     sprmTVertAlign = 0xD62C,
     sprmTSetBrc = 0xD62F,
-    sprmTUndocumentedSpacing = 0xD632, // OOo: specific spacing
-    sprmTUndocumented8 = 0xD634,
+    sprmTCellPadding = 0xD632,
+    sprmTCellSpacingDefault = 0xD633,
+    sprmTCellPaddingDefault = 0xD634,
     sprmTSetShdTable = 0xD660,
     sprmTCellBrcType = 0xD662,
     sprmCChs = 0xEA08,
@@ -2112,7 +2132,17 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         pcVert = ( *ptr & 0x30 ) >> 4;
         pcHorz = ( *ptr & 0xC0 ) >> 6;
         break;
-    } 
+    }
+    case SPRM::sprmTDxaFromText:
+    {
+        dxaFromText = readS16( ptr );
+        break;
+    }
+    case SPRM::sprmTDxaFromTextRight:
+    {
+        dxaFromTextRight = readS16( ptr );
+        break;
+    }
     case SPRM::sprmTDxaAbs:
         dxaAbs = readS16( ptr );
         break;
@@ -2352,26 +2382,6 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         }
         break;
     }
-    case SPRM::sprmTUndocumentedSpacing:
-        if ( *ptr == 6 ) {
-/*                wvlog << "sprmTUndocumentedSpacing----" << endl;
-                const U8 itcFirst( *( ptr + 1 ) );
-                for ( int i = 0; i < 6; ++i )
-                    wvlog << "    byte " << i << ": " << hex << ( int )*( ptr + i ) << dec << endl;
-*/
-        }
-        else {
-            wvlog << "Warning: sprmTUndocumentedSpacing with unusual length=" << 
-                  static_cast<int>( *ptr ) << endl;
-        }
-        break;
-    case SPRM::sprmTUndocumented8:
-       wvlog << "sprmTUndocumented8: some undocumented spacing thingy, TODO" << endl;
-       break;
-    case SPRM::sprmTUndocumented1:
-    case SPRM::sprmTUndocumented2:
-        wvlog << "Warning: undocumented SPRM";
-        break;
     case SPRM::sprmTBrcTopCv:
     {
         const U8* myPtr( version == Word8 ? ptr + 1 : ptr );  // variable size byte for Word 8!
@@ -2404,6 +2414,65 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         }
         break;
     }
+    case SPRM::sprmTCellPadding:
+        wvlog << "Warning: sprmTCellPadding not implemented" << endl;
+//         if ( *ptr == 6 ) {
+//             const U8 itcFirst( *( ptr + 1 ) );
+//             for ( int i = 0; i < 6; ++i )
+//                 wvlog << "    byte " << i << ": " << hex << ( int )*( ptr + i ) << dec << endl;
+//         }
+//         else {
+//             wvlog << "Warning: sprmTCellPadding with unusual length=" << 
+//                   static_cast<int>( *ptr ) << endl;
+//         }
+        break;
+    case SPRM::sprmTCellSpacingDefault:
+       wvlog << "Warning: sprmTCellSpacingDefault not implemented" << endl;
+       break;
+    case SPRM::sprmTCellPaddingDefault:
+        if ( *ptr == 6 ) {
+
+            U8 itcFirst = *( ptr + 1 );
+            U8 itcLim = *( ptr + 2 );
+            U8 grfbrc = *( ptr + 3 );
+            U8 ftsWidth = *( ptr + 4 );
+            const U16 wWidth = readU16( ptr + 5 );
+
+            if ( (itcFirst != 0) || (itcLim != 1) ) {
+                wvlog << "Warning: wrong itcFirst or itcLim value";
+            }
+
+            switch (ftsWidth) {
+            case Word97::ftsNil:
+                wvlog << "Note: wWidth is not used and must be zero";
+                break;
+            case Word97::ftsAuto:
+            case Word97::ftsPercent:
+            case Word97::ftsDxaSys:
+                wvlog << "Note: this value of ftsWidth is not allowed";
+                break;
+            default:
+                if (grfbrc == (Word97::fbrcLeft | Word97::fbrcRight)) {
+                    padHorz = wWidth;
+                }
+                else if (grfbrc == (Word97::fbrcTop | Word97::fbrcBottom)) {
+                    padVert = wWidth;
+                }
+                else {
+                    padHorz = wWidth;
+                    padVert = wWidth;
+                }
+                break;
+            }
+        } else {
+            wvlog << "Warning: sprmTCellPaddingDefault with unusual length=" <<
+                  static_cast<int>( *ptr ) << endl;
+        }
+        break;
+    case SPRM::sprmTUndocumented1:
+    case SPRM::sprmTUndocumented2:
+        wvlog << "Warning: undocumented SPRM";
+        break;
     case SPRM::sprmTSetShdTable:
         wvlog << "Warning: sprmTSetShdTable not implemented" << endl;
         break;
@@ -2418,21 +2487,19 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         const U8 ftsWidth = *ptr;
         const S16 wWidth = readS16( ptr + 1 );
 
-        if ((ftsWidth == 0x01) || (ftsWidth == 0x13)) {
-            wvlog << "Warning: sprmTWidthIndent: unsupported units of measurement"; 
-        }  
-        //value is expressed in percentage of page/table, etc.
-        if (ftsWidth == 2) {
-            wvlog << "Warning: sprmTWidthIndent: unsupported units of measurement"; 
-        }
-        //absolute width measured in twips
-        else if (ftsWidth == 3) {
+        switch (ftsWidth) {
+        case Word97::ftsNil:
+        case Word97::ftsAuto:
+            wvlog << "Note: wWidth is not used and must be zero";
+            break;
+        case Word97::ftsPercent:
+            wvlog << "Note: this value of ftsWidth is not allowed";
+            break;
+        default:
             widthIndent = wWidth;
-#ifdef WV2_DEBUG_SPRMS
-            wvlog << "widthIndent: " << widthIndent;
-#endif
+            break;
         }
-        break; 
+        break;
     }
     // These are needed in case there are table properties inside the huge papx
     case SPRM::sprmPHugePapx:
@@ -2457,16 +2524,6 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             wvlog << "Error: no data stream!" << endl;
         }
         wvlog << "<-- PrcData parsed successfully" << endl;
-        break;
-    }
-    case SPRM::sprmTDxaFromText:
-    {
-        dxaFromText = readS16( ptr );
-        break;
-    }
-    case SPRM::sprmTDxaFromTextRight:
-    {
-        dxaFromTextRight = readS16( ptr );
         break;
     }
     default:
