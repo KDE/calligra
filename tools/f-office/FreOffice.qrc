@@ -32,5 +32,6 @@
         <file>images/48x48/Edittoolbaricons/Copy.png</file>
         <file>images/64x64/PresentationDrawTool/highlight.png</file>
         <file>images/64x64/PresentationDrawTool/pen.png</file>
+        <file>images/48x48/Edittoolbaricons/Collaborate.png</file>
     </qresource>
 </RCC>

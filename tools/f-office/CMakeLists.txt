@@ -4,6 +4,7 @@ add_definitions(-DNO_PIGMENT)
 
 find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
+SET(QT_USE_QTNETWORK TRUE)
 INCLUDE(${QT_USE_FILE})
 
 include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part)
@@ -11,10 +12,10 @@ include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES}
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
 
-QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui)
-QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h)
+QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h)
 
-add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp
+add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
 target_link_libraries(FreOffice ${QT_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate)
 

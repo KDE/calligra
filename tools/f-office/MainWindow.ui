@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>801</width>
-    <height>445</height>
+    <width>799</width>
+    <height>443</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -113,22 +113,15 @@
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
-   <addaction name="separator"/>
    <addaction name="actionEdit"/>
-   <addaction name="separator"/>
    <addaction name="actionCopy"/>
-   <addaction name="separator"/>
    <addaction name="actionPaste"/>
-   <addaction name="separator"/>
    <addaction name="actionCut"/>
-   <addaction name="separator"/>
    <addaction name="actionUndo"/>
-   <addaction name="separator"/>
    <addaction name="actionRedo"/>
-   <addaction name="separator"/>
    <addaction name="actionStyle"/>
-   <addaction name="separator"/>
    <addaction name="actionFormat"/>
+   <addaction name="actionCollaborate"/>
   </widget>
   <action name="actionSearch">
    <property name="checkable">
@@ -433,6 +426,15 @@
    </property>
    <property name="text">
     <string>redo</string>
+   </property>
+  </action>
+  <action name="actionCollaborate">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Collaborate.png</normaloff>:/images/48x48/Edittoolbaricons/Collaborate.png</iconset>
+   </property>
+   <property name="text">
+    <string>Collaborate</string>
    </property>
   </action>
  </widget>

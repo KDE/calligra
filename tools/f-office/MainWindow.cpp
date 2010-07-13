@@ -168,7 +168,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_alignType(AlignmentType(0)),
         m_pptTool(NULL),
         m_fsPPTDrawHighlightButton(NULL),
-        m_fsPPTDrawPenButton(NULL)
+        m_fsPPTDrawPenButton(NULL),
+        m_collab(0),
+        m_collabDialog(0),
+        m_collabEditor(0)
 {
     init();
 }
@@ -183,6 +186,7 @@ void MainWindow::init()
     menu->addAction(m_ui->actionSaveAs);
     menu->addAction(m_ui->actionClose);
     menu->addAction(m_ui->actionAbout);
+    menu->addAction(m_ui->actionCollaborate);
 
     // false here means that they are not plugins
     m_ui->actionOpen->setData(QVariant(false));
@@ -243,6 +247,7 @@ void MainWindow::init()
     connect(m_ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFileDialog()));
     connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
     connect(m_ui->actionFullScreen, SIGNAL(triggered()), this, SLOT(fullScreen()));
+    connect(m_ui->actionCollaborate, SIGNAL(triggered()), this, SLOT(collaborateDialog()));
 
     m_ui->actionZoomIn->setShortcuts(QKeySequence::ZoomIn);
     m_ui->actionZoomIn->setShortcutContext(Qt::ApplicationShortcut);
@@ -302,6 +307,9 @@ MainWindow::~MainWindow()
     }
     delete m_ui;
     m_ui = 0;
+    delete m_collab;
+    delete m_collabDialog;
+    delete m_collabEditor;
 }
 void MainWindow::openFormatFrame()
 {
@@ -428,166 +436,276 @@ void MainWindow::openFontStyleFrame()
     connect(m_superscript,SIGNAL(clicked()),SLOT(doSuperScript()));
 }
 
+///////////////////////
+// Styling functions //
+///////////////////////
+
 void MainWindow::doSubScript()
 {
-   if (m_editor){
-       if (m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript ){
-           m_editor->setVerticalTextAlignment(Qt::AlignVCenter);
-           m_subscript->setStyleSheet("");
-       } else {
-           m_editor->setVerticalTextAlignment(Qt::AlignBottom);
-           m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
-       }
-       m_fontstyleframe->hide();
+    if (m_fontstyleframe)
+        m_fontstyleframe->hide();
+    if(setSubScript(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatSubScript);
+
+}
+
+bool MainWindow::setSubScript(KoTextEditor *editor) {
+    if (editor){
+        if (editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript ){
+            editor->setVerticalTextAlignment(Qt::AlignVCenter);
+            if (editor == m_editor)
+                m_subscript->setStyleSheet("");
+        } else {
+            editor->setVerticalTextAlignment(Qt::AlignBottom);
+            if (editor == m_editor)
+                m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
+        }
+        return true;
     }
+    return false;
 }
 
 void MainWindow::doSuperScript()
 {
-    if (m_editor) {
-        if (m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript ) {
-            m_editor->setVerticalTextAlignment(Qt::AlignVCenter);
-             m_superscript->setStyleSheet("");
-        } else {
-            m_editor->setVerticalTextAlignment(Qt::AlignTop);
-            m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
-        }
+    if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(setSuperScript(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatSuperScript);
+}
+
+bool MainWindow::setSuperScript(KoTextEditor *editor) {
+    if (editor) {
+        if (editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript ) {
+            editor->setVerticalTextAlignment(Qt::AlignVCenter);
+            if (editor == m_editor)
+                m_superscript->setStyleSheet("");
+        } else {
+            editor->setVerticalTextAlignment(Qt::AlignTop);
+            if (editor == m_editor)
+                m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
+        }
+        return true;
     }
+    return false;
 }
 
 void MainWindow::selectFontSize()
 {
     QString selectedSize=m_fontsizecombo->currentText();
     int size=selectedSize.toInt();
-    if (m_editor) {
-        m_editor->setFontSize(size);
-        QTextCharFormat textchar=m_editor->charFormat();
-        textchar.setFontWeight(size);
+    if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(setFontSize(size, m_editor) && m_collab)
+        m_collab->sendFontSize(m_editor->selectionStart(), m_editor->selectionEnd(), size);
+}
+
+bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
+    if (editor) {
+        editor->setFontSize(size);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::selectFontType()
 {
     QString selectedfont=m_fontcombobox->currentText();
-    if (m_editor) {
-        m_editor->setFontFamily(selectedfont);
-        QTextCharFormat textchar = m_editor->charFormat();
-        textchar.setFontFamily(selectedfont);
+    if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(setFontType(selectedfont, m_editor) && m_collab)
+        m_collab->sendFontType(m_editor->selectionStart(), m_editor->selectionEnd(), selectedfont);
+}
+
+bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
+    if (editor) {
+        editor->setFontFamily(font);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::selectTextColor()
 {
     QColor color = QColorDialog::getColor(Qt::white,this);
-    if (m_editor) {
-        m_editor->setTextColor(color);
+    if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(setTextColor(color, m_editor) && m_collab)
+        m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
+}
+
+bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
+    if (editor) {
+        editor->setTextColor(color);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::selectTextBackGroundColor()
 {
     QColor color = QColorDialog::getColor(Qt::white,this);
-    if (m_editor) {
-        m_editor->setTextBackgroundColor(color);
+    if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(setTextBackgroundColor(color, m_editor) && m_collab)
+        m_collab->sendTextBackgroundColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
+}
+
+bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
+    if (editor) {
+        editor->setTextBackgroundColor(color);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::doBold()
 {
-    if(m_editor) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if (textchar.fontWeight()==QFont::Bold) {
-            m_editor->bold(false);
-            textchar.setFontWeight(QFont::Normal);
-            m_bold->setStyleSheet("");
-        } else {
-            textchar.setFontWeight(QFont::Bold);
-            m_editor->bold(true);
-            m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        }
+    if (m_formatframe)
         m_formatframe->hide();
+    if(setBold(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatBold);
+}
+
+bool MainWindow::setBold(KoTextEditor *editor) {
+    if(editor) {
+        QTextCharFormat textchar = editor->charFormat();
+        if (textchar.fontWeight()==QFont::Bold) {
+            editor->bold(false);
+            if (editor == m_editor)
+                m_bold->setStyleSheet("");
+        } else {
+            editor->bold(true);
+            if (editor == m_editor)
+                m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        }
+        return true;
     }
+    return false;
 }
 
 void MainWindow::doItalic()
 {
-    if(m_editor) {
-        QTextCharFormat textchar = m_editor->charFormat();
+    if (m_formatframe)
+        m_formatframe->hide();
+    if (setItalic(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatItalic);
+}
+
+bool MainWindow::setItalic(KoTextEditor *editor) {
+    if(editor) {
+        QTextCharFormat textchar = editor->charFormat();
         if (textchar.fontItalic()) {
-            m_editor->italic(false);
-            textchar.setFontItalic(false);
+            editor->italic(false);
+            if (editor==m_editor)
             m_italic->setStyleSheet("");
         } else {
-            m_editor->italic(true);
-            textchar.setFontItalic(true);
+            editor->italic(true);
+            if(editor==m_editor)
             m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
-        m_formatframe->hide();
+        return true;
     }
+    return false;
 }
 
 void MainWindow::doUnderLine()
 {
-    if(m_editor) {
-        QTextCharFormat textchar = m_editor->charFormat();
+    if (m_formatframe)
+        m_formatframe->hide();
+    if(setUnderline(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatUnderline);
+}
+
+bool MainWindow::setUnderline(KoTextEditor *editor) {
+    if(editor) {
+        QTextCharFormat textchar = editor->charFormat();
         if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
-            m_editor->underline(false);
-            textchar.setProperty(KoCharacterStyle::UnderlineType,KoCharacterStyle::SingleLine);
-            textchar.setProperty(KoCharacterStyle::UnderlineStyle,KoCharacterStyle::SolidLine);
+            editor->underline(false);
+            if(editor==m_editor)
             m_underline->setStyleSheet("");
         } else {
-            m_editor->underline(true);
-            textchar.setProperty(KoCharacterStyle::UnderlineType,KoCharacterStyle::NoLineType);
-            textchar.setProperty(KoCharacterStyle::UnderlineStyle,KoCharacterStyle::NoLineStyle);
+            editor->underline(true);
+            if(editor == m_editor)
             m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
+        return true;
     }
-    m_formatframe->hide();
+    return false;
 }
 
 void MainWindow::doLeftAlignment()
 {
-    if (m_editor) {
-          m_editor->setHorizontalTextAlignment(Qt::AlignLeft);
-          m_formatframe->hide();
-          m_alignType=Left;
-          findAlignType();
+    if (m_formatframe) {
+        m_formatframe->hide();
     }
+    if(setLeftAlign(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignLeft);
+
+    m_alignType=Left;
+    findAlignType();
+}
+
+bool MainWindow::setLeftAlign(KoTextEditor *editor) {
+    if (editor) {
+          editor->setHorizontalTextAlignment(Qt::AlignLeft);
+          return true;
+    }
+    return false;
 }
 
 void MainWindow::doJustify()
 {
-    if (m_editor) {
-        m_editor->setHorizontalTextAlignment(Qt::AlignJustify);
+    if (m_formatframe)
         m_formatframe->hide();
-        m_alignType=Justify;
-        findAlignType();
+    if(setJustify(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignJustify);
+    m_alignType=Justify;
+    findAlignType();
+}
+
+bool MainWindow::setJustify(KoTextEditor *editor) {
+    if (editor) {
+        editor->setHorizontalTextAlignment(Qt::AlignJustify);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::doRightAlignment()
 {
-    if (m_editor) {
-        m_editor->setHorizontalTextAlignment(Qt::AlignRight);
+    if (m_formatframe)
         m_formatframe->hide();
-        m_alignType=Right;
-        findAlignType();
+    if(setRightAlign(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignRight);
+    m_alignType=Right;
+    findAlignType();
+}
+
+bool MainWindow::setRightAlign(KoTextEditor *editor) {
+    if (editor) {
+        editor->setHorizontalTextAlignment(Qt::AlignRight);
+        return true;
     }
+    return false;
 }
 
 void MainWindow::doCenterAlignment()
 {
-    if (m_editor) {
-        m_editor->setHorizontalTextAlignment(Qt::AlignCenter);
+    if (m_formatframe)
         m_formatframe->hide();
-        m_alignType=Center;
-        findAlignType();
+    if(setCenterAlign(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignCenter);
+    m_alignType=Center;
+    findAlignType();
+
+}
+
+bool MainWindow::setCenterAlign(KoTextEditor *editor) {
+    if (editor) {
+        editor->setHorizontalTextAlignment(Qt::AlignCenter);
+        return true;
     }
+    return true;
 }
 
 void MainWindow::initialAlignType() {
@@ -646,27 +764,44 @@ void MainWindow::doNumberList()
 {
     if(m_formatframe->isVisible())
         m_formatframe->hide();
-    KoListStyle::Style style = KoListStyle::DecimalItem;
-    doStyle(style);
+    if(setNumberList(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatListNumber);
+}
+
+bool MainWindow::setNumberList(KoTextEditor *editor) {
+    if (editor) {
+        doStyle(KoListStyle::DecimalItem, editor);
+        return true;
+    }
+    return false;
 }
 
 void MainWindow::doBulletList()
 {
     if(m_formatframe->isVisible())
         m_formatframe->hide();
-    KoListStyle::Style style = KoListStyle::DiscItem;
-    doStyle(style);
+    if(setBulletList(m_editor) && m_collab)
+        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatListBullet);
 }
 
-void MainWindow::doStyle(KoListStyle::Style style)
+bool MainWindow::setBulletList(KoTextEditor *editor) {
+    if (editor) {
+        doStyle(KoListStyle::DiscItem, editor);
+        return true;
+    }
+    return false;
+}
+
+void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 {
-    QTextBlock blk = m_editor->block();
-    KoList *list;
+    QTextBlock blk = editor->block();
+    //KoList *list;
     KoListStyle *liststyle = new KoListStyle();
     KoListLevelProperties listlevelproperties;
     listlevelproperties.setStyle(style);
     liststyle->setLevelProperties(listlevelproperties);
-    list->applyStyle(blk,liststyle,list->level(blk));
+    KoList::applyStyle(blk, liststyle, KoList::level(blk));
+    //list->applyStyle(blk,liststyle,list->level(blk));
 }
 
 void MainWindow::saveFile()
@@ -801,7 +936,7 @@ void MainWindow::openNewSpreadSheet()
    openNewDocument(type);
 }
 
-QPushButton * MainWindow::addFormatFrameComponent(QString const& imagepath)
+QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
@@ -809,7 +944,7 @@ QPushButton * MainWindow::addFormatFrameComponent(QString const& imagepath)
     Q_CHECK_PTR(btn);
     return btn;
 }
-QPushButton * MainWindow::addFontStyleFrameComponent(QString const& imagepath)
+QPushButton * MainWindow::addFontStyleFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
@@ -818,7 +953,7 @@ QPushButton * MainWindow::addFontStyleFrameComponent(QString const& imagepath)
     return btn;
 }
 
-QToolButton * MainWindow ::addNewDocument(QString const& docname)
+QToolButton * MainWindow ::addNewDocument(const QString &docname)
 {
     QToolButton * toolbutton = new QToolButton(this);
     Q_CHECK_PTR(toolbutton);
@@ -1377,11 +1512,11 @@ void MainWindow::openDocument(const QString &fileName)
         return;
     }
 
-    KUrl url;
-    url.setPath(fileName);
+    m_url;
+    m_url.setPath(fileName);
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(true);
-    if (!m_doc->openUrl(url)) {
+    if (!m_doc->openUrl(m_url)) {
         setShowProgressIndicator(false);
         return;
     }
@@ -1400,7 +1535,7 @@ void MainWindow::openDocument(const QString &fileName)
         return;
     }
 
-    QString fname = url.fileName();
+    QString fname = m_url.fileName();
     QString ext = KMimeType::extractKnownExtension(fname);
     if (ext.length()) {
         fname.chop(ext.length() + 1);
@@ -1954,6 +2089,23 @@ void MainWindow::updateActions()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+
+    // TODO: refine the collaborative-editing section of eventFilter
+    if(m_editor && m_collab)
+    {
+        if(event->type() == 6 && QString::compare("KWCanvas", watched->metaObject()->className())== 0 )
+        {
+            //qDebug()<<"111111111111111"<<watched->metaObject()->className();
+            QKeyEvent *ke=static_cast<QKeyEvent *>(event);
+            if( ke->key() == Qt::Key_Backspace )
+                m_collab->sendBackspace(m_editor->selectionStart(), m_editor->selectionEnd());
+            else if (((ke->key()>=Qt::Key_Space) && (ke->key()<=Qt::Key_AsciiTilde)) || ke->key() == Qt::Key_Return )
+                m_collab->sendString(m_editor->selectionStart(), m_editor->selectionEnd(), ke->text().toUtf8());
+            else
+                qDebug() << "Collaborate: Unsupported key: " << ke->key() << " (" << ke->text() << ")";
+        }
+    }
+
     // show buttons in full screen mode if user taps anywhere in the screen
     if (event && this->isFullScreen()) {
 
@@ -2258,3 +2410,187 @@ void MainWindow::enableFullScreenPresentationNavigation()
     m_fsPPTForwardButton->show();
     m_fsPPTForwardButton->raise();
 }
+
+///////////////////////////
+// Collaborative editing //
+///////////////////////////
+
+void MainWindow::collaborateDialog()
+{
+    if(m_collab)
+    {
+        QMessageBox::warning(this,"Collaborative Editing",QString("An active session already exists"),QMessageBox::Ok);
+        return ;
+    }
+    else
+    {
+        if (m_collabDialog) {
+            delete m_collabDialog;
+            m_collabDialog = 0;
+        }
+        m_collabDialog = new CollabDialog(this);
+
+        connect(m_collabDialog, SIGNAL(accepted()), this, SLOT(startCollaborating()));
+        //connect(m_collabDialog, SIGNAL(finished(int)), this, SLOT(startCollaborating(int)));
+        connect(m_collabDialog, SIGNAL(rejected()), this, SLOT(collaborationCancelled()));
+
+        m_collabDialog->show();
+    }
+
+}
+
+void MainWindow::closeCollabDialog() {
+    qDebug() << "Collaborate-Dialog: closeDialog() called";
+    //delete m_collabDialog;
+    //m_collabDialog = 0;
+    m_collabDialog->hide();
+    qDebug() << "Collaborate-Dialog: closeDialog() done";
+}
+
+void MainWindow::startCollaborating() {
+    qDebug() << "Collaborate-Dialog: start ";
+    if (m_collabDialog->isClient()) {
+        if (m_doc) {
+            qDebug() << "A document is already open. Cannot start client.";
+            return closeCollabDialog();
+        }
+        m_collab = new CollabClient(m_collabDialog->getNick(),
+                                    m_collabDialog->getAddress(),
+                                    m_collabDialog->getPort(),
+                                    this);
+        connect(m_collab, SIGNAL(openFile(const QString&)), this, SLOT(collabOpenFile(QString)));
+
+    } else if (m_collabDialog->isServer()) {
+        if (!m_doc) {
+            qDebug() << "No document is open. Cannot start server.";
+            return closeCollabDialog();
+        }
+        m_collab = new CollabServer(m_collabDialog->getNick(),
+                                    m_url.fileName(),
+                                    m_collabDialog->getPort(),
+                                    this);
+        connect(m_collab, SIGNAL(saveFile(const QString&)), this, SLOT(collabSaveFile(const QString&)));
+        m_collabEditor = new KoTextEditor(m_editor->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(m_doc->createView(this))->kwcanvas()->toolProxy()->selection());
+
+    } else {
+        return closeCollabDialog();
+    }
+
+    //qDebug() << "888888888888888888888888888888888888888";
+    //m_collabEditor =
+    //qDebug() << "999999999999999999999999999999999999999";
+
+    connect(m_collab, SIGNAL(receivedBackspace(uint,uint)), this, SLOT(receivedBackspace(uint,uint)));
+    connect(m_collab, SIGNAL(receivedFormat(uint,uint,Collaborate::FormatFlag)), this, SLOT(receivedFormat(uint,uint,Collaborate::FormatFlag)));
+    connect(m_collab, SIGNAL(receivedString(uint,uint,QByteArray)), this, SLOT(receivedString(uint,uint,QByteArray)));
+    connect(m_collab, SIGNAL(receivedFontSize(uint,uint,uint)), this, SLOT(receivedFontSize(uint,uint,uint)));
+    connect(m_collab, SIGNAL(receivedTextColor(uint,uint,QRgb)), this, SLOT(receivedTextColor(uint,uint,QRgb)));
+    connect(m_collab, SIGNAL(receivedTextBackgroundColor(uint,uint,QRgb)), this, SLOT(receivedTextBackgroundColor(uint,uint,QRgb)));
+    connect(m_collab, SIGNAL(receivedFontType(uint,uint,QString)), this, SLOT(receivedFontType(uint,uint,QString)));
+    connect(m_collab, SIGNAL(error(quint16)), this, SLOT(error(quint16)));
+
+    closeCollabDialog();
+    qDebug() << "Collaborate-Dialog: end ----------------------------------------- ";
+}
+
+void MainWindow::collaborationCancelled() {
+    closeCollabDialog();
+}
+
+void MainWindow::receivedString(uint start, uint end, QByteArray msg) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+    m_collabEditor->insertText(msg);
+}
+
+void MainWindow::receivedBackspace(uint start, uint end) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+    m_collabEditor->deletePreviousChar();
+}
+
+void MainWindow::receivedFormat(uint start, uint end, Collaborate::FormatFlag format) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+
+    switch(format) {
+    case Collaborate::FormatAlignCenter:
+        setCenterAlign(m_collabEditor);
+        break;
+    case Collaborate::FormatAlignJustify:
+        setJustify(m_collabEditor);
+        break;
+    case Collaborate::FormatAlignLeft:
+        setLeftAlign(m_collabEditor);
+        break;
+    case Collaborate::FormatAlignRight:
+        setRightAlign(m_collabEditor);
+        break;
+    case Collaborate::FormatBold:
+        setBold(m_collabEditor);
+        break;
+    case Collaborate::FormatItalic:
+        setItalic(m_collabEditor);
+        break;
+    case Collaborate::FormatListBullet:
+        setBulletList(m_collabEditor);
+        break;
+    case Collaborate::FormatListNumber:
+        setNumberList(m_collabEditor);
+        break;
+    case Collaborate::FormatSubScript:
+        setSubScript(m_collabEditor);
+        break;
+    case Collaborate::FormatSuperScript:
+        setSuperScript(m_collabEditor);
+        break;
+    case Collaborate::FormatUnderline:
+        setUnderline(m_collabEditor);
+        break;
+    default:
+        qDebug() << "Collaborate: Unknown format flag";
+    }
+}
+
+void MainWindow::receivedFontSize(uint start, uint end, uint size) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+    setFontSize(size, m_collabEditor);
+}
+
+void MainWindow::receivedFontType(uint start, uint end, const QString &font) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+    setFontType(font, m_collabEditor);
+}
+
+void MainWindow::receivedTextColor(uint start, uint end, QRgb color) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+    setTextColor(QColor(color), m_collabEditor);
+}
+
+void MainWindow::receivedTextBackgroundColor(uint start, uint end, QRgb color) {
+    m_collabEditor->setPosition(start);
+    m_collabEditor->setPosition(end, QTextCursor::KeepAnchor);
+    setTextBackgroundColor(QColor(color), m_collabEditor);
+}
+
+void MainWindow::error(quint16 err) {
+    qDebug() << "Collaborate: Error: " << err;
+}
+
+void MainWindow::collabSaveFile(const QString &filename) {
+    m_doc->saveNativeFormat(filename);
+}
+
+void MainWindow::collabOpenFile(const QString &filename) {
+    m_fileName = filename;
+    openDocument(filename);
+    qDebug() << "============================================";
+    m_collabEditor = new KoTextEditor(m_editor->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(m_doc->createView(this))->kwcanvas()->toolProxy()->selection());
+    qDebug() << "::::::::::::::::::::::::::::::::::::::::::::";
+}
+
+///////////////////////////
+///////////////////////////

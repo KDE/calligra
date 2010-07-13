@@ -32,6 +32,11 @@
 
 #include "PresentationTool.h"
 #include "Splash.h"
+
+#include "CollabClient.h"
+#include "CollabDialog.h"
+#include "CollabServer.h"
+
 class KoTextEditor;
 class QPushButton;
 class QIcon;
@@ -87,6 +92,46 @@ public:
 private:
     Ui::MainWindow *m_ui;
     int m_count;
+
+///////////////////////////
+// Collaborative editing //
+///////////////////////////
+
+// TODO: Better error handling
+
+private:
+    CollabDialog* m_collabDialog;
+    Collaborate* m_collab;
+    KoTextEditor* m_collabEditor;
+
+    void closeCollabDialog();
+
+private slots:
+    void startCollaborating();
+    void collaborationCancelled();
+    void collaborateDialog();
+
+    void receivedFontSize(uint start, uint end, uint size);
+    void receivedTextColor(uint start, uint end, QRgb color);
+    void receivedTextBackgroundColor(uint start, uint end, QRgb color);
+    void receivedFontType(uint start, uint end, const QString &font);
+    void receivedString(uint start, uint end, QByteArray msg);
+    void receivedBackspace(uint start, uint end);
+    void receivedFormat(uint start, uint end, Collaborate::FormatFlag format);
+    void error(quint16 err);
+
+    void collabSaveFile(const QString &filename);
+    void collabOpenFile(const QString &filename);
+
+/////////////////////////////
+/////////////////////////////
+
+private:
+    /*!
+      * Stores the URL of the open file
+      */
+    KUrl m_url;
+
     /*!
      * Format frame declaration
      */
@@ -248,7 +293,7 @@ private:
     /*!
      * style formatting function
      */
-    void doStyle(KoListStyle::Style);
+    void doStyle(KoListStyle::Style, KoTextEditor* editor);
     /*!
      *opening a new document
      */
@@ -256,15 +301,15 @@ private:
     /*!
      *Function to add formatframe components
      */
-    QPushButton *addFormatFrameComponent(QString const& imagepath);
+    QPushButton *addFormatFrameComponent(const QString &imagepath);
     /*!
      *Function to add fontstyleframe components
      */
-    QPushButton *addFontStyleFrameComponent(QString const& imagepath);
+    QPushButton *addFontStyleFrameComponent(const QString &imagepath);
     /*!
      *Function to create new document
      */
-    QToolButton *addNewDocument(QString const& docname);
+    QToolButton *addNewDocument(const QString &docname);
     /*!
      * Find string from document
      * /param pointer to QTextDocument
@@ -319,6 +364,24 @@ private:
      * counts initial undosteps of KoDocument
      */
     void initialUndoStepsCount();
+
+private:
+    // Apply the selected formatting
+    bool setFontSize(int size, KoTextEditor* editor);
+    bool setFontType(const QString &font, KoTextEditor* editor);
+    bool setTextColor(const QColor &color, KoTextEditor* editor);
+    bool setTextBackgroundColor(const QColor &color, KoTextEditor* editor);
+    bool setBold(KoTextEditor* editor);
+    bool setItalic(KoTextEditor* editor);
+    bool setUnderline(KoTextEditor* editor);
+    bool setLeftAlign(KoTextEditor* editor);
+    bool setRightAlign(KoTextEditor* editor);
+    bool setCenterAlign(KoTextEditor* editor);
+    bool setJustify(KoTextEditor* editor);
+    bool setNumberList(KoTextEditor* editor);
+    bool setBulletList(KoTextEditor* editor);
+    bool setSubScript(KoTextEditor* editor);
+    bool setSuperScript(KoTextEditor* editor);
 
 private slots:
 
