@@ -25,6 +25,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QPen>
+#include <QDBusConnection>
 
 #include <KoView.h>
 
@@ -35,21 +36,23 @@ PresentationTool::PresentationTool(MainWindow * window, KoCanvasController * con
 m_window(window),
 m_controller(controller),
 m_highlightToolActivated(false),
-m_penToolActivated(false)
+m_penToolActivated(false),
+m_dbus( new PresentationToolAdaptor( this ) )
 {
+    QDBusConnection::sessionBus().registerObject("/presentation/tool", this);
     lastPoint.setX(0);
     lastPoint.setY(0);
 }
 
 PresentationTool::~PresentationTool()
 {
-
 }
 
 void PresentationTool::handleMainWindowMousePressEvent( QMouseEvent * event )
 {
     if( m_penToolActivated ) {
         if ( event->button() == Qt::LeftButton ) {
+            emit startDrawPresentation(event->x(), event->y());
             lastPoint = event->pos();
             scribbling = true;
         }
@@ -60,13 +63,15 @@ void PresentationTool::handleMainWindowMouseMoveEvent( QMouseEvent * event )
 {
     if( m_penToolActivated ) {
         if ( ( event->buttons() & Qt::LeftButton ) && scribbling ) {
+            emit drawOnPresentation(event->x(), event->y());
             drawLineTo( event->pos() );
         }
     }
 
     if( m_highlightToolActivated ) {
         if ( ( event->buttons() & Qt::LeftButton ) ) {
-                 drawEllipse( event->pos() );
+            emit highlightPresentation(event->x(), event->y());
+            drawEllipse( event->pos() );
         }
     }
 }
@@ -75,6 +80,7 @@ void PresentationTool::handleMainWindowMouseReleaseEvent( QMouseEvent * event )
 {
     if( m_penToolActivated ) {
         if ( event->button() == Qt::LeftButton && scribbling ) {
+            emit stopDrawPresentation();
             drawLineTo( event->pos() );
             scribbling = false;
         }
@@ -92,6 +98,7 @@ void PresentationTool::togglePenTool()
         m_window->disableFullScreenPresentationNavigation();
     }
     else {
+        emit normalPresentation();
         m_window->enableFullScreenPresentationNavigation();
         m_penToolActivated = false;
         m_controller->show();
@@ -110,6 +117,7 @@ void PresentationTool::toggleHighlightTool()
         m_window->disableFullScreenPresentationNavigation();
     }
     else {
+        emit normalPresentation();
         m_window->enableFullScreenPresentationNavigation();
         m_highlightToolActivated = false;
         m_controller->show();

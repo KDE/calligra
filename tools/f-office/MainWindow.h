@@ -30,7 +30,6 @@
 #include <KWView.h>
 #include <styles/KoListStyle.h>
 
-#include "PresentationTool.h"
 #include "Splash.h"
 #include "previewwindow.h"
 
@@ -46,6 +45,7 @@ class QToolButton;
 class QFrame;
 class QLabel;
 class PresentationTool;
+class MainWindowAdaptor;
 
 namespace Ui
 {
@@ -285,6 +285,10 @@ private:
      * Pointer to presentation drawing tools
      */
     PresentationTool *m_pptTool;
+    /*!
+     *Pointer to the MainWindowAdaptor object
+     */
+    MainWindowAdaptor *m_dbus;
 
     void init();
     /*!
@@ -683,6 +687,24 @@ private:
     StoreButtonPreview *storeButtonPreview;
 
     ThumbnailRetriever *thumbnailRetriever;
+
+signals:
+    /*!
+     * Presentation has entered full screen mode.
+     */
+    void presentationStarted();
+    /*!
+     * Presentation has exited from full screen mode.
+     */
+    void presentationStopped();
+    /*!
+     * Presentation has moved to the next slide.
+     */
+    void nextSlide();
+    /*!
+     * Presentation has moved to the previous slide.
+     */
+    void previousSlide();
 };
 
 #endif // MAINWINDOW_H

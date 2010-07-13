@@ -30,6 +30,9 @@
 #include "HildonMenu.h"
 #include "NotifyDialog.h"
 #include "AboutDialog.h"
+#include "PresentationTool.h"
+#include "MainWindowAdaptor.h"
+
 #include <QFileDialog>
 #include <QUrl>
 #include <QDebug>
@@ -166,9 +169,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_docExist(false),
         m_count(0),
         m_alignType(AlignmentType(0)),
-        m_pptTool(NULL),
-        m_fsPPTDrawHighlightButton(NULL),
-        m_fsPPTDrawPenButton(NULL),
+        m_pptTool(0),
+        m_fsPPTDrawHighlightButton(0),
+        m_fsPPTDrawPenButton(0),
+        m_dbus( new MainWindowAdaptor(this) ),
         m_collab(0),
         m_collabDialog(0),
         m_collabEditor(0)
@@ -179,6 +183,9 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
 void MainWindow::init()
 {
     m_ui->setupUi(this);
+
+    QDBusConnection::sessionBus().registerObject("/presentation/view", this);
+
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionNew);
@@ -1706,6 +1713,11 @@ void MainWindow::fullScreen()
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
     m_ui->EditToolBar->hide();
+
+    if(m_type == Presentation) {
+        emit presentationStarted();
+    }
+
     showFullScreen();
     QSize size(this->frameSize());
 
@@ -1805,6 +1817,10 @@ void MainWindow::prevPage()
         return;
     if(m_currentPage == 1)
         return;
+    if(m_type == Presentation) {
+        emit previousSlide();
+    }
+
     int cur_page = m_currentPage;
     bool check = triggerAction("page_previous");
     if(check) {
@@ -1816,11 +1832,16 @@ void MainWindow::prevPage()
 
 void MainWindow::nextPage()
 {
-   if (!m_controller)
-       return ;
-   if(m_currentPage == m_doc->pageCount()) {
-      return;
-   }
+    if (!m_controller)
+        return ;
+    if(m_currentPage == m_doc->pageCount()) {
+       return;
+    }
+
+    if(m_type == Presentation) {
+        emit nextSlide();
+    }
+
    static int prev_curpage=0;
    if(prev_curpage != m_currentPage) {
         int cur_page = m_currentPage;
@@ -1863,6 +1884,10 @@ void MainWindow::fsButtonClicked()
 {
     if (!m_ui)
         return;
+
+    if(m_type == Presentation) {
+        emit presentationStopped();
+    }
 
     if(m_controller) {
         m_controller->show();

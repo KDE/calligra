@@ -27,10 +27,12 @@
 
 #include "MainWindow.h"
 #include "KoCanvasController.h"
+#include "PresentationToolAdaptor.h"
 
 #include <QPoint>
 
 class MainWindow;
+class PresentationToolAdaptor;
 
 class PresentationTool : public QObject
 {
@@ -89,6 +91,8 @@ private :
     QPoint lastPoint;
     QPoint endPoint;
 
+    PresentationToolAdaptor *m_dbus;
+
     /*!
      * Draw a line to a particular point
      */
@@ -98,6 +102,29 @@ private :
      * Draw a ellipse at this particular point
      */
     void drawEllipse( const QPoint &cpoint );
+
+signals:
+    /*!
+     * Draw on presentation started at (pointx,pointy).
+     */
+    void startDrawPresentation(int pointx,int pointy);
+    /*!
+     * Drawing on presentation tool.
+     * The parameters pointx and pointy specify a point in the path.
+     */
+    void drawOnPresentation(int pointx,int pointy);
+    /*!
+     * Drawing path stopped. The current path is stopped.
+     */
+    void stopDrawPresentation ();
+    /*!
+     * Presentation highlighted at (pointx, pointy).
+     */
+    void highlightPresentation(int pointx, int pointy);
+    /*!
+     * Normal presentation mode.
+     */
+    void normalPresentation();
 };
 
 #endif // PRESENTATIONTOOL_H
