@@ -24,25 +24,29 @@
 #include <QLabel>
 #include <QDialog>
 #include <QScrollArea>
-#include "flowlayout.h"
+#include <KoPAPageBase.h>
+#include <KoDocument.h>
+#include <QThread>
 
-QT_BEGIN_NAMESPACE
-class QLabel;
-QT_END_NAMESPACE
+#include "flowlayout.h"
 
 class PreviewWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    PreviewWindow();
+    PreviewWindow(KoDocument *m_doc,KoView *m_view,int m_currentPage,QList <QPixmap> *thumbnailList);
+
 public:
    /*!
     * Preview images of the slides will be shown on the pushbutton
     */
-    QPushButton *previewScreen[100];
+    QList<QPushButton *> previewScreenButton;
+    QList <QPixmap> *thumbnailList;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
+    KoDocument *m_doc;
+    KoView *m_view;
    /*!
     * Its a Layout created for showing the previews in a sequential manner
     */
@@ -52,6 +56,9 @@ public:
     * stores the number of preview its showing in the
     */
     int previewCount;
+    int toBeMovedPage;
+    bool moveFlag;
+    int m_currentPage;
 public slots:
    /*!
     * slot to service the click of any thumbnail
@@ -60,12 +67,48 @@ public slots:
    /*!
     * it adds thumbnail and shows it in the scroll area
     */
-    void showThumbnail(QPixmap pageThumbnail);
+    void showThumbnail();
+    /*!
+     * it adds thumbnail and shows it in the scroll area
+     */
+    void addThumbnail(QPixmap pix);
 signals:
    /*!
     * This signal is emitted whenever the thumbnail is clicked
     */
     void gotoPage(int page);
+};
+
+class StoreButtonPreview : public QObject
+{
+    Q_OBJECT
+public:
+    explicit StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QObject *parent = 0);
+public slots:
+    void showDialog(int m_currentPage);
+    void addThumbnail(long pageNumber);
+public:
+    QList<QPixmap> thumbnailList;
+    KoDocument *m_doc;
+    KoView *m_view;
+    PreviewWindow *previewWindow;
+    bool isPreviewDialogActive;
+signals:
+    void gotoPage(int page);
+};
+
+class ThumbnailRetriever : public QThread
+{
+    Q_OBJECT
+public:
+    explicit ThumbnailRetriever(long pageCount,QObject *parent = 0);
+
+signals:
+    void newThumbnail(long pageNumber);
+private:
+    long pageCount;
+public:
+    void run();
 };
 
 #endif

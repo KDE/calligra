@@ -18,12 +18,42 @@
  */
 
 #include <QtGui>
+#include <KoPAPageBase.h>
+#include <KoDocument.h>
+
+#include <KoView.h>
+#include <KoCanvasBase.h>
+#include <KoDocumentInfo.h>
+#include <kdemacros.h>
+#include <KoCanvasController.h>
+#include <KoZoomMode.h>
+#include <KoZoomController.h>
+#include <KoToolProxy.h>
+#include <KoToolBase.h>
+#include <KoResourceManager.h>
+#include <KoToolManager.h>
+#include <KoShape.h>
+#include <KoShapeManager.h>
+#include <KoShapeUserData.h>
+#include <KoTextShapeData.h>
+#include <KoSelection.h>
+#include <KoPADocument.h>
+#include <KoPAPageBase.h>
+#include <KoPAView.h>
+#include <QProgressDialog>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
 
 #include "flowlayout.h"
 #include "previewwindow.h"
 
-PreviewWindow::PreviewWindow()
+PreviewWindow::PreviewWindow(KoDocument *m_doc,KoView *m_view,int m_currentPage,QList <QPixmap> *thumbnailList)
 {
+    this->m_doc=m_doc;
+    this->m_view=m_view;
+    this->m_currentPage=m_currentPage;
+    this->thumbnailList=thumbnailList;
         gridLayout = new QGridLayout(this);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         scrollArea = new QScrollArea(this);
@@ -31,7 +61,7 @@ PreviewWindow::PreviewWindow()
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 380, 280));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 420,320));
 
         flowLayout = new FlowLayout(scrollAreaWidgetContents);
 
@@ -39,30 +69,112 @@ PreviewWindow::PreviewWindow()
 
         gridLayout->addWidget(scrollArea, 0, 0, 1, 1);
         previewCount=0;
+
+        scrollArea->resize(420,320);
+        this->resize(420,320);
+        this->show();
+        moveFlag=false;
+        toBeMovedPage=-1;
+for(int i=0;i<thumbnailList->count();i++)
+{
+    showThumbnail();
+}
 }
 
 void PreviewWindow::screenThumbnailClicked()
 {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
     QString buttonName = clickedButton->objectName();
-    emit gotoPage(buttonName.toInt());
+    int index=(clickedButton->text()).toInt();
+
+    emit gotoPage(index);
     hide();
 }
 
-void PreviewWindow::showThumbnail(QPixmap pageThumbnail)
+void PreviewWindow::showThumbnail()
 {
+    QPushButton *previewButton;
+
     if(previewCount<9)
-        previewScreen[previewCount]=new QPushButton(QIcon(pageThumbnail),QString("0").append(QString::number(previewCount+1)));
+        previewButton=new QPushButton(thumbnailList->at(previewCount),QString("0").append(QString::number(previewCount+1)),this);
     else
-        previewScreen[previewCount]=new QPushButton(QIcon(pageThumbnail),QString::number(previewCount+1));
+        previewButton=new QPushButton(thumbnailList->at(previewCount),QString::number(previewCount+1),this);
 
-        previewScreen[previewCount]->setFlat(true);
+        previewButton->setFlat(true);
 
-        previewScreen[previewCount]->setMinimumSize(QSize(80, 70));
-        previewScreen[previewCount]->setIconSize(QSize(100, 70));
-        flowLayout->addWidget(previewScreen[previewCount]);
-        connect(previewScreen[previewCount],SIGNAL(clicked()),this,SLOT(screenThumbnailClicked()));
+        previewButton->setMinimumSize(QSize(80, 70));
+        previewButton->setIconSize(QSize(100, 70));
+        flowLayout->addWidget(previewButton);
+        connect(previewButton,SIGNAL(clicked()),this,SLOT(screenThumbnailClicked()));
 
-        previewScreen[previewCount]->setObjectName(QString::fromUtf8(QString::number(previewCount+1).toAscii().data()));
         previewCount++;
+}
+
+void PreviewWindow::addThumbnail(QPixmap pix)
+{
+    QPushButton *previewButton;
+
+    if(previewCount<9)
+        previewButton=new QPushButton(pix,QString("0").append(QString::number(previewCount+1)),this);
+    else
+        previewButton=new QPushButton(pix,QString::number(previewCount+1),this);
+
+        previewButton->setFlat(true);
+
+        previewButton->setMinimumSize(QSize(80, 70));
+        previewButton->setIconSize(QSize(100, 70));
+        flowLayout->addWidget(previewButton);
+        connect(previewButton,SIGNAL(clicked()),this,SLOT(screenThumbnailClicked()));
+
+        previewCount++;
+}
+
+StoreButtonPreview::StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QObject *parent) :
+    QObject(parent),
+    previewWindow(NULL)
+{
+    this->m_doc=m_doc;
+    this->m_view=m_view;
+    isPreviewDialogActive=false;
+}
+
+void StoreButtonPreview::showDialog(int m_currentPage)
+{
+    if(isPreviewDialogActive)
+        return;
+    isPreviewDialogActive=true;
+    previewWindow=new PreviewWindow(m_doc,m_view,m_currentPage,&thumbnailList);
+    QObject::connect(previewWindow,SIGNAL(gotoPage(int)),this,SIGNAL(gotoPage(int)));
+    previewWindow->exec();
+    isPreviewDialogActive=false;
+}
+void StoreButtonPreview::addThumbnail(long pageNumber)
+{
+    thumbnailList.append(QPixmap("/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png"));
+    if(previewWindow!=NULL)
+        previewWindow->addThumbnail(QPixmap("/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png"));
+}
+
+
+ThumbnailRetriever::ThumbnailRetriever(long pageCount,QObject *parent) :
+    QThread(parent)
+{
+    this->pageCount=pageCount;
+}
+
+void ThumbnailRetriever::run()
+{
+    QDir temp("/tmp/FreOfficeThumbnail");
+    temp.mkdir("/tmp/FreOfficeThumbnail");
+    int pageNumber=0;
+    while(pageNumber<pageCount) {
+        QDBusConnection bus = QDBusConnection::sessionBus();
+
+        QDBusInterface *interface = new QDBusInterface("com.nokia.FreOffice", "/view_0", "org.kde.koffice.presentation.view");
+
+        QString m_notesHtml = (QDBusReply<QString>)interface->call("exportPageThumbnail", pageNumber,128,128,"/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png","PNG",-1);
+        qDebug()<<"page="<<pageNumber<<"\n";
+        newThumbnail(pageNumber);
+        pageNumber++;
+    }
 }

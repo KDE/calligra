@@ -294,6 +294,7 @@ void MainWindow::init()
     // Toolbar should be shown only when we open a document
     m_ui->viewToolBar->hide();
     m_ui->EditToolBar->hide();
+    connect(m_ui->actionPageNumber,SIGNAL(triggered()),this,SLOT(showPreviewDialog()));
 }
 
 MainWindow::~MainWindow()
@@ -311,6 +312,27 @@ MainWindow::~MainWindow()
     delete m_collabDialog;
     delete m_collabEditor;
 }
+
+void MainWindow::showPreviewDialog()
+{
+    if(m_type == Presentation) {
+        storeButtonPreview->showDialog(m_currentPage);
+    }
+}
+
+void MainWindow::gotoPage(int page)
+{
+    if(page>=m_currentPage) {
+        for(int i=m_currentPage;i<page;i++)
+            nextPage();
+    }
+    else {
+        for(int i=m_currentPage;i>page;i--) {
+            prevPage();
+        }
+    }
+}
+
 void MainWindow::openFormatFrame()
 {
     if(m_fontstyleframe)
@@ -1467,6 +1489,14 @@ void MainWindow::discardNewDocument()
 void MainWindow::doOpenDocument()
 {
     openDocument(m_fileName);
+    if(m_type==Presentation)
+    {
+        storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
+        connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+        thumbnailRetriever=new ThumbnailRetriever(m_doc->pageCount());
+        thumbnailRetriever->start();
+        connect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
+    }
 }
 
 void MainWindow::raiseWindow(void)

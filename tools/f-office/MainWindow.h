@@ -32,6 +32,7 @@
 
 #include "PresentationTool.h"
 #include "Splash.h"
+#include "previewwindow.h"
 
 #include "CollabClient.h"
 #include "CollabDialog.h"
@@ -625,6 +626,10 @@ public slots:
      */
     void loadScrollAndQuit();
 
+    void gotoPage(int page);
+
+    void showPreviewDialog();
+
 private:
 
     QMap<QString, OfficeInterface*> loadedPlugins;
@@ -674,6 +679,10 @@ private:
      * Is document is currently being loaded
      */
     bool m_isLoading;
+
+    StoreButtonPreview *storeButtonPreview;
+
+    ThumbnailRetriever *thumbnailRetriever;
 };
 
 #endif // MAINWINDOW_H
