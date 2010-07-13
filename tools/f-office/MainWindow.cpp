@@ -183,6 +183,9 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
 void MainWindow::init()
 {
     m_ui->setupUi(this);
+
+    QDBusConnection::sessionBus().registerObject("/presentation/view", this);
+
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionNew);
