@@ -317,13 +317,13 @@ bool KPrPage::saveOdfAnimations(KoPASavingContext & paContext) const
         }
 
         if (steps.size() > 1) {
+            writer.startElement("anim:seq");
+            writer.addAttribute("presentation:node-type", "main-sequence");
             for (int i = 1; i < steps.size(); i++) {
                 KPrAnimationStep *step = steps.at(i);
-                writer.startElement("anim:seq");
-                writer.addAttribute("presentation:node-type", "main-sequence");
                 step->saveOdf(paContext);
-                writer.endElement();
             }
+            writer.endElement();
         }
         writer.endElement(); // anim:par
     }
