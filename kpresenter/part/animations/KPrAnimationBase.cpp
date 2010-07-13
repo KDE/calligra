@@ -79,7 +79,7 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
 {
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.addAttribute("smil:begin", KPrDurationParser::msToString(m_begin));
-    writer.addAttribute("smil:duration", KPrDurationParser::msToString(m_duration));
+    writer.addAttribute("smil:dur", KPrDurationParser::msToString(m_duration));
     writer.addAttribute("smil:targetElement", paContext.drawId(m_shapeAnimation->shape(), false));
     return true;
 }
