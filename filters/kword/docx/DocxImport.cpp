@@ -146,7 +146,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         "\n      <style:text-properties style:use-window-font-color=\"true\" style:font-name=\"Calibri\" fo:font-size=\"11pt\" fo:language=\"en\" fo:country=\"GB\" style:letter-kerning=\"true\" style:font-name-asian=\"Arial1\" style:font-size-asian=\"11pt\" style:language-asian=\"en\" style:country-asian=\"US\" style:font-name-complex=\"F\" style:font-size-complex=\"11pt\" style:language-complex=\"ar\" style:country-complex=\"SA\" fo:hyphenate=\"false\" fo:hyphenation-remain-char-count=\"2\" fo:hyphenation-push-char-count=\"2\"/>"
         "\n    </style:default-style>"
         "\n    <style:default-style style:family=\"table\">"
-        "\n      <style:table-properties table:border-model=\"collapsing\"/>"
+        "\n      <style:table-properties style:border-model=\"collapsing\"/>"
         "\n    </style:default-style>"
         "\n    <style:default-style style:family=\"table-row\">"
         "\n      <style:table-row-properties fo:keep-together=\"auto\"/>"
