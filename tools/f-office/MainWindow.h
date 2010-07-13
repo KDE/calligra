@@ -45,7 +45,7 @@ class QToolButton;
 class QFrame;
 class QLabel;
 class PresentationTool;
-class MainWindowToolAdaptor;
+class MainWindowAdaptor;
 
 namespace Ui
 {
