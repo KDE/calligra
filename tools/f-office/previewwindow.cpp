@@ -156,10 +156,11 @@ void StoreButtonPreview::addThumbnail(long pageNumber)
 }
 
 
-ThumbnailRetriever::ThumbnailRetriever(long pageCount,QObject *parent) :
+ThumbnailRetriever::ThumbnailRetriever(long pageCount,int viewNumber,QObject *parent) :
     QThread(parent)
 {
     this->pageCount=pageCount;
+    this->viewNumber=viewNumber;
 }
 
 void ThumbnailRetriever::run()
@@ -170,11 +171,11 @@ void ThumbnailRetriever::run()
     while(pageNumber<pageCount) {
         QDBusConnection bus = QDBusConnection::sessionBus();
 
-        QDBusInterface *interface = new QDBusInterface("com.nokia.FreOffice", "/view_0", "org.kde.koffice.presentation.view");
+        QDBusInterface *interface = new QDBusInterface("com.nokia.FreOffice", "/view_"+QString::number(viewNumber), "org.kde.koffice.presentation.view");
 
         QString m_notesHtml = (QDBusReply<QString>)interface->call("exportPageThumbnail", pageNumber,128,128,"/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png","PNG",-1);
-        qDebug()<<"page="<<pageNumber<<"\n";
         newThumbnail(pageNumber);
         pageNumber++;
     }
 }
+

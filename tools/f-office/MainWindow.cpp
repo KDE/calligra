@@ -174,7 +174,8 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_dbus( new MainWindowAdaptor(this)),
         m_collab(0),
         m_collabDialog(0),
-        m_collabEditor(0)
+        m_collabEditor(0),
+        storeButtonPreview(0)
 {
     init();
 }
@@ -298,6 +299,7 @@ void MainWindow::init()
     m_ui->viewToolBar->hide();
     m_ui->EditToolBar->hide();
     connect(m_ui->actionPageNumber,SIGNAL(triggered()),this,SLOT(showPreviewDialog()));
+    viewNumber=0;
 }
 
 MainWindow::~MainWindow()
@@ -1497,14 +1499,6 @@ void MainWindow::discardNewDocument()
 void MainWindow::doOpenDocument()
 {
     openDocument(m_fileName);
-    if(m_type==Presentation)
-    {
-        storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
-        connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-        thumbnailRetriever=new ThumbnailRetriever(m_doc->pageCount());
-        thumbnailRetriever->start();
-        connect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
-    }
 }
 
 void MainWindow::raiseWindow(void)
@@ -1633,6 +1627,24 @@ void MainWindow::openDocument(const QString &fileName)
    m_docExist = true;
 
    initialUndoStepsCount();
+
+   if(m_type==Presentation)
+   {
+       if(storeButtonPreview!=0)
+       {
+           disconnect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+           disconnect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
+           delete storeButtonPreview;
+           delete thumbnailRetriever;
+       }
+           storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
+           connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+           thumbnailRetriever=new ThumbnailRetriever(m_doc->pageCount(),viewNumber);
+           thumbnailRetriever->start();
+           connect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
+
+       viewNumber++;
+   }
 }
 
 bool MainWindow::checkFiletype(const QString &fileName)

@@ -624,9 +624,13 @@ public slots:
      * Then it quits.
      */
     void loadScrollAndQuit();
-
+    /*!
+     * Slot to go to perticular page
+     */
     void gotoPage(int page);
-
+    /*!
+     * Slot to show the preview dialog
+     */
     void showPreviewDialog();
 
 private:
@@ -678,11 +682,18 @@ private:
      * Is document is currently being loaded
      */
     bool m_isLoading;
-
+    /*!
+     * pointer to preview button store
+     */
     StoreButtonPreview *storeButtonPreview;
-
+    /*!
+     * pointer to thumbnail retriever thread
+     */
     ThumbnailRetriever *thumbnailRetriever;
-
+    /*!
+     * view number used while dbus session creation
+     */
+    int viewNumber;
 signals:
     /*!
      * Presentation has entered full screen mode.
