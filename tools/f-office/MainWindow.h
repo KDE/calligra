@@ -45,7 +45,7 @@ class QToolButton;
 class QFrame;
 class QLabel;
 class PresentationTool;
-class MainWindowAdaptor;
+class MainWindowToolAdaptor;
 
 namespace Ui
 {
@@ -265,11 +265,6 @@ private:
     enum DocumentType { Text, Presentation, Spreadsheet };
     DocumentType m_type;
     /*!
-     * Flag to make higlighting of alignment button enable
-     */
-    enum AlignmentType {Left=1,Right,Center,Justify};
-    AlignmentType m_alignType;
-    /*!
      * Pointer to splash class
      */
     Splash *m_splash;
@@ -369,6 +364,14 @@ private:
      * counts initial undosteps of KoDocument
      */
     void initialUndoStepsCount();
+    /*!
+     * Function to check activeFormatFrame Options
+     */
+    void activeFormatOptionCheck();
+    /*!
+     * Function to check activeFontStyleFrame Options
+     */
+    void activeFontOptionCheck();
 
 private:
     // Apply the selected formatting
@@ -494,14 +497,6 @@ private slots:
      * Slot to choose new document
      */
     void chooseDocumentType();
-    /*!
-     * Slot to find AlignmentType
-     */
-    void findAlignType();
-    /*!
-     * Slot for intial AlignmentTypeCheck
-     */
-    void initialAlignType();
     /*!
      * Slot to open new documnet
      */

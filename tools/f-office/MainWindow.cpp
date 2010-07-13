@@ -168,11 +168,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_existingFile(false),
         m_docExist(false),
         m_count(0),
-        m_alignType(AlignmentType(0)),
-        m_pptTool(0),
-        m_fsPPTDrawHighlightButton(0),
-        m_fsPPTDrawPenButton(0),
-        m_dbus( new MainWindowAdaptor(this) ),
+        m_pptTool(NULL),
+        m_fsPPTDrawHighlightButton(NULL),
+        m_fsPPTDrawPenButton(NULL),
+        m_dbus( new MainWindowAdaptor(this)),
         m_collab(0),
         m_collabDialog(0),
         m_collabEditor(0)
@@ -183,9 +182,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
 void MainWindow::init()
 {
     m_ui->setupUi(this);
-
-    QDBusConnection::sessionBus().registerObject("/presentation/view", this);
-
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionNew);
@@ -349,6 +345,7 @@ void MainWindow::openFormatFrame()
         m_formatframe->hide();
         return;
     } else if(m_formatframe){
+        activeFormatOptionCheck();
         m_formatframe->show();
         return;
     }
@@ -372,8 +369,6 @@ void MainWindow::openFormatFrame()
     m_numberedlist=addFormatFrameComponent(i18n("Number"));
     m_alignjustify=addFormatFrameComponent(i18n("AlignJustify"));
 
-    initialAlignType();
-
     m_formatframelayout->addWidget(m_bold,0,0);
     m_formatframelayout->addWidget(m_alignleft,0,1);
     m_formatframelayout->addWidget(m_numberedlist,0,2);
@@ -389,6 +384,7 @@ void MainWindow::openFormatFrame()
                                FORMATFRAME_WIDTH,
                                FORMATFRAME_HEIGHT);
     m_formatframe->setLayout(m_formatframelayout);
+    activeFormatOptionCheck();
     m_formatframe->show();
 
     connect(m_alignjustify,SIGNAL(clicked()),this,SLOT(doJustify()));
@@ -411,6 +407,7 @@ void MainWindow::openFontStyleFrame()
         m_fontstyleframe->hide();
         return;
     } else if(m_fontstyleframe){
+        activeFontOptionCheck();
         m_fontstyleframe->show();
         return;
     }
@@ -425,8 +422,8 @@ void MainWindow::openFontStyleFrame()
     m_fontsizecombo=new QComboBox(this);
     Q_CHECK_PTR(m_fontsizecombo);
     m_fontsizecombo->setMinimumSize(120,76);
-        int i;
-    for(i=4;i<=100;i++)
+    int i;
+    for(i=4;i<=40;i++)
     {
         QString f_size;
         m_fontsizecombo->addItem(f_size.setNum(i));
@@ -455,6 +452,7 @@ void MainWindow::openFontStyleFrame()
                              FONTSTYLEFRAME_YCORDINATE_VALUE,
                              FONTSTYLEFRAME_WIDTH,
                              FONTSTYLEFRAME_HEIGHT);
+    activeFontOptionCheck();
     m_fontstyleframe->show();
 
     connect(m_fontsizecombo,SIGNAL(activated(int)),SLOT(selectFontSize()));
@@ -482,12 +480,8 @@ bool MainWindow::setSubScript(KoTextEditor *editor) {
     if (editor){
         if (editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript ){
             editor->setVerticalTextAlignment(Qt::AlignVCenter);
-            if (editor == m_editor)
-                m_subscript->setStyleSheet("");
         } else {
             editor->setVerticalTextAlignment(Qt::AlignBottom);
-            if (editor == m_editor)
-                m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
         }
         return true;
     }
@@ -506,12 +500,8 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
     if (editor) {
         if (editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript ) {
             editor->setVerticalTextAlignment(Qt::AlignVCenter);
-            if (editor == m_editor)
-                m_superscript->setStyleSheet("");
         } else {
             editor->setVerticalTextAlignment(Qt::AlignTop);
-            if (editor == m_editor)
-                m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; }");
         }
         return true;
     }
@@ -600,12 +590,8 @@ bool MainWindow::setBold(KoTextEditor *editor) {
         QTextCharFormat textchar = editor->charFormat();
         if (textchar.fontWeight()==QFont::Bold) {
             editor->bold(false);
-            if (editor == m_editor)
-                m_bold->setStyleSheet("");
         } else {
             editor->bold(true);
-            if (editor == m_editor)
-                m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
         return true;
     }
@@ -625,12 +611,8 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
         QTextCharFormat textchar = editor->charFormat();
         if (textchar.fontItalic()) {
             editor->italic(false);
-            if (editor==m_editor)
-            m_italic->setStyleSheet("");
         } else {
             editor->italic(true);
-            if(editor==m_editor)
-            m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
         return true;
     }
@@ -650,12 +632,8 @@ bool MainWindow::setUnderline(KoTextEditor *editor) {
         QTextCharFormat textchar = editor->charFormat();
         if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
             editor->underline(false);
-            if(editor==m_editor)
-            m_underline->setStyleSheet("");
         } else {
             editor->underline(true);
-            if(editor == m_editor)
-            m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
         }
         return true;
     }
@@ -669,9 +647,6 @@ void MainWindow::doLeftAlignment()
     }
     if(setLeftAlign(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignLeft);
-
-    m_alignType=Left;
-    findAlignType();
 }
 
 bool MainWindow::setLeftAlign(KoTextEditor *editor) {
@@ -688,8 +663,6 @@ void MainWindow::doJustify()
         m_formatframe->hide();
     if(setJustify(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignJustify);
-    m_alignType=Justify;
-    findAlignType();
 }
 
 bool MainWindow::setJustify(KoTextEditor *editor) {
@@ -706,8 +679,6 @@ void MainWindow::doRightAlignment()
         m_formatframe->hide();
     if(setRightAlign(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignRight);
-    m_alignType=Right;
-    findAlignType();
 }
 
 bool MainWindow::setRightAlign(KoTextEditor *editor) {
@@ -724,9 +695,6 @@ void MainWindow::doCenterAlignment()
         m_formatframe->hide();
     if(setCenterAlign(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignCenter);
-    m_alignType=Center;
-    findAlignType();
-
 }
 
 bool MainWindow::setCenterAlign(KoTextEditor *editor) {
@@ -737,55 +705,90 @@ bool MainWindow::setCenterAlign(KoTextEditor *editor) {
     return true;
 }
 
-void MainWindow::initialAlignType() {
+void MainWindow::activeFormatOptionCheck() {
     QTextBlockFormat blk = m_editor->blockFormat();
     Qt::Alignment textblock_align = blk.alignment();
     switch(textblock_align) {
         case Qt::AlignLeft :
-                        m_alignType = Left;
-                        break;
-        case Qt::AlignRight :
-                        m_alignType = Right;
-                        break;
-        case Qt::AlignCenter :
-                        m_alignType = Center;
-                        break;
-        case Qt::AlignJustify :
-                        m_alignType = Justify;
-                        break;
-    }
-    findAlignType();
-}
-
-void MainWindow::findAlignType()
-{
-    if(m_alignType) {
-        switch(m_alignType){
-            case Left:
                         m_alignleft->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
                         m_alignjustify->setStyleSheet("");
                         m_alignright->setStyleSheet("");
                         m_aligncenter->setStyleSheet("");
                         break;
-            case Right:
+        case Qt::AlignRight :
                         m_alignright->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
                         m_alignjustify->setStyleSheet("");
                         m_alignleft->setStyleSheet("");
                         m_aligncenter->setStyleSheet("");
                         break;
-            case Center:
+        case Qt::AlignCenter :
                         m_aligncenter->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
                         m_alignjustify->setStyleSheet("");
                         m_alignright->setStyleSheet("");
                         m_alignleft->setStyleSheet("");
                         break;
-            case Justify:
+        case Qt::AlignJustify :
                         m_alignjustify->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
                         m_alignleft->setStyleSheet("");
                         m_alignright->setStyleSheet("");
                         m_aligncenter->setStyleSheet("");
                         break;
+    }
+    if(m_bold) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if (textchar.fontWeight()==QFont::Bold) {
+            m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_bold->setStyleSheet("");
         }
+    }
+    if(m_italic) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if (textchar.fontItalic()) {
+            m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_italic->setStyleSheet("");
+        }
+    }
+    if(m_underline) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
+            m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_underline->setStyleSheet("");
+        }
+    }
+}
+
+void MainWindow::activeFontOptionCheck() {
+    if(m_superscript) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
+            m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_superscript->setStyleSheet("");
+        }
+    }
+
+    if(m_subscript) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
+            m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_subscript->setStyleSheet("");
+        }
+    }
+
+    if(m_fontsizecombo) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        QFont font=textchar.font();
+        m_fontsizecombo->setCurrentIndex((font.pointSize())-4);
+    }
+
+    if(m_fontcombobox) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        QString fonttype = textchar.fontFamily();
+        m_fontcombobox->setCurrentFont(QFont(fonttype));
     }
 }
 
@@ -824,13 +827,11 @@ bool MainWindow::setBulletList(KoTextEditor *editor) {
 void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 {
     QTextBlock blk = editor->block();
-    //KoList *list;
     KoListStyle *liststyle = new KoListStyle();
     KoListLevelProperties listlevelproperties;
     listlevelproperties.setStyle(style);
     liststyle->setLevelProperties(listlevelproperties);
     KoList::applyStyle(blk, liststyle, KoList::level(blk));
-    //list->applyStyle(blk,liststyle,list->level(blk));
 }
 
 void MainWindow::saveFile()
@@ -1713,11 +1714,9 @@ void MainWindow::fullScreen()
     m_ui->viewToolBar->hide();
     m_ui->SearchToolBar->hide();
     m_ui->EditToolBar->hide();
-
     if(m_type == Presentation) {
         emit presentationStarted();
     }
-
     showFullScreen();
     QSize size(this->frameSize());
 
@@ -1820,7 +1819,6 @@ void MainWindow::prevPage()
     if(m_type == Presentation) {
         emit previousSlide();
     }
-
     int cur_page = m_currentPage;
     bool check = triggerAction("page_previous");
     if(check) {
@@ -1832,16 +1830,14 @@ void MainWindow::prevPage()
 
 void MainWindow::nextPage()
 {
-    if (!m_controller)
-        return ;
-    if(m_currentPage == m_doc->pageCount()) {
-       return;
-    }
-
-    if(m_type == Presentation) {
-        emit nextSlide();
-    }
-
+   if (!m_controller)
+       return ;
+   if(m_currentPage == m_doc->pageCount()) {
+      return;
+   }
+   if(m_type == Presentation) {
+       emit nextSlide();
+   }
    static int prev_curpage=0;
    if(prev_curpage != m_currentPage) {
         int cur_page = m_currentPage;
@@ -1885,13 +1881,14 @@ void MainWindow::fsButtonClicked()
     if (!m_ui)
         return;
 
+    if(m_controller) {
+        m_controller->show();
+    }
+
     if(m_type == Presentation) {
         emit presentationStopped();
     }
 
-    if(m_controller) {
-        m_controller->show();
-    }
     m_fsButton->hide();
 
     if (m_fsPPTBackButton && m_fsPPTBackButton->isVisible())
@@ -2266,55 +2263,10 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         if((m_fontstyleframe) && (m_fontstyleframe->isVisible())) {
             if(!this->isActiveWindow()){
             } else {
-                    if((xcordinate<384) || (ycordinate<199))
-                        m_fontstyleframe->hide();
+                if((xcordinate<384) || (ycordinate<199))
+                    m_fontstyleframe->hide();
             }
         }
-    }
-
-    if((event&&event->type()==QEvent::MouseButtonPress)&&(m_doc&&m_editor)) {
-        if(m_bold) {
-            QTextCharFormat textchar = m_editor->charFormat();
-            if (textchar.fontWeight()==QFont::Bold) {
-                m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-            } else {
-                m_bold->setStyleSheet("");
-            }
-        }
-        if(m_italic) {
-            QTextCharFormat textchar = m_editor->charFormat();
-            if (textchar.fontItalic()) {
-                m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-            } else {
-                m_italic->setStyleSheet("");
-            }
-        }
-        if(m_underline) {
-            QTextCharFormat textchar = m_editor->charFormat();
-            if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
-                m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-            } else {
-                m_underline->setStyleSheet("");
-            }
-        }
-        if(m_superscript) {
-            QTextCharFormat textchar = m_editor->charFormat();
-            if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
-                m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-            } else {
-                m_superscript->setStyleSheet("");
-            }
-        }
-        if(m_subscript) {
-            QTextCharFormat textchar = m_editor->charFormat();
-            if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
-                m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-            } else {
-                m_subscript->setStyleSheet("");
-            }
-        }
-        if(m_formatframe)
-            initialAlignType();
     }
 
     if(m_doubleClick) {
