@@ -1226,8 +1226,13 @@ void KWordGraphicsHandler::parseFloatingPictures(void)
             if (block.anon.is<OfficeArtFBSE>()) {
                 OfficeArtFBSE* fbse = block.anon.get<OfficeArtFBSE>();
                 if (!fbse->embeddedBlip) {
-                    //An foDelay value of 0xffffffff specifies that the file is
-                    //not in the delay stream and cRef must be zero.
+
+                    //NOTE: An foDelay value of 0xffffffff specifies that the
+                    //file is not in the delay stream and cRef must be zero.
+
+                    //NOTE: A cRef value of 0x00000000 specifies an empty slot
+                    //in the OfficeArtBStoreContainer.
+
                     if (fbse->foDelay != 0xffffffff) {
                         if (!fbse->cRef) {
                             kDebug(30513) << "Strange, no references to this BLIP, skipping";
@@ -1269,8 +1274,8 @@ KWordGraphicsHandler::createFloatingPictures(KoStore* store, KoXmlWriter* manife
         foreach (const OfficeArtBStoreContainerFileBlock& block, blipStore->rgfb) {
             ref = savePicture(block, store);
             if (ref.name.length() == 0) {
-                kDebug(30513) << "empty name in picture reference";
-                break;
+                kDebug(30513) << "Note: Empty picture reference, probably an empty slot";
+                continue;
 	    }
             manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
             fileNames[ref.uid] = ref.name;
