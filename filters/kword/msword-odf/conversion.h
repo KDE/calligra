@@ -61,12 +61,14 @@ namespace Conversion
         9674, 9001, 0, 0, 0, 8721, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 9002, 8747, 8992, 0, 8993, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
-// UString -> QString conversion. Use .string() to get the QString.
-// Always store the QString into a variable first, to avoid a deep copy.
+// UString -> QString conversion. 
 inline QString string(const wvWare::UString& str)
 {
-    // Let's hope there's no copying of the QConstString happening...
-    return QString::fromRawData(reinterpret_cast<const QChar*>(str.data()), str.length());
+    // Do a deep copy.  We used to not do that, but it lead to several
+    // memory corruption bugs that were difficult to find.
+    //
+    // FIXME: Get rid of UString altogether and port wv2 to QString.
+    return QString(reinterpret_cast<const QChar*>(str.data()), str.length());
 }
 
 //special version of string() that replaces spaces with _20_,
