@@ -187,7 +187,6 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         // We have only support for fdct=1, i.e. regular dropcaps.
         // There is no support for fdct=2, i.e. dropcaps in the margin (ODF doesn't support this).
         tmpWriter.addAttribute("style:length", m_dcs_fdct > 0 ? 1 : 0);
-qDebug() << "dropcap style has textstyle " << m_dropCapStyleName;
         if (!m_dropCapStyleName.isEmpty()) {
             tmpWriter.addAttribute("style:style-name", m_dropCapStyleName.toUtf8());
         }
@@ -360,7 +359,7 @@ qDebug() << "dropcap style has textstyle " << m_dropCapStyleName;
                     writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
                 }
                 //cleanup
-                delete m_textStyles[i];
+                //delete m_textStyles[i];
                 m_textStyles[i] = 0;
             }
         }
