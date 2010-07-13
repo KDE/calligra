@@ -86,6 +86,7 @@ target_link_libraries(kexi
   ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
   kexidb
   keximain
+  kexicore
 )
 install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 
