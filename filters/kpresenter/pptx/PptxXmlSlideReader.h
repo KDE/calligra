@@ -123,7 +123,7 @@ public:
     PptxSlideMasterTextStyle();
     ~PptxSlideMasterTextStyle();
     //! @return text style for list level @a level
-    //! @par level can be 0..8, otherwise 0 is returned.
+    //! @par level can be 1..9, otherwise 0 is returned.
     //! Returned object is owned by PptxSlideMasterTextStyle.
     PptxSlideMasterListLevelTextStyle *listStyle(uint level);
 private:

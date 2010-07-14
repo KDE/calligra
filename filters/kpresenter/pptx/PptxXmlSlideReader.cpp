@@ -149,11 +149,11 @@ PptxSlideMasterTextStyle::~PptxSlideMasterTextStyle()
 
 PptxSlideMasterListLevelTextStyle* PptxSlideMasterTextStyle::listStyle(uint level)
 {
-    if (level >= (uint)m_listStyles.size())
+    if (level < 1 || level > (uint)m_listStyles.size())
         return 0;
-    PptxSlideMasterListLevelTextStyle* result = m_listStyles.at(level);
+    PptxSlideMasterListLevelTextStyle* result = m_listStyles.at(level - 1);
     if (!result) {
-        m_listStyles[level] = result = new PptxSlideMasterListLevelTextStyle;
+        m_listStyles[level - 1] = result = new PptxSlideMasterListLevelTextStyle;
     }
     return result;
 }

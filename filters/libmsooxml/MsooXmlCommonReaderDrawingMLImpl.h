@@ -1307,8 +1307,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 #ifdef PPTXXMLSLIDEREADER_H
         if (m_context->type == Slide) {
             // pass properties from master to slide
-//! @todo hardcoded list index
-            PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(0);
+//! @todo hardcoded list index (sebsauer; are there cases where another level needs to be applied? For reference see also bug #244363)
+            PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(1);
             if (listStyle) {
                 kDebug() << "try from master!!! sz=" << listStyle->sz;
                 szInt = listStyle->sz;
@@ -1477,8 +1477,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     TRY_READ_ATTR_WITHOUT_NS(lvl)
 
     if (!lvl.isEmpty()) {
-        m_currentListStyleProperties->setLevel(lvl.toInt());
         m_currentListLevel = lvl.toInt();
+        m_currentListStyleProperties->setLevel(m_currentListLevel);
     } else {
         m_currentListLevel = 0;
     }
@@ -2908,7 +2908,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentListStyleProperties = new KoListLevelProperties;
 
     // Number 3 makes eg. lvl4 -> 4
-    m_currentListStyleProperties->setLevel(QString(level.at(3)).toInt());
+    m_currentListLevel = QString(level.at(3)).toInt();
+    Q_ASSERT(m_currentListLevel > 0);
+    m_currentListStyleProperties->setLevel(m_currentListLevel);
 
     // To prevent the default bullet, as MS2007 does have it
     m_currentListStyleProperties->setBulletCharacter(QChar());
@@ -3507,9 +3509,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 #ifdef PPTXXMLSLIDEREADER_H
         if (d->currentSlideMasterTextStyle) {
 //! @todo level, 0 is hardcoded
-            PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(0);
             kDebug() << "=====" << szInt;
-            slideMasterListLevelTextStyle->sz = szInt;
+            PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(m_currentListLevel);
+            if (slideMasterListLevelTextStyle)
+                slideMasterListLevelTextStyle->sz = szInt;
         }
 #endif
     }
