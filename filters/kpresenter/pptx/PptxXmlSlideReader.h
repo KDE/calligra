@@ -68,6 +68,7 @@ public:
     ~PptxSlideProperties();
     //! Shapes ordered by position
     QList<PptxShapeProperties*> shapes;
+    QMap<QString, PptxShapeProperties*> shapesMap;
 
     void clear();
 };
@@ -77,6 +78,7 @@ class PptxPlaceholder
 {
 public:
     PptxPlaceholder();
+    PptxPlaceholder(const PptxShapeProperties &other);
     ~PptxPlaceholder();
     //! Writers placeholder's attributes (svg:x, etc.) to @a writer
     void writeAttributes(KoXmlWriter* writer);
@@ -94,6 +96,8 @@ public:
     ~PptxSlideLayoutProperties();
     //! Shapes ordered by position
     QList<PptxShapeProperties*> shapes;
+    //! Shapes map addressed by type
+    QMap<QString, PptxShapeProperties*> shapesMap;
     //! placeholders objects are owned by this object
     QMap<QString, PptxPlaceholder*> placeholders;
     QString styleName;
@@ -139,8 +143,8 @@ public:
     PptxSlideMasterTextStyle bodyStyle;
     PptxSlideMasterTextStyle otherStyle;
     
-    //! Shapes ordered by position
-    QList<PptxShapeProperties*> shapes;
+    //! Shapes map addressed by type
+    QMap<QString, PptxShapeProperties*> shapes;
 
 private:
     QMap<QByteArray, QByteArray> m_drawingPageProperties;
@@ -192,6 +196,7 @@ protected:
 
     KoGenStyle m_currentMasterPageStyle; //!< set by read_sp()
     KoGenStyle m_currentPresentationPageLayoutStyle; //!< set by read_sp() for placeholders (KoGenStyle::PresentationPageLayoutStyle)
+    KoGenStyle m_currentPresentationStyle; //!< KoGenStyle::PresentationAutoStyle
 
     KoXmlWriter* m_placeholderElWriter;
 

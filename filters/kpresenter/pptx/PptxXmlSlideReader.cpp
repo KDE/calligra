@@ -97,12 +97,22 @@ void PptxSlideProperties::clear()
 {
     qDeleteAll(shapes);
     shapes.clear();
+    shapesMap.clear();
 }
 
 // -------------------
 
 PptxPlaceholder::PptxPlaceholder()
 {
+}
+
+PptxPlaceholder::PptxPlaceholder(const PptxShapeProperties &other)
+ : x(EMU_TO_CM_STRING(other.x))
+ , y(EMU_TO_CM_STRING(other.y))
+ , width(EMU_TO_CM_STRING(other.width))
+ , height(EMU_TO_CM_STRING(other.height))
+{
+    kDebug() << x << y << width << height;
 }
 
 PptxPlaceholder::~PptxPlaceholder()
@@ -223,6 +233,14 @@ public:
     uint shapeNumber;
     QString qualifiedNameOfMainElement;
     QString phType; //!< set by read_ph()
+    QString phIdx; //!< set by read_ph()
+    QString phStyleId() const
+    {
+        if (!phType.isEmpty())
+            return phType;
+        return phIdx;
+    }
+
     PptxSlideMasterTextStyle* currentSlideMasterTextStyle; //!< set by read_*Style()
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
@@ -1014,8 +1032,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     const QXmlStreamAttributes attrs(attributes());
     // Specifies the placeholder index. This is used when applying templates or changing
     // layouts to match a placeholder on one template/master to another.
-    TRY_READ_ATTR_WITHOUT_NS(idx)
-    kDebug() << "idx:" << idx;
+    TRY_READ_ATTR_WITHOUT_NS_INTO(idx, d->phIdx)
+    kDebug() << "idx:" << d->phIdx;
 
     // Specifies the size of a placeholder.
     // The possible values for this attribute are defined by the ST_PlaceholderSize simple type (§19.7.9), p.2987.
@@ -1030,6 +1048,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // Mark this shape as a place holder.
     m_isPlaceHolder = true;
 
+    const QString styleId(d->phStyleId());
+    kDebug() << "styleId:" << styleId;
+    if (m_context->type == Slide) {
+        if (m_context->slideLayoutProperties->styles.contains(styleId)) {
+            m_currentParagraphStyle = m_context->slideLayoutProperties->styles[styleId];
+            m_currentParagraphStylePredefined = true;
+        }
+    }
+    else if (m_context->type == SlideLayout) {
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -1042,13 +1070,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
  Parent elements:
  - [done] sp (§19.3.1.43)
  Child elements:
- - bodyPr (Body Properties) §21.1.2.1.1
+ - [done] bodyPr (Body Properties) §21.1.2.1.1
  - [done] lstStyle (Text List Styles) §21.1.2.4.12
  - [done] p (Text Paragraphs) §21.1.2.2.6
 
  Only used for Slide type.
 */
 //! @todo support all child elements
+//! CASE #P526
 KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 {
     READ_PROLOGUE
@@ -1075,7 +1104,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF_NS(a, lstStyle)
+            TRY_READ_IF_NS(a, bodyPr)
+            ELSE_TRY_READ_IF_NS(a, lstStyle)
             else if (qualifiedName() == QLatin1String("a:p")) {
                 TRY_READ(DrawingML_p);
             }
@@ -1169,6 +1199,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
 {
     READ_PROLOGUE
     d->phType.clear();
+    d->phIdx.clear();
     while (!atEnd()) {
         readNext();
         kDebug() << *this;

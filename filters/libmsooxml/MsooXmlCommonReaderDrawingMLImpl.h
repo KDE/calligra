@@ -423,12 +423,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
     if (caller == cNvPr_nvSpPr || caller == cNvPr_nvPicPr) { // for sanity, p:nvGrpSpPr can be also the caller
         READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
         kDebug() << "id:" << m_cNvPrId;
-#ifdef PPTXXMLSLIDEREADER_H
-        if(m_context->type == Slide && m_context->slideLayoutProperties->styles.contains(m_cNvPrId)) {
-            m_currentParagraphStyle = m_context->slideLayoutProperties->styles[m_cNvPrId];
-            m_currentParagraphStylePredefined = true;
-        }
-#endif        
         TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_cNvPrName)
         kDebug() << "name:" << m_cNvPrName;
         TRY_READ_ATTR_WITHOUT_NS_INTO(descr, m_cNvPrDescr)
@@ -573,19 +567,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     // If called from the pptx converter, handle different contexts
     // (Slide, SlideMaster, SlideLayout)
     if (m_context->type == Slide) {
+        m_currentPresentationStyle = KoGenStyle(KoGenStyle::PresentationAutoStyle, "presentation");
     }
     else if (m_context->type == SlideMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
-        m_context->slideProperties->shapes.append(m_currentShapeProperties);
         m_currentMasterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
 #ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
 #endif
     }
     else if (m_context->type == SlideLayout) {
-        PptxShapeProperties* masterShapeProperties = (d->shapeNumber < m_context->slideProperties->shapes.count()) ? m_context->slideProperties->shapes[d->shapeNumber] : 0;
-        m_currentShapeProperties = masterShapeProperties ? new PptxShapeProperties(*masterShapeProperties) : new PptxShapeProperties();
-        m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
+        // moved down
+        m_currentShapeProperties = 0;
         m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle);
 #ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
@@ -633,11 +626,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type != Slide && !d->phType.isEmpty() && outputDrawFrame) {
+    const QString styleId(d->phStyleId());
+    if (m_context->type != Slide && !styleId.isEmpty() && outputDrawFrame) {
         outputDrawFrame = false;
         body = drawFrameBuf.originalWriter();
         drawFrameBuf.clear();
-        kDebug() << "giving up outputDrawFrame for because ph@ is not empty: ph@type=" << d->phType << "m_context->type=" << m_context->type;
+        kDebug() << "giving up outputDrawFrame for because ph@type is not empty:" << d->phType << "m_context->type=" << m_context->type;
     }
 #endif
 
@@ -665,13 +659,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         }
 
 //todo        body->addAttribute("presentation:style-name", styleName);
+        QString presentationStyleName;
 # ifdef HARDCODED_PRESENTATIONSTYLENAME
         d->presentationStyleNameCount++;
-        body->addAttribute("presentation:style-name",
-                           d->presentationStyleNameCount == 1 ? "pr1" : "pr2");
+        presentationStyleName = d->presentationStyleNameCount == 1 ? "pr1" : "pr2";
 # else
         //body->addAttribute("draw:style-name", );
+        if (!m_currentPresentationStyle.isEmpty()) {
+            presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
+        }
 # endif // HARDCODED_PRESENTATIONSTYLENAME
+        if (!presentationStyleName.isEmpty()) {
+            body->addAttribute("presentation:style-name", presentationStyleName);
+        }
 
         if (m_context->type == Slide) {
 // CASE #P476
@@ -679,7 +679,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
             body->addAttribute("presentation:class", presentationClass);
             kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
-            PptxPlaceholder *placeholder;
+            kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
+                << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
+            PptxPlaceholder *placeholder = m_context->slideLayoutProperties->placeholders.value(presentationClass);
+            kDebug() << "m_context->slideLayoutProperties:" << m_context->slideLayoutProperties
+                << QString("m_context->slideLayoutProperties->placeholders.value(\"%1\")")
+                   .arg(presentationClass) << placeholder;
+            if (!placeholder) {
+                kDebug() << "trying placeholder for id:" << d->phIdx;
+                placeholder = m_context->slideLayoutProperties->placeholders.value(d->phIdx);
+                kDebug() << "m_context->slideLayoutProperties:" << m_context->slideLayoutProperties
+                    << QString("m_context->slideLayoutProperties->placeholders.value(\"%1\")")
+                   .arg(d->phIdx) << placeholder;
+            }
             if (m_svgWidth > -1 && m_svgHeight > -1) {
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
     //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
@@ -688,9 +700,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
                 body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
             }
-            else if (   m_context->slideLayoutProperties
-                && ((placeholder = m_context->slideLayoutProperties->placeholders.value(presentationClass))))
-            {
+            else if (   m_context->slideLayoutProperties && placeholder) {
                 kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->styleName;
                 placeholder->writeAttributes(body);
             }
@@ -711,25 +721,71 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body->endElement(); //draw:frame
     }
 #ifdef PPTXXMLSLIDEREADER_H
-    else if (m_context->type == SlideLayout) {
+    kDebug() << "styleId:" << styleId << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
+
+    if (m_context->type == SlideLayout) {
+        PptxShapeProperties* masterShapeProperties = 0;
+        if (!styleId.isEmpty()) {
+            masterShapeProperties = m_context->slideProperties->shapesMap.value(styleId);
+        }
+        else if (d->shapeNumber < (uint)m_context->slideProperties->shapes.count()) {
+            masterShapeProperties = m_context->slideProperties->shapes[d->shapeNumber];
+        }
+        kDebug() << masterShapeProperties;
+
+        m_currentShapeProperties = masterShapeProperties
+            ? new PptxShapeProperties(*masterShapeProperties) : new PptxShapeProperties();
+
+        m_context->slideLayoutProperties->shapesMap.insert(styleId, m_currentShapeProperties);
+        m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
+    }
+    else if (m_context->type == SlideMaster) {
+        kDebug() << "m_context->slideProperties->shapesMap insert:" << styleId;
+        if (!styleId.isEmpty()) {
+            m_context->slideProperties->shapesMap.insert(styleId, m_currentShapeProperties);
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideProperties->shapesMap.insert(d->phIdx, m_currentShapeProperties);
+        }
+        m_context->slideProperties->shapes.append(m_currentShapeProperties);
+    }
+
+    if (!outputDrawFrame && m_context->type == SlideLayout) {
         // presentation:placeholder
         Q_ASSERT(m_placeholderElWriter);
-        const QString presentationObject(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
+        QString presentationObject;
+        presentationObject = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType);
+        QString phStyleId;
+        if (!d->phType.isEmpty())
+            phStyleId = presentationObject;
+        if (phStyleId.isEmpty()) {
+            // were indexing placeholders by id if type is not present, so shaped can refer to them by id
+            phStyleId = d->phIdx;
+        }
 
         // Keep this placeholder information for reuse in slides because ODF requires
         // not only reference but redundant copy of the properties to be present in slides.
-        PptxPlaceholder *placeholder = new PptxPlaceholder;
-        placeholder->x = EMU_TO_CM_STRING(m_svgX);
-        placeholder->y = EMU_TO_CM_STRING(m_svgY);
-        placeholder->width = EMU_TO_CM_STRING(m_svgWidth);
-        placeholder->height = EMU_TO_CM_STRING(m_svgHeight);
-        m_context->slideLayoutProperties->placeholders.insert(presentationObject, placeholder);
+        PptxPlaceholder *placeholder;
+        if (m_currentShapeProperties) {
+            kDebug() << "copying geometry from master to placeholder";
+            placeholder = new PptxPlaceholder(*m_currentShapeProperties);
+        }
+        else {
+            placeholder = new PptxPlaceholder();
+            placeholder->x = EMU_TO_CM_STRING(m_svgX);
+            placeholder->y = EMU_TO_CM_STRING(m_svgY);
+            placeholder->width = EMU_TO_CM_STRING(m_svgWidth);
+            placeholder->height = EMU_TO_CM_STRING(m_svgHeight);
+        }
+        kDebug() << "adding placeholder" << presentationObject << "phStyleId:" << phStyleId;
+        m_context->slideLayoutProperties->placeholders.insert(phStyleId, placeholder);
 
         m_placeholderElWriter->startElement("presentation:placeholder");
         m_placeholderElWriter->addAttribute("presentation:object", presentationObject);
         placeholder->writeAttributes(m_placeholderElWriter);
         m_placeholderElWriter->endElement();
     }
+
 #endif
 
     popCurrentDrawStyle();
@@ -817,7 +873,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide && !xfrm_read) { // loading values from slideMaster/slideLayout is needed
         //Q_ASSERT(d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count());
-        PptxShapeProperties* props = (d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count()) ? m_context->slideLayoutProperties->shapes[d->shapeNumber - 1] : 0;
+        PptxShapeProperties* props = 0;
+        const QString styleId(d->phStyleId());
+        kDebug() << "styleId:" << styleId;
+        if (!styleId.isEmpty()) {
+            props = m_context->slideLayoutProperties->shapesMap.value(styleId);
+        }
+        else if(d->shapeNumber >= 1 && d->shapeNumber <= (uint)m_context->slideLayoutProperties->shapes.count())
+        {
+            props = m_context->slideLayoutProperties->shapes[d->shapeNumber - 1];
+        }
+
         if (props) {
             m_svgX = props->x;
             m_svgY = props->y;
@@ -825,6 +891,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             m_svgHeight = props->height;
             m_rot = props->rot;
             m_isPlaceHolder = props->isPlaceHolder;
+            kDebug() << "Copied from PptxShapeProperties:"
+                << "d->shapeNumber:" << d->shapeNumber
+                << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
+                << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
         }
     }
 #endif
@@ -1034,8 +1104,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          body->startElement("text:p", false);
 #ifdef PPTXXMLSLIDEREADER_H
          if(m_context->type == SlideLayout) {
-            if(!m_cNvPrId.isEmpty())
-                m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
+            const QString styleId(d->phStyleId());
+            kDebug() << "styleId:" << styleId;
+            if (!styleId.isEmpty())
+                m_context->slideLayoutProperties->styles.insert(styleId, m_currentParagraphStyle);
+            //if (!m_cNvPrId.isEmpty())
+            //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
          } else if(m_context->type == Slide) {
              setupParagraphStyle();
              m_currentParagraphStylePredefined = false;
@@ -3444,6 +3518,103 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bodyPr
+//! bodyPr handler (Body Properties)
+/*! ECMA-376, 21.1.2.1.1, p.3556 - DrawingML
+
+ This element defines the body properties for the text body within a shape.
+
+ Parent elements:
+ - lnDef (§20.1.4.1.20)
+ - rich (§21.2.2.156)
+ - spDef (§20.1.4.1.27)
+ - t (§21.4.3.8)
+ - txBody (§21.3.2.26)
+ - txBody(§20.1.2.2.40)
+ - txBody (§20.5.2.34)
+ - [done] txBody (§19.3.1.51)
+ - txDef (§20.1.4.1.28)
+ - txPr (§21.2.2.216)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+ - flatTx (No text in 3D scene) §20.1.5.8
+ - noAutofit (No AutoFit) §21.1.2.1.2
+ - normAutofit (Normal AutoFit) §21.1.2.1.3
+ - prstTxWarp (Preset Text Warp) §20.1.9.19
+ - scene3d (3D Scene Properties) §20.1.4.1.26
+ - sp3d (Apply 3D shape properties) §20.1.5.12
+ - [done] spAutoFit (Shape AutoFit) §21.1.2.1.4
+
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    // wrap (Text Wrapping Type)
+    // Specifies the wrapping options to be used for this text body. If this attribute is omitted,
+    // then a value of square is implied which wraps the text using the bounding text box.
+    // The possible values for this attribute are defined by the ST_TextWrappingType simple type (§20.1.10.85):
+    // - none (Text Wrapping Type Enum ( None ))
+    //        No wrapping occurs on this text body. Words spill out without paying attention to the bounding
+    //        rectangle boundaries.
+    // - square (Text Wrapping Type Enum ( Square ))
+    //        Determines whether we wrap words within the bounding rectangle.
+    TRY_READ_ATTR_WITHOUT_NS(wrap)
+
+//TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
+
+//! @todo more atributes
+
+    bool spAutoFit = false;
+    while (!atEnd()) {
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:spAutoFit")) {
+                TRY_READ(spAutoFit)
+                spAutoFit = true;
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == Slide) { // CASE #P526
+        m_currentPresentationStyle.addProperty("draw:auto-grow-height",
+            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse);
+        m_currentPresentationStyle.addProperty("draw:auto-grow-width",
+            (!spAutoFit || wrap == QLatin1String("square"))
+            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue);
+        // text in shape
+        m_currentPresentationStyle.addProperty("fo:wrap-option",
+            wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"));
+    }
+#endif
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL spAutoFit
+//! spAutoFit handler (Shape AutoFit)
+/*! ECMA-376, 21.1.2.1.4, p.3567 - DrawingML
+
+ This element specifies that a shape should be auto-fit to fully contain the text described within it.
+ Auto-fitting is when text within a shape is scaled in order to contain all the text inside.
+ If this element is omitted, then noAutofit or auto-fit off is implied.
+
+ Parent elements:
+ - [done] bodyPr (§21.1.2.1.1)
+
+ No child elements.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
+{
+    READ_PROLOGUE
+    SKIP_EVERYTHING
     READ_EPILOGUE
 }
 

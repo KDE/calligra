@@ -254,6 +254,7 @@ MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     out of ECMA-376's ph@type attribute.
     By default (and for empty argument), "outline" is returned.
 */
+//! @todo or "object"?  ST_PlaceholderType docs day the default is "obj".
 //! CASE #P500
 MSOOXML_EXPORT QString ST_PlaceholderType_to_ODF(const QString& ecmaType);
 
