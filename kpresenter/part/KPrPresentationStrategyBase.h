@@ -34,7 +34,7 @@ public:
     virtual ~KPrPresentationStrategyBase();
 
     /**
-     * If the event is handled or should be ignored by the tool return true. Otherwise 
+     * If the event is handled or should be ignored by the tool return true. Otherwise
      * the event will be handled in the tool.
      */
     virtual bool keyPressEvent( QKeyEvent * event ) = 0;
@@ -46,8 +46,9 @@ protected:
     void activateDefaultStrategy();
     KoPACanvas * canvas();
 
-    KPrPresentationToolEventForwarder *m_widget;
     KPrPresentationTool *m_tool;
+    KPrPresentationToolEventForwarder *m_widget;
+
 };
 
 #endif /* KPRPRESENTATIONSTRATEGYBASE_H */

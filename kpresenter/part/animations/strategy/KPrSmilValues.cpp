@@ -29,7 +29,10 @@ KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation) : KPrAnimationVa
 
 qreal KPrSmilValues::value(qreal time) const
 {
-    qreal value, value1, value2 = 0.0;
+    qreal value = 0.0;
+    qreal value1 = 0.0;
+    qreal value2 = 0.0;
+
     for (int i = 0; i < m_values.size(); i++) {
         if (time > m_times.at(i) && (m_times.at(i+1) - m_times.at(i))) {
             value1 = m_values.at(i).eval(m_cache);

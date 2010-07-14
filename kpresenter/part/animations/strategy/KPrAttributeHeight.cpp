@@ -32,7 +32,7 @@ KPrAttributeHeight::KPrAttributeHeight() : KPrAnimationAttribute("height")
 
 void KPrAttributeHeight::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
-    qreal tx, ty;
+    qreal tx, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
     KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
     QTransform transform;
@@ -60,7 +60,7 @@ void KPrAttributeHeight::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
 
 void KPrAttributeHeight::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
 {
-    qreal v1, v2, tx, ty;
+    qreal v1, v2, tx, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
     KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
 

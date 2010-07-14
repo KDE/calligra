@@ -101,15 +101,19 @@ void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
         indent += ' ';
     }
     if (KPrAnimationStep *a = dynamic_cast<KPrAnimationStep*>(animation)) {
+        Q_UNUSED(a);
         kDebug() << indent + "animation step";
     }
     else if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+        Q_UNUSED(a);
         kDebug() << indent + "animation sub step";
     }
     else if (KPrShapeAnimation *a = dynamic_cast<KPrShapeAnimation*>(animation)) {
+        Q_UNUSED(a);
         kDebug() << indent + "shape animation";
     }
     else if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase*>(animation)) {
+        Q_UNUSED(a);
         kDebug() << indent + "animation base";
     }
 

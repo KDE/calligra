@@ -160,9 +160,8 @@ protected:
     KPrAnimationDirector * m_pvAnimationDirector;
     KoPACanvas * m_presenterViewCanvas;
     KPrPresenterViewWidget * m_presenterViewWidget;
-    KPrView *m_view;
-
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
+    KPrView *m_view;
 };
 
 #endif /* KPRVIEWMODEPRESENTATION_H */

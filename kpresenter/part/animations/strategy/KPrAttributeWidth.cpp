@@ -32,7 +32,7 @@ KPrAttributeWidth::KPrAttributeWidth() : KPrAnimationAttribute("width")
 
 void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
-    qreal tx, ty;
+    qreal tx, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
     KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
     QTransform transform;
@@ -62,7 +62,7 @@ void KPrAttributeWidth::updateCache(KPrAnimationCache *cache, KPrShapeAnimation 
 
 void KPrAttributeWidth::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
 {
-    qreal v1, v2, tx, ty;
+    qreal v1, v2, tx, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
     KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
 
