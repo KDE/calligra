@@ -144,7 +144,7 @@ protected:
 
 protected:
     ViewBase *m_view;
-    QPointer<PrintingHeaderFooter> m_widget;
+    PrintingHeaderFooter *m_widget;
 };
 
 class KPLATOUI_EXPORT ViewActionLists

@@ -177,7 +177,7 @@ QList<QWidget*> PrintingDialog::createOptionWidgets() const
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
     const_cast<PrintingDialog*>( this )->m_widget = w;
 
-    return QList<QWidget*>() << m_widget;
+    return QList<QWidget*>() << w;
 }
 
 QList<KoShape*> PrintingDialog::shapesOnPage(int)
