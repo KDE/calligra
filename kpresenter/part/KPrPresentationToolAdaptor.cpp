@@ -73,11 +73,12 @@ void KPrPresentationToolAdaptor::startDrawPresentation(int pointx, int pointy, i
             KPrPresentationDrawWidget *widget=dynamic_cast< KPrPresentationDrawWidget *>(m_tool->strategy()->widget());
             widget->updateSize(penSize);
             widget->updateColor(color);
-            QPoint point(pointx,pointy);
-            QMouseEvent event(QEvent::MouseButtonPress, point, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-
-            m_tool->strategy()->widget()->receiveMousePressEvent(&event);
         }
+
+        QPoint point(pointx,pointy);
+        QMouseEvent event(QEvent::MouseButtonPress, point, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+
+        m_tool->strategy()->widget()->receiveMousePressEvent(&event);
     }
 }
 
