@@ -2,6 +2,8 @@
 Version=1.0
 Type=Application
 Name=Office
+Name[pt]=Escritório
+Name[uk]=Офіс
 Name[x-test]=xxOfficexx
 Exec=/usr/bin/FreOffice
 Icon=freoffice
