@@ -62,7 +62,10 @@ const QString ABOUT_DIALOG_KOFFICE_PIXMAP("/usr/share/icons/hicolor/64x64/apps/f
  * * Nokia pixmap in about dialog
  * */
 const QString ABOUT_DIALOG_NOKIA_PIXMAP("/usr/share/icons/hicolor/scalable/hildon/about_nokia_logo.png");
-
+/*!
+ * * notes view icon
+ * */
+const QString VIEW_NOTES_PIXMAP(":/images/64x64/PresentationDrawTool/viewnotes.png");
 /*!
 * Path New Document Template
 */

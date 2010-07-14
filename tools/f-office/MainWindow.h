@@ -32,6 +32,7 @@
 
 #include "Splash.h"
 #include "previewwindow.h"
+#include "NotesDialog.h"
 
 #include "CollabClient.h"
 #include "CollabDialog.h"
@@ -632,6 +633,14 @@ public slots:
      * Slot to show the preview dialog
      */
     void showPreviewDialog();
+    /*!
+     * Slot to show the notes dialog when show notes dialog is clicked
+     */
+    void slideNotesButtonClicked();
+    /*!
+     * Slot to update current slide in the presentation, when the slide changed in the notes dialog
+     */
+    void moveSLideFromNotesSLide(bool flag);
 
 private:
 
@@ -694,6 +703,19 @@ private:
      * view number used while dbus session creation
      */
     int viewNumber;
+    /*!
+     * Pointer to show notes button
+     */
+    QPushButton *m_slideNotesButton;
+    /*!
+     * Icon for show notes button
+     */
+    const QIcon m_slideNotesIcon;
+    /*!
+     * Pointer to notes dialog
+     */
+    NotesDialog *notesDialog;
+
 signals:
     /*!
      * Presentation has entered full screen mode.

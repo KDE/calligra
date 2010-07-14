@@ -175,7 +175,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_collab(0),
         m_collabDialog(0),
         m_collabEditor(0),
-        storeButtonPreview(0)
+        storeButtonPreview(0),
+        notesDialog(0),
+        m_slideNotesButton(0),
+        m_slideNotesIcon(VIEW_NOTES_PIXMAP)
 {
     init();
 }
@@ -1320,8 +1323,43 @@ void MainWindow::showFullScreenPresentationIcons(void)
         m_fsPPTBackButton->show();
         m_fsPPTBackButton->raise();
     }
+    if(m_type == Presentation)
+    {
+        if (!m_slideNotesButton) {
+            m_slideNotesButton = new QPushButton(this);
+            Q_CHECK_PTR(m_slideNotesButton);
+            m_slideNotesButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+            m_slideNotesButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
+            m_slideNotesButton->setIcon(m_slideNotesIcon);
+            connect(m_slideNotesButton, SIGNAL(clicked()), SLOT(slideNotesButtonClicked()));
+            m_slideNotesButton->move(FS_BUTTON_SIZE*2,size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+        }
+        m_slideNotesButton->show();
+        m_slideNotesButton->raise();
+    }
 }
+void MainWindow::slideNotesButtonClicked()
+{
+    if(notesDialog) {
+        disconnect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
+        delete notesDialog;
+    }
+        notesDialog=new NotesDialog(m_doc,viewNumber);
+        notesDialog->show();
+        connect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
 
+        notesDialog->show();
+        notesDialog->showNotesDialog(m_currentPage);
+}
+void MainWindow::moveSLideFromNotesSLide(bool flag)
+{
+    if(flag==true) {
+        nextPage();
+    }
+    else {
+        prevPage();
+    }
+}
 void MainWindow::openFileDialog()
 {
     if(m_docExist) {
@@ -1478,6 +1516,7 @@ void MainWindow::closeDocument()
     m_docExist=false;
     m_doubleClick=false;
     m_count=0;
+    viewNumber++;
 }
 
 void MainWindow::returnToDoc()
@@ -1645,8 +1684,6 @@ void MainWindow::openDocument(const QString &fileName)
            thumbnailRetriever=new ThumbnailRetriever(m_doc->pageCount(),viewNumber);
            thumbnailRetriever->start();
            connect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
-
-       viewNumber++;
    }
 }
 
@@ -1888,6 +1925,8 @@ void MainWindow::fsTimer()
             m_fsPPTDrawHighlightButton->hide();
         if (m_fsPPTDrawPenButton && m_fsPPTDrawPenButton->isVisible() )
             m_fsPPTDrawPenButton->hide();
+        if (m_slideNotesButton && m_slideNotesButton->isVisible())
+            m_slideNotesButton->hide();
     }
 }
 
