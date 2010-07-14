@@ -814,7 +814,7 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
     }
     if ( m_type == Type_Team ) {
 #ifndef NDEBUG
-        m_currentSchedule->logDebug( "Make appointments to team " + m_name ) );
+        m_currentSchedule->logDebug( "Make appointments to team " + m_name );
 #endif
         Duration e;
         foreach ( Resource *r, m_teamMembers ) {
