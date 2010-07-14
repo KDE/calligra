@@ -2216,10 +2216,12 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             if (movePos.y() - m_pressPos.y() > 50 && sliderVal == sliderMin && m_pptTool && ( ! m_pptTool->toolsActivated() ) ) {
                 m_slideChangePossible = false;
                 triggerAction("page_previous");
+                emit previousSlide();
             }
             if (m_pressPos.y() - movePos.y() > 50 && sliderVal == sliderMax && m_pptTool && ( ! m_pptTool->toolsActivated() ) ) {
                 m_slideChangePossible = false;
                 triggerAction("page_next");
+                emit nextSlide();
             }
         }
     }
@@ -2259,8 +2261,10 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                 QSize size(this->frameSize());
                 if (mouseEvent->x() <= FS_BUTTON_SIZE) {
                     triggerAction("page_previous");
+                    emit previousSlide();
                 } else if (mouseEvent->x() >= (size.width() - FS_BUTTON_SIZE)) {
                     triggerAction("page_next");
+                    emit nextSlide();
                 }
             }
         }
