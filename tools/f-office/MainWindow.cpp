@@ -93,9 +93,16 @@
 #include <KWCanvas.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
+#include <Map.h>
+#include <Doc.h>
+#include <View.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+using  KSpread::Doc;
+using  KSpread::Map;
+using  KSpread::View;
+using  KSpread::Sheet;
 
 #define FORMATFRAME_XCORDINATE_VALUE 310
 #define FORMATFRAME_YCORDINATE_VALUE 140
@@ -1860,12 +1867,31 @@ void MainWindow::nextPage()
     m_vPage = m_controller->verticalScrollBar()->pageStep();
     m_controller->pan(QPoint(0, m_vPage));
 }*/
+void MainWindow::nextSheet()
+{
+    Sheet *sheet = ((View*)m_view)->activeSheet();
+    sheet = ((Doc *)m_doc)->map()->nextSheet(sheet);
+    if(sheet)
+      ((View*)m_view)->setActiveSheet(sheet);
+}
+
+void MainWindow::prevSheet()
+{
+    Sheet *sheet = ((View*)m_view)->activeSheet();
+    sheet = ((Doc *)m_doc)->map()->previousSheet(sheet);
+    if(sheet)
+      ((View*)m_view)->setActiveSheet(sheet);
+}
 
 //this new functions  solve problem in action next page which stops  moving page from 13th page number
 void MainWindow::prevPage()
 {
     if (!m_controller)
         return;
+    if(m_type == Spreadsheet) {
+       prevSheet();
+       return;
+    }
     if(m_currentPage == 1)
         return;
     if(m_type == Presentation) {
@@ -1884,6 +1910,10 @@ void MainWindow::nextPage()
 {
    if (!m_controller)
        return ;
+   if(m_type == Spreadsheet) {
+      nextSheet();
+      return;
+   }
    if(m_currentPage == m_doc->pageCount()) {
       return;
    }

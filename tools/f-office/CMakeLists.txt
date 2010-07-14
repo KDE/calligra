@@ -17,7 +17,7 @@ QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplic
 
 add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  flowlayout.cpp previewwindow.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
-target_link_libraries(FreOffice ${QT_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate)
+target_link_libraries(FreOffice ${QT_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)
 install(FILES FreOffice.desktop DESTINATION share/applications/hildon)

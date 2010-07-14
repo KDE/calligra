@@ -374,6 +374,9 @@ private:
      */
     void activeFontOptionCheck();
 
+    void nextSheet();
+    void prevSheet();
+
 private:
     // Apply the selected formatting
     bool setFontSize(int size, KoTextEditor* editor);
