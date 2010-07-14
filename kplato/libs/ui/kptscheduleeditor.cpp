@@ -444,6 +444,8 @@ void ScheduleLogTreeView::headerContextMenuRequested( const QPoint &pos )
     m->addAction( actionShowDebug );
     m->exec( mapToGlobal( pos ) );
     delete m;
+#else
+   Q_UNUSED(pos);
 #endif
 }
 
