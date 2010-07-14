@@ -109,35 +109,44 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
     kDebug(30513) << "text has characterstyle " << msTextStyleName;
 
-    KoGenStyle *textStyle = m_mainStyles->styleForModification(msTextStyleName);
-    if (!textStyle) {
-        kWarning() << "Couldn't retrieve style for modification!";
-    }
+    KoGenStyle *textStyle;
 
     bool suppresFontSize = false;
     if (m_textStyles.size() == 0 && m_paragraphProperties->pap().dcs.lines > 1) {
         suppresFontSize = true;
     }
 
-    // Modify the character style if we detect any diff between the
-    // chp of the paragraph and the summed chp.
-    const wvWare::Style* parentStyle = styles.styleByIndex(msTextStyle->m_std->istdBase);
-    if (parentStyle) {
-        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
+    // Apply any extra properties to our auto style
+    // those extra properties is the diff beteween the referenceChp and the summed chp.
+    // ReferenceCHP can be either the paragraph or a named style
+    if (msTextStyle->sti() != 65) {
+        // this is not default paragraph font
+        textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+        if (m_inStylesDotXml) {
+            textStyle->setAutoStyleInStylesDotXml(true);
+        }
+        textStyle->setParentName(Conversion::styleNameString(msTextStyle->name()));
+        //if we have a new font, process that
+        const wvWare::Word97::CHP* refChp = &msTextStyle->chp();
+        if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
+            if (!fontName.isEmpty()) {
+                textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
+            }
+        applyCharacterProperties(chp, textStyle, msTextStyle, suppresFontSize, m_combinedCharacters);
+        }
+    } else {
+        // Default Paragraph Font
+        // meaning we should really compare against the CHP of the paragraph
+        textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+        if (m_inStylesDotXml) {
+            textStyle->setAutoStyleInStylesDotXml(true);
+        }
         //if we have a new font, process that
         const wvWare::Word97::CHP* refChp = &m_paragraphStyle->chp();
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
             if (!fontName.isEmpty()) {
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
-        }
-    } else {
-        textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-        if (m_inStylesDotXml) {
-            textStyle->setAutoStyleInStylesDotXml(true);
-        }
-        if (!fontName.isEmpty()) {
-            textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
         }
         applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
     }

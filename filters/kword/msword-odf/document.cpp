@@ -341,9 +341,8 @@ void Document::processStyles()
                                        Conversion::styleNameString(parentStyle->name()));
             }
 
-            // even if we were able to process character properties in the chpx
-            // lists then we don't need to the design is such that the styles
-            // are modified during processing of text runs
+            // Process the character and paragraph properties.
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
