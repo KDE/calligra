@@ -176,8 +176,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         kDebug(30513) << "returning with drop cap paragraph";
         if (m_textStrings.size()) {
             if (m_textStyles[0] != 0) {
-                m_dropCapStyleName= 'T';
-                m_dropCapStyleName = m_mainStyles->insert(*m_textStyles[0], m_dropCapStyleName);
+                m_dropCapStyleName= m_textStyles[0]->parentName();
             }
         }
         return;
