@@ -373,8 +373,13 @@ private:
      * Function to check activeFontStyleFrame Options
      */
     void activeFontOptionCheck();
-
+    /*!
+     * Function for navigating to NextSheet 
+     */
     void nextSheet();
+    /*!
+     * Function for navigating to PreviousSheet
+     */
     void prevSheet();
 
 private:
