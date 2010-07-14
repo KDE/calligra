@@ -731,7 +731,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         else if (d->shapeNumber < (uint)m_context->slideProperties->shapes.count()) {
             masterShapeProperties = m_context->slideProperties->shapes[d->shapeNumber];
         }
-        kDebug() << masterShapeProperties;
+        kDebug() << "masterShapeProperties:" << masterShapeProperties;
 
         m_currentShapeProperties = masterShapeProperties
             ? new PptxShapeProperties(*masterShapeProperties) : new PptxShapeProperties();
@@ -766,7 +766,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         // Keep this placeholder information for reuse in slides because ODF requires
         // not only reference but redundant copy of the properties to be present in slides.
         PptxPlaceholder *placeholder;
-        if (m_currentShapeProperties) {
+        if (m_currentShapeProperties && m_currentShapeProperties->width >= 0) {
             kDebug() << "copying geometry from master to placeholder";
             placeholder = new PptxPlaceholder(*m_currentShapeProperties);
         }
