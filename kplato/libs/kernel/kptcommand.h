@@ -1001,6 +1001,28 @@ private:
     Account *m_newvalue;
     Account *m_oldvalue;
 };
+class KPLATOKERNEL_EXPORT AddResourceTeamCmd : public NamedCommand
+{
+public:
+    AddResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_team;
+    Resource *m_member;
+};
+class KPLATOKERNEL_EXPORT RemoveResourceTeamCmd : public NamedCommand
+{
+public:
+    RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_team;
+    Resource *m_member;
+};
 
 class KPLATOKERNEL_EXPORT RemoveResourceGroupCmd : public NamedCommand
 {

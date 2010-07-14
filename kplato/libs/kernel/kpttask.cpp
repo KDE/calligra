@@ -156,14 +156,6 @@ QStringList Task::assignedNameList( long id) const {
     return s->resourceNameList();
 }
 
-// int Task::units() const {
-//     return m_requests.units();
-// }
-
-int Task::workUnits() const {
-    return m_requests.workUnits();
-}
-
 void Task::makeAppointments() {
     if (m_currentSchedule == 0)
         return;
@@ -3605,7 +3597,6 @@ void Task::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
     qDebug()<<indent<<"+ Task node:"<<name()<<" type="<<typeToString()<<"("<<type()<<") id="<<id();
     indent += "!  ";
-    qDebug()<<indent<<"Requested resources (work):"<<workUnits()<<"%";
     m_requests.printDebug(indent);
 
     completion().printDebug( indent );

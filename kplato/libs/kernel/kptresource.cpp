@@ -381,6 +381,8 @@ void Resource::copy(Resource *resource) {
     cost.account = resource->account();
     m_calendar = resource->m_calendar;
 
+    m_teamMembers = resource->m_teamMembers;
+
     // hmmmm
     //m_externalAppointments = resource->m_externalAppointments;
     //m_externalNames = resource->m_externalNames;
@@ -405,6 +407,8 @@ void Resource::setType(const QString &type)
         setType( Type_Work );
     else if (type == "Material")
         setType( Type_Material );
+    else if (type == "Team")
+        setType( Type_Team );
     else
         setType( Type_Work );
 }
@@ -416,8 +420,9 @@ QString Resource::typeToString( bool trans ) const {
 QStringList Resource::typeToStringList( bool trans ) {
     // keep theese in the same order as the enum!
     return QStringList() 
-            << (trans ? i18n("Work") : QString("Work"))
-            << (trans ? i18n("Material") : QString("Material"));
+            << (trans ? i18nc( "@item:inlistbox resource type", "Work" ) : QString( "Work") )
+            << (trans ? i18nc( "@item:inlistbox resource type", "Material" ) : QString( "Material" ) )
+            << (trans ? i18nc( "@item:inlistbox resource type", "Team" ) : QString( "Team" ) );
 }
 
 void Resource::setName( const QString n )
@@ -807,6 +812,16 @@ void Resource::makeAppointment(Schedule *node, int load, const QList<Resource*> 
         m_currentSchedule->logWarning( i18n( "Make appointments: Node end time is not valid" ) );
         return;
     }
+    if ( m_type == Type_Team ) {
+#ifndef NDEBUG
+        m_currentSchedule->logDebug( "Make appointments to team " + m_name ) );
+#endif
+        Duration e;
+        foreach ( Resource *r, m_teamMembers ) {
+            r->makeAppointment( node, load, required );
+        }
+        return;
+    }
     node->resourceNotAvailable = false;
     node->workStartTime = DateTime();
     node->workEndTime = DateTime();
@@ -857,8 +872,12 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
     bool sts=false;
     Duration e;
-    if (duration == 0) {
-        kWarning()<<"zero duration";
+    if ( duration == 0 || m_units == 0 ) {
+        kWarning()<<"zero duration or zero units";
+        return e;
+    }
+    if ( m_type == Type_Team ) {
+        kError()<<"A team resource cannot deliver any effort";
         return e;
     }
     Calendar *cal = calendar();
@@ -866,6 +885,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return e;
     }
+
     if (backward) {
         DateTime limit = start - duration;
         if ( limit < m_availableFrom ) {
@@ -1129,7 +1149,14 @@ AppointmentIntervalList Resource::externalAppointments() const
 long Resource::allocationSuitability( const DateTime &time, const Duration &duration, bool backward )
 {
     // FIXME: This is not *very* intelligent...
-    Duration e = effort( time, duration, backward );
+    Duration e;
+    if ( m_type == Type_Team ) {
+        foreach ( Resource *r, m_teamMembers ) {
+            e += r->effort( time, duration, backward );
+        }
+    } else {
+        e = effort( time, duration, backward );
+    }
     return e.minutes();
 }
 
@@ -1163,6 +1190,20 @@ DateTime Resource::endTime( long id ) const
         }
     }
     return dt;
+}
+
+void Resource::addTeamMember( Resource *resource )
+{
+    if ( ! m_teamMembers.contains( resource ) ) {
+        m_teamMembers.append( resource );
+    }
+}
+
+void Resource::removeTeamMember( Resource *resource )
+{
+    if ( m_teamMembers.contains( resource ) ) {
+        m_teamMembers.removeAt( m_teamMembers.indexOf( resource ) );
+    }
 }
 
 /////////   Risk   /////////
@@ -1201,6 +1242,7 @@ ResourceRequest::~ResourceRequest() {
     if (m_resource)
         m_resource->unregisterRequest(this);
     m_resource = 0;
+    qDeleteAll( m_teamMembers );
 }
 
 bool ResourceRequest::load(KoXmlElement &element, Project &project) {
@@ -1260,14 +1302,6 @@ void ResourceRequest::setUnits( int value )
     m_units = value; changed();
 }
 
-int ResourceRequest::workUnits() const {
-    if (m_resource->type() == Resource::Type_Work) {
-        return units();
-    }
-    //kDebug()<<"units=0";
-    return 0;
-}
-
 Task *ResourceRequest::task() const {
     return m_parent ? m_parent->task() : 0;
 }
@@ -1281,8 +1315,13 @@ void ResourceRequest::changed()
 
 void ResourceRequest::setCurrentSchedulePtr( Schedule *ns )
 {
-    resource()->setCurrentSchedulePtr( resourceSchedule( ns ) );
-    foreach ( Resource *r, m_required ) {
+    setCurrentSchedulePtr( m_resource, ns );
+}
+
+void ResourceRequest::setCurrentSchedulePtr( Resource *resource, Schedule *ns )
+{
+    resource->setCurrentSchedulePtr( resourceSchedule( ns, resource ) );
+    foreach ( Resource *r, resource->requiredResources() ) {
         r->setCurrentSchedulePtr( resourceSchedule( ns, r ) );
     }
 }
@@ -1314,6 +1353,8 @@ DateTime ResourceRequest::workTimeAfter(const DateTime &dt, Schedule *ns) {
             t = r->availableAfter( t, DateTime(), resourceSchedule( ns, r ) );
         }
         return t;
+    } else if ( m_resource->type() == Resource::Type_Team ) {
+        return availableAfter( dt, ns );
     }
     return DateTime();
 }
@@ -1328,18 +1369,41 @@ DateTime ResourceRequest::workTimeBefore(const DateTime &dt, Schedule *ns) {
             t = r->availableBefore( t, DateTime(), resourceSchedule( ns, r ) );
         }
         return t;
+    } else if ( m_resource->type() == Resource::Type_Team ) {
+        return availableBefore( dt, ns );
     }
     return DateTime();
 }
 
 DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
+    if ( m_resource->type() == Resource::Type_Team ) {
+        DateTime t;// = m_resource->availableFrom();
+        foreach ( Resource *r, m_resource->teamMembers() ) {
+            setCurrentSchedulePtr( r, ns );
+            t = qMax( t, r->availableAfter( time ) );
+        }
+        return t;
+    }
     setCurrentSchedulePtr( ns );
-    return resource()->availableAfter(time);
+    return m_resource->availableAfter( time );
 }
 
 DateTime ResourceRequest::availableBefore(const DateTime &time, Schedule *ns) {
+    if ( m_resource->type() == Resource::Type_Team ) {
+        DateTime t = time;
+        bool avail = false;
+        foreach ( Resource *r, m_resource->teamMembers() ) {
+            setCurrentSchedulePtr( r, ns );
+            DateTime tt = r->availableBefore( time );
+            if ( tt.isValid() ) {
+                avail = true;
+                t = qMin( t, tt );
+            }
+        }
+        return avail ? t : DateTime();
+    }
     setCurrentSchedulePtr( ns );
-    return resource()->availableBefore(time);
+    return resource()->availableBefore( time );
 }
 
 Duration ResourceRequest::effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok ) {
@@ -1367,6 +1431,28 @@ long ResourceRequest::allocationSuitability( const DateTime &time, const Duratio
 {
     setCurrentSchedulePtr( ns );
     return resource()->allocationSuitability( time, duration, backward );
+}
+
+QList<ResourceRequest*> ResourceRequest::teamMembers() const
+{
+    qDeleteAll( m_teamMembers );
+    m_teamMembers.clear();
+    if ( m_resource->type() == Resource::Type_Team ) {
+        foreach ( Resource *r, m_resource->teamMembers() ) {
+            m_teamMembers << new ResourceRequest( r, m_units );
+        }
+    }
+    return m_teamMembers;
+}
+
+QDebug &operator<<( QDebug &dbg, const KPlato::ResourceRequest *rr )
+{
+    return operator<<( dbg, *rr );
+}
+QDebug &operator<<( QDebug &dbg, const KPlato::ResourceRequest &rr )
+{
+    dbg<<"ResourceRequest["<<rr.resource()->name()<<']';
+    return dbg;
 }
 
 /////////
@@ -1436,8 +1522,34 @@ QStringList ResourceGroupRequest::requestNameList( bool includeGroup ) const {
         lst << m_group->name();
     }
     foreach ( ResourceRequest *r, m_resourceRequests ) {
-        if ( r->resource() && ! r->isDynamicallyAllocated() ) {
+        if ( ! r->isDynamicallyAllocated() ) {
+            Q_ASSERT( r->resource() );
             lst << r->resource()->name();
+        }
+    }
+    return lst;
+}
+
+QList<Resource*> ResourceGroupRequest::requestedResources() const
+{
+    QList<Resource*> lst;
+    foreach ( ResourceRequest *r, m_resourceRequests ) {
+        if ( ! r->isDynamicallyAllocated() ) {
+            Q_ASSERT( r->resource() );
+            lst << r->resource();
+        }
+    }
+    return lst;
+}
+
+QList<ResourceRequest*> ResourceGroupRequest::resourceRequests( bool resolveTeam ) const
+{
+    QList<ResourceRequest*> lst;
+    foreach ( ResourceRequest *rr, m_resourceRequests ) {
+        if ( resolveTeam && rr->resource()->type() == Resource::Type_Team ) {
+            lst += rr->teamMembers();
+        } else {
+            lst << rr;
         }
     }
     return lst;
@@ -1484,24 +1596,6 @@ void ResourceGroupRequest::save(QDomElement &element) const {
 
 int ResourceGroupRequest::units() const {
     return m_units;
-}
-
-int ResourceGroupRequest::workUnits() const {
-    int units = 0;
-    if (m_group->type() == ResourceGroup::Type_Work)
-        units = m_units;
-    foreach (ResourceRequest *r, m_resourceRequests) {
-        units += r->workUnits();
-    }
-    //kDebug()<<"units="<<units;
-    return units;
-}
-
-int ResourceGroupRequest::workAllocation() const {
-    if ( m_group->type() == ResourceGroup::Type_Work ) {
-        return qMax( m_units, m_resourceRequests.count() );
-    }
-    return 0;
 }
 
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
@@ -1636,7 +1730,7 @@ void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const 
     Duration e = effort / m_units;
     QMap<long, ResourceRequest*> map;
     foreach ( Resource *r, m_group->resources() ) {
-        if ( find( r ) ) {
+        if ( r->type() == Resource::Type_Team || find( r ) ) {
             continue;
         }
         ResourceRequest *rr = new ResourceRequest( r, r->units() );
@@ -1721,17 +1815,15 @@ QStringList ResourceRequestCollection::requestNameList( bool includeGroup ) cons
 QList<Resource*> ResourceRequestCollection::requestedResources() const {
     QList<Resource*> lst;
     foreach ( ResourceGroupRequest *g, m_requests ) {
-        foreach ( ResourceRequest *r, g->resourceRequests() ) {
-            lst << r->resource();
-        }
+        lst += g->requestedResources();
     }
     return lst;
 }
 
-QList<ResourceRequest*> ResourceRequestCollection::resourceRequests() const {
+QList<ResourceRequest*> ResourceRequestCollection::resourceRequests( bool resolveTeam ) const {
     QList<ResourceRequest*> lst;
     foreach ( ResourceGroupRequest *g, m_requests ) {
-        foreach ( ResourceRequest *r, g->resourceRequests() ) {
+        foreach ( ResourceRequest *r, g->resourceRequests( resolveTeam ) ) {
             lst << r;
         }
     }
@@ -1764,36 +1856,6 @@ void ResourceRequestCollection::save(QDomElement &element) const {
     foreach (ResourceGroupRequest *r, m_requests) {
         r->save(element);
     }
-}
-
-// int ResourceRequestCollection::units() const {
-//     //kDebug();
-//     int units = 0;
-//     foreach (ResourceGroupRequest *r, m_requests) {
-//         units += r->units();
-//         //kDebug()<<" Group:"<<r->group()->name()<<" now="<<units;
-//     }
-//     return units;
-// }
-
-int ResourceRequestCollection::workUnits() const {
-    //kDebug();
-    int units = 0;
-    foreach (ResourceGroupRequest *r, m_requests) {
-        units += r->workUnits();
-    }
-    //kDebug()<<" units="<<units;
-    return units;
-}
-
-int ResourceRequestCollection::workAllocation() const {
-    //kDebug();
-    int units = 0;
-    foreach (ResourceGroupRequest *r, m_requests) {
-        units += r->workAllocation();
-    }
-    //kDebug()<<" units="<<units;
-    return units;
 }
 
 // Returns the longest duration needed by any of the groups.
@@ -1947,7 +2009,7 @@ Duration ResourceRequestCollection::effort(const QList<ResourceRequest*> &lst, c
     foreach (ResourceRequest *r, lst) {
         e += r->effort(time, duration, ns, backward, &sts);
         if (sts && ok) *ok = sts;
-        //kDebug()<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString();
+        //kDebug()<<(backward?"(B)":"(F)" )<<r<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString();
     }
     //kDebug()<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString();
     return e;
@@ -1974,7 +2036,7 @@ int ResourceRequestCollection::numDays(const QList<ResourceRequest*> &lst, const
 }
 
 Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
-    //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_group->name()<<""<<time.toString()<<": effort:"<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")";
+    //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<time.toString()<<": effort:"<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")";
     KLocale *locale = KGlobal::locale();
     Duration e;
     if (_effort == Duration::zeroDuration) {
@@ -2132,7 +2194,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         }
     }
     end = t.isValid() ? t : time;
-    //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_group->name()<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort:"<<_effort.toString(Duration::Format_Day);
+    //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort:"<<_effort.toString(Duration::Format_Day);
     return (end>time?end-time:time-end);
 }
 

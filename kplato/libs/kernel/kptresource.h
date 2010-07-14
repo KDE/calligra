@@ -146,7 +146,7 @@ public:
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
     
-    /// Save workpackage document. Include only resources listed in @lst
+    /// Save workpackage document. Include only resources listed in @p lst
     void saveWorkPackageXML( QDomElement &element, const QList<Resource*> lst ) const;
 
     void initiateCalculation( Schedule &sch );
@@ -233,7 +233,7 @@ public:
     QString id() const { return m_id; }
     void setId( const QString& id );
 
-    enum Type { Type_Work, Type_Material };
+    enum Type { Type_Work, Type_Material, Type_Team };
     void setType( Type type );
     void setType( const QString &type );
     Type type() const { return m_type; }
@@ -443,6 +443,11 @@ public:
     QList<Resource*> requiredResources() const { return m_required; }
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
+    QList<Resource*> teamMembers() const { return m_teamMembers; }
+    void clearTeamMembers() { m_teamMembers.clear(); }
+    void addTeamMember( Resource *resource );
+    void removeTeamMember( Resource *resource );
+
     /// Used by Project::load() after all resources have been loaded
     /// to translate resource ids to resources
     void resolveRequiredResources( Project &project );
@@ -494,6 +499,8 @@ private:
     QList<Resource*> m_required;
     QStringList m_requiredIds;
     
+    QList<Resource*> m_teamMembers;
+
     Schedule *m_currentSchedule;
 
 #ifndef NDEBUG
@@ -555,11 +562,6 @@ public:
     int units() const;
     void setUnits( int value );
 
-    /**
-    * Get amount of requested work units in percent
-    */
-    int workUnits() const;
-
     void registerRequest()
     {
         if ( m_resource )
@@ -593,23 +595,29 @@ public:
     const QList<Resource*> requiredResources() const { return m_required; }
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
+    QList<ResourceRequest*> teamMembers() const;
+
 protected:
     void changed();
 
     void setCurrentSchedulePtr( Schedule *ns );
-    
+    void setCurrentSchedulePtr( Resource *resource, Schedule *ns );
+
 private:
     Resource *m_resource;
     int m_units;
     ResourceGroupRequest *m_parent;
     bool m_dynamic;
     QList<Resource*> m_required;
+    mutable QList<ResourceRequest*> m_teamMembers;
 
 #ifndef NDEBUG
 public:
     void printDebug( const QString& ident );
 #endif
 };
+QDebug &operator<<( QDebug &dbg, const KPlato::ResourceRequest *r );
+QDebug &operator<<( QDebug &dbg, const KPlato::ResourceRequest &r );
 
 class KPLATOKERNEL_EXPORT ResourceGroupRequest
 {
@@ -624,7 +632,10 @@ public:
     ResourceGroup *group() const { return m_group; }
     void setGroup( ResourceGroup *group ) { m_group = group; }
     void unregister( const ResourceGroup *group ) { if ( group == m_group ) m_group = 0; }
-    QList<ResourceRequest*> resourceRequests() { return m_resourceRequests; }
+    /// Return a list of resource requests.
+    /// If @p resolveTeam is true, include the team members,
+    /// if @p resolveTeam is false, include the team resource itself.
+    QList<ResourceRequest*> resourceRequests( bool resolveTeam=true ) const;
     void addResourceRequest( ResourceRequest *request );
     void deleteResourceRequest( ResourceRequest *request );
     int count() const { return m_resourceRequests.count(); }
@@ -635,7 +646,11 @@ public:
     ResourceRequest *resourceRequest( const QString &name );
     /// Return a list of allocated resources, allocation to group is not included by default.
     QStringList requestNameList( bool includeGroup = false ) const;
-    
+    /// Return a list of allocated resources.
+    /// Allocations to groups are not included.
+    /// Team resources are included but *not* the team members.
+    /// Any dynamically allocated resource is not included.
+    QList<Resource*> requestedResources() const;
     bool load( KoXmlElement &element, Project &project );
     void save( QDomElement &element ) const;
 
@@ -644,18 +659,7 @@ public:
     void setUnits( int value ) { m_units = value; changed(); }
 
     /**
-    * Get amount of allocated work units in percent
-    */
-    int workUnits() const;
-
-    /**
-    * Get the number of resources allocated
-    */
-    int workAllocation() const;
-
-    /**
-     * Returns the duration needed to do the effort  effort
-     * starting at start.
+     * Returns the duration needed to do the @p effort starting at @p start.
      */
     Duration duration( const DateTime &start, const Duration &effort, Schedule *ns, bool backward = false );
 
@@ -740,33 +744,27 @@ public:
 
     bool contains( const QString &identity ) const;
     ResourceGroupRequest *findGroupRequestById( const QString &id ) const;
-    /// Return a list of allocated resources, allocations to groups are not included by default.
+    /// Return a list of names of allocated resources.
+    /// Allocations to groups are not included by default.
+    /// Team resources are included but *not* the team members.
+    /// Any dynamically allocated resource is not included.
     QStringList requestNameList( bool includeGroup = false ) const;
+    /// Return a list of allocated resources.
+    /// Allocations to groups are not included.
+    /// Team resources are included but *not* the team members.
+    /// Any dynamically allocated resource is not included.
     QList<Resource*> requestedResources() const;
-    /// Return a list of all resource requests
-    QList<ResourceRequest*> resourceRequests() const;
+
+    /// Return a list of all resource requests.
+    /// If @p resolveTeam is true, include the team members,
+    /// if @p resolveTeam is false, include the team resource itself.
+    QList<ResourceRequest*> resourceRequests( bool resolveTeam=true ) const;
     
     //bool load(KoXmlElement &element, Project &project);
     void save( QDomElement &element ) const;
 
     /**
-    * Returns the total amount of resource units in percent
-    */
-//    int units() const;
-
-    /**
-    * Returns the amount of allocated work units in percent
-    */
-    int workUnits() const;
-
-    /**
-    * Returns the number of allocated working resources
-    */
-    int workAllocation() const;
-
-    /**
-    * Returns the duration needed to do the effort @param effort
-    * starting at @param time.
+    * Returns the duration needed to do the @p effort starting at @p time.
     */
     Duration duration( const DateTime &time, const Duration &effort, Schedule *sch, bool backward = false );
 

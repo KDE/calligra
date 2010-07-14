@@ -27,6 +27,8 @@
 #include <QPushButton>
 #include <QList>
 #include <qstringlist.h>
+#include <QSortFilterProxyModel>
+#include <QStandardItem>
 
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
@@ -41,13 +43,44 @@
 namespace KPlato
 {
 
-ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
-    : QWidget(parent)
+ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resource, QWidget *parent )
+    : QWidget(parent),
+    m_project( project ),
+    m_resource( resource )
 {
     setupUi(this);
 
+    QSortFilterProxyModel *pr = new QSortFilterProxyModel( ui_teamView );
+    QStandardItemModel *m = new QStandardItemModel( ui_teamView );
+    pr->setSourceModel( new QStandardItemModel( ui_teamView ) );
+    ui_teamView->setModel( m );
+    m->setHorizontalHeaderLabels( QStringList() << i18nc( "title:column", "Select team members" ) << i18nc( "title:column", "Group" ) );
+    foreach ( Resource *r, m_project.resourceList() ) {
+        if ( r->type() != Resource::Type_Work || r->id() == m_resource.id() ) {
+            continue;
+        }
+        QList<QStandardItem *> items;
+        QStandardItem *item = new QStandardItem( r->name() );
+        item->setCheckable( true );
+        item->setCheckState( m_resource.teamMembers().contains( r ) ? Qt::Checked : Qt::Unchecked );
+        items << item;
+        item = new QStandardItem( r->parentGroup()->name() );
+        items << item;
+
+        // Add id so we can find the resource
+        item = new QStandardItem( r->id() );
+        items << item;
+        m->appendRow( items );
+    }
+    // hide resource identity (last column)
+    ui_teamView->setColumnHidden( m->columnCount() - 1, true );
+    ui_teamView->resizeColumnToContents( 0 );
+    ui_teamView->sortByColumn( 0, Qt::AscendingOrder );
+    slotTypeChanged( resource.type() );
+    connect( m, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(slotTeamChanged(const QModelIndex&)));
+
     connect(group, SIGNAL(activated(int)), SLOT(slotChanged()));
-    connect(type, SIGNAL(activated(int)), SLOT(slotChanged()));
+    connect(type, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
     connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged()));
     connect(nameEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
     connect(initialsEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
@@ -70,6 +103,29 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
     connect(account, SIGNAL(activated(int)), SLOT(slotChanged()));
 }
 
+void ResourceDialogImpl::slotTeamChanged( const QModelIndex &index ) {
+    if ( ! index.isValid() ) {
+        return;
+    }
+    bool checked = (bool)(index.data( Qt::CheckStateRole ).toInt());
+    int idCol = index.model()->columnCount() - 1;
+    QString id = index.model()->index( index.row(), idCol ).data().toString();
+    Resource *r = m_project.findResource( id );
+    Q_ASSERT( r );
+    if ( checked ) {
+        if ( ! m_resource.teamMembers().contains( r ) ) {
+            m_resource.addTeamMember( r );
+        }
+    } else {
+        m_resource.removeTeamMember( r );
+    }
+    emit changed();
+}
+
+void ResourceDialogImpl::slotTypeChanged( int index ) {
+    ui_stackedWidget->setCurrentIndex( index == Resource::Type_Team ? 1 : 0 );
+    emit changed();
+}
 
 void ResourceDialogImpl::slotChanged() {
     emit changed();
@@ -154,7 +210,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    dia = new ResourceDialogImpl(this);
+    dia = new ResourceDialogImpl(project, m_resource, this);
     setMainWidget(dia);
     KDialog::enableButtonOk(false);
 
@@ -211,7 +267,6 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     if ( resource->account() ) {
         dia->account->setCurrentIndex( lst.indexOf( resource->account()->name() ) );
     }
-    
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
@@ -338,6 +393,23 @@ MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resourc
     if (resource.account() != original->account()) {
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ResourceModifyAccountCmd(*original, original->account(), resource.account()));
+    }
+    if ( resource.type() == Resource::Type_Team ) {
+        //kDebug()<<original->teamMembers()<<resource.teamMembers();
+        foreach ( Resource *r, resource.teamMembers() ) {
+            if ( ! original->teamMembers().contains( r ) ) {
+                if (!m) m = new MacroCommand(n);
+                m->addCommand( new AddResourceTeamCmd( original, r ) );
+                //kDebug()<<original->name()<<"added member"<<r->name();
+            }
+        }
+        foreach ( Resource *r, original->teamMembers() ) {
+            if ( ! resource.teamMembers().contains( r ) ) {
+                if (!m) m = new MacroCommand(n);
+                m->addCommand( new RemoveResourceTeamCmd( original, r ) );
+                //kDebug()<<original->name()<<"removed member"<<r->name();
+            }
+        }
     }
     return m;
 }

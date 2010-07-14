@@ -377,8 +377,6 @@ public:
     void addRequest(ResourceGroup *group, int numResources);
     void addRequest(ResourceGroupRequest *request);
     void takeRequest(ResourceGroupRequest *request);
-//    int units() const;
-    int workUnits() const;
     void makeAppointments();
     virtual QStringList requestNameList() const;
     virtual QList<Resource*> requestedResources() const;

@@ -112,16 +112,11 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole: {
-            QStringList sl;
-            foreach ( Resource *r, node->requests().requestedResources() ) {
-                sl << r->name();
-            }
-            return sl.join( "," );
-        }
+        case Qt::EditRole:
+            return node->requests().requestNameList().join( "," );
         case Qt::ToolTipRole: {
             QMap<QString, QStringList> lst;
-            foreach ( ResourceRequest *rr, node->requests().resourceRequests() ) {
+            foreach ( ResourceRequest *rr, node->requests().resourceRequests( false ) ) {
                 QStringList sl;
                 foreach( Resource *r, rr->requiredResources() ) {
                     sl << r->name();
@@ -136,13 +131,13 @@ QVariant NodeModel::allocation( const Node *node, int role ) const
                 if ( it.value().isEmpty() ) {
                     sl << it.key();
                 } else {
-                    sl << i18nc( "1=resource name, 2=list of resources", "%1 (%2)", it.key(), it.value().join(", ") );
+                    sl << i18nc( "@info:tooltip 1=resource name, 2=list of requiered resources", "%1 (%2)", it.key(), it.value().join(", ") );
                 }
             }
             if ( sl.count() == 1 ) {
                 return i18nc( "@info:tooltip 1=resource name", "Allocated resource: %1", sl.first() );
             }
-            return i18nc( "@info:tooltip 1=list of resources", "Allocated resources: %1", sl.join( "\n" ) );
+            return i18nc( "@info:tooltip 1=list of resources", "Allocated resources:<nl/>%1", sl.join( "<nl/>" ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:

@@ -182,8 +182,10 @@ QVariant ResourceModel::email( const Resource *res, int role ) const
 QVariant ResourceModel::calendar( const Resource *res, int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
+        case Qt::DisplayRole: {
+            if ( res->type() == Resource::Type_Team ) {
+                return " ";
+            }
             QString s = i18n( "None" );
             Calendar *cal = res->calendar( true ); // don't check for default calendar
             if ( cal == 0 ) {
@@ -191,6 +193,23 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
                 cal = res->calendar();
                 if ( cal ) {
                     s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
+                }
+            } else {
+                s = cal->name();
+            }
+            return s;
+        }
+        case Qt::ToolTipRole: {
+            if ( res->type() == Resource::Type_Team ) {
+                return i18nc( "@info:tooltip", "A team resource does not have a calendar" );
+            }
+            QString s = i18nc( "@info:tooltip", "No calendar" );
+            Calendar *cal = res->calendar( true ); // don't check for default calendar
+            if ( cal == 0 ) {
+                // Do we get a default calendar
+                cal = res->calendar();
+                if ( cal ) {
+                    s = i18nc( "@info:tooltip 1=calendar name", "Using default calendar: %1", cal->name() );
                 }
             } else {
                 s = cal->name();

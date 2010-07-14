@@ -42,10 +42,11 @@ class MacroCommand;
 class ResourceDialogImpl : public QWidget, public Ui_ResourceDialogBase {
     Q_OBJECT
 public:
-    explicit ResourceDialogImpl (QWidget *parent);
+    explicit ResourceDialogImpl( const Project &m_project, Resource &resource, QWidget *parent );
 
 public slots:
     void slotChanged();
+    void slotTypeChanged(int);
     void slotCalculationNeeded(const QString&);
     void slotChooseResource();
     
@@ -60,7 +61,11 @@ protected slots:
     void slotAvailableUntilChanged(const QDateTime& dt);
     
     void slotUseRequiredChanged( int state );
+    void slotTeamChanged( const QModelIndex &index );
+
 private:
+    const Project &m_project;
+    Resource &m_resource;
     QList<QPersistentModelIndex> m_currentIndexes;
 };
 

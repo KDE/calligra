@@ -1945,6 +1945,36 @@ void ModifyRequiredResourcesCmd::unexecute()
     m_resource->setRequiredResources( m_oldvalue );
 }
 
+AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+    : NamedCommand( name ),
+    m_team( team ),
+    m_member( member )
+{
+}
+void AddResourceTeamCmd::execute()
+{
+    m_team->addTeamMember( m_member );
+}
+void AddResourceTeamCmd::unexecute()
+{
+    m_team->removeTeamMember( m_member );
+}
+
+RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+    : NamedCommand( name ),
+    m_team( team ),
+    m_member( member )
+{
+}
+void RemoveResourceTeamCmd::execute()
+{
+    m_team->removeTeamMember( m_member );
+}
+void RemoveResourceTeamCmd::unexecute()
+{
+    m_team->addTeamMember( m_member );
+}
+
 RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )
         : NamedCommand( name ),
         m_group( group ),

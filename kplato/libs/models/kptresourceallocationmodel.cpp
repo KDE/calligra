@@ -174,10 +174,10 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const 
         case Qt::ToolTipRole: {
             int units = rr ? rr->units() : 0;
             if ( units == 0 ) {
-                return i18n( "Not allocated" );
+                return i18nc( "@info:tooltip", "Not allocated" );
             }
             // xgettext: no-c-format
-            return i18n( "Allocated units: %1%", units );
+            return i18nc( "@info:tooltip", "Allocated units: %1%", units );
         }
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -529,6 +529,9 @@ Qt::ItemFlags ResourceAllocationItemModel::flags( const QModelIndex &index ) con
             if ( m_resourceCache.contains( r ) && m_resourceCache[ r ]->units() > 0 ) {
                 flags |= ( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
             }
+            if ( r && r->type() != Resource::Type_Work ) {
+                flags &= ~( Qt::ItemIsEditable | Qt::ItemIsUserCheckable );
+            }
             break;
         }
         default:
@@ -730,18 +733,40 @@ QVariant ResourceAllocationItemModel::required( const QModelIndex &idx, int role
     }
     switch ( role ) {
         case Qt::DisplayRole: {
-            QStringList lst;
-            if ( m_requiredChecked[ res ] ) {
-                foreach ( const Resource *r, required( idx ) ) {
-                    lst << r->name();
+            if ( res->type() == Resource::Type_Work ) {
+                QStringList lst;
+                if ( m_requiredChecked[ res ] ) {
+                    foreach ( const Resource *r, required( idx ) ) {
+                        lst << r->name();
+                    }
                 }
+                return lst.isEmpty() ? i18n( "None" ) : lst.join( "," );
             }
-            return lst.isEmpty() ? i18n( "None" ) : lst.join( "," );
+            break;
         }
         case Qt::EditRole: break;
-        case Qt::ToolTipRole: break;
+        case Qt::ToolTipRole: 
+            switch ( res->type() ) {
+                case Resource::Type_Work: {
+                    QStringList lst;
+                    if ( m_requiredChecked[ res ] ) {
+                        foreach ( const Resource *r, required( idx ) ) {
+                            lst << r->name();
+                        }
+                    }
+                    return lst.isEmpty() ? i18nc( "@info:tooltip", "No required resources" ) : lst.join( "\n" );
+                }
+                case Resource::Type_Material:
+                    return i18nc( "@info:tooltip", "Material resources cannot have required resources" );
+                case Resource::Type_Team:
+                    return i18nc( "@info:tooltip", "Team resources cannot have required resources" );
+            }
+            break;
         case Qt::CheckStateRole:
-            return m_requiredChecked[ res ];
+            if ( res->type() == Resource::Type_Work ) {
+                return m_requiredChecked[ res ];
+            }
+            break;
         default:
             break;
     }

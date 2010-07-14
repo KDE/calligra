@@ -985,6 +985,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     // These go last
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        kDebug()<<n.isElement();
         if ( ! n.isElement() ) {
             continue;
         }
@@ -1010,12 +1011,12 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         } else if ( e.tagName() == "schedules" ) {
             //kDebug()<<"Project schedules & task appointments--->";
             // References tasks and resources
-            n = e.firstChild();
-            for ( ; ! n.isNull(); n = n.nextSibling() ) {
-                if ( ! n.isElement() ) {
+            KoXmlNode sn = e.firstChild();
+            for ( ; ! sn.isNull(); sn = sn.nextSibling() ) {
+                if ( ! sn.isElement() ) {
                     continue;
                 }
-                KoXmlElement el = n.toElement();
+                KoXmlElement el = sn.toElement();
                 //kDebug()<<el.tagName()<<" Version="<<status.version();
                 ScheduleManager *sm = 0;
                 bool add = false;
@@ -1044,6 +1045,32 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 }
             }
             //kDebug()<<"Node schedules<---";
+        } else if ( e.tagName() == "resource-teams" ) {
+            //kDebug()<<"Resource teams--->";
+            // References other resources
+            KoXmlNode tn = e.firstChild();
+            for ( ; ! tn.isNull(); tn = tn.nextSibling() ) {
+                if ( ! tn.isElement() ) {
+                    continue;
+                }
+                KoXmlElement el = tn.toElement();
+                if ( el.tagName() == "team" ) {
+                    Resource *r = findResource( el.attribute( "team-id" ) );
+                    Resource *tm = findResource( el.attribute( "member-id" ) );
+                    if ( r == 0 || tm == 0 ) {
+                        kError()<<"resource-teams: cannot find resources";
+                        continue;
+                    }
+                    if ( r == tm ) {
+                        kError()<<"resource-teams: a team cannot be a member of itself";
+                        continue;
+                    }
+                    r->addTeamMember( tm );
+                } else {
+                    kError()<<"resource-teams: unhandled tag"<<el.tagName();
+                }
+            }
+            //kDebug()<<"Resource teams<---";
         } else if ( e.tagName() == "wbs-definition" ) {
             m_wbsDefinition.loadXML( e, status );
         } else if ( e.tagName() == "locale" ) {
@@ -1131,6 +1158,27 @@ void Project::save( QDomElement &element ) const
         me.appendChild( el );
         foreach ( ScheduleManager *sm, m_managers ) {
             sm->saveXML( el );
+        }
+    }
+    // save resource teams
+    QMap<QString, QString> rmap;
+    foreach ( Resource *r, resourceIdDict ) {
+        if ( r->type() == Resource::Type_Team ) {
+            foreach ( Resource *tm, r->teamMembers() ) {
+                rmap.insertMulti( r->id(), tm->id() );
+            }
+        }
+    }
+    if ( ! rmap.isEmpty() ) {
+        QDomElement el = me.ownerDocument().createElement( "resource-teams" );
+        me.appendChild( el );
+        QMap<QString, QString>::const_iterator i = rmap.constBegin();
+        while ( i != rmap.constEnd() ) {
+            QDomElement e = el.ownerDocument().createElement( "team" );
+            el.appendChild( e );
+            e.setAttribute( "team-id", i.key() );
+            e.setAttribute( "member-id", i.value() );
+            ++i;
         }
     }
 }
