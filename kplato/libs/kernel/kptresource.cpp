@@ -312,8 +312,8 @@ Resource::Resource()
     m_type = Type_Work;
     m_units = 100; // %
 
-    m_availableFrom = DateTime( QDate::currentDate(), QTime( 0, 0, 0 ) );
-    m_availableUntil = m_availableFrom.addYears(2);
+//     m_availableFrom = DateTime( QDate::currentDate(), QTime( 0, 0, 0 ) );
+//     m_availableUntil = m_availableFrom.addYears(2);
 
     cost.normalRate = 100;
     cost.overtimeRate = 200;
@@ -550,8 +550,12 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("email", m_email);
     me.setAttribute("type", typeToString());
     me.setAttribute("units", m_units);
-    me.setAttribute("available-from", m_availableFrom.toString( KDateTime::ISODate ));
-    me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
+    if ( m_availableFrom.isValid() ) {
+        me.setAttribute("available-from", m_availableFrom.toString( KDateTime::ISODate ));
+    }
+    if ( m_availableUntil.isValid() ) {
+        me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
+    }
     me.setAttribute("normal-rate", m_project->locale()->formatMoney(cost.normalRate));
     me.setAttribute("overtime-rate", m_project->locale()->formatMoney(cost.overtimeRate));
     if ( cost.account ) {
@@ -724,7 +728,9 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 #ifndef NDEBUG
     if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available in interval: %1" ).arg( interval.toString() ) );
 #endif
-    DateTimeInterval x = interval.limitedTo( m_availableFrom, m_availableUntil );
+    DateTime availableFrom = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
+    DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
+    DateTimeInterval x = interval.limitedTo( availableFrom, availableUntil );
     if ( calendar() == 0 ) {
 #ifndef NDEBUG
         if (m_currentSchedule) m_currentSchedule->logDebug( QString( "Required available: no calendar, %1" ).arg( x.toString() ) );
@@ -885,11 +891,11 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return e;
     }
-
     if (backward) {
+        DateTime availableFrom = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
         DateTime limit = start - duration;
-        if ( limit < m_availableFrom ) {
-            limit = m_availableFrom;
+        if ( limit < availableFrom ) {
+            limit = availableFrom;
         }
         DateTime t = start;
         foreach ( Resource *r, required ) {
@@ -910,9 +916,10 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
 #endif
         }
     } else {
+        DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
         DateTime limit = start + duration;
-        if ( limit > m_availableUntil ) {
-            limit = m_availableUntil;
+        if ( limit > availableUntil ) {
+            limit = availableUntil;
         }
         DateTime t = start;
         foreach ( Resource *r, required ) {
@@ -954,7 +961,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
     if (m_units == 0) {
         return t;
     }
-    DateTime lmt = m_availableUntil;
+    DateTime lmt = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
     if (limit.isValid() && limit < lmt) {
         lmt = limit;
     }
@@ -966,7 +973,8 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
         if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return t;
     }
-    t = m_availableFrom > time ? m_availableFrom : time;
+    DateTime availableFrom = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
+    t = availableFrom > time ? availableFrom : time;
     if ( t >= lmt ) {
         //kDebug()<<t<<lmt;
         return DateTime();
@@ -981,7 +989,7 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
     if (m_units == 0) {
         return t;
     }
-    DateTime lmt = m_availableFrom;
+    DateTime lmt = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
     if (limit.isValid() && limit > lmt) {
         lmt = limit;
     }
@@ -992,13 +1000,14 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
     if (cal == 0) {
         return t;
     }
-    if (!m_availableUntil.isValid()) {
+    DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
+    if ( ! availableUntil.isValid() ) {
 #ifndef NDEBUG
         if ( sch ) sch->logDebug( "availabelUntil is invalid" );
 #endif
         t = time;
     } else {
-        t = m_availableUntil < time ? m_availableUntil : time;
+        t = availableUntil < time ? availableUntil : time;
     }
 #ifndef NDEBUG
     if ( sch && t < lmt ) sch->logDebug( "t < lmt: " + t.toString() + " < " + lmt.toString() );
@@ -1321,7 +1330,7 @@ void ResourceRequest::setCurrentSchedulePtr( Schedule *ns )
 void ResourceRequest::setCurrentSchedulePtr( Resource *resource, Schedule *ns )
 {
     resource->setCurrentSchedulePtr( resourceSchedule( ns, resource ) );
-    foreach ( Resource *r, resource->requiredResources() ) {
+    foreach ( Resource *r, m_required ) {
         r->setCurrentSchedulePtr( resourceSchedule( ns, r ) );
     }
 }
@@ -1373,6 +1382,24 @@ DateTime ResourceRequest::workTimeBefore(const DateTime &dt, Schedule *ns) {
         return availableBefore( dt, ns );
     }
     return DateTime();
+}
+
+DateTime ResourceRequest::availableFrom()
+{
+    DateTime dt = m_resource->availableFrom();
+    if ( ! dt.isValid() ) {
+        dt = m_resource->project()->constraintStartTime();
+    }
+    return dt;
+}
+
+DateTime ResourceRequest::availableUntil()
+{
+    DateTime dt = m_resource->availableUntil();
+    if ( ! dt.isValid() ) {
+        dt = m_resource->project()->constraintEndTime();
+    }
+    return dt;
 }
 
 DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
@@ -2019,7 +2046,7 @@ int ResourceRequestCollection::numDays(const QList<ResourceRequest*> &lst, const
     DateTime t1, t2 = time;
     if (backward) {
         foreach (ResourceRequest *r, lst) {
-            t1 = r->resource()->availableFrom();
+            t1 = r->availableFrom();
             if (!t2.isValid() || t2 > t1)
                 t2 = t1;
         }
@@ -2027,7 +2054,7 @@ int ResourceRequestCollection::numDays(const QList<ResourceRequest*> &lst, const
         return t2.daysTo(time);
     }
     foreach (ResourceRequest *r, lst) {
-        t1 = r->resource()->availableUntil();
+        t1 = r->availableUntil();
         if (!t2.isValid() || t2 < t1)
             t2 = t1;
     }
@@ -2172,7 +2199,7 @@ Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst,
         ns->logError( i18n( "Could not match effort. Want: %1 got: %2", _effort.toString( Duration::Format_Hour ), e.toString( Duration::Format_Hour ) ) );
         foreach (ResourceRequest *r, lst) {
             Resource *res = r->resource();
-            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale->formatDateTime( res->availableFrom() ), locale->formatDateTime( res->availableUntil() ) ) );
+            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale->formatDateTime( r->availableFrom() ), locale->formatDateTime( r->availableUntil() ) ) );
         }
 
     }

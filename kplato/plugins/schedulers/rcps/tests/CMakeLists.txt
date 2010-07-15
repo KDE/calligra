@@ -7,7 +7,7 @@ include_directories( .. ${KPLATO_INCLUDES} ${KOSTORE_INCLUDES})
 set(ProjectTester_SRCS ProjectTester.cpp )
  
  
-kde4_add_unit_test(ProjectTester TESTNAME KPlato-ProjectTester  ${ProjectTester_SRCS})
+kde4_add_unit_test(ProjectTester TESTNAME KPlato-RCPSTester  ${ProjectTester_SRCS})
  
 target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} kplatorcpsscheduler kplatoprivate kplatokernel  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
  

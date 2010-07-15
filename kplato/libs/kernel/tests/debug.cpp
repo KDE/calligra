@@ -19,6 +19,7 @@
 
 #include "kptcalendar.h"
 #include "kptdatetime.h"
+#include "kptproject.h"
 #include "kptresource.h"
 #include "kptnode.h"
 #include "kpttask.h"
@@ -53,11 +54,20 @@ void print( Calendar *c, const QString &str, bool full = true ) {
 }
 static
 void print( Resource *r, const QString &str, bool full = true ) {
-    Q_UNUSED(full)
     qDebug()<<"Debug info: Resource"<<r->name()<<str;
-    qDebug()<<"Group:"<<r->parentGroup()->name()<<"Type:"<<r->parentGroup()->typeToString();
-    qDebug()<<"Available:"<<r->availableFrom().toString()<<r->availableUntil().toString()<<r->units()<<"%";
+    qDebug()<<"Parent group:"<<( r->parentGroup()
+                ? ( r->parentGroup()->name() + " Type: "+ r->parentGroup()->typeToString() )
+                : QString( "None" ) );
+    qDebug()<<"Available:"
+        <<( r->availableFrom().isValid()
+                ? r->availableFrom().toString()
+                : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+        <<( r->availableUntil().isValid()
+                ? r->availableUntil().toString()
+                : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
+        <<r->units()<<"%";
     qDebug()<<"Type:"<<r->typeToString();
+    if ( ! full ) return;
     qDebug()<<"External appointments:"<<r->numExternalAppointments();
     foreach ( Appointment *a, r->externalAppointmentList() ) {
         qDebug()<<"   appointment:"<<a->startTime().toString()<<a->endTime().toString();
@@ -80,7 +90,7 @@ void print( Project *p, Task *t, const QString &str, bool full = true ) {
 static
 void print( Task *t, const QString &str, bool full = true ) {
     qDebug()<<"Debug info: Task"<<t->name()<<str;
-    print( t );
+    print( t, full );
 }
 static
 void print( Task *t, bool full = true ) {

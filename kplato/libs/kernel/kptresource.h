@@ -255,13 +255,13 @@ public:
     ResourceGroup *parentGroup() const { return m_parent; }
     
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom( const QDateTime &af ) { m_availableFrom.setDateTime( af ); changed();}
+    void setAvailableFrom( const QDateTime &af ) { m_availableFrom = KDateTime( af ); changed();}
     /// Set the time from when the resource is available to this project
     void setAvailableFrom( const DateTime &af ) { m_availableFrom = af; changed(); }
     /// Return the time when the resource is available to this project
     const DateTime &availableFrom() const { return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil( const QDateTime &au ) { m_availableUntil.setDateTime( au ); changed(); }
+    void setAvailableUntil( const QDateTime &au ) { m_availableUntil = KDateTime( au ); changed(); }
     /// Set the time when the resource is no longer available to this project
     void setAvailableUntil( const DateTime &au ) { m_availableUntil = au; changed(); }
     /// Return the time when the resource is no longer available to this project.
@@ -440,12 +440,19 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
+    /// Returns the list requiered resources.
+    /// Note: This list is used as default for allocation dialog, not for scheduling.
     QList<Resource*> requiredResources() const { return m_required; }
+    /// Set the list of required resources.
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
+    /// Return the list of team members.
     QList<Resource*> teamMembers() const { return m_teamMembers; }
+    /// Clear the list of team members.
     void clearTeamMembers() { m_teamMembers.clear(); }
+    /// Add @p resource to the list of team members.
     void addTeamMember( Resource *resource );
+    /// Remove @p resource to the list of team members.
     void removeTeamMember( Resource *resource );
 
     /// Used by Project::load() after all resources have been loaded
@@ -577,6 +584,13 @@ public:
     void makeAppointment( Schedule *schedule );
     Task *task() const;
 
+    /// Return the datetime from when the resource is available.
+    /// If it is not valid, the project constraint start time is used.
+    DateTime availableFrom();
+    /// Return the datetime until when the resource is available.
+    /// If it is not valid, the project constraint end time is used.
+    DateTime availableUntil();
+
     Schedule *resourceSchedule( Schedule *ns, Resource *resource = 0 );
     DateTime availableAfter(const DateTime &time, Schedule *ns);
     DateTime availableBefore(const DateTime &time, Schedule *ns);
@@ -592,7 +606,10 @@ public:
     /// Return a measure of how suitable the resource is for allocation
     long allocationSuitability( const DateTime &time, const Duration &duration, Schedule *ns, bool backward );
 
+    /// Returns a list of all the required resources that will be used in scheduling.
+    /// Note: This list overrides the resources own list which is just used as default for allocation dialog.
     const QList<Resource*> requiredResources() const { return m_required; }
+    /// Set the list of required resources that will be used in scheduling.
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
     QList<ResourceRequest*> teamMembers() const;

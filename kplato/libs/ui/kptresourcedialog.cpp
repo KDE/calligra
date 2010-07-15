@@ -230,8 +230,12 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     dia->emailEdit->setText(resource->email());
     dia->type->setCurrentIndex((int)resource->type()); // NOTE: must match enum
     dia->units->setValue(resource->units());
-    dia->availableFrom->setDateTime(resource->availableFrom().dateTime());
-    dia->availableUntil->setDateTime(resource->availableUntil().dateTime());
+    DateTime dt = resource->availableFrom();
+    dia->ui_rbfrom->setChecked( dt.isValid() );
+    dia->availableFrom->setDateTime( dt.isValid() ? dt.dateTime() : QDateTime( QDate::currentDate(), QTime( 0, 0, 0 ) ) );
+    dt = resource->availableUntil();
+    dia->ui_rbuntil->setChecked( dt.isValid() );
+    dia->availableUntil->setDateTime( dt.isValid() ? dt.dateTime() : QDateTime( QDate::currentDate().addYears( 2 ), QTime( 0, 0, 0 ) ) );
     dia->rateEdit->setText(project.locale()->formatMoney(resource->normalRate()));
     dia->overtimeEdit->setText(project.locale()->formatMoney(resource->overtimeRate()));
 
@@ -313,8 +317,8 @@ void ResourceDialog::slotOk() {
     m_resource.setNormalRate(m_project.locale()->readMoney(dia->rateEdit->text()));
     m_resource.setOvertimeRate(m_project.locale()->readMoney(dia->overtimeEdit->text()));
     m_resource.setCalendar(m_calendars[dia->calendarList->currentIndex()]);
-    m_resource.setAvailableFrom(dia->availableFrom->dateTime());
-    m_resource.setAvailableUntil(dia->availableUntil->dateTime());
+    m_resource.setAvailableFrom( dia->ui_rbfrom->isChecked() ? dia->availableFrom->dateTime() : QDateTime() );
+    m_resource.setAvailableUntil( dia->ui_rbuntil->isChecked() ? dia->availableUntil->dateTime() : QDateTime() );
     ResourceItemSFModel *m = static_cast<ResourceItemSFModel*>( dia->required->model() );
     QList<Resource*> lst;
     foreach ( const QModelIndex &i, dia->required->currentIndexes() ) {

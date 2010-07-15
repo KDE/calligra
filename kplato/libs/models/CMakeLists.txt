@@ -1,5 +1,5 @@
 
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 include_directories(
     ../kernel 
