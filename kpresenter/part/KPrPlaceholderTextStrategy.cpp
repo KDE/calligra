@@ -137,7 +137,7 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
 
     if ( style ) {
         KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf( style, context.odfLoadingContext() );
+        paragraphStyle.loadOdf(style, context);
 
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
         Q_ASSERT( factory );
