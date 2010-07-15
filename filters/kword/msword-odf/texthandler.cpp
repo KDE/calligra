@@ -111,7 +111,6 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
 }
 
 //increment m_sectionNumber
-//emit firstSectionFound or check for pagebreak
 void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513) ;
@@ -136,12 +135,8 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     //now creating a <master-page> for it because the page layout or
     //header/footer content could change.
     //
-    //But now the section content is placed at a new page, which is wrong.
+    //But this way the section content is placed at a new page, which is wrong.
     //There's actually no direct support for "continuous section break" in ODF.
-    //
-    //TODO: Let's check if the <page-layout> and header/footer content changed.
-    //If not, then we can store the content directly into <text:section>.  But
-    //this is not the full support for "continuous section break".
 
     //check to see if we have more than the usual one column
     if ( numColumns > 1 )

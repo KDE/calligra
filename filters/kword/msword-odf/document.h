@@ -202,14 +202,15 @@ private:
     bool m_firstOpen; //processing a first page header/footer
     QBuffer* m_buffer; //for odd and first page header/footer tags
     QBuffer* m_bufferEven; //for even header/footer tags
+
+    QList<KoGenStyle*> m_masterPageStyle_list; //master-page styles
+    QList<KoGenStyle*> m_pageLayoutStyle_list; //page-layout styles
+    QStringList m_masterPageName_list; //master-page names
+
+    QList<bool> m_headersMask; //mask informing of section's empty/nonempty header/footer stories
     QList<bool> m_hasHeader_list; //does master-page/page-layout require a header element
     QList<bool> m_hasFooter_list; //does master-page/page-layout require a footer element
 
-    //information about section's empty/nonempty header/footer stories
-    QList<bool> m_headersMask;
-
-    QStringList m_masterPageName_list; //master-page names
-    QStringList m_pageLayoutName_list; //page-layout names
     bool m_writeMasterPageName; //whether to write the master-page name into a paragraph/table
     bool m_omittMasterPage; //whether master-page style for current section has been omitted
 
