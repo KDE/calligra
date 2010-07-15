@@ -1311,10 +1311,6 @@ void TC::readPtr(const U8 *ptr) {
     ptr+=BRC::sizeOf97;
     brcRight.readPtr(ptr);
     ptr+=BRC::sizeOf97;
-    brcTL2BR.readPtr(ptr);
-    ptr+=BRC::sizeOf97;
-    brcTR2BL.readPtr(ptr);
-    ptr+=BRC::sizeOf97;
 }
 
 bool TC::write(OLEStreamWriter *stream, bool preservePos) const {
