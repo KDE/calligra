@@ -1210,7 +1210,14 @@ struct TC {
      * specification of right border of table row.
      */
     BRC brcRight;
-
+    /**
+     * border line from top left to bottom right
+     */
+    BRC brcTL2BR;
+    /**
+     * border line from top right to bottom left
+     */
+    BRC brcTR2BL;
 }; // TC
 
 bool operator==(const TC &lhs, const TC &rhs);

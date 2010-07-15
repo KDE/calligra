@@ -504,6 +504,9 @@ void KWordTableHandler::tableCellStart()
                                           brcWinner(tc.brcRight, m_tap->rgbrcTable[5]) :
                                           brcWinner(tc.brcRight, m_tap->rgbrcTable[3]);
 
+    const wvWare::Word97::BRC& brcTL2BR = tc.brcTL2BR;
+    const wvWare::Word97::BRC& brcTR2BL = tc.brcTR2BL;
+
     KoGenStyle cellStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
 
     //in case a header or footer is processed, save the style into styles.xml
@@ -559,17 +562,43 @@ void KWordTableHandler::tableCellStart()
             cellStyle.addProperty("style:border-line-width-right", dba);
     }
 
+    //top left to bottom right
+    if (brcTL2BR.brcType > 0 && brcTL2BR.brcType < 64) {
+        cellStyle.addProperty("style:diagonal-tl-br", Conversion::setBorderAttributes(brcTL2BR));
+        QString kba = Conversion::borderKOfficeAttributes(brcTL2BR);
+        if (!kba.isEmpty()) {
+            cellStyle.addProperty("koffice:specialborder-tl-br",kba);
+        }
+        QString dba = Conversion::setDoubleBorderAttributes(brcTL2BR);
+        if (!dba.isEmpty()) {
+            cellStyle.addProperty("style:diagonal-tl-br-widths", dba);
+        }
+    }
+
+    //top right to bottom left
+    if (brcTR2BL.brcType > 0 && brcTR2BL.brcType < 64) {
+        cellStyle.addProperty("style:diagonal-bl-tr", Conversion::setBorderAttributes(brcTR2BL));
+        QString kba = Conversion::borderKOfficeAttributes(brcTR2BL);
+        if (!kba.isEmpty()) {
+            cellStyle.addProperty("koffice:specialborder-tr-bl",kba);
+        }
+        QString dba = Conversion::setDoubleBorderAttributes(brcTR2BL);
+        if (!dba.isEmpty()) {
+            cellStyle.addProperty("style:diagonal-bl-tr-widths", dba);
+        }
+    }
+
     //check if we have to ignore the shading information   
     if (!shd.shdAutoOrNill) {
-	QString color = QString('#');
-	//ipatPct5 to ipatPct90
+        QString color = QString('#');
+        //ipatPct5 to ipatPct90
         if (shd.ipat >= 0x02 && shd.ipat <= 0x0d) {
             //get the color from the shading pattern
             uint grayColor = Conversion::shadingPatternToColor(shd.ipat);
             color.append(QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
             cellStyle.addProperty("fo:background-color", color);
         }
-	//ipatSolid
+        //ipatSolid
         else if (shd.ipat == 0x01) {
             color.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
             cellStyle.addProperty("fo:background-color", color);

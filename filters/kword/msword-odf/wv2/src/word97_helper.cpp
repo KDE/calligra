@@ -2371,14 +2371,24 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         brc.read90Ptr(myPtr + 3 );
 
         for ( ; itcFirst < itcLim; ++itcFirst ) {
-            if ( flags & 0x01 )
+            if ( flags & 0x01 ) {
                 rgtc[ itcFirst ].brcTop = brc;
-            if ( flags & 0x02 )
+            }
+            if ( flags & 0x02 ) {
                 rgtc[ itcFirst ].brcLeft = brc;
-            if ( flags & 0x04 )
+            }
+            if ( flags & 0x04 ) {
                 rgtc[ itcFirst ].brcBottom = brc;
-            if ( flags & 0x08 )
+            }
+            if ( flags & 0x08 ) {
                 rgtc[ itcFirst ].brcRight = brc;
+            }
+            if ( flags & 0x10 ) {
+                rgtc[ itcFirst ].brcTL2BR = brc;
+            }
+            if ( flags & 0x20 ) {
+                rgtc[ itcFirst ].brcTR2BL = brc;
+            }
         }
         break;
     }

@@ -1269,6 +1269,8 @@ bool TC::read(OLEStreamReader *stream, bool preservePos) {
     brcLeft.read(stream, false);
     brcBottom.read(stream, false);
     brcRight.read(stream, false);
+    brcTL2BR.read(stream, false);
+    brcTR2BL.read(stream, false);
 
     if(preservePos)
         stream->pop();
@@ -1308,7 +1310,11 @@ void TC::readPtr(const U8 *ptr) {
     brcBottom.readPtr(ptr);
     ptr+=BRC::sizeOf97;
     brcRight.readPtr(ptr);
-    ptr+=BRC::sizeOf;
+    ptr+=BRC::sizeOf97;
+    brcTL2BR.readPtr(ptr);
+    ptr+=BRC::sizeOf97;
+    brcTR2BL.readPtr(ptr);
+    ptr+=BRC::sizeOf97;
 }
 
 bool TC::write(OLEStreamWriter *stream, bool preservePos) const {
@@ -1333,6 +1339,8 @@ bool TC::write(OLEStreamWriter *stream, bool preservePos) const {
     brcLeft.write(stream, false);
     brcBottom.write(stream, false);
     brcRight.write(stream, false);
+    brcTL2BR.write(stream, false);
+    brcTR2BL.write(stream, false);
 
     if(preservePos)
         stream->pop();
@@ -1354,6 +1362,8 @@ void TC::clear() {
     brcLeft.clear();
     brcBottom.clear();
     brcRight.clear();
+    brcTL2BR.clear();
+    brcTR2BL.clear();
 }
 
 void TC::dump() const
@@ -1394,6 +1404,10 @@ std::string TC::toString() const
     s += "\n{" + brcBottom.toString() + "}\n";
     s += "\nbrcRight=";
     s += "\n{" + brcRight.toString() + "}\n";
+    s += "\nbrcTL2BR=";
+    s += "\n{" + brcTL2BR.toString() + "}\n";
+    s += "\nbrcTR2BL=";
+    s += "\n{" + brcTR2BL.toString() + "}\n";
     s += "\nTC Done.";
     return s;
 }
@@ -1413,7 +1427,9 @@ bool operator==(const TC &lhs, const TC &rhs) {
            lhs.brcTop==rhs.brcTop &&
            lhs.brcLeft==rhs.brcLeft &&
            lhs.brcBottom==rhs.brcBottom &&
-           lhs.brcRight==rhs.brcRight;
+           lhs.brcRight==rhs.brcRight &&
+           lhs.brcTL2BR==rhs.brcTL2BR &&
+           lhs.brcTR2BL==rhs.brcTR2BL;
 }
 
 bool operator!=(const TC &lhs, const TC &rhs) {
