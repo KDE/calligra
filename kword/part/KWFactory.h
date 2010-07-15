@@ -38,21 +38,21 @@ public:
      * @param parent the parent QObject
      * @param name the name of the object
      */
-    explicit KWFactory(QObject* parent = 0, const char* name = 0);
+    explicit KWFactory(QObject *parent = 0, const char *name = 0);
     ~KWFactory();
 
     /// overwritten method from superclass
-    virtual KParts::Part* createPartObject(QWidget * = 0, QObject* parent = 0, const char* classname = "KoDocument", const QStringList &args = QStringList());
+    virtual KParts::Part* createPartObject(QWidget * = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList());
 
     /// Return an instance
     static const KComponentData &componentData();
 
     /// Creates a new KAboutData instance
-    static KAboutData* aboutData();
+    static KAboutData *aboutData();
 
 private:
     static KComponentData *s_instance;
-    static KAboutData* s_aboutData;
+    static KAboutData *s_aboutData;
 };
 
 #endif

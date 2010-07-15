@@ -79,11 +79,11 @@ public:
     /// reimplemented method from superclass
     virtual const KoViewConverter *viewConverter() const;
     /// reimplemented method from superclass
-    virtual QWidget* canvasWidget() {
+    virtual QWidget *canvasWidget() {
         return this;
     }
     /// reimplemented method from superclass
-    virtual const QWidget* canvasWidget() const {
+    virtual const QWidget *canvasWidget() const {
         return this;
     }
     /// reimplemented method from superclass
@@ -91,7 +91,7 @@ public:
         return document()->unit();
     }
     /// reimplemented method from superclass
-    virtual KoToolProxy * toolProxy() const {
+    virtual KoToolProxy *toolProxy() const {
         return m_toolProxy;
     }
     /// reimplemented method from superclass

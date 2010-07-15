@@ -64,16 +64,16 @@ public:
     };
 
     /** Document coord -> view coord */
-    virtual QPointF documentToView(const QPointF & point) const = 0;
+    virtual QPointF documentToView(const QPointF &point) const = 0;
 
     /** Document coord -> view coord */
-    QRectF documentToView(const QRectF & rect) const ;
+    QRectF documentToView(const QRectF &rect) const;
 
     /** View coord -> Document coord */
-    virtual QPointF viewToDocument(const QPointF & point) const = 0;
+    virtual QPointF viewToDocument(const QPointF &point) const = 0;
 
     /** View coord -> Document coord */
-    QRectF viewToDocument(const QRectF & rect) const;
+    QRectF viewToDocument(const QRectF &rect) const;
 
     /** Size of the contents area, in pixels */
     virtual QSizeF contentsSize() const = 0;

@@ -56,7 +56,7 @@ public:
      *  @brief Loads an OASIS OpenDocument from a store.
      *  This implements the KoDocument::loadOdf method.
      */
-    bool load(KoOdfReadStore & odfStore);
+    bool load(KoOdfReadStore &odfStore);
 
 signals:
     /**
@@ -72,13 +72,13 @@ private:
         LoadFooter
     };
 
-    void loadSettings(const KoXmlDocument& settings);
+    void loadSettings(const KoXmlDocument &settings);
     void loadMasterPageStyles(KoOdfLoadingContext& context, bool hasMainTextFS);
-    void loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPageStyle, HFLoadType headerFooter);
-    void loadFinished(KoOdfLoadingContext& context, QTextCursor& cursor);
+    void loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
+    void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);
 
     /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-    void loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::TextFrameSetType fsType);
+    void loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType);
 
 private:
     /// The KWord document.

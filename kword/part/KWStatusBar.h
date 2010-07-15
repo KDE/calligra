@@ -52,7 +52,7 @@ public:
     void addView(KWView *view);
 
 public slots:
-    void setText(const QString& text);
+    void setText(const QString &text);
 
 private slots:
     void setModified(bool modified);
@@ -76,7 +76,7 @@ private:
     * \param view The KWord view instance the statusbar belongs to. Each
     * KWStatusBar instance belongs to exactly one view.
     */
-    KWStatusBar(KStatusBar* statusBar, KWView* view);
+    KWStatusBar(KStatusBar *statusBar, KWView* view);
 
     void setCurrentCanvas(KWCanvas *view);
 

@@ -43,7 +43,7 @@ public:
      *        will use to show the content
      * @param parent the parent view
      */
-    KWGui(const QString& viewMode, KWView *parent);
+    KWGui(const QString &viewMode, KWView *parent);
     ~KWGui();
 
     /**

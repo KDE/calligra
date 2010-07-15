@@ -36,8 +36,8 @@ public:
     explicit KWViewModePreview();
     ~KWViewModePreview() {}
 
-    virtual QPointF documentToView(const QPointF & point) const;
-    virtual QPointF viewToDocument(const QPointF & point) const;
+    virtual QPointF documentToView(const QPointF &point) const;
+    virtual QPointF viewToDocument(const QPointF &point) const;
     virtual QSizeF contentsSize() const;
 
     /**

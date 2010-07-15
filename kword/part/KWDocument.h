@@ -128,11 +128,11 @@ public:
         return m_frameSets;
     }
     /// return a frameset, or null, by name. @see KWFrameSet::name()
-    KWFrameSet *frameSetByName(const QString & name);
+    KWFrameSet *frameSetByName(const QString &name);
     /// return a suggestion for a copy frameset that does not collide with known ones.
     QString suggestFrameSetNameForCopy(const QString& base);
     /// return a suggestion for a new frameset name that does not collide with known ones.
-    QString uniqueFrameSetName(const QString& suggestion);
+    QString uniqueFrameSetName(const QString &suggestion);
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
@@ -199,7 +199,7 @@ private:
     friend class KWDLoader;
     friend class KWOdfLoader;
     friend class KWPagePropertiesCommand;
-    QString renameFrameSet(const QString& prefix , const QString& base);
+    QString renameFrameSet(const QString &prefix , const QString &base);
     /// post process loading after either oasis or oldxml loading finished
     void endOfLoading();
     /**
@@ -210,7 +210,7 @@ private:
      */
     void clear();
 
-    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
+    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
     /// emits pageSetupChanged
 
     void saveConfig();

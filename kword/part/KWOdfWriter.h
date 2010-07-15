@@ -60,11 +60,11 @@ public:
      *  @brief Writes an OASIS OpenDocument to a store.
      *  This implements the KoDocument::saveOdf method.
      */
-    bool save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver);
+    bool save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver);
 
 private:
-    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes, KWTextFrameSet* fs);
-    void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes);
+    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes, KWTextFrameSet* fs);
+    void saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes);
 
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);

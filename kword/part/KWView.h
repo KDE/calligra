@@ -58,7 +58,7 @@ public:
      * @param document the document we show.
      * @param parent a parent widget we show ourselves in.
      */
-    KWView(const QString& viewMode, KWDocument *document, QWidget *parent);
+    KWView(const QString &viewMode, KWDocument *document, QWidget *parent);
     virtual ~KWView();
 
     /**
