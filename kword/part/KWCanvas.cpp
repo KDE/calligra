@@ -30,6 +30,7 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
+#include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoGridData.h>
 
@@ -243,6 +244,12 @@ void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
 KoGuidesData *KWCanvas::guidesData()
 {
     return &m_document->guidesData();
+}
+
+void KWCanvas::ensureVisible(const QRectF &rect)
+{
+    QRectF viewRect = m_viewMode->documentToView(rect);
+    canvasController()->ensureVisible(viewRect);
 }
 
 #ifdef DEBUG_REPAINT

@@ -302,7 +302,7 @@ void KarbonCanvas::updateSizeAndOffset()
             // make sure the actual selection is visible
             KoSelection * selection = d->shapeManager->selection();
             if (selection->count())
-                controller->ensureVisible(selection->boundingRect());
+                controller->ensureVisible(d->zoomHandler.documentToView(selection->boundingRect()));
         }
     }
     adjustOrigin();

@@ -444,7 +444,7 @@ void KChartView::documentViewRectChanged( const QRectF &viewRect )
     m_zoomController->setDocumentSize( size );
     m_zoomController->setPageSize( size );
     m_canvas->update();
-    m_canvasController->ensureVisible( m_canvas->shapeManager()->selection()->boundingRect() );
+    m_canvasController->ensureVisible(m_zoomHandler->documentToView(m_canvas->shapeManager()->selection()->boundingRect()));
 }
 
 void KChartView::zoomChanged( KoZoomMode::Mode mode, qreal zoom )
