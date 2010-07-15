@@ -54,7 +54,7 @@
 Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
                    KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, POLE::Storage* storage,
-		   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
+                   LEInputStream* data, LEInputStream* table, LEInputStream* wdocument)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new KWordReplacementHandler)
@@ -71,7 +71,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_headerCount(0)
         , m_writingHeader(false)
         , m_evenOpen(false)
-	, m_firstOpen(false)
+        , m_firstOpen(false)
         , m_buffer(0)
         , m_bufferEven(0)
         , m_writeMasterPageName(false)
@@ -687,7 +687,6 @@ void Document::headerEnd()
 
     //we're done with this header, so reset to false
     m_writingHeader = false;
-    return;
 }
 
 void Document::footnoteStart()
@@ -922,8 +921,8 @@ void Document::processSubDocQueue()
 }
 
 void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
-				  wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
-				  bool firstPage)
+                                  wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
+                                  bool firstPage)
 {
     // TODO: Check page-layout attributes specific for the first page.
 
@@ -1041,8 +1040,6 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
                                          (sep->dyaBottom - (sep->brcBottom.dptSpace * 20)) / 20);
     }
     // TODO: use sep->fEndNote to set the 'use endnotes or footnotes' flag
-
-    return;
 }
 
 bool Document::headersChanged(void) const
