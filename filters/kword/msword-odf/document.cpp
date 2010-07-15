@@ -297,20 +297,19 @@ void Document::processStyles()
 
         // Process paragraph styles.
         if (style && style->type() == wvWare::Style::sgcPara) {
-            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
-            if (followingStyle && followingStyle != style) {
-                QString followingName = Conversion::string(followingStyle->name());
-            }
-
             //create this style & add formatting info to it
             kDebug(30513) << "creating ODT paragraphstyle" << name;
             KoGenStyle userStyle(KoGenStyle::ParagraphStyle, "paragraph");
             userStyle.addAttribute("style:display-name", displayName);
 
+            const wvWare::Style* followingStyle = styles.styleByID(style->followingStyle());
+            if (followingStyle && followingStyle != style) {
+                QString followingName = Conversion::string(followingStyle->name());
+            }
+
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.addAttribute("style:parent-style-name",
-                                       Conversion::styleNameString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
             }
 
             //set font name in style
@@ -337,8 +336,14 @@ void Document::processStyles()
 
             const wvWare::Style* parentStyle = styles.styleByIndex(style->m_std->istdBase);
             if (parentStyle) {
-                userStyle.addAttribute("style:parent-style-name",
-                                       Conversion::styleNameString(parentStyle->name()));
+                userStyle.setParentName(Conversion::styleNameString(parentStyle->name()));
+            }
+
+            //set font name in style
+            QString fontName = m_textHandler->getFont(style->chp().ftcAscii);
+            if (!fontName.isEmpty()) {
+                m_mainStyles->insertFontFace(KoFontFace(fontName));
+                userStyle.addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
 
             // Process the character and paragraph properties.
