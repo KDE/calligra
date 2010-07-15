@@ -109,6 +109,7 @@
   <Action name="create_clipped_frame"/>
   <Action name="remove_clipped_frame"/>
   <Action name="convert_to_text_box"/>
+  <Action name="add_text_on_shape"/>
   <Separator/>
   <Action name="frame_stylist"/>
   <Action name="create_framestyle"/>
