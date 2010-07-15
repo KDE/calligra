@@ -382,8 +382,14 @@ Style::Style( U16 baseSize, OLEStreamReader* tableStream, U16* ftc ) : m_isEmpty
         m_chp->ftcFE = *ftc++;
         m_chp->ftcOther = *ftc;
     }
-    else if ( m_std->sgc == sgcChp )
+    else if (m_std->sgc == sgcChp) {
+        m_chp = new Word97::CHP();
         m_upechpx = new UPECHPX();
+        m_chp->ftc = *ftc;         // Same value for ftc and ftcAscii
+        m_chp->ftcAscii = *ftc++;
+        m_chp->ftcFE = *ftc++;
+        m_chp->ftcOther = *ftc;
+    }
     else
         wvlog << "Attention: New kind of style in the stylesheet" << endl;
 }
@@ -453,18 +459,21 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
                 m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
                 wvlog << "our istd = " << m_upechpx->istd << " sti = " << m_std->sti << endl;
                 mergeUpechpx( parentStyle, version );
-
-                // Normally we don't need the full CHP, but sprms like sprmCFBold are nasty and
-                // need that information (sometimes).
-                m_chp = new Word97::CHP();
-                m_chp->apply( m_upechpx->grpprl, m_upechpx->cb, parentStyle, &stylesheet, 0, version );
-                wvlog << "-------> fStrike = " << static_cast<int>( m_chp->fStrike ) << endl;
             }
             else
                 wvlog << "################# NO parent style for this character style found" << endl;
         }
-        else
-            m_chp = new Word97::CHP(); // initialize stiNormalChar
+        else {
+            // no need to do anything regarding the stiNormalChar parentStyle
+            // let's just merge the upxchpx character exceptions into ourselves
+             bool ok;
+             m_upechpx->istd = stylesheet.indexByID( m_std->sti, ok );
+             mergeUpechpx(this, version);
+        }
+
+        //finally apply so the chpx so we have ourselves a nice chp
+        m_chp->apply(m_upechpx->grpprl, m_upechpx->cb, parentStyle, &stylesheet, 0, version);
+        wvlog << "-------> fStrike = " << static_cast<int>( m_chp->fStrike ) << endl;
     }
     else
         wvlog << "Warning: Unknown style type code detected" << endl;
