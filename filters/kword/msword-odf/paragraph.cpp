@@ -107,7 +107,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
     const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
     Q_ASSERT(msTextStyle);
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
-    kDebug(30513) << "text has characterstyle " << msTextStyleName;
+    kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
     KoGenStyle *textStyle;
 
@@ -125,7 +125,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
         }
-        textStyle->setParentName(Conversion::styleNameString(msTextStyle->name()));
+        textStyle->setParentName(msTextStyleName);
         //if we have a new font, process that
         const wvWare::Word97::CHP* refChp = &msTextStyle->chp();
         if (!refChp || refChp->ftcAscii != chp->ftcAscii) {
@@ -135,8 +135,8 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
         applyCharacterProperties(chp, textStyle, msTextStyle, suppresFontSize, m_combinedCharacters);
         }
     } else {
-        // Default Paragraph Font
-        // meaning we should really compare against the CHP of the paragraph
+        // Default Paragraph Font, which is handled differently
+        // Meaning we should really compare against the CHP of the paragraph
         textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
         if (m_inStylesDotXml) {
             textStyle->setAutoStyleInStylesDotXml(true);
