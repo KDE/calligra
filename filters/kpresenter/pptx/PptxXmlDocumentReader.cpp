@@ -66,7 +66,7 @@ public:
     QString masterPageDrawStyleName;
     KoGenStyle masterPageStyle;
     PptxSlideMasterPageProperties slideMasterPageProperties;
-    QMap<int,QString> commentsAuthors;
+    QMap<int,QString> commentAuthors;
 private:
 };
 
@@ -145,7 +145,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     const QString autorsFilePath = "/ppt/commentAuthors.xml";
     PptxXmlCommentAuthorsReaderContext autorsContext;
     m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
-    d->commentsAuthors = autorsContext.authors;
+    d->commentAuthors = autorsContext.authors;
 
     TRY_READ(presentation)
     kDebug() << "===========finished============";
@@ -189,7 +189,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         result,
         &d->slideMasterPageProperties, //PptxSlideMasterPageProperties
         *m_context->relationships,
-        d->commentsAuthors
+        d->commentAuthors
     );
     PptxXmlSlideReader slideLayoutReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -249,7 +249,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         slideLayoutProperties,
         &d->slideMasterPageProperties,
         *m_context->relationships,
-        d->commentsAuthors
+        d->commentAuthors
     );
     PptxXmlSlideReader slideReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -301,7 +301,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         0,
         &d->slideMasterPageProperties,
         *m_context->relationships,
-        d->commentsAuthors
+        d->commentAuthors
     );
     PptxXmlSlideReader slideMasterReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(

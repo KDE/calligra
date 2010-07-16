@@ -212,13 +212,13 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxSlideLayoutProperties* _slideLayoutProperties,
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
     MSOOXML::MsooXmlRelationships& _relationships,
-    QMap<int, QString> _commentsAuthors)
+    QMap<int, QString> _commentAuthors)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(&_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
-        commentsAuthors(_commentsAuthors)
+        commentAuthors(_commentAuthors)
 {
 }
 
@@ -555,7 +555,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             PptxXmlCommentsReader commentsReader(this);
             const QString filepath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::comments);
             PptxXmlCommentsReaderContext commentsContext;
-            commentsContext.authors = m_context->commentsAuthors;
+            commentsContext.authors = m_context->commentAuthors;
             (void)m_context->import->loadAndParseDocument(&commentsReader, filepath, &commentsContext);
         }
 
