@@ -53,7 +53,7 @@ void RightToLeftPaintingStrategy::paint(KoShape *shape, QPainter &painter,
 {
     painter.save();
     const double width = d->canvas->canvasWidget()->width();
-    const double offsetX = d->canvas->canvasController()->canvasOffsetX();
+//    const double offsetX = d->canvas->canvasController()->canvasOffsetX();
     painter.translate(/*-2 * offsetX*/ + width, 0);
 //     painter.scale(-1, 1);
 
