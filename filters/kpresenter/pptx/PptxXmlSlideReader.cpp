@@ -27,7 +27,7 @@
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxXmlChartReader.h"
-#include "PptxCommentsReader.h"
+#include "PptxXmlCommentsReader.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -552,9 +552,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         (void)drawPageBuf.releaseWriter();
 
         {
-            PptxCommentsReader commentsReader(this);
+            PptxXmlCommentsReader commentsReader(this);
             const QString filepath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::comments);
-            PptxCommentsReaderContext commentsContext;
+            PptxXmlCommentsReaderContext commentsContext;
             commentsContext.authors = m_context->commentsAuthors;
             (void)m_context->import->loadAndParseDocument(&commentsReader, filepath, &commentsContext);
         }

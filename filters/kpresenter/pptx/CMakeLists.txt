@@ -10,8 +10,8 @@ set(pptximport_PART_SRCS
     PptxImport.cpp
     PptxXmlDocumentReader.cpp
     PptxXmlSlideReader.cpp
-    PptxCommentsReader.cpp
-    PptxCommentAuthorsReader.cpp
+    PptxXmlCommentsReader.cpp
+    PptxXmlCommentAuthorsReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp
 )

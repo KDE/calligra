@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "PptxCommentsReader.h"
+#include "PptxXmlCommentsReader.h"
 
 #include <QPoint>
 
@@ -28,7 +28,7 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
-class PptxCommentsReader::Private
+class PptxXmlCommentsReader::Private
 {
 public:
     int currentComment;
@@ -37,23 +37,23 @@ public:
     QMap<int, QString> texts;
     QMap<int, QPoint> positions;
     QMap<int, QString> dates;
-    PptxCommentsReaderContext* context;
+    PptxXmlCommentsReaderContext* context;
 };
 
-PptxCommentsReader::PptxCommentsReader(KoOdfWriters* writers)
+PptxXmlCommentsReader::PptxXmlCommentsReader(KoOdfWriters* writers)
 : MsooXmlCommonReader(writers)
 , d( new Private() )
 {
     d->currentComment = 0;
 }
 
-PptxCommentsReader::~PptxCommentsReader()
+PptxXmlCommentsReader::~PptxXmlCommentsReader()
 {
 }
 
-KoFilter::ConversionStatus PptxCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
-    d->context = dynamic_cast<PptxCommentsReaderContext*>(context);
+    d->context = dynamic_cast<PptxXmlCommentsReaderContext*>(context);
     Q_ASSERT(d->context);
 
     readNext();
@@ -71,7 +71,7 @@ KoFilter::ConversionStatus PptxCommentsReader::read(MSOOXML::MsooXmlReaderContex
     return KoFilter::OK;
 }
 
-void PptxCommentsReader::saveOdfComments()
+void PptxXmlCommentsReader::saveOdfComments()
 {
     for(int i = 0; i < d->currentComment; ++i) {
         body->startElement("oficeooo:annotation"); //TODO replace with standarized element name
@@ -99,7 +99,7 @@ void PptxCommentsReader::saveOdfComments()
 #undef CURRENT_EL
 #define CURRENT_EL cmLst
 
-KoFilter::ConversionStatus PptxCommentsReader::read_cmLst()
+KoFilter::ConversionStatus PptxXmlCommentsReader::read_cmLst()
 {
     READ_PROLOGUE
 
@@ -118,7 +118,7 @@ KoFilter::ConversionStatus PptxCommentsReader::read_cmLst()
 #undef CURRENT_EL
 #define CURRENT_EL cm
 
-KoFilter::ConversionStatus PptxCommentsReader::read_cm()
+KoFilter::ConversionStatus PptxXmlCommentsReader::read_cm()
 {
     READ_PROLOGUE
 
@@ -150,7 +150,7 @@ KoFilter::ConversionStatus PptxCommentsReader::read_cm()
 #undef CURRENT_EL
 #define CURRENT_EL extLst
 
-KoFilter::ConversionStatus PptxCommentsReader::read_extLst()
+KoFilter::ConversionStatus PptxXmlCommentsReader::read_extLst()
 {
     READ_PROLOGUE
 
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus PptxCommentsReader::read_extLst()
 #undef CURRENT_EL
 #define CURRENT_EL pos
 
-KoFilter::ConversionStatus PptxCommentsReader::read_pos()
+KoFilter::ConversionStatus PptxXmlCommentsReader::read_pos()
 {
     READ_PROLOGUE
 
@@ -190,7 +190,7 @@ KoFilter::ConversionStatus PptxCommentsReader::read_pos()
 #undef CURRENT_EL
 #define CURRENT_EL text
 
-KoFilter::ConversionStatus PptxCommentsReader::read_text()
+KoFilter::ConversionStatus PptxXmlCommentsReader::read_text()
 {
     READ_PROLOGUE
 
@@ -206,12 +206,12 @@ KoFilter::ConversionStatus PptxCommentsReader::read_text()
 }
 
 
-PptxCommentsReaderContext::PptxCommentsReaderContext()
+PptxXmlCommentsReaderContext::PptxXmlCommentsReaderContext()
 : MsooXmlReaderContext()
 {
 }
 
-PptxCommentsReaderContext::~PptxCommentsReaderContext()
+PptxXmlCommentsReaderContext::~PptxXmlCommentsReaderContext()
 {
 }
 

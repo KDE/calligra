@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "PptxCommentAuthorsReader.h"
+#include "PptxXmlCommentAuthorsReader.h"
 
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxAuthorsReader
@@ -26,24 +26,24 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
-class PptxCommentAuthorsReader::Private
+class PptxXmlCommentAuthorsReader::Private
 {
 public:
-    PptxCommentAuthorsReaderContext* context;
+    PptxXmlCommentAuthorsReaderContext* context;
 };
 
-PptxCommentAuthorsReader::PptxCommentAuthorsReader(KoOdfWriters* writers)
+PptxXmlCommentAuthorsReader::PptxXmlCommentAuthorsReader(KoOdfWriters* writers)
 : MsooXmlCommonReader(writers)
 {
 }
 
-PptxCommentAuthorsReader::~PptxCommentAuthorsReader()
+PptxXmlCommentAuthorsReader::~PptxXmlCommentAuthorsReader()
 {
 }
 
-KoFilter::ConversionStatus PptxCommentAuthorsReader::read(MSOOXML::MsooXmlReaderContext* context)
+KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
-    d->context = dynamic_cast<PptxCommentAuthorsReaderContext*>(context);
+    d->context = dynamic_cast<PptxXmlCommentAuthorsReaderContext*>(context);
     Q_ASSERT(d->context);
 
     readNext();
@@ -60,7 +60,7 @@ KoFilter::ConversionStatus PptxCommentAuthorsReader::read(MSOOXML::MsooXmlReader
 #undef CURRENT_EL
 #define CURRENT_EL cmAuthorLst
 
-KoFilter::ConversionStatus PptxCommentAuthorsReader::read_cmAuthorLst()
+KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read_cmAuthorLst()
 {
     READ_PROLOGUE
 
@@ -79,7 +79,7 @@ KoFilter::ConversionStatus PptxCommentAuthorsReader::read_cmAuthorLst()
 #undef CURRENT_EL
 #define CURRENT_EL cmAuthor
 
-KoFilter::ConversionStatus PptxCommentAuthorsReader::read_cmAuthor()
+KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read_cmAuthor()
 {
     READ_PROLOGUE
 
@@ -102,13 +102,13 @@ KoFilter::ConversionStatus PptxCommentAuthorsReader::read_cmAuthor()
     READ_EPILOGUE
 }
 
-PptxCommentAuthorsReaderContext::PptxCommentAuthorsReaderContext()
+PptxXmlCommentAuthorsReaderContext::PptxXmlCommentAuthorsReaderContext()
 : MsooXmlReaderContext()
 {
 
 }
 
-PptxCommentAuthorsReaderContext::~PptxCommentAuthorsReaderContext()
+PptxXmlCommentAuthorsReaderContext::~PptxXmlCommentAuthorsReaderContext()
 {
 
 }

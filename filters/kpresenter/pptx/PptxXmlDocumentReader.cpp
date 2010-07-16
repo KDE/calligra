@@ -23,7 +23,7 @@
 
 #include "PptxXmlDocumentReader.h"
 #include "PptxXmlSlideReader.h"
-#include "PptxCommentAuthorsReader.h"
+#include "PptxXmlCommentAuthorsReader.h"
 #include "PptxImport.h"
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
@@ -141,9 +141,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-    PptxCommentAuthorsReader autorsReader(this);
+    PptxXmlCommentAuthorsReader autorsReader(this);
     const QString autorsFilePath = "/ppt/commentAuthors.xml";
-    PptxCommentAuthorsReaderContext autorsContext;
+    PptxXmlCommentAuthorsReaderContext autorsContext;
     m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
     d->commentsAuthors = autorsContext.authors;
 

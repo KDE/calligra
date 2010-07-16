@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef PPTXCOMMENTAUTHORSREADER_H
-#define PPTXCOMMENTAUTHORSREADER_H
+#ifndef PPTXXMLCOMMENTAUTHORSREADER_H
+#define PPTXXMLCOMMENTAUTHORSREADER_H
 
 #include <MsooXmlCommonReader.h>
 
-class PptxCommentAuthorsReader : public MSOOXML::MsooXmlCommonReader
+class PptxXmlCommentAuthorsReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    PptxCommentAuthorsReader(KoOdfWriters* writers);
-    virtual ~PptxCommentAuthorsReader();
+    PptxXmlCommentAuthorsReader(KoOdfWriters* writers);
+    virtual ~PptxXmlCommentAuthorsReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
     KoFilter::ConversionStatus read_cmAuthorLst();
@@ -36,13 +36,13 @@ private:
     Private* d;
 };
 
-class PptxCommentAuthorsReaderContext : public MSOOXML::MsooXmlReaderContext
+class PptxXmlCommentAuthorsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    PptxCommentAuthorsReaderContext();
-    virtual ~PptxCommentAuthorsReaderContext();
+    PptxXmlCommentAuthorsReaderContext();
+    virtual ~PptxXmlCommentAuthorsReaderContext();
 
     QMap<int, QString> authors;
 };
 
-#endif // PPTXCOMMENTSAUTHORSREADER_H
+#endif // PPTXXMLCOMMENTSAUTHORSREADER_H
