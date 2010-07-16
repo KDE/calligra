@@ -146,7 +146,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     PptxCommentAuthorsReaderContext autorsContext;
     m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
     d->commentsAuthors = autorsContext.authors;
-    qDebug() << "commentAuthors received:" << d->commentsAuthors;
 
     TRY_READ(presentation)
     kDebug() << "===========finished============";
