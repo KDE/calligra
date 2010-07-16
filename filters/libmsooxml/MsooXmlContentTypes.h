@@ -59,6 +59,7 @@ public:
     static const char* const wordFontTable;
     static const char* const wordWebSettings;
     static const char* const wordTemplate;
+    static const char* const wordComments;
 
     // presentationml-specific namespaces
     static const char* const presentationDocument;
@@ -70,6 +71,7 @@ public:
     static const char* const presentationTableStyles;
     static const char* const presentationProps;
     static const char* const presentationViewProps;
+    static const char* const presentationComments;
 
     // spreadsheetml-specific content types
     static const char* const spreadsheetDocument;
@@ -79,6 +81,7 @@ public:
     static const char* const spreadsheetCalcChain;
     static const char* const spreadsheetSharedStrings;
     static const char* const spreadsheetTemplate;
+    static const char* const spreadsheetComments;
 };
 
 } // MSOOXML namespace

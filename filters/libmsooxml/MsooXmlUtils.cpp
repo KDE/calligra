@@ -83,6 +83,7 @@ const char* const MSOOXML::ContentTypes::wordEndnotes =         "application/vnd
 const char* const MSOOXML::ContentTypes::wordFontTable =        "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
 const char* const MSOOXML::ContentTypes::wordWebSettings =      "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
 const char* const MSOOXML::ContentTypes::wordTemplate =         "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml";
+const char* const MSOOXML::ContentTypes::wordComments =         "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml";
 
 // presentationml-specific content types
 const char* const MSOOXML::ContentTypes::presentationDocument =      "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml";
@@ -94,6 +95,7 @@ const char* const MSOOXML::ContentTypes::presentationNotes =         "applicatio
 const char* const MSOOXML::ContentTypes::presentationTableStyles =   "application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml";
 const char* const MSOOXML::ContentTypes::presentationProps =         "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml";
 const char* const MSOOXML::ContentTypes::presentationViewProps =     "application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml";
+const char* const MSOOXML::ContentTypes::presentationComments =      "application/vnd.openxmlformats-officedocument.presentationml.comments+xml";
 
 // spreadsheetml-specific content types
 const char* const MSOOXML::ContentTypes::spreadsheetDocument =        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
@@ -103,6 +105,7 @@ const char* const MSOOXML::ContentTypes::spreadsheetWorksheet =       "applicati
 const char* const MSOOXML::ContentTypes::spreadsheetCalcChain =       "application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetSharedStrings =   "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetTemplate =        "application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml";
+const char* const MSOOXML::ContentTypes::spreadsheetComments =        "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml";
 
 //generic namespaces
 const char* const MSOOXML::Schemas::dublin_core =                                "http://purl.org/dc/elements/1.1/";
