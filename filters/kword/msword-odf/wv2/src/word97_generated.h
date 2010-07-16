@@ -1509,7 +1509,7 @@ struct TAP : public Shared {
      * dxaFromTextRight, dyaFromTextBottom SPRMs was processed.  If set to one,
      * around text wrapping is active.
      */
-    U8 textWrap:1;
+    U8 textWrap;
 
     /**
      * Specifies left and right cell margins.  Cell margin is the distance
