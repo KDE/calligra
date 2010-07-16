@@ -222,7 +222,8 @@ public:
         PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
         PptxSlideLayoutProperties* _slideLayoutProperties,
         PptxSlideMasterPageProperties* _slideMasterPageProperties,
-        MSOOXML::MsooXmlRelationships& _relationships);
+        MSOOXML::MsooXmlRelationships& _relationships,
+        QMap<int, QString> _commentsAuthors);
     PptxImport* import;
     const QString path;
     const QString file;
@@ -233,6 +234,7 @@ public:
     PptxSlideLayoutProperties* slideLayoutProperties;
     PptxSlideMasterPageProperties* slideMasterPageProperties;
     QString pageDrawStyleName; //!< written in read_sldInternal()
+    QMap<int, QString> commentsAuthors;
 };
 
 #endif

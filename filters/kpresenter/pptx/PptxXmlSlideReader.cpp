@@ -27,6 +27,7 @@
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxXmlChartReader.h"
+#include "PptxCommentsReader.h"
 
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -55,6 +56,7 @@
 //#define HARDCODED_PRESENTATIONSTYLENAME
 
 #include <MsooXmlReader_p.h>
+#include <MsooXmlContentTypes.h>
 
 PptxShapeProperties::PptxShapeProperties()
 {
@@ -209,12 +211,14 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
     PptxSlideLayoutProperties* _slideLayoutProperties,
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
-    MSOOXML::MsooXmlRelationships& _relationships)
+    MSOOXML::MsooXmlRelationships& _relationships,
+    QMap<int, QString> _commentsAuthors)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(&_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
-        slideMasterPageProperties(_slideMasterPageProperties)
+        slideMasterPageProperties(_slideMasterPageProperties),
+        commentsAuthors(_commentsAuthors)
 {
 }
 
@@ -546,6 +550,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
 //                body->addCompleteElement(&drawPageBuf);
         (void)drawPageBuf.releaseWriter();
+
+        {
+            PptxCommentsReader commentsReader(this);
+            const QString filepath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::comments);
+            PptxCommentsReaderContext commentsContext;
+            commentsContext.authors = m_context->commentsAuthors;
+            (void)m_context->import->loadAndParseDocument(&commentsReader, filepath, &commentsContext);
+        }
+
         body->endElement(); //draw:page
     }
     else if (m_context->type == SlideMaster) {
