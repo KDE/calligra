@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     }
 
     Splash *s = new Splash();
+    s->move(QPoint(311,122));
     if (arguments.size() > 1)
         s->show();
 
@@ -67,7 +68,11 @@ int main(int argc, char *argv[])
                      &w, SLOT(showApplicationMenu()));
 
     if (arguments.size() > 1) {
-        w.openDocument(arguments[1]);
+        if(QFile(arguments[1]).exists()) {
+            w.openDocument(arguments[1]);
+        } else if (arguments.length()>2) {
+             w.openNewDocumentType(arguments[2]);
+        }
     } else {
         QTimer::singleShot(5, &w, SLOT(checkDBusActivation()));
     }

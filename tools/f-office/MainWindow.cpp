@@ -99,6 +99,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+
 using  KSpread::Doc;
 using  KSpread::Map;
 using  KSpread::View;
@@ -173,7 +174,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_doubleClick(false),
         m_newDocOpen(false),
         m_existingFile(false),
-        m_docExist(false),
         m_count(0),
         m_pptTool(0),
         m_fsPPTDrawHighlightButton(0),
@@ -343,8 +343,7 @@ void MainWindow::gotoPage(int page)
     if(page>=m_currentPage) {
         for(int i=m_currentPage;i<page;i++)
             nextPage();
-    }
-    else {
+    } else {
         for(int i=m_currentPage;i>page;i--) {
             prevPage();
         }
@@ -853,7 +852,7 @@ void MainWindow::saveFile()
 {
     QMessageBox msgBox;
     if(m_doc) {
-       if(m_fileName.isNull()) {
+       if(m_fileName.isEmpty()) {
           m_fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
           if(m_fileName.isEmpty())
               return;
@@ -928,35 +927,28 @@ void MainWindow::saveFileAs()
 }
 void MainWindow::chooseDocumentType()
 {
-    if (m_docExist) {
-       QMessageBox msgBox;
-       msgBox.setText(i18n("Close the existing Document first and try again"));
-       msgBox.exec();
-       return;
-    } else {
-       m_docdialog = new QDialog(this);
-       Q_CHECK_PTR(m_docdialog);
+    m_docdialog = new QDialog(this);
+    Q_CHECK_PTR(m_docdialog);
 
-       m_docdialoglayout = new QGridLayout;
-       Q_CHECK_PTR(m_docdialoglayout);
+    m_docdialoglayout = new QGridLayout;
+    Q_CHECK_PTR(m_docdialoglayout);
 
-       m_document = addNewDocument("Document");
-       m_presenter = addNewDocument("Presenter");
-       m_presenter->setDisabled(true);
-       m_spreadsheet = addNewDocument("SpreadSheet");
-       m_spreadsheet->setDisabled(true);
+    m_document = addNewDocument("Document");
+    m_presenter = addNewDocument("Presenter");
+    m_presenter->setDisabled(true);
+    m_spreadsheet = addNewDocument("SpreadSheet");
+    m_spreadsheet->setDisabled(true);
 
-       m_docdialoglayout->addWidget(m_document,0,0);
-       m_docdialoglayout->addWidget(m_presenter,0,1);
-       m_docdialoglayout->addWidget(m_spreadsheet,0,2);
+    m_docdialoglayout->addWidget(m_document,0,0);
+    m_docdialoglayout->addWidget(m_presenter,0,1);
+    m_docdialoglayout->addWidget(m_spreadsheet,0,2);
 
-       m_docdialog->setLayout(m_docdialoglayout);
-       m_docdialog->show();
+    m_docdialog->setLayout(m_docdialoglayout);
+    m_docdialog->show();
 
-       connect(m_document,SIGNAL(clicked()),this,SLOT(openNewDoc()));
-       //connect(m_presenter,SIGNAL(clicked()),this,SLOT(openNewPresenter()));
-       //connect(m_spreadsheet,SIGNAL(clicked()),this,SLOT(openNewSpreadSheet()));
-    }
+    connect(m_document,SIGNAL(clicked()),this,SLOT(openNewDoc()));
+    //connect(m_presenter,SIGNAL(clicked()),this,SLOT(openNewPresenter()));
+    //connect(m_spreadsheet,SIGNAL(clicked()),this,SLOT(openNewSpreadSheet()));
 }
 
 void MainWindow::openNewDoc()
@@ -1007,11 +999,17 @@ QToolButton * MainWindow ::addNewDocument(const QString &docname)
     return toolbutton;
 }
 
+void MainWindow::openNewDocumentType(QString type)
+{
+    if(type.compare("Text")==0) {
+        openNewDocument(Text);
+    }
+}
+
 void MainWindow::openNewDocument(DocumentType type)
 {
     KUrl newurl;
     QString mimetype;
-    m_docExist = true;
     switch(type) {
     case Text:
         newurl.setPath(NEW_WORDDOC);
@@ -1025,6 +1023,13 @@ void MainWindow::openNewDocument(DocumentType type)
         newurl.setPath(NEW_SPREADSHEET);
         mimetype = "application/vnd.oasis.opendocument.spreadsheet";
         break;
+    }
+    if (m_doc) {
+        QStringList args;
+        if(type==Text)
+            args <<""<<"Text";
+        QProcess::startDetached(FREOFFICE_APPLICATION_PATH,args);
+        return;
     }
     raiseWindow();
 
@@ -1095,7 +1100,7 @@ void MainWindow::openNewDocument(DocumentType type)
 
     m_ui->actionEdit->setVisible(true);
     m_ui->EditToolBar->show();
-    m_fileName = (char*)0;
+    m_fileName = "";
     m_newDocOpen = true;
     m_type = type;
     //false when new document open
@@ -1362,20 +1367,12 @@ void MainWindow::moveSLideFromNotesSLide(bool flag)
 {
     if(flag==true) {
         nextPage();
-    }
-    else {
+    } else {
         prevPage();
     }
 }
 void MainWindow::openFileDialog()
 {
-    if(m_docExist) {
-        QMessageBox msgBox;
-        msgBox.setText(i18n("Close the Existing Document first and try again"));
-        msgBox.exec();
-        return;
-    }
-
     if (m_splash && !this->isActiveWindow()) {
         this->show();
         m_splash->finish(this);
@@ -1402,8 +1399,7 @@ void MainWindow::closeDocument()
 {
     if (m_doc == NULL)
         return;
-
-    if((m_fileName.isNull())&&(!m_existingFile)) {
+    if((m_fileName.isEmpty())&&(!m_existingFile)) {
         m_confirmationdialog = new QDialog(this);
         Q_CHECK_PTR(m_confirmationdialog);
         m_confirmationdialoglayout = new QGridLayout;
@@ -1520,7 +1516,6 @@ void MainWindow::closeDocument()
             m_confirmationdialog = 0;
         }
     }
-    m_docExist=false;
     m_doubleClick=false;
     m_count=0;
     viewNumber++;
@@ -1533,7 +1528,6 @@ void MainWindow::returnToDoc()
         delete m_confirmationdialog;
         m_confirmationdialog = 0;
     }
-    m_docExist = true;
     return;
 }
 
@@ -1566,7 +1560,6 @@ void MainWindow::raiseWindow(void)
 
 void MainWindow::openDocument(const QString &fileName)
 {
-    m_ui->viewToolBar->show();
     if (!checkFiletype(fileName))
         return;
 
@@ -1576,7 +1569,7 @@ void MainWindow::openDocument(const QString &fileName)
         QProcess::startDetached(FREOFFICE_APPLICATION_PATH, args);
         return;
     }
-
+    m_ui->viewToolBar->show();
     raiseWindow();
 
     setShowProgressIndicator(true);
@@ -1601,7 +1594,6 @@ void MainWindow::openDocument(const QString &fileName)
         setShowProgressIndicator(false);
         return;
     }
-
     m_doc->setReadWrite(true);
     m_doc->setAutoSave(0);
     m_view = m_doc->createView();
@@ -1615,7 +1607,7 @@ void MainWindow::openDocument(const QString &fileName)
         setShowProgressIndicator(false);
         return;
     }
-
+   
     QString fname = m_url.fileName();
     QString ext = KMimeType::extractKnownExtension(fname);
     if (ext.length()) {
@@ -1662,7 +1654,6 @@ void MainWindow::openDocument(const QString &fileName)
             SLOT(activeToolChanged(KoCanvasController*, int)));
 
     KoToolManager::instance()->switchToolRequested(PanTool_ID);
-
     setShowProgressIndicator(false);
     m_isLoading = false;
     if (m_splash && !this->isActiveWindow()) {
@@ -1670,11 +1661,7 @@ void MainWindow::openDocument(const QString &fileName)
         m_splash->finish(m_controller);
         m_splash = 0;
    }
-
    m_openCheck = true;
-   //flag for not allowing to open a document if already one documnet is exists
-   m_docExist = true;
-
    initialUndoStepsCount();
 
    if(m_type==Presentation)
@@ -1723,15 +1710,19 @@ void MainWindow::updateUI()
     updateActions();
     if (!m_view || !m_ui)
         return;
-    if(m_type==Spreadsheet) {
-        this->resize(this->frameSize());
-    }
-    int factor = 100;
+
     QString pageNo = i18n("pg%1 - pg%2", 0, 0);
+    int factor = 100;
 
     if (m_doc->pageCount() > 0) {
         factor = m_view->zoomController()->zoomAction()->effectiveZoom() * 100;
         pageNo = i18n("pg%1 - pg%2", 1, QString::number(m_doc->pageCount()));
+    }
+
+    if(m_type==Spreadsheet) {
+        this->resize(this->frameSize());
+        if ((((Doc*)m_doc)->map())->count()>0)
+            pageNo = i18n("pg%1 - pg%2", 1, QString::number((((Doc*)m_doc)->map())->count()));
     }
 
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
@@ -1761,6 +1752,7 @@ void MainWindow::resourceChanged(int key, const QVariant &value)
 
         QString pageNo = i18n("pg%1 - pg%2", QString::number(value.toInt()), QString::number(m_doc->pageCount()));
         m_ui->actionPageNumber->setText(pageNo);
+
     }
 }
 
@@ -1914,11 +1906,11 @@ void MainWindow::nextPage()
       nextSheet();
       return;
    }
-   if(m_currentPage == m_doc->pageCount()) {
-      return;
-   }
    if(m_type == Presentation) {
        emit nextSlide();
+   }
+   if(m_currentPage == m_doc->pageCount()) {
+      return;
    }
    static int prev_curpage=0;
    if(prev_curpage != m_currentPage) {

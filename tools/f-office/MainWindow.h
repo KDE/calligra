@@ -81,7 +81,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(Splash *aSplash, QWidget *parent = 0);
     ~MainWindow();
-    QString newdocumentype;
+    /*!
+     * Opened file
+     */
+    QString m_fileName;
     //void tabletEvent ( QTabletEvent * event );
     void mousePressEvent ( QMouseEvent * event );
     void mouseMoveEvent ( QMouseEvent * event );
@@ -90,7 +93,7 @@ public:
 
     void disableFullScreenPresentationNavigation();
     void enableFullScreenPresentationNavigation();
-
+    void openNewDocumentType(QString type);
 private:
     Ui::MainWindow *m_ui;
     int m_count;
@@ -381,7 +384,7 @@ private:
      * Function for navigating to PreviousSheet
      */
     void prevSheet();
-
+    
 private:
     // Apply the selected formatting
     bool setFontSize(int size, KoTextEditor* editor);
@@ -503,10 +506,6 @@ private slots:
      */
      void openFontStyleFrame();
     /*!
-     * Slot to choose new document
-     */
-    void chooseDocumentType();
-    /*!
      * Slot to open new documnet
      */
     void openNewDoc();
@@ -618,6 +617,10 @@ public slots:
      */
     void openDocument(const QString &fileName);
     /*!
+     * Slot to choose new document
+     */
+    void chooseDocumentType();
+    /*!
      * Slot to actionOpen triggered signal
      */
     void openFileDialog();
@@ -656,10 +659,6 @@ private:
 
     void setShowProgressIndicator(bool visible);
     /*!
-     * Opened file
-     */
-    QString m_fileName;
-    /*!
      * Double click detector
      */
     bool m_doubleClick;
@@ -675,10 +674,6 @@ private:
      * flag for new file to existing file conversion
      */
     bool m_existingFile;
-    /*!
-     * true if already one document exists
-     */
-    bool m_docExist;
     /*!
      * QShortcut for copying text with Ctrl-c
      */
