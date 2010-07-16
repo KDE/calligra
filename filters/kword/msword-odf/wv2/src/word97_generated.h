@@ -1347,7 +1347,7 @@ struct TAP : public Shared {
      * Specifies whether this table is right-to-left.  By default table is
      * left-to-right.
      */
-    S8 fBiDi;
+    U16 fBiDi;
 
     /**
      * Vertical position code.  Specifies the location of an anchor point for
