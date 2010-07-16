@@ -139,3 +139,13 @@ KoFilter::ConversionStatus PptxCommentsReader::read_text()
     READ_EPILOGUE
 }
 
+
+PptxCommentsReaderContext::PptxCommentsReaderContext()
+: MsooXmlReaderContext()
+{
+}
+
+PptxCommentsReaderContext::~PptxCommentsReaderContext()
+{
+}
+

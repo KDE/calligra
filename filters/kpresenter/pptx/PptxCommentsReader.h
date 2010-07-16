@@ -40,4 +40,13 @@ public:
     KoFilter::ConversionStatus read_text();
 };
 
+class PptxCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
+{
+public:
+    PptxCommentsReaderContext();
+    virtual ~PptxCommentsReaderContext();
+
+    QMap<int, QString> authors;
+};
+
 #endif // PPTXCOMMENTSREADER_H
