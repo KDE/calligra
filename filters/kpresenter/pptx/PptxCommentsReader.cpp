@@ -19,6 +19,8 @@
 
 #include "PptxCommentsReader.h"
 
+#include <QPoint>
+
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxCommentsReader
 
@@ -26,9 +28,23 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 
+class PptxCommentsReader::Private
+{
+public:
+    int currentComment;
+
+    QMap<int, QString> authors;
+    QMap<int, QString> texts;
+    QMap<int, QPoint> positions;
+    QMap<int, QString> dates;
+    PptxCommentsReaderContext* context;
+};
+
 PptxCommentsReader::PptxCommentsReader(KoOdfWriters* writers)
 : MsooXmlCommonReader(writers)
+, d( new Private() )
 {
+    d->currentComment = 0;
 }
 
 PptxCommentsReader::~PptxCommentsReader()
@@ -37,15 +53,47 @@ PptxCommentsReader::~PptxCommentsReader()
 
 KoFilter::ConversionStatus PptxCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
+    d->context = dynamic_cast<PptxCommentsReaderContext*>(context);
+    Q_ASSERT(d->context);
+
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
 
     readNext();
-    TRY_READ(cmLst)
+    KoFilter::ConversionStatus result = read_cmLst();
+    Q_ASSERT(result == KoFilter::OK);
+    if( result == KoFilter::OK ) {
+        saveOdfComments();
+    }
 
     return KoFilter::OK;
+}
+
+void PptxCommentsReader::saveOdfComments()
+{
+    for(int i = 0; i < d->currentComment; ++i) {
+        body->startElement("oficeooo:annotation"); //TODO replace with standarized element name
+
+        QPoint position = d->positions.value(i);
+        body->addAttribute("svg:x", position.x());
+        body->addAttribute("svg:y", position.y());
+
+        body->startElement("dc:creator");
+        body->addTextSpan(d->authors.value(i));
+        body->endElement();//dc:creator
+
+        body->startElement("dc:date");
+        body->addTextSpan(d->dates.value(i));
+        body->endElement();//dc:date
+
+        body->startElement("text:p");
+        body->addTextSpan(d->texts.value(i));
+        body->endElement();//text:p
+
+        body->endElement();//oficeooo:annotation
+    }
 }
 
 #undef CURRENT_EL
@@ -74,6 +122,15 @@ KoFilter::ConversionStatus PptxCommentsReader::read_cm()
 {
     READ_PROLOGUE
 
+    QXmlStreamAttributes attrs( attributes() );
+
+    TRY_READ_ATTR_WITHOUT_NS(authorId)
+    const QString author = d->context->authors.value(authorId.toInt());
+    d->authors.insert(d->currentComment, author);
+
+    TRY_READ_ATTR_WITHOUT_NS(dt)
+    d->dates.insert(d->currentComment, dt);
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -84,6 +141,8 @@ KoFilter::ConversionStatus PptxCommentsReader::read_cm()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    d->currentComment++;
 
     READ_EPILOGUE
 }
@@ -115,8 +174,15 @@ KoFilter::ConversionStatus PptxCommentsReader::read_pos()
 
     QXmlStreamAttributes attrs( attributes() );
 
-    READ_ATTR(x);
-    READ_ATTR(y);
+    READ_ATTR_WITHOUT_NS(x);
+    READ_ATTR_WITHOUT_NS(y);
+
+    d->positions.insert(d->currentComment, QPoint(x.toInt(),y.toInt()));
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
 
     READ_EPILOGUE
 }
@@ -131,7 +197,7 @@ KoFilter::ConversionStatus PptxCommentsReader::read_text()
     while (!atEnd()) {
         readNext();
         if (isCharacters()) {
-            body->addTextSpan(text().toString());
+            d->texts.insert( d->currentComment, text().toString());
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
