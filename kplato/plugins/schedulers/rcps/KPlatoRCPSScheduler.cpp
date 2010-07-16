@@ -539,7 +539,15 @@ void KPlatoRCPSScheduler::addResources()
     kDebug();
     QList<Resource*> list = m_project->resourceList();
     for (int i = 0; i < list.count(); ++i) {
-        struct rcps_resource *res = addResource( list.at(i) );
+        KPlato::Resource *r = list.at(i);
+        if ( r->type() == Resource::Type_Team ) {
+            foreach ( KPlato::Resource *tm, r->teamMembers() ) {
+                addResource( tm );
+            }
+            return;
+        } else {
+            addResource( list.at(i) );
+        }
     }
 /*    for( int i = 0; i < rcps_resource_count( m_problem ); ++i ) {
         kDebug()<<"Resource:"<<rcps_resource_getname( rcps_resource_get(m_problem, i) );

@@ -67,6 +67,19 @@ void print( Resource *r, const QString &str, bool full = true ) {
                 : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
         <<r->units()<<"%";
     qDebug()<<"Type:"<<r->typeToString();
+    if ( r->type() == Resource::Type_Team ) {
+        qDebug()<<"Team members:"<<r->teamMembers().count();
+        foreach ( Resource *tm, r->teamMembers() ) {
+            qDebug()<<"   "<<tm->name()<<"Available:"
+                    <<( r->availableFrom().isValid()
+                            ? r->availableFrom().toString()
+                            : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+                    <<( r->availableUntil().isValid()
+                            ? r->availableUntil().toString()
+                            : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
+                    <<r->units()<<"%";
+        }
+    }
     if ( ! full ) return;
     qDebug()<<"External appointments:"<<r->numExternalAppointments();
     foreach ( Appointment *a, r->externalAppointmentList() ) {

@@ -62,13 +62,11 @@ private slots:
     void requiredResource();
 
     void resourceWithLimitedAvailability();
+    void unavailableResource();
     
-private:
-    void printDebug( Calendar *c, const QString &s = QString(), bool full = false ) const;
-    void printDebug( Resource *r, const QString &s = QString(), bool full = false ) const;
-    void printDebug( Project *p, Task *t, const QString &s = QString(), bool full = false ) const;
-    void printSchedulingLog( const ScheduleManager &sm, const QString &s = QString() ) const;
+    void team();
 
+private:
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;

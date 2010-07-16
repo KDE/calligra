@@ -25,15 +25,6 @@
 #include "kptproject.h"
 #include "kptdatetime.h"
 
-namespace QTest
-{
-    template<>
-            char *toString(const KPlato::DateTime &dt)
-    {
-        return toString( dt.toString() );
-    }
-}
-
 namespace KPlato
 {
 
@@ -47,6 +38,7 @@ private slots:
     void cleanupTestCase();
     
     void oneTask();
+    void team();
 
 private:
     Project *m_project;

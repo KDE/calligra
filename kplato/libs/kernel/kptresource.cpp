@@ -876,6 +876,9 @@ Duration Resource::effort( const DateTime &start, const Duration &duration, bool
 // the amount of effort we can do within the duration
 Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &duration, bool backward, const QList<Resource*> &required, bool *ok) const {
     //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
+#if 0
+    if ( sch ) sch->logDebug( "Check effort in interval:" + start.toString() + "," + (start+duration).toString() );
+#endif
     bool sts=false;
     Duration e;
     if ( duration == 0 || m_units == 0 ) {
@@ -887,58 +890,41 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         return e;
     }
     Calendar *cal = calendar();
-    if (cal == 0) {
+    if ( cal == 0 ) {
         if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return e;
     }
-    if (backward) {
-        DateTime availableFrom = m_availableFrom.isValid() ? m_availableFrom : ( m_project ? m_project->constraintStartTime() : DateTime() );
-        DateTime limit = start - duration;
-        if ( limit < availableFrom ) {
-            limit = availableFrom;
-        }
-        DateTime t = start;
-        foreach ( Resource *r, required ) {
-            if ( ! t.isValid() ) {
-                break;
-            }
-            t = r->availableBefore( t, limit );
-        }
-        if (t.isValid()) {
-            sts = true;
-#ifndef NDEBUG
-            if ( sch && t < limit && sch ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
-#endif
-            e = (cal->effort(limit, t, sch) * m_units)/100;
-        } else {
-#ifndef NDEBUG
-            if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
-#endif
-        }
+    DateTime from;
+    DateTime until;
+    if ( backward ) {
+        from = availableAfter( start - duration, start, sch );
+        until = availableBefore( start, start - duration, sch );
     } else {
-        DateTime availableUntil = m_availableUntil.isValid() ? m_availableUntil : ( m_project ? m_project->constraintEndTime() : DateTime() );
-        DateTime limit = start + duration;
-        if ( limit > availableUntil ) {
-            limit = availableUntil;
-        }
-        DateTime t = start;
+        from = availableAfter( start, start + duration, sch );
+        until = availableBefore( start + duration, start, sch );
+    }
+    if ( ! ( from.isValid() && until.isValid() ) ) {
+#ifndef NDEBUG
+        if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + (start+duration).toString() );
+#endif
+    } else {
         foreach ( Resource *r, required ) {
-            if ( ! t.isValid() ) {
-                break;
+            from = r->availableAfter( from, until );
+            until = r->availableBefore( until, from );
+            if ( ! ( from.isValid() && until.isValid() ) ) {
+#ifndef NDEBUG
+                if ( sch ) sch->logDebug( "The required resource '" + r->name() + "'is not available in interval:" + start.toString() + "," + (start+duration).toString() );
+#endif
+                    break;
             }
-            t = r->availableAfter( t, limit );
         }
-        if (t.isValid()) {
-            sts = true;
+    }
+    if ( from.isValid() && until.isValid() ) {
+        sts = true;
 #ifndef NDEBUG
-            if ( sch && t > limit && sch ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
+        if ( sch && until < from ) sch->logDebug( " until < from: until=" + until.toString() + " from=" + from.toString() );
 #endif
-            e = (cal->effort(t, limit, sch) * m_units)/100;
-        } else {
-#ifndef NDEBUG
-            if ( sch ) sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
-#endif
-        }
+        e = ( cal->effort( from, until, sch ) * m_units ) / 100;
     }
     //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
     if (ok) *ok = sts;
@@ -1407,7 +1393,10 @@ DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
         DateTime t;// = m_resource->availableFrom();
         foreach ( Resource *r, m_resource->teamMembers() ) {
             setCurrentSchedulePtr( r, ns );
-            t = qMax( t, r->availableAfter( time ) );
+            DateTime x = r->availableAfter( time );
+            if ( x.isValid() ) {
+                t = t.isValid() ? qMin( t, x ) : x;
+            }
         }
         return t;
     }
@@ -1417,17 +1406,15 @@ DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
 
 DateTime ResourceRequest::availableBefore(const DateTime &time, Schedule *ns) {
     if ( m_resource->type() == Resource::Type_Team ) {
-        DateTime t = time;
-        bool avail = false;
+        DateTime t;
         foreach ( Resource *r, m_resource->teamMembers() ) {
             setCurrentSchedulePtr( r, ns );
-            DateTime tt = r->availableBefore( time );
-            if ( tt.isValid() ) {
-                avail = true;
-                t = qMin( t, tt );
+            DateTime x = r->availableBefore( time );
+            if ( x.isValid() ) {
+                t = t.isValid() ? qMax( t, x ) : x;
             }
         }
-        return avail ? t : DateTime();
+        return t;
     }
     setCurrentSchedulePtr( ns );
     return resource()->availableBefore( time );
@@ -2064,6 +2051,14 @@ int ResourceRequestCollection::numDays(const QList<ResourceRequest*> &lst, const
 
 Duration ResourceRequestCollection::duration(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
     //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<time.toString()<<": effort:"<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")";
+#if 0
+    if ( ns ) {
+        QStringList nl;
+        foreach ( ResourceRequest *r, lst ) { nl << r->resource()->name(); }
+        ns->logDebug( "Match effort:" + time.toString() + "," + _effort.toString() );
+        ns->logDebug( "Resources: " + ( nl.isEmpty() ? QString( "None" ) : nl.join( ", " ) ) );
+    }
+#endif
     KLocale *locale = KGlobal::locale();
     Duration e;
     if (_effort == Duration::zeroDuration) {

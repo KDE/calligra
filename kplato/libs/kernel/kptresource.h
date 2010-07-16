@@ -586,9 +586,11 @@ public:
 
     /// Return the datetime from when the resource is available.
     /// If it is not valid, the project constraint start time is used.
+    /// For teams the earliest time for any team member is used.
     DateTime availableFrom();
     /// Return the datetime until when the resource is available.
     /// If it is not valid, the project constraint end time is used.
+    /// For teams the latest time for any team member is used.
     DateTime availableUntil();
 
     Schedule *resourceSchedule( Schedule *ns, Resource *resource = 0 );
