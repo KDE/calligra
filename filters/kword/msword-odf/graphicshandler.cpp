@@ -901,7 +901,7 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
                 style.addProperty("style:wrap", "right");
             }
             else if (spa->wrk == 3) {
-                style.addProperty("style:wrap", "dynamic");
+                style.addProperty("style:wrap", "biggest");
             }
         }
     }
@@ -1069,8 +1069,9 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     defineWrappingProperties(style, ds, spa);
     defineAnchorProperties(style, ds);
 
-    //ODF-1.2: this property must be provided if wrap mode is in {left, right,
-    //parallel, dynamic} and anchor type is in {char, paragraph}
+    //ODF-1.2: specifies the number of paragraphs that can wrap around a frame
+    //if wrap mode is in {left, right, parallel, dynamic} and anchor type is in
+    //{char, paragraph}
     if (spa) {
         if ((spa->wr != 1) && (spa->wr != 3)) {
             style.addProperty("style:number-wrapped-paragraphs", "no-limit");

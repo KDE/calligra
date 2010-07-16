@@ -50,6 +50,8 @@ typedef enum
     ftsDxaSys  = 0x13  //absolute width measured in twips
 } FTS;
 
+// Make use of the grfbrc enumeration in decision to which cell sides the cell
+// margin or cell spacing applies to.
 typedef enum
 {
     fbrcTop    = 0x01,
@@ -278,7 +280,9 @@ typedef enum
     sprmSDyaLinePitch = 0x9031,
     sprmTDyaRowHeight = 0x9407,
     sprmTDxaFromText = 0x9410,
+    sprmTDyaFromText = 0x9411,
     sprmTDxaFromTextRight = 0x941E,
+    sprmTDyaFromTextBottom = 0x941F,
     sprmTDxaAbs = 0x940E,
     sprmTDyaAbs = 0x940F,
     sprmTDxaLeft = 0x9601,
@@ -2125,7 +2129,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         tlp.readPtr( ptr );
         break;
     case SPRM::sprmTFBiDi:
-        wvlog << "Warning: sprmTFBiDi not implemented" << endl;
+        fBiDi = readU16( ptr );
         break;
     case SPRM::sprmTPc:
     {
@@ -2134,15 +2138,21 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         break;
     }
     case SPRM::sprmTDxaFromText:
-    {
-        dxaFromText = readS16( ptr );
+        dxaFromText = readU16( ptr );
+        textWrap = 1;
         break;
-    }
+    case SPRM::sprmTDyaFromText:
+        dyaFromText = readU16( ptr );
+        textWrap = 1;
+        break;
     case SPRM::sprmTDxaFromTextRight:
-    {
-        dxaFromTextRight = readS16( ptr );
+        dxaFromTextRight = readU16( ptr );
+        textWrap = 1;
         break;
-    }
+    case SPRM::sprmTDyaFromTextBottom:
+        dyaFromTextBottom = readU16( ptr );
+        textWrap = 1;
+        break;
     case SPRM::sprmTDxaAbs:
         dxaAbs = readS16( ptr );
         break;

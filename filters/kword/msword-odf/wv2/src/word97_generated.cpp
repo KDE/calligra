@@ -1543,6 +1543,7 @@ void TAP::clear() {
     fCantSplit=0;
     fTableHeader=0;
     tlp.clear();
+    fBiDi=0;
     pcVert=0;
     pcHorz=0;
     dxaAbs=0;
@@ -1558,7 +1559,10 @@ void TAP::clear() {
     dxaScale=0;
     dxsInch=0;
     dxaFromText=0;
+    dyaFromText=0;
     dxaFromTextRight=0;
+    dyaFromTextBottom=0;
+    textWrap=0;
     rgdxaCenter.clear();
     rgdxaCenterPrint.clear();
     rgtc.clear();
@@ -1595,6 +1599,8 @@ std::string TAP::toString() const
     s += uint2string( fTableHeader );
     s += "\ntlp=";
     s += "\n{" + tlp.toString() + "}\n";
+    s += "\nfBiDi=";
+    s += uint2string( fBiDi );
     s += "\npcVert=";
     s += uint2string( pcVert );
     s += "\npcHorz=";
@@ -1625,9 +1631,14 @@ std::string TAP::toString() const
     s += int2string( dxsInch );
     s += "\ndxaFromText=";
     s += uint2string( dxaFromText );
+    s += "\ndyaFromText=";
+    s += uint2string( dyaFromText );
     s += "\ndxaFromTextRight=";
     s += uint2string( dxaFromTextRight );
-
+    s += "\ndyaFromTextBottom=";
+    s += uint2string( dyaFromTextBottom );
+    s += "\ntextWrap=";
+    s += uint2string( textWrap );
     s += "\nrgdxaCenter=";
     // skipping the std::vector rgdxaCenter
     s += "\nrgdxaCenterPrint=";

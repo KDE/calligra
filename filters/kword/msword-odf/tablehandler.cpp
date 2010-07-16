@@ -81,29 +81,51 @@ void KWordTableHandler::tableStart(KWord::Table* table)
         writer->startElement("text:p", false);
         writer->addAttribute("text:style-name", "Standard");
 
+        //process wrapping information
+        if (tap->textWrap) {
+            //right aligned
+            if (tap->dxaAbs == -8) {
+                userStyle.addProperty("style:wrap", "left");
+            }
+            //left aligned
+            else if (tap->dxaAbs == 0) {
+                userStyle.addProperty("style:wrap", "right");
+            } else {
+                userStyle.addProperty("style:wrap", "parallel");
+            }
+           //ODF-1.2: specifies the number of paragraphs that can wrap around a
+           //frame if wrap mode is in {left, right, parallel, dynamic} and
+           //anchor type is in {char, paragraph}
+            userStyle.addProperty("style:number-wrapped-paragraphs", "no-limit");
+        } else {
+            userStyle.addProperty("style:wrap", "none");
+        }
+
+        //margin information is related to wrapping of text around the table
+        userStyle.addPropertyPt("fo:margin-left", twipsToPt(tap->dxaFromText));
+        userStyle.addPropertyPt("fo:margin-right", twipsToPt(tap->dxaFromTextRight));
+        userStyle.addPropertyPt("fo:margin-top", twipsToPt(tap->dyaFromText));
+        userStyle.addPropertyPt("fo:margin-bottom", twipsToPt(tap->dyaFromTextBottom));
+
         //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
         // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside
         if (tap->dxaAbs == -4) {
-           userStyle.addProperty("style:horizontal-pos","center");
-           userStyle.addPropertyPt("fo:margin-left", (double) tap->dxaFromText / 20);
-           userStyle.addPropertyPt("fo:margin-right", (double) tap->dxaFromTextRight / 20);
+            userStyle.addProperty("style:horizontal-pos","center");
         }
         else if (tap->dxaAbs == -8)  {
-           userStyle.addProperty("style:horizontal-pos","right");
-           userStyle.addPropertyPt("fo:margin-left", (double) tap->dxaFromTextRight / 20);
-           userStyle.addPropertyPt("fo:margin-right", 0);
+            userStyle.addProperty("style:horizontal-pos","right");
+            userStyle.addPropertyPt("fo:margin-right", 0);
         }
         else if (tap->dxaAbs == -12) {
-           userStyle.addProperty("style:horizontal-pos","inside");
+            userStyle.addProperty("style:horizontal-pos","inside");
         }
         else if (tap->dxaAbs == -16) {
-           userStyle.addProperty("style:horizontal-pos","outside");
+            userStyle.addProperty("style:horizontal-pos","outside");
         }
         else {
-           dxaAbs = tap->dxaAbs;
-           userStyle.addProperty("style:horizontal-pos","from-left");
-           userStyle.addPropertyPt("fo:margin-left", 0);
-           userStyle.addPropertyPt("fo:margin-right", (double) tap->dxaFromText / 20);
+            dxaAbs = tap->dxaAbs;
+            userStyle.addProperty("style:horizontal-pos","from-left");
+            userStyle.addPropertyPt("fo:margin-left", 0);
         }
 
         int dyaAbs = 0;
@@ -177,22 +199,31 @@ void KWordTableHandler::tableStart(KWord::Table* table)
         tableStyle.setAutoStyleInStylesDotXml(true);
     }
 
-    //process horizontal align information
-    QString align;
-    switch (tap->jc) {
-    case wvWare::hAlignLeft:
-        align = QString("left");
-        break;
-    case wvWare::hAlignCenter:
-        align = QString("center");
-        break;
-    case wvWare::hAlignRight:
-        align = QString("right");
-        break;
+    if (tap->fBiDi == 1) {
+        tableStyle.addProperty("style:writing-mode", "rl-tb");
+    } else {
+        tableStyle.addProperty("style:writing-mode", "lr-tb");
     }
 
-    tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
+    //process horizontal align information
+    QString align;
+    if (m_floatingTable != true) {
+        switch (tap->jc) {
+        case wvWare::hAlignLeft:
+            align = QString("left");
+            break;
+        case wvWare::hAlignCenter:
+            align = QString("center");
+            break;
+        case wvWare::hAlignRight:
+            align = QString("right");
+            break;
+        }
+    } else {
+        align = QString("margins");
+    } 
     tableStyle.addProperty("table:align", align);
+    tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
     tableStyle.addProperty("style:border-model", "collapsing");
 
     //process the margin information 

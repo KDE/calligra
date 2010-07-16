@@ -1344,6 +1344,12 @@ struct TAP : public Shared {
     TLP tlp;
 
     /**
+     * Specifies whether this table is right-to-left.  By default table is
+     * left-to-right.
+     */
+    S8 fBiDi;
+
+    /**
      * Vertical position code.  Specifies the location of an anchor point for
      * an absolutely positioned table.
      * 0 - relative to the top page margin
@@ -1469,18 +1475,41 @@ struct TAP : public Shared {
     /**
      * An XAS_nonNeg that specifies the minimum horizontal distance between the
      * physical left edge of the table and the physical right edge of the text
-     * that wraps around the table. By default, the minimum horizontal distance
-     * between a table and wrapping text is 0 twips.
+     * that wraps around the table.  By default, the minimum horizontal
+     * distance between a table and wrapping text is 0 twips.
      */
     U16 dxaFromText;
 
     /**
+     * An YAS_nonNeg that specifies the minimum vertical distance between the
+     * top edge of the table and the bottom edge of the text that wraps around
+     * the table.  By default, the minimum vertical distance between a table
+     * and wrapping text is 0 twips.
+     */
+    U16 dyaFromText;
+
+    /**
      * An XAS_nonNeg that specifies the minimum horizontal distance between the
      * physical right edge of the table and the physical left edge of the text
-     * that wraps around the table. By default, the minimum horizontal distance
-     * between a table and wrapping text is 0 twips.
+     * that wraps around the table.  By default, the minimum horizontal
+     * distance between a table and wrapping text is 0 twips.
      */
     U16 dxaFromTextRight;
+
+    /**
+     * An YAS_nonNeg that specifies the minimum vertical distance between the
+     * bottom edge of the table and the top edge of the text that wraps around
+     * the table.  By default, the minimum vertical distance between a table
+     * and wrapping text is 0 twips.
+     */
+    U16 dyaFromTextBottom;
+
+    /**
+     * A helper variable set to one if any of dxaFromText, dyaFromText,
+     * dxaFromTextRight, dyaFromTextBottom SPRMs was processed.  If set to one,
+     * around text wrapping is active.
+     */
+    U8 textWrap:1;
 
     /**
      * Specifies left and right cell margins.  Cell margin is the distance
