@@ -452,6 +452,7 @@ void KWordTextHandler::bookmarkEnd( const wvWare::BookmarkData& data )
 void KWordTextHandler::annotationFound( wvWare::UString characters, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                         const wvWare::AnnotationFunctor& parseAnnotation)
 {
+    Q_UNUSED(characters);
     Q_UNUSED(chp);
     m_insideAnnotation = true;
 
@@ -738,7 +739,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     KoGenStyle* style = m_paragraph->getOdfParagraphStyle();
 
     //check if the master-page-name attribute is required
-    if (document()->writeMasterPageName() && !document()->writingHeader()) 
+    if (document()->writeMasterPageName() && !document()->writingHeader())
     {
         style->addAttribute("style:master-page-name", document()->masterPageName());
         document()->set_writeMasterPageName(false);
