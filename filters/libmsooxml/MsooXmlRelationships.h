@@ -53,6 +53,10 @@ private:
     Private* const d;
 };
 
+namespace Relationships {
+    static const char* const comments = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
+}
+
 }
 
 #endif //MSOOXMLRELATIONSHIPSREADER_H
