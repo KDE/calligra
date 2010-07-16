@@ -23,6 +23,7 @@
 
 #include "PptxXmlDocumentReader.h"
 #include "PptxXmlSlideReader.h"
+#include "PptxCommentAuthorsReader.h"
 #include "PptxImport.h"
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
@@ -65,6 +66,7 @@ public:
     QString masterPageDrawStyleName;
     KoGenStyle masterPageStyle;
     PptxSlideMasterPageProperties slideMasterPageProperties;
+    QMap<int,QString> commentsAuthors;
 private:
 };
 
@@ -139,6 +141,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
+    PptxCommentAuthorsReader autorsReader(this);
+    const QString autorsFilePath = "/ppt/commentAuthors.xml";
+    PptxCommentAuthorsReaderContext autorsContext;
+    m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
+    d->commentsAuthors = autorsContext.authors;
+    qDebug() << "commentAuthors received:" << d->commentsAuthors;
+
     TRY_READ(presentation)
     kDebug() << "===========finished============";
     return KoFilter::OK;
@@ -147,6 +156,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     const QString& slidePath, const QString& slideFile)
 {
+    
+
     const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
         slidePath, slideFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"));
@@ -167,7 +178,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
     PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
-    
+
     result = new PptxSlideLayoutProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
@@ -178,7 +189,8 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         masterSlideProperties, //PptxSlideProperties
         result,
         &d->slideMasterPageProperties, //PptxSlideMasterPageProperties
-        *m_context->relationships
+        *m_context->relationships,
+        d->commentsAuthors
     );
     PptxXmlSlideReader slideLayoutReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -237,7 +249,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         masterSlideProperties,
         slideLayoutProperties,
         &d->slideMasterPageProperties,
-        *m_context->relationships
+        *m_context->relationships,
+        d->commentsAuthors
     );
     PptxXmlSlideReader slideReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -288,7 +301,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         masterSlideProperties,
         0,
         &d->slideMasterPageProperties,
-        *m_context->relationships
+        *m_context->relationships,
+        d->commentsAuthors
     );
     PptxXmlSlideReader slideMasterReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(

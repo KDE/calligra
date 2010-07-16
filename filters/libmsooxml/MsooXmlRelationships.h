@@ -1,3 +1,4 @@
+
 /*
  * This file is part of Office 2007 Filters for KOffice
  *
