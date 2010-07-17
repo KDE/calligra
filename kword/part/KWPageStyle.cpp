@@ -379,7 +379,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     KoXmlElement propBackgroundImage = KoXml::namedItemNS(props, KoXmlNS::style, "background-image");
     if (!propBackgroundImage.isNull()) {
         const QString href = propBackgroundImage.attributeNS(KoXmlNS::xlink, "href", QString());
-        if (!href.isEmpty()) {   
+        if (!href.isEmpty()) {
             KoPatternBackground *background = new KoPatternBackground(documentResources->imageCollection());
             d->fullPageBackground = background;
             d->fullPageBackground->ref();
