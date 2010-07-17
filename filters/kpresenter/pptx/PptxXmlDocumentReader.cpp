@@ -142,7 +142,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 //! @todo expect other namespaces too...
 
     PptxXmlCommentAuthorsReader autorsReader(this);
-    const QString autorsFilePath = "/ppt/commentAuthors.xml";
+    const QString autorsFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
     PptxXmlCommentAuthorsReaderContext autorsContext;
     m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
     d->commentAuthors = autorsContext.authors;
