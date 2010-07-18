@@ -55,20 +55,16 @@ SQLiteConnectionInternal::SQLiteConnectionInternal(Connection *connection)
 SQLiteConnectionInternal::~SQLiteConnectionInternal()
 {
     if (data_owned && data) {
-        free(data);
+        sqlite3_close(data);
         data = 0;
     }
-//sqlite_freemem does this if (errmsg) {
-//  free( errmsg );
-//  errmsg = 0;
-// }
 }
 
 void SQLiteConnectionInternal::storeResult()
 {
     if (errmsg_p) {
         errmsg = errmsg_p;
-        sqlite_free(errmsg_p);
+        sqlite3_free(errmsg_p);
         errmsg_p = 0;
     }
     errmsg = (data && res != SQLITE_OK) ? sqlite3_errmsg(data) : 0;
@@ -251,7 +247,7 @@ bool SQLiteConnection::drv_closeDatabase()
     if (!d->data)
         return false;
 
-    const int res = sqlite_close(d->data);
+    const int res = sqlite3_close(d->data);
     if (SQLITE_OK == res) {
         d->data = 0;
         return true;
@@ -305,7 +301,7 @@ bool SQLiteConnection::drv_executeSQL(const QString& statement)
     KexiUtils::addKexiDBDebug(QString("ExecuteSQL (SQLite): ") + statement);
 #endif
 
-    d->res = sqlite_exec(
+    d->res = sqlite3_exec(
                  d->data,
                  (const char*)d->temp_st,
                  0/*callback*/,
@@ -320,7 +316,7 @@ bool SQLiteConnection::drv_executeSQL(const QString& statement)
 
 quint64 SQLiteConnection::drv_lastInsertRowID()
 {
-    return (quint64)sqlite_last_insert_rowid(d->data);
+    return (quint64)sqlite3_last_insert_rowid(d->data);
 }
 
 int SQLiteConnection::serverResult()

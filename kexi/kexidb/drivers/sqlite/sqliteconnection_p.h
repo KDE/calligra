@@ -22,22 +22,7 @@
 
 #include <kexidb/connection_p.h>
 
-#include "sqlite3.h"
-
-//for compatibility
-#ifdef _SQLITE3_H_
-# define SQLITE3
-typedef sqlite3 sqlite_struct;
-# define sqlite_free sqlite3_free
-# define sqlite_close sqlite3_close
-# define sqlite_exec sqlite3_exec
-# define sqlite_last_insert_rowid sqlite3_last_insert_rowid
-# define sqlite_error_string sqlite3_last_insert_row_id
-# define sqlite_libversion sqlite3_libversion
-# define sqlite_libencoding sqlite3_libencoding
-#else
-# error Invalid sqlite version
-#endif
+#include <sqlite3.h>
 
 namespace KexiDB
 {
@@ -52,7 +37,7 @@ public:
     //! stores last result's message
     virtual void storeResult();
 
-    sqlite_struct *data;
+    sqlite3 *data;
     bool data_owned; //!< true if data pointer should be freed on destruction
     QString errmsg; //<! server-specific message of last operation
     char *errmsg_p; //<! temporary: server-specific message of last operation

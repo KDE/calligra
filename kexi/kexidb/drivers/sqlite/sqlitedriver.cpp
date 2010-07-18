@@ -66,7 +66,7 @@ SQLiteDriver::SQLiteDriver(QObject *parent, const QVariantList &args)
     initDriverSpecificKeywords(keywords);
 
     //predefined properties
-    d->properties["client_library_version"] = sqlite_libversion();
+    d->properties["client_library_version"] = sqlite3_libversion();
     d->properties["default_server_encoding"] = "UTF8"; //OK?
 
     d->typeNames[Field::Byte] = "Byte";
