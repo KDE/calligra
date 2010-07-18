@@ -223,12 +223,19 @@ int ret;
 			
 			char *str;
 			if (col->col_type == MDB_NUMERIC) {
+                /*fprintf(stdout,"MDB_NUMERIC\n");*/
 				str = mdb_num_to_string(mdb, start,
 					col->col_type, col->col_prec,
 					col->col_scale);
+                /*fprintf(stdout,"mdb_num_to_string()=%d '%s'\n", strlen(str), str);*/
 			} else {
+                /*fprintf(stdout,"!MDB_NUMERIC : %d len=%d\n", col->col_type, len);*/
 				str = mdb_col_to_string(mdb, mdb->pg_buf, start,
 					col->col_type, len);
+                /*if (strlen(str) > MDB_BIND_SIZE) {
+                    fprintf(stdout, "!!!!!!\n");
+                }
+                fprintf(stdout,"mdb_col_to_string()=%d '%s'\n", strlen(str), str);*/
 			}
 			strcpy(col->bind_ptr, str);
 			g_free(str);
@@ -610,9 +617,11 @@ static char *mdb_memo_to_string(MdbHandle *mdb, int start, int size)
 	gint32 row_start, pg_row;
 	size_t len;
 	void *buf, *pg_buf = mdb->pg_buf;
-	char *text = (char *) g_malloc(MDB_BIND_SIZE);
+	char *text = 0;
 
+    /*printf("mdb_memo_to_string: size=%d\n", size);*/
 	if (size<MDB_MEMO_OVERHEAD) {
+		text = (char *) g_malloc(MDB_BIND_SIZE);
 		strcpy(text, "");
 		return text;
 	} 
@@ -626,13 +635,18 @@ static char *mdb_memo_to_string(MdbHandle *mdb, int start, int size)
 	 * The 32 bit integer at offset 4 contains page and row information.
 	 */
 	memo_len = mdb_get_int32(pg_buf, start);
+    /*printf("memo_len=%d\n", memo_len);*/
 
 	if (memo_len & 0x80000000) {
+		text = (char *) g_malloc(MDB_BIND_SIZE);
+        /*printf("INLINE MEMO\n");*/
 		/* inline memo field */
 		mdb_unicode2ascii(mdb, (char*)pg_buf + start + MDB_MEMO_OVERHEAD,
 			size - MDB_MEMO_OVERHEAD, text, MDB_BIND_SIZE);
 		return text;
 	} else if (memo_len & 0x40000000) {
+		text = (char *) g_malloc(MDB_BIND_SIZE);
+        /*printf("SINGLE-PAGE MEMO\n");*/
 		/* single-page memo field */
 		pg_row = mdb_get_int32(pg_buf, start+4);
 #if MDB_DEBUG
@@ -650,6 +664,7 @@ static char *mdb_memo_to_string(MdbHandle *mdb, int start, int size)
 		mdb_unicode2ascii(mdb, (char*)buf + row_start, len, text, MDB_BIND_SIZE);
 		return text;
 	} else if ((memo_len & 0xff000000) == 0) { /* assume all flags in MSB */
+        /*printf("MULTI-PAGE MEMO\n");*/
 		/* multi-page memo field */
 		guint32 tmpoff = 0;
 		char *tmp;
@@ -678,7 +693,9 @@ static char *mdb_memo_to_string(MdbHandle *mdb, int start, int size)
 		if (tmpoff < memo_len) {
 			fprintf(stderr, "Warning: incorrect memo length\n");
 		}
-		mdb_unicode2ascii(mdb, tmp, tmpoff, text, MDB_BIND_SIZE);
+        /*printf("ALLOCATING tmpoff *2: %d\n", tmpoff * 2);*/
+		text = (char *) g_malloc(tmpoff);
+		mdb_unicode2ascii(mdb, tmp, tmpoff, text, tmpoff);
 		g_free(tmp);
 		return text;
 	} else {

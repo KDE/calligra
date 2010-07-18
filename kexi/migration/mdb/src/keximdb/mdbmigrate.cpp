@@ -264,7 +264,15 @@ bool MDBMigrate::drv_copyTable(const QString& srcTable,
     //! Bind + allocate the DB columns to columnData and columnDataLength arrays
     mdb_read_columns(tableDef); // mdb_bind_column dies without this
     for (unsigned int i = 0; i < tableDef->num_cols; i++) {
-        columnData[i] = (char*) g_malloc(MDB_BIND_SIZE);
+        MdbColumn *col = (MdbColumn*) g_ptr_array_index(tableDef->columns, i);
+        if (col->col_type == MDB_MEMO) {
+//! @todo supporting 1GB (possible to insert programmatically) of MEMO field needs changes in mdbtools API;
+//!       for now 65,535 is supported (maximum when entering data through the user interface)
+            columnData[i] = (char*) g_malloc(0x10000);
+        }
+        else {
+            columnData[i] = (char*) g_malloc(MDB_BIND_SIZE);
+        }
 
         // Columns are numbered from 1
         // and why aren't these unsigned ints?
