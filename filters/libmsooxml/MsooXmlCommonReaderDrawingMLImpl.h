@@ -1245,7 +1245,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         // pass properties from master to slide
 //! @todo hardcoded list index (sebsauer; are there cases where another level needs to be applied? For reference see also bug #244363)
         PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(1);
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
         if (listStyle) {
             m_currentTextStyleProperties = listStyle->m_characterStyle;
             destroyCharacterStyle = false; // cause we are not the owner
