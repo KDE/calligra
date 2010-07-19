@@ -1055,24 +1055,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                     body->startElement("text:list");
                     if (listDepth == 0) {
+                        QString listStyleName;
                         if (m_currentListStyle.isEmpty()) {
                             // for now the name is hardcoded...should be maybe fixed
                             if (d->phType == "title" || d->phType == "ctrTitle") {
-                                body->addAttribute("text:style-name", "titleList"); 
+                                listStyleName = "titleList";
                             }
                             else if (d->phType == "body" ) {
                                 // Fixme? : for now the master slide list style is called bodyList
-                                body->addAttribute("text:style-name", "bodyList");
+                                listStyleName = "bodyList";
                             }
                             else {
                                 // This hardcoded name should maybe changed to something else
-                                body->addAttribute("text:style-name", "otherList");
+                                listStyleName = "otherList";
                             }
                         }
                         else {
-                            QString listStyleName = mainStyles->insert(m_currentListStyle);
-                            body->addAttribute("text:style-name", listStyleName);
+                            listStyleName = mainStyles->insert(m_currentListStyle);
                         }
+                        Q_ASSERT(!listStyleName.isEmpty());
+                        body->addAttribute("text:style-name", listStyleName);
+                        m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
                     }
                     body->startElement("text:list-item");
                 }
