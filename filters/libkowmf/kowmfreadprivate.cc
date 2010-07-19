@@ -108,6 +108,8 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     mBBoxLeft = 32767;
     mBBoxRight = -32768;
     mBBoxBottom = -32768;
+    mMaxWidth = 0;
+    mMaxHeight = 0;
 
 #if DEBUG_RECORDS
     kDebug(31000) << "--------------------------- Starting parsing WMF ---------------------------";
@@ -144,6 +146,8 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
         mBBoxTop    = pheader.top;
         mBBoxRight  = pheader.right;
         mBBoxBottom = pheader.bottom;
+        mMaxWidth   = abs(pheader.right - pheader.left);
+        mMaxHeight  = abs(pheader.bottom - pheader.top);
 
         mDpi = pheader.inch;
     } else {
@@ -221,12 +225,15 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                 break;
             }
 
+            bool  isOrgOrExt = true;
             numFunction &= 0xFF;
             if (numFunction == 11) {
                 // setWindowOrg
 
                 st >> curOrgY >> curOrgX;
-                //kDebug(31000) << "setWindowOrg" << curOrgX << curOrgY;
+#if DEBUG_RECORDS
+                kDebug(31000) << "setWindowOrg" << curOrgX << curOrgY;
+#endif
                 if (curOrgY < mBBoxTop)    mBBoxTop = curOrgY;
                 if (curOrgX < mBBoxLeft)   mBBoxLeft = curOrgX;
                 if (curOrgX > mBBoxRight)  mBBoxRight = curOrgX;
@@ -238,8 +245,26 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                 qint16 height;
 
                 st >> height >> width;
-                //kDebug(31000) << "setWindowExt" << width << height
-                //              << "(curOrg = " << curOrgX << curOrgY << ")";
+#if DEBUG_RECORDS
+                kDebug(31000) << "setWindowExt" << width << height
+                              << "(curOrg = " << curOrgX << curOrgY << ")";
+#endif
+
+                // Collect the maximum width and height.
+                //
+                // The spec is very vague about how to treat the set
+                // of Org/Ext pairs.  Should their combined areas be
+                // treated as a union?  Should they be treated
+                // individually?  The file
+                // msword_2003_embedded_wordpad_doc.doc suggests that
+                // they should be handled individually and shown in
+                // the available drawing area.
+                //
+                // FIXME: Find out how it really is.
+                if (abs(width - curOrgX) > mMaxWidth)
+                    mMaxWidth = abs(width - curOrgX);
+                if (abs(height - curOrgY) > mMaxHeight)
+                    mMaxHeight = abs(height - curOrgY);
 
                 // Negative values are allowed
                 if (width < 0) {
@@ -264,10 +289,17 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
                     }
                 }
             }
+            else
+                isOrgOrExt = false;
 
-            //kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
-            //kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
-            //kDebug(31000) << "           MBBoxBotton = " << mBBoxBottom;
+#if DEBUG_RECORDS
+            if (isOrgOrExt) {
+                kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
+                kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
+                kDebug(31000) << "           MBBoxBotton = " << mBBoxBottom;
+                kDebug(31000) << "Max width,height = " << mMaxWidth << mMaxHeight;
+            }
+#endif
 
             mBuffer->seek(filePos + (size << 1));
         }
@@ -396,6 +428,7 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
 //-----------------------------------------------------------------------------
 // Metafile painter methods
 
+
 void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
 {
     qint16 top, left;
@@ -404,7 +437,9 @@ void KoWmfReadPrivate::setWindowOrg(quint32, QDataStream& stream)
     mReadWmf->setWindowOrg(left, top);
     mWindowLeft = left;
     mWindowTop = top;
-    //kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+#if DEBUG_RECORDS
+    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+#endif
 }
 
 /*  TODO : deeper look in negative width and height
@@ -416,7 +451,9 @@ void KoWmfReadPrivate::setWindowExt(quint32, QDataStream& stream)
 
     // negative value allowed for width and height
     stream >> height >> width;
-    //kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+#if DEBUG_RECORDS
+    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+#endif
 
     mReadWmf->setWindowExt(width, height);
     mWindowWidth  = width;
@@ -454,6 +491,38 @@ void KoWmfReadPrivate::ScaleWindowExt(quint32, QDataStream &stream)
         mWindowHeight = height;
     }
     //kDebug(31000) <<"KoWmfReadPrivate::ScaleWindowExt :" << widthDenum <<"" << heightDenum;
+}
+
+
+void KoWmfReadPrivate::setViewportOrg(quint32, QDataStream& stream)
+{
+    qint16 top, left;
+
+    stream >> top >> left;
+    //mReadWmf->setViewportOrg(left, top);
+    //mViewportLeft = left;
+    //mViewportTop = top;
+#if DEBUG_RECORDS
+    kDebug(31000) <<"Org: (" << left <<","  << top <<")";
+#endif
+}
+
+/*  TODO : deeper look in negative width and height
+*/
+
+void KoWmfReadPrivate::setViewportExt(quint32, QDataStream& stream)
+{
+    qint16 width, height;
+
+    // negative value allowed for width and height
+    stream >> height >> width;
+#if DEBUG_RECORDS
+    kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
+#endif
+
+    //mReadWmf->setViewportExt(width, height);
+    //mViewportWidth  = width;
+    //mViewportHeight = height;
 }
 
 
@@ -1069,6 +1138,7 @@ void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
         stream >> weight >> property >> arg >> arg;
         stream >> fixedPitch;
 
+        kDebug(31000) << height << width << weight << property;
         // text rotation (in 1/10 degree)
         // TODO: memorisation of rotation in object Font
         mTextRotation = -rotation / 10;
@@ -1185,7 +1255,9 @@ void KoWmfReadPrivate::setLayout(quint32, QDataStream &stream)
     stream >> layout >> reserved;
     mLayout = (WmfLayout)layout;
 
+#if DEBUG_RECORDS
     kDebug(31000) << "setLayout: layout=" << layout;
+#endif
 }
 
 void KoWmfReadPrivate::startDoc(quint32, QDataStream&)

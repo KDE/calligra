@@ -55,7 +55,7 @@ public:
     using KoWmfRead::play;
 
     /**
-     * play WMF file on a QPaintDevice. Return true on success.
+     * Play a WMF file on a QPaintDevice. Return true on success.
      * Use absolute or relative coordinate :
      *   absolute coord. reset the world transfomation Matrix (by default)
      *   relative coord. use the existing world transfomation Matrix

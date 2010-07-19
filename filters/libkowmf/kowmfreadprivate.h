@@ -65,6 +65,10 @@ public:
     void ScaleWindowExt(quint32, QDataStream& stream);
     /// offset in window origin
     void OffsetWindowOrg(quint32, QDataStream& stream);
+    /// set viewport origin
+    void setViewportOrg(quint32 size, QDataStream& stream);
+    /// set viewport extents
+    void setViewportExt(quint32 size, QDataStream& stream);
 
     /****************** Drawing *******************/
     /// draw line to coord
@@ -215,6 +219,8 @@ public:
     qint16 mBBoxLeft;
     qint16 mBBoxRight;
     qint16 mBBoxBottom;
+    qint16 mMaxWidth;
+    qint16 mMaxHeight;
 
     // standard file : this is the value in setWindowOrg and setWindowExt
     // number of points per inch for the default size
@@ -273,8 +279,8 @@ static const struct KoWmfFunc {
     { &KoWmfReadPrivate::ScaleWindowExt, "ScaleWindowExt" }, // 10 0x0a
     { &KoWmfReadPrivate::setWindowOrg, "setWindowOrg" }, // 11 0x0b
     { &KoWmfReadPrivate::setWindowExt, "setWindowExt" }, // 12 0x0c
-    { &KoWmfReadPrivate::notyet, "notyet" }, // 13 0x0d
-    { &KoWmfReadPrivate::notyet, "notyet" }, // 14 0x0e
+    { &KoWmfReadPrivate::setViewportOrg, "setViewportOrg" }, // 13 0x0d
+    { &KoWmfReadPrivate::setViewportExt, "setViewportExt" }, // 14 0x0e
     { &KoWmfReadPrivate::OffsetWindowOrg, "OffsetWindowOrg" }, // 15 0x0f
     { &KoWmfReadPrivate::notyet, "notyet" }, // 16 0x10
     { &KoWmfReadPrivate::notyet, "notyet" }, // 17 0x11

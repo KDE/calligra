@@ -85,7 +85,7 @@ bool KoWmfPaint::begin()
     bool ret = true;
 
     // If the painter is our own, we have to call begin() on it.
-    // If it's external, we suppose that it's already done for us.
+    // If it's external, we assume that it's already done for us.
     if (mIsInternalPainter)
         ret = mPainter->begin(mTarget);
 
@@ -549,13 +549,13 @@ void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QStri
         y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
     else if ((textAlign & TA_BOTTOM) == TA_BOTTOM) {
         y -= height;
+    }
 
 #if DEBUG_WMFPAINT
-        kDebug(31000) << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
-                      << "ascent = " << fm.ascent() << " height = " << fm.height()
-                      << "leading = " << fm.leading();
+    kDebug(31000) << "font = " << mPainter->font() << " pointSize = " << mPainter->font().pointSize()
+                  << "ascent = " << fm.ascent() << " height = " << fm.height()
+                  << "leading = " << fm.leading();
 #endif
-    }
 
     // Use the special pen defined by mTextPen for text.
     QPen  savePen = mPainter->pen();
