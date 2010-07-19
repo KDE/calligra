@@ -1316,8 +1316,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
     if (!sz.isEmpty()) {
+        int szInt;
         STRING_TO_INT(sz, szInt, "rPr@sz")
-        m_currentTextStyleProperties->setFontPointSize(szInt.toDouble() / 100.0);
+        m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
     }
     // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
     TRY_READ_ATTR_WITHOUT_NS(strike)
