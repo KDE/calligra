@@ -1239,7 +1239,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     const QXmlStreamAttributes attrs(attributes());
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
-    bool destroyCharacterStyle = true;
+    m_currentTextStyleProperties = new KoCharacterStyle();
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) {
         // pass properties from master to slide
@@ -1248,8 +1248,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
         PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
         if (listStyle) {
-            m_currentTextStyleProperties = listStyle->m_characterStyle;
-            destroyCharacterStyle = false; // cause we are not the owner
+            m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
         }
     }
 #endif
@@ -1350,8 +1349,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     // elements
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     
-    if (destroyCharacterStyle)
-        delete m_currentTextStyleProperties;
+    delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE_WITHOUT_RETURN
