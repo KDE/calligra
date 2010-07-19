@@ -144,10 +144,10 @@ QImage ComponentTransferEffect::processImage(const QImage &image, const KoFilter
             da *= 255.0;
 
             // set pre-multiplied color values on destination image
-            dst[pixel] = qRgba(static_cast<quint8>(qBound(0.0, dr * da, 255.0)),
-                               static_cast<quint8>(qBound(0.0, dg * da, 255.0)),
-                               static_cast<quint8>(qBound(0.0, db * da, 255.0)),
-                               static_cast<quint8>(qBound(0.0, da, 255.0)));
+            dst[pixel] = qRgba(static_cast<quint8>(qBound(qreal(0.0), dr * da, qreal(255.0))),
+                               static_cast<quint8>(qBound(qreal(0.0), dg * da, qreal(255.0))),
+                               static_cast<quint8>(qBound(qreal(0.0), db * da, qreal(255.0))),
+                               static_cast<quint8>(qBound(qreal(0.0), da, qreal(255.0))));
         }
     }
 

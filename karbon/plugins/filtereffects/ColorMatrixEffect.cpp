@@ -83,7 +83,7 @@ void ColorMatrixEffect::setColorMatrix(const QVector<qreal> &colorMatrix)
 void ColorMatrixEffect::setSaturate(qreal value)
 {
     m_type = Saturate;
-    m_value = qBound(0.0, value, 1.0);
+    m_value = qBound(qreal(0.0), value, qreal(1.0));
 
     setIdentity();
 
@@ -190,10 +190,10 @@ QImage ColorMatrixEffect::processImage(const QImage &image, const KoFilterEffect
             da *= 255.0;
 
             // set pre-multiplied color values on destination image
-            dst[row*w+col] = qRgba(static_cast<quint8>(qBound(0.0, dr * da, 255.0)),
-                                   static_cast<quint8>(qBound(0.0, dg * da, 255.0)),
-                                   static_cast<quint8>(qBound(0.0, db * da, 255.0)),
-                                   static_cast<quint8>(qBound(0.0, da, 255.0)));
+            dst[row*w+col] = qRgba(static_cast<quint8>(qBound(qreal(0.0), dr * da, qreal(255.0))),
+                                   static_cast<quint8>(qBound(qreal(0.0), dg * da, qreal(255.0))),
+                                   static_cast<quint8>(qBound(qreal(0.0), db * da, qreal(255.0))),
+                                   static_cast<quint8>(qBound(qreal(0.0), da, qreal(255.0))));
         }
     }
 
