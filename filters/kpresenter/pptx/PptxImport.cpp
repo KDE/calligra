@@ -846,6 +846,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n      <style:paragraph-properties fo:margin-left=\"2.063cm\" fo:margin-right=\"0cm\" fo:margin-top=\"0.246cm\" fo:margin-bottom=\"0cm\" text:enable-numbering=\"true\" fo:text-indent=\"-0.793cm\"/>"
         "\n    </style:style>"
 */
+/* 2010-07-19 no longer hardcoded
         "\n    <text:list-style style:name=\"Lpredef1\">"
         "\n      <text:list-level-style-bullet text:level=\"1\" text:bullet-char=\"•\">"
         "\n        <style:text-properties fo:font-family=\"Calibri\" style:font-family-generic=\"swiss\" style:font-pitch=\"variable\" fo:color=\"#000000\" fo:font-size=\"100%\"/>"
@@ -953,6 +954,7 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n        <style:text-properties fo:font-family=\"Arial\" style:font-family-generic=\"swiss\" style:font-pitch=\"variable\" fo:color=\"#000000\" fo:font-size=\"100%\"/>"
         "\n      </text:list-level-style-bullet>"
         "\n    </text:list-style>"
+*/
         "\n    <!-- /COPIED -->"
     );
 
