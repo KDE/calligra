@@ -112,7 +112,7 @@ const QString FREOFFICE_PATH("/com/nokia/FreOffice");
  * DBus FreOffice ServiceName
  */
 const QString FREOFFICE_SERVICE_NAME("com.nokia.FreOffice");
-const QString FILE_CHOOSER_FILTER("Document(*.doc *.docx *.odt *.txt);;Presentation(*.ppt *.pptx *.odp);;Spreadsheet(*.xls *.xlsx *.ods)");
+const QString FILE_CHOOSER_FILTER("Document(*.doc *.docx *.odt *.txt);;Presentation(*.ppt *.pptx *.odp *.pps *.ppsx);;Spreadsheet(*.xls *.xlsx *.ods)");
 
 const QString FREOFFICE_APPLICATION_PATH("/usr/bin/FreOffice");
 #endif // COMMON_H
