@@ -174,7 +174,7 @@ private:
      * Confirmation dialog for closing new document
      */
     QDialog *m_confirmationdialog;
-    QGridLayout * m_confirmationdialoglayout;
+    QGridLayout *m_confirmationdialoglayout;
     QPushButton *m_yes;
     QPushButton *m_no;
     QPushButton *m_cancel;
@@ -384,7 +384,19 @@ private:
      * Function for navigating to PreviousSheet
      */
     void prevSheet();
-    
+    /*!
+     * Confirmation Dialog Destructor
+     */
+    void confirmationDialogDestructor();
+    /*!
+     * Format Frame Destructor
+     */
+    void formatFrameDestructor();
+    /*!
+     * FontStyle Frame Destructor
+     */
+    void fontStyleFrameDestructor();
+
 private:
     // Apply the selected formatting
     bool setFontSize(int size, KoTextEditor* editor);
@@ -670,6 +682,7 @@ private:
      * true if new document is open
      */
     bool m_newDocOpen;
+    bool m_isDocModified;
     /*!
      * flag for new file to existing file conversion
      */

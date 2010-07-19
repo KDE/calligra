@@ -173,7 +173,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_openCheck(false),
         m_doubleClick(false),
         m_newDocOpen(false),
-        m_existingFile(false),
+        m_isDocModified(false),
         m_count(0),
         m_pptTool(0),
         m_fsPPTDrawHighlightButton(0),
@@ -497,6 +497,7 @@ bool MainWindow::setSubScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignBottom);
         }
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -517,6 +518,7 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignTop);
         }
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -535,6 +537,7 @@ void MainWindow::selectFontSize()
 bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
     if (editor) {
         editor->setFontSize(size);
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -552,6 +555,7 @@ void MainWindow::selectFontType()
 bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
     if (editor) {
         editor->setFontFamily(font);
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -569,6 +573,7 @@ void MainWindow::selectTextColor()
 bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
     if (editor) {
         editor->setTextColor(color);
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -586,6 +591,7 @@ void MainWindow::selectTextBackGroundColor()
 bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
     if (editor) {
         editor->setTextBackgroundColor(color);
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -607,6 +613,7 @@ bool MainWindow::setBold(KoTextEditor *editor) {
         } else {
             editor->bold(true);
         }
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -628,6 +635,7 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
         } else {
             editor->italic(true);
         }
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -649,6 +657,7 @@ bool MainWindow::setUnderline(KoTextEditor *editor) {
         } else {
             editor->underline(true);
         }
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -666,6 +675,7 @@ void MainWindow::doLeftAlignment()
 bool MainWindow::setLeftAlign(KoTextEditor *editor) {
     if (editor) {
           editor->setHorizontalTextAlignment(Qt::AlignLeft);
+          m_isDocModified = true;
           return true;
     }
     return false;
@@ -682,6 +692,7 @@ void MainWindow::doJustify()
 bool MainWindow::setJustify(KoTextEditor *editor) {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignJustify);
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -698,6 +709,7 @@ void MainWindow::doRightAlignment()
 bool MainWindow::setRightAlign(KoTextEditor *editor) {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignRight);
+        m_isDocModified = true;
         return true;
     }
     return false;
@@ -714,6 +726,7 @@ void MainWindow::doCenterAlignment()
 bool MainWindow::setCenterAlign(KoTextEditor *editor) {
     if (editor) {
         editor->setHorizontalTextAlignment(Qt::AlignCenter);
+        m_isDocModified = true;
         return true;
     }
     return true;
@@ -846,6 +859,7 @@ void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
     listlevelproperties.setStyle(style);
     liststyle->setLevelProperties(listlevelproperties);
     KoList::applyStyle(blk, liststyle, KoList::level(blk));
+    m_isDocModified = true;
 }
 
 void MainWindow::saveFile()
@@ -853,32 +867,23 @@ void MainWindow::saveFile()
     QMessageBox msgBox;
     if(m_doc) {
        if(m_fileName.isEmpty()) {
-          m_fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
-          if(m_fileName.isEmpty())
-              return;
-
-          m_doc->saveNativeFormat(m_fileName);
-          msgBox.setText(i18n("The document has been saved successfully"));
-          msgBox.exec();
-          m_existingFile = true;
-
-          if(m_confirmationdialog) {
-              closeDocument();
-          }
+         saveFileAs();
        } else {
           QString ext = KMimeType::extractKnownExtension(m_fileName);
-
           if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
               !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
 
               m_doc->saveNativeFormat(m_fileName);
+              m_isDocModified = false;
               msgBox.setText(i18n("The document has been saved successfully"));
-
-              m_existingFile = true;
+              msgBox.exec();
+              if(m_confirmationdialog) {
+                  closeDocument();
+              }
           } else {
               msgBox.setText(i18n("Saving operation supports only open document formats currently,Sorry"));
+              msgBox.exec();
           }
-          msgBox.exec();
        }
     }
     else {
@@ -915,15 +920,20 @@ void MainWindow::saveFileAs()
                 return;
 
             m_doc->saveNativeFormat(m_fileName);
+            m_isDocModified = false;
             msgBox.setText(i18n("The document has been saved successfully"));
-            m_existingFile=true;
+            msgBox.exec();
+            if(m_confirmationdialog) {
+                closeDocument();
+            }
        } else {
            msgBox.setText(i18n("Saving operation supports only open document formats currently,sorry"));
+           msgBox.exec();
        }
     }  else {
         msgBox.setText(i18n("No document is open to perform saveas operation ,invalid try"));
+        msgBox.exec();
     }
-    msgBox.exec();
 }
 void MainWindow::chooseDocumentType()
 {
@@ -1109,8 +1119,47 @@ void MainWindow::openNewDocument(DocumentType type)
 
 void MainWindow::closeDoc()
 {
-    if(m_doc!=NULL)
-       closeDocument();
+    if(m_doc == NULL)
+       return;
+
+    if(!m_fileName.isEmpty()) {
+        QString ext = KMimeType::extractKnownExtension(m_fileName);
+        if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
+        } else {
+            closeDocument();
+            return;
+        }
+    }
+
+    m_doc->setModified(m_isDocModified);
+    if (m_doc->isModified()) {
+        m_confirmationdialog = new QDialog(this);
+        Q_CHECK_PTR(m_confirmationdialog);
+        m_confirmationdialoglayout = new QGridLayout;
+        Q_CHECK_PTR(m_confirmationdialoglayout);
+        m_yes = new QPushButton(i18n("Save"),this);
+        Q_CHECK_PTR(m_yes);
+        m_no = new QPushButton(i18n("Discard"),this);
+        Q_CHECK_PTR(m_no);
+        m_cancel = new QPushButton(i18n("Cancel"),this);
+        Q_CHECK_PTR(m_cancel);
+        m_message = new QLabel(i18n("Document is modified do you want to save before closing ?"),this);
+        Q_CHECK_PTR(m_message);
+
+        m_confirmationdialoglayout->addWidget(m_message,0,0,1,3,Qt::AlignCenter);
+        m_confirmationdialoglayout->addWidget(m_yes,1,0);
+        m_confirmationdialoglayout->addWidget(m_no,1,1);
+        m_confirmationdialoglayout->addWidget(m_cancel,1,2);
+        m_confirmationdialog->setLayout(m_confirmationdialoglayout);
+        m_confirmationdialog->show();
+
+        connect(m_no,SIGNAL(clicked()),this,SLOT(discardNewDocument()));
+        connect(m_yes,SIGNAL(clicked()),this,SLOT(saveFile()));
+        connect(m_cancel,SIGNAL(clicked()),this,SLOT(returnToDoc()));
+    } else {
+        closeDocument();
+    }
 }
 
 void MainWindow::openAboutDialog(void)
@@ -1132,7 +1181,6 @@ void MainWindow::toggleToolBar(bool show)
         m_isViewToolBar = false;
         m_search->setFocus();
         m_search->selectAll();
-
     } else {
         m_search->clearFocus();
         m_ui->SearchToolBar->hide();
@@ -1244,6 +1292,7 @@ void MainWindow::cut()
     if(m_editor && m_editor->hasSelection()) {
          m_controller->canvas()->toolProxy()->cut();
     }
+
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
     if(m_formatframe)
@@ -1356,12 +1405,12 @@ void MainWindow::slideNotesButtonClicked()
         disconnect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
         delete notesDialog;
     }
-        notesDialog=new NotesDialog(m_doc,viewNumber);
-        notesDialog->show();
-        connect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
+    notesDialog=new NotesDialog(m_doc,viewNumber);
+    notesDialog->show();
+    connect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
 
-        notesDialog->show();
-        notesDialog->showNotesDialog(m_currentPage);
+    notesDialog->show();
+    notesDialog->showNotesDialog(m_currentPage);
 }
 void MainWindow::moveSLideFromNotesSLide(bool flag)
 {
@@ -1395,153 +1444,129 @@ void MainWindow::openFileDialog()
         QTimer::singleShot(100, this, SLOT(doOpenDocument()));
     }
 }
+
 void MainWindow::closeDocument()
 {
     if (m_doc == NULL)
         return;
-    if((m_fileName.isEmpty())&&(!m_existingFile)) {
-        m_confirmationdialog = new QDialog(this);
-        Q_CHECK_PTR(m_confirmationdialog);
-        m_confirmationdialoglayout = new QGridLayout;
-        Q_CHECK_PTR(m_confirmationdialoglayout);
-        m_yes = new QPushButton(i18n("Save"),this);
-        Q_CHECK_PTR(m_yes);
-        m_no = new QPushButton(i18n("Discard"),this);
-        Q_CHECK_PTR(m_no);
-        m_cancel = new QPushButton(i18n("Cancel"),this);
-        Q_CHECK_PTR(m_cancel);
-        m_message = new QLabel(i18n("Do u want to save newly created document before closing ?"),this);
-        Q_CHECK_PTR(m_message);
-        m_confirmationdialoglayout->addWidget(m_message,0,0,1,3,Qt::AlignCenter);
-        m_confirmationdialoglayout->addWidget(m_yes,1,0);
-        m_confirmationdialoglayout->addWidget(m_no,1,1);
-        m_confirmationdialoglayout->addWidget(m_cancel,1,2);
-        m_confirmationdialog->setLayout(m_confirmationdialoglayout);
-        m_confirmationdialog->show();
-        connect(m_no,SIGNAL(clicked()),this,SLOT(discardNewDocument()));
-        connect(m_yes,SIGNAL(clicked()),this,SLOT(saveFile()));
-        connect(m_cancel,SIGNAL(clicked()),this,SLOT(returnToDoc()));
-        m_existingFile = false;
-     } else {
-        setWindowTitle(i18n("Office"));
-        setCentralWidget(0);
-        m_positions.clear();
 
-        // the presentation and text document instances seem to require different ways to do cleanup
-        if (m_type == Presentation || m_type == Spreadsheet) {
-            KoToolManager::instance()->removeCanvasController(m_controller);
-            delete m_doc;
-            m_doc = 0;
-        } else {
-            KoToolManager::instance()->removeCanvasController(m_controller);
-            if(m_kwview)
-                m_kwview->kwcanvas()->toolProxy()->deleteSelection();
-            delete m_doc;
-            m_doc = 0;
-            delete m_view;
-            m_kwview=NULL;
-            m_editor=NULL;
-        }
-        m_view = NULL;
-        setCentralWidget(0);
-        m_currentPage = 1;
-        m_controller = NULL;
-
-        if (m_ui->EditToolBar)
-            m_ui->EditToolBar->hide();
-
-        if(m_ui->viewToolBar)
-            m_ui->viewToolBar->hide();
-
-        if(m_ui->SearchToolBar)
-            m_ui->SearchToolBar->hide();
-
-        updateActions();
-
-        m_ui->actionZoomLevel->setText(i18n("%1 %", 100));
-        m_ui->actionPageNumber->setText(i18n("%1 of %2", 0, 0));
-        m_existingFile=false;
-
-        if(m_formatframe) {
-            m_formatframe->close();
-            delete m_bold;
-            m_bold = 0;
-            delete m_italic;
-            m_italic = 0;
-            delete m_underline;
-            m_underline = 0;
-            delete m_alignright;
-            m_alignright = 0;
-            delete m_alignleft;
-            m_alignleft = 0;
-            delete m_alignjustify;
-            m_alignjustify = 0;
-            delete m_aligncenter;
-            m_aligncenter = 0;
-            delete m_numberedlist;
-            m_numberedlist = 0;
-            delete m_bulletlist;
-            m_bulletlist = 0;
-            delete m_formatframe ;
-            m_formatframe = 0;
-        }
-
-        if(m_fontstyleframe) {
-            m_fontstyleframe->close();
-            delete m_subscript;
-            m_subscript = 0;
-            delete m_superscript;
-            m_superscript = 0;
-            delete m_fontcombobox;
-            m_fontcombobox = 0;
-            delete m_fontsizecombo;
-            m_fontsizecombo = 0;
-            delete m_textcolor;
-            m_textcolor = 0;
-            delete m_textbackgroundcolor;
-            m_textbackgroundcolor = 0;
-            delete m_fontstyleframe;
-            m_fontstyleframe = 0;
-        }
-
-        if(m_confirmationdialog) {
-            m_confirmationdialog->close();
-            delete m_yes;
-            m_yes = 0;
-            delete m_no;
-            m_no = 0;
-            delete m_cancel;
-            m_cancel = 0;
-            delete m_confirmationdialog;
-            m_confirmationdialog = 0;
-        }
+    setWindowTitle(i18n("Office"));
+    setCentralWidget(0);
+    m_positions.clear();
+    // the presentation and text document instances seem to require different ways to do cleanup
+    if (m_type == Presentation || m_type == Spreadsheet) {
+        KoToolManager::instance()->removeCanvasController(m_controller);
+        delete m_doc;
+        m_doc = 0;
+    } else {
+        KoToolManager::instance()->removeCanvasController(m_controller);
+        if(m_kwview)
+            m_kwview->kwcanvas()->toolProxy()->deleteSelection();
+        delete m_doc;
+        m_doc = 0;
+        delete m_view;
+        m_kwview=NULL;
+        m_editor=NULL;
     }
+    m_view = NULL;
+    setCentralWidget(0);
+    m_currentPage = 1;
+    m_controller = NULL;
+    if (m_ui->EditToolBar)
+        m_ui->EditToolBar->hide();
+
+    if(m_ui->viewToolBar)
+        m_ui->viewToolBar->hide();
+
+    if(m_ui->SearchToolBar)
+        m_ui->SearchToolBar->hide();
+
+    updateActions();
+
+    m_ui->actionZoomLevel->setText(i18n("%1 %", 100));
+    m_ui->actionPageNumber->setText(i18n("%1 of %2", 0, 0));
+
+    fontStyleFrameDestructor();
+    formatFrameDestructor();
+    confirmationDialogDestructor();
+
     m_doubleClick=false;
+    m_isDocModified=false;
     m_count=0;
     viewNumber++;
 }
 
 void MainWindow::returnToDoc()
 {
-    if(m_confirmationdialog) {
-        m_confirmationdialog->close();
-        delete m_confirmationdialog;
-        m_confirmationdialog = 0;
-    }
+    confirmationDialogDestructor();
     return;
 }
 
 void MainWindow::discardNewDocument()
 {
-    m_fileName = "safe";
     closeDocument();
-    m_fileName = (char*)0;
-    m_existingFile = false;
 }
 
-void MainWindow::doOpenDocument()
-{
-    openDocument(m_fileName);
+void MainWindow::confirmationDialogDestructor(){
+    if(m_confirmationdialog) {
+        m_confirmationdialog->close();
+        delete m_yes;
+        m_yes = 0;
+        delete m_no;
+        m_no = 0;
+        delete m_cancel;
+        m_cancel = 0;
+        delete m_confirmationdialog;
+        m_confirmationdialog = 0;
+
+    }
+    return;
+}
+
+void MainWindow::formatFrameDestructor() {
+    if(m_formatframe) {
+        m_formatframe->close();
+        delete m_bold;
+        m_bold = 0;
+        delete m_italic;
+        m_italic = 0;
+        delete m_underline;
+        m_underline = 0;
+        delete m_alignright;
+        m_alignright = 0;
+        delete m_alignleft;
+        m_alignleft = 0;
+        delete m_alignjustify;
+        m_alignjustify = 0;
+        delete m_aligncenter;
+        m_aligncenter = 0;
+        delete m_numberedlist;
+        m_numberedlist = 0;
+        delete m_bulletlist;
+        m_bulletlist = 0;
+        delete m_formatframe ;
+        m_formatframe = 0;
+     }
+}
+
+void MainWindow::fontStyleFrameDestructor() {
+    if(m_fontstyleframe) {
+        m_fontstyleframe->close();
+        delete m_subscript;
+        m_subscript = 0;
+        delete m_superscript;
+        m_superscript = 0;
+        delete m_fontcombobox;
+        m_fontcombobox = 0;
+        delete m_fontsizecombo;
+        m_fontsizecombo = 0;
+        delete m_textcolor;
+        m_textcolor = 0;
+        delete m_textbackgroundcolor;
+        m_textbackgroundcolor = 0;
+        delete m_fontstyleframe;
+        m_fontstyleframe = 0;
+    }
 }
 
 void MainWindow::raiseWindow(void)
@@ -1556,6 +1581,11 @@ void MainWindow::raiseWindow(void)
     e.xclient.format       = 32;
     XSendEvent(display, root, False, SubstructureRedirectMask, &e);
     XFlush(display);
+}
+
+void MainWindow::doOpenDocument()
+{
+    openDocument(m_fileName);
 }
 
 void MainWindow::openDocument(const QString &fileName)
@@ -1884,11 +1914,13 @@ void MainWindow::prevPage()
        prevSheet();
        return;
     }
-    if(m_currentPage == 1)
-        return;
     if(m_type == Presentation) {
         emit previousSlide();
     }
+
+    if(m_currentPage == 1)
+        return;
+
     int cur_page = m_currentPage;
     bool check = triggerAction("page_previous");
     if(check) {
@@ -1908,6 +1940,9 @@ void MainWindow::nextPage()
    }
    if(m_type == Presentation) {
        emit nextSlide();
+   }
+   if(m_currentPage == m_doc->pageCount()) {
+      return;
    }
    if(m_currentPage == m_doc->pageCount()) {
       return;
@@ -2217,7 +2252,6 @@ void MainWindow::updateActions()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-
     // TODO: refine the collaborative-editing section of eventFilter
     if(m_editor && m_collab)
     {
@@ -2347,6 +2381,16 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                     m_fontstyleframe->hide();
             }
         }
+    }
+
+    if(event && event->type() == 6 && m_doc && m_editor ) {
+         QKeyEvent *ke=static_cast<QKeyEvent *>(event);
+         if(ke->key()!=Qt::Key_Up && ke->key()!=Qt::Key_Down &&
+            ke->key()!=Qt::Key_Right && ke->key()!=Qt::Key_Left &&
+            ke->key()!=Qt::Key_Shift && ke->key()!=Qt::Key_Alt &&
+            ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock ){
+             m_isDocModified = true;
+         }
     }
 
     if(m_doubleClick) {
