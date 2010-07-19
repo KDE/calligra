@@ -943,6 +943,13 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                         fullList.removeAt(0);
                     }
                     passThrough = false;
+                } else if (fullList[0].contains("HYPERLINK")) {
+                    emptyList.append(fullList[1]);
+                    emptyList.append(fullList[3]);
+                    for(int i = 0; i<4; i++) {
+                        fullList.removeAt(0);
+                    }
+                    passThrough = false;
                 }
             }
             if (fullList.size() >= 2 && fullList[0].contains("HYPERLINK") && passThrough) {
