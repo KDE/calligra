@@ -132,7 +132,15 @@ void PptxPlaceholder::writeAttributes(KoXmlWriter* writer)
 // -------------------
 
 PptxSlideMasterListLevelTextStyle::PptxSlideMasterListLevelTextStyle()
+ : m_characterStyle(0)
+ , m_listlevelproperties(0)
 {
+}
+
+PptxSlideMasterListLevelTextStyle::~PptxSlideMasterListLevelTextStyle()
+{
+    delete m_characterStyle;
+    delete m_listlevelproperties;
 }
 
 // -------------------

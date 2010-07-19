@@ -112,7 +112,9 @@ class PptxSlideMasterListLevelTextStyle
 {
 public:
     PptxSlideMasterListLevelTextStyle();
-    QVariant sz;
+    ~PptxSlideMasterListLevelTextStyle();
+    KoCharacterStyle* m_characterStyle;
+    KoListLevelProperties* m_listlevelproperties;
 };
 
 //! Data structure collecting information about single text style defined by master slide

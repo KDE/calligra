@@ -1239,8 +1239,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     const QXmlStreamAttributes attrs(attributes());
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
-//    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = new KoCharacterStyle();
+    bool destroyCharacterStyle = true;
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == Slide) {
+        // pass properties from master to slide
+//! @todo hardcoded list index (sebsauer; are there cases where another level needs to be applied? For reference see also bug #244363)
+        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(1);
+        if (listStyle) {
+            m_currentTextStyleProperties = listStyle->m_characterStyle;
+            destroyCharacterStyle = false; // cause we are not the owner
+        }
+    }
+#endif
+    if (! m_currentTextStyleProperties) {
+        m_currentTextStyleProperties = new KoCharacterStyle();
+    }
 
     if (!m_currentTextStylePredefined) {
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
@@ -1298,28 +1312,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 
 #ifdef PPTXXMLSLIDEREADER_H
     kDebug() << "d->phType ____" << d->phType;
-    PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
-    QVariant szInt;
-    if (sz.isEmpty()) {
-#ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == Slide) {
-            // pass properties from master to slide
-//! @todo hardcoded list index (sebsauer; are there cases where another level needs to be applied? For reference see also bug #244363)
-            PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(1);
-            if (listStyle) {
-                kDebug() << "try from master!!! sz=" << listStyle->sz;
-                szInt = listStyle->sz;
-            }
-        }
-#endif
-    }
-    else {
+    if (!sz.isEmpty()) {
         STRING_TO_INT(sz, szInt, "rPr@sz")
-    }
-    if (!szInt.isNull()) {
         m_currentTextStyleProperties->setFontPointSize(szInt.toDouble() / 100.0);
     }
     // from 20.1.10.79 ST_TextStrikeType (Text Strike Type)
@@ -1350,7 +1347,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     }
     // elements
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    delete m_currentTextStyleProperties;
+    
+    if (destroyCharacterStyle)
+        delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE_WITHOUT_RETURN
@@ -2905,6 +2904,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     const QXmlStreamAttributes attrs(attributes());
 
+    Q_ASSERT(m_currentTextStyleProperties == 0);
+    m_currentTextStyleProperties = new KoCharacterStyle();
+
+    Q_ASSERT(m_currentListStyleProperties == 0);
     m_currentListStyleProperties = new KoListLevelProperties;
 
     // Number 3 makes eg. lvl4 -> 4
@@ -2958,7 +2961,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF(defRPr)
+            TRY_READ_IF(defRPr) // fills m_currentTextStyleProperties
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buChar)
@@ -2975,25 +2978,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     KoXmlWriter tempWriter(&buffer);
     m_currentTextStyle.writeStyleProperties(&tempWriter, KoGenStyle::TextType);
     QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-
     listWriter.addCompleteElement(content.toUtf8());
-
     listWriter.endElement(); // text:list-level-style-number
-
     const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-
     m_currentListStyle.addChildElement(QString("level %1").arg(level), elementContents);
 */
 
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
     QBuffer listBuf;
     KoXmlWriter listStyleWriter(&listBuf);
-
     m_currentListStyleProperties->saveOdf(&listStyleWriter);
-
     const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-
     m_currentListStyle.addChildElement("list-style-properties", elementContents);
 
+#ifdef PPTXXMLSLIDEREADER_H
+    if (d->currentSlideMasterTextStyle) {
+        PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(m_currentListLevel);
+        if (slideMasterListLevelTextStyle) {
+            slideMasterListLevelTextStyle->m_characterStyle = m_currentTextStyleProperties;
+            m_currentTextStyleProperties = 0;
+            slideMasterListLevelTextStyle->m_listlevelproperties = m_currentListStyleProperties;
+            m_currentListStyleProperties = 0;
+        }
+    }
+#endif
+
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
     delete m_currentListStyleProperties;
     m_currentListStyleProperties = 0;
 
@@ -3487,10 +3499,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 {
     READ_PROLOGUE
-
     const QXmlStreamAttributes attrs(attributes());
-
-    m_currentTextStyleProperties = new KoCharacterStyle();
 
     while (!atEnd()) {
         readNext();
@@ -3506,20 +3515,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         int szInt;
         STRING_TO_INT(sz, szInt, "defRPr@sz")
         m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
-#ifdef PPTXXMLSLIDEREADER_H
-        if (d->currentSlideMasterTextStyle) {
-//! @todo level, 0 is hardcoded
-            kDebug() << "=====" << szInt;
-            PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(m_currentListLevel);
-            if (slideMasterListLevelTextStyle)
-                slideMasterListLevelTextStyle->sz = szInt;
-        }
-#endif
     }
-
-    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
