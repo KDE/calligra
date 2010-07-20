@@ -28,9 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     <height>139</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QCheckBox" name="m_replaceSubtotals">
