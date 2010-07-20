@@ -1582,7 +1582,7 @@ SchedulerPlugin *ScheduleManager::schedulerPlugin() const
 {
     if ( m_schedulerPluginId.isEmpty() ) {
         // try to avoid crash
-        return m_project.schedulerPlugins().value( m_project.schedulerPlugins().keys().at( 0 ) );
+        return m_project.schedulerPlugins().value( m_project.schedulerPlugins().keys().value( 0 ) );
     }
     return m_project.schedulerPlugins().value( m_schedulerPluginId );
 }
@@ -1608,9 +1608,11 @@ int ScheduleManager::schedulerPluginIndex() const
 
 void ScheduleManager::setSchedulerPlugin( int index )
 {
-    schedulerPlugin()->stopCalculation( this ); // in case...
+    if ( schedulerPlugin() ) {
+        schedulerPlugin()->stopCalculation( this ); // in case...
+    }
 
-    m_schedulerPluginId = m_project.schedulerPlugins().keys().at( index );
+    m_schedulerPluginId = m_project.schedulerPlugins().keys().value( index );
     kDebug()<<index<<m_schedulerPluginId;
     m_project.changed( this );
 }
@@ -1618,17 +1620,23 @@ void ScheduleManager::setSchedulerPlugin( int index )
 void ScheduleManager::calculateSchedule()
 {
     m_calculationresult = CalculationRunning;
-    schedulerPlugin()->calculate( m_project, this );
+    if ( schedulerPlugin() ) {
+        schedulerPlugin()->calculate( m_project, this );
+    }
 }
 
 void ScheduleManager::stopCalculation()
 {
-    schedulerPlugin()->stopCalculation( this );
+    if ( schedulerPlugin() ) {
+        schedulerPlugin()->stopCalculation( this );
+    }
 }
 
 void ScheduleManager::haltCalculation()
 {
-    schedulerPlugin()->haltCalculation( this );
+    if ( schedulerPlugin() ) {
+        schedulerPlugin()->haltCalculation( this );
+    }
 }
 
 void ScheduleManager::setMaxProgress( int value )

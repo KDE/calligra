@@ -616,13 +616,14 @@ QVariant ScheduleItemModel::scheduler( const QModelIndex &index, int role ) cons
     if ( sm == 0 ) {
         return QVariant();
     }
+    SchedulerPlugin *pl = sm->schedulerPlugin();
     switch ( role ) {
         case Qt::EditRole:
             return sm->schedulerPluginId();
         case Qt::DisplayRole:
-            return sm->schedulerPlugin()->name();
+            return pl ? pl->name() : i18n( "Unknown" );
         case Qt::ToolTipRole:
-            return sm->schedulerPlugin()->comment();
+            return pl ? pl->comment() : QString();
         case Role::EnumList:
             return sm->schedulerPluginNames();
         case Role::EnumListValue:
