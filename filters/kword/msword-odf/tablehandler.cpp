@@ -619,7 +619,7 @@ void KWordTableHandler::tableCellStart()
         }
     }
 
-    //check if we have to ignore the shading information   
+    //check if we have to ignore the shading information
     if (!shd.shdAutoOrNill) {
         QString color = QString('#');
         //ipatPct5 to ipatPct90
@@ -629,8 +629,9 @@ void KWordTableHandler::tableCellStart()
             color.append(QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
             cellStyle.addProperty("fo:background-color", color);
         }
-        //ipatSolid
-        else if (shd.ipat == 0x01) {
+        //ipatSolid or ipatnil means that no pattern is applied, but only color
+        //The case of neither color nor pattern is tested above by the shdAutoOrNill
+        else if (shd.ipat == 0x01 || shd.ipat == 0x00) {
             color.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
             cellStyle.addProperty("fo:background-color", color);
         }
