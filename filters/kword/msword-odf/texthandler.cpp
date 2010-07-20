@@ -234,6 +234,13 @@ void KWordTextHandler::sectionEnd()
         //reset m_currentTable
         m_currentTable = 0L;
         //must delete table in Document!
+
+        //we cant have an open list when entering a table
+        if (listIsOpen()) {
+            //kDebug(30513) << "closing list " << m_currentListID;
+            closeList();
+        }
+
         emit tableFound(table);
         m_maxColumns = 0;
     }
@@ -632,6 +639,13 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
         //reset m_currentTable
         m_currentTable = 0L;
         //must delete table in Document!
+
+        //we cant have an open list when entering a table
+        if (listIsOpen()) {
+            //kDebug(30513) << "closing list " << m_currentListID;
+            closeList();
+        }
+
         emit tableFound(table);
         m_maxColumns = 0;
     }
