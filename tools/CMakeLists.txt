@@ -4,6 +4,8 @@ macro_optional_add_subdirectory( kthesaurus )
 macro_optional_add_subdirectory( quickprint )
 macro_optional_add_subdirectory( slidecompare )
 
+add_subdirectory( okularodpgenerator )
+
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)
 if(X11_FOUND)

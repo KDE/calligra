@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Encoding=UTF-8
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;
+Terminal=false
+Name=okular
+GenericName=Document Viewer
+Exec=okular %U %i -caption "%c"
+Icon=okular
+Type=Application
+InitialPreference=7
+Categories=Qt;KDE;Graphics;Viewer;
+NoDisplay=true

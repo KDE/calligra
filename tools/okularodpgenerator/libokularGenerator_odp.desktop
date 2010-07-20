@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=OpenDocument Presentation Document
+Comment=Odp for okular
+ServiceTypes=okular/Generator
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;
+X-KDE-Library=okularGenerator_odp
+X-KDE-Priority=1
+X-KDE-okularAPIVersion=1
+X-KDE-okularHasInternalSettings=false
