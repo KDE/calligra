@@ -190,7 +190,8 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         break;
     case KoTextAnchor::VerticalOffset: {
         qreal y;
-        if (block.length() == 2 && m_anchor->horizontalAlignment()!=KoTextAnchor::HorizontalOffset) {
+        if (block.length() == 2 && !m_anchor->isPositionedInline()) {
+            //m_anchor->horizontalAlignment()!=KoTextAnchor::HorizontalOffset) {
             // the anchor is the only thing in the block, and not inline
             y = state->y();
         } else if (layout->lineCount()) {
