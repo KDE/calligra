@@ -107,7 +107,9 @@ bool KPrShapeAnimation::visible()
 
 void KPrShapeAnimation::deactivate()
 {
-    m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
+    if (m_textBlockData) {
+        m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
+    }
 }
 
 // we could have a loader that would put the data into the correct pos
