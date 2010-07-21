@@ -268,7 +268,6 @@ void KWTextDocumentLayout::layout()
             void tryFit() {
                 const qreal leftIndent = m_state->x();
                 const qreal width = m_state->width();
-                const qreal rightIndent = m_state->shape->size().width() - width - leftIndent;
                 QRectF rect(leftIndent, m_state->y(), width, 1.);
                 line.setLineWidth(rect.width());
                 if (rect.width() <= 0. || line.textLength() == 0) {
@@ -294,9 +293,6 @@ void KWTextDocumentLayout::layout()
                             x += leftIndent;
                             effectiveLineWidth -= leftIndent;
                         }
-                        if (leftIndent + width > rect.right()) // limit moved the right edge, keep the indent.
-                            effectiveLineWidth = rect.width() - rightIndent;
-
                         line.setLineWidth(effectiveLineWidth);
                         line.setPosition(QPointF(x, rect.y()));
                     }
