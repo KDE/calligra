@@ -1505,10 +1505,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         const QString elementContents = QString::fromUtf8(listBuf.buffer(),
                                                           listBuf.buffer().size());
         m_currentListStyle.addChildElement("list-style-properties", elementContents);
-
-        delete m_currentListStyleProperties;
-        m_currentListStyleProperties = 0;
     }
+
+    delete m_currentListStyleProperties;
+    m_currentListStyleProperties = 0;
 
 #ifdef __GNUC__
 #warning implement read_DrawingML_pPr
