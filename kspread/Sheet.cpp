@@ -1648,7 +1648,9 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
                     kDebug(36003) << " table-row found :index row after" << rowIndex;
-                } else if (rowElement.localName() == "shapes") {
+                } // the evaluation of the elements is done in during data reading so this does not seam
+                  // to have any use, therefore removed
+                /*else if (rowElement.localName() == "shapes") {
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
@@ -1663,7 +1665,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                         addShape(shape);
                         dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(false);
                     }
-                }
+                }*/
             }
 
             // don't need it anymore

@@ -93,6 +93,7 @@
 #include "Util.h"
 #include "View.h"
 #include "SheetAccessModel.h"
+#include "BindingModel.h"
 
 // chart shape
 #include "plugins/chartshape/ChartShape.h"
@@ -123,6 +124,8 @@ public:
     SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
 };
+
+Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
 /*****************************************************************************
  *
@@ -506,6 +509,21 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
         loadOdfSettings(odfStore.settingsDoc());
     }
     initConfig();
+    
+    //update plugins that rely on bindings, as loading order can mess up the data of the plugins
+    SheetAccessModel* sheetModel = sheetAccessModel();
+    QList< Sheet* > sheets = map()->sheetList();    
+    Q_FOREACH( Sheet* sheet, sheets ){
+        // This region contains the entire sheet
+        const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
+        QModelIndex index = sheetModel->index( 0, map()->indexOf( sheet ) );
+          QVariant bindingModelValue = sheetModel->data( index , Qt::DisplayRole );
+          BindingModel* curBindingModel = dynamic_cast< BindingModel* >( qVariantValue< QPointer< QAbstractItemModel > >( bindingModelValue ).data() );
+          if ( curBindingModel ){
+              curBindingModel->emitDataChanged( region );
+          }
+    }
+    
     emit sigProgress(-1);
 
     //display loading time
