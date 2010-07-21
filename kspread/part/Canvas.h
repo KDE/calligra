@@ -40,12 +40,7 @@
 #include "kspread_export.h"
 
 #include "Global.h"
-
-// Width of row header and height of column headers.  These are not
-// part of the styles.
-// FIXME: Rename to ROWHEADER_WIDTH and COLHEADER_HEIGHT?
-#define YBORDER_WIDTH  35
-#define XBORDER_HEIGHT 20
+#include "CanvasBase.h"
 
 class QDragLeaveEvent;
 class QDragMoveEvent;
@@ -76,7 +71,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class KSPREAD_EXPORT Canvas : public QWidget, public KoCanvasBase
+class KSPREAD_EXPORT Canvas : public QWidget, public CanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;
@@ -89,24 +84,6 @@ public:
     explicit Canvas(View* view);
     ~Canvas();
 
-    View* view() const;
-    Doc* doc() const;
-
-    // KoCanvasBase interface methods.
-    /// reimplemented method from KoCanvasBase
-    virtual void gridSize(qreal* horizontal, qreal* vertical) const;
-    /// reimplemented method from KoCanvasBase
-    virtual bool snapToGrid() const;
-    /// reimplemented method from KoCanvasBase
-    virtual void addCommand(QUndoCommand* command);
-    /// reimplemented method from KoCanvasBase
-    virtual KoShapeManager* shapeManager() const;
-    /// reimplemented method from KoCanvasBase
-    virtual void updateCanvas(const QRectF& rc);
-    /// reimplemented method from KoCanvasBase
-    virtual KoToolProxy* toolProxy() const;
-    /// reimplemented method from KoCanvasBase
-    virtual const KoViewConverter* viewConverter() const;
     /// reimplemented method from KoCanvasBase
     virtual QWidget* canvasWidget() {
         return this;
@@ -114,107 +91,81 @@ public:
     virtual const QWidget* canvasWidget() const {
         return this;
     }
-    /// reimplemented method from KoCanvasBase
-    virtual KoUnit unit() const;
-    /// reimplemented method from KoCanvasBase
-    virtual void updateInputMethodInfo();
-
-    /**
-     * @return the usual selection of cells
-     */
-    KSpread::Selection* selection() const;
-
-    QPointF offset() const;
-
-    /**
-     * @return the width of the columns before the current screen
-     */
-    double xOffset() const;
-
-    /**
-     * @return the height of the rows before the current screen
-     */
-    double yOffset() const;
-
-    /**
-     * @return a rect indicating which cell range is currently visible onscreen
-     */
-    QRect visibleCells() const;
-
-    /**
-     * @return a pointer to the active sheet
-     */
-    Sheet* activeSheet() const;
-
-    /**
-     * Validates the selected cell.
-     */
-    void validateSelection();
 
 public Q_SLOTS:
-    void setDocumentOffset(const QPoint& offset);
-    void setDocumentSize(const QSizeF& size);
+    void setDocumentOffset(const QPoint& offset) {
+        CanvasBase::setDocumentOffset(offset);
+    }
+    void setDocumentSize(const QSizeF& size) {
+        CanvasBase::setDocumentSize(size);
+    }
 
 Q_SIGNALS:
-    void documentSizeChanged(const QSize&);
+    virtual void documentSizeChanged(const QSize&);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent* _ev);
+    virtual void keyPressEvent(QKeyEvent* _ev) {
+        CanvasBase::keyPressed(_ev);
+    }
     virtual void paintEvent(QPaintEvent* _ev);
     virtual void mousePressEvent(QMouseEvent* _ev);
     virtual void mouseReleaseEvent(QMouseEvent* _ev);
     virtual void mouseMoveEvent(QMouseEvent* _ev);
     virtual void mouseDoubleClickEvent(QMouseEvent*);
-    virtual void focusInEvent(QFocusEvent*);
-    virtual void focusOutEvent(QFocusEvent*);
+    virtual void focusInEvent(QFocusEvent* _ev) {
+        CanvasBase::focusIn(_ev);
+        QWidget::focusInEvent(_ev);
+    }
     virtual void dragEnterEvent(QDragEnterEvent*);
     virtual void dragMoveEvent(QDragMoveEvent*);
     virtual void dragLeaveEvent(QDragLeaveEvent*);
     virtual void dropEvent(QDropEvent*);
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const {
+        return CanvasBase::inputMethodQuery(query);
+    }
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    virtual void inputMethodEvent(QInputMethodEvent *event) {
+        CanvasBase::inputMethodEvent(event);
+    }
     /// reimplemented method from superclass
-    virtual void tabletEvent(QTabletEvent *e);
+    virtual void tabletEvent(QTabletEvent *e) {
+        CanvasBase::tabletEvent(e);
+    }
 
+public:
+    virtual void update() {
+        QWidget::update();
+    }
+    virtual void update(const QRectF& rect) {
+        QWidget::update(rect.toRect());
+    }
+    virtual Qt::LayoutDirection layoutDirection() const {
+        return QWidget::layoutDirection();
+    }
+    virtual QRectF rect() const {
+        return QWidget::rect();
+    }
+    virtual QSizeF size() const {
+        return QWidget::size();
+    }
+    virtual QPoint mapToGlobal(const QPointF& point) const {
+        return QWidget::mapToGlobal(point.toPoint());
+    }
+    virtual void updateMicroFocus() {
+        QWidget::updateMicroFocus();
+    }
+    
 private:
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
-    ColumnHeader* columnHeader() const;
-    RowHeader* rowHeader() const;
-    QScrollBar* horzScrollBar() const;
-    QScrollBar* vertScrollBar() const;
-
-    /**
-     * Returns the range of cells which appear in the specified area of the Canvas widget
-     * For example, viewToCellCoordinates( QRect(0,0,width(),height()) ) returns a range containing all visible cells
-     *
-     * @param area The area (in pixels) on the Canvas widget
-     */
-    QRect viewToCellCoordinates(const QRectF& area) const;
-
-    /**
-     * Calculates the region in view coordinates occupied by a range of cells on
-     * the currently active sheet. Respects the scrolling offset and the layout
-     * direction
-     *
-     * \param cellRange The range of cells on the current sheet.
-     */
-    QRectF cellCoordinatesToView(const QRect& cellRange) const;
-
-private:
-    /**
-     * Determines the cell at @p point and shows its tooltip.
-     * @param point the position for which a tooltip is requested
-     */
-    void showToolTip(const QPoint& point);
+    virtual void setVertScrollBarPos(qreal pos);
+    virtual void setHorizScrollBarPos(qreal pos);
+    
+    virtual bool eventFilter(QObject *o, QEvent *e) {
+        return CanvasBase::eventFilter(o, e);
+    }
 
 private:
     Q_DISABLE_COPY(Canvas)
-
-    class Private;
-    Private * const d;
 };
 
 } // namespace KSpread

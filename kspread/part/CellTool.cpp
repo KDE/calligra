@@ -83,14 +83,14 @@ using namespace KSpread;
 class CellTool::Private
 {
 public:
-    Canvas* canvas;
+    CanvasBase* canvas;
 };
 
 CellTool::CellTool(KoCanvasBase* canvas)
         : CellToolBase(canvas)
         , d(new Private)
 {
-    d->canvas = static_cast<Canvas*>(canvas);
+    d->canvas = static_cast<CanvasBase*>(canvas);
 
     KAction* action = 0;
 

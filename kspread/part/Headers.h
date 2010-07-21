@@ -26,21 +26,21 @@ class QLabel;
 class QRubberBand;
 
 class KoCanvasBase;
+class KoPointerEvent;
 
 namespace KSpread
 {
-class Canvas;
+class CanvasBase;
 class Selection;
 class View;
 
 /**
- * The widget above the cells showing the column headers.
+ * Base class for the widget above the cells showing the column headers.
  */
-class ColumnHeader : public QWidget
+class ColumnHeader
 {
-    Q_OBJECT
 public:
-    ColumnHeader(QWidget *_parent, Canvas *_canvas, View *_view);
+    ColumnHeader(CanvasBase *_canvas, View *_view);
     virtual ~ColumnHeader();
 
     int markerColumn() const {
@@ -48,33 +48,37 @@ public:
     }
     void equalizeColumn(double resize);
 
-    void updateColumns(int from, int to);
+    virtual void updateColumns(int from, int to) = 0;
+    virtual QSizeF size() const = 0;
+    qreal width() const { return size().width(); }
+    qreal height() const { return size().height(); }
+    virtual void setCursor(const QCursor& cursor) = 0;
+    virtual void scroll(qreal dx, qreal dy) = 0;
+    virtual QPalette palette() const = 0;
+    virtual void update() = 0;
+protected:
+    void paint(QPainter* painter, const QRectF& painterRect);
+    void mousePress(KoPointerEvent* _ev);
+    void mouseRelease(KoPointerEvent* _ev);
+    void mouseDoubleClick(KoPointerEvent* _ev);
+    void mouseMove(KoPointerEvent* _ev);
+    void wheel(KoPointerEvent* _ev);
+    void focusOut(QFocusEvent* ev);
+    void resize(const QSizeF& size, const QSizeF& oldSize);
+    virtual void paintSizeIndicator(int mouseX) = 0;
+    virtual void removeSizeIndicator() = 0;
 
-private slots:
-    void slotAutoScroll(const QPoint& distance);
+    void drawText(QPainter* painter, const QFont& font, const QPointF& location, const QString& text, double width) const;
+
+    
+    void doToolChanged(const QString& toolId);
 
 protected:
-    virtual void paintEvent(QPaintEvent* _ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent* _ev);
-    virtual void mouseMoveEvent(QMouseEvent* _ev);
-    virtual void wheelEvent(QWheelEvent*);
-    virtual void focusOutEvent(QFocusEvent* ev);
-    virtual void resizeEvent(QResizeEvent * _ev);
-    void paintSizeIndicator(int mouseX);
-
-    void drawText(QPainter& painter, const QFont& font, const QPointF& location, const QString& text, double width) const;
-
-private Q_SLOTS:
-    void toolChanged(const QString& toolId);
-
-private:
-    Canvas *m_pCanvas;
+    CanvasBase *m_pCanvas;
     View *m_pView;
 
     /**
-     * Flag that inidicates whether the user wants to mark columns.
+     * Flag that indicates whether the user wants to mark columns.
      * The user may mark columns by dragging the mouse around in th XBorder widget.
      * If he is doing that right now, this flag is true. Mention that the user may
      * also resize columns by dragging the mouse. This case is not covered by this flag.
@@ -118,48 +122,49 @@ private:
      */
     bool m_bMousePressed;
 
-    QRubberBand* m_rubberband;
     bool m_cellToolIsActive;
 };
 
 
 
 /**
- * The widget left to the cells showing the row headers.
+ * Base class for the widget left to the cells showing the row headers.
  */
-class RowHeader : public QWidget
+class RowHeader
 {
-    Q_OBJECT
 public:
-    RowHeader(QWidget *_parent, Canvas *_canvas, View *_view);
+    RowHeader(CanvasBase *_canvas, View *_view);
     virtual ~RowHeader();
 
     int markerRow() const {
         return  m_iSelectionAnchor;
     }
     void equalizeRow(double resize);
-    void updateRows(int from, int to);
-
-private slots:
-    void slotAutoScroll(const QPoint& distance);
-
+    
+    virtual void updateRows(int from, int to) = 0;
+    virtual QSizeF size() const = 0;
+    qreal width() const { return size().width(); }
+    qreal height() const { return size().height(); }
+    virtual void setCursor(const QCursor& cursor) = 0;
+    virtual void scroll(qreal dx, qreal dy) = 0;
+    virtual QPalette palette() const = 0;
+    virtual void update() = 0;
 protected:
-    virtual void paintEvent(QPaintEvent* _ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QMouseEvent* _ev);
-    virtual void mouseMoveEvent(QMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent* _ev);
-    virtual void wheelEvent(QWheelEvent*);
-    virtual void focusOutEvent(QFocusEvent* ev);
-    void paintSizeIndicator(int mouseY);
+    void paint(QPainter* painter, const QRectF& painterRect);
+    void mousePress(KoPointerEvent* _ev);
+    void mouseRelease(KoPointerEvent* _ev);
+    void mouseDoubleClick(KoPointerEvent* _ev);
+    void mouseMove(KoPointerEvent* _ev);
+    void wheel(KoPointerEvent* _ev);
+    void focusOut(QFocusEvent* ev);
+    virtual void paintSizeIndicator(int mouseX) = 0;
+    virtual void removeSizeIndicator() = 0;
 
-    void drawText(QPainter& painter, const QFont& font, const QPointF& location, const QString& text) const;
+    void drawText(QPainter* painter, const QFont& font, const QPointF& location, const QString& text) const;
 
-private Q_SLOTS:
-    void toolChanged(const QString& toolId);
-
-private:
-    Canvas *m_pCanvas;
+    void doToolChanged(const QString& toolId);
+protected:
+    CanvasBase *m_pCanvas;
     View *m_pView;
 
     bool m_bSelection;
@@ -177,36 +182,34 @@ private:
      */
     bool m_bMousePressed;
 
-    QRubberBand* m_rubberband;
     bool m_cellToolIsActive;
 };
 
 
 
 /**
- * The widget in the top left corner of the canvas,
+ * Base class for the widget in the top left corner of the canvas,
  * responsible for selecting all cells in a sheet.
  */
-class SelectAllButton : public QWidget
+class SelectAllButton
 {
-    Q_OBJECT
 public:
-    explicit SelectAllButton(KoCanvasBase* canvasBase, Selection* selection);
+    explicit SelectAllButton(CanvasBase* canvasBase, Selection* selection);
     virtual ~SelectAllButton();
 
+    virtual QPalette palette() const = 0;
+    virtual void update() = 0;
 protected:
-    virtual void paintEvent(QPaintEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void wheelEvent(QWheelEvent*);
-
-private Q_SLOTS:
-    void toolChanged(const QString& toolId);
+    virtual void paint(QPainter* painter, const QRectF& painterRect);
+    virtual void mousePress(KoPointerEvent* event);
+    virtual void mouseRelease(KoPointerEvent* event);
+    virtual void wheel(KoPointerEvent* event);
+    void doToolChanged(const QString& toolId);
 
 private:
-    KoCanvasBase* m_canvasBase;
+    CanvasBase* m_canvasBase;
     Selection* m_selection;
-    bool   m_mousePressed;
+    bool m_mousePressed;
     bool m_cellToolIsActive;
 };
 
