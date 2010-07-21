@@ -68,6 +68,7 @@ public:
     ~PptxSlideProperties();
     //! Shapes ordered by position
     QList<PptxShapeProperties*> shapes;
+    //! Shapes map addressed by type
     QMap<QString, PptxShapeProperties*> shapesMap;
 
     void clear();
@@ -145,9 +146,6 @@ public:
     PptxSlideMasterTextStyle bodyStyle;
     PptxSlideMasterTextStyle otherStyle;
     
-    //! Shapes map addressed by type
-    QMap<QString, PptxShapeProperties*> shapes;
-
 private:
     QMap<QByteArray, QByteArray> m_drawingPageProperties;
 };
