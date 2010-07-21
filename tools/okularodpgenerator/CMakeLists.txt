@@ -1,4 +1,3 @@
-macro_optional_find_package(Okular)
 
 include_directories( ${OKULAR_INCLUDE_DIR} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES})
 

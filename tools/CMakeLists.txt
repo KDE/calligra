@@ -4,7 +4,13 @@ macro_optional_add_subdirectory( kthesaurus )
 macro_optional_add_subdirectory( quickprint )
 macro_optional_add_subdirectory( slidecompare )
 
-#add_subdirectory( okularodpgenerator )
+macro_optional_find_package(Okular)
+
+if(OKULAR_FOUND)
+    add_subdirectory( okularodpgenerator )
+else(OKULAR_FOUND)
+    message(STATUS "Did NOT find Okular libraries, Okular generator will not be build")
+endif(OKULAR_FOUND)
 
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)
