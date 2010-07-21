@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenDocument Presentation Document
+Name[x-test]=xxOpenDocument Presentation Documentxx
 Comment=Odp for okular
+Comment[x-test]=xxOdp for okularxx
 ServiceTypes=okular/Generator
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;
 X-KDE-Library=okularGenerator_odp
