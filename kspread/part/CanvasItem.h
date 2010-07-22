@@ -136,8 +136,30 @@ private:
         return CanvasBase::eventFilter(o, e);
     }
 
+public:
+    virtual Selection* selection() const;
+    virtual Sheet* activeSheet() const;
+    virtual const KoZoomHandler* zoomHandler() const;
+    virtual SheetView* sheetView(const Sheet* sheet) const;
+    
+    virtual bool isViewLoading() const { return false; }
+    virtual void enableAutoScroll() {}
+    virtual void disableAutoScroll() {}
+    virtual void setVertScrollBarPos(qreal) {}
+    virtual void setHorizScrollBarPos(qreal) {}
+
+    virtual void update() { QGraphicsWidget::update(); }
+    virtual void update(const QRectF& rect) { QGraphicsWidget::update(rect); }
+    virtual Qt::LayoutDirection layoutDirection() const { return QGraphicsWidget::layoutDirection(); }
+    virtual QRectF rect() const { return QGraphicsWidget::rect(); }
+    virtual QSizeF size() const { return QGraphicsWidget::size(); }
+    virtual QPoint mapToGlobal(const QPointF& point) const { return QGraphicsWidget::mapToScene(point).toPoint(); /* TODO */ }
+    virtual void updateMicroFocus() { /*QGraphicsWidget::updateMicroFocus();*/ }
 private:
     Q_DISABLE_COPY(CanvasItem)
+
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread

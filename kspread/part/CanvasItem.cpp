@@ -124,10 +124,18 @@
 
 using namespace KSpread;
 
+class CanvasItem::Private
+{
+public:
+    Selection* selection;
+    KoZoomHandler* zoomHandler;
+    QHash<const Sheet*, SheetView*> sheetViews;
+};
 
 CanvasItem::CanvasItem(Doc *doc)
         : QGraphicsWidget(0)
         , CanvasBase(doc)
+        , d(new Private)
 {
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_StaticContents);
@@ -141,10 +149,17 @@ CanvasItem::CanvasItem(Doc *doc)
     installEventFilter(this);   // for TAB key processing, otherwise focus change
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
+
+    d->selection = new Selection(this);
+    d->zoomHandler = new KoZoomHandler();
 }
 
 CanvasItem::~CanvasItem()
 {
+    delete d->zoomHandler;
+    delete d->selection;
+    qDeleteAll(d->sheetViews);
+    delete d;
 }
 
 void CanvasItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
@@ -204,6 +219,38 @@ void CanvasItem::dropEvent(QGraphicsSceneDragDropEvent *event)
     } else {
         event->ignore();
     }
+}
+
+Selection* CanvasItem::selection() const
+{
+    return d->selection;
+}
+
+Sheet* CanvasItem::activeSheet() const
+{
+    //TODO real implementation
+    return doc()->map()->sheet(0);
+}
+
+const KoZoomHandler* CanvasItem::zoomHandler() const
+{
+    return d->zoomHandler;
+}
+
+SheetView* CanvasItem::sheetView(const Sheet* sheet) const
+{
+    if (!d->sheetViews.contains(sheet)) {
+        kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
+        d->sheetViews.insert(sheet, new SheetView(sheet));
+        d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
+        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
+                this, SLOT(setDocumentSize(const QSizeF&)));
+        //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
+                //d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        connect(sheet, SIGNAL(visibleSizeChanged()),
+                d->sheetViews[ sheet ], SLOT(updateAccessedCellRange()));
+    }
+    return d->sheetViews[ sheet ];
 }
 
 #include "CanvasItem.moc"
