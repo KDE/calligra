@@ -190,6 +190,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //    KoXmlWriter *origBody = body;
 //    body = new KoXmlWriter(&drawFrameBuf);
 
+    // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     while (!atEnd()) {
@@ -207,6 +208,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     body = drawFrameBuf.originalWriter();
 //    delete body;
 //    body = origBody;
+    // The logic for place holders have to be significantly enhanced.
     if (!m_isPlaceHolder) {
         body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
@@ -2321,6 +2323,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
  - majorFont (§20.1.4.1.24)
  - minorFont (§20.1.4.1.25)
  - [done] rPr (§21.1.2.3.9)
+
  No child elements.
 
  Attributes:
@@ -2534,6 +2537,93 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller calle
     READ_EPILOGUE
 }
 
+/*
+This element specifies a color bound to a user's theme. As with all
+elements which define a color, it is possible to apply a list of color
+transforms to the base color defined.
+
+Parent Elements
+  - accent1 (§20.1.4.1.1)
+  - accent2 (§20.1.4.1.2)
+  - accent3 (§20.1.4.1.3)
+  - accent4 (§20.1.4.1.4)
+  - accent5 (§20.1.4.1.5)
+  - accent6 (§20.1.4.1.6)
+  - alphaInv (§20.1.8.4)
+  - bgClr (§20.1.8.10)
+  - bgRef (§19.3.1.3)
+  - buClr (§21.1.2.4.4)
+  - clrFrom (§20.1.8.17)
+  - clrMru (§19.2.1.4)
+  - clrRepl (§20.1.8.18)
+  - clrTo (§20.1.8.19)
+  - clrVal (§19.5.27)
+  - contourClr (§20.1.5.6)
+  - custClr (§20.1.4.1.8)
+  - dk1 (§20.1.4.1.9)
+  - dk2 (§20.1.4.1.10)
+  - duotone (§20.1.8.23)
+  - effectClrLst (§21.4.4.7)
+  - effectRef (§20.1.4.2.8)
+  - extrusionClr (§20.1.5.7)
+  - fgClr (§20.1.8.27)
+  - fillClrLst (§21.4.4.8)
+  - fillRef (§20.1.4.2.10)
+  - folHlink (§20.1.4.1.15)
+  - fontRef (§20.1.4.1.17)
+  - from (§19.5.43)
+  - glow (§20.1.8.32)
+  - gs (§20.1.8.36)
+  - highlight (§21.1.2.3.4)
+  - hlink (§20.1.4.1.19)
+  - innerShdw (§20.1.8.40)
+  - linClrLst (§21.4.4.9)
+  - lnRef (§20.1.4.2.19)
+  - lt1 (§20.1.4.1.22)
+  - lt2 (§20.1.4.1.23)
+  - outerShdw (§20.1.8.45)
+  - penClr (§19.2.1.23)
+  - prstShdw (§20.1.8.49)
+  - [done] solidFill (§20.1.8.54)
+  - tcTxStyle (§20.1.4.2.30)
+  - to (§19.5.90)
+  - txEffectClrLst (§21.4.4.12)
+  - txFillClrLst (§21.4.4.13)
+  - txLinClrLst (§21.4.4.14)
+
+Child elements:
+  - alpha (Alpha) §20.1.2.3.1
+  - alphaMod (Alpha Modulation) §20.1.2.3.2
+  - alphaOff (Alpha Offset) §20.1.2.3.3
+  - blue (Blue) §20.1.2.3.4
+  - blueMod (Blue Modification) §20.1.2.3.5
+  - blueOff (Blue Offset) §20.1.2.3.6
+  - comp (Complement) §20.1.2.3.7
+  - gamma (Gamma) §20.1.2.3.8
+  - gray (Gray) §20.1.2.3.9
+  - green (Green) §20.1.2.3.10
+  - greenMod (Green Modification) §20.1.2.3.11
+  - greenOff (Green Offset) §20.1.2.3.12
+  - hue (Hue) §20.1.2.3.14
+  - hueMod (Hue Modulate) §20.1.2.3.15
+  - hueOff (Hue Offset) §20.1.2.3.16
+  - inv (Inverse) §20.1.2.3.17
+  - invGamma (Inverse Gamma) §20.1.2.3.18
+  - lum (Luminance) §20.1.2.3.19
+  - [done] lumMod (Luminance Modulation) §20.1.2.3.20
+  - [done] lumOff (Luminance Offset) §20.1.2.3.21
+  - red (Red) §20.1.2.3.23
+  - redMod (Red Modulation) §20.1.2.3.24
+  - redOff (Red Offset) §20.1.2.3.25
+  - sat (Saturation) §20.1.2.3.26
+  - satMod (Saturation Modulation) §20.1.2.3.27
+  - satOff (Saturation Offset) §20.1.2.3.28
+  - shade (Shade) §20.1.2.3.31
+  - tint (Tint) §20.1.2.3.34
+
+Attributes
+  - val (Value)    Specifies the desired scheme.
+ */
 #undef CURRENT_EL
 #define CURRENT_EL schemeClr
 //! @todo support all child elements
@@ -2543,7 +2633,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
-    // get color from theme
+    // Get color from theme.
     if (m_context->themes->isEmpty())
         return KoFilter::WrongFormat;
 //! @todo find proper theme, not just any
