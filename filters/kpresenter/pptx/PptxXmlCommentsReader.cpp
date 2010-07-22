@@ -79,7 +79,7 @@ void PptxXmlCommentsReader::saveOdfComments()
 
         QPoint position = d->positions.value(i);
         //FIXME according to the documentation these measurements are EMUs
-        //but I still get wrong values and that's why I multiply by 2000
+        //but I still get wrong values and that's why I multiply by 1500
         const int fixmeFactor = 1500;
         body->addAttribute("svg:x", EMU_TO_CM_STRING(position.x()*fixmeFactor));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(position.y()*fixmeFactor));
