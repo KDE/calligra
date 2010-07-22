@@ -45,14 +45,10 @@
 
 // Qt
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
 #include <QPainter>
-#include <QRubberBand>
-#include <QStyle>
 #include <QTextLayout>
 #include <QToolTip>
-#include <QScrollBar>
 
 // KDE
 #include <klocale.h>
@@ -67,8 +63,7 @@
 #include <KoPointerEvent.h>
 
 // KSpread
-#include "Canvas.h"
-#include "Canvas_p.h"
+#include "CanvasBase.h"
 #include "Cell.h"
 #include "Doc.h"
 #include "kspread_limits.h"

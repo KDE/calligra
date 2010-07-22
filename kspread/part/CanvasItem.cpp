@@ -125,9 +125,9 @@
 using namespace KSpread;
 
 
-CanvasItem::CanvasItem(View *view)
+CanvasItem::CanvasItem(Doc *doc)
         : QGraphicsWidget(0)
-        , CanvasBase(view)
+        , CanvasBase(doc)
 {
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_StaticContents);

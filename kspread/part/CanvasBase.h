@@ -33,7 +33,6 @@
 #define KSPREAD_CANVASBASE
 
 #include <QList>
-#include <QWidget>
 
 #include <KoCanvasBase.h>
 
@@ -47,33 +46,21 @@
 #define YBORDER_WIDTH  35
 #define XBORDER_HEIGHT 20
 
-class QDragLeaveEvent;
-class QDragMoveEvent;
-class QDropEvent;
-class QEvent;
 class QFocusEvent;
 class QKeyEvent;
-class QMouseEvent;
 class QMimeData;
 class QPainter;
-class QPaintEvent;
-class QPen;
-class QResizeEvent;
-class QScrollBar;
 class KoPointerEvent;
 
 namespace KSpread
 {
-class Cell;
-class CellEditor;
 class Canvas;
 class ColumnHeader;
 class Doc;
 class Sheet;
 class RowHeader;
 class Selection;
-class View;
-
+class SheetView;
 
 /**
  * The scrollable area showing the cells.
@@ -86,10 +73,9 @@ class KSPREAD_EXPORT CanvasBase : public KoCanvasBase
     friend class CellTool;
     friend class Canvas;
 public:
-    explicit CanvasBase(View* view);
+    explicit CanvasBase(Doc* doc);
     ~CanvasBase();
 
-    View* view() const;
     Doc* doc() const;
 
     // KoCanvasBase interface methods.
@@ -105,8 +91,6 @@ public:
     virtual void updateCanvas(const QRectF& rc);
     /// reimplemented method from KoCanvasBase
     virtual KoToolProxy* toolProxy() const;
-    /// reimplemented method from KoCanvasBase
-    virtual const KoViewConverter* viewConverter() const;
 
     /// reimplemented method from KoCanvasBase
     virtual KoUnit unit() const;
@@ -116,7 +100,7 @@ public:
     /**
      * @return the usual selection of cells
      */
-    KSpread::Selection* selection() const;
+    virtual KSpread::Selection* selection() const = 0;
 
     QPointF offset() const;
 
@@ -138,7 +122,7 @@ public:
     /**
      * @return a pointer to the active sheet
      */
-    Sheet* activeSheet() const;
+    virtual Sheet* activeSheet() const = 0;
 
     /**
      * Validates the selected cell.
@@ -168,8 +152,8 @@ protected:
     void tabletEvent(QTabletEvent *e);
 
     bool eventFilter(QObject *o, QEvent *e);
-    ColumnHeader* columnHeader() const;
-    RowHeader* rowHeader() const;
+    virtual ColumnHeader* columnHeader() const { return 0; };
+    virtual RowHeader* rowHeader() const { return 0; };
 
 public:
     virtual void update() = 0;
@@ -182,6 +166,10 @@ public:
     qreal height() const { return size().height(); }
     virtual QPoint mapToGlobal(const QPointF& point) const = 0;
     virtual void updateMicroFocus() = 0;
+
+    virtual const KoViewConverter* viewConverter() const = 0;
+    virtual bool isViewLoading() const = 0; // not sure if is needed
+    virtual SheetView* sheetView(const Sheet* sheet) const = 0;
 private:
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget

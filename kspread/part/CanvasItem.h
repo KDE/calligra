@@ -81,11 +81,8 @@ class KSPREAD_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
     Q_OBJECT
 
 public:
-    explicit CanvasItem(View* view);
+    explicit CanvasItem(Doc* doc);
     ~CanvasItem();
-
-    View* view() const;
-    Doc* doc() const;
 
     virtual QWidget* canvasWidget() {
         return 0;

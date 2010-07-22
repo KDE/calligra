@@ -72,7 +72,6 @@
 #include <QScrollBar>
 #include <QTextStream>
 #include <QToolTip>
-#include <QWidget>
 
 // KDE
 #include <kcursor.h>
@@ -106,7 +105,6 @@
 #include "Sheet.h"
 #include "Util.h"
 #include "Validity.h"
-#include "View.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -129,14 +127,14 @@ using namespace KSpread;
  *
  ****************************************************************/
 
-CanvasBase::CanvasBase(View *view)
+CanvasBase::CanvasBase(Doc* doc)
         : KoCanvasBase(0)
         , d(new Private)
 {
     d->validationInfo = 0;
     d->offset = QPointF(0.0, 0.0);
-    d->view = view;
-
+    d->doc = doc;
+    
     // flake
     d->shapeManager = new KoShapeManager(this);
     d->toolProxy = new KoToolProxy(this);
@@ -150,14 +148,9 @@ CanvasBase::~CanvasBase()
     delete d;
 }
 
-View* CanvasBase::view() const
-{
-    return d->view;
-}
-
 Doc* CanvasBase::doc() const
 {
-    return d->view->doc();
+    return d->doc;
 }
 
 void CanvasBase::gridSize(qreal* horizontal, qreal* vertical) const
@@ -186,11 +179,6 @@ void CanvasBase::updateCanvas(const QRectF& rc)
     QRectF clipRect(viewConverter()->documentToView(rc.translated(-offset())));
     clipRect.adjust(-2, -2, 2, 2);   // Resize to fit anti-aliasing
     update(clipRect);
-}
-
-const KoViewConverter* CanvasBase::viewConverter() const
-{
-    return view()->zoomHandler();
 }
 
 KoUnit CanvasBase::unit() const
@@ -247,26 +235,6 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
         break;
     }
     return false;
-}
-
-Selection* CanvasBase::selection() const
-{
-    return d->view->selection();
-}
-
-ColumnHeader* CanvasBase::columnHeader() const
-{
-    return d->view->columnHeader();
-}
-
-RowHeader* CanvasBase::rowHeader() const
-{
-    return d->view->rowHeader();
-}
-
-Sheet* CanvasBase::activeSheet() const
-{
-    return d->view->activeSheet();
 }
 
 void CanvasBase::validateSelection()
@@ -330,8 +298,10 @@ void CanvasBase::setDocumentOffset(const QPoint& offset)
     const QPoint delta = offset - viewConverter()->documentToView(d->offset).toPoint();
     d->offset = viewConverter()->viewToDocument(offset);
 
-    columnHeader()->scroll(delta.x(), 0);
-    rowHeader()->scroll(0, delta.y());
+    ColumnHeader* ch = columnHeader();
+    if (ch) ch->scroll(delta.x(), 0);
+    RowHeader* rh = rowHeader();
+    if (rh) rh->scroll(0, delta.y());
 }
 
 void CanvasBase::setDocumentSize(const QSizeF& size)
@@ -481,7 +451,7 @@ void CanvasBase::inputMethodEvent(QInputMethodEvent *event)
 
 void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
 {
-    if (d->view->doc()->map()->isLoading() || d->view->isLoading())
+    if (doc()->map()->isLoading() || isViewLoading())
         return;
 
     register Sheet * const sheet = activeSheet();
@@ -510,8 +480,8 @@ void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
     // paint visible cells
     const QRect visibleRect = visibleCells();
     const QPointF topLeft(sheet->columnPosition(visibleRect.left()), sheet->rowPosition(visibleRect.top()));
-    view()->sheetView(sheet)->setPaintCellRange(visibleRect);
-    view()->sheetView(sheet)->paintCells(*painter, paintRect, topLeft);
+    sheetView(sheet)->setPaintCellRange(visibleRect);
+    sheetView(sheet)->paintCells(*painter, paintRect, topLeft);
 
     // flake
     painter->restore();
@@ -731,7 +701,7 @@ QRectF CanvasBase::cellCoordinatesToView(const QRect& cellRange) const
     // apply scrolling offset
     rect.translate(-xOffset(), -yOffset());
     // convert it to view coordinates
-    rect = d->view->zoomHandler()->documentToView(rect);
+    rect = viewConverter()->documentToView(rect);
     // apply layout direction
     if (sheet->layoutDirection() == Qt::RightToLeft) {
         const double left = rect.left();
@@ -750,24 +720,24 @@ void CanvasBase::showToolTip(const QPoint& p)
 
     // Over which cell is the mouse ?
     double ypos, xpos;
-    double dwidth = d->view->zoomHandler()->viewToDocumentX(width());
+    double dwidth = viewConverter()->viewToDocumentX(width());
     int col;
     if (sheet->layoutDirection() == Qt::RightToLeft)
-        col = sheet->leftColumn((dwidth - d->view->zoomHandler()->viewToDocumentX(p.x()) +
+        col = sheet->leftColumn((dwidth - viewConverter()->viewToDocumentX(p.x()) +
                                  xOffset()), xpos);
     else
-        col = sheet->leftColumn((d->view->zoomHandler()->viewToDocumentX(p.x()) +
+        col = sheet->leftColumn((viewConverter()->viewToDocumentX(p.x()) +
                                  xOffset()), xpos);
 
 
-    int row = sheet->topRow((d->view->zoomHandler()->viewToDocumentY(p.y()) +
+    int row = sheet->topRow((viewConverter()->viewToDocumentY(p.y()) +
                              yOffset()), ypos);
 
     Cell cell = Cell(sheet, col, row).masterCell();
-    CellView cellView = view()->sheetView(sheet)->cellView(cell.column(), cell.row());
+    CellView cellView = sheetView(sheet)->cellView(cell.column(), cell.row());
     if (cellView.isObscured()) {
         cell = Cell(sheet, cellView.obscuringCell());
-        cellView = view()->sheetView(sheet)->cellView(cellView.obscuringCell().x(), cellView.obscuringCell().y());
+        cellView = sheetView(sheet)->cellView(cellView.obscuringCell().x(), cellView.obscuringCell().y());
     }
 
     // displayed tool tip, which has the following priorities:

@@ -62,7 +62,6 @@
 
 #include "Cell.h"
 #include "Canvas.h"
-#include "Canvas_p.h"
 #include "Doc.h"
 #include "kspread_limits.h"
 #include "PrintSettings.h"
@@ -158,7 +157,7 @@ int CellTool::maxRow() const
 
 SheetView* CellTool::sheetView(const Sheet* sheet) const
 {
-    return d->canvas->view()->sheetView(sheet);
+    return d->canvas->sheetView(sheet);
 }
 
 void CellTool::definePrintRange()
@@ -166,7 +165,7 @@ void CellTool::definePrintRange()
     DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    d->canvas->view()->doc()->addCommand(command);
+    d->canvas->doc()->addCommand(command);
 }
 
 #include "CellTool.moc"

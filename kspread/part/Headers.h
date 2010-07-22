@@ -23,9 +23,6 @@
 #include <QWidget>
 
 class QLabel;
-class QRubberBand;
-
-class KoCanvasBase;
 class KoPointerEvent;
 
 namespace KSpread

@@ -84,6 +84,8 @@ public:
     explicit Canvas(View* view);
     ~Canvas();
 
+    View* view() const;
+    
     /// reimplemented method from KoCanvasBase
     virtual QWidget* canvasWidget() {
         return this;
@@ -92,6 +94,8 @@ public:
         return this;
     }
 
+    virtual Sheet* activeSheet() const;
+    virtual KSpread::Selection* selection() const;
 public Q_SLOTS:
     void setDocumentOffset(const QPoint& offset) {
         CanvasBase::setDocumentOffset(offset);
@@ -155,7 +159,13 @@ public:
     virtual void updateMicroFocus() {
         QWidget::updateMicroFocus();
     }
-    
+
+    virtual const KoViewConverter* viewConverter() const;
+    virtual bool isViewLoading() const;
+    virtual SheetView* sheetView(const Sheet* sheet) const;
+
+    virtual ColumnHeader* columnHeader() const;
+    virtual RowHeader* rowHeader() const;
 private:
     virtual void setVertScrollBarPos(qreal pos);
     virtual void setHorizScrollBarPos(qreal pos);
@@ -166,6 +176,9 @@ private:
 
 private:
     Q_DISABLE_COPY(Canvas)
+
+    class Private;
+    Private * const cd;
 };
 
 } // namespace KSpread

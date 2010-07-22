@@ -43,7 +43,7 @@
 
 // Local
 #include "Canvas.h"
-#include "Canvas_p.h"
+#include "CanvasBase_p.h"
 
 // std
 #include <assert.h>
@@ -123,6 +123,12 @@
 
 using namespace KSpread;
 
+class Canvas::Private
+{
+public:
+    View *view;
+};
+    
 /****************************************************************
  *
  * Canvas
@@ -131,8 +137,11 @@ using namespace KSpread;
 
 Canvas::Canvas(View *view)
         : QWidget(view)
-        , CanvasBase(view)
+        , CanvasBase(view->doc())
+        , cd(new Private)
 {
+    cd->view = view;
+
     setAttribute(Qt::WA_OpaquePaintEvent);
     setAttribute(Qt::WA_StaticContents);
     setBackgroundRole(QPalette::Base);
@@ -146,6 +155,11 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
+}
+
+View* Canvas::view() const
+{
+    return cd->view;
 }
 
 void Canvas::mousePressEvent(QMouseEvent* event)
@@ -177,9 +191,9 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         d->toolProxy->mousePressEvent(event, documentPosition);
 
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
-            d->view->unplugActionList("toolproxy_action_list");
-            d->view->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
-            QMenu* menu = dynamic_cast<QMenu*>(d->view->factory()->container("default_canvas_popup", d->view));
+            view()->unplugActionList("toolproxy_action_list");
+            view()->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
+            QMenu* menu = dynamic_cast<QMenu*>(view()->factory()->container("default_canvas_popup", view()));
             // Only show the menu, if there are items. The plugged action list counts as one action.
             if (menu && menu->actions().count() > 1) {
                 menu->exec(origEvent->globalPos());
@@ -312,5 +326,41 @@ void Canvas::setHorizScrollBarPos(qreal pos)
     if (pos < 0) pos = view()->horzScrollBar()->maximum() - pos;
     view()->horzScrollBar()->setValue((int)pos);
 }
-    
+
+const KoViewConverter* Canvas::viewConverter() const
+{
+    return view()->zoomHandler();
+}
+
+Sheet* Canvas::activeSheet() const
+{
+    return view()->activeSheet();
+}
+
+bool Canvas::isViewLoading() const
+{
+    return view()->isLoading();
+}
+
+SheetView* Canvas::sheetView(const Sheet* sheet) const
+{
+    return view()->sheetView(sheet);
+}
+
+KSpread::Selection* Canvas::selection() const
+{
+    return view()->selection();
+}
+
+ColumnHeader* Canvas::columnHeader() const
+{
+    return view()->columnHeader();
+}
+
+RowHeader* Canvas::rowHeader() const
+{
+    return view()->rowHeader();
+}
+
+
 #include "Canvas.moc"

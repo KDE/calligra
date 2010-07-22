@@ -68,7 +68,6 @@
 
 // KSpread
 #include "Canvas.h"
-#include "Canvas_p.h"
 #include "Cell.h"
 #include "Doc.h"
 #include "kspread_limits.h"
