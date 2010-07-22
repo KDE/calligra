@@ -78,8 +78,11 @@ void PptxXmlCommentsReader::saveOdfComments()
         body->startElement("officeooo:annotation"); //TODO replace with standarized element name
 
         QPoint position = d->positions.value(i);
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(position.x()));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(position.y()));
+        //FIXME according to the documentation these measurements are EMUs
+        //but I still get wrong values and that's why I multiply by 2000
+        const int fixmeFactor = 1500;
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(position.x()*fixmeFactor));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(position.y()*fixmeFactor));
 
         body->startElement("dc:creator");
         body->addTextSpan(d->authors.value(i));
