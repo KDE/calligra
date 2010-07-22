@@ -68,9 +68,9 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     while (page.isValid()) {
 #ifndef NDEBUG
         if (page.pageNumber() - pageOffset >= m_pageTops.count()) {
-            kWarning(32003) << "KWViewModeNormal ERROR; pagemanager has more pages than viewmode ("
-            << m_pageManager->pageCount() << ">" << m_pageTops.count()
-            << "). Make sure you add pages via the document!";
+            kWarning(32003) << "ERROR; pagemanager has more pages than viewmode ("
+                << m_pageManager->pageCount() << ">" << m_pageTops.count()
+                << "). Make sure you add pages via the document!";
             break;
         }
 #endif
