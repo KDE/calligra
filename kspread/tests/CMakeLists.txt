@@ -132,6 +132,12 @@ kde4_add_unit_test(TestSheet TESTNAME kspread-Sheet  ${TestSheet_SRCS})
 macro_add_compile_flags(TestSheet "-DKSPREAD_UNIT_TEST")
 target_link_libraries(TestSheet kspreadcommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestGraphicsView_SRCS TestGraphicsView.cpp)
+kde4_add_executable(TestGraphicsView TEST ${TestGraphicsView_SRCS})
+target_link_libraries(TestGraphicsView kspreadcommon)
+
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
