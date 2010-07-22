@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     QRect usedArea = canvas->activeSheet()->usedArea(true);
     QSizeF size(canvas->activeSheet()->columnPosition(usedArea.right()+3), canvas->activeSheet()->rowPosition(usedArea.bottom()+5));
     canvas->setDocumentSize(size);
-    qDebug() << size;
+    size = canvas->zoomHandler()->documentToView(size);
     canvas->resize(size);
     canvas->setPos(0, 0);
 
@@ -61,6 +61,9 @@ int main(int argc, char** argv)
     KSpread::RowHeaderItem* rowHeader = new KSpread::RowHeaderItem(0, canvas);
     static_cast<QGraphicsWidget*>(rowHeader)->resize(canvas->zoomHandler()->zoomItX(YBORDER_WIDTH), size.height());
     rowHeader->setPos(-rowHeader->width(), 0);
+
+    columnHeader->toolChanged("PanTool");
+    rowHeader->toolChanged("PanTool");
     
     QGraphicsScene scene;
     scene.addItem(canvas);

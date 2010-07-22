@@ -69,7 +69,7 @@ protected:
     virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
     virtual QPalette palette() const { return QGraphicsWidget::palette(); }
     virtual void update() { QGraphicsWidget::update(); }
-private Q_SLOTS:
+/*private */public Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
 
@@ -108,7 +108,7 @@ protected:
     virtual QPalette palette() const { return QGraphicsWidget::palette(); }
     virtual void update() { QGraphicsWidget::update(); }
 
-private Q_SLOTS:
+/*private */public Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
 
