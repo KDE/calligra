@@ -80,6 +80,8 @@ protected:
     KoFilter::ConversionStatus read_barDir();
     KoFilter::ConversionStatus read_grouping();
     KoFilter::ConversionStatus read_val();
+    KoFilter::ConversionStatus read_xVal();
+    KoFilter::ConversionStatus read_yVal();
     KoFilter::ConversionStatus read_cat();
     KoFilter::ConversionStatus read_tx();
     KoFilter::ConversionStatus read_numCache();

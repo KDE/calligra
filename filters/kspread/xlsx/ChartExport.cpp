@@ -328,12 +328,34 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
         if(!valuesCellRangeAddress.isEmpty())
             bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+        else if (!series->m_domainValuesCellRangeAddress.isEmpty())
+            bodyWriter->addAttribute("chart:values-cell-range-address", series->m_domainValuesCellRangeAddress.last()); //"Sheet1.C2:Sheet1.E2");
+        bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
-        if(chart()->m_impl->name() == "scatter") {
-            bodyWriter->startElement("chart:domain");
-            bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
-            bodyWriter->endElement();
-        }
+//         if(chart()->m_impl->name() == "scatter") {
+//             bodyWriter->startElement("chart:domain");
+//             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+//             bodyWriter->endElement();
+//         } else if (chart()->m_impl->name() == "bubble" ){
+            Q_FOREACH( const QString& curRange, series->m_domainValuesCellRangeAddress ){
+                bodyWriter->startElement("chart:domain");
+                bodyWriter->addAttribute("table:cell-range-address", curRange); //"Sheet1.C2:Sheet1.E5");
+                bodyWriter->endElement();
+            }
+//             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){
+//                 bodyWriter->startElement("chart:domain");
+//                 bodyWriter->addAttribute("table:cell-range-address", series->m_domainValuesCellRangeAddress.last()); //"Sheet1.C2:Sheet1.E5");
+//                 bodyWriter->endElement();
+//             }
+//             if ( series->m_domainValuesCellRangeAddress.isEmpty() ){
+//                 bodyWriter->startElement("chart:domain");
+//                 bodyWriter->addAttribute("table:cell-range-address", series->m_valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+//                 bodyWriter->endElement();
+//                 bodyWriter->startElement("chart:domain");
+//                 bodyWriter->addAttribute("table:cell-range-address", series->m_valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+//                 bodyWriter->endElement();
+//             }
+//         }
 
         for(int j = 0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");

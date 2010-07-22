@@ -192,7 +192,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             ELSE_TRY_READ_IF(grouping)
             ELSE_TRY_READ_IF(firstSliceAng)
             ELSE_TRY_READ_IF(holeSize)
-            ELSE_TRY_READ_IF(bubbleSize)
+            //ELSE_TRY_READ_IF(bubbleSize)
             ELSE_TRY_READ_IF(bubbleScale)
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -218,6 +218,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(val)
+            ELSE_TRY_READ_IF(xVal)
+            ELSE_TRY_READ_IF(yVal)
+            ELSE_TRY_READ_IF(bubbleSize)
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(tx)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(explosion))) {
@@ -267,6 +270,55 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
                 m_currentSeries->m_valuesCellRangeAddress = readElementText();
                 QPair<QString,QRect> result = splitCellRange( m_currentSeries->m_valuesCellRangeAddress );
                 m_context->m_chart->addRange( result.second );
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL xVal
+/*! Read the horizontal value. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_xVal()
+{
+    READ_PROLOGUE
+    bool numRef = false;
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(numCache)
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(numRef)))
+                numRef = true;
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f)) && numRef) {
+                //m_currentSeries->m_valuesCellRangeAddress = readElementText();
+                m_currentSeries->m_domainValuesCellRangeAddress.push_back( readElementText() );
+                //QPair<QString,QRect> result = splitCellRange( m_currentSeries->m_valuesCellRangeAddress );
+                //m_context->m_chart->addRange( result.second );
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL yVal
+/*! Read the vertical value. */
+KoFilter::ConversionStatus XlsxXmlChartReader::read_yVal()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(numCache)
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
+                if ( m_currentSeries->m_valuesCellRangeAddress.isEmpty() )
+                  m_currentSeries->m_valuesCellRangeAddress = readElementText();
+                else                
+                  m_currentSeries->m_domainValuesCellRangeAddress.push_back( readElementText() );
+                //QPair<QString,QRect> result = splitCellRange( m_currentSeries->m_valuesCellRangeAddress );
+                //m_context->m_chart->addRange( result.second );
             }
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -681,10 +733,19 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_holeSize()
 KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleSize()
 {
     READ_PROLOGUE
+    if (!m_currentSeries->m_valuesCellRangeAddress.isEmpty() )
+                  m_currentSeries->m_domainValuesCellRangeAddress.append( m_currentSeries->m_valuesCellRangeAddress );
     while (!atEnd()) {
         readNext();
-        //TODO
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {                
+                m_currentSeries->m_valuesCellRangeAddress = readElementText();
+                /*QPair<QString,QRect> result = splitCellRange( m_currentSeries->m_valuesCellRangeAddress );
+                m_context->m_chart->addRange( result.second );*/
+            }
+        }
         BREAK_IF_END_OF(CURRENT_EL);
+        
     }
     READ_EPILOGUE
 }

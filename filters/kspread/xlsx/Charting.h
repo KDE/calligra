@@ -251,6 +251,8 @@ namespace Charting
         int m_countBubbleSizeValues;
         /// Range that contains the values that should be visualized by the dataSeries.
         QString m_valuesCellRangeAddress;
+        /// Ranges that contains the values that should be visualized by the dataSeries.
+        QStringList m_domainValuesCellRangeAddress;
         /// The referenced values used in the chart
         QMap<Value::DataId, Value*> m_datasetValue;
         /// The formatting for the referenced values
