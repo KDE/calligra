@@ -70,6 +70,9 @@ void KWPage::setPageSide(PageSide ps)
         return;
     KWPageManagerPrivate::Page page = priv->pages[n];
 
+    if (page.pageSide == ps)
+        return;
+
     const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
     page.pageSide = ps;
     priv->pages.insert(n, page);
@@ -249,9 +252,12 @@ const KWPage KWPage::next() const
     if (! isValid())
         return KWPage();
     QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
+    Q_ASSERT(iter != priv->pageNumbers.constEnd());
     ++iter;
-    if (priv->pages[n].pageSide == PageSpread) // one more
+    if (priv->pages[n].pageSide == PageSpread) {// one more
+        Q_ASSERT(iter != priv->pageNumbers.constEnd());
         ++iter;
+    }
     if (iter == priv->pageNumbers.constEnd())
         return KWPage();
     return KWPage(priv, iter.value());

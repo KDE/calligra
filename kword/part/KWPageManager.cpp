@@ -116,22 +116,28 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
         QMap<int, int> numbers = pageNumbers;
         const int offset = newPage.pageSide == KWPage::PageSpread ? 2 : 1;
         QMap<int, int>::iterator iter = numbers.end();
+        int prevId = -1;
         do {
             --iter;
 
             if (iter.key() < newPage.pageNumber)
                 break;
             KWPageManagerPrivate::Page page = pages[iter.value()];
-            pageNumbers.remove(page.pageNumber);
-            page.pageNumber += offset;
+            pageNumbers.remove(iter.key());
+            if (iter.value() != prevId) { // make sure we don't increase pagespreads twice.
+                page.pageNumber += offset;
+                prevId = iter.value();
+            }
             pages.insert(iter.value(), page);
-            pageNumbers.insert(page.pageNumber, iter.value());
+            pageNumbers.insert(iter.key() + offset, iter.value());
         } while (iter != numbers.begin());
     }
 
     pages.insert(++lastId, newPage);
     Q_ASSERT(! pageNumbers.contains(newPage.pageNumber));
     pageNumbers.insert(newPage.pageNumber, lastId);
+    if (newPage.pageSide == KWPage::PageSpread)
+        pageNumbers.insert(newPage.pageNumber + 1, lastId);
 }
 
 ///////////
@@ -291,8 +297,11 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
 
     d->pages.insert(++d->lastId, page);
     d->pageNumbers.insert(page.pageNumber, d->lastId);
+    if (page.pageSide == KWPage::PageSpread)
+        d->pageNumbers.insert(page.pageNumber + 1, d->lastId);
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount();
+    kDebug(32001) << "           " << d->pageNumbers;
 #endif
 
     return KWPage(d, d->lastId);

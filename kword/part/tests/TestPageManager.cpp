@@ -534,9 +534,12 @@ void TestPageManager::testPageSpreadLayout()
     KoPageLayout layout = page.pageStyle().pageLayout();
     layout.width = 450;
     layout.height = 150;
-    page.setPageSide(KWPage::PageSpread);
+    QCOMPARE(page.pageNumber(), 1);
+    page.setPageSide(KWPage::PageSpread); // makes it page 2 (and 3)
+    QCOMPARE(page.pageNumber(), 2);
     page.pageStyle().setPageLayout(layout);
     KWPage page2 = manager.appendPage();
+    QCOMPARE(page2.pageNumber(), 4);
     page2.setDirectionHint(KoText::LeftRightTopBottom);
     layout.width = 200;
     page2.pageStyle().setPageLayout(layout);
@@ -546,6 +549,16 @@ void TestPageManager::testPageSpreadLayout()
 
     QCOMPARE(manager.pageNumber(QPointF(10, 200)), 4);
     QCOMPARE(manager.pageNumber(QPointF(10, 151)), 4);
+
+
+    KWPage four = page.next();
+    QCOMPARE(four.pageNumber(), 4);
+    KWPage invalid = four.next();
+    QVERIFY(!invalid.isValid());
+    QVERIFY(invalid.pageNumber() != 4);
+    KWPage copy = invalid;
+    QVERIFY(!copy.isValid());
+    QVERIFY(copy.pageNumber() != 4);
 }
 
 void TestPageManager::testInsertPage()
@@ -684,6 +697,8 @@ void TestPageManager::testAppendPageSpread()
     QCOMPARE(page1.pageNumber(), 1);
     QCOMPARE(page1.pageSide(), KWPage::Right);
     QCOMPARE(page1.width(), style.pageLayout().width);
+    KWPage test = page1.next();
+    QVERIFY(!test.isValid());
 
     KWPage page2 = manager.appendPage(style);
     QCOMPARE(page1.pageNumber(), 1);
@@ -692,6 +707,8 @@ void TestPageManager::testAppendPageSpread()
     QCOMPARE(page2.pageNumber(), 2);
     QCOMPARE(page2.pageSide(), KWPage::PageSpread);
     QCOMPARE(page2.width(), style.pageLayout().width * 2);
+    test = page2.next();
+    QVERIFY(!test.isValid());
 
     KWPage page3 = manager.insertPage(2, style);
     QCOMPARE(page1.pageNumber(), 1);
@@ -703,6 +720,12 @@ void TestPageManager::testAppendPageSpread()
     QCOMPARE(page3.pageNumber(), 2);
     QCOMPARE(page3.pageSide(), KWPage::PageSpread);
     QCOMPARE(page3.width(), style.pageLayout().width * 2);
+    test = page2.next();
+    QVERIFY(!test.isValid());
+
+    KWPage realPage3 = manager.page(3);
+    QVERIFY(realPage3.isValid());
+    QCOMPARE(realPage3.pageNumber(), 2); // its still a pagespread
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)
