@@ -2644,11 +2644,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         colorItem = theme->colorScheme.value(val);
     }
 #endif
+
+    // Parse the child elements
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+
+        // @todo: Hmm, are these color modifications only available for pptx?
 #ifdef PPTXXMLSLIDEREADER_H
         if (m_context->type == Slide) {
             if (QUALIFIED_NAME_IS(lumMod)) {
@@ -2666,8 +2670,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) {
-        //Seems that if the item is not present we should default to black
-        QColor col(Qt::black);
+        // Seems that if the item is not present we should default to
+        // black, unless we are dealing with a background.
+        QColor col;
+        if (val.startsWith("bg"))
+            col = Qt::white;
+        else
+            col = Qt::black;
         if (colorItem && colorItem->toColorItem())
             col = QColor (colorItem->toColorItem()->color);
 
