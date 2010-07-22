@@ -151,6 +151,7 @@ CanvasItem::CanvasItem(Doc *doc)
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
     d->selection = new Selection(this);
+    d->selection->setActiveSheet(activeSheet());
     d->zoomHandler = new KoZoomHandler();
 }
 
