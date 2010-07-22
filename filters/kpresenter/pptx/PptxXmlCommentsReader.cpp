@@ -74,7 +74,7 @@ KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderCon
 void PptxXmlCommentsReader::saveOdfComments()
 {
     for(int i = 0; i < d->currentComment; ++i) {
-        body->startElement("oficeooo:annotation"); //TODO replace with standarized element name
+        body->startElement("officeooo:annotation"); //TODO replace with standarized element name
 
         QPoint position = d->positions.value(i);
         body->addAttribute("svg:x", position.x());
@@ -92,7 +92,7 @@ void PptxXmlCommentsReader::saveOdfComments()
         body->addTextSpan(d->texts.value(i));
         body->endElement();//text:p
 
-        body->endElement();//oficeooo:annotation
+        body->endElement();//officeooo:annotation
     }
 }
 
