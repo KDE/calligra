@@ -51,6 +51,7 @@ class QKeyEvent;
 class QMimeData;
 class QPainter;
 class KoPointerEvent;
+class KoZoomHandler;
 
 namespace KSpread
 {
@@ -167,9 +168,12 @@ public:
     virtual QPoint mapToGlobal(const QPointF& point) const = 0;
     virtual void updateMicroFocus() = 0;
 
-    virtual const KoViewConverter* viewConverter() const = 0;
+    virtual const KoZoomHandler* zoomHandler() const = 0;
+    virtual const KoViewConverter* viewConverter() const;
     virtual bool isViewLoading() const = 0; // not sure if is needed
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;
+    virtual void enableAutoScroll() = 0;
+    virtual void disableAutoScroll() = 0;
 private:
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget

@@ -160,10 +160,11 @@ public:
         QWidget::updateMicroFocus();
     }
 
-    virtual const KoViewConverter* viewConverter() const;
+    virtual const KoZoomHandler* zoomHandler() const;
     virtual bool isViewLoading() const;
     virtual SheetView* sheetView(const Sheet* sheet) const;
-
+    virtual void enableAutoScroll();
+    virtual void disableAutoScroll();
     virtual ColumnHeader* columnHeader() const;
     virtual RowHeader* rowHeader() const;
 private:

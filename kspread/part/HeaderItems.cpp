@@ -76,7 +76,6 @@
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "Selection.h"
-#include "View.h"
 
 // commands
 #include "commands/RowColumnManipulators.h"
@@ -89,16 +88,16 @@ using namespace KSpread;
  *
  ****************************************************************/
 
-RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas, View *_view)
-        : QGraphicsWidget(_parent), RowHeader(_canvas, _view)
+RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
+        : QGraphicsWidget(_parent), RowHeader(_canvas)
 {
     setAttribute(Qt::WA_StaticContents);
 
     //setMouseTracking(true);
     setAcceptHoverEvents(true);
 
-    connect(m_pView, SIGNAL(autoScroll(const QPoint &)),
-            this, SLOT(slotAutoScroll(const QPoint &)));
+    //connect(m_pView, SIGNAL(autoScroll(const QPoint &)),
+            //this, SLOT(slotAutoScroll(const QPoint &)));
     connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));
 }
@@ -132,7 +131,7 @@ void RowHeaderItem::mouseMoveEvent(QGraphicsSceneMouseEvent * _ev)
     KoPointerEvent pev(_ev, QPointF());
     mouseMove(&pev);
 }
-
+/*
 void RowHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
 {
     // NOTE Stefan: This slot is triggered by the same signal as
@@ -153,7 +152,7 @@ void RowHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
     //QApplication::sendEvent(this, &event);
     m_pCanvas->update();
 }
-
+*/
 void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
     KoPointerEvent pev(_ev, QPointF());
@@ -162,14 +161,14 @@ void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 
 void RowHeaderItem::paintSizeIndicator(int mouseY)
 {
-    register Sheet * const sheet = m_pView->activeSheet();
+    register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
     m_iResizePos = mouseY;
 
     // Don't make the row have a height < 2 pixel.
-    double y = m_pView->zoomHandler()->zoomItY(sheet->rowPosition(m_iResizedRow) - m_pCanvas->yOffset());
+    double y = m_pCanvas->zoomHandler()->zoomItY(sheet->rowPosition(m_iResizedRow) - m_pCanvas->yOffset());
     if (m_iResizePos < y + 2)
         m_iResizePos = (int) y;
 
@@ -182,10 +181,10 @@ void RowHeaderItem::paintSizeIndicator(int mouseY)
     //m_rubberband->move(0, m_iResizePos);
 
     QString tmpSize;
-    double hh = m_pView->zoomHandler()->unzoomItY(m_iResizePos - y);
-    double hu = m_pView->doc()->unit().toUserValue(hh);
+    double hh = m_pCanvas->zoomHandler()->unzoomItY(m_iResizePos - y);
+    double hu = m_pCanvas->doc()->unit().toUserValue(hh);
     if (hu > 0.01)
-        tmpSize = i18n("Height: %1 %2", hu, KoUnit::unitName(m_pView->doc()->unit()));
+        tmpSize = i18n("Height: %1 %2", hu, KoUnit::unitName(m_pCanvas->doc()->unit()));
     else
         tmpSize = i18n("Hide Row");
 
@@ -217,12 +216,12 @@ void RowHeaderItem::removeSizeIndicator()
 
 void RowHeaderItem::updateRows(int from, int to)
 {
-    register Sheet * const sheet = m_pView->activeSheet();
+    register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
-    double y0 = m_pView->zoomHandler()->zoomItY(sheet->rowPosition(from));
-    double y1 = m_pView->zoomHandler()->zoomItY(sheet->rowPosition(to + 1));
+    double y0 = m_pCanvas->zoomHandler()->zoomItY(sheet->rowPosition(from));
+    double y1 = m_pCanvas->zoomHandler()->zoomItY(sheet->rowPosition(to + 1));
     QGraphicsItem::update(0, (int) y0, boundingRect().width(), (int)(y1 - y0));
 }
 
@@ -249,16 +248,16 @@ void RowHeaderItem::toolChanged(const QString& toolId)
  *
  ****************************************************************/
 
-ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas, View *_view)
-        : QGraphicsWidget(_parent), ColumnHeader(_canvas, _view)
+ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
+        : QGraphicsWidget(_parent), ColumnHeader(_canvas)
 {
     setAttribute(Qt::WA_StaticContents);
 
     //setMouseTracking(true);
     setAcceptHoverEvents(true);
 
-    connect(_view, SIGNAL(autoScroll(const QPoint &)),
-            this, SLOT(slotAutoScroll(const QPoint &)));
+    //connect(_view, SIGNAL(autoScroll(const QPoint &)),
+            //this, SLOT(slotAutoScroll(const QPoint &)));
     connect(_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));
 }
@@ -291,7 +290,7 @@ void ColumnHeaderItem::mouseMoveEvent(QGraphicsSceneMouseEvent * _ev)
     KoPointerEvent pev(_ev, QPointF());
     mouseMove(&pev);
 }
-
+/*
 void ColumnHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
 {
     // NOTE Stefan: This slot is triggered by the same signal as
@@ -311,7 +310,7 @@ void ColumnHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
     //QApplication::sendEvent(this, &event);
     m_pCanvas->update();
 }
-
+*/
 void ColumnHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
     KoPointerEvent pev(_ev, QPointF());
@@ -325,7 +324,7 @@ void ColumnHeaderItem::resizeEvent(QGraphicsSceneResizeEvent* _ev)
 
 void ColumnHeaderItem::paintSizeIndicator(int mouseX)
 {
-    register Sheet * const sheet = m_pView->activeSheet();
+    register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -335,7 +334,7 @@ void ColumnHeaderItem::paintSizeIndicator(int mouseX)
         m_iResizePos = mouseX;
 
     // Don't make the column have a width < 2 pixels.
-    double x = m_pView->zoomHandler()->zoomItX(sheet->columnPosition(m_iResizedColumn) - m_pCanvas->xOffset());
+    double x = m_pCanvas->zoomHandler()->zoomItX(sheet->columnPosition(m_iResizedColumn) - m_pCanvas->xOffset());
 
     if (sheet->layoutDirection() == Qt::RightToLeft) {
         x = m_pCanvas->width() - x;
@@ -355,10 +354,10 @@ void ColumnHeaderItem::paintSizeIndicator(int mouseX)
 //    m_rubberband->move(m_iResizePos, 0);
 
     QString tmpSize;
-    double ww = m_pView->zoomHandler()->unzoomItX((sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x);
-    double wu = m_pView->doc()->unit().toUserValue(ww);
+    double ww = m_pCanvas->zoomHandler()->unzoomItX((sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x);
+    double wu = m_pCanvas->doc()->unit().toUserValue(ww);
     if (wu > 0.01)
-        tmpSize = i18n("Width: %1 %2", wu, KoUnit::unitName(m_pView->doc()->unit()));
+        tmpSize = i18n("Width: %1 %2", wu, KoUnit::unitName(m_pCanvas->doc()->unit()));
     else
         tmpSize = i18n("Hide Column");
 
@@ -390,12 +389,12 @@ void ColumnHeaderItem::removeSizeIndicator()
 
 void ColumnHeaderItem::updateColumns(int from, int to)
 {
-    register Sheet * const sheet = m_pView->activeSheet();
+    register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
-    double x0 = m_pView->zoomHandler()->zoomItX(sheet->columnPosition(from));
-    double x1 = m_pView->zoomHandler()->zoomItX(sheet->columnPosition(to + 1));
+    double x0 = m_pCanvas->zoomHandler()->zoomItX(sheet->columnPosition(from));
+    double x1 = m_pCanvas->zoomHandler()->zoomItX(sheet->columnPosition(to + 1));
     QGraphicsItem::update((int) x0, 0, (int)(x1 - x0), boundingRect().height());
 }
 

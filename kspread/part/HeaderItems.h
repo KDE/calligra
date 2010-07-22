@@ -41,13 +41,13 @@ class ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
 {
     Q_OBJECT
 public:
-    ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas, View *_view);
+    ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas);
     virtual ~ColumnHeaderItem();
 
     void updateColumns(int from, int to);
 
 private slots:
-    void slotAutoScroll(const QPoint& distance);
+    //void slotAutoScroll(const QPoint& distance);
 
 protected:
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
@@ -75,13 +75,13 @@ class RowHeaderItem : public QGraphicsWidget, public RowHeader
 {
     Q_OBJECT
 public:
-    RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas, View *_view);
+    RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas);
     virtual ~RowHeaderItem();
 
     void updateRows(int from, int to);
 
 private slots:
-    void slotAutoScroll(const QPoint& distance);
+    //void slotAutoScroll(const QPoint& distance);
 
 protected:
     virtual void paint (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);

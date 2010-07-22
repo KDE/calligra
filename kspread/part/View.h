@@ -350,6 +350,7 @@ protected: // reimplementations
     virtual void updateReadWrite(bool readwrite);
     virtual void guiActivateEvent(KParts::GUIActivateEvent *ev);
     virtual KoPrintJob * createPrintJob();
+public:
     virtual KoZoomController *zoomController() const;
 
 Q_SIGNALS:

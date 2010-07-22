@@ -801,3 +801,8 @@ void CanvasBase::updateInputMethodInfo()
 {
     updateMicroFocus();
 }
+
+const KoViewConverter* CanvasBase::viewConverter() const
+{
+        return zoomHandler();
+}

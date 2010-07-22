@@ -327,7 +327,7 @@ void Canvas::setHorizScrollBarPos(qreal pos)
     view()->horzScrollBar()->setValue((int)pos);
 }
 
-const KoViewConverter* Canvas::viewConverter() const
+const KoZoomHandler* Canvas::zoomHandler() const
 {
     return view()->zoomHandler();
 }
@@ -362,5 +362,14 @@ RowHeader* Canvas::rowHeader() const
     return view()->rowHeader();
 }
 
+void Canvas::enableAutoScroll()
+{
+    view()->enableAutoScroll();
+}
+
+void Canvas::disableAutoScroll()
+{
+    view()->disableAutoScroll();
+}
 
 #include "Canvas.moc"

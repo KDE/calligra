@@ -754,10 +754,15 @@ QStringList Doc::spellListIgnoreAll() const
 
 void Doc::paintContent(QPainter& painter, const QRect& rect)
 {
+    paintContent(painter, rect, 0);
+}
+
+void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
+{
     if (rect.isEmpty()) {
         return;
     }
-    Sheet *const sheet = d->map->sheet(0);
+    Sheet *const sheet = _sheet ? _sheet : d->map->sheet(0);
 
     const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
     QPixmap thumbnail(pageLayout.width, pageLayout.height);

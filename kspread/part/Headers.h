@@ -37,7 +37,7 @@ class View;
 class ColumnHeader
 {
 public:
-    ColumnHeader(CanvasBase *_canvas, View *_view);
+    ColumnHeader(CanvasBase *_canvas);
     virtual ~ColumnHeader();
 
     int markerColumn() const {
@@ -72,7 +72,6 @@ protected:
 
 protected:
     CanvasBase *m_pCanvas;
-    View *m_pView;
 
     /**
      * Flag that indicates whether the user wants to mark columns.
@@ -130,7 +129,7 @@ protected:
 class RowHeader
 {
 public:
-    RowHeader(CanvasBase *_canvas, View *_view);
+    RowHeader(CanvasBase *_canvas);
     virtual ~RowHeader();
 
     int markerRow() const {
@@ -162,7 +161,6 @@ protected:
     void doToolChanged(const QString& toolId);
 protected:
     CanvasBase *m_pCanvas;
-    View *m_pView;
 
     bool m_bSelection;
     int m_iSelectionAnchor;

@@ -176,6 +176,7 @@ public:
 
     // reimplemented; paints the thumbnail
     virtual void paintContent(QPainter & painter, const QRect & rect);
+    virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);
 
     void initConfig();
     void saveConfig();
