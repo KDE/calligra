@@ -284,7 +284,7 @@ void KWTextDocumentLayout::layout()
                 qreal eligableTop = rect.top();
                 while (true) {
                     if (m_state->numColumns() > 0) {
-                        line.setNumColumns(m_state->numColumns());
+                        line.setNumColumns(m_state->numColumns(),rect.width());
                         line.setPosition(QPointF(line.x(), rect.y()));
                     } else {
                         qreal x = rect.x();
