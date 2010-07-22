@@ -23,6 +23,8 @@
 #include <QGraphicsWidget>
 #include "Headers.h"
 
+#include "kspread_export.h"
+
 class QLabel;
 class QRubberBand;
 
@@ -37,7 +39,7 @@ class View;
 /**
  * The widget above the cells showing the column headers.
  */
-class ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
+class KSPREAD_EXPORT ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
 {
     Q_OBJECT
 public:
@@ -62,6 +64,11 @@ protected:
     virtual void paintSizeIndicator(int mouseX);
     virtual void removeSizeIndicator();
 
+    virtual QSizeF size() const { return QGraphicsWidget::size(); }
+    virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
+    virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
+    virtual QPalette palette() const { return QGraphicsWidget::palette(); }
+    virtual void update() { QGraphicsWidget::update(); }
 private Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
@@ -71,7 +78,7 @@ private Q_SLOTS:
 /**
  * The widget left to the cells showing the row headers.
  */
-class RowHeaderItem : public QGraphicsWidget, public RowHeader
+class KSPREAD_EXPORT RowHeaderItem : public QGraphicsWidget, public RowHeader
 {
     Q_OBJECT
 public:
@@ -95,6 +102,12 @@ protected:
     virtual void paintSizeIndicator(int mouseY);
     virtual void removeSizeIndicator();
 
+    virtual QSizeF size() const { return QGraphicsWidget::size(); }
+    virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
+    virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
+    virtual QPalette palette() const { return QGraphicsWidget::palette(); }
+    virtual void update() { QGraphicsWidget::update(); }
+
 private Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
@@ -105,7 +118,7 @@ private Q_SLOTS:
  * The widget in the top left corner of the canvas,
  * responsible for selecting all cells in a sheet.
  */
-class SelectAllButtonItem : public QGraphicsWidget
+class KSPREAD_EXPORT SelectAllButtonItem : public QGraphicsWidget
 {
     Q_OBJECT
 public:
