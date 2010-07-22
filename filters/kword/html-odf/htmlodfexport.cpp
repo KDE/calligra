@@ -40,11 +40,10 @@
 #include <KoXmlWriter.h>
 
 #include <document.h>
-#include "pole.h"
 #include <exportdialog.h>
+#include <QtXmlPatterns>
+#include <convert.h>
 
-//function prototypes of local functions
-bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
 
 typedef KGenericFactory<HTMLOdfExport> HTMLOdfExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libhtmlodf_export, HTMLOdfExportFactory("kofficefilters"))
@@ -77,9 +76,6 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     if (m_dialog->exec() == QDialog::Rejected)
         return KoFilter::UserCancelled;
 
-    QBuffer buff3;
-
-    LEInputStream wdocument_stream(&buff3);
 
     // Create output files
 
@@ -90,7 +86,9 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             return KoFilter::FileNotFound;
         }
 
-        out.write("<html><h1> The Filter is under construction</h1></html>");
+        Conversion c1;
+        c1.convert(&out);
+
         QFileInfo base(outputFile);
         QString filenamewithoutext = outputFile.left(outputFile.lastIndexOf('.'));
         QString directory=base.absolutePath();
@@ -103,12 +101,8 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             css.close();
             return KoFilter::FileNotFound;
         }
-   //     QByteArray header;
-   //     header="<!DOCTYPE html><html><link rel=\"stylesheet\" type=\"text/css\" href=\"";
-   //     header+=stylesheet;
-   //     header+="<h1> The Filter is under construction</h1></html>";
-   //     out.write(header);
 
+       out.write("<html><h1> The Filter is under construction</h1></html>");
        out.close();
        css.close();
 
@@ -132,12 +126,5 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
     kDebug(30513) << "######################## HTMLOdfExport::convert done ####################";
     return KoFilter::OK;
 }
-
-/*
- * Read the stream content into buffer.
- * @param storage; POLE storage
- * @param streampath; stream path into the POLE storage
- * @param buffer; buffer provided by the user
- */
 
 #include <htmlodfexport.moc>

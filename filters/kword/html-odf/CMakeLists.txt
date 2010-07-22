@@ -1,9 +1,11 @@
+add_subdirectory(conversion)
 INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} ../../libmso )
 
 set(htmlodf_export_PART_SRCS
 htmlodfexport.cpp
 document.cpp
 exportdialog.cpp
+convert.cpp
 )
 
 kde4_add_ui_files(htmlodf_export_PART_SRCS exportwidget.ui )
@@ -17,6 +19,7 @@ target_link_libraries(
     kwordexportfilters
     koodf
     komain
+    QtXmlPatterns
     ${ZLIB_LIBRARIES}
 )
 
