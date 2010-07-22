@@ -27,6 +27,7 @@
 #include <KoXmlWriter.h>
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
+#include <MsooXmlUnits.h>
 
 class PptxXmlCommentsReader::Private
 {
@@ -77,8 +78,8 @@ void PptxXmlCommentsReader::saveOdfComments()
         body->startElement("officeooo:annotation"); //TODO replace with standarized element name
 
         QPoint position = d->positions.value(i);
-        body->addAttribute("svg:x", position.x());
-        body->addAttribute("svg:y", position.y());
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(position.x()));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(position.y()));
 
         body->startElement("dc:creator");
         body->addTextSpan(d->authors.value(i));
