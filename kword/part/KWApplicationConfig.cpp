@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -145,4 +145,12 @@ void KWApplicationConfig::save()
     interface.writeEntry("StatusBarShowMouse", m_statusBarShowMouse);
     interface.writeEntry("StatusBarShowZoom", m_statusBarShowZoom);
     interface.sync();
+}
+
+void KWApplicationConfig::setUnit(const KoUnit &unit)
+{
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup misc = config->group("Misc");
+    misc.writeEntry("Units", KoUnit::unitName(unit));
+    misc.sync();
 }

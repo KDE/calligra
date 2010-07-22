@@ -171,6 +171,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
 KWDocument::~KWDocument()
 {
     delete m_magicCurtain;
+    m_config.setUnit(unit());
     saveConfig();
     qDeleteAll(m_frameSets);
 }

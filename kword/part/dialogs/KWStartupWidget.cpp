@@ -28,11 +28,9 @@
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
         : QWidget(parent),
-        m_unit(KoUnit::Millimeter)
+        m_unit(doc->unit())
 {
     widget.setupUi(this);
-    // TODO get unit from config and set it on m_unit
-
     m_columns = columns;
     m_layout.leftMargin = MM_TO_POINT(30);
     m_layout.rightMargin = MM_TO_POINT(30);
@@ -67,7 +65,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     connect(widget.createButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
     connect(widget.mainText, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setTextAreaAvailable(bool)));
     connect(widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setTextAreaAvailable(bool)));
-    connect(m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), m_columnsWidget, SLOT(setUnit(const KoUnit&)));
+    connect(m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(unitChanged(const KoUnit&)));
     connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), prev, SLOT(setColumns(const KoColumns&)));
     connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), this, SLOT(columnsUpdated(const KoColumns&)));
     connect(m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
@@ -76,6 +74,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 void KWStartupWidget::unitChanged(const KoUnit &unit)
 {
     m_unit = unit;
+    m_columnsWidget->setUnit(unit);
 }
 
 void KWStartupWidget::sizeUpdated(const KoPageLayout &layout)

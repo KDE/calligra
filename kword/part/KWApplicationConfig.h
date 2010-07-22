@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 
 class KConfigGroup;
 class KWDocument;
+class KoUnit;
 
 /**
  * A set of config settings for application-specific stuff (compared to document-specific stuff).
@@ -122,6 +123,8 @@ public:
         return m_defaultColumnSpacing;
     }
 
+    void setUnit(const KoUnit &unit);
+
 private:
     bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
     bool m_viewFormattingEndParag, m_viewFormattingTabs;
@@ -139,4 +142,3 @@ private:
 };
 
 #endif
-
