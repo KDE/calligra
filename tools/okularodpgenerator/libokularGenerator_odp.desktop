@@ -2,8 +2,16 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenDocument Presentation Document
+Name[pt]=Documento de Apresentação em OpenDocument
+Name[pt_BR]=Documento de apresentação OpenDocument
+Name[sv]=OpenDocument presentationsdokument
+Name[uk]=Документ презентації OpenDocument
 Name[x-test]=xxOpenDocument Presentation Documentxx
 Comment=Odp for okular
+Comment[pt]=ODP para o Okular
+Comment[pt_BR]=ODP para o Okular
+Comment[sv]=Odp för okular
+Comment[uk]=ODP для Okular
 Comment[x-test]=xxOdp for okularxx
 ServiceTypes=okular/Generator
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.presentationml.presentation;
