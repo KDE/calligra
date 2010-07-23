@@ -34,5 +34,8 @@
         <file>images/64x64/PresentationDrawTool/pen.png</file>
         <file>images/48x48/Edittoolbaricons/Collaborate.png</file>
         <file>images/64x64/PresentationDrawTool/viewnotes.png</file>
+        <file>images/64x64/Acceleration/swingoff.png</file>
+        <file>images/64x64/Acceleration/swingon.png</file>
+        <file>images/48x48/Edittoolbaricons/SlidingMotion.png</file>
     </qresource>
 </RCC>

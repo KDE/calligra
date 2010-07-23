@@ -115,6 +115,7 @@ using  KSpread::Sheet;
 #define FONTSTYLEFRAME_WIDTH 440
 #define FONTSTYLEFRAME_HEIGHT 220
 
+bool MainWindow::enable_accelerator=false;
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
         m_ui(new Ui::MainWindow),
@@ -183,6 +184,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_pptTool(0),
         m_fsPPTDrawHighlightButton(0),
         m_fsPPTDrawPenButton(0),
+        m_fsAccButton(0),
         m_dbus( new MainWindowAdaptor(this)),
         m_collab(0),
         m_collabDialog(0),
@@ -269,6 +271,7 @@ void MainWindow::init()
     connect(m_ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFileDialog()));
     connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(openAboutDialog()));
     connect(m_ui->actionFullScreen, SIGNAL(triggered()), this, SLOT(fullScreen()));
+    connect(m_ui->actionSlidingMotion, SIGNAL(triggered()), this, SLOT(slideTransitionDialog()));
     connect(m_ui->actionCollaborate, SIGNAL(triggered()), this, SLOT(collaborateDialog()));
 
     m_ui->actionZoomIn->setShortcuts(QKeySequence::ZoomIn);
@@ -1368,7 +1371,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
         m_fsPPTDrawPenButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
         m_fsPPTDrawPenButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTDrawPenButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/pen.png"));
-        m_fsPPTDrawPenButton->move(0 , size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+        m_fsPPTDrawPenButton->move(736 ,284);
         connect(m_fsPPTDrawPenButton,SIGNAL(clicked()),m_pptTool,SLOT(togglePenTool()));
     }
 
@@ -1380,7 +1383,7 @@ void MainWindow::showFullScreenPresentationIcons(void)
         m_fsPPTDrawHighlightButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
         m_fsPPTDrawHighlightButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
         m_fsPPTDrawHighlightButton->setIcon(QIcon(":/images/64x64/PresentationDrawTool/highlight.png"));
-        m_fsPPTDrawHighlightButton->move(FS_BUTTON_SIZE , size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+        m_fsPPTDrawHighlightButton->move(736,350);
         connect(this->m_fsPPTDrawHighlightButton,SIGNAL(clicked()),m_pptTool,SLOT(toggleHighlightTool()));
     }
 
@@ -1409,12 +1412,47 @@ void MainWindow::showFullScreenPresentationIcons(void)
             m_slideNotesButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
             m_slideNotesButton->setIcon(m_slideNotesIcon);
             connect(m_slideNotesButton, SIGNAL(clicked()), SLOT(slideNotesButtonClicked()));
-            m_slideNotesButton->move(FS_BUTTON_SIZE*2,size.height() - FS_BUTTON_SIZE - hScrlbarHeight);
+            m_slideNotesButton->move(736,222);
         }
         m_slideNotesButton->show();
         m_slideNotesButton->raise();
+
+        if ((!m_fsAccButton)&& (m_pptTool)) {
+             m_fsAccButton = new QPushButton(this);
+             m_fsAccButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
+             m_fsAccButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
+             m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
+             m_fsAccButton->move(736,156);
+             connect(m_fsAccButton, SIGNAL(clicked(bool)), SLOT(toggle_accelerator()));
+        }
+        m_fsAccButton->show();
+        m_fsAccButton->raise();
     }
 }
+
+void MainWindow::slideTransitionDialog(){
+
+}
+
+void MainWindow::toggle_accelerator()
+{
+     enable_accelerator=!enable_accelerator;
+     if(enable_accelerator==false)
+     {qDebug()<<"closed the acc";
+         m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
+//         Accelerator_Thread.StopRecognition();
+//         disconnect(&Accelerator_Thread,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
+//         disconnect(&Accelerator_Thread,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
+     }
+     else
+     {   qDebug()<<"toggled to start";
+         m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingon.png"));
+//         Accelerator_Thread.StartRecognition();
+//         connect(&Accelerator_Thread,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
+//         connect(&Accelerator_Thread,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
+     }
+ }
+
 void MainWindow::slideNotesButtonClicked()
 {
     if(notesDialog) {
@@ -1452,6 +1490,7 @@ void MainWindow::openFileDialog()
                    QDesktopServices::storageLocation(
                        QDesktopServices::DocumentsLocation),
                    FILE_CHOOSER_FILTER);
+
     if (!file.isNull() && !checkFiletype(file)) {
         return;
     }
@@ -1623,6 +1662,7 @@ void MainWindow::openDocument(const QString &fileName)
         return;
     }
     m_ui->viewToolBar->show();
+    m_ui->actionSlidingMotion->setVisible(false);
     raiseWindow();
 
     setShowProgressIndicator(true);
@@ -1690,6 +1730,9 @@ void MainWindow::openDocument(const QString &fileName)
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
     } else {
         m_ui->actionEdit->setVisible(false);
+        if(m_type == Presentation) {
+            m_ui->actionSlidingMotion->setVisible(true);
+        }
     }
     setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"), fname));
 
@@ -2035,6 +2078,8 @@ void MainWindow::fsTimer()
             m_fsPPTDrawPenButton->hide();
         if (m_slideNotesButton && m_slideNotesButton->isVisible())
             m_slideNotesButton->hide();
+        if (m_fsAccButton && m_fsAccButton->isVisible())
+            m_fsAccButton->hide();
     }
 }
 
@@ -2058,6 +2103,18 @@ void MainWindow::fsButtonClicked()
 
     if (m_fsPPTForwardButton && m_fsPPTForwardButton->isVisible())
         m_fsPPTForwardButton->hide();
+
+    if (m_fsPPTDrawHighlightButton && m_fsPPTDrawHighlightButton->isVisible() )
+        m_fsPPTDrawHighlightButton->hide();
+
+    if (m_fsPPTDrawPenButton && m_fsPPTDrawPenButton->isVisible() )
+        m_fsPPTDrawPenButton->hide();
+
+    if (m_slideNotesButton && m_slideNotesButton->isVisible())
+        m_slideNotesButton->hide();
+
+    if (m_fsAccButton && m_fsAccButton->isVisible())
+        m_fsAccButton->hide();
 
     if (m_isViewToolBar)
         m_ui->viewToolBar->show();

@@ -636,6 +636,10 @@ private slots:
      */
     void openAboutDialog();
     /*!
+     * Slot to show  slide transition options
+     */
+    void slideTransitionDialog();
+    /*!
      * Slot for progress indicator
      */
     //void slotProgress(int value);
@@ -689,6 +693,10 @@ public slots:
      * Slot to update current slide in the presentation, when the slide changed in the notes dialog
      */
     void moveSLideFromNotesSLide(bool flag);
+    /*!
+     * Slot to toggle between the gesture recognization
+     */
+    void toggle_accelerator();
 
 private:
 
@@ -755,6 +763,14 @@ private:
      * Pointer to notes dialog
      */
     NotesDialog *notesDialog;
+    /*!
+     * Pointer to fullscreen Accelerometer Button
+     */
+    QPushButton *m_fsAccButton;
+    /*!
+     * true if accelerometer starts
+     */
+    static bool enable_accelerator;
 
 signals:
     /*!

@@ -438,6 +438,15 @@
     <string>Collaborate</string>
    </property>
   </action>
+  <action name="actionSlidingMotion">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/SlidingMotion.png</normaloff>:/images/48x48/Edittoolbaricons/SlidingMotion.png</iconset>
+   </property>
+   <property name="text">
+    <string>slidingMotion</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="FreOffice.qrc"/>
