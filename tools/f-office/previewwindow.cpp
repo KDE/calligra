@@ -83,22 +83,55 @@ for(int i=0;i<thumbnailList->count();i++)
 
 void PreviewWindow::screenThumbnailClicked()
 {
-    QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
+    PreviewButton *clickedButton = qobject_cast<PreviewButton *>(sender());
     QString buttonName = clickedButton->objectName();
-    int index=(clickedButton->text()).toInt();
+    int index=clickedButton->getSlideNumber();
 
-    emit gotoPage(index);
-    hide();
+    if(!moveFlag || index==toBeMovedPage)
+    {
+      emit gotoPage(clickedButton->getSlideNumber()+1);
+      hide();
+    }
+    else
+    {
+        KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
+        KoPAPageBase* page = padoc->pageByIndex(toBeMovedPage, false);
+
+        padoc->takePage(page);
+
+        if ( !page )
+            return;
+
+        padoc->insertPage((KoPAPageBase*)  page ,index);
+
+        QList<KoPAPageBase*> pages = padoc->pages();
+
+        pages.insert( index, (KoPAPageBase *)page );
+
+        this->accept();
+
+        this->thumbnailList->move(toBeMovedPage,index);
+
+
+        if(m_currentPage==m_doc->pageCount()) {
+            emit gotoPage(m_currentPage-1);
+            emit gotoPage(m_currentPage);
+        }
+        else {
+        emit gotoPage(m_currentPage+1);
+        emit gotoPage(m_currentPage);
+      }
+    }
 }
 
 void PreviewWindow::showThumbnail()
 {
-    QPushButton *previewButton;
+    PreviewButton *previewButton;
 
     if(previewCount<9)
-        previewButton=new QPushButton(thumbnailList->at(previewCount),QString("0").append(QString::number(previewCount+1)),this);
+        previewButton=new PreviewButton(thumbnailList->at(previewCount),QString("0").append(QString::number(previewCount+1)),this);
     else
-        previewButton=new QPushButton(thumbnailList->at(previewCount),QString::number(previewCount+1),this);
+        previewButton=new PreviewButton(thumbnailList->at(previewCount),QString::number(previewCount+1),this);
 
         previewButton->setFlat(true);
 
@@ -106,18 +139,21 @@ void PreviewWindow::showThumbnail()
         previewButton->setIconSize(QSize(100, 70));
         flowLayout->addWidget(previewButton);
         connect(previewButton,SIGNAL(clicked()),this,SLOT(screenThumbnailClicked()));
-
+        connect(previewButton,SIGNAL(newSlide()),this,SLOT(newSlide()));
+        connect(previewButton,SIGNAL(moveSlide()),this,SLOT(moveSlide()));
+        connect(previewButton,SIGNAL(deleteSlide()),this,SLOT(deleteSlide()));
+        previewButton->setSlideNumber(previewCount);
         previewCount++;
 }
 
 void PreviewWindow::addThumbnail(QPixmap pix)
 {
-    QPushButton *previewButton;
+    PreviewButton *previewButton;
 
     if(previewCount<9)
-        previewButton=new QPushButton(pix,QString("0").append(QString::number(previewCount+1)),this);
+        previewButton=new PreviewButton(pix,QString("0").append(QString::number(previewCount+1)),this);
     else
-        previewButton=new QPushButton(pix,QString::number(previewCount+1),this);
+        previewButton=new PreviewButton(pix,QString::number(previewCount+1),this);
 
         previewButton->setFlat(true);
 
@@ -125,8 +161,70 @@ void PreviewWindow::addThumbnail(QPixmap pix)
         previewButton->setIconSize(QSize(100, 70));
         flowLayout->addWidget(previewButton);
         connect(previewButton,SIGNAL(clicked()),this,SLOT(screenThumbnailClicked()));
-
+        connect(previewButton,SIGNAL(newSlide()),this,SLOT(newSlide()));
+        connect(previewButton,SIGNAL(moveSlide()),this,SLOT(moveSlide()));
+        connect(previewButton,SIGNAL(deleteSlide()),this,SLOT(deleteSlide()));
+        previewButton->setSlideNumber(previewCount);
         previewCount++;
+}
+
+void PreviewWindow::moveSlide()
+{
+    moveFlag=true;
+    PreviewButton *clickedButton = qobject_cast<PreviewButton *>(sender());
+    clickedButton->setCheckable(true);
+    clickedButton->setChecked(true);
+    toBeMovedPage=clickedButton->getSlideNumber();
+}
+
+void PreviewWindow::deleteSlide()
+{
+    if(m_doc->pageCount()==1)
+        return;
+
+    PreviewButton *clickedButton = qobject_cast<PreviewButton *>(sender());
+
+    int index=clickedButton->getSlideNumber();
+    KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
+    KoPAPageBase* page = padoc->pageByIndex(index, false);
+
+    padoc->takePage(page);
+    previewScreenButton.removeAt(index);
+    thumbnailList->removeAt(index);
+    flowLayout->removeWidget(clickedButton);
+    flowLayout->update();
+    this->repaint();
+    this->accept();
+    this->repaint();
+    if(m_currentPage==m_doc->pageCount()) {
+        emit gotoPage(m_currentPage-1);
+        emit gotoPage(m_currentPage);
+    }
+    else {
+    emit gotoPage(m_currentPage+1);
+    emit gotoPage(m_currentPage);
+  }
+}
+
+void PreviewWindow::newSlide()
+{
+    PreviewButton *clickedButton = qobject_cast<PreviewButton *>(sender());
+    int index=clickedButton->getSlideNumber()+1;
+
+    emit gotoPage(clickedButton->getSlideNumber()+1);
+
+    if (m_view) {
+        QAction* action = ((KXMLGUIClient*)m_view)->action("page_insertpage");
+        if (action) {
+            action->activate(QAction::Trigger);
+        }
+    }
+
+    KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
+    KoPAPageBase* papage = padoc->pageByIndex(index, false);
+    thumbnailList->insert(index,papage->thumbnail());
+
+    this->accept();
 }
 
 StoreButtonPreview::StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QObject *parent) :

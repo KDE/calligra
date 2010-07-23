@@ -29,6 +29,7 @@
 #include <QThread>
 
 #include "flowlayout.h"
+#include "PreviewButton.h"
 
 class PreviewWindow : public QDialog
 {
@@ -41,7 +42,7 @@ public:
    /*!
     * Preview images of the slides will be shown on the pushbutton
     */
-    QList<QPushButton *> previewScreenButton;
+    QList<PreviewButton *> previewScreenButton;
     QList <QPixmap> *thumbnailList;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
@@ -72,6 +73,19 @@ public slots:
      * it adds thumbnail and shows it in the scroll area
      */
     void addThumbnail(QPixmap pix);
+    /*!
+     * it adds thumbnail and shows it in the scroll area
+     */
+    void moveSlide();
+    /*!
+     * it adds thumbnail and shows it in the scroll area
+     */
+    void deleteSlide();
+    /*!
+     * it adds thumbnail and shows it in the scroll area
+     */
+    void newSlide();
+
 signals:
    /*!
     * This signal is emitted whenever the thumbnail is clicked
