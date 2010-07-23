@@ -98,6 +98,8 @@ public Q_SLOTS:
         CanvasBase::setDocumentSize(size);
     }
 
+    void refreshSheetViews();
+
 Q_SIGNALS:
     virtual void documentSizeChanged(const QSize&);
 
