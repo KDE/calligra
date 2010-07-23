@@ -99,7 +99,7 @@ public Q_SLOTS:
     }
 
     void refreshSheetViews();
-
+    void setActiveSheet(Sheet* sheet);
 Q_SIGNALS:
     virtual void documentSizeChanged(const QSize&);
 

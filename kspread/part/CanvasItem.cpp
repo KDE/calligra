@@ -94,8 +94,11 @@
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
+#include <KoShapeController.h>
+#include <KoShapeManagerPaintingStrategy.h>
 
 // KSpread
+#include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Global.h"
@@ -120,6 +123,7 @@
 // ui
 #include "ui/CellView.h"
 #include "ui/SheetView.h"
+#include "ui/RightToLeftPaintingStrategy.h"
 
 #define MIN_SIZE 10
 
@@ -131,6 +135,7 @@ public:
     Selection* selection;
     KoZoomHandler* zoomHandler;
     QHash<const Sheet*, SheetView*> sheetViews;
+    Sheet* activeSheet;
 };
 
 CanvasItem::CanvasItem(Doc *doc)
@@ -154,14 +159,25 @@ CanvasItem::CanvasItem(Doc *doc)
     d->selection = new Selection(this);
     d->selection->setActiveSheet(activeSheet());
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
+    connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
+
     d->zoomHandler = new KoZoomHandler();
+    d->activeSheet = 0;
+    setActiveSheet(doc->map()->sheet(0));
 }
 
 CanvasItem::~CanvasItem()
 {
-    delete d->zoomHandler;
+    if (doc()->isReadWrite())
+        selection()->emitCloseEditor(true);
+    d->selection->emitCloseEditor(false);
+    d->selection->endReferenceSelection(false);
+
+    d->activeSheet = 0;
+    
     delete d->selection;
     qDeleteAll(d->sheetViews);
+    delete d->zoomHandler;
     delete d;
 }
 
@@ -272,6 +288,88 @@ void CanvasItem::refreshSheetViews()
     const QList<Sheet*> sheets = doc()->map()->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
         sheets[i]->cellStorage()->styleStorage()->invalidateCache();
+}
+
+void CanvasItem::setActiveSheet(Sheet* sheet)
+{
+    if (sheet == d->activeSheet)
+        return;
+
+    if (d->activeSheet != 0 && !d->selection->referenceSelectionMode()) {
+        selection()->emitCloseEditor(true);
+        //saveCurrentSheetSelection();
+    }
+
+    const Sheet* oldSheet = d->activeSheet;
+    d->activeSheet = sheet;
+
+    if (d->activeSheet == 0) {
+        return;
+    }
+
+    // flake
+    // Change the active shape controller and its shapes.
+    shapeController()->setShapeControllerBase(d->activeSheet);
+    shapeManager()->setShapes(d->activeSheet->shapes());
+    // Tell the Canvas about the new visible sheet size.
+    sheetView(d->activeSheet)->updateAccessedCellRange();
+
+    // If there was no sheet before or the layout directions differ.
+    if (!oldSheet || oldSheet->layoutDirection() != d->activeSheet->layoutDirection()) {
+        // Propagate the layout direction to the canvas and horz. scrollbar.
+        const Qt::LayoutDirection direction = d->activeSheet->layoutDirection();
+        setLayoutDirection(direction);
+        // XXX d->horzScrollBar->setLayoutDirection(direction);
+        // Replace the painting strategy for painting shapes.
+        KoShapeManager *const shapeManager = this->shapeManager();
+        KoShapeManagerPaintingStrategy *paintingStrategy = 0;
+        if (direction == Qt::LeftToRight) {
+            paintingStrategy = new KoShapeManagerPaintingStrategy(shapeManager);
+        } else {
+            paintingStrategy = new RightToLeftPaintingStrategy(shapeManager, this);
+        }
+        shapeManager->setPaintingStrategy(paintingStrategy);
+    }
+
+    /*
+    // Restore the old scrolling offset.
+    QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
+    if (it3 != d->savedOffsets.end()) {
+        const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();
+        d->canvas->setDocumentOffset(offset);
+        d->horzScrollBar->setValue(offset.x());
+        d->vertScrollBar->setValue(offset.y());
+    }*/
+
+    // Always repaint the visible cells.
+    update();
+    //d->rowHeader->update();
+    //d->columnHeader->update();
+    //d->selectAllButton->update();
+
+    if (d->selection->referenceSelectionMode()) {
+        d->selection->setActiveSheet(d->activeSheet);
+        return;
+    }
+
+#if 0
+    /* see if there was a previous selection on this other sheet */
+    QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
+    QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
+
+    // restore the old anchor and marker
+    const QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1, 1) : *it;
+    const QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1, 1) : *it2;
+
+#endif
+    d->selection->clear();
+    d->selection->setActiveSheet(d->activeSheet);
+    d->selection->setOriginSheet(d->activeSheet);
+    //d->selection->initialize(QRect(newMarker, newAnchor));
+
+    // Auto calculation state for the INFO function.
+    const bool autoCalc = d->activeSheet->isAutoCalculationEnabled();
+    doc()->map()->calculationSettings()->setAutoCalculationEnabled(autoCalc);
 }
 
 #include "CanvasItem.moc"
