@@ -38,6 +38,7 @@
 #include "CollabDialog.h"
 #include "CollabServer.h"
 
+class KoCharacterStyle;
 class KoTextEditor;
 class QPushButton;
 class QIcon;
@@ -138,6 +139,18 @@ private:
     KUrl m_url;
 
     /*!
+     * Font related information for each Character in NewDocuments 
+     */
+    int m_fontcount;
+    int m_fontsize;
+    int m_fontweight;
+    QString m_fonttype;
+    QBrush m_foregroundbrush;
+    QBrush m_backgroundbrush;
+    QTextCharFormat::VerticalAlignment m_verticalalignment;
+    bool m_italicCheck;
+    bool m_underlineCheck;
+    /*!
      * Format frame declaration
      */
     QFrame * m_formatframe;
@@ -211,6 +224,10 @@ private:
      * Pointer to KoCanvasController
      */
     KoCanvasController *m_controller;
+    /*!
+     * Pointer to KoCharacterStyle
+     */
+    KoCharacterStyle *charstyle;
     /*!
      * Integers about current page
      */
@@ -396,6 +413,14 @@ private:
      * FontStyle Frame Destructor
      */
     void fontStyleFrameDestructor();
+    /*!
+     * Function for finding style of character's in NewDocument
+     */
+    void findCharStyle();
+    /*!
+     * Function for applying style to character's in NewDocument
+     */
+    void applyCharStyle();
 
 private:
     // Apply the selected formatting
@@ -675,13 +700,12 @@ private:
      */
     bool m_doubleClick;
     /*!
-     * true if existing document is open
-     */
-    bool m_openCheck;
-    /*!
      * true if new document is open
      */
     bool m_newDocOpen;
+    /*!
+     * true if document is modified
+     */
     bool m_isDocModified;
     /*!
      * flag for new file to existing file conversion

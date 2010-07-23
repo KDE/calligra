@@ -14,7 +14,7 @@
    <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Office</string>
+   <string>FreOffice</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QToolBar" name="viewToolBar">
@@ -55,6 +55,7 @@
    <addaction name="actionZoomLevel"/>
    <addaction name="actionZoomIn"/>
    <addaction name="actionFullScreen"/>
+   <addaction name="actionSlidingMotion"/>
   </widget>
   <widget class="QToolBar" name="SearchToolBar">
    <property name="focusPolicy">

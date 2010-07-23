@@ -170,10 +170,15 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_no(0),
         m_cancel(0),
         m_message(0),
-        m_openCheck(false),
         m_doubleClick(false),
         m_newDocOpen(false),
         m_isDocModified(false),
+        m_italicCheck(false),
+        m_underlineCheck(false),
+        m_fontcount(0),
+        m_fontsize(12),
+        m_fonttype("Nokia Sans"),
+        m_fontweight(25),
         m_count(0),
         m_pptTool(0),
         m_fsPPTDrawHighlightButton(0),
@@ -497,6 +502,8 @@ bool MainWindow::setSubScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignBottom);
         }
+        if(m_newDocOpen)
+            m_verticalalignment = editor->charFormat().verticalAlignment();
         m_isDocModified = true;
         return true;
     }
@@ -518,6 +525,8 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignTop);
         }
+        if(m_newDocOpen)
+            m_verticalalignment = editor->charFormat().verticalAlignment();
         m_isDocModified = true;
         return true;
     }
@@ -537,6 +546,8 @@ void MainWindow::selectFontSize()
 bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
     if (editor) {
         editor->setFontSize(size);
+        if(m_newDocOpen)
+            m_fontsize = size;
         m_isDocModified = true;
         return true;
     }
@@ -555,6 +566,8 @@ void MainWindow::selectFontType()
 bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
     if (editor) {
         editor->setFontFamily(font);
+        if(m_newDocOpen)
+            m_fonttype = font;
         m_isDocModified = true;
         return true;
     }
@@ -573,6 +586,8 @@ void MainWindow::selectTextColor()
 bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
     if (editor) {
         editor->setTextColor(color);
+        if(m_newDocOpen)
+            m_foregroundbrush = QBrush(color);
         m_isDocModified = true;
         return true;
     }
@@ -591,6 +606,8 @@ void MainWindow::selectTextBackGroundColor()
 bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
     if (editor) {
         editor->setTextBackgroundColor(color);
+        if(m_newDocOpen)
+            m_backgroundbrush = QBrush(color);
         m_isDocModified = true;
         return true;
     }
@@ -613,6 +630,8 @@ bool MainWindow::setBold(KoTextEditor *editor) {
         } else {
             editor->bold(true);
         }
+        if(m_newDocOpen)
+            m_fontweight = m_editor->charFormat().fontWeight();
         m_isDocModified = true;
         return true;
     }
@@ -635,6 +654,8 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
         } else {
             editor->italic(true);
         }
+        if(m_newDocOpen)
+            m_italicCheck = m_editor->charFormat().fontItalic();
         m_isDocModified = true;
         return true;
     }
@@ -657,6 +678,8 @@ bool MainWindow::setUnderline(KoTextEditor *editor) {
         } else {
             editor->underline(true);
         }
+        if(m_newDocOpen)
+            m_underlineCheck=m_editor->charFormat().property(KoCharacterStyle::UnderlineType).toBool();
         m_isDocModified = true;
         return true;
     }
@@ -1050,7 +1073,7 @@ void MainWindow::openNewDocument(DocumentType type)
     m_doc = KParts::ComponentFactory::createPartInstanceFromQuery<KoDocument>(
                 mimetype, QString(),
                 0, 0, QStringList(),
-                0);
+                &errorCode);
     if (!m_doc) {
         setShowProgressIndicator(false);
         return;
@@ -1071,6 +1094,12 @@ void MainWindow::openNewDocument(DocumentType type)
         m_doubleClick = true;
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
+        charstyle=new KoCharacterStyle();
+        charstyle->setFontCapitalization(QFont::AllLowercase);
+        charstyle->setFontPointSize(m_fontsize);
+        charstyle->setFontWeight(m_fontweight);
+        charstyle->setFontFamily("Nokia Sans");
+        m_editor->setStyle(charstyle);
     }
 
     QList<KoCanvasController*> controllers = m_view->findChildren<KoCanvasController*>();
@@ -1084,7 +1113,7 @@ void MainWindow::openNewDocument(DocumentType type)
         return;
     }
 
-    setWindowTitle(QString("%1 - %2").arg(i18n("Office"),"NewDocument"));
+    setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"),"NewDocument"));
 
     m_controller->setProperty("FingerScrollable", true);
     setCentralWidget(m_controller);
@@ -1113,8 +1142,6 @@ void MainWindow::openNewDocument(DocumentType type)
     m_fileName = "";
     m_newDocOpen = true;
     m_type = type;
-    //false when new document open
-    m_openCheck = false;
 }
 
 void MainWindow::closeDoc()
@@ -1192,19 +1219,7 @@ void MainWindow::toggleToolBar(bool show)
 //Toogling between edit toolbar and view toolbar with various options
 void MainWindow::editToolBar(bool edit)
 {
-    if ((!m_doubleClick)&&(m_openCheck)) {
-        if (edit) {
-             KoToolManager::instance()->switchToolRequested(PanTool_ID);
-             m_ui->viewToolBar->show();
-             m_ui->EditToolBar->hide();
-             m_openCheck = true;
-        } else {
-             m_ui->viewToolBar->hide();
-             m_ui->EditToolBar->show();
-             m_openCheck = true;
-             KoToolManager::instance()->switchToolRequested(TextTool_ID);
-        }
-    } else if (m_newDocOpen) {
+    if (m_newDocOpen) {
          if (edit) {
              KoToolManager::instance()->switchToolRequested(PanTool_ID);
              m_ui->EditToolBar->hide();
@@ -1214,7 +1229,6 @@ void MainWindow::editToolBar(bool edit)
              KoToolManager::instance()->switchToolRequested(TextTool_ID);
              m_ui->viewToolBar->hide();
              m_ui->EditToolBar->show();
-             m_newDocOpen=true;
          }
     } else {
          if (edit) {
@@ -1222,12 +1236,13 @@ void MainWindow::editToolBar(bool edit)
              m_ui->viewToolBar->hide();
              m_ui->EditToolBar->show();
          } else {
+             KoToolManager::instance()->switchToolRequested(PanTool_ID);
              m_ui->EditToolBar->hide();
              m_ui->viewToolBar->show();
              m_isViewToolBar = true;
-             KoToolManager::instance()->switchToolRequested(PanTool_ID);
          }
     }
+
     if(m_formatframe)
         m_formatframe->hide();
 
@@ -1279,7 +1294,8 @@ void MainWindow::doRedo()
 
 void MainWindow::copy()
 {
-    m_controller->canvas()->toolProxy()->copy();
+    if(m_editor->hasSelection())
+        m_controller->canvas()->toolProxy()->copy();
 
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -1450,7 +1466,7 @@ void MainWindow::closeDocument()
     if (m_doc == NULL)
         return;
 
-    setWindowTitle(i18n("Office"));
+    setWindowTitle(i18n("FreOffice"));
     setCentralWidget(0);
     m_positions.clear();
     // the presentation and text document instances seem to require different ways to do cleanup
@@ -1492,7 +1508,14 @@ void MainWindow::closeDocument()
 
     m_doubleClick=false;
     m_isDocModified=false;
+    m_newDocOpen=false;
+    m_italicCheck=false,
+    m_underlineCheck=false,
     m_count=0;
+    m_fontcount=0,
+    m_fontsize=12,
+    m_fontweight=25;
+    m_fonttype="Nokia Sans";
     viewNumber++;
 }
 
@@ -1668,7 +1691,7 @@ void MainWindow::openDocument(const QString &fileName)
     } else {
         m_ui->actionEdit->setVisible(false);
     }
-    setWindowTitle(QString("%1 - %2").arg(i18n("Office"), fname));
+    setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"), fname));
 
     m_controller->setProperty("FingerScrollable", true);
     setCentralWidget(m_controller);
@@ -1691,7 +1714,6 @@ void MainWindow::openDocument(const QString &fileName)
         m_splash->finish(m_controller);
         m_splash = 0;
    }
-   m_openCheck = true;
    initialUndoStepsCount();
 
    if(m_type==Presentation)
@@ -1782,7 +1804,36 @@ void MainWindow::resourceChanged(int key, const QVariant &value)
 
         QString pageNo = i18n("pg%1 - pg%2", QString::number(value.toInt()), QString::number(m_doc->pageCount()));
         m_ui->actionPageNumber->setText(pageNo);
+    }
+}
 
+void MainWindow::findCharStyle()
+{
+    m_fontsize = m_editor->charFormat().font().pointSize();
+    m_fonttype = m_editor->charFormat().fontFamily();
+    m_foregroundbrush = m_editor->charFormat().foreground();
+    m_backgroundbrush = m_editor->charFormat().background();
+    m_verticalalignment = m_editor->charFormat().verticalAlignment();
+    m_italicCheck = m_editor->charFormat().fontItalic();
+    m_underlineCheck = m_editor->charFormat().property(KoCharacterStyle::UnderlineType).toBool();
+    m_fontweight = m_editor->charFormat().fontWeight();
+}
+
+void MainWindow::applyCharStyle()
+{
+    charstyle->setFontPointSize(m_fontsize);
+    charstyle->setFontFamily(m_fonttype);
+    charstyle->setForeground (m_foregroundbrush);
+    charstyle->setBackground(m_backgroundbrush);
+    charstyle->setVerticalAlignment(m_verticalalignment);
+    charstyle->setFontWeight(m_fontweight);
+    charstyle->setFontItalic(m_italicCheck);
+    if(m_underlineCheck) {
+        charstyle->setUnderlineStyle(KoCharacterStyle::SolidLine);
+        charstyle->setUnderlineType(KoCharacterStyle::SingleLine);
+    } else {
+        charstyle->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
+        charstyle->setUnderlineType(KoCharacterStyle::NoLineType);
     }
 }
 
@@ -2381,9 +2432,12 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                     m_fontstyleframe->hide();
             }
         }
+        if(m_editor&&m_newDocOpen){
+            findCharStyle();
+        }
     }
 
-    if(event && event->type() == 6 && m_doc && m_editor ) {
+    if(m_doc && m_editor && event && event->type() == 7 ) {
          QKeyEvent *ke=static_cast<QKeyEvent *>(event);
          if(ke->key()!=Qt::Key_Up && ke->key()!=Qt::Key_Down &&
             ke->key()!=Qt::Key_Right && ke->key()!=Qt::Key_Left &&
@@ -2391,12 +2445,23 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock ){
              m_isDocModified = true;
          }
+         if(ke->key() == Qt::Key_Shift && m_newDocOpen ) {
+             m_fontcount++;
+             if((m_fontcount%2)!=0) {
+                charstyle->setFontCapitalization(QFont::AllUppercase);
+             } else {
+                charstyle->setFontCapitalization(QFont::AllLowercase);
+             }
+             applyCharStyle();
+             m_editor->setStyle(charstyle);
+         }
     }
 
     if(m_doubleClick) {
         if(event->type() == QEvent::MouseButtonDblClick) {
-            m_ui->EditToolBar->show();
-            m_ui->viewToolBar->hide();
+            KoToolManager::instance()->switchToolRequested(PanTool_ID);
+            m_ui->EditToolBar->hide();
+            m_ui->viewToolBar->show();
         }
     }
     return false;

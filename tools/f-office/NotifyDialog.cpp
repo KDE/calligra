@@ -40,7 +40,7 @@ NotifyDialog::NotifyDialog(QWidget *parent)
     m_layout = new QVBoxLayout(this);
     m_layout->addWidget(m_label);
     this->setLayout(m_layout);
-    this->setWindowTitle(i18n("Office"));
+    this->setWindowTitle(i18n("FreOffice"));
     m_label->setAlignment(Qt::AlignCenter);
 }
 
