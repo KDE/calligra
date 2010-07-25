@@ -136,6 +136,9 @@ public:
 
     void emitProgress(int value);
 
+#ifdef SWINDER_XLS2RAW
+    void dumpStats();
+#endif
 signals:
     void sigProgress(int value);
 

@@ -25,6 +25,8 @@
 #include "value.h"
 
 #include <vector>
+#include <QtGlobal>
+#include <QList>
 
 namespace Swinder
 {
@@ -34,6 +36,26 @@ class Sheet;
 class Picture;
 class ChartObject;
 
+struct Hyperlink
+{
+    Hyperlink() : isValid(false) {}
+    Hyperlink(const UString& displayName, const UString& location, const UString& targetFrameName) : isValid(true), displayName(displayName), location(location), targetFrameName(targetFrameName) {}
+    bool operator==(const Hyperlink& b) {
+        if (!isValid && !b.isValid) return true;
+        if (!isValid || !b.isValid) return false;
+        return displayName == b.displayName && location == b.location && targetFrameName == b.targetFrameName;
+    }
+    bool operator!=(const Hyperlink& b) { return !operator==(b); }
+
+    bool isValid;
+    UString displayName;
+    UString location;
+    UString targetFrameName;
+};
+}
+Q_DECLARE_TYPEINFO(Swinder::Hyperlink, Q_MOVABLE_TYPE);
+namespace Swinder
+{
 class Cell
 {
 public:
@@ -90,23 +112,20 @@ public:
     
     // Defines if this cell has a hyperlink.
     bool hasHyperlink() const;
-    UString hyperlinkDisplayName() const;
-    UString hyperlinkLocation() const;
-    UString hyperlinkTargetFrameName() const;
-    void removeHyperlink();
-    void setHyperlink(const UString& displayName, const UString& location, const UString& targetFrameName);
+    Hyperlink hyperlink() const;
+    void setHyperlink(const Hyperlink& link);
 
     // Returns the optional note/comment/annotation of this cell.
     UString note() const;
     void setNote(const UString &n);
     
     // Defines a list of pictures anchored to this cell.
-    std::vector<Picture*> pictures() const;
-    void setPictures(std::vector<Picture*>);
+    QList<Picture*> pictures() const;
+    void setPictures(const QList<Picture*>&);
     void addPicture(Picture*);
 
     // Defines a list of charts anchored to this cell.
-    std::vector<ChartObject*> charts() const;
+    QList<ChartObject*> charts() const;
     void addChart(ChartObject* chart);
     
     bool operator==(const Cell &other) const;

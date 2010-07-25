@@ -24,6 +24,8 @@
 #include "ustring.h"
 #include "utils.h"
 
+#include <PointStorage.h>
+
 #include <iostream>
 #include <map>
 #include <QPoint>
@@ -49,6 +51,9 @@ public:
     QHash<unsigned, unsigned> maxCellsInRow;
     QHash<unsigned, Column*> columns;
     QHash<unsigned, Row*> rows;
+    KSpread::PointStorage<Hyperlink> hyperlinks;
+    KSpread::PointStorage<QList<Picture*> > pictures;
+    KSpread::PointStorage<QList<ChartObject*> > charts;
 
     bool visible;
     bool protect;
@@ -116,6 +121,13 @@ void Sheet::setAutoCalc(bool a)
 
 void Sheet::clear()
 {
+    // delete all cell data
+    for (int i = 0; i < d->pictures.count(); i++) {
+        qDeleteAll(d->pictures.data(i));
+    }
+    for (int i = 0; i < d->charts.count(); i++) {
+        qDeleteAll(d->charts.data(i));
+    }
     // delete all cells
     qDeleteAll(d->cells);
     d->cells.clear();
@@ -468,6 +480,80 @@ QList<HorizontalPageBreak> Sheet::horizontalPageBreaks()
     return d->horizontalPageBreaks;
 }
 
+Hyperlink Sheet::hyperlink(unsigned column, unsigned row) const
+{
+    return d->hyperlinks.lookup(column, row);
+}
+
+void Sheet::setHyperlink(unsigned column, unsigned row, const Hyperlink& link)
+{
+    if (link.isValid)
+        d->hyperlinks.insert(column, row, link);
+    else
+        d->hyperlinks.take(column, row);
+}
+
+QList<Picture*> Sheet::pictures(unsigned column, unsigned row) const
+{
+    return d->pictures.lookup(column, row);
+}
+
+void Sheet::setPictures(unsigned column, unsigned row, const QList<Picture*>& pictures)
+{
+    if (pictures.isEmpty())
+        d->pictures.take(column, row);
+    else
+        d->pictures.insert(column, row, pictures);
+}
+
+void Sheet::addPicture(unsigned column, unsigned row, Picture* picture)
+{
+    QList<Picture*> pics = pictures(column, row);
+    pics.append(picture);
+    setPictures(column, row, pics);
+}
+
+QList<ChartObject*> Sheet::charts(unsigned column, unsigned row) const
+{
+    return d->charts.lookup(column, row);
+}
+
+void Sheet::setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts)
+{
+    if (charts.isEmpty())
+        d->charts.take(column, row);
+    else
+        d->charts.insert(column, row, charts);
+}
+
+void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
+{
+    QList<ChartObject*> chrts = charts(column, row);
+    chrts.append(chart);
+    setCharts(column, row, chrts);
+}
+
+#ifdef SWINDER_XLS2RAW
+void Sheet::dumpStats()
+{
+    int ndValue = 0, ndFormula = 0, ndFormat = 0, ndColumnSpan = 0, ndRowSpan = 0, ndCovered = 0, ndColumnRepeat = 0, ndHyperlink = 0, ndNote = 0, ndPictures = 0, ndCharts = 0;
+    foreach (Cell* c, d->cells) {
+        if (c->value() != Value()) ndValue++;
+        if (!c->formula().isEmpty()) ndFormula++;
+        if (c->format() != Format()) ndFormat++;
+        if (c->columnSpan() != 1) ndColumnSpan++;
+        if (c->rowSpan() != 1) ndRowSpan++;
+        if (c->isCovered()) ndCovered++;
+        if (c->columnRepeat() != 1) ndColumnRepeat++;
+        if (c->hasHyperlink()) ndHyperlink++;
+        if (!c->note().isEmpty()) ndNote++;
+        if (c->pictures().size()) ndPictures++;
+        if (c->charts().size()) ndCharts++;
+    }
+    printf("    rows: %d\n  cols: %d\n  cells: %d\n", d->rows.size(), d->columns.size(), d->cells.size());
+    printf("       values: %d\n       formulas: %d\n       formats: %d\n       colspans: %d\n       rowspans: %d\n       covered: %d\n       colrepeat: %d\n       hyperlink: %d\n       note: %d\n       pics: %d\n       charts: %d\n", ndValue, ndFormula, ndFormat, ndColumnSpan, ndRowSpan, ndCovered, ndColumnRepeat, ndHyperlink, ndNote, ndPictures, ndCharts);
+}
+#endif
 
 class Column::Private
 {

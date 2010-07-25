@@ -3220,6 +3220,7 @@ int main(int argc, char ** argv)
     Workbook* workbook = new Workbook();
     ExcelReader* reader = new ExcelReader();
     reader->load(workbook, filename);
+    workbook->dumpStats();
     delete reader;
     delete workbook;
 

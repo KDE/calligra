@@ -22,6 +22,7 @@
 
 #include "ustring.h"
 #include "format.h"
+#include "cell.h"
 #include <QImage>
 
 class QPoint;
@@ -174,6 +175,9 @@ public:
     void addHorizontalPageBreak(const HorizontalPageBreak& pageBreak);
     QList<HorizontalPageBreak> horizontalPageBreaks();
 
+#ifdef SWINDER_XLS2RAW
+    void dumpStats();
+#endif
 private:
     // no copy or assign
     Sheet(const Sheet&);
@@ -181,6 +185,17 @@ private:
 
     class Private;
     Private *d;
+
+    friend class Cell;
+
+    Hyperlink hyperlink(unsigned column, unsigned row) const;
+    void setHyperlink(unsigned column, unsigned row, const Hyperlink& link);
+    QList<Picture*> pictures(unsigned column, unsigned row) const;
+    void setPictures(unsigned column, unsigned row, const QList<Picture*>& pictures);
+    void addPicture(unsigned column, unsigned row, Picture* picture);
+    QList<ChartObject*> charts(unsigned column, unsigned row) const;
+    void setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts);
+    void addChart(unsigned column, unsigned row, ChartObject* chart);
 };
 
 struct VerticalPageBreak {

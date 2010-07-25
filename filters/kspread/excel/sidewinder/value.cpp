@@ -34,9 +34,11 @@ public:
     Value::Type type;
 
     // someday move to use union to reduce memory consumption
-    bool b;
-    int i;
-    double f;
+    union {
+        bool b;
+        int i;
+        double f;
+    };
     UString s;
     std::map<unsigned, FormatFont> formatRuns;
 

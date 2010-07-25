@@ -1,5 +1,11 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder  ${CMAKE_BINARY_DIR}/filters/ ${KOMAIN_INCLUDES})
-include_directories( ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx ${CMAKE_SOURCE_DIR}/filters/libmsooxml )
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
+    ${CMAKE_BINARY_DIR}/filters/
+    ${KOMAIN_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx
+    ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+    ${CMAKE_SOURCE_DIR}/kspread # for PointStorage
+)
 
 add_custom_command(
     OUTPUT records.cpp

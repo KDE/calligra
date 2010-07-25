@@ -178,3 +178,13 @@ Format* Workbook::format(int index)
 {
     return d->formats[index];
 }
+
+#ifdef SWINDER_XLS2RAW
+void Workbook::dumpStats()
+{
+    for (unsigned i = 0; i < d->sheets.size(); i++) {
+        printf("Sheet %u\n", i+1);
+        d->sheets[i]->dumpStats();
+    }
+}
+#endif

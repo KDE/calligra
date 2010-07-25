@@ -1,6 +1,7 @@
 include_directories(
     ${CMAKE_BINARY_DIR}/filters/
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting.h
+    ${CMAKE_SOURCE_DIR}/kspread # for PointStorage.h
 )
 
 kde4_add_executable(recordsxml2cpp recordsxml2cpp.cpp)

@@ -1336,10 +1336,11 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         QString str = string(value.asString());
         QString linkName, linkLocation;
 
-        if (cell->hasHyperlink()) {
-            linkLocation = string(cell->hyperlinkLocation());
+        Hyperlink link = cell->hyperlink();
+        if (link.isValid) {
+            linkLocation = string(link.location);
             if(!linkLocation.isEmpty()) {
-                linkName = string(cell->hyperlinkDisplayName()).trimmed();
+                linkName = string(link.displayName).trimmed();
                 if(linkName.isEmpty())
                     linkName = str;
                 str.clear(); // at Excel cells with links don't have additional text content
@@ -1401,7 +1402,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         if (!linkName.isEmpty()) {
             xmlWriter->startElement("text:a");
             xmlWriter->addAttribute("xlink:href", linkLocation);
-            const QString targetFrameName = string(cell->hyperlinkTargetFrameName());
+            const QString targetFrameName = string(link.targetFrameName);
             if (! targetFrameName.isEmpty())
                 xmlWriter->addAttribute("office:target-frame-name", targetFrameName);
             xmlWriter->addTextNode(linkName);

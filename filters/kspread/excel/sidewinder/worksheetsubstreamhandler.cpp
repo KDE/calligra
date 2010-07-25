@@ -726,7 +726,7 @@ void WorksheetSubStreamHandler::handleHLink(HLinkRecord* record)
     Cell *cell = d->sheet->cell(record->firstColumn(), record->firstRow());
     if (cell) {
         UString url = record->urlMonikerUrl() + UString('#') + record->location();
-        cell->setHyperlink(record->displayName(), url, record->frameName());
+        cell->setHyperlink(Hyperlink(record->displayName(), url, record->frameName()));
     }
 }
 

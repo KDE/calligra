@@ -42,13 +42,7 @@ public:
     unsigned rowSpan;
     bool covered;
     int columnRepeat;
-    bool hasHyperlink;
-    UString hyperlinkDisplayName;
-    UString hyperlinkLocation;
-    UString hyperlinkTargetFrameName;
     UString note;
-    std::vector<Picture*> pictures;
-    std::vector<ChartObject*> charts;
 };
 
 }
@@ -66,14 +60,11 @@ Cell::Cell(Sheet* sheet, unsigned column, unsigned row)
     d->rowSpan    = 1;
     d->covered    = false;
     d->columnRepeat = 1;
-    d->hasHyperlink = false;
     d->format     = 0;
 }
 
 Cell::~Cell()
 {
-    qDeleteAll(d->pictures);
-    qDeleteAll(d->charts);
     delete d;
 }
 
@@ -217,38 +208,17 @@ void Cell::setColumnRepeat(int repeat)
 
 bool Cell::hasHyperlink() const
 {
-    return d->hasHyperlink;
+    return d->sheet->hyperlink(d->column, d->row).isValid;
 }
 
-UString Cell::hyperlinkDisplayName() const
+Hyperlink Cell::hyperlink() const
 {
-    return d->hyperlinkDisplayName;
+    return d->sheet->hyperlink(d->column, d->row);
 }
 
-UString Cell::hyperlinkLocation() const
+void Cell::setHyperlink(const Hyperlink& link)
 {
-    return d->hyperlinkLocation;
-}
-
-UString Cell::hyperlinkTargetFrameName() const
-{
-    return d->hyperlinkTargetFrameName;
-}
-
-void Cell::removeHyperlink()
-{
-    d->hyperlinkDisplayName = UString();
-    d->hyperlinkLocation = UString();
-    d->hyperlinkTargetFrameName = UString();
-    d->hasHyperlink = false;
-}
-
-void Cell::setHyperlink(const UString& displayName, const UString& location, const UString& targetFrameName)
-{
-    d->hyperlinkDisplayName = displayName;
-    d->hyperlinkLocation = location;
-    d->hyperlinkTargetFrameName = targetFrameName;
-    d->hasHyperlink = true;
+    d->sheet->setHyperlink(d->column, d->row, link);
 }
 
 UString Cell::note() const
@@ -261,29 +231,29 @@ void Cell::setNote(const UString &n)
     d->note = n;
 }
 
-std::vector<Picture*> Cell::pictures() const
+QList<Picture*> Cell::pictures() const
 {
-    return d->pictures;
+    return d->sheet->pictures(d->column, d->row);
 }
 
-void Cell::setPictures(std::vector<Picture*> pics)
+void Cell::setPictures(const QList<Picture*>& pics)
 {
-    d->pictures = pics;
+    d->sheet->setPictures(d->column, d->row, pics);
 }
 
 void Cell::addPicture(Picture* picture)
 {
-    d->pictures.push_back(picture);
+    d->sheet->addPicture(d->column, d->row, picture);
 }
 
-std::vector<ChartObject*> Cell::charts() const
+QList<ChartObject*> Cell::charts() const
 {
-    return d->charts;
+    return d->sheet->charts(d->column, d->row);
 }
 
 void Cell::addChart(ChartObject* chart)
 {
-    d->charts.push_back(chart);
+    d->sheet->addChart(d->column, d->row, chart);
 }
 
 bool Cell::operator==(const Cell &other) const
@@ -297,9 +267,7 @@ bool Cell::operator==(const Cell &other) const
     if (columnRepeat() != other.columnRepeat()) return false;
 
     if (hasHyperlink() != other.hasHyperlink()) return false;
-    if (hasHyperlink() && ( hyperlinkDisplayName() != other.hyperlinkDisplayName() ||
-                            hyperlinkLocation() != other.hyperlinkLocation() ||
-                            hyperlinkTargetFrameName() != other.hyperlinkTargetFrameName() ) ) return false;
+    if (hasHyperlink() && hyperlink() != other.hyperlink()) return false;
 
     if (note() != other.note()) return false;
 
