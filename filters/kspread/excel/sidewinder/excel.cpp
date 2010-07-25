@@ -3151,7 +3151,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
     free(buffer);
     free(continuePositions);
-
+    delete d->globals;
     delete stream;
 
     storage.close();

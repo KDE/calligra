@@ -190,6 +190,13 @@ Map::Map(Doc* doc, int syntaxVersion)
 
 Map::~Map()
 {
+    // we have to explicitly delete the Sheets, not let QObject take care of that
+    // as the sheet in its destructor expects the Map to still exist
+    qDeleteAll(d->lstSheets);
+    d->lstSheets.clear();
+
+    deleteLoadingInfo();
+
     delete d->bindingManager;
     delete d->databaseManager;
     delete d->dependencyManager;
