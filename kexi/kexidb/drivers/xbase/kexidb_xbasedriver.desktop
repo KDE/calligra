@@ -70,5 +70,5 @@ X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
 X-Kexi-DriverName=xBase
-X-Kexi-DriverType=Network
+X-Kexi-DriverType=File
 X-Kexi-KexiDBVersion=1.9
