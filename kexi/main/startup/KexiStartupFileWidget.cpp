@@ -319,7 +319,7 @@ bool KexiStartupFileWidget::checkSelectedFile()
 // QString path = selectedFile().trimmed();
     kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 
-    if (d->highlightedUrl.isEmpty() && !locationEdit()->lineEdit()->text().isEmpty()) {
+    if (/*d->highlightedUrl.isEmpty() &&*/ !locationEdit()->lineEdit()->text().isEmpty()) {
         kDebug() << locationEdit()->lineEdit()->text();
         //kDebug() << locationEdit()->urls();
         kDebug() << baseUrl();
