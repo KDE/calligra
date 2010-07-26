@@ -94,11 +94,13 @@
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
+#include "KexiProjectModel.h"
 
 #include <widget/KexiProjectListView.h>
 #include <widget/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/KexiDockableWidget.h>
+#include <widget/KexiProjectNavigator.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -298,6 +300,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //#ifdef KEXI_DEBUG_GUI
 // delete debugWindow;
 //#endif
+
     return 0;
 }
 
@@ -2087,7 +2090,22 @@ void KexiMainWindow::setupProjectNavigator()
 
         KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
         d->nav = new KexiProjectListView(navDockableWidget);
-        navDockableWidget->setWidget(d->nav);
+        d->nav2 = new KexiProjectNavigator(navDockableWidget);
+        
+        //navDockableWidget->setWidget(d->nav);
+
+               
+        //TODO temp
+        QWidget *navi = new QWidget(navDockableWidget);
+        QVBoxLayout *navi_layout = new QVBoxLayout();
+        navi_layout->addWidget(d->nav);
+        navi_layout->addWidget(d->nav2);
+        navi->setLayout(navi_layout);
+
+        navDockableWidget->setWidget(navi);
+        //End TODO
+
+        
 //TODO REMOVE?  d->nav->installEventFilter(this);
         d->navDockWidget->setWindowTitle(d->nav->windowTitle());
         d->navDockWidget->setWidget(navDockableWidget);
@@ -2131,10 +2149,40 @@ void KexiMainWindow::setupProjectNavigator()
         }
         connect(d->nav, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
+        
         connect(d->navDockWidget, SIGNAL(visibilityChanged(bool)),
             this, SLOT(slotProjectNavigatorVisibilityChanged(bool)));
 
-//  d->restoreNavigatorWidth();
+        //Nav2 Signals
+        connect(d->nav2, SIGNAL(openItem(KexiPart::Item*, Kexi::ViewMode)),
+                this, SLOT(openObject(KexiPart::Item*, Kexi::ViewMode)));
+        connect(d->nav2, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
+                this, SLOT(openObjectFromNavigator(KexiPart::Item*, Kexi::ViewMode)));
+        connect(d->nav2, SIGNAL(newItem(KexiPart::Info*)),
+                this, SLOT(newObject(KexiPart::Info*)));
+        connect(d->nav2, SIGNAL(removeItem(KexiPart::Item*)),
+                this, SLOT(removeObject(KexiPart::Item*)));
+        connect(d->nav2->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
+                this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
+        connect(d->nav2, SIGNAL(executeItem(KexiPart::Item*)),
+                this, SLOT(executeItem(KexiPart::Item*)));
+        connect(d->nav2, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
+                this, SLOT(copyItemToClipboardAsDataTable(KexiPart::Item*)));
+        connect(d->nav2, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
+                this, SLOT(exportItemAsDataTable(KexiPart::Item*)));
+        connect(d->nav2, SIGNAL(printItem(KexiPart::Item*)),
+                this, SLOT(printItem(KexiPart::Item*)));
+        connect(d->nav2, SIGNAL(pageSetupForItem(KexiPart::Item*)),
+                this, SLOT(showPageSetupForItem(KexiPart::Item*)));
+        connect(d->nav2, SIGNAL(selectionChanged(KexiPart::Item*)),
+                this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
+        if (d->prj) {//connect to the project
+            connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
+                    d->nav2, SLOT(slotRemoveItem(const KexiPart::Item&)));
+        }
+
+        
+        //  d->restoreNavigatorWidth();
     }
     if (d->prj->isConnected()) {
         QString partManagerErrorMessages;
@@ -2143,6 +2191,8 @@ void KexiMainWindow::setupProjectNavigator()
             showWarningContinueMessage(partManagerErrorMessages, QString(),
                                        "dontShowWarningsRelatedToPluginsLoading");
         }
+        d->nav2->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
+        
     }
     connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav, SLOT(addItem(KexiPart::Item&)));
     d->nav->setFocus();

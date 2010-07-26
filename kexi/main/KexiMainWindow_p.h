@@ -35,6 +35,7 @@
 #include <QHBoxLayout>
 
 #include <kexiutils/SmallToolButton.h>
+class KexiProjectNavigator;
 
 //! @short Main application's tabbed toolbar
 class KexiTabbedToolBar : public KTabWidget
@@ -298,6 +299,7 @@ void KexiTabbedToolBar::mouseMoveEvent(QMouseEvent* event)
         d->tabToRaise = -1;
     } else if (d->tabToRaise != tab) {
         d->tabRaiseTimer.start();
+
         d->tabToRaise = tab;
     }
     KTabWidget::mouseMoveEvent(event);
@@ -945,6 +947,7 @@ public:
     KexiContextHelp *ctxHelp;
 #endif
     KexiProjectListView *nav;
+    KexiProjectNavigator *nav2;
     KexiTabbedToolBar *tabbedToolBar;
     KexiDockWidget *navDockWidget;
     KTabWidget *propEditorTabWidget;

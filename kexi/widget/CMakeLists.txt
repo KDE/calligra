@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/ta
 
 ########### next target ###############
 
-set(kexiextendedwidgets_LIB_SRCS 
+set(kexiextendedwidgets_LIB_SRCS
    kexidataawareview.cpp 
    kexidatatable.cpp 
    kexiquerydesignersqleditor.cpp 
@@ -31,7 +31,11 @@ set(kexiextendedwidgets_LIB_SRCS
    kexicharencodingcombobox.cpp
    kexiprjtypeselector.cpp
    KexiProjectListView.cpp 
-   KexiProjectListViewItem.cpp 
+   KexiProjectListViewItem.cpp
+   KexiProjectModel.cpp
+   KexiProjectModelItem.cpp
+   KexiProjectNavigator.cpp
+   KexiProjectTreeView.cpp
 )
 
 
