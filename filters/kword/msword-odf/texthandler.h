@@ -237,8 +237,9 @@ private:
     bool m_hyperLinkActive;
     QList<QString> m_bookmarkRef;
 
-    //set to TRUE if a manual page break (an end-of-section character
-    //not at the end of a section) was found in the main document
+    //if TRUE, the fo:break-before="page" property is required because a manual
+    //page break (an end-of-section character not at the end of a section) was
+    //found in the main document
     bool m_breakBeforePage;
 };
 
