@@ -102,7 +102,8 @@ Style Conditions::testConditions( const Cell& cell ) const
     if (currentCondition(cell, condition)) {
         StyleManager *const styleManager = cell.sheet()->map()->styleManager();
         Style *const style = styleManager->style(condition.styleName);
-        return *style;
+        if (style)
+            return *style;
     }
     return Style();
 }
