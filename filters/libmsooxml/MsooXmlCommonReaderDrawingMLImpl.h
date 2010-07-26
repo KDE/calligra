@@ -1481,7 +1481,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     TRY_READ_ATTR_WITHOUT_NS(lvl)
 
     if (!lvl.isEmpty()) {
-        m_currentListLevel = lvl.toInt();
+        m_currentListLevel = lvl.toInt() + 1;
         m_currentListStyleProperties->setLevel(m_currentListLevel);
     } else {
         m_currentListLevel = 0;
