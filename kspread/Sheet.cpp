@@ -1652,22 +1652,22 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     kDebug(36003) << " table-row found :index row after" << rowIndex;
                 } // the evaluation of the elements is done in during data reading so this does not seam
                   // to have any use, therefore removed
-                /*else if (rowElement.localName() == "shapes") {
+                else if (rowElement.localName() == "shapes") {
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
-                    KoShapeLoadingContext shapeLoadingContext(odfContext, resourceManager());
+                    KoShapeLoadingContext* shapeLoadingContext = tableContext.shapeContext;
                     KoXmlElement element;
                     forEachElement(element, rowElement) {
                         if (element.namespaceURI() != KoXmlNS::draw)
                             continue;
-                        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeLoadingContext);
+                        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, *shapeLoadingContext);
                         if (!shape)
                             continue;
                         addShape(shape);
                         dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(false);
                     }
-                }*/
+                }
             }
 
             // don't need it anymore
