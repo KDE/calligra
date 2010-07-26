@@ -97,7 +97,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     d->pageLayout = KoPageLayout();
     d->masterPageDrawStyleName.clear();
     d->masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
-    d->slideMasterPageProperties = PptxSlideMasterPageProperties();
+    d->slideMasterPageProperties.clear();
 
     const KoFilter::ConversionStatus result = readInternal();
 

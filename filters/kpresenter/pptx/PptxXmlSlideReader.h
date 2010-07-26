@@ -70,8 +70,10 @@ public:
     QList<PptxShapeProperties*> shapes;
     //! Shapes map addressed by type
     QMap<QString, PptxShapeProperties*> shapesMap;
-
+    //! Clear the shapes and shapesMap lists.
     void clear();
+private:
+    Q_DISABLE_COPY(PptxSlideProperties)
 };
 
 //! Properties of a single placeholder for shapes defined by layouts
@@ -105,6 +107,8 @@ public:
     QString pageLayoutStyleName;
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > styles;
+private:
+    Q_DISABLE_COPY(PptxSlideLayoutProperties)
 };
 
 //! Data structure collecting information about single text style for one list level defined by master slide
@@ -117,7 +121,8 @@ public:
     PptxSlideMasterListLevelTextStyle();
     ~PptxSlideMasterListLevelTextStyle();
     KoCharacterStyle* m_characterStyle;
-    KoListLevelProperties* m_listlevelproperties;
+private:
+    Q_DISABLE_COPY(PptxSlideMasterListLevelTextStyle)
 };
 
 //! Data structure collecting information about single text style defined by master slide
@@ -127,11 +132,13 @@ class PptxSlideMasterTextStyle
 public:
     PptxSlideMasterTextStyle();
     ~PptxSlideMasterTextStyle();
+    void clear();
     //! @return text style for list level @a level
     //! @par level can be 1..9, otherwise 0 is returned.
     //! Returned object is owned by PptxSlideMasterTextStyle.
     PptxSlideMasterListLevelTextStyle *listStyle(uint level);
 private:
+    Q_DISABLE_COPY(PptxSlideMasterTextStyle)
     QVector<PptxSlideMasterListLevelTextStyle*> m_listStyles;
 };
 
@@ -140,6 +147,7 @@ class PptxSlideMasterPageProperties
 {
 public:
     PptxSlideMasterPageProperties();
+    void clear();
     void addDrawingPageProperty(const QByteArray& property, const QByteArray& value);
     void saveDrawingPageProperties(KoGenStyle* style);
 

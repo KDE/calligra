@@ -3101,8 +3101,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             // Remember the styles to be able to apply them later on the style. Note that the PptxSlideMasterListLevelTextStyle takes over the ownership of the styles.
             slideMasterListLevelTextStyle->m_characterStyle = m_currentTextStyleProperties;
             m_currentTextStyleProperties = 0;
-            slideMasterListLevelTextStyle->m_listlevelproperties = m_currentListStyleProperties;
-            m_currentListStyleProperties = 0;
         }
     }
 #endif

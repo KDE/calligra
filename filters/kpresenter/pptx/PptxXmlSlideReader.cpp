@@ -133,14 +133,12 @@ void PptxPlaceholder::writeAttributes(KoXmlWriter* writer)
 
 PptxSlideMasterListLevelTextStyle::PptxSlideMasterListLevelTextStyle()
  : m_characterStyle(0)
- , m_listlevelproperties(0)
 {
 }
 
 PptxSlideMasterListLevelTextStyle::~PptxSlideMasterListLevelTextStyle()
 {
     delete m_characterStyle;
-    delete m_listlevelproperties;
 }
 
 // -------------------
@@ -152,9 +150,15 @@ PptxSlideMasterTextStyle::PptxSlideMasterTextStyle()
 
 PptxSlideMasterTextStyle::~PptxSlideMasterTextStyle()
 {
+    clear();
+}
+
+void PptxSlideMasterTextStyle::clear()
+{
     for (int i = 0; i < m_listStyles.size(); i++) {
         delete m_listStyles[i];
     }
+    m_listStyles.clear();
 }
 
 PptxSlideMasterListLevelTextStyle* PptxSlideMasterTextStyle::listStyle(uint level)
@@ -180,8 +184,18 @@ PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
     qDeleteAll(placeholders);
 }
 
+// -------------------
+
 PptxSlideMasterPageProperties::PptxSlideMasterPageProperties()
 {
+}
+
+void PptxSlideMasterPageProperties::clear()
+{
+    titleStyle.clear();
+    bodyStyle.clear();
+    otherStyle.clear();
+    m_drawingPageProperties.clear();
 }
 
 void PptxSlideMasterPageProperties::addDrawingPageProperty(
