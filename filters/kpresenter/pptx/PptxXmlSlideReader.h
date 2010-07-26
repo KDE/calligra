@@ -101,8 +101,10 @@ public:
     QMap<QString, PptxShapeProperties*> shapesMap;
     //! placeholders objects are owned by this object
     QMap<QString, PptxPlaceholder*> placeholders;
-    QString styleName;
-    QMap<QString, KoGenStyle> styles;
+    //! The presentation:presentation-page-layout-name
+    QString pageLayoutStyleName;
+    //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,KoGenStyle> > styles;
 };
 
 //! Data structure collecting information about single text style for one list level defined by master slide

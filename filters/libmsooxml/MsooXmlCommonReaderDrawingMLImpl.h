@@ -703,7 +703,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
             }
             else if (   m_context->slideLayoutProperties && placeholder) {
-                kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->styleName;
+                kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
                 placeholder->writeAttributes(body);
             }
             if (m_rot != 0) {
@@ -1112,7 +1112,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             const QString styleId(d->phStyleId());
             kDebug() << "styleId:" << styleId;
             if (!styleId.isEmpty())
-                m_context->slideLayoutProperties->styles.insert(styleId, m_currentParagraphStyle);
+                m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
             //if (!m_cNvPrId.isEmpty())
             //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
          } else if(m_context->type == Slide) {

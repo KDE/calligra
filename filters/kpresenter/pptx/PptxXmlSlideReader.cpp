@@ -548,12 +548,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
         kDebug() << "currentPageStyleName:" << currentPageStyleName;
 
-        if (!m_context->slideLayoutProperties->styleName.isEmpty()) {
+        if (!m_context->slideLayoutProperties->pageLayoutStyleName.isEmpty()) {
             // CASE #P308
             kDebug() << "presentation:presentation-page-layout-name=" <<
-                                m_context->slideLayoutProperties->styleName;
+                                m_context->slideLayoutProperties->pageLayoutStyleName;
             body->addAttribute("presentation:presentation-page-layout-name",
-                                m_context->slideLayoutProperties->styleName);
+                                m_context->slideLayoutProperties->pageLayoutStyleName);
         }
 
 //                body->addCompleteElement(&drawPageBuf);
@@ -576,8 +576,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             << "m_context->type:" << m_context->type;
     }
     else if (m_context->type == SlideLayout) {
-        m_context->slideLayoutProperties->styleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
-        kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->styleName;
+        m_context->slideLayoutProperties->pageLayoutStyleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
+        kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->pageLayoutStyleName;
     }
 
     return KoFilter::OK;
@@ -1072,8 +1072,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     const QString styleId(d->phStyleId());
     kDebug() << "styleId:" << styleId;
     if (m_context->type == Slide) {
-        if (m_context->slideLayoutProperties->styles.contains(styleId)) {
-            m_currentParagraphStyle = m_context->slideLayoutProperties->styles[styleId];
+        if (m_context->slideLayoutProperties->styles.contains(styleId) && m_context->slideLayoutProperties->styles[styleId].contains(m_currentListLevel)) {
+            m_currentParagraphStyle = m_context->slideLayoutProperties->styles[styleId][m_currentListLevel];
             m_currentParagraphStylePredefined = true;
         }
     }
