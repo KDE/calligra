@@ -37,7 +37,7 @@ int main(int argc, char** argv)
     KComponentData cd("graphicsview-test");
 
     KSpread::Doc doc;
-    bool ok = doc.openUrl(KUrl("/home/marijn/Documents/Addition.xls"));
+    bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/koffice/docs/oos_AMSAT-IARU_Link_Model.ods"));
     if (!ok) {
         qDebug() << "failed to load";
         return 0;

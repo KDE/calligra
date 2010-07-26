@@ -41,6 +41,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
+#include <KoShapeRegistry.h>
 
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
@@ -67,6 +68,8 @@
 
 // database
 #include "database/DatabaseManager.h"
+
+#include "shape/TableShapeFactory.h"
 
 // D-Bus
 #include "interfaces/MapAdaptor.h"
@@ -121,6 +124,8 @@ public:
     int syntaxVersion;
 
     KCompletion listCompletion;
+
+    KoResourceManager* resourceManager;
 };
 
 
@@ -159,6 +164,16 @@ Map::Map(Doc* doc, int syntaxVersion)
     QFont font(KoGlobal::defaultFont());
     d->defaultRowFormat->setHeight(font.pointSizeF() + 4);
     d->defaultColumnFormat->setWidth((font.pointSizeF() + 4) * 5);
+
+    d->resourceManager = new KoResourceManager();
+    QVariant variant;
+    variant.setValue<void*>(this);
+    d->resourceManager->setResource(MapResourceId, variant);
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    foreach (const QString &id, registry->keys()) {
+        KoShapeFactoryBase *shapeFactory = registry->value(id);
+        shapeFactory->newDocumentResourceManager(d->resourceManager);
+    }
 
     d->isLoading = false;
 
@@ -213,6 +228,8 @@ Map::~Map()
 
     delete d->defaultColumnFormat;
     delete d->defaultRowFormat;
+
+    delete d->resourceManager;
     delete d;
 }
 
@@ -524,8 +541,8 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
     OdfLoadingContext tableContext(odfContext);
     tableContext.validities = Validity::preloadValidities(body); // table:content-validations
 
-    // load text styles for rich-text content
-    KoShapeLoadingContext shapeContext(odfContext, 0); // TODO find a proper documentResourceManager somewhere.
+    // load text styles for rich-text content and TOS
+    KoShapeLoadingContext shapeContext(tableContext.odfContext, resourceManager());
     tableContext.shapeContext = &shapeContext;
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     sharedData->loadOdfStyles(shapeContext, textStyleManager());
@@ -538,6 +555,11 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
         fixupStyle(style);
     }
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
+
+    QVariant variant;
+    variant.setValue(textStyleManager());
+    resourceManager()->setResource(KoText::StyleManager, variant);
+
 
     // load default column style
     const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
@@ -986,6 +1008,11 @@ void Map::handleDamages(const QList<Damage*>& damages)
 void Map::addCommand(QUndoCommand *command)
 {
     emit commandAdded(command);
+}
+
+KoResourceManager* Map::resourceManager() const
+{
+    return d->resourceManager;
 }
 
 #include "Map.moc"

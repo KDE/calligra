@@ -36,8 +36,6 @@
 #include "TableShape.h"
 #include "TableToolFactory.h"
 
-#define MapResourceId 65227211
-
 using namespace KSpread;
 
 K_EXPORT_COMPONENT_FACTORY(spreadsheetshape, KGenericFactory<TableShapePlugin>("TableShape"))
@@ -80,6 +78,7 @@ KoShape *TableShapeFactory::createDefaultShape(KoResourceManager *documentResour
 
 void TableShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
 {
+    if (manager->hasResource(MapResourceId)) return;
     // One spreadsheet map for all inserted tables to allow referencing cells among them.
     QVariant variant;
     Map* map = new Map();

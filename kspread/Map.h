@@ -36,6 +36,7 @@ class KoStore;
 class KoOdfLoadingContext;
 class KoEmbeddedDocumentSaver;
 class KoStyleManager;
+class KoResourceManager;
 
 class KCompletion;
 
@@ -350,6 +351,14 @@ public:
      */
     void addDamage(Damage* damage);
 
+    /**
+     * Return a pointer to the resource manager associated with the
+     * document. The resource manager contains
+     * document wide resources * such as variable managers, the image
+     * collection and others.
+     * @see KoCanvasBase::resourceManager()
+     */
+    KoResourceManager *resourceManager() const;
 public Q_SLOTS:
     /**
      * \ingroup Damages

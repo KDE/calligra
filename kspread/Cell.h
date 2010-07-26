@@ -593,7 +593,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOdfObjects(const KoXmlElement& e, KoOdfLoadingContext& odfContext);
+    void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext);
 
     /**
      * \ingroup OpenDocument

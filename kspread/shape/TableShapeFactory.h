@@ -27,6 +27,8 @@
 class KoShape;
 #include "KoXmlReaderForward.h"
 
+#define MapResourceId 65227211
+
 class TableShapePlugin : public QObject
 {
     Q_OBJECT

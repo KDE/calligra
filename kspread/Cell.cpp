@@ -1573,7 +1573,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
             setComment(comment);
     }
 
-    loadOdfObjects(element, tableContext.odfContext);
+    loadOdfObjects(element, tableContext);
 
     return true;
 }
@@ -1681,7 +1681,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
     }
 }
 
-void Cell::loadOdfObjects(const KoXmlElement &parent, KoOdfLoadingContext& odfContext)
+void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableContext)
 {
     // Register additional attributes, that identify shapes anchored in cells.
     // Their dimensions need adjustment after all rows are loaded,
@@ -1696,13 +1696,12 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, KoOdfLoadingContext& odfCo
                 KoXmlNS::table, "end-y",
                 "table:end-y"));
 
-    KoShapeLoadingContext shapeContext(odfContext, d->sheet->resourceManager());
     KoXmlElement element;
     forEachElement(element, parent) {
         if (element.namespaceURI() != KoXmlNS::draw)
             continue;
 
-        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
+        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, *tableContext.shapeContext);
         if (!shape) {
             kDebug(36003) << "Unable to load shape.";
             continue;

@@ -132,6 +132,7 @@ public:
     // KoShapeControllerBase interface
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
+    virtual KoResourceManager* resourceManager() const;
 
     /**
      * \ingroup Embedding

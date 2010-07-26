@@ -58,6 +58,8 @@
 #include <KoStore.h>
 #include <KoText.h>
 #include <KoStyleManager.h>
+#include <KoTextSharedLoadingData.h>
+#include <KoParagraphStyle.h>
 
 #include "CellStorage.h"
 #include "Cluster.h"
@@ -169,13 +171,13 @@ Sheet::Sheet(Map* map, const QString& sheetName)
         , KoShapeControllerBase()
         , d(new Private)
 {
+    d->workbook = map;
     if (map->doc()) {
         resourceManager()->setUndoStack(map->doc()->undoStack());
         QVariant variant;
         variant.setValue<void*>(map->doc()->sheetAccessModel());
         resourceManager()->setResource(75751149, variant); // duplicated in kchart.
     }
-    d->workbook = map;
     d->model = new SheetModel(this);
 
     d->layoutDirection = QApplication::layoutDirection();
@@ -331,6 +333,11 @@ void Sheet::removeShape(KoShape* shape)
         return;
     d->shapes.removeAll(shape);
     emit shapeRemoved(this, shape);
+}
+
+KoResourceManager* Sheet::resourceManager() const
+{
+    return map()->resourceManager();
 }
 
 QList<KoShape*> Sheet::shapes() const
@@ -1389,16 +1396,11 @@ QString Sheet::getPart(const KoXmlNode & part)
     return result;
 }
 
-
 bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     OdfLoadingContext& tableContext,
                     const Styles& autoStyles,
                     const QHash<QString, Conditions>& conditionalStyles)
 {
-    QVariant variant;
-    variant.setValue(map()->textStyleManager());
-    resourceManager()->setResource(KoText::StyleManager, variant);
-
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
         QString stylename = sheetElement.attributeNS(KoXmlNS::table, "style-name", QString());
