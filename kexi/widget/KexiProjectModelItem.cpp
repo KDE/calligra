@@ -32,16 +32,16 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
     m_groupName = n;
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiProjectModelItem *p) : m_info(i), m_item(0), m_parentItem(p)
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p) : m_info(&i), m_item(0), m_parentItem(p)
 {
-    m_icon = SmallIcon(i->itemIcon());
+    m_icon = SmallIcon(i.itemIcon());
     initItem();
     m_fifoSorting = 1; //because this is top level item
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info *i, KexiPart::Item *item, KexiProjectModelItem *p) : m_info(i), m_item(item), m_parentItem(p)
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p) : m_info(&i), m_item(&item), m_parentItem(p)
 {
-    m_icon = SmallIcon(i->itemIcon());
+    m_icon = SmallIcon(i.itemIcon());
     initItem();
 }
 

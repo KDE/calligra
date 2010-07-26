@@ -68,8 +68,8 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         , m_readOnly(false)
 {
     kDebug();
-    setObjectName("KexiNavigator");
-    setWindowTitle(i18n("Project Navigator 2"));
+    setObjectName("KexiProjectNavigator");
+    setWindowTitle(i18n("Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     m_model = new KexiProjectModel();
@@ -212,6 +212,7 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
 {
     kDebug() << itemsPartClass << ".";
     m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
+    m_list->expandAll();
 }
 
 KexiProjectNavigator::~KexiProjectNavigator()
@@ -643,7 +644,7 @@ void KexiProjectNavigator::clear()
 m_list->setModel(0);
 }
 
-KexiProjectModel* KexiProjectNavigator::model()
+KexiProjectModel* KexiProjectNavigator::model() const
 {
 return m_model;
 }

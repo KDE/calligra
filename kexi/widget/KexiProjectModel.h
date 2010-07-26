@@ -51,7 +51,7 @@ private:
 
     KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*);
     KexiProjectModelItem* addItem(KexiPart::Item& item, KexiProjectModelItem*);
-    KexiProjectModelItem* addItem(KexiPart::Item* item, KexiPart::Info* info, KexiProjectModelItem*);
+    KexiProjectModelItem* addItem(KexiPart::Item& item, KexiPart::Info& info, KexiProjectModelItem*);
 
     KexiProjectModelItem *m_rootItem;
 

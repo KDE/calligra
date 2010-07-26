@@ -87,7 +87,7 @@ public:
 
     bool actionEnabled(const QString& actionName) const;
 
-    KexiProjectModel* model();
+    KexiProjectModel* model() const;
 
 public slots:
 

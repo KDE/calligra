@@ -74,7 +74,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
             }
             
             foreach(KexiPart::Item *item, *item_dict) {
-                KexiProjectModelItem *itm = addItem(item, info, groupItem);
+                KexiProjectModelItem *itm = addItem(*item, *info, groupItem);
                 if (itm) {
                     groupItem->appendChild(itm);
                 }
@@ -117,15 +117,15 @@ KexiProjectModel::~KexiProjectModel()
 
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
 {
-     if (!index.isValid())
-         return QVariant();
-
     KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
-    if (role == Qt::DisplayRole) {
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+    case Qt::WhatsThisRole:
         return item->data(index.column());
-    }
-    else if (role == Qt::DecorationRole) {
+    case Qt::DecorationRole:
         return item->icon();
+    default:;
     }
 
     return QVariant();
@@ -207,7 +207,7 @@ bool KexiProjectModel::setData(const QModelIndex& index, const QVariant& value, 
         return false;
     
     QString txt = value.toString().trimmed();
-    bool ok = it->partItem()->name().toLower() != txt.toLower(); //the new name must be different
+    bool ok = QString::compare(it->partItem()->name(), txt, Qt::CaseInsensitive); //make sure the new name is different
     if (ok) {
         emit renameItem(it->partItem(), txt, ok);
     }
@@ -247,7 +247,7 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProje
     if (!info.isVisibleInNavigator())
         return 0;
 
-    KexiProjectModelItem *item = new KexiProjectModelItem(&info, p);
+    KexiProjectModelItem *item = new KexiProjectModelItem(info, p);
     return item;
 }
 
@@ -259,7 +259,7 @@ KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item& item, KexiProjec
 //    return addItem(item, parent, parent->partInfo());
 }
 
-KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item *item, KexiPart::Info* info, KexiProjectModelItem *p)
+KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p)
 {
     return new KexiProjectModelItem(info, item, p);;
 }
