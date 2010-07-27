@@ -901,7 +901,7 @@ void ExcelImport::Private::processColumnForBody(Sheet* sheet, int columnIndex, K
 
     if (!xmlWriter) return;
 
-    int newOutlineLevel = column ? column->outlineLevel() : 0;
+    unsigned newOutlineLevel = column ? column->outlineLevel() : 0;
     while (newOutlineLevel > outlineLevel) {
         xmlWriter->startElement("table:table-column-group");
         outlineLevel++;
@@ -962,7 +962,7 @@ int ExcelImport::Private::processRowForBody(KoOdfWriteStore* store, Sheet* sheet
     if (!xmlWriter) return repeat;
     Row *row = sheet->row(rowIndex, false);
 
-    int newOutlineLevel = row ? row->outlineLevel() : 0;
+    unsigned newOutlineLevel = row ? row->outlineLevel() : 0;
     while (newOutlineLevel > outlineLevel) {
         xmlWriter->startElement("table:table-row-group");
         outlineLevel++;
