@@ -447,9 +447,13 @@ void KWTextDocumentLayout::layout()
                     matrix.translate(0, m_state->documentOffsetInShape());
                     outlines.append(new Outline(strategy->anchoredShape(), matrix));
                  }
-                // if the anchor occupies the first character of our block, create one line for it.
+                // if the anchor occupies the first character of our block,
+                // create one line for it. This can theoretically change currentshape=0
+                // midway through the loop causing crashes. However the textshape makes
+                // sure that a line like this always have height so infinite that it
+                // doesn't happen.
                 const int cursorPosition = m_state->cursorPosition();
-                if (cursorPosition == startOfBlockText && strategy->anchor()->positionInDocument() == cursorPosition) {
+                if (cursorPosition == startOfBlockText && strategy->anchor()->positionInDocument() == cursorPosition && !strategy->anchor()->isPositionedInline()) {
                     ADEBUG << "   creating line for anchor";
                     QTextLine line = m_state->layout->createLine();
                     line.setNumColumns(1);
