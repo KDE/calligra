@@ -433,7 +433,7 @@ void TabBar::setTabs(const QStringList& list)
 
     if (d->activeTab > 0)
         active = d->tabs[ d->activeTab-1 ];
-    if (d->firstTab > 0)
+    if (d->firstTab > 0 && d->firstTab <= d->tabs.size())
         left = d->tabs[ d->firstTab-1 ];
 
     d->tabs = list;
