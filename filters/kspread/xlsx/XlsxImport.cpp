@@ -134,7 +134,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         KoGenStyles::DocumentStyles,
         "    <!-- COPIED -->"
         "\n    <style:default-style style:family=\"table-cell\">"
-        "\n      <style:table-cell-properties style:decimal-places=\"2\"/>"
+        "\n      <style:table-cell-properties />"
         "\n      <style:paragraph-properties style:tab-stop-distance=\"1.27cm\"/>"
         "\n      <style:text-properties style:font-name=\"Albany AMT\" fo:language=\"en\" fo:country=\"US\" style:font-name-asian=\"Arial\" style:language-asian=\"zxx\" style:country-asian=\"none\" style:font-name-complex=\"Tahoma\" style:language-complex=\"zxx\" style:country-complex=\"none\"/>"
         "\n    </style:default-style>"
