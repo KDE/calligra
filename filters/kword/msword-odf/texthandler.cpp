@@ -523,6 +523,9 @@ QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
 
 void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
+    if (m_insideAnnotation) // odf doesn't support tables in annotations
+        return;
+
     kDebug(30513) ;
     if (!m_currentTable) {
         // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
