@@ -61,7 +61,7 @@ public:
         unsigned numberFormat = readU16(data + 4);
 
         UString formula;
-        if(m_worksheetHandler) {
+        if (m_worksheetHandler) {
             FormulaTokens tokens = m_worksheetHandler->decodeFormula(size, 6, data, version());
             formula = m_worksheetHandler->decodeFormula(0, 0, true, tokens);
         } else {
@@ -69,7 +69,7 @@ public:
             formula = m_handler->globals()->decodeFormula(0, 0, true, tokens);
         }
 
-        if(m_value) delete m_value;
+        if (m_value) delete m_value;
         m_value = new Charting::Value(dataId, type, string(formula), isUnlinkedFormat, numberFormat);
     }
 
@@ -84,12 +84,23 @@ const unsigned BRAIRecord::id = 0x1051;
 
 using namespace Swinder;
 
-ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler)
-    : SubStreamHandler(), m_globals(globals), m_parentHandler(parentHandler), m_sheet(0), m_chartObject(0), m_chart(0), m_currentSeries(0), m_currentObj(0), m_defaultTextId(-1), m_axisId(-1)
+ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
+                                             SubStreamHandler* parentHandler)
+    : SubStreamHandler()
+    , m_globals(globals)
+    , m_parentHandler(parentHandler)
+    , m_sheet(0)
+    , m_chartObject(0)
+    , m_chart(0)
+    , m_currentSeries(0)
+    , m_currentObj(0)
+    , m_defaultTextId(-1)
+    , m_axisId(-1)
 {
     RecordRegistry::registerRecordClass(BRAIRecord::id, BRAIRecord::createRecord, this);
 
-    if(WorksheetSubStreamHandler* worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(parentHandler)) {
+    WorksheetSubStreamHandler* worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(parentHandler);
+    if (worksheetHandler) {
         m_sheet = worksheetHandler->sheet();
         Q_ASSERT(m_sheet);
 
@@ -110,7 +121,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals, S
         cell->addChart(m_chartObject);
     } else {
         Q_ASSERT(globals);
-        if(globals->chartSheets().isEmpty()) {
+        if (globals->chartSheets().isEmpty()) {
             std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
         } else {
             m_sheet = globals->chartSheets().takeFirst();
@@ -142,7 +153,8 @@ ChartSubStreamHandler::~ChartSubStreamHandler()
 std::string whitespaces(int number)
 {
     std::string s;
-    for(int i = 0; i < number; ++i) s += " ";
+    for (int i = 0; i < number; ++i)
+        s += " ";
     return s;
 }
 
@@ -323,37 +335,37 @@ void ChartSubStreamHandler::handleZoomLevel(ZoomLevelRecord *)
 
 void ChartSubStreamHandler::handleLeftMargin(LeftMarginRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     m_chart->m_leftMargin = record->leftMargin();
 }
 
 void ChartSubStreamHandler::handleRightMargin(RightMarginRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     m_chart->m_rightMargin = record->rightMargin();
 }
 
 void ChartSubStreamHandler::handleTopMargin(TopMarginRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     m_chart->m_topMargin = record->topMargin();
 }
 
 void ChartSubStreamHandler::handleBottomMargin(BottomMarginRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     m_chart->m_bottomMargin = record->bottomMargin();
 }
 
 void ChartSubStreamHandler::handleDimension(DimensionRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "firstRow=" << record->firstRow() << " lastRowPlus1=" << record->lastRowPlus1() << " firstColumn=" << record->firstColumn() << " lastColumnPlus1=" << record->lastColumnPlus1() << " lastRow=" << record->lastRow() << " lastColumn=" << record->lastColumn() << std::endl;
 }
 
 void ChartSubStreamHandler::handleChart(ChartRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "x=" << record->x() << " y=" << record->y() << " width=" << record->width() << " height=" << record->height() <<  std::endl;
     m_chart->m_x1 = record->x();
     m_chart->m_y1 = record->y();
@@ -371,18 +383,18 @@ void ChartSubStreamHandler::handleBegin(BeginRecord *)
 void ChartSubStreamHandler::handleEnd(EndRecord *)
 {
     m_currentObj = m_stack.pop();
-    if(Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj))
+    if (Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj))
         m_currentSeries = series;
 }
 
 void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
-    if(!record) return;
-    if(record->isAutoPosition()) {
+    if (!record) return;
+    if (record->isAutoPosition()) {
         m_chart->m_x1 = -1;
         m_chart->m_y1 = -1;
     }
-    if(record->isAutoSize()) {
+    if (record->isAutoSize()) {
         m_chart->m_x2 = -1;
         m_chart->m_y2 = -1;
     }
@@ -391,7 +403,7 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 // properties of the data for series, trendlines or errorbars
 void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
     
     m_currentSeries = new Charting::Series;
@@ -406,27 +418,34 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 // specifies a reference to data in a sheet that is used by a part of a series, legend entry, trendline or error bars.
 void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "dataId=" << record->m_value->m_dataId << " type=" << record->m_value->m_type << " isUnlinkedNumberFormat=" << record->m_value->m_isUnlinkedFormat << " numberFormat=" << record->m_value->m_numberFormat << " formula=" << record->m_value->m_formula.toUtf8().constData() << std::endl;
 
-    if(m_currentSeries) {
-        //FIXME is that correct or do we need to take the series somehow into account to provide one cellRangeAddress per series similar to valuesCellRangeAddress?
-        //FIXME handle VerticalValues and BubbleSizeValues
-        if(!record->m_value->m_formula.isEmpty()) {
-            if(record->m_value->m_type == Charting::Value::TextOrValue || record->m_value->m_type == Charting::Value::CellRange) {
-                if(record->m_value->m_dataId == Charting::Value::HorizontalValues)
+    if (m_currentSeries) {
+        // FIXME: Is that correct or do we need to take the series
+        //        somehow into account to provide one cellRangeAddress
+        //        per series similar to valuesCellRangeAddress?
+        //
+        // FIXME: Handle VerticalValues and BubbleSizeValues
+        if (!record->m_value->m_formula.isEmpty()) {
+            if (record->m_value->m_type == Charting::Value::TextOrValue
+                || record->m_value->m_type == Charting::Value::CellRange)
+            {
+                if (record->m_value->m_dataId == Charting::Value::HorizontalValues)
                     m_currentSeries->m_valuesCellRangeAddress = record->m_value->m_formula;
-                else if(record->m_value->m_dataId == Charting::Value::VerticalValues)
+                else if (record->m_value->m_dataId == Charting::Value::VerticalValues)
                     m_chart->m_verticalCellRangeAddress = record->m_value->m_formula;
                 
-                //FIXME we are ignoring the sheetname here but we probably should handle the case where a series is made from different sheets...
-                QPair<QString,QRect> result = splitCellRange( record->m_value->m_formula );
+                // FIXME: We are ignoring the sheetname here but we
+                //        probably should handle the case where a
+                //        series is made from different sheets...
+                QPair<QString, QRect> result = splitCellRange( record->m_value->m_formula );
                 m_chart->addRange(result.second);
             }
         }
 
-        //FIXME is it ok to only accept the first or should we merge them somehow?
-        if(!m_currentSeries->m_datasetValue.contains(record->m_value->m_dataId)) {
+        // FIXME: Is it ok to only accept the first or should we merge them somehow?
+        if (!m_currentSeries->m_datasetValue.contains(record->m_value->m_dataId)) {
             m_currentSeries->m_datasetValue[record->m_value->m_dataId] = record->m_value;
             record->m_value = 0; // take over ownership
         }
@@ -435,14 +454,16 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 
 void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
 {
-    if(!record) return;
-    DEBUG << "xi=" << record->xi() << " yi=" << record->yi() << " iss=" << record->iss() << std::endl;
+    if (!record) return;
+    DEBUG << "xi=" << record->xi()
+          << " yi=" << record->yi()
+          << " iss=" << record->iss() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "riser=" << record->riser() << " taper=" << record->taper() << std::endl;
     //TODO
 }
@@ -450,7 +471,7 @@ void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record
 // specifies that chart is rendered in 3d scene
 void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "anRot=" << record->anRot() << " anElev=" << record->anElev() << " pcDist=" << record->pcDist() << " pcHeight=" << record->pcHeight() << " pcDepth=" << record->pcDepth() << std::endl;
     m_chart->m_is3d = true;
     //TODO
@@ -458,9 +479,9 @@ void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 
 void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "lns=" << record->lns() << " we=" << record->we() << " fAxisOn=" << record->isFAxisOn() << std::endl;
-    if(Charting::Axis* axis = dynamic_cast<Charting::Axis*>(m_currentObj)) {
+    if (Charting::Axis* axis = dynamic_cast<Charting::Axis*>(m_currentObj)) {
         Charting::LineFormat format(Charting::LineFormat::Style(record->lns()), Charting::LineFormat::Tickness(record->we()));
         switch(m_axisId) {
             case 0x0000: // The axis line itself
@@ -482,38 +503,41 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
 
 void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
 {
-    if(!record || !m_currentObj || m_currentObj->m_areaFormat) return;
+    if (!record || !m_currentObj || m_currentObj->m_areaFormat) return;
     QColor foreground(record->redForeground(), record->greenForeground(), record->blueForeground());
     QColor background(record->redBackground(), record->greenBackground(), record->blueBackground());
-    DEBUG << "foreground=" << foreground.name().toUtf8().data() << " background=" << background.name().toUtf8().data() << " fillStyle=" << record->fls() << std::endl;
-    m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background, record->fls() != 0x0000);
+    DEBUG << "foreground=" << foreground.name().toUtf8().data()
+          << " background=" << background.name().toUtf8().data()
+          << " fillStyle=" << record->fls() << std::endl;
+    m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background,
+                                                          record->fls() != 0x0000);
 }
 
 void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
 {
-    if(!record) return;
-    if(!m_currentSeries) return;
-    DEBUG << "pcExplode="<<record->pcExplode()<<std::endl;
+    if (!record) return;
+    if (!m_currentSeries) return;
+    DEBUG << "pcExplode=" << record->pcExplode() << std::endl;
     m_currentSeries->m_datasetFormat << new Charting::PieFormat(record->pcExplode());
 }
 
 void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleChartFormat(ChartFormatRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "fVaried=" << record->isFVaried() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleGelFrame(GelFrameRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
@@ -521,19 +545,19 @@ void ChartSubStreamHandler::handleGelFrame(GelFrameRecord *record)
 // specifies the chartgroup for the current series
 void ChartSubStreamHandler::handleSerToCrt(SerToCrtRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "id=" << record->identifier() << std::endl;
 }
 
 // properties
 void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
 
-// specifies the text elements that are formatted using the information specified by the Text record
+// Specifies the text elements that are formatted using the information specified by the Text record
 // immediately following this record. The identifier is one of;
 //   * 0x0000 Format all Text records in the chart group where fShowPercent is equal to 0 or
 //     fShowValue is equal to 0.
@@ -545,7 +569,7 @@ void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 //     FontInfo structure is equal to 1.
 void ChartSubStreamHandler::handleDefaultText(DefaultTextRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "id=" << record->identifier() << std::endl;
     m_defaultTextId = record->identifier();
 }
@@ -553,10 +577,18 @@ void ChartSubStreamHandler::handleDefaultText(DefaultTextRecord *record)
 // specifies the properties of an attached label
 void ChartSubStreamHandler::handleText(TextRecord *record)
 {
-    if(!record || record->isFDeleted()) return;
-    DEBUG << "at=" << record->at() << " vat=" << record->vat() << " x=" << record->x() << " y=" << record->y() << " dx=" << record->dx() << " dy=" << record->dy() << " fShowKey=" << record->isFShowKey() << " fShowValue=" << record->isFShowValue() << std::endl;
+    if (!record || record->isFDeleted()) return;
+    DEBUG << "at=" << record->at()
+          << " vat=" << record->vat()
+          << " x=" << record->x()
+          << " y=" << record->y()
+          << " dx=" << record->dx()
+          << " dy=" << record->dy()
+          << " fShowKey=" << record->isFShowKey()
+          << " fShowValue=" << record->isFShowValue() << std::endl;
+
     m_currentObj = new Charting::Text;
-    if(m_defaultTextId >= 0) {  
+    if (m_defaultTextId >= 0) {  
         //m_defaultObjects[m_currentObj] = m_defaultTextId;
         m_defaultTextId = -1;
     }
@@ -564,14 +596,14 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 
 void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
-    if(!record || !m_currentSeries) return;
+    if (!record || !m_currentSeries) return;
     DEBUG << "text=" << record->text() << std::endl;
-    if(Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
+    if (Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
         t->m_text = string(record->text());
-    } else if(Charting::Legend *l = dynamic_cast<Charting::Legend*>(m_currentObj)) {
+    } else if (Charting::Legend *l = dynamic_cast<Charting::Legend*>(m_currentObj)) {
         //TODO
         Q_UNUSED(l);
-    } else if(Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj)) {
+    } else if (Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj)) {
         series->m_texts << new Charting::Text(string(record->text()));
     } else {
         //m_currentSeries->m_texts << new Charting::Text(string(record->text()));
@@ -580,9 +612,10 @@ void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 
 void ChartSubStreamHandler::handlePos(PosRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "mdTopLt=" << record->mdTopLt() << " mdBotRt=" << record->mdBotRt() << " x1=" << record->x1() << " y1=" << record->y1() << " x2=" << record->x2() << " y2=" << record->y2() << std::endl;
-    if(m_currentObj) {
+
+    if (m_currentObj) {
         m_currentObj->m_mdBotRt = record->mdBotRt();
         m_currentObj->m_mdTopLt = record->mdTopLt();
         m_currentObj->m_x1 = record->x1();
@@ -594,21 +627,21 @@ void ChartSubStreamHandler::handlePos(PosRecord *record)
 
 void ChartSubStreamHandler::handleFontX(FontXRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handlePlotGrowth(PlotGrowthRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     m_currentObj = new Charting::Legend();
     //TODO
@@ -616,14 +649,14 @@ void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 
 void ChartSubStreamHandler::handleAxesUsed(AxesUsedRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
@@ -631,9 +664,9 @@ void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 // specifies that the chartgroup is a pie chart
 void ChartSubStreamHandler::handlePie(PieRecord *record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
-    if(record->pcDonut() > 0)
+    if (record->pcDonut() > 0)
         m_chart->m_impl = new Charting::RingImpl(record->anStart(), record->pcDonut());
     else
         m_chart->m_impl = new Charting::PieImpl(record->anStart());
@@ -642,7 +675,7 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 // specifies that the chartgroup is a bar chart
 void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << "pcOverlap=" << record->pcOverlap() << " pcGap=" << record->pcGap() << " fTranspose=" << record->isFTranspose() << " fStacked=" << record->isFStacked() << " f100=" << record->isF100() << std::endl;
     m_chart->m_impl = new Charting::BarImpl();
     m_chart->m_transpose = record->isFTranspose();
@@ -653,7 +686,7 @@ void ChartSubStreamHandler::handleBar(BarRecord *record)
 // specifies that the chartgroup is a area chart
 void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::AreaImpl();
     m_chart->m_stacked = record->isFStacked();
@@ -663,7 +696,7 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
 // specifies that the chartgroup is a line chart
 void ChartSubStreamHandler::handleLine(LineRecord* record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::LineImpl();
     m_chart->m_stacked = record->isFStacked();
@@ -673,9 +706,9 @@ void ChartSubStreamHandler::handleLine(LineRecord* record)
 // specifies that the chartgroup is a scatter chart
 void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
-    if(record->isFBubbles())
+    if (record->isFBubbles())
         m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
     else
         m_chart->m_impl = new Charting::ScatterImpl();
@@ -684,7 +717,7 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
 // specifies that the chartgroup is a radar chart
 void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::RadarImpl();
 }
@@ -692,7 +725,7 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 // specifies that the chartgroup is a filled radar chart
 void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::RadarImpl();
 }
@@ -700,14 +733,14 @@ void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 // specifies that the chartgroup is a surface chart
 void ChartSubStreamHandler::handleSurf(SurfRecord *record)
 {
-    if(!record || m_chart->m_impl) return;
+    if (!record || m_chart->m_impl) return;
     DEBUG << std::endl;
     m_chart->m_impl = new Charting::SurfaceImpl(record->isFFillSurface());
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "wType=" << record->wType() << std::endl;
     Charting::Axis* axis = new Charting::Axis(Charting::Axis::Type(record->wType()));
     m_chart->m_axes << axis;
@@ -717,7 +750,7 @@ void ChartSubStreamHandler::handleAxis(AxisRecord* record)
 // This record specifies which part of the axis is specified by the LineFormat record that follows.
 void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "identifier=" << record->identifier() << std::endl;
     m_axisId = record->identifier();
 }
@@ -725,7 +758,7 @@ void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
 // type of data contained in the Number records following
 void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "numIndex=" << record->numIndex() << std::endl;
     /*TODO
     0x0001 Series values or vertical values (for scatter or bubble chart groups)
@@ -736,32 +769,32 @@ void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 
 void ChartSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleShapePropsStream(ShapePropsStreamRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleTextPropsStream(TextPropsStreamRecord* record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "rgb=" << record->rgb().length() << " " << record->rgb() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
 
     Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj);
-    //if(!t) return;
+    //if (!t) return;
     Q_ASSERT(t);
 
     switch(record->wLinkObj()) {
@@ -775,9 +808,9 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
             //TODO
             break;
         case ObjectLinkRecord::SeriesOrDatapoints: {
-            if((int)record->wLinkVar1() >= m_chart->m_series.count()) return;
+            if ((int)record->wLinkVar1() >= m_chart->m_series.count()) return;
             //Charting::Series* series = m_chart->m_series[ record->wLinkVar1() ];
-            if(record->wLinkVar2() == 0xFFFF) {
+            if (record->wLinkVar2() == 0xFFFF) {
                 //TODO series->texts << t;
             } else {
                 //TODO series->category[record->wLinkVar2()];
@@ -788,46 +821,55 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
     }
 }
 
-// This empty record specifies that the Frame record that immediately follows this record specifies
-// properties of the plot area.
+// This empty record specifies that the Frame record that immediately
+// follows this record specifies properties of the plot area.
 void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << std::endl;
 }
 
 void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fAutoCross=" << record->isFAutoCross() << " fLog=" << record->isFLog() << " fReversed=" << record->isFReversed() << " fMaxCross=" << record->isFMaxCross() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleTick(TickRecord *record)
 {
-    if(!record) return;
-    DEBUG << "tktMajor=" << record->tktMajor() << " tktMinor=" << record->tktMinor() << " tlt=" << record->tlt() << std::endl;
+    if (!record) return;
+    DEBUG << "tktMajor=" << record->tktMajor()
+          << " tktMinor=" << record->tktMinor()
+          << " tlt=" << record->tlt() << std::endl;
     //TODO
 }
 
 void ChartSubStreamHandler::handleAxcExt(AxcExtRecord *record)
 {
-    if(!record) return;
-    DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fDateAxis=" << record->isFDateAxis() << " fAutoBase=" << record->isFAutoBase() << " fAutoCross=" << record->isFAutoCross() << " fAutoDate=" << record->isFAutoDate() << std::endl;
+    if (!record) return;
+    DEBUG << "fAutoMin=" << record->isFAutoMin()
+          << " fAutoMax=" << record->isFAutoMax()
+          << " fAutoMajor=" << record->isFAutoMajor()
+          << " fAutoMinor=" << record->isFAutoMinor()
+          << " fDateAxis=" << record->isFDateAxis()
+          << " fAutoBase=" << record->isFAutoBase()
+          << " fAutoCross=" << record->isFAutoCross()
+          << " fAutoDate=" << record->isFAutoDate() << std::endl;
     //TODO
 }
 
 // Specifies the presence of drop lines, high-low lines, series lines or leader lines on the chart group. This record is followed by a LineFormat record which specifies the format of the lines.
 void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "identifier=" << record->identifier() << std::endl;
     switch(record->identifier()) {
         case 0x0000: // Drop lines below the data points of line, area, and stock chart groups.
             //TODO
             break;
         case 0x0001: // High-Low lines around the data points of line and stock chart groups.
-            if(Charting::LineImpl* line = dynamic_cast<Charting::LineImpl*>(m_chart->m_impl)) {
+            if (Charting::LineImpl* line = dynamic_cast<Charting::LineImpl*>(m_chart->m_impl)) {
                 // It seems that a stockchart is always a linechart with a CrtLine record that defines High-Low lines.
                 delete line;
                 m_chart->m_impl = new Charting::StockImpl();
@@ -844,7 +886,7 @@ void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
 
 void ChartSubStreamHandler::handleCatSerRange(CatSerRangeRecord *record)
 {
-    if(!record) return;
+    if (!record) return;
     DEBUG << "fBetween=" << record->isFBetween() << " fMaxCross=" << record->isFMaxCross() << " fReverse=" << record->isFReverse() << std::endl;
     //TODO
 }
