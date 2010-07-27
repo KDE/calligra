@@ -94,7 +94,7 @@ public:
     virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
 
 #ifdef IMAGE_IMPORT
-    virtual void inlineObjectFound(const wvWare::PictureData& data, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    virtual void inlineObjectFound(const wvWare::PictureData& data);
 #endif // IMAGE_IMPORT
     virtual void floatingObjectFound(unsigned int globalCP );
 

@@ -1090,7 +1090,7 @@ void Parser9x::emitPictureData( SharedPtr<const Word97::CHP> chp )
 
     SharedPtr<const Word97::PICF> sharedPicf( picf );
     PictureData data( offset, sharedPicf );
-    m_textHandler->inlineObjectFound(data, chp);
+    m_textHandler->inlineObjectFound(data);
 
     //NOTE: the depreciated approach to parse an inline object follows
 //     PictureFunctor fnct = make_functor( *this, &Parser9x::parsePicture,

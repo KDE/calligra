@@ -547,8 +547,7 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 }
 
 #ifdef IMAGE_IMPORT
-void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data,
-                                         wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
+void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
 {
     kDebug(30513);
 
@@ -569,9 +568,7 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data,
         emit inlineObjectFound(data, &writer);
         //now add content to our current paragraph
         QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-
-        //TODO: check if we need chp here
-        m_paragraph->addRunOfText(contents, chp, QString(""), m_parser->styleSheet(), true);
+        m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
 
     } else {
         //signal picture without a writer, because it can just write to the default (bodyWriter)

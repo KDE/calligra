@@ -455,9 +455,8 @@ namespace wvWare {
         /**
          * This method is called every time we find an inline object.
          * @param data the picture data as defined by functordata.
-	 * @param chp the character properties.
          */
-        virtual void inlineObjectFound(const PictureData& data, SharedPtr<const Word97::CHP> chp);
+        virtual void inlineObjectFound(const PictureData& data);
 
         /**
          * This method is called every time we find a floating object.
