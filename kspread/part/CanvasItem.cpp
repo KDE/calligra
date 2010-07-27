@@ -158,13 +158,14 @@ CanvasItem::CanvasItem(Doc *doc)
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
     d->selection = new Selection(this);
-    d->selection->setActiveSheet(activeSheet());
-    connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
-    connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
 
     d->zoomHandler = new KoZoomHandler();
     d->activeSheet = 0;
     setActiveSheet(doc->map()->sheet(0));
+
+    d->selection->setActiveSheet(activeSheet());
+    connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
+    connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
 }
 
 CanvasItem::~CanvasItem()
