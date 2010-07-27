@@ -68,6 +68,7 @@
 #include <kfileitem.h>
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
+#include <kparts/event.h>
 
 #include <KoView.h>
 #include <KoCanvasBase.h>
@@ -1691,6 +1692,7 @@ void MainWindow::openDocument(const QString &fileName)
     m_doc->setAutoSave(0);
     m_view = m_doc->createView();
     QList<KoCanvasController*> controllers = m_view->findChildren<KoCanvasController*>();
+
     if (controllers.isEmpty()) {
         setShowProgressIndicator(false);
         return;// Panic
@@ -1700,7 +1702,7 @@ void MainWindow::openDocument(const QString &fileName)
         setShowProgressIndicator(false);
         return;
     }
-   
+
     QString fname = m_url.fileName();
     QString ext = KMimeType::extractKnownExtension(fname);
     if (ext.length()) {
@@ -1721,6 +1723,12 @@ void MainWindow::openDocument(const QString &fileName)
         m_type = Text;
         // We need to get the page count again after layout rounds.
         connect(m_doc, SIGNAL(pageSetupChanged()), this, SLOT(updateUI()));
+    }
+
+
+    if (m_type == Spreadsheet) {
+        KoToolManager::instance()->addController(m_controller);
+        QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
     }
 
     if((m_type==Text) && (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive))) {
