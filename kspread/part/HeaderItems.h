@@ -47,6 +47,7 @@ public:
     virtual ~ColumnHeaderItem();
 
     void updateColumns(int from, int to);
+    virtual void update() { QGraphicsWidget::update(); }
 
 private slots:
     //void slotAutoScroll(const QPoint& distance);
@@ -68,7 +69,6 @@ protected:
     virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
     virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
     virtual QPalette palette() const { return QGraphicsWidget::palette(); }
-    virtual void update() { QGraphicsWidget::update(); }
 /*private */public Q_SLOTS:
     void toolChanged(const QString& toolId);
 };
@@ -86,6 +86,7 @@ public:
     virtual ~RowHeaderItem();
 
     void updateRows(int from, int to);
+    virtual void update() { QGraphicsWidget::update(); }
 
 private slots:
     //void slotAutoScroll(const QPoint& distance);
@@ -106,7 +107,6 @@ protected:
     virtual void setCursor(const QCursor& cursor) { QGraphicsWidget::setCursor(cursor); }
     virtual void scroll(qreal x, qreal y) { QGraphicsWidget::scroll(x, y); }
     virtual QPalette palette() const { return QGraphicsWidget::palette(); }
-    virtual void update() { QGraphicsWidget::update(); }
 
 /*private */public Q_SLOTS:
     void toolChanged(const QString& toolId);
