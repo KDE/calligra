@@ -96,6 +96,7 @@
 #include <KoPointerEvent.h>
 #include <KoShapeController.h>
 #include <KoShapeManagerPaintingStrategy.h>
+#include <KoResourceManager.h>
 
 // KSpread
 #include "CalculationSettings.h"
@@ -340,6 +341,9 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
         d->horzScrollBar->setValue(offset.x());
         d->vertScrollBar->setValue(offset.y());
     }*/
+
+    // tell the resource manager of the newly active page
+    resourceManager()->setResource(KoCanvasResource::CurrentPage, QVariant(sheet->map()->indexOf(sheet)));
 
     // Always repaint the visible cells.
     update();
