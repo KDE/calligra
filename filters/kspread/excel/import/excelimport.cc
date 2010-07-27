@@ -601,6 +601,8 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         QList<QRect> filters = workbook->filterRanges(i);
         QString sheetName = string(workbook->sheet(i)->name());
+        if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
+            sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
         if (filters.size()) {
             if (!openedDBRanges) xmlWriter->startElement("table:database-ranges");
             openedDBRanges = true;
@@ -616,7 +618,7 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
                 sRange.append(columnName(filter.right()));
                 sRange.append(QString::number(workbook->sheet(i)->maxRow()));
                 xmlWriter->startElement("table:database-range");
-                xmlWriter->addAttribute("table:name", QString("database-%1").arg(rangeId++));
+                xmlWriter->addAttribute("table:name", QString("excel-database-%1").arg(rangeId++));
                 xmlWriter->addAttribute("table:display-filter-buttons", "true");
                 xmlWriter->addAttribute("table:target-range-address", sRange);
                 xmlWriter->endElement(); // table:database-range
