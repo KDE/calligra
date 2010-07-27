@@ -688,7 +688,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
 
         // CLSID, contains a object class GUI if this entry is a storage or root
         // storage or all zero if not.
-        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%i size=%i clsid=%i.%i.%i.%i\n",
+        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",
                name.c_str(), type, e.prev, e.next, e.child, e.start, e.size, readU32(buffer + 0x50 + p), readU32(buffer + 0x54 + p), readU32(buffer + 0x58 + p), readU32(buffer + 0x5C + p));
 
         entries.push_back(e);
