@@ -1141,9 +1141,8 @@ UString FormulaToken::refn(unsigned row, unsigned col) const
         }
     }
 
-    colRef += col;
-    rowRef += row;
-
+    if (colRelative) colRef += col;
+    if (rowRelative) rowRef += row;
     UString result;
 
     result.append(UString("["));    // OpenDocument format
