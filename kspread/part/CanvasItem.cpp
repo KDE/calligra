@@ -249,8 +249,7 @@ Selection* CanvasItem::selection() const
 
 Sheet* CanvasItem::activeSheet() const
 {
-    //TODO real implementation
-    return doc()->map()->sheet(0);
+    return d->activeSheet;
 }
 
 const KoZoomHandler* CanvasItem::zoomHandler() const
