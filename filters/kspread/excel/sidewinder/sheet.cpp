@@ -482,55 +482,55 @@ QList<HorizontalPageBreak> Sheet::horizontalPageBreaks()
 
 Hyperlink Sheet::hyperlink(unsigned column, unsigned row) const
 {
-    return d->hyperlinks.lookup(column, row);
+    return d->hyperlinks.lookup(column+1, row+1);
 }
 
 void Sheet::setHyperlink(unsigned column, unsigned row, const Hyperlink& link)
 {
     if (link.isValid)
-        d->hyperlinks.insert(column, row, link);
+        d->hyperlinks.insert(column+1, row+1, link);
     else
-        d->hyperlinks.take(column, row);
+        d->hyperlinks.take(column+1, row+1);
 }
 
 QList<Picture*> Sheet::pictures(unsigned column, unsigned row) const
 {
-    return d->pictures.lookup(column, row);
+    return d->pictures.lookup(column+1, row+1);
 }
 
 void Sheet::setPictures(unsigned column, unsigned row, const QList<Picture*>& pictures)
 {
     if (pictures.isEmpty())
-        d->pictures.take(column, row);
+        d->pictures.take(column+1, row+1);
     else
-        d->pictures.insert(column, row, pictures);
+        d->pictures.insert(column+1, row+1, pictures);
 }
 
 void Sheet::addPicture(unsigned column, unsigned row, Picture* picture)
 {
-    QList<Picture*> pics = pictures(column, row);
+    QList<Picture*> pics = pictures(column+1, row+1);
     pics.append(picture);
-    setPictures(column, row, pics);
+    setPictures(column+1, row+1, pics);
 }
 
 QList<ChartObject*> Sheet::charts(unsigned column, unsigned row) const
 {
-    return d->charts.lookup(column, row);
+    return d->charts.lookup(column+1, row+1);
 }
 
 void Sheet::setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts)
 {
     if (charts.isEmpty())
-        d->charts.take(column, row);
+        d->charts.take(column+1, row+1);
     else
-        d->charts.insert(column, row, charts);
+        d->charts.insert(column+1, row+1, charts);
 }
 
 void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
 {
-    QList<ChartObject*> chrts = charts(column, row);
+    QList<ChartObject*> chrts = charts(column+1, row+1);
     chrts.append(chart);
-    setCharts(column, row, chrts);
+    setCharts(column+1, row+1, chrts);
 }
 
 #ifdef SWINDER_XLS2RAW
