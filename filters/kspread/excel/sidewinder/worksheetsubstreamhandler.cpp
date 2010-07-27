@@ -946,7 +946,7 @@ void WorksheetSubStreamHandler::handleBkHim(BkHimRecord* record)
 void WorksheetSubStreamHandler::handleVerticalPageBreaksRecord(VerticalPageBreaksRecord* record)
 {
     const unsigned int count = record->count();
-    for(int i = 0; i < count; ++i ) {
+    for(unsigned i = 0; i < count; ++i ) {
         VerticalPageBreak pageBreak;
         pageBreak.col = record->col(i);
         pageBreak.rowStart = record->rowStart(i);
@@ -958,7 +958,7 @@ void WorksheetSubStreamHandler::handleVerticalPageBreaksRecord(VerticalPageBreak
 void WorksheetSubStreamHandler::handleHorizontalPageBreaksRecord(HorizontalPageBreaksRecord* record)
 {
     const unsigned int count = record->count();
-    for( int i = 0; i < count; ++i ) {
+    for(unsigned i = 0; i < count; ++i ) {
         HorizontalPageBreak pageBreak;
         pageBreak.row = record->row(i);
         pageBreak.colStart = record->colStart(i);
