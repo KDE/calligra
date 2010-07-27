@@ -2,6 +2,7 @@
 Version=1.0
 Type=Application
 Name=Office
+Name[nds]=Kontoor
 Name[pt]=Escritório
 Name[pt_BR]=Escritório
 Name[sv]=Kontor
