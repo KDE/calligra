@@ -29,19 +29,10 @@
 #include <string>
 #include <map>
 
+class KoStore;
+
 namespace Swinder
 {
-
-class Store
-{
-public:
-    explicit Store() {}
-    virtual ~Store() {}
-
-    virtual bool open(const std::string& filename) = 0;
-    virtual bool write(const char *data, int size) = 0;
-    virtual bool close() = 0;
-};
 
 class Sheet;
 class Format;
@@ -57,7 +48,7 @@ public:
      * @a store An optional implementation of the Store class
      * that is used to write content like images to.
      */
-    explicit Workbook(Store* store = 0);
+    explicit Workbook(KoStore* store = 0);
 
     /**
      * Destroys the workbook.
@@ -67,7 +58,7 @@ public:
     /**
      * Returns the used KoStore or NULL if not KoStore was set.
     /*/
-    Store* store() const;
+    KoStore* store() const;
 
     /**
      * Clears the workbook, i.e. makes it as if it is just constructed.

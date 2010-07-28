@@ -79,7 +79,7 @@ public:
     std::vector<XFRecord> xfTable;
 
     // table blib items
-    std::vector< MsoDrawingBlibItem* > drawingTable;
+    QList< MsoDrawingBlibItem* > drawingTable;
 
     // list of chart sheets
     QList< Sheet* > chartSheets;
@@ -837,7 +837,7 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
 
 MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
 {
-    if (pid <= 0 || pid > d->drawingTable.size()) {
+    if (pid < 1 || pid > uint(d->drawingTable.size())) {
         std::cerr << "GlobalsSubStreamHandler::drawing: Invalid index=" << (pid - 1) << std::endl;
         return 0;
     }
@@ -849,7 +849,7 @@ QList< Sheet* >& GlobalsSubStreamHandler::chartSheets()
     return d->chartSheets;
 }
 
-Store* GlobalsSubStreamHandler::store() const
+KoStore* GlobalsSubStreamHandler::store() const
 {
     return d->workbook->store();
 }

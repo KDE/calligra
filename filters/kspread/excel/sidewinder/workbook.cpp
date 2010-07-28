@@ -30,7 +30,7 @@ using namespace Swinder;
 class Workbook::Private
 {
 public:
-    Store* store;
+    KoStore* store;
     std::vector<Sheet*> sheets;
     QHash<PropertyType, QVariant> properties;
     std::map<std::pair<unsigned, UString>, UString> namedAreas;
@@ -41,7 +41,7 @@ public:
     std::vector<Format*> formats;
 };
 
-Workbook::Workbook(Store* store)
+Workbook::Workbook(KoStore* store)
 {
     d = new Workbook::Private();
     d->store = store;
@@ -53,13 +53,12 @@ Workbook::Workbook(Store* store)
 Workbook::~Workbook()
 {
     clear();
-    delete d->store;
     for (unsigned i = 0; i < d->formats.size(); i++)
         delete d->formats[i];
     delete d;
 }
 
-Store* Workbook::store() const
+KoStore* Workbook::store() const
 {
     return d->store;
 }

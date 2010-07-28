@@ -841,7 +841,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
         if(!drawing) return;
         Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
         Q_ASSERT(cell);
-        cell->addPicture(new Picture(record,drawing));
+        cell->addPicture(new Picture(record,drawing->m_picture));
         return;
     }
 

@@ -176,17 +176,6 @@ ExcelImport::~ExcelImport()
     delete d;
 }
 
-class StoreImpl : public Store {
-public:
-    StoreImpl(KoStore* store) : Store(), m_store(store) {}
-    virtual ~StoreImpl() {}
-    virtual bool open(const std::string& filename) { return m_store->open(filename.c_str()); }
-    virtual bool write(const char *data, int size) { return m_store->write(data, size); }
-    virtual bool close() { return m_store->close(); }
-private:
-    KoStore* m_store;
-};
-
 KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (from != "application/vnd.ms-excel")
@@ -214,8 +203,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->storeout->disallowNameExpansion();
 
     // open inputFile
-    StoreImpl *storeimpl = new StoreImpl(d->storeout);
-    d->workbook = new Swinder::Workbook(storeimpl);
+    d->workbook = new Swinder::Workbook(d->storeout);
     connect(d->workbook, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
@@ -1449,7 +1437,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT));
 
         xmlWriter->startElement("draw:image");
-        xmlWriter->addAttribute("xlink:href", picture->m_filename.c_str());
+        xmlWriter->addAttribute("xlink:href", "Pictures/" + picture->m_filename);
         xmlWriter->addAttribute("xlink:type", "simple");
         xmlWriter->addAttribute("xlink:show", "embed");
         xmlWriter->addAttribute("xlink:actuate", "onLoad");
@@ -1919,7 +1907,7 @@ void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
 void ExcelImport::Private::insertPictureManifest(Picture* picture)
 {
     QString mimeType;
-    const QString fileName = QString::fromAscii(picture->m_filename.c_str());
+    const QString fileName = picture->m_filename;
     const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
     if( extension == "gif" ) {

@@ -1,9 +1,11 @@
 include_directories(
+    ${ZLIB_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+    ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/kspread # for PointStorage
 )
 
@@ -38,13 +40,15 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+
 set(excelimport_PART_SRCS excelimport.cc ${sidewinder_SRCS})
 
 kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 
 
-target_link_libraries(excelimport msooxml komain)
+target_link_libraries(excelimport ${ZLIB_LIBRARIES} msooxml komain mso koodf)
 if(QCA2_FOUND)
    target_link_libraries(excelimport ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)

@@ -1,5 +1,7 @@
 include_directories(
+    ${CMAKE_BINARY_DIR}/libs/store
     ${CMAKE_BINARY_DIR}/filters/
+    ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting.h
     ${CMAKE_SOURCE_DIR}/kspread # for PointStorage.h
 )
@@ -34,10 +36,13 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+
 add_definitions(-DSWINDER_XLS2RAW)
 
 kde4_add_executable(sidewinder TEST ${sidewinder_SRCS})
-target_link_libraries(sidewinder ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+
+target_link_libraries(sidewinder ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} mso koodf)
 if(QCA2_FOUND)
    target_link_libraries(sidewinder ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)

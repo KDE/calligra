@@ -30,6 +30,15 @@
 #include "records.h"
 #include "objects.h"
 
+// libmso
+//#include <generated/simpleParser.h>
+//#include <generated/leinputstream.h>
+#include "generated/simpleParser.h"
+#include "generated/leinputstream.h"
+#include "drawstyle.h"
+#include "ODrawToOdf.h"
+#include "pictures.h"
+
 namespace Swinder
 {
 // rich-text, unicode, far-east support Excel string
@@ -872,16 +881,27 @@ public:
 class MsoDrawingBlibItem
 {
 public:
-    std::string id;
-    std::string filename;
-    explicit MsoDrawingBlibItem() {}
+    //enum Type { Picture, ... };
+    PictureReference m_picture;
+    explicit MsoDrawingBlibItem(const PictureReference &picture);
 };
 
-class MsoDrawingGroupRecord : public Record, private DrawingObject
+class Picture
 {
 public:
-    std::vector< MsoDrawingBlibItem* > m_items;
+    /// The unique identifier of the picture.
+    QString m_id;
+    /// The path and filename of the picture-file in the KoStore. So, can be something like "Pictures/TheUniqueIdentifierOfThePicture.jpg" for example.
+    QString m_filename;
+    /// The position of the picture in the sheet.
+    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
+    Picture(MsoDrawingRecord *record, const PictureReference &picture);
+};
 
+class MsoDrawingGroupRecord : public Record
+{
+public:
+    QList< MsoDrawingBlibItem* > m_items;
     static const unsigned id;
     MsoDrawingGroupRecord(Workbook *book);
     virtual ~MsoDrawingGroupRecord();
@@ -1393,26 +1413,6 @@ public:
 private:
     class Private;
     Private* d;
-};
-
-class Picture
-{
-public:
-    std::string m_id;
-    std::string m_filename;
-    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
-    Picture(MsoDrawingRecord *record, MsoDrawingBlibItem *item) {
-        m_id = item->id;
-        m_filename = item->filename;
-        m_colL = record->m_colL;
-        m_dxL = record->m_dxL;
-        m_rwT = record->m_rwT;
-        m_dyT = record->m_dyT;
-        m_colR = record->m_colR;
-        m_dxR = record->m_dxR;
-        m_rwB = record->m_rwB;
-        m_dyB = record->m_dyB;
-    }
 };
 
 class ExcelReader
