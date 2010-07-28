@@ -805,26 +805,26 @@ void Parser9x::processChunk( const Chunk& chunk, SharedPtr<const Word97::CHP> ch
             } 
             else if ( m_bookmarks ) {
 
-                //TODO: there might be a number of bookmarks having different
+                //TODO: there may be a number of bookmarks having different
                 //lengths at the current CP
 
-                //TODO: there might be a number of overlapping bookmarks in
+                //TODO: we need to handle a number of overlapping bookmarks in
                 //this chunk
 
+		bool ok;
+		BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
+
+                //TODO: a bookmark can cover text from several chunks
                 if ( !(bkmk_length <= length) ) {
-                    wvlog << "WARNING: overlapping bookmarks are not supported!";
+                    wvlog << "WARNING: bookmarks covering several chunks are not supported yet!";
                     processRun( chunk, chp, length, index, currentStart );
-        
                     length = 0;
                     index += length;
                 } else {
-                    bool ok;
-                    BookmarkData data( m_bookmarks->bookmark( disruption, ok ) );
                     m_textHandler->bookmarkStart( data );
                     if (bkmk_length > 0) {
                         processRun( chunk, chp, bkmk_length, index, currentStart );
                         m_textHandler->bookmarkEnd( data );
-
                         length -= bkmk_length;
                         index += bkmk_length;
                     }
@@ -960,6 +960,9 @@ void Parser9x::emitBookmark( U32 globalCP )
 {
     bool ok = false;
     BookmarkData data( m_bookmarks->bookmark( globalCP, ok ) );
+
+    //TODO: handle bookmarks marking a text range between paragraphs in this
+    //special case
 
     //there might be more bookmarks for the current CP
     while (ok) {

@@ -252,8 +252,8 @@ namespace wvWare
 
         /**
          * This function is only used to check if there are any bookmarks at
-         * the CP of the paragraph mark.  There's no support for bookmarks
-         * which mark a text range between more paragraphs.
+         * the CP of the paragraph mark.  TODO: There's no support for
+         * bookmarks which mark a text range between more paragraphs.
          */
         void emitBookmark( U32 globalCP );
 
