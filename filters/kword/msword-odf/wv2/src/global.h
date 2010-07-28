@@ -28,7 +28,7 @@
  */
 
 // A few defines used for "inline" debugging
-#define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
+//#define WV2_DUMP_PIECE_TABLE 0 // has to be defined as we just #if it
 //#define WV2_DUMP_FIB 0
 
 //#define WV2_DEBUG_STYLESHEET 1
@@ -42,6 +42,7 @@
 //#define WV2_DEBUG_PICTURES 1
 //#define WV2_DEBUG_ANNOTATIONS 1
 //#define WV2_DEBUG_BOOKMARK 1
+//#define WV2_DEBUG_SECTIONS 1
 
 // This define should only be commented out for releases (if at all)
 #define WV2_CHECKING 1
