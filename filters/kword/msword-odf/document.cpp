@@ -354,6 +354,11 @@ void Document::processStyles()
             kDebug(30513) << "added style " << actualName;
         }
     }
+    //also create a defaul style which is needed to store the default tab spacing
+    KoGenStyle defaultStyle(KoGenStyle::ParagraphStyle, "paragraph");
+    defaultStyle.setDefaultStyle(true);
+    defaultStyle.addPropertyPt("style:tab-stop-distance", (qreal)m_parser->dop().dxaTab / 20.0);
+    m_mainStyles->insert(defaultStyle, "nevershown");
 }
 
 //just call parsing function
