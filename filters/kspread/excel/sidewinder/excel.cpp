@@ -2408,7 +2408,7 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
 
     if (version() == Excel97) {
         unsigned angle = data[7];
-        qDebug() << d->globalIndex << angle;
+        //qDebug() << d->globalIndex << angle;
         setRotationAngle((angle != 255) ? angle : 0);
         setStackedLetters(angle == 255);
 
