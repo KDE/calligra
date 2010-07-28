@@ -1153,17 +1153,21 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
     m_usedListWriters.push(writer);		// put the currently used writer in the stack
 
     //process the different places we could be in a list
-    if (m_currentListID == 0) {
-        //we're starting a new list...
-        //set the list ID
-        m_currentListID = listInfo->lsid();
-        kDebug(30513) << "opening list " << m_currentListID;
+    if (m_currentListID != listInfo->lsid()) {
+        //we're entering a different or new list...
+        kDebug(30513) << "opening list " << listInfo->lsid();
+
+        //just in case another list was already open
+        if (listIsOpen()) {
+            //kDebug(30513) << "closing list " << m_currentListID;
+            closeList();
+        }
 
         // Open <text:list> in the body
         writer->startElement("text:list");
 
         //check for a continued list
-        if (m_currentListID == m_previousListID) {
+        if (listInfo->lsid() == m_previousListID) {
             writer->addAttribute("text:continue-numbering", "true");
             writer->addAttribute("text:style-name", m_previousListStyleName);
             m_listStyleName = m_previousListStyleName;
@@ -1180,6 +1184,8 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
             m_listStyleName = m_mainStyles->insert(listStyle);
             writer->addAttribute("text:style-name", m_listStyleName);
         }
+        //set the list ID - now is safe as we are done using the old value
+        m_currentListID = listInfo->lsid();
 
         //set flag to true because it's a new list, so we need to write that tag
         newListLevelStyle = true;
@@ -1203,9 +1209,11 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         //it's a new level, so we need to configure this level
         newListLevelStyle = true;
     } else {
+        qDebug() << "HMMM" << m_currentListDepth << pap.ilvl;
         // We're backing out one or more levels in the list.
         kDebug(30513) << "backing out one or more levels in list" << m_currentListID;
-        for (;m_currentListDepth > pap.ilvl; m_currentListDepth--) {
+        while (m_currentListDepth > pap.ilvl) {
+            m_currentListDepth--;
             //close the last <text:list-item of the level
             writer->endElement();
             //close <text:list> for the level
