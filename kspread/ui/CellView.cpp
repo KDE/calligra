@@ -991,7 +991,6 @@ void CellView::paintText(QPainter& painter,
         QColor bgColor = d->style.backgroundColor();
         if (bgColor.isValid()) {
             qreal contrast = KColorUtils::contrastRatio(bgColor, textColorPrint);
-            kDebug() << bgColor << textColorPrint << contrast;
             if (contrast < 3)
                 textColorPrint = QColor(255 - textColorPrint.red(), 255 - textColorPrint.green(), 255 - textColorPrint.blue());
         }
@@ -1852,7 +1851,16 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
         while (status == Undefined) {
             Cell nextCell = Cell(masterCell.sheet(), masterCell.column(), row + 1).masterCell();
 
-            if (nextCell.isEmpty()) {
+            bool isEmpty = true;
+            
+            for (int col = 0; col < masterCell.mergedXCells() + d->obscuredCellsX+1; col++) {
+                Cell cellNext = Cell(masterCell.sheet(), masterCell.column() + col, row + 1).masterCell();
+                if (!cellNext.isEmpty()) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
                 extraHeight += nextCell.height();
                 row += 1 + nextCell.mergedYCells();
 
