@@ -1396,6 +1396,75 @@ QString Sheet::getPart(const KoXmlNode & part)
     return result;
 }
 
+void Sheet::loadColumnNodes(const KoXmlElement& parent,
+                            int& indexCol,
+                            int& maxColumn,
+                            KoOdfLoadingContext& odfContext,
+                            QHash<QString, QRegion>& columnStyleRegions
+                            )
+{
+    KoXmlNode node = parent.firstChild();
+    while (!node.isNull()) {
+        KoXmlElement elem = node.toElement();
+        if (!elem.isNull() && elem.namespaceURI() == KoXmlNS::table) {
+            if (elem.localName() == "table-column") {
+                loadColumnFormat(elem, odfContext.stylesReader(), indexCol, columnStyleRegions);
+                maxColumn = qMax(maxColumn, indexCol - 1);
+            } else if (elem.localName() == "table-column-group") {
+                loadColumnNodes(elem, indexCol, maxColumn, odfContext, columnStyleRegions);
+            }
+        }
+        node = node.nextSibling();
+    }
+}
+
+void Sheet::loadRowNodesStyles(const KoXmlElement& parent,
+                            int& rowIndex,
+                            int& maxColumn,
+                            OdfLoadingContext& tableContext,
+                            QHash<QString, QRegion>& rowStyleRegions,
+                            QHash<QString, QRegion>& cellStyleRegions
+                            )
+{
+    KoXmlNode node = parent.firstChild();
+    while (!node.isNull()) {
+        KoXmlElement elem = node.toElement();
+        if (!elem.isNull() && elem.namespaceURI() == KoXmlNS::table) {
+            if (elem.localName() == "table-row") {
+                int columnMaximal = loadRowFormatStyles(elem, rowIndex, tableContext,
+                                                        rowStyleRegions, cellStyleRegions);
+                // allow the row to define more columns then defined via table-column
+                maxColumn = qMax(maxColumn, columnMaximal);
+            } else if (elem.localName() == "table-row-group") {
+                loadRowNodesStyles(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions);
+            }
+        }
+        node = node.nextSibling();
+    }
+}
+
+void Sheet::loadRowNodesContent(const KoXmlElement& parent,
+                            int& rowIndex,
+                            int& maxColumn,
+                            OdfLoadingContext& tableContext
+                            )
+{
+    KoXmlNode node = parent.firstChild();
+    while (!node.isNull()) {
+        KoXmlElement elem = node.toElement();
+        if (!elem.isNull() && elem.namespaceURI() == KoXmlNS::table) {
+            if (elem.localName() == "table-row") {
+                int columnMaximal = loadRowFormatContent(elem, rowIndex, tableContext);
+                // allow the row to define more columns then defined via table-column
+                maxColumn = qMax(maxColumn, columnMaximal);
+            } else if (elem.localName() == "table-row-group") {
+                loadRowNodesContent(elem, rowIndex, maxColumn, tableContext);
+            }
+        }
+        node = node.nextSibling();
+    }
+}
+
 bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     OdfLoadingContext& tableContext,
                     const Styles& autoStyles,
@@ -1563,31 +1632,22 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
             kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
             if (rowElement.namespaceURI() == KoXmlNS::table) {
                 if (rowElement.localName() == "table-header-columns") {
-                    KoXmlNode headerColumnNode = rowElement.firstChild();
-                    while (!headerColumnNode.isNull()) {
-                        // NOTE Handle header cols as ordinary ones
-                        //      as long as they're not supported.
-                        loadColumnFormat(headerColumnNode.toElement(), odfContext.stylesReader(),
-                                         indexCol, columnStyleRegions);
-                        headerColumnNode = headerColumnNode.nextSibling();
-                    }
+                    // NOTE Handle header cols as ordinary ones
+                    //      as long as they're not supported.
+                    loadColumnNodes(rowElement, indexCol, maxColumn, odfContext, columnStyleRegions);
+                } else if (rowElement.localName() == "table-column-group") {
+                    loadColumnNodes(rowElement, indexCol, maxColumn, odfContext, columnStyleRegions);
                 } else if (rowElement.localName() == "table-column" && indexCol <= KS_colMax) {
                     kDebug(36003) << " table-column found : index column before" << indexCol;
                     loadColumnFormat(rowElement, odfContext.stylesReader(), indexCol, columnStyleRegions);
                     kDebug(36003) << " table-column found : index column after" << indexCol;
                     maxColumn = qMax(maxColumn, indexCol - 1);
                 } else if (rowElement.localName() == "table-header-rows") {
-                    KoXmlNode headerRowNode = rowElement.firstChild();
-                    while (!headerRowNode.isNull()) {
-                        // NOTE Handle header rows as ordinary ones
-                        //      as long as they're not supported.
-                        int columnMaximal = loadRowFormatStyles(headerRowNode.toElement(), rowIndex,
-                                      tableContext, rowStyleRegions,
-                                      cellStyleRegions);
-                        // allow the row to define more columns then defined via table-column
-                        maxColumn = qMax(maxColumn, columnMaximal);
-                        headerRowNode = headerRowNode.nextSibling();
-                    }
+                    // NOTE Handle header rows as ordinary ones
+                    //      as long as they're not supported.
+                    loadRowNodesStyles(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions);
+                } else if (rowElement.localName() == "table-row-group") {
+                    loadRowNodesStyles(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions);
                 } else if (rowElement.localName() == "table-row") {
                     kDebug(36003) << " table-row found :index row before" << rowIndex;
                     int columnMaximal = loadRowFormatStyles(rowElement, rowIndex, tableContext,
@@ -1634,16 +1694,11 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
             kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
             if (rowElement.namespaceURI() == KoXmlNS::table) {
                 if (rowElement.localName() == "table-header-rows") {
-                    KoXmlNode headerRowNode = rowElement.firstChild();
-                    while (!headerRowNode.isNull()) {
-                        // NOTE Handle header rows as ordinary ones
-                        //      as long as they're not supported.
-                        int columnMaximal = loadRowFormatContent(headerRowNode.toElement(), rowIndex,
-                                      tableContext);
-                        // allow the row to define more columns then defined via table-column
-                        maxColumn = qMax(maxColumn, columnMaximal);
-                        headerRowNode = headerRowNode.nextSibling();
-                    }
+                    // NOTE Handle header rows as ordinary ones
+                    //      as long as they're not supported.
+                    loadRowNodesContent(rowElement, rowIndex, maxColumn, tableContext);
+                } else if (rowElement.localName() == "table-row-group") {
+                    loadRowNodesContent(rowElement, rowIndex, maxColumn, tableContext);
                 } else if (rowElement.localName() == "table-row") {
                     kDebug(36003) << " table-row found :index row before" << rowIndex;
                     int columnMaximal = loadRowFormatContent(rowElement, rowIndex, tableContext);

@@ -834,6 +834,16 @@ protected:
     //BEGIN Methods related to the OpenDocument file format
     //
 
+    void loadColumnNodes(const KoXmlElement& parent, int& indexCol,
+                            int& maxColumn, KoOdfLoadingContext& odfContext,
+                            QHash<QString, QRegion>& columnStyleRegions);
+    void loadRowNodesStyles(const KoXmlElement& parent, int& rowIndex,
+                            int& maxColumn, OdfLoadingContext& tableContext,
+                            QHash<QString, QRegion>& rowStyleRegions,
+                            QHash<QString, QRegion>& cellStyleRegions);
+    void loadRowNodesContent(const KoXmlElement& parent, int& rowIndex,
+                            int& maxColumn, OdfLoadingContext& tableContext);
+
     /**
      * \ingroup OpenDocument
      */
