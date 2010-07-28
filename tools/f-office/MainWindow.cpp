@@ -880,12 +880,17 @@ bool MainWindow::setBulletList(KoTextEditor *editor) {
 
 void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 {
-    QTextBlock blk = editor->block();
-    KoListStyle *liststyle = new KoListStyle();
-    KoListLevelProperties listlevelproperties;
-    listlevelproperties.setStyle(style);
-    liststyle->setLevelProperties(listlevelproperties);
-    KoList::applyStyle(blk, liststyle, KoList::level(blk));
+    const int start = qMin(editor->position(), editor->anchor());
+    const int end = qMax(editor->position(), editor->anchor());
+    QTextBlock block = editor->document()->findBlock(start);
+    while (block.isValid() && block.position() <= end) {
+        KoListStyle *liststyle = new KoListStyle();
+        KoListLevelProperties listlevelproperties;
+        listlevelproperties.setStyle(style);
+        liststyle->setLevelProperties(listlevelproperties);
+        KoList::applyStyle(block, liststyle, KoList::level(block));
+        block = block.next();
+    }
     m_isDocModified = true;
 }
 
