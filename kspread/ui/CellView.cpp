@@ -1546,7 +1546,7 @@ void CellView::makeLayout(SheetView* sheetView, const Cell& cell)
             font.setPointSizeF(siz / 2.);
             fontMetrics = QFontMetricsF(font, &device);
             d->calculateTextSize(font, fontMetrics);
-            if (d->fittingWidth)\
+            if (d->fittingWidth)
                 lower = siz;
             else
                 upper = siz - 1;
@@ -1678,13 +1678,8 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
         } else if (tmpRichText) {
             d->textY = effBottom;
         } else if (tmpMultiRow && !tmpVerticalText) {
-            // Is enough place available?
-            if (effBottom - effTop - d->textHeight > 0) {
-                d->textY = effBottom - d->textHeight + ascent;
-            } else {
-                d->textY = effTop + ascent;
-            }
-        } else {
+            d->textY = effBottom - d->textHeight + ascent;
+        } else { // vertical text
             // Is enough place available?
             if (effBottom - effTop - d->textHeight > 0) {
                 d->textY = effBottom - d->textHeight + ascent;
