@@ -2406,11 +2406,12 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
     setVerticalAlignment((align >> 4) + 1/*enum starts at 1*/);
     setTextWrap(align & 0x08);
 
-    unsigned angle = data[7];
-    setRotationAngle((angle != 255) ? angle : 0);
-    setStackedLetters(angle == 255);
-
     if (version() == Excel97) {
+        unsigned angle = data[7];
+        qDebug() << d->globalIndex << angle;
+        setRotationAngle((angle != 255) ? angle : 0);
+        setStackedLetters(angle == 255);
+
         unsigned options = data[8];
 //     unsigned attributes = data[9];
 
@@ -2443,6 +2444,13 @@ void XFRecord::setData(unsigned size, const unsigned char* data, const unsigned 
         setPatternForeColor(fill & 0x7f);
         setPatternBackColor((fill >> 7) & 0x7f);
     } else {
+        unsigned orient = data[7] & 3;
+        switch (orient) {
+            case 0: break;
+            case 1: setStackedLetters(true); break;
+            case 2: setRotationAngle(90); break;
+            case 3: setRotationAngle(180); break; // 90 degrees clockwise
+        }
         unsigned data1 = readU32(data + 8);
         unsigned data2 = readU32(data + 12);
 
