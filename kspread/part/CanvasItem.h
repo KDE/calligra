@@ -157,6 +157,9 @@ public:
     virtual QSizeF size() const { return QGraphicsWidget::size(); }
     virtual QPoint mapToGlobal(const QPointF& point) const { return QGraphicsWidget::mapToScene(point).toPoint(); /* TODO */ }
     virtual void updateMicroFocus() { /*QGraphicsWidget::updateMicroFocus();*/ }
+
+    virtual ColumnHeader* columnHeader() const;
+    virtual RowHeader* rowHeader() const;
 private:
     Q_DISABLE_COPY(CanvasItem)
 

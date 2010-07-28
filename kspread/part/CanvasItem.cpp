@@ -137,6 +137,8 @@ public:
     KoZoomHandler* zoomHandler;
     QHash<const Sheet*, SheetView*> sheetViews;
     Sheet* activeSheet;
+    ColumnHeaderItem* columnHeader;
+    RowHeaderItem* rowHeader;
 };
 
 CanvasItem::CanvasItem(Doc *doc)
@@ -156,6 +158,9 @@ CanvasItem::CanvasItem(Doc *doc)
     installEventFilter(this);   // for TAB key processing, otherwise focus change
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
+
+    d->rowHeader = 0;
+    d->columnHeader = 0;
 
     d->selection = new Selection(this);
 
@@ -209,6 +214,7 @@ void CanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event)
 
 void CanvasItem::paint(QPainter* painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+    Q_UNUSED(widget);
     CanvasBase::paint(painter, option->exposedRect);
 }
 
@@ -347,8 +353,8 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
 
     // Always repaint the visible cells.
     update();
-    //d->rowHeader->update();
-    //d->columnHeader->update();
+    if (d->rowHeader) d->rowHeader->update();
+    if (d->columnHeader) d->columnHeader->update();
     //d->selectAllButton->update();
 
     if (d->selection->referenceSelectionMode()) {
@@ -374,6 +380,20 @@ void CanvasItem::setActiveSheet(Sheet* sheet)
     // Auto calculation state for the INFO function.
     const bool autoCalc = d->activeSheet->isAutoCalculationEnabled();
     doc()->map()->calculationSettings()->setAutoCalculationEnabled(autoCalc);
+}
+
+ColumnHeader* CanvasItem::columnHeader() const
+{
+    if (!d->columnHeader)
+        d->columnHeader = new ColumnHeaderItem(0, const_cast<CanvasItem*>(this));
+    return d->columnHeader;
+}
+
+RowHeader* CanvasItem::rowHeader() const
+{
+    if (!d->rowHeader)
+        d->rowHeader = new RowHeaderItem(0, const_cast<CanvasItem*>(this));
+    return d->rowHeader;
 }
 
 #include "CanvasItem.moc"

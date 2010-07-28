@@ -54,11 +54,11 @@ int main(int argc, char** argv)
     canvas->resize(size);
     canvas->setPos(0, 0);
 
-    KSpread::ColumnHeaderItem* columnHeader = new KSpread::ColumnHeaderItem(0, canvas);
+    KSpread::ColumnHeaderItem* columnHeader = static_cast<KSpread::ColumnHeaderItem*>(canvas->columnHeader());
     static_cast<QGraphicsWidget*>(columnHeader)->resize(size.width(), canvas->zoomHandler()->zoomItY(font.pointSizeF() + 3));
     columnHeader->setPos(0, -columnHeader->height());
 
-    KSpread::RowHeaderItem* rowHeader = new KSpread::RowHeaderItem(0, canvas);
+    KSpread::RowHeaderItem* rowHeader = static_cast<KSpread::RowHeaderItem*>(canvas->rowHeader());
     static_cast<QGraphicsWidget*>(rowHeader)->resize(canvas->zoomHandler()->zoomItX(YBORDER_WIDTH), size.height());
     rowHeader->setPos(-rowHeader->width(), 0);
 
