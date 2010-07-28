@@ -1894,7 +1894,8 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
     const QTextOption options = d->textOptions();
 
     const bool tmpVerticalText = d->style.verticalText();
-    const qreal lineWidth = tmpVerticalText ? fontMetrics.maxWidth() :
+    const bool tmpAngled = fixAngle(d->style.angle()) != 0;
+    const qreal lineWidth = tmpAngled ? 1e9 : tmpVerticalText ? fontMetrics.maxWidth() :
                             (d->width - 2 * s_borderSpace
                              - 0.5 * d->style.leftBorderPen().width()
                              - 0.5 * d->style.rightBorderPen().width());
