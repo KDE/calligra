@@ -84,7 +84,6 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_maxColumns(0)
     , m_currentListDepth(-1)
     , m_currentListID(0)
-    , m_previousListID(0)
     , m_hyperLinkActive(false)
     , m_breakBeforePage(false)
 {
@@ -1167,10 +1166,10 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         writer->startElement("text:list");
 
         //check for a continued list
-        if (listInfo->lsid() == m_previousListID) {
+        if (m_previousLists.contains(listInfo->lsid())) {
             writer->addAttribute("text:continue-numbering", "true");
-            writer->addAttribute("text:style-name", m_previousListStyleName);
-            m_listStyleName = m_previousListStyleName;
+            writer->addAttribute("text:style-name", m_previousLists[listInfo->lsid()]);
+            m_listStyleName = m_previousLists[listInfo->lsid()];
         } else {
             //need to create a style for this list
             KoGenStyle listStyle(KoGenStyle::ListAutoStyle);
@@ -1407,10 +1406,9 @@ void KWordTextHandler::closeList()
     }
 
     //track this list ID, in case we open it again and need to continue the numbering
-    m_previousListID = m_currentListID;
+    m_previousLists[m_currentListID] = m_listStyleName;
     m_currentListID = 0;
     m_currentListDepth = -1;
-    m_previousListStyleName = m_listStyleName;
     m_listStyleName = "";
 }
 
@@ -1423,15 +1421,13 @@ void KWordTextHandler::saveState()
 {
     kDebug(30513);
     m_oldStates.push(State(m_currentTable, m_paragraph, m_listStyleName,
-                           m_currentListDepth, m_currentListID, m_previousListID,
-                           m_previousListStyleName));
+                           m_currentListDepth, m_currentListID, m_previousLists));
     m_currentTable = 0;
     m_paragraph = 0;
     m_listStyleName = "";
     m_currentListDepth = -1;
     m_currentListID = 0;
-    m_previousListID = 0;
-    m_previousListStyleName = "";
+    m_previousLists.clear();
 }
 
 void KWordTextHandler::restoreState()
@@ -1457,8 +1453,7 @@ void KWordTextHandler::restoreState()
     m_listStyleName = s.listStyleName;
     m_currentListDepth = s.currentListDepth;
     m_currentListID = s.currentListID;
-    m_previousListID = s.previousListID;
-    m_previousListStyleName = s.previousListStyleName;
+    m_previousLists = s.previousLists;
 }
 
 #include "texthandler.moc"

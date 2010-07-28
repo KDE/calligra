@@ -165,18 +165,17 @@ private:
     //save/restore for processing footnotes (very similar to the wv2 method)
     struct State {
         State(KWord::Table* curTab, Paragraph* para, QString lStyleName,
-              int curListDepth, int curListID, int preListID, QString preLStyleName) :
+              int curListDepth, int curListID, const QMap<int, QString> &preLists) :
                 currentTable(curTab), paragraph(para), listStyleName(lStyleName),
                 currentListDepth(curListDepth), currentListID(curListID),
-                previousListID(preListID), previousListStyleName(preLStyleName) {}
+                previousLists(preLists) {}
 
         KWord::Table* currentTable;
         Paragraph* paragraph;
         QString listStyleName;
         int currentListDepth; //tells us which list level we're on (-1 if not in a list)
         int currentListID; //tracks the id of the current list - 0 if no list
-        int previousListID;
-        QString previousListStyleName;
+        QMap<int, QString> previousLists; //remember previous lists, to continue numbering
     };
 
     std::stack<State> m_oldStates;
@@ -230,8 +229,9 @@ private:
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
     int m_currentListID; //tracks the id of the current list - 0 if no list
-    int m_previousListID; //track previous list, in case we need to continue the numbering
-    QString m_previousListStyleName;
+    //int m_previousListID; //track previous list, in case we need to continue the numbering
+    //QString m_previousListStyleName;
+    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
 
     QList<QString> m_hyperLinkList;
     bool m_hyperLinkActive;
