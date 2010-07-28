@@ -182,6 +182,8 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_fonttype("Nokia Sans"),
         m_fontweight(25),
         m_count(0),
+        m_xcordinate(0),
+        m_ycordinate(0),
         m_pptTool(0),
         m_fsPPTDrawHighlightButton(0),
         m_fsPPTDrawPenButton(0),
@@ -2488,17 +2490,17 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     if(event && event->type()==QEvent::MouseButtonPress && m_doc) {
         QMouseEvent *mouseEvent= reinterpret_cast<QMouseEvent*>(event);
-        int xcordinate = mouseEvent->globalX ();
-        int ycordinate = mouseEvent->globalY();
+        m_xcordinate = mouseEvent->globalX ();
+        m_ycordinate = mouseEvent->globalY();
         if((m_formatframe) && (m_formatframe->isVisible())) {
-            if ((xcordinate<325) || (ycordinate<199))
+            if ((m_xcordinate<325) || (m_ycordinate<199))
                 m_formatframe->hide();
         }
 
         if((m_fontstyleframe) && (m_fontstyleframe->isVisible())) {
             if(!this->isActiveWindow()){
             } else {
-                if((xcordinate<384) || (ycordinate<199))
+                if((m_xcordinate<384) || (m_ycordinate<199))
                     m_fontstyleframe->hide();
             }
         }
@@ -2529,9 +2531,11 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     if(m_doubleClick) {
         if(event->type() == QEvent::MouseButtonDblClick) {
-            KoToolManager::instance()->switchToolRequested(PanTool_ID);
-            m_ui->EditToolBar->hide();
-            m_ui->viewToolBar->show();
+            if (!((m_xcordinate>0) && (m_ycordinate>400))) {
+                KoToolManager::instance()->switchToolRequested(PanTool_ID);
+                m_ui->EditToolBar->hide();
+                m_ui->viewToolBar->show();
+            }
         }
     }
     return false;

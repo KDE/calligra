@@ -137,7 +137,11 @@ private:
       * Stores the URL of the open file
       */
     KUrl m_url;
-
+    /*!
+     * X-cordinate and Y-cordinate values at mouse click position
+     */
+    int m_xcordinate ;
+    int m_ycordinate ;
     /*!
      * Font related information for each Character in NewDocuments 
      */
