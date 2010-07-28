@@ -1328,6 +1328,10 @@ void MainWindow::cut()
 
 void MainWindow::paste()
 {
+    if (QApplication::clipboard()->text().isEmpty()) {
+        return ;
+    }
+
     m_controller->canvas()->toolProxy()->paste();
 
     if(m_fontstyleframe)

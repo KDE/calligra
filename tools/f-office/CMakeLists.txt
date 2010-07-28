@@ -32,3 +32,4 @@ install(FILES templates/NewPresentation.odp DESTINATION share/freoffice-template
 install(FILES templates/NewSpread.ods DESTINATION share/freoffice-templates/.templates)
 install(FILES OfficeInterface.h DESTINATION include/office)
 
+SET(CMAKE_CXX_FLAGS "-g -Wall")
