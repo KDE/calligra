@@ -508,9 +508,9 @@ void Sheet::setPictures(unsigned column, unsigned row, const QList<Picture*>& pi
 
 void Sheet::addPicture(unsigned column, unsigned row, Picture* picture)
 {
-    QList<Picture*> pics = pictures(column+1, row+1);
+    QList<Picture*> pics = pictures(column, row);
     pics.append(picture);
-    setPictures(column+1, row+1, pics);
+    setPictures(column, row, pics);
 }
 
 QList<ChartObject*> Sheet::charts(unsigned column, unsigned row) const
