@@ -1207,14 +1207,11 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
         kDebug(30513) << "backing out one or more levels in list" << m_currentListID;
         for (;m_currentListDepth > pap.ilvl; m_currentListDepth--) {
             //close the last <text:list-item of the level
-       writer->addCompleteElement("debug:texth1215 close list-item");
             writer->endElement();
             //close <text:list> for the level
-       writer->addCompleteElement("debug:texth1218 close list");
             writer->endElement();
         }
         //close the <text:list-item> from the surrounding level
-       writer->addCompleteElement("debug:texth1222 close list-item (next now on same level)");
         writer->endElement();
     }
 
