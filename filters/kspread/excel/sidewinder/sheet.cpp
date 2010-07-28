@@ -528,9 +528,9 @@ void Sheet::setCharts(unsigned column, unsigned row, const QList<ChartObject*>& 
 
 void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
 {
-    QList<ChartObject*> chrts = charts(column+1, row+1);
+    QList<ChartObject*> chrts = charts(column, row);
     chrts.append(chart);
-    setCharts(column+1, row+1, chrts);
+    setCharts(column, row, chrts);
 }
 
 #ifdef SWINDER_XLS2RAW
