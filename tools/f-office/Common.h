@@ -29,6 +29,7 @@
 
 #define PanTool_ID "PanTool"
 #define TextTool_ID "TextToolFactory_ID"
+#define CellTool_ID "KSpreadCellToolId"
 
 /*!
 * Size of full screen button

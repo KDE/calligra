@@ -1242,16 +1242,21 @@ void MainWindow::editToolBar(bool edit)
              m_ui->EditToolBar->show();
          }
     } else {
-         if (edit) {
-             KoToolManager::instance()->switchToolRequested(TextTool_ID);
-             m_ui->viewToolBar->hide();
-             m_ui->EditToolBar->show();
-         } else {
-             KoToolManager::instance()->switchToolRequested(PanTool_ID);
-             m_ui->EditToolBar->hide();
-             m_ui->viewToolBar->show();
-             m_isViewToolBar = true;
-         }
+        if (edit) {
+            if(m_type==Spreadsheet) {
+                KoToolManager::instance()->switchToolRequested(CellTool_ID);
+                m_ui->viewToolBar->show();
+            } else {
+                KoToolManager::instance()->switchToolRequested(TextTool_ID);
+                m_ui->viewToolBar->hide();
+                m_ui->EditToolBar->show();
+            }
+        } else {
+            KoToolManager::instance()->switchToolRequested(PanTool_ID);
+            m_ui->EditToolBar->hide();
+            m_ui->viewToolBar->show();
+            m_isViewToolBar = true;
+        }
     }
 
     if(m_formatframe)
@@ -1748,8 +1753,8 @@ void MainWindow::openDocument(const QString &fileName)
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
     } else {
-        m_ui->actionEdit->setVisible(false);
         if(m_type == Presentation) {
+            m_ui->actionEdit->setVisible(false);
             m_ui->actionSlidingMotion->setVisible(true);
         }
     }
@@ -2557,7 +2562,7 @@ void MainWindow::activeToolChanged(KoCanvasController* canvas, int)
    QString newTool= KoToolManager::instance()->activeToolId();
    // only Pan tool or Text tool should ever be the active tool, so if
    // another tool got activated, switch back to pan tool
-    if (newTool != PanTool_ID && newTool != TextTool_ID) {
+    if (newTool != PanTool_ID && newTool != TextTool_ID && newTool != CellTool_ID) {
         KoToolManager::instance()->switchToolRequested(PanTool_ID);
     }
     canvas->setProperty("FingerScrollable", true);
