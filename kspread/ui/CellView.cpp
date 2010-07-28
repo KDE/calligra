@@ -1657,22 +1657,13 @@ void CellView::textOffset(const QFontMetricsF& fontMetrics, const Cell& cell)
         if (!tmpVerticalText && !tmpMultiRow && !tmpAngle && !tmpRichText) {
             d->textY = effBottom;
         } else if (tmpAngle != 0) {
-            // Is enough place available?
-            if (effBottom - effTop - d->textHeight > 0) {
-                if (tmpAngle < 0) {
-                    d->textY = effBottom - d->textHeight;
-                } else {
-                    d->textY = effBottom - d->textHeight + ascent * ::cos(tmpAngle * M_PI / 180);
-                }
-                if (tmpAngle < -90 || tmpAngle > 90) {
-                    d->textY += ascent * ::cos(tmpAngle * M_PI / 180);
-                }
+            if (tmpAngle < 0) {
+                d->textY = effBottom - d->textHeight;
             } else {
-                if (tmpAngle < 0) {
-                    d->textY = effTop;
-                } else {
-                    d->textY = effTop + ascent * ::cos(tmpAngle * M_PI / 180);
-                }
+                d->textY = effBottom - d->textHeight + ascent * ::cos(tmpAngle * M_PI / 180);
+            }
+            if (tmpAngle < -90 || tmpAngle > 90) {
+                d->textY += ascent * ::cos(tmpAngle * M_PI / 180);
             }
         } else if (tmpRichText) {
             d->textY = effBottom;
