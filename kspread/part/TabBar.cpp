@@ -38,6 +38,7 @@
 #include <QToolButton>
 #include <QWidget>
 #include <QWheelEvent>
+#include <kglobalsettings.h>
 
 // TODO
 // improvement possibilities
@@ -113,6 +114,8 @@ public:
     // update the enable/disable status of scroll buttons
     void updateButtons();
 
+    // get the font to use on the tabs
+    QFont font(bool selected);
 };
 
 // built-in pixmap for scroll-first button
@@ -188,13 +191,8 @@ void TabBarPrivate::layoutTabs()
 {
     tabRects.clear();
 
-    QPainter painter(tabbar);
-
-    QFont f = painter.font();
-    f.setBold(true);
-    painter.setFont(f);
-    QFontMetrics fm = painter.fontMetrics();
-
+    QFont f = font(true);
+    QFontMetrics fm(f, tabbar);
     if (tabbar->isLeftToRight()) {
         // left to right
         int x = 0;
@@ -290,8 +288,7 @@ void TabBarPrivate::drawTab(QPainter& painter, QRect& rect, const QString& text,
     painter.drawPolyline(polygon);
 
     painter.setPen(tabbar->palette().color(QPalette::ButtonText));
-    QFont f = painter.font();
-    if (active) f.setBold(true);
+    QFont f = font(active);
     painter.setFont(f);
     QFontMetrics fm = painter.fontMetrics();
     int tx =  rect.x() + (rect.width() - fm.width(text)) / 2;
@@ -345,6 +342,13 @@ void TabBarPrivate::updateButtons()
     scrollBackButton->setEnabled(tabbar->canScrollBack());
     scrollForwardButton->setEnabled(tabbar->canScrollForward());
     scrollLastButton->setEnabled(tabbar->canScrollForward());
+}
+
+QFont TabBarPrivate::font(bool selected)
+{
+    QFont f = KGlobalSettings::menuFont();
+    if (selected) f.setBold(true);
+    return f;
 }
 
 // creates a new tabbar
