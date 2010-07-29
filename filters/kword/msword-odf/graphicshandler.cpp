@@ -333,10 +333,10 @@ DrawStyle KWordGraphicsHandler::getDrawingStyle()
 void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out
         , wvWare::Word97::FSPA* spa)
 {
-    if(dg == NULL)
+    if(dg == NULL || dg->groupShape == NULL)
         return;
 
-    foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape.rgfb) {
+    foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
         //if spgr is in root, find out if his first item is sp with right spid
         if (co.anon.is<OfficeArtSpgrContainer>()) {
             const OfficeArtSpContainer* first =

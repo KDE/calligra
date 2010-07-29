@@ -71,7 +71,9 @@ void collectGlobalObjects(C& collector,
 template <typename C>
 void collectGlobalObjects(C& collector, const MSO::OfficeArtDgContainer& dg)
 {
-    collectGlobalObjects(collector, dg.groupShape);
+    if (dg.groupShape) {
+        collectGlobalObjects(collector, *dg.groupShape);
+    }
     if (dg.shape) {
         collectGlobalObjects(collector, *dg.shape);
     }

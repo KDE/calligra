@@ -1228,8 +1228,10 @@ void handleOfficeArtContainer(O& handler, const MSO::OfficeArtDgContainer& c) {
     if (c.shape) {
         handler.handle(*c.shape);
     }
-    foreach (const OfficeArtSpgrContainerFileBlock& fb, c.groupShape.rgfb) {
-        handleOfficeArtContainer(handler, fb);
+    if (c.groupShape) {
+        foreach (const OfficeArtSpgrContainerFileBlock& fb, c.groupShape->rgfb) {
+            handleOfficeArtContainer(handler, fb);
+        }
     }
 }
 
@@ -1516,11 +1518,13 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
                             drawingPageStyles[p->notesMaster]);
         currentMaster = 0;
 
-        DrawClient drawclient(this);
-        ODrawToOdf odrawtoodf(drawclient);
-        foreach(const OfficeArtSpgrContainerFileBlock& co,
-                p->notesMaster->drawing.OfficeArtDg.groupShape.rgfb) {
-            odrawtoodf.processDrawing(co, out);
+        if (p->notesMaster->drawing.OfficeArtDg.groupShape) {
+            DrawClient drawclient(this);
+            ODrawToOdf odrawtoodf(drawclient);
+            foreach(const OfficeArtSpgrContainerFileBlock& co,
+                    p->notesMaster->drawing.OfficeArtDg.groupShape->rgfb) {
+                odrawtoodf.processDrawing(co, out);
+            }
         }
         writer.endElement();
     }
@@ -1542,11 +1546,13 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         buffer.open(QIODevice::WriteOnly);
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
-        DrawClient drawclient(this);
-        ODrawToOdf odrawtoodf(drawclient);
-        foreach(const OfficeArtSpgrContainerFileBlock& co,
-                drawing->OfficeArtDg.groupShape.rgfb) {
-            odrawtoodf.processDrawing(co, out);
+        if (drawing->OfficeArtDg.groupShape) {
+            DrawClient drawclient(this);
+            ODrawToOdf odrawtoodf(drawclient);
+            foreach(const OfficeArtSpgrContainerFileBlock& co,
+                    drawing->OfficeArtDg.groupShape->rgfb) {
+                odrawtoodf.processDrawing(co, out);
+            }
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
                                                      buffer.buffer().size()));
@@ -2112,10 +2118,14 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
-    foreach(const OfficeArtSpgrContainerFileBlock& co,
-            slide->drawing.OfficeArtDg.groupShape.rgfb) {
-        odrawtoodf.processDrawing(co, out);
+
+    if (slide->drawing.OfficeArtDg.groupShape) {
+        foreach(const OfficeArtSpgrContainerFileBlock& co,
+                slide->drawing.OfficeArtDg.groupShape->rgfb) {
+            odrawtoodf.processDrawing(co, out);
+        }
     }
+
     if (slide->drawing.OfficeArtDg.shape) {
         // leave it out until it is understood
         //  processObjectForBody(*slide->drawing.OfficeArtDg.shape, out);
@@ -2123,7 +2133,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 
     // draw the notes
     const NotesContainer* nc = p->notes[slideNo];
-    if (nc) {
+    if (nc && nc->drawing.OfficeArtDg.groupShape) {
         currentSlideTexts = 0;
         out.xml.startElement("presentation:notes");
         value = drawingPageStyles[nc];
@@ -2131,7 +2141,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
             out.xml.addAttribute("draw:style-name", value);
         }
         foreach(const OfficeArtSpgrContainerFileBlock& co,
-                nc->drawing.OfficeArtDg.groupShape.rgfb) {
+                nc->drawing.OfficeArtDg.groupShape->rgfb) {
             odrawtoodf.processDrawing(co, out);
         }
         out.xml.endElement();
