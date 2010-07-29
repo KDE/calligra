@@ -114,8 +114,11 @@ void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal 
 QRectF Outline::limit(const QRectF &content)
 {
     if (m_side == Empty) {
-        if (content.intersects(m_bounds))
-            return QRectF();
+        if (content.intersects(m_bounds)) {
+            QRectF answer = content;
+            answer.setWidth((qreal)0.0);
+            return answer;
+        }
         return content;
     }
 

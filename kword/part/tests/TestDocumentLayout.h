@@ -28,6 +28,7 @@ private slots:
     void placeAnchoredFrame2_data();
     void placeAnchoredFrame2();
     void placeAnchoredFrame3();
+    void noRunAroundFrame();
 
 private:
     void initForNewTest(const QString &initText = QString());

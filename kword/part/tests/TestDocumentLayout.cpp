@@ -321,6 +321,41 @@ void TestDocumentLayout::placeAnchoredFrame3()
     QCOMPARE(line.position().x(), 0.);
     QVERIFY(qAbs(line.position().y() - 14.4) <  0.125);
 }
+#define ROUNDING 0.126
+
+void TestDocumentLayout::noRunAroundFrame()
+{
+    // With this test we want to make sure a shape that is set to not run around
+    // will simply put the text further down.
+    initForNewTest(loremIpsum);
+    MockShape *picture = new MockShape();
+    KWFrame frame(picture, frameSet);
+    frame.setTextRunAround(KWord::NoRunAround);
+    picture->setSize(QSizeF(100, 100));
+    picture->setPosition(QPointF(0, 0));
+
+    MockLayoutState *state = new MockLayoutState(doc);
+    layout->setLayout(state);
+    state->shape = shape1;
+
+    layout->layout();
+
+    QTextLayout *lay = doc->begin().layout();
+
+    QVERIFY(lay->lineCount() >= 4);
+    QTextLine line = doc->begin().layout()->lineAt(0);
+    QVERIFY(line.isValid());
+    double preY = line.position().y();
+    int linenumber=1;
+    line = doc->begin().layout()->lineAt(linenumber);
+    while(linenumber < lay->lineCount()) {
+        qDebug() << line.position().y() << (preY + 14.4);
+        QVERIFY(line.position().y() > (preY + 14.4 - ROUNDING));
+        preY = line.position().y();
+        ++linenumber;
+        line = doc->begin().layout()->lineAt(linenumber);
+    }
+}
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)
 
