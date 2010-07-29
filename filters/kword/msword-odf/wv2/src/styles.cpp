@@ -473,7 +473,6 @@ void Style::unwrapStyle( const StyleSheet& stylesheet, WordVersion version )
 
         //finally apply so the chpx so we have ourselves a nice chp
         m_chp->apply(m_upechpx->grpprl, m_upechpx->cb, parentStyle, &stylesheet, 0, version);
-        wvlog << "-------> fStrike = " << static_cast<int>( m_chp->fStrike ) << endl;
     }
     else
         wvlog << "Warning: Unknown style type code detected" << endl;
