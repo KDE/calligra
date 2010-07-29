@@ -103,47 +103,28 @@ static inline QUuid readUuid(const void* p)
         ptr[9], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15]);
 }
 
-typedef double& data_64;
-static inline void convert_64(data_64 convert)
-{
-    register unsigned char temp;
-    register unsigned int u_int_temp;
-    temp = ((unsigned char*) & convert)[0];
-    ((unsigned char*)&convert)[0] = ((unsigned char*) & convert)[3];
-    ((unsigned char*)&convert)[3] = temp;
-    temp = ((unsigned char*) & convert)[1];
-    ((unsigned char*)&convert)[1] = ((unsigned char*) & convert)[2];
-    ((unsigned char*)&convert)[2] = temp;
-    temp = ((unsigned char*) & convert)[4];
-    ((unsigned char*)&convert)[4] = ((unsigned char*) & convert)[7];
-    ((unsigned char*)&convert)[7] = temp;
-    temp = ((unsigned char*) & convert)[5];
-    ((unsigned char*)&convert)[5] = ((unsigned char*) & convert)[6];
-    ((unsigned char*)&convert)[6] = temp;
-
-    u_int_temp = ((unsigned int *) & convert)[0];
-    ((unsigned int *)&convert)[0] = ((unsigned int *) & convert)[1];
-    ((unsigned int *)&convert)[1] = u_int_temp;
-}
-
-static inline bool isLittleEndian(void)
-{
-    long i = 0x44332211;
-    unsigned char* a = (unsigned char*) & i;
-    return (*a == 0x11);
-}
-
-
 // FIXME check that double is 64 bits
 static inline double readFloat64(const void*p)
 {
-    const double* ptr = (const double*) p;
     double num = 0.0;
-    num = *ptr;
-
-    if (!isLittleEndian())
-        convert_64(num);
-
+#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+    memcpy(&num, p, sizeof num);
+#else
+    union {
+        double v1;
+        char v2[8];
+    } x;
+    char* b = (char*)p;
+    x.v2[0] = b[7];
+    x.v2[1] = b[6];
+    x.v2[2] = b[5];
+    x.v2[3] = b[4];
+    x.v2[4] = b[3];
+    x.v2[5] = b[2];
+    x.v2[6] = b[1];
+    x.v2[7] = b[0];
+    num = x.v1;
+#endif
     return num;
 }
 

@@ -72,15 +72,15 @@ static inline void decodeRK(unsigned rkvalue, bool& isInteger,
         isInteger = false;
         unsigned char* s = (unsigned char*) & rkvalue;
         unsigned char* r = (unsigned char*) & f;
-        if (Swinder::isLittleEndian()) {
+#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
             r[0] = r[1] = r[2] = r[3] = 0;
             r[4] = s[0] & 0xfc;
             r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-        } else {
+#else
             r[0] = r[1] = r[2] = r[3] = 0;
             r[4] = s[0] & 0xfc;
             r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-        }
+#endif
         memcpy(&f, r, 8);
         f *= factor;
     }
@@ -1437,9 +1437,9 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             return;
         }
         const unsigned long ft2 = readU16(startPict + 6);
-        Q_ASSERT(ft2 == 0x0008);
+        Q_ASSERT(ft2 == 0x0008); Q_UNUSED(ft2);
         const unsigned long cb2 = readU16(startPict + 8);
-        Q_ASSERT(cb2 == 0x0002);
+        Q_ASSERT(cb2 == 0x0002); Q_UNUSED(cb2);
         const unsigned long opts2 = readU16(startPict + 10);
         //const bool fAutoPict = opts2 & 0x01;
         fDde = opts2 & 0x02; // dynamic data exchange reference?
