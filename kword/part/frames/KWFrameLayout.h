@@ -113,11 +113,12 @@ private slots:
 private:
     friend class TestBasicLayout;
     struct FrameSets {
-        FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0) {}
+        FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0), pageBackground(0) {}
         KWTextFrameSet *oddHeaders;
         KWTextFrameSet *evenHeaders;
         KWTextFrameSet *oddFooters;
         KWTextFrameSet *evenFooters;
+        KWTextFrameSet *pageBackground;
     };
 
     KoShape *createTextShape(const KWPage &page);

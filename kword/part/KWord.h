@@ -61,6 +61,11 @@ namespace KWord
         RunThrough  ///< The text will completely ignore the frame and layout as if it was not there
     };
 
+    enum Through {
+        Background,
+        Foreground
+    };
+
     /**
      * Returns true if the passed frameset is a known type that the frameLayout auto-creates.
      * @param fs the frameset to check. 0 is allowed.
@@ -79,6 +84,7 @@ namespace KWord
         OddPagesFooterTextFrameSet,  ///< The frameSet that holds the footers for the odd pages
         EvenPagesFooterTextFrameSet, ///< The frameSet that holds the footers for the even pages
         MainTextFrameSet,   ///< The frameset that holds all the frames for the main text area
+        PageBackgroundFrameSet, ///< The frame set that holds all the frames for the page background
         OtherTextFrameSet   ///< Any other text frameset not managed by the auto-frame layout
     };
 

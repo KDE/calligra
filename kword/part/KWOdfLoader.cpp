@@ -124,6 +124,12 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 
     loadMasterPageStyles(context, hasMainText);
 
+    // add page background frame set
+    KWTextFrameSet *pageBackgroundFrameSet = new KWTextFrameSet(m_document, KWord::PageBackgroundFrameSet);
+    pageBackgroundFrameSet->setAllowLayout(false);
+    pageBackgroundFrameSet->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
+    m_document->addFrameSet(pageBackgroundFrameSet);
+
 #if 0 //1.6:
     KWOasisLoader oasisLoader(this);
     // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
@@ -276,6 +282,12 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
     context.setUseStylesAutoStyles(true);
 
     KoShapeLoadingContext ctxt(context, m_document->resourceManager());
+    KWOdfSharedLoadingData *sharedData = new KWOdfSharedLoadingData(this);
+    KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
+    Q_ASSERT(styleManager);
+    sharedData->loadOdfStyles(ctxt, styleManager);
+    ctxt.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
+
     KoTextLoader loader(ctxt);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);

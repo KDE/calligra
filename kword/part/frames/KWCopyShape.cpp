@@ -36,6 +36,7 @@ KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         m_pageManager(pageManager)
 {
     setSize(m_original->size());
+    setSelectable(original->isSelectable());
     // allow selecting me to get the tool for the original to still work.
     QSet<KoShape*> delegates;
     delegates << m_original;

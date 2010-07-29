@@ -61,6 +61,12 @@ KWFrame::~KWFrame()
     delete m_outline;
 }
 
+void KWFrame::setTextRunAround(KWord::TextRunAround runAround, KWord::Through runThrought)
+{
+    m_runAround = runAround;
+    m_runThrough = runThrought;
+}
+
 void KWFrame::setFrameSet(KWFrameSet *fs)
 {
     if (fs == m_frameSet)
