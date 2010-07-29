@@ -29,8 +29,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CANVAS
-#define KSPREAD_CANVAS
+#ifndef KSPREAD_CANVAS_ITEM
+#define KSPREAD_CANVAS_ITEM
 
 #include <QList>
 #include <QGraphicsWidget>
@@ -169,4 +169,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_CANVAS
+#endif // KSPREAD_CANVAS_ITEM
