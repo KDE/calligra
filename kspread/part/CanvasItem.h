@@ -101,7 +101,7 @@ public Q_SLOTS:
     void refreshSheetViews();
     void setActiveSheet(Sheet* sheet);
 Q_SIGNALS:
-    virtual void documentSizeChanged(const QSize&);
+    /* virtual */ void documentSizeChanged(const QSize&);
 
 protected:
     virtual void keyPressEvent(QKeyEvent* _ev) {
@@ -143,7 +143,7 @@ public:
     virtual Sheet* activeSheet() const;
     virtual const KoZoomHandler* zoomHandler() const;
     virtual SheetView* sheetView(const Sheet* sheet) const;
-    
+
     virtual bool isViewLoading() const { return false; }
     virtual void enableAutoScroll() {}
     virtual void disableAutoScroll() {}

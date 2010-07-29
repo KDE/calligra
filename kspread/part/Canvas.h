@@ -85,7 +85,7 @@ public:
     ~Canvas();
 
     View* view() const;
-    
+
     /// reimplemented method from KoCanvasBase
     virtual QWidget* canvasWidget() {
         return this;
@@ -105,7 +105,7 @@ public Q_SLOTS:
     }
 
 Q_SIGNALS:
-    virtual void documentSizeChanged(const QSize&);
+    /* virtual */ void documentSizeChanged(const QSize&);
 
 protected:
     virtual void keyPressEvent(QKeyEvent* _ev) {
@@ -170,7 +170,7 @@ public:
 private:
     virtual void setVertScrollBarPos(qreal pos);
     virtual void setHorizScrollBarPos(qreal pos);
-    
+
     virtual bool eventFilter(QObject *o, QEvent *e) {
         return CanvasBase::eventFilter(o, e);
     }
