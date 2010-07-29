@@ -1781,9 +1781,13 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
         return;
     }
     
+    if(!container.blipStore.data()) {
+        setIsValid(false);
+        return;
+    }
+    
     m_workbook->store()->enterDirectory("Pictures");
     
-    Q_ASSERT(container.blipStore.data());
     foreach(MSO::OfficeArtBStoreContainerFileBlock fb, container.blipStore->rgfb) {
         PictureReference ref = savePicture(fb, m_workbook->store());
         if (ref.name.length() == 0) {
