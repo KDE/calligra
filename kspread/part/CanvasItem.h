@@ -116,13 +116,14 @@ public Q_SLOTS:
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
 
+public:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);
 protected:
     virtual void keyPressEvent(QKeyEvent* _ev) {
         CanvasBase::keyPressed(_ev);
     }
     virtual void paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* _ev);
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
     virtual void focusInEvent(QFocusEvent* _ev) {
