@@ -60,6 +60,11 @@ KWCanvasItem::~KWCanvasItem()
 {
 }
 
+KoZoomHandler* KWCanvasItem::zoomHandler() const
+{
+    return m_viewConverter;
+}
+
 void KWCanvasItem::pageSetupChanged()
 {
     m_viewMode->pageSetupChanged();
@@ -164,6 +169,7 @@ void KWCanvasItem::inputMethodEvent(QInputMethodEvent *event)
 {
     m_toolProxy->inputMethodEvent(event);
 }
+
 void KWCanvasItem::updateInputMethodInfo()
 {
 #if QT_VERSION  >= 0x040700

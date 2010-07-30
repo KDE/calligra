@@ -35,6 +35,7 @@
 #include <KoToolProxy.h>
 #include <KoGridData.h>
 #include <KoShape.h>
+#include <KoZoomHandler.h>
 
 // KDE + Qt includes
 #include <KDebug>

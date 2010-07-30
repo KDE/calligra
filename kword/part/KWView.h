@@ -91,6 +91,10 @@ public:
     KoViewConverter *viewConverter() {
         return &m_zoomHandler;
     }
+    /// Return the zoom handler for this view
+    KoZoomHandler *zoomHandler() {
+        return &m_zoomHandler;
+    }
 
     /// show a popup on the view, adding to it a list of actions
     void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);

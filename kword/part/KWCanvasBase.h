@@ -35,6 +35,7 @@ class QPainter;
 class KWGui;
 class KoToolProxy;
 class KoShape;
+class KoZoomHandler;
 
 class KWORD_EXPORT KWCanvasBase : public KoCanvasBase
 {
@@ -108,7 +109,7 @@ protected:
     KoToolProxy * m_toolProxy;
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
-    KoViewConverter *m_viewConverter;
+    KoZoomHandler *m_viewConverter;
 };
 
 #endif // KWCANVASBASE_H

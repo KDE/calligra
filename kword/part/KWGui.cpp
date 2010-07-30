@@ -91,10 +91,8 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
     connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), m_horizontalRuler, SLOT(setOffset(int)));
     connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), m_verticalRuler, SLOT(setOffset(int)));
     connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), parent, SLOT(offsetInDocumentMoved(int)));
-    connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint &)),
-            this, SLOT(updateMousePos(const QPoint&)));
-    connect(m_canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
-            m_canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint &)), this, SLOT(updateMousePos(const QPoint&)));
+    connect(m_canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
