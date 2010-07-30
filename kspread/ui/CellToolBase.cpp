@@ -1316,7 +1316,7 @@ void CellToolBase::scrollToCell(const QPoint &location)
     rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
 
     // Scroll to cell.
-    canvas()->canvasController()->ensureVisible(rect, true);
+    canvas()->canvasController()->ensureVisible(canvas()->viewConverter()->documentToView(rect), true);
 }
 
 CellEditor* CellToolBase::editor() const
