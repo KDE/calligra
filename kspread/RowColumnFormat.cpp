@@ -231,6 +231,7 @@ void RowFormat::setPrevious(RowFormat* prev)
 
 void RowFormat::setHidden(bool _hide, bool repaint)
 {
+    Q_UNUSED(repaint);
     Q_ASSERT(d->sheet);
     if (_hide != d->hide) { // only if we change the status
         if (_hide) {
