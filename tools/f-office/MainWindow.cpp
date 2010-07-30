@@ -95,7 +95,7 @@
 #include <KoTextEditor.h>
 #include <KoPAView.h>
 #include <KoStore.h>
-#include <KWCanvas.h>
+#include <KoCanvasBase.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <Map.h>
@@ -1316,7 +1316,7 @@ void MainWindow::openNewDocument(DocumentType type)
     if(type == Text) {
         m_doubleClick = true;
         m_kwview = qobject_cast<KWView *>(m_view);
-        m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
+        m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
         charstyle=new KoCharacterStyle();
         charstyle->setFontCapitalization(QFont::AllLowercase);
         charstyle->setFontPointSize(m_fontsize);
@@ -1745,7 +1745,7 @@ void MainWindow::closeDocument()
     } else {
         KoToolManager::instance()->removeCanvasController(m_controller);
         if(m_kwview)
-            m_kwview->kwcanvas()->toolProxy()->deleteSelection();
+            m_kwview->canvasBase()->toolProxy()->deleteSelection();
         delete m_doc;
         m_doc = 0;
         delete m_view;
@@ -1963,7 +1963,7 @@ void MainWindow::openDocument(const QString &fileName)
         m_doubleClick = true;
         m_ui->actionEdit->setVisible(true);
         m_kwview = qobject_cast<KWView *>(m_view);
-        m_editor = qobject_cast<KoTextEditor *>(m_kwview->kwcanvas()->toolProxy()->selection());
+        m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
     } else {
         if(m_type == Presentation) {
             m_ui->actionEdit->setVisible(false);
