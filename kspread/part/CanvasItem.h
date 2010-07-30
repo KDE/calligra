@@ -90,6 +90,18 @@ public:
     virtual const QWidget* canvasWidget() const {
         return 0;
     }
+
+    /**
+     * Return the widget that will be added to the scrollArea.
+     */
+    virtual QGraphicsWidget *canvasItem() { return this; }
+
+    /**
+     * Return the widget that will be added to the scrollArea.
+     */
+    virtual const QGraphicsWidget *canvasItem() const{ return this; }
+
+
 public Q_SLOTS:
     void setDocumentOffset(const QPoint& offset) {
         CanvasBase::setDocumentOffset(offset);

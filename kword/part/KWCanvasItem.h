@@ -85,6 +85,15 @@ public:
         return 0;
     }
     /// reimplemented method from superclass
+    virtual QGraphicsWidget *canvasItem() {
+        return this;
+    }
+    /// reimplemented method from superclass
+    virtual const QGraphicsWidget *canvasItem() const {
+        return this;
+    }
+
+    /// reimplemented method from superclass
     virtual KoUnit unit() const {
         return document()->unit();
     }
