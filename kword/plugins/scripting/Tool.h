@@ -62,7 +62,7 @@ class Tool : public QObject
 public:
     explicit Tool(Module* module) : QObject(module), m_module(module) {
         KWView* v = dynamic_cast< KWView* >(m_module->view());
-        KoCanvasBase* c = v ? v->kwcanvas() : 0;
+        KoCanvasBase* c = v ? v->canvasBase() : 0;
         m_toolproxy = c ? c->toolProxy() : 0;
 
         m_signalMapper = new QSignalMapper(this);

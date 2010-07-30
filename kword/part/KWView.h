@@ -84,7 +84,7 @@ public:
     /**
      * Return the current canvas; much like canvas(), but this one does not downcast.
      */
-    KoCanvasBase *kwcanvas() const;
+    KoCanvasBase *canvasBase() const;
 
     /// Return the view converter for this view.
     KoViewConverter *viewConverter() {

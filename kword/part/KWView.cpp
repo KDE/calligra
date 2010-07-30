@@ -182,7 +182,7 @@ KWView::~KWView()
 {
 }
 
-KoCanvasBase *KWView::kwcanvas() const
+KoCanvasBase *KWView::canvasBase() const
 {
     return m_canvas;
 }
@@ -306,17 +306,17 @@ void KWView::setupActions()
     connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT(sendToBack()));
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
-    foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(kwcanvas()))
+    foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(canvasBase()))
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf* rdf = m_document->documentRdf()) {
-        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(kwcanvas());
+        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
         actionCollection()->addAction("insert_semanticobject_ref", createRef);
         KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
         actionCollection()->addAction("insert_semanticobject_new", subMenu);
-        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(kwcanvas())) {
+        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
             subMenu->addAction(action);
         }
     }
@@ -376,11 +376,11 @@ void KWView::setupActions()
 
     // -------------- Edit actions
     action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
-    new KoCutController(kwcanvas(), action);
+    new KoCutController(canvasBase(), action);
     action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
-    new KoCopyController(kwcanvas(), action);
+    new KoCopyController(canvasBase(), action);
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
-    new KoPasteController(kwcanvas(), action);
+    new KoPasteController(canvasBase(), action);
 
     action  = new KAction(i18n("Statistics"), this);
     actionCollection()->addAction("file_statistics", action);
@@ -426,7 +426,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     action = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(kwcanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
+    connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
     actionCollection()->addAction("edit_delete", action);
 
     action = m_document->gridData().gridToggleAction(m_canvas);
@@ -931,7 +931,7 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
 QList<KWFrame*> KWView::selectedFrames() const
 {
     QList<KWFrame*> frames;
-    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
+    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes()) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         frames.append(frame);
@@ -958,7 +958,7 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::insertFrameBreak()
 {
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
     if (handler) {
         // this means we have the text tool selected right now.
         handler->insertFrameBreak();
@@ -972,7 +972,7 @@ void KWView::addBookmark()
 {
     QString name, suggestedName;
 
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
     KoShape *shape = 0;
     shape = selection->firstSelectedShape();
     if (shape == 0) return; // no shape selected
@@ -984,7 +984,7 @@ void KWView::addBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
     Q_ASSERT(handler);
 
     KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
@@ -1023,7 +1023,7 @@ void KWView::selectBookmark()
 
     KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
     selection->deselectAll();
     selection->select(shape);
 
@@ -1062,7 +1062,7 @@ void KWView::deleteBookmark(const QString &name)
 void KWView::editDeleteFrame()
 {
     QList<KoShape*> frames;
-    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
@@ -1071,7 +1071,7 @@ void KWView::editDeleteFrame()
         }
         frames.append(shape);
     }
-    QUndoCommand *cmd = kwcanvas()->shapeController()->removeShapes(frames);
+    QUndoCommand *cmd = canvasBase()->shapeController()->removeShapes(frames);
     m_document->addCommand(cmd);
 }
 
@@ -1102,8 +1102,8 @@ void KWView::toggleSnapToGrid()
 void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction)
 {
     // TODO we should not allow any shapes to fall behind the main text frame.
-    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
-                        kwcanvas()->shapeManager(), direction);
+    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(canvasBase()->shapeManager()->selection()->selectedShapes(),
+                        canvasBase()->shapeManager(), direction);
     if (cmd)
         m_document->addCommand(cmd);
 }
@@ -1143,7 +1143,7 @@ void KWView::editSemanticStylesheets()
 void KWView::inlineFrame()
 {
     Q_ASSERT(kwdocument()->mainFrameSet());
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
 
     KoShape *targetShape = 0;
     foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
@@ -1187,7 +1187,7 @@ void KWView::inlineFrame()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-    KoTextEditor *handler = qobject_cast<KoTextEditor*> (kwcanvas()->toolProxy()->selection());
+    KoTextEditor *handler = qobject_cast<KoTextEditor*> (canvasBase()->toolProxy()->selection());
     Q_ASSERT(handler);
     KoTextAnchor *anchor = new KoTextAnchor(targetShape);
     anchor->setOffset(QPointF(0, -targetShape->size().height()));
@@ -1210,7 +1210,7 @@ void KWView::showRulers(bool visible)
 
 void KWView::createLinkedFrame()
 {
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
     QList<KoShape*> oldSelection = selection->selectedShapes(KoFlake::TopLevelSelection);
     if (oldSelection.count() == 0)
         return;
@@ -1223,7 +1223,7 @@ void KWView::createLinkedFrame()
         KWCopyShape *copy = new KWCopyShape(frame->shape(), m_document->pageManager());
         copy->setPosition(frame->shape()->position());
         QPointF offset(40, 40);
-        kwcanvas()->clipToDocument(copy, offset);
+        canvasBase()->clipToDocument(copy, offset);
         copy->setPosition(frame->shape()->position() + offset);
         copy->setZIndex(frame->shape()->zIndex() + 1);
         KWFrame *newFrame = new KWFrame(copy, frame->frameSet());
@@ -1273,7 +1273,7 @@ void KWView::setShowFormattingChars(bool on)
 
 void KWView::editSelectAllFrames()
 {
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         foreach (KWFrame *frame, fs->frames()) {
             if (frame->shape()->isVisible())
@@ -1284,7 +1284,7 @@ void KWView::editSelectAllFrames()
 
 void KWView::editDeleteSelection()
 {
-    kwcanvas()->toolProxy()->deleteSelection();
+    canvasBase()->toolProxy()->deleteSelection();
 }
 
 void KWView::createCustomOutline()
@@ -1301,7 +1301,7 @@ void KWView::createCustomOutline()
         m_document->addCommand(cmd);
     }
 
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
     selection->deselectAll();
     foreach (KWFrame *frame, frames) {
         KoShapeContainer *group = frame->shape()->parent();
@@ -1315,7 +1315,7 @@ void KWView::createCustomOutline()
 void KWView::createFrameClipping()
 {
     QSet<KWFrame *> clipFrames;
-    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         if (frame->shape()->parent() == 0)
@@ -1330,7 +1330,7 @@ void KWView::createFrameClipping()
 void KWView::removeFrameClipping()
 {
     QSet<KWFrame *> unClipFrames;
-    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         if (frame->shape()->parent())
@@ -1384,7 +1384,7 @@ void KWView::setGuideVisibility(bool on)
 void KWView::createTextOnShape()
 {
     QSet<KoShape *> frameShapes;
-    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoSelection *selection = canvasBase()->shapeManager()->selection();
     foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
@@ -1429,7 +1429,7 @@ void KWView::zoomChanged(KoZoomMode::Mode mode, qreal zoom)
 
 void KWView::selectionChanged()
 {
-    KoShape *shape = kwcanvas()->shapeManager()->selection()-> firstSelectedShape();
+    KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
     m_actionFormatFrameSet->setEnabled(shape != 0);
     m_actionAddBookmark->setEnabled(shape != 0);
     if (shape) {
@@ -1447,7 +1447,7 @@ void KWView::selectionChanged()
     action = actionCollection()->action("inline_frame");
     if (action) action->setEnabled(shape && kwdocument()->mainFrameSet());
 
-    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         QVariant variant;
@@ -1543,7 +1543,7 @@ void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QStrin
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
-    KoTextEditor *editor = qobject_cast<KoTextEditor*>(kwcanvas()->toolProxy()->selection());
+    KoTextEditor *editor = qobject_cast<KoTextEditor*>(canvasBase()->toolProxy()->selection());
     if (!editor) {
         kDebug(30015) << "no editor, not reflowing rdf semantic item.";
         return;

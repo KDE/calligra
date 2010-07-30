@@ -199,7 +199,7 @@ void KWStatusBar::setCurrentView(KWView *view)
     }
 
     if (m_currentView) {
-        KoCanvasBase *const canvas =  m_currentView->kwcanvas();
+        KoCanvasBase *const canvas =  m_currentView->canvasBase();
         Q_ASSERT(canvas);
         KoResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
@@ -226,7 +226,7 @@ void KWStatusBar::setCurrentView(KWView *view)
         QTimer::singleShot(0, this, SLOT(createZoomWidget()));
     }
 
-    KoResourceManager *resourceManager = view->kwcanvas()->resourceManager();
+    KoResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
     connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
         this, SLOT(resourceChanged(int, QVariant)));

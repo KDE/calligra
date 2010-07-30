@@ -70,7 +70,7 @@ void KWClipFrameCommand::redo()
         container->setClipped(frame->shape(), true);
         frame->shape()->setTransformation(QTransform());
         foreach (KoView *view, m_document->views()) {
-            KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
+            KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
             canvas->shapeManager()->addShape(container);
         }
     }
@@ -91,7 +91,7 @@ void KWClipFrameCommand::undo()
         frame->shape()->setAbsolutePosition(pos);
         frame->shape()->setTransformation(container->transformation());
         foreach (KoView *view, m_document->views()) {
-            KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
+            KoCanvasBase *canvas = static_cast<KWView*>(view)->canvasBase();
             canvas->shapeManager()->remove(container);
         }
     }
