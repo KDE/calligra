@@ -107,6 +107,7 @@ public:
         if (!m.input || !m.input->seek(m.pos)) {
             throw IOException("Cannot rewind.");
         }
+        data.resetStatus();
     }
 
     bool readbit() {
