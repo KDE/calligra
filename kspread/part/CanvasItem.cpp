@@ -258,7 +258,7 @@ Sheet* CanvasItem::activeSheet() const
     return d->activeSheet;
 }
 
-const KoZoomHandler* CanvasItem::zoomHandler() const
+KoZoomHandler* CanvasItem::zoomHandler() const
 {
     return d->zoomHandler;
 }

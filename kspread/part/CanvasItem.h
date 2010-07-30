@@ -141,7 +141,7 @@ private:
 public:
     virtual Selection* selection() const;
     virtual Sheet* activeSheet() const;
-    virtual const KoZoomHandler* zoomHandler() const;
+    virtual KoZoomHandler* zoomHandler() const;
     virtual SheetView* sheetView(const Sheet* sheet) const;
 
     virtual bool isViewLoading() const { return false; }

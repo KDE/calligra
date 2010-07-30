@@ -168,7 +168,7 @@ public:
     virtual QPoint mapToGlobal(const QPointF& point) const = 0;
     virtual void updateMicroFocus() = 0;
 
-    virtual const KoZoomHandler* zoomHandler() const = 0;
+    virtual KoZoomHandler* zoomHandler() const = 0;
     virtual const KoViewConverter* viewConverter() const;
     virtual bool isViewLoading() const = 0; // not sure if is needed
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;

@@ -327,7 +327,7 @@ void Canvas::setHorizScrollBarPos(qreal pos)
     view()->horzScrollBar()->setValue((int)pos);
 }
 
-const KoZoomHandler* Canvas::zoomHandler() const
+KoZoomHandler* Canvas::zoomHandler() const
 {
     return view()->zoomHandler();
 }
