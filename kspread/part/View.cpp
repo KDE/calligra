@@ -84,7 +84,7 @@
 // KOffice includes
 #include <KoGlobal.h>
 #include <KoDpi.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -676,11 +676,12 @@ void View::initView()
 
     // Setup the Canvas and its controller.
     d->canvas = new Canvas(this);
-    d->canvasController = new KoCanvasController(this);
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    d->canvasController = canvasController;
     d->canvasController->setCanvas(d->canvas);
     d->canvasController->setCanvasMode(KoCanvasController::Spreadsheet);
-    d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     // Setup the map model.
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
@@ -721,7 +722,7 @@ void View::initView()
         shell()->createDockWidget(&toolBoxFactory);
 
         // Setup the tool options dock widget manager.
-        connect(d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
                 shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
     }
     // Setup the zoom controller.
@@ -748,7 +749,7 @@ void View::initView()
     // Vert. Scroll Bar
     d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar(this);
-    d->canvasController->setVerticalScrollBar(d->vertScrollBar);
+    canvasController->setVerticalScrollBar(d->vertScrollBar);
     d->vertScrollBar->setOrientation(Qt::Vertical);
     d->vertScrollBar->setSingleStep(60);  //just random guess based on what feels okay
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
@@ -760,7 +761,7 @@ void View::initView()
     d->tabBar = new TabBar(0);
     d->tabScrollBarLayout->addWidget(d->tabBar, 0, 0);
     d->horzScrollBar = new QScrollBar(0);
-    d->canvasController->setHorizontalScrollBar(d->horzScrollBar);
+    canvasController->setHorizontalScrollBar(d->horzScrollBar);
     d->tabScrollBarLayout->addWidget(d->horzScrollBar, 0, 1, 2, 1, Qt::AlignVCenter);
 
     d->horzScrollBar->setOrientation(Qt::Horizontal);
@@ -785,7 +786,7 @@ void View::initView()
     d->viewLayout->addWidget(d->selectAllButton, 1, 0);
     d->viewLayout->addWidget(d->columnHeader, 1, 1, 1, 1);
     d->viewLayout->addWidget(d->rowHeader, 2, 0);
-    d->viewLayout->addWidget(d->canvasController, 2, 1);
+    d->viewLayout->addWidget(canvasController, 2, 1);
     d->viewLayout->addWidget(d->vertScrollBar, 1, 2, 2, 1, Qt::AlignHCenter);
     d->viewLayout->addWidget(bottomPart, 3, 0, 1, 2);
     d->viewLayout->setColumnMinimumWidth(2, extent);
@@ -801,8 +802,8 @@ void View::initView()
 
     // signal slot
     connect(d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
-            d->canvasController, SLOT(setDocumentSize(const QSize&)));
-    connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+            d->canvasController->proxyObject, SLOT(setDocumentSize(const QSize&)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(shapeSelectionChanged()));
