@@ -331,11 +331,13 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
         kDebug() << "newEvent->pos():" << event->pos();
         kDebug() << "newEvent->globalPos():" << event->globalPos();*/
     }
-#if 0 // XXX TODO
+
+    event = new KoPointerEvent(event, documentPosition);
+
     // flake
     if(d->toolProxy) {
-        d->toolProxy->mousePressEvent(event, documentPosition);
-
+        d->toolProxy->mousePressEvent(event);
+#if 0
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
             d->view->unplugActionList("toolproxy_action_list");
             d->view->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
@@ -346,11 +348,12 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
             }
             origEvent->setAccepted(true);
         }
+#endif
     }
     if (layoutDirection() == Qt::RightToLeft) {
         //delete event;
     }
-#endif
+    delete event;
 }
 
 void CanvasBase::mouseReleased(KoPointerEvent* event)
@@ -365,15 +368,16 @@ void CanvasBase::mouseReleased(KoPointerEvent* event)
         // XXX TODO event = new QMouseEvent(QEvent::MouseButtonRelease, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
     }
 
-#if 0 // XXX TODO
+    event = new KoPointerEvent(event, documentPosition);
+
     // flake
     if(d->toolProxy)
-        d->toolProxy->mouseReleaseEvent(event, documentPosition);
+        d->toolProxy->mouseReleaseEvent(event);
 
     if (layoutDirection() == Qt::RightToLeft) {
        // delete event;
     }
-#endif
+    delete event;
 }
 
 void CanvasBase::mouseMoved(KoPointerEvent* event)
@@ -388,15 +392,16 @@ void CanvasBase::mouseMoved(KoPointerEvent* event)
         // XXX TODO event = new QMouseEvent(QEvent::MouseMove, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
     }
 
-#if 0 // XXX TODO
+    event = new KoPointerEvent(event, documentPosition);
+
     // flake
     if(d->toolProxy)
-        d->toolProxy->mouseMoveEvent(event, documentPosition);
+        d->toolProxy->mouseMoveEvent(event);
 
     if (layoutDirection() == Qt::RightToLeft) {
        // delete event;
     }
-#endif
+    delete event;
 }
 
 void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
@@ -411,15 +416,16 @@ void CanvasBase::mouseDoubleClicked(KoPointerEvent* event)
         // XXX TODO event = new QMouseEvent(QEvent::MouseButtonDblClick, position, mapToGlobal(position), event->button(), event->buttons(), event->modifiers());
     }
 
-#if 0 // XXX TODO
+    event = new KoPointerEvent(event, documentPosition);
+
     // flake
     if(d->toolProxy)
-        d->toolProxy->mouseDoubleClickEvent(event, documentPosition);
+        d->toolProxy->mouseDoubleClickEvent(event);
 
     if (layoutDirection() == Qt::RightToLeft) {
        // delete event;
     }
-#endif
+    delete event;
 }
 
 void CanvasBase::keyPressed(QKeyEvent* event)
