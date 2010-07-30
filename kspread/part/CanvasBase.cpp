@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2009 Thomas Zander <zander@kde.org>
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2006 Robert Knight <robertknight@gmail.com>
@@ -24,7 +25,6 @@
    Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

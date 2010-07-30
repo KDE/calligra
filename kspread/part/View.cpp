@@ -9,7 +9,7 @@
    Copyright 1999-2003 David Faure <faure@kde.org>
    Copyright 1999-2001 Simon Hausmann <hausmann@kde.org>
    Copyright 1998-2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   Copyright 2010 Boudewijn Rempt <boud@kogmbh.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
