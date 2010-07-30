@@ -35,10 +35,11 @@ class KWCanvas;
 class KWFrame;
 class KWGui;
 
+class KoCanvasBase;
 class KoZoomController;
-class KToggleAction;
 class KoRdfSemanticItem;
 
+class KToggleAction;
 /**
  * KWords view class. Following the broad model-view-controller idea this class
  * shows you one view on the document. There can be multiple views of the same document each
@@ -83,7 +84,7 @@ public:
     /**
      * Return the current canvas; much like canvas(), but this one does not downcast.
      */
-    KWCanvas *kwcanvas() const;
+    KoCanvasBase *kwcanvas() const;
 
     /// Return the view converter for this view.
     KoViewConverter *viewConverter() {

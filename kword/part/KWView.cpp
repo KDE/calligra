@@ -182,7 +182,7 @@ KWView::~KWView()
 {
 }
 
-KWCanvas *KWView::kwcanvas() const
+KoCanvasBase *KWView::kwcanvas() const
 {
     return m_canvas;
 }
@@ -1110,8 +1110,8 @@ void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType d
 
 void KWView::toggleViewFrameBorders(bool on)
 {
-    kwcanvas()->resourceManager()->setResource(KoText::ShowTextFrames, on);
-    kwcanvas()->update();
+    m_canvas->resourceManager()->setResource(KoText::ShowTextFrames, on);
+    m_canvas->update();
     m_document->config().setViewFrameBorders(on);
 }
 
@@ -1378,7 +1378,7 @@ void KWView::insertImage()
 void KWView::setGuideVisibility(bool on)
 {
     m_document->guidesData().setShowGuideLines(on);
-    kwcanvas()->update();
+    m_canvas->update();
 }
 
 void KWView::createTextOnShape()
