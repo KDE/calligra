@@ -25,15 +25,19 @@
 #include <QMap>
 
 class QPoint;
-class KStatusBar;
-class KWView;
+class QAction;
 class QLabel;
+
+class KStatusBar;
 class KSqueezedTextLabel;
+
 class KoCanvasController;
 class KoCanvasControllerProxyObject;
+class KoCanvasBase;
+
 class KWDocument;
-class KWCanvas;
-class QAction;
+class KWView;
+
 
 /**
  * The KWStatusBar class implements an extended statusbar for KWord.
@@ -79,7 +83,7 @@ private:
     */
     KWStatusBar(KStatusBar *statusBar, KWView* view);
 
-    void setCurrentCanvas(KWCanvas *view);
+    void setCurrentView(KWView *view);
 
     KStatusBar *m_statusbar;
     QPointer<KWView> m_currentView;

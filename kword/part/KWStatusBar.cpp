@@ -21,8 +21,8 @@
 #include "KWStatusBar.h"
 #include "KWView.h"
 #include "KWDocument.h"
-#include "KWCanvas.h"
 
+#include <KoCanvasBase.h>
 #include <KoToolManager.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
@@ -110,7 +110,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_statusbar->addAction(m_zoomAction);
 
     updateCurrentTool(0);
-    setCurrentCanvas(view->kwcanvas());
+    setCurrentView(view);
     connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*, int)),
             this, SLOT(updateCurrentTool(KoCanvasController*)));
 }
@@ -170,9 +170,17 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
     }
     m_controller = canvasController->proxyObject;
     if (canvasController) {
-        KWCanvas *canvas = dynamic_cast<KWCanvas*>(canvasController->canvas());
-        if (canvas) {
-            setCurrentCanvas(canvas);
+        // find KWView parent of the canvas controller widget
+        KWView *view = 0;
+        QWidget *parent = widget->parentWidget();
+        while (view == 0 && parent != 0) {
+            view = dynamic_cast<KWView*>(parent);
+            if (!view) {
+                parent = parent->parentWidget();
+            }
+        }
+        if (view) {
+            setCurrentView(view);
         }
         connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this,
                 SLOT(updateMousePosition(const QPoint&)));
@@ -181,17 +189,17 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
     }
 }
 
-void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
+void KWStatusBar::setCurrentView(KWView *view)
 {
-    if (canvas == 0) {
+    if (view == 0) {
         m_currentView = 0;
         return;
-    } else if (canvas->view() == m_currentView) {
+    } else if (view == m_currentView) {
         return;
     }
 
     if (m_currentView) {
-        KWCanvas *const canvas =  m_currentView->kwcanvas();
+        KoCanvasBase *const canvas =  m_currentView->kwcanvas();
         Q_ASSERT(canvas);
         KoResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
@@ -204,7 +212,7 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
         }
     }
 
-    m_currentView = canvas->view();
+    m_currentView = view;
     if (m_currentView == 0)
         return;
     QWidget *zoomWidget = m_zoomWidgets.value(m_currentView);
@@ -218,7 +226,7 @@ void KWStatusBar::setCurrentCanvas(KWCanvas *canvas)
         QTimer::singleShot(0, this, SLOT(createZoomWidget()));
     }
 
-    KoResourceManager *resourceManager = canvas->resourceManager();
+    KoResourceManager *resourceManager = view->kwcanvas()->resourceManager();
     Q_ASSERT(resourceManager);
     connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
         this, SLOT(resourceChanged(int, QVariant)));
