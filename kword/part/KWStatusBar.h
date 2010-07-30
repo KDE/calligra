@@ -54,8 +54,6 @@ public:
 
     static void addViewControls(KStatusBar *statusBar, KWView *view);
 
-    void addView(KWView *view);
-
 public slots:
     void setText(const QString &text);
 
