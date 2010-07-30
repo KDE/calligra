@@ -2,6 +2,7 @@
  * This file is part of Maemo 5 Office UI for KOffice
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+ * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  *
  * Contact: Manikandaprasad N C <manikandaprasad.chandrasekar@nokia.com>
  *

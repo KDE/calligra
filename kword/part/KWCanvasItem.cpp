@@ -32,6 +32,7 @@
 #include <KoToolProxy.h>
 #include <KoGridData.h>
 #include <KoShape.h>
+#include <KoZoomHandler.h>
 
 // KDE + Qt includes
 #include <KDebug>
@@ -45,12 +46,13 @@
 
 
 KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
-        : QGraphicsWidget(),
+        : QGraphicsWidget(0),
         KoCanvasBase(document),
         m_document(document),
         m_viewMode(0)
 {
     m_shapeManager = new KoShapeManager(this);
+    m_viewConverter = new KoZoomHandler();
     m_viewMode = KWViewMode::create(viewMode, document, this);
     setFocusPolicy(Qt::StrongFocus);
 
@@ -60,7 +62,6 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
     setAttribute(Qt::WA_OpaquePaintEvent, true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
-    m_viewConverter = new KoViewConverter();
 }
 
 KWCanvasItem::~KWCanvasItem()

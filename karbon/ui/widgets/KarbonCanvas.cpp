@@ -11,7 +11,8 @@
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
-
+   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
