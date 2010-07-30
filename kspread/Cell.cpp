@@ -1619,7 +1619,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
     QString cellText;
 
     bool multipleTextParagraphsFound = false;
-    const bool hasRichText = KoTextLoader::containsRichText(parent);
+    bool hasRichText = KoTextLoader::containsRichText(parent);
 
     forEachElement(textParagraphElement , parent) {
         if (textParagraphElement.localName() == "p" &&
@@ -1640,6 +1640,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
                     QString link = textA.attributeNS(KoXmlNS::xlink, "href", QString());
                     cellText = textA.text();
                     setUserInput(cellText);
+                    hasRichText = false;
                     // The value will be set later in loadOdf().
                     if ((!link.isEmpty()) && (link[0] == '#'))
                         link = link.remove(0, 1);
