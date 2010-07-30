@@ -65,6 +65,9 @@ public:
     }
     QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
 
+    /// set the gap between the pages
+    void setGap(int gap);
+
 protected:
     void updatePageCache();
 

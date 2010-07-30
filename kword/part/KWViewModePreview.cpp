@@ -65,3 +65,9 @@ QList<KWViewMode::ViewMap> KWViewModePreview::clipRectToDocument(const QRect &vi
     Q_UNUSED(viewRect);
     return QList<KWViewMode::ViewMap>();
 }
+
+void KWViewModePreview::setGap(int gap)
+{
+    Q_UNUSED(gap);
+    // TODO
+}
