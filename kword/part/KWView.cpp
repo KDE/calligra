@@ -120,6 +120,7 @@ static KWFrame *frameForShape(KoShape *shape)
 
 KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
+        , m_canvas(0)
 {
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
@@ -180,6 +181,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
 KWView::~KWView()
 {
+    m_canvas = 0;
 }
 
 KoCanvasBase *KWView::canvasBase() const

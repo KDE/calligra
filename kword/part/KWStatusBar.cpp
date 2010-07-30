@@ -196,7 +196,10 @@ void KWStatusBar::setCurrentView(KWView *view)
         return;
     } else if (view == m_currentView) {
         return;
+    } else if (view->canvasBase() == 0 ) {
+        return;
     }
+
 
     if (m_currentView) {
         KoCanvasBase *const canvas =  m_currentView->canvasBase();
