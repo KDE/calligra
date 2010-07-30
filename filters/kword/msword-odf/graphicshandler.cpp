@@ -165,6 +165,7 @@ KWordGraphicsHandler::KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWrite
 , m_fib(0)
 , m_pOfficeArtHeaderDgContainer(0)
 , m_pOfficeArtBodyDgContainer(0)
+, m_zIndex(0)
 {
     kDebug(30513) ;
 }
@@ -336,6 +337,8 @@ void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg,
     if(dg == NULL || dg->groupShape == NULL)
         return;
 
+    m_zIndex = 0;
+
     foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
         //if spgr is in root, find out if his first item is sp with right spid
         if (co.anon.is<OfficeArtSpgrContainer>()) {
@@ -346,6 +349,8 @@ void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg,
                 out.SetRectangle(*spa);
                 processObjectContent(*co.anon.get<OfficeArtSpgrContainer>(), out); //draw group
                 break;
+            } else {
+                m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
             }
         }
         else //if sp is in root, find out if it has the right spid
@@ -357,6 +362,7 @@ void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg,
                 processObjectContent(spCo, out); //draw object
                 break;
             }
+            m_zIndex++;
         }
     }
 }
@@ -925,6 +931,20 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
     // style:wrap-dynamic-treshold
 }
 
+void KWordGraphicsHandler::SetAnchorTypeAtribute(DrawingWriter& out)
+{
+    if (out.m_inline) {
+        out.xml.addAttribute("text:anchor-type","as-char");
+    } else {
+        out.xml.addAttribute("text:anchor-type","char");
+    }
+}
+
+void KWordGraphicsHandler::SetZIndexAtribute(DrawingWriter& out)
+{
+    out.xml.addAttribute("draw:z-index",m_zIndex);
+}
+
 void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     QString styleName;
@@ -943,7 +963,8 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type","char");
+    SetAnchorTypeAtribute(out);
+    SetZIndexAtribute(out);
 
     switch(drawStyle.txflTextFlow()) {
     case 1: //msotxflTtoBA up-down
@@ -992,7 +1013,8 @@ void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,D
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type","char");
+    SetAnchorTypeAtribute(out);
+    SetZIndexAtribute(out);
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("svg:width", out.hLength());
     out.xml.addAttribute("svg:height", out.vLength());
@@ -1075,7 +1097,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     if (spa) {
         if ((spa->wr != 1) && (spa->wr != 3)) {
             style.addProperty("style:number-wrapped-paragraphs", "no-limit");
-	}
+        }
     }
     styleName = out.styles.insert(style);
 
@@ -1091,6 +1113,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     }
     out.xml.addAttribute("draw:style-name", styleName);
     out.xml.addAttribute("text:anchor-type","char");
+    SetZIndexAtribute(out);
     out.xml.addAttribute("svg:width", out.hLength());
     out.xml.addAttribute("svg:height", out.vLength());
     out.xml.addAttribute("svg:x", out.hOffset());
@@ -1105,22 +1128,22 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
 
     //check for user edited wrap points
     if (ds.fEditedWrap()) {
-	QString points;
-	QByteArray* data = NULL;
-	data = getComplexData<PWrapPolygonVertices>(o);
-	if (data) {
-	    QBuffer buf(data);
-	    buf.open(QIODevice::ReadOnly);
-	    LEInputStream in(&buf);
-	    PWrapPolygonVertices_complex _v;
-	    parsePWrapPolygonVertices_complex(in, _v);
-            buf.close();
+        QString points;
+        QByteArray* data = NULL;
+        data = getComplexData<PWrapPolygonVertices>(o);
+        if (data) {
+            QBuffer buf(data);
+            buf.open(QIODevice::ReadOnly);
+            LEInputStream in(&buf);
+            PWrapPolygonVertices_complex _v;
+            parsePWrapPolygonVertices_complex(in, _v);
+                buf.close();
 
-	    //_v.data is an array of POINTs, MS-ODRAW, page 89
-	    QByteArray a, a2;
-	    int* p;
+            //_v.data is an array of POINTs, MS-ODRAW, page 89
+            QByteArray a, a2;
+            int* p;
 
-	    for (int i = 0, offset = 0; i < _v.nElems; i++, offset += _v.cbElem) {
+            for (int i = 0, offset = 0; i < _v.nElems; i++, offset += _v.cbElem) {
                 // x coordinate of this point
                 a = _v.data.mid(offset, _v.cbElem);
                 a2 = a.mid(0, _v.cbElem / 2);
@@ -1193,7 +1216,8 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     //create a custom shape
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", styleName);
-    out.xml.addAttribute("text:anchor-type", "as-char");
+    SetAnchorTypeAtribute(out);
+    SetZIndexAtribute(out);
 
     QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
     out.xml.addAttribute("svg:height", height);

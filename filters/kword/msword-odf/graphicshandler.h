@@ -169,6 +169,17 @@ private:
 //    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
 
     /**
+     * Check if the object is inline or floating and set the anchor type to char or as-char.
+     */
+    void SetAnchorTypeAtribute(DrawingWriter& out);
+
+    /**
+     * Set the Z-Index atribute. Z-Index is the position of the shape on z axis.
+     * Z-Index depends on the order in which shapes are stored inside OfficeArtDgContainer
+     */
+    void SetZIndexAtribute(DrawingWriter& out);
+
+    /**
      *
      */
     void drawObject(uint spid, MSO::OfficeArtDgContainer* dg, DrawingWriter& out,
@@ -226,6 +237,7 @@ private:
     MSO::OfficeArtDgContainer * m_pOfficeArtBodyDgContainer;
 
     QMap<QByteArray, QString> m_picNames; //picture names
+    int m_zIndex; //position of current shape on z axis
 };
 
 #endif // GRAPHICSHANDLER_H
