@@ -157,9 +157,11 @@ void KWStatusBar::resourceChanged(int key, const QVariant &value)
 void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
 {
     KoCanvasControllerWidget *widget = dynamic_cast<KoCanvasControllerWidget*>(canvasController);
-
+    if (!widget) {
+        return;
+    }
     QWidget *root = m_statusbar->window();
-    if (root && widget && !root->isAncestorOf(widget))
+    if (root && !root->isAncestorOf(widget))
         return; // ignore tool changes in other mainWindows
 
     if (m_controller) {
