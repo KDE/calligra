@@ -24,7 +24,7 @@
 #include "KWDocument.h"
 #include "kword_export.h"
 
-#include <KoCanvasBase.h>
+#include <KWCanvasBase.h>
 
 #include "KWViewMode.h"
 
@@ -43,7 +43,7 @@ class KoShape;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_TEST_EXPORT KWCanvasItem : public QGraphicsWidget, public KoCanvasBase
+class KWORD_TEST_EXPORT KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
 {
     Q_OBJECT
 
@@ -63,60 +63,30 @@ public:
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
-    /// reimplemented method from superclass
     virtual bool snapToGrid() const;
-    /// reimplemented method from superclass
-    virtual void addCommand(QUndoCommand *command);
-    /// reimplemented method from superclass
-    virtual KoShapeManager *shapeManager() const {
-        return m_shapeManager;
-    }
-    /// reimplemented method from superclass
-    virtual void updateCanvas(const QRectF& rc);
-    /// reimplemented method from superclass
-    virtual const KoViewConverter *viewConverter() const;
+
     /// reimplemented method from superclass
     virtual QWidget *canvasWidget() {
         return 0;
     }
+
     /// reimplemented method from superclass
     virtual const QWidget *canvasWidget() const {
         return 0;
     }
+
     /// reimplemented method from superclass
     virtual QGraphicsWidget *canvasItem() {
         return this;
     }
+
     /// reimplemented method from superclass
     virtual const QGraphicsWidget *canvasItem() const {
         return this;
     }
 
     /// reimplemented method from superclass
-    virtual KoUnit unit() const {
-        return document()->unit();
-    }
-    /// reimplemented method from superclass
-    virtual KoToolProxy *toolProxy() const {
-        return m_toolProxy;
-    }
-    /// reimplemented method from superclass
-    virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
-    /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
-    /// reimplemented method from superclass
-    virtual KoGuidesData *guidesData();
-    // getters
-    /// return the document that this canvas works on
-    KWDocument *document() const {
-        return m_document;
-    }
-
-    /// return the viewMode currently associated with this canvas
-    KWViewMode *viewMode() const {
-        return m_viewMode;
-    }
 
     QCursor setCursor(const QCursor &cursor);
 
@@ -135,56 +105,48 @@ signals:
      */
     void documentSize(const QSizeF &size);
 
-protected:
+protected: //QGraphicsWidget
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);
+
     /// reimplemented method from superclass
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
+
     /// reimplemented method from superclass
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
+
     /// reimplemented method from superclass
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
+
     /// reimplemented method from superclass
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e);
+
     /// reimplemented method from superclass
+
     virtual void keyReleaseEvent(QKeyEvent *e);
+
     /// reimplemented method from superclass
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+
     /// reimplemented method from superclass
-//    virtual void tabletEvent(QTabletEvent *e);
-//    /// reimplemented method from superclass
+    //    virtual void tabletEvent(QTabletEvent *e);
+
+    /// reimplemented method from superclass
     virtual void wheelEvent(QGraphicsSceneWheelEvent *e);
+
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
-    /// reimplemented method from superclass
-    virtual void ensureVisible(const QRectF &rect);
+
+protected: // KWCanvasBase
+
+    void updateCanvasInternal(const QRectF& clip) { update(clip); }
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.
     void pageSetupChanged();
-
-private:
-    void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
-    void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
-    /**
-     * paint one border along one of the 4 sides.
-     * @param inwardsX is the horizontal vector (with value -1, 0 or 1) for the vector
-     * pointing inwards for the border part nearest the center of the page.
-     * @param inwardsY is the vertical vector (with value -1, 0 or 1) for the vector
-     * pointing inwards for the border part nearest the center of the page.
-     */
-    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
-                         const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
-                         int inwardsX, int inwardsY) const;
-
-    KWDocument *m_document;
-    KoShapeManager *m_shapeManager;
-    KoToolProxy * m_toolProxy;
-    KWViewMode *m_viewMode;
-    QPoint m_documentOffset;
-    KoViewConverter *m_viewConverter;
 };
 
 #endif

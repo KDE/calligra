@@ -2,6 +2,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2006 David Faure <faure@kde.org>
    Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +26,7 @@
 #include "KWDocument.h"
 #include "kword_export.h"
 
-#include <KoCanvasBase.h>
+#include <KWCanvasBase.h>
 
 #include "KWViewMode.h"
 
@@ -44,7 +45,7 @@ class KoToolProxy;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_TEST_EXPORT KWCanvas : public QWidget, public KoCanvasBase
+class KWORD_TEST_EXPORT KWCanvas : public QWidget, public KWCanvasBase
 {
     Q_OBJECT
 
@@ -65,19 +66,8 @@ public:
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
-    /// reimplemented method from superclass
     virtual bool snapToGrid() const;
-    /// reimplemented method from superclass
-    virtual void addCommand(QUndoCommand *command);
-    /// reimplemented method from superclass
-    virtual KoShapeManager *shapeManager() const {
-        return m_shapeManager;
-    }
-    /// reimplemented method from superclass
-    virtual void updateCanvas(const QRectF& rc);
-    /// reimplemented method from superclass
-    virtual const KoViewConverter *viewConverter() const;
+
     /// reimplemented method from superclass
     virtual QWidget *canvasWidget() {
         return this;
@@ -85,30 +75,6 @@ public:
     /// reimplemented method from superclass
     virtual const QWidget *canvasWidget() const {
         return this;
-    }
-    /// reimplemented method from superclass
-    virtual KoUnit unit() const {
-        return document()->unit();
-    }
-    /// reimplemented method from superclass
-    virtual KoToolProxy *toolProxy() const {
-        return m_toolProxy;
-    }
-    /// reimplemented method from superclass
-    virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
-    /// reimplemented method from superclass
-    virtual void updateInputMethodInfo();
-    /// reimplemented method from superclass
-    virtual KoGuidesData *guidesData();
-    // getters
-    /// return the document that this canvas works on
-    KWDocument *document() const {
-        return m_document;
-    }
-
-    /// return the viewMode currently associated with this canvas
-    KWViewMode *viewMode() const {
-        return m_viewMode;
     }
 
     KWView *view() {
@@ -132,7 +98,7 @@ signals:
      */
     void documentSize(const QSizeF &size);
 
-protected:
+protected: // QWidget
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);
     /// reimplemented method from superclass
@@ -156,32 +122,18 @@ protected:
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
     /// reimplemented method from superclass
-    virtual void ensureVisible(const QRectF &rect);
+    virtual void updateInputMethodInfo();
+protected: // KWCanvasBase
+
+    void updateCanvasInternal(const QRectF &clip) { update(clip.toRect()); };
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.
     void pageSetupChanged();
 
 private:
-    void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
-    void paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const;
-    /**
-     * paint one border along one of the 4 sides.
-     * @param inwardsX is the horizontal vector (with value -1, 0 or 1) for the vector
-     * pointing inwards for the border part nearest the center of the page.
-     * @param inwardsY is the vertical vector (with value -1, 0 or 1) for the vector
-     * pointing inwards for the border part nearest the center of the page.
-     */
-    void paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
-                         const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
-                         int inwardsX, int inwardsY) const;
 
-    KWDocument *m_document;
-    KoShapeManager *m_shapeManager;
-    KoToolProxy * m_toolProxy;
     KWView *m_view;
-    KWViewMode *m_viewMode;
-    QPoint m_documentOffset;
 };
 
 #endif
