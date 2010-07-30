@@ -418,9 +418,9 @@ void ColumnHeaderWidget::toolChanged(const QString& toolId)
  *
  ****************************************************************/
 
-SelectAllButtonWidget::SelectAllButtonWidget(CanvasBase* canvasBase, Selection* selection)
+SelectAllButtonWidget::SelectAllButtonWidget(CanvasBase* canvasBase)
         : QWidget(canvasBase->canvasWidget())
-        , SelectAllButton(canvasBase, selection)
+        , SelectAllButton(canvasBase)
 {
     connect(canvasBase->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));

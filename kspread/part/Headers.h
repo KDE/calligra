@@ -189,21 +189,20 @@ protected:
 class SelectAllButton
 {
 public:
-    explicit SelectAllButton(CanvasBase* canvasBase, Selection* selection);
+    explicit SelectAllButton(CanvasBase* canvasBase);
     virtual ~SelectAllButton();
 
     virtual QPalette palette() const = 0;
     virtual void update() = 0;
 protected:
-    virtual void paint(QPainter* painter, const QRectF& painterRect);
-    virtual void mousePress(KoPointerEvent* event);
-    virtual void mouseRelease(KoPointerEvent* event);
-    virtual void wheel(KoPointerEvent* event);
+    void paint(QPainter* painter, const QRectF& painterRect);
+    void mousePress(KoPointerEvent* event);
+    void mouseRelease(KoPointerEvent* event);
+    void wheel(KoPointerEvent* event);
     void doToolChanged(const QString& toolId);
 
 private:
     CanvasBase* m_canvasBase;
-    Selection* m_selection;
     bool m_mousePressed;
     bool m_cellToolIsActive;
 };

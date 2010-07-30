@@ -118,11 +118,11 @@ protected:
  * The widget in the top left corner of the canvas,
  * responsible for selecting all cells in a sheet.
  */
-class KSPREAD_EXPORT SelectAllButtonItem : public QGraphicsWidget
+class KSPREAD_EXPORT SelectAllButtonItem : public QGraphicsWidget, public SelectAllButton
 {
     Q_OBJECT
 public:
-    explicit SelectAllButtonItem(QGraphicsItem *_parent, KoCanvasBase* canvasBase, Selection* selection);
+    explicit SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase* canvasBase);
     virtual ~SelectAllButtonItem();
 
 protected:
@@ -133,12 +133,6 @@ protected:
 
 private Q_SLOTS:
     void toolChanged(const QString& toolId);
-
-private:
-    KoCanvasBase* m_canvasBase;
-    Selection* m_selection;
-    bool m_mousePressed;
-    bool m_cellToolIsActive;
 };
 
 } // namespace KSpread

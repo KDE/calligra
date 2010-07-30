@@ -422,14 +422,11 @@ void ColumnHeaderItem::toolChanged(const QString& toolId)
  *
  ****************************************************************/
 
-SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, KoCanvasBase* canvasBase, Selection* selection)
+SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase* canvasBase)
         : QGraphicsWidget(_parent)
-        , m_canvasBase(canvasBase)
-        , m_selection(selection)
-        , m_mousePressed(false)
+        , SelectAllButton(canvasBase)
 {
-    m_cellToolIsActive = true;
-    connect(m_canvasBase->toolProxy(), SIGNAL(toolChanged(const QString&)),
+    connect(canvasBase->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));
 }
 
@@ -440,59 +437,30 @@ SelectAllButtonItem::~SelectAllButtonItem()
 void SelectAllButtonItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     Q_UNUSED(widget);
-    // the painter
-    painter->setClipRect(option->exposedRect);
-
-    // if all cells are selected
-    if (m_selection->isAllSelected() &&
-            !m_selection->referenceSelectionMode() && m_cellToolIsActive) {
-        // selection brush/color
-        QColor selectionColor(palette().highlight().color());
-        selectionColor.setAlpha(127);
-        const QBrush selectionBrush(selectionColor);
-
-        painter->setPen(selectionColor.dark(150));
-        painter->setBrush(selectionBrush);
-    } else {
-        // background brush/color
-        const QBrush backgroundBrush(palette().window());
-        const QColor backgroundColor(backgroundBrush.color());
-
-        painter->setPen(backgroundColor.dark(150));
-        painter->setBrush(backgroundBrush);
-    }
-    painter->drawRect(rect().adjusted(0, 0, -1, -1));
+    SelectAllButton::paint(painter, option->exposedRect);
 }
 
-void SelectAllButtonItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
+void SelectAllButtonItem::mousePressEvent(QGraphicsSceneMouseEvent* _ev)
 {
-    if (!m_cellToolIsActive)
-        return;
-    if (event->button() == Qt::LeftButton)
-        m_mousePressed = true;
+    KoPointerEvent pev(_ev, QPointF());
+    mousePress(&pev);
 }
 
-void SelectAllButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
+void SelectAllButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev)
 {
-    if (!m_cellToolIsActive)
-        return;
-    Q_UNUSED(event);
-    if (!m_mousePressed)
-        return;
-    m_mousePressed = false;
-    m_selection->selectAll();
+    KoPointerEvent pev(_ev, QPointF());
+    mouseRelease(&pev);
 }
 
-void SelectAllButtonItem::wheelEvent(QGraphicsSceneWheelEvent* event)
+void SelectAllButtonItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
-    QWheelEvent ev(event->pos().toPoint(), event->delta(), event->buttons(), event->modifiers(), event->orientation());
-    QApplication::sendEvent(m_canvasBase->canvasWidget(), &ev);
+    KoPointerEvent pev(_ev, QPointF());
+    wheel(&pev);
 }
 
 void SelectAllButtonItem::toolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
-    update();
+    doToolChanged(toolId);
 }
 
 #include "HeaderItems.moc"

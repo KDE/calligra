@@ -736,7 +736,7 @@ void View::initView()
     d->rowHeader = new RowHeaderWidget(this, d->canvas , this);
     d->columnHeader->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     d->rowHeader->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-    d->selectAllButton = new SelectAllButtonWidget(d->canvas, d->selection);
+    d->selectAllButton = new SelectAllButtonWidget(d->canvas);
     d->selectAllButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     d->canvas->setFocusPolicy(Qt::StrongFocus);

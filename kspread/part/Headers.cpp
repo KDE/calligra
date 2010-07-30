@@ -1185,9 +1185,8 @@ void ColumnHeader::doToolChanged(const QString& toolId)
  *
  ****************************************************************/
 
-SelectAllButton::SelectAllButton(CanvasBase* canvasBase, Selection* selection)
+SelectAllButton::SelectAllButton(CanvasBase* canvasBase)
         : m_canvasBase(canvasBase)
-        , m_selection(selection)
         , m_mousePressed(false)
         , m_cellToolIsActive(true)
 {
@@ -1203,8 +1202,8 @@ void SelectAllButton::paint(QPainter* painter, const QRectF& painterRect)
     painter->setClipRect(painterRect);
 
     // if all cells are selected
-    if (m_selection->isAllSelected() &&
-            !m_selection->referenceSelectionMode() && m_cellToolIsActive) {
+    if (m_canvasBase->selection()->isAllSelected() &&
+            !m_canvasBase->selection()->referenceSelectionMode() && m_cellToolIsActive) {
         // selection brush/color
         QColor selectionColor(palette().highlight().color());
         selectionColor.setAlpha(127);
@@ -1239,7 +1238,7 @@ void SelectAllButton::mouseRelease(KoPointerEvent* event)
     if (!m_mousePressed)
         return;
     m_mousePressed = false;
-    m_selection->selectAll();
+    m_canvasBase->selection()->selectAll();
 }
 
 void SelectAllButton::wheel(KoPointerEvent* event)
