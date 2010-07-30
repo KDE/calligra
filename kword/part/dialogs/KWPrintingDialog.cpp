@@ -23,23 +23,23 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "KWView.h"
-#include "KWCanvas.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
 
 #include <KoInsets.h>
 #include <KoShapeManager.h>
+#include "KoCanvasBase.h"
 
 #include <QApplication>
 #include <QTextBlock>
 #include <QTextLayout>
 #include <QTextDocument>
 
-KWPrintingDialog::KWPrintingDialog(KWView *view)
-        : KoPrintingDialog(view),
-        m_document(view->kwdocument())
+KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, QWidget *parent)
+        : KoPrintingDialog(parent),
+        m_document(document)
 {
-    setShapeManager(view->kwcanvas()->shapeManager());
+    setShapeManager(shapeManager);
 
     while (! m_document->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();

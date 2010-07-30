@@ -949,7 +949,7 @@ void KWView::editFrameProperties()
 
 KoPrintJob *KWView::createPrintJob()
 {
-    KWPrintingDialog *dia = new KWPrintingDialog(this);
+    KWPrintingDialog *dia = new KWPrintingDialog(m_document, m_canvas->shapeManager(), this);
     dia->printer().setResolution(600);
     dia->printer().setCreator("KWord 2.0");
     dia->printer().setFullPage(true); // ignore printer margins
