@@ -5,6 +5,7 @@ add_definitions(-DNO_PIGMENT)
 find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
 SET(QT_USE_QTNETWORK TRUE)
+SET(QT_USE_QTMAEMO5 TRUE)
 INCLUDE(${QT_USE_FILE})
 
 include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kspread/part ${CMAKE_SOURCE_DIR}/kspread)
@@ -17,7 +18,14 @@ QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplic
 
 add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  flowlayout.cpp previewwindow.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
-target_link_libraries(FreOffice ${QT_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+
+find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
+
+if(QT_QMAEMO5_LIBRARY)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+else(QT_QMAEMO5_LIBRARY)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)
 install(FILES FreOffice.desktop DESTINATION share/applications/hildon)

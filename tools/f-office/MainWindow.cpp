@@ -65,6 +65,10 @@
 #include <QFrame>
 #include <QPalette>
 
+#ifdef Q_WS_MAEMO_5
+#include <QtMaemo5/QMaemo5InformationBox>
+#endif
+
 #include <kfileitem.h>
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
@@ -900,31 +904,104 @@ void MainWindow::saveFile()
 {
     QMessageBox msgBox;
     if(m_doc) {
-       if(m_fileName.isEmpty()) {
-         saveFileAs();
-       } else {
-          QString ext = KMimeType::extractKnownExtension(m_fileName);
-          if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
-              !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
+        if(m_fileName.isEmpty()) {
+            saveFileAs();
+        } else {
+            QString ext = KMimeType::extractKnownExtension(m_fileName);
+            if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
+                !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
 
-              m_doc->saveNativeFormat(m_fileName);
-              m_isDocModified = false;
-              msgBox.setText(i18n("The document has been saved successfully"));
-              msgBox.exec();
-              if(m_confirmationdialog) {
-                  closeDocument();
-              }
-          } else {
-              msgBox.setText(i18n("Saving operation supports only open document formats currently,Sorry"));
-              msgBox.exec();
-          }
-       }
-    }
-    else {
+                if(m_doc->saveNativeFormat(m_fileName)) {
+#ifdef Q_WS_MAEMO_5
+                    QMaemo5InformationBox::information(0, i18n("The document has been saved successfully"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#else
+                    msgBox.setText(i18n("The document has been saved successfully"));
+                    msgBox.exec();
+#endif
+                    m_isDocModified = false;
+
+                    if(m_confirmationdialog) {
+                        closeDocument();
+                    }
+                } else {
+#ifdef Q_WS_MAEMO_5
+                    QMaemo5InformationBox::information(0, i18n("The document could not be saved"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#else
+                    msgBox.setText(i18n("The document could not be saved"));
+                    msgBox.exec();
+#endif
+                }
+            } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive))  {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
+                                                   QMaemo5InformationBox::NoTimeout);
+#else
+                msgBox.setText(i18n("File will be saved in ODF"));
+                msgBox.exec();
+#endif
+                QString fileName=QFileDialog::getSaveFileName(0,i18n("Save File"),"/home/user/MyDocs/.odt");
+
+                if (fileName.isEmpty()) {
+#ifdef Q_WS_MAEMO_5
+                    QMaemo5InformationBox::information(0, i18n("File name not specified"),
+                                                       QMaemo5InformationBox::NoTimeout);
+#else
+                    msgBox.setText(i18n("File name not specified"));
+                    msgBox.exec();
+#endif
+                    return;
+                }
+                KUrl newURL;
+                newURL.setPath(fileName);
+                //Since KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+                QString outputFormatString = "application/vnd.oasis.opendocument.text";
+                // qDebug()<<"outputformat string"<<mime->name();
+                m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
+
+                if(m_doc->saveAs(newURL)) {
+#ifdef Q_WS_MAEMO_5
+                    QMaemo5InformationBox::information(0, i18n("The document has been saved successfully"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#else
+                    msgBox.setText(i18n("The document has been saved successfully"));
+                    msgBox.exec();
+#endif
+                    m_isDocModified = false;
+
+                    if(m_confirmationdialog) {
+                        closeDocument();
+                    }
+                } else {
+#ifdef Q_WS_MAEMO_5
+                    QMaemo5InformationBox::information(0, i18n("The document could not be saved"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#else
+                    msgBox.setText(i18n("The document could not be saved"));
+                    msgBox.exec();
+#endif
+                }
+            } else {
+
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("Saving operation supports only open document formats currently,Sorry"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("Saving operation supports only open document formats currently,Sorry"));
+                msgBox.exec();
+#endif
+            }
+        }
+    } else {
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(0, i18n("No document is open to perform save operation , invalid try"),
+                                           QMaemo5InformationBox::DefaultTimeout);
+#else
         msgBox.setText(i18n("No document is open to perform save operation , invalid try"));
         msgBox.exec();
+#endif
     }
-
 }
 
 void MainWindow::saveFileAs()
@@ -940,35 +1017,170 @@ void MainWindow::saveFileAs()
         }
         if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
             !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
+            QString fileName;
             switch(m_type) {
-                case Text:
-                       m_fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
-                       break;
-                case Presentation:
-                       m_fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odp");
-                       break;
-                case Spreadsheet:
-                       return;
-            }
-            if (m_fileName.isEmpty())
+            case Text:
+                fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
+                break;
+            case Presentation:
+                fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odp");
+                break;
+            case Spreadsheet:
                 return;
-
-            m_doc->saveNativeFormat(m_fileName);
-            m_isDocModified = false;
-            msgBox.setText(i18n("The document has been saved successfully"));
-            msgBox.exec();
-            if(m_confirmationdialog) {
-                closeDocument();
             }
-       } else {
-           msgBox.setText(i18n("Saving operation supports only open document formats currently,sorry"));
-           msgBox.exec();
-       }
+            if (fileName.isEmpty()) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("File name not specified"),
+                                                   QMaemo5InformationBox::NoTimeout);
+#else
+                msgBox.setText(i18n("File name not specified"));
+                msgBox.exec();
+#endif
+                return;
+            }
+            if(m_doc->saveNativeFormat(m_fileName)) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("The document has been saved successfully"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("The document has been saved successfully"));
+                msgBox.exec();
+#endif
+                m_fileName=fileName;
+                m_isDocModified = false;
+
+                if(m_confirmationdialog) {
+                    closeDocument();
+                }
+            } else {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("The document could not be saved"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("The document could not be saved"));
+                msgBox.exec();
+#endif
+            }
+
+        } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive))  {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
+                                               QMaemo5InformationBox::NoTimeout);
+#else
+            msgBox.setText(i18n("File will be saved in ODF"));
+            msgBox.exec();
+#endif
+            QString fileName=QFileDialog::getSaveFileName(0,i18n("Save File"),"/home/user/MyDocs/.odt");
+
+            if (fileName.isEmpty()) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("File name not specified"),
+                                                   QMaemo5InformationBox::NoTimeout);
+#else
+                msgBox.setText(i18n("File name not specified"));
+                msgBox.exec();
+#endif
+                return;
+            }
+            KUrl newURL;
+            newURL.setPath(fileName);
+            //At present we can hard code this KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+            QString outputFormatString = "application/vnd.oasis.opendocument.text";
+            // qDebug()<<"outputformat string"<<mime->name();
+            m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
+
+            if(m_doc->saveAs(newURL)) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("The document has been saved successfully"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("The document has been saved successfully"));
+                msgBox.exec();
+#endif
+                m_fileName=fileName;
+                m_isDocModified = false;
+
+                if(m_confirmationdialog) {
+                    closeDocument();
+                }
+            } else {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("The document could not be saved"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("The document could not be saved"));
+                msgBox.exec();
+#endif
+            }
+        }else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive))  {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
+                                               QMaemo5InformationBox::NoTimeout);
+#else
+            msgBox.setText(i18n("File will be saved in ODF"));
+            msgBox.exec();
+#endif
+            QString fileName=QFileDialog::getSaveFileName(0,i18n("Save File"),"/home/user/MyDocs/.odt");
+
+            if (fileName.isEmpty()) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("File name not specified"),
+                                                   QMaemo5InformationBox::NoTimeout);
+#else
+                msgBox.setText(i18n("File name not specified"));
+                msgBox.exec();
+#endif
+                return;
+            }
+            KUrl newURL;
+            newURL.setPath(m_fileName);
+            //Since KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+            QString outputFormatString = "application/vnd.oasis.opendocument.text";
+            // qDebug()<<"outputformat string"<<mime->name();
+            m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
+
+            if(m_doc->saveAs(newURL)) {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("The document has been saved successfully"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("The document has been saved successfully"));
+                msgBox.exec();
+#endif
+                m_isDocModified = false;
+
+                if(m_confirmationdialog) {
+                    closeDocument();
+                }
+            } else {
+#ifdef Q_WS_MAEMO_5
+                QMaemo5InformationBox::information(0, i18n("The document could not be saved"),
+                                                   QMaemo5InformationBox::DefaultTimeout);
+#else
+                msgBox.setText(i18n("The document could not be saved"));
+                msgBox.exec();
+#endif
+            }
+        }else {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(0, i18n("Saving operation supports only open document formats currently,Sorry"),
+                                               QMaemo5InformationBox::DefaultTimeout);
+#else
+            msgBox.setText(i18n("Saving operation supports only open document formats currently,Sorry"));
+            msgBox.exec();
+#endif
+        }
     }  else {
-        msgBox.setText(i18n("No document is open to perform saveas operation ,invalid try"));
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(0, i18n("No document is open to perform save operation , invalid try"),
+                                           QMaemo5InformationBox::DefaultTimeout);
+#else
+        msgBox.setText(i18n("No document is open to perform save operation , invalid try"));
         msgBox.exec();
+#endif
     }
 }
+
 void MainWindow::chooseDocumentType()
 {
     m_docdialog = new QDialog(this);
@@ -1747,7 +1959,8 @@ void MainWindow::openDocument(const QString &fileName)
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
     }
 
-    if((m_type==Text) && (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive))) {
+    if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
+                          (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)))) {
         m_doubleClick = true;
         m_ui->actionEdit->setVisible(true);
         m_kwview = qobject_cast<KWView *>(m_view);
