@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 #include "KFormulaPartFactory.h"
 #include "KFormulaConfigDialog.h"
 #include "KFormulaCanvas.h"
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoZoomHandler.h>
 #include <kstandardaction.h>
 #include <kaction.h>
@@ -49,7 +49,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
 
     m_formulaCanvas = new KFormulaCanvas( this, m_partDocument );
     m_zoomHandler = new KoZoomHandler();
-    m_canvasController = new KoCanvasController( this );
+    m_canvasController = new KoCanvasControllerWidget( this );
     m_canvasController->setCanvas( m_formulaCanvas );
 
     if ( !doc->isReadWrite() )
@@ -85,21 +85,21 @@ void KFormulaPartView::setupActions()
     m_pasteAction;
 
     m_addBracketAction = new KAction( KIcon("paren"), i18n("Add Bracket"),
-		                      actionCollection(), "addbracket" );
+                                      actionCollection(), "addbracket" );
 //    connect();
 //    m_addBracketAction->set... ;
     m_addFractionAction = new KAction( KIcon("frac"), i18n("Add Fraction"),
-		                       actionCollection(), "addfraction" );
+                                       actionCollection(), "addfraction" );
     m_addRootAction = new KAction( KIcon("sqrt"), i18n("Add Root"),
-		                   actionCollection(), "addroot" );
+                                   actionCollection(), "addroot" );
     m_addSumAction = new KAction( KIcon("sum"), i18n("Add Sum"),
-		                  actionCollection(), "addsum" );
+                                  actionCollection(), "addsum" );
     m_addProductAction = new KAction( KIcon("prod"), i18n("Add Product"),
-		                      actionCollection(), "addproduct" );
+                                      actionCollection(), "addproduct" );
     m_addIntegralAction = new KAction( KIcon("int"), i18n("Add Integral"),
-		                       actionCollection(), "addintegral" );
+                                       actionCollection(), "addintegral" );
     m_addMatrixAction = new KAction( KIcon("matrix"), i18n("Add Matrix"),
-		                     actionCollection(), "addmatrix" );
+                                     actionCollection(), "addmatrix" );
     m_addUpperLeftAction;
     m_addLowerLeftAction;
     m_addUpperRightAction;
@@ -146,7 +146,7 @@ void KFormulaPartView::setEnabled( bool enabled )
 
 void KFormulaPartView::resizeEvent( QResizeEvent * )
 {
-    m_canvasController->setGeometry( 0, 0, width(), height() );
+    static_cast<KoCanvasControllerWidget*>(m_canvasController)->setGeometry( 0, 0, width(), height() );
 }
 
 void KFormulaPartView::cursorChanged( bool visible, bool selecting )
