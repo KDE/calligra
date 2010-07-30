@@ -26,7 +26,7 @@
 #define PRESENTATIONTOOL_H
 
 #include "MainWindow.h"
-#include "KoCanvasController.h"
+#include "KoCanvasControllerWidget.h"
 #include "PresentationToolAdaptor.h"
 
 #include <QPoint>
@@ -39,21 +39,21 @@ class PresentationTool : public QObject
    Q_OBJECT
 
 public :
-    PresentationTool( MainWindow * window, KoCanvasController * controller );
+    PresentationTool( MainWindow * window, KoCanvasControllerWidget * controller );
     ~PresentationTool();
 
     /** Get all the mouse event needed to paint */
     void handleMainWindowMousePressEvent( QMouseEvent * e );
     void handleMainWindowMouseMoveEvent( QMouseEvent * e );
     void handleMainWindowMouseReleaseEvent( QMouseEvent * e );
-    
+
     /*!
      * get the status of various tools
      */
     bool getPenToolStatus();
     bool getHighlightToolStatus();
     bool toolsActivated();
-    
+
     /*!
      * The image of the current slide
      */
@@ -68,12 +68,12 @@ public slots:
     void deactivateTool();
 
 private :
-    KoCanvasController *m_controller;
+    KoCanvasControllerWidget *m_controller;
     MainWindow *m_window;
 
     /*!
      * Holds the image map of the current state of
-     * current slide 
+     * current slide
      */
     QImage *image;
     QImage *image1;
@@ -82,9 +82,9 @@ private :
      * The state-variables for various tools
      */
     bool m_penToolActivated;
-    bool m_highlightToolActivated;   
+    bool m_highlightToolActivated;
     bool scribbling;
-    
+
     /*!
      * The points that are used by the pen tool
      */

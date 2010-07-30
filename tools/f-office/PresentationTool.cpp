@@ -31,7 +31,7 @@
 
 #include "PresentationTool.h"
 
-PresentationTool::PresentationTool(MainWindow * window, KoCanvasController * controller )
+PresentationTool::PresentationTool(MainWindow * window, KoCanvasControllerWidget * controller )
 : scribbling(false),
 m_window(window),
 m_controller(controller),
@@ -89,7 +89,7 @@ void PresentationTool::handleMainWindowMouseReleaseEvent( QMouseEvent * event )
 
 void PresentationTool::togglePenTool()
 {
-    if( m_penToolActivated == false ) {  
+    if( m_penToolActivated == false ) {
         m_penToolActivated = true;
         m_highlightToolActivated = false;
         QPixmap pix = QPixmap::grabWidget( m_controller );

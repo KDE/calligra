@@ -78,7 +78,7 @@
 #include <KoCanvasBase.h>
 #include <KoDocumentInfo.h>
 #include <kdemacros.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoZoomMode.h>
 #include <KoZoomController.h>
 #include <KoToolProxy.h>
@@ -1325,7 +1325,7 @@ void MainWindow::openNewDocument(DocumentType type)
         m_editor->setStyle(charstyle);
     }
 
-    QList<KoCanvasController*> controllers = m_view->findChildren<KoCanvasController*>();
+    QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
     if (controllers.isEmpty()) {
         setShowProgressIndicator(false);
         return;// Panic
@@ -1919,8 +1919,7 @@ void MainWindow::openDocument(const QString &fileName)
     m_doc->setReadWrite(true);
     m_doc->setAutoSave(0);
     m_view = m_doc->createView();
-    QList<KoCanvasController*> controllers = m_view->findChildren<KoCanvasController*>();
-
+    QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
     if (controllers.isEmpty()) {
         setShowProgressIndicator(false);
         return;// Panic
@@ -2770,7 +2769,7 @@ void MainWindow::showApplicationMenu()
     menu.exec();
 }
 
-void MainWindow::activeToolChanged(KoCanvasController* canvas, int)
+void MainWindow::activeToolChanged(KoCanvasControllerWidget* canvas, int)
 {
    QString newTool= KoToolManager::instance()->activeToolId();
    // only Pan tool or Text tool should ever be the active tool, so if

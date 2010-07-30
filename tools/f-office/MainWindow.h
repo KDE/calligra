@@ -38,28 +38,15 @@
 #include "CollabDialog.h"
 #include "CollabServer.h"
 
-class KoCharacterStyle;
-class KoTextEditor;
 class QPushButton;
 class QIcon;
 class QTextDocument;
 class QToolButton;
 class QFrame;
 class QLabel;
-class PresentationTool;
-class MainWindowAdaptor;
-
-namespace Ui
-{
-class MainWindow;
-}
-
 class QMessageBox;
 class QLineEdit;
-class KoCanvasController;
 class QTextCursor;
-class KoShape;
-class KoPAPageBase;
 class QShortcut;
 class QCheckBox;
 class QComboBox;
@@ -69,7 +56,23 @@ class QTextDocument;
 class QGridLayout;
 class QDialog;
 
+class KoCharacterStyle;
+class KoTextEditor;
+class KoTextEditor;
+class PresentationTool;
+class MainWindowAdaptor;
+class KoCanvasController;
+class KoCanvasControllerWidget;
+class KoShape;
+class KoPAPageBase;
+
 class OfficeInterface;
+
+namespace Ui
+{
+class MainWindow;
+}
+
 
 /*!
  * \brief Main window of the application. KoCanvasController is set as
@@ -227,7 +230,7 @@ private:
     /*!
      * Pointer to KoCanvasController
      */
-    KoCanvasController *m_controller;
+    KoCanvasControllerWidget *m_controller;
     /*!
      * Pointer to KoCharacterStyle
      */
@@ -398,7 +401,7 @@ private:
      */
     void activeFontOptionCheck();
     /*!
-     * Function for navigating to NextSheet 
+     * Function for navigating to NextSheet
      */
     void nextSheet();
     /*!
@@ -630,7 +633,7 @@ private slots:
     /*!
      * Slot that is invoked when the currently active tool changes.
      */
-    void activeToolChanged(KoCanvasController *canvas, int uniqueToolId);
+    void activeToolChanged(KoCanvasControllerWidget *canvas, int uniqueToolId);
     /*!
      * function for opening existing document.
      */
