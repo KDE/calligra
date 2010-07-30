@@ -61,6 +61,7 @@
 #include <KoZoomHandler.h>
 #include <KoDpi.h>
 #include <KoPointerEvent.h>
+#include <KoGlobal.h>
 
 // KSpread
 #include "CanvasBase.h"
@@ -409,7 +410,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
-    QFont normalFont(painter->font());
+    QFont normalFont(KoGlobal::defaultFont());
     QFont boldFont(normalFont);
     boldFont.setBold(true);
 
@@ -984,7 +985,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     painter->setRenderHint(QPainter::TextAntialiasing);
 
     // fonts
-    QFont normalFont(painter->font());
+    QFont normalFont(KoGlobal::defaultFont());
     QFont boldFont(normalFont);
     boldFont.setBold(true);
 
