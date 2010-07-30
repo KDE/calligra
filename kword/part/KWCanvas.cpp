@@ -51,7 +51,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
         m_viewMode(0)
 {
     m_shapeManager = new KoShapeManager(this);
-    m_viewMode = KWViewMode::create(viewMode, this);
+    m_viewMode = KWViewMode::create(viewMode, document, this);
     setFocusPolicy(Qt::StrongFocus);
 
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
@@ -325,7 +325,7 @@ void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &view
     const KoPageLayout pageLayout = viewMap.page.pageStyle().pageLayout();
 
     // Get the coordinates of the border rect in view coordinates.
-    QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft() 
+    QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft()
                                                             + QPointF(pageLayout.leftMargin,
                                                                       pageLayout.topMargin));
     QPointF bottomRightCorner = viewConverter()->documentToView(pageRect.bottomRight()

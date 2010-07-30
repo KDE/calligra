@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2002-2006 David Faure <faure@kde.org>
-   Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+
+   Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWCANVAS_H
-#define KWCANVAS_H
+#ifndef KWCANVASITEM_H
+#define KWCANVASITEM_H
 
 #include "KWDocument.h"
 #include "kword_export.h"
@@ -29,7 +28,7 @@
 
 #include "KWViewMode.h"
 
-#include <QWidget>
+#include <QGraphicsWidget>
 
 class QRect;
 class QPainter;
@@ -44,7 +43,7 @@ class KoToolProxy;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_TEST_EXPORT KWCanvas : public QWidget, public KoCanvasBase
+class KWORD_TEST_EXPORT KWCanvasItem : public QGraphicsWidget, public KoCanvasBase
 {
     Q_OBJECT
 
@@ -57,8 +56,8 @@ public:
      * @param view the parent KWView object
      * @param parent the parent widget.
      */
-    KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent);
-    virtual ~KWCanvas();
+    KWCanvasItem(const QString& viewMode, KWDocument *document, KWView *view);
+    virtual ~KWCanvasItem();
 
     /// ask the widget to set the size this canvas takes to display all content
     void updateSize();
@@ -80,11 +79,11 @@ public:
     virtual const KoViewConverter *viewConverter() const;
     /// reimplemented method from superclass
     virtual QWidget *canvasWidget() {
-        return this;
+        return 0;
     }
     /// reimplemented method from superclass
     virtual const QWidget *canvasWidget() const {
-        return this;
+        return 0;
     }
     /// reimplemented method from superclass
     virtual KoUnit unit() const {
@@ -134,21 +133,21 @@ protected:
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);
     /// reimplemented method from superclass
-    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *e);
     /// reimplemented method from superclass
-    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *e);
     /// reimplemented method from superclass
-    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *e);
     /// reimplemented method from superclass
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e);
     /// reimplemented method from superclass
     virtual void keyReleaseEvent(QKeyEvent *e);
     /// reimplemented method from superclass
-    virtual void paintEvent(QPaintEvent * ev);
+    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
     /// reimplemented method from superclass
-    virtual void tabletEvent(QTabletEvent *e);
-    /// reimplemented method from superclass
-    virtual void wheelEvent(QWheelEvent *e);
+//    virtual void tabletEvent(QTabletEvent *e);
+//    /// reimplemented method from superclass
+    virtual void wheelEvent(QGraphicsSceneWheelEvent *e);
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass

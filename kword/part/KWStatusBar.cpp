@@ -24,7 +24,7 @@
 #include "KWCanvas.h"
 
 #include <KoToolManager.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoZoomController.h>
 
 #include <QLabel>
@@ -156,18 +156,22 @@ void KWStatusBar::resourceChanged(int key, const QVariant &value)
 
 void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
 {
+    KoCanvasControllerWidget *widget = dynamic_cast<KoCanvasControllerWidget*>(canvasController);
+
     QWidget *root = m_statusbar->window();
-    if (root && !root->isAncestorOf(canvasController))
+    if (root && widget && !root->isAncestorOf(widget))
         return; // ignore tool changes in other mainWindows
+
     if (m_controller) {
         disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)),
                 this, SLOT(updateMousePosition(const QPoint&)));
     }
-    m_controller = canvasController;
-    if (m_controller) {
-        KWCanvas *canvas = dynamic_cast<KWCanvas*>(m_controller->canvas());
-        if (canvas)
+    m_controller = canvasController->proxyObject;
+    if (canvasController) {
+        KWCanvas *canvas = dynamic_cast<KWCanvas*>(canvasController->canvas());
+        if (canvas) {
             setCurrentCanvas(canvas);
+        }
         connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this,
                 SLOT(updateMousePosition(const QPoint&)));
     } else {

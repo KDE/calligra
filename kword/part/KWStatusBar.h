@@ -30,6 +30,7 @@ class KWView;
 class QLabel;
 class KSqueezedTextLabel;
 class KoCanvasController;
+class KoCanvasControllerProxyObject;
 class KWDocument;
 class KWCanvas;
 class QAction;
@@ -83,7 +84,7 @@ private:
     KStatusBar *m_statusbar;
     QPointer<KWView> m_currentView;
     QMap<KWView*, QWidget*> m_zoomWidgets;
-    QPointer<KoCanvasController> m_controller;
+    QPointer<KoCanvasControllerProxyObject> m_controller;
     int m_currentPageNumber;
     QAction *m_zoomAction;
 

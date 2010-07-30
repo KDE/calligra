@@ -11,6 +11,7 @@ set(kwordprivate_LIB_SRCS
     KWord.cpp
     KWApplicationConfig.cpp
     KWCanvas.cpp
+    KWCanvasItem.cpp
     KWDocument.cpp
     KWGui.cpp
     KWView.cpp

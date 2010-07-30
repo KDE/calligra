@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2002-2006 David Faure <faure@kde.org>
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+ *
+ * Copyright (C) 2010 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +19,7 @@
  */
 
 // kword includes
-#include "KWCanvas.h"
+#include "KWCanvasItem.h"
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
@@ -39,19 +38,21 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
-
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
+#include <QStyleOptionGraphicsItem>
 // #define DEBUG_REPAINT
 
 
-KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, KWGui *parent)
-        : QWidget(parent),
+KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document, KWView *view)
+        : QGraphicsWidget(),
         KoCanvasBase(document),
         m_document(document),
         m_view(view),
         m_viewMode(0)
 {
     m_shapeManager = new KoShapeManager(this);
-    m_viewMode = KWViewMode::create(viewMode, this);
+    m_viewMode = KWViewMode::create(viewMode, document, this);
     setFocusPolicy(Qt::StrongFocus);
 
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
@@ -61,7 +62,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
-KWCanvas::~KWCanvas()
+KWCanvasItem::~KWCanvasItem()
 {
     delete m_shapeManager;
     m_shapeManager = 0;
@@ -70,40 +71,40 @@ KWCanvas::~KWCanvas()
     m_toolProxy = 0;
 }
 
-void KWCanvas::pageSetupChanged()
+void KWCanvasItem::pageSetupChanged()
 {
     m_viewMode->pageSetupChanged();
     updateSize();
 }
 
-void KWCanvas::updateSize()
+void KWCanvasItem::updateSize()
 {
     resourceManager()->setResource(KWord::CurrentPageCount, m_document->pageCount());
     emit documentSize(m_viewMode->contentsSize());
 }
 
-void KWCanvas::setDocumentOffset(const QPoint &offset)
+void KWCanvasItem::setDocumentOffset(const QPoint &offset)
 {
     m_documentOffset = offset;
 }
 
-void KWCanvas::gridSize(qreal *horizontal, qreal *vertical) const
+void KWCanvasItem::gridSize(qreal *horizontal, qreal *vertical) const
 {
     *horizontal = m_document->gridData().gridX();
     *vertical = m_document->gridData().gridY();
 }
 
-bool KWCanvas::snapToGrid() const
+bool KWCanvasItem::snapToGrid() const
 {
     return m_view->snapToGrid();
 }
 
-void KWCanvas::addCommand(QUndoCommand *command)
+void KWCanvasItem::addCommand(QUndoCommand *command)
 {
     m_document->addCommand(command);
 }
 
-void KWCanvas::updateCanvas(const QRectF &rc)
+void KWCanvasItem::updateCanvas(const QRectF &rc)
 {
     QRectF zoomedRect = m_viewMode->documentToView(rc);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
@@ -116,12 +117,12 @@ void KWCanvas::updateCanvas(const QRectF &rc)
     }
 }
 
-const KoViewConverter *KWCanvas::viewConverter() const
+const KoViewConverter *KWCanvasItem::viewConverter() const
 {
     return m_view->viewConverter();
 }
 
-void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
+void KWCanvasItem::clipToDocument(const KoShape *shape, QPointF &move) const
 {
     Q_ASSERT(shape);
     const QPointF absPos = shape->absolutePosition();
@@ -159,31 +160,40 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
     }
 }
 
-void KWCanvas::mouseMoveEvent(QMouseEvent *e)
+void KWCanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    m_toolProxy->mouseMoveEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    e->setAccepted(me.isAccepted());
 }
 
-void KWCanvas::mousePressEvent(QMouseEvent *e)
+void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
-    if (!e->isAccepted() && e->button() == Qt::RightButton) {
-        m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
-        e->setAccepted(true);
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    m_toolProxy->mousePressEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    if (!me.isAccepted() && me.button() == Qt::RightButton) {
+        // XXX: Port to graphicsitem!
+        //m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
+        me.setAccepted(true);
     }
+    e->setAccepted(me.isAccepted());
 }
 
-void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
+void KWCanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    m_toolProxy->mouseReleaseEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    e->setAccepted(me.isAccepted());
 }
 
-void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+void KWCanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
+    m_toolProxy->mouseDoubleClickEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    e->setAccepted(me.isAccepted());
 }
 
-void KWCanvas::keyPressEvent(QKeyEvent *e)
+void KWCanvasItem::keyPressEvent(QKeyEvent *e)
 {
     m_toolProxy->keyPressEvent(e);
     if (! e->isAccepted()) {
@@ -195,17 +205,17 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
     }
 }
 
-QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant KWCanvasItem::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
-void KWCanvas::updateInputMethodInfo()
+void KWCanvasItem::updateInputMethodInfo()
 {
     updateMicroFocus();
 }
 
-void KWCanvas::keyReleaseEvent(QKeyEvent *e)
+void KWCanvasItem::keyReleaseEvent(QKeyEvent *e)
 {
 #ifndef NDEBUG
     // Debug keys
@@ -226,27 +236,29 @@ void KWCanvas::keyReleaseEvent(QKeyEvent *e)
     m_toolProxy->keyReleaseEvent(e);
 }
 
-void KWCanvas::tabletEvent(QTabletEvent *e)
+//void KWCanvasItem::tabletEvent(QTabletEvent *e)
+//{
+//    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+//}
+
+void KWCanvasItem::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    QWheelEvent ev(event->pos().toPoint(), event->delta(), event->buttons(), event->modifiers(), event->orientation());
+    m_toolProxy->wheelEvent(&ev, m_viewMode->viewToDocument(event->pos() + m_documentOffset));
+    event->setAccepted(ev.isAccepted());
 }
 
-void KWCanvas::wheelEvent(QWheelEvent *e)
-{
-    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
-}
-
-void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
+void KWCanvasItem::inputMethodEvent(QInputMethodEvent *event)
 {
     m_toolProxy->inputMethodEvent(event);
 }
 
-KoGuidesData *KWCanvas::guidesData()
+KoGuidesData *KWCanvasItem::guidesData()
 {
     return &m_document->guidesData();
 }
 
-void KWCanvas::ensureVisible(const QRectF &rect)
+void KWCanvasItem::ensureVisible(const QRectF &rect)
 {
     QRectF viewRect = m_viewMode->documentToView(rect);
     canvasController()->ensureVisible(viewRect);
@@ -255,11 +267,10 @@ void KWCanvas::ensureVisible(const QRectF &rect)
 #ifdef DEBUG_REPAINT
 # include <stdlib.h>
 #endif
-void KWCanvas::paintEvent(QPaintEvent * ev)
+void KWCanvasItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
-    QPainter painter(this);
-    painter.eraseRect(ev->rect());
-    painter.translate(-m_documentOffset);
+    painter->eraseRect(option->exposedRect);
+    painter->translate(-m_documentOffset);
 
     if (m_viewMode->hasPages()) {
         int pageContentArea = 0;
@@ -269,55 +280,56 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
         // that is shown on the canvas.
         //
         // Then go through them and paint each one.
-        QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
+        QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(option->exposedRect.toRect().translated(m_documentOffset));
         foreach (KWViewMode::ViewMap vm, map) {
-            painter.save();
+            painter->save();
 
             // Set up the painter to clip the part of the canvas that contains the rect.
-            painter.translate(vm.distance.x(), vm.distance.y());
+            painter->translate(vm.distance.x(), vm.distance.y());
             vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
-            painter.setClipRect(vm.clipRect);
+            painter->setClipRect(vm.clipRect);
 
             // Paint the background of the page.
             QColor color = Qt::white; // TODO paper background
 #ifdef DEBUG_REPAINT
             color = QColor(random() % 255, random() % 255, random() % 255);
 #endif
-            painter.fillRect(vm.clipRect, QBrush(color));
+            painter->fillRect(vm.clipRect, QBrush(color));
 
             // Paint the page decorations: border, shadow, etc.
-            paintPageDecorations(painter, vm);
+            paintPageDecorations(*painter, vm);
 
             // Paint the contents of the page.
-            painter.setRenderHint(QPainter::Antialiasing);
-            m_shapeManager->paint(painter, *(viewConverter()), false);
+            painter->setRenderHint(QPainter::Antialiasing);
+            m_shapeManager->paint(*painter, *(viewConverter()), false);
 
             // Paint the grid
-            painter.save();
-            painter.translate(-vm.distance.x(), -vm.distance.y());
-            painter.setRenderHint(QPainter::Antialiasing, false);
+            painter->save();
+            painter->translate(-vm.distance.x(), -vm.distance.y());
+            painter->setRenderHint(QPainter::Antialiasing, false);
             const QRectF clipRect = viewConverter()->viewToDocument(vm.clipRect);
-            document()->gridData().paintGrid(painter, *(viewConverter()), clipRect);
-            document()->guidesData().paintGuides(painter, *(viewConverter()), clipRect);
-            painter.restore();
+            document()->gridData().paintGrid(*painter, *(viewConverter()), clipRect);
+            document()->guidesData().paintGuides(*painter, *(viewConverter()), clipRect);
+            painter->restore();
 
             // paint whatever the tool wants to paint
-            m_toolProxy->paint(painter, *(viewConverter()));
-            painter.restore();
+            m_toolProxy->paint(*painter, *(viewConverter()));
+            painter->restore();
 
             int contentArea = qRound(vm.clipRect.width() * vm.clipRect.height());
-            if (contentArea > pageContentArea)
+            if (contentArea > pageContentArea) {
                 pageContentArea = contentArea;
+            }
         }
     } else {
         // TODO paint the main-text-flake directly
         kWarning(32003) << "Non-page painting not implemented yet!";
     }
 
-    painter.end();
+    painter->end();
 }
 
-void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
+void KWCanvasItem::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
     painter.save();
 
@@ -325,7 +337,7 @@ void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &view
     const KoPageLayout pageLayout = viewMap.page.pageStyle().pageLayout();
 
     // Get the coordinates of the border rect in view coordinates.
-    QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft() 
+    QPointF topLeftCorner = viewConverter()->documentToView(pageRect.topLeft()
                                                             + QPointF(pageLayout.leftMargin,
                                                                       pageLayout.topMargin));
     QPointF bottomRightCorner = viewConverter()->documentToView(pageRect.bottomRight()
@@ -339,7 +351,7 @@ void KWCanvas::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &view
     painter.restore();
 }
 
-void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const
+void KWCanvasItem::paintBorder(QPainter &painter, const KoBorder &border, const QRectF &borderRect) const
 {
     // Get the zoom.
     qreal zoomX;
@@ -370,7 +382,7 @@ void KWCanvas::paintBorder(QPainter &painter, const KoBorder &border, const QRec
     painter.restore();
 }
 
-void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
+void KWCanvasItem::paintBorderSide(QPainter &painter, const KoBorder::BorderData &borderData,
                                const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                                int inwardsX, int inwardsY) const
 {
