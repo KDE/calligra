@@ -44,6 +44,7 @@
 //Added by qt3to4:
 #include <QList>
 #include <QPainter>
+#include <QGraphicsItem>
 
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -74,6 +75,7 @@
 #include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
+#include "CanvasItem.h"
 #include "DependencyManager.h"
 #include "Factory.h"
 #include "Formula.h"
@@ -239,6 +241,11 @@ int Doc::syntaxVersion() const
 KoView* Doc::createViewInstance(QWidget* parent)
 {
     return new View(parent, this);
+}
+
+QGraphicsItem *Doc::createCanvasItem()
+{
+    return new CanvasItem(this);
 }
 
 bool Doc::saveChildren(KoStore* _store)
@@ -509,10 +516,10 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
         loadOdfSettings(odfStore.settingsDoc());
     }
     initConfig();
-    
+
     //update plugins that rely on bindings, as loading order can mess up the data of the plugins
     SheetAccessModel* sheetModel = sheetAccessModel();
-    QList< Sheet* > sheets = map()->sheetList();    
+    QList< Sheet* > sheets = map()->sheetList();
     Q_FOREACH( Sheet* sheet, sheets ){
         // This region contains the entire sheet
         const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
@@ -523,7 +530,7 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
               curBindingModel->emitDataChanged( region );
           }
     }
-    
+
     emit sigProgress(-1);
 
     //display loading time

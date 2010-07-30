@@ -200,6 +200,7 @@ public:
      */
     void updateAllViews();
 
+
 public Q_SLOTS:
     virtual void initEmpty();
 
@@ -213,7 +214,10 @@ protected Q_SLOTS:
     virtual void openTemplate(const KUrl& url);
 
 protected:
+
     KoView* createViewInstance(QWidget* parent);
+
+    QGraphicsItem *createCanvasItem();
 
     /**
      * @reimp Overloaded function of KoDocument.
