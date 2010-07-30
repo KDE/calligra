@@ -143,7 +143,7 @@ public:
      */
     QRectF textRect() const;
 
-    QString testAnchor(const Cell& cell, qreal x, qreal y) const;
+    QString testAnchor(SheetView* sheetView, const Cell& cell, qreal x, qreal y) const;
 
     bool hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const;
 

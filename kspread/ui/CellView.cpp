@@ -292,8 +292,16 @@ QRectF CellView::textRect() const
     return QRectF(d->textX, d->textY, d->textWidth, d->textWidth);
 }
 
-QString CellView::testAnchor(const Cell& cell, qreal x, qreal y) const
+QString CellView::testAnchor(SheetView* sheetView, const Cell& cell, qreal x, qreal y) const
 {
+    if (isObscured()) {
+        Sheet* sheet = cell.sheet();
+        Cell otherCell = Cell(sheet, d->obscuringCellX, d->obscuringCellY);
+        const CellView& otherView = sheetView->cellView(otherCell.column(), otherCell.row());
+        if (cell.column() != otherCell.column()) x += sheet->columnPosition(cell.column()) - sheet->columnPosition(otherCell.column());
+        if (cell.row() != otherCell.row()) y += sheet->rowPosition(cell.row()) - sheet->rowPosition(otherCell.row());
+        return otherView.testAnchor(sheetView, otherCell, x, y);
+    }
     if (cell.link().isEmpty())
         return QString();
 

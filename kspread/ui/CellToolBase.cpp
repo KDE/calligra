@@ -945,9 +945,9 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
         QString url;
         const CellView cellView = sheetView->cellView(col, row);
         if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-            url = cellView.testAnchor(cell, cell.width() - position.x() + xpos, position.y() - ypos);
+            url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
         } else {
-            url = cellView.testAnchor(cell, position.x() - xpos, position.y() - ypos);
+            url = cellView.testAnchor(sheetView, cell, position.x() - xpos, position.y() - ypos);
         }
         if (!url.isEmpty()) {
             useCursor(Qt::PointingHandCursor);
@@ -1209,9 +1209,9 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             QString url;
             const CellView cellView = sheetView->cellView(col, row);
             if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
-                url = cellView.testAnchor(cell, cell.width() - position.x() + xpos, position.y() - ypos);
+                url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
             } else {
-                url = cellView.testAnchor(cell, position.x() - xpos, position.y() - ypos);
+                url = cellView.testAnchor(sheetView, cell, position.x() - xpos, position.y() - ypos);
             }
             if (!url.isEmpty()) {
                 return new HyperlinkStrategy(this, event->point,
