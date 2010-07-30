@@ -36,7 +36,7 @@ class QPainter;
 class KWGui;
 class KWView;
 class KoToolProxy;
-
+class KoShape;
 
 /**
  * This class is responsible for the rendering of the frames to
@@ -53,10 +53,9 @@ public:
      * Creates a new canvas widget that can display pages and frames.
      * @param viewMode the initial KWViewMode this canvas should use
      * @param document as this is one view in the MVC design; the document holds all content
-     * @param view the parent KWView object
      * @param parent the parent widget.
      */
-    KWCanvasItem(const QString& viewMode, KWDocument *document, KWView *view);
+    KWCanvasItem(const QString& viewMode, KWDocument *document);
     virtual ~KWCanvasItem();
 
     /// ask the widget to set the size this canvas takes to display all content
@@ -108,10 +107,6 @@ public:
     /// return the viewMode currently associated with this canvas
     KWViewMode *viewMode() const {
         return m_viewMode;
-    }
-
-    KWView *view() {
-        return m_view;
     }
 
 public slots:
@@ -176,9 +171,9 @@ private:
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoToolProxy * m_toolProxy;
-    KWView *m_view;
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
+    KoViewConverter *m_viewConverter;
 };
 
 #endif

@@ -21,7 +21,6 @@
 // kword includes
 #include "KWCanvasItem.h"
 #include "KWGui.h"
-#include "KWView.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
@@ -32,6 +31,7 @@
 #include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoGridData.h>
+#include <KoShape.h>
 
 // KDE + Qt includes
 #include <KDebug>
@@ -44,11 +44,10 @@
 // #define DEBUG_REPAINT
 
 
-KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document, KWView *view)
+KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
         : QGraphicsWidget(),
         KoCanvasBase(document),
         m_document(document),
-        m_view(view),
         m_viewMode(0)
 {
     m_shapeManager = new KoShapeManager(this);
@@ -60,6 +59,8 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document, KWView
     m_toolProxy = new KoToolProxy(this, this);
     setAttribute(Qt::WA_OpaquePaintEvent, true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
+
+    m_viewConverter = new KoViewConverter();
 }
 
 KWCanvasItem::~KWCanvasItem()
@@ -96,7 +97,8 @@ void KWCanvasItem::gridSize(qreal *horizontal, qreal *vertical) const
 
 bool KWCanvasItem::snapToGrid() const
 {
-    return m_view->snapToGrid();
+//    return m_view->snapToGrid();
+    return false;
 }
 
 void KWCanvasItem::addCommand(QUndoCommand *command)
@@ -119,7 +121,7 @@ void KWCanvasItem::updateCanvas(const QRectF &rc)
 
 const KoViewConverter *KWCanvasItem::viewConverter() const
 {
-    return m_view->viewConverter();
+    return m_viewConverter;
 }
 
 void KWCanvasItem::clipToDocument(const KoShape *shape, QPointF &move) const

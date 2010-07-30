@@ -77,7 +77,9 @@ public:
     /// reimplemented from KoOdfDocument
     virtual bool saveOdf(SavingContext &documentContext);
     /// reimplemented from KoDocument
-    KoView* createViewInstance(QWidget*);
+    virtual KoView* createViewInstance(QWidget*);
+    /// reimplemented from KoDocument
+    virtual QGraphicsItem *createCanvasItem();
     /// reimplemented from KoDocument
     virtual int pageCount() const {
         return pageManager()->pageCount();
