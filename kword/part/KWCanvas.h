@@ -115,6 +115,8 @@ public:
         return m_view;
     }
 
+    QCursor setCursor(const QCursor &cursor);
+
 public slots:
     /**
      * sets the document offset in the scrollArea

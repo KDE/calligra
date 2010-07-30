@@ -118,6 +118,8 @@ public:
         return m_viewMode;
     }
 
+    QCursor setCursor(const QCursor &cursor);
+
 public slots:
     /**
      * sets the document offset in the scrollArea

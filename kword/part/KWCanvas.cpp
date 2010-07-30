@@ -427,3 +427,10 @@ void KWCanvas::paintBorderSide(QPainter &painter, const KoBorder::BorderData &bo
         painter.drawLine(lineStart, lineEnd);
     }
 }
+
+QCursor KWCanvas::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = QWidget::cursor();
+    QWidget::setCursor(cursor);
+    return oldCursor;
+}

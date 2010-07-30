@@ -443,3 +443,10 @@ void KWCanvasItem::paintBorderSide(QPainter &painter, const KoBorder::BorderData
         painter.drawLine(lineStart, lineEnd);
     }
 }
+
+QCursor KWCanvasItem::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = QGraphicsWidget::cursor();
+    QGraphicsWidget::setCursor(cursor);
+    return oldCursor;
+}

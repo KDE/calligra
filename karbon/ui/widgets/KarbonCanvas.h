@@ -85,7 +85,7 @@ public:
     virtual void updateInputMethodInfo();
     /// reimplemented from KoCanvasBase
     virtual KoGuidesData * guidesData();
-
+    virtual QCursor setCursor(const QCursor &cursor);
     /// Enables/disables showing page margins
     void setShowPageMargins(bool on);
 

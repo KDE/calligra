@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,17 +54,17 @@ void KFormulaCanvas::paintEvent( QPaintEvent* e )
 
     if( m_dirtyBuffer )
     {
-	 m_paintBuffer = QPixmap(  );
+         m_paintBuffer = QPixmap(  );
          p.begin( &m_paintBuffer );
-	 p.end();
+         p.end();
     }
 
     p.begin( this );
     QRect tmp = e->rect();
-    // if the shown area is smaller than the canvas centralize it    
+    // if the shown area is smaller than the canvas centralize it
     if( width() > m_paintBuffer.width() || height() > m_paintBuffer.height() )
         tmp.translate( width()/2 - m_paintBuffer.width()/2,
-		       height()/2 - m_paintBuffer.height()/2 )
+                       height()/2 - m_paintBuffer.height()/2 )
 
     p.drawPixmap( tmp, m_paintBuffer, viewConverter()->viewToDocument( e->rect() ) );
     p.end();*/
@@ -107,17 +107,17 @@ void KFormulaCanvas::gridSize( qreal* horizontal, qreal* vertical ) const
     *horizontal = 10.0;        // set values to a default as KFormula doesn't
     *vertical = 10.0;          // use any grid
 }
-    
+
 bool KFormulaCanvas::snapToGrid() const
 {
     return false;             // KFormula doesn't use a grid
 }
-    
+
 void KFormulaCanvas::addCommand( QUndoCommand *command )
 {
     Q_UNUSED( command );
 }
-    
+
 KoShapeManager* KFormulaCanvas::shapeManager() const
 {
     return m_shapeManager;
@@ -127,12 +127,12 @@ void KFormulaCanvas::updateCanvas( const QRectF& rc )
 {
     update( viewConverter()->documentToView( rc ).toRect() );
 }
-    
+
 const KoViewConverter* KFormulaCanvas::viewConverter() const
 {
     return m_view->viewConverter();
 }
-    
+
 QWidget* KFormulaCanvas::canvasWidget() {
     return this;
 }
@@ -155,4 +155,11 @@ KoToolProxy* KFormulaCanvas::toolProxy() const
 void KFormulaCanvas::updateInputMethodInfo()
 {
     updateMicroFocus();
+}
+
+QCursor KFormulaCanvas::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = QWidget::cursor();
+    QWidget::setCursor(cursor);
+    return oldCursor;
 }

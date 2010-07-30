@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
-	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-		 2006 Martin Pfeiffer <hubipete@gmx.net>
+                      Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2006 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@ class KoToolProxy;
 
 /**
  * @short The canvas widget displaying the FormulaShape
- * 
+ *
  * The KFormulaCanvas is a class derived from QWidget to display a @ref FormulaShape
  * and to direct all user inputs to the shape. KFormulaCanvas renders the formula
  * in its paintEvent method.
@@ -48,25 +48,25 @@ public:
 
     /// reimplemented method from superclass
     void gridSize( qreal* horizontal, qreal* vertical ) const;
-    
+
     /// reimplemented method from superclass
     bool snapToGrid() const;
-    
+
     /// reimplemented method from superclass
     void addCommand( QUndoCommand* command );
-     
+
     /// reimplemented method from superclass
     KoShapeManager* shapeManager() const;
 
     /// reimplemented method from superclass
     KoToolProxy* toolProxy() const;
-    
+
     /// reimplemented method from superclass
     void updateCanvas( const QRectF& rc );
-    
+
     /// reimplemented method from superclass
     const KoViewConverter* viewConverter() const;
-    
+
     /// reimplemented method from superclass
     QWidget* canvasWidget();
     /// reimplemented method from superclass
@@ -78,6 +78,8 @@ public:
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
 
+    QCursor setCursor(const QCursor &cursor);
+
 protected:
     void mousePressEvent( QMouseEvent* event );
     void mouseReleaseEvent( QMouseEvent* event );
@@ -87,7 +89,7 @@ protected:
     void keyPressEvent( QKeyEvent* event );
 
 private:
-    /// The buffer for painting - always updated when the formula changes 
+    /// The buffer for painting - always updated when the formula changes
     QPixmap m_paintBuffer;
 
     /// True when a formula repaint is needed
@@ -95,8 +97,8 @@ private:
 
     /// The KFormulaPartView we belong to
     KFormulaPartView* m_view;
-   
-    /// The proxy used to forward events 
+
+    /// The proxy used to forward events
     KoToolProxy* m_toolProxy;
 
     KoShapeManager* m_shapeManager;

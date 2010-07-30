@@ -49,7 +49,7 @@ public:
     bool snapToGrid() const  {
         return false;
     }
-    
+
     void addCommand(QUndoCommand* c) {
 //         c->redo();
         stack->push(c);
@@ -74,6 +74,12 @@ public:
         return KoUnit(KoUnit::Millimeter);
     }
     void updateInputMethodInfo() {}
+
+
+    QCursor setCursor(const QCursor &cursor)
+    {
+        return cursor;
+    }
 };
 
 void TestCursor::moveCursor()

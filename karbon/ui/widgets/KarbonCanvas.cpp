@@ -419,5 +419,11 @@ void KarbonCanvas::setBackgroundColor(const QColor &color)
     setPalette(pal);
 }
 
+QCursor KarbonCanvas::setCursor(const QCursor &cursor)
+{
+    QCursor oldCursor = QWidget::cursor();
+    QWidget::setCursor(cursor);
+    return oldCursor;
+}
 #include "KarbonCanvas.moc"
 

@@ -103,6 +103,8 @@ public Q_SLOTS:
     void setDocumentSize(const QSizeF& size) {
         CanvasBase::setDocumentSize(size);
     }
+    QCursor setCursor(const QCursor &cursor);
+
 
 Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
