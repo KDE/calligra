@@ -181,9 +181,8 @@ CanvasItem::~CanvasItem()
     d->selection->endReferenceSelection(false);
 
     d->activeSheet = 0;
-    
+
     delete d->selection;
-    qDeleteAll(d->sheetViews);
     delete d->zoomHandler;
     delete d;
 }
