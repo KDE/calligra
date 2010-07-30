@@ -298,7 +298,7 @@ void KarbonCanvas::updateSizeAndOffset()
         KoCanvasController * controller = canvasController();
         if (controller) {
             // tell canvas controller the new document size in pixel
-            controller->setDocumentSize(viewRect.size().toSize(), true);
+            controller->updateDocumentSize(viewRect.size().toSize(), true);
             // make sure the actual selection is visible
             KoSelection * selection = d->shapeManager->selection();
             if (selection->count())

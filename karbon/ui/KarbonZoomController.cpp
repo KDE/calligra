@@ -141,7 +141,7 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has change as a result of the zoom change
     QSizeF viewSize = d->zoomHandler->documentToView(documentRect).size();
-    d->canvasController->setDocumentSize(QSize(qRound(viewSize.width()), qRound(viewSize.height())), true);
+    d->canvasController->updateDocumentSize(QSize(qRound(viewSize.width()), qRound(viewSize.height())), true);
 
     d->canvas->adjustOrigin();
 
@@ -195,7 +195,7 @@ void KarbonZoomController::resourceChanged(int key, const QVariant &value)
         // has changed as a result of the page layout change
         QRectF documentRect = d->canvas->documentViewRect();
         QSizeF viewSize = d->zoomHandler->documentToView(documentRect).size();
-        d->canvasController->setDocumentSize(QSize(qRound(viewSize.width()), qRound(viewSize.height())), true);
+        d->canvasController->updateDocumentSize(QSize(qRound(viewSize.width()), qRound(viewSize.height())), true);
         d->canvas->adjustOrigin();
         d->canvas->update();
     }

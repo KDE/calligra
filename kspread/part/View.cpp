@@ -802,7 +802,7 @@ void View::initView()
 
     // signal slot
     connect(d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
-            d->canvasController->proxyObject, SLOT(setDocumentSize(const QSize&)));
+            d->canvasController->proxyObject, SLOT(updateDocumentSize(const QSize&)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
     connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
