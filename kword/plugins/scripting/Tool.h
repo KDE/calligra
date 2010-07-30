@@ -29,7 +29,7 @@
 #include <KoToolProxy.h>
 #include <KoTextEditor.h>
 #include <KWView.h>
-#include <KWCanvas.h>
+#include <KoCanvasBase.h>
 
 #include "Module.h"
 #include "TextCursor.h"
@@ -62,7 +62,7 @@ class Tool : public QObject
 public:
     explicit Tool(Module* module) : QObject(module), m_module(module) {
         KWView* v = dynamic_cast< KWView* >(m_module->view());
-        KWCanvas* c = v ? v->kwcanvas() : 0;
+        KoCanvasBase* c = v ? v->kwcanvas() : 0;
         m_toolproxy = c ? c->toolProxy() : 0;
 
         m_signalMapper = new QSignalMapper(this);
@@ -117,7 +117,7 @@ public slots:
         TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
         if (! textcursor) return false;
         KWView* v = dynamic_cast< KWView* >(m_module->view());
-        KWCanvas* c = v ? v->kwcanvas() : 0;
+        KoCanvasBase* c = v ? v->KoCanvasBase() : 0;
         KoResourceManager* r = c ? c->resourceManager() : 0;
         if (! r) return false;
         QVariant variant;
