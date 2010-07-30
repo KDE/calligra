@@ -299,9 +299,9 @@ void CanvasBase::setDocumentOffset(const QPoint& offset)
     d->offset = viewConverter()->viewToDocument(offset);
 
     ColumnHeader* ch = columnHeader();
-    if (ch) ch->scroll(delta.x(), 0);
+    if (ch) ch->scroll(-delta.x(), 0);
     RowHeader* rh = rowHeader();
-    if (rh) rh->scroll(0, delta.y());
+    if (rh) rh->scroll(0, -delta.y());
 }
 
 void CanvasBase::setDocumentSize(const QSizeF& size)
