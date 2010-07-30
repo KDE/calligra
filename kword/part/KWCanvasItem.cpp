@@ -214,7 +214,9 @@ QVariant KWCanvasItem::inputMethodQuery(Qt::InputMethodQuery query) const
 
 void KWCanvasItem::updateInputMethodInfo()
 {
+#if QT_VERSION  >= 0x040700
     updateMicroFocus();
+#endif
 }
 
 void KWCanvasItem::keyReleaseEvent(QKeyEvent *e)
