@@ -164,8 +164,6 @@ void KWCanvasBase::ensureVisible(const QRectF &rect)
 
 void KWCanvasBase::paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap)
 {
-    qDebug() << "painting decorations";
-
     painter.save();
 
     const QRectF       pageRect = viewMap.page.rect();
@@ -221,7 +219,6 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
                                const QPointF &lineStart, const QPointF &lineEnd, qreal zoom,
                                int inwardsX, int inwardsY) const
 {
-    qDebug() << "paintBorderSide" << (borderData.style != KoBorder::BorderNone);
     // Return if nothing to paint
     if (borderData.style == KoBorder::BorderNone)
         return;
