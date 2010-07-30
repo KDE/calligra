@@ -130,7 +130,7 @@ public:
     /// Adds appointment to this schedule only
     virtual bool add( Appointment *appointment );
     /// Adds appointment to both this resource schedule and node schedule
-    virtual void addAppointment( Schedule * /*other*/, DateTime & /*start*/, DateTime & /*end*/, double /*load*/ = 100 ) {}
+    virtual void addAppointment( Schedule * /*other*/, const DateTime & /*start*/, const DateTime & /*end*/, double /*load*/ = 100 ) {}
     /// Removes appointment without deleting it.
     virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
     Appointment *findAppointment( Schedule *resource, Schedule *node, int type = Scheduling );
@@ -339,7 +339,7 @@ public:
     virtual void saveXML( QDomElement &element ) const;
 
     // tasks------------>
-    virtual void addAppointment( Schedule *resource, DateTime &start, DateTime &end, double load = 100 );
+    virtual void addAppointment( Schedule *resource, const DateTime &start, const DateTime &end, double load = 100 );
     virtual void takeAppointment( Appointment *appointment, int type = Schedule::Scheduling );
 
     virtual Node *node() const { return m_node; }
@@ -381,7 +381,7 @@ public:
 
     virtual bool isDeleted() const
     { return m_parent == 0 ? true : m_parent->isDeleted(); }
-    virtual void addAppointment( Schedule *node, DateTime &start, DateTime &end, double load = 100 );
+    virtual void addAppointment( Schedule *node, const DateTime &start, const DateTime &end, double load = 100 );
     virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
 
     virtual bool isOverbooked() const;

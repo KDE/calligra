@@ -764,7 +764,7 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     sch.setAttribute( "free-float", freeFloat.toString() );
 }
 
-void NodeSchedule::addAppointment( Schedule *resource, DateTime &start, DateTime &end, double load )
+void NodeSchedule::addAppointment( Schedule *resource, const DateTime &start, const DateTime &end, double load )
 {
     //kDebug();
     Appointment * a = findAppointment( resource, this, m_calculationMode );
@@ -774,8 +774,10 @@ void NodeSchedule::addAppointment( Schedule *resource, DateTime &start, DateTime
         return ;
     }
     a = new Appointment( resource, this, start, end, load );
-    Q_ASSERT ( add( a ) == true );
-    Q_ASSERT ( resource->add( a ) == true );
+    bool result = add( a );
+    Q_ASSERT ( result );
+    result = resource->add( a );
+    Q_ASSERT ( result );
     //kDebug()<<"Added interval to new"<<a;
 }
 
@@ -895,7 +897,7 @@ ResourceSchedule::~ResourceSchedule()
 }
 
 // called from the resource
-void ResourceSchedule::addAppointment( Schedule *node, DateTime &start, DateTime &end, double load )
+void ResourceSchedule::addAppointment( Schedule *node, const DateTime &start, const DateTime &end, double load )
 {
     Q_ASSERT( start < end );
     //kDebug()<<"("<<this<<")"<<node<<","<<m_calculationMode;
