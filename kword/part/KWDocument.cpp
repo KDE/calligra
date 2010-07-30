@@ -193,7 +193,7 @@ void KWDocument::addShape(KoShape *shape)
     addFrameSet(frame->frameSet());
 
     foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->addShape(shape);
     }
 }
@@ -210,7 +210,7 @@ void KWDocument::removeShape(KoShape *shape)
             fs->removeFrame(frame);
     } else { // not a frame, but we still have to remove it from views.
         foreach (KoView *view, views()) {
-            KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+            KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
             canvas->shapeManager()->remove(shape);
         }
     }
@@ -314,7 +314,7 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     foreach (KWFrame *frame, fs->frames())
         removeFrame(frame);
     foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
 }
@@ -338,7 +338,7 @@ void KWDocument::relayout()
             }
 
             foreach (KoView *view, views()) {
-                KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+                KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
                 canvas->shapeManager()->remove(frame->shape());
             }
             tfs->removeFrame(frame);
@@ -380,7 +380,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
 void KWDocument::addFrame(KWFrame *frame)
 {
     foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
         if (frame->outlineShape())
             canvas->shapeManager()->addShape(frame->outlineShape()->parent());
         else
@@ -828,7 +828,7 @@ void KWDocument::removeFrameFromViews(KWFrame *frame)
 {
     Q_ASSERT(frame);
     foreach (KoView *view, views()) {
-        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        KoCanvasBase *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->remove(frame->shape());
     }
 }
