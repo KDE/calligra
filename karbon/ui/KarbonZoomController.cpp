@@ -53,8 +53,8 @@ public:
     int fitMargin;
 };
 
-KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActionCollection *actionCollection)
-        : QObject(controller), d(new Private())
+KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActionCollection *actionCollection, QObject *parent)
+        : QObject(parent), d(new Private())
 {
     d->canvasController = controller;
 
@@ -74,9 +74,9 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
     d->canvas = dynamic_cast<KarbonCanvas*>(d->canvasController->canvas());
     d->zoomHandler = dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(d->canvas->viewConverter()));
 
-    connect(d->canvasController, SIGNAL(sizeChanged(const QSize &)), this, SLOT(setAvailableSize()));
-    connect(d->canvasController, SIGNAL(zoomBy(const qreal)), this, SLOT(requestZoomBy(const qreal)));
-    connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(setAvailableSize()));
+    connect(d->canvasController->proxyObject, SIGNAL(zoomBy(const qreal)), this, SLOT(requestZoomBy(const qreal)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
@@ -108,14 +108,14 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         if (zoom == 0.0) return;
         d->action->setZoom(zoom);
     } else if (mode == KoZoomMode::ZOOM_WIDTH) {
-        zoom = (d->canvasController->viewport()->size().width() - 2 * d->fitMargin)
+        zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
                / (d->zoomHandler->resolutionX() * d->pageSize.width());
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     } else if (mode == KoZoomMode::ZOOM_PAGE) {
-        zoom = (d->canvasController->viewport()->size().width() - 2 * d->fitMargin)
+        zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
                / (d->zoomHandler->resolutionX() * d->pageSize.width());
-        zoom = qMin(zoom, (d->canvasController->viewport()->size().height() - 2 * d->fitMargin)
+        zoom = qMin(zoom, (d->canvasController->viewportSize().height() - 2 * d->fitMargin)
                     / (d->zoomHandler->resolutionY() * d->pageSize.height()));
 
         d->action->setSelectedZoomMode(mode);

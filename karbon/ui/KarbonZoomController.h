@@ -38,7 +38,7 @@ public:
      * @param controller the canvasController
      * @param actionCollection the action collection where the KoZoomAction is added to
      */
-    KarbonZoomController(KoCanvasController *controller, KActionCollection *actionCollection);
+    KarbonZoomController(KoCanvasController *controller, KActionCollection *actionCollection, QObject *parent = 0);
 
     /// destructor
     ~KarbonZoomController();

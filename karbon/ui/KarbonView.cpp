@@ -12,7 +12,7 @@
    Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
-   Copyright (C) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2005-2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
@@ -63,7 +63,7 @@
 
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoResourceManager.h>
 #include <KoFilterManager.h>
 #include <KoUnitDoubleSpinBox.h>
@@ -203,15 +203,16 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
 
-    d->canvasController = new KoCanvasController(this);
-    d->canvasController->setMinimumSize(QSize(viewMargin + 50, viewMargin + 50));
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(this);
+    d->canvasController = canvasController;
+    canvasController->setMinimumSize(QSize(viewMargin + 50, viewMargin + 50));
     d->canvasController->setCanvas(d->canvas);
     d->canvasController->setCanvasMode(KoCanvasController::Infinite);
     // always show srollbars which fixes some nasty infinite
     // recursion when scrollbars are disabled during resizing
-    d->canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    d->canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    d->canvasController->show();
+    canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    canvasController->show();
 
     // set up status bar message
     d->status = new QLabel(QString(), this);
@@ -227,7 +228,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
 
     // TODO maybe the zoomHandler should be a member of the view and not the canvas.
     // set up the zoom controller
-    KarbonZoomController * zoomController = new KarbonZoomController(d->canvasController, actionCollection());
+    KarbonZoomController * zoomController = new KarbonZoomController(d->canvasController, actionCollection(), this);
     zoomController->setPageSize(d->part->document().pageSize());
     d->zoomActionWidget = zoomController->zoomAction()->createWidget(statusBar());
     addStatusBarItem(d->zoomActionWidget, 0);
@@ -243,7 +244,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // layout:
     QGridLayout *layout = new QGridLayout();
     layout->setMargin(0);
-    layout->addWidget(d->canvasController, 1, 1);
+    layout->addWidget(canvasController, 1, 1);
 
     KoToolManager::instance()->addController(d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
@@ -271,9 +272,9 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     layout->addWidget(d->vertRuler, 1, 0);
 
     connect(d->canvas, SIGNAL(documentOriginChanged(const QPoint &)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
+    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
+    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
+    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(mousePositionChanged(const QPoint&)));
     d->vertRuler->createGuideToolConnection(d->canvas);
     d->horizRuler->createGuideToolConnection(d->canvas);
@@ -290,7 +291,7 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
         KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(d->canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
                 shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
 
         KoToolManager::instance()->requestToolActivation(d->canvasController);
