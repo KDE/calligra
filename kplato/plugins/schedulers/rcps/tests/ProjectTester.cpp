@@ -190,7 +190,7 @@ void ProjectTester::team()
     ScheduleManager *sm = project.createScheduleManager( "Team" );
     project.addScheduleManager( sm );
     sm->createSchedules();
-    
+
     rcps.calculate( project, sm, true/*nothread*/ );
 
 //     Debug::print( r1, s);

@@ -747,7 +747,7 @@ void Node::propagateLatestFinish(DateTime &time) {
         switch ( m_constraint ) {
             case StartNotEarlier:
             case MustStartOn:
-                if ( m_constraintStartTime < time ) {
+                if ( m_constraintStartTime > time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
                     m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
                 }

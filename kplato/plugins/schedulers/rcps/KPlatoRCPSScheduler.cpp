@@ -526,6 +526,10 @@ Duration KPlatoRCPSScheduler::calculateEarlyStuff( const QMap<Node*, QList<Resou
 
 struct rcps_resource *KPlatoRCPSScheduler::addResource( KPlato::Resource *r)
 {
+    if ( m_resourcemap.values().contains( r ) ) {
+        kWarning()<<r->name()<<"already exist";
+        return 0;
+    }
     struct rcps_resource *res = rcps_resource_new();
     rcps_resource_setname( res, r->name().toLocal8Bit().data() );
     rcps_resource_setavail( res, r->units() );
@@ -539,19 +543,8 @@ void KPlatoRCPSScheduler::addResources()
     kDebug();
     QList<Resource*> list = m_project->resourceList();
     for (int i = 0; i < list.count(); ++i) {
-        KPlato::Resource *r = list.at(i);
-        if ( r->type() == Resource::Type_Team ) {
-            foreach ( KPlato::Resource *tm, r->teamMembers() ) {
-                addResource( tm );
-            }
-            return;
-        } else {
-            addResource( list.at(i) );
-        }
+        addResource( list.at(i) );
     }
-/*    for( int i = 0; i < rcps_resource_count( m_problem ); ++i ) {
-        kDebug()<<"Resource:"<<rcps_resource_getname( rcps_resource_get(m_problem, i) );
-    }*/
 }
 
 struct rcps_job *KPlatoRCPSScheduler::addTask( KPlato::Task *task )
@@ -694,7 +687,7 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
     info->calls = 0;
     info->task = task;
     info->estimate = task->estimate()->value( Estimate::Use_Expected, m_usePert );
-    info->requests = task->requests().resourceRequests();
+    info->requests = task->requests().resourceRequests(); // returns team members (not team resource itself)
     info->estimatetype = task->estimate()->type();
 
     rcps_mode_set_cbarg( mode, info );
@@ -702,6 +695,10 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
 
     foreach ( ResourceRequest *rr, info->requests ) {
         Resource *r = rr->resource();
+        if ( r->type() == Resource::Type_Team ) {
+            kWarning()<<"There should not be any request to a team resource:"<<r->name();
+            continue;
+        }
         struct rcps_request *req = rcps_request_new();
         rcps_request_add( mode, req );
         m_requestmap[ req ] = rr;

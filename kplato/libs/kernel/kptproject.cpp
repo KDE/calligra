@@ -555,6 +555,7 @@ void Project::tasksForward( Task *task, int pos )
     int cp = m_forwardTasks.value( task );
     if ( cp == 0 || cp > pos ) {
         m_forwardTasks[ task ] = pos;
+        m_currentSchedule->logDebug( "Added task forward: " + task->name() + "position: " + QString::number( pos ) );
     }
     foreach ( Relation *r, task->dependParentNodes() + task->parentProxyRelations() ) {
         tasksForward( static_cast<Task*>( r->parent() ), pos - 1 );
@@ -582,15 +583,18 @@ DateTime Project::calculateForward( int use )
     if ( type() == Node::Type_Project ) {
         // Do constrained first
         foreach ( Node *n, cs->hardConstraints() ) {
+            cs->logDebug( "Calculate task with hard constraint:" + n->name() );
             n->calculateEarlyFinish( use );
         }
         // Follow *parent* relations back and
         // calculate forwards following the child relations
         m_forwardTasks.clear();
-        foreach ( Node *n, cs->endNodes() ) {
-            tasksForward( static_cast<Task*>( n ), -1 );
+        QList<Node*> endNodes = cs->endNodes();
+        foreach ( Node *n, endNodes ) {
+            tasksForward( static_cast<Task*>( n ), n->numDependParentNodes() ? -2 : -1 );
         }
         if ( ! m_forwardTasks.isEmpty() ) {
+            // order the tasks according to how many child dependencies they have
             QMultiMap<int, Task*> map;
             QMap<Task*, int>::const_iterator i = m_forwardTasks.constBegin();
             for ( ; i != m_forwardTasks.constEnd(); ++i   ) {
@@ -599,23 +603,30 @@ DateTime Project::calculateForward( int use )
             DateTime finish;
             DateTime time;
             foreach ( int key, map.uniqueKeys() ) {
-                QMap<int, Task*>::iterator low = map.lowerBound( key );
-                QMap<int, Task*>::iterator upper = map.upperBound( key );
-                do {
-                    --upper;
-                    time = static_cast<Node*> ( upper.value() )->calculateForward( use );
+                if ( key != -1 ) {
+                    // calculate all tasks with dependencies
+                    QMap<int, Task*>::iterator low = map.lowerBound( key );
+                    QMap<int, Task*>::iterator upper = map.upperBound( key );
+                    do {
+                        --upper;
+                        cs->logDebug( QString( "Calculate: %1" ).arg( upper.value()->name() ) );
+                        time = static_cast<Node*> ( upper.value() )->calculateForward( use );
+                        if ( !finish.isValid() || time > finish ) {
+                            finish = time;
+                        }
+                    } while ( upper != low && ! stopcalculation );
+                }
+            }
+            // do the tasks without dependencies in wbs order
+            foreach ( Node *n, allTasks() ) {
+                if ( endNodes.contains( n ) ) {
+                    cs->logDebug( QString( "Calculate: %1" ).arg( n->name() ) );
+                    time = n->calculateForward( use );
                     if ( !finish.isValid() || time > finish ) {
                         finish = time;
                     }
-                } while ( upper != low && ! stopcalculation );
+                }
             }
-/*            foreach ( Task *n, map ) {
-                time = static_cast<Node*> ( n )->calculateForward( use );*/
-    /*        foreach ( Node *n, cs->endNodes() ) {
-                time = n->calculateForward( use );*/
-/*                if ( !finish.isValid() || time > finish )
-                    finish = time;
-            }*/
             //kDebug()<<m_name<<" finish="<<finish.toString();
             return finish;
         }
@@ -639,8 +650,9 @@ DateTime Project::calculateBackward( int use )
         // Follow *child* relations back and
         // calculate backwards following parent relation
         m_backwardTasks.clear();
-        foreach ( Node *n, cs->startNodes() ) {
-            tasksBackward( static_cast<Task*>( n ), -1 );
+        QList<Node*> startNodes = cs->startNodes();
+        foreach ( Node *n, startNodes ) {
+            tasksBackward( static_cast<Task*>( n ), n->numDependChildNodes() ? -2 : -1 );
         }
         DateTime start;
         DateTime time;
@@ -651,24 +663,35 @@ DateTime Project::calculateBackward( int use )
                 map.insertMulti( i.value(), i.key() );
             }
             foreach ( int key, map.uniqueKeys() ) {
-                QMap<int, Task*>::iterator low = map.lowerBound( key );
-                QMap<int, Task*>::iterator upper = map.upperBound( key );
-                do {
-                    --upper;
-                    time = static_cast<Node*> ( upper.value() )->calculateBackward( use );
+                if ( key != -1 ) {
+                    QMap<int, Task*>::iterator low = map.lowerBound( key );
+                    QMap<int, Task*>::iterator upper = map.upperBound( key );
+                    do {
+                        --upper;
+                        cs->logDebug( QString( "Calculate backward: %1" ).arg( upper.value()->name() ) );
+                        time = static_cast<Node*> ( upper.value() )->calculateBackward( use );
+                        if ( !start.isValid() || time < start ) {
+                            start = time;
+                        }
+                    } while ( upper != low && ! stopcalculation );
+                }
+            }
+            // do the tasks without dependencies in inverted wbs order
+            QList<Task*> tl = allTasks();
+            while ( ! tl.isEmpty() ) {
+                if ( stopcalculation ) {
+                    break;
+                }
+                Node *n = tl.takeLast();
+                if ( startNodes.contains( n ) ) {
+                    cs->logDebug( QString( "Calculate backward: %1" ).arg( n->name() ) );
+                    time = n->calculateBackward( use );
                     if ( !start.isValid() || time < start ) {
                         start = time;
                     }
-                } while ( upper != low && ! stopcalculation );
+                }
             }
         }
-/*        foreach ( Task *n, map ) {
-            time = static_cast<Node*> ( n )->calculateBackward( use );*/
-/*        foreach ( Node *n, cs->startNodes() ) {
-            time = n->calculateBackward( use );*/
-/*            if ( !start.isValid() || time < start )
-                start = time;
-        }*/
         //kDebug()<<m_name<<" start="<<start.toString();
         return start;
     } else {
@@ -693,25 +716,32 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
             map.insertMulti( i.value(), i.key() );
         }
         foreach ( int key, map.uniqueKeys() ) {
-            QMap<int, Task*>::Iterator low = map.lowerBound( key );
-            QMap<int, Task*>::Iterator upper = map.upperBound( key );
-            do {
-                --upper;
-                time = static_cast<Node*> ( upper.value() )->scheduleForward( earliest, use );
+            if ( key != -1 ) {
+                QMap<int, Task*>::Iterator low = map.lowerBound( key );
+                QMap<int, Task*>::Iterator upper = map.upperBound( key );
+                do {
+                    --upper;
+                    cs->logDebug( QString( "Schedule: %1" ).arg( upper.value()->name() ) );
+                    time = static_cast<Node*> ( upper.value() )->scheduleForward( earliest, use );
+                    if ( time > end ) {
+                        end = time;
+                    }
+                } while ( upper != low && ! stopcalculation );
+            }
+        }
+        foreach ( Node *n, allTasks() ) {
+            if ( stopcalculation ) {
+                break;
+            }
+            if ( cs->endNodes().contains( n ) ) {
+                cs->logDebug( QString( "Schedule: %1" ).arg( n->name() ) );
+                time = n->scheduleForward( earliest, use );
                 if ( time > end ) {
                     end = time;
                 }
-            } while ( upper != low && ! stopcalculation );
+            }
         }
     }
-/*    foreach ( Task *n, map ) {
-        time = static_cast<Node*> ( n )->scheduleForward( earliest, use );*/
-/*    QListIterator<Node*> it( cs->endNodes() );
-    while ( it.hasNext() ) {
-        time = it.next() ->scheduleForward( earliest, use );*/
-/*        if ( time > end )
-            end = time;
-    }*/
     // Fix summarytasks
     adjustSummarytask();
     return end;
@@ -738,25 +768,35 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
             map.insertMulti( i.value(), i.key() );
         }
         foreach ( int key, map.uniqueKeys() ) {
-            QMap<int, Task*>::Iterator low = map.lowerBound( key );
-            QMap<int, Task*>::Iterator upper = map.upperBound( key );
-            do {
-                --upper;
-                time = static_cast<Node*> ( upper.value() )->scheduleBackward( latest, use );
+            if ( key != -1 ) {
+                QMap<int, Task*>::Iterator low = map.lowerBound( key );
+                QMap<int, Task*>::Iterator upper = map.upperBound( key );
+                do {
+                    --upper;
+                    cs->logDebug( QString( "Schedule: %1" ).arg( upper.value()->name() ) );
+                    time = static_cast<Node*> ( upper.value() )->scheduleBackward( latest, use );
+                    if ( time < start ) {
+                        start = time;
+                    }
+                } while ( upper != low && ! stopcalculation );
+            }
+        }
+        // do the tasks without dependencies in inverted wbs order
+        QList<Task*> tl = allTasks();
+        while ( ! tl.isEmpty() ) {
+            if ( stopcalculation ) {
+                break;
+            }
+            Node *n = tl.takeLast();
+            if ( cs->startNodes().contains( n ) ) {
+                cs->logDebug( QString( "Schedule: %1" ).arg( n->name() ) );
+                time = n->scheduleBackward( latest, use );
                 if ( time < start ) {
                     start = time;
                 }
-            } while ( upper != low && ! stopcalculation );
+            }
         }
     }
-/*    foreach ( Task *n, map ) {
-        time = static_cast<Node*> ( n )->scheduleBackward( latest, use );*/
-/*    QListIterator<Node*> it( cs->startNodes() );
-    while ( it.hasNext() ) {
-        time = it.next() ->scheduleBackward( latest, use );*/
-/*        if ( time < start )
-            start = time;
-     }*/
     // Fix summarytasks
     adjustSummarytask();
     return start;
@@ -1672,7 +1712,20 @@ QList<Node*> Project::allNodes() const
     }
     return lst;
 }
-    
+
+QList<Task*> Project::allTasks( const Node *parent ) const
+{
+    QList<Task*> lst;
+    const Node *p = parent ? parent : this;
+    foreach ( Node *n, p->childNodeIterator() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Type_Milestone ) {
+            lst << static_cast<Task*>( n );
+        }
+        lst += allTasks( n );
+    }
+    return lst;
+}
+
 bool Project::setResourceGroupId( ResourceGroup *group )
 {
     if ( group == 0 ) {

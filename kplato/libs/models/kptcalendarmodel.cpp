@@ -800,7 +800,7 @@ QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) 
             if ( day->state() == CalendarDay::Working ) {
                 KLocale *l = KGlobal::locale();
                 QStringList tip;
-                foreach ( TimeInterval *i, day->workingIntervals() ) {
+                foreach ( TimeInterval *i, day->timeIntervals() ) {
                     tip <<  i18nc( "1=time 2=The number of hours of work duration (non integer)", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
                 }
                 return tip.join( "\n" );
@@ -1010,7 +1010,7 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         }
         KLocale *l = KGlobal::locale();
         QStringList tip;
-        foreach ( TimeInterval *i, day->workingIntervals() ) {
+        foreach ( TimeInterval *i, day->timeIntervals() ) {
                     tip <<  i18nc( "1=time 2=The number of hours of work duration (non integer)", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
         }
         return tip.join( "\n" );

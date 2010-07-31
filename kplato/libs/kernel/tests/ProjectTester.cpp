@@ -170,6 +170,9 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
+//     Debug::print( m_project, t, s );
+//     Debug::printSchedulingLog( *sm, s );
+
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
@@ -186,6 +189,8 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     sm->createSchedules();
     m_project->calculate( *sm );
+
+    Debug::print( m_project, t, s );
 
     QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
@@ -287,6 +292,9 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
+    Debug::print( m_project, t, s );
+    Debug::printSchedulingLog( *sm, s );
+    
     QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
@@ -1666,6 +1674,104 @@ void ProjectTester::team()
     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
+
+}
+
+void ProjectTester::inWBSOrder()
+{
+    Project p;
+    p.setName( "WBS Order" );
+    DateTime st = p.constraintStartTime();
+    st = DateTime( st.addDays( 1 ) );
+    st.setTime( QTime ( 0, 0, 0 ) );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Task *t = p.createTask( &p );
+    t->setName( "T1" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    ResourceRequest *tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T2" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T3" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T4" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+    
+    ScheduleManager *sm = p.createScheduleManager( "WBS Order, forward" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+    QString s = "Schedule 4 tasks forward in wbs order -------";
+    // NOTE: It's not *mandatory* to schedule in wbs order but users expect it, so we'll try
+    //       This test can be removed if for some important reason this isn't possible.
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+//     Debug::print( &p, s, true );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 3, 8, 0 ) );
 
 }
 

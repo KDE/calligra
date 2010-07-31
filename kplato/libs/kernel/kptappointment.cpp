@@ -57,6 +57,11 @@ AppointmentInterval::~AppointmentInterval() {
     //kDebug()<<this;
 }
 
+Duration AppointmentInterval::effort() const
+{
+    return ( m_end - m_start ) * m_load / 100;
+}
+
 Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) const {
     if (start >= m_end || end <= m_start) {
         return Duration::zeroDuration;
@@ -110,7 +115,7 @@ void AppointmentInterval::saveXML(QDomElement &element) const {
 }
 
 bool AppointmentInterval::isValid() const {
-    return m_start.isValid() && m_end.isValid();
+    return m_start.isValid() && m_end.isValid() && m_start < m_end && m_load >= 0.0;
 }
 
 AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval &interval, const DateTime &from) const {
@@ -178,7 +183,113 @@ bool AppointmentInterval::operator<( const AppointmentInterval &other ) const
     return m_end < other.m_end;
 }
 
+QDebug &operator<<( QDebug &dbg, const KPlato::AppointmentInterval &i )
+{
+    dbg<<"AppointmentInterval["<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<"%"<<']';
+    return dbg;
+}
+
 //-----------------------
+AppointmentIntervalList &AppointmentIntervalList::operator=( const AppointmentIntervalList &lst )
+{
+    clear();
+    if ( ! lst.isEmpty() ) {
+        foreach ( const AppointmentInterval &ai, lst ) {
+            inSort( ai );
+        }
+    }
+    return *this;
+}
+
+AppointmentIntervalList &AppointmentIntervalList::operator-=( const AppointmentIntervalList &lst )
+{
+    if ( lst.isEmpty() ) {
+        return *this;
+    }
+    foreach ( const AppointmentInterval &ai, lst ) {
+        subtract( ai.startTime(), ai.endTime(), ai.load() );
+    }
+    return *this;
+}
+
+void AppointmentIntervalList::subtract( const DateTime &st, const DateTime &et, double load )
+{
+    //kDebug()<<st<<et<<load;
+    Q_ASSERT( st < et );
+    DateTime s = st;
+    DateTime e = et;
+    if ( isEmpty() || et < values().first().startTime() || st > values().last().endTime() ) {
+        return;
+    } else {
+        // see if we have overlapping intervals
+        QMutableMapIterator<AppointmentInterval, AppointmentInterval> it( *this );
+        while ( it.hasNext() ) {
+            AppointmentInterval &ai = it.next().value();
+            DateTime ist = ai.startTime();
+            DateTime iet = ai.endTime();
+            //kDebug()<<"Check:"<<ai<<AppointmentInterval( st, et, load );
+            if ( e <= ist ) {
+                //kDebug()<<"Before first or in between";
+                break;
+            }
+            if ( s >= iet ) {
+                //kDebug()<<"After this interval, check next";
+                continue;
+            }
+            if ( s <= ist ) {
+                //kDebug()<<"Start <= start";
+                if ( e >= iet ) {
+                    //kDebug()<<"Total overlap, subtract load";
+                    ai.setLoad( ai.load() - load );
+                    if ( ai.load() <= 0 ) {
+                        //kDebug()<<"Total overlap, result is 0, remove";
+                        it.remove();
+                    }
+                } else if ( e < iet ) {
+                    //kDebug()<<"End in the midle, split this interval";
+                    double l = ai.load();
+                    it.remove();
+                    AppointmentInterval i( ist, e, l - load );
+                    if ( i.isValid() ) {
+                        //kDebug()<<"Subtract first part:"<<i;
+                        inSort( i );
+                    }
+                    i = AppointmentInterval( e, iet, l );
+                    //kDebug()<<"Keep last part:"<<i;
+                    inSort( i ); // keep the last part
+                }
+                return;
+            }
+            if ( s > ist ) {
+                //kDebug()<<"Start in the middle of an interval";
+                double l = ai.load();
+                it.remove();
+                if ( e < iet ) {
+                    //kDebug()<<"End in the midle, split this interval";
+                    AppointmentInterval i( ist, s, l );
+                    //kDebug()<<"Keep first part:"<<i;
+                    inSort( AppointmentInterval( ist, s, l ) ); // keep the first part
+                    if ( l > load ) {
+                        AppointmentInterval i( s, e, l - load );
+                        //kDebug()<<"Subtract:"<<i;
+                        inSort( i ); // subtract overlap
+                    }
+                    i = AppointmentInterval( ist, s, l );
+                    //kDebug()<<"Keep last part:"<<i;
+                    inSort( i ); // keep the last part
+                } else if ( e >= iet ) {
+                    //kDebug()<<"End >= end, split this interval";
+                    inSort( AppointmentInterval( ist, s, l ) ); // keep first part
+                    if ( l > load ) {
+                        inSort( AppointmentInterval( s, iet, l - load ) ); // subtract overlap
+                    }
+                }
+                return;
+            }
+        }
+    }
+}
+
 AppointmentIntervalList &AppointmentIntervalList::operator+=( const AppointmentIntervalList &lst )
 {
     if ( lst.isEmpty() ) {
@@ -188,6 +299,27 @@ AppointmentIntervalList &AppointmentIntervalList::operator+=( const AppointmentI
         add( ai );
     }
     return *this;
+}
+
+AppointmentIntervalList AppointmentIntervalList::extractIntervals( const DateTime &start, const DateTime &end ) const
+{
+    if ( isEmpty() ) {
+        return AppointmentIntervalList();
+    }
+    QList<AppointmentInterval> ilst = values();
+    if ( start <= ilst.first().startTime() && end >= ilst.last().endTime() ) {
+        return *this;
+    }
+    AppointmentIntervalList lst;
+    foreach ( const AppointmentInterval &i, ilst ) {
+        if ( end <= i.startTime() ) {
+            break;
+        }
+        if ( start < i.endTime() ) {
+            lst.inSort( AppointmentInterval( qMax( start, i.startTime() ), qMin( end, i.endTime() ), i.load() ) );
+        }
+    }
+    return lst;
 }
 
 void AppointmentIntervalList::add( const AppointmentInterval &ai )
@@ -201,7 +333,7 @@ void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, doubl
     Q_ASSERT( st < et );
     DateTime s = st;
     DateTime e = et;
-    if ( isEmpty() || et < values().first().startTime() || st > values().last().endTime() ) {
+    if ( isEmpty() || et <= values().first().startTime() || st >= values().last().endTime() ) {
         inSort( AppointmentInterval( s, e, load ) );
     } else {
         // see if we have overlapping intervals
@@ -375,6 +507,26 @@ Appointment::~Appointment() {
 void Appointment::clear()
 {
     m_intervals.clear();
+}
+
+// Returns the total effort
+Duration AppointmentIntervalList::effort() const
+{
+    Duration d;
+    foreach (const AppointmentInterval &i, *this ) {
+        d += i.effort();
+    }
+    return d;
+}
+
+// Returns the effort from start to end
+Duration AppointmentIntervalList::effort(const DateTime &start, const DateTime &end) const
+{
+    Duration d;
+    foreach (const AppointmentInterval &i, *this ) {
+        d += i.effort(start, end);
+    }
+    return d;
 }
 
 AppointmentIntervalList Appointment::intervals( const DateTime &start, const DateTime &end ) const
@@ -625,11 +777,7 @@ void Appointment::detach() {
 
 // Returns the effort from start to end
 Duration Appointment::effort(const DateTime &start, const DateTime &end) const {
-    Duration d;
-    foreach (const AppointmentInterval &i, m_intervals ) {
-        d += i.effort(start, end);
-    }
-    return d;
+    return m_intervals.effort( start, end );
 }
 // Returns the effort from start for the duration
 Duration Appointment::effort(const DateTime &start, const Duration &duration) const {

@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "kptappointment.h"
 #include "kptcalendar.h"
 #include "kptdatetime.h"
 #include "kptproject.h"
@@ -26,6 +27,9 @@
 #include "kptschedule.h"
 
 #include <kdebug.h>
+
+#include <QStringList>
+#include <QString>
 
 namespace KPlato
 {
@@ -41,16 +45,29 @@ void print( Calendar *c, const QString &str, bool full = true ) {
     for ( int wd = 1; wd <= 7; ++wd ) {
         CalendarDay *d = c->weekday( wd );
         qDebug()<<"   "<<wd<<":"<<d->stateToString( d->state() );
-        foreach ( TimeInterval *t,  d->workingIntervals() ) {
+        foreach ( TimeInterval *t,  d->timeIntervals() ) {
             qDebug()<<"      interval:"<<t->first<<t->second;
         }
     }
     foreach ( const CalendarDay *d, c->days() ) {
         qDebug()<<"   "<<d->date()<<":";
-        foreach ( TimeInterval *t,  d->workingIntervals() ) {
+        foreach ( TimeInterval *t,  d->timeIntervals() ) {
             qDebug()<<"      interval:"<<t->first<<t->second;
         }
     }
+}
+static
+QString printAvailable( Resource *r, const QString &lead = QString() ) {
+    QStringList sl;
+    sl<<lead<<"Available:"
+        <<( r->availableFrom().isValid()
+                ? r->availableFrom().toString()
+                : ( r->project() ? ("("+r->project()->constraintStartTime().toString()+")" ) : QString() ) )
+        <<( r->availableUntil().isValid()
+                ? r->availableUntil().toString()
+                : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
+        <<QString::number( r->units() )<<"%";
+    return sl.join( " " );
 }
 static
 void print( Resource *r, const QString &str, bool full = true ) {
@@ -79,6 +96,20 @@ void print( Resource *r, const QString &str, bool full = true ) {
                             : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
                     <<r->units()<<"%";
         }
+    } else {
+        Calendar *cal = r->calendar( true );
+        QString s;
+        if ( cal ) {
+            s = cal->name();
+        } else {
+            cal = r->calendar( false );
+            if ( cal ) {
+                s = cal->name() + " (Default)";
+            } else {
+                s = "No calendar";
+            }
+        }
+        qDebug()<<"Calendar:"<<s;
     }
     if ( ! full ) return;
     qDebug()<<"External appointments:"<<r->numExternalAppointments();
@@ -87,12 +118,20 @@ void print( Resource *r, const QString &str, bool full = true ) {
     }
 }
 static
-void print( Project *p, const QString &str ) {
+void print( Project *p, const QString &str, bool all = false ) {
     qDebug()<<"Debug info: Project"<<p->name()<<str;
     qDebug()<<"project target start:"<<p->constraintStartTime().toString();
     qDebug()<<"  project target end:"<<p->constraintEndTime().toString();
     qDebug()<<"  project start time:"<<p->startTime().toString();
     qDebug()<<"    project end time:"<<p->endTime().toString();
+    
+    if ( ! all ) {
+        return;
+    }
+    foreach ( Task *t, p->allTasks() ) {
+        qDebug();
+        print( t );
+    }
 }
 static
 void print( Project *p, Task *t, const QString &str, bool full = true ) {
@@ -131,7 +170,7 @@ void print( Task *t, bool full = true ) {
     foreach ( ResourceGroupRequest *gr, t->requests().requests() ) {
         qDebug()<<"Group request:"<<gr->group()->name()<<gr->units();
         foreach ( ResourceRequest *rr, gr->resourceRequests() ) {
-            qDebug()<<"  Resource request:"<<rr->resource()->name()<<rr->units()<<"%"<<rr->resource()->availableFrom().toString()<<rr->resource()->availableUntil().toString();
+            qDebug()<<printAvailable( rr->resource(), "   " + rr->resource()->name() );
         }
     }
     Schedule *s = t->currentSchedule();
@@ -185,6 +224,26 @@ void print( Account *a, long id = -1, const QString &s = QString() )
         qDebug()<<"  running:"<<cp->running();
         qDebug()<<"  startup:"<<cp->startup();
         qDebug()<<" shutdown:"<<cp->shutdown();
+    }
+}
+
+static
+void print( const AppointmentInterval &i, const QString &indent = QString() )
+{
+    QString s = indent + "Interval:";
+    if ( ! i.isValid() ) {
+        qDebug()<<s<<"Not valid";
+    } else {
+        qDebug()<<s<<i.startTime().toString()<<i.endTime().toString()<<i.load()<<"%";
+    }
+}
+
+static
+void print( const AppointmentIntervalList &lst, const QString &s = QString() )
+{
+    qDebug()<<"Interval list:"<<lst.count()<<s;
+    foreach ( const AppointmentInterval &i, lst ) {
+        print( i, "  " );
     }
 }
 

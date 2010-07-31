@@ -21,9 +21,12 @@
 #include <kptdatetime.h>
 #include <kptduration.h>
 #include <kptmap.h>
+#include "kptappointment.h"
 
 
 #include <qtest_kde.h>
+
+#include "debug.cpp"
 
 namespace KPlato
 {
@@ -145,6 +148,89 @@ void CalendarTester::testTimezone() {
     
     Duration e(0, 2, 0);
     QCOMPARE((t.effort(dt1, dt2)).toString(), e.toString());
+
+}
+
+void CalendarTester::workIntervals()
+{
+    Calendar t("Test");
+    QDate wdate(2006,1,2);
+    DateTime before = DateTime(wdate.addDays(-1), QTime());
+    DateTime after = DateTime(wdate.addDays(1), QTime());
+    QTime t1(8,0,0);
+    QTime t2(10,0,0);
+    DateTime wdt1( wdate, t1 );
+    DateTime wdt2( wdate, t2 );
+    int length = t1.msecsTo( t2 );
+    CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
+    day->addInterval( TimeInterval( t1, length ) );
+    t.addDay(day);
+    QVERIFY(t.findDay(wdate) == day);
+    
+    AppointmentIntervalList lst = t.workIntervals( before, after, 100. );
+    QCOMPARE( lst.count(), 1 );
+    QCOMPARE( wdate, lst.values().first().startTime().date() );
+    QCOMPARE( t1, lst.values().first().startTime().time() );
+    QCOMPARE( wdate, lst.values().first().endTime().date() );
+    QCOMPARE( t2, lst.values().first().endTime().time() );
+    QCOMPARE( 100., lst.values().first().load() );
+    
+    QTime t3( 12, 0, 0 );
+    day->addInterval( TimeInterval( t3, length ) );
+    
+    lst = t.workIntervals( before, after, 100. );
+    Debug::print( lst );
+    QCOMPARE( lst.count(), 2 );
+    QCOMPARE( wdate, lst.values().first().startTime().date() );
+    QCOMPARE( t1, lst.values().first().startTime().time() );
+    QCOMPARE( wdate, lst.values().first().endTime().date() );
+    QCOMPARE( t2, lst.values().first().endTime().time() );
+    QCOMPARE( 100., lst.values().first().load() );
+    
+    QCOMPARE( wdate, lst.values().at( 1 ).startTime().date() );
+    QCOMPARE( t3, lst.values().at( 1 ).startTime().time() );
+    QCOMPARE( wdate, lst.values().at( 1 ).endTime().date() );
+    QCOMPARE( t3.addMSecs( length ), lst.values().at( 1 ).endTime().time() );
+    QCOMPARE( 100., lst.values().at( 1 ).load() );
+}
+
+void CalendarTester::workIntervalsFullDays()
+{
+    Calendar t("Test");
+    QDate wdate(2006,1,2);
+    DateTime before = DateTime(wdate.addDays(-1), QTime());
+    DateTime after = DateTime(wdate.addDays(10), QTime());
+
+    CalendarDay *day = new CalendarDay( wdate, CalendarDay::Working );
+    day->addInterval( TimeInterval( QTime( 0, 0, 0), 24*60*60*1000 ) );
+    t.addDay(day);
+
+    QCOMPARE( day->numIntervals(), 1 );
+    QVERIFY( day->intervalAt( 0 )->endsMidnight() );
+    
+    DateTime start = day->start();
+    DateTime end = day->end();
+
+    QCOMPARE( t.workIntervals( start, end, 100. ).count(), 1 );
+    QCOMPARE( t.workIntervals( before, after, 100. ).count(), 1 );
+    
+    day = new CalendarDay( wdate.addDays( 1 ), CalendarDay::Working );
+    day->addInterval( TimeInterval( QTime( 0, 0, 0), 24*60*60*1000 ) );
+    t.addDay( day );
+
+    end = day->end();
+
+    QCOMPARE( t.workIntervals( start, end, 100. ).count(), 2 );
+    QCOMPARE( t.workIntervals( before, after, 100. ).count(), 2 );
+
+    day = new CalendarDay( wdate.addDays( 2 ), CalendarDay::Working );
+    day->addInterval( TimeInterval( QTime( 0, 0, 0), 24*60*60*1000 ) );
+    t.addDay( day );
+
+    end = day->end();
+
+    QCOMPARE( t.workIntervals( start, end, 100. ).count(), 3 );
+    QCOMPARE( t.workIntervals( before, after, 100. ).count(), 3 );
 
 }
 

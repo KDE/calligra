@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>456</height>
+    <height>472</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -25,7 +25,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="textLabel1">
+      <widget class="QLabel" name="ui_namelabel">
        <property name="text">
         <string>Name:</string>
        </property>
@@ -68,7 +68,7 @@
       </layout>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="textLabel1_2">
+      <widget class="QLabel" name="ui_initialslabel">
        <property name="text">
         <string>Initials:</string>
        </property>
@@ -108,7 +108,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="textLabel1_2_2">
+        <widget class="QLabel" name="ui_emaillabel">
          <property name="text">
           <string>&lt;p align=&quot;right&quot;&gt;Email:&lt;/p&gt;</string>
          </property>
@@ -203,7 +203,7 @@
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <widget class="QLabel" name="textLabel3">
+          <widget class="QLabel" name="ui_unitslabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -238,7 +238,7 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QLabel" name="textLabel2">
+          <widget class="QLabel" name="ui_calendarlabel">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -260,34 +260,23 @@
           <widget class="QComboBox" name="calendarList"/>
          </item>
          <item row="1" column="0" colspan="2">
-          <widget class="QGroupBox" name="groupBox_3">
+          <widget class="QGroupBox" name="ui_fromgroup">
            <property name="title">
             <string>From</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <widget class="QRadioButton" name="ui_rbfromunlimited">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>Unlimited</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QRadioButton" name="ui_rbfromunlimited">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Unlimited</string>
+              </property>
+             </widget>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -317,7 +306,7 @@
           </widget>
          </item>
          <item row="1" column="2" colspan="2">
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="ui_untilgroup">
            <property name="title">
             <string>Until</string>
            </property>
@@ -326,28 +315,17 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <widget class="QRadioButton" name="ui_rbuntilunlimited">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>Unlimited</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QRadioButton" name="ui_rbuntilunlimited">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Unlimited</string>
+              </property>
+             </widget>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -425,7 +403,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="ui_costgroup">
          <property name="title">
           <string>Cost</string>
          </property>

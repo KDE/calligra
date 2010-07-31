@@ -52,6 +52,7 @@ class DateTime;
 class Project;
 class Schedule;
 class XMLLoaderObject;
+class AppointmentIntervalList;
 
 class KPLATOKERNEL_EXPORT DateTimeInterval : public QPair<DateTime, DateTime>
 {
@@ -180,15 +181,14 @@ public:
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
-    const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
-    QList<TimeInterval*> workingIntervals() { return m_workingIntervals; }
+    QList<TimeInterval*> timeIntervals() const { return m_timeIntervals; }
     void addInterval( const QTime &t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
-    void clearIntervals() { m_workingIntervals.clear(); }
+    void clearIntervals() { m_timeIntervals.clear(); }
     void setIntervals(QList<TimeInterval*> intervals) { 
-        m_workingIntervals.clear();
-        m_workingIntervals = intervals;
+        m_timeIntervals.clear();
+        m_timeIntervals = intervals;
     }
     void removeInterval( TimeInterval *interval );
     TimeInterval *intervalAt( int index ) const;
@@ -199,6 +199,9 @@ public:
     void setDate(const QDate& date) { m_date = date; }
     int state() const { return m_state; }
     void setState(int state) { m_state = state; }
+
+    DateTime start( const KDateTime::Spec &spec = KDateTime::Spec( KDateTime::LocalZone ) ) const;
+    DateTime end( const KDateTime::Spec &spec = KDateTime::Spec( KDateTime::LocalZone ) ) const;
 
     bool operator==(const CalendarDay *day) const;
     bool operator==(const CalendarDay &day) const;
@@ -272,7 +275,7 @@ private:
     Calendar *m_calendar;
     QDate m_date; //NOTE: inValid if used for weekdays
     int m_state;
-    QList<TimeInterval*> m_workingIntervals;
+    QList<TimeInterval*> m_timeIntervals;
 
 #ifndef NDEBUG
 public:
@@ -451,6 +454,12 @@ public:
     bool hasParent(Calendar *cal);
 
     /**
+     * Returns the work intervals in the interval from @p start to @p end
+     * Sets the load of each interval to @p load
+     */
+    AppointmentIntervalList workIntervals(const DateTime &start, const DateTime &end, double load) const;
+
+    /**
      * Returns the amount of 'worktime' that can be done in the
      * interval from @p start to @p end
      * If @p sch is not 0, the schedule is checked for availability.
@@ -499,6 +508,9 @@ public:
     void setDefault( bool on );
     bool isDefault() const { return m_default; }
     
+    int cacheVersion() const;
+    void incCacheVersion();
+
 signals:
     void changed( Calendar* );
     void changed( CalendarDay* );
@@ -562,6 +574,7 @@ private:
     
     KDateTime::Spec m_spec;
     bool m_default; // this is the default calendar, only used for save/load
+    int m_cacheversion; // incremented every time a calendar is changed
     
 #ifndef NDEBUG
 public:

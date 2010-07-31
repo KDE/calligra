@@ -66,6 +66,10 @@ private slots:
     
     void team();
 
+    // NOTE: It's not *mandatory* to schedule in wbs order but users expect it, so we'll try.
+    // This test can be removed if for some important reason this isn't possible.
+    void inWBSOrder();
+
 private:
     Project *m_project;
     Calendar *m_calendar;

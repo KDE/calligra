@@ -414,7 +414,7 @@ CalendarModifyStateCmd::CalendarModifyStateCmd( Calendar *calendar, CalendarDay 
     m_newvalue = value;
     m_oldvalue = (CalendarDay::State)day->state();
     if ( value != CalendarDay::Working ) {
-        foreach ( TimeInterval *ti, day->workingIntervals() ) {
+        foreach ( TimeInterval *ti, day->timeIntervals() ) {
             m_cmd->addCommand( new CalendarRemoveTimeIntervalCmd( calendar, day, ti ) );
         }
     }

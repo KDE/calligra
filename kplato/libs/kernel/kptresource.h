@@ -288,7 +288,7 @@ public:
     /// Adds appointment to schedule sch
     virtual bool addAppointment( Appointment *appointment, Schedule &main );
     /// Adds appointment to both this resource and node
-    virtual void addAppointment( Schedule *node, DateTime &start, DateTime &end, double load = 100 );
+    virtual void addAppointment( Schedule *node, const DateTime &start, const DateTime &end, double load = 100 );
 
     void initiateCalculation( Schedule &sch );
     bool isAvailable( Task *task );
@@ -312,19 +312,24 @@ public:
     /**
      * Set available units in percent
      */
-    void setUnits( int units ) { m_units = units; changed(); }
+    void setUnits( int units );
 
     Project *project() const { return m_project; }
     /// Return the resources timespec. Defaults to local.
     KDateTime::Spec timeSpec() const;
     
     /**
-     * Get the calendar for this resource. 
-     * If local=false, check if there is a default calendar.
+     * Get the calendar for this resource.
+     * Working resources may have a default calendar if the a calendar is marked as default,
+     * this is checked if local=false.
+     * If no calendar can be found for a working resource, the resource is not available.
+     *
+     * Material resources must have calendar explicitly set.
+     * If there is no calendar set for a material resource, the resource is always available.
      */
     Calendar *calendar( bool local = false ) const;
     //Calendar *calendar( const QString& id ) const;
-    void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
+    void setCalendar( Calendar *calendar );
 
     /// Delete all requests for me
     void removeRequests();
@@ -342,17 +347,26 @@ public:
     const QList<ResourceRequest*> &requests() const
     { return m_requests; }
 
+    /// Returns a list of work intervals in the interval @p from, @p until.
+    /// Appointments are subtracted if @p schedule is not 0.
+    AppointmentIntervalList workIntervals( const DateTime &from, const DateTime &until, Schedule *schedule = 0 ) const;
+
+    /// Updates work interval cache a list of work intervals extracted from the resource calendar
+    /// with @p load in the interval @p from, @p until.
+    /// The load of the intervals is set to m_units
+    /// Note: The list may contain intervals outside @p from, @p until
+    void calendarIntervals( const DateTime &from, const DateTime &until ) const;
+
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The current schedule is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
-    /// Status is returned in @p ok
-    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>(), bool *ok = 0 ) const;
+    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
 
     /// Returns the effort that can be done starting at @p start within @p duration.
     /// The schedule @p sch is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
     /// Status is returned in @p ok
-    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>(), bool *ok = 0 ) const;
+    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, const QList<Resource*> &required = QList<Resource*>() ) const;
 
 
     /**
@@ -464,6 +478,19 @@ public:
     /// Set the @p account
     void setAccount( Account *account );
 
+    class WorkInfoCache
+    {
+    public:
+        WorkInfoCache() { clear(); }
+        void clear() { start = end = DateTime(); effort = Duration::zeroDuration; intervals.clear(); version = -1; }
+        bool isValid() const { return start.isValid() && end.isValid(); }
+        DateTime start;
+        DateTime end;
+        Duration effort;
+        AppointmentIntervalList intervals;
+        int version;
+    };
+
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );
     void externalAppointmentAdded( Resource*, Appointment* );
@@ -509,6 +536,8 @@ private:
     QList<Resource*> m_teamMembers;
 
     Schedule *m_currentSchedule;
+
+    mutable WorkInfoCache m_workinfocache;
 
 #ifndef NDEBUG
 public:
@@ -596,7 +625,7 @@ public:
     Schedule *resourceSchedule( Schedule *ns, Resource *resource = 0 );
     DateTime availableAfter(const DateTime &time, Schedule *ns);
     DateTime availableBefore(const DateTime &time, Schedule *ns);
-    Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 );
+    Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward );
     DateTime workTimeAfter(const DateTime &dt, Schedule *ns = 0);
     DateTime workTimeBefore(const DateTime &dt, Schedule *ns = 0);
 
@@ -610,7 +639,7 @@ public:
 
     /// Returns a list of all the required resources that will be used in scheduling.
     /// Note: This list overrides the resources own list which is just used as default for allocation dialog.
-    const QList<Resource*> requiredResources() const { return m_required; }
+    QList<Resource*> requiredResources() const { return m_required; }
     /// Set the list of required resources that will be used in scheduling.
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
@@ -809,18 +838,9 @@ public:
 
     void changed();
     
-    Duration effort(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const;
+    Duration effort( const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &duration, Schedule *ns, bool backward ) const;
     int numDays(const QList<ResourceRequest*> &lst, const DateTime &time, bool backward) const;
     Duration duration(const QList<ResourceRequest*> &lst, const DateTime &time, const Duration &_effort, Schedule *ns, bool backward);
-
-protected:
-    struct Interval
-    {
-        DateTime start;
-        DateTime end;
-        Duration effort;
-    };
-
 
 private:
     Task *m_task;

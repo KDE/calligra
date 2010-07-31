@@ -38,7 +38,7 @@ IntervalEdit::IntervalEdit( CalendarDay *day, QWidget *parent)
 {
     //kDebug();
     if ( day ) {
-        const QList<TimeInterval*> &intervals = day->workingIntervals();
+        const QList<TimeInterval*> &intervals = day->timeIntervals();
         setIntervals( intervals );
         if ( ! intervals.isEmpty() ) {
             startTime->setTime( intervals.last()->endTime() );
@@ -251,7 +251,7 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
 {
     //kDebug();
     const QList<TimeInterval*> lst = m_panel->intervals();
-    if ( lst == day->workingIntervals() ) {
+    if ( lst == day->timeIntervals() ) {
         return 0;
     }
     MacroCommand *cmd = 0;

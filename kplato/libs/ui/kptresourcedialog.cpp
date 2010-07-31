@@ -97,7 +97,13 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotChanged()));
     connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
     connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
-    
+
+    connect(ui_rbfrom, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_rbuntil, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+
+    connect(ui_rbfrom, SIGNAL(toggled(bool)), availableFrom, SLOT(setEnabled(bool)));
+    connect(ui_rbuntil, SIGNAL(toggled(bool)), availableUntil, SLOT(setEnabled(bool)));
+
     connect( useRequired, SIGNAL( stateChanged( int ) ), SLOT( slotUseRequiredChanged( int ) ) );
 
     connect(account, SIGNAL(activated(int)), SLOT(slotChanged()));
@@ -231,11 +237,22 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     dia->type->setCurrentIndex((int)resource->type()); // NOTE: must match enum
     dia->units->setValue(resource->units());
     DateTime dt = resource->availableFrom();
-    dia->ui_rbfrom->setChecked( dt.isValid() );
+    if ( dt.isValid() ) {
+        dia->ui_rbfrom->click();
+    } else {
+        dia->ui_rbfromunlimited->click();
+    }
     dia->availableFrom->setDateTime( dt.isValid() ? dt.dateTime() : QDateTime( QDate::currentDate(), QTime( 0, 0, 0 ) ) );
+    dia->availableFrom->setEnabled( dt.isValid() );
+
     dt = resource->availableUntil();
-    dia->ui_rbuntil->setChecked( dt.isValid() );
+    if ( dt.isValid() ) {
+        dia->ui_rbuntil->click();
+    } else {
+        dia->ui_rbuntilunlimited->click();
+    }
     dia->availableUntil->setDateTime( dt.isValid() ? dt.dateTime() : QDateTime( QDate::currentDate().addYears( 2 ), QTime( 0, 0, 0 ) ) );
+    dia->availableUntil->setEnabled( dt.isValid() );
     dia->rateEdit->setText(project.locale()->formatMoney(resource->normalRate()));
     dia->overtimeEdit->setText(project.locale()->formatMoney(resource->overtimeRate()));
 

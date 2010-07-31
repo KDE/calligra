@@ -312,6 +312,9 @@ public:
     /// Return the number of all nodes in the project (exluding myself)
     int nodeCount() const { return nodeIdDict.count() - 1; }
 
+    /// Return a list of all tasks and milestones int the wbs order
+    QList<Task*> allTasks( const Node *parent = 0 ) const;
+
     using Node::findNode;
     /// Find the node with identity id
     virtual Node *findNode( const QString &id ) const;

@@ -232,7 +232,7 @@ void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
         if ( on && sm->parentManager() ) {
             on = on && sm->parentManager()->isScheduled();
         }
-        actionCalculateSchedule->setEnabled( on );
+        actionCalculateSchedule->setEnabled( on && sm->schedulerPlugin() );
         actionAddSubSchedule->setEnabled( on && sm->isScheduled() );
     }
 }

@@ -59,7 +59,7 @@ public:
     void set(DateTime &start, DateTime &end, double load=100);
     void set(DateTime &start, Duration &duration, double load=100);
     
-    Duration effort() const { return (m_end - m_start) * m_load / 100; }
+    Duration effort() const;
     Duration effort(const DateTime &start, const DateTime end) const;
     Duration effort(const QDate &time, bool upto) const;
     
@@ -84,6 +84,7 @@ private:
     DateTime m_end;
     double m_load; //percent
 };
+QDebug &operator<<( QDebug &dbg, const KPlato::AppointmentInterval &i );
 
 
 /**
@@ -105,8 +106,20 @@ public:
     void saveXML(QDomElement &element) const;
     
     AppointmentIntervalList &operator+=( const AppointmentIntervalList &lst );
+    AppointmentIntervalList &operator-=( const AppointmentIntervalList &lst );
+    AppointmentIntervalList &operator=( const AppointmentIntervalList &lst );
+
+    /// Returns the intervals in the range @p start, @p end
+    AppointmentIntervalList extractIntervals( const DateTime &start, const DateTime &end ) const;
+    
+    /// Return the total effort
+    Duration effort() const;
+    /// Return the effort limited to the interval @p start, @p end
+    Duration effort(const DateTime &start, const DateTime &end) const;
+
+protected:
+    void subtract( const DateTime &st, const DateTime &et, double load );
 };
-typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
 
 /**
  * A Resource can be scheduled to be used at any time, 
