@@ -1069,7 +1069,7 @@ void CellToolBase::inputMethodEvent(QInputMethodEvent * event)
 {
     // Send it to the embedded editor.
     if (editor()) {
-        QApplication::sendEvent(editor(), event);
+        QApplication::sendEvent(editor()->widget(), event);
     }
 }
 
@@ -1319,7 +1319,7 @@ void CellToolBase::scrollToCell(const QPoint &location)
     canvas()->canvasController()->ensureVisible(canvas()->viewConverter()->documentToView(rect), true);
 }
 
-CellEditor* CellToolBase::editor() const
+CellEditorBase* CellToolBase::editor() const
 {
     return d->cellEditor;
 }
@@ -1376,7 +1376,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
 
         // Setup the editor's palette.
         const Style style = cell.effectiveStyle();
-        QPalette editorPalette(editor()->palette());
+        QPalette editorPalette(d->cellEditor->palette());
         QColor color = style.fontColor();
         if (!color.isValid())
             color = canvas()->canvasWidget()->palette().text().color();
@@ -1385,7 +1385,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         if (!color.isValid())
             color = editorPalette.base().color();
         editorPalette.setColor(QPalette::Background, color);
-        editor()->setPalette(editorPalette);
+        d->cellEditor->setPalette(editorPalette);
 
         // apply (table shape) offset
         xpos += offset().x();
@@ -1393,24 +1393,24 @@ bool CellToolBase::createEditor(bool clear, bool focus)
 
         const QRectF rect(xpos + 0.5, ypos + 0.5, w - 0.5, h - 0.5); //needed to circumvent rounding issue with height/width
         const QRectF zoomedRect = canvas()->viewConverter()->documentToView(rect);
-        editor()->setGeometry(zoomedRect.toRect().adjusted(1, 1, -1, -1));
-        editor()->setMinimumSize(QSize((int)canvas()->viewConverter()->documentToViewX(min_w) - 1,
+        d->cellEditor->setGeometry(zoomedRect.toRect().adjusted(1, 1, -1, -1));
+        d->cellEditor->setMinimumSize(QSize((int)canvas()->viewConverter()->documentToViewX(min_w) - 1,
                                        (int)canvas()->viewConverter()->documentToViewY(min_h) - 1));
-        editor()->show();
+        d->cellEditor->show();
 
         // Laurent 2001-12-05
         // Don't add focus when we create a new editor and
         // we select text in edit widget otherwise we don't delete
         // selected text.
         if (focus)
-            editor()->setFocus();
+            d->cellEditor->setFocus();
 
         // clear the selection rectangle
         selection()->update();
     }
 
     if (!clear && !cell.isNull())
-        editor()->setText(cell.userInput());
+        d->cellEditor->setText(cell.userInput());
     return true;
 }
 
@@ -1419,8 +1419,8 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     if (!d->cellEditor) {
         return;
     }
-    const QString userInput = editor()->toPlainText();
-    editor()->hide();
+    const QString userInput = d->cellEditor->toPlainText();
+    d->cellEditor->hide();
     // Delete the cell editor first and after that update the document.
     // That means we get a synchronous repaint after the cell editor
     // widget is gone. Otherwise we may get painting errors.
@@ -1452,9 +1452,9 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
     }
     if (editor()) {
         if (selection()->originSheet() != selection()->activeSheet()) {
-            editor()->hide();
+            editor()->widget()->hide();
         } else {
-            editor()->show();
+            editor()->widget()->show();
         }
     }
     focusEditorRequested();
@@ -1486,7 +1486,7 @@ void CellToolBase::focusEditorRequested()
     } else {
         // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
-            editor()->setFocus();
+            editor()->widget()->setFocus();
         } else {
             d->optionWidget->editor()->setFocus();
         }
@@ -2686,7 +2686,7 @@ void CellToolBase::specialChar(QChar character, const QString& fontName)
     if (!editor()) {
         createEditor();
     }
-    QApplication::sendEvent(editor(), &keyEvent);
+    QApplication::sendEvent(editor()->widget(), &keyEvent);
 }
 
 void CellToolBase::insertFormula()
@@ -2819,10 +2819,10 @@ void CellToolBase::edit()
         createEditor(false /* keep content */);
     } else {
         // Switch focus.
-        if (editor()->hasFocus()) {
+        if (editor()->widget()->hasFocus()) {
             d->optionWidget->editor()->setFocus();
         } else {
-            editor()->setFocus();
+            editor()->widget()->setFocus();
         }
     }
 }

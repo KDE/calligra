@@ -305,7 +305,7 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
 
     if (q->editor()) {
         // We are in edit mode -> go beginning of line
-        QApplication::sendEvent(q->editor(), event);
+        QApplication::sendEvent(q->editor()->widget(), event);
         return false;
     } else {
         QPoint destination;
@@ -362,7 +362,7 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
 
     if (q->editor()) {
         // We are in edit mode -> go end of line
-        QApplication::sendEvent(q->editor(), event);
+        QApplication::sendEvent(q->editor()->widget(), event);
         return false;
     } else {
         // move to the last used cell in the row
@@ -447,7 +447,7 @@ void CellToolBase::Private::processOtherKey(QKeyEvent *event)
             q->createEditor();
         }
         // Send it to the embedded editor.
-        QApplication::sendEvent(q->editor(), event);
+        QApplication::sendEvent(q->editor()->widget(), event);
     }
 }
 

@@ -26,7 +26,7 @@
 #include <KTextEdit>
 
 #include "kspread_export.h"
-
+#include "CellEditorBase.h"
 class KoViewConverter;
 
 namespace KSpread
@@ -37,7 +37,7 @@ class Selection;
 /**
  * class CellEditor
  */
-class CellEditor : public KTextEdit
+class CellEditor : public KTextEdit, public CellEditorBase
 {
     Q_OBJECT
 public:
@@ -70,6 +70,12 @@ public:
      */
     void setActiveSubRegion(int index);
 
+    // CellEditorBase interface
+    virtual QWidget* widget() { return this; }
+    virtual void cut() { KTextEdit::cut(); }
+    virtual void copy() { KTextEdit::copy(); }
+    virtual void paste() { KTextEdit::paste(); }
+    virtual QString toPlainText() const { return KTextEdit::toPlainText(); }
 Q_SIGNALS:
     void textChanged(const QString &text);
 

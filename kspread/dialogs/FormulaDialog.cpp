@@ -61,7 +61,7 @@
 
 using namespace KSpread;
 
-FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* editor, const QString& formulaName)
+FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
         : KDialog(parent)
 {
     setCaption(i18n("Function"));
@@ -352,7 +352,7 @@ void FormulaDialog::slotOk()
             tmp = '=' + tmp;
         int pos = m_editor->cursorPosition() + tmp.length();
         m_editor->setText(tmp);
-        m_editor->setFocus();
+        m_editor->widget()->setFocus();
         m_editor->setCursorPosition(pos);
     }
 
@@ -375,7 +375,7 @@ void FormulaDialog::slotClose()
     if (m_editor != 0) {
         Q_ASSERT(m_editor);
         m_editor->setText(m_oldText);
-        m_editor->setFocus();
+        m_editor->widget()->setFocus();
     }
 
     m_selection->emitModified();

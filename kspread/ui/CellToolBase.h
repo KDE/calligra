@@ -40,6 +40,7 @@ class KoColor;
 namespace KSpread
 {
 class SheetView;
+class CellEditorBase;
 
 /**
  * Abstract tool providing actions acting on cell ranges.
@@ -82,8 +83,8 @@ public:
 
     virtual void deleteSelection();
 
-    bool createEditor(bool clear = true, bool focus = true);
-    CellEditor* editor() const;
+    virtual bool createEditor(bool clear = true, bool focus = true);
+    virtual CellEditorBase* editor() const;
 
     /**
      * Sets the editor \p type, which had the focus at last.
@@ -99,7 +100,7 @@ public Q_SLOTS:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
-    void deleteEditor(bool saveChanges, bool expandMatrix = false);
+    virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
 
 protected:
     void init();

@@ -46,7 +46,7 @@ class KLineEdit;
 
 namespace KSpread
 {
-class CellEditor;
+class CellEditorBase;
 class FunctionDescription;
 class Selection;
 
@@ -58,7 +58,7 @@ class FormulaDialog : public KDialog
 {
     Q_OBJECT
 public:
-    FormulaDialog(QWidget* parent, Selection* selection, CellEditor* editor, const QString& expression = 0);
+    FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& expression = 0);
     ~FormulaDialog();
 private:
     /**
@@ -139,7 +139,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 private:
     Selection* m_selection;
-    CellEditor* m_editor;
+    CellEditorBase* m_editor;
 
     KTabWidget* m_tabwidget;
     KTextBrowser* m_browser;

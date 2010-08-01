@@ -127,8 +127,8 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
     // the Enter and Esc key are handled by the embedded editor
     if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter) ||
             (event->key() == Qt::Key_Escape)) {
-        d->cellTool->editor()->setFocus();
-        QApplication::sendEvent(d->cellTool->editor(), event);
+        d->cellTool->editor()->widget()->setFocus();
+        QApplication::sendEvent(d->cellTool->editor()->widget(), event);
         event->accept();
         return;
     }
