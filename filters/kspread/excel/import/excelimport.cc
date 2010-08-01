@@ -95,6 +95,19 @@ static QString columnName(uint column)
     return s;
 }
 
+static QString encodeSheetName(const QString& name)
+{
+    QString sheetName = name;
+    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
+        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
+    return sheetName;
+}
+
+static QString encodeAddress(const QString& sheetName, uint column, uint row)
+{
+    return QString("%1.%2%3").arg(sheetName).arg(columnName(column)).arg(row+1);
+}
+
 }
 
 using namespace Swinder;
@@ -589,22 +602,14 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         QList<QRect> filters = workbook->filterRanges(i);
         QString sheetName = workbook->sheet(i)->name();
-        if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
-            sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
         if (filters.size()) {
             if (!openedDBRanges) xmlWriter->startElement("table:database-ranges");
             openedDBRanges = true;
 
             foreach (const QRect& filter, filters) {
-                QString sRange(sheetName);
-                sRange.append(".");
-                sRange.append(columnName(filter.left()));
-                sRange.append(QString::number(filter.top()+1));
+                QString sRange(encodeAddress(sheetName, filter.left(), filter.top()));
                 sRange.append(":");
-                sRange.append(sheetName);
-                sRange.append(".");
-                sRange.append(columnName(filter.right()));
-                sRange.append(QString::number(workbook->sheet(i)->maxRow()));
+                sRange.append(encodeAddress(sheetName, filter.right(), workbook->sheet(i)->maxRow()));
                 xmlWriter->startElement("table:database-range");
                 xmlWriter->addAttribute("table:name", QString("excel-database-%1").arg(rangeId++));
                 xmlWriter->addAttribute("table:display-filter-buttons", "true");
@@ -1428,7 +1433,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell-address", sheet->name() + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB+1));
+        xmlWriter->addAttribute("table:end-cell-address", encodeAddress(sheet->name(), picture->m_colR, picture->m_rwB));
         xmlWriter->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR));
         xmlWriter->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
@@ -1458,7 +1463,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         ChartExport *c = new ChartExport(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = sheet->name() + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
+        c->m_endCellAddress = encodeAddress(sheet->name(), drawobj->m_colR, drawobj->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
 
         const unsigned long colL = drawobj->m_colL;
@@ -1474,8 +1479,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->m_y = offset(rowHeight(sheet, rwT), dyT);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
-            c->m_cellRangeAddress = sheet->name() + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
-                                    sheet->name() + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
+            c->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
+                                    encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;
 
