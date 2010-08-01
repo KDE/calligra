@@ -64,28 +64,26 @@ static inline uint qHash(const Swinder::FormatFont& font)
     return qHash(font.fontFamily()) ^ qRound(font.fontSize() * 100);
 }
 
-qreal offset( unsigned long dimension, unsigned long offset ) {
+static qreal offset( unsigned long dimension, unsigned long offset ) {
     return (float)dimension * (float)offset / 1024.0;
 }
 
-qreal columnWidth(Sheet* sheet, unsigned long col) {
+static qreal columnWidth(Sheet* sheet, unsigned long col) {
     if( sheet->column(col, false) )
         return sheet->column(col)->width();
 
     return sheet->defaultColWidth();
 }
 
-qreal rowHeight(Sheet* sheet, unsigned long row) {
+static qreal rowHeight(Sheet* sheet, unsigned long row) {
     if( sheet->row(row, false) )
         return sheet->row(row)->height();
 
     return sheet->defaultRowHeight();
 }
 
-}
-
 // Returns A for 1, B for 2, C for 3, etc.
-QString columnName(uint column)
+static QString columnName(uint column)
 {
     QString s;
     unsigned digits = 1;
@@ -95,6 +93,8 @@ QString columnName(uint column)
     for (unsigned col = column - offset; digits; --digits, col /= 26)
         s.prepend(QChar('A' + (col % 26)));
     return s;
+}
+
 }
 
 using namespace Swinder;
