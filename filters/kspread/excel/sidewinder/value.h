@@ -22,7 +22,6 @@
 
 #include <iostream>
 #include <map>
-#include "ustring.h"
 #include "format.h"
 
 namespace Swinder
@@ -112,12 +111,12 @@ public:
     /**
      * Create a string value.
      */
-    explicit Value(const UString& s);
+    explicit Value(const QString& s);
 
     /**
      * Create a richtext value
      */
-    Value(const UString& s, const std::map<unsigned, FormatFont>& formatRuns);
+    Value(const QString& s, const std::map<unsigned, FormatFont>& formatRuns);
 
     /**
      * Returns the type of the value.
@@ -208,17 +207,17 @@ public:
     /**
      * Sets this value to string value.
      */
-    void setValue(const UString& s);
+    void setValue(const QString& s);
 
     /**
      * Sets this value to richtext value.
      */
-    void setValue(const UString& s, const std::map<unsigned, FormatFont>& formatRuns);
+    void setValue(const QString& s, const std::map<unsigned, FormatFont>& formatRuns);
 
     /**
      * Sets this value to hold error message.
      */
-    void setError(const UString& msg);
+    void setError(const QString& msg);
 
     /**
      * Returns the boolean value of this value.
@@ -246,7 +245,7 @@ public:
      *
      * Call this function only if isText() returns true.
      */
-    UString asString() const;
+    QString asString() const;
 
     /**
      * Returns the format runs of this value.
@@ -260,7 +259,7 @@ public:
      *
      * Call this function only if isError() returns true.
      */
-    UString errorMessage() const;
+    QString errorMessage() const;
 
     /**
      * Detaches itself from shared value data, i.e make a private, deep copy

@@ -813,7 +813,7 @@ unsigned long FormulaToken::nameXIndex() const
     return ni;
 }
 
-UString FormulaToken::area(unsigned row, unsigned col, bool relative) const
+QString FormulaToken::area(unsigned row, unsigned col, bool relative) const
 {
     // FIXME check data size !
     unsigned char buf[2];
@@ -892,32 +892,32 @@ UString FormulaToken::area(unsigned row, unsigned col, bool relative) const
         col2Ref += col;
     }
 
-    UString result;
-    result.append(UString("["));    // OpenDocument format
+    QString result;
+    result.append(QString("["));    // OpenDocument format
 
     if (!col1Relative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(col1Ref));
     if (!row1Relative)
-        result.append(UString("$"));
-    result.append(UString::from(row1Ref + 1));
-    result.append(UString(":"));
+        result.append(QString("$"));
+    result.append(QString::number(row1Ref + 1));
+    result.append(QString(":"));
     if (!col2Relative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(col2Ref));
     if (!row2Relative)
-        result.append(UString("$"));
-    result.append(UString::from(row2Ref + 1));
+        result.append(QString("$"));
+    result.append(QString::number(row2Ref + 1));
 
-    result.append(UString("]"));  // OpenDocument format
+    result.append(QString("]"));  // OpenDocument format
 
     return result;
 }
 
-UString FormulaToken::area3d(const std::vector<UString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::area3d(const std::vector<QString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
 {
     if (version() != Excel97) {
-        return UString("Unknown");
+        return QString("Unknown");
     }
 
     unsigned sheetRef = readU16(&d->data[0]);
@@ -952,30 +952,30 @@ UString FormulaToken::area3d(const std::vector<UString>& externSheets, unsigned 
     col2Relative = col2Ref & 0x4000;
     col2Ref &= 0x3fff;
 
-    UString result;
-    result.append(UString("["));    // OpenDocument format
+    QString result;
+    result.append(QString("["));    // OpenDocument format
 
     if (sheetRef >= externSheets.size())
-        result.append(UString("Error"));
+        result.append(QString("Error"));
     else
         result.append(externSheets[sheetRef]);
-    result.append(UString("."));
+    result.append(QString("."));
 
     if (!col1Relative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(col1Ref));
     if (!row1Relative)
-        result.append(UString("$"));
-    result.append(UString::from(row1Ref + 1));
-    result.append(UString(":"));
+        result.append(QString("$"));
+    result.append(QString::number(row1Ref + 1));
+    result.append(QString(":"));
     if (!col2Relative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(col2Ref));
     if (!row2Relative)
-        result.append(UString("$"));
-    result.append(UString::from(row2Ref + 1));
+        result.append(QString("$"));
+    result.append(QString::number(row2Ref + 1));
 
-    result.append(UString("]"));  // OpenDocument format
+    result.append(QString("]"));  // OpenDocument format
 
     return result;
 }
@@ -1015,7 +1015,7 @@ std::pair<unsigned, QRect> FormulaToken::filterArea3d() const
     return std::make_pair(sheetRef, range);
 }
 
-UString FormulaToken::areaMap(unsigned row, unsigned col)
+QString FormulaToken::areaMap(unsigned row, unsigned col)
 {
     unsigned char buf[4];
     buf[0] = d->data[0];
@@ -1028,14 +1028,14 @@ UString FormulaToken::areaMap(unsigned row, unsigned col)
     //printf( "SIZE=%i\n", cce );
     if (cce < 7) {
         printf("Error: Invalid size %i for formula areaMap of type %i\n", cce, type);
-        return UString();
+        return QString();
     }
 
     // remove the first seven elements cause they are done
     d->data.erase(d->data.begin(), d->data.begin() + 7);
     //unsigned size, const unsigned char* data
 
-    UString result;
+    QString result;
     switch (type) {
     case 0x01: // REFERENCE, specifies a reference to a range.
         result = ref(row, col);
@@ -1052,7 +1052,7 @@ UString FormulaToken::areaMap(unsigned row, unsigned col)
     return result;
 }
 
-UString FormulaToken::ref(unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::ref(unsigned /*row*/, unsigned /*col*/) const
 {
     // FIXME check data size !
     // FIXME handle shared formula
@@ -1086,23 +1086,23 @@ UString FormulaToken::ref(unsigned /*row*/, unsigned /*col*/) const
         rowRef &= 0x3fff;
     }
 
-    UString result;
+    QString result;
 
-    result.append(UString("["));    // OpenDocument format
+    result.append(QString("["));    // OpenDocument format
 
     if (!colRelative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(colRef));
     if (!rowRelative)
-        result.append(UString("$"));
-    result.append(UString::from(rowRef + 1));
+        result.append(QString("$"));
+    result.append(QString::number(rowRef + 1));
 
-    result.append(UString("]"));  // OpenDocument format
+    result.append(QString("]"));  // OpenDocument format
 
     return result;
 }
 
-UString FormulaToken::refn(unsigned row, unsigned col) const
+QString FormulaToken::refn(unsigned row, unsigned col) const
 {
     // FIXME check data size !
     // FIXME handle shared formula
@@ -1143,26 +1143,26 @@ UString FormulaToken::refn(unsigned row, unsigned col) const
 
     if (colRelative) colRef += col;
     if (rowRelative) rowRef += row;
-    UString result;
+    QString result;
 
-    result.append(UString("["));    // OpenDocument format
+    result.append(QString("["));    // OpenDocument format
 
     if (!colRelative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(colRef));
     if (!rowRelative)
-        result.append(UString("$"));
-    result.append(UString::from(rowRef + 1));
+        result.append(QString("$"));
+    result.append(QString::number(rowRef + 1));
 
-    result.append(UString("]"));  // OpenDocument format
+    result.append(QString("]"));  // OpenDocument format
 
     return result;
 }
 
-UString FormulaToken::ref3d(const std::vector<UString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
+QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /*row*/, unsigned /*col*/) const
 {
     if (version() != Excel97) {
-        return UString("Unknown");
+        return QString("Unknown");
     }
 
     unsigned sheetRef = readU16(&d->data[0]);
@@ -1185,30 +1185,30 @@ UString FormulaToken::ref3d(const std::vector<UString>& externSheets, unsigned /
     colRelative = colRef & 0x4000;
     colRef &= 0x3fff;
 
-    UString result;
+    QString result;
 
-    result.append(UString("["));    // OpenDocument format
+    result.append(QString("["));    // OpenDocument format
 
     if (sheetRef >= externSheets.size())
-        result.append(UString("Error"));
+        result.append(QString("Error"));
     else
         result.append(externSheets[sheetRef]);
-    result.append(UString("."));
+    result.append(QString("."));
 
     if (!colRelative)
-        result.append(UString("$"));
+        result.append(QString("$"));
     result.append(Cell::columnLabel(colRef));
     if (!rowRelative)
-        result.append(UString("$"));
-    result.append(UString::from(rowRef + 1));
+        result.append(QString("$"));
+    result.append(QString::number(rowRef + 1));
 
-    result.append(UString("]"));  // OpenDocument format
+    result.append(QString("]"));  // OpenDocument format
 
 
     return result;
 }
 
-UString FormulaToken::array(unsigned row, unsigned col) const
+QString FormulaToken::array(unsigned row, unsigned col) const
 {
     /*
     unsigned char buf[2];
@@ -1225,7 +1225,7 @@ UString FormulaToken::array(unsigned row, unsigned col) const
     Q_ASSERT(type == 2 || type == 3);
     // remove the first two elements cause they are done
     d->data.erase(d->data.begin(), d->data.begin() + 2);
-    UString result;
+    QString result;
     switch (type) {
     case 0x01: // REFERENCE, specifies a reference to a range.
         result = ref(row, col);
@@ -1240,7 +1240,7 @@ UString FormulaToken::array(unsigned row, unsigned col) const
     //Q_ASSERT(false);
     return result;
     */
-    return UString();
+    return QString();
 }
 
 std::pair<unsigned, unsigned> FormulaToken::baseFormulaRecord() const
@@ -1310,20 +1310,20 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
     return tokens;
 }
 
-typedef std::vector<UString> UStringStack;
+typedef std::vector<QString> UStringStack;
 
-static void mergeTokens(UStringStack* stack, unsigned count, UString mergeString)
+static void mergeTokens(UStringStack* stack, unsigned count, QString mergeString)
 {
     if (!stack) return;
     if (stack->size() < count) return;
 
-    UString s1, s2;
+    QString s1, s2;
 
     while (count) {
         count--;
 
-        UString last = (*stack)[stack->size()-1];
-        UString tmp = last;
+        QString last = (*stack)[stack->size()-1];
+        QString tmp = last;
         tmp.append(s1);
         s1 = tmp;
 
@@ -1340,7 +1340,7 @@ static void mergeTokens(UStringStack* stack, unsigned count, UString mergeString
 }
 
 #ifdef SWINDER_XLS2RAW
-static void dumpStack(std::vector<UString> stack)
+static void dumpStack(std::vector<QString> stack)
 {
     std::cout << std::endl;
     std::cout << "Stack now is: " ;
@@ -1348,12 +1348,12 @@ static void dumpStack(std::vector<UString> stack)
         std::cout << "(empty)" ;
 
     for (unsigned i = 0; i < stack.size(); i++)
-        std::cout << "  " << i << ": " << stack[i].ascii() << std::endl;
+        std::cout << "  " << i << ": " << stack[i] << std::endl;
     std::cout << std::endl;
 }
 #endif
 
-UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens)
+QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens)
 {
     UStringStack stack;
 
@@ -1368,117 +1368,117 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         switch (token.id()) {
         case FormulaToken::Add:
-            mergeTokens(&stack, 2, UString("+"));
+            mergeTokens(&stack, 2, QString("+"));
             break;
 
         case FormulaToken::Sub:
-            mergeTokens(&stack, 2, UString("-"));
+            mergeTokens(&stack, 2, QString("-"));
             break;
 
         case FormulaToken::Mul:
-            mergeTokens(&stack, 2, UString("*"));
+            mergeTokens(&stack, 2, QString("*"));
             break;
 
         case FormulaToken::Div:
-            mergeTokens(&stack, 2, UString("/"));
+            mergeTokens(&stack, 2, QString("/"));
             break;
 
         case FormulaToken::Power:
-            mergeTokens(&stack, 2, UString("^"));
+            mergeTokens(&stack, 2, QString("^"));
             break;
 
         case FormulaToken::Concat:
-            mergeTokens(&stack, 2, UString("&"));
+            mergeTokens(&stack, 2, QString("&"));
             break;
 
         case FormulaToken::LT:
-            mergeTokens(&stack, 2, UString("<"));
+            mergeTokens(&stack, 2, QString("<"));
             break;
 
         case FormulaToken::LE:
-            mergeTokens(&stack, 2, UString("<="));
+            mergeTokens(&stack, 2, QString("<="));
             break;
 
         case FormulaToken::EQ:
-            mergeTokens(&stack, 2, UString("="));
+            mergeTokens(&stack, 2, QString("="));
             break;
 
         case FormulaToken::GE:
-            mergeTokens(&stack, 2, UString(">="));
+            mergeTokens(&stack, 2, QString(">="));
             break;
 
         case FormulaToken::GT:
-            mergeTokens(&stack, 2, UString(">"));
+            mergeTokens(&stack, 2, QString(">"));
             break;
 
         case FormulaToken::NE:
-            mergeTokens(&stack, 2, UString("<>"));
+            mergeTokens(&stack, 2, QString("<>"));
             break;
 
         case FormulaToken::Intersect:
-            mergeTokens(&stack, 2, UString("!"));
+            mergeTokens(&stack, 2, QString("!"));
             break;
 
         case FormulaToken::Union:
-            mergeTokens(&stack, 2, UString("~"));
+            mergeTokens(&stack, 2, QString("~"));
             break;
 
         case FormulaToken::Range:
-            mergeTokens(&stack, 2, UString(":"));
+            mergeTokens(&stack, 2, QString(":"));
             break;
 
         case FormulaToken::UPlus: {
-            UString str("+");
+            QString str("+");
             str.append(stack[stack.size()-1]);
             stack[stack.size()-1] = str;
             break;
         }
 
         case FormulaToken::UMinus: {
-            UString str("-");
+            QString str("-");
             str.append(stack[ stack.size()-1 ]);
             stack[stack.size()-1] = str;
             break;
         }
 
         case FormulaToken::Percent:
-            stack[stack.size()-1].append(UString("%"));
+            stack[stack.size()-1].append(QString("%"));
             break;
 
         case FormulaToken::Paren: {
-            UString str("(");
+            QString str("(");
             str.append(stack[ stack.size()-1 ]);
-            str.append(UString(")"));
+            str.append(QString(")"));
             stack[stack.size()-1] = str;
             break;
         }
 
         case FormulaToken::MissArg:
             // just ignore
-            stack.push_back(UString(" "));
+            stack.push_back(QString(" "));
             break;
 
         case FormulaToken::String: {
-            UString str('\"');
+            QString str('\"');
             str.append(token.value().asString());
-            str.append(UString('\"'));
+            str.append(QString('\"'));
             stack.push_back(str);
             break;
         }
 
         case FormulaToken::Bool:
             if (token.value().asBoolean())
-                stack.push_back(UString("TRUE"));
+                stack.push_back(QString("TRUE"));
             else
-                stack.push_back(UString("FALSE"));
+                stack.push_back(QString("FALSE"));
             break;
 
         case FormulaToken::Integer:
-            stack.push_back(UString::from(token.value().asInteger()));
+            stack.push_back(QString::number(token.value().asInteger()));
             break;
 
         case FormulaToken::Float:
-            stack.push_back(UString::from(token.value().asFloat()));
+            stack.push_back(QString::number(token.value().asFloat()));
             break;
 
         case FormulaToken::Array:
@@ -1510,12 +1510,12 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             break;
 
         case FormulaToken::Function: {
-            mergeTokens(&stack, token.functionParams(), UString(";"));
+            mergeTokens(&stack, token.functionParams(), QString(";"));
             if (stack.size()) {
-                UString str(token.functionName() ? token.functionName() : "??");
-                str.append(UString("("));
+                QString str(token.functionName() ? token.functionName() : "??");
+                str.append(QString("("));
                 str.append(stack[stack.size()-1]);
-                str.append(UString(")"));
+                str.append(QString(")"));
                 stack[stack.size()-1] = str;
             }
             break;
@@ -1523,24 +1523,24 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         case FormulaToken::FunctionVar:
             if (token.functionIndex() != 255) {
-                mergeTokens(&stack, token.functionParams(), UString(";"));
+                mergeTokens(&stack, token.functionParams(), QString(";"));
                 if (stack.size()) {
-                    UString str;
+                    QString str;
                     if (token.functionIndex() != 255)
                         str = token.functionName() ? token.functionName() : "??";
-                    str.append(UString("("));
+                    str.append(QString("("));
                     str.append(stack[stack.size()-1]);
-                    str.append(UString(")"));
+                    str.append(QString(")"));
                     stack[stack.size()-1] = str;
                 }
             } else {
                 unsigned count = token.functionParams() - 1;
-                mergeTokens(&stack, count, UString(";"));
+                mergeTokens(&stack, count, QString(";"));
                 if (stack.size()) {
-                    UString str;
-                    str.append(UString("("));
+                    QString str;
+                    str.append(QString("("));
                     str.append(stack[ stack.size()-1 ]);
-                    str.append(UString(")"));
+                    str.append(QString(")"));
                     stack[stack.size()-1] = str;
                 }
             }
@@ -1548,12 +1548,12 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 
         case FormulaToken::Attr:
             if (token.attr() & 0x10) { // SUM
-                mergeTokens(&stack, 1, UString(";"));
+                mergeTokens(&stack, 1, QString(";"));
                 if (stack.size()) {
-                    UString str("SUM");
-                    str.append(UString("("));
+                    QString str("SUM");
+                    str.append(QString("("));
                     str.append(stack[ stack.size()-1 ]);
-                    str.append(UString(")"));
+                    str.append(QString(")"));
                     stack[stack.size()-1] = str;
                 }
             }
@@ -1601,7 +1601,7 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         case FormulaToken::AreaErr3d:
         case FormulaToken::RefErr:
         case FormulaToken::RefErr3d:
-            stack.push_back(UString("#REF!"));
+            stack.push_back(QString("#REF!"));
             break;
 
         case FormulaToken::MemErr: // specifies that the result is an error-code
@@ -1626,7 +1626,7 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         default:
             // FIXME handle this !
             std::cout << "Unhandled token=" << token.idAsString() << std::endl;
-            stack.push_back(UString("Unknown"));
+            stack.push_back(QString("Unknown"));
             break;
         };
 
@@ -1635,7 +1635,7 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
 #endif
     }
 
-    UString result;
+    QString result;
     for (unsigned i = 0; i < stack.size(); i++)
         result.append(stack[i]);
 
@@ -1645,9 +1645,9 @@ UString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
     return result;
 }
 
-UString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record)
+QString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record)
 {
-    UString result("MULTIPLE.OPERATIONS(");
+    QString result("MULTIPLE.OPERATIONS(");
 
     unsigned formulaRow = 0, formulaCol = 0;
     switch (record->direction()) {
@@ -1665,50 +1665,50 @@ UString FormulaDecoder::dataTableFormula(unsigned row, unsigned col, const DataT
         break;
     }
 
-    result.append(UString("[.$"));
+    result.append(QString("[.$"));
     result.append(Cell::columnLabel(formulaCol));
-    result.append(UString("$"));
-    result.append(UString::from(formulaRow + 1));
-    result.append(UString("]"));
+    result.append(QString("$"));
+    result.append(QString::number(formulaRow + 1));
+    result.append(QString("]"));
 
     if (record->direction() == DataTableRecord::Input2D) {
-        result.append(UString(";[.$"));
+        result.append(QString(";[.$"));
         result.append(Cell::columnLabel(record->inputColumn2()));
-        result.append(UString("$"));
-        result.append(UString::from(record->inputRow2() + 1));
-        result.append(UString("]"));
+        result.append(QString("$"));
+        result.append(QString::number(record->inputRow2() + 1));
+        result.append(QString("]"));
     } else {
-        result.append(UString(";[.$"));
+        result.append(QString(";[.$"));
         result.append(Cell::columnLabel(record->inputColumn1()));
-        result.append(UString("$"));
-        result.append(UString::from(record->inputRow1() + 1));
-        result.append(UString("]"));
+        result.append(QString("$"));
+        result.append(QString::number(record->inputRow1() + 1));
+        result.append(QString("]"));
     }
 
     if (record->direction() == DataTableRecord::Input2D || record->direction() == DataTableRecord::InputColumn) {
-        result.append(UString(";[.$"));
+        result.append(QString(";[.$"));
         result.append(Cell::columnLabel(record->firstColumn() - 1));
-        result.append(UString::from(row + 1));
-        result.append(UString("]"));
+        result.append(QString::number(row + 1));
+        result.append(QString("]"));
     }
 
     if (record->direction() == DataTableRecord::Input2D) {
-        result.append(UString(";[.$"));
+        result.append(QString(";[.$"));
         result.append(Cell::columnLabel(record->inputColumn1()));
-        result.append(UString("$"));
-        result.append(UString::from(record->inputRow1() + 1));
-        result.append(UString("]"));
+        result.append(QString("$"));
+        result.append(QString::number(record->inputRow1() + 1));
+        result.append(QString("]"));
     }
 
     if (record->direction() == DataTableRecord::Input2D || record->direction() == DataTableRecord::InputRow) {
-        result.append(UString(";[."));
+        result.append(QString(";[."));
         result.append(Cell::columnLabel(col));
-        result.append(UString("$"));
-        result.append(UString::from(record->firstRow() - 1 + 1));
-        result.append(UString("]"));
+        result.append(QString("$"));
+        result.append(QString::number(record->firstRow() - 1 + 1));
+        result.append(QString("]"));
     }
 
-    result.append(UString(")"));
+    result.append(QString(")"));
 
 #ifdef SWINDER_XLS2RAW
     std::cout << "DATATABLE Result: " << result << std::endl;

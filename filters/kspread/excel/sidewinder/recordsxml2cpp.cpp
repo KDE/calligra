@@ -64,7 +64,7 @@ static QString getFieldType(QString xmlType, unsigned bits, QString otherType, c
     else if (xmlType == "signed") return "int";
     else if (xmlType == "float" || xmlType == "fixed") return "double";
     else if (xmlType == "bool") return "bool";
-    else if (xmlType == "bytestring" || xmlType == "unicodestring" || xmlType == "unicodechars") return "UString";
+    else if (xmlType == "bytestring" || xmlType == "unicodestring" || xmlType == "unicodechars") return "QString";
     else if (xmlType == "blob") return "QByteArray";
     else if (xmlType == "uuid") return "QUuid";
     else if (extraTypes.contains(xmlType)) return getFieldType(extraTypes[xmlType], bits, otherType, extraTypes);
@@ -87,7 +87,7 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
         QString name = e.attribute("name");
         if (!name.startsWith("reserved")) {
             map[name] = Field(name, getFieldType(e.attribute("type"), e.attribute("size").toUInt(), map[name].type, extraTypes));
-            if (foundStrings && map[name].type == "UString") *foundStrings = true;
+            if (foundStrings && map[name].type == "QString") *foundStrings = true;
             if (e.parentNode().nodeName() == "array") {
                 map[name].isArray = true;
             }
@@ -145,7 +145,7 @@ void processEnumsForHeader(QDomNodeList fieldList, QTextStream& out)
                 out << "\n";
             }
             out << "    };\n\n"
-            << "    static UString " << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
+            << "    static QString " << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ");\n\n";
         }
     }
 }
@@ -251,7 +251,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 qFatal("Fields of 16 bits and larger must always be an exact number of bytes");
 
             Field& f = fieldsMap[name];
-            if (f.type == "UString") {
+            if (f.type == "QString") {
                 if (offset % 8 != 0)
                     qFatal("Unaligned string");
 
@@ -513,13 +513,13 @@ void processEnumsForImplementation(QDomNodeList fieldList, QString className, QT
         QDomNodeList enumNodes = f.elementsByTagName("enum");
         if (enumNodes.size()) {
             QString name = ucFirst(f.attribute("name"));
-            out << "UString " << className << "::" << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ")\n{\n"
+            out << "QString " << className << "::" << lcFirst(f.attribute("name")) << "ToString(" << name << " " << f.attribute("name") << ")\n{\n"
             << "    switch (" << f.attribute("name") << ") {\n";
             for (int j = 0; j < enumNodes.size(); j++) {
                 QDomElement en = enumNodes.at(j).toElement();
-                out << "        case " << en.attribute("name") << ": return UString(\"" << en.attribute("name") << "\");\n";
+                out << "        case " << en.attribute("name") << ": return QString(\"" << en.attribute("name") << "\");\n";
             }
-            out << "        default: return UString(\"Unknown: \") + UString::from(" << f.attribute("name") << ");\n    }\n}\n\n";
+            out << "        default: return QString(\"Unknown: %1\").arg(" << f.attribute("name") << ");\n    }\n}\n\n";
         }
     }
 }

@@ -22,11 +22,11 @@
 #define SWINDER_FORMULAS_H
 
 #include "value.h"
-#include "ustring.h"
 
 #include <vector>
 
 #include <QtCore/QRect>
+#include <QtCore/QString>
 
 namespace Swinder
 {
@@ -120,23 +120,23 @@ public:
     unsigned functionParams() const;
 
     // only when id is Ref
-    UString ref(unsigned row, unsigned col) const;
+    QString ref(unsigned row, unsigned col) const;
     // only when id is RefN
-    UString refn(unsigned row, unsigned col) const;
+    QString refn(unsigned row, unsigned col) const;
     // only when id is Ref3d
-    UString ref3d(const std::vector<UString>& externSheets, unsigned row, unsigned col) const;
+    QString ref3d(const std::vector<QString>& externSheets, unsigned row, unsigned col) const;
 
     // only when id is Array
-    UString array(unsigned row, unsigned col) const;
+    QString array(unsigned row, unsigned col) const;
 
     // only when id is Area or AreaN
-    UString area(unsigned row, unsigned col, bool relative = false) const;
+    QString area(unsigned row, unsigned col, bool relative = false) const;
     // only when id is Area3d
-    UString area3d(const std::vector<UString>& externSheets, unsigned row, unsigned col) const;
+    QString area3d(const std::vector<QString>& externSheets, unsigned row, unsigned col) const;
     // only when id is Area3d, assumes all references to be absolute
     std::pair<unsigned, QRect> filterArea3d() const;
     // only when id is MemArea
-    UString areaMap(unsigned row, unsigned col);
+    QString areaMap(unsigned row, unsigned col);
 
     // only when id is Attr
     unsigned attr() const;
@@ -172,16 +172,16 @@ public:
 
     FormulaTokens decodeFormula(unsigned size, unsigned pos, const unsigned char* data, unsigned version);
 
-    UString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
-    UString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
+    QString decodeFormula(unsigned row, unsigned col, bool isShared, const FormulaTokens& tokens);
+    QString dataTableFormula(unsigned row, unsigned col, const DataTableRecord* record);
 
-    virtual const std::vector<UString>& externSheets() const { return m_externSheets; }
-    virtual UString nameFromIndex(unsigned /*index*/) const { return UString(); }
-    virtual UString externNameFromIndex(unsigned /*index*/) const { return UString(); }
+    virtual const std::vector<QString>& externSheets() const { return m_externSheets; }
+    virtual QString nameFromIndex(unsigned /*index*/) const { return QString(); }
+    virtual QString externNameFromIndex(unsigned /*index*/) const { return QString(); }
     virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& /*formulaCellPos*/) const { return FormulaTokens(); }
     virtual DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& /*formulaCellPos*/) const { return 0; }
 protected:
-    std::vector<UString> m_externSheets;
+    std::vector<QString> m_externSheets;
 };
 
 } // namespace Swinder

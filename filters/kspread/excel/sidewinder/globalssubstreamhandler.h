@@ -26,7 +26,6 @@
 
 #include "workbook.h"
 #include "substreamhandler.h"
-#include "ustring.h"
 #include "format.h"
 #include "formulas.h"
 
@@ -72,7 +71,7 @@ public:
 
     unsigned version() const;
     Sheet* sheetFromPosition(unsigned position) const;
-    UString stringFromSST(unsigned index) const;
+    QString stringFromSST(unsigned index) const;
     std::map<unsigned, FormatFont> formatRunsFromSST(unsigned index) const;
 
     unsigned fontCount() const;//
@@ -88,12 +87,12 @@ public:
 
     const Format* convertedFormat(unsigned index) const;
 
-    UString valueFormat(unsigned index) const;  //
+    QString valueFormat(unsigned index) const;  //
 
-    virtual const std::vector<UString>& externSheets() const;
+    virtual const std::vector<QString>& externSheets() const;
 
-    virtual UString nameFromIndex(unsigned index) const;
-    virtual UString externNameFromIndex(unsigned index) const;
+    virtual QString nameFromIndex(unsigned index) const;
+    virtual QString externNameFromIndex(unsigned index) const;
 
     MsoDrawingBlibItem* drawing(unsigned long pid) const;
     QList< Sheet* >& chartSheets();

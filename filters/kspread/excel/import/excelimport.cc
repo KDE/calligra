@@ -61,7 +61,7 @@ namespace Swinder
 static inline uint qHash(const Swinder::FormatFont& font)
 {
     // TODO: make this a better hash
-    return qHash(string(font.fontFamily())) ^ qRound(font.fontSize() * 100);
+    return qHash(font.fontFamily()) ^ qRound(font.fontSize() * 100);
 }
 
 qreal offset( unsigned long dimension, unsigned long offset ) {
@@ -141,7 +141,7 @@ public:
     void processSheetForBody(KoOdfWriteStore* store, Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter);
     void processSheetForHeaderFooter(Sheet* sheet, KoXmlWriter* writer);
-    void processHeaderFooterStyle(UString text, KoXmlWriter* xmlWriter);
+    void processHeaderFooterStyle(const QString& text, KoXmlWriter* xmlWriter);
     void processColumnForBody(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel);
     void processColumnForStyle(Sheet* sheet, int columnIndex, KoXmlWriter* xmlWriter);
     int processRowForBody(KoOdfWriteStore* store, Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter, unsigned& outlineLevel);
@@ -510,14 +510,14 @@ bool ExcelImport::Private::createSettings(KoOdfWriteStore* store)
     settingsWriter->startElement("config:config-item-map-entry");
     settingsWriter->addConfigItem("ViewId", QString::fromLatin1("View1"));
     if(Sheet *sheet = workbook->sheet(workbook->activeTab()))
-        settingsWriter->addConfigItem("ActiveTable", string(sheet->name()));
+        settingsWriter->addConfigItem("ActiveTable", sheet->name());
 
     settingsWriter->startElement("config:config-item-map-named");
     settingsWriter->addAttribute("config:name", "Tables");
     for(uint i = 0; i < workbook->sheetCount(); ++i) {
         Sheet* sheet = workbook->sheet(i);
         settingsWriter->startElement("config:config-item-map-entry");
-        settingsWriter->addAttribute("config:name", string(sheet->name()));
+        settingsWriter->addAttribute("config:name", sheet->name());
         QPoint point = sheet->firstVisibleCell();
         settingsWriter->addConfigItem("CursorPositionX", point.x());
         settingsWriter->addConfigItem("CursorPositionY", point.y());
@@ -569,13 +569,13 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
         processSheetForBody(store, sheet, xmlWriter);
     }
 
-    std::map<std::pair<unsigned, UString>, UString> &namedAreas = workbook->namedAreas();
+    std::map<std::pair<unsigned, QString>, QString> &namedAreas = workbook->namedAreas();
     if(namedAreas.size() > 0) {
         xmlWriter->startElement("table:named-expressions");
-        for(std::map<std::pair<unsigned, UString>, UString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
+        for(std::map<std::pair<unsigned, QString>, QString>::iterator it = namedAreas.begin(); it != namedAreas.end(); it++) {
             xmlWriter->startElement("table:named-range");
-            xmlWriter->addAttribute("table:name", string((*it).first.second) ); // e.g. "My Named Range"
-            QString range = string((*it).second);
+            xmlWriter->addAttribute("table:name", it->first.second ); // e.g. "My Named Range"
+            QString range = it->second;
             if(range.startsWith('[') && range.endsWith(']'))
                 range = range.mid(1, range.length() - 2);
             xmlWriter->addAttribute("table:cell-range-address", range); // e.g. "$Sheet1.$B$2:.$B$3"
@@ -588,7 +588,7 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
     int rangeId = 1;
     for (unsigned i = 0; i < workbook->sheetCount(); i++) {
         QList<QRect> filters = workbook->filterRanges(i);
-        QString sheetName = string(workbook->sheet(i)->name());
+        QString sheetName = workbook->sheet(i)->name();
         if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
             sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
         if (filters.size()) {
@@ -686,7 +686,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
 
     xmlWriter->startElement("table:table");
 
-    xmlWriter->addAttribute("table:name", string(sheet->name()));
+    xmlWriter->addAttribute("table:name", sheet->name());
     xmlWriter->addAttribute("table:print", "false");
     xmlWriter->addAttribute("table:style-name", sheetStyles[sheetFormatIndex]);
     ++sheetFormatIndex;
@@ -824,17 +824,17 @@ void ExcelImport::Private::processSheetForHeaderFooter(Sheet* sheet, KoXmlWriter
 }
 
 // Processes the styles of a headers and footers for a sheet.
-void ExcelImport::Private::processHeaderFooterStyle(UString text, KoXmlWriter* xmlWriter)
+void ExcelImport::Private::processHeaderFooterStyle(const QString& text, KoXmlWriter* xmlWriter)
 {
     QString content;
     bool skipUnsupported = false;
     int lastPos;
-    int pos = text.find(UString('&'));
+    int pos = text.indexOf('&');
     int len = text.length();
     if ((pos < 0) && (text.length() > 0))   // If ther is no &
-        xmlWriter->addTextNode(text.cstring().c_str());
+        xmlWriter->addTextNode(text);
     else if (pos > 0) // Some text and '&'
-        xmlWriter->addTextNode(text.substr(0,  pos - 1).cstring().c_str());
+        xmlWriter->addTextNode(text.mid(0,  pos - 1));
 
     while (pos >= 0) {
         switch (text[pos + 1].unicode()) {
@@ -874,11 +874,11 @@ void ExcelImport::Private::processHeaderFooterStyle(UString text, KoXmlWriter* x
             break;
         }
         lastPos = pos;
-        pos = text.find(UString('&'), lastPos + 1);
+        pos = text.indexOf('&', lastPos + 1);
         if (!skipUnsupported && (pos > (lastPos + 1)))
-            xmlWriter->addTextNode(text.substr(lastPos + 2, (pos - lastPos - 2)).cstring().c_str());
+            xmlWriter->addTextNode(text.mid(lastPos + 2, (pos - lastPos - 2)));
         else if (!skipUnsupported && (pos < 0))  //Remaining text
-            xmlWriter->addTextNode(text.substr(lastPos + 2, len - (lastPos + 2)).cstring().c_str());
+            xmlWriter->addTextNode(text.mid(lastPos + 2, len - (lastPos + 2)));
         else
             skipUnsupported = false;
     }
@@ -1245,7 +1245,7 @@ static QString convertFraction(double serialNo, const QString& valueFormat)
 
 QString cellFormula(Cell* cell)
 {
-    QString formula = string(cell->formula());
+    QString formula = cell->formula();
     if (!formula.isEmpty()) {
         if(formula.startsWith("ROUNDUP(") || formula.startsWith("ROUNDDOWN(") || formula.startsWith("ROUND(") || formula.startsWith("RAND(")) {
             // Special case Excel formulas that differ from OpenFormula
@@ -1301,7 +1301,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttribute("office:value-type", "boolean");
         xmlWriter->addAttribute("office:boolean-value", value.asBoolean() ? "true" : "false");
     } else if (value.isFloat() || value.isInteger()) {
-        const QString valueFormat = string(cell->format().valueFormat());
+        const QString valueFormat = cell->format().valueFormat();
 
         if (isPercentageFormat(valueFormat)) {
             xmlWriter->addAttribute("office:value-type", "percentage");
@@ -1323,14 +1323,14 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
             xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
         }
     } else if (value.isText() || value.isError()) {
-        QString str = string(value.asString());
+        QString str = value.asString();
         QString linkName, linkLocation;
 
         Hyperlink link = cell->hyperlink();
         if (link.isValid) {
-            linkLocation = string(link.location);
+            linkLocation = link.location;
             if(!linkLocation.isEmpty()) {
-                linkName = string(link.displayName).trimmed();
+                linkName = link.displayName.trimmed();
                 if(linkName.isEmpty())
                     linkName = str;
                 str.clear(); // at Excel cells with links don't have additional text content
@@ -1392,7 +1392,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         if (!linkName.isEmpty()) {
             xmlWriter->startElement("text:a");
             xmlWriter->addAttribute("xlink:href", linkLocation);
-            const QString targetFrameName = string(link.targetFrameName);
+            const QString targetFrameName = link.targetFrameName;
             if (! targetFrameName.isEmpty())
                 xmlWriter->addAttribute("office:target-frame-name", targetFrameName);
             xmlWriter->addTextNode(linkName);
@@ -1402,15 +1402,14 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->endElement(); //  text:p
     }
 
-    const UString note = cell->note();
+    const QString note = cell->note();
     if (! note.isEmpty()) {
-        const QString n = string(note);
         xmlWriter->startElement("office:annotation");
         //xmlWriter->startElement("dc:creator");
         //xmlWriter->addTextNode(authorName); //TODO
         //xmlWriter->endElement(); // dc:creator
         xmlWriter->startElement("text:p");
-        xmlWriter->addTextNode(n);
+        xmlWriter->addTextNode(note);
         xmlWriter->endElement(); // text:p
         xmlWriter->endElement(); // office:annotation
     }
@@ -1429,7 +1428,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
-        xmlWriter->addAttribute("table:end-cell-address", string(sheet->name()) + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB+1));
+        xmlWriter->addAttribute("table:end-cell-address", sheet->name() + "." + columnName(picture->m_colR) + QString::number(picture->m_rwB+1));
         xmlWriter->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR));
         xmlWriter->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB));
         xmlWriter->addAttribute("draw:z-index", "0");
@@ -1459,7 +1458,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         ChartExport *c = new ChartExport(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = string(sheet->name()) + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
+        c->m_endCellAddress = sheet->name() + "." + columnName(drawobj->m_colR) + QString::number(drawobj->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
 
         const unsigned long colL = drawobj->m_colL;
@@ -1475,8 +1474,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->m_y = offset(rowHeight(sheet, rwT), dyT);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
-            c->m_cellRangeAddress = string(sheet->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
-                                    string(sheet->name()) + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
+            c->m_cellRangeAddress = sheet->name() + "." + columnName(chart->m_chart->m_cellRangeAddress.left()) + QString::number(chart->m_chart->m_cellRangeAddress.top()) + ":" +
+                                    sheet->name() + "." + columnName(chart->m_chart->m_cellRangeAddress.right()) + QString::number(chart->m_chart->m_cellRangeAddress.bottom());
 
         this->charts << c;
 
@@ -1532,7 +1531,7 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
 {
     // handle data format, e.g. number style
     QString refName;
-    QString valueFormat = string(format->valueFormat());
+    QString valueFormat = format->valueFormat();
     if (valueFormat != QString("General")) {
         refName = processValueFormat(valueFormat);
     } else {
@@ -1582,7 +1581,7 @@ QString ExcelImport::Private::processCellFormat(Format* format, const QString& f
 QString ExcelImport::Private::processRowFormat(Format* format, const QString& breakBefore, int rowRepeat, double rowHeight)
 {
     QString refName;
-    QString valueFormat = string(format->valueFormat());
+    QString valueFormat = format->valueFormat();
     if (valueFormat != QString("General"))
         refName = processValueFormat(valueFormat);
 
@@ -1883,7 +1882,7 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
 
     //TODO add the manifest entry
     writer.startElement("style:background-image");
-    writer.addAttribute("xlink:href", sheet->backgroundImage().ascii());
+    writer.addAttribute("xlink:href", sheet->backgroundImage());
     writer.addAttribute("xlink:type", "simple");
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
@@ -1891,7 +1890,7 @@ void ExcelImport::Private::processSheetBackground(Sheet* sheet, KoGenStyle& styl
 
     buffer.close();
     style.addChildElement("style:background-image", QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
-    manifestEntries.insert(QString::fromAscii(sheet->backgroundImage().ascii()), "image/bmp");
+    manifestEntries.insert(sheet->backgroundImage(), "image/bmp");
 }
 
 void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)

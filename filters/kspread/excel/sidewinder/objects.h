@@ -22,7 +22,6 @@
 
 #include <Charting.h>
 
-#include "ustring.h"
 #include "formulas.h"
 #include "records.h"
 #include "format.h"
@@ -35,8 +34,9 @@
 #include <iostream>
 #include <vector>
 
-#include <QRect>
-#include <QList>
+#include <QtCore/QList>
+#include <QtCore/QRect>
+#include <QtCore/QString>
 
 namespace Swinder
 {
@@ -202,15 +202,15 @@ public:
     NoteObject(unsigned long id) : Object(Note, id) {}
     virtual ~NoteObject() {}
     /// Returns the comment.
-    UString note() const {
+    QString note() const {
         return m_note;
     }
     /// Set the comment.
-    void setNote(const UString &n) {
+    void setNote(const QString &n) {
         m_note = n;
     }
 private:
-    UString m_note;
+    QString m_note;
 };
 
 class ChartObject : public Object

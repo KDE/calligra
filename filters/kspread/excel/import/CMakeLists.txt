@@ -24,7 +24,6 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/format.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/pole.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/sheet.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/ustring.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/value.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/workbook.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/formulas.cpp

@@ -33,7 +33,7 @@ public:
     KoStore* store;
     std::vector<Sheet*> sheets;
     QHash<PropertyType, QVariant> properties;
-    std::map<std::pair<unsigned, UString>, UString> namedAreas;
+    std::map<std::pair<unsigned, QString>, QString> namedAreas;
     std::map<unsigned, QList<QRect> > filterRanges;
     int activeTab;
     bool passwordProtected;
@@ -112,12 +112,12 @@ void Workbook::setProperty(PropertyType type, const QVariant &value)
     d->properties[ type ] = value;
 }
 
-std::map<std::pair<unsigned, UString>, UString>& Workbook::namedAreas()
+std::map<std::pair<unsigned, QString>, QString>& Workbook::namedAreas()
 {
     return d->namedAreas;
 }
 
-void Workbook::setNamedArea(unsigned sheet, UString name, UString formula)
+void Workbook::setNamedArea(unsigned sheet, QString name, QString formula)
 {
     d->namedAreas[std::make_pair(sheet, name)] = formula;
 }

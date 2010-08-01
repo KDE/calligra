@@ -18,7 +18,7 @@
 */
 
 #include "value.h"
-#include "ustring.h"
+#include "utils.h"
 
 #include <iostream>
 #include <sstream>
@@ -39,7 +39,7 @@ public:
         int i;
         double f;
     };
-    UString s;
+    QString s;
     std::map<unsigned, FormatFont> formatRuns;
 
     // create empty data
@@ -48,7 +48,7 @@ public:
         b = false;
         i = 0;
         f = 0.0;
-        s = UString::null;
+        s = QString::null;
         type = Value::Empty;
         ref();
     }
@@ -166,14 +166,14 @@ Value::Value(double f)
 }
 
 // create a string value
-Value::Value(const UString& s)
+Value::Value(const QString& s)
 {
     d = ValueData::null();
     setValue(s);
 }
 
 // create a richtext value
-Value::Value(const UString& s, const std::map<unsigned, FormatFont>& formatRuns)
+Value::Value(const QString& s, const std::map<unsigned, FormatFont>& formatRuns)
 {
     d = ValueData::null();
     setValue(s, formatRuns);
@@ -264,7 +264,7 @@ double Value::asFloat() const
 }
 
 // set the value as string
-void Value::setValue(const UString& s)
+void Value::setValue(const QString& s)
 {
     detach();
     d->type = String;
@@ -272,9 +272,9 @@ void Value::setValue(const UString& s)
 }
 
 // get the value as string
-UString Value::asString() const
+QString Value::asString() const
 {
-    UString result;
+    QString result;
 
     switch(type()) {
         case Value::Error:
@@ -305,7 +305,7 @@ UString Value::asString() const
 }
 
 // set the value as rich text
-void Value::setValue(const UString& s, const std::map<unsigned, FormatFont>& formatRuns)
+void Value::setValue(const QString& s, const std::map<unsigned, FormatFont>& formatRuns)
 {
     detach();
     d->type = RichText;
@@ -325,7 +325,7 @@ std::map<unsigned, FormatFont> Value::formatRuns() const
 }
 
 // set error message
-void Value::setError(const UString& msg)
+void Value::setError(const QString& msg)
 {
     detach();
     d->type = Error;
@@ -333,9 +333,9 @@ void Value::setError(const UString& msg)
 }
 
 // get error message
-UString Value::errorMessage() const
+QString Value::errorMessage() const
 {
-    UString result;
+    QString result;
 
     if (type() == Value::Error)
         result = d->s;
@@ -353,7 +353,7 @@ const Value& Value::empty()
 const Value& Value::errorDIV0()
 {
     if (!ks_error_div0.isError())
-        ks_error_div0.setError(UString("#DIV/0!"));
+        ks_error_div0.setError(QString("#DIV/0!"));
     return ks_error_div0;
 }
 
@@ -361,7 +361,7 @@ const Value& Value::errorDIV0()
 const Value& Value::errorNA()
 {
     if (!ks_error_na.isError())
-        ks_error_na.setError(UString("#N/A"));
+        ks_error_na.setError(QString("#N/A"));
     return ks_error_na;
 }
 
@@ -369,7 +369,7 @@ const Value& Value::errorNA()
 const Value& Value::errorNAME()
 {
     if (!ks_error_name.isError())
-        ks_error_name.setError(UString("#NAME?"));
+        ks_error_name.setError(QString("#NAME?"));
     return ks_error_name;
 }
 
@@ -377,7 +377,7 @@ const Value& Value::errorNAME()
 const Value& Value::errorNUM()
 {
     if (!ks_error_num.isError())
-        ks_error_num.setError(UString("#NUM!"));
+        ks_error_num.setError(QString("#NUM!"));
     return ks_error_num;
 }
 
@@ -385,7 +385,7 @@ const Value& Value::errorNUM()
 const Value& Value::errorNULL()
 {
     if (!ks_error_null.isError())
-        ks_error_null.setError(UString("#NULL!"));
+        ks_error_null.setError(QString("#NULL!"));
     return ks_error_null;
 }
 
@@ -393,7 +393,7 @@ const Value& Value::errorNULL()
 const Value& Value::errorREF()
 {
     if (!ks_error_ref.isError())
-        ks_error_ref.setError(UString("#REF!"));
+        ks_error_ref.setError(QString("#REF!"));
     return ks_error_ref;
 }
 
@@ -401,7 +401,7 @@ const Value& Value::errorREF()
 const Value& Value::errorVALUE()
 {
     if (!ks_error_value.isError())
-        ks_error_value.setError(UString("#VALUE!"));
+        ks_error_value.setError(QString("#VALUE!"));
     return ks_error_value;
 }
 
@@ -444,13 +444,13 @@ std::ostream& Swinder::operator<<(std::ostream& s, Swinder::Value value)
         s << "Float: " << value.asFloat();
         break;
     case Value::String:
-        s << "String: " << value.asString().ascii();
+        s << "String: " << value.asString();
         break;
     case Value::RichText:
-        s << "RichText: " << value.asString().ascii();
+        s << "RichText: " << value.asString();
         break;
     case Value::Error:
-        s << "Error: " << value.errorMessage().ascii();
+        s << "Error: " << value.errorMessage();
         break;
     default:
         break;

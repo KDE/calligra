@@ -25,55 +25,55 @@
 namespace Swinder
 {
 
-UString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
+QString readByteString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* size)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
 
     if (size) *size = length;
     if (length > maxSize) {
         if (*error) *error = true;
-        return UString::null;
+        return QString::null;
     }
 
     char* buffer = new char[length+1];
     memcpy(buffer, data, length);
     buffer[length] = 0;
-    UString str(buffer);
+    QString str(buffer);
     delete[] buffer;
 
     return str;
 }
 
-UString readTerminatedUnicodeChars(const void* p, unsigned* pSize, unsigned maxSize, bool* error)
+QString readTerminatedUnicodeChars(const void* p, unsigned* pSize, unsigned maxSize, bool* error)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
 
-    UString str;
+    QString str;
     unsigned offset = 0;
     unsigned size = offset;
     while (true) {
         if (size+2 > maxSize) {
             if (*error) *error = true;
-            return UString::null;
+            return QString::null;
         }
         unsigned uchar = readU16(data + offset);
         size += 2;
         if (uchar == '\0') break;
         offset += 2;
-        str.append(UString(UChar(uchar)));
+        str.append(QChar(uchar));
     }
 
     if (pSize) *pSize = size;
     return str;
 }
 
-UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition, unsigned offset, bool unicode, bool asianPhonetics, bool richText)
+QString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition, unsigned offset, bool unicode, bool asianPhonetics, bool richText)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
 
     if (maxSize < 1) {
         if (*error) *error = true;
-        return UString::null;
+        return QString::null;
     }
 
     unsigned formatRuns = 0;
@@ -82,7 +82,7 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (richText) {
         if (offset + 2 > maxSize) {
             if (*error) *error = true;
-            return UString::null;
+            return QString::null;
         }
         formatRuns = readU16(data + offset);
         offset += 2;
@@ -91,7 +91,7 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (asianPhonetics) {
         if (offset + 4 > maxSize) {
             if (*error) *error = true;
-            return UString::null;
+            return QString::null;
         }
         asianPhoneticsSize = readU32(data + offset);
         offset += 4;
@@ -103,15 +103,15 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     if (asianPhonetics) size += asianPhoneticsSize;
     if (size > maxSize) {
         if (*error) *error = true;
-        return UString::null;
+        return QString::null;
     }
-    UString str;
+    QString str;
     for (unsigned k = 0; k < length; k++) {
         unsigned uchar;
         if (unicode) {
             if (size + 2 > maxSize) {
                 if (*error) *error = true;
-                return UString::null;
+                return QString::null;
             }
             uchar = readU16(data + offset);
             offset += 2;
@@ -119,16 +119,16 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
         } else {
             if (size + 1 > maxSize) {
                 if (*error) *error = true;
-                return UString::null;
+                return QString::null;
             }
             uchar = data[offset++];
             size++;
         }
-        str.append(UString(UChar(uchar)));
+        str.append(QChar(uchar));
         if (offset == continuePosition && k < length - 1) {
             if (size + 1 > maxSize) {
                 if (*error) *error = true;
-                return UString::null;
+                return QString::null;
             }
             unicode = data[offset] & 1;
             size++;
@@ -140,13 +140,13 @@ UString readUnicodeChars(const void* p, unsigned length, unsigned maxSize, bool*
     return str;
 }
 
-UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+QString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
 {
     const unsigned char* data = reinterpret_cast<const unsigned char*>(p);
 
     if (maxSize < 1) {
         if (*error) *error = true;
-        return UString::null;
+        return QString::null;
     }
 
     unsigned char flags = data[0];
@@ -158,7 +158,7 @@ UString readUnicodeString(const void* p, unsigned length, unsigned maxSize, bool
     return readUnicodeChars(p, length, maxSize, error, pSize, continuePosition, offset, unicode, asianPhonetics, richText);
 }
 
-UString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
+QString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize, bool* error, unsigned* pSize, unsigned continuePosition)
 {
     if (length == unsigned(-1)) { // null terminated string
         return readTerminatedUnicodeChars(p, pSize, maxSize, error);
@@ -167,10 +167,9 @@ UString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize, b
     }
 }
 
-std::ostream& operator<<(std::ostream& s, Swinder::UString ustring)
+std::ostream& operator<<(std::ostream& s, const QString& ustring)
 {
-    char* str = ustring.ascii();
-    s << str;
+    s << qPrintable(ustring);
     return s;
 }
 

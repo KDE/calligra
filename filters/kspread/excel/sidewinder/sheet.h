@@ -20,10 +20,10 @@
 #ifndef SWINDER_SHEET_H
 #define SWINDER_SHEET_H
 
-#include "ustring.h"
 #include "format.h"
 #include "cell.h"
-#include <QImage>
+#include <QtCore/QString>
+#include <QtGui/QImage>
 
 class QPoint;
 
@@ -52,9 +52,9 @@ public:
      */
     void clear();
 
-    void setName(const UString& name);
+    void setName(const QString& name);
 
-    UString name() const;
+    QString name() const;
 
     // return cell at specified column and row
     // automatically create the cell if previously there is no cell there
@@ -103,19 +103,19 @@ public:
 
      */
 
-    UString leftHeader() const;
-    void setLeftHeader(const UString& h);
-    UString centerHeader() const;
-    void setCenterHeader(const UString& h);
-    UString rightHeader() const;
-    void setRightHeader(const UString& h);
+    QString leftHeader() const;
+    void setLeftHeader(const QString& h);
+    QString centerHeader() const;
+    void setCenterHeader(const QString& h);
+    QString rightHeader() const;
+    void setRightHeader(const QString& h);
 
-    UString leftFooter() const;
-    void setLeftFooter(const UString& f);
-    UString centerFooter() const;
-    void setCenterFooter(const UString& f);
-    UString rightFooter() const;
-    void setRightFooter(const UString& f);
+    QString leftFooter() const;
+    void setLeftFooter(const QString& f);
+    QString centerFooter() const;
+    void setCenterFooter(const QString& f);
+    QString rightFooter() const;
+    void setRightFooter(const QString& f);
 
     // left margin, in points (pt)
     double leftMargin() const;
@@ -166,8 +166,8 @@ public:
     unsigned long password() const;
     void setPassword(unsigned long hash);
 
-    UString backgroundImage();
-    void setBackgroundImage(const Swinder::UString& imagePath);
+    QString backgroundImage();
+    void setBackgroundImage(const QString& imagePath);
 
     void addVerticalPageBreak(const VerticalPageBreak& pageBreak);
     QList<VerticalPageBreak> verticalPageBreaks();

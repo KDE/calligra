@@ -60,7 +60,7 @@ public:
         bool isUnlinkedFormat = readU16(data + 2) & 0x01;
         unsigned numberFormat = readU16(data + 4);
 
-        UString formula;
+        QString formula;
         if (m_worksheetHandler) {
             FormulaTokens tokens = m_worksheetHandler->decodeFormula(size, 6, data, version());
             formula = m_worksheetHandler->decodeFormula(0, 0, true, tokens);
@@ -70,7 +70,7 @@ public:
         }
 
         if (m_value) delete m_value;
-        m_value = new Charting::Value(dataId, type, string(formula), isUnlinkedFormat, numberFormat);
+        m_value = new Charting::Value(dataId, type, formula, isUnlinkedFormat, numberFormat);
     }
 
 private:
@@ -599,12 +599,12 @@ void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
     if (!record || !m_currentSeries) return;
     DEBUG << "text=" << record->text() << std::endl;
     if (Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj)) {
-        t->m_text = string(record->text());
+        t->m_text = record->text();
     } else if (Charting::Legend *l = dynamic_cast<Charting::Legend*>(m_currentObj)) {
         //TODO
         Q_UNUSED(l);
     } else if (Charting::Series* series = dynamic_cast<Charting::Series*>(m_currentObj)) {
-        series->m_texts << new Charting::Text(string(record->text()));
+        series->m_texts << new Charting::Text(record->text());
     } else {
         //m_currentSeries->m_texts << new Charting::Text(string(record->text()));
     }

@@ -61,7 +61,7 @@ public:
     int noteCount;
 
     // list of textobjects as received via TxO records
-    std::vector<UString> textObjects;
+    std::vector<QString> textObjects;
 
     // The last drawing object we got.
     DrawingObject* lastDrawingObject;
@@ -108,17 +108,17 @@ std::vector<unsigned long>& WorksheetSubStreamHandler::charts() const
     return d->charts;
 }
 
-const std::vector<UString>& WorksheetSubStreamHandler::externSheets() const
+const std::vector<QString>& WorksheetSubStreamHandler::externSheets() const
 {
     return d->globals->externSheets();
 }
 
-UString WorksheetSubStreamHandler::nameFromIndex(unsigned index) const
+QString WorksheetSubStreamHandler::nameFromIndex(unsigned index) const
 {
     return d->globals->nameFromIndex(index);
 }
 
-UString WorksheetSubStreamHandler::externNameFromIndex(unsigned index) const
+QString WorksheetSubStreamHandler::externNameFromIndex(unsigned index) const
 {
     return d->globals->externNameFromIndex(index);
 }
@@ -322,7 +322,7 @@ void WorksheetSubStreamHandler::handleDataTable(DataTableRecord* record)
 
     d->dataTables[std::make_pair(row, column)] = new DataTableRecord(*record);
 
-    UString formula = dataTableFormula(row, column, record);
+    QString formula = dataTableFormula(row, column, record);
     d->lastFormulaCell->setFormula(formula);
 
     d->lastFormulaCell = 0;
@@ -348,7 +348,7 @@ void WorksheetSubStreamHandler::handleFormula(FormulaRecord* record)
     unsigned row = record->row();
     unsigned xfIndex = record->xfIndex();
     Value value = record->result();
-    UString formula = decodeFormula(row, column, record->isShared(), record->tokens());
+    QString formula = decodeFormula(row, column, record->isShared(), record->tokens());
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
         cell->setValue(value);
@@ -369,41 +369,41 @@ void WorksheetSubStreamHandler::handleFooter(FooterRecord* record)
     if (!record) return;
     if (!d->sheet) return;
 
-    UString footer = record->footer();
-    UString left, center, right;
+    QString footer = record->footer();
+    QString left, center, right;
     int pos = -1, len = 0;
 
     // left part
-    pos = footer.find(UString("&L"));
+    pos = footer.indexOf("&L");
     if (pos >= 0) {
         pos += 2;
-        len = footer.find(UString("&C")) - pos;
+        len = footer.indexOf("&C") - pos;
         if (len > 0) {
-            left = footer.substr(pos, len);
-            footer = footer.substr(pos + len, footer.length());
+            left = footer.mid(pos, len);
+            footer = footer.mid(pos + len, footer.length());
         } else {
-            left = footer.substr(pos);
+            left = footer.mid(pos);
         }
     }
 
     // center part
-    pos = footer.find(UString("&C"));
+    pos = footer.indexOf("&C");
     if (pos >= 0) {
         pos += 2;
-        len = footer.find(UString("&R")) - pos;
+        len = footer.indexOf("&R") - pos;
         if (len > 0) {
-            center = footer.substr(pos, len);
-            footer = footer.substr(pos + len, footer.length());
+            center = footer.mid(pos, len);
+            footer = footer.mid(pos + len, footer.length());
         } else {
-            center = footer.substr(pos);
+            center = footer.mid(pos);
         }
     }
 
     // right part
-    pos = footer.find(UString("&R"));
+    pos = footer.indexOf("&R");
     if (pos >= 0) {
         pos += 2;
-        right = footer.substr(pos, footer.length() - pos);
+        right = footer.mid(pos, footer.length() - pos);
     }
 
     d->sheet->setLeftFooter(left);
@@ -416,41 +416,41 @@ void WorksheetSubStreamHandler::handleHeader(HeaderRecord* record)
     if (!record) return;
     if (!d->sheet) return;
 
-    UString header = record->header();
-    UString left, center, right;
+    QString header = record->header();
+    QString left, center, right;
     int pos = -1, len = 0;
 
     // left part of the header
-    pos = header.find(UString("&L"));
+    pos = header.indexOf("&L");
     if (pos >= 0) {
         pos += 2;
-        len = header.find(UString("&C")) - pos;
+        len = header.indexOf("&C") - pos;
         if (len > 0) {
-            left = header.substr(pos, len);
-            header = header.substr(pos + len, header.length());
+            left = header.mid(pos, len);
+            header = header.mid(pos + len, header.length());
         } else {
-            left = header.substr(pos);
+            left = header.mid(pos);
         }
     }
 
     // center part of the header
-    pos = header.find(UString("&C"));
+    pos = header.indexOf("&C");
     if (pos >= 0) {
         pos += 2;
-        len = header.find(UString("&R")) - pos;
+        len = header.indexOf("&R") - pos;
         if (len > 0) {
-            center = header.substr(pos, len);
-            header = header.substr(pos + len, header.length());
+            center = header.mid(pos, len);
+            header = header.mid(pos + len, header.length());
         } else {
-            center = header.substr(pos);
+            center = header.mid(pos);
         }
     }
 
     // right part of the header
-    pos = header.find(UString("&R"));
+    pos = header.indexOf("&R");
     if (pos >= 0) {
         pos += 2;
-        right = header.substr(pos, header.length() - pos);
+        right = header.mid(pos, header.length() - pos);
     }
 
     d->sheet->setLeftHeader(left);
@@ -466,7 +466,7 @@ void WorksheetSubStreamHandler::handleLabel(LabelRecord* record)
     unsigned column = record->column();
     unsigned row = record->row();
     unsigned xfIndex = record->xfIndex();
-    UString label = record->label();
+    QString label = record->label();
 
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
@@ -485,7 +485,7 @@ void WorksheetSubStreamHandler::handleLabelSST(LabelSSTRecord* record)
     unsigned index = record->sstIndex();
     unsigned xfIndex = record->xfIndex();
 
-    UString str = d->globals->stringFromSST(index);
+    QString str = d->globals->stringFromSST(index);
     std::map<unsigned, FormatFont> formatRuns = d->globals->formatRunsFromSST(index);
 
     Cell* cell = d->sheet->cell(column, row, true);
@@ -672,7 +672,7 @@ void WorksheetSubStreamHandler::handleRString(RStringRecord* record)
     unsigned column = record->column();
     unsigned row = record->row();
     unsigned xfIndex = record->xfIndex();
-    UString label = record->label();
+    QString label = record->label();
 
     Cell* cell = d->sheet->cell(column, row, true);
     if (cell) {
@@ -691,7 +691,7 @@ void WorksheetSubStreamHandler::handleSharedFormula(SharedFormulaRecord* record)
 
     d->sharedFormulas[std::make_pair(row, column)] = record->tokens();
 
-    UString formula = decodeFormula(row, column, true, record->tokens());
+    QString formula = decodeFormula(row, column, true, record->tokens());
     d->lastFormulaCell->setFormula(formula);
 
     d->lastFormulaCell = 0;
@@ -725,7 +725,7 @@ void WorksheetSubStreamHandler::handleHLink(HLinkRecord* record)
     //FIXME we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
     Cell *cell = d->sheet->cell(record->firstColumn(), record->firstRow());
     if (cell) {
-        UString url = record->urlMonikerUrl() + UString('#') + record->location();
+        QString url = record->urlMonikerUrl() + QString('#') + record->location();
         cell->setHyperlink(Hyperlink(record->displayName(), url, record->frameName()));
     }
 }

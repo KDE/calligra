@@ -94,7 +94,7 @@ class EString::Private
 public:
     bool unicode;
     bool richText;
-    UString str;
+    QString str;
     unsigned size;
     std::map<unsigned, unsigned> formatRuns;
 };
@@ -104,7 +104,7 @@ EString::EString()
     d = new EString::Private();
     d->unicode  = false;
     d->richText = false;
-    d->str      = UString::null;
+    d->str      = QString::null;
     d->size     = 0;
 }
 
@@ -148,12 +148,12 @@ void EString::setRichText(bool r)
     d->richText = r;
 }
 
-UString EString::str() const
+QString EString::str() const
 {
     return d->str;
 }
 
-void EString::setStr(const UString& str)
+void EString::setStr(const QString& str)
 {
     d->str = str;
 }
@@ -182,7 +182,7 @@ void EString::setSize(unsigned s)
 EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* maxsize */, const unsigned* continuePositions, unsigned continuePositionsOffset)
 {
     const unsigned char* data = (const unsigned char*) p;
-    UString str = UString::null;
+    QString str = QString::null;
 
     unsigned offset = longString ? 2 : 1;
     unsigned len = longString ? readU16(data) : data[0];
@@ -210,7 +210,7 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
     if (richText) size += (formatRuns * 4);
     if (asianPhonetics) size += asianPhoneticsSize;
 
-    str = UString();
+    str = QString();
     for (unsigned k = 0; k < len; k++) {
         unsigned uchar;
         if (unicode) {
@@ -221,7 +221,7 @@ EString EString::fromUnicodeString(const void* p, bool longString, unsigned /* m
             uchar = data[offset++];
             size++;
         }
-        str.append(UString(UChar(uchar)));
+        str.append(QString(QChar(uchar)));
         if (continuePositions && offset == *continuePositions - continuePositionsOffset && k < len - 1) {
             unicode = data[offset] & 1;
             size++;
@@ -255,7 +255,7 @@ EString EString::fromByteString(const void* p, bool longString,
                                 unsigned /* maxsize */)
 {
     const unsigned char* data = (const unsigned char*) p;
-    UString str = UString::null;
+    QString str = QString::null;
 
     unsigned offset = longString ? 2 : 1;
     unsigned len = longString ? readU16(data) : data[0];
@@ -263,7 +263,7 @@ EString EString::fromByteString(const void* p, bool longString,
     char* buffer = new char[ len+1 ];
     memcpy(buffer, data + offset, len);
     buffer[ len ] = 0;
-    str = UString(buffer);
+    str = QString(buffer);
     delete[] buffer;
 
     unsigned size = offset + len;
@@ -283,7 +283,7 @@ EString EString::fromByteString(const void* p, bool longString,
 EString EString::fromSheetName(const void* p, unsigned datasize)
 {
     const unsigned char* data = (const unsigned char*) p;
-    UString str = UString::null;
+    QString str = QString::null;
 
     bool richText = false;
     // unsigned formatRuns = 0;
@@ -301,12 +301,12 @@ EString EString::fromSheetName(const void* p, unsigned datasize)
         char* buffer = new char[ len+1 ];
         memcpy(buffer, data + offset, len);
         buffer[ len ] = 0;
-        str = UString(buffer);
+        str = QString(buffer);
         delete[] buffer;
     } else {
         for (unsigned k = 0; k < len; k++) {
             unsigned uchar = readU16(data + offset + k * 2);
-            str.append(UString(UChar(uchar)));
+            str.append(QString(QChar(uchar)));
         }
     }
 
@@ -540,7 +540,7 @@ class ExternBookRecord::Private
 {
 public:
     unsigned sheetCount;
-    UString name;
+    QString name;
 };
 
 
@@ -555,7 +555,7 @@ ExternBookRecord::~ExternBookRecord()
     delete d;
 }
 
-UString ExternBookRecord::bookName() const
+QString ExternBookRecord::bookName() const
 {
     return d->name;
 }
@@ -566,9 +566,9 @@ void ExternBookRecord::setData(unsigned size, const unsigned char* data, const u
 
     d->sheetCount = readU16(data);
     if (data[2] == 0x01 && data[3] == 0x04) { // self-referencing supporting link
-        d->name = UString("\004");
+        d->name = QString("\004");
     } else if (data[2] == 0x01 && data[3] == ':') { // add-in referencing type of supporting link
-        d->name = UString(":");
+        d->name = QString(":");
     } else {
         d->name = EString::fromUnicodeString(data + 2, true, size - 2).str();
     }
@@ -590,7 +590,7 @@ class ExternNameRecord::Private
 public:
     unsigned optionFlags;
     unsigned sheetIndex;   // one-based, not zero-based
-    UString externName;
+    QString externName;
 };
 
 
@@ -616,12 +616,12 @@ unsigned ExternNameRecord::sheetIndex() const
     return d->sheetIndex;
 }
 
-void ExternNameRecord::setExternName(const UString& name)
+void ExternNameRecord::setExternName(const QString& name)
 {
     d->externName = name;
 }
 
-UString ExternNameRecord::externName() const
+QString ExternNameRecord::externName() const
 {
     return d->externName;
 }
@@ -936,7 +936,7 @@ class NameRecord::Private
 {
 public:
     unsigned optionFlags;
-    UString definedName;
+    QString definedName;
     int sheetIndex; // 0 for global
     bool builtin;
 };
@@ -954,12 +954,12 @@ NameRecord::~NameRecord()
     delete d;
 }
 
-void NameRecord::setDefinedName(const UString& name)
+void NameRecord::setDefinedName(const QString& name)
 {
     d->definedName = name;
 }
 
-UString NameRecord::definedName() const
+QString NameRecord::definedName() const
 {
     return d->definedName;
 }
@@ -1004,7 +1004,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         char* buffer = new char[ len+1 ];
         memcpy(buffer, data + 14, len);
         buffer[ len ] = 0;
-        d->definedName = UString(buffer);
+        d->definedName = QString(buffer);
         delete[] buffer;
     } else  if (version() == Excel97) {
         if (d->builtin) { // field is for a build-in name
@@ -1034,24 +1034,24 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
             Q_ASSERT((opts << 1) == 0x0);
 
             // XLUnicodeStringNoCch
-            UString str = UString();
+            QString str = QString();
             if (fHighByte) {
                 for (unsigned k = 0; k < len*2; k++) {
                     unsigned zc = readU16(data + 15 + k * 2);
-                    str.append(UString(zc));
+                    str.append(QString(zc));
                 }
             } else {
                 for (unsigned k = 0; k < len; k++) {
                     unsigned char uc = readU8(data + 15 + k) + 0x0 * 256;
-                    str.append(UString(uc));
+                    str.append(QString(uc));
                 }
             }
 
             // This is rather illogical and seems there is nothing in the specs about this,
             // but the string "_xlfn." may in front of the string we are looking for. So,
             // remove that one and ignore whatever it means...
-            if (str.substr(0, 6) == "_xlfn.")
-                str = str.substr(6);
+            if (str.startsWith("_xlfn."))
+                str = str.mid(6);
 
             d->definedName = str;
         }
@@ -1190,14 +1190,14 @@ const unsigned int RStringRecord::id = 0x00d6;
 class RStringRecord::Private
 {
 public:
-    UString label;
+    QString label;
 };
 
 RStringRecord::RStringRecord(Workbook *book):
         Record(book), CellInfo()
 {
     d = new RStringRecord::Private();
-    d->label = UString::null;
+    d->label = QString::null;
 }
 
 RStringRecord::~RStringRecord()
@@ -1205,12 +1205,12 @@ RStringRecord::~RStringRecord()
     delete d;
 }
 
-UString RStringRecord::label() const
+QString RStringRecord::label() const
 {
     return d->label;
 }
 
-void RStringRecord::setLabel(const UString& l)
+void RStringRecord::setLabel(const QString& l)
 {
     d->label = l;
 }
@@ -1225,7 +1225,7 @@ void RStringRecord::setData(unsigned size, const unsigned char* data, const unsi
     setXfIndex(readU16(data + 4));
 
     // FIXME check Excel97
-    UString label = (version() >= Excel97) ?
+    QString label = (version() >= Excel97) ?
                     EString::fromUnicodeString(data + 6, true, size - 6).str() :
                     EString::fromByteString(data + 6, true, size - 6).str();
     setLabel(label);
@@ -1249,7 +1249,7 @@ class SSTRecord::Private
 public:
     unsigned total;
     unsigned count;
-    std::vector<UString> strings;
+    std::vector<QString> strings;
     std::vector<std::map<unsigned, unsigned> > formatRuns;
 };
 
@@ -1266,12 +1266,12 @@ SSTRecord::~SSTRecord()
     delete d;
 }
 
-UString sstrecord_get_plain_string(const unsigned char* data, unsigned length)
+QString sstrecord_get_plain_string(const unsigned char* data, unsigned length)
 {
     char* buffer = new char[ length+1 ];
     memcpy(buffer, data, length);
     buffer[ length ] = 0;
-    UString str = UString(buffer);
+    QString str = QString(buffer);
     delete[] buffer;
     return str;
 }
@@ -1316,9 +1316,9 @@ unsigned SSTRecord::count() const
 }
 
 // why not just string() ? to avoid easy confusion with std::string
-UString SSTRecord::stringAt(unsigned index) const
+QString SSTRecord::stringAt(unsigned index) const
 {
-    if (index >= count()) return UString::null;
+    if (index >= count()) return QString::null;
     return d->strings[ index ];
 }
 
@@ -1597,11 +1597,11 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                     embedInfoSize += 3;
                     if (cbClass > 0x0000) { // strClass specifies the class name of the embedded control
                         unsigned size = 0;
-                        UString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, 0, &size);
+                        QString className = readUnicodeString(startPict + cbFmlaSize + embedInfoSize, cbClass, -1, 0, &size);
                         embedInfoSize += size;
 
                         //TODO
-                        std::cout << "ObjRecord::setData: className=" << className.ascii() << std::endl;
+                        std::cout << "ObjRecord::setData: className=" << qPrintable(className) << std::endl;
                     }
                 }
             }
@@ -1689,20 +1689,20 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     //Q_ASSERT((opts << 1) == 0x0);
 
     // XLUnicodeStringNoCch
-    m_text = UString();
+    m_text = QString();
     if(fHighByte) {
         for (unsigned k = 1; k + 2 < size; k += 2) {
             unsigned zc = readU16(startPict + k);
-            m_text.append(UString(zc));
+            m_text.append(QString(zc));
         }
     } else {
         for (unsigned k = 1; k + 1 < size; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
-            m_text.append(UString(uc));
+            m_text.append(QString(uc));
         }
     }
 
-    std::cout << "TxORecord::setData size=" << size << " text=" << m_text.ascii() << std::endl;
+    std::cout << "TxORecord::setData size=" << size << " text=" << qPrintable(m_text) << std::endl;
 }
 
 // ========== MsoDrawing ==========
@@ -2329,7 +2329,7 @@ class BkHimRecord::Private
 {
 public:
     Format format;
-    UString imagePath;
+    QString imagePath;
 };
 
 BkHimRecord::BkHimRecord(Workbook *book)
@@ -2354,12 +2354,12 @@ BkHimRecord& BkHimRecord::operator=( const BkHimRecord& record )
     return *this;
 }
 
-UString BkHimRecord::formatToString(Format format)
+QString BkHimRecord::formatToString(Format format)
 {
     switch (format) {
-        case WindowsBitMap: return UString("WindowsBitMap");
-        case NativeFormat: return UString("NativeFormat");
-        default: return UString("Unknown: ") + UString::from(format);
+        case WindowsBitMap: return QString("WindowsBitMap");
+        case NativeFormat: return QString("NativeFormat");
+        default: return QString("Unknown: %1").arg(format);
     }
 }
 
@@ -2373,12 +2373,12 @@ void BkHimRecord::setFormat(Format format )
     d->format = format;
 }
 
-UString BkHimRecord::imagePath() const
+QString BkHimRecord::imagePath() const
 {
     return d->imagePath;
 }
 
-void BkHimRecord::setImagePath(UString imagePath )
+void BkHimRecord::setImagePath(QString imagePath )
 {
     d->imagePath = imagePath;
 }
@@ -2400,15 +2400,15 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
     curOffset += 4;
 
     static int counter = 1; //we need unique file names
-    UString filename = UString("Pictures/sheetBackground").append(UString::from(counter++));
+    QString filename = QString("Pictures/sheetBackground%1").arg(counter++);
     if(format() == WindowsBitMap) {
-        filename.append(UString(".bmp"));
+        filename.append(QString(".bmp"));
     }
     setImagePath(filename);
 
     KoStore *store = m_workbook->store();
     Q_ASSERT(store);
-    if(store->open(filename.cstring().c_str())) {
+    if(store->open(filename)) {
         //Excel doesn't include the file header, only the pixmap header,
         //we need to convert it to a standard BMP header
         //see http://www.fileformat.info/format/bmp/egff.htm for details
@@ -2745,7 +2745,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                         const unsigned long length = readU32(buffer);
                         bytes_read = summarystream->read(buffer, length);
                         if (bytes_read != length) break;
-                        UString u = readByteString(buffer, length);
+                        QString u = readByteString(buffer, length);
                         const QChar *c = reinterpret_cast<const QChar*>(u.data());
                         QString s = QString(c, u.length());
                         workbook->setProperty(propertyId, s);
@@ -2800,8 +2800,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
           if(bytes_read != length) hasCombObjStream = false;
       }
       if(hasCombObjStream) {
-          UString ansiUserType = readByteString(buffer, length);
-          printf( "length=%lu ansiUserType=%s\n",length,ansiUserType.ascii() );
+          QString ansiUserType = readByteString(buffer, length);
+          printf( "length=%lu ansiUserType=%s\n",length, qPrintable(ansiUserType) );
 
           // AnsiClipboardFormat
           bytes_read = combObjStream->read( buffer, 4 );
@@ -2823,7 +2823,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             break;
             default:
               bytes_read = combObjStream->read( buffer, markerOrLength );
-              UString ansiString = readByteString(buffer, markerOrLength);
+              QString ansiString = readByteString(buffer, markerOrLength);
               //TODO...
               //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
           }

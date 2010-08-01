@@ -20,9 +20,6 @@
 
 #include "format.h"
 
-#include "ustring.h"
-
-
 using namespace Swinder;
 
 class FormatFont::Private
@@ -35,14 +32,14 @@ public:
     bool strikeout : 1;
     bool subscript : 1;
     bool superscript : 1;
-    UString fontFamily;
+    QString fontFamily;
     double fontSize;
     Color color;
 };
 
 FormatFont::FormatFont()
 {
-    static const UString arial("Arial");
+    static const QString arial("Arial");
     d = new FormatFont::Private();
     d->null        = true;
     d->fontFamily  = arial;
@@ -92,12 +89,12 @@ bool FormatFont::isNull() const
     return d->null;
 }
 
-UString FormatFont::fontFamily() const
+QString FormatFont::fontFamily() const
 {
     return d->fontFamily;
 }
 
-void FormatFont::setFontFamily(const UString& fontFamily)
+void FormatFont::setFontFamily(const QString& fontFamily)
 {
     d->fontFamily = fontFamily;
     d->null = false;
@@ -639,13 +636,13 @@ public:
     FormatAlignment alignment;
     FormatBorders borders;
     FormatBackground background;
-    UString valueFormat;
+    QString valueFormat;
 };
 
 // create an empty format
 Format::Format()
 {
-    static const UString general("General");
+    static const QString general("General");
     d = new Format::Private;
     d->valueFormat = general;
 }
@@ -730,12 +727,12 @@ void Format::setBackground(const FormatBackground& background)
     d->background = background;
 }
 
-UString Format::valueFormat() const
+QString Format::valueFormat() const
 {
     return d->valueFormat;
 }
 
-void Format::setValueFormat(const UString& valueFormat)
+void Format::setValueFormat(const QString& valueFormat)
 {
     d->valueFormat = valueFormat;
 }

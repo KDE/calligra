@@ -20,13 +20,13 @@
 #ifndef SWINDER_CELL_H
 #define SWINDER_CELL_H
 
-#include "ustring.h"
 #include "format.h"
 #include "value.h"
 
 #include <vector>
 #include <QtGlobal>
 #include <QList>
+#include <QString>
 
 namespace Swinder
 {
@@ -39,7 +39,7 @@ class ChartObject;
 struct Hyperlink
 {
     Hyperlink() : isValid(false) {}
-    Hyperlink(const UString& displayName, const UString& location, const UString& targetFrameName) : isValid(true), displayName(displayName), location(location), targetFrameName(targetFrameName) {}
+    Hyperlink(const QString& displayName, const QString& location, const QString& targetFrameName) : isValid(true), displayName(displayName), location(location), targetFrameName(targetFrameName) {}
     bool operator==(const Hyperlink& b) {
         if (!isValid && !b.isValid) return true;
         if (!isValid || !b.isValid) return false;
@@ -48,9 +48,9 @@ struct Hyperlink
     bool operator!=(const Hyperlink& b) { return !operator==(b); }
 
     bool isValid;
-    UString displayName;
-    UString location;
-    UString targetFrameName;
+    QString displayName;
+    QString location;
+    QString targetFrameName;
 };
 }
 Q_DECLARE_TYPEINFO(Swinder::Hyperlink, Q_MOVABLE_TYPE);
@@ -73,20 +73,20 @@ public:
 
     // Returns the name this cell is in. This could be for example
     // the name D3 for a cell that is in column 4 and row 3.
-    UString name() const;
-    static UString name(unsigned column, unsigned row);
+    QString name() const;
+    static QString name(unsigned column, unsigned row);
 
     // Retuns the column label. As example the column 4 has the label D.
-    UString columnLabel() const;
-    static UString columnLabel(unsigned column);
+    QString columnLabel() const;
+    static QString columnLabel(unsigned column);
 
     // Retuns the value this cell has.
     Value value() const;
     void setValue(const Value& value);
 
     // Returns the formula of this cell. May an empty string if this cell has no formula.
-    UString formula() const;
-    void setFormula(const UString& formula);
+    QString formula() const;
+    void setFormula(const QString& formula);
 
     // Returns the format of this cell.
     const Format& format() const;
@@ -116,8 +116,8 @@ public:
     void setHyperlink(const Hyperlink& link);
 
     // Returns the optional note/comment/annotation of this cell.
-    UString note() const;
-    void setNote(const UString &n);
+    QString note() const;
+    void setNote(const QString &n);
     
     // Defines a list of pictures anchored to this cell.
     QList<Picture*> pictures() const;

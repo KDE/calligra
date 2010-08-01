@@ -43,13 +43,13 @@ public:
     std::map<unsigned, Sheet*> bofMap;
 
     // for EXTERNBOOK and EXTERNSHEET
-    std::vector<UString> externBookTable;
-    std::vector<UString> externSheetTable;
+    std::vector<QString> externBookTable;
+    std::vector<QString> externSheetTable;
 
     // for NAME
-    std::vector<UString> nameTable;
+    std::vector<QString> nameTable;
     // for EXTERNNAME
-    std::vector<UString> externNameTable;
+    std::vector<QString> externNameTable;
 
     // password protection flag
     // TODO: password hash for record decryption
@@ -63,13 +63,13 @@ public:
     std::map<unsigned, FormatFont> fontCache;
 
     // table of format
-    std::map<unsigned, UString> formatsTable;
+    std::map<unsigned, QString> formatsTable;
     
     // cache of formats
     std::map<unsigned, int> formatCache;
 
     // shared-string table
-    std::vector<UString> stringTable;
+    std::vector<QString> stringTable;
     std::vector<std::map<unsigned, FormatFont> > formatRunsTable;
 
     // color table (from Palette record)
@@ -169,12 +169,12 @@ Sheet* GlobalsSubStreamHandler::sheetFromPosition(unsigned position) const
         return 0;
 }
 
-UString GlobalsSubStreamHandler::stringFromSST(unsigned index) const
+QString GlobalsSubStreamHandler::stringFromSST(unsigned index) const
 {
     if (index < d->stringTable.size())
         return d->stringTable[index];
     else
-        return UString();
+        return QString();
 }
 
 std::map<unsigned, FormatFont> GlobalsSubStreamHandler::formatRunsFromSST(unsigned index) const
@@ -219,34 +219,34 @@ XFRecord GlobalsSubStreamHandler::xformat(unsigned index) const
         return XFRecord(d->workbook);
 }
 
-UString GlobalsSubStreamHandler::valueFormat(unsigned index) const
+QString GlobalsSubStreamHandler::valueFormat(unsigned index) const
 {
-    std::map<unsigned, UString>::iterator it = d->formatsTable.find(index);
+    std::map<unsigned, QString>::iterator it = d->formatsTable.find(index);
     if (it != d->formatsTable.end())
         return it->second;
     else
-        return UString();
+        return QString();
 }
 
-const std::vector<UString>& GlobalsSubStreamHandler::externSheets() const
+const std::vector<QString>& GlobalsSubStreamHandler::externSheets() const
 {
     return d->externSheetTable;
 }
 
-UString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
+QString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
 {
     if (index < d->nameTable.size())
         return d->nameTable[index];
     std::cerr << "Invalid index in GlobalsSubStreamHandler::nameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
-    return UString();
+    return QString();
 }
 
-UString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
+QString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
 {
     if (index < d->externNameTable.size())
         return d->externNameTable[index];
     std::cerr << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
-    return UString();
+    return QString();
 }
 
 FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
@@ -416,7 +416,7 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 
     XFRecord xf = xformat(index);
 
-    UString valueFormat = this->valueFormat(xf.formatIndex());
+    QString valueFormat = this->valueFormat(xf.formatIndex());
     if (valueFormat.isEmpty()) {
         const unsigned ifmt = xf.formatIndex();
         switch (ifmt) {
@@ -676,15 +676,15 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
     for (unsigned i = 0; i < record->refCount(); i++) {
         unsigned bookRef = record->bookRef(i);
 
-        UString result;
+        QString result;
         if (bookRef >= d->externBookTable.size()) {
-            result = UString("Error");
+            result = QString("Error");
         } else {
-            UString book = d->externBookTable[bookRef];
+            QString book = d->externBookTable[bookRef];
             if (book == "\004") {
                 unsigned sheetRef = record->firstSheetRef(i);
                 if (sheetRef >= d->workbook->sheetCount()) {
-                    result = UString("Error");
+                    result = QString("Error");
                 } else {
                     result = d->workbook->sheet(sheetRef)->name();
                 }
@@ -693,16 +693,16 @@ void GlobalsSubStreamHandler::handleExternSheet(ExternSheetRecord* record)
             }
         }
 
-        if (result.find(UString(" ")) != -1 || result.find(UString("'")) != -1) {
+        if (result.indexOf(' ') != -1 || result.indexOf('\'') != -1) {
             // escape string
-            UString outp("'");
+            QString outp("'");
             for (int idx = 0; idx < result.length(); idx++) {
                 if (result[idx] == '\'')
-                    outp.append(UString("''"));
+                    outp.append(QString("''"));
                 else
-                    outp.append(UString(result[idx]));
+                    outp.append(QString(result[idx]));
             }
-            result = outp + UString("'");
+            result = outp + QString("'");
         }
 
         d->externSheetTable[i] = result;
@@ -762,9 +762,9 @@ void GlobalsSubStreamHandler::handleName(NameRecord* record)
         } else {
             FormulaTokens tokens;
             tokens.push_back(record->m_formula);
-            UString f = decodeFormula(0, 0, false, tokens);
+            QString f = decodeFormula(0, 0, false, tokens);
             if(!f.isEmpty()) {
-                UString n = record->definedName();
+                QString n = record->definedName();
                 d->workbook->setNamedArea(record->sheetIndex(), n, f);
             }
         }
@@ -787,7 +787,7 @@ void GlobalsSubStreamHandler::handleSST(SSTRecord* record)
     d->stringTable.clear();
     d->formatRunsTable.clear();
     for (unsigned i = 0; i < record->count(); i++) {
-        UString str = record->stringAt(i);
+        QString str = record->stringAt(i);
         d->stringTable.push_back(str);
         std::map<unsigned, unsigned> formatRunsRaw = record->formatRunsAt(i);
         std::map<unsigned, FormatFont> formatRuns;

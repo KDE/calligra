@@ -22,7 +22,6 @@ set(sidewinder_SRCS
   format.cpp
   pole.cpp
   sheet.cpp
-  ustring.cpp
   value.cpp
   workbook.cpp
   formulas.cpp

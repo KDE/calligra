@@ -63,9 +63,9 @@ public:
 
     void setRichText(bool r);
 
-    UString str() const;
+    QString str() const;
 
-    void setStr(const UString& str);
+    void setStr(const QString& str);
 
     std::map<unsigned, unsigned> formatRuns() const;
 
@@ -324,7 +324,7 @@ public:
 
     unsigned sheetCount() const;
 
-    UString bookName() const;
+    QString bookName() const;
 
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
@@ -365,9 +365,9 @@ public:
 
     void setSheetIndex(unsigned sheetIndex);
 
-    UString externName() const;
+    QString externName() const;
 
-    void setExternName(const UString& name);
+    void setExternName(const QString& name);
 
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
@@ -591,9 +591,9 @@ public:
 
     ~NameRecord();
 
-    UString definedName() const;
+    QString definedName() const;
 
-    void setDefinedName(const UString& name);
+    void setDefinedName(const QString& name);
 
     unsigned sheetIndex() const;
 
@@ -739,14 +739,14 @@ public:
      *
      * \sa setLabel
      */
-    UString label() const;
+    QString label() const;
 
     /**
      * Sets the label string.
      *
      * \sa label
      */
-    void setLabel(const UString& l);
+    void setLabel(const QString& l);
 
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
 
@@ -803,9 +803,9 @@ public:
     /**
       Returns the string at specified index.
       Note that index must be less than count().
-      If index is not valid, this will return UString::null.
+      If index is not valid, this will return QString::null.
      */
-    UString stringAt(unsigned index) const;
+    QString stringAt(unsigned index) const;
 
     /**
       Returnsformat runs for the string at specified index.
@@ -848,7 +848,7 @@ public:
 class TxORecord : public Record
 {
 public:
-    UString m_text;
+    QString m_text;
     static const unsigned id;
     TxORecord(Workbook *book);
     virtual ~TxORecord();
@@ -1455,13 +1455,13 @@ public:
         NativeFormat = 0x000e
     };
 
-    static UString formatToString(Format format);
+    static QString formatToString(Format format);
 
     Format format() const;
     void setFormat( Format format );
 
-    UString imagePath() const;
-    void setImagePath( UString imagePath );
+    QString imagePath() const;
+    void setImagePath( QString imagePath );
 
     unsigned imageSize() const;
     void setImageSize( unsigned imageSize );

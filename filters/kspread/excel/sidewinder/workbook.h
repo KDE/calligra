@@ -21,8 +21,6 @@
 #ifndef SWINDER_WORKBOOK_H
 #define SWINDER_WORKBOOK_H
 
-#include "ustring.h"
-
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <QtCore/QRect>
@@ -107,8 +105,8 @@ public:
     QVariant property(PropertyType type, const QVariant &defaultValue = QVariant()) const;
     void setProperty(PropertyType type, const QVariant &value);
 
-    std::map<std::pair<unsigned, UString>, UString>& namedAreas();
-    void setNamedArea(unsigned sheet, UString name, UString formula);
+    std::map<std::pair<unsigned, QString>, QString>& namedAreas();
+    void setNamedArea(unsigned sheet, QString name, QString formula);
 
     QList<QRect> filterRanges(unsigned sheet) const;
     void addFilterRange(unsigned sheet, const QRect& range);

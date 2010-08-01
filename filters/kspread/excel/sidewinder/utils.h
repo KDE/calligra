@@ -118,22 +118,15 @@ static inline double readFloat64(const void*p)
  */
 enum { UnknownExcel = 0, Excel95, Excel97, Excel2000 };
 
-UString readByteString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0);
-UString readTerminatedUnicodeChars(const void* data, unsigned* size = 0, unsigned maxSize = -1, bool* error = 0);
-UString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1, unsigned offset = 0, bool unicode = true, bool asianPhonetics = false, bool richText = false);
-UString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
-UString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
+QString readByteString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0);
+QString readTerminatedUnicodeChars(const void* data, unsigned* size = 0, unsigned maxSize = -1, bool* error = 0);
+QString readUnicodeChars(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1, unsigned offset = 0, bool unicode = true, bool asianPhonetics = false, bool richText = false);
+QString readUnicodeString(const void* data, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
+QString readUnicodeCharArray(const void* p, unsigned length, unsigned maxSize = -1, bool* error = 0, unsigned* size = 0, unsigned continuePosition = -1);
 
-std::ostream& operator<<(std::ostream& s, Swinder::UString ustring);
+std::ostream& operator<<(std::ostream& s, const QString& ustring);
 std::ostream& operator<<(std::ostream& s, const QByteArray& data);
 std::ostream& operator<<(std::ostream& s, const QUuid& uuid);
-
-inline QString string(const Swinder::UString& str)
-{
-    // don't use QString::fromRawData cause it does not create a deep copy what may result in
-    // garbage if the underlying str got deleted before we are using our QString.
-    return QString(reinterpret_cast<const QChar*>(str.data()), str.length());
-}
 
 /**
   Class Record represents a base class for all other type record,

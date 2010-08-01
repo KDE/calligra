@@ -19,7 +19,6 @@
 
 #include "cell.h"
 #include "excel.h"
-#include "ustring.h"
 #include "format.h"
 #include "value.h"
 #include "objects.h"
@@ -36,13 +35,13 @@ public:
     unsigned row;
     unsigned column;
     Value value;
-    UString formula;
+    QString formula;
     const Format* format;
     unsigned columnSpan;
     unsigned rowSpan;
     bool covered;
     int columnRepeat;
-    UString note;
+    QString note;
 };
 
 }
@@ -83,25 +82,25 @@ unsigned Cell::row() const
     return d->row;
 }
 
-UString Cell::name() const
+QString Cell::name() const
 {
     return name(column(), row());
 }
 
-UString Cell::name(unsigned column, unsigned row)
+QString Cell::name(unsigned column, unsigned row)
 {
-    return columnLabel(column) + UString::from(row);
+    return columnLabel(column) + QString::number(row);
 }
 
-UString Cell::columnLabel() const
+QString Cell::columnLabel() const
 {
     return columnLabel(column());
 }
 
 // FIXME be careful for integer overflow
-UString Cell::columnLabel(unsigned column)
+QString Cell::columnLabel(unsigned column)
 {
-    UString str;
+    QString str;
     unsigned digits = 1;
     unsigned offset = 0;
 
@@ -109,7 +108,7 @@ UString Cell::columnLabel(unsigned column)
         offset += limit;
 
     for (unsigned c = column - offset; digits; --digits, c /= 26)
-        str = UString(UChar('A' + (c % 26))) + str;
+        str = QString(QChar('A' + (c % 26))) + str;
 
     return str;
 }
@@ -124,12 +123,12 @@ void Cell::setValue(const Value& value)
     d->value = value;
 }
 
-UString Cell::formula() const
+QString Cell::formula() const
 {
     return d->formula;
 }
 
-void Cell::setFormula(const UString& formula)
+void Cell::setFormula(const QString& formula)
 {
     d->formula = formula;
 }
@@ -221,12 +220,12 @@ void Cell::setHyperlink(const Hyperlink& link)
     d->sheet->setHyperlink(d->column, d->row, link);
 }
 
-UString Cell::note() const
+QString Cell::note() const
 {
     return d->note;
 }
 
-void Cell::setNote(const UString &n)
+void Cell::setNote(const QString &n)
 {
     d->note = n;
 }

@@ -21,8 +21,8 @@
 #ifndef SWINDER_FORMAT_H
 #define SWINDER_FORMAT_H
 
-#include "ustring.h"
 #include <cstdio> // for sscanf
+#include <QString>
 
 namespace Swinder
 {
@@ -173,12 +173,12 @@ public:
     /**
      * Returns the name of font family, e.g "Helvetica".
      */
-    UString fontFamily() const;
+    QString fontFamily() const;
 
     /**
      * Sets a new family for the font information.
      */
-    void setFontFamily(const UString& fontFamily);
+    void setFontFamily(const QString& fontFamily);
 
     /**
      * Returns the size of font (in points).
@@ -759,12 +759,12 @@ public:
     /**
      * Returns the formatting string to display the value of this format.
      */
-    UString valueFormat() const;
+    QString valueFormat() const;
 
     /**
      * Sets the new formatting string to display the value of this format.
      */
-    void setValueFormat(const UString& valueFormat);
+    void setValueFormat(const QString& valueFormat);
 
     enum { Standard = -1, Left, Center, Right, Justify, Distributed };
 

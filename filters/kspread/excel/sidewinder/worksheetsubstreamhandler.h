@@ -23,7 +23,6 @@
 
 #include "substreamhandler.h"
 #include "formulas.h"
-#include "ustring.h"
 #include <vector>
 
 namespace Swinder
@@ -89,9 +88,9 @@ public:
 
 public:
     // from FormulaDecoder
-    virtual const std::vector<UString>& externSheets() const;
-    virtual UString nameFromIndex(unsigned index) const;
-    virtual UString externNameFromIndex(unsigned index) const;
+    virtual const std::vector<QString>& externSheets() const;
+    virtual QString nameFromIndex(unsigned index) const;
+    virtual QString externNameFromIndex(unsigned index) const;
     virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& formulaCellPos) const;
     virtual DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& formulaCellPos) const;
 

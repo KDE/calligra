@@ -21,7 +21,6 @@
 #include "cell.h"
 #include "sheet.h"
 #include "workbook.h"
-#include "ustring.h"
 #include "utils.h"
 
 #include <PointStorage.h>
@@ -42,7 +41,7 @@ class Sheet::Private
 {
 public:
     Workbook* workbook;
-    UString name;
+    QString name;
 
     // hash to store cell, FIXME replace with quad-tree
     QHash<unsigned, Cell*> cells;
@@ -59,12 +58,12 @@ public:
     bool protect;
     bool autoCalc;
 
-    UString leftHeader;
-    UString centerHeader;
-    UString rightHeader;
-    UString leftFooter;
-    UString centerFooter;
-    UString rightFooter;
+    QString leftHeader;
+    QString centerHeader;
+    QString rightHeader;
+    QString leftFooter;
+    QString centerFooter;
+    QString rightFooter;
 
     double leftMargin;
     double rightMargin;
@@ -81,7 +80,7 @@ public:
     bool isPageBreakViewEnabled;
 
     unsigned long passwd;
-    UString backgroundImagePath;
+    QString backgroundImagePath;
 
     QList<VerticalPageBreak> verticalPageBreaks;
     QList<HorizontalPageBreak> horizontalPageBreaks;
@@ -159,12 +158,12 @@ void Sheet::clear()
     d->passwd = 0; // password protection disabled
 }
 
-UString Sheet::name() const
+QString Sheet::name() const
 {
     return d->name;
 }
 
-void Sheet::setName(const UString& name)
+void Sheet::setName(const QString& name)
 {
     d->name = name;
 }
@@ -270,62 +269,62 @@ void Sheet::setProtect(bool p)
     d->protect = p;
 }
 
-UString Sheet::leftHeader() const
+QString Sheet::leftHeader() const
 {
     return d->leftHeader;
 }
 
-void Sheet::setLeftHeader(const UString& h)
+void Sheet::setLeftHeader(const QString& h)
 {
     d->leftHeader = h;
 }
 
-UString Sheet::centerHeader() const
+QString Sheet::centerHeader() const
 {
     return d->centerHeader;
 }
 
-void Sheet::setCenterHeader(const UString& h)
+void Sheet::setCenterHeader(const QString& h)
 {
     d->centerHeader = h;
 }
 
-UString Sheet::rightHeader() const
+QString Sheet::rightHeader() const
 {
     return d->rightHeader;
 }
 
-void Sheet::setRightHeader(const UString& h)
+void Sheet::setRightHeader(const QString& h)
 {
     d->rightHeader = h;
 }
 
-UString Sheet::leftFooter() const
+QString Sheet::leftFooter() const
 {
     return d->leftFooter;
 }
 
-void Sheet::setLeftFooter(const UString& h)
+void Sheet::setLeftFooter(const QString& h)
 {
     d->leftFooter = h;
 }
 
-UString Sheet::centerFooter() const
+QString Sheet::centerFooter() const
 {
     return d->centerFooter;
 }
 
-void Sheet::setCenterFooter(const UString& h)
+void Sheet::setCenterFooter(const QString& h)
 {
     d->centerFooter = h;
 }
 
-UString Sheet::rightFooter() const
+QString Sheet::rightFooter() const
 {
     return d->rightFooter;
 }
 
-void Sheet::setRightFooter(const UString& h)
+void Sheet::setRightFooter(const QString& h)
 {
     d->rightFooter = h;
 }
@@ -450,12 +449,12 @@ void Sheet::setPassword(unsigned long hash)
     d->passwd = hash;
 }
 
-void Sheet::setBackgroundImage( const UString& imagePath )
+void Sheet::setBackgroundImage( const QString& imagePath )
 {
     d->backgroundImagePath = imagePath;
 }
 
-UString Sheet::backgroundImage()
+QString Sheet::backgroundImage()
 {
     return d->backgroundImagePath;
 }
