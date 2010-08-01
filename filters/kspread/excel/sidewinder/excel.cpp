@@ -70,18 +70,12 @@ static inline void decodeRK(unsigned rkvalue, bool& isInteger,
     } else {
         // TODO ensure double takes 8 bytes
         isInteger = false;
+        rkvalue = qFromLittleEndian<quint32>(rkvalue);
         unsigned char* s = (unsigned char*) & rkvalue;
         unsigned char* r = (unsigned char*) & f;
-#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-            r[0] = r[1] = r[2] = r[3] = 0;
-            r[4] = s[0] & 0xfc;
-            r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-#else
-            r[0] = r[1] = r[2] = r[3] = 0;
-            r[4] = s[0] & 0xfc;
-            r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
-#endif
-        memcpy(&f, r, 8);
+        r[0] = r[1] = r[2] = r[3] = 0;
+        r[4] = s[0] & 0xfc;
+        r[5] = s[1]; r[6] = s[2];  r[7] = s[3];
         f *= factor;
     }
 }

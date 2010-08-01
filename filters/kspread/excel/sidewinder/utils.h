@@ -26,6 +26,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QUuid>
+#include <QtEndian>
 
 namespace Swinder
 {
@@ -106,25 +107,9 @@ static inline QUuid readUuid(const void* p)
 // FIXME check that double is 64 bits
 static inline double readFloat64(const void*p)
 {
+    quint64 val = qFromLittleEndian<quint64>(reinterpret_cast<const uchar*>(p));
     double num = 0.0;
-#if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
-    memcpy(&num, p, sizeof num);
-#else
-    union {
-        double v1;
-        char v2[8];
-    } x;
-    char* b = (char*)p;
-    x.v2[0] = b[7];
-    x.v2[1] = b[6];
-    x.v2[2] = b[5];
-    x.v2[3] = b[4];
-    x.v2[4] = b[3];
-    x.v2[5] = b[2];
-    x.v2[6] = b[1];
-    x.v2[7] = b[0];
-    num = x.v1;
-#endif
+    memcpy(&num, &val, sizeof num);
     return num;
 }
 
