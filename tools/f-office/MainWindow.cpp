@@ -33,6 +33,7 @@
 #include "AboutDialog.h"
 #include "PresentationTool.h"
 #include "MainWindowAdaptor.h"
+#include "FoCellToolFactory.h"
 
 #include <QFileDialog>
 #include <QUrl>
@@ -97,6 +98,7 @@
 #include <KoPAView.h>
 #include <KoStore.h>
 #include <KoCanvasBase.h>
+#include <KoToolRegistry.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
 #include <Map.h>
@@ -1955,6 +1957,7 @@ void MainWindow::openDocument(const QString &fileName)
 
 
     if (m_type == Spreadsheet) {
+        KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
     }
