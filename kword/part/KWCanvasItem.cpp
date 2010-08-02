@@ -61,11 +61,6 @@ KWCanvasItem::~KWCanvasItem()
     delete m_viewConverter;
 }
 
-KoZoomHandler* KWCanvasItem::zoomHandler() const
-{
-    return m_viewConverter;
-}
-
 void KWCanvasItem::pageSetupChanged()
 {
     m_viewMode->pageSetupChanged();

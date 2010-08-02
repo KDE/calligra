@@ -59,8 +59,6 @@ public:
     /// ask the widget to set the size this canvas takes to display all content
     void updateSize();
 
-    KoZoomHandler *zoomHandler() const;
-
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
     virtual bool snapToGrid() const;
