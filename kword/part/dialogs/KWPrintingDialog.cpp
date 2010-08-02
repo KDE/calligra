@@ -126,7 +126,8 @@ int KWPrintingDialog::documentFirstPage() const
 
 int KWPrintingDialog::documentLastPage() const
 {
-    return m_document->pageManager()->last().pageNumber();
+    KWPage lastPage = m_document->pageManager()->last();
+    return lastPage.pageNumber() + (lastPage.pageSide() == KWPage::PageSpread ? 1 : 0);
 }
 
 QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() const
