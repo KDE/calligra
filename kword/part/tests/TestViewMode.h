@@ -42,6 +42,7 @@ class TestViewMode : public QObject
 private slots: // tests
     void init();
     void testBasicConversion();
+    void testPageSetupChanged();
 };
 
 #endif

@@ -105,5 +105,44 @@ void TestViewMode::testBasicConversion()
     QCOMPARE(answer[1].distance, QPointF(0, PAGEGAP));
 }
 
+void TestViewMode::testPageSetupChanged()
+{
+    KWPageManager pageManager;
+
+    //set up as a page spread;
+    KoPageLayout pageLayout = pageManager.defaultPageStyle().pageLayout();
+    pageLayout.leftMargin = -1;
+    pageLayout.rightMargin = -1;
+    pageLayout.pageEdge = 20;
+    pageLayout.bindingSide = 25;
+    pageLayout.topMargin = 21;
+    pageLayout.bottomMargin = 22;
+    pageManager.defaultPageStyle().setPageLayout(pageLayout);
+
+    KoZoomHandler zoomer;
+    zoomer.setZoomAndResolution(100, 72, 72); // BORING :)
+    MyViewModeNormal viewMode;
+    viewMode.setPageManager(&pageManager);
+    viewMode.setViewConverter(&zoomer);
+
+    pageManager.appendPage(); // page 1
+    pageManager.appendPage(); // page 2 & 3
+    QCOMPARE(pageManager.pageCount(), 3);
+
+    viewMode.pageSetupChanged();
+    QCOMPARE(viewMode.pageTops().count(), 3);
+    QCOMPARE(viewMode.pageSpreadMode(), true);
+
+    KWPage lastPage = pageManager.appendPage(); // page 4 & 5
+    viewMode.pageSetupChanged();
+    QCOMPARE(viewMode.pageTops().count(), 5);
+    QCOMPARE(viewMode.pageSpreadMode(), true);
+
+    pageManager.removePage(lastPage);
+    viewMode.pageSetupChanged();
+    QCOMPARE(viewMode.pageTops().count(), 3);
+    QCOMPARE(viewMode.pageSpreadMode(), true);
+}
+
 QTEST_KDEMAIN(TestViewMode, GUI)
 #include <TestViewMode.moc>

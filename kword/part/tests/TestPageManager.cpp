@@ -224,8 +224,6 @@ void TestPageManager::removePages()
     pageManager->removePage(page2);
     QCOMPARE(page1.pageNumber(), 1);
     QCOMPARE(page4.pageNumber(), 2);
-
-    /* todo: bool tryRemovingPages(); */
 }
 
 void TestPageManager::pageInfo()
@@ -726,6 +724,46 @@ void TestPageManager::testAppendPageSpread()
     KWPage realPage3 = manager.page(3);
     QVERIFY(realPage3.isValid());
     QCOMPARE(realPage3.pageNumber(), 2); // its still a pagespread
+}
+
+void TestPageManager::testRemovePageSpread()
+{
+    KWPageManager manager;
+
+    KoPageLayout layout = manager.defaultPageStyle().pageLayout();
+    layout.leftMargin = -1;
+    layout.rightMargin = -1;
+    layout.pageEdge = 7;
+    layout.bindingSide = 13;
+    manager.defaultPageStyle().setPageLayout(layout);
+
+    KWPage page1 = manager.appendPage();
+    KWPage pageSpread1 = manager.appendPage();
+    KWPage pageSpread2 = manager.appendPage();
+    QCOMPARE(pageSpread1.pageSide(), KWPage::PageSpread);
+    QCOMPARE(pageSpread2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(manager.pageCount(), 5);
+
+    manager.removePage(pageSpread2); // remove from end
+    QVERIFY(pageSpread1.isValid());
+    QCOMPARE(pageSpread1.pageSide(), KWPage::PageSpread);
+    QCOMPARE(manager.pageCount(), 3);
+    QVERIFY(!pageSpread2.isValid());
+    QVERIFY(pageSpread2.pageNumber() < 0);
+
+    // re-add so we can remove something in the middle
+    pageSpread2 = manager.appendPage();
+    QCOMPARE(pageSpread1.pageSide(), KWPage::PageSpread);
+    QCOMPARE(pageSpread2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(manager.pageCount(), 5);
+
+
+    manager.removePage(pageSpread1); // remove pages 2&3
+    QVERIFY(!pageSpread1.isValid());
+    QVERIFY(pageSpread1.pageNumber() < 0);
+    QCOMPARE(pageSpread2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(manager.pageCount(), 3);
+    QVERIFY(pageSpread2.isValid());
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)

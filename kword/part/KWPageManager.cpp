@@ -327,26 +327,29 @@ void KWPageManager::removePage(const KWPage &page)
     if (!page.isValid())
         return;
     const int removedPageNumber = page.pageNumber();
+    const int offset = page.pageSide() == KWPage::PageSpread ? 2 : 1;
     d->pages.remove(d->pageNumbers[removedPageNumber]);
 
     // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int> pageNumbers = d->pageNumbers;
     QMap<int, int>::iterator iter = pageNumbers.begin();
     while (iter != pageNumbers.end()) {
-        if (iter.key() > removedPageNumber) {
+        if (iter.key() < removedPageNumber) {
+            //  don't touch those
+        } else if (iter.key() > removedPageNumber + offset - 1) {
             KWPageManagerPrivate::Page page = d->pages[iter.value()];
-            d->pageNumbers.remove(page.pageNumber);
+            d->pageNumbers.remove(iter.key());
             page.pageNumber--;
             d->pages.insert(iter.value(), page);
             d->pageNumbers.insert(page.pageNumber, iter.value());
-        }
-        else if (iter.key() == removedPageNumber) {
+        } else {
             d->pageNumbers.remove(iter.key());
         }
         ++iter;
     }
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
+    kDebug(32001) << "           " << d->pageNumbers;
 #endif
 }
 
