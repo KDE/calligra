@@ -47,7 +47,7 @@ kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
 
 
-target_link_libraries(excelimport ${ZLIB_LIBRARIES} msooxml komain mso koodf)
+target_link_libraries(excelimport msooxml komain mso koodfi ${ZLIB_LIBRARIES})
 if(QCA2_FOUND)
    target_link_libraries(excelimport ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
