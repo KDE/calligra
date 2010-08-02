@@ -28,7 +28,6 @@ set(kwordprivate_LIB_SRCS
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
     KWDLoader.cpp
-    KWPageBackground.cpp
 
     frames/KWTextDocumentLayout.cpp
     frames/KWFrameLayout.cpp
@@ -40,6 +39,7 @@ set(kwordprivate_LIB_SRCS
     frames/KWAnchorStrategy.cpp
     frames/KWOutlineShape.cpp
     frames/Outline.cpp
+    frames/KWPageBackground.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWFrameGeometry.cpp

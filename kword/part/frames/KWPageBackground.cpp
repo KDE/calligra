@@ -27,7 +27,7 @@ KWPageBackground::KWPageBackground()
 
 KWPageBackground::~KWPageBackground()
 {
-    
+
 }
 
 void KWPageBackground::paint(QPainter &painter, const KoViewConverter &converter)
@@ -47,5 +47,5 @@ bool KWPageBackground::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
 
 void KWPageBackground::saveOdf(KoShapeSavingContext &context) const
 {
-    
+
 }
