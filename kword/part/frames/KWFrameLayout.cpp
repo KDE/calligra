@@ -66,14 +66,9 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     // create page background
     KWTextFrameSet *fs = getOrCreate(KWord::PageBackgroundFrameSet, page);
     if (!hasFrameOn(fs, pageNumber)) {
-        if (fs->frameCount() == 0) {
-            KoShape *shape = new KWPageBackground();
-            shape->setSize(QSize(20, 10));
-            new KWFrame(shape, fs);
-        }
-        else {
-            createCopyFrame(fs, page);
-        }
+        KoShape *shape = new KWPageBackground();
+        shape->setSize(QSizeF(page.width(), page.height()));
+        new KWFrame(shape, fs);
     }
 
     // create headers & footers
@@ -238,6 +233,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
+    int minZIndex = INT_MAX;
     qreal requestedHeight[9], minimumHeight[9], resultingPositions[9];
     for (int i = 0; i < 9; i++) { // zero fill.
         requestedHeight[i] = 0;
@@ -272,19 +268,21 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2 : 1) : 0;
     int columnsCount = columns;
     KWTextFrame **main;
-    KWFrame *footer = 0, *endnote = 0, *header = 0, *pageBackground = 0;
+    KWTextFrame *footer = 0, *endnote = 0, *header = 0;
+    KWFrame *pageBackground = 0;
     main = new KWTextFrame*[columnsCount];
     if (columns > 0)
         main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     foreach (KWFrame *frame, framesInPage(pageRect)) {
         KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-
+        if (textFrameSet == 0 || textFrameSet->textFrameSetType() == KWord::OtherTextFrameSet)
+            minZIndex = qMin(minZIndex, frame->shape()->zIndex());
         if (textFrameSet == 0) continue;
         switch (textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
-            header = static_cast<KWFrame *>(frame);
+            header = static_cast<KWTextFrame *>(frame);
             minimumHeight[1] = qMax((qreal)10, page.pageStyle().headerMinimumHeight());
             requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             if (minimumHeight[1] < page.pageStyle().headerDistance())
@@ -293,7 +291,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         }
         case KWord::OddPagesFooterTextFrameSet:
         case KWord::EvenPagesFooterTextFrameSet: {
-            footer = static_cast<KWFrame *>(frame);
+            footer = static_cast<KWTextFrame *>(frame);
             minimumHeight[7] = qMax((qreal)10, page.pageStyle().footerMinimumHeight());
             requestedHeight[7] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             if(minimumHeight[7] < page.pageStyle().footerDistance())
@@ -317,28 +315,22 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             break;
         }
         case KWord::PageBackgroundFrameSet:
-        {
             pageBackground = static_cast<KWFrame *>(frame);
-        }
+            break;
         // TODO end + foot note frameset
         default:;
         }
     }
-
-    for (int i = 0; i < columns; ++i) {
-        main[i]->shape()->setZIndex(SHRT_MIN + 3);
-    }
-    if (footer) {
-        footer->shape()->setZIndex(SHRT_MIN + 2);
-    }
-    if (endnote) {
-        endnote->shape()->setZIndex(SHRT_MIN + 4);
-    }
-    if (header) {
-        header->shape()->setZIndex(SHRT_MIN + 1);
-    }
-    if (pageBackground) {
-        pageBackground->shape()->setZIndex(SHRT_MIN);
+    if (minZIndex < INT_MAX) {
+        --minZIndex;
+        if (endnote)
+            endnote->shape()->setZIndex(minZIndex--);
+        for (int i = 0; i < columns; ++i)
+            main[i]->shape()->setZIndex(minZIndex);
+        if (footer)
+            footer->shape()->setZIndex(--minZIndex);
+        if (header)
+            header->shape()->setZIndex(--minZIndex);
     }
 
     // spread space across items.

@@ -32,20 +32,20 @@ KWPageBackground::~KWPageBackground()
 
 void KWPageBackground::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    applyConversion(painter, converter);
     if (background()) {
+        applyConversion(painter, converter);
         QPainterPath p;
         p.addRect(QRectF(QPointF(), size()));
         background()->paint(painter, p);
     }
 }
 
-bool KWPageBackground::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool KWPageBackground::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
 {
     return true;
 }
 
-void KWPageBackground::saveOdf(KoShapeSavingContext &context) const
+void KWPageBackground::saveOdf(KoShapeSavingContext &) const
 {
 
 }

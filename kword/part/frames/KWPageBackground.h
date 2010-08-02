@@ -29,9 +29,9 @@ class KWPageBackground : public KoShape
 public:
     KWPageBackground();
     virtual ~KWPageBackground();
-    
+
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    
+
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     virtual void saveOdf(KoShapeSavingContext &context) const;

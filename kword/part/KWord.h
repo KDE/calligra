@@ -61,6 +61,9 @@ namespace KWord
         RunThrough  ///< The text will completely ignore the frame and layout as if it was not there
     };
 
+    /**
+     * TODO
+     */
     enum Through {
         Background,
         Foreground
