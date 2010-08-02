@@ -150,8 +150,7 @@ void RowHeaderWidget::slotAutoScroll(const QPoint& scrollDistance)
 
 void RowHeaderWidget::wheelEvent(QWheelEvent* _ev)
 {
-    KoPointerEvent pev(_ev, QPointF());
-    wheel(&pev);
+    QApplication::sendEvent(static_cast<Canvas*>(m_pCanvas), _ev);
 }
 
 void RowHeaderWidget::paintSizeIndicator(int mouseY)
@@ -307,8 +306,7 @@ void ColumnHeaderWidget::slotAutoScroll(const QPoint& scrollDistance)
 
 void ColumnHeaderWidget::wheelEvent(QWheelEvent* _ev)
 {
-    KoPointerEvent pev(_ev, QPointF());
-    wheel(&pev);
+    QApplication::sendEvent(static_cast<Canvas*>(m_pCanvas), _ev);
 }
 
 void ColumnHeaderWidget::resizeEvent(QResizeEvent* _ev)
@@ -450,8 +448,7 @@ void SelectAllButtonWidget::mouseReleaseEvent(QMouseEvent* _ev)
 
 void SelectAllButtonWidget::wheelEvent(QWheelEvent* _ev)
 {
-    KoPointerEvent pev(_ev, QPointF());
-    wheel(&pev);
+    QApplication::sendEvent(static_cast<Canvas*>(m_canvasBase), _ev);
 }
 
 void SelectAllButtonWidget::toolChanged(const QString& toolId)

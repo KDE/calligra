@@ -59,7 +59,6 @@ protected:
     void mouseRelease(KoPointerEvent* _ev);
     void mouseDoubleClick(KoPointerEvent* _ev);
     void mouseMove(KoPointerEvent* _ev);
-    void wheel(KoPointerEvent* _ev);
     void focusOut(QFocusEvent* ev);
     void resize(const QSizeF& size, const QSizeF& oldSize);
     virtual void paintSizeIndicator(int mouseX) = 0;
@@ -151,7 +150,6 @@ protected:
     void mouseRelease(KoPointerEvent* _ev);
     void mouseDoubleClick(KoPointerEvent* _ev);
     void mouseMove(KoPointerEvent* _ev);
-    void wheel(KoPointerEvent* _ev);
     void focusOut(QFocusEvent* ev);
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
@@ -198,10 +196,9 @@ protected:
     void paint(QPainter* painter, const QRectF& painterRect);
     void mousePress(KoPointerEvent* event);
     void mouseRelease(KoPointerEvent* event);
-    void wheel(KoPointerEvent* event);
     void doToolChanged(const QString& toolId);
 
-private:
+protected:
     CanvasBase* m_canvasBase;
     bool m_mousePressed;
     bool m_cellToolIsActive;

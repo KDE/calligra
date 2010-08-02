@@ -386,11 +386,6 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
     }
 }
 
-void RowHeader::wheel(KoPointerEvent* _ev)
-{
-    //XXX TODO m_pCanvas->wheel(_ev);
-}
-
 void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
 {
     register Sheet * const sheet = m_pCanvas->activeSheet();
@@ -943,11 +938,6 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
     }
 }
 
-void ColumnHeader::wheel(KoPointerEvent* _ev)
-{
-    //XXX TODO m_pCanvas->wheel(_ev);
-}
-
 void ColumnHeader::resize(const QSizeF& size, const QSizeF& oldSize)
 {
     register Sheet * const sheet = m_pCanvas->activeSheet();
@@ -1240,11 +1230,6 @@ void SelectAllButton::mouseRelease(KoPointerEvent* event)
         return;
     m_mousePressed = false;
     m_canvasBase->selection()->selectAll();
-}
-
-void SelectAllButton::wheel(KoPointerEvent* event)
-{
-    //XXX TODO m_canvasBase->wheel(event);
 }
 
 void SelectAllButton::doToolChanged(const QString& toolId)

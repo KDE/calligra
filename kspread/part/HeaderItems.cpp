@@ -155,8 +155,7 @@ void RowHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
 */
 void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
-    KoPointerEvent pev(_ev, QPointF());
-    wheel(&pev);
+    // TODO XXX
 }
 
 void RowHeaderItem::paintSizeIndicator(int mouseY)
@@ -313,8 +312,7 @@ void ColumnHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
 */
 void ColumnHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
-    KoPointerEvent pev(_ev, QPointF());
-    wheel(&pev);
+    // TODO XXX
 }
 
 void ColumnHeaderItem::resizeEvent(QGraphicsSceneResizeEvent* _ev)
@@ -454,8 +452,7 @@ void SelectAllButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev)
 
 void SelectAllButtonItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
-    KoPointerEvent pev(_ev, QPointF());
-    wheel(&pev);
+    // TODO XXX
 }
 
 void SelectAllButtonItem::toolChanged(const QString& toolId)
