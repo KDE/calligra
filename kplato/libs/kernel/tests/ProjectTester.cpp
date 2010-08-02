@@ -1775,6 +1775,131 @@ void ProjectTester::inWBSOrder()
 
 }
 
+void ProjectTester::resourceConflictALAP()
+{
+    Project p;
+    p.setName( "resourceConflictALAPr" );
+    DateTime st = p.constraintStartTime();
+    st = DateTime( st.addDays( 1 ) );
+    st.setTime( QTime ( 0, 0, 0 ) );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Task *t = p.createTask( &p );
+    t->setName( "T1" );
+    t->setConstraint( Node::ALAP );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    ResourceRequest *tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T2" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T3" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T4" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+    
+    ScheduleManager *sm = p.createScheduleManager( "T1 ALAP" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+    QString s = "Schedule T1 ALAP -------";
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+//     Debug::print( &p, s, true );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1, T2 ALAP -------";
+    p.allTasks().at( 1 )->setConstraint( Node::ALAP );
+    
+    sm = p.createScheduleManager( "T1, T2 ALAP" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+//     Debug::print( &p, s, true );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+}
+
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ProjectTester )

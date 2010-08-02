@@ -70,6 +70,8 @@ private slots:
     // This test can be removed if for some important reason this isn't possible.
     void inWBSOrder();
 
+    void resourceConflictALAP();
+
 private:
     Project *m_project;
     Calendar *m_calendar;

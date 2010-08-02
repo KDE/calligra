@@ -1495,7 +1495,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::ALAP:
             // cs->startTime calculated above
             //kDebug()<<m_name<<"ALAP:"<<cs->startTime<<cs->endTime<<" latest="<<cs->lateFinish;
-            cs->endTime = workTimeBefore( cs->lateFinish );
+            cs->endTime = workTimeBefore( cs->lateFinish, cs );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             //kDebug()<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
@@ -1512,9 +1512,9 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::StartNotEarlier:
             // cs->startTime calculated above
             //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->startTime<<cs->lateStart;
-            cs->startTime = workTimeAfter( cs->startTime );
+            cs->startTime = workTimeAfter( cs->startTime, cs );
             if ( cs->startTime < m_constraintStartTime ) {
-                cs->startTime = workTimeAfter( qMin( m_constraintStartTime, cs->lateStart ) );
+                cs->startTime = workTimeAfter( qMin( m_constraintStartTime, cs->lateStart ), cs );
             }
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
@@ -1538,7 +1538,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::FinishNotLater:
             // cs->startTime calculated above
             //kDebug()<<"FinishNotLater:"<<m_constraintEndTime<<cs->startTime;
-            cs->startTime = workTimeAfter( cs->startTime );
+            cs->startTime = workTimeAfter( cs->startTime, cs );
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
@@ -1561,7 +1561,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             break;
         case Node::MustStartOn:
             // cs->startTime calculated above as predecessors endTime
-            cs->startTime = workTimeAfter( cs->startTime );
+            cs->startTime = workTimeAfter( cs->startTime, cs );
             if (m_constraintStartTime > cs->startTime ) {
                 cs->startTime = qMin( m_constraintStartTime, cs->lateStart );
             }
@@ -1586,7 +1586,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             }
             break;
         case Node::MustFinishOn:
-            cs->endTime = workTimeBefore( qMin( m_constraintEndTime, cs->lateFinish ) );
+            cs->endTime = workTimeBefore( qMin( m_constraintEndTime, cs->lateFinish ), cs );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = workTimeAfter( cs->startTime );
             if ( cs->startTime <= cs->endTime - cs->duration ) {
@@ -1861,7 +1861,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         {
             // cs->endTime calculated above
             //kDebug()<<m_name<<": end="<<cs->endTime<<"  late="<<cs->lateFinish;
-            cs->endTime = workTimeBefore(cs->endTime);
+            cs->endTime = workTimeBefore( cs->endTime, cs );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             if ( cs->startTime < cs->earlyStart ) {
@@ -1884,7 +1884,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::StartNotEarlier:
             // cs->endTime calculated above
             //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->endTime;
-            cs->endTime = workTimeBefore( cs->endTime );
+            cs->endTime = workTimeBefore( cs->endTime, cs );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             if ( m_constraintStartTime > cs->startTime ) {
@@ -1904,7 +1904,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if (cs->endTime > m_constraintEndTime) {
                 cs->endTime = qMax( qMin( m_constraintEndTime, cs->lateFinish ), cs->earlyFinish );
             }
-            cs->endTime = workTimeBefore( cs->endTime );
+            cs->endTime = workTimeBefore( cs->endTime, cs );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             if ( cs->endTime > m_constraintEndTime ) {
@@ -1920,7 +1920,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::MustStartOn:
             // cs->endTime calculated above
             //kDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<""<<cs->startTime.toString();
-            cs->startTime = workTimeAfter( qMax( m_constraintStartTime, cs->earlyStart ) );
+            cs->startTime = workTimeAfter( qMax( m_constraintStartTime, cs->earlyStart ), cs );
             cs->duration = duration(cs->startTime, use, false);
             if ( cs->endTime >= cs->startTime + cs->duration ) {
                 cs->endTime = cs->startTime + cs->duration;
@@ -1945,7 +1945,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if (cs->endTime > m_constraintEndTime) {
                 cs->endTime = qMax( qMin( m_constraintEndTime, cs->lateFinish ), cs->earlyFinish );
             }
-            cs->endTime = workTimeBefore( cs->endTime );
+            cs->endTime = workTimeBefore( cs->endTime, cs );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             if (m_constraintEndTime != cs->endTime ) {
