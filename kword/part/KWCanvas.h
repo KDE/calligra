@@ -81,7 +81,7 @@ public:
         return m_view;
     }
 
-    virtual QCursor setCursor(const QCursor &cursor);
+    virtual void setCursor(const QCursor &cursor);
 
 public slots:
     /**

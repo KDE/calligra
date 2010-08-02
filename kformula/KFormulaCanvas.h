@@ -78,7 +78,7 @@ public:
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
 
-    QCursor setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor);
 
 protected:
     void mousePressEvent( QMouseEvent* event );

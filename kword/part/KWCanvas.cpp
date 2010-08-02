@@ -165,11 +165,9 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
     painter.end();
 }
 
-QCursor KWCanvas::setCursor(const QCursor &cursor)
+void KWCanvas::setCursor(const QCursor &cursor)
 {
-    QCursor oldCursor = QWidget::cursor();
     QWidget::setCursor(cursor);
-    return oldCursor;
 }
 
 void KWCanvas::updateInputMethodInfo()

@@ -174,7 +174,7 @@ public:
 
     virtual ColumnHeader* columnHeader() const;
     virtual RowHeader* rowHeader() const;
-    virtual QCursor setCursor(const QCursor &cursor);
+    virtual void setCursor(const QCursor &cursor);
 
 private:
     Q_DISABLE_COPY(CanvasItem)

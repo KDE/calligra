@@ -86,7 +86,7 @@ public:
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
 
-    virtual QCursor setCursor(const QCursor &cursor);
+    virtual void setCursor(const QCursor &cursor);
 
 public slots:
     /**

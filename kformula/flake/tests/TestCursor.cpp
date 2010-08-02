@@ -74,12 +74,7 @@ public:
         return KoUnit(KoUnit::Millimeter);
     }
     void updateInputMethodInfo() {}
-
-
-    QCursor setCursor(const QCursor &cursor)
-    {
-        return cursor;
-    }
+    void setCursor(const QCursor &) {}
 };
 
 void TestCursor::moveCursor()

@@ -157,9 +157,7 @@ void KFormulaCanvas::updateInputMethodInfo()
     updateMicroFocus();
 }
 
-QCursor KFormulaCanvas::setCursor(const QCursor &cursor)
+void KFormulaCanvas::setCursor(const QCursor &cursor)
 {
-    QCursor oldCursor = QWidget::cursor();
     QWidget::setCursor(cursor);
-    return oldCursor;
 }

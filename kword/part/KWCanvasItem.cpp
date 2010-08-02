@@ -181,9 +181,7 @@ void KWCanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     KWCanvasBase::paint(*painter, option->exposedRect);
 }
 
-QCursor KWCanvasItem::setCursor(const QCursor &cursor)
+void KWCanvasItem::setCursor(const QCursor &cursor)
 {
-    QCursor oldCursor = QGraphicsWidget::cursor();
     QGraphicsWidget::setCursor(cursor);
-    return oldCursor;
 }
