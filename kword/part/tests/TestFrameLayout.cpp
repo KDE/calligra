@@ -1,4 +1,4 @@
-#include "TestBasicLayout.h"
+#include "TestFrameLayout.h"
 #include "TestDocumentLayout.h"
 
 #include "../KWPageManager.h"
@@ -35,12 +35,12 @@ public:
     KWPageStyle pageStyle;
 };
 
-TestBasicLayout::TestBasicLayout()
+TestFrameLayout::TestFrameLayout()
 {
-    new KComponentData("TestBasicLayout");
+    new KComponentData("TestFrameLayout");
 }
 
-void TestBasicLayout::testGetOrCreateFrameSet()
+void TestFrameLayout::testGetOrCreateFrameSet()
 {
     Helper helper;
     m_frames.clear();
@@ -66,7 +66,7 @@ void TestBasicLayout::testGetOrCreateFrameSet()
     QCOMPARE(main->textFrameSetType(), KWord::MainTextFrameSet);
 }
 
-void TestBasicLayout::testCreateNewFramesForPage()
+void TestFrameLayout::testCreateNewFramesForPage()
 {
     Helper helper;
     m_frames.clear();
@@ -89,7 +89,7 @@ void TestBasicLayout::testCreateNewFramesForPage()
     QCOMPARE(main->frameCount(), 1);
 }
 
-void TestBasicLayout::testShouldHaveHeaderOrFooter()
+void TestFrameLayout::testShouldHaveHeaderOrFooter()
 {
     Helper helper;
     m_frames.clear();
@@ -158,7 +158,7 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter()
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, true, &origin), true);
 }
 
-void TestBasicLayout::headerPerPage()
+void TestFrameLayout::headerPerPage()
 {
     Helper helper;
     m_frames.clear();
@@ -208,7 +208,7 @@ void TestBasicLayout::headerPerPage()
     QCOMPARE(fsets2.evenFooters, (void*) 0);
 }
 
-void TestBasicLayout::testFrameCreation()
+void TestFrameLayout::testFrameCreation()
 {
     Helper helper;
     m_frames.clear();
@@ -246,7 +246,7 @@ void TestBasicLayout::testFrameCreation()
     QVERIFY(frameSets.evenFooters == 0);
 }
 
-void TestBasicLayout::testCreateNewFrameForPage_data()
+void TestFrameLayout::testCreateNewFrameForPage_data()
 {
     // tests void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
     QTest::addColumn<QStringList>("pages");
@@ -301,7 +301,7 @@ void TestBasicLayout::testCreateNewFrameForPage_data()
         (int) KWord::OddPagesFooterTextFrameSet << 3 << 1;
 }
 
-void TestBasicLayout::testCreateNewFrameForPage()
+void TestFrameLayout::testCreateNewFrameForPage()
 {
     QFETCH(QStringList, pages);
     QFETCH(int, frameSetType);
@@ -367,7 +367,7 @@ void TestBasicLayout::testCreateNewFrameForPage()
     }
 }
 
-void TestBasicLayout::testLargeHeaders()
+void TestFrameLayout::testLargeHeaders()
 {
     // create a header with waaaaaaay to much text and do one page layout.
     // Check if the header has been trunkated and no new page has been requested.
@@ -406,12 +406,12 @@ void TestBasicLayout::testLargeHeaders()
 }
 
 // helper method (slot)
-void TestBasicLayout::addFS(KWFrameSet*fs)
+void TestFrameLayout::addFS(KWFrameSet*fs)
 {
     m_frames.append(fs);
 }
 
-void TestBasicLayout::removeAllFrames()
+void TestFrameLayout::removeAllFrames()
 {
     foreach (KWFrameSet *fs, m_frames) {
         foreach (KWFrame *frame, fs->frames()) {
@@ -421,6 +421,6 @@ void TestBasicLayout::removeAllFrames()
     }
 }
 
-QTEST_KDEMAIN(TestBasicLayout, GUI)
+QTEST_KDEMAIN(TestFrameLayout, GUI)
 
-#include <TestBasicLayout.moc>
+#include <TestFrameLayout.moc>

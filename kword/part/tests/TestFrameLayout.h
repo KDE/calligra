@@ -8,11 +8,11 @@
 
 class KWFrameSet;
 
-class TestBasicLayout : public QObject
+class TestFrameLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestBasicLayout();
+    TestFrameLayout();
 
 private slots:
     // tests

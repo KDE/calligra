@@ -111,7 +111,7 @@ private slots:
     void mainframeRemoved(KWFrame *frame);
 
 private:
-    friend class TestBasicLayout;
+    friend class TestFrameLayout;
     struct FrameSets {
         FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0), pageBackground(0) {}
         KWTextFrameSet *oddHeaders;

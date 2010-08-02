@@ -38,9 +38,9 @@ target_link_libraries(TestPageTextInfo kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestBasicLayout_test_SRCS TestBasicLayout.cpp)
-kde4_add_unit_test(TestBasicLayout TESTNAME kword-part-frame-TestBasicLayout  ${TestBasicLayout_test_SRCS})
-target_link_libraries(TestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
+set(TestFrameLayout_test_SRCS TestFrameLayout.cpp)
+kde4_add_unit_test(TestFrameLayout TESTNAME kword-part-frame-TestFrameLayout  ${TestFrameLayout_test_SRCS})
+target_link_libraries(TestFrameLayout kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
