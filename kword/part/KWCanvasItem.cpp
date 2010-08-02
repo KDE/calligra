@@ -177,7 +177,7 @@ void KWCanvasItem::updateInputMethodInfo()
 #endif
 }
 
-void KWCanvasItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
+void KWCanvasItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     painter->fillRect(option->exposedRect, Qt::darkGray);
     KWCanvasBase::paint(*painter, option->exposedRect);

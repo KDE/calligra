@@ -46,12 +46,12 @@
 //#define DEBUG_REPAINT
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
-    : KoCanvasBase(document)
-    , m_document(document)
-    , m_shapeManager(0)
-    , m_toolProxy(0)
-    , m_viewMode(0)
-    , m_viewConverter(0)
+    : KoCanvasBase(document),
+    m_document(document),
+    m_shapeManager(0),
+    m_toolProxy(0),
+    m_viewMode(0),
+    m_viewConverter(0)
 {
 
     m_shapeManager = new KoShapeManager(this);
@@ -78,7 +78,8 @@ void KWCanvasBase::addCommand(QUndoCommand *command)
     m_document->addCommand(command);
 }
 
-KoShapeManager *KWCanvasBase::shapeManager() const {
+KoShapeManager *KWCanvasBase::shapeManager() const
+{
     return m_shapeManager;
 }
 
@@ -96,12 +97,14 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
 }
 
 /// reimplemented method from superclass
-KoUnit KWCanvasBase::unit() const {
+KoUnit KWCanvasBase::unit() const
+{
     return m_document->unit();
 }
 
 /// reimplemented method from superclass
-KoToolProxy *KWCanvasBase::toolProxy() const {
+KoToolProxy *KWCanvasBase::toolProxy() const
+{
     return m_toolProxy;
 }
 
@@ -148,11 +151,13 @@ KoGuidesData *KWCanvasBase::guidesData()
     return &m_document->guidesData();
 }
 
-KWDocument *KWCanvasBase::document() const {
+KWDocument *KWCanvasBase::document() const
+{
     return m_document;
 }
 
-KWViewMode *KWCanvasBase::viewMode() const {
+KWViewMode *KWCanvasBase::viewMode() const
+{
     return m_viewMode;
 }
 
@@ -295,7 +300,7 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
             painter.setClipRect(vm.clipRect);
 
             // Paint the background of the page.
-            QColor color = Qt::white; // TODO paper background
+            QColor color = Qt::white;
 #ifdef DEBUG_REPAINT
             color = QColor(random() % 255, random() % 255, random() % 255);
 #endif
@@ -330,7 +335,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
         // TODO paint the main-text-flake directly
         kWarning(32003) << "Non-page painting not implemented yet!";
     }
-
 }
 
 const KoViewConverter *KWCanvasBase::viewConverter() const

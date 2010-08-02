@@ -254,7 +254,7 @@ KoView *KWDocument::createViewInstance(QWidget *parent)
 
 QGraphicsItem *KWDocument::createCanvasItem()
 {
-    // KoDocument owns the canvas item
+    // caller owns the canvas item
     KWCanvasItem *item = new KWCanvasItem(m_viewMode, this);
 
     if (m_magicCurtain) {

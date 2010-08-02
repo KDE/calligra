@@ -24,9 +24,9 @@
 
 #include "KWDocument.h"
 #include "kword_export.h"
+#include "KWViewMode.h"
 
 #include <KoCanvasBase.h>
-#include "KWViewMode.h"
 #include <QRectF>
 
 class QRect;
@@ -55,7 +55,7 @@ public: // KoCanvasBase interface methods.
     virtual KoShapeManager *shapeManager() const;
 
     /// reimplemented method from superclass
-    virtual void updateCanvas(const QRectF& rc);
+    virtual void updateCanvas(const QRectF &rc);
 
     /// reimplemented method from superclass
     virtual KoUnit unit() const;
@@ -83,7 +83,7 @@ public: // KoCanvasBase interface methods.
 
 protected:
 
-    void paint(QPainter& painter, const QRectF &paintRect);
+    void paint(QPainter &painter, const QRectF &paintRect);
 
     void paintPageDecorations(QPainter &painter, KWViewMode::ViewMap &viewMap);
 
@@ -106,7 +106,7 @@ protected:
 
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
-    KoToolProxy * m_toolProxy;
+    KoToolProxy *m_toolProxy;
     KWViewMode *m_viewMode;
     QPoint m_documentOffset;
     KoZoomHandler *m_viewConverter;

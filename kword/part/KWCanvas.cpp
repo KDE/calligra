@@ -157,14 +157,13 @@ void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
     m_toolProxy->inputMethodEvent(event);
 }
 
-void KWCanvas::paintEvent(QPaintEvent * ev)
+void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
     paint(painter, ev->rect());
     painter.end();
 }
-
 
 QCursor KWCanvas::setCursor(const QCursor &cursor)
 {

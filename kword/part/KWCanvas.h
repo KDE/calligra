@@ -58,7 +58,7 @@ public:
      * @param view the parent KWView object
      * @param parent the parent widget.
      */
-    KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent);
+    KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, KWGui *parent);
     virtual ~KWCanvas();
 
     /// ask the widget to set the size this canvas takes to display all content
@@ -81,7 +81,7 @@ public:
         return m_view;
     }
 
-    QCursor setCursor(const QCursor &cursor);
+    virtual QCursor setCursor(const QCursor &cursor);
 
 public slots:
     /**
@@ -123,9 +123,8 @@ protected: // QWidget
     virtual void inputMethodEvent(QInputMethodEvent *event);
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
-protected: // KWCanvasBase
-
-    void updateCanvasInternal(const QRectF &clip) { update(clip.toRect()); };
+    /// reimplemented method from superclass
+    virtual void updateCanvasInternal(const QRectF &clip) { update(clip.toRect()); }
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.

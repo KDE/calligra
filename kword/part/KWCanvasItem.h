@@ -22,11 +22,9 @@
 #define KWCANVASITEM_H
 
 #include "KWDocument.h"
-#include "kword_export.h"
-
-#include <KWCanvasBase.h>
-
+#include "KWCanvasBase.h"
 #include "KWViewMode.h"
+#include "kword_export.h"
 
 #include <QGraphicsWidget>
 
@@ -43,7 +41,7 @@ class KoShape;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_TEST_EXPORT KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
+class KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
 {
     Q_OBJECT
 
@@ -55,13 +53,13 @@ public:
      * @param document as this is one view in the MVC design; the document holds all content
      * @param parent the parent widget.
      */
-    KWCanvasItem(const QString& viewMode, KWDocument *document);
+    KWCanvasItem(const QString &viewMode, KWDocument *document);
     virtual ~KWCanvasItem();
 
     /// ask the widget to set the size this canvas takes to display all content
     void updateSize();
 
-    KoZoomHandler* zoomHandler() const;
+    KoZoomHandler *zoomHandler() const;
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
@@ -90,7 +88,7 @@ public:
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
 
-    QCursor setCursor(const QCursor &cursor);
+    virtual QCursor setCursor(const QCursor &cursor);
 
 public slots:
     /**
@@ -128,7 +126,7 @@ protected: //QGraphicsWidget
     virtual void keyReleaseEvent(QKeyEvent *e);
 
     /// reimplemented method from superclass
-    virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     /// reimplemented method from superclass
     //    virtual void tabletEvent(QTabletEvent *e);
@@ -142,10 +140,8 @@ protected: //QGraphicsWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-
-protected: // KWCanvasBase
-
-    void updateCanvasInternal(const QRectF& clip) { update(clip); }
+    /// reimplemented method from superclass
+    virtual void updateCanvasInternal(const QRectF &clip) { update(clip); }
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.
