@@ -313,7 +313,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::PageBackgroundFrameSet:
             pageBackground = static_cast<KWFrame *>(frame);
             break;
-        // TODO end + foot note frameset
+        // TODO endnote frameset
         default:;
         }
     }
@@ -412,7 +412,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         pageBackground->shape()->setSize(QSizeF(width, page.height()));
     }
     delete [] main;
-// TODO footnotes, endnotes
+// TODO endnotes
 }
 
 bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin)
