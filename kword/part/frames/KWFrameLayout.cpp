@@ -95,8 +95,31 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
         }
     }
 
+    // create main text frame. All columns of them.
+    if (page.pageStyle().hasMainTextFrame()) {
+        int columns = page.pageStyle().columns().columns;
+        KWTextFrameSet *fs = getOrCreate(KWord::MainTextFrameSet, page);
+        QRectF rect(QPointF(0, page.offsetInDocument()),
+                    QSizeF(page.width(), page.height()));
+        if (page.pageSide() == KWPage::PageSpread)
+            rect.setWidth(rect.width() / 2);
+        foreach (KWFrame *frame, framesInPage(rect)) {
+            if (frame->frameSet() == fs) {
+                columns--;
+                if (columns < 0) {
+                    fs->removeFrame(frame);
+                    delete frame;
+                }
+            }
+        }
+        while (columns > 0) {
+            new KWTextFrame(createTextShape(page), fs);
+            columns--;
+        }
+    }
+
     if (page.pageSide() == KWPage::PageSpread) {
-        // inline helper method
+        // inline helper class
         class PageSpreadShapeFactory
         {
         public:
@@ -143,29 +166,6 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                 factory.create(page, fs);
                 columns--;
             }
-        }
-    }
-
-    // create main text frame. All columns of them.
-    if (page.pageStyle().hasMainTextFrame()) {
-        int columns = page.pageStyle().columns().columns;
-        KWTextFrameSet *fs = getOrCreate(KWord::MainTextFrameSet, page);
-        QRectF rect(QPointF(0, page.offsetInDocument()),
-                    QSizeF(page.width(), page.height()));
-        if (page.pageSide() == KWPage::PageSpread)
-            rect.setWidth(rect.width() / 2);
-        foreach (KWFrame *frame, framesInPage(rect)) {
-            if (frame->frameSet() == fs) {
-                columns--;
-                if (columns < 0) {
-                    fs->removeFrame(frame);
-                    delete frame;
-                }
-            }
-        }
-        while (columns > 0) {
-            new KWTextFrame(createTextShape(page), fs);
-            columns--;
         }
     }
 
@@ -221,15 +221,15 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     Q_ASSERT(page.isValid());
 
     /* +-----------------+
-       |  0              | <- m_pageStyle->pageLayout()->topMargin + d:o->topPadding
+       |  0              | <- pageStyle->pageLayout()->topMargin + layout->topPadding
        |  1  [ header ]  |
-       |  2              | <- m_pageStyle->headerDistance()
+       |  2              | <- pageStyle->headerDistance()
        |  3  [ maintxt ] |
-       |  4              | <- m_pageStyle->endNoteDistance()
+       |  4              | <- pageStyle->endNoteDistance()
        |  5  [ endnote ] |
-       |  6              | <- m_pageStyle->footerDistance()
+       |  6              | <- pageStyle->footerDistance()
        |  7  [ footer ]  |
-       |  8              | <- m_pageStyle->pageLayout()->bottomMargin + d:o->bottomPadding
+       |  8              | <- pageStyle->pageLayout()->bottomMargin + layout->bottomPadding
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
@@ -251,7 +251,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     qreal left = 0, width = page.width();
     if (page.pageSide() == KWPage::PageSpread) {
         width /= 2;
-        if (page.pageNumber() != pageNumber) { // doing the 'right' one
+        layout.leftMargin = page.pageEdgeMargin();
+        layout.rightMargin = page.marginClosestBinding();
+        if (page.pageNumber() != pageNumber) { // doing the 'right' part
             left = width;
             qSwap(layout.leftMargin, layout.rightMargin);
             qSwap(layout.leftPadding, layout.rightPadding);
@@ -261,7 +263,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                             - layout.leftPadding - layout.rightPadding;
 
     KWPageStyle pageStyle = page.pageStyle();
-    const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2 : 1) : 0;
+    const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns : 0;
     int columnsCount = columns;
     KWTextFrame **main;
     KWTextFrame *footer = 0, *endnote = 0, *header = 0;

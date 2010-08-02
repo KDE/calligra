@@ -405,6 +405,38 @@ void TestFrameLayout::testLargeHeaders()
     QVERIFY(shape->size().height() >= 10);
 }
 
+void TestFrameLayout::testLayoutPageSpread()
+{
+    Helper helper;
+    m_frames.clear();
+
+    //set up as a page spread;
+    KoPageLayout pageLayout = helper.pageStyle.pageLayout();
+    pageLayout.leftMargin = -1;
+    pageLayout.rightMargin = -1;
+    pageLayout.pageEdge = 20;
+    pageLayout.bindingSide = 25;
+    pageLayout.topMargin = 21;
+    pageLayout.bottomMargin = 22;
+    helper.pageStyle.setPageLayout(pageLayout);
+
+    KWPage spread = helper.pageManager->appendPage();
+    QCOMPARE(spread.pageSide(), KWPage::PageSpread);
+    QCOMPARE(spread.pageNumber(), 2);
+
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    bfl.createNewFramesForPage(spread.pageNumber());
+    KWTextFrameSet *fs = bfl.getOrCreate(KWord::MainTextFrameSet, spread);
+    QCOMPARE(fs->frameCount(), 2);
+    bfl.layoutFramesOnPage(spread.pageNumber());
+    QCOMPARE(fs->frames()[0]->shape()->position(), QPointF(20, 221)); // left
+    QCOMPARE(fs->frames()[0]->shape()->size(), QSizeF(155, 157));
+    QCOMPARE(fs->frames()[1]->shape()->position(), QPointF(225, 221)); // right
+    QCOMPARE(fs->frames()[1]->shape()->size(), QSizeF(155, 157));
+}
+
 // helper method (slot)
 void TestFrameLayout::addFS(KWFrameSet*fs)
 {
