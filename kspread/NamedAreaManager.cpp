@@ -202,7 +202,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 kDebug(36003) << "Named area found, name:" << name << ", area:" << range;
 
                 Region region(Region::loadOdf(range), d->map, fallbackSheet);
-                if (!region.isValid() || region.lastSheet()) {
+                if (!region.isValid() || !region.lastSheet()) {
                     kDebug(36003) << "invalid area";
                     continue;
                 }
