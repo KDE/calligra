@@ -43,6 +43,7 @@ private slots: // tests
     void init();
     void testBasicConversion();
     void testPageSetupChanged();
+    void testClipRectForPageSpread();
 };
 
 #endif

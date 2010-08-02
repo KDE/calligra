@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
-   Copyright (C) 2008 Thomas Zander <zander@kde.org>
+   Copyright (C) 2008-2010 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -107,6 +107,66 @@ void TestViewMode::testBasicConversion()
     QCOMPARE(answer[1].distance, QPointF(0, PAGEGAP));
 }
 
+void TestViewMode::testClipRectForPageSpread()
+{
+    KWPageManager pageManager;
+
+    //set up as a page spread;
+    KoPageLayout pageLayout = pageManager.defaultPageStyle().pageLayout();
+    pageLayout.leftMargin = -1;
+    pageLayout.rightMargin = -1;
+    pageLayout.pageEdge = 20;
+    pageLayout.bindingSide = 25;
+    pageLayout.height = 200;
+    pageLayout.width = 300;
+    pageManager.defaultPageStyle().setPageLayout(pageLayout);
+
+    KoZoomHandler zoomer;
+    zoomer.setZoomAndResolution(100, 72, 72); // BORING :)
+    MyViewModeNormal viewMode;
+    viewMode.setPageManager(&pageManager);
+    viewMode.setViewConverter(&zoomer);
+
+    pageManager.appendPage(); // page 1
+    pageManager.appendPage(); // page 2 & 3
+    QCOMPARE(pageManager.pageCount(), 3);
+    viewMode.pageSetupChanged();
+
+    QList<KWViewMode::ViewMap> answer;
+    answer = viewMode.clipRectToDocument(QRect(50, 180, 300, 100));
+    QCOMPARE(answer.count(), 2);
+    QCOMPARE(answer[0].clipRect, QRect(50, 180, 250, 20)); // page 1
+    QCOMPARE(answer[0].distance, QPointF());
+    QCOMPARE(answer[1].clipRect, QRect(50, 200, 300, 75)); // page 2 & 3
+    QCOMPARE(answer[1].distance, QPointF(0, PAGEGAP));
+
+    answer = viewMode.clipRectToDocument(QRect(0, 250, 1000, 50));
+    QCOMPARE(answer.count(), 1);
+    QCOMPARE(answer[0].clipRect, QRect(0, 245, 600, 50)); // page 2&3
+    QCOMPARE(answer[0].distance, QPointF(0, PAGEGAP));
+
+    pageManager.appendPage(); // page 4 & 5
+    QCOMPARE(pageManager.pageCount(), 5);
+    viewMode.pageSetupChanged();
+
+    answer = viewMode.clipRectToDocument(QRect(0, 250, 1000, 50));
+    QCOMPARE(answer.count(), 1);
+    QCOMPARE(answer[0].clipRect, QRect(0, 245, 600, 50)); // page 2&3
+    QCOMPARE(answer[0].distance, QPointF(0, PAGEGAP));
+
+    answer = viewMode.clipRectToDocument(QRect(0, 450, 1000, 50));
+    QCOMPARE(answer.count(), 1);
+    QCOMPARE(answer[0].clipRect, QRect(0, 440, 600, 50)); // page 4&5
+    QCOMPARE(answer[0].distance, QPointF(0, PAGEGAP * 2));
+
+    answer = viewMode.clipRectToDocument(QRect(0, 250, 1000, 500));
+    QCOMPARE(answer.count(), 2);
+    QCOMPARE(answer[0].clipRect, QRect(0, 245, 600, 155)); // page 2&3
+    QCOMPARE(answer[0].distance, QPointF(0, PAGEGAP));
+    QCOMPARE(answer[1].clipRect, QRect(0, 400, 600, 200)); // page 4&5
+    QCOMPARE(answer[1].distance, QPointF(0, PAGEGAP * 2));
+}
+
 void TestViewMode::testPageSetupChanged()
 {
     KWPageManager pageManager;
@@ -117,8 +177,6 @@ void TestViewMode::testPageSetupChanged()
     pageLayout.rightMargin = -1;
     pageLayout.pageEdge = 20;
     pageLayout.bindingSide = 25;
-    pageLayout.topMargin = 21;
-    pageLayout.bottomMargin = 22;
     pageManager.defaultPageStyle().setPageLayout(pageLayout);
 
     KoZoomHandler zoomer;

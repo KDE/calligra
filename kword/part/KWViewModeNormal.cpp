@@ -61,6 +61,8 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     while (index > 1) { // 1 since we might hit a pagespread in the binary search, so start one page early
         page = page.next();
         --index;
+        if (page.pageSide() == KWPage::PageSpread)
+            --index;
     }
 
     int emptyPages = 0;
