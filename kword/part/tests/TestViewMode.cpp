@@ -24,6 +24,9 @@
 
 #include <kdebug.h>
 
+// this is also defined in the KWViewModeNormal
+#define PAGEGAP 5
+
 void TestViewMode::init()
 {
 }
@@ -31,7 +34,6 @@ void TestViewMode::init()
 void TestViewMode::testBasicConversion()
 {
     const int A4_HEIGHT = 842;
-    const int PAGEGAP = 5;
     KWPageManager pageManager;
     KoZoomHandler zoomer;
     zoomer.setZoomAndResolution(100, 72, 72); // BORING :)
