@@ -99,8 +99,10 @@
 #include <KoStore.h>
 #include <KoCanvasBase.h>
 #include <KoToolRegistry.h>
+#include <styles/KoParagraphStyle.h>
 #include <styles/KoListLevelProperties.h>
 #include <KoList.h>
+#include <kundostack.h>
 #include <Map.h>
 #include <Doc.h>
 #include <View.h>
@@ -113,15 +115,15 @@ using  KSpread::Map;
 using  KSpread::View;
 using  KSpread::Sheet;
 
-#define FORMATFRAME_XCORDINATE_VALUE 310
-#define FORMATFRAME_YCORDINATE_VALUE 140
-#define FORMATFRAME_WIDTH 500
-#define FORMATFRAME_HEIGHT 220
+#define FORMATFRAME_XCORDINATE_VALUE 465
+#define FORMATFRAME_YCORDINATE_VALUE 150
+#define FORMATFRAME_WIDTH 335
+#define FORMATFRAME_HEIGHT 210
 
-#define FONTSTYLEFRAME_XCORDINATE_VALUE 370
-#define FONTSTYLEFRAME_YCORDINATE_VALUE 140
-#define FONTSTYLEFRAME_WIDTH 440
-#define FONTSTYLEFRAME_HEIGHT 220
+#define FONTSTYLEFRAME_XCORDINATE_VALUE 280
+#define FONTSTYLEFRAME_YCORDINATE_VALUE 150
+#define FONTSTYLEFRAME_WIDTH 520
+#define FONTSTYLEFRAME_HEIGHT 210
 
 bool MainWindow::enable_accelerator=false;
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
@@ -133,6 +135,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_editor(NULL),
         m_kwview(NULL),
         m_controller(NULL),
+        m_undostack(NULL),
         m_vPage(0),
         m_hPage(0),
         m_pressed(false),
@@ -188,7 +191,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_fontsize(12),
         m_fonttype("Nokia Sans"),
         m_fontweight(25),
-        m_count(0),
         m_xcordinate(0),
         m_ycordinate(0),
         m_pptTool(0),
@@ -391,9 +393,6 @@ void MainWindow::openFormatFrame()
     m_formatframelayout->setVerticalSpacing(0);
     m_formatframelayout->setHorizontalSpacing(0);
 
-    m_bold=addFormatFrameComponent(i18n("Bold"));
-    m_italic=addFormatFrameComponent(i18n("Italic"));
-    m_underline=addFormatFrameComponent(i18n("UnderLine"));
     m_alignleft=addFormatFrameComponent(i18n("AlignLeft"));
     m_alignright=addFormatFrameComponent(i18n("AlignRight"));
     m_aligncenter=addFormatFrameComponent(i18n("AlignCenter"));
@@ -401,15 +400,12 @@ void MainWindow::openFormatFrame()
     m_numberedlist=addFormatFrameComponent(i18n("Number"));
     m_alignjustify=addFormatFrameComponent(i18n("AlignJustify"));
 
-    m_formatframelayout->addWidget(m_bold,0,0);
-    m_formatframelayout->addWidget(m_alignleft,0,1);
-    m_formatframelayout->addWidget(m_numberedlist,0,2);
-    m_formatframelayout->addWidget(m_italic,1,0);
-    m_formatframelayout->addWidget(m_alignright,1,1);
-    m_formatframelayout->addWidget(m_bulletlist,1,2);
-    m_formatframelayout->addWidget(m_underline,2,0);
-    m_formatframelayout->addWidget(m_aligncenter,2,1);
-    m_formatframelayout->addWidget(m_alignjustify,2,2);
+    m_formatframelayout->addWidget(m_alignleft,0,0);
+    m_formatframelayout->addWidget(m_alignright,0,1);
+    m_formatframelayout->addWidget(m_aligncenter,1,0);
+    m_formatframelayout->addWidget(m_alignjustify,1,1);
+    m_formatframelayout->addWidget(m_numberedlist,2,0);
+    m_formatframelayout->addWidget(m_bulletlist,2,1);
 
     m_formatframe->setGeometry(FORMATFRAME_XCORDINATE_VALUE,
                                FORMATFRAME_YCORDINATE_VALUE,
@@ -420,9 +416,6 @@ void MainWindow::openFormatFrame()
     m_formatframe->show();
 
     connect(m_alignjustify,SIGNAL(clicked()),this,SLOT(doJustify()));
-    connect(m_bold,SIGNAL(clicked()),this,SLOT(doBold()));
-    connect(m_italic,SIGNAL(clicked()),this,SLOT(doItalic()));
-    connect(m_underline,SIGNAL(clicked()),this,SLOT(doUnderLine()));
     connect(m_alignleft,SIGNAL(clicked()),this,SLOT(doLeftAlignment()));
     connect(m_alignright,SIGNAL(clicked()),this,SLOT(doRightAlignment()));
     connect(m_aligncenter,SIGNAL(clicked()),this,SLOT(doCenterAlignment()));
@@ -453,7 +446,7 @@ void MainWindow::openFontStyleFrame()
 
     m_fontsizecombo=new QComboBox(this);
     Q_CHECK_PTR(m_fontsizecombo);
-    m_fontsizecombo->setMinimumSize(120,76);
+    m_fontsizecombo->setMinimumSize(100,73);
     int i;
     for(i=4;i<=40;i++)
     {
@@ -461,6 +454,9 @@ void MainWindow::openFontStyleFrame()
         m_fontsizecombo->addItem(f_size.setNum(i));
     }
 
+    m_bold=addFontStyleFrameComponent(i18n("Bold"));
+    m_italic=addFontStyleFrameComponent(i18n("Italic"));
+    m_underline=addFontStyleFrameComponent(i18n("UnderLine"));
     m_textcolor=addFontStyleFrameComponent(i18n("TextColor"));
     m_textbackgroundcolor=addFontStyleFrameComponent(i18n("TextBackgroundColor"));
     m_subscript=addFontStyleFrameComponent(i18n("SubScript"));
@@ -468,16 +464,19 @@ void MainWindow::openFontStyleFrame()
 
     m_fontcombobox=new QFontComboBox(this);
     Q_CHECK_PTR(m_fontcombobox);
-    m_fontcombobox->setMinimumSize(290,76);
+    m_fontcombobox->setMinimumSize(230,73);
     m_fontcombobox->setFont(QFont("Nokia Sans",20,QFont::Normal));
     m_fontcombobox->setEditable(false);
 
-    m_fontstyleframelayout->addWidget(m_fontcombobox,0,0);
+    m_fontstyleframelayout->addWidget(m_fontcombobox,0,0,1,2);
     m_fontstyleframelayout->addWidget(m_fontsizecombo,0,2);
+    m_fontstyleframelayout->addWidget(m_bold,0,3,1,2);
     m_fontstyleframelayout->addWidget(m_textcolor,1,0);
-    m_fontstyleframelayout->addWidget(m_textbackgroundcolor,1,1,0,2);
+    m_fontstyleframelayout->addWidget(m_textbackgroundcolor,1,1,1,3);
+    m_fontstyleframelayout->addWidget(m_italic,1,4);
     m_fontstyleframelayout->addWidget(m_superscript,2,0);
-    m_fontstyleframelayout->addWidget(m_subscript,2,1,0,2);
+    m_fontstyleframelayout->addWidget(m_subscript,2,1,1,3);
+    m_fontstyleframelayout->addWidget(m_underline,2,4);
 
     m_fontstyleframe->setLayout(m_fontstyleframelayout);
     m_fontstyleframe->setGeometry(FONTSTYLEFRAME_XCORDINATE_VALUE,
@@ -493,6 +492,9 @@ void MainWindow::openFontStyleFrame()
     connect(m_textbackgroundcolor,SIGNAL(clicked()),SLOT(selectTextBackGroundColor()));
     connect(m_subscript,SIGNAL(clicked()),SLOT(doSubScript()));
     connect(m_superscript,SIGNAL(clicked()),SLOT(doSuperScript()));
+    connect(m_bold,SIGNAL(clicked()),this,SLOT(doBold()));
+    connect(m_italic,SIGNAL(clicked()),this,SLOT(doItalic()));
+    connect(m_underline,SIGNAL(clicked()),this,SLOT(doUnderLine()));
 }
 
 ///////////////////////
@@ -629,8 +631,8 @@ bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* edito
 
 void MainWindow::doBold()
 {
-    if (m_formatframe)
-        m_formatframe->hide();
+    if (m_fontstyleframe)
+        m_fontstyleframe->hide();
     if(setBold(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatBold);
 }
@@ -653,8 +655,8 @@ bool MainWindow::setBold(KoTextEditor *editor) {
 
 void MainWindow::doItalic()
 {
-    if (m_formatframe)
-        m_formatframe->hide();
+    if (m_fontstyleframe)
+        m_fontstyleframe->hide();
     if (setItalic(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatItalic);
 }
@@ -677,8 +679,8 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
 
 void MainWindow::doUnderLine()
 {
-    if (m_formatframe)
-        m_formatframe->hide();
+    if (m_fontstyleframe)
+        m_fontstyleframe->hide();
     if(setUnderline(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatUnderline);
 }
@@ -797,30 +799,6 @@ void MainWindow::activeFormatOptionCheck() {
                         m_aligncenter->setStyleSheet("");
                         break;
     }
-    if(m_bold) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if (textchar.fontWeight()==QFont::Bold) {
-            m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_bold->setStyleSheet("");
-        }
-    }
-    if(m_italic) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if (textchar.fontItalic()) {
-            m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_italic->setStyleSheet("");
-        }
-    }
-    if(m_underline) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
-            m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_underline->setStyleSheet("");
-        }
-    }
 }
 
 void MainWindow::activeFontOptionCheck() {
@@ -852,6 +830,33 @@ void MainWindow::activeFontOptionCheck() {
         QTextCharFormat textchar = m_editor->charFormat();
         QString fonttype = textchar.fontFamily();
         m_fontcombobox->setCurrentFont(QFont(fonttype));
+    }
+
+    if(m_bold) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if (textchar.fontWeight()==QFont::Bold) {
+            m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_bold->setStyleSheet("");
+        }
+    }
+
+    if(m_italic) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if (textchar.fontItalic()) {
+            m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_italic->setStyleSheet("");
+        }
+    }
+
+    if(m_underline) {
+        QTextCharFormat textchar = m_editor->charFormat();
+        if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
+            m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
+        } else {
+            m_underline->setStyleSheet("");
+        }
     }
 }
 
@@ -889,17 +894,13 @@ bool MainWindow::setBulletList(KoTextEditor *editor) {
 
 void MainWindow::doStyle(KoListStyle::Style style, KoTextEditor *editor)
 {
-    const int start = qMin(editor->position(), editor->anchor());
-    const int end = qMax(editor->position(), editor->anchor());
-    QTextBlock block = editor->document()->findBlock(start);
-    while (block.isValid() && block.position() <= end) {
-        KoListStyle *liststyle = new KoListStyle();
-        KoListLevelProperties listlevelproperties;
-        listlevelproperties.setStyle(style);
-        liststyle->setLevelProperties(listlevelproperties);
-        KoList::applyStyle(block, liststyle, KoList::level(block));
-        block = block.next();
-    }
+    KoParagraphStyle *parag = new KoParagraphStyle();
+    KoListStyle *list = new KoListStyle(parag);
+    KoListLevelProperties llp = list->levelProperties(0);
+    llp.setStyle(style);
+    list->setLevelProperties(llp);
+    parag->setListStyle(list);
+    editor->setStyle(parag);
     m_isDocModified = true;
 }
 
@@ -1236,7 +1237,7 @@ QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
-    btn->setMaximumSize(165,70);
+    btn->setMaximumSize(165,75);
     Q_CHECK_PTR(btn);
     return btn;
 }
@@ -1244,7 +1245,8 @@ QPushButton * MainWindow::addFontStyleFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
-    btn->setMinimumSize(200,70);
+    btn->setMinimumSize(165,70);
+    btn->setMaximumSize(165,70);
     Q_CHECK_PTR(btn);
     return btn;
 }
@@ -1481,13 +1483,6 @@ void MainWindow::editToolBar(bool edit)
         m_fontstyleframe->hide();
 }
 
-void MainWindow::initialUndoStepsCount() {
-    if(m_doc && m_editor) {
-        m_textDocument=m_editor->document();
-        m_count=m_textDocument->availableUndoSteps();
-    }
-}
-
 void MainWindow::doUndo()
 {
     if(m_formatframe)
@@ -1496,15 +1491,8 @@ void MainWindow::doUndo()
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
 
-    if (m_doc && m_editor) {
-        m_textDocument = m_editor->document();
-        m_textDocument->availableUndoSteps();
-        if (m_count<(m_textDocument->availableUndoSteps())) {
-            m_textDocument->undo();
-            if (m_count<m_textDocument->availableUndoSteps()) {
-                m_textDocument->undo();
-            }
-        }
+    if(m_doc && m_undostack->canUndo()) {
+        m_undostack->undo();
     }
 }
 
@@ -1516,10 +1504,8 @@ void MainWindow::doRedo()
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
 
-    if(m_doc && m_editor) {
-        m_textDocument = m_editor->document();
-        m_textDocument->redo();
-        m_textDocument->redo();
+    if(m_doc && m_undostack->canRedo()) {
+        m_undostack->redo();
     }
 }
 
@@ -1749,6 +1735,8 @@ void MainWindow::closeDocument()
         KoToolManager::instance()->removeCanvasController(m_controller);
         if(m_kwview)
             m_kwview->canvasBase()->toolProxy()->deleteSelection();
+        delete m_undostack;
+        m_undostack = 0;
         delete m_doc;
         m_doc = 0;
         delete m_view;
@@ -1758,6 +1746,9 @@ void MainWindow::closeDocument()
     m_view = NULL;
     setCentralWidget(0);
     m_currentPage = 1;
+    if(m_controller){
+        delete m_controller;
+    }
     m_controller = NULL;
     if (m_ui->EditToolBar)
         m_ui->EditToolBar->hide();
@@ -1782,7 +1773,6 @@ void MainWindow::closeDocument()
     m_newDocOpen=false;
     m_italicCheck=false,
     m_underlineCheck=false,
-    m_count=0;
     m_fontcount=0,
     m_fontsize=12,
     m_fontweight=25;
@@ -1997,7 +1987,6 @@ void MainWindow::openDocument(const QString &fileName)
         m_splash->finish(m_controller);
         m_splash = 0;
    }
-   initialUndoStepsCount();
 
    if(m_type==Presentation)
    {
@@ -2014,6 +2003,7 @@ void MainWindow::openDocument(const QString &fileName)
            thumbnailRetriever->start();
            connect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
    }
+   m_undostack = m_doc->undoStack();
 }
 
 bool MainWindow::checkFiletype(const QString &fileName)
@@ -2530,7 +2520,7 @@ void MainWindow::highlightText(int aIndex)
     QString sizeStr = QString::number(m_positions.size());
     QString indexStr = QString::number(aIndex + 1);
 
-    m_ui->actionSearchResult->setText(i18n("%1 of %2", m_positions.size(), aIndex + 1));
+    m_ui->actionSearchResult->setText(i18n("%1 of %2",aIndex + 1,m_positions.size() ));
 
     provider->setResource(KoText::CurrentTextPosition,
                           m_positions.at(aIndex).second.first);
@@ -2718,14 +2708,13 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         m_xcordinate = mouseEvent->globalX ();
         m_ycordinate = mouseEvent->globalY();
         if((m_formatframe) && (m_formatframe->isVisible())) {
-            if ((m_xcordinate<325) || (m_ycordinate<199))
+            if ((m_xcordinate<480) || (m_ycordinate<205))
                 m_formatframe->hide();
         }
-
         if((m_fontstyleframe) && (m_fontstyleframe->isVisible())) {
             if(!this->isActiveWindow()){
             } else {
-                if((m_xcordinate<384) || (m_ycordinate<199))
+                if((m_xcordinate<325) || (m_ycordinate<205))
                     m_fontstyleframe->hide();
             }
         }

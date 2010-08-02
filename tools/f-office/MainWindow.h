@@ -57,8 +57,8 @@ class QTextDocument;
 class QGridLayout;
 class QDialog;
 
+class KUndoStack;
 class KoCharacterStyle;
-class KoTextEditor;
 class KoTextEditor;
 class PresentationTool;
 class MainWindowAdaptor;
@@ -101,8 +101,7 @@ public:
     void openNewDocumentType(QString type);
 private:
     Ui::MainWindow *m_ui;
-    int m_count;
-
+    
 ///////////////////////////
 // Collaborative editing //
 ///////////////////////////
@@ -163,9 +162,6 @@ private:
      */
     QFrame * m_formatframe;
     QGridLayout * m_formatframelayout;
-    QPushButton * m_bold;
-    QPushButton * m_italic;
-    QPushButton * m_underline;
     QPushButton * m_alignleft;
     QPushButton * m_alignright;
     QPushButton * m_aligncenter;
@@ -180,9 +176,12 @@ private:
     QFontComboBox *m_fontcombobox;
     QComboBox *m_fontsizecombo;
     QPushButton *m_textcolor;
+    QPushButton *m_textbackgroundcolor;
     QPushButton *m_superscript;
     QPushButton *m_subscript;
-    QPushButton *m_textbackgroundcolor;
+    QPushButton * m_bold;
+    QPushButton * m_italic;
+    QPushButton * m_underline;
     /*!
      * New document chooser dialog
      */
@@ -236,6 +235,10 @@ private:
      * Pointer to KoCharacterStyle
      */
     KoCharacterStyle *charstyle;
+    /*!
+     * Pointer to KUndoStack
+     */
+    KUndoStack *m_undostack;
     /*!
      * Integers about current page
      */
@@ -388,11 +391,6 @@ private:
      * _NET_ACTIVE_WINDOW message to Matchbox and window is raised.
      */
     void raiseWindow(void);
-
-    /*!
-     * counts initial undosteps of KoDocument
-     */
-    void initialUndoStepsCount();
     /*!
      * Function to check activeFormatFrame Options
      */
