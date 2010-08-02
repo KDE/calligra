@@ -184,7 +184,7 @@ public:
     void clear();
 
     /// return the pageLayout applied for these pages
-    const KoPageLayout pageLayout() const;
+    KoPageLayout pageLayout() const;
 
     /// set the pageLayout applied for these pages
     void setPageLayout(const KoPageLayout &layout);
