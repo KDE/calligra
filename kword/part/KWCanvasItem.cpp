@@ -58,6 +58,7 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
 
 KWCanvasItem::~KWCanvasItem()
 {
+    delete m_viewConverter;
 }
 
 KoZoomHandler* KWCanvasItem::zoomHandler() const
