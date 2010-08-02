@@ -186,13 +186,23 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 if (!element.hasAttributeNS(KoXmlNS::table, "cell-range-address"))
                     continue;
 
-                // TODO: what is: sheet:base-cell-address
+                // TODO: what is: table:base-cell-address
+                const QString base = element.attributeNS(KoXmlNS::table, "base-cell-address", QString());
+
+                // Handle the case where the table:base-cell-address does contain the referenced sheetname
+                // while it's missing in the table:cell-range-address. See bug #194386 for an example.
+                Sheet* fallbackSheet = 0;
+                if (!base.isEmpty()) {
+                    Region region(Region::loadOdf(base), d->map);
+                    fallbackSheet = region.lastSheet();
+                }
+                
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                 kDebug(36003) << "Named area found, name:" << name << ", area:" << range;
 
-                Region region(Region::loadOdf(range), d->map);
-                if (!region.isValid()) {
+                Region region(Region::loadOdf(range), d->map, fallbackSheet);
+                if (!region.isValid() || region.lastSheet()) {
                     kDebug(36003) << "invalid area";
                     continue;
                 }
