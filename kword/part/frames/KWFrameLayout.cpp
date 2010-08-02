@@ -253,12 +253,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         width /= 2;
         if (page.pageNumber() != pageNumber) { // doing the 'right' one
             left = width;
-            qreal x = layout.leftMargin; // swap margins
-            layout.leftMargin = layout.rightMargin;
-            layout.rightMargin = x;
-            x = layout.leftPadding; // swap paddings
-            layout.leftPadding = layout.rightPadding;
-            layout.rightPadding = x;
+            qSwap(layout.leftMargin, layout.rightMargin);
+            qSwap(layout.leftPadding, layout.rightPadding);
         }
     }
     qreal textWidth = width - layout.leftMargin - layout.rightMargin
