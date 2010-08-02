@@ -39,7 +39,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     setTextDirection(m_page.directionHint());
 
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
-    addPage(m_columns, i18n("Columns:")); // TODO remove the colon after string freeze is lifted
+    addPage(m_columns, i18n("Columns"));
 }
 
 void KWPageSettingsDialog::accept()
