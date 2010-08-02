@@ -785,6 +785,7 @@ void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
     sheetView.setPaintCellRange(sheet->print()->cellRange(1)); // first page
 
     QPainter pixmapPainter(&thumbnail);
+    pixmapPainter.setClipRect(QRect(QPoint(0, 0), thumbnail.size()));
     sheetView.paintCells(pixmapPainter, QRect(0, 0, pageLayout.width, pageLayout.height), QPointF(0,0));
 
     // The pixmap gets scaled to fit the rectangle.
