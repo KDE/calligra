@@ -25,10 +25,9 @@
 
 #include <kdebug.h>
 
-#define GAP 5
-
 KWViewModeNormal::KWViewModeNormal()
     : m_pageSpreadMode(false)
+    , m_gap(5)
 {
 }
 
@@ -99,7 +98,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             break;
         if (m_pageSpreadMode) {
             if (page.pageSide() == KWPage::Left)
-                offsetX = page.width() + GAP;
+                offsetX = page.width() + m_gap;
             else
                 offsetX = 0.0;
         }
@@ -131,10 +130,10 @@ void KWViewModeNormal::updatePageCache()
             switch (page.pageSide()) {
             case KWPage::PageSpread:
                 if (last > 0)
-                    top += last + GAP;
+                    top += last + m_gap;
                 m_pageTops.append(top);
                 m_pageTops.append(top);
-                top += page.height() + GAP;
+                top += page.height() + m_gap;
                 width = qMax(width, page.width());
                 halfWidth = 0.0;
                 last = 0.0;
@@ -143,7 +142,7 @@ void KWViewModeNormal::updatePageCache()
             case KWPage::Left:
                 m_pageTops.append(top);
                 last = page.height();
-                halfWidth = page.width() + GAP;
+                halfWidth = page.width() + m_gap;
                 width = qMax(width, halfWidth);
                 bottom = top + last;
                 break;
@@ -154,7 +153,7 @@ void KWViewModeNormal::updatePageCache()
                 width = qMax(width, halfWidth + page.width());
                 halfWidth = 0.0;
                 bottom = top;
-                top += GAP;
+                top += m_gap;
                 break;
             default:
                 Q_ASSERT(false);
@@ -165,13 +164,13 @@ void KWViewModeNormal::updatePageCache()
         qreal top = 0.0;
         foreach (const KWPage &page, m_pageManager->pages()) {
             m_pageTops.append(top);
-            top += page.height() + GAP;
+            top += page.height() + m_gap;
             width = qMax(width, page.width());
         }
         bottom = top;
     }
-    if (bottom > GAP)
-        bottom -= GAP; // remove one too many added
+    if (bottom > m_gap)
+        bottom -= m_gap; // remove one too many added
     m_contents = QSizeF(width, bottom);
 }
 
@@ -228,4 +227,9 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
         yOffset -= m_pageTops[pageNumber -1];
 
     return QPointF(xOffset, page.offsetInDocument() + yOffset);
+}
+
+void KWViewModeNormal::setGap(int gap)
+{
+    m_gap = gap;
 }
