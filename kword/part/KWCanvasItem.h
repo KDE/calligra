@@ -41,7 +41,7 @@ class KoShape;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_EXPORT KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
+class KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
 {
     Q_OBJECT
 
