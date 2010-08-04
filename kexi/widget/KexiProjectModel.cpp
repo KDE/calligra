@@ -257,6 +257,7 @@ KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item& item, KexiProjec
 //    KexiProjectModelItem *parent = item.partClass().isEmpty()
 //                              ? 0 : m_baseItems.value(item.partClass().toLower());
 //    return addItem(item, parent, parent->partInfo());
+    return 0;
 }
 
 KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p)
