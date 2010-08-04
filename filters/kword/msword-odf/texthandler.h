@@ -70,6 +70,7 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
     Q_OBJECT
 public:
     KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    ~KWordTextHandler() { Q_ASSERT (m_fldStart == m_fldEnd); }
 
     //////// TextHandler interface
 
@@ -204,12 +205,6 @@ private:
     QString    m_dropCapString;
     QString    m_dropCapStyleName;
 
-    QString m_fieldValue;
-    bool m_insideField;
-    bool m_fieldAfterSeparator;
-    int m_fieldType; //0 if we're not in a field, -1 for a field we can't handle,
-    //anything else is the type of the field
-
     bool m_insideFootnote;
     KoXmlWriter* m_footnoteWriter; //write the footnote data, then add it to bodyWriter
     QBuffer* m_footnoteBuffer; //buffer for the footnote data
@@ -218,13 +213,10 @@ private:
     KoXmlWriter* m_annotationWriter; //write the annotation data, then add it to bodyWriter
     QBuffer* m_annotationBuffer; //buffer for the annotation data
 
-    bool    m_RunOfTextCollect;         // when this is enabled, the m_RunOfTextStrings collects strings when runOfText is called
-    QString m_RunOfTextStrings;         // collection of strings passed to runOfText
-
     bool m_insideDrawing;
     KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
 
-    int m_maxColumns;//max number of columns in a table
+    int m_maxColumns; //max number of columns in a table
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
@@ -233,14 +225,87 @@ private:
     //QString m_previousListStyleName;
     QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
 
-    QList<QString> m_hyperLinkList;
-    bool m_hyperLinkActive;
-    QList<QString> m_bookmarkRef;
-
     //if TRUE, the fo:break-before="page" property is required because a manual
     //page break (an end-of-section character not at the end of a section) was
     //found in the main document
     bool m_breakBeforePage;
+
+    // ************************************************
+    //  Field related
+    // ************************************************
+
+    //save/restore for processing field (very similar to the wv2 method)
+    struct fld_State
+    {
+        fld_State(int type, bool inside, bool afterSep, bool hyperLink, bool bkmkRef,
+                  QString inst, QString result, QString stlName, KoXmlWriter* writer, QBuffer* buf) :
+        type(type),
+        inside(inside),
+        afterSeparator(afterSep),
+        hyperLinkActive(hyperLink),
+        bkmkRefActive(bkmkRef),
+        instructions(inst),
+        result(result),
+        styleName(stlName),
+        writer(writer),
+        buffer(buf) {}
+
+        int type;
+        bool inside;
+        bool afterSeparator;
+        bool hyperLinkActive;
+        bool bkmkRefActive;
+        QString instructions;
+        QString result;
+        QString styleName;
+        KoXmlWriter* writer;
+        QBuffer* buffer;
+    };
+
+    std::stack<fld_State> m_fldStates;
+    void fld_saveState();
+    void fld_restoreState();
+
+    //storage for XML snippets of already processed fields
+    QList<QString> fld_snippets;
+
+    //field type enumeration as defined in MS-DOC page 354/609
+    typedef enum
+    {
+        UNSUPPORTED = 0,
+        REF = 3,
+        TOC = 13,
+        NUMPAGES = 26,
+        PAGE = 33,
+        PAGEREF = 37,
+        EQ = 49,
+        HYPERLINK = 88,
+    } fldType;
+
+    //set to 0 for a field we can't handle, anything else is the field type
+    int m_fieldType;
+
+    //other field related variables
+    bool m_insideField;
+    bool m_fieldAfterSeparator;
+    bool m_hyperLinkActive;
+    bool m_bkmkRefActive;
+
+    //writer and buffer used to place bookmark elements into the field result,
+    //if bookmarks are not to be supported by your field type, use m_fldResult
+    KoXmlWriter* m_fldWriter;
+    QBuffer* m_fldBuffer;
+
+    QString m_fldInst;   //stores field instructions
+    QString m_fldResult; //stores the field result
+
+    //KoGenStyle name for the <text:span> element encapsulating the field
+    //result (if applicable)
+    QString m_fldStyleName;
+
+    //counters
+    int m_fldStart;
+    int m_fldEnd;
 };
 
 #endif // TEXTHANDLER_H

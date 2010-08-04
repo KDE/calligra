@@ -948,3 +948,27 @@ QString Paragraph::string(int index) const
     return m_textStrings[index];
 }
 
+QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles)
+{
+    const wvWare::Style* msTextStyle = styles.styleByIndex(chp->istd);
+    Q_ASSERT(msTextStyle);
+    QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
+    kDebug(30513) << "text based on characterstyle " << msTextStyleName;
+
+    KoGenStyle *textStyle;
+    textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    if (m_inStylesDotXml) {
+        textStyle->setAutoStyleInStylesDotXml(true);
+    }
+
+    bool suppresFontSize = false;
+    if (m_paragraphProperties->pap().dcs.lines > 1) {
+        suppresFontSize = true;
+    }
+    applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
+
+    QString textStyleName('T');
+    textStyleName = m_mainStyles->insert(*textStyle, textStyleName);
+
+    return textStyleName;
+}

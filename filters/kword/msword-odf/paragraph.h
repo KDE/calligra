@@ -79,6 +79,15 @@ public:
                                          bool suppressFontSize=false, bool combineCharacters=false);
 
     void setCombinedCharacters(bool isCombined);
+
+    /**
+     * A special purpose method, which creates a KoGenStyle for a <text:span>
+     * element and inserts it into the styles collection.  Use this function if
+     * you have to create XML snippets.  In any other case use addRunOfText.
+     * @return the style name.
+     */
+    QString createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::StyleSheet& styles);
+
 private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties2;
