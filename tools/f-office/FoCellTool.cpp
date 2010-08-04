@@ -20,6 +20,9 @@
 // Local
 #include "FoCellTool.h"
 
+// KOffice
+#include "KoColor.h"
+
 
 FoCellTool::FoCellTool(KoCanvasBase* canvas)
         : KSpread::CellTool(canvas)
