@@ -86,7 +86,7 @@
 
 // KDE + Qt includes
 #include <QHBoxLayout>
-#include <QMenu>
+#include <KMenu>
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
@@ -122,7 +122,7 @@ static KWFrame *frameForShape(KoShape *shape)
 
 KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         : KoView(document, parent)
-        , m_canvas(0)
+        , m_canvas(0), m_actionMenu(0)
 {
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
@@ -309,10 +309,11 @@ void KWView::setupActions()
     actionCollection()->addAction("send_toback_frame", m_actionSendBackward);
     connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT(sendToBack()));
 
-    KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
+    m_actionMenu = new KActionMenu(i18n("Variable"), this);
     foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(canvasBase()))
-        actionMenu->addAction(action);
-    actionCollection()->addAction("insert_variable", actionMenu);
+        m_actionMenu->addAction(action);
+    actionCollection()->addAction("insert_variable", m_actionMenu);
+    connect(m_document->inlineTextObjectManager()->variableManager(), SIGNAL(valueChanged()), this, SLOT(variableChanged()));
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf* rdf = m_document->documentRdf()) {
@@ -1559,3 +1560,8 @@ void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QStrin
 #endif
 }
 
+void KWView::variableChanged(){
+    m_actionMenu->menu()->clear();
+    foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(canvasBase()))
+        m_actionMenu->addAction(action);
+}

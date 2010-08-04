@@ -39,6 +39,7 @@ class KWGui;
 class KoCanvasBase;
 class KoZoomController;
 class KoRdfSemanticItem;
+class KActionMenu;
 
 class KToggleAction;
 /**
@@ -105,6 +106,7 @@ public:
 
 public slots:
     void offsetInDocumentMoved(int yOffset);
+    void variableChanged();
 
 protected:
     /// reimplemented method from superclass
@@ -232,6 +234,8 @@ private:
     KToggleAction *m_actionViewHeader;
     KToggleAction *m_actionViewFooter;
     KToggleAction *m_actionViewSnapToGrid;
+
+    KActionMenu* m_actionMenu;
 
     bool m_snapToGrid;
 };
