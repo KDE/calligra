@@ -33,6 +33,23 @@ public:
     explicit FoCellTool(KoCanvasBase* canvas);
     ~FoCellTool();
 
+    /*!
+     * Function for selecting font size
+     */
+    void selectFontSize(int size);
+    /*!
+     * function for selecting font type
+     */
+    void selectFontType(const QString& font);
+    /*!
+     * Function for selecting text foreground color
+     */
+    void selectTextColor(const QColor& color);
+    /*!
+     * function for selecting text background color
+     */
+    void selectTextBackgroundColor(const QColor& color);
+
     // custom cell editor
     virtual KSpread::CellEditorBase* editor() const;
     virtual bool createEditor(bool clear, bool focus);

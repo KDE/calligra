@@ -30,6 +30,26 @@ FoCellTool::~FoCellTool()
 {
 }
 
+void FoCellTool::selectFontSize(int size){
+    fontSize(size);
+}
+
+void FoCellTool::selectFontType(const QString& fonttype){
+    font(fonttype);
+}
+
+void FoCellTool::selectTextColor(const QColor &color) {
+    KoColor *textcolor = new KoColor();
+    textcolor->fromQColor(color);
+    changeTextColor(*textcolor);
+}
+
+void FoCellTool::selectTextBackgroundColor(const QColor &color) {
+    KoColor *textbackgroundcolor = new KoColor();
+    textbackgroundcolor->fromQColor(color);
+    changeBackgroundColor(*textbackgroundcolor);
+}
+
 KSpread::CellEditorBase* FoCellTool::editor() const
 {
     return KSpread::CellTool::editor();
