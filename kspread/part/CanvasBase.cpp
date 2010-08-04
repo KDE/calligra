@@ -313,7 +313,6 @@ void CanvasBase::setDocumentSize(const QSizeF& size)
 
 void CanvasBase::mousePressed(KoPointerEvent* event)
 {
-    KoPointerEvent *const origEvent = event;
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
         documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
@@ -506,6 +505,7 @@ void CanvasBase::paint(QPainter* painter, const QRectF& painterRect)
 
 void CanvasBase::focusIn(QFocusEvent *event)
 {
+    Q_UNUSED(event);
     // If we are in editing mode, we redirect the
     // focus to the CellEditor or ExternalEditor.
     // Using a focus proxy does not work here, because in reference selection
