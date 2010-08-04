@@ -122,6 +122,7 @@
    <addaction name="actionRedo"/>
    <addaction name="actionStyle"/>
    <addaction name="actionFormat"/>
+   <addaction name="actionMathOp"/>
    <addaction name="actionCollaborate"/>
   </widget>
   <action name="actionSearch">
@@ -367,12 +368,18 @@
    </property>
   </action>
   <action name="actionFormat">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="FreOffice.qrc">
      <normaloff>:/images/48x48/Edittoolbaricons/Format.png</normaloff>:/images/48x48/Edittoolbaricons/Format.png</iconset>
    </property>
    <property name="text">
     <string>Format</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionStyle">
@@ -445,6 +452,15 @@
    </property>
    <property name="text">
     <string>slidingMotion</string>
+   </property>
+  </action>
+  <action name="actionMathOp">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Math.png</normaloff>:/images/48x48/Edittoolbaricons/Math.png</iconset>
+   </property>
+   <property name="text">
+    <string>MathOp</string>
    </property>
   </action>
  </widget>

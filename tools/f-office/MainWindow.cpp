@@ -267,6 +267,7 @@ void MainWindow::init()
     connect(m_ui->actionClose,SIGNAL(triggered()),this,SLOT(closeDoc()));
     connect(m_ui->actionFormat,SIGNAL(triggered()),SLOT(openFormatFrame()));
     connect(m_ui->actionStyle,SIGNAL(triggered()),SLOT(openFontStyleFrame()));
+    connect(m_ui->actionMathOp,SIGNAL(triggered()),SLOT(openMathOpFrame()));
 
     connect(m_search, SIGNAL(returnPressed()), SLOT(nextWord()));
     connect(m_search, SIGNAL(textEdited(QString)), SLOT(startSearch()));
@@ -500,6 +501,10 @@ void MainWindow::openFontStyleFrame()
     connect(m_bold,SIGNAL(clicked()),this,SLOT(doBold()));
     connect(m_italic,SIGNAL(clicked()),this,SLOT(doItalic()));
     connect(m_underline,SIGNAL(clicked()),this,SLOT(doUnderLine()));
+}
+
+void MainWindow:: openMathOpFrame() {
+
 }
 
 ///////////////////////
@@ -1828,6 +1833,9 @@ void MainWindow::closeDocument()
     m_fontweight=25;
     m_fonttype="Nokia Sans";
     viewNumber++;
+
+    m_ui->actionMathOp->setVisible(false);
+    m_ui->actionFormat->setVisible(false);
 }
 
 void MainWindow::returnToDoc()
@@ -1994,9 +2002,10 @@ void MainWindow::openDocument(const QString &fileName)
         // We need to get the page count again after layout rounds.
         connect(m_doc, SIGNAL(pageSetupChanged()), this, SLOT(updateUI()));
     }
-
-
+    m_ui->actionMathOp->setVisible(false);
+    m_ui->actionFormat->setVisible(false);
     if (m_type == Spreadsheet) {
+        m_ui->actionMathOp->setVisible(true);
         KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
@@ -2009,6 +2018,8 @@ void MainWindow::openDocument(const QString &fileName)
         m_ui->actionEdit->setVisible(true);
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
+        m_ui->actionFormat->setVisible(true);
+        m_ui->actionEdit->setVisible(true);
     } else {
         if(m_type == Presentation) {
             m_ui->actionEdit->setVisible(false);

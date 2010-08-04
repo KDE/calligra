@@ -555,6 +555,10 @@ private slots:
      * Slot to display fontstyleframe with all options
      */
      void openFontStyleFrame();
+     /*!
+      * Slot to display Math operation options
+      */
+    void openMathOpFrame();
     /*!
      * Slot to open new documnet
      */
