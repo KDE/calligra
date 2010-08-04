@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="122">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="123">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -41,13 +41,13 @@
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
   <Action name="showStatusBar" />
+  <Action name="view_toggledockers"/>
+  <Action name="view_show_guides"/>
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
-  <Action name="view_show_guides"/>
   <Separator/>
   <Action name="view_zoom"/>
   <Action name="view_fullscreen"/>
-  <Action name="view_toggledockers"/>
  </Menu>
  <Menu name="insert"><text context="Insert menu">&amp;Insert</text>
   <!-- Inside the text, simple things (e.g. one char) -->

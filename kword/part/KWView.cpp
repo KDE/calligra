@@ -465,12 +465,11 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     actionCollection()->addAction("add_text_on_shape", action);
     connect(action, SIGNAL(triggered()), this, SLOT(createTextOnShape()));
 
-
-    //------------------------ Settings menu
-    action = new KToggleAction(i18n("Status Bar"), this);
-    action->setToolTip(i18n("Shows or hides the status bar"));
-    actionCollection()->addAction("showStatusBar", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
+    tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    tAction->setToolTip(i18n("Shows or hides the status bar"));
+    actionCollection()->addAction("showStatusBar", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     // -------------- Insert menu
     /* ********** From old kwview ****
