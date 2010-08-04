@@ -1686,11 +1686,16 @@ void MainWindow::showFullScreenPresentationIcons(void)
 }
 
 void MainWindow::slideTransitionDialog(){
-
+    m_slidingmotiondialog = new SlidingMotionDialog;
+    m_slidingmotiondialog->showDialog(this);
+    connect(m_slidingmotiondialog->m_opengl, SIGNAL(clicked()), SLOT(toggle_accelerator()));
 }
 
 void MainWindow::toggle_accelerator()
 {
+    if(m_slidingmotiondialog){
+        m_slidingmotiondialog->m_slidingmotionframe->hide();
+    }
      enable_accelerator=!enable_accelerator;
      if(enable_accelerator==false)
      {qDebug()<<"closed the acc";
@@ -1808,6 +1813,10 @@ void MainWindow::closeDocument()
     if(m_focelltool){
         delete m_focelltool;
         m_focelltool = 0;
+    }
+    if(m_slidingmotiondialog) {
+        delete m_slidingmotiondialog;
+        m_slidingmotiondialog = 0;
     }
     m_doubleClick=false;
     m_isDocModified=false;

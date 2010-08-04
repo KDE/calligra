@@ -34,6 +34,7 @@
 #include "Splash.h"
 #include "previewwindow.h"
 #include "NotesDialog.h"
+#include "SlidingMotionDialog.h"
 
 #include "CollabClient.h"
 #include "CollabDialog.h"
@@ -57,6 +58,7 @@ class QTextListFormat;
 class QTextDocument;
 class QGridLayout;
 class QDialog;
+class SlidingMotionDialog;
 
 class KUndoStack;
 class KoCharacterStyle;
@@ -770,6 +772,10 @@ private:
      * Pointer to notes dialog
      */
     NotesDialog *notesDialog;
+    /*!
+     * Pointer to sliding motion dialog
+     */
+    SlidingMotionDialog *m_slidingmotiondialog;
     /*!
      * Pointer to fullscreen Accelerometer Button
      */
