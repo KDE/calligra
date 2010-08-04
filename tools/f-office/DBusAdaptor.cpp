@@ -25,6 +25,7 @@
 #include "DBusAdaptor.h"
 #include "Common.h"
 #include <QUrl>
+#include<unistd.h>
 
 DBusAdaptor::DBusAdaptor(HildonApplication *aApplication) :
         QDBusAbstractAdaptor(aApplication), m_app(aApplication)
@@ -37,7 +38,7 @@ DBusAdaptor::DBusAdaptor(HildonApplication *aApplication) :
         printf("Try with run-standalone.sh ./xxx\n");
     }
 
-    QDBusConnection::sessionBus().registerService(FREOFFICE_SERVICE_NAME);
+    QDBusConnection::sessionBus().registerService(FREOFFICE_SERVICE_NAME+"-"+QString::number(getpid()));
     QObject::connect(this, SIGNAL(openDocument(const QString &)), m_app, SIGNAL(openDocument(const QString &)));
 }
 

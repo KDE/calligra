@@ -750,10 +750,6 @@ private:
      */
     StoreButtonPreview *storeButtonPreview;
     /*!
-     * pointer to thumbnail retriever thread
-     */
-    ThumbnailRetriever *thumbnailRetriever;
-    /*!
      * view number used while dbus session creation
      */
     int viewNumber;

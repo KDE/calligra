@@ -227,13 +227,17 @@ void PreviewWindow::newSlide()
     this->accept();
 }
 
-StoreButtonPreview::StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QObject *parent) :
-    QObject(parent),
+StoreButtonPreview::StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QWidget *parent) :
+    QWidget(parent),
     previewWindow(NULL)
 {
     this->m_doc=m_doc;
     this->m_view=m_view;
     isPreviewDialogActive=false;
+    timer=new QTimer();
+    connect(timer,SIGNAL(timeout()),this,SLOT(addThumbnail()));
+    //timer->setSingleShot(true);
+    timer->start(100);
 }
 
 void StoreButtonPreview::showDialog(int m_currentPage)
@@ -246,34 +250,29 @@ void StoreButtonPreview::showDialog(int m_currentPage)
     previewWindow->exec();
     isPreviewDialogActive=false;
 }
-void StoreButtonPreview::addThumbnail(long pageNumber)
+void StoreButtonPreview::addThumbnail()
 {
-    thumbnailList.append(QPixmap("/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png"));
+    static int val=0;
+    if(!m_doc)
+        return;
+
+    KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
+    KoPAPageBase* papage = padoc->pageByIndex(val, false);
+    if(!papage)
+        return;
+    thumbnailList.append(papage->thumbnail());
     if(previewWindow!=NULL)
-        previewWindow->addThumbnail(QPixmap("/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png"));
-}
+        previewWindow->addThumbnail(thumbnailList.at(thumbnailList.count()-1));
 
-
-ThumbnailRetriever::ThumbnailRetriever(long pageCount,int viewNumber,QObject *parent) :
-    QThread(parent)
-{
-    this->pageCount=pageCount;
-    this->viewNumber=viewNumber;
-}
-
-void ThumbnailRetriever::run()
-{
-    QDir temp("/tmp/FreOfficeThumbnail");
-    temp.mkdir("/tmp/FreOfficeThumbnail");
-    int pageNumber=0;
-    while(pageNumber<pageCount) {
-        QDBusConnection bus = QDBusConnection::sessionBus();
-
-        QDBusInterface *interface = new QDBusInterface("com.nokia.FreOffice", "/view_"+QString::number(viewNumber), "org.kde.koffice.presentation.view");
-
-        QString m_notesHtml = (QDBusReply<QString>)interface->call("exportPageThumbnail", pageNumber,128,128,"/tmp/FreOfficeThumbnail/"+QString::number(pageNumber)+".png","PNG",-1);
-        newThumbnail(pageNumber);
-        pageNumber++;
+    if(val<m_doc->pageCount())
+    {
+        val++;
+        timer->start(10);
+    }
+    if(val==m_doc->pageCount()){
+        timer->stop();
+        disconnect(timer,SIGNAL(timeout()),this,SLOT(addThumbnail()));
+        val=0;
     }
 }
 

@@ -1993,15 +1993,10 @@ void MainWindow::openDocument(const QString &fileName)
        if(storeButtonPreview!=0)
        {
            disconnect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-           disconnect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
            delete storeButtonPreview;
-           delete thumbnailRetriever;
        }
            storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
            connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-           thumbnailRetriever=new ThumbnailRetriever(m_doc->pageCount(),viewNumber);
-           thumbnailRetriever->start();
-           connect(thumbnailRetriever,SIGNAL(newThumbnail(long)),storeButtonPreview,SLOT(addThumbnail(long)));
    }
    m_undostack = m_doc->undoStack();
 }

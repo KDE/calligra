@@ -93,14 +93,14 @@ signals:
     void gotoPage(int page);
 };
 
-class StoreButtonPreview : public QObject
+class StoreButtonPreview : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QObject *parent = 0);
+    explicit StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QWidget *parent = 0);
 public slots:
     void showDialog(int m_currentPage);
-    void addThumbnail(long pageNumber);
+    void addThumbnail();
 public:
     /*!
      * list of thumbnails in the preview dialog
@@ -119,32 +119,13 @@ public:
      * falg to check whether preview dialog is open
      */
     bool isPreviewDialogActive;
+
+    QTimer *timer;
 signals:
     /*!
      * signal emmited when user cick a preview
      */
     void gotoPage(int page);
-};
-
-class ThumbnailRetriever : public QThread
-{
-    Q_OBJECT
-public:
-    explicit ThumbnailRetriever(long pageCount,int viewNumber,QObject *parent = 0);
-
-signals:
-    void newThumbnail(long pageNumber);
-private:
-    /*!
-     * variable to store total number of slides in a presentation document
-     */
-    long pageCount;
-    /*!
-     * variable to store the view number which is used for dbus session creation
-     */
-    int viewNumber;
-public:
-    void run();
 };
 
 #endif

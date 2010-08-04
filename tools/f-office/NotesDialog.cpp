@@ -24,6 +24,7 @@
 #include <QProcess>
 #include <QWidget>
 #include <KoPAPageBase.h>
+#include<unistd.h>
 
 NotesDialog::NotesDialog(KoDocument *m_doc,int viewNumber,QWidget *parent)
     : QDialog(parent)
@@ -85,7 +86,7 @@ void NotesDialog::showNotesDialog(int page)
 
     QDBusConnection bus = QDBusConnection::sessionBus();
 qDebug()<<"view number="<<viewNumber<<"\n";
-    QDBusInterface *interface = new QDBusInterface("com.nokia.FreOffice", "/view_"+QString::number(viewNumber), "org.kde.koffice.presentation.view");
+    QDBusInterface *interface = new QDBusInterface("com.nokia.FreOffice-"+QString::number(getpid()), "/view_"+QString::number(viewNumber), "org.kde.koffice.presentation.view");
 
     QString m_notesHtml = (QDBusReply<QString>)interface->call("pageNotes", currentPage, "html");
     pageNotesTextEdit->setHtml(m_notesHtml);
