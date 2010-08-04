@@ -136,6 +136,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_kwview(NULL),
         m_controller(NULL),
         m_undostack(NULL),
+        m_focelltool(NULL),
         m_vPage(0),
         m_hPage(0),
         m_pressed(false),
@@ -379,7 +380,8 @@ void MainWindow::openFormatFrame()
         m_formatframe->hide();
         return;
     } else if(m_formatframe){
-        activeFormatOptionCheck();
+        if(m_type==Text)
+            activeFormatOptionCheck();
         m_formatframe->show();
         return;
     }
@@ -412,7 +414,8 @@ void MainWindow::openFormatFrame()
                                FORMATFRAME_WIDTH,
                                FORMATFRAME_HEIGHT);
     m_formatframe->setLayout(m_formatframelayout);
-    activeFormatOptionCheck();
+    if(m_type==Text)
+        activeFormatOptionCheck();
     m_formatframe->show();
 
     connect(m_alignjustify,SIGNAL(clicked()),this,SLOT(doJustify()));
@@ -432,7 +435,8 @@ void MainWindow::openFontStyleFrame()
         m_fontstyleframe->hide();
         return;
     } else if(m_fontstyleframe){
-        activeFontOptionCheck();
+        if(m_type==Text)
+            activeFontOptionCheck();
         m_fontstyleframe->show();
         return;
     }
@@ -483,7 +487,8 @@ void MainWindow::openFontStyleFrame()
                              FONTSTYLEFRAME_YCORDINATE_VALUE,
                              FONTSTYLEFRAME_WIDTH,
                              FONTSTYLEFRAME_HEIGHT);
-    activeFontOptionCheck();
+    if(m_type==Text)
+        activeFontOptionCheck();
     m_fontstyleframe->show();
 
     connect(m_fontsizecombo,SIGNAL(activated(int)),SLOT(selectFontSize()));
@@ -554,8 +559,12 @@ void MainWindow::selectFontSize()
     int size=selectedSize.toInt();
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if(setFontSize(size, m_editor) && m_collab)
-        m_collab->sendFontSize(m_editor->selectionStart(), m_editor->selectionEnd(), size);
+    if(m_type == Spreadsheet) {
+        m_focelltool->selectFontSize(size);
+    } else {
+        if(setFontSize(size, m_editor) && m_collab)
+            m_collab->sendFontSize(m_editor->selectionStart(), m_editor->selectionEnd(), size);
+    }
 }
 
 bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
@@ -574,8 +583,12 @@ void MainWindow::selectFontType()
     QString selectedfont=m_fontcombobox->currentText();
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if(setFontType(selectedfont, m_editor) && m_collab)
-        m_collab->sendFontType(m_editor->selectionStart(), m_editor->selectionEnd(), selectedfont);
+    if(m_type == Spreadsheet) {
+        m_focelltool->selectFontType(selectedfont);
+    } else {
+        if(setFontType(selectedfont, m_editor) && m_collab)
+            m_collab->sendFontType(m_editor->selectionStart(), m_editor->selectionEnd(), selectedfont);
+    }
 }
 
 bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
@@ -594,8 +607,12 @@ void MainWindow::selectTextColor()
     QColor color = QColorDialog::getColor(Qt::white,this);
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if(setTextColor(color, m_editor) && m_collab)
-        m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
+    if(m_type == Spreadsheet) {
+        m_focelltool->selectTextColor(color);
+    } else {
+        if(setTextColor(color, m_editor) && m_collab)
+            m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
+    }
 }
 
 bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
@@ -614,8 +631,12 @@ void MainWindow::selectTextBackGroundColor()
     QColor color = QColorDialog::getColor(Qt::white,this);
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if(setTextBackgroundColor(color, m_editor) && m_collab)
-        m_collab->sendTextBackgroundColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
+    if(m_type == Spreadsheet) {
+        m_focelltool->selectTextBackgroundColor(color);
+    } else {
+        if(setTextColor(color, m_editor) && m_collab)
+            m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
+    }
 }
 
 bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
@@ -633,8 +654,12 @@ void MainWindow::doBold()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if(setBold(m_editor) && m_collab)
-        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatBold);
+    if(m_type == Spreadsheet) {
+        m_controller->canvas()->toolProxy()->actions()["bold"]->trigger();
+    } else {
+        if(setBold(m_editor) && m_collab)
+            m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatBold);
+    }
 }
 
 bool MainWindow::setBold(KoTextEditor *editor) {
@@ -657,8 +682,12 @@ void MainWindow::doItalic()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if (setItalic(m_editor) && m_collab)
-        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatItalic);
+    if(m_type == Spreadsheet) {
+        m_controller->canvas()->toolProxy()->actions()["italic"]->trigger();
+    } else {
+        if (setItalic(m_editor) && m_collab)
+            m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatItalic);
+    }
 }
 
 bool MainWindow::setItalic(KoTextEditor *editor) {
@@ -681,8 +710,12 @@ void MainWindow::doUnderLine()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-    if(setUnderline(m_editor) && m_collab)
-        m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatUnderline);
+    if(m_type == Spreadsheet) {
+        m_controller->canvas()->toolProxy()->actions()["underline"]->trigger();
+    } else {
+        if(setUnderline(m_editor) && m_collab)
+            m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatUnderline);
+    }
 }
 
 bool MainWindow::setUnderline(KoTextEditor *editor) {
@@ -1511,8 +1544,11 @@ void MainWindow::doRedo()
 
 void MainWindow::copy()
 {
-    if(m_editor->hasSelection())
-        m_controller->canvas()->toolProxy()->copy();
+    if((m_type == Text) && m_editor->hasSelection()) {
+       m_controller->canvas()->toolProxy()->copy();
+    }
+    if(m_type == Spreadsheet)
+          m_controller->canvas()->toolProxy()->copy();
 
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -1522,9 +1558,11 @@ void MainWindow::copy()
 
 void MainWindow::cut()
 {
-    if(m_editor && m_editor->hasSelection()) {
-         m_controller->canvas()->toolProxy()->cut();
-    }
+    if((m_type == Text)&& m_editor->hasSelection())
+        m_controller->canvas()->toolProxy()->cut();
+
+    if(m_type == Spreadsheet)
+        m_controller->canvas()->toolProxy()->cut();
 
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -1534,10 +1572,9 @@ void MainWindow::cut()
 
 void MainWindow::paste()
 {
-    if (QApplication::clipboard()->text().isEmpty()) {
+    if ((m_type == Text) && QApplication::clipboard()->text().isEmpty()) {
         return ;
     }
-
     m_controller->canvas()->toolProxy()->paste();
 
     if(m_fontstyleframe)
@@ -1768,6 +1805,10 @@ void MainWindow::closeDocument()
     formatFrameDestructor();
     confirmationDialogDestructor();
 
+    if(m_focelltool){
+        delete m_focelltool;
+        m_focelltool = 0;
+    }
     m_doubleClick=false;
     m_isDocModified=false;
     m_newDocOpen=false;
@@ -1950,6 +1991,7 @@ void MainWindow::openDocument(const QString &fileName)
         KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
+        m_focelltool = new FoCellTool(((View*)m_view)->selection()->canvas());
     }
 
     if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||

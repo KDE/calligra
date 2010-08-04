@@ -38,6 +38,7 @@
 #include "CollabClient.h"
 #include "CollabDialog.h"
 #include "CollabServer.h"
+#include "FoCellTool.h"
 
 class QPushButton;
 class QIcon;
@@ -239,6 +240,10 @@ private:
      * Pointer to KUndoStack
      */
     KUndoStack *m_undostack;
+    /*!
+     * Pointer to FreOffice CellTool
+     */
+    FoCellTool *m_focelltool;
     /*!
      * Integers about current page
      */
