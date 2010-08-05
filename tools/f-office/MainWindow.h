@@ -103,6 +103,10 @@ public:
     void disableFullScreenPresentationNavigation();
     void enableFullScreenPresentationNavigation();
     void openNewDocumentType(QString type);
+
+protected:
+        void closeEvent(QCloseEvent *);
+
 private:
     Ui::MainWindow *m_ui;
     

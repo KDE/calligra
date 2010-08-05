@@ -359,6 +359,17 @@ MainWindow::~MainWindow()
     delete m_collabEditor;
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    closeDoc();
+
+    if(m_doc) {
+        event->ignore();
+    } else {
+        QMainWindow::closeEvent(event);
+    }
+}
+
 void MainWindow::showPreviewDialog()
 {
     if(m_type == Presentation) {
@@ -1462,12 +1473,12 @@ void MainWindow::openNewDocument(DocumentType type)
 void MainWindow::closeDoc()
 {
     if(m_doc == NULL)
-       return;
+        return;
 
     if(!m_fileName.isEmpty()) {
         QString ext = KMimeType::extractKnownExtension(m_fileName);
         if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
+                !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
         } else {
             closeDocument();
             return;
@@ -1494,11 +1505,12 @@ void MainWindow::closeDoc()
         m_confirmationdialoglayout->addWidget(m_no,1,1);
         m_confirmationdialoglayout->addWidget(m_cancel,1,2);
         m_confirmationdialog->setLayout(m_confirmationdialoglayout);
-        m_confirmationdialog->show();
 
         connect(m_no,SIGNAL(clicked()),this,SLOT(discardNewDocument()));
         connect(m_yes,SIGNAL(clicked()),this,SLOT(saveFile()));
         connect(m_cancel,SIGNAL(clicked()),this,SLOT(returnToDoc()));
+
+        m_confirmationdialog->exec();
     } else {
         closeDocument();
     }
@@ -1898,9 +1910,10 @@ void MainWindow::discardNewDocument()
     closeDocument();
 }
 
-void MainWindow::confirmationDialogDestructor(){
+void MainWindow::confirmationDialogDestructor()
+{
     if(m_confirmationdialog) {
-        m_confirmationdialog->close();
+        m_confirmationdialog->accept();
         delete m_yes;
         m_yes = 0;
         delete m_no;
