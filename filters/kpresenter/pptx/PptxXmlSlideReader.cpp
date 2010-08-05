@@ -1289,3 +1289,4 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_xfrm_p()
 #define DRAWINGML_PIC_NS "p" // DrawingML/Picture
 
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
+#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl

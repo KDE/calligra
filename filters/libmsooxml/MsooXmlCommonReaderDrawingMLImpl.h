@@ -2065,6 +2065,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
             ELSE_TRY_READ_IF_NS(c, chart)
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
+            ELSE_TRY_READ_IF_NS(a, tbl);
 #endif
 //! @todo add ELSE_WRONG_FORMAT
         }

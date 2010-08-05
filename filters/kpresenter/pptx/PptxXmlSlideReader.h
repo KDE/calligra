@@ -217,6 +217,7 @@ private:
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include <MsooXmlDrawingReaderTableMethods.h>
 };
 
 //! Context for PptxXmlSlideReader
