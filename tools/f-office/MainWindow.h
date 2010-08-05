@@ -58,6 +58,7 @@ class QTextListFormat;
 class QTextDocument;
 class QGridLayout;
 class QDialog;
+class QListWidget;
 class SlidingMotionDialog;
 
 class KUndoStack;
@@ -161,6 +162,13 @@ private:
     bool m_italicCheck;
     bool m_underlineCheck;
     /*!
+     * Dialog for fontsize
+     */
+    QDialog *m_fontSizeDialog;
+    QVBoxLayout *m_fontSizeDialogLayout;
+    QLineEdit *m_fontSizeLineEdit;
+    QListWidget *m_fontSizeList;
+    /*!
      * Format frame declaration
      */
     QFrame * m_formatframe;
@@ -177,7 +185,7 @@ private:
     QFrame * m_fontstyleframe;
     QGridLayout *m_fontstyleframelayout;
     QFontComboBox *m_fontcombobox;
-    QComboBox *m_fontsizecombo;
+    QPushButton *m_fontsizebutton;
     QPushButton *m_textcolor;
     QPushButton *m_textbackgroundcolor;
     QPushButton *m_superscript;
@@ -459,6 +467,9 @@ private slots:
     void pluginOpen(bool newWindow, const QString& path);
     void updateUI();
     void resourceChanged(int key, const QVariant &value);
+    void showFontSizeDialog();
+    void fontSizeEntered();
+    void fontSizeRowSelected(int row);
     /*!
      * Slot to perform UndoAction
      */
@@ -526,7 +537,7 @@ private slots:
     /*!
      *  Slot for font size Selection
      */
-    void selectFontSize();
+    void selectFontSize(int size);
     /*!
      *  Slot for font type Selection
      */

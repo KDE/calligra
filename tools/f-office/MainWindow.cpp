@@ -66,6 +66,7 @@
 #include <QColorDialog>
 #include <QFrame>
 #include <QPalette>
+#include <QListWidget>
 
 #ifdef Q_WS_MAEMO_5
 #include <QtMaemo5/QMaemo5InformationBox>
@@ -169,12 +170,16 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_alignjustify(0),
         m_fontstyleframelayout(0),
         m_fontcombobox(0),
-        m_fontsizecombo(0),
         m_textcolor(0),
         m_superscript(0),
         m_subscript(0),
         m_textbackgroundcolor(0),
         m_docdialoglayout(0),
+        m_fontsizebutton(0),
+        m_fontSizeDialog(0),
+        m_fontSizeDialogLayout(0),
+        m_fontSizeLineEdit(0),
+        m_fontSizeList(0),
         m_document(0),
         m_presenter(0),
         m_spreadsheet(0),
@@ -450,15 +455,9 @@ void MainWindow::openFontStyleFrame()
     m_fontstyleframelayout->setVerticalSpacing(0);
     m_fontstyleframelayout->setHorizontalSpacing(0);
 
-    m_fontsizecombo=new QComboBox(this);
-    Q_CHECK_PTR(m_fontsizecombo);
-    m_fontsizecombo->setMinimumSize(100,73);
-    int i;
-    for(i=4;i<=40;i++)
-    {
-        QString f_size;
-        m_fontsizecombo->addItem(f_size.setNum(i));
-    }
+    m_fontsizebutton=new QPushButton(this);
+    Q_CHECK_PTR(m_fontsizebutton);
+    m_fontsizebutton->setMinimumSize(100,73);
 
     m_bold=addFontStyleFrameComponent(i18n("Bold"));
     m_italic=addFontStyleFrameComponent(i18n("Italic"));
@@ -475,7 +474,7 @@ void MainWindow::openFontStyleFrame()
     m_fontcombobox->setEditable(false);
 
     m_fontstyleframelayout->addWidget(m_fontcombobox,0,0,1,2);
-    m_fontstyleframelayout->addWidget(m_fontsizecombo,0,2);
+    m_fontstyleframelayout->addWidget(m_fontsizebutton,0,2);
     m_fontstyleframelayout->addWidget(m_bold,0,3,1,2);
     m_fontstyleframelayout->addWidget(m_textcolor,1,0);
     m_fontstyleframelayout->addWidget(m_textbackgroundcolor,1,1,1,3);
@@ -493,7 +492,7 @@ void MainWindow::openFontStyleFrame()
         activeFontOptionCheck();
     m_fontstyleframe->show();
 
-    connect(m_fontsizecombo,SIGNAL(activated(int)),SLOT(selectFontSize()));
+    connect(m_fontsizebutton,SIGNAL(clicked()),SLOT(showFontSizeDialog()));
     connect(m_fontcombobox,SIGNAL(activated(int)),SLOT(selectFontType()));
     connect(m_textcolor,SIGNAL(clicked()),SLOT(selectTextColor()));
     connect(m_textbackgroundcolor,SIGNAL(clicked()),SLOT(selectTextBackGroundColor()));
@@ -502,6 +501,56 @@ void MainWindow::openFontStyleFrame()
     connect(m_bold,SIGNAL(clicked()),this,SLOT(doBold()));
     connect(m_italic,SIGNAL(clicked()),this,SLOT(doItalic()));
     connect(m_underline,SIGNAL(clicked()),this,SLOT(doUnderLine()));
+}
+
+void MainWindow::showFontSizeDialog()
+{
+    if (m_fontstyleframe) {
+        m_fontstyleframe->hide();
+    }
+
+    m_fontSizeDialog = new QDialog(this);
+    Q_ASSERT(m_fontSizeDialog);
+    m_fontSizeLineEdit=new QLineEdit(m_fontSizeDialog);
+    Q_ASSERT(m_fontSizeLineEdit);
+    m_fontSizeList= new QListWidget(m_fontSizeDialog);
+    Q_ASSERT(m_fontSizeList);
+    m_fontSizeDialogLayout= new QVBoxLayout();
+    m_fontSizeDialogLayout->addWidget(m_fontSizeLineEdit);
+    m_fontSizeDialogLayout->addWidget(m_fontSizeList);
+    m_fontSizeDialog->setWindowTitle("Font Size");
+    m_fontSizeDialog->setLayout(m_fontSizeDialogLayout);
+    // Q_CHECK_PTR(m_fontsizebutton);
+    m_fontSizeLineEdit->setInputMethodHints(Qt::ImhDigitsOnly);
+
+    int i;
+    for(i=4;i<=40;i++)
+    {
+        QString f_size;
+        m_fontSizeList->addItem(f_size.setNum(i));
+    }
+
+    int currentFont= m_fontsizebutton->text().toInt();
+
+    if(currentFont>=4 && currentFont<=40) {
+        m_fontSizeList->setCurrentRow(currentFont-4);
+    }
+
+    m_fontSizeLineEdit->setText(m_fontsizebutton->text());
+    m_fontSizeLineEdit->selectAll();
+    m_fontSizeDialog->show();
+    connect(m_fontSizeList,SIGNAL(currentRowChanged(int)),SLOT(fontSizeRowSelected(int)));
+    connect(m_fontSizeLineEdit,SIGNAL(returnPressed()),SLOT(fontSizeEntered()));
+}
+
+void MainWindow::fontSizeRowSelected(int row)
+{
+    selectFontSize(row+4);
+}
+
+void MainWindow::fontSizeEntered()
+{
+    selectFontSize(m_fontSizeLineEdit->text().toInt());
 }
 
 void MainWindow:: openMathOpFrame() {
@@ -559,10 +608,8 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
     return false;
 }
 
-void MainWindow::selectFontSize()
+void MainWindow::selectFontSize(int size)
 {
-    QString selectedSize=m_fontsizecombo->currentText();
-    int size=selectedSize.toInt();
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
     if(m_type == Spreadsheet) {
@@ -571,6 +618,7 @@ void MainWindow::selectFontSize()
         if(setFontSize(size, m_editor) && m_collab)
             m_collab->sendFontSize(m_editor->selectionStart(), m_editor->selectionEnd(), size);
     }
+    m_fontSizeDialog->hide();
 }
 
 bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
@@ -859,10 +907,10 @@ void MainWindow::activeFontOptionCheck() {
         }
     }
 
-    if(m_fontsizecombo) {
+    if(m_fontsizebutton) {
         QTextCharFormat textchar = m_editor->charFormat();
         QFont font=textchar.font();
-        m_fontsizecombo->setCurrentIndex((font.pointSize())-4);
+        m_fontsizebutton->setText(QString().setNum(font.pointSize()));
     }
 
     if(m_fontcombobox) {
@@ -1901,8 +1949,8 @@ void MainWindow::fontStyleFrameDestructor() {
         m_superscript = 0;
         delete m_fontcombobox;
         m_fontcombobox = 0;
-        delete m_fontsizecombo;
-        m_fontsizecombo = 0;
+        delete m_fontsizebutton;
+        m_fontsizebutton = 0;
         delete m_textcolor;
         m_textcolor = 0;
         delete m_textbackgroundcolor;
