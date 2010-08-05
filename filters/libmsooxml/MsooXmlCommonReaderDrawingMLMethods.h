@@ -74,6 +74,7 @@ KoFilter::ConversionStatus read_DrawingML_pPr();
 
 KoFilter::ConversionStatus read_DrawingML_r();
 KoFilter::ConversionStatus read_DrawingML_highlight();
+KoFilter::ConversionStatus read_DrawingML_txBody();
 KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();

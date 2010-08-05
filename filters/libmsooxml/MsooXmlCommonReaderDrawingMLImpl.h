@@ -3718,4 +3718,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL txBody
+//! txBody handler (Shape Text Body)
+/*! ECMA-376, 20.1.2.2.40, p. 3050
+ This element specifies the existence of text to be contained within the corresponding cell.
+ Only used for text inside a cell.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
+{
+    READ_PROLOGUE2(DrawingML_txBody)
+
+    /*#ifdef __GNUC__
+#warning remove m_context->type != Slide
+#endif
+    if (m_context->type != Slide) {
+        SKIP_EVERYTHING_AND_RETURN
+    }*/
+
+    m_lstStyleFound = false;
+    m_prevListLevel = 0;
+    m_currentListLevel = 0;
+    m_pPr_lvl = 0;
+
+    MSOOXML::Utils::XmlWriteBuffer listBuf;
+    body = listBuf.setWriter(body);
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, bodyPr)
+            ELSE_TRY_READ_IF_NS(a, lstStyle)
+            else if (qualifiedName() == QLatin1String("a:p")) {
+                TRY_READ(DrawingML_p);
+            }
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (m_prevListLevel > 0) {
+        for(; m_prevListLevel > 0; --m_prevListLevel) {
+            body->endElement(); // text:list-item
+            body->endElement(); // text:list
+        }
+    }
+
+    if (m_lstStyleFound) {
+        body = listBuf.originalWriter();
+        body->startElement("text:list");
+        const QString currentListStyleName(mainStyles->insert(m_currentListStyle));
+
+        //! @todo currently hardcoded
+        body->addAttribute("text:style-name", "bodyList");
+        (void)listBuf.releaseWriter();
+        body->endElement(); // text:list
+    }
+    else {
+        body = listBuf.releaseWriter();
+    }
+
+    READ_EPILOGUE
+}
+
 #endif
