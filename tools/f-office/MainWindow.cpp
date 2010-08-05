@@ -1835,7 +1835,16 @@ void MainWindow::closeDocument()
     setCentralWidget(0);
     m_positions.clear();
     // the presentation and text document instances seem to require different ways to do cleanup
-    if (m_type == Presentation || m_type == Spreadsheet) {
+    if (m_type == Presentation) {
+
+        if(m_pptTool) {
+        disconnect(m_fsButton, SIGNAL(clicked()), m_pptTool, SLOT(deactivateTool()));
+        }
+
+        KoToolManager::instance()->removeCanvasController(m_controller);
+        delete m_doc;
+        m_doc = 0;
+    } else if (m_type == Spreadsheet) {
         KoToolManager::instance()->removeCanvasController(m_controller);
         delete m_doc;
         m_doc = 0;
