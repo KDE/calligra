@@ -829,8 +829,7 @@ void WorksheetSubStreamHandler::handleZoomLevel(ZoomLevelRecord *record)
 
 void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
-    if (!record) return;
-    if (!d->sheet) return;
+    if (!record || !record->isValid() || !d->sheet) return;
 
     // picture?
     std::map<unsigned long,unsigned long>::iterator pit = record->m_properties.find(DrawingObject::pid);
@@ -838,7 +837,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
         const unsigned long id = (*pit).second;
         std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << id << std::endl;
         MsoDrawingBlibItem *drawing = d->globals->drawing(id);
-        if(!drawing) return;
+        Q_ASSERT(drawing);//if(!drawing) return;
         Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
         Q_ASSERT(cell);
         cell->addPicture(new Picture(record,drawing->m_picture));
@@ -850,11 +849,9 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     if(txit != record->m_properties.end()) {
         const unsigned long id = (*txit).second;
         std::cout << "TODO WorksheetSubStreamHandler::handleMsoDrawing itxid=" << id << std::endl;
-
         //TODO
         //Q_ASSERT(d->globals->drawing(id));
         //Q_ASSERT(false);
-
         return;
     }
 
@@ -867,6 +864,10 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
     }
 
     std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;
+
+//     // remember the MsoDrawingRecord for the ObjRecord that is expected to follow and to proper handle the drawing object.
+//     delete d->lastDrawingObject;
+//     d->lastDrawingObject = new DrawingObject(*record);
 }
 
 void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)

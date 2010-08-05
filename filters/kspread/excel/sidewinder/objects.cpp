@@ -26,21 +26,21 @@ const char* DrawingObject::propertyName(Property p)
     switch(p) {
         case DrawingObject::pid: return "pid"; break;
         case DrawingObject::itxid: return "itxid"; break;
-        case DrawingObject::cxk: return "cxk"; break;
-        case DrawingObject::fillColor: return "fillColor"; break;
-        case DrawingObject::fillBackColor: return "fillBackColor"; break;
-        case DrawingObject::fillCrMod: return "fillCrMod"; break;
-        case DrawingObject::fillStyleBooleanProperties: return "fillStyleBooleanProperties"; break;
-        case DrawingObject::lineColor: return "lineColor"; break;
-        case DrawingObject::lineCrMod: return "lineCrMod"; break;
-        case DrawingObject::shadowColor: return "shadowColor"; break;
-        case DrawingObject::shadowCrMod: return "shadowCrMod"; break;
-        case DrawingObject::shadowStyleBooleanProperties: return "shadowStyleBooleanProperties"; break;
-        case DrawingObject::groupShapeBooleanProperties: return "groupShapeBooleanProperties"; break;
-        case DrawingObject::pictureContrast: return "pictureContrast"; break;
-        case DrawingObject::textBooleanProperties: return "textBooleanProperties"; break;
-        case DrawingObject::lineStyleBooleanProperties: return "lineStyleBooleanProperties"; break;
-        case DrawingObject::wzName: return "wzName"; break;
+        case 0x0158: return "cxk"; break;
+        case 0x0181: return "fillColor"; break;
+        case 0x0183: return "fillBackColor"; break;
+        case 0x0185: return "fillCrMod"; break;
+        case 0x01bf: return "fillStyleBooleanProperties"; break;
+        case 0x01c0: return "lineColor"; break;
+        case 0x01c3: return "lineCrMod"; break;
+        case 0x0201: return "shadowColor"; break;
+        case 0x0203: return "shadowCrMod"; break;
+        case 0x023f: return "shadowStyleBooleanProperties"; break;
+        case 0x03bf: return "groupShapeBooleanProperties"; break;
+        case 0x7f: return "pictureContrast"; break;
+        case 0x00bf: return "textBooleanProperties"; break;
+        case 0x01ff: return "lineStyleBooleanProperties"; break;
+        case 0x0380: return "wzName"; break;
     }
     return "Unknown";
 }

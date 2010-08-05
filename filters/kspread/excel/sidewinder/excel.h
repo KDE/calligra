@@ -865,6 +865,7 @@ public:
 class MsoDrawingRecord : public Record, public DrawingObject
 {
 public:
+    //MSO::OfficeArtDgContainer m_container;
     static const unsigned id;
     MsoDrawingRecord(Workbook *book) : Record(book) {}
     virtual ~MsoDrawingRecord() {}

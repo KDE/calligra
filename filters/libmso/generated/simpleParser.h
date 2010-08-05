@@ -382,6 +382,8 @@ class OfficeArtChildAnchor;
 void parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s);
 class DocOfficeArtClientAnchor;
 void parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnchor& _s);
+class XlsOfficeArtClientAnchor;
+void parseXlsOfficeArtClientAnchor(LEInputStream& in, XlsOfficeArtClientAnchor& _s);
 class OfficeArtFPSPL;
 void parseOfficeArtFPSPL(LEInputStream& in, OfficeArtFPSPL& _s);
 class RectStruct;
@@ -390,6 +392,8 @@ class SmallRectStruct;
 void parseSmallRectStruct(LEInputStream& in, SmallRectStruct& _s);
 class DocOfficeArtClientData;
 void parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData& _s);
+class XlsOfficeArtClientData;
+void parseXlsOfficeArtClientData(LEInputStream& in, XlsOfficeArtClientData& _s);
 class ShapeFlagsAtom;
 void parseShapeFlagsAtom(LEInputStream& in, ShapeFlagsAtom& _s);
 class ShapeFlags10Atom;
@@ -426,10 +430,12 @@ class RoundTripHFPlaceholder12Atom;
 void parseRoundTripHFPlaceholder12Atom(LEInputStream& in, RoundTripHFPlaceholder12Atom& _s);
 class RoundTripShapeCheckSumForCustomLayouts12Atom;
 void parseRoundTripShapeCheckSumForCustomLayouts12Atom(LEInputStream& in, RoundTripShapeCheckSumForCustomLayouts12Atom& _s);
-class PptOfficeArtClientTextBox;
-void parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTextBox& _s);
+class XlsOfficeArtClientTextBox;
+void parseXlsOfficeArtClientTextBox(LEInputStream& in, XlsOfficeArtClientTextBox& _s);
 class DocOfficeArtClientTextBox;
 void parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTextBox& _s);
+class PptOfficeArtClientTextBox;
+void parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTextBox& _s);
 class OfficeArtIDCL;
 void parseOfficeArtIDCL(LEInputStream& in, OfficeArtIDCL& _s);
 class OfficeArtFOPTEOPID;
@@ -2311,6 +2317,34 @@ public:
     qint32 clientAnchor;
     DocOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
 };
+class XlsOfficeArtClientAnchor : public StreamOffset {
+public:
+    bool _has_width;
+    bool _has_height;
+    bool _has_colL;
+    bool _has_dxL;
+    bool _has_rwT;
+    bool _has_dyT;
+    bool _has_colR;
+    bool _has_dxR;
+    bool _has_rwB;
+    bool _has_dyB;
+    OfficeArtRecordHeader rh;
+    bool fMove;
+    bool fSize;
+    quint16 unused;
+    qint32 width;
+    qint32 height;
+    quint16 colL;
+    qint16 dxL;
+    quint16 rwT;
+    qint16 dyT;
+    quint16 colR;
+    qint16 dxR;
+    quint16 rwB;
+    qint16 dyB;
+    XlsOfficeArtClientAnchor(void* /*dummy*/ = 0) {}
+};
 class OfficeArtFPSPL : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
@@ -2340,6 +2374,11 @@ public:
     OfficeArtRecordHeader rh;
     quint32 clientData;
     DocOfficeArtClientData(void* /*dummy*/ = 0) {}
+};
+class XlsOfficeArtClientData : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    XlsOfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class ShapeFlagsAtom : public StreamOffset {
 public:
@@ -2471,17 +2510,22 @@ public:
     QByteArray unknown;
     RoundTripShapeCheckSumForCustomLayouts12Atom(void* /*dummy*/ = 0) {}
 };
-class PptOfficeArtClientTextBox : public StreamOffset {
+class XlsOfficeArtClientTextBox : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
-    QList<TextClientDataSubContainerOrAtom> rgChildRec;
-    PptOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+    XlsOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
 };
 class DocOfficeArtClientTextBox : public StreamOffset {
 public:
     OfficeArtRecordHeader rh;
     quint32 clientTextBox;
     DocOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
+};
+class PptOfficeArtClientTextBox : public StreamOffset {
+public:
+    OfficeArtRecordHeader rh;
+    QList<TextClientDataSubContainerOrAtom> rgChildRec;
+    PptOfficeArtClientTextBox(void* /*dummy*/ = 0) {}
 };
 class OfficeArtIDCL : public StreamOffset {
 public:
@@ -4193,16 +4237,17 @@ public:
 };
 class OfficeArtClientTextBox : public StreamOffset {
 public:
-    class choice1016492251 : public QSharedPointer<StreamOffset> {
+    class choice2757443956 : public QSharedPointer<StreamOffset> {
     public:
-        choice1016492251() {}
-        explicit choice1016492251(PptOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice1016492251(DocOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2757443956() {}
+        explicit choice2757443956(XlsOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2757443956(DocOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2757443956(PptOfficeArtClientTextBox* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice1016492251 anon;
+    choice2757443956 anon;
     OfficeArtClientTextBox(void* /*dummy*/ = 0) {}
 };
 class TextRulerAtom : public StreamOffset {
@@ -4661,16 +4706,17 @@ public:
 };
 class OfficeArtClientAnchor : public StreamOffset {
 public:
-    class choice3312540203 : public QSharedPointer<StreamOffset> {
+    class choice1726903461 : public QSharedPointer<StreamOffset> {
     public:
-        choice3312540203() {}
-        explicit choice3312540203(PptOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3312540203(DocOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
+        choice1726903461() {}
+        explicit choice1726903461(PptOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1726903461(DocOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice1726903461(XlsOfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice3312540203 anon;
+    choice1726903461 anon;
     OfficeArtClientAnchor(void* /*dummy*/ = 0) {}
 };
 class PptOfficeArtClientData : public StreamOffset {
@@ -4874,16 +4920,17 @@ public:
 };
 class OfficeArtClientData : public StreamOffset {
 public:
-    class choice2642699428 : public QSharedPointer<StreamOffset> {
+    class choice2520977885 : public QSharedPointer<StreamOffset> {
     public:
-        choice2642699428() {}
-        explicit choice2642699428(DocOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice2642699428(PptOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        choice2520977885() {}
+        explicit choice2520977885(DocOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2520977885(PptOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice2520977885(XlsOfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice2642699428 anon;
+    choice2520977885 anon;
     OfficeArtClientData(void* /*dummy*/ = 0) {}
 };
 class ShapeProgTagsSubContainerOrAtom : public StreamOffset {
@@ -5025,16 +5072,20 @@ public:
 };
 class OfficeArtSpgrContainerFileBlock : public StreamOffset {
 public:
-    class choice3415770141 : public QSharedPointer<StreamOffset> {
+    class choice4117040 : public QSharedPointer<StreamOffset> {
     public:
-        choice3415770141() {}
-        explicit choice3415770141(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
-        explicit choice3415770141(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        choice4117040() {}
+        explicit choice4117040(OfficeArtSpContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4117040(OfficeArtSpgrContainer* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4117040(OfficeArtFSP* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4117040(OfficeArtFSPGR* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4117040(OfficeArtClientAnchor* a) :QSharedPointer<StreamOffset>(a) {}
+        explicit choice4117040(OfficeArtClientData* a) :QSharedPointer<StreamOffset>(a) {}
         template <typename T> T*get() { return dynamic_cast<T*>(this->data()); }
         template <typename T> const T*get() const { return dynamic_cast<const T*>(this->data()); }
         template <typename T> bool is() const { return get<T>(); }
     };
-    choice3415770141 anon;
+    choice4117040 anon;
     OfficeArtSpgrContainerFileBlock(void* /*dummy*/ = 0) {}
 };
 class DrawingContainer : public StreamOffset {

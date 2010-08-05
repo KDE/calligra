@@ -1714,16 +1714,14 @@ void MsoDrawingRecord::dump(std::ostream& out) const
     out << "MsoDrawingRecord" << std::endl;
 }
 
-void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     if(size < 24) {
         setIsValid(false);
         return;
     }
 
-    //printf("MsoDrawingRecord: START_POS %i\n",data+0);
-
-    // rh
+#if 0 // old code that uses DrawingObject::handleObject
     unsigned recType = 0;
     unsigned long recLen = 0;
     readHeader(data, 0, 0, &recType, &recLen);
@@ -1732,13 +1730,79 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
         setIsValid(false);
         return;
     }
-
     unsigned long offset = 8;
     while(offset + 8 <= size) {
         offset += handleObject(size, data + offset);
     }
+#else // new code ported to use libmso
 
-    //printf("MsoDrawingRecord: END_POS %i, recLen=%i\n",data+offset,recLen);
+    QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
+    QBuffer buff(&byteArr);
+    buff.open(QIODevice::ReadOnly);
+    LEInputStream in(&buff);
+
+    MSO::OfficeArtSpContainer container;
+
+    // First try to parse a OfficeArtDgContainer and if that fails try to parse a OfficeArtSpContainer. Note
+    // that the xls-specs say that the rgChildRec of a MsoDrawing-record always is a OfficeArtDgContainer but
+    // thta's just wrong since at some documents it's direct the OfficeArtSpContainer we are expected in.
+    LEInputStream::Mark _m = in.setMark();
+    try {
+        MSO::OfficeArtDgContainer c;
+        MSO::parseOfficeArtDgContainer(in, c);
+        if(c.groupShape) {
+            foreach(MSO::OfficeArtSpgrContainerFileBlock b, c.groupShape->rgfb) {
+                MSO::OfficeArtSpContainer* spc = b.anon.get<MSO::OfficeArtSpContainer>();
+                if(spc && spc->shapePrimaryOptions) {
+                    container = *spc;
+                    break; // job done
+                }
+            }
+        }
+    } catch (const IOException&) {
+        in.rewind(_m);
+        try {
+            parseOfficeArtSpContainer(in, container);
+        } catch (const IOException& e) {
+            std::cerr << "Invalid MsoDrawingRecord record: " << qPrintable(e.msg) << std::endl;
+            setIsValid(false);
+            return;
+        }
+    }
+
+    // The groupShape is required. If there is no such groupShape then the whole drawingObject is invalid.
+    if(!container.shapePrimaryOptions) {
+        std::cerr << "Invalid MsoDrawingRecord record: No groupShape defined in the container." << std::endl;
+        setIsValid(false);
+        return;
+    }
+
+    // Everything seems to be fine. So, extract the unique identifier for the drawing to be able to access the drawing again from outside.
+    foreach(MSO::OfficeArtFOPTEChoice c, container.shapePrimaryOptions->fopt) {
+        if(c.anon.is<MSO::Pib>()) {
+            m_properties[DrawingObject::pid] = c.anon.get<MSO::Pib>()->pib;
+        } else if(c.anon.is<MSO::ITxid>()) {
+            m_properties[DrawingObject::itxid] = c.anon.get<MSO::ITxid>()->iTxid;
+        }
+    }
+
+    // The drawing may attached to an anchor which contains the informations where our drawing will be located.
+    MSO::XlsOfficeArtClientAnchor* anchor = container.clientAnchor ? container.clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>() : 0;
+    if(anchor) {
+        m_colL = anchor->colL;
+        m_dxL = anchor->dxL;
+        m_rwT = anchor->rwT;
+        m_dyT = anchor->dyT;
+        m_colR = anchor->colR;
+        m_dxR = anchor->dxR;
+        m_rwB = anchor->rwB;
+        m_dyB = anchor->dyB;
+    } else {
+        m_colL = m_dxL = m_rwT = m_dyT = m_colR = m_dxR = m_rwB = m_dyB = 0;
+    }
+
+    m_gotClientData = container.clientData != 0;
+#endif
 }
 
 // ========== MsoDrawingGroup ==========
@@ -2888,16 +2952,16 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             next_type = readU16(small_buffer);
             unsigned long next_size = readU16(small_buffer + 2);
 
-            if(next_type == MsoDrawingGroupRecord::id) {
-                if(type != MsoDrawingGroupRecord::id)
+            if(next_type == MsoDrawingRecord::id || next_type == MsoDrawingGroupRecord::id) {
+                if(type != next_type)
                     break;
-            } else if(next_type != 0x3C) {
-                break;
+            } else if(next_type == 0x3C) {
+                // 0x3C are continues records which are always just merged...
             } else {
-                //std::cout << "Continues record (0x3C), size=" << next_size << " parent-record=" << type << std::endl;
+                break; // and abort merging of records
             }
 
-            // compress multiple MsoDrawingGroup records or continues records (0x3C) into one.
+            // compress multiple records into one.
             continuePositions[continuePositionsCount++] = size;
             if (continuePositionsCount >= continuePositionsSize) {
                 continuePositionsSize *= 2;

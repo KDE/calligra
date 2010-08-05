@@ -46,22 +46,7 @@ class DrawingObject
 public:
     enum Property {
         pid = 0x0104, // identifier for pictures
-        itxid = 0x0080, // identifier for text
-        cxk = 0x0158, // where on the shape the connection points are
-        fillColor = 0x0181, // foreground color of the fill
-        fillBackColor = 0x0183, // background color of the fill
-        fillCrMod = 0x0185, // background color of the fill for black-white displays
-        fillStyleBooleanProperties = 0x01bf, // 32-bit field of Bollean properties for the fill style
-        lineColor = 0x01c0, // foreground color of the line
-        lineCrMod = 0x01c3, // foreground color of the line for black-white displays
-        shadowColor = 0x0201, // primary color of the shadow
-        shadowCrMod = 0x0203, // primary color of the shadow for black-white displays
-        shadowStyleBooleanProperties = 0x023f, // 32-bit field of Bollean properties for shadows
-        groupShapeBooleanProperties = 0x03bf, // 32-bit field of Bollean properties for a shape or a group
-        lineStyleBooleanProperties = 0x01ff, // 32-bit field of Bollean properties for the line style
-        pictureContrast = 0x7f,
-        textBooleanProperties = 0x00bf,
-        wzName = 0x0380
+        itxid = 0x0080 // identifier for text
     };
 
     static const char* propertyName(Property p);
