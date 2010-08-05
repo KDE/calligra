@@ -204,6 +204,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_collabEditor(0),
         storeButtonPreview(0),
         notesDialog(0),
+        m_slidingmotiondialog(0),
         m_slideNotesButton(0),
         m_slideNotesIcon(VIEW_NOTES_PIXMAP)
 {
