@@ -2704,6 +2704,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         }
     }
 #endif
+#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_H
+    m_currentPen.setColor(col);
+#endif
     READ_EPILOGUE
 }
 
