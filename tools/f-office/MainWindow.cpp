@@ -1844,8 +1844,18 @@ void MainWindow::closeDocument()
         KoToolManager::instance()->removeCanvasController(m_controller);
         delete m_doc;
         m_doc = 0;
+        delete m_view;
+        m_view = 0;
+
+        if(m_controller) {
+            delete m_controller;
+        }
+
+        m_controller = 0;
     } else if (m_type == Spreadsheet) {
         KoToolManager::instance()->removeCanvasController(m_controller);
+        delete m_view;
+        m_view=0;
         delete m_doc;
         m_doc = 0;
     } else {
@@ -1857,16 +1867,18 @@ void MainWindow::closeDocument()
         delete m_doc;
         m_doc = 0;
         delete m_view;
-        m_kwview=NULL;
-        m_editor=NULL;
+        m_view = 0;
+        m_kwview=0;
+        m_editor=0;
+        if(m_controller) {
+            delete m_controller;
+        }
+        m_controller = 0;
     }
-    m_view = NULL;
+
     setCentralWidget(0);
     m_currentPage = 1;
-    if(m_controller){
-        delete m_controller;
-    }
-    m_controller = NULL;
+
     if (m_ui->EditToolBar)
         m_ui->EditToolBar->hide();
 
@@ -2075,12 +2087,16 @@ void MainWindow::openDocument(const QString &fileName)
     }
     m_ui->actionMathOp->setVisible(false);
     m_ui->actionFormat->setVisible(false);
-    if (m_type == Spreadsheet) {
-        m_ui->actionMathOp->setVisible(true);
+    if (m_type == Spreadsheet) {        
         KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
         m_focelltool = new FoCellTool(((View*)m_view)->selection()->canvas());
+        ((View *)m_view)->showTabBar(false);
+        ((View *)m_view)->setStyleSheet("* { color:white; } ");
+        ((View *)m_view)->setStyleSheet("* { color:white; } ");
+        setCentralWidget(((View *)m_view));
+        m_ui->actionMathOp->setVisible(true);
     }
 
     if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
@@ -2100,7 +2116,10 @@ void MainWindow::openDocument(const QString &fileName)
     setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"), fname));
 
     m_controller->setProperty("FingerScrollable", true);
-    setCentralWidget(m_controller);
+
+    if(m_type!=Spreadsheet) {
+        setCentralWidget(m_controller);
+    }
     QTimer::singleShot(250, this, SLOT(updateUI()));
 
     KoCanvasBase *canvas = m_controller->canvas();
@@ -2173,7 +2192,6 @@ void MainWindow::updateUI()
     }
 
     if(m_type==Spreadsheet) {
-        this->resize(this->frameSize());
         if ((((Doc*)m_doc)->map())->count()>0)
             pageNo = i18n("pg%1 - pg%2", 1, QString::number((((Doc*)m_doc)->map())->count()));
     }
