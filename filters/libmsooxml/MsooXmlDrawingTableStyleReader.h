@@ -109,7 +109,7 @@ public:
 
     virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
 
-private:
+protected:
     KoFilter::ConversionStatus read_tblStyleLst();
     KoFilter::ConversionStatus read_tblStyle();
     KoFilter::ConversionStatus read_wholeTbl();
