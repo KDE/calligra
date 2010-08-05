@@ -1710,6 +1710,19 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
 
         d->sheet->addShape(shape);
 
+        // The position is relative to the upper left sheet corner until now. Move it.
+        QPointF position = shape->position();
+        // Remember how far we're off from the top-left corner of this cell
+        double offsetX = position.x();
+        double offsetY = position.y();
+        for (int col = 1; col < column(); ++col)
+            position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
+        for (int row = 1; row < this->row(); ++row)
+            position += QPointF(0.0, d->sheet->rowFormat(row)->height());
+        shape->setPosition(position);
+
+        dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
+
         // All three attributes are necessary for cell anchored shapes.
         // Otherwise, they are anchored in the sheet.
         if (!shape->hasAdditionalAttribute("table:end-cell-address") ||
@@ -1734,17 +1747,6 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
             continue;
         double endY = KoUnit::parseValue(string);
 
-        // The position is relative to the upper left sheet corner until now. Move it.
-        QPointF position = shape->position();
-        // Remember how far we're off from the top-left corner of this cell
-        double offsetX = position.x();
-        double offsetY = position.y();
-        for (int col = 1; col < column(); ++col)
-            position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
-        for (int row = 1; row < this->row(); ++row)
-            position += QPointF(0.0, d->sheet->rowFormat(row)->height());
-        shape->setPosition(position);
-
         // The column dimensions are already the final ones, but not the row dimensions.
         // The default height is used for the not yet loaded rows.
         // TODO Stefan: Honor non-default row heights later!
@@ -1757,7 +1759,6 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
             size += QSizeF(0.0, d->sheet->rowFormat(row)->height());
         shape->setSize(size);
 
-        dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
     }
 }
 
