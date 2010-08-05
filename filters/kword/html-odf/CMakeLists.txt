@@ -19,7 +19,7 @@ target_link_libraries(
     kwordexportfilters
     koodf
     komain
-    QtXmlPatterns
+    ${QT_QTXMLPATTERNS_LIBRARY}
     ${ZLIB_LIBRARIES}
 )
 
