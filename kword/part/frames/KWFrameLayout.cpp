@@ -329,6 +329,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             footer->shape()->setZIndex(--minZIndex);
         if (header)
             header->shape()->setZIndex(--minZIndex);
+        if (pageBackground)
+            pageBackground->shape()->setZIndex(--minZIndex);
     }
 
     // spread space across items.
