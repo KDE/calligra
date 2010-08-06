@@ -2074,6 +2074,10 @@ void MainWindow::openDocument(const QString &fileName)
     }
     m_doc->setReadWrite(true);
     m_doc->setAutoSave(0);
+
+    // registering tools
+    KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
+
     m_view = m_doc->createView();
     QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
     if (controllers.isEmpty()) {
@@ -2110,7 +2114,6 @@ void MainWindow::openDocument(const QString &fileName)
     m_ui->actionMathOp->setVisible(false);
     m_ui->actionFormat->setVisible(false);
     if (m_type == Spreadsheet) {        
-        KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
         m_focelltool = new FoCellTool(((View*)m_view)->selection()->canvas());
