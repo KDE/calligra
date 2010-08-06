@@ -186,7 +186,7 @@ RectStorage<T>::~RectStorage()
 template<typename T>
 T RectStorage<T>::contains(const QPoint& point) const
 {
-    if (!m_usedArea.contains(point)/* && !m_usedColumns.contains(point.x()) && !m_usedRows.contains(point.y())*/)
+    if (!usedArea().contains(point))
         return T();
     // first, lookup point in the cache
     if (m_cache.contains(point)) {
@@ -239,7 +239,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::undoData(const Region& region) const
 template<typename T>
 QRect RectStorage<T>::usedArea() const
 {
-    return m_usedArea.boundingRect();
+    return m_tree.boundingBox().toRect();
 }
 
 template<typename T>
@@ -256,11 +256,6 @@ void RectStorage<T>::insert(const Region& region, const T& _data)
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-        // keep track of the used area
-        if (data == T())
-            m_usedArea -= (*it)->rect();
-        else
-            m_usedArea += (*it)->rect();
         // insert data
         m_tree.insert((*it)->rect(), data);
         regionChanged((*it)->rect());
@@ -275,8 +270,6 @@ void RectStorage<T>::remove(const Region& region, const T& data)
     }
     const Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-        // keep track of the used area
-        m_usedArea -= (*it)->rect(); // FIXME Can still be used!
         // insert data
         m_tree.remove((*it)->rect(), data);
         regionChanged((*it)->rect());
@@ -289,25 +282,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & invalidRect;
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(0, number);
-    const QVector<QRect> rects = (m_usedArea & QRect(1, position - 1, KS_colMax, 1)).rects();
-    for (int i = 0; i < rects.count(); ++i)
-        m_usedArea += rects[i].adjusted(0, 1, 0, number + 1);
-    // update the used rows
-//     QMap<int, bool> map;
-//     const QMap<int, bool>::ConstIterator begin = m_usedRows.upperBound(position);
-//     const QMap<int, bool>::ConstIterator end = m_usedRows.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() + number <= KS_rowMax)
-//             map.insert(it.key() + number, true);
-//     }
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//         m_usedRows.remove(it.key());
-//     m_usedRows.unite(map);
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
@@ -321,25 +295,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & invalidRect;
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(number, 0);
-    const QVector<QRect> rects = (m_usedArea & QRect(position - 1, 0, 1, KS_rowMax)).rects();
-    for (int i = 0; i < rects.count(); ++i)
-        m_usedArea += rects[i].adjusted(1, 0, number + 1, 0);
-    // update the used columns
-//     QMap<int, bool> map;
-//     const QMap<int, bool>::ConstIterator begin = m_usedColumns.upperBound(position);
-//     const QMap<int, bool>::ConstIterator end = m_usedColumns.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() + number <= KS_colMax)
-//             map.insert(it.key() + number, true);
-//     }
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//         m_usedColumns.remove(it.key());
-//     m_usedColumns.unite(map);
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
@@ -353,22 +308,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & QRect(1, position + number, KS_colMax, KS_rowMax);
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(0, -number);
-    // update the used rows
-//     QMap<int, bool> map;
-//     const QMap<int, bool>::ConstIterator begin = m_usedRows.upperBound(position);
-//     const QMap<int, bool>::ConstIterator end = m_usedRows.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() - number >= position)
-//             map.insert(it.key() - number, true);
-//     }
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//         m_usedRows.remove(it.key());
-//     m_usedRows.unite(map);
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(1, position, KS_colMax, number), T());
@@ -382,22 +321,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & QRect(position + number, 1, KS_colMax, KS_rowMax);
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(-number, 0);
-    // update the used columns
-//     QMap<int, bool> map;
-//     const QMap<int, bool>::ConstIterator begin = m_usedColumns.upperBound(position);
-//     const QMap<int, bool>::ConstIterator end = m_usedColumns.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() - number >= position)
-//             map.insert(it.key() - number, true);
-//     }
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//         m_usedColumns.remove(it.key());
-//     m_usedColumns.unite(map);
     // process the tree
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(position, 1, number, KS_rowMax), T());
@@ -413,23 +336,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.insertShiftRight(rect);
     regionChanged(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & invalidRect;
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(rect.width(), 0);
-    const QVector<QRect> rects = (m_usedArea & QRect(rect.left() - 1, rect.top(), 1, rect.height())).rects();
-    for (int i = 0; i < rects.count(); ++i)
-        m_usedArea += rects[i].adjusted(1, 0, rect.width() + 1, 0);
-    // update the used columns
-//     const QMap<int, bool>::ConstIterator begin = m_usedColumns.upperBound(rect.left());
-//     const QMap<int, bool>::ConstIterator end = m_usedColumns.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() + rect.width() <= KS_colMax)
-//             m_usedArea += QRect(it.key() + rect.width(), rect.top(), rect.width(), rect.height());
-//     }
-//     if (m_usedColumns.contains(rect.left() - 1))
-//         m_usedArea += rect;
     return undoData;
 }
 
@@ -441,23 +347,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.insertShiftDown(rect);
     regionChanged(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & invalidRect;
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(0, rect.height());
-    const QVector<QRect> rects = (m_usedArea & QRect(rect.left(), rect.top() - 1, rect.width(), 1)).rects();
-    for (int i = 0; i < rects.count(); ++i)
-        m_usedArea += rects[i].adjusted(0, 1, 0, rect.height() + 1);
-    // update the used rows
-//     const QMap<int, bool>::ConstIterator begin = m_usedRows.upperBound(rect.top());
-//     const QMap<int, bool>::ConstIterator end = m_usedRows.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() + rect.height() <= KS_rowMax)
-//             m_usedArea += QRect(rect.left(), it.key() + rect.height(), rect.width(), rect.height());
-//     }
-//     if (m_usedRows.contains(rect.top() - 1))
-//         m_usedArea += rect;
     return undoData;
 }
 
@@ -469,18 +358,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.removeShiftLeft(rect);
     regionChanged(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & QRect(rect.right() + 1, rect.top(), KS_colMax, rect.height());
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(-rect.width(), 0);
-    // update the used columns
-//     const QMap<int, bool>::ConstIterator begin = m_usedColumns.upperBound(rect.right() + 1);
-//     const QMap<int, bool>::ConstIterator end = m_usedColumns.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() - rect.width() >= rect.left())
-//             m_usedArea += QRect(it.key() - rect.width(), rect.top(), rect.width(), rect.height());
-//     }
     return undoData;
 }
 
@@ -492,18 +369,6 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.removeShiftUp(rect);
     regionChanged(invalidRect);
-    // update the used area
-    const QRegion usedArea = m_usedArea & QRect(rect.left(), rect.bottom() + 1, rect.width(), KS_rowMax);
-    m_usedArea -= invalidRect;
-    m_usedArea += usedArea.translated(0, -rect.height());
-    // update the used rows
-//     const QMap<int, bool>::ConstIterator begin = m_usedRows.upperBound(rect.bottom() + 1);
-//     const QMap<int, bool>::ConstIterator end = m_usedRows.constEnd();
-//     for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
-//     {
-//         if (it.key() - rect.height() >= rect.top())
-//             m_usedArea += QRect(rect.left(), it.key() - rect.height(), rect.width(), rect.height());
-//     }
     return undoData;
 }
 

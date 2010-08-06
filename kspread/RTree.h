@@ -201,6 +201,10 @@ public:
      */
     void operator=(const RTree& other);
 
+    /**
+     * Returns the bounding box for the entire tree.
+     */
+    QRectF boundingBox() const { return KoRTree<T>::m_root->boundingBox(); }
 protected:
     class Node;
     class NonLeafNode;
