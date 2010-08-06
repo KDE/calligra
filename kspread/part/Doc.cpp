@@ -525,7 +525,7 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
         const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
         QModelIndex index = sheetModel->index( 0, map()->indexOf( sheet ) );
           QVariant bindingModelValue = sheetModel->data( index , Qt::DisplayRole );
-          BindingModel* curBindingModel = dynamic_cast< BindingModel* >( qVariantValue< QPointer< QAbstractItemModel > >( bindingModelValue ).data() );
+          BindingModel *curBindingModel = dynamic_cast< BindingModel* >( qvariant_cast< QPointer< QAbstractItemModel > >( bindingModelValue ).data() );
           if ( curBindingModel ){
               curBindingModel->emitDataChanged( region );
           }

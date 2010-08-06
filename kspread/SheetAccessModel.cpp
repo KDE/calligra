@@ -82,7 +82,7 @@ void SheetAccessModel::slotSheetAdded(Sheet *sheet)
     const Region region(1, 1, KS_colMax, KS_rowMax, sheet);
     const QPointer<QAbstractItemModel> model = const_cast<QAbstractItemModel*>( d->map->bindingManager()->createModel( region.name() ) );
 
-    item->setData( qVariantFromValue( model ), Qt::DisplayRole );
+    item->setData( QVariant::fromValue( model ), Qt::DisplayRole );
 
     const int sheetIndex = d->map->indexOf( sheet );
 
