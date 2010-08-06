@@ -734,10 +734,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             body->endElement(); // draw:plugin
         }
         else {
-            body->startElement("draw:object");
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            body->startElement("draw:object-ole");
+            // In this case the file might already be in ole format, thus it's safest to leave it like that
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName ))
             body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:object
+            body->endElement(); // draw:object-ole
         }
     }
 
