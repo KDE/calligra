@@ -82,20 +82,26 @@ void MSOOXML_CURRENT_CLASS::popCurrentDrawStyle()
 
 // ----------------------------------------------------------------
 
-
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName,
                                                            const QString& destinationDir,
-                                                           QString& destinationName)
+                                                           QString& destinationName,
+                                                           bool oleType)
 {
     destinationName = destinationDir + sourceName.mid(sourceName.lastIndexOf('/') + 1);
-    if (m_copiedFiles.contains(sourceName)) {
+    if (oleType) {
+        // If it's of type ole, we don't know the file type, by default it has .bin
+        // ending which we're removing here.
+        destinationName.remove(".bin");
+    }
+
+    if (m_copiedFiles.contains(destinationName)) {
         kDebug() << sourceName << "already copied - skipping";
     }
     else {
 //! @todo should we check name uniqueness here in case the sourceName can be located in various directories?
-        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName) )
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, oleType) )
         addManifestEntryForFile(destinationName);
-        m_copiedFiles.insert(sourceName);
+        m_copiedFiles.insert(destinationName);
     }
     return KoFilter::OK;
 }

@@ -134,7 +134,7 @@ void readWrap();
 
 //! Copies file to destination directory. @a destinationName is set.
 KoFilter::ConversionStatus copyFile(
-    const QString& sourceName, const QString& destinationDir, QString& destinationName);
+    const QString& sourceName, const QString& destinationDir, QString& destinationName, bool oleType=false);
 
 /*! @return size of image file @a sourceName read from input.
  Can be invalid is the size cannot be determined.

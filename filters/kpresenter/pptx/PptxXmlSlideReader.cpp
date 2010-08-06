@@ -83,7 +83,7 @@ PptxShapeProperties& PptxShapeProperties::operator=(const PptxShapeProperties &o
     isPlaceHolder = other.isPlaceHolder;
     return *this;
 }
-    
+
 // -------------------
 
 PptxSlideProperties::PptxSlideProperties()
@@ -701,6 +701,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
     TRY_READ_ATTR_WITH_NS(r, id);
     TRY_READ_ATTR_WITHOUT_NS(imgW);
     TRY_READ_ATTR_WITHOUT_NS(imgH);
+    TRY_READ_ATTR_WITHOUT_NS(progId);
 
     while (!atEnd()) {
         readNext();
@@ -711,20 +712,22 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
     }
 
     if (!r_id.isEmpty()) {
-        // The file which we get here is oble object, it should be unpacked.
-        // @todo : implement this
-        /*
-        body->startElement("draw:image");
-        const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
-        if (sourceName.isEmpty()) {
-            return KoFilter::FileNotFound;
+        // Currently only a picture is handled, maybe others should be handled as well
+        if (progId == "Paint.Picture") {
+            body->startElement("draw:image");
+            QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+            if (sourceName.isEmpty()) {
+                return KoFilter::FileNotFound;
+            }
+
+            QString destinationName;
+            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true ) )
+            addManifestEntryForPicturesDir();
+            body->addAttribute("xlink:href", destinationName);
+            body->addAttribute("xlink:show", "embed");
+            body->addAttribute("xlink:actuate", "onLoad");
+            body->endElement(); //draw:image
         }
-        QString destinationName;
-        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-        addManifestEntryForPicturesDir();
-        body->addAttribute("xlink:href", destinationName);
-        body->endElement(); //draw:image
-        */
     }
 
     READ_EPILOGUE
@@ -1176,7 +1179,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
 
 #undef CURRENT_EL
 #define CURRENT_EL graphicFrame
-//! graphicFrame 
+//! graphicFrame
 /*!
   This element specifies the existence of a graphics frame. This frame contains a graphic that was generated
   by an external source and needs a container in which to be displayed on the slide surface.
@@ -1186,21 +1189,69 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
   Child Elements:
     - extLst (Extension List with Modification Flag) (§4.2.4)
     - graphic (Graphic Object) (§5.1.2.1.16)
-    - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
+    - [done] nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
     - xfrm (2D Transform for Graphic Frame)
 */
 KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 {
     READ_PROLOGUE
     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
+            ELSE_TRY_READ_IF(nvGraphicFramePr)
             else if (qualifiedName() == "p:xfrm") {
                 read_xfrm_p();
             }
 //! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    body = buffer.originalWriter();
+    body->startElement("draw:frame");
+    body->addAttribute("draw:name", m_cNvPrName);
+    body->addAttribute("draw:layer", "layout");
+    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+
+    (void)buffer.releaseWriter();
+
+    body->endElement();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL nvGraphicFramePr
+//! graphicFramePr handler
+/*
+ Parent elements:
+ - [done] graphicFrame (§19.3.1.21)
+
+ Child elements:
+ - cNvGraphicFramePr (Non-Visual Graphic Frame Drawing Properties) §19.3.1.9
+ - cNvPr (Non-Visual Drawing Properties) §19.3.1.12
+ - [done] nvPr (Non-Visual Properties) §19.3.1.33
+
+*/
+KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == "p:cNvPr") {
+                read_cNvPr_p();
+            }
+            ELSE_TRY_READ_IF(nvGraphicFramePr) // This should be fixed later
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -1249,6 +1300,26 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "p"
+
+#undef CURRENT_EL
+#define CURRENT_EL cNvPr
+//! p:nvPr handler
+KoFilter::ConversionStatus PptxXmlSlideReader::read_cNvPr_p()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS_INTO(id, m_cNvPrId)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_cNvPrName)
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL xfrm

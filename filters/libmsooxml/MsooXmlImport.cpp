@@ -125,14 +125,14 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
 }
 
 KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
-        const QString& destinationName)
+        const QString& destinationName, bool oleFile)
 {
     if (!m_zip || !m_outputStore) {
         return KoFilter::UsageError;
     }
     QString errorMessage;
     const KoFilter::ConversionStatus status = Utils::copyFile(
-                m_zip, errorMessage, sourceName, m_outputStore, destinationName);
+                m_zip, errorMessage, sourceName, m_outputStore, destinationName, oleFile);
 //! @todo transmit the error to the GUI...
     kDebug() << errorMessage;
     return status;

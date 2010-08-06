@@ -175,7 +175,7 @@ MSOOXML_EXPORT KoFilter::ConversionStatus loadAndParseDocument(MsooXmlReader* re
 KoFilter::ConversionStatus copyFile(const KZip* zip, QString& errorMessage,
                                     const QString& sourceName,
                                     KoStore *outputStore,
-                                    const QString& destinationName);
+                                    const QString& destinationName, bool oleType=false);
 
 /*! @return size of image file @a sourceName read from zip archive @a zip.
  Size of the image is returned in @a size.

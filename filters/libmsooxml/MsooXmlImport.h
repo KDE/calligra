@@ -75,7 +75,8 @@ public:
      KoFilter::UsageError is returned if this method is called outside
      of the importing process, i.e. not from within parseParts(). */
     KoFilter::ConversionStatus copyFile(const QString& sourceName,
-                                        const QString& destinationName);
+                                        const QString& destinationName,
+                                        bool oleFile);
 
     /*! @return size of image file @a sourceName read from zip archive @a zip.
     Size of the image is returned in @a size.

@@ -46,6 +46,8 @@
 #include "MsooXmlSchemas.h"
 #include "MsooXmlReader.h"
 
+#include "pole.h"
+
 #include <KoOdfReadStore.h>
 #include <styles/KoCharacterStyle.h>
 #include <KoXmlReader.h>
@@ -247,26 +249,101 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
 }
 
 #define BLOCK_SIZE 4096
+static KoFilter::ConversionStatus copyOle(QString& errorMessage,
+                                    const QString sourceName, KoStore *outputStore,
+                                    const QString& destinationName, const KZip* zip)
+{
+    KoFilter::ConversionStatus status = KoFilter::OK;
+
+    QIODevice* inputDevice = Utils::openDeviceForFile(zip, errorMessage, sourceName, status);
+    inputDevice->open(QIODevice::ReadOnly);
+
+    POLE::Storage storage(inputDevice);
+    if (!storage.open()) {
+        kDebug(30513) << "Cannot open " << sourceName;
+        return KoFilter::WrongFormat;
+    }
+
+    //Uncomment these to look for the streams
+    //std::list<std::string> lista = storage.entries();
+    //for (std::list<std::string>::iterator it = lista.begin(); it != lista.end(); ++it)  {
+    //    qDebug() << "ENTRY " << (*it).c_str();
+    //}
+
+    POLE::Stream stream(&storage, "Ole10Native");
+    QByteArray array;
+    array.resize(stream.size());
+
+    unsigned long r = stream.read((unsigned char*)array.data(), stream.size());
+    if (r != stream.size()) {
+        kError(30513) << "Error while reading from stream";
+        return KoFilter::WrongFormat;
+    }
+
+    // Removing first 4 bytes which are the size
+    array = array.right(array.length() - 4);
+
+    // Uncomment to write the file for testing
+    //QFile file("olething.ole");
+    //file.open(QIODevice::WriteOnly);
+    //QDataStream out(&file);
+    //out.writeRawData(array.data(), array.length());
+
+    kDebug() << "mode:" << outputStore->mode();
+    if (!outputStore->open(destinationName)) {
+        errorMessage = i18n("Could not open entry \"%1\" for writing.", destinationName);
+        return KoFilter::CreationError;
+    }
+
+    QByteArray array2;
+    while (true) {
+        array2 = array.left(BLOCK_SIZE);
+        array = array.right(array.size() - array2.size());
+        const qint64 in = array2.size();
+        if (in <= 0) {
+            break;
+        }
+        char *block = array2.data();
+        if (in != outputStore->write(block, in)) {
+            errorMessage = i18n("Could not write block");
+            status = KoFilter::CreationError;
+            break;
+        }
+    }
+    outputStore->close();
+    delete inputDevice;
+    inputDevice = 0;
+    return status;
+}
+#undef BLOCK_SIZE
+
+#define BLOCK_SIZE 4096
 KoFilter::ConversionStatus Utils::copyFile(const KZip* zip, QString& errorMessage,
                                            const QString& sourceName, KoStore *outputStore,
-                                           const QString& destinationName)
+                                           const QString& destinationName, bool oleType)
 {
     if (outputStore->hasFile(destinationName)) {
         return KoFilter::OK;
     }
 
     KoFilter::ConversionStatus status;
-    std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(zip, errorMessage, sourceName, status));
+    if (oleType) {
+        status = copyOle(errorMessage, sourceName, outputStore, destinationName, zip);
+        return status;
+    }
+
+    std::auto_ptr<QIODevice> inputDevice = std::auto_ptr<QIODevice>(Utils::openDeviceForFile(zip, errorMessage, sourceName, status));
+
     if (!inputDevice.get()) {
         return status;
     }
+
     kDebug() << "mode:" << outputStore->mode();
     if (!outputStore->open(destinationName)) {
         errorMessage = i18n("Could not open entry \"%1\" for writing.", destinationName);
         return KoFilter::CreationError;
     }
     status = KoFilter::OK;
-//    QIODevice* outputDevice = outputStore->device();
     char block[BLOCK_SIZE];
     while (true) {
         const qint64 in = inputDevice->read(block, BLOCK_SIZE);

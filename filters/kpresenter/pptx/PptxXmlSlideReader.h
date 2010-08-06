@@ -197,7 +197,10 @@ protected:
     KoFilter::ConversionStatus read_ph();
     KoFilter::ConversionStatus read_txBody();
     KoFilter::ConversionStatus read_graphicFrame();
+    KoFilter::ConversionStatus read_nvGraphicFramePr();
+
     KoFilter::ConversionStatus read_xfrm_p();
+    KoFilter::ConversionStatus read_cNvPr_p();
     KoFilter::ConversionStatus read_oleObj();
 
 //    KoGenStyle m_currentPageStyle;
