@@ -712,16 +712,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
     }
 
     if (!r_id.isEmpty()) {
-        // Currently only a picture is handled, maybe others should be handled as well
+        QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
+        if (sourceName.isEmpty()) {
+            return KoFilter::FileNotFound;
+        }
+        QString destinationName;
+        body->startElement("draw:object");
+        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName) )
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); // draw:object
+
         if (progId == "Paint.Picture") {
             body->startElement("draw:image");
-            QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
-            if (sourceName.isEmpty()) {
-                return KoFilter::FileNotFound;
-            }
-
-            QString destinationName;
-            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true ) )
+            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
             addManifestEntryForPicturesDir();
             body->addAttribute("xlink:href", destinationName);
             body->addAttribute("xlink:show", "embed");
