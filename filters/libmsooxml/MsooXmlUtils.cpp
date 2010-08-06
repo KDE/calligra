@@ -272,6 +272,9 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
         if (QString((*it).c_str()).contains("Ole10Native")) {
             oleType = "Ole10Native";
         }
+        else if (QString((*it).c_str()).contains("CONTENTS")) {
+            oleType = "CONTENTS";
+        }
     }
 
     POLE::Stream stream(&storage, oleType);
@@ -284,8 +287,10 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
         return KoFilter::WrongFormat;
     }
 
-    // Removing first 4 bytes which are the size
-    array = array.right(array.length() - 4);
+    if (oleType == "Contents" || oleType == "Ole10Native") {
+     // Removing first 4 bytes which are the size
+        array = array.right(array.length() - 4);
+    }
 
     // Uncomment to write any ole file for testing
     //POLE::Stream streamTemp(&storage, "Ole");

@@ -718,6 +718,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         }
         QString destinationName;
 
+        body->startElement("draw:object-ole");
+        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); // draw:object-ole
+
         if (progId == "Paint.Picture") {
             body->startElement("draw:image");
             RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
@@ -733,12 +738,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             body->addAttribute("xlink:href", destinationName);
             body->endElement(); // draw:plugin
         }
-        else {
-            body->startElement("draw:object-ole");
-            // In this case the file might already be in ole format, thus it's safest to leave it like that
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName ))
+        else if (progId.contains("AcroExch")) { // PDF
+            body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
             body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:object-ole
+            body->endElement(); // draw:object
         }
     }
 
