@@ -28,7 +28,11 @@ SlidingMotionDialog::SlidingMotionDialog(QWidget *parent)
     :m_slidingmotionframe(0),
     m_slidingmotionframelayout(0),
     m_opengl(0),
-    m_acceleration(0)
+    m_acceleration(0),
+    m_slidetransitionlabel(0),
+    m_timerlabel(0),
+    m_slidetransitionstyle(0),
+    m_slidetransitiontime(0)
 {
 }
 

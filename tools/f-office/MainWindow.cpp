@@ -1468,6 +1468,7 @@ void MainWindow::openNewDocument(DocumentType type)
     m_fileName = "";
     m_newDocOpen = true;
     m_type = type;
+    m_doc->undoStack();
 }
 
 void MainWindow::closeDoc()
@@ -1561,7 +1562,8 @@ void MainWindow::editToolBar(bool edit)
         if (edit) {
             if(m_type==Spreadsheet) {
                 KoToolManager::instance()->switchToolRequested(CellTool_ID);
-                m_ui->viewToolBar->show();
+                m_ui->viewToolBar->hide();
+                m_ui->EditToolBar->show();
             } else {
                 KoToolManager::instance()->switchToolRequested(TextTool_ID);
                 m_ui->viewToolBar->hide();
@@ -1765,14 +1767,14 @@ void MainWindow::toggle_accelerator()
      enable_accelerator=!enable_accelerator;
      if(enable_accelerator==false)
      {qDebug()<<"closed the acc";
-         m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
+         //m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
 //         Accelerator_Thread.StopRecognition();
 //         disconnect(&Accelerator_Thread,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
 //         disconnect(&Accelerator_Thread,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
      }
      else
      {   qDebug()<<"toggled to start";
-         m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingon.png"));
+         //m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingon.png"));
 //         Accelerator_Thread.StartRecognition();
 //         connect(&Accelerator_Thread,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
 //         connect(&Accelerator_Thread,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
@@ -1840,20 +1842,19 @@ void MainWindow::closeDocument()
         if(m_pptTool) {
         disconnect(m_fsButton, SIGNAL(clicked()), m_pptTool, SLOT(deactivateTool()));
         }
-
         KoToolManager::instance()->removeCanvasController(m_controller);
         delete m_doc;
         m_doc = 0;
         delete m_view;
         m_view = 0;
-
         if(m_controller) {
             delete m_controller;
         }
-
         m_controller = 0;
     } else if (m_type == Spreadsheet) {
         KoToolManager::instance()->removeCanvasController(m_controller);
+        delete m_undostack;
+        m_undostack = 0;
         delete m_view;
         m_view=0;
         delete m_doc;
