@@ -117,7 +117,7 @@ public:
     }
     T get(int idx) const {
         typename QMap<int, QPair<int, T> >::ConstIterator it = m_data.lowerBound(idx);
-        if (it.value().first <= idx) {
+        if (it != m_data.end() && it.value().first <= idx) {
             return it.value().second;
         }
         return T();
