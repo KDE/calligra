@@ -717,10 +717,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
         QString destinationName;
-        body->startElement("draw:object");
-        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName) )
-        body->addAttribute("xlink:href", destinationName);
-        body->endElement(); // draw:object
 
         if (progId == "Paint.Picture") {
             body->startElement("draw:image");
@@ -730,6 +726,18 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             body->addAttribute("xlink:show", "embed");
             body->addAttribute("xlink:actuate", "onLoad");
             body->endElement(); //draw:image
+        }
+        else if (progId == "Package") {
+            body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            body->addAttribute("xlink:href", destinationName);
+            body->endElement(); // draw:plugin
+        }
+        else {
+            body->startElement("draw:object");
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            body->addAttribute("xlink:href", destinationName);
+            body->endElement(); // draw:object
         }
     }
 

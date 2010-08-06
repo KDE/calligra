@@ -264,13 +264,17 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
         return KoFilter::WrongFormat;
     }
 
-    //Uncomment these to look for the streams
-    //std::list<std::string> lista = storage.entries();
-    //for (std::list<std::string>::iterator it = lista.begin(); it != lista.end(); ++it)  {
-    //    qDebug() << "ENTRY " << (*it).c_str();
-    //}
+    std::list<std::string> lista = storage.entries();
+    std::string oleType = "Contents";
 
-    POLE::Stream stream(&storage, "Ole10Native");
+    for (std::list<std::string>::iterator it = lista.begin(); it != lista.end(); ++it)  {
+        //qDebug() << "ENTRY " << (*it).c_str();
+        if (QString((*it).c_str()).contains("Ole10Native")) {
+            oleType = "Ole10Native";
+        }
+    }
+
+    POLE::Stream stream(&storage, oleType);
     QByteArray array;
     array.resize(stream.size());
 
@@ -283,11 +287,15 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     // Removing first 4 bytes which are the size
     array = array.right(array.length() - 4);
 
-    // Uncomment to write the file for testing
+    // Uncomment to write any ole file for testing
+    //POLE::Stream streamTemp(&storage, "Ole");
+    //QByteArray arrayTemp;
+    //arrayTemp.resize(streamTemp.size());
+    //streamTemp.read((unsigned char*)arrayTemp.data(), streamTemp.size());
     //QFile file("olething.ole");
     //file.open(QIODevice::WriteOnly);
     //QDataStream out(&file);
-    //out.writeRawData(array.data(), array.length());
+    //out.writeRawData(arrayTemp.data(), arrayTemp.length());
 
     kDebug() << "mode:" << outputStore->mode();
     if (!outputStore->open(destinationName)) {
