@@ -839,30 +839,20 @@ protected:
                             int& maxColumn, KoOdfLoadingContext& odfContext,
                             QHash<QString, QRegion>& columnStyleRegions,
                             IntervalMap<QString>& columnStyles);
-    void loadRowNodesStyles(const KoXmlElement& parent, int& rowIndex,
+    void loadRowNodes(const KoXmlElement& parent, int& rowIndex,
                             int& maxColumn, OdfLoadingContext& tableContext,
                             QHash<QString, QRegion>& rowStyleRegions,
-                            QHash<QString, QRegion>& cellStyleRegions/*,
-                            const IntervalMap<QString>& columnStyles,
-                            const Styles& autoStyles*/);
-    void loadRowNodesContent(const KoXmlElement& parent, int& rowIndex,
-                            int& maxColumn, OdfLoadingContext& tableContext,
+                            QHash<QString, QRegion>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
                             const Styles& autoStyles);
 
     /**
      * \ingroup OpenDocument
      */
-    int loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
+    int loadRowFormat(const KoXmlElement& row, int &rowIndex,
                        OdfLoadingContext& odfContext,
                        QHash<QString, QRegion>& rowStyleRegions,
-                       QHash<QString, QRegion>& cellStyleRegions);
-
-    /**
-     * \ingroup OpenDocument
-     */
-    int loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
-                       OdfLoadingContext& odfContext,
+                       QHash<QString, QRegion>& cellStyleRegions,
                        const IntervalMap<QString>& columnStyles,
                        const Styles& autoStyles);
 

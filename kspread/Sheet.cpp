@@ -122,11 +122,6 @@ public:
         }
         return T();
     }
-    void dump() {
-        for (typename QMap<int, QPair<int, T> >::ConstIterator it = m_data.constBegin(); it != m_data.constEnd(); ++it) {
-            kDebug() << it.value().first << "-" << it.key() << "=" << it.value().second;
-        }   
-    }
 private:
     QMap<int, QPair<int, T> > m_data;
 };
@@ -1444,35 +1439,12 @@ void Sheet::loadColumnNodes(const KoXmlElement& parent,
     }
 }
 
-void Sheet::loadRowNodesStyles(const KoXmlElement& parent,
+void Sheet::loadRowNodes(const KoXmlElement& parent,
                             int& rowIndex,
                             int& maxColumn,
                             OdfLoadingContext& tableContext,
                             QHash<QString, QRegion>& rowStyleRegions,
-                            QHash<QString, QRegion>& cellStyleRegions
-                            )
-{
-    KoXmlNode node = parent.firstChild();
-    while (!node.isNull()) {
-        KoXmlElement elem = node.toElement();
-        if (!elem.isNull() && elem.namespaceURI() == KoXmlNS::table) {
-            if (elem.localName() == "table-row") {
-                int columnMaximal = loadRowFormatStyles(elem, rowIndex, tableContext,
-                                                        rowStyleRegions, cellStyleRegions);
-                // allow the row to define more columns then defined via table-column
-                maxColumn = qMax(maxColumn, columnMaximal);
-            } else if (elem.localName() == "table-row-group") {
-                loadRowNodesStyles(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions);
-            }
-        }
-        node = node.nextSibling();
-    }
-}
-
-void Sheet::loadRowNodesContent(const KoXmlElement& parent,
-                            int& rowIndex,
-                            int& maxColumn,
-                            OdfLoadingContext& tableContext,
+                            QHash<QString, QRegion>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
                             const Styles& autoStyles
                             )
@@ -1482,16 +1454,19 @@ void Sheet::loadRowNodesContent(const KoXmlElement& parent,
         KoXmlElement elem = node.toElement();
         if (!elem.isNull() && elem.namespaceURI() == KoXmlNS::table) {
             if (elem.localName() == "table-row") {
-                int columnMaximal = loadRowFormatContent(elem, rowIndex, tableContext, columnStyles, autoStyles);
+                int columnMaximal = loadRowFormat(elem, rowIndex, tableContext,
+                                                        rowStyleRegions, cellStyleRegions,
+                                                        columnStyles, autoStyles);
                 // allow the row to define more columns then defined via table-column
                 maxColumn = qMax(maxColumn, columnMaximal);
             } else if (elem.localName() == "table-row-group") {
-                loadRowNodesContent(elem, rowIndex, maxColumn, tableContext, columnStyles, autoStyles);
+                loadRowNodes(elem, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
             }
         }
         node = node.nextSibling();
     }
 }
+
 
 bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     OdfLoadingContext& tableContext,
@@ -1674,69 +1649,17 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                 } else if (rowElement.localName() == "table-header-rows") {
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
-                    loadRowNodesStyles(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions);
+                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
                 } else if (rowElement.localName() == "table-row-group") {
-                    loadRowNodesStyles(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions);
+                    loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
                 } else if (rowElement.localName() == "table-row") {
                     kDebug(36003) << " table-row found :index row before" << rowIndex;
-                    int columnMaximal = loadRowFormatStyles(rowElement, rowIndex, tableContext,
-                                  rowStyleRegions, cellStyleRegions);
+                    int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
+                                  rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
                     // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
                     kDebug(36003) << " table-row found :index row after" << rowIndex;
-                }
-            }
-
-            // don't need it anymore
-            KoXml::unload(rowElement);
-        }
-
-        rowNode = rowNode.nextSibling();
-        map()->increaseLoadedRowsCounter();
-    }
-columnStyles.dump();
-    // insert the styles into the storage (column defaults)
-    kDebug(36003) << "Inserting column default cell styles ...";
-    loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
-    // insert the styles into the storage (row defaults)
-    kDebug(36003) << "Inserting row default cell styles ...";
-    loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
-    // insert the styles into the storage
-    kDebug(36003) << "Inserting cell styles ...";
-    loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
-
-    rowIndex = 1;
-    indexCol = 1;
-    rowNode = sheetElement.firstChild();
-    // And secondly also load the actual cell content. Loading cell content requires syle
-    // information to be present, so we need this two phase approach
-    while (!rowNode.isNull() && rowIndex <= KS_rowMax) {
-        kDebug(36003) << " rowIndex :" << rowIndex << " indexCol :" << indexCol;
-        KoXmlElement rowElement = rowNode.toElement();
-        if (!rowElement.isNull()) {
-            // slightly faster
-            KoXml::load(rowElement);
-
-            kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
-            if (rowElement.namespaceURI() == KoXmlNS::table) {
-                if (rowElement.localName() == "table-header-rows") {
-                    // NOTE Handle header rows as ordinary ones
-                    //      as long as they're not supported.
-                    loadRowNodesContent(rowElement, rowIndex, maxColumn, tableContext, columnStyles, autoStyles);
-                } else if (rowElement.localName() == "table-row-group") {
-                    loadRowNodesContent(rowElement, rowIndex, maxColumn, tableContext, columnStyles, autoStyles);
-                } else if (rowElement.localName() == "table-row") {
-                    kDebug(36003) << " table-row found :index row before" << rowIndex;
-                    int columnMaximal = loadRowFormatContent(rowElement, rowIndex, tableContext, columnStyles, autoStyles);
-                    // allow the row to define more columns then defined via table-column
-                    maxColumn = qMax(maxColumn, columnMaximal);
-                    kDebug(36003) << " table-row found :index row after" << rowIndex;
-                } // the evaluation of the elements is done in during data reading so this does not seam
-                  // to have any use, therefore removed
-                else if (rowElement.localName() == "shapes") {
+                } else if (rowElement.localName() == "shapes") {
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
@@ -1762,6 +1685,18 @@ columnStyles.dump();
         map()->increaseLoadedRowsCounter();
     }
 
+    // insert the styles into the storage (column defaults)
+    kDebug(36003) << "Inserting column default cell styles ...";
+    loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
+    // insert the styles into the storage (row defaults)
+    kDebug(36003) << "Inserting row default cell styles ...";
+    loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
+    // insert the styles into the storage
+    kDebug(36003) << "Inserting cell styles ...";
+    loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
+                        QRect(1, 1, maxColumn, rowIndex - 1));
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
@@ -2025,10 +1960,12 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
     }
 }
 
-int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
+int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                           OdfLoadingContext& tableContext,
                           QHash<QString, QRegion>& rowStyleRegions,
-                          QHash<QString, QRegion>& cellStyleRegions)
+                          QHash<QString, QRegion>& cellStyleRegions,
+                          const IntervalMap<QString>& columnStyles,
+                          const Styles& autoStyles)
 {
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
@@ -2056,10 +1993,11 @@ int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
             number = qMin(n, KS_rowMax - rowIndex + 1);
     }
 
+    QString rowCellStyleName;
     if (row.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
-        const QString styleName = row.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
-        if (!styleName.isEmpty()) {
-            rowStyleRegions[styleName] += QRect(1, rowIndex, KS_colMax, number);
+        rowCellStyleName = row.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
+        if (!rowCellStyleName.isEmpty()) {
+            rowStyleRegions[rowCellStyleName] += QRect(1, rowIndex, KS_colMax, number);
         }
     }
 
@@ -2113,7 +2051,7 @@ int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
 
     int columnIndex = 1;
     int columnMaximal = 0;
-    //const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
+    const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
 
     KoXmlElement cellElement;
     forEachElement(cellElement, row) {
@@ -2121,6 +2059,7 @@ int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
             continue;
         if (cellElement.localName() != "table-cell" && cellElement.localName() != "covered-table-cell")
             continue;
+
 
         bool ok = false;
         const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
@@ -2135,47 +2074,8 @@ int Sheet::loadRowFormatStyles(const KoXmlElement& row, int &rowIndex,
         if (!styleName.isEmpty())
             cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
 
-        columnIndex += numberColumns;
-    }
-    rowIndex += number;
-    return columnMaximal;
-}
-
-int Sheet::loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
-                          OdfLoadingContext& tableContext,
-                          const IntervalMap<QString>& columnStyles,
-                          const Styles& autoStyles)
-{
-//    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
-    int number = 1;
-    if (row.hasAttributeNS(KoXmlNS::table, "number-rows-repeated")) {
-        bool ok = true;
-        int n = row.attributeNS(KoXmlNS::table, "number-rows-repeated", QString()).toInt(&ok);
-        if (ok)
-            // Some spreadsheet programs may support more rows than KSpread so
-            // limit the number of repeated rows.
-            // FIXME POSSIBLE DATA LOSS!
-            number = qMin(n, KS_rowMax - rowIndex + 1);
-    }
-
-    QString rowCellStyleName;
-    if (row.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
-        rowCellStyleName = row.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
-    }
-
-
-    int columnIndex = 1;
-    int columnMaximal = 0;
-    const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
-
-    KoXmlElement cellElement;
-    forEachElement(cellElement, row) {
-        if (cellElement.namespaceURI() != KoXmlNS::table)
-            continue;
-        if (cellElement.localName() != "table-cell" && cellElement.localName() != "covered-table-cell")
-            continue;
-
-        QString cellStyleName = cellElement.attributeNS(KoXmlNS::table , "style-name", QString());
+        // figure out exact cell style for loading of cell content
+        QString cellStyleName = styleName;
         if (cellStyleName.isEmpty())
             cellStyleName = rowCellStyleName;
         if (cellStyleName.isEmpty())
@@ -2193,14 +2093,6 @@ int Sheet::loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
 
         Cell cell(this, columnIndex, rowIndex);
         cell.loadOdf(cellElement, tableContext, style);
-
-        bool ok = false;
-        const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
-        // Some spreadsheet programs may support more columns than
-        // KSpread so limit the number of repeated columns.
-        // FIXME POSSIBLE DATA LOSS!
-        const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
-        columnMaximal = qMax(numberColumns, columnMaximal);
 
         if (!cell.comment().isEmpty())
             cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, this), cell.comment());
