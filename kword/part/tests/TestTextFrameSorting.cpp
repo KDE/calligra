@@ -4,6 +4,7 @@
 #include "../frames/KWTextFrameSet.h"
 #include "../frames/KWTextFrame.h"
 #include "../KWDocument.h"
+#include "../frames/KWCopyShape.h"
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
@@ -165,11 +166,38 @@ void TestTextFrameSorting::testSortingById()
     QCOMPARE(tfs.m_frames[2], frame3);
 }
 
+void TestTextFrameSorting::testCopyAfterTextSorting()
+{
+    KWTextFrameSet tfs(0);
+    KWTextFrame * frame1 = createFrame(QPointF(70, 1300), tfs);
+    KWFrame * frame2 = createCopyFrame(QPointF(70, 100), frame1->shape(), tfs);
+    KWTextFrame * frame3 = createFrame(QPointF(70, 2000), tfs);
+
+    tfs.removeFrame(frame1);
+
+    QCOMPARE(tfs.m_frames[0], frame2);
+    QCOMPARE(tfs.m_frames[1], frame3);
+
+    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+
+    QCOMPARE(tfs.m_frames[0], frame3);
+    QCOMPARE(tfs.m_frames[1], frame2);
+}
+
+
 KWTextFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextFrameSet &fs)
 {
     MockShape *shape = new MockShape();
     shape->setUserData(new KoTextShapeData());
     KWTextFrame *frame = new KWTextFrame(shape, &fs);
+    shape->setPosition(position);
+    return frame;
+}
+
+KWFrame * TestTextFrameSorting::createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs)
+{
+    KoShape *shape = new KWCopyShape(orig);
+    KWFrame *frame = new KWFrame(shape, &fs);
     shape->setPosition(position);
     return frame;
 }

@@ -316,7 +316,9 @@ void KWTextFrameSet::sortFrames()
         KWFrame *first = m_frames.first();
         qSort(m_frames.begin(), m_frames.end(), sortTextFrames);
         if (m_frames[0] != first) { // that means it needs to be re-layouted
-            qobject_cast<KoTextShapeData*>(m_frames[0]->shape()->userData())->foul();
+            KoTextShapeData *tsd = qobject_cast<KoTextShapeData*>(m_frames[0]->shape()->userData());
+            if (tsd)
+                tsd->foul();
         }
     }
     m_frameOrderDirty = false;
@@ -327,6 +329,12 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
 {
     const KWTextFrame *f1 = dynamic_cast<const KWTextFrame*>(frame1);
     const KWTextFrame *f2 = dynamic_cast<const KWTextFrame*>(frame2);
+
+    if (!f1 && f2) // copy always come after textframe
+        return false;
+
+    if (f1 && !f2) // copy always come after textframe
+        return true;
 
     if (f1 && f2 && f1->sortingId() >= 0 && f2->sortingId() >= 0) { // copy frames don't have a sortingId
         return f1->sortingId() < f2->sortingId();

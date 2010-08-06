@@ -7,6 +7,8 @@
 
 class KWTextFrame;
 class KWTextFrameSet;
+class KWFrame;
+class KoShape;
 
 class TestTextFrameSorting : public QObject
 {
@@ -21,9 +23,11 @@ private slots:
     void testSortingOnPagespread();
     void testRtlSorting();
     void testSortingById();
+    void testCopyAfterTextSorting();
 
 private:
     KWTextFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
+    KWFrame* createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs);
 };
 
 #endif
