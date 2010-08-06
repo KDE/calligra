@@ -350,6 +350,10 @@ private:
      */
     void openNewDocument(DocumentType);
     /*!
+     *Applies appropiate file extension during saving operation
+     */
+    QString getFileExtension(DocumentType);
+    /*!
      *Function to add formatframe components
      */
     QPushButton *addFormatFrameComponent(const QString &imagepath);

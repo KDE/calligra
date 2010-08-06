@@ -1011,7 +1011,8 @@ void MainWindow::saveFile()
         } else {
             QString ext = KMimeType::extractKnownExtension(m_fileName);
             if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
-                !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
+                !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)||
+                !QString::compare(ext, EXT_ODS, Qt::CaseInsensitive)) {
 
                 if(m_doc->saveNativeFormat(m_fileName)) {
 #ifdef Q_WS_MAEMO_5
@@ -1035,7 +1036,9 @@ void MainWindow::saveFile()
                     msgBox.exec();
 #endif
                 }
-            } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive))  {
+            } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive)||
+                       !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)||
+                       !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive))  {
 #ifdef Q_WS_MAEMO_5
                 QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
                                                    QMaemo5InformationBox::NoTimeout);
@@ -1043,7 +1046,8 @@ void MainWindow::saveFile()
                 msgBox.setText(i18n("File will be saved in ODF"));
                 msgBox.exec();
 #endif
-                QString fileName=QFileDialog::getSaveFileName(0,i18n("Save File"),"/home/user/MyDocs/.odt");
+                QString fileName;
+                fileName = getFileExtension(m_type);
 
                 if (fileName.isEmpty()) {
 #ifdef Q_WS_MAEMO_5
@@ -1057,9 +1061,8 @@ void MainWindow::saveFile()
                 }
                 KUrl newURL;
                 newURL.setPath(fileName);
-                //Since KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-                QString outputFormatString = "application/vnd.oasis.opendocument.text";
-                // qDebug()<<"outputformat string"<<mime->name();
+                KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+                QString outputFormatString = mime->name();
                 m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
 
                 if(m_doc->saveAs(newURL)) {
@@ -1117,19 +1120,14 @@ void MainWindow::saveFileAs()
         } else {
             ext = KMimeType::extractKnownExtension(m_fileName);
         }
-        if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
+        if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)||
+            !QString::compare(ext,EXT_ODP,Qt::CaseInsensitive)||
+            !QString::compare(ext,EXT_ODS,Qt::CaseInsensitive)) {
+
             QString fileName;
-            switch(m_type) {
-            case Text:
-                fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
-                break;
-            case Presentation:
-                fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odp");
-                break;
-            case Spreadsheet:
-                return;
-            }
+            fileName = getFileExtension(m_type);
+            m_fileName = fileName;
+
             if (fileName.isEmpty()) {
 #ifdef Q_WS_MAEMO_5
                 QMaemo5InformationBox::information(0, i18n("File name not specified"),
@@ -1148,7 +1146,7 @@ void MainWindow::saveFileAs()
                 msgBox.setText(i18n("The document has been saved successfully"));
                 msgBox.exec();
 #endif
-                m_fileName=fileName;
+                m_fileName = fileName;
                 m_isDocModified = false;
 
                 if(m_confirmationdialog) {
@@ -1164,7 +1162,9 @@ void MainWindow::saveFileAs()
 #endif
             }
 
-        } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive))  {
+        } else if (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)||
+                   !QString::compare(ext,EXT_XLS,Qt::CaseInsensitive)||
+                   !QString::compare(ext,EXT_PPT,Qt::CaseInsensitive))  {
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
                                                QMaemo5InformationBox::NoTimeout);
@@ -1172,7 +1172,8 @@ void MainWindow::saveFileAs()
             msgBox.setText(i18n("File will be saved in ODF"));
             msgBox.exec();
 #endif
-            QString fileName=QFileDialog::getSaveFileName(0,i18n("Save File"),"/home/user/MyDocs/.odt");
+            QString fileName;
+            fileName = getFileExtension(m_type);
 
             if (fileName.isEmpty()) {
 #ifdef Q_WS_MAEMO_5
@@ -1186,9 +1187,8 @@ void MainWindow::saveFileAs()
             }
             KUrl newURL;
             newURL.setPath(fileName);
-            //At present we can hard code this KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-            QString outputFormatString = "application/vnd.oasis.opendocument.text";
-            // qDebug()<<"outputformat string"<<mime->name();
+            KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+            QString outputFormatString = mime->name();
             m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
 
             if(m_doc->saveAs(newURL)) {
@@ -1199,7 +1199,7 @@ void MainWindow::saveFileAs()
                 msgBox.setText(i18n("The document has been saved successfully"));
                 msgBox.exec();
 #endif
-                m_fileName=fileName;
+                m_fileName = fileName;
                 m_isDocModified = false;
 
                 if(m_confirmationdialog) {
@@ -1214,7 +1214,9 @@ void MainWindow::saveFileAs()
                 msgBox.exec();
 #endif
             }
-        }else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive))  {
+        }else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive)||
+                  !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)||
+                  !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive))  {
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
                                                QMaemo5InformationBox::NoTimeout);
@@ -1222,7 +1224,9 @@ void MainWindow::saveFileAs()
             msgBox.setText(i18n("File will be saved in ODF"));
             msgBox.exec();
 #endif
-            QString fileName=QFileDialog::getSaveFileName(0,i18n("Save File"),"/home/user/MyDocs/.odt");
+            QString fileName;
+            fileName = getFileExtension(m_type);
+            m_fileName = fileName;
 
             if (fileName.isEmpty()) {
 #ifdef Q_WS_MAEMO_5
@@ -1236,9 +1240,8 @@ void MainWindow::saveFileAs()
             }
             KUrl newURL;
             newURL.setPath(m_fileName);
-            //Since KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
-            QString outputFormatString = "application/vnd.oasis.opendocument.text";
-            // qDebug()<<"outputformat string"<<mime->name();
+            KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
+            QString outputFormatString = mime->name();
             m_doc->setOutputMimeType(outputFormatString.toLatin1(), 0);
 
             if(m_doc->saveAs(newURL)) {
@@ -1282,6 +1285,24 @@ void MainWindow::saveFileAs()
 #endif
     }
 }
+
+QString MainWindow::getFileExtension(DocumentType type){
+    QString fileName;
+    switch(type) {
+        case Text:
+            fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
+            break;
+        case Presentation:
+            fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odp");
+            break;
+        case Spreadsheet:
+            fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.ods");
+            break;
+    }
+   return fileName;
+}
+
+
 
 void MainWindow::chooseDocumentType()
 {
