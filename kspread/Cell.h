@@ -353,7 +353,7 @@ public:
      * @param element An OASIS XML element
      * @param tableContext The loading context assoiated with the XML element
      */
-    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext);
+    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Style& style);
 
     /**
      * \ingroup OpenDocument
@@ -588,7 +588,7 @@ protected:
      * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
-    void loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext);
+    void loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Style& style);
 
     /**
      * \ingroup OpenDocument

@@ -1315,10 +1315,10 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
     };
 }
 
-bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
+bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Style& style)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
-    loadOdfCellText(element, tableContext);
+    loadOdfCellText(element, tableContext, style);
 
     //
     // formula
@@ -1399,7 +1399,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
                     currency = Currency(element.attributeNS(KoXmlNS::office, "currency", QString()));
                 }
 
-                if( style().isEmpty() ) {
+                if( style.isEmpty() ) {
                     Style style;
                     style.setCurrency(currency);
                     setStyle(style);
@@ -1612,7 +1612,7 @@ static bool findDrawElements(const KoXmlElement& parent)
     return false;
 }
 
-void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext)
+void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Style& style)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     KoXmlElement textParagraphElement;
@@ -1659,7 +1659,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             // this is because they would currently be loaded twice, once by the KoTextLoader
             // and later properly by the cell itself
 
-            QTextCharFormat format = style().asCharFormat();
+            QTextCharFormat format = style.asCharFormat();
             sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);
 
             KoTextLoader loader(*tableContext.shapeContext);
@@ -1676,9 +1676,9 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
 
     //Enable word wrapping if multiple lines of text have been found.
     if (multipleTextParagraphsFound) {
-        Style style;
-        style.setWrapText(true);
-        setStyle(style);
+        Style newStyle;
+        newStyle.setWrapText(true);
+        setStyle(newStyle);
     }
 }
 

@@ -82,6 +82,7 @@ class Validity;
 class ValidityStorage;
 class ValueStorage;
 class View;
+template<typename T> class IntervalMap;
 
 /**
  * A sheet contains several cells.
@@ -836,13 +837,18 @@ protected:
 
     void loadColumnNodes(const KoXmlElement& parent, int& indexCol,
                             int& maxColumn, KoOdfLoadingContext& odfContext,
-                            QHash<QString, QRegion>& columnStyleRegions);
+                            QHash<QString, QRegion>& columnStyleRegions,
+                            IntervalMap<QString>& columnStyles);
     void loadRowNodesStyles(const KoXmlElement& parent, int& rowIndex,
                             int& maxColumn, OdfLoadingContext& tableContext,
                             QHash<QString, QRegion>& rowStyleRegions,
-                            QHash<QString, QRegion>& cellStyleRegions);
+                            QHash<QString, QRegion>& cellStyleRegions/*,
+                            const IntervalMap<QString>& columnStyles,
+                            const Styles& autoStyles*/);
     void loadRowNodesContent(const KoXmlElement& parent, int& rowIndex,
-                            int& maxColumn, OdfLoadingContext& tableContext);
+                            int& maxColumn, OdfLoadingContext& tableContext,
+                            const IntervalMap<QString>& columnStyles,
+                            const Styles& autoStyles);
 
     /**
      * \ingroup OpenDocument
@@ -856,7 +862,9 @@ protected:
      * \ingroup OpenDocument
      */
     int loadRowFormatContent(const KoXmlElement& row, int &rowIndex,
-                       OdfLoadingContext& odfContext);
+                       OdfLoadingContext& odfContext,
+                       const IntervalMap<QString>& columnStyles,
+                       const Styles& autoStyles);
 
     /**
      * \ingroup OpenDocument
@@ -865,7 +873,8 @@ protected:
      */
     bool loadColumnFormat(const KoXmlElement& row,
                           const KoOdfStylesReader& stylesReader, int & indexCol,
-                          QHash<QString, QRegion>& columnStyleRegions);
+                          QHash<QString, QRegion>& columnStyleRegions,
+                          IntervalMap<QString>& columnStyles);
 
     /**
      * \ingroup OpenDocument
