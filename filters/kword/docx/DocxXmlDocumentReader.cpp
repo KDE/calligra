@@ -1526,7 +1526,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         body = textPBuf.setWriter(body);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
-#if 0
         // MS2007 has a different way of marking drop cap, it divides them to two paragraphs
         // here we apply the status to current paragraph if previous one had dropCap
         if (m_dropCapStatus == DropCapDone) {
@@ -1540,7 +1539,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
             m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
         }
-#endif
     }
 
     while (!atEnd()) {
