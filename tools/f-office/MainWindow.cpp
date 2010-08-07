@@ -188,12 +188,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_no(0),
         m_cancel(0),
         m_message(0),
-        m_doubleClick(false),
         m_newDocOpen(false),
         m_isDocModified(false),
         m_italicCheck(false),
         m_underlineCheck(false),
-        m_fontcount(0),
         m_fontsize(12),
         m_fonttype("Nokia Sans"),
         m_fontweight(25),
@@ -1437,7 +1435,6 @@ void MainWindow::openNewDocument(DocumentType type)
     m_view = m_doc->createView();
 
     if(type == Text) {
-        m_doubleClick = true;
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
         charstyle=new KoCharacterStyle();
@@ -1926,12 +1923,10 @@ void MainWindow::closeDocument()
         delete m_slidingmotiondialog;
         m_slidingmotiondialog = 0;
     }
-    m_doubleClick=false;
     m_isDocModified=false;
     m_newDocOpen=false;
     m_italicCheck=false,
     m_underlineCheck=false,
-    m_fontcount=0,
     m_fontsize=12,
     m_fontweight=25;
     m_fonttype="Nokia Sans";
@@ -2125,7 +2120,6 @@ void MainWindow::openDocument(const QString &fileName)
 
     if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
                           (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)))) {
-        m_doubleClick = true;
         m_ui->actionEdit->setVisible(true);
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
@@ -2244,8 +2238,12 @@ void MainWindow::resourceChanged(int key, const QVariant &value)
             else if (m_currentPage < m_doc->pageCount())
                 m_fsPPTForwardButton->show();
         }
-
-        QString pageNo = i18n("pg%1 - pg%2", QString::number(value.toInt()), QString::number(m_doc->pageCount()));
+        QString pageNo;
+        if(m_type == Spreadsheet){
+            pageNo = i18n("pg%1 - pg%2", QString::number(value.toInt()), QString::number((((Doc*)m_doc)->map())->count()));
+        }
+        else
+            pageNo = i18n("pg%1 - pg%2", QString::number(value.toInt()), QString::number(m_doc->pageCount()));
         m_ui->actionPageNumber->setText(pageNo);
     }
 }
@@ -2355,6 +2353,10 @@ void MainWindow::zoomToPage()
     if (!m_view || !m_ui)
         return;
     m_view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    if(m_type == Presentation)
+        m_ui->actionZoomLevel->setText("48%");
+    else
+        m_ui->actionZoomLevel->setText("29%");
 }
 
 void MainWindow::zoomToPageWidth()
@@ -2362,6 +2364,10 @@ void MainWindow::zoomToPageWidth()
     if (!m_view || !m_ui)
         return;
     m_view->zoomController()->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+    if(m_type == Presentation)
+        m_ui->actionZoomLevel->setText("84%");
+    else
+        m_ui->actionZoomLevel->setText("100%");
 }
 
 /*void MainWindow::prevPage()
@@ -2901,28 +2907,14 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock ){
              m_isDocModified = true;
          }
-         if(ke->key() == Qt::Key_Shift && m_newDocOpen ) {
-             m_fontcount++;
-             if((m_fontcount%2)!=0) {
-                charstyle->setFontCapitalization(QFont::AllUppercase);
-             } else {
-                charstyle->setFontCapitalization(QFont::AllLowercase);
-             }
-             applyCharStyle();
-             m_editor->setStyle(charstyle);
-         }
     }
 
-    if(m_doubleClick) {
-        if(event->type() == QEvent::MouseButtonDblClick) {
-            if (!((m_xcordinate>0) && (m_ycordinate>400))) {
-                KoToolManager::instance()->switchToolRequested(PanTool_ID);
-                m_ui->EditToolBar->hide();
-                m_ui->viewToolBar->show();
-            }
-        }
-    }
-    return false;
+    if(event->type() == QEvent::MouseButtonDblClick) {
+        if(m_ui->actionEdit->isChecked() && m_type!= Spreadsheet)
+            m_editor->setPosition(0,QTextCursor::MoveAnchor);
+
+        return true;
+    }    return false;
     //return QMainWindow::eventFilter(watched, event);
 }
 

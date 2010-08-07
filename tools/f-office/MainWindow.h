@@ -156,7 +156,6 @@ private:
     /*!
      * Font related information for each Character in NewDocuments 
      */
-    int m_fontcount;
     int m_fontsize;
     int m_fontweight;
     QString m_fonttype;
@@ -739,10 +738,6 @@ private:
     QMap<QString, OfficeInterface*> loadedPlugins;
 
     void setShowProgressIndicator(bool visible);
-    /*!
-     * Double click detector
-     */
-    bool m_doubleClick;
     /*!
      * true if new document is open
      */
