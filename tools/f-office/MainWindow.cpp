@@ -1314,7 +1314,6 @@ void MainWindow::chooseDocumentType()
 
     m_document = addNewDocument("Document");
     m_presenter = addNewDocument("Presenter");
-    m_presenter->setDisabled(true);
     m_spreadsheet = addNewDocument("SpreadSheet");
     m_spreadsheet->setDisabled(true);
 
@@ -1326,7 +1325,7 @@ void MainWindow::chooseDocumentType()
     m_docdialog->show();
 
     connect(m_document,SIGNAL(clicked()),this,SLOT(openNewDoc()));
-    //connect(m_presenter,SIGNAL(clicked()),this,SLOT(openNewPresenter()));
+    connect(m_presenter,SIGNAL(clicked()),this,SLOT(openNewPresenter()));
     //connect(m_spreadsheet,SIGNAL(clicked()),this,SLOT(openNewSpreadSheet()));
 }
 
