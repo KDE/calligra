@@ -1573,6 +1573,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             // there might as well be no drop cap
             m_dropCapStatus = NoDropCap;
         }
+        else if (m_dropCapStatus == DropCapDone) {
+            // In case of drop cap, we do not wish there to be a paragraph at
+            // this point, this because two ooxml paragraphs with drop cap
+            // in first, trasnfer to one paragraph in odt with drop cap as style.
+            body = textPBuf.releaseWriter();
+        }
         else {
             body = textPBuf.originalWriter();
             if (m_listFound) {
