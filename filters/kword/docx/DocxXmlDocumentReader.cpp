@@ -1750,7 +1750,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 mainStyles->markStyleForStylesXml(currentTextStyleName);
             }
         }
-        if (m_complexCharStatus == InstrExecute || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
+        if (m_complexCharStatus == ExecuteInstrNow || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             if (m_complexCharType == HyperlinkComplexFieldCharType || m_complexCharType == InternalHyperlinkComplexFieldCharType) {
                 body->startElement("text:a");
                 body->addAttribute("xlink:type", "simple");
@@ -1792,15 +1792,20 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
              else if (m_complexCharType == ReferenceComplexFieldCharType) {
                  m_complexCharType = ReferenceNextComplexFieldCharType;
              }
-             else if (m_complexCharType == HyperlinkComplexFieldCharType) {
-                 body->endElement(); // text:a
-             }
+        }
+        if (m_complexCharStatus == ExecuteInstrNow && m_complexCharType == HyperlinkComplexFieldCharType) {
+            body->endElement(); // text:a
         }
         else if (m_complexCharType == InternalHyperlinkComplexFieldCharType) {
             body->endElement(); // text:a
         //    m_complexCharType = NoComplexFieldCharType;
         }
 
+        // Case where there's hyperlink with read_instrText, we only want to use the link
+        // with the next r element, not this.
+        if (m_complexCharStatus == InstrExecute) {
+            m_complexCharStatus = ExecuteInstrNow;
+        }
         if (m_closeHyperlink) {
             body->endElement(); //either text:bookmark-ref or text:a
             m_closeHyperlink = false;

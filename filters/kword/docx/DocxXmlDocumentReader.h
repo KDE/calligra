@@ -221,7 +221,7 @@ private:
     QString m_complexCharValue;
 
     enum ComplexCharStatus {
-        NoneAllowed, InstrAllowed, InstrExecute
+        NoneAllowed, InstrAllowed, InstrExecute, ExecuteInstrNow
     };
     //! State of fldChar
     ComplexCharStatus m_complexCharStatus;
