@@ -41,6 +41,8 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoOdfReadStore.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
 #include <QApplication>
 #include <qpainter.h>
@@ -180,10 +182,11 @@ bool Part::loadOdf( KoOdfReadStore & odfStore )
 
 bool Part::loadXML( const KoXmlDocument &document, KoStore* )
 {
-    kDebug();
-    QTime dt;
-    dt.start();
-    emit sigProgress( 0 );
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(1, "KPlato::Part::loadXML");
+        updater->setProgress(0);
+    }
 
     QString value;
     KoXmlElement plan = document.documentElement();
@@ -211,7 +214,7 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
             return false;
         }
     }
-    emit sigProgress( 5 );
+    if (updater) updater->setProgress(5);
 /*
 #ifdef KOXML_USE_QDOM
     int numNodes = plan.childNodes().count();
@@ -253,12 +256,8 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
     }
     m_xmlLoader.stopLoad();
-    emit sigProgress( 100 ); // the rest is only processing, not loading
 
-    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
-
-    // do some sanity checking on document.
-    emit sigProgress( -1 );
+    if (updater) updater->setProgress(100); // the rest is only processing, not loading
 
     setModified( false );
     emit changed();

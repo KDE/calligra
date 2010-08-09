@@ -70,6 +70,9 @@
 #include <rdf/KoDocumentRdf.h>
 #endif
 
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+
 // KDE + Qt includes
 #include <klocale.h>
 #include <kstandardaction.h>
@@ -584,6 +587,12 @@ bool KWDocument::loadXML(const KoXmlDocument &doc, KoStore *store)
 
 void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(1, "KWDocument::endOfLoading");
+        updater->setProgress(0);
+    }
+
     // Get the master page name of the first page.
     QString firstPageMasterName;
     if (mainFrameSet()) {
@@ -629,6 +638,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             m_magicCurtain->revealFramesForPage(lastpage.pageNumber(), lastpage.offsetInDocument());
         }
     }
+
+    if (updater) updater->setProgress(50);
 
 #if 0
     // do some sanity checking on document.
@@ -723,7 +734,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         tfs->setAllowLayout(true);
     }
 
-    emit sigProgress(-1);
+    if (updater) updater->setProgress(100);
 
     kDebug(32001) << "KWDocument::endOfLoading done";
 

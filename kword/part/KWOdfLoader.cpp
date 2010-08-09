@@ -41,6 +41,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -67,8 +69,14 @@ KWDocument *KWOdfLoader::document() const
 //1.6: KWDocument::loadOasis
 bool KWOdfLoader::load(KoOdfReadStore &odfStore)
 {
-    emit progressUpdate(0);
     //kDebug(32001) << "========================> KWOdfLoader::load START";
+
+    QPointer<KoUpdater> updater;
+    if (m_document->progressUpdater()) {
+        updater = m_document->progressUpdater()->startSubtask(1,
+                                                           "KWOdfLoader::load");
+        updater->setProgress(0);
+    }
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
@@ -91,6 +99,8 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
             m_document->setErrorMessage(i18n("This is not a word processing document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
         return false;
     }
+
+    updater->setProgress(20);
 
     // TODO check versions and mimetypes etc.
 
@@ -119,6 +129,8 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     KoStyleManager *styleManager = m_document->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     sharedData->loadOdfStyles(sc, styleManager);
+
+    updater->setProgress(40);
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
 
@@ -195,6 +207,8 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         }
     }
 
+    updater->setProgress(60);
+
     KoTextShapeData textShapeData;
     if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
@@ -203,6 +217,9 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         m_document->addFrameSet(mainFs);
         textShapeData.setDocument(mainFs->document(), false);
     }
+
+    updater->setProgress(80);
+
     // Let the TextShape handle loading the body element.
     textShapeData.loadOdf(body, sc, m_document->documentRdfBase());
 
@@ -211,10 +228,11 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 
+    updater->setProgress(90);
+
     loadSettings(odfStore.settingsDoc());
 
-    //kDebug(32001) << "========================> KWOdfLoader::load END";
-    emit progressUpdate(100);
+    updater->setProgress(100);
     return true;
 }
 

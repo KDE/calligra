@@ -71,6 +71,8 @@
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 #include <KoShapeSavingContext.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -472,10 +474,12 @@ void Doc::loadOdfIgnoreList(const KoOasisSettings& settings)
 
 bool Doc::loadOdf(KoOdfReadStore & odfStore)
 {
-    QTime dt;
-    dt.start();
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(1, "KSpread::Doc::loadOdf");
+        updater->setProgress(0);
+    }
 
-    emit sigProgress(0);
     d->spellListIgnoreAll.clear();
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -531,20 +535,19 @@ bool Doc::loadOdf(KoOdfReadStore & odfStore)
           }
     }
 
-    emit sigProgress(-1);
-
-    //display loading time
-    kDebug(36001) << "Loading took" << (float)(dt.elapsed()) / 1000.0 << " seconds";
+    if (updater) updater->setProgress(100);
 
     return true;
 }
 
 bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 {
-    QTime dt;
-    dt.start();
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(1, "KSpread::Doc::loadXML");
+        updater->setProgress(0);
+    }
 
-    emit sigProgress(0);
     d->spellListIgnoreAll.clear();
     // <spreadsheet>
     KoXmlElement spread = doc.documentElement();
@@ -573,7 +576,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
     if (!loc.isNull())
         static_cast<Localization*>(map()->calculationSettings()->locale())->load(loc);
 
-    emit sigProgress(5);
+    if (updater) updater->setProgress(5);
 
     KoXmlElement defaults = spread.namedItem("defaults").toElement();
     if (!defaults.isNull()) {
@@ -603,7 +606,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         }
     }
 
-    emit sigProgress(40);
+    if (updater) updater->setProgress(40);
     // In case of reload (e.g. from konqueror)
     qDeleteAll(map()->sheetList());
     map()->sheetList().clear();
@@ -639,7 +642,7 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         }
     }
 
-    emit sigProgress(85);
+    if (updater) updater->setProgress(85);
 
     KoXmlElement element(spread.firstChild().toElement());
     while (!element.isNull()) {
@@ -655,11 +658,9 @@ bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
         element = element.nextSibling().toElement();
     }
 
-    emit sigProgress(90);
+    if (updater) updater->setProgress(90);
     initConfig();
-    emit sigProgress(-1);
-
-    kDebug(36001) << "Loading took" << (float)(dt.elapsed()) / 1000.0 << " seconds";
+    if (updater) updater->setProgress(100);
 
     return true;
 }

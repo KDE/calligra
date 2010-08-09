@@ -299,7 +299,7 @@ public:
     QStringList visibleSheets() const;
     QStringList hiddenSheets() const;
 
-    void increaseLoadedRowsCounter(int i = 1);
+    int increaseLoadedRowsCounter(int i = 1);
 
     /**
      * \ingroup OpenDocument

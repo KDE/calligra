@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 #include <kcodecs.h>
 #include <kcompletion.h>
 #include <ktemporaryfile.h>
@@ -824,12 +823,13 @@ int Map::count() const
     return d->lstSheets.count();
 }
 
-void Map::increaseLoadedRowsCounter(int number)
+int Map::increaseLoadedRowsCounter(int number)
 {
     d->loadedRowsCounter += number;
     if (d->overallRowCount) {
-        d->doc->emitProgress(100 * d->loadedRowsCounter / d->overallRowCount);
+        return 100 * d->loadedRowsCounter / d->overallRowCount;
     }
+    return -1;
 }
 
 bool Map::isLoading() const

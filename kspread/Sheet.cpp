@@ -60,6 +60,8 @@
 #include <KoStyleManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoParagraphStyle.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
 #include "CellStorage.h"
 #include "Cluster.h"
@@ -1473,6 +1475,14 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     const Styles& autoStyles,
                     const QHash<QString, Conditions>& conditionalStyles)
 {
+
+    QPointer<KoUpdater> updater;
+    if (doc()->progressUpdater()) {
+        updater = doc()->progressUpdater()->startSubtask(1,
+                                                     "KSpread::Sheet::loadOdf");
+        updater->setProgress(0);
+    }
+
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "style-name")) {
         QString stylename = sheetElement.attributeNS(KoXmlNS::table, "style-name", QString());
@@ -1682,7 +1692,9 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
         }
 
         rowNode = rowNode.nextSibling();
-        map()->increaseLoadedRowsCounter();
+
+        int count = map()->increaseLoadedRowsCounter();
+        if (updater && count >= 0) updater->setProgress(count);
     }
 
     // insert the styles into the storage (column defaults)
