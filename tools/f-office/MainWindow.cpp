@@ -187,6 +187,7 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_yes(0),
         m_no(0),
         m_cancel(0),
+        m_firstChar(true),
         m_message(0),
         m_newDocOpen(false),
         m_isDocModified(false),
@@ -1342,7 +1343,7 @@ void MainWindow::templateSelectionDialog()
 
     m_tempselectiondialog = new QDialog(this);
     Q_CHECK_PTR(m_tempselectiondialog);
-    m_tempselectiondialog->setWindowTitle("Select Presentation Template                                   Preview");
+    m_tempselectiondialog->setWindowTitle(i18n("Select Presentation Template                                   Preview"));
 
     m_tempdialoglayout = new QGridLayout;
     Q_CHECK_PTR(m_tempdialoglayout);
@@ -1541,6 +1542,8 @@ void MainWindow::openNewDocument(DocumentType type)
     m_newDocOpen = true;
     m_type = type;
     m_undostack = m_doc->undoStack();
+    m_ui->actionEdit->setChecked(true);
+    m_firstChar=true;
 }
 
 void MainWindow::closeDoc()
@@ -1620,7 +1623,7 @@ void MainWindow::toggleToolBar(bool show)
 void MainWindow::editToolBar(bool edit)
 {
     if (m_newDocOpen) {
-         if (edit) {
+         if (!edit) {
              KoToolManager::instance()->switchToolRequested(PanTool_ID);
              m_ui->EditToolBar->hide();
              m_ui->viewToolBar->show();
@@ -2077,6 +2080,7 @@ void MainWindow::raiseWindow(void)
 void MainWindow::doOpenDocument()
 {
     openDocument(m_fileName);
+    m_ui->actionEdit->setChecked(false);
 }
 
 void MainWindow::openDocument(const QString &fileName)
@@ -2923,11 +2927,16 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             ke->key()!=Qt::Key_Shift && ke->key()!=Qt::Key_Alt &&
             ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock ){
              m_isDocModified = true;
+             if(m_firstChar==true){
+                m_ui->EditToolBar->setFocus();
+                m_controller->setFocus();
+                m_firstChar=false;
+            }
          }
     }
 
-    if(event->type() == QEvent::MouseButtonDblClick) {
-        if(m_ui->actionEdit->isChecked() && m_type!= Spreadsheet && m_type !=Presentation)
+    if(event->type() == QEvent::MouseButtonDblClick && m_type == Text) {
+        if(m_ui->actionEdit->isChecked())
             m_editor->setPosition(0,QTextCursor::MoveAnchor);
 
         return true;

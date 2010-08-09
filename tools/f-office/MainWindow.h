@@ -32,7 +32,7 @@
 #include <styles/KoListStyle.h>
 
 #include "Splash.h"
-#include "previewwindow.h"
+#include "PreviewDialog.h"
 #include "NotesDialog.h"
 #include "SlidingMotionDialog.h"
 
@@ -446,6 +446,10 @@ private:
      * Template Chooser
      */
     void templateSelectionDialog();
+    /*!
+     *
+     */
+    bool m_firstChar;
 
 private:
     // Apply the selected formatting

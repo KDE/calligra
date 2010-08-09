@@ -45,8 +45,8 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 
-#include "flowlayout.h"
-#include "previewwindow.h"
+#include "FlowLayout.h"
+#include "PreviewDialog.h"
 
 PreviewWindow::PreviewWindow(KoDocument *m_doc,KoView *m_view,int m_currentPage,QList <QPixmap> *thumbnailList)
 {

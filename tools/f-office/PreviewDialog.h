@@ -28,7 +28,7 @@
 #include <KoDocument.h>
 #include <QThread>
 
-#include "flowlayout.h"
+#include "FlowLayout.h"
 #include "PreviewButton.h"
 
 class PreviewWindow : public QDialog
