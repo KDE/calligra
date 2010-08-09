@@ -174,7 +174,7 @@ KoView *Part::createViewInstance( QWidget *parent )
     return view;
 }
 
-bool Part::loadOdf( KoOdfReadStore & odfStore )
+bool Part::loadOdf( KoOdfReadStore &odfStore )
 {
     kWarning()<< "OpenDocument not supported, let's try native xml format";
     return loadXML( odfStore.contentDoc(), 0 ); // We have only one format, so try to load that!
@@ -239,7 +239,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            Project * newProject = new Project( m_config );
+            Project *newProject = new Project( m_config );
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
                 if ( newProject->id().isEmpty() ) {
@@ -316,7 +316,7 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *reso
     return document;
 }
 
-bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource )
+bool Part::saveWorkPackageToStream( QIODevice *dev, const Node *node, long id, Resource *resource )
 {
     QDomDocument doc = saveWorkPackageXML( node, id, resource );
     // Save to buffer
@@ -344,7 +344,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     QByteArray mimeType = "application/x-vnd.kde.kplato.work";
     kDebug() <<"MimeType=" << mimeType;
 
-    KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
+    KoStore *store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
 /*    if ( d->m_specialOutputFlag == SaveEncrypted && !d->m_password.isNull( ) ) {
         store->setPassword( d->m_password );
     }*/
@@ -380,7 +380,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     return true;
 }
 
-bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource )
+bool Part::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Resource *resource )
 {
     //kDebug()<<_url;
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -398,7 +398,7 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
         kDebug()<<"TODO: download if url not local";
         return false;
     }
-    KoStore * store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
+    KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
     if ( store->bad() ) {
 //        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1", file );
         kDebug()<<"bad store"<<url.prettyUrl();
@@ -746,7 +746,7 @@ void Part::activate( QWidget *w )
         manager()->setActivePart( this, w );
 }
 
-void Part::openTemplate( const KUrl& url )
+void Part::openTemplate( const KUrl &url )
 {
     //kDebug()<<url;
     // HACK because we can't really reimplemt openTemplate() (private methods)
@@ -801,7 +801,7 @@ bool Part::completeSaving( KoStore *store )
     return true;
 }
 
-bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
+bool Part::loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc)
 {
     //kDebug() << "oldLoadAndParse: Trying to open " << filename;
 

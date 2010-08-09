@@ -128,7 +128,7 @@ private:
     QMap<int, QPair<int, T> > m_data;
 };
 
-static QString createObjectName(const QString& sheetName)
+static QString createObjectName(const QString &sheetName)
 {
     QString objectName;
     for (int i = 0; i < sheetName.count(); ++i) {
@@ -188,7 +188,7 @@ public:
 };
 
 
-Sheet::Sheet(Map* map, const QString& sheetName)
+Sheet::Sheet(Map* map, const QString &sheetName)
         : KoShapeUserData(map)
         , KoShapeControllerBase()
         , d(new Private)
@@ -245,7 +245,7 @@ Sheet::Sheet(Map* map, const QString& sheetName)
             d->workbook->namedAreaManager(), SLOT(remove(const QString&)));
 }
 
-Sheet::Sheet(const Sheet& other)
+Sheet::Sheet(const Sheet &other)
         : KoShapeUserData(other.d->workbook)
         , KoShapeControllerBase()
         , ProtectableObject(other)
@@ -566,7 +566,7 @@ PrintSettings* Sheet::printSettings() const
     return d->print->settings();
 }
 
-void Sheet::setPrintSettings(const PrintSettings& settings)
+void Sheet::setPrintSettings(const PrintSettings &settings)
 {
     d->print->setSettings(settings);
     // Repaint, if page borders are shown and this is the active sheet.
@@ -651,7 +651,7 @@ QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
     return rect;
 }
 
-QRect Sheet::documentToCellCoordinates(const QRectF& area) const
+QRect Sheet::documentToCellCoordinates(const QRectF &area) const
 {
     double width = 0.0;
     int left = 0;
