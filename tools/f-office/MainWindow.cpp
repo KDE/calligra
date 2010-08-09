@@ -2349,8 +2349,11 @@ void MainWindow::zoomIn()
     if (!m_view || !m_ui)
         return;
     KoZoomAction *zAction =  m_view->zoomController()->zoomAction();
-    zAction->zoomIn();
     int factor = zAction->effectiveZoom() * 100;
+    if(factor<199)
+    {
+        zAction->zoomIn();
+    }
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
 }
 
@@ -2359,17 +2362,23 @@ void MainWindow::zoomOut()
     if (!m_view || !m_ui)
         return;
     KoZoomAction *zAction = m_view->zoomController()->zoomAction();
-    zAction->zoomOut();
     int factor = zAction->effectiveZoom() * 100;
+    if(factor>70)
+    {
+        zAction->zoomOut();
+    }
     m_ui->actionZoomLevel->setText(i18n("%1 %", QString::number(factor)));
 }
 
 void MainWindow::zoom()
 {
-    ZoomDialog dlg(this);
-    connect(&dlg, SIGNAL(fitPage()), SLOT(zoomToPage()));
-    connect(&dlg, SIGNAL(fitPageWidth()), SLOT(zoomToPageWidth()));
-    dlg.exec();
+    if(m_type!=Spreadsheet)
+    {
+        ZoomDialog dlg(this);
+        connect(&dlg, SIGNAL(fitPage()), SLOT(zoomToPage()));
+        connect(&dlg, SIGNAL(fitPageWidth()), SLOT(zoomToPageWidth()));
+        dlg.exec();
+    }
 }
 
 void MainWindow::zoomToPage()
