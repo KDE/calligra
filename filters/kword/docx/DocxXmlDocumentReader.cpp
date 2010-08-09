@@ -1775,6 +1775,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->startElement("text:bookmark-ref");
                 body->addAttribute("text:reference-format", "page");
                 body->addAttribute("text:ref-name", m_complexCharValue);
+                m_closeHyperlink = true;
             }
         }
 
