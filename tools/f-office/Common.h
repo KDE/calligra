@@ -74,8 +74,7 @@ const QString NEW_WORDDOC("/usr/share/freoffice-templates/.templates/NewDocument
 /*!
 * Path New Presentation Template
 */
-const QString NEW_PRESENTER("/usr/share/freoffice-templates/.templates/NewPresentation.odp");
-
+const QString NEW_PRESENTER ("/usr/share/freoffice-templates/.presentationtemplates/");
 /*!
 * Path New Spreadsheet Template
 */

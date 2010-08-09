@@ -36,6 +36,11 @@ install(FILES images/48x48/Document.png DESTINATION share/icons/hicolor/48x48/hi
 install(FILES images/48x48/Presenter.png DESTINATION share/icons/hicolor/48x48/hildon)
 install(FILES images/48x48/SpreadSheet.png DESTINATION share/icons/hicolor/48x48/hildon)
 install(FILES templates/NewDocument.odt DESTINATION share/freoffice-templates/.templates)
-install(FILES templates/NewPresentation.odp DESTINATION share/freoffice-templates/.templates)
+install(FILES templates/TextOnly.odp DESTINATION share/freoffice-templates/.presentationtemplates)
+install(FILES templates/TextWithChart.odp DESTINATION share/freoffice-templates/.presentationtemplates)
+install(FILES templates/TextWithHeader.odp DESTINATION share/freoffice-templates/.presentationtemplates)
+install(FILES templates/TextWithImage.odp DESTINATION share/freoffice-templates/.presentationtemplates)
+install(FILES templates/TextWithOutLine.odp DESTINATION share/freoffice-templates/.presentationtemplates)
 install(FILES templates/NewSpread.ods DESTINATION share/freoffice-templates/.templates)
+
 install(FILES OfficeInterface.h DESTINATION include/office)

@@ -62,7 +62,6 @@ class QListWidget;
 class SlidingMotionDialog;
 
 class KUndoStack;
-class KoCharacterStyle;
 class KoTextEditor;
 class PresentationTool;
 class MainWindowAdaptor;
@@ -157,13 +156,6 @@ private:
      * Font related information for each Character in NewDocuments 
      */
     int m_fontsize;
-    int m_fontweight;
-    QString m_fonttype;
-    QBrush m_foregroundbrush;
-    QBrush m_backgroundbrush;
-    QTextCharFormat::VerticalAlignment m_verticalalignment;
-    bool m_italicCheck;
-    bool m_underlineCheck;
     /*!
      * Dialog for fontsize
      */
@@ -205,6 +197,19 @@ private:
     QToolButton * m_presenter;
     QToolButton * m_spreadsheet;
     /*!
+     * Presentation Template chooser dialog
+     */
+    QDialog * m_tempselectiondialog;
+    QGridLayout * m_tempdialoglayout;
+    QListWidget * m_templateWidget;
+    QPushButton * m_go;
+    QPushButton * m_closetemp;
+    QLabel * m_templatepreview;
+    QStringList m_temptitle;
+    QStringList m_templatepath;
+    int m_tempnumber;
+    QString newpresenter;
+    /*!
      * Confirmation dialog for closing new document
      */
     QDialog *m_confirmationdialog;
@@ -245,10 +250,6 @@ private:
      * Pointer to KoCanvasController
      */
     KoCanvasControllerWidget *m_controller;
-    /*!
-     * Pointer to KoCharacterStyle
-     */
-    KoCharacterStyle *charstyle;
     /*!
      * Pointer to KUndoStack
      */
@@ -442,13 +443,9 @@ private:
      */
     void fontStyleFrameDestructor();
     /*!
-     * Function for finding style of character's in NewDocument
+     * Template Chooser
      */
-    void findCharStyle();
-    /*!
-     * Function for applying style to character's in NewDocument
-     */
-    void applyCharStyle();
+    void templateSelectionDialog();
 
 private:
     // Apply the selected formatting
@@ -674,6 +671,18 @@ private slots:
      * Slot to show  slide transition options
      */
     void slideTransitionDialog();
+    /*!
+     * Slot to preview selected templates
+     */
+    void selectedTemplatePreview(int number);
+    /*!
+     * Open selected template
+     */
+    void openSelectedTemplate();
+    /*!
+     * Close Template Selection Dialog
+     */
+    void closeTempSelectionDialog();
     /*!
      * Slot for progress indicator
      */

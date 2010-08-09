@@ -190,11 +190,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_message(0),
         m_newDocOpen(false),
         m_isDocModified(false),
-        m_italicCheck(false),
-        m_underlineCheck(false),
-        m_fontsize(12),
-        m_fonttype("Nokia Sans"),
-        m_fontweight(25),
         m_xcordinate(0),
         m_ycordinate(0),
         m_pptTool(0),
@@ -209,7 +204,14 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         notesDialog(0),
         m_slidingmotiondialog(0),
         m_slideNotesButton(0),
-        m_slideNotesIcon(VIEW_NOTES_PIXMAP)
+        m_slideNotesIcon(VIEW_NOTES_PIXMAP),
+        m_tempnumber(0),
+        m_tempselectiondialog(0),
+        m_tempdialoglayout(0),
+        m_templateWidget(0),
+        m_go(0),
+        m_closetemp(0),
+        m_templatepreview(0)
 {
     init();
 }
@@ -586,8 +588,6 @@ bool MainWindow::setSubScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignBottom);
         }
-        if(m_newDocOpen)
-            m_verticalalignment = editor->charFormat().verticalAlignment();
         m_isDocModified = true;
         return true;
     }
@@ -609,8 +609,6 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignTop);
         }
-        if(m_newDocOpen)
-            m_verticalalignment = editor->charFormat().verticalAlignment();
         m_isDocModified = true;
         return true;
     }
@@ -633,8 +631,6 @@ void MainWindow::selectFontSize(int size)
 bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
     if (editor) {
         editor->setFontSize(size);
-        if(m_newDocOpen)
-            m_fontsize = size;
         m_isDocModified = true;
         return true;
     }
@@ -657,8 +653,6 @@ void MainWindow::selectFontType()
 bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
     if (editor) {
         editor->setFontFamily(font);
-        if(m_newDocOpen)
-            m_fonttype = font;
         m_isDocModified = true;
         return true;
     }
@@ -681,8 +675,6 @@ void MainWindow::selectTextColor()
 bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
     if (editor) {
         editor->setTextColor(color);
-        if(m_newDocOpen)
-            m_foregroundbrush = QBrush(color);
         m_isDocModified = true;
         return true;
     }
@@ -705,8 +697,6 @@ void MainWindow::selectTextBackGroundColor()
 bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
     if (editor) {
         editor->setTextBackgroundColor(color);
-        if(m_newDocOpen)
-            m_backgroundbrush = QBrush(color);
         m_isDocModified = true;
         return true;
     }
@@ -733,8 +723,6 @@ bool MainWindow::setBold(KoTextEditor *editor) {
         } else {
             editor->bold(true);
         }
-        if(m_newDocOpen)
-            m_fontweight = m_editor->charFormat().fontWeight();
         m_isDocModified = true;
         return true;
     }
@@ -761,8 +749,6 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
         } else {
             editor->italic(true);
         }
-        if(m_newDocOpen)
-            m_italicCheck = m_editor->charFormat().fontItalic();
         m_isDocModified = true;
         return true;
     }
@@ -789,8 +775,6 @@ bool MainWindow::setUnderline(KoTextEditor *editor) {
         } else {
             editor->underline(true);
         }
-        if(m_newDocOpen)
-            m_underlineCheck=m_editor->charFormat().property(KoCharacterStyle::UnderlineType).toBool();
         m_isDocModified = true;
         return true;
     }
@@ -1336,10 +1320,8 @@ void MainWindow::openNewDoc()
 
 void MainWindow::openNewPresenter()
 {
-    DocumentType type = Presentation;
     m_docdialog->close();
-    openNewDocument(type);
-
+    templateSelectionDialog();
 }
 
 void MainWindow::openNewSpreadSheet()
@@ -1347,6 +1329,87 @@ void MainWindow::openNewSpreadSheet()
    DocumentType type = Spreadsheet;
    m_docdialog->close();
    openNewDocument(type);
+}
+
+void MainWindow::templateSelectionDialog()
+{
+    if(m_tempselectiondialog){
+        m_tempselectiondialog->show();
+        return;
+    }
+    const QDir temppath(NEW_PRESENTER);
+    m_temptitle <<temppath.entryList(QDir::Files);
+
+    m_tempselectiondialog = new QDialog(this);
+    Q_CHECK_PTR(m_tempselectiondialog);
+    m_tempselectiondialog->setWindowTitle("Select Presentation Template                                   Preview");
+
+    m_tempdialoglayout = new QGridLayout;
+    Q_CHECK_PTR(m_tempdialoglayout);
+    m_tempdialoglayout->setVerticalSpacing(0);
+    m_tempdialoglayout->setHorizontalSpacing(0);
+
+    m_templateWidget = new QListWidget(this);
+    Q_CHECK_PTR(m_templateWidget);
+    QStringList tempNames;
+    tempNames<<m_temptitle;
+    tempNames.replaceInStrings("_"," ");
+    tempNames.replaceInStrings(".odp","");
+    m_templateWidget->addItems(tempNames);
+    m_templateWidget->setMinimumSize(500,200);
+
+    m_go = new QPushButton("Load",this);
+    Q_CHECK_PTR(m_go);
+
+    m_closetemp = new QPushButton("Cancel",this);
+    Q_CHECK_PTR(m_closetemp);
+
+    m_templatepreview = new QLabel(this);
+    Q_CHECK_PTR(m_templatepreview);
+
+    m_tempdialoglayout->addWidget(m_templateWidget,0,0,1,2);
+    m_tempdialoglayout->addWidget(m_templatepreview,0,2);
+    m_tempdialoglayout->addWidget(m_go,1,0);
+    m_tempdialoglayout->addWidget(m_closetemp,1,1);
+
+    m_tempselectiondialog->setLayout(m_tempdialoglayout);
+    m_tempselectiondialog->show();
+
+    connect(m_templateWidget,SIGNAL(currentRowChanged(int)),SLOT(selectedTemplatePreview(int)));
+    connect(m_go,SIGNAL(clicked()),SLOT(openSelectedTemplate()));
+    connect(m_closetemp,SIGNAL(clicked()),SLOT(closeTempSelectionDialog()));
+}
+
+void MainWindow::selectedTemplatePreview(int number) {
+    QString path = NEW_PRESENTER+m_temptitle.at(number);
+    KoStore::Backend backend = KoStore::Auto;
+    KoStore * store = KoStore::createStore(path, KoStore::Read, "", backend);
+    if(store->open("/Thumbnails/thumbnail.png")) {
+        QByteArray content=store->device()->readAll();
+        QPixmap thumbnail;
+        thumbnail.loadFromData(content);
+        store->close();
+        m_templatepreview->setPixmap(thumbnail);
+    }
+    m_tempnumber=number;
+}
+
+void MainWindow::openSelectedTemplate(){
+    newpresenter = NEW_PRESENTER+m_temptitle.at(m_tempnumber);
+    m_tempselectiondialog->accept();
+    DocumentType type = Presentation;
+    openNewDocument(type);
+    if(storeButtonPreview!=0) {
+        disconnect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+        delete storeButtonPreview;
+    }
+    storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
+    connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+}
+
+void MainWindow::closeTempSelectionDialog() {
+    if(m_tempselectiondialog)
+        m_tempselectiondialog->hide();
 }
 
 QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
@@ -1393,7 +1456,7 @@ void MainWindow::openNewDocument(DocumentType type)
         mimetype = "application/vnd.oasis.opendocument.text";
         break;
     case Presentation:
-        newurl.setPath(NEW_PRESENTER);
+        newurl.setPath(newpresenter);
         mimetype = "application/vnd.oasis.opendocument.presentation-template";
         break;
     case Spreadsheet:
@@ -1403,8 +1466,9 @@ void MainWindow::openNewDocument(DocumentType type)
     }
     if (m_doc) {
         QStringList args;
-        if(type==Text)
+        if(type == Text)
             args <<""<<"Text";
+
         QProcess::startDetached(FREOFFICE_APPLICATION_PATH,args);
         return;
     }
@@ -1432,17 +1496,11 @@ void MainWindow::openNewDocument(DocumentType type)
 
     m_doc->setReadWrite(true);
     m_doc->setAutoSave(0);
-    m_view = m_doc->createView();
 
+    m_view = m_doc->createView();
     if(type == Text) {
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
-        charstyle=new KoCharacterStyle();
-        charstyle->setFontCapitalization(QFont::AllLowercase);
-        charstyle->setFontPointSize(m_fontsize);
-        charstyle->setFontWeight(m_fontweight);
-        charstyle->setFontFamily("Nokia Sans");
-        m_editor->setStyle(charstyle);
     }
 
     QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
@@ -1455,9 +1513,7 @@ void MainWindow::openNewDocument(DocumentType type)
         setShowProgressIndicator(false);
         return;
     }
-
     setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"),"NewDocument"));
-
     m_controller->setProperty("FingerScrollable", true);
     setCentralWidget(m_controller);
     QTimer::singleShot(250, this, SLOT(updateUI()));
@@ -1479,13 +1535,12 @@ void MainWindow::openNewDocument(DocumentType type)
         m_splash->finish(m_controller);
         m_splash = 0;
     }
-
     m_ui->actionEdit->setVisible(true);
     m_ui->EditToolBar->show();
     m_fileName = "";
     m_newDocOpen = true;
     m_type = type;
-    m_doc->undoStack();
+    m_undostack = m_doc->undoStack();
 }
 
 void MainWindow::closeDoc()
@@ -1925,11 +1980,6 @@ void MainWindow::closeDocument()
     }
     m_isDocModified=false;
     m_newDocOpen=false;
-    m_italicCheck=false,
-    m_underlineCheck=false,
-    m_fontsize=12,
-    m_fontweight=25;
-    m_fonttype="Nokia Sans";
     viewNumber++;
 
     m_ui->actionMathOp->setVisible(false);
@@ -2245,36 +2295,6 @@ void MainWindow::resourceChanged(int key, const QVariant &value)
         else
             pageNo = i18n("pg%1 - pg%2", QString::number(value.toInt()), QString::number(m_doc->pageCount()));
         m_ui->actionPageNumber->setText(pageNo);
-    }
-}
-
-void MainWindow::findCharStyle()
-{
-    m_fontsize = m_editor->charFormat().font().pointSize();
-    m_fonttype = m_editor->charFormat().fontFamily();
-    m_foregroundbrush = m_editor->charFormat().foreground();
-    m_backgroundbrush = m_editor->charFormat().background();
-    m_verticalalignment = m_editor->charFormat().verticalAlignment();
-    m_italicCheck = m_editor->charFormat().fontItalic();
-    m_underlineCheck = m_editor->charFormat().property(KoCharacterStyle::UnderlineType).toBool();
-    m_fontweight = m_editor->charFormat().fontWeight();
-}
-
-void MainWindow::applyCharStyle()
-{
-    charstyle->setFontPointSize(m_fontsize);
-    charstyle->setFontFamily(m_fonttype);
-    charstyle->setForeground (m_foregroundbrush);
-    charstyle->setBackground(m_backgroundbrush);
-    charstyle->setVerticalAlignment(m_verticalalignment);
-    charstyle->setFontWeight(m_fontweight);
-    charstyle->setFontItalic(m_italicCheck);
-    if(m_underlineCheck) {
-        charstyle->setUnderlineStyle(KoCharacterStyle::SolidLine);
-        charstyle->setUnderlineType(KoCharacterStyle::SingleLine);
-    } else {
-        charstyle->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
-        charstyle->setUnderlineType(KoCharacterStyle::NoLineType);
     }
 }
 
@@ -2894,9 +2914,6 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
                     m_fontstyleframe->hide();
             }
         }
-        if(m_editor&&m_newDocOpen){
-            findCharStyle();
-        }
     }
 
     if(m_doc && m_editor && event && event->type() == 7 ) {
@@ -2910,7 +2927,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     }
 
     if(event->type() == QEvent::MouseButtonDblClick) {
-        if(m_ui->actionEdit->isChecked() && m_type!= Spreadsheet)
+        if(m_ui->actionEdit->isChecked() && m_type!= Spreadsheet && m_type !=Presentation)
             m_editor->setPosition(0,QTextCursor::MoveAnchor);
 
         return true;
