@@ -781,6 +781,9 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     kDebug(30513) << "create new Paragraph";
     m_paragraph = new Paragraph(m_mainStyles, inStylesDotXml, isHeading, m_document->writingHeader(), outlineLevel);
 
+    //provide the background color information
+    m_paragraph->setBgColor(m_document->currentBgColor());
+
     //if ( m_bInParagraph )
     //    paragraphEnd();
     //m_bInParagraph = true;

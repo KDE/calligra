@@ -996,7 +996,7 @@ bool BRC::write(OLEStreamWriter *stream, bool preservePos) const {
 void BRC::clear() {
     dptLineWidth=0;
     brcType=0;
-    cv=0;
+    cv=cvAuto;
     dptSpace=0;
     fShadow=0;
     fFrame=0;
@@ -3239,7 +3239,7 @@ void CHP::clear() {
         xstDispFldRMark[_i]=0;
     shd.clear();
     brc.clear();
-    cv=0;
+    cv=cvAuto;
     fTNY=0;
     fTNYCompress=0;
 }

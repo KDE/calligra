@@ -44,9 +44,14 @@ class Style;
 
 namespace Word97 {
 
-   /**
-    * Helper function to convert ico color codes to 24bit rgb values
-    */
+    /**
+     * The default value for a COLORREF required in TAP and PAP.
+     */
+    const U32 cvAuto = 0xff000000;
+
+    /**
+     * Helper function to convert ico color codes to 24bit rgb values
+     */
     U32 icoToRGB(U16 ico);
 
 /**
@@ -844,7 +849,8 @@ struct WV2_EXPORT BRC {
     // Data
 
     /**
-     *  24-bit border color
+     * A COLORREF value that specifies the color of the corresponding border.
+     * The default color is cvAuto.
      */
     U32 cv;
 
@@ -2846,7 +2852,8 @@ struct CHP : public Shared {
     S16 hpsPos;
 
     /**
-     * foreground color, color of the text
+     * A COLORREF value that specifies the color of the text.  The default text
+     * color is cvAuto.
      */
     U32 cv;
 

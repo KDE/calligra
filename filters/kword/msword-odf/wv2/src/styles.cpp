@@ -138,6 +138,9 @@ bool STD::read( U16 baseSize, U16 totalSize, OLEStreamReader* stream, bool prese
     shifterU16 >>= 4;
     istdNext = shifterU16;
     bchUpe = stream->readU16();
+#ifdef WV2_DEBUG_STYLESHEET
+    wvlog << "cbStd: " << totalSize << "bchUpe: " << bchUpe << endl;
+#endif
 
     // Skip the end of the Word97::STD in older documents with baseSize <= 8
     if ( baseSize > 8 ) {
@@ -208,7 +211,9 @@ bool STD::read( U16 baseSize, U16 totalSize, OLEStreamReader* stream, bool prese
 #endif
         }
     }
-
+#ifdef WV2_DEBUG_STYLESHEET
+    wvlog << "curr. position: " << stream->tell() << endl;
+#endif
     if ( preservePos )
         stream->pop();
     return true;
@@ -677,6 +682,9 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
     wvlog << "StyleSheet::StyleSheet(): fcStshf=" << fcStshf << " lcbStshf=" << lcbStshf
           << " cbStshi=" << cbStshi << endl;
 #endif
+
+    //NOTE: STSHI definition in MS-DOC and Microsoft Word 97 (aka Version 8)
+    //documentation differs a bit, not that bad actually
 
     // First read the STSHI
     if ( cbStshi == Word95::STSHI::sizeOf ) {

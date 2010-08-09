@@ -320,7 +320,7 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, currentBgColor());
             Paragraph::applyParagraphProperties(style->paragraphProperties(),
                                                 &userStyle, parentStyle, false, 0);
 
@@ -347,7 +347,7 @@ void Document::processStyles()
             }
 
             // Process the character and paragraph properties.
-            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle);
+            Paragraph::applyCharacterProperties(&style->chp(), &userStyle, parentStyle, currentBgColor());
 
             //add style to main collection, using the name that it had in the .doc
             QString actualName = m_mainStyles->insert(userStyle, name, KoGenStyles::DontAddNumberToName);
@@ -950,11 +950,17 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     DrawStyle ds = m_graphicsHandler->getDrawingStyle();
     // TODO: use ds.fillType to enable fill efects for document background
 
-    // When more complete background color implementation will be added to filter,
+    // When more complete background-color implementation will be added to filter,
     // PptToOdp::toQColor helper function can be used instead of this conversion
     MSO::OfficeArtCOLORREF clr = ds.fillColor();
-    QColor color(clr.red,clr.green,clr.blue);
-    pageLayoutStyle->addProperty("fo:background-color", color.name());
+    QColor color(clr.red, clr.green, clr.blue);
+    QString tmp = color.name();
+    pageLayoutStyle->addProperty("fo:background-color", tmp);
+
+    //update the background-color information if required
+    if (tmp != currentBgColor()) {
+        updateBgColor(tmp);
+    }
 
     //set the minimum height of header/footer to the full margin minus margin above header
     //problem with footer is that it is not possible to say how big the footer is.

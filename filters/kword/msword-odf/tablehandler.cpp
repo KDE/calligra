@@ -194,6 +194,8 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     //table style
     KoGenStyle tableStyle(KoGenStyle::TableAutoStyle, "table");
 
+    //TODO: process the border color information <table:border-color>
+
     //in case a header or footer is processed, save the style into styles.xml
     if (document()->writingHeader()) {
         tableStyle.setAutoStyleInStylesDotXml(true);
@@ -620,17 +622,20 @@ void KWordTableHandler::tableCellStart()
             //get the color from the shading pattern
             uint grayColor = Conversion::shadingPatternToColor(shd.ipat);
             color.append(QString::number(grayColor | 0xff000000, 16).right(6).toUpper());
-            cellStyle.addProperty("fo:background-color", color);
         }
         //ipatSolid or ipatnil means that no pattern is applied, but only color
         //The case of neither color nor pattern is tested above by the shdAutoOrNill
         else if (shd.ipat == 0x01 || shd.ipat == 0x00) {
             color.append(QString::number(shd.cvBack | 0xff000000, 16).right(6).toUpper());
-            cellStyle.addProperty("fo:background-color", color);
         }
         else {
-            kDebug(30513) << "Warning: Unsupported shading pattern";
+            kDebug(30513) << "Warning: Unsupported shading pattern, using current background-color";
+            color = document()->currentBgColor();
         }
+        cellStyle.addProperty("fo:background-color", color);
+
+        //add the current background-color to stack
+        document()->addBgColor(color);
     }
 
     //text direction
@@ -713,6 +718,9 @@ void KWordTableHandler::tableCellEnd()
         writer->endElement();
     }
     m_colSpan = 1;
+
+    //remove the current backgroud-color from stack
+    document()->rmBgColor();
 }
 
 

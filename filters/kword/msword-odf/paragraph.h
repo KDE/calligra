@@ -69,6 +69,8 @@ public:
     int  strings() const;
     QString string(int index) const;
 
+    void setCombinedCharacters(bool isCombined);
+
     // Static functions for parsing wvWare properties and applying
     // them onto a KoGenStyle.
     static void applyParagraphProperties(const wvWare::ParagraphProperties& properties,
@@ -76,9 +78,19 @@ public:
                                          bool setDefaultAlign, Paragraph *paragraph);
     static void applyCharacterProperties(const wvWare::Word97::CHP* chp,
                                          KoGenStyle* style, const wvWare::Style* parentStyle,
+                                         QString bgColor,
                                          bool suppressFontSize=false, bool combineCharacters=false);
 
-    void setCombinedCharacters(bool isCombined);
+    /**
+     * Set the actual background-color to val.
+     */
+    static void setBgColor(QString val) { m_bgColor = val; }
+
+    /**
+     * @return the name of a color contrasting to the background color of the
+     * provided name.
+     */
+    static QString contrastFontColor(QString name);
 
     /**
      * A special purpose method, which creates a KoGenStyle for a <text:span>
@@ -123,6 +135,9 @@ private:
     bool m_inHeaderFooter;
     bool m_containsPageNumberField;
     bool m_combinedCharacters;            // is true when the next characters are combined
-}; //end class Paragraph
 
+    //background-color of the current paragraph or the parent element
+    static QString m_bgColor;
+
+}; //end class Paragraph
 #endif //PARAGRAPH_H

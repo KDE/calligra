@@ -124,8 +124,29 @@ public:
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
 
     /**
-     * Return the item from m_headersMask corresponding with the actually
-     * processed section.  Return false if the Header document doesn't exist.
+     * Add element val to the backgroud-color stack.
+     */
+    void addBgColor(const QString val) { m_bgColors.push(val); }
+
+    /**
+     * Remove the last item from the backgroud-color stack.
+     */
+    void rmBgColor(void) { m_bgColors.pop(); }
+
+    /**
+     * Update the last item of the background-color stack.
+     */
+    void updateBgColor(const QString val) { m_bgColors.pop(); m_bgColors.push(val); }
+
+    /**
+     * @return the current background-color.
+     */
+    QString currentBgColor(void) { return m_bgColors.top(); }
+
+    /**
+     * Checks if the header/footer content of the current section differs from
+     * the previous section's header/footer.  @return TRUE - different content;
+     * FALSE - no difference or the Header document doesn't exist.
      */
     bool headersChanged(void) const;
 
@@ -195,7 +216,6 @@ private:
     KoXmlWriter* m_metaWriter;      //for writing to meta.xml
     KoXmlWriter* m_headerWriter;    //for header/footer writing in styles.xml
 
-    //    unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     int m_headerCount; //to have a unique name for element we're putting into an masterPageStyle
     bool m_writingHeader; //flag for headers/footers, where we write the actual text to styles.xml
     bool m_evenOpen;  //processing an even header/footer
@@ -224,6 +244,10 @@ private:
     LEInputStream* m_table_stream;
     LEInputStream* m_wdocument_stream;
     POLE::Storage* m_storage; // pointer to the pole storage
+
+    //A stack for backgroud-colors, which represets a background color context
+    //for automatic colors.
+    QStack<QString> m_bgColors;
 };
 
 #endif // DOCUMENT_H

@@ -25,6 +25,9 @@
 
 #include <kdebug.h>
 
+//define the static attribute
+QString Paragraph::m_bgColor = "";
+
 Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeading, bool inHeaderFooter, int outlineLevel)
         : m_paragraphProperties(0),
         m_paragraphProperties2(0),
@@ -132,7 +135,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
             if (!fontName.isEmpty()) {
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
-        applyCharacterProperties(chp, textStyle, msTextStyle, suppresFontSize, m_combinedCharacters);
+            applyCharacterProperties(chp, textStyle, msTextStyle, m_bgColor, suppresFontSize, m_combinedCharacters);
         }
     } else {
         // Default Paragraph Font, which is handled differently
@@ -148,7 +151,7 @@ void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word
                 textStyle->addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
             }
         }
-        applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
+        applyCharacterProperties(chp, textStyle, m_paragraphStyle, m_bgColor, suppresFontSize, m_combinedCharacters);
     }
 
     //add text style to list
@@ -501,14 +504,21 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             style->addProperty("style:writing-mode", "lr-tb", KoGenStyle::ParagraphType);
     }
 
-    if (!refPap ||                                                  // if there is no parent style OR
-        refPap->shd.cvBack != pap.shd.cvBack ||                     // the parent and child background color don't match OR
-        (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) ) {   // parent color was invalid, childs color is valid
-        if (!pap.shd.shdAutoOrNill) {                               // is the color valid? (don't compare to black - 0xff000000 !!!)
-            style->addProperty(QString("fo:background-color"), '#' + QString::number(pap.shd.cvBack | 0xff000000, 16).right(6).toUpper());
+    // if there is no parent style OR the parent and child background color
+    // don't match OR parent color was invalid, childs color is valid
+    if (!refPap || refPap->shd.cvBack != pap.shd.cvBack ||
+        (refPap->shd.shdAutoOrNill && !pap.shd.shdAutoOrNill) )
+    {
+        QString color;
+        // is the color valid? (don't compare to black - 0xff000000 !!!)
+        if (!pap.shd.shdAutoOrNill) {
+            color = '#' + QString::number(pap.shd.cvBack | 0xff000000, 16).right(6).toUpper();
+            //update the background-color information
+            setBgColor(color);
         } else {
-            style->addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
+            color = "transparent";
         }
+        style->addProperty("fo:background-color", color, KoGenStyle::ParagraphType);
     }
 
     //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
@@ -699,7 +709,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
     }
 } //end applyParagraphProperties
 
-void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, bool suppressFontSize, bool combineCharacters)
+void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenStyle* style, const wvWare::Style* parentStyle, QString bgColor, bool suppressFontSize, bool combineCharacters)
 {
     //if we have a named style, set its CHP as the refChp
     const wvWare::Word97::CHP* refChp;
@@ -710,8 +720,15 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //ico = color of text, but this has been replaced by cv
-    if (!refChp || refChp->cv != chp->cv) {
-        style->addProperty(QString("fo:color"), '#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper(), KoGenStyle::TextType);
+    if (!refChp || (refChp->cv != chp->cv) || (chp->cv == wvWare::Word97::cvAuto)) {
+        QString color;
+        //use the color context to set the proper font color
+        if (chp->cv == wvWare::Word97::cvAuto) {
+            color = contrastFontColor(bgColor);
+        } else {
+            color = QString('#' + QString::number(chp->cv | 0xff000000, 16).right(6).toUpper());
+        }
+        style->addProperty(QString("fo:color"), color, KoGenStyle::TextType);
     }
 
     //hps = font size in half points
@@ -965,10 +982,27 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     if (m_paragraphProperties->pap().dcs.lines > 1) {
         suppresFontSize = true;
     }
-    applyCharacterProperties(chp, textStyle, m_paragraphStyle, suppresFontSize, m_combinedCharacters);
+    applyCharacterProperties(chp, textStyle, m_paragraphStyle, m_bgColor, suppresFontSize, m_combinedCharacters);
 
     QString textStyleName('T');
     textStyleName = m_mainStyles->insert(*textStyle, textStyleName);
 
     return textStyleName;
+}
+
+
+QString Paragraph::contrastFontColor(QString name)
+{
+    QColor color(name);
+    int d = 0;
+
+    // counting the perceptive luminance - human eye favors green color...
+    double a = 1 - (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
+
+    if (a < 0.5) {
+	d = 0; // bright colors - black font
+    } else {
+	d = 255; // dark colors - white font
+    }
+    return  QColor(d, d, d).name();
 }

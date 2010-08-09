@@ -179,8 +179,8 @@ private:
 /**
  * This class represents one single style.
  */
-// It would maybe be worth to optimize the construction a bit, like creating
-// the PAP and the CHP on copying from the base style, and not before (TODO)
+// TODO: It would maybe be worth to optimize the construction a bit, like creating
+// the PAP and the CHP on copying from the base style, and not before
 class WV2_EXPORT Style
 {
 public:
