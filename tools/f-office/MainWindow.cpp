@@ -2157,7 +2157,7 @@ void MainWindow::openDocument(const QString &fileName)
     }
     m_ui->actionMathOp->setVisible(false);
     m_ui->actionFormat->setVisible(false);
-    if (m_type == Spreadsheet) {        
+    if (m_type == Spreadsheet) {
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
         m_focelltool = new FoCellTool(((View*)m_view)->selection()->canvas());
@@ -2982,10 +2982,12 @@ void MainWindow::menuClicked(QAction* action)
     }
 
     const QString activeText = action->text();
-    closeDocument();
     OfficeInterface *nextPlugin = loadedPlugins[activeText];
     nextPlugin->setDocument(m_doc);
-    setCentralWidget(nextPlugin->view());
+    QWidget *pluginView = nextPlugin->view();
+    pluginView->setParent(this);
+    pluginView->setWindowFlags(Qt::Dialog);
+    pluginView->show();
 }
 
 void MainWindow::loadScrollAndQuit()
