@@ -21,8 +21,8 @@
 
 #include <KoPACanvas.h>
 
-KPrPresentationToolEventForwarder::KPrPresentationToolEventForwarder(KoPACanvas *canvas)
-:QWidget(canvas)
+KPrPresentationToolEventForwarder::KPrPresentationToolEventForwarder(KoPACanvasBase *canvas)
+:QWidget(canvas->canvasWidget())
 {
 }
 

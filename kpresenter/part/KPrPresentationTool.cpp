@@ -54,11 +54,11 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation &viewMode )
     QDBusConnection::sessionBus().registerObject("/kpresenter/PresentationTools", this);
 
     // tool box
-    m_frame = new QFrame( m_viewMode.canvas() );
+    m_frame = new QFrame( m_viewMode.canvas()->canvasWidget() );
 
     QVBoxLayout *frameLayout = new QVBoxLayout();
 
-    m_presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
+    m_presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas()->canvasWidget());
     frameLayout->addWidget( m_presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
     m_frame->setLayout( frameLayout );
     m_frame->show();
@@ -254,7 +254,7 @@ bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
     if ( event->type() == QEvent::MouseMove ) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>( event );
         QWidget *source = static_cast<QWidget*>( obj );
-        QPoint pos = source->mapFrom( m_viewMode.canvas(), mouseEvent->pos() );
+        QPoint pos = source->mapFrom( m_viewMode.canvas()->canvasWidget(), mouseEvent->pos() );
 
         QSize buttonSize = m_presentationToolWidget->size() + QSize( 20, 20 );
         QRect geometry = QRect( 0, m_frame->height() - buttonSize.height(), buttonSize.width(), buttonSize.height() );

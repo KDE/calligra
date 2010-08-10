@@ -29,8 +29,8 @@
 #include "KPrPresentationBlackWidget.h"
 
 KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool * tool )
-: KPrPresentationStrategyBase( tool ) 
-{    
+: KPrPresentationStrategyBase( tool )
+{
     m_widget = new KPrPresentationBlackWidget( canvas() );
     // TODO
     QString str("kpresenter");
@@ -51,7 +51,7 @@ KPrPresentationBlackStrategy::KPrPresentationBlackStrategy( KPrPresentationTool 
 
 KPrPresentationBlackStrategy::~KPrPresentationBlackStrategy()
 {
-    setToolWidgetParent( canvas() );
+    setToolWidgetParent( canvas()->canvasWidget() );
     QApplication::restoreOverrideCursor();
 }
 

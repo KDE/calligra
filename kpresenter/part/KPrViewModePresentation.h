@@ -38,10 +38,10 @@ class KPrViewModePresentation : public KoPAViewMode
     Q_OBJECT
 
 public:
-    KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
+    KPrViewModePresentation( KoPAViewBase * view, KoPACanvasBase * m_canvas );
     ~KPrViewModePresentation();
 
-    KoViewConverter * viewConverter( KoPACanvas * canvas );
+    KoViewConverter * viewConverter( KoPACanvasBase * canvas );
 
     void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
     void tabletEvent( QTabletEvent *event, const QPointF &point );
@@ -159,6 +159,7 @@ protected:
     KPrAnimationDirector * m_animationDirector;
     KPrAnimationDirector * m_pvAnimationDirector;
     KoPACanvas * m_presenterViewCanvas;
+    KoPACanvas * m_baseCanvas;
     KPrPresenterViewWidget * m_presenterViewWidget;
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
     KPrView *m_view;

@@ -37,7 +37,7 @@
 
 #include "KPrPresentationDrawWidget.h"
 
-KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas)
+KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvasBase * canvas)
 : KPrPresentationToolEventForwarder(canvas)
 , m_draw( false )
 , m_penSize( 10 )
@@ -46,7 +46,7 @@ KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas)
     setFocusPolicy( Qt::StrongFocus );
     setMouseTracking( true );
 
-    resize( canvas->size() );
+    resize( canvas->canvasWidget()->size() );
 }
 
 KPrPresentationDrawWidget::~KPrPresentationDrawWidget()

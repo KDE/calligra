@@ -37,7 +37,7 @@ class KPRESENTER_EXPORT KPrViewModePreviewPageEffect : public KoPAViewMode
 
     Q_OBJECT
 public:
-    KPrViewModePreviewPageEffect( KoPAView * view, KoPACanvas * m_canvas );
+    KPrViewModePreviewPageEffect( KoPAViewBase * view, KoPACanvasBase * m_canvas );
     ~KPrViewModePreviewPageEffect();
 
     void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
@@ -70,7 +70,7 @@ public slots:
     /**
      * @brief Activate the saved view mode
      *
-     * This ends the presentation mode. The view mode that was active before the 
+     * This ends the presentation mode. The view mode that was active before the
      * presentation will be restored.
      */
     void activateSavedViewMode();

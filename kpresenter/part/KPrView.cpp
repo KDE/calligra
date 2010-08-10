@@ -101,7 +101,7 @@ KPrView::~KPrView()
     delete m_notesMode;
 }
 
-KoViewConverter * KPrView::viewConverter( KoPACanvas * canvas )
+KoViewConverter * KPrView::viewConverter( KoPACanvasBase * canvas )
 {
     return viewMode()->viewConverter( canvas );
 }

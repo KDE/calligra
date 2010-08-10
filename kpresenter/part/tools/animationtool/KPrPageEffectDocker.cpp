@@ -214,13 +214,13 @@ KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactor
     return factory->createPageEffect( properties );
 }
 
-void KPrPageEffectDocker::setView( KoPAView* view )
+void KPrPageEffectDocker::setView( KoPAViewBase* view )
 {
     Q_ASSERT( view );
     m_view = view;
-    connect( view, SIGNAL( activePageChanged() ),
+    connect( view->proxyObject, SIGNAL( activePageChanged() ),
              this, SLOT( slotActivePageChanged() ) );
-    connect( view, SIGNAL( destroyed( QObject* ) ),
+    connect( view->proxyObject, SIGNAL( destroyed( QObject* ) ),
              this, SLOT( cleanup ( QObject* ) ) );
 
 
@@ -248,7 +248,7 @@ void KPrPageEffectDocker::setEffectPreview()
 
 void KPrPageEffectDocker::cleanup( QObject* object )
 {
-    if(object != m_view)
+    if(object != m_view->proxyObject)
         return;
 
     m_view = 0;

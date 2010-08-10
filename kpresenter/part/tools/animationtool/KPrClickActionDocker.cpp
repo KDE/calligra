@@ -119,7 +119,7 @@ void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
     selectionChanged();
 }
 
-void KPrClickActionDocker::setView(KoPAView  *view )
+void KPrClickActionDocker::setView(KoPAViewBase  *view )
 {
     m_view = view;
     if (m_view->kopaDocument()->resourceManager()->hasResource(KPresenter::SoundCollection)) {

@@ -42,7 +42,7 @@ public:
     explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
 
-    virtual KoViewConverter * viewConverter( KoPACanvas * canvas);
+    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas);
 
     /**
      * Get the document object the view was initialised with

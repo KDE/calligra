@@ -44,7 +44,7 @@
 #include "KPrNotes.h"
 #include "KPrPage.h"
 
-KPrViewModeNotes::KPrViewModeNotes(KoPAView *view, KoPACanvas *canvas)
+KPrViewModeNotes::KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode( view, canvas )
 {
 }
@@ -55,6 +55,7 @@ KPrViewModeNotes::~KPrViewModeNotes()
 
 void KPrViewModeNotes::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
 {
+#if 0
 #ifdef NDEBUG
     Q_UNUSED(canvas);
 #endif
@@ -69,6 +70,7 @@ void KPrViewModeNotes::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
     KoViewConverter *converter = m_view->viewConverter( m_canvas );
     m_canvas->shapeManager()->paint(painter, *converter, false);
     m_toolProxy->paint(painter, *converter);
+#endif
 }
 
 void KPrViewModeNotes::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -180,7 +182,7 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     m_canvas->setDocumentOrigin( QPointF( 0, 0 ) );
     m_view->zoomController()->setPageSize(size);
     m_view->zoomController()->setDocumentSize(size);
-    m_canvas->update();
+    m_canvas->repaint();
 
     m_canvas->shapeManager()->setShapes( layer->shapes() );
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());

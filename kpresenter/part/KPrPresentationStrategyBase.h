@@ -24,7 +24,7 @@
 class QWidget;
 class QKeyEvent;
 class KPrPresentationToolEventForwarder;
-class KoPACanvas;
+class KoPACanvasBase;
 class KPrPresentationTool;
 
 class KPrPresentationStrategyBase
@@ -44,7 +44,7 @@ public:
 protected:
     void setToolWidgetParent( QWidget * widget );
     void activateDefaultStrategy();
-    KoPACanvas * canvas();
+    KoPACanvasBase * canvas();
 
     KPrPresentationTool *m_tool;
     KPrPresentationToolEventForwarder *m_widget;

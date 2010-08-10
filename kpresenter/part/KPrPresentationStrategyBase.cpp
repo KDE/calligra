@@ -41,7 +41,7 @@ void KPrPresentationStrategyBase::setToolWidgetParent( QWidget * widget )
     return m_tool->m_presentationToolWidget->setParent( widget );
 }
 
-KoPACanvas * KPrPresentationStrategyBase::canvas()
+KoPACanvasBase * KPrPresentationStrategyBase::canvas()
 {
     return m_tool->m_viewMode.canvas();
 }

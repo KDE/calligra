@@ -27,9 +27,9 @@
 #include <QColor>
 #include <QPainter>
 
-KPrPresentationHighlightWidget::KPrPresentationHighlightWidget( KoPACanvas * canvas )
+KPrPresentationHighlightWidget::KPrPresentationHighlightWidget( KoPACanvasBase * canvas )
 : KPrPresentationToolEventForwarder(canvas)
-, m_size( canvas->size() )
+, m_size( canvas->canvasWidget()->size() )
 {
     // The focus and the track for have the mouse position every time
     setFocusPolicy( Qt::StrongFocus );

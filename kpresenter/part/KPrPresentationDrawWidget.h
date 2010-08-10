@@ -43,7 +43,7 @@ class KPrPresentationDrawWidget : public KPrPresentationToolEventForwarder
     Q_OBJECT
 
 public :
-    KPrPresentationDrawWidget( KoPACanvas * canvas );
+    KPrPresentationDrawWidget( KoPACanvasBase * canvas );
     ~KPrPresentationDrawWidget();
 
     /** Draw on the Presentation */

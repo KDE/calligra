@@ -25,9 +25,9 @@
 #include <QPainter>
 #include <QRect>
 
-KPrPresentationBlackWidget::KPrPresentationBlackWidget( KoPACanvas * canvas )
+KPrPresentationBlackWidget::KPrPresentationBlackWidget( KoPACanvasBase * canvas )
 : KPrPresentationToolEventForwarder(canvas)
-, m_size( canvas->size() )
+, m_size( canvas->canvasWidget()->size() )
 {
     // Size of the canvas is saved because it's used in the paintEvent
     resize( m_size );

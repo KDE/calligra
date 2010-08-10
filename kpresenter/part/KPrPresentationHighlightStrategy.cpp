@@ -36,9 +36,10 @@ KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentat
     m_widget->show();
     m_widget->installEventFilter( m_tool );
 }
+
 KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
 {
-    setToolWidgetParent( canvas() );
+    setToolWidgetParent( canvas()->canvasWidget() );
 }
 
 bool KPrPresentationHighlightStrategy::keyPressEvent( QKeyEvent * event )

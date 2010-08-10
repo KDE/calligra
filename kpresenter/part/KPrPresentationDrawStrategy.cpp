@@ -53,7 +53,7 @@ KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * 
 
 KPrPresentationDrawStrategy::~KPrPresentationDrawStrategy()
 {
-    setToolWidgetParent( canvas() );
+    setToolWidgetParent( canvas()->canvasWidget() );
     QApplication::restoreOverrideCursor();
 }
 

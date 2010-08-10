@@ -41,7 +41,7 @@
 #include "KPrPresenterViewWidget.h"
 #include "KPrEndOfSlideShowPage.h"
 
-KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * canvas )
+KPrViewModePresentation::KPrViewModePresentation( KoPAViewBase * view, KoPACanvasBase * canvas )
 : KoPAViewMode( view, canvas )
 , m_savedParent( 0 )
 , m_tool( new KPrPresentationTool( *this ) )
@@ -52,6 +52,7 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_endOfSlideShowPage( 0 )
 , m_view( static_cast<KPrView *>(view) )
 {
+    m_baseCanvas = dynamic_cast<KoPACanvas*>(canvas);
 }
 
 KPrViewModePresentation::~KPrViewModePresentation()
@@ -60,9 +61,9 @@ KPrViewModePresentation::~KPrViewModePresentation()
     delete m_tool;
 }
 
-KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvas * canvas )
+KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvasBase * canvas )
 {
-    if ( m_animationDirector && m_canvas == canvas ) {
+    if ( m_baseCanvas && m_animationDirector && m_baseCanvas == canvas ) {
         return m_animationDirector->viewConverter();
     }
     else if ( m_pvAnimationDirector && m_presenterViewCanvas == canvas ) {
@@ -75,7 +76,7 @@ KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvas * canvas )
 
 void KPrViewModePresentation::paintEvent( KoPACanvas * canvas,  QPaintEvent* event )
 {
-    if ( m_canvas == canvas && m_animationDirector ) {
+    if ( m_baseCanvas && m_baseCanvas == canvas && m_animationDirector ) {
         m_animationDirector->paintEvent( event );
     } else if ( m_presenterViewCanvas == canvas && m_pvAnimationDirector ) {
         m_pvAnimationDirector->paintEvent( event );
@@ -141,9 +142,11 @@ void KPrViewModePresentation::closeEvent( QCloseEvent * event )
 
 void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 {
+    if (!m_baseCanvas) return;
+
     m_savedViewMode = previousViewMode;               // store the previous view mode
-    m_savedParent = m_canvas->parentWidget();
-    m_canvas->setParent( ( QWidget* )0, Qt::Window ); // set parent to 0 and
+    m_savedParent = m_baseCanvas->parentWidget();
+    m_baseCanvas->setParent( ( QWidget* )0, Qt::Window ); // set parent to 0 and
 
     QDesktopWidget desktop;
 
@@ -158,22 +161,22 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );
 
-    m_canvas->setParent(desktop.screen(presentationscreen), Qt::Window); // detach widget to the presentation screen
-    m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // make it show full screen
+    m_baseCanvas->setParent(desktop.screen(presentationscreen), Qt::Window); // detach widget to the presentation screen
+    m_baseCanvas->setWindowState( m_baseCanvas->windowState() | Qt::WindowFullScreen ); // make it show full screen
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
-    // the animation director needs to be set before m_canvas->move is called as this might try to call
+    // the animation director needs to be set before m_baseCanvas->move is called as this might try to call
     // viewConverter.
-    m_animationDirector = new KPrAnimationDirector( m_view, m_canvas, pages, m_view->activePage() );
+    m_animationDirector = new KPrAnimationDirector( m_view, m_baseCanvas, pages, m_view->activePage() );
     // move and resize now as otherwise it is not set when we call activate on the tool.
-    m_canvas->move( presentationRect.topLeft() );
-    m_canvas->resize( presentationRect.size() );
+    m_baseCanvas->move( presentationRect.topLeft() );
+    m_baseCanvas->resize( presentationRect.size() );
     // show and setFocus needs to be done after move and resize as otherwise the move and resize have no effect
-    m_canvas->show();
-    m_canvas->setFocus();
+    m_baseCanvas->show();
+    m_baseCanvas->setFocus();
 
-    KCursor::setAutoHideCursor( m_canvas, true );
+    KCursor::setAutoHideCursor( m_baseCanvas, true );
 
     if ( presenterViewEnabled ) {
 
@@ -221,12 +224,14 @@ void KPrViewModePresentation::deactivate()
     }
     m_tool->deactivate();
 
-    m_canvas->setParent( m_savedParent, Qt::Widget );
-    m_canvas->setFocus();
-    m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
-    m_canvas->show();
-    KCursor::setAutoHideCursor( m_canvas, false );
-    m_canvas->setMouseTracking( true );
+    if (!m_baseCanvas) return;
+
+    m_baseCanvas->setParent( m_savedParent, Qt::Widget );
+    m_baseCanvas->setFocus();
+    m_baseCanvas->setWindowState( m_baseCanvas->windowState() & ~Qt::WindowFullScreen ); // reset
+    m_baseCanvas->show();
+    KCursor::setAutoHideCursor( m_baseCanvas, false );
+    m_baseCanvas->setMouseTracking( true );
     m_view->setActivePage( page );
 
     // only delete after the new page has been set

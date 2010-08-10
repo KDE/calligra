@@ -41,7 +41,7 @@
 #include "pageeffects/KPrPageEffect.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 
-KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect( KoPAView * view, KoPACanvas * canvas )
+KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect( KoPAViewBase * view, KoPACanvasBase * canvas )
 : KoPAViewMode( view, canvas )
 , m_savedViewMode(0)
 , m_pageEffect(0)
@@ -60,6 +60,7 @@ KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect()
 
 void KPrViewModePreviewPageEffect::paintEvent( KoPACanvas * canvas,  QPaintEvent* event )
 {
+/*
     Q_UNUSED(event);
     QPainter p(canvas);
     QRect framerect = canvas->rect();
@@ -67,6 +68,7 @@ void KPrViewModePreviewPageEffect::paintEvent( KoPACanvas * canvas,  QPaintEvent
     if(m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
         m_pageEffectRunner->paint(p);
     }
+*/
 }
 
 
@@ -129,7 +131,7 @@ void KPrViewModePreviewPageEffect::activate( KoPAViewMode * previousViewMode )
     m_savedViewMode = previousViewMode;               // store the previous view mode
 
     // the update of the canvas is needed so that the old page gets drawn fully before the effect starts
-    canvas()->update();
+    canvas()->repaint();
     m_timeLine.setDuration( m_pageEffect->duration() );
     m_timeLine.setCurrentTime( 0 );
     m_timeLine.start();
@@ -173,7 +175,7 @@ void KPrViewModePreviewPageEffect::setPageEffect( KPrPageEffect* pageEffect, KPr
         updatePixmaps();
 
         if(m_pageEffect) {
-            m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, canvas(), m_pageEffect );
+            m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, canvas()->canvasWidget(), m_pageEffect );
         }
     }
 }
@@ -190,7 +192,7 @@ void KPrViewModePreviewPageEffect::updatePixmaps()
     if(!m_page)
         return;
 
-    QSize size = canvas()->size(); // TODO wrong this should be page/document size
+    QSize size = canvas()->canvasWidget()->size(); // TODO wrong this should be page/document size
 
     m_newPage = m_page->thumbnail(size);
 

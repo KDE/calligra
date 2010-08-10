@@ -22,14 +22,14 @@
 
 #include <QWidget>
 
-class KoPACanvas;
+class KoPACanvasBase;
 
 class KPrPresentationToolEventForwarder : public QWidget
 {
     Q_OBJECT
 
 public:
-    KPrPresentationToolEventForwarder(KoPACanvas *canvas);
+    KPrPresentationToolEventForwarder(KoPACanvasBase *canvas);
     ~KPrPresentationToolEventForwarder();
 
     void receiveMousePressEvent(QMouseEvent *event);

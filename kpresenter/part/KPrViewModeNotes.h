@@ -30,7 +30,7 @@ class KoPAPageBase;
 class KPrViewModeNotes : public KoPAViewMode
 {
 public:
-    KPrViewModeNotes(KoPAView *view, KoPACanvas *canvas);
+    KPrViewModeNotes(KoPAViewBase *view, KoPACanvasBase *canvas);
     ~KPrViewModeNotes();
 
     void paintEvent( KoPACanvas * canvas, QPaintEvent* event );

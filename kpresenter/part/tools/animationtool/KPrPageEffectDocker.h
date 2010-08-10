@@ -30,7 +30,7 @@ class QTimer;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrPageEffectFactory;
-class KoPAView;
+class KoPAViewBase;
 class KPrViewModePreviewPageEffect;
 
 /**
@@ -43,7 +43,7 @@ class KPrPageEffectDocker : public QWidget
 public:
     explicit KPrPageEffectDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
-    void setView( KoPAView* view );
+    void setView( KoPAViewBase* view );
 
 public slots:
     void slotActivePageChanged();
@@ -63,7 +63,7 @@ protected slots:
     void setEffectPreview();
 
 private:
-    KoPAView* m_view;
+    KoPAViewBase* m_view;
     QComboBox* m_effectCombo;
     QComboBox* m_subTypeCombo;
     QDoubleSpinBox* m_durationSpinBox;
