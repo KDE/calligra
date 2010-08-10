@@ -32,6 +32,7 @@ KWPageBackground::~KWPageBackground()
 
 void KWPageBackground::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    return;
     if (background()) {
         applyConversion(painter, converter);
         QPainterPath p;
