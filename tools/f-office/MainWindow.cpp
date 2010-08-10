@@ -1660,6 +1660,7 @@ void MainWindow::toggleToolBar(bool show)
         m_search->setFocus();
         m_search->selectAll();
     } else {
+        m_doc->setReadWrite(true);
         m_search->clearFocus();
         m_ui->SearchToolBar->hide();
         m_ui->viewToolBar->show();
@@ -2632,6 +2633,13 @@ void MainWindow::startSearch()
         return;
 
     QString searchString = m_search->text();
+    if(m_search->text()==""){
+        KoCanvasBase *canvas = m_controller->canvas();
+        KoSelection *selection = canvas->shapeManager()->selection();
+        selection->deselectAll();
+        m_ui->actionSearchResult->setText(i18n("%1 of %2", 0, 0));
+        return;
+    }
 
     KoCanvasBase *canvas = m_controller->canvas();
     Q_CHECK_PTR(canvas);

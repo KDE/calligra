@@ -137,7 +137,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Search.png</normaloff>:/images/48x48/Edittoolbaricons/Search.png</iconset>
    </property>
    <property name="text">
-    <string>ActionSearch</string>
+    <string/>
    </property>
   </action>
   <action name="actionPrevPage">
@@ -146,7 +146,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Previous.png</normaloff>:/images/48x48/Edittoolbaricons/Previous.png</iconset>
    </property>
    <property name="text">
-    <string>PreviousPage</string>
+    <string/>
    </property>
    <property name="autoRepeat">
     <bool>true</bool>
@@ -161,7 +161,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Next.png</normaloff>:/images/48x48/Edittoolbaricons/Next.png</iconset>
    </property>
    <property name="text">
-    <string>NextPage</string>
+    <string/>
    </property>
   </action>
   <action name="actionZoomIn">
@@ -170,7 +170,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/ZoomIn.png</normaloff>:/images/48x48/Edittoolbaricons/ZoomIn.png</iconset>
    </property>
    <property name="text">
-    <string>ZoomIn</string>
+    <string/>
    </property>
   </action>
   <action name="actionZoomOut">
@@ -179,7 +179,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/ZoomOut.png</normaloff>:/images/48x48/Edittoolbaricons/ZoomOut.png</iconset>
    </property>
    <property name="text">
-    <string>ZoomOut</string>
+    <string/>
    </property>
   </action>
   <action name="actionFullScreen">
@@ -323,10 +323,10 @@
      <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_back.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_back.png</iconset>
    </property>
    <property name="text">
-    <string>PrevWord</string>
+    <string/>
    </property>
    <property name="iconText">
-    <string>PrevWord</string>
+    <string/>
    </property>
   </action>
   <action name="actionNextWord">
@@ -335,7 +335,7 @@
      <normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_forward.png</normaloff>../../../../../../../../../../usr/share/icons/hicolor/48x48/hildon/general_forward.png</iconset>
    </property>
    <property name="text">
-    <string>NextWord</string>
+    <string/>
    </property>
   </action>
   <action name="actionSearchOption">
@@ -346,7 +346,10 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>searchOption</string>
+    <string/>
+   </property>
+   <property name="iconText">
+    <string/>
    </property>
    <property name="visible">
     <bool>false</bool>
@@ -364,7 +367,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/EditMode.png</normaloff>:/images/48x48/Edittoolbaricons/EditMode.png</iconset>
    </property>
    <property name="text">
-    <string>Edit</string>
+    <string/>
    </property>
   </action>
   <action name="actionFormat">
@@ -376,7 +379,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Format.png</normaloff>:/images/48x48/Edittoolbaricons/Format.png</iconset>
    </property>
    <property name="text">
-    <string>Format</string>
+    <string/>
    </property>
    <property name="visible">
     <bool>true</bool>
@@ -388,7 +391,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/FontStyle.png</normaloff>:/images/48x48/Edittoolbaricons/FontStyle.png</iconset>
    </property>
    <property name="text">
-    <string>FontStyle</string>
+    <string/>
    </property>
   </action>
   <action name="actionCopy">
@@ -397,7 +400,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Copy.png</normaloff>:/images/48x48/Edittoolbaricons/Copy.png</iconset>
    </property>
    <property name="text">
-    <string>Copy</string>
+    <string/>
    </property>
   </action>
   <action name="actionPaste">
@@ -406,7 +409,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Paste.png</normaloff>:/images/48x48/Edittoolbaricons/Paste.png</iconset>
    </property>
    <property name="text">
-    <string>Paste</string>
+    <string/>
    </property>
   </action>
   <action name="actionCut">
@@ -415,7 +418,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Cut.png</normaloff>:/images/48x48/Edittoolbaricons/Cut.png</iconset>
    </property>
    <property name="text">
-    <string>Cut</string>
+    <string/>
    </property>
   </action>
   <action name="actionUndo">
@@ -424,7 +427,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Undo.png</normaloff>:/images/48x48/Edittoolbaricons/Undo.png</iconset>
    </property>
    <property name="text">
-    <string>undo</string>
+    <string/>
    </property>
   </action>
   <action name="actionRedo">
@@ -433,7 +436,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Redo.png</normaloff>:/images/48x48/Edittoolbaricons/Redo.png</iconset>
    </property>
    <property name="text">
-    <string>redo</string>
+    <string/>
    </property>
   </action>
   <action name="actionCollaborate">
@@ -451,7 +454,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/SlidingMotion.png</normaloff>:/images/48x48/Edittoolbaricons/SlidingMotion.png</iconset>
    </property>
    <property name="text">
-    <string>slidingMotion</string>
+    <string/>
    </property>
   </action>
   <action name="actionMathOp">
@@ -460,7 +463,7 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Math.png</normaloff>:/images/48x48/Edittoolbaricons/Math.png</iconset>
    </property>
    <property name="text">
-    <string>MathOp</string>
+    <string/>
    </property>
   </action>
  </widget>
