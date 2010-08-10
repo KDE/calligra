@@ -30,6 +30,7 @@
 #include <KoDocument.h>
 #include <KWView.h>
 #include <styles/KoListStyle.h>
+#include <KoPAView.h>
 
 #include "Splash.h"
 #include "PreviewDialog.h"
