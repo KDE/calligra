@@ -719,8 +719,11 @@ void KWordTableHandler::tableCellEnd()
     }
     m_colSpan = 1;
 
-    //remove the current backgroud-color from stack
-    document()->rmBgColor();
+    //check if a cell backgroud-color was provided and remove it from stack
+    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+    if (!shd.shdAutoOrNill) {
+        document()->rmBgColor();
+    }
 }
 
 
