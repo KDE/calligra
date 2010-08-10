@@ -68,7 +68,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (!hasFrameOn(fs, pageNumber)) {
         KoShape *shape = new KWPageBackground();
         shape->setSize(QSizeF(page.width(), page.height()));
-        new KWFrame(shape, fs);
+        KWFrame *f = new KWFrame(shape, fs);
+        f->setTextRunAround(KWord::RunThrough);
     }
 
     // create headers & footers
