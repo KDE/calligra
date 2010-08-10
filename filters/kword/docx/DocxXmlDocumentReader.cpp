@@ -2418,6 +2418,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
     }
 
+    TRY_READ_ATTR(firstLine)
+    const qreal firstInd = qreal(TWIP_TO_POINT(firstLine.toDouble(&ok)));
+    if (ok) {
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    }
+
     TRY_READ_ATTR(right)
     const int rightInd = qreal(TWIP_TO_POINT(right.toDouble(&ok)));
     if (ok) {
