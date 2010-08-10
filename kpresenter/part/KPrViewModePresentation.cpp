@@ -52,6 +52,7 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAViewBase * view, KoPACanva
 , m_endOfSlideShowPage( 0 )
 , m_view( static_cast<KPrView *>(view) )
 {
+    // TODO: make this viewmode work with non-QWidget-based canvases as well
     m_baseCanvas = dynamic_cast<KoPACanvas*>(canvas);
 }
 
