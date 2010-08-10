@@ -30,12 +30,15 @@
 #include <KoDocument.h>
 #include <KoPADocument.h>
 
+class QToolButton;
+class QScrollArea;
+
 class NotesDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    NotesDialog(KoDocument *m_doc,int viewNumber,QWidget *parent = 0);
+    NotesDialog(KoDocument *m_doc,int viewNumber,QList <QPixmap> thumbnailList,QWidget *parent = 0);
 
 public:
         QGridLayout *gridLayout;
@@ -58,6 +61,12 @@ public:
         int currentPage;
         KoDocument *m_doc;
         int viewNumber;
+        QList <QPixmap> thumbnailList;
+        QScrollArea *scrollArea;
+        QWidget *scrollAreaWidgetContents;
+        QVBoxLayout *verticalLayout;
+        QList <QToolButton *> previewButtonList;
+        QLabel *currentSlideNumber;
 public slots:
         /*!
           * functions which gets and shows the notes for a perticular page number
@@ -71,11 +80,16 @@ public slots:
          * slot which handles the click of the previous side button
          */
         void nextButtonClicked();
+        void previewClicked();
 signals:
         /*!
           * signal emitted when slide is changes which is caught in the mainwindow to update the change in slide number
           */
         void moveSlide(bool flag);
+        /*!
+         * This signal is emitted whenever the thumbnail is clicked
+         */
+         void gotoPage(int page);
 };
 
 #endif // NOTESDIALOG_H

@@ -23,12 +23,16 @@
 #include <QDBusReply>
 #include <QProcess>
 #include <QWidget>
+#include <QToolButton>
+#include <QScrollArea>
+
 #include <KoPAPageBase.h>
 #include<unistd.h>
 
-NotesDialog::NotesDialog(KoDocument *m_doc,int viewNumber,QWidget *parent)
+NotesDialog::NotesDialog(KoDocument *m_doc,int viewNumber,QList <QPixmap> thumbnailList,QWidget *parent)
     : QDialog(parent)
 {
+    this->thumbnailList<<thumbnailList;
     this->viewNumber=viewNumber;
         this->m_doc=m_doc;
         this->resize(486, 330);
@@ -58,10 +62,40 @@ NotesDialog::NotesDialog(KoDocument *m_doc,int viewNumber,QWidget *parent)
                                      border-radius: 5px;");
 
 
-        gridLayout->addWidget(pageNotesTextEdit,0,0,4,8);
-        gridLayout->addWidget(slidePreview,0,8,2,4);
-        gridLayout->addWidget(pushPrev,3,8,1,2);
-        gridLayout->addWidget(pushNext,3,10,1,2);
+        gridLayout->addWidget(pageNotesTextEdit,0,0,4,10);
+
+        scrollArea = new QScrollArea(this);
+        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 20,10));
+
+        verticalLayout = new QVBoxLayout(scrollAreaWidgetContents);
+
+        scrollArea->setWidget(scrollAreaWidgetContents);
+
+        gridLayout->addWidget(slidePreview,0,11,1,1);
+        currentSlideNumber=new QLabel();//("            Slide ");
+        gridLayout->addWidget(currentSlideNumber,1,11,1,1);
+        gridLayout->addWidget(scrollArea,2,11,2,2);
+        for(int i=0;i<thumbnailList.count();i++)
+        {
+            QToolButton *button=new QToolButton();
+            previewButtonList.append(button);
+            button->setIcon(QIcon(thumbnailList.at(i).scaled(160,120)));
+            button->setIconSize(QSize(160,120));
+            verticalLayout->addWidget(button);
+            button->setMinimumHeight(160);
+            button->setMaximumHeight(120);
+            button->setMinimumWidth(160);
+            button->setMaximumWidth(120);
+            connect(button,SIGNAL(clicked()),this,SLOT(previewClicked()));
+        }
+        slidePreview->setPixmap(thumbnailList.at(0).scaled(10,10));
+
+        gridLayout->addWidget(pushPrev,3,11,1,2);
+        gridLayout->addWidget(pushNext,3,12,1,2);
 
         this->setLayout(gridLayout);
 
@@ -70,6 +104,7 @@ NotesDialog::NotesDialog(KoDocument *m_doc,int viewNumber,QWidget *parent)
         connect(pushNext,SIGNAL(clicked()),this,SLOT(nextButtonClicked()));
         connect(pushPrev,SIGNAL(clicked()),this,SLOT(preButtonClicked()));
         pageNotesTextEdit->setReadOnly(true);
+        this->resize(620,820);
 }
 
 void NotesDialog::showNotesDialog(int page)
@@ -78,11 +113,8 @@ void NotesDialog::showNotesDialog(int page)
         return;
 
     this->currentPage=page-1;
-    qDebug()<<"current page="<<currentPage;
-    KoPADocument* padoc = qobject_cast<KoPADocument*>(m_doc);
-    KoPAPageBase* papage = padoc->pageByIndex(currentPage, false);
 
-    slidePreview->setPixmap(papage->thumbnail().scaled(220,150));
+    slidePreview->setPixmap(thumbnailList.at(currentPage).scaled(220,150));
 
     QDBusConnection bus = QDBusConnection::sessionBus();
 qDebug()<<"view number="<<viewNumber<<"\n";
@@ -90,6 +122,11 @@ qDebug()<<"view number="<<viewNumber<<"\n";
 
     QString m_notesHtml = (QDBusReply<QString>)interface->call("pageNotes", currentPage, "html");
     pageNotesTextEdit->setHtml(m_notesHtml);
+
+    currentPage=page-1;
+    previewButtonList.at(currentPage)->setCheckable(true);
+    previewButtonList.at(currentPage)->setChecked(true);
+    currentSlideNumber->setText("            Slide "+QString::number(currentPage+1));
 }
 void NotesDialog::preButtonClicked()
 {
@@ -106,4 +143,20 @@ void NotesDialog::nextButtonClicked()
         showNotesDialog(currentPage+2);
         emit moveSlide(true);
     }
+}
+void NotesDialog::previewClicked()
+{
+    QToolButton *clickedButton = qobject_cast<QToolButton *>(sender());
+if(!clickedButton)
+    return;
+    clickedButton->setCheckable(true);
+    clickedButton->setChecked(true);
+    if(currentPage==previewButtonList.indexOf(clickedButton)){
+        return;
+    }
+    previewButtonList.at(currentPage)->setChecked(false);
+    previewButtonList.at(currentPage)->setCheckable(false);
+    currentPage=previewButtonList.indexOf(clickedButton);
+    showNotesDialog(currentPage+1);
+    emit gotoPage(currentPage+1);
 }

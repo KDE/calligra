@@ -1910,7 +1910,7 @@ void MainWindow::slideNotesButtonClicked()
         disconnect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
         delete notesDialog;
     }
-    notesDialog=new NotesDialog(m_doc,viewNumber);
+    notesDialog=new NotesDialog(m_doc,viewNumber,storeButtonPreview->thumbnailList);
     notesDialog->show();
     connect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
 
