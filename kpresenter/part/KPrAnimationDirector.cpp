@@ -100,10 +100,10 @@ KPrAnimationDirector::~KPrAnimationDirector()
                                                              new KPrPageSelectStrategyActive( m_view ) ) );
 }
 
-void KPrAnimationDirector::paintEvent( QPaintEvent* event )
-{
-    QPainter painter( m_canvas );
 
+
+void KPrAnimationDirector::paint(QPainter& painter, const QRectF &paintRect)
+{
     if ( m_pageEffectRunner )
     {
         bool finished = m_pageEffectRunner->isFinished();
@@ -115,7 +115,7 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
             // check if there where a animation to start
             if ( hasAnimation() ) {
                 if ( finished ) {
-                    QRect clipRect = m_pageRect.intersected( event->rect() );
+                    QRect clipRect = m_pageRect.intersected( paintRect.toRect() );
                     painter.setClipRect( clipRect );
                     painter.setRenderHint( QPainter::Antialiasing );
                     paintStep( painter );
@@ -128,7 +128,7 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
         }
     }
     else {
-        QRect clipRect = m_pageRect.intersected( event->rect() );
+        QRect clipRect = m_pageRect.intersected( paintRect.toRect() );
         painter.setClipRect( clipRect );
         painter.setRenderHint( QPainter::Antialiasing );
         paintStep( painter );
@@ -140,6 +140,12 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
     // events. It looks like this is not a problem with nvidia graphic
     // cards.
     KApplication::kApplication()->syncX();
+}
+
+void KPrAnimationDirector::paintEvent( QPaintEvent* event )
+{
+    QPainter painter( m_canvas );
+    paint(painter, event->rect());
 }
 
 KoViewConverter * KPrAnimationDirector::viewConverter()

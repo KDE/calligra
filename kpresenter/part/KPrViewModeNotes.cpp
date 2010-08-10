@@ -53,24 +53,22 @@ KPrViewModeNotes::~KPrViewModeNotes()
 {
 }
 
-void KPrViewModeNotes::paintEvent( KoPACanvas * canvas, QPaintEvent* event )
+void KPrViewModeNotes::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
 {
-#if 0
 #ifdef NDEBUG
     Q_UNUSED(canvas);
 #endif
     Q_ASSERT( m_canvas == canvas );
 
-    QPainter painter(m_canvas);
     painter.translate(-m_canvas->documentOffset());
     painter.setRenderHint( QPainter::Antialiasing );
-    QRectF clipRect = event->rect().translated(m_canvas->documentOffset());
+    QRectF clipRect = paintRect.translated(m_canvas->documentOffset());
     painter.setClipRect( clipRect );
 
     KoViewConverter *converter = m_view->viewConverter( m_canvas );
     m_canvas->shapeManager()->paint(painter, *converter, false);
     m_toolProxy->paint(painter, *converter);
-#endif
+
 }
 
 void KPrViewModeNotes::tabletEvent(QTabletEvent *event, const QPointF &point)

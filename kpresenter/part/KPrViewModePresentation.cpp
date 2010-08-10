@@ -74,12 +74,12 @@ KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvasBase * canva
     }
 }
 
-void KPrViewModePresentation::paintEvent( KoPACanvas * canvas,  QPaintEvent* event )
+void KPrViewModePresentation::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
 {
     if ( m_baseCanvas && m_baseCanvas == canvas && m_animationDirector ) {
-        m_animationDirector->paintEvent( event );
+        m_animationDirector->paint( painter, paintRect);
     } else if ( m_presenterViewCanvas == canvas && m_pvAnimationDirector ) {
-        m_pvAnimationDirector->paintEvent( event );
+        m_pvAnimationDirector->paint( painter, paintRect );
     }
 }
 

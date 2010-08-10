@@ -58,17 +58,14 @@ KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect()
 }
 
 
-void KPrViewModePreviewPageEffect::paintEvent( KoPACanvas * canvas,  QPaintEvent* event )
+void KPrViewModePreviewPageEffect::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
 {
-/*
-    Q_UNUSED(event);
-    QPainter p(canvas);
-    QRect framerect = canvas->rect();
+    Q_UNUSED(paintRect);
+    //QRect framerect = canvas->rect();
 
-    if(m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
-        m_pageEffectRunner->paint(p);
+    if (m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
+        m_pageEffectRunner->paint(painter);
     }
-*/
 }
 
 
