@@ -66,10 +66,14 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     // create page background
     KWTextFrameSet *fs = getOrCreate(KWord::PageBackgroundFrameSet, page);
     if (!hasFrameOn(fs, pageNumber)) {
-        KoShape *shape = new KWPageBackground();
-        shape->setSize(QSizeF(page.width(), page.height()));
-        KWFrame *f = new KWFrame(shape, fs);
-        f->setTextRunAround(KWord::RunThrough);
+        if (fs->frameCount() == 0) {
+            KoShape *shape = new KWPageBackground();
+            shape->setSize(QSize(20, 10));
+            new KWFrame(shape, fs);
+        }
+        else {
+            createCopyFrame(fs, page);
+        }
     }
 
     // create headers & footers
@@ -320,18 +324,21 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         default:;
         }
     }
-    if (minZIndex < INT_MAX) {
-        --minZIndex;
-        if (endnote)
-            endnote->shape()->setZIndex(minZIndex--);
-        for (int i = 0; i < columns; ++i)
-            main[i]->shape()->setZIndex(minZIndex);
-        if (footer)
-            footer->shape()->setZIndex(--minZIndex);
-        if (header)
-            header->shape()->setZIndex(--minZIndex);
-        if (pageBackground)
-            pageBackground->shape()->setZIndex(--minZIndex);
+    for (int i = 0; i < columns; ++i) {
+        main[i]->shape()->setZIndex(SHRT_MIN + 3);
+
+     }
+    if (footer) {
+        footer->shape()->setZIndex(SHRT_MIN + 2);
+    }
+    if (endnote) {
+        endnote->shape()->setZIndex(SHRT_MIN + 4);
+    }
+    if (header) {
+        header->shape()->setZIndex(SHRT_MIN + 1);
+    }
+    if (pageBackground) {
+        pageBackground->shape()->setZIndex(SHRT_MIN);
     }
 
     // spread space across items.
