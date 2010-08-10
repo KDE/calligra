@@ -58,16 +58,19 @@ def profile(file):
 	while  s[0] == 0 and s[1] == 0 and waited < maxwaittime:
 		time.sleep(waitstep)
 		waited += waitstep
-		s = os.wait3(os.WNOHANG)
-	try:
-		os.kill(pid, signal.SIGKILL)
-	except:
-		pass
+		s = os.wait4(pid, os.WNOHANG)
+	if waited >= maxwaittime:
+		try:
+			os.kill(pid, signal.SIGKILL)
+		except:
+			pass
+		try:
+			s = os.wait4(pid, 0)
+		except:
+			pass
 	r.utime = s[2].ru_utime
 	r.stime = s[2].ru_stime
 	r.returnValue = s[1]
-	if waited >= maxwaittime:
-		r.returnValue = -1
 	outfile = os.fdopen(fileno, 'r')
 	r.lines = outfile.readlines()
 	outfile.close()
@@ -87,8 +90,6 @@ def getGlobalMinMax(times):
 
 def getGlobalTask(times):
 	keys = times.min.keys()
-	if len(keys) == 0:
-		return None
 	(min, max) = getGlobalMinMax(times)
 	name = None
 	for k in keys:
@@ -118,6 +119,9 @@ def getClosestStart(start, times, excludedkey):
 # if there is no global task, then count the time between the first and last
 # timepoint where there is no task running
 def getUnaccountedTime(lines, times):
+	if len(times.min.keys()) == 0:
+		return 0
+
 	globaltask = getGlobalTask(times)
 	(min, max) = getGlobalMinMax(times)
 	unaccounted = 0
