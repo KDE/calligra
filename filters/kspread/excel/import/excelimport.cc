@@ -171,7 +171,7 @@ public:
     void createDefaultColumnStyle( Sheet* sheet );
     void processSheetBackground(Sheet* sheet, KoGenStyle& style);
     void addManifestEntries(KoXmlWriter* ManifestWriter);
-    void insertPictureManifest(Picture* picture);
+    void insertPictureManifest(PictureObject* picture);
 
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
@@ -1420,7 +1420,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     }
 
     // handle pictures
-    foreach(Picture *picture, cell->pictures()) {
+    foreach(PictureObject *picture, cell->pictures()) {
         Sheet* const sheet = cell->sheet();
         const unsigned long colL = picture->m_colL;
         const unsigned long dxL = picture->m_dxL;
@@ -1441,7 +1441,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT));
 
         xmlWriter->startElement("draw:image");
-        xmlWriter->addAttribute("xlink:href", "Pictures/" + picture->m_filename);
+        xmlWriter->addAttribute("xlink:href", "Pictures/" + picture->fileName());
         xmlWriter->addAttribute("xlink:type", "simple");
         xmlWriter->addAttribute("xlink:show", "embed");
         xmlWriter->addAttribute("xlink:actuate", "onLoad");
@@ -1453,9 +1453,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
     // handle charts
     foreach(ChartObject *chart, cell->charts()) {
-        DrawingObject* drawobj = chart->drawingObject();
         Sheet* const sheet = cell->sheet();
-        if(!drawobj) continue;
         if(chart->m_chart->m_impl==0) {
             kDebug() << "Invalid chart to be created, no implementation.";
             continue;
@@ -1463,17 +1461,17 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         ChartExport *c = new ChartExport(chart->m_chart);
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
-        c->m_endCellAddress = encodeAddress(sheet->name(), drawobj->m_colR, drawobj->m_rwB);
+        c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
 
-        const unsigned long colL = drawobj->m_colL;
-        const unsigned long dxL = drawobj->m_dxL;
-        const unsigned long colR = drawobj->m_colR;
-        const unsigned long dxR = drawobj->m_dxR;
-        const unsigned long rwB = drawobj->m_rwB;
-        const unsigned long dyT = drawobj->m_dyT;
-        const unsigned long rwT = drawobj->m_rwT;
-        const unsigned long dyB = drawobj->m_dyB;
+        const unsigned long colL = chart->m_colL;
+        const unsigned long dxL = chart->m_dxL;
+        const unsigned long colR = chart->m_colR;
+        const unsigned long dxR = chart->m_dxR;
+        const unsigned long rwB = chart->m_rwB;
+        const unsigned long dyT = chart->m_dyT;
+        const unsigned long rwT = chart->m_rwT;
+        const unsigned long dyB = chart->m_dyB;
 
         c->m_x = offset(columnWidth(sheet, colL), dxL);
         c->m_y = offset(rowHeight(sheet, rwT), dyT);
@@ -1487,7 +1485,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->saveIndex(xmlWriter);
     }
 
-    xmlWriter->endElement(); //  table:[covered-]table-cell
+    xmlWriter->endElement(); // table:[covered-]table-cell
 }
 
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
@@ -1908,10 +1906,10 @@ void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
     }
 }
 
-void ExcelImport::Private::insertPictureManifest(Picture* picture)
+void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
 {
     QString mimeType;
-    const QString fileName = picture->m_filename;
+    const QString fileName = picture->fileName();
     const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
     if( extension == "gif" ) {

@@ -1,5 +1,5 @@
 /* Swinder - Portable library for spreadsheet
-   Copyright (C) 2009 Sebastian Sauer <sebsauer@kdab.com>
+   Copyright (C) 2009,2010 Sebastian Sauer <sebsauer@kdab.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,35 +38,13 @@
 #include <QtCore/QRect>
 #include <QtCore/QString>
 
+namespace MSO
+{
+    class OfficeArtDgContainer;
+}
+
 namespace Swinder
 {
-
-class DrawingObject
-{
-public:
-    enum Property {
-        pid = 0x0104, // identifier for pictures
-        itxid = 0x0080 // identifier for text
-    };
-
-    static const char* propertyName(Property p);
-    
-    std::map<unsigned long,unsigned long> m_properties;
-    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
-    bool m_gotClientData; // indicates that a OfficeArtClientData was received
-
-    explicit DrawingObject();
-    virtual ~DrawingObject();
-    DrawingObject(const DrawingObject& other);
-    void operator=(const DrawingObject& other);
-
-protected:
-    // read an OfficeArtRecordHeader struct.
-    void readHeader(const unsigned char* data, unsigned *recVer = 0, unsigned *recInstance = 0,
-                    unsigned *recType = 0, unsigned long *recLen = 0);
-    // read a drawing object (container or atom) and handle/dispatch according to the recType.
-    unsigned long handleObject(unsigned size, const unsigned char* data, bool* recordHandled = 0);
-};
 
 /**
  * Base class for all kind of objects.
@@ -98,11 +76,11 @@ public:
         GroupBox = 0x0013,
         DropdownList = 0x0014,
         Note = 0x0019, ///< \a NoteObject
-        OfficeArtObject = 0x001E
+        OfficeArt = 0x001E
     };
 
-    Object(Type t, unsigned long id): m_type(t), m_id(id), m_drawingObject(0) {}
-    virtual ~Object() { delete m_drawingObject; }
+    Object(Type t, unsigned long id);
+    virtual ~Object();
 
     /// Returns the object type.
     Type type() const {
@@ -113,14 +91,15 @@ public:
         return m_id;
     }
 
-    // Each Object can have optional a DrawingObject assigned.
-    DrawingObject* drawingObject() const { return m_drawingObject; }
-    void setDrawingObject(DrawingObject* drawing) { m_drawingObject = drawing; }
+    /// Location of the object.
+    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
 
-private:
+    /// Apply the drawing-container to the object.
+    virtual bool applyDrawing(const MSO::OfficeArtDgContainer &container);
+
+protected:
     const Type m_type;
     unsigned long m_id;
-    DrawingObject* m_drawingObject;
 };
 
 /**
@@ -171,11 +150,23 @@ public:
     void setEmbeddedStorage(const std::string &filename) {
         m_storage = filename;
     }
+
+    /**
+     * Returns the path and filename of the picture-file in the KoStore.
+     * This can be something like "Pictures/TheUniqueIdentifierOfThePicture.jpg" for example.
+     */
+    QString fileName() const {
+        return m_filename;
+    }
+    void setFileName(const QString& name) {
+        m_filename = name;
+    }
+    
 private:
     Type m_type;
     uint m_offset, m_size;
     std::string m_storage;
-
+    QString m_filename;
 };
 
 /**
@@ -198,6 +189,9 @@ private:
     QString m_note;
 };
 
+/**
+ * A charting object.
+ */
 class ChartObject : public Object
 {
 public:
@@ -207,6 +201,38 @@ public:
     virtual ~ChartObject() { delete m_chart; }
     bool operator==(const ChartObject &other) const { return this == &other; }
     bool operator!=(const ChartObject &other) const { return ! (*this == other); }
+};
+
+/**
+ * A group object.
+ */
+class GroupObject : public Object
+{
+public:
+    explicit GroupObject(unsigned long id) : Object(Group, id) {}
+    virtual ~GroupObject() {}
+};
+
+/**
+ * A oval object.
+ */
+class OvalObject : public Object
+{
+public:
+    explicit OvalObject(unsigned long id) : Object(Oval, id) {}
+    virtual ~OvalObject() {}
+};
+
+/**
+ * A OfficeArt object.
+ */
+class OfficeArtObject : public Object
+{
+public:
+    explicit OfficeArtObject(unsigned long id) : Object(OfficeArt, id) {}
+    virtual ~OfficeArtObject() {}
+    bool operator==(const OfficeArtObject &other) const { return this == &other; }
+    bool operator!=(const OfficeArtObject &other) const { return ! (*this == other); }
 };
 
 } // namespace Swinder

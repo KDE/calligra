@@ -22,6 +22,7 @@
 #include "sheet.h"
 #include "workbook.h"
 #include "utils.h"
+#include "objects.h"
 
 #include <PointStorage.h>
 
@@ -51,8 +52,9 @@ public:
     QHash<unsigned, Column*> columns;
     QHash<unsigned, Row*> rows;
     KSpread::PointStorage<Hyperlink> hyperlinks;
-    KSpread::PointStorage<QList<Picture*> > pictures;
+    KSpread::PointStorage<QList<PictureObject*> > pictures;
     KSpread::PointStorage<QList<ChartObject*> > charts;
+    KSpread::PointStorage<QList<OfficeArtObject*> > officearts;
 
     bool visible;
     bool protect;
@@ -492,12 +494,12 @@ void Sheet::setHyperlink(unsigned column, unsigned row, const Hyperlink& link)
         d->hyperlinks.take(column+1, row+1);
 }
 
-QList<Picture*> Sheet::pictures(unsigned column, unsigned row) const
+QList<PictureObject*> Sheet::pictures(unsigned column, unsigned row) const
 {
     return d->pictures.lookup(column+1, row+1);
 }
 
-void Sheet::setPictures(unsigned column, unsigned row, const QList<Picture*>& pictures)
+void Sheet::setPictures(unsigned column, unsigned row, const QList<PictureObject*>& pictures)
 {
     if (pictures.isEmpty())
         d->pictures.take(column+1, row+1);
@@ -505,9 +507,9 @@ void Sheet::setPictures(unsigned column, unsigned row, const QList<Picture*>& pi
         d->pictures.insert(column+1, row+1, pictures);
 }
 
-void Sheet::addPicture(unsigned column, unsigned row, Picture* picture)
+void Sheet::addPicture(unsigned column, unsigned row, PictureObject* picture)
 {
-    QList<Picture*> pics = pictures(column, row);
+    QList<PictureObject*> pics = pictures(column, row);
     pics.append(picture);
     setPictures(column, row, pics);
 }
@@ -532,6 +534,26 @@ void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
     setCharts(column, row, chrts);
 }
 
+QList<OfficeArtObject*> Sheet::officeArts(unsigned column, unsigned row) const
+{
+    return d->officearts.lookup(column+1, row+1);
+}
+
+void Sheet::setOfficeArts(unsigned column, unsigned row, const QList<OfficeArtObject*>& officearts)
+{
+    if (officearts.isEmpty())
+        d->officearts.take(column+1, row+1);
+    else
+        d->officearts.insert(column+1, row+1, officearts);
+}
+
+void Sheet::addOfficeArt(unsigned column, unsigned row, OfficeArtObject* officeart)
+{
+    QList<OfficeArtObject*> arts = officeArts(column, row);
+    arts.append(officeart);
+    setOfficeArts(column, row, arts);
+}
+    
 #ifdef SWINDER_XLS2RAW
 void Sheet::dumpStats()
 {

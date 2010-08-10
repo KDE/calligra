@@ -64,7 +64,7 @@ public:
     std::vector<QString> textObjects;
 
     // The last drawing object we got.
-    DrawingObject* lastDrawingObject;
+    MsoDrawingRecord* lastDrawingObject;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -742,10 +742,11 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
+    std::cout << "WorksheetSubStreamHandler::handleNote column=" << record->column() << " row=" << record->row() << std::endl;
     Cell *cell = d->sheet->cell(record->column(), record->row());
     if (cell) {
         const unsigned long id = record->idObj();
-        NoteObject *obj = static_cast<NoteObject*>(d->sharedObjects[id]);
+        NoteObject *obj = dynamic_cast<NoteObject*>(d->sharedObjects[id]);
         if (obj) {
             int offset = d->noteMap[id] - 1;
             Q_ASSERT(offset>=0 && uint(offset)<d->textObjects.size());
@@ -759,33 +760,47 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 {
     if (!record) return;
     if (!record->m_object) return;
+    if (!d->lastDrawingObject) return;
 
     const unsigned long id = record->m_object->id();
 
     std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << record->m_object->type() << std::endl;
-    switch(record->m_object->type()) {
-        //case Object::Picture:
-        //    PictureObject *r = static_cast<PictureObject*>(record->m_object);
-        //    std::cout << "PICTURE embeddedStorage=" << r->embeddedStorage().c_str() << std::endl;
-        //    break;
-        case Object::Chart:
-            d->charts.push_back(id);
-            break;
-        case Object::Note:
-            d->noteMap[id] = ++d->noteCount;
-            break;
-        default:
-            break;
+    
+    if (record->m_object->applyDrawing(d->lastDrawingObject->m_container)) {
+        switch (record->m_object->type()) {
+            case Object::Picture: {
+                MsoDrawingBlibItem *drawing = d->globals->drawing(record->m_object->id());
+                if(!drawing) {
+                    std::cerr << "WorksheetSubStreamHandler: Skipping unknown object of type=" << record->m_object->type() << " with id=" << record->m_object->id() << std::endl;
+                    return;
+                }
+                PictureObject* pic = dynamic_cast<PictureObject*>(record->m_object);
+                Q_ASSERT(pic);
+                pic->setFileName(drawing->m_picture.name);
+                Cell *cell = d->sheet->cell(record->m_object->m_colL, record->m_object->m_rwT);
+                cell->addPicture(pic);//(record->m_object, drawing->m_picture);
+            } break;
+            case Object::Chart: {
+                d->charts.push_back(id);
+            } break;
+            case Object::Note: {
+                // a NoteRecord will follow which picks that up.
+                d->noteMap[id] = ++d->noteCount;
+            } break;
+            case Object::OfficeArt: {
+                //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
+                
+            } break;
+            default:
+                break;
+        }
     }
-
-    // look if there is a DrawingObject defined that is waiting for us to be picked up.
-    if(d->lastDrawingObject) {
-        record->m_object->setDrawingObject(d->lastDrawingObject); // will take over ownership
-        d->lastDrawingObject = 0;
-    }
-
+    
     d->sharedObjects[id] = record->m_object;
     record->m_object = 0; // take over ownership
+     
+    delete d->lastDrawingObject;
+    d->lastDrawingObject = 0;
 }
 
 void WorksheetSubStreamHandler::handleDefaultRowHeight(DefaultRowHeightRecord* record)
@@ -831,43 +846,9 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
     if (!record || !record->isValid() || !d->sheet) return;
 
-    // picture?
-    std::map<unsigned long,unsigned long>::iterator pit = record->m_properties.find(DrawingObject::pid);
-    if(pit != record->m_properties.end()) {
-        const unsigned long id = (*pit).second;
-        std::cout << "WorksheetSubStreamHandler::handleMsoDrawing pid=" << id << std::endl;
-        MsoDrawingBlibItem *drawing = d->globals->drawing(id);
-        Q_ASSERT(drawing);//if(!drawing) return;
-        Cell *cell = d->sheet->cell(record->m_colL, record->m_rwT);
-        Q_ASSERT(cell);
-        cell->addPicture(new Picture(record,drawing->m_picture));
-        return;
-    }
-
-    // text?
-    std::map<unsigned long,unsigned long>::iterator txit = record->m_properties.find(DrawingObject::itxid);
-    if(txit != record->m_properties.end()) {
-        const unsigned long id = (*txit).second;
-        std::cout << "TODO WorksheetSubStreamHandler::handleMsoDrawing itxid=" << id << std::endl;
-        //TODO
-        //Q_ASSERT(d->globals->drawing(id));
-        //Q_ASSERT(false);
-        return;
-    }
-
-    //FIXME probably move that up and use it for noites and pictures too? Needs more investigation...
-    if(record->m_gotClientData) {
-        // If the DrawingObject got a OfficeArtClientData then a ObjRecord will follow that picks
-        // this DrawingObject up and uses it for future actions.
-        delete d->lastDrawingObject; // remove old DrawingObject if it was not picked up
-        d->lastDrawingObject = new DrawingObject(*record);
-    }
-
-    std::cerr << "WorksheetSubStreamHandler::handleMsoDrawing No pid" << std::endl;
-
-//     // remember the MsoDrawingRecord for the ObjRecord that is expected to follow and to proper handle the drawing object.
-//     delete d->lastDrawingObject;
-//     d->lastDrawingObject = new DrawingObject(*record);
+    // remember the MsoDrawingRecord for the ObjRecord that is expected to follow and to proper handle the drawing object.
+    delete d->lastDrawingObject;
+    d->lastDrawingObject = new MsoDrawingRecord(*record);
 }
 
 void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)

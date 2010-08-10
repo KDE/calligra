@@ -117,7 +117,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
         Q_ASSERT(m_chart);
         m_currentObj = m_chart;
 
-        Cell* cell = m_sheet->cell(m_chartObject->drawingObject()->m_colL, m_chartObject->drawingObject()->m_rwT, true);
+        Cell* cell = m_sheet->cell(m_chartObject->m_colL, m_chartObject->m_rwT, true);
         cell->addChart(m_chartObject);
     } else {
         Q_ASSERT(globals);
@@ -126,19 +126,21 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
         } else {
             m_sheet = globals->chartSheets().takeFirst();
 
-            static unsigned long id = 99999;
-            m_chartObject = new ChartObject(++id);
+            m_chartObject = new ChartObject(m_chartObject->id());
             m_chart = m_chartObject->m_chart;
             Q_ASSERT(m_chart);
             m_currentObj = m_chart;
-
+#if 0
             DrawingObject* drawing = new DrawingObject;
             drawing->m_properties[DrawingObject::pid] = m_chartObject->id();
             drawing->m_properties[DrawingObject::itxid] = m_chartObject->id();
             drawing->m_colL = drawing->m_dxL = drawing->m_rwT = drawing->m_dyT = drawing->m_dxR = drawing->m_dyB = 0;
             drawing->m_colR = 10; drawing->m_rwB = 30; //FIXME use sheet "fullscreen" rather then hardcode
             m_chartObject->setDrawingObject(drawing);
-
+#else
+            m_chartObject->m_colL = m_chartObject->m_dxL = m_chartObject->m_rwT = m_chartObject->m_dyT = m_chartObject->m_dxR = m_chartObject->m_dyB = 0;
+            m_chartObject->m_colR = 10; m_chartObject->m_rwB = 30; //FIXME use sheet "fullscreen" rather then hardcode
+#endif
             Cell* cell = m_sheet->cell(0, 0, true); // anchor to the first cell
             cell->addChart(m_chartObject);
         }

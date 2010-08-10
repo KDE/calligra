@@ -33,8 +33,9 @@ namespace Swinder
 
 class Workbook;
 class Sheet;
-class Picture;
+class PictureObject;
 class ChartObject;
+class OfficeArtObject;
 
 struct Hyperlink
 {
@@ -120,13 +121,17 @@ public:
     void setNote(const QString &n);
     
     // Defines a list of pictures anchored to this cell.
-    QList<Picture*> pictures() const;
-    void setPictures(const QList<Picture*>&);
-    void addPicture(Picture*);
+    QList<PictureObject*> pictures() const;
+    void setPictures(const QList<PictureObject*>&);
+    void addPicture(PictureObject*);
 
     // Defines a list of charts anchored to this cell.
     QList<ChartObject*> charts() const;
     void addChart(ChartObject* chart);
+
+    // Defines a list of OfficeArt-objects anchored to this cell.
+    QList<OfficeArtObject*> officeArts() const;
+    void addOfficeArt(OfficeArtObject* officeart);
     
     bool operator==(const Cell &other) const;
     bool operator!=(const Cell &other) const;

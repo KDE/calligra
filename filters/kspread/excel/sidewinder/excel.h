@@ -862,10 +862,10 @@ public:
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
 };
 
-class MsoDrawingRecord : public Record, public DrawingObject
+class MsoDrawingRecord : public Record//, public DrawingObject
 {
 public:
-    //MSO::OfficeArtDgContainer m_container;
+    MSO::OfficeArtDgContainer m_container;
     static const unsigned id;
     MsoDrawingRecord(Workbook *book) : Record(book) {}
     virtual ~MsoDrawingRecord() {}
@@ -885,18 +885,6 @@ public:
     //enum Type { Picture, ... };
     PictureReference m_picture;
     explicit MsoDrawingBlibItem(const PictureReference &picture);
-};
-
-class Picture
-{
-public:
-    /// The unique identifier of the picture.
-    QString m_id;
-    /// The path and filename of the picture-file in the KoStore. So, can be something like "Pictures/TheUniqueIdentifierOfThePicture.jpg" for example.
-    QString m_filename;
-    /// The position of the picture in the sheet.
-    unsigned long m_colL, m_dxL, m_rwT, m_dyT, m_colR, m_dxR, m_rwB, m_dyB;
-    Picture(MsoDrawingRecord *record, const PictureReference &picture);
 };
 
 class MsoDrawingGroupRecord : public Record

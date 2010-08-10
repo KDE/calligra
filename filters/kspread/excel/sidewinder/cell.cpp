@@ -230,17 +230,17 @@ void Cell::setNote(const QString &n)
     d->note = n;
 }
 
-QList<Picture*> Cell::pictures() const
+QList<PictureObject*> Cell::pictures() const
 {
     return d->sheet->pictures(d->column, d->row);
 }
 
-void Cell::setPictures(const QList<Picture*>& pics)
+void Cell::setPictures(const QList<PictureObject*>& pics)
 {
     d->sheet->setPictures(d->column, d->row, pics);
 }
 
-void Cell::addPicture(Picture* picture)
+void Cell::addPicture(PictureObject* picture)
 {
     d->sheet->addPicture(d->column, d->row, picture);
 }
@@ -253,6 +253,16 @@ QList<ChartObject*> Cell::charts() const
 void Cell::addChart(ChartObject* chart)
 {
     d->sheet->addChart(d->column, d->row, chart);
+}
+
+QList<OfficeArtObject*> Cell::officeArts() const
+{
+    return d->sheet->officeArts(d->column, d->row);
+}
+
+void Cell::addOfficeArt(OfficeArtObject* officeart)
+{
+    d->sheet->addOfficeArt(d->column, d->row, officeart);
 }
 
 bool Cell::operator==(const Cell &other) const
@@ -272,10 +282,10 @@ bool Cell::operator==(const Cell &other) const
 
     if (pictures().size() != other.pictures().size()) return false;
     for(int i = pictures().size() - 1; i >= 0; --i) {
-        Picture* p1 = pictures()[i];
-        Picture* p2 = other.pictures()[i];
-        if(p1->m_id != p2->m_id) return false;
-        if(p1->m_filename != p2->m_filename) return false;
+        PictureObject* p1 = pictures()[i];
+        PictureObject* p2 = other.pictures()[i];
+        if(p1->id() != p2->id()) return false;
+        if(p1->fileName() != p2->fileName()) return false;
         if(p1->m_colL != p2->m_colL) return false;
         if(p1->m_dxL != p2->m_dxL) return false;
         if(p1->m_rwT != p2->m_rwT) return false;
@@ -291,6 +301,13 @@ bool Cell::operator==(const Cell &other) const
         ChartObject* c1 = charts()[i];
         ChartObject* c2 = other.charts()[i];
         if(*c1 != *c2) return false;
+    }
+    
+    if (officeArts().size() != other.officeArts().size()) return false;
+    for(int i = officeArts().size() - 1; i >= 0; --i) {
+        OfficeArtObject* a1 = officeArts()[i];
+        OfficeArtObject* a2 = other.officeArts()[i];
+        if(*a1 != *a2) return false;
     }
 
     return true;

@@ -1406,6 +1406,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     switch (ot) {
     case Object::Group: // gmo
         printf("ObjRecord::setData group\n");
+        m_object = new GroupObject(id);
         startPict += 6;
         break;
     case Object::Picture: { // pictFormat and pictFlags
@@ -1517,7 +1518,11 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     case Object::Label: printf("ObjRecord::setData Label\n"); break;
     case Object::DialogBox: printf("ObjRecord::setData DialogBox\n"); break;
     case Object::GroupBox: printf("ObjRecord::setData GroupBox\n"); break;
-    case Object::OfficeArtObject: printf("ObjRecord::setData OfficeArtObject\n"); break;
+
+    case Object::OfficeArt:
+        printf("ObjRecord::setData OfficeArt\n");
+        m_object = new OfficeArtObject(id);
+        break;
 
     default:
         std::cerr << "ObjRecord::setData: Unexpected objecttype " << ot << " in ObjRecord" << std::endl;
@@ -1721,88 +1726,45 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
         return;
     }
 
-#if 0 // old code that uses DrawingObject::handleObject
-    unsigned recType = 0;
-    unsigned long recLen = 0;
-    readHeader(data, 0, 0, &recType, &recLen);
-    if(recType < 0xF000 || recType > 0xFFFF) {
-        std::cerr << "Invalid MsoDrawing record" << std::endl;
-        setIsValid(false);
-        return;
-    }
-    unsigned long offset = 8;
-    while(offset + 8 <= size) {
-        offset += handleObject(size, data + offset);
-    }
-#else // new code ported to use libmso
-
     QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
     LEInputStream in(&buff);
 
-    MSO::OfficeArtSpContainer container;
+    MSO::OfficeArtDgContainer container;
 
-    // First try to parse a OfficeArtDgContainer and if that fails try to parse a OfficeArtSpContainer. Note
-    // that the xls-specs say that the rgChildRec of a MsoDrawing-record always is a OfficeArtDgContainer but
-    // thta's just wrong since at some documents it's direct the OfficeArtSpContainer we are expected in.
+    // First try to parse a OfficeArtDgContainer and if that fails try to parse a single OfficeArtSpgrContainerFileBlock. Note
+    // that the xls-specs say that the rgChildRec of a MsoDrawing-record always is a OfficeArtDgContainer but that's just wrong
+    // since at some documents it's direct the OfficeArtSpContainer we are interested in.
     LEInputStream::Mark _m = in.setMark();
     try {
-        MSO::OfficeArtDgContainer c;
-        MSO::parseOfficeArtDgContainer(in, c);
-        if(c.groupShape) {
-            foreach(MSO::OfficeArtSpgrContainerFileBlock b, c.groupShape->rgfb) {
-                MSO::OfficeArtSpContainer* spc = b.anon.get<MSO::OfficeArtSpContainer>();
-                if(spc && spc->shapePrimaryOptions) {
-                    container = *spc;
-                    break; // job done
-                }
-            }
-        }
-    } catch (const IOException&) {
+        MSO::parseOfficeArtDgContainer(in, container);
+    } catch(const IOException&) {
         in.rewind(_m);
+        container.groupShape = QSharedPointer<MSO::OfficeArtSpgrContainer>(new MSO::OfficeArtSpgrContainer(&container));
+        container.groupShape->rgfb.append(MSO::OfficeArtSpgrContainerFileBlock(&container));
         try {
-            parseOfficeArtSpContainer(in, container);
-        } catch (const IOException& e) {
+            parseOfficeArtSpgrContainerFileBlock(in, container.groupShape->rgfb.last());
+        } catch(const IOException& e) {
             std::cerr << "Invalid MsoDrawingRecord record: " << qPrintable(e.msg) << std::endl;
+            setIsValid(false);
+            return;
+        } catch(...) {
+            std::cerr << "Invalid MsoDrawingRecord record: Unexpected error" << std::endl;
             setIsValid(false);
             return;
         }
     }
 
-    // The groupShape is required. If there is no such groupShape then the whole drawingObject is invalid.
-    if(!container.shapePrimaryOptions) {
-        std::cerr << "Invalid MsoDrawingRecord record: No groupShape defined in the container." << std::endl;
+    // Be sure we got at least something useful we can work with.
+    if(!container.groupShape) {
+        std::cerr << "Invalid MsoDrawingRecord record: Expected groupShape missing in the container." << std::endl;
         setIsValid(false);
         return;
     }
-
-    // Everything seems to be fine. So, extract the unique identifier for the drawing to be able to access the drawing again from outside.
-    foreach(MSO::OfficeArtFOPTEChoice c, container.shapePrimaryOptions->fopt) {
-        if(c.anon.is<MSO::Pib>()) {
-            m_properties[DrawingObject::pid] = c.anon.get<MSO::Pib>()->pib;
-        } else if(c.anon.is<MSO::ITxid>()) {
-            m_properties[DrawingObject::itxid] = c.anon.get<MSO::ITxid>()->iTxid;
-        }
-    }
-
-    // The drawing may attached to an anchor which contains the informations where our drawing will be located.
-    MSO::XlsOfficeArtClientAnchor* anchor = container.clientAnchor ? container.clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>() : 0;
-    if(anchor) {
-        m_colL = anchor->colL;
-        m_dxL = anchor->dxL;
-        m_rwT = anchor->rwT;
-        m_dyT = anchor->dyT;
-        m_colR = anchor->colR;
-        m_dxR = anchor->dxR;
-        m_rwB = anchor->rwB;
-        m_dyB = anchor->dyB;
-    } else {
-        m_colL = m_dxL = m_rwT = m_dyT = m_colR = m_dxR = m_rwB = m_dyB = 0;
-    }
-
-    m_gotClientData = container.clientData != 0;
-#endif
+    
+    // Finally remember the container to be able to extract later content out of it.
+    m_container = container;
 }
 
 // ========== MsoDrawingGroup ==========
@@ -3093,20 +3055,6 @@ void ExcelReader::handleEOF(EOFRecord* record)
 MsoDrawingBlibItem::MsoDrawingBlibItem(const PictureReference &picture)
     : m_picture(picture)
 {
-}
-
-Picture::Picture(MsoDrawingRecord *record, const PictureReference &item)
-{
-    m_id = item.uid;
-    m_filename = item.name;
-    m_colL = record->m_colL;
-    m_dxL = record->m_dxL;
-    m_rwT = record->m_rwT;
-    m_dyT = record->m_dyT;
-    m_colR = record->m_colR;
-    m_dxR = record->m_dxR;
-    m_rwB = record->m_rwB;
-    m_dyB = record->m_dyB;
 }
 
 #ifdef SWINDER_XLS2RAW
