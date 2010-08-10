@@ -172,10 +172,13 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     KoPageLayout &layout = notes->pageLayout();
     QSize size(layout.width, layout.height);
 
-    m_view->horizontalRuler()->setRulerLength(layout.width);
-    m_view->verticalRuler()->setRulerLength(layout.height);
-    m_view->horizontalRuler()->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
-    m_view->verticalRuler()->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
+    KoPAView *view = dynamic_cast<KoPAView*>(m_view);
+    if (view) {
+        view->horizontalRuler()->setRulerLength(layout.width);
+        view->verticalRuler()->setRulerLength(layout.height);
+        view->horizontalRuler()->setActiveRange(layout.leftMargin, layout.width - layout.rightMargin);
+        view->verticalRuler()->setActiveRange(layout.topMargin, layout.height - layout.bottomMargin);
+    }
 
     m_canvas->setDocumentOrigin( QPointF( 0, 0 ) );
     m_view->zoomController()->setPageSize(size);
