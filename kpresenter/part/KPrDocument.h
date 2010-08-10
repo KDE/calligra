@@ -55,7 +55,7 @@ public:
      * @brief Remove animation from shape
      *
      * @param animation animation to remove from shape
-     * @param removeFromApplicationData if true the animation will also be removed from the 
+     * @param removeFromApplicationData if true the animation will also be removed from the
      *        application data
      */
     void removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData = true );
@@ -161,6 +161,8 @@ protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
     /// reimplemented
+    virtual QGraphicsItem *createCanvasItem();
+    /// reimplemented
     virtual const char *odfTagName( bool withNamespace );
 
     /// reimplemented
@@ -190,7 +192,7 @@ protected:
      * @brief get the animations of the page
      */
     KPrShapeAnimations & animationsByPage( KoPAPageBase * page );
-    
+
     KPrCustomSlideShows *m_customSlideShows;
 
 private:

@@ -35,6 +35,7 @@
 #include "tools/KPrPlaceholderToolFactory.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
 #include <KoPACanvas.h>
+#include <KoPACanvasItem.h>
 #include <KoPAViewModeNormal.h>
 #include <KoPASavingContext.h>
 #include <KoPALoadingContext.h>
@@ -105,6 +106,12 @@ KPrDocument::~KPrDocument()
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );
+}
+
+QGraphicsItem *KPrDocument::createCanvasItem()
+{
+    KoPACanvasItem *canvasItem = new KoPACanvasItem(this);
+    return canvasItem;
 }
 
 const char * KPrDocument::odfTagName( bool withNamespace )
