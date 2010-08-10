@@ -66,14 +66,15 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     // create page background
     KWTextFrameSet *fs = getOrCreate(KWord::PageBackgroundFrameSet, page);
     if (!hasFrameOn(fs, pageNumber)) {
+        KWFrame *frame = 0;
         if (fs->frameCount() == 0) {
             KoShape *shape = new KWPageBackground();
-            shape->setSize(QSize(20, 10));
-            new KWFrame(shape, fs);
+            frame = new KWFrame(shape, fs);
         }
         else {
-            createCopyFrame(fs, page);
+            frame = createCopyFrame(fs, page);
         }
+        frame->setTextRunAround(KWord::RunThrough);
     }
 
     // create headers & footers
