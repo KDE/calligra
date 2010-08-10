@@ -103,6 +103,7 @@ KPrView::~KPrView()
 
 KoViewConverter * KPrView::viewConverter( KoPACanvasBase * canvas )
 {
+    Q_ASSERT(viewMode());
     return viewMode()->viewConverter( canvas );
 }
 
