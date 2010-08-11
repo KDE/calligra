@@ -57,6 +57,7 @@ install( FILES
     MsooXmlCommentsReader.h
     MsooXmlDocPropertiesReader.h
     MsooXmlNotesReader.h
+    MsooXmlDrawingTableStyleReader.H
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
 endif (FALSE)
