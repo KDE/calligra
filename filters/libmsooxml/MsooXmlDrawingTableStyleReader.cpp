@@ -251,7 +251,7 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
     }
 
     KoGenStyle::Type styleType;
-    QString styleBaseName;
+    QLatin1String styleBaseName("");
     switch(m_type) {
         //shut up compiler about not handled enum value in a switch
         case NoType:
@@ -259,23 +259,23 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
         case FirstRow:
         case LastRow:
             styleType = KoGenStyle::TableRowAutoStyle;
-            styleBaseName = "row";
+            styleBaseName = QLatin1String("row");
             break;
         case FirstCol:
         case LastCol:
             styleType = KoGenStyle::TableColumnAutoStyle;
-            styleBaseName = "col";
+            styleBaseName = QLatin1String("col");
             break;
         case NeCell:
         case NwCell:
         case SeCell:
         case SwCell:
             styleType = KoGenStyle::TableCellAutoStyle;
-            styleBaseName = "cell";
+            styleBaseName = QLatin1String("cell");
             break;
         case WholeTbl:
             styleType =KoGenStyle::TableAutoStyle;
-            styleBaseName = "table";
+            styleBaseName = QLatin1String("table");
             break;
     }
     KoGenStyle style = KoGenStyle(styleType, qPrintable(styleBaseName));
