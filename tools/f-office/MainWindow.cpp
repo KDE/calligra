@@ -263,6 +263,7 @@ void MainWindow::init()
 
     connect(menu, SIGNAL(triggered(QAction*)), this, SLOT(menuClicked(QAction*)));
     m_search = new QLineEdit(this);
+    m_search->setInputMethodHints(Qt::ImhNoAutoUppercase);
     m_ui->SearchToolBar->insertWidget(m_ui->actionSearchOption, m_search);
     m_exactMatchCheckBox = new QCheckBox(i18n("Exact Match"), this);
     m_ui->SearchToolBar->insertWidget(m_ui->actionSearchOption, m_exactMatchCheckBox);
@@ -690,7 +691,7 @@ void MainWindow::selectTextBackGroundColor()
     if(m_type == Spreadsheet) {
         m_focelltool->selectTextBackgroundColor(color);
     } else {
-        if(setTextColor(color, m_editor) && m_collab)
+        if(setTextBackgroundColor(color, m_editor) && m_collab)
             m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
     }
 }
@@ -2130,6 +2131,8 @@ void MainWindow::doOpenDocument()
 {
     openDocument(m_fileName);
     m_ui->actionEdit->setChecked(false);
+    m_ui->actionSearch->setChecked(false);
+    m_search->setText("");
 }
 
 void MainWindow::openDocument(const QString &fileName)
@@ -2734,7 +2737,7 @@ void MainWindow::findText(QList<QTextDocument*> aDocs,
             if (!m_wholeWord)
                 result = doc->find(aText, result);
             else
-                result = doc->find(aText, result, QTextDocument::FindWholeWords);
+                result = doc->find(aText, result, QTextDocument::FindCaseSensitively);
             if (result.hasSelection()) {
                 m_positions.append(qMakePair(qMakePair(shapes.at(i).first, shape),
                                              qMakePair(result.selectionStart(),
@@ -2855,6 +2858,9 @@ void MainWindow::updateActions()
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (event->type() == QEvent::ContextMenu)
+        return true;
+
     // TODO: refine the collaborative-editing section of eventFilter
     if(m_editor && m_collab)
     {

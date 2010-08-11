@@ -21,9 +21,7 @@
 #include "FoCellTool.h"
 
 // KOffice
-#include "ui/CellEditorBase.h"
 #include "KoColor.h"
-#include "ui/CellEditor.h"
 
 
 FoCellTool::FoCellTool(KoCanvasBase* canvas)
