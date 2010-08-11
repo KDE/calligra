@@ -165,6 +165,43 @@ Type TableStyleProperties::typeFromString(const QString& string)
     return WholeTbl;
 }
 
+QString TableStyleProperties::saveStyle(KoGenStyles& styles)
+{
+    if(m_type == NoType) {
+        return QString();
+    }
+
+    KoGenStyle::Type styleType;
+    QString styleBaseName;
+    switch(m_type) {
+        //shut up compiler about not handled enum value in a switch
+        case NoType:
+            break;
+        case FirstRow:
+        case LastRow:
+            styleType = KoGenStyle::TableRowAutoStyle;
+            styleBaseName = "row";
+            break;
+        case FirstCol:
+        case LastCol:
+            styleType = KoGenStyle::TableColumnAutoStyle;
+            styleBaseName = "col";
+            break;
+        case NeCell:
+        case NwCell:
+        case SeCell:
+        case SwCell:
+            styleType = KoGenStyle::TableCellAutoStyle;
+            styleBaseName = "cell";
+            break;
+        case WholeTbl:
+            styleType =KoGenStyle::TableAutoStyle;
+            styleBaseName = "table";
+            break;
+    }
+    KoGenStyle style = KoGenStyle(styleType, styleBaseName);
+}
+
 void TableStyle::setId(const QString& id)
 {
     m_id = id;
