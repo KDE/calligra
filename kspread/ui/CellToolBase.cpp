@@ -1340,12 +1340,14 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(action("permuteFixation"), SIGNAL(triggered(bool)),
                 d->cellEditor, SLOT(permuteFixation()));
+    if(d->optionWidget && d->optionWidget->editor()) {
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
                 d->optionWidget->editor(), SLOT(setText(const QString &)));
         connect(d->optionWidget->editor(), SIGNAL(textChanged(const QString &)),
                 d->cellEditor, SLOT(setText(const QString &)));
         d->optionWidget->applyButton()->setEnabled(true);
         d->optionWidget->cancelButton()->setEnabled(true);
+    }
 
         double w = cell.width();
         double h = cell.height();

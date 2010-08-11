@@ -19,6 +19,7 @@
 */
 #ifndef KSPREAD_CELLEDITORBASE_H
 #define KSPREAD_CELLEDITORBASE_H
+#include "kspread_export.h"
 
 class QFont;
 class KoViewConverter;
@@ -28,7 +29,7 @@ class QWidget;
 namespace KSpread
 {
 
-class CellEditorBase
+class KSPREAD_EXPORT CellEditorBase
 {
 public:
     CellEditorBase();

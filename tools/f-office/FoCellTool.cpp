@@ -21,7 +21,9 @@
 #include "FoCellTool.h"
 
 // KOffice
+#include "ui/CellEditorBase.h"
 #include "KoColor.h"
+#include "ui/CellEditor.h"
 
 
 FoCellTool::FoCellTool(KoCanvasBase* canvas)
@@ -55,7 +57,9 @@ void FoCellTool::selectTextBackgroundColor(const QColor &color) {
 
 KSpread::CellEditorBase* FoCellTool::editor() const
 {
-    return KSpread::CellTool::editor();
+CellEditorBase *editorx=KSpread::CellTool::editor();
+editorx->setStyleSheet(QString("* { background-color:red;}"));
+    return editorx;
 }
 
 bool FoCellTool::createEditor(bool clear, bool focus)
