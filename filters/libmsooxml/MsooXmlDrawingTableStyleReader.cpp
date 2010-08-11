@@ -37,6 +37,14 @@
 
 using namespace MSOOXML;
 
+Border::Border()
+: m_side(NoSide)
+{
+}
+
+Border::~Border()
+{
+}
 
 Border::Side Border::side()
 {

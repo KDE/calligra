@@ -38,6 +38,8 @@ namespace MSOOXML
 
 class Border {
 public:
+    Border();
+    ~Border();
 
     enum Side {
         NoSide,
