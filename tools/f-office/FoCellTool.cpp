@@ -57,9 +57,7 @@ void FoCellTool::selectTextBackgroundColor(const QColor &color) {
 
 KSpread::CellEditorBase* FoCellTool::editor() const
 {
-CellEditorBase *editorx=KSpread::CellTool::editor();
-editorx->setStyleSheet(QString("* { background-color:red;}"));
-    return editorx;
+    return KSpread::CellTool::editor();;
 }
 
 bool FoCellTool::createEditor(bool clear, bool focus)
