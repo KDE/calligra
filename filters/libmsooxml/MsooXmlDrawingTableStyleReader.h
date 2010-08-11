@@ -106,7 +106,7 @@ public:
     void setType(Type type);
 
     Border borderForSide(Border::Side side) const;
-    void addBorder(Border border, Border::Side side);
+    void addBorder(Border border);
 
     /** 
     * @brief Save the style, note that the type of the style depends on the type 
@@ -132,7 +132,7 @@ public:
     void setId(const QString& id);
 
     TableStyleProperties propertiesForType(TableStyleProperties::Type type) const;
-    void addProperties(TableStyleProperties properties, TableStyleProperties::Type type);
+    void addProperties(TableStyleProperties properties);
 
 private:
     QString m_id;

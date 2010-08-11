@@ -163,9 +163,9 @@ void TableStyleProperties::setType(Type type)
     m_type = type;
 }
 
-void TableStyleProperties::addBorder(Border border, Border::Side side)
+void TableStyleProperties::addBorder(Border border)
 {
-    m_borders.insert(side, border);
+    m_borders.insert(border.side(), border);
 }
 
 Border TableStyleProperties::borderForSide(Border::Side side) const
@@ -315,9 +315,9 @@ TableStyleProperties TableStyle::propertiesForType(TableStyleProperties::Type ty
     return m_properties.value(type);
 }
 
-void TableStyle::addProperties(TableStyleProperties properties, TableStyleProperties::Type type)
+void TableStyle::addProperties(TableStyleProperties properties)
 {
-    m_properties.insert(type, properties);
+    m_properties.insert(properties.type(), properties);
 }
 
 TableStyle TableStyleList::tableStyle(const QString& id) const
@@ -414,6 +414,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
 {
     READ_PROLOGUE
 
+    m_currentStyleProperties.setType(TableStyleProperties::WholeTbl);
+
     while(!atEnd()) {
         if(isStartElement()) {
             TRY_READ_IF(tcStyle)
@@ -423,7 +425,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    m_currentStyle.addProperties(m_currentStyleProperties, TableStyleProperties::WholeTbl);
+    m_currentStyle.addProperties(m_currentStyleProperties);
     m_currentStyleProperties = TableStyleProperties();
 
     READ_EPILOGUE
@@ -499,8 +501,9 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
     }
 
     Border border;
+    border.setSide(Border::Bottom);
     border.setColor(m_currentPen.color());
-    m_currentStyleProperties.addBorder(border, Border::Bottom);
+    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -521,8 +524,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
     }
 
     Border border;
+    border.setSide(Border::Top);
     border.setColor(m_currentPen.color());
-    m_currentStyleProperties.addBorder(border, Border::Top);
+    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -543,8 +547,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
     }
 
     Border border;
+    border.setSide(Border::Left);
     border.setColor(m_currentPen.color());
-    m_currentStyleProperties.addBorder(border, Border::Left);
+    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -565,8 +570,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
     }
 
     Border border;
+    border.setSide(Border::Right);
     border.setColor(m_currentPen.color());
-    m_currentStyleProperties.addBorder(border, Border::Right);
+    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
