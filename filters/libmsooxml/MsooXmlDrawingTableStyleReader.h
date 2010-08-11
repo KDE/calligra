@@ -57,7 +57,7 @@ public:
     QColor color() const;
     void setColor(const QColor& color);
 
-    QString odfBorderName();
+    QString odfBorderName() const;
 
     enum Style {
         None,
@@ -69,7 +69,7 @@ public:
     };
     void setStyle(Style style);
     Style style() const;
-    QString odfStyleName();
+    QString odfStyleName() const;
 
 private:
     QColor m_color;

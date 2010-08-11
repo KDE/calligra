@@ -70,7 +70,7 @@ void Border::setColor(const QColor& color)
     m_color = color;
 }
 
-QString Border::odfBorderName()
+QString Border::odfBorderName() const
 {
     switch(m_side) {
         case NoSide:
@@ -103,7 +103,7 @@ Border::Style Border::style() const
     return m_style;
 }
 
-QString Border::odfStyleName()
+QString Border::odfStyleName() const
 {
     switch(m_style) {
         case None:
