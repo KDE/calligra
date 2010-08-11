@@ -47,6 +47,26 @@ void Border::setPen(const QPen& pen)
     m_pen = pen;
 }
 
+TableStyleProperties::TableStyleProperties()
+: m_borders()
+, m_type(NoType)
+{
+}
+
+TableStyleProperties::~TableStyleProperties()
+{
+}
+
+TableStyleProperties::Type TableStyleProperties::type() const
+{
+    return m_type;
+}
+
+void TableStyleProperties::setType(Type type)
+{
+    m_type = type;
+}
+
 void TableStyleProperties::addBorder(Border border, BorderSide side)
 {
     m_borders.insert(side, border);
@@ -57,7 +77,7 @@ Border TableStyleProperties::borderForSide(BorderSide side) const
     return m_borders.value(side);
 }
 
-QString TableStyle::stringFromType(TableStyle::Type type)
+QString TableStyleProperties::stringFromType(Type type)
 {
     switch(type) {
         case FirstRow:
@@ -95,7 +115,7 @@ QString TableStyle::stringFromType(TableStyle::Type type)
     return QString();
 }
 
-TableStyle::Type TableStyle::typeFromString(const QString& string)
+Type TableStyleProperties::typeFromString(const QString& string)
 {
     if(string == "firstRow") {
         return FirstRow;

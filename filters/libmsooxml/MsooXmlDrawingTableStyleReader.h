@@ -48,6 +48,22 @@ private:
 class TableStyleProperties
 {
 public:
+    enum Type {
+        NoType,
+        FirstRow,
+        FirstCol,
+        LastCol,
+        LastRow,
+        NeCell,
+        NwCell,
+        SeCell,
+        SwCell,
+        WholeTbl
+    };
+
+    Type type() const;
+    void setType(Type type);
+
     enum BorderSide {
         Bottom,
         InsideH,
@@ -62,33 +78,31 @@ public:
     Border borderForSide(BorderSide side) const;
     void addBorder(Border border, BorderSide side);
 
+    /** 
+    * @brief Save the style, note that the type of the style depends on the type 
+    * of this styleProperties
+    * @return the name of the saved style
+    */
+    QString saveStyle(KoGenStyles& styles);
+
+    static Type typeFromString(const QString& string);
+    static QString stringFromType(Type type);
+
 private:
     QMap<BorderSide, Border> m_borders;
+    Type m_type;
 };
 
 class TableStyle
 {
 public:
-    enum Type {
-        FirstRow,
-        LastCol,
-        LastRow,
-        NeCell,
-        NwCell,
-        SeCell,
-        SwCell,
-        TblBg,
-        WholeTbl
-    };
+    using TableStyle::Type;
 
     QString id() const;
     void setId(const QString& id);
 
     TableStyleProperties propertiesForType(Type type) const;
     void addProperties(TableStyleProperties properties, Type type);
-
-    static Type typeFromString(const QString& string);
-    static QString stringFromType(Type type);
 
 private:
     QString m_id;
