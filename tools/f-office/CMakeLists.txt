@@ -22,9 +22,9 @@ add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp H
 find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon QtOpenGL)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
 else(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon QtOpenGL)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
 endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)
