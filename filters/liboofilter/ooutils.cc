@@ -474,15 +474,10 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlD
 
 KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName)
 {
-    QXmlInputSource source(io);
-    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-    QXmlSimpleReader reader;
-    KoOdfReadStore::setupXmlReader(reader, true /*namespaceProcessing*/);
-
     // Error variables for QDomDocument::setContent
     QString errorMsg;
     int errorLine, errorColumn;
-    if (!doc.setContent(&source, &reader, &errorMsg, &errorLine, &errorColumn)) {
+    if (!doc.setContent(io, &errorMsg, &errorLine, &errorColumn)) {
         kError(30519) << "Parsing error in " << fileName << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;

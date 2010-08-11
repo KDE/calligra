@@ -165,18 +165,9 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
 {
     errorMessage.clear();
 
-    // We need to be able to see the space in <text:span> </text:span>, this is why
-    // we activate the "report-whitespace-only-CharData" feature.
-    // Unfortunately this leads to lots of whitespace text nodes in between real
-    // elements in the rest of the document, watch out for that.
-    QXmlInputSource source(io);
-    // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
-    QXmlSimpleReader reader;
-    KoOdfReadStore::setupXmlReader(reader, true /*namespaceProcessing*/);
-
     QString errorMsg;
     int errorLine, errorColumn;
-    bool ok = doc.setContent(&source, &reader, &errorMsg, &errorLine, &errorColumn);
+    bool ok = doc.setContent(io, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError() << "Parsing error in " << fileName << ", aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
