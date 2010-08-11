@@ -20,6 +20,8 @@
 #include "MsooXmlDrawingTableStyleReader.h"
 
 #include <KoGenStyles.h>
+#include <KoGenStyle.h>
+#include <KoOdfGraphicStyles.h>
 
 #define MSOOXML_CURRENT_NS "a"
 #define MSOOXML_CURRENT_CLASS MsooXmlDrawingTableStyleReader

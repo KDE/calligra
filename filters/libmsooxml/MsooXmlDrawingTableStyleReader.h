@@ -23,7 +23,7 @@
 #include <MsooXmlCommonReader.h>
 #include <MsooXmlThemesReader.h>
 
-#include <KoGenStyle.h>
+class KoGenStyles;
 
 #include <QPen>
 #include <QString>
