@@ -39,6 +39,7 @@ using namespace MSOOXML;
 
 Border::Border()
 : m_side(NoSide)
+, m_style(None)
 {
 }
 
@@ -85,6 +86,37 @@ QString Border::odfBorderName()
 //         case TableStyleProperties::TopRightToBottomLeft:
 //             return "";
     };
+
+    Q_ASSERT(false);
+    return QString();
+}
+
+void Border::setStyle(Border::Style style)
+{
+    m_style = style;
+}
+
+Border::Style Border::style() const
+{
+    return m_style;
+}
+
+QString Border::odfStyleName()
+{
+    switch(m_style) {
+        case None:
+            return "none";
+        case Solid:
+            return "solid";
+        case Dashed:
+            return "dashed";
+        case Dotted:
+            return "dotted";
+        case DashDot:
+            return "dot-dash";
+        case DashDotDot:
+            return "dot-dot-dash";
+    }
 
     Q_ASSERT(false);
     return QString();

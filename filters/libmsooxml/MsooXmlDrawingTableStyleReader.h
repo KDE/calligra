@@ -59,9 +59,22 @@ public:
 
     QString odfBorderName();
 
+    enum Style {
+        None,
+        Solid,
+        Dashed,
+        Dotted,
+        DashDot,
+        DashDotDot
+    };
+    void setStyle(Style style);
+    Style style() const;
+    QString odfStyleName();
+
 private:
     QColor m_color;
     Side m_side;
+    Style m_style;
 };
 
 class TableStyleProperties
