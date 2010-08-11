@@ -29,6 +29,7 @@
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
 #include <MsooXmlUnits.h>
+#include <MsooXmlDrawingTableStyleReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoPageLayout.h>
@@ -146,6 +147,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     PptxXmlCommentAuthorsReaderContext autorsContext;
     m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
     d->commentAuthors = autorsContext.authors;
+
+    MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+    MSOOXML::TableStyleList* styleList = new MSOOXML::TableStyleList();
+    MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext;
+    tableStyleReaderContext.styleList = styleList;
+    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
+    m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
 
     TRY_READ(presentation)
     kDebug() << "===========finished============";
