@@ -57,6 +57,8 @@ public:
     QColor color() const;
     void setColor(const QColor& color);
 
+    QString odfBorderName();
+
 private:
     QColor m_color;
     Side m_side;

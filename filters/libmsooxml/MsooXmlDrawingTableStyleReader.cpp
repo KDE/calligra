@@ -67,6 +67,29 @@ void Border::setColor(const QColor& color)
     m_color = color;
 }
 
+QString Border::odfBorderName()
+{
+    switch(m_side) {
+        case NoSide:
+            return QString();
+        case Bottom:
+            return "fo:border-bottom";
+        case Left:
+            return "fo:border-left";
+        case Right:
+            return "fo:border-right";
+//         case TableStyleProperties::TopLeftToBottomRight:
+//             return "";
+        case Top:
+            return "fo:border-top";
+//         case TableStyleProperties::TopRightToBottomLeft:
+//             return "";
+    };
+
+    Q_ASSERT(false);
+    return QString();
+}
+
 TableStyleProperties::TableStyleProperties()
 : m_borders()
 , m_type(NoType)
