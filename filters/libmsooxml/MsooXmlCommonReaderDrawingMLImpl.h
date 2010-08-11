@@ -2657,6 +2657,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 #endif
 
+#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
+    colorItem = theme->colorScheme.value(val);
+#endif
     // Parse the child elements
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;
@@ -2667,6 +2672,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         // @todo: Hmm, are these color modifications only available for pptx?
 #ifdef PPTXXMLSLIDEREADER_H
         if (m_context->type == Slide) {
+#endif
             if (QUALIFIED_NAME_IS(lumMod)) {
                 m_currentDoubleValue = &lumMod.value;
                 TRY_READ(lumMod);
@@ -2676,6 +2682,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
                 TRY_READ(lumOff);
                 lumOff.valid = true;
             }
+#ifdef PPTXXMLSLIDEREADER_H
         }
 #endif
     }
@@ -2716,8 +2723,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         }
     }
 #endif
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_H
-    m_currentPen.setColor(col);
+#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
+        QColor col;
+        if (val.startsWith("bg"))
+            col = Qt::white;
+        else
+            col = Qt::black;
+        if (colorItem && colorItem->toColorItem())
+            col = QColor (colorItem->toColorItem()->color);
+
+        col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
+
+        m_currentPen.setColor(col);
 #endif
     READ_EPILOGUE
 }
