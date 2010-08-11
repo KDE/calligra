@@ -33,6 +33,7 @@ public:
     
     void setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages);
     QString itemsPartClass() const;
+    void removeItem(const KexiPart::Item &item);
     
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -43,9 +44,13 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     
+    
 private:
     void clear();
 
+    QModelIndex indexFromItem(KexiProjectModelItem *item) const;
+    KexiProjectModelItem *modelItemFromItem(const KexiPart::Item &item);
+    
     //!Part class to display
     QString m_itemsPartClass;
 

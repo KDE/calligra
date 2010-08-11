@@ -234,26 +234,7 @@ KAction* KexiProjectNavigator::addAction(const QString& name, const KIcon& icon,
 
 void KexiProjectNavigator::slotRemoveItem(const KexiPart::Item &item)
 {
-#if 0
-    KexiProjectModelItem *to_remove = m_normalItems.take(item.identifier());
-    if (!to_remove)
-        return;
-
-    KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(m_list->currentIndex().internalPointer());
-
-    Q3ListViewItem *new_item_to_select = 0;
-    if (it == to_remove) {//compute item to select if current one will be removed
-        new_item_to_select = it->itemBelow();//nearest item to select
-        if (!new_item_to_select || new_item_to_select->parent() != it->parent()) {
-            new_item_to_select = it->itemAbove();
-        }
-    }
-    delete to_remove;
-
-    if (new_item_to_select)
-        m_list->setSelected(new_item_to_select, true);
-#endif
-    
+    m_model->removeItem(item);
 }
 
 void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
@@ -382,58 +363,6 @@ void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
     }
     emit selectionChanged(it ? it->partItem() : 0);
 }
-
-#if 0
-bool KexiProjectNavigator::eventFilter(QObject *o, QEvent * e)
-{
-
-    /* if (o==m_list && e->type()==QEvent::Resize) {
-        kDebug() << "resize!";
-      }*/
-    if (o == m_list->renameLineEdit()) {
-        if (e->type() == QEvent::Hide)
-            itemRenameDone();
-    } else if (e->type() == QEvent::KeyPress) {
-        QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-        if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) {
-            if (0 == (ke->modifiers() & (Qt::ShiftButton | Qt::ControlButton | Qt::AltButton))) {
-                Q3ListViewItem *it = m_list->selectedItem();
-                if (it)
-                    slotExecuteItem(it);
-            } else if (Qt::ControlButton == (ke->modifiers() & (Qt::ShiftButton | Qt::ControlButton | Qt::AltButton))) {
-                slotDesignObject();
-            }
-        }
-    } else if (e->type() == QEvent::ShortcutOverride) {
-        QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-        //override delete action
-        if (ke->key() == Qt::Key_Delete && ke->modifiers() == Qt::NoButton) {
-            slotRemove();
-            ke->accept();
-            return true;
-        }
-        //override rename action
-        if (ke->key() == Qt::Key_F2 && ke->modifiers() == Qt::NoButton) {
-            slotRename();
-            ke->accept();
-            return true;
-        }
-        /*  else if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
-              if (ke->modifiers()==Qt::ControlModifier) {
-                slotDesignObject();
-              }
-              else if (ke->modifiers()==0 && !m_list->renameLineEdit()->isVisible()) {
-                Q3ListViewItem *it = m_list->selectedItem();
-                if (it)
-                  slotExecuteItem(it);
-              }
-              ke->accept();
-              return true;
-            }*/
-    }
-    return false;
-}
-#endif
 
 void KexiProjectNavigator::slotRemove()
 {

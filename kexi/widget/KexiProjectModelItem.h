@@ -70,8 +70,9 @@ public:
     int childCount() const;
     int columnCount() const;
     QVariant data(int column) const;
-    int row() const;
+    int row();
     KexiProjectModelItem *parent();
+    void removeChild(const KexiPart::Item &item);
 
     QIcon icon();
 
@@ -79,6 +80,9 @@ public:
     Qt::ItemFlags flags();
     
     void debugPrint();
+
+    KexiProjectModelItem* modelItemFromItem(const KexiPart::Item &item) const;
+
  private:
     QList<KexiProjectModelItem*> m_childItems;
     KexiProjectModelItem *m_parentItem;

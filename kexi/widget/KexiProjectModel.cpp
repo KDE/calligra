@@ -113,8 +113,6 @@ KexiProjectModel::~KexiProjectModel()
     }
 }
 
-
-
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
 {
     KexiProjectModelItem *item = static_cast<KexiProjectModelItem*>(index.internalPointer());
@@ -263,4 +261,41 @@ KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item& item, KexiProjec
 KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p)
 {
     return new KexiProjectModelItem(info, item, p);;
+}
+
+void KexiProjectModel::removeItem(const KexiPart::Item& item)
+{
+    QModelIndex idx;
+    KexiProjectModelItem *mitm = modelItemFromItem(item);
+    KexiProjectModelItem *parent =0;
+    
+    if (mitm) {
+        kDebug() << "Got model item from item";
+        parent = mitm->parent();
+    } else {
+        kDebug() << "Unable to get model item from item";
+    }
+    
+    if (parent) {
+        idx = indexFromItem(parent);
+        beginRemoveRows(idx, 0,0);
+        parent->removeChild(item);
+        endRemoveRows();
+    }
+}
+
+QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
+{
+    if (item && item->parent()) {
+        int row = item->row();
+        //dbgUI << "Node index in image: " << index << ", parent has " << rowCount + 1 << " rows, inverted index becomes " << row;
+        return createIndex(row, 0, (void*)item);
+    } else {
+            return QModelIndex();
+    }
+}
+
+KexiProjectModelItem* KexiProjectModel::modelItemFromItem(const KexiPart::Item& item)
+{
+    return m_rootItem->modelItemFromItem(item);
 }

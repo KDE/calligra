@@ -126,11 +126,12 @@ QVariant KexiProjectModelItem::data(int column) const
     }
 }
 
-int KexiProjectModelItem::row() const
+int KexiProjectModelItem::row()
 {
      if (m_parentItem)
-         return m_parentItem->m_childItems.indexOf(const_cast<KexiProjectModelItem*>(this));
-
+     {
+         return m_parentItem->m_childItems.indexOf(this);
+     }
      return 0;
 }
 
@@ -146,4 +147,45 @@ Qt::ItemFlags KexiProjectModelItem::flags()
     } else {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     }
+}
+
+void KexiProjectModelItem::removeChild(const KexiPart::Item& item)
+{
+    KexiProjectModelItem *to_delete = 0;
+    int i = 0;
+    if (!m_item) {
+        foreach(KexiProjectModelItem *child, m_childItems) {
+            ++i;
+            if (!to_delete) {
+                if (child->m_item) {
+                    if (child->m_item && child->m_item->identifier() == item.identifier()) {
+                        to_delete = m_childItems.takeAt(i-1);
+                    }
+                }
+            }
+        }
+    }
+    if (to_delete) {
+        delete to_delete;
+    }
+}
+
+KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::Item& item) const
+{
+    KexiProjectModelItem* itm = 0;
+    
+    if (!m_item) {
+        foreach(KexiProjectModelItem *child, m_childItems) {
+            if (!itm) {
+                if (child->m_item) {
+                    if (child->m_item && child->m_item->identifier() == item.identifier()) {
+                        itm = child;
+                    }
+                } else {
+                        itm = child->modelItemFromItem(item);
+                }
+            }
+        }
+    }
+    return itm;
 }
