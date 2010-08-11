@@ -918,6 +918,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 // ================================================================
 //                             NameSpace "c"
 // ================================================================
+#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "c"
@@ -970,6 +971,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
     READ_EPILOGUE
 }
+
+#endif
 
 // ================================================================
 //                             NameSpace "a"
@@ -2068,7 +2071,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
         readNext();
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
+#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
             ELSE_TRY_READ_IF_NS(c, chart)
+#endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
             ELSE_TRY_READ_IF_NS(a, tbl);
