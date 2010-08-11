@@ -101,9 +101,6 @@ QString TableStyleProperties::stringFromType(Type type)
         case SwCell:
             return "swCell";
             break;
-        case TblBg:
-            return "tblBg";
-            break;
         case WholeTbl:
             return "wholeTbl";
             break;
@@ -138,9 +135,6 @@ Type TableStyleProperties::typeFromString(const QString& string)
     else if(string == "swCell") {
         return SwCell;
     }
-    else if(string == "tblBg") {
-        return TblBg;
-    }
     else if(string == "wholeTbl") {
         return WholeTbl;
     }
@@ -155,7 +149,6 @@ void TableStyle::setId(const QString& id)
 {
     m_id = id;
 }
-
 
 QString TableStyle::id() const
 {

@@ -106,6 +106,7 @@ public:
 
 private:
     QString m_id;
+    //TODO handle the table background stored in the element TblBg
     QMap<Type, TableStyleProperties> m_properties;
 };
 
