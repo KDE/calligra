@@ -14,17 +14,17 @@ SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
 
 QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
-QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  FlowLayout.h PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellTool.h SlidingMotionDialog.h)
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  FlowLayout.h PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h)
 
-add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp
+add_executable(FreOffice Main.cpp MainWindow.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
 
 find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon QtOpenGL)
 else(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon QtOpenGL)
 endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)

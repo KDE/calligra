@@ -22,6 +22,7 @@
 #include <QFrame>
 #include <QDialog>
 #include <QSpinBox>
+#include <QComboBox>
 
 #include "MainWindow.h"
 
@@ -46,8 +47,10 @@ public:
     QPushButton * m_acceleration;
     QLabel * m_slidetransitionlabel;
     QLabel * m_timerlabel;
-    QSpinBox * m_slidetransitionstyle;
+    QComboBox * m_slidetransitionstyle;
     QSpinBox * m_slidetransitiontime;
+    int m_select;
+    int m_time;
 
 private:
     QPushButton * addFrameComponent(const QString &imagepath);
@@ -57,6 +60,10 @@ public:
 
 public slots:
     void deleteDialog();
+    void prepglshow();
+
+signals:
+    void startglshow(int,int);
 
 };
 

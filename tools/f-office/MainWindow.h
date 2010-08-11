@@ -62,6 +62,7 @@ class QDialog;
 class QListWidget;
 class QListWidgetItem;
 class SlidingMotionDialog;
+class GLPresenter;
 
 class KUndoStack;
 class KoTextEditor;
@@ -149,6 +150,11 @@ private:
       * Stores the URL of the open file
       */
     KUrl m_url;
+    /*!
+      * Holds the properties of presentation style and time
+      */
+    int gl_showtime;
+    int gl_style;
     /*!
      * X-cordinate and Y-cordinate values at mouse click position
      */
@@ -371,6 +377,10 @@ private:
      * Find string from document
      * /param pointer to QTextDocument
      * /param reference to text to be searched
+     */
+    GLPresenter *presenter;
+    /*!
+     * Open GL Class , to handle the slide show.
      */
     void findText(QList<QTextDocument*> docs, QList<QPair<KoPAPageBase*, KoShape*> > shapes, const QString &aText);
     /*!
@@ -747,7 +757,8 @@ public slots:
      * Slot to toggle between the gesture recognization
      */
     void toggle_accelerator();
-
+    void glPresenter();
+    void glPresenterSet(int,int);
 private:
 
     QMap<QString, OfficeInterface*> loadedPlugins;

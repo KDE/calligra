@@ -466,6 +466,11 @@
     <string/>
    </property>
   </action>
+  <action name="actionPresentation">
+   <property name="text">
+    <string>Presentation</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="FreOffice.qrc"/>

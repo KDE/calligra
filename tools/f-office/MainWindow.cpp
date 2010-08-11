@@ -34,6 +34,7 @@
 #include "PresentationTool.h"
 #include "MainWindowAdaptor.h"
 #include "FoCellToolFactory.h"
+#include "GlPresenter.h"
 
 #include <QFileDialog>
 #include <QUrl>
@@ -230,8 +231,8 @@ void MainWindow::init()
     menu->addAction(m_ui->actionSaveAs);
     menu->addAction(m_ui->actionClose);
     menu->addAction(m_ui->actionAbout);
-    menu->addAction(m_ui->actionCollaborate);
-
+   // menu->addAction(m_ui->actionCollaborate);
+    menu->addAction(m_ui->actionPresentation);
     // false here means that they are not plugins
     m_ui->actionOpen->setData(QVariant(false));
     m_ui->actionAbout->setData(QVariant(false));
@@ -239,7 +240,7 @@ void MainWindow::init()
     m_ui->actionSave->setData(QVariant(false));
     m_ui->actionSaveAs->setData(QVariant(false));
     m_ui->actionClose->setData(QVariant(false));
-
+    m_ui->actionPresentation->setData(QVariant(false));
     const QDir pluginDir("/usr/lib/freoffice/");
     const QStringList plugins = pluginDir.entryList(QDir::Files);
 
@@ -276,6 +277,7 @@ void MainWindow::init()
     connect(m_ui->actionFormat,SIGNAL(triggered()),SLOT(openFormatFrame()));
     connect(m_ui->actionStyle,SIGNAL(triggered()),SLOT(openFontStyleFrame()));
     connect(m_ui->actionMathOp,SIGNAL(triggered()),SLOT(openMathOpFrame()));
+    connect(m_ui->actionPresentation,SIGNAL(triggered()),this,SLOT(glPresenter()));
 
     connect(m_search, SIGNAL(returnPressed()), SLOT(nextWord()));
     connect(m_search, SIGNAL(textEdited(QString)), SLOT(startSearch()));
@@ -343,6 +345,11 @@ void MainWindow::init()
     m_ui->EditToolBar->hide();
     connect(m_ui->actionPageNumber,SIGNAL(triggered()),this,SLOT(showPreviewDialog()));
     viewNumber=0;
+    /*
+     * Default show time is 7000 milli seconds
+     */
+    gl_showtime=7000;
+    gl_style=0;
 }
 
 MainWindow::~MainWindow()
@@ -1878,8 +1885,11 @@ void MainWindow::showFullScreenPresentationIcons(void)
 
 void MainWindow::slideTransitionDialog(){
     m_slidingmotiondialog = new SlidingMotionDialog;
+    m_slidingmotiondialog->m_select = gl_style ;
+    m_slidingmotiondialog->m_time = gl_showtime / 1000;
     m_slidingmotiondialog->showDialog(this);
     connect(m_slidingmotiondialog->m_opengl, SIGNAL(clicked()), SLOT(toggle_accelerator()));
+    connect(m_slidingmotiondialog, SIGNAL(startglshow(int,int)), SLOT(glPresenterSet(int,int)));
 }
 
 void MainWindow::toggle_accelerator()
@@ -3337,3 +3347,26 @@ void MainWindow::collabOpenFile(const QString &filename) {
 
 ///////////////////////////
 ///////////////////////////
+void MainWindow::glPresenter()
+{
+    if(m_type == Presentation){
+    /*
+    int i=0;
+    QList <QPixmap> pixm;
+    while(i < m_doc->pageCount())
+    {
+        KoPADocument* slide = qobject_cast<KoPADocument*>(m_doc);
+        KoPAPageBase* cur_slide = slide->pageByIndex(i, false);
+        pixm << cur_slide->thumbnail();
+        i++;
+    }
+    */
+    presenter = new GLPresenter(this,gl_style,gl_showtime,storeButtonPreview->thumbnailList);
+}
+}
+
+void MainWindow::glPresenterSet(int a , int b)
+{
+    gl_showtime = b * 1000;
+    gl_style = a;
+}

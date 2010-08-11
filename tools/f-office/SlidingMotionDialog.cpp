@@ -61,10 +61,22 @@ void SlidingMotionDialog::showDialog(MainWindow *main){
     m_timerlabel->setAlignment(Qt::AlignRight);
     m_timerlabel->setPixmap(QPixmap(":/images/64x64/Acceleration/TimerClock.png"));
 
-    m_slidetransitionstyle = new QSpinBox(this);
+    m_slidetransitionstyle = new QComboBox(this);
+    Q_CHECK_PTR(m_slidetransitionstyle);
     m_slidetransitiontime = new QSpinBox(this);
+    Q_CHECK_PTR(m_slidetransitiontime);
 
+    m_slidetransitiontime->setSuffix(" Seconds");
+    m_slidetransitiontime->setValue(m_time);
+
+    m_slidetransitionstyle->addItem("Simple");
+    m_slidetransitionstyle->addItem("Cubical moves");
+    m_slidetransitionstyle->addItem("Wave motion");
+    m_slidetransitionstyle->addItem("Jumping slides");
     m_slidingmotionframe->setWindowTitle("Slide Transition Options");
+    m_slidetransitionstyle->setCurrentIndex(m_select);
+    connect(m_slidetransitionstyle,SIGNAL(activated(int)),SLOT(prepglshow()));
+    connect(m_slidetransitiontime,SIGNAL(valueChanged(int)),SLOT(prepglshow()));
 
     m_slidingmotionframelayout->addWidget(m_opengl,0,0);
     m_slidingmotionframelayout->addWidget(m_slidetransitionlabel,0,1);
@@ -97,4 +109,11 @@ QPushButton * SlidingMotionDialog::addFrameComponent(const QString &imagepath){
     QPushButton *btn = new QPushButton(imagepath,this);
     Q_CHECK_PTR(btn);
     return btn;
+}
+
+void SlidingMotionDialog::prepglshow(){
+    if(m_slidetransitiontime->value()<7){
+        m_slidetransitiontime->setValue(7);
+    }
+    emit startglshow(m_slidetransitionstyle->currentIndex(),m_slidetransitiontime->value());
 }
