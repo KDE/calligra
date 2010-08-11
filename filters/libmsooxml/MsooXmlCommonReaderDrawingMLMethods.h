@@ -31,7 +31,9 @@ protected:
 void initDrawingML();
 
 // All the readers
+#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
 KoFilter::ConversionStatus read_chart();
+#endif
 KoFilter::ConversionStatus read_pic();
 KoFilter::ConversionStatus read_nvPicPr();
 enum cNvPrCaller {
