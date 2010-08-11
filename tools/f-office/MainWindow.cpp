@@ -462,7 +462,7 @@ void MainWindow::openFontStyleFrame()
         m_fontstyleframe->hide();
         return;
     } else if(m_fontstyleframe){
-        if(m_type==Text)
+        if(m_type == Text || m_type == Spreadsheet)
             activeFontOptionCheck();
         m_fontstyleframe->show();
         return;
@@ -508,7 +508,7 @@ void MainWindow::openFontStyleFrame()
                              FONTSTYLEFRAME_YCORDINATE_VALUE,
                              FONTSTYLEFRAME_WIDTH,
                              FONTSTYLEFRAME_HEIGHT);
-    if(m_type==Text)
+    if(m_type == Text || m_type == Spreadsheet)
         activeFontOptionCheck();
     m_fontstyleframe->show();
 
@@ -862,87 +862,126 @@ void MainWindow::activeFormatOptionCheck() {
     Qt::Alignment textblock_align = blk.alignment();
     switch(textblock_align) {
         case Qt::AlignLeft :
-                        m_alignleft->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-                        m_alignjustify->setStyleSheet("");
-                        m_alignright->setStyleSheet("");
-                        m_aligncenter->setStyleSheet("");
+                        m_alignleft->setChecked(true);
+                        m_alignjustify->setChecked(false);
+                        m_alignright->setChecked(false);
+                        m_aligncenter->setChecked(false);
                         break;
         case Qt::AlignRight :
-                        m_alignright->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-                        m_alignjustify->setStyleSheet("");
-                        m_alignleft->setStyleSheet("");
-                        m_aligncenter->setStyleSheet("");
+                        m_alignright->setChecked(true);
+                        m_alignjustify->setChecked(false);
+                        m_alignleft->setChecked(false);
+                        m_aligncenter->setChecked(false);
                         break;
         case Qt::AlignCenter :
-                        m_aligncenter->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-                        m_alignjustify->setStyleSheet("");
-                        m_alignright->setStyleSheet("");
-                        m_alignleft->setStyleSheet("");
+                        m_aligncenter->setChecked(true);
+                        m_alignjustify->setChecked(false);
+                        m_alignright->setChecked(false);
+                        m_alignleft->setChecked(false);
                         break;
         case Qt::AlignJustify :
-                        m_alignjustify->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-                        m_alignleft->setStyleSheet("");
-                        m_alignright->setStyleSheet("");
-                        m_aligncenter->setStyleSheet("");
+                        m_alignjustify->setChecked(true);
+                        m_alignleft->setChecked(false);
+                        m_alignright->setChecked(false);
+                        m_aligncenter->setChecked(false);
                         break;
     }
 }
 
 void MainWindow::activeFontOptionCheck() {
-    if(m_superscript) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
-            m_superscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_superscript->setStyleSheet("");
+    if(m_type == Text) {
+        if(m_superscript) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSuperScript) {
+                m_superscript->setChecked(true);
+            } else {
+                m_superscript->setChecked(false);
+            }
+        }
+
+        if(m_subscript) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
+                m_subscript->setChecked(true);
+            } else {
+                m_subscript->setChecked(false);
+            }
+        }
+
+        if(m_fontsizebutton) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            QFont font=textchar.font();
+            m_fontsizebutton->setText(QString().setNum(font.pointSize()));
+        }
+
+        if(m_fontcombobox) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            QString fonttype = textchar.fontFamily();
+            m_fontcombobox->setCurrentFont(QFont(fonttype));
+        }
+
+        if(m_bold) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if (textchar.fontWeight()==QFont::Bold) {
+                m_bold->setChecked(true);
+            } else {
+                m_bold->setChecked(false);
+            }
+        }
+
+        if(m_italic) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if (textchar.fontItalic()) {
+                m_italic->setChecked(true);
+            } else {
+                m_italic->setChecked(false);
+            }
+        }
+
+        if(m_underline) {
+            QTextCharFormat textchar = m_editor->charFormat();
+            if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
+                m_underline->setChecked(true);
+            } else {
+                m_underline->setChecked(false);
+            }
         }
     }
 
-    if(m_subscript) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if(m_editor->charFormat().verticalAlignment() == QTextCharFormat::AlignSubScript) {
-            m_subscript->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_subscript->setStyleSheet("");
+    if(m_type == Spreadsheet) {
+
+        if(m_fontsizebutton) {
+           QString fontsize;
+           fontsize.setNum(m_focelltool->getFontSize());
+           m_fontsizebutton->setText(fontsize);
         }
-    }
 
-    if(m_fontsizebutton) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        QFont font=textchar.font();
-        m_fontsizebutton->setText(QString().setNum(font.pointSize()));
-    }
-
-    if(m_fontcombobox) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        QString fonttype = textchar.fontFamily();
-        m_fontcombobox->setCurrentFont(QFont(fonttype));
-    }
-
-    if(m_bold) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if (textchar.fontWeight()==QFont::Bold) {
-            m_bold->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_bold->setStyleSheet("");
+        if(m_fontcombobox) {
+            m_fontcombobox->setCurrentFont(QFont(m_focelltool->getFontType()));
         }
-    }
 
-    if(m_italic) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if (textchar.fontItalic()) {
-            m_italic->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_italic->setStyleSheet("");
+        if(m_bold) {
+            if (m_focelltool->isFontBold()) {
+                m_bold->setChecked(true);
+            } else {
+                m_bold->setChecked(false);
+            }
         }
-    }
 
-    if(m_underline) {
-        QTextCharFormat textchar = m_editor->charFormat();
-        if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
-            m_underline->setStyleSheet("QPushButton { background-color:lightskyblue; } ");
-        } else {
-            m_underline->setStyleSheet("");
+        if(m_italic) {
+            if (m_focelltool->isFontItalic()) {
+                m_italic->setChecked(true);
+            } else {
+                m_italic->setChecked(false);
+            }
+        }
+
+        if(m_underline) {
+            if(m_focelltool->isFontUnderline()) {
+                m_underline->setChecked(true);
+            } else {
+                m_underline->setChecked(false);
+            }
         }
     }
 }
@@ -1421,18 +1460,20 @@ void MainWindow::closeTempSelectionDialog() {
 QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
+    Q_CHECK_PTR(btn);
+    btn->setCheckable(true);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
     btn->setMaximumSize(165,75);
-    Q_CHECK_PTR(btn);
     return btn;
 }
 QPushButton * MainWindow::addFontStyleFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
+    Q_CHECK_PTR(btn);
+    btn->setCheckable(true);
     btn->setIcon(QIcon(":/images/48x48/Edittoolbaricons/"+imagepath+".png"));
     btn->setMinimumSize(165,70);
     btn->setMaximumSize(165,70);
-    Q_CHECK_PTR(btn);
     return btn;
 }
 

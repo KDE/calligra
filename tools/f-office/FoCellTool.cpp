@@ -19,10 +19,12 @@
 
 // Local
 #include "FoCellTool.h"
-
-// KOffice
+#include "Cell.h"
+#include "Style.h"
 #include "KoColor.h"
 
+using KSpread::Cell;
+using KSpread::Style;
 
 FoCellTool::FoCellTool(KoCanvasBase* canvas)
         : KSpread::CellTool(canvas)
@@ -54,6 +56,31 @@ void FoCellTool::selectTextBackgroundColor(const QColor &color) {
     KoColor *textbackgroundcolor = new KoColor();
     textbackgroundcolor->fromQColor(color);
     changeBackgroundColor(*textbackgroundcolor);
+}
+
+int FoCellTool::getFontSize() {
+    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+    return style.fontSize();
+}
+
+QString FoCellTool::getFontType() {
+    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+    return style.fontFamily();
+}
+
+bool FoCellTool::isFontBold() {
+    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+    return style.bold();
+}
+
+bool FoCellTool::isFontItalic() {
+    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+    return style.italic();
+}
+
+bool FoCellTool::isFontUnderline() {
+    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
+    return style.underline();
 }
 
 KSpread::CellEditorBase* FoCellTool::editor() const

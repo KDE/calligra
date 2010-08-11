@@ -49,6 +49,27 @@ public:
      * function for selecting text background color
      */
     void selectTextBackgroundColor(const QColor& color);
+    /*!
+     * function for retreiving font size
+     */
+    int getFontSize();
+    /*!
+     * function for retreiving font type
+     */
+    QString getFontType();
+    /*!
+     * function for bold check
+     */
+    bool isFontBold();
+    /*!
+     * function for italic check
+     */
+    bool isFontItalic();
+    /*!
+     * function for underline check
+     */
+    bool isFontUnderline();
+
 
     // custom cell editor
     virtual KSpread::CellEditorBase* editor() const;
