@@ -38,11 +38,26 @@ namespace MSOOXML
 
 class Border {
 public:
+
+    enum Side {
+        NoSide,
+        Bottom,
+        Left,
+        Right,
+//         TopLeftToBottomRight,
+        Top,
+//         TopRightToBottomLeft
+    };
+
+    Side side();
+    void setSide(Side side);
+
     void setPen(const QPen& pen);
     QPen pen() const;
 
 private:
     QPen m_pen;
+    Side m_side;
 };
 
 class TableStyleProperties
@@ -64,17 +79,6 @@ public:
     Type type() const;
     void setType(Type type);
 
-    enum BorderSide {
-        Bottom,
-        InsideH,
-        InsideV,
-        Left,
-        Right,
-        TopLeftToBottomRight,
-        Top,
-        TopRightToBottomLeft
-    };
-
     Border borderForSide(BorderSide side) const;
     void addBorder(Border border, BorderSide side);
 
@@ -89,7 +93,8 @@ public:
     static QString stringFromType(Type type);
 
 private:
-    QMap<BorderSide, Border> m_borders;
+    //TODO see if we can take care of InsideH InsideV and how
+    QMap<Border::Side, Border> m_borders;
     Type m_type;
 };
 

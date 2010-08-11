@@ -37,6 +37,18 @@
 
 using namespace MSOOXML;
 
+
+Border::Side Border::side()
+{
+    return m_side;
+}
+
+
+void Border::setSide(Border::Side side)
+{
+    m_side = side;
+}
+
 QPen Border::pen() const
 {
     return m_pen;
@@ -67,12 +79,12 @@ void TableStyleProperties::setType(Type type)
     m_type = type;
 }
 
-void TableStyleProperties::addBorder(Border border, BorderSide side)
+void TableStyleProperties::addBorder(Border border, Border::Side side)
 {
     m_borders.insert(side, border);
 }
 
-Border TableStyleProperties::borderForSide(BorderSide side) const
+Border TableStyleProperties::borderForSide(Border::Side side) const
 {
     return m_borders.value(side);
 }
@@ -355,7 +367,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
 
     Border border;
     border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::Bottom);
+    m_currentStyleProperties.addBorder(border, Border::Bottom);
 
     READ_EPILOGUE
 }
@@ -377,7 +389,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
 
     Border border;
     border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::Top);
+    m_currentStyleProperties.addBorder(border, Border::Top);
 
     READ_EPILOGUE
 }
@@ -399,7 +411,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
 
     Border border;
     border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::Left);
+    m_currentStyleProperties.addBorder(border, Border::Left);
 
     READ_EPILOGUE
 }
@@ -421,7 +433,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 
     Border border;
     border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::Right);
+    m_currentStyleProperties.addBorder(border, Border::Right);
 
     READ_EPILOGUE
 }
@@ -443,7 +455,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
 
     Border border;
     border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::InsideH);
+    m_currentStyleProperties.addBorder(border, Border::InsideH);
 
     READ_EPILOGUE
 }
