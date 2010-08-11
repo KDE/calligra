@@ -124,6 +124,23 @@ QString Border::odfStyleName() const
     return QString();
 }
 
+QString Border::odfStyleProperties() const
+{
+    return QString("%1pt %2 %3").arg(m_width)
+                                .arg(odfStyleName())
+                                .arg(m_color.name());
+}
+
+void Border::setWidth(qreal width)
+{
+    m_width = width;
+}
+
+qreal Border::width() const
+{
+    return m_width;
+}
+
 TableStyleProperties::TableStyleProperties()
 : m_borders()
 , m_type(NoType)

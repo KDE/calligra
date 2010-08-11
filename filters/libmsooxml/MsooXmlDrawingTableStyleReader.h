@@ -71,9 +71,15 @@ public:
     Style style() const;
     QString odfStyleName() const;
 
+    void setWidth(qreal width);
+    qreal width() const;
+
+    QString odfStyleProperties() const;
+
 private:
     QColor m_color;
     Side m_side;
+    qreal m_width;
     Style m_style;
 };
 
