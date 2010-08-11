@@ -28,7 +28,6 @@
 #include <MsooXmlCommonReader.h>
 
 #include <KoGenStyle.h>
-#include <styles/KoCharacterStyle.h>
 
 class KoXmlWriter;
 class PptxXmlSlideReaderContext;
