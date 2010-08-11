@@ -33,6 +33,8 @@
 
 #include <KoXmlWriter.h>
 
+#include <QString>
+
 #define MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 using namespace MSOOXML;
