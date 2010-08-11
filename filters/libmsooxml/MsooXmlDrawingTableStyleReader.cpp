@@ -465,54 +465,54 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideV()
 
     Border border;
     border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::InsideV);
+    m_currentStyleProperties.addBorder(border, Border::InsideV);
 
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL tl2br
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
-{
-    READ_PROLOGUE
+// #undef CURRENT_EL
+// #define CURRENT_EL tl2br
+// KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
+// {
+//     READ_PROLOGUE
+// 
+//     while(!atEnd()) {
+//         if(isStartElement()) {
+//             TRY_READ_IF(ln)
+// //             ELSE_TRY_READ_IF(lnRef)
+// //             ELSE_WRONG_FORMAT
+//         }
+//         BREAK_IF_END_OF(CURRENT_EL);
+//     }
+// 
+//     Border border;
+//     border.setPen(m_currentPen);
+//     m_currentStyleProperties.addBorder(border, Border::TopLeftToBottomRight);
+// 
+//     READ_EPILOGUE
+// }
 
-    while(!atEnd()) {
-        if(isStartElement()) {
-            TRY_READ_IF(ln)
-//             ELSE_TRY_READ_IF(lnRef)
-//             ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    Border border;
-    border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::TopLeftToBottomRight);
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL tr2bl
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
-{
-    READ_PROLOGUE
-
-    while(!atEnd()) {
-        if(isStartElement()) {
-            TRY_READ_IF(ln)
-//             ELSE_TRY_READ_IF(lnRef)
-//             ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    Border border;
-    border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, TableStyleProperties::TopRightToBottomLeft);
-
-    READ_EPILOGUE
-}
+// #undef CURRENT_EL
+// #define CURRENT_EL tr2bl
+// KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
+// {
+//     READ_PROLOGUE
+// 
+//     while(!atEnd()) {
+//         if(isStartElement()) {
+//             TRY_READ_IF(ln)
+// //             ELSE_TRY_READ_IF(lnRef)
+// //             ELSE_WRONG_FORMAT
+//         }
+//         BREAK_IF_END_OF(CURRENT_EL);
+//     }
+// 
+//     Border border;
+//     border.setPen(m_currentPen);
+//     m_currentStyleProperties.addBorder(border, Border::TopRightToBottomLeft);
+// 
+//     READ_EPILOGUE
+// }
 
 #define blipFill_NS "a"
 #define SETUP_PARA_STYLE_IN_READ_P
