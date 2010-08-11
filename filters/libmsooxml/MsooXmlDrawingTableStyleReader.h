@@ -154,7 +154,7 @@ class MsooXmlImport;
 class MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    TableStyleList styleList;
+    TableStyleList* styleList;
 
     //Should be mostly unused, those members are needed by some functions not used
     //in this file

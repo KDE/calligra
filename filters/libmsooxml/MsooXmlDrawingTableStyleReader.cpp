@@ -402,7 +402,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 
     QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(styleId)
-    m_context->styleList.insertStyle(styleId, m_currentStyle);
+    m_context->styleList->insertStyle(styleId, m_currentStyle);
     m_currentStyle = TableStyle();
 
     READ_EPILOGUE
