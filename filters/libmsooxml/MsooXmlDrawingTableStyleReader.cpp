@@ -57,14 +57,14 @@ void Border::setSide(Border::Side side)
     m_side = side;
 }
 
-QPen Border::pen() const
+QColor Border::color() const
 {
-    return m_pen;
+    return m_color;
 }
 
-void Border::setPen(const QPen& pen)
+void Border::setColor(const QColor& color)
 {
-    m_pen = pen;
+    m_color = color;
 }
 
 TableStyleProperties::TableStyleProperties()
@@ -411,7 +411,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
     }
 
     Border border;
-    border.setPen(m_currentPen);
+    border.setColor(m_currentPen.color());
     m_currentStyleProperties.addBorder(border, Border::Bottom);
 
     READ_EPILOGUE
@@ -433,7 +433,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
     }
 
     Border border;
-    border.setPen(m_currentPen);
+    border.setColor(m_currentPen.color());
     m_currentStyleProperties.addBorder(border, Border::Top);
 
     READ_EPILOGUE
@@ -455,7 +455,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
     }
 
     Border border;
-    border.setPen(m_currentPen);
+    border.setColor(m_currentPen.color());
     m_currentStyleProperties.addBorder(border, Border::Left);
 
     READ_EPILOGUE
@@ -477,7 +477,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
     }
 
     Border border;
-    border.setPen(m_currentPen);
+    border.setColor(m_currentPen.color());
     m_currentStyleProperties.addBorder(border, Border::Right);
 
     READ_EPILOGUE
@@ -499,7 +499,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //     }
 // 
 //     Border border;
-//     border.setPen(m_currentPen);
+//     border.setColor(m_currentPen.color());
 //     m_currentStyleProperties.addBorder(border, Border::TopLeftToBottomRight);
 // 
 //     READ_EPILOGUE
@@ -521,7 +521,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //     }
 // 
 //     Border border;
-//     border.setPen(m_currentPen);
+//     border.setColor(m_currentPen.color());
 //     m_currentStyleProperties.addBorder(border, Border::TopRightToBottomLeft);
 // 
 //     READ_EPILOGUE

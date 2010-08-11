@@ -54,11 +54,11 @@ public:
     Side side() const;
     void setSide(Side side);
 
-    void setPen(const QPen& pen);
-    QPen pen() const;
+    QColor color() const;
+    void setColor(const QColor& color);
 
 private:
-    QPen m_pen;
+    QColor m_color;
     Side m_side;
 };
 
