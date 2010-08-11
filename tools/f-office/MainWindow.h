@@ -60,6 +60,7 @@ class QTextDocument;
 class QGridLayout;
 class QDialog;
 class QListWidget;
+class QListWidgetItem;
 class SlidingMotionDialog;
 
 class KUndoStack;
@@ -478,7 +479,7 @@ private slots:
     void resourceChanged(int key, const QVariant &value);
     void showFontSizeDialog();
     void fontSizeEntered();
-    void fontSizeRowSelected(int row);
+    void fontSizeRowSelected(QListWidgetItem *item);
     /*!
      * Slot to perform UndoAction
      */

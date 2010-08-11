@@ -35,6 +35,9 @@ FoCellTool::~FoCellTool()
 
 void FoCellTool::selectFontSize(int size){
     fontSize(size);
+
+    //below function will automatically adjust size of row as per font size we select
+    adjustRow();
 }
 
 void FoCellTool::selectFontType(const QString& fonttype){

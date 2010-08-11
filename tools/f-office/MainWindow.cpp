@@ -516,12 +516,11 @@ void MainWindow::openFontStyleFrame()
     connect(m_underline,SIGNAL(clicked()),this,SLOT(doUnderLine()));
 }
 
-void MainWindow::showFontSizeDialog()
+void  MainWindow::showFontSizeDialog()
 {
     if (m_fontstyleframe) {
         m_fontstyleframe->hide();
     }
-
     m_fontSizeDialog = new QDialog(this);
     Q_ASSERT(m_fontSizeDialog);
     m_fontSizeLineEdit=new QLineEdit(m_fontSizeDialog);
@@ -531,9 +530,8 @@ void MainWindow::showFontSizeDialog()
     m_fontSizeDialogLayout= new QVBoxLayout();
     m_fontSizeDialogLayout->addWidget(m_fontSizeLineEdit);
     m_fontSizeDialogLayout->addWidget(m_fontSizeList);
-    m_fontSizeDialog->setWindowTitle("Font Size");
+    m_fontSizeDialog->setWindowTitle(i18n("Font Size"));
     m_fontSizeDialog->setLayout(m_fontSizeDialogLayout);
-    // Q_CHECK_PTR(m_fontsizebutton);
     m_fontSizeLineEdit->setInputMethodHints(Qt::ImhDigitsOnly);
 
     int i;
@@ -542,23 +540,23 @@ void MainWindow::showFontSizeDialog()
         QString f_size;
         m_fontSizeList->addItem(f_size.setNum(i));
     }
-
     int currentFont= m_fontsizebutton->text().toInt();
-
     if(currentFont>=4 && currentFont<=40) {
         m_fontSizeList->setCurrentRow(currentFont-4);
     }
 
     m_fontSizeLineEdit->setText(m_fontsizebutton->text());
     m_fontSizeLineEdit->selectAll();
-    m_fontSizeDialog->show();
-    connect(m_fontSizeList,SIGNAL(currentRowChanged(int)),SLOT(fontSizeRowSelected(int)));
+    connect(m_fontSizeList,SIGNAL(itemDoubleClicked (QListWidgetItem *)),SLOT(fontSizeRowSelected( QListWidgetItem * )));
     connect(m_fontSizeLineEdit,SIGNAL(returnPressed()),SLOT(fontSizeEntered()));
+    m_fontSizeDialog->exec();
 }
 
-void MainWindow::fontSizeRowSelected(int row)
+void MainWindow::fontSizeRowSelected(QListWidgetItem *item)
 {
-    selectFontSize(row+4);
+     int row=(item->text()).toInt();
+     selectFontSize(row+4);
+     m_fontSizeDialog->accept();
 }
 
 void MainWindow::fontSizeEntered()
