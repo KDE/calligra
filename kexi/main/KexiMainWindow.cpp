@@ -94,7 +94,7 @@
 #include "kexifinddialog.h"
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
-#include "KexiProjectModel.h"
+#include <widget/KexiProjectModel.h>
 
 #include <widget/KexiProjectListView.h>
 #include <widget/KexiPropertyEditorView.h>
