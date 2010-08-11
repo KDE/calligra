@@ -65,6 +65,9 @@ private:
 class TableStyleProperties
 {
 public:
+    TableStyleProperties();
+    ~TableStyleProperties();
+
     enum Type {
         NoType,
         FirstRow,
@@ -81,8 +84,8 @@ public:
     Type type() const;
     void setType(Type type);
 
-    Border borderForSide(BorderSide side) const;
-    void addBorder(Border border, BorderSide side);
+    Border borderForSide(Border::Side side) const;
+    void addBorder(Border border, Border::Side side);
 
     /** 
     * @brief Save the style, note that the type of the style depends on the type 

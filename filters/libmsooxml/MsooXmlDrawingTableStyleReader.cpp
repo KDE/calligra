@@ -199,7 +199,7 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
             styleBaseName = "table";
             break;
     }
-    KoGenStyle style = KoGenStyle(styleType, styleBaseName);
+    KoGenStyle style = KoGenStyle(styleType, qPrintable(styleBaseName));
 }
 
 void TableStyle::setId(const QString& id)
@@ -212,22 +212,22 @@ QString TableStyle::id() const
     return m_id;
 }
 
-TableStyleProperties TableStyle::propertiesForType(Type type) const
+TableStyleProperties TableStyle::propertiesForType(TableStyleProperties::Type type) const
 {
     if(!m_properties.contains(type)) {
-        if(!m_properties.contains(TableStyle::WholeTbl)) {
+        if(!m_properties.contains(TableStyleProperties::WholeTbl)) {
             //Return at least something
             return TableStyleProperties();
         }
 
         //Asume WholeTbl
-        return m_properties.value(TableStyle::WholeTbl);
+        return m_properties.value(TableStyleProperties::WholeTbl);
     }
 
     return m_properties.value(type);
 }
 
-void TableStyle::addProperties(TableStyleProperties properties, Type type)
+void TableStyle::addProperties(TableStyleProperties properties, TableStyleProperties::Type type)
 {
     m_properties.insert(type, properties);
 }
@@ -335,7 +335,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    m_currentStyle.addProperties(m_currentStyleProperties, TableStyle::WholeTbl);
+    m_currentStyle.addProperties(m_currentStyleProperties, TableStyleProperties::WholeTbl);
     m_currentStyleProperties = TableStyleProperties();
 
     READ_EPILOGUE
@@ -379,13 +379,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBrd()
         if(isStartElement()) {
             TRY_READ_IF(bottom)
 //             ELSE_TRY_READ_IF(extLst)
-            ELSE_TRY_READ_IF(insideH)
-            ELSE_TRY_READ_IF(insideV)
+//             ELSE_TRY_READ_IF(insideH)
+//             ELSE_TRY_READ_IF(insideV)
             ELSE_TRY_READ_IF(left)
             ELSE_TRY_READ_IF(right)
-            ELSE_TRY_READ_IF(tl2br)
+//             ELSE_TRY_READ_IF(tl2br)
             ELSE_TRY_READ_IF(top)
-            ELSE_TRY_READ_IF(tr2bl)
+//             ELSE_TRY_READ_IF(tr2bl)
 //             ELSE_WRONG_FORMAT
             m_currentPen = QPen();
         }
@@ -479,50 +479,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
     Border border;
     border.setPen(m_currentPen);
     m_currentStyleProperties.addBorder(border, Border::Right);
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL insideH
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
-{
-    READ_PROLOGUE
-
-    while(!atEnd()) {
-        if(isStartElement()) {
-            TRY_READ_IF(ln)
-//             ELSE_TRY_READ_IF(lnRef)
-//             ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    Border border;
-    border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, Border::InsideH);
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL insideV
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideV()
-{
-    READ_PROLOGUE
-
-    while(!atEnd()) {
-        if(isStartElement()) {
-            TRY_READ_IF(ln)
-//             ELSE_TRY_READ_IF(lnRef)
-//             ELSE_WRONG_FORMAT
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    Border border;
-    border.setPen(m_currentPen);
-    m_currentStyleProperties.addBorder(border, Border::InsideV);
 
     READ_EPILOGUE
 }
