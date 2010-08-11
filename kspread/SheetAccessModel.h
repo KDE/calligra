@@ -36,6 +36,9 @@ class Sheet;
  * Essentially, this model is a list of models to access a sheet's data. It contains a single row,
  * and has exactly one sheet model per column. In short, a model containing models.
  *
+ * To allow name-based referencing of a sheet's data (e.g. in an ODF-conform cell region like "Table1.A1:B2")
+ * each column's header contains the name of the sheet returned by KSpread::Sheet::sheetName() .
+ *
  * To access the QAbstractItemModel instance for a sheet's data, take the following code as example:
  * @code
  * QAbstractItemModel *sheetAccessModel = dynamic_cast<QAbstractItemModel*>( dataCenterMap["SheetAccessModel"] );
