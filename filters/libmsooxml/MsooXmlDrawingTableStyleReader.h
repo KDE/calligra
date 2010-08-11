@@ -51,7 +51,7 @@ public:
 //         TopRightToBottomLeft
     };
 
-    Side side();
+    Side side() const;
     void setSide(Side side);
 
     void setPen(const QPen& pen);

@@ -46,7 +46,7 @@ Border::~Border()
 {
 }
 
-Border::Side Border::side()
+Border::Side Border::side() const
 {
     return m_side;
 }
