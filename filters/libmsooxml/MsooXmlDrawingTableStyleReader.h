@@ -36,7 +36,7 @@ class KoGenStyles;
 namespace MSOOXML
 {
 
-class Border {
+class MSOOXML_EXPORT Border {
 public:
     Border();
     ~Border();
@@ -83,7 +83,7 @@ private:
     Style m_style;
 };
 
-class TableStyleProperties
+class MSOOXML_EXPORT TableStyleProperties
 {
 public:
     TableStyleProperties();
@@ -124,7 +124,7 @@ private:
     Type m_type;
 };
 
-class TableStyle
+class MSOOXML_EXPORT TableStyle
 {
 public:
 
@@ -140,7 +140,7 @@ private:
     QMap<TableStyleProperties::Type, TableStyleProperties> m_properties;
 };
 
-class TableStyleList
+class MSOOXML_EXPORT TableStyleList
 {
 public:
     TableStyle tableStyle(const QString& id) const;
@@ -164,7 +164,7 @@ public:
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
 };
 
-class MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
+class MSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
 {
 public:
     MsooXmlDrawingTableStyleReader(KoOdfWriters* writers);
