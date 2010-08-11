@@ -40,7 +40,9 @@
 using namespace MSOOXML;
 
 Border::Border()
-: m_side(NoSide)
+: m_color()
+, m_side(NoSide)
+, m_width(qreal(1.0))
 , m_style(None)
 {
 }
