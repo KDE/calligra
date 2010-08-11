@@ -103,18 +103,17 @@ private:
 class TableStyle
 {
 public:
-    using TableStyle::Type;
 
     QString id() const;
     void setId(const QString& id);
 
-    TableStyleProperties propertiesForType(Type type) const;
-    void addProperties(TableStyleProperties properties, Type type);
+    TableStyleProperties propertiesForType(TableStyleProperties::Type type) const;
+    void addProperties(TableStyleProperties properties, TableStyleProperties::Type type);
 
 private:
     QString m_id;
     //TODO handle the table background stored in the element TblBg
-    QMap<Type, TableStyleProperties> m_properties;
+    QMap<TableStyleProperties::Type, TableStyleProperties> m_properties;
 };
 
 class TableStyleList

@@ -132,7 +132,7 @@ QString TableStyleProperties::stringFromType(Type type)
     return QString();
 }
 
-Type TableStyleProperties::typeFromString(const QString& string)
+TableStyleProperties::Type TableStyleProperties::typeFromString(const QString& string)
 {
     if(string == "firstRow") {
         return FirstRow;
