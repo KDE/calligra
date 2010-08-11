@@ -123,8 +123,13 @@ Border TableStyleProperties::borderForSide(Border::Side side) const
 QString TableStyleProperties::stringFromType(Type type)
 {
     switch(type) {
+        case NoType:
+            return QString();
         case FirstRow:
             return "firstRow";
+            break;
+        case FirstCol:
+            return "firstCol";
             break;
         case LastCol:
             return "lastCol";
