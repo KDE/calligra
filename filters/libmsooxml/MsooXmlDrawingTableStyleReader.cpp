@@ -228,6 +228,7 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
             break;
     }
     KoGenStyle style = KoGenStyle(styleType, qPrintable(styleBaseName));
+    return QString();
 }
 
 void TableStyle::setId(const QString& id)
