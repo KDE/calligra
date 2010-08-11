@@ -19,6 +19,7 @@ set(msooxml_LIB_SRCS
     MsooXmlImport.cpp
     MsooXmlDocPropertiesReader.cpp
     pole.cpp
+    MsooXmlDrawingTableStyleReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
     KoOdfExporter.cpp
