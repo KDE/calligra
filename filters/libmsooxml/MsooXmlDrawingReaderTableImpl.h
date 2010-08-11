@@ -81,23 +81,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
             KoGenStyles::DontAddNumberToName)
     );
     body->addAttribute("table:style-name", tableStyleName);
-    uint column = 0;
-    foreach (const ColumnStyleInfo& columnStyle, columnStyles) {
+
+    foreach (const QString columnWidth, m_columnsWidth) {
         body->startElement("table:table-column");
-        const QString columnStyleName(
-            mainStyles->insert(
-                *columnStyle.style,
-                m_currentTableName + '.' + MSOOXML::Utils::columnName(column),
-                KoGenStyles::DontAddNumberToName)
-        );
+
+        KoGenStyle columnStyle = KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
+        columnStyle.addProperty("style:column-width", columnWidth);
+
+        const QString columnStyleName = mainStyles->insert(columnStyle, "col");
+
         body->addAttribute("table:style-name", columnStyleName);
-        if (columnStyle.count > 1) {
-            body->addAttribute("table:number-columns-repeated", columnStyle.count);
-        }
         body->endElement(); // table:table-column
-        column += columnStyle.count;
     }
-    clearColumnStyles();
+    m_columnsWidth.clear();
 
     (void)tableBuf.releaseWriter();
     body->endElement(); // table:table
@@ -167,16 +163,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
     TRY_READ_ATTR_WITHOUT_NS(w)
     const QString widthCm(MSOOXML::Utils::EMU_to_ODF(w));
 
-    KoGenStyle *columnStyle = new KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
-    if (!widthCm.isEmpty()) {
-        columnStyle->addProperty("style:column-width", widthCm, KoGenStyle::TableColumnType);
-        m_currentTableWidth += widthCm.left(widthCm.length()-2).toFloat();
-    }
-    // only add the style if it different than the previous; else just increate the counter
-    if (columnStyles.isEmpty() || !(*columnStyles.last().style == *columnStyle)) {
-        columnStyles.append(ColumnStyleInfo(columnStyle));
-    }
-    columnStyles.last().count++;
+    m_columnsWidth.append(widthCm);
+    m_currentTableWidth += widthCm.left(widthCm.length()-2).toFloat();
 
     while(!atEnd()) {
         readNext();
@@ -381,12 +369,4 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     readNext();
 
     READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-void MSOOXML_CURRENT_CLASS::clearColumnStyles() {
-    foreach (const ColumnStyleInfo& info, columnStyles) {
-        delete info.style;
-    }
-    columnStyles.clear();
 }

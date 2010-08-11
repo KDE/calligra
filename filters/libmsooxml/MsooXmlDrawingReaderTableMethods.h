@@ -38,17 +38,6 @@ protected:
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
 
-    //! Column style info, allows to keep information about repeated columns
-    class ColumnStyleInfo
-    {
-    public:
-        ColumnStyleInfo(KoGenStyle *s = 0) : count(0), style(s) {}
-        uint count;
-        KoGenStyle* style; //!< not owned
-    };
-
-    void clearColumnStyles();
-    QList<ColumnStyleInfo> columnStyles; //!< for collecting column styles
-
+    QList<QString> m_columnsWidth; //!< for collecting column sizes
 
 #endif
