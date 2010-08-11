@@ -279,8 +279,13 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
             styleBaseName = QLatin1String("table");
             break;
     }
-    KoGenStyle style = KoGenStyle(styleType, qPrintable(styleBaseName));
-    return QString();
+    KoGenStyle style = KoGenStyle(styleType);
+
+    foreach(const Border& border, m_borders) {
+        style.addAttribute(border.odfBorderName(), border.odfStyleProperties());
+    }
+
+    return styles.insert(style, styleBaseName.latin1());
 }
 
 void TableStyle::setId(const QString& id)
