@@ -20,9 +20,13 @@
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
 #define MSOOXMLDRAWINGTABLESTYLEREADER_H
 
-#include <MsooXmlReader.h>
+#include <MsooXmlCommonReader.h>
+#include <MsooXmlThemesReader.h>
+
+#include <KoGenStyle.h>
 
 #include <QPen>
+#include <QString>
 
 /**
 *   The following classes deal with the table styles part, specifically
@@ -46,7 +50,7 @@ class TableStyleProperties
 public:
     enum BorderSide {
         Bottom,
-        insideH,
+        InsideH,
         InsideV,
         Left,
         Right,
@@ -81,7 +85,7 @@ public:
     void setId(const QString& id);
 
     TableStyleProperties propertiesForType(Type type) const;
-    void addProperties(TableStyleProperties properties);
+    void addProperties(TableStyleProperties properties, Type type);
 
     static Type typeFromString(const QString& string);
     static QString stringFromType(Type type);
@@ -101,7 +105,21 @@ private:
     QMap<QString, TableStyle> m_styles;
 };
 
-class MsooXmlDrawingTableStyleReader : public MsooXmlReader
+class MsooXmlImport;
+class MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
+{
+public:
+    TableStyleList styleList;
+
+    //Should be mostly unused, those members are needed by some functions not used
+    //in this file
+    MsooXmlImport* import;
+    const QString path;
+    const QString file;
+    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
+};
+
+class MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
 {
 public:
     MsooXmlDrawingTableStyleReader(KoOdfWriters* writers);
@@ -119,26 +137,21 @@ protected:
     KoFilter::ConversionStatus read_left();
     KoFilter::ConversionStatus read_right();
     KoFilter::ConversionStatus read_top();
+    KoFilter::ConversionStatus read_insideV();
+    KoFilter::ConversionStatus read_insideH();
+    KoFilter::ConversionStatus read_tl2br();
+    KoFilter::ConversionStatus read_tr2bl();
+    KoFilter::ConversionStatus read_tcBrd();
 
     //get read_ln and friends, it's a shame I have to get a lot of crap alongside
+    #include <MsooXmlCommonReaderMethods.h>
     #include <MsooXmlCommonReaderDrawingMLMethods.h>
 
 private:
-    MsooXmlDrawingTablesStyleContext* m_context;
-
-    Border m_currentBorder;
-    TableStyleProperties::BorderSide m_currentBorderSide;
+    MsooXmlDrawingTableStyleContext* m_context;
 
     TableStyleProperties m_currentStyleProperties;
-    TableStyle::Type m_currentStylePropertiesType;
-
     TableStyle m_currentStyle;
-};
-
-class MsooXmlDrawingTablesStyleContext : public MSOOXML::MsooXmlReaderContext
-{
-public:
-    TableStyleList styleList;
 };
 
 }
