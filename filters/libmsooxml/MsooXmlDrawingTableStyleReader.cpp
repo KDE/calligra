@@ -255,6 +255,7 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
     switch(m_type) {
         //shut up compiler about not handled enum value in a switch
         case NoType:
+            Q_ASSERT(false);
             break;
         case FirstRow:
         case LastRow:
