@@ -167,7 +167,7 @@ KoFilter::ConversionStatus Utils::loadAndParse(QIODevice* io, KoXmlDocument& doc
 
     QString errorMsg;
     int errorLine, errorColumn;
-    bool ok = doc.setContent(io, &errorMsg, &errorLine, &errorColumn);
+    bool ok = doc.setContent(io, true, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError() << "Parsing error in " << fileName << ", aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
