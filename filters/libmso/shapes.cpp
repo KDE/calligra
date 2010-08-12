@@ -520,10 +520,10 @@ void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
     }
 
     out.xml.startElement("draw:line");
-    out.xml.addAttribute("svg:y1", out.vOffset(y1));
-    out.xml.addAttribute("svg:y2", out.vOffset(y2));
-    out.xml.addAttribute("svg:x1", out.hOffset(x1));
-    out.xml.addAttribute("svg:x2", out.hOffset(x2));
+    out.xml.addAttribute("svg:y1", client->formatPos(out.vOffset(y1)));
+    out.xml.addAttribute("svg:y2", client->formatPos(out.vOffset(y2)));
+    out.xml.addAttribute("svg:x1", client->formatPos(out.hOffset(x1)));
+    out.xml.addAttribute("svg:x2", client->formatPos(out.hOffset(x2)));
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     processText(o, out);
@@ -841,8 +841,8 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
     const QRectF rect = getRect(o);
 
-    out.xml.addAttribute("svg:width", out.hLength(rect.width()));
-    out.xml.addAttribute("svg:height", out.vLength(rect.height()));
+    out.xml.addAttribute("svg:width", client->formatPos(out.hLength(rect.width())));
+    out.xml.addAttribute("svg:height", client->formatPos(out.vLength(rect.height())));
  
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) {
@@ -867,11 +867,11 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 
         static const QString transformString("rotate(%1) translate(%2 %3)");
 
-        out.xml.addAttribute("draw:transform", transformString.arg(rotationAngle).arg( out.hOffset(translatedPoint.x())).arg(out.vOffset(translatedPoint.y())));
+        out.xml.addAttribute("draw:transform", transformString.arg(rotationAngle).arg( client->formatPos(out.hOffset(translatedPoint.x()))).arg(client->formatPos(out.vOffset(translatedPoint.y()))));
     }
     else {
-        out.xml.addAttribute("svg:x", out.hOffset(rect.x()));
-        out.xml.addAttribute("svg:y", out.vOffset(rect.y()));
+        out.xml.addAttribute("svg:x", client->formatPos(out.hOffset(rect.x())));
+        out.xml.addAttribute("svg:y", client->formatPos(out.vOffset(rect.y())));
     }
 }
 void defineArrow(KoGenStyles& styles)

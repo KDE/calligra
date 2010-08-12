@@ -40,8 +40,8 @@ Writer::Writer(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
                          bool stylesxml_)
       : xOffset(0),
         yOffset(0),
-        scaleX(25.4 / 576),
-        scaleY(25.4 / 576),
+        scaleX(1),
+        scaleY(1),
         xml(xmlWriter),
         styles(kostyles),
         stylesxml(stylesxml_)
@@ -59,22 +59,23 @@ Writer Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
     w.yOffset -= w.scaleY * newCoords.y();
     return w;
 }
-QString Writer::vLength(qreal length)
+
+qreal Writer::vLength(qreal length)
 {
-    return mm(length*scaleY);
+    return length*scaleY;
 }
 
-QString Writer::hLength(qreal length)
+qreal Writer::hLength(qreal length)
 {
-    return mm(length*scaleX);
+    return length*scaleX;
 }
 
-QString Writer::vOffset(qreal offset)
+qreal Writer::vOffset(qreal offset)
 {
-    return mm(yOffset + offset*scaleY);
+    return yOffset + offset*scaleY;
 }
 
-QString Writer::hOffset(qreal offset)
+qreal Writer::hOffset(qreal offset)
 {
-    return mm(xOffset + offset*scaleX);
+    return xOffset + offset*scaleX;
 }

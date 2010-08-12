@@ -172,6 +172,7 @@ private:
             Writer& out, KoGenStyle& style);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
+    QString formatPos(qreal v);
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
 };
@@ -390,6 +391,11 @@ PptToOdp::DrawClient::getOfficeArtDggContainer()
 QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     return ppttoodp->toQColor(c);
+}
+
+QString PptToOdp::DrawClient::formatPos(qreal v)
+{
+    return mm(v * (25.4 / 576));
 }
 
 PptToOdp::PptToOdp() : p(0)

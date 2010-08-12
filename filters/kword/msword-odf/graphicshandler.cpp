@@ -68,6 +68,10 @@ QString pt(double v) {
 QString percent(double v) {
     return format(v) + '%';
 }
+QString mm(double v) {
+    static const QString mm("mm");
+    return format(v) + mm;
+}
 }
 
 /*
@@ -92,22 +96,22 @@ DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
     scaleY = 25.4 / 1440;
 }
 
-QString DrawingWriter::vLength()
+qreal DrawingWriter::vLength()
 {
     return Writer::vLength(yBottom - yTop);
 }
 
-QString DrawingWriter::hLength()
+qreal DrawingWriter::hLength()
 {
     return Writer::hLength(xRight - xLeft);
 }
 
-QString DrawingWriter::vOffset()
+qreal DrawingWriter::vOffset()
 {
     return Writer::vOffset(yTop);
 }
 
-QString DrawingWriter::hOffset()
+qreal DrawingWriter::hOffset()
 {
     return Writer::hOffset(xLeft);
 }
@@ -976,22 +980,22 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
     case 1: //msotxflTtoBA up-down
     case 3: //msotxflTtoBN up-down
     case 5: //msotxflVertN up-down
-        out.xml.addAttribute("svg:width", out.vLength());
-        out.xml.addAttribute("svg:height",out.hLength());
+        out.xml.addAttribute("svg:width", mm(out.vLength()));
+        out.xml.addAttribute("svg:height",mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 1 -1 0 " +
-                ((Writer *)&out)->hOffset(out.xRight) + " " + out.vOffset() + ")");
+                mm(((Writer *)&out)->hOffset(out.xRight)) + " " + mm(out.vOffset()) + ")");
         break;
     case 2: //msotxflBtoT down-up
-        out.xml.addAttribute("svg:width", out.vLength());
-        out.xml.addAttribute("svg:height",out.hLength());
+        out.xml.addAttribute("svg:width", mm(out.vLength()));
+        out.xml.addAttribute("svg:height",mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
-               out.hOffset() + " " + ((Writer *)&out)->vOffset(out.yBottom) + ")");
+               mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
          break;
     default : //standard text flow
-        out.xml.addAttribute("svg:width", out.hLength());
-        out.xml.addAttribute("svg:height", out.vLength());
-        out.xml.addAttribute("svg:x", out.hOffset());
-        out.xml.addAttribute("svg:y", out.vOffset());
+        out.xml.addAttribute("svg:width", mm(out.hLength()));
+        out.xml.addAttribute("svg:height", mm(out.vLength()));
+        out.xml.addAttribute("svg:x", mm(out.hOffset()));
+        out.xml.addAttribute("svg:y", mm(out.vOffset()));
     }
 
     out.xml.startElement("draw:text-box");
@@ -1022,10 +1026,10 @@ void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,D
     SetAnchorTypeAtribute(out);
     SetZIndexAtribute(out);
     out.xml.addAttribute("draw:layer", "layout");
-    out.xml.addAttribute("svg:width", out.hLength());
-    out.xml.addAttribute("svg:height", out.vLength());
-    out.xml.addAttribute("svg:x", out.hOffset());
-    out.xml.addAttribute("svg:y", out.vOffset());
+    out.xml.addAttribute("svg:width", mm(out.hLength()));
+    out.xml.addAttribute("svg:height", mm(out.vLength()));
+    out.xml.addAttribute("svg:x", mm(out.hOffset()));
+    out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
     out.xml.startElement("draw:text-box");
     out.xml.endElement(); // draw:text-box
@@ -1120,10 +1124,10 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.addAttribute("draw:style-name", styleName);
     out.xml.addAttribute("text:anchor-type","char");
     SetZIndexAtribute(out);
-    out.xml.addAttribute("svg:width", out.hLength());
-    out.xml.addAttribute("svg:height", out.vLength());
-    out.xml.addAttribute("svg:x", out.hOffset());
-    out.xml.addAttribute("svg:y", out.vOffset());
+    out.xml.addAttribute("svg:width", mm(out.hLength()));
+    out.xml.addAttribute("svg:height", mm(out.vLength()));
+    out.xml.addAttribute("svg:x", mm(out.hOffset()));
+    out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
     out.xml.startElement("draw:image");
     out.xml.addAttribute("xlink:href", url);

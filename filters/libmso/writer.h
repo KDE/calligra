@@ -76,19 +76,19 @@ public:
      * @param length a local length.
      * @return string of the global length with "mm" appended.
      */
-    QString vLength(qreal length);
+    qreal vLength(qreal length);
     /**
      * @see vLength
      */
-    QString hLength(qreal length);
+    qreal hLength(qreal length);
     /**
      * @see vLength
      */
-    QString vOffset(qreal offset);
+    qreal vOffset(qreal offset);
     /**
      * @see vLength
      */
-    QString hOffset(qreal offset);
+    qreal hOffset(qreal offset);
 };
 
 #endif //MSO_WRITER_H

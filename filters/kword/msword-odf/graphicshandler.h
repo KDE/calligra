@@ -72,10 +72,10 @@ public:
     //true - inline object; false - floating object
     bool m_inline;
 
-    QString vLength();
-    QString hLength();
-    QString vOffset();
-    QString hOffset();
+    qreal vLength();
+    qreal hLength();
+    qreal vOffset();
+    qreal hOffset();
 
     void SetRectangle(wvWare::Word97::FSPA& spa);
     void SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr);

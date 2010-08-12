@@ -83,6 +83,8 @@ public:
          * This conversion requires color scheme information.
          **/
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c) = 0;
+
+        virtual QString formatPos(qreal v) = 0;
     };
 private:
     Client* const client;
