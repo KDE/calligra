@@ -822,7 +822,6 @@ void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer& o,
 void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
                                      Writer& out)
 {
-    const QRect rect = getRect(o);
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
