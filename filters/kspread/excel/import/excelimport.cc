@@ -47,7 +47,7 @@
 
 #include "swinder.h"
 #include <iostream>
-
+#include "ODrawClient.h"
 typedef KGenericFactory<ExcelImport> ExcelImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 
@@ -1485,6 +1485,18 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         c->saveIndex(xmlWriter);
     }
 
+    // handle graphics objects
+    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
+    if (!objects.empty()) {
+        ODrawClient client = ODrawClient(cell->sheet()->workbook()->officeArtDggContainer(), cell->sheet());
+        ODrawToOdf odraw( client);
+        Writer writer(*xmlWriter, *styles, false);
+        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
+            odraw.processDrawing(fb, writer);
+        }
+    }
+
+
     xmlWriter->endElement(); // table:[covered-]table-cell
 }
 
@@ -1526,6 +1538,19 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
         KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
         style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
         subScriptStyle = styles->insert(style, "T");
+    }
+
+    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
+    if (!objects.empty()) {
+        ODrawClient client = ODrawClient(cell->sheet()->workbook()->officeArtDggContainer(), cell->sheet());
+        ODrawToOdf odraw( client);
+        QBuffer b;
+        KoXmlWriter xml(&b);
+        Writer writer(xml, *styles, false);
+        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
+            odraw.processDrawing(fb, writer);
+        }
+        //qDebug() << cell->columnLabel() << cell->row() << b.data();
     }
 }
 

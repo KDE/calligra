@@ -41,7 +41,7 @@ set(sidewinder_SRCS
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
-set(excelimport_PART_SRCS excelimport.cc ${sidewinder_SRCS})
+set(excelimport_PART_SRCS excelimport.cc ODrawClient.cpp ${sidewinder_SRCS})
 
 kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
