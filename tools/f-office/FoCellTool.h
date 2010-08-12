@@ -73,7 +73,6 @@ public:
      */
     bool isFontUnderline();
 
-
     // custom cell editor
     virtual KSpread::CellEditorBase* editor() const;
     virtual bool createEditor(bool clear=true, bool focus=true);

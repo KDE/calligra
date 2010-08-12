@@ -461,6 +461,9 @@ void MainWindow::openFormatFrame()
     m_numberedlist=addFormatFrameComponent(i18n("Number"));
     m_alignjustify=addFormatFrameComponent(i18n("AlignJustify"));
 
+    m_bulletlist->setCheckable(false);
+    m_numberedlist->setCheckable(false);
+
     m_formatframelayout->addWidget(m_alignleft,0,0);
     m_formatframelayout->addWidget(m_alignright,0,1);
     m_formatframelayout->addWidget(m_aligncenter,1,0);
@@ -518,6 +521,9 @@ void MainWindow::openFontStyleFrame()
     m_textbackgroundcolor=addFontStyleFrameComponent(i18n("TextBackgroundColor"));
     m_subscript=addFontStyleFrameComponent(i18n("SubScript"));
     m_superscript=addFontStyleFrameComponent(i18n("SuperScript"));
+
+    m_textcolor->setCheckable(false);
+    m_textbackgroundcolor->setCheckable(false);
 
     m_fontcombobox=new QFontComboBox(this);
     Q_CHECK_PTR(m_fontcombobox);
@@ -615,8 +621,11 @@ void MainWindow::doSubScript()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
+
     if(setSubScript(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatSubScript);
+
+    m_isDocModified = true;
 
 }
 
@@ -627,7 +636,6 @@ bool MainWindow::setSubScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignBottom);
         }
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -637,8 +645,10 @@ void MainWindow::doSuperScript()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
+
     if(setSuperScript(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatSuperScript);
+    m_isDocModified = true;
 }
 
 bool MainWindow::setSuperScript(KoTextEditor *editor) {
@@ -648,7 +658,6 @@ bool MainWindow::setSuperScript(KoTextEditor *editor) {
         } else {
             editor->setVerticalTextAlignment(Qt::AlignTop);
         }
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -664,13 +673,13 @@ void MainWindow::selectFontSize(int size)
         if(setFontSize(size, m_editor) && m_collab)
             m_collab->sendFontSize(m_editor->selectionStart(), m_editor->selectionEnd(), size);
     }
+    m_isDocModified = true;
     m_fontSizeDialog->hide();
 }
 
 bool MainWindow::setFontSize(int size, KoTextEditor *editor) {
     if (editor) {
         editor->setFontSize(size);
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -687,12 +696,12 @@ void MainWindow::selectFontType()
         if(setFontType(selectedfont, m_editor) && m_collab)
             m_collab->sendFontType(m_editor->selectionStart(), m_editor->selectionEnd(), selectedfont);
     }
+    m_isDocModified = true;
 }
 
 bool MainWindow::setFontType(const QString &font, KoTextEditor *editor) {
     if (editor) {
         editor->setFontFamily(font);
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -709,12 +718,12 @@ void MainWindow::selectTextColor()
         if(setTextColor(color, m_editor) && m_collab)
             m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
     }
+    m_isDocModified = true;
 }
 
 bool MainWindow::setTextColor(const QColor &color, KoTextEditor *editor) {
     if (editor) {
         editor->setTextColor(color);
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -731,12 +740,12 @@ void MainWindow::selectTextBackGroundColor()
         if(setTextBackgroundColor(color, m_editor) && m_collab)
             m_collab->sendTextColor(m_editor->selectionStart(), m_editor->selectionEnd(), color.rgb());
     }
+    m_isDocModified = true;
 }
 
 bool MainWindow::setTextBackgroundColor(const QColor &color, KoTextEditor* editor) {
     if (editor) {
         editor->setTextBackgroundColor(color);
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -752,6 +761,7 @@ void MainWindow::doBold()
         if(setBold(m_editor) && m_collab)
             m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatBold);
     }
+    m_isDocModified = true;
 }
 
 bool MainWindow::setBold(KoTextEditor *editor) {
@@ -762,7 +772,6 @@ bool MainWindow::setBold(KoTextEditor *editor) {
         } else {
             editor->bold(true);
         }
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -778,6 +787,7 @@ void MainWindow::doItalic()
         if (setItalic(m_editor) && m_collab)
             m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatItalic);
     }
+    m_isDocModified = true;
 }
 
 bool MainWindow::setItalic(KoTextEditor *editor) {
@@ -788,7 +798,6 @@ bool MainWindow::setItalic(KoTextEditor *editor) {
         } else {
             editor->italic(true);
         }
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -804,6 +813,7 @@ void MainWindow::doUnderLine()
         if(setUnderline(m_editor) && m_collab)
             m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatUnderline);
     }
+    m_isDocModified = true;
 }
 
 bool MainWindow::setUnderline(KoTextEditor *editor) {
@@ -814,7 +824,6 @@ bool MainWindow::setUnderline(KoTextEditor *editor) {
         } else {
             editor->underline(true);
         }
-        m_isDocModified = true;
         return true;
     }
     return false;
@@ -1593,6 +1602,12 @@ void MainWindow::openNewDocument(DocumentType type)
     KoToolRegistry::instance()->add(m_cellToolFactory);
 
     m_view = m_doc->createView();
+    
+    m_ui->actionEdit->setVisible(true);
+    m_ui->actionSlidingMotion->setVisible(false);
+    m_ui->actionFormat->setVisible(false);
+    m_ui->EditToolBar->show();
+
     if(type == Text) {
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
@@ -1637,11 +1652,9 @@ void MainWindow::openNewDocument(DocumentType type)
             SIGNAL(changedTool(KoCanvasControllerWidget*, int)),
             SLOT(activeToolChanged(KoCanvasControllerWidget*, int)));
 
-    /*if(type!=Spreadsheet) {
+    if(type == Text || type == Presentation) {
         KoToolManager::instance()->switchToolRequested(TextTool_ID);
-    } else {
-        KoToolManager::instance()->switchToolRequested(CellTool_ID);
-    }*/
+
     setShowProgressIndicator(false);
 
     m_isLoading = false;
@@ -1650,26 +1663,17 @@ void MainWindow::openNewDocument(DocumentType type)
         m_splash->finish(m_controller);
         m_splash = 0;
     }
-    m_ui->actionEdit->setVisible(true);
-    /*if(type == Spreadsheet) {
-        m_ui->actionMathOp->setVisible(true);
-        m_ui->actionFormat->setVisible(false);
-        m_ui->actionCollaborate->setVisible(false);
-        m_ui->actionSlidingMotion->setVisible(false);
-        m_ui->EditToolBar->show();
-    }
-    if(type == Text) {
-        m_ui->actionFormat->setVisible(true);
-        m_ui->EditToolBar->show();
-    }*/
-
+    
     if(type == Presentation){
+        m_ui->actionEdit->setVisible(false);
+        m_ui->actionSlidingMotion->setVisible(true);
         m_ui->viewToolBar->show();
+        m_ui->EditToolBar->hide();
     }
 
     //if(type==Text||type==Spreadsheet)
       //  m_ui->actionEdit->setChecked(true);*/
-    if(type==Text || type ==Spreadsheet) {
+    if(type == Spreadsheet) {
         m_ui->actionEdit->trigger();
     }
 
@@ -1686,16 +1690,6 @@ void MainWindow::closeDoc()
 
     if(m_doc == NULL)
         return;
-
-    if(!m_fileName.isEmpty()) {
-        QString ext = KMimeType::extractKnownExtension(m_fileName);
-        if (!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive) ||
-                !QString::compare(ext, EXT_ODP, Qt::CaseInsensitive)) {
-        } else {
-            closeDocument();
-            return;
-        }
-    }
 
     m_doc->setModified(m_isDocModified);
     if (m_doc->isModified()) {
@@ -2152,9 +2146,6 @@ void MainWindow::closeDocument()
     m_isDocModified=false;
     m_newDocOpen=false;
     viewNumber++;
-
-    m_ui->actionMathOp->setVisible(false);
-    m_ui->actionFormat->setVisible(false);
 }
 
 void MainWindow::returnToDoc()
@@ -2292,7 +2283,7 @@ void MainWindow::openDocument(const QString &fileName)
     }
     m_doc->setReadWrite(true);
     m_doc->setAutoSave(0);
-qDebug()<<"here ";
+
     // registering tools
     m_cellToolFactory=new FoCellToolFactory(KoToolRegistry::instance());
    // m_spreadEdit->setCellTool(m_cellToolFactory->cellTool());
@@ -2333,7 +2324,11 @@ qDebug()<<"here ";
     }
     m_ui->actionMathOp->setVisible(false);
     m_ui->actionFormat->setVisible(false);
+    m_ui->actionEdit->setVisible(false);
+    m_ui->actionSlidingMotion->setVisible(false);
+
     if (m_type == Spreadsheet) {
+        m_ui->actionEdit->setVisible(true);
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
         qDebug()<<"here 1";
@@ -2346,7 +2341,6 @@ qDebug()<<"here ";
 
     if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
                           (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)))) {
-        m_ui->actionEdit->setVisible(true);
         m_kwview = qobject_cast<KWView *>(m_view);
         m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
         m_ui->actionFormat->setVisible(true);
@@ -3111,28 +3105,29 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if(m_doc && m_editor && event && event->type() == 7 ) {
+    if(m_doc && event && event->type() == 7 ) {
          QKeyEvent *ke=static_cast<QKeyEvent *>(event);
          if(ke->key()!=Qt::Key_Up && ke->key()!=Qt::Key_Down &&
             ke->key()!=Qt::Key_Right && ke->key()!=Qt::Key_Left &&
             ke->key()!=Qt::Key_Shift && ke->key()!=Qt::Key_Alt &&
             ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock ){
-             m_isDocModified = true;
-             if(m_firstChar==true){
-                m_ui->EditToolBar->setFocus();
-                m_controller->setFocus();
-                m_firstChar=false;
+            m_isDocModified = true;
+            if(m_firstChar==true){
+                 m_ui->EditToolBar->setFocus();
+                 m_controller->setFocus();
+                 m_firstChar=false;
             }
          }
     }
 
-    if(event->type() == QEvent::MouseButtonDblClick && m_type == Text) {
+    if(m_editor && event->type() == QEvent::MouseButtonDblClick && this->isActiveWindow()) {
         if(m_ui->actionEdit->isChecked())
             m_editor->setPosition(m_editor->position(),QTextCursor::MoveAnchor);
         return true;
     }
-    if(event->type() == QEvent::MouseButtonDblClick && m_type ==Spreadsheet) {
+    if(event->type() == QEvent::MouseButtonDblClick && m_type == Spreadsheet) {
         m_isDocModified = true;
+        m_firstChar=true;
         return false;
     }
     return false;

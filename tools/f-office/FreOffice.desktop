@@ -1,8 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Office
-Name[es]=Oficina
+Name=FreOffice
+Name[es]=FreOficina
 Name[nds]=Kontoor
 Name[pt]=Escritório
 Name[pt_BR]=Escritório
@@ -13,7 +13,6 @@ Exec=/usr/bin/FreOffice
 Icon=freoffice
 X-Window-Icon=freoffice
 X-Window-Icon-Dimmed=freoffice
-X-Osso-Service=com.nokia.FreOffice
 X-Osso-Type=application/x-executable
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/plain;application/x-mswrite;application/vnd.oasis.opendocument.presentation;application/x-kpresenter;application/mspowerpoint;application/vnd.ms-powerpoint;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.presentationml.presentation;application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.ms-word;
 

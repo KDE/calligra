@@ -46,7 +46,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionEdit"/>
-   <addaction name="separator"/>
    <addaction name="actionSearch"/>
    <addaction name="actionPrevPage"/>
    <addaction name="actionPageNumber"/>
@@ -54,8 +53,8 @@
    <addaction name="actionZoomOut"/>
    <addaction name="actionZoomLevel"/>
    <addaction name="actionZoomIn"/>
-   <addaction name="actionFullScreen"/>
    <addaction name="actionSlidingMotion"/>
+   <addaction name="actionFullScreen"/>
   </widget>
   <widget class="QToolBar" name="SearchToolBar">
    <property name="focusPolicy">
@@ -114,17 +113,24 @@
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
+   <addaction name="separator"/>
    <addaction name="actionEdit"/>
+   <addaction name="separator"/>
    <addaction name="actionCopy"/>
+   <addaction name="separator"/>
    <addaction name="actionPaste"/>
+   <addaction name="separator"/>
    <addaction name="actionCut"/>
+   <addaction name="separator"/>
    <addaction name="actionUndo"/>
+   <addaction name="separator"/>
    <addaction name="actionRedo"/>
+   <addaction name="separator"/>
    <addaction name="actionStyle"/>
+   <addaction name="separator"/>
    <addaction name="actionFormat"/>
    <addaction name="actionMathOp"/>
-   <addaction name="actionCollaborate"/>
-  </widget>
+   </widget>
   <action name="actionSearch">
    <property name="checkable">
     <bool>true</bool>
