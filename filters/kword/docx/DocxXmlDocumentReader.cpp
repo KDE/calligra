@@ -3004,6 +3004,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
         body->addAttribute("text:select-page", "current");
     }
 
+    if (instr.startsWith("NUMPAGES ")) {
+        body->startElement("text:page-count");
+    }
+
 // @todo support all attributes
 
     while (!atEnd()) {
@@ -3016,8 +3020,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    if (instr.startsWith("PAGE ")) {
-        body->endElement(); // text:page-number
+    if (instr.startsWith("PAGE ") || instr.startsWith("NUMPAGES ")) {
+        body->endElement(); // text:page-number | text:page-count
     }
 
     READ_EPILOGUE
