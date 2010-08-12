@@ -250,7 +250,7 @@ void equation(Writer& out, const char* name, const char* formula)
 /**
  * Return the bounding rectangle for this object.
  **/
-QRect
+QRectF
 ODrawToOdf::getRect(const OfficeArtSpContainer &o)
 {
     if (o.childAnchor) {
@@ -506,7 +506,7 @@ void ODrawToOdf::processArrow(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::processLine(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
+    const QRectF rect = getRect(o);
     qreal x1 = rect.x();
     qreal y1 = rect.y();
     qreal x2 = rect.x() + rect.width();
@@ -840,7 +840,7 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
 
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 {
-    const QRect rect = getRect(o);
+    const QRectF rect = getRect(o);
 
     out.xml.addAttribute("svg:width", out.hLength(rect.width()));
     out.xml.addAttribute("svg:height", out.vLength(rect.height()));

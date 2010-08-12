@@ -28,7 +28,7 @@ using namespace MSO;
 /**
  * Return the bounding rectangle for this object.
  **/
-QRect
+QRectF
 ODrawToOdf::getRect(const OfficeArtFSPGR &r)
 {
     return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
@@ -52,12 +52,12 @@ void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
        */
     const OfficeArtSpContainer* first
         = o.rgfb[0].anon.get<OfficeArtSpContainer>();
-    QRect oldCoords;
+    QRectF oldCoords;
     if (first && first->shapeGroup && first->clientAnchor) {
         oldCoords = client->getRect(*first->clientAnchor);
     }
     if (oldCoords.isValid()) {
-        QRect newCoords = getRect(*first->shapeGroup);
+        QRectF newCoords = getRect(*first->shapeGroup);
         Writer transformedOut = out.transform(oldCoords, newCoords);
         for (int i = 1; i < o.rgfb.size(); ++i) {
             processDrawing(o.rgfb[i], transformedOut);

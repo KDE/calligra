@@ -35,7 +35,7 @@ public:
          * Get the bounding rect that defines the position of the diagram
          * in the hosting document.
          **/
-        virtual QRect getRect(const MSO::OfficeArtClientAnchor&) = 0;
+        virtual QRectF getRect(const MSO::OfficeArtClientAnchor&) = 0;
         /**
          * Get the path in the ODF document that corresponds to the
          * image generated from the image with the given pib.
@@ -86,8 +86,8 @@ public:
     };
 private:
     Client* const client;
-    QRect getRect(const MSO::OfficeArtFSPGR &r);
-    QRect getRect(const MSO::OfficeArtSpContainer &o);
+    QRectF getRect(const MSO::OfficeArtFSPGR &r);
+    QRectF getRect(const MSO::OfficeArtSpContainer &o);
     void processEllipse(const MSO::OfficeArtSpContainer& fsp, Writer& out);
     void processRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRoundRectangle(const MSO::OfficeArtSpContainer& o, Writer& out);

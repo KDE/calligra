@@ -156,7 +156,7 @@ class PptToOdp::DrawClient : public ODrawToOdf::Client {
 private:
     PptToOdp* const ppttoodp;
 
-    QRect getRect(const MSO::OfficeArtClientAnchor&);
+    QRectF getRect(const MSO::OfficeArtClientAnchor&);
     QString getPicturePath(int pib);
     bool onlyClientData(const MSO::OfficeArtClientData& o);
     void processClientData(const MSO::OfficeArtClientData& clientData,
@@ -176,7 +176,7 @@ public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
 };
 
-QRect PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
+QRectF PptToOdp::DrawClient::getRect(const MSO::OfficeArtClientAnchor& o)
 {
     const PptOfficeArtClientAnchor* a = o.anon.get<PptOfficeArtClientAnchor>();
     if (a) {
