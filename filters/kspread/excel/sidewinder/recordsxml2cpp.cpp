@@ -344,6 +344,15 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 if (f.isEnum) out << ")";
                 out << ");\n";
             }
+            // evaluate constraints
+            for (QDomElement child  = field.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+                if (child.tagName() == "constraint") {
+                    out << indent << "if (!(" << f.getterName() << "(" << setterArgs << ") " << child.attribute("expr") << ")) {\n";
+                    out << indent << "    setIsValid(false);\n";
+                    out << indent << "    return;\n";
+                    out << indent << "}\n";
+                }
+            }
         }
         offset += bits;
     } else if (field.tagName() == "if") {
