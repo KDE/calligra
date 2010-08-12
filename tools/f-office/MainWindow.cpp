@@ -109,7 +109,7 @@
 #include <kundostack.h>
 #include <Map.h>
 #include <Doc.h>
-#include <part/View.h>
+#include <View.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -611,6 +611,12 @@ void MainWindow::fontSizeEntered()
 
 void MainWindow:: openMathOpFrame() {
 
+}
+
+void MainWindow::addMathematicalOperator(QString mathSymbol)
+{
+    Q_ASSERT(m_cellToolFactory->cellTool()->externalEditor());
+    m_cellToolFactory->cellTool()->externalEditor()->insertOperator(mathSymbol);
 }
 
 ///////////////////////
@@ -1654,6 +1660,7 @@ void MainWindow::openNewDocument(DocumentType type)
 
     if(type == Text || type == Presentation) {
         KoToolManager::instance()->switchToolRequested(TextTool_ID);
+    }
 
     setShowProgressIndicator(false);
 

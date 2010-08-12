@@ -530,6 +530,11 @@ private slots:
     void fontSizeEntered();
     void fontSizeRowSelected(QListWidgetItem *item);
     void startMathMode(bool start);
+    /**
+     * Adds symbol for spreadEditToolBar
+     */
+    void addMathematicalOperator(QString mathSymbol);
+
     /*!
      * Slot to perform UndoAction
      */
