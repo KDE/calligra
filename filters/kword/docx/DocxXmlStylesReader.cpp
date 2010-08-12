@@ -441,47 +441,14 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         else if (type == "paragraph") {
             m_currentParagraphStyle.addAttribute("style:class", "text");
 
-            QBuffer buffer;
-            buffer.open(QIODevice::WriteOnly);
-            KoXmlWriter *tempWriter = new KoXmlWriter(&buffer);
-            m_currentTextStyle.writeStyleProperties(tempWriter, KoGenStyle::TextType);
-
-            QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-            delete tempWriter;
-
-            // We have to add the properties in a loop
-            // This works as long as text-properties don't have children
-            // Currenty KoGenStyle doesn't support adding this in other ways.             
-
-            int separatorLocation = content.indexOf(' ');
-            content = content.right(content.size() - (separatorLocation + 1));
-            separatorLocation = content.indexOf(' ');
-            if (separatorLocation < 0) {
-                separatorLocation = content.indexOf('/');
-            }
-            while (separatorLocation > 0) {
-                int equalSignLocation = content.indexOf('=');
-                if (equalSignLocation < 0) {
-                    break;
-                }
-                QString propertyName = content.left(equalSignLocation);
-                // Removing equal and one quota
-                content = content.right(content.size() - (equalSignLocation) - 2);
-                separatorLocation = content.indexOf('\"');
-                if (separatorLocation < 0) {
-                    separatorLocation = content.indexOf('/');
-                }
-                QString propertyValue = content.left(separatorLocation);
-                content = content.right(content.size() - (separatorLocation + 2));
-                m_currentParagraphStyle.addProperty(propertyName, propertyValue, KoGenStyle::TextType);
-            }
-
+            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             styleName = mainStyles->insert(m_currentParagraphStyle, styleName, insertionFlags);
-
         }
         else if (type == "table") {
             styleName = mainStyles->insert(m_currentTableStyle, styleName, insertionFlags);
 
+            // The names here are partly hard coded, it means in practise that if there was a style called
+            // 'style'-cellsLeft, then this logic would not work, however it is not very likely.
             mainStyles->insert(m_currentTableCellStyleLeft, QString("%1-%2").arg(styleName).arg("cellsLeft"), insertionFlags);
             mainStyles->insert(m_currentTableCellStyleRight, QString("%1-%2").arg(styleName).arg("cellsRight"), insertionFlags);
             mainStyles->insert(m_currentTableCellStyleTop, QString("%1-%2").arg(styleName).arg("cellsTop"), insertionFlags);
