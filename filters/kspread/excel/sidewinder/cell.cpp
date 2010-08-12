@@ -265,6 +265,16 @@ void Cell::addOfficeArt(OfficeArtObject* officeart)
     d->sheet->addOfficeArt(d->column, d->row, officeart);
 }
 
+QList<MSO::OfficeArtSpgrContainerFileBlock> Cell::drawObjects() const
+{
+    return d->sheet->drawObjects(d->column, d->row);
+}
+
+void Cell::addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& of)
+{
+    d->sheet->addDrawObject(d->column, d->row, of);
+}
+
 bool Cell::operator==(const Cell &other) const
 {
     if (value() != other.value()) return false;

@@ -27,6 +27,7 @@
 #include <QtGlobal>
 #include <QList>
 #include <QString>
+#include "generated/simpleParser.h"
 
 namespace Swinder
 {
@@ -133,6 +134,10 @@ public:
     QList<OfficeArtObject*> officeArts() const;
     void addOfficeArt(OfficeArtObject* officeart);
     
+    // Defines a list of ODraw objects anchored to this cell.
+    QList<MSO::OfficeArtSpgrContainerFileBlock> drawObjects() const;
+    void addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& of);
+
     bool operator==(const Cell &other) const;
     bool operator!=(const Cell &other) const;
 

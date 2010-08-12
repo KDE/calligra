@@ -761,6 +761,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     if (!record) return;
     if (!record->m_object) return;
     if (!d->lastDrawingObject) return;
+    if (!d->sheet) return;
 
     const unsigned long id = record->m_object->id();
 
@@ -787,12 +788,30 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                 // a NoteRecord will follow which picks that up.
                 d->noteMap[id] = ++d->noteCount;
             } break;
-            case Object::OfficeArt: {
+            case Object::OfficeArt:
+            default: {
                 //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
-                
+                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->m_container.groupShape->rgfb) {
+                    if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
+                        // TODO
+                        qDebug() << "unsupported spgr container";
+                    } else {
+                        const MSO::OfficeArtSpContainer& o = *fb.anon.get<MSO::OfficeArtSpContainer>();
+                        if (o.clientAnchor) {
+                            MSO::XlsOfficeArtClientAnchor* anchor = o.clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>();
+                            if (!anchor) {
+                                qDebug() << "invalid client anchor";
+                            } else {
+                                Cell  *cell = d->sheet->cell(anchor->colL, anchor->rwT);
+                                cell->addDrawObject(fb);
+                            }
+                        } else {
+                            // TODO
+                            qDebug() << "unsupported not cell-anchored object";
+                        }
+                    }
+                }
             } break;
-            default:
-                break;
         }
     }
     

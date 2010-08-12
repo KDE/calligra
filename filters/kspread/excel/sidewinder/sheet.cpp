@@ -55,6 +55,7 @@ public:
     KSpread::PointStorage<QList<PictureObject*> > pictures;
     KSpread::PointStorage<QList<ChartObject*> > charts;
     KSpread::PointStorage<QList<OfficeArtObject*> > officearts;
+    KSpread::PointStorage<QList<MSO::OfficeArtSpgrContainerFileBlock> > drawObjects;
 
     bool visible;
     bool protect;
@@ -554,6 +555,26 @@ void Sheet::addOfficeArt(unsigned column, unsigned row, OfficeArtObject* officea
     setOfficeArts(column, row, arts);
 }
     
+QList<MSO::OfficeArtSpgrContainerFileBlock> Sheet::drawObjects(unsigned column, unsigned row) const
+{
+    return d->drawObjects.lookup(column+1, row+1);
+}
+
+void Sheet::setDrawObjects(unsigned column, unsigned row, const QList<MSO::OfficeArtSpgrContainerFileBlock>& drawObjects)
+{
+    if (drawObjects.isEmpty())
+        d->drawObjects.take(column+1, row+1);
+    else
+        d->drawObjects.insert(column+1, row+1, drawObjects);
+}
+
+void Sheet::addDrawObject(unsigned column, unsigned row, const MSO::OfficeArtSpgrContainerFileBlock& drawObject)
+{
+    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = drawObjects(column, row);
+    objects.append(drawObject);
+    setDrawObjects(column, row, objects);
+}
+
 #ifdef SWINDER_XLS2RAW
 void Sheet::dumpStats()
 {
