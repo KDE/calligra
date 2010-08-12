@@ -83,6 +83,7 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     , m_context(0)
     , m_currentSeries(0)
     , m_autoTitleDeleted(false)
+    , m_readTxContext( None )
 {
 }
 
@@ -244,6 +245,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
 /*! Read the horizontal value. */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_title()
 {
+    m_readTxContext = Title;
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
@@ -253,7 +255,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_title()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    READ_EPILOGUE
+    if ( m_context->m_chart->m_title.isEmpty() )
+        m_context->m_chart->m_title = "Chart Title";
+    m_readTxContext = None;
+    READ_EPILOGUE    
 }
 
 #undef CURRENT_EL
@@ -394,7 +399,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                             if (qualifiedName() == QLatin1String("a:t")) {
                                 if(isStartElement()) {
                                     if(!result.isEmpty()) result += ' '; //concat multiple strings into one result
-                                    result += readElementText();
+                                    const QString text = readElementText();
+                                    result += text;
+                                    m_context->m_chart->m_title = text;
                                 } else
                                     s = Paragraph;
                             }

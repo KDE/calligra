@@ -293,6 +293,8 @@ namespace Charting
         QRect m_cellRangeAddress;
         /// Range that contains the vertical values (the categories) for the plot-area.
         QString m_verticalCellRangeAddress;
+        // The ChartTitle
+        QString m_title;
         /// The more concrete chart implementation like e.g. a PieImpl for a pie chart.
         ChartImpl *m_impl;
         /// List of defined axes.

@@ -90,10 +90,12 @@ protected:
     KoFilter::ConversionStatus read_bubbleSize();
     KoFilter::ConversionStatus read_bubbleScale();
 private:
+    enum ReadTxContext{ Title, None };
     XlsxXmlChartReaderContext *m_context;
     Charting::Series *m_currentSeries;
     QString m_cellRangeAddress;
     bool m_autoTitleDeleted;
+    ReadTxContext m_readTxContext;
 };
 
 #endif
