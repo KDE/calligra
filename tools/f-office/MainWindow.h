@@ -41,6 +41,7 @@
 #include "CollabDialog.h"
 #include "CollabServer.h"
 #include "FoCellTool.h"
+#include "FoCellToolFactory.h"
 
 class QPushButton;
 class QIcon;
@@ -63,6 +64,7 @@ class QListWidget;
 class QListWidgetItem;
 class SlidingMotionDialog;
 class GLPresenter;
+class FoCellTooFactory;
 
 class KUndoStack;
 class KoTextEditor;
@@ -111,6 +113,7 @@ protected:
 
 private:
     Ui::MainWindow *m_ui;
+    FoCellToolFactory *m_cellToolFactory;
     
 ///////////////////////////
 // Collaborative editing //
@@ -226,6 +229,17 @@ private:
     QPushButton *m_no;
     QPushButton *m_cancel;
     QLabel *m_message;
+    /*!
+     * Actions for spreadEditToolBar.
+     */
+    QAction *m_addAction;
+    QAction *m_subtractAction;
+    QAction *m_multiplyAction;
+    QAction *m_divideAction;
+    QAction *m_percentageAction;
+    QAction *m_equalsAction;
+    QSignalMapper *m_signalMapper;
+
     /*!
      * line edit for search
      */
@@ -462,6 +476,14 @@ private:
      *
      */
     bool m_firstChar;
+    /*!
+     * Set up tool bar.
+     */
+    void setUpSpreadEditorToolBar();
+    /*!
+     * Reset the SpreadEditor toolbar.
+     */
+    void resetSpreadEditorToolBar();
 
 private:
     // Apply the selected formatting
@@ -490,6 +512,7 @@ private slots:
     void showFontSizeDialog();
     void fontSizeEntered();
     void fontSizeRowSelected(QListWidgetItem *item);
+    void startMathMode(bool start);
     /*!
      * Slot to perform UndoAction
      */
@@ -828,6 +851,10 @@ private:
      * true if accelerometer starts
      */
     static bool enable_accelerator;
+    /*!
+     * Tool bar for spread sheet.
+     */
+    QToolBar *m_spreadEditToolBar;
 
 signals:
     /*!

@@ -42,5 +42,11 @@
         <file>images/48x48/Edittoolbaricons/Math.png</file>
         <file>images/64x64/Acceleration/TimerClock.png</file>
         <file>images/64x64/Acceleration/Presentation.png</file>
+        <file>images/48x48/Edittoolbaricons/Plus.png</file>
+        <file>images/48x48/Edittoolbaricons/Percentage.png</file>
+        <file>images/48x48/Edittoolbaricons/Divide.png</file>
+        <file>images/48x48/Edittoolbaricons/Multiply.png</file>
+        <file>images/48x48/Edittoolbaricons/Equal.png</file>
+        <file>images/48x48/Edittoolbaricons/Subtract.png</file>
     </qresource>
 </RCC>

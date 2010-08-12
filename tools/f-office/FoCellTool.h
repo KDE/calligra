@@ -22,6 +22,9 @@
 
 #include "part/CellTool.h"
 
+class FoExternalEditor;
+class FoCellEditor;
+
 /**
  * The tool to change cell ranges.
  */
@@ -73,10 +76,21 @@ public:
 
     // custom cell editor
     virtual KSpread::CellEditorBase* editor() const;
-    virtual bool createEditor(bool clear, bool focus);
+    virtual bool createEditor(bool clear=true, bool focus=true);
+
+    virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
+
+    FoExternalEditor *externalEditor();
+
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void mousePressEvent(KoPointerEvent* event);
+
 private:
     Q_DISABLE_COPY(FoCellTool)
-};
 
+    FoExternalEditor *m_externalEditor;
+    FoCellEditor *m_editor;
+    QString m_editorContents;
+};
 
 #endif // FOCELL_TOOL

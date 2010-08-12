@@ -34,7 +34,9 @@
 #include "PresentationTool.h"
 #include "MainWindowAdaptor.h"
 #include "FoCellToolFactory.h"
+#include "FoExternalEditor.h"
 #include "GlPresenter.h"
+#include "FoCellTool.h"
 
 #include <QFileDialog>
 #include <QUrl>
@@ -213,7 +215,15 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_templateWidget(0),
         m_go(0),
         m_closetemp(0),
-        m_templatepreview(0)
+        m_templatepreview(0),
+        m_addAction(0),
+        m_subtractAction(0),
+        m_multiplyAction(0),
+        m_divideAction(0),
+        m_percentageAction(0),
+        m_equalsAction(0),
+        m_signalMapper(0),
+        m_spreadEditToolBar(0)
 {
     init();
 }
@@ -276,7 +286,8 @@ void MainWindow::init()
     connect(m_ui->actionClose,SIGNAL(triggered()),this,SLOT(closeDoc()));
     connect(m_ui->actionFormat,SIGNAL(triggered()),SLOT(openFormatFrame()));
     connect(m_ui->actionStyle,SIGNAL(triggered()),SLOT(openFontStyleFrame()));
-    connect(m_ui->actionMathOp,SIGNAL(triggered()),SLOT(openMathOpFrame()));
+    m_ui->actionMathOp->setCheckable(true);
+    connect(m_ui->actionMathOp,SIGNAL(toggled(bool)),this,SLOT(startMathMode(bool)));
     connect(m_ui->actionPresentation,SIGNAL(triggered()),this,SLOT(glPresenter()));
 
     connect(m_search, SIGNAL(returnPressed()), SLOT(nextWord()));
@@ -1555,7 +1566,9 @@ void MainWindow::openNewDocument(DocumentType type)
     m_doc->setAutoSave(0);
 
     // registering tools
-    KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
+    m_cellToolFactory=new FoCellToolFactory(KoToolRegistry::instance());
+   // m_spreadEdit->setCellTool(m_cellToolFactory->cellTool());
+    KoToolRegistry::instance()->add(m_cellToolFactory);
 
     m_view = m_doc->createView();
     if(type == Text) {
@@ -1580,13 +1593,13 @@ void MainWindow::openNewDocument(DocumentType type)
     if (type == Spreadsheet) {
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        m_focelltool = new FoCellTool(((View*)m_view)->selection()->canvas());
+        m_focelltool= dynamic_cast<FoCellTool *>(m_cellToolFactory->createTool(((View*)m_view)->selection()->canvas()));
 
         ((View *)m_view)->showTabBar(false);
         ((View *)m_view)->setStyleSheet("* { color:white; } ");
-        ((View *)m_view)->setStyleSheet("* { color:white; } ");
 
         setCentralWidget(((View *)m_view));
+        setUpSpreadEditorToolBar();
     }
 
     if(type!=Spreadsheet)
@@ -1599,14 +1612,14 @@ void MainWindow::openNewDocument(DocumentType type)
             SIGNAL(resourceChanged(int, const QVariant &)),
             this,SLOT(resourceChanged(int, const QVariant &)));
     connect(KoToolManager::instance(),
-            SIGNAL(changedTool(KoCanvasController*, int)),
-            SLOT(activeToolChanged(KoCanvasController*, int)));
+            SIGNAL(changedTool(KoCanvasControllerWidget*, int)),
+            SLOT(activeToolChanged(KoCanvasControllerWidget*, int)));
 
-    if(type!=Spreadsheet) {
+    /*if(type!=Spreadsheet) {
         KoToolManager::instance()->switchToolRequested(TextTool_ID);
     } else {
         KoToolManager::instance()->switchToolRequested(CellTool_ID);
-    }
+    }*/
     setShowProgressIndicator(false);
 
     m_isLoading = false;
@@ -1616,7 +1629,7 @@ void MainWindow::openNewDocument(DocumentType type)
         m_splash = 0;
     }
     m_ui->actionEdit->setVisible(true);
-    if(type == Spreadsheet) {
+    /*if(type == Spreadsheet) {
         m_ui->actionMathOp->setVisible(true);
         m_ui->actionFormat->setVisible(false);
         m_ui->actionCollaborate->setVisible(false);
@@ -1626,14 +1639,17 @@ void MainWindow::openNewDocument(DocumentType type)
     if(type == Text) {
         m_ui->actionFormat->setVisible(true);
         m_ui->EditToolBar->show();
-    }
+    }*/
 
     if(type == Presentation){
         m_ui->viewToolBar->show();
     }
 
-    if(type==Text||type==Spreadsheet)
-        m_ui->actionEdit->setChecked(true);
+    //if(type==Text||type==Spreadsheet)
+      //  m_ui->actionEdit->setChecked(true);*/
+    if(type==Text || type ==Spreadsheet) {
+        m_ui->actionEdit->trigger();
+    }
 
     m_fileName = "";
     m_newDocOpen = true;
@@ -1719,31 +1735,51 @@ void MainWindow::toggleToolBar(bool show)
 void MainWindow::editToolBar(bool edit)
 {
     if (m_newDocOpen) {
-         if (!edit) {
-             KoToolManager::instance()->switchToolRequested(PanTool_ID);
-             m_ui->EditToolBar->hide();
-             m_ui->viewToolBar->show();
-             m_isViewToolBar = true;
-         } else {
-             KoToolManager::instance()->switchToolRequested(TextTool_ID);
-             m_ui->viewToolBar->hide();
-             m_ui->EditToolBar->show();
-         }
+        if (!edit) {
+            KoToolManager::instance()->switchToolRequested(PanTool_ID);
+            m_ui->EditToolBar->hide();
+            if(m_spreadEditToolBar) {
+                m_spreadEditToolBar->hide();
+            }
+            m_ui->viewToolBar->show();
+            m_isViewToolBar = true;
+        } else {
+            if(m_type==Spreadsheet) {
+                KoToolManager::instance()->switchToolRequested(CellTool_ID);
+                m_ui->viewToolBar->hide();
+                m_spreadEditToolBar->show();
+                m_ui->EditToolBar->hide();
+            } else {
+                KoToolManager::instance()->switchToolRequested(TextTool_ID);
+                m_ui->viewToolBar->hide();
+                if(m_spreadEditToolBar) {
+                    m_spreadEditToolBar->hide();
+                }
+                m_ui->EditToolBar->show();
+            }
+        }
     } else {
         if (edit) {
             if(m_type==Spreadsheet) {
                 KoToolManager::instance()->switchToolRequested(CellTool_ID);
                 m_ui->viewToolBar->hide();
-                m_ui->EditToolBar->show();
+                m_spreadEditToolBar->show();
+                m_ui->EditToolBar->hide();
             } else {
                 KoToolManager::instance()->switchToolRequested(TextTool_ID);
                 m_ui->viewToolBar->hide();
+                if(m_spreadEditToolBar) {
+                    m_spreadEditToolBar->hide();
+                }
                 m_ui->EditToolBar->show();
             }
         } else {
             KoToolManager::instance()->switchToolRequested(PanTool_ID);
             m_ui->EditToolBar->hide();
             m_ui->viewToolBar->show();
+            if(m_spreadEditToolBar) {
+                m_spreadEditToolBar->hide();
+            }
             m_isViewToolBar = true;
         }
     }
@@ -2033,6 +2069,12 @@ void MainWindow::closeDocument()
         m_view=0;
         delete m_doc;
         m_doc = 0;
+        m_spreadEditToolBar->hide();
+        resetSpreadEditorToolBar();
+       /* delete m_focelltool;
+        m_focelltool=0;
+        delete m_cellToolFactory;
+        m_cellToolFactory=0;*/
     } else {
         KoToolManager::instance()->removeCanvasController(m_controller);
         if(m_kwview)
@@ -2223,9 +2265,11 @@ void MainWindow::openDocument(const QString &fileName)
     }
     m_doc->setReadWrite(true);
     m_doc->setAutoSave(0);
-
+qDebug()<<"here ";
     // registering tools
-    KoToolRegistry::instance()->add(new FoCellToolFactory(KoToolRegistry::instance()));
+    m_cellToolFactory=new FoCellToolFactory(KoToolRegistry::instance());
+   // m_spreadEdit->setCellTool(m_cellToolFactory->cellTool());
+    KoToolRegistry::instance()->add(m_cellToolFactory);
 
     m_view = m_doc->createView();
     QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
@@ -2265,12 +2309,12 @@ void MainWindow::openDocument(const QString &fileName)
     if (m_type == Spreadsheet) {
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        m_focelltool = new FoCellTool(((View*)m_view)->selection()->canvas());
+        qDebug()<<"here 1";
+        m_focelltool= dynamic_cast<FoCellTool *>(m_cellToolFactory->createTool(((View*)m_view)->selection()->canvas()));
         ((View *)m_view)->showTabBar(false);
         ((View *)m_view)->setStyleSheet("* { color:white; } ");
-        ((View *)m_view)->setStyleSheet("* { color:white; } ");
         setCentralWidget(((View *)m_view));
-        m_ui->actionMathOp->setVisible(true);
+        setUpSpreadEditorToolBar();
     }
 
     if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
@@ -3060,6 +3104,10 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             m_editor->setPosition(0,QTextCursor::MoveAnchor);
         return true;
     }
+    if(event->type() == QEvent::MouseButtonDblClick && m_type ==Spreadsheet) {
+        m_isDocModified = true;
+        return false;
+    }
     return false;
     //return QMainWindow::eventFilter(watched, event);
 }
@@ -3203,6 +3251,159 @@ void MainWindow::enableFullScreenPresentationNavigation()
     m_fsPPTBackButton->raise();
     m_fsPPTForwardButton->show();
     m_fsPPTForwardButton->raise();
+}
+
+void MainWindow::setUpSpreadEditorToolBar()
+{
+   if(m_spreadEditToolBar) {
+        delete m_spreadEditToolBar;
+        m_spreadEditToolBar=0;
+    }
+    m_spreadEditToolBar = new QToolBar();
+    m_spreadEditToolBar->setIconSize(QSize(48,48));
+    addToolBar(Qt::BottomToolBarArea,m_spreadEditToolBar);
+    m_spreadEditToolBar->addAction(m_ui->actionEdit);
+    m_spreadEditToolBar->addSeparator();
+    m_spreadEditToolBar->addAction(m_ui->actionCopy);
+    m_spreadEditToolBar->addAction(m_ui->actionPaste);
+    m_spreadEditToolBar->addAction(m_ui->actionCut);
+    m_spreadEditToolBar->addAction(m_ui->actionUndo);
+    m_spreadEditToolBar->addAction(m_ui->actionRedo);
+    m_spreadEditToolBar->addAction(m_ui->actionStyle);
+    m_spreadEditToolBar->addAction(m_ui->actionFormat);
+
+    m_cellToolFactory->cellTool()->externalEditor()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    m_spreadEditToolBar->insertWidget(m_ui->actionCopy, m_cellToolFactory->cellTool()->externalEditor());
+
+    if(m_addAction) {
+        delete m_addAction;
+        m_addAction=0;
+    }
+    m_addAction= new QAction(this);
+    m_addAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Plus.png"));
+    if(m_subtractAction) {
+        delete m_subtractAction;
+        m_subtractAction=0;
+    }
+    m_subtractAction= new QAction(this);
+    m_subtractAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Subtract.png"));
+    if(m_multiplyAction) {
+        delete m_multiplyAction;
+        m_multiplyAction=0;
+    }
+    m_multiplyAction= new QAction(this);
+    m_multiplyAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Multiply.png"));
+    if(m_divideAction) {
+        delete m_divideAction;
+        m_divideAction=0;
+    }
+    m_divideAction= new QAction(this);
+    m_divideAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Divide.png"));
+    if(m_percentageAction) {
+        delete m_percentageAction;
+        m_percentageAction=0;
+    }
+    m_percentageAction= new QAction(this);
+    m_percentageAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Percentage.png"));
+    if(m_equalsAction) {
+        delete m_equalsAction;
+        m_equalsAction=0;
+    }
+    m_equalsAction= new QAction(this);
+    m_equalsAction->setIcon(QIcon(":/images/48x48/Edittoolbaricons/Equal.png"));
+
+    m_spreadEditToolBar->addAction(m_addAction);
+    m_spreadEditToolBar->addAction(m_subtractAction);
+    m_spreadEditToolBar->addAction(m_multiplyAction);
+    m_spreadEditToolBar->addAction(m_divideAction);
+    m_spreadEditToolBar->addAction(m_percentageAction);
+    m_spreadEditToolBar->addAction(m_equalsAction);
+
+    if(m_signalMapper) {
+        delete m_signalMapper;
+        m_signalMapper=0;
+    }
+    m_signalMapper= new QSignalMapper(this);
+    m_signalMapper->setMapping(m_addAction,QString("+"));
+    m_signalMapper->setMapping(m_subtractAction,QString("-"));
+    m_signalMapper->setMapping(m_multiplyAction,QString("*"));
+    m_signalMapper->setMapping(m_divideAction,QString("/"));
+    m_signalMapper->setMapping(m_percentageAction,QString("%"));
+    m_signalMapper->setMapping(m_equalsAction,QString("="));
+
+    connect(m_addAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    connect(m_subtractAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    connect(m_multiplyAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    connect(m_divideAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    connect(m_percentageAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    connect(m_equalsAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+
+    connect(m_signalMapper,SIGNAL(mapped(QString)),this,SLOT(addMathematicalOperator(QString)));
+
+    m_addAction->setVisible(false);
+    m_subtractAction->setVisible(false);
+    m_multiplyAction->setVisible(false);
+    m_divideAction->setVisible(false);
+    m_percentageAction->setVisible(false);
+    m_equalsAction->setVisible(false);
+
+    m_spreadEditToolBar->addAction(m_ui->actionMathOp);
+    m_ui->actionMathOp->setVisible(true);
+    m_spreadEditToolBar->hide();
+}
+
+void MainWindow::resetSpreadEditorToolBar()
+{
+    m_ui->actionCut->setVisible(true);
+    m_ui->actionCopy->setVisible(true);
+    m_ui->actionPaste->setVisible(true);
+    m_ui->actionUndo->setVisible(true);
+    m_ui->actionRedo->setVisible(true);
+    m_ui->actionStyle->setVisible(true);
+    m_ui->actionFormat->setVisible(true);
+    m_cellToolFactory->cellTool()->externalEditor()->hide();
+    m_cellToolFactory->cellTool()->externalEditor()->releaseKeyboard();
+
+    disconnect(m_signalMapper,SIGNAL(mapped(QString)),this,SLOT(addMathematicalOperator(QString)));
+    disconnect(m_addAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    disconnect(m_subtractAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    disconnect(m_multiplyAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    disconnect(m_divideAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    disconnect(m_percentageAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+    disconnect(m_equalsAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
+
+    this->removeToolBar(m_spreadEditToolBar);
+    delete m_addAction;
+    m_addAction=0;
+    delete m_subtractAction;
+    m_subtractAction=0;
+    delete m_multiplyAction;
+    m_multiplyAction=0;
+    delete m_divideAction;
+    m_divideAction=0;
+    delete m_percentageAction;
+    m_percentageAction=0;
+    delete m_equalsAction;
+    m_equalsAction=0;
+    delete m_spreadEditToolBar;
+    m_spreadEditToolBar=0;
+}
+
+void MainWindow::startMathMode(bool start)
+{
+    m_addAction->setVisible(start);
+    m_subtractAction->setVisible(start);
+    m_multiplyAction->setVisible(start);
+    m_divideAction->setVisible(start);
+    m_percentageAction->setVisible(start);
+    m_equalsAction->setVisible(start);
+    m_ui->actionCut->setVisible(!start);
+    m_ui->actionCopy->setVisible(!start);
+    m_ui->actionPaste->setVisible(!start);
+    m_ui->actionUndo->setVisible(!start);
+    m_ui->actionRedo->setVisible(!start);
+    m_ui->actionStyle->setVisible(!start);
+    m_ui->actionFormat->setVisible(!start);
 }
 
 ///////////////////////////
