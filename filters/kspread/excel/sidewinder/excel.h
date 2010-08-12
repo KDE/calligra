@@ -899,8 +899,6 @@ public:
 class MsoDrawingGroupRecord : public Record
 {
 public:
-    MSO::OfficeArtDggContainer m_container;
-    QList< MsoDrawingBlibItem* > m_items;
     static const unsigned id;
     MsoDrawingGroupRecord(Workbook *book);
     virtual ~MsoDrawingGroupRecord();
@@ -912,6 +910,16 @@ public:
     }
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+
+    const MSO::OfficeArtDggContainer& dggContainer() const;
+    QList<MsoDrawingBlibItem*> blibItems() const;
+private:
+    // no copy or assign
+    MsoDrawingGroupRecord(const MsoDrawingGroupRecord&);
+    MsoDrawingGroupRecord& operator=(const MsoDrawingGroupRecord&);
+
+    class Private;
+    Private *d;
 };
 
 /**

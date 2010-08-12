@@ -1808,8 +1808,32 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
 
 const unsigned MsoDrawingGroupRecord::id = 0xEB;
 
-MsoDrawingGroupRecord::MsoDrawingGroupRecord(Workbook *book) : Record(book) {}
-MsoDrawingGroupRecord::~MsoDrawingGroupRecord() {}
+class MsoDrawingGroupRecord::Private
+{
+public:
+    MSO::OfficeArtDggContainer container;
+    QList< MsoDrawingBlibItem* > items;
+};
+
+MsoDrawingGroupRecord::MsoDrawingGroupRecord(Workbook *book) : Record(book)
+{
+    d = new Private();
+}
+
+MsoDrawingGroupRecord::~MsoDrawingGroupRecord()
+{
+    delete d;
+}
+
+const MSO::OfficeArtDggContainer& MsoDrawingGroupRecord::dggContainer() const
+{
+    return d->container;
+}
+
+QList<MsoDrawingBlibItem*> MsoDrawingGroupRecord::blibItems() const
+{
+    return d->items;
+}
 
 void MsoDrawingGroupRecord::dump(std::ostream& out) const
 {
@@ -1830,23 +1854,23 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     LEInputStream lei(&buff);
     
     try {
-        MSO::parseOfficeArtDggContainer(lei, m_container);
+        MSO::parseOfficeArtDggContainer(lei, d->container);
     } catch (const IOException& e) {
         std::cerr << "Invalid MsoDrawingGroup record:" << qPrintable(e.msg) << std::endl;
         setIsValid(false);
         return;
     }
     
-    if(m_container.blipStore.data() && m_workbook->store()) {
+    if(d->container.blipStore.data() && m_workbook->store()) {
         m_workbook->store()->enterDirectory("Pictures");
     
-        foreach(MSO::OfficeArtBStoreContainerFileBlock fb, m_container.blipStore->rgfb) {
+        foreach(MSO::OfficeArtBStoreContainerFileBlock fb, d->container.blipStore->rgfb) {
             PictureReference ref = savePicture(fb, m_workbook->store());
             if (ref.name.length() == 0) {
                 std::cerr << "Empty name in picture reference for picture with uid=" << ref.uid << " mimetype=" << ref.mimetype << std::endl;
                 continue;
             }
-            m_items << new MsoDrawingBlibItem(ref);
+            d->items << new MsoDrawingBlibItem(ref);
         }
     
         m_workbook->store()->leaveDirectory();
