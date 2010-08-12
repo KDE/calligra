@@ -323,7 +323,10 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 if (!f.isStringLength) out << ")";
                 out << ";\n";
             } else {
-                out << indent << f.setterName() << "(" << setterArgs;
+                if (f.isStringLength)
+                    out << indent << "unsigned " << name << " = ";
+                else
+                    out << indent << f.setterName() << "(" << setterArgs;
                 if (f.isEnum)
                     out << "static_cast<" << f.type << ">(";
                 unsigned firstByte = offset / 8;
@@ -342,7 +345,8 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 out << ") & 0x" << hex << mask << dec << ")";
                 if (field.attribute("type") == "bool") out << " != 0";
                 if (f.isEnum) out << ")";
-                out << ");\n";
+                if (!f.isStringLength) out << ")";
+                out << ";\n";
             }
             // evaluate constraints
             for (QDomElement child  = field.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
