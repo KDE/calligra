@@ -571,6 +571,21 @@ void ExternBookRecord::setData(unsigned size, const unsigned char* data, const u
         d->name = QString(":");
     } else {
         d->name = EString::fromUnicodeString(data + 2, true, size - 2).str();
+        if (d->name.length() > 2 && d->name[0] == 0x0001) {
+            if (d->name[1] == 0x0001) {
+                // 'unc-volume'
+                d->name = "unc://" + d->name.mid(3).replace(0x0003, '/');
+            } else if (d->name[1] == 0x0002) {
+                // relative to drive volume
+                d->name = d->name.mid(2).replace(0x0003, '/');
+            } else if (d->name[1] == 0x0005) {
+                // full url
+                d->name = d->name.mid(3);
+            } else {
+                // TODO other options
+                d->name = d->name.mid(2).replace(0x0003, '/');
+            }
+        }
     }
 }
 
