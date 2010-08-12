@@ -1488,7 +1488,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     // handle graphics objects
     QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
     if (!objects.empty()) {
-        ODrawClient client = ODrawClient(cell->sheet()->workbook()->officeArtDggContainer(), cell->sheet());
+        ODrawClient client = ODrawClient(cell->sheet());
         ODrawToOdf odraw( client);
         Writer writer(*xmlWriter, *styles, false);
         foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
@@ -1542,7 +1542,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
 
     QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
     if (!objects.empty()) {
-        ODrawClient client = ODrawClient(cell->sheet()->workbook()->officeArtDggContainer(), cell->sheet());
+        ODrawClient client = ODrawClient(cell->sheet());
         ODrawToOdf odraw( client);
         QBuffer b;
         KoXmlWriter xml(&b);

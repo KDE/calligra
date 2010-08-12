@@ -22,10 +22,10 @@
 #include <QColor>
 #include <KoXmlWriter.h>
 #include "sheet.h"
+#include "workbook.h"
 
-ODrawClient::ODrawClient(MSO::OfficeArtDggContainer* dggContainer, Swinder::Sheet* sheet)
+ODrawClient::ODrawClient(Swinder::Sheet* sheet)
     : m_sheet(sheet)
-    , m_dggContainer(dggContainer)
 {
 }
 
@@ -83,7 +83,6 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
     } else {
         qDebug() << "Invalid client anchor!";
     }
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     return QRectF();
 }
 
@@ -111,7 +110,6 @@ void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct, co
 
 KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, Writer &out)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     return style;
@@ -119,14 +117,13 @@ KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct
 
 void ODrawClient::addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, Writer &out, KoGenStyle &style)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
     const QString styleName = out.styles.insert(style);
     out.xml.addAttribute("draw:style-name", styleName);
 }
 
 const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
 {
-    return m_dggContainer;
+    return m_sheet->workbook()->officeArtDggContainer();
 }
 
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)

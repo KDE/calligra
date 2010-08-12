@@ -28,7 +28,7 @@ namespace Swinder {
 class ODrawClient : public ODrawToOdf::Client
 {
 public:
-    explicit ODrawClient(MSO::OfficeArtDggContainer* dggContainer, Swinder::Sheet* sheet);
+    explicit ODrawClient(Swinder::Sheet* sheet);
     virtual QRectF getRect(const MSO::OfficeArtClientAnchor& anchor);
     virtual QString getPicturePath(int pib);
     virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
@@ -41,7 +41,6 @@ public:
     virtual QString formatPos(qreal v);
 private:
     Swinder::Sheet* m_sheet;
-    MSO::OfficeArtDggContainer* m_dggContainer;
 };
 
 #endif // ODRAWCLIENT_H
