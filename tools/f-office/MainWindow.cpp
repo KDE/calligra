@@ -109,7 +109,7 @@
 #include <kundostack.h>
 #include <Map.h>
 #include <Doc.h>
-#include <View.h>
+#include <part/View.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -130,6 +130,7 @@ using  KSpread::Sheet;
 #define FONTSTYLEFRAME_HEIGHT 210
 
 bool MainWindow::enable_accelerator=false;
+bool MainWindow::virtualKeyBoardIsOnScreen=false;
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
         m_ui(new Ui::MainWindow),
@@ -233,6 +234,13 @@ void MainWindow::init()
     m_ui->setupUi(this);
 
     QDBusConnection::sessionBus().registerObject("/presentation/view", this);
+    shortcutForVirtualKeyBoard = new QShortcut(QKeySequence(("Ctrl+K")),this);
+    Q_CHECK_PTR(shortcutForVirtualKeyBoard);
+    shortcutForVirtualKeyBoard->setEnabled(true);
+
+    spaceHandlerShortcutForVirtualKeyBoard = new QShortcut(Qt::Key_Space,this);
+    Q_CHECK_PTR(spaceHandlerShortcutForVirtualKeyBoard);
+    spaceHandlerShortcutForVirtualKeyBoard->setEnabled(true);
 
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
@@ -377,6 +385,19 @@ MainWindow::~MainWindow()
     delete m_collab;
     delete m_collabDialog;
     delete m_collabEditor;
+}
+void MainWindow::spaceHandlerForVirtualKeyBoard()
+{
+ m_editor->insertText(" ");
+}
+void MainWindow::showVirtualKeyBoardOnScreen()
+{
+    virtualKeyBoardIsOnScreen=!virtualKeyBoardIsOnScreen;
+
+    m_controller->verticalScrollBar()->setSliderPosition(m_editor->position());
+    static   VirtualKeyBoard *vb=new VirtualKeyBoard;
+    vb->ShowVirtualKeyBoard(this,m_editor);
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -1290,6 +1311,7 @@ void MainWindow::saveFileAs()
 #else
                 msgBox.setText(i18n("The document has been saved successfully"));
                 msgBox.exec();
+
 #endif
                 m_isDocModified = false;
 
@@ -1659,6 +1681,9 @@ void MainWindow::openNewDocument(DocumentType type)
 }
 void MainWindow::closeDoc()
 {
+    if(virtualKeyBoardIsOnScreen)
+      showVirtualKeyBoardOnScreen();
+
     if(m_doc == NULL)
         return;
 
@@ -1734,37 +1759,36 @@ void MainWindow::toggleToolBar(bool show)
 //Toogling between edit toolbar and view toolbar with various options
 void MainWindow::editToolBar(bool edit)
 {
+    if(virtualKeyBoardIsOnScreen)
+        showVirtualKeyBoardOnScreen();
+
     if (m_newDocOpen) {
-        if (!edit) {
-            KoToolManager::instance()->switchToolRequested(PanTool_ID);
-            m_ui->EditToolBar->hide();
-            if(m_spreadEditToolBar) {
-                m_spreadEditToolBar->hide();
-            }
-            m_ui->viewToolBar->show();
-            m_isViewToolBar = true;
-        } else {
-            if(m_type==Spreadsheet) {
-                KoToolManager::instance()->switchToolRequested(CellTool_ID);
-                m_ui->viewToolBar->hide();
-                m_spreadEditToolBar->show();
-                m_ui->EditToolBar->hide();
-            } else {
-                KoToolManager::instance()->switchToolRequested(TextTool_ID);
-                m_ui->viewToolBar->hide();
-                if(m_spreadEditToolBar) {
-                    m_spreadEditToolBar->hide();
-                }
-                m_ui->EditToolBar->show();
-            }
-        }
+         if (!edit) {
+             KoToolManager::instance()->switchToolRequested(PanTool_ID);
+             m_ui->EditToolBar->hide();
+             m_ui->viewToolBar->show();
+             m_isViewToolBar = true;
+             disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+             disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+         } else {
+             KoToolManager::instance()->switchToolRequested(TextTool_ID);
+             m_ui->viewToolBar->hide();
+             m_ui->EditToolBar->show();
+             connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+             connect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+         }
     } else {
         if (edit) {
+            connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+            connect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
             if(m_type==Spreadsheet) {
                 KoToolManager::instance()->switchToolRequested(CellTool_ID);
                 m_ui->viewToolBar->hide();
                 m_spreadEditToolBar->show();
                 m_ui->EditToolBar->hide();
+                disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+                disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+
             } else {
                 KoToolManager::instance()->switchToolRequested(TextTool_ID);
                 m_ui->viewToolBar->hide();
@@ -1772,6 +1796,7 @@ void MainWindow::editToolBar(bool edit)
                     m_spreadEditToolBar->hide();
                 }
                 m_ui->EditToolBar->show();
+
             }
         } else {
             KoToolManager::instance()->switchToolRequested(PanTool_ID);
@@ -1781,6 +1806,8 @@ void MainWindow::editToolBar(bool edit)
                 m_spreadEditToolBar->hide();
             }
             m_isViewToolBar = true;
+            disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+            disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
         }
     }
 
@@ -3101,7 +3128,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     if(event->type() == QEvent::MouseButtonDblClick && m_type == Text) {
         if(m_ui->actionEdit->isChecked())
-            m_editor->setPosition(0,QTextCursor::MoveAnchor);
+            m_editor->setPosition(m_editor->position(),QTextCursor::MoveAnchor);
         return true;
     }
     if(event->type() == QEvent::MouseButtonDblClick && m_type ==Spreadsheet) {

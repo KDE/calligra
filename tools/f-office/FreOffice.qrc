@@ -42,6 +42,10 @@
         <file>images/48x48/Edittoolbaricons/Math.png</file>
         <file>images/64x64/Acceleration/TimerClock.png</file>
         <file>images/64x64/Acceleration/Presentation.png</file>
+        <file>images/64x64/VirtualKeyBoard/back.png</file>
+        <file>images/64x64/VirtualKeyBoard/languages.png</file>
+        <file>images/64x64/VirtualKeyBoard/numbers.png</file>
+        <file>images/64x64/VirtualKeyBoard/change.png</file>
         <file>images/48x48/Edittoolbaricons/Plus.png</file>
         <file>images/48x48/Edittoolbaricons/Percentage.png</file>
         <file>images/48x48/Edittoolbaricons/Divide.png</file>

@@ -41,6 +41,7 @@
 #include "CollabDialog.h"
 #include "CollabServer.h"
 #include "FoCellTool.h"
+#include "VirtualKeyBoard.h"
 #include "FoCellToolFactory.h"
 
 class QPushButton;
@@ -148,6 +149,22 @@ private slots:
 /////////////////////////////
 /////////////////////////////
 
+
+/////virtualkeyboard
+
+private:
+
+    QShortcut *shortcutForVirtualKeyBoard;
+    QShortcut *spaceHandlerShortcutForVirtualKeyBoard;
+    static bool virtualKeyBoardIsOnScreen;
+
+
+private slots:
+
+    void showVirtualKeyBoardOnScreen();
+    void spaceHandlerForVirtualKeyBoard();
+
+    ////////////////////
 private:
     /*!
       * Stores the URL of the open file
