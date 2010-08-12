@@ -1729,6 +1729,28 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 const unsigned MsoDrawingRecord::id = 0xEC;
 
+class MsoDrawingRecord::Private
+{
+public:
+    MSO::OfficeArtDgContainer container;
+};
+
+MsoDrawingRecord::MsoDrawingRecord(Workbook *book)
+    : Record(book)
+{
+    d = new MsoDrawingRecord::Private();
+}
+
+MsoDrawingRecord::~MsoDrawingRecord()
+{
+    delete d;
+}
+
+const MSO::OfficeArtDgContainer& MsoDrawingRecord::dgContainer() const
+{
+    return d->container;
+}
+
 void MsoDrawingRecord::dump(std::ostream& out) const
 {
     out << "MsoDrawingRecord" << std::endl;
@@ -1779,7 +1801,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
     }
     
     // Finally remember the container to be able to extract later content out of it.
-    m_container = container;
+    d->container = container;
 }
 
 // ========== MsoDrawingGroup ==========

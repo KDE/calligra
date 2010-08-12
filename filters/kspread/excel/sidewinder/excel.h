@@ -862,13 +862,13 @@ public:
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
 };
 
-class MsoDrawingRecord : public Record//, public DrawingObject
+class MsoDrawingRecord : public Record
 {
 public:
-    MSO::OfficeArtDgContainer m_container;
     static const unsigned id;
-    MsoDrawingRecord(Workbook *book) : Record(book) {}
-    virtual ~MsoDrawingRecord() {}
+    MsoDrawingRecord(Workbook *book);
+    virtual ~MsoDrawingRecord();
+
     virtual unsigned rtti() const {
         return this->id;
     }
@@ -877,6 +877,15 @@ public:
     }
     virtual void dump(std::ostream&) const;
     virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+
+    const MSO::OfficeArtDgContainer& dgContainer() const;
+private:
+    // no copy or assign
+    MsoDrawingRecord(const MsoDrawingRecord&);
+    MsoDrawingRecord& operator=(const MsoDrawingRecord&);
+
+    class Private;
+    Private *d;
 };
 
 class MsoDrawingBlibItem

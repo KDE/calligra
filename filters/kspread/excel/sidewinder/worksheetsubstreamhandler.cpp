@@ -64,7 +64,7 @@ public:
     std::vector<QString> textObjects;
 
     // The last drawing object we got.
-    MsoDrawingRecord* lastDrawingObject;
+    MSO::OfficeArtDgContainer* lastDrawingObject;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -767,7 +767,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 
     std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << record->m_object->type() << std::endl;
     
-    if (record->m_object->applyDrawing(d->lastDrawingObject->m_container)) {
+    if (record->m_object->applyDrawing(d->lastDrawingObject)) {
         switch (record->m_object->type()) {
             case Object::Picture: {
                 MsoDrawingBlibItem *drawing = d->globals->drawing(record->m_object->id());
@@ -791,7 +791,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
             case Object::OfficeArt:
             default: {
                 //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
-                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->m_container.groupShape->rgfb) {
+                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
                     if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
                         // TODO
                         qDebug() << "unsupported spgr container";
@@ -867,7 +867,7 @@ void WorksheetSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 
     // remember the MsoDrawingRecord for the ObjRecord that is expected to follow and to proper handle the drawing object.
     delete d->lastDrawingObject;
-    d->lastDrawingObject = new MsoDrawingRecord(*record);
+    d->lastDrawingObject = new MSO::OfficeArtDgContainer(record->dgContainer());
 }
 
 void WorksheetSubStreamHandler::handleWindow2(Window2Record* record)
