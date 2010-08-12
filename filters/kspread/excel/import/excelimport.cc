@@ -64,8 +64,8 @@ static inline uint qHash(const Swinder::FormatFont& font)
     return qHash(font.fontFamily()) ^ qRound(font.fontSize() * 100);
 }
 
-static qreal offset( unsigned long dimension, unsigned long offset ) {
-    return (float)dimension * (float)offset / 1024.0;
+static qreal offset( unsigned long dimension, unsigned long offset, qreal factor ) {
+    return (float)dimension * (float)offset / factor;
 }
 
 static qreal columnWidth(Sheet* sheet, unsigned long col) {
@@ -1434,11 +1434,11 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         xmlWriter->startElement("draw:frame");
         //xmlWriter->addAttribute("draw:name", "Graphics 1");
         xmlWriter->addAttribute("table:end-cell-address", encodeAddress(sheet->name(), picture->m_colR, picture->m_rwB));
-        xmlWriter->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR));
-        xmlWriter->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB));
+        xmlWriter->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR, 1024));
+        xmlWriter->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB, 256));
         xmlWriter->addAttribute("draw:z-index", "0");
-        xmlWriter->addAttributePt("svg:x", offset(columnWidth(sheet, colL), dxL) );
-        xmlWriter->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT));
+        xmlWriter->addAttributePt("svg:x", offset(columnWidth(sheet, colL), dxL, 1024) );
+        xmlWriter->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT, 256));
 
         xmlWriter->startElement("draw:image");
         xmlWriter->addAttribute("xlink:href", "Pictures/" + picture->fileName());
@@ -1473,8 +1473,8 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         const unsigned long rwT = chart->m_rwT;
         const unsigned long dyB = chart->m_dyB;
 
-        c->m_x = offset(columnWidth(sheet, colL), dxL);
-        c->m_y = offset(rowHeight(sheet, rwT), dyT);
+        c->m_x = offset(columnWidth(sheet, colL), dxL, 1024);
+        c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
 
         if (!chart->m_chart->m_cellRangeAddress.isNull() )
             c->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
