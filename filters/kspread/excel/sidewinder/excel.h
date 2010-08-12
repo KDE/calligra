@@ -890,6 +890,7 @@ public:
 class MsoDrawingGroupRecord : public Record
 {
 public:
+    MSO::OfficeArtDggContainer m_container;
     QList< MsoDrawingBlibItem* > m_items;
     static const unsigned id;
     MsoDrawingGroupRecord(Workbook *book);

@@ -39,6 +39,7 @@ public:
     bool passwordProtected;
     unsigned long passwd;
     std::vector<Format*> formats;
+    MSO::OfficeArtDggContainer* dggContainer;
 };
 
 Workbook::Workbook(KoStore* store)
@@ -48,6 +49,7 @@ Workbook::Workbook(KoStore* store)
     d->passwordProtected = false;
     d->activeTab = -1;
     d->passwd = 0; // password protection disabled
+    d->dggContainer = 0;
 }
 
 Workbook::~Workbook()
@@ -71,6 +73,7 @@ void Workbook::clear()
         delete s;
     }
     d->sheets.clear();
+    delete d->dggContainer; d->dggContainer = 0;
 }
 
 bool Workbook::load(const char* filename)
@@ -176,6 +179,16 @@ int Workbook::addFormat(const Format& format)
 Format* Workbook::format(int index)
 {
     return d->formats[index];
+}
+
+void Workbook::setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer)
+{
+    d->dggContainer = new MSO::OfficeArtDggContainer(dggContainer);
+}
+
+MSO::OfficeArtDggContainer* Workbook::officeArtDggContainer() const
+{
+    return d->dggContainer;
 }
 
 #ifdef SWINDER_XLS2RAW

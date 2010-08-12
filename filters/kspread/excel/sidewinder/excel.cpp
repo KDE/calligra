@@ -1797,7 +1797,7 @@ void MsoDrawingGroupRecord::dump(std::ostream& out) const
 void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n",size,*data,*continuePositions);
-    if(size < 32 || !m_workbook->store()) {
+    if(size < 32) {
         setIsValid(false);
         return;
     }
@@ -1807,32 +1807,28 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     buff.open(QIODevice::ReadOnly);
     LEInputStream lei(&buff);
     
-    MSO::OfficeArtDggContainer container;
     try {
-        MSO::parseOfficeArtDggContainer(lei, container);
+        MSO::parseOfficeArtDggContainer(lei, m_container);
     } catch (const IOException& e) {
         std::cerr << "Invalid MsoDrawingGroup record:" << qPrintable(e.msg) << std::endl;
         setIsValid(false);
         return;
     }
     
-    if(!container.blipStore.data()) {
-        setIsValid(false);
-        return;
-    }
+    if(m_container.blipStore.data() && m_workbook->store()) {
+        m_workbook->store()->enterDirectory("Pictures");
     
-    m_workbook->store()->enterDirectory("Pictures");
-    
-    foreach(MSO::OfficeArtBStoreContainerFileBlock fb, container.blipStore->rgfb) {
-        PictureReference ref = savePicture(fb, m_workbook->store());
-        if (ref.name.length() == 0) {
-            std::cerr << "Empty name in picture reference for picture with uid=" << ref.uid << " mimetype=" << ref.mimetype << std::endl;
-            continue;
+        foreach(MSO::OfficeArtBStoreContainerFileBlock fb, m_container.blipStore->rgfb) {
+            PictureReference ref = savePicture(fb, m_workbook->store());
+            if (ref.name.length() == 0) {
+                std::cerr << "Empty name in picture reference for picture with uid=" << ref.uid << " mimetype=" << ref.mimetype << std::endl;
+                continue;
+            }
+            m_items << new MsoDrawingBlibItem(ref);
         }
-        m_items << new MsoDrawingBlibItem(ref);
-    }
     
-    m_workbook->store()->leaveDirectory();
+        m_workbook->store()->leaveDirectory();
+    }
 }
 
 // ========== XF ==========

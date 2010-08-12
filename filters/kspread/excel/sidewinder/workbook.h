@@ -29,6 +29,10 @@
 
 class KoStore;
 
+namespace MSO {
+    class OfficeArtDggContainer;
+}
+
 namespace Swinder
 {
 
@@ -122,6 +126,9 @@ public:
 
     int addFormat(const Format& format);
     Format* format(int index);
+
+    void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
+    MSO::OfficeArtDggContainer* officeArtDggContainer() const;
 
     void emitProgress(int value);
 

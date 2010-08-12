@@ -833,6 +833,7 @@ void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* recor
     printf("GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
     Q_ASSERT(d->drawingTable.size() == 0); // if this asserts then multiple MsoDrawingGroupRecord can exist what we need to handle!
     d->drawingTable = record->m_items;
+    d->workbook->setOfficeArtDggContainer(record->m_container);
 }
 
 MsoDrawingBlibItem* GlobalsSubStreamHandler::drawing(unsigned long pid) const
