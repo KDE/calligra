@@ -122,6 +122,7 @@ protected:
     KoFilter::ConversionStatus read_rStyle();
     KoFilter::ConversionStatus read_tblStyle();
     KoFilter::ConversionStatus read_tblBorders();
+    KoFilter::ConversionStatus read_tblCellMar();
     KoFilter::ConversionStatus read_fldSimple();
     KoFilter::ConversionStatus read_lastRenderedPageBreak();
     KoFilter::ConversionStatus read_instrText();
@@ -174,6 +175,26 @@ protected:
 
     KoOdfWriters *m_writers; // Needed to create new relationship for header/footer
 
+    KoGenStyle m_currentTableCellStyle;
+    KoGenStyle m_currentTableCellStyleLeft;
+    KoGenStyle m_currentTableCellStyleRight;
+    KoGenStyle m_currentTableCellStyleTop;
+    KoGenStyle m_currentTableCellStyleBottom;
+    KoGenStyle m_currentTableCellStyleInsideV;
+    KoGenStyle m_currentTableCellStyleInsideH;
+
+    enum BorderSide {
+        TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
+    };
+
+    //! Used for setting up properties for pages and paragraphs.
+    //! It is reversed map, so detecting duplicates is easy in applyBorders().
+    QMap<QString, BorderSide> m_borderStyles;
+
+    //! Used for setting up properties for pages and paragraphs.
+    //! It is reversed map, so detecting duplicates is easy in applyBorders().
+    QMap<QString, BorderSide> m_borderPaddings;
+
 private:
     void init();
 
@@ -181,17 +202,7 @@ private:
     //! Uses m_currentObjectWidthCm and m_currentObjectHeightCm for size (defaults to 2cm/2cm)
     void writeRect();
 
-    enum BorderSide {
-        TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
-    };
-    //! Used for setting up properties for pages and paragraphs.
-    //! It is reversed map, so detecting duplicates is easy in applyBorders().
-    QMap<QString, BorderSide> m_borderStyles;
     QColor m_backgroundColor; //Documet background color
-
-    //! Used for setting up properties for pages and paragraphs.
-    //! It is reversed map, so detecting duplicates is easy in applyBorders().
-    QMap<QString, BorderSide> m_borderPaddings;
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr
     KoFilter::ConversionStatus readBorderElement(BorderSide borderSide, const char *borderSideName);
@@ -244,7 +255,6 @@ private:
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
     KoGenStyle m_currentTableRowStyle;
-    KoGenStyle m_currentTableCellStyle;
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered

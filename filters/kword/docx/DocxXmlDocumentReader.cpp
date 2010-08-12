@@ -1051,6 +1051,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             fillImageStyle.addAttribute("xlink:show", "embed");
             fillImageStyle.addAttribute("xlink:actuate", "onLoad");
             const QString fillImageStyleName(mainStyles->insert(fillImageStyle, "FillImage"));
+            if (m_moveToStylesXml) {
+                mainStyles->markStyleForStylesXml(fillImageStyleName);
+            }
+
             m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageStyleName);
         }
         writeRect();
@@ -2768,6 +2772,68 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pStyle()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL tblCellMar
+//! tblCellMar (cell margin defaults)
+/*!
+ Parent elements:
+ - [done] tblPr (§17.4.60)
+ - [done] tblPr (§17.4.59) 
+ - [done] tblPr (§17.7.6.4)
+ - [done] tblPr (§17.7.6.3)
+
+ Child elements:
+ - ...
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
+{
+    READ_PROLOGUE
+
+    QString side = QString();
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (QUALIFIED_NAME_IS(top)) {
+                side = "top";
+            }
+            else if (QUALIFIED_NAME_IS(left)) {
+                side = "left";
+            }
+            else if (QUALIFIED_NAME_IS(bottom)) {
+                side = "bottom";
+            }
+            else if (QUALIFIED_NAME_IS(right)) {
+                side = "right";
+            }
+            else {
+                side = QString();
+            }
+        }
+        if (!(side == QString())) {
+            const QXmlStreamAttributes attrs(attributes());
+            TRY_READ_ATTR(w)
+            if (!w.isEmpty()) {
+                bool ok;
+                const qreal distance = qreal(TWIP_TO_POINT(w.toDouble(&ok)));
+                if (ok) {
+                    m_currentTableCellStyleLeft.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
+                    m_currentTableCellStyleRight.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
+                    m_currentTableCellStyleBottom.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
+                    m_currentTableCellStyleTop.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
+                    m_currentTableCellStyleInsideV.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
+                    m_currentTableCellStyleInsideH.addPropertyPt(QString("fo:padding-%1").arg(side), distance, KoGenStyle::TableCellType);
+                }
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL tblBorders
 //! tblBorders handler (Table borders)
 /*!
@@ -3476,6 +3542,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableWidth = 0.0;
     m_currentTableRowNumber = 0;
 
+    m_currentTableCellStyleLeft = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentTableCellStyleRight = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentTableCellStyleTop = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentTableCellStyleBottom = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentTableCellStyleInsideV = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_currentTableCellStyleInsideH = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -3504,6 +3577,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
             m_currentTableName,
             KoGenStyles::DontAddNumberToName)
     );
+    if (m_moveToStylesXml) {
+                mainStyles->markStyleForStylesXml(tableStyleName);
+    }
+
     body->addAttribute("table:style-name", tableStyleName);
     uint column = 0;
     foreach (const ColumnStyleInfo& columnStyle, d->columnStyles) {
@@ -3514,6 +3591,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
                 m_currentTableName + '.' + MSOOXML::Utils::columnName(column),
                 KoGenStyles::DontAddNumberToName)
         );
+        if (m_moveToStylesXml) {
+            mainStyles->markStyleForStylesXml(columnStyleName);
+        }
+
         body->addAttribute("table:style-name", columnStyleName);
         if (columnStyle.count > 1) {
             body->addAttribute("table:number-columns-repeated", columnStyle.count);
@@ -3549,7 +3630,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
  - shd (Table Shading) §17.4.32
  - [done] tblBorders (Table Borders) §17.4.39
  - tblCaption (Table Caption) §17.4.41
- - tblCellMar (Table Cell Margin Defaults) §17.4.43
+ - [done] tblCellMar (Table Cell Margin Defaults) §17.4.43
  - tblCellSpacing (Table Cell Spacing Default) §17.4.46
  - tblDescription (Table Description) §17.4.47
  - tblInd (Table Indent from Leading Margin) §17.4.51
@@ -3567,11 +3648,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(tblStyle)
             ELSE_TRY_READ_IF(tblBorders)
+            ELSE_TRY_READ_IF(tblCellMar)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -3724,6 +3807,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
             m_currentTableName + '.' + QString::number(m_currentTableRowNumber + 1),
             KoGenStyles::DontAddNumberToName)
     );
+    if (m_moveToStylesXml) {
+        mainStyles->markStyleForStylesXml(tableRowStyleName);
+    }
+
     body->addAttribute("table:style-name", tableRowStyleName);
 
 
@@ -3874,51 +3961,81 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
     }
     undoReadNext();
 
-    m_currentTableCellStyle.addProperty("fo:border-bottom", "0.5pt solid #000000");
+    // We have to do this because ooxml predefined table styles so that you can specily
+    // all kinds of styles for one table style, where as odf does not allow it, but
+    // wants to have separate style for cell style.
+    QString currentParent = m_currentTableStyle.parentName();
+    const KoGenStyle *parentCellStyle = 0;
+
+    // FIXME: Current approach works for everything except last row.
+    m_currentTableCellStyle.addProperty("fo:border-bottom", "0.5pt solid #000000", KoGenStyle::TableCellType);
 
     if (m_currentTableColumnNumber == 0) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleLeft, m_currentTableCellStyle, KoGenStyle::TableCellType);
+        if (!currentParent.isEmpty()) {
+            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsLeft"));
+        }
         if (!m_borderStyles.key(LeftBorder).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(LeftBorder));
+            m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(LeftBorder), KoGenStyle::TableCellType);
         }
         if (!m_borderPaddings.key(LeftBorder).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder));
+            m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder), KoGenStyle::TableCellType);
         }
     }
     else {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideV, m_currentTableCellStyle, KoGenStyle::TableCellType);
+        if (!currentParent.isEmpty()) {
+            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsInsideV"));
+        }
         if (!m_borderStyles.key(InsideV).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(InsideV));
+            m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(InsideV), KoGenStyle::TableCellType);
         }
         if (!m_borderPaddings.key(InsideV).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(InsideV));
+            m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(InsideV), KoGenStyle::TableCellType);
         }
     }
     if (lastColumn) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleRight, m_currentTableCellStyle, KoGenStyle::TableCellType);
+        if (!currentParent.isEmpty()) {
+            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsRight"));
+        }
         if (!m_borderStyles.key(RightBorder).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:border-right", m_borderStyles.key(RightBorder));
+            m_currentTableCellStyle.addProperty("fo:border-right", m_borderStyles.key(RightBorder), KoGenStyle::TableCellType);
         }
         if (!m_borderPaddings.key(RightBorder).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:padding-right", m_borderPaddings.key(RightBorder));
+            m_currentTableCellStyle.addProperty("fo:padding-right", m_borderPaddings.key(RightBorder), KoGenStyle::TableCellType);
         }
     }
     if (m_currentTableRowNumber == 0) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleTop, m_currentTableCellStyle, KoGenStyle::TableCellType);
+        if (!currentParent.isEmpty()) {
+            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsTop"));
+        }
         if (!m_borderStyles.key(TopBorder).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(TopBorder));
+            m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(TopBorder), KoGenStyle::TableCellType);
         }
         if (!m_borderPaddings.key(TopBorder).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(TopBorder));
+            m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(TopBorder), KoGenStyle::TableCellType);
         }
     }
     else {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideH, m_currentTableCellStyle, KoGenStyle::TableCellType);
+        if (!currentParent.isEmpty()) {
+            parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsInsideH"));
+        }
         if (!m_borderStyles.key(InsideH).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(InsideH));
+            m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(InsideH), KoGenStyle::TableCellType);
         }
         if (!m_borderPaddings.key(InsideH).isEmpty()) {
-            m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(InsideH));
+            m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(InsideH), KoGenStyle::TableCellType);
         }
     }
 
+    if (parentCellStyle != 0) {
+        MSOOXML::Utils::copyPropertiesFromStyle(*parentCellStyle, m_currentTableCellStyle, KoGenStyle::TableCellType);
+    }
+
     //! @todo real border style get from w:tblPr/w:tblStyle@w:val
-    //m_currentTableCellStyle.addProperty("fo:border", "0.5pt solid #000000");
 
     const QString tableCellStyleName(
         mainStyles->insert(
@@ -3927,6 +4044,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
                 + QString::number(m_currentTableRowNumber + 1),
             KoGenStyles::DontAddNumberToName)
     );
+    if (m_moveToStylesXml) {
+        mainStyles->markStyleForStylesXml(tableCellStyleName);
+    }
+
     body->addAttribute("table:style-name", tableCellStyleName);
     //! @todo import various cell types
     body->addAttribute("office:value-type", "string");
@@ -4003,6 +4124,10 @@ void DocxXmlDocumentReader::writeRect()
     body->startElement("draw:rect");
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
+        if (m_moveToStylesXml) {
+            mainStyles->markStyleForStylesXml(drawStyleName);
+        }
+
         body->addAttribute("draw:style-name", drawStyleName);
     }
 

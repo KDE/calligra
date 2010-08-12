@@ -1259,3 +1259,40 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 }
 
 // </units> -------------------
+
+MSOOXML_EXPORT void Utils::copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type)
+{
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter tempWriter(&buffer);
+    sourceStyle.writeStyleProperties(&tempWriter, type);
+
+    QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+
+    // We have to add the properties in a loop
+    // This works as long as text-properties don't have children
+    // Currenty KoGenStyle doesn't support adding this in other ways.
+
+    int separatorLocation = content.indexOf(' ');
+    content = content.right(content.size() - (separatorLocation + 1));
+    separatorLocation = content.indexOf(' ');
+    if (separatorLocation < 0) {
+        separatorLocation = content.indexOf('/');
+    }
+    while (separatorLocation > 0) {
+        int equalSignLocation = content.indexOf('=');
+        if (equalSignLocation < 0) {
+            break;
+        }
+        QString propertyName = content.left(equalSignLocation);
+        // Removing equal and one quota
+        content = content.right(content.size() - (equalSignLocation) - 2);
+        separatorLocation = content.indexOf('\"');
+        if (separatorLocation < 0) {
+            separatorLocation = content.indexOf('/');
+        }
+        QString propertyValue = content.left(separatorLocation);
+        content = content.right(content.size() - (separatorLocation + 2));
+        targetStyle.addProperty(propertyName, propertyValue, type);
+    }
+}
