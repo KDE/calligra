@@ -531,6 +531,7 @@ QString MainWindow::currentSheetName()
     if(m_type == Spreadsheet && m_view ) {
         return ((View *)m_view)->activeSheet()->sheetName();
     }
+    return QString();
 }
 
 void MainWindow::gotoPage(int page)
