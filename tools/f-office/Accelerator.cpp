@@ -329,18 +329,24 @@ void AcceleratorScrollSlide::startScrollSettings()
 
 void AcceleratorScrollSlide::ifNoScroll()
 {
+#ifdef Q_WS_MAEMO_5
     MainWindow::stopAcceleratorScrolling=true;
+#endif
     scrollSettingsDialog->close();
     closeScrollDialog();
+#ifdef Q_WS_MAEMO_5
     if (MainWindow::enableScrolling) {
 
         emit stopTheAccelerator();
     }
+#endif
 }
 
 void AcceleratorScrollSlide::ifYesScroll()
 {
+#ifdef Q_WS_MAEMO_5
     MainWindow::stopAcceleratorScrolling=false;
+#endif
     scrollSettingsDialog->close();
     closeScrollDialog();
 }

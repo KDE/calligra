@@ -215,7 +215,9 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_pptTool(0),
         m_fsPPTDrawHighlightButton(0),
         m_fsPPTDrawPenButton(0),
+#ifdef Q_WS_MAEMO_5
         m_fsAccButton(0),
+#endif
         m_dbus( new MainWindowAdaptor(this)),
         m_collab(0),
         m_collabDialog(0),
@@ -262,9 +264,11 @@ void MainWindow::init()
     Q_CHECK_PTR(spaceHandlerShortcutForVirtualKeyBoard);
     spaceHandlerShortcutForVirtualKeyBoard->setEnabled(true);
 
+#ifdef Q_WS_MAEMO_5
     shortcutForAccelerator = new QShortcut(QKeySequence(("Ctrl+G")),this);
     Q_CHECK_PTR(shortcutForAccelerator);
     shortcutForAccelerator->setEnabled(true);
+#endif
 
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
@@ -2106,18 +2110,18 @@ void MainWindow::showFullScreenPresentationIcons(void)
         m_slideNotesButton->show();
         m_slideNotesButton->raise();
 
+#ifdef Q_WS_MAEMO_5
         if ((!m_fsAccButton)&& (m_pptTool)) {
              m_fsAccButton = new QPushButton(this);
              m_fsAccButton->setStyleSheet(FS_BUTTON_STYLE_SHEET);
              m_fsAccButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
              m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
              m_fsAccButton->move(736,156);
-#ifdef Q_WS_MAEMO_5
              connect(m_fsAccButton, SIGNAL(clicked(bool)), SLOT(switchToSlid()));
-#endif
         }
         m_fsAccButton->show();
         m_fsAccButton->raise();
+#endif
     }
 }
 ////////////////////////////////////////////////acc/////////////////////////////
@@ -2907,8 +2911,10 @@ void MainWindow::fsTimer()
             m_fsPPTDrawPenButton->hide();
         if (m_slideNotesButton && m_slideNotesButton->isVisible())
             m_slideNotesButton->hide();
+#ifdef Q_WS_MAEMO_5
         if (m_fsAccButton && m_fsAccButton->isVisible())
             m_fsAccButton->hide();
+#endif
     }
 }
 
@@ -2942,8 +2948,10 @@ void MainWindow::fsButtonClicked()
     if (m_slideNotesButton && m_slideNotesButton->isVisible())
         m_slideNotesButton->hide();
 
+#ifdef Q_WS_MAEMO_5
     if (m_fsAccButton && m_fsAccButton->isVisible())
         m_fsAccButton->hide();
+#endif
 
     if (m_isViewToolBar)
         m_ui->viewToolBar->show();
