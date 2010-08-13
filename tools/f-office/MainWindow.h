@@ -44,6 +44,12 @@
 #include "VirtualKeyBoard.h"
 #include "FoCellToolFactory.h"
 
+
+#ifdef Q_WS_MAEMO_5
+#include "Accelerator.h"
+#endif
+
+
 class QPushButton;
 class QIcon;
 class QTextDocument;
@@ -165,6 +171,75 @@ private slots:
     void spaceHandlerForVirtualKeyBoard();
 
     ////////////////////
+    ////////////////////////////////////
+    // Accelerator scrolling ,sliding //
+    ////////////////////////////////////
+#ifdef Q_WS_MAEMO_5
+
+private:
+
+/*!
+ * true if scrolling start
+ */
+
+static bool stopAcceleratorScrolling;
+/*!
+ * true if slide transition starts
+ */
+static bool enableAccelerator;
+/*!
+ * true if scrolling starts
+ */
+static bool enableScrolling;
+
+
+private:
+/*!
+ *  For accessing the accelerator
+ */
+AcceleratorScrollSlide acceleratorForScrolAndSlide;
+/*!
+ * Pointer to fullscreen Accelerometer Button
+ */
+QPushButton *m_fsAccButton;
+
+/*!
+ * shortcut for enabling the gestures
+ */
+QShortcut *shortcutForAccelerator;
+
+
+
+private slots:
+/*!
+ * Slot to toggle between the slide transition
+ */
+void switchToSlid();
+/*!
+ * Slot to toggle between the scrolling
+ */
+void switchToScroll();
+/*!
+ * Slot for the scroll action
+ */
+void scrollAction();
+/*!
+ * Slot for closing all the accelerator settings
+ */
+void closeAcceleratorSettings();
+/*!
+ * Slot for Enabling and disabling the scroll
+ */
+void  enableDisableScrollingOption();
+
+friend void AcceleratorScrollSlide::ifYesScroll();
+
+friend void AcceleratorScrollSlide::ifNoScroll();
+
+#endif
+////////////////////////////////
+////////////////////////////////
+
 private:
     /*!
       * Stores the URL of the open file
@@ -821,10 +896,7 @@ public slots:
      * Slot to update current slide in the presentation, when the slide changed in the notes dialog
      */
     void moveSLideFromNotesSLide(bool flag);
-    /*!
-     * Slot to toggle between the gesture recognization
-     */
-    void toggle_accelerator();
+
     void glPresenter();
     void glPresenterSet(int,int);
 private:
@@ -904,14 +976,7 @@ private:
      * Pointer to sliding motion dialog
      */
     SlidingMotionDialog *m_slidingmotiondialog;
-    /*!
-     * Pointer to fullscreen Accelerometer Button
-     */
-    QPushButton *m_fsAccButton;
-    /*!
-     * true if accelerometer starts
-     */
-    static bool enable_accelerator;
+
     /*!
      * Tool bar for spread sheet.
      */

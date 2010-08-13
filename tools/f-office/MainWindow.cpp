@@ -74,6 +74,7 @@
 
 #ifdef Q_WS_MAEMO_5
 #include <QtMaemo5/QMaemo5InformationBox>
+#include "Accelerator.h"
 #endif
 
 #include <kfileitem.h>
@@ -110,7 +111,7 @@
 #include <kundostack.h>
 #include <Map.h>
 #include <Doc.h>
-#include <View.h>
+#include <part/View.h>
 #include <Sheet.h>
 
 #include <X11/Xlib.h>
@@ -136,7 +137,14 @@ using  KSpread::Sheet;
 #define SHEETINFOFRAME_WIDTH 520
 #define SHEETINFOFRAME_HEIGHT 70
 
-bool MainWindow::enable_accelerator=false;
+
+#ifdef Q_WS_MAEMO_5
+
+bool MainWindow::enableAccelerator=false;
+bool MainWindow::enableScrolling=false;
+bool MainWindow::stopAcceleratorScrolling=true;
+#endif
+
 bool MainWindow::virtualKeyBoardIsOnScreen=false;
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
@@ -254,6 +262,10 @@ void MainWindow::init()
     Q_CHECK_PTR(spaceHandlerShortcutForVirtualKeyBoard);
     spaceHandlerShortcutForVirtualKeyBoard->setEnabled(true);
 
+    shortcutForAccelerator = new QShortcut(QKeySequence(("Ctrl+G")),this);
+    Q_CHECK_PTR(shortcutForAccelerator);
+    shortcutForAccelerator->setEnabled(true);
+
     QMenuBar* menu = menuBar();
     menu->addAction(m_ui->actionOpen);
     menu->addAction(m_ui->actionNew);
@@ -307,6 +319,10 @@ void MainWindow::init()
     connect(m_ui->actionFormat,SIGNAL(triggered()),SLOT(openFormatFrame()));
     connect(m_ui->actionStyle,SIGNAL(triggered()),SLOT(openFontStyleFrame()));
     m_ui->actionMathOp->setCheckable(true);
+#ifdef Q_WS_MAEMO_5
+    connect(m_ui->actionClose,SIGNAL(triggered()),this,SLOT(closeAcceleratorSettings()));
+#endif
+
     connect(m_ui->actionMathOp,SIGNAL(toggled(bool)),this,SLOT(startMathMode(bool)));
     connect(m_ui->actionPresentation,SIGNAL(triggered()),this,SLOT(glPresenter()));
 
@@ -1646,6 +1662,7 @@ void MainWindow::openNewDocument(DocumentType type)
 {
     KUrl newurl;
     QString mimetype;
+    m_type=type;
     switch(type) {
     case Text:
         newurl.setPath(NEW_WORDDOC);
@@ -1782,7 +1799,6 @@ void MainWindow::openNewDocument(DocumentType type)
 
     m_fileName = "";
     m_newDocOpen = true;
-    m_type = type;
     m_undostack = m_doc->undoStack();
     m_firstChar=true;
 }
@@ -1871,15 +1887,16 @@ void MainWindow::editToolBar(bool edit)
             disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
             disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
         } else {
+            disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+            disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
             if(m_type==Spreadsheet) {
                 KoToolManager::instance()->switchToolRequested(CellTool_ID);
                 m_ui->viewToolBar->hide();
-                m_spreadEditToolBar->show();
+                if(m_spreadEditToolBar) {
+                    m_spreadEditToolBar->show();
+                }
                 m_ui->EditToolBar->hide();
-                disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-                disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-
-            } else {
+                } else {
                 KoToolManager::instance()->switchToolRequested(TextTool_ID);
                 m_ui->viewToolBar->hide();
                 m_ui->EditToolBar->show();
@@ -2095,43 +2112,119 @@ void MainWindow::showFullScreenPresentationIcons(void)
              m_fsAccButton->resize(FS_BUTTON_SIZE, FS_BUTTON_SIZE);
              m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
              m_fsAccButton->move(736,156);
-             connect(m_fsAccButton, SIGNAL(clicked(bool)), SLOT(toggle_accelerator()));
+#ifdef Q_WS_MAEMO_5
+             connect(m_fsAccButton, SIGNAL(clicked(bool)), SLOT(switchToSlid()));
+#endif
         }
         m_fsAccButton->show();
         m_fsAccButton->raise();
     }
 }
+////////////////////////////////////////////////acc/////////////////////////////
+#ifdef Q_WS_MAEMO_5
+void MainWindow::switchToSlid()
+{
+
+     enableAccelerator=!enableAccelerator;
+     if(!enableAccelerator) {
+           m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
+           acceleratorForScrolAndSlide.stopRecognition();
+           disconnect(&acceleratorForScrolAndSlide,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
+           disconnect(&acceleratorForScrolAndSlide,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
+
+     }
+     else {
+
+           m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingon.png"));
+           acceleratorForScrolAndSlide.startRecognitionSlide();
+           disconnect(&acceleratorForScrolAndSlide,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
+           disconnect(&acceleratorForScrolAndSlide,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
+           connect(&acceleratorForScrolAndSlide,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
+           connect(&acceleratorForScrolAndSlide,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
+      }
+
+ }
+void MainWindow::enableDisableScrollingOption()
+{
+
+    if(enableScrolling) {
+        switchToScroll();
+}
+    if(stopAcceleratorScrolling) {
+        stopAcceleratorScrolling=false;
+
+    }
+    else {
+        stopAcceleratorScrolling=true;
+
+    }
+}
+
+
+void MainWindow::switchToScroll()
+{
+   enableScrolling=!enableScrolling;
+
+   if(enableScrolling) {
+       acceleratorForScrolAndSlide.startRecognitionScroll();
+       connect(&acceleratorForScrolAndSlide,SIGNAL(change()),this,SLOT(scrollAction()));
+
+   }
+   else {
+       disconnect(&acceleratorForScrolAndSlide,SIGNAL(change()),this,SLOT(scrollAction()));
+       acceleratorForScrolAndSlide.stopRecognitionScroll();
+   }
+}
+
+void MainWindow::scrollAction()
+{
+    m_controller->verticalScrollBar()->
+                  setSliderPosition (
+                    (m_controller->verticalScrollBar()->sliderPosition()
+                    +acceleratorForScrolAndSlide.getVerticalScrollValue())
+                  );
+    m_controller->horizontalScrollBar()->
+                  setSliderPosition (
+                    (m_controller->horizontalScrollBar()->sliderPosition()
+                    +acceleratorForScrolAndSlide.getHorizontalScrollValue())
+                  );
+    acceleratorForScrolAndSlide.resetScrollValues();
+}
+
+void MainWindow::closeAcceleratorSettings()
+{
+    if(enableAccelerator) {
+        m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
+        disconnect(&acceleratorForScrolAndSlide,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
+        disconnect(&acceleratorForScrolAndSlide,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
+
+        acceleratorForScrolAndSlide.stopRecognition();
+        enableAccelerator=!enableAccelerator;
+    }
+    if(enableScrolling) {
+        disconnect(&acceleratorForScrolAndSlide,SIGNAL(change()),this,SLOT(scrollAction()));
+        acceleratorForScrolAndSlide.stopRecognitionScroll();
+        enableScrolling=false;
+    }
+    disconnect(shortcutForAccelerator,SIGNAL(activated()),this,SLOT(enableDisableScrollingOption()));
+    disconnect(&acceleratorForScrolAndSlide,SIGNAL(StopTheAccelerator()),this,SLOT(switchToScroll()));
+}
+
+#endif
+//////////////////////////////////////////////////////////////////////////////
 
 void MainWindow::slideTransitionDialog(){
     m_slidingmotiondialog = new SlidingMotionDialog;
     m_slidingmotiondialog->m_select = gl_style ;
     m_slidingmotiondialog->m_time = gl_showtime / 1000;
     m_slidingmotiondialog->showDialog(this);
-    connect(m_slidingmotiondialog->m_opengl, SIGNAL(clicked()), SLOT(toggle_accelerator()));
     connect(m_slidingmotiondialog, SIGNAL(startglshow(int,int)), SLOT(glPresenterSet(int,int)));
-}
+#ifdef Q_WS_MAEMO_5
+   connect(m_slidingmotiondialog->m_opengl, SIGNAL(clicked()),&acceleratorForScrolAndSlide,SLOT(startSlideSettings()));
+   connect(m_slidingmotiondialog->m_acceleration,SIGNAL(clicked()),&acceleratorForScrolAndSlide,SLOT(startScrollSettings()));
+#endif
 
-void MainWindow::toggle_accelerator()
-{
-    if(m_slidingmotiondialog){
-        m_slidingmotiondialog->m_slidingmotionframe->hide();
-    }
-     enable_accelerator=!enable_accelerator;
-     if(enable_accelerator==false)
-     {qDebug()<<"closed the acc";
-         //m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingoff.png"));
-//         Accelerator_Thread.StopRecognition();
-//         disconnect(&Accelerator_Thread,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
-//         disconnect(&Accelerator_Thread,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
-     }
-     else
-     {   qDebug()<<"toggled to start";
-         //m_fsAccButton->setIcon(QIcon(":/images/64x64/Acceleration/swingon.png"));
-//         Accelerator_Thread.StartRecognition();
-//         connect(&Accelerator_Thread,SIGNAL(next()),m_fsPPTForwardButton,SLOT(click()));
-//         connect(&Accelerator_Thread,SIGNAL(previous()),m_fsPPTBackButton,SLOT(click()));
-     }
- }
+}
 
 void MainWindow::slideNotesButtonClicked()
 {
@@ -2179,6 +2272,11 @@ void MainWindow::openFileDialog()
     if (!file.isNull() && !m_isLoading) {
         m_fileName = file;
         QTimer::singleShot(100, this, SLOT(doOpenDocument()));
+#ifdef Q_WS_MAEMO_5
+
+        connect(shortcutForAccelerator,SIGNAL(activated()),this,SLOT(enableDisableScrollingOption()));
+        connect(&acceleratorForScrolAndSlide,SIGNAL(StopTheAccelerator()),this,SLOT(switchToScroll()));
+#endif
     }
 }
 
@@ -3135,6 +3233,16 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             if (m_panningCount <= 5) {
                 m_fsButton->show();
                 m_fsButton->raise();
+#ifdef Q_WS_MAEMO_5
+
+                //tap on the fullscreen starts and stops the scrolling functionality
+
+                if(!stopAcceleratorScrolling)
+                {
+                    qDebug()<<"this is the scroll stoppping and starting option"<<stopAcceleratorScrolling;
+                    switchToScroll();
+                }
+#endif
                 if (m_type == Presentation)
                     showFullScreenPresentationIcons();
                 m_fsTimer->start(3000);

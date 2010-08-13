@@ -27,6 +27,49 @@
 
 #include <QString>
 
+
+//  For accelerator sliding and scrolling
+
+/*!
+* Cordinates for horizontalscrolling
+*/
+
+#define XCORDINATELIMITLEVEL1    70
+#define XCORDINATELIMITLEVEL2   100
+#define XCORDINATELIMITLEVEL3   200
+#define XCORDINATELIMITLEVEL4   300
+
+/*!
+* Cordinates for virticalscrolling
+*/
+
+#define YCORDINATELIMITLEVEL1    70
+#define YCORDINATELIMITLEVEL2   150
+#define YCORDINATELIMITLEVEL3   200
+#define YCORDINATELIMITLEVEL4   300
+
+/*!
+* Levels of the vibration
+*/
+#define VIBRATIONLEVEL1  "PatternAcceleratora"
+#define VIBRATIONLEVEL2  "PatternAcceleratorb"
+#define VIBRATIONLEVEL3  "PatternAcceleratorc"
+#define VIBRATIONLEVEL4  "PatternAcceleratord"
+#define VIBRATIONLEVEL5  "PatternAcceleratore"
+#define VIBRATIONLEVEL6  "PatternAcceleratorf"
+#define VIBRATIONLEVEL7  "PatternAcceleratorg"
+#define VIBRATIONLEVEL8  "PatternAcceleratorh"
+#define VIBRATIONLEVEL9  "PatternAcceleratori"
+#define VIBRATIONLEVEL10  "PatternAcceleratorj"
+
+/*!
+* Range limits for  sliding
+*/
+#define LIMITFORENTERINGRANGE   700
+#define LIMITFOREXITINGRANGE    400
+
+//////////////////////////////////////////////
+
 #define PanTool_ID "PanTool"
 #define TextTool_ID "TextToolFactory_ID"
 #define CellTool_ID "FreOfficeCellToolId"

@@ -48,8 +48,8 @@ void SlidingMotionDialog::showDialog(MainWindow *main){
     m_slidingmotionframelayout->setVerticalSpacing(0);
     m_slidingmotionframelayout->setHorizontalSpacing(0);
 
-    m_opengl=addFrameComponent("Acceleration");
-    m_acceleration=addFrameComponent("Transition");
+    m_opengl=addFrameComponent("slide");
+    m_acceleration=addFrameComponent("scroll");
 
     m_slidetransitionlabel = new QLabel(this);
     m_slidetransitionlabel->setPixmap(QPixmap(":/images/64x64/Acceleration/Presentation.png"));
