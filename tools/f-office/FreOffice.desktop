@@ -2,13 +2,7 @@
 Version=1.0
 Type=Application
 Name=FreOffice
-Name[es]=FreOficina
-Name[nds]=Kontoor
-Name[pt]=Escritório
-Name[pt_BR]=Escritório
-Name[sv]=Kontor
-Name[uk]=Офіс
-Name[x-test]=xxOfficexx
+Name[x-test]=xxFreOfficexx
 Exec=/usr/bin/FreOffice
 Icon=freoffice
 X-Window-Icon=freoffice
