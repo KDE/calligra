@@ -1343,6 +1343,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
+            else if (instruction == "PAGE") {
+                m_complexCharType = CurrentPageComplexFieldCharType;
+            }
+            else if (instruction == "NUMPAGES") {
+                m_complexCharType = NumberOfPagesComplexFieldCharType;
+            }
             //! @todo: Add rest of the instructions
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1781,6 +1787,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->addAttribute("text:ref-name", m_complexCharValue);
                 m_closeHyperlink = true;
             }
+            else if (m_complexCharType == CurrentPageComplexFieldCharType) {
+                body->startElement("text:page-number");
+                body->addAttribute("text:select-page", "current");
+                m_closeHyperlink = true;
+            }
+            else if (m_complexCharType == NumberOfPagesComplexFieldCharType) {
+                body->startElement("text:page-count");
+                m_closeHyperlink = true;
+            }
         }
 
         body->startElement("text:span", false);
@@ -1818,7 +1833,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             m_complexCharStatus = ExecuteInstrNow;
         }
         if (m_closeHyperlink) {
-            body->endElement(); //either text:bookmark-ref or text:a
+            body->endElement(); //either text:bookmark-ref or text:a or text:page-number or text:page-count
             m_closeHyperlink = false;
         }
     }
@@ -4014,14 +4029,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
     // FIXME: Current approach works for everything except last row.
     m_currentTableCellStyle.addProperty("fo:border-bottom", "0.5pt solid #000000", KoGenStyle::TableCellType);
 
+    // Applying styles is done in two phases, first we apply styles from referenced style
+    // and in second phase from local styles to make sure local styles haver preference
+
+    // Phase 1 starts
     if (m_currentTableColumnNumber == 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleLeft, m_currentTableCellStyle, KoGenStyle::TableCellType);
         if (!currentParent.isEmpty()) {
             parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsLeft"));
         }
     }
     else {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideV, m_currentTableCellStyle, KoGenStyle::TableCellType);
         if (!currentParent.isEmpty()) {
             parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsInsideV"));
         }
@@ -4031,7 +4048,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
         parentCellStyle = 0;
     }
     if (lastColumn) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleRight, m_currentTableCellStyle, KoGenStyle::TableCellType);
         if (!currentParent.isEmpty()) {
             parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsRight"));
         }
@@ -4041,13 +4057,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
         parentCellStyle = 0;
     }
     if (m_currentTableRowNumber == 0) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleTop, m_currentTableCellStyle, KoGenStyle::TableCellType);
         if (!currentParent.isEmpty()) {
             parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsTop"));
         }
     }
     else {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideH, m_currentTableCellStyle, KoGenStyle::TableCellType);
         if (!currentParent.isEmpty()) {
             parentCellStyle = mainStyles->style(QString("%1-%2").arg(currentParent).arg("cellsInsideH"));
         }
@@ -4057,7 +4071,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
         parentCellStyle = 0;
     }
 
-    //! @todo real border style get from w:tblPr/w:tblStyle@w:val
+    // Phase 2 starts
+    if (m_currentTableColumnNumber == 0) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleLeft, m_currentTableCellStyle, KoGenStyle::TableCellType);
+    }
+    else {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideV, m_currentTableCellStyle, KoGenStyle::TableCellType);
+    }
+    if (lastColumn) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleRight, m_currentTableCellStyle, KoGenStyle::TableCellType);
+    }
+    if (m_currentTableRowNumber == 0) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleTop, m_currentTableCellStyle, KoGenStyle::TableCellType);
+    }
+    else {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_currentTableCellStyleInsideH, m_currentTableCellStyle, KoGenStyle::TableCellType);
+    }
 
     const QString tableCellStyleName(
         mainStyles->insert(
