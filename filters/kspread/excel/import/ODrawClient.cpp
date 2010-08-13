@@ -125,8 +125,10 @@ const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
 
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
 {
-    qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    return QColor();
+    if (c.fSchemeIndex) {
+        return m_sheet->workbook()->color(c.red);
+    }
+    return QColor(c.red, c.green, c.blue);
 }
 
 QString ODrawClient::formatPos(qreal v)
