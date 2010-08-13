@@ -130,6 +130,10 @@ public:
     void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
     MSO::OfficeArtDggContainer* officeArtDggContainer() const;
 
+    void setColorTable(const QList<QColor>& colorTable);
+    QColor customColor(unsigned index) const;
+    QColor color(unsigned index) const;
+
     void emitProgress(int value);
 
 #ifdef SWINDER_XLS2RAW

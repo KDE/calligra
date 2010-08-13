@@ -79,9 +79,6 @@ public:
 
     FormatFont convertedFont(unsigned index) const;
 
-    QColor customColor(unsigned index) const;  //
-    QColor convertedColor(unsigned index) const;
-
     unsigned xformatCount() const;//
     XFRecord xformat(unsigned index) const;  //
 

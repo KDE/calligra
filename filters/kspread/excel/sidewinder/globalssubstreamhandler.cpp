@@ -72,9 +72,6 @@ public:
     std::vector<QString> stringTable;
     std::vector<std::map<unsigned, FormatFont> > formatRunsTable;
 
-    // color table (from Palette record)
-    std::vector<QColor> colorTable;
-
     // table of Xformat
     std::vector<XFRecord> xfTable;
 
@@ -92,21 +89,6 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
     d->version = version;
     d->passwordProtected = false;
     d->decryption = 0;
-
-    // initialize palette
-    static const char *const default_palette[64-8] = { // default palette for all but the first 8 colors
-        "#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff",
-        "#00ffff", "#800000", "#008000", "#000080", "#808000", "#800080", "#008080",
-        "#c0c0c0", "#808080", "#9999ff", "#993366", "#ffffcc", "#ccffff", "#660066",
-        "#ff8080", "#0066cc", "#ccccff", "#000080", "#ff00ff", "#ffff00", "#00ffff",
-        "#800080", "#800000", "#008080", "#0000ff", "#00ccff", "#ccffff", "#ccffcc",
-        "#ffff99", "#99ccff", "#ff99cc", "#cc99ff", "#ffcc99", "#3366ff", "#33cccc",
-        "#99cc00", "#ffcc00", "#ff9900", "#ff6600", "#666699", "#969696", "#003366",
-        "#339966", "#003300", "#333300", "#993300", "#993366", "#333399", "#333333",
-    };
-    for (int i = 0; i < 64 - 8; i++) {
-        d->colorTable.push_back(QColor(default_palette[i]));
-    }
 }
 
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
@@ -198,14 +180,6 @@ FontRecord GlobalsSubStreamHandler::fontRecord(unsigned index) const
         return FontRecord(d->workbook);
 }
 
-QColor GlobalsSubStreamHandler::customColor(unsigned index) const
-{
-    if (index < d->colorTable.size())
-        return d->colorTable[index];
-    else
-        return QColor();
-}
-
 unsigned GlobalsSubStreamHandler::xformatCount() const
 {
     return d->xfTable.size();
@@ -257,7 +231,7 @@ FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
         FontRecord fr = fontRecord(index);
         font.setFontSize(fr.height() / 20.0);
         font.setFontFamily(fr.fontName());
-        font.setColor(convertedColor(fr.colorIndex()));
+        font.setColor(d->workbook->color(fr.colorIndex()));
         font.setBold(fr.fontWeight() > 500);
         font.setItalic(fr.isItalic());
         font.setStrikeout(fr.isStrikeout());
@@ -270,39 +244,6 @@ FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
     }
 
     return font;
-}
-
-QColor GlobalsSubStreamHandler::convertedColor(unsigned index) const
-{
-    if ((index >= 8) && (index < 0x40))
-        return customColor(index - 8);
-
-    // FIXME the following colors depend on system color settings
-    // 0x0040  system window text color for border lines
-    // 0x0041  system window background color for pattern background
-    // 0x7fff  system window text color for fonts
-    if (index == 0x40) return QColor(0, 0, 0);
-    if (index == 0x41) return QColor(255, 255, 255);
-    if (index == 0x7fff) return QColor(0, 0, 0);
-
-    // fallback: just "black"
-    QColor color;
-
-    // standard colors: black, white, red, green, blue,
-    // yellow, magenta, cyan
-    switch (index) {
-    case 0:   color = QColor(0, 0, 0); break;
-    case 1:   color = QColor(255, 255, 255); break;
-    case 2:   color = QColor(255, 0, 0); break;
-    case 3:   color = QColor(0, 255, 0); break;
-    case 4:   color = QColor(0, 0, 255); break;
-    case 5:   color = QColor(255, 255, 0); break;
-    case 6:   color = QColor(255, 0, 255); break;
-    case 7:   color = QColor(0, 255, 255); break;
-    default:  break;
-    }
-
-    return color;
 }
 
 // convert border style, e.g MediumDashed to a Pen
@@ -520,38 +461,38 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
 
     Pen pen;
     pen = convertBorderStyle(xf.leftBorderStyle());
-    pen.color = convertedColor(xf.leftBorderColor());
+    pen.color = d->workbook->color(xf.leftBorderColor());
     borders.setLeftBorder(pen);
 
     pen = convertBorderStyle(xf.rightBorderStyle());
-    pen.color = convertedColor(xf.rightBorderColor());
+    pen.color = d->workbook->color(xf.rightBorderColor());
     borders.setRightBorder(pen);
 
     pen = convertBorderStyle(xf.topBorderStyle());
-    pen.color = convertedColor(xf.topBorderColor());
+    pen.color = d->workbook->color(xf.topBorderColor());
     borders.setTopBorder(pen);
 
     pen = convertBorderStyle(xf.bottomBorderStyle());
-    pen.color = convertedColor(xf.bottomBorderColor());
+    pen.color = d->workbook->color(xf.bottomBorderColor());
     borders.setBottomBorder(pen);
 
     if(xf.diagonalTopLeft()) {
         pen = convertBorderStyle(xf.diagonalStyle());
-        pen.color = convertedColor(xf.diagonalColor());
+        pen.color = d->workbook->color(xf.diagonalColor());
         borders.setTopLeftBorder(pen);
     }
 
     if(xf.diagonalBottomLeft()) {
         pen = convertBorderStyle(xf.diagonalStyle());
-        pen.color = convertedColor(xf.diagonalColor());
+        pen.color = d->workbook->color(xf.diagonalColor());
         borders.setBottomLeftBorder(pen);
     }
 
     format.setBorders(borders);
 
     FormatBackground background;
-    background.setForegroundColor(convertedColor(xf.patternForeColor()));
-    background.setBackgroundColor(convertedColor(xf.patternBackColor()));
+    background.setForegroundColor(d->workbook->color(xf.patternForeColor()));
+    background.setBackgroundColor(d->workbook->color(xf.patternBackColor()));
     background.setPattern(convertPatternStyle(xf.fillPattern()));
     format.setBackground(background);
 
@@ -775,9 +716,10 @@ void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
 {
     if (!record) return;
 
-    d->colorTable.clear();
+    QList<QColor> colorTable;
     for (unsigned i = 0; i < record->count(); i++)
-        d->colorTable.push_back(QColor(record->red(i), record->green(i), record->blue(i)));
+        colorTable.append(QColor(record->red(i), record->green(i), record->blue(i)));
+    d->workbook->setColorTable(colorTable);
 }
 
 void GlobalsSubStreamHandler::handleSST(SSTRecord* record)

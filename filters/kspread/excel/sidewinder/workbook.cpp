@@ -40,6 +40,7 @@ public:
     unsigned long passwd;
     std::vector<Format*> formats;
     MSO::OfficeArtDggContainer* dggContainer;
+    QList<QColor> colorTable;
 };
 
 Workbook::Workbook(KoStore* store)
@@ -50,6 +51,22 @@ Workbook::Workbook(KoStore* store)
     d->activeTab = -1;
     d->passwd = 0; // password protection disabled
     d->dggContainer = 0;
+
+    // initialize palette
+    static const char *const default_palette[64-8] = { // default palette for all but the first 8 colors
+        "#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff",
+        "#00ffff", "#800000", "#008000", "#000080", "#808000", "#800080", "#008080",
+        "#c0c0c0", "#808080", "#9999ff", "#993366", "#ffffcc", "#ccffff", "#660066",
+        "#ff8080", "#0066cc", "#ccccff", "#000080", "#ff00ff", "#ffff00", "#00ffff",
+        "#800080", "#800000", "#008080", "#0000ff", "#00ccff", "#ccffff", "#ccffcc",
+        "#ffff99", "#99ccff", "#ff99cc", "#cc99ff", "#ffcc99", "#3366ff", "#33cccc",
+        "#99cc00", "#ffcc00", "#ff9900", "#ff6600", "#666699", "#969696", "#003366",
+        "#339966", "#003300", "#333300", "#993300", "#993366", "#333399", "#333333",
+    };
+    for (int i = 0; i < 64 - 8; i++) {
+        d->colorTable.append(QColor(default_palette[i]));
+    }
+
 }
 
 Workbook::~Workbook()
@@ -189,6 +206,52 @@ void Workbook::setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggCon
 MSO::OfficeArtDggContainer* Workbook::officeArtDggContainer() const
 {
     return d->dggContainer;
+}
+
+void Workbook::setColorTable(const QList<QColor> &colorTable)
+{
+    d->colorTable = colorTable;
+}
+
+QColor Workbook::customColor(unsigned index) const
+{
+    if (index < d->colorTable.size())
+        return d->colorTable[index];
+    else
+        return QColor();
+}
+
+QColor Workbook::color(unsigned index) const
+{
+    if ((index >= 8) && (index < 0x40))
+        return customColor(index - 8);
+
+    // FIXME the following colors depend on system color settings
+    // 0x0040  system window text color for border lines
+    // 0x0041  system window background color for pattern background
+    // 0x7fff  system window text color for fonts
+    if (index == 0x40) return QColor(0, 0, 0);
+    if (index == 0x41) return QColor(255, 255, 255);
+    if (index == 0x7fff) return QColor(0, 0, 0);
+
+    // fallback: just "black"
+    QColor color;
+
+    // standard colors: black, white, red, green, blue,
+    // yellow, magenta, cyan
+    switch (index) {
+    case 0:   color = QColor(0, 0, 0); break;
+    case 1:   color = QColor(255, 255, 255); break;
+    case 2:   color = QColor(255, 0, 0); break;
+    case 3:   color = QColor(0, 255, 0); break;
+    case 4:   color = QColor(0, 0, 255); break;
+    case 5:   color = QColor(255, 255, 0); break;
+    case 6:   color = QColor(255, 0, 255); break;
+    case 7:   color = QColor(0, 255, 255); break;
+    default:  break;
+    }
+
+    return color;
 }
 
 #ifdef SWINDER_XLS2RAW
