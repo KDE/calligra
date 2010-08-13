@@ -759,16 +759,16 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 {
     if (!record) return;
-    if (!record->m_object) return;
     if (!d->lastDrawingObject) return;
     if (!d->sheet) return;
 
-    const unsigned long id = record->m_object->id();
+    const unsigned long id = record->m_object ? record->m_object->id() : -1;
 
-    std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << record->m_object->type() << std::endl;
+    std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << (record->m_object ? record->m_object->type() : -1) << std::endl;
     
-    bool handled = true;
-    if (record->m_object->applyDrawing(*(d->lastDrawingObject))) {
+    bool handled = false;
+    if (record->m_object && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
+        handled = true;
         switch (record->m_object->type()) {
             case Object::Picture: {
                 MsoDrawingBlibItem *drawing = d->globals->drawing(record->m_object->id());
@@ -817,7 +817,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
         }
     }
     
-    d->sharedObjects[id] = record->m_object;
+    if (record->m_object) d->sharedObjects[id] = record->m_object;
     record->m_object = 0; // take over ownership
      
     delete d->lastDrawingObject;
