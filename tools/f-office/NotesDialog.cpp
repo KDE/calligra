@@ -105,13 +105,18 @@ NotesDialog::NotesDialog(KoDocument *m_doc,int viewNumber,QList <QPixmap> thumbn
         connect(pushPrev,SIGNAL(clicked()),this,SLOT(preButtonClicked()));
         pageNotesTextEdit->setReadOnly(true);
         this->resize(620,820);
+        currentPage=0;
+        slidePreview->hide();
 }
 
 void NotesDialog::showNotesDialog(int page)
 {
     if(page<0 || page>m_doc->pageCount())
         return;
-
+    if(currentPage>=0 && currentPage<m_doc->pageCount() && currentPage<thumbnailList.count()){
+        previewButtonList.at(currentPage)->setChecked(false);
+        previewButtonList.at(currentPage)->setCheckable(false);
+    }
     this->currentPage=page-1;
 
     slidePreview->setPixmap(thumbnailList.at(currentPage).scaled(220,150));
@@ -126,7 +131,7 @@ qDebug()<<"view number="<<viewNumber<<"\n";
     currentPage=page-1;
     previewButtonList.at(currentPage)->setCheckable(true);
     previewButtonList.at(currentPage)->setChecked(true);
-    currentSlideNumber->setText("            Slide "+QString::number(currentPage+1));
+    currentSlideNumber->setText("    Current Slide "+QString::number(currentPage+1));
 }
 void NotesDialog::preButtonClicked()
 {

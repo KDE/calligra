@@ -39,13 +39,11 @@ AboutDialog::AboutDialog(QWidget *parent) :
     </style></head><body style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:400; \
     font-style:normal;\">\n <p>" +
 
-    i18n("FreOffice - Alpha for Maemo 5 is based on KOffice.<br>"
-    "KOffice is an active open source project of many more office applications.<br>"
-    "FreOffice supports ODF (odt, odp & ods) and Microsoft formats (Word and <br>"
-    "PowerPoint and Excel).<br>"
-    "Support for Microsoft formats is currently not feature complete.<br>"
-    "Office is packaged by Maemo, in collaboration with members of<br>"
-    "the KOffice community.") +
+i18n("Freoffice is a mobile edition of KOffice Open source project. <br>"
+     "Freoffice code can be found in the KOffice Open Source project. <br>"
+     "Freoffice is in beta edition and it supports viewing of spreadsheet, presentation and document in both<br>"
+     "Open document format (ODF) and Microsoft format. <br>"
+     "The editing functionality is limited to ODF documents only.")+
     "</p></body></html>";
 
     m_ui->setupUi(this);

@@ -109,7 +109,7 @@
 #include <kundostack.h>
 #include <Map.h>
 #include <Doc.h>
-#include <View.h>
+#include <part/View.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -356,8 +356,20 @@ void MainWindow::init()
                     (unsigned char *) &val, 1);
     /* taking care of Zoom buttons : ends */
 
+    m_cutShortcut = new QShortcut(QKeySequence::Cut, this);
+    connect(m_cutShortcut, SIGNAL(activated()), this, SLOT(cut()));
+
     m_copyShortcut = new QShortcut(QKeySequence::Copy, this);
     connect(m_copyShortcut, SIGNAL(activated()), this, SLOT(copy()));
+
+    m_pasteShortcut = new QShortcut(QKeySequence::Paste, this);
+    connect(m_pasteShortcut, SIGNAL(activated()), this, SLOT(paste()));
+
+    m_undoShortcut = new QShortcut(QKeySequence::Undo, this);
+    connect(m_undoShortcut,SIGNAL(activated()),this,SLOT(doUndo()));
+
+    m_redoShortcut = new QShortcut(QKeySequence::Redo, this);
+    connect(m_redoShortcut,SIGNAL(activated()),this,SLOT(doRedo()));
 
     // Toolbar should be shown only when we open a document
     m_ui->viewToolBar->hide();
@@ -369,6 +381,7 @@ void MainWindow::init()
      */
     gl_showtime=7000;
     gl_style=0;
+
 }
 
 MainWindow::~MainWindow()
@@ -2022,12 +2035,14 @@ void MainWindow::toggle_accelerator()
 void MainWindow::slideNotesButtonClicked()
 {
     if(notesDialog) {
+        disconnect(notesDialog,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
         disconnect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
         delete notesDialog;
     }
     notesDialog=new NotesDialog(m_doc,viewNumber,storeButtonPreview->thumbnailList);
     notesDialog->show();
     connect(notesDialog,SIGNAL(moveSlide(bool)),this,SLOT(moveSLideFromNotesSLide(bool)));
+    connect(notesDialog,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
 
     notesDialog->show();
     notesDialog->showNotesDialog(m_currentPage);

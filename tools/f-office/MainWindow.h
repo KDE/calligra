@@ -822,9 +822,25 @@ private:
      */
     bool m_existingFile;
     /*!
-     * QShortcut for copying text with Ctrl-c
+     * QShortcut to cut text with Ctrl-X
+     */
+    QShortcut *m_cutShortcut;
+    /*!
+     * QShortcut for copying text with Ctrl-C
      */
     QShortcut *m_copyShortcut;
+    /*!
+     * QShortcut for copying text with Ctrl-V
+     */
+    QShortcut *m_pasteShortcut;
+    /*!
+     * QShortcut for copying text with Ctrl-Z
+     */
+    QShortcut *m_undoShortcut;
+    /*!
+     * QShortcut for copying text with Ctrl-P
+     */
+    QShortcut *m_redoShortcut;
     /*!
      * Count of mouseMove or tabletMove events after MousePress or tabletPress event
      */
@@ -877,7 +893,6 @@ private:
      * Tool bar for spread sheet.
      */
     QToolBar *m_spreadEditToolBar;
-
 signals:
     /*!
      * Presentation has entered full screen mode.
