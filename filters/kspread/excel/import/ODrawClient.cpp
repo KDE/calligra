@@ -51,7 +51,6 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
 {
     const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
     if (anchor) {
-        qDebug() << "colL" << anchor->colL << "colR" << anchor->colR << "dxL" << anchor->dxL << "dxR" << anchor->dxR << "rwT" << anchor->rwT << "rwB" << anchor->rwB << "dyT" << anchor->dyT << "dyB" << anchor->dyB << "fMove" << anchor->fMove << "fSize" << anchor->fSize;
         QRectF r;
         qreal colWidth = columnWidth(m_sheet, anchor->colL);
         r.setLeft(offset(colWidth, anchor->dxL, 1024));
@@ -66,7 +65,6 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
             r.setWidth(width);
         }
         qreal rowHgt = rowHeight(m_sheet, anchor->rwT);
-        qDebug() << "w:" << colWidth << "h:" << rowHgt;
         r.setTop(offset(rowHgt, anchor->dyT, 256));
         if (anchor->rwT == anchor->rwB) {
             r.setBottom(offset(rowHgt, anchor->dyB, 256));
@@ -78,7 +76,6 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
             height += offset(rowHeight(m_sheet, anchor->rwB), anchor->dyB, 256);
             r.setHeight(height);
         }
-        qDebug() << "rect:" << r;
         return r;
     } else {
         qDebug() << "Invalid client anchor!";
