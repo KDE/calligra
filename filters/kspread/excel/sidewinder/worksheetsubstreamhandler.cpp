@@ -767,7 +767,8 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 
     std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << record->m_object->type() << std::endl;
     
-    if (record->m_object->applyDrawing(d->lastDrawingObject)) {
+    bool handled = true;
+    if (record->m_object->applyDrawing(*(d->lastDrawingObject))) {
         switch (record->m_object->type()) {
             case Object::Picture: {
                 MsoDrawingBlibItem *drawing = d->globals->drawing(record->m_object->id());
@@ -788,30 +789,31 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                 // a NoteRecord will follow which picks that up.
                 d->noteMap[id] = ++d->noteCount;
             } break;
-            case Object::OfficeArt:
-            default: {
-                //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
-                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
-                    if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
-                        // TODO
-                        qDebug() << "unsupported spgr container";
+            default:
+                handled = false;
+        }
+    }
+    if (!handled) {
+        //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
+        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
+            if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
+                // TODO
+                qDebug() << "unsupported spgr container";
+            } else {
+                const MSO::OfficeArtSpContainer& o = *fb.anon.get<MSO::OfficeArtSpContainer>();
+                if (o.clientAnchor) {
+                    MSO::XlsOfficeArtClientAnchor* anchor = o.clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>();
+                    if (!anchor) {
+                        qDebug() << "invalid client anchor";
                     } else {
-                        const MSO::OfficeArtSpContainer& o = *fb.anon.get<MSO::OfficeArtSpContainer>();
-                        if (o.clientAnchor) {
-                            MSO::XlsOfficeArtClientAnchor* anchor = o.clientAnchor->anon.get<MSO::XlsOfficeArtClientAnchor>();
-                            if (!anchor) {
-                                qDebug() << "invalid client anchor";
-                            } else {
-                                Cell  *cell = d->sheet->cell(anchor->colL, anchor->rwT);
-                                cell->addDrawObject(fb);
-                            }
-                        } else {
-                            // TODO
-                            qDebug() << "unsupported not cell-anchored object";
-                        }
+                        Cell  *cell = d->sheet->cell(anchor->colL, anchor->rwT);
+                        cell->addDrawObject(fb);
                     }
+                } else {
+                    // TODO
+                    qDebug() << "unsupported not cell-anchored object";
                 }
-            } break;
+            }
         }
     }
     
