@@ -256,6 +256,14 @@ private:
     QAction *m_percentageAction;
     QAction *m_equalsAction;
     QSignalMapper *m_signalMapper;
+    /*!
+     * Frame for Spreadsheet sheet information.
+     */
+    QFrame *m_sheetInfoFrame;
+    QGridLayout *m_sheetInfoFrameLayout;
+    QPushButton *m_addSheet;
+    QPushButton *m_removeSheet;
+    QPushButton *m_sheetName;
 
     /*!
      * line edit for search
@@ -519,6 +527,10 @@ private:
     bool setBulletList(KoTextEditor* editor);
     bool setSubScript(KoTextEditor* editor);
     bool setSuperScript(KoTextEditor* editor);
+    /*!
+     * Handle the Spreadsheet sheet information
+     */
+    void spreadSheetInfo();
 
 private slots:
 
@@ -534,7 +546,18 @@ private slots:
      * Adds symbol for spreadEditToolBar
      */
     void addMathematicalOperator(QString mathSymbol);
-
+    /*!
+     * Remove a sheet.
+     */
+    void removeSheet();
+    /*!
+     * Add add a sheet.
+     */
+    void addSheet();
+    /*!
+     * Current sheet info.
+     */
+    QString currentSheetName();
     /*!
      * Slot to perform UndoAction
      */

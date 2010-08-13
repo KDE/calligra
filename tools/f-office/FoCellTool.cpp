@@ -36,6 +36,8 @@
 #include "Cell.h"
 #include "Sheet.h"
 #include "Style.h"
+#include "KoColorSpace.h"
+#include "KoColorSpaceRegistry.h"
 
 using KSpread::CellEditorBase;
 using KSpread::Sheet;
@@ -66,14 +68,12 @@ void FoCellTool::selectFontType(const QString& fonttype){
 }
 
 void FoCellTool::selectTextColor(const QColor &color) {
-    KoColor *textcolor = new KoColor();
-    textcolor->fromQColor(color);
+    KoColor *textcolor = new KoColor(color,KoColorSpaceRegistry::instance()->rgb16(0));
     changeTextColor(*textcolor);
 }
 
 void FoCellTool::selectTextBackgroundColor(const QColor &color) {
-    KoColor *textbackgroundcolor = new KoColor();
-    textbackgroundcolor->fromQColor(color);
+    KoColor *textbackgroundcolor = new KoColor(color,KoColorSpaceRegistry::instance()->rgb16(0));
     changeBackgroundColor(*textbackgroundcolor);
 }
 

@@ -370,6 +370,8 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
         disconnect(virtualKeyBoardButton[43],SIGNAL(clicked()),this,SLOT(displayCharactorVirtualKeyBoard()));
         disconnect(virtualKeyBoardButton[44],SIGNAL(clicked()),this,SLOT(displayCharactorVirtualKeyBoard()));
 
+        virtualKeyBoardFrame->close();
+        
         delete numbers;
         numbers=0;
 

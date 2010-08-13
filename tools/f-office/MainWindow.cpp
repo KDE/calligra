@@ -37,6 +37,7 @@
 #include "FoExternalEditor.h"
 #include "GlPresenter.h"
 #include "FoCellTool.h"
+#include "RemoveSheet.h"
 
 #include <QFileDialog>
 #include <QUrl>
@@ -109,7 +110,8 @@
 #include <kundostack.h>
 #include <Map.h>
 #include <Doc.h>
-#include <part/View.h>
+#include <View.h>
+#include <Sheet.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -128,6 +130,11 @@ using  KSpread::Sheet;
 #define FONTSTYLEFRAME_YCORDINATE_VALUE 150
 #define FONTSTYLEFRAME_WIDTH 520
 #define FONTSTYLEFRAME_HEIGHT 210
+
+#define SHEETINFOFRAME_XCORDINATE_VALUE 100
+#define SHEETINFOFRAME_YCORDINATE_VALUE 290
+#define SHEETINFOFRAME_WIDTH 520
+#define SHEETINFOFRAME_HEIGHT 70
 
 bool MainWindow::enable_accelerator=false;
 bool MainWindow::virtualKeyBoardIsOnScreen=false;
@@ -224,7 +231,12 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_percentageAction(0),
         m_equalsAction(0),
         m_signalMapper(0),
-        m_spreadEditToolBar(0)
+        m_spreadEditToolBar(0),
+        m_sheetInfoFrame(0),
+        m_sheetInfoFrameLayout(0),
+        m_addSheet(0),
+        m_removeSheet(0),
+        m_sheetName(0)
 {
     init();
 }
@@ -407,8 +419,7 @@ void MainWindow::showVirtualKeyBoardOnScreen()
 {
     virtualKeyBoardIsOnScreen=!virtualKeyBoardIsOnScreen;
 
-    m_controller->verticalScrollBar()->setSliderPosition(m_editor->position());
-    static   VirtualKeyBoard *vb=new VirtualKeyBoard;
+    static VirtualKeyBoard *vb=new VirtualKeyBoard;
     vb->ShowVirtualKeyBoard(this,m_editor);
 
 }
@@ -428,6 +439,77 @@ void MainWindow::showPreviewDialog()
 {
     if(m_type == Presentation) {
         storeButtonPreview->showDialog(m_currentPage);
+    }
+    //add spreadsheet sheet information frame
+    if(m_type == Spreadsheet) {
+        spreadSheetInfo();
+    }
+}
+
+void MainWindow::spreadSheetInfo()
+{
+    if(m_sheetInfoFrame) {
+        m_sheetInfoFrame->hide();
+        disconnect(m_addSheet,SIGNAL(clicked()),this,SLOT(addSheet()));
+        disconnect(m_removeSheet,SIGNAL(clicked()),this,SLOT(removeSheet()));
+        delete m_sheetInfoFrame;
+        m_sheetInfoFrame=0;
+        m_sheetInfoFrameLayout=0;
+        m_addSheet=0;
+        m_removeSheet=0;
+        m_sheetName=0;
+        return;
+    }
+    m_sheetInfoFrame=new QFrame(this);
+    m_addSheet=new QPushButton(QString("+"), this);
+    m_removeSheet=new QPushButton(QString("-"), this);
+    m_sheetName=new QPushButton(this);
+
+    m_sheetInfoFrameLayout=new QGridLayout(m_sheetInfoFrame);
+    m_sheetInfoFrameLayout->addWidget(m_removeSheet,0,0);
+    m_sheetInfoFrameLayout->addWidget(m_sheetName,0,2,0,2);
+    m_sheetInfoFrameLayout->addWidget(m_addSheet,0,5);
+    m_sheetInfoFrameLayout->setHorizontalSpacing(0);
+    m_sheetInfoFrameLayout->setVerticalSpacing(0);
+
+    m_sheetInfoFrame->setGeometry(SHEETINFOFRAME_XCORDINATE_VALUE,
+                               SHEETINFOFRAME_YCORDINATE_VALUE,
+                               SHEETINFOFRAME_WIDTH,
+                               SHEETINFOFRAME_HEIGHT);
+
+    m_sheetInfoFrame->setLayout(m_sheetInfoFrameLayout);
+    m_sheetInfoFrame->show();
+    connect(m_addSheet,SIGNAL(clicked()),this,SLOT(addSheet()));
+    connect(m_removeSheet,SIGNAL(clicked()),this,SLOT(removeSheet()));
+    m_sheetName->setText(this->currentSheetName());
+}
+
+void MainWindow::addSheet()
+{
+    if(m_type == Spreadsheet && m_view ) {
+        m_isDocModified=true;
+        ((View *)m_view)->insertSheet();
+    }
+}
+
+void MainWindow::removeSheet()
+{
+    if(m_type == Spreadsheet && m_view ) {
+        if(QMessageBox::question(this,QString("Confirm Delete"),QString("Do you really want to delet the sheet"),QMessageBox::Yes | QMessageBox::No ) == QMessageBox::Yes ) {
+        ((View *)m_view)->selection()->emitCloseEditor(false); // discard changes
+        ((View *)m_view)->doc()->setModified(true);
+        m_isDocModified=true;
+        Sheet * tbl = ((View *)m_view)->activeSheet();
+        QUndoCommand* command = new RemoveSheet(tbl);
+        ((View *)m_view)->doc()->addCommand(command);
+    }
+    }
+}
+
+QString MainWindow::currentSheetName()
+{
+    if(m_type == Spreadsheet && m_view ) {
+        return ((View *)m_view)->activeSheet()->sheetName();
     }
 }
 
@@ -1694,7 +1776,8 @@ void MainWindow::openNewDocument(DocumentType type)
     //if(type==Text||type==Spreadsheet)
       //  m_ui->actionEdit->setChecked(true);*/
     if(type == Spreadsheet) {
-        m_ui->actionEdit->trigger();
+        m_ui->actionEdit->setChecked(false);
+        //m_ui->actionEdit->trigger();
     }
 
     m_fileName = "";
@@ -1777,20 +1860,36 @@ void MainWindow::editToolBar(bool edit)
         showVirtualKeyBoardOnScreen();
 
     if (m_newDocOpen) {
-         if (!edit) {
-             KoToolManager::instance()->switchToolRequested(PanTool_ID);
-             m_ui->EditToolBar->hide();
-             m_ui->viewToolBar->show();
-             m_isViewToolBar = true;
-             disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-             disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-         } else {
-             KoToolManager::instance()->switchToolRequested(TextTool_ID);
-             m_ui->viewToolBar->hide();
-             m_ui->EditToolBar->show();
-             connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-             connect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-         }
+        if (!edit) {
+            KoToolManager::instance()->switchToolRequested(PanTool_ID);
+            m_ui->EditToolBar->hide();
+            if(m_spreadEditToolBar) {
+                m_spreadEditToolBar->hide();
+            }
+            m_ui->viewToolBar->show();
+            m_isViewToolBar = true;
+            disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+            disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+        } else {
+            if(m_type==Spreadsheet) {
+                KoToolManager::instance()->switchToolRequested(CellTool_ID);
+                m_ui->viewToolBar->hide();
+                m_spreadEditToolBar->show();
+                m_ui->EditToolBar->hide();
+                disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+                disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+
+            } else {
+                KoToolManager::instance()->switchToolRequested(TextTool_ID);
+                m_ui->viewToolBar->hide();
+                m_ui->EditToolBar->show();
+                if(m_spreadEditToolBar) {
+                m_spreadEditToolBar->hide();
+                }
+                connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+                connect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+            }
+        }
     } else {
         if (edit) {
             connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
@@ -1798,7 +1897,9 @@ void MainWindow::editToolBar(bool edit)
             if(m_type==Spreadsheet) {
                 KoToolManager::instance()->switchToolRequested(CellTool_ID);
                 m_ui->viewToolBar->hide();
-                m_spreadEditToolBar->show();
+                if(m_spreadEditToolBar) {
+                    m_spreadEditToolBar->show();
+                }
                 m_ui->EditToolBar->hide();
                 disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
                 disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
@@ -2114,6 +2215,9 @@ void MainWindow::closeDocument()
         m_doc = 0;
         m_spreadEditToolBar->hide();
         resetSpreadEditorToolBar();
+        if(m_sheetInfoFrame && m_sheetInfoFrame->isVisible()) {
+            spreadSheetInfo();
+        }
        /* delete m_focelltool;
         m_focelltool=0;
         delete m_cellToolFactory;
@@ -3299,6 +3403,7 @@ void MainWindow::enableFullScreenPresentationNavigation()
 
 void MainWindow::setUpSpreadEditorToolBar()
 {
+    if(m_type == Spreadsheet) {
    if(m_spreadEditToolBar) {
         delete m_spreadEditToolBar;
         m_spreadEditToolBar=0;
@@ -3395,9 +3500,12 @@ void MainWindow::setUpSpreadEditorToolBar()
     m_ui->actionMathOp->setVisible(true);
     m_spreadEditToolBar->hide();
 }
+}
 
 void MainWindow::resetSpreadEditorToolBar()
 {
+    m_ui->actionMathOp->setChecked(false);
+    if(m_type == Spreadsheet) {
     m_ui->actionCut->setVisible(true);
     m_ui->actionCopy->setVisible(true);
     m_ui->actionPaste->setVisible(true);
@@ -3417,6 +3525,7 @@ void MainWindow::resetSpreadEditorToolBar()
     disconnect(m_equalsAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
 
     this->removeToolBar(m_spreadEditToolBar);
+
     delete m_addAction;
     m_addAction=0;
     delete m_subtractAction;
@@ -3432,9 +3541,11 @@ void MainWindow::resetSpreadEditorToolBar()
     delete m_spreadEditToolBar;
     m_spreadEditToolBar=0;
 }
+}
 
 void MainWindow::startMathMode(bool start)
 {
+    if(m_type == Spreadsheet) {
     m_addAction->setVisible(start);
     m_subtractAction->setVisible(start);
     m_multiplyAction->setVisible(start);
@@ -3448,6 +3559,7 @@ void MainWindow::startMathMode(bool start)
     m_ui->actionRedo->setVisible(!start);
     m_ui->actionStyle->setVisible(!start);
     m_ui->actionFormat->setVisible(!start);
+}
 }
 
 ///////////////////////////
