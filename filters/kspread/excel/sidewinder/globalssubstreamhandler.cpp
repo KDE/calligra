@@ -73,7 +73,7 @@ public:
     std::vector<std::map<unsigned, FormatFont> > formatRunsTable;
 
     // color table (from Palette record)
-    std::vector<Color> colorTable;
+    std::vector<QColor> colorTable;
 
     // table of Xformat
     std::vector<XFRecord> xfTable;
@@ -105,7 +105,7 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
         "#339966", "#003300", "#333300", "#993300", "#993366", "#333399", "#333333",
     };
     for (int i = 0; i < 64 - 8; i++) {
-        d->colorTable.push_back(Color(default_palette[i]));
+        d->colorTable.push_back(QColor(default_palette[i]));
     }
 }
 
@@ -198,12 +198,12 @@ FontRecord GlobalsSubStreamHandler::fontRecord(unsigned index) const
         return FontRecord(d->workbook);
 }
 
-Color GlobalsSubStreamHandler::customColor(unsigned index) const
+QColor GlobalsSubStreamHandler::customColor(unsigned index) const
 {
     if (index < d->colorTable.size())
         return d->colorTable[index];
     else
-        return Color();
+        return QColor();
 }
 
 unsigned GlobalsSubStreamHandler::xformatCount() const
@@ -272,7 +272,7 @@ FormatFont GlobalsSubStreamHandler::convertedFont(unsigned index) const
     return font;
 }
 
-Color GlobalsSubStreamHandler::convertedColor(unsigned index) const
+QColor GlobalsSubStreamHandler::convertedColor(unsigned index) const
 {
     if ((index >= 8) && (index < 0x40))
         return customColor(index - 8);
@@ -281,24 +281,24 @@ Color GlobalsSubStreamHandler::convertedColor(unsigned index) const
     // 0x0040  system window text color for border lines
     // 0x0041  system window background color for pattern background
     // 0x7fff  system window text color for fonts
-    if (index == 0x40) return Color(0, 0, 0);
-    if (index == 0x41) return Color(255, 255, 255);
-    if (index == 0x7fff) return Color(0, 0, 0);
+    if (index == 0x40) return QColor(0, 0, 0);
+    if (index == 0x41) return QColor(255, 255, 255);
+    if (index == 0x7fff) return QColor(0, 0, 0);
 
     // fallback: just "black"
-    Color color;
+    QColor color;
 
     // standard colors: black, white, red, green, blue,
     // yellow, magenta, cyan
     switch (index) {
-    case 0:   color = Color(0, 0, 0); break;
-    case 1:   color = Color(255, 255, 255); break;
-    case 2:   color = Color(255, 0, 0); break;
-    case 3:   color = Color(0, 255, 0); break;
-    case 4:   color = Color(0, 0, 255); break;
-    case 5:   color = Color(255, 255, 0); break;
-    case 6:   color = Color(255, 0, 255); break;
-    case 7:   color = Color(0, 255, 255); break;
+    case 0:   color = QColor(0, 0, 0); break;
+    case 1:   color = QColor(255, 255, 255); break;
+    case 2:   color = QColor(255, 0, 0); break;
+    case 3:   color = QColor(0, 255, 0); break;
+    case 4:   color = QColor(0, 0, 255); break;
+    case 5:   color = QColor(255, 255, 0); break;
+    case 6:   color = QColor(255, 0, 255); break;
+    case 7:   color = QColor(0, 255, 255); break;
     default:  break;
     }
 
@@ -777,7 +777,7 @@ void GlobalsSubStreamHandler::handlePalette(PaletteRecord* record)
 
     d->colorTable.clear();
     for (unsigned i = 0; i < record->count(); i++)
-        d->colorTable.push_back(Color(record->red(i), record->green(i), record->blue(i)));
+        d->colorTable.push_back(QColor(record->red(i), record->green(i), record->blue(i)));
 }
 
 void GlobalsSubStreamHandler::handleSST(SSTRecord* record)

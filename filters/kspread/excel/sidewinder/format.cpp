@@ -34,7 +34,7 @@ public:
     bool superscript : 1;
     QString fontFamily;
     double fontSize;
-    Color color;
+    QColor color;
 };
 
 FormatFont::FormatFont()
@@ -111,12 +111,12 @@ void FormatFont::setFontSize(double fs)
     d->null = false;
 }
 
-Color FormatFont::color() const
+QColor FormatFont::color() const
 {
     return d->color;
 }
 
-void FormatFont::setColor(const Color& c)
+void FormatFont::setColor(const QColor& c)
 {
     d->color = c;
     d->null = false;
@@ -389,8 +389,8 @@ class FormatBackground::Private
 public:
     bool null;
     unsigned pattern;
-    Color background;
-    Color foreground;
+    QColor background;
+    QColor foreground;
 };
 
 // constructor
@@ -446,23 +446,23 @@ void FormatBackground::setPattern(unsigned pattern)
     d->null = false;
 }
 
-Color FormatBackground::backgroundColor() const
+QColor FormatBackground::backgroundColor() const
 {
     return d->background;
 }
 
-void FormatBackground::setBackgroundColor(const Color& color)
+void FormatBackground::setBackgroundColor(const QColor& color)
 {
     d->background = color;
     d->null = false;
 }
 
-Color FormatBackground::foregroundColor() const
+QColor FormatBackground::foregroundColor() const
 {
     return d->foreground;
 }
 
-void FormatBackground::setForegroundColor(const Color& color)
+void FormatBackground::setForegroundColor(const QColor& color)
 {
     d->foreground = color;
     d->null = false;

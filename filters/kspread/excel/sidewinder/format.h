@@ -23,77 +23,17 @@
 
 #include <cstdio> // for sscanf
 #include <QString>
+#include <QColor>
 
 namespace Swinder
 {
-
-/**
- * @short Provides color based on RGB values.
- *
- * Class Color provides color based on  terms of RGB (red, green and blue)
- * components.
- *
- */
-class Color
-{
-public:
-
-    unsigned red, green, blue;
-
-    /**
-     * Constructs a default color with the RGB value (0, 0, 0), i.e black.
-     */
-    Color() {
-        red = green = blue = 0;
-    }
-
-    /**
-     * Creates a copy of another color.
-     */
-    Color(const Color& c) {
-        red = c.red; green = c.green; blue = c.blue;
-    }
-
-    /**
-     * Creates a color based on given red, green and blue values.
-     */
-    Color(unsigned r, unsigned g, unsigned b) {
-        red = r; green = g; blue = b;
-    }
-
-    /**
-     * Creates a color based on given red, green and blue values, encoded as \#RRGGBB in a string.
-     */
-    explicit Color(const char* c) {
-        std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue);
-    }
-
-    friend inline bool operator==(const Color&, const Color&);
-    friend inline bool operator!=(const Color&, const Color&);
-};
-
-/**
-    Returns true if c1 is equal to c2; otherwise returns false.
-*/
-inline bool operator==(const Color& c1, const Color& c2)
-{
-    return c1.red == c2.red && c1.green == c2.green && c1.blue == c2.blue;
-}
-
-/**
-    Returns true if c1 is not equal to c2; otherwise returns false.
-*/
-inline bool operator!=(const Color& c1, const Color& c2)
-{
-    return c1.red != c2.red || c1.green != c2.green || c1.blue != c2.blue;
-}
 
 class Pen
 {
 public:
     unsigned style;
     float width;
-    Color color;
+    QColor color;
 
     enum {
         NoLine,         // no line at all
@@ -193,12 +133,12 @@ public:
     /**
      * Returns the color of the font.
      */
-    Color color() const;
+    QColor color() const;
 
     /**
      * Sets the color of the font.
      */
-    void setColor(const Color& color);
+    void setColor(const QColor& color);
 
     /**
      * Returns true if bold has been set.
@@ -506,28 +446,28 @@ public:
      *
      * \sa setBackgroundColor
      */
-    Color backgroundColor() const;
+    QColor backgroundColor() const;
 
     /**
      * Set the background color.
      *
      * \sa backgroundColor
      */
-    void setBackgroundColor(const Color&);
+    void setBackgroundColor(const QColor&);
 
     /**
      * Returns the foreground color of the background area.
      *
      * \sa setForegroundColor
      */
-    Color foregroundColor() const;
+    QColor foregroundColor() const;
 
     /**
      * Sets the foreground color.
      *
      * \sa foregroundColor
      */
-    void setForegroundColor(const Color&);
+    void setForegroundColor(const QColor&);
 
     /**
      * Returns true if this background is equal to f; otherwise returns false.

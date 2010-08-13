@@ -1629,10 +1629,10 @@ QString ExcelImport::Private::processRowFormat(Format* format, const QString& br
     return styleName;
 }
 
-QString convertColor(const Color& color)
+QString convertColor(const QColor& color)
 {
     char buf[8];
-    sprintf(buf, "#%02x%02x%02x", color.red, color.green, color.blue);
+    sprintf(buf, "#%02x%02x%02x", color.red(), color.green(), color.blue());
     return QString(buf);
 }
 
@@ -1771,7 +1771,7 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
     if (!back.isNull() && back.pattern() != FormatBackground::EmptyPattern) {
         KoGenStyle fillStyle = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
 
-        Color backColor = back.backgroundColor();
+        QColor backColor = back.backgroundColor();
         if (back.pattern() == FormatBackground::SolidPattern)
             backColor = back.foregroundColor();
         const QString bgColor = convertColor(backColor);
