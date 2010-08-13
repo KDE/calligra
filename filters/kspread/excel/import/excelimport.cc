@@ -132,6 +132,7 @@ public:
     QString subScriptStyle, superScriptStyle;
 
     QList<ChartExport*> charts;
+    QHash<Cell*, QByteArray> cellShapes;
 
     QHash<Row*,int> rowsRepeatedHash;
     int rowsRepeated(Row* row, int rowIndex);
@@ -1488,12 +1489,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     // handle graphics objects
     QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
     if (!objects.empty()) {
-        ODrawClient client = ODrawClient(cell->sheet());
-        ODrawToOdf odraw( client);
-        Writer writer(*xmlWriter, *styles, false);
-        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
-            odraw.processDrawing(fb, writer);
-        }
+        xmlWriter->addCompleteElement(cellShapes[cell].data());
     }
 
 
@@ -1550,6 +1546,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
         foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
             odraw.processDrawing(fb, writer);
         }
+        cellShapes[cell] = b.data();
         //qDebug() << cell->columnLabel() << cell->row() << b.data();
     }
 }
