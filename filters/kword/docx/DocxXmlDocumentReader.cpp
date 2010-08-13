@@ -1504,7 +1504,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
  - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
  - oMath (Office Math) §22.1.2.77
- - oMathPara (Office Math Paragraph) §22.1.2.78
+ - [done] oMathPara (Office Math Paragraph) §22.1.2.78
  - permEnd (Range Permission End) §17.13.7.1
  - permStart (Range Permission Start) §17.13.7.2
  - [done] pPr (Paragraph Properties) §17.3.1.26
@@ -1569,6 +1569,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 //! @todo add more conditions testing the parent
             ELSE_TRY_READ_IF(r) // CASE #400.2
             ELSE_TRY_READ_IF(fldSimple)
+            else if (qualifiedName() == "m:oMathPara") {
+                TRY_READ(oMathPara)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1909,7 +1912,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 //! @todo support all elements
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
 {
-    Q_UNUSED(caller);
+    Q_UNUSED(caller)
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
@@ -4781,6 +4784,109 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
             readNext();
             BREAK_IF_END_OF(CURRENT_EL);
         }*/
+    READ_EPILOGUE
+}
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "m"
+#undef CURRENT_EL
+#define CURRENT_EL oMathPara
+//! oMathPara handler
+// @todo implement...
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMathPara()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(oMath)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oMath
+//! oMath handler
+// @todo implement...
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMath()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == "m:r") {
+                TRY_READ(r_m)
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL t
+//! t handler for math
+// @todo implement...
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_t_m()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isCharacters()) {
+            body->addTextSpan(text().toString());
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL r
+//! r handler in math
+// @todo implement fully.
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
+{
+    READ_PROLOGUE
+
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == "w:rPr") {
+                TRY_READ_IN_CONTEXT(rPr)
+            }
+            else if (qualifiedName() == "m:t") {
+                TRY_READ(t_m)
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    body = buffer.originalWriter();
+
+    QString currentTextStyleName = mainStyles->insert(m_currentTextStyle);
+    if (m_moveToStylesXml) {
+        mainStyles->markStyleForStylesXml(currentTextStyleName);
+    }
+
+    body->startElement("text:span", false);
+    body->addAttribute("text:style-name", currentTextStyleName);
+
+    // Writing the internal body of read_t now
+    body = buffer.releaseWriter();
+
+    body->endElement(); //text:span
+
     READ_EPILOGUE
 }
 

@@ -146,6 +146,11 @@ protected:
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
 
+    KoFilter::ConversionStatus read_oMath();
+    KoFilter::ConversionStatus read_oMathPara();
+    KoFilter::ConversionStatus read_r_m();
+    KoFilter::ConversionStatus read_t_m();
+
     enum posOffsetCaller {
         posOffset_positionH,
         posOffset_positionV
