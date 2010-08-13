@@ -43,5 +43,7 @@ install(FILES templates/Text_With_Header.odp DESTINATION share/freoffice-templat
 install(FILES templates/Text_With_Image.odp DESTINATION share/freoffice-templates/.presentationtemplates)
 install(FILES templates/Text_With_Outline.odp DESTINATION share/freoffice-templates/.presentationtemplates)
 install(FILES templates/NewSpread.ods DESTINATION share/freoffice-templates/.templates)
-install(FILES Acceleration/mce.ini DESTINATION /etc/mce)
+if(QT_QMAEMO5_LIBRARY)
+    install(FILES Acceleration/mce.ini DESTINATION /etc/mce)
+endif(QT_QMAEMO5_LIBRARY)
 install(FILES OfficeInterface.h DESTINATION include/office)
