@@ -100,7 +100,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         return false;
     }
 
-    updater->setProgress(20);
+    if (updater) updater->setProgress(20);
 
     // TODO check versions and mimetypes etc.
 
@@ -130,7 +130,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     Q_ASSERT(styleManager);
     sharedData->loadOdfStyles(sc, styleManager);
 
-    updater->setProgress(40);
+    if (updater) updater->setProgress(40);
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
 
@@ -207,7 +207,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         }
     }
 
-    updater->setProgress(60);
+    if (updater) updater->setProgress(60);
 
     KoTextShapeData textShapeData;
     if (hasMainText) {
@@ -218,7 +218,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         textShapeData.setDocument(mainFs->document(), false);
     }
 
-    updater->setProgress(80);
+    if (updater) updater->setProgress(80);
 
     // Let the TextShape handle loading the body element.
     textShapeData.loadOdf(body, sc, m_document->documentRdfBase());
@@ -228,11 +228,11 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 
-    updater->setProgress(90);
+    if (updater) updater->setProgress(90);
 
     loadSettings(odfStore.settingsDoc());
 
-    updater->setProgress(100);
+    if (updater) updater->setProgress(100);
     return true;
 }
 
