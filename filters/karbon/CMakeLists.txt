@@ -25,7 +25,7 @@ macro_optional_find_package(Poppler)
 # Installing these is off by default in poppler sources, so lets make
 # sure they're really there before trying to build the pdf import
 find_path(POPPLER_XPDF_HEADERS poppler-config.h
-    HINTS ${POPPLE_INCLUDE_DIR} )
+    HINTS ${POPPLER_INCLUDE_DIR} )
 if( POPPLER_FOUND AND NOT POPPLER_XPDF_HEADERS )
     message( STATUS "Could NOT find the XPDF headers in Poppler Qt4 which are necessary for the Karbon PDF import filter")
     set( POPPLER_FOUND FALSE )
