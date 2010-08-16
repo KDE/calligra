@@ -65,6 +65,7 @@ public:
 
     // The last drawing object we got.
     MSO::OfficeArtDgContainer* lastDrawingObject;
+    MSO::OfficeArtSpgrContainer* lastGroupObject;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -79,6 +80,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->formulaStringCell = 0;
     d->noteCount = 0;
     d->lastDrawingObject = 0;
+    d->lastGroupObject = 0;
 }
 
 WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
@@ -90,6 +92,7 @@ WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
     //for(std::map<std::pair<unsigned, unsigned>, FormulaTokens*>::iterator it = d->sharedFormulas.begin(); it != d->sharedFormulas.end(); ++it)
     //    delete it.second.second;
     delete d->lastDrawingObject;
+    delete d->lastGroupObject;
     delete d;
 }
 
@@ -797,8 +800,8 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
         //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
         foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
             if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
-                // TODO
-                qDebug() << "unsupported spgr container";
+                delete d->lastGroupObject;
+                d->lastGroupObject = new MSO::OfficeArtSpgrContainer(*fb.anon.get<MSO::OfficeArtSpgrContainer>());
             } else {
                 const MSO::OfficeArtSpContainer& o = *fb.anon.get<MSO::OfficeArtSpContainer>();
                 if (o.clientAnchor) {
@@ -810,9 +813,13 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                         cell->addDrawObject(fb);
                     }
                 } else {
-                    // TODO
-                    qDebug() << "unsupported not cell-anchored object";
-                    d->sheet->addDrawObject(fb);
+                    d->sheet->addDrawObject(fb, d->lastGroupObject);
+
+                    if (d->lastGroupObject) {
+                        if (!o.shapeProp.fChild) {
+                            delete d->lastGroupObject; d->lastGroupObject = 0;
+                        }
+                    }
                 }
             }
         }
