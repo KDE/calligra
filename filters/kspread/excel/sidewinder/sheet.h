@@ -176,6 +176,9 @@ public:
     void addHorizontalPageBreak(const HorizontalPageBreak& pageBreak);
     QList<HorizontalPageBreak> horizontalPageBreaks();
 
+    QList<MSO::OfficeArtSpgrContainerFileBlock> drawObjects() const;
+    void addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& drawObject);
+
 #ifdef SWINDER_XLS2RAW
     void dumpStats();
 #endif

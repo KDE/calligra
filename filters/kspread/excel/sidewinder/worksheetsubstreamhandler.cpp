@@ -812,6 +812,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                 } else {
                     // TODO
                     qDebug() << "unsupported not cell-anchored object";
+                    d->sheet->addDrawObject(fb);
                 }
             }
         }

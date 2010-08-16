@@ -87,6 +87,7 @@ public:
 
     QList<VerticalPageBreak> verticalPageBreaks;
     QList<HorizontalPageBreak> horizontalPageBreaks;
+    QList<MSO::OfficeArtSpgrContainerFileBlock> sheetDrawObjects;
 };
 
 }
@@ -573,6 +574,16 @@ void Sheet::addDrawObject(unsigned column, unsigned row, const MSO::OfficeArtSpg
     QList<MSO::OfficeArtSpgrContainerFileBlock> objects = drawObjects(column, row);
     objects.append(drawObject);
     setDrawObjects(column, row, objects);
+}
+
+QList<MSO::OfficeArtSpgrContainerFileBlock> Sheet::drawObjects() const
+{
+    return d->sheetDrawObjects;
+}
+
+void Sheet::addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& drawObject)
+{
+    d->sheetDrawObjects.append(drawObject);
 }
 
 #ifdef SWINDER_XLS2RAW

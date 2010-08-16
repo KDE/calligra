@@ -133,6 +133,7 @@ public:
 
     QList<ChartExport*> charts;
     QHash<Cell*, QByteArray> cellShapes;
+    QHash<Sheet*, QByteArray> sheetShapes;
 
     QHash<Row*,int> rowsRepeatedHash;
     int rowsRepeated(Row* row, int rowIndex);
@@ -703,6 +704,14 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
        //xmlWriter->addAttribute("table:protection-key", uint(sheet->password()));
     }
 
+    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = sheet->drawObjects();
+    if (!objects.empty()) {
+        xmlWriter->startElement("table:shapes");
+        xmlWriter->addCompleteElement(sheetShapes[sheet]);
+        xmlWriter->endElement(); // table:shapes
+    }
+
+
     const unsigned columnCount = qMin(maximalColumnCount, sheet->maxColumn());
     unsigned outlineLevel = 0;
     for (unsigned i = 0; i <= columnCount; ++i) {
@@ -771,6 +780,20 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     const unsigned rowCount = qMin(maximalRowCount, sheet->maxRow());
     for (unsigned i = 0; i <= rowCount;) {
         i += processRowForStyle(sheet, i, xmlWriter);
+    }
+
+    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = sheet->drawObjects();
+    if (!objects.empty()) {
+        ODrawClient client = ODrawClient(sheet);
+        ODrawToOdf odraw(client);
+        QBuffer b;
+        KoXmlWriter xml(&b);
+        Writer writer(xml, *styles, false);
+        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
+            odraw.processDrawing(fb, writer);
+        }
+        sheetShapes[sheet] = b.data();
+        //qDebug() << b.data();
     }
 }
 
