@@ -232,11 +232,6 @@ KAction* KexiProjectNavigator::addAction(const QString& name, const KIcon& icon,
     return action;
 }
 
-void KexiProjectNavigator::slotRemoveItem(const KexiPart::Item &item)
-{
-    m_model->removeItem(item);
-}
-
 void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
 {
     if (!m_list->currentIndex().isValid() || !(m_features & ContextMenus))

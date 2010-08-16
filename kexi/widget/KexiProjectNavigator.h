@@ -91,7 +91,6 @@ public:
 
 public slots:
 
-    void slotRemoveItem(const KexiPart::Item &item);
     virtual void setFocus();
     void updateItemName(KexiPart::Item& item, bool dirty);
     void selectItem(KexiPart::Item& item);

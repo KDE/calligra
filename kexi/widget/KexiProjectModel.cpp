@@ -249,9 +249,12 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProje
     return item;
 }
 
-KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item& item, KexiProjectModelItem *p)
+KexiProjectModelItem* KexiProjectModel::slotAddItem(KexiPart::Item& item)
 {
-    //part object for this item
+
+//    KexiProjectModelItem *parent = modelItemFromItem(item.partClass());
+
+    //part object for this item    
 //    KexiProjectModelItem *parent = item.partClass().isEmpty()
 //                              ? 0 : m_baseItems.value(item.partClass().toLower());
 //    return addItem(item, parent, parent->partInfo());
@@ -263,7 +266,7 @@ KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::
     return new KexiProjectModelItem(info, item, p);;
 }
 
-void KexiProjectModel::removeItem(const KexiPart::Item& item)
+void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
 {
     QModelIndex idx;
     KexiProjectModelItem *mitm = modelItemFromItem(item);
