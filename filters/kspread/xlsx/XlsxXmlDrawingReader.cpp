@@ -249,12 +249,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
 {
     READ_PROLOGUE
-qDebug()<<"AAAAAAAAA'###############################################################";
-//     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
-// 
-//     MSOOXML::Utils::XmlWriteBuffer buffer;
-//     body = buffer.setWriter(body);
-// 
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -267,20 +261,6 @@ qDebug()<<"AAAAAAAAA'###########################################################
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-// 
-//     body = buffer.originalWriter();
-//     body->startElement("draw:frame");
-//     body->addAttribute("draw:name", m_cNvPrName);
-//     body->addAttribute("draw:layer", "layout");
-//     body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-//     body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-//     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-//     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-// 
-//     (void)buffer.releaseWriter();
-// 
-//     body->endElement();
-//Q_ASSERT(false);
     READ_EPILOGUE
 }
 
