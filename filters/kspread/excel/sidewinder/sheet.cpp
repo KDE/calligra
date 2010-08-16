@@ -87,7 +87,8 @@ public:
 
     QList<VerticalPageBreak> verticalPageBreaks;
     QList<HorizontalPageBreak> horizontalPageBreaks;
-    QList<MSO::OfficeArtSpgrContainerFileBlock> sheetDrawObjects;
+    QList<MSO::OfficeArtSpgrContainer> sheetDrawObjectsGroups;
+    QMultiHash<int, MSO::OfficeArtSpgrContainerFileBlock> sheetDrawObjects;
 };
 
 }
@@ -576,14 +577,47 @@ void Sheet::addDrawObject(unsigned column, unsigned row, const MSO::OfficeArtSpg
     setDrawObjects(column, row, objects);
 }
 
-QList<MSO::OfficeArtSpgrContainerFileBlock> Sheet::drawObjects() const
+int Sheet::drawObjectsGroupCount() const
 {
-    return d->sheetDrawObjects;
+    return d->sheetDrawObjectsGroups.size();
 }
 
-void Sheet::addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& drawObject)
+MSO::OfficeArtSpgrContainer Sheet::drawObjectsGroup(int groupId) const
 {
-    d->sheetDrawObjects.append(drawObject);
+    Q_ASSERT(groupId >= 0 && groupId < drawObjectsGroupCount());
+    return d->sheetDrawObjectsGroups[groupId];
+}
+
+QList<MSO::OfficeArtSpgrContainerFileBlock> Sheet::drawObjects(int groupId) const
+{
+    Q_ASSERT(groupId < drawObjectsGroupCount());
+    if (groupId < 0) {
+        return d->sheetDrawObjects.values(-1);
+    } else {
+        return d->sheetDrawObjects.values(groupId);
+    }
+}
+
+static int shapeGroupId(const MSO::OfficeArtSpgrContainer& group)
+{
+    return group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>()->shapeProp.spid;
+}
+
+void Sheet::addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& drawObject, const MSO::OfficeArtSpgrContainer* group )
+{
+    int groupId = -1;
+    if (group) {
+        for (int i = 0; i < d->sheetDrawObjectsGroups.size(); ++i) {
+            if (shapeGroupId(*group) == shapeGroupId(d->sheetDrawObjectsGroups[i])) {
+                groupId = i;
+            }
+        }
+        if (groupId == -1) {
+            d->sheetDrawObjectsGroups.append(*group);
+            groupId = d->sheetDrawObjectsGroups.size() - 1;
+        }
+    }
+    d->sheetDrawObjects.insert(groupId, drawObject);
 }
 
 #ifdef SWINDER_XLS2RAW
