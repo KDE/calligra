@@ -25,17 +25,32 @@
 #ifndef XLSXXMLDRAWINGREADER_H
 #define XLSXXMLDRAWINGREADER_H
 
+#include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
 
+class KoXmlWriter;
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;
 class XlsxXmlChartReaderContext;
 
+//#include <KoGenStyle.h>
+//#include <styles/KoCharacterStyle.h>
+
+namespace MSOOXML
+{
+class MsooXmlRelationships;
+}
+
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext);
+    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, const QString& _path, const QString& _file);
     virtual ~XlsxXmlDrawingReaderContext();
+
+    XlsxImport* import;
+    QString path;
+    QString file;
+    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     QList<XlsxXmlChartReaderContext*> charts;
@@ -68,12 +83,17 @@ protected:
     KoFilter::ConversionStatus read_row();
     KoFilter::ConversionStatus read_colOff();
     KoFilter::ConversionStatus read_rowOff();
-    KoFilter::ConversionStatus read_chart();
+    KoFilter::ConversionStatus read_graphicFrame();
 private:
     XlsxXmlDrawingReaderContext *m_context;
     XlsxXmlDrawingReaderContext::AnchorType m_anchorType;
 
     int m_chartNumber;
+    
+#include <MsooXmlCommonReaderMethods.h>
+#include <MsooXmlCommonReaderDrawingMLMethods.h>
+//#include <MsooXmlDrawingReaderTableMethods.h>
+
 };
 
 #endif

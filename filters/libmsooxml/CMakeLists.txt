@@ -18,6 +18,7 @@ set(msooxml_LIB_SRCS
     MsooXmlRelationships.cpp
     MsooXmlImport.cpp
     MsooXmlDocPropertiesReader.cpp
+    MsooXmlDiagramReader.cpp
     pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
@@ -29,6 +30,7 @@ kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
 
 target_link_libraries(msooxml
     komain
+    QtXmlPatterns # ${QT_QTXML_LIBRARY} ${QT_QTXMLPATTERN}
 )
 
 set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
@@ -57,6 +59,7 @@ install( FILES
     MsooXmlCommentsReader.h
     MsooXmlDocPropertiesReader.h
     MsooXmlNotesReader.h
+    MsooXmlDiagramReader.h
     MsooXmlDrawingTableStyleReader.H
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )

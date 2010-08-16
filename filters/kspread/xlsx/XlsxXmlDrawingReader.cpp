@@ -29,15 +29,30 @@
 #include "Charting.h"
 #include "ChartExport.h"
 
+#include <MsooXmlSchemas.h>
+#include <MsooXmlUtils.h>
+#include <MsooXmlRelationships.h>
+#include <MsooXmlUnits.h>
+
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoUnit.h>
+
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
+#include <MsooXmlContentTypes.h>
 
-XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext)
-    : MSOOXML::MsooXmlReaderContext()
+XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, const QString& _path, const QString& _file)
+    : MSOOXML::MsooXmlReaderContext(_worksheetReaderContext->relationships)
+    , import(_worksheetReaderContext->import)
+    , path(_path)
+    , file(_file)
+    , themes(&(*_worksheetReaderContext->themes))
     , worksheetReaderContext(_worksheetReaderContext)
 {
 }
@@ -85,6 +100,8 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
             ELSE_TRY_READ_IF(to)
             // the reference to a chart
             ELSE_TRY_READ_IF_NS(c, chart)
+            // a graphic-frame
+            ELSE_TRY_READ_IF(graphicFrame)
         }
     }
 
@@ -164,6 +181,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
     return KoFilter::OK;
 }
 
+/* is now in MsooXmlCommonReaderDrawingMLImpl.h
 #undef CURRENT_EL
 #define CURRENT_EL chart
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
@@ -211,3 +229,70 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
 
     return KoFilter::OK;
 }
+*/
+
+#undef CURRENT_EL
+#define CURRENT_EL graphicFrame
+//! graphicFrame
+/*!
+  This element specifies the existence of a graphics frame. This frame contains a graphic that was generated
+  by an external source and needs a container in which to be displayed on the slide surface.
+
+  Parent Elements:
+    - grpSp (§4.4.1.19); spTree (§4.4.1.42)
+  Child Elements:
+    - extLst (Extension List with Modification Flag) (§4.2.4)
+    - graphic (Graphic Object) (§5.1.2.1.16)
+    - nvGraphicFramePr (Non-Visual Properties for a Graphic Frame) (§4.4.1.27)
+    - xfrm (2D Transform for Graphic Frame)
+*/
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
+{
+    READ_PROLOGUE
+qDebug()<<"AAAAAAAAA'###############################################################";
+//     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
+// 
+//     MSOOXML::Utils::XmlWriteBuffer buffer;
+//     body = buffer.setWriter(body);
+// 
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, graphic)
+            //ELSE_TRY_READ_IF(nvGraphicFramePr)
+            //else if (qualifiedName() == "p:xfrm") {
+            //    read_xfrm_xdr();
+            //}
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+// 
+//     body = buffer.originalWriter();
+//     body->startElement("draw:frame");
+//     body->addAttribute("draw:name", m_cNvPrName);
+//     body->addAttribute("draw:layer", "layout");
+//     body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+//     body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+//     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+//     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+// 
+//     (void)buffer.releaseWriter();
+// 
+//     body->endElement();
+//Q_ASSERT(false);
+    READ_EPILOGUE
+}
+
+#define blipFill_NS "a"
+// END NAMESPACE p
+// BEGIN NAMESPACE a
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "a"
+// in PPTX we do not have pPr, so p@text:style-name should be added earlier
+//#define SETUP_PARA_STYLE_IN_READ_P
+#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+#define DRAWINGML_NS "a"
+#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
+#include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
+//#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl

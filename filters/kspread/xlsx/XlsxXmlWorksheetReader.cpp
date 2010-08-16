@@ -1367,8 +1367,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
         QString filepath = path + "/" + file;
 
-        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context);
-
+        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, path, file);
         XlsxXmlDrawingReader reader(this);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {

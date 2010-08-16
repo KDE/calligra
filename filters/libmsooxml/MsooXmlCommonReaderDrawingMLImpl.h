@@ -44,10 +44,13 @@
 
 #include <KoXmlWriter.h>
 #include <MsooXmlUnits.h>
+#include <MsooXmlDiagramReader.h>
 #include "Charting.h"
 #include "ChartExport.h"
 #include "XlsxXmlChartReader.h"
 
+#include <MsooXmlReader.h>
+#include <MsooXmlCommonReader.h>
 
 // ================================================================
 
@@ -914,6 +917,58 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     READ_EPILOGUE
 }
 
+// ================================================================
+//                             NameSpace "dmg"
+// ================================================================
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "dmg"
+
+#undef CURRENT_EL
+#define CURRENT_EL chart
+//! 5.9 DrawingML - Diagrams
+/*!
+A DrawingML diagram allows the definition of diagrams using DrawingML objects and constructs. This
+namespace defines the contents of a DrawingML diagram.
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_diagram()
+{
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITH_NS(r, cs) // colors
+    TRY_READ_ATTR_WITH_NS(r, dm) // data
+    TRY_READ_ATTR_WITH_NS(r, lo) // layout
+    TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
+
+    const QString path = "xl/diagrams/";
+    //const QString colorsfile     = r_cs.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_cs, m_context->path, m_context->file);
+    const QString datafile       = r_dm.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_dm, m_context->path, m_context->file);
+    const QString layoutfile     = r_lo.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_lo, m_context->path, m_context->file);
+    //const QString quickstylefile = r_qs.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_qs, m_context->path, m_context->file);
+
+    //kDebug()<<"colorsfile="<<colorsfile<<"datafile="<<datafile<<"layoutfile="<<layoutfile<<"quickstylefile="<<quickstylefile;
+
+    KoStore* storeout = m_context->import->outputStore();
+    MSOOXML::MsooXmlDiagramReaderContext context(storeout);
+
+    // first read the data-model
+    MSOOXML::MsooXmlDiagramReader dataReader(this);
+    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, &context);
+    if (dataReaderResult != KoFilter::OK) {
+       raiseError(dataReader.errorString());
+       return dataReaderResult;
+    }
+    
+    // the read the layout definition
+    MSOOXML::MsooXmlDiagramReader layoutReader(this);
+    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, &context);
+    if (layoutReaderResult != KoFilter::OK) {
+       raiseError(layoutReader.errorString());
+       return layoutReaderResult;
+    }
+
+    return KoFilter::OK;
+}
 
 // ================================================================
 //                             NameSpace "c"
@@ -2076,8 +2131,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 #endif
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF_NS(p, oleObj)
-            ELSE_TRY_READ_IF_NS(a, tbl);
+            ELSE_TRY_READ_IF_NS(a, tbl)
 #endif
+            else if (qualifiedName() == QLatin1String("dgm:relIds")) {
+                read_diagram(); // DrawingML diagram
+            }
+
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
