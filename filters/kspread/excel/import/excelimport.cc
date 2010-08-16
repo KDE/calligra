@@ -1704,7 +1704,7 @@ void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle&
     }
 
     if (!font.fontFamily().isEmpty())
-        style.addProperty("fo:font-family", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
+        style.addProperty("fo:font-family", font.fontFamily(), KoGenStyle::TextType);
 
     style.addPropertyPt("fo:font-size", font.fontSize(), KoGenStyle::TextType);
 
