@@ -753,6 +753,11 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
     ++defaultColumnStyleIndex;
 }
 
+static QRectF getRect(const MSO::OfficeArtFSPGR &r)
+{
+    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
+}
+
 // Processes styles for a sheet.
 void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWriter)
 {
@@ -783,7 +788,8 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
     }
 
     QList<MSO::OfficeArtSpgrContainerFileBlock> objects = sheet->drawObjects();
-    if (!objects.empty()) {
+    int drawObjectGroups = sheet->drawObjectsGroupCount();
+    if (!objects.empty() || drawObjectGroups) {
         ODrawClient client = ODrawClient(sheet);
         ODrawToOdf odraw(client);
         QBuffer b;
@@ -791,6 +797,25 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
         Writer writer(xml, *styles, false);
         foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
             odraw.processDrawing(fb, writer);
+        }
+        for (int i = 0; i < drawObjectGroups; ++i) {
+            xml.startElement("draw:g");
+
+            const MSO::OfficeArtSpgrContainer& group = sheet->drawObjectsGroup(i);
+            const MSO::OfficeArtSpContainer* first = group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>();
+            if (first && first->clientAnchor && first->shapeGroup) {
+                QRectF oldCoords = client.getGlobalRect(*first->clientAnchor);
+                QRectF newCoords = getRect(*first->shapeGroup);
+                Writer transw = writer.transform(oldCoords, newCoords);
+                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, sheet->drawObjects(i)) {
+                    odraw.processDrawing(fb, transw);
+                }
+            } else {
+                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, sheet->drawObjects(i)) {
+                    odraw.processDrawing(fb, writer);
+                }
+            }
+            xml.endElement(); // draw:g
         }
         sheetShapes[sheet] = b.data();
         //qDebug() << b.data();
