@@ -83,6 +83,22 @@ QRectF ODrawClient::getRect(const MSO::OfficeArtClientAnchor& clientAnchor)
     return QRectF();
 }
 
+QRectF ODrawClient::getGlobalRect(const MSO::OfficeArtClientAnchor &clientAnchor)
+{
+    const MSO::XlsOfficeArtClientAnchor* anchor = clientAnchor.anon.get<MSO::XlsOfficeArtClientAnchor>();
+    if (!anchor) return QRectF();
+    QRectF r = getRect(clientAnchor);
+    qreal x = 0, y = 0;
+    for (int row = 0; row < anchor->rwT; row++) {
+        y += rowHeight(m_sheet, row);
+    }
+    for (int col = 0; col < anchor->colL; col++) {
+        x += columnWidth(m_sheet, col);
+    }
+    return r.adjusted(x, y, x, y);
+}
+
+
 QString ODrawClient::getPicturePath(int pib)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
