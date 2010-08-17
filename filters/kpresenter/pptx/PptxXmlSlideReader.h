@@ -35,6 +35,7 @@ class PptxImport;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
+class TableStyleList;
 }
 
 //! Data structure collecting information about single slide's shape (p:sp)
@@ -236,7 +237,8 @@ public:
         PptxSlideLayoutProperties* _slideLayoutProperties,
         PptxSlideMasterPageProperties* _slideMasterPageProperties,
         MSOOXML::MsooXmlRelationships& _relationships,
-        QMap<int, QString> _commentAuthors);
+        QMap<int, QString> _commentAuthors,
+        MSOOXML::TableStyleList *tableStyleList);
     PptxImport* import;
     const QString path;
     const QString file;
@@ -248,6 +250,7 @@ public:
     PptxSlideMasterPageProperties* slideMasterPageProperties;
     QString pageDrawStyleName; //!< written in read_sldInternal()
     QMap<int, QString> commentAuthors;
+    MSOOXML::TableStyleList *tableStyleList;
 };
 
 #endif

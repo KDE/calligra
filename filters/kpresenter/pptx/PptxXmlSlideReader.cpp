@@ -33,6 +33,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
+#include <MsooXmlDrawingTableStyleReader.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -234,13 +235,14 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxSlideLayoutProperties* _slideLayoutProperties,
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
     MSOOXML::MsooXmlRelationships& _relationships,
-    QMap<int, QString> _commentAuthors)
+    QMap<int, QString> _commentAuthors,
+    MSOOXML::TableStyleList *_tableStyleList)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(&_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
-        commentAuthors(_commentAuthors)
+        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList)
 {
 }
 

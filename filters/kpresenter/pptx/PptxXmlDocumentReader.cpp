@@ -198,7 +198,8 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         result,
         &d->slideMasterPageProperties, //PptxSlideMasterPageProperties
         *m_context->relationships,
-        d->commentAuthors
+        d->commentAuthors,
+        d->tableStyleList
     );
     PptxXmlSlideReader slideLayoutReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -258,7 +259,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         slideLayoutProperties,
         &d->slideMasterPageProperties,
         *m_context->relationships,
-        d->commentAuthors
+        d->commentAuthors,
+        d->tableStyleList
     );
     PptxXmlSlideReader slideReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -310,7 +312,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         0,
         &d->slideMasterPageProperties,
         *m_context->relationships,
-        d->commentAuthors
+        d->commentAuthors,
+        d->tableStyleList
     );
     PptxXmlSlideReader slideMasterReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
