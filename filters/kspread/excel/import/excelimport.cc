@@ -175,6 +175,8 @@ public:
     void addManifestEntries(KoXmlWriter* ManifestWriter);
     void insertPictureManifest(PictureObject* picture);
 
+    bool isDateFormat(const Value &value, const QString& valueFormat);
+
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
     QMap<QString,QString> manifestEntries;
@@ -1209,12 +1211,14 @@ QString extractLocale(QString &time)
 }
 
 // Checks if the as argument passed formatstring defines a date-format or not.
-static bool isDateFormat(const Value &value, const QString& valueFormat)
+bool ExcelImport::Private::isDateFormat(const Value &value, const QString& valueFormat)
 {
     if (value.type() != Value::Float)
         return false;
 
-    const KoGenStyle style = NumberFormatParser::parse( valueFormat );
+    KoGenStyle& style = valueFormatCache[valueFormat];
+    if (style.isEmpty())
+        style = NumberFormatParser::parse( valueFormat );
     return style.type() == KoGenStyle::NumericDateStyle;
 }
 
