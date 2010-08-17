@@ -474,6 +474,8 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
     Border border;
     border.setSide(Border::Bottom);
     border.setColor(m_currentPen.color());
+    //FIXME don't asume it's solid
+    border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
@@ -497,6 +499,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
     Border border;
     border.setSide(Border::Top);
     border.setColor(m_currentPen.color());
+    //FIXME don't asume it's solid
+    border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
@@ -520,6 +524,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
     Border border;
     border.setSide(Border::Left);
     border.setColor(m_currentPen.color());
+    //FIXME don't asume it's solid
+    border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
@@ -543,6 +549,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
     Border border;
     border.setSide(Border::Right);
     border.setColor(m_currentPen.color());
+    //FIXME don't asume it's solid
+    border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
