@@ -252,42 +252,13 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
         return QString();
     }
 
-    KoGenStyle::Type styleType;
-    QLatin1String styleBaseName("");
-    switch(m_type) {
-        //shut up compiler about not handled enum value in a switch
-        case NoType:
-            Q_ASSERT(false);
-            break;
-        case FirstRow:
-        case LastRow:
-            styleType = KoGenStyle::TableRowAutoStyle;
-            styleBaseName = QLatin1String("row");
-            break;
-        case FirstCol:
-        case LastCol:
-            styleType = KoGenStyle::TableColumnAutoStyle;
-            styleBaseName = QLatin1String("col");
-            break;
-        case NeCell:
-        case NwCell:
-        case SeCell:
-        case SwCell:
-            styleType = KoGenStyle::TableCellAutoStyle;
-            styleBaseName = QLatin1String("cell");
-            break;
-        case WholeTbl:
-            styleType =KoGenStyle::TableAutoStyle;
-            styleBaseName = QLatin1String("table");
-            break;
-    }
-    KoGenStyle style = KoGenStyle(styleType);
+    KoGenStyle style = KoGenStyle(KoGenStyle::TableCellAutoStyle);
 
     foreach(const Border& border, m_borders) {
         style.addAttribute(border.odfBorderName(), border.odfStyleProperties());
     }
 
-    return styles.insert(style, styleBaseName.latin1());
+    return styles.insert(style, "cell");
 }
 
 void TableStyle::setId(const QString& id)
