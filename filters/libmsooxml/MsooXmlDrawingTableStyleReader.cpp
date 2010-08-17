@@ -259,7 +259,7 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
     style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
 
     foreach(const Border& border, m_borders) {
-        style.addAttribute(border.odfBorderName(), border.odfStyleProperties());
+        style.addProperty(border.odfBorderName(), border.odfStyleProperties(), KoGenStyle::ParagraphType);
     }
 
     return styles.insert(style, "cell");
