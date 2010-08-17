@@ -161,16 +161,18 @@ private:
 };
 
 class MsooXmlImport;
-class MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
+class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, const QMap< QString, MSOOXML::DrawingMLTheme* >* _themes, MSOOXML::TableStyleList* _styleList);
+    virtual ~MsooXmlDrawingTableStyleContext();
+
     TableStyleList* styleList;
 
-    //Should be mostly unused, those members are needed by some functions not used
-    //in this file
+    //Those members are used by some methods included
     MsooXmlImport* import;
-    const QString path;
-    const QString file;
+    QString path;
+    QString file;
     const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
 };
 

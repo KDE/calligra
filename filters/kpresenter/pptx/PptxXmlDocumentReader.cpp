@@ -152,11 +152,16 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
         d->commentAuthors = autorsContext.authors;
     }
     {
-        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
         d->tableStyleList = new MSOOXML::TableStyleList();
-        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext;
-        tableStyleReaderContext.styleList = d->tableStyleList;
+
         const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
+        QString tableStylesFile;
+        QString tableStylesPath;
+        MSOOXML::Utils::splitPathAndFile(tableStylesFilePath, &tableStylesPath, &tableStylesFile);
+
+        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
+                                                                         tableStylesFile, m_context->themes, d->tableStyleList);
         m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
     }
 
