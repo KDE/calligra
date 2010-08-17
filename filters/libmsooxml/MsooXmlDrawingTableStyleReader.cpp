@@ -350,6 +350,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 {
     READ_PROLOGUE
 
+    QXmlStreamAttributes attrs(attributes());
+    READ_ATTR_WITHOUT_NS(styleId)
+
     while(!atEnd()) {
         readNext();
         if(isStartElement()) {
@@ -373,8 +376,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-    QXmlStreamAttributes attrs(attributes());
-    READ_ATTR_WITHOUT_NS(styleId)
     m_context->styleList->insertStyle(styleId, m_currentStyle);
     m_currentStyle = TableStyle();
 
