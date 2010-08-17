@@ -108,6 +108,19 @@ static QString encodeAddress(const QString& sheetName, uint column, uint row)
     return QString("%1.%2%3").arg(sheetName).arg(columnName(column)).arg(row+1);
 }
 
+struct CellFormatKey {
+    Format* format;
+    bool isGeneral;
+    int decimalCount;
+    CellFormatKey(Format* format, const QString& formula);
+    bool operator==(const CellFormatKey& b) const;
+};
+
+static uint qHash(const CellFormatKey& key)
+{
+    return ::qHash(key.format) ^ ::qHash(key.decimalCount);
+}
+
 }
 
 using namespace Swinder;
@@ -131,6 +144,7 @@ public:
     QHash<FormatFont, QString> fontStyles;
     QString subScriptStyle, superScriptStyle;
     QHash<QString, KoGenStyle> valueFormatCache;
+    QHash<CellFormatKey, QString> cellFormatCache;
     QList<ChartExport*> charts;
     QHash<Cell*, QByteArray> cellShapes;
     QHash<Sheet*, QByteArray> sheetShapes;
@@ -1603,54 +1617,62 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     }
 }
 
-// Processes styles for a cell within a sheet.
-QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
+CellFormatKey::CellFormatKey(Format* format, const QString& formula)
+    : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
 {
-    // handle data format, e.g. number style
-    QString refName;
-    QString valueFormat = format->valueFormat();
-    if (valueFormat != QString("General")) {
-        refName = processValueFormat(valueFormat);
-    } else {
-        if(formula.startsWith("msoxl:=")) { // special cases
+    if (!isGeneral) {
+        if (formula.startsWith("msoxl:=")) { // special cases
             QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
             if (roundRegExp.indexIn(formula) >= 0) {
                 bool ok = false;
                 int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
                 if (ok) {
-                    KoGenStyle style(KoGenStyle::NumericNumberStyle);
-                    QBuffer buffer;
-                    buffer.open(QIODevice::WriteOnly);
-                    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
-                    xmlWriter.startElement("number:number");
-                    xmlWriter.addAttribute("number:decimal-places", decimals);
-                    xmlWriter.endElement(); // number:number
-                    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-                    style.addChildElement("number", elementContents);
-                    refName = styles->insert(style, "N");
+                    decimalCount = decimals;
                 }
-            } else if(formula.startsWith("msoxl:=RAND(")) {
+            }
+        } else if (formula.startsWith("msoxl:=RAND(")) {
+            decimalCount = 9;
+        }
+    }
+}
+
+bool CellFormatKey::operator==(const CellFormatKey& b) const {
+    return format == b.format && isGeneral == b.isGeneral && decimalCount == b.decimalCount;
+}
+
+// Processes styles for a cell within a sheet.
+QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
+{
+    CellFormatKey key(format, formula);
+    QString& styleName = cellFormatCache[key];
+    if (styleName.isEmpty()) {
+        // handle data format, e.g. number style
+        QString refName;
+        if (!key.isGeneral) {
+            refName = processValueFormat(format->valueFormat());
+        } else {
+            if (key.decimalCount >= 0) {
                 KoGenStyle style(KoGenStyle::NumericNumberStyle);
                 QBuffer buffer;
                 buffer.open(QIODevice::WriteOnly);
                 KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
                 xmlWriter.startElement("number:number");
-                xmlWriter.addAttribute("number:decimal-places", 9);
+                xmlWriter.addAttribute("number:decimal-places", key.decimalCount);
                 xmlWriter.endElement(); // number:number
                 QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
                 style.addChildElement("number", elementContents);
                 refName = styles->insert(style, "N");
             }
         }
+
+        KoGenStyle style(KoGenStyle::TableCellAutoStyle, "table-cell");
+        // now the real table-cell
+        if (!refName.isEmpty())
+            style.addAttribute("style:data-style-name", refName);
+
+        processFormat(format, style);
+        styleName = styles->insert(style, "ce");
     }
-
-    KoGenStyle style(KoGenStyle::TableCellAutoStyle, "table-cell");
-    // now the real table-cell
-    if (!refName.isEmpty())
-        style.addAttribute("style:data-style-name", refName);
-
-    processFormat(format, style);
-    QString styleName = styles->insert(style, "ce");
     return styleName;
 }
 
