@@ -50,12 +50,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     }
 
     body = tableBuf.originalWriter();
-
-    body->startElement("draw:frame");
-    body->addAttribute("svg:x", QString("%1pt").arg(EMU_TO_POINT(m_svgX)));
-    body->addAttribute("svg:y", QString("%1pt").arg(EMU_TO_POINT(m_svgY)));
-    body->addAttribute("svg:width", QString("%1pt").arg(EMU_TO_POINT(m_svgWidth)));
-    body->addAttribute("svg:height", QString("%1pt").arg(EMU_TO_POINT(m_svgHeight)));
+//TODO this seems to not be needed anymore, it seems it's taken care up in the hierarchy.
+//However, I'm not absolutely sure so I'll just comment it for now.
+//     body->startElement("draw:frame");
+//     body->addAttribute("svg:x", QString("%1pt").arg(EMU_TO_POINT(m_svgX)));
+//     body->addAttribute("svg:y", QString("%1pt").arg(EMU_TO_POINT(m_svgY)));
+//     body->addAttribute("svg:width", QString("%1pt").arg(EMU_TO_POINT(m_svgWidth)));
+//     body->addAttribute("svg:height", QString("%1pt").arg(EMU_TO_POINT(m_svgHeight)));
 
     body->startElement("table:table");
     body->addAttribute("table:name", m_currentTableName);
@@ -92,7 +93,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     (void)tableBuf.releaseWriter();
     body->endElement(); // table:table
 
-    body->endElement(); // draw:frame
+//     body->endElement(); // draw:frame
 
     m_currentTableNumber++;
 
