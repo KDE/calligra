@@ -270,7 +270,7 @@ private:
     QList<QString> fld_snippets;
 
     //field type enumeration as defined in MS-DOC page 354/609
-    typedef enum
+    enum fldType
     {
         UNSUPPORTED = 0,
         REF = 3,
@@ -280,7 +280,8 @@ private:
         PAGEREF = 37,
         EQ = 49,
         HYPERLINK = 88,
-    } fldType;
+        SHAPE = 95
+    };
 
     //set to 0 for a field we can't handle, anything else is the field type
     int m_fieldType;

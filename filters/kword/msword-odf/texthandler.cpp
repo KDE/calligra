@@ -578,22 +578,29 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 }
 
 #ifdef IMAGE_IMPORT
+
+//TODO: merge inlineObjectFound with floatingObjectFound, both of them are
+//stable actually
+
 void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
 {
     kDebug(30513);
     //inline object should be inside of a pragraph
     Q_ASSERT(m_paragraph);
 
-    //ignore picture if we're in the first part of a field
+    //ignore if field instructions are processed 
     if (m_insideField && !m_fieldAfterSeparator) {
-        kWarning(30513) << "Ignoring, because it's located in field instractions.";
+        kWarning(30513) << "Warning: Object located in field instractions, Ignoring!";
         return;
     }
 
+    m_insideDrawing = true;
+
+    //create temporary writer for the picture tags
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
-    KoXmlWriter* writer = NULL;
-    writer = new KoXmlWriter(&buf);
+    m_drawingWriter = new KoXmlWriter(&buf);
+    KoXmlWriter* writer = m_drawingWriter;
 
     //frame or drawing shape acting as a hyperlink
     if (m_hyperLinkActive) {
@@ -603,7 +610,7 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
     }
 
     //signal that we have a picture, provide the bodyWriter to GraphicsHandler
-    emit inlineObjectFound(data, writer);
+    emit inlineObjectFound(data, m_drawingWriter);
 
     if (m_hyperLinkActive) {
         writer->endElement();
@@ -613,19 +620,29 @@ void KWordTextHandler::inlineObjectFound(const wvWare::PictureData& data)
     //now add content to our current paragraph
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
     m_paragraph->addRunOfText(contents, 0, QString(""), m_parser->styleSheet(), true);
-    delete writer;
+
+    m_insideDrawing = false;
+
+    //cleanup
+    delete m_drawingWriter;
+    m_drawingWriter = 0;
 }
-#endif // IMAGE_IMPORT
 
 void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
 {
     kDebug(30513);
-    //inline object should be inside of a pragraph
+    //floating object should be inside of a pragraph (or at least it's anchor)
     Q_ASSERT(m_paragraph);
 
-    //create temporary writer for the picture tags
+    //ignore if field instructions are processed
+    if (m_insideField && !m_fieldAfterSeparator) {
+        kWarning(30513) << "Warning: Object located in field instractions, Ignoring!";
+        return;
+    }
+
     m_insideDrawing = true;
 
+    //create temporary writer for the picture tags
     QBuffer drawingBuffer;
     drawingBuffer.open(QIODevice::WriteOnly);
     m_drawingWriter = new KoXmlWriter(&drawingBuffer);
@@ -657,6 +674,7 @@ void KWordTextHandler::floatingObjectFound(unsigned int globalCP)
     delete m_drawingWriter;
     m_drawingWriter = 0;
 }
+#endif // IMAGE_IMPORT
 
 QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
 {
@@ -927,17 +945,21 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         m_paragraph->setContainsPageNumberField(true);
         break;
     case PAGEREF:
-        kDebug(30513) << "processing field... PageRef";
+        kDebug(30513) << "processing field... PAGEREF";
         break;
     case EQ:
         kDebug(30513) << "processing field... EQ (Combined Characters)";
         break;
     case HYPERLINK:
-        kDebug(30513) << "processing field... HyperLink";
+        kDebug(30513) << "processing field... HYPERLINK";
+        break;
+    case SHAPE:
+        kDebug(30513) << "processing field... SHAPE";
         break;
     default:
         kDebug(30513) << "can't process field, just outputting text into document...";
         m_fieldType = UNSUPPORTED;
+        break;
     }
     m_fldStart++;
 }//end fieldStart()
@@ -964,6 +986,8 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         }
         *str = str->trimmed();
 	break;
+    default:
+        break;
     }
 } //end fieldSeparator()
 
@@ -1045,9 +1069,10 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         }
         //else a frame or drawing shape acting as a hyperlink already processed
         break;
+    default:
+        break;
     }
     QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
-
     if (!contents.isEmpty()) {
         //nested field
         if (!m_fldStates.empty()) {
@@ -1092,6 +1117,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 //this handles a basic section of text
 void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
+    bool common_flag = false;
     QString newText(Conversion::string(text));
     kDebug(30513) << newText;
 
@@ -1117,9 +1143,6 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         //processing the field result
         else {
             KoXmlWriter* writer = m_fldWriter;
-            if (m_fldStyleName.isEmpty()) {
-                m_fldStyleName = m_paragraph->createTextStyle(chp, m_parser->styleSheet());
-            }
 	    switch (m_fieldType) {
 	    case PAGEREF:
                 //bookmark support not required
@@ -1133,12 +1156,23 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                     writer->addTextNode(newText);
                 }
                 break;
+            case SHAPE:
+                //let's assume no nested fields around the SHAPE result!
+                kDebug(30513) << "Processing as common text string.";
+                common_flag = true;
+                break;
             default:
                 kDebug(30513) << "Ignoring the field result.";
                 break;
             }
         }
-        return;
+        if (!common_flag) {
+            //create a style for the <text:span> element (if applicable)
+            if (m_fldStyleName.isEmpty()) {
+                m_fldStyleName = m_paragraph->createTextStyle(chp, m_parser->styleSheet());
+            }
+            return;
+        }
     }
 
     // Font name, TODO: We only use the Ascii font code. We should work out

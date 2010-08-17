@@ -166,21 +166,24 @@ private:
      */
     void defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa);
 
+    //TODO:
 //    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
 
     /**
-     * Check if the object is inline or floating and set the anchor type to char or as-char.
+     * Check if the object is inline or floating and set the anchor type to
+     * char or as-char.
      */
-    void SetAnchorTypeAtribute(DrawingWriter& out);
+    void SetAnchorTypeAttribute(DrawingWriter& out);
 
     /**
-     * Set the Z-Index atribute. Z-Index is the position of the shape on z axis.
-     * Z-Index depends on the order in which shapes are stored inside OfficeArtDgContainer
+     * Set the Z-Index attribute. Z-Index is the position of the shape on z
+     * axis. Z-Index depends on the order in which shapes are stored inside
+     * OfficeArtDgContainer
      */
-    void SetZIndexAtribute(DrawingWriter& out);
+    void SetZIndexAttribute(DrawingWriter& out);
 
     /**
-     *
+     * TODO:
      */
     void drawObject(uint spid, MSO::OfficeArtDgContainer* dg, DrawingWriter& out,
                     wvWare::Word97::FSPA* spa);

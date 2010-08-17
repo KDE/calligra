@@ -282,7 +282,7 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
 {
     kDebug(30513) << "globalCP" << globalCP ;
     // draw shape or group of shapes
-    if(m_drawings == NULL) {
+    if (m_drawings == NULL) {
         return;
     }
 
@@ -291,15 +291,15 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
         PLCFIterator<Word97::FSPA> it(fspa->at(0));
 
         //search for drawing in main body
-        for(size_t i = 0; i < fspa->count(); i++, ++it) {
+        for (size_t i = 0; i < fspa->count(); i++, ++it) {
             kDebug(30513) << "FSPA start:" << it.currentStart();
             kDebug(30513) << "FSPA spid:" << it.current()->spid;
 
-            if(it.currentStart() == globalCP) {
-                DrawingWriter out(*m_bodyWriter,*m_mainStyles,true, false);
+            if (it.currentStart() == globalCP) {
+                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
                 out.m_pSpa = it.current();
                 out.m_bodyDrawing = true;
-                drawObject((uint) it.current()->spid, m_pOfficeArtBodyDgContainer, out,it.current());
+                drawObject((uint) it.current()->spid, m_pOfficeArtBodyDgContainer, out, it.current());
                 return;
             }
         }
@@ -309,15 +309,15 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
     if (fspa != 0) {
         PLCFIterator<Word97::FSPA> itHeader(fspa->at(0));
         //search for drawing in header
-        for(size_t i = 0; i < fspa->count(); i++, ++itHeader) {
+        for (size_t i = 0; i < fspa->count(); i++, ++itHeader) {
             kDebug(30513) << "FSPA start:" << itHeader.currentStart() + m_fib->ccpText + m_fib->ccpFtn;
             kDebug(30513) << "FSPA spid:" << itHeader.current()->spid;
 
-            if((itHeader.currentStart() + m_fib->ccpText + m_fib->ccpFtn)  == globalCP) {
-                DrawingWriter out(*m_bodyWriter,*m_mainStyles,true, false);
+            if ((itHeader.currentStart() + m_fib->ccpText + m_fib->ccpFtn)  == globalCP) {
+                DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
                 out.m_pSpa = itHeader.current();
                 out.m_bodyDrawing = false;
-                drawObject((uint) itHeader.current()->spid, m_pOfficeArtHeaderDgContainer, out,itHeader.current());
+                drawObject((uint) itHeader.current()->spid, m_pOfficeArtHeaderDgContainer, out, itHeader.current());
                 return;
             }
         }
@@ -331,30 +331,28 @@ void KWordGraphicsHandler::setBodyWriter(KoXmlWriter* writer)
 
 DrawStyle KWordGraphicsHandler::getDrawingStyle()
 {
-    if(m_pOfficeArtBodyDgContainer != NULL) {
-        if(m_pOfficeArtBodyDgContainer->shape.isNull() == false) {
-            if((*m_pOfficeArtBodyDgContainer->shape).shapePrimaryOptions.isNull() == false ) {
-                return DrawStyle(m_OfficeArtDggContainer,NULL,m_pOfficeArtBodyDgContainer->shape.data());
-                }
+    if (m_pOfficeArtBodyDgContainer != NULL) {
+        if (m_pOfficeArtBodyDgContainer->shape.isNull() == false) {
+            if ((*m_pOfficeArtBodyDgContainer->shape).shapePrimaryOptions.isNull() == false) {
+                return DrawStyle(m_OfficeArtDggContainer, NULL, m_pOfficeArtBodyDgContainer->shape.data());
             }
         }
+    }
     return DrawStyle(m_OfficeArtDggContainer);
 }
 
-void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out
-        , wvWare::Word97::FSPA* spa)
+void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out, wvWare::Word97::FSPA* spa)
 {
-    if(dg == NULL || dg->groupShape == NULL)
+    if (dg == NULL || dg->groupShape == NULL) {
         return;
-
+    }
     m_zIndex = 0;
 
-    foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
+    foreach (const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
         //if spgr is in root, find out if his first item is sp with right spid
         if (co.anon.is<OfficeArtSpgrContainer>()) {
-            const OfficeArtSpContainer* first =
-                    (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
-
+            const OfficeArtSpContainer* first = 
+                (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
             if (first && first->shapeProp.spid == spid) {
                 out.SetRectangle(*spa);
                 processObjectContent(*co.anon.get<OfficeArtSpgrContainer>(), out); //draw group
@@ -363,10 +361,9 @@ void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg,
                 m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
             }
         }
-        else //if sp is in root, find out if it has the right spid
-        {
-            const OfficeArtSpContainer & spCo = *co.anon.get<OfficeArtSpContainer>();
-
+        //if sp is in root, find out if it has the right spid
+        else {
+            const OfficeArtSpContainer &spCo = *co.anon.get<OfficeArtSpContainer>();
             if (spCo.shapeProp.spid == spid) {
                 out.SetRectangle(*spa);
                 processObjectContent(spCo, out); //draw object
@@ -379,28 +376,26 @@ void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg,
 
 void KWordGraphicsHandler::processObjectContent(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
 {
-    if (o.rgfb.size() < 2) return;
-
+    if (o.rgfb.size() < 2) {
+        return;
+    }
+    //TODO: create corresponding style and apply style properties
     out.xml.startElement("draw:g");
-
     const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
-    if(first && first->shapeGroup) {
+
+    if (first && first->shapeGroup) {
         out.SetGroupRectangle(*first->shapeGroup); //set group rectangle
     }
 
     for (int i = 1; i < o.rgfb.size(); ++i) {
-        if(o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
-
+        if (o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
             OfficeArtSpContainer tempSp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
-
-            if(tempSp.childAnchor) {
+            if (tempSp.childAnchor) {
                 out.SetClientRectangle(*tempSp.childAnchor); //set child rectangle
             }
-
             processObjectContent(tempSp, out); //draw objects
         }
     }
-
     out.xml.endElement(); // draw:g
 }
 
@@ -417,7 +412,7 @@ void KWordGraphicsHandler::processObjectContent(const MSO::OfficeArtSpContainer&
     kDebug(30513) << "pib: " << ds.pib();
 
     // textbox can be msosptTextBox or msosptRectangle or ...
-    if(!o.clientTextbox.isNull()) {
+    if (!o.clientTextbox.isNull()) {
         kDebug(30513)<< "processing text box";
         parseTextBox(o, out);
         return;
@@ -458,7 +453,7 @@ void KWordGraphicsHandler::parseOfficeArtContainer(POLE::Storage* storage, const
 {
     kDebug(30513);
     // get OfficeArtContent
-    if(fib.lcbDggInfo != 0) {
+    if (fib.lcbDggInfo != 0) {
 
 	const std::string table = fib.fWhichTblStm ? "1Table" : "0Table";
         POLE::Stream stream(storage, table);
@@ -508,10 +503,10 @@ void KWordGraphicsHandler::parseOfficeArtContainer(POLE::Storage* storage, const
         }
 
         //parse OfficeArfDgContainer from msdoc
-        OfficeArtDgContainer * pDgContainer = NULL;
+        OfficeArtDgContainer *pDgContainer = NULL;
         try {
             pDgContainer = new OfficeArtDgContainer();
-            if(drawingsVariable == 0) {
+            if (drawingsVariable == 0) {
                 m_pOfficeArtBodyDgContainer = pDgContainer;
             } else {
                 m_pOfficeArtHeaderDgContainer = pDgContainer;
@@ -547,15 +542,14 @@ void KWordGraphicsHandler::parseOfficeArtContainer(POLE::Storage* storage, const
         pDgContainer = NULL;
         try {
             pDgContainer = new OfficeArtDgContainer();
-            if(drawingsVariable == 0) {
-                if(m_pOfficeArtBodyDgContainer!= NULL){
+            if (drawingsVariable == 0) {
+                if (m_pOfficeArtBodyDgContainer != NULL){
                     delete m_pOfficeArtBodyDgContainer;
                 }
                 m_pOfficeArtBodyDgContainer = pDgContainer;
             }
-            else
-            {
-                if(m_pOfficeArtHeaderDgContainer != NULL) {
+            else {
+                if (m_pOfficeArtHeaderDgContainer != NULL) {
                     delete m_pOfficeArtHeaderDgContainer;
                 }
                 m_pOfficeArtHeaderDgContainer = pDgContainer;
@@ -941,7 +935,7 @@ void KWordGraphicsHandler::defineWrappingProperties(KoGenStyle& style, const Dra
     // style:wrap-dynamic-treshold
 }
 
-void KWordGraphicsHandler::SetAnchorTypeAtribute(DrawingWriter& out)
+void KWordGraphicsHandler::SetAnchorTypeAttribute(DrawingWriter& out)
 {
     if (out.m_inline) {
         out.xml.addAttribute("text:anchor-type","as-char");
@@ -950,7 +944,7 @@ void KWordGraphicsHandler::SetAnchorTypeAtribute(DrawingWriter& out)
     }
 }
 
-void KWordGraphicsHandler::SetZIndexAtribute(DrawingWriter& out)
+void KWordGraphicsHandler::SetZIndexAttribute(DrawingWriter& out)
 {
     out.xml.addAttribute("draw:z-index",m_zIndex);
 }
@@ -973,21 +967,21 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAtribute(out);
-    SetZIndexAtribute(out);
+    SetAnchorTypeAttribute(out);
+    SetZIndexAttribute(out);
 
     switch(drawStyle.txflTextFlow()) {
     case 1: //msotxflTtoBA up-down
     case 3: //msotxflTtoBN up-down
     case 5: //msotxflVertN up-down
         out.xml.addAttribute("svg:width", mm(out.vLength()));
-        out.xml.addAttribute("svg:height",mm(out.hLength()));
+        out.xml.addAttribute("svg:height", mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 1 -1 0 " +
                 mm(((Writer *)&out)->hOffset(out.xRight)) + " " + mm(out.vOffset()) + ")");
         break;
     case 2: //msotxflBtoT down-up
         out.xml.addAttribute("svg:width", mm(out.vLength()));
-        out.xml.addAttribute("svg:height",mm(out.hLength()));
+        out.xml.addAttribute("svg:height", mm(out.hLength()));
         out.xml.addAttribute("draw:transform","matrix(0 -1 1 0 " +
                mm(out.hOffset()) + " " + mm(((Writer *)&out)->vOffset(out.yBottom)) + ")");
          break;
@@ -1003,7 +997,7 @@ void KWordGraphicsHandler::parseTextBox(const MSO::OfficeArtSpContainer& o, Draw
     emit textBoxFound(o.shapeProp.spid , out.m_bodyDrawing);
 
     out.xml.endElement(); //draw:text-box
-    out.xml.endElement(); // draw:frame
+    out.xml.endElement(); //draw:frame
 }
 
 void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,DrawingWriter& out)
@@ -1023,8 +1017,8 @@ void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,D
 
     out.xml.startElement("draw:frame");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAtribute(out);
-    SetZIndexAtribute(out);
+    SetAnchorTypeAttribute(out);
+    SetZIndexAttribute(out);
     out.xml.addAttribute("draw:layer", "layout");
     out.xml.addAttribute("svg:width", mm(out.hLength()));
     out.xml.addAttribute("svg:height", mm(out.vLength()));
@@ -1032,8 +1026,8 @@ void KWordGraphicsHandler::processRectangle(const MSO::OfficeArtSpContainer& o,D
     out.xml.addAttribute("svg:y", mm(out.vOffset()));
 
     out.xml.startElement("draw:text-box");
-    out.xml.endElement(); // draw:text-box
-    out.xml.endElement(); // draw:frame
+    out.xml.endElement(); //draw:text-box
+    out.xml.endElement(); //draw:frame
 }
 
 void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpContainer& o, DrawingWriter& out)
@@ -1060,7 +1054,7 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     out.xml.startElement("draw:frame");
     if (url.isEmpty()) {
         // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); // frame
+        out.xml.endElement(); //draw:frame
         return;
     }
     out.xml.addAttribute("draw:style-name", styleName);
@@ -1079,8 +1073,8 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     out.xml.addAttribute("xlink:type", "simple");
     out.xml.addAttribute("xlink:show", "embed");
     out.xml.addAttribute("xlink:actuate", "onLoad");
-    out.xml.endElement(); // image
-    out.xml.endElement(); // frame
+    out.xml.endElement(); //draw:image
+    out.xml.endElement(); //draw:frame
     return;
 }
 
@@ -1117,13 +1111,13 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     }
     out.xml.startElement("draw:frame");
     if (url.isEmpty()) {
-        // if the image cannot be found, just place an empty frame
-        out.xml.endElement(); // frame
+        //if the image cannot be found, just place an empty frame
+        out.xml.endElement(); //draw:frame
         return;
     }
     out.xml.addAttribute("draw:style-name", styleName);
     out.xml.addAttribute("text:anchor-type","char");
-    SetZIndexAtribute(out);
+    SetZIndexAttribute(out);
     out.xml.addAttribute("svg:width", mm(out.hLength()));
     out.xml.addAttribute("svg:height", mm(out.vLength()));
     out.xml.addAttribute("svg:x", mm(out.hOffset()));
@@ -1134,7 +1128,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.addAttribute("xlink:type", "simple");
     out.xml.addAttribute("xlink:show", "embed");
     out.xml.addAttribute("xlink:actuate", "onLoad");
-    out.xml.endElement(); // image
+    out.xml.endElement(); //draw:image
 
     //check for user edited wrap points
     if (ds.fEditedWrap()) {
@@ -1170,10 +1164,10 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         }
         out.xml.startElement("draw:contour-polygon");
         out.xml.addAttribute("draw:points", points);
-        out.xml.endElement(); // contour-polygon
+        out.xml.endElement(); //draw:contour-polygon
         delete data;
     }
-    out.xml.endElement(); // frame
+    out.xml.endElement(); //draw:frame
     return;
 }
 
@@ -1226,8 +1220,8 @@ void KWordGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     //create a custom shape
     out.xml.startElement("draw:custom-shape");
     out.xml.addAttribute("draw:style-name", styleName);
-    SetAnchorTypeAtribute(out);
-    SetZIndexAtribute(out);
+    SetAnchorTypeAttribute(out);
+    SetZIndexAttribute(out);
 
     QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
     out.xml.addAttribute("svg:height", height);
