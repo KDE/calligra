@@ -512,6 +512,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
     }
     else if (m_context->type == SlideLayout) {
+        m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
         m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
     }
 
@@ -592,6 +593,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             << "m_context->type:" << m_context->type;
     }
     else if (m_context->type == SlideLayout) {
+        //! FIXME: Here we don't do anything for m_currentDrawStyle, what should we do for it?
         m_context->slideLayoutProperties->pageLayoutStyleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
         kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->pageLayoutStyleName;
     }
