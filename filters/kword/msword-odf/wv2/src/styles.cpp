@@ -381,6 +381,7 @@ Style::Style( U16 baseSize, OLEStreamReader* tableStream, U16* ftc ) : m_isEmpty
 
     if ( m_std->sgc == sgcPara ) {
         m_chp = new Word97::CHP();
+        m_upechpx = new UPECHPX();
         m_properties = new ParagraphProperties();
         m_chp->ftc = *ftc;         // Same value for ftc and ftcAscii
         m_chp->ftcAscii = *ftc++;
