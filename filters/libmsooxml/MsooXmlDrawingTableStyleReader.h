@@ -178,7 +178,7 @@ class MSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader
 {
 public:
     MsooXmlDrawingTableStyleReader(KoOdfWriters* writers);
-    ~MsooXmlDrawingTableStyleReader();
+    virtual ~MsooXmlDrawingTableStyleReader();
 
     virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
 
