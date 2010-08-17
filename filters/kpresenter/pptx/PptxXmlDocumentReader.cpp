@@ -153,7 +153,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     d->tableStyleList = new MSOOXML::TableStyleList();
     MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext;
     tableStyleReaderContext.styleList = d->tableStyleList;
-    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
+    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
     m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
 
     TRY_READ(presentation)
