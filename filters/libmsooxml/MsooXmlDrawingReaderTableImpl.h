@@ -33,15 +33,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     MSOOXML::Utils::XmlWriteBuffer tableBuf;
     body = tableBuf.setWriter(body);
 
-    //const QXmlStreamAttributes attrs(attributes());
-    //TRY_READ_ATTR(bandDol)
-    //TRY_READ_ATTR(bandRow)
-    //TRY_READ_ATTR(firstCol)
-    //TRY_READ_ATTR(firstRow)
-    //TRY_READ_ATTR(lastCol)
-    //TRY_READ_ATTR(lastRow)
-    //TRY_READ_ATTR(rtl)
-
     m_currentTableName = QLatin1String("Table") + QString::number(m_currentTableNumber + 1);
     m_currentTableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
     m_currentTableWidth = 0.0;
@@ -113,6 +104,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 {
     READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(bandCol)
+    TRY_READ_ATTR(bandRow)
+    TRY_READ_ATTR(firstCol)
+    TRY_READ_ATTR(firstRow)
+    TRY_READ_ATTR(lastCol)
+    TRY_READ_ATTR(lastRow)
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
