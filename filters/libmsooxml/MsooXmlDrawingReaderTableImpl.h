@@ -80,6 +80,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
         KoGenStyle columnStyle = KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
         columnStyle.addProperty("style:column-width", columnWidth);
+        columnStyle.addAttribute("style:default-cell-style-name", m_defaultCellStyle);
 
         const QString columnStyleName = mainStyles->insert(columnStyle, "col");
 
@@ -132,6 +133,32 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    MSOOXML::TableStyle tableStyle = m_context->tableStyleList->tableStyle(m_styleId);
+
+    m_defaultCellStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::WholeTbl).saveStyle(*mainStyles);
+
+    if(bandCol == "1") {
+        m_oddColumnStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band1Horizontal).saveStyle(*mainStyles);
+        m_evenColumnStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band2Horizontal).saveStyle(*mainStyles);
+    }
+    if(bandRow == "1") {
+        m_oddRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band1Vertical).saveStyle(*mainStyles);
+        m_evenRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band2Vertical).saveStyle(*mainStyles);
+    }
+    if(firstCol == "1") {
+        m_firstColStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::FirstCol).saveStyle(*mainStyles);
+    }
+    if(firstRow == "1") {
+        m_firstRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::FirstRow).saveStyle(*mainStyles);
+    }
+    if(lastCol == "1") {
+        m_lastColStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::LastCol).saveStyle(*mainStyles);
+    }
+    if(firstCol == "1") {
+        m_lastRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::LastRow).saveStyle(*mainStyles);
+    }
+//     TRY_READ_ATTR(rtl)
 
     READ_EPILOGUE
 }

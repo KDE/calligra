@@ -41,4 +41,14 @@ protected:
 
     QList<QString> m_columnsWidth; //!< for collecting column sizes
 
+    QString m_defaultCellStyle;
+    QString m_oddColumnStyle;
+    QString m_evenColumnStyle;
+    QString m_oddRowStyle;
+    QString m_evenRowStyle;
+    QString m_firstColStyle;
+    QString m_firstRowStyle;
+    QString m_lastColStyle;
+    QString m_lastRowStyle;
+
 #endif
