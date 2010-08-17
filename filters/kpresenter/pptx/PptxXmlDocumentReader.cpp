@@ -68,6 +68,7 @@ public:
     KoGenStyle masterPageStyle;
     PptxSlideMasterPageProperties slideMasterPageProperties;
     QMap<int,QString> commentAuthors;
+    MSOOXML::TableStyleList* tableStyleList;
 private:
 };
 
@@ -149,9 +150,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     d->commentAuthors = autorsContext.authors;
 
     MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
-    MSOOXML::TableStyleList* styleList = new MSOOXML::TableStyleList();
+    d->tableStyleList = new MSOOXML::TableStyleList();
     MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext;
-    tableStyleReaderContext.styleList = styleList;
+    tableStyleReaderContext.styleList = d->tableStyleList;
     const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
     m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
 
