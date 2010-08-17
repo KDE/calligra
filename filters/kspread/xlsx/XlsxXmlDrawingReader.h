@@ -84,6 +84,7 @@ protected:
     KoFilter::ConversionStatus read_colOff();
     KoFilter::ConversionStatus read_rowOff();
     KoFilter::ConversionStatus read_graphicFrame();
+    KoFilter::ConversionStatus read_chart2();
 private:
     XlsxXmlDrawingReaderContext *m_context;
     XlsxXmlDrawingReaderContext::AnchorType m_anchorType;

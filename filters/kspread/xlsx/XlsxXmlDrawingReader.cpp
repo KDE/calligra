@@ -98,10 +98,13 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
             ELSE_TRY_READ_IF(to)
-            // the reference to a chart
-            ELSE_TRY_READ_IF_NS(c, chart)
             // a graphic-frame
-            ELSE_TRY_READ_IF(graphicFrame)
+            //ELSE_TRY_READ_IF(graphicFrame)
+            // the reference to a chart
+            //ELSE_TRY_READ_IF_NS(c, chart)
+            else if (qualifiedName() == "c:chart") {
+                read_chart2();
+            }
         }
     }
 
@@ -181,10 +184,10 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
     return KoFilter::OK;
 }
 
-/* is now in MsooXmlCommonReaderDrawingMLImpl.h
+//FIXME Refactor+merge following code which is duplicated in MsooXmlCommonReaderDrawingMLImpl.h atm cause of the missing anchor-handling.
 #undef CURRENT_EL
 #define CURRENT_EL chart
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart2()
 {
     Q_ASSERT(m_context);
     Q_ASSERT(m_context->worksheetReaderContext);
@@ -194,7 +197,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
     TRY_READ_ATTR_WITH_NS(r, id)
     if(!r_id.isEmpty()) {
         //! @todo use MSOOXML::MsooXmlRelationships
-
         const QString path = "/xl/charts";
         const QString file = QString("chart%1.xml").arg(++m_chartNumber);
         const QString filepath = path + "/" + file;
@@ -229,7 +231,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart()
 
     return KoFilter::OK;
 }
-*/
 
 #undef CURRENT_EL
 #define CURRENT_EL graphicFrame
