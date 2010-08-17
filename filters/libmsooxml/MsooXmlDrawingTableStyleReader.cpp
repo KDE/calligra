@@ -326,6 +326,19 @@ MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader()
 {
 }
 
+MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, const QMap< QString, DrawingMLTheme* >* _themes, TableStyleList* _styleList)
+{
+    import = _import;
+    path = _path;
+    file = _file;
+    themes = _themes;
+    styleList = _styleList;
+}
+
+MsooXmlDrawingTableStyleContext::~MsooXmlDrawingTableStyleContext()
+{
+}
+
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderContext* context)
 {
     m_context = dynamic_cast<MsooXmlDrawingTableStyleContext*>(context);
