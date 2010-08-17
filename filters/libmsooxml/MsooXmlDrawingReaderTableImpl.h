@@ -22,6 +22,8 @@
 * the table starts at tbl §21.1.3.13
 */
 
+#include <MsooXmlDrawingTableStyleReader.h>
+
 #undef CURRENT_EL
 #define CURRENT_EL tbl
 //! tbl (Table) §21.1.3.13
