@@ -81,11 +81,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
         KoGenStyle columnStyle = KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
         columnStyle.addProperty("style:column-width", columnWidth);
-        columnStyle.addAttribute("style:default-cell-style-name", m_defaultCellStyle);
 
         const QString columnStyleName = mainStyles->insert(columnStyle, "col");
 
         body->addAttribute("table:style-name", columnStyleName);
+        body->addAttribute("table:default-cell-style-name", m_defaultCellStyle);
+
         body->endElement(); // table:table-column
     }
     m_columnsWidth.clear();
