@@ -24,10 +24,6 @@
 #include "sheet.h"
 #include "workbook.h"
 
-#ifndef __GNUC__ 
-  #define __PRETTY_FUNCTION__ __FUNCTION__
-#endif /* __PRETTY_FUNCTION__ only exists in gnu c++ */
-
 ODrawClient::ODrawClient(Swinder::Sheet* sheet)
     : m_sheet(sheet)
 {

@@ -109,10 +109,10 @@ static QString encodeAddress(const QString& sheetName, uint column, uint row)
 }
 
 struct CellFormatKey {
-    Format* format;
+    const Format* format;
     bool isGeneral;
     int decimalCount;
-    CellFormatKey(Format* format, const QString& formula);
+    CellFormatKey(const Format* format, const QString& formula);
     bool operator==(const CellFormatKey& b) const;
 };
 
@@ -177,9 +177,9 @@ public:
     int processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWriter* xmlWriter);
     void processCellForBody(KoOdfWriteStore* store, Cell* cell, int rowsRepeat, KoXmlWriter* xmlWriter);
     void processCellForStyle(Cell* cell, KoXmlWriter* xmlWriter);
-    QString processCellFormat(Format* format, const QString& formula = QString());
+    QString processCellFormat(const Format* format, const QString& formula = QString());
     QString processRowFormat(Format* format, const QString& breakBefore = QString(), int rowRepeat = 1, double rowHeight = -1);
-    void processFormat(Format* format, KoGenStyle& style);
+    void processFormat(const Format* format, KoGenStyle& style);
     QString processValueFormat(const QString& valueFormat);
     void processFontFormat(const FormatFont& font, KoGenStyle& style, bool allProps = false);
     void processCharts(KoXmlWriter* manifestWriter);
@@ -1009,8 +1009,8 @@ void ExcelImport::Private::processColumnForStyle(Sheet* sheet, int columnIndex, 
     QString styleName = styles->insert(style, "co");
     colStyles.append(styleName);
 
-    Format format = column->format();
-    QString cellStyleName = processCellFormat(&format);
+    const Format* format = &column->format();
+    QString cellStyleName = processCellFormat(format);
     colCellStyles.append(cellStyleName);
 }
 
@@ -1576,8 +1576,8 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     if (!xmlWriter) return;
 
     // TODO optimize with hash table
-    Format format = cell->format();
-    QString styleName = processCellFormat(&format, cellFormula(cell));
+    const Format* format = &cell->format();
+    QString styleName = processCellFormat(format, cellFormula(cell));
     cellStyles.append(styleName);
 
     if (cell->value().isRichText()) {
@@ -1591,12 +1591,12 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
         }
     }
 
-    if (format.font().superscript() && superScriptStyle.isEmpty()) {
+    if (format->font().superscript() && superScriptStyle.isEmpty()) {
         KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
         style.addProperty("style:text-position", "super", KoGenStyle::TextType);
         superScriptStyle = styles->insert(style, "T");
     }
-    if (format.font().subscript() && subScriptStyle.isEmpty()) {
+    if (format->font().subscript() && subScriptStyle.isEmpty()) {
         KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
         style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
         subScriptStyle = styles->insert(style, "T");
@@ -1617,7 +1617,7 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     }
 }
 
-CellFormatKey::CellFormatKey(Format* format, const QString& formula)
+CellFormatKey::CellFormatKey(const Format* format, const QString& formula)
     : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
 {
     if (!isGeneral) {
@@ -1641,7 +1641,7 @@ bool CellFormatKey::operator==(const CellFormatKey& b) const {
 }
 
 // Processes styles for a cell within a sheet.
-QString ExcelImport::Private::processCellFormat(Format* format, const QString& formula)
+QString ExcelImport::Private::processCellFormat(const Format* format, const QString& formula)
 {
     CellFormatKey key(format, formula);
     QString& styleName = cellFormatCache[key];
@@ -1786,7 +1786,7 @@ void ExcelImport::Private::processFontFormat(const FormatFont& font, KoGenStyle&
 }
 
 // Processes a formatting.
-void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
+void ExcelImport::Private::processFormat(const Format* format, KoGenStyle& style)
 {
     if (!format) return;
 
