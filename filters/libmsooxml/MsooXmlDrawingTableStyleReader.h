@@ -196,7 +196,7 @@ protected:
 //     KoFilter::ConversionStatus read_insideH();
 //     KoFilter::ConversionStatus read_tl2br();
 //     KoFilter::ConversionStatus read_tr2bl();
-    KoFilter::ConversionStatus read_tcBrd();
+    KoFilter::ConversionStatus read_tcBdr();
 
     //get read_ln and friends, it's a shame I have to get a lot of crap alongside
     #include <MsooXmlCommonReaderMethods.h>

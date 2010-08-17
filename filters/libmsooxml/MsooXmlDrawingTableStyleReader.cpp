@@ -434,7 +434,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 //             TRY_READ_IF(cell3D)
 //             ELSE_TRY_READ_IF(fill)
 //             ELSE_TRY_READ_IF(fillRef)
-            /*ELSE_*/TRY_READ_IF(tcBrd)
+            /*ELSE_*/TRY_READ_IF(tcBdr)
 //             ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -452,8 +452,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL tcBrd
-KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBrd()
+#define CURRENT_EL tcBdr
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
 {
     READ_PROLOGUE
 
