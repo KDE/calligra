@@ -334,6 +334,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(tblStyle)
         }
@@ -350,6 +351,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
 //             TRY_READ_IF(band1H)
 //             ELSE_TRY_READ_IF(band1V)
@@ -388,6 +390,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
     m_currentStyleProperties.setType(TableStyleProperties::WholeTbl);
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
@@ -409,6 +412,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
 //             TRY_READ_IF(cell3D)
 //             ELSE_TRY_READ_IF(fill)
@@ -437,6 +441,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBrd()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(bottom)
 //             ELSE_TRY_READ_IF(extLst)
@@ -463,6 +468,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
@@ -488,6 +494,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
@@ -513,6 +520,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
@@ -538,6 +546,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
     READ_PROLOGUE
 
     while(!atEnd()) {
+        readNext();
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
