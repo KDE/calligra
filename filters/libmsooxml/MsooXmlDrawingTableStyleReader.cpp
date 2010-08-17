@@ -487,7 +487,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
             ELSE_TRY_READ_IF(top)
 //             ELSE_TRY_READ_IF(tr2bl)
 //             ELSE_WRONG_FORMAT
-            m_currentPen = QPen();
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
