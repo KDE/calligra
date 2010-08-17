@@ -33,10 +33,17 @@
 namespace MSOOXML
 {
 
+class PointListNode;
+class ConnectionListNode;
+class LayoutNode;
+
 class MSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     KoStore* m_storeout;
+    PointListNode *m_points;
+    ConnectionListNode *m_connections;
+    LayoutNode *m_layout;
     explicit MsooXmlDiagramReaderContext(KoStore* storeout);
     virtual ~MsooXmlDiagramReaderContext();
 };
@@ -48,7 +55,11 @@ public:
     virtual ~MsooXmlDiagramReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 protected:
-    KoFilter::ConversionStatus read_layoutNode();
+    //KoFilter::ConversionStatus read_layoutNode();
+    //KoFilter::ConversionStatus read_choose();
+    //KoFilter::ConversionStatus read_if();
+    //KoFilter::ConversionStatus read_else();
+    //KoFilter::ConversionStatus read_forEach();
 private:
     MsooXmlDiagramReaderContext *m_context;
 

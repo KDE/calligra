@@ -34,113 +34,126 @@
 #include <QXmlQuery>
 #include <QAbstractUriResolver>
 
-using namespace MSOOXML;
+namespace MSOOXML
+{
 
 /****************************************************************************************************
  * The data-model of the diagram. The data-model was designed after the way it's done in
- * oo.org to make it easier to reuse some of the logic.
+ * oo.org to make it easier to reuse some of the logic and ideas.
  */
 
 /// The AbstractNode is the base class to handle the diagram data-model.
-struct AbstractNode
+class AbstractNode
 {
-    const char* m_tagName;
-    explicit AbstractNode(const char* tagName) : m_tagName(tagName) {}
-    virtual ~AbstractNode() {}
-    virtual void readElement(MsooXmlDiagramReader* reader) {
-        Q_UNUSED(reader);
-    }
-    virtual void readAll(MsooXmlDiagramReader* reader) {
-        while (!reader->atEnd()) {
-            QXmlStreamReader::TokenType tokenType = reader->readNext();
-            if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-            if (!reader->isStartElement() && reader->qualifiedName() == m_tagName) break;
-            readElement(reader);
+    public:
+        const char *m_tagName;
+        explicit AbstractNode(const char *tagName) : m_tagName(tagName) {}
+        virtual ~AbstractNode() {}
+        virtual void readElement(MsooXmlDiagramReader* reader) {
+            Q_UNUSED(reader);
         }
-    }
+        virtual void readAll(MsooXmlDiagramReader* reader) {
+            while (!reader->atEnd()) {
+                QXmlStreamReader::TokenType tokenType = reader->readNext();
+                if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+                if (!reader->isStartElement() && reader->qualifiedName() == m_tagName) break;
+                readElement(reader);
+            }
+        }
 };
 
 /// A point in the data-model.
-struct PointNode : AbstractNode
+class PointNode : public AbstractNode
 {
-    QString m_modelId;
-    QString m_type;
-    QString m_cxnId;
-    explicit PointNode() : AbstractNode("dgm:pt") {}
-    virtual ~PointNode() {}
-    virtual void readElement(MsooXmlDiagramReader* reader) {
-        if (reader->isStartElement()) {
-            if (reader->qualifiedName() == QLatin1String("dgm:prSet")) {
-                //TODO
-            }
-            else if (reader->qualifiedName() == QLatin1String("dgm:spPr")) {
-                //TODO
-            }
-            else if (reader->qualifiedName() == QLatin1String("dgm:t")) {
-                //TODO
+    public:
+        QString m_modelId;
+        QString m_type;
+        QString m_cxnId;
+        explicit PointNode() : AbstractNode("dgm:pt") {}
+        virtual ~PointNode() {}
+        virtual void readElement(MsooXmlDiagramReader* reader) {
+            if (reader->isStartElement()) {
+                if (reader->qualifiedName() == QLatin1String("dgm:prSet")) {
+                    //TODO
+                }
+                else if (reader->qualifiedName() == QLatin1String("dgm:spPr")) {
+                    //TODO
+                }
+                else if (reader->qualifiedName() == QLatin1String("dgm:t")) {
+                    //TODO
+                }
             }
         }
-    }
-    virtual void readAll(MsooXmlDiagramReader* reader) {
-        const QXmlStreamAttributes attrs(reader->attributes());
-        TRY_READ_ATTR_WITHOUT_NS_INTO(modelId, m_modelId)
-        TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
-        if (m_type == QLatin1String("parTrans") || m_type == QLatin1String("sibTrans"))
-            TRY_READ_ATTR_WITHOUT_NS_INTO(cxnId, m_cxnId)
-        else
-            m_cxnId.clear();
-        AbstractNode::readAll(reader);
-    }
+        virtual void readAll(MsooXmlDiagramReader* reader) {
+            const QXmlStreamAttributes attrs(reader->attributes());
+            TRY_READ_ATTR_WITHOUT_NS_INTO(modelId, m_modelId)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
+            if (m_type.isEmpty()) m_type = "node";
+            if (m_type == QLatin1String("parTrans") || m_type == QLatin1String("sibTrans"))
+                TRY_READ_ATTR_WITHOUT_NS_INTO(cxnId, m_cxnId)
+            else
+                m_cxnId.clear();
+            AbstractNode::readAll(reader);
+        }
+        QList<PointNode*> children() const { return m_children; }
+        void addChild(PointNode* node) { m_children << node; }
+    private:
+        QList<PointNode*> m_children;
 };
 
 /// A list of points in the data-model.
-struct PointListNode : AbstractNode
+class PointListNode : public AbstractNode
 {
-    QList<PointNode*> m_points;
-    explicit PointListNode() : AbstractNode("dgm:ptLst") {}
-    virtual ~PointListNode() { qDeleteAll(m_points); }
-    virtual void readElement(MsooXmlDiagramReader* reader) {
-        if (reader->isStartElement()) {
-            if (reader->qualifiedName() == QLatin1String("dgm:pt")) {
-                PointNode *n = new PointNode;
-                n->readAll(reader);
-                m_points << n;
+    public:
+        explicit PointListNode() : AbstractNode("dgm:ptLst") {}
+        virtual ~PointListNode() { qDeleteAll(m_points); }
+        virtual void readElement(MsooXmlDiagramReader* reader) {
+            if (reader->isStartElement()) {
+                if (reader->qualifiedName() == QLatin1String("dgm:pt")) {
+                    PointNode *n = new PointNode;
+                    n->readAll(reader);
+                    m_points << n;
+                }
             }
         }
-    }
+        QList<PointNode*> points() const { return m_points; }
+    private:
+        QList<PointNode*> m_points;
 };
 
 /// A connection between two nodes in the data-model.
-struct ConnectionNode : AbstractNode
+class ConnectionNode : public AbstractNode
 {
-    QString m_modelId;
-    QString m_type;
-    QString m_srcId;
-    QString m_destId;
-    QString m_presId;
-    QString m_sibTransId;
-    int m_srcOrd;
-    int m_destOrd;
-    explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
-    virtual ~ConnectionNode() {}
-    virtual void readAll(MsooXmlDiagramReader* reader) {
-        const QXmlStreamAttributes attrs(reader->attributes());
-        TRY_READ_ATTR_WITHOUT_NS_INTO(modelId, m_modelId)
-        TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
-        TRY_READ_ATTR_WITHOUT_NS_INTO(srcId, m_srcId)
-        TRY_READ_ATTR_WITHOUT_NS_INTO(destId, m_destId)
-        TRY_READ_ATTR_WITHOUT_NS_INTO(presId, m_presId)
-        TRY_READ_ATTR_WITHOUT_NS_INTO(sibTransId, m_sibTransId)
-        TRY_READ_ATTR_WITHOUT_NS(srcOrd)
-        TRY_READ_ATTR_WITHOUT_NS(destOrd)
-        m_srcOrd = srcOrd.toInt();
-        m_destOrd = destOrd.toInt();
-        AbstractNode::readAll(reader);
-    }
+    public:
+        QString m_modelId;
+        QString m_type;
+        QString m_srcId;
+        QString m_destId;
+        QString m_presId;
+        QString m_sibTransId;
+        int m_srcOrd;
+        int m_destOrd;
+        explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
+        virtual ~ConnectionNode() {}
+        virtual void readAll(MsooXmlDiagramReader* reader) {
+            const QXmlStreamAttributes attrs(reader->attributes());
+            TRY_READ_ATTR_WITHOUT_NS_INTO(modelId, m_modelId)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
+            if (m_type.isEmpty()) m_type = "parOf";
+            TRY_READ_ATTR_WITHOUT_NS_INTO(srcId, m_srcId)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(destId, m_destId)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(presId, m_presId)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(sibTransId, m_sibTransId)
+            TRY_READ_ATTR_WITHOUT_NS(srcOrd)
+            TRY_READ_ATTR_WITHOUT_NS(destOrd)
+            m_srcOrd = srcOrd.toInt();
+            m_destOrd = destOrd.toInt();
+            AbstractNode::readAll(reader);
+        }
 };
 
 /// A list of connections in the data-model.
-struct ConnectionListNode : AbstractNode
+class ConnectionListNode : public AbstractNode
 {
     public:
         explicit ConnectionListNode() : AbstractNode("dgm:cxnLst") {}
@@ -154,23 +167,117 @@ struct ConnectionListNode : AbstractNode
                 }
             }
         }
+        QList<ConnectionNode*> connections() const { return m_connections; }
     private:
         QList<ConnectionNode*> m_connections;
 };
+
+class AtomNode : public AbstractNode
+{
+    public:
+        explicit AtomNode(const char *tagName) : AbstractNode(tagName) {}
+        virtual ~AtomNode() { qDeleteAll(m_children); }
+        virtual void readElement(MsooXmlDiagramReader* reader);
+        QList<AtomNode*> children() const { return m_children; }
+        void addChild(AtomNode* node) { m_children << node; }
+    private:
+        QList<AtomNode*> m_children;
+};
+
+class LayoutNode : public AtomNode
+{
+    public:
+        QString m_name;
+        explicit LayoutNode() : AtomNode("dgm:layoutNode") {}
+        virtual ~LayoutNode() {}
+        virtual void readAll(MsooXmlDiagramReader* reader) {
+            const QXmlStreamAttributes attrs(reader->attributes());
+            TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
+            //TRY_READ_ATTR_WITHOUT_NS_INTO(styleLbl, m_styleLbl)
+            AtomNode::readAll(reader);
+        }
+};
+
+class ShapeNode : public AtomNode
+{
+    public:
+        QString m_type;
+        QString m_name;
+        explicit ShapeNode() : AtomNode("dgm:shape") {}
+        virtual ~ShapeNode() {}
+        virtual void readAll(MsooXmlDiagramReader* reader) {
+            const QXmlStreamAttributes attrs(reader->attributes());
+            TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
+            if (m_type.isEmpty()) m_type = "obj";
+            //TRY_READ_ATTR_WITHOUT_NS_INTO(id, m_id)
+            //TRY_READ_ATTR_WITHOUT_NS_INTO(idx, m_idx)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
+            AtomNode::readAll(reader);
+        }
+};
+
+class ChooseNode : public AtomNode
+{
+    public:
+        explicit ChooseNode() : AtomNode("dgm:choose") {}
+        virtual ~ChooseNode() {}
+};
+
+class ForEachNode : public AtomNode
+{
+    public:
+        explicit ForEachNode() : AtomNode("dgm:forEach") {}
+        virtual ~ForEachNode() {}
+};
+
+void AtomNode::readElement(MsooXmlDiagramReader* reader)
+{
+    if (reader->isStartElement()) {
+        AtomNode *node = 0;
+
+        if (reader->qualifiedName() == QLatin1String("dgm:layoutNode")) {
+            node = new LayoutNode;
+        }
+        else if (reader->qualifiedName() == QLatin1String("dgm:shape")) {
+            node = new ShapeNode;
+        }
+        else if (reader->qualifiedName() == QLatin1String("dgm:choose")) {
+            node = new ChooseNode;
+        }
+        else if (reader->qualifiedName() == QLatin1String("dgm:forEach")) {
+            node = new ForEachNode;
+        }
+        
+        if (node) {
+            addChild(node);
+            node->readAll(reader);
+        }
+    }
+}
+
+}
 
 /****************************************************************************************************
  * The reader-context and the reader itself. Note that there will be one reader-instance per xml-file
  * in a diagram. The reader-context is shared between the reader-instances for one diagram.
  */
 
+using namespace MSOOXML;
+
 MsooXmlDiagramReaderContext::MsooXmlDiagramReaderContext(KoStore* storeout)
     : MSOOXML::MsooXmlReaderContext()
     , m_storeout(storeout)
+    , m_points(new PointListNode)
+    , m_connections(new ConnectionListNode)
+    , m_layout(new LayoutNode)
 {
 }
 
 MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
 {
+    delete m_points;
+    delete m_connections;
+    delete m_layout;
 }
 
 MsooXmlDiagramReader::MsooXmlDiagramReader(KoOdfWriters *writers)
@@ -202,20 +309,70 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
             if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
             if (isStartElement()) {
                 if (qualifiedName() == QLatin1String("dgm:ptLst")) { // list of points
-                    PointListNode *l = new PointListNode;
-                    l->readAll(this);
+                    m_context->m_points->readAll(this);
                 }
                 else if (qualifiedName() == QLatin1String("dgm:cxnLst")) { // list of connections
-                    ConnectionListNode *l = new ConnectionListNode;
-                    l->readAll(this);
+                    m_context->m_connections->readAll(this);
                 }
             }
         }
+
+        QMap<QString, PointNode*> pointMap;
+        foreach(PointNode* node, m_context->m_points->points()) {
+            if (!node->m_modelId.isEmpty()) {
+                pointMap[node->m_modelId] = node;
+            }
+        }
+
+        QMap<QString, PointNode*> pointTree;
+        foreach(ConnectionNode* node, m_context->m_connections->connections()) {
+            if (node->m_type != "parOf") continue;
+
+            PointNode* source = 0;
+            if (pointTree.contains(node->m_srcId)) {
+                source = pointTree[node->m_srcId];
+            } else {
+                if (!pointMap.contains(node->m_srcId)) continue;
+                source = pointMap[node->m_srcId];
+                pointTree[node->m_srcId] = source;
+            }
+
+            if (!pointMap.contains(node->m_destId)) continue;
+            PointNode* destination = pointMap[node->m_destId];
+            source->addChild(destination);
+            pointTree[node->m_destId] = destination;
+        }
+
+#if 0
+        for(QMap<QString, PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) {
+            PointNode* node = (*it);
+            kDebug()<<">"<< node->m_modelId;
+            foreach(PointNode* n, node->children()) {
+                kDebug()<<"  >"<< n->m_modelId;
+                foreach(PointNode* n2, n->children()) {
+                    kDebug()<<"    >"<< n2->m_modelId;
+                }
+            }
+        }
+#endif
     }
     else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
         m_type = LayoutDefType;
+
+        while (!atEnd()) {
+            QXmlStreamReader::TokenType tokenType = readNext();
+            if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+            if (isStartElement()) {
+                if (qualifiedName() == QLatin1String("dgm:layoutNode")) {
+                    m_context->m_layout->readAll(this);
+                }
+                //ELSE_TRY_READ_IF(title)
+                //ELSE_TRY_READ_IF(catLst)
+                //ELSE_TRY_READ_IF(sampData)
+                //ELSE_TRY_READ_IF(styleData)
+            }
+        }
         
-        // We are using the layout-definition as xslt-stylesheet since dmg seems to be an extended xslt-dialect.
 #if 0
         device()->seek(0);
         const QString xml = QString::fromUtf8(device()->readAll());
@@ -274,22 +431,3 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
     return KoFilter::OK;
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL layoutNode
-KoFilter::ConversionStatus MsooXmlDiagramReader::read_layoutNode()
-{
-    READ_PROLOGUE
-    while (!atEnd()) {
-        QXmlStreamReader::TokenType tokenType = readNext();
-        if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-        if (isStartElement()) {
-//             if (QUALIFIED_NAME_IS(forEach)) {
-//                 
-//             }
-            //TRY_READ_IF(layoutNode)
-        }
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-    READ_EPILOGUE
-    //return KoFilter::OK;
-}

@@ -99,12 +99,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
             TRY_READ_IF(from)
             ELSE_TRY_READ_IF(to)
             // a graphic-frame
-            //ELSE_TRY_READ_IF(graphicFrame)
-            // the reference to a chart
-            //ELSE_TRY_READ_IF_NS(c, chart)
-            else if (qualifiedName() == "c:chart") {
-                read_chart2();
-            }
+            ELSE_TRY_READ_IF(graphicFrame)
         }
     }
 
@@ -184,7 +179,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
     return KoFilter::OK;
 }
 
-//FIXME Refactor+merge following code which is duplicated in MsooXmlCommonReaderDrawingMLImpl.h atm cause of the missing anchor-handling.
 #undef CURRENT_EL
 #define CURRENT_EL chart
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart2()
@@ -253,12 +247,9 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF_NS(a, graphic)
-            //ELSE_TRY_READ_IF(nvGraphicFramePr)
-            //else if (qualifiedName() == "p:xfrm") {
-            //    read_xfrm_xdr();
-            //}
-//! @todo add ELSE_WRONG_FORMAT
+            if (qualifiedName() == "a:graphic") {
+                read_graphic2();
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
@@ -266,10 +257,49 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
 }
 
 #define blipFill_NS "a"
-// END NAMESPACE p
-// BEGIN NAMESPACE a
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
+
+#undef CURRENT_EL
+#define CURRENT_EL graphic
+//! graphic handler (Graphic Object)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic2()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if (qualifiedName() == "a:graphicData") {
+                read_graphicData2();
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL graphicData
+//! graphicData handler (Graphic Object Data)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData2()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF_NS(pic, pic)
+            else if (qualifiedName() == "c:chart") {
+                read_chart2();
+            }
+            else if (qualifiedName() == QLatin1String("dgm:relIds")) {
+                read_diagram(); // DrawingML diagram
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
 // in PPTX we do not have pPr, so p@text:style-name should be added earlier
 //#define SETUP_PARA_STYLE_IN_READ_P
 #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.

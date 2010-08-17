@@ -959,7 +959,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_diagram()
        return dataReaderResult;
     }
     
-    // the read the layout definition
+    // then read the layout definition
     MSOOXML::MsooXmlDiagramReader layoutReader(this);
     const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, &context);
     if (layoutReaderResult != KoFilter::OK) {
