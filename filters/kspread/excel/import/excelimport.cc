@@ -130,7 +130,7 @@ public:
     QList<QString> sheetStyles;
     QHash<FormatFont, QString> fontStyles;
     QString subScriptStyle, superScriptStyle;
-
+    QHash<QString, KoGenStyle> valueFormatCache;
     QList<ChartExport*> charts;
     QHash<Cell*, QByteArray> cellShapes;
     QHash<Sheet*, QByteArray> sheetShapes;
@@ -1925,8 +1925,11 @@ void ExcelImport::Private::processFormat(Format* format, KoGenStyle& style)
 // 3.8.31 numFmts
 QString ExcelImport::Private::processValueFormat(const QString& valueFormat)
 {
-    NumberFormatParser::setStyles( styles );
-    const KoGenStyle style = NumberFormatParser::parse( valueFormat );
+    KoGenStyle& style = valueFormatCache[valueFormat];
+    if (style.isEmpty()) {
+        NumberFormatParser::setStyles( styles );
+        style = NumberFormatParser::parse( valueFormat );
+    }
     if( style.type() == KoGenStyle::ParagraphAutoStyle ) {
         return QString();
     }
