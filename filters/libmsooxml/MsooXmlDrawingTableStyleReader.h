@@ -99,6 +99,10 @@ public:
         NwCell,
         SeCell,
         SwCell,
+        Band1Horizontal,
+        Band2Horizontal,
+        Band1Vertical,
+        Band2Vertical,
         WholeTbl
     };
 
