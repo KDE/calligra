@@ -37,6 +37,7 @@ protected:
     KoGenStyle m_currentTableCellStyle;
     QString m_currentTableName;
     qreal m_currentTableWidth; //!< in cm
+    QString m_styleId;
 
     QList<QString> m_columnsWidth; //!< for collecting column sizes
 
