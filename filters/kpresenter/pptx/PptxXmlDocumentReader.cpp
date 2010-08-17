@@ -144,18 +144,21 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-    PptxXmlCommentAuthorsReader autorsReader(this);
-    const QString autorsFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
-    PptxXmlCommentAuthorsReaderContext autorsContext;
-    m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
-    d->commentAuthors = autorsContext.authors;
-
-    MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
-    d->tableStyleList = new MSOOXML::TableStyleList();
-    MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext;
-    tableStyleReaderContext.styleList = d->tableStyleList;
-    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
-    m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
+    {
+        PptxXmlCommentAuthorsReader autorsReader(this);
+        const QString autorsFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
+        PptxXmlCommentAuthorsReaderContext autorsContext;
+        m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
+        d->commentAuthors = autorsContext.authors;
+    }
+    {
+        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+        d->tableStyleList = new MSOOXML::TableStyleList();
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext;
+        tableStyleReaderContext.styleList = d->tableStyleList;
+        const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
+        m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
+    }
 
     TRY_READ(presentation)
     kDebug() << "===========finished============";
