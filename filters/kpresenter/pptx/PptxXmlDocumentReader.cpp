@@ -58,6 +58,7 @@ public:
     ~Private() {
         qDeleteAll(masterSlidePropertiesMap);
         qDeleteAll(slideLayoutPropertiesMap);
+        delete tableStyleList;
     }
     QMap<QString, PptxSlideProperties*> masterSlidePropertiesMap;
     QMap<QString, PptxSlideLayoutProperties*> slideLayoutPropertiesMap;
