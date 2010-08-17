@@ -302,8 +302,8 @@ static QString ST_StyleType_to_ODF(const QString& type)
  - rPr (Run Properties) §17.7.9.1
  - rsid (Revision Identifier for Style Definition) §17.7.4.15
  - semiHidden (Hide Style From Main User Interface) §17.7.4.16
- - tblPr (Style Table Properties) §17.7.6.4
- - tblStylePr (Style Conditional Table Formatting Properties) §17.7.6.6
+ - [done] tblPr (Style Table Properties) §17.7.6.4
+ - [done] tblStylePr (Style Conditional Table Formatting Properties) §17.7.6.6
  - tcPr (Style Table Cell Properties) §17.7.6.9
  - trPr (Style Table Row Properties) §17.7.6.11
  - uiPriority (Optional User Interface Sorting Order) §17.7.4.19
@@ -384,6 +384,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             ELSE_TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF(pPr)
             ELSE_TRY_READ_IF(tblPr)
+            ELSE_TRY_READ_IF(tblStylePr)
             else if (QUALIFIED_NAME_IS(basedOn)) {
                 READ_ATTR(val)
                 if (type == "character") {
@@ -464,6 +465,31 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
     m_currentParagraphStyle = KoGenStyle();
     m_currentTextStyle = KoGenStyle();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tblStylePr
+//! tbleStylePr (table style handler)
+KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(type)
+    if (!type.isEmpty()) {
+
+    }
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            //TRY_READ_IF(name)
+            //! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
 
     READ_EPILOGUE
 }

@@ -50,6 +50,7 @@ protected:
     KoFilter::ConversionStatus read_rPrDefault();
     KoFilter::ConversionStatus read_style();
     KoFilter::ConversionStatus read_name();
+    KoFilter::ConversionStatus read_tblStylePr();
 
     //! Context used by methods like read_lang to know the parent element
     enum DocxXmlStylesReadingContext {
