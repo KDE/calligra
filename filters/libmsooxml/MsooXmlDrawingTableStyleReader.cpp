@@ -252,7 +252,11 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
         return QString();
     }
 
-    KoGenStyle style = KoGenStyle(KoGenStyle::TableCellAutoStyle);
+    KoGenStyle style = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+
+    //FIXME support actual background
+    //I just added it to play nice to OOo which adds a blue background of questionable taste
+    style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
 
     foreach(const Border& border, m_borders) {
         style.addAttribute(border.odfBorderName(), border.odfStyleProperties());
