@@ -132,6 +132,9 @@ class MSOOXML_EXPORT TableStyle
 {
 public:
 
+    TableStyle();
+    ~TableStyle();
+
     QString id() const;
     void setId(const QString& id);
 
@@ -147,6 +150,9 @@ private:
 class MSOOXML_EXPORT TableStyleList
 {
 public:
+    TableStyleList();
+    ~TableStyleList();
+
     TableStyle tableStyle(const QString& id) const;
     void insertStyle(QString id, MSOOXML::TableStyle style);
 

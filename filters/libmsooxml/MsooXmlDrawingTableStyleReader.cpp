@@ -261,6 +261,14 @@ QString TableStyleProperties::saveStyle(KoGenStyles& styles)
     return styles.insert(style, "cell");
 }
 
+TableStyle::TableStyle()
+{
+}
+
+TableStyle::~TableStyle()
+{
+}
+
 void TableStyle::setId(const QString& id)
 {
     m_id = id;
@@ -289,6 +297,14 @@ TableStyleProperties TableStyle::propertiesForType(TableStyleProperties::Type ty
 void TableStyle::addProperties(TableStyleProperties properties)
 {
     m_properties.insert(properties.type(), properties);
+}
+
+TableStyleList::TableStyleList()
+{
+}
+
+TableStyleList::~TableStyleList()
+{
 }
 
 TableStyle TableStyleList::tableStyle(const QString& id) const
