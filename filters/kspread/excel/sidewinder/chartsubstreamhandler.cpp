@@ -125,7 +125,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
             std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
         } else {
             m_sheet = globals->chartSheets().takeFirst();
-
+#if 0
             m_chartObject = new ChartObject(m_chartObject->id());
             m_chart = m_chartObject->m_chart;
             Q_ASSERT(m_chart);
@@ -143,6 +143,9 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
 #endif
             Cell* cell = m_sheet->cell(0, 0, true); // anchor to the first cell
             cell->addChart(m_chartObject);
+#else
+            std::cerr << "ChartSubStreamHandler: FIXME" << std::endl;
+#endif
         }
     }
 }
