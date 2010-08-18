@@ -81,8 +81,8 @@ def profile(dir, file, logger):
 		[exepath, "--benchmark-loading", "--profile-filename",
 			tmpfilename, file],
 		env=env, close_fds=True,
-#		stdout=None, stderr=None)
-		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		stdout=None, stderr=None)
+#		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	s = os.wait4(process.pid, os.WNOHANG)
 	waited = 0
 	waitstep = 0.1
