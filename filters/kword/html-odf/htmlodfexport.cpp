@@ -102,7 +102,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
             return KoFilter::FileNotFound;
         }
 
-       out.write("<html><h1> The Filter is under construction</h1></html>");
+
        out.close();
        css.close();
 

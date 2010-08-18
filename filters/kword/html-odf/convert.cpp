@@ -42,25 +42,26 @@ void Conversion::convert(QFile *cont1)
     QByteArray sty;
     QByteArray met;
 
+    /*The following line of code contains a parameter "path_of_the_file", which needs to be fixed.
+    Here, the url of the file that is opened or the path of the temp file should be substituted.*/
 
-    KoStore* storecont=KoStore::createStore("path_to_the_file",KoStore::Read);
-    storecont->extractFile("content.xml",cont);
-    cont.remove(0,38);
-    contall.append(cont);
+    KoStore* storecont=KoStore::createStore("path_of_the_file",KoStore::Read);
+    storecont->extractFile("meta.xml",met);
+    met.remove(0,38);
+    contall.append(met);
 
     storecont->extractFile("styles.xml",sty);
     sty.remove(0,38);
     contall.append(sty);
 
-    storecont->extractFile("meta.xml",met);
-    met.remove(0,38);
-    contall.append(met);
+    storecont->extractFile("content.xml",cont);
+    cont.remove(0,38);
+    contall.append(cont);
+
     contall.append("</office:document>");
 
-/* Will be activated after converter.xsl is complete
-
-    QFile temp(KStandardDirs::locate("data","kword/html-odf/converter.xsl"));
-    temp.open(QIODevice::ReadOnly);
+    QFile temp1(KStandardDirs::locate("data","kword/html-odf/converter.xsl"));
+    temp1.open(QIODevice::ReadOnly);
 
 
     QXmlQuery myQuery(QXmlQuery::XSLT20);
@@ -68,13 +69,9 @@ void Conversion::convert(QFile *cont1)
     myQuery.setQuery(temp1.readAll());
     myQuery.evaluateTo(cont1);
 
-*/
 
- /* Will be activated after converter.xsl is complete
 
-    temp.close();
-
-*/
+    temp1.close();
     contall.clear();
     met.clear();
     sty.clear();

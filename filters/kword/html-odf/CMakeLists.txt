@@ -19,13 +19,13 @@ target_link_libraries(
     kwordexportfilters
     koodf
     komain
-    ${QT_QTXMLPATTERNS_LIBRARY}
+    QtXmlPatterns
     ${ZLIB_LIBRARIES}
 )
 
 install(TARGETS htmlodf_export DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES 
+install( FILES
   html-odf_export.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )
