@@ -105,7 +105,7 @@ static QString encodeSheetName(const QString& name)
 
 static QString encodeAddress(const QString& sheetName, uint column, uint row)
 {
-    return QString("%1.%2%3").arg(sheetName).arg(columnName(column)).arg(row+1);
+    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
 }
 
 struct CellFormatKey {
