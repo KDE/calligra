@@ -8,7 +8,7 @@
 #
 # Copyright 2010 Jos van den Oever <jos@vandenoever.info>
 
-import sys, os, tempfile, time, signal
+import sys, os, tempfile, time, signal, subprocess
 
 applications = {
   'kword': ['odt', 'doc', 'docx'],
@@ -49,23 +49,33 @@ def profile(file):
 		if os.path.exists(exepath):
 			break
 	r = object()
-	pid = os.spawnlpe(os.P_NOWAIT, exepath, exe,
-		"--benchmark-loading", "--profile-filename", tmpfilename, file, env)
-	s = os.wait4(pid, os.WNOHANG)
+	process = subprocess.Popen(
+		[exepath, "--benchmark-loading", "--profile-filename",
+			tmpfilename, file],
+		env=env, close_fds=True,
+		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	s = os.wait4(process.pid, os.WNOHANG)
 	waited = 0
 	waitstep = 0.1
 	maxwaittime = 60
 	while  s[0] == 0 and s[1] == 0 and waited < maxwaittime:
+		# make process output buffers empty
+		if process.stdout:
+			process.stdout.read()
+		if process.stderr:
+			process.stderr.read()
+		# wait a bit
 		time.sleep(waitstep)
 		waited += waitstep
-		s = os.wait4(pid, os.WNOHANG)
+		s = os.wait4(process.pid, os.WNOHANG)
 	if waited >= maxwaittime:
+		# if the process did not end nicely, kill it
 		try:
-			os.kill(pid, signal.SIGKILL)
+			os.kill(process.pid, signal.SIGKILL)
 		except:
 			pass
 		try:
-			s = os.wait4(pid, 0)
+			s = os.wait4(process.pid, 0)
 		except:
 			pass
 	r.utime = s[2].ru_utime
