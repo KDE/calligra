@@ -34,7 +34,35 @@ class object:
 	def __init__(self):
 		pass
 
-def profile(file):
+# functions for logging, in this case to TeamCity
+class logger:
+	def __init__(self):
+		self.suitename = None
+	def startTestSuite(self, name):
+		self.suitename = name
+		print "##teamcity[testSuiteStarted name='" + self.suitename \
+			+ "']"
+	def endTestSuite(self):
+		if not self.suitename: return
+		print "##teamcity[testSuiteFinished name='" + self.suitename \
+			+ "']"
+	def startTest(self, name):
+		if not self.suitename: return
+		self.testname = name
+		print "##teamcity[testStarted name='" + self.testname + "']"
+	# fail the current test
+	def failTest(self):
+		if not self.suitename: return
+		print "##teamcity[testFailed name='" + self.testname + "']"
+	# end test, pass duration as integer representing the milliseconds
+	def endTest(self, duration):
+		if not self.suitename: return
+		print "##teamcity[testFinished name='" + self.testname \
+			+ "' duration='" + str(duration) + "']"
+
+def profile(dir, file, logger):
+	logger.startTest(file)
+	file = os.path.join(dir, file)
 	(path, ext) = os.path.splitext(file)
 	ext = ext[1:]
 	env = os.environ
@@ -53,6 +81,7 @@ def profile(file):
 		[exepath, "--benchmark-loading", "--profile-filename",
 			tmpfilename, file],
 		env=env, close_fds=True,
+#		stdout=None, stderr=None)
 		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	s = os.wait4(process.pid, os.WNOHANG)
 	waited = 0
@@ -85,6 +114,9 @@ def profile(file):
 	r.lines = outfile.readlines()
 	outfile.close()
 	os.remove(tmpfilename)
+	if r.returnValue != 0:
+		logger.failTest()
+	logger.endTest(int((r.utime + r.stime)*1000))
 	return r
 
 def getGlobalMinMax(times):
@@ -163,15 +195,23 @@ def summarize(lines):
 if __name__ == '__main__':
 	dir = sys.argv[1]
 	output = sys.argv[2]
+	loggername = None
+	if len(sys.argv) > 3:
+		loggername = sys.argv[3]
 	exts = []
 	for v in applications.values():
 		for e in v:
 			exts.append(e);
 	officefiles = scanDirectory(dir, exts);
 	results = {}
+	logger = logger()
+	if loggername:
+		logger.startTestSuite(loggername)
 	for f in officefiles:
-		result = profile(f)
+		relf = os.path.relpath(f, dir)
+		result = profile(dir, relf, logger)
 		results[f] = result
+	logger.endTestSuite()
 
 	fields = {}
 	for r in results.keys():
