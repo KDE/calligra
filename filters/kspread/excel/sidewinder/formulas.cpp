@@ -1149,7 +1149,7 @@ QString FormulaToken::refn(unsigned row, unsigned col) const
 
     if (!colRelative)
         result.append(QString("$"));
-    result.append(Cell::columnLabel(colRef));
+    result.append(Cell::columnLabel(qMax(0, colRef)));
     if (!rowRelative)
         result.append(QString("$"));
     result.append(QString::number(rowRef + 1));
