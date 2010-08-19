@@ -103,6 +103,8 @@ public:
      */
     virtual void insert(const QRectF& rect, const T& data);
 
+    void load(const QList<QPair<QRegion, T> >& data);
+
     void remove(const QRectF& rect, const T& data);
 
     /**
@@ -221,6 +223,29 @@ protected:
 private:
     // disable copy constructor
     RTree(const RTree& other);
+
+    struct LoadData {
+        QRect rect;
+        const T* data;
+        qreal value;
+        LoadData(const QRect& r, const T* d, qreal v)
+            : rect(r), data(d), value(v)
+        {}
+    };
+    struct LoadDataIndexCompare {
+        const QList<LoadData>& m_data;
+        LoadDataIndexCompare(const QList<LoadData>& data) : m_data(data) {}
+        bool operator()(int a, int b) {
+            return m_data[a].value < m_data[b].value;
+        }
+    };
+    struct NodeLoadDataIndexCompare {
+        const QList<QPair<Node*, qreal> >& m_data;
+        NodeLoadDataIndexCompare(const QList<QPair<Node*, qreal> >& data) : m_data(data) {}
+        bool operator()(int a, int b) {
+            return m_data[a].second < m_data[b].second;
+        }
+    };
 };
 
 /**
@@ -348,6 +373,72 @@ void RTree<T>::insert(const QRectF& rect, const T& data)
     Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
     Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
     KoRTree<T>::insert(rect.normalized().adjusted(0, 0, -0.1, -0.1), data);
+}
+
+static inline qreal calcLoadingRectValue(const QRectF& r)
+{
+    QPointF center = r.center();
+    // TODO: better value would be hilbert value of center of rect
+    return center.x();
+}
+
+template<typename T>
+void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
+{
+    // clear current tree
+    KoRTree<T>::clear();
+
+    // make rect->data mapping
+    typedef QPair<QRegion, T> DataRegion;
+    
+    QList<LoadData> rectData;
+    QVector<int> indices;
+    foreach (const DataRegion& dataRegion, data) {
+        foreach (const QRect& rect, dataRegion.first.rects()) {
+            qreal h = calcLoadingRectValue(rect);
+            rectData.append(LoadData(rect, &dataRegion.second, h));
+            indices.append(indices.size());
+        }
+    }
+
+    qSort(indices.begin(), indices.end(), LoadDataIndexCompare(rectData));
+
+    QList<QPair<Node*, qreal> > nodes;
+    // create LeafNodes
+    for (int i = 0; i < indices.size(); i += KoRTree<T>::m_capacity) {
+        LeafNode* n = createLeafNode(KoRTree<T>::m_capacity + 1, 0, 0);
+        for (int j = 0; j < KoRTree<T>::m_capacity && i+j < indices.size(); j++) {
+            const LoadData& d = rectData[indices[i+j]];
+            n->insert(QRectF(d.rect).normalized().adjusted(0, 0, -0.1, -0.1), *d.data, LeafNode::dataIdCounter + indices[i+j]);
+        }
+        n->updateBoundingBox();
+        nodes.append(qMakePair<Node*, qreal>(n, calcLoadingRectValue(n->boundingBox())));
+    }
+    LeafNode::dataIdCounter += indices.size();
+
+    while (nodes.size() > 1) {
+        indices.resize(nodes.size());
+        for (int i = 0; i < indices.size(); i++) indices[i] = i;
+
+        qSort(indices.begin(), indices.end(), NodeLoadDataIndexCompare(nodes));
+
+        QList<QPair<Node*, qreal> > newNodes;
+
+        for (int i = 0; i < indices.size(); i += KoRTree<T>::m_capacity) {
+            NonLeafNode* n = createNonLeafNode(KoRTree<T>::m_capacity + 1, 0, 0);
+            for (int j = 0; j < KoRTree<T>::m_capacity && i+j < indices.size(); j++) {
+                Node* oldNode = nodes[indices[i+j]].first;
+                n->insert(oldNode->boundingBox(), oldNode);
+            }
+            n->updateBoundingBox();
+            newNodes.append(qMakePair<Node*, qreal>(n, calcLoadingRectValue(n->boundingBox())));
+        }
+        nodes = newNodes;
+    }
+
+    // set root node
+    delete KoRTree<T>::m_root;
+    KoRTree<T>::m_root = nodes.first().first;
 }
 
 template<typename T>
