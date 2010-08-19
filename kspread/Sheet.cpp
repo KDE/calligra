@@ -1637,13 +1637,13 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
 
     // First load all style information for rows, columns and cells
     while (!rowNode.isNull() && rowIndex <= KS_rowMax) {
-        kDebug(36003) << " rowIndex :" << rowIndex << " indexCol :" << indexCol;
+        //kDebug(36003) << " rowIndex :" << rowIndex << " indexCol :" << indexCol;
         KoXmlElement rowElement = rowNode.toElement();
         if (!rowElement.isNull()) {
             // slightly faster
             KoXml::load(rowElement);
 
-            kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
+            //kDebug(36003) << " Sheet::loadOdf rowElement.tagName() :" << rowElement.localName();
             if (rowElement.namespaceURI() == KoXmlNS::table) {
                 if (rowElement.localName() == "table-header-columns") {
                     // NOTE Handle header cols as ordinary ones
@@ -1652,9 +1652,9 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                 } else if (rowElement.localName() == "table-column-group") {
                     loadColumnNodes(rowElement, indexCol, maxColumn, odfContext, columnStyleRegions, columnStyles);
                 } else if (rowElement.localName() == "table-column" && indexCol <= KS_colMax) {
-                    kDebug(36003) << " table-column found : index column before" << indexCol;
+                    //kDebug(36003) << " table-column found : index column before" << indexCol;
                     loadColumnFormat(rowElement, odfContext.stylesReader(), indexCol, columnStyleRegions, columnStyles);
-                    kDebug(36003) << " table-column found : index column after" << indexCol;
+                    //kDebug(36003) << " table-column found : index column after" << indexCol;
                     maxColumn = qMax(maxColumn, indexCol - 1);
                 } else if (rowElement.localName() == "table-header-rows") {
                     // NOTE Handle header rows as ordinary ones
@@ -1663,12 +1663,12 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                 } else if (rowElement.localName() == "table-row-group") {
                     loadRowNodes(rowElement, rowIndex, maxColumn, tableContext, rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
                 } else if (rowElement.localName() == "table-row") {
-                    kDebug(36003) << " table-row found :index row before" << rowIndex;
+                    //kDebug(36003) << " table-row found :index row before" << rowIndex;
                     int columnMaximal = loadRowFormat(rowElement, rowIndex, tableContext,
                                   rowStyleRegions, cellStyleRegions, columnStyles, autoStyles);
                     // allow the row to define more columns then defined via table-column
                     maxColumn = qMax(maxColumn, columnMaximal);
-                    kDebug(36003) << " table-row found :index row after" << rowIndex;
+                    //kDebug(36003) << " table-row found :index row after" << rowIndex;
                 } else if (rowElement.localName() == "shapes") {
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
@@ -1854,7 +1854,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
             // limit the number of repeated rows.
             // FIXME POSSIBLE DATA LOSS!
             number = qMin(n, KS_colMax - indexCol + 1);
-        kDebug(36003) << "Repeated:" << number;
+        //kDebug(36003) << "Repeated:" << number;
     }
 
     if (column.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
@@ -1889,7 +1889,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     double width = -1.0;
     if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
         width = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width") , -1.0);
-        kDebug(36003) << " style:column-width : width :" << width;
+        //kDebug(36003) << " style:column-width : width :" << width;
         isNonDefaultColumn = true;
     }
 
@@ -1898,8 +1898,9 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
         QString str = styleStack.property(KoXmlNS::fo, "break-before");
         if (str == "page") {
             insertPageBreak = true;
-        } else
-            kDebug(36003) << " str :" << str;
+        } else {
+            // kDebug(36003) << " str :" << str;
+        }
         isNonDefaultColumn = true;
     } else if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
         // TODO
@@ -1960,14 +1961,14 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
                 cellStorage()->setConditions(Region(rect), conditionalStyles[styleNames[i]]);
         }
         if (autoStyles.contains(styleNames[i])) {
-            kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << styleRegion.rectCount() << "rects";
+            //kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << styleRegion.rectCount() << "rects";
             Style style;
             style.setDefault(); // "overwrite" existing style
             style.merge(autoStyles[styleNames[i]]);
             outStyleRegions.append(qMakePair(styleRegion, style));
         } else {
             const CustomStyle* namedStyle = map()->styleManager()->style(styleNames[i]);
-            kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << styleRegion.rectCount() << "rects";
+            //kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << styleRegion.rectCount() << "rects";
             Style style;
             style.setDefault(); // "overwrite" existing style
             style.merge(*namedStyle);
