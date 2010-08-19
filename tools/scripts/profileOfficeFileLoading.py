@@ -30,6 +30,13 @@ def scanDirectory(rootdir, extensions):
 				list.append(os.path.join(root, file))
 	return frozenset(list)
 
+def getExtensions(list):
+	extensions = []
+	for file in list:
+		(path, ext) = os.path.splitext(file)
+		extensions.append(ext)
+	return frozenset(extensions)
+
 class object:
 	def __init__(self):
 		pass
@@ -46,19 +53,21 @@ class logger:
 		if not self.suitename: return
 		print "##teamcity[testSuiteFinished name='" + self.suitename \
 			+ "']"
+		self.suitename = None
 	def startTest(self, name):
 		if not self.suitename: return
 		self.testname = name
 		print "##teamcity[testStarted name='" + self.testname + "']"
 	# fail the current test
 	def failTest(self):
-		if not self.suitename: return
+		if not self.suitename or not self.testname: return
 		print "##teamcity[testFailed name='" + self.testname + "']"
 	# end test, pass duration as integer representing the milliseconds
 	def endTest(self, duration):
-		if not self.suitename: return
+		if not self.suitename or not self.testname: return
 		print "##teamcity[testFinished name='" + self.testname \
 			+ "' duration='" + str(duration) + "']"
+		self.testname = None
 
 def profile(dir, file, logger):
 	logger.startTest(file)
@@ -192,26 +201,34 @@ def summarize(lines):
 			r.max[fieldname] = time
 	return r
 
+def profileAll(dir, loggername):
+	exts = []
+	for v in applications.values():
+		for e in v:
+			exts.append(e);
+	officefiles = scanDirectory(dir, exts);
+	usedExts = getExtensions(officefiles)
+	results = {}
+	log = logger()
+	for ext in usedExts:
+		if loggername:
+			log.startTestSuite(loggername + '-' + ext[1:])
+		for f in officefiles:
+			(path, pathext) = os.path.splitext(f)
+			if pathext == ext:
+				relf = os.path.relpath(f, dir)
+				result = profile(dir, relf, log)
+				results[f] = result
+		log.endTestSuite()
+	return results
+
 if __name__ == '__main__':
 	dir = sys.argv[1]
 	output = sys.argv[2]
 	loggername = None
 	if len(sys.argv) > 3:
 		loggername = sys.argv[3]
-	exts = []
-	for v in applications.values():
-		for e in v:
-			exts.append(e);
-	officefiles = scanDirectory(dir, exts);
-	results = {}
-	logger = logger()
-	if loggername:
-		logger.startTestSuite(loggername)
-	for f in officefiles:
-		relf = os.path.relpath(f, dir)
-		result = profile(dir, relf, logger)
-		results[f] = result
-	logger.endTestSuite()
+	results = profileAll(dir, loggername)
 
 	fields = {}
 	for r in results.keys():
