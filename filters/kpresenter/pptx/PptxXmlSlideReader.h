@@ -248,7 +248,11 @@ public:
     PptxSlideProperties* slideProperties;
     PptxSlideLayoutProperties* slideLayoutProperties;
     PptxSlideMasterPageProperties* slideMasterPageProperties;
+
+    // There could potentially be multiple of these...todo
     QString pageDrawStyleName; //!< written in read_sldInternal()
+    QVector<QString> pageFrames; //! Frames which go to masterslide
+
     QMap<int, QString> commentAuthors;
     MSOOXML::TableStyleList *tableStyleList;
 };

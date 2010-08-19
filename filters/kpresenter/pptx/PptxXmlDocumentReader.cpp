@@ -65,8 +65,12 @@ public:
     uint slideNumber; //!< temp., see todo in PptxXmlDocumentReader::read_sldId()
     bool sldSzRead;
     KoPageLayout pageLayout;
+
+    // These should be most likely separated to another structure in case there are multiple slideMasters
     QString masterPageDrawStyleName;
     KoGenStyle masterPageStyle;
+    QVector<QString> masterPageFrames;
+
     PptxSlideMasterPageProperties slideMasterPageProperties;
     QMap<int,QString> commentAuthors;
     MSOOXML::TableStyleList* tableStyleList;
@@ -101,6 +105,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     d->masterPageDrawStyleName.clear();
     d->masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
     d->slideMasterPageProperties.clear();
+    d->masterPageFrames.clear();
 
     const KoFilter::ConversionStatus result = readInternal();
 
@@ -334,6 +339,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
     masterSlidePropertiesSetter.release();
     d->masterPageDrawStyleName = context.pageDrawStyleName;
+    d->masterPageFrames = context.pageFrames;
     kDebug() << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleName;
     SKIP_EVERYTHING
     READ_EPILOGUE
@@ -487,17 +493,21 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         mainStyles->markStyleForStylesXml(pageLayoutStyleName);
         kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
 
-        //! @todo insert draw:frame child elements read from master slide
-        //<style:master-page style:name="Default" style:page-layout-name="PMpredef1" draw:style-name="dppredef1">
-        // <draw:frame presentation:style-name=...
         d->masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
     }
     if (!d->masterPageDrawStyleName.isEmpty()) {
         d->masterPageStyle.addAttribute("draw:style-name", d->masterPageDrawStyleName);
     }
+
+    unsigned frameCount = d->masterPageFrames.size();
+    unsigned frameIndex = 0;
+    while (frameIndex < frameCount) {
+        d->masterPageStyle.addChildElement(QString("frame%1").arg(frameIndex), d->masterPageFrames.at(frameIndex));
+        ++frameIndex;
+    }
+
     const QString masterPageStyleName(
         mainStyles->insert(d->masterPageStyle, "Default", KoGenStyles::DontAddNumberToName));
-    //mainStyles->markStyleForStylesXml(masterPageStyleName);
     kDebug() << "masterPageStyleName:" << masterPageStyleName;
     READ_EPILOGUE
 }

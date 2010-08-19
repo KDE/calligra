@@ -221,7 +221,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (!m_isPlaceHolder) {
         body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
-        body->addAttribute("draw:layer", "layout");
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            body->addAttribute("draw:layer", "layout");
+        }
+        else {
+            body->addAttribute("draw:layer", "background");
+        }
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
 //todo        body->addAttribute("presentation:style-name", styleName);
@@ -277,6 +282,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
 
         const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+#ifdef PPTXXMLSLIDEREADER_H
+        if (m_context->type == SlideMaster) {
+            mainStyles->markStyleForStylesXml(styleName);
+        }
+#endif
         body->addAttribute("draw:style-name", styleName);
 
         // Now it's time to link to the actual picture.  Only do it if
@@ -606,17 +616,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
     // to write after the child elements are generated
-//    QBuffer drawFrameBuf;
-//    KoXmlWriter *origBody = body;
-#ifdef PPTXXMLSLIDEREADER_H
-    bool outputDrawFrame = m_context->type == Slide || m_context->type == SlideLayout;
-#else
     bool outputDrawFrame = true;
-#endif
-    if (outputDrawFrame) {
-        body = drawFrameBuf.setWriter(body);
-//        body = new KoXmlWriter(&drawFrameBuf, origBody->indentLevel()+1);
-    }
+    body = drawFrameBuf.setWriter(body);
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
@@ -627,7 +628,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
 #ifdef PPTXXMLSLIDEREADER_H
-            else if (m_context->type == Slide || m_context->type == SlideLayout) {
+            else {
                 TRY_READ_IF(txBody)
             }
 #endif
@@ -638,7 +639,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 #ifdef PPTXXMLSLIDEREADER_H
     const QString styleId(d->phStyleId());
-    if (m_context->type != Slide && !styleId.isEmpty() && outputDrawFrame) {
+    if (m_context->type == SlideLayout && !styleId.isEmpty() && outputDrawFrame) {
         outputDrawFrame = false;
         body = drawFrameBuf.originalWriter();
         drawFrameBuf.clear();
@@ -652,9 +653,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 //        KoXmlWriter *writer = m_context->type == SlideLayout ? mainStyles : body;
 #else
 #endif
-//        KoXmlWriter *writer = body;
-//        delete body;
-//        body = origBody;
         body = drawFrameBuf.originalWriter();
         body->startElement("draw:frame"); // CASE #P475
         if (!m_cNvPrName.isEmpty()) {
@@ -664,7 +662,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_H
-        body->addAttribute("draw:layer", "layout");
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            body->addAttribute("draw:layer", "layout");
+        }
+        else {
+            body->addAttribute("draw:layer", "background");
+        }
         if( !d->textBoxHasContent ) {
             body->addAttribute("presentation:placeholder", "true");
         }
@@ -720,6 +723,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
             }
         }
+        if (m_context->type == SlideMaster) {
+            if (m_svgWidth > -1 && m_svgHeight > -1) {
+                body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
+    //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
+                body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+                body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+                body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+            }
+        }
 
 #else
 #ifdef __GNUC__
@@ -728,7 +741,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #endif // PPTXXMLSLIDEREADER_H
 
         (void)drawFrameBuf.releaseWriter();
-//        body->addCompleteElement(&drawFrameBuf);
         body->endElement(); //draw:frame
     }
 #ifdef PPTXXMLSLIDEREADER_H
@@ -1427,6 +1439,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
     if (QUALIFIED_NAME_IS(t)) {
         const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideMaster) {
+        mainStyles->markStyleForStylesXml(currentTextStyleName);
+    }
+#endif
         if (m_hyperLink) {
             body->startElement("text:a");
             body->addAttribute("xlink:type", "simple");

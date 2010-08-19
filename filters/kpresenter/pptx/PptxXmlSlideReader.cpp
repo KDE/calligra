@@ -340,10 +340,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
 {
     kDebug() << "=============================";
+    QBuffer slideMasterBuffer;
     if (m_context->type == SlideMaster) {
         //! Clear body pointer for SlideMaster mode: avoid writting to body by mistake in this mode
         d->body = body;
-      //  body = 0;
+        // We do not want to write to the main body in slidemaster, so we use secondary body,
+        // the old body is
+        body = new KoXmlWriter(&slideMasterBuffer);
     }
 
     readNext();
@@ -390,6 +393,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::readInternal()
         TRY_READ(sldMaster)
         break;
     }
+
+     if (m_context->type == SlideMaster) {
+        QString elementContents = QString::fromUtf8( slideMasterBuffer.buffer(), slideMasterBuffer.buffer().size() );
+        m_context->pageFrames.push_back(elementContents);
+
+        // write the contents here to pageFrames
+        delete body;
+        body = d->body;
+    }
+
     kDebug() << "===========finished============";
     return KoFilter::OK;
 }
@@ -503,7 +516,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
         m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
         m_currentDrawStyle->addProperty("presentation:background-visible", true);   // CASE #P111
-        m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);   // CASE #P112
+        m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);   // CASE #P112
         m_context->slideMasterPageProperties->saveDrawingPageProperties(m_currentDrawStyle);
     }
     else if (m_context->type == SlideMaster) {
@@ -518,11 +531,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
     MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
     // style before style name is known
-//        KoXmlWriter *origBody = body;
     if (m_context->type == Slide) {
         body = drawPageBuf.setWriter(body);
-//            body = new KoXmlWriter(&drawPageBuf, origBody->indentLevel()+1);
     }
+
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -541,8 +553,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
     if (m_context->type == Slide) {
         body = drawPageBuf.originalWriter();
-//            delete body;
-//            body = origBody;
 
         body->startElement("draw:page"); // CASE #P300
         //! @todo draw:master-page-name is hardcoded for now
