@@ -1327,7 +1327,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     if (element.hasAttributeNS(KoXmlNS::table, "formula")) {
         isFormula = true;
         QString oasisFormula(element.attributeNS(KoXmlNS::table, "formula", QString()));
-        kDebug(36003) << "cell:" << name() << "formula :" << oasisFormula;
+        // kDebug(36003) << "cell:" << name() << "formula :" << oasisFormula;
         // each spreadsheet application likes to safe formulas with a different namespace
         // prefix, so remove all of them
         QStringList prefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
@@ -1361,7 +1361,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     if (element.hasAttributeNS(KoXmlNS::office, "value-type")) {
         const QString valuetype = element.attributeNS(KoXmlNS::office, "value-type", QString());
-        kDebug(36003) << "cell:" << name() << "value-type:" << valuetype;
+        // kDebug(36003) << "cell:" << name() << "value-type:" << valuetype;
         if (valuetype == "boolean") {
             const QString val = element.attributeNS(KoXmlNS::office, "boolean-value", QString()).toLower();
             if ((val == "true") || (val == "false"))
@@ -1469,7 +1469,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 s.setFormatType(Format::ShortDate);
                 setStyle(s);
 #endif
-                kDebug(36003) << "cell:" << name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
+                // kDebug(36003) << "cell:" << name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
             }
         } else if (valuetype == "time") {
             QString value = element.attributeNS(KoXmlNS::office, "time-value", QString());
@@ -1507,7 +1507,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 style.setFormatType(Format::Time);
                 setStyle(style);
 #endif
-                kDebug(36003) << "cell:" << name() << "Type: time:" << value << "Hours:" << hours << "," << minutes << "," << seconds;
+                // kDebug(36003) << "cell:" << name() << "Type: time:" << value << "Hours:" << hours << "," << minutes << "," << seconds;
             }
         } else if (valuetype == "string") {
             if (element.hasAttributeNS(KoXmlNS::office, "string-value")) {
@@ -1524,12 +1524,12 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
             setStyle(style);
 #endif
         } else {
-            kDebug(36003) << "cell:" << name() << "  Unknown type. Parsing user input.";
+            // kDebug(36003) << "cell:" << name() << "  Unknown type. Parsing user input.";
             // Set the value by parsing the user input.
             parseUserInput(userInput());
         }
     } else { // no value-type attribute
-        kDebug(36003) << "cell:" << name() << "  No value type specified. Parsing user input.";
+        // kDebug(36003) << "cell:" << name() << "  No value type specified. Parsing user input.";
         // Set the value by parsing the user input.
         parseUserInput(userInput());
     }
