@@ -1309,7 +1309,7 @@ static QFont::Capitalization capToOdf(const QString& cap)
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
-{    
+{
     READ_PROLOGUE2(DrawingML_rPr)
 
     // Indicate that if any color is read, it's for text color.
@@ -1333,9 +1333,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         }
     }
 #endif
-    if (! m_currentTextStyleProperties) {
-        m_currentTextStyleProperties = new KoCharacterStyle();
-    }
 
     if (!m_currentTextStylePredefined) {
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
@@ -1429,7 +1426,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     }
     // elements
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-    
+
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
@@ -1440,9 +1437,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     if (QUALIFIED_NAME_IS(t)) {
         const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideMaster) {
-        mainStyles->markStyleForStylesXml(currentTextStyleName);
-    }
+        if (m_context->type == SlideMaster) {
+            mainStyles->markStyleForStylesXml(currentTextStyleName);
+        }
 #endif
         if (m_hyperLink) {
             body->startElement("text:a");
@@ -3127,7 +3124,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     // To prevent the default bullet, as MS2007 does have it
     m_currentListStyleProperties->setBulletCharacter(QChar());
- 
+
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(indent)
 
@@ -3182,18 +3179,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         }
     }
 
-/*
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    KoXmlWriter tempWriter(&buffer);
-    m_currentTextStyle.writeStyleProperties(&tempWriter, KoGenStyle::TextType);
-    QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-    listWriter.addCompleteElement(content.toUtf8());
-    listWriter.endElement(); // text:list-level-style-number
-    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-    m_currentListStyle.addChildElement(QString("level %1").arg(level), elementContents);
-*/
-
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
     QBuffer listBuf;
@@ -3204,6 +3189,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (d->currentSlideMasterTextStyle) {
+
         PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(m_currentListLevel);
         if (slideMasterListLevelTextStyle) {
             // Remember the styles to be able to apply them later on the style. Note that the PptxSlideMasterListLevelTextStyle takes over the ownership of the styles.

@@ -133,8 +133,8 @@ void PptxPlaceholder::writeAttributes(KoXmlWriter* writer)
 // -------------------
 
 PptxSlideMasterListLevelTextStyle::PptxSlideMasterListLevelTextStyle()
- : m_characterStyle(0)
 {
+    m_characterStyle = new KoCharacterStyle();
 }
 
 PptxSlideMasterListLevelTextStyle::~PptxSlideMasterListLevelTextStyle()
@@ -145,7 +145,6 @@ PptxSlideMasterListLevelTextStyle::~PptxSlideMasterListLevelTextStyle()
 // -------------------
 
 PptxSlideMasterTextStyle::PptxSlideMasterTextStyle()
- : m_listStyles(9)
 {
 }
 
@@ -164,12 +163,17 @@ void PptxSlideMasterTextStyle::clear()
 
 PptxSlideMasterListLevelTextStyle* PptxSlideMasterTextStyle::listStyle(uint level)
 {
-    if (level < 1 || level > (uint)m_listStyles.size())
+    if (level < 1 || level > 9) {
         return 0;
-    PptxSlideMasterListLevelTextStyle* result = m_listStyles.at(level - 1);
-    if (!result) {
-        m_listStyles[level - 1] = result = new PptxSlideMasterListLevelTextStyle;
     }
+    if (m_listStyles.size() == 0) {
+        for (int i = 0; i < 9; i++) {
+            PptxSlideMasterListLevelTextStyle* created = new PptxSlideMasterListLevelTextStyle();
+            m_listStyles.push_back(created);
+        }
+    }
+    PptxSlideMasterListLevelTextStyle* result = m_listStyles.at(level - 1);
+
     return result;
 }
 
