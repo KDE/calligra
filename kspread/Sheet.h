@@ -876,7 +876,8 @@ protected:
     void loadOdfInsertStyles(const Styles& autoStyles,
                              const QHash<QString, QRegion>& styleRegions,
                              const QHash<QString, Conditions>& conditionalStyles,
-                             const QRect& usedArea);
+                             const QRect& usedArea,
+                             QList<QPair<QRegion, Style> >& outStyleRegions);
 
     /**
      * \ingroup OpenDocument

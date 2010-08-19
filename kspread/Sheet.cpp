@@ -1697,18 +1697,21 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
         if (updater && count >= 0) updater->setProgress(count);
     }
 
+    QList<QPair<QRegion, Style> > styleRegions;
     // insert the styles into the storage (column defaults)
     kDebug(36003) << "Inserting column default cell styles ...";
     loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
+                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions);
     // insert the styles into the storage (row defaults)
     kDebug(36003) << "Inserting row default cell styles ...";
     loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
+                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions);
     // insert the styles into the storage
     kDebug(36003) << "Inserting cell styles ...";
     loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1));
+                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions);
+
+    cellStorage()->styleStorage()->load(styleRegions);
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
@@ -1941,7 +1944,8 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
                                 const QHash<QString, QRegion>& styleRegions,
                                 const QHash<QString, Conditions>& conditionalStyles,
-                                const QRect& usedArea)
+                                const QRect& usedArea,
+                                QList<QPair<QRegion, Style> >& outStyleRegions)
 {
     const QList<QString> styleNames = styleRegions.keys();
     for (int i = 0; i < styleNames.count(); ++i) {
@@ -1952,22 +1956,22 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
         const bool hasConditions = conditionalStyles.contains(styleNames[i]);
         const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion(usedArea);
         foreach(const QRect& rect, styleRegion.rects()) {
-            if (autoStyles.contains(styleNames[i])) {
-                kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << rect;
-                Style style;
-                style.setDefault(); // "overwrite" existing style
-                style.merge(autoStyles[styleNames[i]]);
-                cellStorage()->setStyle(Region(rect), style);
-            } else {
-                const CustomStyle* namedStyle = map()->styleManager()->style(styleNames[i]);
-                kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << rect;
-                Style style;
-                style.setDefault(); // "overwrite" existing style
-                style.merge(*namedStyle);
-                cellStorage()->setStyle(Region(rect), style);
-            }
             if (hasConditions)
                 cellStorage()->setConditions(Region(rect), conditionalStyles[styleNames[i]]);
+        }
+        if (autoStyles.contains(styleNames[i])) {
+            kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << styleRegion;
+            Style style;
+            style.setDefault(); // "overwrite" existing style
+            style.merge(autoStyles[styleNames[i]]);
+            outStyleRegions.append(qMakePair(styleRegion, style));
+        } else {
+            const CustomStyle* namedStyle = map()->styleManager()->style(styleNames[i]);
+            kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << styleRegion;
+            Style style;
+            style.setDefault(); // "overwrite" existing style
+            style.merge(*namedStyle);
+            outStyleRegions.append(qMakePair(styleRegion, style));
         }
     }
 }
