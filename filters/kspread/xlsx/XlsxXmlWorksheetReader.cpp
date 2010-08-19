@@ -283,7 +283,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read(MSOOXML::MsooXmlReaderCo
 
 KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 {
-    kDebug() << "=============================";
+    //kDebug() << "=============================";
     Q_ASSERT(m_context);
 
     readNext();
@@ -305,9 +305,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
     d->sheet->setVisible( m_context->state.toLower() != "hidden" );
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
-    for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
-    }
+    //for (int i = 0; i < namespaces.count(); i++) {
+        //kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+    //}
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration("", MSOOXML::Schemas::spreadsheetml))) {
@@ -317,7 +317,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::readInternal()
 //! @todo expect other namespaces too...
 
     TRY_READ(worksheet)
-    kDebug() << "===========finished============";
+    //kDebug() << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -338,11 +338,11 @@ inline static QString encodeLabelText(int col, int row)
 void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
 {
     QString ref(encodeLabelText(col + 1, row + 1));
-    kDebug() << ref;
+    //kDebug() << ref;
     XlsxComment *comment = m_context->comments->value(ref);
     if (!comment)
         return;
-    kDebug() << "Saving annotation for cell" << ref;
+    //kDebug() << "Saving annotation for cell" << ref;
     body->startElement("office:annotation");
     body->startElement("dc:creator");
     body->addTextNode(comment->author(m_context->comments));
@@ -427,7 +427,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
@@ -614,7 +614,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetFormatPr()
     TRY_READ_ATTR_WITHOUT_NS_INTO(defaultRowHeight, m_defaultRowHeight) // in pt
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
@@ -635,7 +635,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_WRONG_FORMAT
@@ -670,7 +670,7 @@ static QString printCm(double cm)
 
 void XlsxXmlWorksheetReader::appendTableColumns(int columns, const QString& width)
 {
-    kDebug() << "columns:" << columns;
+    //kDebug() << "columns:" << columns;
     if (columns <= 0)
         return;
     body->startElement("table:table-column");
@@ -733,17 +733,17 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_col()
         //! For explanation of width, see p. 1778
 //simplified:
 //! @todo hardcoded, not 100% accurate
-        kDebug() << "PT_TO_PX(11.0):" << PT_TO_PX(11.0);
+        //kDebug() << "PT_TO_PX(11.0):" << PT_TO_PX(11.0);
         const double realSize = round(PT_TO_PX(11.0)) * 0.75;
-        kDebug() << "realSize:" << realSize;
+        //kDebug() << "realSize:" << realSize;
         const double averageDigitWidth = realSize * 2.0 / 3.0;
-        kDebug() << "averageDigitWidth:" << averageDigitWidth;
+        //kDebug() << "averageDigitWidth:" << averageDigitWidth;
         if (averageDigitWidth * widthNumber == 0)
             realWidthString = QLatin1String("0cm");
         else
             realWidthString = printCm(PX_TO_CM(averageDigitWidth * widthNumber));
 
-        kDebug() << "realWidthString:" << realWidthString;
+        //kDebug() << "realWidthString:" << realWidthString;
 //moved        saveColumnStyle(realWidthString);
 //! @todo hardcoded table:default-cell-style-name
 //moved        body->addAttribute("table:default-cell-style-name", "Excel_20_Built-in_20_Normal");
@@ -786,7 +786,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     m_currentRow = 0;
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(row)
             ELSE_WRONG_FORMAT
@@ -872,7 +872,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(c) // modifies m_currentColumn
             ELSE_WRONG_FORMAT
@@ -994,7 +994,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_TRY_READ_IF(v)
@@ -1005,7 +1005,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
 
     bool ok;
     uint styleId = s.toUInt(&ok);
-    kDebug() << "styleId:" << styleId;
+    //kDebug() << "styleId:" << styleId;
     const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
     const QString numberFormat = cellFormat->applyNumberFormat ? m_context->styles->numberFormatString( cellFormat->numFmtId ) : QString();
 
@@ -1120,7 +1120,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     if (!s.isEmpty()) {
         bool ok;
         const uint styleId = s.toUInt(&ok);
-        kDebug() << "styleId:" << styleId;
+        //kDebug() << "styleId:" << styleId;
         const XlsxCellFormat* cellFormat = m_context->styles->cellFormat(styleId);
         if (!ok || !cellFormat) {
             raiseUnexpectedAttributeValueError(s, "c@s");
@@ -1271,7 +1271,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     //kDebug() << m_value;
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE

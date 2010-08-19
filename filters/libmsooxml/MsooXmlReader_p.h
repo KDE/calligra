@@ -76,12 +76,12 @@
 # define PUSH_NAME
 //! put at beginning of each read_*() method on call stack, only in debug mode
 # define PUSH_NAME_INTERNAL \
-    kDebug() << CALL_STACK_TOP_NAME << "==>" << QUALIFIED_NAME(CURRENT_EL); \
+    /*kDebug() << CALL_STACK_TOP_NAME << "==>" << QUALIFIED_NAME(CURRENT_EL); */\
     m_callsNamesDebug.push(STRINGIFY(CURRENT_EL));
 //! put at the end of each read_*() method on call stack, only in debug mode
 # define POP_NAME_INTERNAL \
     m_callsNamesDebug.pop(); \
-    kDebug() << CALL_STACK_TOP_NAME << "<==" << QUALIFIED_NAME(CURRENT_EL);
+    /*kDebug() << CALL_STACK_TOP_NAME << "<==" << QUALIFIED_NAME(CURRENT_EL); */
 #endif
 
 #define READ_PROLOGUE2(method) \
@@ -96,18 +96,18 @@
 #define READ_EPILOGUE_WITHOUT_RETURN \
     POP_NAME_INTERNAL \
     if (!expectElEnd(QUALIFIED_NAME(CURRENT_EL))) { \
-        kDebug() << "READ_EPILOGUE:" << QUALIFIED_NAME(CURRENT_EL) << "not found!"; \
+        /*kDebug() << "READ_EPILOGUE:" << QUALIFIED_NAME(CURRENT_EL) << "not found!"; */\
         return KoFilter::WrongFormat; \
     } \
-    kDebug() << "/READ_EPILOGUE_WITHOUT_RETURN";
+    /*kDebug() << "/READ_EPILOGUE_WITHOUT_RETURN";*/
 
 #define READ_EPILOGUE \
-    kDebug() << "READ_EPILOGUE"; \
+    /*kDebug() << "READ_EPILOGUE";*/ \
     READ_EPILOGUE_WITHOUT_RETURN \
     return KoFilter::OK;
 
 #define BREAK_IF_END_OF_QSTRING(name) \
-    kDebug() << "BREAK_IF_END_OF" << name << "found:" << qualifiedName(); \
+    /*kDebug() << "BREAK_IF_END_OF" << name << "found:" << qualifiedName();*/ \
     if (isEndElement() && qualifiedName() == name) { \
         break; \
     }
@@ -127,9 +127,9 @@
                        QLatin1String(STRINGIFY(name)), tokenString())); \
             return KoFilter::WrongFormat; \
         } \
-        kDebug() << "TRY_READ_IF " STRINGIFY(name) " started"; \
+        /*kDebug() << "TRY_READ_IF " STRINGIFY(name) " started";*/ \
         TRY_READ_WITH_ARGS_INTERNAL(name, , context) \
-        kDebug() << "TRY_READ_IF " STRINGIFY(name) " finished"; \
+        /*kDebug() << "TRY_READ_IF " STRINGIFY(name) " finished";*/ \
     }
 
 #define TRY_READ_IF_IN_CONTEXT_INTERNAL(name, context) \
@@ -157,9 +157,9 @@
 
 #define TRY_READ_IF_NS_INTERNAL(ns, name) \
     if (qualifiedName() == QLatin1String(JOIN(STRINGIFY(ns) ":", name))) { \
-        kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " started"; \
+        /*kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " started";*/ \
         TRY_READ(name); \
-        kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " finished"; \
+        /*kDebug() << "TRY_READ_IF_NS " JOIN(STRINGIFY(ns) ":", name) " finished";*/ \
     }
 
 //! Like TRY_READ_IF() but namespace for explicit namespace @a ns.
@@ -201,7 +201,7 @@
 */
 #define TRY_READ_ATTR_INTO(atrname, destination) \
     destination = attrs.value(QUALIFIED_NAME(atrname)).toString(); \
-    kDebug() << "TRY_READ_ATTR_INTO: " STRINGIFY(destination) << "=" << destination;
+    /*kDebug() << "TRY_READ_ATTR_INTO: " STRINGIFY(destination) << "=" << destination;*/
 
 //! Reads optional attribute of name @a atrname with explicitly specified namespace @a ns.
 /*! Creates QString variable with name \<ns\>_\<atrame\>
@@ -223,7 +223,7 @@
 */
 #define TRY_READ_ATTR_WITH_NS_INTO(ns, atrname, destination) \
     destination = attrs.value(JOIN(STRINGIFY(ns) ":", atrname)).toString(); \
-    kDebug() << "TRY_READ_ATTR_WITH_NS_INTO: " STRINGIFY(destination) << "=" << destination;
+    /*kDebug() << "TRY_READ_ATTR_WITH_NS_INTO: " STRINGIFY(destination) << "=" << destination;*/
 
 inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrname)
 {
@@ -359,9 +359,9 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
 
 //! Skips everything until end of CURRENT_EL is pulled
 #define SKIP_EVERYTHING \
-    kDebug() << "Skipping everything in element" << qualifiedName() << "..."; \
+    /*kDebug() << "Skipping everything in element" << qualifiedName() << "...";*/ \
     const QString qn(qualifiedName().toString()); \
-    kDebug() << *this; \
+    /*kDebug() << *this; */\
     while (true) { \
         if (atEnd()) \
             break; \

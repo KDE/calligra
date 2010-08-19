@@ -47,7 +47,7 @@ DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-    kDebug() << systemColor;
+    //kDebug() << systemColor;
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
@@ -211,21 +211,21 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read(MsooXmlReaderContext* conte
 
 KoFilter::ConversionStatus MsooXmlThemesReader::readInternal()
 {
-    kDebug() << "=============================";
+    //kDebug() << "=============================";
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
 
     readNext();
-    kDebug() << *this;
+    //kDebug() << *this;
     if (isStartElement()) {
         TRY_READ_IF(theme)
         ELSE_WRONG_FORMAT
     } else {
         return KoFilter::WrongFormat;
     }
-    kDebug() << "===========finished============";
+    //kDebug() << "===========finished============";
     return KoFilter::OK;
 }
 
@@ -245,7 +245,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::readInternal()
 KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
 {
     READ_PROLOGUE
-    kDebug() << namespaceUri();
+    //kDebug() << namespaceUri();
 
     if (!expectNS(Schemas::drawingml::main)) {
         return KoFilter::WrongFormat;
@@ -253,12 +253,12 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
 
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS_INTO(name, m_context->theme->name)
-    kDebug() << "name:" << m_context->theme->name;
+    //kDebug() << "name:" << m_context->theme->name;
 
     QXmlStreamNamespaceDeclarations namespaces(namespaceDeclarations());
-    for (int i = 0; i < namespaces.count(); i++) {
-        kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
-    }
+    //for (int i = 0; i < namespaces.count(); i++) {
+        //kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
+    //}
 //! @todo find out whether the namespace returned by namespaceUri()
 //!       is exactly the same ref as the element of namespaceDeclarations()
     if (!namespaces.contains(QXmlStreamNamespaceDeclaration(MSOOXML_CURRENT_NS, Schemas::drawingml::main))) {
@@ -269,7 +269,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(themeElements)
             ELSE_TRY_READ_IF(custClrLst)
@@ -302,7 +302,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_themeElements()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(clrScheme)
             ELSE_TRY_READ_IF(extLst)
@@ -429,7 +429,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
@@ -440,7 +440,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
                     return KoFilter::InternalError;
                 }
                 const QString colorName( this->name().toString() );
-                kDebug() << "inserting color for" << colorName;
+                //kDebug() << "inserting color for" << colorName;
                 m_context->theme->colorScheme.insert(colorName, m_currentColor);
                 const QString colorIndex(m_colorSchemeIndices.value(colorName));
                 if (!colorIndex.isEmpty()) {
@@ -491,7 +491,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
 
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
+        //kDebug() << *this;
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
@@ -573,7 +573,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
 
     READ_ATTR_WITHOUT_NS(val)
     color.get()->color = Utils::ST_HexColorRGB_to_QColor(val);
-    kDebug() << color.get()->color;
+    //kDebug() << color.get()->color;
 
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN
@@ -643,12 +643,12 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
 
     READ_ATTR_WITHOUT_NS(lastClr)
     color.get()->lastColor = Utils::ST_HexColorRGB_to_QColor(lastClr);
-    kDebug() << "lastClr:" << color.get()->lastColor;
+    //kDebug() << "lastClr:" << color.get()->lastColor;
 
     // System color value. This color is based upon the value that this color currently has
     // within the system on which the document is being viewed.
     READ_ATTR_WITHOUT_NS_INTO(val, color.get()->systemColor)
-    kDebug() << "val:" << color.get()->systemColor;
+    //kDebug() << "val:" << color.get()->systemColor;
 
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN

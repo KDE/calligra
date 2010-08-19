@@ -156,7 +156,7 @@ QXmlStreamReader::TokenType MsooXmlReader::readNext()
     } else {
         m_recentType = QXmlStreamReader::readNext();
     }
-    kDebug() << tokenName(m_recentType) << *this;
+    //kDebug() << tokenName(m_recentType) << *this;
     return m_recentType;
 }
 
@@ -192,7 +192,7 @@ void MsooXmlReader::raiseUnexpectedSecondOccurenceOfElError(const char* elementN
 
 bool MsooXmlReader::expectElName(const char* elementName)
 {
-    kDebug() << elementName << "found:" << name();
+    //kDebug() << elementName << "found:" << name();
     if (!isStartElement() || name() != QLatin1String(elementName)) {
         raiseElNotFoundError(elementName);
         return false;
@@ -202,7 +202,7 @@ bool MsooXmlReader::expectElName(const char* elementName)
 
 bool MsooXmlReader::expectElNameEnd(const char* elementName)
 {
-    kDebug() << elementName << "found:" << name();
+    //kDebug() << elementName << "found:" << name();
     if (!isEndElement() || name() != QLatin1String(elementName)) {
         raiseError(i18n("Expected closing of element \"%1\"", elementName));
         return false;
@@ -212,7 +212,7 @@ bool MsooXmlReader::expectElNameEnd(const char* elementName)
 
 bool MsooXmlReader::expectEl(const char* qualifiedElementName)
 {
-    kDebug() << qualifiedElementName << "found:" << qualifiedName();
+    //kDebug() << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != QLatin1String(qualifiedElementName)) {
         raiseElNotFoundError(qualifiedElementName);
         return false;
@@ -222,7 +222,7 @@ bool MsooXmlReader::expectEl(const char* qualifiedElementName)
 
 bool MsooXmlReader::expectEl(const QString& qualifiedElementName)
 {
-    kDebug() << qualifiedElementName << "found:" << qualifiedName();
+    //kDebug() << qualifiedElementName << "found:" << qualifiedName();
     if (!isStartElement() || qualifiedName() != qualifiedElementName) {
         raiseElNotFoundError(qualifiedElementName.toLatin1());
         return false;
@@ -235,7 +235,7 @@ bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
     if (isStartElement()) {
         foreach (const QByteArray& qualifiedElementName, qualifiedElementNames) {
             if (qualifiedName().toString() == qualifiedElementName) {
-                kDebug() << qualifiedElementNames << "found:" << qualifiedName();
+                //kDebug() << qualifiedElementNames << "found:" << qualifiedName();
                 return true;
             }
         }
@@ -252,7 +252,7 @@ bool MsooXmlReader::expectEl(const QList<QByteArray>& qualifiedElementNames)
 
 bool MsooXmlReader::expectElEnd(const QString& qualifiedElementName)
 {
-    kDebug() << qualifiedElementName << "found:" << qualifiedName();
+    //kDebug() << qualifiedElementName << "found:" << qualifiedName();
 //    kDebug() << kBacktrace();
     if (!isEndElement() || qualifiedName() != qualifiedElementName) {
         raiseError(i18n("Expected closing of element \"%1\"", qualifiedElementName));
