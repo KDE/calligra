@@ -1960,14 +1960,14 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
                 cellStorage()->setConditions(Region(rect), conditionalStyles[styleNames[i]]);
         }
         if (autoStyles.contains(styleNames[i])) {
-            kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << styleRegion;
+            kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << styleRegion.rectCount() << "rects";
             Style style;
             style.setDefault(); // "overwrite" existing style
             style.merge(autoStyles[styleNames[i]]);
             outStyleRegions.append(qMakePair(styleRegion, style));
         } else {
             const CustomStyle* namedStyle = map()->styleManager()->style(styleNames[i]);
-            kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << styleRegion;
+            kDebug(36003) << "\tcustom:" << namedStyle->name() << " at" << styleRegion.rectCount() << "rects";
             Style style;
             style.setDefault(); // "overwrite" existing style
             style.merge(*namedStyle);

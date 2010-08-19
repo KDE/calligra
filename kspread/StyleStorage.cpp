@@ -278,7 +278,6 @@ void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
     d->usedRows.clear();
     d->cachedArea = QRegion();
     d->cache.clear();
-    int cnt = 0;
     typedef QPair<QRegion, Style> StyleRegion;
     foreach (const StyleRegion& styleArea, styles) {
         const QRegion& reg = styleArea.first;
@@ -318,10 +317,8 @@ void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
                 // insert substyle and add to the used substyle list
                 subStyles.append(qMakePair(reg, subStyle));
             }
-            cnt += reg.rectCount();
         }
     }
-    qDebug() << "COUNT: " << cnt;
     d->tree.load(subStyles);
 }
 
