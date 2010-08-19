@@ -306,11 +306,11 @@ QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *conver
 Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
                                          const ValueParser *parser)
 {
-    kDebug(36003) << "\tcondition:" << conditionValue;
+    //kDebug(36003) << "\tcondition:" << conditionValue;
     Conditional newCondition;
     loadOdfConditionValue(conditionValue, newCondition, parser);
     if (!applyStyleName.isNull()) {
-        kDebug(36003) << "\tstyle:" << applyStyleName;
+        //kDebug(36003) << "\tstyle:" << applyStyleName;
         newCondition.styleName = applyStyleName;
     }
     d->conditionList.append(newCondition);
@@ -387,7 +387,7 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
         newCondition.cond = Conditional::Equal;
     } else
         kDebug(36003) << " I don't know how to parse it :" << valExpression;
-    kDebug(36003) << "\tvalue:" << value;
+    //kDebug(36003) << "\tvalue:" << value;
 
     newCondition.value1 = parser->parse(value);
 }
