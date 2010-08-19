@@ -436,9 +436,11 @@ void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
         nodes = newNodes;
     }
 
-    // set root node
-    delete KoRTree<T>::m_root;
-    KoRTree<T>::m_root = nodes.first().first;
+    if (!nodes.isEmpty()) {
+        // set root node
+        delete KoRTree<T>::m_root;
+        KoRTree<T>::m_root = nodes.first().first;
+    }
 }
 
 template<typename T>
