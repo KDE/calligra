@@ -135,6 +135,11 @@ public:
     void insert(const Region& region, const Style& style);
 
     /**
+     * Replaces the current styles with those in \p styles
+     */
+    void load(const QList<QPair<QRegion, Style> >& styles);
+
+    /**
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */

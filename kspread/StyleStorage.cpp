@@ -269,6 +269,62 @@ void StyleStorage::insert(const Region& region, const Style& style)
     }
 }
 
+void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
+{
+    QList<QPair<QRegion, SharedSubStyle> > subStyles;
+
+    d->usedArea = QRegion();
+    d->usedColumns.clear();
+    d->usedRows.clear();
+    d->cachedArea = QRegion();
+    d->cache.clear();
+    int cnt = 0;
+    typedef QPair<QRegion, Style> StyleRegion;
+    foreach (const StyleRegion& styleArea, styles) {
+        const QRegion& reg = styleArea.first;
+        const Style& style = styleArea.second;
+        if (style.isEmpty()) continue;
+
+        // update used areas
+        foreach (const QRect& rect, reg.rects()) {
+            if (rect.top() == 1 && rect.bottom() == KS_colMax) {
+                for (int i = rect.left(); i <= rect.right(); ++i) {
+                    d->usedColumns.insert(i, true);
+                }
+            } else if (rect.left() == 1 && rect.right() == KS_rowMax) {
+                for (int i = rect.top(); i <= rect.bottom(); ++i) {
+                    d->usedRows.insert(i, true);
+                }
+            } else {
+                d->usedArea += rect;
+            }
+        }
+
+        // find substyles
+        foreach(const SharedSubStyle& subStyle, style.subStyles()) {
+            bool foundShared = false;
+            typedef const QList< SharedSubStyle> StoredSubStyleList;
+            StoredSubStyleList& storedSubStyles(d->subStyles.value(subStyle->type()));
+            StoredSubStyleList::ConstIterator end(storedSubStyles.end());
+            for (StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it) {
+                if (Style::compare(subStyle.data(), (*it).data())) {
+        //             kDebug(36006) <<"[REUSING EXISTING SUBSTYLE]";
+                    subStyles.append(qMakePair(reg, *it));
+                    foundShared = true;
+                    break;
+                }
+            }
+            if (!foundShared) {
+                // insert substyle and add to the used substyle list
+                subStyles.append(qMakePair(reg, subStyle));
+            }
+            cnt += reg.rectCount();
+        }
+    }
+    qDebug() << "COUNT: " << cnt;
+    d->tree.load(subStyles);
+}
+
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertRows(int position, int number)
 {
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
