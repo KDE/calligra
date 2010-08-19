@@ -247,8 +247,9 @@ void RectStorage<T>::insert(const Region& region, const T& _data)
 {
     T data;
     // lookup already used data
-    if (m_storedData.contains(_data))
-        data = m_storedData[ m_storedData.indexOf(_data)];
+    int index = m_storedData.indexOf(_data);
+    if (index != -1)
+        data = m_storedData[index];
     else {
         data = _data;
         m_storedData.append(_data);
