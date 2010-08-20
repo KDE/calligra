@@ -80,6 +80,9 @@ KoFilter::ConversionStatus read_DrawingML_txBody();
 KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
+KoFilter::ConversionStatus read_gradFill();
+KoFilter::ConversionStatus read_gsLst();
+KoFilter::ConversionStatus read_gs();
 enum noFillCaller {
         noFill_rPr
 };
@@ -145,6 +148,7 @@ QSize imageSize(const QString& sourceName);
 
 QList<KoGenStyle*>  m_drawStyleStack;
 KoGenStyle         *m_currentDrawStyle; //! used by all classes that need a graphics style.
+KoGenStyle m_currentGradientStyle;
 void pushCurrentDrawStyle(KoGenStyle *newStyle);
 void popCurrentDrawStyle();
 
@@ -181,7 +185,8 @@ QMap<QString, QSize> m_imageSizes; //!< collects image sizes to avoid multiple c
 enum ColorType {
     BackgroundColor,
     OutlineColor,
-    TextColor
+    TextColor,
+    GradientColor
 };
 ColorType m_colorType;
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.

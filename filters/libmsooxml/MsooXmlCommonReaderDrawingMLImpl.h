@@ -839,7 +839,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     - effectDag (Effect Container) §20.1.8.25
     - effectLst (Effect Container) §20.1.8.26
     - extLst (Extension List) §20.1.2.2.15
-    - gradFill (Gradient Fill) §20.1.8.33
+    - [done] gradFill (Gradient Fill) §20.1.8.33
     - grpFill (Group Fill) §20.1.8.35
     - ln (Outline) §20.1.2.2.24
     - [done] noFill (No Fill) §20.1.8.44
@@ -858,6 +858,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     READ_PROLOGUE
     bool xfrm_read = false;
     bool solidFill_read = false;
+    bool gradFill_read = false;
     m_noFill = false;
     while (!atEnd()) {
         readNext();
@@ -878,6 +879,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 SKIP_EVERYTHING // safely skip
                 m_noFill = true;
             }
+            else if (qualifiedName() == QLatin1String("a:gradFill")) {
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                TRY_READ(gradFill)
+                gradFill_read = true;
+            }
 //! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -890,6 +896,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
         m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
         m_currentColor = QColor();
+    }
+    if (gradFill_read) {
+        m_currentDrawStyle->addProperty("draw:fill", "gradient");
+        const QString gradName = mainStyles->insert(m_currentGradientStyle);
+        m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -2518,6 +2529,127 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL gradFill
+//! Gradient Fill
+/*
+ Parent Elements:
+ - bg (§21.4.3.1);
+ - bgFillStyleLst (§20.1.4.1.7);
+ - bgPr (§19.3.1.2); defRPr (§21.1.2.3.2);
+ - endParaRPr (§21.1.2.2.3);
+ - fill (§20.1.8.28);
+ - fill (§20.1.4.2.9);
+ - fillOverlay (§20.1.8.29);
+ - fillStyleLst (§20.1.4.1.13);
+ - grpSpPr (§21.3.2.14);
+ - grpSpPr (§20.1.2.2.22);
+ - grpSpPr (§20.5.2.18);
+ - grpSpPr (§19.3.1.23);
+ - ln (§20.1.2.2.24);
+ - lnB (§21.1.3.5);
+ - lnBlToTr (§21.1.3.6);
+ - lnL (§21.1.3.7);
+ - lnR (§21.1.3.8);
+ - lnT (§21.1.3.9);
+ - lnTlToBr (§21.1.3.10);
+ - rPr (§21.1.2.3.9);
+ - [done] spPr (§21.2.2.197);
+ - [done] spPr (§21.3.2.23);
+ - [done] spPr (§21.4.3.7);
+ - [done] spPr (§20.1.2.2.35);
+ - [done] spPr (§20.2.2.6);
+ - [done] spPr (§20.5.2.30);
+ - [done] spPr (§19.3.1.44);
+ - tblPr (§21.1.3.15);
+ - tcPr (§21.1.3.17);
+ - uFill (§21.1.2.3.12);
+ - uLn (§21.1.2.3.14)
+
+ Child Elements:
+ - [done] gsLst (Gradient Stop List) §20.1.8.37
+ - lin (Linear Gradient Fill) §20.1.8.41
+ - path (Path Gradient) §20.1.8.46
+ - tileRect (Tile Rectangle) §20.1.8.59
+
+*/
+//! @todo support this properly
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
+{
+    READ_PROLOGUE
+
+    m_colorType = GradientColor;
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(gsLst)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL gsLst
+//! gradient stop list
+/*
+ Parent Elements:
+ - [done] gradFill (§20.1.8.33)
+
+ Child Elements:
+ - [done] gs (Gradient stops) §20.1.8.36
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
+{
+    READ_PROLOGUE
+
+    // FIXME: This is currently hardcoded to be axial
+    m_currentGradientStyle.addAttribute("draw:style", "axial");
+    m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
+    m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
+    m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(gs)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL gs
+//! gradient stops
+/*
+ Parent Elements:
+ - [done] gsLst (§20.1.8.37)
+
+ Child Elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - sysClr (System Color) §20.1.2.3.33
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
 //noFill 20.1.8.44
 /*This element specifies No fill.
 Parents:
@@ -2728,6 +2860,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
                 if (m_currentTextStyleProperties) {
                     m_currentTextStyleProperties->setForeground(col);
                 }
+            }
+            case GradientColor:
+            {
+                // Fixme, this is currently hardcoded to fit axial gradient
+                const QString red = QString::number(col.red(), 16);
+                const QString green = QString::number(col.green(), 16);
+                const QString blue = QString::number(col.blue(), 16);
+                const QString color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+                m_currentGradientStyle.addAttribute("draw:start-color", color);
             }
             break;
         }
