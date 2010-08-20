@@ -29,7 +29,6 @@
 
 #include <QList>
 #include <QPointF>
-#include <QPointer>
 
 class KWPage;
 class KoShape;
