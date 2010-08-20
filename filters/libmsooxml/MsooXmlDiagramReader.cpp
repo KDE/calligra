@@ -33,7 +33,7 @@
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
 //#include <QXmlQuery>
-#include <QAbstractUriResolver>
+//#include <QAbstractUriResolver>
 #include <typeinfo>
 
 namespace MSOOXML { namespace Diagram {

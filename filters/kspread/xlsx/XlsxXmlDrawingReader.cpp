@@ -33,6 +33,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
+#include <MsooXmlDiagramReader.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -263,7 +264,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
 #undef CURRENT_EL
 #define CURRENT_EL graphic
 //! graphic handler (Graphic Object)
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic2()
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphic2()
 {
     READ_PROLOGUE
     while (!atEnd()) {
@@ -281,14 +282,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic2()
 #undef CURRENT_EL
 #define CURRENT_EL graphicData
 //! graphicData handler (Graphic Object Data)
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData2()
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
 {
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF_NS(pic, pic)
-            else if (qualifiedName() == "c:chart") {
+            //TRY_READ_IF_NS(pic, pic)
+            if (qualifiedName() == "c:chart") {
                 read_chart2();
             }
             else if (qualifiedName() == QLatin1String("dgm:relIds")) {
@@ -300,10 +301,56 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData2()
     READ_EPILOGUE
 }
 
-// in PPTX we do not have pPr, so p@text:style-name should be added earlier
-//#define SETUP_PARA_STYLE_IN_READ_P
-#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
-#define DRAWINGML_NS "a"
-#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
-#include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
-//#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl
+#undef CURRENT_EL
+#define CURRENT_EL diagram
+//! 5.9 DrawingML - Diagrams
+/*!
+A DrawingML diagram allows the definition of diagrams using DrawingML objects and constructs. This
+namespace defines the contents of a DrawingML diagram.
+*/
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
+{
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITH_NS(r, cs) // colors
+    TRY_READ_ATTR_WITH_NS(r, dm) // data
+    TRY_READ_ATTR_WITH_NS(r, lo) // layout
+    TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
+
+    const QString path = "xl/diagrams/";
+    //const QString colorsfile     = r_cs.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_cs, m_context->path, m_context->file);
+    const QString datafile       = r_dm.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_dm, m_context->path, m_context->file);
+    const QString layoutfile     = r_lo.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_lo, m_context->path, m_context->file);
+    //const QString quickstylefile = r_qs.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_qs, m_context->path, m_context->file);
+
+    //kDebug()<<"colorsfile="<<colorsfile<<"datafile="<<datafile<<"layoutfile="<<layoutfile<<"quickstylefile="<<quickstylefile;
+
+    KoStore* storeout = m_context->import->outputStore();
+    MSOOXML::MsooXmlDiagramReaderContext context(storeout);
+
+    // first read the data-model
+    MSOOXML::MsooXmlDiagramReader dataReader(this);
+    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, &context);
+    if (dataReaderResult != KoFilter::OK) {
+       raiseError(dataReader.errorString());
+       return dataReaderResult;
+    }
+    
+    // then read the layout definition
+    MSOOXML::MsooXmlDiagramReader layoutReader(this);
+    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, &context);
+    if (layoutReaderResult != KoFilter::OK) {
+       raiseError(layoutReader.errorString());
+       return layoutReaderResult;
+    }
+
+    return KoFilter::OK;
+}
+
+// // in PPTX we do not have pPr, so p@text:style-name should be added earlier
+// //#define SETUP_PARA_STYLE_IN_READ_P
+// #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+// #define DRAWINGML_NS "a"
+// #define DRAWINGML_PIC_NS "p" // DrawingML/Picture
+// #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
+// //#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl

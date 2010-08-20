@@ -87,15 +87,16 @@ protected:
     KoFilter::ConversionStatus read_graphic2();
     KoFilter::ConversionStatus read_graphicData2();
     KoFilter::ConversionStatus read_chart2();
+    KoFilter::ConversionStatus read_diagram();
 private:
     XlsxXmlDrawingReaderContext *m_context;
     XlsxXmlDrawingReaderContext::AnchorType m_anchorType;
 
     int m_chartNumber;
     
-#include <MsooXmlCommonReaderMethods.h>
-#include <MsooXmlCommonReaderDrawingMLMethods.h>
-//#include <MsooXmlDrawingReaderTableMethods.h>
+// #include <MsooXmlCommonReaderMethods.h>
+// #include <MsooXmlCommonReaderDrawingMLMethods.h>
+// #include <MsooXmlDrawingReaderTableMethods.h>
 
     Q_DISABLE_COPY(XlsxXmlDrawingReader)
 };

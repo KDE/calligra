@@ -31,7 +31,6 @@ protected:
 void initDrawingML();
 
 // All the readers
-KoFilter::ConversionStatus read_diagram();
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
 KoFilter::ConversionStatus read_chart();
 #endif
