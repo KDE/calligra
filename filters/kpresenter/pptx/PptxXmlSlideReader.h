@@ -155,7 +155,9 @@ public:
     PptxSlideMasterTextStyle titleStyle;
     PptxSlideMasterTextStyle bodyStyle;
     PptxSlideMasterTextStyle otherStyle;
-    
+
+    QMap<QString, QString> colorMap;
+
 private:
     QMap<QByteArray, QByteArray> m_drawingPageProperties;
 };
@@ -202,6 +204,8 @@ protected:
     KoFilter::ConversionStatus read_xfrm_p();
     KoFilter::ConversionStatus read_cNvPr_p();
     KoFilter::ConversionStatus read_oleObj();
+
+    KoFilter::ConversionStatus read_clrMap();
 
 //    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;

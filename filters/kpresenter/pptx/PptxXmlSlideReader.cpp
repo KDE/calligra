@@ -441,7 +441,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sld()
  This element specifies an instance of a slide master slide.
 
  Child elements:
-    - clrMap (Color Scheme Map) §19.3.1.6
+    - [done] clrMap (Color Scheme Map) §19.3.1.6
     - [done] cSld (Common Slide Data) §19.3.1.16
     - extLst (Extension List with Modification Flag) §19.3.1.20
     - hf (Header/Footer information for a slide master) §19.3.1.25
@@ -512,8 +512,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << slideReader.errorString();
         return status;
     }
-        
-        
 
 #endif
 
@@ -546,6 +544,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
                 TRY_READ(txStyles)
             }
+            ELSE_TRY_READ_IF(clrMap)
 //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement()) {
@@ -908,6 +907,39 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL clrMap
+// clrMap handler (Color Scheme Map)
+/*! This element specifies the mapping layer that transforms one color
+ scheme definition to another. Each attribute
+ represents a color name that can be referenced in this master, and the
+ value is the corresponding color in the 	theme.
+
+ Parent elements:
+ - handoutMaster (§19.3.1.24)
+ - notesMaster (§19.3.1.27)
+ - [done]  sldMaster (§19.3.1.42)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+
+*/
+KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMap()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    int index = 0;
+    while (index < attrs.size()) {
+        const QString handledAttr = attrs.at(index).name().toString();
+        const QString attrValue = attrs.value(handledAttr).toString();
+        m_context->slideMasterPageProperties->colorMap[handledAttr] = attrValue;
+        ++index;
+    }
+
+    SKIP_EVERYTHING
     READ_EPILOGUE
 }
 

@@ -2665,10 +2665,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         return KoFilter::WrongFormat;
 //! @todo find proper theme, not just any
 #ifdef PPTXXMLSLIDEREADER_H
+
+   // Currently hardcoded to use clormappings from slidemaster
+   const QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
+
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     if (m_context->type == Slide) {
         MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
-        colorItem = theme->colorScheme.value(val);
+        colorItem = theme->colorScheme.value(valTransformed);
     }
 #endif
 
@@ -2685,9 +2689,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         readNext();
 
         // @todo: Hmm, are these color modifications only available for pptx?
-#ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == Slide) {
-#endif
             if (QUALIFIED_NAME_IS(lumMod)) {
                 m_currentDoubleValue = &lumMod.value;
                 TRY_READ(lumMod);
@@ -2697,17 +2698,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
                 TRY_READ(lumOff);
                 lumOff.valid = true;
             }
-#ifdef PPTXXMLSLIDEREADER_H
-        }
-#endif
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == Slide) {
-        // Seems that if the item is not present we should default to
-        // black, unless we are dealing with a background.
         QColor col;
-        if (val.startsWith("bg"))
+        if (valTransformed.startsWith("bg"))
             col = Qt::white;
         else
             col = Qt::black;
@@ -2736,7 +2731,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             }
             break;
         }
-    }
 #endif
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
         QColor col;
@@ -2800,8 +2794,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
 #define CURRENT_EL ln
 //! Outline
 //! DrawingML ECMA-376, 20.1.2.2.24, p. 3048.
-/*! This element specifies an outline style that can be applied to a 
-    number of different objects such as shapes and text. 
+/*! This element specifies an outline style that can be applied to a
+    number of different objects such as shapes and text.
 
  Child elements:
     - bevel (Line Join Bevel) §20.1.8.9
@@ -2880,7 +2874,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     if(w.isEmpty()) {
         w = "0";
     }
-    int wInt = w.toInt();
+    qreal wInt = EMU_TO_POINT(w.toInt());
+
     m_currentPen.setWidth(wInt);
 
     while (!atEnd()) {
@@ -3625,7 +3620,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
      - noFill (No Fill)                                §20.1.8.44
      - pattFill (Pattern Fill)                         §20.1.8.47
      - rtl (Right to Left Run)                         §21.1.2.2.8
-     - solidFill (Solid Fill)                          §20.1.8.54
+     - [done] solidFill (Solid Fill)                          §20.1.8.54
      - sym (Symbol Font)                               §21.1.2.3.10
      - uFill (Underline Fill)                          §21.1.2.3.12
      - uFillTx (Underline Fill Properties Follow Text) §21.1.2.3.13
@@ -3638,10 +3633,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
+    m_colorType = TextColor;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
+            TRY_READ_IF(solidFill)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
