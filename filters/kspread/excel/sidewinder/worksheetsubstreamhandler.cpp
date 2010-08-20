@@ -818,8 +818,10 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                     if (!anchor) {
                         qDebug() << "invalid client anchor";
                     } else {
-                        Cell  *cell = d->sheet->cell(anchor->colL, anchor->rwT);
-                        cell->addDrawObject(fb);
+                        Cell *cell = d->sheet->cell(anchor->colL, anchor->rwT);
+                        OfficeArtObject* obj = new OfficeArtObject(o);
+                        cell->addDrawObject(obj);
+                        d->lastOfficeArtObject = obj;
                     }
                 } else {
                     OfficeArtObject* obj = new OfficeArtObject(o);

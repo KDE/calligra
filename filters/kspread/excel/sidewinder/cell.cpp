@@ -255,22 +255,12 @@ void Cell::addChart(ChartObject* chart)
     d->sheet->addChart(d->column, d->row, chart);
 }
 
-QList<OfficeArtObject*> Cell::officeArts() const
-{
-    return d->sheet->officeArts(d->column, d->row);
-}
-
-void Cell::addOfficeArt(OfficeArtObject* officeart)
-{
-    d->sheet->addOfficeArt(d->column, d->row, officeart);
-}
-
-QList<MSO::OfficeArtSpgrContainerFileBlock> Cell::drawObjects() const
+QList<OfficeArtObject*> Cell::drawObjects() const
 {
     return d->sheet->drawObjects(d->column, d->row);
 }
 
-void Cell::addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& of)
+void Cell::addDrawObject(OfficeArtObject* of)
 {
     d->sheet->addDrawObject(d->column, d->row, of);
 }
@@ -312,14 +302,14 @@ bool Cell::operator==(const Cell &other) const
         ChartObject* c2 = other.charts()[i];
         if(*c1 != *c2) return false;
     }
-    
-    if (officeArts().size() != other.officeArts().size()) return false;
-    for(int i = officeArts().size() - 1; i >= 0; --i) {
-        OfficeArtObject* a1 = officeArts()[i];
-        OfficeArtObject* a2 = other.officeArts()[i];
-        if(*a1 != *a2) return false;
-    }
 
+    if (drawObjects().size() != other.drawObjects().size()) return false;
+    for(int i = drawObjects().size() - 1; i >= 0; --i) {
+        OfficeArtObject* o1 = drawObjects()[i];
+        OfficeArtObject* o2 = other.drawObjects()[i];
+        if(*o1 != *o2) return false;
+    }
+    
     return true;
 }
 

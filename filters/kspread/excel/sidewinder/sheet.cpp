@@ -54,8 +54,7 @@ public:
     KSpread::PointStorage<Hyperlink> hyperlinks;
     KSpread::PointStorage<QList<PictureObject*> > pictures;
     KSpread::PointStorage<QList<ChartObject*> > charts;
-    KSpread::PointStorage<QList<OfficeArtObject*> > officearts;
-    KSpread::PointStorage<QList<MSO::OfficeArtSpgrContainerFileBlock> > drawObjects;
+    KSpread::PointStorage<QList<OfficeArtObject*> > drawObjects;
 
     bool visible;
     bool protect;
@@ -132,6 +131,9 @@ void Sheet::clear()
     }
     for (int i = 0; i < d->charts.count(); i++) {
         qDeleteAll(d->charts.data(i));
+    }
+    for (int i = 0; i < d->drawObjects.count(); i++) {
+        qDeleteAll(d->drawObjects.data(i));
     }
     qDeleteAll(d->sheetDrawObjects);
     // delete all cells
@@ -538,33 +540,13 @@ void Sheet::addChart(unsigned column, unsigned row, ChartObject* chart)
     chrts.append(chart);
     setCharts(column, row, chrts);
 }
-
-QList<OfficeArtObject*> Sheet::officeArts(unsigned column, unsigned row) const
-{
-    return d->officearts.lookup(column+1, row+1);
-}
-
-void Sheet::setOfficeArts(unsigned column, unsigned row, const QList<OfficeArtObject*>& officearts)
-{
-    if (officearts.isEmpty())
-        d->officearts.take(column+1, row+1);
-    else
-        d->officearts.insert(column+1, row+1, officearts);
-}
-
-void Sheet::addOfficeArt(unsigned column, unsigned row, OfficeArtObject* officeart)
-{
-    QList<OfficeArtObject*> arts = officeArts(column, row);
-    arts.append(officeart);
-    setOfficeArts(column, row, arts);
-}
     
-QList<MSO::OfficeArtSpgrContainerFileBlock> Sheet::drawObjects(unsigned column, unsigned row) const
+QList<OfficeArtObject*> Sheet::drawObjects(unsigned column, unsigned row) const
 {
     return d->drawObjects.lookup(column+1, row+1);
 }
 
-void Sheet::setDrawObjects(unsigned column, unsigned row, const QList<MSO::OfficeArtSpgrContainerFileBlock>& drawObjects)
+void Sheet::setDrawObjects(unsigned column, unsigned row, const QList<OfficeArtObject*>& drawObjects)
 {
     if (drawObjects.isEmpty())
         d->drawObjects.take(column+1, row+1);
@@ -572,9 +554,9 @@ void Sheet::setDrawObjects(unsigned column, unsigned row, const QList<MSO::Offic
         d->drawObjects.insert(column+1, row+1, drawObjects);
 }
 
-void Sheet::addDrawObject(unsigned column, unsigned row, const MSO::OfficeArtSpgrContainerFileBlock& drawObject)
+void Sheet::addDrawObject(unsigned column, unsigned row, OfficeArtObject* drawObject)
 {
-    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = drawObjects(column, row);
+    QList<OfficeArtObject*> objects = drawObjects(column, row);
     objects.append(drawObject);
     setDrawObjects(column, row, objects);
 }

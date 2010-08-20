@@ -206,13 +206,9 @@ private:
     void setCharts(unsigned column, unsigned row, const QList<ChartObject*>& charts);
     void addChart(unsigned column, unsigned row, ChartObject* chart);
 
-    QList<OfficeArtObject*> officeArts(unsigned column, unsigned row) const;
-    void setOfficeArts(unsigned column, unsigned row, const QList<OfficeArtObject*>& officearts);
-    void addOfficeArt(unsigned column, unsigned row, OfficeArtObject* officeart);
-
-    QList<MSO::OfficeArtSpgrContainerFileBlock> drawObjects(unsigned column, unsigned row) const;
-    void setDrawObjects(unsigned column, unsigned row, const QList<MSO::OfficeArtSpgrContainerFileBlock>& drawObjects);
-    void addDrawObject(unsigned column, unsigned row, const MSO::OfficeArtSpgrContainerFileBlock& drawObject);
+    QList<OfficeArtObject*> drawObjects(unsigned column, unsigned row) const;
+    void setDrawObjects(unsigned column, unsigned row, const QList<OfficeArtObject*>& drawObjects);
+    void addDrawObject(unsigned column, unsigned row, OfficeArtObject* drawObject);
 };
 
 struct VerticalPageBreak {

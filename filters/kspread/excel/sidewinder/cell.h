@@ -130,13 +130,9 @@ public:
     QList<ChartObject*> charts() const;
     void addChart(ChartObject* chart);
 
-    // Defines a list of OfficeArt-objects anchored to this cell.
-    QList<OfficeArtObject*> officeArts() const;
-    void addOfficeArt(OfficeArtObject* officeart);
-    
     // Defines a list of ODraw objects anchored to this cell.
-    QList<MSO::OfficeArtSpgrContainerFileBlock> drawObjects() const;
-    void addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& of);
+    QList<OfficeArtObject*> drawObjects() const;
+    void addDrawObject(OfficeArtObject* of);
 
     bool operator==(const Cell &other) const;
     bool operator!=(const Cell &other) const;

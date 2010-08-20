@@ -1555,8 +1555,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
     }
 
     // handle graphics objects
-    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
-    if (!objects.empty()) {
+    if (!cell->drawObjects().isEmpty()) {
         xmlWriter->addCompleteElement(cellShapes[cell].data());
     }
 
@@ -1604,15 +1603,16 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
         subScriptStyle = styles->insert(style, "T");
     }
 
-    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = cell->drawObjects();
+    QList<OfficeArtObject*> objects = cell->drawObjects();
     if (!objects.empty()) {
         ODrawClient client = ODrawClient(cell->sheet());
         ODrawToOdf odraw( client);
         QBuffer b;
         KoXmlWriter xml(&b);
         Writer writer(xml, *styles, false);
-        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
-            odraw.processDrawing(fb, writer);
+        foreach (OfficeArtObject* o, objects) {
+            client.setShapeText(o->text());
+            odraw.processDrawingObject(o->object(), writer);
         }
         cellShapes[cell] = b.data();
         //qDebug() << cell->columnLabel() << cell->row() << b.data();
