@@ -1421,7 +1421,6 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     switch (ot) {
     case Object::Group: // gmo
         printf("ObjRecord::setData group\n");
-        m_object = new GroupObject(id);
         startPict += 6;
         break;
     case Object::Picture: { // pictFormat and pictFlags
@@ -1533,11 +1532,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     case Object::Label: printf("ObjRecord::setData Label\n"); break;
     case Object::DialogBox: printf("ObjRecord::setData DialogBox\n"); break;
     case Object::GroupBox: printf("ObjRecord::setData GroupBox\n"); break;
-
-    case Object::OfficeArt:
-        printf("ObjRecord::setData OfficeArt\n");
-        m_object = new OfficeArtObject(id);
-        break;
+    case Object::OfficeArt: printf("ObjRecord::setData OfficeArt\n"); break;
 
     default:
         std::cerr << "ObjRecord::setData: Unexpected objecttype " << ot << " in ObjRecord" << std::endl;
