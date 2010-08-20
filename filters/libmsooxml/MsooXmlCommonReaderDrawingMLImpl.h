@@ -224,7 +224,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             body->addAttribute("draw:layer", "layout");
         }
         else {
-            body->addAttribute("draw:layer", "background");
+            body->addAttribute("draw:layer", "backgroundobjects");
         }
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
@@ -665,7 +665,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             body->addAttribute("draw:layer", "layout");
         }
         else {
-            body->addAttribute("draw:layer", "background");
+            body->addAttribute("draw:layer", "backgroundobjects");
         }
         if( !d->textBoxHasContent ) {
             body->addAttribute("presentation:placeholder", "true");
