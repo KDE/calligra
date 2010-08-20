@@ -70,23 +70,24 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     if(!chart() || m_href.isEmpty())
         return false;
 
-    xmlWriter->startElement("draw:frame");
+    // This because for presesentations the frame is done in read_graphicFrame
+    if (!m_drawLayer) {
+        xmlWriter->startElement("draw:frame");
+        // used in opendocumentpresentation for layers
+        //if(m_drawLayer)
+        //    xmlWriter->addAttribute("draw:layer", "layout");
 
-    // used in opendocumentpresentation for layers
-    if(m_drawLayer)
-        xmlWriter->addAttribute("draw:layer", "layout");
+        // used in opendocumentspreadsheet to reference cells
+        if(!m_endCellAddress.isEmpty())
+            xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
 
-    // used in opendocumentspreadsheet to reference cells
-    if(!m_endCellAddress.isEmpty())
-        xmlWriter->addAttribute("table:end-cell-address", m_endCellAddress);
-
-    xmlWriter->addAttributePt("svg:x", m_x);
-    xmlWriter->addAttributePt("svg:y", m_y);
-    if(m_width > 0)
-        xmlWriter->addAttributePt("svg:width", m_width);
-    if(m_height > 0)
-        xmlWriter->addAttributePt("svg:height", m_height);
-
+        xmlWriter->addAttributePt("svg:x", m_x);
+        xmlWriter->addAttributePt("svg:y", m_y);
+        if(m_width > 0)
+            xmlWriter->addAttributePt("svg:width", m_width);
+        if(m_height > 0)
+            xmlWriter->addAttributePt("svg:height", m_height);
+    }
     //xmlWriter->addAttribute("draw:z-index", "0");
     xmlWriter->startElement("draw:object");
     //TODO don't show on e.g. presenter
@@ -97,7 +98,9 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     xmlWriter->addAttribute("xlink:show", "embed");
     xmlWriter->addAttribute("xlink:actuate", "onLoad");
     xmlWriter->endElement(); // draw:object
-    xmlWriter->endElement(); // draw:frame
+    if (!m_drawLayer) {
+        xmlWriter->endElement(); // draw:frame
+    }
     return true;
 }
 
