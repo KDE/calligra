@@ -97,6 +97,7 @@ private:
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 //#include <MsooXmlDrawingReaderTableMethods.h>
 
+    Q_DISABLE_COPY(XlsxXmlDrawingReader)
 };
 
 #endif

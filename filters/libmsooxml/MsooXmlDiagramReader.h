@@ -33,19 +33,21 @@
 namespace MSOOXML
 {
 
-class PointListNode;
-class ConnectionListNode;
-class LayoutNode;
+namespace Diagram
+{
+    class DataModel;
+    class LayoutNode;
+}
 
 class MSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     KoStore* m_storeout;
-    PointListNode *m_points;
-    ConnectionListNode *m_connections;
-    LayoutNode *m_layout;
+    Diagram::DataModel* m_data;
+    Diagram::LayoutNode* m_layout;
     explicit MsooXmlDiagramReaderContext(KoStore* storeout);
     virtual ~MsooXmlDiagramReaderContext();
+    void saveDiagram(KoOdfWriters* odfWriters);
 };
 
 class MSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader
