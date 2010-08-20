@@ -321,7 +321,6 @@ void TestDocumentLayout::placeAnchoredFrame3()
     QCOMPARE(line.position().x(), 0.);
     QVERIFY(qAbs(line.position().y() - 14.4) <  0.125);
 }
-#define ROUNDING 0.126
 
 void TestDocumentLayout::noRunAroundFrame()
 {
