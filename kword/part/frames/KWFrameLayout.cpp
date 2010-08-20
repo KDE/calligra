@@ -711,6 +711,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
     }
 
     KoShape *orig = 0;
+    //Lets find the last non-copy frame in the frameset
     foreach (KWFrame *candidate, fs->frames()) {
         if (candidate->isCopy())
             break;
