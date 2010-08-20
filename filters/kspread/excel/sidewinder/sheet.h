@@ -178,8 +178,8 @@ public:
 
     int drawObjectsGroupCount() const;
     MSO::OfficeArtSpgrContainer drawObjectsGroup(int groupId) const;
-    QList<MSO::OfficeArtSpgrContainerFileBlock> drawObjects(int groupId = -1) const;
-    void addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& drawObject, const MSO::OfficeArtSpgrContainer* group = 0);
+    QList<OfficeArtObject*> drawObjects(int groupId = -1) const;
+    void addDrawObject(OfficeArtObject* drawObject, const MSO::OfficeArtSpgrContainer* group = 0);
 
 
 #ifdef SWINDER_XLS2RAW

@@ -66,6 +66,7 @@ public:
     // The last drawing object we got.
     MSO::OfficeArtDgContainer* lastDrawingObject;
     MSO::OfficeArtSpgrContainer* lastGroupObject;
+    OfficeArtObject* lastOfficeArtObject;
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
@@ -81,6 +82,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->noteCount = 0;
     d->lastDrawingObject = 0;
     d->lastGroupObject = 0;
+    d->lastOfficeArtObject = 0;
 }
 
 WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
@@ -739,6 +741,11 @@ void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
 
     std::cout << "WorksheetSubStreamHandler::handleTxO size=" << d->textObjects.size()+1 << " text=" << record->m_text << std::endl;
     d->textObjects.push_back(record->m_text);
+
+    if (d->lastOfficeArtObject) {
+        d->lastOfficeArtObject->setText(record->m_text);
+        d->lastOfficeArtObject = 0;
+    }
 }
 
 void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
@@ -768,7 +775,9 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     const unsigned long id = record->m_object ? record->m_object->id() : -1;
 
     std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << (record->m_object ? record->m_object->type() : -1) << std::endl;
-    
+
+    d->lastOfficeArtObject = 0;
+
     bool handled = false;
     if (record->m_object && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
         handled = true;
@@ -813,7 +822,9 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                         cell->addDrawObject(fb);
                     }
                 } else {
-                    d->sheet->addDrawObject(fb, d->lastGroupObject);
+                    OfficeArtObject* obj = new OfficeArtObject(o);
+                    d->sheet->addDrawObject(obj, d->lastGroupObject);
+                    d->lastOfficeArtObject = obj;
 
                     if (d->lastGroupObject) {
                         if (!o.shapeProp.fChild) {

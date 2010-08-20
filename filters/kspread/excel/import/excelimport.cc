@@ -720,8 +720,7 @@ void ExcelImport::Private::processSheetForBody(KoOdfWriteStore* store, Sheet* sh
        //xmlWriter->addAttribute("table:protection-key", uint(sheet->password()));
     }
 
-    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = sheet->drawObjects();
-    if (!objects.empty()) {
+    if (!sheet->drawObjects().isEmpty()) {
         xmlWriter->startElement("table:shapes");
         xmlWriter->addCompleteElement(sheetShapes[sheet]);
         xmlWriter->endElement(); // table:shapes
@@ -803,7 +802,7 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
         i += processRowForStyle(sheet, i, xmlWriter);
     }
 
-    QList<MSO::OfficeArtSpgrContainerFileBlock> objects = sheet->drawObjects();
+    QList<OfficeArtObject*> objects = sheet->drawObjects();
     int drawObjectGroups = sheet->drawObjectsGroupCount();
     if (!objects.empty() || drawObjectGroups) {
         ODrawClient client = ODrawClient(sheet);
@@ -811,8 +810,9 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
         QBuffer b;
         KoXmlWriter xml(&b);
         Writer writer(xml, *styles, false);
-        foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, objects) {
-            odraw.processDrawing(fb, writer);
+        foreach (const OfficeArtObject* o, objects) {
+            client.setShapeText(o->text());
+            odraw.processDrawingObject(o->object(), writer);
         }
         for (int i = 0; i < drawObjectGroups; ++i) {
             xml.startElement("draw:g");
@@ -823,12 +823,14 @@ void ExcelImport::Private::processSheetForStyle(Sheet* sheet, KoXmlWriter* xmlWr
                 QRectF oldCoords = client.getGlobalRect(*first->clientAnchor);
                 QRectF newCoords = getRect(*first->shapeGroup);
                 Writer transw = writer.transform(oldCoords, newCoords);
-                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, sheet->drawObjects(i)) {
-                    odraw.processDrawing(fb, transw);
+                foreach (const OfficeArtObject* o, sheet->drawObjects(i)) {
+                    client.setShapeText(o->text());
+                    odraw.processDrawingObject(o->object(), transw);
                 }
             } else {
-                foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, sheet->drawObjects(i)) {
-                    odraw.processDrawing(fb, writer);
+                foreach (const OfficeArtObject* o, sheet->drawObjects(i)) {
+                    client.setShapeText(o->text());
+                    odraw.processDrawingObject(o->object(), writer);
                 }
             }
             xml.endElement(); // draw:g

@@ -112,12 +112,15 @@ QString ODrawClient::getPicturePath(int pib)
 bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    return false;
+    return !m_shapeText.isEmpty();
 }
 
 void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
+    out.xml.startElement("text:p");
+    out.xml.addTextNode(m_shapeText);
+    out.xml.endElement();
 }
 
 void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out)
@@ -154,4 +157,9 @@ QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
 QString ODrawClient::formatPos(qreal v)
 {
     return QString::number(v, 'f', 11) + "pt";
+}
+
+void ODrawClient::setShapeText(const QString &text)
+{
+    m_shapeText = text;
 }

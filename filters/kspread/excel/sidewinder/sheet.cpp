@@ -87,8 +87,9 @@ public:
 
     QList<VerticalPageBreak> verticalPageBreaks;
     QList<HorizontalPageBreak> horizontalPageBreaks;
+
     QList<MSO::OfficeArtSpgrContainer> sheetDrawObjectsGroups;
-    QMultiHash<int, MSO::OfficeArtSpgrContainerFileBlock> sheetDrawObjects;
+    QMultiHash<int, OfficeArtObject*> sheetDrawObjects;
 };
 
 }
@@ -132,6 +133,7 @@ void Sheet::clear()
     for (int i = 0; i < d->charts.count(); i++) {
         qDeleteAll(d->charts.data(i));
     }
+    qDeleteAll(d->sheetDrawObjects);
     // delete all cells
     qDeleteAll(d->cells);
     d->cells.clear();
@@ -588,7 +590,7 @@ MSO::OfficeArtSpgrContainer Sheet::drawObjectsGroup(int groupId) const
     return d->sheetDrawObjectsGroups[groupId];
 }
 
-QList<MSO::OfficeArtSpgrContainerFileBlock> Sheet::drawObjects(int groupId) const
+QList<OfficeArtObject*> Sheet::drawObjects(int groupId) const
 {
     Q_ASSERT(groupId < drawObjectsGroupCount());
     if (groupId < 0) {
@@ -603,7 +605,7 @@ static int shapeGroupId(const MSO::OfficeArtSpgrContainer& group)
     return group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>()->shapeProp.spid;
 }
 
-void Sheet::addDrawObject(const MSO::OfficeArtSpgrContainerFileBlock& drawObject, const MSO::OfficeArtSpgrContainer* group )
+void Sheet::addDrawObject(OfficeArtObject* drawObject, const MSO::OfficeArtSpgrContainer* group )
 {
     int groupId = -1;
     if (group) {

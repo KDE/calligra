@@ -105,3 +105,27 @@ bool Object::applyDrawing(const MSO::OfficeArtDgContainer &container)
 
     return ok;
 }
+
+OfficeArtObject::OfficeArtObject(const MSO::OfficeArtSpContainer &object)
+    : m_object(object)
+{
+}
+
+OfficeArtObject::~OfficeArtObject()
+{
+}
+
+MSO::OfficeArtSpContainer OfficeArtObject::object() const
+{
+    return m_object;
+}
+
+void OfficeArtObject::setText(const QString &text)
+{
+    m_text = text;
+}
+
+QString OfficeArtObject::text() const
+{
+    return m_text;
+}

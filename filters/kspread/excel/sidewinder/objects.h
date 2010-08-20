@@ -204,35 +204,21 @@ public:
 };
 
 /**
- * A group object.
- */
-class GroupObject : public Object
-{
-public:
-    explicit GroupObject(unsigned long id) : Object(Group, id) {}
-    virtual ~GroupObject() {}
-};
-
-/**
- * A oval object.
- */
-class OvalObject : public Object
-{
-public:
-    explicit OvalObject(unsigned long id) : Object(Oval, id) {}
-    virtual ~OvalObject() {}
-};
-
-/**
  * A OfficeArt object.
  */
-class OfficeArtObject : public Object
+class OfficeArtObject
 {
 public:
-    explicit OfficeArtObject(unsigned long id) : Object(OfficeArt, id) {}
-    virtual ~OfficeArtObject() {}
-    bool operator==(const OfficeArtObject &other) const { return this == &other; }
-    bool operator!=(const OfficeArtObject &other) const { return ! (*this == other); }
+    explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object);
+    ~OfficeArtObject();
+    MSO::OfficeArtSpContainer object() const;
+    void setText(const QString& text);
+    QString text() const;
+    bool operator==(const OfficeArtObject& other) const { return this == &other; }
+    bool operator!=(const OfficeArtObject& other) const { return !(*this == other); }
+private:
+    MSO::OfficeArtSpContainer m_object;
+    QString m_text;
 };
 
 } // namespace Swinder
