@@ -75,7 +75,6 @@ def profile(dir, file, logger):
 	(path, ext) = os.path.splitext(file)
 	ext = ext[1:]
 	env = os.environ
-	env['KDE_DEBUG'] = '0'
 	(fileno, tmpfilename) = tempfile.mkstemp()
 	exe = None
 	for f in applications.keys():
@@ -88,7 +87,7 @@ def profile(dir, file, logger):
 	r = object()
 	process = subprocess.Popen(
 		[exepath, "--benchmark-loading", "--profile-filename",
-			tmpfilename, file],
+			tmpfilename, "--nocrashhandler", file],
 		env=env, close_fds=True,
 		stdout=None, stderr=None)
 #		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
