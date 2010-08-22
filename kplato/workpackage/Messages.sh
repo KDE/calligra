@@ -1,4 +1,4 @@
 #! /bin/sh
-$EXTRACTRC `find . -name \*.ui` >> rc.cpp
+$EXTRACTRC `find . -name \*.ui` `find . -name \*.rc` >> rc.cpp
 $XGETTEXT *.cpp aboutdata.h -o $podir/kplatowork.pot
 
