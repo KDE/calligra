@@ -33,12 +33,13 @@ public:
 };
 
 PptxXmlCommentAuthorsReader::PptxXmlCommentAuthorsReader(KoOdfWriters* writers)
-: MsooXmlCommonReader(writers)
+: MsooXmlCommonReader(writers), d(new Private)
 {
 }
 
 PptxXmlCommentAuthorsReader::~PptxXmlCommentAuthorsReader()
 {
+    delete d;
 }
 
 KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -112,4 +113,3 @@ PptxXmlCommentAuthorsReaderContext::~PptxXmlCommentAuthorsReaderContext()
 {
 
 }
-
