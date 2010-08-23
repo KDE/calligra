@@ -90,6 +90,7 @@ KoFilter::ConversionStatus read_noFill(noFillCaller caller);
 KoFilter::ConversionStatus read_schemeClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
+KoFilter::ConversionStatus read_shade();
 KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
@@ -189,6 +190,9 @@ enum ColorType {
     GradientColor
 };
 ColorType m_colorType;
+
+int m_currentShadeLevel;
+
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
 QColor m_currentColor;
 QPen   m_currentPen;

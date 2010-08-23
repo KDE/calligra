@@ -2605,19 +2605,49 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 {
     READ_PROLOGUE
 
-    // FIXME: This is currently hardcoded to be axial
-    m_currentGradientStyle.addAttribute("draw:style", "axial");
-    m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
-    m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-    m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+    QVector<QColor> colors;
+    QVector<int> shades;
 
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(gs)
+            if (QUALIFIED_NAME_IS(gs)) {
+                TRY_READ(gs)
+                colors.push_back(m_currentColor);
+                shades.push_back(m_currentShadeLevel);
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    // FIXME: This works only for 3 gs spots, can there be more?
+    if (colors.size() == 3 && shades.size() == 3) {
+        // Case: traditional gradient
+        if (shades.at(0) < shades.at(1) && shades.at(1) < shades.at(2)) {
+            m_currentGradientStyle.addAttribute("draw:style", "linear");
+            m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
+            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
+            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(2)));
+            const QString red = QString::number(m_currentColor.red(), 16);
+            const QString green = QString::number(m_currentColor.green(), 16);
+            const QString blue = QString::number(m_currentColor.blue(), 16);
+            const QString color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+            m_currentGradientStyle.addAttribute("draw:start-color", color);
+        }
+        // Case: axial gradient
+        if (shades.at(0) > shades.at(1) && shades.at(2) == shades.at(0)) {
+            m_currentGradientStyle.addAttribute("draw:style", "axial");
+            m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
+            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
+            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(2)));
+            const QString red = QString::number(m_currentColor.red(), 16);
+            const QString green = QString::number(m_currentColor.green(), 16);
+            const QString blue = QString::number(m_currentColor.blue(), 16);
+            const QString color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+            m_currentGradientStyle.addAttribute("draw:start-color", color);
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -2640,6 +2670,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
 {
     READ_PROLOGUE
+
+    m_currentShadeLevel = 0;
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
@@ -2830,6 +2862,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
                 TRY_READ(lumOff);
                 lumOff.valid = true;
             }
+            ELSE_TRY_READ_IF(shade)
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -2863,12 +2896,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             }
             case GradientColor:
             {
-                // Fixme, this is currently hardcoded to fit axial gradient
-                const QString red = QString::number(col.red(), 16);
-                const QString green = QString::number(col.green(), 16);
-                const QString blue = QString::number(col.blue(), 16);
-                const QString color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
-                m_currentGradientStyle.addAttribute("draw:start-color", color);
+                m_currentColor = col;
             }
             break;
         }
@@ -2886,6 +2914,28 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
         m_currentPen.setColor(col);
 #endif
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL shade
+//! shade (shade value)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shade()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    if (!val.isEmpty()) {
+        bool ok = false;
+        int value = val.toInt(&ok);
+        if (!ok) {
+            value = 0;
+        }
+        m_currentShadeLevel = value/1000; // To get percentage
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
