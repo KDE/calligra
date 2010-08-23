@@ -35,6 +35,7 @@ namespace MSOOXML
 
 namespace Diagram
 {
+    class Context;
     class DataModel;
     class LayoutNode;
 }
@@ -42,12 +43,10 @@ namespace Diagram
 class MSOOXML_EXPORT MsooXmlDiagramReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    KoStore* m_storeout;
-    Diagram::DataModel* m_data;
-    Diagram::LayoutNode* m_layout;
-    explicit MsooXmlDiagramReaderContext(KoStore* storeout);
+    Diagram::Context* m_context;
+    explicit MsooXmlDiagramReaderContext();
     virtual ~MsooXmlDiagramReaderContext();
-    void saveDiagram(KoOdfWriters* odfWriters);
+    void saveIndex(KoXmlWriter* xmlWriter);
 };
 
 class MSOOXML_EXPORT MsooXmlDiagramReader : public MSOOXML::MsooXmlCommonReader

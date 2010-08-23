@@ -63,12 +63,32 @@ XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderC
 XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
 {
     foreach(XlsxXmlChartReaderContext* c, charts) {
-        delete c->m_chart;
-        delete c->m_chartExport;
+        delete c;
     }
-
+    foreach(MSOOXML::MsooXmlDiagramReaderContext* c, diagrams) {
+        delete c;
+    }
     foreach(XlsxXmlEmbeddedPicture* p, pictures) {  // delete all pictures from the QList
         delete p;
+    }
+}
+
+void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
+{
+    foreach(XlsxXmlChartReaderContext* c, charts) {
+        c->m_chartExport->saveIndex(xmlWriter);
+        // the embedded object file was written by the XlsxXmlChartReader already
+        //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
+    }
+    foreach(MSOOXML::MsooXmlDiagramReaderContext* c, diagrams) {
+        xmlWriter->startElement("draw:g");
+        xmlWriter->addAttribute("draw:name", "SmartArt Shapes Group");
+        xmlWriter->addAttribute("draw:z-index", "0");
+        //xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H29");
+        //xmlWriter->addAttribute("table:end-x", "0.6016in");
+        //xmlWriter->addAttribute("table:end-y", "0.1339in");
+        c->saveIndex(xmlWriter);
+        xmlWriter->endElement(); // draw:g
     }
 }
 
@@ -412,24 +432,28 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
 
     //kDebug()<<"colorsfile="<<colorsfile<<"datafile="<<datafile<<"layoutfile="<<layoutfile<<"quickstylefile="<<quickstylefile;
 
-    KoStore* storeout = m_context->import->outputStore();
-    MSOOXML::MsooXmlDiagramReaderContext context(storeout);
+    //KoStore* storeout = m_context->import->outputStore();
+    MSOOXML::MsooXmlDiagramReaderContext* context = new MSOOXML::MsooXmlDiagramReaderContext();
 
     // first read the data-model
     MSOOXML::MsooXmlDiagramReader dataReader(this);
-    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, &context);
+    const KoFilter::ConversionStatus dataReaderResult = m_context->import->loadAndParseDocument(&dataReader, datafile, context);
     if (dataReaderResult != KoFilter::OK) {
        raiseError(dataReader.errorString());
+       delete context;
        return dataReaderResult;
     }
     
     // then read the layout definition
     MSOOXML::MsooXmlDiagramReader layoutReader(this);
-    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, &context);
+    const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context);
     if (layoutReaderResult != KoFilter::OK) {
        raiseError(layoutReader.errorString());
+       delete context;
        return layoutReaderResult;
     }
+    
+    m_context->diagrams << context;
 
     return KoFilter::OK;
 }

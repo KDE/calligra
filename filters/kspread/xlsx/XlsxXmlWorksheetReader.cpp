@@ -33,6 +33,7 @@
 #include "ChartExport.h"
 #include "FormulaParser.h"
 
+#include <MsooXmlDiagramReader.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -576,14 +577,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->endElement(); // text:p
                     }
 
-                    // handle objects like e.g. charts
+                    // save the indexes of into the cell embedded objects like e.g. charts and SmartArt
                     foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
-                        foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
-                            // save the index embedded into this cell
-                            chart->m_chartExport->saveIndex(body);
-                            // the embedded object file was written by the XlsxXmlChartReader already
-                            //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
-                        }
+                        drawing->saveIndexes(body);
                     }
 
                     // output pictures
@@ -1488,6 +1484,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
+    
     if(!r_id.isEmpty() && !this->m_context->path.isEmpty()) {
         //! @todo use MSOOXML::MsooXmlRelationships
 

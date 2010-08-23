@@ -76,6 +76,8 @@ XlsxXmlChartReaderContext::XlsxXmlChartReaderContext(KoStore* _storeout, ChartEx
 
 XlsxXmlChartReaderContext::~XlsxXmlChartReaderContext()
 {
+    delete m_chart;
+    delete m_chartExport;
 }
 
 XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)

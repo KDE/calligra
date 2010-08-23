@@ -40,6 +40,7 @@ class XlsxXmlEmbeddedPicture;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
+class MsooXmlDiagramReaderContext;
 }
 
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
@@ -55,6 +56,7 @@ public:
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     QList<XlsxXmlChartReaderContext*> charts;
+    QList<MSOOXML::MsooXmlDiagramReaderContext*> diagrams;
     QList<XlsxXmlEmbeddedPicture*> pictures;      // list of all embedded pictures in this drawing
 
     enum AnchorType {
@@ -72,6 +74,8 @@ public:
 
     QString m_path;         // contains the path to the file which is being processed (i.e. 'xl/drawings')
     QString m_file;         // contains the name of the file which is being processed (i.e. 'drawing1.xml')
+    
+    void saveIndexes(KoXmlWriter* xmlWriter);
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
