@@ -32,6 +32,7 @@ class KoXmlWriter;
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;
 class XlsxXmlChartReaderContext;
+class XlsxXmlEmbeddedPicture;
 
 //#include <KoGenStyle.h>
 //#include <styles/KoCharacterStyle.h>
@@ -54,6 +55,7 @@ public:
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     QList<XlsxXmlChartReaderContext*> charts;
+    QList<XlsxXmlEmbeddedPicture*> pictures;      // list of all embedded pictures in this drawing
 
     enum AnchorType {
         NoAnchor,
@@ -67,6 +69,9 @@ public:
     };
 
     QMap<AnchorType, Position> m_positions;
+
+    QString m_path;         // contains the path to the file which is being processed (i.e. 'xl/drawings')
+    QString m_file;         // contains the name of the file which is being processed (i.e. 'drawing1.xml')
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
@@ -79,6 +84,7 @@ public:
 protected:
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
+    KoFilter::ConversionStatus read_pic();
     KoFilter::ConversionStatus read_col();
     KoFilter::ConversionStatus read_row();
     KoFilter::ConversionStatus read_colOff();
@@ -99,6 +105,23 @@ private:
 // #include <MsooXmlDrawingReaderTableMethods.h>
 
     Q_DISABLE_COPY(XlsxXmlDrawingReader)
+};
+
+// This class is used for storing information about embedded pictures.
+// It is filled in XlsxXmlDrawingReader.cpp, some processing is done on it in XlsxXmlWorksheetReader.cpp.
+class XlsxXmlEmbeddedPicture
+{
+public:
+    XlsxXmlEmbeddedPicture();
+    XlsxXmlEmbeddedPicture(QString &filePath);
+
+    bool saveXml(KoXmlWriter *xmlWriter);   // save the .xml part of the picture (the picture itself isn't stored here)
+    void setPath(QString &newPath);         // set the new path for the file
+    QString path();
+
+    qreal m_x, m_y, m_width, m_height;                  // picture position and size in Pt
+    XlsxXmlDrawingReaderContext::Position m_fromCell, m_toCell; // picture position and size in cells (starting cell, ending cell)
+    QString m_path;                                     // path to the embedded file
 };
 
 #endif

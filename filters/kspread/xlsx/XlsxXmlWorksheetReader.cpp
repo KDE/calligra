@@ -62,6 +62,9 @@
 #define MSOOXML_CURRENT_CLASS XlsxXmlWorksheetReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 
+#define DEFAULT_COLUMN_WIDTH_STRING     "1.707cm"
+#define DEFAULT_COLUMN_WIDTH            1.707
+
 #include <MsooXmlReader_p.h>
 
 #include <math.h>
@@ -127,11 +130,23 @@ public:
     QString hyperlink;
     QList<XlsxXmlDrawingReaderContext*> drawings;
 
+    qreal widthPt();        // get width of this cell (column) in pt
+    qreal xPt();            // get the x coordinate (left border) of this cell in pt
+
+    qreal heightPt();       // get height of this cell (row) in pt
+    qreal yPt();            // get the y coordinate (top border) of this cell in pt
+
     //QPair< oleObjectFile, imageReplacementFile>
     QList< QPair<QString,QString> > oleObjects;
 
     Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
     ~Cell() { qDeleteAll(drawings); }
+};
+
+struct ColumnsWidth             // structure to keep width (in pt) of 1 or more columns
+{
+    qreal   widthPt;            // the width of the column in Pt
+    int     repeatCount;        // the count of columns to which the width is applied to
 };
 
 class Row
@@ -160,7 +175,7 @@ public:
 class Sheet
 {
 public:
-    explicit Sheet() : m_maxRow(0), m_maxColumn(0), m_visible(true) {}
+    explicit Sheet() : m_maxRow(0), m_maxColumn(0), m_visible(true), m_defaultRowHeight(15.0) {}
     ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); qDeleteAll(m_cells); }
 
     Row* row(int rowIndex, bool autoCreate)
@@ -212,6 +227,16 @@ public:
     QString pictureBackgroundPath() { return m_pictureBackgroundPath; }
     void setPictureBackgroundPath(const QString& path) { m_pictureBackgroundPath = path; }
 
+    qreal columnWidthPt(int columnIndex);   // get width of column in pt
+    qreal columnXPt(int columnIndex);       // get the x coordinate (left border) of column in pt
+
+    qreal rowHeightPt(int rowIndex);        // get height of row in pt
+    qreal rowYPt(int rowIndex);             // get the y coordinate (top border) of row in pt
+
+    void columnWidthAppend(ColumnsWidth colsWidth);                 // add one record to m_columnWidth
+    void rowHeightInsert(QString rowStyleName, qreal rowHeightPt);  // add one record to m_rowStyleHeight
+    void setDefaultRowHeight(qreal defaultRowHeight);               // set default row height (used when can't determine real row height)
+
 private:
     QHash<int, Row*> m_rows;
     QHash<int, Column*> m_columns;
@@ -221,6 +246,10 @@ private:
     QHash<int, int> m_maxCellsInRow;
     bool m_visible;
     QString m_pictureBackgroundPath;
+
+    QList<ColumnsWidth> m_columnWidth;      // list of column width records (used by columnWidthPt(...))
+    QMap<QString, qreal> m_rowStyleHeight;  // map of row styles vs. row heights (used by rowHeightPt(...))
+    qreal m_defaultRowHeight;               // this value is used in rowHeightPt(...) when there is no style defined for the row
 };
 
 class XlsxXmlWorksheetReader::Private
@@ -557,6 +586,30 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         }
                     }
 
+                    // output pictures
+                    foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
+                        foreach(XlsxXmlEmbeddedPicture* picture, drawing->pictures) {
+                            // get only the file name and try to copy it from .xlsx to .ods
+                            QString fileName = picture->path().right( picture->path().lastIndexOf('/') +1 );
+                            // if we succeeded copying the file, we can calculate the coordinates (x,y, width, height) and save it
+                            if (copyFile(picture->path(), "Pictures/", fileName) == KoFilter::OK) {
+                                // calculate the x,y coordinates of picture from the 'from' cell in sheet
+                                picture->m_x        = EMU_TO_POINT(picture->m_fromCell.m_colOff);
+                                picture->m_y        = EMU_TO_POINT(picture->m_fromCell.m_rowOff);
+                                // if we do have 'to' cell, calculate width and height (or leave it all zeros if we don't)
+                                if (picture->m_toCell.m_col > 0 && picture->m_toCell.m_row > 0) {
+                                    picture->m_width    = d->sheet->columnXPt(picture->m_toCell.m_col) - d->sheet->columnXPt(picture->m_fromCell.m_col)
+                                                            + EMU_TO_POINT(picture->m_toCell.m_colOff - picture->m_fromCell.m_colOff);
+                                    picture->m_height   = d->sheet->rowYPt(picture->m_toCell.m_row) - d->sheet->rowYPt(picture->m_fromCell.m_row)
+                                                            + EMU_TO_POINT(picture->m_toCell.m_rowOff - picture->m_fromCell.m_rowOff);
+                                }
+                                // set the new path (in .ods) and save the image
+                                picture->setPath(fileName);
+                                picture->saveXml(body);
+                            }
+                        }
+                    }
+
                     QPair<QString,QString> oleObject;
                     foreach( oleObject, cell->oleObjects ) {
                         const QString olePath = oleObject.first;
@@ -679,8 +732,80 @@ void XlsxXmlWorksheetReader::appendTableColumns(int columns, const QString& widt
 //! @todo hardcoded table:default-cell-style-name
     body->addAttribute("table:default-cell-style-name", "Excel_20_Built-in_20_Normal");
 //! @todo hardcoded default style:column-width
-    saveColumnStyle(width.isEmpty() ? QLatin1String("1.707cm") : width);
+    saveColumnStyle(width.isEmpty() ? QLatin1String(DEFAULT_COLUMN_WIDTH_STRING) : width);
+
+    // get the width and count of columns it applies the width to and store it for later use
+    QString width2 = width.isEmpty() ? QLatin1String(DEFAULT_COLUMN_WIDTH_STRING) : width;  // use default or real value of width?
+    ColumnsWidth colsWidth;
+    colsWidth.repeatCount = columns;            // store the repeat count
+    colsWidth.widthPt = 0.0;
+    if (width2.endsWith("cm")) {                // if it's in 'cm', read and convert it to pt
+        width2.resize(width2.size()-2);         // remove 2 last characters ('cm')
+        colsWidth.widthPt = CM_TO_POINT(width2.toDouble());
+    } else if (width2.endsWith("in")) {         // if it's in 'in', read and convert it to pt
+        width2.resize(width2.size()-2);         // remove 2 last characters ('in')
+        colsWidth.widthPt = INCH_TO_POINT(width2.toDouble());
+    }
+
+    d->sheet->columnWidthAppend(colsWidth);     // store this in the sheet
+
     body->endElement(); // table:table-column
+}
+
+qreal Sheet::columnWidthPt(int columnIndex)     // get the column width in pt
+{
+    int currIndex = 0, nextIndex;               // the width of colsWidht is valid through <currIndex, nextIndex)
+
+    foreach (ColumnsWidth colsWidth, m_columnWidth) {
+        nextIndex = currIndex + colsWidth.repeatCount;                  // get the next index with different width
+
+        if (columnIndex >= currIndex && columnIndex < nextIndex) {      // if the index is in the range, return this width
+            return colsWidth.widthPt;
+        }
+
+        currIndex = nextIndex;                  // move to next index
+    }
+
+    return DEFAULT_COLUMN_WIDTH;                // in case we didn't find anything
+}
+
+qreal Sheet::columnXPt(int columnIndex)         // get the x coordinate (left border position) of column
+{
+    // sum up all the previous column widths to get the x coordinate
+    qreal x = 0.0;
+    for (int i=0; i<columnIndex; i++) {
+        x += columnWidthPt(i);
+    }
+
+    return x;
+}
+
+qreal Sheet::rowHeightPt(int rowIndex)          // get the height of a row in pt
+{
+    QString rowStyleName;
+    Row *prow = row(rowIndex, false);           // get row from sheet
+    if (prow) {                                 // if we succeeded, get name of the row style
+        rowStyleName = prow->styleName;
+    }
+
+    // we don't have style name or height for that style name?
+    if (rowStyleName.isEmpty() || !m_rowStyleHeight.contains(rowStyleName)) {
+        return m_defaultRowHeight;              // just return the default row height
+    }
+
+    qreal rowHeight = m_rowStyleHeight.value(rowStyleName);   // get the row height according to style name
+    return rowHeight;
+}
+
+qreal Sheet::rowYPt(int rowIndex)               // get the y coordinate (top border position) of a row
+{
+    // sum up all the previous row heights to get the y coordinate
+    qreal y = 0.0;
+    for (int i=0; i<rowIndex; i++) {
+        y += rowHeightPt(i);
+    }
+
+    return y;
 }
 
 #undef CURRENT_EL
@@ -798,6 +923,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
 
 QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
 {
+    qreal styleRowHeight = m_defaultRowHeight.toDouble();   // try to get the row height from the string
+    d->sheet->setDefaultRowHeight(styleRowHeight);          // store the default row height - we will need it in rowHeightPt(...) method
+
     QString heightString(_heightString);
     if (heightString.isEmpty()) {
         heightString = m_defaultRowHeight;
@@ -810,10 +938,13 @@ QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
     if (!heightString.isEmpty()) {
         bool ok;
         double height = heightString.toDouble(&ok);
-        if (ok)
+        if (ok) {
             tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
+            styleRowHeight = height;        // if succeeded to get height, use it for this row style
+        }
     }
     const QString currentTableRowStyleName(mainStyles->insert(tableRowStyle, "ro"));
+    d->sheet->rowHeightInsert(currentTableRowStyleName, styleRowHeight);    // store the row style name vs. row height relation
     return currentTableRowStyleName;
 }
 
@@ -1368,6 +1499,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString filepath = path + "/" + file;
 
         XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, path, file);
+        context->m_path = path;     // store path to this file (i.e. 'xl/drawings')
+        context->m_file = file;     // and store the file name (i.e. 'drawing1.xml') - we'll use it when working with MsooXmlRelationships
+        QString errMessage;         // set the relationships (to get real file path according to r_id)
+        context->relationships = new MSOOXML::MsooXmlRelationships(*m_context->import, (KoOdfWriters *) this, errMessage);
         XlsxXmlDrawingReader reader(this);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {
@@ -1521,3 +1656,29 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     }
     READ_EPILOGUE
 }
+
+void Sheet::columnWidthAppend(ColumnsWidth colsWidth)   // add one record of columns width to m_columnWidth
+{
+    m_columnWidth.append(colsWidth);
+}
+
+void Sheet::rowHeightInsert(QString rowStyleName, qreal rowHeightPt)    // add one record of row height to m_rowStyleHeight
+{
+    m_rowStyleHeight.insert(rowStyleName, rowHeightPt);
+}
+
+void Sheet::setDefaultRowHeight(qreal defaultRowHeight)                 // set the default row height - used when can't determine real row height
+{
+    m_defaultRowHeight = defaultRowHeight;
+}
+
+qreal Cell::widthPt()       // get the width of a cell (column) in Pt
+{
+    return sheet->columnWidthPt(column);
+}
+
+qreal Cell::xPt()          // get the x coordinate of a cell in Pt
+{
+    return sheet->columnXPt(column);
+}
+
