@@ -1299,7 +1299,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
-    m_colorType = TextColor;
+    m_currentColor = QColor();
 
     // Read child elements
     while (!atEnd()) {
@@ -1309,7 +1309,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
-            ELSE_TRY_READ_IF_IN_CONTEXT(noFill) 
+            ELSE_TRY_READ_IF_IN_CONTEXT(noFill)
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
             }
@@ -1317,6 +1317,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             ELSE_TRY_READ_IF(hlinkClick)
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentColor = QColor();
     }
 
     // Read Attributes
@@ -3226,18 +3231,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     m_currentColor = QColor( QLatin1Char('#') + val );
 
-#ifdef PPTXXMLSLIDEREADER_H
-    switch (m_colorType) {
-        case TextColor:
-        {
-            if (m_currentTextStyleProperties) {
-                m_currentTextStyleProperties->setForeground(m_currentColor);
-            }
-        }
-        break;
-    }
-#endif
-
     //TODO: all the color transformations
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -3835,7 +3828,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_colorType = TextColor;
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
@@ -3845,6 +3838,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    if (m_currentColor.isValid()) {
+        m_currentTextStyleProperties->setForeground(m_currentColor);
+        m_currentColor = QColor();
     }
 
     TRY_READ_ATTR_WITHOUT_NS(sz)
