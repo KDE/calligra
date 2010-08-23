@@ -1299,6 +1299,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     }
 
+    m_colorType = TextColor;
+
     // Read child elements
     while (!atEnd()) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1317,13 +1319,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         }
     }
 
-    // Set the text color if it was set in the text properties, and if
-    // so reset the current color.
-    if (m_currentColor.isValid()) {
-        m_currentTextStyleProperties->setForeground(m_currentColor);
-        m_currentColor = QColor();
-    }
-
     // Read Attributes
 
     // DrawingML: b, i, strike, u attributes:
@@ -1334,7 +1329,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     if (attrs.hasAttribute("i")) {
         m_currentTextStyleProperties->setFontItalic(
             MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
-//kDebug() << "ITALIC:" << m_currentTextStyleProperties->fontItalic();
     }
 
     TRY_READ_ATTR_WITHOUT_NS(cap);
@@ -2898,6 +2892,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
                     m_currentTextStyleProperties->setForeground(col);
                 }
             }
+            break;
             case GradientColor:
             {
                 m_currentColor = col;
@@ -3230,6 +3225,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
     READ_ATTR_WITHOUT_NS(val)
 
     m_currentColor = QColor( QLatin1Char('#') + val );
+
+#ifdef PPTXXMLSLIDEREADER_H
+    switch (m_colorType) {
+        case TextColor:
+        {
+            if (m_currentTextStyleProperties) {
+                m_currentTextStyleProperties->setForeground(m_currentColor);
+            }
+        }
+        break;
+    }
+#endif
 
     //TODO: all the color transformations
     while (true) {
