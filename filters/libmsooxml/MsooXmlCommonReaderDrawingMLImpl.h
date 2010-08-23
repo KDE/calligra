@@ -1021,7 +1021,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
  - txPr (§21.2.2.216)
 
  Child elements:
- - br (Text Line Break) §21.1.2.2.1
+ - [done] br (Text Line Break) §21.1.2.2.1
  - endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
  - [done] fld (Text Field) §21.1.2.2.4
  - pPr (Text Paragraph Properties) §21.1.2.2.7
@@ -1068,6 +1068,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 // CASE #400.1
             else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
+            }
+            else if (QUALIFIED_NAME_IS(br)) {
+                body->startElement("text:line-break");
+                body->endElement(); // text:line-break
             }
 // CASE #400.2
 //! @todo add more conditions testing the parent
