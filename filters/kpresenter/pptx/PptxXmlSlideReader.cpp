@@ -557,11 +557,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         // First check if we have properties from the slide, then from layout, then from master
         if (m_currentDrawStyle->isEmpty()) {
             MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->m_drawingPageProperties,
-                                                    *m_currentDrawStyle, KoGenStyle::DefaultType);
+                                                    *m_currentDrawStyle, KoGenStyle::DrawingPageType);
             // Only get properties from master page if they were not defined in the layout
             if (m_currentDrawStyle->isEmpty()) {
                 MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->m_drawingPageProperties,
-                                                        *m_currentDrawStyle, KoGenStyle::DefaultType);
+                                                        *m_currentDrawStyle, KoGenStyle::DrawingPageType);
             }
         } else {
             m_currentDrawStyle->addProperty("presentation:visibility", "visible");
@@ -895,6 +895,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -971,17 +972,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideMaster) {
-        MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
+    if (!m_currentDrawStyle->isEmpty()) {
+        if (m_context->type == SlideMaster) {
+            MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
                                                 m_context->slideMasterPageProperties->m_drawingPageProperties,
-                                                KoGenStyle::DefaultType);
-    } else if (m_context->type == SlideLayout) {
-        MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
+                                                KoGenStyle::DrawingPageType);
+        } else if (m_context->type == SlideLayout) {
+            MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
                                                 m_context->slideLayoutProperties->m_drawingPageProperties,
-                                                KoGenStyle::DefaultType);
+                                                KoGenStyle::DrawingPageType);
+        }
     }
-#endif
 
     READ_EPILOGUE
 }
@@ -1044,17 +1045,17 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 
     if (!fillImageName.isEmpty()) {
         //! Setup slide's bitmap fill
-        m_currentDrawStyle->addProperty("draw:fill", "bitmap");
-        m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageName);
+        m_currentDrawStyle->addProperty("draw:fill", "bitmap", KoGenStyle::DrawingPageType);
+        m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageName, KoGenStyle::DrawingPageType);
         if (m_context->type != SlideMaster) {
             if (!m_recentSourceName.isEmpty()) {
                 const QSize size(imageSize(m_recentSourceName));
                 kDebug() << "SIZE:" << size;
                 if (size.isValid()) {
                     m_currentDrawStyle->addProperty("draw:fill-image-width",
-                        MSOOXML::Utils::cmString(POINT_TO_CM(size.width())));
+                        MSOOXML::Utils::cmString(POINT_TO_CM(size.width())), KoGenStyle::DrawingPageType);
                     m_currentDrawStyle->addProperty("draw:fill-image-height",
-                        MSOOXML::Utils::cmString(POINT_TO_CM(size.height())));
+                        MSOOXML::Utils::cmString(POINT_TO_CM(size.height())), KoGenStyle::DrawingPageType);
                 }
             }
         }
