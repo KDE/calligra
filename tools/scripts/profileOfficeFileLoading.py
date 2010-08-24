@@ -8,7 +8,7 @@
 #
 # Copyright 2010 Jos van den Oever <jos@vandenoever.info>
 
-import sys, os, tempfile, time, signal, subprocess
+import sys, os, tempfile, time, signal, subprocess, re
 
 applications = {
   'kword': ['odt', 'doc', 'docx'],
@@ -45,6 +45,14 @@ class object:
 class logger:
 	def __init__(self):
 		self.suitename = None
+	def escape(self, text):
+		def escape(m):
+			if m.group(0) == '\n':
+				return '|n'
+			if m.group(0) == '\r':
+				return '|r'
+			return '|'+m.group(0)
+		return re.sub('[\'\n\r\|\]]', escape, text)
 	def startTestSuite(self, name):
 		self.suitename = name
 		print "##teamcity[testSuiteStarted name='" + self.suitename \
@@ -63,7 +71,7 @@ class logger:
 		if not self.suitename or not self.testname: return
 		bt = ''
 		for l in backtrace:
-			bt = bt + l.rstrip() + '\\n'
+			bt = bt + self.escape(l)
 		print "##teamcity[testFailed name='" + self.testname \
 			+ "' details='" + bt + "']"
 	# end test, pass duration as integer representing the milliseconds
