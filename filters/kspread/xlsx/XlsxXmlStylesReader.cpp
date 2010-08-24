@@ -52,7 +52,6 @@
     @param tint color tint: from -1.0 .. 1.0, where -1.0 means 100% darken
            and 1.0 means 100% lighten; 0.0 means no change
 */
-#if 0 // following doesn't work as expected (see bug #248906).
 static QColor tintedColor(const QColor& color, qreal tint)
 {
     const int HLSMAX = 255; // Used for computing tint
@@ -76,7 +75,7 @@ static QColor tintedColor(const QColor& color, qreal tint)
 //kDebug() << "rgb:" << r << g << b << QColor(r, g, b, color.alpha()).name();
     return QColor(r, g, b, color.alpha());
 }
-#else
+#if 0
 static QColor tintedColor( const QColor & color, qreal tintfactor )
 {
     QColor retColor;
