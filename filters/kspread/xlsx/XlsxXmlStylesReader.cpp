@@ -46,16 +46,16 @@
 #include "ColorConversions.h"
 //! @todo only include for TINY target
 
-const int HLSMAX = 255; //!< Used for computing tint
-
 //! @return tinted value for @a color
 //! Alpha value is left unchanged.
 /*! @param color to be converted
     @param tint color tint: from -1.0 .. 1.0, where -1.0 means 100% darken
            and 1.0 means 100% lighten; 0.0 means no change
 */
+#if 0 // following doesn't work as expected (see bug #248906).
 static QColor tintedColor(const QColor& color, qreal tint)
 {
+    const int HLSMAX = 255; // Used for computing tint
 //kDebug() << "rgb:" << color.name() << "tint:" << tint;
     if (tint == 0.0 || !color.isValid()) {
         return color;
@@ -76,6 +76,18 @@ static QColor tintedColor(const QColor& color, qreal tint)
 //kDebug() << "rgb:" << r << g << b << QColor(r, g, b, color.alpha()).name();
     return QColor(r, g, b, color.alpha());
 }
+#else
+static QColor tintedColor( const QColor & color, qreal tintfactor )
+{
+    QColor retColor;
+    const qreal  nonTindedPart = 1.0 - tintfactor;
+    const int tintedColor = 255 * nonTindedPart;
+    retColor.setRed( tintedColor + tintfactor * color.red() );
+    retColor.setGreen( tintedColor + tintfactor * color.green() );
+    retColor.setBlue( tintedColor + tintfactor * color.blue() );
+    return retColor;
+}
+#endif
 
 /*! @return color decoded from a "rgb" attribute of the current element
             or invalid QColor when reading was not possible.
@@ -364,17 +376,6 @@ kDebug() << "patternType:" << patternType;
     return &bgColor;
 }
 
-QColor tintColor( const QColor & color, qreal tintfactor )
-{
-    QColor retColor;
-    const qreal  nonTindedPart = 1.0 - tintfactor;
-    const int tintedColor = 255 * nonTindedPart;
-    retColor.setRed( tintedColor + tintfactor * color.red() );
-    retColor.setGreen( tintedColor + tintfactor * color.green() );
-    retColor.setBlue( tintedColor + tintfactor * color.blue() );
-    return retColor;
-}
-
 void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
 {
 //! @todo implement more styling;
@@ -384,7 +385,7 @@ void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MS
 kDebug() << patternType << realBackgroundColor->value(themes).name()
          << realBackgroundColor->tint << realBackgroundColor->isValid(themes);
         if (realBackgroundColor->isValid(themes)) {
-            cellStyle->addProperty("fo:background-color", tintColor(realBackgroundColor->value(themes), realBackgroundColor->tint).name());
+            cellStyle->addProperty("fo:background-color", realBackgroundColor->value(themes).name());
         }
     }
 }
