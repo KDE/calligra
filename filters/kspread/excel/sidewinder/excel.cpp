@@ -1688,6 +1688,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     const unsigned long cchText = readU16(data + 14);
     const unsigned char* startPict = data + 16;
+    const unsigned char* endPict = data + size;
     if(cchText > 0) {
         //const unsigned long cbRuns = readU16(startPict);
         const unsigned long cbFmla = readU16(startPict + 2); // fmla, ObjFmla structure
@@ -1706,14 +1707,14 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     // XLUnicodeStringNoCch
     m_text = QString();
     if(fHighByte) {
-        for (unsigned k = 1; k + 2 < size; k += 2) {
+        for (unsigned k = 1; startPict + k + 1 < endPict; k += 2) {
             unsigned zc = readU16(startPict + k);
-            m_text.append(QString(zc));
+            m_text.append(QChar(zc));
         }
     } else {
-        for (unsigned k = 1; k + 1 < size; k += 1) {
+        for (unsigned k = 1; startPict + k < endPict; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
-            m_text.append(QString(uc));
+            m_text.append(QChar(uc));
         }
     }
 
