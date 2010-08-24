@@ -762,8 +762,12 @@ bool Part::completeLoading( KoStore *store )
         //kDebug()<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
     } else if ( isImporting() ) {
-        //kDebug()<<"Importing, generate unique node ids";
-        m_project->generateUniqueNodeIds();
+        // NOTE: I don't think this is a good idea.
+        // Let the filter generate ids for non-kplato files.
+        // If the user wants to create a new project from an old one,
+        // he should use Tools -> Insert Project File
+
+        //m_project->generateUniqueNodeIds();
     }
     if ( store == 0 ) {
         // can happen if loading a template
