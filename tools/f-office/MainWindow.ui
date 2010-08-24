@@ -116,11 +116,11 @@
    <addaction name="separator"/>
    <addaction name="actionEdit"/>
    <addaction name="separator"/>
+   <addaction name="actionCut"/>
+   <addaction name="separator"/>
    <addaction name="actionCopy"/>
    <addaction name="separator"/>
    <addaction name="actionPaste"/>
-   <addaction name="separator"/>
-   <addaction name="actionCut"/>
    <addaction name="separator"/>
    <addaction name="actionUndo"/>
    <addaction name="separator"/>

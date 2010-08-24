@@ -208,7 +208,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_cancel(0),
         m_firstChar(true),
         m_message(0),
-        m_newDocOpen(false),
         m_isDocModified(false),
         m_xcordinate(0),
         m_ycordinate(0),
@@ -227,7 +226,6 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_slidingmotiondialog(0),
         m_slideNotesButton(0),
         m_slideNotesIcon(VIEW_NOTES_PIXMAP),
-        m_tempnumber(0),
         m_tempselectiondialog(0),
         m_tempdialoglayout(0),
         m_templateWidget(0),
@@ -446,7 +444,7 @@ void MainWindow::showVirtualKeyBoardOnScreen()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    closeDoc();
+    closeDoc(true);
 
     if(m_doc) {
         event->ignore();
@@ -731,8 +729,8 @@ void MainWindow:: openMathOpFrame() {
 
 void MainWindow::addMathematicalOperator(QString mathSymbol)
 {
-    Q_ASSERT(m_cellToolFactory->cellTool()->externalEditor());
-    m_cellToolFactory->cellTool()->externalEditor()->insertOperator(mathSymbol);
+    Q_ASSERT(m_focelltool->externalEditor());
+    m_focelltool->externalEditor()->insertOperator(mathSymbol);
 }
 
 ///////////////////////
@@ -1013,7 +1011,7 @@ void MainWindow::doCenterAlignment()
 
 bool MainWindow::setCenterAlign(KoTextEditor *editor) {
     if (editor) {
-        editor->setHorizontalTextAlignment(Qt::AlignCenter);
+        editor->setHorizontalTextAlignment(Qt::AlignHCenter);
         m_isDocModified = true;
         return true;
     }
@@ -1228,8 +1226,13 @@ void MainWindow::saveFile()
 #endif
                 }
             } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive)||
-                       !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)||
-                       !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive))  {
+                      !QString::compare(ext, EXT_DOCX, Qt::CaseInsensitive)||
+                      !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)||
+                      !QString::compare(ext, EXT_XLSX, Qt::CaseInsensitive) ||
+                      !QString::compare(ext, EXT_PPSX, Qt::CaseInsensitive) ||
+                      !QString::compare(ext, EXT_PPTX, Qt::CaseInsensitive) ||
+                      !QString::compare(ext, EXT_PPS, Qt::CaseInsensitive) ||
+                      !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive))  {
 #ifdef Q_WS_MAEMO_5
                 QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
                                                    QMaemo5InformationBox::NoTimeout);
@@ -1353,9 +1356,14 @@ void MainWindow::saveFileAs()
 #endif
             }
 
-        } else if (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)||
-                   !QString::compare(ext,EXT_XLS,Qt::CaseInsensitive)||
-                   !QString::compare(ext,EXT_PPT,Qt::CaseInsensitive))  {
+        } else if (!QString::compare(ext, EXT_DOC, Qt::CaseInsensitive)||
+                   !QString::compare(ext, EXT_DOCX, Qt::CaseInsensitive)||
+                   !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)||
+                   !QString::compare(ext, EXT_XLSX, Qt::CaseInsensitive) ||
+                   !QString::compare(ext, EXT_PPSX, Qt::CaseInsensitive) ||
+                   !QString::compare(ext, EXT_PPTX, Qt::CaseInsensitive) ||
+                   !QString::compare(ext, EXT_PPS, Qt::CaseInsensitive) ||
+                   !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive))  {
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(0, i18n("File will be saved in ODF"),
                                                QMaemo5InformationBox::NoTimeout);
@@ -1494,8 +1502,6 @@ QString MainWindow::getFileExtension(DocumentType type){
    return fileName;
 }
 
-
-
 void MainWindow::chooseDocumentType()
 {
     m_docdialog = new QDialog(this);
@@ -1522,9 +1528,8 @@ void MainWindow::chooseDocumentType()
 
 void MainWindow::openNewDoc()
 {
-    DocumentType type = Text;
     m_docdialog->close();
-    openNewDocument(type);
+    openDocument(NEW_WORDDOC, true);
 }
 
 void MainWindow::openNewPresenter()
@@ -1535,9 +1540,8 @@ void MainWindow::openNewPresenter()
 
 void MainWindow::openNewSpreadSheet()
 {
-   DocumentType type = Spreadsheet;
    m_docdialog->close();
-   openNewDocument(type);
+   openDocument(NEW_SPREADSHEET,true);
 }
 
 void MainWindow::templateSelectionDialog()
@@ -1551,7 +1555,7 @@ void MainWindow::templateSelectionDialog()
 
     m_tempselectiondialog = new QDialog(this);
     Q_CHECK_PTR(m_tempselectiondialog);
-    m_tempselectiondialog->setWindowTitle(i18n("Select Presentation Template                                   Preview"));
+    m_tempselectiondialog->setWindowTitle(i18n("Select Presentation Template Preview"));
 
     m_tempdialoglayout = new QGridLayout;
     Q_CHECK_PTR(m_tempdialoglayout);
@@ -1589,7 +1593,8 @@ void MainWindow::templateSelectionDialog()
     connect(m_closetemp,SIGNAL(clicked()),SLOT(closeTempSelectionDialog()));
 }
 
-void MainWindow::selectedTemplatePreview(int number) {
+void MainWindow::selectedTemplatePreview(int number)
+{
     QString path = NEW_PRESENTER+m_temptitle.at(number);
     KoStore::Backend backend = KoStore::Auto;
     KoStore * store = KoStore::createStore(path, KoStore::Read, "", backend);
@@ -1600,23 +1605,17 @@ void MainWindow::selectedTemplatePreview(int number) {
         store->close();
         m_templatepreview->setPixmap(thumbnail);
     }
-    m_tempnumber=number;
 }
 
-void MainWindow::openSelectedTemplate(){
-    newpresenter = NEW_PRESENTER+m_temptitle.at(m_tempnumber);
+void MainWindow::openSelectedTemplate()
+{
+    newpresenter = NEW_PRESENTER+m_temptitle.at(m_templateWidget->currentRow());
     m_tempselectiondialog->accept();
-    DocumentType type = Presentation;
-    openNewDocument(type);
-    if(storeButtonPreview!=0) {
-        disconnect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-        delete storeButtonPreview;
-    }
-    storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
-    connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+    openDocument(newpresenter, true);
 }
 
-void MainWindow::closeTempSelectionDialog() {
+void MainWindow::closeTempSelectionDialog()
+{
     if(m_tempselectiondialog)
         m_tempselectiondialog->hide();
 }
@@ -1630,6 +1629,7 @@ QPushButton * MainWindow::addFormatFrameComponent(const QString &imagepath)
     btn->setMaximumSize(165,75);
     return btn;
 }
+
 QPushButton * MainWindow::addFontStyleFrameComponent(const QString &imagepath)
 {
     QPushButton * btn = new QPushButton(this);
@@ -1650,68 +1650,66 @@ QToolButton * MainWindow ::addNewDocument(const QString &docname)
     return toolbutton;
 }
 
-void MainWindow::openNewDocumentType(QString type)
+void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
 {
-    if(type.compare("Text") == 0) {
-        openNewDocument(Text);
-    }
-    if(type.compare("Spreadsheet") == 0) {
-        openNewDocument(Spreadsheet);
-    }
-    if(type.compare("Presentation") == 0) {
-        templateSelectionDialog();
-    }
-}
-
-void MainWindow::openNewDocument(DocumentType type)
-{
-    KUrl newurl;
-    QString mimetype;
-    m_type=type;
-    switch(type) {
-    case Text:
-        newurl.setPath(NEW_WORDDOC);
-        mimetype = "application/vnd.oasis.opendocument.text";
-        break;
-    case Presentation:
-        newurl.setPath(newpresenter);
-        mimetype = "application/vnd.oasis.opendocument.presentation-template";
-        break;
-    case Spreadsheet:
-        newurl.setPath(NEW_SPREADSHEET);
-        mimetype = "application/vnd.oasis.opendocument.spreadsheet";
-        break;
-    }
-    if (m_doc) {
-        QStringList args;
-        if(type == Text)
-            args <<""<<"Text";
-        if(type == Spreadsheet)
-            args <<""<<"Spreadsheet";
-        if(type == Presentation)
-            args <<""<<"Presentation";
-
-        QProcess::startDetached(FREOFFICE_APPLICATION_PATH,args);
+    //check if the file exists
+    if(!QFile(fileName).exists()) {
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(0, i18n("No such file exists"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#endif
         return;
     }
+
+    //check if the format is supported for opening
+    if (!checkFiletype(fileName)) {
+        qDebug()<<"Currently this file format is not supported";
+        return;
+    }
+
+    //if the current instance has a document open start a new one
+    if (m_doc) {
+        QStringList args;
+        args << fileName;
+        isNewDocument ? (args << "true") : (args << "false");
+        QProcess::startDetached(FREOFFICE_APPLICATION_PATH, args);
+        return;
+    }
+
+    m_ui->viewToolBar->show();
+    m_ui->actionSlidingMotion->setVisible(false);
     raiseWindow();
 
     setShowProgressIndicator(true);
-    closeDocument();
+    QString mimetype = KMimeType::findByPath(fileName)->name();
     int errorCode = 0;
     m_isLoading = true;
+
     m_doc = KParts::ComponentFactory::createPartInstanceFromQuery<KoDocument>(
                 mimetype, QString(),
                 0, 0, QStringList(),
                 &errorCode);
+
     if (!m_doc) {
         setShowProgressIndicator(false);
         return;
     }
 
+    //for new files the condition to be checked is m_fileName.isEmpty()
+    if(isNewDocument) {
+        m_fileName="";
+    } else {
+        m_fileName=fileName;
+    }
+
+    KUrl fileUrl;
+    fileUrl.setPath(fileName);
+
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(true);
-    if (!m_doc->openUrl(newurl)) {
+
+    //actual opening of the document happens here.
+    if (!m_doc->openUrl(fileUrl)) {
         setShowProgressIndicator(false);
         return;
     }
@@ -1721,99 +1719,147 @@ void MainWindow::openNewDocument(DocumentType type)
 
     // registering tools
     m_cellToolFactory=new FoCellToolFactory(KoToolRegistry::instance());
-   // m_spreadEdit->setCellTool(m_cellToolFactory->cellTool());
+   // m_spreadEdit->setCellTool(m_focelltool);
     KoToolRegistry::instance()->add(m_cellToolFactory);
 
     m_view = m_doc->createView();
-    
-    m_ui->actionEdit->setVisible(true);
-    m_ui->actionSlidingMotion->setVisible(false);
-    m_ui->actionFormat->setVisible(false);
-    m_ui->EditToolBar->show();
-
-    if(type == Text) {
-        m_kwview = qobject_cast<KWView *>(m_view);
-        m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
-        m_ui->actionFormat->setVisible(true);
-    }
-
     QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
     if (controllers.isEmpty()) {
         setShowProgressIndicator(false);
         return;// Panic
     }
+
     m_controller = controllers.first();
+
     if (!m_controller) {
         setShowProgressIndicator(false);
         return;
     }
-    setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"),"NewDocument"));
-    m_controller->setProperty("FingerScrollable", true);
 
-    if (type == Spreadsheet) {
+    QString fname = fileUrl.fileName();
+    QString ext = KMimeType::extractKnownExtension(fname);
+    if (ext.length()) {
+        fname.chop(ext.length() + 1);
+    }
+
+    //file type of the document
+    if (!QString::compare(ext, EXT_ODP, Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_PPS, Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_PPSX, Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_PPTX, Qt::CaseInsensitive) ||
+            !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive)) {
+        m_type = Presentation;
+    } else if (!QString::compare(ext, EXT_ODS, Qt::CaseInsensitive) ||
+               !QString::compare(ext, EXT_XLSX, Qt::CaseInsensitive) ||
+               !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)) {
+        m_type = Spreadsheet;
+    } else {
+        m_type = Text;
+        // We need to get the page count again after layout rounds.
+        connect(m_doc, SIGNAL(pageSetupChanged()), this, SLOT(updateUI()));
+    }
+
+    m_ui->actionMathOp->setVisible(false);
+    m_ui->actionFormat->setVisible(false);
+    m_ui->actionSlidingMotion->setVisible(false);
+
+    if (m_type == Spreadsheet) {
+        m_ui->actionEdit->setVisible(true);
         KoToolManager::instance()->addController(m_controller);
         QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        m_focelltool= dynamic_cast<FoCellTool *>(m_cellToolFactory->createTool(((View*)m_view)->selection()->canvas()));
-
+        m_focelltool = dynamic_cast<FoCellTool *>(KoToolManager::instance()->toolById(((View*)m_view)->selection()->canvas(),CellTool_ID));
         ((View *)m_view)->showTabBar(false);
         ((View *)m_view)->setStyleSheet("* { color:white; } ");
 
+        //set the central widget. Note: The central widget for spreadsheet is m_view.
         setCentralWidget(((View *)m_view));
         setUpSpreadEditorToolBar();
+    } else if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
+                                (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)) ||
+                                (!QString::compare(ext,EXT_DOCX,Qt::CaseInsensitive)))) {
+        m_kwview = qobject_cast<KWView *>(m_view);
+        m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
+        m_ui->actionFormat->setVisible(true);
+        m_ui->actionEdit->setVisible(true);
+
+        //set the central widget here
+        setCentralWidget(m_controller);
+    } else if(m_type == Presentation) {
+        m_ui->actionEdit->setVisible(false);
+        m_ui->actionSlidingMotion->setVisible(true);
+        //set the central widget here
+        setCentralWidget(m_controller);
+
+        //code related to the button previews
+        if(storeButtonPreview!=0) {
+            disconnect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+            delete storeButtonPreview;
+        }
+        storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
+        connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
+    } else {
+        //condition required for plain text document that is opened.
+        setCentralWidget(m_controller);
     }
 
-    if(type!=Spreadsheet)
-        setCentralWidget(m_controller);
+    setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"), fname));
+
+    m_controller->setProperty("FingerScrollable", true);
 
     QTimer::singleShot(250, this, SLOT(updateUI()));
 
-    KoCanvasBase *new_canvas = m_controller->canvas();
-    connect(new_canvas->resourceManager(),
+    KoCanvasBase *canvas = m_controller->canvas();
+    connect(canvas->resourceManager(),
             SIGNAL(resourceChanged(int, const QVariant &)),
-            this,SLOT(resourceChanged(int, const QVariant &)));
+            this,
+            SLOT(resourceChanged(int, const QVariant &)));
     connect(KoToolManager::instance(),
-            SIGNAL(changedTool(KoCanvasControllerWidget*, int)),
-            SLOT(activeToolChanged(KoCanvasControllerWidget*, int)));
-
-    if(type == Text || type == Presentation) {
-        KoToolManager::instance()->switchToolRequested(TextTool_ID);
-    }
+            SIGNAL(changedTool(KoCanvasController*, int)),
+            SLOT(activeToolChanged(KoCanvasController*, int)));
 
     setShowProgressIndicator(false);
-
     m_isLoading = false;
+
     if (m_splash && !this->isActiveWindow()) {
         this->show();
         m_splash->finish(m_controller);
         m_splash = 0;
-    }
-    
-    if(type == Presentation){
-        m_ui->actionEdit->setVisible(false);
-        m_ui->actionSlidingMotion->setVisible(true);
-        m_ui->viewToolBar->show();
-        m_ui->EditToolBar->hide();
-    }
+   }
 
-    //if(type==Text||type==Spreadsheet)
-      //  m_ui->actionEdit->setChecked(true);*/
-    if(type == Spreadsheet) {
-        m_ui->actionEdit->setChecked(false);
-        //m_ui->actionEdit->trigger();
-    }
+   //This is a hack for the uppercase problem.
+   m_firstChar=true;
 
-    m_fileName = "";
-    m_newDocOpen = true;
-    m_undostack = m_doc->undoStack();
-    m_firstChar=true;
+   //When the user opens a new document it should open in the edit mode directly
+   if(isNewDocument) {
+       //This timer is required, otherwise a new spread sheet will
+       //have an unwanted widget in the view.
+       QTimer::singleShot(1,this,SLOT(editToolBar()));
+       if(m_type==Text) {
+           centralWidget()->setInputMethodHints(Qt::ImhNoAutoUppercase);
+       }
+   } else {
+       //activate the pan tool.
+       editToolBar(false);
+   }
+
+   m_ui->actionSearch->setChecked(false);
+   m_undostack = m_doc->undoStack();
 }
-void MainWindow::closeDoc()
+
+void MainWindow::closeDoc(bool isWindowClosed)
 {
     if(virtualKeyBoardIsOnScreen)
       showVirtualKeyBoardOnScreen();
 
-    if(m_doc == NULL)
+    if(m_doc == NULL) {
+        if(!isWindowClosed) {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(0, i18n("Please close the window if you want to quit"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#endif
+        }
         return;
+    }
 
     m_doc->setModified(m_isDocModified);
     if (m_doc->isModified()) {
@@ -1877,75 +1923,56 @@ void MainWindow::toggleToolBar(bool show)
 //Toogling between edit toolbar and view toolbar with various options
 void MainWindow::editToolBar(bool edit)
 {
+    if(!m_doc) {
+        return;
+    }
+
     if(virtualKeyBoardIsOnScreen)
         showVirtualKeyBoardOnScreen();
 
-    if (m_newDocOpen) {
-        if (!edit) {
-            KoToolManager::instance()->switchToolRequested(PanTool_ID);
+    if(edit){
+        //set the icon to be checked
+        m_ui->actionEdit->blockSignals(true);
+        if(! m_ui->actionEdit->isChecked()) {
+            m_ui->actionEdit->setChecked(true);
+        }
+        m_ui->actionEdit->blockSignals(false);
+
+        if(m_type==Spreadsheet) {
+            KoToolManager::instance()->switchToolRequested(CellTool_ID);
+            m_ui->viewToolBar->hide();
+            if(m_spreadEditToolBar) {
+                m_spreadEditToolBar->show();
+            }
             m_ui->EditToolBar->hide();
+        } else {
+            KoToolManager::instance()->switchToolRequested(TextTool_ID);
+            m_ui->viewToolBar->hide();
+            m_ui->EditToolBar->show();
             if(m_spreadEditToolBar) {
                 m_spreadEditToolBar->hide();
             }
-            m_ui->viewToolBar->show();
-            m_isViewToolBar = true;
-            disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-            disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-        } else {
-            disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-            disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-            if(m_type==Spreadsheet) {
-                KoToolManager::instance()->switchToolRequested(CellTool_ID);
-                m_ui->viewToolBar->hide();
-                if(m_spreadEditToolBar) {
-                    m_spreadEditToolBar->show();
-                }
-                m_ui->EditToolBar->hide();
-                } else {
-                KoToolManager::instance()->switchToolRequested(TextTool_ID);
-                m_ui->viewToolBar->hide();
-                m_ui->EditToolBar->show();
-                if(m_spreadEditToolBar) {
-                m_spreadEditToolBar->hide();
-                }
-                connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-                connect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-            }
-        }
-    } else {
-        if (edit) {
+
             connect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
             connect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-            if(m_type==Spreadsheet) {
-                KoToolManager::instance()->switchToolRequested(CellTool_ID);
-                m_ui->viewToolBar->hide();
-                if(m_spreadEditToolBar) {
-                    m_spreadEditToolBar->show();
-                }
-                m_ui->EditToolBar->hide();
-                disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-                disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
-
-            } else {
-                KoToolManager::instance()->switchToolRequested(TextTool_ID);
-                m_ui->viewToolBar->hide();
-                if(m_spreadEditToolBar) {
-                    m_spreadEditToolBar->hide();
-                }
-                m_ui->EditToolBar->show();
-
-            }
-        } else {
-            KoToolManager::instance()->switchToolRequested(PanTool_ID);
-            m_ui->EditToolBar->hide();
-            m_ui->viewToolBar->show();
-            if(m_spreadEditToolBar) {
-                m_spreadEditToolBar->hide();
-            }
-            m_isViewToolBar = true;
-            disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
-            disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
         }
+    } else {
+        KoToolManager::instance()->switchToolRequested(PanTool_ID);
+        m_ui->EditToolBar->hide();
+        m_ui->viewToolBar->show();
+        if(m_spreadEditToolBar) {
+            m_spreadEditToolBar->hide();
+        }
+        m_isViewToolBar = true;
+
+        disconnect(spaceHandlerShortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(spaceHandlerForVirtualKeyBoard()));
+        disconnect(shortcutForVirtualKeyBoard,SIGNAL(activated()),this,SLOT(showVirtualKeyBoardOnScreen()));
+
+        m_ui->actionEdit->blockSignals(true);
+        if(m_ui->actionEdit->isChecked()) {
+            m_ui->actionEdit->setChecked(false);
+        }
+        m_ui->actionEdit->blockSignals(false);
     }
 
     if(m_formatframe)
@@ -2309,6 +2336,8 @@ void MainWindow::closeDocument()
         }
         m_controller = 0;
     } else if (m_type == Spreadsheet) {
+        m_spreadEditToolBar->hide();
+        resetSpreadEditorToolBar();
         KoToolManager::instance()->removeCanvasController(m_controller);
         delete m_undostack;
         m_undostack = 0;
@@ -2316,15 +2345,10 @@ void MainWindow::closeDocument()
         m_view=0;
         delete m_doc;
         m_doc = 0;
-        m_spreadEditToolBar->hide();
-        resetSpreadEditorToolBar();
+
         if(m_sheetInfoFrame && m_sheetInfoFrame->isVisible()) {
             spreadSheetInfo();
         }
-       /* delete m_focelltool;
-        m_focelltool=0;
-        delete m_cellToolFactory;
-        m_cellToolFactory=0;*/
     } else {
         KoToolManager::instance()->removeCanvasController(m_controller);
         if(m_kwview)
@@ -2364,16 +2388,12 @@ void MainWindow::closeDocument()
     formatFrameDestructor();
     confirmationDialogDestructor();
 
-    if(m_focelltool){
-        delete m_focelltool;
-        m_focelltool = 0;
-    }
     if(m_slidingmotiondialog) {
         delete m_slidingmotiondialog;
         m_slidingmotiondialog = 0;
     }
+
     m_isDocModified=false;
-    m_newDocOpen=false;
     viewNumber++;
 }
 
@@ -2407,13 +2427,8 @@ void MainWindow::confirmationDialogDestructor()
 
 void MainWindow::formatFrameDestructor() {
     if(m_formatframe) {
-        m_formatframe->close();
-        delete m_bold;
-        m_bold = 0;
-        delete m_italic;
-        m_italic = 0;
-        delete m_underline;
-        m_underline = 0;
+        m_formatframe->hide();
+
         delete m_alignright;
         m_alignright = 0;
         delete m_alignleft;
@@ -2434,6 +2449,12 @@ void MainWindow::formatFrameDestructor() {
 void MainWindow::fontStyleFrameDestructor() {
     if(m_fontstyleframe) {
         m_fontstyleframe->close();
+        delete m_bold;
+        m_bold = 0;
+        delete m_italic;
+        m_italic = 0;
+        delete m_underline;
+        m_underline = 0;
         delete m_subscript;
         m_subscript = 0;
         delete m_superscript;
@@ -2467,157 +2488,8 @@ void MainWindow::raiseWindow(void)
 
 void MainWindow::doOpenDocument()
 {
-    openDocument(m_fileName);
-    m_ui->actionEdit->setChecked(false);
-    m_ui->actionSearch->setChecked(false);
+    openDocument(m_fileName,false);
     m_search->setText("");
-}
-
-void MainWindow::openDocument(const QString &fileName)
-{
-    if (!checkFiletype(fileName))
-        return;
-
-    if (m_doc) {
-        QStringList args;
-        args << fileName;
-        QProcess::startDetached(FREOFFICE_APPLICATION_PATH, args);
-        return;
-    }
-    m_ui->viewToolBar->show();
-    m_ui->actionSlidingMotion->setVisible(false);
-    raiseWindow();
-
-    setShowProgressIndicator(true);
-    QString mimetype = KMimeType::findByPath(fileName)->name();
-    closeDocument();
-    int errorCode = 0;
-    m_isLoading = true;
-    m_doc = KParts::ComponentFactory::createPartInstanceFromQuery<KoDocument>(
-                mimetype, QString(),
-                0, 0, QStringList(),
-                &errorCode);
-    if (!m_doc) {
-        setShowProgressIndicator(false);
-        return;
-    }
-
-    m_url;
-    m_url.setPath(fileName);
-    m_doc->setCheckAutoSaveFile(false);
-    m_doc->setAutoErrorHandlingEnabled(true);
-    if (!m_doc->openUrl(m_url)) {
-        setShowProgressIndicator(false);
-        return;
-    }
-    m_doc->setReadWrite(true);
-    m_doc->setAutoSave(0);
-
-    // registering tools
-    m_cellToolFactory=new FoCellToolFactory(KoToolRegistry::instance());
-   // m_spreadEdit->setCellTool(m_cellToolFactory->cellTool());
-    KoToolRegistry::instance()->add(m_cellToolFactory);
-
-    m_view = m_doc->createView();
-    QList<KoCanvasControllerWidget*> controllers = m_view->findChildren<KoCanvasControllerWidget*>();
-    if (controllers.isEmpty()) {
-        setShowProgressIndicator(false);
-        return;// Panic
-    }
-    m_controller = controllers.first();
-    if (!m_controller) {
-        setShowProgressIndicator(false);
-        return;
-    }
-
-    QString fname = m_url.fileName();
-    QString ext = KMimeType::extractKnownExtension(fname);
-    if (ext.length()) {
-        fname.chop(ext.length() + 1);
-    }
-
-    if (!QString::compare(ext, EXT_ODP, Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_PPS, Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_PPSX, Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_PPTX, Qt::CaseInsensitive) ||
-            !QString::compare(ext, EXT_PPT, Qt::CaseInsensitive)) {
-        m_type = Presentation;
-    } else if (!QString::compare(ext, EXT_ODS, Qt::CaseInsensitive) ||
-               !QString::compare(ext, EXT_XLSX, Qt::CaseInsensitive) ||
-               !QString::compare(ext, EXT_XLS, Qt::CaseInsensitive)) {
-        m_type = Spreadsheet;
-    } else {
-        m_type = Text;
-        // We need to get the page count again after layout rounds.
-        connect(m_doc, SIGNAL(pageSetupChanged()), this, SLOT(updateUI()));
-    }
-    m_ui->actionMathOp->setVisible(false);
-    m_ui->actionFormat->setVisible(false);
-    m_ui->actionEdit->setVisible(false);
-    m_ui->actionSlidingMotion->setVisible(false);
-
-    if (m_type == Spreadsheet) {
-        m_ui->actionEdit->setVisible(true);
-        KoToolManager::instance()->addController(m_controller);
-        QApplication::sendEvent(m_view, new KParts::GUIActivateEvent(true));
-        qDebug()<<"here 1";
-        m_focelltool= dynamic_cast<FoCellTool *>(m_cellToolFactory->createTool(((View*)m_view)->selection()->canvas()));
-        ((View *)m_view)->showTabBar(false);
-        ((View *)m_view)->setStyleSheet("* { color:white; } ");
-        setCentralWidget(((View *)m_view));
-        setUpSpreadEditorToolBar();
-    }
-
-    if((m_type==Text) && ((!QString::compare(ext,EXT_ODT,Qt::CaseInsensitive)) ||
-                          (!QString::compare(ext,EXT_DOC,Qt::CaseInsensitive)))) {
-        m_kwview = qobject_cast<KWView *>(m_view);
-        m_editor = qobject_cast<KoTextEditor *>(m_kwview->canvasBase()->toolProxy()->selection());
-        m_ui->actionFormat->setVisible(true);
-        m_ui->actionEdit->setVisible(true);
-    } else {
-        if(m_type == Presentation) {
-            m_ui->actionEdit->setVisible(false);
-            m_ui->actionSlidingMotion->setVisible(true);
-        }
-    }
-    setWindowTitle(QString("%1 - %2").arg(i18n("FreOffice"), fname));
-
-    m_controller->setProperty("FingerScrollable", true);
-
-    if(m_type!=Spreadsheet) {
-        setCentralWidget(m_controller);
-    }
-    QTimer::singleShot(250, this, SLOT(updateUI()));
-
-    KoCanvasBase *canvas = m_controller->canvas();
-    connect(canvas->resourceManager(),
-            SIGNAL(resourceChanged(int, const QVariant &)),
-            this,
-            SLOT(resourceChanged(int, const QVariant &)));
-    connect(KoToolManager::instance(),
-            SIGNAL(changedTool(KoCanvasController*, int)),
-            SLOT(activeToolChanged(KoCanvasController*, int)));
-
-    KoToolManager::instance()->switchToolRequested(PanTool_ID);
-    setShowProgressIndicator(false);
-    m_isLoading = false;
-    if (m_splash && !this->isActiveWindow()) {
-        this->show();
-        m_splash->finish(m_controller);
-        m_splash = 0;
-   }
-
-   if(m_type==Presentation)
-   {
-       if(storeButtonPreview!=0)
-       {
-           disconnect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-           delete storeButtonPreview;
-       }
-           storeButtonPreview=new StoreButtonPreview(m_doc,m_view);
-           connect(storeButtonPreview,SIGNAL(gotoPage(int)),this,SLOT(gotoPage(int)));
-   }
-   m_undostack = m_doc->undoStack();
 }
 
 bool MainWindow::checkFiletype(const QString &fileName)
@@ -2846,9 +2718,20 @@ void MainWindow::prevPage()
         emit previousSlide();
     }
 
-    if(m_currentPage == 1)
+    if(m_currentPage == 1) {
+        if(m_type == Presentation) {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(0, i18n("First slide reached"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#endif
+        } else if(m_type == Text) {
+#ifdef Q_WS_MAEMO_5
+            QMaemo5InformationBox::information(0, i18n("First page reached"),
+                                                       QMaemo5InformationBox::DefaultTimeout);
+#endif
+        }
         return;
-
+    }
     int cur_page = m_currentPage;
     bool check = triggerAction("page_previous");
     if(check) {
@@ -2870,6 +2753,17 @@ void MainWindow::nextPage()
        emit nextSlide();
    }
    if(m_currentPage == m_doc->pageCount()) {
+       if(m_type == Presentation) {
+#ifdef Q_WS_MAEMO_5
+           QMaemo5InformationBox::information(0, i18n("Last slide reached"),
+                                                      QMaemo5InformationBox::DefaultTimeout);
+#endif
+       } else if(m_type == Text) {
+#ifdef Q_WS_MAEMO_5
+           QMaemo5InformationBox::information(0, i18n("Last page reached"),
+                                                      QMaemo5InformationBox::DefaultTimeout);
+#endif
+       }
       return;
    }
    if(m_currentPage == m_doc->pageCount()) {
@@ -3348,15 +3242,16 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         }
     }
 
-    if(m_doc && event && event->type() == 7 ) {
+    if(m_doc && event && event->type() == 7 && m_type == Text) {
          QKeyEvent *ke=static_cast<QKeyEvent *>(event);
          if(ke->key()!=Qt::Key_Up && ke->key()!=Qt::Key_Down &&
             ke->key()!=Qt::Key_Right && ke->key()!=Qt::Key_Left &&
             ke->key()!=Qt::Key_Shift && ke->key()!=Qt::Key_Alt &&
-            ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock ){
+            ke->key()!=Qt::Key_Control && ke->key()!=Qt::Key_CapsLock &&
+            ke->key()!=Qt::Key_Backspace ){
             m_isDocModified = true;
-            if(m_firstChar==true){
-                 m_ui->EditToolBar->setFocus();
+            if(m_firstChar==true && centralWidget()->hasFocus()){
+                 centralWidget()->clearFocus();
                  m_controller->setFocus();
                  m_firstChar=false;
             }
@@ -3370,7 +3265,6 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     }
     if(event->type() == QEvent::MouseButtonDblClick && m_type == Spreadsheet) {
         m_isDocModified = true;
-        m_firstChar=true;
         return false;
     }
     return false;
@@ -3413,7 +3307,7 @@ void MainWindow::checkDBusActivation()
 
 void MainWindow::pluginOpen(bool newWindow, const QString& path)
 {
-    openDocument(path);
+    openDocument(path,false);
 }
 
 void MainWindow::menuClicked(QAction* action)
@@ -3530,16 +3424,16 @@ void MainWindow::setUpSpreadEditorToolBar()
     addToolBar(Qt::BottomToolBarArea,m_spreadEditToolBar);
     m_spreadEditToolBar->addAction(m_ui->actionEdit);
     m_spreadEditToolBar->addSeparator();
+    m_spreadEditToolBar->addAction(m_ui->actionCut);
     m_spreadEditToolBar->addAction(m_ui->actionCopy);
     m_spreadEditToolBar->addAction(m_ui->actionPaste);
-    m_spreadEditToolBar->addAction(m_ui->actionCut);
     m_spreadEditToolBar->addAction(m_ui->actionUndo);
     m_spreadEditToolBar->addAction(m_ui->actionRedo);
     m_spreadEditToolBar->addAction(m_ui->actionStyle);
     m_spreadEditToolBar->addAction(m_ui->actionFormat);
 
-    m_cellToolFactory->cellTool()->externalEditor()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-    m_spreadEditToolBar->insertWidget(m_ui->actionCopy, m_cellToolFactory->cellTool()->externalEditor());
+    m_focelltool->externalEditor()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
+    m_spreadEditToolBar->insertWidget(m_ui->actionCut, m_focelltool->externalEditor());
 
     if(m_addAction) {
         delete m_addAction;
@@ -3630,8 +3524,8 @@ void MainWindow::resetSpreadEditorToolBar()
     m_ui->actionRedo->setVisible(true);
     m_ui->actionStyle->setVisible(true);
     m_ui->actionFormat->setVisible(true);
-    m_cellToolFactory->cellTool()->externalEditor()->hide();
-    m_cellToolFactory->cellTool()->externalEditor()->releaseKeyboard();
+    m_focelltool->externalEditor()->hide();
+    m_focelltool->externalEditor()->releaseKeyboard();
 
     disconnect(m_signalMapper,SIGNAL(mapped(QString)),this,SLOT(addMathematicalOperator(QString)));
     disconnect(m_addAction,SIGNAL(triggered()),m_signalMapper,SLOT(map()));
@@ -3734,7 +3628,7 @@ void MainWindow::startCollaborating() {
             return closeCollabDialog();
         }
         m_collab = new CollabServer(m_collabDialog->getNick(),
-                                    m_url.fileName(),
+                                    m_fileName,
                                     m_collabDialog->getPort(),
                                     this);
         connect(m_collab, SIGNAL(saveFile(const QString&)), this, SLOT(collabSaveFile(const QString&)));
@@ -3854,7 +3748,7 @@ void MainWindow::collabSaveFile(const QString &filename) {
 
 void MainWindow::collabOpenFile(const QString &filename) {
     m_fileName = filename;
-    openDocument(filename);
+    openDocument(filename,false);
     qDebug() << "============================================";
     m_collabEditor = new KoTextEditor(m_editor->document()); // qobject_cast<KoTextEditor*>(qobject_cast<KWView*>(m_doc->createView(this))->kwcanvas()->toolProxy()->selection());
     qDebug() << "::::::::::::::::::::::::::::::::::::::::::::";

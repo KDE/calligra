@@ -241,11 +241,7 @@ friend void AcceleratorScrollSlide::ifNoScroll();
 ////////////////////////////////
 
 private:
-    /*!
-      * Stores the URL of the open file
-      */
-    KUrl m_url;
-    /*!
+   /*!
       * Holds the properties of presentation style and time
       */
     int gl_showtime;
@@ -310,7 +306,6 @@ private:
     QLabel * m_templatepreview;
     QStringList m_temptitle;
     QStringList m_templatepath;
-    int m_tempnumber;
     QString newpresenter;
     /*!
      * Confirmation dialog for closing new document
@@ -648,11 +643,13 @@ private slots:
     /*!
      * Slot to actionEdit toggled signal
      */
-    void editToolBar(bool);
+    void editToolBar(bool status=true);
     /*!
      * Slot to actionClose signal
+     * @parm isWindowClosed set to true if you are calling it from the window
+     *       close event.
      */
-    void closeDoc();
+    void closeDoc(bool isWindowClosed=false);
     /*!
      *  Slot to convert character into bold
      */
@@ -859,7 +856,7 @@ public slots:
      * Slot to  dialog fileSelected signal
      * /param filename
      */
-    void openDocument(const QString &fileName);
+    void openDocument(const QString &fileName, bool isNewDocument=false);
     /*!
      * Slot to choose new document
      */
@@ -904,10 +901,6 @@ private:
     QMap<QString, OfficeInterface*> loadedPlugins;
 
     void setShowProgressIndicator(bool visible);
-    /*!
-     * true if new document is open
-     */
-    bool m_newDocOpen;
     /*!
      * true if document is modified
      */

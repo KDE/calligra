@@ -202,6 +202,8 @@ bool FoCellTool::createEditor(bool clear, bool focus)
             connect(m_externalEditor, SIGNAL(textChanged(const QString &)),
                     ((FoCellEditor*)m_editor), SLOT(setText(const QString &)));
         }
+        m_editor->setFocus();
+        m_editor->setCursorPosition(m_editor->toPlainText().length());
     }
     return status;
 }

@@ -42,7 +42,7 @@ FoCellEditor::FoCellEditor(KSpread::CellToolBase *cellTool, QWidget *parent)
     m_cellTool(cellTool)
 {
     this->setStyleSheet("* { color:black; } ");
-    //setStyle(new QGtkStyle());
+    setInputMethodHints(Qt::ImhNoAutoUppercase);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFrameStyle(QFrame::NoFrame);

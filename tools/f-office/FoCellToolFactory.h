@@ -34,14 +34,6 @@ public:
     ~FoCellToolFactory();
 
     KoToolBase* createTool(KoCanvasBase* canvas);
-
-    FoCellTool *cellTool();
-
-private:
-    /*!
-     * Contains the pointer to the first created CellTool.
-     */
-    FoCellTool *m_cellTool;
 };
 
 #endif // FOCELL_TOOL_FACTORY
