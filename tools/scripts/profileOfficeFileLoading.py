@@ -69,38 +69,28 @@ class logger:
 			+ "' duration='" + str(duration) + "']"
 		self.testname = None
 
-def profile(dir, file, logger):
-	logger.startTest(file)
-	file = os.path.join(dir, file)
-	(path, ext) = os.path.splitext(file)
-	ext = ext[1:]
+def getExecutablePath(exe):
+	exepath = None
 	env = os.environ
-	(fileno, tmpfilename) = tempfile.mkstemp()
-	exe = None
-	for f in applications.keys():
-		if ext in applications[f]:
-			exe = f
 	for p in env['PATH'].split(':'):
 		exepath = os.path.join(p, exe)
 		if os.path.exists(exepath):
 			break
-	r = object()
-	process = subprocess.Popen(
-		[exepath, "--benchmark-loading", "--profile-filename",
-			tmpfilename, "--nocrashhandler", file],
-		env=env, close_fds=True,
-		stdout=None, stderr=None)
-#		stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	return exepath
+
+def runCommand(exepath, arguments, captureStdOut):
+	env = os.environ
+	stdout = None
+	if (captureStdOut):
+		stdout = subprocess.PIPE
+		
+	process = subprocess.Popen([exepath] + arguments, env=env,
+		close_fds=True, stdout=stdout, stderr=None)
 	s = os.wait4(process.pid, os.WNOHANG)
 	waited = 0
 	waitstep = 0.1
 	maxwaittime = 60
 	while  s[0] == 0 and s[1] == 0 and waited < maxwaittime:
-		# make process output buffers empty
-		if process.stdout:
-			process.stdout.read()
-		if process.stderr:
-			process.stderr.read()
 		# wait a bit
 		time.sleep(waitstep)
 		waited += waitstep
@@ -115,15 +105,46 @@ def profile(dir, file, logger):
 			s = os.wait4(process.pid, 0)
 		except:
 			pass
+	r = object()
 	r.utime = s[2].ru_utime
 	r.stime = s[2].ru_stime
 	r.returnValue = s[1]
+	if process.stdout:
+		r.stdout = process.stdout.readlines()
+	return r
+
+def profile(dir, file, logger):
+	logger.startTest(file)
+	file = os.path.join(dir, file)
+	(path, ext) = os.path.splitext(file)
+	ext = ext[1:]
+	exe = None
+	for f in applications.keys():
+		if ext in applications[f]:
+			exe = f
+	exepath = getExecutablePath(exe)
+
+	# profile
+	(fileno, tmpfilename) = tempfile.mkstemp()
+	args = ["--benchmark-loading", "--profile-filename", tmpfilename,
+		"--nocrashhandler", file]
+	r = runCommand(exepath, args, False)
 	outfile = os.fdopen(fileno, 'r')
 	r.lines = outfile.readlines()
 	outfile.close()
-	os.remove(tmpfilename)
 	if r.returnValue != 0:
+		# generate a backtrace
+		args = ["--batch", "--eval-command=run",
+			"--eval-command=bt", "--args"] + [exepath] + args
+		exepath = getExecutablePath("gdb")
+		debugresult = runCommand(exepath, args, True)
+		r.backtrace = debugresult.stdout
+		for l in r.backtrace:
+			print l.rstrip()
 		logger.failTest()
+
+	os.remove(tmpfilename)
+
 	logger.endTest(int((r.utime + r.stime)*1000))
 	return r
 
