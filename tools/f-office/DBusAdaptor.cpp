@@ -38,6 +38,9 @@ DBusAdaptor::DBusAdaptor(HildonApplication *aApplication) :
         printf("Try with run-standalone.sh ./xxx\n");
     }
 
+    //Registering FREOFFICE_SERVICE_NAME service is required if not FreOffice will crash after ~2 minutes.
+    QDBusConnection::sessionBus().interface()->registerService(FREOFFICE_SERVICE_NAME, QDBusConnectionInterface::QueueService);
+
     QDBusConnection::sessionBus().registerService(FREOFFICE_SERVICE_NAME+"-"+QString::number(getpid()));
     QObject::connect(this, SIGNAL(openDocument(const QString &)), m_app, SIGNAL(openDocument(const QString &)));
 }

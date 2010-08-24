@@ -29,7 +29,6 @@
 #include "Style.h"
 
 #include "KoColor.h"
-#include <ui/CellEditor.h>
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"

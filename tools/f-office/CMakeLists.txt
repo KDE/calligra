@@ -29,7 +29,7 @@ else(QT_QMAEMO5_LIBRARY)
 endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)
-install(FILES FreOffice.desktop DESTINATION share/applications/hildon)
+install(FILES freoffice.desktop DESTINATION share/applications/hildon)
 install(FILES images/178x200/freoffice.png DESTINATION share/icons/hicolor/178x200/apps)
 install(FILES images/64x64/freoffice.png DESTINATION share/icons/hicolor/64x64/apps)
 install(FILES com.nokia.FreOffice.service DESTINATION share/dbus-1/services)
