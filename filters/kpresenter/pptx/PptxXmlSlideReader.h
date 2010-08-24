@@ -97,6 +97,7 @@ class PptxSlideLayoutProperties
 public:
     PptxSlideLayoutProperties();
     ~PptxSlideLayoutProperties();
+
     //! Shapes ordered by position
     QList<PptxShapeProperties*> shapes;
     //! Shapes map addressed by type
@@ -107,7 +108,10 @@ public:
     QString pageLayoutStyleName;
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > styles;
+
+    KoGenStyle m_drawingPageProperties;
 private:
+
     Q_DISABLE_COPY(PptxSlideLayoutProperties)
 };
 
@@ -148,8 +152,6 @@ class PptxSlideMasterPageProperties
 public:
     PptxSlideMasterPageProperties();
     void clear();
-    void addDrawingPageProperty(const QByteArray& property, const QByteArray& value);
-    void saveDrawingPageProperties(KoGenStyle* style);
 
     PptxSlideMasterTextStyle* textStyle(const QString& style);
     PptxSlideMasterTextStyle titleStyle;
@@ -158,8 +160,7 @@ public:
 
     QMap<QString, QString> colorMap;
 
-private:
-    QMap<QByteArray, QByteArray> m_drawingPageProperties;
+    KoGenStyle m_drawingPageProperties;
 };
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.

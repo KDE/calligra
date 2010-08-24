@@ -599,7 +599,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     else if (m_context->type == SlideLayout) {
         // moved down
         m_currentShapeProperties = 0;
-        m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle);
 #ifdef __GNUC__
 #warning TODO:     m_currentMasterPageStyle.addChildElement(....)
 #endif
@@ -1840,16 +1839,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
     m_fillImageRenderingStyleStretch = true;
     m_currentDrawStyle->addProperty("style:repeat", QLatin1String("stretch"));
 
-#ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideMaster) {
-        // pass the properties from master to slides
-        m_context->slideMasterPageProperties->addDrawingPageProperty("style:repeat", "stretch");
-        m_context->slideMasterPageProperties->addDrawingPageProperty("draw:fill", "bitmap");
-        m_context->slideMasterPageProperties->addDrawingPageProperty("draw:fill-image-name", "A1");
-        m_context->slideMasterPageProperties->addDrawingPageProperty("presentation:visibility", "visible");
-    }
-#endif
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1982,6 +1971,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tile()
     m_currentDrawStyle->addProperty("style:repeat", QLatin1String("repeat"));
 //! @todo algn - convert to "ODF's Fill Image Tile Reference Point"
     m_currentDrawStyle->addProperty("draw:fill-image-ref-point", "top-left");
+
 //! @todo flip
 //! @todo sx
 //! @todo sy
@@ -2202,6 +2192,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         }
         BREAK_IF_END_OF_QSTRING(qn)
     }
+
     // we do not use READ_EPILOGUE because namespace depends on caller here
     POP_NAME_INTERNAL
     if (!expectElEnd(qn)) {

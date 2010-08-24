@@ -181,6 +181,7 @@ PptxSlideMasterListLevelTextStyle* PptxSlideMasterTextStyle::listStyle(uint leve
 
 PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 {
+    m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 }
 
 PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
@@ -193,6 +194,7 @@ PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
 
 PptxSlideMasterPageProperties::PptxSlideMasterPageProperties()
 {
+    m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 }
 
 void PptxSlideMasterPageProperties::clear()
@@ -200,23 +202,6 @@ void PptxSlideMasterPageProperties::clear()
     titleStyle.clear();
     bodyStyle.clear();
     otherStyle.clear();
-    m_drawingPageProperties.clear();
-}
-
-void PptxSlideMasterPageProperties::addDrawingPageProperty(
-    const QByteArray& property, const QByteArray& value)
-{
-    kDebug() << "Inserting" << property << "->" << value;
-    m_drawingPageProperties.insert(property, value);
-}
-
-void PptxSlideMasterPageProperties::saveDrawingPageProperties(KoGenStyle* style)
-{
-    for (QMap<QByteArray, QByteArray>::ConstIterator it = m_drawingPageProperties.constBegin();
-         it != m_drawingPageProperties.constEnd(); ++it)
-    {
-        style->addProperty(QString(it.key()), it.value().constData());
-    }
 }
 
 PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString& style)
@@ -492,6 +477,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
+    // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
+    m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
+
     if (m_context->type == Slide) {
 #if 0
     QString slidePath, slideFile;
@@ -515,19 +503,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
 #endif
 
-        // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
-        m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
-        m_currentDrawStyle->addProperty("presentation:background-visible", true);   // CASE #P111
-        m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);   // CASE #P112
-        m_context->slideMasterPageProperties->saveDrawingPageProperties(m_currentDrawStyle);
     }
     else if (m_context->type == SlideMaster) {
-        m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
         m_currentDrawStyle->addProperty("presentation:visibility", "visible");
         m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
     }
     else if (m_context->type == SlideLayout) {
-        m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
         m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
     }
 
@@ -573,7 +554,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     presentation:display-date-time="false"/>
 </style:style>
 */
-            
+        // First check if we have properties from the slide, then from layout, then from master
+        if (m_currentDrawStyle->isEmpty()) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->m_drawingPageProperties,
+                                                    *m_currentDrawStyle, KoGenStyle::DefaultType);
+            // Only get properties from master page if they were not defined in the layout
+            if (m_currentDrawStyle->isEmpty()) {
+                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->m_drawingPageProperties,
+                                                        *m_currentDrawStyle, KoGenStyle::DefaultType);
+            }
+        } else {
+            m_currentDrawStyle->addProperty("presentation:visibility", "visible");
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+        }
+
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
         body->addAttribute("draw:style-name", currentPageStyleName); // CASE #P302
         kDebug() << "currentPageStyleName:" << currentPageStyleName;
@@ -606,7 +600,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             << "m_context->type:" << m_context->type;
     }
     else if (m_context->type == SlideLayout) {
-        //! FIXME: Here we don't do anything for m_currentDrawStyle, what should we do for it?
+        if (!m_currentDrawStyle->isEmpty()) {
+            m_currentDrawStyle->addProperty("presentation:visibility", "visible");
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+            m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
+        }
         m_context->slideLayoutProperties->pageLayoutStyleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
         kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->pageLayoutStyleName;
     }
@@ -972,6 +970,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideMaster) {
+        MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
+                                                m_context->slideMasterPageProperties->m_drawingPageProperties,
+                                                KoGenStyle::DefaultType);
+    } else if (m_context->type == SlideLayout) {
+        MSOOXML::Utils::copyPropertiesFromStyle(*m_currentDrawStyle,
+                                                m_context->slideLayoutProperties->m_drawingPageProperties,
+                                                KoGenStyle::DefaultType);
+    }
+#endif
+
     READ_EPILOGUE
 }
 
@@ -1048,6 +1059,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
             }
         }
     }
+
     READ_EPILOGUE
 }
 
