@@ -1754,11 +1754,6 @@ void MsoDrawingRecord::dump(std::ostream& out) const
 
 void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
-    if(size < 24) {
-        setIsValid(false);
-        return;
-    }
-
     QByteArray byteArr = QByteArray::fromRawData(reinterpret_cast<const char*>(data), size);
     QBuffer buff(&byteArr);
     buff.open(QIODevice::ReadOnly);
