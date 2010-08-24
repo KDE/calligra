@@ -364,6 +364,17 @@ kDebug() << "patternType:" << patternType;
     return &bgColor;
 }
 
+QColor tintColor( const QColor & color, qreal tintfactor )
+{
+    QColor retColor;
+    const qreal  nonTindedPart = 1.0 - tintfactor;
+    const int tintedColor = 255 * nonTindedPart;
+    retColor.setRed( tintedColor + tintfactor * color.red() );
+    retColor.setGreen( tintedColor + tintfactor * color.green() );
+    retColor.setBlue( tintedColor + tintfactor * color.blue() );
+    return retColor;
+}
+
 void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
 {
 //! @todo implement more styling;
@@ -373,7 +384,7 @@ void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MS
 kDebug() << patternType << realBackgroundColor->value(themes).name()
          << realBackgroundColor->tint << realBackgroundColor->isValid(themes);
         if (realBackgroundColor->isValid(themes)) {
-            cellStyle->addProperty("fo:background-color", realBackgroundColor->value(themes).name());
+            cellStyle->addProperty("fo:background-color", tintColor(realBackgroundColor->value(themes), realBackgroundColor->tint).name());
         }
     }
 }
