@@ -59,9 +59,13 @@ class logger:
 		self.testname = name
 		print "##teamcity[testStarted name='" + self.testname + "']"
 	# fail the current test
-	def failTest(self):
+	def failTest(self, backtrace):
 		if not self.suitename or not self.testname: return
-		print "##teamcity[testFailed name='" + self.testname + "']"
+		bt = ''
+		for l in backtrace:
+			bt = bt + l.rstrip() + '\\n'
+		print "##teamcity[testFailed name='" + self.testname \
+			+ "' details='" + bt + "']"
 	# end test, pass duration as integer representing the milliseconds
 	def endTest(self, duration):
 		if not self.suitename or not self.testname: return
@@ -133,7 +137,6 @@ def profile(dir, file, logger):
 	r.lines = outfile.readlines()
 	outfile.close()
 	if r.returnValue != 0:
-		logger.failTest()
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
 			"--eval-command=bt", "--args"] + [exepath] + args
@@ -142,6 +145,7 @@ def profile(dir, file, logger):
 		r.backtrace = debugresult.stdout
 		for l in r.backtrace:
 			print l.rstrip()
+		logger.failTest(r.backtrace)
 
 	os.remove(tmpfilename)
 
