@@ -87,9 +87,9 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_t()
     m_text = text().toString();
 
     while (!atEnd()) {
-        readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
     }
     READ_EPILOGUE
 }
