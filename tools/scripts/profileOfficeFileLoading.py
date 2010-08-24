@@ -133,6 +133,7 @@ def profile(dir, file, logger):
 	r.lines = outfile.readlines()
 	outfile.close()
 	if r.returnValue != 0:
+		logger.failTest()
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
 			"--eval-command=bt", "--args"] + [exepath] + args
@@ -141,7 +142,6 @@ def profile(dir, file, logger):
 		r.backtrace = debugresult.stdout
 		for l in r.backtrace:
 			print l.rstrip()
-		logger.failTest()
 
 	os.remove(tmpfilename)
 
