@@ -240,7 +240,7 @@ QString KexiProjectModel::itemsPartClass() const
     return m_itemsPartClass;
 }
 
-KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProjectModelItem *p)
+KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProjectModelItem *p) const
 {
     if (!info.isVisibleInNavigator())
         return 0;
@@ -249,19 +249,27 @@ KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProje
     return item;
 }
 
-KexiProjectModelItem* KexiProjectModel::slotAddItem(KexiPart::Item& item)
+void KexiProjectModel::slotAddItem(KexiPart::Item& item)
 {
+    kDebug() << item.name();
+    QModelIndex idx;
+  
+    KexiProjectModelItem *parent = modelItemFromName(item.partClass());
 
-//    KexiProjectModelItem *parent = modelItemFromItem(item.partClass());
-
-    //part object for this item    
-//    KexiProjectModelItem *parent = item.partClass().isEmpty()
-//                              ? 0 : m_baseItems.value(item.partClass().toLower());
-//    return addItem(item, parent, parent->partInfo());
-    return 0;
+    if (parent) {
+        kDebug() << "Got Parent" << parent->data(0);
+        idx = indexFromItem(parent);
+        beginInsertRows(idx, 0,0);
+        KexiProjectModelItem *itm = new KexiProjectModelItem(*(parent->partInfo()), item, parent);
+        if (itm) {
+            kDebug() << "Appending";
+            parent->appendChild(itm);
+        }
+        endInsertRows();
+    }
 }
 
-KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p)
+KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p) const
 {
     return new KexiProjectModelItem(info, item, p);;
 }
@@ -289,16 +297,23 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
 
 QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 {
+    kDebug();
     if (item && item->parent()) {
         int row = item->row();
-        //dbgUI << "Node index in image: " << index << ", parent has " << rowCount + 1 << " rows, inverted index becomes " << row;
+        kDebug() << row;
         return createIndex(row, 0, (void*)item);
-    } else {
-            return QModelIndex();
-    }
+    } 
+    return QModelIndex();
 }
 
-KexiProjectModelItem* KexiProjectModel::modelItemFromItem(const KexiPart::Item& item)
+KexiProjectModelItem* KexiProjectModel::modelItemFromItem(const KexiPart::Item& item) const
 {
     return m_rootItem->modelItemFromItem(item);
 }
+
+KexiProjectModelItem* KexiProjectModel::modelItemFromName(const QString& name) const
+{
+    kDebug() << name;
+    return m_rootItem->modelItemFromName(name);
+}
+

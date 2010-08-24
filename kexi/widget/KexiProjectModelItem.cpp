@@ -130,8 +130,10 @@ int KexiProjectModelItem::row()
 {
      if (m_parentItem)
      {
+         //kDebug() << m_parentItem->m_childItems << this << data(0);;
          return m_parentItem->m_childItems.indexOf(this);
      }
+     kDebug() << "No parent item!";
      return 0;
 }
 
@@ -189,3 +191,20 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::It
     }
     return itm;
 }
+
+KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& name) const
+{
+    KexiProjectModelItem* itm = 0;
+
+        foreach(KexiProjectModelItem *child, m_childItems) {
+            if (!itm) {
+                if ((child->m_item && child->m_item->name() == name) || (child->m_info && child->m_info->partClass() == name) || (child->m_groupName == name)) {
+                        itm = child;
+                } else {
+                     itm = child->modelItemFromName(name);
+                }
+            }
+        }
+    return itm;
+}
+

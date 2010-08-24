@@ -2195,7 +2195,7 @@ void KexiMainWindow::setupProjectNavigator()
         
     }
     connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav, SLOT(addItem(KexiPart::Item&)));
-    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav2, SLOT(slotAddItem(KexiPart::Item&))); //TODO new navigator
+    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav2->model(), SLOT(slotAddItem(KexiPart::Item&))); //TODO new navigator
     d->nav->setFocus();
 
     if (d->forceShowProjectNavigatorOnCreation) {

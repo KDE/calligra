@@ -82,6 +82,7 @@ public:
     void debugPrint();
 
     KexiProjectModelItem* modelItemFromItem(const KexiPart::Item &item) const;
+    KexiProjectModelItem* modelItemFromName(const QString& name) const;
 
  private:
     QList<KexiProjectModelItem*> m_childItems;
