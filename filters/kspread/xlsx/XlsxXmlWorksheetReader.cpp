@@ -1030,17 +1030,13 @@ static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
     QString result = referencedCell->formula;
     if (result.isEmpty())
         return QString();
-    enum { Start, InArguments, InCellReference, InString, InSheetOrAreaName } state;
+    enum { Start, InCellReference, InString, InSheetOrAreaName } state;
     state = Start;
     int cellReferenceStart = 0;
     for(int i = 1; i < result.length(); ++i) {
         QChar ch = result[i];
         switch (state) {
         case Start:
-            if(ch == '(')
-                state = InArguments;
-            break;
-        case InArguments:
             if (ch == '"')
                 state = InString;
             else if (ch.unicode() == '\'')
@@ -1052,11 +1048,11 @@ static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
             break;
         case InString:
             if (ch == '"')
-                state = InArguments;
+                state = Start;
             break;
         case InSheetOrAreaName:
             if (ch == '\'')
-                state = InArguments;
+                state = Start;
             break;
         case InCellReference:
             if (!isCellnameCharacter(ch)) {
@@ -1071,7 +1067,7 @@ static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
                     const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
                     result = result.replace(cellReferenceStart,
                                             i - cellReferenceStart, encodeLabelText(c, r));
-                    state = InArguments;
+                    state = Start;
                 }
             }
             break;
