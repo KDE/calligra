@@ -977,14 +977,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
-            delete chart;
-            delete chartexport;
             return result;
         }
 
         chartexport->saveIndex(body);
-        delete chart;
-        delete chartexport;
     }
 
     while (!atEnd()) {
