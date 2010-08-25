@@ -254,6 +254,70 @@ def profileAll(dir, loggername):
 		log.endTestSuite()
 	return results
 
+def addMapEntry(map, start, end):
+	if start in map:
+		a = map[start]
+		if end in a:
+			a[end] = a[end] + 1
+		else:
+			a[end] = 1
+	else:
+		a = {}
+		a[end] = 1
+	map[start] = a
+	return map
+
+def createStackTraceGraph(results):
+	exepath = getExecutablePath('dot')
+	if not exepath:
+		return
+	edges = {}
+	nodes = {}
+	n = 0
+	for file in results.keys():
+		r = results[file]
+		if not r.backtrace:
+			print 'no backtrace for ' + r
+			continue
+		name = os.path.basename(file)
+		nodes[name] = file
+		for l in r.backtrace:
+			l = l.rstrip()
+			n += 1
+			m = re.search('/koffice/.*/([^/]+:\d+)$', l)
+			if m != None:
+				key = m.group(1)
+				nodes[key] = l
+				edges = addMapEntry(edges, key, name)
+				name = key
+
+	(fileno, tmpfilename) = tempfile.mkstemp()
+	out = os.fdopen(fileno, 'w')
+	out.write('digraph {')
+	svn = 'http://websvn.kde.org/trunk'
+	for a in nodes:
+		m = re.search('(/koffice/.*):(\d+)$', nodes[a])
+		n = '"' + a + '" [URL = "'
+		if m:
+			out.write(n + svn + m.group(1) + '?view=markup#l'
+				+ m.group(2) + '"];')
+		else:
+			m = re.search('(/kofficetests/.*)', nodes[a])
+			if m:
+				out.write(n + svn + '/tests' + m.group(1)
+					+ '"];')
+	for a in edges.keys():
+		for b in edges[a].keys():
+			out.write('"' + a + '" -> "' + b + '" [penwidth='
+				+ str(edges[a][b]) + '];')
+	out.write('}')
+	os.fdatasync(fileno)
+	out.close()
+
+	args = ["-Tsvg", "-ostacktraces.svg", tmpfilename]
+	r = runCommand(exepath, args, False)
+	os.remove(tmpfilename)
+
 if __name__ == '__main__':
 	dir = sys.argv[1]
 	output = sys.argv[2]
@@ -315,3 +379,5 @@ if __name__ == '__main__':
 				out.write(str(r.times.max[f]-r.times.min[f]))
 		out.write('\n')
 	out.close()
+
+	createStackTraceGraph(results)
