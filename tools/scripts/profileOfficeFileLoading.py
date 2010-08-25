@@ -93,19 +93,20 @@ def getExecutablePath(exe):
 def runCommand(exepath, arguments, captureStdOut):
 	env = os.environ
 	stdout = None
-	if (captureStdOut):
-		stdout = subprocess.PIPE
+	if captureStdOut:
+		(fileno, tmpfilename) = tempfile.mkstemp()
+		stdout = os.fdopen(fileno, 'w')
 
-	cmd = 'ulimit -v 512000 -t 60;' + exepath
+	args = 'ulimit -v 1000000 -t 60 -c 0;' + exepath
 	for s in arguments:
-		cmd += ' ' + '"' + s + '"'
+		args += ' "' + s + '"'
 
-	process = subprocess.Popen(cmd, env=env, shell=True,
+	process = subprocess.Popen(['/bin/bash', '-c', args], env=env,
 		close_fds=True, stdout=stdout, stderr=None)
 	s = os.wait4(process.pid, os.WNOHANG)
 	waited = 0
 	waitstep = 0.1
-	maxwaittime = 120
+	maxwaittime = 65
 	while  s[0] == 0 and s[1] == 0 and waited < maxwaittime:
 		# wait a bit
 		time.sleep(waitstep)
@@ -125,8 +126,12 @@ def runCommand(exepath, arguments, captureStdOut):
 	r.utime = s[2].ru_utime
 	r.stime = s[2].ru_stime
 	r.returnValue = s[1]
-	if process.stdout:
-		r.stdout = process.stdout.readlines()
+	if captureStdOut:
+		stdout.close()
+		stdout = open(tmpfilename, 'r')
+		r.stdout = stdout.readlines()
+		stdout.close()
+		os.remove(tmpfilename)
 	return r
 
 def profile(dir, file, logger):
