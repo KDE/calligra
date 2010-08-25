@@ -68,8 +68,6 @@
 // database
 #include "database/DatabaseManager.h"
 
-#include "shape/TableShapeFactory.h"
-
 // D-Bus
 #include "interfaces/MapAdaptor.h"
 #include <QtDBus/QtDBus>
