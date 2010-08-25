@@ -123,8 +123,6 @@ public:
     int syntaxVersion;
 
     KCompletion listCompletion;
-
-    KoResourceManager* resourceManager;
 };
 
 
@@ -163,16 +161,6 @@ Map::Map(Doc* doc, int syntaxVersion)
     QFont font(KoGlobal::defaultFont());
     d->defaultRowFormat->setHeight(font.pointSizeF() + 4);
     d->defaultColumnFormat->setWidth((font.pointSizeF() + 4) * 5);
-
-    d->resourceManager = new KoResourceManager();
-    QVariant variant;
-    variant.setValue<void*>(this);
-    d->resourceManager->setResource(MapResourceId, variant);
-    KoShapeRegistry *registry = KoShapeRegistry::instance();
-    foreach (const QString &id, registry->keys()) {
-        KoShapeFactoryBase *shapeFactory = registry->value(id);
-        shapeFactory->newDocumentResourceManager(d->resourceManager);
-    }
 
     d->isLoading = false;
 
@@ -228,7 +216,6 @@ Map::~Map()
     delete d->defaultColumnFormat;
     delete d->defaultRowFormat;
 
-    delete d->resourceManager;
     delete d;
 }
 
@@ -1012,7 +999,8 @@ void Map::addCommand(QUndoCommand *command)
 
 KoResourceManager* Map::resourceManager() const
 {
-    return d->resourceManager;
+    if (!doc()) return 0;
+    return doc()->resourceManager();
 }
 
 #include "Map.moc"

@@ -61,6 +61,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
+#include <KoResourceManager.h>
 #include <KoShapeConfigFactoryBase.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeManager.h>
@@ -127,6 +128,7 @@ public:
     QStringList spellListIgnoreAll;
     SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
+    KoResourceManager *resourceManager;
 };
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
@@ -144,9 +146,16 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode)
         , d(new Private)
 {
+    d->resourceManager = new KoResourceManager();
     d->map = new Map(this, CURRENT_SYNTAX_VERSION);
     // Document Url for FILENAME function and page header/footer.
     d->map->calculationSettings()->setFileName(url().prettyUrl());
+
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    foreach (const QString &id, registry->keys()) {
+        KoShapeFactoryBase *shapeFactory = registry->value(id);
+        shapeFactory->newDocumentResourceManager(d->resourceManager);
+    }
 
     d->configLoadFromFile = false;
 
@@ -178,6 +187,7 @@ Doc::~Doc()
 
     delete d->map;
     delete d->sheetAccessModel;
+    delete d->resourceManager;
     delete d;
 }
 
@@ -836,4 +846,10 @@ SheetAccessModel *Doc::sheetAccessModel() const
 {
     return d->sheetAccessModel;
 }
+
+KoResourceManager* Doc::resourceManager() const
+{
+    return d->resourceManager;
+}
+
 #include "Doc.moc"

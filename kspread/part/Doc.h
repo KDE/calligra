@@ -50,6 +50,7 @@ class QPainter;
 
 class KoGenStyles;
 class KoOasisSettings;
+class KoResourceManager;
 class KoStore;
 class KoXmlWriter;
 
@@ -115,6 +116,15 @@ public:
      * Returns the syntax version of the currently opened file
      */
     int syntaxVersion() const;
+
+    /**
+     * Return a pointer to the resource manager associated with the
+     * document. The resource manager contains
+     * document wide resources * such as variable managers, the image
+     * collection and others.
+     * @see KoCanvasBase::resourceManager()
+     */
+    KoResourceManager *resourceManager() const;
 
     virtual bool completeSaving(KoStore* _store);
 
