@@ -1262,6 +1262,10 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 MSOOXML_EXPORT void Utils::copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type)
 {
+    if (sourceStyle.isEmpty()) {
+        return;
+    }
+
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter tempWriter(&buffer);

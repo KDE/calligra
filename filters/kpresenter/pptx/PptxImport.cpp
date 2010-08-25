@@ -1098,67 +1098,26 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n    </text:list-style>"*/
         "\n    <!-- /COPIED -->"
     );
-    // 2. parse themes
-    QMap<QString, MSOOXML::DrawingMLTheme*> themes;
-    MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
-    RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
-#if 0 // moved to PptxXmlDocumentReader::read_sldMasterId()
-    // 3. parse master slides
-#ifdef __GNUC__
-#warning TODO use MsooXmlRelationships; parse all used master slides; now one hardcoded master name is used
-#else
-#pragma WARNING( use MsooXmlRelationships; parse all used master slides; now one hardcoded master name is used )
-#endif
-    /* Algorithm:
-     slides/_rels/slide1.xml.rels contains Target="../slideLayouts/slideLayout2.xml";
-     slideLayouts/_rels/slideLayout2.xml.rels contains Target="../slideMasters/slideMaster1.xml"
-     (the same for slide2)
-    */
-#define HARDCODED_SLIDEMASTER_PATH "ppt/slideMasters"
-#define HARDCODED_SLIDEMASTER_FILE "slideMaster1.xml"
-    PptxSlideProperties masterSlideProperties;
-//! @todo support more than one slide master
-    {
-        PptxXmlSlideReaderContext context(
-            *this,
-            QLatin1String(HARDCODED_SLIDEMASTER_PATH), QLatin1String(HARDCODED_SLIDEMASTER_FILE),
-            0, themes,
-            PptxXmlSlideReader::SlideMaster,
-            masterSlideProperties,
-            *relationships
-        );
-        PptxXmlSlideReader slideMasterReader(writers);
-        KoFilter::ConversionStatus status = loadAndParseDocument(
-                                                &slideMasterReader,
-                                                QLatin1String(HARDCODED_SLIDEMASTER_PATH "/" HARDCODED_SLIDEMASTER_FILE),
-                                                errorMessage, &context
-                                            );
-        if (status != KoFilter::OK) {
-            kDebug() << slideMasterReader.errorString();
-            return status;
-        }
-    }
-#endif //0
+
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
     if (partNames.count() != 1) {
         errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
         return KoFilter::WrongFormat;
     }
-    // 4. parse document
+    // parse document
     const QString documentPathAndFile(partNames.first());
     QString documentPath, documentFile;
     MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
     kDebug() << documentPathAndFile << documentPath << documentFile;
     {
         PptxXmlDocumentReaderContext context(
-            *this, themes,
+            *this,
             documentPath, documentFile,
             *relationships);
         PptxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
     }
-    // more here...
     return KoFilter::OK;
 }
 

@@ -2418,7 +2418,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
- - sysClr (System Color) §20.1.2.3.33
+ - [done] sysClr (System Color) §20.1.2.3.33
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
@@ -2431,6 +2431,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2490,7 +2491,7 @@ This element especifies a solid color fill.
     - [done] schemeClr (Scheme Color) §20.1.2.3.29
     - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
     - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
-    - sysClr (System Color) §20.1.2.3.33
+    - [done] sysClr (System Color) §20.1.2.3.33
 
  Attributes:
     None.
@@ -2511,6 +2512,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
             //TODO hslClr hue, saturation, luminecence color
             //TODO prstClr preset color
             ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
             //TODO stsClr system color
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -2814,26 +2816,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
-    // Get color from theme.
-    if (m_context->themes->isEmpty())
-        return KoFilter::WrongFormat;
 //! @todo find proper theme, not just any
 #ifdef PPTXXMLSLIDEREADER_H
 
-   // Currently hardcoded to use clormappings from slidemaster
-   const QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
+    // Currently hardcoded to use clormappings from slidemaster
+    const QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
-    if (m_context->type == Slide) {
-        MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
-        colorItem = theme->colorScheme.value(valTransformed);
-    }
+    colorItem = m_context->themes->colorScheme.value(valTransformed);
 #endif
 
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
-    MSOOXML::DrawingMLTheme *theme = m_context->themes->constBegin().value();
-    colorItem = theme->colorScheme.value(val);
+    colorItem = m_context->themes->colorScheme.value(val);
 #endif
     // Parse the child elements
     MSOOXML::Utils::DoubleModifier lumMod;
@@ -2856,15 +2851,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-        QColor col;
-        if (valTransformed.startsWith("bg"))
-            col = Qt::white;
-        else
-            col = Qt::black;
-        if (colorItem && colorItem->toColorItem())
-            col = QColor (colorItem->toColorItem()->color);
+        QColor col = Qt::white;
+        if (colorItem) {
+            col = colorItem->value();
+        }
 
         col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
+
         switch (m_colorType) {
             case BackgroundColor:
             {
@@ -3217,6 +3210,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
     READ_ATTR_WITHOUT_NS(val)
 
     m_currentColor = QColor( QLatin1Char('#') + val );
+
+    //TODO: all the color transformations
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sysClr
+//! sysClr handler
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(lastClr)
+
+    if (!lastClr.isEmpty()) {
+        m_currentColor = QColor( QLatin1Char('#') + lastClr );
+    }
 
     //TODO: all the color transformations
     while (true) {

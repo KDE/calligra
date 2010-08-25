@@ -330,7 +330,7 @@ MsooXmlDrawingTableStyleReader::~MsooXmlDrawingTableStyleReader()
 {
 }
 
-MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, const QMap< QString, DrawingMLTheme* >* _themes, TableStyleList* _styleList)
+MsooXmlDrawingTableStyleContext::MsooXmlDrawingTableStyleContext(MsooXmlImport* _import, const QString& _path, const QString& _file, DrawingMLTheme* _themes, TableStyleList* _styleList)
 {
     import = _import;
     path = _path;

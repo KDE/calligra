@@ -446,6 +446,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
                 if (!colorIndex.isEmpty()) {
                     m_context->theme->colorScheme.insert(colorIndex, m_currentColor);
                 }
+
                 m_currentColor = 0;
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
@@ -578,6 +579,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN
     m_currentColor = color.release();
+
     return KoFilter::OK;
 }
 
@@ -653,6 +655,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
     readNext();
     READ_EPILOGUE_WITHOUT_RETURN
     m_currentColor = color.release();
+
     return KoFilter::OK;
 }
 

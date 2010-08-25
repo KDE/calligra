@@ -38,11 +38,11 @@ class MsooXmlRelationships;
 class PptxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    PptxXmlDocumentReaderContext(PptxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+    PptxXmlDocumentReaderContext(PptxImport& _import,
                                  const QString& _path, const QString& _file,
                                  MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport *import;
-    const QMap<QString, MSOOXML::DrawingMLTheme*> *themes;
+    MSOOXML::DrawingMLTheme theme;
     const QString path;
     const QString file;
     MSOOXML::MsooXmlRelationships* relationships;
@@ -68,11 +68,13 @@ protected:
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
     KoFilter::ConversionStatus read_sldSz();
-    
+
     // Locates slide layout informaitons for given slide. Caches the result.
     PptxSlideLayoutProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
 
+    KoOdfWriters *m_writers;
     PptxXmlDocumentReaderContext* m_context;
+
 private:
     void init();
 

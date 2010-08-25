@@ -219,7 +219,7 @@ PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString
 
 PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxImport& _import, const QString& _path, const QString& _file,
-    uint _slideNumber, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+    uint _slideNumber, MSOOXML::DrawingMLTheme* _themes,
     PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
     PptxSlideLayoutProperties* _slideLayoutProperties,
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
@@ -228,7 +228,7 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     MSOOXML::TableStyleList *_tableStyleList)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
-        slideNumber(_slideNumber), themes(&_themes), type(_type),
+        slideNumber(_slideNumber), themes(_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
         commentAuthors(_commentAuthors), tableStyleList(_tableStyleList)

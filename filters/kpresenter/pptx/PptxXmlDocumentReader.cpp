@@ -41,10 +41,9 @@
 #include <MsooXmlReader_p.h>
 
 PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
-    PptxImport& _import, const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
-    const QString& _path, const QString& _file,
+    PptxImport& _import, const QString& _path, const QString& _file,
     MSOOXML::MsooXmlRelationships& _relationships)
-        : import(&_import), themes(&_themes),
+        : import(&_import),
           path(_path), file(_file), relationships(&_relationships)
 {
 }
@@ -80,6 +79,7 @@ private:
 
 PptxXmlDocumentReader::PptxXmlDocumentReader(KoOdfWriters *writers)
         : MSOOXML::MsooXmlReader(writers)
+        , m_writers(writers)
         , m_context(0)
         , d(new Private)
 {
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 
         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
         MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                         tableStylesFile, m_context->themes, d->tableStyleList);
+                                                                         tableStylesFile, &m_context->theme, d->tableStyleList);
         m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
     }
 #endif
@@ -181,7 +181,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
 PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     const QString& slidePath, const QString& slideFile)
 {
-    
+
 
     const QString slideLayoutPathAndFile(m_context->relationships->targetForType(
         slidePath, slideFile,
@@ -209,7 +209,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideLayoutPath, slideLayoutFile,
-        0/*unused*/, *m_context->themes,
+        0/*unused*/, &m_context->theme,
         PptxXmlSlideReader::SlideLayout,
         masterSlideProperties, //PptxSlideProperties
         result,
@@ -260,17 +260,17 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         raiseError(i18n("Slide layout \"%1\" not found", slidePath + '/' + slideFile));
         return KoFilter::WrongFormat;
     }
-    
+
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
     PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
-    
+
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slidePath, slideFile,
         d->slideNumber,
-        *m_context->themes,
+        &m_context->theme,
         PptxXmlSlideReader::Slide,
         masterSlideProperties,
         slideLayoutProperties,
@@ -318,12 +318,31 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(slideMasterPathAndFile, &slideMasterPath, &slideMasterFile);
 
+    // Reading the slidemaster theme
+
+    const QString slideThemePathAndFile(m_context->relationships->targetForType(
+        slideMasterPath, slideMasterFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+    kDebug() << "slideThemePathAndFile:" << slideThemePathAndFile;
+
+    QString slideThemePath, slideThemeFile;
+    MSOOXML::Utils::splitPathAndFile(slideThemePathAndFile, &slideThemePath, &slideThemeFile);
+
+    MSOOXML::MsooXmlThemesReader themesReader(m_writers);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(m_context->theme);
+
+    QString errorMessage;
+
+    KoFilter::ConversionStatus status
+        = m_context->import->loadAndParseDocument(&themesReader, slideThemePathAndFile, errorMessage, &themecontext);
+
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideMasterPath, slideMasterFile,
-        0/*unused*/, *m_context->themes,
+        0/*unused*/, &m_context->theme,
         PptxXmlSlideReader::SlideMaster,
         masterSlideProperties,
         0,
@@ -333,12 +352,13 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         d->tableStyleList
     );
     PptxXmlSlideReader slideMasterReader(this);
-    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
+    status = m_context->import->loadAndParseDocument(
         &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideMasterReader.errorString();
         return status;
     }
+
     d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
     masterSlidePropertiesSetter.release();
     d->masterPageDrawStyleName = context.pageDrawStyleName;

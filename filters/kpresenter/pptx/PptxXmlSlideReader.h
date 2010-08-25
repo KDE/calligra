@@ -237,7 +237,7 @@ public:
     PptxXmlSlideReaderContext(
         PptxImport& _import, const QString& _path, const QString& _file,
         uint _slideNumber,
-        const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+        MSOOXML::DrawingMLTheme* _themes,
         PptxXmlSlideReader::Type _type, PptxSlideProperties* _slideProperties,
         PptxSlideLayoutProperties* _slideLayoutProperties,
         PptxSlideMasterPageProperties* _slideMasterPageProperties,
@@ -248,7 +248,7 @@ public:
     const QString path;
     const QString file;
     const uint slideNumber;
-    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
+    MSOOXML::DrawingMLTheme* themes;
     PptxXmlSlideReader::Type type;
     PptxSlideProperties* slideProperties;
     PptxSlideLayoutProperties* slideLayoutProperties;
