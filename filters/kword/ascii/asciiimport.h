@@ -40,7 +40,7 @@ const double ptsperchar = 6.0;
 const int spacespertab = 6;
 const double leftmargin = 56.0;
 
-const uint shortline = 40;  // max length of a "short" line
+const int shortline = 40;  // max length of a "short" line
 
 struct Tabs {
     int columns;
