@@ -53,6 +53,7 @@ class PptxXmlDocumentReader::Private
 {
 public:
     Private()
+        : tableStyleList(0)
     {
     }
     ~Private() {
