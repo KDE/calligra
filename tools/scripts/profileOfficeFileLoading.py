@@ -95,13 +95,17 @@ def runCommand(exepath, arguments, captureStdOut):
 	stdout = None
 	if (captureStdOut):
 		stdout = subprocess.PIPE
-		
-	process = subprocess.Popen([exepath] + arguments, env=env,
+
+	cmd = 'ulimit -m 512000 -t 60;' + exepath
+	for s in arguments:
+		cmd += ' ' + '"' + s + '"'
+
+	process = subprocess.Popen(cmd, env=env, shell=True,
 		close_fds=True, stdout=stdout, stderr=None)
 	s = os.wait4(process.pid, os.WNOHANG)
 	waited = 0
 	waitstep = 0.1
-	maxwaittime = 60
+	maxwaittime = 120
 	while  s[0] == 0 and s[1] == 0 and waited < maxwaittime:
 		# wait a bit
 		time.sleep(waitstep)
