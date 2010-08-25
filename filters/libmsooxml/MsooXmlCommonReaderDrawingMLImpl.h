@@ -1083,7 +1083,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         //nothing
     } else {
          body = textPBuf.originalWriter();
-         if (/*m_lstStyleFound ||*/ m_currentListLevel > 0 || m_prevListLevel > 0) {
+
+         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
+         // being a list-item. We need to handle that case and need to make sure that such paragraph's
+         // end as first-level list-items in ODF.
+         const bool makeList = (m_lstStyleFound && m_currentListLevel < 1);
+         if (makeList) ++m_currentListLevel;
+         
+         if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_H
              if (m_prevListLevel < m_currentListLevel) {
                 for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
@@ -1158,13 +1165,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          body->endElement(); //text:p
 
 #ifdef PPTXXMLSLIDEREADER_H
-         m_prevListLevel = m_currentListLevel;
+         const bool closeList = makeList;
 #else
-         for(int i = 0; i < m_currentListLevel; ++i) {
-             body->endElement(); // text:list-item
-             body->endElement(); // text:list
-         }
+         // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
+         // and excel filters still need to be adjusted to proper handle nested lists.
+         const bool closeList = true;
 #endif
+         if (closeList) {
+             for(int i = 0; i < m_currentListLevel; ++i) {
+                 body->endElement(); // text:list-item
+                 body->endElement(); // text:list
+             }
+             m_prevListLevel = m_currentListLevel = 0;
+             m_lstStyleFound = false;
+         } else {
+             m_prevListLevel = m_currentListLevel;
+         }
     }
     READ_EPILOGUE
 }
@@ -2336,7 +2352,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
-    m_lstStyleFound = !m_currentListStyle.isEmpty();
+    if (!m_currentListStyle.isEmpty())
+        m_lstStyleFound = true;
 
     READ_EPILOGUE
 }
@@ -3489,6 +3506,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     if (attrs.hasAttribute("char")) {
         // Effectively converts this to QChar
         m_currentListStyleProperties->setBulletCharacter(attrs.value("char").toString().at(0));
+        // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
+        m_lstStyleFound = true;
     }
 
     m_listStylePropertiesAltered = true;
