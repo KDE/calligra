@@ -100,6 +100,8 @@ protected:
 //    uint m_currentParagraphStyleNumber;
 //    QString currentParagraphStyleName() const;
 private:
+    Q_DISABLE_COPY(MsooXmlCommonReader)
+
     void init();
 };
 

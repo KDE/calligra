@@ -51,6 +51,8 @@ protected:
 public:
     virtual ~MsooXmlReaderContext();
     MSOOXML::MsooXmlRelationships* relationships;
+private:    
+    Q_DISABLE_COPY(MsooXmlReaderContext)
 };
 
 //! A base class reading MSOOXML parts like document.xml or styles.xml.
@@ -131,6 +133,8 @@ protected:
 #endif
 
 private:
+    Q_DISABLE_COPY(MsooXmlReader)
+
     QString m_fileName;
     bool m_readUndoed;
     QXmlStreamReader::TokenType m_recentType;
