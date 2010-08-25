@@ -96,7 +96,7 @@ def runCommand(exepath, arguments, captureStdOut):
 	if (captureStdOut):
 		stdout = subprocess.PIPE
 
-	cmd = 'ulimit -m 512000 -t 60;' + exepath
+	cmd = 'ulimit -v 512000 -t 60;' + exepath
 	for s in arguments:
 		cmd += ' ' + '"' + s + '"'
 
