@@ -22,8 +22,18 @@
 
 #include "part/CellTool.h"
 
+#include <QPair>
+
+namespace KSpread {
+    class Cell;
+    class CellTool;
+    class CellEditorBase;
+}
+
 class FoExternalEditor;
 class FoCellEditor;
+
+class KoCanvasBase;
 
 /**
  * The tool to change cell ranges.
@@ -83,6 +93,28 @@ public:
 
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void mousePressEvent(KoPointerEvent* event);
+    /*!
+     * Used to initialize the find operations.
+     */
+    void initializeFind();
+    /*!
+     * Returns the current search statistics as
+     * QPair<position of current focussed cell, total number of matched cells>
+     */
+    QPair<int,int> currentSearchStatistics();
+    /*!
+     * Sets the case sensitive option.
+     */
+    void setCaseSensitive(bool isSensitive);
+
+public slots:
+    /*!
+     * This is used to highlight a particular cell. This can be used as a goto also
+     */
+    void slotHighlight(QPoint goToCell);
+    void findNext();
+    void findPrevious();
+    void slotSearchTextChanged(const QString &text);
 
 private:
     Q_DISABLE_COPY(FoCellTool)
@@ -90,6 +122,13 @@ private:
     FoExternalEditor *m_externalEditor;
     FoCellEditor *m_editor;
     QString m_editorContents;
+    QString m_searchString;
+    int m_currentfindPosition;
+    QList<QPoint> m_matchedPosition;
+    bool m_searchCaseSensitive;
+    QRect m_findArea;
+
+    int find();
 };
 
 #endif // FOCELL_TOOL

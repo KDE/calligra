@@ -32,23 +32,36 @@
 #include "KoCanvasBase.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
+#include "CellStorage.h"
 #include "Cell.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 
+#include <QApplication>
+
+#define SEARCH_CONDITION(exactMatch) cell.displayText().contains(m_searchString, exactMatch) ||\
+                                     cell.comment().contains(m_searchString, exactMatch) ||\
+                                     cell.link().contains(m_searchString,exactMatch)
+
 using KSpread::CellEditorBase;
+using KSpread::CellStorage;
 using KSpread::Sheet;
 using KSpread::Cell;
 using KSpread::Style;
 
 FoCellTool::FoCellTool(KoCanvasBase* canvas)
-        : KSpread::CellTool(canvas),
-        m_editor(0)
+    : KSpread::CellTool(canvas),
+      m_editor(0),
+      m_currentfindPosition(0),
+      m_searchCaseSensitive(false)
 {
+    m_searchString.clear();
+    m_matchedPosition.clear();
     m_externalEditor=new FoExternalEditor();
     m_externalEditor->setCellTool(this);
+    m_findArea.setCoords(0,0,0,0);
 }
 
 FoCellTool::~FoCellTool()
@@ -250,3 +263,100 @@ void FoCellTool::mousePressEvent(KoPointerEvent* event)
     createEditor(false);*/
 }
 
+void FoCellTool::slotSearchTextChanged(const QString &text)
+{
+    if(text.isEmpty() || text.isNull()) {
+        return;
+    }
+
+    m_searchString=text;
+    initializeFind();
+}
+
+void FoCellTool::initializeFind()
+{
+    KSpread::Sheet * currentSheet = selection()->activeSheet();
+    QRect filledRect = currentSheet->usedArea(true);
+    m_matchedPosition.clear();
+    m_currentfindPosition=-1;
+    if(filledRect!=m_findArea) {
+        m_findArea.setCoords(filledRect.left(),filledRect.top(),
+                             filledRect.right(),filledRect.bottom());
+    }
+    find();
+}
+
+int FoCellTool::find()
+{
+    //search row wise i.e reading order
+    int row=m_findArea.left();
+    KSpread::Sheet * currentSheet = selection()->activeSheet();
+    while(row<=m_findArea.bottom()) {
+        KSpread::Cell cell = currentSheet->cellStorage()->firstInRow(row);
+        if(cell.isNull()) {
+            row++;
+            continue;
+        }
+        int col=cell.column();
+        while (!cell.isNull() && col <= m_findArea.right()) {
+            if(m_searchCaseSensitive) {
+                if (SEARCH_CONDITION(Qt::CaseSensitive)) {
+                    m_matchedPosition.append(cell.cellPosition());
+                }
+            } else {
+                if (SEARCH_CONDITION(Qt::CaseInsensitive)) {
+                    m_matchedPosition.append(cell.cellPosition());
+                }
+            }
+            cell = currentSheet->cellStorage()->nextInRow(col, row);
+            if(cell.isNull())
+                continue;
+            col = cell.column();
+        }
+        row++;
+    }
+    return 0;
+}
+
+void FoCellTool::slotHighlight(QPoint goToCell)
+{
+    //here we select the cell where the string was found.
+    selection()->initialize(goToCell);
+    KSpread::CellToolBase::scrollToCell(goToCell);
+}
+
+void FoCellTool::findNext()
+{
+    if(m_currentfindPosition<(m_matchedPosition.length()-1) && m_currentfindPosition>=0) {
+        m_currentfindPosition++;
+    } else {
+        m_currentfindPosition=0;
+    }
+
+    slotHighlight(m_matchedPosition.value(m_currentfindPosition,QPoint(1,1)));
+}
+
+void FoCellTool::findPrevious()
+{
+    if(m_currentfindPosition<(m_matchedPosition.length()-1) && m_currentfindPosition>=0) {
+        m_currentfindPosition--;
+    } else {
+        m_currentfindPosition=m_matchedPosition.length()-1;
+    }
+
+    slotHighlight(m_matchedPosition.value(m_currentfindPosition,QPoint(1,1)));
+}
+
+QPair<int,int> FoCellTool::currentSearchStatistics()
+{
+    if(m_currentfindPosition<0 || m_currentfindPosition>=m_matchedPosition.length()) {
+        return qMakePair(0,0);
+    }
+    return qMakePair(m_currentfindPosition+1,m_matchedPosition.length());
+}
+
+
+void FoCellTool::setCaseSensitive(bool isSensitive)
+{
+    m_searchCaseSensitive=isSensitive;
+}

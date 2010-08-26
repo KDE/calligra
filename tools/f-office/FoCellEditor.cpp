@@ -190,7 +190,7 @@ void FoCellEditor::slotTextChanged()
     }
 
     // Enable/disable the reference selection.
-    if (!text.isEmpty() && text[0] == '=') {
+  /*  if (!text.isEmpty() && text[0] == '=') {
         m_cellTool->selection()->startReferenceSelection();
     } else {
         m_cellTool->selection()->endReferenceSelection();

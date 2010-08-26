@@ -1905,6 +1905,10 @@ void MainWindow::toggleToolBar(bool show)
 {
     KoToolManager::instance()->switchToolRequested(PanTool_ID);
     if (show) {
+        if(m_type==Spreadsheet) {
+            KoToolManager::instance()->switchToolRequested(CellTool_ID);
+            ((Doc *)m_doc)->map()->setReadWrite(false);
+        }
         m_doc->setReadWrite(false);
         m_ui->viewToolBar->hide();
         m_ui->SearchToolBar->show();
@@ -1912,6 +1916,10 @@ void MainWindow::toggleToolBar(bool show)
         m_search->setFocus();
         m_search->selectAll();
     } else {
+        if(m_type==Spreadsheet) {
+            KoToolManager::instance()->switchToolRequested(PanTool_ID);
+            ((Doc *)m_doc)->map()->setReadWrite(true);
+        }
         m_doc->setReadWrite(true);
         m_search->clearFocus();
         m_ui->SearchToolBar->hide();
@@ -2877,6 +2885,16 @@ void MainWindow::startSearch()
         return;
 
     QString searchString = m_search->text();
+    if(m_type==Spreadsheet && searchString!="") {
+        //for spreadsheet use the find method in FoCellTool.
+        m_focelltool->setCaseSensitive(m_wholeWord);
+        m_focelltool->slotSearchTextChanged(searchString);
+        m_ui->actionSearchResult->setText(i18n("%1 of %2",m_focelltool->currentSearchStatistics().first,
+                                               m_focelltool->currentSearchStatistics().second));
+        this->nextWord();
+        return;
+    }
+
     if(m_search->text()==""){
         KoCanvasBase *canvas = m_controller->canvas();
         KoSelection *selection = canvas->shapeManager()->selection();
@@ -3039,6 +3057,13 @@ void MainWindow::highlightText(int aIndex)
 
 void MainWindow::previousWord()
 {
+    if(m_type==Spreadsheet) {
+        m_focelltool->findPrevious();
+        m_ui->actionSearchResult->setText(i18n("%1 of %2",m_focelltool->currentSearchStatistics().first,
+                                               m_focelltool->currentSearchStatistics().second));
+        return;
+    }
+
     if (m_positions.isEmpty())
         return;
     if (m_index == 0) {
@@ -3051,6 +3076,13 @@ void MainWindow::previousWord()
 
 void MainWindow::nextWord()
 {
+    if(m_type==Spreadsheet) {
+        m_focelltool->findNext();
+        m_ui->actionSearchResult->setText(i18n("%1 of %2",m_focelltool->currentSearchStatistics().first,
+                                               m_focelltool->currentSearchStatistics().second));
+        return;
+    }
+
     if (m_positions.isEmpty())
         return;
     if (m_index == m_positions.size() - 1) {
@@ -3058,6 +3090,7 @@ void MainWindow::nextWord()
     } else {
         m_index++;
     }
+
     highlightText(m_index);
 }
 
