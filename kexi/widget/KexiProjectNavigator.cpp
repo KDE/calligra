@@ -93,7 +93,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     m_list->setAllColumnsShowFocus(true);
     m_list->setAlternatingRowColors(true);
 //    m_list->renameLineEdit()->setValidator(new KexiUtils::IdentifierValidator(this));
-
+    
     connect(m_list, SIGNAL(pressed(const QModelIndex&)), this,SLOT(slotSelectionChanged(const QModelIndex&)));
     connect(m_list, SIGNAL(contextMenu(QTreeView *, const QModelIndex&, const QPoint &)), this, SLOT(slotContextMenu(QTreeView*, const QModelIndex &, const QPoint&)));
 

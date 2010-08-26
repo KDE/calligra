@@ -84,21 +84,21 @@ public:
     KexiProjectModelItem* modelItemFromItem(const KexiPart::Item &item) const;
     KexiProjectModelItem* modelItemFromName(const QString& name) const;
 
+    void sortChildren();
+
  private:
     QList<KexiProjectModelItem*> m_childItems;
     KexiProjectModelItem *m_parentItem;
     QPixmap m_icon;
 
  protected:
-    void initItem();
-    virtual QString key(int column, bool ascending) const;
-
     KexiPart::Info *m_info;
     KexiPart::Item *m_item;
     QString m_groupName;
 
-    QString m_sortKey;
     bool m_fifoSorting;
 };
+
+bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b);
 
 #endif // KEXIPROJECTMODELITEM_H

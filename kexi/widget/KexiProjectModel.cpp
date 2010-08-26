@@ -79,11 +79,11 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
                     groupItem->appendChild(itm);
                 }
             }
-            
+
             if (!m_itemsPartClass.isEmpty()) {
                 break; //the only group added, so our work is completed
             }
-            
+            groupItem->sortChildren();
         } else {
             //add this error to the list that will be displayed later
             QString msg, details;
@@ -264,6 +264,7 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
         if (itm) {
             kDebug() << "Appending";
             parent->appendChild(itm);
+            parent->sortChildren();
         }
         endInsertRows();
     }
@@ -316,4 +317,5 @@ KexiProjectModelItem* KexiProjectModel::modelItemFromName(const QString& name) c
     kDebug() << name;
     return m_rootItem->modelItemFromName(name);
 }
+
 

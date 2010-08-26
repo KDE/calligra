@@ -35,31 +35,16 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p) : m_info(&i), m_item(0), m_parentItem(p)
 {
     m_icon = SmallIcon(i.itemIcon());
-    initItem();
     m_fifoSorting = 1; //because this is top level item
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p) : m_info(&i), m_item(&item), m_parentItem(p)
 {
     m_icon = SmallIcon(i.itemIcon());
-    initItem();
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()
 {
-}
-
-void KexiProjectModelItem::initItem()
-{
-    m_fifoSorting = 0;
-    int sortKey = 0;
-    // set sorting key with FIFO order
-    if (parent()) {
-        sortKey = parent()->childCount();
-    }
-    
-    m_sortKey.sprintf("%2.2d", sortKey);
-// kDebug() << "m_sortKey=" << m_sortKey;
 }
 
 void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
@@ -85,14 +70,6 @@ void KexiProjectModelItem::debugPrint()
 void KexiProjectModelItem::clearChildren()
 {
     qDeleteAll(m_childItems);
-}
-
-QString KexiProjectModelItem::key(int column, bool ascending) const
-{
-// kDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : K3ListViewItem::key(column,ascending));
-//    return m_fifoSorting ? m_sortKey : K3ListViewItem::key(column, ascending);
-return QString();
-    
 }
 
 KexiProjectModelItem* KexiProjectModelItem::parent()
@@ -208,3 +185,12 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& nam
     return itm;
 }
 
+void KexiProjectModelItem::sortChildren()
+{
+    qSort(m_childItems.begin(), m_childItems.end(), itemLessThan);
+}
+
+bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b)
+{
+    return a->data(0).toString() < b->data(0).toString();
+}
