@@ -288,7 +288,6 @@ def createStackTraceGraph(results):
 	for file in results.keys():
 		r = results[file]
 		if not r.backtrace:
-			print 'no backtrace for ' + r
 			continue
 		name = os.path.basename(file)
 		nodes[name] = file
