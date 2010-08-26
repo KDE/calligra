@@ -126,6 +126,7 @@ def runCommand(exepath, arguments, captureStdOut):
 	r.utime = s[2].ru_utime
 	r.stime = s[2].ru_stime
 	r.returnValue = s[1]
+	r.stdout = []
 	if captureStdOut:
 		stdout.close()
 		stdout = open(tmpfilename, 'r')
@@ -153,6 +154,7 @@ def profile(dir, file, logger):
 	outfile = os.fdopen(fileno, 'r')
 	r.lines = outfile.readlines()
 	outfile.close()
+	r.backtrace = None
 	if r.returnValue != 0:
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
