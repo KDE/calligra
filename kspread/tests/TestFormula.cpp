@@ -192,6 +192,21 @@ void TestFormula::testConstant()
     CHECK_EVAL("-1", Value(-1));
     CHECK_EVAL("3.14e7", Value(3.14e7));
     CHECK_EVAL("3.14e-7", Value(3.14e-7));
+
+    // String constants (from Odf 1.2 spec)
+    CHECK_EVAL("\"Hi\"", Value("Hi"));
+    CHECK_EVAL("\"Hi\"\"t\"", Value("Hi\"t"));
+    CHECK_EVAL("\"\\n\"", Value("\\n"));
+
+    // Constant errors
+    CHECK_EVAL("#N/A", Value::errorNA());
+    CHECK_EVAL("#DIV/0!", Value::errorDIV0());
+    CHECK_EVAL("#NAME?", Value::errorNAME());
+    CHECK_EVAL("#NULL!", Value::errorNULL());
+    CHECK_EVAL("#NUM!", Value::errorNUM());
+    CHECK_EVAL("#REF!", Value::errorREF());
+    CHECK_EVAL("#VALUE!", Value::errorVALUE());
+
 }
 
 void TestFormula::testWhitespace()
