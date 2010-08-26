@@ -1872,8 +1872,7 @@ void View::statusBarClicked(const QPoint&)
     QPoint mousepos = QCursor::pos();
     if (koDocument()->isReadWrite() && factory())
         if (QMenu* menu = dynamic_cast<QMenu*>(factory()->container("calc_popup" , this)))
-            if (menu)
-                menu->popup(mousepos);
+            menu->popup(mousepos);
 }
 
 void View::menuCalc(bool)
