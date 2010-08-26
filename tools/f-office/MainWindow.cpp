@@ -1241,7 +1241,7 @@ void MainWindow::saveFile()
                 msgBox.exec();
 #endif
                 QString fileName;
-                fileName = getFileExtension(m_type);
+                fileName = getFileSavePath(m_type);
 
                 if (fileName.isEmpty()) {
 #ifdef Q_WS_MAEMO_5
@@ -1319,7 +1319,7 @@ void MainWindow::saveFileAs()
             !QString::compare(ext,EXT_ODS,Qt::CaseInsensitive)) {
 
             QString fileName;
-            fileName = getFileExtension(m_type);
+            fileName = getFileSavePath(m_type);
             m_fileName = fileName;
 
             if (fileName.isEmpty()) {
@@ -1372,7 +1372,7 @@ void MainWindow::saveFileAs()
             msgBox.exec();
 #endif
             QString fileName;
-            fileName = getFileExtension(m_type);
+            fileName = getFileSavePath(m_type);
 
             if (fileName.isEmpty()) {
 #ifdef Q_WS_MAEMO_5
@@ -1424,7 +1424,7 @@ void MainWindow::saveFileAs()
             msgBox.exec();
 #endif
             QString fileName;
-            fileName = getFileExtension(m_type);
+            fileName = getFileSavePath(m_type);
             m_fileName = fileName;
 
             if (fileName.isEmpty()) {
@@ -1486,20 +1486,22 @@ void MainWindow::saveFileAs()
     }
 }
 
-QString MainWindow::getFileExtension(DocumentType type){
+QString MainWindow::getFileSavePath(DocumentType type){
     QString fileName;
+    QString filter;
     switch(type) {
         case Text:
-            fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odt");
+            filter = "(*.odt)";
             break;
         case Presentation:
-            fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.odp");
+            filter = "(*.odp)";
             break;
         case Spreadsheet:
-            fileName = QFileDialog::getSaveFileName(this,i18n("Save File"),"/home/user/MyDocs/.ods");
+            filter = "(*.ods)";
             break;
     }
-   return fileName;
+    fileName = QFileDialog::getSaveFileName(this, i18n("Save File"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation), filter);
+    return fileName;
 }
 
 void MainWindow::chooseDocumentType()

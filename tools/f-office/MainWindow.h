@@ -467,9 +467,9 @@ private:
      */
     void openNewDocument(DocumentType);
     /*!
-     *Applies appropiate file extension during saving operation
+     *Retrieves path for saving file
      */
-    QString getFileExtension(DocumentType);
+    QString getFileSavePath(DocumentType);
     /*!
      *Function to add formatframe components
      */
