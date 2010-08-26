@@ -1872,7 +1872,8 @@ void View::statusBarClicked(const QPoint&)
     QPoint mousepos = QCursor::pos();
     if (koDocument()->isReadWrite() && factory())
         if (QMenu* menu = dynamic_cast<QMenu*>(factory()->container("calc_popup" , this)))
-            menu->popup(mousepos);
+            if (menu)
+                menu->popup(mousepos);
 }
 
 void View::menuCalc(bool)
@@ -1924,6 +1925,8 @@ void View::popupTabBarMenu(const QPoint & _point)
         return;
     if (d->tabBar) {
         QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));
+        if (!menu)
+            return;
 
         QAction* insertSheet = new KAction(KIcon("insert-table"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
