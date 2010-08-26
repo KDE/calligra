@@ -3732,6 +3732,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
+    m_lstStyleFound = true;
     m_currentListStyleProperties->setBulletCharacter(QChar());
     m_listStylePropertiesAltered = true;
     readNext();
@@ -3764,6 +3765,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
     TRY_READ_ATTR_WITHOUT_NS(type)
 
     if (!type.isEmpty()) {
+        m_lstStyleFound = true;
         if (type == "arabicPeriod") {
             m_currentListStyleProperties->setListItemSuffix(".");
             m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
