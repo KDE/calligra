@@ -1089,7 +1089,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          // end as first-level list-items in ODF.
          const bool makeList = (m_lstStyleFound && m_currentListLevel < 1);
          if (makeList) ++m_currentListLevel;
-         
          if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_H
              if (m_prevListLevel < m_currentListLevel) {
@@ -1160,7 +1159,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          }
 #else
          setupParagraphStyle();
-#endif         
+#endif
          (void)textPBuf.releaseWriter();
          body->endElement(); //text:p
 
@@ -1293,6 +1292,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 
     Q_ASSERT(m_currentTextStyleProperties == 0);
     m_currentTextStyleProperties = new KoCharacterStyle();
+    if (!m_currentTextStylePredefined) {
+        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    }
+
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) {
         // pass properties from master to slide
@@ -1303,12 +1306,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         if (listStyle) {
             m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
         }
+        m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+        delete m_currentTextStyleProperties;
+        m_currentTextStyleProperties = new KoCharacterStyle();
+
+        const QString styleId(d->phStyleId());
+        if (!styleId.isEmpty()) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        }
     }
 #endif
-
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    }
 
     m_currentColor = QColor();
 
@@ -1551,7 +1560,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (m_listStylePropertiesAltered) {
         QBuffer listBuf;
         KoXmlWriter listStyleWriter(&listBuf);
-    
+
         m_currentListStyleProperties->saveOdf(&listStyleWriter);
         const QString elementContents = QString::fromUtf8(listBuf.buffer(),
                                                           listBuf.buffer().size());
@@ -3271,6 +3280,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     // Number 3 makes eg. lvl4 -> 4
     m_currentListLevel = QString(level.at(3)).toInt();
+
     Q_ASSERT(m_currentListLevel > 0);
     m_currentListStyleProperties->setLevel(m_currentListLevel);
 
@@ -3340,14 +3350,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentListStyle.addChildElement("list-style-properties", elementContents);
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (d->currentSlideMasterTextStyle) {
-
-        PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(m_currentListLevel);
-        if (slideMasterListLevelTextStyle) {
-            // Remember the styles to be able to apply them later on the style. Note that the PptxSlideMasterListLevelTextStyle takes over the ownership of the styles.
-            slideMasterListLevelTextStyle->m_characterStyle = m_currentTextStyleProperties;
-            m_currentTextStyleProperties = 0;
+    if (m_context->type == SlideMaster) {
+        if (d->currentSlideMasterTextStyle) {
+            PptxSlideMasterListLevelTextStyle* slideMasterListLevelTextStyle = d->currentSlideMasterTextStyle->listStyle(m_currentListLevel);
+            if (slideMasterListLevelTextStyle) {
+                // Remember the styles to be able to apply them later on the style. Note that the PptxSlideMasterListLevelTextStyle takes over the ownership of the styles.
+                slideMasterListLevelTextStyle->m_characterStyle = m_currentTextStyleProperties;
+                m_currentTextStyleProperties = 0;
+            }
         }
+    }
+    else if (m_context->type == SlideLayout) {
+        const QString styleId(d->phStyleId());
+        m_context->slideLayoutProperties->textStyles[styleId][m_currentListLevel] = m_currentTextStyle;
     }
 #endif
 
@@ -3367,7 +3382,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
  Parent elements:
   - [done] bodyStyle (§19.3.1.5)
   - defaultTextStyle (§19.2.1.8)
-  - lstStyle (§21.1.2.4.12)
+  - [done] lstStyle (§21.1.2.4.12)
   - notesStyle (§19.3.1.28)
   - [done] otherStyle (§19.3.1.35)
   - [done] titleStyle (§19.3.1.49)
@@ -3501,7 +3516,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl9pPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());   
+    const QXmlStreamAttributes attrs(attributes());
 
     if (attrs.hasAttribute("char")) {
         // Effectively converts this to QChar
@@ -3851,6 +3866,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentColor = QColor();
+    m_colorType = TextColor;
 
     while (!atEnd()) {
         readNext();

@@ -109,6 +109,9 @@ public:
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > styles;
 
+    //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,KoGenStyle> > textStyles;
+
     KoGenStyle m_drawingPageProperties;
 private:
 
