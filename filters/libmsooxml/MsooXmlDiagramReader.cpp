@@ -114,6 +114,21 @@ class AbstractNode
             node->m_parent = 0;
             m_children.removeAll(node);
         }
+        QList<AbstractNode*> descendant() const {
+            QList<AbstractNode*> list = m_children;
+            foreach(AbstractNode* node, m_children)
+                foreach(AbstractNode* n, node->descendant())
+                    list.append(n);
+            return list;
+        }
+        QList<AbstractNode*> peers() const {
+            QList<AbstractNode*> list;
+            if (m_parent)
+                foreach(AbstractNode* node, m_parent->m_children)
+                    if(node != this)
+                        list.append(node);
+            return list;
+        }                
     protected:
         AbstractNode* m_parent;
         QList<AbstractNode*> m_children;
@@ -306,37 +321,57 @@ class LayoutNodeAtom : public AbstractAtom
         QList<ConstraintAtom*> constraints() const { return m_constraints; }
         void addConstraint(ConstraintAtom* constraint) { m_constraints << constraint; }
         void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; }
+        QList<AbstractNode*> axis() const { return m_axis; }
         void setAxis(Context* context, const QString& axis, const QString& ptType) {
-            if(axis.isEmpty()) {
-                //context->m_currentNode = 0;
-
-            //} else if(axis == QLatin1String("ancst")) { // Ancestor
-            //    for(PointNode* n = m_item; n; n = n->parent()) list.append(n);
-            //} else if(axis == QLatin1String("ancstOrSelf")) { // Ancestor Or Self
-            //    list.append(m_item);
-            //    for(PointNode* n = m_item; n; n = n->parent()) list.append(n);
-            //} else if(axis == QLatin1String("ch")) { // Child
-            //    list = m_item->children();
-            //} else if(axis == QLatin1String("des")) { // Descendant
-            //    list = m_item->childrenRecursive();
-            //} else if(m_axis == QLatin1String("desOrSelf")) { // Descendant Or Self
-            //    list.append(m_item);
-            //    list = m_item->childrenRecursive();
-            // } else if(m_axis == QLatin1String("follow")) { // Follow
-            // } else if(m_axis == QLatin1String("followSib")) { // Follow Sibling
-            //} else if(m_axis == QLatin1String("par")) { // Parent
-            //    if (m_item->parent()) list.append(m_item->parent());
-            // } else if(m_axis == QLatin1String("preced")) { // Preceding
-            // } else if(m_axis == QLatin1String("precedSib")) { // Preceding Sibling
-            // } else if(m_axis == QLatin1String("root")) { // Root
+            QList<AbstractNode*> list;
+            if(axis == QLatin1String("ancst")) { // Ancestor
+               for(AbstractNode* n = context->m_currentNode; n; n = n->parent())
+                   list.append(n);
+            } else if(axis == QLatin1String("ancstOrSelf")) { // Ancestor Or Self
+               for(AbstractNode* n = context->m_currentNode; n; n = n->parent())
+                   list.append(n);
+               list.append(context->m_currentNode);
+            } else if(axis == QLatin1String("ch")) { // Child
+               list = context->m_currentNode->children();
+            } else if(axis == QLatin1String("des")) { // Descendant
+               list = context->m_currentNode->descendant();
+            } else if(axis == QLatin1String("desOrSelf")) { // Descendant Or Self
+               list = context->m_currentNode->descendant();
+               list.append(context->m_currentNode);
+            } else if(axis == QLatin1String("follow")) { // Follow
+                foreach(AbstractNode* peer, context->m_currentNode->peers()) {
+                    list.append(peer);
+                    foreach(AbstractNode* n, peer->descendant())
+                        list.append(n);
+                }
+            } else if(axis == QLatin1String("followSib")) { // Follow Sibling
+                list = context->m_currentNode->peers();
+            } else if(axis == QLatin1String("par")) { // Parent
+               if (context->m_currentNode->parent()) list.append(context->m_currentNode->parent());
+            } else if(axis == QLatin1String("preced")) { // Preceding
+                //TODO
+            } else if(axis == QLatin1String("precedSib")) { // Preceding Sibling
+                //TODO
+            } else if(axis == QLatin1String("root")) { // Root
+                list.append(context->m_rootPoint);
             } else if(axis == QLatin1String("self")) { // Self
-               context->m_currentNode = this;
-               //this->m_currentNode = context->m_currentNode;
+                list.append(context->m_currentNode);
             }
+            m_axis = filter(list, ptType);
         }
     private:
         QList<ConstraintAtom*> m_constraints;
         AlgorithmAtom* m_algorithm;
+        QList<AbstractNode*> m_axis;
+        
+        QList<AbstractNode*> filter(const QList<AbstractNode*> &list, const QString &ptType) const {
+            QList<AbstractNode*> result;
+            foreach(AbstractNode* node, list)
+                if(PointNode* pt = dynamic_cast<PointNode*>(node))
+                    if(ptType == pt->m_type || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm"))
+                        result.append(pt);
+            return result;
+        }
 };
 
 /// Specify size and position of nodes, text values, and layout dependencies between nodes in a layout definition.
@@ -917,7 +952,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
 
         //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(0);
-        //m_context->m_context->m_rootPoint->dump(0);
+        m_context->m_context->m_rootPoint->dump(0);
     }
     else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
         m_type = LayoutDefType;
@@ -935,10 +970,11 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
             }
         }
 
-        m_context->m_context->m_rootPoint->dump(0);
+        //m_context->m_context->m_rootPoint->dump(0);
         //m_context->m_context->m_layout->dump(0);
-        m_context->m_context->m_rootLayout->layoutAtom(m_context->m_context);
         //Q_ASSERT(false);
+
+        m_context->m_context->m_rootLayout->layoutAtom(m_context->m_context);
         
 #if 0
         device()->seek(0);
