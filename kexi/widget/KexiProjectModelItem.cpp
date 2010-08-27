@@ -27,18 +27,21 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p) : m_info(0), m_item(0), m_parentItem(p)
+KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
+    : m_parentItem(p), m_info(0), m_item(0)
 {
     m_groupName = n;
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p) : m_info(&i), m_item(0), m_parentItem(p)
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
+    : m_parentItem(p), m_info(&i), m_item(0)
 {
     m_icon = SmallIcon(i.itemIcon());
     m_fifoSorting = 1; //because this is top level item
 }
 
-KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p) : m_info(&i), m_item(&item), m_parentItem(p)
+KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
+    : m_parentItem(p), m_info(&i), m_item(&item)
 {
     m_icon = SmallIcon(i.itemIcon());
 }
@@ -94,6 +97,7 @@ int KexiProjectModelItem::columnCount() const
 
 QVariant KexiProjectModelItem::data(int column) const
 {
+    Q_UNUSED(column);
     if (m_item) {
         return m_item->name();
     } else if (m_info) {
