@@ -86,6 +86,7 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     , m_currentSeries(0)
     , m_autoTitleDeleted(false)
     , m_readTxContext( None )
+    , m_areaContext( ChartArea )
 {
 }
 
@@ -112,6 +113,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
         QXmlStreamReader::TokenType tokenType = readNext();
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
         if (isStartElement()) {
+            m_areaContext = ChartArea;
             TRY_READ_IF(plotArea)
             ELSE_TRY_READ_IF(title)
             ELSE_TRY_READ_IF(legend)
@@ -120,6 +122,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 m_autoTitleDeleted = val.toInt();
+            }
+            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(style))) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                m_context->m_chart->m_style = val.toInt();
             }
         }
     }
@@ -164,14 +171,76 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL valAx
+KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
+{
+    READ_PROLOGUE
+    Charting::Axis* axis = new Charting::Axis( Charting::Axis::VerticalValueAxis );
+    
+    m_context->m_chart->m_axes.push_back( axis );
+    while (!atEnd()) {
+        readNext();
+        qDebug( qualifiedName().toString().toLocal8Bit().data() );
+        if (isStartElement()) {
+            if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(axPos) ) ) {
+                  const QXmlStreamAttributes attrs(attributes());
+                  TRY_READ_ATTR_WITHOUT_NS(val)
+                  if ( val == QLatin1String( "b" ) ){
+                      axis->m_type = Charting::Axis::HorizontalValueAxis;
+                  }
+//                   else if ( val == QLatin1String( "l" ) ){
+//                   }
+            }            
+        }
+        else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
+            axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL catAx
+KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
+{
+    READ_PROLOGUE
+    Charting::Axis* axis = new Charting::Axis( Charting::Axis::VerticalValueAxis );
+    m_context->m_chart->m_axes.push_back( axis );
+    while (!atEnd()) {
+        readNext();
+        if (isStartElement()) {
+            if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(axPos) ) ) {
+                  const QXmlStreamAttributes attrs(attributes());
+                  TRY_READ_ATTR_WITHOUT_NS(val)
+                  if ( val == QLatin1String( "b" ) ){
+                      axis->m_type = Charting::Axis::HorizontalValueAxis;
+                  }
+//                   else if ( val == QLatin1String( "l" ) ){
+//                   }
+            }
+            else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
+                  axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
+            }
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL plotArea
 KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
 {
+    m_areaContext = PlotArea;
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
             TRY_READ_IF(ser)
+            ELSE_TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(valAx)
+            ELSE_TRY_READ_IF(catAx)
             ELSE_TRY_READ_IF(pieChart)
             ELSE_TRY_READ_IF(pie3DChart)
             ELSE_TRY_READ_IF(doughnutChart)
@@ -201,6 +270,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
         BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
+    m_areaContext = ChartArea;
 }
 
 #undef CURRENT_EL
@@ -464,8 +534,13 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     State state = Start;
     READ_PROLOGUE
     int level = 0;
+    bool readingGradient = false;
+    bool readingGradientStop = false;
+    Charting::Gradient* gradient = NULL;
+    Charting::Gradient::GradientStop currentStop;
     while (!atEnd()) {
         readNext();
+        qDebug( qualifiedName().toString().toLocal8Bit().data() );
         if(isStartElement()) ++level;
         else if(isEndElement()) --level;
 
@@ -480,9 +555,96 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             TRY_READ_ATTR_WITHOUT_NS(val)
             if(!val.isEmpty() && !m_context->m_chart->m_areaFormat) {
                 if(!val.startsWith('#')) val.prepend('#');
-                m_context->m_chart->m_areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                    if ( readingGradientStop )
+                        currentStop.knownColorValue = QColor( val );
+                    else
+                        if ( m_areaContext == ChartArea )
+                            m_context->m_chart->m_areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                        else
+                            m_context->m_chart->m_plotAreaFillColor = QColor( val );
             }
             state = Start; // job done
+        } else if ( qualifiedName() == "a:srgbClr" ) {
+            if ( isStartElement() ) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                if(!val.isEmpty() && !m_context->m_chart->m_areaFormat) {
+                    if(!val.startsWith('#')) val.prepend('#');
+                        if ( readingGradientStop )
+                            currentStop.knownColorValue = QColor( val );
+                        else
+                            if ( m_areaContext == ChartArea )
+                                m_context->m_chart->m_areaFormat = new Charting::AreaFormat(QColor(val), QColor(), state == InFill);
+                            else
+                                m_context->m_chart->m_plotAreaFillColor = QColor( val );
+                }
+            }
+        } else if ( qualifiedName() == "a:alpha" ) {
+            const QXmlStreamAttributes attrs(attributes());
+            TRY_READ_ATTR_WITHOUT_NS(val)
+                  if ( !val.isEmpty() )
+                      if ( readingGradientStop )
+                          currentStop.knownColorValue.setAlphaF( val.toDouble() / 100000.0 );
+                      else
+                          if ( m_areaContext == ChartArea )
+                              m_context->m_chart->m_areaFormat->m_foreground.setAlphaF( val.toDouble() / 100000.0 );
+                          else
+                              m_context->m_chart->m_plotAreaFillColor.setAlphaF( val.toDouble() / 100000.0 );
+        } else if ( qualifiedName() == "a:gsLst" ) {
+            if ( isStartElement() ) {
+                readingGradient = true;
+                gradient =  new Charting::Gradient;
+            } else if ( isEndElement() ) {
+                readingGradient = false;                
+                switch ( m_areaContext ) {
+                    case( PlotArea ):
+                      m_context->m_chart->m_plotAreaFillGradient = gradient;
+                      break;
+                    case( ChartArea ):
+                      m_context->m_chart->m_fillGradient = gradient;
+                      break;
+                }
+                gradient = NULL;
+            }
+        } else if ( qualifiedName() == "a:gs" && readingGradient ) {
+            if ( isStartElement() ) {
+                readingGradientStop = true;
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(pos)
+                if ( !pos.isEmpty() )
+                    currentStop.position = pos.toDouble() / 1000.0;
+                
+            } else if ( isEndElement() ) {
+                // append the current gradient stop                
+                gradient->gradientStops.append( currentStop );
+                readingGradientStop = false;
+                currentStop.reset();
+                
+            }
+        } else if ( qualifiedName() == "a:schemeClr" && readingGradientStop ) {
+            if ( isStartElement() ) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                if ( !val.isEmpty() )
+                    currentStop.referenceColor = val;
+            } else if ( isEndElement() ) {
+            }
+        } else if ( qualifiedName() == "a:tint" && readingGradientStop ) {
+            const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                if ( !val.isEmpty() )
+                    currentStop.tintVal = val.toDouble() / 1000.0;
+        } else if ( qualifiedName() == "a:satMod" && readingGradientStop ) {
+            const QXmlStreamAttributes attrs(attributes());
+            TRY_READ_ATTR_WITHOUT_NS(val)
+            if ( !val.isEmpty() )
+                currentStop.satVal = val.toDouble() / 1000.0;
+        }
+         else if ( qualifiedName() == "a:lin" && readingGradient ) {
+            const QXmlStreamAttributes attrs(attributes());
+            TRY_READ_ATTR_WITHOUT_NS(ang)
+            if ( !ang.isEmpty() )
+                gradient->angle = ang.toDouble() / 60000.0;
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }

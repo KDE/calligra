@@ -27,11 +27,12 @@
 #include <KoGenStyle.h>
 //#include <KoOdfNumberStyles.h>
 #include <KDebug>
+#include "XlsxXmlDrawingReader.h"
 
 using namespace Charting;
 
-ChartExport::ChartExport(Charting::Chart* chart)
-    : m_width(0), m_height(0), m_chart(chart)
+ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
+    : m_width(0), m_height(0), m_chart(chart), m_theme(theme)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -104,10 +105,182 @@ bool ChartExport::saveIndex(KoXmlWriter* xmlWriter)
     return true;
 }
 
+QColor tintColor( const QColor & color, qreal tintfactor )
+{
+    QColor retColor;
+    const qreal  nonTindedPart = 1.0 - tintfactor;
+    const int tintedColor = 255 * nonTindedPart;
+    retColor.setRed( tintedColor + tintfactor * color.red() );
+    retColor.setGreen( tintedColor + tintfactor * color.green() );
+    retColor.setBlue( tintedColor + tintfactor * color.blue() );
+    return retColor;
+}
+
+QColor ChartExport::calculateColorFromGradientStop ( const Charting::Gradient::GradientStop& grad )
+{
+    QColor color = grad.knownColorValue;
+    if ( !grad.referenceColor.isEmpty() )
+        color = m_theme->colorScheme.value( grad.referenceColor )->value();
+    const int tintedColor = 255 * grad.tintVal / 100.0;
+    const qreal  nonTindedPart = 1.0 - grad.tintVal / 100.0;
+    color.setRed( tintedColor + nonTindedPart * color.red() );
+    color.setGreen( tintedColor + nonTindedPart * color.green() );
+    color.setBlue( tintedColor + nonTindedPart * color.blue() );
+    return color;
+}
+
+QString ChartExport::generateGradientStyle ( KoGenStyles& mainStyles, const Charting::Gradient* grad )
+{
+    KoGenStyle gradStyle( KoGenStyle::GradientStyle );
+    gradStyle.addAttribute( "draw:style", "linear" );
+    QColor startColor = calculateColorFromGradientStop( grad->gradientStops.first() );
+    QColor endColor = calculateColorFromGradientStop( grad->gradientStops.last() );
+    
+    gradStyle.addAttribute( "draw:start-color", startColor.name() );
+    gradStyle.addAttribute( "draw:end-color", endColor.name() );
+    gradStyle.addAttribute( "draw:angle", QString::number( grad->angle ) );
+    return mainStyles.insert( gradStyle, "ms_chart_gradient" );
+}
+
+QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
+{
+    const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+    if( chart()->m_areaFormat && chart()->m_areaFormat->m_fill )
+    {
+        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+    }
+    else if ( chart()->m_fillGradient )
+    {
+        style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-gradient-name", generateGradientStyle( mainStyles, chart()->m_fillGradient ), KoGenStyle::GraphicType );
+    }
+    else if ( m_theme )
+    {        
+        style.addProperty( "draw:fill", "solid" );
+        switch( styleID )
+        {
+            case( 33 ):              
+            case( 34 ):
+            case( 35 ):
+            case( 36 ):
+            case( 37 ):
+            case( 38 ):
+            case( 39 ):
+            case( 40 ):
+            {
+                style.addProperty( "draw:fill-color", colorScheme.value( "lt1" )->value().name(), KoGenStyle::GraphicType );
+            }            
+            break;            
+            case( 41 ):
+            case( 42 ):
+            case( 43 ):
+            case( 44 ):
+            case( 45 ):
+            case( 46 ):
+            case( 47 ):
+            case( 48 ):
+            {
+                style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
+            }            
+            break;
+            default:
+              style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        }
+        //style.addProperty();
+    }
+    else
+    {        
+        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+    }
+    return styles.insert( style, "ch" );
+}
+
+
+QString ChartExport::genChartAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles )
+{
+    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
+    return genChartAreaStyle( styleID, style, styles, mainStyles );
+}
+
+
+QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
+{
+    const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
+    if( chart()->m_plotAreaFillColor.isValid() )
+    {
+        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-color", chart()->m_plotAreaFillColor.name(), KoGenStyle::GraphicType );
+        if ( chart()->m_plotAreaFillColor.alpha() < 255 )
+        {
+            style.addProperty( "draw:opacity", QString( "%1\%" ).arg( chart()->m_plotAreaFillColor.alphaF() * 100.0 ), KoGenStyle::GraphicType );
+        }
+    } 
+    else if ( chart()->m_plotAreaFillGradient )
+    {
+        style.addProperty( "draw:fill", "gradient", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-gradient-name", generateGradientStyle( mainStyles, chart()->m_plotAreaFillGradient ), KoGenStyle::GraphicType );
+    }
+    else if ( m_theme )
+    {        
+        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        switch( styleID )
+        {
+            case( 33 ):              
+            case( 34 ):
+            {
+                style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.2 ).name(), KoGenStyle::GraphicType );
+            }
+            break;
+            case( 35 ):
+            case( 36 ):
+            case( 37 ):
+            case( 38 ):
+            case( 39 ):
+            case( 40 ):
+            {
+                QString prop = QString::fromLatin1( "accent%1" ).arg( styleID - 34 );
+                style.addProperty( "draw:fill-color", colorScheme.value( "dk1" )->value().name(), KoGenStyle::GraphicType );
+            }            
+            break;            
+            case( 41 ):
+            case( 42 ):
+            case( 43 ):
+            case( 44 ):
+            case( 45 ):
+            case( 46 ):
+            case( 47 ):
+            case( 48 ):
+            {
+                style.addProperty( "draw:fill-color", tintColor( colorScheme.value( "dk1" )->value(), 0.95 ).name(), KoGenStyle::GraphicType );
+            }            
+            break;
+            default:
+              style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+        }
+    }
+    else
+    {        
+        style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
+        style.addProperty( "draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF", KoGenStyle::GraphicType );
+    }
+    return styles.insert( style, "ch" );
+}
+
+
+QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles )
+{
+    KoGenStyle style(KoGenStyle::ChartAutoStyle, "chart");
+    return genPlotAreaStyle( styleID, style, styles, mainStyles );
+}
+
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
     if(!chart() || !chart()->m_impl || m_href.isEmpty())
         return false;
+    
+    const int styleID = chart()->m_style;
 
     KoGenStyles styles;
     KoGenStyles mainStyles;
@@ -131,12 +304,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     if(m_height > 0)
         bodyWriter->addAttributePt("svg:height", m_height);
 
-    KoGenStyle style(KoGenStyle::GraphicAutoStyle, "chart");
-    if(!chart()->m_areaFormat || chart()->m_areaFormat->m_fill) {
-        style.addProperty("draw:fill", "solid");
-        style.addProperty("draw:fill-color", chart()->m_areaFormat ? chart()->m_areaFormat->m_foreground.name() : "#FFFFFF");
-    }
-    bodyWriter->addAttribute("chart:style-name", styles.insert(style, "ch"));
+    
+    bodyWriter->addAttribute("chart:style-name", genChartAreaStyle( styleID, styles, mainStyles ) );
 
     //<chart:title svg:x="5.618cm" svg:y="0.14cm" chart:style-name="ch2"><text:p>PIE CHART</text:p></chart:title>
     //foreach(Charting::Text* t, chart()->m_texts) {
@@ -209,7 +378,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         chartstyle.addProperty("chart:stacked", "true");
     if( chart()->m_f100 )
        chartstyle.addProperty("chart:percentage", "true");
-    bodyWriter->addAttribute("chart:style-name", styles.insert(chartstyle, "ch"));
+    bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( styleID, chartstyle, styles, mainStyles ) );
 
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
 
@@ -238,11 +407,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
         bodyWriter->startElement("chart:axis");
         switch(axis->m_type) {
-            case Charting::Axis::HorizontalValueAxis:
+            case Charting::Axis::VerticalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "y");
                 bodyWriter->addAttribute("chart:name", QString("y%1").arg(++countYAxis));
                 break;
-            case Charting::Axis::VerticalValueAxis:
+            case Charting::Axis::HorizontalValueAxis:
                 bodyWriter->addAttribute("chart:dimension", "x");
                 bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
                 if(countXAxis == 1 && definesCategories && !verticalCellRangeAddress.isEmpty()) {

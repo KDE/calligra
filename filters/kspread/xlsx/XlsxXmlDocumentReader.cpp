@@ -39,7 +39,7 @@
 
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import,
-    const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+    /* QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/& _themes,
     const XlsxSharedStringVector& _sharedStrings,
     const XlsxComments& _comments,
     const XlsxStyles& _styles,
@@ -47,7 +47,7 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     )
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , import(&_import)
-        , themes(&_themes)
+        , themes(_themes)
         , sharedStrings(&_sharedStrings)
         , comments(&_comments)
         , styles(&_styles)
@@ -256,7 +256,7 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
 
     XlsxXmlWorksheetReader worksheetReader(this);
     XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, state, path, file,
-                                          *m_context->themes, *m_context->sharedStrings,
+                                          m_context->themes, *m_context->sharedStrings,
                                           *m_context->comments,
                                           *m_context->styles,
                                           *m_context->relationships, m_context->import,

@@ -53,6 +53,8 @@ public:
 protected:
     KoFilter::ConversionStatus read_plotArea();
     KoFilter::ConversionStatus read_ser();
+    KoFilter::ConversionStatus read_valAx();
+    KoFilter::ConversionStatus read_catAx();
     KoFilter::ConversionStatus read_title();
     KoFilter::ConversionStatus read_legend();
     KoFilter::ConversionStatus read_spPr();
@@ -91,11 +93,13 @@ protected:
     KoFilter::ConversionStatus read_bubbleScale();
 private:
     enum ReadTxContext{ Title, None };
+    enum ReadAreaContext{ PlotArea, ChartArea };
     XlsxXmlChartReaderContext *m_context;
     Charting::Series *m_currentSeries;
     QString m_cellRangeAddress;
-    bool m_autoTitleDeleted;
+    bool m_autoTitleDeleted;    
     ReadTxContext m_readTxContext;
+    ReadAreaContext m_areaContext;
 };
 
 #endif

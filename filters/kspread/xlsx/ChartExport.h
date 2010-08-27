@@ -30,11 +30,19 @@
 
 class KoStore;
 class KoXmlWriter;
+class KoGenStyles;
+class KoGenStyle;
+
+namespace MSOOXML
+{
+    class DrawingMLTheme;
+}
+
 
 class ChartExport
 {
 public:
-    explicit ChartExport(Charting::Chart* chart);
+    explicit ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL);
     ~ChartExport();
     Charting::Chart* chart() const { return m_chart; }
 
@@ -62,6 +70,13 @@ private:
     };
     float sprcToPt( int sprc, Orientation orientation );
     Charting::Chart* m_chart;
+    const MSOOXML::DrawingMLTheme* m_theme;
+    QString genChartAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genChartAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    QString generateGradientStyle( KoGenStyles& mainStyles, const Charting::Gradient* grad );
+    QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
 };
 
 #endif

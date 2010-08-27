@@ -303,13 +303,13 @@ public:
         DocxImport& _import,
         const QString& _path, const QString& _file,
         MSOOXML::MsooXmlRelationships& _relationships,
-        const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes
+        /* QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes
     );
     DocxImport* import;
     const QString path;
     const QString file;
 
-    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
+    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>**/ themes;
 
     // Contains footnotes when read, the styles of footnotes are already put to correct files.
     QMap<QString, QString> m_footnotes;

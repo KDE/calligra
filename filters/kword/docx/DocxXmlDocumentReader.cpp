@@ -45,10 +45,10 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
     const QString& _path, const QString& _file,
     MSOOXML::MsooXmlRelationships& _relationships,
-    const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes)
+    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
-        themes(&_themes)
+        themes(_themes)
 {
 }
 
@@ -498,7 +498,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
     MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
 
     DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
-        relationships, *m_context->themes);
+        relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, &context);
@@ -568,7 +568,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
     MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
 
     DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
-        relationships, *m_context->themes);
+        relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, &context);

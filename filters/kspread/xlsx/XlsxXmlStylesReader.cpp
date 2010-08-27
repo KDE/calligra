@@ -131,7 +131,7 @@ void XlsxColorStyle::clear()
     theme = -1;
 }
 
-bool XlsxColorStyle::isValid(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+bool XlsxColorStyle::isValid(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const
 {
 kDebug() << "indexed:" << indexed << "rgb:" << rgb.name() << "tint:" << tint << "theme:" << theme;
     if (theme >= 0) {
@@ -141,11 +141,11 @@ kDebug() << themeColor(themes).isValid();
     return rgb.isValid();
 }
 
-QColor XlsxColorStyle::themeColor(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+QColor XlsxColorStyle::themeColor(const/* QMap<QString,*/ MSOOXML::DrawingMLTheme*/*> **/themes) const
 {
     Q_ASSERT(themes);
 //! @todo find proper theme, not just any
-    MSOOXML::DrawingMLTheme *themeObject = themes->constBegin().value();
+    const MSOOXML::DrawingMLTheme *themeObject = themes;
 kDebug() << themeObject;
     if (themeObject) {
         MSOOXML::DrawingMLColorSchemeItemBase *colorItemBase = themeObject->colorScheme.value(theme);
@@ -159,7 +159,7 @@ kDebug() << colorItemBase;
     return QColor();
 }
 
-QColor XlsxColorStyle::value(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+QColor XlsxColorStyle::value(const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const
 {
     QColor realColor;
 kDebug() << "theme:" << theme;
@@ -220,7 +220,7 @@ XlsxBorderStyle::XlsxBorderStyle()
 {
 }
 
-QString XlsxBorderStyle::setupCellStyle(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+QString XlsxBorderStyle::setupCellStyle(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const
 {
     QString styleString = this->style;
 
@@ -267,7 +267,7 @@ XlsxBorderStyles::XlsxBorderStyles()
 {
 }
 
-void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const
 {
 //! @todo simplify if 2 or 4 sides are the same
     QString s;
@@ -294,7 +294,7 @@ void XlsxBorderStyles::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString,
     }
 }
 
-static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyle& fg, qreal percent, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes )
+static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyle& fg, qreal percent, const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes )
 {
     const QColor bgColor = bg.theme >= 0 ? bg.themeColor( themes ) : bg.rgb.isValid() ? bg.rgb : QColor( Qt::white );
     const QColor fgColor = fg.theme >= 0 ? fg.themeColor( themes ) : fg.rgb;//.isValid() ? fg.rgb : QColor( Qt::black );
@@ -315,7 +315,7 @@ static QColor applyPatternDensity( const XlsxColorStyle& bg, const XlsxColorStyl
     return result;
 }
 
-const XlsxColorStyle* XlsxFillStyle::realBackgroundColor( const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+const XlsxColorStyle* XlsxFillStyle::realBackgroundColor( const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const
 {
     delete cachedRealBackgroundColor;
     cachedRealBackgroundColor = new XlsxColorStyle;
@@ -375,7 +375,7 @@ kDebug() << "patternType:" << patternType;
     return &bgColor;
 }
 
-void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const
+void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const
 {
 //! @todo implement more styling;
 //!       use XlsxColorStyle::automatic, XlsxColorStyle::indexed, XlsxColorStyle::theme...
@@ -510,7 +510,7 @@ void XlsxFontStyle::setupCharacterStyle(KoCharacterStyle* characterStyle) const
 }
 
 void XlsxFontStyle::setupCellTextStyle(
-    const QMap<QString, MSOOXML::DrawingMLTheme*> *themes,
+    const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes,
     KoGenStyle* cellStyle) const
 {
     if (!name.isEmpty()) {
@@ -719,7 +719,7 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
 //! See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#text-align
 bool XlsxCellFormat::setupCellStyle(
     const XlsxStyles *styles,
-    const QMap<QString, MSOOXML::DrawingMLTheme*> *themes,
+    const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes,
     KoGenStyle* cellStyle) const
 {
     kDebug() << "fontId:" << fontId << "fillId:" << fillId << "borderId:" << borderId;

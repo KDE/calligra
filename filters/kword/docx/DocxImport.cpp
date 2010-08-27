@@ -245,8 +245,8 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     }
 
     // 2. parse themes
-    QMap<QString, MSOOXML::DrawingMLTheme*> themes;
-    MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
+    /*QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/ themes;
+//     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
     RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
 
     // 3. parse styles

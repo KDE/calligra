@@ -29,6 +29,25 @@
 
 namespace Charting
 {
+  
+    class Gradient
+    {        
+    public:
+        Gradient(){ angle =  0.0; }
+        class GradientStop
+        {
+        public:
+            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
+            qreal position;
+            QColor knownColorValue;
+            qreal tintVal;
+            qreal satVal;
+            qreal shadeVal;
+            QString referenceColor;
+        };
+        QVector< GradientStop > gradientStops;
+        qreal angle;
+    };
 
     class Value
     {
@@ -305,13 +324,16 @@ namespace Charting
         bool m_stacked;
         /// Whether the chart is percentage or not.
         bool m_f100;
+        /// style for colors fills line types, etc
+        int m_style;
+        Gradient* m_fillGradient;
+        Gradient* m_plotAreaFillGradient;
+        QColor m_plotAreaFillColor;
 
-        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false) {
+        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(0), m_fillGradient(0), m_plotAreaFillGradient(0) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
-        virtual ~Chart() {
-            qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl;
-        }
+        virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_fillGradient; delete m_plotAreaFillGradient; }
         
         void addRange(const QRect& range)
         {

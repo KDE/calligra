@@ -117,7 +117,7 @@ public:
         const QString& _worksheetName,
         const QString& _state,
         const QString _path, const QString _file,
-        const QMap<QString, MSOOXML::DrawingMLTheme*>& _themes,
+        /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes,
         const XlsxSharedStringVector& _sharedStrings,
         const XlsxComments& _comments,
         const XlsxStyles& _styles,
@@ -128,7 +128,7 @@ public:
     const uint worksheetNumber;
     QString worksheetName;
     QString state;
-    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
+    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>**/ themes;
     const XlsxSharedStringVector *sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;

@@ -52,7 +52,7 @@ public:
     XlsxImport* import;
     QString path;
     QString file;
-    const QMap<QString, MSOOXML::DrawingMLTheme*>* themes;
+    const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/* themes;
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     QList<XlsxXmlChartReaderContext*> charts;

@@ -998,7 +998,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
-        ChartExport* chartexport = new ChartExport(chart);
+        
+        ChartExport* chartexport = new ChartExport(chart, m_context->themes);
         chartexport->m_drawLayer = true;
         chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
         chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
@@ -1008,7 +1009,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         kDebug()<<"r:id="<<r_id<<"filepath="<<filepath<<"position="<<QString("%1:%2").arg(chartexport->m_x).arg(chartexport->m_y)<<"size="<<QString("%1x%2").arg(chartexport->m_width).arg(chartexport->m_height);
         
         KoStore* storeout = m_context->import->outputStore();
-        XlsxXmlChartReaderContext context(storeout, chartexport);
+        XlsxXmlChartReaderContext context(storeout, chartexport );
         XlsxXmlChartReader reader(this);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
         if (result != KoFilter::OK) {

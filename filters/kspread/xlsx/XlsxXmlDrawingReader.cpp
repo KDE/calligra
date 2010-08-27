@@ -55,7 +55,7 @@ XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderC
     , import(_worksheetReaderContext->import)
     , path(_path)
     , file(_file)
-    , themes(&(*_worksheetReaderContext->themes))
+    , themes((_worksheetReaderContext->themes))
     , worksheetReaderContext(_worksheetReaderContext)
 {
 }
@@ -236,7 +236,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart2()
                 chart->m_toColumn = f.m_col;
             }
         }
-        ChartExport* chartexport = new ChartExport(chart);
+        ChartExport* chartexport = new ChartExport(chart, m_context->themes);
 
         KoStore* storeout = m_context->worksheetReaderContext->import->outputStore();
         XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(storeout, chartexport);

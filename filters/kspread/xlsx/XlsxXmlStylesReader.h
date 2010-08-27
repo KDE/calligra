@@ -46,11 +46,11 @@ public:
     void clear();
 
     //! @return true if this color style is valid
-    bool isValid(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    bool isValid(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 
     //! @return value of this color style; for computing rgb, indexed, tint and theme attributes are used
 //! @todo use indexed
-    QColor value(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    QColor value(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 
     KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const char* debugElement);
 
@@ -60,7 +60,7 @@ public:
     qreal tint; //!< tint value applied to the color, default is -1
     int theme; //!< default: -1
 
-    QColor themeColor(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    QColor themeColor(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 };
 
 //! 22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
@@ -126,7 +126,7 @@ public:
 
     //! Sets up @a cellStyle to match this cell text style.
     //! @todo implement more styling
-    void setupCellTextStyle(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes, KoGenStyle* cellStyle) const;
+    void setupCellTextStyle(const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes, KoGenStyle* cellStyle) const;
 
     //! Sets up @a characterStyle to match this font style.
     //! @todo implement more formatting
@@ -194,11 +194,11 @@ public:
 
     //! Sets up @a cellStyle to match this style.
     //! @todo implement more styling
-    void setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    void setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 
     //! @return color style (bgColor or fgColor) depending on the pattern
     //! Can return 0 if no fill should be painted.
-    const XlsxColorStyle* realBackgroundColor( const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    const XlsxColorStyle* realBackgroundColor( const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 
 private:
     mutable XlsxColorStyle* cachedRealBackgroundColor;
@@ -213,7 +213,7 @@ public:
 
     KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs);
 
-    QString setupCellStyle(const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    QString setupCellStyle(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 
     XlsxColorStyle color;
 private:
@@ -227,7 +227,7 @@ class XlsxBorderStyles
 public:
     XlsxBorderStyles();
 
-    void setupCellStyle(KoGenStyle* cellStyle, const QMap<QString, MSOOXML::DrawingMLTheme*> *themes) const;
+    void setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const;
 
     XlsxBorderStyle top;
     XlsxBorderStyle right;
@@ -355,7 +355,7 @@ public:
     //! @todo implement more styling
     bool setupCellStyle(
         const XlsxStyles *styles,
-        const QMap<QString, MSOOXML::DrawingMLTheme*> *themes,
+        const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes,
         KoGenStyle* cellStyle) const;
 
     //! Sets up @a characterStyle to match this font style.

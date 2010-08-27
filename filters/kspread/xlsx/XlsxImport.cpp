@@ -541,8 +541,8 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
     );
 
     // 1. parse themes
-    QMap<QString, MSOOXML::DrawingMLTheme*> themes;
-    MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
+    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/ themes;
+//     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
     {
         std::auto_ptr<MSOOXML::DrawingMLTheme> theme(new MSOOXML::DrawingMLTheme);
         MSOOXML::MsooXmlThemesReader themesReader(writers);
@@ -550,11 +550,13 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context))
-        if (!theme.get()->name.isEmpty()) {
-            // theme loaded
-            themes.insert(theme.get()->name, theme.get());
-            theme.release();
-        }
+        themes = theme.get();
+        theme.release();
+//         if (!theme.get()->name.isEmpty()) {
+//             // theme loaded
+//             themes.insert(theme.get()->name, theme.get());
+//             theme.release();
+//         }
     }
     // 2. parse shared strings
     XlsxSharedStringVector sharedStrings;
