@@ -1649,7 +1649,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List) §20.1.2.2.15
   - [done] lnSpc (Line Spacing) §21.1.2.2.5
-  - spcAft (Space After) §21.1.2.2.9
+  - [done] spcAft (Space After) §21.1.2.2.9
   - [done] spcBef (Space Before) §21.1.2.2.10
   - tabLst (Tab List) §21.1.2.2.14
 */
@@ -1679,8 +1679,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
-            ELSE_TRY_READ_IF(spcBef)
-            ELSE_TRY_READ_IF(lnSpc)
+            else if (QUALIFIED_NAME_IS(spcBef)) {
+                m_currentSpacingType = spacingMarginTop;
+                TRY_READ(spcBef)
+            }
+            else if (QUALIFIED_NAME_IS(spcAft)) {
+                m_currentSpacingType = spacingMarginBottom;
+                TRY_READ(spcAft)
+            }
+            else if (QUALIFIED_NAME_IS(lnSpc)) {
+                m_currentSpacingType = spacingLines;
+                TRY_READ(lnSpc)
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -3724,7 +3734,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
  Child elements:
 
- - spcPct (Spacing Percent) §21.1.2.2.11
+ - [done] spcPct (Spacing Percent) §21.1.2.2.11
  - [done] spcPts (Spacing Points)  §21.1.2.2.12
 
 */
@@ -3736,6 +3746,47 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
     while (!atEnd()) {
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
+            ELSE_TRY_READ_IF(spcPct)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL spcAft
+//! spcAft - spacing after
+/*!
+ Parent elements:
+
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+
+ - [done] spcPct (Spacing Percent) §21.1.2.2.11
+ - [done] spcPts (Spacing Points)  §21.1.2.2.12
+
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcAft()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        if (isStartElement()) {
+            TRY_READ_IF(spcPts)
+            ELSE_TRY_READ_IF(spcPct)
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -3764,7 +3815,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
  Child elements:
 
  - [done] spcPct (Spacing Percent) §21.1.2.2.11
- - spcPts (Spacing Points)  §21.1.2.2.12
+ - [done] spcPts (Spacing Points)  §21.1.2.2.12
 
 */
 //! @todo support all attributes
@@ -3774,6 +3825,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
     while (!atEnd()) {
         if (isStartElement()) {
             TRY_READ_IF(spcPct)
+            ELSE_TRY_READ_IF(spcPts)
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -3787,7 +3839,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
 /*!
  Parent elements:
  - lnSpc (§21.1.2.2.5)
- - spcAft (§21.1.2.2.9)
+ - [done] spcAft (§21.1.2.2.9)
  - [done] spcBef (§21.1.2.2.10)
 */
 //! @todo support all attributes
@@ -3796,14 +3848,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-   
+
     TRY_READ_ATTR_WITHOUT_NS(val)
 
     bool ok = false;
-    const int marginTop = val.toDouble(&ok);
+    const int margin = val.toDouble(&ok);
 
     if (ok) {
-        m_currentParagraphStyle.addPropertyPt("fo:margin-top", marginTop/100);
+        switch (m_currentSpacingType) {
+            case (spacingMarginTop):
+                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100);
+                break;
+            case (spacingMarginBottom):
+                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100);
+                break;
+            case (spacingLines):
+                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100);
+                break;
+        }
     }
 
     readNext();
@@ -3816,8 +3878,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 /*!
  Parent elements:
  - [done] lnSpc (§21.1.2.2.5)
- - spcAft (§21.1.2.2.9)
- - spcBef (§21.1.2.2.10)
+ - [done] spcAft (§21.1.2.2.9)
+ - [done] spcBef (§21.1.2.2.10)
 */
 //! @todo support all attributes
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
@@ -3825,7 +3887,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-   
+
     TRY_READ_ATTR_WITHOUT_NS(val)
     bool ok = false;
     int lineSpace = val.toDouble(&ok)/1000;
@@ -3833,7 +3895,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
         QString space = "%1";
         space = space.arg(lineSpace);
         space.append('%');
-        m_currentParagraphStyle.addProperty("fo:line-height", space);
+        switch (m_currentSpacingType) {
+            case (spacingMarginTop):
+                m_currentParagraphStyle.addProperty("fo:margin-top", space);
+                break;
+            case (spacingMarginBottom):
+                m_currentParagraphStyle.addProperty("fo:margin-bottom", space);
+                break;
+            case (spacingLines):
+                m_currentParagraphStyle.addProperty("fo:line-height", space);
+                break;
+        }
     }
 
     readNext();

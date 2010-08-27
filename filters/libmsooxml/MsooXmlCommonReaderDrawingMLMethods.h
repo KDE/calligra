@@ -103,9 +103,15 @@ bool    m_isPlaceHolder; //! set by read_ph()
 
 KoFilter::ConversionStatus read_fld();
 
+enum spacingType {
+    spacingMarginTop, spacingLines, spacingMarginBottom
+};
+spacingType m_currentSpacingType; // determines how spcPct and spcPts should behave
+
 KoFilter::ConversionStatus read_lnSpc();
 KoFilter::ConversionStatus read_spcPct();
 KoFilter::ConversionStatus read_spcBef();
+KoFilter::ConversionStatus read_spcAft();
 KoFilter::ConversionStatus read_spcPts();
 
 bool m_listStylePropertiesAltered;
