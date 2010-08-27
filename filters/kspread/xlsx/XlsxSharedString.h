@@ -39,7 +39,7 @@ public:
     //! Constructs empty plain string.
     XlsxSharedString();
 
-    //bool isPlainText() const { return m_isPlainText; }
+    bool isPlainText() const { return m_isPlainText; }
     QString data() const { return m_data; }
 
     //QString plainText() const { return m_isPlainText ? m_data : QString(); }

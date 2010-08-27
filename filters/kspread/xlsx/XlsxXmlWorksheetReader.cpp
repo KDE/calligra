@@ -120,6 +120,7 @@ public:
     QString styleName;
     QString charStyleName;
     QString text;
+    bool isPlainText;
     QString valueType;
     QByteArray valueAttr;
     QString valueAttrValue;
@@ -130,7 +131,7 @@ public:
     //QPair< oleObjectFile, imageReplacementFile>
     QList< QPair<QString,QString> > oleObjects;
 
-    Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1) {}
+    Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true) {}
     ~Cell() { qDeleteAll(drawings); }
 };
 
@@ -536,10 +537,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             body->startElement("text:a");
                             body->addAttribute("xlink:href", cell->hyperlink);
                             //body->addAttribute("office:target-frame-name", targetFrameName);
-                            body->addTextNode(cell->text.isEmpty() ? cell->hyperlink : cell->text);
+                            if(cell->text.isEmpty())
+                                body->addTextNode(cell->hyperlink);
+                            else if(cell->isPlainText)
+                                body->addTextNode(cell->text);
+                            else 
+                                body->addCompleteElement(cell->text.toUtf8());
                             body->endElement(); // text:a
                         } else if (!cell->text.isEmpty()) {
-                            body->addTextSpan(cell->text);
+                            if(cell->isPlainText)
+                                body->addTextSpan(cell->text);
+                            else
+                                body->addCompleteElement(cell->text.toUtf8());
                         }
                         if (!cell->charStyleName.isEmpty()) {
                             body->endElement(); // text:span
@@ -1050,7 +1059,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             if (!ok || stringIndex >= m_context->sharedStrings->size()) {
                 return KoFilter::WrongFormat;
             }
-            cell->text = m_context->sharedStrings->at(stringIndex).data();
+            XlsxSharedString sharedstring = m_context->sharedStrings->at(stringIndex);
+            cell->text = sharedstring.data();
+            cell->isPlainText = sharedstring.isPlainText();
             cell->valueType = MsooXmlReader::constString;
             // no valueAttr
         } else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {

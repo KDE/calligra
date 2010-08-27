@@ -215,7 +215,9 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
             else if (QUALIFIED_NAME_IS(r)) {
                 TRY_READ(r)
                 if (m_currentTextStyle.isEmpty()) {
+                    body->startElement("text:span", false);
                     body->addTextSpan(m_text);
+                    body->endElement(); //text:span
                 }
                 else {
                     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
