@@ -41,6 +41,7 @@ add_subdirectory( core )
 add_subdirectory( widget )
 add_subdirectory( formeditor )
 
+if(FALSE) #TODO ENABLE WEBFORMS
 if(WITH_WEBFORMS)
   macro_optional_find_package(PionNet)
   macro_log_feature(PionNet_FOUND "Pion Network Library" "C++ development library for implementing lightweight HTTP interfaces" "http://www.pion.org/projects/pion-network-library" FALSE "" "Required by Kexi Web Forms")
@@ -65,6 +66,7 @@ if(WITH_WEBFORMS)
 else(WITH_WEBFORMS)
   set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
 endif(WITH_WEBFORMS)
+endif(FALSE)
 
 add_subdirectory( data )
 add_subdirectory( pics )
