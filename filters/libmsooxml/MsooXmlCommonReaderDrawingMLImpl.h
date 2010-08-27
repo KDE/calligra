@@ -559,7 +559,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
     - [done] spPr (Shape Properties) §19.3.1.44
     - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
     - style (Shape Style) §19.3.1.46
-    - style (Shape Style) §20.1.2.2.37 - DrawingML
+    - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
     - [done] txBody (Shape Text Body) §19.3.1.51 - PML
     - [done] txSp (Text Shape) §20.1.2.2.41 - DrawingML
  Attributes:
@@ -625,6 +625,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         if (isStartElement()) {
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(style)
 #ifdef PPTXXMLSLIDEREADER_H
             else {
                 TRY_READ_IF(txBody)
@@ -815,6 +816,41 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL style
+//! style handler (Shape style)
+/*
+ Parent elements:
+ - cxnSp (§19.3.1.19);
+ - pic (§19.3.1.37);
+ - [done] sp (§19.3.1.43)
+
+ Child elements:
+ - effectRef (Effect Reference) §20.1.4.2.8
+ - [done] fillRef (Fill Reference) §20.1.4.2.10
+ . fontRef (Font Reference) §20.1.4.1.17
+ - [done] lnRef (Line Reference) §20.1.4.2.19
+
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, fillRef)
+            ELSE_TRY_READ_IF_NS(a, lnRef)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL spPr
 //! spPr handler (Shape Properties)
 /*! ECMA-376, 19.3.1.44, p. 2855; 20.1.2.2.35, p. 3055 (DrawingML)
@@ -1000,6 +1036,89 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "a"
+
+#undef CURRENT_EL
+#define CURRENT_EL fillRef
+//! fillREf handler (Fill reference)
+/*
+ Parent elements:
+ - [done] style (§21.3.2.24);
+ - [done] style (§21.4.2.28);
+ - [done] style (§20.1.2.2.37);
+ - [done] style (§20.5.2.31);
+ - [done] style (§19.3.1.46);
+ - tblBg (§20.1.4.2.25);
+ - tcStyle (§20.1.4.2.29)
+
+ Child elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - sysClr (System Color) §20.1.2.3.33
+
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
+{
+    READ_PROLOGUE
+
+    m_colorType = BackgroundColor;
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lnRef
+//! fillREf handler (Line reference)
+/*
+ Parent elements:
+ - [done] style (§21.3.2.24);
+ - [done] style (§21.4.2.28);
+ - [done] style (§20.1.2.2.37);
+ - [done] style (§20.5.2.31);
+ - [done] style (§19.3.1.46);
+ - tblBg (§20.1.4.2.25);
+ - tcStyle (§20.1.4.2.29)
+
+ Child elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - sysClr (System Color) §20.1.2.3.33
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
+{
+    READ_PROLOGUE
+
+    m_colorType = OutlineColor;
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(schemeClr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL p
