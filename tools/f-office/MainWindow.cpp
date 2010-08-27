@@ -1497,7 +1497,7 @@ QString MainWindow::getFileSavePath(DocumentType type){
             break;
         case Presentation:
             filter = "Presentation (*.odp);;";
-            extension = ".odp"
+            extension = ".odp";
             break;
         case Spreadsheet:
             filter = "SpreadSheet (*.ods);;";
