@@ -2986,9 +2986,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     // Currently hardcoded to use clormappings from slidemaster
     QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
-    if (valTransformed.isEmpty()) {
-        valTransformed = val;
-    }
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(valTransformed);
@@ -3020,6 +3017,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
 #ifdef PPTXXMLSLIDEREADER_H
         QColor col = Qt::white;
+        // Temporary defaulting text color to black
+        if (m_colorType == TextColor) {
+            col = Qt::black;
+        }
         if (colorItem) {
             col = colorItem->value();
         }

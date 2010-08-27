@@ -369,33 +369,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrMap()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    int index = 0;
-    while (index < attrs.size()) {
-        const QString handledAttr = attrs.at(index).name().toString();
-        const QString attrValue = attrs.value(handledAttr).toString();
-        if (handledAttr != attrValue)
-        {
-            // This is done to support masterslides properly, they may try to use colors
-            // which are not yet mapped to correct ones, so we use these values.
-            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
-            colorItem = m_context->theme->colorScheme.value(attrValue);
-            QColor col = Qt::white;
-            if (colorItem) {
-                col = colorItem->value();
-            }
-            std::auto_ptr<DrawingMLColorSchemeItem> color(new DrawingMLColorSchemeItem);
-            m_currentColor = 0;
-            color.get()->color = col;
-            m_currentColor = color.release();
-
-            m_context->theme->colorScheme.insert(handledAttr, m_currentColor);
-            colorItem = m_context->theme->colorScheme.value(handledAttr);
-            if (colorItem) {
-                col = colorItem->value();
-            }
-        }
-        ++index;
-    }
 
     SKIP_EVERYTHING
 
@@ -418,7 +391,34 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrSchemeLst()
         readNext();
         //kDebug() << *this;
         if (isStartElement()) {
-            TRY_READ_IF(clrMap)
+            TRY_READ_IF(extraClrScheme)
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL extraClrScheme
+//! extraClrScheme (Extra Color Scheme)
+/*!
+
+ @todo implement
+*/
+KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrScheme()
+{
+   READ_PROLOGUE
+
+   bool read = false;
+
+   while (!atEnd()) {
+        readNext();
+        //kDebug() << *this;
+        if (isStartElement()) {
+            if (QUALIFIED_NAME(clrMap) && !read) {
+                TRY_READ(clrMap)
+                read = true;
+            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }

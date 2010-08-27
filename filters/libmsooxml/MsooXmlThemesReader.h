@@ -215,6 +215,7 @@ protected:
     KoFilter::ConversionStatus read_custClrLst();
     KoFilter::ConversionStatus read_extLst();
     KoFilter::ConversionStatus read_extraClrSchemeLst();
+    KoFilter::ConversionStatus read_extraClrScheme();
     KoFilter::ConversionStatus read_clrScheme();
     KoFilter::ConversionStatus read_color(); //!< helper
     KoFilter::ConversionStatus read_srgbClr();
