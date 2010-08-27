@@ -394,7 +394,7 @@ public:
      * Removes myself from current parent and
      * inserts myself as child to new parent.
      */
-    void setParentCal(Calendar *parent);
+    void setParentCal( Calendar *parent, int pos = -1 );
     
     bool isChildOf( const Calendar *cal ) const;
     
@@ -405,7 +405,7 @@ public:
     void setId(const QString& id);
     
     const QList<Calendar*> &calendars() const { return m_calendars; }
-    void addCalendar( Calendar *calendar );
+    void addCalendar( Calendar *calendar, int pos = -1 );
     void takeCalendar( Calendar *calendar );
     int indexOf( const Calendar *calendar ) const;
     /// Return number of children

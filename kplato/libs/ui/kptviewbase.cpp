@@ -1097,16 +1097,16 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
         return;
     }
     QTreeView::dragMoveEvent( event );
-    event->ignore();
     if ( dropIndicatorPosition() == QAbstractItemView::OnViewport ) {
-        if ( m_acceptDropsOnView ) {
-            event->accept();
+        if ( ! m_acceptDropsOnView ) {
+            event->ignore();
         }
         //kDebug()<<"On viewport:"<<event->isAccepted();
         return;
     }
     QModelIndex index = indexAt( event->pos() );
     if ( ! index.isValid() ) {
+        event->ignore();
         //kDebug()<<"Invalid index:"<<event->isAccepted();
         return;
     }

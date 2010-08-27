@@ -105,7 +105,7 @@ protected:
 class KPLATOKERNEL_EXPORT CalendarAddCmd : public NamedCommand
 {
 public:
-    CalendarAddCmd( Project *project, Calendar *cal, Calendar *parent, const QString& name = QString() );
+    CalendarAddCmd( Project *project, Calendar *cal, int pos, Calendar *parent, const QString& name = QString() );
     ~CalendarAddCmd();
     void execute();
     void unexecute();
@@ -113,6 +113,7 @@ public:
 private:
     Project *m_project;
     Calendar *m_cal;
+    int m_pos;
     Calendar *m_parent;
     bool m_mine;
 };
@@ -129,8 +130,25 @@ private:
     Project *m_project;
     Calendar *m_parent;
     Calendar *m_cal;
+    int m_index;
     bool m_mine;
     MacroCommand *m_cmd;
+};
+
+class KPLATOKERNEL_EXPORT CalendarMoveCmd : public NamedCommand
+{
+public:
+    CalendarMoveCmd( Project *project, Calendar *cal, int position, Calendar *parent, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Calendar *m_cal;
+    int m_newpos;
+    int m_oldpos;
+    Calendar *m_newparent;
+    Calendar *m_oldparent;
 };
 
 class KPLATOKERNEL_EXPORT CalendarModifyNameCmd : public NamedCommand
@@ -160,6 +178,9 @@ private:
     Calendar *m_newvalue;
     Calendar *m_oldvalue;
     MacroCommand *m_cmd;
+
+    int m_oldindex;
+    int m_newindex;
 };
 
 class KPLATOKERNEL_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand

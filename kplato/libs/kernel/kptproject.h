@@ -275,7 +275,7 @@ public:
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
     void setDefaultCalendar( Calendar *cal );
     const QList<Calendar*> &calendars() const;
-    void addCalendar( Calendar *calendar, Calendar *parent = 0 );
+    void addCalendar( Calendar *calendar, Calendar *parent = 0, int index = -1 );
     void takeCalendar( Calendar *calendar );
     int indexOf( const Calendar *calendar ) const;
     /// Returns the calendar with identity id.

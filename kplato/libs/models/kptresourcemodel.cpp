@@ -1094,7 +1094,6 @@ bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicator
     Q_UNUSED(data);
     //kDebug()<<index;
     // TODO: if internal, don't allow dropping on my own parent
-    // TODO: if internal, only MoveAction is allowed, but there is no indication...
     switch ( dropIndicatorPosition ) {
         case ItemModelBase::OnItem:
             return qobject_cast<ResourceGroup*>( object( index ) ); // Allow only on group
@@ -1134,26 +1133,45 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     kDebug()<<data->formats()<<g->name();
     if ( data->hasFormat( "application/x-vnd.kde.kplato.resourceitemmodel.internal" ) ) {
         kDebug()<<action<<Qt::MoveAction;
-        if ( action != Qt::MoveAction ) {
-            return false;
-        }
-        MacroCommand *m = 0;
-        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.resourceitemmodel.internal" );
-        QDataStream stream(&encodedData, QIODevice::ReadOnly);
-        int i = 0;
-        foreach ( Resource *r, resourceList( stream ) ) {
-            if ( r->parentGroup() == g ) {
-                continue;
+        if ( action == Qt::MoveAction ) {
+            MacroCommand *m = 0;
+            QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.resourceitemmodel.internal" );
+            QDataStream stream(&encodedData, QIODevice::ReadOnly);
+            int i = 0;
+            foreach ( Resource *r, resourceList( stream ) ) {
+                if ( r->parentGroup() == g ) {
+                    continue;
+                }
+                if ( m == 0 ) m = new MacroCommand( "" );
+                m->addCommand( new MoveResourceCmd( g, r ) );
+                ++i;
             }
-            if ( m == 0 ) m = new MacroCommand( "" );
-            m->addCommand( new MoveResourceCmd( g, r ) );
-            ++i;
+            if ( m ) {
+                QString msg = i18np( "Move resource", "Move %1 resources", i );
+                MacroCommand *c = new MacroCommand( msg );
+                c->addCommand( m );
+                emit executeCommand( c );
+            }
+            return true;
         }
-        if ( m ) {
-            QString msg = i18np( "Move resource", "Move %1 resources", i );
-            MacroCommand *c = new MacroCommand( msg );
-            c->addCommand( m );
-            emit executeCommand( c );
+        if ( action == Qt::CopyAction ) {
+            MacroCommand *m = 0;
+            QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.resourceitemmodel.internal" );
+            QDataStream stream(&encodedData, QIODevice::ReadOnly);
+            int i = 0;
+            foreach ( Resource *r, resourceList( stream ) ) {
+                Resource *nr = new Resource( r );
+                if ( m == 0 ) m = new MacroCommand( "" );
+                m->addCommand( new AddResourceCmd( g, nr ) );
+                ++i;
+            }
+            if ( m ) {
+                QString msg = i18np( "Copy resource", "Copy %1 resources", i );
+                MacroCommand *c = new MacroCommand( msg );
+                c->addCommand( m );
+                emit executeCommand( c );
+            }
+            return true;
         }
         return true;
     }

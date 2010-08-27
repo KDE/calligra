@@ -166,7 +166,7 @@ public slots:
 
 protected:
     void updateActionsEnabled( bool on );
-    void insertCalendar( Calendar *calendar, Calendar *parent );
+    void insertCalendar( Calendar *calendar, Calendar *parent, int pos = -1 );
     
 protected slots:
     void slotIntervalEditDialogFinished( int result );

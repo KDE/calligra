@@ -2129,18 +2129,21 @@ double Project::bcwp( const QDate &date, long id ) const
     return c;
 }
 
-void Project::addCalendar( Calendar *calendar, Calendar *parent )
+void Project::addCalendar( Calendar *calendar, Calendar *parent, int index )
 {
     Q_ASSERT( calendar != 0 );
     //kDebug()<<calendar->name()<<","<<(parent?parent->name():"No parent");
     int row = parent == 0 ? m_calendars.count() : parent->calendars().count();
+    if ( index >= 0 && index < row ) {
+        row = index;
+    }
     emit calendarToBeAdded( parent, row );
     calendar->setProject( this );
     if ( parent == 0 ) {
         calendar->setParentCal( 0 ); // in case
-        m_calendars.append( calendar );
+        m_calendars.insert( row, calendar );
     } else {
-        calendar->setParentCal( parent );
+        calendar->setParentCal( parent, row );
     }
     if ( calendar->isDefault() ) {
         setDefaultCalendar( calendar );

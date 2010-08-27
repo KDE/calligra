@@ -689,14 +689,14 @@ void Calendar::setName(const QString& name)
     }
 }
 
-void Calendar::setParentCal(Calendar *parent)
+void Calendar::setParentCal( Calendar *parent, int pos )
 {
     if ( m_parent ) {
         m_parent->takeCalendar( this );
     }
     m_parent = parent;
     if ( m_parent ) {
-        m_parent->addCalendar( this );
+        m_parent->addCalendar( this, pos );
     }
     
 }
@@ -741,9 +741,9 @@ void Calendar::setId(const QString& id) {
     m_id = id;
 }
 
-void Calendar::addCalendar( Calendar *calendar )
+void Calendar::addCalendar( Calendar *calendar, int pos )
 {
-    m_calendars.append( calendar );
+    pos == -1 ? m_calendars.append( calendar ) : m_calendars.insert( pos, calendar );
     calendar->setTimeZone( m_spec.timeZone() );
 }
 

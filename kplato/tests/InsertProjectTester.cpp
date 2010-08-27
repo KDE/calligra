@@ -37,7 +37,7 @@ void InsertProjectTester::init()
 void InsertProjectTester::addCalendar( Part &part )
 {
     Project &p = part.getProject();
-    QUndoCommand *c = new CalendarAddCmd( &p, new Calendar(), 0 );
+    QUndoCommand *c = new CalendarAddCmd( &p, new Calendar(), -1, 0 );
     part.addCommand( c );
 }
 

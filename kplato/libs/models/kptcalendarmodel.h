@@ -100,7 +100,7 @@ public:
     bool dropAllowed( Calendar *on, const QMimeData *data );
 
     Calendar *calendar( const QModelIndex &index ) const;
-    QModelIndex insertCalendar( Calendar *calendar, Calendar *parent = 0 );
+    QModelIndex insertCalendar( Calendar *calendar, int pos, Calendar *parent = 0 );
     void removeCalendar( QList<Calendar*> lst );
     void removeCalendar( Calendar *calendar );
     

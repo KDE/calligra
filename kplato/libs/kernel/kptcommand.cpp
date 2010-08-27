@@ -122,10 +122,11 @@ void MacroCommand::unexecute()
 }
 
 //-------------------------------------------------
-CalendarAddCmd::CalendarAddCmd( Project *project, Calendar *cal, Calendar *parent, const QString& name )
+CalendarAddCmd::CalendarAddCmd( Project *project, Calendar *cal, int pos, Calendar *parent, const QString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_cal( cal ),
+        m_pos( pos ),
         m_parent( parent ),
         m_mine( true )
 {
@@ -140,7 +141,7 @@ CalendarAddCmd::~CalendarAddCmd()
 void CalendarAddCmd::execute()
 {
     if ( m_project ) {
-        m_project->addCalendar( m_cal, m_parent );
+        m_project->addCalendar( m_cal, m_parent, m_pos );
         m_mine = false;
     }
 
@@ -162,14 +163,14 @@ CalendarRemoveCmd::CalendarRemoveCmd( Project *project, Calendar *cal, const QSt
         m_project( project ),
         m_parent( cal->parentCal() ),
         m_cal( cal ),
+        m_index( -1 ),
         m_mine( false ),
         m_cmd( new MacroCommand("") )
 {
     Q_ASSERT( project != 0 );
 
-/*    foreach ( Schedule * s, project->schedules() ) {
-        addSchScheduled( s );
-    }*/
+    m_index = m_parent ? m_parent->indexOf( cal ) : project->indexOf( cal );
+
     foreach ( Resource *r, project->resourceList() ) {
         if ( r->calendar( true ) == cal ) {
             m_cmd->addCommand( new ModifyResourceCalendarCmd( r, 0 ) );
@@ -199,11 +200,36 @@ void CalendarRemoveCmd::execute()
 }
 void CalendarRemoveCmd::unexecute()
 {
-    m_project->addCalendar( m_cal, m_parent );
+    m_project->addCalendar( m_cal, m_parent, m_index );
     m_cmd->unexecute();
 //    setSchScheduled();
     m_mine = false;
 
+}
+
+CalendarMoveCmd::CalendarMoveCmd( Project *project, Calendar *cal, int position, Calendar *parent, const QString& name )
+        : NamedCommand( name ),
+        m_project( project ),
+        m_cal( cal ),
+        m_newpos( position ),
+        m_newparent( parent ),
+        m_oldparent( cal->parentCal() )
+{
+    //kDebug()<<cal->name();
+    Q_ASSERT( project != 0 );
+
+    m_oldpos = m_oldparent ? m_oldparent->indexOf( cal ) : project->indexOf( cal );
+}
+void CalendarMoveCmd::execute()
+{
+    m_project->takeCalendar( m_cal );
+    m_project->addCalendar( m_cal, m_newparent, m_newpos );
+}
+
+void CalendarMoveCmd::unexecute()
+{
+    m_project->takeCalendar( m_cal );
+    m_project->addCalendar( m_cal, m_oldparent, m_oldpos );
 }
 
 CalendarModifyNameCmd::CalendarModifyNameCmd( Calendar *cal, const QString& newvalue, const QString& name )
@@ -232,10 +258,14 @@ CalendarModifyParentCmd::CalendarModifyParentCmd( Project *project, Calendar *ca
         : NamedCommand( name ),
         m_project( project ),
         m_cal( cal ),
-        m_cmd( new MacroCommand( "" ) )
+        m_cmd( new MacroCommand( "" ) ),
+        m_oldindex( -1 ),
+        m_newindex( -1 )
 {
     m_oldvalue = cal->parentCal();
     m_newvalue = newvalue;
+    m_oldindex = m_oldvalue ? m_oldvalue->indexOf( cal ) : m_project->indexOf( cal );
+
     if ( newvalue ) {
         m_cmd->addCommand( new CalendarModifyTimeZoneCmd( cal, newvalue->timeZone() ) );
     }
@@ -248,7 +278,7 @@ CalendarModifyParentCmd::~CalendarModifyParentCmd()
 void CalendarModifyParentCmd::execute()
 {
     m_project->takeCalendar( m_cal );
-    m_project->addCalendar( m_cal, m_newvalue );
+    m_project->addCalendar( m_cal, m_newvalue, m_newindex );
     m_cmd->execute();
 //    setSchScheduled( false );
 
@@ -257,7 +287,7 @@ void CalendarModifyParentCmd::unexecute()
 {
     m_cmd->unexecute();
     m_project->takeCalendar( m_cal );
-    m_project->addCalendar( m_cal, m_oldvalue );
+    m_project->addCalendar( m_cal, m_oldvalue, m_oldindex );
 //    setSchScheduled();
 
 }
@@ -3427,7 +3457,7 @@ void InsertProjectCmd::addCalendars( Calendar *calendar, Calendar *parent, QMap<
     }
     Calendar *cal = m_project->findCalendar( calendar->id() );
     if ( cal == 0 ) {
-        addCommand( new CalendarAddCmd( m_project, calendar, par, "Calendar" ) );
+        addCommand( new CalendarAddCmd( m_project, calendar, -1, par, "Calendar" ) );
     } else {
         map[ calendar ] = cal;
     }

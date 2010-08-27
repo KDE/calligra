@@ -156,14 +156,14 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
     event->ignore();
     QModelIndex index = indexAt( event->pos() );
     if ( ! index.isValid() ) {
-            if ( model()->dropAllowed( 0, event->mimeData() ) ) {
-                event->accept();
-            }
+        if ( model()->dropAllowed( 0, event->mimeData() ) ) {
+            event->accept();
+        }
         return;
     }
     Calendar *c = model()->calendar( index );
     if ( c == 0 ) {
-        kError()<<"no calendar to drop on!"<<endl;
+        kError()<<"no calendar to drop on!";
         return; // hmmm
     }
     switch ( dropIndicatorPosition() ) {
@@ -656,11 +656,13 @@ void CalendarEditor::slotAddCalendar ()
 {
     //kDebug();
     // get parent through sibling
-    Calendar *parent = m_calendarview->selectedCalendar ();
-    if ( parent ) {
-        parent = parent->parentCal();
+    Calendar *cal = m_calendarview->selectedCalendar();
+    Calendar *parent = cal ? cal->parentCal() : 0;
+    int pos = parent ? parent->indexOf( cal ) : project()->indexOf( cal );
+    if ( pos >= 0 ) {
+        ++pos; // after selected calendar
     }
-    insertCalendar ( new Calendar (), parent );
+    insertCalendar ( new Calendar(), parent, pos );
 }
 
 void CalendarEditor::slotAddSubCalendar ()
@@ -669,9 +671,9 @@ void CalendarEditor::slotAddSubCalendar ()
     insertCalendar ( new Calendar (), m_calendarview->selectedCalendar () );
 }
 
-void CalendarEditor::insertCalendar ( Calendar *calendar, Calendar *parent )
+void CalendarEditor::insertCalendar ( Calendar *calendar, Calendar *parent, int pos )
 {
-    QModelIndex i = m_calendarview->model()->insertCalendar ( calendar, parent );
+    QModelIndex i = m_calendarview->model()->insertCalendar ( calendar, pos, parent );
     if ( i.isValid() ) {
         QModelIndex p = m_calendarview->model()->parent( i );
         //if (parent) kDebug()<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();

@@ -483,9 +483,9 @@ QMimeData *CalendarItemModel::mimeData( const QModelIndexList & indexes ) const
     return m;
 }
 
-bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int /*row*/, int /*column*/, const QModelIndex &parent )
+bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
-    kDebug()<<action;
+    kDebug()<<action<<row;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -507,6 +507,9 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             if ( c->parentCal() != par ) {
                 if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Re-parent calendar" ) );
                 cmd->addCommand( new CalendarModifyParentCmd( m_project, c, par ) );
+            } else {
+                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move calendar" ) );
+                cmd->addCommand( new CalendarMoveCmd( m_project, c, row, par ) );
             }
         }
         if ( cmd ) {
@@ -538,6 +541,9 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
     if ( !data->hasFormat("application/x-vnd.kde.kplato.calendarid.internal") ) {
         return false;
     }
+    if ( on == 0 && ! ( flags( QModelIndex() ) & (int)Qt::ItemIsDropEnabled ) ) {
+        return false;
+    }
     QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.calendarid.internal" );
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Calendar*> lst = calendarList( stream );
@@ -545,7 +551,7 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
         if ( (flags( index( c ) ) & (int)Qt::ItemIsDropEnabled) == 0 ) {
             return false;
         }
-        if ( on == c->parentCal() ) {
+        if ( on != 0 && on == c->parentCal() ) {
             return false;
         }
         if ( on != 0 && ( on == c || on->isChildOf( c ) ) ) {
@@ -555,10 +561,10 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
     return true;
 }
 
-QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *parent )
+QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, int pos, Calendar *parent )
 {
-    //kDebug();
-    emit executeCommand( new CalendarAddCmd( m_project, calendar, parent, i18n( "Add calendar" ) ) );
+    //kDebug()<<calendar<<pos<<parent;
+    emit executeCommand( new CalendarAddCmd( m_project, calendar, pos, parent, i18n( "Add calendar" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->indexOf( calendar );
@@ -566,7 +572,7 @@ QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *pa
         row = m_project->indexOf( calendar );
     }
     if ( row != -1 ) {
-        //kDebug()<<"Inserted:"<<calendar->name();
+        //kDebug()<<"Inserted:"<<calendar->name()<<"row="<<row;
         return createIndex( row, 0, calendar );
     }
     return QModelIndex();
