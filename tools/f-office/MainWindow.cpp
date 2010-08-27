@@ -1505,8 +1505,8 @@ QString MainWindow::getFileSavePath(DocumentType type){
             break;
     }
     fileName = QFileDialog::getSaveFileName(this, i18n("Save File"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation), filter);
-    if(!filename.empty())
-        filename.append(extension);
+    if(!fileName.isEmpty())
+        fileName.append(extension);
     return fileName;
 }
 
