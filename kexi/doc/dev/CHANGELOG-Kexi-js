@@ -3,7 +3,7 @@
  Proposed by jstaniek
 
  Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
- Copyright (C) 2008-2009 Jaroslaw Staniek (staniek at kde.org)
+ Copyright (C) 2008-2010 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -109,27 +109,52 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+2010-07-18
+KexiDB
+*SQLite Driver
+**remove all sqlite_* macros, use sqlite3_* functions directly since we only support version 3
+**use sqlite3_close() on sqlite3 structure instead of free(3)
+***possible fix of crash in bug #245030
+Migration
+*support multipage (large up to 65535 bytes) memo values
+BUG:244420
+TODO: support up to 1GB of data too (requires changes in mdbtools API)
+TODO: The display routines of table view is not optimized for such large text values. Optimize that!
+
+2010-07-07
+KexiDB
+*proper copy constructor for LookupFieldSchema::RowSource
+**merged with Predicate
+
 2010-06-13
 Forms
 *display title in the drop-down menu for image boxes; regression in 2.x; also fixes image boxes in table view
+** backported to 2.2.1
 
 2010-06-11
 Main Window
 *fix autoopening (--open) for User Mode
+** backported to 2.2.1
 *fix possible crash on exit
+** backported to 2.2.1
 Forms
 *fix "open object by name" action assignment for buttons
+** backported to 2.2.1
 
 2010-06-03
 Migration
 *When source filename is preselected (e.g. when opening mdb file with Kexi), do not display the source name selection page
+** backported to 2.2.1
 *Append proper extension if not present, e.g. .kexi (regression in 2.x)
+** backported to 2.2.1
 
 2010-05-24
 Forms
 *Image Box widget:
 **added new property "Smoothing". When "Scaled Contents" is on, image is scaled smoothly. On by default.
 **cache scaled pixmap between paint events
+*** backported to 2.2.1
+
 **** TODO: setting "enabled" property to false does not work
 
 ===================== Kexi 2.2  =====================
