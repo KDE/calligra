@@ -223,6 +223,8 @@ void KexiScriptPart::initPartActions()
 #else
 #ifdef __GNUC__
 #warning Port It!!!
+#else
+#pragma WARNING( Port It!!! )
 #endif
 #endif
 }
@@ -265,6 +267,8 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
 #else
 #ifdef __GNUC__
 #warning Port It!!!
+#else
+#pragma WARNING( Port It!!! )
 #endif
 
         if (viewMode == Kexi::DesignViewMode) {

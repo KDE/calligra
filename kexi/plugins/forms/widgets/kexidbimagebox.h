@@ -141,6 +141,8 @@ public:
      if the data source is empty (see dataSource()). */
 #ifdef __GNUC__
 #warning TODO focusPolicy() is not virtual!
+#else
+#pragma WARNING( TODO focusPolicy() is not virtual! )
 #endif
     Qt::FocusPolicy focusPolicy() const;
 
