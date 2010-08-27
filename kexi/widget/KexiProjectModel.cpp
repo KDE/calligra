@@ -268,6 +268,9 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
         }
         endInsertRows();
     }
+    else {
+        kDebug() << "Unable to find parent item!";
+    }
 }
 
 KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p) const
@@ -293,6 +296,8 @@ void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
         beginRemoveRows(idx, 0,0);
         parent->removeChild(item);
         endRemoveRows();
+    } else {
+        kDebug() << "Unable to find parent item!";
     }
 }
 

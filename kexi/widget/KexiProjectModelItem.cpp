@@ -159,34 +159,36 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::It
     
     if (!m_item) {
         foreach(KexiProjectModelItem *child, m_childItems) {
-            if (!itm) {
-                if (child->m_item) {
-                    if (child->m_item && child->m_item->identifier() == item.identifier()) {
-                        itm = child;
-                    }
-                } else {
-                        itm = child->modelItemFromItem(item);
+            if (child->m_item) {
+               if (child->m_item && child->m_item->identifier() == item.identifier()) {
+                    itm = child;
                 }
+            } else {
+                    itm = child->modelItemFromItem(item);
+            }
+            if (itm) {
+                return itm;
             }
         }
     }
-    return itm;
+    return 0;
 }
 
 KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& name) const
 {
     KexiProjectModelItem* itm = 0;
 
-        foreach(KexiProjectModelItem *child, m_childItems) {
-            if (!itm) {
-                if ((child->m_item && child->m_item->name() == name) || (child->m_info && child->m_info->partClass() == name) || (child->m_groupName == name)) {
-                        itm = child;
-                } else {
-                     itm = child->modelItemFromName(name);
-                }
-            }
+    foreach(KexiProjectModelItem *child, m_childItems) {
+        if ((child->m_item && child->m_item->name() == name) || (child->m_info && child->m_info->partClass() == name) || (child->m_groupName == name)) {
+                itm = child;
+        } else {
+                itm = child->modelItemFromName(name);
         }
-    return itm;
+        if (itm) {
+            return itm;
+        }
+    }
+    return 0;
 }
 
 void KexiProjectModelItem::sortChildren()
