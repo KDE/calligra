@@ -171,6 +171,8 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     //// Init dialog and display it ////////////////////////
 #ifdef __GNUC__
 #warning "setInitialSize() unavailable on kde 4"
+#else
+#pragma WARNING( setInitialSize() unavailable on kde 4 )
 #endif
 // setInitialSize(QSize(500, 300), true);
 }

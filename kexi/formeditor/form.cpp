@@ -64,7 +64,10 @@
 
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
+
 #define KEXI_NO_PIXMAPCOLLECTION
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
@@ -725,6 +728,8 @@ void Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByt
     d->toplevel->setForm(this);
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     d->pixcollection = new PixmapCollection(container->objectName(), this);
@@ -1029,6 +1034,8 @@ void Form::emitUndoActionSignals()
 {
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
@@ -1341,6 +1348,8 @@ void Form::emitUndoEnabled()
 {
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     KAction *undoAction = d->collection->action(QLatin1String("edit_undo"));
@@ -2642,6 +2651,8 @@ void Form::editFormPixmapCollection()
 
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     PixmapCollectionEditor dialog(pixmapCollection(), widget()->topLevelWidget());

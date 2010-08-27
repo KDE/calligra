@@ -326,6 +326,8 @@ void KexiStartupDialog::setupPageTemplates()
 //  d->templatesWidget_IconListBox = d->templatesWidget->child(0,"KListBox");
 #ifdef __GNUC__
 #warning OK for KPageWidget?
+#else
+#pragma WARNING( OK for KPageWidget? )
 #endif
         d->templatesWidget_IconListView
         = KexiUtils::findFirstChild<QListView*>(d->templatesWidget, "QListView");

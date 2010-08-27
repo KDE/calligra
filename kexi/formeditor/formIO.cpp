@@ -60,7 +60,9 @@
 
 #define KEXI_NO_FLOWLAYOUT
 #ifdef __GNUC__
-#warning "Port Kexi flow layout!"
+#warning Port Kexi flow layout!
+#else
+#pragma WARNING( Port Kexi flow layout! )
 #endif
 #ifndef KEXI_NO_FLOWLAYOUT
 #include <kexiutils/FlowLayout.h>
@@ -69,6 +71,8 @@
 #define KEXI_NO_PIXMAPCOLLECTION
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
@@ -242,6 +246,8 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     // Save the Form 's PixmapCollection
@@ -393,6 +399,8 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     m_savePixmapsInline = ((ui.firstChildElement("pixmapinproject").isNull()) || (!ui.firstChildElement("images").isNull()));
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
     form->pixmapCollection()->load(ui.namedItem("collection"));
@@ -878,6 +886,8 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
     } else if (type == "pixmap") {
 #ifdef __GNUC__
 #warning pixmapcollection
+#else
+#pragma WARNING( pixmapcollection )
 #endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
         if (m_savePixmapsInline || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
@@ -1080,7 +1090,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     case Form::VFlow: {
 #ifdef KEXI_NO_FLOWLAYOUT
 #ifdef __GNUC__
-#warning "Port Kexi flow layout!"
+#warning Port Kexi flow layout!
+#else
+#pragma WARNING( Port Kexi flow layout! )
 #endif
 #else
         layout.setTagName("grid");
@@ -1402,7 +1414,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
                 } else if ((name == "justify")) {
 #ifdef KEXI_NO_FLOWLAYOUT
 #ifdef __GNUC__
-#warning "Port Kexi flow layout!"
+#warning Port Kexi flow layout!
+#else
+#pragma WARNING( Port Kexi flow layout! )
 #endif
 #else
                     bool justify = readPropertyValue(node.firstChild(), w, name).toBool();
@@ -1474,7 +1488,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
             if (layoutName == "HFlow") {
 #ifdef KEXI_NO_FLOWLAYOUT
 #ifdef __GNUC__
-#warning "Port Kexi flow layout!"
+#warning Port Kexi flow layout!
+#else
+#pragma WARNING( Port Kexi flow layout! )
 #endif
 #else
                 item->container()->m_layType = Form::HFlow;

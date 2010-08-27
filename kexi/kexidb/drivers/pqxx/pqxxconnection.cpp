@@ -101,6 +101,8 @@ bool pqxxSqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)
     d->version = &version; //remember for later...
 #ifdef __GNUC__
 #warning pqxxSqlConnection::drv_connect implement setting version info when we drop libpqxx for libpq
+#else
+#pragma WARNING( pqxxSqlConnection::drv_connect implement setting version info when we drop libpqxx for libpq )
 #endif
     return true;
 }

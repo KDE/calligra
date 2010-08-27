@@ -447,6 +447,11 @@ void KexiProjectNavigator::setFocus()
 
 void KexiProjectNavigator::updateItemName(KexiPart::Item& item, bool dirty)
 {
+#ifdef __GNUC__
+#warning implement KexiProjectNavigator::updateItemName()
+#else
+#pragma WARNING( implement KexiProjectNavigator::updateItemName() )
+#endif
 #if 0
     if (!(m_features & Writable))
         return;
@@ -465,6 +470,7 @@ void KexiProjectNavigator::slotSettingsChanged(int)
 
 void KexiProjectNavigator::selectItem(KexiPart::Item& item)
 {
+#warning implement KexiProjectNavigator::selectItem()
 #if 0
     KexiProjectListViewItem *bitem = m_normalItems.value(item.identifier());
     if (!bitem)

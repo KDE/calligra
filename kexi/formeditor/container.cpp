@@ -882,6 +882,8 @@ Container::deleteWidget(QWidget *w)
     delete w;
 #ifdef __GNUC__
 #warning "OK?"
+#else
+#pragma WARNING( OK? )
 #endif
 }
 

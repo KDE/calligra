@@ -292,6 +292,8 @@ QRect KexiRelationsTableFieldList::drawItemHighlighter(QPainter *painter, Q3List
 {
 #ifdef __GNUC__
 #warning TODO KexiRelationsTableFieldList::drawItemHighlighter() OK?
+#else
+#pragma WARNING( TODO KexiRelationsTableFieldList::drawItemHighlighter() OK? )
 #endif
     if (painter) {
         QStyleOptionFocusRect option;

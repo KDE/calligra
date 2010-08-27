@@ -621,6 +621,8 @@ void KexiMainWindow::setupActions()
     //kde4
 #ifdef __GNUC__
 #warning TODO setupGUI(KMainWindow::Keys|KMainWindow::StatusBar|KMainWindow::Save|KMainWindow::Create, "kexiui.rc" );
+#else
+#pragma WARNING( TODO setupGUI(KMainWindow::Keys|KMainWindow::StatusBar|KMainWindow::Save|KMainWindow::Create, "kexiui.rc" ); )
 #endif
 
 // d->actionMapper = new QSignalMapper(this, "act_map");
@@ -1089,6 +1091,8 @@ void KexiMainWindow::setupActions()
     //SETTINGS MENU
 #ifdef __GNUC__
 #warning TODO setStandardToolBarMenuEnabled( true );
+#else
+#pragma WARNING( setStandardToolBarMenuEnabled( true ); )
 #endif
 
     action = KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), this);

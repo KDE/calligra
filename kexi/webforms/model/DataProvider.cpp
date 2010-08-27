@@ -34,7 +34,12 @@
 namespace KexiWebForms {
 namespace Model {
 
-#warning "WARNING: Direct calls to gConnections are deprecated from now on!"
+
+#ifdef __GNUC__
+#warning Direct calls to gConnections are deprecated from now on!
+#else
+#pragma WARNING( Direct calls to gConnections are deprecated from now on! )
+#endif
 KexiDB::Connection* gConnection;
 
 DataProvider* DataProvider::m_instance = 0;
@@ -78,8 +83,11 @@ bool DataProvider::initDatabase(const QString& fileName) {
             m_connData->setFileName(fileName);
 
             m_connection = m_driver->createConnection(*m_connData);
-
-#warning "This is just for compatibility"
+#ifdef __GNUC__
+#warning This is just for compatibility
+#else
+#pragma WARNING( This is just for compatibility )
+#endif
             gConnection = m_connection; // FIXME: drop this and port all code
 
             if (!m_connection || m_driver->error()) {
