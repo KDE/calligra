@@ -206,6 +206,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
     if (!(m_features & Writable)) {
         setReadOnly(true);
     }
+    slotSelectionChanged(QModelIndex());
 }
 
 void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
@@ -277,8 +278,12 @@ void KexiProjectNavigator::slotExecuteItem(const QModelIndex& vitem)
 void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
 {
     KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(i.internalPointer());
-    if (!it)
+    if (!it) {
+        m_openAction->setEnabled(false);
+        m_designAction->setEnabled(false);
+        m_deleteAction->setEnabled(false);
         return;
+    }
     KexiPart::Part* part = Kexi::partManager().part(it->partInfo());
     if (!part) {
         it = static_cast<KexiProjectModelItem*>(it->parent());
