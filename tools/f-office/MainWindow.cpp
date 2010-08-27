@@ -1489,18 +1489,24 @@ void MainWindow::saveFileAs()
 QString MainWindow::getFileSavePath(DocumentType type){
     QString fileName;
     QString filter;
+    QString extension;
     switch(type) {
         case Text:
-            filter = "(*.odt)";
+            filter = "Document (*.odt);;";
+            extension = ".odt";
             break;
         case Presentation:
-            filter = "(*.odp)";
+            filter = "Presentation (*.odp);;";
+            extension = ".odp"
             break;
         case Spreadsheet:
-            filter = "(*.ods)";
+            filter = "SpreadSheet (*.ods);;";
+            extension = ".ods";
             break;
     }
     fileName = QFileDialog::getSaveFileName(this, i18n("Save File"), QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation), filter);
+    if(!filename.empty())
+        filename.append(extension);
     return fileName;
 }
 
