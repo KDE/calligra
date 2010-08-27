@@ -900,7 +900,7 @@ Paragraph::DropCapStatus Paragraph::dropCapStatus() const
 void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *distance, QString *style) const
 {
     // As far as I can see there is only ever a single character as drop cap.
-    *string = m_textStrings[0];
+    *string = m_textStrings.isEmpty() ? QString() : m_textStrings[0];
     *type = m_dcs_fdct;
     *lines = m_dcs_lines;
     *distance = m_dropCapDistance;
@@ -928,7 +928,13 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
 
 #if 1
     kDebug(30513) << "size: " << m_textStrings.size();
-    m_textStrings[0].prepend(string);
+    if (m_textStrings.isEmpty()) {
+        m_textStrings.append(string);
+        KoGenStyle* style = 0;
+        m_textStyles.insert(m_textStyles.begin(), style);
+    } else {
+        m_textStrings[0].prepend(string);
+    }
 #else
     m_textStrings.prepend(string);
     KoGenStyle* style = 0;
