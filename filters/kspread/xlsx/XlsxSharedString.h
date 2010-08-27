@@ -48,8 +48,6 @@ public:
     //QString xml() const { return m_isPlainText ? QString() : m_data; }
     void setXml(const QByteArray& xml) { m_data = xml; m_isPlainText = false; }
 
-    void saveXml(KoXmlWriter *writer) const;
-
 private:
     QString m_data;
     bool m_isPlainText;

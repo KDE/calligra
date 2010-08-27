@@ -39,16 +39,6 @@ XlsxSharedString::XlsxSharedString()
 {
 }
 
-void XlsxSharedString::saveXml(KoXmlWriter *writer) const
-{
-    if (m_isPlainText) {
-        writer->addTextSpan(m_data);
-    }
-    else {
-        writer->addCompleteElement(m_data.toLatin1());
-    }
-}
-
 // -------------------------------------------------------------
 
 XlsxXmlSharedStringsReaderContext::XlsxXmlSharedStringsReaderContext(XlsxSharedStringVector& _strings)
