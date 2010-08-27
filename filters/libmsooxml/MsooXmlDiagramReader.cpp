@@ -368,7 +368,7 @@ class LayoutNodeAtom : public AbstractAtom
             QList<AbstractNode*> result;
             foreach(AbstractNode* node, list)
                 if(PointNode* pt = dynamic_cast<PointNode*>(node))
-                    if(ptType == pt->m_type || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm"))
+                    if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm"))
                         result.append(pt);
             return result;
         }
