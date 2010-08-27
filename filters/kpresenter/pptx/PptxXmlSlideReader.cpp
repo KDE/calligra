@@ -1200,15 +1200,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     READ_PROLOGUE
     kDebug() << "m_context->type:" << m_context->type;
 
-/*#ifdef __GNUC__
-#warning remove m_context->type != Slide
-#endif
-    if (m_context->type != Slide) {
-        SKIP_EVERYTHING_AND_RETURN
-    }*/
-
-    body->startElement("draw:text-box"); // CASE #P436
-
     m_lstStyleFound = false;
     m_prevListLevel = 0;
     m_currentListLevel = 0;
@@ -1238,19 +1229,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         }
     }
 
-    if (m_lstStyleFound) {
-        body = listBuf.originalWriter();
-        body->startElement("text:list");
-        const QString currentListStyleName(mainStyles->insert(m_currentListStyle));
-
-        //! @todo currently hardcoded
-        body->addAttribute("text:style-name", "bodyList");
-        (void)listBuf.releaseWriter();
-        body->endElement(); // text:list
-    }
-    else {
+    if (!d->textBoxHasContent) {
         body = listBuf.releaseWriter();
+        READ_EPILOGUE
     }
+
+    body = listBuf.originalWriter();
+    body->startElement("draw:text-box"); // CASE #P436
+
+    body = listBuf.releaseWriter();
 
     body->endElement(); // draw:text-box
     READ_EPILOGUE

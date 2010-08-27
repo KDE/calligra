@@ -1191,6 +1191,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 // CASE #400.2
 //! @todo add more conditions testing the parent
             else if (QUALIFIED_NAME_IS(r)) {
+#ifdef PPTXXMLSLIDEREADER_H
+                d->textBoxHasContent = true;
+#endif
                 TRY_READ(DrawingML_r)
             }
             ELSE_TRY_READ_IF(fld)
@@ -1199,6 +1202,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         BREAK_IF_END_OF(CURRENT_EL);
     }
 
+#ifdef PPTXXMLSLIDEREADER_H
+    if (!d->textBoxHasContent) {
+        body = textPBuf.releaseWriter();
+        READ_EPILOGUE
+    }
+#endif
     if (args & read_p_Skip) {
         //nothing
     } else {
@@ -4123,13 +4132,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
 {
     READ_PROLOGUE2(DrawingML_txBody)
 
-    /*#ifdef __GNUC__
-#warning remove m_context->type != Slide
-#endif
-    if (m_context->type != Slide) {
-        SKIP_EVERYTHING_AND_RETURN
-    }*/
-
     m_lstStyleFound = false;
     m_prevListLevel = 0;
     m_currentListLevel = 0;
@@ -4157,20 +4159,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
             body->endElement(); // text:list-item
             body->endElement(); // text:list
         }
-    }
-
-    if (m_lstStyleFound) {
-        body = listBuf.originalWriter();
-        body->startElement("text:list");
-        const QString currentListStyleName(mainStyles->insert(m_currentListStyle));
-
-        //! @todo currently hardcoded
-        body->addAttribute("text:style-name", "bodyList");
-        (void)listBuf.releaseWriter();
-        body->endElement(); // text:list
-    }
-    else {
-        body = listBuf.releaseWriter();
     }
 
     READ_EPILOGUE
