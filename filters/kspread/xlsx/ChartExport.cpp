@@ -489,6 +489,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                     seriesstyle.addProperty("chart:pie-offset", pcExplode, KoGenStyle::ChartType);
                 }
         }
+        if ( series->m_showDataValues )
+            seriesstyle.addProperty( "chart:data-label-number", "value", KoGenStyle::ChartType );
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 
         // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined

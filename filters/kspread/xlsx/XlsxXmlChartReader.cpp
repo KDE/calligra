@@ -296,6 +296,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
             ELSE_TRY_READ_IF(bubbleSize)
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(tx)
+            ELSE_TRY_READ_IF(dLbl)
+            ELSE_TRY_READ_IF(dLbls)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(explosion))) {
                 const QXmlStreamAttributes attrs(attributes());
                 TRY_READ_ATTR_WITHOUT_NS(val)
@@ -526,6 +528,39 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL dLbl
+KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbl()
+{
+    READ_PROLOGUE
+      while (!atEnd()) {
+          readNext();
+          qDebug( qualifiedName().toString().toLocal8Bit().data() );
+          if ( qualifiedName() == "c:showVal" ) {
+              m_currentSeries->m_showDataValues = true;
+          }
+          BREAK_IF_END_OF(CURRENT_EL);
+      }
+      READ_EPILOGUE
+}
+#undef CURRENT_EL
+#define CURRENT_EL dLbls
+KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
+{
+    READ_PROLOGUE
+      while (!atEnd()) {
+          qDebug( qualifiedName().toString().toLocal8Bit().data() );
+          readNext();
+          if ( qualifiedName() == "c:showVal" ) {
+              m_currentSeries->m_showDataValues = true;
+          }
+          BREAK_IF_END_OF(CURRENT_EL);
+      }
+      READ_EPILOGUE
+}
+
+
+
+#undef CURRENT_EL
 #define CURRENT_EL spPr
 // Visual shape properties that can be applied to a shape.
 KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
@@ -539,8 +574,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     Charting::Gradient* gradient = NULL;
     Charting::Gradient::GradientStop currentStop;
     while (!atEnd()) {
-        readNext();
-        qDebug( qualifiedName().toString().toLocal8Bit().data() );
+        readNext();        
         if(isStartElement()) ++level;
         else if(isEndElement()) --level;
 

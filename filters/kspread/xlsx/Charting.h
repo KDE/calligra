@@ -268,6 +268,8 @@ namespace Charting
         int m_countYValues;
         /// the count of bubble size values in the series.
         int m_countBubbleSizeValues;
+        /// termines if the data values are shown as labels
+        bool m_showDataValues;
         /// Range that contains the values that should be visualized by the dataSeries.
         QString m_valuesCellRangeAddress;
         /// Ranges that contains the values that should be visualized by the dataSeries.
@@ -279,7 +281,7 @@ namespace Charting
         /// List of text records attached to the series.
         QList<Text*> m_texts;
 
-        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0) {}
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false) {}
         virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
     };
     

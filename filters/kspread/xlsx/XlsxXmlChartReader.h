@@ -58,6 +58,8 @@ protected:
     KoFilter::ConversionStatus read_title();
     KoFilter::ConversionStatus read_legend();
     KoFilter::ConversionStatus read_spPr();
+    KoFilter::ConversionStatus read_dLbl();
+    KoFilter::ConversionStatus read_dLbls();
 
     KoFilter::ConversionStatus read_pieChart();
     KoFilter::ConversionStatus read_pie3DChart();
