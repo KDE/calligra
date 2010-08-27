@@ -2985,7 +2985,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 #ifdef PPTXXMLSLIDEREADER_H
 
     // Currently hardcoded to use clormappings from slidemaster
-    const QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
+    QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
+    if (valTransformed.isEmpty()) {
+        valTransformed = val;
+    }
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(valTransformed);

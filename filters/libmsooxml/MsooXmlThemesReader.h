@@ -222,6 +222,7 @@ protected:
     DrawingMLColorSchemeItemBase* m_currentColor; //!< used by *Clr()
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
+    KoFilter::ConversionStatus read_clrMap();
 
     //! Used for skipping a subtree - kust reads and shows each element.
     //! called by BIND_READ_SKIP() macro.
