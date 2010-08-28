@@ -734,6 +734,81 @@ void ODrawToOdf::processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& o
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "0 0 26110 21600");
+    out.xml.addAttribute("draw:type", "circular-arrow");
+    out.xml.addAttribute("draw:modifiers", "-130 -80 7200"); // TODO: get from odraw shape
+    out.xml.addAttribute("draw:enhanced-path", "B ?f3 ?f3 ?f20 ?f20 ?f19 ?f18 ?f17 ?f16 W 0 0 21600 21600 ?f9 ?f8 ?f11 ?f10 L ?f24 ?f23 ?f47 ?f46 ?f29 ?f28 Z N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "10800+$2 ");
+    equation(out, "f4", "10800*sin($0 *(pi/180))");
+    equation(out, "f5", "10800*cos($0 *(pi/180))");
+    equation(out, "f6", "10800*sin($1 *(pi/180))");
+    equation(out, "f7", "10800*cos($1 *(pi/180))");
+    equation(out, "f8", "?f4 +10800");
+    equation(out, "f9", "?f5 +10800");
+    equation(out, "f10", "?f6 +10800");
+    equation(out, "f11", "?f7 +10800");
+    equation(out, "f12", "?f3 *sin($0 *(pi/180))");
+    equation(out, "f13", "?f3 *cos($0 *(pi/180))");
+    equation(out, "f14", "?f3 *sin($1 *(pi/180))");
+    equation(out, "f15", "?f3 *cos($1 *(pi/180))");
+    equation(out, "f16", "?f12 +10800");
+    equation(out, "f17", "?f13 +10800");
+    equation(out, "f18", "?f14 +10800");
+    equation(out, "f19", "?f15 +10800");
+    equation(out, "f20", "21600-?f3 ");
+    equation(out, "f21", "13500*sin($1 *(pi/180))");
+    equation(out, "f22", "13500*cos($1 *(pi/180))");
+    equation(out, "f23", "?f21 +10800");
+    equation(out, "f24", "?f22 +10800");
+    equation(out, "f25", "$2 -2700");
+    equation(out, "f26", "?f25 *sin($1 *(pi/180))");
+    equation(out, "f27", "?f25 *cos($1 *(pi/180))");
+    equation(out, "f28", "?f26 +10800");
+    equation(out, "f29", "?f27 +10800");
+    equation(out, "f30", "?f29 -?f24 ");
+    equation(out, "f31", "?f29 -?f24 ");
+    equation(out, "f32", "?f30 *?f31 ");
+    equation(out, "f33", "?f28 -?f23 ");
+    equation(out, "f34", "?f28 -?f23 ");
+    equation(out, "f35", "?f33 *?f34 ");
+    equation(out, "f36", "?f32 +?f35 ");
+    equation(out, "f37", "sqrt(?f36 )");
+    equation(out, "f38", "$1 +45");
+    equation(out, "f39", "?f37 *sin(?f38 *(pi/180))");
+    equation(out, "f40", "$1 +45");
+    equation(out, "f41", "?f37 *cos(?f40 *(pi/180))");
+    equation(out, "f42", "45");
+    equation(out, "f43", "?f39 *sin(?f42 *(pi/180))");
+    equation(out, "f44", "45");
+    equation(out, "f45", "?f41 *sin(?f44 *(pi/180))");
+    equation(out, "f46", "?f28 +?f43 ");
+    equation(out, "f47", "?f29 +?f45 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "10800 $0");
+    out.xml.addAttribute("draw:handle-polar", "10800 10800");
+    out.xml.addAttribute("draw:handle-radius-range-minimum", "10800");
+    out.xml.addAttribute("draw:handle-radius-range-maximum", "10800");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$2 $1");
+    out.xml.addAttribute("draw:handle-polar", "10800 10800");
+    out.xml.addAttribute("draw:handle-radius-range-minimum", "0");
+    out.xml.addAttribute("draw:handle-radius-range-maximum", "10800");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -804,6 +879,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processQuadArrow(o, out);
     } else if (shapeType == msosptUturnArrow) {
         processUturnArrow(o, out);
+    } else if (shapeType == msosptCircularArrow) {
+        processCircularArrow(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
