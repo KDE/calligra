@@ -854,6 +854,21 @@ void ODrawToOdf::processCircularArrow(const MSO::OfficeArtSpContainer &o, Writer
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processIrregularSeal1(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "mso-spt71");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "14623 106 106 8718 8590 21600 21600 13393");
+    out.xml.addAttribute("draw:text-areas", "4680 6570 16140 13280");
+    out.xml.addAttribute("draw:enhanced-path", "M 10901 5905 L 8458 2399 7417 6425 476 2399 4732 7722 106 8718 3828 11880 243 14689 5772 14041 4868 17719 7819 15730 8590 21600 10637 15038 13349 19840 14125 14561 18248 18195 16938 13044 21600 13393 17710 10579 21198 8242 16806 7417 18482 4560 14257 5429 14623 106 10901 5905 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -928,6 +943,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processCircularArrow(o, out);
     } else if (shapeType == msosptCloudCallout) {
         processCloudCallout(o, out);
+    } else if (shapeType == msosptIrregularSeal1) {
+        processIrregularSeal1(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
