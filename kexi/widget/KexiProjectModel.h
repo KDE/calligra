@@ -45,17 +45,16 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
     void updateItemName(KexiPart::Item& item, bool dirty);
-
+    QModelIndex indexFromItem(KexiProjectModelItem *item) const;
+    KexiProjectModelItem *modelItemFromItem(const KexiPart::Item &item) const;
+    KexiProjectModelItem *modelItemFromName(const QString &name) const;
+    
 public slots:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
     
 private:
     void clear();
-
-    QModelIndex indexFromItem(KexiProjectModelItem *item) const;
-    KexiProjectModelItem *modelItemFromItem(const KexiPart::Item &item) const;
-    KexiProjectModelItem *modelItemFromName(const QString &name) const;
     
     //!Part class to display
     QString m_itemsPartClass;

@@ -465,16 +465,13 @@ void KexiProjectNavigator::slotSettingsChanged(int)
 
 void KexiProjectNavigator::selectItem(KexiPart::Item& item)
 {
-#warning implement KexiProjectNavigator::selectItem()
-#if 0
-    KexiProjectListViewItem *bitem = m_normalItems.value(item.identifier());
+    KexiProjectModelItem *bitem = m_model->modelItemFromItem(item);
     if (!bitem)
         return;
-    m_list->setSelected(bitem, true);
-    m_list->ensureItemVisible(bitem);
-    m_list->setCurrentItem(bitem);
 
-#endif
+    QModelIndex idx = m_model->indexFromItem(bitem);
+    m_list->setCurrentIndex(idx);
+    m_list->scrollTo(idx);
 }
 
 void KexiProjectNavigator::clearSelection()
@@ -520,7 +517,7 @@ bool KexiProjectNavigator::actionEnabled(const QString& actionName) const
 {
     if (actionName == "project_export_data_table" && (m_features & ContextMenus))
         return m_exportActionMenu->isVisible();
-    kWarning() << "KexiBrowser::actionEnabled() no such action: " << actionName;
+    kWarning() << "no such action: " << actionName;
     return false;
 }
 
