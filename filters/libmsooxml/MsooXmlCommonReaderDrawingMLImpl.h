@@ -1167,6 +1167,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
     }
 
+    bool pprRead = false;
+
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
     while (!atEnd()) {
@@ -1183,6 +1185,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 // CASE #400.1
             else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
+                pprRead = true;
             }
             else if (QUALIFIED_NAME_IS(br)) {
                 body->startElement("text:line-break");
@@ -1204,7 +1207,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_H
     const QString styleId(d->phStyleId());
-    if (!styleId.isEmpty()) {
+    if (!styleId.isEmpty() && !pprRead) {
         int copyLevel = 0;
         if (m_currentListLevel == 0) {
             copyLevel = 1;
@@ -1697,9 +1700,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     m_currentListStyleProperties = new KoListLevelProperties;
     m_listStylePropertiesAltered = false;
 
-    TRY_READ_ATTR_WITHOUT_NS(algn)
-    algnToODF("fo:text-align", algn);
-
     TRY_READ_ATTR_WITHOUT_NS(lvl)
 
     if (!lvl.isEmpty()) {
@@ -1708,6 +1708,32 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     } else {
         m_currentListLevel = 0;
     }
+
+    // We take inherited properties before applying the local ones
+#ifdef PPTXXMLSLIDEREADER_H
+    const QString styleId(d->phStyleId());
+    if (!styleId.isEmpty()) {
+        int copyLevel = 0;
+        if (m_currentListLevel == 0) {
+            copyLevel = 1;
+        }
+        else {
+            copyLevel = m_currentListLevel;
+        }
+
+        // In all cases, we take them first from masterslide
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
+                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
+
+        if (m_context->type == Slide) {
+           MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
+                                                   m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        }
+    }
+#endif
+
+    TRY_READ_ATTR_WITHOUT_NS(algn)
+    algnToODF("fo:text-align", algn);
 
     while (!atEnd()) {
         if (isStartElement()) {
