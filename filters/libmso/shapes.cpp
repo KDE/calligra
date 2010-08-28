@@ -675,6 +675,45 @@ void ODrawToOdf::processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, 
     out.xml.endElement(); // custom-shape
 }
 
+void ODrawToOdf::processCloudCallout(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "cloud-callout");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:text-areas", "3000 3320 17110 17330");
+    out.xml.addAttribute("draw:modifiers", "9683 13275");
+    out.xml.addAttribute("draw:enhanced-path", "M 1930 7160 C 1530 4490 3400 1970 5270 1970 5860 1950 6470 2210 6970 2600 7450 1390 8340 650 9340 650 10004 690 10710 1050 11210 1700 11570 630 12330 0 13150 0 13840 0 14470 460 14870 1160 15330 440 16020 0 16740 0 17910 0 18900 1130 19110 2710 20240 3150 21060 4580 21060 6220 21060 6720 21000 7200 20830 7660 21310 8460 21600 9450 21600 10460 21600 12750 20310 14680 18650 15010 18650 17200 17370 18920 15770 18920 15220 18920 14700 18710 14240 18310 13820 20240 12490 21600 11000 21600 9890 21600 8840 20790 8210 19510 7620 20000 7930 20290 6240 20290 4850 20290 3570 19280 2900 17640 1300 17600 480 16300 480 14660 480 13900 690 13210 1070 12640 380 12160 0 11210 0 10120 0 8590 840 7330 1930 7160 Z N M 1930 7160 C 1950 7410 2040 7690 2090 7920 F N M 6970 2600 C 7200 2790 7480 3050 7670 3310 F N M 11210 1700 C 11130 1910 11080 2160 11030 2400 F N M 14870 1160 C 14720 1400 14640 1720 14540 2010 F N M 19110 2710 C 19130 2890 19230 3290 19190 3380 F N M 20830 7660 C 20660 8170 20430 8620 20110 8990 F N M 18660 15010 C 18740 14200 18280 12200 17000 11450 F N M 14240 18310 C 14320 17980 14350 17680 14370 17360 F N M 8220 19510 C 8060 19250 7960 18950 7860 18640 F N M 2900 17640 C 3090 17600 3280 17540 3460 17450 F N M 1070 12640 C 1400 12900 1780 13130 2330 13040 F N U ?f17 ?f18 1800 1800 0 360 Z N U ?f19 ?f20 1200 1200 0 360 Z N U ?f13 ?f14 700 700 0 360 Z N");
+    equation(out, "f0", "$0 -10800");
+    equation(out, "f1", "$1 -10800");
+    equation(out, "f2", "atan2(?f1 ,?f0 )/(pi/180)");
+    equation(out, "f3", "10800*cos(?f2 *(pi/180))");
+    equation(out, "f4", "10800*sin(?f2 *(pi/180))");
+    equation(out, "f5", "?f3 +10800");
+    equation(out, "f6", "?f4 +10800");
+    equation(out, "f7", "$0 -?f5 ");
+    equation(out, "f8", "$1 -?f6 ");
+    equation(out, "f9", "?f7 /3");
+    equation(out, "f10", "?f8 /3");
+    equation(out, "f11", "?f7 *2/3");
+    equation(out, "f12", "?f8 *2/3");
+    equation(out, "f13", "$0 ");
+    equation(out, "f14", "$1 ");
+    equation(out, "f15", "?f3 /12");
+    equation(out, "f16", "?f4 /12");
+    equation(out, "f17", "?f9 +?f5 -?f15 ");
+    equation(out, "f18", "?f10 +?f6 -?f16 ");
+    equation(out, "f19", "?f11 +?f5 ");
+    equation(out, "f20", "?f12 +?f6 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 $1");
+    out.xml.endElement();
+    out.xml.endElement();
+    out.xml.endElement(); // custom-shape
+}
+
 void ODrawToOdf::processQuadArrow(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:custom-shape");
@@ -887,6 +926,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processUturnArrow(o, out);
     } else if (shapeType == msosptCircularArrow) {
         processCircularArrow(o, out);
+    } else if (shapeType == msosptCloudCallout) {
+        processCloudCallout(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
