@@ -1446,6 +1446,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
                                                 m_currentTextStyle, KoGenStyle::TextType);
         }
     }
+    // Styles of texts for slidemaster are read in first round of reading slidemasterX.xml
+    // When we get here, we are in 2nd round, and can actually apply them.
+    else if (m_context->type == SlideMaster) {
+        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
+        }
+        m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+        delete m_currentTextStyleProperties;
+        m_currentTextStyleProperties = new KoCharacterStyle();
+    }
 #endif
 
     m_currentColor = QColor();
@@ -2963,7 +2977,7 @@ Child elements:
   - satMod (Saturation Modulation) §20.1.2.3.27
   - satOff (Saturation Offset) §20.1.2.3.28
   - shade (Shade) §20.1.2.3.31
-  - tint (Tint) §20.1.2.3.34
+  - [done] tint (Tint) §20.1.2.3.34
 
 Attributes
   - val (Value)    Specifies the desired scheme.
@@ -2977,6 +2991,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
+    m_currentTint = 0;
+
 //! @todo find proper theme, not just any
 #ifdef PPTXXMLSLIDEREADER_H
 
@@ -2985,9 +3001,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(valTransformed);
-#endif
-
-#ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
+#else
+    // This should most likely be checked from a color map, see above
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(val);
 #endif
@@ -2997,68 +3012,88 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
-
         // @todo: Hmm, are these color modifications only available for pptx?
-            if (QUALIFIED_NAME_IS(lumMod)) {
-                m_currentDoubleValue = &lumMod.value;
-                TRY_READ(lumMod);
-                lumMod.valid = true;
-            } else if (QUALIFIED_NAME_IS(lumOff)) {
-                m_currentDoubleValue = &lumOff.value;
-                TRY_READ(lumOff);
-                lumOff.valid = true;
-            }
-            ELSE_TRY_READ_IF(shade)
+        if (QUALIFIED_NAME_IS(lumMod)) {
+            m_currentDoubleValue = &lumMod.value;
+            TRY_READ(lumMod)
+            lumMod.valid = true;
+        } else if (QUALIFIED_NAME_IS(lumOff)) {
+            m_currentDoubleValue = &lumOff.value;
+            TRY_READ(lumOff)
+            lumOff.valid = true;
+        } else if (QUALIFIED_NAME_IS(tint)) {
+            TRY_READ(tint)
+        }
+        ELSE_TRY_READ_IF(shade)
     }
 
+    QColor col = Qt::white;
+    if (colorItem) {
+        col = colorItem->value();
+    }
+    if (m_currentTint > 0) {
+        int red = (col.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        int green = (col.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        int blue = (col.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+
+        col = QColor(red, green, blue);
+    }
+
+    col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
+
 #ifdef PPTXXMLSLIDEREADER_H
-        QColor col = Qt::black;
-        if (colorItem) {
-            col = colorItem->value();
+    switch (m_colorType) {
+        case BackgroundColor:
+        {
+            QBrush brush(col, Qt::SolidPattern);
+            KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
         }
-
-        col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
-
-        switch (m_colorType) {
-            case BackgroundColor:
-            {
-                QBrush brush(col, Qt::SolidPattern);
-                KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
-            }
-            break;
-            case OutlineColor:
-            {
-                m_currentPen.setColor(col);
-                KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
-            }
-            break;
-            case TextColor:
-            {
-                if (m_currentTextStyleProperties) {
-                    m_currentTextStyleProperties->setForeground(col);
-                }
-            }
-            break;
-            case GradientColor:
-            {
-                m_currentColor = col;
-            }
-            break;
+        break;
+        case OutlineColor:
+        {
+            m_currentPen.setColor(col);
+            KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
         }
+        break;
+        case TextColor:
+        {
+            if (m_currentTextStyleProperties) {
+                m_currentTextStyleProperties->setForeground(col);
+            }
+        }
+        break;
+        case GradientColor:
+        {
+            m_currentColor = col;
+        }
+        break;
+    }
 #endif
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-        QColor col;
-        if (val.startsWith("bg"))
-            col = Qt::white;
-        else
-            col = Qt::black;
-        if (colorItem && colorItem->toColorItem())
-            col = QColor (colorItem->toColorItem()->color);
-
-        col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
-
-        m_currentPen.setColor(col);
+    m_currentPen.setColor(col);
 #endif
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tint
+//! tint (tint value)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tint()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    if (!val.isEmpty()) {
+        bool ok = false;
+        int value = val.toInt(&ok);
+        if (!ok) {
+            value = 0;
+        }
+        m_currentTint = value/1000; // To get percentage
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3358,7 +3393,7 @@ This element specifies a color in RGB notation.
     - satMod (Saturation Modulation) §20.1.2.3.27
     - satOff (Saturation Offset) §20.1.2.3.28
     - shade (Shade) §20.1.2.3.31
-    - tint (Tint) §20.1.2.3.34
+    - [done] tint (Tint) §20.1.2.3.34
  Attributes:
     - [done] val ("RRGGBB" hex digits)
 */
@@ -3374,9 +3409,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     //TODO: all the color transformations
     while (true) {
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+        }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
     }
+
+    if (m_currentTint > 0) {
+        int red = (m_currentColor.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        int green = (m_currentColor.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        int blue = (m_currentColor.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+
+        m_currentColor = QColor(red, green, blue);
+    }
+
     READ_EPILOGUE
 }
 
@@ -3397,9 +3444,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
 
     //TODO: all the color transformations
     while (true) {
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+        }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
     }
+
+    if (m_currentTint > 0) {
+        int red = (m_currentColor.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        int green = (m_currentColor.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        int blue = (m_currentColor.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+
+        m_currentColor = QColor(red, green, blue);
+    }
+
     READ_EPILOGUE
 }
 

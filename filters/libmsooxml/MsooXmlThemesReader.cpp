@@ -47,7 +47,9 @@ DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-    //kDebug() << systemColor;
+    if (lastColor.isValid()) {
+        return lastColor;
+    }
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
@@ -84,7 +86,6 @@ QColor DrawingMLColorSchemeSystemItem::value() const
         return QPalette().color(QPalette::Active, QPalette::Dark);
     }
 //! @todo Use more of systemColor
-    return lastColor;
 }
 
 DrawingMLColorSchemeItemBase::DrawingMLColorSchemeItemBase()

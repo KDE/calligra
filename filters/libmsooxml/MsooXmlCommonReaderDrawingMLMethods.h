@@ -57,6 +57,7 @@ KoFilter::ConversionStatus read_stretch();
 KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
 KoFilter::ConversionStatus read_lum();
+KoFilter::ConversionStatus read_tint();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
@@ -98,6 +99,8 @@ KoFilter::ConversionStatus read_shade();
 KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
+
+int m_currentTint; // value of current tint
 
 bool    m_isPlaceHolder; //! set by read_ph()
 
