@@ -47,6 +47,12 @@ KoFilter::ConversionStatus read_style();
 KoFilter::ConversionStatus read_fillRef();
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
+KoFilter::ConversionStatus read_grpSp();
+
+// whether contents belong to a group shape
+bool m_groupShape;
+
+KoFilter::ConversionStatus read_grpSpPr();
 KoFilter::ConversionStatus read_sp();
 KoFilter::ConversionStatus read_spPr();
 KoFilter::ConversionStatus read_xfrm();

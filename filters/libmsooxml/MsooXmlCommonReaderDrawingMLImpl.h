@@ -61,6 +61,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_hyperLink = false;
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
+    m_groupShape = false;
 }
 
 
@@ -214,8 +215,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 
     body = drawFrameBuf.originalWriter();
-//    delete body;
-//    body = origBody;
     // The logic for place holders have to be significantly enhanced.
     if (!m_isPlaceHolder) {
         body->startElement("draw:frame"); // CASE #P421
@@ -473,7 +472,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
  Parent elements:
     - [done] sp (§19.3.1.43)
     - [done] sp (§20.1.2.2.33)
- Child elements:
+  Child elements:
     - [done] cNvPr (Non-Visual Drawing Properties) §19.3.1.12
     - [done] cNvPr (Non-Visual Drawing Properties) §20.1.2.2.8 - DrawingML
     - [done] cNvSpPr (Non-Visual Drawing Properties for a Shape) §19.3.1.13
@@ -497,6 +496,88 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL grpSp
+//! grpSp handler (Group shape)
+/*!
+ Parent elements:
+ - [done] grpSp (§19.3.1.22);
+ - [done] spTree (§19.3.1.45)
+
+ Child elements:
+ - contentPart (Content Part) §19.3.1.14
+ - cxnSp (Connection Shape) §19.3.1.19
+ - extLst (Extension List with Modification Flag) §19.3.1.20
+ - graphicFrame (Graphic Frame) §19.3.1.21
+ - [done] grpSp (Group Shape) §19.3.1.22
+ - [done] grpSpPr (Group Shape Properties) §19.3.1.23
+ - nvGrpSpPr (Non-Visual Properties for a Group Shape) §19.3.1.31
+ - [done] pic (Picture) §19.3.1.37
+ - [done] sp (Shape) §19.3.1.43
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
+{
+    READ_PROLOGUE
+
+    body->startElement("draw:g");
+
+    m_groupShape = true;
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+            TRY_READ_IF(grpSp)
+            ELSE_TRY_READ_IF(pic)
+            ELSE_TRY_READ_IF(sp)
+        //! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+    body->endElement(); // draw:g
+
+    m_groupShape = false;
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL grpSpPr
+//! grpSp handler (Group shape properties)
+/*!
+ Parent elements:
+ - [done] grpSp (§19.3.1.22);
+ - spTree (§19.3.1.45)
+
+ Child elements:
+ - blipFill (Picture Fill) §20.1.8.14
+ - effectDag (Effect Container) §20.1.8.25
+ - effectLst (Effect Container) §20.1.8.26
+ - extLst (Extension List) §20.1.2.2.15
+ - gradFill (Gradient Fill) §20.1.8.33
+ - grpFill (Group Fill) §20.1.8.35
+ - noFill (No Fill) §20.1.8.44
+ - pattFill (Pattern Fill) §20.1.8.47
+ - scene3d (3D Scene Properties) §20.1.4.1.26
+ - solidFill (Solid Fill) §20.1.8.54
+ - xfrm (2D Transform for Grouped Objects) §20.1.7.5
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        if (isStartElement()) {
+        //! @todo add ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
     READ_EPILOGUE
 }
 
@@ -966,10 +1047,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         }
     }
 #endif
-
-    if (solidFill_read) {
-        
-    }
 
     READ_EPILOGUE
 }
@@ -1901,6 +1978,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgY, "off@y")
 
+    // There seems to be undocumented feature that when a picture/shape is part of groupShape
+    // Their dimensions are not accurately, they have to be multiplied with magic number 1587
+    // TODO: Find out where this number comes from
+    if (m_groupShape) {
+        m_svgX = m_svgX * 1587;
+        m_svgY = m_svgY * 1587;
+    }
+
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -1938,6 +2023,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     STRING_TO_INT(cx, m_svgWidth, "ext@cx")
     READ_ATTR_WITHOUT_NS(cy)
     STRING_TO_INT(cy, m_svgHeight, "ext@cy")
+
+    // There seems to be undocumented feature that when a picture/shape is part of groupShape
+    // Their dimensions are not accurately, they have to be multiplied with magic number 1587
+    // TODO: Find out where this number comes from
+    if (m_groupShape) {
+        m_svgWidth = m_svgWidth * 1587;
+        m_svgHeight = m_svgHeight * 1587;
+    }
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);

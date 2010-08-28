@@ -1100,7 +1100,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     - cxnSp (Connection Shape) §19.3.1.19
     - extLst (Extension List with Modification Flag) §19.3.1.20
     - [done] graphicFrame (Graphic Frame) §19.3.1.21
-    - grpSp (Group Shape) §19.3.1.22
+    - [done] grpSp (Group Shape) §19.3.1.22
     - grpSpPr (Group Shape Properties) §19.3.1.23
     - nvGrpSpPr (Non-Visual Properties for a Group Shape) §19.3.1.31
     - [done] pic (Picture) §19.3.1.37
@@ -1130,6 +1130,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(sp)
+            ELSE_TRY_READ_IF(grpSp)
             ELSE_TRY_READ_IF(pic)
             ELSE_TRY_READ_IF(graphicFrame)
 //! @todo add ELSE_WRONG_FORMAT
