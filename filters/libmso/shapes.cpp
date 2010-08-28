@@ -302,7 +302,9 @@ void ODrawToOdf::processDiamond(const OfficeArtSpContainer& o, Writer& out)
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "diamond");
+    out.xml.addAttribute("svg:viewBox", "0 0 10 10");
     out.xml.addAttribute("draw:glue-points", "5 0 0 5 5 10 10 5");
+    out.xml.addAttribute("draw:enhanced-path", "M 5 0 10 5 5 10 0 5 5 0");
     out.xml.endElement();
     out.xml.endElement();
 }
