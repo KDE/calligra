@@ -541,15 +541,18 @@ void ODrawToOdf::processSmiley(const OfficeArtSpContainer& o, Writer& out)
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "smiley");
-    out.xml.addAttribute("draw:glue-points", "5 0 1.461 1.461 0 5 1.461 8.536 10 5 8.536 1.461");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163");
+    out.xml.addAttribute("draw:text-areas", "3163 3163 18437 18437");
+    out.xml.addAttribute("draw:modifiers", "17520");
+    out.xml.addAttribute("draw:enhanced-path", "U 10800 10800 10800 10800 0 360 Z N U 7305 7515 1165 1165 0 360 Z N U 14295 7515 1165 1165 0 360 Z N M 4870 ?f1 C 8680 ?f2 12920 ?f2 16730 ?f1 F N");
     equation(out, "f0", "$0-15510");
     equation(out, "f1", "17520-?f0");
     equation(out, "f2", "15510+?f0");
     out.xml.startElement("draw:handle");
-    out.xml.addAttribute("draw:position", 10800);
     out.xml.addAttribute("draw:handle-range-y-maximum", 17520);
     out.xml.addAttribute("draw:handle-range-y-minimum", 15510);
-    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-position", "10800 $0");
     out.xml.endElement();
     out.xml.endElement(); // enhanced-geometry
     out.xml.endElement(); // custom-shape
