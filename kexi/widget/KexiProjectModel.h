@@ -44,6 +44,8 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
+    void updateItemName(KexiPart::Item& item, bool dirty);
+
 public slots:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);

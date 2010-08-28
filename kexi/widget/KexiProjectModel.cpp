@@ -323,4 +323,16 @@ KexiProjectModelItem* KexiProjectModel::modelItemFromName(const QString& name) c
     return m_rootItem->modelItemFromName(name);
 }
 
+void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
+{
+    kDebug();
+    KexiProjectModelItem *bitem = modelItemFromItem(item);
+    if (!bitem)
+        return;
+
+    QModelIndex idx = indexFromItem(bitem);
+    bitem->setDirty(dirty);
+    emit dataChanged(idx, idx);
+}
+
 

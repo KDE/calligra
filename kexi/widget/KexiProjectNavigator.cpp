@@ -452,20 +452,10 @@ void KexiProjectNavigator::setFocus()
 
 void KexiProjectNavigator::updateItemName(KexiPart::Item& item, bool dirty)
 {
-#ifdef __GNUC__
-#warning implement KexiProjectNavigator::updateItemName()
-#else
-#pragma WARNING( implement KexiProjectNavigator::updateItemName() )
-#endif
-#if 0
     if (!(m_features & Writable))
         return;
-    KexiProjectModelItem *bitem = m_normalItems.value(item.identifier());
-    if (!bitem)
-        return;
-    bitem->setText(0, item.name() + (dirty ? "*" : ""));
 
-#endif
+    m_model->updateItemName(item, dirty);
 }
 
 void KexiProjectNavigator::slotSettingsChanged(int)

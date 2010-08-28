@@ -28,20 +28,20 @@
 #include <kiconloader.h>
 
 KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
-    : m_parentItem(p), m_info(0), m_item(0)
+    : m_parentItem(p), m_info(0), m_item(0), m_dirty(false)
 {
     m_groupName = n;
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
-    : m_parentItem(p), m_info(&i), m_item(0)
+    : m_parentItem(p), m_info(&i), m_item(0), m_dirty(false)
 {
     m_icon = SmallIcon(i.itemIcon());
     m_fifoSorting = 1; //because this is top level item
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
-    : m_parentItem(p), m_info(&i), m_item(&item)
+    : m_parentItem(p), m_info(&i), m_item(&item), m_dirty(false)
 {
     m_icon = SmallIcon(i.itemIcon());
 }
@@ -99,7 +99,7 @@ QVariant KexiProjectModelItem::data(int column) const
 {
     Q_UNUSED(column);
     if (m_item) {
-        return m_item->name();
+        return m_item->name() + (m_dirty ? "*" : "");
     } else if (m_info) {
         return m_info->groupName();
     } else   {
@@ -199,4 +199,9 @@ void KexiProjectModelItem::sortChildren()
 bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b)
 {
     return a->data(0).toString() < b->data(0).toString();
+}
+
+void KexiProjectModelItem::setDirty(bool d)
+{
+    m_dirty = d;
 }

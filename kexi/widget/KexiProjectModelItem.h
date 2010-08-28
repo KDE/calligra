@@ -85,11 +85,13 @@ public:
     KexiProjectModelItem* modelItemFromName(const QString& name) const;
 
     void sortChildren();
+    void setDirty(bool);
 
  private:
     QList<KexiProjectModelItem*> m_childItems;
     KexiProjectModelItem *m_parentItem;
     QPixmap m_icon;
+    bool m_dirty;
 
  protected:
     KexiPart::Info *m_info;
