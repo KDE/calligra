@@ -511,7 +511,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
  - contentPart (Content Part) §19.3.1.14
  - cxnSp (Connection Shape) §19.3.1.19
  - extLst (Extension List with Modification Flag) §19.3.1.20
- - graphicFrame (Graphic Frame) §19.3.1.21
+ - [done] graphicFrame (Graphic Frame) §19.3.1.21
  - [done] grpSp (Group Shape) §19.3.1.22
  - [done] grpSpPr (Group Shape Properties) §19.3.1.23
  - nvGrpSpPr (Non-Visual Properties for a Group Shape) §19.3.1.31
@@ -533,6 +533,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
             TRY_READ_IF(grpSp)
             ELSE_TRY_READ_IF(pic)
             ELSE_TRY_READ_IF(sp)
+#ifdef PPTXXMLSLIDEREADER_H
+            ELSE_TRY_READ_IF(graphicFrame)
+#endif
         //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
@@ -973,9 +976,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
     bool xfrm_read = false;
-    bool solidFill_read = false;
-    bool gradFill_read = false;
     m_noFill = false;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -986,15 +988,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_H
-                d->textBoxHasContent = true;
+                d->textBoxHasContent = true; // We count normal fill and gardient as content
 #endif
+                m_colorType = BackgroundColor;
                 TRY_READ(solidFill)
-                solidFill_read = true;
+                // We must set the color immediately, otherwise currentColor may be modified by eg. ln
+                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                m_currentColor = QColor();
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
-#ifdef PPTXXMLSLIDEREADER_H
-                d->textBoxHasContent = true;
-#endif
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
@@ -1007,25 +1010,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #endif
                 m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
                 TRY_READ(gradFill)
-                gradFill_read = true;
+                m_currentDrawStyle->addProperty("draw:fill", "gradient");
+                const QString gradName = mainStyles->insert(m_currentGradientStyle);
+                m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
             }
 //! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
-    }
-
-    // Set the fill color if it was set in the shape properties, and if
-    // so reset the current color.
-    if (solidFill_read) {
-        m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
-        m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
-        m_currentColor = QColor();
-    }
-    if (gradFill_read) {
-        m_currentDrawStyle->addProperty("draw:fill", "gradient");
-        const QString gradName = mainStyles->insert(m_currentGradientStyle);
-        m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -3151,6 +3143,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(valTransformed);
+
 #else
     // This should most likely be checked from a color map, see above
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
@@ -3229,6 +3222,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
     m_currentPen.setColor(col);
 #endif
+    m_currentColor = col;
+
     READ_EPILOGUE
 }
 
@@ -3448,6 +3443,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             }
         }
     }
+
+    m_currentPen.setColor(m_currentColor);
+
+#ifdef PPTXXMLSLIDEREADER_H
+    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+#endif
 
     READ_EPILOGUE
 }

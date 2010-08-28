@@ -49,13 +49,6 @@
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
 #define PPTXXMLSLIDEREADER_CPP
 
-#ifdef __GNUC__
-#warning Using hardcoded presentation:style-name attributes: pr1; pr2
-#else
-#pragma WARNING( Using hardcoded presentation:style-name attributes: pr1; pr2 )
-#endif
-//#define HARDCODED_PRESENTATIONSTYLENAME
-
 #include <MsooXmlReader_p.h>
 #include <MsooXmlContentTypes.h>
 
