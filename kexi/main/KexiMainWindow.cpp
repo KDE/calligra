@@ -5294,6 +5294,7 @@ void KexiMainWindow::highlightObject(const QString& partClass, const QString& na
         return;
     if (d->nav) {
         d->nav->selectItem(*item);
+        d->nav2->selectItem(*item);
     }
 }
 
