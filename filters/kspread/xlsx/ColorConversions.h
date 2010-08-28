@@ -29,8 +29,8 @@
  */
 
 // 8-bit integer versions. RGBSL are 0-255, H is 0-360.
-void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
-void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
+extern "C" void rgb_to_hsv(int R, int G, int B, int *H, int *S, int *V);
+extern "C" void hsv_to_rgb(int H, int S, int V, int *R, int *G, int *B);
 
 // Floating point versions. RGBSL are 0-1, H is 0-360.
 void RGBToHSV(float r, float g, float b, float *h, float *s, float *v);
