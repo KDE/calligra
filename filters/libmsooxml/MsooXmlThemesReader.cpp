@@ -409,16 +409,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrScheme()
 {
    READ_PROLOGUE
 
-   bool read = false;
-
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
         if (isStartElement()) {
-            if (QUALIFIED_NAME(clrMap) && !read) {
-                TRY_READ(clrMap)
-                read = true;
-            }
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }

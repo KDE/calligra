@@ -263,6 +263,12 @@ public:
 
     QMap<int, QString> commentAuthors;
     MSOOXML::TableStyleList *tableStyleList;
+
+    // Used to keep track, whether we should skip elements
+    // currently we need to read some slides twice
+    // This because some elements from the later part of the document are needed
+    // to fully understand cSld element
+    bool firstReadingRound;
 };
 
 #endif

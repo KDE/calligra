@@ -231,7 +231,7 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
         slideNumber(_slideNumber), themes(_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
-        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList)
+        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList), firstReadingRound(false)
 {
 }
 
@@ -504,7 +504,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 #endif
 
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster && !m_context->firstReadingRound) {
         m_currentDrawStyle->addProperty("presentation:visibility", "visible");
         m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
     }
@@ -521,11 +521,31 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     while (!atEnd()) {
         readNext();
         if (isStartElement()) {
-            TRY_READ_IF(cSld)
-            else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
-                TRY_READ(txStyles)
+            // This effectively means that in the first round of reading slideMaster, we ignore cSld
+            if (QUALIFIED_NAME_IS(cSld)) {
+                if (!m_context->firstReadingRound) {
+                    TRY_READ(cSld)
+                }
+                else {
+                    skipCurrentElement();
+                }
             }
-            ELSE_TRY_READ_IF(clrMap)
+            else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(txStyles)) {
+                if (m_context->firstReadingRound) {
+                    TRY_READ(txStyles)
+                }
+                else {
+                    skipCurrentElement();
+                }
+            }
+            else if (m_context->type == SlideMaster && QUALIFIED_NAME_IS(clrMap)) {
+                if (m_context->firstReadingRound) {
+                    TRY_READ(clrMap)
+                }
+                else {
+                    skipCurrentElement();
+                }
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement()) {
@@ -593,7 +613,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
 
         body->endElement(); //draw:page
     }
-    else if (m_context->type == SlideMaster) {
+    else if (m_context->type == SlideMaster && !m_context->firstReadingRound) {
         m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
         mainStyles->markStyleForStylesXml(m_context->pageDrawStyleName);
         kDebug() << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName

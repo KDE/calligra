@@ -1709,10 +1709,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     delete m_currentListStyleProperties;
     m_currentListStyleProperties = 0;
 
-#ifdef __GNUC__
-#warning implement read_DrawingML_pPr
-#endif
-
     READ_EPILOGUE
 }
 
@@ -3016,11 +3012,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-        QColor col = Qt::white;
-        // Temporary defaulting text color to black
-        if (m_colorType == TextColor) {
-            col = Qt::black;
-        }
+        QColor col = Qt::black;
         if (colorItem) {
             col = colorItem->value();
         }
