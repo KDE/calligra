@@ -22,7 +22,7 @@
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
-#include <QMatrix>
+#include <QTransform>
 
 #include <cmath>
 
@@ -923,24 +923,18 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
  
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) {
-        //FIXME: I get wrong angle values, aren't they in radians?
-        //FIXME: check weather how the degrees are measured (might need a to multiply by -1)
-        qreal rotationAngle = toQReal(rotation->rotation);
+        qreal rotationAngle = toQReal(rotation->rotation) / 180 * M_PI;
 
-        QMatrix matrix(cos(rotationAngle), -sin(rotationAngle), sin(rotationAngle), cos(rotationAngle), 0, 0);
+        QTransform t;
+        t.rotateRadians(-rotationAngle);
 
         QPointF figureCenter(rect.width()/2.0, rect.height()/2.0);
 
-        QPointF origenInDocument( rect.x(), rect.y() );
+        QPointF originInDocument( rect.x(), rect.y() );
 
-        qreal rotX = 0.0;
-        qreal rotY = 0.0;
+        QPointF rotatedCenterPoint = t.map( figureCenter );
 
-        matrix.map( figureCenter.x(), figureCenter.y(), &rotX, &rotY);
-
-        QPointF rotatedCenterPoint( rotX, rotY );
-
-        QPointF translatedPoint( figureCenter - rotatedCenterPoint + origenInDocument );
+        QPointF translatedPoint( figureCenter - rotatedCenterPoint + originInDocument );
 
         static const QString transformString("rotate(%1) translate(%2 %3)");
 
