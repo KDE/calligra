@@ -985,10 +985,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 xfrm_read = true;
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
+#ifdef PPTXXMLSLIDEREADER_H
+                d->textBoxHasContent = true;
+#endif
                 TRY_READ(solidFill)
                 solidFill_read = true;
             }
             else if ( qualifiedName() == QLatin1String("a:ln") ) {
+#ifdef PPTXXMLSLIDEREADER_H
+                d->textBoxHasContent = true;
+#endif
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
@@ -996,6 +1002,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 m_noFill = true;
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
+#ifdef PPTXXMLSLIDEREADER_H
+                d->textBoxHasContent = true;
+#endif
                 m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
                 TRY_READ(gradFill)
                 gradFill_read = true;
@@ -1075,7 +1084,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
-        
+
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
         chartexport->m_drawLayer = true;
         chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
@@ -4336,6 +4345,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         int szInt;
         STRING_TO_INT(sz, szInt, "defRPr@sz")
         m_currentTextStyleProperties->setFontPointSize(qreal(szInt) / 100.0);
+    }
+
+    if (attrs.hasAttribute("b")) {
+        m_currentTextStyleProperties->setFontWeight(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("b").toString()) ? QFont::Bold : QFont::Normal);
+    }
+    if (attrs.hasAttribute("i")) {
+        m_currentTextStyleProperties->setFontItalic(
+            MSOOXML::Utils::convertBooleanAttr(attrs.value("i").toString()));
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(cap);
+    if (!cap.isEmpty()) {
+        m_currentTextStyleProperties->setFontCapitalization(capToOdf(cap));
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(spc)
+    if (!spc.isEmpty()) {
+        int spcInt;
+        STRING_TO_INT(spc, spcInt, "rPr@spc")
+        m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
+    }
+    TRY_READ_ATTR_WITHOUT_NS(strike)
+    if (strike == QLatin1String("sngStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::SingleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else if (strike == QLatin1String("dblStrike")) {
+        m_currentTextStyleProperties->setStrikeOutType(KoCharacterStyle::DoubleLine);
+        m_currentTextStyleProperties->setStrikeOutStyle(KoCharacterStyle::SolidLine);
+    } else {
+        // empty or "noStrike"
+    }
+    // from
+    TRY_READ_ATTR_WITHOUT_NS(baseline)
+    if (!baseline.isEmpty()) {
+        int baselineInt;
+        STRING_TO_INT(baseline, baselineInt, "rPr@baseline")
+        if (baselineInt > 0)
+            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSuperScript );
+        else if (baselineInt < 0)
+            m_currentTextStyleProperties->setVerticalAlignment( QTextCharFormat::AlignSubScript );
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(u)
+    if (!u.isEmpty()) {
+        MSOOXML::Utils::setupUnderLineStyle(u, m_currentTextStyleProperties);
     }
 
     READ_EPILOGUE
