@@ -3840,8 +3840,10 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         }
     } else {
         //not dirty now
-        if (d->nav)
+        if (d->nav) {//TODO New Navigator
             d->nav->updateItemName(*window->partItem(), false);
+            d->nav2->updateItemName(*window->partItem(), false);
+        }
     }
 
     d->removeWindow(window_id); //don't remove -KMDI will do that
@@ -4546,8 +4548,10 @@ void KexiMainWindow::slotDirtyFlagChanged(KexiWindow* window)
 {
     KexiPart::Item *item = window->partItem();
     //update text in navigator and app. caption
-    if (!d->userMode)
+    if (!d->userMode) { //TODO New Navigator
         d->nav->updateItemName(*item, window->isDirty());
+        d->nav2->updateItemName(*item, window->isDirty());
+    }
 
     invalidateActions();
     updateAppCaption();
