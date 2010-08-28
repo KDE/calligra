@@ -1203,6 +1203,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
+    const QString styleId(d->phStyleId());
+    if (!styleId.isEmpty()) {
+        int copyLevel = 0;
+        if (m_currentListLevel == 0) {
+            copyLevel = 1;
+        }
+        else {
+            copyLevel = m_currentListLevel;
+        }
+
+        // In all cases, we take them first from masterslide
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
+                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
+
+        if (m_context->type == Slide) {
+           MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
+                                                   m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        }
+    }
+
     if (!d->textBoxHasContent) {
         body = textPBuf.releaseWriter();
         READ_EPILOGUE
@@ -1276,10 +1296,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          body->startElement("text:p", false);
 #ifdef PPTXXMLSLIDEREADER_H
          if(m_context->type == SlideLayout) {
-            const QString styleId(d->phStyleId());
-            kDebug() << "styleId:" << styleId;
-            if (!styleId.isEmpty())
-                m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
+            //const QString styleId(d->phStyleId());
+            //kDebug() << "styleId:" << styleId;
+            //if (!styleId.isEmpty())
+            //    m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
             //if (!m_cNvPrId.isEmpty())
             //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
          } else if(m_context->type == Slide) {
@@ -1618,7 +1638,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
     }
     else {
         m_hyperLink = true;
-        m_hyperLinkTarget = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+        m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
+        m_hyperLinkTarget.remove(0, m_context->path.length() + 1);
     }
 
     while (!atEnd()) {
@@ -2477,15 +2498,15 @@ void MSOOXML_CURRENT_CLASS::readWrap()
  Child elements:
  - defPPr (Default Paragraph Style) §21.1.2.2.2
  - extLst (Extension List) §20.1.2.2.15
- - lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
- - lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
- - lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
- - lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
- - lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
- - lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
- - lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
- - lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
- - lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
+ - [done] lvl1pPr (List Level 1 Text Style) §21.1.2.4.13
+ - [done] lvl2pPr (List Level 2 Text Style) §21.1.2.4.14
+ - [done] lvl3pPr (List Level 3 Text Style) §21.1.2.4.15
+ - [done] lvl4pPr (List Level 4 Text Style) §21.1.2.4.16
+ - [done] lvl5pPr (List Level 5 Text Style) §21.1.2.4.17
+ - [done] lvl6pPr (List Level 6 Text Style) §21.1.2.4.18
+ - [done] lvl7pPr (List Level 7 Text Style) §21.1.2.4.19
+ - [done] lvl8pPr (List Level 8 Text Style) §21.1.2.4.20
+ - [done] lvl9pPr (List Level 9 Text Style) §21.1.2.4.21
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
@@ -2992,6 +3013,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     READ_ATTR_WITHOUT_NS(val)
 
     m_currentTint = 0;
+    m_currentShadeLevel = 0;
 
 //! @todo find proper theme, not just any
 #ifdef PPTXXMLSLIDEREADER_H
@@ -3035,6 +3057,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         int red = (col.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
         int green = (col.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
         int blue = (col.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+
+        col = QColor(red, green, blue);
+    }
+    if (m_currentShadeLevel > 0) {
+        int red = (col.red() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        int green = (col.green() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        int blue = (col.blue() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
 
         col = QColor(red, green, blue);
     }
@@ -3392,7 +3421,7 @@ This element specifies a color in RGB notation.
     - sat (Saturation) §20.1.2.3.26
     - satMod (Saturation Modulation) §20.1.2.3.27
     - satOff (Saturation Offset) §20.1.2.3.28
-    - shade (Shade) §20.1.2.3.31
+    - [done] shade (Shade) §20.1.2.3.31
     - [done] tint (Tint) §20.1.2.3.34
  Attributes:
     - [done] val ("RRGGBB" hex digits)
@@ -3400,8 +3429,10 @@ This element specifies a color in RGB notation.
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 {
     READ_PROLOGUE
-
     const QXmlStreamAttributes attrs(attributes());
+
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
 
     READ_ATTR_WITHOUT_NS(val)
 
@@ -3411,6 +3442,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
     while (true) {
         if (isStartElement()) {
             TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(shade)
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -3423,6 +3455,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
         m_currentColor = QColor(red, green, blue);
     }
+    if (m_currentShadeLevel > 0) {
+        int red = (m_currentColor.red() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        int green = (m_currentColor.green() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        int blue = (m_currentColor.blue() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+
+        m_currentColor = QColor(red, green, blue);
+    }
 
     READ_EPILOGUE
 }
@@ -3430,11 +3469,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 #undef CURRENT_EL
 #define CURRENT_EL sysClr
 //! sysClr handler
+// SysClr is bit controversial, it is supposed to use
+// color defined by the system at the moment, the document is read
+// however, it often means that when reading the document, it is not
+// using the same colors, the creater wished.
+// Sometimes sysclr saves attribue lastClr which tells which color
+// the creator was using, the current implementation uses that
+// and ignores real system colors.
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
 {
     READ_PROLOGUE
-
     const QXmlStreamAttributes attrs(attributes());
+
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
 
     TRY_READ_ATTR_WITHOUT_NS(lastClr)
 
@@ -3446,6 +3494,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
     while (true) {
         if (isStartElement()) {
             TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(shade)
         }
         BREAK_IF_END_OF(CURRENT_EL);
         readNext();
@@ -3455,6 +3504,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
         int red = (m_currentColor.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
         int green = (m_currentColor.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
         int blue = (m_currentColor.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+
+        m_currentColor = QColor(red, green, blue);
+    }
+    if (m_currentShadeLevel > 0) {
+        int red = (m_currentColor.red() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        int green = (m_currentColor.green() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        int blue = (m_currentColor.blue() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
 
         m_currentColor = QColor(red, green, blue);
     }
@@ -3489,6 +3545,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     float marginal = 0;
     float ind = 0;
 
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+
 //! @todo Check if this conversion is really correct?
 
     if (!marL.isEmpty()) {
@@ -3503,18 +3561,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     }
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
-    if (!algn.isEmpty()) {
-        if (algn == "l") {
-            m_currentListStyleProperties->setAlignment(Qt::AlignLeft);
-        }
-        else if (algn == "ctr") {
-            m_currentListStyleProperties->setAlignment(Qt::AlignHCenter);
-        }
-        else if (algn == "r") {
-            m_currentListStyleProperties->setAlignment(Qt::AlignRight);
-        }
-//! @todo add rest of the alignments
-    }
+    algnToODF("fo:text-align", algn);
 
     TRY_READ_ATTR(defTabSz)
 
@@ -3528,6 +3575,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buChar)
+            else if (QUALIFIED_NAME_IS(spcBef)) {
+                m_currentSpacingType = spacingMarginTop;
+                TRY_READ(spcBef)
+            }
+            else if (QUALIFIED_NAME_IS(spcAft)) {
+                m_currentSpacingType = spacingMarginBottom;
+                TRY_READ(spcAft)
+            }
+            else if (QUALIFIED_NAME_IS(lnSpc)) {
+                m_currentSpacingType = spacingLines;
+                TRY_READ(lnSpc)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
@@ -3553,10 +3612,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
                 m_currentTextStyleProperties = 0;
             }
         }
+        QString styleId(d->phStyleId());
+        // If it's empty, we're in slideMasters titleStyle, bodystyle, otherStyle
+        if (styleId.isEmpty()) {
+            styleId = m_context->slideMasterPageProperties->m_currentHandledList;
+        }
+        m_context->slideMasterPageProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
+        // Check at some point: What is ctrTitle in reality? is it it's own type?
+        // Is it title which should have central aligment? something else?
+        if (styleId == "title") {
+            m_context->slideMasterPageProperties->styles["ctrTitle"][m_currentListLevel] = m_currentParagraphStyle;
+        }
     }
     else if (m_context->type == SlideLayout) {
         const QString styleId(d->phStyleId());
         m_context->slideLayoutProperties->textStyles[styleId][m_currentListLevel] = m_currentTextStyle;
+        m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
     }
 #endif
 
@@ -3595,9 +3666,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - buSzTx (Bullet Size Follows Text)    §21.1.2.4.11
   - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
   - extLst (Extension List)              §20.1.2.2.15
-  - lnSpc (Line Spacing)                 §21.1.2.2.5
-  - spcAft (Space After)                 §21.1.2.2.9
-  - spcBef (Space Before)                §21.1.2.2.10
+  - [done] lnSpc (Line Spacing)                 §21.1.2.2.5
+  - [done] spcAft (Space After)                 §21.1.2.2.9
+  - [done] spcBef (Space Before)                §21.1.2.2.10
   - tabLst (Tab List)                    §21.1.2.2.14
 
 */

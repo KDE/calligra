@@ -689,6 +689,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "bodyList";
+    m_context->slideMasterPageProperties->m_currentHandledList = "body";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
     d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->bodyStyle;
     MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
@@ -810,6 +811,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "titleList";
+    m_context->slideMasterPageProperties->m_currentHandledList = "title";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
     d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->titleStyle;
     MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
@@ -863,6 +865,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     READ_PROLOGUE
 
     QString currentListStyleName = "otherList";
+    m_context->slideMasterPageProperties->m_currentHandledList = "other";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
     d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->otherStyle;
     MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);

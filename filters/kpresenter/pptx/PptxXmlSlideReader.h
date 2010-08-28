@@ -163,6 +163,12 @@ public:
 
     QMap<QString, QString> colorMap;
 
+    //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,KoGenStyle> > styles;
+
+    // title, body, other
+    QString m_currentHandledList;
+
     KoGenStyle m_drawingPageProperties;
 };
 
