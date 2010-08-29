@@ -41,6 +41,8 @@ struct Field {
     bool isStringLength;
     bool isEnum;
     QList<Field> arrayFields;
+    QString defaultValue;
+
     Field(QString name = QString(), QString type = QString()) : name(name), type(type), isArray(false), isArrayLength(false), isStringLength(false), isEnum(false) {}
 
     QString getterName() const {
@@ -99,6 +101,8 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
                 map[name].isEnum = true;
                 map[name].type = e.attribute("type");
             }
+            if (e.hasAttribute("default"))
+                map[name].defaultValue = e.attribute("default");
         }
     }
     for (int i = 0; i < fields.size(); i++) {
@@ -566,7 +570,9 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     foreach(const Field& f, fields) {
         if (f.isArray || f.isStringLength) continue;
         QString val;
-        if (f.type == "unsigned" || f.type == "int") {
+        if (!f.defaultValue.isEmpty()) {
+            val = f.defaultValue;
+        } else if (f.type == "unsigned" || f.type == "int") {
             val = "0";
         } else if (f.type == "bool") {
             val = "false";
