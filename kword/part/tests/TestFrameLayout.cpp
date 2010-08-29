@@ -11,6 +11,7 @@
 #include "../KWord.h"
 
 #include <KoTextDocumentLayout.h>
+#include <KoColorBackground.h>
 #include <QTextCursor>
 
 #include <kcomponentdata.h>
@@ -77,13 +78,13 @@ void TestFrameLayout::testCreateNewFramesForPage()
 
     KWTextFrameSet *main = bfl.getOrCreate(KWord::MainTextFrameSet, page);
     QVERIFY(main);
-    QCOMPARE(bfl.hasFrameOn(main, 1), false);
+    QVERIFY(bfl.frameOn(main, 1) == 0);
 
     KoShape *shape = new MockTextShape();
     new KWTextFrame(shape, main);
     QCOMPARE(main->frameCount(), 1);
 
-    QCOMPARE(bfl.hasFrameOn(main, 1), true);
+    QVERIFY(bfl.frameOn(main, 1));
 
     bfl.createNewFramesForPage(1);
     QCOMPARE(main->frameCount(), 1);
@@ -436,6 +437,137 @@ void TestFrameLayout::testLayoutPageSpread()
     QCOMPARE(fs->frames()[1]->shape()->position(), QPointF(225, 221)); // right
     QCOMPARE(fs->frames()[1]->shape()->size(), QSizeF(155, 157));
 }
+
+void TestFrameLayout::testPageStyle()
+{
+    // on different page styles i want different framesets.
+    // changing a page (in a sequence) to get a different style should
+    // thus delete all auto-generated frames on that page and force
+    // new ones to be created.
+
+    Helper helper;
+    m_frames.clear();
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWPage page1 = helper.pageManager->page(1);
+    page1.pageStyle().setHeaderPolicy(KWord::HFTypeUniform);
+
+    KWPageStyle style2 = page1.pageStyle();
+    style2.detach("Style2"); // make it a copy of first style, but with new name
+    helper.pageManager->addPageStyle(style2);
+    KWPage page2 = helper.pageManager->appendPage();
+    QCOMPARE(page1.pageStyle(), page2.pageStyle());
+    KWPage page3 = helper.pageManager->appendPage(style2);
+    QCOMPARE(page3.pageStyle(), style2);
+    KWPage page4 = helper.pageManager->appendPage();
+    QCOMPARE(page1.pageStyle(), page2.pageStyle());
+    QCOMPARE(page3.pageStyle(), style2);
+    QCOMPARE(page4.pageStyle(), style2);
+
+    bfl.createNewFramesForPage(1);
+    // mainFs is special; there is only one across all page styles
+    QVERIFY(bfl.m_maintext);
+    KWTextFrameSet *mainFs = bfl.getOrCreate(KWord::MainTextFrameSet, page1);
+    QCOMPARE(bfl.m_maintext, mainFs);
+    bfl.createNewFramesForPage(2);
+    QCOMPARE(bfl.getOrCreate(KWord::MainTextFrameSet, page2), mainFs);
+    QVERIFY(!bfl.m_pageStyles.contains(style2));
+    bfl.createNewFramesForPage(3);
+    QVERIFY(bfl.m_pageStyles.contains(style2));
+    QCOMPARE(bfl.getOrCreate(KWord::MainTextFrameSet, page3), mainFs);
+    bfl.createNewFramesForPage(4);
+    QCOMPARE(bfl.getOrCreate(KWord::MainTextFrameSet, page1), mainFs);
+    QCOMPARE(bfl.getOrCreate(KWord::MainTextFrameSet, page2), mainFs);
+    QCOMPARE(bfl.getOrCreate(KWord::MainTextFrameSet, page3), mainFs);
+    QCOMPARE(bfl.getOrCreate(KWord::MainTextFrameSet, page4), mainFs);
+
+    KWFrameLayout::FrameSets fsets1 = bfl.m_pageStyles.value(page1.pageStyle());
+    KWFrameLayout::FrameSets fsets2 = bfl.m_pageStyles.value(style2);
+    QVERIFY(fsets1.oddHeaders);
+    QVERIFY(fsets2.oddHeaders);
+    QVERIFY(fsets1.oddHeaders != fsets2.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page1), fsets1.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page2), fsets1.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page3), fsets2.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page4), fsets2.oddHeaders);
+    QCOMPARE(fsets1.oddHeaders->frameCount(), 2);
+    QCOMPARE(fsets2.oddHeaders->frameCount(), 2);
+
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 1));
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 2));
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 3) == 0);
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 4) == 0);
+
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 1) == 0);
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 2) == 0);
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 3));
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 4));
+
+    // now we change one and check if the frame moved
+    page2.setPageStyle(style2);
+    bfl.createNewFramesForPage(2);
+
+    fsets1 = bfl.m_pageStyles.value(page1.pageStyle());
+    fsets2 = bfl.m_pageStyles.value(style2);
+    QVERIFY(fsets1.oddHeaders);
+    QVERIFY(fsets2.oddHeaders);
+    QVERIFY(fsets1.oddHeaders != fsets2.oddHeaders);
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 1));
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 2) == 0);
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 3) == 0);
+    QVERIFY(bfl.frameOn(fsets1.oddHeaders, 4) == 0);
+
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 1) == 0);
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 2));
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 3));
+    QVERIFY(bfl.frameOn(fsets2.oddHeaders, 4));
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page1), fsets1.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page2), fsets2.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page3), fsets2.oddHeaders);
+    QCOMPARE(bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page4), fsets2.oddHeaders);
+    QCOMPARE(fsets1.oddHeaders->frameCount(), 1);
+    QCOMPARE(fsets2.oddHeaders->frameCount(), 3);
+}
+
+void TestFrameLayout::testPageBackground()
+{
+    // creating a page with a pagestyle that has a background set should
+    // trigger the creation of a shape that draws the page-background.
+    // If there is no background or its removed (in a command) that should
+    // remove the frame.
+    Helper helper;
+    m_frames.clear();
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWPage page1 = helper.pageManager->page(1);
+    KoColorBackground background1(Qt::red);
+    page1.pageStyle().setBackground(&background1);
+
+    KWPageStyle style2("No Background");
+    helper.pageManager->addPageStyle(style2);
+    KWPage page2 = helper.pageManager->appendPage();
+    KWPage page3 = helper.pageManager->appendPage(style2);
+    KWPage page4 = helper.pageManager->appendPage();
+
+    QVERIFY(bfl.m_backgroundFrameSet == 0);
+    bfl.createNewFramesForPage(1);
+    QVERIFY(bfl.m_backgroundFrameSet);
+    QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 1);
+    bfl.createNewFramesForPage(2);
+    QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 2);
+    bfl.createNewFramesForPage(3);
+    QVERIFY(bfl.m_backgroundFrameSet);
+    QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 2);
+    bfl.createNewFramesForPage(4);
+    QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 2);
+
+    foreach (KWFrame *frame, bfl.m_backgroundFrameSet->frames()) {
+        QCOMPARE(frame->shape()->background(), page1.pageStyle().background());
+    }
+}
+
 
 // helper method (slot)
 void TestFrameLayout::addFS(KWFrameSet*fs)

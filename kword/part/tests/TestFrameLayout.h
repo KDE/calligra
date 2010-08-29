@@ -25,6 +25,8 @@ private slots:
     void testCreateNewFrameForPage();
     void testLargeHeaders();
     void testLayoutPageSpread();
+    void testPageStyle();
+    void testPageBackground();
 
     // helper
     void addFS(KWFrameSet*);

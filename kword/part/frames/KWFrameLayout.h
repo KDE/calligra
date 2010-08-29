@@ -122,11 +122,20 @@ private:
     };
 
     KoShape *createTextShape(const KWPage &page);
+    /**
+     * Get or create a text frameset of the specified \a type on the specified \a page.
+     * A page follows a KWPageStyle and we have individual framesets for each style.
+     * This means that in a document there can be many framesets of type odd-header, at
+     * most one for each page style. The same for all other text framesets.
+     * This method figures out which frameset fits with the page and returns it, or
+     * if it did not exist yet it creates it.
+     * \note the main text frameset is consistent across all pages and page styles.
+     */
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
-    QList<KWFrame *> framesInPage(const QRectF &page);
+    QList<KWFrame *> framesInPage(const QRectF &page) const;
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
-    bool hasFrameOn(KWFrameSet *fs, int pageNumber);
+    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
     void cleanFrameSet(KWTextFrameSet *fs);
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
