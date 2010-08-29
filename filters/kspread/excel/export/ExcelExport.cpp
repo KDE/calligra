@@ -123,7 +123,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
 
     {
         LastWriteAccessRecord lwar(0);
-        lwar.setUserName("marijn"); // TODO: figure out real username
+        lwar.setUserName("  "); // TODO: figure out real username
         lwar.setUnusedBlob(QByteArray(112 - 3 - 2*lwar.userName().length(), ' '));
         o.writeRecord(lwar);
     }
