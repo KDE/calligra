@@ -52,11 +52,14 @@ if(QCA2_FOUND) # because sidewinder depends on it
    target_link_libraries(excelexport ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
 
-install(TARGETS excelexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+set(INSTALL_XLS_EXPORT_FILTER OFF CACHE BOOL "Install the very experimental xls export filter, which might eat your data and provides no guarentees")
+
+if(INSTALL_XLS_EXPORT_FILTER)
+  install(TARGETS excelexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kspread_excel_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-
+  install( FILES  kspread_excel_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+endif(INSTALL_XLS_EXPORT_FILTER)
 
