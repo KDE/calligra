@@ -43,6 +43,42 @@ KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document,
     m_styleBefore.detach("dummy"); // all mine now!
     m_styleAfter.detach("dummy"); // all mine now!
 
+    // All frames below \a pos move \a distance upon redoing this command
+    QMap<qreal, qreal> offsetsMap; // posInDocument, distance.
+
+    const qreal perPageDistance = m_styleAfter.pageLayout().height - m_style.pageLayout().height;
+    if (qAbs(perPageDistance) > 1E-6) { // frames need to be moved
+        KWPage page = m_document->pageManager()->begin();
+        qreal lastDistance = 0;
+        while (page.isValid()) {
+            if (page.pageStyle() == m_style) {
+                offsetsMap.insert(page.offsetInDocument(), lastDistance);
+                lastDistance += perPageDistance;
+                offsetsMap.insert(page.offsetInDocument() + page.height(), lastDistance);
+            }
+            page = page.next();
+        }
+    }
+
+    // move
+    QList<KoShape *> shapes;
+    QList<QPointF> previousPositions;
+    QList<QPointF> newPositions;
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
+        foreach (KWFrame *frame, fs->frames()) {
+            const QPointF pos = frame->shape()->absolutePosition();
+            QMap<qreal,qreal>::Iterator iter = offsetsMap.lowerBound(pos.y());
+            --iter;
+            if (qAbs(iter.value()) > 1E-6) {
+                shapes.append(frame->shape());
+                previousPositions.append(frame->shape()->position());
+                newPositions.append(frame->shape()->position() + QPointF(0, iter.value()));
+            }
+        }
+    }
+    if (shapes.count() > 0)
+        new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
+
     // figure out which pages change.
     // create a list of  QMap<qreal /* posInDocument */, qreal *distance */ >
     //   which indicates that all frames after posInDocument have to move 'distance'
