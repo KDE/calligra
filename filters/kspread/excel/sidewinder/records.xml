@@ -1131,7 +1131,7 @@
 </record>
 
 <record name="RRTabId" id="0x013d">
-  <array length="size/2">
+  <array length="recordSize()/2" lengthField="sheetCount">
     <field name="sheetId" type="unsigned" size="16" />
   </array>
 </record>

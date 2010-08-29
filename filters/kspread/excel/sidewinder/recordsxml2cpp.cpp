@@ -201,6 +201,17 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
         out << "    " << type << " " << f.attribute("name") << "() const;\n\n";
     }
 
+    // array lengths
+    QDomNodeList arrayNodes = e.elementsByTagName("array");
+    for (int i = 0; i < arrayNodes.size(); i++) {
+        QDomElement f = arrayNodes.at(i).toElement();
+        if (f.hasAttribute("lengthField")) {
+            QString name = f.attribute("lengthField");
+            out << "    unsigned " << lcFirst(name) << "() const;\n";
+            out << "    void set" << ucFirst(name) << "( unsigned " << name << " );\n\n";
+        }
+    }
+
     // setData method
     out << "    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );\n\n";
 
@@ -742,6 +753,27 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         if (type.isEmpty()) type = className + "::" + ucFirst(f.attribute("name"));
         out << type << " " << className << "::" << f.attribute("name") << "() const\n{\n"
         << "    return " << f.attribute("value") << ";\n}\n\n";
+    }
+
+    // array lengths
+    QDomNodeList arrayNodes = e.elementsByTagName("array");
+    for (int i = 0; i < arrayNodes.size(); i++) {
+        QDomElement f = arrayNodes.at(i).toElement();
+        if (f.hasAttribute("lengthField")) {
+            QString name = f.attribute("lengthField");
+            QDomNodeList afields = e.elementsByTagName("field");
+            QDomElement af1 = afields.at(0).toElement();
+
+            out << "unsigned " << className << "::" << lcFirst(name)  << "() const\n{\n";
+            out << "    return d->" << af1.attribute("name") << ".size();\n}\n\n";
+
+            out << "void " << className << "::set" << ucFirst(name) << "( unsigned " << name << " )\n{\n";
+            for (int j = 0; j < afields.size(); j++) {
+                QDomElement af = afields.at(j).toElement();
+                out << "    d->" << af.attribute("name") << ".resize(" << name << ");\n";
+            }
+            out << "}\n\n";
+        }
     }
 
     // setData method
