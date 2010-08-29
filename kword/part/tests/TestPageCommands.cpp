@@ -23,6 +23,7 @@
 #include <commands/KWPageInsertCommand.h>
 #include <commands/KWPageRemoveCommand.h>
 #include <commands/KWPagePropertiesCommand.h>
+#include <commands/KWNewPageStyleCommand.h>
 #include <frames/KWTextFrame.h>
 #include <frames/KWTextFrameSet.h>
 #include <KoTextShapeData.h>
@@ -570,6 +571,22 @@ void TestPageCommands::testMakePageSpread()
 
     cmd2.undo();
     // test for page side etc.
+}
+
+void TestPageCommands::testNewPageStyleCommand()
+{
+    KWDocument document;
+    KWPageManager *manager = document.pageManager();
+
+    KWPageStyle style("pagestyle1");
+    KWNewPageStyleCommand cmd(&document, style);
+
+    QCOMPARE(manager->pageStyle("pagestyle1").isValid(), false);
+    cmd.redo();
+    QVERIFY(manager->pageStyle("pagestyle1").isValid());
+    QCOMPARE(manager->pageStyle("pagestyle1"), style);
+    cmd.undo();
+    QCOMPARE(manager->pageStyle("pagestyle1").isValid(), false);
 }
 
 QTEST_KDEMAIN(TestPageCommands, GUI)

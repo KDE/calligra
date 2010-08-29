@@ -61,6 +61,7 @@ set(kwordprivate_LIB_SRCS
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
     commands/KWPageRemoveCommand.cpp
+    commands/KWNewPageStyleCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp
     commands/KWCreateOutlineCommand.cpp

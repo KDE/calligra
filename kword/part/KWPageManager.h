@@ -188,6 +188,8 @@ public:
      */
     KWPageStyle addPageStyle(const QString &name);
 
+    void removePageStyle(const KWPageStyle &pageStyle);
+
     /**
      * Returns all pagestyles.
      * // TODO only return a qlist of styles, they have a their name in them alraedy

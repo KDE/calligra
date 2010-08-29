@@ -1,5 +1,5 @@
-/* This file is part of the KOffice project
- * Copyright (C) 2005-2006,2008 Thomas Zander <zander@kde.org>
+/* This file is part of the KDE project
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,28 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPAGECOMMANDS_H
-#define KWPAGECOMMANDS_H
+#include "KWNewPageStyleCommand.h"
+#include "KWDocument.h"
+#include "KWPageManager.h"
 
-#include <QObject>
-#include <QtTest/QtTest>
-#include <qtest_kde.h>
-class TestPageCommands : public QObject
+#include <KDebug>
+
+KWNewPageStyleCommand::KWNewPageStyleCommand(KWDocument *document, const KWPageStyle &newStyle, QUndoCommand *parent)
+    : QUndoCommand(i18n("Insert Page Style"), parent),
+    m_newStyle(newStyle),
+    m_document(document)
 {
-    Q_OBJECT
-private slots: // tests
-    void init();
-    void documentPages();
-    void testInsertPageCommand();
-    void testInsertPageCommand2();
-    void testInsertPageCommand3();
-    void testRemovePageCommand();
-    void testRemovePageCommand2();
-    void testRemovePageCommand3();
-    void testRemovePageCommand4();
-    void testPagePropertiesCommand();
-    void testMakePageSpread();
-    void testNewPageStyleCommand();
-};
+    Q_ASSERT(document);
+}
 
-#endif
+void KWNewPageStyleCommand::redo()
+{
+    QUndoCommand::redo();
+    m_document->pageManager()->addPageStyle(m_newStyle);
+}
+
+void KWNewPageStyleCommand::undo()
+{
+    QUndoCommand::undo();
+    m_document->pageManager()->removePageStyle(m_newStyle);
+}

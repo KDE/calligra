@@ -431,6 +431,13 @@ KWPageStyle KWPageManager::addPageStyle(const QString &name)
     return pagestyle;
 }
 
+void KWPageManager::removePageStyle(const KWPageStyle &pageStyle)
+{
+    KWPageStyle style = d->pageStyles.value(pageStyle.name());
+    if (style == pageStyle)
+        d->pageStyles.remove(pageStyle.name());
+}
+
 KWPageStyle KWPageManager::defaultPageStyle() const
 {
     return d->defaultPageStyle;
