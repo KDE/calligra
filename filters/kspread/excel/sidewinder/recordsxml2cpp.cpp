@@ -42,6 +42,7 @@ struct Field {
     bool isEnum;
     QList<Field> arrayFields;
     QString defaultValue;
+    QString lengthFor;
 
     Field(QString name = QString(), QString type = QString()) : name(name), type(type), isArray(false), isArrayLength(false), isStringLength(false), isEnum(false) {}
 
@@ -109,8 +110,10 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
         QDomElement e = fields.at(i).toElement();
         if (e.hasAttribute("length")) {
             QString name = e.attribute("length");
-            if (map.contains(name))
+            if (map.contains(name)) {
                 map[name].isStringLength = true;
+                map[name].lengthFor = e.attribute("name");
+            }
         }
     }
     QDomNodeList arrays = record.elementsByTagName("array");
@@ -499,10 +502,14 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
         unsigned bits = field.attribute("size").toUInt();
         if (!name.startsWith("reserved")) {
             const Field& f = fieldsMap[name];
-            if (f.type == "QString") {
-                out << indent << "// TODO ";
+            if (field.attribute("type") == "bytestring") {
+                out << indent << "out.writeByteString(";
+            } else if (field.attribute("type") == "unicodestring") {
+                out << indent << "out.writeUnicodeStringWithFlags(";
+            } else if (field.attribute("type") == "unicodechars") {
+                out << indent << "out.writeUnicodeString(";
             } else if (f.type == "QByteArray") {
-                out << indent << "// TODO ";
+                out << indent << "out.writeBlob(";
             } else if (f.type == "QUuid") {
                 out << indent << "// TODO ";
             } else if (field.attribute("type") == "bool" || field.attribute("type") == "unsigned") {
@@ -518,7 +525,8 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
             }
             if (f.isStringLength) {
                 // TODO: figure out length from string
-                out << "/* TODO */ 0";
+                const Field& f2 = fieldsMap[f.lengthFor];
+                out << f2.getterName() << "(" << getterArgs << ").length()";
             } else {
                 out << f.getterName() << "(" << getterArgs << ")";
             }
