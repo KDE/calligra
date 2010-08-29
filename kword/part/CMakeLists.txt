@@ -67,6 +67,7 @@ set(kwordprivate_LIB_SRCS
     commands/KWCreateOutlineCommand.cpp
     commands/KWClipFrameCommand.cpp
     commands/KWRemoveFrameClipCommand.cpp
+    commands/KWChangePageStyleCommand.cpp
 )
 if( Soprano_FOUND )
     set(kwordprivate_LIB_SRCS ${kwordprivate_LIB_SRCS}

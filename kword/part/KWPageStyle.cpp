@@ -435,6 +435,11 @@ bool KWPageStyle::operator==(const KWPageStyle &other) const
     return d == other.d;
 }
 
+KWPageStylePrivate *KWPageStyle::priv()
+{
+    return d.data();
+}
+
 const KWPageStylePrivate *KWPageStyle::priv() const
 {
     return d.data();
@@ -453,4 +458,9 @@ bool KWPageStyle::isPageSpread() const
 uint qHash(const KWPageStyle &style)
 {
     return style.hash();
+}
+
+void KWPageStyle::detach()
+{
+    d.detach();
 }

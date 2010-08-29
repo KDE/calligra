@@ -224,7 +224,12 @@ public:
     inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }
     uint hash() const;
 
+    /// internal
     const KWPageStylePrivate *priv() const;
+    /// internal
+    KWPageStylePrivate *priv();
+
+    void detach();
 
 private:
     QExplicitlySharedDataPointer<KWPageStylePrivate> d;
