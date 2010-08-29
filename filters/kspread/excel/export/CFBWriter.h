@@ -48,6 +48,8 @@ private:
 
     unsigned writeMiniSector(const QByteArray& data, unsigned previousSector = -1);
 
+    void writeData(unsigned sector, unsigned sectorOffset, const QByteArray& data);
+
     unsigned fatSectorCount() const;
 
     QList<unsigned> m_difat;

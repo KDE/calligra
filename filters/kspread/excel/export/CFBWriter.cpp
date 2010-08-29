@@ -80,9 +80,12 @@ public:
     virtual ~StreamIODevice();
     virtual void close();
     virtual bool open(OpenMode mode);
+    virtual qint64 size() const;
 protected:
     virtual qint64 writeData(const char *data, qint64 len);
     virtual qint64 readData(char *data, qint64 maxlen);
+    void appendData(const char *data, qint64 len);
+    qint64 internalWriteData(const char* data, qint64 len, qint64 pos);
 private:
     DirectoryEntry& m_entry;
     CFBWriter& m_writer;
@@ -133,7 +136,12 @@ bool CFBWriter::StreamIODevice::open(OpenMode)
     return false;
 }
 
-qint64 CFBWriter::StreamIODevice::writeData(const char *data, qint64 len)
+qint64 CFBWriter::StreamIODevice::size() const
+{
+    return m_entry.streamSize + m_buffer.size();
+}
+
+void CFBWriter::StreamIODevice::appendData(const char *data, qint64 len)
 {
     m_buffer.append(data, len);
     while (m_buffer.size() > 4096) {
@@ -145,7 +153,46 @@ qint64 CFBWriter::StreamIODevice::writeData(const char *data, qint64 len)
         }
         m_entry.streamSize += 4096;
     }
+}
+
+qint64 CFBWriter::StreamIODevice::writeData(const char *data, qint64 len)
+{
+    qint64 bytesWritten = 0;
+    qint64 curPos = pos();
+    while (bytesWritten < len) {
+        bytesWritten += internalWriteData(data + bytesWritten, len - bytesWritten, curPos + bytesWritten);
+    }
     return len;
+}
+
+qint64 CFBWriter::StreamIODevice::internalWriteData(const char *data, qint64 len, qint64 pos)
+{
+    Q_ASSERT(pos >= 0 && pos <= size());
+    if (pos == size()) {
+        appendData(data, len);
+        return len;
+    } else {
+        if (pos + len > size()) {
+            len = size() - pos;
+        }
+        qint64 bufferStart = m_entry.streamSize;
+        if (pos < bufferStart) {
+            unsigned sectorIndex = pos/4096;
+            unsigned sector = m_entry.firstSector;
+            while (sectorIndex--) {
+                sector = m_writer.m_fat[sector];
+            }
+            unsigned sectorOffset = pos%4096;
+            if (sectorOffset + len > 4096) {
+                len = 4096 - sectorOffset;
+            }
+            m_writer.writeData(sector, sectorOffset, QByteArray::fromRawData(data, len));
+        } else {
+            // len has already been adjusted to be fully inside the buffer, so just overwrite what is in the buffer with the subset of data we have
+            m_buffer.replace(pos - bufferStart, len, QByteArray::fromRawData(data, len));
+        }
+        return len;
+    }
 }
 
 qint64 CFBWriter::StreamIODevice::readData(char *data, qint64 maxlen)
@@ -335,6 +382,19 @@ void CFBWriter::init()
     m_entries.clear();
     m_entries.append(DirectoryEntry(0, "Root Entry", DirectoryEntry::RootStorage));
     m_miniFatDataStream = new StreamIODevice(*this, m_entries[0]);
+}
+
+void CFBWriter::writeData(unsigned sector, unsigned sectorOffset, const QByteArray &data)
+{
+    Q_ASSERT(m_device);
+    Q_ASSERT(m_device->isOpen());
+    Q_ASSERT(m_device->isWritable());
+    Q_ASSERT(!m_device->isSequential());
+    Q_ASSERT(sector < unsigned(m_fat.size()));
+    Q_ASSERT(sectorOffset + data.length() <= 4096);
+
+    m_device->seek((sector + 1) * 4096 + sectorOffset);
+    m_device->write(data);
 }
 
 unsigned CFBWriter::writeSector(const QByteArray &data, unsigned previousSector)

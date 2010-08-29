@@ -32,7 +32,13 @@ XlsRecordOutputStream::XlsRecordOutputStream(QIODevice* device)
 {
     Q_ASSERT(device->isOpen());
     Q_ASSERT(device->isWritable());
+    Q_ASSERT(!device->isSequential());
     m_dataStream.setByteOrder(QDataStream::LittleEndian);
+}
+
+qint64 XlsRecordOutputStream::pos() const
+{
+    return m_dataStream.device()->pos();
 }
 
 void XlsRecordOutputStream::writeRecord(const Record& record)
@@ -40,6 +46,20 @@ void XlsRecordOutputStream::writeRecord(const Record& record)
     startRecord(record.rtti());
     record.writeData(*this);
     endRecord();
+}
+
+void XlsRecordOutputStream::writeRecord(Record& record)
+{
+    record.setPosition(pos());
+    writeRecord(const_cast<const Record&>(record));
+}
+
+void XlsRecordOutputStream::rewriteRecord(const Record& record)
+{
+    qint64 oldPos = pos();
+    m_dataStream.device()->seek(record.position());
+    writeRecord(record);
+    m_dataStream.device()->seek(oldPos);
 }
 
 void XlsRecordOutputStream::startRecord(unsigned recordType)

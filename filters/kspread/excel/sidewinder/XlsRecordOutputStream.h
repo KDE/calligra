@@ -34,7 +34,16 @@ class XlsRecordOutputStream
 public:
     XlsRecordOutputStream(QIODevice* device);
 
+    /**
+     * Writes a record, updates the records position to the position it is saved to in the file.
+     */
+    void writeRecord(Record& record);
     void writeRecord(const Record& record);
+    /**
+     * Rewrites the given record at its recordPosition by first seeking there, and then going back to where the output device was first.
+     */
+    void rewriteRecord(const Record& record);
+
     void startRecord(unsigned recordType);
     void endRecord();
 
@@ -44,6 +53,8 @@ public:
     void writeUnicodeStringWithFlags(const QString& value);
     void writeByteString(const QString& value);
     void writeBlob(const QByteArray& value);
+
+    qint64 pos() const;
 private:
     QDataStream m_dataStream;
     unsigned m_currentRecord;
