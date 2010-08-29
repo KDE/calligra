@@ -109,6 +109,10 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+2010-08-29
+CSV Export Dialog
+*fix layout of the CSV Export dialog
+
 2010-07-18
 KexiDB
 *SQLite Driver

@@ -106,7 +106,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             KexiStartupFileWidget::Custom | KexiStartupFileWidget::SavingFileBasedDB,
             this);
         m_fileSavePage->setObjectName("m_fileSavePage");
-        m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height() / 2);
+        //m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height() / 2);
         m_fileSavePage->setAdditionalFilters(csvMimeTypes().toSet());
         m_fileSavePage->setDefaultExtension("csv");
         m_fileSavePage->setLocationText(
@@ -115,13 +115,21 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         addPage(m_fileSavePage, i18n("Enter Name of File You Want to Save Data To"));
     }
 
-    // 2. Export options
+    /* 2. Export options
+        m_exportOptionsPage
+        exportOptionsLyr
+            m_infoLblFrom
+            m_infoLblTo
+            m_showOptionsButton
+            m_exportOptionsSection
+            exportOptionsSectionLyr
+    */
     m_exportOptionsPage = new QWidget(this);
     m_exportOptionsPage->setObjectName("m_exportOptionsPage");
-    
+
     QGridLayout *exportOptionsLyr = new QGridLayout(m_exportOptionsPage);
     exportOptionsLyr->setObjectName("exportOptionsLyr");
-    
+
     m_infoLblFrom = new KexiCSVInfoLabel(infoLblFromText, m_exportOptionsPage, true/*showFnameLine*/);
     KexiPart::Info *partInfo = Kexi::partManager().infoForClass(
             QString("org.kexi-project.%1").arg(m_tableOrQuery->table() ? "table" : "query"));
@@ -134,45 +142,52 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_infoLblTo = new KexiCSVInfoLabel(
         (m_options.mode == KexiCSVExport::File) ? i18n("To CSV file:") : i18n("To clipboard:"),
         m_exportOptionsPage, true/*showFnameLine*/);
-	
+
     if (m_options.mode == KexiCSVExport::Clipboard)
         m_infoLblTo->setIcon("edit-paste");
-    
+
     m_infoLblTo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblTo, 1, 0, 1, 2);
 
-    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"),m_exportOptionsPage);
+//    QWidget *stretchWidget = new QWidget();
+//    exportOptionsLyr->addWidget(stretchWidget, 2, 0, 2, 2);
+    exportOptionsLyr->setRowStretch(2, 1);
+
+    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"));
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
-    exportOptionsLyr->addWidget(m_showOptionsButton, 2, 1);
-    
+    exportOptionsLyr->addWidget(m_showOptionsButton, 3, 1);
+
     // -<options section>
-    m_exportOptionsSection = new QGroupBox(""/*i18n("Options")*/, m_exportOptionsPage);
+    m_exportOptionsSection = new QGroupBox(""/*i18n("Options")*/);
     m_exportOptionsSection->setObjectName("m_exportOptionsSection");
     m_exportOptionsSection->setAlignment(Qt::Vertical);
-    m_exportOptionsSection->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    
-    QWidget *exportOptionsSectionWidget = new QWidget(m_exportOptionsSection);
-    exportOptionsSectionWidget->setObjectName("exportOptionsSectionWidget");
-    
-    QGridLayout *exportOptionsSectionLyr = new QGridLayout(exportOptionsSectionWidget);
+    m_exportOptionsSection->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    exportOptionsLyr->addWidget(m_exportOptionsSection, 4, 0, 1, 2);
+#ifdef __GNUC__
+#warning TODO    exportOptionsLyr->setRowStretch();
+#else
+#pragma WARNING( TODO exportOptionsLyr->setRowStretch(); )
+#endif
+
+    QGridLayout *exportOptionsSectionLyr = new QGridLayout;
     exportOptionsLyr->setObjectName("exportOptionsLyr");
+    m_exportOptionsSection->setLayout(exportOptionsSectionLyr);
 
     // -delimiter
-    QLabel *delimiterLabel = new QLabel(i18n("Delimiter:"), exportOptionsSectionWidget);
+    QLabel *delimiterLabel = new QLabel(i18n("Delimiter:"));
     exportOptionsSectionLyr->addWidget(delimiterLabel, 0, 0);
-    
-    m_delimiterWidget = new KexiCSVDelimiterWidget(false, /*//!lineEditOnBottom*/ exportOptionsSectionWidget);
+
+    m_delimiterWidget = new KexiCSVDelimiterWidget(false /* !lineEditOnBottom*/);
     m_delimiterWidget->setDelimiter(defaultDelimiter());
-   
     delimiterLabel->setBuddy(m_delimiterWidget);
     exportOptionsSectionLyr->addWidget(m_delimiterWidget, 0, 1);
 
     // -text quote
-    QLabel *textQuoteLabel = new QLabel(i18n("Text quote:"), exportOptionsSectionWidget);
+    QLabel *textQuoteLabel = new QLabel(i18n("Text quote:"));
     exportOptionsSectionLyr->addWidget(textQuoteLabel, 1, 0);
-    
-    QWidget *textQuoteWidget = new QWidget(exportOptionsSectionWidget);
+
+    QWidget *textQuoteWidget = new QWidget;
     QHBoxLayout *textQuoteLyr = new QHBoxLayout(textQuoteWidget);
 
     m_textQuote = new KexiCSVTextQuoteComboBox(textQuoteWidget);
@@ -180,29 +195,28 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     textQuoteLabel->setBuddy(m_textQuote);
     textQuoteLyr->addWidget(m_textQuote);
     textQuoteLyr->addStretch(0);
-    
+
     exportOptionsSectionLyr->addWidget(textQuoteWidget, 1, 1);
-    
+
     // - character encoding
-    QLabel *characterEncodingLabel = new QLabel(i18n("Text encoding:"), exportOptionsSectionWidget);
+    QLabel *characterEncodingLabel = new QLabel(i18n("Text encoding:"));
     exportOptionsSectionLyr->addWidget(characterEncodingLabel, 2, 0);
-    
-    m_characterEncodingCombo = new KexiCharacterEncodingComboBox(exportOptionsSectionWidget);
+
+    m_characterEncodingCombo = new KexiCharacterEncodingComboBox();
     m_characterEncodingCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     characterEncodingLabel->setBuddy(m_characterEncodingCombo);
     exportOptionsSectionLyr->addWidget(m_characterEncodingCombo, 2, 1);
 
     // - checkboxes
-    m_addColumnNamesCheckBox = new QCheckBox(i18n("Add column names as the first row"),exportOptionsSectionWidget);
+    m_addColumnNamesCheckBox = new QCheckBox(i18n("Add column names as the first row"));
     m_addColumnNamesCheckBox->setChecked(true);
-    exportOptionsSectionLyr->addWidget(m_addColumnNamesCheckBox, 3, 0);
+    exportOptionsSectionLyr->addWidget(m_addColumnNamesCheckBox, 3, 1);
 
-    exportOptionsSectionWidget->setLayout(exportOptionsSectionLyr);
-    exportOptionsLyr->addWidget(m_exportOptionsSection, 3, 0, 1, 2);
-    
-    //! @todo 1.1: for copying use "Always use above options for copying" string
-    m_alwaysUseCheckBox = new QCheckBox(i18n("Always use above options for exporting"), m_exportOptionsPage);
-    exportOptionsLyr->addWidget(m_alwaysUseCheckBox, 4, 0);
+    m_alwaysUseCheckBox = new QCheckBox(
+        m_options.mode == KexiCSVExport::Clipboard ?
+          i18n("Always use above options for copying")
+        : i18n("Always use above options for exporting"));
+    exportOptionsLyr->addWidget(m_alwaysUseCheckBox, 5, 1);
 
     m_exportOptionsSection->hide();
     m_alwaysUseCheckBox->hide();
@@ -232,14 +246,12 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             readBoolEntry("AddColumnNamesForExportingCSVFiles", true));
     }
 
-    m_exportOptionsPage->setLayout(exportOptionsLyr);
-
     // -keep widths equal on page #2:
     int width = qMax(m_infoLblFrom->leftLabel()->sizeHint().width(),
                      m_infoLblTo->leftLabel()->sizeHint().width());
     m_infoLblFrom->leftLabel()->setFixedWidth(width);
     m_infoLblTo->leftLabel()->setFixedWidth(width);
-    
+
     updateGeometry();
 }
 
@@ -259,7 +271,7 @@ void KexiCSVExportWizard::showPage(QWidget * page)
         m_fileSavePage->setFocus();
     } else if (page == m_exportOptionsPage) {
         if (m_options.mode == KexiCSVExport::File)
-            m_infoLblTo->setFileName(m_fileSavePage->selectedFile());
+            m_infoLblTo->setFileName(m_fileSavePage->highlightedFile());
         QString text = m_tableOrQuery->captionOrName();
         if (!m_rowCountDetermined) {
             //do this costly operation only once
@@ -273,8 +285,8 @@ void KexiCSVExportWizard::showPage(QWidget * page)
         else
             text += i18n("(columns: %1)", columns);
         m_infoLblFrom->setLabelText(text);
-        QFontMetrics fm(m_infoLblFrom->fileNameLabel()->font());
-        m_infoLblFrom->fileNameLabel()->setFixedHeight(fm.height() * 2 + fm.lineSpacing());
+        //QFontMetrics fm(m_infoLblFrom->fileNameLabel()->font());
+        //m_infoLblFrom->fileNameLabel()->setFixedHeight(fm.height() * 2 + fm.lineSpacing());
         if (m_defaultsBtn)
             m_defaultsBtn->show();
     }
@@ -293,8 +305,9 @@ void KexiCSVExportWizard::next()
         if (!m_fileSavePage->checkSelectedFile()) {
             return;
 	}
-	kDebug() << m_fileSavePage->selectedFile();
-	kDebug() << m_fileSavePage->selectedUrl();
+	kDebug() << "selectedFile:" << m_fileSavePage->selectedFile();
+    kDebug() << "selectedUrl:" << m_fileSavePage->selectedUrl();
+    kDebug() << "highlightedFile:" << m_fileSavePage->highlightedFile();
         K3Wizard::next();
         finishButton()->setFocus();
         return;

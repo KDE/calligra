@@ -271,7 +271,7 @@ void KexiCSVInfoLabel::setLabelText(const QString& text)
 
 void KexiCSVInfoLabel::setIcon(const QString& iconName)
 {
-    m_iconLbl->setPixmap(BarIcon(iconName));
+    m_iconLbl->setPixmap(DesktopIcon(iconName));
 }
 
 void KexiCSVInfoLabel::setCommentText(const QString& text)
