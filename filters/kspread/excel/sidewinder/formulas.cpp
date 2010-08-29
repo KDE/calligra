@@ -391,8 +391,11 @@ unsigned FormulaToken::size() const
     case MemAreaN:
     case MemNoMemN:
     default:
+        if (d->data.empty())
         // WARNING this is unhandled case
-        printf("Unhandled formula token with id %i\n", d->id);
+            printf("Unhandled formula token with id %i\n", d->id);
+        else
+            s = d->data.size();
         break;
     }
 
