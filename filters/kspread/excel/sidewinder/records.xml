@@ -194,7 +194,7 @@
 </record>
 
 <record name="CalcMode" id="0x000D">
-  <field name="calcMode" type="signed" size="16">
+  <field name="calcMode" type="signed" size="16" default="Automatic">
     <enum name="Manual"        value="0" />
     <enum name="Automatic"     value="1" />
     <enum name="SemiAutomatic" value="-1" />
@@ -626,7 +626,7 @@
   <field name="exDsc"           type="bool" size="1" />
   <field name="reserved"                    size="12" />
   <if predicate="!isDyZero()">
-    <field name="miyRw"            type="signed" size="16" /> <!-- in twips -->
+    <field name="miyRw"            type="signed" size="16" default="255" /> <!-- in twips -->
   </if>
   <if predicate="isDyZero()">
     <field name="miyRwHidden"      type="signed" size="16" />
@@ -646,13 +646,13 @@
 </record>
 
 <record name="Setup" id="0x00a1">
-  <field name="paperSize"               type="unsigned" size="16" />
-  <field name="scalePercentage"         type="unsigned" size="16" />
-  <field name="startingPageNumber"      type="signed"   size="16" />
-  <field name="fitWidthToPageCount"     type="unsigned" size="16" />
-  <field name="fitHeightToPageCount"    type="unsigned" size="16" />
+  <field name="paperSize"               type="unsigned" size="16" default="1" />
+  <field name="scalePercentage"         type="unsigned" size="16" default="100" />
+  <field name="startingPageNumber"      type="signed"   size="16" default="1" />
+  <field name="fitWidthToPageCount"     type="unsigned" size="16" default="1" />
+  <field name="fitHeightToPageCount"    type="unsigned" size="16" default="1" />
   <field name="leftToRight"             type="bool"     size="1" />
-  <field name="portrait"                type="bool"     size="1" />
+  <field name="portrait"                type="bool"     size="1" default="true" />
   <field name="noPaperSizeSet"          type="bool"     size="1" />
   <field name="greyscale"               type="bool"     size="1" />
   <field name="draftQuality"            type="bool"     size="1" />
@@ -668,11 +668,11 @@
     <enum name="ErrorsAsNA"        value="3" />
   </field>
   <field name="reserved1" size="4" />
-  <field name="printResolution"         type="unsigned" size="16" />
-  <field name="verticalPrintResolution" type="unsigned" size="16" />
-  <field name="headerMargin"            type="float"    size="64" />
-  <field name="footerMargin"            type="float"    size="64" />
-  <field name="numCopies"               type="unsigned" size="16" />
+  <field name="printResolution"         type="unsigned" size="16" default="200" />
+  <field name="verticalPrintResolution" type="unsigned" size="16" default="200" />
+  <field name="headerMargin"            type="float"    size="64" default="0.5" />
+  <field name="footerMargin"            type="float"    size="64" default="0.5" />
+  <field name="numCopies"               type="unsigned" size="16" default="1" />
 </record>
 
 <record name="CrtLine" id="0x101c">
@@ -1202,26 +1202,26 @@
 </record>
 
 <record name="Window2" id="0x023E">
-  <field name="fDspFmlaRt" type="bool" size="1" />
-  <field name="fDspGridRt" type="bool" size="1" />
-  <field name="fDspRwColRt" type="bool" size="1" />
-  <field name="fFrozenRt" type="bool" size="1" />
-  <field name="fDspZerosRt" type="bool" size="1" />
-  <field name="fDefaultHdr" type="bool" size="1" />
-  <field name="fRightToLeft" type="bool" size="1" />
-  <field name="fDspGuts" type="bool" size="1" />
-  <field name="fFrozenNoSplit" type="bool" size="1" />
-  <field name="fSelected" type="bool" size="1" />
-  <field name="fPaged" type="bool" size="1" />
-  <field name="fSLV" type="bool" size="1" />
-  <field name="reserved1" size="4" />
-  <field name="rwTop" type="unsigned" size="16" />
-  <field name="colLeft" type="unsigned" size="16" />
+  <field name="fDspFmlaRt"      type="bool"     size="1" />
+  <field name="fDspGridRt"      type="bool"     size="1" default="true" />
+  <field name="fDspRwColRt"     type="bool"     size="1" default="true" />
+  <field name="fFrozenRt"       type="bool"     size="1" />
+  <field name="fDspZerosRt"     type="bool"     size="1" default="true" />
+  <field name="fDefaultHdr"     type="bool"     size="1" default="true" />
+  <field name="fRightToLeft"    type="bool"     size="1" />
+  <field name="fDspGuts"        type="bool"     size="1" default="true" />
+  <field name="fFrozenNoSplit"  type="bool"     size="1" />
+  <field name="fSelected"       type="bool"     size="1" default="true" />
+  <field name="fPaged"          type="bool"     size="1" default="true" />
+  <field name="fSLV"            type="bool"     size="1" />
+  <field name="reserved1"                       size="4" />
+  <field name="rwTop"           type="unsigned" size="16" />
+  <field name="colLeft"         type="unsigned" size="16" />
   <optional name="sheetFields">
-    <field name="icvHdr" type="unsigned" size="16" />
-    <field name="reserved2" size="16" />
-    <field name="wScaleSLV" type="unsigned" size="16" />
-    <field name="wScaleNormal" type="unsigned" size="16" />
+    <field name="icvHdr"        type="unsigned" size="16" default="64" />
+    <field name="reserved2"                     size="16" />
+    <field name="wScaleSLV"     type="unsigned" size="16" />
+    <field name="wScaleNormal"  type="unsigned" size="16" />
   </optional>
 </record>
 
@@ -1360,7 +1360,7 @@
 </record>
 
 <record name="CalcCount" id="0x000c">
-  <field name="iterCount" type="signed" size="16" />
+  <field name="iterCount" type="signed" size="16" default="100" />
 </record>
 
 <record name="CalcRefMode" id="0x000f">
@@ -1372,7 +1372,7 @@
 </record>
 
 <record name="CalcDelta" id="0x0010">
-  <field name="numDelta" type="float" size="64" />
+  <field name="numDelta" type="float" size="64" default="0.001" />
 </record>
 
 <record name="CalcSaveRecalc" id="0x005f">
@@ -1396,12 +1396,12 @@
 </record>
 
 <record name="WsBool" id="0x0081">
-  <field name="showAutoBreaks"          type="bool" size="1" />
+  <field name="showAutoBreaks"          type="bool" size="1" default="true" />
   <field name="reserved"                            size="3" />
   <field name="dialogSheet"             type="bool" size="1" />
   <field name="applyStylesInOutline"    type="bool" size="1" />
-  <field name="rowSumsBelow"            type="bool" size="1" />
-  <field name="colSumsRight"            type="bool" size="1" />
+  <field name="rowSumsBelow"            type="bool" size="1" default="true" />
+  <field name="colSumsRight"            type="bool" size="1" default="true" />
   <field name="fitToPage"               type="bool" size="1" />
   <field name="reserved"                            size="1" />
   <field name="reserved"                            size="2" />
@@ -1428,11 +1428,11 @@
 <record name="PhoneticInfo" id="0x00ef">
 </record>
 <record name="Selection" id="0x001d">
-  <field name="pnn" type="unsigned" size="8" />
-  <field name="rwAct" type="unsigned" size="16" />
-  <field name="colAct" type="unsigned" size="16" />
+  <field name="pnn"     type="unsigned" size="8" />
+  <field name="rwAct"   type="unsigned" size="16" />
+  <field name="colAct"  type="unsigned" size="16" />
   <field name="irefAct" type="unsigned" size="16" />
-  <field name="cref" type="unsigned" size="16" />
+  <field name="cref"    type="unsigned" size="16" />
 </record>
 <record name="PrinterSettings" id="0x004d">
 </record>
