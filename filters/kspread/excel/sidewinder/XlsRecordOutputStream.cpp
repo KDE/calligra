@@ -169,6 +169,27 @@ void XlsRecordOutputStream::writeUnicodeStringWithFlags(const QString& value)
     writeUnicodeString(value);
 }
 
+void XlsRecordOutputStream::writeUnicodeStringWithFlagsAndLength(const QString& value)
+{
+    if (m_buffer->size() + 7 > 8224) {
+        // header doesn't fit in record, add continue record
+        endRecord();
+        startRecord(0x003C);
+    }
+    writeUnsigned(16, value.length());
+    writeUnsigned(8, 1); // unicode, no other flags
+    int pos = 0;
+    while (pos < value.length()) {
+        int len = (8224 - m_buffer->size()) / 2;
+        writeUnicodeString(value.mid(pos, len));
+        pos += len;
+        if (pos < value.length()) {
+            endRecord();
+            startRecord(0x003C);
+            writeUnsigned(8, 1); // unicode, no other flags
+        }
+    }
+}
 
 void XlsRecordOutputStream::writeByteString(const QString& value)
 {

@@ -42,6 +42,7 @@
 #include "globalssubstreamhandler.h"
 #include "worksheetsubstreamhandler.h"
 #include "chartsubstreamhandler.h"
+#include "XlsRecordOutputStream.h"
 
 //#define SWINDER_XLS2RAW
 
@@ -1148,7 +1149,6 @@ class SSTRecord::Private
 {
 public:
     unsigned total;
-    unsigned count;
     std::vector<QString> strings;
     std::vector<std::map<unsigned, unsigned> > formatRuns;
 };
@@ -1158,7 +1158,6 @@ SSTRecord::SSTRecord(Workbook *book):
 {
     d = new SSTRecord::Private();
     d->total = 0;
-    d->count = 0;
 }
 
 SSTRecord::~SSTRecord()
@@ -1181,14 +1180,14 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
     if (size < 8) return;
 
     d->total = readU32(data);
-    d->count = readU32(data + 4);
+    unsigned count = readU32(data + 4);
 
     unsigned offset = 8;
     unsigned int nextContinuePosIdx = 0;
     unsigned int nextContinuePos = continuePositions[0];
 
     d->strings.clear();
-    for (unsigned i = 0; i < d->count; i++) {
+    for (unsigned i = 0; i < count; i++) {
         // check against size
         if (offset >= size) {
             std::cerr << "Warning: reached end of SST record, but not all strings have been read!" << std::endl;
@@ -1204,15 +1203,23 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 
     // sanity check, adjust to safer condition
-    if (d->count > d->strings.size()) {
-        std::cerr << "Warning: mismatch number of string in SST record, expected " << d->count << ", got " << d->strings.size() << "!" << std::endl;
-        d->count = d->strings.size();
+    if (count > d->strings.size()) {
+        std::cerr << "Warning: mismatch number of string in SST record, expected " << count << ", got " << d->strings.size() << "!" << std::endl;
+    }
+}
+
+void SSTRecord::writeData(XlsRecordOutputStream &out) const
+{
+    out.writeUnsigned(32, d->total);
+    out.writeUnsigned(32,count());
+    for (unsigned i = 0; i < count(); i++) {
+        out.writeUnicodeStringWithFlagsAndLength(stringAt(i));
     }
 }
 
 unsigned SSTRecord::count() const
 {
-    return d->count;
+    return d->strings.size();
 }
 
 // why not just string() ? to avoid easy confusion with std::string
@@ -1226,6 +1233,12 @@ std::map<unsigned, unsigned> SSTRecord::formatRunsAt(unsigned index) const
 {
     if (index >= count()) return std::map<unsigned, unsigned>();
     return d->formatRuns[ index ];
+}
+
+unsigned SSTRecord::addString(const QString &string)
+{
+    d->strings.push_back(string);
+    return d->strings.size()-1;
 }
 
 void SSTRecord::dump(std::ostream& out) const

@@ -52,6 +52,7 @@ public:
     void writeFloat(unsigned bits, double value);
     void writeUnicodeString(const QString& value);
     void writeUnicodeStringWithFlags(const QString& value);
+    void writeUnicodeStringWithFlagsAndLength(const QString& value);
     void writeByteString(const QString& value);
     void writeBlob(const QByteArray& value);
 

@@ -713,6 +713,7 @@ public:
     virtual ~SSTRecord();
 
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void writeData(XlsRecordOutputStream& out) const;
 
     /**
       Returns the number of available string in this string table.
@@ -727,10 +728,12 @@ public:
     QString stringAt(unsigned index) const;
 
     /**
-      Returnsformat runs for the string at specified index.
+      Returns format runs for the string at specified index.
       Format runs are a mapping from character-index -> font index.
      */
     std::map<unsigned, unsigned> formatRunsAt(unsigned index) const;
+
+    unsigned addString(const QString& string);
 
     virtual const char* name() const {
         return "SST";
