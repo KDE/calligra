@@ -86,6 +86,7 @@ QColor DrawingMLColorSchemeSystemItem::value() const
         return QPalette().color(QPalette::Active, QPalette::Dark);
     }
 //! @todo Use more of systemColor
+    return QColor(Qt::black); // TODO; better default?
 }
 
 DrawingMLColorSchemeItemBase::DrawingMLColorSchemeItemBase()
