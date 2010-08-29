@@ -174,7 +174,7 @@ FormulaToken FormulaToken::createArea(const QString &cell)
 
 FormulaToken FormulaToken::createFunc(const QString &func, unsigned argCount)
 {
-    int paramCount = functionParams(func);
+    unsigned paramCount = functionParams(func);
     bool isVarArgs = !fixedFunctionParams(func) || argCount != paramCount;
     FormulaToken t(isVarArgs ? FunctionVar : Function);
     QBuffer b;
@@ -668,8 +668,8 @@ static const FunctionEntry FunctionEntries[] = {
     { "DCOUNTA",         3, false },    // 199
     { "DELETEBAR",       1, false },
     { "UNREGISTER",      1, false },
-    { "Unknown202",      0 },
-    { "Unknown203",      0 },
+    { "Unknown202",      0, true },
+    { "Unknown203",      0, true },
     { "USDOLLAR",        0, true },
     { "FINDB",           0, true },
     { "SEARCHB",         0, true },
@@ -683,8 +683,8 @@ static const FunctionEntry FunctionEntries[] = {
     { "ASC",             1, false },
     { "DBCS",            1, false },
     { "RANK",            0, true },     // 216
-    { "Unknown217",      0 },
-    { "Unknown218",      0 },
+    { "Unknown217",      0, true },
+    { "Unknown218",      0, true },
     { "ADDRESS",         0, true },     // 219
     { "DAYS360",         0, true },     // 220
     { "CURRENTDATE",     0, false },    // 221
@@ -715,8 +715,8 @@ static const FunctionEntry FunctionEntries[] = {
     { "GETOBJECT",       0, true },
     { "DB",              0, true },     // 247
     { "PAUSE",           0, true },
-    { "Unknown249",      0 },
-    { "Unknown250",      0 },
+    { "Unknown249",      0, true },
+    { "Unknown250",      0, true },
     { "RESUME",          0, true },
     { "FREQUENCY",       2, false },    // 252
     { "ADDTOOLBAR",      0, true },
@@ -799,7 +799,7 @@ static const FunctionEntry FunctionEntries[] = {
     { "MODALVALUE",      0, true },     // 330
     { "TRIMMEAN",        2, false },    // 331
     { "TINV",            2, false },    // 332
-    { "Unknown333",      0 },
+    { "Unknown333",      0, true },
     { "MOVIECOMMAND",    0, true },
     { "GETMOVIE",        0, true },
     { "CONCATENATE",     0, true },     // 336
