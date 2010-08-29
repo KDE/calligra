@@ -84,8 +84,9 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
         kWarning() << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
     }
 
-    CFBWriter w;
+    CFBWriter w(false);
     w.open(d->outputFile);
+    w.setRootClassId(QUuid("{00020820-0000-0000-c000-000000000046 }"));
     QIODevice* a = w.openSubStream("Workbook");
     XlsRecordOutputStream o(a);
     d->out = &o;

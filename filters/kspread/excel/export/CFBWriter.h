@@ -30,7 +30,7 @@ class QIODevice;
 class CFBWriter
 {
 public:
-    CFBWriter();
+    explicit CFBWriter(bool largeSectors);
     ~CFBWriter();
     bool open(QIODevice* device);
     bool open(const QString& fileName);
@@ -45,6 +45,8 @@ private:
 
     QIODevice* m_device;
     bool m_ownsDevice;
+
+    unsigned m_sectorSize;
 
     /// returns the sector id of the newly written sector
     unsigned writeSector(const QByteArray& data, unsigned previousSector = -1);
