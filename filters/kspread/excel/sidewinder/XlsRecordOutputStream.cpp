@@ -73,7 +73,7 @@ void XlsRecordOutputStream::endRecord()
 void XlsRecordOutputStream::writeUnsigned(unsigned bits, unsigned value)
 {
     Q_ASSERT(m_currentRecord != NORECORD);
-    unsigned mask = (unsigned(1) << bits) - 1;
+    unsigned mask = bits == 32 ? 0xFFFFFFFF : (unsigned(1) << bits) - 1;
     value &= mask;
     if (m_curBitOffset) {
         if (bits < 8-m_curBitOffset) {
