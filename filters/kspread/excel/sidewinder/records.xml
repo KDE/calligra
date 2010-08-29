@@ -1217,12 +1217,12 @@
   <field name="reserved1" size="4" />
   <field name="rwTop" type="unsigned" size="16" />
   <field name="colLeft" type="unsigned" size="16" />
-  <!--
-  <field name="icvHdr" type="unsigned" size="16" />
-  <field name="reserved2" size="16" />
-  <field name="wScaleSLV" type="unsigned" size="16" />
-  <field name="wScaleNormal" type="unsigned" size="16" />
-  -->
+  <optional name="sheetFields">
+    <field name="icvHdr" type="unsigned" size="16" />
+    <field name="reserved2" size="16" />
+    <field name="wScaleSLV" type="unsigned" size="16" />
+    <field name="wScaleNormal" type="unsigned" size="16" />
+  </optional>
 </record>
 
 <record name="ObjProtected" id="0x0063">

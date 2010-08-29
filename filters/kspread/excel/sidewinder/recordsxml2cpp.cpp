@@ -217,6 +217,13 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
         }
     }
 
+    // optional groups
+    QDomNodeList optionalNodes = e.elementsByTagName("optional");
+    for (int i = 0; i < optionalNodes.size(); i++) {
+        QDomElement f = optionalNodes.at(i).toElement();
+        out << "    bool has" << ucFirst(f.attribute("name")) << "() const;\n\n";
+    }
+
     // setData method
     out << "    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );\n\n";
 
@@ -233,7 +240,18 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     out << "private:\n    class Private;\n    Private * const d;\n};\n\n";
 }
 
-static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, unsigned offset, bool dynamicOffset)
+static void invalidFound(QString indent, QTextStream& out, QString currentOptional)
+{
+    if (currentOptional.isEmpty()) {
+        out << indent << "setIsValid(false);\n";
+        out << indent << "return;\n";
+    } else {
+        out << indent << "d->has" << ucFirst(currentOptional) << " = false;\n";
+        out << indent << "goto " << lcFirst(currentOptional) << "Failed;\n";
+    }
+}
+
+static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, unsigned offset, bool dynamicOffset, QString currentOptional)
 {
     // find size of all fields until first unsized field or first if/array
     unsigned size = 0;
@@ -255,18 +273,16 @@ static void sizeCheck(QString indent, QTextStream& out, QDomElement firstField, 
         out << indent << "if (size < ";
         if (dynamicOffset) out << "curOffset + ";
         if (offset) out << (offset / 8) << " + ";
-        out << (size / 8) << ") {\n"
-        << indent << "    setIsValid(false);\n"
-        << indent << "    return;\n"
-        << indent << "}\n";
+        out << (size / 8) << ") {\n";
+        invalidFound(indent + "    ", out, currentOptional);
+        out << indent << "}\n";
     }
 }
 
-static void processFieldElement(QString indent, QTextStream& out, QDomElement field, unsigned& offset, bool& dynamicOffset, QMap<QString, Field>& fieldsMap, QString setterArgs = QString())
+static void processFieldElement(QString indent, QTextStream& out, QDomElement field, unsigned& offset, bool& dynamicOffset, QMap<QString, Field>& fieldsMap, QString setterArgs = QString(), QString currentOptional = QString())
 {
     if (field.tagName() == "fail") {
-        out << indent << "setIsValid(false);\n";
-        out << indent << "return;\n";
+        invalidFound(indent, out, currentOptional);
     } else if (field.tagName() == "field") {
         unsigned bits = field.attribute("size").toUInt();
         QString name = field.attribute("name");
@@ -301,12 +317,11 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                     out << "-1";
                 out << ", size - curOffset"
                 << ", &stringLengthError, &stringSize));\n";
-                out << indent << "if (stringLengthError) {\n"
-                << indent << "    setIsValid(false);\n"
-                << indent << "    return;\n"
-                << indent << "}\n";
+                out << indent << "if (stringLengthError) {\n";
+                invalidFound(indent + "    ", out, currentOptional);
+                out << indent << "}\n";
                 out << indent << "curOffset += stringSize;\n";
-                sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+                sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
             } else if (f.type == "QByteArray") {
                 if (offset % 8 != 0)
                     qFatal("Unaligned string");
@@ -315,10 +330,9 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                     out << indent << "if (";
                     if (dynamicOffset) out << "curOffset + ";
                     if (offset) out << (offset / 8) << " + ";
-                    out << "(" << field.attribute("length") << ") > size) {\n"
-                    << indent << "    setIsValid(false);\n"
-                    << indent << "    return;\n"
-                    << indent << "}\n";
+                    out << "(" << field.attribute("length") << ") > size) {\n";
+                    invalidFound(indent + "    ", out, currentOptional);
+                    out << indent << "}\n";
                 }
                 out << indent << f.setterName() << "(" << setterArgs;
                 out << "QByteArray(reinterpret_cast<const char*>(";
@@ -337,7 +351,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                     else out << indent << "curOffset += " << (offset / 8);
                     out << " + " << field.attribute("length") << ";\n";
                     dynamicOffset = true; offset = 0;
-                    sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+                    sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
                 }
             } else if (f.type == "QUuid") {
                 out << indent << f.setterName() << "(" << setterArgs;
@@ -403,8 +417,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             for (QDomElement child  = field.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
                 if (child.tagName() == "constraint") {
                     out << indent << "if (!(" << f.getterName() << "(" << setterArgs << ") " << child.attribute("expr") << ")) {\n";
-                    out << indent << "    setIsValid(false);\n";
-                    out << indent << "    return;\n";
+                    invalidFound(indent + "    ", out, currentOptional);
                     out << indent << "}\n";
                 }
             }
@@ -420,10 +433,10 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
 
         offset = 0; dynamicOffset = true;
-        sizeCheck(indent + "    ", out, field.firstChildElement(), offset, dynamicOffset);
+        sizeCheck(indent + "    ", out, field.firstChildElement(), offset, dynamicOffset, currentOptional);
 
         for (QDomElement child = field.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-            processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap);
+            processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs, currentOptional);
         }
 
         if (offset % 8 != 0)
@@ -432,7 +445,38 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
         out << indent << "}\n";
         offset = 0;
-        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
+    } else if (field.tagName() == "optional") {
+        if (offset % 8 != 0)
+            qFatal("Optionals should always be byte-aligned");
+        if (!dynamicOffset)
+            out << indent << "curOffset = " << (offset / 8) << ";\n";
+        else if (offset) out << indent << "curOffset += " << (offset / 8) << ";\n";
+        offset = 0; dynamicOffset = true;
+
+        QString name = ucFirst(field.attribute("name"));
+        QString label = field.attribute("name") + "Failed";
+        out << indent << "d->has" << name << " = true;\n";
+        out << indent << "unsigned savedOffset" << name << " = curOffset;\n";
+        out << indent << "{\n";
+
+        sizeCheck(indent + "    ", out, field.firstChildElement(), offset, dynamicOffset, name);
+        for (QDomElement child = field.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+            processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs, name);
+        }
+
+        if (offset % 8 != 0)
+            qFatal("Optionals should contain an integer number of bytes");
+
+        if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
+
+        out << indent << "}\n";
+        out << label << ":\n";
+        out << indent << "if (!d->has" << name << ") {\n";
+        out << indent << "    curOffset = savedOffset" << name << ";\n";
+        out << indent << "}\n";
+        offset = 0;
+        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     } else if (field.tagName() == "choose") {
         if (offset % 8 != 0)
             qFatal("Choose tags should always be byte-aligned");
@@ -456,10 +500,10 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 out << "if (" << childField.attribute("predicate") << ") ";
             out << "{\n";
 
-            sizeCheck(indent + "    ", out, childField.firstChildElement(), offset, dynamicOffset);
+            sizeCheck(indent + "    ", out, childField.firstChildElement(), offset, dynamicOffset, currentOptional);
 
             for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-                processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap);
+                processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs, currentOptional);
             }
 
             if (offset % 8 != 0)
@@ -470,7 +514,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
             offset = 0;
         }
         out << "\n";
-        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     } else if (field.tagName() == "array") {
         if (offset % 8 != 0)
             qFatal("Arrays should always be byte-aligned");
@@ -495,10 +539,10 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
 
         out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
         offset = 0; dynamicOffset = true;
-        sizeCheck(indent + "    ", out, field.firstChildElement(), offset, dynamicOffset);
+        sizeCheck(indent + "    ", out, field.firstChildElement(), offset, dynamicOffset, currentOptional);
 
         for (QDomElement child = field.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
-            processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs + "i, ");
+            processFieldElement(indent + "    ", out, child, offset, dynamicOffset, fieldsMap, setterArgs + "i, ", currentOptional);
         }
 
         if (offset % 8 != 0)
@@ -507,7 +551,7 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
         if (offset) out << indent << "    curOffset += " << (offset / 8) << ";\n";
         out << indent << "}\n";
         offset = 0;
-        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+        sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset, currentOptional);
     }
 }
 
@@ -642,6 +686,11 @@ static void processFieldElementForDump(QString indent, QTextStream& out, QDomEle
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
             processFieldElementForDump(indent + "    ", out, e, fieldsMap, "i");
         out << indent << "}\n";
+    } else if (field.tagName() == "optional") {
+        out << indent << "if (has" << ucFirst(field.attribute("name")) << "()) {\n";
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+            processFieldElementForDump(indent + "    ", out, e, fieldsMap);
+        out << indent << "}\n";
     }
 }
 
@@ -684,6 +733,12 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         else if (!f.isStringLength)
             out << "    " << f.type << " " << f.name << ";\n";
     }
+    // optional groups
+    QDomNodeList optionalNodes = e.elementsByTagName("optional");
+    for (int i = 0; i < optionalNodes.size(); i++) {
+        QDomElement f = optionalNodes.at(i).toElement();
+        out << "    bool has" << ucFirst(f.attribute("name")) << ";\n";
+    }
     out << "};\n\n";
 
     // constructor
@@ -701,6 +756,10 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         }
         if (!val.isEmpty())
             out << "    " << f.setterName() << "(" << val << ");\n";
+    }
+    for (int i = 0; i < optionalNodes.size(); i++) {
+        QDomElement f = optionalNodes.at(i).toElement();
+        out << "    d->has" << ucFirst(f.attribute("name")) << " = false;\n";
     }
     out << "}\n\n";
 
@@ -782,6 +841,13 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         }
     }
 
+    // optional groups
+    for (int i = 0; i < optionalNodes.size(); i++) {
+        QDomElement f = optionalNodes.at(i).toElement();
+        out << "bool " << className << "::has" << ucFirst(f.attribute("name")) << "() const\n{\n";
+        out << "    return d->has" << ucFirst(f.attribute("name")) << ";\n}\n\n";
+    }
+
     // setData method
     bool hasFields = !fieldNodes.isEmpty();
     if (hasFields) {
@@ -790,7 +856,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         out << "void " << className << "::setData( unsigned size, const unsigned char*, const unsigned int* )\n{\n";
     }
     out << "    setRecordSize(size);\n\n";
-    if (e.elementsByTagName("if").size() > 0 || e.elementsByTagName("array").size() > 0 || containsStrings)
+    if (e.elementsByTagName("if").size() > 0 || e.elementsByTagName("array").size() > 0 || containsStrings || e.elementsByTagName("optional").size() > 0)
         out << "    unsigned curOffset;\n";
     if (containsStrings) {
         out << "    bool stringLengthError = false;\n"
@@ -798,7 +864,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     }
     unsigned offset = 0;
     bool dynamicOffset = false;
-    sizeCheck("    ", out, e.firstChildElement(), offset, dynamicOffset);
+    sizeCheck("    ", out, e.firstChildElement(), offset, dynamicOffset, "");
     for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
         processFieldElement("    ", out, child, offset, dynamicOffset, fieldsMap);
     out << "}\n\n";
