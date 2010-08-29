@@ -271,6 +271,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(themeElements)
             ELSE_TRY_READ_IF(custClrLst)
@@ -280,7 +281,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_theme()
             ELSE_TRY_READ_IF(custClrLst)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -304,6 +304,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_themeElements()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(clrScheme)
             ELSE_TRY_READ_IF(extLst)
@@ -311,7 +312,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_themeElements()
             ELSE_TRY_READ_IF(fontScheme)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -391,10 +391,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrSchemeLst()
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(extraClrScheme)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -413,9 +413,9 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_extraClrScheme()
    while (!atEnd()) {
         readNext();
         //kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -474,6 +474,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
@@ -495,7 +496,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_clrScheme()
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -537,6 +537,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
     while (!atEnd()) {
         readNext();
         //kDebug() << *this;
+        BREAK_IF_END_OF_QSTRING(qn)
         if (isStartElement()) {
             ReadMethod readMethod = m_readMethods.value(this->name().toString());
             if (readMethod) {
@@ -544,7 +545,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_color()
             }
             ELSE_WRONG_FORMAT_DEBUG("!readMethod")
         }
-        BREAK_IF_END_OF_QSTRING(qn)
     }
 
     if (!expectElEnd(qn)) {

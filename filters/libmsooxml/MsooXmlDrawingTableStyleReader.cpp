@@ -368,10 +368,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(tblStyle)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -388,6 +388,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
 //             TRY_READ_IF(band1H)
 //             ELSE_TRY_READ_IF(band1V)
@@ -406,7 +407,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
             /*ELSE_*/TRY_READ_IF(wholeTbl)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_context->styleList->insertStyle(styleId, m_currentStyle);
@@ -425,12 +425,12 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(tcStyle)
             ELSE_TRY_READ_IF(tcTxStyle)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_currentStyle.addProperties(m_currentStyleProperties);
@@ -447,6 +447,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
 //             TRY_READ_IF(cell3D)
 //             ELSE_TRY_READ_IF(fill)
@@ -454,7 +455,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
             /*ELSE_*/TRY_READ_IF(tcBdr)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -476,6 +476,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(bottom)
 //             ELSE_TRY_READ_IF(extLst)
@@ -488,7 +489,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
 //             ELSE_TRY_READ_IF(tr2bl)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -502,12 +502,12 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     Border border;
@@ -528,12 +528,12 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     Border border;
@@ -554,12 +554,12 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     Border border;
@@ -580,12 +580,12 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     Border border;

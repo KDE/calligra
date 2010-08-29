@@ -363,12 +363,12 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
     const QString qn(qualifiedName().toString()); \
     /*kDebug() << *this; */\
     while (true) { \
+        readNext(); \
         if (atEnd()) \
             break; \
         if (isEndElement() && qualifiedName() == qn) { \
             break; \
         } \
-        readNext(); \
     }
 
 #define SKIP_EVERYTHING_AND_RETURN \

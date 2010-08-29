@@ -205,13 +205,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(nvPicPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = drawFrameBuf.originalWriter();
@@ -355,6 +355,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(cNvPicPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(cNvPr)
@@ -363,7 +364,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
 #endif
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -393,10 +393,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPicPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -451,11 +451,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvPr(cNvPrCaller caller)
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //            TRY_READ_IF()
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -486,6 +486,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(cNvPr)
 #ifdef PPTXXMLSLIDEREADER_H
@@ -494,7 +495,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
             ELSE_TRY_READ_IF(cNvSpPr)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -526,6 +526,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         kDebug() << *this;
         if (isStartElement()) {
             TRY_READ_IF(grpSp)
@@ -537,7 +538,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 #endif
         //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     body->endElement(); // draw:g
 
@@ -580,19 +580,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, xfrm)
         //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_inGrpSpPr = false;
 
-    m_svgXTransform.push_back(m_svgX/m_svgChX);
-    m_svgYTransform.push_back(m_svgY/m_svgChY);
-    m_svgWidthTransform.push_back(m_svgWidth/m_svgChWidth);
-    m_svgHeightTransform.push_back(m_svgHeight/m_svgChHeight);
+    m_svgXTransform.push_back((qreal)m_svgX/m_svgChX);
+    m_svgYTransform.push_back((qreal)m_svgY/m_svgChY);
+    m_svgWidthTransform.push_back((qreal)m_svgWidth/m_svgChWidth);
+    m_svgHeightTransform.push_back((qreal)m_svgHeight/m_svgChHeight);
 
     READ_EPILOGUE
 }
@@ -626,11 +626,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         /*        if (isStartElement()) {
                     TRY_READ_IF(...)
         //! @todo add ELSE_WRONG_FORMAT
                 }*/
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -719,6 +719,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
@@ -730,7 +731,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #endif
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -936,12 +936,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, fillRef)
             ELSE_TRY_READ_IF_NS(a, lnRef)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -994,6 +994,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
@@ -1030,7 +1031,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 //! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -1161,11 +1161,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -1202,11 +1202,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -1265,6 +1265,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     while (!atEnd()) {
         readNext();
         kDebug() << "isStartElement:" << isStartElement();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(p)) {
 // CASE #301: avoid nested paragaraphs
@@ -1293,7 +1294,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             ELSE_TRY_READ_IF(fld)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -1445,6 +1445,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     READ_PROLOGUE2(DrawingML_r)
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(rPr)) {
                 TRY_READ(DrawingML_rPr)
@@ -1452,7 +1453,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             ELSE_TRY_READ_IF(t)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -1580,8 +1580,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 
     // Read child elements
     while (!atEnd()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(latin)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
@@ -1737,8 +1737,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
     }
 
     while (!atEnd()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -1827,6 +1827,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     algnToODF("fo:text-align", algn);
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buNone)
@@ -1844,8 +1846,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
                 TRY_READ(lnSpc)
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 
     if (m_listStylePropertiesAltered) {
@@ -1908,6 +1908,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     bool ext_read = false;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(off)) {
                 TRY_READ(off);
@@ -1920,7 +1921,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             ELSE_TRY_READ_IF(chExt)
         }
 //! @todo add ELSE_WRONG_FORMAT
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     /*//! @todo
@@ -1999,7 +1999,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     // Checking whether we are in a group shape properties
     // don't need to make transformations if we are
     if (!m_inGrpSpPr) {
-        if (m_svgXTransform.size()) {
+        if (m_svgXTransform.size() > 0) {
             int index = 0;
             while (index < m_svgXTransform.size()) {
                 m_svgX = m_svgX * m_svgXTransform.at(m_svgXTransform.size() - 1 - index);
@@ -2010,8 +2010,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     }
 
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -2032,8 +2032,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
     STRING_TO_INT(y, m_svgChY, "chOff@y")
 
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -2072,7 +2072,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     // Checking whether we are in a group shape properties
     // don't need to make transformations if we are
     if (!m_inGrpSpPr) {
-        if (m_svgWidthTransform.size()) {
+        if (m_svgWidthTransform.size() > 0) {
             int index = 0;
             while (index < m_svgWidthTransform.size()) {
                 m_svgWidth = m_svgWidth * m_svgWidthTransform.at(m_svgWidthTransform.size() - 1 - index);
@@ -2083,8 +2083,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     }
 
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -2105,8 +2105,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     STRING_TO_INT(cy, m_svgChHeight, "chExt@cy")
 
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -2184,13 +2184,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
             ELSE_TRY_READ_IF(lum)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -2224,11 +2224,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stretch()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fillRect)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -2437,11 +2437,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(graphicData)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -2470,6 +2470,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(pic, pic)
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
@@ -2481,7 +2482,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 #endif
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -2566,13 +2566,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF_QSTRING(qn)
         if (isStartElement()) {
             TRY_READ_IF(blip)
             ELSE_TRY_READ_IF(stretch)
             ELSE_TRY_READ_IF(tile)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF_QSTRING(qn)
     }
 
     // we do not use READ_EPILOGUE because namespace depends on caller here
@@ -2708,6 +2708,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -2720,7 +2721,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     if (!m_currentListStyle.isEmpty())
         m_lstStyleFound = true;
@@ -2814,6 +2814,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
@@ -2821,7 +2822,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
             ELSE_TRY_READ_IF(sysClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 //    m_currentTextStyleProperties->setBackground(m_currentColor);
     // note: paragraph background is unsupported in presentation applications anyway...
@@ -2891,6 +2891,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             //scheme color
             TRY_READ_IF(schemeClr)
@@ -2903,7 +2904,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
             //TODO stsClr system color
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -2961,10 +2961,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gsLst)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -2989,6 +2989,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(gs)) {
                 TRY_READ(gs)
@@ -2996,7 +2997,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
                 shades.push_back(m_currentShadeLevel);
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     // FIXME: This works only for 3 gs spots, can there be more?
@@ -3053,10 +3053,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
     m_currentShadeLevel = 0;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -3224,8 +3224,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     MSOOXML::Utils::DoubleModifier lumMod;
     MSOOXML::Utils::DoubleModifier lumOff;
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         // @todo: Hmm, are these color modifications only available for pptx?
         if (QUALIFIED_NAME_IS(lumMod)) {
             m_currentDoubleValue = &lumMod.value;
@@ -3473,8 +3473,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     m_currentPen.setWidth(wInt);
 
     while (!atEnd()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if( isStartElement() ) {
             //Line join bevel
 //             if(qualifiedName() == QLatin1String("a:bevel")) {
@@ -3581,8 +3581,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
 
     //TODO: all the color transformations
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -3640,12 +3640,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     //TODO: all the color transformations
     while (true) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 
     if (m_currentTint > 0) {
@@ -3692,12 +3692,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
 
     //TODO: all the color transformations
     while (true) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 
     if (m_currentTint > 0) {
@@ -4024,6 +4024,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     }
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(rPr)) {
                 TRY_READ(DrawingML_rPr)
@@ -4033,8 +4035,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             }
             ELSE_TRY_READ_IF(t)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 
     READ_EPILOGUE
@@ -4070,12 +4070,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
     READ_PROLOGUE
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
             ELSE_TRY_READ_IF(spcPct)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
     READ_EPILOGUE
 }
@@ -4110,12 +4110,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcAft()
     READ_PROLOGUE
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
             ELSE_TRY_READ_IF(spcPct)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
     READ_EPILOGUE
 }
@@ -4149,12 +4149,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
 {
     READ_PROLOGUE
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(spcPct)
             ELSE_TRY_READ_IF(spcPts)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
     READ_EPILOGUE
 }
@@ -4400,11 +4400,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (m_currentColor.isValid()) {
@@ -4520,14 +4520,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 
     bool spAutoFit = false;
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:spAutoFit")) {
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) { // CASE #P526
@@ -4587,6 +4587,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)
             ELSE_TRY_READ_IF_NS(a, lstStyle)
@@ -4595,7 +4596,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (m_prevListLevel > 0) {

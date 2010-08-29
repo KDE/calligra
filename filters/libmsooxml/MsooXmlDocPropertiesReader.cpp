@@ -91,8 +91,8 @@ KoFilter::ConversionStatus MsooXmlDocPropertiesReader::read_coreProperties()
     READ_PROLOGUE
 
     while(true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             const QString qn = qualifiedName().toString();
             while (!isEndElement() && !isCharacters())

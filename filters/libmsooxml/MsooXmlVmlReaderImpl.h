@@ -62,6 +62,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "v:rect") {
                 TRY_READ(rect)
@@ -70,7 +71,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shape)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = drawFrameBuf.originalWriter();
@@ -151,12 +151,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
     const QXmlStreamAttributes attrs(attributes());
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(p)
         }
-
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 
     READ_EPILOGUE
@@ -238,11 +237,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     RETURN_IF_ERROR(parseCSS(style))
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -296,11 +295,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //            TRY_READ_IF(fill)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -337,10 +336,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
     //const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     const QString rId(m_vmlStyle.value("v:fill@r:id"));
     if (!rId.isEmpty()) {
@@ -413,10 +412,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
     //const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //            TRY_READ_IF()
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -513,11 +512,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(imagedata)
             ELSE_TRY_READ_IF_NS(v, textbox)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_objectRectInitialized = true;
@@ -572,8 +571,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
     kDebug() << "m_imagedataPath:" << m_imagedataPath;
 
     while (!atEnd()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -597,12 +596,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
     body->startElement("draw:text-box");
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(w, txbxContent)
         }
-
-        BREAK_IF_END_OF(CURRENT_EL);
-        readNext();
     }
 
     body->endElement(); // draw-textbox

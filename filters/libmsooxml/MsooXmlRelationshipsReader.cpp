@@ -131,11 +131,11 @@ KoFilter::ConversionStatus MsooXmlRelationshipsReader::read_Relationships()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(Relationship)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }

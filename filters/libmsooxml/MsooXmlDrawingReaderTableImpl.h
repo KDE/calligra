@@ -40,13 +40,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = tableBuf.originalWriter();
@@ -118,6 +118,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //             TRY_READ_IF(blipFill)
 //             ELSE_TRY_READ_IF(effectDrag)
@@ -133,7 +134,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
             /*ELSE_*/TRY_READ_IF(tableStyleId)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     MSOOXML::TableStyle tableStyle = m_context->tableStyleList->tableStyle(m_styleId);
@@ -174,11 +174,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblGrid()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -199,10 +199,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
 
     while(!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
 //         if(isStartElement()) {
 //             TRY_READ_IF(extLst)
 //         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -226,12 +226,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tc)
 //             ELSE_TRY_READ_IF(extLst)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = rowBuf.originalWriter();
@@ -268,6 +268,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if(qualifiedName() == "a:txBody") {
                 TRY_READ(DrawingML_txBody);
@@ -276,8 +277,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
             ELSE_TRY_READ_IF(tcPr)
 //             ELSE_WRONG_FORMAT
         }
-
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = cellBuf.originalWriter();
@@ -366,6 +365,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //            TRY_READ_IF(blipFill)
 //            ELSE_TRY_READ_IF(cell3D)
@@ -383,7 +383,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 //            ELSE_TRY_READ_IF(solidFill)
 //             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
