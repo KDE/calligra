@@ -342,19 +342,52 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
 
             for (int col = first.column(); col <= last.column(); col++) {
                 KSpread::Cell cell(sheet, col, row);
+                KSpread::Value val = cell.value();
 
-                if (cell.value().isNumber()) {
+                if (val.isNumber()) {
                     NumberRecord nr(0);
                     nr.setRow(row-1);
                     nr.setColumn(col-1);
                     nr.setNumber(cell.value().asFloat());
                     o.writeRecord(nr);
-                } else if (cell.value().isString()) {
+                } else if (val.isString()) {
                     LabelSSTRecord lr(0);
                     lr.setRow(row-1);
                     lr.setColumn(col-1);
                     lr.setSstIndex(sst[cell.value().asString()]);
                     o.writeRecord(lr);
+                } else if (val.isBoolean() || val.isError()) {
+                    BoolErrRecord br(0);
+                    br.setRow(row-1);
+                    br.setColumn(col-1);
+                    if (val.isBoolean()) {
+                        br.setError(false);
+                        br.setValue(val.asBoolean() ? 1 : 0);
+                    } else {
+                        br.setError(true);
+                        if (val == KSpread::Value::errorCIRCLE()) {
+                            br.setValue(0x17);
+                        } else if (val == KSpread::Value::errorDEPEND()) {
+                            br.setValue(0x17);
+                        } else if (val == KSpread::Value::errorDIV0()) {
+                            br.setValue(0x07);
+                        } else if (val == KSpread::Value::errorNA()) {
+                            br.setValue(0x2A);
+                        } else if (val == KSpread::Value::errorNAME()) {
+                            br.setValue(0x1D);
+                        } else if (val == KSpread::Value::errorNULL()) {
+                            br.setValue(0x00);
+                        } else if (val == KSpread::Value::errorNUM()) {
+                            br.setValue(0x24);
+                        } else if (val == KSpread::Value::errorPARSE()) {
+                            br.setValue(0x2A);
+                        } else if (val == KSpread::Value::errorREF()) {
+                            br.setValue(0x17);
+                        } else if (val == KSpread::Value::errorVALUE()) {
+                            br.setValue(0x0F);
+                        }
+                    }
+                    o.writeRecord(br);
                 } else /*if (cell.isEmpty())*/ {
                     BlankRecord br(0);
                     br.setRow(row-1);
