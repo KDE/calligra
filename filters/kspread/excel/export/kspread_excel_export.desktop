@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KSpread Microsoft Excel Export Filter
+X-KDE-Import=application/vnd.oasis.opendocument.spreadsheet
+X-KDE-Export=application/vnd.ms-excel
+X-KDE-Weight=1
+X-KDE-Library=libexcelexport
+X-KDE-ServiceTypes=KOfficeFilter

@@ -6,6 +6,7 @@ endif(QCA2_FOUND)
 
 add_subdirectory( sidewinder )
 add_subdirectory( import )
+add_subdirectory( export )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
