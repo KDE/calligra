@@ -292,6 +292,15 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 if (offset % 8 != 0)
                     qFatal("Unaligned string");
 
+                if (field.hasAttribute("length")) {
+                    out << indent << "if (";
+                    if (dynamicOffset) out << "curOffset + ";
+                    if (offset) out << (offset / 8) << " + ";
+                    out << "(" << field.attribute("length") << ") > size) {\n"
+                    << indent << "    setIsValid(false);\n"
+                    << indent << "    return;\n"
+                    << indent << "}\n";
+                }
                 out << indent << f.setterName() << "(" << setterArgs;
                 out << "QByteArray(reinterpret_cast<const char*>(";
                 out << "data";
