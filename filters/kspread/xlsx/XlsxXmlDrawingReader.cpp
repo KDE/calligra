@@ -144,13 +144,13 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
     m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_TRY_READ_IF(row)
             ELSE_TRY_READ_IF(colOff)
             ELSE_TRY_READ_IF(rowOff)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
     READ_EPILOGUE
@@ -164,13 +164,13 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
     m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_TRY_READ_IF(row)
             ELSE_TRY_READ_IF(colOff)
             ELSE_TRY_READ_IF(rowOff)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
     READ_EPILOGUE
@@ -354,12 +354,12 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicFrame()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "a:graphic") {
                 read_graphic2();
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -376,12 +376,12 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphic2()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "a:graphicData") {
                 read_graphicData2();
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -394,6 +394,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             //TRY_READ_IF_NS(pic, pic)
             if (qualifiedName() == "c:chart") {
@@ -403,7 +404,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
                 read_diagram(); // DrawingML diagram
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }

@@ -147,11 +147,11 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_sst()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(si)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -196,6 +196,7 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(t)) {
                 TRY_READ(t)
@@ -221,7 +222,6 @@ KoFilter::ConversionStatus XlsxXmlSharedStringsReader::read_si()
 //! @todo support rPh
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     (void)buf.releaseWriter();

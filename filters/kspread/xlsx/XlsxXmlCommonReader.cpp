@@ -88,8 +88,8 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_t()
 
     while (!atEnd()) {
         kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -120,6 +120,8 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
     QString readResult;
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         TRY_READ_IF(rPr)
         else if (QUALIFIED_NAME_IS(t)) {
             TRY_READ(t)
@@ -129,8 +131,6 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_r()
         }
 //! @todo support rPr
 //! @todo            ELSE_WRONG_FORMAT
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     m_text = readResult;
 
@@ -173,12 +173,12 @@ KoFilter::ConversionStatus XlsxXmlCommonReader::read_rPr()
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(vertAlign)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);

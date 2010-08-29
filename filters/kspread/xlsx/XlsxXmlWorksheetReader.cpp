@@ -429,6 +429,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sheetFormatPr)
             ELSE_TRY_READ_IF(cols)
@@ -439,7 +440,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             ELSE_TRY_READ_IF(picture)
             ELSE_TRY_READ_IF(oleObjects)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     bodyBuffer->close();
@@ -645,11 +645,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(col)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE_WITHOUT_RETURN
 
@@ -796,11 +796,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(row)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -882,11 +882,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_row()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(c) // modifies m_currentColumn
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     ++m_currentRow; // This row is done now. Select the next row.
@@ -1004,12 +1004,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(f)
             ELSE_TRY_READ_IF(v)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     bool ok;
@@ -1201,8 +1201,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
     }
 
     while (!atEnd() && !hasError()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isCharacters()) {
             cell->formula = MSOOXML::convertFormula(text().toString());
         }
@@ -1337,11 +1337,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCells()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(mergeCell)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -1443,11 +1443,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlinks()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(hyperlink)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -1481,10 +1481,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObjects()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if( isStartElement() ) {
             TRY_READ_IF(oleObject)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }

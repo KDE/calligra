@@ -176,11 +176,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
 {
     READ_PROLOGUE
     Charting::Axis* axis = new Charting::Axis( Charting::Axis::VerticalValueAxis );
-    
+
     m_context->m_chart->m_axes.push_back( axis );
     while (!atEnd()) {
         readNext();
         qDebug( qualifiedName().toString().toLocal8Bit().data() );
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(axPos) ) ) {
                   const QXmlStreamAttributes attrs(attributes());
@@ -190,12 +191,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_valAx()
                   }
 //                   else if ( val == QLatin1String( "l" ) ){
 //                   }
-            }            
+            }
         }
         else if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(majorGridlines) ) ) {
             axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -209,6 +209,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
     m_context->m_chart->m_axes.push_back( axis );
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if ( qualifiedName() == QLatin1String( QUALIFIED_NAME(axPos) ) ) {
                   const QXmlStreamAttributes attrs(attributes());
@@ -223,7 +224,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_catAx()
                   axis->m_majorGridlines = Charting::Axis::Gridline( Charting::LineFormat( Charting::LineFormat::Solid ) );
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -236,6 +236,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(ser)
             ELSE_TRY_READ_IF(spPr)
@@ -267,7 +268,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_plotArea()
             //ELSE_TRY_READ_IF(bubbleSize)
             ELSE_TRY_READ_IF(bubbleScale)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
     m_areaContext = ChartArea;
@@ -289,6 +289,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(val)
             ELSE_TRY_READ_IF(xVal)
@@ -308,7 +309,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
                 }
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -323,16 +323,16 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_title()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if(!m_autoTitleDeleted)            
+            if(!m_autoTitleDeleted)
                 TRY_READ_IF(tx)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     if ( m_context->m_chart->m_title.isEmpty() )
         m_context->m_chart->m_title = "Chart Title";
     m_readTxContext = None;
-    READ_EPILOGUE    
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -343,6 +343,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numCache)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
@@ -351,7 +352,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_val()
                 m_context->m_chart->addRange( result.second );
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -365,6 +365,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_xVal()
     bool numRef = false;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numCache)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(numRef)))
@@ -376,7 +377,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_xVal()
                 //m_context->m_chart->addRange( result.second );
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -389,18 +389,18 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_yVal()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numCache)
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
                 if ( m_currentSeries->m_valuesCellRangeAddress.isEmpty() )
                   m_currentSeries->m_valuesCellRangeAddress = readElementText();
-                else                
+                else
                   m_currentSeries->m_domainValuesCellRangeAddress.push_back( readElementText() );
                 //QPair<QString,QRect> result = splitCellRange( m_currentSeries->m_valuesCellRangeAddress );
                 //m_context->m_chart->addRange( result.second );
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -413,6 +413,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {
                 m_context->m_chart->m_verticalCellRangeAddress = readElementText();
@@ -420,7 +421,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_cat()
                 m_context->m_chart->addRange( result.second );
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -436,6 +436,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
     state = Start;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         switch(state) {
             case Start:
                 if (qualifiedName() == QLatin1String(QUALIFIED_NAME(strRef)))
@@ -461,6 +462,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                 s = Rich;
                 while (!atEnd()) {
                     readNext();
+                    BREAK_IF_END_OF(rich);
                     switch(s) {
                         case Rich:
                             if (isStartElement() && qualifiedName() == QLatin1String("a:p")) s = Paragraph;
@@ -481,14 +483,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_tx()
                             }
                             break;
                     }
-                    BREAK_IF_END_OF(rich);
                 }
                 if(!result.isEmpty())
                     m_context->m_chart->m_texts << new Charting::Text(result);
                 state = Start;
                 break;
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -500,6 +500,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_numCache()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(ptCount))) {
                 const QXmlStreamAttributes attrs(attributes());
@@ -509,7 +510,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_numCache()
             //else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(pt)))
             //else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(formatCode)))
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -521,8 +521,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_legend()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
-        //TODO
         BREAK_IF_END_OF(CURRENT_EL);
+        //TODO
     }
     READ_EPILOGUE
 }
@@ -535,10 +535,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbl()
       while (!atEnd()) {
           readNext();
           qDebug( qualifiedName().toString().toLocal8Bit().data() );
+          BREAK_IF_END_OF(CURRENT_EL);
           if ( qualifiedName() == "c:showVal" ) {
               m_currentSeries->m_showDataValues = true;
           }
-          BREAK_IF_END_OF(CURRENT_EL);
       }
       READ_EPILOGUE
 }
@@ -550,10 +550,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
       while (!atEnd()) {
           qDebug( qualifiedName().toString().toLocal8Bit().data() );
           readNext();
+          BREAK_IF_END_OF(CURRENT_EL);
           if ( qualifiedName() == "c:showVal" ) {
               m_currentSeries->m_showDataValues = true;
           }
-          BREAK_IF_END_OF(CURRENT_EL);
       }
       READ_EPILOGUE
 }
@@ -574,7 +574,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     Charting::Gradient* gradient = NULL;
     Charting::Gradient::GradientStop currentStop;
     while (!atEnd()) {
-        readNext();        
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) ++level;
         else if(isEndElement()) --level;
 
@@ -653,7 +654,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                 gradient->gradientStops.append( currentStop );
                 readingGradientStop = false;
                 currentStop.reset();
-                
             }
         } else if ( qualifiedName() == "a:schemeClr" && readingGradientStop ) {
             if ( isStartElement() ) {
@@ -680,7 +680,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             if ( !ang.isEmpty() )
                 gradient->angle = ang.toDouble() / 60000.0;
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -942,6 +941,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleSize()
                   m_currentSeries->m_domainValuesCellRangeAddress.append( m_currentSeries->m_valuesCellRangeAddress );
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String(QUALIFIED_NAME(f))) {                
                 m_currentSeries->m_valuesCellRangeAddress = readElementText();
@@ -949,8 +949,6 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleSize()
                 m_context->m_chart->addRange( result.second );*/
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
-        
     }
     READ_EPILOGUE
 }

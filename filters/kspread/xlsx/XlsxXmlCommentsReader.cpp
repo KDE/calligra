@@ -118,12 +118,12 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comments()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(authors)
             ELSE_TRY_READ_IF(commentList)
 //            ELSE_TRY_READ_IF(extLst)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -136,11 +136,11 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_authors()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(author)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -156,8 +156,8 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_author()
     kDebug() << "Added author #" << (m_context->comments->count() + 1) << author;
     m_context->comments->m_authors.append(author);
     while (!atEnd()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -169,11 +169,11 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_commentList()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(comment)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -191,12 +191,12 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_comment()
     std::auto_ptr<XlsxComment> comment(authorIdInt < 0 ? 0 : new XlsxComment(authorIdInt));
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(text)
             //! @todo ELSE_TRY_READ_IF(commentPr)
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     if (comment.get()) {
         comment.get()->texts = m_currentCommentText;
@@ -214,14 +214,14 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_text()
     m_currentCommentText.clear();
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(r)
-            TRY_READ_IF(t)
+            ELSE_TRY_READ_IF(t)
             //! @todo ELSE_TRY_READ_IF(rPh)
             //! @todo ELSE_TRY_READ_IF(phoneticPr)
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -233,12 +233,12 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_r()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(t)
             //! @todo ELSE_TRY_READ_IF(rPr)
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     kDebug() << m_currentCommentText;
     READ_EPILOGUE
@@ -253,8 +253,8 @@ KoFilter::ConversionStatus XlsxXmlCommentsReader::read_t()
     //! @todo is trimming ok here?
     m_currentCommentText += text().toString().trimmed();
     while (!atEnd()) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
