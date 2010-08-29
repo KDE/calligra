@@ -97,6 +97,7 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
             if (e.elementsByTagName("enum").size() > 0) {
                 map[name].isEnum = true;
                 map[name].type = ucFirst(name);
+                map[name].defaultValue = e.elementsByTagName("enum").at(0).toElement().attribute("name");
             }
             if (extraTypes.contains(e.attribute("type"))) {
                 map[name].isEnum = true;
