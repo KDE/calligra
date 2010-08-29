@@ -32,6 +32,7 @@
 
 #include <part/Doc.h>
 #include <CellStorage.h>
+#include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
 #include <RowColumnFormat.h>
@@ -344,7 +345,49 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                 KSpread::Cell cell(sheet, col, row);
                 KSpread::Value val = cell.value();
 
-                if (val.isNumber()) {
+                if (cell.isFormula()) {
+                    FormulaRecord fr(0);
+                    fr.setRow(row-1);
+                    fr.setColumn(col-1);
+                    if (val.isNumber()) {
+                        fr.setResult(Value((double)numToDouble(val.asFloat())));
+                    } else if (val.isBoolean()) {
+                        fr.setResult(Value(val.asBoolean()));
+                    } else if (val.isError()) {
+                        if (val == KSpread::Value::errorCIRCLE()) {
+                            fr.setResult(Value::errorREF());
+                        } else if (val == KSpread::Value::errorDEPEND()) {
+                            fr.setResult(Value::errorREF());
+                        } else if (val == KSpread::Value::errorDIV0()) {
+                            fr.setResult(Value::errorDIV0());
+                        } else if (val == KSpread::Value::errorNA()) {
+                            fr.setResult(Value::errorNA());
+                        } else if (val == KSpread::Value::errorNAME()) {
+                            fr.setResult(Value::errorNAME());
+                        } else if (val == KSpread::Value::errorNULL()) {
+                            fr.setResult(Value::errorNULL());
+                        } else if (val == KSpread::Value::errorNUM()) {
+                            fr.setResult(Value::errorNUM());
+                        } else if (val == KSpread::Value::errorPARSE()) {
+                            fr.setResult(Value::errorNA());
+                        } else if (val == KSpread::Value::errorREF()) {
+                            fr.setResult(Value::errorREF());
+                        } else if (val == KSpread::Value::errorVALUE()) {
+                            fr.setResult(Value::errorVALUE());
+                        }
+                    } else if (val.isString()) {
+                        fr.setResult(Value(Value::String));
+                    } else {
+                        fr.setResult(Value::empty());
+                    }
+                    KSpread::Formula f = cell.formula();
+                    QList<FormulaToken> tokens = compileFormula(f.tokens());
+                    foreach (const FormulaToken& t, tokens) {
+                        fr.addToken(t);
+                    }
+
+                    o.writeRecord(fr);
+                } else if (val.isNumber()) {
                     NumberRecord nr(0);
                     nr.setRow(row-1);
                     nr.setColumn(col-1);
@@ -410,4 +453,516 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
     o.writeRecord(EOFRecord(0));
 }
 
+
+/**********************
+    TokenStack
+ **********************/
+class TokenStack : public QVector<KSpread::Token>
+{
+public:
+    TokenStack();
+    bool isEmpty() const;
+    unsigned itemCount() const;
+    void push(const KSpread::Token& token);
+    KSpread::Token pop();
+    const KSpread::Token& top();
+    const KSpread::Token& top(unsigned index);
+private:
+    void ensureSpace();
+    unsigned topIndex;
+};
+
+TokenStack::TokenStack(): QVector<KSpread::Token>()
+{
+    topIndex = 0;
+    ensureSpace();
+}
+
+bool TokenStack::isEmpty() const
+{
+    return topIndex == 0;
+}
+
+unsigned TokenStack::itemCount() const
+{
+    return topIndex;
+}
+
+void TokenStack::push(const KSpread::Token& token)
+{
+    ensureSpace();
+    insert(topIndex++, token);
+}
+
+KSpread::Token TokenStack::pop()
+{
+    return (topIndex > 0) ? KSpread::Token(at(--topIndex)) : KSpread::Token();
+}
+
+const KSpread::Token& TokenStack::top()
+{
+    return top(0);
+}
+
+const KSpread::Token& TokenStack::top(unsigned index)
+{
+    if (topIndex > index)
+        return at(topIndex - index - 1);
+    return KSpread::Token::null;
+}
+
+void TokenStack::ensureSpace()
+{
+    while ((int) topIndex >= size())
+        resize(size() + 10);
+}
+
+// helper function: give operator precedence
+// e.g. '+' is 1 while '*' is 3
+static int opPrecedence(KSpread::Token::Op op)
+{
+    int prec = -1;
+    switch (op) {
+    case KSpread::Token::Percent      : prec = 8; break;
+    case KSpread::Token::Caret        : prec = 7; break;
+    case KSpread::Token::Asterisk     : prec = 5; break;
+    case KSpread::Token::Slash        : prec = 6; break;
+    case KSpread::Token::Plus         : prec = 3; break;
+    case KSpread::Token::Minus        : prec = 3; break;
+    case KSpread::Token::Union        : prec = 2; break;
+    case KSpread::Token::Ampersand    : prec = 2; break;
+    case KSpread::Token::Intersect    : prec = 2; break;
+    case KSpread::Token::Equal        : prec = 1; break;
+    case KSpread::Token::NotEqual     : prec = 1; break;
+    case KSpread::Token::Less         : prec = 1; break;
+    case KSpread::Token::Greater      : prec = 1; break;
+    case KSpread::Token::LessEqual    : prec = 1; break;
+    case KSpread::Token::GreaterEqual : prec = 1; break;
+#ifdef KSPREAD_INLINE_ARRAYS
+        // FIXME Stefan: I don't know whether zero is right for this case. :-(
+    case KSpread::Token::CurlyBra     : prec = 0; break;
+    case KSpread::Token::CurlyKet     : prec = 0; break;
+    case KSpread::Token::Pipe         : prec = 0; break;
+#endif
+    case KSpread::Token::Semicolon    : prec = 0; break;
+    case KSpread::Token::RightPar     : prec = 0; break;
+    case KSpread::Token::LeftPar      : prec = -1; break;
+    default: prec = -1; break;
+    }
+    return prec;
+}
+
+QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens) const
+{
+    QList<FormulaToken> codes;
+
+    TokenStack syntaxStack;
+    QStack<int> argStack;
+    unsigned argCount = 1;
+    bool valid = true;
+
+    for (int i = 0; i <= tokens.count(); i++) {
+        // helper token: InvalidOp is end-of-formula
+        KSpread::Token token = (i < tokens.count()) ? tokens[i] : KSpread::Token(KSpread::Token::Operator);
+        KSpread::Token::Type tokenType = token.type();
+
+        // unknown token is invalid
+        if (tokenType == KSpread::Token::Unknown) {
+            // TODO
+            break;
+        }
+
+        // are we entering a function ?
+        // if stack already has: id (
+        if (syntaxStack.itemCount() >= 2) {
+            KSpread::Token par = syntaxStack.top();
+            KSpread::Token id = syntaxStack.top(1);
+            if (par.asOperator() == KSpread::Token::LeftPar)
+                if (id.isIdentifier()) {
+                    argStack.push(argCount);
+                    argCount = 1;
+                }
+        }
+
+#ifdef KSPREAD_INLINE_ARRAYS
+        // are we entering an inline array ?
+        // if stack already has: {
+        if (syntaxStack.itemCount() >= 1) {
+            KSpread::Token bra = syntaxStack.top();
+            if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                argStack.push(argCount);
+                argStack.push(1);   // row count
+                argCount = 1;
+            }
+        }
+#endif
+
+        // for constants, push immediately to stack
+        // generate code to load from a constant
+        if ((tokenType == KSpread::Token::Integer) || (tokenType == KSpread::Token::Float) ||
+                (tokenType == KSpread::Token::String) || (tokenType == KSpread::Token::Boolean) ||
+                (tokenType == KSpread::Token::Error)) {
+            syntaxStack.push(token);
+            switch (tokenType) {
+            case KSpread::Token::Integer:
+                codes.append(FormulaToken::createNum(token.asInteger()));
+                break;
+            case KSpread::Token::Float:
+                codes.append(FormulaToken::createNum(token.asFloat()));
+                break;
+            case KSpread::Token::String:
+                codes.append(FormulaToken::createStr(token.asString()));
+                break;
+            case KSpread::Token::Boolean:
+                codes.append(FormulaToken::createBool(token.asBoolean()));
+                break;
+            case KSpread::Token::Error:
+                // TODO
+                codes.append(FormulaToken(FormulaToken::MissArg));
+                break;
+            }
+        }
+
+        // for cell, range, or identifier, push immediately to stack
+        // generate code to load from reference
+        if ((tokenType == KSpread::Token::Cell) || (tokenType == KSpread::Token::Range) ||
+                (tokenType == KSpread::Token::Identifier)) {
+            syntaxStack.push(token);
+
+            if (tokenType == KSpread::Token::Cell)
+                codes.append(FormulaToken::createRef(token.text()));
+            else if (tokenType == KSpread::Token::Range)
+                codes.append(FormulaToken::createArea(token.text()));
+            else {
+                // TODO
+                // codes.append(FormulaToken(FormulaToken::MissArg));
+            }
+        }
+
+        // special case for percentage
+        if (tokenType == KSpread::Token::Operator)
+            if (token.asOperator() == KSpread::Token::Percent)
+                if (syntaxStack.itemCount() >= 1)
+                    if (!syntaxStack.top().isOperator()) {
+                        codes.append(FormulaToken(FormulaToken::Percent));
+                    }
+
+        // for any other operator, try to apply all parsing rules
+        if (tokenType == KSpread::Token::Operator)
+            if (token.asOperator() != KSpread::Token::Percent) {
+                // repeat until no more rule applies
+                for (; ;) {
+                    bool ruleFound = false;
+
+                    // rule for function arguments, if token is ; or )
+                    // id ( arg1 ; arg2 -> id ( arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 5)
+                            if ((token.asOperator() == KSpread::Token::RightPar) ||
+                                    (token.asOperator() == KSpread::Token::Semicolon)) {
+                                KSpread::Token arg2 = syntaxStack.top();
+                                KSpread::Token sep = syntaxStack.top(1);
+                                KSpread::Token arg1 = syntaxStack.top(2);
+                                KSpread::Token par = syntaxStack.top(3);
+                                KSpread::Token id = syntaxStack.top(4);
+                                if (!arg2.isOperator())
+                                    if (sep.asOperator() == KSpread::Token::Semicolon)
+                                        if (!arg1.isOperator())
+                                            if (par.asOperator() == KSpread::Token::LeftPar)
+                                                if (id.isIdentifier()) {
+                                                    ruleFound = true;
+                                                    syntaxStack.pop();
+                                                    syntaxStack.pop();
+                                                    argCount++;
+                                                }
+                            }
+
+                    // rule for empty function arguments, if token is ; or )
+                    // id ( arg ; -> id ( arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 3)
+                            if ((token.asOperator() == KSpread::Token::RightPar) ||
+                                    (token.asOperator() == KSpread::Token::Semicolon)) {
+                                KSpread::Token sep = syntaxStack.top();
+                                KSpread::Token arg = syntaxStack.top(1);
+                                KSpread::Token par = syntaxStack.top(2);
+                                KSpread::Token id = syntaxStack.top(3);
+                                if (sep.asOperator() == KSpread::Token::Semicolon)
+                                    if (!arg.isOperator())
+                                        if (par.asOperator() == KSpread::Token::LeftPar)
+                                            if (id.isIdentifier()) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                codes.append(FormulaToken(FormulaToken::MissArg));
+                                                argCount++;
+                                            }
+                            }
+
+                    // rule for function last argument:
+                    //  id ( arg ) -> arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 4) {
+                            KSpread::Token par2 = syntaxStack.top();
+                            KSpread::Token arg = syntaxStack.top(1);
+                            KSpread::Token par1 = syntaxStack.top(2);
+                            KSpread::Token id = syntaxStack.top(3);
+                            if (par2.asOperator() == KSpread::Token::RightPar)
+                                if (!arg.isOperator())
+                                    if (par1.asOperator() == KSpread::Token::LeftPar)
+                                        if (id.isIdentifier()) {
+                                            ruleFound = true;
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.push(arg);
+                                            codes.append(FormulaToken::createFunc(id.text(), argCount));
+                                            Q_ASSERT(!argStack.empty());
+                                            argCount = argStack.empty() ? 0 : argStack.pop();
+                                        }
+                        }
+
+                    // rule for function call with parentheses, but without argument
+                    // e.g. "2*PI()"
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 3) {
+                            KSpread::Token par2 = syntaxStack.top();
+                            KSpread::Token par1 = syntaxStack.top(1);
+                            KSpread::Token id = syntaxStack.top(2);
+                            if (par2.asOperator() == KSpread::Token::RightPar)
+                                if (par1.asOperator() == KSpread::Token::LeftPar)
+                                    if (id.isIdentifier()) {
+                                        ruleFound = true;
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.push(KSpread::Token(KSpread::Token::Integer));
+                                        codes.append(FormulaToken::createFunc(id.text(), 0));
+                                        Q_ASSERT(!argStack.empty());
+                                        argCount = argStack.empty() ? 0 : argStack.pop();
+                                    }
+                        }
+
+#ifdef KSPREAD_INLINE_ARRAYS
+                    // rule for inline array elements, if token is ; or | or }
+                    // { arg1 ; arg2 -> { arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 4)
+                            if ((token.asOperator() == KSpread::Token::Semicolon) ||
+                                    (token.asOperator() == KSpread::Token::CurlyKet) ||
+                                    (token.asOperator() == KSpread::Token::Pipe)) {
+                                KSpread::Token arg2 = syntaxStack.top();
+                                KSpread::Token sep = syntaxStack.top(1);
+                                KSpread::Token arg1 = syntaxStack.top(2);
+                                KSpread::Token bra = syntaxStack.top(3);
+                                if (!arg2.isOperator())
+                                    if (sep.asOperator() == KSpread::Token::Semicolon)
+                                        if (!arg1.isOperator())
+                                            if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                argCount++;
+                                            }
+                            }
+
+                    // rule for last array row element, if token is ; or | or }
+                    //  { arg1 | arg2 -> { arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 4)
+                            if ((token.asOperator() == KSpread::Token::Semicolon) ||
+                                    (token.asOperator() == KSpread::Token::CurlyKet) ||
+                                    (token.asOperator() == KSpread::Token::Pipe)) {
+                                KSpread::Token arg2 = syntaxStack.top();
+                                KSpread::Token sep = syntaxStack.top(1);
+                                KSpread::Token arg1 = syntaxStack.top(2);
+                                KSpread::Token bra = syntaxStack.top(3);
+                                if (!arg2.isOperator())
+                                    if (sep.asOperator() == KSpread::Token::Pipe)
+                                        if (!arg1.isOperator())
+                                            if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                int rowCount = argStack.pop();
+                                                argStack.push(++rowCount);
+                                                argCount = 1;
+                                            }
+                            }
+
+                    // rule for last array element:
+                    //  { arg } -> arg
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 3) {
+                            KSpread::Token ket = syntaxStack.top();
+                            KSpread::Token arg = syntaxStack.top(1);
+                            KSpread::Token bra = syntaxStack.top(2);
+                            if (ket.asOperator() == KSpread::Token::CurlyKet)
+                                if (!arg.isOperator())
+                                    if (bra.asOperator() == KSpread::Token::CurlyBra) {
+                                        ruleFound = true;
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.pop();
+                                        syntaxStack.push(arg);
+                                        const int rowCount = argStack.pop();
+                                        // TODO:
+                                        codes.append(FormulaToken(FormulaToken::MissArg));
+                                        //d->constants.append(Value((int)argCount));     // cols
+                                        //d->constants.append(Value(rowCount));
+                                        //d->codes.append(Opcode(Opcode::Array, d->constants.count() - 2));
+                                        Q_ASSERT(!argStack.empty());
+                                        argCount = argStack.empty() ? 0 : argStack.pop();
+                                    }
+                        }
+#endif
+                    // rule for parenthesis:  ( Y ) -> Y
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 3) {
+                            KSpread::Token right = syntaxStack.top();
+                            KSpread::Token y = syntaxStack.top(1);
+                            KSpread::Token left = syntaxStack.top(2);
+                            if (right.isOperator())
+                                if (!y.isOperator())
+                                    if (left.isOperator())
+                                        if (right.asOperator() == KSpread::Token::RightPar)
+                                            if (left.asOperator() == KSpread::Token::LeftPar) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                syntaxStack.push(y);
+                                                codes.append(FormulaToken(FormulaToken::Paren));
+                                            }
+                        }
+
+                    // rule for binary operator:  A (op) B -> A
+                    // conditions: precedence of op >= precedence of token
+                    // action: push (op) to result
+                    // e.g. "A * B" becomes 'A' if token is operator '+'
+                    if (!ruleFound)
+                        if (syntaxStack.itemCount() >= 3) {
+                            KSpread::Token b = syntaxStack.top();
+                            KSpread::Token op = syntaxStack.top(1);
+                            KSpread::Token a = syntaxStack.top(2);
+                            if (!a.isOperator())
+                                if (!b.isOperator())
+                                    if (op.isOperator())
+                                        if (token.asOperator() != KSpread::Token::LeftPar)
+                                            if (opPrecedence(op.asOperator()) >= opPrecedence(token.asOperator())) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                syntaxStack.push(b);
+                                                switch (op.asOperator()) {
+                                                    // simple binary operations
+                                                case KSpread::Token::Plus:
+                                                    codes.append(FormulaToken(FormulaToken::Add)); break;
+                                                case KSpread::Token::Minus:
+                                                    codes.append(FormulaToken(FormulaToken::Sub)); break;
+                                                case KSpread::Token::Asterisk:
+                                                    codes.append(FormulaToken(FormulaToken::Mul)); break;
+                                                case KSpread::Token::Slash:
+                                                    codes.append(FormulaToken(FormulaToken::Div)); break;
+                                                case KSpread::Token::Caret:
+                                                    codes.append(FormulaToken(FormulaToken::Power)); break;
+                                                case KSpread::Token::Ampersand:
+                                                    codes.append(FormulaToken(FormulaToken::Concat)); break;
+                                                case KSpread::Token::Intersect:
+                                                    codes.append(FormulaToken(FormulaToken::Intersect)); break;
+                                                case KSpread::Token::Union:
+                                                    codes.append(FormulaToken(FormulaToken::Union)); break;
+
+                                                    // simple value comparisons
+                                                case KSpread::Token::Equal:
+                                                    codes.append(FormulaToken(FormulaToken::EQ)); break;
+                                                case KSpread::Token::Less:
+                                                    codes.append(FormulaToken(FormulaToken::LT)); break;
+                                                case KSpread::Token::Greater:
+                                                    codes.append(FormulaToken(FormulaToken::GT)); break;
+                                                case KSpread::Token::NotEqual:
+                                                    codes.append(FormulaToken(FormulaToken::NE)); break;
+                                                case KSpread::Token::LessEqual:
+                                                    codes.append(FormulaToken(FormulaToken::LE)); break;
+                                                case KSpread::Token::GreaterEqual:
+                                                    codes.append(FormulaToken(FormulaToken::GE)); break;
+                                                default: break;
+                                                };
+                                            }
+                        }
+
+                    // rule for unary operator:  (op1) (op2) X -> (op1) X
+                    // conditions: op2 is unary, token is not '('
+                    // action: push (op2) to result
+                    // e.g.  "* - 2" becomes '*'
+                    if (!ruleFound)
+                        if (token.asOperator() != KSpread::Token::LeftPar)
+                            if (syntaxStack.itemCount() >= 3) {
+                                KSpread::Token x = syntaxStack.top();
+                                KSpread::Token op2 = syntaxStack.top(1);
+                                KSpread::Token op1 = syntaxStack.top(2);
+                                if (!x.isOperator())
+                                    if (op1.isOperator())
+                                        if (op2.isOperator())
+                                            if ((op2.asOperator() == KSpread::Token::Plus) ||
+                                                    (op2.asOperator() == KSpread::Token::Minus)) {
+                                                ruleFound = true;
+                                                syntaxStack.pop();
+                                                syntaxStack.pop();
+                                                syntaxStack.push(x);
+                                                if (op2.asOperator() == KSpread::Token::Minus)
+                                                    codes.append(FormulaToken(FormulaToken::UMinus));
+                                                else
+                                                    codes.append(FormulaToken(FormulaToken::UPlus));
+                                            }
+                            }
+
+                    // auxiliary rule for unary operator:  (op) X -> X
+                    // conditions: op is unary, op is first in syntax stack, token is not '('
+                    // action: push (op) to result
+                    if (!ruleFound)
+                        if (token.asOperator() != KSpread::Token::LeftPar)
+                            if (syntaxStack.itemCount() == 2) {
+                                KSpread::Token x = syntaxStack.top();
+                                KSpread::Token op = syntaxStack.top(1);
+                                if (!x.isOperator())
+                                    if (op.isOperator())
+                                        if ((op.asOperator() == KSpread::Token::Plus) ||
+                                                (op.asOperator() == KSpread::Token::Minus)) {
+                                            ruleFound = true;
+                                            syntaxStack.pop();
+                                            syntaxStack.pop();
+                                            syntaxStack.push(x);
+                                            if (op.asOperator() == KSpread::Token::Minus)
+                                                codes.append(FormulaToken(FormulaToken::UMinus));
+                                            else
+                                                codes.append(FormulaToken(FormulaToken::UPlus));
+                                        }
+                            }
+
+                    if (!ruleFound) break;
+                }
+
+                // can't apply rules anymore, push the token
+                if (token.asOperator() != KSpread::Token::Percent)
+                    syntaxStack.push(token);
+            }
+    }
+
+    // syntaxStack must left only one operand and end-of-formula (i.e. InvalidOp)
+    valid = false;
+    if (syntaxStack.itemCount() == 2)
+        if (syntaxStack.top().isOperator())
+            if (syntaxStack.top().asOperator() == KSpread::Token::InvalidOp)
+                if (!syntaxStack.top(1).isOperator())
+                    valid = true;
+
+    // bad parsing ? clean-up everything
+    if (!valid) {
+        // TODO
+    }
+
+    return codes;
+}
 

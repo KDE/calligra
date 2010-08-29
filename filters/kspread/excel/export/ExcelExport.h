@@ -21,6 +21,7 @@
 #define EXCELEXPORT_H
 
 #include <QHash>
+#include <QList>
 #include <QString>
 
 #include <KoFilter.h>
@@ -28,10 +29,12 @@
 
 namespace KSpread {
     class Sheet;
+    class Tokens;
 }
 
 namespace Swinder {
     class SSTRecord;
+    class FormulaToken;
 }
 
 class ExcelExport : public KoFilter
@@ -45,6 +48,8 @@ public:
     virtual ~ExcelExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+
+    QList<Swinder::FormulaToken> compileFormula(const KSpread::Tokens& tokens) const;
 
     void convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst);
     void buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
