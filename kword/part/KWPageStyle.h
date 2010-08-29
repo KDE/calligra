@@ -229,7 +229,8 @@ public:
     /// internal
     KWPageStylePrivate *priv();
 
-    void detach();
+    /// detach from shared data and set a new name for this one.
+    void detach(const QString &name);
 
 private:
     QExplicitlySharedDataPointer<KWPageStylePrivate> d;

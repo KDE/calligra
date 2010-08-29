@@ -460,7 +460,8 @@ uint qHash(const KWPageStyle &style)
     return style.hash();
 }
 
-void KWPageStyle::detach()
+void KWPageStyle::detach(const QString &newName)
 {
     d.detach();
+    d->name = newName;
 }
