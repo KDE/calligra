@@ -222,6 +222,11 @@ QIODevice* CFBWriter::openSubStream(const QString &streamName)
     return new StreamIODevice(*this, m_entries.last());
 }
 
+void CFBWriter::setRootClassId(const QUuid& classId)
+{
+    m_entries[0].uuid = classId;
+}
+
 static bool compareNames(const QString& a, const QString& b)
 {
     if (a.length() < b.length()) return true;
@@ -307,7 +312,7 @@ void CFBWriter::close()
             ds << quint32(e.leftSibling ? e.leftSibling->id : NOSTREAM);
             ds << quint32(e.rightSibling ? e.rightSibling->id : NOSTREAM);
             ds << quint32(e.firstChild ? e.firstChild->id : NOSTREAM);
-            ds.writeRawData(zeroes, 16); // CLSID
+            ds << e.uuid; // CLSID
             ds << quint32(0); // state bits
             ds.writeRawData(zeroes, 16); // creation&modified time
             ds << quint32(e.firstSector);

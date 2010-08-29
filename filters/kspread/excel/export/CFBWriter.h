@@ -23,6 +23,8 @@
 #include <QHash>
 #include <QList>
 #include <QString>
+#include <QUuid>
+
 class QIODevice;
 
 class CFBWriter
@@ -36,6 +38,7 @@ public:
     void close();
 
     QIODevice* openSubStream(const QString& streamName);
+    void setRootClassId(const QUuid& classId);
 private:
     void init();
     void writeHeader();
@@ -73,6 +76,8 @@ private:
 
         int id;
         QString name;
+        QUuid uuid;
+
         Type type;
         QHash<QString, DirectoryEntry*> children;
         DirectoryEntry *leftSibling, *rightSibling, *firstChild;
