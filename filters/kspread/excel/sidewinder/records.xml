@@ -1035,9 +1035,7 @@
 
 <!-- reserved/ignored records -->
 <record name="GridSetReserved" id="0x0082" />
-<record name="DSFReserved" id="0x0161" />
 <record name="Excel9File" id="0x01c0" />
-<record name="MmsReserved" id="0x00c1" />
 <record name="Compat12" id="0x088c" />
 
 <record name="Window1" id="0x003D">
@@ -1107,6 +1105,37 @@
   <field name="wPassword" type="unsigned" size="16" />
 </record>
 
+<record name="InterfaceHdr" id="0x00e1">
+  <field name="codePage" type="unsigned" size="16" default="0x04B0" />
+</record>
+
+<record name="MmsReserved" id="0x00c1">
+  <field name="reserved" size="32" />
+</record>
+
+<record name="InterfaceEnd" id="0x00e2">
+</record>
+
+<record name="LastWriteAccess" id="0x005c">
+  <field name="userNameLength" type="unsigned" size="16" />
+  <field name="userName" type="unicodestring" length="userNameLength" />
+  <field name="unusedBlob" type="blob" size="0" />
+</record>
+
+<record name="CodePage" id="0x0042">
+  <field name="codePage" type="unsigned" size="16" default="1200" />
+</record>
+
+<record name="DSFReserved" id="0x0161">
+  <field name="reserved" size="16" />
+</record>
+
+<record name="RRTabId" id="0x013d">
+  <array length="size/2">
+    <field name="sheetId" type="unsigned" size="16" />
+  </array>
+</record>
+
 <!-- TODO handle following records -->
 <record name="FeatHdr" id="0x0867">
 </record>
@@ -1122,12 +1151,7 @@
 </record>
 <record name="CalcSaveRecalc" id="0x005f">
 </record>
-<record name="InterfaceHdr" id="0x00e1">
-</record>
-<record name="InterfaceEnd" id="0x00e2">
-</record>
-<record name="RRTabId" id="0x013d">
-</record>
+
 <record name="BuiltInFnGroupCount" id="0x009c">
 </record>
 <record name="HideObj" id="0x008d">
@@ -1160,8 +1184,6 @@
 </record>
 <record name="CalcRefMode" id="0x000f">
 </record>
-<record name="CodePage" id="0x0042">
-</record>
 <record name="Country" id="0x008c">
 </record>
 <record name="Selection" id="0x001d">
@@ -1176,8 +1198,6 @@
 <record name="PrintRowCol" id="0x002a">
 </record>
 <record name="PrintGrid" id="0x002b">
-</record>
-<record name="LastWriteAccess" id="0x005c">
 </record>
 <record name="XFExt" id="0x087d">
 </record>
