@@ -117,6 +117,7 @@ public:
     // size of data, EXCLUDING the byte for token id
     unsigned size() const;
     void setData(unsigned size, const unsigned char* data);
+    std::vector<unsigned char> data() const;
 
     // only when id returns ErrorCode, Bool, Integer, Float, or String
     Value value() const;

@@ -344,6 +344,7 @@ public:
     void setResult(const Value& v);
 
     FormulaTokens tokens() const;
+    void addToken(const FormulaToken& token);
 
     /**
      * Returns true if this formula is a share formula.
@@ -351,6 +352,7 @@ public:
     bool isShared() const;
 
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    virtual void writeData(XlsRecordOutputStream &out) const;
 
     virtual const char* name() const {
         return "FORMULA";

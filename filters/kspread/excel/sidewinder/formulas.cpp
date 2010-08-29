@@ -390,6 +390,11 @@ void FormulaToken::setData(unsigned size, const unsigned char* data)
         d->data[i] = data[i];
 }
 
+std::vector<unsigned char> FormulaToken::data() const
+{
+    return d->data;
+}
+
 Value FormulaToken::value() const
 {
     Value result;

@@ -564,7 +564,7 @@ FormulaRecord::FormulaRecord(Workbook *book):
         Record(book)
 {
     d = new FormulaRecord::Private();
-    d->shared = true;
+    d->shared = false;
 }
 
 FormulaRecord::~FormulaRecord()
@@ -585,6 +585,11 @@ void FormulaRecord::setResult(const Value& r)
 FormulaTokens FormulaRecord::tokens() const
 {
     return d->tokens;
+}
+
+void FormulaRecord::addToken(const FormulaToken &token)
+{
+    d->tokens.push_back(token);
 }
 
 bool FormulaRecord::isShared() const
@@ -637,6 +642,75 @@ void FormulaRecord::setData(unsigned size, const unsigned char* data, const unsi
 
     FormulaDecoder decoder;
     d->tokens = decoder.decodeFormula(size, 20, data, version());
+}
+
+void FormulaRecord::writeData(XlsRecordOutputStream &o) const
+{
+    o.writeUnsigned(16, row());
+    o.writeUnsigned(16, column());
+    o.writeUnsigned(16, xfIndex());
+    if (d->result.isNumber()) {
+        o.writeFloat(64, d->result.asFloat());
+    } else if (d->result.isString()) {
+        o.writeUnsigned(8, 0); // type
+        o.writeUnsigned(24, 0); // reserved
+        o.writeUnsigned(16, 0); // reserved
+        o.writeUnsigned(16, 0xFFFF);
+    } else if (d->result.isBoolean()) {
+        o.writeUnsigned(8, 1); // type
+        o.writeUnsigned(8, 0); // reserved
+        o.writeUnsigned(8, d->result.asBoolean() ? 1 : 0);
+        o.writeUnsigned(24, 0); // reserved
+        o.writeUnsigned(16, 0xFFFF);
+    } else if (d->result.isError()) {
+        o.writeUnsigned(8, 2); // type
+        o.writeUnsigned(8, 0); // reserved
+        Value v = d->result;
+        if (v == Value::errorNULL()) {
+            o.writeUnsigned(8, 0x00);
+        } else if (v == Value::errorDIV0()) {
+            o.writeUnsigned(8, 0x07);
+        } else if (v == Value::errorVALUE()) {
+            o.writeUnsigned(8, 0x0F);
+        } else if (v == Value::errorREF()) {
+            o.writeUnsigned(8, 0x17);
+        } else if (v == Value::errorNAME()) {
+            o.writeUnsigned(8, 0x1D);
+        } else if (v == Value::errorNUM()) {
+            o.writeUnsigned(8, 0x24);
+        } else if (v == Value::errorNA()) {
+            o.writeUnsigned(8, 0x2A);
+        } else {
+            o.writeUnsigned(8, 0x2A);
+        }
+        o.writeUnsigned(24, 0); // reserved
+        o.writeUnsigned(16, 0xFFFF);
+    } else {
+        o.writeUnsigned(8, 3); // type
+        o.writeUnsigned(24, 0); // reserved
+        o.writeUnsigned(16, 0); // reserved
+        o.writeUnsigned(16, 0xFFFF);
+    }
+
+    o.writeUnsigned(1, 1); // fAlwaysRecalc
+    o.writeUnsigned(1, 0); // reserved
+    o.writeUnsigned(1, 0); // fFill
+    o.writeUnsigned(1, d->shared ? 1 : 0);
+    o.writeUnsigned(1, 0); // reserved
+    o.writeUnsigned(1, 0); // fClearErrors
+    o.writeUnsigned(10, 0); // reserved
+    o.writeUnsigned(32, 0); // chn
+    // actual formula
+    unsigned totalSize = 0;
+    for (unsigned i = 0; i < d->tokens.size(); i++) {
+        totalSize += d->tokens[i].size() + 1;
+    }
+    o.writeUnsigned(16, totalSize);
+    for (unsigned i = 0; i < d->tokens.size(); i++) {
+        o.writeUnsigned(8, d->tokens[i].id()); // ptg
+        std::vector<unsigned char> data = d->tokens[i].data();
+        o.writeBlob(QByteArray::fromRawData(reinterpret_cast<char*>(data.data()), data.size()));
+    }
 }
 
 void FormulaRecord::dump(std::ostream& out) const
