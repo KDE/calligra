@@ -286,12 +286,28 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
                 out << indent << "curOffset += stringSize;\n";
                 sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
             } else if (f.type == "QByteArray") {
+                if (offset % 8 != 0)
+                    qFatal("Unaligned string");
+
                 out << indent << f.setterName() << "(" << setterArgs;
                 out << "QByteArray(reinterpret_cast<const char*>(";
                 out << "data";
                 if (dynamicOffset) out << " + curOffset";
                 if (offset) out << " + " << (offset / 8);
-                out << "), " << (bits / 8) << "));\n";
+                out << "), ";
+                if (field.hasAttribute("length"))
+                    out << field.attribute("length");
+                else
+                    out << (bits / 8);
+                out << "));\n";
+                if (field.hasAttribute("length")) {
+                    if (!dynamicOffset)
+                        out << indent << "curOffset = " << (offset / 8);
+                    else out << indent << "curOffset += " << (offset / 8);
+                    out << " + " << field.attribute("length") << ";\n";
+                    dynamicOffset = true; offset = 0;
+                    sizeCheck(indent, out, field.nextSiblingElement(), offset, dynamicOffset);
+                }
             } else if (f.type == "QUuid") {
                 out << indent << f.setterName() << "(" << setterArgs;
                 out << "readUuid(data";
