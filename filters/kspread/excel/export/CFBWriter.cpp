@@ -54,6 +54,7 @@ bool CFBWriter::open(QIODevice *device)
         m_ownsDevice = false;
     }
     init();
+    return true;
 }
 
 bool CFBWriter::open(const QString &fileName)
@@ -69,6 +70,7 @@ bool CFBWriter::open(const QString &fileName)
     }
     m_ownsDevice = true;
     init();
+    return true;
 }
 
 class CFBWriter::StreamIODevice : public QIODevice
@@ -148,6 +150,8 @@ qint64 CFBWriter::StreamIODevice::writeData(const char *data, qint64 len)
 
 qint64 CFBWriter::StreamIODevice::readData(char *data, qint64 maxlen)
 {
+    Q_UNUSED(data);
+    Q_UNUSED(maxlen);
     return -1;
 }
 
@@ -293,11 +297,11 @@ void CFBWriter::close()
         sectorCount = (fatSize + 1023) / 1024;
         fatSize = m_fat.size() + sectorCount;
     }
-    for (int i = 0; i < sectorCount; i++) {
+    for (unsigned i = 0; i < sectorCount; i++) {
         m_difat.append(m_fat.size());
         m_fat.append(FATSECT);
     }
-    for (int i = 0; i < sectorCount; i++) {
+    for (unsigned i = 0; i < sectorCount; i++) {
         unsigned sector = m_difat[i];
         m_device->seek((sector + 1) * 4096);
         QDataStream ds(m_device);
@@ -340,7 +344,7 @@ unsigned CFBWriter::writeSector(const QByteArray &data, unsigned previousSector)
     Q_ASSERT(m_device->isWritable());
     Q_ASSERT(!m_device->isSequential());
     Q_ASSERT(data.size() == 4096);
-    Q_ASSERT(previousSector == unsigned(-1) || previousSector < m_fat.size());
+    Q_ASSERT(previousSector == unsigned(-1) || previousSector < unsigned(m_fat.size()));
 
     qDebug() << "writeSector: previousSector=" << previousSector << ", fat-size =" << m_fat.size();
     unsigned sector = m_fat.size();
@@ -360,7 +364,7 @@ unsigned CFBWriter::writeMiniSector(const QByteArray &data, unsigned previousSec
     Q_ASSERT(m_miniFatDataStream->isOpen());
     Q_ASSERT(m_miniFatDataStream->isWritable());
     Q_ASSERT(data.size() == 64);
-    Q_ASSERT(previousSector == unsigned(-1) || previousSector < m_miniFat.size());
+    Q_ASSERT(previousSector == unsigned(-1) || previousSector < unsigned(m_miniFat.size()));
 
     qDebug() << "writeMiniSector: previousSector=" << previousSector << ", fat-size =" << m_miniFat.size();
     unsigned sector = m_miniFat.size();
