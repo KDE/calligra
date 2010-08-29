@@ -46,21 +46,20 @@ private:
     /// returns the sector id of the newly written sector
     unsigned writeSector(const QByteArray& data, unsigned previousSector = -1);
 
-    unsigned fatSectorCount() const;
+    unsigned writeMiniSector(const QByteArray& data, unsigned previousSector = -1);
 
-    struct Header {
-        unsigned m_firstMiniFatSector;
-        unsigned m_miniFatSectorCount;
-    };
+    unsigned fatSectorCount() const;
 
     QList<unsigned> m_difat;
     unsigned m_firstDifatSector;
     unsigned m_difatSectorCount;
     unsigned m_directorySectorCount;
     unsigned m_firstDirectorySector;
+    unsigned m_firstMiniFatSector;
+    unsigned m_miniFatSectorCount;
 
     QList<unsigned> m_fat;
-    Header m_header;
+    QList<unsigned> m_miniFat;
 
     struct DirectoryEntry {
         enum Type {
@@ -86,6 +85,8 @@ private:
 
     class StreamIODevice;
     QList<StreamIODevice*> m_openStreams;
+
+    QIODevice* m_miniFatDataStream;
 };
 
 #endif // CFBWRITER_H
