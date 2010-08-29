@@ -2313,16 +2313,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grayscl()
  No child elements.
 
  Attributes
- - bright (Brightness)
- - contrast (Contrast)
+ - [done] bright (Brightness)
+ - [done] contrast (Contrast)
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-//! @todo attributes -- even though there is no counterpart in ODF.
-    m_currentDrawStyle->addProperty("draw:color-mode", QLatin1String("watermark"));
+
+    TRY_READ_ATTR_WITHOUT_NS(bright)
+    TRY_READ_ATTR_WITHOUT_NS(contrast)
+
+    // Numbers are in format 70000, so we need to remove 3 zeros
+    // Adding bright to luminance may not be correct (but better than hardcoding to watermark mode)
+    if (!bright.isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:luminance", bright.left(bright.length()-3) + '%');
+    }
+
+    if (!contrast.isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:contrast", contrast.left(contrast.length()-3) + '%');
+    }
 
     readNext();
     READ_EPILOGUE

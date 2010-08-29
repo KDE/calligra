@@ -204,6 +204,7 @@ protected:
     KoFilter::ConversionStatus read_cSld();
     KoFilter::ConversionStatus read_bg();
     KoFilter::ConversionStatus read_bgPr();
+    KoFilter::ConversionStatus read_bgRef();
     KoFilter::ConversionStatus read_spTree();
     KoFilter::ConversionStatus read_nvPr();
     KoFilter::ConversionStatus read_ph();

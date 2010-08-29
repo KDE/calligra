@@ -967,12 +967,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMap()
  where no objects exist and as the background for transparent objects.
 
  Parent elements:
-    - cSld (§19.3.1.16)
+    - [done] cSld (§19.3.1.16)
  Attributes:
     - bwMode (Black and White Mode)
  Child elements:
     - [done] bgPr (Background Properties) §19.3.1.2
-    - bgRef (Background Style Reference) §19.3.1.3
+    - [done] bgRef (Background Style Reference) §19.3.1.3
 */
 //! @todo support all elements
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
@@ -984,6 +984,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bgPr)
+            ELSE_TRY_READ_IF(bgRef)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1004,6 +1005,53 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL bgRef
+//! bgRef Handler (Background style reference)
+/*! This element specifies the slide background is to use a fill style defined in the style matrix. The idx attribute
+ refers to the index of a background fill style or fill style within the presentation's style matrix, defined by the
+ fmtScheme element. A value of 0 or 1000 indicates no background, values 1-999 refer to the index of a fill style
+ within the fillStyleLst element, and values 1001 and above refer to the index of a background fill style within
+
+ Parent elements:
+ - [done] bg (§19.3.1.1)
+
+ Child elements:
+ - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
+ - prstClr (Preset Color) §20.1.2.3.22
+ - [done] schemeClr (Scheme Color) §20.1.2.3.29
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
+{
+    READ_PROLOGUE
+    m_colorType = BackgroundColor;
+    m_currentColor = QColor();
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, schemeClr)
+            ELSE_TRY_READ_IF_NS(a, srgbClr)
+            ELSE_TRY_READ_IF_NS(a, sysClr)
+            ELSE_TRY_READ_IF_NS(a, scrgbClr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    // This is not the correct way, a temporary solution, fix at some point
+    if (m_currentColor.isValid()) {
+        QBrush brush(m_currentColor, Qt::SolidPattern);
+        KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL bgPr
 //! 19.3.1.2 bgPr (Background Properties)
 /*! ECMA-376, 19.3.1.2, p. 2815.
@@ -1012,7 +1060,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
  make up the background of the slide.
 
  Parent elements:
- - bg (§19.3.1.1)
+ - [done] bg (§19.3.1.1)
  Attributes:
  - shadeToTitle
  Child elements:
@@ -1033,6 +1081,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 
     m_colorType = BackgroundColor;
     QString fillImageName;
+    m_currentColor = QColor();
 
     while (!atEnd()) {
         readNext();
@@ -1057,6 +1106,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
             }*/
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (m_currentColor.isValid()) {
+        QBrush brush(m_currentColor, Qt::SolidPattern);
+        KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
     }
 
     if (!fillImageName.isEmpty()) {
@@ -1179,8 +1233,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, d->phType)
     kDebug() << "type:" << d->phType;
 
-    // Mark this shape as a place holder.
-    m_isPlaceHolder = true;
+    if (m_context->type == SlideLayout) {
+        // Mark this shape as a place holder.
+        m_isPlaceHolder = true;
+    }
 
     const QString styleId(d->phStyleId());
     kDebug() << "styleId:" << styleId;
