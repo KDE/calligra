@@ -622,6 +622,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << "slideLayoutProperties->styleName:" << m_context->slideLayoutProperties->pageLayoutStyleName;
     }
 
+    delete m_currentDrawStyle;
+    m_currentDrawStyle = 0;
+
     return KoFilter::OK;
 }
 
@@ -1339,6 +1342,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
     MSOOXML::Utils::XmlWriteBuffer buffer;
     body = buffer.setWriter(body);
 
+    // Create a new drawing style for this element
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1351,6 +1357,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    popCurrentDrawStyle();
 
     body = buffer.originalWriter();
     body->startElement("draw:frame");
