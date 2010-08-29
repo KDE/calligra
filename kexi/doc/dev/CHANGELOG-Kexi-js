@@ -112,6 +112,7 @@ TODO: this causes crash:
 2010-08-29
 CSV Export Dialog
 *fix layout of the CSV Export dialog
+*fixed regression: make "Export Data to File" action enabled when opening object
 
 2010-07-18
 KexiDB
