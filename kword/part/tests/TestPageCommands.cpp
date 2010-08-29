@@ -1,20 +1,21 @@
-/* This file is part of the KOffice project
+/*
+ * This file is part of KOffice tests
+ *
  * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "TestPageCommands.h"
 
@@ -538,6 +539,268 @@ void TestPageCommands::testPageStylePropertiesCommand() // basic properties chan
     QCOMPARE(page2.height(), 102.);
     QCOMPARE(page2.leftMargin(), 7.);
     QCOMPARE(page2.directionHint(), KoText::AutoDirection);
+}
+
+void TestPageCommands::testPageStylePropertiesCommand2()
+{
+    /*
+      make setup where multiple, interspaced pages use the style we want to change.
+      add some frames.
+      check if the frames moved properly when the page gets a new size
+      check that all pages got their new size
+      check that the name of the style did not change
+    */
+    KWDocument document;
+    KWPageManager *manager = document.pageManager();
+
+    KWPageStyle style("pagestyle1");
+    KoPageLayout lay = style.pageLayout();
+    lay.width = 300;
+    lay.height = 500;
+    style.setPageLayout(lay);
+
+    KWPageStyle style2("pagestyle2");
+    lay = style.pageLayout();
+    lay.width = 400;
+    lay.height = 400;
+    style2.setPageLayout(lay);
+    KWPage p1 = manager->appendPage(style2);
+    KWPage p2 = manager->appendPage(style);
+    KWPage p3 = manager->appendPage(style);
+    KWPage p4 = manager->appendPage(style2);
+    KWPage p5 = manager->appendPage(style2);
+    KWPage p6 = manager->appendPage(style);
+    KWPage p7 = manager->appendPage(style);
+    KWPage p8 = manager->appendPage(style);
+    KWPage p9 = manager->appendPage(style2);
+    QCOMPARE(manager->pageCount(), 9);
+
+    KWFrameSet *fs = new KWFrameSet();
+    for (int i = 1; i <= manager->pageCount(); ++i) {
+        // create one frame per page. Positioned relative to the top of the page.
+        KWPage page = manager->page(i);
+        QVERIFY(page.isValid());
+        MockShape *shape = new MockShape();
+        new KWFrame(shape, fs);
+        shape->setPosition(QPointF(-10, page.offsetInDocument() + 10));
+    }
+    document.addFrameSet(fs);
+
+    // lets prepare to change the style to a new page size.
+    KWPageStyle newStyle("foo");
+    lay = newStyle.pageLayout();
+    lay.width = 350;
+    lay.height = 1000;
+    newStyle.setPageLayout(lay);
+
+    KWPageStylePropertiesCommand command(&document, style, newStyle);
+
+    // nothing happens in constructor before redo;
+    for (int i = 1; i <= manager->pageCount(); ++i) {
+        KWPage page = manager->page(i);
+        QVERIFY(page.height() <= 500); // not 1000 yet
+        QVERIFY(page.isValid());
+        KoShape *shape = fs->frames().at(i-1)->shape();
+        QCOMPARE(shape->position(), QPointF(-10, page.offsetInDocument() + 10));
+    }
+
+    const qreal lastPageOffset = p9.offsetInDocument();
+
+    command.redo();
+    QCOMPARE(manager->pageCount(), 9);
+    QCOMPARE(p1.height(), 400.);
+    QCOMPARE(p4.height(), 400.);
+    QCOMPARE(p5.height(), 400.);
+    QCOMPARE(p9.height(), 400.);
+    QCOMPARE(p2.height(), 1000.);
+    QCOMPARE(p3.height(), 1000.);
+    QCOMPARE(p6.height(), 1000.);
+    QCOMPARE(p7.height(), 1000.);
+    QCOMPARE(p8.height(), 1000.);
+    QCOMPARE(lastPageOffset + 2500, p9.offsetInDocument());
+    for (int i = 1; i <= manager->pageCount(); ++i) {
+        KWPage page = manager->page(i);
+        QVERIFY(page.isValid());
+        KoShape *shape = fs->frames().at(i-1)->shape();
+        QCOMPARE(shape->position(), QPointF(-10, page.offsetInDocument() + 10));
+    }
+}
+
+void TestPageCommands::testPageSpread()
+{
+    // setup a doc with multiple pages like;
+    //   1: S1, 2: S1, 3: S1, 4: S2, 5: S1, 6:S2, 7: S2
+
+    KWDocument document;
+    KWPageManager *manager = document.pageManager();
+
+    KWPageStyle style("pagestyle1");
+    KoPageLayout lay = style.pageLayout();
+    lay.width = 300;
+    lay.height = 500;
+    style.setPageLayout(lay);
+
+    KWPageStyle style2("pagestyle2");
+    lay = style.pageLayout();
+    lay.width = 400;
+    lay.height = 400;
+    style2.setPageLayout(lay);
+    KWPage p1 = manager->appendPage(style);
+    KWPage p2 = manager->appendPage(style);
+    KWPage p3 = manager->appendPage(style);
+    KWPage p4 = manager->appendPage(style2);
+    KWPage p5 = manager->appendPage(style);
+    KWPage p6 = manager->appendPage(style2);
+    KWPage p7 = manager->appendPage(style2);
+
+    KWFrameSet *fs = new KWFrameSet();
+    for (int i = 1; i <= manager->pageCount(); ++i) {
+        // create one frame per page. Positioned relative to the top of the page.
+        KWPage page = manager->page(i);
+        QVERIFY(page.isValid());
+        MockShape *shape = new MockShape();
+        new KWFrame(shape, fs);
+        shape->setPosition(QPointF(-10, page.offsetInDocument() + 10));
+    }
+    document.addFrameSet(fs);
+
+    // when changing S1 from normal to pagespread I expect
+    //  page 1 to stay the same.
+    //  page 2 to become a pagespread
+    //  page 3 to be deleted
+    //  page 4 to stay the same.
+    //  page 5 to become a page spread and gets pageNumber 6
+    //  page 6 to become page 7 and become a Right page
+    //  page 7 to become page 8 and become a Left page
+    //  there will be a new KWPage for page 5
+    // all frames to be moved so they are still at the same relative location
+    // to their original page' top
+
+    KWPageStyle style3("dummy");
+    lay.leftMargin = -1;
+    lay.rightMargin = -1;
+    lay.pageEdge = 7;
+    lay.bindingSide = 13;
+    style2.setPageLayout(lay);
+    KWPageStylePropertiesCommand cmd(&document, style, style3);
+    cmd.redo();
+
+    QCOMPARE(manager->pageCount(), 7);
+QEXPECT_FAIL("", "Not done yet", Abort);
+    QCOMPARE(p1.height(), 500.);
+    QCOMPARE(p1.width(), 300.);
+    QCOMPARE(p1.pageSide(), KWPage::Right);
+    QCOMPARE(p1.pageNumber(), 1);
+    QCOMPARE(p2.height(), 500.);
+    QCOMPARE(p2.width(), 600.);
+    QCOMPARE(p2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(p2.pageNumber(), 2);
+    QVERIFY(!p3.isValid());
+    QCOMPARE(p4.pageSide(), KWPage::Left);
+    QCOMPARE(p4.width(), 300.);
+    QCOMPARE(p4.height(), 500.);
+    QCOMPARE(p4.pageNumber(), 4);
+    QCOMPARE(p5.width(), 600.);
+    QCOMPARE(p5.height(), 500.);
+    QCOMPARE(p5.pageSide(), KWPage::PageSpread);
+    QCOMPARE(p5.pageNumber(), 6);
+    QCOMPARE(p6.pageSide(), KWPage::Right);
+    QCOMPARE(p6.width(), 400.);
+    QCOMPARE(p6.pageNumber(), 7);
+    QCOMPARE(p7.pageSide(), KWPage::Left);
+    QCOMPARE(p7.width(), 400.);
+    QCOMPARE(p7.pageNumber(), 8);
+
+    KWPage newPage5 = manager->page(5);
+    QCOMPARE(newPage5.pageStyle(), style);
+    QCOMPARE(newPage5.width(), 400.);
+    QCOMPARE(newPage5.height(), 400.);
+    QCOMPARE(newPage5.pageSide(), KWPage::Left);
+
+    QCOMPARE(fs->frames()[0]->shape()->position(), QPointF(-10, 10));
+    // TODO figure out what the actual numbers should be below
+    QCOMPARE(fs->frames()[1]->shape()->position(), QPointF(-10, 10));
+    QCOMPARE(fs->frames()[2]->shape()->position(), QPointF(-10, 10));
+    QCOMPARE(fs->frames()[3]->shape()->position(), QPointF(-10, 10));
+    QCOMPARE(fs->frames()[4]->shape()->position(), QPointF(-10, 10));
+    QCOMPARE(fs->frames()[5]->shape()->position(), QPointF(-10, 10));
+    QCOMPARE(fs->frames()[6]->shape()->position(), QPointF(-10, 10));
+}
+
+void TestPageCommands::testMakePageSpread()
+{
+    KWDocument document;
+    KWPageManager *manager = document.pageManager();
+
+    KWPageStyle style("pagestyle1");
+    const KoPageLayout oldLayout = style.pageLayout();
+    KoPageLayout layout = style.pageLayout();
+
+    manager->addPageStyle(style);
+    KWPage page1 = manager->appendPage(style);
+    QCOMPARE(page1.width(), layout.width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(manager->pageCount(), 1);
+
+    // make it a pagespread
+    KWPageStyle pageSpread = style;
+    pageSpread.detach("dummy");
+    layout.leftMargin = -1;
+    layout.rightMargin = -1;
+    layout.pageEdge = 7;
+    layout.bindingSide = 13;
+    pageSpread.setPageLayout(layout);
+
+    KWPageStylePropertiesCommand cmd1(&document, style, pageSpread);
+    cmd1.redo();
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(manager->pageCount(), 1);
+    KoPageLayout newLayout = style.pageLayout();
+    QCOMPARE(newLayout.width, layout.width);
+    QCOMPARE(newLayout.leftMargin, layout.leftMargin);
+    QCOMPARE(newLayout.rightMargin, layout.rightMargin);
+    QCOMPARE(newLayout.pageEdge, layout.pageEdge);
+    QCOMPARE(newLayout.bindingSide, layout.bindingSide);
+
+    cmd1.undo();
+    QCOMPARE(page1.width(), oldLayout.width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(manager->pageCount(), 1);
+
+    // create another page. So we have 2 single sided pages. (Right/Left)
+    KWPage page2 = manager->appendPage(style);
+    QCOMPARE(page2.width(), oldLayout.width);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page2.pageSide(), KWPage::Left);
+    QCOMPARE(manager->pageCount(), 2);
+
+    // avoid reusing cmd1 as that assumes the constructor doens't do anything. Which is
+    // not a restriction we put on the command. (i.e. that doesn't *have* to work)
+    KWPageStylePropertiesCommand cmd2(&document, style, pageSpread);
+    cmd2.redo();
+
+    QCOMPARE(page1.width(), style.pageLayout().width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page2.pageNumber(), 2);
+QEXPECT_FAIL("", "Not done yet", Abort);
+    QCOMPARE(page2.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page2.width(), style.pageLayout().width * 2);
+    QCOMPARE(manager->pageCount(), 3);
+
+    cmd2.undo();
+    // test for page side etc.
+    QCOMPARE(page1.width(), oldLayout.width);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page2.pageSide(), KWPage::Left);
+    QCOMPARE(page2.width(), oldLayout.width);
+    QCOMPARE(manager->pageCount(), 2);
 }
 
 void TestPageCommands::testNewPageStyleCommand()
