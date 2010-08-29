@@ -38,7 +38,7 @@ class KWORD_EXPORT KWFrameSet : public QObject
     Q_OBJECT
 public:
     /// Constructor.
-    KWFrameSet();
+    KWFrameSet(KWord::FrameSetType type = KWord::OtherFrameSet);
     virtual ~KWFrameSet();
 
     /**
@@ -91,6 +91,10 @@ public:
     virtual void printDebug(KWFrame *frame);
 #endif
 
+    KWord::FrameSetType type() const {
+        return m_type;
+    }
+
 signals:
     /**
      * emitted whenever a frame is added
@@ -116,6 +120,7 @@ protected:
 
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;
+    KWord::FrameSetType m_type;
 
 private:
     QString m_name;

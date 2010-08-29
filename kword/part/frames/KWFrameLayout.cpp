@@ -42,6 +42,7 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
         : m_pageManager(pageManager),
         m_frameSets(frameSets),
         m_maintext(0),
+        m_backgroundFrameSet(0),
         m_document(0),
         m_setup(false)
 {
@@ -63,14 +64,6 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     allHFTypes.append(KWord::OddPagesFooterTextFrameSet);
     allHFTypes.append(KWord::EvenPagesFooterTextFrameSet);
 
-    // create page background
-    KWTextFrameSet *fs = getOrCreate(KWord::PageBackgroundFrameSet, page);
-    if (!hasFrameOn(fs, pageNumber)) {
-        KoShape *shape = new KWPageBackground();
-        KWFrame *f = new KWFrame(shape, fs);
-        f->setTextRunAround(KWord::RunThrough);
-    }
-
     // create headers & footers
     KWord::TextFrameSetType origin;
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
@@ -84,6 +77,19 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
         KWTextFrameSet *fs = getOrCreate(origin, page);
         if (!hasFrameOn(fs, pageNumber))
             createCopyFrame(fs, page);
+    }
+
+    // create page background
+    if (!m_backgroundFrameSet) {
+        m_backgroundFrameSet = new KWFrameSet(KWord::BackgroundFrameSet);
+        m_backgroundFrameSet->setName("backgroundFrames");
+    }
+    if (!hasFrameOn(m_backgroundFrameSet, pageNumber)) {
+        KoShape *shape = new KWPageBackground();
+        shape->setPosition(QPointF(0, page.offsetInDocument()));
+        KWFrame *f = new KWFrame(shape, m_backgroundFrameSet);
+        f->setTextRunAround(KWord::RunThrough);
+        // TODO pagespread
     }
 
     // delete headers/footer frames that are not needed on this page
@@ -312,9 +318,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             requestedHeight[3] = -1; // rest
             break;
         }
-        case KWord::PageBackgroundFrameSet:
-            pageBackground = static_cast<KWFrame *>(frame);
-            break;
         // TODO endnote frameset
         default:;
         }
@@ -473,9 +476,6 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type, const K
     case KWord::EvenPagesFooterTextFrameSet:
         answer = &frameSets.evenFooters;
         break;
-    case KWord::PageBackgroundFrameSet:
-        answer = &frameSets.pageBackground;
-        break;
     case KWord::MainTextFrameSet:
         answer = &m_maintext;
         break;
@@ -504,36 +504,36 @@ void KWFrameLayout::setup()
         return;
 
     m_maintext = 0;
+    m_backgroundFrameSet = 0;
     m_pageStyles.clear();
     foreach (KWFrameSet *fs, m_frameSets) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0)
-            continue;
-        FrameSets frameSets = m_pageStyles.value(tfs->pageStyle());
-        switch (tfs->textFrameSetType()) {
-        case KWord::OddPagesHeaderTextFrameSet:
-            frameSets.oddHeaders = tfs;
-            break;
-        case KWord::EvenPagesHeaderTextFrameSet:
-            frameSets.evenHeaders = tfs;
-            break;
-        case KWord::OddPagesFooterTextFrameSet:
-            frameSets.oddFooters = tfs;
-            break;
-        case KWord::EvenPagesFooterTextFrameSet:
-            frameSets.evenFooters = tfs;
-            break;
-        case KWord::PageBackgroundFrameSet:
-            frameSets.pageBackground = tfs;
-            break;
-        case KWord::MainTextFrameSet:
-            m_maintext = tfs;
-            disconnect(tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
-            connect(tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
-        default: ;// ignore
+        if (fs->type() == KWord::BackgroundFrameSet) {
+            m_backgroundFrameSet = fs;
+        } else if (fs->type() == KWord::TextFrameSet) {
+            KWTextFrameSet *tfs = static_cast<KWTextFrameSet*>(fs);
+            FrameSets frameSets = m_pageStyles.value(tfs->pageStyle());
+            switch (tfs->textFrameSetType()) {
+            case KWord::OddPagesHeaderTextFrameSet:
+                frameSets.oddHeaders = tfs;
+                break;
+            case KWord::EvenPagesHeaderTextFrameSet:
+                frameSets.evenHeaders = tfs;
+                break;
+            case KWord::OddPagesFooterTextFrameSet:
+                frameSets.oddFooters = tfs;
+                break;
+            case KWord::EvenPagesFooterTextFrameSet:
+                frameSets.evenFooters = tfs;
+                break;
+            case KWord::MainTextFrameSet:
+                m_maintext = tfs;
+                disconnect(tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
+                connect(tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
+            default: ;// ignore
+            }
+            if (tfs->pageStyle().isValid())
+                m_pageStyles.insert(tfs->pageStyle(), frameSets);
         }
-        if (tfs->pageStyle().isValid())
-            m_pageStyles.insert(tfs->pageStyle(), frameSets);
     }
     m_setup = true;
 }
@@ -551,7 +551,7 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     return shape;
 }
 
-bool KWFrameLayout::hasFrameOn(KWTextFrameSet *fs, int pageNumber)
+bool KWFrameLayout::hasFrameOn(KWFrameSet *fs, int pageNumber)
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());

@@ -40,7 +40,8 @@
 #include <QTextBlock>
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
-        : m_document(new QTextDocument()),
+        : KWFrameSet(KWord::TextFrameSet),
+        m_document(new QTextDocument()),
         m_layoutTriggered(false),
         m_allowLayoutRequests(true),
         m_frameOrderDirty(true),
@@ -64,7 +65,8 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
 }
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType type)
-        : m_document(new QTextDocument()),
+        : KWFrameSet(KWord::TextFrameSet),
+        m_document(new QTextDocument()),
         m_layoutTriggered(false),
         m_allowLayoutRequests(true),
         m_frameOrderDirty(true),
@@ -99,9 +101,6 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     case KWord::MainTextFrameSet:
         setName(i18n("Main text"));
         break;
-    case KWord::PageBackgroundFrameSet:
-        setName(i18n("Page Background"));
-        break;
     default: ;
     }
 }
@@ -109,7 +108,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
 KWTextFrameSet::~KWTextFrameSet()
 {
     // first remove the doc from all our frames so they won't try to use it after we delete it.
-    if (!m_frames.isEmpty() && m_textFrameSetType != KWord::PageBackgroundFrameSet) {
+    if (!m_frames.isEmpty()) {
         // we transfer ownership of the doc to our last shape so it will keep being alive until nobody references it anymore.
         QList<KWFrame*>::Iterator iter = m_frames.end();
         --iter;
@@ -130,10 +129,6 @@ KWTextFrameSet::~KWTextFrameSet()
 
 void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
-    if (frame->shape() && m_pageStyle.isValid() && m_textFrameSetType == KWord::PageBackgroundFrameSet) {
-        frame->shape()->setBackground(m_pageStyle.background());
-        return;
-    }
     if (m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setGeometryProtected(true);
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(frame->shape()->userData());

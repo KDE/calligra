@@ -23,8 +23,9 @@
 
 #include <kdebug.h>
 
-KWFrameSet::KWFrameSet()
-        : QObject()
+KWFrameSet::KWFrameSet(KWord::FrameSetType type)
+    : QObject(),
+    m_type(type)
 {
 }
 

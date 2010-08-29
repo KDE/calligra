@@ -137,9 +137,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     loadMasterPageStyles(context, hasMainText);
 
     // add page background frame set
-    KWTextFrameSet *pageBackgroundFrameSet = new KWTextFrameSet(m_document, KWord::PageBackgroundFrameSet);
-    pageBackgroundFrameSet->setAllowLayout(false);
-    pageBackgroundFrameSet->setPageStyle(m_document->pageManager()->pageStyle("Standard"));
+    KWFrameSet *pageBackgroundFrameSet = new KWFrameSet(KWord::BackgroundFrameSet);
     m_document->addFrameSet(pageBackgroundFrameSet);
 
 #if 0 //1.6:

@@ -126,7 +126,7 @@ private:
     QList<KWFrame *> framesInPage(const QRectF &page);
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
-    bool hasFrameOn(KWTextFrameSet *fs, int pageNumber);
+    bool hasFrameOn(KWFrameSet *fs, int pageNumber);
     void cleanFrameSet(KWTextFrameSet *fs);
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
@@ -136,6 +136,7 @@ private:
     QHash<KWPageStyle, FrameSets> m_pageStyles;
 
     KWTextFrameSet *m_maintext;
+    KWFrameSet *m_backgroundFrameSet;
 
     const KWDocument *m_document;
 
