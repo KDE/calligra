@@ -2437,6 +2437,15 @@ bool Style::operator==(const Style& other) const
     return true;
 }
 
+uint KSpread::qHash(const Style& style)
+{
+    uint hash = 0;
+    foreach (const SharedSubStyle& ss, style.subStyles()) {
+        hash ^= ss->koHash();
+    }
+    return hash;
+}
+
 void Style::operator=(const Style & other)
 {
     d = other.d;

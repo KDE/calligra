@@ -52,6 +52,7 @@ typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
+KSPREAD_EXPORT uint qHash(const Style& style);
 
 /**
  * \ingroup Style
@@ -336,6 +337,7 @@ public:
     inline bool operator!=(const Style& other) const {
         return !operator==(other);
     }
+    friend uint qHash(const Style& style);
     void operator=(const Style& style);
     Style operator-(const Style& style) const;
     void merge(const Style& style);
@@ -458,6 +460,7 @@ public:
     virtual QString debugData(bool withName = true) const {
         QString out; if (withName) out = name(Style::DefaultStyleKey); return out;
     }
+    virtual uint koHash() const { return uint(type()); }
     static QString name(Style::Key key);
 };
 
@@ -504,8 +507,19 @@ public:
     virtual QString debugData(bool withName = true) const {
         QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out;
     }
+    virtual uint koHash() const { return uint(type()) ^ qHash(name); }
     QString name;
 };
+
+
+static inline uint qHash(const QColor& color)
+{ return uint(color.rgb()); }
+
+static inline uint qHash(const QPen& pen)
+{ return qHash(pen.color()) ^ 37 * uint(pen.style()); }
+
+static inline uint qHash(const QBrush& brush)
+{ return qHash(brush.color()) ^ 91 * uint(brush.style()); }
 
 template<Style::Key key, class Value1>
 class SubStyleOne : public SubStyle
@@ -521,6 +535,7 @@ public:
     virtual QString debugData(bool withName = true) const {
         QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
     }
+    virtual uint koHash() const { return uint(type()) ^ qHash(value1); }
     Value1 value1;
 };
 

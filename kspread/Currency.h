@@ -21,6 +21,7 @@
 #ifndef KSPREAD_CURRENCY
 #define KSPREAD_CURRENCY
 
+#include <QHash>
 #include <QMetaType>
 
 #include "kspread_export.h"
@@ -80,6 +81,10 @@ private:
     int     m_index;
     QString m_code;
 };
+
+static inline uint qHash(const Currency& cur) {
+    return ::qHash(cur.code());
+}
 
 } // namespace KSpread
 
