@@ -539,7 +539,7 @@ public:
                    /* project has 'user mode' set as default and not 'design mode' override is found: */
                    || (pdata && pdata->userMode() && !Kexi::startupHandler().forcedDesignMode());
         isProjectNavigatorVisible = Kexi::startupHandler().isProjectNavigatorVisible();
-        nav = 0;
+        navigator = 0;
 //2.0: unused    navToolWindow=0;
         prj = 0;
         config = KGlobal::config();
@@ -946,8 +946,7 @@ public:
 #ifndef KEXI_NO_CTXT_HELP
     KexiContextHelp *ctxHelp;
 #endif
-    KexiProjectListView *nav;
-    KexiProjectNavigator *nav2;
+    KexiProjectNavigator *navigator;
     KexiTabbedToolBar *tabbedToolBar;
     KexiDockWidget *navDockWidget;
     KTabWidget *propEditorTabWidget;

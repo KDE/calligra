@@ -43,40 +43,6 @@ public slots:
 protected:
 };
 
-/*! @internal */
-class KexiMenuBase : public KMenu
-{
-public:
-    KexiMenuBase(QWidget *parent, KActionCollection *collection);
-    ~KexiMenuBase();
 
-    QAction* addAction(const QString& actionName);
-
-protected:
-    QPointer<KActionCollection> m_actionCollection;
-};
-
-/*! @internal */
-class KexiItemMenu : public KexiMenuBase
-{
-public:
-    KexiItemMenu(QWidget *parent, KActionCollection *collection);
-    ~KexiItemMenu();
-
-    //! Rebuilds the menu entirely using infromation obtained from \a partInfo
-    //! and \a partItem.
-    void update(KexiPart::Info* partInfo, KexiPart::Item* partItem);
-};
-
-/*! @internal */
-class KexiGroupMenu : public KexiMenuBase
-{
-public:
-    KexiGroupMenu(QWidget *parent, KActionCollection *collection);
-    ~KexiGroupMenu();
-
-    //! Rebuilds the menu entirely using infromation obtained from \a partInfo.
-    void update(KexiPart::Info* partInfo);
-};
 
 #endif

@@ -96,7 +96,6 @@
 #include <kexi_global.h>
 #include <widget/KexiProjectModel.h>
 
-#include <widget/KexiProjectListView.h>
 #include <widget/KexiPropertyEditorView.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/KexiDockableWidget.h>
@@ -1469,8 +1468,9 @@ void KexiMainWindow::invalidateProjectWideActions()
     }
 
     //DOCKS
-    if (d->nav)
-        d->nav->setEnabled(d->prj);
+    if (d->navigator) {
+        d->navigator->setEnabled(d->prj);
+    }
     if (d->propEditor)
         d->propEditorTabWidget->setEnabled(d->prj);
 }
@@ -1666,9 +1666,11 @@ void KexiMainWindow::updateReadOnlyState()
 {
     const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
     d->statusBar->setReadOnlyFlag(readOnly);
-    if (d->nav)
-        d->nav->setReadOnly(readOnly);
-    // update "insert ....." actions for every part
+    if (d->navigator) {
+        d->navigator->setReadOnly(readOnly);
+    }
+    
+// update "insert ....." actions for every part
     KActionCollection *ac = actionCollection();
     foreach(KexiPart::Info *info, *Kexi::partManager().partInfoList()) {
         QAction *a = ac->action(KexiPart::nameForCreateAction(*info));
@@ -1816,13 +1818,6 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
     // if (!d->prj->data()->autoopenObjects.isEmpty())
 //2.0 d->restoreNavigatorWidth();
 
-    if (d->nav) {
-#ifdef __GNUC__
-#warning NEEDED?  d->nav->updateGeometry();
-#else
-#pragma WARNING( NEEDED?  d->nav->updateGeometry(); )
-#endif
-    }
     qApp->processEvents();
     emit projectOpened();
 }
@@ -1909,12 +1904,12 @@ tristate KexiMainWindow::closeProject()
     if (!d->prj->closeConnection())
         return false;
 
-    if (d->nav) {
+    if (d->navigator) {
         d->navWasVisibleBeforeProjectClosing = d->navDockWidget->isVisible();
         d->navDockWidget->hide();
-        d->nav->clear();
+        d->navigator->clear();
     }
-
+    
     if (d->propEditorDockWidget)
         d->propEditorDockWidget->hide();
 
@@ -2078,8 +2073,8 @@ void KexiMainWindow::setupProjectNavigator()
     if (!d->isProjectNavigatorVisible)
         return;
 
-    if (d->nav) {
-         d->navDockWidget->show();
+    if (d->navigator) {
+        d->navDockWidget->show();
     }
     else {
         d->navDockWidget = new KexiDockWidget(QString(), d->mainWidget);
@@ -2093,25 +2088,22 @@ void KexiMainWindow::setupProjectNavigator()
         );
 
         KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
-        d->nav = new KexiProjectListView(navDockableWidget);
-        d->nav2 = new KexiProjectNavigator(navDockableWidget);
+        d->navigator = new KexiProjectNavigator(navDockableWidget);
         
         //navDockableWidget->setWidget(d->nav);
 
                
         //TODO temp
-        QWidget *navi = new QWidget(navDockableWidget);
-        QVBoxLayout *navi_layout = new QVBoxLayout();
-        navi_layout->addWidget(d->nav);
-        navi_layout->addWidget(d->nav2);
-        navi->setLayout(navi_layout);
+//TODO remove        QWidget *navi = new QWidget(navDockableWidget);
+//TODO remove        QVBoxLayout *navi_layout = new QVBoxLayout();
+//TODO remove
+//TODO remove        navi_layout->addWidget(d->navigator);
+//TODO remove        navi->setLayout(navi_layout);
 
-        navDockableWidget->setWidget(navi);
+        navDockableWidget->setWidget(d->navigator);
         //End TODO
 
-        
-//TODO REMOVE?  d->nav->installEventFilter(this);
-        d->navDockWidget->setWindowTitle(d->nav->windowTitle());
+        d->navDockWidget->setWindowTitle(d->navigator->windowTitle());
         d->navDockWidget->setWidget(navDockableWidget);
 
 //        const bool showProjectNavigator = mainWindowGroup.readEntry("ShowProjectNavigator", true);
@@ -2127,62 +2119,35 @@ void KexiMainWindow::setupProjectNavigator()
 #endif
 //  d->navToolWindow->hide();
 
-        connect(d->nav, SIGNAL(openItem(KexiPart::Item*, Kexi::ViewMode)),
-                this, SLOT(openObject(KexiPart::Item*, Kexi::ViewMode)));
-        connect(d->nav, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
-                this, SLOT(openObjectFromNavigator(KexiPart::Item*, Kexi::ViewMode)));
-        connect(d->nav, SIGNAL(newItem(KexiPart::Info*)),
-                this, SLOT(newObject(KexiPart::Info*)));
-        connect(d->nav, SIGNAL(removeItem(KexiPart::Item*)),
-                this, SLOT(removeObject(KexiPart::Item*)));
-        connect(d->nav, SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
-                this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
-        connect(d->nav, SIGNAL(executeItem(KexiPart::Item*)),
-                this, SLOT(executeItem(KexiPart::Item*)));
-        connect(d->nav, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
-                this, SLOT(copyItemToClipboardAsDataTable(KexiPart::Item*)));
-        connect(d->nav, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
-                this, SLOT(exportItemAsDataTable(KexiPart::Item*)));
-        connect(d->nav, SIGNAL(printItem(KexiPart::Item*)),
-                this, SLOT(printItem(KexiPart::Item*)));
-        connect(d->nav, SIGNAL(pageSetupForItem(KexiPart::Item*)),
-                this, SLOT(showPageSetupForItem(KexiPart::Item*)));
-        if (d->prj) {//connect to the project
-            connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                    d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
-        }
-        connect(d->nav, SIGNAL(selectionChanged(KexiPart::Item*)),
-                this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
-        
         connect(d->navDockWidget, SIGNAL(visibilityChanged(bool)),
             this, SLOT(slotProjectNavigatorVisibilityChanged(bool)));
 
         //Nav2 Signals
-        connect(d->nav2, SIGNAL(openItem(KexiPart::Item*, Kexi::ViewMode)),
+        connect(d->navigator, SIGNAL(openItem(KexiPart::Item*, Kexi::ViewMode)),
                 this, SLOT(openObject(KexiPart::Item*, Kexi::ViewMode)));
-        connect(d->nav2, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
+        connect(d->navigator, SIGNAL(openOrActivateItem(KexiPart::Item*, Kexi::ViewMode)),
                 this, SLOT(openObjectFromNavigator(KexiPart::Item*, Kexi::ViewMode)));
-        connect(d->nav2, SIGNAL(newItem(KexiPart::Info*)),
+        connect(d->navigator, SIGNAL(newItem(KexiPart::Info*)),
                 this, SLOT(newObject(KexiPart::Info*)));
-        connect(d->nav2, SIGNAL(removeItem(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(removeItem(KexiPart::Item*)),
                 this, SLOT(removeObject(KexiPart::Item*)));
-        connect(d->nav2->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
+        connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
                 this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
-        connect(d->nav2, SIGNAL(executeItem(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
-        connect(d->nav2, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
                 this, SLOT(copyItemToClipboardAsDataTable(KexiPart::Item*)));
-        connect(d->nav2, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(exportItemToFileAsDataTable(KexiPart::Item*)),
                 this, SLOT(exportItemAsDataTable(KexiPart::Item*)));
-        connect(d->nav2, SIGNAL(printItem(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(printItem(KexiPart::Item*)),
                 this, SLOT(printItem(KexiPart::Item*)));
-        connect(d->nav2, SIGNAL(pageSetupForItem(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(pageSetupForItem(KexiPart::Item*)),
                 this, SLOT(showPageSetupForItem(KexiPart::Item*)));
-        connect(d->nav2, SIGNAL(selectionChanged(KexiPart::Item*)),
+        connect(d->navigator, SIGNAL(selectionChanged(KexiPart::Item*)),
                 this, SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
         if (d->prj) {//connect to the project
             connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-                    d->nav2->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
+                    d->navigator->model(), SLOT(slotRemoveItem(const KexiPart::Item&)));
         }
 
         
@@ -2190,18 +2155,19 @@ void KexiMainWindow::setupProjectNavigator()
     }
     if (d->prj->isConnected()) {
         QString partManagerErrorMessages;
-        d->nav->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
+
         if (!partManagerErrorMessages.isEmpty()) {
             showWarningContinueMessage(partManagerErrorMessages, QString(),
                                        "dontShowWarningsRelatedToPluginsLoading");
         }
-        d->nav2->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
+        d->navigator->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
         
     }
-    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav, SLOT(addItem(KexiPart::Item&)));
-    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav2->model(), SLOT(slotAddItem(KexiPart::Item&))); //TODO new navigator
-    d->nav->setFocus();
 
+    connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->navigator->model(), SLOT(slotAddItem(KexiPart::Item&)));
+
+    d->navigator->setFocus();
+    
     if (d->forceShowProjectNavigatorOnCreation) {
         slotViewNavigator();
         d->forceShowProjectNavigatorOnCreation = false;
@@ -2520,9 +2486,9 @@ KexiMainWindow::storeSettings()
 // d->mainWidget->saveMainWindowSettings( mainWindowGroup );
 // d->mainWidget->saveState();
 
-    if (d->nav)
-        mainWindowGroup.writeEntry("ProjectNavigatorSize", d->nav->parentWidget()->size());
-
+    if (d->navigator)
+        mainWindowGroup.writeEntry("ProjectNavigatorSize", d->navigator->parentWidget()->size());
+    
     if (d->propEditorDockableWidget)
         mainWindowGroup.writeEntry("PropertyEditorSize", d->propEditorDockableWidget->size());
 
@@ -3073,8 +3039,10 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
 //provided by KexiMessageHandler connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
     connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QString&)));
 
-    if (d->nav)
-        connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
+    if (d->navigator){
+        connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->navigator, SLOT(slotRemoveItem(const KexiPart::Item&)));
+    }
+    
 }
 
 KexiProjectData*
@@ -3436,7 +3404,7 @@ KexiMainWindow::slotProjectQuit()
 
 void KexiMainWindow::slotViewNavigator()
 {
-    if (!d->nav
+    if (!d->navigator
 #ifdef __GNUC__
 #warning TODO || !d->navToolWindow
 #else
@@ -3465,7 +3433,8 @@ void KexiMainWindow::slotViewNavigator()
 #endif
 //
 //2.0: unused d->block_KMdiMainFrm_eventFilter=true;
-    d->nav->setFocus();
+
+    d->navigator->setFocus();
 //2.0: unused d->block_KMdiMainFrm_eventFilter=false;
 }
 
@@ -3840,9 +3809,8 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         }
     } else {
         //not dirty now
-        if (d->nav) {//TODO New Navigator
-            d->nav->updateItemName(*window->partItem(), false);
-            d->nav2->updateItemName(*window->partItem(), false);
+        if (d->navigator) {
+            d->navigator->updateItemName(*window->partItem(), false);
         }
     }
 
@@ -3902,8 +3870,10 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
     //focus navigator if nothing else available
     if (d->openedWindowsCount() == 0) {
 //2.0: unused  d->maximizeFirstOpenedChildFrm = isInMaximizedChildFrmMode;
-        if (d->nav)
-            d->nav->setFocus();
+
+        if (d->navigator) {
+            d->navigator->setFocus();
+        }
         d->updatePropEditorVisibility(Kexi::NoViewMode);
     }
 
@@ -4374,8 +4344,9 @@ bool KexiMainWindow::newObject(KexiPart::Info *info, bool& openingCancelled)
         return false;
     }
 
-    if (!it->neverSaved()) //only add stored objects to the browser
-        d->nav->addItem(*it);
+    if (!it->neverSaved()) { //only add stored objects to the browser
+        d->navigator->model()->slotAddItem(*it);
+    }
     return openObject(it, Kexi::DesignViewMode, openingCancelled);
 }
 
@@ -4548,9 +4519,8 @@ void KexiMainWindow::slotDirtyFlagChanged(KexiWindow* window)
 {
     KexiPart::Item *item = window->partItem();
     //update text in navigator and app. caption
-    if (!d->userMode) { //TODO New Navigator
-        d->nav->updateItemName(*item, window->isDirty());
-        d->nav2->updateItemName(*item, window->isDirty());
+    if (!d->userMode) {
+        d->navigator->updateItemName(*item, window->isDirty());
     }
 
     invalidateActions();
@@ -5143,7 +5113,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
 
 void KexiMainWindow::slotEditCopySpecialDataTable()
 {
-    KexiPart::Item* item = d->nav->selectedPartItem();
+    KexiPart::Item* item = d->navigator->selectedPartItem();
     if (item)
         copyItemToClipboardAsDataTable(item);
 }
@@ -5292,9 +5262,8 @@ void KexiMainWindow::highlightObject(const QString& partClass, const QString& na
     KexiPart::Item *item = d->prj->itemForClass(partClass, name);
     if (!item)
         return;
-    if (d->nav) {
-        d->nav->selectItem(*item);
-        d->nav2->selectItem(*item);
+    if (d->navigator) {
+        d->navigator->selectItem(*item);
     }
 }
 

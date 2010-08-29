@@ -55,6 +55,7 @@
 #include <kexiutils/SmallToolButton.h>
 #include <kexidb/utils.h>
 #include <kexi_global.h>
+#include "KexiProjectNavigator.h"
 
 /*
 class KexiBrowserView : public QWidget
@@ -852,113 +853,7 @@ bool KexiBrowserListView::isExecuteArea(const QPoint& point)
     return enableExecuteArea && K3ListView::isExecuteArea(point);
 }
 
-//--------------------------------------------
-KexiMenuBase::KexiMenuBase(QWidget* parent, KActionCollection *col)
-        : KMenu(parent)
-        , m_actionCollection(col)
-{
-}
 
-KexiMenuBase::~KexiMenuBase()
-{
-}
-
-QAction* KexiMenuBase::addAction(const QString& actionName)
-{
-    QAction* action = m_actionCollection->action(actionName);
-    if (action)
-        KMenu::addAction(action);
-    return action;
-}
-
-//--------------------------------------------
-KexiItemMenu::KexiItemMenu(QWidget* parent, KActionCollection *col)
-        : KexiMenuBase(parent, col)
-{
-}
-
-KexiItemMenu::~KexiItemMenu()
-{
-}
-
-void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
-{
-    clear();
-    QString title_text(partItem->name());
-    KexiPart::Part *part = partInfo ? Kexi::partManager().part(partInfo) : 0;
-    if (part && !part->instanceCaption().isEmpty()) {
-        //+ type name
-        title_text += (" : " + part->instanceCaption());
-    }
-    addTitle(KIcon(partInfo->itemIcon()), title_text);
-
-    if (m_actionCollection->action("open_object")
-            && m_actionCollection->action("open_object")->isEnabled()
-            && partItem && part && (part->supportedViewModes() & Kexi::DataViewMode)) {
-        addAction("open_object");
-    }
-    if (m_actionCollection->action("design_object")
-            && m_actionCollection->action("design_object")->isEnabled()
-            && partItem && part && (part->supportedViewModes() & Kexi::DesignViewMode)) {
-        addAction("design_object");
-    }
-    if (m_actionCollection->action("editText_object")
-            && m_actionCollection->action("editText_object")->isEnabled()
-            && partItem && part && (part->supportedViewModes() & Kexi::TextViewMode)) {
-        addAction("editText_object");
-    }
-//    if (addAction("new_object"))
-//        addSeparator();
-
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-    //todo plugSharedAction("edit_cut", m_itemMenu);
-    //todo plugSharedAction("edit_copy", m_itemMenu);
-    //todo addSeparator();
-#endif
-    bool addSep = false;
-    if (partItem && partInfo->isExecuteSupported()) {
-        addAction("data_execute");
-        addSep = true;
-    }
-    if (partItem && partInfo->isDataExportSupported()) {
-        addAction("export_object");
-        addSep = true;
-    }
-    if (addSep)
-        addSeparator();
-
-    if (partItem && partInfo->isPrintingSupported())
-        addAction("print_object");
-    if (partItem && partInfo->isPrintingSupported())
-        addAction("pageSetupForObject");
-    if (m_actionCollection->action("edit_rename") || m_actionCollection->action("edit_delete"))
-        addSeparator();
-    addAction("edit_rename");
-    addAction("edit_delete");
-}
-
-//--------------------------------------------
-KexiGroupMenu::KexiGroupMenu(QWidget* parent, KActionCollection *col)
-        : KexiMenuBase(parent, col)
-{
-}
-
-KexiGroupMenu::~KexiGroupMenu()
-{
-}
-
-//#if 0 //unused
-void KexiGroupMenu::update(KexiPart::Info* partInfo)
-{
-    Q_UNUSED(partInfo);
-    clear();
-//not needed    addTitle(KIcon(partInfo->itemIcon()), partInfo->groupName());
-    addAction("new_object");
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-// addSeparator();
-// qobject_cast<KexiBrowser*>(parent())->plugSharedAction("edit_paste", this);
-#endif
-}
 
 #include "KexiProjectListView.moc"
 #include "KexiProjectListView_p.moc"
