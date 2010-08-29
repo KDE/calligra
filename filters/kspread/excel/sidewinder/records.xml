@@ -6,7 +6,7 @@
 </record>
 
 <record name="BOF" id="0x0809">
-  <field name="rawVersion"          type="unsigned" size="16" />
+  <field name="rawVersion"          type="unsigned" size="16" default="0x0600" />
   <computedField name="version" ctype="unsigned" value="rawVersion() == 0x0500 ? Excel95 : rawVersion() == 0x0600 ? Excel97 : UnknownExcel" />
   <field name="type"                type="unsigned" size="16">
     <enum name="Workbook"   value="0x0005" />
@@ -17,13 +17,13 @@
     <enum name="Workspace"  value="0x0100" />
   </field>
   <if predicate="recordSize() >= 8">
-    <field name="build"             type="unsigned" size="16" />
-    <field name="year"              type="unsigned" size="16" />
+    <field name="build"             type="unsigned" size="16" default="0x4DE4" />
+    <field name="year"              type="unsigned" size="16" default="0x07CD" />
     <if predicate="recordSize() >= 16">
-      <field name="fWin"            type="bool"     size="1" />
+      <field name="fWin"            type="bool"     size="1" default="true" />
       <field name="fRisc"           type="bool"     size="1" />
       <field name="fBeta"           type="bool"     size="1" />
-      <field name="fWinAny"         type="bool"     size="1" />
+      <field name="fWinAny"         type="bool"     size="1" default="true" />
       <field name="fMacAny"         type="bool"     size="1" />
       <field name="fBetaAny"        type="bool"     size="1" />
       <field name="reserved"                        size="2" />
@@ -32,7 +32,7 @@
       <field name="fGIJmp"          type="bool"     size="1" />
       <field name="reserved"                        size="2" />
       <field name="fFontLimit"      type="bool"     size="1" />
-      <field name="verXLHigh"       type="unsigned" size="4">
+      <field name="verXLHigh"       type="unsigned" size="4" default="HExcel97" >
         <enum name="HExcel97"   value="0x0" />
         <enum name="HExcel2000" value="0x1" />
         <enum name="HExcel2002" value="0x2" />
@@ -42,8 +42,8 @@
       </field>
       <field name="reserved"                        size="1" />
       <field name="reserved"                        size="13" />
-      <field name="verLowestBiff"   type="unsigned" size="8" />
-      <field name="verLastXLSaved"  type="unsigned" size="4">
+      <field name="verLowestBiff"   type="unsigned" size="8" default="6" />
+      <field name="verLastXLSaved"  type="unsigned" size="4" default="LExcel97" >
         <enum name="LExcel97"   value="0x0" />
         <enum name="LExcel2000" value="0x1" />
         <enum name="LExcel2002" value="0x2" />
