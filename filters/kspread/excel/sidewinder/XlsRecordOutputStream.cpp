@@ -77,12 +77,12 @@ void XlsRecordOutputStream::writeUnsigned(unsigned bits, unsigned value)
     value &= mask;
     if (m_curBitOffset) {
         if (bits < 8-m_curBitOffset) {
+            m_curByte |= value << m_curBitOffset;
             m_curBitOffset += bits;
-            m_curByte |= value << (m_curBitOffset - 1);
             return;
         } else if (bits == 8-m_curBitOffset) {
+            m_curByte |= value << m_curBitOffset;
             m_curBitOffset += bits;
-            m_curByte |= value << (m_curBitOffset - 1);
             m_buffer->write(reinterpret_cast<char*>(&m_curByte), 1);
             m_curByte = 0;
             m_curBitOffset = 0;
@@ -90,7 +90,7 @@ void XlsRecordOutputStream::writeUnsigned(unsigned bits, unsigned value)
         } else {
             unsigned bitsLeft = 8-m_curBitOffset;
             unsigned maskVal = value & ((1 << bitsLeft) - 1);
-            m_curByte |= maskVal << 7;
+            m_curByte |= maskVal << m_curBitOffset;
             m_buffer->write(reinterpret_cast<char*>(&m_curByte), 1);
             m_curByte = 0;
             m_curBitOffset = 0;
