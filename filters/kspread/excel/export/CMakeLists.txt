@@ -41,7 +41,7 @@ set(sidewinder_SRCS
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
-set(excelexport_SRCS ExcelExport.cpp ${sidewinder_SRCS})
+set(excelexport_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
 kde4_add_plugin(excelexport WITH_PREFIX ${excelexport_SRCS})
 
