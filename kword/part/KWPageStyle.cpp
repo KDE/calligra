@@ -445,8 +445,12 @@ uint KWPageStyle::hash() const
     return ((uint) d) + 1;
 }
 
+bool KWPageStyle::isPageSpread() const
+{
+    return d->pageLayout.leftMargin < 0;
+}
+
 uint qHash(const KWPageStyle &style)
 {
     return style.hash();
 }
-

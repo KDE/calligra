@@ -33,7 +33,8 @@ class KWPage;
 
 /**
  * The undo / redo command for changing the properties of a KWPage
- * When altering the size of a page this command will also reposition all required frames to account for the changes.
+ * When altering the size of a page this command will also reposition all required
+ * frames to account for the changes.
  */
 class KWORD_TEST_EXPORT KWPagePropertiesCommand : public QUndoCommand
 {
