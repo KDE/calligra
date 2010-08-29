@@ -61,7 +61,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_hyperLink = false;
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
-    m_groupShape = false;
+    m_inGrpSpPr = false;
 }
 
 
@@ -524,8 +524,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 
     body->startElement("draw:g");
 
-    m_groupShape = true;
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -533,6 +531,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
             TRY_READ_IF(grpSp)
             ELSE_TRY_READ_IF(pic)
             ELSE_TRY_READ_IF(sp)
+            ELSE_TRY_READ_IF(grpSpPr)
 #ifdef PPTXXMLSLIDEREADER_H
             ELSE_TRY_READ_IF(graphicFrame)
 #endif
@@ -542,7 +541,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     }
     body->endElement(); // draw:g
 
-    m_groupShape = false;
+    // Transforms are set in grpSp
+    m_svgXTransform.pop_back();
+    m_svgYTransform.pop_back();
+    m_svgWidthTransform.pop_back();
+    m_svgHeightTransform.pop_back();
 
     READ_EPILOGUE
 }
@@ -566,20 +569,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
  - pattFill (Pattern Fill) §20.1.8.47
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - solidFill (Solid Fill) §20.1.8.54
- - xfrm (2D Transform for Grouped Objects) §20.1.7.5
+ - [done] xfrm (2D Transform for Grouped Objects) §20.1.7.5
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
 {
     READ_PROLOGUE
 
+    m_inGrpSpPr = true;
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         if (isStartElement()) {
+            TRY_READ_IF_NS(a, xfrm)
         //! @todo add ELSE_WRONG_FORMAT
         }
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
+    m_inGrpSpPr = false;
+
+    m_svgXTransform.push_back(m_svgX/m_svgChX);
+    m_svgYTransform.push_back(m_svgY/m_svgChY);
+    m_svgWidthTransform.push_back(m_svgWidth/m_svgChWidth);
+    m_svgHeightTransform.push_back(m_svgHeight/m_svgChHeight);
 
     READ_EPILOGUE
 }
@@ -1870,6 +1883,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
  Child elements:
     - [done] ext (Extents) §20.1.7.3
     - [done] off (Offset) §20.1.7.4
+    - [done] chExt (Child extends) ..in case of a group shape
+    - [done] chOff (Child offset) ..in case of a group shape
  Attributes:
     - flipH (Horizontal Flip)
     - flipV (Vertical Flip)
@@ -1901,6 +1916,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
                 TRY_READ(ext);
                 ext_read = true;
             }
+            ELSE_TRY_READ_IF(chOff)
+            ELSE_TRY_READ_IF(chExt)
         }
 //! @todo add ELSE_WRONG_FORMAT
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1979,13 +1996,40 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgY, "off@y")
 
-    // There seems to be undocumented feature that when a picture/shape is part of groupShape
-    // Their dimensions are not accurately, they have to be multiplied with magic number 1587
-    // TODO: Find out where this number comes from
-    if (m_groupShape) {
-        m_svgX = m_svgX * 1587;
-        m_svgY = m_svgY * 1587;
+    // Checking whether we are in a group shape properties
+    // don't need to make transformations if we are
+    if (!m_inGrpSpPr) {
+        if (m_svgXTransform.size()) {
+            int index = 0;
+            while (index < m_svgXTransform.size()) {
+                m_svgX = m_svgX * m_svgXTransform.at(m_svgXTransform.size() - 1 - index);
+                m_svgY = m_svgY * m_svgYTransform.at(m_svgYTransform.size() - 1 - index);
+                ++index;
+            }
+        }
     }
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
+    READ_EPILOGUE
+}
+
+//! chOff handler (Child offset)
+//! Look parent, children
+#undef CURRENT_EL
+#define CURRENT_EL chOff
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS(x)
+    STRING_TO_INT(x, m_svgChX, "chOff@x")
+    READ_ATTR_WITHOUT_NS(y)
+    STRING_TO_INT(y, m_svgChY, "chOff@y")
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2025,13 +2069,40 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     READ_ATTR_WITHOUT_NS(cy)
     STRING_TO_INT(cy, m_svgHeight, "ext@cy")
 
-    // There seems to be undocumented feature that when a picture/shape is part of groupShape
-    // Their dimensions are not accurately, they have to be multiplied with magic number 1587
-    // TODO: Find out where this number comes from
-    if (m_groupShape) {
-        m_svgWidth = m_svgWidth * 1587;
-        m_svgHeight = m_svgHeight * 1587;
+    // Checking whether we are in a group shape properties
+    // don't need to make transformations if we are
+    if (!m_inGrpSpPr) {
+        if (m_svgWidthTransform.size()) {
+            int index = 0;
+            while (index < m_svgWidthTransform.size()) {
+                m_svgWidth = m_svgWidth * m_svgWidthTransform.at(m_svgWidthTransform.size() - 1 - index);
+                m_svgHeight = m_svgHeight * m_svgHeightTransform.at(m_svgHeightTransform.size() - 1 - index);
+                ++index;
+            }
+        }
     }
+
+    while (true) {
+        BREAK_IF_END_OF(CURRENT_EL);
+        readNext();
+    }
+
+    READ_EPILOGUE
+}
+
+//! chExt handler (Child extend)
+//! Look parent, children
+#undef CURRENT_EL
+#define CURRENT_EL chExt
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR_WITHOUT_NS(cx)
+    STRING_TO_INT(cx, m_svgChWidth, "chExt@cx")
+    READ_ATTR_WITHOUT_NS(cy)
+    STRING_TO_INT(cy, m_svgChHeight, "chExt@cy")
 
     while (true) {
         BREAK_IF_END_OF(CURRENT_EL);

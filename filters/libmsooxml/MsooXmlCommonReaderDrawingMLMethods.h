@@ -49,14 +49,13 @@ KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
-// whether contents belong to a group shape
-bool m_groupShape;
-
 KoFilter::ConversionStatus read_grpSpPr();
 KoFilter::ConversionStatus read_sp();
 KoFilter::ConversionStatus read_spPr();
 KoFilter::ConversionStatus read_xfrm();
 KoFilter::ConversionStatus read_off();
+KoFilter::ConversionStatus read_chOff();
+KoFilter::ConversionStatus read_chExt();
 KoFilter::ConversionStatus read_ext();
 KoFilter::ConversionStatus read_blip();
 KoFilter::ConversionStatus read_stretch();
@@ -183,6 +182,17 @@ int m_svgX; //!< set by read_off()
 int m_svgY; //!< set by read_off()
 int m_svgWidth; //! set by read_ext()
 int m_svgHeight; //! set by read_ext()
+int m_svgChX; //!< set by read_chOff()
+int m_svgChY; //!< set by read_chOff()
+int m_svgChWidth; //! set by read_chExt()
+int m_svgChHeight; //! set by read_chExt()
+// These have to be in a vector in order to support group shapes within
+// a group shape
+bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
+QVector<qreal> m_svgXTransform; //! ratio between normal/child
+QVector<qreal> m_svgYTransform; //! ratio between normal/child
+QVector<qreal> m_svgWidthTransform; //! radio between normal/child
+QVector<qreal> m_svgHeightTransform; //! radio between normal/child
 bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
 int m_rot; //! set by read_xfrm()
