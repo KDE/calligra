@@ -766,7 +766,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         QDomElement f = arrayNodes.at(i).toElement();
         if (f.hasAttribute("lengthField")) {
             QString name = f.attribute("lengthField");
-            QDomNodeList afields = e.elementsByTagName("field");
+            QDomNodeList afields = f.elementsByTagName("field");
             QDomElement af1 = afields.at(0).toElement();
 
             out << "unsigned " << className << "::" << lcFirst(name)  << "() const\n{\n";
@@ -775,6 +775,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
             out << "void " << className << "::set" << ucFirst(name) << "( unsigned " << name << " )\n{\n";
             for (int j = 0; j < afields.size(); j++) {
                 QDomElement af = afields.at(j).toElement();
+                if (af.attribute("name").startsWith("reserved")) continue;
                 out << "    d->" << af.attribute("name") << ".resize(" << name << ");\n";
             }
             out << "}\n\n";
