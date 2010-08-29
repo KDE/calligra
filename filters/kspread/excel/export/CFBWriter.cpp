@@ -173,7 +173,9 @@ QIODevice* CFBWriter::openSubStream(const QString &streamName)
 
 static bool compareNames(const QString& a, const QString& b)
 {
-    return a < b;
+    if (a.length() < b.length()) return true;
+    if (a.length() > b.length()) return false;
+    return a.toUpper() < b.toUpper();
 }
 
 void CFBWriter::DirectoryEntry::buildChildrenTree()
