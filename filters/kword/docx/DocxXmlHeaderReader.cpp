@@ -159,11 +159,11 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     m_content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());

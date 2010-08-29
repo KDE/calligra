@@ -394,11 +394,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldIdLst()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sldId)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -421,11 +421,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterIdLst()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sldMasterId)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -465,8 +465,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
         ? KoPageFormat::Landscape : KoPageFormat::Portrait;
 
     while (true) {
-        BREAK_IF_END_OF(CURRENT_EL);
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     d->sldSzRead = true;
@@ -509,6 +509,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
 //        kDebug() << "!!" << qualifiedName() << JOIN(MSOOXML_CURRENT_NS ":", CURRENT_EL);
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sldMasterIdLst)
             ELSE_TRY_READ_IF(sldIdLst)
@@ -517,7 +518,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
             //! @todo ELSE_TRY_READ_IF(defaultTextStyle)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (d->sldSzRead) {

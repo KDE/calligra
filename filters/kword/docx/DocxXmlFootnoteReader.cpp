@@ -119,10 +119,10 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read_footnotes()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(footnote)
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -187,10 +187,10 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read_footnote()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(p)
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     QString content = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());

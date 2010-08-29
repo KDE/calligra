@@ -159,12 +159,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(document)
         if (isStartElement()) {
             TRY_READ_IF(body)
             ELSE_TRY_READ_IF(background)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(document)
     }
 
     if (!expectElEnd("w:document")) {
@@ -227,13 +227,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(sectPr)
             ELSE_TRY_READ_IF(tbl)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -297,6 +297,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(pgSz)
             ELSE_TRY_READ_IF(pgMar)
@@ -309,7 +310,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(endnotePr)
             ELSE_TRY_READ_IF(lnNumType)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     // Currently if there are 3 header/footer styles, the one with 'first' is ignored
@@ -679,10 +679,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body->endElement(); // text:notes-configuration
@@ -729,10 +729,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body->endElement(); // text:notes-configuration
@@ -822,9 +822,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     columnWriter.endElement(); // style:columns;
@@ -861,6 +861,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
     m_borderPaddings.clear();
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
@@ -876,7 +877,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
             }
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     applyBorders(&m_currentPageStyle);
     READ_EPILOGUE
@@ -999,6 +999,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             //! @todo support VML here
             TRY_READ_IF_NS(v, shapetype)
@@ -1006,7 +1007,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             ELSE_TRY_READ_IF_NS(o, OLEObject)
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     if (m_objectRectInitialized) {
 #if 1
@@ -1323,6 +1323,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (m_complexCharStatus == InstrAllowed) {
             QString instruction = text().toString().trimmed();
 
@@ -1351,7 +1352,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
             }
             //! @todo: Add rest of the instructions
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -1443,6 +1443,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(r)
             ELSE_TRY_READ_IF(hyperlink)
@@ -1450,7 +1451,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             ELSE_TRY_READ_IF(bookmarkEnd)
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -1554,6 +1554,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(p)) {
                 // CASE #301: avoid nested paragaraphs
@@ -1574,7 +1575,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (oldWasCaption || (args & read_p_Skip)) {
@@ -1730,6 +1730,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         readNext();
         kDebug() << *this;
 //kDebug() <<"[1]";
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF(t)
@@ -1749,7 +1750,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 //            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (m_dropCapStatus == DropCapDone) {
@@ -1927,6 +1927,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(b)
             ELSE_TRY_READ_IF(i)
@@ -1949,7 +1950,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(webHidden)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
@@ -2057,6 +2057,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
@@ -2071,7 +2072,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(suppressLineNumbers)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (m_listFound) {
@@ -2257,12 +2257,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numId)
             ELSE_TRY_READ_IF(ilvl)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -2341,12 +2341,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     m_drawing_inline = false;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(wp, anchor)
             ELSE_TRY_READ_IF_NS(wp, inline)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     m_drawing_anchor = false;
     m_drawing_inline = false;
@@ -2812,6 +2812,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 side = "top";
@@ -2845,7 +2846,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblCellMar()
                 }
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -2875,6 +2875,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
@@ -2935,7 +2936,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblBorders()
                 }
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -3070,12 +3070,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF(r)
             ELSE_TRY_READ_IF(hyperlink)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (instr.startsWith("PAGE ") || instr.startsWith("NUMPAGES ")) {
@@ -3118,10 +3118,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tab)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     elementWriter.addCompleteElement(&buffer);
@@ -3239,6 +3239,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
     m_borderPaddings.clear();
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(top)) {
                 RETURN_IF_ERROR(readBorderElement(TopBorder, "top"));
@@ -3254,7 +3255,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     applyBorders(&m_currentParagraphStyle);
     READ_EPILOGUE
@@ -3529,13 +3529,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "v:background") {
                 TRY_READ(VML_background)
             }
             ELSE_TRY_READ_IF(drawing)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -3613,13 +3613,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = tableBuf.originalWriter();
@@ -3713,13 +3713,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblPr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tblStyle)
             ELSE_TRY_READ_IF(tblBorders)
             ELSE_TRY_READ_IF(tblCellMar)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -3747,11 +3747,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tblGrid()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gridCol)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -3850,12 +3850,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tc)
             ELSE_TRY_READ_IF(trPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = rowBuf.originalWriter();
@@ -3906,16 +3906,16 @@ child elements:
  - trPrChange (Revision Information for Table Row Properties) §17.13.5.37
  - wAfter (Preferred Width After Table Row) §17.4.86 
  - wBefore (Preferred Width Before Table Row) §17.4.87
-*/ 
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_trPr()
 {
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(trHeight)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4004,13 +4004,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(tcPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = cellBuf.originalWriter();
@@ -4155,12 +4155,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //            TRY_READ_IF(..)
               TRY_READ_IF_IN_CONTEXT(shd)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4338,6 +4338,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF(positionH)
@@ -4371,7 +4372,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     m_hasPosOffsetH = false;
@@ -4423,13 +4423,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF_NS(wp, extent)
             ELSE_TRY_READ_IF(docPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4489,10 +4489,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_docPr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -4532,12 +4532,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionH()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(align)
             ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4576,12 +4576,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionV()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(align)
             ELSE_TRY_READ_IF_IN_CONTEXT(posOffset)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4661,10 +4661,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapSquare()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
 //        if (isStartElement()) {
 //! @todo effectExtent
 //        }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4697,10 +4697,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapTight()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
 //        if (isStartElement()) {
 //! @todo effectExtent
 //        }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4733,10 +4733,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
 //        if (isStartElement()) {
 //! @todo effectExtent
 //        }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4802,10 +4802,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMathPara()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(oMath)
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4820,12 +4820,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMath()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "m:r") {
                 TRY_READ(r_m)
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4840,11 +4840,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_t_m()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         kDebug() << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -4864,6 +4864,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "w:rPr") {
                 TRY_READ_IN_CONTEXT(rPr)
@@ -4872,7 +4873,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
                 TRY_READ(t_m)
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = buffer.originalWriter();

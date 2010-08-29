@@ -125,10 +125,10 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(lvl)
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     m_abstractListStyles[abstractNumId] = m_currentListStyle;
@@ -166,6 +166,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(start)
             ELSE_TRY_READ_IF(numFmt)
@@ -178,7 +179,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
                 TRY_READ(rPr_numbering)
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     // For some symbol bullets MS2007 sets the bullet char to wingdings/symbol  but since
@@ -221,11 +221,11 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numbering()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(abstractNum)
             ELSE_TRY_READ_IF(num)
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -353,10 +353,10 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(abstractNumId)
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     if (!numId.isEmpty()) {
@@ -386,12 +386,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("w:rFonts")) {
                 TRY_READ(rFonts_numbering)
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE
@@ -413,12 +413,12 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_pPr_numbering()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("w:ind")) {
                 TRY_READ(ind_numbering)
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL)
     }
 
     READ_EPILOGUE

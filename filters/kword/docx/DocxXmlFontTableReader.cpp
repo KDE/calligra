@@ -122,6 +122,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(font)) {
                 TRY_READ(font)
@@ -133,7 +134,6 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_fonts()
             }
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -179,12 +179,12 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(family)
             ELSE_TRY_READ_IF(pitch)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE_WITHOUT_RETURN

@@ -67,11 +67,11 @@ KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read_cmAuthorLst()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(cmAuthor)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE
@@ -93,11 +93,11 @@ KoFilter::ConversionStatus PptxXmlCommentAuthorsReader::read_cmAuthor()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
 //         if (isStartElement()) {
 //             TRY_READ_IF(extLst)
 //             ELSE_WRONG_FORMAT
 //         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE

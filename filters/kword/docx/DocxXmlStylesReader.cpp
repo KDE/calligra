@@ -111,6 +111,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(styles)
         if (isStartElement()) {
             TRY_READ_IF(docDefaults)
             ELSE_TRY_READ_IF(style)
@@ -119,7 +120,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
             }
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(styles)
     }
 
     if (!expectElEnd("w:styles")) {
@@ -174,12 +174,12 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(pPrDefault)
             ELSE_TRY_READ_IF(rPrDefault)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     m_defaultStyle = m_currentTextStyle;
     m_currentTextStyle = KoGenStyle();
@@ -203,11 +203,11 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_pPrDefault()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(pPr)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -229,11 +229,11 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPrDefault()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(rPr)
             ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -378,6 +378,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
@@ -399,7 +400,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             }
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName;
     if (styleName.isEmpty()) {
@@ -484,11 +484,11 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             //TRY_READ_IF(name)
             //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     READ_EPILOGUE

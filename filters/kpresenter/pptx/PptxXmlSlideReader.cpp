@@ -645,13 +645,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txStyles()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bodyStyle)
             ELSE_TRY_READ_IF(titleStyle)
             ELSE_TRY_READ_IF(otherStyle)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -690,6 +690,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -702,7 +703,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
@@ -734,10 +734,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (!r_id.isEmpty()) {
@@ -812,6 +812,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -824,7 +825,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
@@ -866,6 +866,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, lvl1pPr)
             ELSE_TRY_READ_IF_NS(a, lvl2pPr)
@@ -878,7 +879,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
@@ -915,12 +915,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bg)
             ELSE_TRY_READ_IF(spTree)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -981,11 +981,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bgPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (!m_currentDrawStyle->isEmpty()) {
@@ -1037,6 +1037,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, solidFill)
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
@@ -1056,7 +1057,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
             }*/
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (!fillImageName.isEmpty()) {
@@ -1121,6 +1121,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(sp)
             ELSE_TRY_READ_IF(grpSp)
@@ -1128,7 +1129,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             ELSE_TRY_READ_IF(graphicFrame)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     placeholderElBuffer.close();
     m_currentPresentationPageLayoutStyle.addProperty(
@@ -1228,6 +1228,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, bodyPr)
             ELSE_TRY_READ_IF_NS(a, lstStyle)
@@ -1236,7 +1237,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     if (m_prevListLevel > 0) {
@@ -1285,6 +1285,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, graphic)
             ELSE_TRY_READ_IF(nvGraphicFramePr)
@@ -1293,7 +1294,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
 
     body = buffer.originalWriter();
@@ -1330,13 +1330,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
     READ_PROLOGUE
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == "p:cNvPr") {
                 read_cNvPr_p();
             }
             ELSE_TRY_READ_IF(nvGraphicFramePr) // This should be fixed later
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -1372,11 +1372,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(ph)
 //! @todo add ELSE_WRONG_FORMAT
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
@@ -1413,6 +1413,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_xfrm_p()
     const QXmlStreamAttributes attrs(attributes());
     while (!atEnd()) {
         readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:off")) {
                 TRY_READ(off);
@@ -1420,7 +1421,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_xfrm_p()
                 TRY_READ(ext);
             }
         }
-        BREAK_IF_END_OF(CURRENT_EL);
     }
     READ_EPILOGUE
 }
