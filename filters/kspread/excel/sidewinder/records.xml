@@ -282,11 +282,11 @@
 <!-- TODO: Filepass -->
 
 <record name="Font" id="0x0031">
-  <field name="height"      type="unsigned" size="16" />
+  <field name="height"      type="unsigned" size="16" default="200" />
 
-  <field name="reserved0"                 size="1" />
+  <field name="reserved0"                   size="1" />
   <field name="italic"      type="bool"     size="1" />
-  <field name="reserved1"                 size="1" />
+  <field name="reserved1"                   size="1" />
   <field name="strikeout"   type="bool"     size="1" />
   <field name="outline"     type="bool"     size="1" />
   <field name="shadow"      type="bool"     size="1" />
@@ -295,8 +295,8 @@
 
   <field name="reserved2"                   size="8" />
 
-  <field name="colorIndex"  type="unsigned" size="16" />
-  <field name="fontWeight"  type="unsigned" size="16" />
+  <field name="colorIndex"  type="unsigned" size="16" default="0x7FFF" />
+  <field name="fontWeight"  type="unsigned" size="16" default="400" />
   <field name="escapement"  type="unsigned" size="16">
     <enum name="Normal"      value="0" />
     <enum name="Superscript" value="1" />
@@ -1039,22 +1039,22 @@
 <record name="Compat12" id="0x088c" />
 
 <record name="Window1" id="0x003D">
-  <field name="xWn" type="signed" size="16" />
-  <field name="yWn" type="signed" size="16" />
-  <field name="dxWn" type="signed" size="16" />
-  <field name="dyWn" type="signed" size="16" />
-  <field name="fHidden" type="bool" size="1" />
-  <field name="fIconic" type="bool" size="1" />
-  <field name="fVeryHidden" type="bool" size="1" />
-  <field name="fDspHScroll" type="bool" size="1" />
-  <field name="fDspVScroll" type="bool" size="1" />
-  <field name="fBotAdornment" type="bool" size="1" />
-  <field name="fNoAFDateGroup" type="bool" size="1" />
-  <field name="reserved" size="9" />
-  <field name="itabCur" type="unsigned" size="16" />
-  <field name="itabFirst" type="unsigned" size="16" />
-  <field name="cTabSel" type="unsigned" size="16" />
-  <field name="wTabRatio" type="unsigned" size="16" />
+  <field name="xWn"             type="signed"   size="16" default="0" />
+  <field name="yWn"             type="signed"   size="16" default="0" />
+  <field name="dxWn"            type="signed"   size="16" default="24000" />
+  <field name="dyWn"            type="signed"   size="16" default="18000" />
+  <field name="fHidden"         type="bool"     size="1" />
+  <field name="fIconic"         type="bool"     size="1" />
+  <field name="fVeryHidden"     type="bool"     size="1" />
+  <field name="fDspHScroll"     type="bool"     size="1" default="true" />
+  <field name="fDspVScroll"     type="bool"     size="1" default="true" />
+  <field name="fBotAdornment"   type="bool"     size="1" default="true" />
+  <field name="fNoAFDateGroup"  type="bool"     size="1" />
+  <field name="reserved"                        size="9" />
+  <field name="itabCur"         type="unsigned" size="16" />
+  <field name="itabFirst"       type="unsigned" size="16" />
+  <field name="cTabSel"         type="unsigned" size="16" default="1" />
+  <field name="wTabRatio"       type="unsigned" size="16" default="600" />
 </record>
 
 <record name="Window2" id="0x023E">
@@ -1136,6 +1136,38 @@
   </array>
 </record>
 
+<record name="HideObj" id="0x008d">
+  <field name="hideObj" type="unsigned" size="16">
+    <enum name="ShowAll"            value="0x0000" />
+    <enum name="ShowPlaceholder"    value="0x0001" />
+    <enum name="HideAll"            value="0x0002" />
+  </field>
+</record>
+
+<record name="CalcPrecision" id="0x000e">
+  <field name="fullPrec" type="bool" size="16" />
+</record>
+
+<record name="RefreshAll" id="0x01b7">
+  <field name="refreshAll" type="bool" size="16" />
+</record>
+
+<record name="BookBool" id="0x00da">
+  <field name="noSaveSup"               type="bool" size="1" />
+  <field name="reserved"                            size="1" />
+  <field name="hasEnvelope"             type="bool" size="1" />
+  <field name="envelopeVisible"         type="bool" size="1" />
+  <field name="envelopeInitDone"        type="bool" size="1" />
+  <field name="updateLinks"         type="unsigned" size="2">
+    <enum name="PromptUser"     value="0" />
+    <enum name="DontUpdate"     value="1" />
+    <enum name="SilentUpdate"   value="2" />
+  </field>
+  <field name="reserved"                            size="1" />
+  <field name="hideBorderUnselLists"    type="bool" size="1" />
+  <field name="reserved"                            size="7" />
+</record>
+
 <!-- TODO handle following records -->
 <record name="FeatHdr" id="0x0867">
 </record>
@@ -1154,13 +1186,7 @@
 
 <record name="BuiltInFnGroupCount" id="0x009c">
 </record>
-<record name="HideObj" id="0x008d">
-</record>
-<record name="RefreshAll" id="0x01b7">
-</record>
 <record name="RecalcId" id="0x01c1">
-</record>
-<record name="BookBool" id="0x00da">
 </record>
 <record name="Style" id="0x0293">
 </record>
@@ -1175,8 +1201,6 @@
 <record name="PhoneticInfo" id="0x00ef">
 </record>
 <record name="CalcCount" id="0x000c">
-</record>
-<record name="CalcPrecision" id="0x000e">
 </record>
 <record name="CalcDelta" id="0x0010">
 </record>
