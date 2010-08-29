@@ -349,393 +349,404 @@ unsigned FormulaToken::functionIndex() const
 struct FunctionEntry {
     const char *name;
     int params;
+    bool varParams;
 };
 
 static const FunctionEntry FunctionEntries[] = {
-    { "COUNT",           1 },     // 0
-    { "IF",              0 },     // 1
-    { "ISNV",            1 },     // 2
-    { "ISERROR",         1 },     // 3
-    { "SUM",             0 },     // 4
-    { "AVERAGE",         0 },     // 5
-    { "MIN",             0 },     // 6
-    { "MAX",             0 },     // 7
-    { "ROW",             0 },     // 8
-    { "COLUMN",          0 },     // 9
-    { "NOVALUE",         0 },     // 10
-    { "NPV",             0 },     // 11
-    { "STDEV",           0 },     // 12
-    { "DOLLAR",          0 },     // 13
-    { "FIXED",           0 },     // 14
-    { "SIN",             1 },     // 15
-    { "COS",             1 },     // 16
-    { "TAN",             1 },     // 17
-    { "ATAN",            1 },     // 18
-    { "PI",              0 },     // 19
-    { "SQRT",            1 },     // 20
-    { "EXP",             1 },     // 21
-    { "LN",              1 },     // 22
-    { "LOG10",           1 },     // 23
-    { "ABS",             1 },     // 24
-    { "INT",             1 },     // 25
-    { "SIGN",            1 },     // 26
-    { "ROUND",           2 },     // 27
-    { "LOOKUP",          0 },     // 28
-    { "INDEX",           0 },     // 29
-    { "REPT",            2 },     // 30
-    { "MID",             3 },     // 31
-    { "LEN",             1 },     // 32
-    { "VALUE",           1 },     // 33
-    { "TRUE",            0 },     // 34
-    { "FALSE",           0 },     // 35
-    { "AND",             0 },     // 36
-    { "OR",              0 },     // 37
-    { "NOT",             1 },     // 38
-    { "MOD",             2 },     // 39
-    { "DCOUNT",          3 },     // 40
-    { "DSUM",            3 },     // 41
-    { "DAVERAGE",        3 },     // 42
-    { "DMIN",            3 },     // 43
-    { "DMAX",            3 },     // 44
-    { "DSTDEV",          3 },     // 45
-    { "VAR",             0 },     // 46
-    { "DVAR",            3 },     // 47
-    { "TEXT",            2 },     // 48
-    { "LINEST",          0 },     // 49
-    { "TREND",           0 },     // 50
-    { "LOGEST",           0 },     // 51
-    { "GROWTH",          0 },     // 52
-    { "GOTO",            0 },     // 53
-    { "HALT",            0 },     // 54
-    { "Unknown55",       0 },     // 55
-    { "PV",              0 },     // 56
-    { "FV",              0 },     // 57
-    { "NPER",            0 },     // 58
-    { "PMT",             0 },     // 59
-    { "RATE",            0 },     // 60
-    { "MIRR",            3 },     // 61
-    { "IRR",             0 },     // 62
-    { "RAND",            0 },     // 63
-    { "MATCH",           0 },     // 64
-    { "DATE",            3 },     // 65
-    { "TIME",            3 },     // 66
-    { "DAY",             1 },     // 67
-    { "MONTH",           1 },     // 68
-    { "YEAR",            1 },     // 69
-    { "WEEKDAY",         0 },     // 70
-    { "HOUR",            1 },     // 71
-    { "MINUTE",          1 },     // 72
-    { "SECOND",          1 },     // 73
-    { "NOW",             0 },     // 74
-    { "AREAS",           1 },     // 75
-    { "ROWS",            1 },     // 76
-    { "COLUMNS",         1 },     // 77
-    { "OFFSET",          0 },     // 78
-    { "ABSREF",          2 },     // 79
-    { "RELREF",          0 },     // 80
-    { "ARGUMENT",        0 },     // 81
-    { "SEARCH",          0 },     // 82
-    { "TRANSPOSE",       1 },     // 83
-    { "ERROR",           0 },     // 84
-    { "STEP",            0 },     // 85
-    { "TYPE",            1 },     // 86
-    { "ECHO",            0 },
-    { "SETNAME",         0 },     // deprecated...
-    { "CALLER",          0 },
-    { "DEREF",           0 },
-    { "WINDOWS",         0 },
-    { "SERIES",          4 },
-    { "DOCUMENTS",       0 },
-    { "ACTIVECELL",      0 },     // deprecated...
-    { "SELECTION",       0 },
-    { "RESULT",          0 },
-    { "ATAN2",           2 },     // 97
-    { "ASIN",            1 },     // 98
-    { "ACOS",            1 },     // 99
-    { "CHOOSE",          0 },     // 100
-    { "HLOOKUP",         0 },     // 101
-    { "VLOOKUP",         0 },     // 102
-    { "LINKS",           0 },
-    { "INPUT",           0 },
-    { "ISREF",           1 },     // 105
-    { "GETFORMULA",      0 },     // deprecated...
-    { "GETNAME",         0 },     // deprecated...
-    { "SETVALUE",        0 },     // deprecated...
-    { "LOG",             0 },     // 109
-    { "EXEC",            0 },
-    { "CHAR",            1 },     // 111
-    { "LOWER",           1 },     // 112
-    { "UPPER",           1 },     // 113
-    { "PROPER",          1 },     // 114
-    { "LEFT",            0 },     // 115
-    { "RIGHT",           0 },     // 116
-    { "EXACT",           2 },     // 117
-    { "TRIM",            1 },     // 118
-    { "REPLACE",         4 },     // 119
-    { "SUBSTITUTE",      0 },     // 120
-    { "CODE",            1 },     // 121
-    { "NAMES",           0 },
-    { "DIRECTORY",       0 },
-    { "FIND",            0 },     // 124
-    { "CELL",            0 },     // 125
-    { "ISERR",           1 },     // 126
-    { "ISTEXT",          1 },     // 127
-    { "ISNUMBER",        1 },     // 128
-    { "ISBLANK",         1 },     // 129
-    { "T",               1 },     // 130
-    { "N",               1 },     // 131
-    { "FOPEN",           0 },     // not portable, insecure, deprecated
-    { "FCLOSE",          0 },     // not portable, insecure, deprecated
-    { "FSIZE",           0 },     // not portable, insecure, deprecated
-    { "FREADLN",         0 },     // not portable, insecure, deprecated
-    { "FREAD",           0 },     // not portable, insecure, deprecated
-    { "FWRITELN",        0 },     // not portable, insecure, deprecated
-    { "FWRITE",          0 },     // not portable, insecure, deprecated
-    { "FPOS",            0 },     // not portable, insecure, deprecated
-    { "DATEVALUE",       1 },     // 140
-    { "TIMEVALUE",       1 },     // 141
-    { "SLN",             3 },     // 142
-    { "SYD",             4 },     // 143
-    { "DDB",             0 },     // 144
-    { "GETDEF",          0 },
-    { "REFTEXT",         0 },
-    { "TEXTREF",         0 },
-    { "INDIRECT",        0 },     // 148
-    { "REGISTER",        0 },
-    { "CALL",            0 },
-    { "ADDBAR",          0 },     // deprecated
-    { "ADDMENU",         0 },     // deprecated
-    { "ADDCOMMAND",      0 },     // deprecated
-    { "ENABLECOMMAND",   0 },     // deprecated
-    { "CHECKCOMMAND",    0 },     // deprecated
-    { "RENAMECOMMAND",   0 },     // deprecated
-    { "SHOWBAR",         0 },     // deprecated
-    { "DELETEMENU",      0 },     // deprecated
-    { "DELETECOMMAND",   0 },     // deprecated
-    { "GETCHARTITEM",    0 },     // deprecated
-    { "DIALOGBOX",       0 },     // deprecated
-    { "CLEAN",           1 },     // 162
-    { "MDETERM",         1 },     // 163
-    { "MINVERSE",        1 },     // 164
-    { "MMULT",           2 },     // 165
-    { "FILES",           0 },     // not portable, insecure, deprecated
-    { "IPMT",            0 },     // 167
-    { "PPMT",            0 },     // 168
-    { "COUNTA",          0 },     // 169
-    { "CANCELKEY",       1 },
-    { "Unknown171",      0 },
-    { "Unknown172",      0 },
-    { "Unknown173",      0 },
-    { "Unknown174",      0 },
-    { "INITIATE",        0 },
-    { "REQUEST",         0 },
-    { "POKE",            0 },
-    { "EXECUTE",         0 },
-    { "TERMINATE",       0 },
-    { "RESTART",         0 },
-    { "HELP",            0 },
-    { "GETBAR",          0 },
-    { "PRODUCT",         0 },     // 183
-    { "FACT",            1 },     // 184
-    { "GETCELL",         0 },
-    { "GETWORKSPACE",    0 },
-    { "GETWINDOW",       0 },
-    { "GETDOCUMENT",     0 },
-    { "DPRODUCT",        3 },     // 189
-    { "ISNONTEXT",       1 },     // 190
-    { "GETNOTE",         0 },
-    { "NOTE",            0 },
-    { "STDEVP",          0 },     // 193
-    { "VARP",            0 },     // 194
-    { "DSTDEVP",         3 },     // 195
-    { "DVARP",           3 },     // 196
-    { "TRUNC",           0 },     // 197
-    { "ISLOGICAL",       1 },     // 198
-    { "DCOUNTA",         3 },     // 199
-    { "DELETEBAR",       0 },
-    { "UNREGISTER",      0 },
+    { "COUNT",           1, true },     // 0
+    { "IF",              0, true },     // 1
+    { "ISNA",            1, false },    // 2
+    { "ISERROR",         1, false },    // 3
+    { "SUM",             0, true },     // 4
+    { "AVERAGE",         0, true },     // 5
+    { "MIN",             0, true },     // 6
+    { "MAX",             0, true },     // 7
+    { "ROW",             0, true },     // 8
+    { "COLUMN",          0, true },     // 9
+    { "NA",              0, false },    // 10
+    { "NPV",             0, true },     // 11
+    { "STDEV",           0, true },     // 12
+    { "DOLLAR",          0, true },     // 13
+    { "FIXED",           0, true },     // 14
+    { "SIN",             1, false },    // 15
+    { "COS",             1, false },    // 16
+    { "TAN",             1, false },    // 17
+    { "ATAN",            1, false },    // 18
+    { "PI",              0, false },    // 19
+    { "SQRT",            1, false },    // 20
+    { "EXP",             1, false },    // 21
+    { "LN",              1, false },    // 22
+    { "LOG10",           1, false },    // 23
+    { "ABS",             1, false },    // 24
+    { "INT",             1, false },    // 25
+    { "SIGN",            1, false },    // 26
+    { "ROUND",           2, false },    // 27
+    { "LOOKUP",          0, true },     // 28
+    { "INDEX",           0, true },     // 29
+    { "REPT",            2, false },    // 30
+    { "MID",             3, false },    // 31
+    { "LEN",             1, false },    // 32
+    { "VALUE",           1, false },    // 33
+    { "TRUE",            0, false },    // 34
+    { "FALSE",           0, false },    // 35
+    { "AND",             0, true },     // 36
+    { "OR",              0, true },     // 37
+    { "NOT",             1, false },    // 38
+    { "MOD",             2, false },    // 39
+    { "DCOUNT",          3, false },    // 40
+    { "DSUM",            3, false },    // 41
+    { "DAVERAGE",        3, false },    // 42
+    { "DMIN",            3, false },    // 43
+    { "DMAX",            3, false },    // 44
+    { "DSTDEV",          3, false },    // 45
+    { "VAR",             0, true },     // 46
+    { "DVAR",            3, false },    // 47
+    { "TEXT",            2, false },    // 48
+    { "LINEST",          0, true },     // 49
+    { "TREND",           0, true },     // 50
+    { "LOGEST",          0, true },     // 51
+    { "GROWTH",          0, true },     // 52
+    { "GOTO",            0, false },    // 53
+    { "HALT",            0, true },     // 54
+    { "RETURN",          0, true },     // 55
+    { "PV",              0, true },     // 56
+    { "FV",              0, true },     // 57
+    { "NPER",            0, true },     // 58
+    { "PMT",             0, true },     // 59
+    { "RATE",            0, true },     // 60
+    { "MIRR",            3, false },    // 61
+    { "IRR",             0, true },     // 62
+    { "RAND",            0, false },    // 63
+    { "MATCH",           0, true },     // 64
+    { "DATE",            3, false },    // 65
+    { "TIME",            3, false },    // 66
+    { "DAY",             1, false },    // 67
+    { "MONTH",           1, false },    // 68
+    { "YEAR",            1, false },    // 69
+    { "WEEKDAY",         0, true },     // 70
+    { "HOUR",            1, false },    // 71
+    { "MINUTE",          1, false },    // 72
+    { "SECOND",          1, false },    // 73
+    { "NOW",             0, false },    // 74
+    { "AREAS",           1, false },    // 75
+    { "ROWS",            1, false },    // 76
+    { "COLUMNS",         1, false },    // 77
+    { "OFFSET",          0, true },     // 78
+    { "ABSREF",          2, false },    // 79
+    { "RELREF",          2, false },    // 80
+    { "ARGUMENT",        0, true },     // 81
+    { "SEARCH",          0, true },     // 82
+    { "TRANSPOSE",       1, false },    // 83
+    { "ERROR",           0, true },     // 84
+    { "STEP",            0, false },    // 85
+    { "TYPE",            1, false },    // 86
+    { "ECHO",            0, true },
+    { "SETNAME",         0, true },     // deprecated...
+    { "CALLER",          0, false },
+    { "DEREF",           1, false },
+    { "WINDOWS",         0, true },
+    { "SERIES",          4, true },
+    { "DOCUMENTS",       0, true },
+    { "ACTIVECELL",      0, false },    // deprecated...
+    { "SELECTION",       0, false },
+    { "RESULT",          0, true },
+    { "ATAN2",           2, false },    // 97
+    { "ASIN",            1, false },    // 98
+    { "ACOS",            1, false },    // 99
+    { "CHOOSE",          0, true },     // 100
+    { "HLOOKUP",         0, true },     // 101
+    { "VLOOKUP",         0, true },     // 102
+    { "LINKS",           0, true },
+    { "INPUT",           0, true },
+    { "ISREF",           1, false },    // 105
+    { "GETFORMULA",      1, false },    // deprecated...
+    { "GETNAME",         0, true },     // deprecated...
+    { "SETVALUE",        2, false },    // deprecated...
+    { "LOG",             0, true },     // 109
+    { "EXEC",            0, true },
+    { "CHAR",            1, false },    // 111
+    { "LOWER",           1, false },    // 112
+    { "UPPER",           1, false },    // 113
+    { "PROPER",          1, false },    // 114
+    { "LEFT",            0, true },     // 115
+    { "RIGHT",           0, true },     // 116
+    { "EXACT",           2, false },    // 117
+    { "TRIM",            1, false },    // 118
+    { "REPLACE",         4, false },    // 119
+    { "SUBSTITUTE",      0, true },     // 120
+    { "CODE",            1, false },    // 121
+    { "NAMES",           0, true },
+    { "DIRECTORY",       0, true },
+    { "FIND",            0, true },     // 124
+    { "CELL",            0, true },     // 125
+    { "ISERR",           1, false },    // 126
+    { "ISTEXT",          1, false },    // 127
+    { "ISNUMBER",        1, false },    // 128
+    { "ISBLANK",         1, false },    // 129
+    { "T",               1, false },    // 130
+    { "N",               1, false },    // 131
+    { "FOPEN",           0, true },     // not portable, insecure, deprecated
+    { "FCLOSE",          1, false },    // not portable, insecure, deprecated
+    { "FSIZE",           1, false },    // not portable, insecure, deprecated
+    { "FREADLN",         1, false },    // not portable, insecure, deprecated
+    { "FREAD",           2, false },    // not portable, insecure, deprecated
+    { "FWRITELN",        2, false },    // not portable, insecure, deprecated
+    { "FWRITE",          2, false },    // not portable, insecure, deprecated
+    { "FPOS",            0, true },     // not portable, insecure, deprecated
+    { "DATEVALUE",       1, false },    // 140
+    { "TIMEVALUE",       1, false },    // 141
+    { "SLN",             3, false },    // 142
+    { "SYD",             4, false },    // 143
+    { "DDB",             0, true },     // 144
+    { "GETDEF",          0, true },
+    { "REFTEXT",         0, true },
+    { "TEXTREF",         0, true },
+    { "INDIRECT",        0, true },     // 148
+    { "REGISTER",        0, true },
+    { "CALL",            0, true },
+    { "ADDBAR",          0, true },     // deprecated
+    { "ADDMENU",         0, true },     // deprecated
+    { "ADDCOMMAND",      0, true },     // deprecated
+    { "ENABLECOMMAND",   0, true },     // deprecated
+    { "CHECKCOMMAND",    0, true },     // deprecated
+    { "RENAMECOMMAND",   0, true },     // deprecated
+    { "SHOWBAR",         0, true },     // deprecated
+    { "DELETEMENU",      0, true },     // deprecated
+    { "DELETECOMMAND",   0, true },     // deprecated
+    { "GETCHARTITEM",    0, true },     // deprecated
+    { "DIALOGBOX",       0, true },     // deprecated
+    { "CLEAN",           1, false },    // 162
+    { "MDETERM",         1, false },    // 163
+    { "MINVERSE",        1, false },    // 164
+    { "MMULT",           2, false },    // 165
+    { "FILES",           0, true },     // not portable, insecure, deprecated
+    { "IPMT",            0, true },     // 167
+    { "PPMT",            0, true },     // 168
+    { "COUNTA",          0, true },     // 169
+    { "CANCELKEY",       1, true },
+    { "FOR",             0, true },
+    { "WHILE",           1, false },
+    { "BREAK",           0, false },
+    { "NEXT",            0, false },
+    { "INITIATE",        2, false },
+    { "REQUEST",         2, false },
+    { "POKE",            3, false },
+    { "EXECUTE",         2, false },
+    { "TERMINATE",       1, false },
+    { "RESTART",         0, true },
+    { "HELP",            0, true },
+    { "GETBAR",          0, true },
+    { "PRODUCT",         0, true },     // 183
+    { "FACT",            1, false },    // 184
+    { "GETCELL",         0, true },
+    { "GETWORKSPACE",    1, false },
+    { "GETWINDOW",       0, true },
+    { "GETDOCUMENT",     0, true },
+    { "DPRODUCT",        3, false },    // 189
+    { "ISNONTEXT",       1, false },    // 190
+    { "GETNOTE",         0, true },
+    { "NOTE",            0, true },
+    { "STDEVP",          0, true },     // 193
+    { "VARP",            0, true },     // 194
+    { "DSTDEVP",         3, false },    // 195
+    { "DVARP",           3, false },    // 196
+    { "TRUNC",           0, true },     // 197
+    { "ISLOGICAL",       1, false },    // 198
+    { "DCOUNTA",         3, false },    // 199
+    { "DELETEBAR",       1, false },
+    { "UNREGISTER",      1, false },
     { "Unknown202",      0 },
     { "Unknown203",      0 },
-    { "USDOLLAR",        0 },
-    { "FINDB",           0 },
-    { "SEARCHB",         0 },
-    { "REPLACEB",        0 },
-    { "LEFTB",           0 },
-    { "RIGHTB",          0 },
-    { "MIDB",            0 },
-    { "LENB",            0 },
-    { "ROUNDUP",         2 },     // 212
-    { "ROUNDDOWN",       2 },     // 213
-    { "ASC",             0 },
-    { "DBCS",            0 },
-    { "RANK",            0 },     // 216
+    { "USDOLLAR",        0, true },
+    { "FINDB",           0, true },
+    { "SEARCHB",         0, true },
+    { "REPLACEB",        4, false },
+    { "LEFTB",           0, true },
+    { "RIGHTB",          0, true },
+    { "MIDB",            3, false },
+    { "LENB",            1, false },
+    { "ROUNDUP",         2, false },    // 212
+    { "ROUNDDOWN",       2, false },    // 213
+    { "ASC",             1, false },
+    { "DBCS",            1, false },
+    { "RANK",            0, true },     // 216
     { "Unknown217",      0 },
     { "Unknown218",      0 },
-    { "ADDRESS",         0 },     // 219
-    { "DAYS360",         0 },     // 220
-    { "CURRENTDATE",     0 },     // 221
-    { "VBD",             0 },     // 222
-    { "Unknown223",      0 },
-    { "Unknown224",      0 },
-    { "Unknown225",      0 },
-    { "Unknown226",      0 },
-    { "MEDIAN",          0 },     // 227
-    { "SUMPRODUCT",      0 },     // 228
-    { "SINH",            1 },     // 229
-    { "COSH",            1 },     // 230
-    { "TANH",            1 },     // 231
-    { "ASINH",           1 },     // 232
-    { "ACOSH",           1 },     // 233
-    { "ATANH",           1 },     // 234
-    { "DGET",            3 },     // 235
-    { "CREATEOBJECT",    0 },
-    { "VOLATILE",        0 },
-    { "LASTERROR",       0 },
-    { "CUSTOMUNDO",      0 },
-    { "CUSTOMREPEAT",    0 },
-    { "FORMULACONVERT",  0 },
-    { "GETLINKINFO",     0 },
-    { "TEXTBOX",         0 },
-    { "INFO",            1 },     // 244
-    { "GROUP",           0 },
-    { "GETOBJECT",       0 },
-    { "DB",              0 },     // 247
-    { "PAUSE",           0 },
+    { "ADDRESS",         0, true },     // 219
+    { "DAYS360",         0, true },     // 220
+    { "CURRENTDATE",     0, false },    // 221
+    { "VBD",             0, true },     // 222
+    { "ELSE",            0, false },
+    { "ELSE.IF",         1, false },
+    { "END.IF",          0, false },
+    { "FOR.CELL",        0, true },
+    { "MEDIAN",          0, true },     // 227
+    { "SUMPRODUCT",      0, true },     // 228
+    { "SINH",            1, false },    // 229
+    { "COSH",            1, false },    // 230
+    { "TANH",            1, false },    // 231
+    { "ASINH",           1, false },    // 232
+    { "ACOSH",           1, false },    // 233
+    { "ATANH",           1, false },    // 234
+    { "DGET",            3, false },    // 235
+    { "CREATEOBJECT",    0, true },
+    { "VOLATILE",        0, true },
+    { "LASTERROR",       0, false },
+    { "CUSTOMUNDO",      0, true },
+    { "CUSTOMREPEAT",    0, true },
+    { "FORMULACONVERT",  0, true },
+    { "GETLINKINFO",     0, true },
+    { "TEXTBOX",         0, true },
+    { "INFO",            1, false },    // 244
+    { "GROUP",           0, false },
+    { "GETOBJECT",       0, true },
+    { "DB",              0, true },     // 247
+    { "PAUSE",           0, true },
     { "Unknown249",      0 },
     { "Unknown250",      0 },
-    { "RESUME",          0 },
-    { "FREQUENCY",       2 },     // 252
-    { "ADDTOOLBAR",      0 },
-    { "DELETETOOLBAR",   0 },
-    { "Unknown255",      0 },
-    { "RESETTOOLBAR",    0 },
-    { "EVALUATE",        0 },
-    { "GETTOOLBAR",      0 },
-    { "GETTOOL",         0 },
-    { "SPELLINGCHECK",   0 },
-    { "ERRORTYPE",       1 },     // 261
-    { "APPTITLE",        0 },
-    { "WINDOWTITLE",     0 },
-    { "SAVETOOLBAR",     0 },
-    { "ENABLETOOL",      0 },
-    { "PRESSTOOL",       0 },
-    { "REGISTERID",      0 },
-    { "GETWORKBOOK",     0 },
-    { "AVEDEV",          0 },     // 269
-    { "BETADIST",        0 },     // 270
-    { "GAMMALN",         1 },     // 271
-    { "BETAINV",         0 },     // 272
-    { "BINOMDIST",       4 },     // 273
-    { "CHIDIST",         2 },     // 274
-    { "CHIINV",          2 },     // 275
-    { "COMBIN",          2 },     // 276
-    { "CONFIDENCE",      3 },     // 277
-    { "CRITBINOM",       3 },     // 278
-    { "EVEN",            1 },     // 279
-    { "EXPONDIST",       3 },     // 280
-    { "FDIST",           3 },     // 281
-    { "FINV",            3 },     // 282
-    { "FISHER",          1 },     // 283
-    { "FISHERINV",       1 },     // 284
-    { "FLOOR",           2 },     // 285
-    { "GAMMADIST",       4 },     // 286
-    { "GAMMAINV",        3 },     // 287
-    { "CEIL",            2 },     // 288
-    { "HYPGEOMDIST",     4 },     // 289
-    { "LOGNORMDIST",     3 },     // 290
-    { "LOGINV",          3 },     // 291
-    { "NEGBINOMDIST",    3 },     // 292
-    { "NORMDIST",        4 },     // 293
-    { "NORMSDIST",       1 },     // 294
-    { "NORMINV",         3 },     // 295
-    { "NORMSINV",        1 },     // 296
-    { "STANDARDIZE",     3 },     // 297
-    { "ODD",             1 },     // 298
-    { "PERMUT",          2 },     // 299
-    { "POISSON",         3 },     // 300
-    { "TDIST",           3 },     // 301
-    { "WEIBULL",         4 },     // 302
-    { "SUMXMY2",         2 },     // 303
-    { "SUMX2MY2",        2 },     // 304
-    { "SUMX2DY2",        2 },     // 305
-    { "CHITEST",         2 },     // 306
-    { "CORREL",          2 },     // 307
-    { "COVAR",           2 },     // 308
-    { "FORECAST",        3 },     // 309
-    { "FTEST",           2 },     // 310
-    { "INTERCEPT",       2 },     // 311
-    { "PEARSON",         2 },     // 312
-    { "RSQ",             2 },     // 313
-    { "STEYX",           2 },     // 314
-    { "SLOPE",           2 },     // 315
-    { "TTEST",           4 },     // 316
-    { "PROB",            0 },     // 317
-    { "DEVSQ",           0 },     // 318
-    { "GEOMEAN",         0 },     // 319
-    { "HARMEAN",         0 },     // 320
-    { "SUMSQ",           0 },     // 321
-    { "KURT",            0 },     // 322
-    { "SKEW",            0 },     // 323
-    { "ZTEST",           0 },     // 324
-    { "LARGE",           2 },     // 325
-    { "SMALL",           2 },     // 326
-    { "QUARTILE",        2 },     // 327
-    { "PERCENTILE",      2 },     // 328
-    { "PERCENTRANK",     0 },     // 329
-    { "MODALVALUE",      0 },     // 330
-    { "TRIMMEAN",        2 },     // 331
-    { "TINV",            2 },     // 332
+    { "RESUME",          0, true },
+    { "FREQUENCY",       2, false },    // 252
+    { "ADDTOOLBAR",      0, true },
+    { "DELETETOOLBAR",   0, true },
+    { "USER.DEFINED.FUNCTION", 0, true },
+    { "RESETTOOLBAR",    1, false },
+    { "EVALUATE",        1, false },
+    { "GETTOOLBAR",      0, true },
+    { "GETTOOL",         0, true },
+    { "SPELLINGCHECK",   0, true },
+    { "ERRORTYPE",       1, false },    // 261
+    { "APPTITLE",        0, true },
+    { "WINDOWTITLE",     0, true },
+    { "SAVETOOLBAR",     0, true },
+    { "ENABLETOOL",      3, false },
+    { "PRESSTOOL",       3, false },
+    { "REGISTERID",      0, true },
+    { "GETWORKBOOK",     0, true },
+    { "AVEDEV",          0, true },     // 269
+    { "BETADIST",        0, true },     // 270
+    { "GAMMALN",         1, false },    // 271
+    { "BETAINV",         0, true },     // 272
+    { "BINOMDIST",       4, false },    // 273
+    { "CHIDIST",         2, false },    // 274
+    { "CHIINV",          2, false },    // 275
+    { "COMBIN",          2, false },    // 276
+    { "CONFIDENCE",      3, false },    // 277
+    { "CRITBINOM",       3, false },    // 278
+    { "EVEN",            1, false },    // 279
+    { "EXPONDIST",       3, false },    // 280
+    { "FDIST",           3, false },    // 281
+    { "FINV",            3, false },    // 282
+    { "FISHER",          1, false },    // 283
+    { "FISHERINV",       1, false },    // 284
+    { "FLOOR",           2, false },    // 285
+    { "GAMMADIST",       4, false },    // 286
+    { "GAMMAINV",        3, false },    // 287
+    { "CEIL",            2, false },    // 288
+    { "HYPGEOMDIST",     4, false },    // 289
+    { "LOGNORMDIST",     3, false },    // 290
+    { "LOGINV",          3, false },    // 291
+    { "NEGBINOMDIST",    3, false },    // 292
+    { "NORMDIST",        4, false },    // 293
+    { "NORMSDIST",       1, false },    // 294
+    { "NORMINV",         3, false },    // 295
+    { "NORMSINV",        1, false },    // 296
+    { "STANDARDIZE",     3, false },    // 297
+    { "ODD",             1, false },    // 298
+    { "PERMUT",          2, false },    // 299
+    { "POISSON",         3, false },    // 300
+    { "TDIST",           3, false },    // 301
+    { "WEIBULL",         4, false },    // 302
+    { "SUMXMY2",         2, false },    // 303
+    { "SUMX2MY2",        2, false },    // 304
+    { "SUMX2DY2",        2, false },    // 305
+    { "CHITEST",         2, false },    // 306
+    { "CORREL",          2, false },    // 307
+    { "COVAR",           2, false },    // 308
+    { "FORECAST",        3, false },    // 309
+    { "FTEST",           2, false },    // 310
+    { "INTERCEPT",       2, false },    // 311
+    { "PEARSON",         2, false },    // 312
+    { "RSQ",             2, false },    // 313
+    { "STEYX",           2, false },    // 314
+    { "SLOPE",           2, false },    // 315
+    { "TTEST",           4, false },    // 316
+    { "PROB",            0, true },     // 317
+    { "DEVSQ",           0, true },     // 318
+    { "GEOMEAN",         0, true },     // 319
+    { "HARMEAN",         0, true },     // 320
+    { "SUMSQ",           0, true },     // 321
+    { "KURT",            0, true },     // 322
+    { "SKEW",            0, true },     // 323
+    { "ZTEST",           0, true },     // 324
+    { "LARGE",           2, false },    // 325
+    { "SMALL",           2, false },    // 326
+    { "QUARTILE",        2, false },    // 327
+    { "PERCENTILE",      2, false },    // 328
+    { "PERCENTRANK",     0, true },     // 329
+    { "MODALVALUE",      0, true },     // 330
+    { "TRIMMEAN",        2, false },    // 331
+    { "TINV",            2, false },    // 332
     { "Unknown333",      0 },
-    { "MOVIECOMMAND",    0 },
-    { "GETMOVIE",        0 },
-    { "CONCATENATE",     0 },     // 336
-    { "POWER",           2 },     // 337
-    { "PIVOTADDDATA",    0 },
-    { "GETPIVOTTABLE",   0 },
-    { "GETPIVOTFIELD",   0 },
-    { "GETPIVOTITEM",    0 },
-    { "RADIANS",         1 },     // 342
-    { "DEGREES",         1 },     // 343
-    { "SUBTOTAL",        0 },     // 344
-    { "SUMIF",           0 },     // 345
-    { "COUNTIF",         2 },     // 346
-    { "COUNTBLANK",      1 },     // 347
-    { "SCENARIOGET",     0 },
-    { "OPTIONSLISTSGET", 0 },
-    { "ISPMT",           4 },
-    { "DATEDIF",         3 },
-    { "DATESTRING",      0 },
-    { "NUMBERSTRING",    0 },
-    { "ROMAN",           0 },     // 354
-    { "OPENDIALOG",      0 },
-    { "SAVEDIALOG",      0 },
-    { "VIEWGET",         0 },
-    { "GETPIVOTDATA",    2 },     // 358
-    { "HYPERLINK",       1 },
-    { "PHONETIC",        0 },
-    { "AVERAGEA",        0 },     // 361
-    { "MAXA",            0 },     // 362
-    { "MINA",            0 },     // 363
-    { "STDEVPA",         0 },     // 364
-    { "VARPA",           0 },     // 365
-    { "STDEVA",          0 },     // 366
-    { "VARA",            0 },     // 367
-
-    { "BAHTTEXT",        1 },     // 368
+    { "MOVIECOMMAND",    0, true },
+    { "GETMOVIE",        0, true },
+    { "CONCATENATE",     0, true },     // 336
+    { "POWER",           2, false },    // 337
+    { "PIVOTADDDATA",    0, true },
+    { "GETPIVOTTABLE",   0, true },
+    { "GETPIVOTFIELD",   0, true },
+    { "GETPIVOTITEM",    0, true },
+    { "RADIANS",         1, false },    // 342
+    { "DEGREES",         1, false },    // 343
+    { "SUBTOTAL",        0, true },     // 344
+    { "SUMIF",           0, true },     // 345
+    { "COUNTIF",         2, false },    // 346
+    { "COUNTBLANK",      1, false },    // 347
+    { "SCENARIOGET",     0, true },
+    { "OPTIONSLISTSGET", 1, false },
+    { "ISPMT",           4, false },
+    { "DATEDIF",         3, false },
+    { "DATESTRING",      1, false },
+    { "NUMBERSTRING",    2, false },
+    { "ROMAN",           0, true },     // 354
+    { "OPENDIALOG",      0, true },
+    { "SAVEDIALOG",      0, true },
+    { "VIEWGET",         0, true },
+    { "GETPIVOTDATA",    2, true },     // 358
+    { "HYPERLINK",       1, true },
+    { "PHONETIC",        1, false },
+    { "AVERAGEA",        0, true },     // 361
+    { "MAXA",            0, true },     // 362
+    { "MINA",            0, true },     // 363
+    { "STDEVPA",         0, true },     // 364
+    { "VARPA",           0, true },     // 365
+    { "STDEVA",          0, true },     // 366
+    { "VARA",            0, true },     // 367
+    { "BAHTTEXT",        1, false },    // 368
     //TODO; following formulas are not supported in KSpread yet
-    { "THAIDAYOFWEEK",   1 },     // 369
-    { "THAIDIGIT",       1 },     // 370
-    { "THAIMONTHOFYEAR", 1 },     // 371
-    { "THAINUMSOUND",    1 },     // 372
-    { "THAINUMSTRING",   1 },     // 373
-    { "THAISTRINGLENGTH", 1 },    // 374
-    { "ISTHAIDIGIT",     1 },     // 375
-    { "ROUNDBAHTDOWN",   1 },     // 376
-    { "ROUNDBAHTUP",     1 },     // 377
-    { "THAIYEAR",        1 },     // 378
-    { "RTD",             1 },     // 379
-    { "ISHYPERLINK",     1 }      // 380
+    { "THAIDAYOFWEEK",   1, false },    // 369
+    { "THAIDIGIT",       1, false },    // 370
+    { "THAIMONTHOFYEAR", 1, false },    // 371
+    { "THAINUMSOUND",    1, false },    // 372
+    { "THAINUMSTRING",   1, false },    // 373
+    { "THAISTRINGLENGTH", 1, false },   // 374
+    { "ISTHAIDIGIT",     1, false },    // 375
+    { "ROUNDBAHTDOWN",   1, false },    // 376
+    { "ROUNDBAHTUP",     1, false },    // 377
+    { "THAIYEAR",        1, false },    // 378
+    { "RTD",             1, false },    // 379
+    { "ISHYPERLINK",     1, false }     // 380
 };
+
+static const FunctionEntry* functionEntry(const QString& functionName)
+{
+    static QHash<QString, const FunctionEntry*> entries;
+    if (entries.isEmpty()) {
+        for (int i = 0; i <= 380; i++) {
+            entries[QString::fromAscii(FunctionEntries[i].name)] = &FunctionEntries[i];
+        }
+    }
+    return entries.value(functionName);
+}
 
 const char* FormulaToken::functionName() const
 {
@@ -758,6 +769,27 @@ unsigned FormulaToken::functionParams() const
     }
 
     return params;
+}
+
+unsigned FormulaToken::functionIndex(const QString &functionName)
+{
+    const FunctionEntry* e = functionEntry(functionName);
+    if (e) return e - FunctionEntries;
+    return -1;
+}
+
+unsigned FormulaToken::functionParams(const QString &functionName)
+{
+    const FunctionEntry* e = functionEntry(functionName);
+    if (e) return e->params;
+    return 0;
+}
+
+bool FormulaToken::fixedFunctionParams(const QString &functionName)
+{
+    const FunctionEntry* e = functionEntry(functionName);
+    if (e) return !e->varParams;
+    return false;
 }
 
 unsigned FormulaToken::attr() const

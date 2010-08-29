@@ -119,6 +119,10 @@ public:
     const char* functionName() const;  // for non external function
     unsigned functionParams() const;
 
+    static unsigned functionIndex(const QString& functionName);
+    static unsigned functionParams(const QString& functionName);
+    static bool fixedFunctionParams(const QString& functionName);
+
     // only when id is Ref
     QString ref(unsigned row, unsigned col) const;
     // only when id is RefN
