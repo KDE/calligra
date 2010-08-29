@@ -462,7 +462,7 @@
     <field name="reserved0"                           size="2" />
   </if>
   <if predicate="version() >= Excel97">
-    <field name="rawTextRotation2"    type="unsigned" size="8" />
+    <field name="rawTextRotation97"    type="unsigned" size="8" />
     <field name="indentationLevel"    type="unsigned" size="4" />
     <field name="shrinkToFit"         type="bool"     size="1" />
     <field name="reserved1"                           size="1" />
@@ -505,9 +505,9 @@
 -->
   <computedField name="rotationAngle" ctype="int" value="version() &lt; Excel97
         ? (rawTextRotation1() == 2 ? 90 : rawTextRotation1() == 3 ? 180 : 0)
-        : (rawTextRotation2() == 255 ? 0 : rawTextRotation2())" />
+        : (rawTextRotation97() == 255 ? 0 : rawTextRotation97())" />
   <computedField name="stackedLetters" ctype="bool" value="version() &lt; Excel97
-        ? rawTextRotation1() == 1 : rawTextRotation2() == 255" />
+        ? rawTextRotation1() == 1 : rawTextRotation97() == 255" />
 </record>
 
 <!-- TODO: Formula -->

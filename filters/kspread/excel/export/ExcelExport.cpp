@@ -37,6 +37,7 @@
 #include <Sheet.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
+#include <StyleStorage.h>
 #include <ValueStorage.h>
 #include <kspread_limits.h>
 
@@ -48,6 +49,16 @@
 typedef KGenericFactory<ExcelExport> ExcelExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libexcelexport, ExcelExportFactory("kofficefilters"))
 
+static uint qHash(const QFont& f)
+{
+    return qHash(f.family()) ^ 37 * f.pointSize();
+}
+
+static uint qHash(const QColor& c)
+{
+    return uint(c.rgba());
+}
+
 using namespace Swinder;
 
 class ExcelExport::Private
@@ -56,6 +67,11 @@ public:
     const KSpread::Doc* inputDoc;
     QString outputFile;
     XlsRecordOutputStream* out;
+    QHash<KSpread::Style, unsigned> styles;
+    QList<FontRecord> fontRecords;
+
+    void convertStyle(const KSpread::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
+    unsigned fontIndex(const QFont& font, const QColor& color, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
 };
 
 ExcelExport::ExcelExport(QObject* parent, const QStringList&)
@@ -138,9 +154,19 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     o.writeRecord(RefreshAllRecord(0));
     o.writeRecord(BookBoolRecord(0));
 
+    QHash<QPair<QFont, QColor>, unsigned> fonts;
+    fonts[qMakePair(QFont(), QColor())] = 0;
     {
         FontRecord fnt(0);
         fnt.setFontName("Arial");
+        d->fontRecords.append(fnt);
+    }
+    QList<XFRecord> xfs;
+    for (int i = 0; i < d->inputDoc->map()->count(); i++) {
+        collectStyles(d->inputDoc->map()->sheet(i), xfs, fonts);
+    }
+
+    foreach (const FontRecord& fnt, d->fontRecords) {
         o.writeRecord(fnt);
     }
 
@@ -160,8 +186,12 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
         o.writeRecord(fr);
     }
 
+    o.writeRecord(XFRecord(0)); // default first record
+    foreach (const XFRecord& xf, xfs) {
+        o.writeRecord(xf);
+    }
     // XLS requires 16 XF records for some reason
-    for (int i = 0; i < 16; i++) {
+    for (int i = xfs.size()+1; i < 16; i++) {
         o.writeRecord(XFRecord(0));
     }
 
@@ -218,6 +248,23 @@ static unsigned convertColumnWidth(qreal width)
         }
     }
     return width / factor * 256;
+}
+
+void ExcelExport::collectStyles(KSpread::Sheet* sheet, QList<XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
+{
+    QRect area = sheet->cellStorage()->styleStorage()->usedArea();
+    for (int row = area.top(); row <= area.bottom(); row++) {
+        for (int col = area.left(); col <= area.right(); col++){
+            KSpread::Style s = sheet->cellStorage()->style(col, row);
+            unsigned& idx = d->styles[s];
+            if (!idx) {
+                XFRecord xfr(0);
+                d->convertStyle(s, xfr, fontMap);
+                xfRecords.append(xfr);
+                idx = xfRecords.size();
+            }
+        }
+    }
 }
 
 void ExcelExport::buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable)
@@ -345,11 +392,14 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
             for (int col = first.column(); col <= last.column(); col++) {
                 KSpread::Cell cell(sheet, col, row);
                 KSpread::Value val = cell.value();
+                KSpread::Style style = cell.style();
+                unsigned xfi = d->styles[style];
 
                 if (cell.isFormula()) {
                     FormulaRecord fr(0);
                     fr.setRow(row-1);
                     fr.setColumn(col-1);
+                    fr.setXfIndex(xfi);
                     if (val.isNumber()) {
                         fr.setResult(Value((double)numToDouble(val.asFloat())));
                     } else if (val.isBoolean()) {
@@ -392,18 +442,21 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                     NumberRecord nr(0);
                     nr.setRow(row-1);
                     nr.setColumn(col-1);
+                    nr.setXfIndex(xfi);
                     nr.setNumber(cell.value().asFloat());
                     o.writeRecord(nr);
                 } else if (val.isString()) {
                     LabelSSTRecord lr(0);
                     lr.setRow(row-1);
                     lr.setColumn(col-1);
+                    lr.setXfIndex(xfi);
                     lr.setSstIndex(sst[cell.value().asString()]);
                     o.writeRecord(lr);
                 } else if (val.isBoolean() || val.isError()) {
                     BoolErrRecord br(0);
                     br.setRow(row-1);
                     br.setColumn(col-1);
+                    br.setXfIndex(xfi);
                     if (val.isBoolean()) {
                         br.setError(false);
                         br.setValue(val.asBoolean() ? 1 : 0);
@@ -436,6 +489,7 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                     BlankRecord br(0);
                     br.setRow(row-1);
                     br.setColumn(col-1);
+                    br.setXfIndex(xfi);
                     o.writeRecord(br);
                 }
             }
@@ -979,3 +1033,83 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
     return codes;
 }
 
+
+void ExcelExport::Private::convertStyle(const KSpread::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
+{
+    unsigned fontIdx = fontIndex(style.font(), style.fontColor(), fontMap);
+    xf.setFontIndex(fontIdx);
+    // TODO: number format
+    switch (style.halign()) {
+    case KSpread::Style::Left:
+        xf.setHorizontalAlignment(XFRecord::Left); break;
+    case KSpread::Style::Center:
+        xf.setHorizontalAlignment(XFRecord::Centered); break;
+    case KSpread::Style::Right:
+        xf.setHorizontalAlignment(XFRecord::Right); break;
+    case KSpread::Style::Justified:
+        xf.setHorizontalAlignment(XFRecord::Justified); break;
+    case KSpread::Style::HAlignUndefined:
+    default:
+        xf.setHorizontalAlignment(XFRecord::General); break;
+    }
+    xf.setTextWrap(style.wrapText());
+    switch (style.valign()) {
+    case KSpread::Style::Top:
+        xf.setVerticalAlignment(XFRecord::Top); break;
+    case KSpread::Style::Middle:
+        xf.setVerticalAlignment(XFRecord::VCentered); break;
+    case KSpread::Style::Bottom:
+        xf.setVerticalAlignment(XFRecord::Bottom); break;
+    case KSpread::Style::VDistributed:
+        xf.setVerticalAlignment(XFRecord::VDistributed); break;
+    case KSpread::Style::VJustified:
+        xf.setVerticalAlignment(XFRecord::VJustified); break;
+    default:
+        xf.setVerticalAlignment(XFRecord::Bottom); break;
+    }
+    if (style.verticalText()) {
+        xf.setRawTextRotation97(255);
+    } else if (style.angle()) {
+        int angle = (style.angle() + 360)% 360;
+        if (angle > 180) angle -= 360;
+        if (angle > 0) xf.setRawTextRotation97(90+angle);
+        else xf.setRawTextRotation97(-angle);
+    }
+    xf.setShrinkToFit(style.shrinkToFit());
+
+    // TODO: borders
+    // TODO: background
+}
+
+unsigned ExcelExport::Private::fontIndex(const QFont& f, const QColor& c, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
+{
+    unsigned& idx = fontMap[qMakePair(f, c)];
+    if (idx) return idx;
+    FontRecord fr(0);
+    fr.setHeight(f.pointSizeF() * 20);
+    fr.setItalic(f.italic());
+    fr.setStrikeout(f.strikeOut());
+    fr.setCondensed(f.stretch() <= QFont::SemiCondensed);
+    fr.setExtended(f.stretch() >= QFont::SemiExpanded);
+    fr.setFontWeight(qBound(100, (f.weight() - 50) * 12 + 400, 1000));
+    fr.setUnderline(f.underline() ? FontRecord::Single : FontRecord::None);
+    switch (f.styleHint()) {
+    case QFont::SansSerif:
+        fr.setFontFamily(FontRecord::Swiss); break;
+    case QFont::Serif:
+        fr.setFontFamily(FontRecord::Roman); break;
+    case QFont::TypeWriter:
+        fr.setFontFamily(FontRecord::Modern); break;
+    case QFont::Decorative:
+        fr.setFontFamily(FontRecord::Decorative); break;
+    case QFont::AnyStyle:
+    case QFont::System:
+    default:
+        fr.setFontFamily(FontRecord::Unknown); break;
+    }
+    fr.setFontName(f.family());
+    // color
+    idx = fontRecords.size();
+    fontRecords.append(fr);
+    return idx;
+}

@@ -27,6 +27,8 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
+#include <records.h>
+
 namespace KSpread {
     class Sheet;
     class Tokens;
@@ -53,6 +55,7 @@ public:
 
     void convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst);
     void buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
+    void collectStyles(KSpread::Sheet* sheet, QList<Swinder::XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
 private:
     class Private;
     Private* d;
