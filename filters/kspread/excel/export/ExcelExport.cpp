@@ -496,6 +496,7 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
         }
 
         db.setFirstRowOffset(o.pos() - firstRowPos);
+        ir.setDbCellPosition(i, o.pos());
         o.writeRecord(db);
     }
 
