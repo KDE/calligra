@@ -193,7 +193,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
         boundSheets[i].setBofPosition(o.pos());
         o.rewriteRecord(boundSheets[i]);
-        convertSheet(d->inputDoc->map()->sheet(i));
+        convertSheet(d->inputDoc->map()->sheet(i), stringTable);
     }
 
     delete a;
@@ -235,7 +235,7 @@ void ExcelExport::buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& ss
     sst.setUseCount(sst.useCount() + useCount);
 }
 
-void ExcelExport::convertSheet(KSpread::Sheet* sheet)
+void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst)
 {
     XlsRecordOutputStream& o = *d->out;
     {
@@ -349,6 +349,12 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet)
                     nr.setColumn(col-1);
                     nr.setNumber(cell.value().asFloat());
                     o.writeRecord(nr);
+                } else if (cell.value().isString()) {
+                    LabelSSTRecord lr(0);
+                    lr.setRow(row-1);
+                    lr.setColumn(col-1);
+                    lr.setSstIndex(sst[cell.value().asString()]);
+                    o.writeRecord(lr);
                 } else /*if (cell.isEmpty())*/ {
                     BlankRecord br(0);
                     br.setRow(row-1);

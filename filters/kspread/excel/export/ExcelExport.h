@@ -46,7 +46,7 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-    void convertSheet(KSpread::Sheet* sheet);
+    void convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst);
     void buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
 private:
     class Private;
