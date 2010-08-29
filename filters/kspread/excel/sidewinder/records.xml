@@ -209,7 +209,10 @@
   <field name="xfIndex"      type="unsigned" size="16" />
 
   <field name="hidden"       type="bool"     size="1" />
-  <field name="reserved0"                    size="7" />
+  <field name="nonDefaultWidth" type="bool"  size="1" />
+  <field name="bestFit"      type="bool"     size="1" />
+  <field name="showPhonetic" type="bool"     size="1" />
+  <field name="reserved0"                    size="4" />
   <field name="outlineLevel" type="unsigned" size="3" />
   <field name="reserved1"                    size="1" />
   <field name="notCollapsed" type="bool"     size="1" />
@@ -634,7 +637,7 @@
 </record>
 
 <record name="DefaultColWidth" id="0x55">
-  <field name="cchdefColWidth"   type="unsigned" size="16" />
+  <field name="cchdefColWidth"   type="unsigned" size="16" default="8" />
 </record>
 
 <record name="HCenter" id="0x0083">

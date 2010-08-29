@@ -20,16 +20,21 @@
 #include <ExcelExport.h>
 #include <ExcelExport.moc>
 
+#include <QFont>
+#include <QFontMetricsF>
 #include <QMap>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoPostscriptPaintDevice.h>
 
 #include <part/Doc.h>
 #include <Map.h>
 #include <Sheet.h>
+#include <RowColumnFormat.h>
+#include <kspread_limits.h>
 
 #include <swinder.h>
 #include <XlsRecordOutputStream.h>
@@ -191,6 +196,20 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     return KoFilter::OK;
 }
 
+static unsigned convertColumnWidth(qreal width)
+{
+    static qreal factor = -1;
+    if (factor == -1) {
+        QFont f("Arial", 10);
+        KoPostscriptPaintDevice pd;
+        QFontMetricsF fm(f, &pd);
+        for (char c = '0'; c <= '9'; c++) {
+            factor = qMax(factor, fm.width(c));
+        }
+    }
+    return width / factor * 256;
+}
+
 void ExcelExport::convertSheet(KSpread::Sheet* sheet)
 {
     XlsRecordOutputStream& o = *d->out;
@@ -227,11 +246,34 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet)
     o.writeRecord(VCenterRecord(0));
     o.writeRecord(SetupRecord(0));
 
-    o.writeRecord(DefaultColWidthRecord(0));
-    // ColInfo
+    QRect area = sheet->usedArea();
+
+    o.writeRecord(DefaultColWidthRecord(0)); // TODO: real defaultColWidthRecord
+    {
+        ColInfoRecord cir(0);
+        for (int i = 1; i <= area.right(); ++i) {
+            const KSpread::ColumnFormat* column = sheet->columnFormat(i);
+            unsigned w = convertColumnWidth(column->width());
+            if (w != cir.width() || column->isHidden() != cir.isHidden() || column->isDefault() != !cir.isNonDefaultWidth()) {
+                if (i > 1) {
+                    o.writeRecord(cir);
+                }
+                cir.setFirstColumn(i-1);
+                cir.setWidth(w);
+                cir.setHidden(column->isHidden());
+                cir.setNonDefaultWidth(!column->isDefault());
+            }
+            cir.setLastColumn(i-1);
+        }
+        o.writeRecord(cir);
+    }
 
     {
         DimensionRecord dr(0);
+        dr.setFirstRow(area.top()-1);
+        dr.setFirstColumn(area.left()-1);
+        dr.setLastRowPlus1(area.bottom());
+        dr.setLastColumnPlus1(area.right());
         o.writeRecord(dr);
     }
 
