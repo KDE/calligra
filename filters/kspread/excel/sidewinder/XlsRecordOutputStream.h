@@ -49,6 +49,7 @@ public:
 
     void writeUnsigned(unsigned bits, unsigned value);
     void writeSigned(unsigned bits, signed value);
+    void writeFloat(unsigned bits, double value);
     void writeUnicodeString(const QString& value);
     void writeUnicodeStringWithFlags(const QString& value);
     void writeByteString(const QString& value);

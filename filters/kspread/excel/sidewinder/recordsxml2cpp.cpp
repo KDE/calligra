@@ -578,7 +578,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
             } else if (field.attribute("type") == "signed") {
                 out << indent << "out.writeSigned(" << bits << ", ";
             } else if (field.attribute("type") == "float") {
-                out << indent << "// TODO ";
+                out << indent << "out.writeFloat(" << bits << ", ";
             } else if (field.attribute("type") == "fixed") {
                 out << indent << "// TODO ";
             } else {

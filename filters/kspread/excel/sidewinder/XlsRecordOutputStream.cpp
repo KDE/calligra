@@ -135,6 +135,19 @@ void XlsRecordOutputStream::writeSigned(unsigned bits, signed value)
     writeUnsigned(bits, value);
 }
 
+void XlsRecordOutputStream::writeFloat(unsigned bits, double value)
+{
+    Q_ASSERT(bits == 32 || bits == 64);
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+    ds.setFloatingPointPrecision(bits == 32 ? QDataStream::SinglePrecision : QDataStream::DoublePrecision);
+    ds << value;
+    Q_ASSERT(b.data().size() == (bits / 8));
+    writeBlob(b.data());
+}
+
 void XlsRecordOutputStream::writeUnicodeString(const QString& value)
 {
     QBuffer b;
