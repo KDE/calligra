@@ -40,6 +40,10 @@ public:
 
     void writeUnsigned(unsigned bits, unsigned value);
     void writeSigned(unsigned bits, signed value);
+    void writeUnicodeString(const QString& value);
+    void writeUnicodeStringWithFlags(const QString& value);
+    void writeByteString(const QString& value);
+    void writeBlob(const QByteArray& value);
 private:
     QDataStream m_dataStream;
     unsigned m_currentRecord;

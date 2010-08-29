@@ -114,3 +114,38 @@ void XlsRecordOutputStream::writeSigned(unsigned bits, signed value)
 {
     writeUnsigned(bits, value);
 }
+
+void XlsRecordOutputStream::writeUnicodeString(const QString& value)
+{
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+    const ushort* d = value.utf16();
+    while (*d) {
+        ds << quint16(*d);
+        d++;
+    }
+    writeBlob(b.data());
+}
+
+void XlsRecordOutputStream::writeUnicodeStringWithFlags(const QString& value)
+{
+    char flags = 1; // just unicode, nothing else
+    m_buffer->write(&flags, 1);
+    writeUnicodeString(value);
+}
+
+
+void XlsRecordOutputStream::writeByteString(const QString& value)
+{
+    writeBlob(value.toAscii());
+}
+
+void XlsRecordOutputStream::writeBlob(const QByteArray& value)
+{
+    Q_ASSERT(m_currentRecord != NORECORD);
+    Q_ASSERT(m_curBitOffset == 0);
+
+    m_buffer->write(value);
+}
