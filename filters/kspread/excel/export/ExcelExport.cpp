@@ -28,6 +28,9 @@
 #include <part/Doc.h>
 
 #include <swinder.h>
+#include <XlsRecordOutputStream.h>
+
+#include <CFBWriter.h>
 
 typedef KGenericFactory<ExcelExport> ExcelExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libexcelexport, ExcelExportFactory("kofficefilters"))
@@ -71,6 +74,28 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     if (!d->inputDoc) {
         kWarning() << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
     }
+
+    CFBWriter w;
+    w.open(d->outputFile);
+    QIODevice* a = w.openSubStream("Workbook");
+    XlsRecordOutputStream o(a);
+
+    BOFRecord b(0);
+    b.setType(BOFRecord::Workbook);
+    b.setRecordSize(16);
+    o.writeRecord(b);
+
+    o.writeRecord(InterfaceHdrRecord(0));
+    o.writeRecord(MmsReservedRecord(0));
+    o.writeRecord(InterfaceEndRecord(0));
+
+    LastWriteAccessRecord lwar(0);
+    lwar.setUserName("marijn"); // TODO: figure out real username
+    lwar.setUnusedBlob(QByteArray(112 - 3 - 2*lwar.userName().length(), ' '));
+    o.writeRecord(lwar);
+
+    delete a;
+    w.close();
 
     emit sigProgress(100);
 
