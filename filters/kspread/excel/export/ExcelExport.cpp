@@ -186,10 +186,20 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
         o.writeRecord(fr);
     }
 
-    o.writeRecord(XFRecord(0)); // default first record
+    // 15 style xfs, followed by one cell xf and then our own xfs
+    for (int i = 0; i < 15; i++) {
+        o.writeRecord(XFRecord(0));
+    }
+    {
+        XFRecord xf(0);
+        xf.setIsStyleXF(false);
+        xf.setParentStyle(0);
+        o.writeRecord(xf);
+    }
     foreach (const XFRecord& xf, xfs) {
         o.writeRecord(xf);
     }
+
     // XLS requires 16 XF records for some reason
     for (int i = xfs.size()+1; i < 16; i++) {
         o.writeRecord(XFRecord(0));
@@ -260,8 +270,8 @@ void ExcelExport::collectStyles(KSpread::Sheet* sheet, QList<XFRecord>& xfRecord
             if (!idx) {
                 XFRecord xfr(0);
                 d->convertStyle(s, xfr, fontMap);
+                idx = xfRecords.size() + 16;
                 xfRecords.append(xfr);
-                idx = xfRecords.size();
             }
         }
     }
@@ -1037,6 +1047,8 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
 
 void ExcelExport::Private::convertStyle(const KSpread::Style& style, XFRecord& xf, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
 {
+    xf.setIsStyleXF(false);
+    xf.setParentStyle(0);
     unsigned fontIdx = fontIndex(style.font(), style.fontColor(), fontMap);
     xf.setFontIndex(fontIdx);
     // TODO: number format
