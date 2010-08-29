@@ -158,11 +158,12 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     o.writeRecord(StyleRecord(0));
     o.writeRecord(UsesELFsRecord(0));
 
+    QList<BoundSheetRecord> boundSheets;
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
-        BoundSheetRecord bsr(0);
+        boundSheets.append(BoundSheetRecord(0));
+        BoundSheetRecord& bsr = boundSheets.last();
         bsr.setSheetName(d->inputDoc->map()->sheet(i)->sheetName());
         o.writeRecord(bsr);
-        // TODO: set bofPosition
     }
 
     o.writeRecord(CountryRecord(0));
@@ -177,6 +178,8 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     o.writeRecord(EOFRecord(0));
 
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
+        boundSheets[i].setBofPosition(o.pos());
+        o.rewriteRecord(boundSheets[i]);
         convertSheet(d->inputDoc->map()->sheet(i));
     }
 
