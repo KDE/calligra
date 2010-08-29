@@ -166,7 +166,7 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     << "    virtual unsigned rtti() const { return this->id; }\n\n";
 
     // constructor and destructor
-    out << "    " << className << "(Workbook *book);\n    virtual ~" << className << "();\n\n";
+    out << "    " << className << "(Swinder::Workbook *book);\n    virtual ~" << className << "();\n\n";
 
     // copy and assignment
     out << "    " << className << "( const " << className << "& record );\n"
@@ -565,7 +565,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     out << "};\n\n";
 
     // constructor
-    out << className << "::" << className << "(Workbook *book)\n";
+    out << className << "::" << className << "(Swinder::Workbook *book)\n";
     out << "    : Record(book), d(new Private)\n{\n";
     foreach(const Field& f, fields) {
         if (f.isArray || f.isStringLength) continue;
@@ -667,7 +667,7 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
     out << "}\n\n";
 
     // creator function
-    out << "static Record* create" << className << "(Workbook *book)\n{\n    return new " << className << "(book);\n}\n\n";
+    out << "static Record* create" << className << "(Swinder::Workbook *book)\n{\n    return new " << className << "(book);\n}\n\n";
 }
 
 
