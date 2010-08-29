@@ -99,6 +99,13 @@ public:
     FormulaToken(const FormulaToken&);
     ~FormulaToken();
 
+    static FormulaToken createBool(bool value);
+    static FormulaToken createNum(double value);
+    static FormulaToken createStr(const QString& value);
+    static FormulaToken createRef(const QString& cell);
+    static FormulaToken createArea(const QString& area);
+    static FormulaToken createFunc(const QString& func, unsigned argCount);
+
     // token id, excluding token class
     unsigned id() const;
     const char* idAsString() const;

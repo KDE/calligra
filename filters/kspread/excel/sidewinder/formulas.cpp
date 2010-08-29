@@ -23,6 +23,10 @@
 #include <iostream>
 #include <iomanip>
 
+#include <QBuffer>
+#include <QDataStream>
+#include <QHash>
+
 #include "excel.h"
 #include "utils.h"
 
@@ -80,6 +84,110 @@ void FormulaToken::operator=(const FormulaToken& token)
 FormulaToken::~FormulaToken()
 {
     delete d;
+}
+
+FormulaToken FormulaToken::createBool(bool value)
+{
+    FormulaToken t(Bool);
+    unsigned char data = value ? : 0;
+    t.setData(1, &data);
+    return t;
+}
+
+FormulaToken FormulaToken::createNum(double value)
+{
+    FormulaToken t(Float);
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+    ds.setFloatingPointPrecision(QDataStream::DoublePrecision);
+    ds << value;
+    Q_ASSERT(b.data().size() == 8);
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    return t;
+}
+
+FormulaToken FormulaToken::createStr(const QString &value)
+{
+    FormulaToken t(String);
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+    ds << quint8(value.length());
+    ds << quint8(1); // unicode
+    for (int i = 0; i < value.length(); i++) {
+        ds << quint16(value[i].unicode());
+    }
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    return t;
+}
+
+FormulaToken FormulaToken::createRef(const QString &cell)
+{
+    FormulaToken t(Ref);
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+    unsigned row = 1;
+    unsigned col = 1;
+    bool rowRel = true;
+    bool colRel = true;
+
+    if (rowRel) col |= 0x4000;
+    if (colRel) col |= 0x8000;
+    ds << quint16(row);
+    ds << quint16(col);
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    return t;
+}
+
+FormulaToken FormulaToken::createArea(const QString &cell)
+{
+    FormulaToken t(Area);
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+    unsigned row1 = 1;
+    unsigned col1 = 1;
+    bool rowRel1 = true;
+    bool colRel1 = true;
+    unsigned row2 = 3;
+    unsigned col2 = 4;
+    bool rowRel2 = true;
+    bool colRel2 = true;
+
+    if (rowRel1) col1 |= 0x4000;
+    if (colRel1) col1 |= 0x8000;
+    if (rowRel2) col2 |= 0x4000;
+    if (colRel2) col2 |= 0x8000;
+    ds << quint16(row1);
+    ds << quint16(row2);
+    ds << quint16(col1);
+    ds << quint16(col2);
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    return t;
+}
+
+FormulaToken FormulaToken::createFunc(const QString &func, unsigned argCount)
+{
+    int paramCount = functionParams(func);
+    bool isVarArgs = !fixedFunctionParams(func) || argCount != paramCount;
+    FormulaToken t(isVarArgs ? FunctionVar : Function);
+    QBuffer b;
+    b.open(QIODevice::WriteOnly);
+    QDataStream ds(&b);
+    ds.setByteOrder(QDataStream::LittleEndian);
+
+    if (isVarArgs) {
+        ds << quint8(argCount);
+    }
+    ds << quint16(functionIndex(func));
+    t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    return t;
 }
 
 unsigned FormulaToken::version() const
