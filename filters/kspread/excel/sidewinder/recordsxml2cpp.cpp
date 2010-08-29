@@ -201,6 +201,9 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     // setData method
     out << "    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );\n\n";
 
+    // writeData method
+    out << "    virtual void writeData( XlsRecordOutputStream& out ) const;\n\n";
+
     // name method
     out << "    virtual const char* name() const { return \"" << e.attribute("name") << "\"; }\n\n";
 
@@ -480,6 +483,76 @@ static void processFieldElement(QString indent, QTextStream& out, QDomElement fi
     }
 }
 
+static void processFieldElementForWrite(QString indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, QString getterArgs = QString())
+{
+    if (field.tagName() == "field") {
+        QString name = field.attribute("name");
+        unsigned bits = field.attribute("size").toUInt();
+        if (!name.startsWith("reserved")) {
+            const Field& f = fieldsMap[name];
+            if (f.type == "QString") {
+                out << indent << "// TODO ";
+            } else if (f.type == "QByteArray") {
+                out << indent << "// TODO ";
+            } else if (f.type == "QUuid") {
+                out << indent << "// TODO ";
+            } else if (field.attribute("type") == "bool" || field.attribute("type") == "unsigned") {
+                out << indent << "out.writeUnsigned(" << bits << ", ";
+            } else if (field.attribute("type") == "signed") {
+                out << indent << "out.writeSigned(" << bits << ", ";
+            } else if (field.attribute("type") == "float") {
+                out << indent << "// TODO ";
+            } else if (field.attribute("type") == "fixed") {
+                out << indent << "// TODO ";
+            } else {
+                out << f.type;
+            }
+            if (f.isStringLength) {
+                // TODO: figure out length from string
+                out << "/* TODO */ 0";
+            } else {
+                out << f.getterName() << "(" << getterArgs << ")";
+            }
+            out << ");\n";
+        } else {
+            out << indent << "out.writeUnsigned(" << bits << ", 0);\n";
+        }
+    } else if (field.tagName() == "if") {
+        out << indent << "if (" << field.attribute("predicate") << ") {\n";
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+            processFieldElementForWrite(indent + "    ", out, e, fieldsMap);
+        out << indent << "}\n";
+    } else if (field.tagName() == "choose") {
+        bool isFirst = true;
+        for (QDomElement childField = field.firstChildElement(); !childField.isNull(); childField = childField.nextSiblingElement()) {
+            if (isFirst) out << indent; else out << " ";
+            if (!isFirst) out << "else ";
+            isFirst = false;
+            if (childField.hasAttribute("predicate"))
+                out << "if (" << childField.attribute("predicate") << ") ";
+            out << "{\n";
+
+            for (QDomElement child = childField.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
+                processFieldElementForWrite(indent + "    ", out, child, fieldsMap);
+            }
+
+            out << indent << "}";
+        }
+        out << "\n";
+    } else if (field.tagName() == "array") {
+        QString length = field.attribute("length");
+        if (fieldsMap.contains(length))
+            length = fieldsMap[length].getterName() + "()";
+        else
+            length = "d->" + field.firstChildElement().attribute("name") + ".size()";
+
+        out << indent << "for (unsigned i = 0, endi = " << length << "; i < endi; ++i) {\n";
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+            processFieldElementForWrite(indent + "    ", out, e, fieldsMap, "i");
+        out << indent << "}\n";
+    }
+}
+
 static void processFieldElementForDump(QString indent, QTextStream& out, QDomElement field, const QMap<QString, Field>& fieldsMap, QString getterArgs = QString())
 {
     if (field.tagName() == "field") {
@@ -675,6 +748,16 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         processFieldElement("    ", out, child, offset, dynamicOffset, fieldsMap);
     out << "}\n\n";
 
+    // writeData method
+    if (hasFields) {
+        out << "void " << className << "::writeData( XlsRecordOutputStream& out ) const\n{\n";
+    } else {
+        out << "void " << className << "::writeData( XlsRecordOutputStream& ) const\n{\n";
+    }
+    for (QDomElement child = e.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+        processFieldElementForWrite("    ", out, child, fieldsMap);
+    out << "}\n\n";
+
     // dump method
     out << "void " << className << "::dump( std::ostream& out ) const\n{\n"
     << "    out << \"" << e.attribute("name") << "\" << std::endl;\n";
@@ -730,7 +813,8 @@ int main(int argc, char** argv)
     cppOut << "// This file was automatically generated from records.xml\n"
     << "#include \"records.h\"\n"
     << "#include <vector>\n"
-    << "#include <iomanip>\n\n"
+    << "#include <iomanip>\n"
+    << "#include \"XlsRecordOutputStream.h\"\n\n"
     << "namespace Swinder {\n\n";
 
     QDomNodeList records = doc.elementsByTagName("record");
