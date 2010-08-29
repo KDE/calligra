@@ -524,7 +524,7 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
                 out << indent << "out.writeBlob(";
             } else if (f.type == "QUuid") {
                 out << indent << "// TODO ";
-            } else if (field.attribute("type") == "bool" || field.attribute("type") == "unsigned") {
+            } else if (field.attribute("type") == "bool" || field.attribute("type") == "unsigned" || f.isEnum) {
                 out << indent << "out.writeUnsigned(" << bits << ", ";
             } else if (field.attribute("type") == "signed") {
                 out << indent << "out.writeSigned(" << bits << ", ";

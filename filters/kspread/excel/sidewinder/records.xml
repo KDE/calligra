@@ -366,6 +366,147 @@
   </if>
 </record>
 
+<record name="XF" id="0x00e0">
+  <type name="BorderStyle" type="unsigned">
+    <enum name="NoLine"                  value="0" />
+    <enum name="Thin"                    value="1" />
+    <enum name="Medium"                  value="2" />
+    <enum name="Dashed"                  value="3" />
+    <enum name="Dotted"                  value="4" />
+    <enum name="Thick"                   value="5" />
+    <enum name="Double"                  value="6" />
+    <enum name="Hair"                    value="7" />
+    <enum name="MediumDashed"            value="8" />
+    <enum name="ThinDashDotted"          value="9" />
+    <enum name="MediumDashDotted"        value="10" />
+    <enum name="ThinDashDotDotted"       value="11" />
+    <enum name="MediumDashDotDotted"    value="12" />
+    <enum name="SlantedMediumDashDotted" value="13" />
+  </type>
+  <type name="FillPattern" type="unsigned">
+    <enum name="Null"              value="0" />
+    <enum name="Solid"             value="1" />
+    <enum name="MediumGray"        value="2" />
+    <enum name="DarkGray"          value="3" />
+    <enum name="LightGray"         value="4" />
+    <enum name="Horizontal"        value="5" />
+    <enum name="Vertical"          value="6" />
+    <enum name="DiagonalDown"      value="7" />
+    <enum name="DiagonalUp"        value="8" />
+    <enum name="DiagonalGrid"      value="9" />
+    <enum name="ThickDiagonalGrid" value="10" />
+    <enum name="ThinHorizontal"    value="11" />
+    <enum name="ThinVertical"      value="12" />
+    <enum name="ThinDiagonalDown"  value="13" />
+    <enum name="ThinDiagonalUp"    vlaue="14" />
+    <enum name="ThinGrid"          value="15" />
+    <enum name="ThinDiagonalGrid"  value="16" />
+    <enum name="Gray1250"          value="17" />
+    <enum name="Gray0625"          value="18" />
+  </type>
+
+  <field name="fontIndex"      type="unsigned" size="16" />
+  <field name="formatIndex"    type="unsigned" size="16" />
+
+  <field name="locked"         type="bool"     size="1" />
+  <field name="formulaHidden"  type="bool"     size="1" />
+  <field name="isStyleXF"      type="bool"     size="1" />
+  <field name="hasPrefixChars" type="bool"     size="1" />
+  <field name="parentStyle"    type="unsigned" size="12" />
+  <field name="horizontalAlignment" type="unsigned" size="3">
+    <enum name="Unspecified"  value="0xFF" />
+    <enum name="General"      value="0" />
+    <enum name="Left"         value="1" />
+    <enum name="Centered"     value="2" />
+    <enum name="Right"        value="3" />
+    <enum name="Filled"       value="4" />
+    <enum name="Justified"    value="5" />
+    <enum name="CenteredSelection" value="6" />
+    <enum name="Distributed"  value="7" />
+  </field>
+  <field name="textWrap"            type="bool"     size="1" />
+  <field name="verticalAlignment"   type="unsigned" size="3">
+    <enum name="Top"          value="0" />
+    <enum name="VCentered"    value="1" />
+    <enum name="Bottom"       value="2" />
+    <enum name="VJustified"   value="3" />
+    <enum name="VDistributed" value="4" />
+  </field>
+  <field name="lastLineJustified"   type="bool"     size="1" />
+
+  <if predicate="version() &lt; Excel97">
+    <field name="rawTextRotation1"    type="unsigned" size="2" />
+    <field name="dontUpdateNumberFormatFromParent" type="bool" size="1" />
+    <field name="dontUpdateFontFromParent"         type="bool" size="1" />
+    <field name="dontUpdateAlcFromParent"          type="bool" size="1" />
+    <field name="dontUpdateBorderFromParent"       type="bool" size="1" />
+    <field name="dontUpdateBackgroundFromParent"   type="bool" size="1" />
+    <field name="dontUpdateProtectionFromParent"   type="bool" size="1" />
+    
+    <field name="patternForeColor"    type="unsigned" size="7" />
+    <field name="patternBackColor"    type="unsigned" size="7" />
+    <field name="reserved"                            size="2" />
+    <field name="fillPattern"         type="FillPattern" size="6" />
+    <field name="bottomBorderStyle"   type="BorderStyle" size="3" />
+    <field name="bottomBorderColor"   type="unsigned" size="7" />
+
+    <field name="topBorderStyle"      type="BorderStyle" size="3" />
+    <field name="leftBorderStyle"     type="BorderStyle" size="3" />
+    <field name="rightBorderStyle"    type="BorderStyle" size="3" />
+    <field name="topBorderColor"      type="unsigned" size="7" />
+    <field name="leftBorderColor"     type="unsigned" size="7" />
+    <field name="rightBorderColor"    type="unsigned" size="7" />
+    <field name="reserved0"                           size="2" />
+  </if>
+  <if predicate="version() >= Excel97">
+    <field name="rawTextRotation2"    type="unsigned" size="8" />
+    <field name="indentationLevel"    type="unsigned" size="4" />
+    <field name="shrinkToFit"         type="bool"     size="1" />
+    <field name="reserved1"                           size="1" />
+    <field name="readingOrder"        type="unsigned" size="2">
+      <enum name="Context"     value="0" />
+      <enum name="LeftToRight" value="1" />
+      <enum name="RightToLeft" value="2" />
+    </field>
+    <field name="reserved2"                           size="2" />
+    <field name="dontUpdateNumberFormatFromParent" type="bool" size="1" />
+    <field name="dontUpdateFontFromParent"         type="bool" size="1" />
+    <field name="dontUpdateAlcFromParent"          type="bool" size="1" />
+    <field name="dontUpdateBorderFromParent"       type="bool" size="1" />
+    <field name="dontUpdateBackgroundFromParent"   type="bool" size="1" />
+    <field name="dontUpdateProtectionFromParent"   type="bool" size="1" />
+
+    <field name="leftBorderStyle"     type="BorderStyle" size="4" />
+    <field name="rightBorderStyle"    type="BorderStyle" size="4" />
+    <field name="topBorderStyle"      type="BorderStyle" size="4" />
+    <field name="bottomBorderStyle"   type="BorderStyle" size="4" />
+    <field name="leftBorderColor"     type="unsigned" size="7" />
+    <field name="rightBorderColor"    type="unsigned" size="7" />
+    <field name="diagonalTopLeftBorder"  type="bool"     size="1" /> <!-- not sure about the order of these -->
+    <field name="diagonalBottomLeftBorder"    type="bool"     size="1" />
+    <field name="topBorderColor"      type="unsigned" size="7" />
+    <field name="bottomBorderColor"   type="unsigned" size="7" />
+    <field name="diagonalBorderColor" type="unsigned" size="7" />
+    <field name="diagonalBorderStyle" type="BorderStyle" size="4" />
+    <field name="hasXFExt"            type="bool"     size="1" />
+
+    <field name="fillPattern"         type="FillPattern" size="6" />
+    <field name="patternForeColor"    type="unsigned" size="7" />
+    <field name="patternBackColor"    type="unsigned" size="7" />
+    <field name="isButton"            type="bool"     size="1" />
+    <field name="reserved3"                           size="1" />
+  </if>
+<!--
+  <computedField name="textRotation"   ctype="int" value="rawTextRotation() == 255 ? 0 : rawTextRotation() &lt;= 90 ? rawTextRotation() : -(rawTextRotation() - 90)*/" />
+  <computedField name="isVerticalText" ctype="bool" value="rawTextRotation() == 255" />
+-->
+  <computedField name="rotationAngle" ctype="int" value="version() &lt; Excel97
+        ? (rawTextRotation1() == 2 ? 90 : rawTextRotation1() == 3 ? 180 : 0)
+        : (rawTextRotation2() == 255 ? 0 : rawTextRotation2())" />
+  <computedField name="stackedLetters" ctype="bool" value="version() &lt; Excel97
+        ? rawTextRotation1() == 1 : rawTextRotation2() == 255" />
+</record>
+
 <!-- TODO: Formula -->
 <!-- TODO: SharedFormula -->
 

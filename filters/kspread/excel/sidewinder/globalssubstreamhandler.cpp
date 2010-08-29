@@ -446,14 +446,14 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
         // FIXME still unsupported: Justified, Distributed
     }
 
-    alignment.setWrap(xf.textWrap());
+    alignment.setWrap(xf.isTextWrap());
 
     unsigned angle = xf.rotationAngle();
     if (angle > 90) angle = 360 - (angle - 90);
     alignment.setRotationAngle(angle);
 
     alignment.setStackedLetters(xf.stackedLetters());
-    alignment.setShrinkToFit(xf.shrinkContent());
+    alignment.setShrinkToFit(xf.isShrinkToFit());
 
     format.setAlignment(alignment);
 
@@ -476,15 +476,15 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     pen.color = d->workbook->color(xf.bottomBorderColor());
     borders.setBottomBorder(pen);
 
-    if(xf.diagonalTopLeft()) {
-        pen = convertBorderStyle(xf.diagonalStyle());
-        pen.color = d->workbook->color(xf.diagonalColor());
+    if(xf.isDiagonalTopLeftBorder()) {
+        pen = convertBorderStyle(xf.diagonalBorderStyle());
+        pen.color = d->workbook->color(xf.diagonalBorderColor());
         borders.setTopLeftBorder(pen);
     }
 
-    if(xf.diagonalBottomLeft()) {
-        pen = convertBorderStyle(xf.diagonalStyle());
-        pen.color = d->workbook->color(xf.diagonalColor());
+    if(xf.isDiagonalBottomLeftBorder()) {
+        pen = convertBorderStyle(xf.diagonalBorderStyle());
+        pen.color = d->workbook->color(xf.diagonalBorderColor());
         borders.setBottomLeftBorder(pen);
     }
 
