@@ -32,6 +32,7 @@ set(sidewinder_SRCS
   globalssubstreamhandler.cpp
   worksheetsubstreamhandler.cpp
   chartsubstreamhandler.cpp
+  XlsRecordOutputStream.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/records.cpp
 )
 

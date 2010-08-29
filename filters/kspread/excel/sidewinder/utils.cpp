@@ -239,6 +239,11 @@ void Record::setData(unsigned, const unsigned char*, const unsigned int*)
 {
 }
 
+void Record::writeData(XlsRecordOutputStream &out) const
+{
+    fprintf(stderr, "ERROR! writeData not implemented for record type %u\n", rtti());
+}
+
 void Record::dump(std::ostream&) const
 {
     // nothing to dump

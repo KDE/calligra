@@ -43,6 +43,7 @@ static const uint maximalColumnCount = 32768;
 static const uint maximalRowCount = 65536;
 
 class Workbook;
+class XlsRecordOutputStream;
 
 Value errorAsValue(int errorCode);
 
@@ -182,6 +183,8 @@ public:
       Sets the data for this record.
      */
     virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+
+    virtual void writeData(XlsRecordOutputStream& out) const;
 
     /**
       Sets the position of the record in the OLE stream. Somehow this is
