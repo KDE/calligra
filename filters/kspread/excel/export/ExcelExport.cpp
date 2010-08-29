@@ -35,6 +35,7 @@
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>
+#include <Region.h>
 #include <RowColumnFormat.h>
 #include <ValueStorage.h>
 #include <kspread_limits.h>
@@ -381,7 +382,7 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
                         fr.setResult(Value::empty());
                     }
                     KSpread::Formula f = cell.formula();
-                    QList<FormulaToken> tokens = compileFormula(f.tokens());
+                    QList<FormulaToken> tokens = compileFormula(f.tokens(), sheet);
                     foreach (const FormulaToken& t, tokens) {
                         fr.addToken(t);
                     }
@@ -552,7 +553,7 @@ static int opPrecedence(KSpread::Token::Op op)
     return prec;
 }
 
-QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens) const
+QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, KSpread::Sheet* sheet) const
 {
     QList<FormulaToken> codes;
 
@@ -629,11 +630,23 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens) c
                 (tokenType == KSpread::Token::Identifier)) {
             syntaxStack.push(token);
 
-            if (tokenType == KSpread::Token::Cell)
-                codes.append(FormulaToken::createRef(token.text()));
-            else if (tokenType == KSpread::Token::Range)
-                codes.append(FormulaToken::createArea(token.text()));
-            else {
+            if (tokenType == KSpread::Token::Cell) {
+                const KSpread::Region region(token.text(), d->inputDoc->map(), sheet);
+                if (!region.isValid() || !region.isSingular()) {
+                    codes.append(FormulaToken::createRefErr());
+                } else {
+                    KSpread::Region::Element* e = *region.constBegin();
+                    codes.append(FormulaToken::createRef(e->rect().topLeft() - QPoint(1, 1), e->isRowFixed(), e->isColumnFixed()));
+                }
+            } else if (tokenType == KSpread::Token::Range) {
+                const KSpread::Region region(token.text(), d->inputDoc->map(), sheet);
+                if (!region.isValid()) {
+                    codes.append(FormulaToken::createAreaErr());
+                } else {
+                    KSpread::Region::Element* e = *region.constBegin();
+                    codes.append(FormulaToken::createArea(e->rect().adjusted(-1, -1, -1, -1), e->isTopFixed(), e->isBottomFixed(), e->isLeftFixed(), e->isRightFixed()));
+                }
+            } else {
                 // TODO
                 // codes.append(FormulaToken(FormulaToken::MissArg));
             }

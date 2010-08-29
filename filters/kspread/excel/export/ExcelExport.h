@@ -49,7 +49,7 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
-    QList<Swinder::FormulaToken> compileFormula(const KSpread::Tokens& tokens) const;
+    QList<Swinder::FormulaToken> compileFormula(const KSpread::Tokens& tokens, KSpread::Sheet* sheet) const;
 
     void convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsigned>& sst);
     void buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);

@@ -102,8 +102,10 @@ public:
     static FormulaToken createBool(bool value);
     static FormulaToken createNum(double value);
     static FormulaToken createStr(const QString& value);
-    static FormulaToken createRef(const QString& cell);
-    static FormulaToken createArea(const QString& area);
+    static FormulaToken createRef(const QPoint& pos, bool rowFixed, bool colFixed);
+    static FormulaToken createRefErr();
+    static FormulaToken createArea(const QRect& area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed);
+    static FormulaToken createAreaErr();
     static FormulaToken createFunc(const QString& func, unsigned argCount);
 
     // token id, excluding token class

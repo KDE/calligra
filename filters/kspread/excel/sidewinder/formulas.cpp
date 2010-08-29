@@ -124,17 +124,17 @@ FormulaToken FormulaToken::createStr(const QString &value)
     return t;
 }
 
-FormulaToken FormulaToken::createRef(const QString &cell)
+FormulaToken FormulaToken::createRef(const QPoint& pos, bool rowFixed, bool colFixed)
 {
     FormulaToken t(Ref);
     QBuffer b;
     b.open(QIODevice::WriteOnly);
     QDataStream ds(&b);
     ds.setByteOrder(QDataStream::LittleEndian);
-    unsigned row = 1;
-    unsigned col = 1;
-    bool rowRel = true;
-    bool colRel = true;
+    unsigned row = pos.y();
+    unsigned col = pos.x();
+    bool rowRel = !rowFixed;
+    bool colRel = !colFixed;
 
     if (rowRel) col |= 0x4000;
     if (colRel) col |= 0x8000;
@@ -144,21 +144,29 @@ FormulaToken FormulaToken::createRef(const QString &cell)
     return t;
 }
 
-FormulaToken FormulaToken::createArea(const QString &cell)
+FormulaToken FormulaToken::createRefErr()
+{
+    FormulaToken t(RefErr);
+    quint32 zero = 0;
+    t.setData(4, reinterpret_cast<unsigned char*>(&zero));
+    return t;
+}
+
+FormulaToken FormulaToken::createArea(const QRect& area, bool topFixed, bool bottomFixed, bool leftFixed, bool rightFixed)
 {
     FormulaToken t(Area);
     QBuffer b;
     b.open(QIODevice::WriteOnly);
     QDataStream ds(&b);
     ds.setByteOrder(QDataStream::LittleEndian);
-    unsigned row1 = 1;
-    unsigned col1 = 1;
-    bool rowRel1 = true;
-    bool colRel1 = true;
-    unsigned row2 = 3;
-    unsigned col2 = 4;
-    bool rowRel2 = true;
-    bool colRel2 = true;
+    unsigned row1 = area.top();
+    unsigned col1 = area.left();
+    bool rowRel1 = !topFixed;
+    bool colRel1 = !leftFixed;
+    unsigned row2 = area.bottom();
+    unsigned col2 = area.right();
+    bool rowRel2 = !bottomFixed;
+    bool colRel2 = !rightFixed;
 
     if (rowRel1) col1 |= 0x4000;
     if (colRel1) col1 |= 0x8000;
@@ -169,6 +177,14 @@ FormulaToken FormulaToken::createArea(const QString &cell)
     ds << quint16(col1);
     ds << quint16(col2);
     t.setData(b.data().size(), reinterpret_cast<const unsigned char*>(b.data().data()));
+    return t;
+}
+
+FormulaToken FormulaToken::createAreaErr()
+{
+    FormulaToken t(AreaErr);
+    quint64 zero = 0;
+    t.setData(8, reinterpret_cast<unsigned char*>(&zero));
     return t;
 }
 
