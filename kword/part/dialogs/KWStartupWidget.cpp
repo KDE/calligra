@@ -42,6 +42,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     QVBoxLayout *lay = new QVBoxLayout(widget.sizeTab);
     m_sizeWidget = new KoPageLayoutWidget(widget.sizeTab, m_layout);
+    m_sizeWidget->showPageSpread(true);
     m_sizeWidget->setUnit(m_unit);
     lay->addWidget(m_sizeWidget);
     lay->setMargin(0);

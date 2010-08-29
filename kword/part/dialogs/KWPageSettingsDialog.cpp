@@ -35,6 +35,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     Q_ASSERT(document);
     Q_ASSERT(page.isValid());
 
+    showPageSpread(true);
     setPageSpread(m_page.pageSide() == KWPage::PageSpread);
     setTextDirection(m_page.directionHint());
 
