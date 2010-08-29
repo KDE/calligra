@@ -478,6 +478,6 @@ void CFBWriter::writeHeader()
     ds << quint32(m_firstDifatSector);
     ds << quint32(m_difatSectorCount);
     for (int i = 0; i < 109; i++) {
-        ds << quint32(i < m_difat.size() ? m_difat[i] : 0);
+        ds << quint32(i < m_difat.size() ? m_difat[i] : NOSTREAM);
     }
 }
