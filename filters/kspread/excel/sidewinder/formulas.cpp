@@ -812,8 +812,8 @@ static const FunctionEntry FunctionEntries[] = {
     { "DEGREES",         1, false },    // 343
     { "SUBTOTAL",        0, true },     // 344
     { "SUMIF",           0, true },     // 345
-    { "COUNTIF",         2, false },    // 346
-    { "COUNTBLANK",      1, false },    // 347
+    { "COUNTIF",         2, true },    // 346
+    { "COUNTBLANK",      1, true },    // 347
     { "SCENARIOGET",     0, true },
     { "OPTIONSLISTSGET", 1, false },
     { "ISPMT",           4, false },
