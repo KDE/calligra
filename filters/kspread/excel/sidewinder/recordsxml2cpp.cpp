@@ -222,6 +222,7 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     for (int i = 0; i < optionalNodes.size(); i++) {
         QDomElement f = optionalNodes.at(i).toElement();
         out << "    bool has" << ucFirst(f.attribute("name")) << "() const;\n\n";
+        out << "    void setHas" << ucFirst(f.attribute("name")) << "( bool value );\n\n";
     }
 
     // setData method
@@ -627,6 +628,11 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
         for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
             processFieldElementForWrite(indent + "    ", out, e, fieldsMap, "i");
         out << indent << "}\n";
+    } else if (field.tagName() == "optional") {
+        out << indent << "if (has" << ucFirst(field.attribute("name")) << "()) {\n";
+        for (QDomElement e = field.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
+            processFieldElementForWrite(indent + "    ", out, e, fieldsMap);
+        out << indent << "}\n";
     }
 }
 
@@ -846,6 +852,8 @@ void processRecordForImplementation(QDomElement e, QTextStream& out)
         QDomElement f = optionalNodes.at(i).toElement();
         out << "bool " << className << "::has" << ucFirst(f.attribute("name")) << "() const\n{\n";
         out << "    return d->has" << ucFirst(f.attribute("name")) << ";\n}\n\n";
+        out << "void " << className << "::setHas" << ucFirst(f.attribute("name")) << "( bool value )\n{\n";
+        out << "    d->has" << ucFirst(f.attribute("name")) << " = value;\n}\n\n";
     }
 
     // setData method
