@@ -78,9 +78,12 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
 {
     QDomNodeList types = record.elementsByTagName("type");
     QMap<QString, QString> extraTypes;
+    QMap<QString, QString> extraTypesDefaults;
     for (int i = 0; i < types.size(); i++) {
         QDomElement e = types.at(i).toElement();
         extraTypes[e.attribute("name")] = e.attribute("type");
+        if (e.elementsByTagName("enum").size() > 0)
+            extraTypesDefaults[e.attribute("name")] = e.elementsByTagName("enum").at(0).toElement().attribute("name");
     }
 
     QDomNodeList fields = record.elementsByTagName("field");
@@ -102,6 +105,7 @@ static QMap<QString, Field> getFields(QDomElement record, bool* foundStrings = 0
             if (extraTypes.contains(e.attribute("type"))) {
                 map[name].isEnum = true;
                 map[name].type = e.attribute("type");
+                map[name].defaultValue = extraTypesDefaults[e.attribute("type")];
             }
             if (e.hasAttribute("default"))
                 map[name].defaultValue = e.attribute("default");

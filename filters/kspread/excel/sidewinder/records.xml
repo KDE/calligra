@@ -408,12 +408,12 @@
   <field name="fontIndex"      type="unsigned" size="16" />
   <field name="formatIndex"    type="unsigned" size="16" />
 
-  <field name="locked"         type="bool"     size="1" />
+  <field name="locked"         type="bool"     size="1" default="true" />
   <field name="formulaHidden"  type="bool"     size="1" />
-  <field name="isStyleXF"      type="bool"     size="1" />
+  <field name="isStyleXF"      type="bool"     size="1" default="true" />
   <field name="hasPrefixChars" type="bool"     size="1" />
-  <field name="parentStyle"    type="unsigned" size="12" />
-  <field name="horizontalAlignment" type="unsigned" size="3">
+  <field name="parentStyle"    type="unsigned" size="12" default="0xFFF" />
+  <field name="horizontalAlignment" type="unsigned" size="3" default="General" >
     <enum name="Unspecified"  value="0xFF" />
     <enum name="General"      value="0" />
     <enum name="Left"         value="1" />
@@ -425,7 +425,7 @@
     <enum name="Distributed"  value="7" />
   </field>
   <field name="textWrap"            type="bool"     size="1" />
-  <field name="verticalAlignment"   type="unsigned" size="3">
+  <field name="verticalAlignment"   type="unsigned" size="3" default="Bottom" >
     <enum name="Top"          value="0" />
     <enum name="VCentered"    value="1" />
     <enum name="Bottom"       value="2" />
@@ -491,8 +491,8 @@
     <field name="hasXFExt"            type="bool"     size="1" />
 
     <field name="fillPattern"         type="FillPattern" size="6" />
-    <field name="patternForeColor"    type="unsigned" size="7" />
-    <field name="patternBackColor"    type="unsigned" size="7" />
+    <field name="patternForeColor"    type="unsigned" size="7" default="64" />
+    <field name="patternBackColor"    type="unsigned" size="7" default="65" />
     <field name="isButton"            type="bool"     size="1" />
     <field name="reserved3"                           size="1" />
   </if>
