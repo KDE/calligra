@@ -1357,7 +1357,7 @@
 
 <record name="DBCell" id="0x00d7">
   <field name="firstRowOffset"  type="unsigned" size="32" />
-  <array length="(recordSize() - 4) / 2" lengthField="cellCount">
+  <array length="(recordSize() - 4) / 2" lengthField="rowCount">
     <field name="cellOffset"    type="unsigned" size="16" />
   </array>
 </record>

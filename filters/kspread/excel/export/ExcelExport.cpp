@@ -31,6 +31,7 @@
 #include <KoPostscriptPaintDevice.h>
 
 #include <part/Doc.h>
+#include <CellStorage.h>
 #include <Map.h>
 #include <Sheet.h>
 #include <RowColumnFormat.h>
@@ -221,11 +222,14 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet)
         o.writeRecord(b);
     }
 
-    {
-        IndexRecord ir(0);
-        // TODO
-        o.writeRecord(ir);
-    }
+    QRect area = sheet->usedArea();
+
+    IndexRecord ir(0);
+    ir.setRowMin(area.top()-1);
+    ir.setRowMaxPlus1(area.bottom());
+    int dbCellCount = ((area.height()+1)+31) / 32;
+    ir.setRowBlockCount(dbCellCount);
+    o.writeRecord(ir);
 
     o.writeRecord(CalcModeRecord(0));
     o.writeRecord(CalcCountRecord(0));
@@ -247,8 +251,7 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet)
     o.writeRecord(VCenterRecord(0));
     o.writeRecord(SetupRecord(0));
 
-    QRect area = sheet->usedArea();
-
+    ir.setDefColWidthPosition(o.pos());
     o.writeRecord(DefaultColWidthRecord(0)); // TODO: real defaultColWidthRecord
     {
         ColInfoRecord cir(0);
@@ -279,6 +282,64 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet)
     }
 
     // Row, CELL, DbCell
+    for (int i = 0; i < dbCellCount; i++) {
+        int firstRow = i*32 + area.top();
+        int lastRowP1 = qMin(firstRow+32, area.bottom());
+        qint64 firstRowPos = o.pos();
+
+        qint64 lastStart = -1;
+        for (int row = firstRow; row < lastRowP1; row++) {
+            RowRecord rr(0);
+
+            KSpread::Cell first = sheet->cellStorage()->firstInRow(row);
+            if (first.isNull()) first = KSpread::Cell(sheet, 1, row);
+            KSpread::Cell last = sheet->cellStorage()->lastInRow(row);
+            if (last.isNull()) last = first;
+            const KSpread::RowFormat* format = sheet->rowFormat(row);
+
+            rr.setRow(row-1);
+            rr.setFirstColumn(first.column()-1);
+            rr.setLastColumnPlus1(last.column());
+            rr.setHeight(format->height() * 20);
+
+            o.writeRecord(rr);
+            if (row == firstRow) lastStart = o.pos();
+        }
+
+        DBCellRecord db(0);
+        db.setRowCount(lastRowP1 - firstRow);
+        for (int row = firstRow; row < lastRowP1; row++) {
+            db.setCellOffset(row - firstRow, o.pos() - lastStart);
+            lastStart = o.pos();
+
+            KSpread::Cell first = sheet->cellStorage()->firstInRow(row);
+            if (first.isNull()) first = KSpread::Cell(sheet, 1, row);
+            KSpread::Cell last = sheet->cellStorage()->lastInRow(row);
+            if (last.isNull()) last = first;
+
+            for (int col = first.column(); col <= last.column(); col++) {
+                KSpread::Cell cell(sheet, col, row);
+
+                if (cell.value().isNumber()) {
+                    NumberRecord nr(0);
+                    nr.setRow(row-1);
+                    nr.setColumn(col-1);
+                    nr.setNumber(cell.value().asFloat());
+                    o.writeRecord(nr);
+                } else /*if (cell.isEmpty())*/ {
+                    BlankRecord br(0);
+                    br.setRow(row-1);
+                    br.setColumn(col-1);
+                    o.writeRecord(br);
+                }
+            }
+        }
+
+        db.setFirstRowOffset(o.pos() - firstRowPos);
+        o.writeRecord(db);
+    }
+
+    o.rewriteRecord(ir);
 
     o.writeRecord(Window2Record(0));
 
