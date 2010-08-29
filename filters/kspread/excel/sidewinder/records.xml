@@ -1175,7 +1175,10 @@
 </record>
 
 <!-- reserved/ignored records -->
-<record name="GridSetReserved" id="0x0082" />
+<record name="GridSetReserved" id="0x0082">
+  <field name="gridSetReserved" type="unsigned" size="16" default="1" />
+</record>
+
 <record name="Excel9File" id="0x01c0" />
 <record name="Compat12" id="0x088c" />
 
@@ -1309,47 +1312,120 @@
   <field name="reserved"                            size="7" />
 </record>
 
+<record name="Style" id="0x0293">
+  <field name="xfIndex"             type="unsigned" size="12" />
+  <field name="reserved"                            size="3" />
+  <field name="builtIn"             type="bool"     size="1" default="true" />
+  <field name="builtInType"         type="unsigned" size="8" />
+  <field name="builtInOutlineLevel" type="unsigned" size="8" default="0xFF" />
+  <if predicate="!isBuiltIn()">
+    <field name="nameLength"        type="unsigned" size="16" />
+    <field name="styleName"         type="unicodestring" length="nameLength" />
+  </if>
+</record>
+
+<record name="UsesELFs" id="0x0160">
+  <field name="usesElfs" type="bool" size="16" />
+</record>
+
+<record name="Country" id="0x008c">
+  <field name="countryDef"      type="unsigned" size="16" default="1" />
+  <field name="countryWinIni"   type="unsigned" size="16" default="1" />
+</record>
+
+<record name="ExtSST" id="0x00ff">
+  <field name="dsst"        type="unsigned" size="16" default="8" />
+  <array length="(recordSize() - 2) / 8" lengthField="groupCount">
+    <field name="ib"        type="unsigned" size="32" />
+    <field name="cbOffset"  type="unsigned" size="16" />
+    <field name="reserved"                  size="16" />
+  </array>
+</record>
+
+<record name="Index" id="0x020b">
+  <field name="reserved" size="32" />
+  <field name="rowMin" type="unsigned" size="32" />
+  <field name="rowMaxPlus1" type="unsigned" size="32" />
+  <field name="defColWidthPosition" type="unsigned" size="32" />
+  <array length="(recordSize() - 16) / 4" lengthField="rowBlockCount">
+    <field name="dbCellPosition" type="unsigned" size="32" />
+  </array>
+</record>
+
+<record name="DBCell" id="0x00d7">
+  <field name="firstRowOffset"  type="unsigned" size="32" />
+  <array length="(recordSize() - 4) / 2" lengthField="cellCount">
+    <field name="cellOffset"    type="unsigned" size="16" />
+  </array>
+</record>
+
+<record name="CalcCount" id="0x000c">
+  <field name="iterCount" type="signed" size="16" />
+</record>
+
+<record name="CalcRefMode" id="0x000f">
+  <field name="refA1" type="bool" size="16" default="true" />
+</record>
+
+<record name="CalcIter" id="0x0011">
+  <field name="iterativeCalcs" type="bool" size="16" />
+</record>
+
+<record name="CalcDelta" id="0x0010">
+  <field name="numDelta" type="float" size="64" />
+</record>
+
+<record name="CalcSaveRecalc" id="0x005f">
+  <field name="recalcBeforeSave" type="bool" size="16" />
+</record>
+
+<record name="PrintRowCol" id="0x002a">
+  <field name="printRowColHeaders" type="bool" size="16" />
+</record>
+
+<record name="PrintGrid" id="0x002b">
+  <field name="printGrid" type="bool" size="1" />
+  <field name="reserved"              size="15" />
+</record>
+
+<record name="Guts" id="0x0080">
+  <field name="reserved"                                size="16" />
+  <field name="reserved"                                size="16" />
+  <field name="maxRowOutlineLevel"      type="unsigned" size="16" />
+  <field name="maxColumnOutlineLevel"   type="unsigned" size="16" />
+</record>
+
+<record name="WsBool" id="0x0081">
+  <field name="showAutoBreaks"          type="bool" size="1" />
+  <field name="reserved"                            size="3" />
+  <field name="dialogSheet"             type="bool" size="1" />
+  <field name="applyStylesInOutline"    type="bool" size="1" />
+  <field name="rowSumsBelow"            type="bool" size="1" />
+  <field name="colSumsRight"            type="bool" size="1" />
+  <field name="fitToPage"               type="bool" size="1" />
+  <field name="reserved"                            size="1" />
+  <field name="reserved"                            size="2" />
+  <field name="syncHorizScrolling"      type="bool" size="1" />
+  <field name="syncVertScrolling"       type="bool" size="1" />
+  <field name="altExprEval"             type="bool" size="1" />
+  <field name="altFormulaEntry"         type="bool" size="1" />
+</record>
+
 <!-- TODO handle following records -->
 <record name="FeatHdr" id="0x0867">
-</record>
-<record name="Index" id="0x020b">
-</record>
-<record name="Guts" id="0x0080">
-</record>
-<record name="WsBool" id="0x0081">
 </record>
 <record name="HeaderFooter" id="0x089c">
 </record>
 <record name="PLV" id="0x088b">
-</record>
-<record name="CalcSaveRecalc" id="0x005f">
 </record>
 
 <record name="BuiltInFnGroupCount" id="0x009c">
 </record>
 <record name="RecalcId" id="0x01c1">
 </record>
-<record name="Style" id="0x0293">
-</record>
 <record name="StyleExt" id="0x0892">
 </record>
-<record name="ExtSST" id="0x00ff">
-</record>
-<record name="UsesELFs" id="0x0160">
-</record>
-<record name="DBCell" id="0x00d7">
-</record>
 <record name="PhoneticInfo" id="0x00ef">
-</record>
-<record name="CalcCount" id="0x000c">
-</record>
-<record name="CalcDelta" id="0x0010">
-</record>
-<record name="CalcIter" id="0x0011">
-</record>
-<record name="CalcRefMode" id="0x000f">
-</record>
-<record name="Country" id="0x008c">
 </record>
 <record name="Selection" id="0x001d">
   <field name="pnn" type="unsigned" size="8" />
@@ -1359,10 +1435,6 @@
   <field name="cref" type="unsigned" size="16" />
 </record>
 <record name="PrinterSettings" id="0x004d">
-</record>
-<record name="PrintRowCol" id="0x002a">
-</record>
-<record name="PrintGrid" id="0x002b">
 </record>
 <record name="XFExt" id="0x087d">
 </record>
