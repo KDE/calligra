@@ -20,11 +20,18 @@
 #ifndef EXCELEXPORT_H
 #define EXCELEXPORT_H
 
+#include <QHash>
+#include <QString>
+
 #include <KoFilter.h>
 #include <KoStore.h>
 
 namespace KSpread {
     class Sheet;
+}
+
+namespace Swinder {
+    class SSTRecord;
 }
 
 class ExcelExport : public KoFilter
@@ -40,6 +47,7 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
     void convertSheet(KSpread::Sheet* sheet);
+    void buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable);
 private:
     class Private;
     Private* d;

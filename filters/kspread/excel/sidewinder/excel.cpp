@@ -1151,6 +1151,7 @@ public:
     unsigned total;
     std::vector<QString> strings;
     std::vector<std::map<unsigned, unsigned> > formatRuns;
+    ExtSSTRecord* esst;
 };
 
 SSTRecord::SSTRecord(Workbook *book):
@@ -1158,6 +1159,7 @@ SSTRecord::SSTRecord(Workbook *book):
 {
     d = new SSTRecord::Private();
     d->total = 0;
+    d->esst = 0;
 }
 
 SSTRecord::~SSTRecord()
@@ -1210,9 +1212,18 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
 void SSTRecord::writeData(XlsRecordOutputStream &out) const
 {
+    unsigned dsst = qMax<unsigned>(8, (count() / 128)+1);
+    if (d->esst) {
+        d->esst->setDsst(dsst);
+        d->esst->setGroupCount((count() + dsst-1) / dsst);
+    }
     out.writeUnsigned(32, d->total);
-    out.writeUnsigned(32,count());
+    out.writeUnsigned(32, count());
     for (unsigned i = 0; i < count(); i++) {
+        if (i % dsst == 0 && d->esst) {
+            d->esst->setIb(i/dsst, out.pos());
+            d->esst->setCbOffset(i/dsst, out.recordPos() + 4);
+        }
         out.writeUnicodeStringWithFlagsAndLength(stringAt(i));
     }
 }
@@ -1220,6 +1231,21 @@ void SSTRecord::writeData(XlsRecordOutputStream &out) const
 unsigned SSTRecord::count() const
 {
     return d->strings.size();
+}
+
+unsigned SSTRecord::useCount() const
+{
+    return d->total;
+}
+
+void SSTRecord::setUseCount(unsigned count)
+{
+    d->total = count;
+}
+
+void SSTRecord::setExtSSTRecord(ExtSSTRecord *esst)
+{
+    d->esst = esst;
 }
 
 // why not just string() ? to avoid easy confusion with std::string

@@ -38,7 +38,18 @@ XlsRecordOutputStream::XlsRecordOutputStream(QIODevice* device)
 
 qint64 XlsRecordOutputStream::pos() const
 {
-    return m_dataStream.device()->pos();
+    if (m_currentRecord != NORECORD) {
+        return m_dataStream.device()->pos() + 4 + m_buffer->size();
+    } else {
+        return m_dataStream.device()->pos();
+    }
+}
+
+qint64 XlsRecordOutputStream::recordPos() const
+{
+    Q_ASSERT(m_currentRecord != NORECORD);
+    Q_ASSERT(m_curBitOffset == 0);
+    return m_buffer->size();
 }
 
 void XlsRecordOutputStream::writeRecord(const Record& record)

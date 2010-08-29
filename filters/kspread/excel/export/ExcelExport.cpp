@@ -35,6 +35,7 @@
 #include <Map.h>
 #include <Sheet.h>
 #include <RowColumnFormat.h>
+#include <ValueStorage.h>
 #include <kspread_limits.h>
 
 #include <swinder.h>
@@ -175,13 +176,18 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
 
     o.writeRecord(CountryRecord(0));
 
-    // TODO: proper SST
-    o.startRecord(SSTRecord::id);
-    o.writeUnsigned(32, 0);
-    o.writeUnsigned(32, 0);
-    o.endRecord();
+    QHash<QString, unsigned> stringTable;
+    {
+        SSTRecord sst(0);
+        ExtSSTRecord esst(0);
+        sst.setExtSSTRecord(&esst);
+        for (int i = 0; i < d->inputDoc->map()->count(); i++) {
+            buildStringTable(d->inputDoc->map()->sheet(i), sst, stringTable);
+        }
+        o.writeRecord(sst);
+        o.writeRecord(esst);
+    }
 
-    o.writeRecord(ExtSSTRecord(0));
     o.writeRecord(EOFRecord(0));
 
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
@@ -210,6 +216,23 @@ static unsigned convertColumnWidth(qreal width)
         }
     }
     return width / factor * 256;
+}
+
+void ExcelExport::buildStringTable(KSpread::Sheet* sheet, Swinder::SSTRecord& sst, QHash<QString, unsigned>& stringTable)
+{
+    unsigned useCount = 0;
+    const KSpread::ValueStorage* values = sheet->cellStorage()->valueStorage();
+    for (int i = 0; i < values->count(); i++) {
+        KSpread::Value v = values->data(i);
+        if (v.isString()) {
+            QString s = v.asString();
+            if (!stringTable.contains(s)) {
+                stringTable.insert(s, sst.addString(s));
+            }
+            useCount++;
+        }
+    }
+    sst.setUseCount(sst.useCount() + useCount);
 }
 
 void ExcelExport::convertSheet(KSpread::Sheet* sheet)

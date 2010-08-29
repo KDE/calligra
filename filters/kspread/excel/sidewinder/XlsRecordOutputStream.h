@@ -57,6 +57,7 @@ public:
     void writeBlob(const QByteArray& value);
 
     qint64 pos() const;
+    qint64 recordPos() const;
 private:
     QDataStream m_dataStream;
     unsigned m_currentRecord;

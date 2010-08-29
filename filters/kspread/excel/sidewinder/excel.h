@@ -720,6 +720,11 @@ public:
      */
     unsigned count() const;
 
+    unsigned useCount() const;
+    void setUseCount(unsigned count);
+
+    void setExtSSTRecord(ExtSSTRecord* esst);
+
     /**
       Returns the string at specified index.
       Note that index must be less than count().
