@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPAGEPROPERTIESCOMMAND_H
-#define KWPAGEPROPERTIESCOMMAND_H
+#ifndef KWPAGESTYLEPROPERTIESCOMMAND_H
+#define KWPAGESTYLEPROPERTIESCOMMAND_H
 
 #include "../kword_export.h"
 #include "../KWPage.h"
@@ -36,7 +36,7 @@ class KWPage;
  * When altering the size of a page this command will also reposition all required
  * frames to account for the changes.
  */
-class KWORD_TEST_EXPORT KWPagePropertiesCommand : public QUndoCommand
+class KWORD_TEST_EXPORT KWPageStylePropertiesCommand : public QUndoCommand
 {
 public:
     /**
@@ -47,7 +47,7 @@ public:
      * @param direction the new page layout direction
      * @param parent the parent for macro command functionality
      */
-    explicit KWPagePropertiesCommand(KWDocument *document, const KWPage &page, const KoPageLayout &newLayout, KoText::Direction direction, const KoColumns &columns, QUndoCommand *parent = 0);
+    explicit KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, QUndoCommand *parent = 0);
 
     /// redo the command
     virtual void redo();
@@ -55,13 +55,10 @@ public:
     virtual void undo();
 
 private:
-    void setLayout(const KoPageLayout &layout);
-
     KWDocument *m_document;
-    KWPage m_page;
-    KoPageLayout m_oldLayout, m_newLayout;
-    KoColumns m_oldColumns, m_newColumns;
-    KoText::Direction m_oldDirection, m_newDirection;
+    KWPageStyle m_style; // the user style we change
+    KWPageStyle m_styleBefore; // one detached set of properties
+    KWPageStyle m_styleAfter; // another detached set of properties
 };
 
 #endif

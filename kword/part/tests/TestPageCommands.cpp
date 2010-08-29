@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005,2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #include <KWDocument.h>
 #include <commands/KWPageInsertCommand.h>
 #include <commands/KWPageRemoveCommand.h>
-#include <commands/KWPagePropertiesCommand.h>
+#include <commands/KWPageStylePropertiesCommand.h>
 #include <commands/KWNewPageStyleCommand.h>
 #include <frames/KWTextFrame.h>
 #include <frames/KWTextFrameSet.h>
@@ -432,7 +432,7 @@ void TestPageCommands::testRemovePageCommand4() // auto remove of frames
     QCOMPARE(header->frameCount(), 0); // doesn't get auto-added
 }
 
-void TestPageCommands::testPagePropertiesCommand() // basic properties change
+void TestPageCommands::testPageStylePropertiesCommand() // basic properties change
 {
     KWDocument document;
     KWPageManager *manager = document.pageManager();
@@ -465,6 +465,7 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     QCOMPARE(page1.pageSide(), KWPage::Right);
 
     // new ;)
+    KWPageStyle style2("pagestyle2");
     KoPageLayout newLayout;
     newLayout.width = 401;
     newLayout.height = 405;
@@ -472,11 +473,14 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     newLayout.rightMargin = 18;
     newLayout.pageEdge = -1;
     newLayout.bindingSide = -1;
+    style2.setPageLayout(newLayout);
     KoColumns newColumns;
     newColumns.columns = 2;
     newColumns.columnSpacing = 12;
+    style2.setColumns(newColumns);
+    style2.setDirection(KoText::RightLeftTopBottom);
 
-    KWPagePropertiesCommand command(&document, page1, newLayout, KoText::RightLeftTopBottom, newColumns);
+    KWPageStylePropertiesCommand command1(&document, style, style2);
 
     // nothing changed before the redo
     QCOMPARE(page1.width(), 101.);
@@ -485,11 +489,16 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     QCOMPARE(page1.pageEdgeMargin(), 7.);
     QCOMPARE(page1.directionHint(), KoText::LeftRightTopBottom);
 
-    command.redo();
+    // redo
+    command1.redo();
+    QCOMPARE(page1.pageStyle().name(), QString("pagestyle1")); // name didn't change
     QCOMPARE(page1.width(), 401.);
     QCOMPARE(page1.height(), 405.);
     QCOMPARE(page1.leftMargin(), 11.);
     QCOMPARE(page1.pageEdgeMargin(), -1.); // its a right-sided page
+    QCOMPARE(page1.pageStyle().direction(), KoText::RightLeftTopBottom);
+    QCOMPARE(page1.directionHint(), KoText::LeftRightTopBottom);
+    page1.setDirectionHint(KoText::InheritDirection); // reset to what the style says
     QCOMPARE(page1.directionHint(), KoText::RightLeftTopBottom);
     QCOMPARE(style.pageLayout().width, 401.); // style changed
     QCOMPARE(page1.pageStyle().columns().columns, 2);
@@ -507,70 +516,28 @@ void TestPageCommands::testPagePropertiesCommand() // basic properties change
     QVERIFY(!manager->page(3).isValid());
     QCOMPARE(page2.pageNumber(), 2);
     QCOMPARE(page2.pageSide(), KWPage::Left);
-}
 
-void TestPageCommands::testMakePageSpread()
-{
-    KWDocument document;
-    KWPageManager *manager = document.pageManager();
-
-    KWPageStyle style("pagestyle1");
-    KoPageLayout layout = style.pageLayout();
-
-    manager->addPageStyle(style);
-    KWPage page1 = manager->appendPage(style);
-    QCOMPARE(page1.width(), layout.width);
+    // undo
+    command1.undo();
+    QCOMPARE(page1.pageStyle().name(), QString("pagestyle1")); // name didn't change
+    QCOMPARE(page1.width(), 101.);
+    QCOMPARE(page1.height(), 102.);
+    QCOMPARE(page1.leftMargin(), 13.);
+    QCOMPARE(page1.directionHint(), KoText::AutoDirection);
+    QCOMPARE(style.pageLayout().width, 101.);
+    QCOMPARE(page1.pageStyle().columns().columns, 4);
     QCOMPARE(page1.pageNumber(), 1);
     QCOMPARE(page1.pageSide(), KWPage::Right);
-    QCOMPARE(manager->pageCount(), 1);
-    // make it a pagespread
-    layout.leftMargin = -1;
-    layout.rightMargin = -1;
-    layout.pageEdge = 7;
-    layout.bindingSide = 13;
-    KWPagePropertiesCommand cmd1(&document, page1, layout,
-        style.direction(), style.columns());
-    cmd1.redo();
-    QCOMPARE(page1.pageNumber(), 1);
-    QCOMPARE(page1.pageSide(), KWPage::Right);
-    QCOMPARE(page1.width(), style.pageLayout().width);
-    QCOMPARE(manager->pageCount(), 1);
-    KoPageLayout newLayout = style.pageLayout();
-    QCOMPARE(newLayout.width, layout.width);
-    QCOMPARE(newLayout.leftMargin, layout.leftMargin);
-    QCOMPARE(newLayout.rightMargin, layout.rightMargin);
-    QCOMPARE(newLayout.pageEdge, layout.pageEdge);
-    QCOMPARE(newLayout.bindingSide, layout.bindingSide);
-
-    cmd1.undo();
-    QCOMPARE(page1.width(), style.pageLayout().width);
-    QCOMPARE(page1.pageNumber(), 1);
-    QCOMPARE(page1.pageSide(), KWPage::Right);
-    QCOMPARE(manager->pageCount(), 1);
-
-    // create another page. So we have 2 single sided pages. (Right/Left)
-    KWPage page2 = manager->appendPage(style);
-    QCOMPARE(page2.width(), style.pageLayout().width);
+    QCOMPARE(manager->pageCount(), 2);
+    QVERIFY(manager->page(1).isValid());
+    QVERIFY(manager->page(2).isValid());
+    QVERIFY(!manager->page(3).isValid());
     QCOMPARE(page2.pageNumber(), 2);
     QCOMPARE(page2.pageSide(), KWPage::Left);
-    QCOMPARE(manager->pageCount(), 2);
-
-    // avoid reusing cmd1 as that assumes the constructor doens't do anything. Which is
-    // not a restriction we put on the command. (i.e. that doesn't *have* to work)
-    KWPagePropertiesCommand cmd2(&document, page1, layout,
-        style.direction(), style.columns());
-    cmd2.redo();
-
-    QCOMPARE(page1.width(), style.pageLayout().width);
-    QCOMPARE(page1.pageNumber(), 1);
-    QCOMPARE(page1.pageSide(), KWPage::Right);
-    QCOMPARE(page2.pageNumber(), 2);
-    QCOMPARE(page2.pageSide(), KWPage::PageSpread);
-    QCOMPARE(page2.width(), style.pageLayout().width * 2);
-    QCOMPARE(manager->pageCount(), 3);
-
-    cmd2.undo();
-    // test for page side etc.
+    QCOMPARE(page2.width(), 101.); // same style
+    QCOMPARE(page2.height(), 102.);
+    QCOMPARE(page2.leftMargin(), 7.);
+    QCOMPARE(page2.directionHint(), KoText::AutoDirection);
 }
 
 void TestPageCommands::testNewPageStyleCommand()

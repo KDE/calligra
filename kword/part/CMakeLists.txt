@@ -58,7 +58,7 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWInsertPageDialog.cpp
     dockers/KWStatisticsDocker.cpp
 
-    commands/KWPagePropertiesCommand.cpp
+    commands/KWPageStylePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
     commands/KWPageRemoveCommand.cpp
     commands/KWNewPageStyleCommand.cpp

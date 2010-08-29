@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005-2006,2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,8 +36,7 @@ private slots: // tests
     void testRemovePageCommand2();
     void testRemovePageCommand3();
     void testRemovePageCommand4();
-    void testPagePropertiesCommand();
-    void testMakePageSpread();
+    void testPageStylePropertiesCommand();
     void testNewPageStyleCommand();
 };
 

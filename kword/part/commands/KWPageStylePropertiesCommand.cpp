@@ -17,9 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPagePropertiesCommand.h"
+#include "KWPageStylePropertiesCommand.h"
 #include "KWDocument.h"
 #include "KWPage.h"
+#include "KWPageStyle_p.h"
 #include "frames/KWFrame.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrameLayout.h"
@@ -31,18 +32,30 @@
 #include <KLocale>
 #include <KDebug>
 
-KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWPage &page,
-        const KoPageLayout &newLayout, KoText::Direction direction, const KoColumns &columns, QUndoCommand *parent)
+KWPageStylePropertiesCommand::KWPageStylePropertiesCommand(KWDocument *document, const KWPageStyle &styleBefore, const KWPageStyle &styleAfter, QUndoCommand *parent)
     : QUndoCommand(i18n("Page Properties"), parent),
     m_document(document),
-    m_page(page),
-    m_oldLayout(page.pageStyle().pageLayout()),
-    m_newLayout(newLayout),
-    m_oldColumns(page.pageStyle().columns()),
-    m_newColumns(columns),
-    m_oldDirection(page.directionHint()),
-    m_newDirection(direction)
+    m_style(styleBefore),
+    m_styleBefore(styleBefore),
+    m_styleAfter(styleAfter)
 {
+    Q_ASSERT(m_styleAfter != m_styleBefore); // would be kinda useless
+    m_styleBefore.detach("dummy"); // all mine now!
+    m_styleAfter.detach("dummy"); // all mine now!
+
+    // figure out which pages change.
+    // create a list of  QMap<qreal /* posInDocument */, qreal *distance */ >
+    //   which indicates that all frames after posInDocument have to move 'distance'
+    // loop over all frames in the doc and move all of them using commands
+
+    // if the change includes a pageSpread change
+    //   loop over all pages that this style is assigned to and auto-delete or auto-create new pages
+    //   * Notice we can't use the pageRemove command for that, so just store page numbers
+    //   to delete and store pagenumbers to insert after.
+    //   loop over all pages after the first changed one and set the pageSide. (seems we get to
+    //      keep the setLayout() method :P)
+
+#if 0
     // move
     QList<KoShape *> shapes;
     QList<QPointF> previousPositions;
@@ -81,29 +94,31 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
 
     if (page.pageNumber() % 2 == 0 && newLayout.leftMargin < 0)
         new KWPageInsertCommand(m_document, page.pageNumber(), QString(), this);
+#endif
 }
 
-void KWPagePropertiesCommand::redo()
+void KWPageStylePropertiesCommand::redo()
 {
     QUndoCommand::redo();
-    setLayout(m_newLayout);
-    m_page.pageStyle().setColumns(m_newColumns);
-    m_page.setDirectionHint(m_newDirection);
+    m_style.priv()->copyProperties(m_styleAfter.priv());
+#if 0
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
+#endif
 }
 
-void KWPagePropertiesCommand::undo()
+void KWPageStylePropertiesCommand::undo()
 {
     QUndoCommand::undo();
-    setLayout(m_oldLayout);
-    m_page.pageStyle().setColumns(m_oldColumns);
-    m_page.setDirectionHint(m_oldDirection);
+    m_style.priv()->copyProperties(m_styleBefore.priv());
+#if 0
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
+#endif
 }
 
-void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout)
+#if 0
+void KWPageStylePropertiesCommand::setLayout(const KoPageLayout &layout)
 {
     KWPageStyle style = m_page.pageStyle();
     style.setPageLayout(layout);
@@ -116,3 +131,4 @@ void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout)
             page.setPageSide(page.pageNumber() % 2 == 0 ? KWPage::Left : KWPage::Right);
     }
 }
+#endif

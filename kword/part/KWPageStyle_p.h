@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,6 +47,29 @@ public:
     KoText::Direction direction;
     KoShapeBackground *fullPageBackground;
     QString nextStyleName;
+
+    // called from the command
+    void copyProperties(KWPageStylePrivate *other) {
+        columns = other->columns;
+        pageLayout = other->pageLayout;
+        //name = other->name;
+        mainFrame = other->mainFrame;
+        headerDistance = other->headerDistance;
+        footerDistance = other->footerDistance;
+        footNoteDistance = other->footNoteDistance;
+        endNoteDistance = other->endNoteDistance;
+        headerMinimumHeight = other->headerMinimumHeight;
+        footerMinimumHeight = other->footerMinimumHeight;
+        headers = other->headers;
+        footers = other->footers;
+        footNoteSeparatorLineWidth = other->footNoteSeparatorLineWidth;
+        footNoteSeparatorLineLength = other->footNoteSeparatorLineLength;
+        footNoteSeparatorLineType = other->footNoteSeparatorLineType;
+        footNoteSeparatorLinePos = other->footNoteSeparatorLinePos;
+        direction = other->direction;
+        fullPageBackground = other->fullPageBackground;
+        nextStyleName = other->nextStyleName;
+    }
 };
 
 #endif
