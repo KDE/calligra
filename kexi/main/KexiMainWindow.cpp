@@ -4253,6 +4253,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         currentWindow()->selectedView()->propertySetSwitched();
 //  activeWindowChanged(window, previousWindow);
     }
+    invalidateProjectWideActions();
     return window;
 }
 
