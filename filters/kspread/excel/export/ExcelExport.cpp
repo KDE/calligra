@@ -20,12 +20,16 @@
 #include <ExcelExport.h>
 #include <ExcelExport.moc>
 
+#include <QMap>
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
 #include <KoFilterChain.h>
 
 #include <part/Doc.h>
+#include <Map.h>
+#include <Sheet.h>
 
 #include <swinder.h>
 #include <XlsRecordOutputStream.h>
@@ -42,7 +46,7 @@ class ExcelExport::Private
 public:
     const KSpread::Doc* inputDoc;
     QString outputFile;
-
+    XlsRecordOutputStream* out;
 };
 
 ExcelExport::ExcelExport(QObject* parent, const QStringList&)
@@ -79,20 +83,102 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     w.open(d->outputFile);
     QIODevice* a = w.openSubStream("Workbook");
     XlsRecordOutputStream o(a);
-
-    BOFRecord b(0);
-    b.setType(BOFRecord::Workbook);
-    b.setRecordSize(16);
-    o.writeRecord(b);
+    d->out = &o;
+    {
+        BOFRecord b(0);
+        b.setType(BOFRecord::Workbook);
+        b.setRecordSize(16);
+        o.writeRecord(b);
+    }
 
     o.writeRecord(InterfaceHdrRecord(0));
     o.writeRecord(MmsReservedRecord(0));
     o.writeRecord(InterfaceEndRecord(0));
 
-    LastWriteAccessRecord lwar(0);
-    lwar.setUserName("marijn"); // TODO: figure out real username
-    lwar.setUnusedBlob(QByteArray(112 - 3 - 2*lwar.userName().length(), ' '));
-    o.writeRecord(lwar);
+    {
+        LastWriteAccessRecord lwar(0);
+        lwar.setUserName("marijn"); // TODO: figure out real username
+        lwar.setUnusedBlob(QByteArray(112 - 3 - 2*lwar.userName().length(), ' '));
+        o.writeRecord(lwar);
+    }
+
+    o.writeRecord(CodePageRecord(0));
+    o.writeRecord(DSFReservedRecord(0));
+
+    {
+        RRTabIdRecord rrti(0);
+        rrti.setSheetCount(d->inputDoc->map()->count());
+        for (int i = 0; i < d->inputDoc->map()->count(); i++) {
+            rrti.setSheetId(i, i+1);
+        }
+        o.writeRecord(rrti);
+    }
+
+    o.writeRecord(WinProtectRecord(0));
+    o.writeRecord(ProtectRecord(0));
+    o.writeRecord(PasswordRecord(0));
+    o.writeRecord(Prot4RevRecord(0));
+    o.writeRecord(Prot4RevPassRecord(0));
+
+    o.writeRecord(Window1Record(0));
+    o.writeRecord(BackupRecord(0));
+    o.writeRecord(HideObjRecord(0));
+    o.writeRecord(DateModeRecord(0));
+    o.writeRecord(CalcPrecisionRecord(0));
+    o.writeRecord(RefreshAllRecord(0));
+    o.writeRecord(BookBoolRecord(0));
+
+    {
+        FontRecord fnt(0);
+        fnt.setFontName("Arial");
+        o.writeRecord(fnt);
+    }
+
+    QMap<int, QString> formats;
+    formats.insert(5, QString::fromUtf8("#,##0\\ \"€\";\\-#,##0\\ \"€\""));
+    formats.insert(6, QString::fromUtf8("#,##0\\ \"€\";[Red]\\-#,##0\\ \"€\""));
+    formats.insert(7, QString::fromUtf8("#,##0.00\\ \"€\";\\-#,##0.00\\ \"€\""));
+    formats.insert(8, QString::fromUtf8("#,##0.00\\ \"€\";[Red]\\-#,##0.00\\ \"€\""));
+    formats.insert(41, QString::fromUtf8("_-* #,##0\\ _€_-;\\-* #,##0\\ _€_-;_-* \"-\"\\ _€_-;_-@_-"));
+    formats.insert(42, QString::fromUtf8("_-* #,##0\\ \"€\"_-;\\-* #,##0\\ \"€\"_-;_-* \"-\"\\ \"€\"_-;_-@_-"));
+    formats.insert(43, QString::fromUtf8("_-* #,##0.00\\ _€_-;\\-* #,##0.00\\ _€_-;_-* \"-\"??\\ _€_-;_-@_-"));
+    formats.insert(44, QString::fromUtf8("_-* #,##0.00\\ \"€\"_-;\\-* #,##0.00\\ \"€\"_-;_-* \"-\"??\\ \"€\"_-;_-@_-"));
+    for (QMap<int, QString>::iterator i = formats.begin(); i != formats.end(); ++i) {
+        FormatRecord fr(0);
+        fr.setIndex(i.key());
+        fr.setFormatString(i.value());
+        o.writeRecord(fr);
+    }
+
+    // XLS requires 16 XF records for some reason
+    for (int i = 0; i < 16; i++) {
+        o.writeRecord(XFRecord(0));
+    }
+
+    o.writeRecord(StyleRecord(0));
+    o.writeRecord(UsesELFsRecord(0));
+
+    for (int i = 0; i < d->inputDoc->map()->count(); i++) {
+        BoundSheetRecord bsr(0);
+        bsr.setSheetName(d->inputDoc->map()->sheet(i)->sheetName());
+        o.writeRecord(bsr);
+        // TODO: set bofPosition
+    }
+
+    o.writeRecord(CountryRecord(0));
+
+    // TODO: proper SST
+    o.startRecord(SSTRecord::id);
+    o.writeUnsigned(32, 0);
+    o.writeUnsigned(32, 0);
+    o.endRecord();
+
+    o.writeRecord(ExtSSTRecord(0));
+    o.writeRecord(EOFRecord(0));
+
+    for (int i = 0; i < d->inputDoc->map()->count(); i++) {
+        convertSheet(d->inputDoc->map()->sheet(i));
+    }
 
     delete a;
     w.close();
@@ -100,6 +186,59 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     emit sigProgress(100);
 
     return KoFilter::OK;
+}
+
+void ExcelExport::convertSheet(KSpread::Sheet* sheet)
+{
+    XlsRecordOutputStream& o = *d->out;
+    {
+        BOFRecord b(0);
+        b.setType(BOFRecord::Worksheet);
+        b.setRecordSize(16);
+        o.writeRecord(b);
+    }
+
+    {
+        IndexRecord ir(0);
+        // TODO
+        o.writeRecord(ir);
+    }
+
+    o.writeRecord(CalcModeRecord(0));
+    o.writeRecord(CalcCountRecord(0));
+    o.writeRecord(CalcRefModeRecord(0));
+    o.writeRecord(CalcIterRecord(0));
+    o.writeRecord(CalcDeltaRecord(0));
+    o.writeRecord(CalcSaveRecalcRecord(0));
+    o.writeRecord(PrintRowColRecord(0));
+    o.writeRecord(PrintGridRecord(0));
+    o.writeRecord(GridSetReservedRecord(0));
+    o.writeRecord(GutsRecord(0));
+
+    o.writeRecord(DefaultRowHeightRecord(0));
+    o.writeRecord(WsBoolRecord(0));
+
+    o.writeRecord(HeaderRecord(0));
+    o.writeRecord(FooterRecord(0));
+    o.writeRecord(HCenterRecord(0));
+    o.writeRecord(VCenterRecord(0));
+    o.writeRecord(SetupRecord(0));
+
+    o.writeRecord(DefaultColWidthRecord(0));
+    // ColInfo
+
+    {
+        DimensionRecord dr(0);
+        o.writeRecord(dr);
+    }
+
+    // Row, CELL, DbCell
+
+    o.writeRecord(Window2Record(0));
+
+    // MergeCells
+
+    o.writeRecord(EOFRecord(0));
 }
 
 

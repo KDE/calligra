@@ -23,6 +23,10 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
+namespace KSpread {
+    class Sheet;
+}
+
 class ExcelExport : public KoFilter
 {
 
@@ -35,6 +39,7 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
+    void convertSheet(KSpread::Sheet* sheet);
 private:
     class Private;
     Private* d;
