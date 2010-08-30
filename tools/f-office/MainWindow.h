@@ -43,9 +43,10 @@
 #include "FoCellTool.h"
 #include "VirtualKeyBoard.h"
 #include "FoCellToolFactory.h"
-
+#include "DigitalSignatureDialog.h"
 
 #ifdef Q_WS_MAEMO_5
+#include "FoDocumentRdf.h"
 #include "Accelerator.h"
 #endif
 
@@ -843,6 +844,11 @@ private slots:
      * Slot for progress indicator
      */
     //void slotProgress(int value);
+    /*!
+     * Slot to show digital signature information
+     */
+    void showDigitalSignatureInfo();
+
 public slots:
     /*!
      * Slot to perform save operation
@@ -974,6 +980,14 @@ private:
      * Tool bar for spread sheet.
      */
     QToolBar *m_spreadEditToolBar;
+
+    DigitalSignatureDialog *digitalSignatureDialog;
+
+#ifdef Q_WS_MAEMO_5
+    FoDocumentRdf *foDocumentRdf;
+
+    QShortcut *rdfShortcut;
+#endif
 signals:
     /*!
      * Presentation has entered full screen mode.

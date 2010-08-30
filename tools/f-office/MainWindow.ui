@@ -130,7 +130,7 @@
    <addaction name="separator"/>
    <addaction name="actionFormat"/>
    <addaction name="actionMathOp"/>
-   </widget>
+  </widget>
   <action name="actionSearch">
    <property name="checkable">
     <bool>true</bool>
@@ -475,6 +475,11 @@
   <action name="actionPresentation">
    <property name="text">
     <string>Presentation</string>
+   </property>
+  </action>
+  <action name="actionDigitalSignature">
+   <property name="text">
+    <string>Digital Signature</string>
    </property>
   </action>
  </widget>

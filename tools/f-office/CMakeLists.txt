@@ -6,26 +6,41 @@ find_package(Qt4 4.5.0 REQUIRED)
 SET(QT_USE_QTDBUS 1)
 SET(QT_USE_QTNETWORK TRUE)
 SET(QT_USE_QTMAEMO5 TRUE)
+SET(QT_USE_QTXML TRUE)
 INCLUDE(${QT_USE_FILE})
 
-include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kspread/part ${CMAKE_SOURCE_DIR}/kspread)
+include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kspread/part ${CMAKE_SOURCE_DIR}/kspread /usr/include/libxml2)
 
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})
 
-QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
-
-QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  FlowLayout.h PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h RemoveSheet.h)
-
-add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp
-  ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
-
 find_library( QT_QMAEMO5_LIBRARY QtMaemo5 HINTS ${QT_LIBRARIES} )
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+
+QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
+
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  FlowLayout.h PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h RemoveSheet.h DigitalSignatureDialog.h FoDocumentRdf.h RdfInfoDialog.h)
+
+add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp DigitalSignatureDialog.cpp FoDocumentRdf.cpp RdfInfoDialog.cpp
+  ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
+
 else(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon)
+
+QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
+
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h OfficeInterface.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  FlowLayout.h PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h RemoveSheet.h DigitalSignatureDialog.h)
+
+add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp DigitalSignatureDialog.cpp
+  ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
+
+endif(QT_QMAEMO5_LIBRARY)
+
+
+if(QT_QMAEMO5_LIBRARY)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon xml2 ssl crypto soprano rdf)
+else(QT_QMAEMO5_LIBRARY)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon xml2 ssl crypto)
 endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)

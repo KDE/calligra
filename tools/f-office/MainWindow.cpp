@@ -244,7 +244,8 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_sheetInfoFrameLayout(0),
         m_addSheet(0),
         m_removeSheet(0),
-        m_sheetName(0)
+        m_sheetName(0),
+        digitalSignatureDialog(0)
 {
     init();
 }
@@ -273,10 +274,10 @@ void MainWindow::init()
     menu->addAction(m_ui->actionNew);
     menu->addAction(m_ui->actionSave);
     menu->addAction(m_ui->actionSaveAs);
+    menu->addAction(m_ui->actionPresentation);
     menu->addAction(m_ui->actionClose);
     menu->addAction(m_ui->actionAbout);
    // menu->addAction(m_ui->actionCollaborate);
-    menu->addAction(m_ui->actionPresentation);
     // false here means that they are not plugins
     m_ui->actionOpen->setData(QVariant(false));
     m_ui->actionAbout->setData(QVariant(false));
@@ -1852,6 +1853,29 @@ void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
 
    m_ui->actionSearch->setChecked(false);
    m_undostack = m_doc->undoStack();
+   if(m_type==Text && !isNewDocument){
+       digitalSignatureDialog=new DigitalSignatureDialog(this->m_fileName);
+        if(digitalSignatureDialog->verifySignature()){
+            QMenuBar* menu = menuBar();
+            menu->insertAction(m_ui->actionClose,m_ui->actionDigitalSignature);
+            connect(m_ui->actionDigitalSignature,SIGNAL(triggered()),this,SLOT(showDigitalSignatureInfo()));
+        }
+   }
+#ifdef Q_WS_MAEMO_5
+   if(m_type==Text)
+   {
+       /*
+        * intialising the rdf
+        */
+       KoStore::Backend backend = KoStore::Auto;
+       KoStore * store = KoStore::createStore(fileName, KoStore::Read, "", backend);
+
+       foDocumentRdf=new FoDocumentRdf(m_doc,m_editor);
+       foDocumentRdf->loadOasis(store);
+       rdfShortcut= new QShortcut(QKeySequence(("Ctrl+R")),this);
+       connect(rdfShortcut,SIGNAL(activated()),foDocumentRdf,SLOT(highlightRdf()));
+   }
+#endif
 }
 
 void MainWindow::closeDoc(bool isWindowClosed)
@@ -2332,6 +2356,18 @@ void MainWindow::closeDocument()
 {
     if (m_doc == NULL)
         return;
+#ifdef Q_WS_MAEMO_5
+    if(foDocumentRdf && m_type==Text){
+        disconnect(rdfShortcut,SIGNAL(activated()),foDocumentRdf,SLOT(highlightRdf()));
+        delete rdfShortcut;
+    }
+#endif
+    if(m_type==Text && digitalSignatureDialog){
+        disconnect(m_ui->actionDigitalSignature,SIGNAL(triggered()),this,SLOT(showDigitalSignatureInfo()));
+        QMenuBar* menu = menuBar();
+        menu->removeAction(m_ui->actionDigitalSignature);
+        delete digitalSignatureDialog;
+    }
 
     setWindowTitle(i18n("FreOffice"));
     setCentralWidget(0);
@@ -2560,6 +2596,11 @@ void MainWindow::updateUI()
 
 void MainWindow::resourceChanged(int key, const QVariant &value)
 {
+#ifdef Q_WS_MAEMO_5
+    if(m_type==Text && m_ui->actionEdit->isChecked()){
+        foDocumentRdf->findStatements(*m_editor->cursor(), 1);
+    }
+#endif
     if( ( m_pptTool ) && m_pptTool->toolsActivated() && m_type == Presentation ) {
         return;
     }
@@ -3819,4 +3860,12 @@ void MainWindow::glPresenterSet(int a , int b)
 {
     gl_showtime = b * 1000;
     gl_style = a;
+}
+
+void MainWindow::showDigitalSignatureInfo()
+{
+    if(digitalSignatureDialog){
+        digitalSignatureDialog->initializeDialog();
+        digitalSignatureDialog->exec();
+    }
 }
