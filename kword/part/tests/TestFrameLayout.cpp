@@ -542,8 +542,7 @@ void TestFrameLayout::testPageBackground()
     connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
 
     KWPage page1 = helper.pageManager->page(1);
-    KoColorBackground background1(Qt::red);
-    page1.pageStyle().setBackground(&background1);
+    page1.pageStyle().setBackground(new KoColorBackground(Qt::red));
 
     KWPageStyle style2("No Background");
     helper.pageManager->addPageStyle(style2);
