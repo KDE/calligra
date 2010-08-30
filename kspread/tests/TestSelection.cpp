@@ -21,8 +21,6 @@
 
 #include <qtest_kde.h>
 
-#define kWarning qWarning
-
 #include "part/Canvas.h"
 #include "Map.h"
 #include "Selection.h"
