@@ -462,6 +462,8 @@ uint qHash(const KWPageStyle &style)
 
 void KWPageStyle::detach(const QString &newName)
 {
+    if (d->fullPageBackground)
+        d->fullPageBackground->ref();
     d.detach();
     d->name = newName;
 }
