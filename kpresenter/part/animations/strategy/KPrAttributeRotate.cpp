@@ -33,7 +33,7 @@ KPrAttributeRotate::KPrAttributeRotate() : KPrAnimationAttribute("rotate")
 
 void KPrAttributeRotate::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value)
 {
-    qreal tx, ty = 0.0;
+    qreal tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
     KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
     QTransform transform;
