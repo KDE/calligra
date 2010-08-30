@@ -86,9 +86,9 @@ class AbstractNode
         const QString m_tagName;
         explicit AbstractNode(const QString &tagName) : m_tagName(tagName), m_parent(0) {}
         virtual ~AbstractNode() { qDeleteAll(m_children); }
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             foreach(AbstractNode* node, m_children)
-                node->dump(level + 1);
+                node->dump(context, level + 1);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             Q_UNUSED(context);
@@ -143,9 +143,9 @@ class PointNode : public AbstractNode
         QString m_cxnId;
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "modelId=" << m_modelId << "type=" << m_type << "cxnId=" << m_cxnId;
-            AbstractNode::dump(level);
+            AbstractNode::dump(context, level);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             Q_UNUSED(context);
@@ -178,9 +178,9 @@ class PointListNode : public AbstractNode
     public:
         explicit PointListNode() : AbstractNode("dgm:ptLst") {}
         virtual ~PointListNode() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             //DEBUG_DUMP;
-            AbstractNode::dump(level);
+            AbstractNode::dump(context, level);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
@@ -207,7 +207,7 @@ class ConnectionNode : public AbstractNode
         int m_destOrd;
         explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
         virtual ~ConnectionNode() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "modelId=" << m_modelId << "type=" << m_type << "srcId=" << m_srcId << "destId=" << m_destId;
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -233,9 +233,9 @@ class ConnectionListNode : public AbstractNode
     public:
         explicit ConnectionListNode() : AbstractNode("dgm:cxnLst") {}
         virtual ~ConnectionListNode() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             //DEBUG_DUMP;
-            AbstractNode::dump(level);
+            AbstractNode::dump(context, level);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
@@ -259,8 +259,8 @@ class AbstractAtom : public AbstractNode
     public:
         explicit AbstractAtom(const QString &tagName) : AbstractNode(tagName) {}
         virtual ~AbstractAtom() {}
-        virtual void dump(int level) {
-            AbstractNode::dump(level);
+        virtual void dump(Context* context, int level) {
+            AbstractNode::dump(context, level);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -286,43 +286,9 @@ class AbstractAtom : public AbstractNode
         //QList<AbstractAtom*> relationship(Context* context, const QString &rel) const;
         //QList<ConstraintAtom*> constraints() const { return m_constraints; }
         //void addConstraint(ConstraintAtom* constraint) { m_constraints << constraint; }
-};
 
-/// The layout node is the basic building block of diagrams. The layout node is responsible for defining how shapes are arranged in a diagram and how the data maps to a particular shape in a diagram.
-class LayoutNodeAtom : public AbstractAtom
-{
-    public:
-        QString m_name;
-        int m_x, m_y, m_width, m_height;
-        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_x(0), m_y(0), m_width(-1), m_height(-1), m_algorithm(0) {}
-        virtual ~LayoutNodeAtom() {}
-        virtual void dump(int level) {
-            DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count();
-            AbstractAtom::dump(level);
-        }
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
-            const QXmlStreamAttributes attrs(reader->attributes());
-            TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
-            //TRY_READ_ATTR_WITHOUT_NS_INTO(styleLbl, m_styleLbl)
-            context->m_layoutMap[m_name] = this;
-            LayoutNodeAtom* oldLayout = context->m_parentLayout;
-            context->m_parentLayout = this;
-            AbstractAtom::readAll(context, reader);
-            context->m_parentLayout = oldLayout;
-        }
-        virtual void layoutAtom(Context* context);
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
-            DEBUG_WRITE << "name=" << m_name;
-            LayoutNodeAtom* oldLayout = context->m_parentLayout;
-            context->m_parentLayout = this;
-            AbstractAtom::writeAtom(context, xmlWriter);
-            context->m_parentLayout = oldLayout;
-        }
-        QList<ConstraintAtom*> constraints() const { return m_constraints; }
-        void addConstraint(ConstraintAtom* constraint) { m_constraints << constraint; }
-        void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; }
-        QList<AbstractNode*> axis() const { return m_axis; }
-        void setAxis(Context* context, const QString& axis, const QString& ptType) {
+    protected:
+        QList<AbstractNode*> fetchAxis(Context* context, const QString& axis) {
             QList<AbstractNode*> list;
             if(axis == QLatin1String("ancst")) { // Ancestor
                for(AbstractNode* n = context->m_currentNode; n; n = n->parent())
@@ -357,14 +323,10 @@ class LayoutNodeAtom : public AbstractAtom
             } else if(axis == QLatin1String("self")) { // Self
                 list.append(context->m_currentNode);
             }
-            m_axis = filter(list, ptType);
+            return list;
         }
-    private:
-        QList<ConstraintAtom*> m_constraints;
-        AlgorithmAtom* m_algorithm;
-        QList<AbstractNode*> m_axis;
         
-        QList<AbstractNode*> filter(const QList<AbstractNode*> &list, const QString &ptType) const {
+        QList<AbstractNode*> filterAxis(const QList<AbstractNode*> &list, const QString &ptType) const {
             QList<AbstractNode*> result;
             foreach(AbstractNode* node, list)
                 if(PointNode* pt = dynamic_cast<PointNode*>(node))
@@ -372,6 +334,59 @@ class LayoutNodeAtom : public AbstractAtom
                         result.append(pt);
             return result;
         }
+        
+        QList<AbstractNode*> foreachAxis(const QList<AbstractNode*> &list, int start, int count, int step) const {
+            QList<AbstractNode*> result;
+            const int _start = qMax(0, start - 1);
+            const int _step = qMax(1, step);
+            const int _count = qMin(list.count(), (count + _start) * _step);
+            for(int i = _start; i < _count; i += _step) {
+                result.append(list[i]);
+            }
+            return result;
+        }
+        
+};
+
+/// The layout node is the basic building block of diagrams. The layout node is responsible for defining how shapes are arranged in a diagram and how the data maps to a particular shape in a diagram.
+class LayoutNodeAtom : public AbstractAtom
+{
+    public:
+        QString m_name;
+        int m_x, m_y, m_width, m_height;
+        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_x(0), m_y(0), m_width(-1), m_height(-1), m_algorithm(0) {}
+        virtual ~LayoutNodeAtom() {}
+        virtual void dump(Context* context, int level) {
+            DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count();
+            AbstractAtom::dump(context, level);
+        }
+        virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
+            const QXmlStreamAttributes attrs(reader->attributes());
+            TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
+            //TRY_READ_ATTR_WITHOUT_NS_INTO(styleLbl, m_styleLbl)
+            context->m_layoutMap[m_name] = this;
+            LayoutNodeAtom* oldLayout = context->m_parentLayout;
+            context->m_parentLayout = this;
+            AbstractAtom::readAll(context, reader);
+            context->m_parentLayout = oldLayout;
+        }
+        virtual void layoutAtom(Context* context);
+        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
+            DEBUG_WRITE << "name=" << m_name;
+            LayoutNodeAtom* oldLayout = context->m_parentLayout;
+            context->m_parentLayout = this;
+            AbstractAtom::writeAtom(context, xmlWriter);
+            context->m_parentLayout = oldLayout;
+        }
+        QList<ConstraintAtom*> constraints() const { return m_constraints; }
+        void addConstraint(ConstraintAtom* constraint) { m_constraints << constraint; }
+        void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; }
+        QList<AbstractNode*> axis() const { return m_axis; }
+        void setAxis(Context* context, const QString& axis, const QString& ptType) { m_axis = filterAxis(fetchAxis(context, axis), ptType); }
+    private:
+        QList<ConstraintAtom*> m_constraints;
+        AlgorithmAtom* m_algorithm;
+        QList<AbstractNode*> m_axis;
 };
 
 /// Specify size and position of nodes, text values, and layout dependencies between nodes in a layout definition.
@@ -402,7 +417,7 @@ class ConstraintAtom : public AbstractAtom
         QString m_val;
         explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
         virtual ~ConstraintAtom() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             QString s = QString("fact=%1 ").arg(m_fact);
             if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
             if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
@@ -444,8 +459,8 @@ class ConstraintListAtom : public AbstractAtom
     public:
         explicit ConstraintListAtom() : AbstractAtom("dgm:constrLst") {}
         virtual ~ConstraintListAtom() {}
-        virtual void dump(int level) {
-            AbstractAtom::dump(level);
+        virtual void dump(Context* context, int level) {
+            AbstractAtom::dump(context, level);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
@@ -468,9 +483,9 @@ class ShapeAtom : public AbstractAtom
         int m_x, m_y, m_width, m_height;
         explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false), m_x(0), m_y(0), m_width(-1), m_height(-1) {}
         virtual ~ShapeAtom() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "type=" << m_type << "blip=" << m_blip;
-            AbstractAtom::dump(level);
+            AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -526,9 +541,9 @@ class AlgorithmAtom : public AbstractAtom
         QList< QPair<QString,QString> > m_params; // list of type=value parameters that modify the default behavior of the algorithm.
         explicit AlgorithmAtom() : AbstractAtom("dgm:alg") {}
         virtual ~AlgorithmAtom() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "type=" << m_type;
-            AbstractAtom::dump(level);
+            AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -561,9 +576,9 @@ class PresentationOfAtom : public AbstractAtom
         int m_step;
         explicit PresentationOfAtom() : AbstractAtom("dgm:presOf"), m_count(0), m_start(0), m_step(0) {}
         virtual ~PresentationOfAtom() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "axis=" << m_axis << "ptType=" << m_ptType << "count=" << m_count << "start=" << m_start << "step=" << m_step << "hideLastTrans=" << m_hideLastTrans;
-            AbstractAtom::dump(level);
+            AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -590,21 +605,21 @@ class IfAtom : public AbstractAtom
     public:
         QString m_argument;
         QString m_axis;
-        int m_count;
         QString m_function;
         QString m_hideLastTrans;
         QString m_name;
         QString m_operator;
-        QString m_dataPointType;
+        QString m_ptType;
         int m_start;
         int m_step;
+        int m_count;
         QString m_value;
-        explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_count(0), m_start(0), m_step(0), m_isTrue(isTrue) {}
+        explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_start(0), m_step(0), m_count(0), m_isTrue(isTrue) {}
         virtual ~IfAtom() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             DEBUG_DUMP;
-            //DEBUG_DUMP << "argument=" << m_argument << "axis=" << m_axis << "count=" << m_count << "function=" << m_function << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "operator=" << m_operator << "dataPointType=" << m_dataPointType << "start=" << m_start << "step=" << m_step << "value=" << m_value;
-            AbstractAtom::dump(level);
+            //DEBUG_DUMP << "argument=" << m_argument << "axis=" << m_axis << "count=" << m_count << "function=" << m_function << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "operator=" << m_operator << "dataPointType=" << m_ptType << "start=" << m_start << "step=" << m_step << "value=" << m_value;
+            AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -616,7 +631,7 @@ class IfAtom : public AbstractAtom
             TRY_READ_ATTR_WITHOUT_NS_INTO(hideLastTrans, m_hideLastTrans)
             TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
             TRY_READ_ATTR_WITHOUT_NS_INTO(op, m_operator)
-            TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_dataPointType)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
             TRY_READ_ATTR_WITHOUT_NS(st)
             m_start = st.toInt();
             TRY_READ_ATTR_WITHOUT_NS(step)
@@ -624,9 +639,49 @@ class IfAtom : public AbstractAtom
             TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
             AbstractAtom::readAll(context, reader);
         }
-        bool testAtom() {
-            //TODO check for the condition rather then always falling into the else-condition...
-            return !m_isTrue;
+        bool testAtom(Context* context) {
+            //TODO handle m_argument=="var"
+            QList<AbstractNode*> axis = foreachAxis(filterAxis(fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
+            bool istrue = false;
+            if(m_function == "cnt") { // Specifies a count.
+                istrue = axis.count() == m_value.toInt();
+            } else if(m_function == "depth") { // Specifies the depth.
+                //int depth = 0;
+                //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
+                //istrue = depth == m_value.toInt();
+                //TODO
+                kWarning()<<"TODO func=depth";
+            } else if(m_function == "maxDepth") { // Defines the maximum depth.
+                //int depth = 0;
+                //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
+                //istrue = depth <= m_value.toInt();
+                //TODO
+                kWarning()<<"TODO func=maxDepth";
+            } else if(m_function == "pos") { // Retrieves the position of the node in the specified set of nodes.
+                //int index = axis.indexOf(context->m_currentNode)+1;
+                //istrue = index == m_value.toInt();
+                //TODO
+                kWarning()<<"TODO func=pos";
+            } else if(m_function == "posEven") { // Returns 1 if the specified node is at an even numbered position in the data model.
+                //int index = axis.indexOf(context->m_currentNode)+1;
+                //istrue = index>=1 ? index % 2 == 0 : false;
+                //TODO
+                kWarning()<<"TODO func=posEven";
+            } else if(m_function == "posOdd") { // Returns 1 if the specified node is in an odd position in the data model.
+                //int index = axis.indexOf(context->m_currentNode)+1;
+                //istrue = index>=1 ? index % 2 != 0 : false;
+                //TODO
+                kWarning()<<"TODO func=posOdd";
+            } else if(m_function == "revPos") { // Reverse position function.
+                //int index = axis.indexOf(context->m_currentNode)+1;
+                //istrue = axis.count()-index == m_value.toInt();
+                //TODO
+                kWarning()<<"TODO func=revPos";
+            } else if(m_function == "var") { // Used to reference a variable.
+                //TODO
+                kWarning()<<"TODO func=var";
+            }
+            return istrue || !m_isTrue;
         }
     private:
         bool m_isTrue;
@@ -639,12 +694,12 @@ class ChooseAtom : public AbstractAtom
         QString m_name;
         explicit ChooseAtom() : AbstractAtom("dgm:choose") {}
         virtual ~ChooseAtom() {}
-        virtual void dump(int level) {
+        virtual void dump(Context* context, int level) {
             //DEBUG_DUMP << "name=" << m_name;
             foreach(AbstractNode* node, m_children)
                 if(IfAtom* atom = dynamic_cast<IfAtom*>(node))
-                    if(atom->testAtom())
-                        atom->dump(level);
+                    if(atom->testAtom(context))
+                        atom->dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -671,19 +726,19 @@ class ForEachAtom : public AbstractAtom
 {
     public:
         QString m_axis;
-        int m_count;
         QString m_hideLastTrans;
         QString m_name;
-        QString m_dataPointType;
+        QString m_ptType;
         QString m_reference;
         int m_start;
         int m_step;
-        explicit ForEachAtom() : AbstractAtom("dgm:forEach"), m_count(0), m_start(0), m_step(0) {}
+        int m_count;
+        explicit ForEachAtom() : AbstractAtom("dgm:forEach"), m_start(0), m_step(0), m_count(0) {}
         virtual ~ForEachAtom() {}
-        virtual void dump(int level) {
-            DEBUG_DUMP << "axis=" << m_axis << "count=" << m_count << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "dataPointType=" << m_dataPointType << "reference=" << m_reference << "start=" << m_start << "step=" << m_step;
+        virtual void dump(Context* context, int level) {
+            DEBUG_DUMP << "axis=" << m_axis << "count=" << m_count << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "ptType=" << m_ptType << "reference=" << m_reference << "start=" << m_start << "step=" << m_step;
             foreach(AbstractNode* node, m_children)
-                node->dump(level + 1);
+                node->dump(context, level + 1);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -692,7 +747,7 @@ class ForEachAtom : public AbstractAtom
             m_count = cnt.toInt();
             TRY_READ_ATTR_WITHOUT_NS_INTO(hideLastTrans, m_hideLastTrans)
             TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
-            TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_dataPointType)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
             TRY_READ_ATTR_WITHOUT_NS_INTO(ref, m_reference)
             TRY_READ_ATTR_WITHOUT_NS(st)
             m_start = st.toInt();
@@ -702,13 +757,12 @@ class ForEachAtom : public AbstractAtom
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
             DEBUG_WRITE;
-
-            //TODO handle forEach-conditions
-            foreach(AbstractNode* node, m_children) {
-                if(AbstractAtom* atom = dynamic_cast<AbstractAtom*>(node)) {
-//context->m_currentNode->next();
-                    atom->writeAtom(context, xmlWriter);
-                }
+            QList<AbstractNode*> axis = foreachAxis(filterAxis(fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
+            foreach(AbstractNode* pt, axis) {
+                context->m_currentNode = pt;
+                foreach(AbstractNode* node, m_children)
+                    if(AbstractAtom* atom = dynamic_cast<AbstractAtom*>(node))
+                        atom->writeAtom(context, xmlWriter);
             }
         }
 };
@@ -819,19 +873,16 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     }
     
     kDebug() << "################# name=" << m_name << "algType=" << algType << "constraintCount=" << m_constraints.count();
-    this->dump(2);
-    kDebug() << "####/CONSTRAINTS-START";
-    foreach(ConstraintAtom* c, m_constraints) {
-        c->dump(2);
-    }
-    kDebug() << "####/CONSTRAINTS-END";
+    //this->dump(context, 2);
+    //kDebug() << "####/CONSTRAINTS-START";
+    //foreach(ConstraintAtom* c, m_constraints) c->dump(context, 2);
+    //kDebug() << "####/CONSTRAINTS-END";
 
     foreach(AbstractNode* node, m_children)
         if(AbstractAtom* atom = dynamic_cast<AbstractAtom*>(node))
             atom->layoutAtom(context);
     
-//     Q_ASSERT(m_name!="circ1");
-
+    //Q_ASSERT(m_name!="circ1");
     context->m_parentLayout = oldLayout;
 }
 
@@ -952,7 +1003,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
 
         //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(0);
-        m_context->m_context->m_rootPoint->dump(0);
+        //m_context->m_context->m_rootPoint->dump(0);
     }
     else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
         m_type = LayoutDefType;
@@ -972,9 +1023,9 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
 
         //m_context->m_context->m_rootPoint->dump(0);
         //m_context->m_context->m_layout->dump(0);
-        //Q_ASSERT(false);
-
+        //kDebug()<<"...............................................................................";
         m_context->m_context->m_rootLayout->layoutAtom(m_context->m_context);
+        //Q_ASSERT(false);
         
 #if 0
         device()->seek(0);
