@@ -556,14 +556,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->endElement(); // text:p
                     }
 
-                    // handle objects like e.g. charts
+                    // handle objects like e.g. charts and diagrams
                     foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
-                        foreach(XlsxXmlChartReaderContext* chart, drawing->charts) {
-                            // save the index embedded into this cell
-                            chart->m_chartExport->saveIndex(body);
-                            // the embedded object file was written by the XlsxXmlChartReader already
-                            //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
-                        }
+                        // save the indexes of drawing objects anchored to this cell
+                        drawing->saveIndexes(body);
                     }
 
                     QPair<QString,QString> oleObject;
