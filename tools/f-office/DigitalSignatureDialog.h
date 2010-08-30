@@ -61,8 +61,10 @@ private:
     QPushButton *organizationButton;
     QPushButton *emailButton;
 
+    bool validSignature;
+
 private:
-    int printChild(QDomNode element);
+    void printChild(QDomNode element);
     void signatureInfoRetriever(QDomNode element);
 private slots:
     void sendMail();

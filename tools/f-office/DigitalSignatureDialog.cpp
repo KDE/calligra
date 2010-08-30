@@ -175,6 +175,7 @@ DigitalSignatureDialog::DigitalSignatureDialog(QString filePath,QWidget *parent)
     this->organizationButton->setIcon(QIcon(QPixmap("/usr/share/icons/hicolor/96x96/hildon/general_conference_avatar.png")));
     connect(this->emailButton,SIGNAL(clicked()),this,SLOT(sendMail()));
 #endif
+    validSignature=true;
 }
 
 DigitalSignatureDialog::~DigitalSignatureDialog()
@@ -183,11 +184,11 @@ DigitalSignatureDialog::~DigitalSignatureDialog()
 }
 
 
-int DigitalSignatureDialog::printChild(QDomNode element)
+void DigitalSignatureDialog::printChild(QDomNode element)
 {
     if(element.isElement()) {
         if(element.toElement().tagName()=="SignatureValue") {
-            return 1;
+            return;
         }
 
         if(element.toElement().tagName()=="Reference") {
@@ -208,17 +209,18 @@ int DigitalSignatureDialog::printChild(QDomNode element)
 
                 node.nextSibling();
 
-                if(element.toElement().text()!=sha1Hash)
-                    return 0;
+                if(element.toElement().text()!=sha1Hash){
+                    validSignature=false;
+                    return;
+                }
 
                 node.nextSibling();
                 store->close();
             }
         }
-        if(printChild(element.nextSibling())==0)
-            return 0;
+        printChild(element.nextSibling());
 
-        return 1;
+        return;
     }
 }
 
@@ -272,7 +274,8 @@ bool DigitalSignatureDialog::verifySignature()
 #endif
             return false;
         }
-        if(printChild(doc.documentElement().firstChild().firstChild().firstChild())==1) {
+        printChild(doc.documentElement().firstChild().firstChild().firstChild());
+        if(validSignature==true) {
             signatureInfoRetriever(doc.documentElement().firstChild());
             QString signerNameString=signerInfo.at(0).signerName;
             for(int i=1;i<signerInfo.length();i++){
@@ -290,6 +293,10 @@ bool DigitalSignatureDialog::verifySignature()
             signatureInfoRetriever(doc.documentElement().firstChild());
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(0, QString("Signature has broken"),QMaemo5InformationBox::NoTimeout);
+#else
+                    QMessageBox msgBox;
+                    msgBox.setText("Signature has broken");
+                    msgBox.exec();
 #endif
         }
         store->close();
