@@ -1313,7 +1313,7 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
     }
 
     QFont font = option.font;
-    QColor textColor = palette.text();
+    QColor textColor = palette.text().color();
     QBrush bg( palette.base() );
     Qt::Alignment align = option.displayAlignment;
     QString text = calendar->dayString(date, KCalendarSystem::ShortFormat);
@@ -1358,16 +1358,16 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
 
 
     if ( option.state & QStyle::State_HasFocus ) {
-        painter->setPen( palette.text() );
+        painter->setPen( palette.text().color() );
         painter->setPen( Qt::DotLine );
         painter->drawRect( option.rectF );
     } else if ( date == QDate::currentDate() ) {
-        painter->setPen( palette.text() );
+        painter->setPen( palette.text().color() );
         painter->drawRect( option.rectF );
     }
 
     if ( option.state & QStyle::State_Selected ) {
-        pen.setColor( palette.highlightedText() );
+        pen.setColor( palette.highlightedText().color() );
     }
     painter->setFont( font );
     painter->setPen( pen );
@@ -1503,8 +1503,8 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
 //    font.setBold(true);
     painter->setFont(font);
 
-    QColor titleColor( palette.button() );
-    QColor textColor( palette.buttonText() );
+    QColor titleColor( palette.button().color() );
+    QColor textColor( palette.buttonText().color() );
 
     painter->setPen(titleColor);
     painter->setBrush(titleColor);
@@ -1551,8 +1551,8 @@ QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOption
     QFont font = KGlobalSettings::generalFont();
     painter->setFont(font);
 
-    QColor titleColor( option.palette.button() );
-    QColor textColor( option.palette.buttonText() );
+    QColor titleColor( option.palette.button().color() );
+    QColor textColor( option.palette.buttonText().color() );
 
     painter->setPen(titleColor);
     painter->setBrush(titleColor);
