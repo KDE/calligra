@@ -337,7 +337,7 @@ if(_axis.isEmpty()) return list;
                     list.append(context->m_currentNode);
                 }
             }
-Q_ASSERT(!list.isEmpty());
+//Q_ASSERT(!list.isEmpty());
             return list;
         }
         
@@ -345,17 +345,17 @@ Q_ASSERT(!list.isEmpty());
             const QString ptType = _ptType.isEmpty() ? "all" : _ptType;
             kDebug()<<">>>>>>>> filterAxis ptType="<<ptType;
             QList<AbstractNode*> result;
-if(list.isEmpty()) return result;
+//if(list.isEmpty()) return result;
             foreach(AbstractNode* node, list) {
                 if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
-kDebug()<<">>>>>>>> filterAxis pt->m_type="<<pt->m_type;
-pt->dump(context, 12);
+//kDebug()<<">>>>>>>> filterAxis pt->m_type="<<pt->m_type;
+//pt->dump(context, 12);
                     if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
                         result.append(pt);
                     }
                 }
             }
-Q_ASSERT(!result.isEmpty());
+//Q_ASSERT(!result.isEmpty());
 //Q_ASSERT(result.isEmpty());
             return result;
         }
@@ -523,7 +523,7 @@ class ShapeAtom : public AbstractAtom
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
             DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip;
-            Q_ASSERT(context->m_parentLayout);
+            //Q_ASSERT(context->m_parentLayout);
 
             if (m_type == QLatin1String("ellipse")) {
 static int iii=-1;
@@ -796,7 +796,7 @@ class ForEachAtom : public AbstractAtom
         virtual void layoutAtom(Context* context) {
             QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
             foreach(AbstractNode* pt, axis) {
-Q_ASSERT(false);
+//Q_ASSERT(false);
                 context->m_currentNode = pt;
                 foreach(AbstractAtom* atom, m_children)
                     atom->layoutAtom(context);
@@ -806,7 +806,7 @@ Q_ASSERT(false);
             DEBUG_WRITE;
             QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
             foreach(AbstractNode* pt, axis) {
-Q_ASSERT(false);
+//Q_ASSERT(false);
                 context->m_currentNode = pt;
                 foreach(AbstractAtom* atom, m_children)
                     atom->writeAtom(context, xmlWriter);
