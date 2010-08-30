@@ -59,13 +59,13 @@ Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int
 }
 
 // round to get at most 10-digits number
-static Value RoundNumber(double f)
+inline static Value RoundNumber(double f)
 {
     return Value(ROUND(f));
 }
 
 // round to get at most 10-digits number
-static Value RoundNumber(const Value& v)
+inline static Value RoundNumber(const Value& v)
 {
     if (v.isNumber()) {
         double d = numToDouble(v.asFloat());
