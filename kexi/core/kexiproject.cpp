@@ -216,8 +216,12 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 //</temp>
                 if (incompatibleWithKexi)
                     *incompatibleWithKexi = true;
-            } else
+            } else {
+                KexiDB::MessageTitle et(this,
+                    i18n("Database project %1 does not appear to have been created using Kexi and cannot be opened."
+                         "<br><br>It is an SQLite file created using other tools.</qt>", d->data->infoString()));
                 setError(d->connection);
+            }
             closeConnection();
             return false;
         }

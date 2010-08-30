@@ -109,6 +109,10 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+2010-08-30
+Core
+*Clarify error message: when non-kexi SQLite file is opened, display "Database project '...' does not appear to have been created using Kexi and cannot be opened. It is an SQLite file created using other tools."
+
 2010-08-29
 CSV Export Dialog
 *fix layout of the CSV Export dialog
