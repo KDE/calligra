@@ -686,6 +686,9 @@ QList<FormulaToken> ExcelExport::compileFormula(const KSpread::Tokens &tokens, K
                 // TODO
                 codes.append(FormulaToken(FormulaToken::MissArg));
                 break;
+            default:
+                // Can't reach here
+                break;
             }
         }
 

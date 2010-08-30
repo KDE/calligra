@@ -215,7 +215,7 @@ void Workbook::setColorTable(const QList<QColor> &colorTable)
 
 QColor Workbook::customColor(unsigned index) const
 {
-    if (index < d->colorTable.size())
+    if (index < unsigned(d->colorTable.size()))
         return d->colorTable[index];
     else
         return QColor();

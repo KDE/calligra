@@ -144,7 +144,7 @@ qint64 CFBWriter::StreamIODevice::size() const
 void CFBWriter::StreamIODevice::appendData(const char *data, qint64 len)
 {
     m_buffer.append(data, len);
-    while (m_buffer.size() > m_writer.m_sectorSize) {
+    while (unsigned(m_buffer.size()) > m_writer.m_sectorSize) {
         QByteArray sector = m_buffer.left(m_writer.m_sectorSize);
         m_buffer = m_buffer.mid(m_writer.m_sectorSize);
         m_lastSector = m_writer.writeSector(sector, m_lastSector);
@@ -295,7 +295,7 @@ void CFBWriter::close()
         b.open(QIODevice::WriteOnly);
         QDataStream ds(&b);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (int j = 0; j < m_sectorSize/128 && i+j < m_entries.size(); j++) {
+        for (int j = 0; j < int(m_sectorSize/128) && i+j < m_entries.size(); j++) {
             const DirectoryEntry& e = m_entries[i+j];
             const ushort* name = e.name.utf16();
             int n = 0;
@@ -332,7 +332,7 @@ void CFBWriter::close()
         b.open(QIODevice::WriteOnly);
         QDataStream ds(&b);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (int j = 0; j < m_sectorSize/4 && i+j < m_miniFat.size(); j++) {
+        for (int j = 0; j < int(m_sectorSize/4) && i+j < m_miniFat.size(); j++) {
             ds << quint32(m_miniFat[i+j]);
         }
         miniFatSector = writeSector(sector, miniFatSector);
@@ -358,8 +358,8 @@ void CFBWriter::close()
         m_device->seek((sector + 1) * m_sectorSize);
         QDataStream ds(m_device);
         ds.setByteOrder(QDataStream::LittleEndian);
-        for (int j = 0, idx = i*(m_sectorSize/4); j < m_sectorSize/4; j++, idx++) {
-            ds << quint32(idx < m_fat.size() ? m_fat[idx] : 0);
+        for (unsigned j = 0, idx = i*(m_sectorSize/4); j < m_sectorSize/4; j++, idx++) {
+            ds << quint32(idx < unsigned(m_fat.size()) ? m_fat[idx] : 0);
         }
     }
 
