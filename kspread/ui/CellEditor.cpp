@@ -176,6 +176,8 @@ void CellEditor::Private::updateActiveSubRegion(const Tokens &tokens)
             case Token::Greater:
             case Token::LessEqual:
             case Token::GreaterEqual:
+            case Token::Intersect:
+            case Token::Union:
                 // Append new references by pointing behind the last.
                 currentToken = tokens.count();
                 regionStart = rangeCounter;
