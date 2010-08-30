@@ -50,6 +50,7 @@ PptxXmlCommentsReader::PptxXmlCommentsReader(KoOdfWriters* writers)
 
 PptxXmlCommentsReader::~PptxXmlCommentsReader()
 {
+    delete d;
 }
 
 KoFilter::ConversionStatus PptxXmlCommentsReader::read(MSOOXML::MsooXmlReaderContext* context)
