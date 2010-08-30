@@ -1,3 +1,7 @@
+30-Aug-2010
+Replaced the listview based project navigator with a new Model-View based one
+
+
 23-jun-2010
 I clearly havnt been keeping this up to date!
 Implemented a simple table based ODT renderer, supporting text and images.
