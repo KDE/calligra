@@ -189,10 +189,17 @@ int m_svgChHeight; //! set by read_chExt()
 // These have to be in a vector in order to support group shapes within
 // a group shape
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
-QVector<qreal> m_svgXTransform; //! ratio between normal/child
-QVector<qreal> m_svgYTransform; //! ratio between normal/child
-QVector<qreal> m_svgWidthTransform; //! radio between normal/child
-QVector<qreal> m_svgHeightTransform; //! radio between normal/child
+struct GroupProp {
+    int svgXOld;
+    int svgYOld;
+    int svgWidthOld;
+    int svgHeightOld;
+    int svgXChOld;
+    int svgYChOld;
+    int svgWidthChOld;
+    int svgHeightChOld;
+};
+QVector<GroupProp> m_svgProp; //! value of the parent
 bool m_flipH; //! set by read_xfrm()
 bool m_flipV; //! set by read_xfrm()
 int m_rot; //! set by read_xfrm()

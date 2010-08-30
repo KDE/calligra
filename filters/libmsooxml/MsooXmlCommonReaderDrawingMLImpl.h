@@ -541,11 +541,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
     }
     body->endElement(); // draw:g
 
-    // Transforms are set in grpSp
-    m_svgXTransform.pop_back();
-    m_svgYTransform.pop_back();
-    m_svgWidthTransform.pop_back();
-    m_svgHeightTransform.pop_back();
+    // Properties are set in grpSpPr
+    m_svgProp.pop_back();
 
     READ_EPILOGUE
 }
@@ -589,10 +586,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
 
     m_inGrpSpPr = false;
 
-    m_svgXTransform.push_back((qreal)m_svgX/m_svgChX);
-    m_svgYTransform.push_back((qreal)m_svgY/m_svgChY);
-    m_svgWidthTransform.push_back((qreal)m_svgWidth/m_svgChWidth);
-    m_svgHeightTransform.push_back((qreal)m_svgHeight/m_svgChHeight);
+    GroupProp prop;
+    prop.svgXOld = m_svgX;
+    prop.svgYOld = m_svgY;
+    prop.svgWidthOld = m_svgWidth;
+    prop.svgHeightOld = m_svgHeight;
+    prop.svgXChOld = m_svgChX;
+    prop.svgYChOld = m_svgChY;
+    prop.svgWidthChOld = m_svgChWidth;
+    prop.svgHeightChOld = m_svgChHeight;
+
+    m_svgProp.push_back(prop);
 
     READ_EPILOGUE
 }
@@ -1996,17 +2000,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgY, "off@y")
 
-    // Checking whether we are in a group shape properties
-    // don't need to make transformations if we are
-    if (!m_inGrpSpPr) {
-        if (m_svgXTransform.size() > 0) {
-            int index = 0;
-            while (index < m_svgXTransform.size()) {
-                m_svgX = m_svgX * m_svgXTransform.at(m_svgXTransform.size() - 1 - index);
-                m_svgY = m_svgY * m_svgYTransform.at(m_svgYTransform.size() - 1 - index);
-                ++index;
-            }
-        }
+    if (m_svgProp.size() > 0) {
+        //(a:off(x) - a:chOff(x))/a:chExt(x) * a(p):ext(x) + a(p):off(x)
+        GroupProp prop = m_svgProp.back();
+
+        m_svgX = (m_svgX - prop.svgXChOld) / (qreal) prop.svgWidthChOld * prop.svgWidthOld + prop.svgXOld;
+        m_svgY = (m_svgY - prop.svgYChOld) / (qreal) prop.svgHeightChOld * prop.svgHeightOld + prop.svgYOld;
     }
 
     while (true) {
@@ -2030,6 +2029,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
     STRING_TO_INT(x, m_svgChX, "chOff@x")
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgChY, "chOff@y")
+
 
     while (true) {
         readNext();
@@ -2069,17 +2069,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     READ_ATTR_WITHOUT_NS(cy)
     STRING_TO_INT(cy, m_svgHeight, "ext@cy")
 
-    // Checking whether we are in a group shape properties
-    // don't need to make transformations if we are
-    if (!m_inGrpSpPr) {
-        if (m_svgWidthTransform.size() > 0) {
-            int index = 0;
-            while (index < m_svgWidthTransform.size()) {
-                m_svgWidth = m_svgWidth * m_svgWidthTransform.at(m_svgWidthTransform.size() - 1 - index);
-                m_svgHeight = m_svgHeight * m_svgHeightTransform.at(m_svgHeightTransform.size() - 1 - index);
-                ++index;
-            }
-        }
+    if (m_svgProp.size() > 0) {
+        GroupProp prop = m_svgProp.back();
+
+        m_svgWidth = m_svgWidth * prop.svgWidthOld / prop.svgWidthChOld;
+        m_svgHeight = m_svgHeight * prop.svgHeightOld / prop.svgHeightChOld;
     }
 
     while (true) {
