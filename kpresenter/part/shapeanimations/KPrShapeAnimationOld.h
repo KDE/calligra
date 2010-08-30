@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRSHAPEANIMATION_H
-#define KPRSHAPEANIMATION_H
+#ifndef KPRSHAPEANIMATIONOLD_H
+#define KPRSHAPEANIMATIONOLD_H
 
 #include <QTimeLine>
 
@@ -152,4 +152,4 @@ protected:
     bool m_finished;
 };
 
-#endif // KPRSHAPEANIMATION_H
+#endif // KPRSHAPEANIMATIONOLD_H
