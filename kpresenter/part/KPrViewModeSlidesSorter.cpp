@@ -258,7 +258,9 @@ void KPrViewModeSlidesSorter::populate()
         item = new QListWidgetItem( QIcon( page->thumbnail( m_iconSize ) ), slideName, m_slidesSorter );
         item->setFlags((item->flags() | Qt::ItemIsDragEnabled ) & ~Qt::ItemIsDropEnabled);
     }
-    setItemSize(m_slidesSorter->visualItemRect(item));
+    if (item) {
+        setItemSize(m_slidesSorter->visualItemRect(item));
+    }
 }
 
 void KPrViewModeSlidesSorter::movePage(int pageNumber, int pageAfterNumber)
