@@ -465,7 +465,7 @@ void TestLoadAndSave::mathColor_data()
     /*
      * It's better to store attribute names and values lowercase and avoid
      * having to check whether it's upper or lower case on a per-use case,
-     * which is more error prone performance consuming.
+     * which is more error prone and performance consuming.
      */
     addRow( "<mi mathcolor=\"Black\">x</mi>",
             "<mi mathcolor=\"black\">x</mi>" );

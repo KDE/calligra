@@ -59,12 +59,31 @@ static void load(BasicElement* element, const QString& input)
 static int count( const QList<BasicElement*>& list )
 {
     BasicElement* element;
-    int counter = 0;
+    int counter = list.count();
     foreach ( element, list )
         counter += count( element->childElements() );
 
-    counter += list.count();
     return counter;
+}
+
+static QString dumpRecurse(const QList<BasicElement*>& list)
+{
+    BasicElement *element;
+    QString       result = "[ ";
+
+    if (list.count() > 0) {
+        result.append(QString::number(list.count()));
+        result.append(' ');
+
+        foreach ( element, list )
+            result.append(dumpRecurse(element->childElements()));
+    }
+    return result + " ]";
+}
+
+static void dump( const QList<BasicElement*>& list )
+{
+    qDebug() << dumpRecurse(list);
 }
 
 static void addRow( const QString& input, int output )
@@ -88,8 +107,15 @@ void test( BasicElement* element )
     QFETCH(int, outputRecursive);
 
     load( element, input );
+    int numElements = count( element->childElements() );
+#if 0 // Set to 1 if you want to dump the xml tree if the test fails.
+    if (numElements != outputRecursive) {
+        //dump(element->childElements());
+        element->writeElementTree();
+    }
+#endif
     QCOMPARE( element->childElements().count() , output );
-    QCOMPARE( count( element->childElements() ), outputRecursive );
+    QCOMPARE( numElements, outputRecursive );
 
     delete element;
 }
@@ -290,7 +316,7 @@ void TestLoad::fracElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mfrac><mi>x</mi><mi>y</mi></mfrac>", 2, 2 );
+    addRow( "<mfrac><mi>x</mi><mi>y</mi></mfrac>", 2, 4 ); // +1 <mrow> for both sides
 
     // More complex content
     addRow( "<mfrac linethickness=\"2\">"
@@ -302,7 +328,7 @@ void TestLoad::fracElement_data()
             "  <mi> c </mi>"
             "  <mi> d </mi>"
             " </mfrac>"
-            "</mfrac>", 2, 6 );
+            "</mfrac>", 2, 6 + 6 ); // +2 mrow per mfrac
 
     addRow( "<mfrac>"
             " <mn> 1 </mn>"
@@ -317,7 +343,7 @@ void TestLoad::fracElement_data()
             "   <mn> 3 </mn>"
             "  </mfrac>"
             " </mrow>"
-            "</mfrac>", 2, 9 );
+            "</mfrac>", 2, 9 + 5 ); // +2 mrow per mfrac, and msup -1 for the one in the test
 }
 
 void TestLoad::rootElement_data()
@@ -680,7 +706,7 @@ void TestLoad::tableElement_data()
     // Basic content
     addRow( "<mtable></mtable>", 0 );
     addRow( "<mtable><mtr></mtr></mtable>", 1 );
-    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 3 );
+    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 3 ); // Insert mrow for each mtd
     addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>", 1, 3 );
     addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>", 1, 4 );
 //   addRow( "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>", 1, 2 );
