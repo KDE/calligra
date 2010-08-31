@@ -2000,12 +2000,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgY, "off@y")
 
-    if (m_svgProp.size() > 0) {
-        //(a:off(x) - a:chOff(x))/a:chExt(x) * a(p):ext(x) + a(p):off(x)
-        GroupProp prop = m_svgProp.back();
-
-        m_svgX = (m_svgX - prop.svgXChOld) / (qreal) prop.svgWidthChOld * prop.svgWidthOld + prop.svgXOld;
-        m_svgY = (m_svgY - prop.svgYChOld) / (qreal) prop.svgHeightChOld * prop.svgHeightOld + prop.svgYOld;
+    if (!m_inGrpSpPr) {
+        int index = 0;
+        while (index < m_svgProp.size()) {
+            //(a:off(x) - a:chOff(x))/a:chExt(x) * a(p):ext(x) + a(p):off(x)
+            GroupProp prop = m_svgProp.at(m_svgProp.size() - 1 - index);
+            m_svgX = (m_svgX - prop.svgXChOld) / prop.svgWidthChOld * prop.svgWidthOld + prop.svgXOld;
+            m_svgY = (m_svgY - prop.svgYChOld) / prop.svgHeightChOld * prop.svgHeightOld + prop.svgYOld;
+            ++index;
+        }
     }
 
     while (true) {
@@ -2069,11 +2072,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
     READ_ATTR_WITHOUT_NS(cy)
     STRING_TO_INT(cy, m_svgHeight, "ext@cy")
 
-    if (m_svgProp.size() > 0) {
-        GroupProp prop = m_svgProp.back();
+    if (!m_inGrpSpPr) {
+        int index = 0;
+        while (index < m_svgProp.size()) {
+            //(a:off(x) - a:chOff(x))/a:chExt(x) * a(p):ext(x) + a(p):off(x)
+            GroupProp prop = m_svgProp.at(m_svgProp.size() - 1 - index);
 
-        m_svgWidth = m_svgWidth * prop.svgWidthOld / prop.svgWidthChOld;
-        m_svgHeight = m_svgHeight * prop.svgHeightOld / prop.svgHeightChOld;
+            m_svgWidth = m_svgWidth * prop.svgWidthOld / prop.svgWidthChOld;
+            m_svgHeight = m_svgHeight * prop.svgHeightOld / prop.svgHeightChOld;
+            ++index;
+        }
     }
 
     while (true) {

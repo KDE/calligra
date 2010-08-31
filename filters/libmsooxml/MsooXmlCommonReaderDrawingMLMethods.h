@@ -190,14 +190,14 @@ int m_svgChHeight; //! set by read_chExt()
 // a group shape
 bool m_inGrpSpPr; //Whether we are in group shape, affects transformations
 struct GroupProp {
-    int svgXOld;
-    int svgYOld;
-    int svgWidthOld;
-    int svgHeightOld;
-    int svgXChOld;
-    int svgYChOld;
-    int svgWidthChOld;
-    int svgHeightChOld;
+    qreal svgXOld;
+    qreal svgYOld;
+    qreal svgWidthOld;
+    qreal svgHeightOld;
+    qreal svgXChOld;
+    qreal svgYChOld;
+    qreal svgWidthChOld;
+    qreal svgHeightChOld;
 };
 QVector<GroupProp> m_svgProp; //! value of the parent
 bool m_flipH; //! set by read_xfrm()
