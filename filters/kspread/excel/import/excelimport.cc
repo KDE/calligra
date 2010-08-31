@@ -1275,10 +1275,10 @@ static bool isFractionFormat(const QString& valueFormat)
     return ex.indexIn(vf) >= 0;
 }
 
-static QString convertCurrency(double currency, const QString& valueFormat)
+static QByteArray convertCurrency(double currency, const QString& valueFormat)
 {
     Q_UNUSED(valueFormat);
-    return QString::number(currency, 'g', 15);
+    return QByteArray::number(currency, 'g', 15);
 }
 
 static QString convertDate(double serialNo, const QString& valueFormat)
@@ -1311,10 +1311,10 @@ static QString convertTime(double serialNo, const QString& valueFormat)
     return tt.toString("'PT'hh'H'mm'M'ss'S'");
 }
 
-static QString convertFraction(double serialNo, const QString& valueFormat)
+static QByteArray convertFraction(double serialNo, const QString& valueFormat)
 {
     Q_UNUSED(valueFormat);
-    return QString::number(serialNo, 'g', 15);
+    return QByteArray::number(serialNo, 'g', 15);
 }
 
 QString cellFormula(Cell* cell)
@@ -1379,7 +1379,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
 
         if (isPercentageFormat(valueFormat)) {
             xmlWriter->addAttribute("office:value-type", "percentage");
-            xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
+            xmlWriter->addAttribute("office:value", value.asFloat());
         } else if (isDateFormat(value, valueFormat)) {
             const QString dateValue = convertDate(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "date");
@@ -1394,7 +1394,7 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
             xmlWriter->addAttribute("office:value", fractionValue);
         } else { // fallback is the generic float format
             xmlWriter->addAttribute("office:value-type", "float");
-            xmlWriter->addAttribute("office:value", QString::number(value.asFloat(), 'g', 15));
+            xmlWriter->addAttribute("office:value", value.asFloat());
         }
     } else if (value.isText() || value.isError()) {
         QString str = value.asString();
