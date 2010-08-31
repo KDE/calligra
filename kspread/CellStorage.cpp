@@ -1384,4 +1384,9 @@ void CellStorage::stopUndoRecording(QUndoCommand *parent)
     d->undoData = 0;
 }
 
+void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& conditions)
+{
+    d->conditionsStorage->load(conditions);
+}
+
 #include "CellStorage.moc"

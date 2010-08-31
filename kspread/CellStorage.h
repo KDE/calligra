@@ -361,6 +361,8 @@ public:
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
 
+    void loadConditions(const QList<QPair<QRegion, Conditions> >& conditions);
+
     /**
      * Starts the undo recording.
      * While recording the undo data of each storage operation is saved in

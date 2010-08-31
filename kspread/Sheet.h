@@ -877,7 +877,8 @@ protected:
                              const QHash<QString, QRegion>& styleRegions,
                              const QHash<QString, Conditions>& conditionalStyles,
                              const QRect& usedArea,
-                             QList<QPair<QRegion, Style> >& outStyleRegions);
+                             QList<QPair<QRegion, Style> >& outStyleRegions,
+                             QList<QPair<QRegion, Conditions> >& outConditionalStyles);
 
     /**
      * \ingroup OpenDocument

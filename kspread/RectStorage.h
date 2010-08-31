@@ -78,6 +78,11 @@ public:
     QRect usedArea() const;
 
     /**
+     * Mass loading of data, removes any existing data first
+     */
+    void load(const QList<QPair<QRegion, T> >& data);
+
+    /**
      * Assigns \p data to \p region .
      */
     void insert(const Region& region, const T& data);
@@ -240,6 +245,27 @@ template<typename T>
 QRect RectStorage<T>::usedArea() const
 {
     return m_tree.boundingBox().toRect();
+}
+
+template<typename T>
+void RectStorage<T>::load(const QList<QPair<QRegion, T> >& data)
+{
+    QList<QPair<QRegion, T> > treeData;
+    typedef QPair<QRegion, T> TRegion;
+    foreach (const TRegion& tr, data) {
+        const QRegion& reg = tr.first;
+        const T& d = tr.second;
+
+        int index = m_storedData.indexOf(d);
+        if (index != -1) {
+            treeData.append(qMakePair(reg, m_storedData[index]));
+        } else {
+            treeData.append(tr);
+            m_storedData.append(d);
+        }
+    }
+
+    m_tree.load(treeData);
 }
 
 template<typename T>

@@ -1698,20 +1698,22 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     }
 
     QList<QPair<QRegion, Style> > styleRegions;
+    QList<QPair<QRegion, Conditions> > conditionRegions;
     // insert the styles into the storage (column defaults)
     kDebug(36003) << "Inserting column default cell styles ...";
     loadOdfInsertStyles(autoStyles, columnStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions);
+                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions, conditionRegions);
     // insert the styles into the storage (row defaults)
     kDebug(36003) << "Inserting row default cell styles ...";
     loadOdfInsertStyles(autoStyles, rowStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions);
+                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions, conditionRegions);
     // insert the styles into the storage
     kDebug(36003) << "Inserting cell styles ...";
     loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
-                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions);
+                        QRect(1, 1, maxColumn, rowIndex - 1), styleRegions, conditionRegions);
 
     cellStorage()->styleStorage()->load(styleRegions);
+    cellStorage()->loadConditions(conditionRegions);
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
@@ -1946,7 +1948,8 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
                                 const QHash<QString, QRegion>& styleRegions,
                                 const QHash<QString, Conditions>& conditionalStyles,
                                 const QRect& usedArea,
-                                QList<QPair<QRegion, Style> >& outStyleRegions)
+                                QList<QPair<QRegion, Style> >& outStyleRegions,
+                                QList<QPair<QRegion, Conditions> >& outConditionalStyles)
 {
     const QList<QString> styleNames = styleRegions.keys();
     for (int i = 0; i < styleNames.count(); ++i) {
@@ -1956,10 +1959,8 @@ void Sheet::loadOdfInsertStyles(const Styles& autoStyles,
         }
         const bool hasConditions = conditionalStyles.contains(styleNames[i]);
         const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion(usedArea);
-        foreach(const QRect& rect, styleRegion.rects()) {
-            if (hasConditions)
-                cellStorage()->setConditions(Region(rect), conditionalStyles[styleNames[i]]);
-        }
+        if (hasConditions)
+            outConditionalStyles.append(qMakePair(styleRegion, conditionalStyles[styleNames[i]]));
         if (autoStyles.contains(styleNames[i])) {
             //kDebug(36003) << "\tautomatic:" << styleNames[i] << " at" << styleRegion.rectCount() << "rects";
             Style style;
