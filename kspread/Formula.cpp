@@ -451,6 +451,12 @@ Formula::Formula()
     clear();
 }
 
+Formula Formula::empty()
+{
+    static Formula f;
+    return f;
+}
+
 Formula::Formula(const Formula& other)
         : d(other.d)
 {

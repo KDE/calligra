@@ -313,6 +313,11 @@ public:
     Formula();
 
     /**
+     * Returns a null formula object, this is quicker than creating a new one.
+     */
+    static Formula empty();
+
+    /**
      * Copy constructor.
      */
     Formula(const Formula&);

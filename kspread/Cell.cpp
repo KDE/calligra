@@ -184,7 +184,7 @@ bool Cell::hasDefaultContent() const
     // check each stored attribute
     if (value() != Value())
         return false;
-    if (formula() != Formula())
+    if (formula() != Formula::empty())
         return false;
     if (!link().isEmpty())
         return false;
@@ -401,7 +401,7 @@ void Cell::setUserInput(const QString& string)
         sheet()->cellStorage()->setUserInput(d->column, d->row, QString());
     } else {
         // remove an existing formula
-        setFormula(Formula());
+        setFormula(Formula::empty());
         // set the value
         sheet()->cellStorage()->setUserInput(d->column, d->row, string);
     }
@@ -779,7 +779,7 @@ void Cell::parseUserInput(const QString& text)
     if (text.isEmpty()) {
         setValue(Value::empty());
         setUserInput(text);
-        setFormula(Formula());
+        setFormula(Formula::empty());
         return;
     }
 

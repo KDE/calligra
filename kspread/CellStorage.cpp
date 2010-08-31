@@ -346,14 +346,14 @@ void CellStorage::setDatabase(const Region& region, const Database& database)
 
 Formula CellStorage::formula(int column, int row) const
 {
-    return d->formulaStorage->lookup(column, row);
+    return d->formulaStorage->lookup(column, row, Formula::empty());
 }
 
 void CellStorage::setFormula(int column, int row, const Formula& formula)
 {
-    Formula old;
+    Formula old = Formula::empty();
     if (formula.expression().isEmpty())
-        old = d->formulaStorage->take(column, row);
+        old = d->formulaStorage->take(column, row, Formula::empty());
     else
         old = d->formulaStorage->insert(column, row, formula);
 

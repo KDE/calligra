@@ -161,18 +161,18 @@ public:
      * default object.
      * \return the data at the given coordinate
      */
-    T lookup(int col, int row) const {
+    T lookup(int col, int row, const T& defaultVal = T()) const {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // is the row not present?
         if (row > m_rows.count())
-            return T();
+            return defaultVal;
         const QVector<int>::const_iterator cstart(m_cols.begin() + m_rows.value(row - 1));
         const QVector<int>::const_iterator cend((row < m_rows.count()) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
         const QVector<int>::const_iterator cit = qBinaryFind(cstart, cend, col);
         // is the col not present?
         if (cit == cend)
-            return T();
+            return defaultVal;
         return m_data.value(m_rows.value(row - 1) + (cit - cstart));
     }
 
@@ -180,19 +180,19 @@ public:
      * Removes data at \p col , \p row .
      * \return the removed data (default data, if none)
      */
-    T take(int col, int row) {
+    T take(int col, int row, const T& defaultVal = T()) {
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's missing?
         if (row > m_rows.count())
-            return T();
+            return defaultVal;
         const int rowStart = (row - 1 < m_rows.count()) ? m_rows.value(row - 1) : m_data.count();
         const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
         const QVector<int> cols = m_cols.mid(rowStart, rowLength);
         QVector<int>::const_iterator cit = qBinaryFind(cols, col);
         // column's missing?
         if (cit == cols.constEnd())
-            return T();
+            return defaultVal;
         const int index = rowStart + (cit - cols.constBegin());
         // save the old data
         const T oldData = m_data[ index ];
