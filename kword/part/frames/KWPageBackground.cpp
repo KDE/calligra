@@ -20,8 +20,6 @@
 #include "KWPageBackground.h"
 #include <KoShapeBackground.h>
 
-#include <QPainter>
-
 KWPageBackground::KWPageBackground()
 {
     setSelectable(false);
@@ -34,8 +32,12 @@ KWPageBackground::~KWPageBackground()
 
 void KWPageBackground::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    applyConversion(painter, converter);
-    painter.fillRect(0, 0, size().width(), size().height(), Qt::red);
+    if (background()) {
+        applyConversion(painter, converter);
+        QPainterPath p;
+        p.addRect(QRectF(QPointF(), size()));
+        background()->paint(painter, p);
+    }
 }
 
 bool KWPageBackground::loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
