@@ -90,6 +90,7 @@ KoFilter::ConversionStatus read_lstStyle();
 KoFilter::ConversionStatus read_latin();
 KoFilter::ConversionStatus read_solidFill();
 KoFilter::ConversionStatus read_gradFill();
+bool m_gradRotation; //whethere there should be angle with gradient
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
 enum noFillCaller {

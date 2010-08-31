@@ -2969,8 +2969,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
 
     m_colorType = GradientColor;
+    m_gradRotation = false;
+
+    TRY_READ_ATTR_WITHOUT_NS(rotWithShape)
+    if (rotWithShape == "1") {
+        m_gradRotation = true;
+    }
 
     while (!atEnd()) {
         readNext();
@@ -3012,7 +3019,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
         }
     }
 
-    // FIXME: This works only for 3 gs spots, can there be more?
+    bool checkAttributes = false;
+    QString red, green, blue, color;
+
+    // This gradient logic should be replace with a more generic one if possible
     if (colors.size() == 3 && shades.size() == 3) {
         // Case: traditional gradient
         if (shades.at(0) < shades.at(1) && shades.at(1) < shades.at(2)) {
@@ -3020,11 +3030,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
             m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
             m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(2)));
-            const QString red = QString::number(m_currentColor.red(), 16);
-            const QString green = QString::number(m_currentColor.green(), 16);
-            const QString blue = QString::number(m_currentColor.blue(), 16);
-            const QString color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+            red = QString::number(m_currentColor.red(), 16);
+            green = QString::number(m_currentColor.green(), 16);
+            blue = QString::number(m_currentColor.blue(), 16);
+            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
             m_currentGradientStyle.addAttribute("draw:start-color", color);
+            checkAttributes = true;
         }
         // Case: axial gradient
         if (shades.at(0) > shades.at(1) && shades.at(2) == shades.at(0)) {
@@ -3032,14 +3043,40 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
             m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
             m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(2)));
-            const QString red = QString::number(m_currentColor.red(), 16);
-            const QString green = QString::number(m_currentColor.green(), 16);
-            const QString blue = QString::number(m_currentColor.blue(), 16);
-            const QString color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+            red = QString::number(m_currentColor.red(), 16);
+            green = QString::number(m_currentColor.green(), 16);
+            blue = QString::number(m_currentColor.blue(), 16);
+            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
             m_currentGradientStyle.addAttribute("draw:start-color", color);
+            checkAttributes = true;
+        }
+    }
+    // Currently used for all other encountered gradient types
+    else if (colors.size() > 1 && shades.size() > 1) {
+        if (shades.at(0) < shades.at(1)) {
+            m_currentGradientStyle.addAttribute("draw:style", "linear");
+            m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
+            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
+            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(1)));
+            red = QString::number(colors.at(0).red(), 16);
+            green = QString::number(colors.at(0).green(), 16);
+            blue = QString::number(colors.at(0).blue(), 16);
+            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+            m_currentGradientStyle.addAttribute("draw:start-color", color);
+            red = QString::number(colors.at(1).red(), 16);
+            green = QString::number(colors.at(1).green(), 16);
+            blue = QString::number(colors.at(1).blue(), 16);
+            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
+            m_currentGradientStyle.addAttribute("draw:end-color", color);
+            checkAttributes = true;
         }
     }
 
+    if (checkAttributes) {
+        if (m_gradRotation) {
+            m_currentGradientStyle.addAttribute("draw:angle", "900");
+        }
+    }
     READ_EPILOGUE
 }
 
@@ -3054,9 +3091,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
- - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
- - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
- - sysClr (System Color) §20.1.2.3.33
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
 
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
@@ -3069,6 +3106,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(scrgbClr)
         }
     }
     READ_EPILOGUE
