@@ -149,23 +149,23 @@ bool MainWindow::virtualKeyBoardIsOnScreen=false;
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
         m_ui(new Ui::MainWindow),
-        m_search(NULL),
-        m_doc(NULL),
-        m_view(NULL),
-        m_editor(NULL),
-        m_kwview(NULL),
-        m_controller(NULL),
-        m_undostack(NULL),
-        m_focelltool(NULL),
+        m_search(0),
+        m_doc(0),
+        m_view(0),
+        m_editor(0),
+        m_kwview(0),
+        m_controller(0),
+        m_undostack(0),
+        m_focelltool(0),
         m_vPage(0),
         m_hPage(0),
         m_pressed(false),
         m_isViewToolBar(true),
-        m_fsTimer(NULL),
-        m_fsButton(NULL),
+        m_fsTimer(0),
+        m_fsButton(0),
         m_fsIcon(FS_BUTTON_PATH),
-        m_fsPPTBackButton(NULL),
-        m_fsPPTForwardButton(NULL),
+        m_fsPPTBackButton(0),
+        m_fsPPTForwardButton(0),
         m_currentPage(1),
         m_index(0),
         m_wholeWord(false),
@@ -1883,7 +1883,7 @@ void MainWindow::closeDoc(bool isWindowClosed)
     if(virtualKeyBoardIsOnScreen)
       showVirtualKeyBoardOnScreen();
 
-    if(m_doc == NULL) {
+    if(m_doc == 0) {
         if(!isWindowClosed) {
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(0, i18n("Please close the window if you want to quit"),
@@ -2354,7 +2354,7 @@ void MainWindow::openFileDialog()
 
 void MainWindow::closeDocument()
 {
-    if (m_doc == NULL)
+    if (m_doc == 0)
         return;
 #ifdef Q_WS_MAEMO_5
     if(foDocumentRdf && m_type==Text){

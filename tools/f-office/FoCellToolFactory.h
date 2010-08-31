@@ -29,6 +29,8 @@ class FoCellTool;
  */
 class FoCellToolFactory : public KoToolFactoryBase
 {
+    Q_OBJECT
+
 public:
     explicit FoCellToolFactory(QObject* parent);
     ~FoCellToolFactory();

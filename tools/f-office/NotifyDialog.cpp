@@ -32,8 +32,8 @@
 
 NotifyDialog::NotifyDialog(QWidget *parent)
         : QDialog(parent),
-        m_layout(NULL),
-        m_label(NULL)
+        m_layout(0),
+        m_label(0)
 {
     m_label = new QLabel(this);
     m_label->setText(i18n("File type not supported"));

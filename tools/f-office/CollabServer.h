@@ -47,8 +47,10 @@ public:
     ~CollabServer();
 
     //void sendUserList();
+    using Collaborate::readyRead;
 
 protected slots:
+
     virtual void readyRead(int source = -1);
     virtual void disconnected(int source = -1);
     virtual void processConnection();

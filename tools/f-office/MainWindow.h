@@ -456,7 +456,7 @@ private:
 
     void init();
     /*!
-     * close the document if it is open and reinit to NULL
+     * close the document if it is open and reinit to 0
      */
     void closeDocument();
     /*!

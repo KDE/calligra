@@ -34,8 +34,8 @@
 
 Splash::Splash(QWidget *parent)
         : QSplashScreen(parent),
-        m_layout(NULL),
-        m_label(NULL),
+        m_layout(0),
+        m_label(0),
         m_kOfficeLogo(SPLASH_LOGO_KOFFICE_PATH)
 {
     m_layout= new QVBoxLayout(this);

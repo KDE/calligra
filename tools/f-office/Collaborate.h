@@ -57,7 +57,7 @@ public:
     enum CollabError { Disconnect = 0, ShortRead, FileError, SocketError };
 
     Collaborate(const QString &nick, QObject* parent = 0) :
-            nick(nick), QObject(parent)
+            QObject(parent), nick(nick)
     {
     }
 
@@ -74,6 +74,7 @@ public:
     virtual void sendFontType(uint start, uint end, const QString &font, int source = -1);
 
 protected:
+
     virtual void readyRead(QDataStream& stream, uint flag = 0, int source = -1);
 
     QString nick;
@@ -81,7 +82,7 @@ protected:
 
     struct connection {
         connection(QTcpSocket* socket) :
-                socket(socket), nick(0), stream(new QDataStream(socket))
+                nick(0), socket(socket), stream(new QDataStream(socket))
         {
         }
 

@@ -229,7 +229,7 @@ void PreviewWindow::newSlide()
 
 StoreButtonPreview::StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QWidget *parent) :
     QWidget(parent),
-    previewWindow(NULL)
+    previewWindow(0)
 {
     this->m_doc=m_doc;
     this->m_view=m_view;
@@ -261,7 +261,7 @@ void StoreButtonPreview::addThumbnail()
     if(!papage)
         return;
     thumbnailList.append(papage->thumbnail());
-    if(previewWindow!=NULL)
+    if(previewWindow!=0)
         previewWindow->addThumbnail(thumbnailList.at(thumbnailList.count()-1));
 
     if(val<m_doc->pageCount())

@@ -43,8 +43,9 @@ public:
                  quint16 port, QObject* parent);
     ~CollabClient();
 
-
+    using Collaborate::readyRead;
 protected slots:
+
     virtual void readyRead(int source = -1);
     virtual void disconnected(int source = -1);
 

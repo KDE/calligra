@@ -43,10 +43,10 @@
 static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
                       const char* xpath_filename, xmlChar **inclusive_namespaces) {
     xmlDocPtr doc;
-    xmlXPathObjectPtr xpath = NULL;
-    xmlChar *result = NULL;
+    xmlXPathObjectPtr xpath = 0;
+    xmlChar *result = 0;
     int ret;
-    xmlExternalEntityLoader defaultEntityLoader = NULL;
+    xmlExternalEntityLoader defaultEntityLoader = 0;
     QString sha1Hash;
     /*
      * build an XML tree from a the file; we need to add default
@@ -64,7 +64,7 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
     QByteArray temp=ioDevice->readAll();
     doc = xmlParseMemory(temp.data(),temp.length());
 
-    if (doc == NULL) {
+    if (doc == 0) {
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(0, QString("Error: unable to parse file \n"));
 #endif
@@ -74,7 +74,7 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
     /*
      * Check the document is of the right kind
      */
-    if(xmlDocGetRootElement(doc) == NULL) {
+    if(xmlDocGetRootElement(doc) == 0) {
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(0, QString("Error: empty document for file \n"));
 #endif
@@ -85,7 +85,7 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
      * load xpath file if specified
      */
     if(xpath_filename) {
-        if(xpath == NULL) {
+        if(xpath == 0) {
 #ifdef Q_WS_MAEMO_5
             QMaemo5InformationBox::information(0, QString("Error: unable to evaluate xpath expression\n"));
 #endif
@@ -98,20 +98,20 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
      * Canonical form
      */
     ret = xmlC14NDocDumpMemory(doc,
-                               (xpath) ? xpath->nodesetval : NULL,
+                               (xpath) ? xpath->nodesetval : 0,
                                exclusive, inclusive_namespaces,
                                with_comments, &result);
     if(ret >= 0) {
-        if(result != NULL) {
+        if(result != 0) {
             sha1Hash=QString((QCryptographicHash::hash(QByteArray((char *)result),QCryptographicHash::Sha1)).toBase64());
-            fflush(NULL);
+            fflush(0);
             xmlFree(result);
         }
     } else {
 #ifdef Q_WS_MAEMO_5
         QMaemo5InformationBox::information(0, QString("Error: failed to canonicalize XML file"));
 #endif
-        if(result != NULL) xmlFree(result);
+        if(result != 0) xmlFree(result);
         xmlFreeDoc(doc);
         return "";
     }
@@ -119,7 +119,7 @@ static QString runc14(QIODevice *ioDevice, int with_comments, int exclusive,
     /*
      * Cleanup
      */
-    if(xpath != NULL)
+    if(xpath != 0)
         xmlXPathFreeObject(xpath);
 
     xmlFreeDoc(doc);
@@ -201,7 +201,7 @@ void DigitalSignatureDialog::printChild(QDomNode element)
                 QString sha1Hash;
 
                 if(node.toElement().tagName()=="Transforms") {
-                    sha1Hash=runc14(store->device(), 1, 0, NULL, NULL);
+                    sha1Hash=runc14(store->device(), 1, 0, 0, 0);
                     node=node.nextSibling();
                 }
                 else
