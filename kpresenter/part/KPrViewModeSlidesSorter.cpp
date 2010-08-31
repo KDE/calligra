@@ -62,7 +62,7 @@ KPrViewModeSlidesSorter::~KPrViewModeSlidesSorter()
 {
 }
 
-void KPrViewModeSlidesSorter::paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect)
+void KPrViewModeSlidesSorter::paint(KoPACanvasBase* /*canvas*/, QPainter& /*painter*/, const QRectF &/*paintRect*/)
 {
 }
 
@@ -249,7 +249,7 @@ void KPrViewModeSlidesSorter::populate()
     int currentPage = 0;
     m_slidesSorter->clear();
 
-    QListWidgetItem * item;
+    QListWidgetItem * item = 0;
 
     //Load the available slides
     foreach( KoPAPageBase* page, m_view->kopaDocument()->pages() )
