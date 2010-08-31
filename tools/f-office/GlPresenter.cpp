@@ -32,6 +32,7 @@
 #include <QDebug>
 
 GLPresenter::GLPresenter(QWidget *parent, int stl, int st, QList <QPixmap> p)
+    : QWidget(parent)
 {
     keepDisplayOn();
     glbase = new GLWidget(this);

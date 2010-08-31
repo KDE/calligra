@@ -27,8 +27,9 @@
 
 CollabClient::CollabClient(const QString &nick, const QHostAddress &address,
                            quint16 port, QObject *parent) :
-address(address), port(port),
-Collaborate(nick, parent)
+    Collaborate(nick, parent),
+    address(address),
+    port(port)
 {
     QTcpSocket* socket = new QTcpSocket(this);
     socket->connectToHost(address, port);
@@ -60,7 +61,7 @@ void CollabClient::socketError(QAbstractSocket::SocketError socketError) {
     emit error((SocketError << 7) + socketError);
 }
 
-void CollabClient::readyRead(int source)
+void CollabClient::readyRead(int /*source*/)
 {
     QDataStream& stream = *(peers.at(0)->stream);
 
@@ -100,7 +101,7 @@ void CollabClient::readyRead(int source)
     }
 }
 
-void CollabClient::disconnected(int source) {
+void CollabClient::disconnected(int /*source*/) {
     qDebug() << "Disconnected";
     // TODO: create a disconnection signal and emit it
 }

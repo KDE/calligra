@@ -27,6 +27,7 @@
 #include "GlWidget.h"
 
 GLWidget::GLWidget(QWidget *parent)
+    : QGLWidget(parent)
 {
     change = false;
     pos1 = pos2 = 0;
@@ -153,7 +154,7 @@ void GLWidget::paintGL()
     }
 }
 
-void GLWidget::resizeGL(int width, int height)
+void GLWidget::resizeGL(int /*width*/, int /*height*/)
 {
     glViewport(0, -160, 800, 800);                   //TODO : Adjust for a better viewport than a fixed one.
 
@@ -169,7 +170,7 @@ void GLWidget::resizeGL(int width, int height)
 #endif
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event)
+void GLWidget::mousePressEvent(QMouseEvent */*event*/)
 {
     emit paused();
 }
@@ -182,7 +183,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void GLWidget::mouseDoubleClickEvent(QMouseEvent * event)
+void GLWidget::mouseDoubleClickEvent(QMouseEvent * /*event*/)
 {
     close();
     emit end();

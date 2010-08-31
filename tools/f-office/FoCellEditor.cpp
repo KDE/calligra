@@ -50,6 +50,7 @@ FoCellEditor::FoCellEditor(KSpread::CellToolBase *cellTool, QWidget *parent)
     document()->setDocumentMargin(0);
     const Cell cell(m_cellTool->selection()->activeSheet(), m_cellTool->selection()->marker());
     const bool wrapText = cell.style().wrapText();
+    Q_UNUSED(wrapText);
     setWordWrapMode(QTextOption::WordWrap);
     setReadOnly(false);
 
@@ -119,7 +120,7 @@ int FoCellEditor::cursorPosition() const
     return textCursor().position();
 }
 
-void FoCellEditor::setActiveSubRegion(int index)
+void FoCellEditor::setActiveSubRegion(int /*index*/)
 {
     /*index = qBound(0, index, (int)d->highlighter->rangeCount());
     int counter = 0;
@@ -188,9 +189,9 @@ void FoCellEditor::slotTextChanged()
     if (hasFocus()) {
         emit textChanged(text);
     }
-
+#if 0
     // Enable/disable the reference selection.
-  /*  if (!text.isEmpty() && text[0] == '=') {
+   if (!text.isEmpty() && text[0] == '=') {
         m_cellTool->selection()->startReferenceSelection();
     } else {
         m_cellTool->selection()->endReferenceSelection();
@@ -198,12 +199,13 @@ void FoCellEditor::slotTextChanged()
     }
 
     //Code to be uncommented when using formula.
-    /* if (d->highlighter->rangeChanged()) {
+     if (d->highlighter->rangeChanged()) {
         // Reset the flag, that indicates range changes after text changes.
         d->highlighter->resetRangeChanged();
         // Rebuild the reference selection by using the formula tokens.
         d->rebuildSelection();
-    }*/
+    }
+#endif
 }
 
 

@@ -84,7 +84,7 @@ private :
      */
     bool m_penToolActivated;
     bool m_highlightToolActivated;
-    bool scribbling;
+    bool scribbling; // XXX: always use m_ prefix!
 
     /*!
      * The points that are used by the pen tool

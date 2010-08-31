@@ -124,7 +124,7 @@ KSpread::CellEditorBase* FoCellTool::editor() const
    return m_editor;
 }
 
-bool FoCellTool::createEditor(bool clear, bool focus)
+bool FoCellTool::createEditor(bool clear, bool /*focus*/)
 {
     bool status=false;
     const Cell cell(selection()->activeSheet(), selection()->marker());

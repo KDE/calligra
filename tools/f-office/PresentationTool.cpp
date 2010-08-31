@@ -33,12 +33,12 @@
 #include "PresentationTool.h"
 
 PresentationTool::PresentationTool(MainWindow * window, KoCanvasControllerWidget * controller )
-: scribbling(false),
-m_window(window),
-m_controller(controller),
-m_highlightToolActivated(false),
-m_penToolActivated(false),
-m_dbus( new PresentationToolAdaptor( this ) )
+    : m_controller(controller),
+    m_window(window),
+    m_penToolActivated(false),
+    m_highlightToolActivated(false),
+    scribbling(false),
+    m_dbus( new PresentationToolAdaptor( this ) )
 {
     QDBusConnection::sessionBus().registerObject("/presentation/tool", this);
     lastPoint.setX(0);

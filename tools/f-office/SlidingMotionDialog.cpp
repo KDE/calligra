@@ -24,8 +24,8 @@
 #include <QString>
 #include <QDialog>
 
-SlidingMotionDialog::SlidingMotionDialog(QWidget *parent)
-    :m_slidingmotionframe(0),
+SlidingMotionDialog::SlidingMotionDialog(QWidget */*parent*/)
+    : m_slidingmotionframe(0),
     m_slidingmotionframelayout(0),
     m_opengl(0),
     m_acceleration(0),

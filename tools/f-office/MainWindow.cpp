@@ -122,7 +122,7 @@ using  KSpread::Map;
 using  KSpread::View;
 using  KSpread::Sheet;
 
-#define FORMATFRAME_XCORDINATE_VALUE 465
+#define FORMATRAME_XCORDINATE_VALUE 465
 #define FORMATFRAME_YCORDINATE_VALUE 150
 #define FORMATFRAME_WIDTH 335
 #define FORMATFRAME_HEIGHT 210
@@ -148,12 +148,57 @@ bool MainWindow::stopAcceleratorScrolling=true;
 bool MainWindow::virtualKeyBoardIsOnScreen=false;
 MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         : QMainWindow(parent),
-        m_ui(new Ui::MainWindow),
+        m_xcordinate(0),
+        m_ycordinate(0),
+        m_fontSizeDialog(0),
+        m_fontSizeDialogLayout(0),
+        m_fontSizeLineEdit(0),
+        m_fontSizeList(0),
+        m_formatframe(0),
+        m_formatframelayout(0),
+        m_alignleft(0),
+        m_alignright(0),
+        m_aligncenter(0),
+        m_numberedlist(0),
+        m_bulletlist(0),
+        m_alignjustify(0),
+        m_fontstyleframe(0),
+        m_fontstyleframelayout(0),
+        m_fontcombobox(0),
+        m_fontsizebutton(0),
+        m_textcolor(0),
+        m_textbackgroundcolor(0),
+        m_superscript(0),
+        m_subscript(0),
+        m_bold(0),
+        m_italic(0),
+        m_underline(0),
+        m_docdialog(0),
+        m_docdialoglayout(0),
+        m_templateWidget(0),
+        m_confirmationdialog(0),
+        m_confirmationdialoglayout(0),
+        m_yes(0),
+        m_no(0),
+        m_cancel(0),
+        m_message(0),
+        m_addAction(0),
+        m_subtractAction(0),
+        m_multiplyAction(0),
+        m_divideAction(0),
+        m_percentageAction(0),
+        m_equalsAction(0),
+        m_signalMapper(0),
+        m_sheetInfoFrame(0),
+        m_sheetInfoFrameLayout(0),
+        m_addSheet(0),
+        m_removeSheet(0),
+        m_sheetName(0),
         m_search(0),
         m_doc(0),
-        m_view(0),
         m_editor(0),
         m_kwview(0),
+        m_view(0),
         m_controller(0),
         m_undostack(0),
         m_focelltool(0),
@@ -166,87 +211,42 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         m_fsIcon(FS_BUTTON_PATH),
         m_fsPPTBackButton(0),
         m_fsPPTForwardButton(0),
-        m_currentPage(1),
-        m_index(0),
-        m_wholeWord(false),
-        m_type(Text),
         m_splash(aSplash),
+        m_fsPPTDrawPenButton(0),
+        m_fsPPTDrawHighlightButton(0),
+        m_pptTool(0),
+        m_dbus( new MainWindowAdaptor(this)),
+        m_isDocModified(false),
         m_panningCount(0),
         m_isLoading(false),
-        m_fontstyleframe(0),
-        m_formatframe(0),
-        m_confirmationdialog(0),
-        m_docdialog(0),
-        m_formatframelayout(0),
-        m_bold(0),
-        m_italic(0),
-        m_underline(0),
-        m_alignleft(0),
-        m_alignright(0),
-        m_aligncenter(0),
-        m_numberedlist(0),
-        m_bulletlist(0),
-        m_alignjustify(0),
-        m_fontstyleframelayout(0),
-        m_fontcombobox(0),
-        m_textcolor(0),
-        m_superscript(0),
-        m_subscript(0),
-        m_textbackgroundcolor(0),
-        m_docdialoglayout(0),
-        m_fontsizebutton(0),
-        m_fontSizeDialog(0),
-        m_fontSizeDialogLayout(0),
-        m_fontSizeLineEdit(0),
-        m_fontSizeList(0),
-        m_document(0),
-        m_presenter(0),
-        m_spreadsheet(0),
-        m_confirmationdialoglayout(0),
-        m_yes(0),
-        m_no(0),
-        m_cancel(0),
-        m_firstChar(true),
-        m_message(0),
-        m_isDocModified(false),
-        m_xcordinate(0),
-        m_ycordinate(0),
-        m_pptTool(0),
-        m_fsPPTDrawHighlightButton(0),
-        m_fsPPTDrawPenButton(0),
-#ifdef Q_WS_MAEMO_5
-        m_fsAccButton(0),
-#endif
-        m_dbus( new MainWindowAdaptor(this)),
-        m_collab(0),
-        m_collabDialog(0),
-        m_collabEditor(0),
         storeButtonPreview(0),
-        notesDialog(0),
-        m_slidingmotiondialog(0),
         m_slideNotesButton(0),
-        m_slideNotesIcon(VIEW_NOTES_PIXMAP),
-        m_tempselectiondialog(0),
-        m_tempdialoglayout(0),
-        m_templateWidget(0),
-        m_go(0),
-        m_closetemp(0),
-        m_templatepreview(0),
-        m_addAction(0),
-        m_subtractAction(0),
-        m_multiplyAction(0),
-        m_divideAction(0),
-        m_percentageAction(0),
-        m_equalsAction(0),
-        m_signalMapper(0),
-        m_spreadEditToolBar(0),
-        m_sheetInfoFrame(0),
-        m_sheetInfoFrameLayout(0),
-        m_addSheet(0),
-        m_removeSheet(0),
-        m_sheetName(0),
-        digitalSignatureDialog(0)
+        m_slideNotesIcon(VIEW_NOTES_PIXMAP)
 {
+    digitalSignatureDialog = 0;
+    m_closetemp = 0;
+    m_collab = 0;
+    m_collabDialog = 0;
+    m_collabEditor = 0;
+    m_currentPage = 1;
+    m_document = 0;
+    m_firstChar = true;
+    m_go = 0;
+    m_index = 0;
+    m_presenter = 0;
+    m_slidingmotiondialog = 0;
+    m_spreadEditToolBar = 0;
+    m_spreadsheet = 0;
+    m_tempdialoglayout = 0;
+    m_templatepreview = 0;
+    m_tempselectiondialog = 0;
+    m_type = Text;
+    m_ui = new Ui::MainWindow;
+    m_wholeWord = false;
+    notesDialog = 0;
+#ifdef Q_WS_MAEMO_5
+    m_fsAccButton = 0;
+#endif
     init();
 }
 
@@ -586,7 +586,7 @@ void MainWindow::openFormatFrame()
     m_formatframelayout->addWidget(m_numberedlist,2,0);
     m_formatframelayout->addWidget(m_bulletlist,2,1);
 
-    m_formatframe->setGeometry(FORMATFRAME_XCORDINATE_VALUE,
+    m_formatframe->setGeometry(FORMATRAME_XCORDINATE_VALUE,
                                FORMATFRAME_YCORDINATE_VALUE,
                                FORMATFRAME_WIDTH,
                                FORMATFRAME_HEIGHT);
@@ -3387,7 +3387,7 @@ void MainWindow::checkDBusActivation()
         openFileDialog();
 }
 
-void MainWindow::pluginOpen(bool newWindow, const QString& path)
+void MainWindow::pluginOpen(bool /*newWindow*/, const QString& path)
 {
     openDocument(path,false);
 }
@@ -3458,7 +3458,7 @@ void MainWindow::mouseReleaseEvent( QMouseEvent *event )
     }
 }
 
-void MainWindow::paintEvent( QPaintEvent *event )
+void MainWindow::paintEvent( QPaintEvent */*event*/ )
 {
     if( !m_pptTool ) {
         return;

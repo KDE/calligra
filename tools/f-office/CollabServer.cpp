@@ -26,8 +26,11 @@
 
 #include "CollabServer.h"
 
-CollabServer::CollabServer(const QString &nick, const QString &filename, quint16 port, QObject *parent) :
-        port(port), Collaborate(nick, parent)
+CollabServer::CollabServer(const QString &nick, const QString &filename, quint16 port, QObject *parent)
+    : Collaborate(nick, parent)
+    , port(port)
+    , readySignal(0)
+    , disconnectSignal(0)
 {
     this->filename = filename;
 
