@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="kpresenter" version="120">
+<kpartgui name="kpresenter" version="123">
     <MenuBar>
         <Menu name="file">
             <Action name="file_export_html" />
@@ -32,6 +32,7 @@
             <Separator/>
             <Action name="view_normal"/>
             <Action name="view_notes"/>
+            <Action name="view_slides_sorter"/>
             <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>
@@ -52,7 +53,7 @@
 	        <Action name="insert_pictures"/>
         </Menu>
         <Menu name="format"><text>F&amp;ormat</text>
-            <Action name="format_masterpage"/> 
+            <Action name="format_masterpage"/>
             <Action name="format_font"/>
             <Action name="format_paragraph"/>
             <Action name="format_stylist"/>

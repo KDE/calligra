@@ -20,6 +20,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
+     KPrViewModeSlidesSorter.cpp
      KPrViewModePreviewPageEffect.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp

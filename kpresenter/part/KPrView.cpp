@@ -45,6 +45,7 @@
 #include "KPrViewAdaptor.h"
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
+#include "KPrViewModeSlidesSorter.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 #include "KPrPicturesImport.h"
@@ -60,13 +61,12 @@
 #include "ui/KPrHtmlExportDialog.h"
 #include <QtGui/QDesktopWidget>
 
-#include <KDebug>
-
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
   : KoPAView( document, parent )
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
+//   , m_slidesSorterMode( new KPrViewModeSlidesSorter( this, kopaCanvas() ))
   , m_dbus( new KPrViewAdaptor( this ) )
 {
     initGUI();
@@ -93,12 +93,18 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
                                                    new KPrPageSelectStrategyActive( this ) ) );
+
+    KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
+    if (canvas) {
+        m_slidesSorterMode = new KPrViewModeSlidesSorter(this, canvas);
+    }
 }
 
 KPrView::~KPrView()
 {
     delete m_presentationMode;
     delete m_notesMode;
+    delete m_slidesSorterMode;
 }
 
 KoViewConverter * KPrView::viewConverter( KoPACanvasBase * canvas )
@@ -191,6 +197,11 @@ void KPrView::initActions()
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
 
+    m_actionViewModeSlidesSorter = new KAction(i18n("Slides Sorter"), this);
+    m_actionViewModeSlidesSorter->setCheckable(true);
+    actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
+    connect(m_actionViewModeSlidesSorter, SIGNAL(triggered()), this, SLOT(showSlidesSorter()));
+
     m_actionInsertPictures = new KAction(i18n("Insert Pictures..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
     connect(m_actionInsertPictures, SIGNAL(activated()), this, SLOT(insertPictures()));
@@ -198,6 +209,7 @@ void KPrView::initActions()
     QActionGroup *viewModesGroup = new QActionGroup(this);
     viewModesGroup->addAction(m_actionViewModeNormal);
     viewModesGroup->addAction(m_actionViewModeNotes);
+    viewModesGroup->addAction(m_actionViewModeSlidesSorter);
 
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
@@ -309,6 +321,17 @@ void KPrView::showNotes()
         setMasterMode( false );
     }
     setViewMode(m_notesMode);
+}
+
+void KPrView::showSlidesSorter()
+{
+    // Make sure that we are not in master mode
+    // Sort master does not make sense
+    if ( viewMode()->masterMode() ) {
+        actionCollection()->action( "view_masterpages" )->setChecked( false );
+        setMasterMode( false );
+    }
+    setViewMode(m_slidesSorterMode);
 }
 
 void KPrView::dialogCustomSlideShows()
