@@ -1315,7 +1315,7 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
     };
 }
 
-bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Style& style)
+bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
 {
     static const QString sFormula           = QString::fromAscii("formula");
     static const QString sValidationName    = QString::fromAscii("validation-name");
@@ -1346,7 +1346,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     static const QStringList formulaNSPrefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
-    loadOdfCellText(element, tableContext, style);
+    loadOdfCellText(element, tableContext, autoStyles, cellStyleName);
 
     //
     // formula
@@ -1425,12 +1425,12 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 if (element.hasAttributeNS(nsOffice, sCurrency)) {
                     currency = Currency(element.attributeNS(nsOffice, sCurrency, QString()));
                 }
-
+                /* TODO: somehow make this work again, all setStyle calls here will be overwritten by cell styles later
                 if( style.isEmpty() ) {
                     Style style;
                     style.setCurrency(currency);
                     setStyle(style);
-                }
+                } */
             }
         } else if (valuetype == sPercentage) {
             bool ok = false;
@@ -1639,7 +1639,7 @@ static bool findDrawElements(const KoXmlElement& parent)
     return false;
 }
 
-void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Style& style)
+void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     KoXmlElement textParagraphElement;
@@ -1685,6 +1685,17 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
             // for now we don't support richtext and embedded shapes in the same cell;
             // this is because they would currently be loaded twice, once by the KoTextLoader
             // and later properly by the cell itself
+
+            Style style; style.setDefault();
+            if (!cellStyleName.isEmpty()) {
+                if (autoStyles.contains(cellStyleName))
+                    style.merge(autoStyles[cellStyleName]);
+                else {
+                    const CustomStyle* namedStyle = sheet()->map()->styleManager()->style(cellStyleName);
+                    if (namedStyle)
+                        style.merge(*namedStyle);
+                }
+            }
 
             QTextCharFormat format = style.asCharFormat();
             sheet()->map()->textStyleManager()->defaultParagraphStyle()->characterStyle()->copyProperties(format);

@@ -2112,19 +2112,9 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
             cellStyleName = rowCellStyleName;
         if (cellStyleName.isEmpty())
             cellStyleName = columnStyles.get(columnIndex);
-        Style style; style.setDefault();
-        if (!cellStyleName.isEmpty()) {
-            if (autoStyles.contains(cellStyleName))
-                style.merge(autoStyles[cellStyleName]);
-            else {
-                const CustomStyle* namedStyle = map()->styleManager()->style(cellStyleName);
-                if (namedStyle)
-                    style.merge(*namedStyle);
-            }
-        }
 
         Cell cell(this, columnIndex, rowIndex);
-        cell.loadOdf(cellElement, tableContext, style);
+        cell.loadOdf(cellElement, tableContext, autoStyles, cellStyleName);
 
         if (!cell.comment().isEmpty())
             cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, this), cell.comment());
