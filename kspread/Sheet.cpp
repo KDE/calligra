@@ -1984,13 +1984,27 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                           const IntervalMap<QString>& columnStyles,
                           const Styles& autoStyles)
 {
+    static const QString sStyleName             = QString::fromAscii("style-name");
+    static const QString sNumberRowsRepeated    = QString::fromAscii("number-rows-repeated");
+    static const QString sDefaultCellStyleName  = QString::fromAscii("default-cell-style-name");
+    static const QString sVisibility            = QString::fromAscii("visibility");
+    static const QString sVisible               = QString::fromAscii("visible");
+    static const QString sCollapse              = QString::fromAscii("collapse");
+    static const QString sFilter                = QString::fromAscii("filter");
+    static const QString sPage                  = QString::fromAscii("page");
+    static const QString sTableCell             = QString::fromAscii("table-cell");
+    static const QString sCoveredTableCell      = QString::fromAscii("covered-table-cell");
+    static const QString sNumberColumnsRepeated = QString::fromAscii("number-columns-repeated");
+
+    static const QString nsTable = QString::fromAscii(KoXmlNS::table);
+
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
     bool isNonDefaultRow = false;
 
     KoStyleStack styleStack;
-    if (row.hasAttributeNS(KoXmlNS::table, "style-name")) {
-        QString str = row.attributeNS(KoXmlNS::table, "style-name", QString());
+    if (row.hasAttributeNS(nsTable, sStyleName)) {
+        QString str = row.attributeNS(nsTable, sStyleName, QString());
         const KoXmlElement *style = odfContext.stylesReader().findStyle(str, "table-row");
         if (style) {
             styleStack.push(*style);
@@ -2000,9 +2014,9 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     styleStack.setTypeProperties("table-row");
 
     int number = 1;
-    if (row.hasAttributeNS(KoXmlNS::table, "number-rows-repeated")) {
+    if (row.hasAttributeNS(nsTable, sNumberRowsRepeated)) {
         bool ok = true;
-        int n = row.attributeNS(KoXmlNS::table, "number-rows-repeated", QString()).toInt(&ok);
+        int n = row.attributeNS(nsTable, sNumberRowsRepeated, QString()).toInt(&ok);
         if (ok)
             // Some spreadsheet programs may support more rows than KSpread so
             // limit the number of repeated rows.
@@ -2011,8 +2025,8 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     }
 
     QString rowCellStyleName;
-    if (row.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
-        rowCellStyleName = row.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
+    if (row.hasAttributeNS(nsTable, sDefaultCellStyleName)) {
+        rowCellStyleName = row.attributeNS(nsTable, sDefaultCellStyleName, QString());
         if (!rowCellStyleName.isEmpty()) {
             rowStyleRegions[rowCellStyleName] += QRect(1, rowIndex, KS_colMax, number);
         }
@@ -2026,11 +2040,11 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     }
 
     enum { Visible, Collapsed, Filtered } visibility = Visible;
-    if (row.hasAttributeNS(KoXmlNS::table, "visibility")) {
-        const QString string = row.attributeNS(KoXmlNS::table, "visibility", "visible");
-        if (string == "collapse")
+    if (row.hasAttributeNS(nsTable, sVisibility)) {
+        const QString string = row.attributeNS(nsTable, sVisibility, sVisible);
+        if (string == sCollapse)
             visibility = Collapsed;
-        else if (string == "filter")
+        else if (string == sFilter)
             visibility = Filtered;
         isNonDefaultRow = true;
     }
@@ -2038,7 +2052,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     bool insertPageBreak = false;
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
         QString str = styleStack.property(KoXmlNS::fo, "break-before");
-        if (str == "page") {
+        if (str == sPage) {
             insertPageBreak = true;
         }
         //  else
@@ -2072,14 +2086,14 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
 
     KoXmlElement cellElement;
     forEachElement(cellElement, row) {
-        if (cellElement.namespaceURI() != KoXmlNS::table)
+        if (cellElement.namespaceURI() != nsTable)
             continue;
-        if (cellElement.localName() != "table-cell" && cellElement.localName() != "covered-table-cell")
+        if (cellElement.localName() != sTableCell && cellElement.localName() != sCoveredTableCell)
             continue;
 
 
         bool ok = false;
-        const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
+        const int n = cellElement.attributeNS(nsTable, sNumberColumnsRepeated, QString()).toInt(&ok);
         // Some spreadsheet programs may support more columns than
         // KSpread so limit the number of repeated columns.
         // FIXME POSSIBLE DATA LOSS!
@@ -2087,7 +2101,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         columnMaximal = qMax(numberColumns, columnMaximal);
 
         // Styles are inserted at the end of the loading process, so check the XML directly here.
-        const QString styleName = cellElement.attributeNS(KoXmlNS::table , "style-name", QString());
+        const QString styleName = cellElement.attributeNS(nsTable , sStyleName, QString());
         if (!styleName.isEmpty())
             cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
 
