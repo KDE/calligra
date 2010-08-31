@@ -74,7 +74,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
     if (container) {
         if (!container->shapeCount()) {
             return;
-	}
+        }
 
         QList<KoShape*> sortedObjects = container->shapes();
         qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
@@ -120,5 +120,11 @@ void KWCopyShape::saveOdf(KoShapeSavingContext &context) const
 
 bool KWCopyShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(context);
+#ifdef __GNUC__
+    #warning TODO: implement KWCopyShape::loadOdf
+#endif
+
     return false; // TODO
 }

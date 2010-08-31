@@ -222,7 +222,11 @@ void KWDocument::removeShape(KoShape *shape)
 
 void KWDocument::paintContent(QPainter&, const QRect &rect)
 {
-    // TODO
+    Q_UNUSED(rect);
+#ifdef __GNUC__
+    #warning TODO: implement KWDocument::paintContent
+#endif
+
 }
 
 KoView *KWDocument::createViewInstance(QWidget *parent)
