@@ -122,8 +122,14 @@ void RdfInfoDialog::doSomething()
 {
     QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
     if(clickedButton->objectName()=="phoneButton"){
-        QRegExp reg("\\D");
-        details.phone=details.phone.replace(reg,"");
+
+        QRegExp reg("[ ]+");
+        QString number=details.phone;
+        number=number.replace(reg,"");
+        reg.setPattern("[^+ * # 0-9]");
+        number=number.replace(reg,"");
+        details.phone=number;
+
         QDBusConnection bus = QDBusConnection::sessionBus();
         QDBusInterface *interface = new QDBusInterface("com.nokia.csd.Call", "/com/nokia/csd/call", "com.nokia.csd.Call");
         interface->call("CreateWith", this->details.phone, uint(0));
