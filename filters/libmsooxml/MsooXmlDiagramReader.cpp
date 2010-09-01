@@ -302,12 +302,11 @@ class AbstractAtom
         QList<AbstractAtom*> m_children;
 
         QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType) {
-            QList<AbstractNode*> result;
-            
             QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
             QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
             Q_ASSERT(axisList.count() <= 1 || axisList.count() == typeList.count());
-            
+
+            QList<AbstractNode*> result;
             for(int i = 0; i < axisList.count(); ++i) {
                 const QString axis = axisList[i];
                 QList<AbstractNode*> list;
@@ -349,6 +348,7 @@ class AbstractAtom
                 } else if(axis == QLatin1String("self")) { // Self
                     list.append(context->currentNode());
                 }
+
                 if(i < typeList.count()) { // filter the result
                     const QString ptType = typeList[i];
                     foreach(AbstractNode* node, list) {
@@ -409,7 +409,7 @@ class LayoutNodeAtom : public AbstractAtom
         void addConstraint(ConstraintAtom* constraint) { m_constraints << constraint; }
         void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; }
         QList<AbstractNode*> axis() const { return m_axis; }
-        void setAxis(Context* context, const QString& axis, const QString& ptType) { m_axis = fetchAxis(context, axis, ptType); }
+        void setAxis(const QList<AbstractNode*> &axis) { m_axis = axis; }
     private:
         QList<ConstraintAtom*> m_constraints;
         AlgorithmAtom* m_algorithm;
@@ -621,7 +621,8 @@ class PresentationOfAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
-            context->m_parentLayout->setAxis(context, m_axis, m_ptType);
+            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType);
+            context->m_parentLayout->setAxis(axis);
             //AbstractAtom::layoutAtom(context);
         }
 };
@@ -669,9 +670,9 @@ class IfAtom : public AbstractAtom
         bool testAtom(Context* context) {
             //TODO handle m_argument=="var"
             QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
-            bool istrue = false;
+            QString funcValue;
             if(m_function == "cnt") { // Specifies a count.
-                istrue = axis.count() == m_value.toInt();
+                funcValue = QString::number(axis.count());
             } else if(m_function == "depth") { // Specifies the depth.
                 //int depth = 0;
                 //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
@@ -705,9 +706,59 @@ class IfAtom : public AbstractAtom
                 //TODO
                 kWarning()<<"TODO func=revPos";
             } else if(m_function == "var") { // Used to reference a variable.
-                //TODO
-                kWarning()<<"TODO func=var";
+                if(m_argument == QLatin1String("animLvl")) { // Specifies the animation level
+                    //TODO
+                } else if(m_argument == QLatin1String("animOne")) { // Specifies animate as one.
+                    //TODO
+                } else if(m_argument == QLatin1String("bulEnabled")) { // Specifies bullets enabled.
+                    //TODO
+                } else if(m_argument == QLatin1String("chMax")) { // The maximum number of children.
+                    //TODO
+                } else if(m_argument == QLatin1String("chPref")) { // The preferred number of children.
+                    //TODO
+                } else if(m_argument == QLatin1String("dir")) { // Specifies the direction of the diagram.
+                    //TODO another case missing in the specs: What are the possible directions and where are they defined?
+                    funcValue = "norm";
+                } else if(m_argument == QLatin1String("hierBranch")) { // The hierarchy branch.
+                    //TODO
+                } else if(m_argument == QLatin1String("none")) { // Unknown variable type.
+                    //TODO
+                } else if(m_argument == QLatin1String("orgChart")) { // Algorithm that lays out an org chart.
+                    //TODO
+                } else if(m_argument == QLatin1String("resizeHandles")) { // Specifies the resize handles.
+                    //TODO
+                } else {
+                    kWarning()<<"Unexpected argument="<<m_argument<<"name="<<m_name;
+                }
             }
+
+            bool istrue = false;
+            if(funcValue >= 0) {
+                if(m_operator == "equ") {
+                    istrue = funcValue == m_value;
+                } else {
+                    bool isInt;
+                    const int funcValueInt = funcValue.toInt(&isInt);
+                    const int valueInt = isInt ? m_value.toInt(&isInt) : 0;
+                    if(!isInt) // right, that's untested atm since I didn't found a single document that does it and the specs don't cover such "details" anyways so it seems :-/
+                        kWarning()<<"TODO figure out how string-comparision is expected to work";
+
+                    if(m_operator == QLatin1String("gt")) {
+                        istrue = isInt ? funcValueInt > valueInt : funcValue > m_value;
+                    } else if(m_operator == QLatin1String("gte")) {
+                        istrue = isInt ? funcValueInt >= valueInt : funcValue >= m_value;
+                    } else if(m_operator == QLatin1String("lt")) {
+                        istrue = isInt ? funcValueInt < valueInt : funcValue < m_value;
+                    } else if(m_operator == QLatin1String("lte")) {
+                        istrue = isInt ? funcValueInt <= valueInt : funcValue <= m_value;
+                    } else if(m_operator == QLatin1String("neq")) {
+                        istrue = isInt ? funcValueInt != valueInt : funcValue != m_value;
+                    } else {
+                        kWarning()<<"Unexpected operator="<<m_operator<<"name="<<m_name;
+                    }
+                }
+            }
+
             return istrue || !m_isTrue;
         }
     private:
