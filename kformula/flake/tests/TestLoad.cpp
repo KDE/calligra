@@ -81,10 +81,10 @@ static QString dumpRecurse(const QList<BasicElement*>& list)
     return result + " ]";
 }
 
-static void dump( const QList<BasicElement*>& list )
-{
-    qDebug() << dumpRecurse(list);
-}
+//static void dump( const QList<BasicElement*>& list )
+//{
+//    qDebug() << dumpRecurse(list);
+//}
 
 static void addRow( const QString& input, int output )
 {
