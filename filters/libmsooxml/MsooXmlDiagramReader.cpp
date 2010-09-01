@@ -301,9 +301,16 @@ class AbstractAtom
         AbstractAtom* m_parent;
         QList<AbstractAtom*> m_children;
 
-        QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis) {
-            QList<AbstractNode*> list;
-            foreach(QString axis, _axis.split(' ', QString::SkipEmptyParts)) {
+        QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType) {
+            QList<AbstractNode*> result;
+            
+            QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
+            QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
+            Q_ASSERT(axisList.count() <= 1 || axisList.count() == typeList.count());
+            
+            for(int i = 0; i < axisList.count(); ++i) {
+                const QString axis = axisList[i];
+                QList<AbstractNode*> list;
                 if(axis == QLatin1String("ancst")) { // Ancestor
                     for(AbstractNode* n = context->currentNode(); n; n = n->parent())
                         list.append(n);
@@ -342,18 +349,13 @@ class AbstractAtom
                 } else if(axis == QLatin1String("self")) { // Self
                     list.append(context->currentNode());
                 }
-            }
-            return list;
-        }
-        
-        QList<AbstractNode*> filterAxis(Context* context, const QList<AbstractNode*> &list, const QString &_ptType) const {
-            const QString ptType = _ptType.isEmpty() ? "all" : _ptType;
-            QList<AbstractNode*> result;
-            foreach(QString type, ptType.split(' ', QString::SkipEmptyParts)) {
-                foreach(AbstractNode* node, list) {
-                    if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
-                        if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
-                            result.append(pt);
+                if(i < typeList.count()) { // filter the result
+                    const QString ptType = typeList[i];
+                    foreach(AbstractNode* node, list) {
+                        if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
+                            if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
+                                result.append(pt);
+                            }
                         }
                     }
                 }
@@ -407,7 +409,7 @@ class LayoutNodeAtom : public AbstractAtom
         void addConstraint(ConstraintAtom* constraint) { m_constraints << constraint; }
         void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; }
         QList<AbstractNode*> axis() const { return m_axis; }
-        void setAxis(Context* context, const QString& axis, const QString& ptType) { m_axis = filterAxis(context, fetchAxis(context, axis), ptType); }
+        void setAxis(Context* context, const QString& axis, const QString& ptType) { m_axis = fetchAxis(context, axis, ptType); }
     private:
         QList<ConstraintAtom*> m_constraints;
         AlgorithmAtom* m_algorithm;
@@ -666,7 +668,7 @@ class IfAtom : public AbstractAtom
         }
         bool testAtom(Context* context) {
             //TODO handle m_argument=="var"
-            QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
+            QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
             bool istrue = false;
             if(m_function == "cnt") { // Specifies a count.
                 istrue = axis.count() == m_value.toInt();
@@ -794,7 +796,7 @@ class ForEachAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
-            QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
+            QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
             foreach(AbstractNode* node, axis) {
                 Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
@@ -803,7 +805,7 @@ class ForEachAtom : public AbstractAtom
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
             DEBUG_WRITE;
-            QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
+            QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
             foreach(AbstractNode* node, axis) {
                 Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
