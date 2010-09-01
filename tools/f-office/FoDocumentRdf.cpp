@@ -101,9 +101,11 @@ bool FoDocumentRdf::loadOasis(KoStore *store)
             Soprano::PluginManager::instance()->discoverParserForSerialization(
                     Soprano::SerializationRdfXml);
     bool ok = loadRdf(store, parser, "manifest.rdf");
-    ok = ok & (loadRdf(store, parser, "data.rdf"));
-    ok = ok & (loadRdf(store, parser, "geo1.rdf"));
-    ok = ok & (loadRdf(store, parser, "openingHours.rdf"));
+    // KOffice stores RDF in manifest
+    // So we just check loading of manifest.rdf file.
+    loadRdf(store, parser, "data.rdf");
+    loadRdf(store, parser, "geo1.rdf");
+    loadRdf(store, parser, "openingHours.rdf");
 
     if (!ok){
         return ok;
