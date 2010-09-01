@@ -116,7 +116,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-#define Q_WS_MAEMO_5 1
+//#define Q_WS_MAEMO_5 1
 using  KSpread::Doc;
 using  KSpread::Map;
 using  KSpread::View;
