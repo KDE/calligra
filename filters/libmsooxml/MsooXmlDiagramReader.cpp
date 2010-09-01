@@ -65,14 +65,17 @@ class AlgorithmAtom;
 class Context
 {
     public:
-        PointListNode* m_rootPoint;
+        AbstractNode* m_rootPoint;
         ConnectionListNode* m_connections;
         LayoutNodeAtom* m_rootLayout;
         LayoutNodeAtom* m_parentLayout;
         QMap<QString, LayoutNodeAtom*> m_layoutMap;
-        AbstractNode* m_currentNode; // the moving context node
         explicit Context();
         ~Context();
+        AbstractNode* currentNode() const { return m_currentNode; }
+        void setCurrentNode(AbstractNode* node);
+    private:
+        AbstractNode* m_currentNode; // the moving context node
 };
 
 /****************************************************************************************************
@@ -299,34 +302,37 @@ class AbstractAtom
         QList<AbstractAtom*> m_children;
 
         QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis) {
-            kDebug()<<">>>>>>>> fetchAxis axis="<<_axis;
             QList<AbstractNode*> list;
-if(_axis.isEmpty()) return list;
             foreach(QString axis, _axis.split(' ', QString::SkipEmptyParts)) {
                 if(axis == QLatin1String("ancst")) { // Ancestor
-                for(AbstractNode* n = context->m_currentNode; n; n = n->parent())
-                    list.append(n);
+                    for(AbstractNode* n = context->currentNode(); n; n = n->parent())
+                        list.append(n);
                 } else if(axis == QLatin1String("ancstOrSelf")) { // Ancestor Or Self
-                for(AbstractNode* n = context->m_currentNode; n; n = n->parent())
-                    list.append(n);
-                    list.append(context->m_currentNode);
+                    for(AbstractNode* n = context->currentNode(); n; n = n->parent())
+                        list.append(n);
+                    list.append(context->currentNode());
                 } else if(axis == QLatin1String("ch")) { // Child
-                    list = context->m_currentNode->children();
+                    foreach(AbstractNode* n, context->currentNode()->children())
+                        list.append(n);
                 } else if(axis == QLatin1String("des")) { // Descendant
-                    list = context->m_currentNode->descendant();
+                    foreach(AbstractNode* n, context->currentNode()->descendant())
+                        list.append(n);
                 } else if(axis == QLatin1String("desOrSelf")) { // Descendant Or Self
-                    list = context->m_currentNode->descendant();
-                    list.append(context->m_currentNode);
+                    foreach(AbstractNode* n, context->currentNode()->descendant())
+                        list.append(n);
+                    list.append(context->currentNode());
                 } else if(axis == QLatin1String("follow")) { // Follow
-                    foreach(AbstractNode* peer, context->m_currentNode->peers()) {
+                    foreach(AbstractNode* peer, context->currentNode()->peers()) {
                         list.append(peer);
                         foreach(AbstractNode* n, peer->descendant())
                             list.append(n);
                     }
                 } else if(axis == QLatin1String("followSib")) { // Follow Sibling
-                    list = context->m_currentNode->peers();
+                    foreach(AbstractNode* n, context->currentNode()->peers())
+                        list.append(n);
                 } else if(axis == QLatin1String("par")) { // Parent
-                    if (context->m_currentNode->parent()) list.append(context->m_currentNode->parent());
+                    if (context->currentNode()->parent())
+                        list.append(context->currentNode()->parent());
                 } else if(axis == QLatin1String("preced")) { // Preceding
                     //TODO
                 } else if(axis == QLatin1String("precedSib")) { // Preceding Sibling
@@ -334,29 +340,24 @@ if(_axis.isEmpty()) return list;
                 } else if(axis == QLatin1String("root")) { // Root
                     list.append(context->m_rootPoint);
                 } else if(axis == QLatin1String("self")) { // Self
-                    list.append(context->m_currentNode);
+                    list.append(context->currentNode());
                 }
             }
-//Q_ASSERT(!list.isEmpty());
             return list;
         }
         
         QList<AbstractNode*> filterAxis(Context* context, const QList<AbstractNode*> &list, const QString &_ptType) const {
             const QString ptType = _ptType.isEmpty() ? "all" : _ptType;
-            kDebug()<<">>>>>>>> filterAxis ptType="<<ptType;
             QList<AbstractNode*> result;
-//if(list.isEmpty()) return result;
-            foreach(AbstractNode* node, list) {
-                if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
-//kDebug()<<">>>>>>>> filterAxis pt->m_type="<<pt->m_type;
-//pt->dump(context, 12);
-                    if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
-                        result.append(pt);
+            foreach(QString type, ptType.split(' ', QString::SkipEmptyParts)) {
+                foreach(AbstractNode* node, list) {
+                    if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
+                        if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
+                            result.append(pt);
+                        }
                     }
                 }
             }
-//Q_ASSERT(!result.isEmpty());
-//Q_ASSERT(result.isEmpty());
             return result;
         }
         
@@ -368,7 +369,6 @@ if(_axis.isEmpty()) return list;
                 result.append(list[i]);
                 if(/*count > 0 &&*/ result.count() == count) break;
             }
-//Q_ASSERT(result.isEmpty());
             return result;
         }
 };
@@ -795,9 +795,8 @@ class ForEachAtom : public AbstractAtom
         }
         virtual void layoutAtom(Context* context) {
             QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
-            foreach(AbstractNode* pt, axis) {
-//Q_ASSERT(false);
-                context->m_currentNode = pt;
+            foreach(AbstractNode* node, axis) {
+                Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
                     atom->layoutAtom(context);
             }
@@ -805,9 +804,8 @@ class ForEachAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
             DEBUG_WRITE;
             QList<AbstractNode*> axis = foreachAxis(context, filterAxis(context, fetchAxis(context, m_axis), m_ptType), m_start, m_count, m_step);
-            foreach(AbstractNode* pt, axis) {
-//Q_ASSERT(false);
-                context->m_currentNode = pt;
+            foreach(AbstractNode* node, axis) {
+                Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
                     atom->writeAtom(context, xmlWriter);
             }
@@ -815,11 +813,11 @@ class ForEachAtom : public AbstractAtom
 };
 
 Context::Context()
-    : m_rootPoint(new PointListNode())
+    : m_rootPoint(0)
     , m_connections(new ConnectionListNode)
     , m_rootLayout(new Diagram::LayoutNodeAtom)
     , m_parentLayout(m_rootLayout)
-    , m_currentNode(m_rootPoint)
+    , m_currentNode(0)
 {
 }
 
@@ -829,7 +827,13 @@ Context::~Context()
     delete m_connections;
     delete m_rootLayout;
 }
-        
+ 
+void Context::setCurrentNode(AbstractNode* node)
+{
+    Q_ASSERT(dynamic_cast<PointNode*>(node));
+    m_currentNode = node;
+}
+
 void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
 {
     if (reader->isStartElement()) {
@@ -1007,12 +1011,13 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
     if (qualifiedName() == QLatin1String("dgm:dataModel")) {
         m_type = DataModelType;
         
+        Diagram::PointListNode rootList;
         while (!atEnd()) {
             QXmlStreamReader::TokenType tokenType = readNext();
             if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
             if (isStartElement()) {
                 if (qualifiedName() == QLatin1String("dgm:ptLst")) { // list of points
-                    m_context->m_context->m_rootPoint->readAll(m_context->m_context, this);
+                    rootList.readAll(m_context->m_context, this);
                 } else if (qualifiedName() == QLatin1String("dgm:cxnLst")) { // list of connections
                     m_context->m_context->m_connections->readAll(m_context->m_context, this);
                 }
@@ -1020,7 +1025,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
 
         QMap<QString, Diagram::PointNode*> pointMap;
-        foreach(Diagram::AbstractNode* node, m_context->m_context->m_rootPoint->children()) {
+        foreach(Diagram::AbstractNode* node, rootList.children()) {
             if(Diagram::PointNode* point = dynamic_cast<Diagram::PointNode*>(node))
                 if (!point->m_modelId.isEmpty())
                     pointMap[point->m_modelId] = point;
@@ -1044,13 +1049,26 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 if (!pointMap.contains(connection->m_destId)) continue;
 
                 Diagram::PointNode* destination = pointMap[connection->m_destId];
-                m_context->m_context->m_rootPoint->removeChild(destination);
+                rootList.removeChild(destination);
                 source->addChild(destination);
                 pointTree[connection->m_destId] = destination;
             }
         }
 
-        //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(0);
+        Q_ASSERT(!m_context->m_context->m_rootPoint);
+        foreach(Diagram::AbstractNode* node, rootList.children()) {
+            if(Diagram::PointNode* pt = dynamic_cast<Diagram::PointNode*>(node)) {
+                if(pt->m_type == QLatin1String("doc")) {
+                    m_context->m_context->m_rootPoint = pt;
+                    break;
+                }
+            }
+        }
+        Q_ASSERT(m_context->m_context->m_rootPoint);
+        rootList.removeChild(m_context->m_context->m_rootPoint);
+        m_context->m_context->setCurrentNode(m_context->m_context->m_rootPoint);
+
+        //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(m_context->m_context, 0);
         //m_context->m_context->m_rootPoint->dump(0);
     }
     else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
@@ -1069,12 +1087,9 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
             }
         }
 
-        kDebug()<<"1...............................................................................";
-        m_context->m_context->m_rootPoint->dump(m_context->m_context,0);
-        //m_context->m_context->m_layout->dump(0);
-        kDebug()<<"2...............................................................................";
+        Q_ASSERT(m_context->m_context->m_rootPoint);
+        //m_context->m_context->m_rootPoint->dump(m_context->m_context,0);
         m_context->m_context->m_rootLayout->layoutAtom(m_context->m_context);
-        //Q_ASSERT(false);
         
 #if 0
         device()->seek(0);
