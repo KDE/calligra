@@ -155,6 +155,7 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
+    delete cd;
 }
 
 View* Canvas::view() const
