@@ -156,11 +156,13 @@ public:
     void load();
     void create();
 
-    unsigned long loadBigBlocks(std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadBigBlocks(const std::vector<unsigned long>& blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadBigBlocks(const unsigned long* blocks, unsigned blockCount, unsigned char* buffer, unsigned long maxlen);
 
     unsigned long loadBigBlock(unsigned long block, unsigned char* buffer, unsigned long maxlen);
 
-    unsigned long loadSmallBlocks(std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadSmallBlocks(const std::vector<unsigned long>& blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadSmallBlocks(const unsigned long* blocks, unsigned blockCount, unsigned char* buffer, unsigned long maxlen);
 
     unsigned long loadSmallBlock(unsigned long block, unsigned char* buffer, unsigned long maxlen);
 
@@ -996,18 +998,25 @@ StreamIO* StorageIO::streamIO(const std::string& name)
     return result;
 }
 
-unsigned long StorageIO::loadBigBlocks(std::vector<unsigned long> blocks,
+unsigned long StorageIO::loadBigBlocks(const std::vector<unsigned long>& blocks,
                                        unsigned char* data, unsigned long maxlen)
+{
+    return loadBigBlocks(blocks.data(), blocks.size(), data, maxlen);
+}
+
+unsigned long StorageIO::loadBigBlocks(const unsigned long *blocks, unsigned blockCount,
+                                       unsigned char *data, unsigned long maxlen)
 {
     // sentinel
     if (!data) return 0;
     if (!file.good()) return 0;
-    if (blocks.size() < 1) return 0;
+    if (!blocks) return 0;
+    if (blockCount < 1) return 0;
     if (maxlen == 0) return 0;
 
     // read block one by one, seems fast enough
     unsigned long bytes = 0;
-    for (unsigned long i = 0; (i < blocks.size()) && (bytes < maxlen); i++) {
+    for (unsigned long i = 0; (i < blockCount) && (bytes < maxlen); i++) {
         unsigned long block = blocks[i];
         unsigned long pos =  bbat->blockSize * (block + 1);
         unsigned long p = (bbat->blockSize < maxlen - bytes) ? bbat->blockSize : maxlen - bytes;
@@ -1028,22 +1037,23 @@ unsigned long StorageIO::loadBigBlock(unsigned long block,
     if (!data) return 0;
     if (!file.good()) return 0;
 
-    // wraps call for loadBigBlocks
-    std::vector<unsigned long> blocks;
-    blocks.resize(1);
-    blocks[ 0 ] = block;
-
-    return loadBigBlocks(blocks, data, maxlen);
+    return loadBigBlocks(&block, 1, data, maxlen);
 }
 
 // return number of bytes which has been read
-unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
+unsigned long StorageIO::loadSmallBlocks(const std::vector<unsigned long>& blocks,
         unsigned char* data, unsigned long maxlen)
+{
+}
+
+unsigned long StorageIO::loadSmallBlocks(const unsigned long *blocks, unsigned blockCount,
+                                         unsigned char *data, unsigned long maxlen)
 {
     // sentinel
     if (!data) return 0;
     if (!file.good()) return 0;
-    if (blocks.size() < 1) return 0;
+    if (!blocks) return 0;
+    if (blockCount < 1) return 0;
     if (maxlen == 0) return 0;
 
     // our own local buffer
@@ -1051,7 +1061,7 @@ unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
 
     // read small block one by one
     unsigned long bytes = 0;
-    for (unsigned long i = 0; (i < blocks.size()) && (bytes < maxlen); i++) {
+    for (unsigned long i = 0; (i < blockCount) && (bytes < maxlen); i++) {
         unsigned long block = blocks[i];
 
         // find where the small-block exactly is
@@ -1085,12 +1095,7 @@ unsigned long StorageIO::loadSmallBlock(unsigned long block,
     if (!data) return 0;
     if (!file.good()) return 0;
 
-    // wraps call for loadSmallBlocks
-    std::vector<unsigned long> blocks;
-    blocks.resize(1);
-    blocks.assign(1, block);
-
-    return loadSmallBlocks(blocks, data, maxlen);
+    return loadSmallBlocks(&block, 1, data, maxlen);
 }
 
 // =========== StreamIO ==========
