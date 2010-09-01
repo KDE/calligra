@@ -101,9 +101,13 @@ bool FoDocumentRdf::loadOasis(KoStore *store)
             Soprano::PluginManager::instance()->discoverParserForSerialization(
                     Soprano::SerializationRdfXml);
     bool ok = loadRdf(store, parser, "manifest.rdf");
-    loadRdf(store, parser, "data.rdf");
-    loadRdf(store, parser, "geo1.rdf");
-    loadRdf(store, parser, "openingHours.rdf");
+    ok = ok & (loadRdf(store, parser, "data.rdf"));
+    ok = ok & (loadRdf(store, parser, "geo1.rdf"));
+    ok = ok & (loadRdf(store, parser, "openingHours.rdf"));
+
+    if (!ok){
+        return ok;
+    }
 
     QList<Soprano::Statement> allStatements = m_model->listStatements().allElements();
     foreach (Soprano::Statement s, allStatements) {

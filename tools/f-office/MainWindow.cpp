@@ -116,7 +116,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-
+#define Q_WS_MAEMO_5 1
 using  KSpread::Doc;
 using  KSpread::Map;
 using  KSpread::View;
@@ -222,6 +222,10 @@ MainWindow::MainWindow(Splash *aSplash, QWidget *parent)
         storeButtonPreview(0),
         m_slideNotesButton(0),
         m_slideNotesIcon(VIEW_NOTES_PIXMAP)
+#ifdef Q_WS_MAEMO_5
+        ,foDocumentRdf(0),
+        rdfShortcut(0)
+#endif
 {
     digitalSignatureDialog = 0;
     m_closetemp = 0;
@@ -1871,7 +1875,11 @@ void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
        KoStore * store = KoStore::createStore(fileName, KoStore::Read, "", backend);
 
        foDocumentRdf=new FoDocumentRdf(m_doc,m_editor);
-       foDocumentRdf->loadOasis(store);
+       if (!foDocumentRdf->loadOasis(store)) {
+           delete foDocumentRdf;
+           foDocumentRdf = 0;
+           return;
+       }
        rdfShortcut= new QShortcut(QKeySequence(("Ctrl+R")),this);
        connect(rdfShortcut,SIGNAL(activated()),foDocumentRdf,SLOT(highlightRdf()));
    }
@@ -2360,6 +2368,9 @@ void MainWindow::closeDocument()
     if(foDocumentRdf && m_type==Text){
         disconnect(rdfShortcut,SIGNAL(activated()),foDocumentRdf,SLOT(highlightRdf()));
         delete rdfShortcut;
+        delete foDocumentRdf;
+        foDocumentRdf=0;
+        rdfShortcut=0;
     }
 #endif
     if(m_type==Text && digitalSignatureDialog){
@@ -2598,7 +2609,8 @@ void MainWindow::resourceChanged(int key, const QVariant &value)
 {
 #ifdef Q_WS_MAEMO_5
     if(m_type==Text && m_ui->actionEdit->isChecked()){
-        foDocumentRdf->findStatements(*m_editor->cursor(), 1);
+        if (foDocumentRdf)
+            foDocumentRdf->findStatements(*m_editor->cursor(), 1);
     }
 #endif
     if( ( m_pptTool ) && m_pptTool->toolsActivated() && m_type == Presentation ) {
