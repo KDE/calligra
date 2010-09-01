@@ -89,6 +89,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString pessimisticRatio();
     static QString riskType();
 
+    static QString nodeSchedulingStatus();
     static QString nodeNotScheduled();
     static QString nodeAssignmentMissing();
     static QString nodeResourceOverbooked();

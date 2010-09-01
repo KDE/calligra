@@ -46,7 +46,7 @@ void print( Calendar *c, const QString &str, bool full = true ) {
         CalendarDay *d = c->weekday( wd );
         qDebug()<<"   "<<wd<<":"<<d->stateToString( d->state() );
         foreach ( TimeInterval *t,  d->timeIntervals() ) {
-            qDebug()<<"      interval:"<<t->first<<t->second;
+            qDebug()<<"      interval:"<<t->first<<t->second<<"("<<Duration( qint64(t->second) ).toString()<<")";
         }
     }
     foreach ( const CalendarDay *d, c->days() ) {
@@ -110,6 +110,9 @@ void print( Resource *r, const QString &str, bool full = true ) {
             }
         }
         qDebug()<<"Calendar:"<<s;
+        if ( cal ) {
+            print( cal, "Resource calendar" );
+        }
     }
     if ( ! full ) return;
     qDebug()<<"External appointments:"<<r->numExternalAppointments();

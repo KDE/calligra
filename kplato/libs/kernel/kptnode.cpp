@@ -591,6 +591,19 @@ bool Node::inCriticalPath( long id ) const
     return s ? s->inCriticalPath : false;
 }
 
+QStringList Node::schedulingStatus( long id, bool trans ) const 
+{
+    Schedule *s = schedule( id );
+    QStringList lst;
+    if ( s ) {
+        lst = s->state();
+    }
+    if ( lst.isEmpty() ) {
+        lst.append( trans ? i18n( "Not scheduled" ) : QString( "Not scheduled" ) );
+    }
+    return lst;
+}
+
 bool Node::resourceError( long id ) const 
 {
     Schedule *s = schedule( id );
@@ -708,10 +721,10 @@ void Node::propagateEarliestStart(DateTime &time) {
         switch ( m_constraint ) {
             case FinishNotLater:
             case MustFinishOn:
-                if ( m_constraintEndTime > time ) {
+                if ( m_constraintEndTime < time ) {
                     m_currentSchedule->logWarning("Task constraint outside project constraint");
 #ifndef NDEBUG
-                    m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                    m_currentSchedule->logDebug( QString( "%1: end constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
 #endif
                 }
                 break;

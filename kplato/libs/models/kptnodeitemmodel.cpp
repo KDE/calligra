@@ -1444,13 +1444,37 @@ QVariant NodeModel::note( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::nodeSchedulingStatus( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->schedulingStatus( id(), true ).value( 0 );
+        case Qt::EditRole:
+            return node->schedulingStatus( id(), false ).value( 0 );
+        case Qt::ToolTipRole:
+            return node->schedulingStatus( id(), true ).join( "\n" );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::resourceIsMissing( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->resourceError( id() );
+            if ( node->resourceError( id() ) ) {
+                return i18n( "Error" );
+            }
             break;
+        case Qt::EditRole:
+            return node->resourceError( id() );
         case Qt::ToolTipRole:
+            if ( node->resourceError( id() ) ) {
+                return i18nc( "@info:tooltip", "Resource allocation is expected when the task estimate type is  <emphasis>Effort</emphasis>" );
+            }
+            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1462,9 +1486,17 @@ QVariant NodeModel::resourceIsOverbooked( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->resourceOverbooked( id() );
+            if ( node->resourceOverbooked( id() ) ) {
+                return i18n( "Error" );
+            }
             break;
+        case Qt::EditRole:
+            return node->resourceOverbooked( id() );
         case Qt::ToolTipRole:
+            if ( node->resourceOverbooked( id() ) ) {
+                return i18nc( "@info:tooltip", "A resource has been overbooked" );
+            }
+            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1476,9 +1508,17 @@ QVariant NodeModel::resourceIsNotAvailable( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->resourceNotAvailable( id() );
+            if ( node->resourceNotAvailable( id() ) ) {
+                return i18n( "Error" );
+            }
             break;
+        case Qt::EditRole:
+            return node->resourceNotAvailable( id() );
         case Qt::ToolTipRole:
+            if ( node->resourceNotAvailable( id() ) ) {
+                return i18nc( "@info:tooltip", "No resource is available for this task" );
+            }
+            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1490,9 +1530,17 @@ QVariant NodeModel::schedulingConstraintsError( const Node *node, int role ) con
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->schedulingError( id() );
+            if ( node->schedulingError( id() ) ) {
+                return i18n( "Error" );
+            }
             break;
+        case Qt::EditRole:
+            return node->schedulingError( id() );
         case Qt::ToolTipRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18nc( "@info:tooltip", "Failed to comply with a timing constraint" );
+            }
+            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1504,10 +1552,17 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->notScheduled( id() );
+            if ( node->notScheduled( id() ) ) {
+                return i18n( "Error" );
+            }
+            break;
         case Qt::EditRole:
             return node->notScheduled( id() );
         case Qt::ToolTipRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18nc( "@info:tooltip", "This task has not been scheduled" );
+            }
+            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1519,9 +1574,17 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->effortMetError( id() );
+            if ( node->effortMetError( id() ) ) {
+                return i18n( "Error" );
+            }
             break;
+        case Qt::EditRole:
+            return node->effortMetError( id() );
         case Qt::ToolTipRole:
+            if ( node->schedulingError( id() ) ) {
+                return i18nc( "@info:tooltip", "The assigned resources cannot deliver the required estimated effort" );
+            }
+            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1804,6 +1867,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeStatusNote: result = note( n, role ); break;
 
         // Scheduling errors
+        case NodeSchedulingStatus: result = nodeSchedulingStatus( n, role ); break;
         case NodeNotScheduled: result = nodeIsNotScheduled( n, role ); break;
         case NodeAssignmentMissing: result = resourceIsMissing( n, role ); break;
         case NodeResourceOverbooked: result = resourceIsOverbooked( n, role ); break;
@@ -1913,6 +1977,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeStatusNote: return i18nc( "@title:column", "Status Note" );
 
             // Scheduling errors
+            case NodeSchedulingStatus: return i18nc( "@title:column", "Scheduling Status" );
             case NodeNotScheduled: return i18nc( "@title:column", "Not Scheduled" );
             case NodeAssignmentMissing: return i18nc( "@title:column", "Assignment Missing" );
             case NodeResourceOverbooked: return i18nc( "@title:column", "Resource Overbooked" );
@@ -2002,6 +2067,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeStatusNote: return ToolTip::completionStatusNote();
 
             // Scheduling errors
+            case NodeSchedulingStatus: return ToolTip::nodeSchedulingStatus();
             case NodeNotScheduled: return ToolTip::nodeNotScheduled();
             case NodeAssignmentMissing: return ToolTip::nodeAssignmentMissing();
             case NodeResourceOverbooked: return ToolTip::nodeResourceOverbooked();

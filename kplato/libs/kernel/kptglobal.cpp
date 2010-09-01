@@ -26,13 +26,20 @@ namespace KPlato
 
 // namespace SchedulingState
 // {
-    QString SchedulingState::deleted() { return i18n( "Deleted" ); }
-    QString SchedulingState::notScheduled() { return i18n( "Not scheduled" ); }
-    QString SchedulingState::scheduled() { return i18n( "Scheduled" ); }
-    QString SchedulingState::resourceOverbooked() { return i18n( "Resource overbooked" ); }
-    QString SchedulingState::resourceNotAvailable() { return i18n( "Resource not available" ); }
-    QString SchedulingState::resourceNotAllocated() { return i18n( "No resource allocated" ); }
-    QString SchedulingState::constraintsNotMet() { return i18n( "Cannot fulfill constraints" ); }
+    QString SchedulingState::deleted( bool trans )
+        { return trans ? i18n( "Deleted" ) : QString( "Deleted" ); }
+    QString SchedulingState::notScheduled( bool trans )
+        { return trans ? i18n( "Not scheduled" ) : QString( "Not scheduled" ); }
+    QString SchedulingState::scheduled( bool trans )
+        { return trans ? i18n( "Scheduled" ) : QString( "Scheduled" ); }
+    QString SchedulingState::resourceOverbooked( bool trans )
+        { return trans ? i18n( "Resource overbooked" ) : QString( "Resource overbooked" ); }
+    QString SchedulingState::resourceNotAvailable( bool trans )
+        { return trans ? i18n( "Resource not available" ) : QString( "Resource not available" ); }
+    QString SchedulingState::resourceNotAllocated( bool trans )
+        { return trans ? i18n( "No resource allocated" ) : QString( "No resource allocated" ); }
+    QString SchedulingState::constraintsNotMet( bool trans )
+        { return trans ? i18n( "Cannot fulfill constraints" ) : QString( "Cannot fulfill constraints" ); }
 
 //} namespace SchedulingState
 

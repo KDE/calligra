@@ -74,6 +74,7 @@ public:
     bool showAppointments;
     bool showNoInformation;
     bool showTimeConstraint;
+    bool showSchedulingError;
 
 protected:
     void paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ );
@@ -81,6 +82,7 @@ protected:
 private:
     Q_DISABLE_COPY(GanttItemDelegate)
     QBrush m_criticalBrush;
+    QBrush m_schedulingErrorBrush;
 
 };
 

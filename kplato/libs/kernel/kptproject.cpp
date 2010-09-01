@@ -293,7 +293,8 @@ void Project::calculate()
             cs->setPhaseName( 1, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 1 );
             cs->lateFinish = calculateForward( estType );
-            cs->lateFinish = checkEndConstraints( cs->lateFinish );
+//            cs->lateFinish = checkEndConstraints( cs->lateFinish );
+            cs->logInfo( i18n( "Late finish calculated: %1", locale->formatDateTime( cs->lateFinish ) ), 1 );
             propagateLatestFinish( cs->lateFinish );
             cs->setPhaseName( 2, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 2 );
@@ -320,7 +321,8 @@ void Project::calculate()
             cs->setPhaseName( 1, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 1 );
             cs->earlyStart = calculateBackward( estType );
-            cs->earlyStart = checkStartConstraints( cs->earlyStart );
+//            cs->earlyStart = checkStartConstraints( cs->earlyStart );
+            cs->logInfo( i18n( "Early start calculated: %1", locale->formatDateTime( cs->earlyStart ) ), 1 );
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 2 );
@@ -550,196 +552,198 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
     return t;
 }
 
-void Project::tasksForward( Task *task, int pos )
+void Project::tasksForward()
 {
-    int cp = m_forwardTasks.value( task );
-    if ( cp == 0 || cp > pos ) {
-        m_forwardTasks[ task ] = pos;
-        m_currentSchedule->logDebug( "Added task forward: " + task->name() + "position: " + QString::number( pos ) );
-    }
-    foreach ( Relation *r, task->dependParentNodes() + task->parentProxyRelations() ) {
-        tasksForward( static_cast<Task*>( r->parent() ), pos - 1 );
+    m_hardConstraints.clear();
+    m_softConstraints.clear();
+    m_terminalNodes.clear();
+    foreach ( Task *t, allTasks() ) {
+        switch ( t->constraint() ) {
+            case Node::MustStartOn:
+            case Node::MustFinishOn:
+            case Node::FixedInterval:
+                m_hardConstraints.append( t );
+                break;
+            case Node::StartNotEarlier:
+            case Node::FinishNotLater:
+                m_softConstraints.append( t );
+                break;
+            default:
+                if ( t->isEndNode() ) {
+                    m_terminalNodes.append( t );
+                }
+                break;
+        }
     }
 }
 
-void Project::tasksBackward( Task *task, int pos )
+void Project::tasksBackward()
 {
-    int cp = m_backwardTasks.value( task );
-    if ( cp == 0 || cp > pos ) {
-        m_backwardTasks[ task ] = pos;
-    }
-    foreach ( Relation *r, task->dependChildNodes() + task->childProxyRelations() ) {
-        tasksBackward( static_cast<Task*>( r->child() ), pos - 1 );
+    m_hardConstraints.clear();
+    m_softConstraints.clear();
+    m_terminalNodes.clear();
+    foreach ( Task *t, allTasks() ) {
+        switch ( t->constraint() ) {
+            case Node::MustStartOn:
+            case Node::MustFinishOn:
+            case Node::FixedInterval:
+                m_hardConstraints.append( t );
+                break;
+            case Node::StartNotEarlier:
+            case Node::FinishNotLater:
+                m_softConstraints.append( t );
+                break;
+            default:
+                if ( t->isEndNode() ) {
+                    m_terminalNodes.append( t );
+                }
+                break;
+        }
     }
 }
 
 DateTime Project::calculateForward( int use )
 {
     //kDebug()<<m_name;
+    DateTime finish;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
-        return DateTime();
+        return finish;
     }
     if ( type() == Node::Type_Project ) {
-        // Do constrained first
-        foreach ( Node *n, cs->hardConstraints() ) {
-            cs->logDebug( "Calculate task with hard constraint:" + n->name() );
-            n->calculateEarlyFinish( use );
-        }
-        // Follow *parent* relations back and
-        // calculate forwards following the child relations
-        m_forwardTasks.clear();
-        QList<Node*> endNodes = cs->endNodes();
-        foreach ( Node *n, endNodes ) {
-            tasksForward( static_cast<Task*>( n ), n->numDependParentNodes() ? -2 : -1 );
-        }
-        if ( ! m_forwardTasks.isEmpty() ) {
-            // order the tasks according to how many child dependencies they have
-            QMultiMap<int, Task*> map;
-            QMap<Task*, int>::const_iterator i = m_forwardTasks.constBegin();
-            for ( ; i != m_forwardTasks.constEnd(); ++i   ) {
-                map.insertMulti( i.value(), i.key() );
-            }
-            DateTime finish;
-            DateTime time;
-            foreach ( int key, map.uniqueKeys() ) {
-                if ( key != -1 ) {
-                    // calculate all tasks with dependencies
-                    QMap<int, Task*>::iterator low = map.lowerBound( key );
-                    QMap<int, Task*>::iterator upper = map.upperBound( key );
-                    do {
-                        --upper;
-                        cs->logDebug( QString( "Calculate: %1" ).arg( upper.value()->name() ) );
-                        time = static_cast<Node*> ( upper.value() )->calculateForward( use );
-                        if ( !finish.isValid() || time > finish ) {
-                            finish = time;
-                        }
-                    } while ( upper != low && ! stopcalculation );
+        m_visitedForward = true;
+        if ( ! m_visitedBackward ) {
+            // setup tasks
+            tasksForward();
+            // Do all hard constrained first
+            foreach ( Node *n, m_hardConstraints ) {
+                cs->logDebug( "Calculate task with hard constraint:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateEarlyFinish( use ); // do not do predeccessors
+                if ( time > finish ) {
+                    finish = time;
                 }
             }
-            // do the tasks without dependencies in wbs order
-            foreach ( Node *n, allTasks() ) {
-                if ( endNodes.contains( n ) ) {
-                    cs->logDebug( QString( "Calculate: %1" ).arg( n->name() ) );
-                    time = n->calculateForward( use );
-                    if ( !finish.isValid() || time > finish ) {
-                        finish = time;
-                    }
+            // do the predeccessors
+            foreach ( Node *n, m_hardConstraints ) {
+                cs->logDebug( "Calculate predeccessors to hard constrained task:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateForward( use );
+                if ( time > finish ) {
+                    finish = time;
                 }
             }
-            //kDebug()<<m_name<<" finish="<<finish.toString();
-            return finish;
+            // now try to schedule soft constrained *with* predeccessors
+            foreach ( Node *n, m_softConstraints ) {
+                cs->logDebug( "Calculate task with soft constraint:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateForward( use );
+                if ( time > finish ) {
+                    finish = time;
+                }
+            }
+            // and then the rest using the end nodes to calculate everything (remaining)
+            foreach ( Task *n, m_terminalNodes ) {
+                cs->logDebug( "Calculate using end task:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateForward( use );
+                if ( time > finish ) {
+                    finish = time;
+                }
+            }
+        } else {
+            // tasks have been calculated backwards in this order
+            foreach ( Node *n, cs->backwardNodes() ) {
+                DateTime time = n->calculateForward( use );
+                if ( time > finish ) {
+                    finish = time;
+                }
+            }
         }
     } else {
         //TODO: subproject
     }
-    return DateTime();
+    return finish;
 }
 
 DateTime Project::calculateBackward( int use )
 {
+    //kDebug()<<m_name;
+    DateTime start;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
-    if ( cs == 0 || stopcalculation ) {
-        return DateTime();
+    if ( cs == 0 ) {
+        return start;
     }
     if ( type() == Node::Type_Project ) {
-        // Do constrained first
-        foreach ( Node *n, cs->hardConstraints() ) {
-            n->calculateLateStart( use );
-        }
-        // Follow *child* relations back and
-        // calculate backwards following parent relation
-        m_backwardTasks.clear();
-        QList<Node*> startNodes = cs->startNodes();
-        foreach ( Node *n, startNodes ) {
-            tasksBackward( static_cast<Task*>( n ), n->numDependChildNodes() ? -2 : -1 );
-        }
-        DateTime start;
-        DateTime time;
-        if ( ! m_backwardTasks.isEmpty() ) {
-            QMultiMap<int, Task*> map;
-            QMap<Task*, int>::const_iterator i = m_backwardTasks.constBegin();
-            for ( ; i != m_backwardTasks.constEnd(); ++i   ) {
-                map.insertMulti( i.value(), i.key() );
-            }
-            foreach ( int key, map.uniqueKeys() ) {
-                if ( key != -1 ) {
-                    QMap<int, Task*>::iterator low = map.lowerBound( key );
-                    QMap<int, Task*>::iterator upper = map.upperBound( key );
-                    do {
-                        --upper;
-                        cs->logDebug( QString( "Calculate backward: %1" ).arg( upper.value()->name() ) );
-                        time = static_cast<Node*> ( upper.value() )->calculateBackward( use );
-                        if ( !start.isValid() || time < start ) {
-                            start = time;
-                        }
-                    } while ( upper != low && ! stopcalculation );
+        m_visitedBackward = true;
+        if ( ! m_visitedForward ) {
+            // setup tasks
+            tasksBackward();
+            // Do all hard constrained first
+            foreach ( Task *n, m_hardConstraints ) {
+                cs->logDebug( "Calculate task with hard constraint:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateLateStart( use ); // do not do predeccessors
+                if ( ! start.isValid() || time < start ) {
+                    start = time;
                 }
             }
-            // do the tasks without dependencies in inverted wbs order
-            QList<Task*> tl = allTasks();
-            while ( ! tl.isEmpty() ) {
-                if ( stopcalculation ) {
-                    break;
+            // then do the predeccessors
+            foreach ( Task *n, m_hardConstraints ) {
+                cs->logDebug( "Calculate predeccessors to hard constrained task:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateBackward( use );
+                if ( ! start.isValid() || time < start ) {
+                    start = time;
                 }
-                Node *n = tl.takeLast();
-                if ( startNodes.contains( n ) ) {
-                    cs->logDebug( QString( "Calculate backward: %1" ).arg( n->name() ) );
-                    time = n->calculateBackward( use );
-                    if ( !start.isValid() || time < start ) {
-                        start = time;
-                    }
+            }
+            // now try to schedule soft constrained *with* predeccessors
+            foreach ( Task *n, m_softConstraints ) {
+                cs->logDebug( "Calculate task with soft constraint:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateBackward( use );
+                if ( ! start.isValid() || time < start ) {
+                    start = time;
+                }
+            }
+            // and then the rest using the start nodes to calculate everything (remaining)
+            foreach ( Task *n, m_terminalNodes ) {
+                cs->logDebug( "Calculate using start task:" + n->name() + " : " + n->constraintToString() );
+                DateTime time = n->calculateBackward( use );
+                if ( ! start.isValid() || time < start ) {
+                    start = time;
+                }
+            }
+        } else {
+            // tasks have been calculated forwards in this order
+            foreach ( Node *n, cs->forwardNodes() ) {
+                DateTime time = n->calculateBackward( use );
+                if ( ! start.isValid() || time < start ) {
+                    start = time;
                 }
             }
         }
-        //kDebug()<<m_name<<" start="<<start.toString();
-        return start;
     } else {
         //TODO: subproject
     }
-    return DateTime();
+    return start;
 }
 
 DateTime Project::scheduleForward( const DateTime &earliest, int use )
 {
+    DateTime end;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 || stopcalculation ) {
         return DateTime();
     }
-    DateTime end = earliest;
-    DateTime time;
     resetVisited();
-    if ( ! m_forwardTasks.isEmpty() ) {
-        QMultiMap<int, Task*> map;
-        QMap<Task*, int>::const_iterator i = m_forwardTasks.constBegin();
-        for ( ; i != m_forwardTasks.constEnd(); ++i   ) {
-            map.insertMulti( i.value(), i.key() );
+    // Schedule in the same order as calculated forward
+    // Do all hard constrained first
+    foreach ( Node *n, m_hardConstraints ) {
+        cs->logDebug( "Schedule task with hard constraint:" + n->name() + " : " + n->constraintToString() );
+        DateTime time = n->scheduleFromStartTime( use ); // do not do predeccessors
+        if ( time > end ) {
+            end = time;
         }
-        foreach ( int key, map.uniqueKeys() ) {
-            if ( key != -1 ) {
-                QMap<int, Task*>::Iterator low = map.lowerBound( key );
-                QMap<int, Task*>::Iterator upper = map.upperBound( key );
-                do {
-                    --upper;
-                    cs->logDebug( QString( "Schedule: %1" ).arg( upper.value()->name() ) );
-                    time = static_cast<Node*> ( upper.value() )->scheduleForward( earliest, use );
-                    if ( time > end ) {
-                        end = time;
-                    }
-                } while ( upper != low && ! stopcalculation );
-            }
-        }
-        foreach ( Node *n, allTasks() ) {
-            if ( stopcalculation ) {
-                break;
-            }
-            if ( cs->endNodes().contains( n ) ) {
-                cs->logDebug( QString( "Schedule: %1" ).arg( n->name() ) );
-                time = n->scheduleForward( earliest, use );
-                if ( time > end ) {
-                    end = time;
-                }
-            }
+    }
+    foreach ( Node *n, cs->forwardNodes() ) {
+        cs->logDebug( "Schedule task:" + n->name() + " : " + n->constraintToString() );
+        DateTime time = n->scheduleForward( earliest, use );
+        if ( time > end ) {
+            end = time;
         }
     }
     // Fix summarytasks
@@ -749,52 +753,26 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
 
 DateTime Project::scheduleBackward( const DateTime &latest, int use )
 {
+    DateTime start;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 || stopcalculation ) {
-        return DateTime();
+        return start;
     }
     resetVisited();
-    QMultiMap<int, Task*> map;
-    QMap<Task*, int>::const_iterator i = m_backwardTasks.constBegin();
-    for ( ; i != m_backwardTasks.constEnd(); ++i   ) {
-        map.insertMulti( i.value(), i.key() );
+    // Schedule in the same order as calculated backward
+    // Do all hard constrained first
+    foreach ( Node *n, m_hardConstraints ) {
+        cs->logDebug( "Schedule task with hard constraint:" + n->name() + " : " + n->constraintToString() );
+        DateTime time = n->scheduleFromEndTime( use ); // do not do predeccessors
+        if ( ! start.isValid() || time < start ) {
+            start = time;
+        }
     }
-    DateTime start = latest;
-    DateTime time;
-    if ( ! m_backwardTasks.isEmpty() ) {
-        QMultiMap<int, Task*> map;
-        QMap<Task*, int>::const_iterator i = m_backwardTasks.constBegin();
-        for ( ; i != m_backwardTasks.constEnd(); ++i   ) {
-            map.insertMulti( i.value(), i.key() );
-        }
-        foreach ( int key, map.uniqueKeys() ) {
-            if ( key != -1 ) {
-                QMap<int, Task*>::Iterator low = map.lowerBound( key );
-                QMap<int, Task*>::Iterator upper = map.upperBound( key );
-                do {
-                    --upper;
-                    cs->logDebug( QString( "Schedule: %1" ).arg( upper.value()->name() ) );
-                    time = static_cast<Node*> ( upper.value() )->scheduleBackward( latest, use );
-                    if ( time < start ) {
-                        start = time;
-                    }
-                } while ( upper != low && ! stopcalculation );
-            }
-        }
-        // do the tasks without dependencies in inverted wbs order
-        QList<Task*> tl = allTasks();
-        while ( ! tl.isEmpty() ) {
-            if ( stopcalculation ) {
-                break;
-            }
-            Node *n = tl.takeLast();
-            if ( cs->startNodes().contains( n ) ) {
-                cs->logDebug( QString( "Schedule: %1" ).arg( n->name() ) );
-                time = n->scheduleBackward( latest, use );
-                if ( time < start ) {
-                    start = time;
-                }
-            }
+    foreach ( Node *n, cs->backwardNodes() ) {
+        cs->logDebug( "Schedule task:" + n->name() + " : " + n->constraintToString() );
+        DateTime time = n->scheduleBackward( latest, use );
+        if ( ! start.isValid() || time < start ) {
+            start = time;
         }
     }
     // Fix summarytasks

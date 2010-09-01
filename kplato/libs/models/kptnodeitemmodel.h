@@ -108,6 +108,7 @@ public:
         NodeStatusNote,
             
         // Scheduling errors
+        NodeSchedulingStatus,
         NodeNotScheduled,
         NodeAssignmentMissing,
         NodeResourceOverbooked,
@@ -206,6 +207,8 @@ public:
     QVariant actualCostTo( const Node *node, int role ) const;
     QVariant note( const Node *node, int role ) const;
 
+    /// The nodes scheduling status
+    QVariant nodeSchedulingStatus( const Node *node, int role ) const;
     /// Set if the node has not been scheduled
     QVariant nodeIsNotScheduled( const Node *node, int role ) const;
     /// Set if EffortType == Effort, but no resource is requested

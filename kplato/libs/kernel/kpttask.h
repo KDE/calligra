@@ -560,6 +560,11 @@ public:
      */
     virtual uint state( long id = CURRENTSCHEDULE ) const;
 
+    /// Check if this node has any dependent child nodes
+    virtual bool isEndNode() const;
+    /// Check if this node has any dependent parent nodes
+    virtual bool isStartNode() const;
+    
     QList<Relation*> parentProxyRelations() const { return  m_parentProxyRelations; }
     QList<Relation*> childProxyRelations() const { return  m_childProxyRelations; }
 
@@ -592,12 +597,7 @@ signals:
     void workPackageToBeRemoved( Node *node, int row );
     void workPackageRemoved( Node *node );
 
-protected:
-    /// Check if this node has any dependent child nodes
-    virtual bool isEndNode() const;
-    /// Check if this node has any dependent parent nodes
-    virtual bool isStartNode() const;
-    
+public:
     virtual void initiateCalculation(MainSchedule &sch);
     /**
      * Sets up the lists used for calculation.

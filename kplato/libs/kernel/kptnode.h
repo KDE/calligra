@@ -266,6 +266,8 @@ public:
     /// within the duration of this node
     virtual void calcResourceOverbooked();
 
+    /// Return the scheduling status of schedule @p id. If @p trans is true, text is translated
+    QStringList schedulingStatus( long id, bool trans = false ) const;
     /// EstimateType == Estimate, but no resource is requested
     bool resourceError( long id = CURRENTSCHEDULE ) const;
     /// The assigned resource is overbooked

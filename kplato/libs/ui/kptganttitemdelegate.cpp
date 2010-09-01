@@ -51,12 +51,18 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     showCriticalPath( false ),
     showCriticalTasks( false ),
     showAppointments( false ),
-    showTimeConstraint( false ) // NOTE: atm for test, activate when the ui can be changed
+    showTimeConstraint( false ), // NOTE: atm for test, activate when the ui can be changed
+    showSchedulingError( false )
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
     b.setColorAt( 0., Qt::red );
     b.setColorAt( 1., Qt::darkRed );
     m_criticalBrush = QBrush( b );
+
+    QLinearGradient sb( 0., 0., 0., QApplication::fontMetrics().height() );
+    sb.setColorAt( 0., Qt::yellow );
+    sb.setColorAt( 1., Qt::darkYellow );
+    m_schedulingErrorBrush = QBrush( sb );
 }
 
 QVariant GanttItemDelegate::data( const QModelIndex& idx, int column, int role ) const
@@ -398,6 +404,23 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             }
             if ( critical ) {
                 painter->setBrush( m_criticalBrush );
+            }
+            if ( showSchedulingError ) {
+                QList<int> lst;
+                lst << NodeModel::NodeAssignmentMissing
+                    << NodeModel::NodeResourceOverbooked
+                    << NodeModel::NodeResourceUnavailable
+                    << NodeModel::NodeConstraintsError
+                    << NodeModel::NodeEffortNotMet;
+                foreach ( int i, lst ) {
+                    QVariant v = data( idx, i, Qt::EditRole );
+                    //kDebug()<<idx.data(NodeModel::NodeName).toString()<<": showSchedulingError"<<i<<v;
+                    if (  v.toBool() ) {
+                        painter->setBrush( m_schedulingErrorBrush );
+                        break;
+                    }
+                }
+
             }
             painter->drawRect( r );
 

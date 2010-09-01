@@ -81,13 +81,13 @@ namespace Role
 
 struct KPLATOKERNEL_EXPORT SchedulingState
 {
-    static QString deleted();
-    static QString notScheduled();
-    static QString scheduled();
-    static QString resourceOverbooked();
-    static QString resourceNotAvailable();
-    static QString resourceNotAllocated();
-    static QString constraintsNotMet();
+    static QString deleted( bool trans = true );
+    static QString notScheduled( bool trans = true );
+    static QString scheduled( bool trans = true );
+    static QString resourceOverbooked( bool trans = true );
+    static QString resourceNotAvailable( bool trans = true );
+    static QString resourceNotAllocated( bool trans = true );
+    static QString constraintsNotMet( bool trans = true );
 
 }; //namespace WhatsThis
 

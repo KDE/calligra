@@ -456,7 +456,9 @@ public:
     QList<Node*> hardConstraints() const { return m_hardconstraints; }
     virtual void insertSoftConstraint( Node *node ) { m_softconstraints.append( node ); }
     QList<Node*> softConstraints() const { return m_softconstraints; }
+    QList<Node*> forwardNodes() const { return m_forwardnodes; }
     virtual void insertForwardNode( Node *node ) { m_forwardnodes.append( node ); }
+    QList<Node*> backwardNodes() const { return m_backwardnodes; }
     virtual void insertBackwardNode( Node *node ) { m_backwardnodes.append( node ); }
     virtual void insertStartNode( Node *node ) { m_startNodes.append( node ); }
     QList<Node*> startNodes() const { return m_startNodes; }

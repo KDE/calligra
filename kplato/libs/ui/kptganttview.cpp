@@ -84,6 +84,7 @@ GanttChartDisplayOptionsPanel::GanttChartDisplayOptionsPanel( GanttItemDelegate 
     connect( ui_showCriticalPath, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCriticalTasks, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
     connect( ui_showCompletion, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showSchedulingError, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
 }
 
 void GanttChartDisplayOptionsPanel::slotOk()
@@ -95,6 +96,7 @@ void GanttChartDisplayOptionsPanel::slotOk()
     m_delegate->showCriticalPath = ui_showCriticalPath->checkState() == Qt::Checked;
     m_delegate->showCriticalTasks = ui_showCriticalTasks->checkState() == Qt::Checked;
     m_delegate->showProgress = ui_showCompletion->checkState() == Qt::Checked;
+    m_delegate->showSchedulingError = ui_showSchedulingError->checkState() == Qt::Checked;
 }
 
 void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
@@ -106,6 +108,7 @@ void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
     ui_showCriticalPath->setCheckState( del.showCriticalPath ? Qt::Checked : Qt::Unchecked );
     ui_showCriticalTasks->setCheckState( del.showCriticalTasks ? Qt::Checked : Qt::Unchecked );
     ui_showCompletion->setCheckState( del.showProgress ? Qt::Checked : Qt::Unchecked );
+    ui_showSchedulingError->setCheckState( del.showSchedulingError ? Qt::Checked : Qt::Unchecked );
 }
 
 void GanttChartDisplayOptionsPanel::setDefault()
@@ -289,6 +292,7 @@ bool GanttViewBase::loadContext( const KoXmlElement &settings )
         m_ganttdelegate->showCriticalPath = (bool)( e.attribute( "show-criticalpath", "0" ).toInt() );
         m_ganttdelegate->showCriticalTasks = (bool)( e.attribute( "show-criticaltasks", "0" ).toInt() );
         m_ganttdelegate->showPositiveFloat = (bool)( e.attribute( "show-positivefloat", "0" ).toInt() );
+        m_ganttdelegate->showSchedulingError = (bool)( e.attribute( "show-schedulingerror", "0" ).toInt() );
     }
     return true;
 }
@@ -307,6 +311,7 @@ void GanttViewBase::saveContext( QDomElement &settings ) const
     e.setAttribute( "show-criticalpath", m_ganttdelegate->showCriticalPath  );
     e.setAttribute( "show-criticaltasks", m_ganttdelegate->showCriticalTasks );
     e.setAttribute( "show-positivefloat", m_ganttdelegate->showPositiveFloat );
+    e.setAttribute( "show-schedulingerror", m_ganttdelegate->showSchedulingError );
 }
 
 //-------------------------------------------

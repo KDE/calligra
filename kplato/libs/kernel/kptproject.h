@@ -630,8 +630,10 @@ protected:
     /// Calculate critical path
     virtual bool calcCriticalPath( bool fromEnd );
 
-    void tasksForward( Task *task, int pos );
-    void tasksBackward( Task *task, int pos );
+    /// Prepare task lists for scheduling
+    void tasksForward();
+    /// Prepare task lists for scheduling
+    void tasksBackward();
 
 protected:
     virtual void changed(Node *node);
@@ -678,9 +680,10 @@ private:
 
     int m_refCount; // make it possible to use the project by different threads
 
-    QMap<Task*, int> m_forwardTasks;
-    QMap<Task*, int> m_backwardTasks;
-
+    QList<Task*> m_hardConstraints;
+    QList<Task*> m_softConstraints;
+    QList<Task*> m_terminalNodes;
+    
 #ifndef NDEBUG
 public:
     void printDebug( bool children, const QByteArray& indent );

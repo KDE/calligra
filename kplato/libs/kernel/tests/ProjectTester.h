@@ -71,6 +71,7 @@ private slots:
     void inWBSOrder();
 
     void resourceConflictALAP();
+    void resourceConflictMustStartOn();
 
 private:
     Project *m_project;

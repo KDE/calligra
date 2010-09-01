@@ -273,11 +273,6 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
-    QVERIFY( t->lateStart() >=  t->earlyStart() );
-    QVERIFY( t->earlyFinish() <= t->endTime() );
-    QVERIFY( t->lateFinish() >= t->endTime() );
-
     QCOMPARE( t->startTime(), DateTime( t->constraintStartTime().date(), t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
@@ -295,11 +290,6 @@ void ProjectTester::schedule()
     Debug::print( m_project, t, s );
     Debug::printSchedulingLog( *sm, s );
     
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
-    QVERIFY( t->lateStart() >=  t->earlyStart() );
-    QVERIFY( t->earlyFinish() <= t->endTime() );
-    QVERIFY( t->lateFinish() >= t->endTime() );
-
     QCOMPARE( t->startTime(), DateTime( t->constraintStartTime().date(), t1 ) );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
@@ -317,11 +307,6 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
-    QVERIFY( t->lateStart() >=  t->earlyStart() );
-    QVERIFY( t->earlyFinish() <= t->endTime() );
-    QVERIFY( t->lateFinish() >= t->endTime() );
-
     QCOMPARE( t->endTime(), t->constraintEndTime() );
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
@@ -338,11 +323,8 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
-    QVERIFY( t->lateStart() >=  t->earlyStart() );
-    QVERIFY( t->earlyFinish() <= t->endTime() );
-    QVERIFY( t->lateFinish() >= t->endTime() );
-
+    Debug::print( m_project, t, s );
+    Debug::printSchedulingLog( *sm, s );
     QCOMPARE( t->endTime(), t->constraintEndTime() );
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
@@ -359,11 +341,8 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-//    Debug::print( m_project, t, s );
-    QCOMPARE( t->earlyStart(), t->requests().workTimeAfter( m_project->startTime() ) );
-    QVERIFY( t->lateStart() >=  t->constraintStartTime() );
-    QCOMPARE( t->earlyFinish(),t->earlyStart() + Duration( 0, 8, 0 ) );
-    QCOMPARE( t->lateFinish(), t->requests().workTimeBefore( m_project->endTime() ) );
+//     Debug::print( m_project, t, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
@@ -381,7 +360,9 @@ void ProjectTester::schedule()
     sm->createSchedules();
     m_project->calculate( *sm );
 
-//    Debug::print( m_project, t, s );
+    Debug::print( m_project, t, s );
+    Debug::print( m_project->resourceList().first(), s );
+    Debug::printSchedulingLog( *sm, s );
 
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
     QCOMPARE( t->earlyFinish(), t->endTime() );
@@ -389,7 +370,7 @@ void ProjectTester::schedule()
 
     QVERIFY( t->endTime() <= t->lateFinish() );
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 )  );
-    QVERIFY( t->schedulingError() == true );
+    QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
     s = "Calculate forwards, Task: FinishNotLater -----------------------------------";
@@ -1778,7 +1759,7 @@ void ProjectTester::inWBSOrder()
 void ProjectTester::resourceConflictALAP()
 {
     Project p;
-    p.setName( "resourceConflictALAPr" );
+    p.setName( "resourceConflictALAP" );
     DateTime st = p.constraintStartTime();
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
@@ -1897,6 +1878,206 @@ void ProjectTester::resourceConflictALAP()
     QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 1, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1, T2, T3 ALAP -------";
+    p.allTasks().at( 2 )->setConstraint( Node::ALAP );
+    
+    sm = p.createScheduleManager( "T1, T2, T3 ALAP" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+//     Debug::print( &p, s, true );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1, T2, T3, T4 ALAP -------";
+    p.allTasks().at( 3 )->setConstraint( Node::ALAP );
+    
+    sm = p.createScheduleManager( "T1, T2, T3, T4 ALAP" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+//     Debug::print( &p, s, true );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+}
+
+void ProjectTester::resourceConflictMustStartOn()
+{
+    Project p;
+    p.setName( "resourceConflictMustStartOn" );
+    DateTime st = p.constraintStartTime();
+    st = DateTime( st.addDays( 1 ) );
+    st.setTime( QTime ( 0, 0, 0 ) );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Task *t = p.createTask( &p );
+    t->setName( "T1" );
+    t->setConstraint( Node::MustStartOn );
+    t->setConstraintStartTime( st + Duration( 1, 8, 0 ) );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    ResourceRequest *tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T2" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T3" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    t = p.createTask( &p );
+    t->setName( "T4" );
+    p.addSubTask( t, &p );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+    
+    ScheduleManager *sm = p.createScheduleManager( "T1 MustStartOn" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+    QString s = "Schedule T1 MustStartOn -------";
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+     Debug::print( &p, s, true );
+     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1, T2 MustStartOn -------";
+    p.allTasks().at( 1 )->setConstraint( Node::MustStartOn );
+    p.allTasks().at( 1 )->setConstraintStartTime( st + Duration( 2, 8, 0 ) );
+    
+    sm = p.createScheduleManager( "T1, T2 MustStartOn" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+     Debug::print( &p, s, true );
+     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1, T2, T3 MustStartOn -------";
+    p.allTasks().at( 2 )->setConstraint( Node::MustStartOn );
+    p.allTasks().at( 2 )->setConstraintStartTime( st + Duration( 3, 8, 0 ) );
+    
+    sm = p.createScheduleManager( "T1, T2, T3 MustStartOn" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+    
+
+//     Debug::print ( c, s );
+//     Debug::print( r1, s );
+//     Debug::print( &p, s, true );
+//     Debug::printSchedulingLog( *sm, s );
+    
+    QCOMPARE( p.allTasks().count(), 4 );
+    QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 0 )->endTime(), st + Duration( 1, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->startTime(), st + Duration( 2, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 1 )->endTime(), st + Duration( 2, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->startTime(), st + Duration( 3, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 2 )->endTime(), st + Duration( 3, 8, 0 ) + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 0, 8, 0 ) );
+    QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
 
 }
 
