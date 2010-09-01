@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                      &w, SLOT(showApplicationMenu()));
 
     if (arguments.size() > 1) {
-        w.openDocument(arguments[1],arguments[2].compare("false",Qt::CaseInsensitive));
+        w.openDocument(arguments[1],arguments.size() > 2 ? arguments[2].compare("false",Qt::CaseInsensitive) : false);
     } else {
         QTimer::singleShot(5, &w, SLOT(checkDBusActivation()));
     }
