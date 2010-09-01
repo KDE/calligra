@@ -176,35 +176,43 @@ Border TableStyleProperties::borderForSide(Border::Side side) const
 QString TableStyleProperties::stringFromType(Type type)
 {
     switch(type) {
-        case NoType:
-            return QString();
-        case FirstRow:
-            return "firstRow";
-            break;
-        case FirstCol:
-            return "firstCol";
-            break;
-        case LastCol:
-            return "lastCol";
-            break;
-        case LastRow:
-            return "lastRow";
-            break;
-        case NeCell:
-            return "neCell";
-            break;
-        case NwCell:
-            return "nwCell";
-            break;
-        case SeCell:
-            return "seCell";
-            break;
-        case SwCell:
-            return "swCell";
-            break;
-        case WholeTbl:
-            return "wholeTbl";
-            break;
+    case NoType:
+        return QString();
+    case FirstRow:
+        return "firstRow";
+        break;
+    case FirstCol:
+        return "firstCol";
+        break;
+    case LastCol:
+        return "lastCol";
+        break;
+    case LastRow:
+        return "lastRow";
+        break;
+    case NeCell:
+        return "neCell";
+        break;
+    case NwCell:
+        return "nwCell";
+        break;
+    case SeCell:
+        return "seCell";
+        break;
+    case SwCell:
+        return "swCell";
+        break;
+    case WholeTbl:
+        return "wholeTbl";
+        break;
+    case Band1Horizontal:
+    case Band2Horizontal:
+    case Band1Vertical:
+    case Band2Vertical:
+    default:
+        qFatal("Encountered unhandled table style type");
+        return QString();
+
     }
 
     //Shut up the compiler about not returning from a non-void function
@@ -603,7 +611,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 // KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
 // {
 //     READ_PROLOGUE
-// 
+//
 //     while(!atEnd()) {
 //         if(isStartElement()) {
 //             TRY_READ_IF(ln)
@@ -612,11 +620,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //         }
 //         BREAK_IF_END_OF(CURRENT_EL);
 //     }
-// 
+//
 //     Border border;
 //     border.setColor(m_currentPen.color());
 //     m_currentStyleProperties.addBorder(border, Border::TopLeftToBottomRight);
-// 
+//
 //     READ_EPILOGUE
 // }
 
@@ -625,7 +633,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 // KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
 // {
 //     READ_PROLOGUE
-// 
+//
 //     while(!atEnd()) {
 //         if(isStartElement()) {
 //             TRY_READ_IF(ln)
@@ -634,11 +642,11 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //         }
 //         BREAK_IF_END_OF(CURRENT_EL);
 //     }
-// 
+//
 //     Border border;
 //     border.setColor(m_currentPen.color());
 //     m_currentStyleProperties.addBorder(border, Border::TopRightToBottomLeft);
-// 
+//
 //     READ_EPILOGUE
 // }
 
