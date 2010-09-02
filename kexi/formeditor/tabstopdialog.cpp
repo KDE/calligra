@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005,2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@
 #include <kpushbutton.h>
 
 #include "form.h"
-#include "objecttreeview.h"
+#include "WidgetTreeWidget.h"
 
 #include "tabstopdialog.h"
 
@@ -52,19 +52,21 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     QFrame *frame = new QFrame(this);
     setMainWidget(frame);
     QGridLayout *l = new QGridLayout(frame);
-    m_treeview = new ObjectTreeView(frame, 
-        ObjectTreeView::DisableSelection | ObjectTreeView::DisableContextMenu);
-    m_treeview->setObjectName("tabstops_treeview");
-    m_treeview->setItemsMovable(true);
-    m_treeview->setDragEnabled(true);
-    m_treeview->setDropVisualizer(true);
-    m_treeview->setAcceptDrops(true);
-    m_treeview->setFocus();
-    l->addWidget(m_treeview, 0, 0);
+    m_widgetTree = new WidgetTreeWidget(frame,
+        WidgetTreeWidget::DisableSelection | WidgetTreeWidget::DisableContextMenu);
+    m_widgetTree->setObjectName("tabstops:widgetTree");
+    m_widgetTree->setDragEnabled(true);
+    m_widgetTree->setDropIndicatorShown(true);
+    //2.0 m_widgetTree->setItemsMovable(true);
+    //2.0 m_widgetTree->setDropVisualizer(true);
+    m_widgetTree->setDragDropMode(QAbstractItemView::InternalMove);
+    m_widgetTree->setAcceptDrops(true);
+    //m_widgetTree->setFocus();
+    l->addWidget(m_widgetTree, 0, 0);
 
-    m_treeview->m_form = 0;
-    connect(m_treeview, SIGNAL(currentChanged(Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
-    connect(m_treeview, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
+    m_widgetTree->m_form = 0;
+    connect(m_widgetTree, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
+#warning TODO connect(m_widgetTree, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
@@ -85,7 +87,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     l->addWidget(m_check, 1, 0, 1, 2);
 
     updateGeometry();
-    setInitialSize(QSize(500 + m_btnUp->width(), qMax(400, m_treeview->height())));
+    setInitialSize(QSize(500 + m_btnUp->width(), qMax(400, m_widgetTree->height())));
 }
 
 TabStopDialog::~TabStopDialog()
@@ -94,8 +96,8 @@ TabStopDialog::~TabStopDialog()
 
 int TabStopDialog::exec(Form *form)
 {
-    m_treeview->clear();
-    m_treeview->m_form = form;
+    m_widgetTree->clear();
+    m_widgetTree->m_form = form;
 
     if (form->autoTabStops())
         form->autoAssignTabStops();
@@ -104,14 +106,15 @@ int TabStopDialog::exec(Form *form)
         ObjectTreeList::ConstIterator it(form->tabStops()->constBegin());
         it+=(form->tabStops()->count()-1);
         for (;it!=form->tabStops()->constEnd(); --it) {
-            new ObjectTreeViewItem(m_treeview, *it);
+            new WidgetTreeWidgetItem(m_widgetTree, *it);
         }
     }
     m_check->setChecked(form->autoTabStops());
 
-    if (m_treeview->firstChild()) {
-        m_treeview->setCurrentItem(m_treeview->firstChild());
-        m_treeview->setSelected(m_treeview->firstChild(), true);
+    if (m_widgetTree->invisibleRootItem()->childCount() > 0) {
+        QTreeWidgetItem *firstItem = m_widgetTree->invisibleRootItem()->child(0);
+        m_widgetTree->setCurrentItem(firstItem);
+        firstItem->setSelected(true);
     }
 
     if (QDialog::Rejected == KDialog::exec())
@@ -126,53 +129,65 @@ int TabStopDialog::exec(Form *form)
 
     //add items to the order list
     form->tabStops()->clear();
-    ObjectTreeViewItem *item = (ObjectTreeViewItem*)m_treeview->firstChild();
-    while (item) {
-        ObjectTreeItem *tree = item->objectTree();
+    QTreeWidgetItemIterator it(m_widgetTree);
+    while (*it) {
+        ObjectTreeItem *tree = static_cast<WidgetTreeWidgetItem*>(*it)->data();
         if (tree)
             form->tabStops()->append(tree);
-        item = (ObjectTreeViewItem*)item->nextSibling();
     }
     return QDialog::Accepted;
 }
 
-void
-TabStopDialog::moveItemUp()
+void TabStopDialog::moveItemUp()
 {
-    if (!m_treeview->selectedItem())
+    QTreeWidgetItem *selected = m_widgetTree->selectedItem();
+    if (!selected)
         return;
-    Q3ListViewItem *before = m_treeview->selectedItem()->itemAbove();
-    before->moveItem(m_treeview->selectedItem());
-    updateButtons(m_treeview->selectedItem());
+    // we assume there is flat list
+    QTreeWidgetItem *root = m_widgetTree->invisibleRootItem();
+    const int selectedIndex = root->indexOfChild(selected);
+    if (selectedIndex < 1)
+        return; // no place to move
+    root->takeChild(selectedIndex);
+    root->insertChild(selectedIndex - 1, selected);
+    updateButtons(selected);
 }
 
-void
-TabStopDialog::moveItemDown()
+void TabStopDialog::moveItemDown()
 {
-    Q3ListViewItem *item = m_treeview->selectedItem();
-    if (!item)
+    QTreeWidgetItem *selected = m_widgetTree->selectedItem();
+    if (!selected)
         return;
-    item->moveItem(item->nextSibling());
-    updateButtons(item);
+    // we assume there is flat list
+    QTreeWidgetItem *root = m_widgetTree->invisibleRootItem();
+    const int selectedIndex = root->indexOfChild(selected);
+    if (selectedIndex >= (root->childCount() - 1))
+        return; // no place to move
+    root->takeChild(selectedIndex);
+    root->insertChild(selectedIndex + 1, selected);
+    updateButtons(selected);
 }
 
-void
-TabStopDialog::updateButtons(Q3ListViewItem *item)
+void TabStopDialog::updateButtons(QTreeWidgetItem *item)
 {
-    m_btnUp->setEnabled(item && (item->itemAbove() && m_treeview->isEnabled()
+    QTreeWidgetItem *root = m_widgetTree->invisibleRootItem();
+    m_btnUp->setEnabled(item && (root->indexOfChild(item) > 0 && m_widgetTree->isEnabled()
                                  /*&& (item->itemAbove()->parent() == item->parent()))*/));
-    m_btnDown->setEnabled(item && item->nextSibling() && m_treeview->isEnabled());
+    m_btnDown->setEnabled(item && root->indexOfChild(item) < (root->childCount() - 1) && m_widgetTree->isEnabled());
 }
 
-void
-TabStopDialog::slotRadioClicked(bool isOn)
+void TabStopDialog::slotSelectionChanged()
 {
-    m_treeview->setEnabled(!isOn);
-    updateButtons(m_treeview->selectedItem());
+    updateButtons(m_widgetTree->selectedItem());
 }
 
-bool
-TabStopDialog::autoTabStops() const
+void TabStopDialog::slotRadioClicked(bool isOn)
+{
+    m_widgetTree->setEnabled(!isOn);
+    updateButtons(m_widgetTree->selectedItem());
+}
+
+bool TabStopDialog::autoTabStops() const
 {
     return m_check->isChecked();
 }

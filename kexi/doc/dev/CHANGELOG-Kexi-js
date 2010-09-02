@@ -41,6 +41,7 @@ TODO Form editor:
  - fix syncing form geometry with properties in the propeditor
  - show Spring element and autofield widget for 2.3
  - disable 'assign action' when no button is selected
+ - port 'assign action' dialog to QColumnView
  - disable mouse-over highlighting effect for buttons and check boxes
  
 TODO: (Windows-only?) when right-clicking again after context menu has been displayed, update selection, otherwise the context menu items won't be adequate to the selection
@@ -108,6 +109,15 @@ TODO: this causes crash:
              , fieldsExpandedWithInternalAndRowID(0)
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
+
+2010-09-02
+Forms
+*Widgets Tree tab ported
+TODO: finalize this, still invisible
+
+2010-09-01
+Forms
+*ObjectTreeView/ObjectTreeViewItem renamed to WidgetTreeWidget/WidgetTreeWidgetItem and ported to QTreeWidget/QTreeWidgetItem
 
 2010-08-30
 Core

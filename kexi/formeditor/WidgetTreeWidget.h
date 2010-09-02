@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,12 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef OBJECTTREEVIEW_H
-#define OBJECTTREEVIEW_H
+#ifndef KFD_WIDGETTREEWIDGET_H
+#define KFD_WIDGETTREEWIDGET_H
 
-#include <k3listview.h>
+#include <QTreeWidget>
 
 #include <kexi_export.h>
+
+class QContextMenuEvent;
 
 namespace KFormDesigner
 {
@@ -31,46 +33,48 @@ namespace KFormDesigner
 class ObjectTreeItem;
 class Form;
 
-//! @short An item in ObjectTreeView associated with an ObjectTreeItem.
-class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
+//! @short An item in WidgetTreeWidget associated with an ObjectTreeItem.
+class KFORMEDITOR_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
-    ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item = 0);
-    virtual ~ObjectTreeViewItem();
+    WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data);
+    WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0);
+    virtual ~WidgetTreeWidgetItem();
 
     //! \return the item name, ie the ObjectTreeItem name
     QString name() const;
 
-    //! \return the ObjectTreeItem associated to this item.
-    ObjectTreeItem* objectTree() const {
+    //! \return the ObjectTreeItem information associated to this item.
+    ObjectTreeItem* data() const {
         return m_item;
     }
 
-    virtual void setOpen(bool o);
+    //2.0 virtual void setOpen(bool o);
+
+    //! Added to unhide.
+    virtual QVariant data(int column, int role) const { return QTreeWidgetItem::data(column, role); }
 
 protected:
     //! Reimplemented to draw custom contents (copied from Property Editor)
-    virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+    //virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
     //! Reimplemented to draw custom contents (copied from Property Editor)
-    virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
+    //virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
 
     //! Reimplemented to draw custom contents (copied from Property Editor)
-    virtual void setup();
+    //2.0 virtual void setup();
 
 private:
     ObjectTreeItem *m_item;
-
-    friend class ObjectTreeView;
+//    friend class WidgetTreeWidget;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
- This is a K3ListView which represents an item for each widget in the form.
- The actually selected widget is written bold
- and selected. Clicking on a list item selects the corresponding widget in the Form.
+ This is a tree representin hierarchy of form widgets.
+ The actually selected widgets are written bold
+ and selected. Clicking on items selects the corresponding widgets on the form.
  */
-class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
+class KFORMEDITOR_EXPORT WidgetTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 
@@ -83,11 +87,14 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    ObjectTreeView(QWidget *parent, Options options = NoOptions);
+    WidgetTreeWidget(QWidget *parent, Options options = NoOptions);
 
-    virtual ~ObjectTreeView();
+    virtual ~WidgetTreeWidget();
 
-    virtual QSize sizeHint() const;
+    //! @return selected tree item or 0 if there is no selection or more than one item is selected.
+    WidgetTreeWidgetItem* selectedItem() const;
+
+    //2.0 virtual QSize sizeHint() const;
 
     /*! Sets \a form as the current Form in the list. The list will automatically
      be filled with an item for each widget in the Form, and selection will be synced.
@@ -96,7 +103,7 @@ public:
     void setForm(Form *form);
 
     //! \return the pixmap name for a given class, to be shown next to the widget name.
-    QString iconNameForClass(const QByteArray &classname);
+    QString iconNameForClass(const QByteArray &classname) const;
 
 public slots:
     /*! Sets the widget \a w as selected item, so it will be written bold.
@@ -113,11 +120,11 @@ public slots:
     void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
 protected slots:
-    /*! This slot is called when the user right-click a list item.
-     The widget context menu is shown, as inisde the Form. */
-    void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
+    ///*! This slot is called when the user right-click a list item.
+//     The widget context menu is shown, as inisde the Form. */
+//2.0    void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
 
-    void slotColumnSizeChanged(int);
+    //2.0 void slotColumnSizeChanged(int);
 
     /*! The selected list item has changed, so we emit a signal to update the Form. */
     void slotSelectionChanged();
@@ -127,19 +134,24 @@ protected slots:
 
 protected:
     //! Internal function to fill the list.
-    ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
+    WidgetTreeWidgetItem* loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent);
 
     //! \return The item whose name is \a name.
-    ObjectTreeViewItem* findItem(const QString &name);
+    WidgetTreeWidgetItem* findItem(const QString &name);
+
+    virtual void contextMenuEvent(QContextMenuEvent* e);
 
 private:
+    void handleContextMenuEvent(QContextMenuEvent* e);
+
     Form *m_form;
-    ObjectTreeViewItem *m_topItem;
+    //2.0 WidgetTreeWidgetItem *m_topItem;
+    Options m_options;
 
     friend class TabStopDialog;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ObjectTreeView::Options)
+Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetTreeWidget::Options)
 
 }
 

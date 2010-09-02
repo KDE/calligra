@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005,2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +25,7 @@
 
 #include <kexi_export.h>
 
-class Q3ListViewItem;
+class QTreeWidgetItem;
 class QCheckBox;
 class KPushButton;
 
@@ -32,7 +33,7 @@ namespace KFormDesigner
 {
 
 class Form;
-class ObjectTreeView;
+class WidgetTreeWidget;
 
 //! A dialog to edit Form tab stops
 /*! The user can change the order by dragging list items or using buttons at the right.
@@ -45,17 +46,20 @@ public:
     TabStopDialog(QWidget *parent);
     virtual ~TabStopDialog();
 
-public slots:
-    int exec(KFormDesigner::Form *form);
-    void moveItemUp();
-    void moveItemDown();
-    void updateButtons(Q3ListViewItem*);
-    void slotRadioClicked(bool isOn);
-
     bool autoTabStops() const;
 
+public slots:
+    int exec(KFormDesigner::Form *form);
+
+protected slots:
+    void moveItemUp();
+    void moveItemDown();
+    void updateButtons(QTreeWidgetItem *item);
+    void slotRadioClicked(bool isOn);
+    void slotSelectionChanged();
+
 protected:
-    ObjectTreeView   *m_treeview;
+    WidgetTreeWidget *m_widgetTree;
     KPushButton *m_btnUp, *m_btnDown;
     QCheckBox *m_check;
 };

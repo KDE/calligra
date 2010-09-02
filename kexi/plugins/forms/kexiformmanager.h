@@ -29,7 +29,7 @@ class KexiFormManagerPrivate;
 
 namespace KFormDesigner {
 class WidgetLibrary;
-class ObjectTreeView;
+class WidgetTreeWidget;
 class ActionGroup;
 class Command;
 }
@@ -43,7 +43,7 @@ public:
     static KexiFormManager* self();
 
     //! Called by KexiFormPart()
-    void init(KexiFormPart *part, KFormDesigner::ObjectTreeView *treeView);
+    void init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree);
 
     virtual QAction* action(const char* name);
     virtual void enableAction(const char* name, bool enable);

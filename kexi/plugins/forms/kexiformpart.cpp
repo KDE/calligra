@@ -46,7 +46,7 @@
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
 //2.0 #include <formeditor/widgetpropertyset.h>
-#include <formeditor/objecttreeview.h>
+#include <formeditor/WidgetTreeWidget.h>
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
@@ -65,18 +65,14 @@ class KexiFormPart::Private
 {
 public:
     Private() {
-#ifndef KEXI_NO_OBJECTTREEVIEW
-        objectTreeView = new KFormDesigner::ObjectTreeView(0);
-        objectTreeView->setObjectName("KexiFormPart:ObjectTreeView");
-#endif
+        widgetTree = new KFormDesigner::WidgetTreeWidget(0);
+        widgetTree->setObjectName("KexiFormPart:WidgetTreeWidget");
     }
     ~Private() {
-#ifndef KEXI_NO_OBJECTTREEVIEW
-        delete static_cast<KFormDesigner::ObjectTreeView*>(objectTreeView);
-#endif
+        delete static_cast<KFormDesigner::WidgetTreeWidget*>(widgetTree);
         delete static_cast<KexiDataSourcePage*>(dataSourcePage);
     }
-    QPointer<KFormDesigner::ObjectTreeView> objectTreeView;
+    QPointer<KFormDesigner::WidgetTreeWidget> widgetTree;
     QPointer<KexiDataSourcePage> dataSourcePage;
     KexiDataSourceComboBox *dataSourceCombo;
 };
@@ -103,7 +99,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const QVariantList &l)
 /* 2.0 removed
     KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
     if (!formManager) {*/
-    KexiFormManager::self()->init(this, d->objectTreeView); // this should create KexiFormManager singleton
+    KexiFormManager::self()->init(this, d->widgetTree); // this should create KexiFormManager singleton
 //    }
 
 /* 2.0 slotPropertyChanged() code moved to Form so this connection can be removed
@@ -490,14 +486,8 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     tab->addTab(d->dataSourcePage, KIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
 
-#if 0
-    tab->addTab(d->objectTreeView, KIcon("widgets"), QString());
-    tab->setTabToolTip(tab->indexOf(d->objectTreeView), i18n("Widgets"));
-#else
-#ifdef __GNUC__
-#warning
-#endif
-#endif
+    tab->addTab(d->widgetTree, KIcon("widgets"), QString());
+    tab->setTabToolTip(tab->indexOf(d->widgetTree), i18n("Widgets"));
 }
 
 //----------------

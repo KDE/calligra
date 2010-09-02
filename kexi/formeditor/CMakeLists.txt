@@ -23,7 +23,7 @@ set(kformdesigner_LIB_SRCS
    formIO.cpp
    FormWidget.cpp
    FormWidgetInterface.cpp
-   objecttreeview.cpp
+   WidgetTreeWidget.cpp
 #todo   spring.cpp
    commands.cpp
    events.cpp
@@ -71,7 +71,7 @@ install( FILES
   FormWidget.h
   FormWidgetInterface.h
   objecttree.h
-  objecttreeview.h
+  WidgetTreeWidget.h
   widgetfactory.h
   WidgetInfo.h
   widgetlibrary.h

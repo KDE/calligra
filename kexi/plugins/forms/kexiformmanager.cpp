@@ -40,7 +40,7 @@
 #include <formeditor/objecttree.h>
 #include <formeditor/formIO.h>
 #include <formeditor/kexiactionselectiondialog.h>
-#include <formeditor/objecttreeview.h>
+#include <formeditor/WidgetTreeWidget.h>
 
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
@@ -58,7 +58,7 @@ public:
 #ifdef KFD_SIGSLOTS
         dragConnectionAction = 0;
 #endif
-        treeView = 0;
+        widgetTree = 0;
         collection = 0;
     }
     ~KexiFormManagerPrivate() {
@@ -69,7 +69,7 @@ public:
     KexiFormPart* part;
     KFormDesigner::WidgetLibrary* lib;
     KFormDesigner::ActionGroup* widgetActionGroup;
-    KFormDesigner::ObjectTreeView *treeView;
+    KFormDesigner::WidgetTreeWidget *widgetTree;
 #ifdef KEXI_DEBUG_GUI
     //! For debugging purposes
     QPointer<KPageDialog> uiCodeDialog;
@@ -106,7 +106,7 @@ KexiFormManager::~KexiFormManager()
 {
 }
 
-void KexiFormManager::init(KexiFormPart *part, KFormDesigner::ObjectTreeView *treeView)
+void KexiFormManager::init(KexiFormPart *part, KFormDesigner::WidgetTreeWidget *widgetTree)
 {
 /* @todo add configuration for supported factory groups */
     QStringList supportedFactoryGroups;
@@ -130,8 +130,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::ObjectTreeView *tr
                 this, SLOT(slotAssignAction()));
     }
 
-    d->treeView = treeView;
-    if (d->treeView) {
+    d->widgetTree = widgetTree;
+    if (d->widgetTree) {
 #ifdef __GNUC__
 #warning "Port this: connect()"
 #else
