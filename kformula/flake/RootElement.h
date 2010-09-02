@@ -93,10 +93,10 @@ protected:
 
 private:
     /// The element that is the radicand of the root
-    BasicElement* m_radicand;
+    RowElement* m_radicand;
 
     /// The element that is the exponent of the root
-    BasicElement* m_exponent;
+    RowElement* m_exponent;
 
     /// The point the artwork relates to.
     QPointF m_rootOffset;

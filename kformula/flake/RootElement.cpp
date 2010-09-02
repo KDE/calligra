@@ -4,6 +4,7 @@
                  2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
                  2009 Jeremias Epperlein <jeeree@web.de>
+   Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -145,12 +146,15 @@ int RootElement::endPosition() const
 
 bool RootElement::replaceChild ( BasicElement* oldelement, BasicElement* newelement )
 {
-    if (oldelement==m_exponent) {
-        m_exponent=newelement;
-        return true;
-    } else if (oldelement==m_radicand) {
-        m_radicand=newelement;
-        return true;
+    if (newelement->elementType()==Row) {
+        RowElement* newrow = static_cast<RowElement*>(newelement);
+        if (oldelement == m_exponent) {
+            m_exponent = newrow;
+            return true;
+        } else if (oldelement == m_radicand) {
+            m_radicand = newrow;
+            return true;
+        }
     }
     return false;
 }
@@ -162,29 +166,22 @@ ElementType RootElement::elementType() const
 
 bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
-    BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-    bool radicand = true;
-    bool exponent = true;
-
-    forEachElement( tmp, element ) {
-        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        if( !tmpElement->readMathML( tmp ) ) {
-            return false;
-        }
-        if( radicand ) {
-            delete m_radicand;
-            m_radicand = tmpElement;
-            radicand = false;
-        } else if( exponent ) {
-            delete m_exponent;
-            m_exponent = tmpElement;
-            exponent= false;
+    int counter = 0;
+    forEachElement(tmp, element) {
+        if (counter==0) {
+            loadElement(tmp, &m_radicand);
+        } else if (counter==1) {
+            loadElement(tmp, &m_exponent);
         } else {
             kDebug(39001) << "Too many arguments to mroot";
-            return false;
         }
+        counter++;
     }
+    if (counter < 2) {
+        kDebug(39001) << "Not enough arguments to mroot";
+    }
+
     return true;
 }
 
