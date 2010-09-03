@@ -286,14 +286,13 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
         }
     } else if (value.isText()) {
         // TODO: hyperlinks
-        // TODO: richtext
         QString txt = value.asString();
         oc.setValue(KSpread::Value(txt));
         if (txt.startsWith('='))
             oc.setUserInput('\'' + txt);
         else
             oc.setUserInput(txt);
-        if (value.isRichText()) {
+        if (value.isRichText() || ic->format().font().subscript() || ic->format().font().superscript()) {
             std::map<unsigned, FormatFont> formatRuns = value.formatRuns();
             // add sentinel to list of format runs
             if (!formatRuns.count(0))
@@ -445,6 +444,10 @@ QTextCharFormat ExcelImport::Private::convertFontToCharFormat(const FormatFont& 
     f.setPointSizeF(font.fontSize());
     frm.setFont(f);
     frm.setForeground(font.color());
+    if (font.subscript())
+        frm.setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    if (font.superscript())
+        frm.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
     return frm;
 }
 
