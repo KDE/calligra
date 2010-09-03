@@ -1001,17 +1001,19 @@ public:
     }
 };
 
-QString Utils::rotateString(const qreal rotation, const qreal xPos, const qreal yPos)
+QString Utils::rotateString(const qreal rotation, const qreal xPos, const  qreal yPos,
+    const qreal width, const qreal height)
 {
     qreal angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0)
                                                     / (qreal)60000.0;
-    qreal oldX = xPos / 360000.0;
-    qreal oldY = yPos / 360000.0;
-    qreal hypo = sqrt(oldX * oldX + oldY * oldY);
-    qreal newX = hypo * sin((qreal)(M_PI)/4 + angle);
-    qreal newY = hypo * cos((qreal)(M_PI)/4 + angle);
 
-    return QString("rotate(%1) translate(%2cm %3cm)").arg(angle).arg(oldX - newX).arg(oldY - newY);
+    //position change is calculated based on the fact that center point stays
+    //Xold+Width/2 = Xnew + cos(angle)*Width/2 - sin(angle)*Height/2
+    //Yold+Height/2 = Ynew + sin(angle)*Width/2 + cos(angle)*Height/2
+    qreal newX = width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
+    qreal newY = height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
+
+    return QString("rotate(%1) translate(%2cm %3cm)").arg(angle).arg(xresult).arg(yresult);
 }
 
 void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties)

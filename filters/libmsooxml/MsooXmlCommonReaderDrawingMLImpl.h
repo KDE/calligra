@@ -276,7 +276,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
         if (m_rot != 0) {
             // m_rot is in 1/60,000th of a degree
-            body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
+            body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY,
+                m_svgWidth, m_svgHeight));
         }
 
         const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
@@ -820,7 +821,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             }
             if (m_rot != 0) {
                 // m_rot is in 1/60,000th of a degree
-                body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY));
+                body->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY,
+                    m_svgWidth, m_svgHeight));
             }
         }
         if (m_context->type == SlideMaster) {

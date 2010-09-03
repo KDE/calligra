@@ -275,7 +275,8 @@ MSOOXML_EXPORT QString columnName(uint column);
 MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
 //! @return the string which is needed when rotation objects
-MSOOXML_EXPORT QString rotateString(const qreal rotation, const qreal xPos, const qreal yPos);
+MSOOXML_EXPORT QString rotateString(const qreal rotation, const qreal xPos, const  qreal yPos,
+    const qreal width, const qreal height);
 
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is based
