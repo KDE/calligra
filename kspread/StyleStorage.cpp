@@ -212,7 +212,7 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 //     kDebug(36006) <<"StyleStorage: inserting" << SubStyle::name(subStyle->type()) <<" into" << rect;
     // keep track of the used area
     const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
-    if (rect.top() == 1 && rect.bottom() == KS_colMax) {
+    if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
         for (int i = rect.left(); i <= rect.right(); ++i) {
             if (isDefault)
                 d->usedColumns.remove(i);
@@ -221,7 +221,7 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
         }
         if (isDefault)
             d->usedArea -= rect;
-    } else if (rect.left() == 1 && rect.right() == KS_rowMax) {
+    } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
         for (int i = rect.top(); i <= rect.bottom(); ++i) {
             if (isDefault)
                 d->usedRows.remove(i);
@@ -286,11 +286,11 @@ void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
 
         // update used areas
         foreach (const QRect& rect, reg.rects()) {
-            if (rect.top() == 1 && rect.bottom() == KS_colMax) {
+            if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
                 for (int i = rect.left(); i <= rect.right(); ++i) {
                     d->usedColumns.insert(i, true);
                 }
-            } else if (rect.left() == 1 && rect.right() == KS_rowMax) {
+            } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
                 for (int i = rect.top(); i <= rect.bottom(); ++i) {
                     d->usedRows.insert(i, true);
                 }
