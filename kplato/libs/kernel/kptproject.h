@@ -427,7 +427,7 @@ public:
     int numScheduleManagers() const { return m_managers.count(); }
     int indexOf( const ScheduleManager *sm ) const { return m_managers.indexOf( const_cast<ScheduleManager*>(sm) ); }
     bool isScheduleManager( void* ptr ) const;
-    void addScheduleManager( ScheduleManager *sm, ScheduleManager *parent = 0 );
+    void addScheduleManager( ScheduleManager *sm, ScheduleManager *parent = 0, int index = -1 );
     int takeScheduleManager( ScheduleManager *sm );
     ScheduleManager *findScheduleManagerByName( const QString &name ) const;
     /// Returns a list of all schedule managers

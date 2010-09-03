@@ -1483,8 +1483,8 @@ private:
 class KPLATOKERNEL_EXPORT AddScheduleManagerCmd : public NamedCommand
 {
 public:
-    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
-    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, const QString& name = 0 );
+    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, int index = -1, const QString& name = 0 );
+    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index = -1, const QString& name = 0 );
     ~AddScheduleManagerCmd();
     void execute();
     void unexecute();

@@ -57,7 +57,11 @@ public:
     Project *project() const { return model()->project(); }
     void setProject( Project *project ) { model()->setProject( project ); }
 
+    ScheduleManager *manager( const QModelIndex &idx ) const;
     ScheduleManager *currentManager() const;
+    ScheduleManager *selectedManager() const;
+
+    QModelIndexList selectedRows() const;
 
 signals:
     void currentChanged( const QModelIndex& );
@@ -118,7 +122,7 @@ private slots:
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
     void updateActionsEnabled( const QModelIndex &index );
-    void slotEnableActions( const ScheduleManager *sm );
+    void slotEnableActions();
 
     void slotCalculateSchedule();
     void slotBaselineSchedule();

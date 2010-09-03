@@ -2823,12 +2823,12 @@ void ProjectModifyEndTimeCmd::unexecute()
 }
 
 //----------------------------
-AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm, const QString& name )
+AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm, int index, const QString& name )
     : NamedCommand( name ),
     m_node( node ),
     m_parent( sm->parentManager() ),
     m_sm( sm ),
-    m_index( -1 ),
+    m_index( index ),
     m_exp( sm->expected() ),
     m_opt( sm->optimistic() ),
     m_pess( sm->pessimistic() ),
@@ -2836,12 +2836,12 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm
 {
 }
 
-AddScheduleManagerCmd::AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, const QString& name )
+AddScheduleManagerCmd::AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index, const QString& name )
     : NamedCommand( name ),
     m_node( parent->project() ),
     m_parent( parent ),
     m_sm( sm ),
-    m_index( -1 ),
+    m_index( index ),
     m_exp( sm->expected() ),
     m_opt( sm->optimistic() ),
     m_pess( sm->pessimistic() ),
@@ -2859,7 +2859,7 @@ AddScheduleManagerCmd::~AddScheduleManagerCmd()
 
 void AddScheduleManagerCmd::execute()
 {
-    m_node.addScheduleManager( m_sm, m_parent );
+    m_node.addScheduleManager( m_sm, m_parent, m_index );
     m_sm->setExpected( m_exp );
     m_sm->setOptimistic( m_opt );
     m_sm->setPessimistic( m_pess );
@@ -2868,7 +2868,7 @@ void AddScheduleManagerCmd::execute()
 
 void AddScheduleManagerCmd::unexecute()
 {
-    m_index = m_node.takeScheduleManager( m_sm );
+    m_node.takeScheduleManager( m_sm );
     m_sm->setExpected( 0 );
     m_sm->setOptimistic( 0 );
     m_sm->setPessimistic( 0 );
@@ -2876,9 +2876,10 @@ void AddScheduleManagerCmd::unexecute()
 }
 
 DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Project &node, ScheduleManager *sm, const QString& name )
-    : AddScheduleManagerCmd( node, sm, name )
+    : AddScheduleManagerCmd( node, sm )
 {
     m_mine = false;
+    m_index = m_parent ? m_parent->indexOf( sm ) : node.indexOf( sm );
     foreach ( ScheduleManager *s, sm->children() ) {
         cmd.addCommand( new DeleteScheduleManagerCmd( node, s ) );
     }

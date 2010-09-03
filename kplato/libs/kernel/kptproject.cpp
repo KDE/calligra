@@ -2423,14 +2423,18 @@ QString Project::uniqueScheduleName() const {
     return n.arg( i );
 }
 
-void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent )
+void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index )
 {
+    int row = parent == 0 ? m_managers.count() : parent->childCount();
+    if ( index >= 0 && index < row ) {
+        row = index;
+    }
     if ( parent == 0 ) {
-        emit scheduleManagerToBeAdded( parent, m_managers.count() );
-        m_managers.append( sm );
+        emit scheduleManagerToBeAdded( parent, row );
+        m_managers.insert( row, sm );
     } else {
-        emit scheduleManagerToBeAdded( parent, parent->children().count() );
-        sm->setParentManager( parent );
+        emit scheduleManagerToBeAdded( parent, row );
+        sm->setParentManager( parent, row );
     }
     if ( sm->managerId().isEmpty() ) {
         sm->setManagerId( uniqueScheduleManagerId() );

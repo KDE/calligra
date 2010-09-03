@@ -65,7 +65,7 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     ScheduleItemModel *m = new ScheduleItemModel( this );
     setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
 
     createItemDelegates( m );
@@ -87,7 +87,13 @@ void ScheduleTreeView::currentChanged( const QModelIndex & current, const QModel
     //kDebug()<<current.row()<<","<<current.column();
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
+    // possible bug in qt: in QAbstractItemView::SingleSelection you can select multiple items/rows
     selectionModel()->select( current, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+}
+
+ScheduleManager *ScheduleTreeView::manager( const QModelIndex &idx ) const
+{
+    return model()->manager( idx );
 }
 
 ScheduleManager *ScheduleTreeView::currentManager() const
@@ -95,12 +101,29 @@ ScheduleManager *ScheduleTreeView::currentManager() const
     return model()->manager( currentIndex() );
 }
 
+QModelIndexList ScheduleTreeView::selectedRows() const
+{
+    QModelIndexList lst = selectionModel()->selectedRows();
+    qDebug()<<lst;
+    return lst;
+}
+
+ScheduleManager *ScheduleTreeView::selectedManager() const
+{
+    ScheduleManager *sm = 0;
+    QModelIndexList lst = selectedRows();
+    if ( lst.count() == 1 ) {
+        sm = model()->manager( lst.first() );
+    }
+    return sm;
+}
+
 //-----------------------------------
 ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();
-    slotEnableActions( 0 );
+    slotEnableActions();
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -180,61 +203,63 @@ void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
 void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
 {
     //kDebug()<<list.count();
-    // The list has one entry per column, and we only select one row at a time, so...
     ScheduleManager *sm = 0;
-    if ( ! list.isEmpty() ) {
+    if ( list.count() == 1 ) {
         sm = m_view->model()->manager( list.first() );
         emit scheduleSelectionChanged( sm );
     } else {
         emit scheduleSelectionChanged( 0 );
     }
-    slotEnableActions( sm );
+    slotEnableActions();
 
 }
 
 void ScheduleEditor::updateActionsEnabled( const QModelIndex &index )
 {
     kDebug()<<index;
-    slotEnableActions( m_view->currentManager() );
+    slotEnableActions();
 }
 
-void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
+void ScheduleEditor::slotEnableActions()
 {
-    if ( sm == 0 || sm->parentManager() == 0 ) {
-        actionAddSchedule->setEnabled( isReadWrite() );
-    } else if ( sm && sm->parentManager() && sm->parentManager()->isScheduled() ) {
-        actionAddSchedule->setEnabled( isReadWrite() );
-    } else {
+    if ( ! isReadWrite() ) {
         actionAddSchedule->setEnabled( false );
-    }
-
-    bool on = isReadWrite() && sm != 0;
-
-    actionBaselineSchedule->setIcon( KIcon( ( sm && sm->isBaselined() ? "view-time-schedule-baselined-remove" : "view-time-schedule-baselined-add" ) ) );
-    if ( on && ( sm->isBaselined() || sm->isChildBaselined() ) ) {
-        actionBaselineSchedule->setEnabled( sm->isBaselined() );
-        actionCalculateSchedule->setEnabled( false );
+        actionAddSubSchedule->setEnabled( false );
         actionDeleteSelection->setEnabled( false );
-        actionAddSubSchedule->setEnabled( on );
-    } else {
-        actionBaselineSchedule->setEnabled( on && sm->isScheduled() && ! m_view->project()->isBaselined() );
-        actionDeleteSelection->setEnabled( on && ! sm->scheduling() );
-        bool scheduling = false;
-        if ( on && model() && project() ) {
-            foreach ( ScheduleManager *sm, project()->allScheduleManagers() ) {
-                scheduling = sm->scheduling();
-                if ( scheduling ) {
-                    break;
-                }
-            }
-        }
-        on = on && ! scheduling;
-        if ( on && sm->parentManager() ) {
-            on = on && sm->parentManager()->isScheduled();
-        }
-        actionCalculateSchedule->setEnabled( on && sm->schedulerPlugin() );
-        actionAddSubSchedule->setEnabled( on && sm->isScheduled() );
+        actionCalculateSchedule->setEnabled( false );
+        actionBaselineSchedule->setEnabled( false );
+        return;
     }
+    QModelIndexList lst = m_view->selectedRows();
+    if ( lst.isEmpty() ) {
+        actionAddSchedule->setEnabled( true );
+        actionAddSubSchedule->setEnabled( false );
+        actionDeleteSelection->setEnabled( false );
+        actionCalculateSchedule->setEnabled( false );
+        actionBaselineSchedule->setEnabled( false );
+        return;
+    }
+    if ( lst.count() > 1 ) {
+        actionAddSchedule->setEnabled( false );
+        actionAddSubSchedule->setEnabled( false );
+        actionDeleteSelection->setEnabled( false );
+        actionCalculateSchedule->setEnabled( false );
+        actionBaselineSchedule->setEnabled( false );
+        return;
+    }
+    // one and only one manager selected
+    ScheduleManager *sm = m_view->manager( lst.first() );
+    Q_ASSERT( sm );
+    actionAddSchedule->setEnabled( true );
+    actionAddSubSchedule->setEnabled( sm->isScheduled() );
+    actionDeleteSelection->setEnabled( ! ( sm->isBaselined() || sm->isChildBaselined() ) );
+    actionCalculateSchedule->setEnabled( ! ( sm->isBaselined() || sm->isChildBaselined() ) );
+
+    actionBaselineSchedule->setIcon( KIcon( ( sm->isBaselined() ? "view-time-schedule-baselined-remove" : "view-time-schedule-baselined-add" ) ) );
+    
+    // enable if scheduled and noone else is baselained
+    bool en = sm->isScheduled() && ( sm->isBaselined() || ! m_view->project()->isBaselined() );
+    actionBaselineSchedule->setEnabled( en );
 }
 
 void ScheduleEditor::setupGui()
@@ -253,7 +278,7 @@ void ScheduleEditor::setupGui()
     connect( actionAddSubSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSubSchedule() ) );
     addAction( name, actionAddSubSchedule );
 
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selection"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete" ), this );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
@@ -281,7 +306,7 @@ void ScheduleEditor::updateReadWrite( bool readwrite )
     kDebug()<<readwrite;
     ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
-    slotEnableActions( m_view->currentManager() );
+    slotEnableActions();
 }
 
 void ScheduleEditor::slotOptions()
@@ -297,7 +322,7 @@ void ScheduleEditor::slotOptions()
 void ScheduleEditor::slotCalculateSchedule()
 {
     //kDebug();
-    ScheduleManager *sm = m_view->currentManager();
+    ScheduleManager *sm = m_view->selectedManager();
     if ( sm == 0 ) {
         return;
     }
@@ -315,11 +340,18 @@ void ScheduleEditor::slotCalculateSchedule()
 void ScheduleEditor::slotAddSchedule()
 {
     //kDebug();
-    ScheduleManager *sm = m_view->currentManager();
+    int idx = -1;
+    ScheduleManager *sm = m_view->selectedManager();
+    if ( sm ) {
+        idx = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : m_view->project()->indexOf( sm );
+        if ( idx >= 0 ) {
+            ++idx;
+        }
+    }
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        part()->addCommand( new AddScheduleManagerCmd( sm, m, idx, i18n( "Create sub-schedule" ) ) );
         QModelIndex idx = model()->index( m );
         if ( idx.isValid() ) {
             m_view->setFocus();
@@ -330,7 +362,7 @@ void ScheduleEditor::slotAddSchedule()
     } else {
         Project *p = m_view->project();
         ScheduleManager *m = p->createScheduleManager();
-        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, i18n( "Add schedule %1", m->name() ) );
+        AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *p, m, idx, i18n( "Add schedule %1", m->name() ) );
         part() ->addCommand( cmd );
         QModelIndex idx = model()->index( m );
         if ( idx.isValid() ) {
@@ -345,10 +377,14 @@ void ScheduleEditor::slotAddSchedule()
 void ScheduleEditor::slotAddSubSchedule()
 {
     //kDebug();
-    ScheduleManager *sm = m_view->currentManager();
+    ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
+        int row = sm->parentManager() ? sm->parentManager()->indexOf( sm ) : m_view->project()->indexOf( sm );
+        if ( row >= 0 ) {
+            ++row;
+        }
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        part()->addCommand( new AddScheduleManagerCmd( sm, m, row, i18n( "Create sub-schedule" ) ) );
         m_view->expand( model()->index( sm ) );
         QModelIndex idx = model()->index( m );
         if ( idx.isValid() ) {
@@ -363,7 +399,7 @@ void ScheduleEditor::slotAddSubSchedule()
 void ScheduleEditor::slotBaselineSchedule()
 {
     //kDebug();
-    ScheduleManager *sm = m_view->currentManager();
+    ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
         emit baselineSchedule( m_view->project(), sm );
     }
@@ -372,7 +408,7 @@ void ScheduleEditor::slotBaselineSchedule()
 void ScheduleEditor::slotDeleteSelection()
 {
     //kDebug();
-    ScheduleManager *sm = m_view->currentManager();
+    ScheduleManager *sm = m_view->selectedManager();
     if ( sm ) {
         emit deleteScheduleManager( m_view->project(), sm );
     }
@@ -410,7 +446,7 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setModel( m_model );
 
     setRootIsDecorated( false );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
 
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );

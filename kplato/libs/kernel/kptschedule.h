@@ -544,7 +544,7 @@ public:
 
     Project &project() const { return m_project; }
     
-    void setParentManager( ScheduleManager *sm );
+    void setParentManager( ScheduleManager *sm, int index = -1 );
     ScheduleManager *parentManager() const { return m_parent; }
     
     long scheduleId() const { return m_expected == 0 ? NOTSCHEDULED : m_expected->id(); }

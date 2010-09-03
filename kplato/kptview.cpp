@@ -1656,7 +1656,7 @@ void View::slotAddScheduleManager( Project *project )
         return;
     }
     ScheduleManager *sm = project->createScheduleManager();
-    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, i18n( "Add schedule %1", sm->name() ) );
+    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( *project, sm, -1, i18n( "Add schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
 }
 

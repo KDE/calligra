@@ -1378,14 +1378,14 @@ ScheduleManager::~ScheduleManager()
     setParentManager( 0 );
 }
 
-void ScheduleManager::setParentManager( ScheduleManager *sm )
+void ScheduleManager::setParentManager( ScheduleManager *sm, int index )
 {
     if ( m_parent ) {
         m_parent->removeChild( this );
     }
     m_parent = sm;
     if ( sm ) {
-        sm->insertChild( this );
+        sm->insertChild( this, index );
     }
 }
 
