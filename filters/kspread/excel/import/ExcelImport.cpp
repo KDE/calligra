@@ -372,7 +372,17 @@ KSpread::Style ExcelImport::Private::convertStyle(const Format* format, const QS
 
 void ExcelImport::Private::processFontFormat(const FormatFont& font, KSpread::Style& style)
 {
-    // TODO
+    if (font.isNull()) return;
+
+    QFont f;
+    f.setBold(font.bold());
+    f.setItalic(font.italic());
+    f.setUnderline(font.underline());
+    f.setStrikeOut(font.strikeout());
+    f.setFamily(font.fontFamily());
+    f.setPointSizeF(font.fontSize());
+    style.setFont(f);
+    style.setFontColor(font.color());
 }
 
 QPen ExcelImport::Private::convertBorder(const Pen& pen)
