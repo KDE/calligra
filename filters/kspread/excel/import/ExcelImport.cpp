@@ -285,8 +285,17 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
             oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
         }
     } else if (value.isText()) {
-        // TODO: hyperlinks
         QString txt = value.asString();
+
+        Hyperlink link = ic->hyperlink();
+        if (link.isValid) {
+            if (!link.location.isEmpty()) {
+                oc.setLink(link.location); // not sure if I should strip a leading # like KSpread does
+                if (!link.displayName.trimmed().isEmpty())
+                    txt = link.displayName.trimmed();
+            }
+        }
+
         oc.setValue(KSpread::Value(txt));
         if (txt.startsWith('='))
             oc.setUserInput('\'' + txt);
