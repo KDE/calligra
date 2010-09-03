@@ -29,6 +29,8 @@
 #include <QBuffer>
 #include <QFontMetricsF>
 #include <QPair>
+#include <QTextCursor>
+
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
@@ -84,6 +86,7 @@ public:
     QList<KSpread::Style> styleList;
 
     void processFontFormat(const FormatFont& font, KSpread::Style& style);
+    QTextCharFormat convertFontToCharFormat(const FormatFont& font);
     QPen convertBorder(const Pen& pen);
 
     int rowsCountTotal, rowsCountDone;
@@ -280,7 +283,32 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
     } else if (value.isText()) {
         // TODO: hyperlinks
         // TODO: richtext
-        oc.setValue(KSpread::Value(value.asString()));
+        QString txt = value.asString();
+        oc.setValue(KSpread::Value(txt));
+        if (txt.startsWith('='))
+            oc.setUserInput('\'' + txt);
+        else
+            oc.setUserInput(txt);
+        if (value.isRichText()) {
+            std::map<unsigned, FormatFont> formatRuns = value.formatRuns();
+            // add sentinel to list of format runs
+            if (!formatRuns.count(0))
+                formatRuns[0] = ic->format().font();
+            formatRuns[txt.length()] = ic->format().font();
+
+            QSharedPointer<QTextDocument> doc(new QTextDocument(txt));
+            QTextCursor c(doc.data());
+            for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
+                std::map<unsigned, FormatFont>::iterator it2 = it; it2++;
+                if (it2 != formatRuns.end()) {
+                    // select block
+                    c.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, it2->first - it->first);
+                    c.setCharFormat(convertFontToCharFormat(it->second));
+                    c.clearSelection();
+                }
+            }
+            oc.setRichText(doc);
+        }
     } else if (value.isError()) {
         KSpread::Value v(Value::Error);
         v.setError(value.asString());
@@ -399,6 +427,21 @@ void ExcelImport::Private::processFontFormat(const FormatFont& font, KSpread::St
     f.setPointSizeF(font.fontSize());
     style.setFont(f);
     style.setFontColor(font.color());
+}
+
+QTextCharFormat ExcelImport::Private::convertFontToCharFormat(const FormatFont& font)
+{
+    QTextCharFormat frm;
+    QFont f;
+    f.setBold(font.bold());
+    f.setItalic(font.italic());
+    f.setUnderline(font.underline());
+    f.setStrikeOut(font.strikeout());
+    f.setFamily(font.fontFamily());
+    f.setPointSizeF(font.fontSize());
+    frm.setFont(f);
+    frm.setForeground(font.color());
+    return frm;
 }
 
 QPen ExcelImport::Private::convertBorder(const Pen& pen)
