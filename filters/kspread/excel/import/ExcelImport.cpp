@@ -243,6 +243,40 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
 void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store)
 {
+    // save styles to xml
+    QBuffer b;
+    b.open(QIODevice::ReadWrite);
+    KoXmlWriter stylesXml(&b);
+    stylesXml.startDocument("office:styles");
+    stylesXml.startElement("office:styles");
+    stylesXml.addAttribute("xmlns:office", KoXmlNS::office);
+    stylesXml.addAttribute("xmlns:meta", KoXmlNS::meta);
+    stylesXml.addAttribute("xmlns:config", KoXmlNS::config);
+    stylesXml.addAttribute("xmlns:text", KoXmlNS::text);
+    stylesXml.addAttribute("xmlns:table", KoXmlNS::table);
+    stylesXml.addAttribute("xmlns:draw", KoXmlNS::draw);
+    stylesXml.addAttribute("xmlns:presentation", KoXmlNS::presentation);
+    stylesXml.addAttribute("xmlns:dr3d", KoXmlNS::dr3d);
+    stylesXml.addAttribute("xmlns:chart", KoXmlNS::chart);
+    stylesXml.addAttribute("xmlns:form", KoXmlNS::form);
+    stylesXml.addAttribute("xmlns:script", KoXmlNS::script);
+    stylesXml.addAttribute("xmlns:style", KoXmlNS::style);
+    stylesXml.addAttribute("xmlns:number", KoXmlNS::number);
+    stylesXml.addAttribute("xmlns:math", KoXmlNS::math);
+    stylesXml.addAttribute("xmlns:svg", KoXmlNS::svg);
+    stylesXml.addAttribute("xmlns:fo", KoXmlNS::fo);
+    stylesXml.addAttribute("xmlns:anim", KoXmlNS::anim);
+    stylesXml.addAttribute("xmlns:smil", KoXmlNS::smil);
+    stylesXml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
+    stylesXml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+    styles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &stylesXml);
+    stylesXml.endElement();
+    stylesXml.endDocument();
+
+    b.seek(0);
+    KoXmlDocument stylesDoc;
+    stylesDoc.setContent(&b, true);
+
     // Register additional attributes, that identify shapes anchored in cells.
     // Their dimensions need adjustment after all rows are loaded,
     // because the position of the end cell is not always known yet.
@@ -256,7 +290,9 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
                 KoXmlNS::table, "end-y",
                 "table:end-y"));
 
+
     KoOdfStylesReader odfStyles;
+    odfStyles.createStyleMap(stylesDoc, false);
     KoOdfLoadingContext odfContext(odfStyles, store);
     KoShapeLoadingContext shapeContext(odfContext, outputDoc->resourceManager());
 
