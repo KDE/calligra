@@ -1652,7 +1652,7 @@ void Cell::loadOdfCellText(const KoXmlElement& parent, OdfLoadingContext& tableC
         if (textParagraphElement.localName() == "p" &&
                 textParagraphElement.namespaceURI() == KoXmlNS::text) {
 
-            // our text, could contain formating for value or result of formul
+            // our text, could contain formating for value or result of formula
             if (cellText.isEmpty()) {
                 cellText = textParagraphElement.text();
             } else {
