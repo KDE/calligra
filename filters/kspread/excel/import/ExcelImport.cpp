@@ -151,6 +151,13 @@ public:
     void addProgress(int addValue);
 
     QHash<int, QRegion> cellStyles;
+
+    QList<ChartExport*> charts;
+    void processCharts(KoXmlWriter* manifestWriter);
+
+    void addManifestEntries(KoXmlWriter* ManifestWriter);
+    void insertPictureManifest(PictureObject* picture);
+    QMap<QString,QString> manifestEntries;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -265,6 +272,23 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     xml.endElement();
     xml.endDocument();
 
+    QBuffer manifestBuffer;
+    KoXmlWriter manifestWriter(&manifestBuffer);
+    manifestWriter.startDocument("manifest:manifest");
+    manifestWriter.startElement("manifest:manifest");
+    manifestWriter.addAttribute("xmlns:manifest", KoXmlNS::manifest);
+    manifestWriter.addManifestEntry("/", "application/vnd.oasis.opendocument.spreadsheet");
+
+    d->processCharts(&manifestWriter);
+    d->addManifestEntries(&manifestWriter);
+
+    manifestWriter.endElement();
+    manifestWriter.endDocument();
+    if (d->storeout->open("META-INF/manifest.xml")) {
+        d->storeout->write(manifestBuffer.buffer());
+        d->storeout->close();
+    }
+
     delete d->storeout;
     storeBuffer.close();
 
@@ -273,7 +297,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     shapesBuffer.seek(0);
     KoXmlDocument xmlDoc;
     QString errorMsg; int errorLine, errorColumn;
-    kDebug() << shapesBuffer.buffer();
     if (!xmlDoc.setContent(&shapesBuffer, true, &errorMsg, &errorLine, &errorColumn)) {
         kDebug() << errorMsg << errorLine << errorColumn;
     } else {
@@ -526,7 +549,6 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
 void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
 {
     bool hasObjects = false;
-    // TODO shapes/pictures/chars
 
     // handle pictures
     foreach(PictureObject *picture, ic->pictures()) {
@@ -564,7 +586,44 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
         shapesXml->endElement(); // draw:image
         shapesXml->endElement(); // draw:frame
 
-        //insertPictureManifest(picture);
+        insertPictureManifest(picture);
+    }
+
+    // handle charts
+    foreach(ChartObject *chart, ic->charts()) {
+        Sheet* const sheet = ic->sheet();
+        if(chart->m_chart->m_impl==0) {
+            kDebug() << "Invalid chart to be created, no implementation.";
+            continue;
+        }
+
+        if (!hasObjects) {
+            shapesXml->startElement("table:table-cell");
+            shapesXml->addAttribute("table:row", oc.row());
+            shapesXml->addAttribute("table:column", oc.column());
+            hasObjects = true;
+        }
+
+        ChartExport *c = new ChartExport(chart->m_chart);
+        c->m_href = QString("Chart%1").arg(this->charts.count()+1);
+        c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
+        c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
+
+        const unsigned long colL = chart->m_colL;
+        const unsigned long dxL = chart->m_dxL;
+        const unsigned long dyT = chart->m_dyT;
+        const unsigned long rwT = chart->m_rwT;
+
+        c->m_x = offset(columnWidth(sheet, colL), dxL, 1024);
+        c->m_y = offset(rowHeight(sheet, rwT), dyT, 256);
+
+        if (!chart->m_chart->m_cellRangeAddress.isNull() )
+            c->m_cellRangeAddress = encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.left(), chart->m_chart->m_cellRangeAddress.top()) + ":" +
+                                    encodeAddress(sheet->name(), chart->m_chart->m_cellRangeAddress.right(), chart->m_chart->m_cellRangeAddress.bottom());
+
+        this->charts << c;
+
+        c->saveIndex(shapesXml);
     }
 
 
@@ -589,6 +648,13 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
 
     if (hasObjects) {
         shapesXml->endElement();
+    }
+}
+
+void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
+{
+    foreach(ChartExport *c, this->charts) {
+        c->saveContent(this->storeout, manifestWriter);
     }
 }
 
@@ -745,11 +811,47 @@ QPen ExcelImport::Private::convertBorder(const Pen& pen)
     }
 }
 
+void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
+{
+    QString mimeType;
+    const QString fileName = picture->fileName();
+    const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
+    if( extension == "gif" ) {
+        mimeType = "image/gif";
+    }
+    else if( extension == "jpg" || extension == "jpeg"
+            || extension == "jpe" || extension == "jfif" ) {
+        mimeType = "image/jpeg";
+    }
+    else if( extension == "tif" || extension == "tiff" ) {
+        mimeType = "image/tiff";
+    }
+    else if( extension == "png" ) {
+        mimeType = "image/png";
+    }
+    else if( extension == "emf" ) {
+        mimeType = "application/x-openoffice-wmf;windows_formatname=\"Image EMF\"";
+    }
+    else if( extension == "wmf" ) {
+        mimeType = "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"";
+    }
+    else if( extension == "bmp" ) {
+        mimeType = "image/bmp";
+    }
 
+    manifestEntries.insert(fileName, mimeType);
+}
 
-
-
+void ExcelImport::Private::addManifestEntries(KoXmlWriter* manifestWriter)
+{
+    QMap<QString, QString>::const_iterator iterator = manifestEntries.constBegin();
+    QMap<QString, QString>::const_iterator end = manifestEntries.constEnd();
+    while( iterator != end ) {
+        manifestWriter->addManifestEntry(iterator.key(), iterator.value());
+        ++iterator;
+    }
+}
 
 
 // Updates the displayed progress information
