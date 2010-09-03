@@ -248,6 +248,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     xml.addAttribute("xmlns:smil", KoXmlNS::smil);
     xml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
     xml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+    xml.addAttribute("xmlns:dc", KoXmlNS::dc);
+    xml.addAttribute("xmlns:xlink", KoXmlNS::xlink);
     d->shapesXml = &xml;
 
     KSpread::Map* map = d->outputDoc->map();
@@ -270,9 +272,13 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     shapesBuffer.seek(0);
     KoXmlDocument xmlDoc;
-    xmlDoc.setContent(&shapesBuffer, true);
-
-    d->processEmbeddedObjects(xmlDoc.documentElement(), store);
+    QString errorMsg; int errorLine, errorColumn;
+    kDebug() << shapesBuffer.buffer();
+    if (!xmlDoc.setContent(&shapesBuffer, true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug() << errorMsg << errorLine << errorColumn;
+    } else {
+        d->processEmbeddedObjects(xmlDoc.documentElement(), store);
+    }
 
     delete store;
 
@@ -314,6 +320,8 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
     stylesXml.addAttribute("xmlns:smil", KoXmlNS::smil);
     stylesXml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
     stylesXml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+    stylesXml.addAttribute("xmlns:dc", KoXmlNS::dc);
+    stylesXml.addAttribute("xmlns:xlink", KoXmlNS::xlink);
     styles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &stylesXml);
     stylesXml.endElement();
     stylesXml.endDocument();
