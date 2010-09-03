@@ -301,10 +301,18 @@ class AbstractAtom
         AbstractAtom* m_parent;
         QList<AbstractAtom*> m_children;
 
-        QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType, int start, int count, int step) const {
-            QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
-            QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
+        QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType, const QString& _start, const QString& _count, const QString& _step) const {
+            const QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
+
+            const QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
             Q_ASSERT(axisList.count() <= 1 || axisList.count() == typeList.count());
+            
+            const QStringList startList = _start.split(' ', QString::SkipEmptyParts);
+            const QStringList countList = _count.split(' ', QString::SkipEmptyParts);
+            const QStringList stepList = _step.split(' ', QString::SkipEmptyParts);
+            Q_ASSERT(startList.count() == countList.count() || startList.isEmpty() || countList.isEmpty());
+            Q_ASSERT(countList.count() == stepList.count() || countList.isEmpty() || stepList.isEmpty());
+            Q_ASSERT(startList.count() == stepList.count() || startList.isEmpty() || stepList.isEmpty());
 
             QList<AbstractNode*> result;
             for(int i = 0; i < axisList.count(); ++i) {
@@ -349,33 +357,44 @@ class AbstractAtom
                     list.append(context->currentNode());
                 }
 
-                if(i < typeList.count()) { // filter the result
+                // optional filter the list
+                if(i < typeList.count()) {
+                    QList<AbstractNode*> _list = list;
+                    list.clear();
                     const QString ptType = typeList[i];
-                    foreach(AbstractNode* node, list) {
+                    foreach(AbstractNode* node, _list) {
                         if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
                             if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
-                                result.append(pt);
+                                list.append(pt);
                             }
                         }
                     }
                 }
-            }
 
-            //TODO seems it's possible that start/count/step are a composition of multiple values (e.g. st="1 2 5") too. That
-            // means that probably the loop needs to be applied per iteration. Needs more testing...
-            if(step >= 0)
-                result = foreachAxis(context, result, start, count, step);
+                // evaluate optional forEach-conditions
+                if(i < startList.count() || i < countList.count() || i < stepList.count()) {
+                    const int start = i < startList.count() ? startList[i].toInt() : 1;
+                    const int count = i < countList.count() ? countList[i].toInt() : list.count();
+                    const int step =  i < stepList.count()  ? stepList[i].toInt()  : 1;
+                    list = foreachAxis(context, list, start, count, step);
+                }
+
+                // transfer the resulting list to the result-list.
+                foreach(AbstractNode* node, list) {
+                    result.append(node);
+                }
+            }
 
             return result;
         }
-        
+
+    private:
         QList<AbstractNode*> foreachAxis(Context* context, const QList<AbstractNode*> &list, int start, int count, int step) const {
             QList<AbstractNode*> result;
             const int _start = qMax(0, start - 1);
             const int _step = qMax(1, step);
-            for(int i = _start; i < list.count(); i += _step) {
+            for(int i = _start; i < list.count() && result.count() != count; i += _step) {
                 result.append(list[i]);
-                if(/*count > 0 &&*/ result.count() == count) break;
             }
             return result;
         }
@@ -603,11 +622,11 @@ class PresentationOfAtom : public AbstractAtom
     public:
         QString m_axis; // This determines how to navigate through the data model, setting the context node as it moves. 
         QString m_ptType; // dataPointType
-        int m_count;
+        QString m_count;
         QString m_hideLastTrans;
-        int m_start;
-        int m_step;
-        explicit PresentationOfAtom() : AbstractAtom("dgm:presOf"), m_count(0), m_start(0), m_step(0) {}
+        QString m_start;
+        QString m_step;
+        explicit PresentationOfAtom() : AbstractAtom("dgm:presOf") {}
         virtual ~PresentationOfAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "axis=" << m_axis << "ptType=" << m_ptType << "count=" << m_count << "start=" << m_start << "step=" << m_step << "hideLastTrans=" << m_hideLastTrans;
@@ -617,13 +636,10 @@ class PresentationOfAtom : public AbstractAtom
             const QXmlStreamAttributes attrs(reader->attributes());
             TRY_READ_ATTR_WITHOUT_NS_INTO(axis, m_axis)
             TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
-            TRY_READ_ATTR_WITHOUT_NS(cnt)
-            m_count = cnt.toInt();
+            TRY_READ_ATTR_WITHOUT_NS_INTO(cnt, m_count)
             TRY_READ_ATTR_WITHOUT_NS_INTO(hideLastTrans, m_hideLastTrans)
-            TRY_READ_ATTR_WITHOUT_NS(st)
-            m_start = st.toInt();
-            TRY_READ_ATTR_WITHOUT_NS(step)
-            m_step = step.toInt();
+            TRY_READ_ATTR_WITHOUT_NS_INTO(st, m_start)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(step, m_step)
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
@@ -645,11 +661,11 @@ class IfAtom : public AbstractAtom
         QString m_name;
         QString m_operator;
         QString m_ptType;
-        int m_start;
-        int m_step;
-        int m_count;
+        QString m_start;
+        QString m_step;
+        QString m_count;
         QString m_value;
-        explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_start(0), m_step(0), m_count(0), m_isTrue(isTrue) {}
+        explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_isTrue(isTrue) {}
         virtual ~IfAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP<<"name="<<m_name;
@@ -660,17 +676,14 @@ class IfAtom : public AbstractAtom
             const QXmlStreamAttributes attrs(reader->attributes());
             TRY_READ_ATTR_WITHOUT_NS_INTO(arg, m_argument)
             TRY_READ_ATTR_WITHOUT_NS_INTO(axis, m_axis)
-            TRY_READ_ATTR_WITHOUT_NS(cnt)
-            m_count = cnt.toInt();
+            TRY_READ_ATTR_WITHOUT_NS_INTO(cnt, m_count)
             TRY_READ_ATTR_WITHOUT_NS_INTO(func, m_function)
             TRY_READ_ATTR_WITHOUT_NS_INTO(hideLastTrans, m_hideLastTrans)
             TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
             TRY_READ_ATTR_WITHOUT_NS_INTO(op, m_operator)
             TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
-            TRY_READ_ATTR_WITHOUT_NS(st)
-            m_start = st.toInt();
-            TRY_READ_ATTR_WITHOUT_NS(step)
-            m_step = step.toInt();
+            TRY_READ_ATTR_WITHOUT_NS_INTO(st, m_start)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(step, m_step)
             TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
             AbstractAtom::readAll(context, reader);
         }
@@ -843,10 +856,10 @@ class ForEachAtom : public AbstractAtom
         QString m_name;
         QString m_ptType;
         QString m_reference;
-        int m_start;
-        int m_step;
-        int m_count;
-        explicit ForEachAtom() : AbstractAtom("dgm:forEach"), m_start(0), m_step(0), m_count(0) {}
+        QString m_start;
+        QString m_step;
+        QString m_count;
+        explicit ForEachAtom() : AbstractAtom("dgm:forEach") {}
         virtual ~ForEachAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "axis=" << m_axis << "count=" << m_count << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "ptType=" << m_ptType << "reference=" << m_reference << "start=" << m_start << "step=" << m_step;
@@ -856,16 +869,13 @@ class ForEachAtom : public AbstractAtom
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
             TRY_READ_ATTR_WITHOUT_NS_INTO(axis, m_axis)
-            TRY_READ_ATTR_WITHOUT_NS(cnt)
-            m_count = cnt.toInt();
+            TRY_READ_ATTR_WITHOUT_NS_INTO(cnt, m_count)
             TRY_READ_ATTR_WITHOUT_NS_INTO(hideLastTrans, m_hideLastTrans)
             TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
             TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
             TRY_READ_ATTR_WITHOUT_NS_INTO(ref, m_reference)
-            TRY_READ_ATTR_WITHOUT_NS(st)
-            m_start = st.toInt();
-            TRY_READ_ATTR_WITHOUT_NS(step)
-            m_step = step.toInt();
+            TRY_READ_ATTR_WITHOUT_NS_INTO(st, m_start)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(step, m_step)
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
