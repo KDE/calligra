@@ -327,7 +327,8 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
         oc.setValue(v);
     }
 
-    // TODO notes
+    oc.setComment(ic->note());
+
     // TODO shapes/pictures/chars
 
     int styleId = convertStyle(&ic->format(), formula);
