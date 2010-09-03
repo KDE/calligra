@@ -139,7 +139,7 @@ public:
     void processCellObjects(Cell* icell, KSpread::Cell ocell);
     void processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store);
 
-    int convertStyle(const Format* format, const QString& formula);
+    int convertStyle(const Format* format, const QString& formula = QString());
     QHash<CellFormatKey, int> styleCache;
     QList<KSpread::Style> styleList;
 
@@ -151,6 +151,8 @@ public:
     void addProgress(int addValue);
 
     QHash<int, QRegion> cellStyles;
+    QHash<int, QRegion> rowStyles;
+    QHash<int, QRegion> columnStyles;
 
     QList<ChartExport*> charts;
     void processCharts(KoXmlWriter* manifestWriter);
@@ -418,7 +420,12 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     }
 
     QList<QPair<QRegion, KSpread::Style> > styles;
-    // TODO row/column styles
+    for (QHash<int, QRegion>::const_iterator it = columnStyles.constBegin(); it != columnStyles.constEnd(); ++it) {
+        styles.append(qMakePair(it.value(), styleList[it.key()]));
+    }
+    for (QHash<int, QRegion>::const_iterator it = rowStyles.constBegin(); it != rowStyles.constEnd(); ++it) {
+        styles.append(qMakePair(it.value(), styleList[it.key()]));
+    }
     for (QHash<int, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
@@ -434,7 +441,9 @@ void ExcelImport::Private::processColumn(Sheet* is, unsigned columnIndex, KSprea
     KSpread::ColumnFormat* oc = os->nonDefaultColumnFormat(columnIndex+1);
     oc->setWidth(column->width());
     oc->setHidden(!column->visible());
-    // TODO: cell styles
+
+    int styleId = convertStyle(&column->format());
+    columnStyles[styleId] += QRect(columnIndex+1, 1, 1, KS_rowMax);
 }
 
 void ExcelImport::Private::processRow(Sheet* is, unsigned rowIndex, KSpread::Sheet* os)
