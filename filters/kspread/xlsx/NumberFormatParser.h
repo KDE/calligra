@@ -37,6 +37,7 @@ public:
 
     static void setStyles(KoGenStyles* styles);
     static KoGenStyle parse(const QString& numberFormat);
+    static bool isDateFormat(const QString& numberFormat);
 
 private:
     static KoGenStyles* styles;

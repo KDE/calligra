@@ -579,3 +579,193 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat)
     // conditional style with the current format
     return styleFromTypeAndBuffer(conditions.isEmpty() ? type : KoGenStyle::NumericTextStyle, buffer);
 }
+
+bool NumberFormatParser::isDateFormat(const QString& numberFormat)
+{
+    // this is for the month vs. minutes-context
+    bool justHadHours = false;
+
+    bool hadPlainText = false;
+
+    for (int i = 0; i < numberFormat.length(); ++i) {
+        const char c = numberFormat[ i ].toLatin1();
+        bool isSpecial = true;
+
+        const bool isLong = i < numberFormat.length() - 1 && numberFormat[ i + 1 ] == c;
+        const bool isLonger = isLong && i < numberFormat.length() - 2 && numberFormat[ i + 2 ] == c;
+        const bool isLongest = isLonger && i < numberFormat.length() - 3 && numberFormat[ i + 3 ] == c;
+        const bool isWayTooLong = isLongest && i < numberFormat.length() - 4 && numberFormat[ i + 4 ] == c;
+
+        switch (c) {
+            // condition or color or locale...
+        case '[': {
+            //don't care, skip
+            while (i < numberFormat.length() && numberFormat[ i ] != QLatin1Char(']'))
+                ++i;
+        }
+        break;
+
+
+        // underscore: ignore the next char
+        case '_':
+            ++i;
+            break;
+
+
+            // asterisk: ignore
+        case '*':
+        case '(':
+        case ')':
+            break;
+
+            // percentage
+        case '%':
+            //SET_TYPE_OR_RETURN(KoGenStyle::NumericPercentageStyle);
+            break;
+
+            // a number
+        case '.':
+        case ',':
+        case '#':
+        case '0':
+        case '?': {
+            //SET_TYPE_OR_RETURN(KoGenStyle::NumericNumberStyle)
+            char ch = numberFormat[ i ].toLatin1();
+            do {
+                if (i >= numberFormat.length() - 1) break;
+                ch = numberFormat[ ++i ].toLatin1();
+
+                if (ch == ' ') {
+                    // spaces are not allowed - but there's an exception: if this is a fraction. Let's check for '?' or '/'
+                    const char c = numberFormat[ i + 1 ].toLatin1();
+                    if (c == '?' || c == '/')
+                        ch = numberFormat[ ++i ].toLatin1();
+                }
+            } while (i < numberFormat.length() && (ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/'));
+
+            if (!(ch == '.' || ch == ',' || ch == '#' || ch == '0' || ch == 'E' || ch == 'e' || ch == '?' || ch == '/')) {
+                --i;
+            }
+        }
+        break;
+
+            // Everything related to date/time
+            // AM/PM
+        case 'A':
+        case 'a':
+            if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm") ||
+                    numberFormat.mid(i, 3).toLower() == QLatin1String("a/p")) {
+                // SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+                if (numberFormat.mid(i, 5).toLower() == QLatin1String("am/pm"))
+                    i += 2;
+                i += 2;
+            }
+            break;
+
+
+            // hours, long or short
+        case 'H':
+        case 'h':
+            //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+            if (isLong) {
+                ++i;
+            }
+            break;
+
+
+            // minutes or months, depending on context
+        case 'M':
+        case 'm':
+            // must be month, then, at least three M
+            if (isLonger) {
+                return true;
+            }
+            // depends on the context. After hours and before seconds, it's minutes
+            // otherwise it's the month
+            else {
+                if (justHadHours) {
+                    //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+                } else {
+                    // on the next iteration, we might see wheter there're seconds or something else
+                    bool minutes = true; // let's just default to minutes, if there's nothing more...
+                    // so let's look ahead:
+                    for (int j = i + 1; j < numberFormat.length(); ++j) {
+                        const char ch = numberFormat[ i ].toLatin1();
+                        if (ch == 's' || ch == 'S') {   // minutes
+                            break;
+                        }
+                        if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'))) {   // months
+                            continue;
+                        }
+                        minutes = false;
+                        break;
+                    }
+                    if (minutes) {
+                        //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+                    } else {
+                        return true;
+                    }
+                }
+                if (isLong) {
+                    ++i;
+                }
+            }
+            break;
+
+
+            // day (of week)
+        case 'D':
+        case 'd':
+            return true;
+
+            // seconds, long or short
+        case 'S':
+        case 's':
+            // SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
+            if (isLong) {
+                ++i;
+            }
+            break;
+
+            // year, long or short
+        case 'Y':
+        case 'y':
+            return true;
+
+            // now it's getting really scarry: semi-colon:
+        case ';':
+            break;
+
+        // text-content
+        case '@':
+            break;
+
+            // quote - plain text block
+        case '"':
+            isSpecial = false;
+            while (i < numberFormat.length() - 1 && numberFormat[ ++i ] != QLatin1Char('"'))
+                /* empty */;
+            break;
+
+            // backslash escapes the next char
+        case '\\':
+            isSpecial = false;
+            if (i < numberFormat.length() - 1) {
+                ++i;
+            }
+            break;
+
+            // every other char is just passed
+        default:
+            isSpecial = false;
+            break;
+        }
+
+        // for the context-sensitive 'M' which can mean either minutes or months
+        if (isSpecial) {
+            justHadHours = (c == 'h' || c == 'H');
+        }
+    }
+
+    return false;
+}
