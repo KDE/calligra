@@ -102,6 +102,7 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     d->inputDoc = qobject_cast<const KSpread::Doc*>(document);
     if (!d->inputDoc) {
         kWarning() << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
+        return KoFilter::WrongFormat;
     }
 
     CFBWriter w(false);
