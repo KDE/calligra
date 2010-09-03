@@ -1010,8 +1010,8 @@ QString Utils::rotateString(const qreal rotation, const qreal xPos, const  qreal
     //position change is calculated based on the fact that center point stays
     //Xold+Width/2 = Xnew + cos(angle)*Width/2 - sin(angle)*Height/2
     //Yold+Height/2 = Ynew + sin(angle)*Width/2 + cos(angle)*Height/2
-    qreal newX = width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
-    qreal newY = height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
+    qreal newX = xPos + width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
+    qreal newY = yPos + height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
 
     return QString("rotate(%1) translate(%2cm %3cm)").arg(angle).arg(newX/360000).arg(newY/360000);
 }

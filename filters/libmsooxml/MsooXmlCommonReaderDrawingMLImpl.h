@@ -265,8 +265,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             kDebug() << "m_posOffsetV" << m_posOffsetV;
             realY += m_posOffsetV;
         }
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(realX));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
+        if (m_rot == 0) {
+            body->addAttribute("svg:x", EMU_TO_CM_STRING(realX));
+            body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
+        }
         body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
         body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         //! @todo: flipH, flipV
@@ -810,8 +812,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             if (m_svgWidth > -1 && m_svgHeight > -1) {
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
     //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
-                body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-                body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                if (m_rot == 0) {
+                    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+                    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                }
                 body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
                 body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
             }
