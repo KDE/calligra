@@ -1740,66 +1740,69 @@ void Cell::loadOdfObjects(const KoXmlElement &parent, OdfLoadingContext& tableCo
         if (element.namespaceURI() != KoXmlNS::draw)
             continue;
 
-        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, *tableContext.shapeContext);
-        if (!shape) {
-            kDebug(36003) << "Unable to load shape.";
-            continue;
-        }
-
-        d->sheet->addShape(shape);
-
-        // The position is relative to the upper left sheet corner until now. Move it.
-        QPointF position = shape->position();
-        // Remember how far we're off from the top-left corner of this cell
-        double offsetX = position.x();
-        double offsetY = position.y();
-        for (int col = 1; col < column(); ++col)
-            position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
-        for (int row = 1; row < this->row(); ++row)
-            position += QPointF(0.0, d->sheet->rowFormat(row)->height());
-        shape->setPosition(position);
-
-        dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
-
-        // All three attributes are necessary for cell anchored shapes.
-        // Otherwise, they are anchored in the sheet.
-        if (!shape->hasAdditionalAttribute("table:end-cell-address") ||
-                !shape->hasAdditionalAttribute("table:end-x") ||
-                !shape->hasAdditionalAttribute("table:end-y")) {
-            kDebug(36003) << "Not all attributes found, that are necessary for cell anchoring.";
-            continue;
-        }
-
-        Region endCell(Region::loadOdf(shape->additionalAttribute("table:end-cell-address")),
-                       d->sheet->map(), d->sheet);
-        if (!endCell.isValid() || !endCell.isSingular())
-            continue;
-
-        QString string = shape->additionalAttribute("table:end-x");
-        if (string.isNull())
-            continue;
-        double endX = KoUnit::parseValue(string);
-
-        string = shape->additionalAttribute("table:end-y");
-        if (string.isNull())
-            continue;
-        double endY = KoUnit::parseValue(string);
-
-        // The column dimensions are already the final ones, but not the row dimensions.
-        // The default height is used for the not yet loaded rows.
-        // TODO Stefan: Honor non-default row heights later!
-        // subtract offset because the accumulated width and height we calculate below starts
-        // at the top-left corner of this cell, but the shape can have an offset to that corner
-        QSizeF size = QSizeF(endX - offsetX, endY - offsetY);
-        for (int col = column(); col < endCell.firstRange().left(); ++col)
-            size += QSizeF(d->sheet->columnFormat(col)->width(), 0.0);
-        for (int row = this->row(); row < endCell.firstRange().top(); ++row)
-            size += QSizeF(0.0, d->sheet->rowFormat(row)->height());
-        shape->setSize(size);
-
+        loadOdfObject(element, *tableContext.shapeContext);
     }
 }
 
+void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &shapeContext)
+{
+    KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
+    if (!shape) {
+        kDebug(36003) << "Unable to load shape.";
+        return;
+    }
+
+    d->sheet->addShape(shape);
+
+    // The position is relative to the upper left sheet corner until now. Move it.
+    QPointF position = shape->position();
+    // Remember how far we're off from the top-left corner of this cell
+    double offsetX = position.x();
+    double offsetY = position.y();
+    for (int col = 1; col < column(); ++col)
+        position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
+    for (int row = 1; row < this->row(); ++row)
+        position += QPointF(0.0, d->sheet->rowFormat(row)->height());
+    shape->setPosition(position);
+
+    dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
+
+    // All three attributes are necessary for cell anchored shapes.
+    // Otherwise, they are anchored in the sheet.
+    if (!shape->hasAdditionalAttribute("table:end-cell-address") ||
+            !shape->hasAdditionalAttribute("table:end-x") ||
+            !shape->hasAdditionalAttribute("table:end-y")) {
+        kDebug(36003) << "Not all attributes found, that are necessary for cell anchoring.";
+        return;
+    }
+
+    Region endCell(Region::loadOdf(shape->additionalAttribute("table:end-cell-address")),
+                   d->sheet->map(), d->sheet);
+    if (!endCell.isValid() || !endCell.isSingular())
+        return;
+
+    QString string = shape->additionalAttribute("table:end-x");
+    if (string.isNull())
+        return;
+    double endX = KoUnit::parseValue(string);
+
+    string = shape->additionalAttribute("table:end-y");
+    if (string.isNull())
+        return;
+    double endY = KoUnit::parseValue(string);
+
+    // The column dimensions are already the final ones, but not the row dimensions.
+    // The default height is used for the not yet loaded rows.
+    // TODO Stefan: Honor non-default row heights later!
+    // subtract offset because the accumulated width and height we calculate below starts
+    // at the top-left corner of this cell, but the shape can have an offset to that corner
+    QSizeF size = QSizeF(endX - offsetX, endY - offsetY);
+    for (int col = column(); col < endCell.firstRange().left(); ++col)
+        size += QSizeF(d->sheet->columnFormat(col)->width(), 0.0);
+    for (int row = this->row(); row < endCell.firstRange().top(); ++row)
+        size += QSizeF(0.0, d->sheet->rowFormat(row)->height());
+    shape->setSize(size);
+}
 
 bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                 Paste::Mode mode, Paste::Operation op, bool paste)

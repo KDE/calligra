@@ -56,6 +56,7 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 
 namespace KSpread
 {
@@ -595,11 +596,13 @@ protected:
      */
     void loadOdfObjects(const KoXmlElement& e, OdfLoadingContext& tableContext);
 
+
     /**
      * \ingroup OpenDocument
      */
     void saveOdfAnnotation(KoXmlWriter &xmlwriter);
-
+public:
+    void loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 private:
     class Private;
     QSharedDataPointer<Private> d;
