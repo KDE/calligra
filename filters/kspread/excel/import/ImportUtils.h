@@ -24,6 +24,9 @@
 #define IMPORTUTILS_H
 
 #include <QString>
+#include <QHash>
+
+#include "../sidewinder/format.h"
 #include "../sidewinder/value.h"
 
 namespace XlsUtils {
@@ -37,6 +40,19 @@ bool isPercentageFormat(const QString& valueFormat);
 bool isTimeFormat(const Swinder::Value &value, const QString& valueFormat);
 bool isFractionFormat(const QString& valueFormat);
 bool isDateFormat(const Swinder::Value &value, const QString& valueFormat);
+
+struct CellFormatKey {
+    const Swinder::Format* format;
+    bool isGeneral;
+    int decimalCount;
+    CellFormatKey(const Swinder::Format* format, const QString& formula);
+    bool operator==(const CellFormatKey& b) const;
+};
+
+static inline uint qHash(const CellFormatKey& key)
+{
+    return ::qHash(key.format) ^ ::qHash(key.decimalCount);
+}
 
 }
 

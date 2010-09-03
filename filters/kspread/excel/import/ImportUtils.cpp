@@ -99,4 +99,29 @@ bool isDateFormat(const Swinder::Value &value, const QString& valueFormat)
     return NumberFormatParser::isDateFormat(valueFormat);
 }
 
+
+
+CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formula)
+    : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
+{
+    if (!isGeneral) {
+        if (formula.startsWith("msoxl:=")) { // special cases
+            QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
+            if (roundRegExp.indexIn(formula) >= 0) {
+                bool ok = false;
+                int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
+                if (ok) {
+                    decimalCount = decimals;
+                }
+            }
+        } else if (formula.startsWith("msoxl:=RAND(")) {
+            decimalCount = 9;
+        }
+    }
+}
+
+bool CellFormatKey::operator==(const CellFormatKey& b) const {
+    return format == b.format && isGeneral == b.isGeneral && decimalCount == b.decimalCount;
+}
+
 }

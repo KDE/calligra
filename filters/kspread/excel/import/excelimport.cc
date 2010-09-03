@@ -110,19 +110,6 @@ static QString encodeAddress(const QString& sheetName, uint column, uint row)
     return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
 }
 
-struct CellFormatKey {
-    const Format* format;
-    bool isGeneral;
-    int decimalCount;
-    CellFormatKey(const Format* format, const QString& formula);
-    bool operator==(const CellFormatKey& b) const;
-};
-
-static uint qHash(const CellFormatKey& key)
-{
-    return ::qHash(key.format) ^ ::qHash(key.decimalCount);
-}
-
 }
 
 using namespace Swinder;
@@ -1541,28 +1528,6 @@ void ExcelImport::Private::processCellForStyle(Cell* cell, KoXmlWriter* xmlWrite
     }
 }
 
-CellFormatKey::CellFormatKey(const Format* format, const QString& formula)
-    : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
-{
-    if (!isGeneral) {
-        if (formula.startsWith("msoxl:=")) { // special cases
-            QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
-            if (roundRegExp.indexIn(formula) >= 0) {
-                bool ok = false;
-                int decimals = roundRegExp.cap(1).trimmed().toInt(&ok);
-                if (ok) {
-                    decimalCount = decimals;
-                }
-            }
-        } else if (formula.startsWith("msoxl:=RAND(")) {
-            decimalCount = 9;
-        }
-    }
-}
-
-bool CellFormatKey::operator==(const CellFormatKey& b) const {
-    return format == b.format && isGeneral == b.isGeneral && decimalCount == b.decimalCount;
-}
 
 // Processes styles for a cell within a sheet.
 QString ExcelImport::Private::processCellFormat(const Format* format, const QString& formula)

@@ -45,6 +45,7 @@
 #include <Map.h>
 #include <Sheet.h>
 #include <RowColumnFormat.h>
+#include <Style.h>
 
 #include <Charting.h>
 #include <ChartExport.h>
@@ -75,6 +76,12 @@ public:
     void processColumn(Sheet* isheet, unsigned column, KSpread::Sheet* osheet);
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
     void processCell(const Cell* icell, KSpread::Cell ocell);
+
+    KSpread::Style convertStyle(const Format* format, const QString& formula);
+    QHash<CellFormatKey, KSpread::Style> styleCache;
+
+    void processFontFormat(const FormatFont& font, KSpread::Style& style);
+    QPen convertBorder(const Pen& pen);
 
     int rowsCountTotal, rowsCountDone;
     void addProgress(int addValue);
@@ -233,7 +240,8 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
         oc.mergeCells(oc.column(), oc.row(), colSpan - 1, rowSpan - 1);
     }
 
-    //const QString formula = cellFormula(cell);
+    const QString formula = ic->formula();
+    // TODO: export formula
 
     Value value = ic->value();
     if (value.isBoolean()) {
@@ -269,7 +277,137 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
 
     // TODO notes
     // TODO shapes/pictures/chars
+
+    KSpread::Style s = convertStyle(&ic->format(), formula);
+    oc.setStyle(s);
 }
+
+KSpread::Style ExcelImport::Private::convertStyle(const Format* format, const QString& formula)
+{
+    CellFormatKey key(format, formula);
+    KSpread::Style& style = styleCache[key];
+    if (style.isEmpty()) {
+        style.setDefault();
+        // TODO: data format/number style
+
+        processFontFormat(format->font(), style);
+
+        FormatAlignment align = format->alignment();
+        if (!align.isNull()) {
+            switch (align.alignY()) {
+            case Format::Top:
+                style.setVAlign(KSpread::Style::Top);
+                break;
+            case Format::Middle:
+                style.setVAlign(KSpread::Style::Middle);
+                break;
+            case Format::Bottom:
+                style.setVAlign(KSpread::Style::Bottom);
+                break;
+            case Format::VJustify:
+                style.setVAlign(KSpread::Style::VJustified);
+                break;
+            case Format::VDistributed:
+                style.setVAlign(KSpread::Style::VDistributed);
+                break;
+            }
+
+            style.setWrapText(align.wrap());
+
+            if (align.rotationAngle()) {
+                style.setAngle(align.rotationAngle());
+            }
+
+            if (align.stackedLetters()) {
+                style.setVerticalText(true);
+            }
+
+            if (align.shrinkToFit()) {
+                style.setShrinkToFit(true);
+            }
+
+            switch (align.alignX()) {
+            case Format::Left:
+                style.setHAlign(KSpread::Style::Left);
+                break;
+            case Format::Center:
+                style.setHAlign(KSpread::Style::Center);
+                break;
+            case Format::Right:
+                style.setHAlign(KSpread::Style::Right);
+                break;
+            case Format::Justify:
+            case Format::Distributed:
+                style.setHAlign(KSpread::Style::Justified);
+                break;
+            }
+
+            if (align.indentLevel() != 0) {
+                style.setIndentation(align.indentLevel() * 10);
+            }
+        }
+
+        FormatBorders borders = format->borders();
+        if (!borders.isNull()) {
+            style.setLeftBorderPen(convertBorder(borders.leftBorder()));
+            style.setRightBorderPen(convertBorder(borders.rightBorder()));
+            style.setTopBorderPen(convertBorder(borders.topBorder()));
+            style.setBottomBorderPen(convertBorder(borders.bottomBorder()));
+            style.setFallDiagonalPen(convertBorder(borders.topLeftBorder()));
+            style.setGoUpDiagonalPen(convertBorder(borders.bottomLeftBorder()));
+        }
+
+        FormatBackground back = format->background();
+        if (!back.isNull()) {
+            QColor backColor = back.backgroundColor();
+            if (back.pattern() == FormatBackground::SolidPattern)
+                backColor = back.foregroundColor();
+            style.setBackgroundColor(backColor);
+
+            // TODO: patterns
+        }
+    }
+    return style;
+}
+
+void ExcelImport::Private::processFontFormat(const FormatFont& font, KSpread::Style& style)
+{
+    // TODO
+}
+
+QPen ExcelImport::Private::convertBorder(const Pen& pen)
+{
+    if (pen.style == Pen::NoLine || pen.width == 0) {
+        return QPen(Qt::NoPen);
+    } else {
+        QPen op;
+        if (pen.style == Pen::DoubleLine) {
+            op.setWidthF(pen.width * 3);
+        } else {
+            op.setWidthF(pen.width);
+        }
+
+        switch (pen.style) {
+        case Pen::SolidLine: op.setStyle(Qt::SolidLine); break;
+        case Pen::DashLine: op.setStyle(Qt::DashLine); break;
+        case Pen::DotLine: op.setStyle(Qt::DotLine); break;
+        case Pen::DashDotLine: op.setStyle(Qt::DashDotLine); break;
+        case Pen::DashDotDotLine: op.setStyle(Qt::DashDotDotLine); break;
+        case Pen::DoubleLine: op.setStyle(Qt::SolidLine); break; // TODO
+        }
+
+        op.setColor(pen.color);
+
+        return op;
+    }
+}
+
+
+
+
+
+
+
 
 // Updates the displayed progress information
 void ExcelImport::Private::addProgress(int addValue)
