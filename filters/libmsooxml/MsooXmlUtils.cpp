@@ -1013,7 +1013,7 @@ QString Utils::rotateString(const qreal rotation, const qreal xPos, const  qreal
     qreal newX = width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
     qreal newY = height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
 
-    return QString("rotate(%1) translate(%2cm %3cm)").arg(angle).arg(xresult).arg(yresult);
+    return QString("rotate(%1) translate(%2cm %3cm)").arg(angle).arg(newX/360000).arg(newY/360000);
 }
 
 void Utils::setupUnderLineStyle(const QString& msooxmlName, KoCharacterStyle* textStyleProperties)
