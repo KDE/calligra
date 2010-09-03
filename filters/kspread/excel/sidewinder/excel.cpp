@@ -1711,7 +1711,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         for (unsigned k = 1; startPict + k + 1 < endPict; k += 2) {
             unsigned zc = readU16(startPict + k);
             if (!zc) break;
-            if (!QChar(zc).isPrint()) {
+            if (!QChar(zc).isPrint() && zc != 10) {
                 m_text.clear();
                 break;
             }
@@ -1721,7 +1721,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         for (unsigned k = 1; startPict + k < endPict; k += 1) {
             unsigned char uc = readU8(startPict + k) + 0x0*256;
             if (!uc) break;
-            if (!QChar(uc).isPrint()) {
+            if (!QChar(uc).isPrint() && uc != 10) {
                 m_text.clear();
                 break;
             }
