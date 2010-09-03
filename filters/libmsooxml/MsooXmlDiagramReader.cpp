@@ -301,7 +301,7 @@ class AbstractAtom
         AbstractAtom* m_parent;
         QList<AbstractAtom*> m_children;
 
-        QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType) {
+        QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType, int start, int count, int step) const {
             QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
             QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
             Q_ASSERT(axisList.count() <= 1 || axisList.count() == typeList.count());
@@ -360,6 +360,12 @@ class AbstractAtom
                     }
                 }
             }
+
+            //TODO seems it's possible that start/count/step are a composition of multiple values (e.g. st="1 2 5") too. That
+            // means that probably the loop needs to be applied per iteration. Needs more testing...
+            if(step >= 0)
+                result = foreachAxis(context, result, start, count, step);
+
             return result;
         }
         
@@ -621,7 +627,8 @@ class PresentationOfAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
-            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType);
+m_step=-1;
+            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             context->m_parentLayout->setAxis(axis);
             //AbstractAtom::layoutAtom(context);
         }
@@ -667,9 +674,10 @@ class IfAtom : public AbstractAtom
             TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
             AbstractAtom::readAll(context, reader);
         }
+        bool isTrue() const { return m_isTrue; } // is true or false?
         bool testAtom(Context* context) {
             //TODO handle m_argument=="var"
-            QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
+            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             QString funcValue;
             if(m_function == "cnt") { // Specifies a count.
                 funcValue = QString::number(axis.count());
@@ -733,15 +741,18 @@ class IfAtom : public AbstractAtom
             }
 
             bool istrue = false;
-            if(funcValue >= 0) {
+            if(m_isTrue && !funcValue.isNull()) {
                 if(m_operator == "equ") {
                     istrue = funcValue == m_value;
                 } else {
                     bool isInt;
                     const int funcValueInt = funcValue.toInt(&isInt);
                     const int valueInt = isInt ? m_value.toInt(&isInt) : 0;
-                    if(!isInt) // right, that's untested atm since I didn't found a single document that does it and the specs don't cover such "details" anyways so it seems :-/
-                        kWarning()<<"TODO figure out how string-comparision is expected to work";
+                    if(!isInt) {
+                        // right, that's untested atm since I didn't found a single document that does it and the specs don't cover
+                        // such "details" anyways so it seems. So, if you run into this then it's up to you to fix it :)
+                        kWarning()<<"TODO figure out how non-integer comparision is expected to work";
+                    }
 
                     if(m_operator == QLatin1String("gt")) {
                         istrue = isInt ? funcValueInt > valueInt : funcValue > m_value;
@@ -757,9 +768,10 @@ class IfAtom : public AbstractAtom
                         kWarning()<<"Unexpected operator="<<m_operator<<"name="<<m_name;
                     }
                 }
+                //kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
             }
 
-            return istrue || !m_isTrue;
+            return istrue;
         }
     private:
         bool m_isTrue;
@@ -774,10 +786,8 @@ class ChooseAtom : public AbstractAtom
         virtual ~ChooseAtom() {}
         virtual void dump(Context* context, int level) {
             //DEBUG_DUMP << "name=" << m_name;
-            foreach(AbstractAtom* atom, m_children)
-                if(IfAtom* ifatom = dynamic_cast<IfAtom*>(atom))
-                    if(ifatom->testAtom(context))
-                        ifatom->dump(context, level);
+            foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
+                atom->dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -798,17 +808,29 @@ class ChooseAtom : public AbstractAtom
             }
         }
         virtual void layoutAtom(Context* context) {
-            foreach(AbstractAtom* atom, m_children)
-                if(IfAtom* ifatom = dynamic_cast<IfAtom*>(atom))
-                    if(ifatom->testAtom(context))
-                        ifatom->layoutAtom(context);
+            foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
+                atom->layoutAtom(context);
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
             DEBUG_WRITE;
-            foreach(AbstractAtom* atom, m_children)
-                if(IfAtom* ifatom = dynamic_cast<IfAtom*>(atom))
-                    if(ifatom->testAtom(context))
-                        ifatom->writeAtom(context, xmlWriter);
+            foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
+                atom->writeAtom(context, xmlWriter);
+        }
+    private:
+        QList<AbstractAtom*> atomsMatchingToCondition(Context* context) const {
+            QList<AbstractAtom*> ifResult;
+            QList<AbstractAtom*> elseResult;
+            foreach(AbstractAtom* atom, m_children) {
+                if(IfAtom* ifatom = dynamic_cast<IfAtom*>(atom)) {
+                    if(ifatom->isTrue()) {
+                        if(ifatom->testAtom(context))
+                            ifResult.append(ifatom);
+                    } else {
+                        elseResult.append(ifatom);
+                    }
+                }
+            }
+            return ifResult.isEmpty() ? elseResult : ifResult;
         }
 };
 
@@ -847,7 +869,7 @@ class ForEachAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
-            QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
+            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             foreach(AbstractNode* node, axis) {
                 Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
@@ -856,7 +878,7 @@ class ForEachAtom : public AbstractAtom
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
             DEBUG_WRITE;
-            QList<AbstractNode*> axis = foreachAxis(context, fetchAxis(context, m_axis, m_ptType), m_start, m_count, m_step);
+            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             foreach(AbstractNode* node, axis) {
                 Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
@@ -975,18 +997,20 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     } else {
         //TODO
     }
-    
+
+    // provide a possibility to let the children layout themselfs before doing something with the layout
+    foreach(AbstractAtom* atom, m_children) {
+        atom->layoutAtom(context);
+    }
+
     QStringList axisnames;
-    foreach(AbstractNode* n, axis()) axisnames << n->m_tagName;
+    foreach(AbstractNode* n, axis()) axisnames.append(n->m_tagName);
     kDebug() << "################# name=" << m_name << "algType=" << algType << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
     //this->dump(context, 2);
     //kDebug() << "####/CONSTRAINTS-START";
     //foreach(ConstraintAtom* c, m_constraints) c->dump(context, 2);
     //kDebug() << "####/CONSTRAINTS-END";
 
-    foreach(AbstractAtom* atom, m_children)
-        atom->layoutAtom(context);
-    
     //Q_ASSERT(m_name!="circ1");
     context->m_parentLayout = oldLayout;
 }
