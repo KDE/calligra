@@ -61,6 +61,9 @@ public:
 public slots:
     void closeTab();
 protected:
+    //! Implemented to add context menu
+    void contextMenu(int index, const QPoint& point);
+
     //! Implemented to update main window on creation of the first tab
     virtual void tabInserted(int index);
 
@@ -68,6 +71,7 @@ protected:
     virtual void paintEvent(QPaintEvent * event);
 
     KexiMainWidget *m_mainWidget;
+    KAction *m_closeAction;
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow

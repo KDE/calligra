@@ -181,14 +181,19 @@ KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget
         : KTabWidget(parent)
         , m_mainWidget(mainWidget)
 {
+    m_closeAction = new KAction(KIcon("tab-close"), i18n("&Close Tab"), this);
+    m_closeAction->setToolTip(i18n("Close the current tab"));
+    m_closeAction->setWhatsThis(i18n("Closes the current tab."));
+    connect(m_closeAction, SIGNAL(triggered()), this, SLOT(closeTab()));
     // close-tab button:
     QToolButton* rightWidget = new QToolButton(this);
-    connect(rightWidget, SIGNAL(clicked()), this, SLOT(closeTab()));
-    rightWidget->setIcon(KIcon("tab-close"));
+    rightWidget->setDefaultAction(m_closeAction);
+    rightWidget->setText(QString());
     rightWidget->setAutoRaise(true);
     rightWidget->adjustSize();
-    rightWidget->setToolTip(i18n("Close the current tab"));
     setCornerWidget(rightWidget, Qt::TopRightCorner);
+    setMovable(true);
+    tabBar()->setExpanding(true);
 }
 
 KexiMainWindowTabWidget::~KexiMainWindowTabWidget()
@@ -214,6 +219,15 @@ void KexiMainWindowTabWidget::tabInserted(int index)
     m_mainWidget->slotCurrentTabIndexChanged(index);
 }
 
+void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
+{
+    QMenu menu;
+    menu.addAction(m_closeAction);
+//! @todo add "&Detach Tab"
+    menu.exec(point);
+    KTabWidget::contextMenu(index, point);
+}
+    
 //-------------------------------------------------
 
 //static
@@ -856,6 +870,8 @@ void KexiMainWindow::setupActions()
     ac->addAction("edit_find",
                   d->action_edit_find = KStandardAction::find(
                                             this, SLOT(slotEditFind()), this));
+    d->action_edit_find->setToolTip(i18n("Find text"));
+    d->action_edit_find->setWhatsThis(i18n("Looks up the first occurence of a piece of text."));
 // d->action_edit_find = createSharedAction( KStandardAction::Find, "edit_find");
     ac->addAction("edit_findnext",
                   d->action_edit_findnext = KStandardAction::findNext(
@@ -4188,8 +4204,14 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 
         // open new tab earlier
         windowContainer = new KexiWindowContainer(d->mainWidget->tabWidget());
-        d->mainWidget->tabWidget()->addTab(windowContainer,
-                                           KIcon(part ? part->info()->itemIcon() : QString()), KexiPart::fullCaptionForItem(*item, part));
+        const int tabIndex = d->mainWidget->tabWidget()->addTab(
+            windowContainer,
+            KIcon(part ? part->info()->itemIcon() : QString()),
+            item->captionOrName());
+        d->mainWidget->tabWidget()->setTabToolTip(tabIndex, KexiPart::fullCaptionForItem(*item, part));
+        d->mainWidget->tabWidget()->setTabWhatsThis(
+            tabIndex,
+            i18n("Tab for \"%1\" (%2).", item->captionOrName(), part->instanceCaption()));
         d->mainWidget->tabWidget()->setCurrentWidget(windowContainer);
 
 #ifndef KEXI_NO_PENDING_DIALOGS
