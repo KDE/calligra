@@ -79,8 +79,9 @@ public:
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
     void processCell(const Cell* icell, KSpread::Cell ocell);
 
-    KSpread::Style convertStyle(const Format* format, const QString& formula);
-    QHash<CellFormatKey, KSpread::Style> styleCache;
+    int convertStyle(const Format* format, const QString& formula);
+    QHash<CellFormatKey, int> styleCache;
+    QList<KSpread::Style> styleList;
 
     void processFontFormat(const FormatFont& font, KSpread::Style& style);
     QPen convertBorder(const Pen& pen);
@@ -88,7 +89,7 @@ public:
     int rowsCountTotal, rowsCountDone;
     void addProgress(int addValue);
 
-    QHash<KSpread::Style, QRegion> cellStyles;
+    QHash<int, QRegion> cellStyles;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -203,8 +204,8 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
 
     QList<QPair<QRegion, KSpread::Style> > styles;
     // row/column styles
-    for (QHash<KSpread::Style, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
-        styles.append(qMakePair(it.value(), it.key()));
+    for (QHash<int, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
+        styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
     os->cellStorage()->styleStorage()->load(styles);
 }
@@ -289,15 +290,16 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
     // TODO notes
     // TODO shapes/pictures/chars
 
-    KSpread::Style s = convertStyle(&ic->format(), formula);
-    cellStyles[s] += QRect(oc.column(), oc.row(), 1, 1);
+    int styleId = convertStyle(&ic->format(), formula);
+    cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
 }
 
-KSpread::Style ExcelImport::Private::convertStyle(const Format* format, const QString& formula)
+int ExcelImport::Private::convertStyle(const Format* format, const QString& formula)
 {
     CellFormatKey key(format, formula);
-    KSpread::Style& style = styleCache[key];
-    if (style.isEmpty()) {
+    int& styleId = styleCache[key];
+    if (!styleId) {
+        KSpread::Style style;
         style.setDefault();
         // TODO: data format/number style
 
@@ -377,8 +379,11 @@ KSpread::Style ExcelImport::Private::convertStyle(const Format* format, const QS
 
             // TODO: patterns
         }
+
+        styleId = styleList.size();
+        styleList.append(style);
     }
-    return style;
+    return styleId;
 }
 
 void ExcelImport::Private::processFontFormat(const FormatFont& font, KSpread::Style& style)
