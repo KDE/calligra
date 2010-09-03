@@ -42,10 +42,12 @@
 #include <KoOdfNumberStyles.h>
 
 #include <part/Doc.h>
+#include <CellStorage.h>
 #include <Map.h>
 #include <Sheet.h>
-#include <RowColumnFormat.h>
 #include <Style.h>
+#include <StyleStorage.h>
+#include <RowColumnFormat.h>
 
 #include <Charting.h>
 #include <ChartExport.h>
@@ -85,6 +87,8 @@ public:
 
     int rowsCountTotal, rowsCountDone;
     void addProgress(int addValue);
+
+    QHash<KSpread::Style, QRegion> cellStyles;
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -191,11 +195,18 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
         processColumn(is, i, os);
     }
 
-
+    cellStyles.clear();
     const unsigned rowCount = qMin(maximalRowCount, is->maxRow());
     for (unsigned i = 0; i <= rowCount; ++i) {
         processRow(is, i, os);
     }
+
+    QList<QPair<QRegion, KSpread::Style> > styles;
+    // row/column styles
+    for (QHash<KSpread::Style, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
+        styles.append(qMakePair(it.value(), it.key()));
+    }
+    os->cellStorage()->styleStorage()->load(styles);
 }
 
 void ExcelImport::Private::processColumn(Sheet* is, unsigned columnIndex, KSpread::Sheet* os)
@@ -279,7 +290,7 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
     // TODO shapes/pictures/chars
 
     KSpread::Style s = convertStyle(&ic->format(), formula);
-    oc.setStyle(s);
+    cellStyles[s] += QRect(oc.column(), oc.row(), 1, 1);
 }
 
 KSpread::Style ExcelImport::Private::convertStyle(const Format* format, const QString& formula)
