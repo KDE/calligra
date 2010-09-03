@@ -2442,21 +2442,23 @@ void AddCompletionActualEffortCmd::unexecute()
 
 }
 
-AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString& parent, const QString& name )
+AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString& parent, int index, const QString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_account( account ),
         m_parent( 0 ),
+        m_index( index ),
         m_parentName( parent )
 {
     m_mine = true;
 }
 
-AddAccountCmd::AddAccountCmd( Project &project, Account *account, Account *parent, const QString& name )
+AddAccountCmd::AddAccountCmd( Project &project, Account *account, Account *parent, int index, const QString& name )
         : NamedCommand( name ),
         m_project( project ),
         m_account( account ),
-        m_parent( parent )
+        m_parent( parent ),
+        m_index( index )
 {
     m_mine = true;
 }
@@ -2472,7 +2474,7 @@ void AddAccountCmd::execute()
     if ( m_parent == 0 && !m_parentName.isEmpty() ) {
         m_parent = m_project.accounts().findAccount( m_parentName );
     }
-    m_project.accounts().insert( m_account, m_parent );
+    m_project.accounts().insert( m_account, m_parent, m_index );
 
 
     m_mine = false;

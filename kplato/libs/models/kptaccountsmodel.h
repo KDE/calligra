@@ -80,7 +80,7 @@ public:
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
     Account *account( const QModelIndex &index ) const;
-    QModelIndex insertAccount( Account *account, Account *parent = 0 );
+    QModelIndex insertAccount( Account *account, Account *parent = 0, int index = -1 );
     void removeAccounts( QList<Account*> lst );
     
 protected slots:

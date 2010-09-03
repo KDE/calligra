@@ -55,7 +55,7 @@ AccountTreeView::AccountTreeView( QWidget *parent )
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new AccountItemModel( this ) );
     setSelectionModel( new QItemSelectionModel( model() ) );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
 
     setAcceptDrops( false );
@@ -90,6 +90,8 @@ void AccountTreeView::currentChanged( const QModelIndex & current, const QModelI
     kDebug();
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
+    // possible bug in qt: in QAbstractItemView::SingleSelection you can select multiple items/rows
+    selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
 }
 
 Account *AccountTreeView::currentAccount() const
@@ -212,7 +214,7 @@ void AccountsEditor::updateActionsEnabled(  bool on )
     bool more = lst.count() > 1;
     actionAddAccount->setEnabled( on && !more );
     actionAddSubAccount->setEnabled( on && one );
-    actionDeleteSelection->setEnabled( on && ( one || more ) );
+    actionDeleteSelection->setEnabled( on && one );
 }
 
 void AccountsEditor::setupGui()
@@ -231,7 +233,7 @@ void AccountsEditor::setupGui()
     connect( actionAddSubAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddSubAccount() ) );
     addAction( name, actionAddSubAccount );
     
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Accounts"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
@@ -242,22 +244,27 @@ void AccountsEditor::setupGui()
 void AccountsEditor::slotAddAccount()
 {
     kDebug();
+    int row = -1;
     Account *parent = m_view->selectedAccount(); // sibling
     if ( parent ) {
+        row = parent->parent() ? parent->parent()->indexOf( parent ) : project()->accounts().indexOf( parent );
+        if ( row >= 0 ) {
+            ++row;
+        }
         parent = parent->parent();
     }
-    insertAccount( new Account(), parent );
+    insertAccount( new Account(), parent, row );
 }
 
 void AccountsEditor::slotAddSubAccount()
 {
     kDebug();
-    insertAccount( new Account(), m_view->selectedAccount() );
+    insertAccount( new Account(), m_view->selectedAccount(), -1 );
 }
 
-void AccountsEditor::insertAccount( Account *account, Account *parent )
+void AccountsEditor::insertAccount( Account *account, Account *parent, int row )
 {
-    QModelIndex i = m_view->model()->insertAccount( account, parent );
+    QModelIndex i = m_view->model()->insertAccount( account, parent, row );
     if ( i.isValid() ) {
         QModelIndex p = m_view->model()->parent( i );
         if (parent) kDebug()<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();

@@ -1286,8 +1286,8 @@ private:
 class KPLATOKERNEL_EXPORT AddAccountCmd : public NamedCommand
 {
 public:
-    AddAccountCmd( Project &project, Account *account, Account *parent = 0, const QString& name = QString() );
-    AddAccountCmd( Project &project, Account *account, const QString& parent, const QString& name = QString() );
+    AddAccountCmd( Project &project, Account *account, Account *parent = 0, int index = -1, const QString& name = QString() );
+    AddAccountCmd( Project &project, Account *account, const QString& parent, int index = -1, const QString& name = QString() );
     ~AddAccountCmd();
     void execute();
     void unexecute();
@@ -1299,6 +1299,7 @@ private:
     Project &m_project;
     Account *m_account;
     Account *m_parent;
+    int m_index;
     QString m_parentName;
 };
 

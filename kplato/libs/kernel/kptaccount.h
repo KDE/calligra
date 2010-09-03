@@ -89,6 +89,7 @@ public:
     void take(Account *account);
     bool isChildOf( const Account *account ) const;
     void insertChildren();
+    int indexOf( Account *account ) const { return m_accountList.indexOf( account ); }
     
     bool load(KoXmlElement &element, Project &project);
     void save(QDomElement &element) const;
@@ -235,7 +236,8 @@ public:
     const AccountList &accountList() const { return m_accountList; }
     int accountCount() const { return m_accountList.count(); }
     Account *accountAt( int index ) const { return m_accountList.value( index ); }
-    
+    int indexOf( Account *account ) const { return m_accountList.indexOf( account ); }
+
     Account *findRunningAccount(const Resource &resource) const;
 
     Account *findRunningAccount(const Node &node) const;

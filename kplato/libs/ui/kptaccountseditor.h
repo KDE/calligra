@@ -98,7 +98,7 @@ public slots:
 
 protected:
     void updateActionsEnabled( bool on );
-    void insertAccount( Account *account, Account *parent );
+    void insertAccount( Account *account, Account *parent, int row );
     
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );

@@ -412,7 +412,7 @@ void AccountItemModel::slotAccountChanged( Account *account )
     }
 }
 
-QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
+QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent, int index )
 {
     kDebug();
     if ( account->name().isEmpty() || m_project->accounts().findAccount( account->name() ) ) {
@@ -420,7 +420,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
         account->setName( m_project->accounts().uniqueId( s ) );
         //m_project->accounts().insertId( account );
     }
-    emit executeCommand( new AddAccountCmd( *m_project, account, parent, i18n( "Add account" ) ) );
+    emit executeCommand( new AddAccountCmd( *m_project, account, parent, index, i18n( "Add account" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->accountList().indexOf( account );
