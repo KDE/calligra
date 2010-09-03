@@ -1671,7 +1671,7 @@ void TxORecord::dump(std::ostream& out) const
     out << "TxO" << std::endl;
 }
 
-void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned* /* continuePositions */)
+void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
     //const unsigned long opts1 = readU16(data);
     //const bool reserved1 = opts1 & 0x01;
@@ -1694,6 +1694,9 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     } else {
         //const unsigned long ifntEmpty = readU16(data + 18); // FontIndex
         startPict += 2;
+        const unsigned *endOffset = continuePositions;
+        while (data + *endOffset <= startPict && *endOffset < size) endOffset++;
+        endPict = data + *endOffset;
     }
 
     const unsigned opts = readU8(startPict);
