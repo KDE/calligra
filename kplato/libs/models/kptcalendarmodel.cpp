@@ -1097,7 +1097,12 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
         f = v.value<QFont>();
     }
     painter->setFont( f );
-    painter->setPen( option.palette.color( QPalette::Text ) );
+
+    if ( option.state & QStyle::State_Selected ) {
+        painter->setPen( option.palette.highlightedText().color() );
+    } else {
+        painter->setPen( option.palette.color( QPalette::Text ) );
+    }
     painter->drawText(rect, align, text, &r);
 
     painter->restore();

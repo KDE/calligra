@@ -68,7 +68,7 @@ CalendarTreeView::CalendarTreeView( QWidget *parent )
     setModel( new CalendarItemModel() );
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionModel( new QItemSelectionModel( model() ) );
 
     setItemDelegateForColumn( 1, new EnumDelegate( this ) ); // timezone
@@ -113,6 +113,7 @@ void CalendarTreeView::currentChanged( const QModelIndex & current, const QModel
 {
     //kDebug();
     TreeViewBase::currentChanged( current, previous );
+    // possible bug in qt: in QAbstractItemView::SingleSelection you can select multiple items/rows
     selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     emit currentChanged( current );
 }
@@ -627,7 +628,7 @@ void CalendarEditor::setupGui()
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
 
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Calendar"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete" ), this );
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );
