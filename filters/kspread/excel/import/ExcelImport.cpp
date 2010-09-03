@@ -547,7 +547,9 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         oc.setValue(v);
     }
 
-    oc.setComment(ic->note());
+    QString note = ic->note();
+    if (!note.isEmpty())
+        oc.setComment(note);
 
     int styleId = convertStyle(&ic->format(), formula);
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
