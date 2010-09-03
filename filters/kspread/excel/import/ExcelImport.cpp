@@ -80,15 +80,19 @@ public:
     QString inputFile;
     KSpread::Doc* outputDoc;
 
-    KoStore* storeout;
     Workbook *workbook;
+
+    // for embedded shapes
+    KoStore* storeout;
     KoGenStyles *styles;
+    KoXmlWriter *shapesXml;
 
     void processSheet(Sheet* isheet, KSpread::Sheet* osheet);
     void processColumn(Sheet* isheet, unsigned column, KSpread::Sheet* osheet);
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
     void processCell(Cell* icell, KSpread::Cell ocell);
     void processCellObjects(Cell* icell, KSpread::Cell ocell);
+    void processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store);
 
     int convertStyle(const Format* format, const QString& formula);
     QHash<CellFormatKey, int> styleCache;
@@ -138,8 +142,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     emit sigProgress(0);
     
     
-    QBuffer b; // TODO: use temporary file instead
-    d->storeout = KoStore::createStore(&b, KoStore::Write);
+    QBuffer storeBuffer; // TODO: use temporary file instead
+    d->storeout = KoStore::createStore(&storeBuffer, KoStore::Write);
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
@@ -170,24 +174,111 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->rowsCountTotal += qMin(maximalRowCount, sheet->maxRow());
     }
 
-    // for now needed for NumberFormatParser
+    // for now needed for NumberFormatParser, also used for embedded shapes
     d->styles = new KoGenStyles();
     NumberFormatParser::setStyles(d->styles);
 
+    QBuffer shapesBuffer;
+    shapesBuffer.open(QBuffer::ReadWrite);
+    KoXmlWriter xml(&shapesBuffer);
+    xml.startDocument("table:shapes");
+    xml.startElement("table:shapes");
+    xml.addAttribute("xmlns:office", KoXmlNS::office);
+    xml.addAttribute("xmlns:meta", KoXmlNS::meta);
+    xml.addAttribute("xmlns:config", KoXmlNS::config);
+    xml.addAttribute("xmlns:text", KoXmlNS::text);
+    xml.addAttribute("xmlns:table", KoXmlNS::table);
+    xml.addAttribute("xmlns:draw", KoXmlNS::draw);
+    xml.addAttribute("xmlns:presentation", KoXmlNS::presentation);
+    xml.addAttribute("xmlns:dr3d", KoXmlNS::dr3d);
+    xml.addAttribute("xmlns:chart", KoXmlNS::chart);
+    xml.addAttribute("xmlns:form", KoXmlNS::form);
+    xml.addAttribute("xmlns:script", KoXmlNS::script);
+    xml.addAttribute("xmlns:style", KoXmlNS::style);
+    xml.addAttribute("xmlns:number", KoXmlNS::number);
+    xml.addAttribute("xmlns:math", KoXmlNS::math);
+    xml.addAttribute("xmlns:svg", KoXmlNS::svg);
+    xml.addAttribute("xmlns:fo", KoXmlNS::fo);
+    xml.addAttribute("xmlns:anim", KoXmlNS::anim);
+    xml.addAttribute("xmlns:smil", KoXmlNS::smil);
+    xml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
+    xml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+    d->shapesXml = &xml;
+
     KSpread::Map* map = d->outputDoc->map();
     for (unsigned i = 0; i < d->workbook->sheetCount(); i++) {
+        xml.startElement("table:table");
+        xml.addAttribute("table:id", i);
         Sheet* sheet = d->workbook->sheet(i);
         KSpread::Sheet* ksheet = map->addNewSheet();
         d->processSheet(sheet, ksheet);
+        xml.endElement();
     }
+
+    xml.endElement();
+    xml.endDocument();
+
+    delete d->storeout;
+    storeBuffer.close();
+
+    KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
+
+    shapesBuffer.seek(0);
+    KoXmlDocument xmlDoc;
+    xmlDoc.setContent(&shapesBuffer, true);
+
+    d->processEmbeddedObjects(xmlDoc.documentElement(), store);
+
+    delete store;
 
     delete d->workbook;
     delete d->styles;
     d->inputFile.clear();
     d->outputDoc = 0;
+    d->shapesXml = 0;
 
     emit sigProgress(100);
     return KoFilter::OK;
+}
+
+void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store)
+{
+    // Register additional attributes, that identify shapes anchored in cells.
+    // Their dimensions need adjustment after all rows are loaded,
+    // because the position of the end cell is not always known yet.
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
+                KoXmlNS::table, "end-cell-address",
+                "table:end-cell-address"));
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
+                KoXmlNS::table, "end-x",
+                "table:end-x"));
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
+                KoXmlNS::table, "end-y",
+                "table:end-y"));
+
+    KoOdfStylesReader odfStyles;
+    KoOdfLoadingContext odfContext(odfStyles, store);
+    KoShapeLoadingContext shapeContext(odfContext, outputDoc->resourceManager());
+
+    KoXmlElement sheetElement;
+    forEachElement(sheetElement, rootElement) {
+        Q_ASSERT(sheetElement.namespaceURI() == KoXmlNS::table && sheetElement.localName() == "table");
+        int sheetId = sheetElement.attributeNS(KoXmlNS::table, "id").toInt();
+        KSpread::Sheet* sheet = outputDoc->map()->sheet(sheetId);
+
+        KoXmlElement cellElement;
+        forEachElement(cellElement, sheetElement) {
+            Q_ASSERT(cellElement.namespaceURI() == KoXmlNS::table && cellElement.localName() == "table-cell");
+            int row = cellElement.attributeNS(KoXmlNS::table, "row").toInt();
+            int col = cellElement.attributeNS(KoXmlNS::table, "column").toInt();
+            KSpread::Cell cell(sheet, col, row);
+
+            KoXmlElement element;
+            forEachElement(element, cellElement) {
+                cell.loadOdfObject(element, shapeContext);
+            }
+        }
+    }
 }
 
 void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
@@ -345,133 +436,30 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
 
 void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
 {
+    bool hasObjects = false;
     // TODO shapes/pictures/chars
-    QBuffer b;
-    b.open(QBuffer::WriteOnly);
-    KoXmlWriter xml(&b);
-    xml.startDocument("table:shapes");
-    xml.startElement("table:shapes");
-    xml.addAttribute("xmlns:office", KoXmlNS::office);
-    xml.addAttribute("xmlns:meta", KoXmlNS::meta);
-    xml.addAttribute("xmlns:config", KoXmlNS::config);
-    xml.addAttribute("xmlns:text", KoXmlNS::text);
-    xml.addAttribute("xmlns:table", KoXmlNS::table);
-    xml.addAttribute("xmlns:draw", KoXmlNS::draw);
-    xml.addAttribute("xmlns:presentation", KoXmlNS::presentation);
-    xml.addAttribute("xmlns:dr3d", KoXmlNS::dr3d);
-    xml.addAttribute("xmlns:chart", KoXmlNS::chart);
-    xml.addAttribute("xmlns:form", KoXmlNS::form);
-    xml.addAttribute("xmlns:script", KoXmlNS::script);
-    xml.addAttribute("xmlns:style", KoXmlNS::style);
-    xml.addAttribute("xmlns:number", KoXmlNS::number);
-    xml.addAttribute("xmlns:math", KoXmlNS::math);
-    xml.addAttribute("xmlns:svg", KoXmlNS::svg);
-    xml.addAttribute("xmlns:fo", KoXmlNS::fo);
-    xml.addAttribute("xmlns:anim", KoXmlNS::anim);
-    xml.addAttribute("xmlns:smil", KoXmlNS::smil);
-    xml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
-    xml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+
 
     QList<OfficeArtObject*> objects = ic->drawObjects();
     if (!objects.empty()) {
+        if (!hasObjects) {
+            shapesXml->startElement("table:table-cell");
+            shapesXml->addAttribute("table:row", oc.row());
+            shapesXml->addAttribute("table:column", oc.column());
+            hasObjects = true;
+        }
         ODrawClient client = ODrawClient(ic->sheet());
         ODrawToOdf odraw(client);
-        Writer writer(xml, *styles, false);
+        Writer writer(*shapesXml, *styles, false);
         foreach (OfficeArtObject* o,objects) {
             client.setShapeText(o->text());
             odraw.processDrawingObject(o->object(), writer);
         }
     }
 
-    xml.endElement();
-    xml.endDocument();
-    b.close();
-
-
-    // Register additional attributes, that identify shapes anchored in cells.
-    // Their dimensions need adjustment after all rows are loaded,
-    // because the position of the end cell is not always known yet.
-    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
-                KoXmlNS::table, "end-cell-address",
-                "table:end-cell-address"));
-    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
-                KoXmlNS::table, "end-x",
-                "table:end-x"));
-    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
-                KoXmlNS::table, "end-y",
-                "table:end-y"));
-
-    QBuffer storeb; // TODO: use temporary file instead
-    KoStore* store = KoStore::createStore(&storeb, KoStore::Read);
-
-    KoOdfStylesReader odfStyles;
-    KoOdfLoadingContext odfContext(odfStyles, store);
-    KoShapeLoadingContext shapeContext(odfContext, oc.sheet()->resourceManager());
-
-    KoXmlDocument doc;
-    doc.setContent(b.data(), true);
-    KoXmlElement element;
-    forEachElement(element, doc.documentElement()) {
-        kDebug() << element.namespaceURI() << element.localName();
-
-        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
-        if (!shape) {
-            kDebug() << "unable to load shape";
-            continue;
-        }
-        oc.sheet()->addShape(shape);
-
-        // The position is relative to the upper left sheet corner until now. Move it.
-        QPointF position = shape->position();
-        // Remember how far we're off from the top-left corner of this cell
-        double offsetX = position.x();
-        double offsetY = position.y();
-        for (int col = 1; col < oc.column(); ++col)
-            position += QPointF(oc.sheet()->columnFormat(col)->width(), 0.0);
-        for (int row = 1; row < oc.row(); ++row)
-            position += QPointF(0.0, oc.sheet()->rowFormat(row)->height());
-        shape->setPosition(position);
-
-        dynamic_cast<KSpread::ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
-
-        // All three attributes are necessary for cell anchored shapes.
-        // Otherwise, they are anchored in the sheet.
-        if (!shape->hasAdditionalAttribute("table:end-cell-address") ||
-                !shape->hasAdditionalAttribute("table:end-x") ||
-                !shape->hasAdditionalAttribute("table:end-y")) {
-            kDebug() << "Not all attributes found, that are necessary for cell anchoring.";
-            continue;
-        }
-
-        KSpread::Region endCell(KSpread::Region::loadOdf(shape->additionalAttribute("table:end-cell-address")),
-                       oc.sheet()->map(), oc.sheet());
-        if (!endCell.isValid() || !endCell.isSingular())
-            continue;
-
-        QString string = shape->additionalAttribute("table:end-x");
-        if (string.isNull())
-            continue;
-        double endX = KoUnit::parseValue(string);
-
-        string = shape->additionalAttribute("table:end-y");
-        if (string.isNull())
-            continue;
-        double endY = KoUnit::parseValue(string);
-
-        // The column dimensions are already the final ones, but not the row dimensions.
-        // The default height is used for the not yet loaded rows.
-        // TODO Stefan: Honor non-default row heights later!
-        // subtract offset because the accumulated width and height we calculate below starts
-        // at the top-left corner of this cell, but the shape can have an offset to that corner
-        QSizeF size = QSizeF(endX - offsetX, endY - offsetY);
-        for (int col = oc.column(); col < endCell.firstRange().left(); ++col)
-            size += QSizeF(oc.sheet()->columnFormat(col)->width(), 0.0);
-        for (int row = oc.row(); row < endCell.firstRange().top(); ++row)
-            size += QSizeF(0.0, oc.sheet()->rowFormat(row)->height());
-        shape->setSize(size);
+    if (hasObjects) {
+        shapesXml->endElement();
     }
-
-    delete store;
 }
 
 int ExcelImport::Private::convertStyle(const Format* format, const QString& formula)
