@@ -21,8 +21,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <excelimport.h>
-#include <excelimport.moc>
+#include <excelimporttoods.h>
+#include <excelimporttoods.moc>
 
 #include <QString>
 #include <QDate>
