@@ -74,6 +74,51 @@ K_EXPORT_COMPONENT_FACTORY(libexcelimporttodoc, ExcelImportFactory("kofficefilte
 using namespace Swinder;
 using namespace XlsUtils;
 
+static qreal offset( unsigned long dimension, unsigned long offset, qreal factor ) {
+    return (float)dimension * (float)offset / factor;
+}
+
+static qreal columnWidth(Sheet* sheet, unsigned long col) {
+    if( sheet->column(col, false) )
+        return sheet->column(col)->width();
+
+    return sheet->defaultColWidth();
+}
+
+static qreal rowHeight(Sheet* sheet, unsigned long row) {
+    if( sheet->row(row, false) )
+        return sheet->row(row)->height();
+
+    return sheet->defaultRowHeight();
+}
+
+// Returns A for 1, B for 2, C for 3, etc.
+static QString columnName(uint column)
+{
+    QString s;
+    unsigned digits = 1;
+    unsigned offset = 0;
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+        offset += limit;
+    for (unsigned col = column - offset; digits; --digits, col /= 26)
+        s.prepend(QChar('A' + (col % 26)));
+    return s;
+}
+
+static QString encodeSheetName(const QString& name)
+{
+    QString sheetName = name;
+    if (sheetName.contains(' ') || sheetName.contains('.') || sheetName.contains('\''))
+        sheetName = '\'' + sheetName.replace('\'', "''") + '\'';
+    return sheetName;
+}
+
+static QString encodeAddress(const QString& sheetName, uint column, uint row)
+{
+    return QString("%1.%2%3").arg(encodeSheetName(sheetName)).arg(columnName(column)).arg(row+1);
+}
+
+
 class ExcelImport::Private
 {
 public:
@@ -475,7 +520,48 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
     bool hasObjects = false;
     // TODO shapes/pictures/chars
 
+    // handle pictures
+    foreach(PictureObject *picture, ic->pictures()) {
+        if (!hasObjects) {
+            shapesXml->startElement("table:table-cell");
+            shapesXml->addAttribute("table:row", oc.row());
+            shapesXml->addAttribute("table:column", oc.column());
+            hasObjects = true;
+        }
 
+        Sheet* const sheet = ic->sheet();
+        const unsigned long colL = picture->m_colL;
+        const unsigned long dxL = picture->m_dxL;
+        const unsigned long colR = picture->m_colR;
+        const unsigned long dxR = picture->m_dxR;
+        const unsigned long rwB = picture->m_rwB;
+        const unsigned long dyT = picture->m_dyT;
+        const unsigned long rwT = picture->m_rwT;
+        const unsigned long dyB = picture->m_dyB;
+
+        shapesXml->startElement("draw:frame");
+        //xmlWriter->addAttribute("draw:name", "Graphics 1");
+        shapesXml->addAttribute("table:end-cell-address", encodeAddress(sheet->name(), picture->m_colR, picture->m_rwB));
+        shapesXml->addAttributePt("table:end-x", offset(columnWidth(sheet, colR), dxR, 1024));
+        shapesXml->addAttributePt("table:end-y", offset(rowHeight(sheet, rwB), dyB, 256));
+        shapesXml->addAttribute("draw:z-index", "0");
+        shapesXml->addAttributePt("svg:x", offset(columnWidth(sheet, colL), dxL, 1024) );
+        shapesXml->addAttributePt("svg:y", offset(rowHeight(sheet, rwT), dyT, 256));
+
+        shapesXml->startElement("draw:image");
+        shapesXml->addAttribute("xlink:href", "Pictures/" + picture->fileName());
+        shapesXml->addAttribute("xlink:type", "simple");
+        shapesXml->addAttribute("xlink:show", "embed");
+        shapesXml->addAttribute("xlink:actuate", "onLoad");
+        shapesXml->endElement(); // draw:image
+        shapesXml->endElement(); // draw:frame
+
+        //insertPictureManifest(picture);
+    }
+
+
+
+    // handle ODraw objects
     QList<OfficeArtObject*> objects = ic->drawObjects();
     if (!objects.empty()) {
         if (!hasObjects) {
