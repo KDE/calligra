@@ -21,7 +21,6 @@
 #define KSPREAD_SHAPE_APPLICATION_DATA
 
 #include <KoShapeApplicationData.h>
-#include "kspread_export.h"
 
 namespace KSpread
 {
@@ -30,7 +29,7 @@ namespace KSpread
  * \ingroup Embedding
  * KSpread specific data attached to each shape.
  */
-class KSPREAD_EXPORT ShapeApplicationData : public KoShapeApplicationData
+class ShapeApplicationData : public KoShapeApplicationData
 {
 public:
     /**
