@@ -48,6 +48,8 @@
 #include "swinder.h"
 #include <iostream>
 #include "ODrawClient.h"
+#include "ImportUtils.h"
+
 typedef KGenericFactory<ExcelImport> ExcelImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
 
@@ -124,6 +126,7 @@ static uint qHash(const CellFormatKey& key)
 }
 
 using namespace Swinder;
+using namespace XlsUtils;
 
 class ExcelImport::Private
 {
@@ -1107,32 +1110,6 @@ int ExcelImport::Private::processRowForStyle(Sheet* sheet, int rowIndex, KoXmlWr
     return repeat;
 }
 
-static bool isPercentageFormat(const QString& valueFormat)
-{
-    if (valueFormat.isEmpty()) return false;
-    if (valueFormat.length() < 1) return false;
-    return valueFormat[valueFormat.length()-1] == QChar('%');
-}
-
-// Remove via the "\" char escaped characters from the string.
-QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false)
-{
-    QString s(text);
-    int pos = 0;
-    while (true) {
-        pos = s.indexOf('\\', pos);
-        if (pos < 0)
-            break;
-        if (removeOnlyEscapeChar) {
-            s = s.left(pos) + s.mid(pos + 1);
-            pos++;
-        } else {
-            s = s.left(pos) + s.mid(pos + 2);
-        }
-    }
-    return s;
-}
-
 // Another form of conditional formats are those that define a different format
 // depending on the value. In following examples the different states are
 // splittet with a ; char, the first is usually used if the value is positive,
@@ -1208,24 +1185,6 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
     return false;
 }
 
-// extract and return locale and remove locale from time string.
-QString extractLocale(QString &time)
-{
-    QString locale;
-    if (time.startsWith("[$-")) {
-        int pos = time.indexOf(']');
-        if (pos > 3) {
-            locale = time.mid(3, pos - 3);
-            time = time.mid(pos + 1);
-            pos = time.lastIndexOf(';');
-            if (pos >= 0) {
-                time = time.left(pos);
-            }
-        }
-    }
-    return locale;
-}
-
 // Checks if the as argument passed formatstring defines a date-format or not.
 bool ExcelImport::Private::isDateFormat(const Value &value, const QString& valueFormat)
 {
@@ -1236,43 +1195,6 @@ bool ExcelImport::Private::isDateFormat(const Value &value, const QString& value
     if (style.isEmpty())
         style = NumberFormatParser::parse( valueFormat );
     return style.type() == KoGenStyle::NumericDateStyle;
-}
-
-static bool isTimeFormat(const Value &value, const QString& valueFormat)
-{
-    if (value.type() != Value::Float)
-        return false;
-
-    QString vf = valueFormat;
-    QString locale = extractLocale(vf);
-    Q_UNUSED(locale);
-    vf = removeEscaped(vf);
-
-    // if( vf == "h:mm AM/PM" ) return true;
-    // if( vf == "h:mm:ss AM/PM" ) return true;
-    // if( vf == "h:mm" ) return true;
-    // if( vf == "h:mm:ss" ) return true;
-    // if( vf == "[h]:mm:ss" ) return true;
-    // if( vf == "[h]:mm" ) return true;
-    // if( vf == "[mm]:ss" ) return true;
-    // if( vf == "M/D/YY h:mm" ) return true;
-    // if( vf == "[ss]" ) return true;
-    // if( vf == "mm:ss" ) return true;
-    // if( vf == "mm:ss.0" ) return true;
-    // if( vf == "[mm]:ss" ) return true;
-    // if( vf == "[ss]" ) return true;
-
-    // if there is still a time formatting picture item that was not escaped
-    // and therefore removed above, then we have a time format here.
-    QRegExp ex("(h|H|m|s)");
-    return (ex.indexIn(vf) >= 0) && value.asFloat() < 1.0;
-}
-
-static bool isFractionFormat(const QString& valueFormat)
-{
-    QRegExp ex("^#[?]+/[0-9?]+$");
-    QString vf = removeEscaped(valueFormat);
-    return ex.indexIn(vf) >= 0;
 }
 
 static QByteArray convertCurrency(double currency, const QString& valueFormat)
