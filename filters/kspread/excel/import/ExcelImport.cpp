@@ -50,6 +50,7 @@
 #include <Style.h>
 #include <StyleStorage.h>
 #include <RowColumnFormat.h>
+#include <ValueConverter.h>
 
 #include <Charting.h>
 #include <ChartExport.h>
@@ -206,7 +207,7 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     }
 
     QList<QPair<QRegion, KSpread::Style> > styles;
-    // row/column styles
+    // TODO row/column styles
     for (QHash<int, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
@@ -261,6 +262,7 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
     Value value = ic->value();
     if (value.isBoolean()) {
         oc.setValue(KSpread::Value(value.asBoolean()));
+        oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
     } else if (value.isNumber()) {
         const QString valueFormat = ic->format().valueFormat();
 
@@ -277,8 +279,10 @@ void ExcelImport::Private::processCell(const Cell* ic, KSpread::Cell oc)
         } else if (isFractionFormat(valueFormat)) {
             // TODO
             oc.setValue(KSpread::Value(value.asFloat()));
+            oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
         } else {
             oc.setValue(KSpread::Value(value.asFloat()));
+            oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
         }
     } else if (value.isText()) {
         // TODO: hyperlinks
