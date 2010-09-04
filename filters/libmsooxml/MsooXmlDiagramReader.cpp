@@ -423,8 +423,10 @@ class LayoutNodeAtom : public AbstractAtom
 {
     public:
         QString m_name;
-        int m_x, m_y, m_width, m_height;
-        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_x(-1), m_y(-1), m_width(-1), m_height(-1), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true) {}
+        int m_x, m_y, m_width, m_height, m_cx, m_cy;
+        qreal m_factX, m_factY, m_factWidth, m_factHeight;
+        qreal m_ctrX, m_ctrY;
+        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_x(-1), m_y(-1), m_width(-1), m_height(-1), m_cx(-1), m_cy(-1), m_factX(1.0), m_factY(1.0), m_factWidth(1.0), m_factHeight(1.0), m_ctrX(1.0), m_ctrY(1.0), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true) {}
         virtual ~LayoutNodeAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count();
@@ -554,8 +556,10 @@ class ShapeAtom : public AbstractAtom
         QString m_type;
         QString m_blip;
         bool m_hideGeom;
-        int m_x, m_y, m_width, m_height;
-        explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false), m_x(-1), m_y(-1), m_width(-1), m_height(-1) {}
+        int m_x, m_y, m_width, m_height, m_cx, m_cy;
+        qreal m_factX, m_factY, m_factWidth, m_factHeight;
+        qreal m_ctrX, m_ctrY;
+        explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false), m_x(-1), m_y(-1), m_width(-1), m_height(-1), m_cx(-1), m_cy(-1), m_factX(1.0), m_factY(1.0), m_factWidth(1.0), m_factHeight(1.0), m_ctrX(1.0), m_ctrY(1.0) {}
         virtual ~ShapeAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "type=" << m_type << "blip=" << m_blip << "x=" << m_x << "y=" << m_y << "width=" << m_width << "height=" << m_height;
@@ -571,29 +575,33 @@ class ShapeAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
-            DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip;
+            DEBUG_WRITE << "################ type=" << m_type << "blip=" << m_blip;
             Q_ASSERT(context->m_parentLayout);
-            const int x = m_x >= 0 ? m_x : context->m_parentLayout->m_x;
-            const int y = m_y >= 0 ? m_y : context->m_parentLayout->m_y;
-            const int w = m_width >= 0 ? m_width : context->m_parentLayout->m_width;
-            const int h = m_height >= 0 ? m_height : context->m_parentLayout->m_height;
+            const int x = m_x * m_factX;
+            const int y = m_y * m_factY;
+            const int w = m_width * m_factWidth;
+            const int h = m_height * m_factHeight;
+            const int cx = m_cx * m_ctrX;
+            const int cy = m_cy * m_ctrY;
 
             if (m_type == QLatin1String("ellipse")) {
 static int iii=-1;
 ++iii;
-kDebug()<<x<<y<<w<<h;
-//Q_ASSERT(false);
+kDebug()<<x<<y<<w<<h<<"..."<<cx<<cy<<"..."<<m_cx<<m_cy<<m_ctrX<<m_ctrY;
+//Q_ASSERT(iii < 2);
+
                 xmlWriter->startElement("draw:custom-shape");
                 xmlWriter->addAttribute("draw:layer", "layout");
                 if (!context->m_parentLayout->m_name.isEmpty())
                     xmlWriter->addAttribute("draw:name", context->m_parentLayout->m_name);
                 //xmlWriter->addAttribute("draw:style-name", "gr1");
                 //xmlWriter->addAttribute("draw:text-style-name", "P2");
-                xmlWriter->addAttribute("svg:x", QString("%1cm").arg(iii));//"10.358cm");
-                xmlWriter->addAttribute("svg:y", QString("%1cm").arg(iii));//"6.606cm");
-                /*if(m_width >= 0)*/ xmlWriter->addAttribute("svg:width", "1.684cm");//"4.684cm");
-                /*if(m_height >= 0)*/ xmlWriter->addAttribute("svg:height", "1.683cm");//"4.683cm");
-                
+
+                xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
+                xmlWriter->addAttribute("svg:y", QString("%1px").arg(y+cy));
+                xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
+                xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
+
                 xmlWriter->startElement("text:p");
                 xmlWriter->endElement();
                 
@@ -986,11 +994,19 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     LayoutNodeAtom* oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
 
-    // Initially inherit the layout from the parent.
+    // initially inherit the layout from the parent.
     m_x = oldLayout->m_x;
     m_y = oldLayout->m_y;
     m_width = oldLayout->m_width;
     m_height = oldLayout->m_height;
+    m_cx = oldLayout->m_cx;
+    m_cy = oldLayout->m_cy;
+    m_factX = oldLayout->m_factX;
+    m_factY = oldLayout->m_factY;
+    m_factWidth = oldLayout->m_factWidth;
+    m_factHeight = oldLayout->m_factHeight;
+    m_ctrX = oldLayout->m_ctrX;
+    m_ctrY = oldLayout->m_ctrY;
 
     /*
     if(m_childNeedsRelayout) {
@@ -1103,20 +1119,22 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 
             if(c->m_type == QLatin1String("l")) {
                 if(value >= 0) m_x = value;
-                //m_x *= c->m_fact;
+                m_factX = (m_factX + c->m_fact) / 2.0;
             } else if(c->m_type == QLatin1String("t")) {
                 if(value >= 0) m_y = value;
-                //m_y *= c->m_fact;
+                m_factY = (m_factY + c->m_fact) / 2.0;
             } else if(c->m_type == QLatin1String("w")) {
                 if(value >= 0) m_width = value;
-                //m_width *= c->m_fact;
+                m_factWidth = (m_factWidth + c->m_fact) / 2.0;
             } else if(c->m_type == QLatin1String("h")) {
                 if(value >= 0) m_height = value;
-                //m_height *= c->m_fact;
+                m_factHeight = (m_factHeight + c->m_fact) / 2.0;
             } else if(c->m_type == QLatin1String("ctrX")) {
-                //TODO
+                if(value >= 0) m_cx = value;
+                m_ctrX = (m_ctrX + c->m_fact) / 2.0;
             } else if(c->m_type == QLatin1String("ctrY")) {
-                //TODO
+                if(value >= 0) m_cy = value;
+                m_ctrY = (m_ctrY + c->m_fact) / 2.0;
             } else if(c->m_type == QLatin1String("lMarg")) {
                 //TODO
             } else if(c->m_type == QLatin1String("tMarg")) {
@@ -1132,16 +1150,19 @@ void LayoutNodeAtom::layoutAtom(Context* context)
             }
 
             if(c->m_for == QLatin1String("ch")) {
-                const int x = m_x >= 0 ? m_x : oldLayout->m_x;
-                const int y = m_y >= 0 ? m_y : oldLayout->m_y;
-                const int w = m_width >= 0 ? m_width : oldLayout->m_width;
-                const int h = m_height >= 0 ? m_height : oldLayout->m_height;
-                
                 foreach(ShapeAtom* shape, children<ShapeAtom>()) {
-                    if(x >= 0) shape->m_x = x;
-                    if(y >= 0) shape->m_y = y;
-                    if(w >= 0) shape->m_width = w;
-                    if(h >= 0) shape->m_height = h;
+                    if(m_x >= 0) shape->m_x = m_x;
+                    if(m_y >= 0) shape->m_y = m_y;
+                    if(m_width >= 0) shape->m_width = m_width;
+                    if(m_height >= 0) shape->m_height = m_height;
+                    if(m_cx >= 0) shape->m_cx = m_cx;
+                    if(m_cy >= 0) shape->m_cy = m_cy;
+                    shape->m_factX = m_factX;
+                    shape->m_factY = m_factY;
+                    shape->m_factWidth = m_factWidth;
+                    shape->m_factHeight = m_factHeight;
+                    shape->m_ctrX = m_ctrX;
+                    shape->m_ctrY = m_ctrY;
                     //shape->dump(context,10);
                 }
                 //if(m_x >= 0 || m_y >= 0 || m_width >= 0 || m_height >= 0) kDebug()<<m_x<<m_y<<m_width<<m_height;
