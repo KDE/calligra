@@ -80,8 +80,6 @@ protected:
     int m_currentColumn;
     //! Used in read_f() and read_v()
     QString m_value;
-    //! Filled by read_sheetFormatPr(), measured in pt
-    QString m_defaultRowHeight;
 
     // for optimization
     static const char* officeValue;

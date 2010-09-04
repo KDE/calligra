@@ -106,14 +106,17 @@ QRect XlsxXmlDrawingReaderContext::positionRect() const
 {
     QRect rect(QPoint(0,0),QSize(0,0));
     if(m_positions.contains(FromAnchor)) {
+        qreal defaultColumnWidth = 8.43;
+        qreal defaultRowHeight = 12.75;
+
         Position f1 = m_positions[FromAnchor];
-        rect.setX( columnWidth2(f1.m_col-1, 0 /*f.m_colOff*/) );
-        rect.setY( rowHeight2(f1.m_row-1, 0 /*f.m_rowOff*/) );
+        rect.setX( columnWidth2(f1.m_col-1, 0 /*f.m_colOff*/, defaultColumnWidth) );
+        rect.setY( rowHeight2(f1.m_row-1, 0 /*f.m_rowOff*/, defaultRowHeight) );
         if(m_positions.contains(ToAnchor)) {
             Position f2 = m_positions[ToAnchor];
             if(f2.m_col > 0 && f2.m_row > 0) {
-                rect.setWidth( columnWidth2( f2.m_col - f1.m_col - 1, 0 /*t.m_colOff*/) );
-                rect.setHeight( rowHeight2( f2.m_row - f1.m_row - 1, 0 /*t.m_rowOff*/) );
+                rect.setWidth( columnWidth2( f2.m_col - f1.m_col - 1, 0 /*t.m_colOff*/, defaultColumnWidth) );
+                rect.setHeight( rowHeight2( f2.m_row - f1.m_row - 1, 0 /*t.m_rowOff*/, defaultRowHeight) );
             }
         }
     }

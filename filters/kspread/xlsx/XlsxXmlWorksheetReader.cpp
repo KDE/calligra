@@ -73,6 +73,8 @@
 
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds pic, etc.
 
+#include "XlsxXmlWorksheetReader_p.h"
+
 XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     uint _worksheetNumber,
     const QString& _worksheetName,
@@ -106,123 +108,6 @@ const char* XlsxXmlWorksheetReader::officeDateValue = "office:date-value";
 const char* XlsxXmlWorksheetReader::officeStringValue = "office:string-value";
 const char* XlsxXmlWorksheetReader::officeTimeValue = "office:time-value";
 const char* XlsxXmlWorksheetReader::officeBooleanValue = "office:boolean-value";
-
-//! @todo the workboot was designed after filters/kspread/excel/sidewinder to allow to shared as much
-//!       logic as possible. Goal is to let them both share the same structures and OpenDocument logic.
-class Sheet;
-
-class Cell
-{
-public:
-    Sheet* sheet;
-    int column, row;
-    int rowsMerged, columnsMerged;
-    QString styleName;
-    QString charStyleName;
-    QString text;
-    bool isPlainText;
-    QString valueType;
-    QByteArray valueAttr;
-    QString valueAttrValue;
-    QString formula;
-    QString hyperlink;
-    QList<XlsxXmlDrawingReaderContext*> drawings;
-
-    //QPair< oleObjectFile, imageReplacementFile>
-    QList< QPair<QString,QString> > oleObjects;
-
-    Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true) {}
-    ~Cell() { qDeleteAll(drawings); }
-};
-
-class Row
-{
-public:
-    Sheet* sheet;
-    int rowIndex;
-    bool hidden;
-    QString styleName;
-
-    Row(Sheet* s, int index) : sheet(s), rowIndex(index), hidden(false) {}
-    ~Row() {}
-};
-
-class Column
-{
-public:
-    Sheet* sheet;
-    int columnIndex;
-    bool hidden;
-
-    Column(Sheet* s, int index) : sheet(s), columnIndex(index), hidden(false) {}
-    ~Column() {}
-};
-
-class Sheet
-{
-public:
-    explicit Sheet() : m_maxRow(0), m_maxColumn(0), m_visible(true) {}
-    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); qDeleteAll(m_cells); }
-
-    Row* row(int rowIndex, bool autoCreate)
-    {
-        Row* r = m_rows[ rowIndex ];
-        if (!r && autoCreate) {
-            r = new Row(this, rowIndex);
-            m_rows[ rowIndex ] = r;
-            if (rowIndex > m_maxRow) m_maxRow = rowIndex;
-        }
-        return r;
-    }
-
-    Column* column(int columnIndex, bool autoCreate)
-    {
-        Column* c = m_columns[ columnIndex ];
-        if (!c && autoCreate) {
-            c = new Column(this, columnIndex);
-            m_columns[ columnIndex ] = c;
-            if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
-        }
-        return c;
-    }
-
-    Cell* cell(int columnIndex, int rowIndex, bool autoCreate)
-    {
-        const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
-        Cell* c = m_cells[ hashed ];
-        if (!c && autoCreate) {
-            c = new Cell(this, columnIndex, rowIndex);
-            m_cells[ hashed ] = c;
-            this->column(columnIndex, true);
-            this->row(rowIndex, true);
-            if (rowIndex > m_maxRow) m_maxRow = rowIndex;
-            if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
-            if (!m_maxCellsInRow.contains(rowIndex) || columnIndex > m_maxCellsInRow[rowIndex])
-                m_maxCellsInRow[rowIndex] = columnIndex;
-        }
-        return c;
-    }
-
-    int maxRow() const { return m_maxRow; }
-    int maxColumn() const { return m_maxColumn; }
-    int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
-
-    bool visible() { return m_visible; }
-    void setVisible(bool visible) { m_visible = visible; }
-
-    QString pictureBackgroundPath() { return m_pictureBackgroundPath; }
-    void setPictureBackgroundPath(const QString& path) { m_pictureBackgroundPath = path; }
-
-private:
-    QHash<int, Row*> m_rows;
-    QHash<int, Column*> m_columns;
-    QHash<unsigned, Cell*> m_cells;
-    int m_maxRow;
-    int m_maxColumn;
-    QHash<int, int> m_maxCellsInRow;
-    bool m_visible;
-    QString m_pictureBackgroundPath;
-};
 
 class XlsxXmlWorksheetReader::Private
 {
@@ -616,7 +501,16 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetFormatPr()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS_INTO(defaultRowHeight, m_defaultRowHeight) // in pt
+    TRY_READ_ATTR_WITHOUT_NS(defaultRowHeight) // in pt
+    TRY_READ_ATTR_WITHOUT_NS(defaultColWidth)
+    TRY_READ_ATTR_WITHOUT_NS(baseColWidth)
+    bool ok;
+    const double drh = defaultRowHeight.toDouble(&ok);
+    if(ok) d->sheet->m_defaultRowHeight = drh;
+    const double dcw = defaultColWidth.toDouble(&ok);
+    if(ok) d->sheet->m_defaultColWidth = dcw;
+    const double bcw = baseColWidth.toDouble(&ok);
+    if(ok) d->sheet->m_baseColWidth = bcw;
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -803,20 +697,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetData()
 
 QString XlsxXmlWorksheetReader::processRowStyle(const QString& _heightString)
 {
-    QString heightString(_heightString);
-    if (heightString.isEmpty()) {
-        heightString = m_defaultRowHeight;
+    double height = -1.0;
+    if(!_heightString.isEmpty()) {
+        bool ok;
+        height = _heightString.toDouble(&ok);
+        if(!ok) height = -1.0;
+    } else {
+        height = d->sheet->m_defaultRowHeight;
     }
     KoGenStyle tableRowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
 //! @todo alter fo:break-before?
     tableRowStyle.addProperty("fo:break-before", MsooXmlReader::constAuto);
 //! @todo alter style:use-optimal-row-height?
     tableRowStyle.addProperty("style:use-optimal-row-height", MsooXmlReader::constFalse);
-    if (!heightString.isEmpty()) {
-        bool ok;
-        double height = heightString.toDouble(&ok);
-        if (ok)
-            tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
+    if (height >= 0.0) {
+        tableRowStyle.addProperty("style:row-height", printCm(POINT_TO_CM(height)));
     }
     const QString currentTableRowStyleName(mainStyles->insert(tableRowStyle, "ro"));
     return currentTableRowStyleName;

@@ -576,6 +576,8 @@ class ShapeAtom : public AbstractAtom
         //TODO use filters/libmso/ODrawToOdf.h
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
+            if(m_type.isEmpty()) return;
+            
             const int x = m_x * m_factX;
             const int y = m_y * m_factY;
             const int w = m_width * m_factWidth;
@@ -1074,7 +1076,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
         //this->dump(context, 2);
 
         // evaluate the constraints responsible for positioning and sizing.
-        kDebug() << "####/CONSTRAINTS-START"<<m_name;
+        //kDebug() << "####/CONSTRAINTS-START"<<m_name;
         foreach(ConstraintAtom* c, m_constraints) {
             c->dump(context, 2);
 
@@ -1167,7 +1169,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 //Q_ASSERT(m_x < 0 && m_y < 0 && m_width < 0 && m_height < 0);
             }
         }
-        kDebug() << "####/CONSTRAINTS-END";
+        //kDebug() << "####/CONSTRAINTS-END";
     }
 
     // layout the children again if still requested
