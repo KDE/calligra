@@ -110,6 +110,14 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+2010-09-03
+Main Window
+*Object tabs
+**now movable
+**contain only names/captions of objects (this is shorter)
+**have tooltip and "what's this" information
+**have context menu with "Close Tab" action
+
 2010-09-02
 Forms
 *Widgets Tree tab ported
