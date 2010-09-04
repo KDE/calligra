@@ -136,11 +136,14 @@ QString pqxxSqlDriver::escapeString(const QString& str) const
            + QString::fromLatin1("'");
 */
 //TODO Optimize
-           return QString::fromLatin1("'") + QString(str)
+//           return QString::fromLatin1("'") + QString(str)
            /*.replace('\\', "\\\\")*/
-           .replace('\'', "\\''")
-           .replace('"', "\\\"")
-           + QString::fromLatin1("'");
+//           .replace('\'', "\\''")
+ //          .replace('"', "\\\"")
+ //          + QString::fromLatin1("'");
+
+return QString::fromLatin1("E'") + QString(str).replace("'", "\"\"").replace("\\", "\\\\") + QString::fromLatin1("'");
+  
 }
 
 //==================================================================================
@@ -156,11 +159,14 @@ QByteArray pqxxSqlDriver::escapeString(const QByteArray& str) const
     + QByteArray(_internalWork->esc(str).c_str())
            + QByteArray("'");*/
 
-    return QByteArray("'") + QByteArray(str)
+//    return QByteArray("'") + QByteArray(str)
            /*.replace('\\', "\\\\")*/
-           .replace('\'', "\\''")
-           .replace('"', "\\\"")
-           + QByteArray("'");
+//           .replace('\'', "\\''")
+//           .replace('"', "\\\"")
+//           + QByteArray("'");
+
+    return QByteArray("E'") + QByteArray(str).replace("'", "\"\"").replace("\\", "\\\\") + QByteArray("'");
+
 }
 
 //==================================================================================
