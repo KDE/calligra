@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="123">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="124">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -412,7 +412,10 @@
  <Action name="edit_cut"/>
  <Action name="edit_copy"/>
  <Action name="edit_paste"/>
+ <Separator/>
  <ActionList name="frameset_type_action"/> <!-- Used for frameset type (picture, part...) spesific actions -->
+ <Action name="spelling_suggestions"/>
+ <Separator/>
  <Action name="format_frameset"/>
 </Menu>
 </kpartgui>
