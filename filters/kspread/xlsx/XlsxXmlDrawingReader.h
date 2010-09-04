@@ -74,7 +74,13 @@ public:
 
     QString m_path;         // contains the path to the file which is being processed (i.e. 'xl/drawings')
     QString m_file;         // contains the name of the file which is being processed (i.e. 'drawing1.xml')
-    
+
+    QRect positionRect() const;
+
+    QString cellAddress(const QString &sheetname, int row, int column) const;
+    QString fromCellAddress() const;
+    QString toCellAddress() const;
+
     void saveIndexes(KoXmlWriter* xmlWriter);
 };
 

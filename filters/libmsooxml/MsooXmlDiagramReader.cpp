@@ -32,6 +32,7 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
+#include <KoGenStyles.h>
 //#include <QXmlQuery>
 //#include <QAbstractUriResolver>
 #include <typeinfo>
@@ -93,9 +94,7 @@ class AbstractNode
             foreach(AbstractNode* node, m_children)
                 node->dump(context, level + 1);
         }
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
-            Q_UNUSED(context);
-            Q_UNUSED(reader);
+        virtual void readElement(Context*, MsooXmlDiagramReader*) {
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             while (!reader->atEnd()) {
@@ -150,8 +149,7 @@ class PointNode : public AbstractNode
             DEBUG_DUMP << "modelId=" << m_modelId << "type=" << m_type << "cxnId=" << m_cxnId;
             AbstractNode::dump(context, level);
         }
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
-            Q_UNUSED(context);
+        virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
                 if (reader->qualifiedName() == QLatin1String("dgm:prSet")) {
                     //TODO
@@ -210,7 +208,7 @@ class ConnectionNode : public AbstractNode
         int m_destOrd;
         explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
         virtual ~ConnectionNode() {}
-        virtual void dump(Context* context, int level) {
+        virtual void dump(Context*, int level) {
             DEBUG_DUMP << "modelId=" << m_modelId << "type=" << m_type << "srcId=" << m_srcId << "destId=" << m_destId;
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -284,9 +282,9 @@ class AbstractAtom
             foreach(AbstractAtom* atom, m_children)
                 atom->layoutAtom(context);
         }
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
+        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             foreach(AbstractAtom* atom, m_children)
-                atom->writeAtom(context, xmlWriter);
+                atom->writeAtom(context, xmlWriter, styles);
         }
         AbstractAtom* parent() const { return m_parent; } 
         QList<AbstractAtom*> children() const { return m_children; }
@@ -406,7 +404,7 @@ class AbstractAtom
         }
 
     private:
-        QList<AbstractNode*> foreachAxis(Context* context, const QList<AbstractNode*> &list, int start, int count, int step) const {
+        QList<AbstractNode*> foreachAxis(Context*, const QList<AbstractNode*> &list, int start, int count, int step) const {
             QList<AbstractNode*> result;
             const int _start = qMax(0, start - 1);
             const int _step = qMax(1, step);
@@ -443,7 +441,7 @@ class LayoutNodeAtom : public AbstractAtom
             context->m_parentLayout = oldLayout;
         }
         virtual void layoutAtom(Context* context);
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter);
+        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
         QList<ConstraintAtom*> constraints() const { return m_constraints; }
         void addConstraint(ConstraintAtom* constraint) { m_constraints.append(constraint); setNeedsRelayout(true); }
         void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; setNeedsRelayout(true); }
@@ -492,7 +490,7 @@ class ConstraintAtom : public AbstractAtom
         QString m_value;
         explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
         virtual ~ConstraintAtom() {}
-        virtual void dump(Context* context, int level) {
+        virtual void dump(Context*, int level) {
             QString s = QString("fact=%1 ").arg(m_fact);
             if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
             if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
@@ -506,7 +504,7 @@ class ConstraintAtom : public AbstractAtom
             if(!m_value.isEmpty()) s += QString("val=%1 ").arg(m_value);
             DEBUG_DUMP << s;
         }
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
+        virtual void readAll(Context*, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
             TRY_READ_ATTR_WITHOUT_NS(fact)
             m_fact = fact.isEmpty() ? 1.0 : fact.toDouble();
@@ -574,8 +572,9 @@ class ShapeAtom : public AbstractAtom
             m_hideGeom = hideGeom.toInt();
             AbstractAtom::readAll(context, reader);
         }
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
-            DEBUG_WRITE << "################ type=" << m_type << "blip=" << m_blip;
+
+        //TODO use filters/libmso/ODrawToOdf.h
+        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
             const int x = m_x * m_factX;
             const int y = m_y * m_factY;
@@ -583,41 +582,42 @@ class ShapeAtom : public AbstractAtom
             const int h = m_height * m_factHeight;
             const int cx = m_cx * m_ctrX;
             const int cy = m_cy * m_ctrY;
+            DEBUG_WRITE << "### type=" << m_type << "blip=" << m_blip << x+cx << y+cy << w << h;
+
+            xmlWriter->startElement("draw:custom-shape");
+            xmlWriter->addAttribute("draw:layer", "layout");
+            if (!context->m_parentLayout->m_name.isEmpty())
+                xmlWriter->addAttribute("draw:name", context->m_parentLayout->m_name);
+
+            KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+            style.addProperty("draw:fill", "solid" /*none*/, KoGenStyle::GraphicType);
+            style.addProperty("draw:fill-color", "#6666ff"); //TODO needs to handle colors1.xml ...
+            style.addProperty("draw:opacity", "50%");
+            const QString styleName = styles->insert(style);
+            xmlWriter->addAttribute("draw:style-name", styleName);
+            //xmlWriter->addAttribute("draw:text-style-name", "P2");
+
+            xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
+            xmlWriter->addAttribute("svg:y", QString("%1px").arg(y+cy));
+            xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
+            xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
+
+            xmlWriter->startElement("text:p");
+            xmlWriter->endElement();
 
             if (m_type == QLatin1String("ellipse")) {
-static int iii=-1;
-++iii;
-kDebug()<<x<<y<<w<<h<<"..."<<cx<<cy<<"..."<<m_cx<<m_cy<<m_ctrX<<m_ctrY;
-//Q_ASSERT(iii < 2);
-
-                xmlWriter->startElement("draw:custom-shape");
-                xmlWriter->addAttribute("draw:layer", "layout");
-                if (!context->m_parentLayout->m_name.isEmpty())
-                    xmlWriter->addAttribute("draw:name", context->m_parentLayout->m_name);
-                //xmlWriter->addAttribute("draw:style-name", "gr1");
-                //xmlWriter->addAttribute("draw:text-style-name", "P2");
-
-                xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
-                xmlWriter->addAttribute("svg:y", QString("%1px").arg(y+cy));
-                xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
-                xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
-
-                xmlWriter->startElement("text:p");
-                xmlWriter->endElement();
-                
                 xmlWriter->startElement("draw:enhanced-geometry");
                 xmlWriter->addAttribute("draw:enhanced-path", "U 10800 10800 10800 10800 0 360 Z N");
                 xmlWriter->addAttribute("draw:glue-points", "10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163");
-                //xmlWriter->addAttribute("draw:text-areas", "3163 3163 18437 18437");
                 xmlWriter->addAttribute("draw:type", "ellipse");
                 xmlWriter->addAttribute("svg:viewBox", "0 0 21600 21600");
                 xmlWriter->endElement();
-
-                xmlWriter->endElement(); // draw:custom-shape
-            } else if (m_type == QLatin1String("rect")) {
+            } else /*if (m_type == QLatin1String("rect"))*/ {
                 //TODO
+                kWarning() << "TODO shape type=" << m_type;
             }
 
+            xmlWriter->endElement(); // draw:custom-shape
         }
 };
 
@@ -639,8 +639,7 @@ class AlgorithmAtom : public AbstractAtom
             context->m_parentLayout->setAlgorithm(this);
             AbstractAtom::readAll(context, reader);
         }
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
-            Q_UNUSED(context);
+        virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
                 if (reader->qualifiedName() == QLatin1String("dgm:param")) {
                     const QXmlStreamAttributes attrs(reader->attributes());
@@ -679,7 +678,6 @@ class PresentationOfAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void layoutAtom(Context* context) {
-m_step=-1;
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             context->m_parentLayout->setAxis(axis);
             //AbstractAtom::layoutAtom(context);
@@ -860,10 +858,10 @@ class ChooseAtom : public AbstractAtom
             foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
                 atom->layoutAtom(context);
         }
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
+        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             DEBUG_WRITE;
             foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
-                atom->writeAtom(context, xmlWriter);
+                atom->writeAtom(context, xmlWriter, styles);
         }
     private:
         QList<AbstractAtom*> atomsMatchingToCondition(Context* context) const {
@@ -922,13 +920,13 @@ class ForEachAtom : public AbstractAtom
                     atom->layoutAtom(context);
             }
         }
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter) {
+        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             DEBUG_WRITE;
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             foreach(AbstractNode* node, axis) {
                 Q_ASSERT(dynamic_cast<PointNode*>(node));
                 foreach(AbstractAtom* atom, m_children)
-                    atom->writeAtom(context, xmlWriter);
+                    atom->writeAtom(context, xmlWriter, styles);
             }
         }
 };
@@ -1185,7 +1183,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     context->m_parentLayout = oldLayout;
 }
 
-void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter)
+void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles)
 {
     QString algType;
     QList< QPair<QString,QString> > params;
@@ -1198,35 +1196,9 @@ void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter)
     LayoutNodeAtom* oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
 
-    
-
-    AbstractAtom::writeAtom(context, xmlWriter);
+    AbstractAtom::writeAtom(context, xmlWriter, styles);
     context->m_parentLayout = oldLayout;
 }
-
-/*
-/// ST_ConstraintRelationship
-QList<AbstractAtom*> AbstractAtom::relationship(Context* context, const QString &rel) const
-{
-    QList<AbstractAtom*> result;
-    //TODO implement all cases
-    foreach(const QString& r, rel.split(' ', QString::SkipEmptyParts)) {
-        //if(r.contains("ancst")) // Ancestor
-        //if(r.contains("ancstOrSelf")) // Ancestor Or Self
-        if(r.contains("ch")) result += m_children; // Child
-        //if(r.contains("des")) // Descendant
-        //if(r.contains("desOrSelf")) // Descendant Or Self
-        //if(r.contains("follow")) // Follow
-        //if(r.contains("followSib")) // Follow Sibling
-        if(r.contains("par")) if(m_parent) result += m_parent; // Parent
-        //if(r.contains("preced")) // Preceding
-        //if(r.contains("precedSib")) // Preceding Sibling
-        if(r.contains("root")) result += context->m_rootLayout; // Root
-        if(r.contains("self")) result += const_cast<AbstractAtom*>(this); // Self
-    }
-    return result;
-}
-*/
 
 }} // namespace MSOOXML::Diagram
 
@@ -1237,8 +1209,9 @@ QList<AbstractAtom*> AbstractAtom::relationship(Context* context, const QString 
 
 using namespace MSOOXML;
 
-MsooXmlDiagramReaderContext::MsooXmlDiagramReaderContext()
+MsooXmlDiagramReaderContext::MsooXmlDiagramReaderContext(KoGenStyles* styles)
     : MSOOXML::MsooXmlReaderContext()
+    , m_styles(styles)
     , m_context(new Diagram::Context)
 {
 }
@@ -1248,9 +1221,17 @@ MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
     delete m_context;
 }
 
-void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter)
+void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)
 {
-    m_context->m_rootLayout->writeAtom(m_context, xmlWriter);
+    // The root layout node always inherits the canvas dimensions by default
+    m_context->m_rootLayout->m_x = rect.x();
+    m_context->m_rootLayout->m_y = rect.y();
+    m_context->m_rootLayout->m_width = rect.width();
+    m_context->m_rootLayout->m_height = rect.height();
+    // Do the (re-)layout.
+    m_context->m_rootLayout->layoutAtom(m_context);
+    // Write the content.
+    m_context->m_rootLayout->writeAtom(m_context, xmlWriter, m_styles);
 }
 
 MsooXmlDiagramReader::MsooXmlDiagramReader(KoOdfWriters *writers)
@@ -1354,15 +1335,8 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
         Q_ASSERT(m_context->m_context->m_rootPoint);
         
-        // The root layout node always inherits the canvas dimensions by default
-        m_context->m_context->m_rootLayout->m_x=0;
-        m_context->m_context->m_rootLayout->m_y=0;
-        m_context->m_context->m_rootLayout->m_width=250;
-        m_context->m_context->m_rootLayout->m_height=250;
-
         //m_context->m_context->m_rootPoint->dump(m_context->m_context,0);
         m_context->m_context->m_rootLayout->readDone(m_context->m_context);
-        m_context->m_context->m_rootLayout->layoutAtom(m_context->m_context);
         
 #if 0
         device()->seek(0);
@@ -1409,9 +1383,11 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
     }
     else if (qualifiedName() == QLatin1String("dgm:styleDef")) {
         m_type = StyleDefType;
+        //TODO
     }
     else if (qualifiedName() == QLatin1String("dgm:colorsDef")) {
         m_type = ColorsDefType;
+        //TODO
     }
     else {
         return KoFilter::WrongFormat;

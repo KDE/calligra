@@ -39,6 +39,7 @@
 #include <KoGenStyles.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoUnit.h>
+#include <QFontMetricsF>
 
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
@@ -73,6 +74,75 @@ XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
     }
 }
 
+// calculates the column width in pixels
+int columnWidth2(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43) {
+    QFont font("Arial", 10);
+    QFontMetricsF fm(font);
+    const qreal characterWidth = fm.width("h");
+    defaultColumnWidth *= characterWidth;
+    return (defaultColumnWidth * col) + (dx / 1024.0 * defaultColumnWidth);
+}
+
+// calculates the row height in pixels
+int rowHeight2(unsigned long row, unsigned long dy = 0, qreal defaultRowHeight = 12.75)
+{
+    return defaultRowHeight * row + dy;
+}
+
+// Returns A for 1, B for 2, C for 3, etc.
+QString columnName2(uint column)
+{
+    QString s;
+    unsigned digits = 1;
+    unsigned offset = 0;
+    for (unsigned limit = 26; column >= limit + offset; limit *= 26, digits++)
+        offset += limit;
+    for (unsigned col = column - offset; digits; --digits, col /= 26)
+        s.prepend(QChar('A' + (col % 26)));
+    return s;
+}
+
+QRect XlsxXmlDrawingReaderContext::positionRect() const
+{
+    QRect rect(QPoint(0,0),QSize(0,0));
+    if(m_positions.contains(FromAnchor)) {
+        Position f1 = m_positions[FromAnchor];
+        rect.setX( columnWidth2(f1.m_col-1, 0 /*f.m_colOff*/) );
+        rect.setY( rowHeight2(f1.m_row-1, 0 /*f.m_rowOff*/) );
+        if(m_positions.contains(ToAnchor)) {
+            Position f2 = m_positions[ToAnchor];
+            if(f2.m_col > 0 && f2.m_row > 0) {
+                rect.setWidth( columnWidth2( f2.m_col - f1.m_col - 1, 0 /*t.m_colOff*/) );
+                rect.setHeight( rowHeight2( f2.m_row - f1.m_row - 1, 0 /*t.m_rowOff*/) );
+            }
+        }
+    }
+    return rect;
+}
+
+QString XlsxXmlDrawingReaderContext::cellAddress(const QString &sheetname, int row, int column) const
+{
+    QString result;
+    if(!sheetname.isEmpty())
+        result += sheetname + '.';
+    result += columnName2(column) + QString::number(row);
+    return result;
+}
+
+QString XlsxXmlDrawingReaderContext::fromCellAddress() const
+{
+    if(!m_positions.contains(FromAnchor)) return QString();
+    Position f = m_positions[FromAnchor];
+    return cellAddress(worksheetReaderContext->worksheetName, f.m_row, f.m_col);
+}
+
+QString XlsxXmlDrawingReaderContext::toCellAddress() const
+{
+    if(!m_positions.contains(ToAnchor)) return QString();
+    Position f = m_positions[ToAnchor];
+    return cellAddress(worksheetReaderContext->worksheetName, f.m_row, f.m_col);
+}
+    
 void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
 {
     foreach(XlsxXmlChartReaderContext* c, charts) {
@@ -84,10 +154,10 @@ void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
         xmlWriter->startElement("draw:g");
         xmlWriter->addAttribute("draw:name", "SmartArt Shapes Group");
         xmlWriter->addAttribute("draw:z-index", "0");
-        //xmlWriter->addAttribute("table:end-cell-address", "Sheet1.H29");
+        xmlWriter->addAttribute("table:end-cell-address", fromCellAddress());
         //xmlWriter->addAttribute("table:end-x", "0.6016in");
         //xmlWriter->addAttribute("table:end-y", "0.1339in");
-        c->saveIndex(xmlWriter);
+        c->saveIndex(xmlWriter, positionRect());
         xmlWriter->endElement(); // draw:g
     }
 }
@@ -433,7 +503,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
     //kDebug()<<"colorsfile="<<colorsfile<<"datafile="<<datafile<<"layoutfile="<<layoutfile<<"quickstylefile="<<quickstylefile;
 
     //KoStore* storeout = m_context->import->outputStore();
-    MSOOXML::MsooXmlDiagramReaderContext* context = new MSOOXML::MsooXmlDiagramReaderContext();
+    MSOOXML::MsooXmlDiagramReaderContext* context = new MSOOXML::MsooXmlDiagramReaderContext(mainStyles);
 
     // first read the data-model
     MSOOXML::MsooXmlDiagramReader dataReader(this);
