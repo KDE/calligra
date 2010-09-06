@@ -730,7 +730,8 @@ int ExcelImport::Private::convertStyle(const Format* format, const QString& form
             QColor backColor = back.backgroundColor();
             if (back.pattern() == FormatBackground::SolidPattern)
                 backColor = back.foregroundColor();
-            style.setBackgroundColor(backColor);
+            if (back.pattern() != FormatBackground::EmptyPattern)
+                style.setBackgroundColor(backColor);
 
             // TODO: patterns
         }
