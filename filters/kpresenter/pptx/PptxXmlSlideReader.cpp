@@ -211,6 +211,9 @@ PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString
     else if (style == "sldNum") {
         return &sldNumStyle;
     }
+    else if (style == "dt") {
+       return &dtStyle;
+    }
     return &otherStyle;
 }
 
@@ -1263,6 +1266,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
         }
         else if (d->phType == "ftr") {
             d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->ftrStyle;
+        }
+        else if (d->phType == "dt") {
+            d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->dtStyle;
         }
     }
     readNext();

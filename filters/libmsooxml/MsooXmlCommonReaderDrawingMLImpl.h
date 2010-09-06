@@ -766,6 +766,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             body->addAttribute("draw:name", m_cNvPrName);
         }
         const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+
+#ifdef PPTXXMLSLIDEREADER_H
+        if (m_context->type == SlideMaster) {
+            mainStyles->markStyleForStylesXml(styleName);
+        }
+#endif
         body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_H
