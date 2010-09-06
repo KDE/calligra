@@ -359,6 +359,8 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     }
 
     cellStyles.clear();
+    rowStyles.clear();
+    columnStyles.clear();
     const unsigned rowCount = qMin(maximalRowCount, is->maxRow());
     for (unsigned i = 0; i <= rowCount; ++i) {
         processRow(is, i, os);
