@@ -462,12 +462,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         } else if (isTimeFormat(value, valueFormat)) {
             // TODO
             oc.setValue(KSpread::Value(value.asFloat()));
-        } else if (isFractionFormat(valueFormat)) {
-            // TODO
-            oc.setValue(KSpread::Value(value.asFloat()));
-            if (!isFormula)
-                oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
-        } else {
+        } else /* fraction or normal */ {
             oc.setValue(KSpread::Value(value.asFloat()));
             if (!isFormula)
                 oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
