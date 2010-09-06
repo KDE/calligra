@@ -1472,6 +1472,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 {
     READ_PROLOGUE2(DrawingML_r)
+
+    m_hyperLink = false;
+
+    MSOOXML::Utils::XmlWriteBuffer rBuf;
+    body = rBuf.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1483,6 +1489,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
             ELSE_WRONG_FORMAT
         }
     }
+
+    body = rBuf.originalWriter();
+
+    if (m_hyperLink) {
+        body->startElement("text:a");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
+    }
+
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideMaster) {
+         mainStyles->markStyleForStylesXml(currentTextStyleName);
+    }
+#endif
+
+    body->startElement("text:span", false);
+    body->addAttribute("text:style-name", currentTextStyleName);
+
+    (void)rBuf.releaseWriter();
+
+    body->endElement(); //text:span
+    if (m_hyperLink) {
+        body->endElement(); // text:a
+    }
+
     READ_EPILOGUE
 }
 
@@ -1696,34 +1729,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
 
-    READ_EPILOGUE_WITHOUT_RETURN
-    // read 't' in one go and insert the contents into text:span
-    readNext();
-    // Only create text:span if the next el. is 't'. Do not this the next el. is 'drawing', etc.
-    if (QUALIFIED_NAME_IS(t)) {
-        const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-#ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == SlideMaster) {
-            mainStyles->markStyleForStylesXml(currentTextStyleName);
-        }
-#endif
-        if (m_hyperLink) {
-            body->startElement("text:a");
-            body->addAttribute("xlink:type", "simple");
-            body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
-        }
-        body->startElement("text:span", false);
-        body->addAttribute("text:style-name", currentTextStyleName);
-        TRY_READ(t)
-        body->endElement(); //text:span
-        if (m_hyperLink) {
-            body->endElement(); // text:a
-        }
-    }
-    else {
-        undoReadNext();
-    }
-    return KoFilter::OK;
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -4143,6 +4149,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 //! @todo support all possible fields here
     }
 
+    MSOOXML::Utils::XmlWriteBuffer fldBuf;
+    body = fldBuf.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -4156,6 +4165,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             ELSE_TRY_READ_IF(t)
         }
     }
+
+    const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
+
+#ifdef PPTXXMLSLIDEREADER_H
+        if (m_context->type == SlideMaster) {
+            mainStyles->markStyleForStylesXml(currentTextStyleName);
+        }
+#endif
+
+    body = fldBuf.originalWriter();
+
+    body->startElement("text:span", false);
+    body->addAttribute("text:style-name", currentTextStyleName);
+
+    (void)fldBuf.releaseWriter();
+
+    body->endElement(); //text:span
 
     READ_EPILOGUE
 }

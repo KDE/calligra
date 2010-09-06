@@ -160,6 +160,8 @@ public:
     PptxSlideMasterTextStyle titleStyle;
     PptxSlideMasterTextStyle bodyStyle;
     PptxSlideMasterTextStyle otherStyle;
+    PptxSlideMasterTextStyle ftrStyle;
+    PptxSlideMasterTextStyle sldNumStyle;
 
     QMap<QString, QString> colorMap;
 

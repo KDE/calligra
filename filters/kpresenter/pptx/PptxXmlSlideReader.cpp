@@ -205,6 +205,12 @@ PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString
     else if (style == "body" || style == "subTitle") {
         return &bodyStyle;
     }
+    else if (style == "ftr") {
+        return &ftrStyle;
+    }
+    else if (style == "sldNum") {
+        return &sldNumStyle;
+    }
     return &otherStyle;
 }
 
@@ -1250,6 +1256,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
         }
     }
     else if (m_context->type == SlideLayout) {
+    }
+    else { //SlideMaster
+        if (d->phType == "sldNum") {
+            d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->sldNumStyle;
+        }
+        else if (d->phType == "ftr") {
+            d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->ftrStyle;
+        }
     }
     readNext();
     READ_EPILOGUE
