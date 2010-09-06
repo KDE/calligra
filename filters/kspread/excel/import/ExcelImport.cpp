@@ -146,6 +146,7 @@ public:
     QHash<CellFormatKey, int> styleCache;
     QList<KSpread::Style> styleList;
     QHash<QString, KSpread::Style> dataStyleCache;
+    QHash<QString, KSpread::Conditions> dataStyleConditions;
 
     void processFontFormat(const FormatFont& font, KSpread::Style& style);
     QTextCharFormat convertFontToCharFormat(const FormatFont& font);
@@ -520,6 +521,10 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
 
     int styleId = convertStyle(&ic->format(), formula);
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
+    QHash<QString, KSpread::Conditions>::iterator conds = dataStyleConditions.find(ic->format().valueFormat());
+    if (conds != dataStyleConditions.end()) {
+        oc.setConditions(conds.value());
+    }
 
     processCellObjects(ic, oc);
 }
@@ -991,7 +996,9 @@ void ExcelImport::Private::processNumberFormats()
             if (style.isEmpty()) {
                 KSpread::Conditions conditions;
                 style.loadOdfDataStyle(odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
-                // TODO: do something with conditions
+
+                if (!conditions.isEmpty())
+                    dataStyleConditions[f->valueFormat()] = conditions;
             }
         }
     }
