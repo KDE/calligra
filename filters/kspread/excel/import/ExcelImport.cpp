@@ -58,6 +58,7 @@
 #include <RowColumnFormat.h>
 #include <ValueConverter.h>
 #include <ShapeApplicationData.h>
+#include <Util.h>
 
 #include <Charting.h>
 #include <ChartExport.h>
@@ -468,6 +469,19 @@ void ExcelImport::Private::processRow(Sheet* is, unsigned rowIndex, KSpread::She
     addProgress(1);
 }
 
+static QString cellFormulaNamespace(const QString& formula)
+{
+    if (!formula.isEmpty()) {
+        if(formula.startsWith("ROUNDUP(") || formula.startsWith("ROUNDDOWN(") || formula.startsWith("ROUND(") || formula.startsWith("RAND(")) {
+            // Special case Excel formulas that differ from OpenFormula
+            return "msoxl:";
+        } else if (!formula.isEmpty()) {
+            return "of:";
+        }
+    }
+    return QString();
+}
+
 void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
 {
     int colSpan = ic->columnSpan();
@@ -477,12 +491,18 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     }
 
     const QString formula = ic->formula();
-    // TODO: export formula
+    const bool isFormula = !formula.isEmpty();
+    if (isFormula) {
+        const QString nsPrefix = cellFormulaNamespace(formula);
+        const QString decodedFormula = KSpread::Odf::decodeFormula(formula, oc.locale(), nsPrefix);
+        oc.setUserInput(decodedFormula);
+    }
 
     Value value = ic->value();
     if (value.isBoolean()) {
         oc.setValue(KSpread::Value(value.asBoolean()));
-        oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
+        if (!isFormula)
+            oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
     } else if (value.isNumber()) {
         const QString valueFormat = ic->format().valueFormat();
 
@@ -499,10 +519,12 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         } else if (isFractionFormat(valueFormat)) {
             // TODO
             oc.setValue(KSpread::Value(value.asFloat()));
-            oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
+            if (!isFormula)
+                oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
         } else {
             oc.setValue(KSpread::Value(value.asFloat()));
-            oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
+            if (!isFormula)
+                oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
         }
     } else if (value.isText()) {
         QString txt = value.asString();
@@ -517,10 +539,12 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         }
 
         oc.setValue(KSpread::Value(txt));
-        if (txt.startsWith('='))
-            oc.setUserInput('\'' + txt);
-        else
-            oc.setUserInput(txt);
+        if (!isFormula) {
+            if (txt.startsWith('='))
+                oc.setUserInput('\'' + txt);
+            else
+                oc.setUserInput(txt);
+        }
         if (value.isRichText() || ic->format().font().subscript() || ic->format().font().superscript()) {
             std::map<unsigned, FormatFont> formatRuns = value.formatRuns();
             // add sentinel to list of format runs
