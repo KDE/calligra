@@ -93,6 +93,7 @@ KoFilter::ConversionStatus read_gradFill();
 bool m_gradRotation; //whethere there should be angle with gradient
 KoFilter::ConversionStatus read_gsLst();
 KoFilter::ConversionStatus read_gs();
+KoFilter::ConversionStatus read_prstGeom();
 enum noFillCaller {
         noFill_rPr
 };
@@ -109,6 +110,8 @@ KoFilter::ConversionStatus read_scrgbClr();
 int m_currentTint; // value of current tint
 
 bool    m_isPlaceHolder; //! set by read_ph()
+
+QString m_contentType; // read in prstGeom
 
 KoFilter::ConversionStatus read_fld();
 

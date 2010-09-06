@@ -325,7 +325,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
 
         (void)drawFrameBuf.releaseWriter();
-//        body->addCompleteElement(&drawFrameBuf);
         body->endElement(); //draw:frame
     }
 
@@ -757,7 +756,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #else
 #endif
         body = drawFrameBuf.originalWriter();
-        body->startElement("draw:frame"); // CASE #P475
+        if (m_contentType == "line") {
+            body->startElement("draw:line");
+        }
+        else {
+            body->startElement("draw:frame"); // CASE #P475
+        }
         if (!m_cNvPrName.isEmpty()) {
             body->addAttribute("draw:name", m_cNvPrName);
         }
@@ -812,12 +816,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             if (m_svgWidth > -1 && m_svgHeight > -1) {
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
     //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
-                if (m_rot == 0) {
-                    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-                    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                if (m_contentType == "line") {
+                    body->addAttribute("svg:x1", EMU_TO_CM_STRING(m_svgX));
+                    body->addAttribute("svg:y1", EMU_TO_CM_STRING(m_svgY));
+                    const QString x2 = QString("%1cm").arg(EMU_TO_CM(m_svgX) + EMU_TO_CM(m_svgWidth));
+                    body->addAttribute("svg:x2", x2);
+                    const QString y2 = QString("%1cm").arg(EMU_TO_CM(m_svgY) + EMU_TO_CM(m_svgHeight));
+                    body->addAttribute("svg:y2", y2);
                 }
-                body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-                body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+                else {
+                    if (m_rot == 0) {
+                        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+                        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                    }
+                    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+                    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+                }
             }
             else if (   m_context->slideLayoutProperties && placeholder) {
                 kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
@@ -833,8 +847,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             if (m_svgWidth > -1 && m_svgHeight > -1) {
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
     //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
-                body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-                body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                if (m_rot == 0) {
+                    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+                    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                }
                 body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
                 body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
             }
@@ -986,7 +1002,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
     - ln (Outline) §20.1.2.2.24
     - [done] noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
-    - prstGeom (Preset geometry) §20.1.9.18
+    - [done] prstGeom (Preset geometry) §20.1.9.18
     - scene3d (3D Scene Properties) §20.1.4.1.26
     - [done] solidFill (Solid Fill) §20.1.8.54
     - sp3d (Apply 3D shape properties) §20.1.5.12
@@ -1027,6 +1043,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             else if (qualifiedName() == QLatin1String("a:noFill")) {
                 SKIP_EVERYTHING // safely skip
                 m_noFill = true;
+            }
+            else if (qualifiedName() == QLatin1String("a:prstGeom")) {
+                TRY_READ(prstGeom)
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
 #ifdef PPTXXMLSLIDEREADER_H
@@ -3166,6 +3185,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller calle
     READ_EPILOGUE
 }
 
+// prstGeom (preset geometry)
+/*
+ Parent elements:
+ - [done] spPr (§21.2.2.197)
+ - [done] spPr (§21.3.2.23)
+ - [done] spPr (§21.4.3.7)
+ - [done] spPr (§20.1.2.2.35)
+ - [done] spPr (§20.2.2.6)
+ - [done] spPr (§20.5.2.30)
+ - [done] spPr (§19.3.1.44)
+
+ Child elements:
+ - avLst (List of Shape Adjust Values) §20.1.9.5
+
+*/
+#undef CURRENT_EL
+#define CURRENT_EL prstGeom
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstGeom()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(prst)
+    m_contentType = prst;
+
+    while (true) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
 /*
 This element specifies a color bound to a user's theme. As with all
 elements which define a color, it is possible to apply a list of color
@@ -3527,9 +3578,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     if(w.isEmpty()) {
         w = "0";
     }
-    qreal wInt = EMU_TO_POINT(w.toInt());
+    qreal penWidth = EMU_TO_POINT(w.toDouble());
 
-    m_currentPen.setWidth(wInt);
+    m_currentPen.setWidthF(penWidth);
+
+    bool colorRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -3567,7 +3620,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             else if(qualifiedName() == QLatin1String("a:round")) {
 //             }
             //solid fill
-            TRY_READ_IF(solidFill)
+            if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                colorRead = true;
+            }
             //tail line end style
 //             else if(qualifiedName() == QLatin1String("a:tailEnd")) {
 //             }
@@ -3575,6 +3631,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     }
 
     m_currentPen.setColor(m_currentColor);
+
+    // No color means that it should not have outline
+    if (!colorRead) {
+        m_currentPen = QPen();
+    }
 
 #ifdef PPTXXMLSLIDEREADER_H
     KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
