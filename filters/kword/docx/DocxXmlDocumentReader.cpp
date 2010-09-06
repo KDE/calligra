@@ -33,6 +33,9 @@
 #include <MsooXmlUnits.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <Charting.h>
+#include <ChartExport.h>
+#include <XlsxXmlChartReader.h>
 
 #define MSOOXML_CURRENT_NS "w"
 #define MSOOXML_CURRENT_CLASS DocxXmlDocumentReader
@@ -4422,17 +4425,117 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
     m_drawing_inline = true; // for pic
     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
     while (!atEnd()) {
-        readNext();
+        readNext();        
         BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF_NS(a, graphic)
-            ELSE_TRY_READ_IF_NS(wp, extent)
+        if (isStartElement()) {            
+            TRY_READ_IF_NS(wp, extent)
             ELSE_TRY_READ_IF(docPr)
+            if ( qualifiedName() == "a:graphic" )
+            {
+                KoFilter::ConversionStatus status = read_graphic2();
+//                 if ( status != KoFilter::OK )
+//                     return status;
+            }
 //! @todo add ELSE_WRONG_FORMAT
-        }
+        }        
     }
     READ_EPILOGUE
 }
+
+#undef CURRENT_EL
+#define CURRENT_EL graphic
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_graphic2()
+{
+//     READ_PROLOGUE
+      while (!atEnd()) {
+          readNext();
+//           BREAK_IF_END_OF(CURRENT_EL);
+          if (isStartElement()) {
+              if ( qualifiedName() == "a:graphicData" )
+              {   
+                  KoFilter::ConversionStatus status = read_graphicData2();
+                  return status;
+              }
+          }
+          else if ( qualifiedName() == "a:graphic" )
+              break;
+      }
+      return KoFilter::OK;
+//       READ_EPILOGUE
+}
+#undef CURRENT_EL
+#define CURRENT_EL graphicData
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_graphicData2()
+{
+//     READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+//         BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF_NS(pic, pic)
+#ifdef PPTXXMLSLIDEREADER_CPP
+            ELSE_TRY_READ_IF_NS(p, oleObj)
+            ELSE_TRY_READ_IF_NS(a, tbl)
+#endif
+#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
+            if ( qualifiedName() == "c:chart" )
+            {   
+                KoFilter::ConversionStatus status = read_chart2();
+                if ( status != KoFilter::OK )
+                    return status;
+            }            
+#endif
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        else if ( qualifiedName() == "a:graphicData" )
+            break;
+    }
+    return KoFilter::OK;
+//     READ_EPILOGUE
+}
+#undef CURRENT_EL
+#define CURRENT_EL chart
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_chart2()
+{
+//     READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITH_NS(r, id)
+    if (!r_id.isEmpty()) {
+        const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
+
+        Charting::Chart* chart = new Charting::Chart;
+
+        ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
+        chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
+        chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
+        chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
+
+        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath<<"position="<<QString("%1:%2").arg(chartexport->m_x).arg(chartexport->m_y)<<"size="<<QString("%1x%2").arg(chartexport->m_width).arg(chartexport->m_height);
+        
+        KoStore* storeout = m_context->import->outputStore();
+        XlsxXmlChartReaderContext context(storeout, chartexport );
+        XlsxXmlChartReader reader(this);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        if (result != KoFilter::OK) {
+            raiseError(reader.errorString());
+            return result;
+        }
+
+        chartexport->saveIndex(body);
+    }
+
+    while (!atEnd()) {
+        readNext();
+        if ( qualifiedName() == "c:chart" )
+              break;
+    }
+
+//     READ_EPILOGUE
+    return KoFilter::OK;
+}
+
 
 #undef CURRENT_EL
 #define CURRENT_EL extent

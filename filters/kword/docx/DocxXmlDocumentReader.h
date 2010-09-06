@@ -172,6 +172,11 @@ protected:
     KoFilter::ConversionStatus read_wrapSquare();
     KoFilter::ConversionStatus read_wrapTight();
     KoFilter::ConversionStatus read_wrapThrough();
+    
+    // docx specifix read_graphics and read_graphics data methods to ensure that draw:frame is written correclty
+    KoFilter::ConversionStatus read_graphic2();
+    KoFilter::ConversionStatus read_graphicData2();
+    KoFilter::ConversionStatus read_chart2();
 
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;
