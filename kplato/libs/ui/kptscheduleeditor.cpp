@@ -200,12 +200,13 @@ void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
     //kDebug()<<curr.row()<<","<<curr.column();
 }
 
-void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
+void ScheduleEditor::slotSelectionChanged( const QModelIndexList /*list*/)
 {
     //kDebug()<<list.count();
-    ScheduleManager *sm = 0;
-    if ( list.count() == 1 ) {
-        sm = m_view->model()->manager( list.first() );
+    // Note: Don't use list as it includes all columns in a row
+    QModelIndexList lst = m_view->selectedRows(); // gets column 0 in each row (should be 1 or 0 rows)
+    if ( lst.count() == 1 ) {
+        ScheduleManager *sm = m_view->model()->manager( lst.first() );
         emit scheduleSelectionChanged( sm );
     } else {
         emit scheduleSelectionChanged( 0 );
