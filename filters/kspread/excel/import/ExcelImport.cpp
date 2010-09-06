@@ -726,14 +726,67 @@ int ExcelImport::Private::convertStyle(const Format* format, const QString& form
         }
 
         FormatBackground back = format->background();
-        if (!back.isNull()) {
+        if (!back.isNull() && back.pattern() != FormatBackground::EmptyPattern) {
             QColor backColor = back.backgroundColor();
             if (back.pattern() == FormatBackground::SolidPattern)
                 backColor = back.foregroundColor();
-            if (back.pattern() != FormatBackground::EmptyPattern)
-                style.setBackgroundColor(backColor);
+            style.setBackgroundColor(backColor);
 
-            // TODO: patterns
+            QBrush brush;
+            switch (back.pattern()) {
+            case FormatBackground::SolidPattern:
+                brush.setStyle(Qt::SolidPattern);
+                brush.setColor(backColor);
+                break;
+            case FormatBackground::Dense3Pattern: // 88% gray
+                brush.setStyle(Qt::Dense2Pattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::Dense4Pattern: // 50% gray
+                brush.setStyle(Qt::Dense4Pattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::Dense5Pattern: // 37% gray
+                brush.setStyle(Qt::Dense5Pattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::Dense6Pattern: // 12% gray
+                brush.setStyle(Qt::Dense6Pattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::Dense7Pattern: // 6% gray
+                brush.setStyle(Qt::Dense7Pattern);
+                brush.setColor(Qt::black);
+                break;
+
+            case FormatBackground::Dense1Pattern:
+            case FormatBackground::HorPattern:
+                brush.setStyle(Qt::HorPattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::VerPattern:
+                brush.setStyle(Qt::VerPattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::Dense2Pattern:
+            case FormatBackground::BDiagPattern:
+                brush.setStyle(Qt::BDiagPattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::FDiagPattern:
+                brush.setStyle(Qt::FDiagPattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::CrossPattern:
+                brush.setStyle(Qt::CrossPattern);
+                brush.setColor(Qt::black);
+                break;
+            case FormatBackground::DiagCrossPattern:
+                brush.setStyle(Qt::DiagCrossPattern);
+                brush.setColor(Qt::black);
+                break;
+            }
+            style.setBackgroundBrush(brush);
         }
 
         styleId = styleList.size();
