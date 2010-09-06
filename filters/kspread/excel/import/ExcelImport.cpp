@@ -158,6 +158,7 @@ public:
     QHash<int, QRegion> cellStyles;
     QHash<int, QRegion> rowStyles;
     QHash<int, QRegion> columnStyles;
+    QList<QPair<QRegion, KSpread::Conditions> > cellConditions;
 
     QList<ChartExport*> charts;
     void processCharts(KoXmlWriter* manifestWriter);
@@ -361,6 +362,7 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     cellStyles.clear();
     rowStyles.clear();
     columnStyles.clear();
+    cellConditions.clear();
     const unsigned rowCount = qMin(maximalRowCount, is->maxRow());
     for (unsigned i = 0; i <= rowCount; ++i) {
         processRow(is, i, os);
@@ -377,6 +379,7 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
     os->cellStorage()->styleStorage()->load(styles);
+    os->cellStorage()->loadConditions(cellConditions);
 }
 
 void ExcelImport::Private::processColumn(Sheet* is, unsigned columnIndex, KSpread::Sheet* os)
@@ -520,7 +523,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
     QHash<QString, KSpread::Conditions>::iterator conds = dataStyleConditions.find(ic->format().valueFormat());
     if (conds != dataStyleConditions.end()) {
-        oc.setConditions(conds.value());
+        cellConditions.append(qMakePair(QRegion(oc.column(), oc.row(), 1, 1), conds.value()));
     }
 
     processCellObjects(ic, oc);
