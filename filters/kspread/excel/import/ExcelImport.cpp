@@ -644,8 +644,19 @@ int ExcelImport::Private::convertStyle(const Format* format, const QString& form
         KSpread::Style style;
         style.setDefault();
 
-        style.merge(dataStyleCache.value(format->valueFormat(), KSpread::Style()));
-        // TODO: special handling for some excel stuff
+        if (!key.isGeneral) {
+            style.merge(dataStyleCache.value(format->valueFormat(), KSpread::Style()));
+        } else {
+            if (key.decimalCount >= 0) {
+                style.setFormatType(KSpread::Format::Number);
+                style.setPrecision(key.decimalCount);
+                QString format = ".";
+                for (int i = 0; i < key.decimalCount; i++) {
+                    format += '0';
+                }
+                style.setCustomFormat(format);
+            }
+        }
 
         processFontFormat(format->font(), style);
 
