@@ -925,6 +925,10 @@ public:
                new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::DoubleLine,
                                   KoCharacterStyle::AutoLineWeight)
               );
+        insert("dbl",
+               new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::DoubleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
         insert("words",
                new UnderlineStyle(KoCharacterStyle::SolidLine, KoCharacterStyle::SingleLine,
                                   KoCharacterStyle::AutoLineWeight, KoCharacterStyle::SkipWhiteSpaceLineMode)
@@ -958,6 +962,10 @@ public:
                                   KoCharacterStyle::AutoLineWeight)
               );
         insert("wavyDouble",
+               new UnderlineStyle(KoCharacterStyle::WaveLine, KoCharacterStyle::DoubleLine,
+                                  KoCharacterStyle::AutoLineWeight)
+              );
+        insert("wavyDbl",
                new UnderlineStyle(KoCharacterStyle::WaveLine, KoCharacterStyle::DoubleLine,
                                   KoCharacterStyle::AutoLineWeight)
               );
