@@ -288,19 +288,7 @@ class AbstractAtom
         }
         AbstractAtom* parent() const { return m_parent; } 
         QList<AbstractAtom*> children() const { return m_children; }
-        template<class T> QList<T*> children(bool recursivly = false) const {
-            QList<T*> results;
-            foreach(AbstractAtom* atom, m_children)
-                if(T* a = dynamic_cast<T*>(atom))
-                    results.append(a);
-            if(recursivly) {
-                const int count = results.count();
-                for(int i = 0; i < count; ++i)
-                    foreach(T* a, results[i]->children<T>(recursivly))
-                        results.append(a);
-            }
-            return results;
-        }
+        template<class U, class T> QList<U*> filterItems(Context* context, const QList<T*> &items) const;
         void addChild(AbstractAtom* node) {
             Q_ASSERT(!node->m_parent);
             node->m_parent = this;
@@ -577,14 +565,15 @@ class ShapeAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
             if(m_type.isEmpty()) return;
+            //if(m_hideGeom)  return;
             
-            const int x = m_x * m_factX;
-            const int y = m_y * m_factY;
-            const int w = m_width * m_factWidth;
-            const int h = m_height * m_factHeight;
-            const int cx = m_cx * m_ctrX;
-            const int cy = m_cy * m_ctrY;
-            DEBUG_WRITE << "### type=" << m_type << "blip=" << m_blip << x+cx << y+cy << w << h;
+            int x = m_x * m_factX;
+            int y = m_y * m_factY;
+            int w = m_width * m_factWidth;
+            int h = m_height * m_factHeight;
+            int cx = m_cx * m_ctrX;
+            int cy = m_cy * m_ctrY;
+            DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h << m_cx << m_ctrX << m_cy << m_ctrY;
 
             xmlWriter->startElement("draw:custom-shape");
             xmlWriter->addAttribute("draw:layer", "layout");
@@ -598,6 +587,16 @@ class ShapeAtom : public AbstractAtom
             const QString styleName = styles->insert(style);
             xmlWriter->addAttribute("draw:style-name", styleName);
             //xmlWriter->addAttribute("draw:text-style-name", "P2");
+
+/*
+static int iii=0;
+iii++;
+if(x+cx<0) { x=iii*30; cx=0; }
+if(y+cy<0) { y=iii*30; cy=0; }
+if(w<0) { w=50; }
+if(h<0) { h=50; }
+//Q_ASSERT(false);
+*/
 
             xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
             xmlWriter->addAttribute("svg:y", QString("%1px").arg(y+cy));
@@ -614,6 +613,16 @@ class ShapeAtom : public AbstractAtom
                 xmlWriter->addAttribute("draw:type", "ellipse");
                 xmlWriter->addAttribute("svg:viewBox", "0 0 21600 21600");
                 xmlWriter->endElement();
+            } else if (m_type == QLatin1String("cycle")) {
+                xmlWriter->startElement("draw:enhanced-geometry");
+                xmlWriter->addAttribute("draw:enhanced-path", "M 0 414114 C 0 304284 43630 198953 121292 121291 198954 43630 304285 0 414115 0 523945 0 629276 43630 706938 121292 784599 198954 828229 304285 828229 414115 828229 523945 784599 629276 706938 706938 629277 784599 523945 828229 414115 828229 304285 828229 198954 784599 121292 706938 43631 629276 1 523945 1 414115 L 0 414114 Z N");
+                xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
+                xmlWriter->addAttribute("draw:glue-points", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
+                xmlWriter->addAttribute("draw:type", "?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f27 ?f28 ?f29 ?f30 ?f27 ?f31 ?f25 ?f32 ?f23 ?f31 ?f33 ?f30 ?f21 ?f22");
+                xmlWriter->addAttribute("draw:text-areas", "?f34 ?f36 ?f35 ?f37");
+                xmlWriter->addAttribute("draw:type", "circle");
+                xmlWriter->addAttribute("svg:viewBox", "0 0 828228 828228");
+                xmlWriter->endElement();
             } else /*if (m_type == QLatin1String("rect"))*/ {
                 //TODO
                 kWarning() << "TODO shape type=" << m_type;
@@ -627,9 +636,38 @@ class ShapeAtom : public AbstractAtom
 class AlgorithmAtom : public AbstractAtom
 {
     public:
-        QString m_type; // composite, conn, cycle, hierChild, hierRoot, lin, pyra, snake, sp, tx
+        enum Algorithm {
+            UnknownAlg,
+            // The composite algorithm specifies the size and position for all child layout nodes. You can use it to create
+            // graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
+            CompositeAlg,
+            // The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
+            ConnectorAlg,
+            // The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
+            CycleAlg,
+            // The hierarchy child algorithm works with the hierRoot algorithm to create hierarchical tree layouts. This
+            // algorithm aligns and positions its child layout nodes in a linear path under the hierRoot layout node.
+            HierChildAlg,
+            // The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts. The
+            // hierRoot algorithm aligns and positions the hierRoot layout node in relation to the hierChild layout nodes.
+            HierRootAlg,
+            // The linear algorithm lays out child layout nodes along a linear path.
+            LinearAlg,
+            // The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid
+            // shape to create a pyramid.
+            PyramidAlg,
+            // The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear
+            // flow to continue across multiple rows or columns.
+            SnakeAlg,
+            // The space algorithm is used to specify a minimum space between other layout nodes or as an indication
+            // to do nothing with the layout node’s size and position.
+            SpaceAlg,
+            // The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
+            TextAlg
+        };
+        Algorithm m_type;
         QList< QPair<QString,QString> > m_params; // list of type=value parameters that modify the default behavior of the algorithm.
-        explicit AlgorithmAtom() : AbstractAtom("dgm:alg") {}
+        explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
         virtual ~AlgorithmAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "type=" << m_type;
@@ -637,7 +675,18 @@ class AlgorithmAtom : public AbstractAtom
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
-            TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
+            TRY_READ_ATTR_WITHOUT_NS(type)
+            if(type == QLatin1String("composite")) m_type = CompositeAlg;
+            else if(type == QLatin1String("conn")) m_type = ConnectorAlg;
+            else if(type == QLatin1String("cycle")) m_type = CycleAlg;
+            else if(type == QLatin1String("hierChild")) m_type = HierChildAlg;
+            else if(type == QLatin1String("hierRoot")) m_type = HierRootAlg;
+            else if(type == QLatin1String("lin")) m_type = LinearAlg;
+            else if(type == QLatin1String("pyra")) m_type = PyramidAlg;
+            else if(type == QLatin1String("snake")) m_type = SnakeAlg;
+            else if(type == QLatin1String("sp")) m_type = SpaceAlg;
+            else if(type == QLatin1String("tx")) m_type = TextAlg;
+            else m_type = UnknownAlg;
             context->m_parentLayout->setAlgorithm(this);
             AbstractAtom::readAll(context, reader);
         }
@@ -865,7 +914,6 @@ class ChooseAtom : public AbstractAtom
             foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
                 atom->writeAtom(context, xmlWriter, styles);
         }
-    private:
         QList<AbstractAtom*> atomsMatchingToCondition(Context* context) const {
             QList<AbstractAtom*> ifResult;
             QList<AbstractAtom*> elseResult;
@@ -989,6 +1037,25 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
     }
 }
 
+template<class U, class T> QList<U*> AbstractAtom::filterItems(Context* context, const QList<T*> &items) const
+{
+    QList<U*> results;
+    foreach(T* atom, items) {
+        if(ChooseAtom* chooseatom = dynamic_cast<ChooseAtom*>(atom)) {
+            QList<U*> children = filterItems<U, AbstractAtom>(context, chooseatom->atomsMatchingToCondition(context));
+            foreach(U* a, children)
+                results.append(a);
+        } else if(ForEachAtom* foreachatom = dynamic_cast<ForEachAtom*>(atom)) {
+            QList<U*> children = filterItems<U, AbstractAtom>(context, foreachatom->children());
+            foreach(U* a, children)
+                results.append(a);
+        } else if(U* a = dynamic_cast<U*>(atom)) {
+            results.append(a);
+        }
+    }
+    return results;
+}
+
 void LayoutNodeAtom::layoutAtom(Context* context)
 {
     LayoutNodeAtom* oldLayout = context->m_parentLayout;
@@ -1017,53 +1084,11 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     }
     */
 
-    QString algType;
+    AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
     QList< QPair<QString,QString> > params;
     if(m_algorithm) {
-        algType = m_algorithm->m_type;
+        algorithm = m_algorithm->m_type;
         params = m_algorithm->m_params;
-    }
-
-    if(algType == QLatin1String("composite")) {
-        // The composite algorithm specifies the size and position for all child layout nodes. You can use it to create
-        // graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
-        //TODO
-    } else if(algType == QLatin1String("conn")) {
-        // The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
-        //TODO
-    } else if(algType == QLatin1String("cycle")) {
-        // The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
-        //TODO
-    } else if(algType == QLatin1String("hierChild")) {
-        // The hierarchy child algorithm works with the hierRoot algorithm to create hierarchical tree layouts. This
-        // algorithm aligns and positions its child layout nodes in a linear path under the hierRoot layout node.
-        //TODO
-    } else if(algType == QLatin1String("hierRoot")) {
-        // The hierarchy root algorithm works with the hierChild
-        // algorithm to create hierarchical tree layouts. The
-        // hierRoot algorithm aligns and positions the hierRoot
-        // layout node in relation to the hierChild layout nodes.
-        //TODO
-    } else if(algType == QLatin1String("lin")) {
-        // The linear algorithm lays out child layout nodes along a linear path.
-        //TODO
-    } else if(algType == QLatin1String("pyra")) {
-        // The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid
-        // shape to create a pyramid.
-        //TODO
-    } else if(algType == QLatin1String("snake")) {
-        // The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear
-        // flow to continue across multiple rows or columns.
-        //TODO
-    } else if(algType == QLatin1String("sp")) {
-        // The space algorithm is used to specify a minimum space between other layout nodes or as an indication
-        // to do nothing with the layout node’s size and position.
-        //TODO
-    } else if(algType == QLatin1String("tx")) {
-        // The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
-        //TODO
-    } else {
-        //TODO
     }
 
     // layout ourself if requested
@@ -1072,13 +1097,13 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 
         //QStringList axisnames;
         //foreach(AbstractNode* n, axis()) axisnames.append(n->m_tagName);
-        //kDebug() << "################# name=" << m_name << "algType=" << algType << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
+        //kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
         //this->dump(context, 2);
 
         // evaluate the constraints responsible for positioning and sizing.
-        //kDebug() << "####/CONSTRAINTS-START"<<m_name;
+        if(!m_constraints.isEmpty()) kDebug() << "Constraints for LayoutNodeAtom="<<m_name;
         foreach(ConstraintAtom* c, m_constraints) {
-            c->dump(context, 2);
+            c->dump(context, 2); 
 
             int value = -1;
             if(!c->m_value.isEmpty()) {
@@ -1107,11 +1132,14 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                         value = ref->m_width;
                     } else if(c->m_refType == "h") {
                         value = ref->m_height;
+                    } else if(c->m_refType == "primFontSz") {
+                        //TODO
                     } else {
                         kWarning() << "Unhandled constraint reference-type=" << c->m_refType;
                     }
                 } else {
                     //TODO
+                    kDebug()<<"TODO c->m_refType.isEmpty()";
                 }
             }
 
@@ -1149,8 +1177,10 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 kWarning() << "Unhandled constraint type=" << c->m_type;
             }
 
+            //dump(context,10);
             if(c->m_for == QLatin1String("ch")) {
-                foreach(ShapeAtom* shape, children<ShapeAtom>()) {
+                QList<ShapeAtom*> shapes = filterItems<ShapeAtom,AbstractAtom>(context, m_children);
+                foreach(ShapeAtom* shape, shapes) {
                     if(m_x >= 0) shape->m_x = m_x;
                     if(m_y >= 0) shape->m_y = m_y;
                     if(m_width >= 0) shape->m_width = m_width;
@@ -1171,6 +1201,8 @@ void LayoutNodeAtom::layoutAtom(Context* context)
         }
         //kDebug() << "####/CONSTRAINTS-END";
     }
+    
+//dump(context,10);
 
     // layout the children again if still requested
     if(m_childNeedsRelayout) {
@@ -1187,13 +1219,13 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 
 void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles)
 {
-    QString algType;
+    AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
     QList< QPair<QString,QString> > params;
     if(m_algorithm) {
-        algType = m_algorithm->m_type;
+        algorithm = m_algorithm->m_type;
         params = m_algorithm->m_params;
     }
-    DEBUG_WRITE << "name=" << m_name << "algType=" << algType << "params=" << params;
+    DEBUG_WRITE << "name=" << m_name << "algorithm=" << algorithm << "params=" << params;
 
     LayoutNodeAtom* oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
