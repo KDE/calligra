@@ -231,104 +231,109 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
     QString str;
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
         const QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", QString());
-        if (stylesReader.dataFormats().contains(styleName)) {
-            KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
-            const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
-            if(styleMaps.count() > 0) {
-                //TODO KSpread does not support conditional formatting yet. So, what we do is to
-                // just take the first style and apply that one in the hope it does match best.
-                const QString stylename = styleMaps.first().second;
-                if(stylesReader.dataFormats().contains(stylename))
-                    dataStyle = stylesReader.dataFormats()[stylename];
+        loadOdfDataStyle(stylesReader, styleName, conditions, styleManager, parser);
+    }
+}
 
-                for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
-                    const Conditional c = conditions.loadOdfCondition(it->first, it->second, parser);
-                    if (styleManager->style(c.styleName) == 0) {
-                        CustomStyle* const s = new CustomStyle(c.styleName);
-                        if (stylesReader.dataFormats().contains(c.styleName)) {
-                            KoOdfNumberStyles::NumericStyleFormat ds = stylesReader.dataFormats()[c.styleName];
-                            s->setCustomFormat(ds.formatStr);
-                        }
-                        const_cast<StyleManager*>(styleManager)->insertStyle(s);
+void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser)
+{
+    if (stylesReader.dataFormats().contains(styleName)) {
+        KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
+        const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
+        if(styleMaps.count() > 0) {
+            //TODO KSpread does not support conditional formatting yet. So, what we do is to
+            // just take the first style and apply that one in the hope it does match best.
+            const QString stylename = styleMaps.first().second;
+            if(stylesReader.dataFormats().contains(stylename))
+                dataStyle = stylesReader.dataFormats()[stylename];
+
+            for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
+                const Conditional c = conditions.loadOdfCondition(it->first, it->second, parser);
+                if (styleManager->style(c.styleName) == 0) {
+                    CustomStyle* const s = new CustomStyle(c.styleName);
+                    if (stylesReader.dataFormats().contains(c.styleName)) {
+                        KoOdfNumberStyles::NumericStyleFormat ds = stylesReader.dataFormats()[c.styleName];
+                        s->setCustomFormat(ds.formatStr);
                     }
+                    const_cast<StyleManager*>(styleManager)->insertStyle(s);
                 }
             }
-
-            QString tmp = dataStyle.prefix;
-            if (!tmp.isEmpty()) {
-                setPrefix(tmp);
-            }
-            tmp = dataStyle.suffix;
-            if (!tmp.isEmpty()) {
-                setPostfix(tmp);
-            }
-            // determine data formatting
-            switch (dataStyle.type) {
-            case KoOdfNumberStyles::Number:
-                setFormatType(Format::Number);
-                if (!dataStyle.currencySymbol.isEmpty())
-                    setCurrency(numberCurrency(dataStyle.currencySymbol));
-                else
-                    setCurrency(numberCurrency(dataStyle.formatStr));
-                break;
-            case KoOdfNumberStyles::Scientific:
-                setFormatType(Format::Scientific);
-                break;
-            case KoOdfNumberStyles::Currency:
-                kDebug(36003) << " currency-symbol:" << dataStyle.currencySymbol;
-                if (!dataStyle.currencySymbol.isEmpty())
-                    setCurrency(numberCurrency(dataStyle.currencySymbol));
-                else
-                    setCurrency(numberCurrency(dataStyle.formatStr));
-                break;
-            case KoOdfNumberStyles::Percentage:
-                setFormatType(Format::Percentage);
-                break;
-            case KoOdfNumberStyles::Fraction:
-                // determine format of fractions, dates and times by using the
-                // formatting string
-                tmp = dataStyle.formatStr;
-                if (!tmp.isEmpty()) {
-                    setFormatType(Style::fractionType(tmp));
-                }
-                break;
-            case KoOdfNumberStyles::Date:
-                // determine format of fractions, dates and times by using the
-                // formatting string
-                tmp = dataStyle.formatStr;
-                if (!tmp.isEmpty()) {
-                    setFormatType(Style::dateType(tmp));
-                }
-                break;
-            case KoOdfNumberStyles::Time:
-                // determine format of fractions, dates and times by using the
-                // formatting string
-                tmp = dataStyle.formatStr;
-                if (!tmp.isEmpty()) {
-                    setFormatType(Style::timeType(tmp));
-                }
-                break;
-            case KoOdfNumberStyles::Boolean:
-                setFormatType(Format::Number);
-                break;
-            case KoOdfNumberStyles::Text:
-                setFormatType(Format::Text);
-                break;
-            }
-
-            if (dataStyle.precision > -1) {
-                // special handling for precision
-                // The Style default (-1) and the storage default (0) differ.
-                // The maximum is 10. Replace the Style value 0 with -11, which always results
-                // in a storage value < 0 and is interpreted as Style value 0.
-                int precision = dataStyle.precision;
-                if (type() == AUTO && precision == 0)
-                    precision = -11;
-                setPrecision(precision);
-            }
-
-            setCustomFormat(dataStyle.formatStr);
         }
+
+        QString tmp = dataStyle.prefix;
+        if (!tmp.isEmpty()) {
+            setPrefix(tmp);
+        }
+        tmp = dataStyle.suffix;
+        if (!tmp.isEmpty()) {
+            setPostfix(tmp);
+        }
+        // determine data formatting
+        switch (dataStyle.type) {
+        case KoOdfNumberStyles::Number:
+            setFormatType(Format::Number);
+            if (!dataStyle.currencySymbol.isEmpty())
+                setCurrency(numberCurrency(dataStyle.currencySymbol));
+            else
+                setCurrency(numberCurrency(dataStyle.formatStr));
+            break;
+        case KoOdfNumberStyles::Scientific:
+            setFormatType(Format::Scientific);
+            break;
+        case KoOdfNumberStyles::Currency:
+            kDebug(36003) << " currency-symbol:" << dataStyle.currencySymbol;
+            if (!dataStyle.currencySymbol.isEmpty())
+                setCurrency(numberCurrency(dataStyle.currencySymbol));
+            else
+                setCurrency(numberCurrency(dataStyle.formatStr));
+            break;
+        case KoOdfNumberStyles::Percentage:
+            setFormatType(Format::Percentage);
+            break;
+        case KoOdfNumberStyles::Fraction:
+            // determine format of fractions, dates and times by using the
+            // formatting string
+            tmp = dataStyle.formatStr;
+            if (!tmp.isEmpty()) {
+                setFormatType(Style::fractionType(tmp));
+            }
+            break;
+        case KoOdfNumberStyles::Date:
+            // determine format of fractions, dates and times by using the
+            // formatting string
+            tmp = dataStyle.formatStr;
+            if (!tmp.isEmpty()) {
+                setFormatType(Style::dateType(tmp));
+            }
+            break;
+        case KoOdfNumberStyles::Time:
+            // determine format of fractions, dates and times by using the
+            // formatting string
+            tmp = dataStyle.formatStr;
+            if (!tmp.isEmpty()) {
+                setFormatType(Style::timeType(tmp));
+            }
+            break;
+        case KoOdfNumberStyles::Boolean:
+            setFormatType(Format::Number);
+            break;
+        case KoOdfNumberStyles::Text:
+            setFormatType(Format::Text);
+            break;
+        }
+
+        if (dataStyle.precision > -1) {
+            // special handling for precision
+            // The Style default (-1) and the storage default (0) differ.
+            // The maximum is 10. Replace the Style value 0 with -11, which always results
+            // in a storage value < 0 and is interpreted as Style value 0.
+            int precision = dataStyle.precision;
+            if (type() == AUTO && precision == 0)
+                precision = -11;
+            setPrecision(precision);
+        }
+
+        setCustomFormat(dataStyle.formatStr);
     }
 }
 

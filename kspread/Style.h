@@ -172,6 +172,10 @@ public:
     void loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                       Conditions& conditions, const StyleManager* styleManager,
                       const ValueParser *parser);
+    void loadOdfDataStyle(KoOdfStylesReader& stylesReader, const QString& dataStyleName,
+                          Conditions& conditions, const StyleManager* styleManager,
+                          const ValueParser *parser);
+
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
