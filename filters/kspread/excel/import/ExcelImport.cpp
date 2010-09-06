@@ -130,7 +130,8 @@ public:
 
     // for embedded shapes
     KoStore* storeout;
-    KoGenStyles *styles;
+    KoGenStyles *shapeStyles;
+    KoGenStyles *dataStyles;
     KoXmlWriter *shapesXml;
 
     void processSheet(Sheet* isheet, KSpread::Sheet* osheet);
@@ -139,10 +140,12 @@ public:
     void processCell(Cell* icell, KSpread::Cell ocell);
     void processCellObjects(Cell* icell, KSpread::Cell ocell);
     void processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store);
+    void processNumberFormats();
 
     int convertStyle(const Format* format, const QString& formula = QString());
     QHash<CellFormatKey, int> styleCache;
     QList<KSpread::Style> styleList;
+    QHash<QString, KSpread::Style> dataStyleCache;
 
     void processFontFormat(const FormatFont& font, KSpread::Style& style);
     QTextCharFormat convertFontToCharFormat(const FormatFont& font);
@@ -232,9 +235,11 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->rowsCountTotal += qMin(maximalRowCount, sheet->maxRow());
     }
 
-    // for now needed for NumberFormatParser, also used for embedded shapes
-    d->styles = new KoGenStyles();
-    NumberFormatParser::setStyles(d->styles);
+    d->shapeStyles = new KoGenStyles();
+    d->dataStyles = new KoGenStyles();
+
+    // convert number formats
+    d->processNumberFormats();
 
     d->shapesXml = d->beginMemoryXmlWriter("table:shapes");
 
@@ -276,7 +281,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     delete store;
 
     delete d->workbook;
-    delete d->styles;
+    delete d->shapeStyles;
+    delete d->dataStyles;
     d->inputFile.clear();
     d->outputDoc = 0;
     d->shapesXml = 0;
@@ -289,7 +295,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
 {
     // save styles to xml
     KoXmlWriter *stylesXml = beginMemoryXmlWriter("office:styles");
-    styles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesXml);
+    shapeStyles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesXml);
 
     KoXmlDocument stylesDoc = endMemoryXmlWriter(stylesXml);
 
@@ -611,7 +617,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
         }
         ODrawClient client = ODrawClient(ic->sheet());
         ODrawToOdf odraw(client);
-        Writer writer(*shapesXml, *styles, false);
+        Writer writer(*shapesXml, *shapeStyles, false);
         foreach (OfficeArtObject* o,objects) {
             client.setShapeText(o->text());
             odraw.processDrawingObject(o->object(), writer);
@@ -637,7 +643,9 @@ int ExcelImport::Private::convertStyle(const Format* format, const QString& form
     if (!styleId) {
         KSpread::Style style;
         style.setDefault();
-        // TODO: data format/number style
+
+        style.merge(dataStyleCache.value(format->valueFormat(), KSpread::Style()));
+        // TODO: special handling for some excel stuff
 
         processFontFormat(format->font(), style);
 
@@ -881,4 +889,45 @@ KoXmlDocument ExcelImport::Private::endMemoryXmlWriter(KoXmlWriter* writer)
     }
     delete b;
     return doc;
+}
+
+void ExcelImport::Private::processNumberFormats()
+{
+    static const QString sNoStyle = QString::fromLatin1("NOSTYLE");
+    QHash<QString, QString> dataStyleMap;
+
+    NumberFormatParser::setStyles(dataStyles);
+    for (int i = 0; i < workbook->formatCount(); i++) {
+        Format* f = workbook->format(i);
+        QString& styleName = dataStyleMap[f->valueFormat()];
+        if (styleName.isEmpty()) {
+            KoGenStyle s = NumberFormatParser::parse(f->valueFormat());
+            if (s.type() != KoGenStyle::ParagraphAutoStyle) {
+                styleName = dataStyles->insert(s, "N");
+            } else {
+                styleName = sNoStyle; // assign it a name anyway to prevent converting it twice
+            }
+        }
+    }
+
+    KoXmlWriter *stylesXml = beginMemoryXmlWriter("office:styles");
+    dataStyles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesXml);
+
+    KoXmlDocument stylesDoc = endMemoryXmlWriter(stylesXml);
+
+    KoOdfStylesReader odfStyles;
+    odfStyles.createStyleMap(stylesDoc, false);
+
+    for (int i = 0; i < workbook->formatCount(); i++) {
+        Format* f = workbook->format(i);
+        const QString& styleName = dataStyleMap[f->valueFormat()];
+        if (styleName != sNoStyle) {
+            KSpread::Style& style = dataStyleCache[f->valueFormat()];
+            if (style.isEmpty()) {
+                KSpread::Conditions conditions;
+                style.loadOdfDataStyle(odfStyles, styleName, conditions, outputDoc->map()->styleManager(), outputDoc->map()->parser());
+                // TODO: do something with conditions
+            }
+        }
+    }
 }
