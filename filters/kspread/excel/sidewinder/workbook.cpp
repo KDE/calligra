@@ -193,9 +193,15 @@ int Workbook::addFormat(const Format& format)
     return d->formats.size()-1;
 }
 
-Format* Workbook::format(int index)
+Format* Workbook::format(int index) const
 {
+    Q_ASSERT(index >= 0 && index < d->formats.size());
     return d->formats[index];
+}
+
+int Workbook::formatCount() const
+{
+    return d->formats.size();
 }
 
 void Workbook::setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer)

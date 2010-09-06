@@ -125,7 +125,8 @@ public:
     void setPassword(unsigned long hash);
 
     int addFormat(const Format& format);
-    Format* format(int index);
+    Format* format(int index) const;
+    int formatCount() const;
 
     void setOfficeArtDggContainer(const MSO::OfficeArtDggContainer& dggContainer);
     MSO::OfficeArtDggContainer* officeArtDggContainer() const;
