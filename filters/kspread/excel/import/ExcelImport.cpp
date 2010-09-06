@@ -161,6 +161,9 @@ public:
     void addManifestEntries(KoXmlWriter* ManifestWriter);
     void insertPictureManifest(PictureObject* picture);
     QMap<QString,QString> manifestEntries;
+
+    KoXmlWriter* beginMemoryXmlWriter(const char* docElement);
+    KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
 };
 
 ExcelImport::ExcelImport(QObject* parent, const QStringList&)
@@ -233,47 +236,17 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     d->styles = new KoGenStyles();
     NumberFormatParser::setStyles(d->styles);
 
-    QBuffer shapesBuffer;
-    shapesBuffer.open(QBuffer::ReadWrite);
-    KoXmlWriter xml(&shapesBuffer);
-    xml.startDocument("table:shapes");
-    xml.startElement("table:shapes");
-    xml.addAttribute("xmlns:office", KoXmlNS::office);
-    xml.addAttribute("xmlns:meta", KoXmlNS::meta);
-    xml.addAttribute("xmlns:config", KoXmlNS::config);
-    xml.addAttribute("xmlns:text", KoXmlNS::text);
-    xml.addAttribute("xmlns:table", KoXmlNS::table);
-    xml.addAttribute("xmlns:draw", KoXmlNS::draw);
-    xml.addAttribute("xmlns:presentation", KoXmlNS::presentation);
-    xml.addAttribute("xmlns:dr3d", KoXmlNS::dr3d);
-    xml.addAttribute("xmlns:chart", KoXmlNS::chart);
-    xml.addAttribute("xmlns:form", KoXmlNS::form);
-    xml.addAttribute("xmlns:script", KoXmlNS::script);
-    xml.addAttribute("xmlns:style", KoXmlNS::style);
-    xml.addAttribute("xmlns:number", KoXmlNS::number);
-    xml.addAttribute("xmlns:math", KoXmlNS::math);
-    xml.addAttribute("xmlns:svg", KoXmlNS::svg);
-    xml.addAttribute("xmlns:fo", KoXmlNS::fo);
-    xml.addAttribute("xmlns:anim", KoXmlNS::anim);
-    xml.addAttribute("xmlns:smil", KoXmlNS::smil);
-    xml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
-    xml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
-    xml.addAttribute("xmlns:dc", KoXmlNS::dc);
-    xml.addAttribute("xmlns:xlink", KoXmlNS::xlink);
-    d->shapesXml = &xml;
+    d->shapesXml = d->beginMemoryXmlWriter("table:shapes");
 
     KSpread::Map* map = d->outputDoc->map();
     for (unsigned i = 0; i < d->workbook->sheetCount(); i++) {
-        xml.startElement("table:table");
-        xml.addAttribute("table:id", i);
+        d->shapesXml->startElement("table:table");
+        d->shapesXml->addAttribute("table:id", i);
         Sheet* sheet = d->workbook->sheet(i);
         KSpread::Sheet* ksheet = map->addNewSheet();
         d->processSheet(sheet, ksheet);
-        xml.endElement();
+        d->shapesXml->endElement();
     }
-
-    xml.endElement();
-    xml.endDocument();
 
     QBuffer manifestBuffer;
     KoXmlWriter manifestWriter(&manifestBuffer);
@@ -297,14 +270,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
 
-    shapesBuffer.seek(0);
-    KoXmlDocument xmlDoc;
-    QString errorMsg; int errorLine, errorColumn;
-    if (!xmlDoc.setContent(&shapesBuffer, true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << errorMsg << errorLine << errorColumn;
-    } else {
-        d->processEmbeddedObjects(xmlDoc.documentElement(), store);
-    }
+    KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
+    d->processEmbeddedObjects(xmlDoc.documentElement(), store);
 
     delete store;
 
@@ -321,40 +288,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store)
 {
     // save styles to xml
-    QBuffer b;
-    b.open(QIODevice::ReadWrite);
-    KoXmlWriter stylesXml(&b);
-    stylesXml.startDocument("office:styles");
-    stylesXml.startElement("office:styles");
-    stylesXml.addAttribute("xmlns:office", KoXmlNS::office);
-    stylesXml.addAttribute("xmlns:meta", KoXmlNS::meta);
-    stylesXml.addAttribute("xmlns:config", KoXmlNS::config);
-    stylesXml.addAttribute("xmlns:text", KoXmlNS::text);
-    stylesXml.addAttribute("xmlns:table", KoXmlNS::table);
-    stylesXml.addAttribute("xmlns:draw", KoXmlNS::draw);
-    stylesXml.addAttribute("xmlns:presentation", KoXmlNS::presentation);
-    stylesXml.addAttribute("xmlns:dr3d", KoXmlNS::dr3d);
-    stylesXml.addAttribute("xmlns:chart", KoXmlNS::chart);
-    stylesXml.addAttribute("xmlns:form", KoXmlNS::form);
-    stylesXml.addAttribute("xmlns:script", KoXmlNS::script);
-    stylesXml.addAttribute("xmlns:style", KoXmlNS::style);
-    stylesXml.addAttribute("xmlns:number", KoXmlNS::number);
-    stylesXml.addAttribute("xmlns:math", KoXmlNS::math);
-    stylesXml.addAttribute("xmlns:svg", KoXmlNS::svg);
-    stylesXml.addAttribute("xmlns:fo", KoXmlNS::fo);
-    stylesXml.addAttribute("xmlns:anim", KoXmlNS::anim);
-    stylesXml.addAttribute("xmlns:smil", KoXmlNS::smil);
-    stylesXml.addAttribute("xmlns:koffice", KoXmlNS::koffice);
-    stylesXml.addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
-    stylesXml.addAttribute("xmlns:dc", KoXmlNS::dc);
-    stylesXml.addAttribute("xmlns:xlink", KoXmlNS::xlink);
-    styles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &stylesXml);
-    stylesXml.endElement();
-    stylesXml.endDocument();
+    KoXmlWriter *stylesXml = beginMemoryXmlWriter("office:styles");
+    styles->saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, stylesXml);
 
-    b.seek(0);
-    KoXmlDocument stylesDoc;
-    stylesDoc.setContent(&b, true);
+    KoXmlDocument stylesDoc = endMemoryXmlWriter(stylesXml);
 
     // Register additional attributes, that identify shapes anchored in cells.
     // Their dimensions need adjustment after all rows are loaded,
@@ -897,3 +834,51 @@ void ExcelImport::Private::addProgress(int addValue)
     workbook->emitProgress(progress);
 }
 
+KoXmlWriter* ExcelImport::Private::beginMemoryXmlWriter(const char* docElement)
+{
+    QIODevice* d = new QBuffer;
+    d->open(QIODevice::ReadWrite);
+    KoXmlWriter* xml = new KoXmlWriter(d);
+    xml->startDocument(docElement);
+    xml->startElement(docElement);
+    xml->addAttribute("xmlns:office", KoXmlNS::office);
+    xml->addAttribute("xmlns:meta", KoXmlNS::meta);
+    xml->addAttribute("xmlns:config", KoXmlNS::config);
+    xml->addAttribute("xmlns:text", KoXmlNS::text);
+    xml->addAttribute("xmlns:table", KoXmlNS::table);
+    xml->addAttribute("xmlns:draw", KoXmlNS::draw);
+    xml->addAttribute("xmlns:presentation", KoXmlNS::presentation);
+    xml->addAttribute("xmlns:dr3d", KoXmlNS::dr3d);
+    xml->addAttribute("xmlns:chart", KoXmlNS::chart);
+    xml->addAttribute("xmlns:form", KoXmlNS::form);
+    xml->addAttribute("xmlns:script", KoXmlNS::script);
+    xml->addAttribute("xmlns:style", KoXmlNS::style);
+    xml->addAttribute("xmlns:number", KoXmlNS::number);
+    xml->addAttribute("xmlns:math", KoXmlNS::math);
+    xml->addAttribute("xmlns:svg", KoXmlNS::svg);
+    xml->addAttribute("xmlns:fo", KoXmlNS::fo);
+    xml->addAttribute("xmlns:anim", KoXmlNS::anim);
+    xml->addAttribute("xmlns:smil", KoXmlNS::smil);
+    xml->addAttribute("xmlns:koffice", KoXmlNS::koffice);
+    xml->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+    xml->addAttribute("xmlns:dc", KoXmlNS::dc);
+    xml->addAttribute("xmlns:xlink", KoXmlNS::xlink);
+    return xml;
+}
+
+KoXmlDocument ExcelImport::Private::endMemoryXmlWriter(KoXmlWriter* writer)
+{
+    writer->endElement();
+    writer->endDocument();
+    QBuffer* b = static_cast<QBuffer*>(writer->device());
+    delete writer;
+
+    b->seek(0);
+    KoXmlDocument doc;
+    QString errorMsg; int errorLine, errorColumn;
+    if (!doc.setContent(b, true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug() << errorMsg << errorLine << errorColumn;
+    }
+    delete b;
+    return doc;
+}
