@@ -83,12 +83,11 @@ public:
     PptxPlaceholder();
     PptxPlaceholder(const PptxShapeProperties &other);
     ~PptxPlaceholder();
-    //! Writers placeholder's attributes (svg:x, etc.) to @a writer
-    void writeAttributes(KoXmlWriter* writer);
-    QString x;
-    QString y;
-    QString width;
-    QString height;
+    int x;
+    int y;
+    int width;
+    int height;
+    int rot;
 };
 
 //! Data structure collecting information about single layout

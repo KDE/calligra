@@ -103,24 +103,13 @@ PptxPlaceholder::PptxPlaceholder()
 }
 
 PptxPlaceholder::PptxPlaceholder(const PptxShapeProperties &other)
- : x(EMU_TO_CM_STRING(other.x))
- , y(EMU_TO_CM_STRING(other.y))
- , width(EMU_TO_CM_STRING(other.width))
- , height(EMU_TO_CM_STRING(other.height))
+ : x(other.x), y(other.y), width(other.width), height(other.height), rot(other.rot)
 {
     kDebug() << x << y << width << height;
 }
 
 PptxPlaceholder::~PptxPlaceholder()
 {
-}
-
-void PptxPlaceholder::writeAttributes(KoXmlWriter* writer)
-{
-    writer->addAttribute("svg:x", x);
-    writer->addAttribute("svg:y", y);
-    writer->addAttribute("svg:width", width);
-    writer->addAttribute("svg:height", height);
 }
 
 // -------------------

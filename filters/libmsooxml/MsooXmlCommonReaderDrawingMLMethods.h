@@ -53,6 +53,7 @@ KoFilter::ConversionStatus read_grpSpPr();
 KoFilter::ConversionStatus read_sp();
 KoFilter::ConversionStatus read_spPr();
 KoFilter::ConversionStatus read_xfrm();
+bool m_xfrm_read;
 KoFilter::ConversionStatus read_off();
 KoFilter::ConversionStatus read_chOff();
 KoFilter::ConversionStatus read_chExt();

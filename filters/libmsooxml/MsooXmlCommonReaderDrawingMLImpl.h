@@ -682,6 +682,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_svgY = 0;
     m_svgWidth = -1;
     m_svgHeight = -1;
+    m_xfrm_read = false;
 
 #ifdef PPTXXMLSLIDEREADER_H
     //We assume that the textbox is empty by default
@@ -819,7 +820,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                     << QString("m_context->slideLayoutProperties->placeholders.value(\"%1\")")
                    .arg(d->phIdx) << placeholder;
             }
-            if (m_svgWidth > -1 && m_svgHeight > -1) {
+            if (!m_xfrm_read && m_context->slideLayoutProperties && placeholder) {
+                kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
+                if (placeholder->rot == 0) {
+                    body->addAttribute("svg:x", EMU_TO_CM_STRING(placeholder->x));
+                    body->addAttribute("svg:y", EMU_TO_CM_STRING(placeholder->y));
+                }
+                body->addAttribute("svg:width", EMU_TO_CM_STRING(placeholder->width));
+                body->addAttribute("svg:height", EMU_TO_CM_STRING(placeholder->height));
+                m_rot = placeholder->rot;
+            }
+            else if (m_svgWidth > -1 && m_svgHeight) {
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
     //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
                 if (m_contentType == "line") {
@@ -838,10 +849,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
                     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
                 }
-            }
-            else if (   m_context->slideLayoutProperties && placeholder) {
-                kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
-                placeholder->writeAttributes(body);
             }
             if (m_rot != 0) {
                 // m_rot is in 1/60,000th of a degree
@@ -917,23 +924,45 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         // Keep this placeholder information for reuse in slides because ODF requires
         // not only reference but redundant copy of the properties to be present in slides.
         PptxPlaceholder *placeholder;
-        if (m_currentShapeProperties && m_currentShapeProperties->width >= 0) {
+        if (m_xfrm_read) {
+            placeholder = new PptxPlaceholder();
+            placeholder->x = m_svgX;
+            placeholder->y = m_svgY;
+            placeholder->width = m_svgWidth;
+            placeholder->height = m_svgHeight;
+            placeholder->rot = m_rot;
+        }
+        else if (m_currentShapeProperties && m_currentShapeProperties->width >= 0) {
             kDebug() << "copying geometry from master to placeholder";
             placeholder = new PptxPlaceholder(*m_currentShapeProperties);
         }
         else {
+            // We should never come here, as this means that values were not defined in the layout nor
+            // in the masterslide
             placeholder = new PptxPlaceholder();
-            placeholder->x = EMU_TO_CM_STRING(m_svgX);
-            placeholder->y = EMU_TO_CM_STRING(m_svgY);
-            placeholder->width = EMU_TO_CM_STRING(m_svgWidth);
-            placeholder->height = EMU_TO_CM_STRING(m_svgHeight);
+            placeholder->x = m_svgX;
+            placeholder->y = m_svgY;
+            placeholder->width = m_svgWidth;
+            placeholder->height = m_svgHeight;
+            placeholder->rot = m_rot;
         }
         kDebug() << "adding placeholder" << presentationObject << "phStyleId:" << phStyleId;
         m_context->slideLayoutProperties->placeholders.insert(phStyleId, placeholder);
 
         m_placeholderElWriter->startElement("presentation:placeholder");
         m_placeholderElWriter->addAttribute("presentation:object", presentationObject);
-        placeholder->writeAttributes(m_placeholderElWriter);
+        if (placeholder->rot == 0) {
+            m_placeholderElWriter->addAttribute("svg:x", EMU_TO_CM_STRING(placeholder->x));
+            m_placeholderElWriter->addAttribute("svg:y", EMU_TO_CM_STRING(placeholder->y));
+        }
+        m_placeholderElWriter->addAttribute("svg:width", EMU_TO_CM_STRING(placeholder->width));
+        m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(placeholder->height));
+        m_rot = placeholder->rot;
+        if (m_rot != 0) {
+            m_placeholderElWriter->addAttribute("draw:transform", MSOOXML::Utils::rotateString(m_rot, m_svgX, m_svgY,
+                    m_svgWidth, m_svgHeight));
+        }
+
         m_placeholderElWriter->endElement();
     }
 
@@ -1020,7 +1049,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 {
     READ_PROLOGUE
-    bool xfrm_read = false;
     m_noFill = false;
 
     while (!atEnd()) {
@@ -1030,7 +1058,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
-                xfrm_read = true;
+                m_xfrm_read = true;
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_H
@@ -1069,7 +1097,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == Slide && !xfrm_read) { // loading values from slideMaster/slideLayout is needed
+    if (m_context->type == Slide && !m_xfrm_read) { // loading values from slideMaster/slideLayout is needed
         //Q_ASSERT(d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count());
         PptxShapeProperties* props = 0;
         const QString styleId(d->phStyleId());
@@ -1081,7 +1109,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         {
             props = m_context->slideLayoutProperties->shapes[d->shapeNumber - 1];
         }
-
         if (props) {
             m_svgX = props->x;
             m_svgY = props->y;
