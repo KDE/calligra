@@ -41,24 +41,36 @@ DrawingMLColorSchemeItem::DrawingMLColorSchemeItem()
 {
 }
 
-DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
+DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem(bool spreadMode)
+    : spreadsheetMode(spreadMode)
 {
 }
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
+    // In this mode we prefer last color
+    if (!spreadsheetMode) {
+        if (lastColor.isValid()) {
+            return lastColor;
+        }
+    }
+
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
     {
-//        return QPalette().color(QPalette::Active, QPalette::WindowText);
+        if (!spreadsheetMode) {
+            return QPalette().color(QPalette::Active, QPalette::WindowText);
+        }
         return QPalette().color(QPalette::Active, QPalette::Window);
     }
     else if (    systemColor == QLatin1String("window")
               || systemColor == QLatin1String("menu")
               || systemColor == QLatin1String("menuBar"))
     {
-//        return QPalette().color(QPalette::Active, QPalette::Window);
+        if (!spreadsheetMode) {
+            return QPalette().color(QPalette::Active, QPalette::Window);
+        }
         return QPalette().color(QPalette::Active, QPalette::WindowText);
     }
     else if (systemColor == QLatin1String("highlightText")) {
@@ -174,7 +186,7 @@ DrawingMLTheme::DrawingMLTheme()
 
 MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t)
         : MsooXmlReaderContext()
-        , theme(&t)
+        , theme(&t), spreadMode(true)
 {
 }
 
@@ -202,6 +214,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read(MsooXmlReaderContext* conte
 {
     m_context = dynamic_cast<MsooXmlThemesReaderContext*>(context);
     Q_ASSERT(m_context);
+    m_spreadMode = m_context->spreadMode;
     *m_context->theme = DrawingMLTheme(); //clear
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
@@ -683,7 +696,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
 */
 KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
 {
-    std::auto_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem);
+    std::auto_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem(m_spreadMode));
     m_currentColor = 0;
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());

@@ -59,11 +59,12 @@ public:
 class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
 {
 public:
-    DrawingMLColorSchemeSystemItem();
+    DrawingMLColorSchemeSystemItem(bool spreadMode);
     virtual QColor value() const;
 
     QColor lastColor;
     QString systemColor; //!< ST_SystemColorVal (§20.1.10.58).
+    bool spreadsheetMode;
 };
 
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
@@ -189,6 +190,7 @@ class MSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
 public:
     MsooXmlThemesReaderContext(DrawingMLTheme& t);
     DrawingMLTheme * const theme;
+    bool spreadMode;
 };
 
 //! A class reading MSOOXML themes markup - theme/theme1.xml.
@@ -243,6 +245,7 @@ private:
     QHash<QString, QString> m_colorSchemeIndices;
     bool m_clrScheme_initialized;
     bool m_color_initialized;
+    bool m_spreadMode;
 };
 
 } // namespace MSOOXML

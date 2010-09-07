@@ -316,6 +316,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     MSOOXML::MsooXmlThemesReader themesReader(m_writers);
     MSOOXML::MsooXmlThemesReaderContext themecontext(m_context->theme);
+    themecontext.spreadMode = false; // In this mode, colors behave better with pptx
 
     QString errorMessage;
 
