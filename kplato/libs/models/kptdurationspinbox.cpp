@@ -111,6 +111,7 @@ void DurationSpinBox::stepUnitDown()
 void DurationSpinBox::stepBy( int steps )
 {
     //kDebug()<<steps;
+    int cpos = lineEdit()->cursorPosition();
     if ( isOnUnit() ) {
         // we are in unit
         if ( steps > 0 ) {
@@ -118,9 +119,12 @@ void DurationSpinBox::stepBy( int steps )
         } else if ( steps < 0 ) {
             stepUnitDown();
         }
+        lineEdit()->setCursorPosition( cpos );
         return;
     }
     QDoubleSpinBox::stepBy( steps );
+    // QDoubleSpinBox selects the whole text and the cursor might end up at the end (in the unit field)
+    lineEdit()->setCursorPosition( cpos ); // also deselects
 }
 
 QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
@@ -183,10 +187,9 @@ void DurationSpinBox::editorTextChanged( const QString &text ) {
 
 double DurationSpinBox::valueFromText( const QString & text ) const
 {
-    //HACK to get around different QLocale/KLocale. Prob. needs to rewrite class to not use QDoubleSpinBox
     QString s = extractValue( text ).remove( KGlobal::locale()->thousandsSeparator() );
     bool ok = false;
-    double v = s.toDouble( &ok );
+    double v = KGlobal::locale()->readNumber( s, &ok );
     if ( ! ok ) {
         v = QDoubleSpinBox::valueFromText( s );
     }
