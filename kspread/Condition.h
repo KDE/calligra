@@ -69,6 +69,10 @@ public:
 };
 
 
+class Conditions;
+uint qHash(const Conditions& conditions);
+uint qHash(const Conditional& condition);
+
 /**
  * \class Conditions
  * \ingroup Style
@@ -145,9 +149,9 @@ public:
      */
     void saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const;
 
-    /// \note fake implementation to make QMap happy
-    bool operator<(const Conditions&) const {
-        return true;
+    /// \note implementation to make QMap happy (which is needed by RectStorage)
+    bool operator<(const Conditions& conditions) const {
+        return qHash(*this) < qHash(conditions);
     }
     void operator=(const Conditions& other);
     bool operator==(const Conditions& other) const;

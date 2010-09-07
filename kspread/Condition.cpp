@@ -457,3 +457,17 @@ bool Conditions::operator==(const Conditions& other) const
     }
     return true;
 }
+
+uint KSpread::qHash(const Conditions &c)
+{
+    uint res = 0;
+    foreach (const Conditional& co, c.conditionList()) {
+        res ^= qHash(co);
+    }
+    return res;
+}
+
+uint KSpread::qHash(const Conditional& c)
+{
+    return static_cast<uint>(c.cond) ^ qHash(c.value1) ^ qHash(c.value2) ^ qHash(c.styleName);
+}
