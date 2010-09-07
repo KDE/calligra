@@ -285,18 +285,23 @@ void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
         if (style.isEmpty()) continue;
 
         // update used areas
-        foreach (const QRect& rect, reg.rects()) {
-            if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
-                for (int i = rect.left(); i <= rect.right(); ++i) {
-                    d->usedColumns.insert(i, true);
+        QRect bound = reg.boundingRect();
+        if ((bound.top() == 1 && bound.bottom() >= KS_rowMax) || (bound.left() == 1 && bound.right() >= KS_colMax)) {
+            foreach (const QRect& rect, reg.rects()) {
+                if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
+                    for (int i = rect.left(); i <= rect.right(); ++i) {
+                        d->usedColumns.insert(i, true);
+                    }
+                } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
+                    for (int i = rect.top(); i <= rect.bottom(); ++i) {
+                        d->usedRows.insert(i, true);
+                    }
+                } else {
+                    d->usedArea += rect;
                 }
-            } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
-                for (int i = rect.top(); i <= rect.bottom(); ++i) {
-                    d->usedRows.insert(i, true);
-                }
-            } else {
-                d->usedArea += rect;
             }
+        } else {
+            d->usedArea += reg;
         }
 
         // find substyles
