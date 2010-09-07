@@ -50,6 +50,7 @@
 #include <KoShape.h>
 
 #include <part/Doc.h>
+#include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -431,6 +432,20 @@ static QString cellFormulaNamespace(const QString& formula)
     return QString();
 }
 
+static QDateTime convertDate(double timestamp)
+{
+    QDateTime dt(QDate(1899, 12, 30));
+    dt = dt.addMSecs((qint64)(timestamp * 86400 * 1000));
+    return dt;
+}
+
+static QTime convertTime(double timestamp)
+{
+    QTime tt;
+    tt = tt.addMSecs(qRound((timestamp - (qint64)timestamp) * 86400 * 1000));
+    return tt;
+}
+
 void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
 {
     int colSpan = ic->columnSpan();
@@ -460,11 +475,19 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             v.setFormat(KSpread::Value::fmt_Percent);
             oc.setValue(v);
         } else if (isDateFormat(value, valueFormat)) {
-            // TODO
-            oc.setValue(KSpread::Value(value.asFloat()));
+            QDateTime date = convertDate(value.asFloat());
+            oc.setValue(KSpread::Value(date, outputDoc->map()->calculationSettings()));
+            KLocale* locale = outputDoc->map()->calculationSettings()->locale();
+            if (true /* TODO somehow determine if time should be included */) {
+                oc.setUserInput(locale->formatDate(date.date()));
+            } else {
+                oc.setUserInput(locale->formatDateTime(date));
+            }
         } else if (isTimeFormat(value, valueFormat)) {
-            // TODO
-            oc.setValue(KSpread::Value(value.asFloat()));
+            QTime time = convertTime(value.asFloat());
+            oc.setValue(KSpread::Value(time, outputDoc->map()->calculationSettings()));
+            KLocale* locale = outputDoc->map()->calculationSettings()->locale();
+            oc.setUserInput(locale->formatTime(time, true));
         } else /* fraction or normal */ {
             oc.setValue(KSpread::Value(value.asFloat()));
             if (!isFormula)
