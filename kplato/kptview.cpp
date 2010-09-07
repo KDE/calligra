@@ -557,62 +557,62 @@ ViewInfo View::defaultViewInfo( const QString type ) const
     ViewInfo vi;
     if ( type == "CalendarEditor" ) {
         vi.name = i18n( "Work & Vacation" );
-        vi.tip = i18n( "Edit working- and vacation days for resources" );
+        vi.tip = i18nc( "@info:tooltip", "Edit working- and vacation days for resources" );
     } else if ( type == "AccountsEditor" ) {
         vi.name = i18n( "Cost Breakdown Structure" );
-        vi.tip = i18n( "Edit cost breakdown structure." );
+        vi.tip = i18nc( "@info:tooltip", "Edit cost breakdown structure." );
     } else if ( type == "ResourceEditor" ) {
         vi.name = i18n( "Resources" );
-        vi.tip = i18n( "Edit resource breakdown structure" );
+        vi.tip = i18nc( "@info:tooltip", "Edit resource breakdown structure" );
     } else if ( type == "TaskEditor" ) {
         vi.name = i18n( "Tasks" );
-        vi.tip = i18n( "Edit work breakdown structure" );
+        vi.tip = i18nc( "@info:tooltip", "Edit work breakdown structure" );
     } else if ( type == "DependencyEditor" ) {
         vi.name = i18n( "Dependencies (Graphic)" );
-        vi.tip = i18n( "Edit task dependencies" );
+        vi.tip = i18nc( "@info:tooltip", "Edit task dependencies" );
     } else if ( type == "PertEditor" ) {
         vi.name = i18n( "Dependencies (List)" );
-        vi.tip = i18n( "Edit task dependencies" );
+        vi.tip = i18nc( "@info:tooltip", "Edit task dependencies" );
     } else if ( type == "ScheduleEditor" ) {
         // This view is not used stand-alone atm
         vi.name = i18n( "Schedules" );
         vi.tip = "";
     } else if ( type == "ScheduleHandlerView" ) {
         vi.name = i18n( "Schedules" );
-        vi.tip = i18n( "Calculate and analyze project schedules" );
+        vi.tip = i18nc( "@info:tooltip", "Calculate and analyze project schedules" );
     } else if ( type == "ProjectStatusView" ) {
         vi.name = i18n( "Project Performance Chart" );
-        vi.tip = i18n( "View project status information" );
+        vi.tip = i18nc( "@info:tooltip", "View project status information" );
     } else if ( type == "TaskStatusView" ) {
         vi.name = i18n( "Task Status" );
-        vi.tip = i18n( "View task progress information" );
+        vi.tip = i18nc( "@info:tooltip", "View task progress information" );
     } else if ( type == "TaskView" ) {
-        vi.name = i18n( "Task Execution" );
-        vi.tip = i18n( "View task execution information" );
+        vi.name = i18nc( "@info:tooltip", "Task Execution" );
+        vi.tip = i18nc( "@info:tooltip", "View task execution information" );
     } else if ( type == "TaskWorkPackageView" ) {
         vi.name = i18n( "Work Package View" );
-        vi.tip = i18n( "View task work package information" );
+        vi.tip = i18nc( "@info:tooltip", "View task work package information" );
     } else if ( type == "GanttView" ) {
         vi.name = i18n( "Gantt" );
-        vi.tip = i18n( "View gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View gantt chart" );
     } else if ( type == "MilestoneGanttView" ) {
-        vi.name = i18n( "Milestone Gantt" );
-        vi.tip = i18n( "View milestone gantt chart" );
+        vi.name = i18nc( "@info:tooltip", "Milestone Gantt" );
+        vi.tip = i18nc( "@info:tooltip", "View milestone gantt chart" );
     } else if ( type == "ResourceAppointmentsView" ) {
         vi.name = i18n( "Resource Assignments" );
-        vi.tip = i18n( "View resource assignments" );
+        vi.tip = i18nc( "@info:tooltip", "View resource assignments in a table" );
     } else if ( type == "ResourceAppointmentsGanttView" ) {
         vi.name = i18n( "Resource Assignments (Gantt)" );
-        vi.tip = i18n( "View resource assignments in gantt chart" );
+        vi.tip = i18nc( "@info:tooltip", "View resource assignments in gantt chart" );
     } else if ( type == "AccountsView" ) {
         vi.name = i18n( "Cost Breakdown" );
-        vi.tip = i18n( "View planned and actual cost" );
+        vi.tip = i18nc( "@info:tooltip", "View planned and actual cost" );
     } else if ( type == "PerformanceStatusView" ) {
-        vi.name = i18n( "Tasks Performance Chart" );
-        vi.tip = i18n( "View tasks performance status information" );
+        vi.name = i18nc( "@info:tooltip", "Tasks Performance Chart" );
+        vi.tip = i18nc( "@info:tooltip", "View tasks performance status information" );
     } else if ( type == "ReportView" ) {
         vi.name = i18n( "Report" );
-        vi.tip = i18n( "View report" );
+        vi.tip = i18nc( "@info:tooltip", "View report" );
     } else  {
         kWarning()<<"Unknown viewtype: "<<type;
     }
