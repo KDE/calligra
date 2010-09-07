@@ -2058,11 +2058,9 @@ void MainWindow::doRedo()
 
 void MainWindow::copy()
 {
-    if((m_type == Text) && m_editor->hasSelection()) {
-       m_controller->canvas()->toolProxy()->copy();
-    }
-    if(m_type == Spreadsheet)
-          m_controller->canvas()->toolProxy()->copy();
+    if(m_type != Spreadsheet && !m_controller->canvas()->toolProxy()->selection()->hasSelection())
+        return;
+    m_controller->canvas()->toolProxy()->copy();
 
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -2072,11 +2070,9 @@ void MainWindow::copy()
 
 void MainWindow::cut()
 {
-    if((m_type == Text)&& m_editor->hasSelection())
-        m_controller->canvas()->toolProxy()->cut();
-
-    if(m_type == Spreadsheet)
-        m_controller->canvas()->toolProxy()->cut();
+    if(m_type != Spreadsheet && !m_controller->canvas()->toolProxy()->selection()->hasSelection())
+        return;
+    m_controller->canvas()->toolProxy()->copy();
 
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -2086,9 +2082,6 @@ void MainWindow::cut()
 
 void MainWindow::paste()
 {
-    if ((m_type == Text) && QApplication::clipboard()->text().isEmpty()) {
-        return ;
-    }
     m_controller->canvas()->toolProxy()->paste();
 
     if(m_fontstyleframe)
