@@ -333,12 +333,12 @@ namespace wvWare {
      */
     unsigned long toULong(bool *ok = 0L) const;
     /**
-     * @return Position of first occurence of f starting at position pos.
+     * @return Position of first occurrence of f starting at position pos.
      * -1 if the search was not successful.
      */
     int find(const UString &f, int pos = 0) const;
     /**
-     * @return Position of first occurence of f searching backwards from
+     * @return Position of first occurrence of f searching backwards from
      * position pos.
      * -1 if the search was not successful.
      */

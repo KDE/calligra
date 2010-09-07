@@ -871,7 +871,7 @@ void KexiMainWindow::setupActions()
                   d->action_edit_find = KStandardAction::find(
                                             this, SLOT(slotEditFind()), this));
     d->action_edit_find->setToolTip(i18n("Find text"));
-    d->action_edit_find->setWhatsThis(i18n("Looks up the first occurence of a piece of text."));
+    d->action_edit_find->setWhatsThis(i18n("Looks up the first occurrence of a piece of text."));
 // d->action_edit_find = createSharedAction( KStandardAction::Find, "edit_find");
     ac->addAction("edit_findnext",
                   d->action_edit_findnext = KStandardAction::findNext(
