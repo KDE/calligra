@@ -148,7 +148,9 @@ def profile(dir, file, logger):
 
 	# profile
 	(fileno, tmpfilename) = tempfile.mkstemp()
+	(roundtripfd, roundtripfilename) = tempfile.mkstemp()
 	args = ["--benchmark-loading", "--profile-filename", tmpfilename,
+		"--roundtrip-filename", roundtripfilename,
 		"--nocrashhandler", file]
 	r = runCommand(exepath, args, False)
 	outfile = os.fdopen(fileno, 'r')
@@ -167,6 +169,7 @@ def profile(dir, file, logger):
 		logger.failTest(r.backtrace)
 
 	os.remove(tmpfilename)
+	os.remove(roundtripfilename)
 
 	logger.endTest(int((r.utime + r.stime)*1000))
 	return r
