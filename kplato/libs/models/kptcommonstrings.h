@@ -113,6 +113,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString resourceNormalRate();
     static QString resourceOvertimeRate();
     static QString resourceFixedCost();
+    static QString resourceAccount();
 
     static QString accountName();
     static QString accountDescription();

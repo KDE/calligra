@@ -444,6 +444,7 @@ QVariant ResourceModel::headerData( int section, int role )
             case ResourceAvailableUntil: return ToolTip::resourceAvailableUntil();
             case ResourceNormalRate: return ToolTip::resourceNormalRate();
             case ResourceOvertimeRate: return ToolTip::resourceOvertimeRate();
+            case ResourceAccount: return ToolTip::resourceAccount();
             default: return QVariant();
         }
     }

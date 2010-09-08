@@ -117,6 +117,7 @@ namespace KPlato
     QString ToolTip::resourceNormalRate() { return i18nc( "@info:tooltip", "The cost pr hour, normal hours" ); }
     QString ToolTip::resourceOvertimeRate() { return i18nc( "@info:tooltip", "The cost pr hour, overtime hours" ); }
     QString ToolTip::resourceFixedCost() { return i18nc( "@info:tooltip", "The fixed cost" ); }
+    QString ToolTip::resourceAccount() { return i18nc( "@info:tooltip", "The account where the resource cost is accumulated" ); }
 
     QString ToolTip::accountName() { return i18nc( "@info:tooltip", "The name of the account" ); }
     QString ToolTip::accountDescription() { return i18nc( "@info:tooltip", "The description of the account" ); }
