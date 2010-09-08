@@ -41,6 +41,7 @@ class KoResourceManager;
 namespace KSpread
 {
 class Map;
+class Sheet;
 class SheetAccessModel;
 
 class KSPREAD_EXPORT DocBase : public KoDocument
@@ -111,7 +112,7 @@ public:
      * @param plainText must be set when saveFlag==SaveSelected.
      *        It returns the plain text format of the saved data, when available.
      */
-    bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
+    virtual bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
                        QString* plainText = 0);
 
     /**
@@ -128,6 +129,9 @@ protected:
     virtual void paintContent(QPainter & painter, const QRect & rect);
     virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
     virtual KoView* createViewInstance(QWidget* parent);
+
+    virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
+    virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter& settingsWriter);
 private:
     Q_DISABLE_COPY(DocBase)
 

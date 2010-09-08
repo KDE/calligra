@@ -604,4 +604,44 @@ void Doc::sheetAdded(Sheet* sheet)
 
 }
 
+void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
+{
+    if (!views().isEmpty()) { // no view if embedded document
+        // Save visual info for the first view, such as active sheet and active cell
+        // It looks like a hack, but reopening a document creates only one view anyway (David)
+        View *const view = static_cast<View*>(views().first());
+        // save current sheet selection before to save marker, otherwise current pos is not saved
+        view->saveCurrentSheetSelection();
+        //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
+        if (Sheet *sheet = view->activeSheet()) {
+            settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
+        }
+    }
+}
+
+void Doc::saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
+{
+    if (!views().isEmpty()) {
+        View *const view = static_cast<View*>(views().first());
+        QPoint marker = view->markerFromSheet(sheet);
+        QPointF offset = view->offsetFromSheet(sheet);
+        settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
+        settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
+        settingsWriter.addConfigItem("xOffset", offset.x());
+        settingsWriter.addConfigItem("yOffset", offset.y());
+    }
+}
+
+bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QString *plainText)
+{
+    /* don't pull focus away from the editor if this is just a background
+       autosave */
+    if (!isAutosaving()) {
+        foreach(KoView* view, views())
+            static_cast<View *>(view)->selection()->emitCloseEditor(true);
+    }
+
+    return DocBase::saveOdfHelper(documentContext, saveFlag, plainText);
+}
+
 #include "Doc.moc"
