@@ -50,7 +50,7 @@
 #include <KoShape.h>
 #include <KoDocumentInfo.h>
 
-#include <part/Doc.h>
+#include <DocBase.h>
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <Map.h>
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     if (!document)
         return KoFilter::StupidError;
 
-    d->outputDoc = qobject_cast<KSpread::Doc*>(document);
+    d->outputDoc = qobject_cast<KSpread::DocBase*>(document);
     if (!d->outputDoc) {
         kWarning() << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
         return KoFilter::WrongFormat;
