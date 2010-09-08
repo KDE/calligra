@@ -71,6 +71,9 @@
 #include "ODrawClient.h"
 #include "ImportUtils.h"
 
+// enable this definition to make the filter output to an ods file instead of using m_chain.outputDocument() to write the spreadsheet to
+// #define OUTPUT_AS_ODS_FILE
+
 typedef KGenericFactory<ExcelImport> ExcelImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libexcelimporttodoc, ExcelImportFactory("kofficefilters"))
 
@@ -126,7 +129,7 @@ class ExcelImport::Private
 {
 public:
     QString inputFile;
-    KSpread::Doc* outputDoc;
+    KSpread::DocBase* outputDoc;
 
     Workbook *workbook;
 
@@ -195,6 +198,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     d->inputFile = m_chain->inputFile();
 
+#ifndef OUTPUT_AS_ODS_FILE
     KoDocument* document = m_chain->outputDocument();
     if (!document)
         return KoFilter::StupidError;
@@ -204,6 +208,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         kWarning() << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
         return KoFilter::WrongFormat;
     }
+#else
+    d->outputDoc = new KSpread::DocBase();
+#endif
 
     emit sigProgress(0);
     
@@ -303,12 +310,19 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     delete store;
 
+#ifdef OUTPUT_AS_ODS_FILE
+    d->outputDoc->setOutputMimeType(to);
+    d->outputDoc->saveNativeFormat(m_chain->outputFile());
+    delete d->outputDoc;
+#endif
+
     delete d->workbook;
     delete d->shapeStyles;
     delete d->dataStyles;
     d->inputFile.clear();
     d->outputDoc = 0;
     d->shapesXml = 0;
+
 
     emit sigProgress(100);
     return KoFilter::OK;
