@@ -1660,11 +1660,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                     forEachElement(element, rowElement) {
                         if (element.namespaceURI() != KoXmlNS::draw)
                             continue;
-                        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, *shapeLoadingContext);
-                        if (!shape)
-                            continue;
-                        addShape(shape);
-                        dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(false);
+                        loadOdfObject(element, *shapeLoadingContext);
                     }
                 }
             }
@@ -1709,6 +1705,15 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
         loadOdfProtection(sheetElement);
     }
     return true;
+}
+
+void Sheet::loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext)
+{
+    KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
+    if (!shape)
+        return;
+    addShape(shape);
+    dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(false);
 }
 
 void Sheet::loadOdfMasterLayoutPage(KoStyleStack &styleStack)

@@ -404,17 +404,30 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
 
         KoXmlElement cellElement;
         forEachElement(cellElement, sheetElement) {
-            Q_ASSERT(cellElement.namespaceURI() == KoXmlNS::table && cellElement.localName() == "table-cell");
-            int row = cellElement.attributeNS(KoXmlNS::table, "row").toInt();
-            int col = cellElement.attributeNS(KoXmlNS::table, "column").toInt();
-            KSpread::Cell cell(sheet, col, row);
+            Q_ASSERT(cellElement.namespaceURI() == KoXmlNS::table);
+            if (cellElement.localName() == "shapes") {
+                KoXmlElement element;
+                forEachElement(element, cellElement) {
+                    sheet->loadOdfObject(element, shapeContext);
+                }
+            } else {
+                Q_ASSERT(cellElement.localName() == "table-cell");
+                int row = cellElement.attributeNS(KoXmlNS::table, "row").toInt();
+                int col = cellElement.attributeNS(KoXmlNS::table, "column").toInt();
+                KSpread::Cell cell(sheet, col, row);
 
-            KoXmlElement element;
-            forEachElement(element, cellElement) {
-                cell.loadOdfObject(element, shapeContext);
+                KoXmlElement element;
+                forEachElement(element, cellElement) {
+                    cell.loadOdfObject(element, shapeContext);
+                }
             }
         }
     }
+}
+
+static QRectF getRect(const MSO::OfficeArtFSPGR &r)
+{
+    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
 }
 
 void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
@@ -457,6 +470,42 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     }
     os->cellStorage()->styleStorage()->load(styles);
     os->cellStorage()->loadConditions(cellConditions);
+
+    // sheet shapes
+    if (!is->drawObjects().isEmpty() || is->drawObjectsGroupCount()) {
+        shapesXml->startElement("table:shapes");
+
+        ODrawClient client = ODrawClient(is);
+        ODrawToOdf odraw(client);
+        Writer writer(*shapesXml, *shapeStyles, false);
+        foreach (const OfficeArtObject* o, is->drawObjects()) {
+            client.setShapeText(o->text());
+            odraw.processDrawingObject(o->object(), writer);
+        }
+        for (int i = 0; i < is->drawObjectsGroupCount(); ++i) {
+            shapesXml->startElement("draw:g");
+
+            const MSO::OfficeArtSpgrContainer& group = is->drawObjectsGroup(i);
+            const MSO::OfficeArtSpContainer* first = group.rgfb.first().anon.get<MSO::OfficeArtSpContainer>();
+            if (first && first->clientAnchor && first->shapeGroup) {
+                QRectF oldCoords = client.getGlobalRect(*first->clientAnchor);
+                QRectF newCoords = getRect(*first->shapeGroup);
+                Writer transw = writer.transform(oldCoords, newCoords);
+                foreach (const OfficeArtObject* o, is->drawObjects(i)) {
+                    client.setShapeText(o->text());
+                    odraw.processDrawingObject(o->object(), transw);
+                }
+            } else {
+                foreach (const OfficeArtObject* o, is->drawObjects(i)) {
+                    client.setShapeText(o->text());
+                    odraw.processDrawingObject(o->object(), writer);
+                }
+            }
+            shapesXml->endElement(); // draw:g
+        }
+
+        shapesXml->endElement();
+    }
 }
 
 void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, KSpread::Sheet* os)

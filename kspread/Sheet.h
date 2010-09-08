@@ -392,6 +392,7 @@ public:
      */
     void saveOdfSettings(KoXmlWriter &settingsWriter) const;
 
+    void loadOdfObject(const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
     //
     //END Methods related to the OpenDocument file format
     //
