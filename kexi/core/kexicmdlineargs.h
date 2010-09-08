@@ -95,10 +95,10 @@ static KCmdLineOptions kexi_options()
              "an empty application window will appear."))
     .add(":", ki18n("Options related to opening objects within a project:"))
     .add("open [<object_type>:]<object_name>", ki18n(
-             "\nOpen object of type <object_type>\n"
-             "and name <object_name> from specified project\n"
+             "\nOpen object of type 'object_type'\n"
+             "and name 'object_name' from specified project\n"
              "on application start.\n"
-             "<object_type>: is optional, if omitted - table\n"
+             "'object_type' is optional, if omitted - table\n"
              "type is assumed.\n"
              "Other object types can be query, report, form,\n"
              "script (may be more or less, depending on your\n"
@@ -114,25 +114,25 @@ static KCmdLineOptions kexi_options()
              "be opened in Text Mode, if one is available."))
     .add("exec")
     .add("execute [<object_type>:]<object_name>", ki18n(
-             "\nStart execution of object of type <object_type>\n"
-             "and name <object_name> on application start.\n"
-             "<object_type>: is optional, if omitted - macro\n"
+             "\nStart execution of object of type 'object_type'\n"
+             "and name 'object_name' on application start.\n"
+             "'object_type' is optional, if omitted - macro\n"
              "type is assumed.\n"
              "Other object types can be script (may be more\n"
              "or less, depending on your plugins installed).\n"
              "Use \"\" chars to specify names containing spaces."))
     .add("new <object_type>", ki18n(
-             "Start new object design of type <object_type>."))
+             "Start new object design of type 'object_type'."))
     .add("print [<object_type>:]<object_name>", ki18n(
              "\nOpen the Print dialog window for an object of type\n"
-             "<object_type> and name <object_name> in the specified\n"
+             "'object_type' and name 'object_name' in the specified\n"
              "project when the application starts, for quick printing\n"
              "of the object's data.\n"
-             "<object_type>: is optional; if omitted, table\n"
+             "'object_type' is optional; if omitted, table\n"
              "type is assumed. Object type can also be query."))
     .add("print-preview [<object_type>:]<object_name>", ki18n(
              "\nOpen Print Preview window for object\n"
-             "of type <object_type> and name <object_name>\n"
+             "of type 'object_type' and name 'object_name'\n"
              "from specified project on application start.\n"
              "See --print for more details."))
     .add(":", ki18n("Options related to database servers:"))
