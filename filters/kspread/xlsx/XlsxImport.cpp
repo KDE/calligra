@@ -33,6 +33,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlContentTypes.h>
+#include <MsooXmlRelationships.h>
 
 #include <memory>
 
@@ -540,25 +541,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- /COPIED -->"
     );
 
-    // 1. parse themes
-    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/ themes;
-//     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
-    {
-        std::auto_ptr<MSOOXML::DrawingMLTheme> theme(new MSOOXML::DrawingMLTheme);
-        MSOOXML::MsooXmlThemesReader themesReader(writers);
-        MSOOXML::MsooXmlThemesReaderContext context(*theme.get());
-        //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
-        RETURN_IF_ERROR(loadAndParseDocumentIfExists(
-                            MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context))
-        themes = theme.get();
-        theme.release();
-//         if (!theme.get()->name.isEmpty()) {
-//             // theme loaded
-//             themes.insert(theme.get()->name, theme.get());
-//             theme.release();
-//         }
-    }
-    // 2. parse shared strings
+    // 1. parse shared strings
     XlsxSharedStringVector sharedStrings;
     {
         XlsxXmlSharedStringsReader sharedStringsReader(writers);
@@ -566,7 +549,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetSharedStrings, &sharedStringsReader, writers, errorMessage, &context))
     }
-    // 3. parse styles
+    // 2. parse styles
     XlsxStyles styles;
     {
         XlsxXmlStylesReader stylesReader(writers);
@@ -574,7 +557,7 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
         RETURN_IF_ERROR(loadAndParseDocumentIfExists(
                             MSOOXML::ContentTypes::spreadsheetStyles, &stylesReader, writers, errorMessage, &context))
     }
-    // 4. parse comments
+    // 3. parse comments
     XlsxComments comments;
     {
         XlsxXmlCommentsReader commentsReader(writers);
@@ -583,9 +566,36 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 //! @todo only support "xl/comments1.xml" filename for comments?
             "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
     }
+    // 4. parse themes
+
+    QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
+    if (partNames.count() != 1) {
+        errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
+        return KoFilter::WrongFormat;
+    }
+    const QString spreadPathAndFile(partNames.first());
+    QString spreadPath, spreadFile;
+    MSOOXML::Utils::splitPathAndFile(spreadPathAndFile, &spreadPath, &spreadFile);
+
+    MSOOXML::DrawingMLTheme themes;
+    const QString spreadThemePathAndFile(relationships->targetForType(
+        spreadPath, spreadFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+
+    QString spreadThemePath, spreadThemeFile;
+    MSOOXML::Utils::splitPathAndFile(spreadThemePathAndFile, &spreadThemePath, &spreadThemeFile);
+
+    MSOOXML::MsooXmlThemesReader themesReader(writers);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
+        spreadThemePath, spreadThemeFile);
+
+    KoFilter::ConversionStatus status
+        = loadAndParseDocument(&themesReader, spreadThemePathAndFile, errorMessage, &themecontext);
+
     // 5. parse document
     {
-        XlsxXmlDocumentReaderContext context(*this, themes, sharedStrings, comments, styles, *relationships);
+        XlsxXmlDocumentReaderContext context(*this, &themes, sharedStrings, comments, styles, *relationships);
         XlsxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR(loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )

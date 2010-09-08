@@ -48,7 +48,7 @@ DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,
     const QString& _path, const QString& _file,
     MSOOXML::MsooXmlRelationships& _relationships,
-    /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>*/& _themes)
+    MSOOXML::DrawingMLTheme* _themes)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         themes(_themes)

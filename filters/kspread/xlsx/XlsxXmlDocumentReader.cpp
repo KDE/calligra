@@ -39,7 +39,7 @@
 
 XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
     XlsxImport& _import,
-    /* QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/& _themes,
+    MSOOXML::DrawingMLTheme* _themes,
     const XlsxSharedStringVector& _sharedStrings,
     const XlsxComments& _comments,
     const XlsxStyles& _styles,

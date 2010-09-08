@@ -115,9 +115,6 @@ protected:
         const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
         QString& errorMessage, MsooXmlReaderContext* context = 0);
 
-    KoFilter::ConversionStatus parseThemes(/*QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/& themes,
-        KoOdfWriters *writers, QString& errorMessage);
-
     //! @return part names associated with @a contentType
     QList<QByteArray> partNames(const QByteArray& contentType) const { return m_contentTypes.values(contentType); }
 private:

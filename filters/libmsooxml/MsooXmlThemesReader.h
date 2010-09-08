@@ -24,12 +24,14 @@
 #ifndef MSOOXMLTHEMESREADER_H
 #define MSOOXMLTHEMESREADER_H
 
-#include "MsooXmlReader.h"
+#include <QHash>
+#include <QColor>
+#include <QMap>
 
 #include <KoGenStyles.h>
 
-#include <QHash>
-#include <QColor>
+#include "MsooXmlCommonReader.h"
+#include "MsooXmlImport.h"
 
 namespace MSOOXML
 {
@@ -117,59 +119,40 @@ public:
     QString name;
 };
 
-class DrawingMLSolidFillStyle;
-class DrawingMLPatternFillStyle;
-class DrawingMLNoFillStyle;
 
-//! @todo blipFill (Picture Fill) §20.1.8.14
-//! @todo gradFill (Gradient Fill) §20.1.8.33
-//! @todo grpFill (Group Fill) §20.1.8.35
-class MSOOXML_EXPORT DrawingMLFillStyleBase
+class MSOOXML_EXPORT DrawingMLFillBase
 {
 public:
-    DrawingMLFillStyleBase();
-    virtual ~DrawingMLFillStyleBase();
-    DrawingMLSolidFillStyle* toSolidFillStyle();
-    DrawingMLPatternFillStyle* toPatternFillStyle();
-    DrawingMLNoFillStyle* toNoFillStyle();
+    virtual ~DrawingMLFillBase();
+    // This function will create the fill style and fill the approriate styles
+    // and filePath if needed.
+    // Number is used to index to correct style, color is the color which should be used when making the styles
+    virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color) = 0;
 };
 
-typedef QList<DrawingMLFillStyleBase*> DrawingMLFillStyleList;
-
-//! Specifies a solid fill.
-class MSOOXML_EXPORT DrawingMLSolidFillStyle : public DrawingMLFillStyleBase
+class MSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
-    DrawingMLSolidFillStyle();
-    DrawingMLColorSchemeItemBase* color;
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color);
 };
 
-//! Specifies a pattern fill.
-class MSOOXML_EXPORT DrawingMLPatternFillStyle : public DrawingMLFillStyleBase
+class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
-    DrawingMLPatternFillStyle();
-    DrawingMLColorSchemeItemBase* backgroundColor;
-    DrawingMLColorSchemeItemBase* foregroundColor;
-    QString presetName; //!< ST_PresetPatternVal 20.1.10.51 (Preset Pattern Value)
+    DrawingMLBlipFill(QString filePath);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color);
+private:
+    QString m_filePath;
 };
 
-//! Specifies empty fill.
-class MSOOXML_EXPORT DrawingMLNoFillStyle : public DrawingMLFillStyleBase
-{
-public:
-    DrawingMLNoFillStyle();
-};
-
-/*! Definition of the background fill styles, effect styles, fill styles, and line styles which define the style
-matrix for a theme.
-*/
 class MSOOXML_EXPORT DrawingMLFormatScheme
 {
 public:
-    DrawingMLFormatScheme();
-    DrawingMLFillStyleList backgroundFillStyles; //!< at least 3 items (CT_BackgroundFillStyleList)
+
+    ~DrawingMLFormatScheme();
     QString name;
+
+    QMap<int, DrawingMLFillBase*> fillStyles;
 };
 
 //! Defines a single DrawingML theme.
@@ -188,15 +171,20 @@ public:
 class MSOOXML_EXPORT MsooXmlThemesReaderContext : public MsooXmlReaderContext
 {
 public:
-    MsooXmlThemesReaderContext(DrawingMLTheme& t);
+    MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel, MSOOXML::MsooXmlImport* imp,
+        QString pathName, QString fileName);
     DrawingMLTheme * const theme;
     bool spreadMode;
+    MSOOXML::MsooXmlRelationships* relationships;
+    MSOOXML::MsooXmlImport* import;
+    QString path;
+    QString file;
 };
 
 //! A class reading MSOOXML themes markup - theme/theme1.xml.
 /*! @todo generalize for other MSOOXML subformats.
  */
-class MSOOXML_EXPORT MsooXmlThemesReader : public MsooXmlReader
+class MSOOXML_EXPORT MsooXmlThemesReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     //! Creates MsooXmlThemesReader object.
@@ -226,6 +214,7 @@ protected:
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
+    KoFilter::ConversionStatus read_bgFillStyleLst();
 
     //! Used for skipping a subtree - kust reads and shows each element.
     //! called by BIND_READ_SKIP() macro.
@@ -246,6 +235,11 @@ private:
     bool m_clrScheme_initialized;
     bool m_color_initialized;
     bool m_spreadMode;
+
+    MSOOXML::MsooXmlRelationships* m_relationships;
+    MSOOXML::MsooXmlImport* m_import;
+    QString m_path;
+    QString m_file;
 };
 
 } // namespace MSOOXML

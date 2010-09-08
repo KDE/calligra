@@ -244,12 +244,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             MSOOXML::ContentTypes::wordFontTable, &fontTableReader, writers, errorMessage, &context) )
     }
 
-    // 2. parse themes
-    /*QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/ themes;
-//     MSOOXML::Utils::ContainerDeleter< QMap<QString, MSOOXML::DrawingMLTheme*> > themesDeleter(themes);
-    RETURN_IF_ERROR( parseThemes(themes, writers, errorMessage) )
-
-    // 3. parse styles
+    // 2. parse styles
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
     if (partNames.count() != 1) {
         errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
@@ -258,7 +253,25 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     const QString documentPathAndFile(partNames.first());
     QString documentPath, documentFile;
     MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
-    kDebug() << documentPathAndFile << documentPath << documentFile;
+
+    // 3. parse theme for the document
+    MSOOXML::DrawingMLTheme themes;
+    const QString docThemePathAndFile(relationships->targetForType(
+        documentPath, documentFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
+    kDebug() << QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme";
+    kDebug() << "ThemePathAndFile:" << docThemePathAndFile;
+
+    QString docThemePath, docThemeFile;
+    MSOOXML::Utils::splitPathAndFile(docThemePathAndFile, &docThemePath, &docThemeFile);
+
+    MSOOXML::MsooXmlThemesReader themesReader(writers);
+    MSOOXML::MsooXmlThemesReaderContext themecontext(themes, relationships, (MSOOXML::MsooXmlImport*)this,
+        docThemePath, docThemeFile);
+
+    KoFilter::ConversionStatus status
+        = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
+
     {
         // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
         // ECMA-376, 11.3.12 Style Definitions Part, p. 65
@@ -294,7 +307,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/footnotes"));
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
         DocxXmlDocumentReaderContext context(
-            *this, documentPath, documentFile, *relationships, themes);
+            *this, documentPath, documentFile, *relationships, &themes);
         DocxXmlFootnoteReader footnoteReader(writers);
         if (!footnotePath.isEmpty()) {
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(

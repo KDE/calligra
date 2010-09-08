@@ -34,6 +34,7 @@
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
 #include <MsooXmlDrawingTableStyleReader.h>
+#include <MsooXmlThemesReader.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -1028,7 +1029,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bg()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
 {
     READ_PROLOGUE
-    m_colorType = BackgroundColor;
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+    int index = idx.toInt();
+    // GradientColor is used temporarily to make schemeClr not to do anything
+    m_colorType = GradientColor;
     m_currentColor = QColor();
     while (!atEnd()) {
         readNext();
@@ -1043,10 +1048,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
         }
     }
 
-    // This is not the correct way, a temporary solution, fix at some point
-    if (m_currentColor.isValid()) {
-        QBrush brush(m_currentColor, Qt::SolidPattern);
-        KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
+    MSOOXML::DrawingMLFillBase *fillBase = m_context->themes->formatScheme.fillStyles.value(index);
+    if (fillBase) {
+        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, 0, m_currentColor);
     }
 
     READ_EPILOGUE

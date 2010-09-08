@@ -25,6 +25,8 @@
 #include "MsooXmlSchemas.h"
 #include "MsooXmlUtils.h"
 #include "KoXmlWriter.h"
+#include <KoOdfGraphicStyles.h>
+#include <MsooXmlRelationships.h>
 
 #define MSOOXML_CURRENT_NS "a"
 #define MSOOXML_CURRENT_CLASS MsooXmlThemesReader
@@ -36,6 +38,36 @@
 #include <memory>
 
 using namespace MSOOXML;
+
+DrawingMLBlipFill::DrawingMLBlipFill(QString filePath) : m_filePath(filePath)
+{
+}
+
+void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color)
+{
+    Q_UNUSED(drawStyle)
+    Q_UNUSED(color)
+
+    KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
+    fillImageStyle.addAttribute("xlink:href", m_filePath);
+    fillImageStyle.addAttribute("xlink:type", "simple");
+    fillImageStyle.addAttribute("xlink:show", "embed");
+    fillImageStyle.addAttribute("xlink:actuate", "onLoad");
+    QString fillImageName = styles.insert(fillImageStyle);
+
+    graphicStyle->addProperty("draw:fill", "bitmap");
+    graphicStyle->addProperty("draw:fill-image-name", fillImageName);
+}
+
+void DrawingMLSolidFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color)
+{
+    Q_UNUSED(drawStyle)
+
+    if (color.isValid()) {
+        QBrush brush(color, Qt::SolidPattern);
+        KoOdfGraphicStyles::saveOdfFillStyle(*graphicStyle, styles, brush);
+    }
+}
 
 DrawingMLColorSchemeItem::DrawingMLColorSchemeItem()
 {
@@ -142,40 +174,13 @@ DrawingMLFontSet::DrawingMLFontSet()
 {
 }
 
-DrawingMLFillStyleBase::DrawingMLFillStyleBase()
+DrawingMLFillBase::~DrawingMLFillBase()
 {
 }
 
-DrawingMLFillStyleBase::~DrawingMLFillStyleBase()
+DrawingMLFormatScheme::~DrawingMLFormatScheme()
 {
-}
-
-DrawingMLSolidFillStyle* DrawingMLFillStyleBase::toSolidFillStyle()
-{
-    return dynamic_cast<DrawingMLSolidFillStyle*>(this);
-}
-
-DrawingMLPatternFillStyle* DrawingMLFillStyleBase::toPatternFillStyle()
-{
-    return dynamic_cast<DrawingMLPatternFillStyle*>(this);
-}
-
-DrawingMLNoFillStyle* DrawingMLFillStyleBase::toNoFillStyle()
-{
-    return dynamic_cast<DrawingMLNoFillStyle*>(this);
-}
-
-DrawingMLNoFillStyle::DrawingMLNoFillStyle()
-{
-}
-
-DrawingMLFormatScheme::DrawingMLFormatScheme()
-{
-}
-
-DrawingMLPatternFillStyle::DrawingMLPatternFillStyle()
-        : backgroundColor(0), foregroundColor(0)
-{
+    qDeleteAll(fillStyles);
 }
 
 DrawingMLTheme::DrawingMLTheme()
@@ -184,16 +189,17 @@ DrawingMLTheme::DrawingMLTheme()
 
 // ---------------------------------------------------
 
-MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t)
+MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel,
+        MSOOXML::MsooXmlImport* imp, QString pathName, QString fileName)
         : MsooXmlReaderContext()
-        , theme(&t), spreadMode(true)
+        , theme(&t), spreadMode(true), relationships(rel), import(imp), path(pathName), file(fileName)
 {
 }
 
 // ---------------------------------------------------
 
 MsooXmlThemesReader::MsooXmlThemesReader(KoOdfWriters *writers)
-        : MsooXmlReader(writers)
+        : MsooXmlCommonReader(writers)
         , m_currentColor(0)
         , m_context(0)
 {
@@ -215,6 +221,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read(MsooXmlReaderContext* conte
     m_context = dynamic_cast<MsooXmlThemesReaderContext*>(context);
     Q_ASSERT(m_context);
     m_spreadMode = m_context->spreadMode;
+    m_import = m_context->import;
+    m_path = m_context->path;
+    m_file = m_context->file;
+    m_relationships = m_context->relationships;
     *m_context->theme = DrawingMLTheme(); //clear
     const KoFilter::ConversionStatus result = readInternal();
     m_context = 0;
@@ -726,13 +736,69 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
  - [done] themeElements (§20.1.6.10)
  - themeOverride (§20.1.6.12)
  Child elements:
- - bgFillStyleLst (Background Fill Style List) §20.1.4.1.7
+ - [done] bgFillStyleLst (Background Fill Style List) §20.1.4.1.7
  - effectStyleLst (Effect Style List) §20.1.4.1.12
  - fillStyleLst (Fill Style List) §20.1.4.1.13
  - lnStyleLst (Line Style List) §20.1.4.1.21*/
 KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
 {
-    SKIP_EVERYTHING_AND_RETURN
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        //kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(bgFillStyleLst)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bgFillStyleLst
+//! bgFillStyleLst (background fill style list)
+KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
+{
+    READ_PROLOGUE
+
+    int index = 1001; // The first style goes to 1001
+    QString element;
+
+    QXmlStreamAttributes attrs;
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            element = qualifiedName().toString();
+            // Commented out for now, until there's a nice implementation for duotone effect
+            /*if (element == "a:blipFill") {
+                readNext(); // Going to a:blip
+                attrs = attributes();
+                TRY_READ_ATTR_WITH_NS(r, embed)
+                if (!r_embed.isEmpty()) {
+                    const QString sourceName(m_relationships->target(m_path, m_file, r_embed));
+                    QString destinationName = "Pictures/" + sourceName.mid(sourceName.lastIndexOf('/') + 1);
+                    RETURN_IF_ERROR( m_import->copyFile(sourceName, destinationName, false) )
+                    addManifestEntryForFile(destinationName);
+                    addManifestEntryForPicturesDir();
+                    m_context->theme->formatScheme.fillStyles[index] = new DrawingMLBlipFill(destinationName);
+                }
+                while (true) {
+                    readNext();
+                    if (isEndElement() && qualifiedName() == element) {
+                        break;
+                    }
+                }
+            }*/
+            /*else*/ { //if (element == "a:solidFill") { //For now, let's have this as default
+                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLSolidFill;
+                skipCurrentElement();
+            } // todo, handle rest
+            ++index;
+        }
+    }
+    READ_EPILOGUE
 }
 
 //! @todo !!!!!!!!!!!!!MERGE with Document Reader!!!!!!!!!!!!!
@@ -756,3 +822,4 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_SKIP()
 {
     SKIP_EVERYTHING_AND_RETURN
 }
+

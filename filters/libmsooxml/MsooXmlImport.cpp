@@ -279,23 +279,4 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParse(const QString& filename, 
     return Utils::loadAndParse(doc, m_zip, errorMessage, filename);
 }
 
-KoFilter::ConversionStatus MsooXmlImport::parseThemes(/*QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/& themes,
-    KoOdfWriters *writers, QString& errorMessage)
-{
-    std::auto_ptr<MSOOXML::DrawingMLTheme> theme( new MSOOXML::DrawingMLTheme );
-    MSOOXML::MsooXmlThemesReader themesReader(writers);
-    MSOOXML::MsooXmlThemesReaderContext context(*theme.get());
-    //! @todo use m_contentTypes.values() beacuse multiple paths for themes are expected
-    RETURN_IF_ERROR( loadAndParseDocumentIfExists(
-        MSOOXML::ContentTypes::theme, &themesReader, writers, errorMessage, &context) )
-        themes = theme.get();
-        theme.release();
-//     if (!theme.get()->name.isEmpty()) {
-//         // theme loaded
-//         themes.insert(theme.get()->name, theme.get());
-//         theme.release();
-//     }
-    return KoFilter::OK;
-}
-
 #include "MsooXmlImport.moc"

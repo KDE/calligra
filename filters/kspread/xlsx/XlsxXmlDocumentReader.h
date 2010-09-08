@@ -38,13 +38,13 @@ class XlsxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     XlsxXmlDocumentReaderContext(XlsxImport& _import,
-                                 /*QMap<QString,*/ MSOOXML::DrawingMLTheme*/*>*/& _themes,
+                                 MSOOXML::DrawingMLTheme* _themes,
                                  const XlsxSharedStringVector& _sharedStrings,
                                  const XlsxComments& _comments,
                                  const XlsxStyles& _styles,
                                  MSOOXML::MsooXmlRelationships& _relationships);
     XlsxImport *import;
-    /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes;
+    MSOOXML::DrawingMLTheme *themes;
     const XlsxSharedStringVector* sharedStrings;
     const XlsxComments* comments;
     const XlsxStyles* styles;
