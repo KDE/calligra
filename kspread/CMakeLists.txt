@@ -31,10 +31,10 @@ SET (commands_DIR_SRCS
     commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
     commands/BorderColorCommand.cpp
-        commands/ColumnStyleCommand.cpp
+    commands/ColumnStyleCommand.cpp
     commands/CommentCommand.cpp
     commands/ConditionCommand.cpp
-        commands/CopyCommand.cpp
+    commands/CopyCommand.cpp
     commands/CSVDataCommand.cpp
     commands/DataManipulators.cpp
     commands/DeleteCommand.cpp
@@ -42,11 +42,11 @@ SET (commands_DIR_SRCS
     commands/LinkCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
-        commands/PageBreakCommand.cpp
-        commands/PasteCommand.cpp
+    commands/PageBreakCommand.cpp
+    commands/PasteCommand.cpp
     commands/PrecisionCommand.cpp
     commands/RowColumnManipulators.cpp
-        commands/RowStyleCommand.cpp
+    commands/RowStyleCommand.cpp
     commands/SheetCommands.cpp
     commands/SortManipulator.cpp
     commands/SpellCheckCommand.cpp
@@ -98,17 +98,17 @@ SET (dialogs_DIR_SRCS
 
 
 kde4_add_ui_files(dialogs_DIR_SRCS
-        dialogs/ConsolidateWidget.ui
-        dialogs/ConsolidateDetailsWidget.ui
+    dialogs/ConsolidateWidget.ui
+    dialogs/ConsolidateDetailsWidget.ui
     dialogs/FontWidget.ui
-        dialogs/GoalSeekWidget.ui
+    dialogs/GoalSeekWidget.ui
     dialogs/PositionWidget.ui
     dialogs/ProtectionWidget.ui
     dialogs/SpecialPasteWidget.ui
-        dialogs/SortWidget.ui
-        dialogs/SortDetailsWidget.ui
+    dialogs/SortWidget.ui
+    dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
-        dialogs/SubtotalsDetailsWidget.ui
+    dialogs/SubtotalsDetailsWidget.ui
     )
 
 SET (functions_DIR_SRCS
