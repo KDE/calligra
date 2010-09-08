@@ -39,13 +39,48 @@
 
 using namespace MSOOXML;
 
+DrawingMLGradientFill::DrawingMLGradientFill(QVector<int> colorModifier) : m_colorModifier(colorModifier)
+{
+}
+
+void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
+{
+
+    KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+
+    // This is over-simplified gradient style
+    gradientStyle.addAttribute("draw:style", "linear");
+    gradientStyle.addAttribute("draw:start-intensity", "100%");
+    gradientStyle.addAttribute("draw:end-intensity", "0%");
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+    int startModifier = m_colorModifier.at(0);
+    int startRed = (red * startModifier + 256 * (100 - startModifier)) / 100;
+    int startGreen = (green * startModifier + 256 * (100 - startModifier)) / 100;
+    int startBlue = (blue * startModifier + 256 * (100 - startModifier)) / 100;
+    QString startColor = QString("#%1%2%3").arg(QString::number(startRed, 16)).arg(QString::number(startGreen, 16))
+                                           .arg(QString::number(startBlue, 16));
+    int endModifier = m_colorModifier.at(m_colorModifier.size()-1);
+    int endRed = (red * endModifier + 256 * (100 - endModifier)) / 100;
+    int endGreen = (green * endModifier + 256 * (100 - endModifier)) / 100;
+    int endBlue = (blue * endModifier + 256 * (100 - endModifier)) / 100;
+    QString endColor = QString("#%1%2%3").arg(QString::number(endRed, 16)).arg(QString::number(endGreen, 16))
+                                           .arg(QString::number(endBlue, 16));
+    gradientStyle.addAttribute("draw:start-color", startColor);
+    gradientStyle.addAttribute("draw:end-color", endColor);
+
+    graphicStyle->addProperty("draw:fill", "gradient");
+    const QString gradName = styles.insert(gradientStyle);
+    graphicStyle->addProperty("draw:fill-gradient-name", gradName);
+}
+
 DrawingMLBlipFill::DrawingMLBlipFill(QString filePath) : m_filePath(filePath)
 {
 }
 
-void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color)
+void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
 {
-    Q_UNUSED(drawStyle)
     Q_UNUSED(color)
 
     KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
@@ -59,10 +94,8 @@ void DrawingMLBlipFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyl
     graphicStyle->addProperty("draw:fill-image-name", fillImageName);
 }
 
-void DrawingMLSolidFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, KoGenStyle *drawStyle, QColor color)
+void DrawingMLSolidFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
 {
-    Q_UNUSED(drawStyle)
-
     if (color.isValid()) {
         QBrush brush(color, Qt::SolidPattern);
         KoOdfGraphicStyles::saveOdfFillStyle(*graphicStyle, styles, brush);
@@ -791,7 +824,46 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                     }
                 }
             }*/
-            /*else*/ { //if (element == "a:solidFill") { //For now, let's have this as default
+            if (element == "a:gradFill") {
+                QVector<int> colorModifiers;
+                readNext(); // a:gsLst
+                while (true) {
+                    readNext();
+                    if (isStartElement() && qualifiedName() == "a:gs") {
+                        readNext();
+                        if (isStartElement() && qualifiedName() == "a:schemeClr") {
+                           while (true) {
+                               readNext();
+                               if (isEndElement() && qualifiedName() == "a:schemeClr") {
+                                   break;
+                               }
+                               attrs = attributes();
+                               TRY_READ_ATTR_WITHOUT_NS(val)
+                               if (qualifiedName() == "a:tint") {
+                                   colorModifiers.push_back(val.toInt()/1000);
+                               }
+                               else if (qualifiedName() == "a:shade") {
+                                   colorModifiers.push_back(100 - val.toInt()/1000);
+                               }
+                           }
+                        }
+                        else if (isEndElement() && qualifiedName() == "a:gs") {
+                            break;
+                        }
+                    }
+                    else if (isEndElement() && qualifiedName() == "a:gsLst") {
+                        break;
+                    }
+                }
+                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(colorModifiers);
+                while (true) {
+                    readNext();
+                    if (isEndElement() && qualifiedName() == element) {
+                        break;
+                    }
+                }
+            }
+            else { //if (element == "a:solidFill") { //For now, let's have this as default
                 m_context->theme->formatScheme.fillStyles[index] = new DrawingMLSolidFill;
                 skipCurrentElement();
             } // todo, handle rest
