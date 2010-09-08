@@ -1011,7 +1011,8 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
                 ix = current;
             }
             for ( int s = 0; s < header()->count(); ++s ) {
-                if ( ! header()->isSectionHidden( s ) ) {
+                int logicalIndex = header()->logicalIndex( s );
+                if ( ! isColumnHidden( logicalIndex ) ) {
                     ix = model()->index( ix.row(), header()->logicalIndex( s ), ix.parent() );
                     break;
                 }
@@ -1025,8 +1026,9 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
                 ix = current;
             }
             for ( int s = header()->count() - 1; s >= 0; --s ) {
-                if ( ! header()->isSectionHidden( s ) ) {
-                    ix = model()->index( ix.row(), header()->logicalIndex( s ), ix.parent() );
+                int logicalIndex = header()->logicalIndex( s );
+                if ( ! isColumnHidden( logicalIndex ) ) {
+                    ix = model()->index( ix.row(), logicalIndex, ix.parent() );
                     break;
                 }
             }
