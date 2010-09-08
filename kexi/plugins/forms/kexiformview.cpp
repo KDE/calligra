@@ -37,7 +37,7 @@
 //2.0 #include <formeditor/widgetpropertyset.h>
 #include <formeditor/commands.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
-#include <formeditor/objecttree.h>
+#include <formeditor/WidgetTreeWidget.h>
 
 #include <kexi.h>
 #include <kexi_global.h>
@@ -1392,8 +1392,10 @@ KexiFormView::setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id)
 void KexiFormView::updateActions(bool activated)
 {
   if (viewMode()==Kexi::DesignViewMode) {
-    if (activated)
+    if (activated) {
         form()->emitActionSignals();
+        formPart()->widgetTreePage()->setForm(form());
+    }
 /* 2.0
     if (form()->selectedWidget()) {
       if (form()->widget() == form()->selectedWidget())

@@ -33,6 +33,7 @@ namespace KFormDesigner
 {
 class WidgetLibrary;
 class Form;
+class WidgetTreeWidget;
 }
 
 namespace KexiDB
@@ -53,6 +54,8 @@ public:
     virtual ~KexiFormPart();
 
     KexiDataSourcePage* dataSourcePage() const;
+
+    KFormDesigner::WidgetTreeWidget* widgetTreePage() const;
 
     void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
