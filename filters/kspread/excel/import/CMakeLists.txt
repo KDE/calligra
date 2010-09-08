@@ -57,7 +57,7 @@ install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(excelimport_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 kde4_add_plugin(excelimporttodoc WITH_PREFIX ${excelimport_SRCS})
-target_link_libraries(excelimporttodoc kspreadcommon msooxml komain mso koodf ${ZLIB_LIBRARIES})
+target_link_libraries(excelimporttodoc kspreadodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
 if(QCA2_FOUND)
    target_link_libraries(excelimporttodoc ${QCA2_LIBRARIES})
 endif(QCA2_FOUND)
