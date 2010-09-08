@@ -53,11 +53,13 @@
 #include <DocBase.h>
 #include <CalculationSettings.h>
 #include <CellStorage.h>
+#include <HeaderFooter.h>
 #include <Map.h>
+#include <RowColumnFormat.h>
 #include <Sheet.h>
+#include <SheetPrint.h>
 #include <Style.h>
 #include <StyleStorage.h>
-#include <RowColumnFormat.h>
 #include <ValueConverter.h>
 #include <ShapeApplicationData.h>
 #include <Util.h>
@@ -141,12 +143,15 @@ public:
 
     void processMetaData();
     void processSheet(Sheet* isheet, KSpread::Sheet* osheet);
+    void processSheetForHeaderFooter(Sheet* isheet, KSpread::Sheet* osheet);
     void processColumn(Sheet* isheet, unsigned column, KSpread::Sheet* osheet);
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
     void processCell(Cell* icell, KSpread::Cell ocell);
     void processCellObjects(Cell* icell, KSpread::Cell ocell);
     void processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store);
     void processNumberFormats();
+
+    QString convertHeaderFooter(const QString& xlsHeader);
 
     int convertStyle(const Format* format, const QString& formula = QString());
     QHash<CellFormatKey, int> styleCache;
@@ -420,6 +425,7 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     os->setAutoCalculationEnabled(is->autoCalc());
 
     // TODO: page layout
+    processSheetForHeaderFooter(is, os);
 
     if(is->password() != 0) {
         //TODO
@@ -451,6 +457,63 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     }
     os->cellStorage()->styleStorage()->load(styles);
     os->cellStorage()->loadConditions(cellConditions);
+}
+
+void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, KSpread::Sheet* os)
+{
+    os->print()->headerFooter()->setHeadFootLine(
+            convertHeaderFooter(is->leftHeader()), convertHeaderFooter(is->centerHeader()),
+            convertHeaderFooter(is->rightHeader()), convertHeaderFooter(is->leftFooter()),
+            convertHeaderFooter(is->centerFooter()), convertHeaderFooter(is->rightFooter()));
+}
+
+QString ExcelImport::Private::convertHeaderFooter(const QString& text)
+{
+    QString result;
+    bool skipUnsupported = false;
+    int lastPos;
+    int pos = text.indexOf('&');
+    int len = text.length();
+    if ((pos < 0) && (text.length() > 0))   // If ther is no &
+        result += text;
+    else if (pos > 0) // Some text and '&'
+        result += text.mid(0,  pos - 1);
+
+    while (pos >= 0) {
+        switch (text[pos + 1].unicode()) {
+        case 'D':
+            result += "<date>";
+            break;
+        case 'T':
+            result += "<time>";
+            break;
+        case 'P':
+            result += "<page>";
+            break;
+        case 'N':
+            result += "<pages>";
+            break;
+        case 'F':
+            result += "<name>";
+            break;
+        case 'A':
+            result += "<sheet>";
+            break;
+        case '\"':
+        default:
+            skipUnsupported = true;
+            break;
+        }
+        lastPos = pos;
+        pos = text.indexOf('&', lastPos + 1);
+        if (!skipUnsupported && (pos > (lastPos + 1)))
+            result += text.mid(lastPos + 2, (pos - lastPos - 2));
+        else if (!skipUnsupported && (pos < 0))  //Remaining text
+            result += text.mid(lastPos + 2, len - (lastPos + 2));
+        else
+            skipUnsupported = false;
+    }
+    return result;
 }
 
 void ExcelImport::Private::processColumn(Sheet* is, unsigned columnIndex, KSpread::Sheet* os)
