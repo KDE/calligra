@@ -514,7 +514,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     const bool isFormula = !formula.isEmpty();
     if (isFormula) {
         const QString nsPrefix = cellFormulaNamespace(formula);
-        const QString decodedFormula = KSpread::Odf::decodeFormula(formula, oc.locale(), nsPrefix);
+        const QString decodedFormula = KSpread::Odf::decodeFormula('=' + formula, oc.locale(), nsPrefix);
         oc.setUserInput(decodedFormula);
     }
 
