@@ -48,6 +48,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShape.h>
+#include <KoDocumentInfo.h>
 
 #include <part/Doc.h>
 #include <CalculationSettings.h>
@@ -135,6 +136,7 @@ public:
     KoGenStyles *dataStyles;
     KoXmlWriter *shapesXml;
 
+    void processMetaData();
     void processSheet(Sheet* isheet, KSpread::Sheet* osheet);
     void processColumn(Sheet* isheet, unsigned column, KSpread::Sheet* osheet);
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
@@ -244,6 +246,8 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // convert number formats
     d->processNumberFormats();
 
+    d->processMetaData();
+
     d->shapesXml = d->beginMemoryXmlWriter("table:shapes");
 
     KSpread::Map* map = d->outputDoc->map();
@@ -292,6 +296,42 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     emit sigProgress(100);
     return KoFilter::OK;
+}
+
+void ExcelImport::Private::processMetaData()
+{
+    KoDocumentInfo* info = outputDoc->documentInfo();
+
+    if (workbook->hasProperty(Workbook::PIDSI_TITLE)) {
+        info->setAboutInfo("title", workbook->property(Workbook::PIDSI_TITLE).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_SUBJECT)) {
+        info->setAboutInfo("subject", workbook->property(Workbook::PIDSI_SUBJECT).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_AUTHOR)) {
+        info->setAuthorInfo("creator", workbook->property(Workbook::PIDSI_AUTHOR).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_KEYWORDS)) {
+        info->setAboutInfo("keyword", workbook->property(Workbook::PIDSI_KEYWORDS).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_COMMENTS)) {
+        info->setAboutInfo("comments", workbook->property(Workbook::PIDSI_COMMENTS).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_REVNUMBER)) {
+        info->setAboutInfo("editing-cycles", workbook->property(Workbook::PIDSI_REVNUMBER).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_LASTPRINTED_DTM)) {
+        info->setAboutInfo("print-date", workbook->property(Workbook::PIDSI_LASTPRINTED_DTM).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_CREATE_DTM)) {
+        info->setAboutInfo("creation-date", workbook->property(Workbook::PIDSI_CREATE_DTM).toString());
+    }
+    if (workbook->hasProperty(Workbook::PIDSI_LASTSAVED_DTM)) {
+        info->setAboutInfo("date", workbook->property(Workbook::PIDSI_LASTSAVED_DTM).toString());
+    }
+    // template
+    // lastauthor
+    // edittime
 }
 
 void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElement, KoStore* store)
