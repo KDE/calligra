@@ -216,6 +216,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 #else
     d->outputDoc = new KSpread::DocBase();
 #endif
+    d->outputDoc->setOutputMimeType(to);
 
     emit sigProgress(0);
     
@@ -316,7 +317,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     delete store;
 
 #ifdef OUTPUT_AS_ODS_FILE
-    d->outputDoc->setOutputMimeType(to);
     d->outputDoc->saveNativeFormat(m_chain->outputFile());
     delete d->outputDoc;
 #endif
