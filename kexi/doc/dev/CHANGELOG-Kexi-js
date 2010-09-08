@@ -120,8 +120,12 @@ Main Window
 
 2010-09-02
 Forms
+*Widgets Tree: now displays items, root is not decorated, fixed possible crash when form becomes null
+TODO: finalize this
+
+2010-09-02
+Forms
 *Widgets Tree tab ported
-TODO: finalize this, still invisible
 
 2010-09-01
 Forms
@@ -146,7 +150,7 @@ Migration
 *support multipage (large up to 65535 bytes) memo values
 BUG:244420
 TODO: support up to 1GB of data too (requires changes in mdbtools API)
-TODO: The display routines of table view is not optimized for such large text values. Optimize that!
+TODO: The display routines of table view are not optimized for such large text values. Optimize that!
 
 2010-07-07
 KexiDB
