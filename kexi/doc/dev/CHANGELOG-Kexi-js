@@ -110,6 +110,13 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+2010-09-08
+Forms
+*Widgets Tree: now displays items, items are sorted, root is not decorated, fixed possible crash when form becomes null
+TODO: finalize this
+Core
+*for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
+
 2010-09-03
 Main Window
 *Object tabs
@@ -117,11 +124,6 @@ Main Window
 **contain only names/captions of objects (this is shorter)
 **have tooltip and "what's this" information
 **have context menu with "Close Tab" action
-
-2010-09-02
-Forms
-*Widgets Tree: now displays items, root is not decorated, fixed possible crash when form becomes null
-TODO: finalize this
 
 2010-09-02
 Forms
