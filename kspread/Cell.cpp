@@ -1104,13 +1104,15 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if (link().isEmpty())
         saveOdfValue(xmlwriter);
 
+    const Style cellStyle = style();
+
     // Either there's no column and row default and the style's not the default style,
     // or the style is different to one of them. The row default takes precedence.
     if ((!tableContext.rowDefaultStyles.contains(row) &&
             !tableContext.columnDefaultStyles.contains(column) &&
-            !(style().isDefault() && conditions().isEmpty())) ||
-            (tableContext.rowDefaultStyles.contains(row) && tableContext.rowDefaultStyles[row] != style()) ||
-            (tableContext.columnDefaultStyles.contains(column) && tableContext.columnDefaultStyles[column] != style())) {
+            !(cellStyle.isDefault() && conditions().isEmpty())) ||
+            (tableContext.rowDefaultStyles.contains(row) && tableContext.rowDefaultStyles[row] != cellStyle) ||
+            (tableContext.columnDefaultStyles.contains(column) && tableContext.columnDefaultStyles[column] != cellStyle)) {
         KoGenStyle currentCellStyle; // the type determined in saveOdfCellStyle
         saveOdfCellStyle(currentCellStyle, mainStyles);
         // skip 'table:style-name' attribute for the default style
@@ -1146,7 +1148,7 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 
             if (nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
                     !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, column) ||
-                    !(nextCell.style() == style() && nextCell.conditions() == conditions())) {
+                    !(nextCell.style() == cellStyle && nextCell.conditions() == conditions())) {
                 break;
             }
             ++repeated;
