@@ -40,7 +40,6 @@ class KoResourceManager;
 
 class KCompletion;
 
-class QAbstractItemModel;
 class QDomElement;
 class QDomDocument;
 class QUndoCommand;
@@ -88,11 +87,6 @@ public:
      * This deletes all sheets contained in this map.
      */
     virtual ~Map();
-
-    /**
-     * \return a model for this map
-     */
-    QAbstractItemModel* model() const;
 
     /**
      * \return the document this map belongs to

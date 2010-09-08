@@ -52,7 +52,6 @@
 #include "part/Doc.h" // FIXME detach from part
 #include "LoadingInfo.h"
 #include "Localization.h"
-#include "MapModel.h"
 #include "NamedAreaManager.h"
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
@@ -75,7 +74,6 @@ using namespace KSpread;
 class Map::Private
 {
 public:
-    MapModel *model;
     Doc* doc;
 
     /**
@@ -127,7 +125,6 @@ Map::Map(Doc* doc, int syntaxVersion)
         d(new Private)
 {
     setObjectName("Map"); // necessary for D-Bus
-    d->model = new MapModel(this);
     d->doc = doc;
     d->tableId = 1;
     d->overallRowCount = 0;
@@ -208,11 +205,6 @@ Map::~Map()
     delete d->defaultRowFormat;
 
     delete d;
-}
-
-QAbstractItemModel* Map::model() const
-{
-    return d->model;
 }
 
 Doc* Map::doc() const
