@@ -40,6 +40,7 @@
 #include "CharSelectDia.h"
 #include "Damages.h"
 #include "database/Database.h"
+#include "database/FilterPopup.h"
 #include "DragAndDropStrategy.h"
 #include "ExternalEditor.h"
 #include "HyperlinkStrategy.h"
@@ -1201,7 +1202,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             const QRect cellViewRect = cellRect.translated(offsetX, offsetY).toRect();
             if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellViewRect, event->pos())) {
                 Database database = cell.database();
-                database.showPopup(canvas()->canvasWidget(), cell, cellViewRect);
+                FilterPopup::showPopup(canvas()->canvasWidget(), cell, cellViewRect, &database);
                 return 0; // Act directly; no further strategy needed.
             }
 

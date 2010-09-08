@@ -39,6 +39,8 @@ public:
      */
     FilterPopup(QWidget* parent, const Cell& cell, Database* database);
 
+    static void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect, Database* database);
+
     /**
      * Destructor.
      */

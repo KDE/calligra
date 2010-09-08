@@ -116,11 +116,6 @@ public:
      */
     void setRange(const Region& region);
 
-    /**
-     * Shows the associated popup menu.
-     */
-    void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect);
-
     const Filter& filter() const;
     void setFilter(const Filter& filter);
 

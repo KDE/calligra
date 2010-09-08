@@ -246,4 +246,12 @@ void FilterPopup::buttonClicked(QAbstractButton* button)
     }
 }
 
+void FilterPopup::showPopup(QWidget *parent, const Cell &cell, const QRect &cellRect, Database *database)
+{
+    FilterPopup* popup = new FilterPopup(parent, cell, database);
+    const QPoint position(database->orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
+    popup->move(parent->mapToGlobal(position));
+    popup->show();
+}
+
 #include "FilterPopup.moc"

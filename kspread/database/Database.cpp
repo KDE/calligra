@@ -168,14 +168,6 @@ void Database::setRange(const Region& region)
     d->targetRangeAddress = region;
 }
 
-void Database::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
-{
-    FilterPopup* popup = new FilterPopup(parent, cell, this);
-    const QPoint position(orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
-    popup->move(parent->mapToGlobal(position));
-    popup->show();
-}
-
 const Filter& Database::filter() const
 {
     return *d->filter;
