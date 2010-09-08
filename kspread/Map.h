@@ -57,7 +57,7 @@ class ColumnFormat;
 class Damage;
 class DatabaseManager;
 class DependencyManager;
-class Doc;
+class DocBase;
 class LoadingInfo;
 class NamedAreaManager;
 class RecalcManager;
@@ -81,7 +81,7 @@ public:
     /**
      * Created an empty map.
      */
-    explicit Map(Doc* doc = 0, int syntaxVersion = 1);
+    explicit Map(DocBase* doc = 0, int syntaxVersion = 1);
 
     /**
      * This deletes all sheets contained in this map.
@@ -91,7 +91,7 @@ public:
     /**
      * \return the document this map belongs to
      */
-    Doc* doc() const;
+    DocBase* doc() const;
 
     /**
      * \brief Sets whether the document can be edited or is read only.

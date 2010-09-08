@@ -30,6 +30,7 @@
 
 // Local
 #include "Doc.h"
+#include "../DocBase_p.h"
 
 #include <unistd.h>
 #include <assert.h>
@@ -115,12 +116,6 @@
 using namespace std;
 using namespace KSpread;
 
-static const int CURRENT_SYNTAX_VERSION = 1;
-// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
-static const char * CURRENT_DTD_VERSION = "1.2";
-
-typedef QMap<QString, QDomElement> SavedDocParts;
-
 class Doc::Private
 {
 public:
@@ -136,7 +131,8 @@ public:
     KoResourceManager *resourceManager;
 };
 
-Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+static const char * CURRENT_DTD_VERSION = "1.2";
 
 /*****************************************************************************
  *
@@ -148,32 +144,13 @@ QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
 Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
-        : KoDocument(parentWidget, parent, singleViewMode)
-        , d(new Private)
+        : DocBase(parentWidget, parent, singleViewMode)
+        , dd(new Private)
 {
-    d->resourceManager = new KoResourceManager();
-    d->map = new Map(this, CURRENT_SYNTAX_VERSION);
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
     new MapAdaptor(d->map);
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
 
-    // Document Url for FILENAME function and page header/footer.
-    d->map->calculationSettings()->setFileName(url().prettyUrl());
-
-    KoShapeRegistry *registry = KoShapeRegistry::instance();
-    foreach (const QString &id, registry->keys()) {
-        KoShapeFactoryBase *shapeFactory = registry->value(id);
-        shapeFactory->newDocumentResourceManager(d->resourceManager);
-    }
-
-    d->configLoadFromFile = false;
-
-    documents().append(this);
-
-    setComponentData(Factory::global(), false);
-    setTemplateType("kspread_template");
-
-    d->sheetAccessModel = new SheetAccessModel(d->map);
 
     // Init chart shape factory with KSpread's specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
@@ -184,6 +161,10 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 
     connect(d->map, SIGNAL(commandAdded(QUndoCommand *)),
             this, SLOT(addCommand(QUndoCommand *)));
+
+    setComponentData(Factory::global(), false);
+    setTemplateType("kspread_template");
+
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
@@ -194,21 +175,7 @@ Doc::~Doc()
     if (isReadWrite())
         saveConfig();
 
-    delete d->map;
-    delete d->sheetAccessModel;
-    delete d->resourceManager;
-    delete d;
-}
-
-QList<Doc*> Doc::documents()
-{
-    return Private::s_docs;
-}
-
-void Doc::setReadWrite(bool readwrite)
-{
-    map()->setReadWrite(readwrite);
-    KoDocument::setReadWrite(readwrite);
+    delete dd;
 }
 
 void Doc::openTemplate(const KUrl& url)
@@ -234,11 +201,6 @@ void Doc::initEmpty()
     KoDocument::initEmpty();
 }
 
-Map *Doc::map() const
-{
-    return d->map;
-}
-
 void Doc::saveConfig()
 {
     if (isEmbedded() || !isReadWrite())
@@ -252,11 +214,6 @@ void Doc::initConfig()
 
     const int page = config->group("KSpread Page Layout").readEntry("Default unit page", 0);
     setUnit(KoUnit((KoUnit::Unit) page));
-}
-
-int Doc::syntaxVersion() const
-{
-    return d->map->syntaxVersion();
 }
 
 KoView* Doc::createViewInstance(QWidget* parent)
@@ -343,221 +300,6 @@ bool Doc::loadChildren(KoStore* _store)
     return map()->loadChildren(_store);
 }
 
-bool Doc::saveOdf(SavingContext &documentContext)
-{
-    ElapsedTime et("OpenDocument Saving", ElapsedTime::PrintOnlyTime);
-    return saveOdfHelper(documentContext, SaveAll);
-}
-
-bool Doc::saveOdfHelper(SavingContext & documentContext, SaveFlag saveFlag,
-                        QString* /*plainText*/)
-{
-    Q_UNUSED(saveFlag);
-    KoStore * store = documentContext.odfStore.store();
-    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
-
-    /* don't pull focus away from the editor if this is just a background
-       autosave */
-    if (!isAutosaving()) {
-        foreach(KoView* view, views())
-        static_cast<View *>(view)->selection()->emitCloseEditor(true);
-    }
-
-    KoStoreDevice dev(store);
-    KoGenStyles mainStyles;//for compile
-
-    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
-
-    KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
-    KoShapeSavingContext savingContext(*bodyWriter, mainStyles, documentContext.embeddedSaver);
-
-    //todo fixme just add a element for testing saving content.xml
-    bodyWriter->startElement("office:body");
-    bodyWriter->startElement("office:spreadsheet");
-
-    // Saving the map.
-    map()->saveOdf(*contentWriter, savingContext);
-
-    bodyWriter->endElement(); ////office:spreadsheet
-    bodyWriter->endElement(); ////office:body
-
-    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
-
-    documentContext.odfStore.closeContentWriter();
-
-    //add manifest line for content.xml
-    manifestWriter->addManifestEntry("content.xml",  "text/xml");
-
-    mainStyles.saveOdfStylesDotXml(store, manifestWriter);
-
-    if (!store->open("settings.xml"))
-        return false;
-
-    KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
-    settingsWriter->startElement("office:settings");
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "view-settings");
-
-    saveUnitOdf(settingsWriter);
-
-    saveOdfSettings(*settingsWriter);
-
-    settingsWriter->endElement(); // config:config-item-set
-
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "configuration-settings");
-    settingsWriter->addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join(","));
-    settingsWriter->endElement(); // config:config-item-set
-    settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // Root:element
-    settingsWriter->endDocument();
-    delete settingsWriter;
-
-    if (!store->close())
-        return false;
-
-    if (!savingContext.saveDataCenter(store, manifestWriter)) {
-        return false;
-    }
-
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
-
-    setModified(false);
-
-    return true;
-}
-
-void Doc::loadOdfSettings(const KoXmlDocument&settingsDoc)
-{
-    KoOasisSettings settings(settingsDoc);
-    KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
-    if (!viewSettings.isNull()) {
-        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-    }
-    map()->loadOdfSettings(settings);
-    loadOdfIgnoreList(settings);
-}
-
-void Doc::saveOdfSettings(KoXmlWriter &settingsWriter)
-{
-    settingsWriter.startElement("config:config-item-map-indexed");
-    settingsWriter.addAttribute("config:name", "Views");
-    settingsWriter.startElement("config:config-item-map-entry");
-    settingsWriter.addConfigItem("ViewId", QString::fromLatin1("View1"));
-    if (!views().isEmpty()) { // no view if embedded document
-        // Save visual info for the first view, such as active sheet and active cell
-        // It looks like a hack, but reopening a document creates only one view anyway (David)
-        View *const view = static_cast<View*>(views().first());
-        // save current sheet selection before to save marker, otherwise current pos is not saved
-        view->saveCurrentSheetSelection();
-        //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        if (Sheet *sheet = view->activeSheet()) {
-            settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
-        }
-    }
-    //<config:config-item-map-named config:name="Tables">
-    settingsWriter.startElement("config:config-item-map-named");
-    settingsWriter.addAttribute("config:name", "Tables");
-    foreach (Sheet *sheet, map()->sheetList()) {
-        settingsWriter.startElement("config:config-item-map-entry");
-        settingsWriter.addAttribute("config:name", sheet->sheetName());
-        if (!views().isEmpty()) {
-            View *const view = static_cast<View*>(views().first());
-            QPoint marker = view->markerFromSheet(sheet);
-            QPointF offset = view->offsetFromSheet(sheet);
-            settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
-            settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
-            settingsWriter.addConfigItem("xOffset", offset.x());
-            settingsWriter.addConfigItem("yOffset", offset.y());
-        }
-        sheet->saveOdfSettings(settingsWriter);
-        settingsWriter.endElement();
-    }
-    settingsWriter.endElement();
-    settingsWriter.endElement();
-    settingsWriter.endElement();
-}
-
-
-void Doc::loadOdfIgnoreList(const KoOasisSettings& settings)
-{
-    KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
-    if (!configurationSettings.isNull()) {
-        const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
-        //kDebug()<<" ignorelist :"<<ignorelist;
-        d->spellListIgnoreAll = ignorelist.split(',', QString::SkipEmptyParts);
-    }
-}
-
-
-bool Doc::loadOdf(KoOdfReadStore & odfStore)
-{
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KSpread::Doc::loadOdf");
-        updater->setProgress(0);
-    }
-
-    d->spellListIgnoreAll.clear();
-
-    KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
-    if (realBody.isNull()) {
-        setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
-        map()->deleteLoadingInfo();
-        return false;
-    }
-    KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
-
-    if (body.isNull()) {
-        kError(32001) << "No office:spreadsheet found!" << endl;
-        KoXmlElement childElem;
-        QString localName;
-        forEachElement(childElem, realBody) {
-            localName = childElem.localName();
-        }
-        if (localName.isEmpty())
-            setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
-        else
-            setErrorMessage(i18n("This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType(localName)));
-        map()->deleteLoadingInfo();
-        return false;
-    }
-
-    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
-
-    // TODO check versions and mimetypes etc.
-
-    // all <sheet:sheet> goes to workbook
-    if (!map()->loadOdf(body, context)) {
-        map()->deleteLoadingInfo();
-        return false;
-    }
-
-    if (!odfStore.settingsDoc().isNull()) {
-        loadOdfSettings(odfStore.settingsDoc());
-    }
-    initConfig();
-
-    //update plugins that rely on bindings, as loading order can mess up the data of the plugins
-    SheetAccessModel* sheetModel = sheetAccessModel();
-    QList< Sheet* > sheets = map()->sheetList();
-    Q_FOREACH( Sheet* sheet, sheets ){
-        // This region contains the entire sheet
-        const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
-        QModelIndex index = sheetModel->index( 0, map()->indexOf( sheet ) );
-          QVariant bindingModelValue = sheetModel->data( index , Qt::DisplayRole );
-          BindingModel *curBindingModel = dynamic_cast< BindingModel* >( qvariant_cast< QPointer< QAbstractItemModel > >( bindingModelValue ).data() );
-          if ( curBindingModel ){
-              curBindingModel->emitDataChanged( region );
-          }
-    }
-
-    if (updater) updater->setProgress(100);
-
-    return true;
-}
 
 bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
 {
@@ -849,16 +591,6 @@ void Doc::loadConfigFromFile()
 bool Doc::configLoadFromFile() const
 {
     return d->configLoadFromFile;
-}
-
-SheetAccessModel *Doc::sheetAccessModel() const
-{
-    return d->sheetAccessModel;
-}
-
-KoResourceManager* Doc::resourceManager() const
-{
-    return d->resourceManager;
 }
 
 void Doc::sheetAdded(Sheet* sheet)

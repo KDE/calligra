@@ -191,6 +191,7 @@ SET (kspreadcommon_LIB_SRCS
     Currency.cpp
     Damages.cpp
     DependencyManager.cpp
+    DocBase.cpp
     Format.cpp
     Formula.cpp
     Function.cpp

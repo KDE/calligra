@@ -49,7 +49,7 @@
 #include "CalculationSettings.h"
 #include "Damages.h"
 #include "DependencyManager.h"
-#include "part/Doc.h" // FIXME detach from part
+#include "DocBase.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
@@ -74,7 +74,7 @@ using namespace KSpread;
 class Map::Private
 {
 public:
-    Doc* doc;
+    DocBase* doc;
 
     /**
      * List of all sheets in this map.
@@ -120,7 +120,7 @@ public:
 };
 
 
-Map::Map(Doc* doc, int syntaxVersion)
+Map::Map(DocBase* doc, int syntaxVersion)
         : QObject(doc),
         d(new Private)
 {
@@ -207,7 +207,7 @@ Map::~Map()
     delete d;
 }
 
-Doc* Map::doc() const
+DocBase* Map::doc() const
 {
     return d->doc;
 }

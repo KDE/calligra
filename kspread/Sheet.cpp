@@ -68,7 +68,7 @@
 #include "Condition.h"
 #include "Damages.h"
 #include "DependencyManager.h"
-#include "part/Doc.h" // FIXME detach from part
+#include "DocBase.h"
 #include "FormulaStorage.h"
 #include "Global.h"
 #include "HeaderFooter.h"
@@ -317,7 +317,7 @@ Map* Sheet::map() const
     return d->workbook;
 }
 
-Doc* Sheet::doc() const
+DocBase* Sheet::doc() const
 {
     return d->workbook->doc();
 }
@@ -2332,20 +2332,20 @@ void Sheet::convertPart(const QString & part, KoXmlWriter & xmlWriter) const
                     xmlWriter.addTextNode("???");
                     xmlWriter.endElement();
                 } else if (var == "<author>") {
-                    Doc* sdoc = doc();
+                    DocBase* sdoc = doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
                     text += docInfo->authorInfo("creator");
                     addText(text, xmlWriter);
                 } else if (var == "<email>") {
-                    Doc* sdoc = doc();
+                    DocBase* sdoc = doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
                     text += docInfo->authorInfo("email");
                     addText(text, xmlWriter);
 
                 } else if (var == "<org>") {
-                    Doc* sdoc = doc();
+                    DocBase* sdoc = doc();
                     KoDocumentInfo* docInfo    = sdoc->documentInfo();
 
                     text += docInfo->authorInfo("company");

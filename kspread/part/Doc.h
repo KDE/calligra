@@ -42,6 +42,7 @@
 #include <KoGenStyle.h>
 
 #include "../Global.h"
+#include "../DocBase.h"
 
 #include "../kspread_export.h"
 
@@ -69,7 +70,7 @@ class SheetAccessModel;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT Doc : public KoDocument
+class KSPREAD_EXPORT Doc : public DocBase
 {
     Q_OBJECT
     Q_PROPERTY(int syntaxVersion READ syntaxVersion)
@@ -88,17 +89,6 @@ public:
      */
     ~Doc();
 
-    /**
-     * \ingroup OpenDocument
-     */
-    enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
-
-    /**
-     * @return list of all documents
-     */
-    static QList<Doc*> documents();
-
-    virtual void setReadWrite(bool readwrite = true);
 
     /**
      * @return the MIME type of KSpread document
@@ -106,25 +96,6 @@ public:
     virtual QByteArray mimeType() const {
         return MIME_TYPE;
     }
-
-    /**
-     * @return the Map that belongs to this Document
-     */
-    Map *map() const;
-
-    /**
-     * Returns the syntax version of the currently opened file
-     */
-    int syntaxVersion() const;
-
-    /**
-     * Return a pointer to the resource manager associated with the
-     * document. The resource manager contains
-     * document wide resources * such as variable managers, the image
-     * collection and others.
-     * @see KoCanvasBase::resourceManager()
-     */
-    KoResourceManager *resourceManager() const;
 
     virtual bool completeSaving(KoStore* _store);
 
@@ -140,35 +111,6 @@ public:
      * Main loading method.
      */
     virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
-
-
-    /**
-     * \ingroup OpenDocument
-     * Save the whole document, or just the selection, into OASIS format
-     * When saving the selection, also return the data as plain text and/or plain picture,
-     * which are used to insert into the KMultipleDrag drag object.
-     *
-     * @param store the KoStore to save into
-     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
-     * @param saveFlag either the whole document, or only the selected text/objects.
-     * @param plainText must be set when saveFlag==SaveSelected.
-     *        It returns the plain text format of the saved data, when available.
-     */
-    bool saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag,
-                       QString* plainText = 0);
-
-    /**
-     * \ingroup OpenDocument
-     * Main saving method.
-     */
-    virtual bool saveOdf(SavingContext &documentContext);
-
-    /**
-     * \ingroup OpenDocument
-     * Main loading method.
-     * @see Map::loadOdf
-     */
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
 
     /**
      * \ingroup OpenDocument
@@ -202,8 +144,6 @@ public:
     void loadConfigFromFile();
     bool configLoadFromFile() const;
 
-
-    SheetAccessModel *sheetAccessModel() const;
 
     /**
      * Requests an update of all attached user interfaces (views).
@@ -244,34 +184,12 @@ private:
     Q_DISABLE_COPY(Doc)
 
     class Private;
-    Private * const d;
+    Private * const dd;
 
     /**
      * \ingroup NativeFormat
      */
     void loadPaper(KoXmlElement const & paper);
-
-    /**
-     * \ingroup OpenDocument
-     * Saves the Document related settings.
-     * The actual saving takes place in Map::saveOdfSettings.
-     * @see Map::saveOdfSettings
-     */
-    void saveOdfSettings(KoXmlWriter &settingsWriter);
-
-    /**
-     * \ingroup OpenDocument
-     * Loads the Document related settings.
-     * The actual loading takes place in Map::loadOdfSettings.
-     * @see Map::loadOdfSettings
-     */
-    void loadOdfSettings(const KoXmlDocument&settingsDoc);
-
-    /**
-     * \ingroup OpenDocument
-     * Load the spell checker ignore list.
-     */
-    void loadOdfIgnoreList(const KoOasisSettings& settings);
 };
 
 } // namespace KSpread
