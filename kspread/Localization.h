@@ -24,13 +24,15 @@
 #include <klocale.h>
 #include <KoXmlReader.h>
 
+#include "kspread_export.h"
+
 class QDomElement;
 class QDomDocument;
 
 namespace KSpread
 {
 
-class Localization : public KLocale
+class KSPREAD_EXPORT Localization : public KLocale
 {
 public:
     Localization();

@@ -25,6 +25,8 @@
 
 #include <KoXmlReader.h>
 
+#include "../kspread_export.h"
+
 class KoXmlWriter;
 
 namespace KSpread
@@ -35,7 +37,7 @@ class Map;
 /**
  * OpenDocument, 8.7.1 Table Filter
  */
-class Filter
+class KSPREAD_EXPORT Filter
 {
 public:
     enum Comparison {

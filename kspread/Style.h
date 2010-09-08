@@ -381,7 +381,7 @@ private:
  * \ingroup Style
  * A named cell style.
  */
-class CustomStyle : public Style
+class KSPREAD_EXPORT CustomStyle : public Style
 {
 public:
     /**

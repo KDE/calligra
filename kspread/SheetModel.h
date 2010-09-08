@@ -22,6 +22,8 @@
 
 #include <QAbstractTableModel>
 
+#include "kspread_export.h"
+
 class QItemSelectionRange;
 
 namespace KSpread
@@ -32,7 +34,7 @@ class Sheet;
  * A model for a sheet.
  * \ingroup Model
  */
-class SheetModel : public QAbstractTableModel
+class KSPREAD_EXPORT SheetModel : public QAbstractTableModel
 {
 public:
     explicit SheetModel(Sheet* sheet);

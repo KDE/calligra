@@ -55,13 +55,13 @@ SET (commands_DIR_SRCS
     )
 
 SET (database_DIR_SRCS
-    database/Database.cpp
-    database/DatabaseManager.cpp
+    #database/Database.cpp
+    #database/DatabaseManager.cpp
     database/DatabaseSource.cpp
     database/DatabaseSourceQuery.cpp
     database/DatabaseSourceSql.cpp
     database/DatabaseSourceTable.cpp
-    database/Filter.cpp
+    #database/Filter.cpp
     database/FilterPopup.cpp
     )
 
@@ -127,7 +127,7 @@ SET (part_DIR_SRCS
     part/CanvasItem.cpp
     part/CellTool.cpp
     part/CellToolFactory.cpp
-    part/Digest.cpp
+    #part/Digest.cpp
     part/Doc.cpp
     part/Factory.cpp
     part/Headers.cpp
@@ -180,6 +180,23 @@ SET (ui_DIR_SRCS
 )
 
 SET (kspreadcommon_LIB_SRCS
+    MapModel.cpp
+    PageManager.cpp
+    RegionModel.cpp
+    Selection.cpp
+    tests/inspector.cpp
+    ${chart_DIR_SRCS}
+    ${commands_DIR_SRCS}
+    ${database_DIR_SRCS}
+    ${dialogs_DIR_SRCS}
+    ${functions_DIR_SRCS}
+    ${interfaces_DIR_SRCS}
+    ${part_DIR_SRCS}
+    ${ui_DIR_SRCS}
+    )
+
+set (kspreadodf_LIB_SRCS
+    part/Digest.cpp
     ApplicationSettings.cpp
     Binding.cpp
     BindingManager.cpp
@@ -194,33 +211,22 @@ SET (kspreadcommon_LIB_SRCS
     DocBase.cpp
     Format.cpp
     Formula.cpp
-    Function.cpp
-    FunctionDescription.cpp
-    FunctionModule.cpp
-    FunctionModuleRegistry.cpp
-    FunctionRepository.cpp
     GenValidationStyle.cpp
     HeaderFooter.cpp
     Localization.cpp
     Map.cpp
-    MapModel.cpp
-    SheetAccessModel.cpp
     NamedAreaManager.cpp
     Number.cpp
-    PageManager.cpp
     PrintSettings.cpp
     ProtectableObject.cpp
     RecalcManager.cpp
+    RectStorage.cpp
     Region.cpp
-    RegionModel.cpp
     RowColumnFormat.cpp
-    Selection.cpp
     ShapeApplicationData.cpp
     Sheet.cpp
+    SheetAccessModel.cpp
     SheetModel.cpp
-    SheetPrint.cpp
-    SheetPrint_p.cpp
-    RectStorage.cpp
     Style.cpp
     StyleManager.cpp
     StyleStorage.cpp
@@ -231,35 +237,53 @@ SET (kspreadcommon_LIB_SRCS
     ValueConverter.cpp
     ValueFormatter.cpp
     ValueParser.cpp
-    tests/inspector.cpp
-    ${chart_DIR_SRCS}
-    ${commands_DIR_SRCS}
-    ${database_DIR_SRCS}
-    ${dialogs_DIR_SRCS}
-    ${functions_DIR_SRCS}
-    ${interfaces_DIR_SRCS}
-    ${part_DIR_SRCS}
-    ${ui_DIR_SRCS}
+
+    database/Database.cpp
+    database/DatabaseManager.cpp
+    database/Filter.cpp
+
+    # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libkspreadodf
+    Function.cpp
+    FunctionDescription.cpp
+    FunctionModule.cpp
+    FunctionModuleRegistry.cpp
+    FunctionRepository.cpp
+
+    # TODO: move HeaderFooter from SheetPrint to PrintSettings, and replace SheetPrint with PrintSettings in Sheet to get rid of this dependency
+    SheetPrint.cpp
+    SheetPrint_p.cpp
+
     )
+
+
+kde4_add_library(kspreadodf SHARED ${kspreadodf_LIB_SRCS})
+
+target_link_libraries(kspreadodf komain)
+target_link_libraries(kspreadodf LINK_INTERFACE_LIBRARIES komain)
+
+set_target_properties(kspreadodf PROPERTIES
+   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+)
+install(TARGETS kspreadodf ${INSTALL_TARGETS_DEFAULT_ARGS})
+
 
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
     komain
+    kspreadodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KUTILS_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
-target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES komain )
+target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES komain kspreadodf )
 
 set_target_properties(kspreadcommon PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
 install(TARGETS kspreadcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-
 ########### next target ###############
 
 SET (kspreadpart_PART_SRCS part/Factory_init.cpp )

@@ -30,6 +30,8 @@
 #ifndef KSPREAD_FORMAT
 #define KSPREAD_FORMAT
 
+#include "kspread_export.h"
+
 namespace KSpread
 {
 
@@ -120,9 +122,9 @@ enum Type {
 };
 
 //helper functions for the formatting
-bool isDate(Type type);
-bool isTime(Type type);
-bool isFraction(Type type);
+KSPREAD_EXPORT bool isDate(Type type);
+KSPREAD_EXPORT bool isTime(Type type);
+KSPREAD_EXPORT bool isFraction(Type type);
 
 } // namespace Format
 } // namespace KSpread
