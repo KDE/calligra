@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <QTimer>
+
 #include <kcodecs.h>
 #include <kcompletion.h>
 #include <ktemporaryfile.h>
@@ -67,10 +69,6 @@
 
 // database
 #include "database/DatabaseManager.h"
-
-// D-Bus
-#include "interfaces/MapAdaptor.h"
-#include <QtDBus/QtDBus>
 
 using namespace KSpread;
 
@@ -164,11 +162,6 @@ Map::Map(Doc* doc, int syntaxVersion)
 
     // default document properties
     d->syntaxVersion = syntaxVersion;
-
-    new MapAdaptor(this);
-    if (doc) {
-        QDBusConnection::sessionBus().registerObject('/' + doc->objectName() + '/' + objectName(), this);
-    }
 
     connect(this, SIGNAL(sheetAdded(Sheet*)),
             d->dependencyManager, SLOT(addSheet(Sheet*)));

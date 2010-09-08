@@ -223,6 +223,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
     virtual void openTemplate(const KUrl& url);
 
+    void sheetAdded(Sheet* sheet);
 protected:
 
     KoView* createViewInstance(QWidget* parent);

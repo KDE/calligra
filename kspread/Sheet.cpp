@@ -101,10 +101,6 @@
 #include "commands/RowColumnManipulators.h"
 #include "commands/Undo.h"
 
-// D-Bus
-#include "interfaces/SheetAdaptor.h"
-#include <QtDBus/QtDBus>
-
 namespace KSpread
 {
 
@@ -146,8 +142,6 @@ class Sheet::Private
 public:
     Map* workbook;
     SheetModel *model;
-
-    SheetAdaptor* dbus;
 
     QString name;
 
@@ -208,12 +202,6 @@ Sheet::Sheet(Map* map, const QString &sheetName)
 
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(d->name));
-    new SheetAdaptor(this);
-    QString dbusPath('/' + d->workbook->objectName() + '/' + objectName());
-    if (parent()) {
-        dbusPath.prepend('/' + parent()->objectName());
-    }
-    QDBusConnection::sessionBus().registerObject(dbusPath, this);
 
     d->cellStorage = new CellStorage(this);
     d->rows.setAutoDelete(true);
@@ -262,12 +250,6 @@ Sheet::Sheet(const Sheet &other)
 
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(d->name));
-    new SheetAdaptor(this);
-    QString dbusPath('/' + d->workbook->objectName() + '/' + objectName());
-    if (parent()) {
-        dbusPath.prepend('/' + parent()->objectName());
-    }
-    QDBusConnection::sessionBus().registerObject(dbusPath, this);
 
     d->layoutDirection = other.d->layoutDirection;
     d->hide = other.d->hide;

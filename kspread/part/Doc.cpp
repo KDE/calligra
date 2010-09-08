@@ -100,6 +100,11 @@
 #include "SheetAccessModel.h"
 #include "BindingModel.h"
 
+// D-Bus
+#include "interfaces/MapAdaptor.h"
+#include "interfaces/SheetAdaptor.h"
+#include <QtDBus/QtDBus>
+
 // chart shape
 #include "plugins/chartshape/ChartShape.h"
 #include "chart/ChartDialog.h"
@@ -148,6 +153,10 @@ Doc::Doc(QWidget *parentWidget, QObject* parent, bool singleViewMode)
 {
     d->resourceManager = new KoResourceManager();
     d->map = new Map(this, CURRENT_SYNTAX_VERSION);
+    connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
+    new MapAdaptor(d->map);
+    QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
+
     // Document Url for FILENAME function and page header/footer.
     d->map->calculationSettings()->setFileName(url().prettyUrl());
 
@@ -850,6 +859,17 @@ SheetAccessModel *Doc::sheetAccessModel() const
 KoResourceManager* Doc::resourceManager() const
 {
     return d->resourceManager;
+}
+
+void Doc::sheetAdded(Sheet* sheet)
+{
+    new SheetAdaptor(sheet);
+    QString dbusPath('/' + sheet->map()->objectName() + '/' + objectName());
+    if (sheet->parent()) {
+        dbusPath.prepend('/' + sheet->parent()->objectName());
+    }
+    QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
+
 }
 
 #include "Doc.moc"
