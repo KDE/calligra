@@ -3083,7 +3083,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
         }
     }
 
-    bool checkAttributes = false;
     QString red, green, blue, color;
 
     // This gradient logic should be replace with a more generic one if possible
@@ -3099,7 +3098,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             blue = QString::number(m_currentColor.blue(), 16);
             color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
             m_currentGradientStyle.addAttribute("draw:start-color", color);
-            checkAttributes = true;
         }
         // Case: axial gradient
         if (shades.at(0) > shades.at(1) && shades.at(2) == shades.at(0)) {
@@ -3112,7 +3110,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             blue = QString::number(m_currentColor.blue(), 16);
             color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
             m_currentGradientStyle.addAttribute("draw:start-color", color);
-            checkAttributes = true;
         }
     }
     // Currently used for all other encountered gradient types
@@ -3132,15 +3129,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             blue = QString::number(colors.at(1).blue(), 16);
             color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
             m_currentGradientStyle.addAttribute("draw:end-color", color);
-            checkAttributes = true;
         }
     }
 
-    if (checkAttributes) {
-        if (m_gradRotation) {
-            m_currentGradientStyle.addAttribute("draw:angle", "900");
-        }
-    }
     READ_EPILOGUE
 }
 

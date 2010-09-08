@@ -41,7 +41,7 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class KSPREAD_TEST_EXPORT SheetPrint
+class KSPREAD_EXPORT SheetPrint
 {
 public:
     explicit SheetPrint(Sheet * sheet = 0);

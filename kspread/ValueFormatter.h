@@ -37,7 +37,7 @@ class ValueConverter;
  * \ingroup Value
  * Generates a textual representation of a Value with a given formatting.
  */
-class KSPREAD_TEST_EXPORT ValueFormatter
+class KSPREAD_EXPORT ValueFormatter
 {
 public:
     /**

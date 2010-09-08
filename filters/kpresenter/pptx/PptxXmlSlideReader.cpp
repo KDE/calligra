@@ -1050,7 +1050,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
 
     MSOOXML::DrawingMLFillBase *fillBase = m_context->themes->formatScheme.fillStyles.value(index);
     if (fillBase) {
-        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, 0, m_currentColor);
+        fillBase->writeStyles(*mainStyles, m_currentDrawStyle, m_currentColor);
     }
 
     READ_EPILOGUE
