@@ -285,6 +285,22 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
     d->processEmbeddedObjects(xmlDoc.documentElement(), store);
 
+    // sheet background images
+    for (unsigned i = 0; i < d->workbook->sheetCount(); i++) {
+        Sheet* sheet = d->workbook->sheet(i);
+        KSpread::Sheet* ksheet = map->sheet(i);
+        kDebug() << i << sheet->backgroundImage();
+        if (sheet->backgroundImage().isEmpty()) continue;
+
+        QByteArray data;
+        store->extractFile(sheet->backgroundImage(), data);
+        QImage image = QImage::fromData(data);
+        if (image.isNull()) continue;
+
+        ksheet->setBackgroundImage(image);
+        ksheet->setBackgroundImageProperties(KSpread::Sheet::BackgroundImageProperties());
+    }
+
     delete store;
 
     delete d->workbook;
