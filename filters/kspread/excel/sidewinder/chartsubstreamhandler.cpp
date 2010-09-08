@@ -799,8 +799,8 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
     DEBUG << "wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
 
     Charting::Text *t = dynamic_cast<Charting::Text*>(m_currentObj);
-    //if (!t) return;
-    Q_ASSERT(t);
+    if (!t) return;         // if the current object is not text, just do nothing
+//    Q_ASSERT(t);          // if the current object is not text, terminate
 
     switch(record->wLinkObj()) {
         case ObjectLinkRecord::EntireChart: {
