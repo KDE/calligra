@@ -54,7 +54,6 @@ AlterTableHandler::ActionBase::ActionBase(bool null)
 
 AlterTableHandler::ActionBase::~ActionBase()
 {
-    kDebug() << this;
 }
 
 AlterTableHandler::ChangeFieldPropertyAction& AlterTableHandler::ActionBase::toChangeFieldPropertyAction()
@@ -102,7 +101,6 @@ AlterTableHandler::FieldActionBase::FieldActionBase(bool)
 
 AlterTableHandler::FieldActionBase::~FieldActionBase()
 {
-    kDebug() << this;
 }
 
 //--------------------------------------------------------
@@ -206,7 +204,6 @@ AlterTableHandler::ChangeFieldPropertyAction::ChangeFieldPropertyAction(bool)
 
 AlterTableHandler::ChangeFieldPropertyAction::~ChangeFieldPropertyAction()
 {
-    kDebug() << this;
 }
 
 void AlterTableHandler::ChangeFieldPropertyAction::updateAlteringRequirements()
@@ -489,7 +486,6 @@ AlterTableHandler::RemoveFieldAction::RemoveFieldAction(bool)
 
 AlterTableHandler::RemoveFieldAction::~RemoveFieldAction()
 {
-    kDebug() << this;
 }
 
 void AlterTableHandler::RemoveFieldAction::updateAlteringRequirements()
@@ -568,7 +564,6 @@ AlterTableHandler::InsertFieldAction::InsertFieldAction(bool)
 
 AlterTableHandler::InsertFieldAction::~InsertFieldAction()
 {
-    kDebug() << this;
     delete m_field;
 }
 
@@ -714,7 +709,6 @@ AlterTableHandler::MoveFieldPositionAction::MoveFieldPositionAction(bool)
 
 AlterTableHandler::MoveFieldPositionAction::~MoveFieldPositionAction()
 {
-    kDebug() << this;
 }
 
 void AlterTableHandler::MoveFieldPositionAction::updateAlteringRequirements()
@@ -757,7 +751,6 @@ AlterTableHandler::AlterTableHandler(Connection &conn)
 
 AlterTableHandler::~AlterTableHandler()
 {
-    kDebug() << this;
     delete d;
 }
 
