@@ -148,6 +148,9 @@ private:
     //2.0 WidgetTreeWidgetItem *m_topItem;
     Options m_options;
 
+    //! Used to temporarily disable slotSelectionChanged() when reloading contents in setForm().
+    bool m_slotSelectionChanged_enabled;
+
     friend class TabStopDialog;
 };
 

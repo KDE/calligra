@@ -169,6 +169,7 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
         : QTreeWidget(parent)
         , m_form(0)
         , m_options(options)
+        , m_slotSelectionChanged_enabled(true)
 {
     setRootIsDecorated(false);
     setHeaderLabels(QStringList() << i18n("Widget name") << i18nc("Widget's type", "Type"));
@@ -284,10 +285,10 @@ WidgetTreeWidget::selectWidget(QWidget *w, bool add)
 
 void WidgetTreeWidget::slotSelectionChanged()
 {
-    if (!m_form)
+    if (!m_form || !m_slotSelectionChanged_enabled)
         return;
     const bool hadFocus = hasFocus();
-    QList<QTreeWidgetItem*> list = selectedItems();
+    const QList<QTreeWidgetItem*> list( selectedItems() );
     m_form->selectFormWidget();
     foreach(QTreeWidgetItem *item, list) {
         WidgetTreeWidgetItem *it = static_cast<WidgetTreeWidgetItem*>(item);
@@ -333,6 +334,7 @@ void WidgetTreeWidget::renameItem(const QByteArray &oldname, const QByteArray &n
 
 void WidgetTreeWidget::setForm(Form *form)
 {
+    m_slotSelectionChanged_enabled = false;
     if (m_form)
         disconnect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
     m_form = form;
@@ -358,6 +360,7 @@ void WidgetTreeWidget::setForm(Form *form)
         selectWidget(form->selectedWidgets()->first());
     else
         selectWidget(form->widget());
+    m_slotSelectionChanged_enabled = true;
 }
 
 void WidgetTreeWidget::slotBeforeFormDestroyed()
