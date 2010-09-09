@@ -104,7 +104,7 @@ OLEStreamReader* OLEStreamReader::inflate( int offset ) const
     wvlog << " got " << gbArray->len << " decompressed bytes." << endl;
     //transform it to an unsigned char* buffer (better way to do this?)
     unsigned char* buffer = new unsigned char [gbArray->len];
-    for ( int i = 0; i < gbArray->len; i++ ) {
+    for ( uint i = 0; i < gbArray->len; i++ ) {
         wvlog << (unsigned int) gbArray->data[i];
         buffer[i] = (unsigned char) gbArray->data[i];
     }
