@@ -1313,8 +1313,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     bool pprRead = false;
 
-    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
-
     while (!atEnd()) {
         readNext();
         kDebug() << "isStartElement:" << isStartElement();
@@ -1424,6 +1422,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                          }
                          else {
                              listStyleName = mainStyles->insert(m_currentListStyle);
+                             if (m_context->type == SlideMaster) {
+                                 mainStyles->markStyleForStylesXml(listStyleName);
+                             }
                          }
                          Q_ASSERT(!listStyleName.isEmpty());
                          body->addAttribute("text:style-name", listStyleName);
@@ -1951,6 +1952,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     if (m_listStylePropertiesAltered) {
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+
         // For now we take a stand that any altered style makes its own list.
         m_currentListLevel = 1;
         m_currentListStyleProperties->setLevel(m_currentListLevel);
