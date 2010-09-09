@@ -114,6 +114,11 @@
 #include <part/View.h>
 #include <Sheet.h>
 
+#include "FoImageSelectionWidget.h"
+#include <KoShapeCreateCommand.h>
+#include <KWDocument.h>
+#include <KoShapeLayer.h>
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 //#define Q_WS_MAEMO_5 1
@@ -417,6 +422,12 @@ void MainWindow::init()
     gl_showtime=7000;
     gl_style=0;
 
+    connect(m_ui->actionSelect, SIGNAL(triggered()), this, SLOT(enableSelectTool()));
+    connect(m_ui->actionShowCCP, SIGNAL(triggered()), this, SLOT(showCCP()));
+    connect(m_ui->actionInsert, SIGNAL(triggered()), this, SLOT(insertButtonClicked()));
+    m_ui->actionInsertImage->setVisible(false);
+    connect(m_ui->actionInsertImage, SIGNAL(triggered()), this, SLOT(insertImage()));
+    showCCP();
 }
 
 MainWindow::~MainWindow()
@@ -3873,4 +3884,104 @@ void MainWindow::showDigitalSignatureInfo()
         digitalSignatureDialog->initializeDialog();
         digitalSignatureDialog->exec();
     }
+}
+
+void MainWindow::enableSelectTool()
+{
+    KoToolManager::instance()->switchToolRequested("InteractionTool");
+}
+
+void MainWindow::insertImage()
+{
+    KoShape *shape;
+    KoShapeCreateCommand *cmd;
+    KoSelection *selection;
+    if(m_type == Text) {
+        KWDocument* m_wdoc = qobject_cast<KWDocument*>(m_doc);
+        shape = FoImageSelectionWidget::selectImageShape(m_wdoc->resourceManager(), this);
+        if (shape) {
+            if (m_currentPage) {
+                KWPage kwpage = m_kwview->currentPage();
+                QRectF page = kwpage.rect();
+                // make the shape be on the current page, and fit inside the current page.
+                if (page.width() < shape->size().width() || page.height() < shape->size().height()) {
+                    QSizeF newSize(page.width() * 0.7, page.height() * 0.7);
+                    const qreal xRatio = newSize.width() / shape->size().width();
+                    const qreal yRatio = newSize.height() / shape->size().height();
+                    if (xRatio > yRatio) // then lets make the vertical set the size.
+                        newSize.setWidth(shape->size().width() * yRatio);
+                    else
+                        newSize.setHeight(shape->size().height() * xRatio);
+                    shape->setSize(newSize);
+                }
+                shape->setPosition(page.topLeft());
+                int zIndex = 0;
+                foreach (KoShape *s, qobject_cast<KWView*>(m_doc->createView(this))->canvasBase()->shapeManager()->shapesAt(page))
+                    zIndex = qMax(s->zIndex(), zIndex);
+                shape->setZIndex(zIndex+1);
+            }
+            cmd = new KoShapeCreateCommand(qobject_cast<KWDocument*>(m_doc), shape);
+            selection = qobject_cast<KWView*>(m_doc->createView(this))->canvasBase()->shapeManager()->selection();
+            selection->deselectAll();
+            selection->select(shape);
+            m_doc->addCommand(cmd);
+        }
+    }
+    if(m_type == Presentation) {
+        KoPADocument *m_prdoc = qobject_cast<KoPADocument *>(m_doc);
+        int pageIndex = m_controller->canvas()->resourceManager()->resource(KoCanvasResource::CurrentPage).toInt() - 1;
+        KoPAPageBase *kprpage = m_prdoc->pageByIndex( pageIndex, false);
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer *>(kprpage->shapes().first());
+        shape = FoImageSelectionWidget::selectImageShape(m_prdoc->resourceManager(), this);
+        if(!shape)
+            return;
+        shape->setParent(&(*layer));
+        int zIndex = 0;
+        QRectF page = kprpage->contentRect();
+        if (page.width() < shape->size().width() || page.height() < shape->size().height()) {
+            QSizeF newSize(page.width() * 0.7, page.height() * 0.7);
+            const qreal xRatio = newSize.width() / shape->size().width();
+            const qreal yRatio = newSize.height() / shape->size().height();
+            if (xRatio > yRatio) // then lets make the vertical set the size.
+                newSize.setWidth(shape->size().width() * yRatio);
+            else
+                newSize.setHeight(shape->size().height() * xRatio);
+            shape->setSize(newSize);
+        }
+        foreach (KoShape *s, m_controller->canvas()->shapeManager()->shapesAt(page))
+            zIndex = qMax(s->zIndex(), zIndex);
+        shape->setZIndex(zIndex);
+        //        shape->setPosition(page.center());
+        cmd = new KoShapeCreateCommand(m_prdoc, shape);
+        m_prdoc->addCommand(cmd);
+    }
+
+    showInsertAction();
+}
+
+void MainWindow::insertButtonClicked()
+{
+    m_ui->actionInsert->setVisible(false);
+    m_ui->actionInsertImage->setVisible(true);
+}
+
+void MainWindow::showCCP()
+{
+    if(!m_ui->actionShowCCP->isChecked()) {
+        m_ui->actionShowCCP->setChecked(false);
+        m_ui->actionCopy->setVisible(false);
+        m_ui->actionCut->setVisible(false);
+        m_ui->actionPaste->setVisible(false);
+        return;
+    }
+    m_ui->actionShowCCP->setChecked(true);
+    m_ui->actionCopy->setVisible(true);
+    m_ui->actionCut->setVisible(true);
+    m_ui->actionPaste->setVisible(true);
+}
+
+void MainWindow::showInsertAction()
+{
+    m_ui->actionInsert->setVisible(true);
+    m_ui->actionInsertImage->setVisible(false);
 }
