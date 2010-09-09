@@ -30,6 +30,8 @@
 #include <knewpassworddialog.h>
 #include <KPasswordDialog>
 
+#include <QPointer>
+
 using namespace KSpread;
 
 void ProtectableObject::password(QByteArray & password) const
@@ -55,29 +57,31 @@ bool ProtectableObject::checkPassword(QByteArray const & password) const
 bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QString& title)
 {
     if (mode == Lock) {
-        KNewPasswordDialog dlg(parent);
-        dlg.setPrompt(i18n("Enter a password."));
-        dlg.setWindowTitle(title);
-        if (dlg.exec() != KPasswordDialog::Accepted) {
+        QPointer<KNewPasswordDialog> dlg = new KNewPasswordDialog(parent);
+        dlg->setPrompt(i18n("Enter a password."));
+        dlg->setWindowTitle(title);
+        if (dlg->exec() != KPasswordDialog::Accepted) {
             return false;
         }
+        delete dlg;
 
         QByteArray hash;
-        QString password = dlg.password();
+        QString password = dlg->password();
         if (password.length() > 0) {
             SHA1::getHash(password, hash);
         }
         m_password = hash;
     } else { /* Unlock */
-        KPasswordDialog dlg(parent);
-        dlg.setPrompt(i18n("Enter the password."));
-        dlg.setWindowTitle(title);
-        if (dlg.exec() != KPasswordDialog::Accepted) {
+        QPointer<KPasswordDialog> dlg = new KPasswordDialog(parent);
+        dlg->setPrompt(i18n("Enter the password."));
+        dlg->setWindowTitle(title);
+        if (dlg->exec() != KPasswordDialog::Accepted) {
             return false;
         }
+        delete dlg;
 
         QByteArray hash("");
-        QString password(dlg.password());
+        QString password(dlg->password());
         if (password.length() > 0) {
             SHA1::getHash(password, hash);
         }

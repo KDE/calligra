@@ -143,20 +143,21 @@ void NamedAreaDialog::slotClose()
 
 void NamedAreaDialog::slotNew()
 {
-    EditNamedAreaDialog dialog(this, m_selection);
-    dialog.setCaption(i18n("New Named Area"));
-    dialog.setRegion(*m_selection);
-    dialog.exec();
-    if (dialog.result() == Rejected)
+    QPointer<EditNamedAreaDialog> dialog = new EditNamedAreaDialog(this, m_selection);
+    dialog->setCaption(i18n("New Named Area"));
+    dialog->setRegion(*m_selection);
+    dialog->exec();
+    if (dialog->result() == Rejected)
         return;
-    if (dialog.areaName().isEmpty())
+    if (dialog->areaName().isEmpty())
         return;
 
-    m_list->addItem(dialog.areaName());
-    QList<QListWidgetItem*> items = m_list->findItems(dialog.areaName(),
+    m_list->addItem(dialog->areaName());
+    QList<QListWidgetItem*> items = m_list->findItems(dialog->areaName(),
                                     Qt::MatchExactly | Qt::MatchCaseSensitive);
     m_list->setCurrentItem(items.first());
-    displayAreaValues(dialog.areaName());
+    displayAreaValues(dialog->areaName());
+    delete dialog;
 
     enableButtonOk(true);
     enableButton(KDialog::User1, true);
@@ -169,15 +170,16 @@ void NamedAreaDialog::slotEdit()
     if (item->text().isEmpty())
         return;
 
-    EditNamedAreaDialog dialog(this, m_selection);
-    dialog.setCaption(i18n("Edit Named Area"));
-    dialog.setAreaName(item->text());
-    dialog.exec();
-    if (dialog.result() == Rejected)
+    QPointer<EditNamedAreaDialog> dialog = new EditNamedAreaDialog(this, m_selection);
+    dialog->setCaption(i18n("Edit Named Area"));
+    dialog->setAreaName(item->text());
+    dialog->exec();
+    if (dialog->result() == Rejected)
         return;
 
-    item->setText(dialog.areaName());
-    displayAreaValues(dialog.areaName());
+    item->setText(dialog->areaName());
+    displayAreaValues(dialog->areaName());
+    delete dialog;
 }
 
 void NamedAreaDialog::slotRemove()

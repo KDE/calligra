@@ -1545,8 +1545,9 @@ void CellToolBase::sheetProtectionToggled(bool protect)
 
 void CellToolBase::cellStyle()
 {
-    CellFormatDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<CellFormatDialog> dialog = new CellFormatDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::setDefaultStyle()
@@ -1562,8 +1563,9 @@ void CellToolBase::styleDialog()
 {
     Map* const map = selection()->activeSheet()->map();
     StyleManager* const styleManager = map->styleManager();
-    StyleManagerDialog dialog(canvas()->canvasWidget(), selection(), styleManager);
-    dialog.exec();
+    QPointer<StyleManagerDialog> dialog = new StyleManagerDialog(canvas()->canvasWidget(), selection(), styleManager);
+    dialog->exec();
+    delete dialog;
 
     static_cast<KSelectAction*>(action("setStyle"))->setItems(styleManager->styleNames());
     if (selection()->activeSheet())
@@ -1961,8 +1963,9 @@ void CellToolBase::decreaseIndentation()
 
 void CellToolBase::changeAngle()
 {
-    AngleDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<AngleDialog> dialog = new AngleDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::percent(bool enable)
@@ -2121,8 +2124,9 @@ void CellToolBase::resizeColumn()
     if (selection()->isRowSelected())
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
-        ResizeColumn dialog(canvas()->canvasWidget(), selection());
-        dialog.exec();
+        QPointer<ResizeColumn> dialog = new ResizeColumn(canvas()->canvasWidget(), selection());
+        dialog->exec();
+        delete dialog;
     }
 }
 
@@ -2174,8 +2178,9 @@ void CellToolBase::showColumn()
 
 void CellToolBase::slotShowColumnDialog()
 {
-    ShowColRow dialog(canvas()->canvasWidget(), selection(), ShowColRow::Column);
-    dialog.exec();
+    QPointer<ShowColRow> dialog = new ShowColRow(canvas()->canvasWidget(), selection(), ShowColRow::Column);
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::equalizeColumn()
@@ -2223,8 +2228,9 @@ void CellToolBase::resizeRow()
     if (selection()->isColumnSelected())
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
-        ResizeRow dialog(canvas()->canvasWidget(), selection());
-        dialog.exec();
+        QPointer<ResizeRow> dialog = new ResizeRow(canvas()->canvasWidget(), selection());
+        dialog->exec();
+        delete dialog;
     }
 }
 
@@ -2276,8 +2282,9 @@ void CellToolBase::showRow()
 
 void CellToolBase::slotShowRowDialog()
 {
-    ShowColRow dialog(canvas()->canvasWidget(), selection(), ShowColRow::Row);
-    dialog.exec();
+    QPointer<ShowColRow> dialog = new ShowColRow(canvas()->canvasWidget(), selection(), ShowColRow::Row);
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::equalizeRow()
@@ -2332,14 +2339,16 @@ void CellToolBase::adjust()
 
 void CellToolBase::insertCells()
 {
-    InsertDialog dialog(canvas()->canvasWidget(), selection(), InsertDialog::Insert);
-    dialog.exec();
+    QPointer<InsertDialog> dialog = new InsertDialog(canvas()->canvasWidget(), selection(), InsertDialog::Insert);
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::deleteCells()
 {
-    InsertDialog dialog(canvas()->canvasWidget(), selection(), InsertDialog::Remove);
-    dialog.exec();
+    QPointer<InsertDialog> dialog = new InsertDialog(canvas()->canvasWidget(), selection(), InsertDialog::Remove);
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::clearAll()
@@ -2369,8 +2378,9 @@ void CellToolBase::clearContents()
 
 void CellToolBase::comment()
 {
-    CommentDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<CommentDialog> dialog = new CommentDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::clearComment()
@@ -2389,8 +2399,9 @@ void CellToolBase::clearComment()
 
 void CellToolBase::conditional()
 {
-    ConditionalDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<ConditionalDialog> dialog = new ConditionalDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::clearConditionalStyles()
@@ -2413,7 +2424,7 @@ void CellToolBase::insertHyperlink()
     QPoint marker(selection()->marker());
     Cell cell(selection()->activeSheet(), marker);
 
-    LinkDialog* dialog = new LinkDialog(canvas()->canvasWidget(), selection());
+    QPointer<LinkDialog> dialog = new LinkDialog(canvas()->canvasWidget(), selection());
     dialog->setWindowTitle(i18n("Insert Link"));
     if (!cell.isNull()) {
         dialog->setText(cell.userInput());
@@ -2452,8 +2463,9 @@ void CellToolBase::clearHyperlink()
 
 void CellToolBase::validity()
 {
-    ValidityDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<ValidityDialog> dialog = new ValidityDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::clearValidity()
@@ -2476,8 +2488,9 @@ void CellToolBase::sort()
         return;
     }
 
-    SortDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<SortDialog> dialog = new SortDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::sortInc()
@@ -2646,8 +2659,9 @@ void CellToolBase::autoSum()
 void CellToolBase::insertSeries()
 {
     selection()->emitAboutToModify();
-    SeriesDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<SeriesDialog> dialog = new SeriesDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::insertSpecialChar()
@@ -2714,8 +2728,9 @@ void CellToolBase::insertFromDatabase()
         return;
     }
 
-    DatabaseDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<DatabaseDialog> dialog = new DatabaseDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 #endif
 }
 
@@ -2723,22 +2738,24 @@ void CellToolBase::insertFromTextfile()
 {
     selection()->emitAboutToModify();
 
-    CSVDialog dialog(canvas()->canvasWidget(), selection(), CSVDialog::File);
-    dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog.canceled())
-        dialog.exec();
+    QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::File);
+    dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
+    if (!dialog->canceled())
+        dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::insertFromClipboard()
 {
     selection()->emitAboutToModify();
 
-    CSVDialog dialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
-    dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog.canceled())
-        dialog.exec();
+    QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
+    dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
+    if (!dialog->canceled())
+        dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::textToColumns()
@@ -2750,19 +2767,21 @@ void CellToolBase::textToColumns()
     Region oldSelection = *selection(); // store
     selection()->initialize(area);
 
-    CSVDialog dialog(canvas()->canvasWidget(), selection(), CSVDialog::Column);
-    dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog.canceled())
-        dialog.exec();
+    QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Column);
+    dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
+    if (!dialog->canceled())
+        dialog->exec();
     else
         selection()->initialize(oldSelection);
+    delete dialog;
 }
 
 void CellToolBase::sortList()
 {
-    ListDialog dialog(canvas()->canvasWidget());
-    dialog.exec();
+    QPointer<ListDialog> dialog = new ListDialog(canvas()->canvasWidget());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::consolidate()
@@ -2787,20 +2806,23 @@ void CellToolBase::subtotals()
         return;
     }
 
-    SubtotalDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<SubtotalDialog> dialog = new SubtotalDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::setAreaName()
 {
-    AddNamedAreaDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<AddNamedAreaDialog> dialog = new AddNamedAreaDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::namedAreaDialog()
 {
-    NamedAreaDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<NamedAreaDialog> dialog = new NamedAreaDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::formulaSelection(const QString& expression)
@@ -2969,10 +2991,11 @@ bool CellToolBase::paste()
 
 void CellToolBase::specialPaste()
 {
-    SpecialPasteDialog dialog(canvas()->canvasWidget(), selection());
-    if (dialog.exec()) {
+    QPointer<SpecialPasteDialog> dialog = new SpecialPasteDialog(canvas()->canvasWidget(), selection());
+    if (dialog->exec()) {
         selection()->emitModified();
     }
+    delete dialog;
 }
 
 void CellToolBase::pasteWithInsertion()
@@ -2986,8 +3009,9 @@ void CellToolBase::pasteWithInsertion()
         command->setInsertionMode(PasteCommand::ShiftCells);
         command->execute(canvas());
     } else {
-        PasteInsertDialog dialog(canvas()->canvasWidget(), selection());
-        dialog.exec();
+        QPointer<PasteInsertDialog> dialog= new PasteInsertDialog(canvas()->canvasWidget(), selection());
+        dialog->exec();
+        delete dialog;
     }
     d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
 }
@@ -3004,22 +3028,22 @@ void CellToolBase::selectAll()
 
 void CellToolBase::find()
 {
-    FindDlg dialog(canvas()->canvasWidget(), "Find", d->findOptions, d->findStrings);
-    dialog.setHasSelection(!selection()->isSingular());
-    dialog.setHasCursor(true);
-    if (KFindDialog::Accepted != dialog.exec())
+    QPointer<FindDlg> dialog = new FindDlg(canvas()->canvasWidget(), "Find", d->findOptions, d->findStrings);
+    dialog->setHasSelection(!selection()->isSingular());
+    dialog->setHasCursor(true);
+    if (KFindDialog::Accepted != dialog->exec())
         return;
 
     // Save for next time
-    d->findOptions = dialog.options();
-    d->findStrings = dialog.findHistory();
-    d->typeValue = dialog.searchType();
-    d->directionValue = dialog.searchDirection();
+    d->findOptions = dialog->options();
+    d->findStrings = dialog->findHistory();
+    d->typeValue = dialog->searchType();
+    d->directionValue = dialog->searchDirection();
 
     // Create the KFind object
     delete d->find;
     delete d->replace;
-    d->find = new KFind(dialog.pattern(), dialog.options(), canvas()->canvasWidget());
+    d->find = new KFind(dialog->pattern(), dialog->options(), canvas()->canvasWidget());
     d->replace = 0;
     d->replaceCommand = 0;
 
@@ -3028,6 +3052,7 @@ void CellToolBase::find()
 
     initFindReplace();
     findNext();
+    delete dialog;
 }
 
 // Initialize a find or replace operation, using d->find or d->replace,
@@ -3219,16 +3244,16 @@ void CellToolBase::findPrevious()
 
 void CellToolBase::replace()
 {
-    SearchDlg dialog(canvas()->canvasWidget(), "Replace", d->findOptions, d->findStrings, d->replaceStrings);
-    dialog.setHasSelection(!selection()->isSingular());
-    dialog.setHasCursor(true);
-    if (KReplaceDialog::Accepted != dialog.exec())
+    QPointer<SearchDlg> dialog = new SearchDlg(canvas()->canvasWidget(), "Replace", d->findOptions, d->findStrings, d->replaceStrings);
+    dialog->setHasSelection(!selection()->isSingular());
+    dialog->setHasCursor(true);
+    if (KReplaceDialog::Accepted != dialog->exec())
         return;
 
-    d->findOptions = dialog.options();
-    d->findStrings = dialog.findHistory();
-    d->replaceStrings = dialog.replacementHistory();
-    d->typeValue = dialog.searchType();
+    d->findOptions = dialog->options();
+    d->findStrings = dialog->findHistory();
+    d->replaceStrings = dialog->replacementHistory();
+    d->typeValue = dialog->searchType();
 
     delete d->find;
     delete d->replace;
@@ -3237,9 +3262,9 @@ void CellToolBase::replace()
     //              will lead to an infinite loop (Bug #125535). The reason
     //              for this is unclear to me, but who cares and who would
     //              want to do something like this, häh?!
-    if (dialog.pattern() == "^" && dialog.replacement().isEmpty())
+    if (dialog->pattern() == "^" && dialog->replacement().isEmpty())
         return;
-    d->replace = new KReplace(dialog.pattern(), dialog.replacement(), dialog.options());
+    d->replace = new KReplace(dialog->pattern(), dialog->replacement(), dialog->options());
 
     d->searchInSheets.currentSheet = selection()->activeSheet();
     d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
@@ -3250,6 +3275,7 @@ void CellToolBase::replace()
     d->replaceCommand = new QUndoCommand(i18n("Replace"));
 
     findNext();
+    delete dialog;
 
 #if 0
     // Refresh the editWidget
@@ -3294,8 +3320,9 @@ void CellToolBase::slotReplace(const QString &newText, int, int, int)
 
 void CellToolBase::gotoCell()
 {
-    GotoDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<GotoDialog> dialog = new GotoDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
     scrollToCell(selection()->cursor());
 }
 
@@ -3309,7 +3336,7 @@ void CellToolBase::inspector()
 {
     // useful to inspect objects
     Cell cell(selection()->activeSheet(), selection()->marker());
-    KSpread::Inspector* ins = new KSpread::Inspector(cell);
+    QPointer<KSpread::Inspector> ins = new KSpread::Inspector(cell);
     ins->exec();
     delete ins;
 }
@@ -3317,7 +3344,7 @@ void CellToolBase::inspector()
 void CellToolBase::qTableView()
 {
 #ifndef NDEBUG
-    KDialog* const dialog = new KDialog(canvas()->canvasWidget());
+    QPointer<KDialog> dialog = new KDialog(canvas()->canvasWidget());
     QTableView* const view = new QTableView(dialog);
     SheetModel* const model = new SheetModel(selection()->activeSheet());
     view->setModel(model);
@@ -3331,8 +3358,9 @@ void CellToolBase::qTableView()
 
 void CellToolBase::sheetFormat()
 {
-    AutoFormatDialog dialog(canvas()->canvasWidget(), selection());
-    dialog.exec();
+    QPointer<AutoFormatDialog> dialog = new AutoFormatDialog(canvas()->canvasWidget(), selection());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::listChoosePopupMenu()
@@ -3424,8 +3452,9 @@ void CellToolBase::listChooseItemSelected(QAction* action)
 
 void CellToolBase::documentSettingsDialog()
 {
-    DocumentSettingsDialog dialog(selection(), canvas()->canvasWidget());
-    dialog.exec();
+    QPointer<DocumentSettingsDialog> dialog = new DocumentSettingsDialog(selection(), canvas()->canvasWidget());
+    dialog->exec();
+    delete dialog;
 }
 
 void CellToolBase::breakBeforeColumn(bool enable)

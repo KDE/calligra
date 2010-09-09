@@ -23,6 +23,7 @@
 
 #include <QLayout>
 #include <QGridLayout>
+#include <QPointer>
 
 #include <klocale.h>
 #include <kcharselect.h>
@@ -112,7 +113,7 @@ bool CharSelectDia::selectChar(QString &_font, QChar &_chr, QWidget* parent, con
 {
     bool res = false;
 
-    CharSelectDia *dlg = new CharSelectDia(parent, name, _chr, _font);
+    QPointer<CharSelectDia> dlg = new CharSelectDia(parent, name, _chr, _font);
     dlg->setFocus();
     if (dlg->exec() == Accepted) {
         _font = dlg->font();
