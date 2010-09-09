@@ -3075,6 +3075,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
 
     m_colorType = GradientColor;
     m_gradRotation = false;
+    m_gradPosition = 0;
 
     TRY_READ_ATTR_WITHOUT_NS(rotWithShape)
     if (rotWithShape == "1") {
@@ -3107,7 +3108,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
     READ_PROLOGUE
 
     QVector<QColor> colors;
-    QVector<int> shades;
+    QVector<int> positions;
 
     while (!atEnd()) {
         readNext();
@@ -3116,58 +3117,32 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             if (QUALIFIED_NAME_IS(gs)) {
                 TRY_READ(gs)
                 colors.push_back(m_currentColor);
-                shades.push_back(m_currentShadeLevel);
+                positions.push_back(m_gradPosition);
             }
         }
     }
 
-    QString red, green, blue, color;
-
+    bool gradFilled = false;
     // This gradient logic should be replace with a more generic one if possible
-    if (colors.size() == 3 && shades.size() == 3) {
-        // Case: traditional gradient
-        if (shades.at(0) < shades.at(1) && shades.at(1) < shades.at(2)) {
-            m_currentGradientStyle.addAttribute("draw:style", "linear");
-            m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
-            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
-            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(2)));
-            red = QString::number(m_currentColor.red(), 16);
-            green = QString::number(m_currentColor.green(), 16);
-            blue = QString::number(m_currentColor.blue(), 16);
-            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
-            m_currentGradientStyle.addAttribute("draw:start-color", color);
-        }
+    if (colors.size() == 3) {
         // Case: axial gradient
-        if (shades.at(0) > shades.at(1) && shades.at(2) == shades.at(0)) {
+        if (positions.at(0) == 0 && positions.at(1) == 50  && positions.at(2) == 100 &&
+            colors.at(0) == colors.at(2) && colors.at(0) != colors.at(1)) {
             m_currentGradientStyle.addAttribute("draw:style", "axial");
-            m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
-            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
-            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(2)));
-            red = QString::number(m_currentColor.red(), 16);
-            green = QString::number(m_currentColor.green(), 16);
-            blue = QString::number(m_currentColor.blue(), 16);
-            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
-            m_currentGradientStyle.addAttribute("draw:start-color", color);
+            m_currentGradientStyle.addAttribute("draw:end-color", colors.at(0).name());
+            m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
+            m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+            m_currentGradientStyle.addAttribute("draw:start-color", colors.at(1).name());
+            gradFilled = true;
         }
     }
     // Currently used for all other encountered gradient types
-    else if (colors.size() > 1 && shades.size() > 1) {
-        if (shades.at(0) < shades.at(1)) {
-            m_currentGradientStyle.addAttribute("draw:style", "linear");
-            m_currentGradientStyle.addAttribute("draw:end-color", "#000000");
-            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1\%").arg(shades.at(0)));
-            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1\%").arg(shades.at(1)));
-            red = QString::number(colors.at(0).red(), 16);
-            green = QString::number(colors.at(0).green(), 16);
-            blue = QString::number(colors.at(0).blue(), 16);
-            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
-            m_currentGradientStyle.addAttribute("draw:start-color", color);
-            red = QString::number(colors.at(1).red(), 16);
-            green = QString::number(colors.at(1).green(), 16);
-            blue = QString::number(colors.at(1).blue(), 16);
-            color = QString("#%1%2%3").arg(red).arg(green).arg(blue);
-            m_currentGradientStyle.addAttribute("draw:end-color", color);
-        }
+    if (colors.size() > 1 && !gradFilled) {
+        m_currentGradientStyle.addAttribute("draw:style", "linear");
+        m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
+        m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+        m_currentGradientStyle.addAttribute("draw:start-color", colors.at(0).name());
+        m_currentGradientStyle.addAttribute("draw:end-color", colors.at(colors.size()-1).name());
     }
 
     READ_EPILOGUE
@@ -3192,8 +3167,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(pos)
 
-    m_currentShadeLevel = 0;
+    m_gradPosition = pos.toInt() / 1000;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);

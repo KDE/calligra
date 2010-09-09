@@ -1102,6 +1102,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
                 fillImageName = mainStyles->insert(fillImageStyle);
                 kDebug() << fillImageName;
             }
+            else if (qualifiedName() == QLatin1String("a:gradFill")) {
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                TRY_READ_IF_NS(a, gradFill)
+                m_currentDrawStyle->addProperty("draw:fill", "gradient");
+                const QString gradName = mainStyles->insert(m_currentGradientStyle);
+                m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
+            }
+
 /*            else if (qualifiedName() == QLatin1String("a:tile")) {
                 TRY_READ(tile)
                 foundTile = true;
