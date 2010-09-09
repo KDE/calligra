@@ -209,6 +209,275 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     }
 }
 
+class Line
+{
+public:
+    Line() {
+        m_lineRect = QRectF();
+        m_updateValidOutlines = false;
+        m_horizontalPosition = 0;
+        m_processingLine = false;
+    }
+    void createLine(KoTextDocumentLayout::LayoutState *state) {
+        m_state = state;
+        line = m_state->layout->createLine();
+    }
+    bool isValid() const {
+        return line.isValid();
+    }
+    void tryFit() {
+        const qreal leftIndent = m_state->x();
+        const qreal width = m_state->width();
+        QRectF rect(leftIndent, m_state->y(), width, 1.);
+        line.setLineWidth(rect.width());
+        if (rect.width() <= 0. || line.textLength() == 0) {
+            // margin so small that the text can't fit.
+            if (m_state->layout->lineCount() > 1
+                    || m_state->layout->text().length() > 0) // parag not empty
+                line.setNumColumns(1); // allow at least one char.
+            line.setPosition(QPointF(rect.x(), rect.y()));
+            return;
+        }
+        rect = limit(rect);
+        qreal movedDown = 0;
+        qreal eligableTop = rect.top();
+        while (true) {
+            if (m_state->numColumns() > 0) {
+                line.setNumColumns(m_state->numColumns());
+                line.setPosition(QPointF(line.x(), rect.y()));
+            } else {
+                qreal x = rect.x();
+                qreal effectiveLineWidth = rect.width();
+                if (leftIndent < x) { // limit moved the left edge, keep the indent.
+                    x += leftIndent;
+                    effectiveLineWidth -= leftIndent;
+                }
+                line.setLineWidth(effectiveLineWidth);
+                line.setPosition(QPointF(x, rect.y()));
+            }
+            rect.setHeight(line.height());
+
+            QRectF newLine = limit(rect);
+            if (newLine.width() <= 0 || line.textLength() == 0
+                    || line.cursorToX(line.textStart()+1) > newLine.right()) {
+                const int Move = 10;
+                movedDown += Move;
+                if (movedDown > m_state->shape->size().height() * 1.3) {
+                    // TODO the magic number of shape height needs some history
+                    // investigation here.
+                    rect = QRectF(leftIndent, eligableTop, width, rect.height());
+                    break;
+                }
+                if (newLine.width() > 0) {
+                    // at least one char fits
+                    eligableTop = rect.top();
+                }
+
+                rect = QRectF(leftIndent, rect.top() + Move, width, rect.height());
+            } else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right()
+                        - rect.right()) < 1E-10) {
+                break;
+            } else if (newLine.isValid()) {
+                rect = newLine;
+            } else {
+                break;
+            }
+        }
+    }
+    void setOutlines(const QList<Outline*> &outlines) {
+        m_outlines = &outlines;
+    }
+    QTextLine line;
+private:
+    QRectF limit(const QRectF &rect) {
+        QRectF answer = rect;
+        foreach (Outline *outline, *m_outlines) {
+            answer = outline->limit(answer);
+        }
+
+        return answer;
+    }
+    KoTextDocumentLayout::LayoutState *m_state;
+    const QList<Outline*> *m_outlines;
+//----------------------------------------------------------------------------------------------------------------
+public:
+    bool processingLine() {
+        return m_processingLine;
+    }
+    void updateOutline(Outline *outline) {
+        QRectF outlineLineRect = outline->cropToLine(m_lineRect);
+        if (outlineLineRect.isValid()) {
+            m_updateValidOutlines = true;
+        }
+    }
+    void fit(const bool resetHorizontalPosition = false) {
+        if (resetHorizontalPosition) {
+            m_horizontalPosition = 0;
+            m_processingLine = false;
+        }
+        const qreal maxLineWidth = m_state->width();
+        line.setLineWidth(maxLineWidth);
+        const qreal maxLineHeight = line.height();
+        const qreal maxNaturalTextWidth = line.naturalTextWidth();
+        if (maxLineWidth <= 0. || line.textLength() == 0) {
+            // margin so small that the text can't fit.
+            if (m_state->layout->lineCount() > 1
+                    || m_state->layout->text().length() > 0) // parag not empty
+                line.setNumColumns(1); // allow at least one char.
+            line.setPosition(QPointF(m_state->x(), m_state->y()));
+            return;
+        }
+        QRectF lineRect(m_state->x(), m_state->y(), maxLineWidth, maxLineHeight);
+        QRectF lineRectPart;
+        qreal movedDown = 0;
+        if (m_state->maxLineHeight() > 0) {
+            movedDown = m_state->maxLineHeight();
+        } else {
+            movedDown = 10;
+        }
+        while (!lineRectPart.isValid()) {
+            lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
+            if (!lineRectPart.isValid()) {
+                m_horizontalPosition = 0;
+                lineRect = QRectF(m_state->x(), m_state->y() + movedDown, maxLineWidth, maxLineHeight);
+                movedDown += 10;
+            }
+        }
+        line.setLineWidth(m_textWidth);
+        line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
+        checkEndOfLine(lineRectPart, maxNaturalTextWidth);
+    }
+private:
+    QList<Outline*> m_validOutlines;
+    QList<QRectF> m_lineParts;
+    QRectF m_lineRect;
+    qreal m_horizontalPosition;
+    bool m_updateValidOutlines;
+    bool m_processingLine;
+    qreal m_textWidth;
+
+    void validateOutlines() {
+        m_validOutlines.clear();
+        foreach (Outline *outline, *m_outlines) {
+            validateOutline(outline);
+        }
+    }
+    void validateOutline(Outline *outline) {
+        QRectF outlineLineRect = outline->cropToLine(m_lineRect);
+        if (outlineLineRect.isValid()) {
+            m_validOutlines.append(outline);
+        }
+    }
+    void createLineParts() {
+        m_lineParts.clear();
+        if (m_validOutlines.isEmpty()) {
+            //add whole line rect
+            m_lineParts.append(m_lineRect);
+        } else {
+            //add line rect parts
+            qSort(m_validOutlines.begin(), m_validOutlines.end(), Outline::compareRectLeft);
+            QRectF rightLineRect = m_lineRect;
+            Outline *prevValidOutline = 0;
+            foreach (Outline *validOutline, m_validOutlines) {
+                QRectF leftLineRect = validOutline->getLeftLinePart(rightLineRect);
+                if (leftLineRect.isValid() && validOutline->textOnLeft()) {
+                    if (!prevValidOutline || prevValidOutline->textOnRight()) {
+                        m_lineParts.append(leftLineRect);
+                    }
+                }
+                rightLineRect = validOutline->getRightLinePart(rightLineRect);
+                if (!rightLineRect.isValid()) {
+                    break;
+                }
+                prevValidOutline = validOutline;
+            }
+            if (rightLineRect.isValid()) {
+                if (!prevValidOutline || prevValidOutline->textOnRight()) {
+                    m_lineParts.append(rightLineRect);
+                }
+            }
+        }
+    }
+    QRectF getMinLineRect(const QRectF &lineRect) {
+        QRectF lineRectBase = lineRect;
+        m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
+        if (m_textWidth > m_state->width()) {
+            m_textWidth = m_state->width();
+        }
+        line.setLineWidth(m_textWidth);
+        lineRectBase.setHeight(line.height());
+        return lineRectBase;
+    }
+    void updateLineParts(const QRectF &lineRect) {
+        if (m_lineRect != lineRect || m_updateValidOutlines) {
+            m_lineRect = lineRect;
+            m_updateValidOutlines = false;
+            validateOutlines();
+            createLineParts();
+        }
+    }
+    QRectF getLineRectPart() {
+        //TODO korinpa: use binary search tree ?
+        QRectF retVal;
+        foreach (QRectF lineRectPart, m_lineParts) {
+            if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
+                retVal = lineRectPart;
+                break;
+            }
+        }
+        return retVal;
+    }
+    void setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
+        qreal width = m_textWidth;
+        qreal maxWidth = minLineRectPart.width() - leftIndent;
+        qreal height;
+        qreal maxHeight = minLineRectPart.height();
+        qreal widthDiff = maxWidth - width;
+        //TODO korinpa: use binary shift ?
+        widthDiff /= 2;
+        while (width <= maxWidth && width <= maxNaturalTextWidth && widthDiff > MIN_WIDTH) {
+            line.setLineWidth(width + widthDiff);
+            height = line.height();
+            if (height <= maxHeight) {
+                width = width + widthDiff;
+                m_textWidth = width;
+            }
+            widthDiff /= 2;
+        }
+    }
+    QRectF getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
+        const qreal leftIndent = lineRect.left();
+        QRectF minLineRect = getMinLineRect(lineRect);
+        updateLineParts(minLineRect);
+        QRectF lineRectPart = getLineRectPart();
+        if (lineRectPart.isValid()) {
+            qreal x = lineRectPart.x();
+            qreal width = lineRectPart.width();
+            if (leftIndent < x) { // limit moved the left edge, keep the indent.
+                x += leftIndent;
+                width -= leftIndent;
+            }
+            line.setLineWidth(width);
+            if (line.height() > lineRectPart.height()) {
+                setMaxTextWidth(lineRectPart, leftIndent, maxNaturalTextWidth);
+            } else {
+                m_textWidth = width;
+            }
+        }
+        return lineRectPart;
+    }
+    void checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
+        if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
+            m_horizontalPosition = 0;
+            m_processingLine = false;
+        } else {
+            m_horizontalPosition = lineRectPart.right();
+            m_processingLine = true;
+        }
+    }
+};
+
+
 void KWTextDocumentLayout::layout()
 {
     TDEBUG << "starting layout pass" << ((void*)document())
@@ -243,6 +512,7 @@ void KWTextDocumentLayout::layout()
     int startOfBlock = -1; // the first position in a block (aka paragraph)
     int startOfBlockText = -1; // the first position of text in a block. Will be different only if anchors preceed text.
     KoShape *currentShape = 0;
+    Line line;
     while (m_state->shape) {
         ADEBUG << "> loop.... layout has" << m_state->layout->lineCount() << "lines, we have" << m_activeAnchors.count() << "+" << m_newAnchors.count() <<"anchors";
 #ifndef DEBUG_ANCHORS
@@ -255,94 +525,6 @@ void KWTextDocumentLayout::layout()
             startOfBlock = m_state->cursorPosition();
             startOfBlockText = m_state->cursorPosition();
         }
-
-        class Line
-        {
-        public:
-            Line(KoTextDocumentLayout::LayoutState *state) : m_state(state) {
-                line = m_state->layout->createLine();
-            }
-            bool isValid() const {
-                return line.isValid();
-            }
-            void tryFit() {
-                const qreal leftIndent = m_state->x();
-                const qreal width = m_state->width();
-                QRectF rect(leftIndent, m_state->y(), width, 1.);
-                line.setLineWidth(rect.width());
-                if (rect.width() <= 0. || line.textLength() == 0) {
-                    // margin so small that the text can't fit.
-                    if (m_state->layout->lineCount() > 1
-                            || m_state->layout->text().length() > 0) // parag not empty
-                        line.setNumColumns(1); // allow at least one char.
-                    line.setPosition(QPointF(rect.x(), rect.y()));
-                    return;
-                }
-                rect = limit(rect);
-
-                qreal movedDown = 0;
-                qreal eligableTop = rect.top();
-                while (true) {
-                    if (m_state->numColumns() > 0) {
-                        line.setNumColumns(m_state->numColumns(),rect.width());
-                        line.setPosition(QPointF(line.x(), rect.y()));
-                    } else {
-                        qreal x = rect.x();
-                        qreal effectiveLineWidth = rect.width();
-                        if (leftIndent < x) { // limit moved the left edge, keep the indent.
-                            x += leftIndent;
-                            effectiveLineWidth -= leftIndent;
-                        }
-                        line.setLineWidth(effectiveLineWidth);
-                        line.setPosition(QPointF(x, rect.y()));
-                    }
-                    rect.setHeight(line.height());
-
-                    QRectF newLine = limit(rect);
-                    if (newLine.width() <= 0 || line.textLength() == 0
-                            || line.cursorToX(line.textStart()+1) > newLine.right()) {
-                        const int Move = 10;
-                        movedDown += Move;
-                        if (movedDown > m_state->shape->size().height() * 1.3) {
-                            // TODO the magic number of shape height needs some history
-                            // investigation here.
-                            rect = QRectF(leftIndent, eligableTop, width, rect.height());
-                            break;
-                        }
-                        if (newLine.width() > 0) {
-                            // at least one char fits
-                            eligableTop = rect.top();
-                        }
-
-                        rect = QRectF(leftIndent, rect.top() + Move, width, rect.height());
-                    } else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right()
-                                - rect.right()) < 1E-10) {
-                        break;
-                    } else if (newLine.isValid()) {
-                        rect = newLine;
-                    } else {
-                        break;
-                    }
-                }
-            }
-            void setOutlines(const QList<Outline*> &outlines) {
-                m_outlines = &outlines;
-            }
-
-            QTextLine line;
-        private:
-            QRectF limit(const QRectF &rect) {
-                QRectF answer = rect;
-                foreach (Outline *outline, *m_outlines)
-                    answer = outline->limit(answer);
-
-                return answer;
-            }
-            KoTextDocumentLayout::LayoutState *m_state;
-            const QList<Outline*> *m_outlines;
-            qreal m_initialIndent;
-        };
-
         if (m_state->shape != currentShape) { // next shape
             TDEBUG << "New shape";
             currentShape = m_state->shape;
@@ -418,6 +600,7 @@ void KWTextDocumentLayout::layout()
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outline->changeMatrix(matrix);
+                        line.updateOutline(outline);
                         break;
                     }
                 }
@@ -445,7 +628,9 @@ void KWTextDocumentLayout::layout()
                     QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
                     matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                     matrix.translate(0, m_state->documentOffsetInShape());
-                    outlines.append(new Outline(strategy->anchoredShape(), matrix));
+                    Outline *outline = new Outline(strategy->anchoredShape(), matrix);
+                    outlines.append(outline);
+                    line.updateOutline(outline);
                  }
                 // if the anchor occupies the first character of our block,
                 // create one line for it. This can theoretically change currentshape=0
@@ -470,7 +655,7 @@ void KWTextDocumentLayout::layout()
         if (restartLine)
             continue;
 
-        Line line(m_state);
+        line.createLine(m_state);
         if (!line.isValid()) { // end of parag
             const qreal posY = m_state->y();
             if (firstParagraph) {
@@ -531,9 +716,11 @@ void KWTextDocumentLayout::layout()
             return;
         }
         newParagraph = false;
+
         line.setOutlines(outlines);
         const int anchorCount = m_newAnchors.count();
-        line.tryFit();
+        line.fit();
+        //line.tryFit();
         if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
             // start parag over so we can correctly take the just found anchors into account.
             m_state->layout->endLayout();
@@ -550,7 +737,6 @@ void KWTextDocumentLayout::layout()
             }
         }
 #endif
-
         bottomOfText = line.line.y() + line.line.height();
         if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1) {
             TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
@@ -558,8 +744,7 @@ void KWTextDocumentLayout::layout()
             cleanupAnchors();
             return;
         }
-
-        while (m_state->addLine(line.line)) {
+        while (m_state->addLine(line.line, line.processingLine())) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
                 line.line.setPosition(QPointF(0, m_state->y() + 10000)); // move it away from any place that we're likely going to paint
@@ -625,7 +810,8 @@ void KWTextDocumentLayout::layout()
                 }
                 requestFrameResize = true;
             }
-            line.tryFit();
+            line.fit(true);
+            //line.tryFit();
 #ifdef DEBUG_TEXT
             if (line.line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());

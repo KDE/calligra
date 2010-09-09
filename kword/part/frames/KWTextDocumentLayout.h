@@ -24,10 +24,11 @@
 
 #include <KoTextDocumentLayout.h>
 
-
 class KWTextFrameSet;
 class KWAnchorStrategy;
+class Outline;
 
+#define MIN_WIDTH   0.01f
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
  * other KWord objects.

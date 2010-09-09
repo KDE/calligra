@@ -28,6 +28,7 @@ public:
         layout = m_currentBlock.layout();
         layout->beginLayout();
         m_y = 0;
+        m_maxLineHeight = 0;
         return true;
     }
     void end() {}
@@ -50,11 +51,18 @@ public:
     qreal docOffsetInShape() const {
         return 0;
     }
-    bool addLine(QTextLine &line) {
-        if (line.height() > 20)
-            m_y += line.height();
-        else
-            m_y += 14.4;
+    bool addLine(QTextLine &line, bool processingLine) {
+        qreal lineHeight;
+        if (line.height() > 20) {
+            lineHeight = line.height();
+        } else {
+            lineHeight = 14.4;
+        }
+        m_maxLineHeight = qMax(m_maxLineHeight, lineHeight);
+        if (! processingLine) {
+            m_y += m_maxLineHeight;
+            m_maxLineHeight = 0;
+        }
         return false;
     }
     bool nextParag() {
@@ -106,10 +114,14 @@ public:
     QTextTableCell hitTestTable(QTextTable *, const QPointF &) {
         return QTextTableCell();
     }
+    qreal maxLineHeight() const {
+        return m_maxLineHeight;
+    }
 
     QTextDocument *m_doc;
     QTextBlock m_currentBlock;
     qreal m_y;
+    qreal m_maxLineHeight;
 };
 
 void TestDocumentLayout::initTestCase()
@@ -320,6 +332,166 @@ void TestDocumentLayout::placeAnchoredFrame3()
     QVERIFY(line.height() < 20);
     QCOMPARE(line.position().x(), 0.);
     QVERIFY(qAbs(line.position().y() - 14.4) <  0.125);
+}
+
+void TestDocumentLayout::insertPicture(QTextCursor &cursor, QPointF offSet, QSizeF size)
+{
+    MockShape *picture = new MockShape();
+    picture->setSize(size);
+    KoTextAnchor *anchor = new KoTextAnchor(picture);
+    anchor->setAlignment(KoTextAnchor::AnchorHorizontal(KoTextAnchor::Left));
+    anchor->setAlignment(KoTextAnchor::AnchorVertical(KoTextAnchor::TopOfParagraph));
+    anchor->setOffset(offSet);
+    KoInlineTextObjectManager *manager = layout->inlineTextObjectManager();
+    manager->insertInlineObject(cursor, anchor);
+}
+
+void TestDocumentLayout::insertPicture(QTextCursor &cursor, QSizeF size)
+{
+    MockShape *picture = new MockShape();
+    picture->setSize(size);
+    KoTextAnchor *anchor = new KoTextAnchor(picture);
+    KoInlineTextObjectManager *manager = layout->inlineTextObjectManager();
+    manager->insertInlineObject(cursor, anchor);
+}
+
+void TestDocumentLayout::testLine(int linenumber, QPointF position, qreal width) {
+    QTextLayout *lay = doc->begin().layout();
+    QTextLine line = lay->lineAt(linenumber);
+    qDebug() << "TESTX LINE POS " << line.position().y() << " MY POS " << position.y();
+    QVERIFY(qAbs(line.position().x() - position.x()) < 0.125);
+    QVERIFY(qAbs(line.position().y() - position.y()) < 0.125);
+    QCOMPARE(line.width(), width);
+}
+
+void TestDocumentLayout::initAdvancedRunAroundTest() {
+    initForNewTest(QString(loremIpsum));
+    MockLayoutState *state = new MockLayoutState(doc);
+    layout->setLayout(state);
+    state->shape = shape1;
+    KoInlineTextObjectManager *manager = new KoInlineTextObjectManager();
+    layout->setInlineTextObjectManager(manager);
+}
+void TestDocumentLayout::testAdvancedRunAround1()
+{
+    initAdvancedRunAroundTest();
+    QTextCursor cursor(doc);
+    qreal LINE1 = 0;
+    qreal LINE2 = 14.4;
+    qreal LINE3 = 28.8;
+    qreal LINE4 = 43.2;
+
+    layout->layout();
+    testLine(0, QPointF(0, LINE1), 200);
+    testLine(1, QPointF(0, LINE2), 200);
+    testLine(2, QPointF(0, LINE3), 200);
+    testLine(3, QPointF(0, LINE4), 200);
+}
+
+void TestDocumentLayout::testAdvancedRunAround2()
+{
+    initAdvancedRunAroundTest();
+    QTextCursor cursor(doc);
+    qreal LINE2 = 14.4;
+    qreal LINE3 = 28.8;
+    qreal LINE4 = 43.2;
+    qreal LINE5 = 57.6;
+
+    insertPicture(cursor, QPointF(0, 0), QSizeF(20, 100));
+    layout->layout();
+    //0 is picture now, so starting from 1
+    testLine(1, QPointF(20, LINE2), 180);
+    testLine(2, QPointF(20, LINE3), 180);
+    testLine(3, QPointF(20, LINE4), 180);
+    testLine(4, QPointF(20, LINE5), 180);
+}
+
+void TestDocumentLayout::testAdvancedRunAround3()
+{
+    initAdvancedRunAroundTest();
+    QTextCursor cursor(doc);
+    qreal LINE3 = 28.8;
+    qreal LINE4 = 43.2;
+
+    insertPicture(cursor, QPointF(0, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(60, 0), QSizeF(20, 100));
+    layout->layout();
+    //0, 1 are pictures now, so starting from 2
+    testLine(2, QPointF(20, LINE3), 40);
+    testLine(3, QPointF(80, LINE3), 120);
+    testLine(4, QPointF(20, LINE4), 40);
+    testLine(5, QPointF(80, LINE4), 120);
+
+}
+
+void TestDocumentLayout::testAdvancedRunAround4()
+{
+    initAdvancedRunAroundTest();
+    QTextCursor cursor(doc);
+    qreal LINE4 = 43.2;
+    qreal LINE5 = 57.6;
+
+    insertPicture(cursor, QPointF(0, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(60, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(120, 0), QSizeF(20, 100));
+    layout->layout();
+    //0, 1, 2 are pictures now, so starting from 3
+    testLine(3, QPointF(20, LINE4), 40);
+    testLine(4, QPointF(80, LINE4), 40);
+    testLine(5, QPointF(140, LINE4), 60);
+    testLine(6, QPointF(20, LINE5), 40);
+}
+
+void TestDocumentLayout::testAdvancedRunAround5()
+{
+    initAdvancedRunAroundTest();
+    QTextCursor cursor(doc);
+    qreal LINE4 = 43.2;
+    //TODO korinpa: corect moved line value when image is inserted above line
+    #if QT_VERSION  >= 0x040700
+        qreal MOVED_LINE1 = 95.2;
+    #else
+        qreal MOVED_LINE1 = 96.2;
+    #endif
+
+    insertPicture(cursor, QPointF(0, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(60, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(120, 0), QSizeF(20, 100));
+    //add inline picture as part of text
+    insertPicture(cursor, QSizeF(20, 40));
+    layout->layout();
+    //0, 1, 2 are pictures now, so starting from 3
+    testLine(3, QPointF(20, LINE4), 40);
+    testLine(4, QPointF(80, LINE4), 40);
+    testLine(5, QPointF(140, LINE4), 60);
+    testLine(6, QPointF(20, MOVED_LINE1), 40);
+}
+
+void TestDocumentLayout::testAdvancedRunAround6()
+{
+    initAdvancedRunAroundTest();
+    QTextCursor cursor(doc);
+    qreal LINE4 = 43.2;
+    //TODO korinpa: corect moved line value when image is inserted above line
+    #if QT_VERSION  >= 0x040700
+        qreal MOVED_LINE1 = 95.2;
+    #else
+        qreal MOVED_LINE1 = 96.2;
+    #endif
+
+    insertPicture(cursor, QPointF(0, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(60, 0), QSizeF(20, 100));
+    insertPicture(cursor, QPointF(120, 0), QSizeF(20, 100));
+    //add inline picture as part of text
+    insertPicture(cursor, QSizeF(20, 40));
+    //add next big inline picture as part of text
+    insertPicture(cursor, QSizeF(60, 40));
+    layout->layout();
+    //0, 1, 2 are pictures now, so starting from 3
+    testLine(3, QPointF(20, LINE4), 40);
+    //one space skiped so not 80, but 140 :-)
+    testLine(4, QPointF(140, LINE4), 60);
+    testLine(5, QPointF(20, MOVED_LINE1), 40);
 }
 
 void TestDocumentLayout::noRunAroundFrame()

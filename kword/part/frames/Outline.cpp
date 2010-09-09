@@ -27,8 +27,11 @@
 
 Outline::Outline(KWFrame *frame, const QTransform &matrix)
     : m_side(None),
+    m_polygon(QPolygonF()),
+    m_line(QRectF()),
     m_shape(frame->shape())
 {
+    //TODO korinpa: check if outline is convex. otherwise do triangulation and create more convex outlines
     KoShape *shape = frame->outlineShape();
     if (shape == 0)
         shape = frame->shape();
@@ -38,20 +41,22 @@ Outline::Outline(KWFrame *frame, const QTransform &matrix)
         path = frame->shape()->parent()->outline().intersected(path);
         path = shape->transformation().inverted().map(path);
     }
-
     init(matrix, path, frame->runAroundDistance());
-    if (frame->textRunAround() == KWord::NoRunAround)
+    if (frame->textRunAround() == KWord::NoRunAround) {
         m_side = Empty;
-    else if (frame->runAroundSide() == KWord::LeftRunAroundSide)
+    } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
         m_side = Right;
-    else if (frame->runAroundSide() == KWord::RightRunAroundSide)
+    } else if (frame->runAroundSide() == KWord::RightRunAroundSide) {
         m_side = Left;
-    else if (frame->runAroundSide() == KWord::BothRunAroundSide)
-        m_side = None;
+    } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
+        m_side = Both;
+    }
 }
 
 Outline::Outline(KoShape *shape, const QTransform &matrix)
     : m_side(None),
+    m_polygon(QPolygonF()),
+    m_line(QRectF()),
     m_shape(shape)
 {
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
@@ -65,9 +70,15 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
             m_distance = 0;
             // We don't exist.
             return;
+        } else if (frame->runAroundSide() == KWord::LeftRunAroundSide) {
+            m_side = Right;
+        } else if (frame->runAroundSide() == KWord::RightRunAroundSide) {
+            m_side = Left;
+        } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
+            m_side = Both;
         }
-    }
 
+    }
     init(matrix, shape->outline(), distance);
 }
 
@@ -95,10 +106,9 @@ void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal 
         m_bounds = path.boundingRect();
     }
 
-    QPolygonF poly = path.toFillPolygon();
-
-    QPointF prev = *(poly.begin());
-    foreach (const QPointF &vtx, poly) { //initialized edges
+    m_polygon = path.toFillPolygon();
+    QPointF prev = *(m_polygon.begin());
+    foreach (const QPointF &vtx, m_polygon) { //initialized edges
         if (vtx.x() == prev.x() && vtx.y() == prev.y())
             continue;
         QLineF line;
@@ -109,6 +119,7 @@ void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal 
         m_edges.insert(line.y1(), line);
         prev = vtx;
     }
+
 }
 
 QRectF Outline::limit(const QRectF &content)
@@ -179,4 +190,93 @@ void Outline::changeMatrix(const QTransform &matrix)
 {
     m_edges.clear();
     init(matrix, m_shape->outline(), m_distance);
+}
+
+//----------------------------------------------------------------------------------------------------------------
+
+QRectF Outline::cropToLine(const QRectF &lineRect)
+{
+    if (m_bounds.intersects(lineRect)) {
+        m_line = lineRect;
+        bool untilFirst = true;
+        //check inner points
+        foreach (const QPointF &point, m_polygon) {
+            if (lineRect.contains(point)) {
+                if (untilFirst) {
+                    m_line.setLeft(point.x());
+                    m_line.setRight(point.x());
+                    untilFirst = false;
+                } else {
+                    if (point.x() < m_line.left()) {
+                        m_line.setLeft(point.x());
+                    } else if (point.x() > m_line.right()) {
+                        m_line.setRight(point.x());
+                    }
+                }
+            }
+        }
+        //check edges
+        qreal points[2] = { lineRect.top(), lineRect.bottom() };
+        for (int i = 0; i < 2; i++) {
+            const qreal y = points[i];
+            QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
+            for (;iter != m_edges.constEnd(); ++iter) {
+                QLineF line = iter.value();
+                if (line.y2() < y) // not a section that will intersect with ou Y yet
+                    continue;
+                if (line.y1() > y) // section is below our Y, so abort loop
+                    //break;
+                    continue;
+                if (qAbs(line.dy()) < 1E-10)  // horizontal lines don't concern us.
+                    continue;
+
+                qreal intersect = xAtY(iter.value(), y);
+                if (untilFirst) {
+                    m_line.setLeft(intersect);
+                    m_line.setRight(intersect);
+                    untilFirst = false;
+                } else {
+                    if (intersect < m_line.left()) {
+                        m_line.setLeft(intersect);
+                    } else if (intersect > m_line.right()) {
+                        m_line.setRight(intersect);
+                    }
+                }
+            }
+        }
+    } else {
+        m_line = QRectF();
+    }
+    return m_line;
+}
+
+QRectF Outline::getLeftLinePart(const QRectF &lineRect) const
+{
+    QRectF leftLinePart = lineRect;
+    leftLinePart.setRight(m_line.left());
+    return leftLinePart;
+}
+
+QRectF Outline::getRightLinePart(const QRectF &lineRect) const
+{
+    QRectF rightLinePart = lineRect;
+    if (m_line.right() > rightLinePart.left()) {
+        rightLinePart.setLeft(m_line.right());
+    }
+    return rightLinePart;
+}
+
+bool Outline::textOnLeft() const
+{
+    return  m_side != Left;
+}
+
+bool Outline::textOnRight() const
+{
+    return m_side != Right;
+}
+
+bool Outline::compareRectLeft(Outline *o1, Outline *o2)
+{
+    return o1->m_line.left() < o2->m_line.left();
 }

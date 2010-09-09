@@ -28,6 +28,16 @@ private slots:
     void placeAnchoredFrame2_data();
     void placeAnchoredFrame2();
     void placeAnchoredFrame3();
+    void insertPicture(QTextCursor &cursor, QPointF offSet, QSizeF size);
+    void insertPicture(QTextCursor &cursor, QSizeF size);
+    void testLine(int linenumber, QPointF position, qreal width);
+    void initAdvancedRunAroundTest();
+    void testAdvancedRunAround1();
+    void testAdvancedRunAround2();
+    void testAdvancedRunAround3();
+    void testAdvancedRunAround4();
+    void testAdvancedRunAround5();
+    void testAdvancedRunAround6();
     void noRunAroundFrame();
 
 private:

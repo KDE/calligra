@@ -45,11 +45,29 @@ public:
 
     void changeMatrix(const QTransform &matrix);
 
+    void switchSide();
+
+    //-------------------------------------------------------------------------------
+
+    QRectF cropToLine(const QRectF &lineRect);
+
+    QRectF getLeftLinePart(const QRectF &lineRect) const;
+
+    QRectF getRightLinePart(const QRectF &lineRect) const;
+
+    bool textOnLeft() const;
+
+    bool textOnRight() const;
+
+    static bool compareRectLeft(Outline *o1, Outline *o2);
 private:
-    enum Side { None, Left, Right, Empty }; // TODO support Auto and Both
+    enum Side { None, Left, Right, Empty, Both }; // TODO support Auto
     Side m_side;
-    QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
+    QPolygonF m_polygon;
+    public:
+    QRectF m_line;
+    QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
     qreal m_distance;
 };
