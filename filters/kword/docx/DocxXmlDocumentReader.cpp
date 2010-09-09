@@ -491,7 +491,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
         link_target.clear();
     }
     else {
-        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+        link_target = m_context->relationships->target(m_context->path, m_context->file, r_id);
     }
 
     DocxXmlFooterReader reader(this);
@@ -561,7 +561,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         link_target.clear();
     }
     else {
-        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+        link_target = m_context->relationships->target(m_context->path, m_context->file, r_id);
     }
 
     DocxXmlHeaderReader reader(this);
@@ -1423,7 +1423,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         link_target.clear();
     }
     else {
-        link_target = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+        link_target = m_context->relationships->target(m_context->path, m_context->file, r_id);
     }
     kDebug() << "link_target:" << link_target;
 
