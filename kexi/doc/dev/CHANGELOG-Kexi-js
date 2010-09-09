@@ -110,10 +110,16 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
-2010-09-08
+2010-09-08..09
 Forms
-*Widgets Tree: now displays items, items are sorted, root is not decorated, fixed possible crash when form becomes null
-TODO: finalize this
+*Widgets Tree:
+**display items
+**items are sorted
+**root is not decorated
+**fixed possible crash when form becomes null
+**display icons for widget items
+**fixed position of context menu
+**do not clear selection when switching between forms
 Core
 *for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
 
