@@ -228,7 +228,7 @@ void WidgetTreeWidget::handleContextMenuEvent(QContextMenuEvent* e)
     QWidget *w = item->data()->widget();
     if (!w)
         return;
-    m_form->createContextMenu(w, m_form->activeContainer(), e->pos());
+    m_form->createContextMenu(w, m_form->activeContainer(), e->pos(), Form::WidgetTreeContextMenuTarget);
 }
 
 void WidgetTreeWidget::contextMenuEvent(QContextMenuEvent* e)

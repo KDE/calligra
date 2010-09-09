@@ -2320,7 +2320,7 @@ void Form::setSnapWidgetsToGridEnabled(bool set)
 }
 
 // moved from FormManager
-void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos) //bool popupAtCursor)
+void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target)
 {
     if (!widget())
         return;
@@ -2440,7 +2440,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 
         // We create the signals menu
         KMenu *sigMenu = new KMenu();
-        QList<QMetaMethod> list(
+        const QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));
         foreach(const QMetaMethod& m, list) {
@@ -2492,10 +2492,21 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 //    QWidgetList *lst = container->form()->selectedWidgets();
 //    QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
 //    QPoint realMenuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
-    d->insertionPoint = menuPos; //container->widget()->mapToGlobal(menuPos);
+    QPoint pos;
+    switch (target) {
+    case FormContextMenuTarget: {
+        pos = container->widget()->mapToGlobal(w->pos() + menuPos);
+        d->insertionPoint = menuPos;
+        break;
+    }
+    case WidgetTreeContextMenuTarget: {
+        pos = QCursor::pos();
+        d->insertionPoint = container->widget()->mapToGlobal(w->pos() + QPoint(10, 10)); // user may still want to paste
+        break;
+    }
+    }
 
-    QAction *result = menu.exec( container->widget()->mapToGlobal(w->pos() + menuPos) );
-    
+    QAction *result = menu.exec(pos);
     if (!result) {
         // nothing to do
     }
