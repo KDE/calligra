@@ -235,11 +235,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #ifdef DOCXXMLDOCREADER_H
         //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #endif
-#ifdef HARDCODED_PRESENTATIONSTYLENAME
-//! @todo hardcoded draw:style-name = grpredef1
-        QString currentDrawStyleName("grpredef1");
-#endif
-#if defined(DOCXXMLDOCREADER_H) || defined(HARDCODED_PRESENTATIONSTYLENAME)
+#if defined(DOCXXMLDOCREADER_H)
         //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
         //body->addAttribute("draw:style-name", currentDrawStyleName);
 #endif
@@ -788,15 +784,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 //todo        body->addAttribute("presentation:style-name", styleName);
         QString presentationStyleName;
-# ifdef HARDCODED_PRESENTATIONSTYLENAME
-        d->presentationStyleNameCount++;
-        presentationStyleName = d->presentationStyleNameCount == 1 ? "pr1" : "pr2";
-# else
         //body->addAttribute("draw:style-name", );
         if (!m_currentPresentationStyle.isEmpty()) {
             presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         }
-# endif // HARDCODED_PRESENTATIONSTYLENAME
         if (!presentationStyleName.isEmpty()) {
             body->addAttribute("presentation:style-name", presentationStyleName);
         }
@@ -1442,8 +1433,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #else
              for(int i = 0; i < m_currentListLevel; ++i) {
                  body->startElement("text:list");
-                 if (i == 0)
-                    body->addAttribute("text:style-name", "otherList");
+                 // Todo, should most likely add the name of the current list style
                  body->startElement("text:list-item");
              }
 #endif
@@ -4677,7 +4667,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
  - extLst (Extension List) §20.1.2.2.15
  - flatTx (No text in 3D scene) §20.1.5.8
  - noAutofit (No AutoFit) §21.1.2.1.2
- - normAutofit (Normal AutoFit) §21.1.2.1.3
+ - [done] normAutofit (Normal AutoFit) §21.1.2.1.3
  - prstTxWarp (Preset Text Warp) §20.1.9.19
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - sp3d (Apply 3D shape properties) §20.1.5.12
@@ -4705,6 +4695,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 //! @todo more atributes
 
     bool spAutoFit = false;
+    bool normAutoFit = false;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -4713,18 +4704,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
             }
+            else if (qualifiedName() == QLatin1String("a:normAutofit")) {
+                normAutoFit = true;
+            }
         }
     }
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) { // CASE #P526
         m_currentPresentationStyle.addProperty("draw:auto-grow-height",
-            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse);
+            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
         m_currentPresentationStyle.addProperty("draw:auto-grow-width",
             (!spAutoFit || wrap == QLatin1String("square"))
-            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue);
+            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue, KoGenStyle::GraphicType);
         // text in shape
         m_currentPresentationStyle.addProperty("fo:wrap-option",
-            wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"));
+            wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+        if (normAutoFit) {
+            m_currentPresentationStyle.addProperty("draw:fit-to-size", "shrink-to-fit", KoGenStyle::GraphicType);
+        }
     }
 #endif
     READ_EPILOGUE

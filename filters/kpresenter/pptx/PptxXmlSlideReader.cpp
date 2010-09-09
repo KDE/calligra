@@ -235,9 +235,6 @@ public:
     ~Private() {
     }
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
-#ifdef HARDCODED_PRESENTATIONSTYLENAME
-    uint presentationStyleNameCount;
-#endif
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
     QString qualifiedNameOfMainElement;
@@ -1163,12 +1160,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 {
     READ_PROLOGUE
 
-#ifdef HARDCODED_PRESENTATIONSTYLENAME
-    // we will expect two draw:frame elements:
-    // - the first will have presentation:style-name="pr1"
-    // - the second presentation:style-name="pr2"
-    d->presentationStyleNameCount = 0;
-#endif
     d->shapeNumber = 0;
 
     QByteArray placeholderEl;
