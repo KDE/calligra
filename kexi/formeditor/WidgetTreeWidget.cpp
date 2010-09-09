@@ -37,15 +37,19 @@ using namespace KFormDesigner;
 
 WidgetTreeWidgetItem::WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data)
         : QTreeWidgetItem(parent, QStringList() << data->name() << data->className())
+        , m_data(data)
 {
-    m_item = data;
+    setIcon(0,
+        SmallIcon(
+            static_cast<WidgetTreeWidget*>(treeWidget())->iconNameForClass(m_data->widget()->metaObject()->className()))
+    );
 }
 
 WidgetTreeWidgetItem::WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data)
         : QTreeWidgetItem(tree, QStringList() << (data ? data->name() : QString())
                                               << (data ? data->className() : QString()))
+        , m_data(data)
 {
-    m_item = data;
 }
 
 WidgetTreeWidgetItem::~WidgetTreeWidgetItem()
@@ -54,8 +58,8 @@ WidgetTreeWidgetItem::~WidgetTreeWidgetItem()
 
 QString WidgetTreeWidgetItem::name() const
 {
-    if (m_item)
-        return m_item->name();
+    if (m_data)
+        return m_data->name();
     else
         return QString();
 }
