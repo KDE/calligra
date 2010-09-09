@@ -504,7 +504,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
         relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
-        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, &context);
+        = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
     if (status != KoFilter::OK) {
         reader.raiseError(errorMessage);
     }
@@ -574,7 +574,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
         relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
-        = m_context->import->loadAndParseDocument(&reader, m_context->path + '/' + link_target, errorMessage, &context);
+        = m_context->import->loadAndParseDocument(&reader, link_target, errorMessage, &context);
     if (status != KoFilter::OK) {
         reader.raiseError(errorMessage);
     }
