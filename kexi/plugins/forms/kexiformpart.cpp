@@ -457,6 +457,11 @@ KexiDataSourcePage* KexiFormPart::dataSourcePage() const
     return d->dataSourcePage;
 }
 
+KFormDesigner::WidgetTreeWidget* KexiFormPart::widgetTreePage() const
+{
+    return d->widgetTree;
+}
+
 void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
     if (!d->dataSourcePage) {

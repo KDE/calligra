@@ -1655,6 +1655,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
                                                 m_currentTextStyle, KoGenStyle::TextType);
         }
     }
+    else if (m_context->type == SlideLayout) {
+        if ((d->phType).isEmpty()) {
+            // If layout does not define any type, we assume it needs to use bodyStyle
+            PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("body");
+            const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+            PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+            if (listStyle) {
+                m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
+            }
+            m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+            delete m_currentTextStyleProperties;
+            m_currentTextStyleProperties = new KoCharacterStyle();
+            m_context->slideLayoutProperties->textStyles[d->phStyleId()][m_currentListLevel] = m_currentTextStyle;
+        }
+    }
     // Styles of texts for slidemaster are read in first round of reading slidemasterX.xml
     // When we get here, we are in 2nd round, and can actually apply them.
     else if (m_context->type == SlideMaster) {

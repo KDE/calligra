@@ -166,6 +166,7 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
         , m_form(0)
         , m_options(options)
 {
+    setRootIsDecorated(false);
     setHeaderLabels(QStringList() << i18n("Widget name") << i18nc("Widget's type", "Type"));
     installEventFilter(this);
 
@@ -178,7 +179,7 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
     header()->setStretchLastSection(true);
     setAllColumnsShowFocus(true);
     //2.0 setItemMargin(3);
-    setSortingEnabled(false);
+    setSortingEnabled(true);
 }
 
 WidgetTreeWidget::~WidgetTreeWidget()
@@ -279,6 +280,8 @@ WidgetTreeWidget::selectWidget(QWidget *w, bool add)
 
 void WidgetTreeWidget::slotSelectionChanged()
 {
+    if (!m_form)
+        return;
     const bool hadFocus = hasFocus();
     QList<QTreeWidgetItem*> list = selectedItems();
     m_form->selectFormWidget();
@@ -345,6 +348,7 @@ void WidgetTreeWidget::setForm(Form *form)
     ObjectTree *tree = m_form->objectTree();
     QTreeWidgetItem *root = invisibleRootItem();
     loadTree(tree, static_cast<WidgetTreeWidgetItem*>(root));
+    sortItems(0, Qt::AscendingOrder);
 
     if (!form->selectedWidgets()->isEmpty())
         selectWidget(form->selectedWidgets()->first());
