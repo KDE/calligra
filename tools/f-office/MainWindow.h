@@ -1005,6 +1005,30 @@ signals:
      * Presentation has moved to the previous slide.
      */
     void previousSlide();
+
+ public slots:
+    /*!
+     * Enable the select tool. This will allow shapes to be selected and moved around
+     */
+    void enableSelectTool();
+    /*!
+     * Insert picture into the document
+     */
+    void insertImage();
+    /*!
+     * Shows available items which can be inserted into the document
+     */
+    void insertButtonClicked();
+    /*!
+     * Show cut,copy, paste actions
+     */
+    void showCCP();
+
+private:
+    /*!
+     * Show Insert action
+     */
+    void showInsertAction();
 };
 
 #endif // MAINWINDOW_H

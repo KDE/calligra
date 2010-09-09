@@ -314,8 +314,8 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         break;
     case Format::Percentage:
         localizedNumber = m_converter->settings()->locale()->formatNumber(val, p);
-        if(!postfix.endsWith("%")) // percent formattings needs to end with a "%"-sign
-            postfix += "%";
+        if(!postfix.endsWith('%')) // percent formattings needs to end with a "%"-sign
+            postfix += '%';
         break;
     case Format::Money:
         localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol.isEmpty() ? m_converter->settings()->locale()->currencySymbol() : currencySymbol, p);

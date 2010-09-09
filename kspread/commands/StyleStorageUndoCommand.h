@@ -45,7 +45,7 @@ class StyleStorageUndoCommand : public QUndoCommand
 public:
     typedef QPair<QRectF, SharedSubStyle> Pair;
 
-    StyleStorageUndoCommand(StyleStorage *storage, QUndoCommand *parent = 0);
+    explicit StyleStorageUndoCommand(StyleStorage *storage, QUndoCommand *parent = 0);
 
     virtual void undo();
 

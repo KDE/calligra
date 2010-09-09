@@ -235,11 +235,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 #ifdef DOCXXMLDOCREADER_H
         //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #endif
-#ifdef HARDCODED_PRESENTATIONSTYLENAME
-//! @todo hardcoded draw:style-name = grpredef1
-        QString currentDrawStyleName("grpredef1");
-#endif
-#if defined(DOCXXMLDOCREADER_H) || defined(HARDCODED_PRESENTATIONSTYLENAME)
+#if defined(DOCXXMLDOCREADER_H)
         //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
         //body->addAttribute("draw:style-name", currentDrawStyleName);
 #endif
@@ -788,15 +784,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 //todo        body->addAttribute("presentation:style-name", styleName);
         QString presentationStyleName;
-# ifdef HARDCODED_PRESENTATIONSTYLENAME
-        d->presentationStyleNameCount++;
-        presentationStyleName = d->presentationStyleNameCount == 1 ? "pr1" : "pr2";
-# else
         //body->addAttribute("draw:style-name", );
         if (!m_currentPresentationStyle.isEmpty()) {
             presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
         }
-# endif // HARDCODED_PRESENTATIONSTYLENAME
         if (!presentationStyleName.isEmpty()) {
             body->addAttribute("presentation:style-name", presentationStyleName);
         }
@@ -1389,61 +1380,74 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     } else {
          body = textPBuf.originalWriter();
 
-         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
-         // being a list-item. We need to handle that case and need to make sure that such paragraph's
-         // end as first-level list-items in ODF.
-         const bool makeList = (m_lstStyleFound && m_currentListLevel < 1);
-         if (makeList) ++m_currentListLevel;
-         if (m_currentListLevel > 0 || m_prevListLevel > 0) {
+        if (m_listStylePropertiesAltered) {
+            if (m_prevListLevel > 0) {
+                // Ending our current level
+                body->endElement(); // text:list
+                // Ending any additional levels needed
+                for(; m_prevListLevel > 1; --m_prevListLevel) {
+                   body->endElement(); // text:list-item
+                   body->endElement(); // text:list
+                }
+            }
+            m_prevListLevel = 0;
+        }
+
+        // In MSOffice it's possible that a paragraph defines a list-style that should be used without
+        // being a list-item. We need to handle that case and need to make sure that such paragraph's
+        // end as first-level list-items in ODF.
+        const bool makeList = (m_lstStyleFound && m_currentListLevel < 1);
+        if (makeList) ++m_currentListLevel;
+        if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_H
              if (m_prevListLevel < m_currentListLevel) {
-                for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
-                    body->startElement("text:list");
-                    if (listDepth == 0) {
-                        QString listStyleName;
-                        if (m_currentListStyle.isEmpty()) {
-                            // for now the name is hardcoded...should be maybe fixed
-                            if (d->phType == "title" || d->phType == "ctrTitle") {
-                                listStyleName = "titleList";
-                            }
-                            else if (d->phType == "body" ) {
-                                // Fixme? : for now the master slide list style is called bodyList
+                 if (m_prevListLevel > 0) {
+                     // Because there was an existing list, we need to start ours with list:item
+                     body->startElement("text:list-item");
+                 }
+                 for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
+                     body->startElement("text:list");
+                     if (listDepth == 0) {
+                         QString listStyleName;
+                         if (m_currentListStyle.isEmpty()) {
+                             if (d->phType == "title" || d->phType == "ctrTitle") {
+                                 listStyleName = "titleList";
+                             }
+                             else if (d->phType == "other" ) {
+                                 // Fixme? : maybe also other types qualify to other
+                                 listStyleName = "otherList";
+                             }
+                             else {
+                                // If there's no default type, it should be of type body
                                 listStyleName = "bodyList";
-                            }
-                            else {
-                                // This hardcoded name should maybe changed to something else
-                                listStyleName = "otherList";
-                            }
-                        }
-                        else {
-                            listStyleName = mainStyles->insert(m_currentListStyle);
-                        }
-                        Q_ASSERT(!listStyleName.isEmpty());
-                        body->addAttribute("text:style-name", listStyleName);
-                        m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
+                             }
+                         }
+                         else {
+                             listStyleName = mainStyles->insert(m_currentListStyle);
+                         }
+                         Q_ASSERT(!listStyleName.isEmpty());
+                         body->addAttribute("text:style-name", listStyleName);
+                         m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
                     }
                     body->startElement("text:list-item");
-                }
+                 }
              } else if (m_prevListLevel > m_currentListLevel) {
-                for(int listDepth = m_prevListLevel; listDepth > m_currentListLevel; --listDepth) {
+                 body->endElement(); // This ends the latest list
+                for(int listDepth = m_prevListLevel-1; listDepth > m_currentListLevel; --listDepth) {
+                    //Ending any additional list levels needed
                     body->endElement(); // text:list-item
                     body->endElement(); // text:list
-                }
-                if (m_currentListLevel > 0) {
-                    body->endElement(); // text:list-item
-                    body->startElement("text:list-item");
-                }
+                 }
+                 body->endElement(); // text:list-item
+                 // Starting our own stuff for this level
+                 body->startElement("text:list-item");
              } else { // m_prevListLevel==m_currentListLevel
-                if (m_currentListLevel > 0) {
-                    body->endElement(); // text:list-item
-                    body->startElement("text:list-item");
-                }
+                 body->startElement("text:list-item");
              }
 #else
              for(int i = 0; i < m_currentListLevel; ++i) {
                  body->startElement("text:list");
-                 if (i == 0)
-                    body->addAttribute("text:style-name", "otherList");
+                 // Todo, should most likely add the name of the current list style
                  body->startElement("text:list-item");
              }
 #endif
@@ -1467,14 +1471,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
          (void)textPBuf.releaseWriter();
          body->endElement(); //text:p
+#ifdef PPTXXMLSLIDEREADER_H
+         // We should end our own list level
+         if (m_currentListLevel > 0) {
+             body->endElement(); // text:list-item
+         }
+#endif
 
 #ifdef PPTXXMLSLIDEREADER_H
-         const bool closeList = makeList;
+         // In this case we have artificially created a list of level 1
+         if (makeList) {
+             body->endElement(); // text:list
+             m_prevListLevel = 0;
+             m_currentListLevel = 0;
+         }
+         else {
+             m_prevListLevel = m_currentListLevel;
+         }
 #else
          // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
          // and excel filters still need to be adjusted to proper handle nested lists.
          const bool closeList = true;
-#endif
          if (closeList) {
              for(int i = 0; i < m_currentListLevel; ++i) {
                  body->endElement(); // text:list-item
@@ -1485,6 +1502,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          } else {
              m_prevListLevel = m_currentListLevel;
          }
+#endif
     }
     READ_EPILOGUE
 }
@@ -1933,6 +1951,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     if (m_listStylePropertiesAltered) {
+        // For now we take a stand that any altered style makes its own list.
+        m_currentListLevel = 1;
+        m_currentListStyleProperties->setLevel(m_currentListLevel);
+
         QBuffer listBuf;
         KoXmlWriter listStyleWriter(&listBuf);
 
@@ -4677,7 +4699,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
  - extLst (Extension List) §20.1.2.2.15
  - flatTx (No text in 3D scene) §20.1.5.8
  - noAutofit (No AutoFit) §21.1.2.1.2
- - normAutofit (Normal AutoFit) §21.1.2.1.3
+ - [done] normAutofit (Normal AutoFit) §21.1.2.1.3
  - prstTxWarp (Preset Text Warp) §20.1.9.19
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - sp3d (Apply 3D shape properties) §20.1.5.12
@@ -4705,6 +4727,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 //! @todo more atributes
 
     bool spAutoFit = false;
+    bool normAutoFit = false;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -4713,18 +4736,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
             }
+            else if (qualifiedName() == QLatin1String("a:normAutofit")) {
+                normAutoFit = true;
+            }
         }
     }
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide) { // CASE #P526
         m_currentPresentationStyle.addProperty("draw:auto-grow-height",
-            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse);
+            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
         m_currentPresentationStyle.addProperty("draw:auto-grow-width",
             (!spAutoFit || wrap == QLatin1String("square"))
-            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue);
+            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue, KoGenStyle::GraphicType);
         // text in shape
         m_currentPresentationStyle.addProperty("fo:wrap-option",
-            wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"));
+            wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+        if (normAutoFit) {
+            m_currentPresentationStyle.addProperty("draw:fit-to-size", "shrink-to-fit", KoGenStyle::GraphicType);
+        }
     }
 #endif
     READ_EPILOGUE

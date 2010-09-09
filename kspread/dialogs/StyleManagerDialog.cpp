@@ -210,8 +210,9 @@ void StyleManagerDialog::slotNew()
     CustomStyle* style = new CustomStyle(newName, parentStyle);
     style->setType(Style::TENTATIVE);
 
-    CellFormatDialog dlg(this, m_selection, style, m_styleManager);
-    dlg.exec();
+    QPointer<CellFormatDialog> dialog = new CellFormatDialog(this, m_selection, style, m_styleManager);
+    dialog->exec();
+    delete dialog;
 
     if (style->type() == Style::TENTATIVE) {
         delete style;
@@ -241,13 +242,14 @@ void StyleManagerDialog::slotEdit()
     if (!style)
         return;
 
-    CellFormatDialog dialog(this, m_selection, style, m_styleManager);
-    dialog.exec();
+    QPointer<CellFormatDialog> dialog = new CellFormatDialog(this, m_selection, style, m_styleManager);
+    dialog->exec();
 
-    if (dialog.result() == Accepted)
+    if (dialog->result() == Accepted)
         m_selection->emitRefreshSheetViews();
 
     slotDisplayMode(m_displayBox->currentIndex());
+    delete dialog;
 }
 
 void StyleManagerDialog::slotRemove()

@@ -560,7 +560,7 @@ public:
     }
     Cell cell() const;
 
-    bool operator==(const Point& other) {
+    bool operator==(const Point& other) const {
         return ((m_point == other.m_point) && (m_sheet == other.m_sheet));
     }
 

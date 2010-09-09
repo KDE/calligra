@@ -1536,7 +1536,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             //}
                             if( element.hasAttribute("style:position") ) {
                                 const QString positionAttribute = element.attribute("style:position","");
-                                const QStringList positionList = positionAttribute.split(" ", QString::SkipEmptyParts);
+                                const QStringList positionList = positionAttribute.split(' ', QString::SkipEmptyParts);
                                 if( positionList.size() == 1) {
                                     const QString position = positionList.at(0);
                                     if( position == "left" ) {
@@ -2407,7 +2407,7 @@ void Sheet::saveOdfBackgroundImage(KoXmlWriter& xmlWriter) const
         position += "right";
     }
 
-    position += " ";
+    position += ' ';
 
     if(properties.verticalPosition == BackgroundImageProperties::Top) {
         position += "top";

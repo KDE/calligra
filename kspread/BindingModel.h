@@ -37,7 +37,7 @@ class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)
 public:
-    BindingModel(Binding* binding, QObject *parent = 0);
+    explicit BindingModel(Binding* binding, QObject *parent = 0);
 
     // QAbstractTableModel interface
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;

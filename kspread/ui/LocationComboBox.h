@@ -44,7 +44,7 @@ class LocationComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    LocationComboBox(CellToolBase *cellTool, QWidget *parent = 0);
+    explicit LocationComboBox(CellToolBase *cellTool, QWidget *parent = 0);
 
     void addCompletionItem(const QString &_item);
     void removeCompletionItem(const QString &_item);

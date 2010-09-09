@@ -92,7 +92,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer)
 
             writer.addAttribute("table:title", it.key().titleInfo);
             writer.addAttribute("table:display", it.key().displayMessage);
-            text = it.key().message.split("\n", QString::SkipEmptyParts);
+            text = it.key().message.split('\n', QString::SkipEmptyParts);
             for (QStringList::Iterator it3 = text.begin(); it3 != text.end(); ++it3) {
                 writer.startElement("text:p");
                 writer.addTextNode(*it3);

@@ -227,7 +227,7 @@ void TableTool::sheetActivated(const QString& sheetName)
 
 void TableTool::sheetsBtnClicked()
 {
-    KPageDialog* dialog = new KPageDialog();
+    QPointer<KPageDialog> dialog = new KPageDialog();
     dialog->setCaption(i18n("Sheets"));
     dialog->setButtons(KDialog::Ok);
     dialog->setFaceType(KPageDialog::Plain);

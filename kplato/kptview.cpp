@@ -587,7 +587,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.name = i18n( "Task Status" );
         vi.tip = i18nc( "@info:tooltip", "View task progress information" );
     } else if ( type == "TaskView" ) {
-        vi.name = i18nc( "@info:tooltip", "Task Execution" );
+        vi.name = i18n( "Task Execution" );
         vi.tip = i18nc( "@info:tooltip", "View task execution information" );
     } else if ( type == "TaskWorkPackageView" ) {
         vi.name = i18n( "Work Package View" );
@@ -596,7 +596,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.name = i18n( "Gantt" );
         vi.tip = i18nc( "@info:tooltip", "View gantt chart" );
     } else if ( type == "MilestoneGanttView" ) {
-        vi.name = i18nc( "@info:tooltip", "Milestone Gantt" );
+        vi.name = i18n( "Milestone Gantt" );
         vi.tip = i18nc( "@info:tooltip", "View milestone gantt chart" );
     } else if ( type == "ResourceAppointmentsView" ) {
         vi.name = i18n( "Resource Assignments" );
@@ -608,7 +608,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
         vi.name = i18n( "Cost Breakdown" );
         vi.tip = i18nc( "@info:tooltip", "View planned and actual cost" );
     } else if ( type == "PerformanceStatusView" ) {
-        vi.name = i18nc( "@info:tooltip", "Tasks Performance Chart" );
+        vi.name = i18n( "Tasks Performance Chart" );
         vi.tip = i18nc( "@info:tooltip", "View tasks performance status information" );
     } else if ( type == "ReportView" ) {
         vi.name = i18n( "Report" );

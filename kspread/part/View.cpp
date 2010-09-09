@@ -1304,7 +1304,7 @@ void View::sheetProperties()
     bool directionChanged = false;
     bool formulaVisibilityChanged = false;
 
-    SheetPropertiesDialog* dlg = new SheetPropertiesDialog(this);
+    QPointer<SheetPropertiesDialog> dlg = new SheetPropertiesDialog(this);
     dlg->setLayoutDirection(d->activeSheet->layoutDirection());
     dlg->setAutoCalculationEnabled(d->activeSheet->isAutoCalculationEnabled());
     dlg->setShowGrid(d->activeSheet->getShowGrid());

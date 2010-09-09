@@ -64,7 +64,7 @@
     <string>toolBar</string>
    </property>
    <property name="movable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="iconSize">
     <size>
@@ -96,7 +96,7 @@
     <string>toolBar</string>
    </property>
    <property name="movable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="iconSize">
     <size>
@@ -113,21 +113,17 @@
    <attribute name="toolBarBreak">
     <bool>true</bool>
    </attribute>
-   <addaction name="separator"/>
    <addaction name="actionEdit"/>
-   <addaction name="separator"/>
+   <addaction name="actionSelect"/>
+   <addaction name="actionInsert"/>
+   <addaction name="actionInsertImage"/>
+   <addaction name="actionShowCCP"/>
    <addaction name="actionCut"/>
-   <addaction name="separator"/>
    <addaction name="actionCopy"/>
-   <addaction name="separator"/>
    <addaction name="actionPaste"/>
-   <addaction name="separator"/>
    <addaction name="actionUndo"/>
-   <addaction name="separator"/>
    <addaction name="actionRedo"/>
-   <addaction name="separator"/>
    <addaction name="actionStyle"/>
-   <addaction name="separator"/>
    <addaction name="actionFormat"/>
    <addaction name="actionMathOp"/>
   </widget>
@@ -480,6 +476,48 @@
   <action name="actionDigitalSignature">
    <property name="text">
     <string>Digital Signature</string>
+   </property>
+  </action>
+  <action name="actionInsertImage">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Picture.png</normaloff>:/images/48x48/Edittoolbaricons/Picture.png</iconset>
+   </property>
+   <property name="text">
+    <string>InsertImage</string>
+   </property>
+  </action>
+  <action name="actionInsert">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Insert.png</normaloff>:/images/48x48/Edittoolbaricons/Insert.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </action>
+  <action name="actionSelect">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/Cursor.png</normaloff>:/images/48x48/Edittoolbaricons/Cursor.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </action>
+  <action name="actionShowCCP">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/CCP.png</normaloff>:/images/48x48/Edittoolbaricons/CCP.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
  </widget>
