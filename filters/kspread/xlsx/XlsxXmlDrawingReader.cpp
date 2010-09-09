@@ -497,11 +497,10 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
     TRY_READ_ATTR_WITH_NS(r, lo) // layout
     TRY_READ_ATTR_WITH_NS(r, qs) // quickStyle
 
-    const QString path = "xl/diagrams/";
-    //const QString colorsfile     = r_cs.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_cs, m_context->path, m_context->file);
-    const QString datafile       = r_dm.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_dm, m_context->path, m_context->file);
-    const QString layoutfile     = r_lo.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_lo, m_context->path, m_context->file);
-    //const QString quickstylefile = r_qs.isEmpty() ? QString() : path + m_context->relationships->linkTarget(r_qs, m_context->path, m_context->file);
+    //const QString colorsfile     = r_cs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_cs);
+    const QString datafile       = r_dm.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_dm);
+    const QString layoutfile     = r_lo.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_lo);
+    //const QString quickstylefile = r_qs.isEmpty() ? QString() : m_context->relationships->target(m_context->path, m_context->file, r_qs);
 
     //kDebug()<<"colorsfile="<<colorsfile<<"datafile="<<datafile<<"layoutfile="<<layoutfile<<"quickstylefile="<<quickstylefile;
 
