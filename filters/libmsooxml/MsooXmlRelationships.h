@@ -47,6 +47,9 @@ public:
 
     QString targetForType(const QString& path, const QString& file, const QString& relType);
 
+    /**
+     * @deprecated To be replaced by @ref MsooXmlRelationships::target
+     */
     QString linkTarget(const QString& id, const QString& path, const QString& file);
 private:
     class Private;
