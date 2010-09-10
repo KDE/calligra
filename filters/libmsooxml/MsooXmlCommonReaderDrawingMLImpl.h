@@ -1378,7 +1378,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         if (m_context->type == Slide) {
             if (!styleId.isEmpty()) {
                 // Case where layout defines the shape to use a list (lvl=0), but it's not been defined in the slide
-                if (m_currentListLevel == 0 && m_context->slideLayoutProperties->m_usesListStyle[styleId]) {
+                if (m_currentListLevel == 0 && m_context->slideLayoutProperties->m_usesListStyle[d->phIdx]) {
                     m_currentListLevel = 1;
                 }
             }
@@ -1411,19 +1411,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     if (args & read_p_Skip) {
         //nothing
     } else {
-         body = textPBuf.originalWriter();
-
+        body = textPBuf.originalWriter();
         if (m_listStylePropertiesAltered) {
             if (m_prevListLevel > 0) {
                 // Ending our current level
                 body->endElement(); // text:list
                 // Ending any additional levels needed
                 for(; m_prevListLevel > 1; --m_prevListLevel) {
-                   body->endElement(); // text:list-item
-                   body->endElement(); // text:list
+                    body->endElement(); // text:list-item
+                    body->endElement(); // text:list
                 }
+                m_prevListLevel = 0;
             }
-            m_prevListLevel = 0;
         }
 
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
@@ -1467,15 +1466,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                     body->startElement("text:list-item");
                  }
              } else if (m_prevListLevel > m_currentListLevel) {
-                 body->endElement(); // This ends the latest list
-                for(int listDepth = m_prevListLevel-1; listDepth > m_currentListLevel; --listDepth) {
-                    //Ending any additional list levels needed
-                    body->endElement(); // text:list-item
-                    body->endElement(); // text:list
+                 body->endElement(); // This ends the latest list text:list
+                 for(int listDepth = m_prevListLevel-1; listDepth > m_currentListLevel; --listDepth) {
+                     //Ending any additional list levels needed
+                     body->endElement(); // text:list-item
+                     body->endElement(); // text:list
                  }
-                 body->endElement(); // text:list-item
                  // Starting our own stuff for this level
-                 body->startElement("text:list-item");
+                 if (m_currentListLevel > 0) {
+                     body->endElement(); // revoving last lists text:list-item
+                     body->startElement("text:list-item");
+                 }
              } else { // m_prevListLevel==m_currentListLevel
                  body->startElement("text:list-item");
              }
@@ -1980,9 +1981,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
                                                 m_currentParagraphStyle, KoGenStyle::ParagraphType);
 
-        if (m_context->type == Slide) {
-           MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
-                                                   m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        if (!d->phIdx.isEmpty()) {
+            if (m_context->type == Slide) {
+               MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phIdx][copyLevel],
+                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
+            }
         }
     }
 #endif
@@ -4884,10 +4887,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     }
 
     if (m_prevListLevel > 0) {
-        for(; m_prevListLevel > 0; --m_prevListLevel) {
+        // Ending our current level
+        body->endElement(); // text:list
+        // Ending any additional levels needed
+        for(; m_prevListLevel > 1; --m_prevListLevel) {
             body->endElement(); // text:list-item
             body->endElement(); // text:list
         }
+        m_prevListLevel = 0;
     }
 
     READ_EPILOGUE
