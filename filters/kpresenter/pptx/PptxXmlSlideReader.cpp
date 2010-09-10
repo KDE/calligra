@@ -704,7 +704,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
         }
     }
 
-    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
+    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates);
 
     READ_EPILOGUE
 }
@@ -826,7 +826,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
         }
     }
 
-    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
+    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates);
 
     READ_EPILOGUE
 }
@@ -880,7 +880,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
         }
     }
 
-    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName);
+    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates);
 
     READ_EPILOGUE
 }

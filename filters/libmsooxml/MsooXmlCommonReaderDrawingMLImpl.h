@@ -62,6 +62,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
+    m_customListMade = false;
 }
 
 
@@ -1445,12 +1446,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                              if (d->phType == "title" || d->phType == "ctrTitle") {
                                  listStyleName = "titleList";
                              }
-                             else if (d->phType == "other" ) {
-                                 // Fixme? : maybe also other types qualify to other
+                             else if (styleId.isEmpty()) {
                                  listStyleName = "otherList";
                              }
                              else {
-                                // If there's no default type, it should be of type body
+                                // If no match, let's default this one.
                                 listStyleName = "bodyList";
                              }
                          }
@@ -1517,6 +1517,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
              body->endElement(); // text:list-item
          }
 #endif
+
+        if (m_listStylePropertiesAltered) {
+            // If they were manually altered in last round, most likely not going to continue with same style.
+            m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+        }
 
 #ifdef PPTXXMLSLIDEREADER_H
          // In this case we have artificially created a list of level 1
@@ -2029,8 +2034,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 #endif
 
     if (m_listStylePropertiesAltered) {
+        m_customListMade = true;
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
+        if (m_currentListLevel == 0) {
+            m_currentListLevel = 1;
+        }
         // For now we take a stand that any altered style makes its own list.
         m_currentListStyleProperties->setLevel(m_currentListLevel);
 
@@ -2041,6 +2050,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         const QString elementContents = QString::fromUtf8(listBuf.buffer(),
                                                           listBuf.buffer().size());
         m_currentListStyle.addChildElement("list-style-properties", elementContents);
+    }
+    else if (m_customListMade) {
+        // We come here in the case, that there was e.g buChar in the previous paragraph
+        // and in this paragraph we want to continue with predefined list styles
+        m_listStylePropertiesAltered = true;
+        m_customListMade = false;
+    }
+    else {
+        m_customListMade = false;
     }
 
     delete m_currentListStyleProperties;
@@ -4761,6 +4779,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 {
     READ_PROLOGUE
+    m_customListMade = false;
     const QXmlStreamAttributes attrs(attributes());
     // wrap (Text Wrapping Type)
     // Specifies the wrapping options to be used for this text body. If this attribute is omitted,
