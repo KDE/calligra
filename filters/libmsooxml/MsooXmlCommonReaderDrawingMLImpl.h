@@ -1312,6 +1312,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 
     bool pprRead = false;
+    bool rRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -1337,6 +1338,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 // CASE #400.2
 //! @todo add more conditions testing the parent
             else if (QUALIFIED_NAME_IS(r)) {
+                rRead = true;
 #ifdef PPTXXMLSLIDEREADER_H
                 d->textBoxHasContent = true;
 #endif
@@ -1345,6 +1347,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             ELSE_TRY_READ_IF(fld)
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (!rRead && m_prevListLevel > 0) {
+        // Making sure that if we were previously in a list and if there's an empty line, that
+        // we don't output a bullet to it
+        // Currently we emulate this as if there would have been buNone in ppr
+        // Would there be a more simple way to do this?
+        m_listStylePropertiesAltered = true;
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+        m_currentListStyleProperties = new KoListLevelProperties;
+        m_currentListLevel = 1;
+        m_currentListStyleProperties->setLevel(m_currentListLevel);
+        m_currentListStyleProperties->setBulletCharacter(QChar());
+
+        QBuffer listBuf;
+        KoXmlWriter listStyleWriter(&listBuf);
+
+        m_currentListStyleProperties->saveOdf(&listStyleWriter);
+        const QString elementContents = QString::fromUtf8(listBuf.buffer(),
+                                                          listBuf.buffer().size());
+        m_currentListStyle.addChildElement("list-style-properties", elementContents);
+        delete m_currentListStyleProperties;
+        m_currentListStyleProperties = 0;
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
