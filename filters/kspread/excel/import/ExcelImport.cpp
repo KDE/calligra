@@ -144,6 +144,7 @@ public:
     void processMetaData();
     void processSheet(Sheet* isheet, KSpread::Sheet* osheet);
     void processSheetForHeaderFooter(Sheet* isheet, KSpread::Sheet* osheet);
+    void processSheetForFilters(Sheet* isheet, KSpread::Sheet* osheet);
     void processColumn(Sheet* isheet, unsigned column, KSpread::Sheet* osheet);
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
     void processCell(Cell* icell, KSpread::Cell ocell);
@@ -272,6 +273,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->processSheet(sheet, ksheet);
         d->shapesXml->endElement();
     }
+
+    //TODO: settings
+    //TODO: named expressions
 
     QBuffer manifestBuffer;
     KoXmlWriter manifestWriter(&manifestBuffer);
@@ -506,6 +510,8 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
 
         shapesXml->endElement();
     }
+
+    processSheetForFilters(is, os);
 }
 
 void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, KSpread::Sheet* os)
@@ -514,6 +520,22 @@ void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, KSpread::Sheet
             convertHeaderFooter(is->leftHeader()), convertHeaderFooter(is->centerHeader()),
             convertHeaderFooter(is->rightHeader()), convertHeaderFooter(is->leftFooter()),
             convertHeaderFooter(is->centerFooter()), convertHeaderFooter(is->rightFooter()));
+}
+
+void ExcelImport::Private::processSheetForFilters(Sheet* is, KSpread::Sheet* os)
+{
+    static int rangeId = 0; // not very nice to do this this way, but I only care about sort of unique names
+    QList<QRect> filters = workbook->filterRanges(is);
+    foreach (const QRect& filter, filters) {
+        KSpread::Database db;
+        db.setName(QString("excel-database-%1").arg(++rangeId));
+        db.setDisplayFilterButtons(true);
+        QRect r = filter.adjusted(1, 1, 1, 1);
+        r.setBottom(is->maxRow()+1);
+        KSpread::Region range(r, os);
+        db.setRange(range);
+        os->cellStorage()->setDatabase(range, db);
+    }
 }
 
 QString ExcelImport::Private::convertHeaderFooter(const QString& text)
