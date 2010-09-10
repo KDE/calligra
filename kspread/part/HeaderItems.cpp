@@ -155,6 +155,7 @@ void RowHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
 */
 void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
+    Q_UNUSED(_ev);
     // TODO XXX
 }
 
@@ -312,6 +313,7 @@ void ColumnHeaderItem::slotAutoScroll(const QPoint& scrollDistance)
 */
 void ColumnHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
+    Q_UNUSED(_ev);
     // TODO XXX
 }
 
@@ -452,6 +454,7 @@ void SelectAllButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev)
 
 void SelectAllButtonItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 {
+    Q_UNUSED(_ev);
     // TODO XXX
 }
 

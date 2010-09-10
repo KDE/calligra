@@ -557,14 +557,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
     QString imagedata;
     TRY_READ_ATTR_WITH_NS(r, id)
     if (!r_id.isEmpty()) {
-        imagedata = m_context->relationships->linkTarget(r_id, m_context->path, m_context->file);
+        imagedata = m_context->relationships->target(m_context->path, m_context->file, r_id);
     }
 
     kDebug() << "imagedata:" << imagedata;
     m_imagedataPath.clear();
     if (!imagedata.isEmpty()) {
 //! @todo ooo saves binaries to the root dir; should we?
-        RETURN_IF_ERROR( copyFile(m_context->path + '/' + imagedata, QLatin1String("Pictures/"), m_imagedataPath) )
+        RETURN_IF_ERROR( copyFile(imagedata, QLatin1String("Pictures/"), m_imagedataPath) )
         m_imagedataFile = imagedata;
         addManifestEntryForPicturesDir();
     }

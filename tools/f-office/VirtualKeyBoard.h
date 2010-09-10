@@ -2,9 +2,8 @@
  * This file is part of Maemo 5 Office UI for KOffice
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  *
- * Contact: Pendurthi Kaushik  <kaushiksjce@gmail.com>
+ * Contact: Kaushik Pendurthi <kaushiksjce@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -35,8 +34,14 @@
 #include <QComboBox>
 #include "MainWindow.h"
 #include <KoTextEditor.h>
+#include <QFile>
+#include <QDir>
+#include <QFileInfo>
+#include <QTextStream>
+#include <QThread>
+#include <klocale.h>
 
-
+#include "VirtualKeyBoardLanguageDownloader.h"
 
 #define VIRTUALKEYBOARDFRAME_YCORDINATE_VALUE 180
 #define VIRTUALKEYBOARDFRAME_XCORDINATE_VALUE 5
@@ -53,6 +58,7 @@
 #define VIRTUALKEYBOARDFRAMENUMBERS_HEIGHT 200
 
 /*!
+
  * \brief VirtualKeyBoard class displays the virtual keyboard
  * on the screen to add multiple languages
  */
@@ -65,11 +71,16 @@ public:
     ~VirtualKeyBoard();
     void ShowVirtualKeyBoard(MainWindow *,KoTextEditor * );
 private:
-     int showLanguage;
-     int count;
-     bool switchForVirtualKeyBoard;
-     bool switchForNextVirtualKeyBoardCharactors;
-     KoTextEditor *showThePosition;
+
+    DownloadManager *manager;
+    QString homeDirPath;
+    QString languageFileName;
+    QString newLanguage;
+    int showLanguage;
+    int count;
+    bool switchForVirtualKeyBoard;
+    bool switchForNextVirtualKeyBoardCharactors;
+    KoTextEditor *showThePosition;
 
     //components for the virtual keyboard
 
@@ -80,6 +91,23 @@ private:
     QPushButton *virtualKeyBoardButton[80];
     QPushButton *nextSetOfCharactors;
 
+    //components for the addition of languages
+
+    QDialog *addingNewLanguage;
+    QVBoxLayout *additionLayout;
+    QLabel *stateOfAddingNewLanguage;
+    QComboBox *listOfAvailableLanguages;
+    QPushButton *add;
+
+
+    //components for the removal of languages
+
+    QDialog *removeLanguage;
+    QVBoxLayout *removeLayout;
+    QLabel *stateOfRemovingNewLanguage;
+    QComboBox *listOfInstalledLanguages;
+    QPushButton *remove;
+
     //different languages on the virtual keyboard
 
     QStringList virtualKeyBoardButtonValuesKannada;
@@ -87,7 +115,9 @@ private:
     QStringList virtualKeyBoardButtonValuesArabic;
     QStringList virtualKeyBoardButtonValuesHindi;
     QStringList virtualKeyBoardButtonValuesFinnish;
+    QStringList virtualKeyBoardButtonValuesCurrentLanguage;
 
+    QStringList containerForListOfAvailableLanguages;
     //for the numbers on the keyboard
 
     MainWindow *parentForTheNumbersFrame;
@@ -103,6 +133,15 @@ private slots:
     void showNumbersOfLanguage();
     void closeNumbers();
     void displayTheRestOfTheCharactors();
+    void addNewLanguage();
+    void removeInstalledLanguage();
+    void deleteFilesOfLanguage();
+    void downloadAndAdd();
+    void nowDownloadFont();
+private:
+
+    int populateTheLanguages();
+
 };
 
 #endif // VIRTUALKEYBOARD_H

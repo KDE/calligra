@@ -38,6 +38,7 @@ class KFORMEDITOR_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
 {
 public:
     WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data);
+    //! For TabStopDialog
     WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0);
     virtual ~WidgetTreeWidgetItem();
 
@@ -46,7 +47,7 @@ public:
 
     //! \return the ObjectTreeItem information associated to this item.
     ObjectTreeItem* data() const {
-        return m_item;
+        return m_data;
     }
 
     //2.0 virtual void setOpen(bool o);
@@ -65,8 +66,7 @@ protected:
     //2.0 virtual void setup();
 
 private:
-    ObjectTreeItem *m_item;
-//    friend class WidgetTreeWidget;
+    ObjectTreeItem *m_data;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -147,6 +147,9 @@ private:
     Form *m_form;
     //2.0 WidgetTreeWidgetItem *m_topItem;
     Options m_options;
+
+    //! Used to temporarily disable slotSelectionChanged() when reloading contents in setForm().
+    bool m_slotSelectionChanged_enabled;
 
     friend class TabStopDialog;
 };

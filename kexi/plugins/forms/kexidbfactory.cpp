@@ -299,11 +299,11 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         // inherited
         KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
         wi->addAlternateClassName("KexiPushButton");
-        wi->setName(i18n("Command Button"));
+        wi->setName(i18n("Button"));
         wi->setNamePrefix(
             i18nc("Widget name. This string will be used to name widgets of this class. "
                   "It must _not_ contain white spaces and non latin1 characters.", "button"));
-        wi->setDescription(i18n("A command button to execute actions"));
+        wi->setDescription(i18n("A button for executing actions"));
         wi->setParentFactoryName("stdwidgets");
         wi->setInheritedClassName("KPushButton");
         addClass(wi);

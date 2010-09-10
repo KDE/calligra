@@ -395,7 +395,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
 {
     setModal(true);
     setObjectName("actionSelectorDialog");
-    setWindowTitle(i18n("Assigning Action to Command Button"));
+    setWindowTitle(i18n("Assigning Action to Button"));
     setButtons(KDialog::Ok | KDialog::Cancel);
     d->actionWidgetName = actionWidgetName;
     setButtonGuiItem(KDialog::Ok,

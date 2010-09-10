@@ -20,18 +20,21 @@ if(QT_QMAEMO5_LIBRARY)
 
 QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
 
-QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h DigitalSignatureDialog.h FoDocumentRdf.h RdfInfoDialog.h FoImageSelectionWidget.h)
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h
+VirtualKeyBoardLanguageDownloader.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h DigitalSignatureDialog.h FoDocumentRdf.h RdfInfoDialog.h FoImageSelectionWidget.h)
 
-add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp DigitalSignatureDialog.cpp FoDocumentRdf.cpp RdfInfoDialog.cpp FoImageSelectionWidget.cpp
+add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp VirtualKeyBoardLanguageDownloader.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp DigitalSignatureDialog.cpp FoDocumentRdf.cpp RdfInfoDialog.cpp FoImageSelectionWidget.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
 
 else(QT_QMAEMO5_LIBRARY)
 
 QT4_WRAP_UI(FreOfficeUiSrc MainWindow.ui ZoomDialog.ui AboutDialog.ui CollabDialog.ui)
 
-QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h DigitalSignatureDialog.h FoImageSelectionWidget.h)
+QT4_WRAP_CPP(FreOfficeMocSrc MainWindow.h Accelerator.h VirtualKeyBoard.h 
+VirtualKeyBoardLanguageDownloader.h
+ZoomDialog.h HildonMenu.h HildonApplication.h Splash.h NotifyDialog.h DBusAdaptor.h PresentationTool.h AboutDialog.h CollabDialog.h Collaborate.h CollabServer.h CollabClient.h  PreviewDialog.h MainWindowAdaptor.h PresentationToolAdaptor.h NotesDialog.h PreviewButton.h FoCellToolFactory.h FoCellTool.h SlidingMotionDialog.h GlWidget.h GlPresenter.h FoExternalEditor.h FoCellEditor.h DigitalSignatureDialog.h FoImageSelectionWidget.h)
 
-add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp DigitalSignatureDialog.cpp FoImageSelectionWidget.cpp
+add_executable(FreOffice Main.cpp MainWindow.cpp Accelerator.cpp VirtualKeyBoard.cpp VirtualKeyBoardLanguageDownloader.cpp ZoomDialog.cpp HildonMenu.cpp HildonApplication.cpp Splash.cpp NotifyDialog.cpp PresentationTool.cpp DBusAdaptor.cpp AboutDialog.cpp CollabDialog.cpp Collaborate.cpp CollabServer.cpp CollabClient.cpp  FlowLayout.cpp PreviewDialog.cpp MainWindowAdaptor.cpp PresentationToolAdaptor.cpp NotesDialog.cpp PreviewButton.cpp FoCellTool.cpp FoCellToolFactory.cpp SlidingMotionDialog.cpp GlWidget.cpp GlPresenter.cpp FoExternalEditor.cpp FoCellEditor.cpp RemoveSheet.cpp DigitalSignatureDialog.cpp FoImageSelectionWidget.cpp
   ${FreOfficeUiSrc} ${FreOfficeMocSrc} ${FreOffice_RCC_SRCS})
 
 endif(QT_QMAEMO5_LIBRARY)

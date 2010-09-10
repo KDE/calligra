@@ -2,9 +2,8 @@
  * This file is part of Maemo 5 Office UI for KOffice
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  *
- * Contact: Pendurthi Kaushik  <kaushiksjce@gmail.com>
+ * Contact: Kaushik Pendurthi <kaushiksjce@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -25,13 +24,55 @@
 
 #include "VirtualKeyBoard.h"
 
+#ifdef Q_WS_MAEMO_5
+#include <QtMaemo5/QMaemo5InformationBox>
+#endif
+
+#define POPULATELANGUAGES "/.VirtualKeyBoardLanguages/.headers"
+#define FONTS   "/.fonts/"
+#define HEADERS "/.VirtualKeyBoardLanguages/.headers/"
+#define LISTOFAVAILABLELANGUAGESBASKET  "/.VirtualKeyBoardLanguages/ListOfAvailableLanguages.txt"
+#define LISTOFAVAILABLELANGUAGES  "/.VirtualKeyBoardLanguages/"
+
+
 VirtualKeyBoard::VirtualKeyBoard(QWidget *parent) :
         QMainWindow(parent)
 {
+    manager =new DownloadManager();
     count=0;
-    showLanguage=0;
+    showLanguage=2;
     switchForVirtualKeyBoard=false;
     switchForNextVirtualKeyBoardCharactors=false;
+
+    QDir directory = QDir::home();
+    homeDirPath = directory.path();
+    QStringList files;
+    QString name(".VirtualKeyBoardLanguages");
+    files = directory.entryList(QStringList("*"),QDir::Hidden );
+    bool filepresent=false;
+    for(int i=0;i<files.count();i++) {
+        if(!name.compare(files.at(i))) {
+            filepresent=true;
+        }
+    }
+    if(!filepresent) {
+        if(directory.mkdir(".VirtualKeyBoardLanguages")); {
+            if(directory.cd(".VirtualKeyBoardLanguages"));
+            if(directory.mkdir(".headers"));
+        }
+    }
+    directory=QDir::home();
+    name= ".fonts";
+    files = directory.entryList(QStringList("*"),QDir::Hidden );
+    filepresent=false;
+    for(int i=0;i<files.count();i++) {
+        if(!name.compare(files.at(i))) {
+            filepresent=true;
+        }
+    }
+    if(!filepresent) {
+        directory.mkdir(".fonts");
+    }
 }
 
 VirtualKeyBoard::~VirtualKeyBoard()
@@ -43,6 +84,10 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
 {
     switchForVirtualKeyBoard=!switchForVirtualKeyBoard;
     if(switchForVirtualKeyBoard) {
+
+        if(showLanguage > 4 || showLanguage < 2) {
+            showLanguage=2;
+        }
 
         parentForTheNumbersFrame=parentOfVirtualKeyBoard;
         showThePosition=toDisplayCharactorAtPosition;
@@ -73,12 +118,12 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
 
         languages=new QComboBox();
         Q_CHECK_PTR(languages);
-        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"Kannada","the keyboard will change");
-        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"Tamil");
+        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"+add Language");
+        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"-remove language");
+        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"Finnish");
         languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"Arabic");
         languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"Hindi");
-        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),"Finnish");
-        languages->setMaxCount(5);
+        languages->setMaxCount(7+populateTheLanguages());
 
         numbers=new QPushButton();
         Q_CHECK_PTR(numbers);
@@ -89,30 +134,37 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
         nextSetOfCharactors->setIcon(QIcon(":/images/64x64/VirtualKeyBoard/change.png"));
         nextSetOfCharactors->setCheckable(true);
 
-        //unicode for kannada charactors
-        virtualKeyBoardButtonValuesKannada
-                <<(QString)0x0C85<<(QString)0x0C86<<(QString)0x0C87<<(QString)0x0C88
-                <<(QString)0x0C89<<(QString)0x0C8A<<(QString)0x0C8B<<(QString)0x0C8E
-                <<(QString)0x0C8F<<(QString)0x0C90<<(QString)0x0C92<<(QString)0x0C93
-                <<(QString)0x0C94<<(QString)0x0C95<<(QString)0x0C96<<(QString)0x0C97
-                <<(QString)0x0C98<<(QString)0x0C99<<(QString)0x0C9A<<(QString)0x0C9B
-                <<(QString)0x0C9C<<(QString)0x0C9D<<(QString)0x0C9E<<(QString)0x0C9F
-                <<(QString)0x0CA0<<(QString)0x0CA1<<(QString)0x0CA2<<(QString)0x0CA3
-                <<(QString)0x0CA4<<(QString)0x0CA5<<(QString)0x0CA6<<(QString)0x0CA7
-                <<(QString)0x0CA8<<(QString)0x0CAA<<(QString)0x0CAB<<(QString)0x0CAC
-                <<(QString)0x0CAD<<(QString)0x0CAE<<(QString)0x0CAF<<(QString)0x0CB0
-                <<(QString)0x0CB1<<(QString)0x0CB2<<(QString)0x0CB3<<(QString)0x0CB5
-                <<(QString)0x0CB6<<(QString)0x0CB7<<(QString)0x0CB8<<(QString)0x0CB9
-                <<(QString)0x0CCD<<(QString)0x0CD5<<(QString)0x0CD6<<(QString)0x0CDE
-                <<(QString)0x0CE0<<(QString)0x0CBF<<(QString)0x0CBC<<(QString)0x0CBD
-                <<(QString)0x0CBE<<(QString)0x0CC0<<(QString)0x0CC1<<(QString)0x0CC2
-                <<(QString)0x0CC3<<(QString)0x0CC4<<(QString)0x0CC6<<(QString)0x0CC7
-                <<(QString)0x0CC8<<(QString)0x0CC9<<(QString)0x0CCC<<(QString)0x0CCA
-                <<(QString)0x0CEF<<(QString)0x0CE6<<(QString)0x0CE7
-                <<(QString)0x0CE8<<(QString)0x0CE9<<(QString)0x0CEA<<(QString)0x0CEB
-                <<(QString)0x0CEC<<(QString)0x0CED<<(QString)0x0CEE<<(QString)0x0CEF;
+        // permanant languages which cannot be deleted
+        // unicode for hindi charactors
+
+        virtualKeyBoardButtonValuesHindi
+                <<(QString)0x0905<<(QString)0x0906<<(QString)0x0907<<(QString)0x0908<<(QString)0x0909
+                <<(QString)0x090A<<(QString)0x090B<<(QString)0x090F<<(QString)0x0910<<(QString)0x0913
+                <<(QString)0x0914<<(QString)0x0915<<(QString)0x0916<<(QString)0x0917<<(QString)0x0918
+                <<(QString)0x0919<<(QString)0x091A<<(QString)0x091B<<(QString)0x091C<<(QString)0x091D
+                <<(QString)0x091E<<(QString)0x091F<<(QString)0x0920<<(QString)0x0921<<(QString)0x0922
+                <<(QString)0x0923<<(QString)0x0924<<(QString)0x0925<<(QString)0x0926<<(QString)0x0927
+                <<(QString)0x0928<<(QString)0x092A<<(QString)0x092B<<(QString)0x092C<<(QString)0x092D
+                <<(QString)0x092E<<(QString)0x092F<<(QString)0x0930<<(QString)0x0932<<(QString)0x0935
+                <<(QString)0x0936<<(QString)0x0937<<(QString)0x0938<<(QString)0x0939<<(QString)0x093E
+                <<(QString)0x093F<<(QString)0x0940<<(QString)0x0941<<(QString)0x0942<<(QString)0x0943
+                <<(QString)0x0947<<(QString)0x0948<<(QString)0x094B<<(QString)0x094C<<(QString)0x094D
+                <<(QString)0x0901<<(QString)0x0902
+                <<(QString)0x0903<<(QString)0x0964<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<(QString)0x0966
+                <<(QString)0x0967<<(QString)0x0968<<(QString)0x0969<<(QString)0x096A<<(QString)0x096B
+                <<(QString)0x096C<<(QString)0x096D<<(QString)0x096E<<(QString)0x096F;
 
 
+        // unicode +english charactors for finnish
+
+        virtualKeyBoardButtonValuesFinnish
+                <<"a"<<"b"<<"c"<<"d"<<"e"<<"f"<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"
+                <<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z"<<(QString)0x00E4<<(QString)0x00E5
+                <<(QString)0x00F6<<(QString)0x0161<<(QString)0x017E<<"A"<<"B"<<"C"<<"D"<<"E"<<"F"<<"G"
+                <<"H"<<"I"<<"J"<<"K"<<"L"<<"M"<<"N"<<"O"<<"P"<<"Q"<<"R"<<"S"<<"T"<<"U"<<"V"<<"W"<<"X"
+                <<"Y"<<"Z"<<(QString)0x00C4<<(QString)0x00C5 <<(QString)0x00D6 <<(QString)0x0160
+                <<(QString)0x017D <<" " <<" " <<" " <<" " <<" " <<" " <<" "<<"0"<<"1"<<"2"<<"3"
+                <<"4"<<"5"<<"6"<<"7"<<"8"<<"9";
 
         //unicode for  arabic charactors
 
@@ -131,62 +183,8 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
                 <<(QString)0x0661<<(QString)0x0662<<(QString)0x0663<<(QString)0x0664<<(QString)0x0665
                 <<(QString)0x0666<<(QString)0x0667<<(QString)0x0668<<(QString)0x0669;
 
-        //unicode for tamil charactors
 
-        virtualKeyBoardButtonValuesTamil
-                <<(QString)0x0B82<<(QString)0x0B83<<(QString)0x0B85<<(QString)0x0B86
-                <<(QString)0x0B87<<(QString)0x0B88<<(QString)0x0B89<<(QString)0x0B8A
-                <<(QString)0x0B8E<<(QString)0x0B8F<<(QString)0x0B90<<(QString)0x0B92
-                <<(QString)0x0B93<<(QString)0x0B94<<(QString)0x0B92<<(QString)0x0BD7
-                <<(QString)0x0B95<<(QString)0x0B99<<(QString)0x0B9A<<(QString)0x0B9C
-                <<(QString)0x0B9E<<(QString)0x0B9F<<(QString)0x0BA3<<(QString)0x0BA4
-                <<(QString)0x0BA8<<(QString)0x0BA9<<(QString)0x0BAA<<(QString)0x0BAE
-                <<(QString)0x0BAF<<(QString)0x0BB0<<(QString)0x0BB1<<(QString)0x0BB2
-                <<(QString)0x0BB3<<(QString)0x0BB4<<(QString)0x0BB5<<(QString)0x0BB6
-                <<(QString)0x0BB7<<(QString)0x0BB8<<(QString)0x0BF2<<(QString)0x0BB9
-                <<(QString)0x0BBE<<(QString)0x0BBF<<(QString)0x0BC0<<(QString)0x0BC1
-                <<(QString)0x0BC2<<(QString)0x0BC6<<(QString)0x0BC7<<(QString)0x0BC8
-                <<(QString)0x0BCA<<(QString)0x0BC6<<(QString)0x0BBE<<(QString)0x0BCB
-                <<(QString)0x0BC7<<(QString)0x0BBE<<(QString)0x0BCC<<(QString)0x0BC6
-                <<(QString)0x0BD7<<(QString)0x0BCD<<(QString)0x0BD0<<(QString)0x0BD7
-                <<(QString)0x0BF0<<(QString)0x0BF1<<(QString)0x0BF2<<(QString)0x0BF3
-                <<(QString)0x0BFA<<(QString)0x0BF3<<(QString)0x0BF4<<(QString)0x0BF5
-                <<(QString)0x0BF6<<(QString)0x0BE6<<(QString)0x0BE7<<(QString)0x0BE8
-                <<(QString)0x0BE9<<(QString)0x0BEA<<(QString)0x0BEB<<(QString)0x0BEC
-                <<(QString)0x0BED<<(QString)0x0BEE<<(QString)0x0BEF;
-
-
-        // unicode for hindi charactors
-
-        virtualKeyBoardButtonValuesHindi
-                <<(QString)0x0905<<(QString)0x0906<<(QString)0x0907<<(QString)0x0908<<(QString)0x0909
-                <<(QString)0x090A<<(QString)0x090B<<(QString)0x090F<<(QString)0x0910<<(QString)0x0913
-                <<(QString)0x0914<<(QString)0x0915<<(QString)0x0916<<(QString)0x0917<<(QString)0x0918
-                <<(QString)0x0919<<(QString)0x091A<<(QString)0x091B<<(QString)0x091C<<(QString)0x091D
-                <<(QString)0x091E<<(QString)0x091F<<(QString)0x0920<<(QString)0x0921<<(QString)0x0922
-                <<(QString)0x0923<<(QString)0x0924<<(QString)0x0925<<(QString)0x0926<<(QString)0x0927
-                <<(QString)0x0928<<(QString)0x092A<<(QString)0x092B<<(QString)0x092C<<(QString)0x092D
-                <<(QString)0x092E<<(QString)0x092F<<(QString)0x0930<<(QString)0x0932<<(QString)0x0935
-                <<(QString)0x0936<<(QString)0x0937<<(QString)0x0938<<(QString)0x0939<<(QString)0x093E
-                <<(QString)0x093F<<(QString)0x0940<<(QString)0x0941<<(QString)0x0942<<(QString)0x0943
-                <<(QString)0x0947<<(QString)0x0948<<(QString)0x094B<<(QString)0x094C<<" "<<" "<<" "
-                <<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<" "<<(QString)0x0966
-                <<(QString)0x0967<<(QString)0x0968<<(QString)0x0969<<(QString)0x096A<<(QString)0x096B
-                <<(QString)0x096C<<(QString)0x096D<<(QString)0x096E<<(QString)0x096F;
-
-
-        // unicode +english charactors for finnish
-
-        virtualKeyBoardButtonValuesFinnish
-                <<"a"<<"b"<<"c"<<"d"<<"e"<<"f"<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"
-                <<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z"<<(QString)0x00E4<<(QString)0x00E5
-                <<(QString)0x00F6<<(QString)0x0161<<(QString)0x017E<<"A"<<"B"<<"C"<<"D"<<"E"<<"F"<<"G"
-                <<"H"<<"I"<<"J"<<"K"<<"L"<<"M"<<"N"<<"O"<<"P"<<"Q"<<"R"<<"S"<<"T"<<"U"<<"V"<<"W"<<"X"
-                <<"Y"<<"Z"<<(QString)0x00C4<<(QString)0x00C5 <<(QString)0x00D6 <<(QString)0x0160
-                <<(QString)0x017D <<" " <<" " <<" " <<" " <<" " <<" " <<" "<<"0"<<"1"<<"2"<<"3"
-                <<"4"<<"5"<<"6"<<"7"<<"8"<<"9";
-
-
+        ///////for dynamic language
         virtualKeyBoardFrame->setFrameStyle(QFrame::Raised);
         virtualKeyBoardLayout->setVerticalSpacing(0);
         virtualKeyBoardLayout->setHorizontalSpacing(0);
@@ -208,20 +206,36 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
             }
             else {
                 switch(showLanguage) {
-                case 0:
-                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesKannada.at(count));
-                    break;
-                case 1:
-                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesTamil.at(count));
-                    break;
                 case 2:
-                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesArabic.at(count));
+                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesFinnish.at(count));
                     break;
                 case 3:
-                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesHindi.at(count));
+                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesArabic.at(count));
                     break;
                 case 4:
-                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesFinnish.at(count));
+                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesHindi.at(count));
+                    break;
+                default:
+                    QComboBox*ForSelection =languages;
+                    QString filename = ForSelection->currentText();
+                    QFile file(HEADERS+filename);
+                    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+                        return;
+                    QTextStream in(&file);
+                    QString line =in.readLine();
+                    bool ok;
+                    ok=true;
+                    int i=0;
+                    virtualKeyBoardButtonValuesCurrentLanguage.clear();
+                    while (!line.isNull()) {
+                        int x=line.toInt(&ok,16);
+                        virtualKeyBoardButtonValuesCurrentLanguage<<(QString)x;
+                        i++;
+                        line = in.readLine();
+                    }
+                    file.close();
+
+                    virtualKeyBoardButton[count]->setText((QString)virtualKeyBoardButtonValuesCurrentLanguage.at(count));
                     break;
                 }
                 virtualKeyBoardLayout->addWidget(virtualKeyBoardButton[count],i,j);
@@ -229,36 +243,49 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
             }
         }
         switch(showLanguage) {
-        case 0:
+        case 2:
             for(int numberCount=0;numberCount<10;numberCount++) {
-                showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesKannada.at(numberCount+69));
+                showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesFinnish.at(numberCount+69));
                 showTheNumberLayout->addWidget(showTheNumbers[numberCount]);
             }
             break;
-         case 1:
+         case 3:
 
-            for(int numberCount=0;numberCount<10;numberCount++) {
-                showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesTamil.at(numberCount+69));
-                showTheNumberLayout->addWidget(showTheNumbers[numberCount]);
-            }
-            break;
-         case 2:
             for(int numberCount=0;numberCount<10;numberCount++) {
                 showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesArabic.at(numberCount+69));
                 showTheNumberLayout->addWidget(showTheNumbers[numberCount]);
             }
             break;
-         case 3:
+         case 4:
             for(int numberCount=0;numberCount<10;numberCount++) {
                 showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesHindi.at(numberCount+69));
                 showTheNumberLayout->addWidget(showTheNumbers[numberCount]);
             }
             break;
-         case 4:
+         default:
+            QComboBox*ForSelection =languages;
+            QString filename =ForSelection->currentText();
+            QFile file(HEADERS+filename);
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+                return;
+            QTextStream in(&file);
+            QString line =in.readLine();
+            bool ok;
+            ok=true;
+            int i=0;
+            virtualKeyBoardButtonValuesCurrentLanguage.clear();
+            while (!line.isNull()) {
+                int x=line.toInt(&ok,16);
+                virtualKeyBoardButtonValuesCurrentLanguage<<(QString)x;
+                i++;
+                line = in.readLine();
+            }
+            file.close();
             for(int numberCount=0;numberCount<10;numberCount++) {
-                showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesFinnish.at(numberCount+69));
+                showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesCurrentLanguage.at(numberCount+69));
                 showTheNumberLayout->addWidget(showTheNumbers[numberCount]);
             }
+
             break;
         }
 
@@ -315,7 +342,7 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
         connect(virtualKeyBoardButton[42],SIGNAL(clicked()),this,SLOT(displayCharactorVirtualKeyBoard()));
         connect(virtualKeyBoardButton[43],SIGNAL(clicked()),this,SLOT(displayCharactorVirtualKeyBoard()));
         connect(virtualKeyBoardButton[44],SIGNAL(clicked()),this,SLOT(displayCharactorVirtualKeyBoard()));
-       connect(languages,SIGNAL(activated(int)),this,SLOT(showLanguagesList()));
+        connect(languages,SIGNAL(activated(int)),this,SLOT(showLanguagesList()));
 
         showTheNumberFrame->setLayout(showTheNumberLayout);
         virtualKeyBoardFrame->setLayout(virtualKeyBoardLayout);
@@ -371,7 +398,7 @@ void VirtualKeyBoard::ShowVirtualKeyBoard(MainWindow *parentOfVirtualKeyBoard,Ko
         disconnect(virtualKeyBoardButton[44],SIGNAL(clicked()),this,SLOT(displayCharactorVirtualKeyBoard()));
 
         virtualKeyBoardFrame->close();
-        
+
         delete numbers;
         numbers=0;
 
@@ -505,44 +532,24 @@ void VirtualKeyBoard::displayCharactorVirtualKeyBoard()
 void VirtualKeyBoard::showLanguagesList()
 {
     QComboBox*ForSelection=qobject_cast<QComboBox*>(sender());
+
     if(switchForNextVirtualKeyBoardCharactors)
         displayTheRestOfTheCharactors();
+
     switch(ForSelection->currentIndex())
     {
     case 0:
         showLanguage=0;
-        for(int i=0;i<45;i++) {
-            virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesKannada.at(i));
-        }
-        for(int numberCount=0;numberCount<10;numberCount++) {
-            showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesKannada.at(69+numberCount));
-        }
+
+        addNewLanguage();
         break;
-    case 1:showLanguage=1;
-        for(int i=0;i<45;i++) {
-            virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesTamil.at(i));
-        }
-        for(int numberCount=0;numberCount<10;numberCount++) {
-            showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesTamil.at(69+numberCount));
-        }
+
+    case 1:
+        showLanguage=1;
+        removeInstalledLanguage();
         break;
-    case 2:showLanguage=2;
-        for(int i=0;i<45;i++) {
-            virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesArabic.at(i));
-        }
-        for(int numberCount=0;numberCount<10;numberCount++) {
-            showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesArabic.at(69+numberCount));
-        }
-        break;
-    case 3:showLanguage=3;
-        for(int i=0;i<45;i++) {
-            virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesHindi.at(i));
-        }
-        for(int numberCount=0;numberCount<10;numberCount++) {
-            showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesHindi.at(69+numberCount));
-        }
-        break;
-    case 4:showLanguage=4;
+    case 2:
+        showLanguage=2;
         for(int i=0;i<45;i++) {
             virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesFinnish.at(i));
         }
@@ -550,7 +557,51 @@ void VirtualKeyBoard::showLanguagesList()
             showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesFinnish.at(69+numberCount));
         }
         break;
+    case 3:showLanguage=3;
+        for(int i=0;i<45;i++) {
+            virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesArabic.at(i));
+        }
+        for(int numberCount=0;numberCount<10;numberCount++) {
+            showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesArabic.at(69+numberCount));
+        }
+        break;
+    case 4:showLanguage=4;
+        for(int i=0;i<45;i++) {
+            virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesHindi.at(i));
+        }
+        for(int numberCount=0;numberCount<10;numberCount++) {
+            showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesHindi.at(69+numberCount));
+        }
+        break;
+    default :
+
+            showLanguage=99;
+    QString filename =ForSelection->currentText();
+    QFile file(homeDirPath+HEADERS+filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QTextStream in(&file);
+    QString line =in.readLine();
+    bool ok;
+    ok=true;
+    int i=0;
+    virtualKeyBoardButtonValuesCurrentLanguage.clear();
+    while (!line.isNull()) {
+        int x=line.toInt(&ok,16);
+        virtualKeyBoardButtonValuesCurrentLanguage<<(QString)x;
+        i++;
+        line = in.readLine();
     }
+    file.close();
+    for(int i=0;i<45;i++) {
+        virtualKeyBoardButton[i]->setText((QString)virtualKeyBoardButtonValuesCurrentLanguage.at(i));
+    }
+    for(int numberCount=0;numberCount<10;numberCount++) {
+        showTheNumbers[numberCount]->setText(virtualKeyBoardButtonValuesCurrentLanguage.at(69+numberCount));
+    }
+    break;
+
+}
 }
 
 
@@ -596,39 +647,7 @@ void VirtualKeyBoard::displayTheRestOfTheCharactors()
     switchForNextVirtualKeyBoardCharactors=!switchForNextVirtualKeyBoardCharactors;
     if(switchForNextVirtualKeyBoardCharactors) {
         switch(showLanguage) {
-        case 0:
-            for(int i=0;i<24;i++) {
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesKannada.at(45+i));
-                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
-                    virtualKeyBoardButton[i]->setVisible(false);
-                }
-            }
-            break;
-        case 1:
-            for(int i=0;i<24;i++) {
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesTamil.at(45+i));
-                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
-                    virtualKeyBoardButton[i]->setVisible(false);
-                }
-            }
-            break;
         case 2:
-            for(int i=0;i<24;i++) {
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesArabic.at(45+i));
-                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
-                    virtualKeyBoardButton[i]->setVisible(false);
-                }
-            } break;
-        case 3:
-            for(int i=0;i<24;i++) {
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesHindi.at(45+i));
-                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
-                    virtualKeyBoardButton[i]->setVisible(false);
-                }
-            }
-
-            break;
-        case 4:
             for(int i=0;i<24;i++) {
                 virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesFinnish.at(45+i));
                 if(!virtualKeyBoardButton[i]->text().compare(" ")) {
@@ -636,39 +655,57 @@ void VirtualKeyBoard::displayTheRestOfTheCharactors()
                 }
             }
             break;
+        case 3:
+            for(int i=0;i<24;i++) {
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesArabic.at(45+i));
+                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
+                    virtualKeyBoardButton[i]->setVisible(false);
+                }
+            }
+            break;
+        case 4:
+            for(int i=0;i<24;i++) {
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesHindi.at(45+i));
+                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
+                    virtualKeyBoardButton[i]->setVisible(false);
+                }
+            } break;
+        default:
+            for(int i=0;i<24;i++) {
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesCurrentLanguage.at(45+i));
+                if(!virtualKeyBoardButton[i]->text().compare(" ")) {
+                    virtualKeyBoardButton[i]->setVisible(false);
+                }
+            }
+
+            break;
 
         }
     }
     else {
         switch(showLanguage) {
-        case 0:
-            for(int i=0;i<45;i++) {
-                virtualKeyBoardButton[i]->setVisible(true);
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesKannada.at(i));
-            }
-            break;
-        case 1:
-            for(int i=0;i<45;i++) {
-                virtualKeyBoardButton[i]->setVisible(true);
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesTamil.at(i));
-            }
-            break;
         case 2:
             for(int i=0;i<45;i++) {
                 virtualKeyBoardButton[i]->setVisible(true);
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesArabic.at(i));
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesFinnish.at(i));
             }
             break;
         case 3:
             for(int i=0;i<45;i++) {
                 virtualKeyBoardButton[i]->setVisible(true);
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesHindi.at(i));
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesArabic.at(i));
             }
             break;
         case 4:
             for(int i=0;i<45;i++) {
                 virtualKeyBoardButton[i]->setVisible(true);
-                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesFinnish.at(i));
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesHindi.at(i));
+            }
+            break;
+        default:
+            for(int i=0;i<45;i++) {
+                virtualKeyBoardButton[i]->setVisible(true);
+                virtualKeyBoardButton[i]->setText(virtualKeyBoardButtonValuesCurrentLanguage.at(i));
             }
             break;
         }
@@ -676,3 +713,129 @@ void VirtualKeyBoard::displayTheRestOfTheCharactors()
 }
 
 
+void VirtualKeyBoard::addNewLanguage()
+{
+
+    manager->execute("ListOfAvailableLanguages.txt",homeDirPath+LISTOFAVAILABLELANGUAGES,"language basket refreshed");
+    addingNewLanguage=new QDialog();
+    additionLayout=new QVBoxLayout();
+    stateOfAddingNewLanguage = new QLabel();
+    listOfAvailableLanguages=new QComboBox();
+    add =new QPushButton("Add");
+
+    QFile file(homeDirPath+LISTOFAVAILABLELANGUAGESBASKET);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+    QTextStream in(&file);
+    QString line = in.readLine();
+    int i=0;
+    while (!line.isNull()) {
+        containerForListOfAvailableLanguages<<line;
+        listOfAvailableLanguages->addItem(containerForListOfAvailableLanguages.at(i));
+        line = in.readLine();
+        i++;
+    }
+    file.close();
+    stateOfAddingNewLanguage->setText(i18n("Select the language to be added from the list"));
+    additionLayout->addWidget(stateOfAddingNewLanguage);
+    additionLayout->addWidget(listOfAvailableLanguages);
+    additionLayout->addWidget(add);
+    addingNewLanguage->setLayout(additionLayout);
+    addingNewLanguage->raise();
+    addingNewLanguage->show();
+    connect(add,SIGNAL(clicked()),this,SLOT(downloadAndAdd()));
+}
+
+void VirtualKeyBoard::downloadAndAdd()
+{
+    newLanguage =listOfAvailableLanguages->currentText();
+    manager->execute(newLanguage,homeDirPath+HEADERS,newLanguage+" added successfully");
+
+    disconnect(manager,SIGNAL(downloadedSuccessfully()),this,SLOT(nowDownloadFont()));
+    connect(manager,SIGNAL(downloadedSuccessfully()),this,SLOT(nowDownloadFont()));
+    delete add ;
+    add=0;
+
+    delete listOfAvailableLanguages;
+    listOfAvailableLanguages=0;
+
+    delete stateOfAddingNewLanguage;
+    stateOfAddingNewLanguage=0;
+
+    delete additionLayout;
+    additionLayout=0;
+
+    delete  addingNewLanguage;
+    addingNewLanguage=0;
+}
+
+void VirtualKeyBoard::removeInstalledLanguage()
+{
+    removeLanguage=new QDialog();
+    removeLayout=new QVBoxLayout();
+    stateOfRemovingNewLanguage = new QLabel();
+    listOfInstalledLanguages=new QComboBox();
+    remove =new QPushButton("remove");
+    QDir directory = QDir(homeDirPath+POPULATELANGUAGES);
+    QStringList files;
+    files = directory.entryList(QStringList("*"),QDir::Files | QDir::NoSymLinks);
+    for(int i=0;i<files.count();i++) {
+        listOfInstalledLanguages->addItem(files.at(i));
+    }
+    listOfInstalledLanguages->setMaxCount(files.count());
+    stateOfRemovingNewLanguage->setText(i18n("Select the language to be removed from the language basket"));
+    removeLayout->addWidget(stateOfRemovingNewLanguage);
+    removeLayout->addWidget(listOfInstalledLanguages);
+    removeLayout->addWidget(remove);
+    if(files.count() == 0) {
+        stateOfRemovingNewLanguage->setText("no new languages are present \n use +add Language for adding languages");
+        remove->hide();
+        listOfInstalledLanguages->hide();
+    }
+
+    removeLanguage->setLayout(removeLayout);
+    removeLanguage->raise();
+    removeLanguage->show();
+    connect(remove,SIGNAL(clicked()),this,SLOT(deleteFilesOfLanguage()));
+}
+
+void VirtualKeyBoard::deleteFilesOfLanguage()
+{
+    QFile toremove;
+    if(!toremove.remove(homeDirPath+HEADERS+listOfInstalledLanguages->currentText())) {  ///scratchbox/users/maemo/home/maemo/VirtualKeyBoardLanguages/headers/
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(0, i18n("unable to remove the file "),
+                                           QMaemo5InformationBox::DefaultTimeout);
+#else
+        stateOfRemovingNewLanguage->setText("unable to remove the file ");
+#endif
+    }
+    else {
+#ifdef Q_WS_MAEMO_5
+        QMaemo5InformationBox::information(0, i18n("language removed select other language or restart the keyboard for changes"),
+                                           QMaemo5InformationBox::DefaultTimeout);
+#else
+        stateOfRemovingNewLanguage->setText("language removed select other language or restart the keyboard for changes");
+#endif
+
+    }
+}
+
+int VirtualKeyBoard::populateTheLanguages()
+{
+    QDir directory = QDir(homeDirPath+POPULATELANGUAGES);
+    QStringList files;
+    files = directory.entryList(QStringList("*"),QDir::Files | QDir::NoSymLinks);
+    for(int i=0;i<files.count();i++) {
+        languages->addItem(QIcon(":/images/64x64/VirtualKeyBoard/languages.png"),files.at(i));
+    }
+    return files.count();
+}
+
+void VirtualKeyBoard::nowDownloadFont()
+{
+    QString newLanguageFont;
+    newLanguageFont = newLanguage;
+    newLanguageFont.append(".ttf");
+    manager->execute(newLanguageFont,homeDirPath+FONTS,newLanguage+" is ready for use,please restart the Keyboard");
+}

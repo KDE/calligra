@@ -314,10 +314,19 @@ public:
      child widgets should ordered by parent tab's order. */
     void autoAssignTabStops();
 
+    //! Specifies target of context menu. Used in createContextMenu().
+    enum ContextMenuTarget
+    {
+        FormContextMenuTarget, //!< Context menu should be displayed on the form
+                               //!< with offset specified by menuPos argument.
+        WidgetTreeContextMenuTarget //!< Context menu should be displayed on the widget tree
+                                    //!< area with offset specified by menuPos argument.
+    };
+
     /*! This function creates and displays the context menu corresponding to the widget \a w.
         The menu item are disabled if necessary, and
         the widget specific part is added (menu from the factory and buddy selection). */
-    void createContextMenu(QWidget *w, Container *container, const QPoint& menuPos); //bool popupAtCursor = true);
+    void createContextMenu(QWidget *w, Container *container, const QPoint& menuPos, ContextMenuTarget target);
 
     //! @return true if snapping widgets to grid is enabled.
     bool isSnapWidgetsToGridEnabled() const;
