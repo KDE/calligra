@@ -55,6 +55,7 @@
 #include <CellStorage.h>
 #include <HeaderFooter.h>
 #include <Map.h>
+#include <NamedAreaManager.h>
 #include <RowColumnFormat.h>
 #include <Sheet.h>
 #include <SheetPrint.h>
@@ -275,7 +276,15 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     //TODO: settings
-    //TODO: named expressions
+    // named expressions
+    const std::map<std::pair<unsigned, QString>, QString>& namedAreas = d->workbook->namedAreas();
+    for (std::map<std::pair<unsigned, QString>, QString>::const_iterator it = namedAreas.begin(); it != namedAreas.end(); ++it) {
+        QString range = it->second;
+        if(range.startsWith('[') && range.endsWith(']'))
+            range = range.mid(1, range.length() - 2);
+        KSpread::Region region(KSpread::Region::loadOdf(range), d->outputDoc->map());
+        d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);
+    }
 
     QBuffer manifestBuffer;
     KoXmlWriter manifestWriter(&manifestBuffer);
