@@ -283,6 +283,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         if(range.startsWith('[') && range.endsWith(']'))
             range = range.mid(1, range.length() - 2);
         KSpread::Region region(KSpread::Region::loadOdf(range), d->outputDoc->map());
+        if (!region.isValid() || !region.lastSheet()) {
+            kDebug() << "invalid area";
+            continue;
+        }
         d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);
     }
 
