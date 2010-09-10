@@ -37,9 +37,9 @@ QString removeEscaped(const QString &text, bool removeOnlyEscapeChar = false);
 QString extractLocale(QString &time);
 
 bool isPercentageFormat(const QString& valueFormat);
-bool isTimeFormat(const Swinder::Value &value, const QString& valueFormat);
+bool isTimeFormat(const QString& valueFormat);
 bool isFractionFormat(const QString& valueFormat);
-bool isDateFormat(const Swinder::Value &value, const QString& valueFormat);
+bool isDateFormat(const QString& valueFormat);
 
 struct CellFormatKey {
     const Swinder::Format* format;

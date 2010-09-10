@@ -704,7 +704,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             KSpread::Value v(value.asFloat());
             v.setFormat(KSpread::Value::fmt_Percent);
             oc.setValue(v);
-        } else if (isDateFormat(value, valueFormat)) {
+        } else if (isDateFormat(valueFormat)) {
             QDateTime date = convertDate(value.asFloat());
             oc.setValue(KSpread::Value(date, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
@@ -713,7 +713,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             } else {
                 oc.setUserInput(locale->formatDateTime(date));
             }
-        } else if (isTimeFormat(value, valueFormat)) {
+        } else if (isTimeFormat(valueFormat)) {
             QTime time = convertTime(value.asFloat());
             oc.setValue(KSpread::Value(time, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();

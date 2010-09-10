@@ -179,7 +179,7 @@ public:
     void addManifestEntries(KoXmlWriter* ManifestWriter);
     void insertPictureManifest(PictureObject* picture);
 
-    bool isDateFormat(const Value &value, const QString& valueFormat);
+    bool isDateFormat(const QString& valueFormat);
 
     QList<QString> defaultColumnStyles;
     int defaultColumnStyleIndex;
@@ -1173,11 +1173,8 @@ static bool currencyFormat(const QString& valueFormat, QString *currencyVal = 0,
 }
 
 // Checks if the as argument passed formatstring defines a date-format or not.
-bool ExcelImport::Private::isDateFormat(const Value &value, const QString& valueFormat)
+bool ExcelImport::Private::isDateFormat(const QString& valueFormat)
 {
-    if (value.type() != Value::Float)
-        return false;
-
     KoGenStyle& style = valueFormatCache[valueFormat];
     if (style.isEmpty())
         style = NumberFormatParser::parse( valueFormat );
@@ -1289,11 +1286,11 @@ void ExcelImport::Private::processCellForBody(KoOdfWriteStore* store, Cell* cell
         if (isPercentageFormat(valueFormat)) {
             xmlWriter->addAttribute("office:value-type", "percentage");
             xmlWriter->addAttribute("office:value", value.asFloat());
-        } else if (isDateFormat(value, valueFormat)) {
+        } else if (isDateFormat(valueFormat)) {
             const QString dateValue = convertDate(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "date");
             xmlWriter->addAttribute("office:date-value", dateValue);
-        } else if (isTimeFormat(value, valueFormat)) {
+        } else if (value.asFloat() < 1.0 && isTimeFormat(valueFormat)) {
             const QString timeValue = convertTime(value.asFloat(), valueFormat);
             xmlWriter->addAttribute("office:value-type", "time");
             xmlWriter->addAttribute("office:time-value", timeValue);
