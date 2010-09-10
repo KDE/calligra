@@ -54,6 +54,7 @@
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <HeaderFooter.h>
+#include <LoadingInfo.h>
 #include <Map.h>
 #include <NamedAreaManager.h>
 #include <RowColumnFormat.h>
@@ -332,6 +333,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     delete store;
+
+    // active sheet
+    kDebug() << "ACTIVE " << d->workbook->activeTab();
+    d->outputDoc->map()->loadingInfo()->setInitialActiveSheet(d->outputDoc->map()->sheet(d->workbook->activeTab()));
 
 #ifdef OUTPUT_AS_ODS_FILE
     d->outputDoc->saveNativeFormat(m_chain->outputFile());
