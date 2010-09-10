@@ -564,11 +564,7 @@ void WorksheetSubStreamHandler::handleMulRK(MulRKRecord* record)
     const int lastColumn = record->lastColumn();
     const int row = record->row();
 
-    Cell *prevCell = 0;
-    int repeat = 1;
-    int column = lastColumn;
-
-    while(column >= firstColumn) {
+    for (int column = firstColumn; column <= lastColumn; column++) {
         Cell* cell = d->sheet->cell(column, row, true);
         const int i = column - firstColumn;
         Value value;
@@ -578,25 +574,6 @@ void WorksheetSubStreamHandler::handleMulRK(MulRKRecord* record)
             value.setValue(record->asFloat(i));
         cell->setValue(value);
         cell->setFormat(d->globals->convertedFormat(record->xfIndex(column - firstColumn)));
-
-        if(prevCell) {
-            if(*prevCell == *cell) {
-                ++repeat;
-            } else {
-                if(repeat > 1) {
-                    prevCell->setColumnRepeat(repeat);
-                    repeat = 1;
-                }
-            }
-        }
-        prevCell = cell;
-        --column;
-        if(column < firstColumn) {
-            if(repeat > 1) {
-                prevCell->setColumnRepeat(repeat);
-            }
-            break;
-        }
     }
 }
 
