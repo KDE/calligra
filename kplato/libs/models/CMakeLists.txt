@@ -19,7 +19,6 @@ set(kplatomodels_LIB_SRCS
     kcalendar/kdatetable.cpp
     kcalendar/kdatepicker.cpp
     
-    kptabstractchartmodel.cpp
     kptnodechartmodel.cpp
     
     kptflatproxymodel.cpp

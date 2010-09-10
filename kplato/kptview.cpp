@@ -374,13 +374,13 @@ void View::slotCreateTemplate()
     KTemporaryFile tempFile;
     tempFile.setSuffix( ".kplatot" );
     //Check that creation of temp file was successful
-    if ( tempFile.status() != 0 ) {
-        qWarning("Creation of temprary file to store template failed.");
+    if ( ! tempFile.open() ) {
+        kWarning()<<"Creation of temprary file to store template failed.";
         return;
     }
-
-    getPart()->saveNativeFormat( tempFile.name() );
-    KoTemplateCreateDia::createTemplate( "kplato_template", Factory::global(), tempFile.name(), pix, this );
+    kDebug()<<"Created temporaray file:"<<tempFile.fileName();
+    getPart()->saveNativeFormat( tempFile.fileName() );
+    KoTemplateCreateDia::createTemplate( "kplato_template", Factory::global(), tempFile.fileName(), pix, this );
 }
 
 void View::createViews()

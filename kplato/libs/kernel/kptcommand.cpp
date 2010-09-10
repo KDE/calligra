@@ -2878,7 +2878,7 @@ void AddScheduleManagerCmd::unexecute()
 }
 
 DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Project &node, ScheduleManager *sm, const QString& name )
-    : AddScheduleManagerCmd( node, sm )
+    : AddScheduleManagerCmd( node, sm, -1, name )
 {
     m_mine = false;
     m_index = m_parent ? m_parent->indexOf( sm ) : node.indexOf( sm );

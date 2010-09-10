@@ -960,7 +960,7 @@ void ResourceAllocationItemModel::setRequired( const QModelIndex &idx, const QLi
     }
 }
 
-const QList<Resource*> &ResourceAllocationItemModel::required( const QModelIndex &idx ) const
+QList<Resource*> ResourceAllocationItemModel::required( const QModelIndex &idx ) const
 {
     Resource *r = resource( idx );
     Q_ASSERT( r );

@@ -572,7 +572,7 @@ void KPlatoRCPSScheduler::addTasks()
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
             continue;
         }
-        struct rcps_job *job = addTask( static_cast<Task*>( n ) );
+        addTask( static_cast<Task*>( n ) );
     }
     // Add an end job
     m_jobend = rcps_job_new();

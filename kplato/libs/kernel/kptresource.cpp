@@ -767,7 +767,6 @@ DateTimeInterval Resource::requiredAvailable(Schedule *node, const DateTime &sta
 }
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end, int load, const QList<Resource*> &required ) {
-    KLocale *locale = KGlobal::locale();
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     if (!from.isValid() || !end.isValid()) {
         m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
