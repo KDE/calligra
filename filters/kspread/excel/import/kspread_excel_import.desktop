@@ -58,5 +58,5 @@ Name[zh_TW]=KSpread Microsoft Excel 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=application/vnd.ms-excel
 X-KDE-Weight=1
-X-KDE-Library=libexcelimport
+X-KDE-Library=libexcelimporttodoc
 X-KDE-ServiceTypes=KOfficeFilter
