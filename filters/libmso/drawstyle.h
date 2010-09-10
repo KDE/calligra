@@ -193,7 +193,7 @@ get(const MSO::OfficeArtDggContainer& o)
 {
     const A* a = 0;
     if (o.drawingPrimaryOptions) {
-        get<A>(*o.drawingPrimaryOptions);
+        a = get<A>(*o.drawingPrimaryOptions);
     }
     if (!a && o.drawingTertiaryOptions) a = get<A>(*o.drawingTertiaryOptions);
     return a;
