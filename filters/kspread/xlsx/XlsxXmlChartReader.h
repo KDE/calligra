@@ -88,6 +88,9 @@ protected:
     KoFilter::ConversionStatus read_yVal();
     KoFilter::ConversionStatus read_cat();
     KoFilter::ConversionStatus read_tx();
+    KoFilter::ConversionStatus read_pt();
+    KoFilter::ConversionStatus read_numLit();
+    KoFilter::ConversionStatus read_strCache();
     KoFilter::ConversionStatus read_numCache();
     KoFilter::ConversionStatus read_firstSliceAng();
     KoFilter::ConversionStatus read_holeSize();
@@ -102,6 +105,8 @@ private:
     bool m_autoTitleDeleted;    
     ReadTxContext m_readTxContext;
     ReadAreaContext m_areaContext;
+    class Private;
+    Private * const d;
 };
 
 #endif
