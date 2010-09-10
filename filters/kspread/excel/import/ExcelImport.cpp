@@ -276,7 +276,6 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->shapesXml->endElement();
     }
 
-    //TODO: settings
     // named expressions
     const std::map<std::pair<unsigned, QString>, QString>& namedAreas = d->workbook->namedAreas();
     for (std::map<std::pair<unsigned, QString>, QString>::const_iterator it = namedAreas.begin(); it != namedAreas.end(); ++it) {
@@ -458,6 +457,15 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     os->setHidden(!is->visible());
     //os->setProtected(is->protect());
     os->setAutoCalculationEnabled(is->autoCalc());
+    os->setHideZero(!is->showZeroValues());
+    os->setShowGrid(is->showGrid());
+    os->setFirstLetterUpper(false);
+    os->map()->loadingInfo()->setCursorPosition(os, is->firstVisibleCell() + QPoint(1, 1));
+    os->setShowFormulaIndicator(false);
+    os->setShowCommentIndicator(true);
+    os->setShowPageBorders(is->isPageBreakViewEnabled());
+    os->setLcMode(false);
+    os->setShowColumnNumber(false);
 
     // TODO: page layout
     processSheetForHeaderFooter(is, os);
