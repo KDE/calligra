@@ -692,6 +692,8 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         oc.setUserInput(decodedFormula);
     }
 
+    int styleId = convertStyle(&ic->format(), formula);
+
     Value value = ic->value();
     if (value.isBoolean()) {
         oc.setValue(KSpread::Value(value.asBoolean()));
@@ -704,7 +706,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             KSpread::Value v(value.asFloat());
             v.setFormat(KSpread::Value::fmt_Percent);
             oc.setValue(v);
-        } else if (isDateFormat(valueFormat)) {
+        } else if (KSpread::Format::isDate(styleList[styleId].formatType())) {
             QDateTime date = convertDate(value.asFloat());
             oc.setValue(KSpread::Value(date, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
@@ -713,7 +715,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             } else {
                 oc.setUserInput(locale->formatDateTime(date));
             }
-        } else if (isTimeFormat(valueFormat)) {
+        } else if (KSpread::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
             oc.setValue(KSpread::Value(time, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
@@ -772,7 +774,6 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     if (!note.isEmpty())
         oc.setComment(note);
 
-    int styleId = convertStyle(&ic->format(), formula);
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
     QHash<QString, KSpread::Conditions>::iterator conds = dataStyleConditions.find(ic->format().valueFormat());
     if (conds != dataStyleConditions.end()) {
