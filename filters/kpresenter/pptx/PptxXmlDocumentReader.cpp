@@ -451,7 +451,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(cx)
     READ_ATTR_WITHOUT_NS(cy)
-    int intCx, intCy;
+    int intCx = 0;
+    int intCy = 0;
     STRING_TO_INT(cx, intCx, "sldSz@cx")
     STRING_TO_INT(cy, intCy, "sldSz@cy")
     //! @todo check "type" attr, e.g. 4x3

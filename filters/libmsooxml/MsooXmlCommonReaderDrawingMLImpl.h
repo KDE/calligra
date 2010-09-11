@@ -1921,12 +1921,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - marR (Right Margin)
   - rtl (Right To Left)
  Child elements:
-  - buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
+  - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
   - buBlip (Picture Bullet) §21.1.2.4.2
   - [done] buChar (Character Bullet) §21.1.2.4.3
   - buClr (Color Specified) §21.1.2.4.4
   - buClrTx (Follow Text) §21.1.2.4.5
-  - buFont (Specified) §21.1.2.4.6
+  - [done] buFont (Specified) §21.1.2.4.6
   - buFontTx (Follow text) §21.1.2.4.7
   - [done] buNone (No Bullet) §21.1.2.4.8
   - buSzPct (Bullet Size Percentage) §21.1.2.4.9
@@ -2002,6 +2002,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     algnToODF("fo:text-align", algn);
 
     TRY_READ_ATTR_WITHOUT_NS(marL)
+    TRY_READ_ATTR_WITHOUT_NS(marR)
     TRY_READ_ATTR_WITHOUT_NS(indent)
 
     bool ok = false;
@@ -2010,10 +2011,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
     }
+    if (!marR.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+    }
     if (!indent.isEmpty()) {
         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
+
+    m_bulletFont = "";
 
     while (!atEnd()) {
         readNext();
@@ -2022,6 +2029,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
+            ELSE_TRY_READ_IF(buFont)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -2035,6 +2043,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
                 TRY_READ(lnSpc)
             }
         }
+    }
+
+    if (m_bulletFont == "Wingdings") {
+        // Ooxml files have very often wingdings fonts, but usually they are not installed
+        // Making the bullet character look ugly, thus defaulting to "-"
+        m_currentListStyleProperties->setBulletCharacter(QChar('-'));
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -4017,12 +4031,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentListStyleProperties->setBulletCharacter(QChar());
 
     TRY_READ_ATTR_WITHOUT_NS(marL)
+    TRY_READ_ATTR_WITHOUT_NS(marR)
     TRY_READ_ATTR_WITHOUT_NS(indent)
 
     bool ok = false;
 
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
 
+    if (!marR.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+    }
     if (!marL.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
@@ -4039,6 +4058,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
+    m_bulletFont = "";
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -4047,6 +4068,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buChar)
+            ELSE_TRY_READ_IF(buFont)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -4064,6 +4086,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
             break;
         }
+    }
+
+    if (m_bulletFont == "Wingdings") {
+        // Ooxml files have very often wingdings fonts, but usually they are not installed
+        // Making the bullet character look ugly, thus defaulting to "-"
+        m_currentListStyleProperties->setBulletCharacter(QChar('-'));
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
@@ -4136,7 +4164,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - [done] buChar (Character Bullet)            §21.1.2.4.3
   - buClr (Color Specified)              §21.1.2.4.4
   - buClrTx (Follow Text)                §21.1.2.4.5
-  - buFont (Specified)                   §21.1.2.4.6
+  - [done] buFont (Specified)                   §21.1.2.4.6
   - buFontTx (Follow text)               §21.1.2.4.7
   - [done] buNone (No Bullet)                   §21.1.2.4.8
   - buSzPct (Bullet Size Percentage)     §21.1.2.4.9
@@ -4269,6 +4297,41 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     }
 
     m_listStylePropertiesAltered = true;
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buFont
+//! buFont - bullet font
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buFont()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(typeface)
+
+    if (!typeface.isEmpty()) {
+        m_lstStyleFound = true;
+        m_listStylePropertiesAltered = true;
+        m_bulletFont = typeface;
+    }
 
     readNext();
     READ_EPILOGUE
