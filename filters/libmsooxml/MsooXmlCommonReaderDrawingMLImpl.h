@@ -1334,8 +1334,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
                 TRY_READ_WITH_ARGS(DrawingML_p, read_p_Skip;)
             }
-//            ELSE_TRY_READ_IF(hyperlink)
-            //ELSE_TRY_READ_IF(commentRangeEnd)
 // CASE #400.1
             else if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
@@ -1452,14 +1450,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                          QString listStyleName;
                          if (m_currentListStyle.isEmpty()) {
                              if (d->phType == "title" || d->phType == "ctrTitle") {
-                                 listStyleName = "titleList";
+                                 listStyleName = m_context->slideMasterPageProperties->m_titleList;
                              }
                              else if (styleId.isEmpty()) {
-                                 listStyleName = "otherList";
+                                 listStyleName = m_context->slideMasterPageProperties->m_otherList;
                              }
                              else {
-                                // If no match, let's default this one.
-                                listStyleName = "bodyList";
+                                 // If no match, let's default this one.
+                                 listStyleName = m_context->slideMasterPageProperties->m_bodyList;
                              }
                          }
                          else {
@@ -1975,25 +1973,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             copyLevel = m_currentListLevel;
         }
 
-        if (m_context->type == SlideLayout) {
-            bool wasNumber = false;
-            // If we are layout, and handling a shape which has only id identifier, it means we must default its
-            // pararagraph styles to  be those of a master slide bodyList
-            if (wasNumber) {
-                 MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles["body"][copyLevel],
-                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
-            }
-        }
-
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
                                                 m_currentParagraphStyle, KoGenStyle::ParagraphType);
         // Perhaps we need to get the properties from layout
         if (m_context->type == Slide) {
-            if (!styleId.isEmpty()) {
-               MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
-                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
-            }
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
+                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
         }
     }
 #endif
@@ -2059,6 +2045,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
+        }
+    } else if (m_context->type == SlideMaster) {
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideMasterPageProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideMasterPageProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
         }
     }
 #endif

@@ -176,6 +176,9 @@ public:
     QString m_currentHandledList;
 
     KoGenStyle m_drawingPageProperties;
+    QString m_titleList;
+    QString m_bodyList;
+    QString m_otherList;
 };
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
