@@ -677,6 +677,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_svgWidth = -1;
     m_svgHeight = -1;
     m_xfrm_read = false;
+    m_flipH = false;
+    m_flipV = false;
+    m_rot = 0;
 
 #ifdef PPTXXMLSLIDEREADER_H
     //We assume that the textbox is empty by default
@@ -822,11 +825,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
     //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
                 if (m_contentType == "line") {
-                    body->addAttribute("svg:x1", EMU_TO_CM_STRING(m_svgX));
-                    body->addAttribute("svg:y1", EMU_TO_CM_STRING(m_svgY));
-                    const QString x2 = QString("%1cm").arg(EMU_TO_CM(m_svgX) + EMU_TO_CM(m_svgWidth));
+                    QString y1 = EMU_TO_CM_STRING(m_svgY);
+                    QString y2 = QString("%1cm").arg(EMU_TO_CM(m_svgY) + EMU_TO_CM(m_svgHeight));
+                    QString x1 = EMU_TO_CM_STRING(m_svgX);
+                    QString x2 = QString("%1cm").arg(EMU_TO_CM(m_svgX) + EMU_TO_CM(m_svgWidth));
+                    if (m_flipV) {
+                        QString temp = y2;
+                        y2 = y1;
+                        y1 = temp;
+                    }
+                    if (m_flipH) {
+                        QString temp = x2;
+                        x2 = x1;
+                        x1 = temp;
+                    }
+                    body->addAttribute("svg:x1", x1);
+                    body->addAttribute("svg:y1", y1);
                     body->addAttribute("svg:x2", x2);
-                    const QString y2 = QString("%1cm").arg(EMU_TO_CM(m_svgY) + EMU_TO_CM(m_svgHeight));
                     body->addAttribute("svg:y2", y2);
                 }
                 else {
@@ -1357,29 +1372,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
     }
 
-    if (!rRead && m_prevListLevel > 0) {
-        // Making sure that if we were previously in a list and if there's an empty line, that
-        // we don't output a bullet to it
-        // Currently we emulate this as if there would have been buNone in ppr
-        // Would there be a more simple way to do this?
-        m_listStylePropertiesAltered = true;
-        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
-        m_currentListStyleProperties = new KoListLevelProperties;
-        m_currentListLevel = 1;
-        m_currentListStyleProperties->setLevel(m_currentListLevel);
-        m_currentListStyleProperties->setBulletCharacter(QChar());
-
-        QBuffer listBuf;
-        KoXmlWriter listStyleWriter(&listBuf);
-
-        m_currentListStyleProperties->saveOdf(&listStyleWriter);
-        const QString elementContents = QString::fromUtf8(listBuf.buffer(),
-                                                          listBuf.buffer().size());
-        m_currentListStyle.addChildElement("list-style-properties", elementContents);
-        delete m_currentListStyleProperties;
-        m_currentListStyleProperties = 0;
-    }
-
 #ifdef PPTXXMLSLIDEREADER_H
     const QString styleId(d->phStyleId());
         if (m_context->type == Slide) {
@@ -1430,6 +1422,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 }
                 m_prevListLevel = 0;
             }
+        }
+
+        if (!rRead) {
+            // Making sure that if we were previously in a list and if there's an empty line, that
+            // we don't output a bullet to it
+            m_listStylePropertiesAltered = false;
+            m_currentListLevel = 0;
+            m_lstStyleFound = 0;
         }
 
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
