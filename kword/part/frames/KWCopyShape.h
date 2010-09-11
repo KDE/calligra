@@ -53,6 +53,8 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     KoShape *original() {return m_original;}
+    void retire() {m_original=0;}
+
 private:
     KoShape *m_original;
     const KWPageManager *m_pageManager;

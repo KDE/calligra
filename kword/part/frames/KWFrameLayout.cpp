@@ -770,7 +770,7 @@ void KWFrameLayout::mainframeRemoved(KWFrame *frame)
     // delete them!
     foreach (KWFrame *frame, framesToDelete) {
         // first remove if from the frameset to make sure the doc gets a signal and removes the page if needed
-        frame->frameSet()->removeFrame(frame);
+        //frame->frameSet()->removeFrame(frame);
         // then actually delete the frame itself.
         delete frame->shape();
     }

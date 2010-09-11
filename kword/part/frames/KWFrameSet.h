@@ -21,11 +21,11 @@
 #define KWFRAMESET_H
 
 #include "KWord.h"
+#include "KWFrame.h"
 #include "kword_export.h"
 
 #include <QObject>
 
-class KWFrame;
 
 /**
  * A frameSet holds a number of frames (zero or more) and a frameSet holds the
@@ -47,12 +47,22 @@ public:
      * @see frameAdded()
      */
     void addFrame(KWFrame *frame);
+
+    /**
+     * Remove a previously added Frame
+     * @param frame the frame to remove
+     * @param shape the shape of the frame
+     * You shouldn't use this method in most cases but the convinience version with only a single
+     * parameter
+     */
+    void removeFrame(KWFrame *frame, KoShape *shape);
+
     /**
      * Remove a previously added Frame
      * @param frame the frame to remove
      * @see frameRemoved()
      */
-    void removeFrame(KWFrame *frame);
+    void removeFrame(KWFrame *frame) {removeFrame(frame, frame->shape());}
 
     /**
      * Give this frameSet a name.

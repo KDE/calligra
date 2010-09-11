@@ -7,8 +7,11 @@
 #include "../frames/KWFrameLayout.h"
 #include "../frames/KWTextFrameSet.h"
 #include "../frames/KWTextFrame.h"
+#include "../frames/KWCopyShape.h"
 #include "../KWDocument.h"
 #include "../KWord.h"
+
+#include <MockShapes.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoColorBackground.h>
@@ -65,6 +68,33 @@ void TestFrameLayout::testGetOrCreateFrameSet()
     QVERIFY(main2);
     QCOMPARE(main, main2);
     QCOMPARE(main->textFrameSetType(), KWord::MainTextFrameSet);
+}
+
+void TestFrameLayout::testCopyShapes()
+{
+    Helper helper;
+    m_frames.clear();
+    KWPage page = helper.pageManager->page(1);
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWTextFrameSet *fs = bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page);
+    m_frames.append(fs);
+    bfl.m_setup = false;
+
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd);
+
+    KWTextFrame *tf = createFrame(QPointF(0,0), *fs);
+    KWFrame *cf = createCopyFrame(QPointF(0,300), tf->shape(), *fs);
+    QVERIFY(fs->frameCount()==2);
+    QVERIFY(bfl.hasFrameOn(fs, 1));
+    delete tf->shape();
+
+    QVERIFY(fs->frameCount()==1);
+    QVERIFY(!bfl.hasFrameOn(fs, 1));
+
+    //now try and add a copyframe without crashing
+    bfl.createNewFramesForPage(1);
 }
 
 void TestFrameLayout::testCreateNewFramesForPage()
@@ -582,6 +612,23 @@ void TestFrameLayout::removeAllFrames()
             delete frame->shape();
         }
     }
+}
+
+KWTextFrame *TestFrameLayout::createFrame(const QPointF &position, KWTextFrameSet &fs)
+{
+    MockShape *shape = new MockShape();
+    shape->setUserData(new KoTextShapeData());
+    KWTextFrame *frame = new KWTextFrame(shape, &fs);
+    shape->setPosition(position);
+    return frame;
+}
+
+KWFrame *TestFrameLayout::createCopyFrame(const QPointF &position, KoShape *orig, KWTextFrameSet &fs)
+{
+    KoShape *shape = new KWCopyShape(orig);
+    KWFrame *frame = new KWFrame(shape, &fs);
+    shape->setPosition(position);
+    return frame;
 }
 
 QTEST_KDEMAIN(TestFrameLayout, GUI)

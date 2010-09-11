@@ -78,6 +78,10 @@ public:
         return m_anchor;
     }
 
+    bool nextShapeNeeded() {
+        return m_nextShapeNeeded;
+    }
+    
 private:
     void calculateKnowledgePoint();
 
@@ -87,6 +91,7 @@ private:
     qreal m_currentLineY;
     int m_pass;
     int m_lastknownPosInDoc;
+    bool m_nextShapeNeeded;
 
     QPointF m_lastOffset;
     KoTextAnchor::AnchorVertical m_lastVerticalAnchorAlignment;

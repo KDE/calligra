@@ -20,6 +20,7 @@
 #include "KWFrameSet.h"
 #include "KWFrame.h"
 #include <KoColorBackground.h>
+#include "KWCopyShape.h"
 
 #include <kdebug.h>
 
@@ -46,11 +47,21 @@ void KWFrameSet::addFrame(KWFrame *frame)
     emit frameAdded(frame);
 }
 
-void KWFrameSet::removeFrame(KWFrame *frame)
+void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
 {
     Q_ASSERT(frame);
-    // TODO loop over all frames to see if there is a copy frame that references the removed frame; if it
-    // does, then mark it as 'unused'.
+    if (!frame->isCopy()) {
+        // Loop over all frames to see if there is a copy frame that references the removed
+        // frame; if it does, then mark the copy as obsolete
+        foreach (KWFrame *f, frames()) {
+            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(f->shape())) {
+                if (cs->original() == shape) {
+                    cs->retire();
+                }
+            }
+        }
+    }
+
     if (m_frames.removeAll(frame)) {
         frame->setFrameSet(0);
         emit frameRemoved(frame);
