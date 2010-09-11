@@ -196,9 +196,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
     body = drawFrameBuf.setWriter(body);
-//    QBuffer drawFrameBuf;
-//    KoXmlWriter *origBody = body;
-//    body = new KoXmlWriter(&drawFrameBuf);
 
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -783,7 +780,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             body->addAttribute("presentation:placeholder", "true");
         }
 
-//todo        body->addAttribute("presentation:style-name", styleName);
         QString presentationStyleName;
         //body->addAttribute("draw:style-name", );
         if (!m_currentPresentationStyle.isEmpty()) {
@@ -883,19 +879,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         }
         kDebug() << "masterShapeProperties:" << masterShapeProperties;
 
-        m_currentShapeProperties = masterShapeProperties
-            ? new PptxShapeProperties(*masterShapeProperties) : new PptxShapeProperties();
-
-        m_context->slideLayoutProperties->shapesMap.insert(styleId, m_currentShapeProperties);
-        m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties);
+        if (masterShapeProperties) {
+            m_currentShapeProperties = new PptxShapeProperties(*masterShapeProperties);
+        } else { // Case where it was not present in master slide at all
+            m_currentShapeProperties = new PptxShapeProperties;
+            m_currentShapeProperties->x = m_svgX;
+            m_currentShapeProperties->y = m_svgY;
+            m_currentShapeProperties->width = m_svgWidth;
+            m_currentShapeProperties->height = m_svgHeight;
+            m_currentShapeProperties->rot = m_rot;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->shapesMap[d->phType] = m_currentShapeProperties;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
+        }
+        m_context->slideLayoutProperties->shapes.append(m_currentShapeProperties); 
     }
     else if (m_context->type == SlideMaster) {
         kDebug() << "m_context->slideProperties->shapesMap insert:" << styleId;
         if (!styleId.isEmpty()) {
-            m_context->slideProperties->shapesMap.insert(styleId, m_currentShapeProperties);
+            m_context->slideProperties->shapesMap[styleId] = m_currentShapeProperties;
         }
         if (!d->phIdx.isEmpty()) {
-            m_context->slideProperties->shapesMap.insert(d->phIdx, m_currentShapeProperties);
+            m_context->slideProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
         }
         m_context->slideProperties->shapes.append(m_currentShapeProperties);
     }
@@ -905,9 +913,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         Q_ASSERT(m_placeholderElWriter);
         QString presentationObject;
         presentationObject = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType);
-        QString phStyleId;
-        if (!d->phType.isEmpty())
-            phStyleId = presentationObject;
+        QString phStyleId = d->phType;
         if (phStyleId.isEmpty()) {
             // were indexing placeholders by id if type is not present, so shaped can refer to them by id
             phStyleId = d->phIdx;
@@ -931,12 +937,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         else {
             // We should never come here, as this means that values were not defined in the layout nor
             // in the masterslide
-            placeholder = new PptxPlaceholder();
-            placeholder->x = m_svgX;
-            placeholder->y = m_svgY;
-            placeholder->width = m_svgWidth;
-            placeholder->height = m_svgHeight;
-            placeholder->rot = m_rot;
+            kDebug() << "Xfrm values not defined neither in layout or masterslide";
+            return KoFilter::WrongFormat;
         }
         kDebug() << "adding placeholder" << presentationObject << "phStyleId:" << phStyleId;
         m_context->slideLayoutProperties->placeholders.insert(phStyleId, placeholder);
@@ -961,6 +963,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #endif
 
     popCurrentDrawStyle();
+#ifdef PPTXXMLSLIDEREADER_H
+    m_currentShapeProperties = 0; // Making sure that nothing uses them.
+#endif
 
     READ_EPILOGUE
 }
@@ -1089,17 +1094,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == Slide && !m_xfrm_read) { // loading values from slideMaster/slideLayout is needed
+    const QString styleId(d->phStyleId());
+    kDebug() << "styleId:" << styleId;
+
+    if (m_context->type == Slide && !m_xfrm_read) { // loading values from slideLayout is needed
         //Q_ASSERT(d->shapeNumber >= 1 && d->shapeNumber <= m_context->slideLayoutProperties->shapes.count());
         PptxShapeProperties* props = 0;
-        const QString styleId(d->phStyleId());
-        kDebug() << "styleId:" << styleId;
         if (!styleId.isEmpty()) {
             props = m_context->slideLayoutProperties->shapesMap.value(styleId);
         }
         else if(d->shapeNumber >= 1 && d->shapeNumber <= (uint)m_context->slideLayoutProperties->shapes.count())
         {
             props = m_context->slideLayoutProperties->shapes[d->shapeNumber - 1];
+        }
+        if (!props) { // It was not present in layout, we need to get the place from slideMaster
+            props = m_context->slideProperties->shapesMap.value(styleId);
         }
         if (props) {
             m_svgX = props->x;
@@ -1968,7 +1977,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 
         if (m_context->type == SlideLayout) {
             bool wasNumber = false;
-            int temp = styleId.toInt(&wasNumber);
             // If we are layout, and handling a shape which has only id identifier, it means we must default its
             // pararagraph styles to  be those of a master slide bodyList
             if (wasNumber) {
@@ -1980,10 +1988,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
                                                 m_currentParagraphStyle, KoGenStyle::ParagraphType);
-
-        if (!d->phIdx.isEmpty()) {
-            if (m_context->type == Slide) {
-               MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phIdx][copyLevel],
+        // Perhaps we need to get the properties from layout
+        if (m_context->type == Slide) {
+            if (!styleId.isEmpty()) {
+               MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
                                                        m_currentParagraphStyle, KoGenStyle::ParagraphType);
             }
         }
@@ -2032,7 +2040,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideLayout) {
         // Could there be cases where lvl1ppr defines something else for layout, and ppr something else?
-        m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
+        }
     }
 #endif
 
@@ -4075,19 +4088,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         // If it's empty, we're in slideMasters titleStyle, bodystyle, otherStyle
         if (styleId.isEmpty()) {
             styleId = m_context->slideMasterPageProperties->m_currentHandledList;
+            m_context->slideMasterPageProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
         }
-        m_context->slideMasterPageProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
-
-        // Check at some point: What is ctrTitle in reality? is it it's own type?
-        // Is it title which should have central aligment? something else?
-        if (styleId == "title") {
-            m_context->slideMasterPageProperties->styles["ctrTitle"][m_currentListLevel] = m_currentParagraphStyle;
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideMasterPageProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideMasterPageProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
         }
     }
     else if (m_context->type == SlideLayout) {
-        const QString styleId(d->phStyleId());
-        m_context->slideLayoutProperties->textStyles[styleId][m_currentListLevel] = m_currentTextStyle;
-        m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->textStyles[d->phIdx][m_currentListLevel] = m_currentTextStyle;
+            m_context->slideLayoutProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->textStyles[d->phType][m_currentListLevel] = m_currentTextStyle;
+            m_context->slideLayoutProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
+        }
     }
 #endif
 
