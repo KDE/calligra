@@ -36,24 +36,78 @@
 using namespace KFormDesigner;
 
 WidgetTreeWidgetItem::WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data)
-        : QTreeWidgetItem(parent, QStringList() << data->name() << data->className())
+        : QTreeWidgetItem(parent)
         , m_data(data)
 {
-    setIcon(0,
-        SmallIcon(
-            static_cast<WidgetTreeWidget*>(treeWidget())->iconNameForClass(m_data->widget()->metaObject()->className()))
-    );
+    init();
 }
 
 WidgetTreeWidgetItem::WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data)
-        : QTreeWidgetItem(tree, QStringList() << (data ? data->name() : QString())
-                                              << (data ? data->className() : QString()))
+        : QTreeWidgetItem(tree)
         , m_data(data)
 {
+    init();
 }
 
 WidgetTreeWidgetItem::~WidgetTreeWidgetItem()
 {
+}
+
+void WidgetTreeWidgetItem::init()
+{
+    if (m_data) {
+        initTextAndIcon();
+    }
+}
+
+void WidgetTreeWidgetItem::initTextAndIcon()
+{
+    QString itemName;
+    QString itemClass;
+    QString itemIcon;
+    Qt::ItemFlags itemFlags = flags();
+    if (m_data->parent() && m_data->parent()->widget()) {
+        if (m_data->parent()->widget()->inherits("QTabWidget")) {
+            const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(m_data->parent()->widget());
+            const int tabIndex = tabWidget->indexOf(m_data->widget());
+            if (tabIndex >= 0) {
+                itemName = tabWidget->tabText(tabIndex);
+                if (itemName.isEmpty()) {
+                    itemName = i18n("Tab %1", tabIndex + 1);
+                }
+                else {
+                    itemName.replace('&', "");
+                }
+                itemClass = i18nc("Tab widget's tab", "Tab");
+                m_customSortingKey = QString("tab%1").arg(tabIndex);
+                itemFlags |= Qt::ItemIsSelectable;
+                itemFlags ^= Qt::ItemIsSelectable;
+                //TODO itemIcon = ...
+            }
+        }
+    }
+    // defaults:
+    if (itemName.isEmpty()) {
+        itemName = m_data->name();
+    }
+    if (itemClass.isEmpty()) {
+        itemClass = m_data->className();
+    }
+    if (itemIcon.isEmpty()) {
+        WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
+        if (widgetTreeWidget) {
+            itemIcon = widgetTreeWidget->iconNameForClass(m_data->widget()->metaObject()->className());
+        }
+    }
+    // set:
+    if (itemFlags != flags()) {
+        setFlags(itemFlags);
+    }
+    setText(0, itemName);
+    setText(1, itemClass);
+    if (!itemIcon.isEmpty()) {
+        setIcon(0, SmallIcon(itemIcon));
+    }
 }
 
 QString WidgetTreeWidgetItem::name() const
@@ -62,6 +116,14 @@ QString WidgetTreeWidgetItem::name() const
         return m_data->name();
     else
         return QString();
+}
+
+bool WidgetTreeWidgetItem::operator<( const QTreeWidgetItem & other ) const
+{
+    const WidgetTreeWidgetItem *otherItem = dynamic_cast<const WidgetTreeWidgetItem*>(&other);
+    if (!otherItem)
+        return QTreeWidgetItem::operator<(other);
+    return true;
 }
 
 #warning port WidgetTreeWidgetItem::paintCell 
@@ -361,6 +423,7 @@ void WidgetTreeWidget::setForm(Form *form)
     else
         selectWidget(form->widget());
     m_slotSelectionChanged_enabled = true;
+    resizeColumnToContents(0);
 }
 
 void WidgetTreeWidget::slotBeforeFormDestroyed()
@@ -368,10 +431,10 @@ void WidgetTreeWidget::slotBeforeFormDestroyed()
     setForm(0);
 }
 
-WidgetTreeWidgetItem* WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent)
+void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent)
 {
     if (!item)
-        return 0;
+        return;
     WidgetTreeWidgetItem *treeItem = new WidgetTreeWidgetItem(parent, item);
     treeItem->setExpanded(true);
 
@@ -386,8 +449,6 @@ WidgetTreeWidgetItem* WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTre
     foreach (ObjectTreeItem *titem, *list) {
         loadTree(titem, treeItem);
     }
-
-    return treeItem;
 }
 
 #include "WidgetTreeWidget.moc"
