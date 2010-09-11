@@ -145,6 +145,8 @@ void KWGui::pageSetupChanged()
     if (firstPage.isValid())
         width = firstPage.width();
     m_horizontalRuler->setRulerLength(width);
+    m_horizontalRuler->setActiveRange(0, width);
+    m_verticalRuler->setActiveRange(0, height);
     updateRulers();
 }
 
@@ -167,23 +169,6 @@ void KWGui::updateRulers() const
 
 void KWGui::shapeSelectionChanged()
 {
-    QPointF start, end;
-    bool first = true;
-    foreach (KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        QRectF rect = shape->boundingRect();
-        if (first) {
-            start = rect.topLeft();
-            end = rect.bottomRight();
-            first = false;
-        } else {
-            start.setX(qMin(start.x(), rect.left()));
-            start.setY(qMin(start.y(), rect.top()));
-            end.setX(qMax(end.x(), rect.right()));
-            end.setY(qMax(end.y(), rect.bottom()));
-        }
-    }
-    m_horizontalRuler->setActiveRange(start.x(), end.x());
-    m_verticalRuler->setActiveRange(start.y(), end.y());
 }
 
 void KWGui::setupUnitActions()
