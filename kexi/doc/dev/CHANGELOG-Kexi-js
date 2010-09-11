@@ -110,7 +110,7 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
-2010-09-08..09
+2010-09-08..11
 Forms
 *Widgets Tree:
 **display items
@@ -120,6 +120,9 @@ Forms
 **display icons for widget items
 **fixed position of context menu
 **do not clear selection when switching between forms
+**make individual tabs not selectable and display custom names for them; properly sort items for tabs
+TODO: select tab widget instead when clicking tab items
+TODO: add tab icon
 Core
 *for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
 
