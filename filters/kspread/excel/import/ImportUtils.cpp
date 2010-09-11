@@ -68,11 +68,8 @@ bool isPercentageFormat(const QString& valueFormat)
     return valueFormat[valueFormat.length()-1] == QChar('%');
 }
 
-bool isTimeFormat(const Swinder::Value &value, const QString& valueFormat)
+bool isTimeFormat(const QString& valueFormat)
 {
-    if (value.type() != Swinder::Value::Float)
-        return false;
-
     QString vf = valueFormat;
     QString locale = extractLocale(vf);
     Q_UNUSED(locale);
@@ -81,7 +78,7 @@ bool isTimeFormat(const Swinder::Value &value, const QString& valueFormat)
     // if there is still a time formatting picture item that was not escaped
     // and therefore removed above, then we have a time format here.
     QRegExp ex("(h|H|m|s)");
-    return (ex.indexIn(vf) >= 0) && value.asFloat() < 1.0;
+    return ex.indexIn(vf) >= 0;
 }
 
 bool isFractionFormat(const QString& valueFormat)
@@ -91,11 +88,8 @@ bool isFractionFormat(const QString& valueFormat)
     return ex.indexIn(vf) >= 0;
 }
 
-bool isDateFormat(const Swinder::Value &value, const QString& valueFormat)
+bool isDateFormat(const QString& valueFormat)
 {
-    if (value.type() != Swinder::Value::Float)
-        return false;
-
     return NumberFormatParser::isDateFormat(valueFormat);
 }
 

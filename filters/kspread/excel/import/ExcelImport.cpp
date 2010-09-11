@@ -54,7 +54,9 @@
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <HeaderFooter.h>
+#include <LoadingInfo.h>
 #include <Map.h>
+#include <NamedAreaManager.h>
 #include <RowColumnFormat.h>
 #include <Sheet.h>
 #include <SheetPrint.h>
@@ -144,6 +146,7 @@ public:
     void processMetaData();
     void processSheet(Sheet* isheet, KSpread::Sheet* osheet);
     void processSheetForHeaderFooter(Sheet* isheet, KSpread::Sheet* osheet);
+    void processSheetForFilters(Sheet* isheet, KSpread::Sheet* osheet);
     void processColumn(Sheet* isheet, unsigned column, KSpread::Sheet* osheet);
     void processRow(Sheet* isheet, unsigned row, KSpread::Sheet* osheet);
     void processCell(Cell* icell, KSpread::Cell ocell);
@@ -273,6 +276,20 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->shapesXml->endElement();
     }
 
+    // named expressions
+    const std::map<std::pair<unsigned, QString>, QString>& namedAreas = d->workbook->namedAreas();
+    for (std::map<std::pair<unsigned, QString>, QString>::const_iterator it = namedAreas.begin(); it != namedAreas.end(); ++it) {
+        QString range = it->second;
+        if(range.startsWith('[') && range.endsWith(']'))
+            range = range.mid(1, range.length() - 2);
+        KSpread::Region region(KSpread::Region::loadOdf(range), d->outputDoc->map());
+        if (!region.isValid() || !region.lastSheet()) {
+            kDebug() << "invalid area";
+            continue;
+        }
+        d->outputDoc->map()->namedAreaManager()->insert(region, it->first.second);
+    }
+
     QBuffer manifestBuffer;
     KoXmlWriter manifestWriter(&manifestBuffer);
     manifestWriter.startDocument("manifest:manifest");
@@ -315,6 +332,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     delete store;
+
+    // active sheet
+    kDebug() << "ACTIVE " << d->workbook->activeTab();
+    d->outputDoc->map()->loadingInfo()->setInitialActiveSheet(d->outputDoc->map()->sheet(d->workbook->activeTab()));
 
 #ifdef OUTPUT_AS_ODS_FILE
     d->outputDoc->saveNativeFormat(m_chain->outputFile());
@@ -436,6 +457,15 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     os->setHidden(!is->visible());
     //os->setProtected(is->protect());
     os->setAutoCalculationEnabled(is->autoCalc());
+    os->setHideZero(!is->showZeroValues());
+    os->setShowGrid(is->showGrid());
+    os->setFirstLetterUpper(false);
+    os->map()->loadingInfo()->setCursorPosition(os, is->firstVisibleCell() + QPoint(1, 1));
+    os->setShowFormulaIndicator(false);
+    os->setShowCommentIndicator(true);
+    os->setShowPageBorders(is->isPageBreakViewEnabled());
+    os->setLcMode(false);
+    os->setShowColumnNumber(false);
 
     // TODO: page layout
     processSheetForHeaderFooter(is, os);
@@ -506,6 +536,8 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
 
         shapesXml->endElement();
     }
+
+    processSheetForFilters(is, os);
 }
 
 void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, KSpread::Sheet* os)
@@ -514,6 +546,22 @@ void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, KSpread::Sheet
             convertHeaderFooter(is->leftHeader()), convertHeaderFooter(is->centerHeader()),
             convertHeaderFooter(is->rightHeader()), convertHeaderFooter(is->leftFooter()),
             convertHeaderFooter(is->centerFooter()), convertHeaderFooter(is->rightFooter()));
+}
+
+void ExcelImport::Private::processSheetForFilters(Sheet* is, KSpread::Sheet* os)
+{
+    static int rangeId = 0; // not very nice to do this this way, but I only care about sort of unique names
+    QList<QRect> filters = workbook->filterRanges(is);
+    foreach (const QRect& filter, filters) {
+        KSpread::Database db;
+        db.setName(QString("excel-database-%1").arg(++rangeId));
+        db.setDisplayFilterButtons(true);
+        QRect r = filter.adjusted(1, 1, 1, 1);
+        r.setBottom(is->maxRow()+1);
+        KSpread::Region range(r, os);
+        db.setRange(range);
+        os->cellStorage()->setDatabase(range, db);
+    }
 }
 
 QString ExcelImport::Private::convertHeaderFooter(const QString& text)
@@ -644,6 +692,8 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         oc.setUserInput(decodedFormula);
     }
 
+    int styleId = convertStyle(&ic->format(), formula);
+
     Value value = ic->value();
     if (value.isBoolean()) {
         oc.setValue(KSpread::Value(value.asBoolean()));
@@ -656,7 +706,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             KSpread::Value v(value.asFloat());
             v.setFormat(KSpread::Value::fmt_Percent);
             oc.setValue(v);
-        } else if (isDateFormat(value, valueFormat)) {
+        } else if (KSpread::Format::isDate(styleList[styleId].formatType())) {
             QDateTime date = convertDate(value.asFloat());
             oc.setValue(KSpread::Value(date, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
@@ -665,7 +715,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             } else {
                 oc.setUserInput(locale->formatDateTime(date));
             }
-        } else if (isTimeFormat(value, valueFormat)) {
+        } else if (KSpread::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
             oc.setValue(KSpread::Value(time, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
@@ -724,7 +774,6 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     if (!note.isEmpty())
         oc.setComment(note);
 
-    int styleId = convertStyle(&ic->format(), formula);
     cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
     QHash<QString, KSpread::Conditions>::iterator conds = dataStyleConditions.find(ic->format().valueFormat());
     if (conds != dataStyleConditions.end()) {

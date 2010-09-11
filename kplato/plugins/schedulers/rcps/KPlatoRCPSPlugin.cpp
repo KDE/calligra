@@ -140,7 +140,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
     }
 }
 
-void KPlatoRCPSPlugin::slotStarted( SchedulerThread *job )
+void KPlatoRCPSPlugin::slotStarted( SchedulerThread */*job*/ )
 {
 //    qDebug()<<"KPlatoRCPSPlugin::slotStarted:";
 }

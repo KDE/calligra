@@ -128,7 +128,7 @@ public:
     
     Resource *resource( const QModelIndex &idx ) const;
     void setRequired( const QModelIndex &idx, const QList<Resource*> &lst );
-    const QList<Resource*> &required( const QModelIndex &idx ) const;
+    QList<Resource*> required( const QModelIndex &idx ) const;
     
 protected slots:
     void slotResourceChanged( Resource* );

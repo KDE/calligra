@@ -113,6 +113,7 @@ public:
     void setNamedArea(unsigned sheet, QString name, QString formula);
 
     QList<QRect> filterRanges(unsigned sheet) const;
+    QList<QRect> filterRanges(const Sheet* sheet) const;
     void addFilterRange(unsigned sheet, const QRect& range);
 
     int activeTab() const;

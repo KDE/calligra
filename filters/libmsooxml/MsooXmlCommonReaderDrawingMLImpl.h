@@ -62,6 +62,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
+    m_customListMade = false;
 }
 
 
@@ -1312,6 +1313,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 
     bool pprRead = false;
+    bool rRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -1337,6 +1339,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 // CASE #400.2
 //! @todo add more conditions testing the parent
             else if (QUALIFIED_NAME_IS(r)) {
+                rRead = true;
 #ifdef PPTXXMLSLIDEREADER_H
                 d->textBoxHasContent = true;
 #endif
@@ -1347,8 +1350,40 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
     }
 
+    if (!rRead && m_prevListLevel > 0) {
+        // Making sure that if we were previously in a list and if there's an empty line, that
+        // we don't output a bullet to it
+        // Currently we emulate this as if there would have been buNone in ppr
+        // Would there be a more simple way to do this?
+        m_listStylePropertiesAltered = true;
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+        m_currentListStyleProperties = new KoListLevelProperties;
+        m_currentListLevel = 1;
+        m_currentListStyleProperties->setLevel(m_currentListLevel);
+        m_currentListStyleProperties->setBulletCharacter(QChar());
+
+        QBuffer listBuf;
+        KoXmlWriter listStyleWriter(&listBuf);
+
+        m_currentListStyleProperties->saveOdf(&listStyleWriter);
+        const QString elementContents = QString::fromUtf8(listBuf.buffer(),
+                                                          listBuf.buffer().size());
+        m_currentListStyle.addChildElement("list-style-properties", elementContents);
+        delete m_currentListStyleProperties;
+        m_currentListStyleProperties = 0;
+    }
+
 #ifdef PPTXXMLSLIDEREADER_H
     const QString styleId(d->phStyleId());
+        if (m_context->type == Slide) {
+            if (!styleId.isEmpty()) {
+                // Case where layout defines the shape to use a list (lvl=0), but it's not been defined in the slide
+                if (m_currentListLevel == 0 && m_context->slideLayoutProperties->m_usesListStyle[d->phIdx]) {
+                    m_currentListLevel = 1;
+                }
+            }
+        }
+
     if (!styleId.isEmpty() && !pprRead) {
         int copyLevel = 0;
         if (m_currentListLevel == 0) {
@@ -1376,19 +1411,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     if (args & read_p_Skip) {
         //nothing
     } else {
-         body = textPBuf.originalWriter();
-
+        body = textPBuf.originalWriter();
         if (m_listStylePropertiesAltered) {
             if (m_prevListLevel > 0) {
                 // Ending our current level
                 body->endElement(); // text:list
                 // Ending any additional levels needed
                 for(; m_prevListLevel > 1; --m_prevListLevel) {
-                   body->endElement(); // text:list-item
-                   body->endElement(); // text:list
+                    body->endElement(); // text:list-item
+                    body->endElement(); // text:list
                 }
+                m_prevListLevel = 0;
             }
-            m_prevListLevel = 0;
         }
 
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
@@ -1411,12 +1445,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                              if (d->phType == "title" || d->phType == "ctrTitle") {
                                  listStyleName = "titleList";
                              }
-                             else if (d->phType == "other" ) {
-                                 // Fixme? : maybe also other types qualify to other
+                             else if (styleId.isEmpty()) {
                                  listStyleName = "otherList";
                              }
                              else {
-                                // If there's no default type, it should be of type body
+                                // If no match, let's default this one.
                                 listStyleName = "bodyList";
                              }
                          }
@@ -1433,15 +1466,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                     body->startElement("text:list-item");
                  }
              } else if (m_prevListLevel > m_currentListLevel) {
-                 body->endElement(); // This ends the latest list
-                for(int listDepth = m_prevListLevel-1; listDepth > m_currentListLevel; --listDepth) {
-                    //Ending any additional list levels needed
-                    body->endElement(); // text:list-item
-                    body->endElement(); // text:list
+                 body->endElement(); // This ends the latest list text:list
+                 for(int listDepth = m_prevListLevel-1; listDepth > m_currentListLevel; --listDepth) {
+                     //Ending any additional list levels needed
+                     body->endElement(); // text:list-item
+                     body->endElement(); // text:list
                  }
-                 body->endElement(); // text:list-item
                  // Starting our own stuff for this level
-                 body->startElement("text:list-item");
+                 if (m_currentListLevel > 0) {
+                     body->endElement(); // revoving last lists text:list-item
+                     body->startElement("text:list-item");
+                 }
              } else { // m_prevListLevel==m_currentListLevel
                  body->startElement("text:list-item");
              }
@@ -1463,7 +1498,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             //    m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
             //if (!m_cNvPrId.isEmpty())
             //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
-         } else if(m_context->type == Slide) {
+         } else if (m_context->type == Slide) {
+             setupParagraphStyle();
+             m_currentParagraphStylePredefined = false;
+         }
+         else { //slidemaster
+             m_moveToStylesXml = true;
              setupParagraphStyle();
              m_currentParagraphStylePredefined = false;
          }
@@ -1478,6 +1518,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
              body->endElement(); // text:list-item
          }
 #endif
+
+        if (m_listStylePropertiesAltered) {
+            // If they were manually altered in last round, most likely not going to continue with same style.
+            m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+        }
 
 #ifdef PPTXXMLSLIDEREADER_H
          // In this case we have artificially created a list of level 1
@@ -1907,6 +1952,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 #ifdef PPTXXMLSLIDEREADER_H
     const QString styleId(d->phStyleId());
     if (!styleId.isEmpty()) {
+        if (m_context->type == SlideLayout) {
+            if (m_currentListLevel > 0) {
+                m_context->slideLayoutProperties->m_usesListStyle[styleId] = true;
+            }
+        }
+
         int copyLevel = 0;
         if (m_currentListLevel == 0) {
             copyLevel = 1;
@@ -1915,19 +1966,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             copyLevel = m_currentListLevel;
         }
 
+        if (m_context->type == SlideLayout) {
+            bool wasNumber = false;
+            int temp = styleId.toInt(&wasNumber);
+            // If we are layout, and handling a shape which has only id identifier, it means we must default its
+            // pararagraph styles to  be those of a master slide bodyList
+            if (wasNumber) {
+                 MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles["body"][copyLevel],
+                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
+            }
+        }
+
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
                                                 m_currentParagraphStyle, KoGenStyle::ParagraphType);
 
-        if (m_context->type == Slide) {
-           MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
-                                                   m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        if (!d->phIdx.isEmpty()) {
+            if (m_context->type == Slide) {
+               MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phIdx][copyLevel],
+                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
+            }
         }
     }
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
     algnToODF("fo:text-align", algn);
+
+    TRY_READ_ATTR_WITHOUT_NS(marL)
+    TRY_READ_ATTR_WITHOUT_NS(indent)
+
+    bool ok = false;
+
+    if (!marL.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+    }
+    if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    }
 
     while (!atEnd()) {
         readNext();
@@ -1951,11 +2029,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         }
     }
 
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideLayout) {
+        // Could there be cases where lvl1ppr defines something else for layout, and ppr something else?
+        m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
+    }
+#endif
+
     if (m_listStylePropertiesAltered) {
+        m_customListMade = true;
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
+        if (m_currentListLevel == 0) {
+            m_currentListLevel = 1;
+        }
         // For now we take a stand that any altered style makes its own list.
-        m_currentListLevel = 1;
         m_currentListStyleProperties->setLevel(m_currentListLevel);
 
         QBuffer listBuf;
@@ -1965,6 +2053,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         const QString elementContents = QString::fromUtf8(listBuf.buffer(),
                                                           listBuf.buffer().size());
         m_currentListStyle.addChildElement("list-style-properties", elementContents);
+    }
+    else if (m_customListMade) {
+        // We come here in the case, that there was e.g buChar in the previous paragraph
+        // and in this paragraph we want to continue with predefined list styles
+        m_listStylePropertiesAltered = true;
+        m_customListMade = false;
+    }
+    else {
+        m_customListMade = false;
     }
 
     delete m_currentListStyleProperties;
@@ -3909,24 +4006,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(indent)
 
-    bool marginalOk = true;
-    bool indentOk = true;
-    float marginal = 0;
-    float ind = 0;
+    bool ok = false;
 
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
 
-//! @todo Check if this conversion is really correct?
-
     if (!marL.isEmpty()) {
-        marginal = int(TWIP_TO_DM(marL.toDouble(&marginalOk)));
+        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
     }
     if (!indent.isEmpty()) {
-        ind = int(TWIP_TO_DM(indent.toDouble(&indentOk)));
-    }
-
-    if (marginalOk || indentOk) {
-        m_currentListStyleProperties->setIndent(marginal + ind);
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -3987,6 +4077,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             styleId = m_context->slideMasterPageProperties->m_currentHandledList;
         }
         m_context->slideMasterPageProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
+
         // Check at some point: What is ctrTitle in reality? is it it's own type?
         // Is it title which should have central aligment? something else?
         if (styleId == "title") {
@@ -4691,6 +4782,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 {
     READ_PROLOGUE
+    m_customListMade = false;
     const QXmlStreamAttributes attrs(attributes());
     // wrap (Text Wrapping Type)
     // Specifies the wrapping options to be used for this text body. If this attribute is omitted,
@@ -4795,10 +4887,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     }
 
     if (m_prevListLevel > 0) {
-        for(; m_prevListLevel > 0; --m_prevListLevel) {
+        // Ending our current level
+        body->endElement(); // text:list
+        // Ending any additional levels needed
+        for(; m_prevListLevel > 1; --m_prevListLevel) {
             body->endElement(); // text:list-item
             body->endElement(); // text:list
         }
+        m_prevListLevel = 0;
     }
 
     READ_EPILOGUE

@@ -4432,7 +4432,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
             ELSE_TRY_READ_IF(docPr)
             if ( qualifiedName() == "a:graphic" )
             {
-                KoFilter::ConversionStatus status = read_graphic2();
+                read_graphic2();
 //                 if ( status != KoFilter::OK )
 //                     return status;
             }
@@ -4506,7 +4506,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_chart2()
 
         Charting::Chart* chart = new Charting::Chart;
 
-        ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        ChartExport* chartexport = new ChartExport( chart, m_context->themes, false );
         chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
         chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
         chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;

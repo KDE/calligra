@@ -147,6 +147,15 @@ QList<QRect> Workbook::filterRanges(unsigned sheet) const
     return d->filterRanges[sheet];
 }
 
+QList<QRect> Workbook::filterRanges(const Sheet* sheet) const
+{
+    for (unsigned i = 0; i < d->sheets.size(); i++) {
+        if(d->sheets[i] == sheet) return filterRanges(i);
+    }
+    return QList<QRect>();
+}
+
+
 void Workbook::addFilterRange(unsigned sheet, const QRect& range)
 {
     d->filterRanges[sheet].push_back(range);

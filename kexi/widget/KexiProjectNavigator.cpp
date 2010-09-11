@@ -117,7 +117,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         buttons_flyr->addWidget(btn);
     }
 
-    if (KexiMainWindowIface::global()->userMode()) {
+    if (KexiMainWindowIface::global() && KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
         m_deleteAction = 0;
         m_renameAction = 0;
@@ -191,7 +191,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                   SLOT(slotPageSetupForObject()));
 
 
-    if (KexiMainWindowIface::global()->userMode()) {
+    if (KexiMainWindowIface::global() && KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
         m_partMenu = 0;
     } else {
