@@ -4367,6 +4367,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     TRY_READ_ATTR(type)
 
+    m_currentTextStyleProperties = new KoCharacterStyle();
+    if (!m_currentTextStylePredefined) {
+        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    }
+
     if (!type.isEmpty()) {
 //! @todo support all possible fields here
     }
@@ -4387,6 +4392,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
             ELSE_TRY_READ_IF(t)
         }
     }
+
+    m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
+
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
