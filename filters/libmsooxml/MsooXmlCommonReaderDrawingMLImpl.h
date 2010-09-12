@@ -1471,7 +1471,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                      if (listDepth == 0) {
                          QString listStyleName;
                          if (m_currentListStyle.isEmpty()) {
-                             if (d->phType == "title" || d->phType == "ctrTitle") {
+                             if (d->phType == "title") {
                                  listStyleName = m_context->slideMasterPageProperties->m_titleList;
                              }
                              else if (styleId.isEmpty()) {

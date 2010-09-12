@@ -1239,6 +1239,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // The possible values for this attribute are defined by the ST_PlaceholderType simple type (§19.7.10), p.2988.
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, d->phType)
     kDebug() << "type:" << d->phType;
+    // There is a hardcoded behaviour in MSoffice that ctrTitle refers also to "title"
+    if (d->phType == "ctrTitle") {
+        d->phType = "title";
+    }
 
     if (m_context->type == SlideLayout) {
         // Mark this shape as a place holder.
