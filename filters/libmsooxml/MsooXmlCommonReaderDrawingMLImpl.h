@@ -1620,11 +1620,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         if (listStyle) {
             m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
         }
-        //m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
-        //delete m_currentTextStyleProperties;
-        //m_currentTextStyleProperties = new KoCharacterStyle();
-
         const QString styleId(d->phStyleId());
         if (!styleId.isEmpty()) {
             MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
@@ -1639,19 +1634,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         }
     }
     else if (m_context->type == SlideLayout) {
+        PptxSlideMasterTextStyle *slideMasterTextStyle = 0;
         if ((d->phType).isEmpty()) {
             // If layout does not define any type, we assume it needs to use bodyStyle
-            PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("body");
-            const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
-            PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
-            if (listStyle) {
-                m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
-            }
-            m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
-            delete m_currentTextStyleProperties;
-            m_currentTextStyleProperties = new KoCharacterStyle();
-            m_context->slideLayoutProperties->textStyles[d->phStyleId()][m_currentListLevel] = m_currentTextStyle;
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("body");
+        }
+        else {
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        }
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
         }
     }
     // Styles of texts for slidemaster are read in first round of reading slidemasterX.xml
@@ -1663,10 +1657,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
         if (listStyle) {
             m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
         }
-        m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
-        delete m_currentTextStyleProperties;
-        m_currentTextStyleProperties = new KoCharacterStyle();
     }
 #endif
 
@@ -1685,9 +1675,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     // elements
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
-    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
-
     body = rBuf.originalWriter();
 
     if (m_hyperLink) {
@@ -1699,8 +1686,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
 #ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideLayout) {
+        if (!(d->phType).isEmpty()) {
+            m_context->slideLayoutProperties->textStyles[d->phType][m_currentListLevel] = m_currentTextStyle;
+        }
+        if (!(d->phIdx).isEmpty()) {
+            m_context->slideLayoutProperties->textStyles[d->phIdx][m_currentListLevel] = m_currentTextStyle;
+        }
+    }
+
     if (m_context->type == SlideMaster) {
-         mainStyles->markStyleForStylesXml(currentTextStyleName);
+        mainStyles->markStyleForStylesXml(currentTextStyleName);
+        // It is possible, the slideMaster updates the style here
+        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            delete listStyle->m_characterStyle;
+            listStyle->m_characterStyle = m_currentTextStyleProperties;
+            m_currentTextStyleProperties = 0;
+        }
     }
 #endif
 
@@ -1713,6 +1718,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     if (m_hyperLink) {
         body->endElement(); // text:a
     }
+
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
@@ -4396,6 +4404,55 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
+#ifdef PPTXXMLSLIDEREADER_H
+    // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
+    if (m_context->type == Slide) {
+        // pass properties from master to slide
+        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
+        }
+        const QString styleId(d->phStyleId());
+        if (!styleId.isEmpty()) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        }
+        else { // Case that there's no style, we apply "other", maybe should read default and apply that?
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("other");
+            listStyle = slideMasterTextStyle->listStyle(listLevel);
+            if (listStyle) {
+                m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
+            }
+        }
+    }
+    else if (m_context->type == SlideLayout) {
+        PptxSlideMasterTextStyle *slideMasterTextStyle = 0;
+        if ((d->phType).isEmpty()) {
+            // If layout does not define any type, we assume it needs to use bodyStyle
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("body");
+        }
+        else {
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        }
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
+        }
+    }
+    // Styles of texts for slidemaster are read in first round of reading slidemasterX.xml
+    // When we get here, we are in 2nd round, and can actually apply them.
+    else if (m_context->type == SlideMaster) {
+        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            m_currentTextStyleProperties->copyProperties(listStyle->m_characterStyle);
+        }
+    }
+#endif
 
     while (!atEnd()) {
         readNext();
@@ -4413,15 +4470,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
-    delete m_currentTextStyleProperties;
-    m_currentTextStyleProperties = 0;
-
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
 #ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == SlideMaster) {
-            mainStyles->markStyleForStylesXml(currentTextStyleName);
+    if (m_context->type == SlideLayout) {
+        if (!(d->phType).isEmpty()) {
+            m_context->slideLayoutProperties->textStyles[d->phType][m_currentListLevel] = m_currentTextStyle;
         }
+        if (!(d->phIdx).isEmpty()) {
+            m_context->slideLayoutProperties->textStyles[d->phIdx][m_currentListLevel] = m_currentTextStyle;
+        }
+    }
+
+    if (m_context->type == SlideMaster) {
+        mainStyles->markStyleForStylesXml(currentTextStyleName);
+        // It is possible, the slideMaster updates the style here
+        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+        const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
+        PptxSlideMasterListLevelTextStyle *listStyle = slideMasterTextStyle->listStyle(listLevel);
+        if (listStyle) {
+            delete listStyle->m_characterStyle;
+            listStyle->m_characterStyle = m_currentTextStyleProperties;
+            m_currentTextStyleProperties = 0;
+        }
+    }
 #endif
 
     body = fldBuf.originalWriter();
@@ -4432,6 +4504,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     (void)fldBuf.releaseWriter();
 
     body->endElement(); //text:span
+
+    delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = 0;
 
     READ_EPILOGUE
 }
