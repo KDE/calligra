@@ -297,7 +297,7 @@ QString KSpread::Odf::encodePen(const QPen & pen)
         break;
     default: break;
     }
-    kDebug() << " encodePen :" << s;
+    //kDebug() << " encodePen :" << s;
     if (pen.color().isValid()) {
         s += ' ';
         s += Style::colorName(pen.color());
