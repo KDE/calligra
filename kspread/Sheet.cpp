@@ -522,7 +522,7 @@ const LinkStorage* Sheet::linkStorage() const
     return d->cellStorage->linkStorage();
 }
 
-StyleStorage* Sheet::styleStorage() const
+const StyleStorage* Sheet::styleStorage() const
 {
     return d->cellStorage->styleStorage();
 }
@@ -1689,7 +1689,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
                         QRect(1, 1, maxColumn, rowIndex - 1), styleRegions, conditionRegions);
 
-    cellStorage()->styleStorage()->load(styleRegions);
+    cellStorage()->loadStyles(styleRegions);
     cellStorage()->loadConditions(conditionRegions);
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {

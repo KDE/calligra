@@ -441,6 +441,11 @@ void CellStorage::setStyle(const Region& region, const Style& style)
     d->styleStorage->insert(region, style);
 }
 
+void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subStyle)
+{
+    d->styleStorage->insert(rect, subStyle);
+}
+
 QString CellStorage::userInput(int column, int row) const
 {
     return d->userInputStorage->lookup(column, row);
@@ -1347,7 +1352,7 @@ const LinkStorage* CellStorage::linkStorage() const
     return d->linkStorage;
 }
 
-StyleStorage* CellStorage::styleStorage() const
+const StyleStorage* CellStorage::styleStorage() const
 {
     return d->styleStorage;
 }
@@ -1387,6 +1392,16 @@ void CellStorage::stopUndoRecording(QUndoCommand *parent)
 void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& conditions)
 {
     d->conditionsStorage->load(conditions);
+}
+
+void CellStorage::loadStyles(const QList<QPair<QRegion, Style> > &styles)
+{
+    d->styleStorage->load(styles);
+}
+
+void CellStorage::invalidateStyleCache()
+{
+    d->styleStorage->invalidateCache();
 }
 
 #include "CellStorage.moc"

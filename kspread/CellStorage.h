@@ -172,6 +172,7 @@ public:
      */
     Style style(const QRect& rect) const;
     void setStyle(const Region& region, const Style& style);
+    void insertSubStyle(const QRect& rect, const SharedSubStyle& subStyle);
 
     /**
      * \return the user input associated with the Cell at \p column , \p row .
@@ -357,11 +358,14 @@ public:
     const FormulaStorage* formulaStorage() const;
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;
-    StyleStorage* styleStorage() const;
+    const StyleStorage* styleStorage() const;
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
 
     void loadConditions(const QList<QPair<QRegion, Conditions> >& conditions);
+    void loadStyles(const QList<QPair<QRegion, Style> >& styles);
+
+    void invalidateStyleCache();
 
     /**
      * Starts the undo recording.

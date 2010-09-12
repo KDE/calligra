@@ -112,7 +112,6 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
-#include "StyleStorage.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -292,7 +291,7 @@ void CanvasItem::refreshSheetViews()
     d->sheetViews.clear();
     const QList<Sheet*> sheets = doc()->map()->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
-        sheets[i]->cellStorage()->styleStorage()->invalidateCache();
+        sheets[i]->cellStorage()->invalidateStyleCache();
 }
 
 void CanvasItem::setActiveSheet(Sheet* sheet)

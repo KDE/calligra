@@ -47,6 +47,7 @@
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
+#include "CellStorage.h"
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "DocBase.h"
@@ -59,7 +60,6 @@
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "StyleManager.h"
-#include "StyleStorage.h"
 #include "Validity.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -902,7 +902,7 @@ void Map::handleDamages(const QList<Damage*>& damages)
             // TODO Stefan: Detach the style cache from the CellView cache.
             if ((changes.testFlag(CellDamage::Appearance))) {
                 // Rebuild the style storage cache.
-                damagedSheet->styleStorage()->invalidateCache(); // FIXME more fine-grained
+                damagedSheet->cellStorage()->invalidateStyleCache(); // FIXME more fine-grained
             }
             if ((cellDamage->changes() & CellDamage::Binding) &&
                     !workbookChanges.testFlag(WorkbookDamage::Value)) {

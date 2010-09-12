@@ -900,7 +900,7 @@ void View::refreshSheetViews()
     d->sheetViews.clear();
     const QList<Sheet*> sheets = d->doc->map()->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
-        sheets[i]->cellStorage()->styleStorage()->invalidateCache();
+        sheets[i]->cellStorage()->invalidateStyleCache();
 }
 
 void View::refreshSelection(const Region& region)
