@@ -274,9 +274,8 @@ MSOOXML_EXPORT QString columnName(uint column);
 //! Splits @a pathAndFile into path and file parts. Path does not end with '/'.
 MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
-//! @return the string which is needed when rotation objects
-MSOOXML_EXPORT QString rotateString(const qreal rotation, const qreal xPos, const  qreal yPos,
-    const qreal width, const qreal height);
+//! Returns calculated angle and xDiff, yDiff, caller has to apply these to style
+MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
 
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is based
