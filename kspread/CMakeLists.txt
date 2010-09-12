@@ -69,6 +69,7 @@ SET (dialogs_DIR_SRCS
     dialogs/AddNamedAreaDialog.cpp
     dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
+    dialogs/CharacterSelectDialog.cpp
     dialogs/CommentDialog.cpp
     dialogs/ConditionalDialog.cpp
     dialogs/ConsolidateDialog.cpp
@@ -175,7 +176,6 @@ SET (ui_DIR_SRCS
     ui/RightToLeftPaintingStrategy.cpp
     ui/SelectionStrategy.cpp
     ui/SheetView.cpp
-    ui/CharSelectDia.cpp
 )
 
 SET (kspreadcommon_LIB_SRCS

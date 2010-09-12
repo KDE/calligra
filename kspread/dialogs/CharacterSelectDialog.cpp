@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "CharSelectDia.h"
-#include "CharSelectDia.moc"
+#include "CharacterSelectDialog.h"
+#include "CharacterSelectDialog.moc"
 
 #include <QLayout>
 #include <QGridLayout>
@@ -30,7 +30,9 @@
 #include <kdebug.h>
 #include <KStandardGuiItem>
 
-class CharSelectDia::Private
+using namespace KSpread;
+
+class CharacterSelectDialog::Private
 {
 public:
     Private() : charSelect(0) {}
@@ -38,10 +40,10 @@ public:
 };
 
 /******************************************************************/
-/* class CharSelectDia                                           */
+/* class CharacterSelectDialog                                           */
 /******************************************************************/
 
-CharSelectDia::CharSelectDia(QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _modal)
+CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _modal)
         : KDialog(parent),
         d(new Private())
 {
@@ -59,7 +61,7 @@ CharSelectDia::CharSelectDia(QWidget *parent, const char *name, const QChar &_ch
     setButtonGuiItem(KDialog::Ok, okItem);
 }
 
-CharSelectDia::CharSelectDia(QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal)
+CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const char *name, const QString &_font, const QChar &_chr, bool _modal)
         : KDialog(parent),
         d(new Private())
 {
@@ -76,7 +78,7 @@ CharSelectDia::CharSelectDia(QWidget *parent, const char *name, const QString &_
     connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()));
 }
 
-void CharSelectDia::initDialog(const QChar &_chr, const QString &_font)
+void CharacterSelectDialog::initDialog(const QChar &_chr, const QString &_font)
 {
     QWidget *page = mainWidget()/*plainPage()*/;
 
@@ -98,22 +100,22 @@ void CharSelectDia::initDialog(const QChar &_chr, const QString &_font)
     d->charSelect->setFocus();
 }
 
-CharSelectDia::~CharSelectDia()
+CharacterSelectDialog::~CharacterSelectDialog()
 {
     delete d;
 }
 
-void CharSelectDia::closeDialog()
+void CharacterSelectDialog::closeDialog()
 {
     KDialog::close();
 }
 
 // static
-bool CharSelectDia::selectChar(QString &_font, QChar &_chr, QWidget* parent, const char* name)
+bool CharacterSelectDialog::selectChar(QString &_font, QChar &_chr, QWidget* parent, const char* name)
 {
     bool res = false;
 
-    QPointer<CharSelectDia> dlg = new CharSelectDia(parent, name, _chr, _font);
+    QPointer<CharacterSelectDialog> dlg = new CharacterSelectDialog(parent, name, _chr, _font);
     dlg->setFocus();
     if (dlg->exec() == Accepted) {
         _font = dlg->font();
@@ -126,22 +128,22 @@ bool CharSelectDia::selectChar(QString &_font, QChar &_chr, QWidget* parent, con
     return res;
 }
 
-QChar CharSelectDia::chr() const
+QChar CharacterSelectDialog::chr() const
 {
     return d->charSelect->currentChar();
 }
 
-QString CharSelectDia::font() const
+QString CharacterSelectDialog::font() const
 {
     return d->charSelect->font().family();
 }
 
-void CharSelectDia::slotUser1()
+void CharacterSelectDialog::slotUser1()
 {
     emit insertChar(chr(), font());
 }
 
-void CharSelectDia::slotDoubleClicked()
+void CharacterSelectDialog::slotDoubleClicked()
 {
     emit insertChar(chr(), font());
 }

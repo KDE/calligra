@@ -18,30 +18,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOCHARSELECTDIA_H
-#define KOCHARSELECTDIA_H
+#ifndef KSPREAD_CHARACTER_SELECT_DIALOG
+#define KSPREAD_CHARACTER_SELECT_DIALOG
 
 #include <kdialog.h>
 
 class QWidget;
 
+namespace KSpread
+{
+
 /**
  * A dialog for selecting a character.
  */
-class CharSelectDia : public KDialog
+class CharacterSelectDialog : public KDialog
 {
     Q_OBJECT
 
 public:
 
     // constructor
-    CharSelectDia(QWidget *parent, const char *name, const QChar &_chr,
+    CharacterSelectDialog(QWidget *parent, const char *name, const QChar &_chr,
                   const QString &_font, bool _modal = true);
 
     //constructor when you want to insert multi char
-    CharSelectDia(QWidget *parent, const char *name, const QString &_font,
+    CharacterSelectDialog(QWidget *parent, const char *name, const QString &_font,
                   const QChar &_chr, bool _modal = true);
-    ~CharSelectDia();
+    ~CharacterSelectDialog();
     /**
      * Shows the selection dialog and returns true if user pressed ok, after filling the font and character parameters.
      * @param font will be filled when the user pressed Ok with the selected font.
@@ -73,4 +76,6 @@ private:
     Private * const d;
 };
 
-#endif
+} // namespace KSpread
+
+#endif // KSPREAD_CHARACTER_SELECT_DIALOG

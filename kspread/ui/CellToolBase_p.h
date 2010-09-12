@@ -48,10 +48,10 @@ class QUndoCommand;
 class KFind;
 class KReplace;
 
-class CharSelectDia;
 
 namespace KSpread
 {
+class CharacterSelectDialog;
 class CellEditor;
 class CellToolOptionWidget;
 class Sheet;
@@ -64,7 +64,7 @@ public:
     // Inline editor
     CellEditor* cellEditor;
     // Insert special character dialog
-    CharSelectDia* specialCharDialog;
+    CharacterSelectDialog* specialCharDialog;
     // Option widget elements
     CellToolOptionWidget *optionWidget;
     QPointer<FormulaDialog> formulaDialog;
