@@ -138,6 +138,12 @@ set(TestGraphicsView_SRCS TestGraphicsView.cpp)
 kde4_add_executable(TestGraphicsView TEST ${TestGraphicsView_SRCS})
 target_link_libraries(TestGraphicsView kspreadcommon)
 
+########### next target ###############
+
+set(TestRowRepeatStorage_SRCS TestRowRepeatStorage.cpp)
+kde4_add_unit_test(TestRowRepeatStorage TESTNAME kspread-RowRepeatStorage ${TestRowRepeatStorage_SRCS})
+target_link_libraries(TestRowRepeatStorage kspreadcommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
