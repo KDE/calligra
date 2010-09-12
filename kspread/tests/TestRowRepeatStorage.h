@@ -39,6 +39,14 @@ private slots:
     void testRemoveRowsEmpty();
     void testRemoveRowsBetween();
     void testRemoveRowsOverlap();
+    void testInsertShiftDown1();
+    void testInsertShiftDown2();
+    void testInsertShiftDown3();
+    void testInsertShiftDown4();
+    void testRemoveShiftUp1();
+    void testRemoveShiftUp2();
+    void testRemoveShiftUp3();
+    void testRemoveShiftUp4();
 };
 
 } // namespace KSpread

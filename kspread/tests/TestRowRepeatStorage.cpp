@@ -251,7 +251,6 @@ void TestRowRepeatStorage::testRemoveRowsBetween()
     s.setRowRepeat(5, 10);
     s.setRowRepeat(50, 20);
     s.removeRows(25, 5);
-    s.dump();
 
     for (int i = 0; i < KS_rowMax; i++) {
         if (i < 5 || i >= 65) {
@@ -277,7 +276,6 @@ void TestRowRepeatStorage::testRemoveRowsOverlap()
     s.setRowRepeat(30, 10);
     s.setRowRepeat(12, 4);
     s.removeRows(10, 22);
-    s.dump();
 
     for (int i = 0; i < KS_rowMax; i++) {
         if (i < 5 || i >= 18) {
@@ -289,6 +287,285 @@ void TestRowRepeatStorage::testRemoveRowsOverlap()
         } else if (i < 18) {
             QCOMPARE(s.rowRepeat(i), 8);
             QCOMPARE(s.firstIdenticalRow(i), 10);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testInsertShiftDown1()
+{
+    // entire rect inside one row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.insertShiftDown(QRect(5, 15, 10, 10));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 25) {
+            QCOMPARE(s.rowRepeat(i), 10);
+            QCOMPARE(s.firstIdenticalRow(i), 15);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 25);
+        } else if (i < 210) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 250) {
+            QCOMPARE(s.rowRepeat(i), 40);
+            QCOMPARE(s.firstIdenticalRow(i), 210);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testInsertShiftDown2()
+{
+    // rect overlapping the end of a row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.insertShiftDown(QRect(5, 25, 10, 10));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 25) {
+            QCOMPARE(s.rowRepeat(i), 15);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 25);
+        } else if (i < 210) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 250) {
+            QCOMPARE(s.rowRepeat(i), 40);
+            QCOMPARE(s.firstIdenticalRow(i), 210);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testInsertShiftDown3()
+{
+    // rect overlapping the start of a row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.insertShiftDown(QRect(5, 5, 10, 10));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 20) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 10);
+            QCOMPARE(s.firstIdenticalRow(i), 20);
+        } else if (i < 210) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 250) {
+            QCOMPARE(s.rowRepeat(i), 40);
+            QCOMPARE(s.firstIdenticalRow(i), 210);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testInsertShiftDown4()
+{
+    // rect overlapping the start and end of a row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(35, 30);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.insertShiftDown(QRect(5, 15, 10, 25));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 15);
+            QCOMPARE(s.firstIdenticalRow(i), 15);
+        } else if (i < 35) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 40) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 35);
+        } else if (i < 55) {
+            QCOMPARE(s.rowRepeat(i), 15);
+            QCOMPARE(s.firstIdenticalRow(i), 40);
+        } else if (i < 60) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 65) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 60);
+        } else if (i < 225) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 250) {
+            QCOMPARE(s.rowRepeat(i), 25);
+            QCOMPARE(s.firstIdenticalRow(i), 225);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testRemoveShiftUp1()
+{
+    // entire rect inside one row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.removeShiftUp(QRect(5, 15, 10, 10));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 20) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 15);
+        } else if (i < 200) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 240) {
+            QCOMPARE(s.rowRepeat(i), 40);
+            QCOMPARE(s.firstIdenticalRow(i), 200);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testRemoveShiftUp2()
+{
+    // rect overlapping the end of a row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.removeShiftUp(QRect(5, 25, 10, 10));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 25) {
+            QCOMPARE(s.rowRepeat(i), 15);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 200) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 240) {
+            QCOMPARE(s.rowRepeat(i), 40);
+            QCOMPARE(s.firstIdenticalRow(i), 200);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testRemoveShiftUp3()
+{
+    // rect overlapping the start of a row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.removeShiftUp(QRect(5, 5, 10, 10));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 20) {
+            QCOMPARE(s.rowRepeat(i), 10);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 200) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 240) {
+            QCOMPARE(s.rowRepeat(i), 40);
+            QCOMPARE(s.firstIdenticalRow(i), 200);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testRemoveShiftUp4()
+{
+    // rect overlapping the start and end of a row-repeat, with a smaller and a larger row repeat after it
+    RowRepeatStorage s;
+    s.setRowRepeat(10, 20);
+    s.setRowRepeat(35, 30);
+    s.setRowRepeat(100, 5);
+    s.setRowRepeat(200, 50);
+    s.removeShiftUp(QRect(5, 15, 10, 25));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 15);
+            QCOMPARE(s.firstIdenticalRow(i), 15);
+        } else if (i < 35) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 40) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 35);
+        } else if (i < 200) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 225) {
+            QCOMPARE(s.rowRepeat(i), 25);
+            QCOMPARE(s.firstIdenticalRow(i), 200);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
         }
     }
 }

@@ -21,6 +21,9 @@
 #include <QList>
 #include <QPair>
 #include <qdebug.h>
+
+#include "kspread_limits.h"
+
 using namespace KSpread;
 
 RowRepeatStorage::RowRepeatStorage()
@@ -74,7 +77,7 @@ void RowRepeatStorage::setRowRepeat(int firstRow, int rowRepeat)
        m_data[lastRow] = rowRepeat;
 
    foreach (const intPair& p, newRanges) {
-       if (p.second != 1) m_data[p.first] = p.second;
+       if (p.second > 1) m_data[p.first] = p.second;
    }
 }
 
@@ -124,7 +127,7 @@ void RowRepeatStorage::insertRows(int row, int count)
 
     m_data[row+count-1] = count;
     foreach (const intPair& p, newRanges) {
-        if (p.second != 1) m_data[p.first] = p.second;
+        if (p.second > 1) m_data[p.first] = p.second;
     }
 }
 
@@ -148,6 +151,58 @@ void RowRepeatStorage::removeRows(int row, int count)
     }
 
     foreach (const intPair& p, newRanges) {
-        if (p.second != 1) m_data[p.first] = p.second;
+        if (p.second > 1) m_data[p.first] = p.second;
+    }
+}
+
+void RowRepeatStorage::insertShiftDown(const QRect &rect)
+{
+    RowRepeatStorage s2 = *this;
+    s2.insertRows(rect.top(), rect.height());
+
+    typedef QPair<int, int> intPair;
+    QList<intPair> newRanges;
+
+    for (int row = 1; row <= KS_rowMax;) {
+        int repeat1 = rowRepeat(row);
+        int repeat2 = s2.rowRepeat(row);
+        repeat1 -= row - firstIdenticalRow(row);
+        repeat2 -= row - s2.firstIdenticalRow(row);
+        int repeat = qMin(repeat1, repeat2);
+        if (repeat > 1) {
+            newRanges.append(qMakePair(row + repeat - 1, repeat));
+        }
+        row += repeat;
+    }
+
+    m_data.clear();
+    foreach (const intPair& p, newRanges) {
+        if (p.second > 1) m_data[p.first] = p.second;
+    }
+}
+
+void RowRepeatStorage::removeShiftUp(const QRect &rect)
+{
+    RowRepeatStorage s2 = *this;
+    s2.removeRows(rect.top(), rect.height());
+
+    typedef QPair<int, int> intPair;
+    QList<intPair> newRanges;
+
+    for (int row = 1; row <= KS_rowMax;) {
+        int repeat1 = rowRepeat(row);
+        int repeat2 = s2.rowRepeat(row);
+        repeat1 -= row - firstIdenticalRow(row);
+        repeat2 -= row - s2.firstIdenticalRow(row);
+        int repeat = qMin(repeat1, repeat2);
+        if (repeat > 1) {
+            newRanges.append(qMakePair(row + repeat - 1, repeat));
+        }
+        row += repeat;
+    }
+
+    m_data.clear();
+    foreach (const intPair& p, newRanges) {
+        if (p.second > 1) m_data[p.first] = p.second;
     }
 }

@@ -20,6 +20,8 @@
 #define ROWREPEATSTORAGE_H
 
 #include <QMap>
+#include <QRect>
+
 #include "kspread_export.h"
 
 namespace KSpread
@@ -40,6 +42,8 @@ public:
     int firstIdenticalRow(int row) const;
     void insertRows(int row, int count);
     void removeRows(int row, int count);
+    void insertShiftDown(const QRect& rect);
+    void removeShiftUp(const QRect& rect);
     void dump() const;
 private:
     // m_data[i] = j means that rows [i-j+1 , i] are the same
