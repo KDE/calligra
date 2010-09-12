@@ -206,3 +206,32 @@ void RowRepeatStorage::removeShiftUp(const QRect &rect)
         if (p.second > 1) m_data[p.first] = p.second;
     }
 }
+
+void RowRepeatStorage::insertShiftRight(const QRect &rect)
+{
+    // first range that ends at or after rect.top
+    QMap<int, int>::iterator it = m_data.lowerBound(rect.top());
+    if (it != m_data.end() && (it.key() - it.value() + 1) < rect.top()) {
+        // range starts before rect, ends in or after it; split it
+        int start = it.key() - it.value() + 1;
+        int count = rect.top() - start;
+        it.value() = it.key() - rect.top() + 1;
+        if (count > 1) m_data[start+count-1] = count;
+    }
+
+    // and now same code for bottom+1 of rect
+    it = m_data.lowerBound(rect.bottom()+1);
+    if (it != m_data.end() && (it.key() - it.value() + 1) < rect.bottom()+1) {
+        // range starts before rect, ends in or after it; split it
+        int start = it.key() - it.value() + 1;
+        int count = rect.bottom() + 1 - start;
+        it.value() = it.key() - rect.bottom();
+        if (count > 1) m_data[start+count-1] = count;
+    }
+}
+
+void RowRepeatStorage::removeShiftLeft(const QRect &rect)
+{
+    // identical to insert
+    insertShiftRight(rect);
+}

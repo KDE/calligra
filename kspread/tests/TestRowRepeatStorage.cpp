@@ -570,6 +570,86 @@ void TestRowRepeatStorage::testRemoveShiftUp4()
     }
 }
 
+void TestRowRepeatStorage::testInsertShiftRight()
+{
+    RowRepeatStorage s;
+    s.setRowRepeat(5, 10);
+    s.setRowRepeat(20, 10);
+    s.setRowRepeat(35, 10);
+    s.insertShiftRight(QRect(5, 10, 10, 30));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 5) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 5);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 20) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 10);
+            QCOMPARE(s.firstIdenticalRow(i), 20);
+        } else if (i < 35) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 40) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 35);
+        } else if (i < 45) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 40);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
+void TestRowRepeatStorage::testRemoveShiftLeft()
+{
+    RowRepeatStorage s;
+    s.setRowRepeat(5, 10);
+    s.setRowRepeat(20, 10);
+    s.setRowRepeat(35, 10);
+    s.removeShiftLeft(QRect(5, 10, 10, 30));
+
+    for (int i = 1; i <= KS_rowMax; i++) {
+        if (i < 5) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 10) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 5);
+        } else if (i < 15) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 10);
+        } else if (i < 20) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 30) {
+            QCOMPARE(s.rowRepeat(i), 10);
+            QCOMPARE(s.firstIdenticalRow(i), 20);
+        } else if (i < 35) {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        } else if (i < 40) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 35);
+        } else if (i < 45) {
+            QCOMPARE(s.rowRepeat(i), 5);
+            QCOMPARE(s.firstIdenticalRow(i), 40);
+        } else {
+            QCOMPARE(s.rowRepeat(i), 1);
+            QCOMPARE(s.firstIdenticalRow(i), i);
+        }
+    }
+}
+
 QTEST_KDEMAIN(TestRowRepeatStorage, NoGUI)
 
 #include "TestRowRepeatStorage.moc"

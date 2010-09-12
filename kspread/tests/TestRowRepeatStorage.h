@@ -47,6 +47,8 @@ private slots:
     void testRemoveShiftUp2();
     void testRemoveShiftUp3();
     void testRemoveShiftUp4();
+    void testInsertShiftRight();
+    void testRemoveShiftLeft();
 };
 
 } // namespace KSpread
