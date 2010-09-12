@@ -209,29 +209,25 @@ void RowRepeatStorage::removeShiftUp(const QRect &rect)
 
 void RowRepeatStorage::insertShiftRight(const QRect &rect)
 {
-    // first range that ends at or after rect.top
-    QMap<int, int>::iterator it = m_data.lowerBound(rect.top());
-    if (it != m_data.end() && (it.key() - it.value() + 1) < rect.top()) {
-        // range starts before rect, ends in or after it; split it
-        int start = it.key() - it.value() + 1;
-        int count = rect.top() - start;
-        it.value() = it.key() - rect.top() + 1;
-        if (count > 1) m_data[start+count-1] = count;
-    }
-
-    // and now same code for bottom+1 of rect
-    it = m_data.lowerBound(rect.bottom()+1);
-    if (it != m_data.end() && (it.key() - it.value() + 1) < rect.bottom()+1) {
-        // range starts before rect, ends in or after it; split it
-        int start = it.key() - it.value() + 1;
-        int count = rect.bottom() + 1 - start;
-        it.value() = it.key() - rect.bottom();
-        if (count > 1) m_data[start+count-1] = count;
-    }
+    splitRowRepeat(rect.top());
+    splitRowRepeat(rect.bottom()+1);
 }
 
 void RowRepeatStorage::removeShiftLeft(const QRect &rect)
 {
     // identical to insert
     insertShiftRight(rect);
+}
+
+void RowRepeatStorage::splitRowRepeat(int row)
+{
+    // first range that ends at or after row
+    QMap<int, int>::iterator it = m_data.lowerBound(row);
+    if (it != m_data.end() && (it.key() - it.value() + 1) < row) {
+        // range starts before row, ends in or after it; split it
+        int start = it.key() - it.value() + 1;
+        int count = row - start;
+        it.value() = it.key() - row + 1;
+        if (count > 1) m_data[start+count-1] = count;
+    }
 }

@@ -46,6 +46,7 @@ public:
     void insertShiftRight(const QRect& rect);
     void removeShiftUp(const QRect& rect);
     void removeShiftLeft(const QRect& rect);
+    void splitRowRepeat(int row);
     void dump() const;
 private:
     // m_data[i] = j means that rows [i-j+1 , i] are the same
