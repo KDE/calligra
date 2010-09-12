@@ -2127,6 +2127,9 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         }
         columnIndex += numberColumns;
     }
+
+    cellStorage()->setRowsRepeated(rowIndex, number);
+
     rowIndex += number;
     return columnMaximal;
 }

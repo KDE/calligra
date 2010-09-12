@@ -347,6 +347,24 @@ public:
     int rows(bool includeStyles = true) const;
 
     /**
+     * The number of rows that are consecutive to, and identical to \p row. This includes the row
+     * itself.
+     */
+    int rowRepeat(int row) const;
+
+    /**
+     * The first row in the block of consecutive identical rows \p row is in.
+     */
+    int firstIdenticalRow(int row) const;
+
+    /**
+     * Set how often the specified row is repeated. \p row is the index of the first row in a block,
+     * \p count is the number of times it is repeated (including the first one). This method is used
+     * during loading.
+     */
+    void setRowsRepeated(int row, int count);
+
+    /**
      * Creates a substorage consisting of the values in \p region.
      * \return a subset of the storage stripped down to the values in \p region
      */

@@ -1459,4 +1459,19 @@ void CellStorage::invalidateStyleCache()
     d->styleStorage->invalidateCache();
 }
 
+int CellStorage::rowRepeat(int row) const
+{
+    return d->rowRepeatStorage->rowRepeat(row);
+}
+
+int CellStorage::firstIdenticalRow(int row) const
+{
+    return d->rowRepeatStorage->firstIdenticalRow(row);
+}
+
+void CellStorage::setRowsRepeated(int row, int count)
+{
+    d->rowRepeatStorage->setRowRepeat(row, count);
+}
+
 #include "CellStorage.moc"
