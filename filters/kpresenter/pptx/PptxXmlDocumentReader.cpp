@@ -66,9 +66,9 @@ public:
     bool sldSzRead;
     KoPageLayout pageLayout;
 
-    // These should be most likely separated to another structure in case there are multiple slideMasters
-    QString masterPageDrawStyleName;
-    KoGenStyle masterPageStyle;
+    // Several because there are several masterpages
+    QVector<QString> masterPageDrawStyleNames;
+    QVector<KoGenStyle> masterPageStyles;
     QVector<QString> masterPageFrames;
 
     PptxSlideMasterPageProperties slideMasterPageProperties;
@@ -103,10 +103,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
     d->slideNumber = 0;
     d->sldSzRead = false;
     d->pageLayout = KoPageLayout();
-    d->masterPageDrawStyleName.clear();
-    d->masterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
-    d->slideMasterPageProperties.clear();
-    d->masterPageFrames.clear();
 
     const KoFilter::ConversionStatus result = readInternal();
 
@@ -185,11 +181,15 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         return result;
 
     QString slideMasterPath, slideMasterFile;
-    MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
-    const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
-    PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
+    MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile,
+        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
+    const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
+         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
+    PptxSlideProperties *masterSlideProperties =
+        d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
 
     result = new PptxSlideLayoutProperties();
+
     MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
         *m_context->import,
@@ -355,6 +355,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         d->commentAuthors,
         d->tableStyleList
     );
+
     PptxXmlSlideReader slideMasterReader(this);
     context.firstReadingRound = true;
     status = m_context->import->loadAndParseDocument(
@@ -373,9 +374,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
     masterSlidePropertiesSetter.release();
-    d->masterPageDrawStyleName = context.pageDrawStyleName;
-    d->masterPageFrames = context.pageFrames;
-    kDebug() << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleName;
+    d->masterPageDrawStyleNames.push_back(context.pageDrawStyleName);
+    d->masterPageFrames += context.pageFrames;
+    kDebug() << "d->masterPageDrawStyleName:" << d->masterPageDrawStyleNames.back();
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
@@ -523,27 +524,30 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         }
     }
 
-    if (d->sldSzRead) {
-        KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
-        const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
-        mainStyles->markStyleForStylesXml(pageLayoutStyleName);
-        kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
+    // There are double the amount of masterPage frames because we read slideMaster always twice
+    // This means that first frame of the set is always empty and is skipped in the loop
+    unsigned frameCount = d->masterPageFrames.size() / 2;
+    unsigned index = 0;
+    while (index < frameCount) {
+        d->masterPageStyles.push_back(KoGenStyle(KoGenStyle::MasterPageStyle));
+        if (d->sldSzRead) {
+            KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
+            const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
+            mainStyles->markStyleForStylesXml(pageLayoutStyleName);
+            kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
 
-        d->masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
-    }
-    if (!d->masterPageDrawStyleName.isEmpty()) {
-        d->masterPageStyle.addAttribute("draw:style-name", d->masterPageDrawStyleName);
+            d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);
+        }
+        if (!d->masterPageDrawStyleNames.at(index).isEmpty()) {
+            d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
+        }
+        d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
+        const QString masterPageStyleName(
+            mainStyles->insert(d->masterPageStyles.at(index), "Default"));
+        kDebug() << "masterPageStyleName:" << masterPageStyleName;
+
+        ++index;
     }
 
-    unsigned frameCount = d->masterPageFrames.size();
-    unsigned frameIndex = 0;
-    while (frameIndex < frameCount) {
-        d->masterPageStyle.addChildElement(QString("frame%1").arg(frameIndex), d->masterPageFrames.at(frameIndex));
-        ++frameIndex;
-    }
-
-    const QString masterPageStyleName(
-        mainStyles->insert(d->masterPageStyle, "Default", KoGenStyles::DontAddNumberToName));
-    kDebug() << "masterPageStyleName:" << masterPageStyleName;
     READ_EPILOGUE
 }
