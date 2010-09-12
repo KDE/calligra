@@ -45,7 +45,7 @@
 #include <Localization.h>
 #include "Map.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include <Sheet.h>
 
 // commands

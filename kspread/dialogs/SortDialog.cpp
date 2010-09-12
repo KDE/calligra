@@ -31,7 +31,7 @@
 
 // KSpread
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 #include "ValueConverter.h"
 

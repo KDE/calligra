@@ -92,7 +92,6 @@
 #include "NamedAreaManager.h"
 #include "PrintSettings.h"
 #include "RecalcManager.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "StyleManager.h"
@@ -111,6 +110,7 @@
 #include "chart/ChartDialog.h"
 
 // ui
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 
 using namespace std;

@@ -26,13 +26,13 @@
 #include "Map.h"
 #include "PrintSettings.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "View.h"
 
 #include "part/dialogs/SheetSelectPage.h"
 
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 
 #include <KoGlobal.h>

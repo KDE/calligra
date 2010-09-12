@@ -102,7 +102,6 @@
 #include "Localization.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "Util.h"
 #include "Validity.h"
@@ -115,6 +114,7 @@
 
 // ui
 #include "ui/CellView.h"
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 
 #define MIN_SIZE 10

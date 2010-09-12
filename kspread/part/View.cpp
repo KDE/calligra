@@ -127,7 +127,6 @@
 #include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
@@ -156,6 +155,7 @@
 #include "ui/CellView.h"
 #include "ui/MapViewModel.h"
 #include "ui/RightToLeftPaintingStrategy.h"
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 
 // D-Bus

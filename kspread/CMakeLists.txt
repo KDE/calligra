@@ -174,6 +174,7 @@ SET (ui_DIR_SRCS
     ui/PasteStrategy.cpp
     ui/RegionSelector.cpp
     ui/RightToLeftPaintingStrategy.cpp
+    ui/Selection.cpp
     ui/SelectionStrategy.cpp
     ui/SheetView.cpp
 )
@@ -182,7 +183,6 @@ SET (kspreadcommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
-    Selection.cpp
     tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}

@@ -22,7 +22,7 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h" // FIXME detach from ui
 #include "Sheet.h"
 #include "ValueStorage.h"
 

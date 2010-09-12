@@ -49,7 +49,6 @@
 #include "BindingModel.h"
 #include "CalculationSettings.h"
 #include "Map.h"
-#include "Selection.h"
 #include "SheetAccessModel.h"
 
 #include "part/View.h" // TODO: get rid of this dependency

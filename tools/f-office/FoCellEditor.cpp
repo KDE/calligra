@@ -18,7 +18,7 @@
 */
 #include "FoCellEditor.h"
 
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "ui/CellToolBase.h"
 #include "KoViewConverter.h"
 #include "KoDpi.h"
@@ -26,7 +26,6 @@
 #include "ui/CellEditorBase.h"
 
 #include "Cell.h"
-#include "Selection.h"
 
 #include <QGtkStyle>
 #include <QScrollBar>

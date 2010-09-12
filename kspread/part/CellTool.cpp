@@ -65,7 +65,6 @@
 #include "Doc.h"
 #include "kspread_limits.h"
 #include "PrintSettings.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "Util.h"
@@ -75,6 +74,7 @@
 #include "commands/DefinePrintRangeCommand.h"
 
 #include "ui/CellView.h"
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 
 using namespace KSpread;

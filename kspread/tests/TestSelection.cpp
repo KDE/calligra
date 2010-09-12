@@ -23,7 +23,7 @@
 
 #include "part/Canvas.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 
 using namespace KSpread;
