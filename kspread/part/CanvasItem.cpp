@@ -119,7 +119,6 @@
 #include "commands/DeleteCommand.h"
 #include "commands/PasteCommand.h"
 #include "commands/StyleCommand.h"
-#include "commands/Undo.h"
 
 // ui
 #include "ui/CellView.h"

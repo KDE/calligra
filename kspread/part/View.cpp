@@ -144,7 +144,6 @@
 #include "commands/CopyCommand.h"
 #include "commands/DefinePrintRangeCommand.h"
 #include "commands/SheetCommands.h"
-#include "commands/Undo.h"
 
 // dialogs
 #include "dialogs/PageLayoutDialog.h"

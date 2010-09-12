@@ -99,7 +99,6 @@
 #include "commands/DeleteCommand.h"
 #include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
-#include "commands/Undo.h"
 
 namespace KSpread
 {
