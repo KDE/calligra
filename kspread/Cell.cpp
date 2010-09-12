@@ -1117,8 +1117,9 @@ bool Cell::saveOdf(KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         saveOdfCellStyle(currentCellStyle, mainStyles);
         // skip 'table:style-name' attribute for the default style
         if (!currentCellStyle.isDefaultStyle()) {
-            if (mainStyles.styles().contains(currentCellStyle))
-                xmlwriter.addAttribute("table:style-name", mainStyles.styles().find(currentCellStyle).value());
+            QString styleName = mainStyles.styles().value(currentCellStyle, QString());
+            if (!styleName.isEmpty())
+                xmlwriter.addAttribute("table:style-name", styleName);
         }
     }
 
