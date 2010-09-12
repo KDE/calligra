@@ -134,7 +134,6 @@ SET (part_DIR_SRCS
     part/HeaderWidgets.cpp
     part/HeaderItems.cpp
     part/PrintJob.cpp
-    part/PrintManager.cpp
     part/ToolRegistry.cpp
     part/TabBar.cpp
     part/View.cpp
