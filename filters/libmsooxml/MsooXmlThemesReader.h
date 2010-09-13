@@ -225,6 +225,8 @@ protected:
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
     KoFilter::ConversionStatus read_bgFillStyleLst();
+    KoFilter::ConversionStatus read_majorFont();
+    KoFilter::ConversionStatus read_minorFont();
 
     //! Used for skipping a subtree - kust reads and shows each element.
     //! called by BIND_READ_SKIP() macro.

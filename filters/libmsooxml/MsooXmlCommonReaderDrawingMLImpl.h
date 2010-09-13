@@ -3044,8 +3044,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(typeface)
-    if (!typeface.isEmpty())
-        m_currentTextStyleProperties->setFontFamily(typeface);
+    if (!typeface.isEmpty()) {
+        QString font = typeface;
+        if (typeface.startsWith("+mj")) {
+            font = m_context->themes->fontScheme.majorFonts.latinTypeface;
+        }
+        else if (typeface.startsWith("+mn")) {
+           font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+        }
+        m_currentTextStyleProperties->setFontFamily(font);
+    }
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
         int pitchFamilyInt;
@@ -4899,6 +4907,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
+            ELSE_TRY_READ_IF(latin)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
