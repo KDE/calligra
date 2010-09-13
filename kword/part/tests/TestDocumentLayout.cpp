@@ -117,7 +117,9 @@ public:
     qreal maxLineHeight() const {
         return m_maxLineHeight;
     }
-
+    QRectF expandVisibleRect(const QRectF &rect) const {
+        return rect; //FIXME is that correct?
+    }
     QTextDocument *m_doc;
     QTextBlock m_currentBlock;
     qreal m_y;
