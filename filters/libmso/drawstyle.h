@@ -59,12 +59,15 @@ public:
     quint32 lineEndArrowWidth() const;
     // LineWidth
     quint32 lineWidth() const;
-    // ShadowOffsetX
+    // Shadow related
+    quint32 shadowType() const;
     qint32 shadowOffsetX() const;
-    // ShadowOffsetY
     qint32 shadowOffsetY() const;
-    // ShadowOpacity
     MSO::FixedPoint shadowOpacity() const;
+    MSO::OfficeArtCOLORREF shadowColor() const;
+    // ShadowStyleBooleanProperties
+    bool fShadowObscured() const;
+    bool fShadow() const;  
     // LineDashing
     quint32 lineDashing() const;
     // LineStyleBooleanProperties
