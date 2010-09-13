@@ -121,8 +121,9 @@ Forms
 **fixed position of context menu
 **do not clear selection when switching between forms
 **make individual tabs not selectable and display custom names for them; properly sort items for tabs
-TODO: select tab widget instead when clicking tab items
-TODO: add tab icon
+**select tab widget instead when clicking tab items
+**tab icon added for tab items
+**context menu has the same strategy as clicking tabs
 Core
 *for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
 
