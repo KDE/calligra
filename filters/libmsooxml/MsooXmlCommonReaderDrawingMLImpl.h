@@ -776,14 +776,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_H
+
+        const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
+
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             body->addAttribute("draw:layer", "layout");
+            if( !d->textBoxHasContent ) {
+                body->addAttribute("presentation:placeholder", "true");
+            }
         }
         else {
             body->addAttribute("draw:layer", "backgroundobjects");
-        }
-        if( !d->textBoxHasContent ) {
             body->addAttribute("presentation:placeholder", "true");
+            body->addAttribute("presentation:class", presentationClass);
         }
 
         QString presentationStyleName;
@@ -798,7 +803,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         if (m_context->type == Slide) {
 // CASE #P476
             body->addAttribute("draw:id", m_cNvPrId);
-            const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
             body->addAttribute("presentation:class", presentationClass);
             kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
             kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight

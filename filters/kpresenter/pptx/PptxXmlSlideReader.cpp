@@ -495,7 +495,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
     else if (m_context->type == SlideMaster && !m_context->firstReadingRound) {
         m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-        m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+        m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
     }
     else if (m_context->type == SlideLayout) {
         m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
@@ -574,7 +574,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             }
         } else {
             m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-            m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
         }
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
@@ -611,7 +611,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     else if (m_context->type == SlideLayout) {
         if (!m_currentDrawStyle->isEmpty()) {
             m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-            m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
             m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
         }
         m_context->slideLayoutProperties->pageLayoutStyleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
