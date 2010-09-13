@@ -692,15 +692,28 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-    // draw:shadow
-    // draw:shadow-color
-    // draw:shadow-offset-x
-    style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
-    // draw:shadow-offset-y
-    style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
-    // draw:shadow-opacity
-    float shadowOpacity = toQReal(ds.shadowOpacity());
-    style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    if (ds.fShadow()) {
+        // draw:shadow
+        style.addProperty("draw:shadow", "visible", gt);
+        // draw:shadow-color
+        clr = ds.shadowColor();
+        style.addProperty("draw:shadow-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
+        //shadowOffset* properties MUST exist if shadowType property equals
+        //msoshadowOffset or msoshadowDouble, otherwise MUST be ignored,
+        //MS-ODRAW 2.3.13.6
+        quint32 type = ds.shadowType();
+        if ((type == 0) || (type == 1)) {
+            // draw:shadow-offset-x
+            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.), gt);
+            // draw:shadow-offset-y
+            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.), gt);
+        }
+        // draw:shadow-opacity
+        float shadowOpacity = toQReal(ds.shadowOpacity());
+        style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    } else {
+        style.addProperty("draw:shadow", "hidden");
+    }
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal
