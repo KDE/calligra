@@ -37,7 +37,6 @@
 #include "CellEditor.h"
 #include "CellToolOptionWidget.h"
 #include "CellView.h"
-#include "CharSelectDia.h"
 #include "Damages.h"
 #include "database/Database.h"
 #include "database/FilterPopup.h"
@@ -79,6 +78,7 @@
 #include "dialogs/AddNamedAreaDialog.h"
 #include "dialogs/AngleDialog.h"
 #include "dialogs/AutoFormatDialog.h"
+#include "dialogs/CharacterSelectDialog.h"
 #include "dialogs/CommentDialog.h"
 #include "dialogs/ConditionalDialog.h"
 #include "dialogs/ConsolidateDialog.h"
@@ -2670,7 +2670,7 @@ void CellToolBase::insertSpecialChar()
     QChar c = ' ';
 
     if (d->specialCharDialog == 0) {
-        d->specialCharDialog = new CharSelectDia(canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
+        d->specialCharDialog = new CharacterSelectDialog(canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
         connect(d->specialCharDialog, SIGNAL(insertChar(QChar, const QString&)),
                 this, SLOT(specialChar(QChar, const QString&)));
         connect(d->specialCharDialog, SIGNAL(finished()),

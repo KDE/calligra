@@ -498,7 +498,7 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     for (QHash<int, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
-    os->cellStorage()->styleStorage()->load(styles);
+    os->cellStorage()->loadStyles(styles);
     os->cellStorage()->loadConditions(cellConditions);
 
     // sheet shapes

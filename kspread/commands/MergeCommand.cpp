@@ -26,7 +26,7 @@
 #include "Cell.h"
 #include "Damages.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h" // FIXME detach from ui
 #include "Sheet.h"
 
 using namespace KSpread;

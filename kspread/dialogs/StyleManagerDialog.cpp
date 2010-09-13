@@ -31,7 +31,7 @@
 
 #include "Cell.h"
 #include "LayoutDialog.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"

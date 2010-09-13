@@ -31,7 +31,7 @@
 #include "CanvasResources.h"
 #include "CellStorage.h"
 #include "Region.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 
 using namespace KSpread;

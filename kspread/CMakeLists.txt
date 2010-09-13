@@ -69,6 +69,7 @@ SET (dialogs_DIR_SRCS
     dialogs/AddNamedAreaDialog.cpp
     dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
+    dialogs/CharacterSelectDialog.cpp
     dialogs/CommentDialog.cpp
     dialogs/ConditionalDialog.cpp
     dialogs/ConsolidateDialog.cpp
@@ -134,7 +135,6 @@ SET (part_DIR_SRCS
     part/HeaderWidgets.cpp
     part/HeaderItems.cpp
     part/PrintJob.cpp
-    part/PrintManager.cpp
     part/ToolRegistry.cpp
     part/TabBar.cpp
     part/View.cpp
@@ -174,16 +174,15 @@ SET (ui_DIR_SRCS
     ui/PasteStrategy.cpp
     ui/RegionSelector.cpp
     ui/RightToLeftPaintingStrategy.cpp
+    ui/Selection.cpp
     ui/SelectionStrategy.cpp
     ui/SheetView.cpp
-    ui/CharSelectDia.cpp
 )
 
 SET (kspreadcommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
-    Selection.cpp
     tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}
@@ -223,6 +222,7 @@ set (kspreadodf_LIB_SRCS
     RectStorage.cpp
     Region.cpp
     RowColumnFormat.cpp
+    RowRepeatStorage.cpp
     ShapeApplicationData.cpp
     Sheet.cpp
     SheetAccessModel.cpp

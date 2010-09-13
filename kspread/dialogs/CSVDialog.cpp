@@ -42,7 +42,7 @@
 #include "CellStorage.h"
 #include "Damages.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 
 #include "commands/CSVDataCommand.h"

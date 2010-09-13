@@ -127,7 +127,6 @@
 #include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
@@ -144,7 +143,6 @@
 #include "commands/CopyCommand.h"
 #include "commands/DefinePrintRangeCommand.h"
 #include "commands/SheetCommands.h"
-#include "commands/Undo.h"
 
 // dialogs
 #include "dialogs/PageLayoutDialog.h"
@@ -157,6 +155,7 @@
 #include "ui/CellView.h"
 #include "ui/MapViewModel.h"
 #include "ui/RightToLeftPaintingStrategy.h"
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 
 // D-Bus
@@ -901,7 +900,7 @@ void View::refreshSheetViews()
     d->sheetViews.clear();
     const QList<Sheet*> sheets = d->doc->map()->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
-        sheets[i]->cellStorage()->styleStorage()->invalidateCache();
+        sheets[i]->cellStorage()->invalidateStyleCache();
 }
 
 void View::refreshSelection(const Region& region)

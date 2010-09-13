@@ -480,7 +480,7 @@ public:
     const FormulaStorage* formulaStorage() const;
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;
-    StyleStorage* styleStorage() const;
+    const StyleStorage* styleStorage() const;
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
 

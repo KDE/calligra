@@ -76,3 +76,6 @@ last revision 832273:
     attic/PaperLayoutDialog.h
     attic/Pen.cpp
     attic/Pen.h
+last revision 1174441:
+    commands/Undo.h
+    commands/Undo.cpp

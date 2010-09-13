@@ -680,7 +680,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 {
     READ_PROLOGUE
 
-    QString currentListStyleName = "bodyList";
     m_context->slideMasterPageProperties->m_currentHandledList = "body";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
     d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->bodyStyle;
@@ -704,7 +703,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
         }
     }
 
-    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates);
+    QString styleName;
+    styleName = mainStyles->insert(m_currentListStyle, styleName, KoGenStyles::AllowDuplicates);
+    m_context->slideMasterPageProperties->m_bodyList = styleName;
 
     READ_EPILOGUE
 }
@@ -802,7 +803,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
 {
     READ_PROLOGUE
 
-    QString currentListStyleName = "titleList";
     m_context->slideMasterPageProperties->m_currentHandledList = "title";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
     d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->titleStyle;
@@ -826,7 +826,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
         }
     }
 
-    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates);
+    QString styleName;
+    styleName = mainStyles->insert(m_currentListStyle, styleName, KoGenStyles::AllowDuplicates);
+    m_context->slideMasterPageProperties->m_titleList = styleName;
 
     READ_EPILOGUE
 }
@@ -856,7 +858,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 {
     READ_PROLOGUE
 
-    QString currentListStyleName = "otherList";
     m_context->slideMasterPageProperties->m_currentHandledList = "other";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
     d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->otherStyle;
@@ -880,7 +881,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
         }
     }
 
-    mainStyles->insert(m_currentListStyle, currentListStyleName, KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates);
+    QString styleName;
+    styleName = mainStyles->insert(m_currentListStyle, styleName, KoGenStyles::AllowDuplicates);
+    m_context->slideMasterPageProperties->m_otherList = styleName;
 
     READ_EPILOGUE
 }
@@ -1236,6 +1239,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // The possible values for this attribute are defined by the ST_PlaceholderType simple type (§19.7.10), p.2988.
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, d->phType)
     kDebug() << "type:" << d->phType;
+    // There is a hardcoded behaviour in MSoffice that ctrTitle refers also to "title"
+    if (d->phType == "ctrTitle") {
+        d->phType = "title";
+    }
 
     if (m_context->type == SlideLayout) {
         // Mark this shape as a place holder.

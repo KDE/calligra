@@ -73,11 +73,13 @@
 #include "kspread_limits.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-#include "Selection.h"
 #include "View.h"
 
 // commands
 #include "commands/RowColumnManipulators.h"
+
+// ui
+#include "ui/Selection.h"
 
 using namespace KSpread;
 

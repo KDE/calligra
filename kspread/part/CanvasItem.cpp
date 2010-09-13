@@ -107,22 +107,20 @@
 #include "Localization.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
-#include "StyleStorage.h"
 
 // commands
 #include "commands/CopyCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/PasteCommand.h"
 #include "commands/StyleCommand.h"
-#include "commands/Undo.h"
 
 // ui
 #include "ui/CellView.h"
+#include "ui/Selection.h"
 #include "ui/SheetView.h"
 #include "ui/RightToLeftPaintingStrategy.h"
 
@@ -293,7 +291,7 @@ void CanvasItem::refreshSheetViews()
     d->sheetViews.clear();
     const QList<Sheet*> sheets = doc()->map()->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
-        sheets[i]->cellStorage()->styleStorage()->invalidateCache();
+        sheets[i]->cellStorage()->invalidateStyleCache();
 }
 
 void CanvasItem::setActiveSheet(Sheet* sheet)

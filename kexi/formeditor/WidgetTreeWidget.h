@@ -55,6 +55,12 @@ public:
     //! Added to unhide.
     virtual QVariant data(int column, int role) const { return QTreeWidgetItem::data(column, role); }
 
+    //! Reimplemented to alter sorting for certain widget types, e.g. tab pages.
+    virtual bool operator<( const QTreeWidgetItem & other ) const;
+
+    //! Used to alter sorting for certain widget types, e.g. tab pages.
+    QString customSortingKey() const { return m_customSortingKey; }
+
 protected:
     //! Reimplemented to draw custom contents (copied from Property Editor)
     //virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
@@ -65,8 +71,13 @@ protected:
     //! Reimplemented to draw custom contents (copied from Property Editor)
     //2.0 virtual void setup();
 
+    //! Initializes text, icon, selectable flag, custom serting key
+    void init();
+    void initTextAndIcon();
+
 private:
     ObjectTreeItem *m_data;
+    QString m_customSortingKey;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -134,7 +145,7 @@ protected slots:
 
 protected:
     //! Internal function to fill the list.
-    WidgetTreeWidgetItem* loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent);
+    void loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent);
 
     //! \return The item whose name is \a name.
     WidgetTreeWidgetItem* findItem(const QString &name);

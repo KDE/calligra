@@ -30,7 +30,7 @@
 
 #include "part/Doc.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 #include "part/View.h"
 #include "part/Canvas.h"

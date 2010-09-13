@@ -41,7 +41,7 @@
 #include "CalculationSettings.h"
 #include "Localization.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 #include "ValueParser.h"
 

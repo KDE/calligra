@@ -35,7 +35,7 @@
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 #include "Util.h"
 

@@ -99,7 +99,6 @@
 #include "commands/DeleteCommand.h"
 #include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
-#include "commands/Undo.h"
 
 namespace KSpread
 {
@@ -523,7 +522,7 @@ const LinkStorage* Sheet::linkStorage() const
     return d->cellStorage->linkStorage();
 }
 
-StyleStorage* Sheet::styleStorage() const
+const StyleStorage* Sheet::styleStorage() const
 {
     return d->cellStorage->styleStorage();
 }
@@ -1690,7 +1689,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
     loadOdfInsertStyles(autoStyles, cellStyleRegions, conditionalStyles,
                         QRect(1, 1, maxColumn, rowIndex - 1), styleRegions, conditionRegions);
 
-    cellStorage()->styleStorage()->load(styleRegions);
+    cellStorage()->loadStyles(styleRegions);
     cellStorage()->loadConditions(conditionRegions);
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
@@ -2128,6 +2127,9 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         }
         columnIndex += numberColumns;
     }
+
+    cellStorage()->setRowsRepeated(rowIndex, number);
+
     rowIndex += number;
     return columnMaximal;
 }
@@ -2691,13 +2693,13 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
-        int repeated = 1;
+        int repeated = cellStorage()->rowRepeat(i);
         // empty row?
         if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) { // row is empty
 //             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row();
-            int j = i + 1;
+            int j = i + repeated;
 
             // search for
             //   next non-empty row
@@ -2715,7 +2717,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                     if (!nextRow->isDefault() || !tableContext.rowDefaultStyles.value(j).isDefault())
                         break;
                     // otherwise, jump to the next
-                    ++j;
+                    j += cellStorage()->rowRepeat(j);
                     continue;
                 }
 
@@ -2725,7 +2727,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 if (style != tableContext.rowDefaultStyles.value(j))
                     break;
                 // otherwise, process the next
-                ++j;
+                j += cellStorage()->rowRepeat(j);
             }
             repeated = j - i;
 
@@ -2772,11 +2774,11 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             else if (row->isFiltered()) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
-            int j = i + 1;
+            int j = i + repeated;
             while (j <= maxRows && compareRows(i, j, maxCols, tableContext)) {
-                j++;
-                repeated++;
+                j += cellStorage()->rowRepeat(j);
             }
+            repeated = j - i;
             if (repeated > 1) {
                 kDebug(36003) << "Sheet::saveOdfColRowCell: NON-empty row" << i
                 << "repeated" << repeated << "times";

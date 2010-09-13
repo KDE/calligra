@@ -209,7 +209,7 @@ bool StyleCommand::mainProcessing()
         style.setPrecision(0);   // reset to storage default
         m_sheet->cellStorage()->setStyle(*this, style);
         for (int i = 0; i < m_undoData.count(); ++i) {
-            m_sheet->styleStorage()->insert(m_undoData[i].first.toRect(), m_undoData[i].second);
+            m_sheet->cellStorage()->insertSubStyle(m_undoData[i].first.toRect(), m_undoData[i].second);
         }
     }
     return AbstractRegionCommand::mainProcessing();

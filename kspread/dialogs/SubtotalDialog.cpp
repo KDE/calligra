@@ -37,7 +37,7 @@
 #include <kmessagebox.h>
 
 // KSpread
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 
 // commands

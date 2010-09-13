@@ -26,7 +26,7 @@
 
 #include "Cell.h"
 #include "Map.h"
-#include "Selection.h"
+#include "ui/Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "ValueConverter.h"
