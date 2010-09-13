@@ -33,6 +33,7 @@
 #include <MsooXmlUtils.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <QExplicitlySharedDataPointer>
 //#include <QXmlQuery>
 //#include <QAbstractUriResolver>
 #include <typeinfo>
@@ -46,6 +47,9 @@ namespace MSOOXML { namespace Diagram {
  * See also;
  * - http://wiki.services.openoffice.org/wiki/SmartArt
  * - http://msdn.microsoft.com/en-us/magazine/cc163470.aspx
+ * - http://msdn.microsoft.com/en-us/library/dd439435(v=office.12).aspx
+ * - http://msdn.microsoft.com/en-us/library/dd439443(v=office.12).aspx
+ * - http://msdn.microsoft.com/en-us/library/dd439454(v=office.12).aspx
  */
 
 #define DEBUG_DUMP \
@@ -68,9 +72,9 @@ class Context
     public:
         AbstractNode* m_rootPoint;
         ConnectionListNode* m_connections;
-        LayoutNodeAtom* m_rootLayout;
-        LayoutNodeAtom* m_parentLayout;
-        QMap<QString, LayoutNodeAtom*> m_layoutMap;
+        QExplicitlySharedDataPointer<LayoutNodeAtom> m_rootLayout;
+        QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
+        QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_layoutMap;
         explicit Context();
         ~Context();
         AbstractNode* currentNode() const { return m_currentNode; }
@@ -100,7 +104,7 @@ class AbstractNode
             while (!reader->atEnd()) {
                 QXmlStreamReader::TokenType tokenType = reader->readNext();
                 if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-                if (!reader->isStartElement() && reader->qualifiedName() == m_tagName) break;
+                if(!reader->isStartElement() && reader->qualifiedName() == m_tagName) break;
                 readElement(context, reader);
             }
         }
@@ -255,54 +259,55 @@ class ConnectionListNode : public AbstractNode
  */
 
 /// Base class for layout-operations (content of layout1.xml)
-class AbstractAtom
+class AbstractAtom : public QSharedData
 {
     public:
         const QString m_tagName;
-        explicit AbstractAtom(const QString &tagName) : m_tagName(tagName), m_parent(0) {}
-        virtual ~AbstractAtom() { qDeleteAll(m_children); }
+        explicit AbstractAtom(const QString &tagName) : QSharedData(), m_tagName(tagName) {}
+        virtual ~AbstractAtom() {
+            kDebug()<<m_tagName;
+        }
         virtual void dump(Context* context, int level) {
-            foreach(AbstractAtom* atom, m_children)
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
                 atom->dump(context, level + 1);
+            }
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             while (!reader->atEnd()) {
                 QXmlStreamReader::TokenType tokenType = reader->readNext();
                 if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
-                if (!reader->isStartElement() && reader->qualifiedName() == m_tagName) break;
+                if(!reader->isStartElement() && reader->qualifiedName() == m_tagName) break;
                 readElement(context, reader);
             }
         }
-        virtual void readDone(Context* context) {
-            foreach(AbstractAtom* atom, m_children)
-                atom->readDone(context);
+        virtual void build(Context* context) {
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
+                atom->build(context);
         }
         virtual void layoutAtom(Context* context) {
-            foreach(AbstractAtom* atom, m_children)
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
                 atom->layoutAtom(context);
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
-            foreach(AbstractAtom* atom, m_children)
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
                 atom->writeAtom(context, xmlWriter, styles);
         }
-        AbstractAtom* parent() const { return m_parent; } 
-        QList<AbstractAtom*> children() const { return m_children; }
-        template<class U, class T> QList<U*> filterItems(Context* context, const QList<T*> &items) const;
-        void addChild(AbstractAtom* node) {
-            Q_ASSERT(!node->m_parent);
+        QExplicitlySharedDataPointer<AbstractAtom> parent() const { return m_parent; } 
+        QVector< QExplicitlySharedDataPointer<AbstractAtom> > children() const { return m_children; }
+        void addChild(QExplicitlySharedDataPointer<AbstractAtom> node) {
             node->m_parent = this;
             m_children.append(node);
         }
-        void removeChild(AbstractAtom* node) {
-            Q_ASSERT(node->m_parent == this);
-            node->m_parent = 0;
-            m_children.removeAll(node);
+        void removeChild(QExplicitlySharedDataPointer<AbstractAtom> node) {
+            const int index = m_children.indexOf(node);
+            Q_ASSERT(index >= 0);
+            m_children.remove(index);
+            node->m_parent = QExplicitlySharedDataPointer<AbstractAtom>();
         }
-
     protected:
-        AbstractAtom* m_parent;
-        QList<AbstractAtom*> m_children;
+        QExplicitlySharedDataPointer<AbstractAtom> m_parent;
+        QVector< QExplicitlySharedDataPointer<AbstractAtom> > m_children;
 
         QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType, const QString& _start, const QString& _count, const QString& _step) const {
             const QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
@@ -316,82 +321,86 @@ class AbstractAtom
             Q_ASSERT(startList.count() == countList.count() || startList.isEmpty() || countList.isEmpty());
             Q_ASSERT(countList.count() == stepList.count() || countList.isEmpty() || stepList.isEmpty());
             Q_ASSERT(startList.count() == stepList.count() || startList.isEmpty() || stepList.isEmpty());
-
+            
             QList<AbstractNode*> result;
+            result << context->currentNode();
             for(int i = 0; i < axisList.count(); ++i) {
-                const QString axis = axisList[i];
-                QList<AbstractNode*> list;
+                result = fetchAxis(context, result, axisList[i], typeList.value(i), startList.value(i), countList.value(i), stepList.value(i));
+            }
+            return result;
+        }
+    private:
+        QList<AbstractNode*> fetchAxis(Context* context, QList<AbstractNode*> list, const QString& axis, const QString &ptType, const QString& start, const QString& count, const QString& step) const {
+            QList<AbstractNode*> result;
+
+            // fill the result-list according to the defined axis value
+            foreach(AbstractNode* node, list) {
                 if(axis == QLatin1String("ancst")) { // Ancestor
-                    for(AbstractNode* n = context->currentNode(); n; n = n->parent())
-                        list.append(n);
+                    for(AbstractNode* n = node; n; n = n->parent())
+                        result.append(n);
                 } else if(axis == QLatin1String("ancstOrSelf")) { // Ancestor Or Self
-                    for(AbstractNode* n = context->currentNode(); n; n = n->parent())
-                        list.append(n);
-                    list.append(context->currentNode());
+                    for(AbstractNode* n = node; n; n = n->parent())
+                        result.append(n);
+                    result.append(node);
                 } else if(axis == QLatin1String("ch")) { // Child
-                    foreach(AbstractNode* n, context->currentNode()->children())
-                        list.append(n);
+                    foreach(AbstractNode* n, node->children())
+                        result.append(n);
                 } else if(axis == QLatin1String("des")) { // Descendant
-                    foreach(AbstractNode* n, context->currentNode()->descendant())
-                        list.append(n);
+                    foreach(AbstractNode* n, node->descendant())
+                        result.append(n);
                 } else if(axis == QLatin1String("desOrSelf")) { // Descendant Or Self
-                    foreach(AbstractNode* n, context->currentNode()->descendant())
-                        list.append(n);
-                    list.append(context->currentNode());
+                    foreach(AbstractNode* n, node->descendant())
+                        result.append(n);
+                    result.append(node);
                 } else if(axis == QLatin1String("follow")) { // Follow
-                    foreach(AbstractNode* peer, context->currentNode()->peers()) {
-                        list.append(peer);
+                    foreach(AbstractNode* peer, node->peers()) {
+                        result.append(peer);
                         foreach(AbstractNode* n, peer->descendant())
-                            list.append(n);
+                            result.append(n);
                     }
                 } else if(axis == QLatin1String("followSib")) { // Follow Sibling
-                    foreach(AbstractNode* n, context->currentNode()->peers())
-                        list.append(n);
+                    foreach(AbstractNode* n, node->peers())
+                        result.append(n);
                 } else if(axis == QLatin1String("par")) { // Parent
-                    if (context->currentNode()->parent())
-                        list.append(context->currentNode()->parent());
+                    if (AbstractNode* n = node->parent())
+                        result.append(n);
                 } else if(axis == QLatin1String("preced")) { // Preceding
+                    kWarning()<<"TODO preced";
                     //TODO
                 } else if(axis == QLatin1String("precedSib")) { // Preceding Sibling
+                    kWarning()<<"TODO precedSib";
                     //TODO
                 } else if(axis == QLatin1String("root")) { // Root
-                    list.append(context->m_rootPoint);
+                    result.append(context->m_rootPoint);
                 } else if(axis == QLatin1String("self")) { // Self
-                    list.append(context->currentNode());
+                    result.append(node);
                 }
-
-                // optionally filter the list
-                if(i < typeList.count()) {
-                    QList<AbstractNode*> _list = list;
-                    list.clear();
-                    const QString ptType = typeList[i];
-                    foreach(AbstractNode* node, _list) {
-                        if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
-                            if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
-                                list.append(pt);
-                            }
+            }
+            
+            // optionally filter the list
+            if(!ptType.isEmpty()) {
+                QList<AbstractNode*> list = result;
+                result.clear();
+                foreach(AbstractNode* node, list) {
+                    if(PointNode* pt = dynamic_cast<PointNode*>(node)) {
+                        if(ptType == pt->m_type || ptType == "all" || (ptType == "nonAsst" && pt->m_type != "asst" ) || (ptType == "nonNorm" && pt->m_type != "norm")) {
+                            result.append(pt);
                         }
                     }
                 }
+            }
 
-                // evaluate optional forEach-conditions
-                if(i < startList.count() || i < countList.count() || i < stepList.count()) {
-                    const int start = i < startList.count() ? startList[i].toInt() : 1;
-                    const int count = i < countList.count() ? countList[i].toInt() : 0;
-                    const int step =  i < stepList.count()  ? stepList[i].toInt()  : 1;
-                    list = foreachAxis(context, list, start, count, step);
-                }
-
-                // transfer the resulting list to the result-list.
-                foreach(AbstractNode* node, list) {
-                    result.append(node);
-                }
+            // evaluate optional forEach-conditions
+            if(!start.isEmpty() || !count.isEmpty() || !step.isEmpty()) {
+                const int _start = start.isEmpty() ? 1 : start.toInt();
+                const int _count = count.isEmpty() ? 0 : count.toInt();
+                const int _step =  step.isEmpty() ? 1 : step.toInt();
+                result = foreachAxis(context, result, _start, _count, _step);
             }
 
             return result;
         }
 
-    private:
         QList<AbstractNode*> foreachAxis(Context*, const QList<AbstractNode*> &list, int start, int count, int step) const {
             QList<AbstractNode*> result;
             const int _start = qMax(0, start - 1);
@@ -410,44 +419,63 @@ class LayoutNodeAtom : public AbstractAtom
     public:
         QString m_name;
         int m_x, m_y, m_width, m_height, m_cx, m_cy;
-        qreal m_factX, m_factY, m_factWidth, m_factHeight;
-        qreal m_ctrX, m_ctrY;
-        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_x(-1), m_y(-1), m_width(-1), m_height(-1), m_cx(-1), m_cy(-1), m_factX(1.0), m_factY(1.0), m_factWidth(1.0), m_factHeight(1.0), m_ctrX(1.0), m_ctrY(1.0), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true) {}
-        virtual ~LayoutNodeAtom() {}
+        qreal m_factX, m_factY, m_factWidth, m_factHeight, m_factCX, m_factCY;
+        int m_countFactX, m_countFactY, m_countFactWidth, m_countFactHeight, m_countFactCX, m_countFactCY;
+        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_x(-1), m_y(-1), m_width(-1), m_height(-1), m_cx(-1), m_cy(-1), m_factX(1.0), m_factY(1.0), m_factWidth(1.0), m_factHeight(1.0), m_factCX(1.0), m_factCY(1.0), m_countFactX(1), m_countFactY(1), m_countFactWidth(1), m_countFactHeight(1), m_countFactCX(1), m_countFactCY(1), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true) {}
+        virtual ~LayoutNodeAtom() {
+            kDebug();
+        }
         virtual void dump(Context* context, int level) {
-            DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count();
+            DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count() << "variables=" << m_variables << "x=" << m_x << "y=" << m_y << "width=" << m_width << "height=" << m_height << "cx=" << m_cx << "cy=" << m_cy;
             AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
             TRY_READ_ATTR_WITHOUT_NS_INTO(name, m_name)
             //TRY_READ_ATTR_WITHOUT_NS_INTO(styleLbl, m_styleLbl)
-            context->m_layoutMap[m_name] = this;
-            LayoutNodeAtom* oldLayout = context->m_parentLayout;
-            context->m_parentLayout = this;
+            QExplicitlySharedDataPointer<LayoutNodeAtom> ptr(this);
+            context->m_layoutMap[m_name] = ptr;
+            QExplicitlySharedDataPointer<LayoutNodeAtom> oldLayout = context->m_parentLayout;
+            context->m_parentLayout = ptr;
             AbstractAtom::readAll(context, reader);
             context->m_parentLayout = oldLayout;
         }
+        virtual void build(Context* context) {
+            //TODO what do to with the axis? How to use them in the layout itself?
+            AbstractAtom::build(context);
+        }
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
-        QList<ConstraintAtom*> constraints() const { return m_constraints; }
-        void addConstraint(ConstraintAtom* constraint) { m_constraints.append(constraint); setNeedsRelayout(true); }
-        void setAlgorithm(AlgorithmAtom* algorithm) { m_algorithm = algorithm; setNeedsRelayout(true); }
-        QList<AbstractNode*> axis() const { return m_axis; }
+        QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const { return m_constraints; }
+        void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint) { m_constraints.append(constraint); setNeedsRelayout(true); }
+        void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm) { m_algorithm = algorithm; setNeedsRelayout(true); }
+        //QList<AbstractNode*> axis() const { return m_axis; }
         void setAxis(const QList<AbstractNode*> &axis) { m_axis = axis; setNeedsRelayout(true); }
         void setNeedsRelayout(bool needsRelayout) {
             if(needsRelayout == m_needsRelayout) return;
             m_needsRelayout = needsRelayout;
             if(m_needsRelayout) // let parent-layouts know that we need a relayout
-                for(AbstractAtom* parent = m_parent; parent; parent = parent->parent())
-                    if(LayoutNodeAtom* parentLayoutAtom = dynamic_cast<LayoutNodeAtom*>(parent))
+                for(QExplicitlySharedDataPointer<AbstractAtom> parent = m_parent; parent.data(); parent = parent->parent())
+                    if(LayoutNodeAtom* parentLayoutAtom = dynamic_cast<LayoutNodeAtom*>(parent.data()))
                         parentLayoutAtom->m_childNeedsRelayout = true;
         }
+        QString variable(const QString &name, bool checkParents = false) const {
+            if(m_variables.contains(name))
+                return m_variables[name];
+            if(checkParents)
+                for(QExplicitlySharedDataPointer<AbstractAtom> parent = m_parent; parent.data(); parent = parent->parent())
+                    if(LayoutNodeAtom* parentLayoutAtom = dynamic_cast<LayoutNodeAtom*>(parent.data()))
+                        return parentLayoutAtom->variable(name, checkParents);
+            return QString();
+        }
+        QMap<QString, QString> variables() const { return m_variables; }
+        void setVariable(const QString &name, const QString &value) { m_variables[name] = value; }
     private:
-        QList<ConstraintAtom*> m_constraints;
-        AlgorithmAtom* m_algorithm;
+        QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
+        QExplicitlySharedDataPointer<AlgorithmAtom> m_algorithm;
         QList<AbstractNode*> m_axis;
         bool m_needsRelayout, m_childNeedsRelayout;
+        QMap<QString, QString> m_variables;
 };
 
 /// Specify size and position of nodes, text values, and layout dependencies between nodes in a layout definition.
@@ -455,7 +483,7 @@ class ConstraintAtom : public AbstractAtom
 {
     public:
         /// Factor used in a reference constraint or a rule in order to modify a referenced value by the factor defined.
-        double m_fact;
+        qreal m_fact;
         /// Specifies the axis of layout nodes to apply a constraint or rule to.
         QString m_for;
         /// Specifies the name of the layout node to apply a constraint or rule to.
@@ -476,7 +504,7 @@ class ConstraintAtom : public AbstractAtom
         QString m_type;
         /// Specifies an absolute value instead of reference another constraint.
         QString m_value;
-        explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
+        explicit ConstraintAtom() : AbstractAtom("dgm:constr"), m_fact(1.0) {}
         virtual ~ConstraintAtom() {}
         virtual void dump(Context*, int level) {
             QString s = QString("fact=%1 ").arg(m_fact);
@@ -508,10 +536,15 @@ class ConstraintAtom : public AbstractAtom
             TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
             //AbstractAtom::readAll(context, reader);
         }
-        virtual void readDone(Context* context) {
-            LayoutNodeAtom* layout = m_forName.isEmpty() ? context->m_parentLayout : context->m_layoutMap.value(m_forName);
-            if(layout) layout->addConstraint(this);
-            AbstractAtom::readDone(context);
+        virtual void build(Context* context) {
+            QExplicitlySharedDataPointer<LayoutNodeAtom> layout = m_forName.isEmpty() ? context->m_parentLayout : context->m_layoutMap.value(m_forName);
+            Q_ASSERT(layout);
+            if(layout) {
+                QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
+                m_parent->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(this));
+                layout->addConstraint(ptr);
+            }
+            AbstractAtom::build(context);
         }
 };
 
@@ -527,7 +560,7 @@ class ConstraintListAtom : public AbstractAtom
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
                 if (reader->qualifiedName() == QLatin1String("dgm:constr")) {
-                    ConstraintAtom* node = new ConstraintAtom;
+                    QExplicitlySharedDataPointer<AbstractAtom> node(new ConstraintAtom);
                     addChild(node);
                     node->readAll(context, reader);
                 }
@@ -542,13 +575,13 @@ class ShapeAtom : public AbstractAtom
         QString m_type;
         QString m_blip;
         bool m_hideGeom;
-        int m_x, m_y, m_width, m_height, m_cx, m_cy;
-        qreal m_factX, m_factY, m_factWidth, m_factHeight;
-        qreal m_ctrX, m_ctrY;
-        explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false), m_x(-1), m_y(-1), m_width(-1), m_height(-1), m_cx(-1), m_cy(-1), m_factX(1.0), m_factY(1.0), m_factWidth(1.0), m_factHeight(1.0), m_ctrX(1.0), m_ctrY(1.0) {}
-        virtual ~ShapeAtom() {}
+        explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false) {}
+        virtual ~ShapeAtom() {
+            kDebug();
+        }
         virtual void dump(Context* context, int level) {
-            DEBUG_DUMP << "type=" << m_type << "blip=" << m_blip << "x=" << m_x << "y=" << m_y << "width=" << m_width << "height=" << m_height;
+            QExplicitlySharedDataPointer<LayoutNodeAtom> l = context->m_parentLayout;
+            DEBUG_DUMP << "type=" << m_type << "blip=" << m_blip << "x=" << l->m_x << "y=" << l->m_y << "width=" << l->m_width << "height=" << l->m_height;
             AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -565,15 +598,33 @@ class ShapeAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
             if(m_type.isEmpty()) return;
-            //if(m_hideGeom)  return;
-            
-            int x = m_x * m_factX;
-            int y = m_y * m_factY;
-            int w = m_width * m_factWidth;
-            int h = m_height * m_factHeight;
-            int cx = m_cx * m_ctrX;
-            int cy = m_cy * m_ctrY;
-            DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h << m_cx << m_ctrX << m_cy << m_ctrY;
+if(m_hideGeom)  return;
+
+            Q_ASSERT(context->m_parentLayout->m_x >= 0);
+            Q_ASSERT(context->m_parentLayout->m_y >= 0);
+            Q_ASSERT(context->m_parentLayout->m_width >= 0);
+            Q_ASSERT(context->m_parentLayout->m_height >= 0);
+            Q_ASSERT(context->m_parentLayout->m_cx >= 0);
+            Q_ASSERT(context->m_parentLayout->m_cy >= 0);
+            Q_ASSERT(context->m_parentLayout->m_factX > 0.0);
+            Q_ASSERT(context->m_parentLayout->m_factX > 0.0);
+            Q_ASSERT(context->m_parentLayout->m_factWidth > 0.0);
+            Q_ASSERT(context->m_parentLayout->m_factHeight > 0.0);
+            Q_ASSERT(context->m_parentLayout->m_factCX > 0.0);
+            Q_ASSERT(context->m_parentLayout->m_factCY > 0.0);
+            const int x  = context->m_parentLayout->m_x      * (context->m_parentLayout->m_factX / context->m_parentLayout->m_countFactX);
+            const int y  = context->m_parentLayout->m_y      * (context->m_parentLayout->m_factY / context->m_parentLayout->m_countFactY);
+            const int w  = context->m_parentLayout->m_width  * (context->m_parentLayout->m_factWidth / context->m_parentLayout->m_countFactWidth);
+            const int h  = context->m_parentLayout->m_height * (context->m_parentLayout->m_factHeight / context->m_parentLayout->m_countFactHeight);
+            const int cx = context->m_parentLayout->m_cx     * (context->m_parentLayout->m_factCX / context->m_parentLayout->m_countFactCX);
+            const int cy = context->m_parentLayout->m_cy     * (context->m_parentLayout->m_factCY / context->m_parentLayout->m_countFactCY);
+            DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
+            Q_ASSERT(x >= 0);
+            Q_ASSERT(y >= 0);
+            Q_ASSERT(w >= 0);
+            Q_ASSERT(h >= 0);
+            Q_ASSERT(cx >= 0);
+            Q_ASSERT(cy >= 0);
 
             xmlWriter->startElement("draw:custom-shape");
             xmlWriter->addAttribute("draw:layer", "layout");
@@ -588,16 +639,7 @@ class ShapeAtom : public AbstractAtom
             xmlWriter->addAttribute("draw:style-name", styleName);
             //xmlWriter->addAttribute("draw:text-style-name", "P2");
 
-/*
-static int iii=0;
-iii++;
-if(x+cx<0) { x=iii*30; cx=0; }
-if(y+cy<0) { y=iii*30; cy=0; }
-if(w<0) { w=50; }
-if(h<0) { h=50; }
-//Q_ASSERT(false);
-*/
-
+//kDebug()<<"################### context"<<context->m_parentLayout->m_name<<x<<y<<w<<h;
             xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
             xmlWriter->addAttribute("svg:y", QString("%1px").arg(y+cy));
             xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
@@ -636,34 +678,19 @@ if(h<0) { h=50; }
 class AlgorithmAtom : public AbstractAtom
 {
     public:
+        /// The used layout-algorithm.
         enum Algorithm {
-            UnknownAlg,
-            // The composite algorithm specifies the size and position for all child layout nodes. You can use it to create
-            // graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
-            CompositeAlg,
-            // The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
-            ConnectorAlg,
-            // The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
-            CycleAlg,
-            // The hierarchy child algorithm works with the hierRoot algorithm to create hierarchical tree layouts. This
-            // algorithm aligns and positions its child layout nodes in a linear path under the hierRoot layout node.
-            HierChildAlg,
-            // The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts. The
-            // hierRoot algorithm aligns and positions the hierRoot layout node in relation to the hierChild layout nodes.
-            HierRootAlg,
-            // The linear algorithm lays out child layout nodes along a linear path.
-            LinearAlg,
-            // The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid
-            // shape to create a pyramid.
-            PyramidAlg,
-            // The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear
-            // flow to continue across multiple rows or columns.
-            SnakeAlg,
-            // The space algorithm is used to specify a minimum space between other layout nodes or as an indication
-            // to do nothing with the layout node’s size and position.
-            SpaceAlg,
-            // The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
-            TextAlg
+            UnknownAlg, ///< Unknown algorithm. This should happen...
+            CompositeAlg, ///< The composite algorithm specifies the size and position for all child layout nodes. You can use it to create graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
+            ConnectorAlg, ///< The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
+            CycleAlg, ///< The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
+            HierChildAlg, ///< The hierarchy child algorithm works with the hierRoot algorithm to create hierarchical tree layouts. This algorithm aligns and positions its child layout nodes in a linear path under the hierRoot layout node.
+            HierRootAlg, ///< The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts. The hierRoot algorithm aligns and positions the hierRoot layout node in relation to the hierChild layout nodes.
+            LinearAlg, ///< The linear algorithm lays out child layout nodes along a linear path.
+            PyramidAlg, ///< The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid shape to create a pyramid.
+            SnakeAlg, ///< The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear flow to continue across multiple rows or columns.
+            SpaceAlg, ///< The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
+            TextAlg ///< The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
         };
         Algorithm m_type;
         QList< QPair<QString,QString> > m_params; // list of type=value parameters that modify the default behavior of the algorithm.
@@ -687,7 +714,8 @@ class AlgorithmAtom : public AbstractAtom
             else if(type == QLatin1String("sp")) m_type = SpaceAlg;
             else if(type == QLatin1String("tx")) m_type = TextAlg;
             else m_type = UnknownAlg;
-            context->m_parentLayout->setAlgorithm(this);
+            QExplicitlySharedDataPointer<AlgorithmAtom> ptr(this);
+            context->m_parentLayout->setAlgorithm(ptr);
             AbstractAtom::readAll(context, reader);
         }
         virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
@@ -728,10 +756,10 @@ class PresentationOfAtom : public AbstractAtom
             TRY_READ_ATTR_WITHOUT_NS_INTO(step, m_step)
             AbstractAtom::readAll(context, reader);
         }
-        virtual void layoutAtom(Context* context) {
+        virtual void build(Context* context) {
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             context->m_parentLayout->setAxis(axis);
-            //AbstractAtom::layoutAtom(context);
+            AbstractAtom::build(context);
         }
 };
 
@@ -774,7 +802,6 @@ class IfAtom : public AbstractAtom
         }
         bool isTrue() const { return m_isTrue; } // is true or false?
         bool testAtom(Context* context) {
-            //TODO handle m_argument=="var"
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             QString funcValue;
             if(m_function == "cnt") { // Specifies a count.
@@ -782,57 +809,66 @@ class IfAtom : public AbstractAtom
             } else if(m_function == "depth") { // Specifies the depth.
                 //int depth = 0;
                 //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
-                //istrue = depth == m_value.toInt();
+                //funcValue = depth;
                 //TODO
                 kWarning()<<"TODO func=depth";
             } else if(m_function == "maxDepth") { // Defines the maximum depth.
                 //int depth = 0;
                 //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
-                //istrue = depth <= m_value.toInt();
+                //funcValue = depth;
                 //TODO
                 kWarning()<<"TODO func=maxDepth";
             } else if(m_function == "pos") { // Retrieves the position of the node in the specified set of nodes.
                 //int index = axis.indexOf(context->m_currentNode)+1;
-                //istrue = index == m_value.toInt();
+                //istrue = index;
                 //TODO
                 kWarning()<<"TODO func=pos";
             } else if(m_function == "posEven") { // Returns 1 if the specified node is at an even numbered position in the data model.
                 //int index = axis.indexOf(context->m_currentNode)+1;
-                //istrue = index>=1 ? index % 2 == 0 : false;
+                //funcValue = index>=1 && index % 2 == 0 ? 1 : 0;
                 //TODO
                 kWarning()<<"TODO func=posEven";
             } else if(m_function == "posOdd") { // Returns 1 if the specified node is in an odd position in the data model.
                 //int index = axis.indexOf(context->m_currentNode)+1;
-                //istrue = index>=1 ? index % 2 != 0 : false;
+                //funcValue = index>=1 && index % 2 != 0 = 1 : 0;
                 //TODO
                 kWarning()<<"TODO func=posOdd";
             } else if(m_function == "revPos") { // Reverse position function.
                 //int index = axis.indexOf(context->m_currentNode)+1;
-                //istrue = axis.count()-index == m_value.toInt();
+                //istrue = axis.count()-index;
                 //TODO
                 kWarning()<<"TODO func=revPos";
             } else if(m_function == "var") { // Used to reference a variable.
                 if(m_argument == QLatin1String("animLvl")) { // Specifies the animation level
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=animLvl";
                 } else if(m_argument == QLatin1String("animOne")) { // Specifies animate as one.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=animOne";
                 } else if(m_argument == QLatin1String("bulEnabled")) { // Specifies bullets enabled.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=bulEnabled";
                 } else if(m_argument == QLatin1String("chMax")) { // The maximum number of children.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=chMax";
                 } else if(m_argument == QLatin1String("chPref")) { // The preferred number of children.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=chPref";
                 } else if(m_argument == QLatin1String("dir")) { // Specifies the direction of the diagram.
-                    //TODO another case missing in the specs: What are the possible directions and where are they defined?
-                    funcValue = "norm";
+                    const QString dirval = context->m_parentLayout->variable("dir", true /* check parents */);
+                    funcValue = dirval.isEmpty() ? "norm" : dirval;
                 } else if(m_argument == QLatin1String("hierBranch")) { // The hierarchy branch.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=hierBranch";
                 } else if(m_argument == QLatin1String("none")) { // Unknown variable type.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=none";
                 } else if(m_argument == QLatin1String("orgChart")) { // Algorithm that lays out an org chart.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=orgChart";
                 } else if(m_argument == QLatin1String("resizeHandles")) { // Specifies the resize handles.
                     //TODO
+                    kWarning()<<"TODO m_function=var m_argument=resizeHandles";
                 } else {
                     kWarning()<<"Unexpected argument="<<m_argument<<"name="<<m_name;
                 }
@@ -883,9 +919,8 @@ class ChooseAtom : public AbstractAtom
         explicit ChooseAtom() : AbstractAtom("dgm:choose") {}
         virtual ~ChooseAtom() {}
         virtual void dump(Context* context, int level) {
-            //DEBUG_DUMP << "name=" << m_name;
-            foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
-                atom->dump(context, level);
+            DEBUG_DUMP << "name=" << m_name;
+            AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -893,42 +928,46 @@ class ChooseAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
-            if (reader->isStartElement()) {
-                if (reader->qualifiedName() == QLatin1String("dgm:if")) {
-                    IfAtom *n = new IfAtom(true);
+            if(reader->isStartElement()) {
+                if(reader->qualifiedName() == QLatin1String("dgm:if")) {
+                    QExplicitlySharedDataPointer<AbstractAtom> n(new IfAtom(true));
                     addChild(n);
                     n->readAll(context, reader);
-                } else if (reader->qualifiedName() == QLatin1String("dgm:else")) {
-                    IfAtom *n = new IfAtom(false);
+                } else if(reader->qualifiedName() == QLatin1String("dgm:else")) {
+                    QExplicitlySharedDataPointer<AbstractAtom> n(new IfAtom(false));
                     addChild(n);
                     n->readAll(context, reader);
                 }
             }
         }
+        virtual void build(Context* context) {
+            QVector< QExplicitlySharedDataPointer<AbstractAtom> > ifResult;
+            QVector< QExplicitlySharedDataPointer<AbstractAtom> > elseResult;
+            while(!m_children.isEmpty()) {
+                QExplicitlySharedDataPointer<AbstractAtom> atom = m_children.first();
+                m_children.remove(0);
+                IfAtom* ifatom = static_cast<IfAtom*>(atom.data());
+                if(ifatom->isTrue()) {
+                    if(ifatom->testAtom(context)) {
+                        ifResult.append(atom);
+                    }
+                } else {
+                    elseResult.append(atom);
+                }
+            }
+            m_children = ifResult.isEmpty() ? elseResult : ifResult;
+            AbstractAtom::build(context);
+        }
+        /*
         virtual void layoutAtom(Context* context) {
-            foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, atomsMatchingToCondition(context))
                 atom->layoutAtom(context);
         }
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
-            DEBUG_WRITE;
-            foreach(AbstractAtom* atom, atomsMatchingToCondition(context))
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, atomsMatchingToCondition(context))
                 atom->writeAtom(context, xmlWriter, styles);
         }
-        QList<AbstractAtom*> atomsMatchingToCondition(Context* context) const {
-            QList<AbstractAtom*> ifResult;
-            QList<AbstractAtom*> elseResult;
-            foreach(AbstractAtom* atom, m_children) {
-                if(IfAtom* ifatom = dynamic_cast<IfAtom*>(atom)) {
-                    if(ifatom->isTrue()) {
-                        if(ifatom->testAtom(context))
-                            ifResult.append(ifatom);
-                    } else {
-                        elseResult.append(ifatom);
-                    }
-                }
-            }
-            return ifResult.isEmpty() ? elseResult : ifResult;
-        }
+        */
 };
 
 /// A looping structure, similar to a for loop in a programming language, which defines what data model points will use this layout node.
@@ -947,7 +986,7 @@ class ForEachAtom : public AbstractAtom
         virtual ~ForEachAtom() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "axis=" << m_axis << "count=" << m_count << "hideLastTrans=" << m_hideLastTrans << "name=" << m_name << "ptType=" << m_ptType << "reference=" << m_reference << "start=" << m_start << "step=" << m_step;
-            foreach(AbstractAtom* atom, m_children)
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children)
                 atom->dump(context, level + 1);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -962,22 +1001,19 @@ class ForEachAtom : public AbstractAtom
             TRY_READ_ATTR_WITHOUT_NS_INTO(step, m_step)
             AbstractAtom::readAll(context, reader);
         }
-        virtual void layoutAtom(Context* context) {
+        virtual void build(Context* context) {
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
+            QVector< QExplicitlySharedDataPointer<AbstractAtom> > children = m_children;
+            m_children.clear();
+            AbstractNode* oldCurrentNode = context->currentNode();
             foreach(AbstractNode* node, axis) {
-                Q_ASSERT(dynamic_cast<PointNode*>(node));
-                foreach(AbstractAtom* atom, m_children)
-                    atom->layoutAtom(context);
+                context->setCurrentNode(node);
+                foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, children) {
+                    addChild(atom);
+                    atom->build(context);
+                }
             }
-        }
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
-            DEBUG_WRITE;
-            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
-            foreach(AbstractNode* node, axis) {
-                Q_ASSERT(dynamic_cast<PointNode*>(node));
-                foreach(AbstractAtom* atom, m_children)
-                    atom->writeAtom(context, xmlWriter, styles);
-            }
+            context->setCurrentNode(oldCurrentNode);
         }
 };
 
@@ -994,12 +1030,12 @@ Context::~Context()
 {
     delete m_rootPoint;
     delete m_connections;
-    delete m_rootLayout;
 }
  
 void Context::setCurrentNode(AbstractNode* node)
 {
     Q_ASSERT(dynamic_cast<PointNode*>(node));
+    //kDebug() << static_cast<PointNode*>(node)->m_modelId << static_cast<PointNode*>(node)->m_type << static_cast<PointNode*>(node)->m_cxnId;
     m_currentNode = node;
 }
 
@@ -1010,79 +1046,75 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
 
         if (reader->qualifiedName() == QLatin1String("dgm:layoutNode")) {
             node = new LayoutNodeAtom;
-        }
-        else if (reader->qualifiedName() == QLatin1String("dgm:shape")) {
+        } else if (reader->qualifiedName() == QLatin1String("dgm:shape")) {
             node = new ShapeAtom;
-        }
-        else if (reader->qualifiedName() == QLatin1String("dgm:alg")) {
+        } else if (reader->qualifiedName() == QLatin1String("dgm:alg")) {
             node = new AlgorithmAtom;
-        }
-        else if (reader->qualifiedName() == QLatin1String("dgm:presOf")) {
+        } else if (reader->qualifiedName() == QLatin1String("dgm:presOf")) {
             node = new PresentationOfAtom;
-        }
-        else if (reader->qualifiedName() == QLatin1String("dgm:choose")) {
+        } else if (reader->qualifiedName() == QLatin1String("dgm:choose")) {
             node = new ChooseAtom;
-        }
-        else if (reader->qualifiedName() == QLatin1String("dgm:forEach")) {
+        } else if (reader->qualifiedName() == QLatin1String("dgm:forEach")) {
             node = new ForEachAtom;
-        }
-        else if (reader->qualifiedName() == QLatin1String("dgm:constrLst")) {
+        } else if (reader->qualifiedName() == QLatin1String("dgm:constrLst")) {
             node = new ConstraintListAtom;
+        } else if (reader->qualifiedName() == QLatin1String("dgm:varLst")) {
+            while (!reader->atEnd()) {
+                QXmlStreamReader::TokenType tokenType = reader->readNext();
+                if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+                if(!reader->isStartElement() && reader->qualifiedName() == "dgm:varLst") break;
+                if(reader->isStartElement()) {
+                    const QXmlStreamAttributes attrs(reader->attributes());
+                    TRY_READ_ATTR_WITHOUT_NS(val)
+                    context->m_parentLayout->setVariable(reader->name().toString(), val);
+                }
+            }
+        } else {
+            kWarning()<<"TODO"<<reader->qualifiedName();
         }
         
         if (node) {
-            addChild(node);
-            node->readAll(context, reader);
+            QExplicitlySharedDataPointer<AbstractAtom> ptr(node);
+            addChild(ptr);
+            ptr->readAll(context, reader);
         }
     }
 }
 
-template<class U, class T> QList<U*> AbstractAtom::filterItems(Context* context, const QList<T*> &items) const
-{
-    QList<U*> results;
-    foreach(T* atom, items) {
-        if(ChooseAtom* chooseatom = dynamic_cast<ChooseAtom*>(atom)) {
-            QList<U*> children = filterItems<U, AbstractAtom>(context, chooseatom->atomsMatchingToCondition(context));
-            foreach(U* a, children)
-                results.append(a);
-        } else if(ForEachAtom* foreachatom = dynamic_cast<ForEachAtom*>(atom)) {
-            QList<U*> children = filterItems<U, AbstractAtom>(context, foreachatom->children());
-            foreach(U* a, children)
-                results.append(a);
-        } else if(U* a = dynamic_cast<U*>(atom)) {
-            results.append(a);
-        }
-    }
-    return results;
-}
+// template<class U, class T> QList<U*> filterItems(Context* context, const QList<T*> &items) const
+// {
+//     QList<U*> results;
+//     foreach(T* atom, items) {
+//         if(ChooseAtom* chooseatom = dynamic_cast<ChooseAtom*>(atom)) {
+//             QList<U*> children = filterItems<U, AbstractAtom>(context, chooseatom->atomsMatchingToCondition(context));
+//             foreach(U* a, children)
+//                 results.append(a);
+//         } else if(ForEachAtom* foreachatom = dynamic_cast<ForEachAtom*>(atom)) {
+//             QList<U*> children = filterItems<U, AbstractAtom>(context, foreachatom->children());
+//             foreach(U* a, children)
+//                 results.append(a);
+//         } else if(U* a = dynamic_cast<U*>(atom)) {
+//             results.append(a);
+//         }
+//     }
+//     return results;
+// }
 
 void LayoutNodeAtom::layoutAtom(Context* context)
 {
-    LayoutNodeAtom* oldLayout = context->m_parentLayout;
+    QExplicitlySharedDataPointer<LayoutNodeAtom> oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
+    
+    AbstractNode* oldCurrentNode = context->currentNode();
 
-    // initially inherit the layout from the parent.
-    m_x = oldLayout->m_x;
-    m_y = oldLayout->m_y;
-    m_width = oldLayout->m_width;
-    m_height = oldLayout->m_height;
-    m_cx = oldLayout->m_cx;
-    m_cy = oldLayout->m_cy;
-    m_factX = oldLayout->m_factX;
-    m_factY = oldLayout->m_factY;
-    m_factWidth = oldLayout->m_factWidth;
-    m_factHeight = oldLayout->m_factHeight;
-    m_ctrX = oldLayout->m_ctrX;
-    m_ctrY = oldLayout->m_ctrY;
-
-    /*
-    if(m_childNeedsRelayout) {
-        m_childNeedsRelayout = false;
-        foreach(AbstractAtom* atom, m_children) {
-            atom->layoutAtom(context);
-        }
-    }
-    */
+    // Initially take over the layout coordinates from the parent layout. Constraints and rules attached to this
+    // layout and that are evaluated later in this method will then make sure to change this according.
+    if(m_x < 0) { m_x = oldLayout->m_x; m_factX = oldLayout->m_factX; }
+    if(m_y < 0) { m_y = oldLayout->m_y; m_factY = oldLayout->m_factY; }
+    if(m_width < 0) { m_width = oldLayout->m_width; m_factWidth = oldLayout->m_factWidth; }
+    if(m_height < 0) { m_height = oldLayout->m_height; m_factHeight = oldLayout->m_factHeight; }
+    if(m_cx < 0) { m_cx = oldLayout->m_cx; m_factCX = oldLayout->m_factCX; }
+    if(m_cy < 0) { m_cy = oldLayout->m_cy; m_factCY = oldLayout->m_factCY; }
 
     AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
     QList< QPair<QString,QString> > params;
@@ -1094,6 +1126,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     // layout ourself if requested
     if(m_needsRelayout) {
         m_needsRelayout = false;
+        //m_childNeedsRelayout = true;
 
         //QStringList axisnames;
         //foreach(AbstractNode* n, axis()) axisnames.append(n->m_tagName);
@@ -1102,8 +1135,12 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 
         // evaluate the constraints responsible for positioning and sizing.
         if(!m_constraints.isEmpty()) kDebug() << "Constraints for LayoutNodeAtom="<<m_name;
-        foreach(ConstraintAtom* c, m_constraints) {
-            c->dump(context, 2); 
+        foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, m_constraints) {
+
+// skip them for now
+if(c->m_type=="lMarg"||c->m_type=="tMarg"||c->m_type=="rMarg"||c->m_type=="bMarg"||c->m_type=="primFontSz") continue;
+    
+            c->dump(context, 2);
 
             int value = -1;
             if(!c->m_value.isEmpty()) {
@@ -1111,109 +1148,104 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 value = c->m_value.toInt(&ok);
                 Q_ASSERT(ok);
             } else {
-                LayoutNodeAtom* ref = c->m_refForName.isEmpty() ? this : context->m_layoutMap.value(c->m_refForName);
+                LayoutNodeAtom* ref = c->m_refForName.isEmpty() ? this : context->m_layoutMap.value(c->m_refForName).data();
                 Q_ASSERT(ref);
                 //Q_ASSERT(!ref->m_needsRelayout);
                 //Q_ASSERT(!ref->m_childNeedsRelayout);
-                if(ref->m_needsRelayout || ref->m_childNeedsRelayout) {
+                if(ref != this && (ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
                     ref->layoutAtom(context);
-                    m_needsRelayout = true;
-                    layoutAtom(context); // restart from the beginning since things may have completly changed now
+                    Q_ASSERT(!ref->m_needsRelayout && !ref->m_childNeedsRelayout);
+                    m_needsRelayout = m_childNeedsRelayout = true;
+                    layoutAtom(context); // restart from the beginning since things may have completly changed now for us
+                    Q_ASSERT(!m_needsRelayout);
+                    Q_ASSERT(!m_childNeedsRelayout);
+                    context->setCurrentNode(oldCurrentNode);
                     context->m_parentLayout = oldLayout;
                     return;
                 }
 
                 if(!c->m_refType.isEmpty()) {
-                    if(c->m_refType == "l") {
+                    if(c->m_refType == QLatin1String("l")) {
                         value = ref->m_x;
-                    } else if(c->m_refType == "t") {
+                    } else if(c->m_refType == QLatin1String("t")) {
                         value = ref->m_y;
-                    } else if(c->m_refType == "w") {
+                    } else if(c->m_refType == QLatin1String("w")) {
                         value = ref->m_width;
-                    } else if(c->m_refType == "h") {
+                    } else if(c->m_refType == QLatin1String("h")) {
                         value = ref->m_height;
-                    } else if(c->m_refType == "primFontSz") {
+                    } else if(c->m_refType == QLatin1String("primFontSz")) {
                         //TODO
                     } else {
                         kWarning() << "Unhandled constraint reference-type=" << c->m_refType;
+                        continue;
                     }
                 } else {
                     //TODO
                     kDebug()<<"TODO c->m_refType.isEmpty()";
+                    continue;
                 }
             }
-
-            //Q_ASSERT(c->m_for.isEmpty() == c->m_forName.isEmpty() || c->m_type=="primFontSz");
 
             if(c->m_type == QLatin1String("l")) {
                 if(value >= 0) m_x = value;
-                m_factX = (m_factX + c->m_fact) / 2.0;
+                m_factX += c->m_fact;
+                m_countFactX++;
             } else if(c->m_type == QLatin1String("t")) {
                 if(value >= 0) m_y = value;
-                m_factY = (m_factY + c->m_fact) / 2.0;
+                m_factY += c->m_fact;
+                m_countFactY++;
             } else if(c->m_type == QLatin1String("w")) {
                 if(value >= 0) m_width = value;
-                m_factWidth = (m_factWidth + c->m_fact) / 2.0;
+                m_factWidth += c->m_fact;
+                m_countFactWidth++;
             } else if(c->m_type == QLatin1String("h")) {
                 if(value >= 0) m_height = value;
-                m_factHeight = (m_factHeight + c->m_fact) / 2.0;
+                m_factHeight += c->m_fact;
+                m_countFactHeight++;
             } else if(c->m_type == QLatin1String("ctrX")) {
                 if(value >= 0) m_cx = value;
-                m_ctrX = (m_ctrX + c->m_fact) / 2.0;
+                m_factCX += c->m_fact;
+                m_countFactCX++;
             } else if(c->m_type == QLatin1String("ctrY")) {
                 if(value >= 0) m_cy = value;
-                m_ctrY = (m_ctrY + c->m_fact) / 2.0;
+                m_factCY += c->m_fact;
+                m_countFactCY++;
             } else if(c->m_type == QLatin1String("lMarg")) {
                 //TODO
+                continue;
             } else if(c->m_type == QLatin1String("tMarg")) {
                 //TODO
+                continue;
             } else if(c->m_type == QLatin1String("rMarg")) {
                 //TODO
+                continue;
             } else if(c->m_type == QLatin1String("bMarg")) {
                 //TODO
+                continue;
             } else if(c->m_type == QLatin1String("primFontSz")) {
                 //TODO
+                continue;
+            } else if(c->m_type == QLatin1String("sibSp")) {
+                //TODO
+                continue;
             } else {
                 kWarning() << "Unhandled constraint type=" << c->m_type;
-            }
-
-            //dump(context,10);
-            if(c->m_for == QLatin1String("ch")) {
-                QList<ShapeAtom*> shapes = filterItems<ShapeAtom,AbstractAtom>(context, m_children);
-                foreach(ShapeAtom* shape, shapes) {
-                    if(m_x >= 0) shape->m_x = m_x;
-                    if(m_y >= 0) shape->m_y = m_y;
-                    if(m_width >= 0) shape->m_width = m_width;
-                    if(m_height >= 0) shape->m_height = m_height;
-                    if(m_cx >= 0) shape->m_cx = m_cx;
-                    if(m_cy >= 0) shape->m_cy = m_cy;
-                    shape->m_factX = m_factX;
-                    shape->m_factY = m_factY;
-                    shape->m_factWidth = m_factWidth;
-                    shape->m_factHeight = m_factHeight;
-                    shape->m_ctrX = m_ctrX;
-                    shape->m_ctrY = m_ctrY;
-                    //shape->dump(context,10);
-                }
-                //if(m_x >= 0 || m_y >= 0 || m_width >= 0 || m_height >= 0) kDebug()<<m_x<<m_y<<m_width<<m_height;
-                //Q_ASSERT(m_x < 0 && m_y < 0 && m_width < 0 && m_height < 0);
+                continue;
             }
         }
-        //kDebug() << "####/CONSTRAINTS-END";
     }
-    
-//dump(context,10);
 
-    // layout the children again if still requested
+    // layout the children if still requested
     if(m_childNeedsRelayout) {
         m_childNeedsRelayout = false;
-        foreach(AbstractAtom* atom, m_children) {
+        foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
             atom->layoutAtom(context);
         }
     }
 
     //TODO evaluate rules too
 
+    context->setCurrentNode(oldCurrentNode);
     context->m_parentLayout = oldLayout;
 }
 
@@ -1227,7 +1259,7 @@ void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenSt
     }
     DEBUG_WRITE << "name=" << m_name << "algorithm=" << algorithm << "params=" << params;
 
-    LayoutNodeAtom* oldLayout = context->m_parentLayout;
+    QExplicitlySharedDataPointer<LayoutNodeAtom> oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
 
     AbstractAtom::writeAtom(context, xmlWriter, styles);
@@ -1257,11 +1289,13 @@ MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
 
 void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)
 {
-    // The root layout node always inherits the canvas dimensions by default
+    // The root layout node always inherits the canvas dimensions by default.
     m_context->m_rootLayout->m_x = rect.x();
     m_context->m_rootLayout->m_y = rect.y();
     m_context->m_rootLayout->m_width = rect.width();
     m_context->m_rootLayout->m_height = rect.height();
+    m_context->m_rootLayout->m_cx = 0;
+    m_context->m_rootLayout->m_cy = 0;
     // Do the (re-)layout.
     m_context->m_rootLayout->layoutAtom(m_context);
     // Write the content.
@@ -1304,7 +1338,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 }
             }
         }
-
+        
         QMap<QString, Diagram::PointNode*> pointMap;
         foreach(Diagram::AbstractNode* node, rootList.children()) {
             if(Diagram::PointNode* point = dynamic_cast<Diagram::PointNode*>(node))
@@ -1369,9 +1403,10 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
         Q_ASSERT(m_context->m_context->m_rootPoint);
         
-        //m_context->m_context->m_rootPoint->dump(m_context->m_context,0);
-        m_context->m_context->m_rootLayout->readDone(m_context->m_context);
-        
+        //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
+        m_context->m_context->m_rootLayout->build(m_context->m_context);
+        //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
+        //Q_ASSERT(false);
 #if 0
         device()->seek(0);
         const QString xml = QString::fromUtf8(device()->readAll());
