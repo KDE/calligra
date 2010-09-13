@@ -152,9 +152,11 @@ protected:
 
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
-private:
     void handleContextMenuEvent(QContextMenuEvent* e);
 
+    void selectWidgetForItem(QTreeWidgetItem *item);
+
+private:
     Form *m_form;
     //2.0 WidgetTreeWidgetItem *m_topItem;
     Options m_options;

@@ -82,7 +82,7 @@ void WidgetTreeWidgetItem::initTextAndIcon()
                 m_customSortingKey = QString("tab%1").arg(tabIndex);
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
-                //TODO itemIcon = ...
+                itemIcon = "tabwidget-tab";
             }
         }
     }
@@ -345,6 +345,17 @@ WidgetTreeWidget::selectWidget(QWidget *w, bool add)
     blockSignals(false);
 }
 
+void WidgetTreeWidget::selectWidgetForItem(QTreeWidgetItem *item)
+{
+    WidgetTreeWidgetItem *it = dynamic_cast<WidgetTreeWidgetItem*>(item);
+    if (!it)
+        return;
+    QWidget *w = it->data()->widget();
+    if (w && !m_form->selectedWidgets()->contains(w)) {
+        m_form->selectWidget(w, Form::AddToPreviousSelection | Form::DontRaise | Form::LastSelection);
+    }
+}
+
 void WidgetTreeWidget::slotSelectionChanged()
 {
     if (!m_form || !m_slotSelectionChanged_enabled)
@@ -353,11 +364,23 @@ void WidgetTreeWidget::slotSelectionChanged()
     const QList<QTreeWidgetItem*> list( selectedItems() );
     m_form->selectFormWidget();
     foreach(QTreeWidgetItem *item, list) {
-        WidgetTreeWidgetItem *it = static_cast<WidgetTreeWidgetItem*>(item);
-        QWidget *w = it->data()->widget();
-        if (w && !m_form->selectedWidgets()->contains(w)) {
-            m_form->selectWidget(w, Form::AddToPreviousSelection | Form::DontRaise | Form::LastSelection);
+        selectWidgetForItem(item);
+    }
+    // alter selection of the item is nonselectable item clicked and parent item is available
+    if (   currentItem()
+        && !(currentItem()->flags() & Qt::ItemIsSelectable)
+        && currentItem()->parent()
+        && (currentItem()->parent()->flags() & Qt::ItemIsSelectable)
+       )
+    {
+        m_slotSelectionChanged_enabled = false;
+        foreach (QTreeWidgetItem *selectedItem, selectedItems()) {
+            selectedItem->setSelected(false);
         }
+        selectWidgetForItem(currentItem()->parent());
+        setCurrentItem(currentItem()->parent());
+        currentItem()->setSelected(true);
+        m_slotSelectionChanged_enabled = true;
     }
     if (hadFocus)
         setFocus(); //restore focus
