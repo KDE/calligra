@@ -1328,11 +1328,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
         m_prevListLevel = 0;
     }
 
-    if (!d->textBoxHasContent) {
-        body = listBuf.releaseWriter();
-        READ_EPILOGUE
-    }
-
     body = listBuf.originalWriter();
     body->startElement("draw:text-box"); // CASE #P436
 

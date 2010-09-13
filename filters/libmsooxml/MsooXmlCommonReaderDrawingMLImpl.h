@@ -781,8 +781,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             body->addAttribute("draw:layer", "layout");
-            if( !d->textBoxHasContent ) {
+            if( !d->textBoxHasContent && m_context->type == SlideLayout) {
                 body->addAttribute("presentation:placeholder", "true");
+                body->addAttribute("presentation:class", presentationClass);
             }
         }
         else {
@@ -3743,7 +3744,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
     - miter (Miter Line Join) §20.1.8.43
     - noFill (No Fill) §20.1.8.44
     - pattFill (Pattern Fill) §20.1.8.47
-    - prstDash (Preset Dash) §20.1.8.48
+    - [done] prstDash (Preset Dash) §20.1.8.48
     - round (Round Line Join) §20.1.8.52
     - solidFill (Solid Fill) §20.1.8.54
     - tailEnd (Tail line end style) §20.1.8.57
@@ -3757,7 +3758,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lumOff()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 {
     READ_PROLOGUE
-    const QXmlStreamAttributes attrs(attributes());
+    QXmlStreamAttributes attrs(attributes());
 
     m_colorType = OutlineColor;
     m_currentPen = QPen();
@@ -3846,9 +3847,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 //             //pattern fill
 //             else if(qualifiedName() == QLatin1String("a:pattFill")) {
 //             }
-//             //preset dash
-//             else if(qualifiedName() == QLatin1String("a:prstDash")) {
-//             }
 //             //round line join
 //             else if(qualifiedName() == QLatin1String("a:round")) {
 //             }
@@ -3856,6 +3854,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
             if (qualifiedName() == QLatin1String("a:solidFill")) {
                 TRY_READ(solidFill)
                 colorRead = true;
+            }
+            else if (qualifiedName() == QLatin1String("a:prstDash")) {
+                attrs = attributes();
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                if (val == "dash") {
+                    m_currentPen.setStyle(Qt::DashLine);
+                }
             }
             //tail line end style
 //             else if(qualifiedName() == QLatin1String("a:tailEnd")) {
