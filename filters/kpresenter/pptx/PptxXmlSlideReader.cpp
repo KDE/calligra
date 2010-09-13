@@ -1157,7 +1157,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     - [done] cSld (§19.3.1.16)
  Child elements:
     - contentPart (Content Part) §19.3.1.14
-    - cxnSp (Connection Shape) §19.3.1.19
+    - [done] cxnSp (Connection Shape) §19.3.1.19
     - extLst (Extension List with Modification Flag) §19.3.1.20
     - [done] graphicFrame (Graphic Frame) §19.3.1.21
     - [done] grpSp (Group Shape) §19.3.1.22
@@ -1188,6 +1188,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             ELSE_TRY_READ_IF(grpSp)
             ELSE_TRY_READ_IF(pic)
             ELSE_TRY_READ_IF(graphicFrame)
+            ELSE_TRY_READ_IF(cxnSp)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

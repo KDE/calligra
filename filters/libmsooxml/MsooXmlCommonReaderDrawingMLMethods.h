@@ -38,7 +38,8 @@ KoFilter::ConversionStatus read_pic();
 KoFilter::ConversionStatus read_nvPicPr();
 enum cNvPrCaller {
     cNvPr_nvSpPr,
-    cNvPr_nvPicPr
+    cNvPr_nvPicPr,
+    cNvPr_nvCxnSpPr
 };
 KoFilter::ConversionStatus read_cNvPr(cNvPrCaller caller);
 KoFilter::ConversionStatus read_cNvPicPr();
@@ -47,9 +48,15 @@ KoFilter::ConversionStatus read_style();
 KoFilter::ConversionStatus read_fillRef();
 KoFilter::ConversionStatus read_lnRef();
 KoFilter::ConversionStatus read_cNvSpPr();
+KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
 KoFilter::ConversionStatus read_grpSpPr();
+bool m_outputDrawFrame; // used by read_sp()
+void preReadSp();
+KoFilter::ConversionStatus generatePlaceHolderSp();
+void generateFrameSp();
+KoFilter::ConversionStatus read_cxnSp();
 KoFilter::ConversionStatus read_sp();
 KoFilter::ConversionStatus read_spPr();
 KoFilter::ConversionStatus read_xfrm();

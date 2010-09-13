@@ -601,6 +601,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL nvCxnSpPr
+//! nvCxnSpPr handler (Non visual properties for a connection shape)
+//! @todo propertly
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvCxnSpPr()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF_IN_CONTEXT(cNvPr)
+#ifdef PPTXXMLSLIDEREADER_H
+            ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
+#endif
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL cNvSpPr
 //! cNvSpPr handler (Non-Visual Drawing Properties for a Shape)
 //! ECMA-376, 19.3.1.13, p. 2828; 20.1.2.2.9, p. 3030.
@@ -638,42 +659,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cNvSpPr()
     READ_EPILOGUE
 }
 
-#undef CURRENT_EL
-#define CURRENT_EL sp
-//! sp handler (Shape)
-//! ECMA-376, 19.3.1.43, p. 2854; 20.1.2.2.33, p. 3053 - DrawingML.
-/*! This element specifies the existence of a single shape.
- A shape can either be a preset or a custom geometry,
- defined using the DrawingML framework.
-
- Parent elements:
-    - grpSp (§19.3.1.22)
-    - grpSp (§20.1.2.2.20) - DrawingML
-    - lockedCanvas (§20.3.2.1) - DrawingML
-    - [done] spTree (§19.3.1.45)
- Child elements:
-    - extLst (Extension List with Modification Flag) §19.3.1.20
-    - extLst (Extension List) §20.1.2.2.15 - DrawingML
-    - [done] nvSpPr (Non-Visual Properties for a Shape) §19.3.1.34
-    - [done] nvSpPr (Non-Visual Properties for a Shape) §20.1.2.2.29 - DrawingML
-    - [done] spPr (Shape Properties) §19.3.1.44
-    - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
-    - style (Shape Style) §19.3.1.46
-    - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
-    - [done] txBody (Shape Text Body) §19.3.1.51 - PML
-    - [done] txSp (Text Shape) §20.1.2.2.41 - DrawingML
- Attributes:
- - [unsupported?] useBgFill
-*/
-//! @todo support all elements
-//! CASE #P405
-//! CASE #P425
-//! CASE #P430
-//! CASE #P476
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
+void MSOOXML_CURRENT_CLASS::preReadSp()
 {
-    READ_PROLOGUE
-
     // Reset the position and size
     m_svgX = 0;
     m_svgY = 0;
@@ -695,17 +682,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     }
     else if (m_context->type == SlideMaster) {
         m_currentShapeProperties = new PptxShapeProperties();
-        m_currentMasterPageStyle = KoGenStyle(KoGenStyle::MasterPageStyle);
-#ifdef __GNUC__
-#warning TODO:     m_currentMasterPageStyle.addChildElement(....)
-#endif
     }
     else if (m_context->type == SlideLayout) {
         // moved down
         m_currentShapeProperties = 0;
-#ifdef __GNUC__
-#warning TODO:     m_currentMasterPageStyle.addChildElement(....)
-#endif
     }
     m_isPlaceHolder = false;
     ++d->shapeNumber;
@@ -715,48 +695,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
     m_rot = 0;
+}
 
-    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
-    // to write after the child elements are generated
-    bool outputDrawFrame = true;
-    body = drawFrameBuf.setWriter(body);
-
-    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
-
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF(nvSpPr)
-            ELSE_TRY_READ_IF(spPr)
-            ELSE_TRY_READ_IF(style)
+void MSOOXML_CURRENT_CLASS::generateFrameSp()
+{
 #ifdef PPTXXMLSLIDEREADER_H
-            else {
-                TRY_READ_IF(txBody)
-            }
-#endif
-//! @todo add ELSE_WRONG_FORMAT
-        }
-    }
+        const QString styleId(d->phStyleId());
 
-#ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
-    if (m_context->type == SlideLayout && !styleId.isEmpty() && outputDrawFrame) {
-        outputDrawFrame = false;
-        body = drawFrameBuf.originalWriter();
-        drawFrameBuf.clear();
-        kDebug() << "giving up outputDrawFrame for because ph@type is not empty:" << d->phType << "m_context->type=" << m_context->type;
-    }
-#endif
-
-    if (outputDrawFrame) {
-#ifdef PPTXXMLSLIDEREADER_H
         kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 //        KoXmlWriter *writer = m_context->type == SlideLayout ? mainStyles : body;
 #else
 #endif
-        body = drawFrameBuf.originalWriter();
         if (m_contentType == "line") {
             body->startElement("draw:line");
         }
@@ -837,14 +786,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                     QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
                     QString x1 = EMU_TO_CM_STRING(m_svgX);
                     QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
-                    if (m_rot != 0) {
-                        qreal angle, xDiff, yDiff;
-                        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
-                        x1 = EMU_TO_CM_STRING(m_svgX - xDiff);
-                        y1 = EMU_TO_CM_STRING(m_svgY - yDiff);
-                        x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth + xDiff);
-                        y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight + yDiff);
-                    }
                     if (m_flipV) {
                         QString temp = y2;
                         y2 = y1;
@@ -854,6 +795,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                         QString temp = x2;
                         x2 = x1;
                         x1 = temp;
+                    }
+
+                    if (m_rot != 0) {
+                        qreal angle, xDiff, yDiff;
+                        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+                        //! @todo, in case of connector, these should maybe be reversed?
+                        x1 = EMU_TO_CM_STRING(m_svgX - xDiff);
+                        y1 = EMU_TO_CM_STRING(m_svgY - yDiff);
+                        x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth + xDiff);
+                        y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight + yDiff);
                     }
                     body->addAttribute("svg:x1", x1);
                     body->addAttribute("svg:y1", y1);
@@ -873,6 +824,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 // m_rot is in 1/60,000th of a degree
                 qreal angle, xDiff, yDiff;
                 MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+qDebug() << "angle is" << angle;
                 QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                     .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
                 body->addAttribute("draw:transform", rotString);
@@ -896,11 +848,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 #warning TODO: docx
 #endif
 #endif // PPTXXMLSLIDEREADER_H
+}
 
-        (void)drawFrameBuf.releaseWriter();
-        body->endElement(); //draw:frame, //draw:line
-    }
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::generatePlaceHolderSp()
+{
 #ifdef PPTXXMLSLIDEREADER_H
+    const QString styleId(d->phStyleId());
+
     kDebug() << "styleId:" << styleId << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
 
     if (m_context->type == SlideLayout) {
@@ -941,8 +895,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         }
         m_context->slideProperties->shapes.append(m_currentShapeProperties);
     }
-
-    if (!outputDrawFrame && m_context->type == SlideLayout) {
+    if (!m_outputDrawFrame && m_context->type == SlideLayout) {
         // presentation:placeholder
         Q_ASSERT(m_placeholderElWriter);
         QString presentationObject;
@@ -1000,10 +953,161 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
 #endif
 
-    popCurrentDrawStyle();
 #ifdef PPTXXMLSLIDEREADER_H
     m_currentShapeProperties = 0; // Making sure that nothing uses them.
 #endif
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL cxnSp
+//! cxnSp handler (connection shape)
+//!TODO: don't imitate this to be normal shape
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
+{
+    READ_PROLOGUE
+
+    preReadSp();
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
+    // to write after the child elements are generated
+    m_outputDrawFrame = true;
+    body = drawFrameBuf.setWriter(body);
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(nvCxnSpPr)
+            ELSE_TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(style)
+#ifdef PPTXXMLSLIDEREADER_H
+            else {
+                TRY_READ_IF(txBody)
+            }
+#endif
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+#ifdef PPTXXMLSLIDEREADER_H
+    const QString styleId(d->phStyleId());
+    if (m_context->type == SlideLayout && !styleId.isEmpty() && m_outputDrawFrame) {
+        m_outputDrawFrame = false;
+        body = drawFrameBuf.originalWriter();
+        drawFrameBuf.clear();
+        kDebug() << "giving up outputDrawFrame for because ph@type is not empty:" << d->phType << "m_context->type=" << m_context->type;
+    }
+#endif
+
+    if (m_outputDrawFrame) {
+        body = drawFrameBuf.originalWriter();
+
+        generateFrameSp();
+
+        (void)drawFrameBuf.releaseWriter();
+        body->endElement(); //draw:frame, //draw:line
+    }
+
+    KoFilter::ConversionStatus stat = generatePlaceHolderSp();
+    if (stat != KoFilter::OK) {
+        return stat;
+    }
+
+    popCurrentDrawStyle();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sp
+//! sp handler (Shape)
+//! ECMA-376, 19.3.1.43, p. 2854; 20.1.2.2.33, p. 3053 - DrawingML.
+/*! This element specifies the existence of a single shape.
+ A shape can either be a preset or a custom geometry,
+ defined using the DrawingML framework.
+
+ Parent elements:
+    - grpSp (§19.3.1.22)
+    - grpSp (§20.1.2.2.20) - DrawingML
+    - lockedCanvas (§20.3.2.1) - DrawingML
+    - [done] spTree (§19.3.1.45)
+ Child elements:
+    - extLst (Extension List with Modification Flag) §19.3.1.20
+    - extLst (Extension List) §20.1.2.2.15 - DrawingML
+    - [done] nvSpPr (Non-Visual Properties for a Shape) §19.3.1.34
+    - [done] nvSpPr (Non-Visual Properties for a Shape) §20.1.2.2.29 - DrawingML
+    - [done] spPr (Shape Properties) §19.3.1.44
+    - [done] spPr (Shape Properties) §20.1.2.2.35 - DrawingML
+    - style (Shape Style) §19.3.1.46
+    - [done] style (Shape Style) §20.1.2.2.37 - DrawingML
+    - [done] txBody (Shape Text Body) §19.3.1.51 - PML
+    - [done] txSp (Text Shape) §20.1.2.2.41 - DrawingML
+ Attributes:
+ - [unsupported?] useBgFill
+*/
+//! @todo support all elements
+//! CASE #P405
+//! CASE #P425
+//! CASE #P430
+//! CASE #P476
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
+{
+    READ_PROLOGUE
+
+    preReadSp();
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:frame, because we have
+    // to write after the child elements are generated
+    m_outputDrawFrame = true;
+    body = drawFrameBuf.setWriter(body);
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(nvSpPr)
+            ELSE_TRY_READ_IF(spPr)
+            ELSE_TRY_READ_IF(style)
+#ifdef PPTXXMLSLIDEREADER_H
+            else {
+                TRY_READ_IF(txBody)
+            }
+#endif
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+#ifdef PPTXXMLSLIDEREADER_H
+    const QString styleId(d->phStyleId());
+    if (m_context->type == SlideLayout && !styleId.isEmpty() && m_outputDrawFrame) {
+        m_outputDrawFrame = false;
+        body = drawFrameBuf.originalWriter();
+        drawFrameBuf.clear();
+        kDebug() << "giving up outputDrawFrame for because ph@type is not empty:" << d->phType << "m_context->type=" << m_context->type;
+    }
+#endif
+
+    if (m_outputDrawFrame) {
+        body = drawFrameBuf.originalWriter();
+
+        generateFrameSp();
+
+        (void)drawFrameBuf.releaseWriter();
+        body->endElement(); //draw:frame, //draw:line
+    }
+
+    KoFilter::ConversionStatus stat = generatePlaceHolderSp();
+    if (stat != KoFilter::OK) {
+        return stat;
+    }
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
