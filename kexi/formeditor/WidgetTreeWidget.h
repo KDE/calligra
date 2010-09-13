@@ -156,6 +156,9 @@ protected:
 
     void selectWidgetForItem(QTreeWidgetItem *item);
 
+    //! Try to alter selection of the item is nonselectable item clicked and parent item is available.
+    QTreeWidgetItem* tryToAlterSelection(QTreeWidgetItem* current);
+
 private:
     Form *m_form;
     //2.0 WidgetTreeWidgetItem *m_topItem;

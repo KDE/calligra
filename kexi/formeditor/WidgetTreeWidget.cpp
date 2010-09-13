@@ -288,7 +288,8 @@ void WidgetTreeWidget::handleContextMenuEvent(QContextMenuEvent* e)
     WidgetTreeWidgetItem *item = static_cast<WidgetTreeWidgetItem*>(itemAt(e->pos()));
     if (!item)
         return;
-    QWidget *w = item->data()->widget();
+    WidgetTreeWidgetItem *newItem = static_cast<WidgetTreeWidgetItem*>(tryToAlterSelection(item));
+    QWidget *w = newItem->data()->widget();
     if (!w)
         return;
     m_form->createContextMenu(w, m_form->activeContainer(), e->pos(), Form::WidgetTreeContextMenuTarget);
@@ -356,6 +357,27 @@ void WidgetTreeWidget::selectWidgetForItem(QTreeWidgetItem *item)
     }
 }
 
+QTreeWidgetItem* WidgetTreeWidget::tryToAlterSelection(QTreeWidgetItem* current)
+{
+    if (   current
+        && !(current->flags() & Qt::ItemIsSelectable)
+        && current->parent()
+        && (current->parent()->flags() & Qt::ItemIsSelectable)
+       )
+    {
+        m_slotSelectionChanged_enabled = false;
+        foreach (QTreeWidgetItem *selectedItem, selectedItems()) {
+            selectedItem->setSelected(false);
+        }
+        selectWidgetForItem(current->parent());
+        setCurrentItem(current->parent());
+        current->parent()->setSelected(true);
+        m_slotSelectionChanged_enabled = true;
+        return current->parent();
+    }
+    return current;
+}
+
 void WidgetTreeWidget::slotSelectionChanged()
 {
     if (!m_form || !m_slotSelectionChanged_enabled)
@@ -366,22 +388,7 @@ void WidgetTreeWidget::slotSelectionChanged()
     foreach(QTreeWidgetItem *item, list) {
         selectWidgetForItem(item);
     }
-    // alter selection of the item is nonselectable item clicked and parent item is available
-    if (   currentItem()
-        && !(currentItem()->flags() & Qt::ItemIsSelectable)
-        && currentItem()->parent()
-        && (currentItem()->parent()->flags() & Qt::ItemIsSelectable)
-       )
-    {
-        m_slotSelectionChanged_enabled = false;
-        foreach (QTreeWidgetItem *selectedItem, selectedItems()) {
-            selectedItem->setSelected(false);
-        }
-        selectWidgetForItem(currentItem()->parent());
-        setCurrentItem(currentItem()->parent());
-        currentItem()->setSelected(true);
-        m_slotSelectionChanged_enabled = true;
-    }
+    tryToAlterSelection(currentItem());
     if (hadFocus)
         setFocus(); //restore focus
 }
