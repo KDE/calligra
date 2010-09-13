@@ -394,6 +394,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_ser()
                     m_currentSeries->m_datasetFormat << new Charting::PieFormat(explosion);
                 }
             }
+            else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(bubble3D))) {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                m_context->m_chart->m_is3d  = val.toInt();
+            }
         }
     }
 
