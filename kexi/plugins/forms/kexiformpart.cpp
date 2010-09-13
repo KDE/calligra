@@ -19,9 +19,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
+#include <QVBoxLayout>
+
+#include <KDebug>
 #include <KDialog>
-#include <k3listview.h>
 #include <ktabwidget.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
@@ -65,15 +66,14 @@ class KexiFormPart::Private
 {
 public:
     Private() {
-        widgetTree = new KFormDesigner::WidgetTreeWidget(0);
-        widgetTree->setObjectName("KexiFormPart:WidgetTreeWidget");
     }
     ~Private() {
-        delete static_cast<KFormDesigner::WidgetTreeWidget*>(widgetTree);
+        delete static_cast<QWidget*>(widgetTreeWidget);
         delete static_cast<KexiDataSourcePage*>(dataSourcePage);
     }
-    QPointer<KFormDesigner::WidgetTreeWidget> widgetTree;
     QPointer<KexiDataSourcePage> dataSourcePage;
+    QPointer<KFormDesigner::WidgetTreeWidget> widgetTree;
+    QPointer<QWidget> widgetTreeWidget;
     KexiDataSourceComboBox *dataSourceCombo;
 };
 
@@ -491,8 +491,16 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     tab->addTab(d->dataSourcePage, KIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
 
-    tab->addTab(d->widgetTree, KIcon("widgets"), QString());
-    tab->setTabToolTip(tab->indexOf(d->widgetTree), i18n("Widgets"));
+    if (!d->widgetTreeWidget) {
+        d->widgetTreeWidget = new QWidget;
+        QVBoxLayout *lyr = new QVBoxLayout(d->widgetTreeWidget);
+        lyr->setContentsMargins(2, 2, 2, 2);
+        d->widgetTree = new KFormDesigner::WidgetTreeWidget;
+        d->widgetTree->setObjectName("KexiFormPart:WidgetTreeWidget");
+        lyr->addWidget(d->widgetTree);
+    }
+    tab->addTab(d->widgetTreeWidget, KIcon("widgets"), QString());
+    tab->setTabToolTip(tab->indexOf(d->widgetTreeWidget), i18n("Widgets"));
 }
 
 //----------------

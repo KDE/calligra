@@ -98,7 +98,7 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    WidgetTreeWidget(QWidget *parent, Options options = NoOptions);
+    WidgetTreeWidget(QWidget *parent = 0, Options options = NoOptions);
 
     virtual ~WidgetTreeWidget();
 
