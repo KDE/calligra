@@ -512,7 +512,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-            TRY_READ_IF(ln)
+//             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
@@ -538,7 +538,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-            TRY_READ_IF(ln)
+//             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
@@ -564,7 +564,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-            TRY_READ_IF(ln)
+//             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
@@ -590,7 +590,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-            TRY_READ_IF(ln)
+//             TRY_READ_IF(ln)
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
