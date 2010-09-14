@@ -384,7 +384,7 @@ void TestLoad::styleElement_data()
 
     // Basic content
     addRow( "<mstyle></mstyle>", 0 );
-    addRow( "<mstyle><mrow></mrow></mstyle>", 1 );
+    addRow( "<mstyle><mrow></mrow></mstyle>", 0 );
     addRow( "<mstyle><mi>x</mi></mstyle>", 1 );
     addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1 );
 
@@ -401,7 +401,7 @@ void TestLoad::errorElement_data()
 
     // Basic content
     addRow( "<merror></merror>", 0 );
-    addRow( "<merror><mrow></mrow></merror>", 1 );
+    addRow( "<merror><mrow></mrow></merror>", 0 );
     addRow( "<merror><mi>x</mi></merror>", 1 );
     addRow( "<merror><mrow><mi>x</mi></mrow></merror>", 1 );
 
@@ -457,9 +457,10 @@ void TestLoad::fencedElement_data()
     QTest::addColumn<int>("output");
     QTest::addColumn<int>("outputRecursive");
 
+    // This is an inferred mrow element
     addRow( "<mfenced></mfenced>", 0 );
-    addRow( "<mfenced><mi>x</mi></mfenced>", 1, 2 );           // Inferred mrow
-    addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 1, 4 ); // Inferred mrow and separator
+    addRow( "<mfenced><mi>x</mi></mfenced>", 1 );
+    addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 2 ); // Inferred mrow
 }
 
 void TestLoad::encloseElement_data()
@@ -887,9 +888,9 @@ void TestLoad::tdElement_data()
 
     // Basic content
     addRow( "<mtd></mtd>", 0 );
-    addRow( "<mtd><mrow></mrow></mtd>", 1, 1 );
+    addRow( "<mtd><mrow></mrow></mtd>", 0, 0 ); // Empty mrow is deleted
     addRow( "<mtd><mi>x</mi></mtd>", 1, 1 );
-    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", 1, 2 );
+    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", 1, 1 ); // mrow with one element is deleted
 
     // Be sure attributes don't break anything
     addRow( "<mtd rowspan=\"3\"><mi>x</mi></mtd>", 1, 1 );
@@ -903,10 +904,10 @@ void TestLoad::actionElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer\"><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"statusline\"><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 1 );
+    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer\"><mrow></mrow><mrow></mrow></maction>", 0 ); // 
+    addRow( "<maction actiontype=\"statusline\"><mrow></mrow><mrow></mrow></maction>", 0 );
+    addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>", 0 );
+    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 0 );
 }
 
 void TestLoad::identifierElement()
