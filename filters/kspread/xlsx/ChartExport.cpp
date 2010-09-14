@@ -31,8 +31,8 @@
 
 using namespace Charting;
 
-ChartExport::ChartExport( Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme, bool maintainRefs )
-    : m_maintainReferences( maintainRefs ), m_width(0), m_height(0), m_chart(chart), m_theme(theme)
+ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
+    : m_width(0), m_height(0), m_chart(chart), m_theme(theme)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -275,31 +275,6 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyles& styles, K
     return genPlotAreaStyle( styleID, style, styles, mainStyles );
 }
 
-int charToInt( const QChar& charachter )
-{
-    char val = charachter.toAscii();
-    if ( val >= 65 && val <= 90 )
-        return val - 65;
-    return -1;
-}
-
-QChar intToChar( int value )
-{
-    if ( value >= 0 && value <= 25 )
-        return QLatin1Char( value + 65 );
-    else
-        return QChar();
-}
-
-QString generateCellRangeFromStartIndex( qint64 startIndex, qint64 numElements )
-{
-    const QString tableName = QString::fromLatin1( "local" );
-    const QString start = QString::fromLatin1( "$%1$%2" ).arg( intToChar( 0 ) ).arg( startIndex );
-    const QString end = QString::fromLatin1( "$%1$%2" ).arg( intToChar( numElements - 1 ) ).arg( startIndex );
-    const QString result = QString::fromLatin1( "%1.%2:.%3" ).arg( tableName, start, end );
-    return result;
-}
-
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
     if(!chart() || !chart()->m_impl || m_href.isEmpty())
@@ -321,14 +296,16 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->startElement("office:chart");
     bodyWriter->startElement("chart:chart"); //<chart:chart svg:width="8cm" svg:height="7cm" chart:class="chart:circle" chart:style-name="ch1">
 
-    if (!chart()->m_impl->name().isEmpty())
+    if (!chart()->m_impl->name().isEmpty()) {
         bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
+    }
 
-    if(m_width > 0)
+    if(m_width > 0) {
         bodyWriter->addAttributePt("svg:width", m_width);
-    if(m_height > 0)
+    }
+    if(m_height > 0) {
         bodyWriter->addAttributePt("svg:height", m_height);
-
+    }
     
     bodyWriter->addAttribute("chart:style-name", genChartAreaStyle( styleID, styles, mainStyles ) );
 
@@ -352,8 +329,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         //NOTE don't load width or height, the record MUST be ignored and determined by the application
         //see [MS-XLS] p. 362
 
-      if ( !chart()->m_title.isEmpty() )
-      {
+      if ( !chart()->m_title.isEmpty() ) {
           bodyWriter->startElement( "text:p" );
           bodyWriter->addTextNode( chart()->m_title );
           bodyWriter->endElement(); // text:p
@@ -368,7 +344,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 
     bodyWriter->startElement("chart:plot-area"); //<chart:plot-area chart:style-name="ch3" table:cell-range-address="Sheet1.C2:Sheet1.E2" svg:x="0.16cm" svg:y="0.14cm"
 
-    if(chart()->m_is3d) {
+    if( chart()->m_is3d) {
         //bodyWriter->addAttribute("dr3d:transform", "matrix (0.893670830886674 0.102940425033731 -0.436755898547686 -0.437131441492021 0.419523087196176 -0.795560483036015 0.101333848646097 0.901888933407692 0.419914042293545 0cm 0cm 0cm)");
         //bodyWriter->addAttribute("dr3d:vrp", "(12684.722548717 7388.35827488833 17691.2795565958)");
         //bodyWriter->addAttribute("dr3d:vpn", "(0.416199821709347 0.173649045905254 0.892537795986984)");
@@ -392,24 +368,28 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //chartstyle.addProperty("chart:series-source", "rows");
     //chartstyle.addProperty("chart:sort-by-x-values", "false");
     //chartstyle.addProperty("chart:right-angled-axes", "true");
-    if( chart()->m_is3d )
+    if( chart()->m_is3d) {
         chartstyle.addProperty("chart:three-dimensional", "true");
+    }
     //chartstyle.addProperty("chart:angle-offset", "90");
     //chartstyle.addProperty("chart:series-source", "rows");
     //chartstyle.addProperty("chart:right-angled-axes", "false");
-    if( chart()->m_transpose )
+    if( chart()->m_transpose ) {
         chartstyle.addProperty("chart:vertical", "true");
-    if( chart()->m_stacked )
+    }
+    if( chart()->m_stacked ) {
         chartstyle.addProperty("chart:stacked", "true");
-    if( chart()->m_f100 )
-       chartstyle.addProperty("chart:percentage", "true");
+    }
+    if( chart()->m_f100 ) {
+        chartstyle.addProperty("chart:percentage", "true");
+    }
     bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( styleID, chartstyle, styles, mainStyles ) );
 
     const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
 
-    if(!m_cellRangeAddress.isEmpty()) {
-        bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
-    }
+//    if(!m_cellRangeAddress.isEmpty()) {
+//        bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
+//    }
 
     /*FIXME
     if(verticalCellRangeAddress.isEmpty()) {
@@ -484,43 +464,43 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     //we should find the biggest and make it 100, then scale all the other factors accordingly
     //see 2.4.195 PieFormat
     int maxExplode = 100;
-    Q_FOREACH(Charting::Series* series, chart()->m_series) 
-    {
-        Q_FOREACH(Charting::Format* f, series->m_datasetFormat) 
-        {
-            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f))
-                if(pieformat->m_pcExplode > 0)
+    foreach(Charting::Series* series, chart()->m_series) {
+        foreach(Charting::Format* f, series->m_datasetFormat) {
+            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f)) {
+                if(pieformat->m_pcExplode > 0) {
                     maxExplode = qMax(maxExplode, pieformat->m_pcExplode);
+                }
+            }
         }
     }
 
     // area diagrams are special in that Excel does display the areas in another order then OpenOffice.org and
     // KSpread. To be sure the same areas are visible we do the same OpenOffice.org does and reverse the order.
     if(chart()->m_impl->name() == "area") {
-        for(int i = chart()->m_series.count() - 1; i >= 0; --i)
+        for(int i = chart()->m_series.count() - 1; i >= 0; --i) {
             chart()->m_series.append( chart()->m_series.takeAt(i) );
+        }
     }
-    qint64 currentStartIndex = 1;
-    const qint64 dimensions = chart()->m_impl->dimensions();
-    Q_FOREACH( Charting::Series* series, chart()->m_series )
-    {
+
+    foreach(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
 
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
 
-        Q_FOREACH( Charting::Format* f, series->m_datasetFormat )
-        {
-            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f))
+        foreach(Charting::Format* f, series->m_datasetFormat) {
+            if(Charting::PieFormat* pieformat = dynamic_cast<Charting::PieFormat*>(f)) {
                 if(pieformat->m_pcExplode > 0) {
                     //Note that 100.0/maxExplode will yield 1.0 most of the time, that's why do that division first
                     const int pcExplode = (int)((float)pieformat->m_pcExplode * (100.0 / (float)maxExplode));
                     seriesstyle.addProperty("chart:pie-offset", pcExplode, KoGenStyle::ChartType);
                 }
+            }
         }
-        if ( series->m_showDataValues )
+        if ( series->m_showDataValues ) {
             seriesstyle.addProperty( "chart:data-label-number", "value", KoGenStyle::ChartType );
+        }
         bodyWriter->addAttribute("chart:style-name", styles.insert(seriesstyle, "ch"));
 
         // ODF does not support custom labels so we depend on the SeriesLegendOrTrendlineName being defined
@@ -531,15 +511,16 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 bodyWriter->addAttribute("chart:label-cell-address", v->m_type == Charting::Value::CellRange ? normalizeCellRange(v->m_formula) : v->m_formula);
             }
         }
+        if (!series->m_labelCell.isEmpty()) {
+            bodyWriter->addAttribute("chart:label-cell-address", normalizeCellRange(series->m_labelCell));
+        }
 
-        const QString valuesCellRangeAddress = normalizeCellRange( series->m_valuesCellRangeAddress );
-        if( !valuesCellRangeAddress.isEmpty() && m_maintainReferences )
-            bodyWriter->addAttribute( "chart:values-cell-range-address", valuesCellRangeAddress ); //"Sheet1.C2:Sheet1.E2");
-        else if ( !series->m_domainValuesCellRangeAddress.isEmpty() && m_maintainReferences )
-            bodyWriter->addAttribute( "chart:values-cell-range-address", series->m_domainValuesCellRangeAddress.last() ); //"Sheet1.C2:Sheet1.E2");
-        else
-        {
-            bodyWriter->addAttribute( "chart:values-cell-range-address", generateCellRangeFromStartIndex( currentStartIndex, qMax( series->m_countYValues, series->m_countXValues ) ) );
+        const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
+        if(!valuesCellRangeAddress.isEmpty()) {
+            bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+        }
+        else if (!series->m_domainValuesCellRangeAddress.isEmpty()) {
+            bodyWriter->addAttribute("chart:values-cell-range-address", series->m_domainValuesCellRangeAddress.last()); //"Sheet1.C2:Sheet1.E2");
         }
         bodyWriter->addAttribute("chart:class", "chart:" + chart()->m_impl->name());
 
@@ -548,33 +529,12 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 //             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
 //             bodyWriter->endElement();
 //         } else if (chart()->m_impl->name() == "bubble" ){
-        int index = 1;
-        Q_FOREACH( const QString& curRange, series->m_domainValuesCellRangeAddress )
-        {
-            if ( dimensions < 3 && index == 1 )
-            {
-                ++index;
-                continue;
-            }
-                
-            if ( index >= dimensions )
-                break;
-            
-            if ( !m_maintainReferences )
-            {
-                bodyWriter->startElement( "chart:domain" );
-                bodyWriter->addAttribute( "table:cell-range-address", generateCellRangeFromStartIndex( currentStartIndex + index, qMax( series->m_countYValues, series->m_countXValues ) ) );
+            Q_FOREACH( const QString& curRange, series->m_domainValuesCellRangeAddress ){
+                bodyWriter->startElement("chart:domain");
+                bodyWriter->addAttribute("table:cell-range-address", curRange); //"Sheet1.C2:Sheet1.E5");
                 bodyWriter->endElement();
             }
-            else if ( !curRange.isEmpty() )
-            {
-                bodyWriter->startElement( "chart:domain" );
-                bodyWriter->addAttribute( "table:cell-range-address", normalizeCellRange( curRange ) ); //"Sheet1.C2:Sheet1.E5");
-                bodyWriter->endElement();
-            }            
-            ++index;
-        }
-//             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){5
+//             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){
 //                 bodyWriter->startElement("chart:domain");
 //                 bodyWriter->addAttribute("table:cell-range-address", series->m_domainValuesCellRangeAddress.last()); //"Sheet1.C2:Sheet1.E5");
 //                 bodyWriter->endElement();
@@ -589,16 +549,14 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 //             }
 //         }
 
-        for(int j = 0; j < series->m_countYValues; ++j) 
-        {
+        for(int j = 0; j < series->m_countYValues; ++j) {
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
             //gs.addProperty("chart:solid-type", "cuboid", KoGenStyle::ChartType);
             //gs.addProperty("draw:fill-color",j==0?"#004586":j==1?"#ff420e":"#ffd320", KoGenStyle::GraphicType);
             bodyWriter->addAttribute("chart-style-name", styles.insert(gs, "ch"));
 
-            Q_FOREACH(Charting::Text* t, series->m_texts) 
-            {
+            foreach(Charting::Text* t, series->m_texts) {
                 bodyWriter->startElement("chart:data-label");
                 bodyWriter->startElement("text:p");
                 bodyWriter->addTextNode(t->m_text);
@@ -610,7 +568,6 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
 
         bodyWriter->endElement(); // chart:series
-        currentStartIndex += dimensions;
     }
 
     bodyWriter->startElement("chart:wall");
@@ -620,6 +577,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->endElement(); // chart:floor
 
     bodyWriter->endElement(); // chart:plot-area
+
     writeInternalTable( bodyWriter );
 
     bodyWriter->endElement(); // chart:chart
@@ -667,197 +625,56 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     return true;
 }
 
-void ChartExport::writeInternalTableCell ( KoXmlWriter* bodyWriter, const QVariant& currentValue, double defaultValue,
-                                           const QString& /*cellRef*/ )
-{
-    if ( currentValue.isValid() )
-    {
-        bodyWriter->startElement( "table:table-cell" );
-            bodyWriter->addAttribute( "office:value-type", /*currentValue.type()  == QVariant::String ? "string" :*/ "float");
-            if ( currentValue.type() == QVariant::String )
-            {
-              // if this is used by msoffice for headers we will rewrite it till then we just write default values
-//                 bodyWriter->startElement( "text:p" );
-//                     bodyWriter->addTextNode( currentValue.toString() );
-//                 bodyWriter->endElement();
-                bodyWriter->addAttribute( "office:value", defaultValue );
-                bodyWriter->startElement( "text:p" );
-                bodyWriter->addTextNode( QString::number( defaultValue ) );
-                bodyWriter->endElement();
-
-            }
-            else
-            {
-                bodyWriter->addAttribute( "office:value", currentValue.toString() );
-//                 if ( !cellRef.isEmpty() )
-//                 {
-//                     bodyWriter->startElement( "table:cell-range-source" );
-//                         bodyWriter->addTextNode( cellRef );
-//                     bodyWriter->endElement();
-//                 }
-                bodyWriter->startElement( "text:p" );
-                bodyWriter->addTextNode( currentValue.toString() );
-                bodyWriter->endElement();
-            }
-        bodyWriter->endElement();
-    }
-    else
-    {
-        bodyWriter->startElement( "table:table-cell" );
-            bodyWriter->addAttribute( "office:value-type", "float" );
-            bodyWriter->addAttribute( "office:value", defaultValue );
-        bodyWriter->endElement();
-    }
-}
-
-/*!
-  calculates the correct reference position from a given ref range
- */
-QString getRefFromList( const QString& refList, int index = 0 )
-{
-    const QString sheet = refList.section( '!', 0, 0 );
-    const QString cellRange = refList.section( '!', 1, -1 );
-    const QStringList& res = cellRange.split( QRegExp( "[$:]" ), QString::SkipEmptyParts );
-    if ( res.isEmpty() )      
-        return QString();
-    else
-    {
-        const int startColumn = charToInt( res[ 0 ][ 0 ] );
-        const int startRow = res[ 1 ].toInt();
-        const int endColumn = charToInt( res[ 2 ][ 0 ] );;
-        const int endRow = res[ 3 ].toInt();
-        QString resultRef;
-        Qt::Orientation orient = Qt::Vertical;
-        if ( startColumn != endColumn )
-            orient = Qt::Horizontal;
-        if ( orient == Qt::Horizontal )
-        {
-            const int refPos = startColumn + index;            
-            if ( refPos <= endColumn )
-                resultRef = sheet + QLatin1String( "." ) +  intToChar( refPos ) + QString::number( startRow );
-        }
-        else
-        {
-            const int refPos = startRow + index;            
-            if ( refPos <= endRow )
-                resultRef = sheet + QLatin1String( "." ) + intToChar( startColumn ) + QString::number( refPos );
-        }
-        return resultRef;
-    }
-}
-
-/*!
-  writes a table with the following layout
-       | x1 | y1 | z1 | x2 | y2 | z2 | ...
-  row1
-  row2
- */
-void ChartExport::writeInternalTable ( KoXmlWriter* bodyWriter )
-{
-    Q_ASSERT( bodyWriter );    
-    bodyWriter->startElement("table:table");
-        bodyWriter->addAttribute( "table:name", "local" );
-        
-        bodyWriter->startElement( "table:table-header-columns" );
-            bodyWriter->startElement( "table:table-column" );
-            bodyWriter->endElement();
-        bodyWriter->endElement();
-        
-        bodyWriter->startElement( "table:table-columns" );
-            bodyWriter->startElement( "table:table-column" );
-            bodyWriter->endElement();
-        bodyWriter->endElement();
-        
-        bodyWriter->startElement( "table:table-header-rows" );
-            bodyWriter->startElement( "table:table-row" );
-            bodyWriter->endElement();
-        bodyWriter->endElement();
-        
-        bodyWriter->startElement( "table:table-rows" );
-            int maxNumRows = 0;
-            const int dimensions = chart()->m_impl->dimensions();
-            QHash< const Charting::Series*, int > seriesToMaxRowMapping;
-            Q_FOREACH( const Charting::Series* ser, chart()->m_series )
-            {                
-                const Charting::InternalDataTable& internT = ser->internalData;
-                int localMaxNumRows = 0;
-                localMaxNumRows = qMax( localMaxNumRows, internT.yValues.count() );
-                localMaxNumRows = qMax( localMaxNumRows, internT.xValues.count() );
-                localMaxNumRows = qMax( localMaxNumRows, internT.zValues.count() );
-                maxNumRows = qMax( maxNumRows, localMaxNumRows );
-                seriesToMaxRowMapping[ ser ] = localMaxNumRows;
-            }
-            QVariant currentXValue;
-            QVariant currentYValue;
-            QVariant currentZValue;
-            /*for ( int row = 0; row < maxNumRows; ++row )
-            {*/                
-                    Q_FOREACH( const Charting::Series* ser, chart()->m_series ) 
-                    {                        
-//                         if ( row < seriesToMaxRowMapping[ ser ] )
-//                         {
-                            const int maxCols = qMax( qMax( ser->internalData.zValues.count(), ser->internalData.yValues.count() ), ser->internalData.xValues.count() );
-                            if ( dimensions > 2 )
-                            {
-                                bodyWriter->startElement( "table:table-row" );
-                                
-                                if ( ser->internalData.zValues.isEmpty() )
-                                    for ( int i = 0; i < maxCols; ++i )
-                                        writeInternalTableCell( bodyWriter, 10, 0.0 );
-                                Q_FOREACH( const QVariant& value, ser->internalData.zValues ) {
-                                    
-                                    writeInternalTableCell( bodyWriter, value, 0.0 );
-                                }
-                                bodyWriter->endElement();
-                            }
-                            bodyWriter->startElement( "table:table-row" );
-                            if ( ser->internalData.yValues.isEmpty() )
-                                    for ( int i = 0; i < maxCols; ++i )
-                                        writeInternalTableCell( bodyWriter, i, 0.0 );
-                            Q_FOREACH( const QVariant& value, ser->internalData.yValues ) {
-                                
-                                writeInternalTableCell( bodyWriter, value, 0.0 );
-                            }
-                            bodyWriter->endElement();
-                            if ( dimensions > 1 )
-                            {
-                                bodyWriter->startElement( "table:table-row" );
-                                if ( ser->internalData.xValues.isEmpty() )
-                                        for ( int i = 0; i < maxCols; ++i )
-                                            writeInternalTableCell( bodyWriter, i, 0.0 );
-                                Q_FOREACH( const QVariant& value, ser->internalData.xValues ) {
-                                    
-                                    writeInternalTableCell( bodyWriter, value, 0.0 );
-                                }
-                                bodyWriter->endElement();                                
-                            }
-//                             const Charting::InternalDataTable& internT = ser->internalData;
-//                             if ( row < internT.xValues.count() )
-//                                 currentXValue = internT.xValues.at( row );
-//                             if ( row < internT.yValues.count() )
-//                                 currentYValue = internT.yValues.at( row );
-//                             if ( row < internT.zValues.count() )
-//                                 currentZValue = internT.zValues.at( row );
-//                             writeInternalTableCell( bodyWriter, currentXValue, row + 1 );
-//                             writeInternalTableCell( bodyWriter, currentYValue, row + 1 );
-//                             writeInternalTableCell( bodyWriter, currentZValue, row + 1 );
-//                         }
-//                         else
-//                         {
-//                             bodyWriter->startElement( "table:table-cell" );
-//                             bodyWriter->endElement();
-//                         }
-                    }
-//                 bodyWriter->endElement();
-//             }
-        bodyWriter->endElement();
-    bodyWriter->endElement();
-}
-
 float ChartExport::sprcToPt( int sprc, Orientation orientation )
 {
     if( orientation & vertical )
         return (float)sprc * ( (float)m_width / 4000.0);
 
     return (float)sprc * ( (float)m_height / 4000.0);
+}
+
+void ChartExport::writeInternalTable ( KoXmlWriter* bodyWriter )
+{
+    Q_ASSERT( bodyWriter );
+    bodyWriter->startElement("table:table");
+        bodyWriter->addAttribute( "table:name", "local" );
+
+        bodyWriter->startElement( "table:table-header-columns" );
+            bodyWriter->startElement( "table:table-column" );
+            bodyWriter->endElement();
+        bodyWriter->endElement();
+
+        bodyWriter->startElement( "table:table-columns" );
+            bodyWriter->startElement( "table:table-column" );
+            bodyWriter->endElement();
+        bodyWriter->endElement();
+
+        bodyWriter->startElement( "table:table-rows" );
+
+        const int rowCount = chart()->m_internalTable.maxRow();
+        for(int r = 1; r <= rowCount; ++r) {
+            bodyWriter->startElement("table:table-row");
+            const int columnCount = chart()->m_internalTable.maxCellsInRow(r);
+            for(int c = 1; c <= columnCount; ++c) {
+                bodyWriter->startElement("table:table-cell");
+                if (Cell* cell = chart()->m_internalTable.cell(c, r, false)) {
+                    //kDebug() << "cell->m_value " << cell->m_value;
+                    if (!cell->m_value.isEmpty()) {
+                        if (!cell->m_valueType.isEmpty()) {
+                            bodyWriter->addAttribute("office:value-type", cell->m_valueType);
+                            if (cell->m_valueType == "float") {
+                                bodyWriter->addAttribute("office:value", cell->m_value);
+                            }
+                        }
+                        bodyWriter->startElement("text:p");
+                        bodyWriter->addTextNode( cell->m_value );
+                        bodyWriter->endElement(); // text:p
+                    }
+                }
+                bodyWriter->endElement(); // table:table-cell
+            }
+            bodyWriter->endElement(); // table:table-row
+        }
+        bodyWriter->endElement();
+    bodyWriter->endElement();
 }

@@ -4506,14 +4506,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_chart2()
 
         Charting::Chart* chart = new Charting::Chart;
 
-        ChartExport* chartexport = new ChartExport( chart, m_context->themes, false );
+        ChartExport* chartexport = new ChartExport( chart, m_context->themes);
         chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
         chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
         chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
         chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
 
         kDebug()<<"r:id="<<r_id<<"filepath="<<filepath<<"position="<<QString("%1:%2").arg(chartexport->m_x).arg(chartexport->m_y)<<"size="<<QString("%1x%2").arg(chartexport->m_width).arg(chartexport->m_height);
-        
+
         KoStore* storeout = m_context->import->outputStore();
         XlsxXmlChartReaderContext context(storeout, chartexport );
         XlsxXmlChartReader reader(this);

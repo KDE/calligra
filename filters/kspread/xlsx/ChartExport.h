@@ -42,17 +42,15 @@ namespace MSOOXML
 class ChartExport
 {
 public:
-    explicit ChartExport( Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL, bool maintainRefs = true );
+    explicit ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL);
     ~ChartExport();
     Charting::Chart* chart() const { return m_chart; }
 
     bool m_drawLayer;
-    
     QString m_href;
     QString m_cellRangeAddress;
     QString m_endCellAddress;
     QString m_notifyOnUpdateOfRanges;
-    bool m_maintainReferences;
 #if 0
     /// anchored to sheet
     QString m_sheetName;
@@ -66,8 +64,6 @@ public:
 
 private:
     QString toPtString( int number );
-    void writeInternalTable( KoXmlWriter* bodyWriter );
-    void writeInternalTableCell( KoXmlWriter* bodyWriter, const QVariant& currentValue, double defaultValue, const QString& cellRef = QString() );    
     enum Orientation {
         vertical,
         horizontal
@@ -81,6 +77,7 @@ private:
     QString genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString generateGradientStyle( KoGenStyles& mainStyles, const Charting::Gradient* grad );
     QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
+    void writeInternalTable ( KoXmlWriter* bodyWriter );
 };
 
 #endif
