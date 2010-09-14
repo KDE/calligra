@@ -275,7 +275,8 @@ MSOOXML_EXPORT QString columnName(uint column);
 MSOOXML_EXPORT void splitPathAndFile(const QString& pathAndFile, QString* path, QString* file);
 
 //! Returns calculated angle and xDiff, yDiff, caller has to apply these to style
-MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff);
+MSOOXML_EXPORT void rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff,
+    bool flipH, bool flipV);
 
 //! A helper allowing to buffer xml streams and writing them back later
 /*! This class is useful when information that has to be written in advance is based

@@ -1009,9 +1009,14 @@ public:
     }
 };
 
-void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff)
+void Utils::rotateString(const qreal rotation, const qreal width, const qreal height, qreal& angle, qreal& xDiff, qreal& yDiff,
+    bool flipH, bool flipV)
 {
     angle = -(qreal)rotation * ((qreal)(M_PI) / (qreal)180.0)/ (qreal)60000.0;
+    // Angle seems to be negative if one of the flips is active
+    if ((flipH && !flipV) || (!flipH && flipV)) {
+        angle = -angle;
+    }
     //position change is calculated based on the fact that center point stays in the same location
     // Width/2 = Xnew + cos(angle)*Width/2 - sin(angle)*Height/2
     // Height/2 = Ynew + sin(angle)*Width/2 + cos(angle)*Height/2

@@ -273,7 +273,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         if (m_rot != 0) {
             // m_rot is in 1/60,000th of a degree
             qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
             QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                 .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
             body->addAttribute("draw:transform", rotString);
@@ -770,22 +770,30 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             }
             if (!m_xfrm_read && m_context->slideLayoutProperties && placeholder) {
                 kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
-                if (placeholder->rot == 0) {
-                    body->addAttribute("svg:x", EMU_TO_CM_STRING(placeholder->x));
-                    body->addAttribute("svg:y", EMU_TO_CM_STRING(placeholder->y));
-                }
-                body->addAttribute("svg:width", EMU_TO_CM_STRING(placeholder->width));
-                body->addAttribute("svg:height", EMU_TO_CM_STRING(placeholder->height));
+                m_svgX = placeholder->x;
+                m_svgY = placeholder->y;
+                m_svgWidth = placeholder->width;
+                m_svgHeight = placeholder->height;
                 m_rot = placeholder->rot;
             }
-            else if (m_svgWidth > -1 && m_svgHeight > -1) {
+        }
+        if (m_context->type == SlideMaster || m_context->type == Slide) {
+            if (m_svgWidth > -1 && m_svgHeight > -1) {
                 body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-    //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
                 if (m_contentType == "line") {
                     QString y1 = EMU_TO_CM_STRING(m_svgY);
                     QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
                     QString x1 = EMU_TO_CM_STRING(m_svgX);
                     QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
+                    if (m_rot != 0) {
+                        qreal angle, xDiff, yDiff;
+                        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                        //! @todo, in case of connector, these should maybe be reversed?
+                        x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
+                        y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
+                        x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
+                        y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
+                    }
                     if (m_flipV) {
                         QString temp = y2;
                         y2 = y1;
@@ -796,22 +804,12 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                         x2 = x1;
                         x1 = temp;
                     }
-
-                    if (m_rot != 0) {
-                        qreal angle, xDiff, yDiff;
-                        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
-                        //! @todo, in case of connector, these should maybe be reversed?
-                        x1 = EMU_TO_CM_STRING(m_svgX - xDiff);
-                        y1 = EMU_TO_CM_STRING(m_svgY - yDiff);
-                        x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth + xDiff);
-                        y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight + yDiff);
-                    }
                     body->addAttribute("svg:x1", x1);
                     body->addAttribute("svg:y1", y1);
                     body->addAttribute("svg:x2", x2);
                     body->addAttribute("svg:y2", y2);
                 }
-                else {
+                if (m_contentType != "line") {
                     if (m_rot == 0) {
                         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -819,27 +817,14 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
                     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
                 }
-            }
-            if (m_rot != 0 && m_contentType != "line") {
-                // m_rot is in 1/60,000th of a degree
-                qreal angle, xDiff, yDiff;
-                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
-qDebug() << "angle is" << angle;
-                QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                    .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-                body->addAttribute("draw:transform", rotString);
-            }
-        }
-        if (m_context->type == SlideMaster) {
-            if (m_svgWidth > -1 && m_svgHeight > -1) {
-                body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-    //! @todo if there's no data in spPr tag, use the one from the slide layout, then from the master slide
-                if (m_rot == 0) {
-                    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-                    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+                if (m_rot != 0 && m_contentType != "line") {
+                    // m_rot is in 1/60,000th of a degree
+                    qreal angle, xDiff, yDiff;
+                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                    QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                        .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+                    body->addAttribute("draw:transform", rotString);
                 }
-                body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-                body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
             }
         }
 
@@ -941,7 +926,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::generatePlaceHolderSp()
         m_rot = placeholder->rot;
         if (m_rot != 0) {
             qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
             QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
                                 .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
             m_placeholderElWriter->addAttribute("draw:transform", rotString);
