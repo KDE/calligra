@@ -660,8 +660,8 @@ if(m_hideGeom) return; // skip for now
             // spacing between the siblings
             int sibSp = values.value("sibSp");
             if(sibSp > 0) {
-                Q_ASSERT(sibSp > w);
-                Q_ASSERT(sibSp > h);
+                Q_ASSERT(w > sibSp);
+                Q_ASSERT(h > sibSp);
 
                 x += sibSp;
                 y += sibSp;
