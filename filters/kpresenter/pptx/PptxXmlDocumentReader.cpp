@@ -327,18 +327,18 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     // Moved this one here, because tablestyles shoudl be read only after reading the theme
 #if 0 // see bug #248991
     {
-        d->tableStyleList = new MSOOXML::TableStyleList();
-
-        const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->fil$
-        QString tableStylesFile;
-        QString tableStylesPath;
-        MSOOXML::Utils::splitPathAndFile(tableStylesFilePath, &tableStylesPath, &tableStylesFile);
-
-        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
-        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                         tableStylesFile, &m_context->theme, d->tab$
-        m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
-    }
+         d->tableStyleList = new MSOOXML::TableStyleList();
+ 
+         const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
+         QString tableStylesFile;
+         QString tableStylesPath;
+         MSOOXML::Utils::splitPathAndFile(tableStylesFilePath, &tableStylesPath, &tableStylesFile);
+ 
+         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+         MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
+                                                                          tableStylesFile, &m_context->theme, d->tableStyleList);
+         m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
+     }
 #endif
 
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
