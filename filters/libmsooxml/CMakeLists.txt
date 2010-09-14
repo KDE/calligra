@@ -28,10 +28,7 @@ set(msooxml_LIB_SRCS
 
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
 
-target_link_libraries(msooxml
-    komain
-    ${QT_QTXMLPATTERNS_LIBRARY}
-)
+target_link_libraries(msooxml komain)
 
 set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})

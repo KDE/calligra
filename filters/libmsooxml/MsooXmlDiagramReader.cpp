@@ -34,8 +34,6 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <QExplicitlySharedDataPointer>
-//#include <QXmlQuery>
-//#include <QAbstractUriResolver>
 #include <typeinfo>
 
 #include "MsooXmlDiagramReader_p.h"
@@ -174,48 +172,6 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         m_context->m_context->m_rootLayout->build(m_context->m_context);
         //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
         //Q_ASSERT(false);
-#if 0
-        device()->seek(0);
-        const QString xml = QString::fromUtf8(device()->readAll());
-
-        QXmlNamePool namepool;
-        //QXmlName name1(namepool, "layoutDef", "http://schemas.openxmlformats.org/drawingml/2006/diagram", "dgm");
-        QXmlQuery query(QXmlQuery::XSLT20, namepool);
-        if (!query.setFocus(xml)) {
-            return KoFilter::WrongFormat;
-        }
-
-        //query.bindVariable("inputDocument", ba);
-        
-        class UriResolver : public QAbstractUriResolver {
-            public:
-                UriResolver() : QAbstractUriResolver() {}
-                virtual ~UriResolver() {}
-                virtual QUrl resolve(const QUrl &relative, const QUrl &baseURI) const { return QString(); }
-        };
-        UriResolver resolver;
-        query.setUriResolver(&resolver);
-
-        query.setQuery(
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "<xsl:stylesheet\n"
-                "xmlns:dgm=\"http://schemas.openxmlformats.org/drawingml/2006/diagram\"\n"
-                "xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\n"
-                "version=\"2.0\">\n"
-            "<xsl:template match=\"/dgm:layoutDef\">\n"
-                "abc\n"
-            "</xsl:template>\n"
-            "</xsl:stylesheet>\n"
-        );
-        Q_ASSERT(query.isValid());
-
-        QByteArray result;
-        QBuffer buffer(&result);
-        buffer.open(QBuffer::ReadWrite);
-        query.evaluateTo(&buffer);
-        buffer.close();
-        kDebug()<<"3>>>>>>"<<result;
-#endif
     }
     else if (qualifiedName() == QLatin1String("dgm:styleDef")) {
         m_type = StyleDefType;
