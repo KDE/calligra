@@ -230,7 +230,7 @@ bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
         return true;
     }
     //Find the letter we clicked on
-    for( i = 1; i < endPosition(); i++ ) {
+    for( i = 1; i < endPosition(); ++i ) {
         if (point.x() < cursorOffset(i)) {
             break;
         }

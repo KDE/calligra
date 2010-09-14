@@ -201,7 +201,7 @@ bool BasicElement::readMathML( const KoXmlElement& element )
 bool BasicElement::readMathMLAttributes( const KoXmlElement& element )
 {
     QStringList attributeList = KoXml::attributeNames( element );
-    foreach( QString attributeName, attributeList ) {
+    foreach( const QString &attributeName, attributeList ) {
         m_attributes.insert( attributeName.toLower(),
                              element.attribute( attributeName ).toLower() );
     }
@@ -431,12 +431,12 @@ void BasicElement::writeElementTree(int indent, bool wrong) const
         s+="   ";
     }
     s+=ElementFactory::elementName(elementType());
-    s+=" ";
+    s+=' ';
     s+=writeElementContent();
 /*    s+="        [scale level ";
     s+=QString::number(m_scaleFactor)+","+QString::number(m_scaleLevel)+"] ";*/
-    s+=QString(" [")+QString::number(baseLine())+" ; " + QString::number(height())+"]";
-    s+=QString(" [")+ QString::number(origin().y())+"]";
+    s+=QString(" [")+QString::number(baseLine())+" ; " + QString::number(height())+']';
+    s+=QString(" [")+ QString::number(origin().y())+']';
     if (wrong) {
         s+=" -> wrong parent !!!";
     }

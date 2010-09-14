@@ -32,7 +32,7 @@
 class KOFORMULA_EXPORT UnderOverElement : public FixedElement {
 public:
     /// The standard constructor
-    UnderOverElement( BasicElement* parent = 0, ElementType elementType = UnderOver );
+    explicit UnderOverElement( BasicElement* parent = 0, ElementType elementType = UnderOver );
 
     /// The standard destructor
     ~UnderOverElement();
