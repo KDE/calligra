@@ -27,7 +27,7 @@
 #include "BasicElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include <kdebug.h>
 
 FormulaCommand::FormulaCommand(QUndoCommand* parent)
@@ -218,7 +218,7 @@ FormulaCommandReplaceRow::FormulaCommandReplaceRow ( FormulaData* data, FormulaC
     for (int i=0; i<newlength;i++) {
         tmpRow = new TableRowElement();
         for (int j=0; j<columnnumber; j++) {
-            tmpRow->insertChild(i,new TableEntryElement());
+            tmpRow->insertChild(i,new TableDataElement());
         }
         m_newRows<<tmpRow;
     }
@@ -226,7 +226,7 @@ FormulaCommandReplaceRow::FormulaCommandReplaceRow ( FormulaData* data, FormulaC
     setText( i18n( "Change rows" ) );
     if (newlength==0 && oldlength>=table->childElements().count()) {
         m_empty=new TableRowElement();
-        m_empty->insertChild(0, new TableEntryElement());
+        m_empty->insertChild(0, new TableDataElement());
     }
     setUndoCursorPosition(oldposition);
 
@@ -302,12 +302,12 @@ FormulaCommandReplaceColumn::FormulaCommandReplaceColumn ( FormulaData* data, Fo
     if (newlength==0 && oldlength>=table->childElements().count()) {
         //we remove the whole table
         m_empty=new TableRowElement();
-        m_empty->insertChild(0, new TableEntryElement());
+        m_empty->insertChild(0, new TableDataElement());
         m_oldRows=table->childElements();
     } else {
         for (int i=0; i<newlength;i++) {
             for (int j=0; j<rownumber;j++) {
-                tmp<<new TableEntryElement();
+                tmp<<new TableDataElement();
             }
             m_newColumns<<tmp;
             tmp.clear();

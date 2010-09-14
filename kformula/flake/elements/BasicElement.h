@@ -39,7 +39,7 @@ class KoXmlWriter;
 class AttributeManager;
 class FormulaCursor;
 class QPainterPath;
-class TableEntryElement;
+class TableDataElement;
 #define DEBUGID 40000
 
 /**
@@ -296,8 +296,8 @@ public:
     /// return the content of the element to kDebug(), only for debugging
     virtual const QString writeElementContent() const;
     
-    /// @return the first TableEntryElement among the elements ancestors or 0 if there is none
-    TableEntryElement* parentTableEntry();
+    /// @return the first TableDataElement among the elements ancestors or 0 if there is none
+    TableDataElement* parentTableData();
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 

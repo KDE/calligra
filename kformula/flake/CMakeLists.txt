@@ -32,7 +32,7 @@ set( kformulalib_PART_SRCS
    elements/FencedElement.cpp 
    elements/TableElement.cpp
    elements/TableRowElement.cpp
-   elements/TableEntryElement.cpp
+   elements/TableDataElement.cpp
    elements/RootElement.cpp
    elements/EncloseElement.cpp
    elements/ActionElement.cpp

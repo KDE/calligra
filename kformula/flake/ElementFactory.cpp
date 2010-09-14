@@ -30,7 +30,7 @@
 #include "IdentifierElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "MultiscriptElement.h"
 #include "NumberElement.h"
 #include "OperatorElement.h"
@@ -88,7 +88,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if ( tagName == "mtr" )
           return new TableRowElement( parent );
     else if ( tagName == "mtd" )
-          return new TableEntryElement( parent );
+          return new TableDataElement( parent );
     else if ( tagName == "mfenced" )
           return new FencedElement( parent );
     else if ( tagName == "menclose" )
@@ -167,7 +167,7 @@ QString ElementFactory::elementName( ElementType type )
             return "mtable";
         case TableRow:
             return "mtr"; // TODO: Check for mlabeledtr
-        case TableEntry:
+        case TableData:
             return "mtd";
         case Action:
             return "maction";

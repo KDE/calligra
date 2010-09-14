@@ -342,7 +342,7 @@ bool TableElement::insertChild ( int position, BasicElement* child )
 {
     if (child->elementType()==TableRow &&
         !child->childElements().isEmpty() &&
-        child->childElements()[0]->elementType()==TableEntry) {
+        child->childElements()[0]->elementType()==TableData) {
         TableRowElement* tmp=static_cast<TableRowElement*>(child);
         m_rows.insert(position,tmp);
         tmp->setParentElement(this);

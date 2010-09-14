@@ -26,7 +26,7 @@
 #include "FixedElement.h"
 #include "NumberElement.h"
 #include "TableElement.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "TableRowElement.h"
 #include "ElementFactory.h"
 #include "OperatorElement.h"
@@ -107,11 +107,11 @@ FormulaCommand* FormulaEditor::insertMathML( const QString& data )
 FormulaCommand* FormulaEditor::changeTable ( bool insert, bool rows )
 {
     FormulaCommand* undo;
-    TableEntryElement* entry=m_cursor.currentElement()->parentTableEntry();
-    if (entry) {
-        TableElement* table=static_cast<TableElement*>(entry->parentElement()->parentElement());
-        int rowNumber=table->childElements().indexOf(entry->parentElement());
-        int columnNumber=entry->parentElement()->childElements().indexOf(entry);
+    TableDataElement* data=m_cursor.currentElement()->parentTableData();
+    if (data) {
+        TableElement* table=static_cast<TableElement*>(data->parentElement()->parentElement());
+        int rowNumber=table->childElements().indexOf(data->parentElement());
+        int columnNumber=data->parentElement()->childElements().indexOf(data);
         if (rows) {
             //Changing rows
             if (insert) {

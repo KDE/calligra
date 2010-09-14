@@ -46,7 +46,7 @@
 #include "UnderOverElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "ActionElement.h"
 
 static void load(BasicElement* element, const QString& input)
@@ -1041,7 +1041,7 @@ void TestLoad::labeledtrElement()
 */
 void TestLoad::tdElement()
 {
-    test( new TableEntryElement );
+    test( new TableDataElement );
 }
 
 void TestLoad::actionElement()

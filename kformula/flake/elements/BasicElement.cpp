@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 #include "FormulaCursor.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
@@ -478,12 +478,12 @@ void BasicElement::cleanElementTree ( BasicElement* element )
     }
 }
 
-TableEntryElement* BasicElement::parentTableEntry()
+TableDataElement* BasicElement::parentTableData()
 {
-    if (elementType()==TableEntry) {
-        return static_cast<TableEntryElement*>(this);
+    if (elementType()==TableData) {
+        return static_cast<TableDataElement*>(this);
     } else if (parentElement()) {
-        return parentElement()->parentTableEntry();
+        return parentElement()->parentTableData();
     } else {
         return 0;
     }

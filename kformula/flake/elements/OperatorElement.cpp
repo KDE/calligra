@@ -64,7 +64,7 @@ void OperatorElement::stretch()
         return;
  
     switch(parentElement()->elementType()) {
-    case TableEntry:  //MTD
+    case TableData:  //MTD
         if(parentElement()->childElements().count() == 1) {
             m_stretchHorizontally = true;
             if(parentElement()->parentElement() &&
