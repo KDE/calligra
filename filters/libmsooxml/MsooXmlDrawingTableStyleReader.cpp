@@ -520,7 +520,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
 
     Border border;
     border.setSide(Border::Bottom);
-    border.setColor(m_currentPen.color());
+//     border.setColor(m_currentPen.color());
     //FIXME don't asume it's solid
     border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
@@ -546,7 +546,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
 
     Border border;
     border.setSide(Border::Top);
-    border.setColor(m_currentPen.color());
+//     border.setColor(m_currentPen.color());
     //FIXME don't asume it's solid
     border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
@@ -572,7 +572,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
 
     Border border;
     border.setSide(Border::Left);
-    border.setColor(m_currentPen.color());
+//     border.setColor(m_currentPen.color());
     //FIXME don't asume it's solid
     border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
@@ -598,7 +598,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 
     Border border;
     border.setSide(Border::Right);
-    border.setColor(m_currentPen.color());
+//     border.setColor(m_currentPen.color());
     //FIXME don't asume it's solid
     border.setStyle(MSOOXML::Border::Solid);
     m_currentStyleProperties.addBorder(border);
@@ -650,12 +650,12 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //     READ_EPILOGUE
 // }
 
-#define blipFill_NS "a"
-#define SETUP_PARA_STYLE_IN_READ_P
+// #define blipFill_NS "a"
+// #define SETUP_PARA_STYLE_IN_READ_P
 
-#include <MsooXmlCommonReaderImpl.h>
+// #include <MsooXmlCommonReaderImpl.h>
 
-#define DRAWINGML_NS "a"
-#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
+// #define DRAWINGML_NS "a"
+// #define DRAWINGML_PIC_NS "p" // DrawingML/Picture
 
-#include <MsooXmlCommonReaderDrawingMLImpl.h>
+// #include <MsooXmlCommonReaderDrawingMLImpl.h>
