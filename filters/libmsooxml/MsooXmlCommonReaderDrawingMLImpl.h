@@ -194,9 +194,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_rot = 0;
     m_isPlaceHolder = false;
 
-    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
-    body = drawFrameBuf.setWriter(body);
-
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
@@ -212,118 +209,127 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
     }
 
-    body = drawFrameBuf.originalWriter();
-    // The logic for place holders have to be significantly enhanced.
-    if (!m_isPlaceHolder) {
-        body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == Slide || m_context->type == SlideLayout) {
-            body->addAttribute("draw:layer", "layout");
-        }
-        else {
-            body->addAttribute("draw:layer", "backgroundobjects");
-        }
-        body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
+    // Ooxml supports slides getting pictures from layout slide, this is not supported in odf
+    // Therefore we are buffering the picture frames from layout and using them later in the slide
+    QBuffer picBuf;
+    KoXmlWriter picWriter(&picBuf);
+    KoXmlWriter *bodyBackup = body;
+
+    if (m_context->type == SlideLayout) {
+        body = &picWriter;
+    }
+#endif
+
+    body->startElement("draw:frame"); // CASE #P421
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == Slide || m_context->type == SlideLayout) {
+        body->addAttribute("draw:layer", "layout");
+    }
+    else { // Slidemaster
+        body->addAttribute("draw:layer", "backgroundobjects");
+    }
+    body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
 #endif
 //todo        body->addAttribute("presentation:style-name", styleName);
 //! @todo for pptx: maybe use KoGenStyle::PresentationAutoStyle?
-        if (m_noFill)
-            m_currentDrawStyle->addAttribute("style:fill", constNone);
+    if (m_noFill) {
+        m_currentDrawStyle->addAttribute("style:fill", constNone);
+    }
 
 #ifdef DOCXXMLDOCREADER_H
-        //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+    //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 #endif
 #if defined(DOCXXMLDOCREADER_H)
-        //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
-        //body->addAttribute("draw:style-name", currentDrawStyleName);
+    //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
+    //body->addAttribute("draw:style-name", currentDrawStyleName);
 #endif
 
 //! @todo CASE #1341: images within w:hdr should be anchored as paragraph (!wp:inline) or as-char (wp:inline)
-        if (m_drawing_inline) {
-            body->addAttribute("text:anchor-type", "as-char");
-        }
-        else {
-            body->addAttribute("text:anchor-type", "char");
-        }
-        if (!m_docPrName.isEmpty()) { // from docPr/@name
-            body->addAttribute("draw:name", m_docPrName);
-        }
-//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
-        int realX = m_svgX;
-        int realY = m_svgY;
-        if (m_hasPosOffsetH) {
-            kDebug() << "m_posOffsetH" << m_posOffsetH;
-            realX += m_posOffsetH;
-        }
-        if (m_hasPosOffsetV) {
-            kDebug() << "m_posOffsetV" << m_posOffsetV;
-            realY += m_posOffsetV;
-        }
-        if (m_rot == 0) {
-            body->addAttribute("svg:x", EMU_TO_CM_STRING(realX));
-            body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
-        }
-        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-        //! @todo: flipH, flipV
-        //! @todo: Generalize the generation of draw:transform so it can be used in other places.
-        //         ingwa: I'm not so sure.  flipH, flipV are handled below, and generate the
-        //                style:mirror attribute.
-
-        if (m_rot != 0) {
-            // m_rot is in 1/60,000th of a degree
-            qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-            body->addAttribute("draw:transform", rotString);
-        }
-
-        const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-#ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == SlideMaster) {
-            mainStyles->markStyleForStylesXml(styleName);
-        }
-#endif
-        body->addAttribute("draw:style-name", styleName);
-
-        // Now it's time to link to the actual picture.  Only do it if
-        // there is an image to link to.  If so, this was created in
-        // read_blip().
-        if (!m_xlinkHref.isEmpty()) {
-            body->startElement("draw:image");
-            body->addAttribute("xlink:href", m_xlinkHref);
-            //! @todo xlink:type?
-            body->addAttribute("xlink:type", "simple");
-            //! @todo xlink:show?
-            body->addAttribute("xlink:show", "embed");
-            //! @todo xlink:actuate?
-            body->addAttribute("xlink:actuate", "onLoad");
-#ifdef PPTXXMLSLIDEREADER_H
-            body->startElement("text:p");
-            body->endElement(); //text:p
-#endif
-            body->endElement(); //draw:image
-#ifdef DOCXXMLDOCREADER_H
-            if (!m_cNvPrName.isEmpty() || !m_cNvPrDescr.isEmpty()) {
-                body->startElement("svg:title");
-                body->addTextSpan(m_cNvPrDescr.isEmpty() ? m_cNvPrName : m_cNvPrDescr);
-                body->endElement(); //svg:title
-            }
-#endif
-            m_xlinkHref.clear();
-        }
-
-        // Add style information
-        //! @todo: horizontal-on-{odd,even}?
-        const QString mirror(mirrorToOdf(m_flipH, m_flipV));
-        if (!mirror.isEmpty()) {
-            m_currentDrawStyle->addProperty("style:mirror", mirror);
-        }
-
-        (void)drawFrameBuf.releaseWriter();
-        body->endElement(); //draw:frame
+    if (m_drawing_inline) {
+        body->addAttribute("text:anchor-type", "as-char");
     }
+    else {
+        body->addAttribute("text:anchor-type", "char");
+    }
+    if (!m_docPrName.isEmpty()) { // from docPr/@name
+        body->addAttribute("draw:name", m_docPrName);
+    }
+//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
+    int realX = m_svgX;
+    int realY = m_svgY;
+    if (m_hasPosOffsetH) {
+        kDebug() << "m_posOffsetH" << m_posOffsetH;
+        realX += m_posOffsetH;
+    }
+    if (m_hasPosOffsetV) {
+        kDebug() << "m_posOffsetV" << m_posOffsetV;
+        realY += m_posOffsetV;
+    }
+    if (m_rot == 0) {
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(realX));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
+    }
+    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+
+    if (m_rot != 0) {
+        // m_rot is in 1/60,000th of a degree
+        qreal angle, xDiff, yDiff;
+        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+        QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+        body->addAttribute("draw:transform", rotString);
+    }
+
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideMaster) {
+        mainStyles->markStyleForStylesXml(styleName);
+    }
+#endif
+    body->addAttribute("draw:style-name", styleName);
+
+    // Now it's time to link to the actual picture.  Only do it if
+    // there is an image to link to.  If so, this was created in
+    // read_blip().
+    if (!m_xlinkHref.isEmpty()) {
+        body->startElement("draw:image");
+        body->addAttribute("xlink:href", m_xlinkHref);
+        //! @todo xlink:type?
+        body->addAttribute("xlink:type", "simple");
+        //! @todo xlink:show?
+        body->addAttribute("xlink:show", "embed");
+        //! @todo xlink:actuate?
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->endElement(); //draw:image
+#ifdef DOCXXMLDOCREADER_H
+        if (!m_cNvPrName.isEmpty() || !m_cNvPrDescr.isEmpty()) {
+            body->startElement("svg:title");
+            body->addTextSpan(m_cNvPrDescr.isEmpty() ? m_cNvPrName : m_cNvPrDescr);
+            body->endElement(); //svg:title
+        }
+#endif
+        m_xlinkHref.clear();
+    }
+
+    // Add style information
+    //! @todo: horizontal-on-{odd,even}?
+    const QString mirror(mirrorToOdf(m_flipH, m_flipV));
+    if (!mirror.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:mirror", mirror);
+    }
+
+    body->endElement(); //draw:frame
+
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideLayout) {
+        const QString elementContents = QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size());
+        m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
+
+        body = bodyBackup;
+    }
+#endif
 
     popCurrentDrawStyle();
 

@@ -115,6 +115,9 @@ public:
     //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > textStyles;
 
+    // Extras frames such as pictures from layout, which should be put to the slide.
+    QVector<QString> layoutFrames;
+
     KoGenStyle m_drawingPageProperties;
 private:
 

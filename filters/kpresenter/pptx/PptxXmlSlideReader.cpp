@@ -1192,6 +1192,16 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    // Adding extra 'inherited' frames from layout
+    if (m_context->type == Slide) {
+        int index = 0;
+        while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
+            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
+            ++index;
+        }
+    }
+
     placeholderElBuffer.close();
     m_currentPresentationPageLayoutStyle.addProperty(
         QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
