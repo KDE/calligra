@@ -98,7 +98,7 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
-    WidgetTreeWidget(QWidget *parent, Options options = NoOptions);
+    WidgetTreeWidget(QWidget *parent = 0, Options options = NoOptions);
 
     virtual ~WidgetTreeWidget();
 
@@ -152,9 +152,14 @@ protected:
 
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
-private:
     void handleContextMenuEvent(QContextMenuEvent* e);
 
+    void selectWidgetForItem(QTreeWidgetItem *item);
+
+    //! Try to alter selection of the item is nonselectable item clicked and parent item is available.
+    QTreeWidgetItem* tryToAlterSelection(QTreeWidgetItem* current);
+
+private:
     Form *m_form;
     //2.0 WidgetTreeWidgetItem *m_topItem;
     Options m_options;

@@ -79,7 +79,7 @@ QString mm(double v) {
  * Drawing Writer
  * ************************************************
  */
-DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles, 
+DrawingWriter::DrawingWriter(KoXmlWriter& xmlWriter, KoGenStyles& kostyles,
                              bool stylesxml_, bool inlineObj)
         : Writer(xmlWriter, kostyles, stylesxml_),
           xLeft(0),
@@ -191,18 +191,12 @@ void KWordGraphicsHandler::init(Drawings * pDrawings, const wvWare::Word97::FIB 
     //to access FIB first in mswordodfimport.cpp
     parseOfficeArtContainer(m_document->storage(), fib);
 
+    //create default GraphicStyle using information from OfficeArtDggContainer
+    defineDefaultGraphicStyle(m_mainStyles);
+
+    //parse and store floating pictures  
     parseFloatingPictures();
-
     m_picNames = createFloatingPictures(m_store, m_manifestWriter);
-
-//     create default draw style
-//    KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
-//    style.setDefaultStyle(true);
-//
-//    defineDefaultGraphicProperties(&style,pDrawings);
-//
-//    //add default draw style to styles
-//    m_mainStyles->insert(style, "");
 
     m_drawings = pDrawings;
     m_fib = const_cast<wvWare::Word97::FIB *>(&fib);
@@ -219,7 +213,6 @@ void KWordGraphicsHandler::init(Drawings * pDrawings, const wvWare::Word97::FIB 
 void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
 {
     kDebug(30513) ;
-
     // going to parse and process the Data stream content
     LEInputStream* in = m_document->data_stream();
     int size = (data.picf->lcb - data.picf->cbHeader);
@@ -477,14 +470,14 @@ void KWordGraphicsHandler::parseOfficeArtContainer(POLE::Storage* storage, const
             parseOfficeArtDggContainer(in, m_OfficeArtDggContainer);
         }
         catch (IOException e) {
-            kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer ";
+            kDebug(30513) << "caught IOException while parsing parseOfficeArtDggContainer";
             return;
         }
         catch (...) {
             kDebug(30513) << "caught unknown exception while parsing parseOfficeArtDggContainer";
             return;
         }
-        kDebug(30513) << "OfficeArtDggContainer parsed successful " ;
+        kDebug(30513) << "OfficeArtDggContainer parsed successfully" ;
 
         // parse drawingsVariable from msdoc
         // 0 - next OfficeArtDgContainer belongs to Main document;
@@ -573,6 +566,16 @@ void KWordGraphicsHandler::parseOfficeArtContainer(POLE::Storage* storage, const
         }
     }
     return;
+}
+
+void KWordGraphicsHandler::defineDefaultGraphicStyle(KoGenStyles* styles)
+{
+    // write style <style:default-style style:family="graphic">
+    KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
+    DrawStyle ds(m_OfficeArtDggContainer);
+    style.setDefaultStyle(true);
+    defineGraphicProperties(style, ds);
+    styles->insert(style);
 }
 
 void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
@@ -689,15 +692,28 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-    // draw:shadow
-    // draw:shadow-color
-    // draw:shadow-offset-x
-    style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
-    // draw:shadow-offset-y
-    style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
-    // draw:shadow-opacity
-    float shadowOpacity = toQReal(ds.shadowOpacity());
-    style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    if (ds.fShadow()) {
+        // draw:shadow
+        style.addProperty("draw:shadow", "visible", gt);
+        // draw:shadow-color
+        clr = ds.shadowColor();
+        style.addProperty("draw:shadow-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
+        //shadowOffset* properties MUST exist if shadowType property equals
+        //msoshadowOffset or msoshadowDouble, otherwise MUST be ignored,
+        //MS-ODRAW 2.3.13.6
+        quint32 type = ds.shadowType();
+        if ((type == 0) || (type == 1)) {
+            // draw:shadow-offset-x
+            style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.), gt);
+            // draw:shadow-offset-y
+            style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.), gt);
+        }
+        // draw:shadow-opacity
+        float shadowOpacity = toQReal(ds.shadowOpacity());
+        style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    } else {
+        style.addProperty("draw:shadow", "hidden");
+    }
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal
@@ -765,7 +781,6 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // style:rel-height
     // style:rel-width
     // style:repeat
-    // style:shadow
     // svg:fill-rule
     // svg:height
     // svg:stroke-color from 2.3.8.1 lineColor

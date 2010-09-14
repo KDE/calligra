@@ -82,7 +82,7 @@ void WidgetTreeWidgetItem::initTextAndIcon()
                 m_customSortingKey = QString("tab%1").arg(tabIndex);
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
-                //TODO itemIcon = ...
+                itemIcon = "tabwidget-tab";
             }
         }
     }
@@ -288,7 +288,8 @@ void WidgetTreeWidget::handleContextMenuEvent(QContextMenuEvent* e)
     WidgetTreeWidgetItem *item = static_cast<WidgetTreeWidgetItem*>(itemAt(e->pos()));
     if (!item)
         return;
-    QWidget *w = item->data()->widget();
+    WidgetTreeWidgetItem *newItem = static_cast<WidgetTreeWidgetItem*>(tryToAlterSelection(item));
+    QWidget *w = newItem->data()->widget();
     if (!w)
         return;
     m_form->createContextMenu(w, m_form->activeContainer(), e->pos(), Form::WidgetTreeContextMenuTarget);
@@ -345,6 +346,38 @@ WidgetTreeWidget::selectWidget(QWidget *w, bool add)
     blockSignals(false);
 }
 
+void WidgetTreeWidget::selectWidgetForItem(QTreeWidgetItem *item)
+{
+    WidgetTreeWidgetItem *it = dynamic_cast<WidgetTreeWidgetItem*>(item);
+    if (!it)
+        return;
+    QWidget *w = it->data()->widget();
+    if (w && !m_form->selectedWidgets()->contains(w)) {
+        m_form->selectWidget(w, Form::AddToPreviousSelection | Form::DontRaise | Form::LastSelection);
+    }
+}
+
+QTreeWidgetItem* WidgetTreeWidget::tryToAlterSelection(QTreeWidgetItem* current)
+{
+    if (   current
+        && !(current->flags() & Qt::ItemIsSelectable)
+        && current->parent()
+        && (current->parent()->flags() & Qt::ItemIsSelectable)
+       )
+    {
+        m_slotSelectionChanged_enabled = false;
+        foreach (QTreeWidgetItem *selectedItem, selectedItems()) {
+            selectedItem->setSelected(false);
+        }
+        selectWidgetForItem(current->parent());
+        setCurrentItem(current->parent());
+        current->parent()->setSelected(true);
+        m_slotSelectionChanged_enabled = true;
+        return current->parent();
+    }
+    return current;
+}
+
 void WidgetTreeWidget::slotSelectionChanged()
 {
     if (!m_form || !m_slotSelectionChanged_enabled)
@@ -353,12 +386,9 @@ void WidgetTreeWidget::slotSelectionChanged()
     const QList<QTreeWidgetItem*> list( selectedItems() );
     m_form->selectFormWidget();
     foreach(QTreeWidgetItem *item, list) {
-        WidgetTreeWidgetItem *it = static_cast<WidgetTreeWidgetItem*>(item);
-        QWidget *w = it->data()->widget();
-        if (w && !m_form->selectedWidgets()->contains(w)) {
-            m_form->selectWidget(w, Form::AddToPreviousSelection | Form::DontRaise | Form::LastSelection);
-        }
+        selectWidgetForItem(item);
     }
+    tryToAlterSelection(currentItem());
     if (hadFocus)
         setFocus(); //restore focus
 }

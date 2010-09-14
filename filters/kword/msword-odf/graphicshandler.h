@@ -109,7 +109,13 @@ public:
 
     /**
      * Initialize the drawing handler.  Optional containers from Table stream
-     * and containers storing picture data from WordDocument stream are parsed.
+     * and containers storing inline picture data from WordDocument stream are
+     * parsed.
+     *
+     * @param pointer to the wv2 Drawing structure providing pointers to PLCs
+     * storing textbox data and shape properties
+     *
+     * @param pointer to the FIB structure provided by wv2
      */
     void init(wvWare::Drawings* pDrawings, const wvWare::Word97::FIB &fib);
 
@@ -152,6 +158,12 @@ private:
     QString getPicturePath(int pib) const;
 
     /**
+     * Process the default properties for all drawing objects stored in
+     * OfficeArtDggContainer.
+     */
+    void defineDefaultGraphicStyle(KoGenStyles* mainStyles);
+
+    /**
      * Process general properties of a shape.
      */
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, const QString& listStyle=QString());
@@ -165,9 +177,6 @@ private:
      * Process text wrapping related properties of a shape.
      */
     void defineWrappingProperties(KoGenStyle& style, const DrawStyle& ds, const wvWare::Word97::FSPA* spa);
-
-    //TODO:
-//    void defineDefaultGraphicProperties(KoGenStyle* pStyle, wvWare::Drawings * pDrawings);
 
     /**
      * Check if the object is inline or floating and set the anchor type to

@@ -33,6 +33,13 @@ const MSO::OfficeArtCOLORREF black() {
             = b.fSysIndex = false;
     return b;
 }
+const MSO::OfficeArtCOLORREF gray() {
+    MSO::OfficeArtCOLORREF b;
+    b.red = b.green = b.blue = 0x80;
+    b.fPaletteIndex = b.fPaletteRGB = b.fSystemRGB = b.fSchemeIndex
+            = b.fSysIndex = false;
+    return b;
+}
 const MSO::FixedPoint one() {
     MSO::FixedPoint one;
     one.integral = 1;
@@ -71,6 +78,8 @@ GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)
 GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)
 GETTER(quint32,                LineEndArrowWidth,    lineEndArrowWidth,    1)
 GETTER(quint32,                LineWidth,            lineWidth,            0x2535)
+GETTER(quint32,                ShadowType,           shadowType,           0)
+GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray()) //2.3.13.2
 GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x6338)
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)
 GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())
@@ -157,4 +166,8 @@ GETTER(fNoshadeHR,            fUsefNoshadeHR,            false)
 GETTER(fStandardHR,           fUsefStandardHR,           false)
 GETTER(fIsBullet,             fUsefIsBullet,             false)
 GETTER(fLayoutInCell,         fUsefLayoutInCell,         true)
+#undef FOPT
+#define FOPT ShadowStyleBooleanProperties
+GETTER(fShadowObscured,       fUsefShadowObscured,       false)
+GETTER(fShadow,               fUsefShadow,               false)
 #undef FOPT

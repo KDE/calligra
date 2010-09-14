@@ -495,7 +495,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     }
     else if (m_context->type == SlideMaster && !m_context->firstReadingRound) {
         m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-        m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+        m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
     }
     else if (m_context->type == SlideLayout) {
         m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
@@ -574,7 +574,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
             }
         } else {
             m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-            m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
         }
 
         const QString currentPageStyleName(mainStyles->insert(*m_currentDrawStyle, "dp"));
@@ -611,7 +611,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     else if (m_context->type == SlideLayout) {
         if (!m_currentDrawStyle->isEmpty()) {
             m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-            m_currentDrawStyle->addProperty("presentation:background-objects-visible", false);
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
             m_context->pageDrawStyleName = mainStyles->insert(*m_currentDrawStyle, "dp");
         }
         m_context->slideLayoutProperties->pageLayoutStyleName = mainStyles->insert(m_currentPresentationPageLayoutStyle);
@@ -1157,7 +1157,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
     - [done] cSld (§19.3.1.16)
  Child elements:
     - contentPart (Content Part) §19.3.1.14
-    - cxnSp (Connection Shape) §19.3.1.19
+    - [done] cxnSp (Connection Shape) §19.3.1.19
     - extLst (Extension List with Modification Flag) §19.3.1.20
     - [done] graphicFrame (Graphic Frame) §19.3.1.21
     - [done] grpSp (Group Shape) §19.3.1.22
@@ -1188,9 +1188,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             ELSE_TRY_READ_IF(grpSp)
             ELSE_TRY_READ_IF(pic)
             ELSE_TRY_READ_IF(graphicFrame)
+            ELSE_TRY_READ_IF(cxnSp)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    // Adding extra 'inherited' frames from layout
+    if (m_context->type == Slide) {
+        int index = 0;
+        while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
+            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
+            ++index;
+        }
+    }
+
     placeholderElBuffer.close();
     m_currentPresentationPageLayoutStyle.addProperty(
         QString(), QString::fromUtf8(placeholderEl), KoGenStyle::StyleChildElement);
@@ -1326,11 +1337,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
             body->endElement(); // text:list
         }
         m_prevListLevel = 0;
-    }
-
-    if (!d->textBoxHasContent) {
-        body = listBuf.releaseWriter();
-        READ_EPILOGUE
     }
 
     body = listBuf.originalWriter();

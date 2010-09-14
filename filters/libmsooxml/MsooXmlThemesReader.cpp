@@ -883,11 +883,80 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
  - themeOverride (§20.1.6.12)
  Child elements:
  - extLst (Extension List) §20.1.2.2.15
- - majorFont (Major Font) §20.1.4.1.24
- - minorFont (Minor fonts) §20.1.4.1.25*/
+ - [done] majorFont (Major Font) §20.1.4.1.24
+ - [done] minorFont (Minor fonts) §20.1.4.1.25*/
 KoFilter::ConversionStatus MsooXmlThemesReader::read_fontScheme()
 {
-    SKIP_EVERYTHING_AND_RETURN
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(majorFont)
+            ELSE_TRY_READ_IF(minorFont)
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL majorFont
+//! majorFont (Major Font)
+KoFilter::ConversionStatus MsooXmlThemesReader::read_majorFont()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (qualifiedName() == "a:latin") {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(typeface)
+                m_context->theme->fontScheme.majorFonts.latinTypeface = typeface;
+            }
+            else if (qualifiedName() == "a:ea") {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(typeface)
+                m_context->theme->fontScheme.minorFonts.eaTypeface = typeface;
+            }
+            else if (qualifiedName() == "a:cs") {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(typeface)
+                m_context->theme->fontScheme.minorFonts.csTypeface = typeface;
+            }
+        }
+    }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL minorFont
+//! minorFont (Minor Font)
+KoFilter::ConversionStatus MsooXmlThemesReader::read_minorFont()
+{
+    READ_PROLOGUE
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (qualifiedName() == "a:latin") {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(typeface)
+                m_context->theme->fontScheme.minorFonts.latinTypeface = typeface;
+            }
+            else if (qualifiedName() == "a:ea") {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(typeface)
+                m_context->theme->fontScheme.minorFonts.eaTypeface = typeface;
+            }
+            else if (qualifiedName() == "a:cs") {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(typeface)
+                m_context->theme->fontScheme.minorFonts.csTypeface = typeface;
+            }
+        }
+    }
+    READ_EPILOGUE
 }
 
 KoFilter::ConversionStatus MsooXmlThemesReader::read_SKIP()
