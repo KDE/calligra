@@ -56,7 +56,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         KexiPart::Part *p = Kexi::partManager().part(info);
         if (p) {
             KexiProjectModelItem *groupItem = 0;
-            if (m_itemsPartClass.isEmpty()) {
+            if (m_itemsPartClass.isEmpty() || m_itemsPartClass == info->partClass()) {
                 groupItem = addGroup(*info, m_rootItem);
                 if (!groupItem) {
                     continue;
@@ -75,7 +75,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
             
             foreach(KexiPart::Item *item, *item_dict) {
                 KexiProjectModelItem *itm = addItem(*item, *info, groupItem);
-                if (itm) {
+                if (itm && groupItem) {
                     groupItem->appendChild(itm);
                 }
             }
