@@ -280,9 +280,9 @@ void TestLoad::rowElement_data()
     addRow( "<mrow><mi>x</mi><mo>=</mo><mn>3</mn></mrow>", 3 );
 
     // More complex content
-    addRow( "<mrow><mrow></mrow></mrow>", 1 );
-    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1, 2 );
-    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1, 2 );
+    addRow( "<mrow><mrow></mrow></mrow>", 0 );
+    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1 );
+    addRow( "<mrow><mrow><mi>x</mi><mn>2</mn></mrow></mrow>", 1, 3 ); // Keep mrow with >1 children
 
     addRow( "<mrow>"
             " <mrow>"
