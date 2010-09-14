@@ -86,10 +86,10 @@ public:
     QString attributesDefaultValue( const QString& attribute ) const;
 
     /// @return The width of the column with the index @p column
-    double columnWidth( int column );
+    qreal columnWidth( int column );
 
     /// @return The height of the @p TableRowElement
-    double rowHeight( TableRowElement* row );
+    qreal rowHeight( TableRowElement* row );
     
     /// inherited from BasicElement
     virtual QLineF cursorLine ( int position ) const;
@@ -109,16 +109,16 @@ protected:
 
 private:
     /// @return The base line computed out of the align attribute
-    double parseTableAlign() const;
+    qreal parseTableAlign() const;
 
     /// Calculate the dimensions of each row and column at a centralized point
     void determineDimensions();
 
     /// Storage for heights of each row calculated in determineDimensions()
-    QList<double> m_rowHeights;
+    QList<qreal> m_rowHeights;
 
     /// Storage for widths of each column calculated in determineDimensions()
-    QList<double> m_colWidths;
+    QList<qreal> m_colWidths;
     
     /// The rows a matrix contains
     QList<TableRowElement*> m_rows;

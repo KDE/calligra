@@ -91,17 +91,17 @@ bool AttributeManager::boolOf( const QString& attribute,
     return findValue( attribute, element ) == "true";
 }
 
-double AttributeManager::doubleOf( const QString& attribute,
-                                   const BasicElement* element ) const
+qreal AttributeManager::doubleOf( const QString& attribute,
+                                  const BasicElement* element ) const
 {
 
     return lengthToPixels(parseUnit( findValue( attribute, element ), element ), element, attribute);
 }
 
-QList<double> AttributeManager::doubleListOf( const QString& attribute,
-                                              const BasicElement* element ) const
+QList<qreal> AttributeManager::doubleListOf( const QString& attribute,
+                                             const BasicElement* element ) const
 {
-    QList<double> doubleList;
+    QList<qreal> doubleList;
     QStringList tmp = findValue( attribute, element ).split( ' ' );
     foreach( const QString &doubleValue, tmp )
         doubleList << lengthToPixels( parseUnit( doubleValue, element ), element, attribute);
@@ -215,20 +215,20 @@ int AttributeManager::scriptLevel( const BasicElement* parent, int index ) const
     }
 }
 
-double AttributeManager::lineThickness( const BasicElement* element ) const
+qreal AttributeManager::lineThickness( const BasicElement* element ) const
 {
     QFontMetricsF fm(font(element));
     return fm.height() * 0.06 ;
 }
 
-double AttributeManager::layoutSpacing( const BasicElement* element  ) const
+qreal AttributeManager::layoutSpacing( const BasicElement* element  ) const
 {
     QFontMetricsF fm(font(element));
 //    return fm.height() * 0.166667 ;
     return fm.height() * 0.05 ;
 }
 
-double AttributeManager::lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const
+qreal AttributeManager::lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const
 {
     if(length.value == 0)
         return 0;
@@ -384,24 +384,24 @@ void AttributeManager::setViewConverter( KoViewConverter* converter )
     m_viewConverter = converter;
 }
 
-double AttributeManager::maxHeightOfChildren( const BasicElement* element ) const
+qreal AttributeManager::maxHeightOfChildren( const BasicElement* element ) const
 {
-    double maxHeight = 0.0;
+    qreal maxHeight = 0.0;
     foreach( BasicElement* tmp, element->childElements() )
         maxHeight = qMax( maxHeight, tmp->height() );
 
     return maxHeight;
 }
 
-double AttributeManager::maxWidthOfChildren( const BasicElement* element  ) const
+qreal AttributeManager::maxWidthOfChildren( const BasicElement* element  ) const
 {
-    double maxWidth = 0.0;
+    qreal maxWidth = 0.0;
     foreach( BasicElement* tmp, element->childElements() )
         maxWidth = qMax( maxWidth, tmp->width() );
 
     return maxWidth;
 }
-double AttributeManager::parseMathSpace( const QString& value, const BasicElement * element )  const
+qreal AttributeManager::parseMathSpace( const QString& value, const BasicElement * element )  const
 {
     QFontMetricsF fm(font(element));
     qreal conversionEmToPixels = fm.xHeight();

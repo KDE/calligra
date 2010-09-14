@@ -37,7 +37,7 @@ void SpaceElement::paint( QPainter& painter, AttributeManager* )
 
 void SpaceElement::layout( const AttributeManager* am )
 {
-    double height =  am->doubleOf( "height", this ); 
+    qreal height =  am->doubleOf( "height", this ); 
     setHeight( height + am->doubleOf( "depth", this ) );
     setWidth( am->doubleOf( "width", this ) );
     setBaseLine( height );

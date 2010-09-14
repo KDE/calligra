@@ -63,9 +63,9 @@ void SubSupElement::paint( QPainter& painter, AttributeManager* am )
 void SubSupElement::layout( const AttributeManager* am )
 {
     // Get the minimum amount of shifting
-    double subscriptshift   = am->doubleOf( "subscriptshift", this ); 
-    double superscriptshift = am->doubleOf( "superscriptshift", this );
-    double halfthinSpace   = 0;
+    qreal subscriptshift   = am->doubleOf( "subscriptshift", this ); 
+    qreal superscriptshift = am->doubleOf( "superscriptshift", this );
+    qreal halfthinSpace   = 0;
 
     if(m_elementType == SubSupScript) {
         //Add half a thin space between both sup and superscript, so there is a minimum
@@ -75,12 +75,12 @@ void SubSupElement::layout( const AttributeManager* am )
 
     // The yOffset is the amount the base element is moved down to make
     // room for the superscript
-    double yOffset = 0;
+    qreal yOffset = 0;
     if(m_superScript) {
         yOffset = m_superScript->height() - m_baseElement->height()/2 + halfthinSpace;
         yOffset = qMax( yOffset, superscriptshift );
     }
-    double largestWidth = 0;
+    qreal largestWidth = 0;
     if(m_subScript) {
         largestWidth = m_subScript->width();
     }
@@ -95,10 +95,9 @@ void SubSupElement::layout( const AttributeManager* am )
 
 
     if(m_subScript) {
-        double yPos = yOffset +
-	       	qMax( m_baseElement->height()/2 + halfthinSpace, 
-		      m_baseElement->height() - m_subScript->baseLine() 
-		          + subscriptshift );
+        qreal yPos = yOffset + qMax( m_baseElement->height()/2 + halfthinSpace, 
+                                     m_baseElement->height() - m_subScript->baseLine() 
+                                     + subscriptshift );
         m_subScript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
 	setHeight( yPos + m_subScript->height() );
     } else {

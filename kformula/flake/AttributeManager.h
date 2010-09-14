@@ -107,20 +107,20 @@ public:
     bool boolOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
-     * Obtain the @p attribute's value as double
+     * Obtain the @p attribute's value as qreal
      * @param attribute A string with the attribute to look up
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    double doubleOf( const QString& attribute, const BasicElement* element ) const;
+    qreal doubleOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
-     * Obtain the @p attribute's value as list of doubles
+     * Obtain the @p attribute's value as list of qreals
      * @param attribute A string with the attribute to look up
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
-    QList<double> doubleListOf( const QString& attribute,
+    QList<qreal> doubleListOf( const QString& attribute,
                                 const BasicElement* element ) const;
 
     /**
@@ -176,24 +176,24 @@ public:
     int scriptLevel( const BasicElement* parent, int index ) const;
     
     /// @return Line thickness for mfrac, mroot etc lines
-    double lineThickness( const BasicElement* element ) const;
+    qreal lineThickness( const BasicElement* element ) const;
 
     /// @return A value used for spacing tasks during layouting
-    double layoutSpacing( const BasicElement* element ) const;
+    qreal layoutSpacing( const BasicElement* element ) const;
 
     /**
      * Determine the maximal height of an given element's child elements
      * @param element The element whos children are used
      * @return The maximal height
      */
-    double maxHeightOfChildren( const BasicElement* element ) const;
+    qreal maxHeightOfChildren( const BasicElement* element ) const;
 
     /**
      * Determine the maximal height of an given element's child elements
      * @param element The element whos children are used
      * @return The maximal height
      */
-    double maxWidthOfChildren( const BasicElement* element ) const;
+    qreal maxWidthOfChildren( const BasicElement* element ) const;
 
     /// @return The Align value that was passed as QString @p value
     Align parseAlign( const QString& value ) const;
@@ -211,13 +211,13 @@ public:
     Length parseUnit( const QString& value, const BasicElement* element ) const;
 
     //// @return The given Length converted to units of pixels
-    double lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const;
+    qreal lengthToPixels( Length length, const BasicElement* element, const QString &attribute) const;
 
     /// Find a value for @p attribute that applies to @p element
     QString findValue( const QString& attribute, const BasicElement* element ) const;
 
     /// Convert a math space string, such as "thinmathspace", to a size in pixels
-    double parseMathSpace( const QString& value, const BasicElement *element ) const;
+    qreal parseMathSpace( const QString& value, const BasicElement *element ) const;
 
     /// The KoViewConverter used to determine the point values of pixels
     KoViewConverter* m_viewConverter;

@@ -73,9 +73,9 @@ void RowElement::layout( const AttributeManager* am )
     }
 
     QPointF origin;
-    double width = 0.0;
-    double topToBaseline = 0.0;
-    double baselineToBottom = 0.0;    
+    qreal width = 0.0;
+    qreal topToBaseline = 0.0;
+    qreal baselineToBottom = 0.0;    
     foreach( BasicElement* child, m_childElements ) // iterate through the children and
         topToBaseline = qMax( topToBaseline, child->baseLine() );  // find max baseline
 

@@ -100,7 +100,7 @@ void TokenElement::layout( const AttributeManager* am )
                 boundingrect.setRight( boundingrect.right() + newbox.right());
                 boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
                 boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-                double glyphoffset = m_offsets.last();
+                qreal glyphoffset = m_offsets.last();
                 for (int j = 0; j < chunk.length(); ++j) {
                     m_offsets << fm.width(chunk.left(j+1)) + glyphoffset;
                 }
@@ -120,7 +120,7 @@ void TokenElement::layout( const AttributeManager* am )
             boundingrect.setRight( boundingrect.right() + newbox.right());
             boundingrect.setTop( qMax(boundingrect.top(), newbox.top()));
             boundingrect.setBottom( qMax(boundingrect.bottom(), newbox.bottom()));
-//             double glyphoffset = m_offsets.last();
+//             qreal glyphoffset = m_offsets.last();
             for (int j = 0; j < chunk.length(); ++j) {
                 m_offsets << fm.width(chunk.left(j+1)) + m_offsets.last();
             }
@@ -248,7 +248,7 @@ bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
 QLineF TokenElement::cursorLine(int position) const
 {
     // inside tokens let the token calculate the cursor x offset
-    double tmp = cursorOffset( position );
+    qreal tmp = cursorOffset( position );
     QPointF top = absoluteBoundingRect().topLeft() + QPointF( tmp, 0 );
     QPointF bottom = top + QPointF( 0.0,height() );
     return QLineF(top,bottom);
@@ -282,7 +282,7 @@ bool TokenElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor
 }
 
 
-double TokenElement::cursorOffset( const int position) const
+qreal TokenElement::cursorOffset( const int position) const
 {
     return m_offsets[position]+m_xoffset;
 }

@@ -57,7 +57,7 @@ void TableRowElement::layout( const AttributeManager* am )
 
     // align the row's entries
     QPointF origin;
-    double hOffset = 0.0;
+    qreal hOffset = 0.0;
     for ( int i = 0; i < m_entries.count(); i++ ) {
 //         origin = QPointF();
         hOffset = 0.0;
@@ -109,7 +109,7 @@ QLineF TableRowElement::cursorLine ( int position ) const
 {
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     QPointF top=absoluteBoundingRect().topLeft();
-    double hOffset = 0;
+    qreal hOffset = 0;
     if( childElements().isEmpty() ) {
         // center cursor in elements that have no children
         top += QPointF( width()/2, 0 );
@@ -139,7 +139,7 @@ bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
         }
     }
     int i=0;
-    double x=0.0;
+    qreal x=0.0;
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     for (; i<m_entries.count()-1; ++i) {
         //Find the child element the point is in

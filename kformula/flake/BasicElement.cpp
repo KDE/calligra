@@ -262,17 +262,17 @@ void BasicElement::setChildrenBoundingRect(const QRectF &rect)
     Q_ASSERT(m_childrenBoundingRect.bottom() <= m_boundingRect.height());
     Q_ASSERT(m_childrenBoundingRect.right() <= m_boundingRect.width());
 }
-double BasicElement::height() const
+qreal BasicElement::height() const
 {
     return m_boundingRect.height();
 }
 
-double BasicElement::width() const
+qreal BasicElement::width() const
 {
     return m_boundingRect.width();
 }
 
-double BasicElement::baseLine() const
+qreal BasicElement::baseLine() const
 {
     return m_baseLine;
 }
@@ -287,7 +287,7 @@ BasicElement* BasicElement::parentElement() const
     return m_parentElement;
 }
 
-double BasicElement::scaleFactor() const
+qreal BasicElement::scaleFactor() const
 {
     return m_scaleFactor;
 }
@@ -296,12 +296,12 @@ int BasicElement::scaleLevel() const
     return m_scaleLevel;
 }
 
-void BasicElement::setWidth( double width )
+void BasicElement::setWidth( qreal width )
 {
     m_boundingRect.setWidth( width );
 }
 
-void BasicElement::setHeight( double height )
+void BasicElement::setHeight( qreal height )
 {
     m_boundingRect.setHeight( height );
 }
@@ -311,7 +311,7 @@ void BasicElement::setOrigin( QPointF origin )
     m_boundingRect.moveTopLeft( origin );
 }
 
-void BasicElement::setBaseLine( double baseLine )
+void BasicElement::setBaseLine( qreal baseLine )
 {
     m_baseLine = baseLine;
 }
@@ -419,7 +419,7 @@ bool BasicElement::isEmpty() const
 }
 
 
-void BasicElement::setScaleFactor ( double scaleFactor )
+void BasicElement::setScaleFactor ( qreal scaleFactor )
 {
     m_scaleFactor=scaleFactor;
 }

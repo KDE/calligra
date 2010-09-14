@@ -42,7 +42,7 @@ void PaddedElement::calcSizes( const ContextStyle& context,
                                ContextStyle::IndexStyle istyle,
                                StyleAttributes& style )
 {
-    double factor = style.sizeFactor();
+    qreal factor = style.sizeFactor();
 
     luPixel width = 0;
     luPixel height = 0;
