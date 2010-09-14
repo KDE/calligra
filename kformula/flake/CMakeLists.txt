@@ -1,4 +1,8 @@
-include_directories(${QT_INCLUDES} ${KOMAIN_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kformula/flake
+                     ${CMAKE_SOURCE_DIR}/kformula/flake/elements
+                     ${QT_INCLUDES}
+                     ${KOMAIN_INCLUDES}
+)
 
 ########### KFormula Library ###############
 
@@ -10,36 +14,37 @@ set( kformulalib_PART_SRCS
    FormulaEditor.cpp
    FormulaCommand.cpp
    ElementFactory.cpp 
-   BasicElement.cpp
-   FixedElement.cpp
-   RowElement.cpp
-   FormulaElement.cpp 
-   TextElement.cpp
-   FractionElement.cpp
-   SpaceElement.cpp
-   GlyphElement.cpp
-   IdentifierElement.cpp
-   OperatorElement.cpp
-   MultiscriptElement.cpp
-   SubSupElement.cpp
-   UnderOverElement.cpp
-   FencedElement.cpp 
-   TableElement.cpp
-   TableRowElement.cpp
-   TableEntryElement.cpp
-   RootElement.cpp
-   EncloseElement.cpp
-   ActionElement.cpp
-   PaddedElement.cpp
-   ErrorElement.cpp
-   StyleElement.cpp
-   TokenElement.cpp
-   NumberElement.cpp
-   StringElement.cpp
-   PhantomElement.cpp
-   SquareRootElement.cpp
-   UnknownElement.cpp
    Dictionary.cpp
+
+   elements/BasicElement.cpp
+   elements/FixedElement.cpp
+   elements/RowElement.cpp
+   elements/FormulaElement.cpp 
+   elements/TextElement.cpp
+   elements/FractionElement.cpp
+   elements/SpaceElement.cpp
+   elements/GlyphElement.cpp
+   elements/IdentifierElement.cpp
+   elements/OperatorElement.cpp
+   elements/MultiscriptElement.cpp
+   elements/SubSupElement.cpp
+   elements/UnderOverElement.cpp
+   elements/FencedElement.cpp 
+   elements/TableElement.cpp
+   elements/TableRowElement.cpp
+   elements/TableEntryElement.cpp
+   elements/RootElement.cpp
+   elements/EncloseElement.cpp
+   elements/ActionElement.cpp
+   elements/PaddedElement.cpp
+   elements/ErrorElement.cpp
+   elements/StyleElement.cpp
+   elements/TokenElement.cpp
+   elements/NumberElement.cpp
+   elements/StringElement.cpp
+   elements/PhantomElement.cpp
+   elements/SquareRootElement.cpp
+   elements/UnknownElement.cpp
 )
 
 kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})

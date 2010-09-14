@@ -3,6 +3,7 @@ project(kformula)
 set(KFORMULA_INCLUDES
     ${CMAKE_SOURCE_DIR}/kformula
     ${CMAKE_SOURCE_DIR}/kformula/flake
+    ${CMAKE_SOURCE_DIR}/kformula/flake/elements
     ${KOMAIN_INCLUDES}     
     )
 
