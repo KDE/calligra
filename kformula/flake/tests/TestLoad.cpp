@@ -494,7 +494,7 @@ void TestLoad::subElement_data()
     addRow( "<msub><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow></msub>", 2, 4 );
 
     // More complex content
-    addRow( "<msup>"
+    addRow( "<msub>"
             " <mrow>"
             "  <mo> ( </mo>"
             "  <mrow>"
@@ -505,7 +505,7 @@ void TestLoad::subElement_data()
             "  <mo> ) </mo>"
             " </mrow>"
             " <mn> 2 </mn>"
-            "</msup>", 2, 8 );
+            "</msub>", 2, 8 );
 
     // Be sure attributes don't break anything
     addRow( "<msub subscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msub>", 2, 4 );
@@ -707,9 +707,9 @@ void TestLoad::tableElement_data()
     // Basic content
     addRow( "<mtable></mtable>", 0 );
     addRow( "<mtable><mtr></mtr></mtable>", 1 );
-    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 3 ); // Insert mrow for each mtd
-    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>", 1, 3 );
-    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>", 1, 4 );
+    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 2 );
+    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>", 1, 2 ); // mtd is an inferred mrow
+    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>", 1, 3 );
 //   addRow( "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>", 1, 2 );
 //   addRow( "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>", 1, 4 );
 
@@ -730,11 +730,11 @@ void TestLoad::tableElement_data()
             "  <mtd> <mn>0</mn> </mtd>"
             "  <mtd> <mn>1</mn> </mtd>"
             " </mtr>"
-            "</mtable>", 3, 31 );
+            "</mtable>", 3, 21 );
 
     // Be sure attributes don't break anything
-    addRow( "<mtable align=\"top\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
-    addRow( "<mtable rowalign=\"center\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
+    addRow( "<mtable align=\"top\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 3 );
+    addRow( "<mtable rowalign=\"center\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 3 );
 
     // Content with alignment elements
 /*    addRow( "<mtable groupalign=\"{decimalpoint left left decimalpoint left left decimalpoint}\">"
@@ -808,10 +808,10 @@ void TestLoad::trElement_data()
 
     // Basic content
     addRow( "<mtr></mtr>", 0 );
-    addRow( "<mtr><mtd></mtd></mtr>", 1, 2 );
-    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>", 2, 3 );
-    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 2, 3 );
-    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 3, 4 );
+    addRow( "<mtr><mtd></mtd></mtr>", 1, 1 );
+    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>", 1, 1 ); // <mtd> is an inferred <mrow>
+    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
+    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 1, 2 );
 
     // More complex ccontent
     addRow( "<mtr id='e-is-m-c-square'>"
@@ -832,7 +832,7 @@ void TestLoad::trElement_data()
             " <mtd>"
             "  <mtext> (2.1) </mtext>"
             " </mtd>"
-            "</mtr>", 2, 15 );
+            "</mtr>", 2, 14 );
 
     // Be sure attributes don't break anything
     addRow( "<mtr rowalign=\"top\"><mi>x</mi></mtr>", 1, 2 );
