@@ -325,7 +325,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         = m_context->import->loadAndParseDocument(&themesReader, slideThemePathAndFile, errorMessage, &themecontext);
 
     // Moved this one here, because tablestyles shoudl be read only after reading the theme
-#if 0 // see bug #248991
     {
          d->tableStyleList = new MSOOXML::TableStyleList();
  
@@ -339,7 +338,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
                                                                           tableStylesFile, &m_context->theme, d->tableStyleList);
          m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
      }
-#endif
 
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
