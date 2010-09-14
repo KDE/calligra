@@ -22,8 +22,8 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Map.h"
-#include "ui/Selection.h" // FIXME detach from ui
 #include "Sheet.h"
+#include "Region.h"
 #include "ValueStorage.h"
 
 #include "commands/DataManipulators.h"
@@ -40,8 +40,8 @@ class SpellCheckCommand::Private
 {
 public:
     KoCanvasBase* canvasBase;
-    Selection* selection;
     int index;
+    Region region;
     Cell currentCell;
     Sheet* currentSheet;
     ValueStorage storage;
@@ -50,20 +50,20 @@ public:
     QUndoCommand* command;
 };
 
-SpellCheckCommand::SpellCheckCommand(Selection* selection, KoCanvasBase* canvasBase)
+SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase* canvasBase)
         : BackgroundChecker(canvasBase->canvasWidget())
         , d(new Private)
 {
     d->canvasBase = canvasBase;
-    d->selection = selection;
     d->index = 0;
-    d->currentSheet = selection->activeSheet();
-    if (selection->isSingular()) {
+    d->region = region;
+    d->currentSheet = region.firstSheet();
+    if (region.isSingular()) {
         // take the whole sheet
-        d->storage = *selection->activeSheet()->valueStorage();
+        d->storage = *d->currentSheet->valueStorage();
     } else {
         // only take the selection
-        d->storage = selection->activeSheet()->valueStorage()->subStorage(*selection);
+        d->storage = d->currentSheet->valueStorage()->subStorage(region);
     }
     setSpeller(d->speller);
     d->dialog = new Sonnet::Dialog(this, canvasBase->canvasWidget());
@@ -93,15 +93,15 @@ QString SpellCheckCommand::fetchMoreText()
         }
         d->index++;
     }
-    if (text.isEmpty() && d->selection->isSingular()) {
-        if (d->selection->activeSheet()->map()->count() == 1) {
+    if (text.isEmpty() && d->region.isSingular()) {
+        if (d->currentSheet->map()->count() == 1) {
             // Nothing more to do, if there's only one sheet.
             return QString();
         }
         // Ask whether we should continue on the next sheet.
         const QString question = i18n("Do you want to check the spelling in the next sheet?");
         if (KMessageBox::questionYesNo(d->canvasBase->canvasWidget(), question) == KMessageBox::Yes) {
-            const Map* map = d->selection->activeSheet()->map();
+            const Map* map = d->currentSheet->map();
             if (d->currentSheet == map->sheet(map->count() - 1)) {
                 // Switch from the last to the first sheet.
                 d->currentSheet = map->sheet(0);
@@ -109,7 +109,7 @@ QString SpellCheckCommand::fetchMoreText()
                 // Switch to the next sheet.
                 d->currentSheet = map->nextSheet(d->currentSheet);
             }
-            if (d->currentSheet == d->selection->activeSheet()) {
+            if (d->currentSheet == d->region.firstSheet()) {
                 // Stop, if reached the starting sheet.
                 return QString();
             }
