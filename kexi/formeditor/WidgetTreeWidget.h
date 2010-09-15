@@ -23,7 +23,7 @@
 
 #include <QTreeWidget>
 
-#include <kexi_export.h>
+#include "form.h"
 
 class QContextMenuEvent;
 
@@ -31,7 +31,6 @@ namespace KFormDesigner
 {
 
 class ObjectTreeItem;
-class Form;
 
 //! @short An item in WidgetTreeWidget associated with an ObjectTreeItem.
 class KFORMEDITOR_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
@@ -118,8 +117,9 @@ public:
 
 public slots:
     /*! Sets the widget \a w as selected item, so it will be written bold.
-     It is added to current selection if \a add is true. */
-    void selectWidget(QWidget *w, bool add = false);
+     It replaces previous selection if \a flags & Form::ReplacePreviousSelection is true. */
+    void selectWidget(QWidget *w,
+                      KFormDesigner::Form::WidgetSelectionFlags flags = KFormDesigner::Form::ReplacePreviousSelection);
 
     /*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
     void addItem(ObjectTreeItem *item);
@@ -137,11 +137,14 @@ protected slots:
 
     //2.0 void slotColumnSizeChanged(int);
 
-    /*! The selected list item has changed, so we emit a signal to update the Form. */
+    /*! The selected list item has changed. */
     void slotSelectionChanged();
 
     /*! Called before Form object is destroyed. */
     void slotBeforeFormDestroyed();
+
+//    /*! Selection on the current form has been changed. */
+//     void slotFormWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)
 
 protected:
     //! Internal function to fill the list.
@@ -166,6 +169,8 @@ private:
 
     //! Used to temporarily disable slotSelectionChanged() when reloading contents in setForm().
     bool m_slotSelectionChanged_enabled;
+    //! Used to temporarily disable selectWidget().
+    bool m_selectWidget_enabled;
 
     friend class TabStopDialog;
 };

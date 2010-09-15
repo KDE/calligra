@@ -232,6 +232,7 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
         , m_form(0)
         , m_options(options)
         , m_slotSelectionChanged_enabled(true)
+        , m_selectWidget_enabled(true)
 {
     setRootIsDecorated(false);
     setHeaderLabels(QStringList() << i18n("Widget name") << i18nc("Widget's type", "Type"));
@@ -316,9 +317,10 @@ WidgetTreeWidgetItem* WidgetTreeWidget::findItem(const QString &name)
     return 0;
 }
 
-void 
-WidgetTreeWidget::selectWidget(QWidget *w, bool add)
+void WidgetTreeWidget::selectWidget(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)
 {
+    if (!m_selectWidget_enabled)
+        return;
     blockSignals(true); // to avoid recursion
 
     if (!w) {
@@ -327,15 +329,15 @@ WidgetTreeWidget::selectWidget(QWidget *w, bool add)
         return;
     }
 
-    if (selectedItems().count() == 0)
-        add = false;
+    if (selectedItems().count() == 0) {
+        flags |= Form::ReplacePreviousSelection;
+    }
 
-    if (!add)
+    if ((flags & Form::ReplacePreviousSelection))
         clearSelection();
 
-
     QTreeWidgetItem *item = findItem(w->objectName());
-    if (!add) {
+    if ((flags & Form::ReplacePreviousSelection)) {
         setCurrentItem(item);
         //2.0 setSelectionAnchor(item);
         item->setSelected(true);
@@ -384,8 +386,11 @@ void WidgetTreeWidget::slotSelectionChanged()
         return;
     const bool hadFocus = hasFocus();
     const QList<QTreeWidgetItem*> list( selectedItems() );
+    m_selectWidget_enabled = false; // to avoid execution seleting form's item
+                                    // on the tree when selectFormWidget() is called
     m_form->selectFormWidget();
-    foreach(QTreeWidgetItem *item, list) {
+    m_selectWidget_enabled = true;
+    foreach (QTreeWidgetItem *item, list) {
         selectWidgetForItem(item);
     }
     tryToAlterSelection(currentItem());
@@ -427,8 +432,11 @@ void WidgetTreeWidget::renameItem(const QByteArray &oldname, const QByteArray &n
 void WidgetTreeWidget::setForm(Form *form)
 {
     m_slotSelectionChanged_enabled = false;
-    if (m_form)
+    if (m_form) {
         disconnect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
+        disconnect(m_form, SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
+            this, SLOT(selectWidget(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
+    }
     m_form = form;
     //2.0 m_topItem = 0;
     clear();
@@ -437,6 +445,8 @@ void WidgetTreeWidget::setForm(Form *form)
         return;
 
     connect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
+    connect(m_form, SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
+        this, SLOT(selectWidget(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
 
     // Creates the hidden top Item
     //2.0 m_topItem = new WidgetTreeWidgetItem(this);
