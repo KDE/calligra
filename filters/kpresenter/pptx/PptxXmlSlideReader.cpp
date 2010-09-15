@@ -185,7 +185,10 @@ PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString
     else if (style == "dt") {
        return &dtStyle;
     }
-    return &otherStyle;
+    else if (style == "other") {
+       return &otherStyle;
+    }
+    return 0;
 }
 
 // -------------------
