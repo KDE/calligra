@@ -38,8 +38,7 @@ class MsooXmlRelationships;
 class PptxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    PptxXmlDocumentReaderContext(PptxImport& _import,
-                                 const QString& _path, const QString& _file,
+    PptxXmlDocumentReaderContext(PptxImport& _import, const QString& _path, const QString& _file,
                                  MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport *import;
     MSOOXML::DrawingMLTheme theme;

@@ -119,6 +119,9 @@ public:
     QVector<QString> layoutFrames;
 
     KoGenStyle m_drawingPageProperties;
+
+    // Name of the slidemaster to be used with this layout
+    QString m_slideMasterName;
 private:
 
     Q_DISABLE_COPY(PptxSlideLayoutProperties)

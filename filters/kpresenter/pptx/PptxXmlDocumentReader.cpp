@@ -71,8 +71,8 @@ public:
     QVector<KoGenStyle> masterPageStyles;
     QVector<QString> masterPageFrames;
 
-    PptxSlideMasterPageProperties slideMasterPageProperties;
-    QMap<int,QString> commentAuthors;
+    QMap<QString, PptxSlideMasterPageProperties> slideMasterPageProperties;
+    QMap<int, QString> commentAuthors;
     MSOOXML::TableStyleList* tableStyleList;
 private:
 };
@@ -189,6 +189,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
 
     result = new PptxSlideLayoutProperties();
+    result->m_slideMasterName = slideMasterPathAndFile;
 
     MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
@@ -198,11 +199,12 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         PptxXmlSlideReader::SlideLayout,
         masterSlideProperties, //PptxSlideProperties
         result,
-        &d->slideMasterPageProperties, //PptxSlideMasterPageProperties
+        &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
         *m_context->relationships,
         d->commentAuthors,
         d->tableStyleList
     );
+
     PptxXmlSlideReader slideLayoutReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
         &slideLayoutReader, slideLayoutPath + "/" + slideLayoutFile, &context);
@@ -259,7 +261,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         PptxXmlSlideReader::Slide,
         masterSlideProperties,
         slideLayoutProperties,
-        &d->slideMasterPageProperties,
+        &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
         *m_context->relationships,
         d->commentAuthors,
         d->tableStyleList
@@ -305,6 +307,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     // Reading the slidemaster theme
 
+    PptxSlideMasterPageProperties masterPageProperties;
+
     const QString slideThemePathAndFile(m_context->relationships->targetForType(
         slideMasterPath, slideMasterFile,
         QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/theme"));
@@ -327,12 +331,12 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     // Moved this one here, because tablestyles shoudl be read only after reading the theme
     {
          d->tableStyleList = new MSOOXML::TableStyleList();
- 
+
          const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
          QString tableStylesFile;
          QString tableStylesPath;
          MSOOXML::Utils::splitPathAndFile(tableStylesFilePath, &tableStylesPath, &tableStylesFile);
- 
+
          MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
          MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
                                                                           tableStylesFile, &m_context->theme, d->tableStyleList);
@@ -348,7 +352,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         PptxXmlSlideReader::SlideMaster,
         masterSlideProperties,
         0,
-        &d->slideMasterPageProperties,
+        &masterPageProperties,
         *m_context->relationships,
         d->commentAuthors,
         d->tableStyleList
@@ -370,6 +374,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         return status;
     }
 
+    d->slideMasterPageProperties.insert(slideMasterPathAndFile, masterPageProperties);
     d->masterSlidePropertiesMap.insert(slideMasterPathAndFile, masterSlideProperties);
     masterSlidePropertiesSetter.release();
     d->masterPageDrawStyleNames.push_back(context.pageDrawStyleName);
@@ -541,9 +546,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         }
         d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
         const QString masterPageStyleName(
-            mainStyles->insert(d->masterPageStyles.at(index), "Default"));
-        kDebug() << "masterPageStyleName:" << masterPageStyleName;
-
+            mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
         ++index;
     }
 
