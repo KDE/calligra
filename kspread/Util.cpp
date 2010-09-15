@@ -509,6 +509,9 @@ QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* lo
             } else if (namespacePrefix == "oooc:" && expression.mid(i).startsWith("TABLE") && !isIdentifier(expression[i+5])) {
                 result.append("MULTIPLE.OPERATIONS");
                 i += 5;
+            } else if (expression.mid(i).startsWith("NEG") && i+3 < expression.length() && !isIdentifier(expression[i+3])) {
+                result.append("-");
+                i += 3;
             }
 
 
