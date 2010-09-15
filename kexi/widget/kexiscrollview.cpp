@@ -64,8 +64,8 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
     QPalette pal(viewport()->palette());
     pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
     viewport()->setPalette(pal);
-    QColor fc = palette().active().foreground(),
-                bc = viewport()->paletteBackgroundColor();
+    const QColor fc = palette().color(QPalette::WindowText);
+    const QColor bc = viewport()->palette().color(QPalette::Window);
     m_helpColor = KexiUtils::blendedColors(fc, bc, 1, 2);
 // m_helpColor = QColor((fc.red()+bc.red()*2)/3, (fc.green()+bc.green()*2)/3,
 //  (fc.blue()+bc.blue()*2)/3);
@@ -331,7 +331,7 @@ KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int line
     pixmap = QPixmap(txtw, txth);
     if (!pixmap.isNull()) {
         //create pixmap once
-        pixmap.fill(viewport()->paletteBackgroundColor());
+        pixmap.fill(viewport()->palette().color(QPalette::Window));
         QPainter pb(&pixmap);
         pb.initFrom(this);
         pb.setPen(m_helpColor);
