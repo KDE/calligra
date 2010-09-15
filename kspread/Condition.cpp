@@ -389,7 +389,11 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
         kDebug(36003) << " I don't know how to parse it :" << valExpression;
     //kDebug(36003) << "\tvalue:" << value;
 
-    newCondition.value1 = parser->parse(value);
+    if (value.length() > 1 && value[0] == '"' && value[value.length()-1] == '"') {
+        newCondition.value1 = Value(value.mid(1, value.length()-2));
+    } else {
+        newCondition.value1 = parser->parse(value);
+    }
 }
 
 void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser)
