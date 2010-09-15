@@ -990,6 +990,52 @@ void ODrawToOdf::processSeal24(const MSO::OfficeArtSpContainer &o, Writer &out)
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processRibbon(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "mso-spt53");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "?f17 ?f10 2700 ?f14 ?f17 21600 ?f18 ?f14");
+    out.xml.addAttribute("draw:text-areas", "?f0 ?f10 ?f9 21600");
+    out.xml.addAttribute("draw:modifiers", "5400 2700");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 0 L ?f3 0 X ?f4 ?f11 L ?f4 ?f10 ?f5 ?f10 ?f5 ?f11 Y ?f6 0 L 21600 0 ?f18 ?f14 21600 ?f15 ?f9 ?f15 ?f9 ?f16 Y ?f8 21600 L ?f1 21600 X ?f0 ?f16 L ?f0 ?f15 0 ?f15 2700 ?f14 Z N M ?f4 ?f11 F Y ?f3 ?f12 L ?f1 ?f12 X ?f0 ?f13 ?f1 ?f10 L ?f4 ?f10 N M ?f5 ?f11 F Y ?f6 ?f12 L ?f8 ?f12 X ?f9 ?f13 ?f8 ?f10 L ?f5 ?f10 N M ?f0 ?f13 F L ?f0 ?f15 N M ?f9 ?f13 F L ?f9 ?f15 N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "?f0 +675");
+    equation(out, "f2", "?f1 +675");
+    equation(out, "f3", "?f2 +675");
+    equation(out, "f4", "?f3 +675");
+    equation(out, "f5", "21600-?f4 ");
+    equation(out, "f6", "21600-?f3 ");
+    equation(out, "f7", "21600-?f2 ");
+    equation(out, "f8", "21600-?f1 ");
+    equation(out, "f9", "21600-?f0 ");
+    equation(out, "f10", "$1 ");
+    equation(out, "f11", "?f10 /4");
+    equation(out, "f12", "?f11 *2");
+    equation(out, "f13", "?f11 *3");
+    equation(out, "f14", "10800-?f12 ");
+    equation(out, "f15", "21600-?f10 ");
+    equation(out, "f16", "21600-?f11 ");
+    equation(out, "f17", "21600/2");
+    equation(out, "f18", "21600-2700");
+    equation(out, "f19", "?f17 -2700");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 top");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "2700");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "8100");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "10800 $1");
+    out.xml.addAttribute("draw:handle-range-y-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-y-maximum", "7200");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -1068,6 +1114,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processIrregularSeal1(o, out);
     } else if (shapeType == msosptSeal24) {
         processSeal24(o, out);
+    } else if (shapeType == msosptRibbon) {
+        processRibbon(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
