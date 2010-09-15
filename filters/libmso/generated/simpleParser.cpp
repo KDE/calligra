@@ -630,11 +630,12 @@ void MSO::parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s)
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1388");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgChildRec.append(DocProgTagsSubContainerOrAtom(&_s));
         parseDocProgTagsSubContainerOrAtom(in, _s.rgChildRec.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseTextAutoNumberScheme(LEInputStream& in, TextAutoNumberScheme& _s) {
@@ -663,11 +664,12 @@ void MSO::parseBlipCollection9Container(LEInputStream& in, BlipCollection9Contai
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x07F8");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgBlipEntityAtom.append(BlipEntityAtom(&_s));
         parseBlipEntityAtom(in, _s.rgBlipEntityAtom.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseKinsoku9Atom(LEInputStream& in, Kinsoku9Atom& _s) {
@@ -950,11 +952,12 @@ void MSO::parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFAC");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgStyleTextProp9.append(StyleTextProp9(&_s));
         parseStyleTextProp9(in, _s.rgStyleTextProp9.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseFontCollection10Container(LEInputStream& in, FontCollection10Container& _s) {
@@ -972,11 +975,12 @@ void MSO::parseFontCollection10Container(LEInputStream& in, FontCollection10Cont
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x07D6");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgFontCollectionEntry.append(FontCollectionEntry(&_s));
         parseFontCollectionEntry(in, _s.rgFontCollectionEntry.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseGridSpacing10Atom(LEInputStream& in, GridSpacing10Atom& _s) {
@@ -1700,11 +1704,12 @@ void MSO::parseMasterTextPropAtom(LEInputStream& in, MasterTextPropAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFA2");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgMasterTextPropRun.append(MasterTextPropRun(&_s));
         parseMasterTextPropRun(in, _s.rgMasterTextPropRun.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseMasterTextPropRun(LEInputStream& in, MasterTextPropRun& _s) {
@@ -2037,11 +2042,12 @@ void MSO::parseFontCollectionContainer(LEInputStream& in, FontCollectionContaine
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x07D5");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgFontCollectionEntry.append(FontCollectionEntry(&_s));
         parseFontCollectionEntry(in, _s.rgFontCollectionEntry.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseFontEntityAtom(LEInputStream& in, FontEntityAtom& _s) {
@@ -2178,11 +2184,12 @@ void MSO::parseTextSpecialInfoAtom(LEInputStream& in, TextSpecialInfoAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFAA");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgSIRun.append(TextSIRun(&_s));
         parseTextSIRun(in, _s.rgSIRun.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseSmartTags(LEInputStream& in, SmartTags& _s) {
@@ -2248,11 +2255,12 @@ void MSO::parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s)
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1772");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgPersistDirEntry.append(PersistDirectoryEntry(&_s));
         parsePersistDirectoryEntry(in, _s.rgPersistDirEntry.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentContainerChild& _s) {
@@ -2416,11 +2424,12 @@ void MSO::parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer&
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x1388");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgTypeRec.append(SlideProgTagsSubContainerOrAtom(&_s));
         parseSlideProgTagsSubContainerOrAtom(in, _s.rgTypeRec.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagExtension& _s) {
@@ -3601,11 +3610,12 @@ void MSO::parseOfficeArtBStoreContainer(LEInputStream& in, OfficeArtBStoreContai
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0F001");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgfb.append(OfficeArtBStoreContainerFileBlock(&_s));
         parseOfficeArtBStoreContainerFileBlock(in, _s.rgfb.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer& _s) {
@@ -3623,11 +3633,12 @@ void MSO::parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer&
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0F003");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgfb.append(OfficeArtSpgrContainerFileBlock(&_s));
         parseOfficeArtSpgrContainerFileBlock(in, _s.rgfb.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseOfficeArtSolverContainer(LEInputStream& in, OfficeArtSolverContainer& _s) {
@@ -4498,11 +4509,12 @@ void MSO::parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTe
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen!=4");
     }
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+    int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgChildRec.append(TextClientDataSubContainerOrAtom(&_s));
         parseTextClientDataSubContainerOrAtom(in, _s.rgChildRec.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseOfficeArtIDCL(LEInputStream& in, OfficeArtIDCL& _s) {
@@ -5354,11 +5366,12 @@ void MSO::parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContai
     }
     parseSoundCollectionAtom(in, _s.soundCollectionAtom);
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen-12;
+    int _totalSize = qMin(_s.rh.recLen-12, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgSoundContainer.append(SoundContainer(&_s));
         parseSoundContainer(in, _s.rgSoundContainer.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen-12;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFootersContainer& _s) {
@@ -6619,11 +6632,12 @@ void MSO::parseExObjListContainer(LEInputStream& in, ExObjListContainer& _s) {
     }
     parseExObjListAtom(in, _s.exObjListAtom);
     int _startPos = in.getPosition();
-    _atend = in.getPosition() - _startPos >= _s.rh.recLen-12;
+    int _totalSize = qMin(_s.rh.recLen-12, quint32(in.getSize() - _startPos));
+    _atend = in.getPosition() - _startPos >= _totalSize;
     while (!_atend) {
         _s.rgChildRec.append(ExObjListSubContainer(&_s));
         parseExObjListSubContainer(in, _s.rgChildRec.last());
-        _atend = in.getPosition() - _startPos >= _s.rh.recLen-12;
+        _atend = in.getPosition() - _startPos >= _totalSize;
     }
 }
 void MSO::parseExControlContainer(LEInputStream& in, ExControlContainer& _s) {
