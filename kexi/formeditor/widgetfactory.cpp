@@ -344,4 +344,9 @@ void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& i
     //nothing
 }
 
+ObjectTreeItem* WidgetFactory::selectableItem(ObjectTreeItem* item)
+{
+    return item;
+}
+
 #include "widgetfactory.moc"

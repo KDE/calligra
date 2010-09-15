@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -127,6 +128,17 @@ ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
         m_span = true;
     else
         m_span = false;
+}
+
+ObjectTreeItem* ObjectTreeItem::selectableItem()
+{
+    if (parent() && parent()->widget()) {
+        if (qobject_cast<QTabWidget*>(parent()->widget())) {
+            // tab widget's page
+            return parent();
+        }
+    }
+    return this;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

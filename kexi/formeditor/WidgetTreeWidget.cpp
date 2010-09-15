@@ -25,6 +25,7 @@
 #include <QContextMenuEvent>
 
 #include <KDebug>
+#include <KIconEffect>
 #include <KIconLoader>
 #include <KLocale>
 
@@ -66,9 +67,11 @@ void WidgetTreeWidgetItem::initTextAndIcon()
     QString itemClass;
     QString itemIcon;
     Qt::ItemFlags itemFlags = flags();
-    if (m_data->parent() && m_data->parent()->widget()) {
-        if (m_data->parent()->widget()->inherits("QTabWidget")) {
-            const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(m_data->parent()->widget());
+    ObjectTreeItem* selectable = m_data->selectableItem();
+    if (selectable != m_data) {
+        if (qobject_cast<QTabWidget*>(selectable->widget())) {
+            // tab widget's page
+            const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(selectable->widget());
             const int tabIndex = tabWidget->indexOf(m_data->widget());
             if (tabIndex >= 0) {
                 itemName = tabWidget->tabText(tabIndex);
@@ -78,7 +81,7 @@ void WidgetTreeWidgetItem::initTextAndIcon()
                 else {
                     itemName.replace('&', "");
                 }
-                itemClass = i18nc("Tab widget's tab", "Tab");
+                itemClass = i18nc("Tab widget's page", "Tab Page");
                 m_customSortingKey = QString("tab%1").arg(tabIndex);
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
@@ -106,7 +109,15 @@ void WidgetTreeWidgetItem::initTextAndIcon()
     setText(0, itemName);
     setText(1, itemClass);
     if (!itemIcon.isEmpty()) {
-        setIcon(0, SmallIcon(itemIcon));
+        QPixmap icon(SmallIcon(itemIcon));
+        if (!(itemFlags & Qt::ItemIsSelectable)) {
+            KIconEffect::semiTransparent(icon);
+        }
+        setIcon(0, icon);
+    }
+    if (!(itemFlags & Qt::ItemIsSelectable)) {
+        setForeground(0, treeWidget()->palette().color(QPalette::Disabled, QPalette::Text));
+        setForeground(1, treeWidget()->palette().color(QPalette::Disabled, QPalette::Text));
     }
 }
 
@@ -359,8 +370,24 @@ void WidgetTreeWidget::selectWidgetForItem(QTreeWidgetItem *item)
     }
 }
 
+void WidgetTreeWidget::activateTabPageIfNeeded(QTreeWidgetItem* item)
+{
+    WidgetTreeWidgetItem *childItem = dynamic_cast<WidgetTreeWidgetItem*>(item);
+    WidgetTreeWidgetItem *parentItem = dynamic_cast<WidgetTreeWidgetItem*>(item->parent());
+    while (childItem && parentItem) {
+        if (parentItem && qobject_cast<QTabWidget*>(parentItem->data()->widget())) {
+            qobject_cast<QTabWidget*>(parentItem->data()->widget())->setCurrentWidget(
+                childItem->data()->widget());
+        }
+        childItem = parentItem;
+        parentItem = dynamic_cast<WidgetTreeWidgetItem*>(parentItem->parent());
+    }
+}
+
 QTreeWidgetItem* WidgetTreeWidget::tryToAlterSelection(QTreeWidgetItem* current)
 {
+    activateTabPageIfNeeded(current);
+
     if (   current
         && !(current->flags() & Qt::ItemIsSelectable)
         && current->parent()
@@ -398,7 +425,7 @@ void WidgetTreeWidget::slotSelectionChanged()
         setFocus(); //restore focus
 }
 
-void WidgetTreeWidget::addItem(ObjectTreeItem *item)
+void WidgetTreeWidget::addItem(KFormDesigner::ObjectTreeItem *item)
 {
     WidgetTreeWidgetItem *parent = findItem(item->parent()->name());
     if (!parent)
@@ -407,7 +434,7 @@ void WidgetTreeWidget::addItem(ObjectTreeItem *item)
     loadTree(item, parent);
 }
 
-void WidgetTreeWidget::removeItem(ObjectTreeItem *item)
+void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
 {
     if (!item)
         return;
@@ -436,6 +463,10 @@ void WidgetTreeWidget::setForm(Form *form)
         disconnect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
         disconnect(m_form, SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
             this, SLOT(selectWidget(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
+        disconnect(m_form, SIGNAL(childRemoved(KFormDesigner::ObjectTreeItem*)),
+            this, SLOT(removeItem(KFormDesigner::ObjectTreeItem*)));
+        disconnect(m_form, SIGNAL(childAdded(KFormDesigner::ObjectTreeItem*)),
+            this, SLOT(addItem(KFormDesigner::ObjectTreeItem*)));
     }
     m_form = form;
     //2.0 m_topItem = 0;
@@ -447,6 +478,10 @@ void WidgetTreeWidget::setForm(Form *form)
     connect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
     connect(m_form, SIGNAL(selectionChanged(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)),
         this, SLOT(selectWidget(QWidget*,KFormDesigner::Form::WidgetSelectionFlags)));
+    connect(m_form, SIGNAL(childRemoved(KFormDesigner::ObjectTreeItem*)),
+        this, SLOT(removeItem(KFormDesigner::ObjectTreeItem*)));
+    connect(m_form, SIGNAL(childAdded(KFormDesigner::ObjectTreeItem*)),
+        this, SLOT(addItem(KFormDesigner::ObjectTreeItem*)));
 
     // Creates the hidden top Item
     //2.0 m_topItem = new WidgetTreeWidgetItem(this);
