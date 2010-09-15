@@ -197,7 +197,7 @@ bool KexiProjectModel::hasChildren(const QModelIndex& parent) const
 
 bool KexiProjectModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-
+    Q_UNUSED(role);
 //    if (!(m_features & Writable))
 //        return;
     KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(index.internalPointer());
