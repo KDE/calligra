@@ -46,7 +46,7 @@
 #include "UnderOverElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "ActionElement.h"
 
 static void load(BasicElement* element, const QString& input)
@@ -280,9 +280,9 @@ void TestLoad::rowElement_data()
     addRow( "<mrow><mi>x</mi><mo>=</mo><mn>3</mn></mrow>", 3 );
 
     // More complex content
-    addRow( "<mrow><mrow></mrow></mrow>", 1 );
-    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1, 2 );
-    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1, 2 );
+    addRow( "<mrow><mrow></mrow></mrow>", 0 );
+    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>", 1 );
+    addRow( "<mrow><mrow><mi>x</mi><mn>2</mn></mrow></mrow>", 1, 3 ); // Keep mrow with >1 children
 
     addRow( "<mrow>"
             " <mrow>"
@@ -384,7 +384,7 @@ void TestLoad::styleElement_data()
 
     // Basic content
     addRow( "<mstyle></mstyle>", 0 );
-    addRow( "<mstyle><mrow></mrow></mstyle>", 1 );
+    addRow( "<mstyle><mrow></mrow></mstyle>", 0 );
     addRow( "<mstyle><mi>x</mi></mstyle>", 1 );
     addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>", 1 );
 
@@ -401,7 +401,7 @@ void TestLoad::errorElement_data()
 
     // Basic content
     addRow( "<merror></merror>", 0 );
-    addRow( "<merror><mrow></mrow></merror>", 1 );
+    addRow( "<merror><mrow></mrow></merror>", 0 );
     addRow( "<merror><mi>x</mi></merror>", 1 );
     addRow( "<merror><mrow><mi>x</mi></mrow></merror>", 1 );
 
@@ -457,9 +457,10 @@ void TestLoad::fencedElement_data()
     QTest::addColumn<int>("output");
     QTest::addColumn<int>("outputRecursive");
 
+    // This is an inferred mrow element
     addRow( "<mfenced></mfenced>", 0 );
-    addRow( "<mfenced><mi>x</mi></mfenced>", 1, 2 );           // Inferred mrow
-    addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 1, 4 ); // Inferred mrow and separator
+    addRow( "<mfenced><mi>x</mi></mfenced>", 1 );
+    addRow( "<mfenced><mi>x</mi><mn>2</mn></mfenced>", 2 ); // Inferred mrow
 }
 
 void TestLoad::encloseElement_data()
@@ -493,7 +494,7 @@ void TestLoad::subElement_data()
     addRow( "<msub><mrow><mi>x</mi></mrow><mrow><mi>y</mi></mrow></msub>", 2, 4 );
 
     // More complex content
-    addRow( "<msup>"
+    addRow( "<msub>"
             " <mrow>"
             "  <mo> ( </mo>"
             "  <mrow>"
@@ -504,7 +505,7 @@ void TestLoad::subElement_data()
             "  <mo> ) </mo>"
             " </mrow>"
             " <mn> 2 </mn>"
-            "</msup>", 2, 8 );
+            "</msub>", 2, 8 );
 
     // Be sure attributes don't break anything
     addRow( "<msub subscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msub>", 2, 4 );
@@ -706,9 +707,9 @@ void TestLoad::tableElement_data()
     // Basic content
     addRow( "<mtable></mtable>", 0 );
     addRow( "<mtable><mtr></mtr></mtable>", 1 );
-    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 3 ); // Insert mrow for each mtd
-    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>", 1, 3 );
-    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>", 1, 4 );
+    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>", 1, 2 );
+    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>", 1, 2 ); // mtd is an inferred mrow
+    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>", 1, 3 );
 //   addRow( "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>", 1, 2 );
 //   addRow( "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>", 1, 4 );
 
@@ -729,11 +730,11 @@ void TestLoad::tableElement_data()
             "  <mtd> <mn>0</mn> </mtd>"
             "  <mtd> <mn>1</mn> </mtd>"
             " </mtr>"
-            "</mtable>", 3, 31 );
+            "</mtable>", 3, 21 );
 
     // Be sure attributes don't break anything
-    addRow( "<mtable align=\"top\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
-    addRow( "<mtable rowalign=\"center\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 4 );
+    addRow( "<mtable align=\"top\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 3 );
+    addRow( "<mtable rowalign=\"center\"><mtr><mtd><mi>x</mi></mtd></mtr></mtable>", 1, 3 );
 
     // Content with alignment elements
 /*    addRow( "<mtable groupalign=\"{decimalpoint left left decimalpoint left left decimalpoint}\">"
@@ -807,10 +808,10 @@ void TestLoad::trElement_data()
 
     // Basic content
     addRow( "<mtr></mtr>", 0 );
-    addRow( "<mtr><mtd></mtd></mtr>", 1, 2 );
-    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>", 2, 3 );
-    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 2, 3 );
-    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 3, 4 );
+    addRow( "<mtr><mtd></mtd></mtr>", 1, 1 );
+    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>", 1, 1 ); // <mtd> is an inferred <mrow>
+    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
+    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 1, 2 );
 
     // More complex ccontent
     addRow( "<mtr id='e-is-m-c-square'>"
@@ -831,7 +832,7 @@ void TestLoad::trElement_data()
             " <mtd>"
             "  <mtext> (2.1) </mtext>"
             " </mtd>"
-            "</mtr>", 2, 15 );
+            "</mtr>", 2, 14 );
 
     // Be sure attributes don't break anything
     addRow( "<mtr rowalign=\"top\"><mi>x</mi></mtr>", 1, 2 );
@@ -887,9 +888,9 @@ void TestLoad::tdElement_data()
 
     // Basic content
     addRow( "<mtd></mtd>", 0 );
-    addRow( "<mtd><mrow></mrow></mtd>", 1, 1 );
+    addRow( "<mtd><mrow></mrow></mtd>", 0, 0 ); // Empty mrow is deleted
     addRow( "<mtd><mi>x</mi></mtd>", 1, 1 );
-    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", 1, 2 );
+    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", 1, 1 ); // mrow with one element is deleted
 
     // Be sure attributes don't break anything
     addRow( "<mtd rowspan=\"3\"><mi>x</mi></mtd>", 1, 1 );
@@ -903,10 +904,10 @@ void TestLoad::actionElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer\"><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"statusline\"><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 1 );
+    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer\"><mrow></mrow><mrow></mrow></maction>", 0 ); // 
+    addRow( "<maction actiontype=\"statusline\"><mrow></mrow><mrow></mrow></maction>", 0 );
+    addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>", 0 );
+    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 0 );
 }
 
 void TestLoad::identifierElement()
@@ -1041,7 +1042,7 @@ void TestLoad::labeledtrElement()
 */
 void TestLoad::tdElement()
 {
-    test( new TableEntryElement );
+    test( new TableDataElement );
 }
 
 void TestLoad::actionElement()

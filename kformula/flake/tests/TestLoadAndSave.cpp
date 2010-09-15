@@ -46,7 +46,7 @@
 #include "UnderOverElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "ActionElement.h"
 
 static QString loadAndSave( BasicElement* element, const QString& input )
@@ -1025,7 +1025,7 @@ void TestLoadAndSave::labeledtrElement()
 
 void TestLoadAndSave::tdElement()
 {
-    test( new TableEntryElement );
+    test( new TableDataElement );
 }
 
 void TestLoadAndSave::actionElement()

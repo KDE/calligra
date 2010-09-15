@@ -38,7 +38,7 @@ enum ElementType {
     Fraction,
     Table,
     TableRow,
-    TableEntry,
+    TableData,
     Under,
     Over,
     UnderOver,

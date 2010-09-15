@@ -93,13 +93,6 @@
 #include "ValueConverter.h"
 #include "ValueStorage.h"
 
-// commands
-#include "commands/CopyCommand.h"
-#include "commands/DataManipulators.h"
-#include "commands/DeleteCommand.h"
-#include "commands/MergeCommand.h"
-#include "commands/RowColumnManipulators.h"
-
 namespace KSpread
 {
 

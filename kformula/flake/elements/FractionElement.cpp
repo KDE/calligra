@@ -81,7 +81,7 @@ void FractionElement::layout( const AttributeManager* am )
         return;
     }
 
-    double distY = am->layoutSpacing( this );
+    qreal distY = am->layoutSpacing( this );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this );
 
@@ -104,7 +104,7 @@ void FractionElement::layout( const AttributeManager* am )
     m_denominator->setOrigin( denominatorOrigin );
 
     // construct the fraction's line    
-    double fractionLineY =  m_numerator->height() + m_lineThickness/2 + distY;
+    qreal fractionLineY =  m_numerator->height() + m_lineThickness/2 + distY;
     m_fractionLine = QLineF( QPointF( m_lineThickness, fractionLineY ),
                              QPointF( width()-m_lineThickness, fractionLineY ) );
 
@@ -118,7 +118,7 @@ void FractionElement::layoutBevelledFraction( const AttributeManager* am )
     // the shown line should have a width that has 1/3 of the height
     // the line is heigher as the content by 2*thinmathspace = 2*borderY
 
-    double borderY = am->layoutSpacing( this );
+    qreal borderY = am->layoutSpacing( this );
     setHeight( m_numerator->height() + m_denominator->height() + 2*borderY );
     setWidth( m_numerator->width() + m_denominator->width() + height()/3 );
     setBaseLine( height()/2 );

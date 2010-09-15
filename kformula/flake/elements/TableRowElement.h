@@ -28,7 +28,7 @@
 #include "AttributeManager.h"
 #include "kformula_export.h"
 
-class TableEntryElement;
+class TableDataElement;
 
 /**
  * @short Representing the MathML mtr element.
@@ -114,7 +114,7 @@ private:
     QList<Align> alignments( Qt::Orientation orientation );
 
     /// The list of entries in this row of the table 
-    QList<TableEntryElement*> m_entries;
+    QList<TableDataElement*> m_data;
 };
 
 #endif

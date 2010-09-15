@@ -73,9 +73,9 @@ void RowElement::layout( const AttributeManager* am )
     }
 
     QPointF origin;
-    double width = 0.0;
-    double topToBaseline = 0.0;
-    double baselineToBottom = 0.0;    
+    qreal width = 0.0;
+    qreal topToBaseline = 0.0;
+    qreal baselineToBottom = 0.0;    
     foreach( BasicElement* child, m_childElements ) // iterate through the children and
         topToBaseline = qMax( topToBaseline, child->baseLine() );  // find max baseline
 
@@ -236,36 +236,50 @@ ElementType RowElement::elementType() const
 bool RowElement::readMathMLContent( const KoXmlElement& parent )
 {
     KoXmlElement realParent = parent;
-    // go deeper in the xml tree and 'skip' the semantics elements
+
+    // Go deeper in the xml tree and 'skip' the semantics elements.
     while (!realParent.namedItemNS( KoXmlNS::math, "semantics" ).isNull()) {            // while there is a child 'semantics'
         realParent = realParent.namedItemNS( KoXmlNS::math, "semantics" ).toElement();  // move to it
     }
 
+    // Read the actual content.
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement ( tmp, realParent ) {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         Q_ASSERT( tmpElement );
-        if( !tmpElement->readMathML( tmp ) ) {
+        if ( !tmpElement->readMathML( tmp ) ) {
             return false;
         }
-        /*if (tmpElement->elementType() == Row) {
-            if (tmpElement->childElements().count()==0) {
-                //we don't load in this case, empty elements in rows are not needed
-            } else if (tmpElement->childElements().count()==1) {
-                //mrows with one element are equivalent to mrows with one child are equivalent to the child
-                //TODO: inverstigate, if we should load them nevertheless
-                RowElement* tmprow = static_cast<RowElement*>(tmpElement);
-                BasicElement* child = tmprow->childElements()[0];
-                tmprow->removeChild(child);
-                delete tmprow;
-                insertChild(childElements().count(),child);
+
+#if 1 // compact empty mrows and mrows with only one element
+        // Treat rows in rows specially.
+        if (tmpElement->elementType() == Row) {
+            if (tmpElement->childElements().count() == 0) {
+                // We don't load in this case, empty elements in rows are not needed.
+            } else if (tmpElement->childElements().count() == 1) {
+                // An mrow with 1 child is equivalent to the child itself.
+                // So dig it out and place it directly in this row.
+                //
+                // TODO: Investigate, if we should load them nevertheless.
+                RowElement   *row   = static_cast<RowElement*>(tmpElement);
+                BasicElement *child = row->childElements()[0];
+                row->removeChild(child);
+                delete row;
+
+                //insertChild(childElements().count(), child);
+                m_childElements << child;
             } else {
+                // If the mrow has > 1 child, then enter it
                 m_childElements << tmpElement;
             }
-        } else {*/
+        } else {
+            // All other elements than mrow are immediately entered.
             m_childElements << tmpElement;
-//         }
+        }
+#else
+        m_childElements << tmpElement;
+#endif
     }
     return true;
 }
@@ -307,12 +321,13 @@ QList< BasicElement* > RowElement::elementsBetween ( int pos1, int pos2 ) const
 bool RowElement::replaceChild ( BasicElement* oldelement, BasicElement* newelement )
 {
     int oldElementIndex = m_childElements.indexOf(oldelement);
-    if( oldElementIndex < 0)
+    if ( oldElementIndex < 0)
         return false;
 
     m_childElements.replace(oldElementIndex,newelement);
     oldelement->setParentElement(0);
     newelement->setParentElement(this);
+
     return true;
 }
 

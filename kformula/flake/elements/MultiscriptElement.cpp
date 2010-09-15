@@ -62,11 +62,11 @@ void MultiscriptElement::ensureEvenNumberElements() {
 void MultiscriptElement::layout( const AttributeManager* am )
 {
     // Get the minimum amount of shifting
-    double subscriptshift   = am->doubleOf( "subscriptshift", this ); 
-    double superscriptshift = am->doubleOf( "superscriptshift", this );
+    qreal subscriptshift   = am->doubleOf( "subscriptshift", this ); 
+    qreal superscriptshift = am->doubleOf( "superscriptshift", this );
     //Add half a thin space between both sup and superscript, so there is a minimum
     //of a whole thin space between them.
-    double halfthinspace   = am->layoutSpacing( this )/2.0;
+    qreal halfthinspace   = am->layoutSpacing( this )/2.0;
 
     //First make sure that there are an even number of elements in both subscript and superscript
     ensureEvenNumberElements();
@@ -74,10 +74,10 @@ void MultiscriptElement::layout( const AttributeManager* am )
     // Go through all the superscripts (pre and post) and find the maximum heights;
     // BaseLine is the distance from the top to the baseline.
     // Depth is the distance from the baseline to the bottom
-    double maxSuperScriptDepth     = 0.0;
-    double maxSuperScriptBaseLine  = 0.0;
-    double maxSubScriptDepth       = 0.0;
-    double maxSubScriptBaseLine    = 0.0;
+    qreal maxSuperScriptDepth     = 0.0;
+    qreal maxSuperScriptBaseLine  = 0.0;
+    qreal maxSubScriptDepth       = 0.0;
+    qreal maxSubScriptBaseLine    = 0.0;
     bool isSuperscript = true;  //Toggle after each element time
     foreach( BasicElement *script, m_postScripts ) {
         isSuperscript = !isSuperscript;  //Toggle each time
@@ -107,19 +107,19 @@ void MultiscriptElement::layout( const AttributeManager* am )
     }
     // The yOffsetBase is the amount the base element is moved down to make
     // room for the superscript
-    double yOffsetBase = 0;
+    qreal yOffsetBase = 0;
     if(maxSuperScriptDepth + maxSuperScriptBaseLine > 0) {
         yOffsetBase = maxSuperScriptDepth + maxSuperScriptBaseLine - m_baseElement->height()/2.0 + halfthinspace;
         yOffsetBase = qMax( yOffsetBase, superscriptshift );
     }
     // The yOffsetSub is the amount the subscript elements /baseline/ are moved down.
-    double yOffsetSub = yOffsetBase + maxSubScriptBaseLine +
+    qreal yOffsetSub = yOffsetBase + maxSubScriptBaseLine +
                 qMax( m_baseElement->height()/2 + halfthinspace, 
                       m_baseElement->height() - maxSubScriptBaseLine
                           + subscriptshift );
     
-    double xOffset = 0.0;  //We increment this as we go along, to keep track of where to place elements
-    double lastSuperScriptWidth= 0.0;
+    qreal xOffset = 0.0;  //We increment this as we go along, to keep track of where to place elements
+    qreal lastSuperScriptWidth= 0.0;
     // Now we have all the information needed to start putting elements in place.
     // We start from the far left, and work to the far right.
     for( int i = m_preScripts.size()-1; i >= 0; i--) {
@@ -131,7 +131,8 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 xOffset += lastSuperScriptWidth;
             } else {
                 // For a given vertical line, this is processed after the superscript
-                double offset = qMax(0.0, (lastSuperScriptWidth - m_preScripts[i]->width())/2.0);
+                qreal offset = qMax(qreal(0.0),
+                                    (lastSuperScriptWidth - m_preScripts[i]->width()) / qreal(2.0));
                 m_preScripts[i]->setOrigin( QPointF( 
                             offset + xOffset, 
                             yOffsetSub - m_preScripts[i]->baseLine() ) );
@@ -148,7 +149,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 lastSuperScriptWidth = 0.0;
             else {
                 lastSuperScriptWidth = m_preScripts[i]->width();
-                double offset = 0.0;
+                qreal offset = 0.0;
                 if(m_preScripts[i-1]) //the subscript directly below us. 
                     offset = qMax(0.0, (m_preScripts[i-1]->width() - lastSuperScriptWidth)/2.0);
                 m_preScripts[i]->setOrigin( QPointF(
@@ -161,7 +162,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
     //We have placed all the prescripts now.  So now place the base element
     m_baseElement->setOrigin( QPointF( xOffset, yOffsetBase ) );
     xOffset += m_baseElement->width();
-    double lastSubScriptWidth = 0.0;
+    qreal lastSubScriptWidth = 0.0;
     //Now we can draw the post scripts.  This code is very similar, but this time we will parse
     //the subscript before the superscript
     for( int i = 0; i < m_postScripts.size(); i++) {
@@ -178,7 +179,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
             } else {
                 lastSubScriptWidth = m_postScripts[i]->width();
                 // For a given vertical line, this is processed after the superscript
-                double offset = 0.0;
+                qreal offset = 0.0;
                 if(m_postScripts.size() > i+1 && m_postScripts[i+1] != NULL) //the subscript directly below us. 
                     offset = qMax(0.0, (m_postScripts[i+1]->width() - lastSubScriptWidth)/2.0);
                 m_postScripts[i]->setOrigin( QPointF( 
@@ -190,7 +191,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
            if( !m_postScripts[i] )
                 xOffset += lastSubScriptWidth;
            else {
-                double offset = qMax(0.0, (lastSubScriptWidth - m_postScripts[i]->width())/2.0);
+                qreal offset = qMax(0.0, (lastSubScriptWidth - m_postScripts[i]->width())/2.0);
                 m_postScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
                             maxSuperScriptBaseLine - m_postScripts[i]->baseLine()));

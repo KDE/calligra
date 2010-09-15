@@ -73,10 +73,10 @@ public:
     bool symmetric() const;
 
     /// @return The maxsize value of the currently queried operator
-    double maxSize() const;
+    qreal maxSize() const;
 
     /// @return The minsize value of the currently queried operator
-    double minSize() const;
+    qreal minSize() const;
     bool largeOp() const;
     bool moveableLimits() const;
     bool accent() const;

@@ -24,7 +24,7 @@
 #include "TableRowElement.h"
 #include "TableElement.h"
 #include "FormulaCursor.h"
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <QStringList>
@@ -51,33 +51,33 @@ void TableRowElement::layout( const AttributeManager* am )
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     setHeight( parentTable->rowHeight( this ) );
 
-    // Get alignment for every table entry
+    // Get alignment for every table data
     QList<Align> verticalAlign = alignments( Qt::Vertical );
     QList<Align> horizontalAlign = alignments( Qt::Horizontal );
 
     // align the row's entries
     QPointF origin;
-    double hOffset = 0.0;
-    for ( int i = 0; i < m_entries.count(); i++ ) {
+    qreal hOffset = 0.0;
+    for ( int i = 0; i < m_data.count(); i++ ) {
 //         origin = QPointF();
         hOffset = 0.0;
         if( verticalAlign[ i ] == Bottom )
-            origin.setY( height() - m_entries[ i ]->height() );
+            origin.setY( height() - m_data[ i ]->height() );
         else if( verticalAlign[ i ] == Center || verticalAlign[ i ] == BaseLine )
-            origin.setY( ( height() - m_entries[ i ]->height() ) / 2 );
+            origin.setY( ( height() - m_data[ i ]->height() ) / 2 );
             // Baseline is treated like Center for the moment until someone also refines
             // TableElement::determineDimensions so that it pays attention to baseline.
             // Axis as alignment option is ignored as it is tought to be an option for
             // the table itsself.
 //         kDebug() << horizontalAlign[ i ]<<","<<Axis;
         if( horizontalAlign[ i ] == Center ) {
-            hOffset = ( parentTable->columnWidth( i ) - m_entries[ i ]->width() ) / 2;
+            hOffset = ( parentTable->columnWidth( i ) - m_data[ i ]->width() ) / 2;
         }
         else if( horizontalAlign[ i ] == Right ) {
-            hOffset = parentTable->columnWidth( i ) - m_entries[ i ]->width();
+            hOffset = parentTable->columnWidth( i ) - m_data[ i ]->width();
         }
 
-        m_entries[ i ]->setOrigin( origin + QPointF( hOffset, 0.0 ) );
+        m_data[ i ]->setOrigin( origin + QPointF( hOffset, 0.0 ) );
         origin += QPointF( parentTable->columnWidth( i ), 0.0 );
     }
 
@@ -93,23 +93,23 @@ bool TableRowElement::acceptCursor( const FormulaCursor& cursor )
 
 int TableRowElement::positionOfChild(BasicElement* child) const 
 {
-    TableEntryElement* temp=dynamic_cast<TableEntryElement*>(child);
+    TableDataElement* temp=dynamic_cast<TableDataElement*>(child);
     if (temp==0) {
         return -1;
     } else {
-        return m_entries.indexOf(temp);
+        return m_data.indexOf(temp);
     }
 }
 
 int TableRowElement::endPosition() const {
-    return m_entries.count();
+    return m_data.count();
 }
 
 QLineF TableRowElement::cursorLine ( int position ) const
 {
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
     QPointF top=absoluteBoundingRect().topLeft();
-    double hOffset = 0;
+    qreal hOffset = 0;
     if( childElements().isEmpty() ) {
         // center cursor in elements that have no children
         top += QPointF( width()/2, 0 );
@@ -126,7 +126,7 @@ QLineF TableRowElement::cursorLine ( int position ) const
 bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
 {
     if (cursor.isSelecting()) {
-        if (m_entries.isEmpty() || point.x()<0.0) {
+        if (m_data.isEmpty() || point.x()<0.0) {
             cursor.setCurrentElement(this);
             cursor.setPosition(0);
             return true;
@@ -139,9 +139,9 @@ bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
         }
     }
     int i=0;
-    double x=0.0;
+    qreal x=0.0;
     TableElement* parentTable = static_cast<TableElement*>( parentElement() );
-    for (; i<m_entries.count()-1; ++i) {
+    for (; i<m_data.count()-1; ++i) {
         //Find the child element the point is in
         x+=parentTable->columnWidth( i );
         if (x>=point.x()) {
@@ -158,8 +158,8 @@ bool TableRowElement::setCursorTo(FormulaCursor& cursor, QPointF point)
         }
         return true;
         } else {
-        point-=m_entries[i]->origin();
-        return m_entries[i]->setCursorTo(cursor,point);
+        point-=m_data[i]->origin();
+        return m_data[i]->setCursorTo(cursor,point);
     }
 }
 
@@ -189,11 +189,11 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
     } else {
         switch(newcursor.direction()) {
         case MoveLeft:
-            newcursor.setCurrentElement(m_entries[newcursor.position()-1]);
+            newcursor.setCurrentElement(m_data[newcursor.position()-1]);
             newcursor.moveEnd();
             break;
         case MoveRight:
-            newcursor.setCurrentElement(m_entries[newcursor.position()]);
+            newcursor.setCurrentElement(m_data[newcursor.position()]);
             newcursor.moveHome();
             break;
         case MoveUp:
@@ -221,7 +221,7 @@ bool TableRowElement::moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcur
 const QList<BasicElement*> TableRowElement::childElements() const
 {
     QList<BasicElement*> tmp;
-    foreach( TableEntryElement* element, m_entries )
+    foreach( TableDataElement* element, m_data )
         tmp << element;
 
     return tmp;
@@ -235,12 +235,12 @@ QList<Align> TableRowElement::alignments( Qt::Orientation orientation )
     // get the alignment values of the parental TableElement
     AttributeManager am;
     QList<Align> parentAlignList = am.alignListOf( align, parentElement() );
-    // iterate over all entries and look on per entry specification of alignment
+    // iterate over all entries and look on per data specification of alignment
     QList<Align> alignList;
-    for( int i = 0; i < m_entries.count(); i++ ) {
+    for( int i = 0; i < m_data.count(); i++ ) {
         // element got own value for align
-        if( !m_entries[ i ]->attribute( align ).isEmpty() )
-            alignList << am.alignOf( align, m_entries[ i ] );
+        if( !m_data[ i ]->attribute( align ).isEmpty() )
+            alignList << am.alignOf( align, m_data[ i ] );
         else if( i < parentAlignList.count() )
             alignList << parentAlignList[ i ];
         else
@@ -256,10 +256,10 @@ bool TableRowElement::readMathMLContent( const KoXmlElement& element )
     forEachElement( tmp, element )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-    if( tmpElement->elementType() != TableEntry )
+    if( tmpElement->elementType() != TableData )
             return false;
 
-        m_entries << static_cast<TableEntryElement*>( tmpElement );
+        m_data << static_cast<TableDataElement*>( tmpElement );
     tmpElement->readMathML( tmp );
     }
 
@@ -268,8 +268,8 @@ bool TableRowElement::readMathMLContent( const KoXmlElement& element )
 
 void TableRowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    foreach( TableEntryElement* tmpEntry, m_entries )
-        tmpEntry->writeMathML( writer );
+    foreach( TableDataElement* tmpData, m_data )
+        tmpData->writeMathML( writer );
 }
 
 ElementType TableRowElement::elementType() const
@@ -279,9 +279,9 @@ ElementType TableRowElement::elementType() const
 
 bool TableRowElement::insertChild ( int position, BasicElement* child )
 {
-    if (child->elementType()==TableEntry) {
-        TableEntryElement* tmp=static_cast<TableEntryElement*>(child);
-        m_entries.insert(position,tmp);
+    if (child->elementType()==TableData) {
+        TableDataElement* tmp=static_cast<TableDataElement*>(child);
+        m_data.insert(position,tmp);
         tmp->setParentElement(this);
         return true;
     } else {
@@ -291,14 +291,14 @@ bool TableRowElement::insertChild ( int position, BasicElement* child )
 
 bool TableRowElement::removeChild ( BasicElement* child )
 {
-    if (child->elementType()!=TableEntry) {
+    if (child->elementType()!=TableData) {
         return false;
     }
-    TableEntryElement* tmp=static_cast<TableEntryElement*>(child);
-    if (m_entries.indexOf(tmp)==-1) {
+    TableDataElement* tmp=static_cast<TableDataElement*>(child);
+    if (m_data.indexOf(tmp)==-1) {
         return false;
     } else {
-        m_entries.removeAll(tmp);
+        m_data.removeAll(tmp);
         tmp->setParentElement(0);
     }
     return true;

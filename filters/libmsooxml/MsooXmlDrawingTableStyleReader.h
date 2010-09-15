@@ -201,8 +201,8 @@ protected:
     KoFilter::ConversionStatus read_tcBdr();
 
     //get read_ln and friends, it's a shame I have to get a lot of crap alongside
-    #include <MsooXmlCommonReaderMethods.h>
-    #include <MsooXmlCommonReaderDrawingMLMethods.h>
+//     #include <MsooXmlCommonReaderMethods.h>
+//     #include <MsooXmlCommonReaderDrawingMLMethods.h>
 
 private:
     MsooXmlDrawingTableStyleContext* m_context;

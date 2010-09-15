@@ -20,19 +20,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "TableEntryElement.h"
+#include "TableDataElement.h"
 #include "FormulaCursor.h"
 #include "TableRowElement.h"
 #include "TableElement.h"
 #include <KoXmlWriter.h>
 
-TableEntryElement::TableEntryElement( BasicElement* parent ) : RowElement( parent )
+TableDataElement::TableDataElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-// void TableEntryElement::layout( const AttributeManager* am )
+// void TableDataElement::layout( const AttributeManager* am )
 // {}
 
-QString TableEntryElement::attributesDefaultValue( const QString& attribute ) const
+QString TableDataElement::attributesDefaultValue( const QString& attribute ) const
 {
     if( attribute == "rowspan" || attribute == "columnspan" )
         return "1";
@@ -41,7 +41,7 @@ QString TableEntryElement::attributesDefaultValue( const QString& attribute ) co
 } 
 
 
-bool TableEntryElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
+bool TableDataElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor )
 {
     if (newcursor.isSelecting() ||
         newcursor.direction()==MoveLeft || newcursor.direction()==MoveRight) {
@@ -69,8 +69,8 @@ bool TableEntryElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& ol
 }
 
 
-ElementType TableEntryElement::elementType() const
+ElementType TableDataElement::elementType() const
 {
-    return TableEntry;
+    return TableData;
 }
 

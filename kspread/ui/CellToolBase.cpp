@@ -3328,7 +3328,7 @@ void CellToolBase::gotoCell()
 
 void CellToolBase::spellCheck()
 {
-    SpellCheckCommand* command = new SpellCheckCommand(selection(), canvas());
+    SpellCheckCommand* command = new SpellCheckCommand(*selection(), canvas());
     command->start();
 }
 

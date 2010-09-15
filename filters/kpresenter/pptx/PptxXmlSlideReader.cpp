@@ -115,20 +115,11 @@ PptxPlaceholder::~PptxPlaceholder()
 
 // -------------------
 
-PptxSlideMasterListLevelTextStyle::PptxSlideMasterListLevelTextStyle()
-{
-    m_characterStyle = new KoCharacterStyle();
-}
-
-PptxSlideMasterListLevelTextStyle::~PptxSlideMasterListLevelTextStyle()
-{
-    delete m_characterStyle;
-}
-
-// -------------------
-
 PptxSlideMasterTextStyle::PptxSlideMasterTextStyle()
 {
+    for (int i = 0; i < 9; i++) {
+        m_listStyles.push_back(KoGenStyle(KoGenStyle::TextAutoStyle, "text"));
+    }
 }
 
 PptxSlideMasterTextStyle::~PptxSlideMasterTextStyle()
@@ -138,26 +129,16 @@ PptxSlideMasterTextStyle::~PptxSlideMasterTextStyle()
 
 void PptxSlideMasterTextStyle::clear()
 {
-    for (int i = 0; i < m_listStyles.size(); i++) {
-        delete m_listStyles[i];
-    }
     m_listStyles.clear();
 }
 
-PptxSlideMasterListLevelTextStyle* PptxSlideMasterTextStyle::listStyle(uint level)
+KoGenStyle* PptxSlideMasterTextStyle::listStyle(uint level)
 {
     if (level < 1 || level > 9) {
         return 0;
     }
-    if (m_listStyles.size() == 0) {
-        for (int i = 0; i < 9; i++) {
-            PptxSlideMasterListLevelTextStyle* created = new PptxSlideMasterListLevelTextStyle();
-            m_listStyles.push_back(created);
-        }
-    }
-    PptxSlideMasterListLevelTextStyle* result = m_listStyles.at(level - 1);
 
-    return result;
+    return &m_listStyles[level - 1];
 }
 
 // -------------------

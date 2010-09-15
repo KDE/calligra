@@ -95,7 +95,7 @@ void FormulaRenderer::updateElementLayout( BasicElement* element )
     }
 }
 
-double FormulaRenderer::elementScaleFactor( BasicElement* element ) const
+qreal FormulaRenderer::elementScaleFactor( BasicElement* element ) const
 {
     Q_UNUSED(element)
     AttributeManager am;

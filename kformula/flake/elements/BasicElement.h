@@ -39,7 +39,7 @@ class KoXmlWriter;
 class AttributeManager;
 class FormulaCursor;
 class QPainterPath;
-class TableEntryElement;
+class TableDataElement;
 #define DEBUGID 40000
 
 /**
@@ -163,16 +163,16 @@ public:
     virtual ElementType elementType() const;
 
     /// Set the element's width to @p width
-    void setWidth( double width );
+    void setWidth( qreal width );
 
     /// @return The width of the element
-    double width() const;
+    qreal width() const;
 
     /// Set the element's height to @p height
-    void setHeight( double height );
+    void setHeight( qreal height );
 
     /// @return The height of the element
-    double height() const;
+    qreal height() const;
 
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
@@ -199,10 +199,10 @@ public:
     void setChildrenBoundingRect(const QRectF &rect);
 
     /// Set the element's baseline to @p baseLine
-    void setBaseLine( double baseLine );
+    void setBaseLine( qreal baseLine );
 
     /// @return The baseline of the element
-    double baseLine() const;
+    qreal baseLine() const;
 
     /// Set the element's origin inside the m_parentElement to @p origin
     void setOrigin( QPointF origin );
@@ -232,10 +232,10 @@ public:
     virtual BasicElement* elementAfter(int position) const;
     
     /// Set the element's m_scaleFactor to @p scaleFactor
-    void setScaleFactor( double scaleFactor );
+    void setScaleFactor( qreal scaleFactor );
 
     /// @return The elements scale factor
-    double scaleFactor() const;
+    qreal scaleFactor() const;
 
     /// Set the elements scale level and sets the scale factor
     void setScaleLevel( int scaleLevel );
@@ -296,8 +296,8 @@ public:
     /// return the content of the element to kDebug(), only for debugging
     virtual const QString writeElementContent() const;
     
-    /// @return the first TableEntryElement among the elements ancestors or 0 if there is none
-    TableEntryElement* parentTableEntry();
+    /// @return the first TableDataElement among the elements ancestors or 0 if there is none
+    TableDataElement* parentTableData();
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 
@@ -331,13 +331,13 @@ private:
     QRectF m_childrenBoundingRect;
 
     /// The position of our base line from the upper border
-    double m_baseLine;
+    qreal m_baseLine;
 
     /// Factor with which this element is scaled down by
-    double m_scaleFactor;
+    qreal m_scaleFactor;
 
     /// Scale level with which this element is scaled down by
-    double m_scaleLevel;
+    qreal m_scaleLevel;
 
     /// Indicates whether this element has displaystyle set
     bool m_displayStyle;

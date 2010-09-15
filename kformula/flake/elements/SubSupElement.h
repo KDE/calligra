@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
-   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
-                 2009 Jeremias Epperlein <jeeree@web.de>
+   Copyright (C) 2006 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,23 +18,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef UNDEROVERELEMENT_H
-#define UNDEROVERELEMENT_H
+#ifndef SUBSUPELEMENT_H
+#define SUBSUPELEMENT_H
 
 #include "FixedElement.h"
 #include "kformula_export.h"
 
 /**
- * @short Implementation of the MathML mover, munder and moverunder elements
- *
+ * @short Implementation of the msub, msup, msubsup elements
  */
-class KOFORMULA_EXPORT UnderOverElement : public FixedElement {
+class KOFORMULA_EXPORT SubSupElement : public FixedElement {
 public:
     /// The standard constructor
-    UnderOverElement( BasicElement* parent = 0, ElementType elementType = UnderOver );
+    explicit SubSupElement( BasicElement* parent = 0, ElementType elementType = SubSupScript);
 
-    /// The standard destructor
-    ~UnderOverElement();
+    /// The destructor
+    ~SubSupElement();
 
     /**
      * Obtain a list of all child elements of this element
@@ -43,11 +41,6 @@ public:
      */
     const QList<BasicElement*> childElements() const;
 
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
-
-    virtual int endPosition() const; 
-
-    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
@@ -61,31 +54,42 @@ public:
      */
     void layout( const AttributeManager* am );
 
+    /**
+     * Insert a new child at the cursor position
+     * @param cursor The cursor holding the position where to insert
+     * @param child A BasicElement to insert
+     */
+
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 
 
     /// @return The element's ElementType
     ElementType elementType() const;
 
+    virtual int endPosition() const;
+
+    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+
+    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
 protected:
-    /// Read all content from the node - reimplemented by child elements
+    /// Read all content from the node
     bool readMathMLContent( const KoXmlElement& element );
 
-    /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer ) const;   
- 
+    /// Write all content to the KoXmlWriter
+    void writeMathMLContent( KoXmlWriter* writer ) const;
+
 private:
-    /// The element used as basis for the under and the over element
+    /// The base element 
     RowElement* m_baseElement;
 
-    /// The element that is layouted under the base element
-    RowElement* m_underElement;
+    /// The subscript right to the m_baseElement
+    RowElement* m_subScript;
 
-    /// The element that is layouted over the base element
-    RowElement* m_overElement;
+    /// The superscript right to the m_baseElement
+    RowElement* m_superScript;
 
-    /// The type - one of Under, Over, UnderOver
+    /// Whether this is a SubScript, SupScript or SubSupScript
     ElementType m_elementType;
 };
 
-#endif // UNDEROVERELEMENT_H
+#endif // SUBSUPELEMENT_H

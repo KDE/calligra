@@ -74,16 +74,16 @@ void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 
 void UnderOverElement::layout( const AttributeManager* am )
 {
-//     double thinSpace   = am->layoutSpacing( this );
-//     double accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
-//     double accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
+//     qreal thinSpace   = am->layoutSpacing( this );
+//     qreal accent      = m_elementType != Under && am->boolOf( "accent", this );     //Whether to add a space above
+//     qreal accentUnder = m_elementType != Over && am->boolOf( "accentunder", this );//Whether to add a space below
 
     // Set whether to stretch the element.  Set it to true if it doesn't exist to make it easy to check if any are non-stretchy
     bool underStretchy = m_elementType == Over || am->boolOf( "stretchy", m_underElement );
     bool overStretchy  = m_elementType == Under || am->boolOf( "stretchy", m_overElement );
     bool baseStretchy  = (underStretchy && overStretchy) || am->boolOf( "stretchy", m_baseElement );  //For sanity, make sure at least one is not stretchy
 
-    double largestWidth = 0;
+    qreal largestWidth = 0;
     if(!baseStretchy)
         largestWidth = m_baseElement->width();
 

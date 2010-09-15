@@ -42,7 +42,7 @@ public:
     QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
 
     /// get width of character, for layouting
-    double getWidth(const AttributeManager *am);
+    qreal getWidth(const AttributeManager *am);
 
 
 private:

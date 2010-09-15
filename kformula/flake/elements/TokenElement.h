@@ -102,7 +102,7 @@ public:
      * @param position The cursor position in the element
      * @return The offset from the left origin
      */
-    double cursorOffset( const int position) const;
+    qreal cursorOffset( const int position) const;
 
     /// Process @p raw and render it to @p path
     virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) const = 0;
@@ -155,7 +155,7 @@ private:
     /// A list of offsets of the letters
     /// They represent the position of the cursor right of 
     /// the index, starting with 0.0
-    QList<double> m_offsets;
+    QList<qreal> m_offsets;
     
     /// A painter path holding text content for fast painting
     QPainterPath m_contentPath;

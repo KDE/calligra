@@ -45,13 +45,13 @@ void TableElement::paint( QPainter& painter, AttributeManager* am )
     // painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     //}
     painter.save();
-    QList<double> frameSpacing = am->doubleListOf( "framespacing", this );
-    QList<double> rowSpacing = am->doubleListOf( "rowspacing", this );
+    QList<qreal> frameSpacing = am->doubleListOf( "framespacing", this );
+    QList<qreal> rowSpacing = am->doubleListOf( "rowspacing", this );
     kDebug()<<frameSpacing;
     painter.setPen(QPen(Qt::NoPen));//debugging 
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     // draw rowlines
-    double offset = frameSpacing[1];
+    qreal offset = frameSpacing[1];
     for( int i = 0; i < m_rowHeights.count()-1; i++ ) {
         offset += m_rowHeights[ i ];
         painter.drawLine( QPointF( 0.0, offset ), QPointF( width(), offset ) );     
@@ -72,12 +72,12 @@ void TableElement::layout( const AttributeManager* am )
     m_framePenStyle = am->penStyleOf( "frame", this );
     m_rowLinePenStyles = am->penStyleListOf( "rowlines", this );
     m_colLinePenStyles = am->penStyleListOf( "columnlines", this );
-    QList<double> frameSpacing = am->doubleListOf( "framespacing", this );
-    QList<double> rowSpacing = am->doubleListOf( "rowspacing", this );
+    QList<qreal> frameSpacing = am->doubleListOf( "framespacing", this );
+    QList<qreal> rowSpacing = am->doubleListOf( "rowspacing", this );
 
     // layout the rows vertically
-    double tmpX = frameSpacing[ 0 ];
-    double tmpY = frameSpacing[ 1 ];
+    qreal tmpX = frameSpacing[ 0 ];
+    qreal tmpY = frameSpacing[ 1 ];
     for( int i = 0; i < m_rows.count(); i++ ) {
         m_rows[ i ]->setOrigin( QPointF( tmpX, tmpY ) );
         tmpY += m_rows[ i ]->height();
@@ -108,8 +108,8 @@ void TableElement::determineDimensions()
     m_colWidths.clear();
     // determine the dimensions of each row and col based on the biggest element in it
     BasicElement* entry;
-    double maxWidth = 0.0;
-    double maxHeight = 0.0;
+    qreal maxWidth = 0.0;
+    qreal maxHeight = 0.0;
     for( int row = 0; row < m_rows.count(); row++ ) {
         m_rowHeights << 0.0;
         for( int col = 0; col < m_rows.first()->childElements().count(); col++ ) {
@@ -134,7 +134,7 @@ void TableElement::determineDimensions()
             m_colWidths.replace( i, maxWidth );
 }
 
-double TableElement::columnWidth( int column )
+qreal TableElement::columnWidth( int column )
 {
     //if( m_colWidths.isEmpty() )
         determineDimensions();
@@ -142,7 +142,7 @@ double TableElement::columnWidth( int column )
     return m_colWidths[ column ];
 }
 
-double TableElement::rowHeight( TableRowElement* row )
+qreal TableElement::rowHeight( TableRowElement* row )
 {
     //if( m_rowHeights.isEmpty() )
         determineDimensions();
@@ -342,7 +342,7 @@ bool TableElement::insertChild ( int position, BasicElement* child )
 {
     if (child->elementType()==TableRow &&
         !child->childElements().isEmpty() &&
-        child->childElements()[0]->elementType()==TableEntry) {
+        child->childElements()[0]->elementType()==TableData) {
         TableRowElement* tmp=static_cast<TableRowElement*>(child);
         m_rows.insert(position,tmp);
         tmp->setParentElement(this);

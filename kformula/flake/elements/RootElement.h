@@ -105,7 +105,7 @@ private:
     QPainterPath m_rootSymbol;
 
     /// Line thickness, in pixels
-    double m_lineThickness;
+    qreal m_lineThickness;
 };
 
 #endif // ROOTELEMENT_H

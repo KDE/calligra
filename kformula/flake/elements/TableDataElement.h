@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TABLEENTRYELEMENT_H
-#define TABLEENTRYELEMENT_H
+#ifndef TABLEDATAELEMENT_H
+#define TABLEDATAELEMENT_H
 
 #include "RowElement.h"
 #include "kformula_export.h"
@@ -32,10 +32,10 @@
  * The lines behaviour is (a little) different from that
  * of ordinary sequences. Its MathML tag is \<mtd\>.
  */
-class KOFORMULA_EXPORT TableEntryElement : public RowElement {
+class KOFORMULA_EXPORT TableDataElement : public RowElement {
 public:
     /// The standard constructor
-    TableEntryElement( BasicElement* parent = 0 );
+    TableDataElement( BasicElement* parent = 0 );
 
 //    /**
 //     * Calculate the size of the element and the positions of its children
@@ -52,4 +52,4 @@ public:
     QString attributesDefaultValue( const QString& attribute ) const; 
 };
 
-#endif // TABLEENTRYELEMENT_H
+#endif // TABLEDATAELEMENT_H

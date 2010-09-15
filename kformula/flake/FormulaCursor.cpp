@@ -77,7 +77,7 @@ void FormulaCursor::paint( QPainter& painter ) const
         return;
     painter.save();
     QPointF origin=m_currentElement->absoluteBoundingRect().topLeft();
-    double baseline=m_currentElement->baseLine();
+    qreal baseline=m_currentElement->baseLine();
     QPen pen;
     pen.setWidthF( 0.5 );
     pen.setColor(Qt::black);

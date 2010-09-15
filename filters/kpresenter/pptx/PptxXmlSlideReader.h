@@ -124,20 +124,6 @@ private:
     Q_DISABLE_COPY(PptxSlideLayoutProperties)
 };
 
-//! Data structure collecting information about single text style for one list level defined by master slide
-//! This can be bodyStyle, otherStyle, tileStyle
-//! Used by PptxSlideMasterTextStyle
-//! Attributes here are of type QVariant, so it is possible to test if these are present.
-class PptxSlideMasterListLevelTextStyle
-{
-public:
-    PptxSlideMasterListLevelTextStyle();
-    ~PptxSlideMasterListLevelTextStyle();
-    KoCharacterStyle* m_characterStyle;
-private:
-    Q_DISABLE_COPY(PptxSlideMasterListLevelTextStyle)
-};
-
 //! Data structure collecting information about single text style defined by master slide
 //! This can be bodyStyle, otherStyle, tileStyle
 class PptxSlideMasterTextStyle
@@ -149,10 +135,9 @@ public:
     //! @return text style for list level @a level
     //! @par level can be 1..9, otherwise 0 is returned.
     //! Returned object is owned by PptxSlideMasterTextStyle.
-    PptxSlideMasterListLevelTextStyle *listStyle(uint level);
+    KoGenStyle *listStyle(uint level);
 private:
-    Q_DISABLE_COPY(PptxSlideMasterTextStyle)
-    QVector<PptxSlideMasterListLevelTextStyle*> m_listStyles;
+    QVector<KoGenStyle> m_listStyles;
 };
 
 //! Data structure collecting information about master slide

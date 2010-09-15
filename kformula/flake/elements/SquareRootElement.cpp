@@ -45,11 +45,11 @@ void SquareRootElement::layout( const AttributeManager* am )
 {
     RowElement::layout( am );
 
-    double thinSpace = am->layoutSpacing( this );
-    double symbolHeight = baseLine();
+    qreal thinSpace = am->layoutSpacing( this );
+    qreal symbolHeight = baseLine();
     if( height() > symbolHeight*1.3 ) symbolHeight = height();
     symbolHeight += thinSpace;
-    double tickWidth = symbolHeight / 3.0;
+    qreal tickWidth = symbolHeight / 3.0;
 
     m_lineThickness = am->lineThickness(this);
 

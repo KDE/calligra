@@ -55,18 +55,18 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 void RootElement::layout( const AttributeManager* am )
 {
     // Calculate values to layout the root symbol
-    double thinSpace = am->layoutSpacing( this );
-    double symbolHeight  = m_radicand->baseLine();
+    qreal thinSpace = am->layoutSpacing( this );
+    qreal symbolHeight  = m_radicand->baseLine();
     if( m_radicand->height() > symbolHeight*1.3 ) symbolHeight = m_radicand->height();
     symbolHeight += thinSpace;
-    double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
+    qreal tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
 
     m_lineThickness = am->lineThickness(this);
 
     // The root symbol an xOffset and yOffset due to the exponent.
-    double xOffset = m_exponent->width() - tickWidth/2;
+    qreal xOffset = m_exponent->width() - tickWidth/2;
     xOffset = xOffset < 0 ? 0 : xOffset; // no negative offset for the root symbol
-    double yOffset =  m_exponent->height() - 2.0*symbolHeight/5.0;
+    qreal yOffset =  m_exponent->height() - 2.0*symbolHeight/5.0;
     yOffset = yOffset < 0 ? 0 : yOffset;
 
     // Set the roots dimensions
