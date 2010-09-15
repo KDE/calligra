@@ -216,7 +216,7 @@ void Style::loadOdfStyle(KoOdfStylesReader& stylesReader, const KoXmlElement& el
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.namespaceURI() == KoXmlNS::style && e.localName() == "map")
-            conditions.loadOdfConditions(e, parser);
+            conditions.loadOdfConditions(e, parser, styleManager);
     }
 
     loadOdfDataStyle(stylesReader, element, conditions, styleManager, parser);
