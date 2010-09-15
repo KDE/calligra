@@ -218,6 +218,7 @@ public:
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
+    bool phRead;
     QString qualifiedNameOfMainElement;
     QString phType; //!< set by read_ph()
     QString phIdx; //!< set by read_ph()
@@ -1217,6 +1218,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
+
+    d->phRead = true;
+
     // Specifies the placeholder index. This is used when applying templates or changing
     // layouts to match a placeholder on one template/master to another.
     TRY_READ_ATTR_WITHOUT_NS_INTO(idx, d->phIdx)
@@ -1441,6 +1445,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    d->phRead = false;
     d->phType.clear();
     d->phIdx.clear();
     while (!atEnd()) {

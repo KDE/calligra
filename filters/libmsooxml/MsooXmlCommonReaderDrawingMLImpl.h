@@ -324,9 +324,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideLayout) {
-        const QString elementContents = QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size());
-        m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
-
+        if (!d->phRead) {
+            const QString elementContents = QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size());
+            m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
+        }
         body = bodyBackup;
     }
 #endif
@@ -706,138 +707,133 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
 #ifdef PPTXXMLSLIDEREADER_H
-        const QString styleId(d->phStyleId());
+    const QString styleId(d->phStyleId());
 
-        kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
-//        KoXmlWriter *writer = m_context->type == SlideLayout ? mainStyles : body;
+    kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 #else
 #endif
-        if (m_contentType == "line") {
-            body->startElement("draw:line");
-        }
-        else {
-            body->startElement("draw:frame"); // CASE #P475
-        }
-        if (!m_cNvPrName.isEmpty()) {
-            body->addAttribute("draw:name", m_cNvPrName);
-        }
-        const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+    if (m_contentType == "line") {
+        body->startElement("draw:line");
+    }
+    else {
+        body->startElement("draw:frame"); // CASE #P475
+    }
+    if (!m_cNvPrName.isEmpty()) {
+        body->addAttribute("draw:name", m_cNvPrName);
+    }
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_H
-        if (m_context->type == SlideMaster) {
-            mainStyles->markStyleForStylesXml(styleName);
-        }
+    if (m_context->type == SlideMaster) {
+        mainStyles->markStyleForStylesXml(styleName);
+    }
 #endif
-        body->addAttribute("draw:style-name", styleName);
+    body->addAttribute("draw:style-name", styleName);
 
 #ifdef PPTXXMLSLIDEREADER_H
 
-        const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
+    const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
-        if (m_context->type == Slide || m_context->type == SlideLayout) {
-            body->addAttribute("draw:layer", "layout");
-            if( !d->textBoxHasContent && m_context->type == SlideLayout) {
-                body->addAttribute("presentation:placeholder", "true");
-                body->addAttribute("presentation:class", presentationClass);
-            }
-        }
-        else {
-            body->addAttribute("draw:layer", "backgroundobjects");
-            // StyleID will be empty for any text that is in masterslide that is wanted
-            // to be shown in the actual slides, such as company names etc.
-            if (!styleId.isEmpty()) {
-                body->addAttribute("presentation:placeholder", "true");
-                body->addAttribute("presentation:class", presentationClass);
-            }
-        }
-
-        QString presentationStyleName;
-        //body->addAttribute("draw:style-name", );
-        if (!m_currentPresentationStyle.isEmpty()) {
-            presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
-        }
-        if (!presentationStyleName.isEmpty()) {
-            body->addAttribute("presentation:style-name", presentationStyleName);
-        }
-
-        if (m_context->type == Slide) {
-// CASE #P476
-            body->addAttribute("draw:id", m_cNvPrId);
+    if (m_context->type == Slide || m_context->type == SlideLayout) {
+        body->addAttribute("draw:layer", "layout");
+    }
+    else {
+        body->addAttribute("draw:layer", "backgroundobjects");
+        // StyleID will be empty for any text that is in masterslide that is wanted
+        // to be shown in the actual slides, such as company names etc.
+        if (!styleId.isEmpty()) {
+            body->addAttribute("presentation:placeholder", "true");
             body->addAttribute("presentation:class", presentationClass);
-            kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
-            kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
-                << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
-            PptxPlaceholder *placeholder = m_context->slideLayoutProperties->placeholders.value(presentationClass);
+        }
+    }
+
+    QString presentationStyleName;
+    //body->addAttribute("draw:style-name", );
+    if (!m_currentPresentationStyle.isEmpty()) {
+        presentationStyleName = mainStyles->insert(m_currentPresentationStyle, "pr");
+        if (m_context->type == SlideMaster) {
+            mainStyles->markStyleForStylesXml(presentationStyleName);
+        }
+    }
+    if (!presentationStyleName.isEmpty()) {
+        body->addAttribute("presentation:style-name", presentationStyleName);
+    }
+
+    if (m_context->type == Slide) {
+        // CASE #P476
+        body->addAttribute("draw:id", m_cNvPrId);
+        body->addAttribute("presentation:class", presentationClass);
+        kDebug() << "presentationClass:" << d->phType << "->" << presentationClass;
+        kDebug() << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
+                 << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
+        PptxPlaceholder *placeholder = m_context->slideLayoutProperties->placeholders.value(presentationClass);
+        kDebug() << "m_context->slideLayoutProperties:" << m_context->slideLayoutProperties
+                 << QString("m_context->slideLayoutProperties->placeholders.value(\"%1\")")
+                   .arg(presentationClass) << placeholder;
+        if (!placeholder) {
+            kDebug() << "trying placeholder for id:" << d->phIdx;
+            placeholder = m_context->slideLayoutProperties->placeholders.value(d->phIdx);
             kDebug() << "m_context->slideLayoutProperties:" << m_context->slideLayoutProperties
                 << QString("m_context->slideLayoutProperties->placeholders.value(\"%1\")")
-                   .arg(presentationClass) << placeholder;
-            if (!placeholder) {
-                kDebug() << "trying placeholder for id:" << d->phIdx;
-                placeholder = m_context->slideLayoutProperties->placeholders.value(d->phIdx);
-                kDebug() << "m_context->slideLayoutProperties:" << m_context->slideLayoutProperties
-                    << QString("m_context->slideLayoutProperties->placeholders.value(\"%1\")")
                    .arg(d->phIdx) << placeholder;
-            }
-            if (!m_xfrm_read && m_context->slideLayoutProperties && placeholder) {
-                kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
-                m_svgX = placeholder->x;
-                m_svgY = placeholder->y;
-                m_svgWidth = placeholder->width;
-                m_svgHeight = placeholder->height;
-                m_rot = placeholder->rot;
-            }
         }
-        if (m_context->type == SlideMaster || m_context->type == Slide) {
-            if (m_svgWidth > -1 && m_svgHeight > -1) {
-                body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-                if (m_contentType == "line") {
-                    QString y1 = EMU_TO_CM_STRING(m_svgY);
-                    QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
-                    QString x1 = EMU_TO_CM_STRING(m_svgX);
-                    QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
-                    if (m_rot != 0) {
-                        qreal angle, xDiff, yDiff;
-                        MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-                        //! @todo, in case of connector, these should maybe be reversed?
-                        x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
-                        y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
-                        x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
-                        y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
-                    }
-                    if (m_flipV) {
-                        QString temp = y2;
-                        y2 = y1;
-                        y1 = temp;
-                    }
-                    if (m_flipH) {
-                        QString temp = x2;
-                        x2 = x1;
-                        x1 = temp;
-                    }
-                    body->addAttribute("svg:x1", x1);
-                    body->addAttribute("svg:y1", y1);
-                    body->addAttribute("svg:x2", x2);
-                    body->addAttribute("svg:y2", y2);
-                }
-                if (m_contentType != "line") {
-                    if (m_rot == 0) {
-                        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
-                        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
-                    }
-                    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-                    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-                }
-                if (m_rot != 0 && m_contentType != "line") {
-                    // m_rot is in 1/60,000th of a degree
-                    qreal angle, xDiff, yDiff;
-                    MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-                    QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                        .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-                    body->addAttribute("draw:transform", rotString);
-                }
-            }
+        if (!m_xfrm_read && m_context->slideLayoutProperties && placeholder) {
+            kDebug() << "Copying attributes from slide layout:" << m_context->slideLayoutProperties->pageLayoutStyleName;
+            m_svgX = placeholder->x;
+            m_svgY = placeholder->y;
+            m_svgWidth = placeholder->width;
+            m_svgHeight = placeholder->height;
+            m_rot = placeholder->rot;
         }
-
+    }
+    if (m_svgWidth > -1 && m_svgHeight > -1) {
+        body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
+        if (m_contentType == "line") {
+            QString y1 = EMU_TO_CM_STRING(m_svgY);
+            QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
+            QString x1 = EMU_TO_CM_STRING(m_svgX);
+            QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
+        if (m_rot != 0) {
+            qreal angle, xDiff, yDiff;
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+            //! @todo, in case of connector, these should maybe be reversed?
+            x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
+            y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
+            x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
+            y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
+        }
+        if (m_flipV) {
+            QString temp = y2;
+            y2 = y1;
+            y1 = temp;
+        }
+        if (m_flipH) {
+            QString temp = x2;
+            x2 = x1;
+            x1 = temp;
+        }
+            body->addAttribute("svg:x1", x1);
+            body->addAttribute("svg:y1", y1);
+            body->addAttribute("svg:x2", x2);
+            body->addAttribute("svg:y2", y2);
+        }
+        if (m_contentType != "line") {
+            if (m_rot == 0) {
+                body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+                body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+            }
+            body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+            body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        }
+        if (m_rot != 0 && m_contentType != "line") {
+            // m_rot is in 1/60,000th of a degree
+            qreal angle, xDiff, yDiff;
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                    .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+            body->addAttribute("draw:transform", rotString);
+        }
+    }
 #else
 #ifdef __GNUC__
 #warning TODO: docx
@@ -962,6 +958,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 {
     READ_PROLOGUE
 
+#ifdef PPTXXMLSLIDEREADER_H
+    // Ooxml supports slides getting items from layout slide, this is not supported in odf
+    // Therefore we are buffering the potential item frames from layout and using them later in the slide
+    QBuffer layoutBuf;
+    KoXmlWriter layoutWriter(&layoutBuf);
+    KoXmlWriter *bodyBackup = body;
+
+    if (m_context->type == SlideLayout) {
+        body = &layoutWriter;
+    }
+#endif
+
     preReadSp();
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -1014,6 +1022,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 
     popCurrentDrawStyle();
 
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideLayout) {
+        if (!d->phRead) {
+            const QString elementContents = QString::fromUtf8(layoutBuf.buffer(), layoutBuf.buffer().size());
+            m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
+        }
+        body = bodyBackup;
+    }
+#endif
+
     READ_EPILOGUE
 }
 
@@ -1052,6 +1070,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 {
     READ_PROLOGUE
+
+#ifdef PPTXXMLSLIDEREADER_H
+    // Ooxml supports slides getting items from layout slide, this is not supported in odf
+    // Therefore we are buffering the potential item frames from layout and using them later in the slide
+    QBuffer layoutBuf;
+    KoXmlWriter layoutWriter(&layoutBuf);
+    KoXmlWriter *bodyBackup = body;
+
+    if (m_context->type == SlideLayout) {
+        body = &layoutWriter;
+    }
+#endif
 
     preReadSp();
 
@@ -1105,6 +1135,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     }
 
     popCurrentDrawStyle();
+
+#ifdef PPTXXMLSLIDEREADER_H
+    if (m_context->type == SlideLayout) {
+        if (!d->phRead) {
+            const QString elementContents = QString::fromUtf8(layoutBuf.buffer(), layoutBuf.buffer().size());
+            m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
+        }
+        body = bodyBackup;
+    }
+#endif
 
     READ_EPILOGUE
 }
@@ -1742,12 +1782,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     }
     else if (m_context->type == SlideLayout) {
         PptxSlideMasterTextStyle *slideMasterTextStyle = 0;
-        if ((d->phType).isEmpty()) {
+        if (styleId.isEmpty()) {
             // If layout does not define any type, we assume it needs to use bodyStyle
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("body");
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("other");
         }
         else {
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
+            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(styleId);
         }
         if (slideMasterTextStyle) {
             MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
@@ -5119,18 +5159,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
         }
     }
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == Slide) { // CASE #P526
-        m_currentPresentationStyle.addProperty("draw:auto-grow-height",
+    m_currentPresentationStyle.addProperty("draw:auto-grow-height",
             spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
-        m_currentPresentationStyle.addProperty("draw:auto-grow-width",
+    m_currentPresentationStyle.addProperty("draw:auto-grow-width",
             (!spAutoFit || wrap == QLatin1String("square"))
             ? MsooXmlReader::constFalse : MsooXmlReader::constTrue, KoGenStyle::GraphicType);
-        // text in shape
-        m_currentPresentationStyle.addProperty("fo:wrap-option",
-            wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
-        if (normAutoFit) {
-            m_currentPresentationStyle.addProperty("draw:fit-to-size", "shrink-to-fit", KoGenStyle::GraphicType);
-        }
+    // text in shape
+    m_currentPresentationStyle.addProperty("fo:wrap-option",
+        wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+    if (normAutoFit) {
+        m_currentPresentationStyle.addProperty("draw:fit-to-size", "shrink-to-fit", KoGenStyle::GraphicType);
     }
 #endif
     READ_EPILOGUE
