@@ -57,6 +57,8 @@ struct Condition {
 
 typedef void (*arrayWalkFunc)(ValueCalc *, Value &result,
                               Value val, Value param);
+// A function that can map an array element-wise
+typedef Value (ValueCalc::*arrayMapFunc)(const Value &val, const Value &param);
 
 /**
  * \ingroup Value
@@ -257,6 +259,8 @@ public:
     This method is here to avoid duplication in function handlers. */
     void arrayWalk(QVector<Value> &range, Value &res,
                    arrayWalkFunc func, Value param);
+    Value arrayMap(const Value &array, arrayMapFunc func, const Value &param);
+    Value twoArrayMap(const Value &array1, arrayMapFunc func, const Value &array2);
     void twoArrayWalk(const Value &a1, const Value &a2,
                       Value &res, arrayWalkFunc func);
     void twoArrayWalk(QVector<Value> &a1,
