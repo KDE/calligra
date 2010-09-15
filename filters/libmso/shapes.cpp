@@ -1036,6 +1036,66 @@ void ODrawToOdf::processRibbon(const MSO::OfficeArtSpContainer &o, Writer &out)
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processDoubleWave(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "mso-spt188");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "?f18 ?f0 ?f20 10800 ?f19 ?f1 ?f21 10800");
+    out.xml.addAttribute("draw:text-areas", "?f5 ?f22 ?f11 ?f23");
+    out.xml.addAttribute("draw:modifiers", "1400 10800");
+    out.xml.addAttribute("draw:enhanced-path", "M ?f7 ?f0 C ?f15 ?f9 ?f30 ?f10 ?f18 ?f0 ?f31 ?f9 ?f16 ?f10 ?f12 ?f0 L ?f24 ?f1 C ?f25 ?f26 ?f33 ?f28 ?f19 ?f1 ?f32 ?f26 ?f27 ?f28 ?f29 ?f1 Z N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "21600-?f0 ");
+    equation(out, "f2", "$1 ");
+    equation(out, "f3", "?f2 -10800");
+    equation(out, "f4", "?f3 *2");
+    equation(out, "f5", "abs(?f4 )");
+    equation(out, "f6", "4320-?f5 ");
+    equation(out, "f7", "if(?f3 ,0,?f5 )");
+    equation(out, "f8", "7900*?f0 /2230");
+    equation(out, "f9", "?f0 -?f8 ");
+    equation(out, "f10", "?f0 +?f8 ");
+    equation(out, "f11", "21600-?f4 ");
+    equation(out, "f12", "if(?f3 ,?f11 ,21600)");
+    equation(out, "f13", "?f12 -?f7 ");
+    equation(out, "f14", "?f5 /2");
+    equation(out, "f15", "?f7 +3600-?f14 ");
+    equation(out, "f16", "?f12 +?f14 -3600");
+    equation(out, "f17", "?f13 /2");
+    equation(out, "f18", "?f7 +?f17 ");
+    equation(out, "f19", "21600-?f18 ");
+    equation(out, "f20", "?f5 /2");
+    equation(out, "f21", "21600-?f20 ");
+    equation(out, "f22", "?f0 *2");
+    equation(out, "f23", "21600-?f22 ");
+    equation(out, "f24", "21600-?f7 ");
+    equation(out, "f25", "21600-?f15 ");
+    equation(out, "f26", "?f1 +?f8 ");
+    equation(out, "f27", "21600-?f16 ");
+    equation(out, "f28", "?f1 -?f8 ");
+    equation(out, "f29", "21600-?f12 ");
+    equation(out, "f30", "?f18 -?f14 ");
+    equation(out, "f31", "?f18 +?f14 ");
+    equation(out, "f32", "?f19 -?f14 ");
+    equation(out, "f33", "?f19 +?f14 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "left $0");
+    out.xml.addAttribute("draw:handle-range-y-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-y-maximum", "2230");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$1 21600");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "8640");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "12960");
+    out.xml.endElement();
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -1116,6 +1176,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processSeal24(o, out);
     } else if (shapeType == msosptRibbon) {
         processRibbon(o, out);
+    } else if (shapeType == msosptDoubleWave) {
+        processDoubleWave(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
