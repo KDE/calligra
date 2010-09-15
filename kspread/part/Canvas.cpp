@@ -191,18 +191,23 @@ void Canvas::mousePressEvent(QMouseEvent* event)
         d->toolProxy->mousePressEvent(event, documentPosition);
 
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
-            view()->unplugActionList("toolproxy_action_list");
-            view()->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
-            QMenu* menu = dynamic_cast<QMenu*>(view()->factory()->container("default_canvas_popup", view()));
-            // Only show the menu, if there are items. The plugged action list counts as one action.
-            if (menu && menu->actions().count() > 1) {
-                menu->exec(origEvent->globalPos());
-            }
+            showContextMenu(origEvent->globalPos());
             origEvent->setAccepted(true);
         }
     }
     if (layoutDirection() == Qt::RightToLeft) {
         delete event;
+    }
+}
+
+void Canvas::showContextMenu(const QPoint& globalPos)
+{
+    view()->unplugActionList("toolproxy_action_list");
+    view()->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
+    QMenu* menu = dynamic_cast<QMenu*>(view()->factory()->container("default_canvas_popup", view()));
+    // Only show the menu, if there are items. The plugged action list counts as one action.
+    if (menu && menu->actions().count() > 1) {
+        menu->exec(globalPos);
     }
 }
 

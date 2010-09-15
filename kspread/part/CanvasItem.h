@@ -176,6 +176,7 @@ public:
     virtual RowHeader* rowHeader() const;
     virtual void setCursor(const QCursor &cursor);
 
+    virtual void showContextMenu(const QPoint& globalPos) {}
 private:
     Q_DISABLE_COPY(CanvasItem)
 
