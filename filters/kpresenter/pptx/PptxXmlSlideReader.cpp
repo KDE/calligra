@@ -1158,6 +1158,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     d->shapeNumber = 0;
 
+    // Adding extra 'inherited' frames from layout
+    if (m_context->type == Slide) {
+        int index = 0;
+        while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
+            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
+            ++index;
+        }
+    }
+
     QByteArray placeholderEl;
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
@@ -1175,15 +1184,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             ELSE_TRY_READ_IF(graphicFrame)
             ELSE_TRY_READ_IF(cxnSp)
 //! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-
-    // Adding extra 'inherited' frames from layout
-    if (m_context->type == Slide) {
-        int index = 0;
-        while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
-            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
-            ++index;
         }
     }
 
