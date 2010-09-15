@@ -743,8 +743,12 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
         else {
             body->addAttribute("draw:layer", "backgroundobjects");
-            body->addAttribute("presentation:placeholder", "true");
-            body->addAttribute("presentation:class", presentationClass);
+            // StyleID will be empty for any text that is in masterslide that is wanted
+            // to be shown in the actual slides, such as company names etc.
+            if (!styleId.isEmpty()) {
+                body->addAttribute("presentation:placeholder", "true");
+                body->addAttribute("presentation:class", presentationClass);
+            }
         }
 
         QString presentationStyleName;
