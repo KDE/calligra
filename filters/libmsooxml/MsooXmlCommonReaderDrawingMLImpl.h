@@ -1495,9 +1495,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
-        if (!m_currentParagraphStylePredefined) {
-            m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-        }
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     }
 
     bool pprRead = false;
@@ -1675,12 +1673,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
          } else if (m_context->type == Slide) {
              setupParagraphStyle();
-             m_currentParagraphStylePredefined = false;
          }
          else { //slidemaster
              m_moveToStylesXml = true;
              setupParagraphStyle();
-             m_currentParagraphStylePredefined = false;
          }
 #else
          setupParagraphStyle();
@@ -1751,27 +1747,36 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     body = rBuf.setWriter(body);
 
     m_currentTextStyleProperties = new KoCharacterStyle();
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    }
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
     MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultTextStyles[listLevel-1],
                                             m_currentTextStyle, KoGenStyle::TextType);
-    if (!styleId.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[styleId][listLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phType][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             // pass properties from master to slide
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phType][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
         }
         if (m_context->type == Slide) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[styleId][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phType][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        }
+    }
+    if (!d->phIdx.isEmpty()) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phIdx][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        }
+        if (m_context->type == Slide) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phIdx][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
         }
     }
@@ -1803,23 +1808,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideLayout) {
-        if (!(d->phType).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phType][listLevel] = m_currentTextStyle;
-        }
-        if (!(d->phIdx).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phIdx][listLevel] = m_currentTextStyle;
-        }
-    }
-
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
-        if (!(d->phType).isEmpty()) {
-            m_context->slideMasterPageProperties->textStyles[d->phType][listLevel] = m_currentTextStyle;
-        }
-        if (!(d->phIdx).isEmpty()) {
-            m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel] = m_currentTextStyle;
-        }
     }
 #endif
 
@@ -2114,19 +2104,44 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultParagraphStyles[copyLevel-1],
                                             m_currentParagraphStyle, KoGenStyle::ParagraphType);
 
-    if (!styleId.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         if (m_context->type == SlideLayout) {
             if (m_currentListLevel > 0) {
-                m_context->slideLayoutProperties->m_usesListStyle[styleId] = true;
+                m_context->slideLayoutProperties->m_usesListStyle[d->phType] = true;
             }
         }
         // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
                                                 m_currentParagraphStyle, KoGenStyle::ParagraphType);
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phType][copyLevel],
+                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        }
+        // This line is needed in case slide defined it's own lvl1ppr
+        if (m_context->type == Slide) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[d->phType][copyLevel],
+                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        }
+    }
+    if (!d->phIdx.isEmpty()) {
+        if (m_context->type == SlideLayout) {
+            if (m_currentListLevel > 0) {
+                m_context->slideLayoutProperties->m_usesListStyle[d->phIdx] = true;
+            }
+        }
+        // In all cases, we take them first from masterslide
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phIdx][copyLevel],
+                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        // Perhaps we need to get the properties from layout
+        // Slidelayout needs to be here in case there was also lvl1ppr defined
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[d->phIdx][copyLevel],
+                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
+        }
+        if (m_context->type == Slide) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[d->phIdx][copyLevel],
                                                     m_currentParagraphStyle, KoGenStyle::ParagraphType);
         }
     }
@@ -2185,25 +2200,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         // Making the bullet character look ugly, thus defaulting to "-"
         m_currentListStyleProperties->setBulletCharacter(QChar('-'));
     }
-
-#ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideLayout) {
-        // Could there be cases where lvl1ppr defines something else for layout, and ppr something else?
-        if (!d->phIdx.isEmpty()) {
-            m_context->slideLayoutProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->slideLayoutProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
-        }
-    } else if (m_context->type == SlideMaster) {
-        if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterPageProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->slideMasterPageProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
-        }
-    }
-#endif
 
     if (m_listStylePropertiesAltered) {
         m_customListMade = true;
@@ -4539,9 +4535,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     TRY_READ_ATTR(type)
 
     m_currentTextStyleProperties = new KoCharacterStyle();
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    }
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     if (!type.isEmpty()) {
 //! @todo support all possible fields here
@@ -4550,22 +4544,33 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
     MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultTextStyles[listLevel-1],
                                             m_currentTextStyle, KoGenStyle::TextType);
-    if (!styleId.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[styleId][listLevel],
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phType][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             // pass properties from master to slide
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phType][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
         }
         if (m_context->type == Slide) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[styleId][listLevel],
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phType][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        }
+    }
+    if (!d->phIdx.isEmpty()) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[d->phIdx][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+        }
+        if (m_context->type == Slide) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phIdx][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
         }
     }
@@ -4586,27 +4591,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideLayout) {
-        if (!(d->phType).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phType][listLevel] = m_currentTextStyle;
-        }
-        if (!(d->phIdx).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phIdx][listLevel] = m_currentTextStyle;
-        }
-    }
-
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
-        if (!(d->phType).isEmpty()) {
-            m_context->slideMasterPageProperties->textStyles[d->phType][listLevel] = m_currentTextStyle;
-        }
-        if (!(d->phIdx).isEmpty()) {
-            m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel] = m_currentTextStyle;
-        }
     }
 #endif
 
