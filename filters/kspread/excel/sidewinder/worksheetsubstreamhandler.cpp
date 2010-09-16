@@ -699,6 +699,14 @@ void WorksheetSubStreamHandler::handleTopMargin(TopMarginRecord* record)
     d->sheet->setTopMargin(margin);
 }
 
+static QString trimTrailingZero(const QString& s) {
+    if (!s.isEmpty() && s[s.length()-1] == '\0') {
+        return s.left(s.length()-1);
+    } else {
+        return s;
+    }
+}
+
 void WorksheetSubStreamHandler::handleHLink(HLinkRecord* record)
 {
     if (!record) return;
@@ -707,8 +715,8 @@ void WorksheetSubStreamHandler::handleHLink(HLinkRecord* record)
     //FIXME we ignore the m_lastRow and m_lastColumn values, does ODF have something similar?
     Cell *cell = d->sheet->cell(record->firstColumn(), record->firstRow());
     if (cell) {
-        QString url = record->urlMonikerUrl() + QString('#') + record->location();
-        cell->setHyperlink(Hyperlink(record->displayName(), url, record->frameName()));
+        QString url = trimTrailingZero(record->urlMonikerUrl()) + QString('#') + trimTrailingZero(record->location());
+        cell->setHyperlink(Hyperlink(trimTrailingZero(record->displayName()), url, trimTrailingZero(record->frameName())));
     }
 }
 
