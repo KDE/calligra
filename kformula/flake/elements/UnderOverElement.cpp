@@ -25,7 +25,9 @@
 #include <kdebug.h>
 #include <QPainter>
 
-UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType ) : FixedElement( parent )
+
+UnderOverElement::UnderOverElement( BasicElement* parent, ElementType elementType )
+    : FixedElement( parent )
 {
     if (elementType!=Under) {
         m_overElement = new RowElement( this );
@@ -139,13 +141,21 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         } else if ((counter==2 && m_elementType==UnderOver) || (counter==1 && m_elementType==Over)) {
             loadElement(tmp,&m_overElement);
         } else if ((counter==3 && m_elementType==UnderOver) || (counter==2)) {
-            kDebug(39001) << "Too many arguments to " << ElementFactory::elementName(m_elementType);
+            kDebug(39001) << "Too many arguments to "
+                          << ElementFactory::elementName(m_elementType)
+                          << "counter =" << counter;
             return false;
         }
         counter++;
     }
+    
     if ((counter<3 && m_elementType==UnderOver) || (counter<2)) {
-        kDebug(39001) << "Not enough arguments to "<< ElementFactory::elementName(m_elementType);
+        kDebug(39001) << "Not enough arguments to "
+
+                      << ElementFactory::elementName(m_elementType)
+                      << "counter =" << counter
+                      << "type = " << (m_elementType == Under ? "Under"
+                                       : m_elementType == Over ? "Over" : "UnderOver");
         return false;
     }
     return true;

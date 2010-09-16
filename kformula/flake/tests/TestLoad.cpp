@@ -1010,17 +1010,17 @@ void TestLoad::subsupElement()
 
 void TestLoad::underElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Under) );
 }
 
 void TestLoad::overElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Over) );
 }
 
 void TestLoad::underOverElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, UnderOver) );
 }
 
 void TestLoad::multiscriptsElement()
