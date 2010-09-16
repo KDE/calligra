@@ -44,6 +44,7 @@
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
+#include "SubSupElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
 #include "TableDataElement.h"
@@ -106,7 +107,9 @@ void test( BasicElement* element )
     QFETCH(int, output);
     QFETCH(int, outputRecursive);
 
+    //qDebug() << input;
     load( element, input );
+    //element->writeElementTree();
     int numElements = count( element->childElements() );
 #if 0 // Set to 1 if you want to dump the xml tree if the test fails.
     if (numElements != outputRecursive) {
@@ -504,8 +507,8 @@ void TestLoad::subElement_data()
             "  </mrow>"
             "  <mo> ) </mo>"
             " </mrow>"
-            " <mn> 2 </mn>"
-            "</msub>", 2, 8 );
+            " <mn> 2 </mn>" // An mrow is added here
+            "</msub>", 2, 9 );
 
     // Be sure attributes don't break anything
     addRow( "<msub subscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msub>", 2, 4 );
@@ -536,8 +539,8 @@ void TestLoad::supElement_data()
             "  </mrow>"
             "  <mo> ) </mo>"
             " </mrow>"
-            " <mn> 2 </mn>"
-            "</msup>", 2, 8 );
+            " <mn> 2 </mn>"  // An mrow is added here
+            "</msup>", 2, 9 );
 
     // Be sure attributes don't break anything
     addRow( "<msup superscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msup>", 2, 4 );
@@ -992,17 +995,17 @@ void TestLoad::encloseElement()
 
 void TestLoad::subElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubScript) );
 }
 
 void TestLoad::supElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SupScript) );
 }
 
 void TestLoad::subsupElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubSupScript) );
 }
 
 void TestLoad::underElement()
