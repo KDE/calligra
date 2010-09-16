@@ -61,6 +61,23 @@ class MsooXmlReader;
 class MsooXmlReaderContext;
 
 namespace Utils {
+
+class ParagraphBulletProperties
+{
+public:
+
+    ParagraphBulletProperties();
+
+    enum ParagraphBulletType {BulletType, NumberType};
+    ParagraphBulletType m_type;
+    QString m_bulletChar;
+    QString m_numbering;
+    int m_level;
+    int m_startValue;
+};
+
+QString convertToListProperties(ParagraphBulletProperties properties);
+
 //! Container autodeleter. Works for QList, QHash and QMap.
 //! @todo move to more generic place
 template <typename T>

@@ -1270,6 +1270,77 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 // </units> -------------------
 
+MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
+    m_type(ParagraphBulletProperties::BulletType), m_bulletChar(""),
+    m_startValue(0)
+{
+}
+
+
+MSOOXML_EXPORT QString Utils::convertToListProperties(ParagraphBulletProperties properties)
+{
+    QString returnValue;
+    if (properties.m_type == ParagraphBulletProperties::NumberType) {
+        returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(properties.m_level);
+
+        QString suffix;
+        QString format;
+        if (properties.m_numbering == "arabicPeriod") {
+            suffix = ".";
+            format = "1";
+        }
+        else if (properties.m_numbering == "arabicParenR") {
+            suffix = ")";
+            format = "1";
+        }
+        else if (properties.m_numbering == "alphaUcPeriod") {
+            suffix = ".";
+            format = "A";
+        }
+        else if (properties.m_numbering == "alphaLcPeriod") {
+            suffix = ".";
+            format = "a";
+        }
+        else if (properties.m_numbering == "alphaUcParenR") {
+            suffix = ")";
+            format = "A";
+        }
+        else if (properties.m_numbering == "alphaLcParenR") {
+            suffix = ")";
+            format = "a";
+        }
+        else if (properties.m_numbering == "romanUcPeriod") {
+            suffix = ".";
+            format = "I";
+        }
+        else if (properties.m_numbering == "romanLcPeriod") {
+            suffix = ")";
+            format = "i";
+        }
+        else if (properties.m_numbering == "romanUcParenR") {
+            suffix = ")";
+            format = "I";
+        }
+        else if (properties.m_numbering == "romanLcParenR") {
+            suffix = ")";
+            format = "i";
+        }
+
+        returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(suffix).arg(format);
+        if (properties.m_startValue != 0) {
+            returnValue += QString("style:start-value=\"%1\" ").arg(properties.m_startValue);
+        }
+        returnValue += "/>";
+    }
+    else {
+        returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(properties.m_level);
+        returnValue += QString("text:bullet-char=\"%1\" ").arg(properties.m_bulletChar);
+        returnValue += "/>";
+    }
+
+    return returnValue;
+}
+
 MSOOXML_EXPORT void Utils::copyPropertiesFromStyle(const KoGenStyle& sourceStyle, KoGenStyle& targetStyle, KoGenStyle::PropertyType type)
 {
     if (sourceStyle.isEmpty()) {

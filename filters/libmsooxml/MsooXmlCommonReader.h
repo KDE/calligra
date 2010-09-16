@@ -29,6 +29,7 @@
 #include <styles/KoListLevelProperties.h>
 
 #include "MsooXmlReader.h"
+#include "MsooXmlUtils.h"
 
 namespace MSOOXML
 {
@@ -64,6 +65,7 @@ protected:
 
     KoGenStyle m_currentListStyle;
     KoListLevelProperties* m_currentListStyleProperties;
+    MSOOXML::Utils::ParagraphBulletProperties m_currentBulletProperties;
 
     //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
     QString m_currentStyleName;

@@ -2055,14 +2055,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     READ_PROLOGUE2(DrawingML_pPr)
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentListStyleProperties = new KoListLevelProperties;
     m_listStylePropertiesAltered = false;
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
 
     if (!lvl.isEmpty()) {
         m_currentListLevel = lvl.toInt() + 1;
-        m_currentListStyleProperties->setLevel(m_currentListLevel);
+        m_currentBulletProperties.m_level = m_currentListLevel;
     } else {
         m_currentListLevel = 0;
     }
@@ -2121,7 +2120,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentListStyleProperties->setBulletCharacter(QChar('-'));
+        m_currentBulletProperties.m_bulletChar = '-';
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     }
 
     if (m_listStylePropertiesAltered) {
@@ -2132,15 +2132,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             m_currentListLevel = 1;
         }
         // For now we take a stand that any altered style makes its own list.
-        m_currentListStyleProperties->setLevel(m_currentListLevel);
+        m_currentBulletProperties.m_level = m_currentListLevel;
 
-        QBuffer listBuf;
-        KoXmlWriter listStyleWriter(&listBuf);
-
-        m_currentListStyleProperties->saveOdf(&listStyleWriter);
-        const QString elementContents = QString::fromUtf8(listBuf.buffer(),
-                                                          listBuf.buffer().size());
-        m_currentListStyle.addChildElement("list-style-properties", elementContents);
+        m_currentListStyle.addChildElement("list-style-properties", 
+            MSOOXML::Utils::convertToListProperties(m_currentBulletProperties));
     }
     else if (m_customListMade) {
         // We come here in the case, that there was e.g buChar in the previous paragraph
@@ -2151,9 +2146,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     else {
         m_customListMade = false;
     }
-
-    delete m_currentListStyleProperties;
-    m_currentListStyleProperties = 0;
 
     READ_EPILOGUE
 }
@@ -4117,17 +4109,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     Q_ASSERT(m_currentTextStyleProperties == 0);
     m_currentTextStyleProperties = new KoCharacterStyle();
 
-    Q_ASSERT(m_currentListStyleProperties == 0);
-    m_currentListStyleProperties = new KoListLevelProperties;
-
     // Number 3 makes eg. lvl4 -> 4
     m_currentListLevel = QString(level.at(3)).toInt();
 
     Q_ASSERT(m_currentListLevel > 0);
-    m_currentListStyleProperties->setLevel(m_currentListLevel);
-
-    // To prevent the default bullet, as MS2007 does have it
-    m_currentListStyleProperties->setBulletCharacter(QChar());
+    m_currentBulletProperties.m_level = m_currentListLevel;
 
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(marR)
@@ -4190,16 +4176,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentListStyleProperties->setBulletCharacter(QChar('-'));
+        m_currentBulletProperties.m_bulletChar = '-';
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
-    QBuffer listBuf;
-    KoXmlWriter listStyleWriter(&listBuf);
-    m_currentListStyleProperties->saveOdf(&listStyleWriter);
-    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-    m_currentListStyle.addChildElement("list-style-properties", elementContents);
+    m_currentListStyle.addChildElement("list-style-properties",
+        MSOOXML::Utils::convertToListProperties(m_currentBulletProperties));
 
 #ifdef PPTXXMLSLIDEREADER_H
     saveCurrentStyles();
@@ -4207,8 +4191,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
-    delete m_currentListStyleProperties;
-    m_currentListStyleProperties = 0;
 
     return KoFilter::OK;
 }
@@ -4359,7 +4341,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
 
     if (attrs.hasAttribute("char")) {
         // Effectively converts this to QChar
-        m_currentListStyleProperties->setBulletCharacter(attrs.value("char").toString().at(0));
+        m_currentBulletProperties.m_bulletChar = attrs.value("char").toString();
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
         // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
         m_lstStyleFound = true;
     }
@@ -4699,7 +4682,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
     m_lstStyleFound = true;
-    m_currentListStyleProperties->setBulletCharacter(QChar());
+    m_currentBulletProperties.m_bulletChar = "";
+    m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     m_listStylePropertiesAltered = true;
     readNext();
     READ_EPILOGUE
@@ -4732,51 +4716,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 
     if (!type.isEmpty()) {
         m_lstStyleFound = true;
-        if (type == "arabicPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
-        }
-        else if (type == "arabicParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
-        }
-        else if (type == "alphaUcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
-        }
-        else if (type == "alphaLcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::AlphaLowerItem);
-        }
-        else if (type == "alphaUcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
-        }
-        else if (type == "alphaLcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
-        }
-        else if (type == "romanUcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
-        }
-        else if (type == "romanLcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
-        }
-        else if (type == "romanUcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
-        }
-        else if (type == "romanLcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
-        }
+
+        m_currentBulletProperties.m_numbering = type;
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::NumberType;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(startAt)
     if (!startAt.isEmpty()) {
-        m_currentListStyleProperties->setStartValue(startAt.toInt());
+        m_currentBulletProperties.m_startValue = startAt.toInt();
     }
 
     m_listStylePropertiesAltered = true;
