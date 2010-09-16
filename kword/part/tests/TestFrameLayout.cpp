@@ -562,9 +562,19 @@ void TestFrameLayout::testPageBackground()
     bfl.createNewFramesForPage(4);
     QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 2);
 
-    foreach (KWFrame *frame, bfl.m_backgroundFrameSet->frames()) {
+    KWFrameSet *bfs = bfl.m_backgroundFrameSet;
+    foreach (KWFrame *frame, bfs->frames()) {
         QCOMPARE(frame->shape()->background(), page1.pageStyle().background());
     }
+
+    // run layout to position and size them.
+    for (int i = 1; i <= 4; ++i)
+        bfl.layoutFramesOnPage(i);
+
+    QCOMPARE(bfs->frames()[0]->shape()->size(), QSizeF(page1.width(), page1.height()));
+    QCOMPARE(bfs->frames()[0]->shape()->position(), QPointF());
+    QCOMPARE(bfs->frames()[1]->shape()->size(), QSizeF(page2.width(), page2.height()));
+    QCOMPARE(bfs->frames()[1]->shape()->position(), QPointF(0, page2.offsetInDocument()));
 }
 
 
