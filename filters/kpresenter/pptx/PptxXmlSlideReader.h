@@ -218,6 +218,18 @@ protected:
 
     KoXmlWriter* m_placeholderElWriter;
 
+    // Saves current text and paragraph styles to slide(layout/master) memory where they
+    // can be used later for inheritance purposes
+    void saveCurrentStyles();
+
+    // Inherits correct textstyle to m_currentTextStyle
+    // First from default, then from master, layout, slide using those lvls which are needed
+    void inheritTextStyles();
+
+    // Inherits correct paragraph and text styles to m_currentTextStyle and m_currentParagraphStyle
+    void inheritParagraphAndTextStyles();
+
+    // True if we reading defaultStyles from PptxXmlDocumentReader
     bool documentReaderMode;
 
     // Default pptx styles
