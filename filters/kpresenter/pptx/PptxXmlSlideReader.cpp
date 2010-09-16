@@ -115,34 +115,6 @@ PptxPlaceholder::~PptxPlaceholder()
 
 // -------------------
 
-PptxSlideMasterTextStyle::PptxSlideMasterTextStyle()
-{
-    for (int i = 0; i < 9; i++) {
-        m_listStyles.push_back(KoGenStyle(KoGenStyle::TextAutoStyle, "text"));
-    }
-}
-
-PptxSlideMasterTextStyle::~PptxSlideMasterTextStyle()
-{
-    clear();
-}
-
-void PptxSlideMasterTextStyle::clear()
-{
-    m_listStyles.clear();
-}
-
-KoGenStyle* PptxSlideMasterTextStyle::listStyle(uint level)
-{
-    if (level < 1 || level > 9) {
-        return 0;
-    }
-
-    return &m_listStyles[level - 1];
-}
-
-// -------------------
-
 PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 {
     m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
@@ -163,32 +135,6 @@ PptxSlideMasterPageProperties::PptxSlideMasterPageProperties()
 
 void PptxSlideMasterPageProperties::clear()
 {
-    titleStyle.clear();
-    bodyStyle.clear();
-    otherStyle.clear();
-}
-
-PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString& style)
-{
-    if (style == QLatin1String("title") || style == QLatin1String("ctrTitle")) {
-        return &titleStyle;
-    }
-    else if (style == "body" || style == "subTitle") {
-        return &bodyStyle;
-    }
-    else if (style == "ftr") {
-        return &ftrStyle;
-    }
-    else if (style == "sldNum") {
-        return &sldNumStyle;
-    }
-    else if (style == "dt") {
-       return &dtStyle;
-    }
-    else if (style == "other") {
-       return &otherStyle;
-    }
-    return 0;
 }
 
 // -------------------
@@ -232,7 +178,6 @@ public:
         return phIdx;
     }
 
-    PptxSlideMasterTextStyle* currentSlideMasterTextStyle; //!< set by read_*Style()
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
@@ -258,6 +203,7 @@ void PptxXmlSlideReader::init()
 {
     initInternal(); // MsooXmlCommonReaderImpl.h
     initDrawingML();
+    documentReaderMode = false;
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 
@@ -265,7 +211,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
 {
     m_context = dynamic_cast<PptxXmlSlideReaderContext*>(context);
     Q_ASSERT(m_context);
-    d->currentSlideMasterTextStyle = 0;
     switch (m_context->type) {
     case Slide:
         d->qualifiedNameOfMainElement = "p:sld";
@@ -665,10 +610,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
 {
     READ_PROLOGUE
 
-    m_context->slideMasterPageProperties->m_currentHandledList = "body";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
-    d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->bodyStyle;
-    MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
+    d->phType = "body";
 
     while (!atEnd()) {
         readNext();
@@ -788,10 +731,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
 {
     READ_PROLOGUE
 
-    m_context->slideMasterPageProperties->m_currentHandledList = "title";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
-    d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->titleStyle;
-    MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
+    d->phType = "title";
 
     while (!atEnd()) {
         readNext();
@@ -843,10 +784,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
 {
     READ_PROLOGUE
 
-    m_context->slideMasterPageProperties->m_currentHandledList = "other";
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
-    d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->otherStyle;
-    MSOOXML::Utils::Setter<PptxSlideMasterTextStyle*> currentSlideMasterTextStyleSetter(&d->currentSlideMasterTextStyle, 0);
+    d->phType = "other";
 
     while (!atEnd()) {
         readNext();
@@ -1251,23 +1190,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     const QString styleId(d->phStyleId());
     kDebug() << "styleId:" << styleId;
     if (m_context->type == Slide) {
-        if (m_context->slideLayoutProperties->styles.contains(styleId) && m_context->slideLayoutProperties->styles[styleId].contains(m_currentListLevel)) {
-            m_currentParagraphStyle = m_context->slideLayoutProperties->styles[styleId][m_currentListLevel];
-            m_currentParagraphStylePredefined = true;
-        }
     }
     else if (m_context->type == SlideLayout) {
     }
     else { //SlideMaster
-        if (d->phType == "sldNum") {
-            d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->sldNumStyle;
-        }
-        else if (d->phType == "ftr") {
-            d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->ftrStyle;
-        }
-        else if (d->phType == "dt") {
-            d->currentSlideMasterTextStyle = &m_context->slideMasterPageProperties->dtStyle;
-        }
     }
     readNext();
     READ_EPILOGUE

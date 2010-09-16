@@ -60,6 +60,17 @@ public:
     bool isPlaceHolder;
 };
 
+//! Styles valid for current slide
+class PptxActualSlideProperties
+{
+public:
+    //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,KoGenStyle> > styles;
+
+    //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,KoGenStyle> > textStyles;
+};
+
 //! Data structure collecting information about single slide/master slide
 class PptxSlideProperties
 {
@@ -127,22 +138,6 @@ private:
     Q_DISABLE_COPY(PptxSlideLayoutProperties)
 };
 
-//! Data structure collecting information about single text style defined by master slide
-//! This can be bodyStyle, otherStyle, tileStyle
-class PptxSlideMasterTextStyle
-{
-public:
-    PptxSlideMasterTextStyle();
-    ~PptxSlideMasterTextStyle();
-    void clear();
-    //! @return text style for list level @a level
-    //! @par level can be 1..9, otherwise 0 is returned.
-    //! Returned object is owned by PptxSlideMasterTextStyle.
-    KoGenStyle *listStyle(uint level);
-private:
-    QVector<KoGenStyle> m_listStyles;
-};
-
 //! Data structure collecting information about master slide
 class PptxSlideMasterPageProperties
 {
@@ -150,21 +145,16 @@ public:
     PptxSlideMasterPageProperties();
     void clear();
 
-    PptxSlideMasterTextStyle* textStyle(const QString& style);
-    PptxSlideMasterTextStyle titleStyle;
-    PptxSlideMasterTextStyle bodyStyle;
-    PptxSlideMasterTextStyle otherStyle;
-    PptxSlideMasterTextStyle ftrStyle;
-    PptxSlideMasterTextStyle sldNumStyle;
-    PptxSlideMasterTextStyle dtStyle;
-
     QMap<QString, QString> colorMap;
 
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > styles;
 
-    // title, body, other
-    QString m_currentHandledList;
+    //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,KoGenStyle> > textStyles;
+
+    QVector<KoGenStyle> defaultTextStyles;
+    QVector<KoGenStyle> defaultParagraphStyles;
 
     KoGenStyle m_drawingPageProperties;
     QString m_titleList;
@@ -228,6 +218,14 @@ protected:
 
     KoXmlWriter* m_placeholderElWriter;
 
+    bool documentReaderMode;
+
+    // Default pptx styles
+    QVector<KoGenStyle> defaultParagraphStyles;
+    QVector<KoGenStyle> defaultTextStyles;
+    QVector<QString> defaultTextColors;
+    QVector<QString> defaultLatinFonts;
+
 private:
     void init();
     class Private;
@@ -263,6 +261,7 @@ public:
     PptxSlideProperties* slideProperties;
     PptxSlideLayoutProperties* slideLayoutProperties;
     PptxSlideMasterPageProperties* slideMasterPageProperties;
+    PptxActualSlideProperties currentSlideStyles;
 
     // There could potentially be multiple of these...todo
     QString pageDrawStyleName; //!< written in read_sldInternal()

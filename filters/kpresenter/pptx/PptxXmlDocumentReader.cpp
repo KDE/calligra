@@ -22,7 +22,6 @@
  */
 
 #include "PptxXmlDocumentReader.h"
-#include "PptxXmlSlideReader.h"
 #include "PptxXmlCommentAuthorsReader.h"
 #include "PptxImport.h"
 #include <MsooXmlRelationships.h>
@@ -46,6 +45,7 @@ PptxXmlDocumentReaderContext::PptxXmlDocumentReaderContext(
         : import(&_import),
           path(_path), file(_file), relationships(&_relationships)
 {
+    firstReadRound = true;
 }
 
 class PptxXmlDocumentReader::Private
@@ -78,7 +78,7 @@ private:
 };
 
 PptxXmlDocumentReader::PptxXmlDocumentReader(KoOdfWriters *writers)
-        : MSOOXML::MsooXmlReader(writers)
+        : PptxXmlSlideReader(writers)
         , m_writers(writers)
         , m_context(0)
         , d(new Private)
@@ -94,6 +94,7 @@ PptxXmlDocumentReader::~PptxXmlDocumentReader()
 void PptxXmlDocumentReader::init()
 {
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
+    documentReaderMode = true;
 }
 
 KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -366,6 +367,37 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         kDebug() << slideMasterReader.errorString();
         return status;
     }
+
+    // Only now, we can fully prepare default text styles, as we know the theme we are using
+    // And we have the mapping available
+    masterPageProperties.defaultTextStyles = defaultTextStyles;
+    masterPageProperties.defaultParagraphStyles = defaultParagraphStyles;
+    int defaultIndex = 0;
+
+    while (defaultIndex < defaultTextStyles.size()) {
+        if (!defaultTextColors.at(defaultIndex).isEmpty()) {
+            QString valTransformed = masterPageProperties.colorMap.value(defaultTextColors.at(defaultIndex));
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = m_context->theme.colorScheme.value(valTransformed);
+            QColor col = Qt::black;
+            if (colorItem) {
+                col = colorItem->value();
+            }
+            masterPageProperties.defaultTextStyles[defaultIndex].addProperty("fo:color", col.name());
+
+        }
+        if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
+            QString face = defaultLatinFonts.at(defaultIndex);
+            if (face.startsWith("+mj")) {
+                face = m_context->theme.fontScheme.majorFonts.latinTypeface;
+            }
+            else if (face.startsWith("+mn")) {
+                face = m_context->theme.fontScheme.minorFonts.latinTypeface;
+            }
+            masterPageProperties.defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
+        }
+        ++defaultIndex;
+    }
+
     context.firstReadingRound = false;
     status = m_context->import->loadAndParseDocument(
         &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
@@ -481,6 +513,48 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldSz()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL defaultTextStyle
+KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
+{
+    READ_PROLOGUE
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle, "list");
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            // Initializing the default style for the level
+            // In the end, there should be 9 levels
+            if (qualifiedName().toString().startsWith("a:lvl")) {
+                defaultTextColors.push_back(QString());
+                defaultLatinFonts.push_back(QString());
+            }
+        }
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, lvl1pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl2pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl3pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl4pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl5pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl6pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl7pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl8pPr)
+            ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+        if (isEndElement()) {
+            if (qualifiedName().toString().startsWith("a:lvl")) {
+                defaultParagraphStyles.push_back(m_currentParagraphStyle);
+                defaultTextStyles.push_back(m_currentTextStyle);
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL presentation
 //! p:presentation handler (Presentation)
 /*! ECMA-376, 19.2.1.26, p. 2790.
@@ -512,42 +586,54 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         kDebug() << "NS prefix:" << namespaces[i].prefix() << "uri:" << namespaces[i].namespaceUri();
     }
 
-    while (!atEnd()) {
-//        kDebug() << "!!" << qualifiedName() << JOIN(MSOOXML_CURRENT_NS ":", CURRENT_EL);
-        readNext();
-        kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF(sldMasterIdLst)
-            ELSE_TRY_READ_IF(sldIdLst)
-            ELSE_TRY_READ_IF(sldSz)
-            //! @todo ELSE_TRY_READ_IF(notesSz)
-            //! @todo ELSE_TRY_READ_IF(defaultTextStyle)
+    if (!m_context->firstReadRound) {
+        while (!atEnd()) {
+            readNext();
+            kDebug() << *this;
+            BREAK_IF_END_OF(CURRENT_EL);
+            if (isStartElement()) {
+                TRY_READ_IF(sldMasterIdLst)
+                ELSE_TRY_READ_IF(sldIdLst)
+                ELSE_TRY_READ_IF(sldSz)
+                //! @todo ELSE_TRY_READ_IF(notesSz)
 //! @todo add ELSE_WRONG_FORMAT
+            }
+        }
+    }
+    else {
+        while (!atEnd()) {
+            readNext();
+            kDebug() << *this;
+            BREAK_IF_END_OF(CURRENT_EL);
+            if (isStartElement()) {
+                TRY_READ_IF(defaultTextStyle)
+            }
         }
     }
 
-    // There are double the amount of masterPage frames because we read slideMaster always twice
-    // This means that first frame of the set is always empty and is skipped in the loop
-    unsigned frameCount = d->masterPageFrames.size() / 2;
-    unsigned index = 0;
-    while (index < frameCount) {
-        d->masterPageStyles.push_back(KoGenStyle(KoGenStyle::MasterPageStyle));
-        if (d->sldSzRead) {
-            KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
-            const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
-            mainStyles->markStyleForStylesXml(pageLayoutStyleName);
-            kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
+    if (!m_context->firstReadRound) {
+        // There are double the amount of masterPage frames because we read slideMaster always twice
+        // This means that first frame of the set is always empty and is skipped in the loop
+        unsigned frameCount = d->masterPageFrames.size() / 2;
+        unsigned index = 0;
+        while (index < frameCount) {
+            d->masterPageStyles.push_back(KoGenStyle(KoGenStyle::MasterPageStyle));
+            if (d->sldSzRead) {
+                KoGenStyle pageLayoutStyle(d->pageLayout.saveOdf());
+                const QString pageLayoutStyleName(mainStyles->insert(pageLayoutStyle, "PM"));
+                mainStyles->markStyleForStylesXml(pageLayoutStyleName);
+                kDebug() << "pageLayoutStyleName:" << pageLayoutStyleName;
 
-            d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);
+                d->masterPageStyles[index].addAttribute("style:page-layout-name", pageLayoutStyleName);
+            }
+            if (!d->masterPageDrawStyleNames.at(index).isEmpty()) {
+               d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
+            }
+            d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
+            const QString masterPageStyleName(
+                mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
+            ++index;
         }
-        if (!d->masterPageDrawStyleNames.at(index).isEmpty()) {
-            d->masterPageStyles[index].addAttribute("draw:style-name", d->masterPageDrawStyleNames.at(index));
-        }
-        d->masterPageStyles[index].addChildElement(QString("frame-2-%1").arg(index), d->masterPageFrames.at((1+index)*2-1));
-        const QString masterPageStyleName(
-            mainStyles->insert(d->masterPageStyles.at(index), "slideMaster"));
-        ++index;
     }
 
     READ_EPILOGUE

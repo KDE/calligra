@@ -1117,6 +1117,10 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         PptxXmlDocumentReader documentReader(writers);
         RETURN_IF_ERROR( loadAndParseDocument(
             d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
+        // We are reading twice, in the first round we ignore everything except defaultTextStyle
+        context.firstReadRound = false;
+        RETURN_IF_ERROR( loadAndParseDocument(
+            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
     }
     return KoFilter::OK;
 }
