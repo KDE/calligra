@@ -336,6 +336,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         default:;
         }
     }
+
+    pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
+
     if (minZIndex < INT_MAX) {
         --minZIndex;
         if (endnote)
