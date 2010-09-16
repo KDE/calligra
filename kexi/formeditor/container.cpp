@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -876,15 +876,16 @@ Container::deleteWidget(QWidget *w)
     if (!w)
         return;
 // kDebug() << "Deleting a widget: " << w->objectName();
-    d->form->objectTree()->removeItem(w->objectName());
-    d->form->selectWidget(widget());
-// 2.0: FormManager::self()->deleteWidgetLater(w);
-    delete w;
-#ifdef __GNUC__
-#warning "OK?"
-#else
-#pragma WARNING( OK? )
-#endif
+    ObjectTreeItem *itemToRemove = d->form->objectTree()->lookup(w->objectName());
+    if (!itemToRemove)
+        return;
+    QWidget *widgetoRemove = itemToRemove->widget();
+    const ObjectTreeItem *parentItemToSelect = itemToRemove->parent()
+        ? itemToRemove->parent()->selectableItem() : 0;
+    QWidget *parentWidgetToSelect = parentItemToSelect ? parentItemToSelect->widget() : 0;
+    d->form->objectTree()->removeItem(itemToRemove);
+    d->form->selectWidget(parentWidgetToSelect);
+    delete widgetoRemove;
 }
 
 void

@@ -312,6 +312,7 @@ void CanvasBase::setDocumentSize(const QSizeF& size)
 
 void CanvasBase::mousePressed(KoPointerEvent* event)
 {
+    KoPointerEvent *const origEvent = event;
     QPointF documentPosition;
     if (layoutDirection() == Qt::LeftToRight) {
         documentPosition = viewConverter()->viewToDocument(event->pos()) + offset();
@@ -336,18 +337,10 @@ void CanvasBase::mousePressed(KoPointerEvent* event)
     // flake
     if(d->toolProxy) {
         d->toolProxy->mousePressEvent(event);
-#if 0
         if (!event->isAccepted() && event->button() == Qt::RightButton) {
-            d->view->unplugActionList("toolproxy_action_list");
-            d->view->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
-            QMenu* menu = dynamic_cast<QMenu*>(d->view->factory()->container("default_canvas_popup", d->view));
-            // Only show the menu, if there are items. The plugged action list counts as one action.
-            if (menu && menu->actions().count() > 1) {
-                menu->exec(origEvent->globalPos());
-            }
-            origEvent->setAccepted(true);
+            showContextMenu(origEvent->globalPos());
+            origEvent->accept();
         }
-#endif
     }
     if (layoutDirection() == Qt::RightToLeft) {
         //delete event;

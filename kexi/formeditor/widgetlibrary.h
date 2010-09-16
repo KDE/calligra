@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -175,6 +175,11 @@ public:
      \a classname class and widget \a w when a given property value changed. */
     bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
             const QByteArray& property);
+
+    //! @return selectable item for @a item item.
+    //! In most cases it is equal to @a item.
+    //! See WidgetFactory::selectableItem(ObjectTreeItem* item).
+    ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
 signals:
     void widgetActionToggled(const QByteArray& _class);

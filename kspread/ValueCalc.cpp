@@ -222,12 +222,13 @@ Value ValueCalc::add(const Value &a, const Value &b)
 {
     if (a.isError()) return a;
     if (b.isError()) return b;
-    Value res;
+    if (a.isArray() || b.isArray())
+        return twoArrayMap(a, &ValueCalc::add, b);
 
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    res = Value(aa + bb);
+    Value res = Value(aa + bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -239,6 +240,9 @@ Value ValueCalc::sub(const Value &a, const Value &b)
 {
     if (a.isError()) return a;
     if (b.isError()) return b;
+    if (a.isArray() || b.isArray())
+        return twoArrayMap(a, &ValueCalc::sub, b);
+
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
@@ -254,6 +258,14 @@ Value ValueCalc::mul(const Value &a, const Value &b)
 {
     if (a.isError()) return a;
     if (b.isError()) return b;
+    // This operation is only defined for an array if it is multiplied
+    // with a number, that however is commutative, thus swap parameters
+    // if necessary.
+    if (a.isArray() && !b.isArray())
+       return arrayMap(a, &ValueCalc::mul, b);
+    if (b.isArray() && !a.isArray())
+       return arrayMap(b, &ValueCalc::mul, a);
+
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
@@ -269,6 +281,9 @@ Value ValueCalc::div(const Value &a, const Value &b)
 {
     if (a.isError()) return a;
     if (b.isError()) return b;
+    if (a.isArray() && !b.isArray())
+       return arrayMap(a, &ValueCalc::div, b);
+
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
@@ -288,6 +303,9 @@ Value ValueCalc::mod(const Value &a, const Value &b)
 {
     if (a.isError()) return a;
     if (b.isError()) return b;
+    if (a.isArray() && !b.isArray())
+       return arrayMap(a, &ValueCalc::mod, b);
+
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
@@ -321,10 +339,13 @@ Value ValueCalc::pow(const Value &a, const Value &b)
 {
     if (a.isError()) return a;
     if (b.isError()) return b;
+    if (a.isArray() && !b.isArray())
+       return arrayMap(a, &ValueCalc::pow, b);
+
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    Value res = Value(::pow(aa, bb));
+    Value res(::pow(aa, bb));
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -1808,6 +1829,37 @@ void ValueCalc::arrayWalk(QVector<Value> &range,
     if (res.isError()) return;
     for (int i = 0; i < range.count(); ++i)
         arrayWalk(range[i], res, func, param);
+}
+
+Value ValueCalc::arrayMap(const Value &array, arrayMapFunc func, const Value &param)
+{
+    Value res( Value::Array );
+    for (unsigned row = 0; row < array.rows(); ++row) {
+        for (unsigned col = 0; col < array.columns(); ++col) {
+            Value element = array.element( col, row );
+            Value _res = (this->*func)( element, param );
+            res.setElement( col, row, _res );
+        }
+    }
+    return res;
+}
+
+Value ValueCalc::twoArrayMap(const Value &array1, arrayMapFunc func, const Value &array2)
+{
+    Value res( Value::Array );
+    // Map each element in one array with the respective element in the other array
+    unsigned rows = qMax(array1.rows(), array2.rows());
+    unsigned columns = qMax(array1.columns(), array2.columns());
+    for (unsigned row = 0; row < rows; ++row) {
+        for (unsigned col = 0; col < columns; ++col) {
+            // Value::element() will return an empty value if element(col, row) does not exist.
+            Value element1 = array1.element( col, row );
+            Value element2 = array2.element( col, row );
+            Value _res = (this->*func)( element1, element2 );
+            res.setElement( col, row, _res );
+        }
+    }
+    return res;
 }
 
 void ValueCalc::twoArrayWalk(const Value &a1, const Value &a2,

@@ -112,6 +112,9 @@ private:
     void processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCloudCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processIrregularSeal1(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processDoubleWave(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);

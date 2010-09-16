@@ -317,7 +317,7 @@ Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QS
     return newCondition;
 }
 
-void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParser *parser)
+void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParser *parser, const StyleManager *styleManager)
 {
     kDebug(36003) << "Loading conditional styles";
     KoXmlNode node(element);
@@ -329,6 +329,10 @@ void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParse
             QString applyStyleName;
             if (elementItem.hasAttributeNS(KoXmlNS::style, "apply-style-name"))
                 applyStyleName = elementItem.attributeNS(KoXmlNS::style, "apply-style-name", QString());
+            if (!applyStyleName.isEmpty() && styleManager) {
+                QString odfStyle = styleManager->openDocumentName(applyStyleName);
+                if (!odfStyle.isEmpty()) applyStyleName = odfStyle;
+            }
             loadOdfCondition(conditionValue, applyStyleName, parser);
         }
         node = node.nextSibling();
@@ -389,7 +393,11 @@ void Conditions::loadOdfCondition(QString &valExpression, Conditional &newCondit
         kDebug(36003) << " I don't know how to parse it :" << valExpression;
     //kDebug(36003) << "\tvalue:" << value;
 
-    newCondition.value1 = parser->parse(value);
+    if (value.length() > 1 && value[0] == '"' && value[value.length()-1] == '"') {
+        newCondition.value1 = Value(value.mid(1, value.length()-2));
+    } else {
+        newCondition.value1 = parser->parse(value);
+    }
 }
 
 void Conditions::loadOdfValidationValue(const QStringList &listVal, Conditional &newCondition, const ValueParser *parser)

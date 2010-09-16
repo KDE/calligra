@@ -118,9 +118,26 @@ bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    out.xml.startElement("text:p");
-    out.xml.addTextNode(m_shapeText);
-    out.xml.endElement();
+    QStringList lines = m_shapeText.split(QRegExp("[\n\r]"));
+    foreach (const QString& line, lines) {
+        out.xml.startElement("text:p", false);
+        int pos = 0;
+        while (pos < line.length()) {
+            int idx = line.indexOf(QRegExp("[^ ]"), pos);
+            if (idx == -1) idx = line.length();
+            int cnt = idx - pos;
+            if (cnt > 1) {
+                out.xml.startElement("text:s");
+                out.xml.addAttribute("text:c", cnt);
+                out.xml.endElement();
+                pos += cnt; cnt = 0;
+            }
+            int endPos = qMax(line.length()-1, line.indexOf(' ', pos+cnt));
+            out.xml.addTextNode(line.mid(pos, endPos - pos + 1));
+            pos = endPos + 1;
+        }
+        out.xml.endElement();
+    }
 }
 
 void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out)

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -145,6 +145,13 @@ public:
         return m_span;
     }
     void setGridPos(int row, int col, int rowspan, int colspan);
+
+    //! @return selectable item for this item.
+    //! In most cases it is equal to this item but e.g. for pages of QTabWidget,
+    //! item for the widget itself is returned.
+    //! Used when user clicks on widget tree item or when parent of the current
+    //! widget should to be selected. Defaults can be overriden by widget factories.
+    ObjectTreeItem* selectableItem();
 
 protected:
     QString m_className;

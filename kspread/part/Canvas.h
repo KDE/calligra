@@ -167,6 +167,7 @@ public:
     virtual SheetView* sheetView(const Sheet* sheet) const;
     virtual void enableAutoScroll();
     virtual void disableAutoScroll();
+    virtual void showContextMenu(const QPoint& globalPos);
     virtual ColumnHeader* columnHeader() const;
     virtual RowHeader* rowHeader() const;
 private:

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2006-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,7 +29,8 @@
 
 #include <QGroupBox>
 #include <QMenu>
-#include <QPaintEvent>
+
+class QPaintEvent;
 
 namespace KFormDesigner
 {
@@ -324,6 +325,9 @@ public:
                                      const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
     virtual bool readSpecialProperty(const QByteArray& classname, QDomElement &node, QWidget *w,
                                      KFormDesigner::ObjectTreeItem *item);
+
+    //! Reimplemented for pages of QTabWidget.
+    virtual KFormDesigner::ObjectTreeItem* selectableItem(KFormDesigner::ObjectTreeItem* item);
 
 protected:
     virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,

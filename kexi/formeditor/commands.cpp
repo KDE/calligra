@@ -1748,8 +1748,7 @@ DeleteWidgetCommand::~DeleteWidgetCommand()
 
 void DeleteWidgetCommand::execute()
 {
-    Container *containerToSelect = 0;
-
+//    ObjectTreeItem *containerItemToSelect = 0;
     QHash<QByteArray, QByteArray>::ConstIterator endIt = d->containers.constEnd();
     for (QHash<QByteArray, QByteArray>::ConstIterator it = d->containers.constBegin(); it != endIt; ++it) {
         ObjectTreeItem *item = d->form->objectTree()->lookup(it.key());
@@ -1757,13 +1756,10 @@ void DeleteWidgetCommand::execute()
             continue;
 
         Container *cont = d->form->parentContainer(item->widget());
-        if (!containerToSelect)
-            containerToSelect = cont;
+/* not needed, Container::deleteWidgets() will select
+        if (!containerItemToSelect)
+            containerItemToSelect = cont->objectTree()->selectableItem();*/
         cont->deleteWidget(item->widget());
-    }
-    //now we've nothing select: select parent container
-    if (containerToSelect) {
-        d->form->selectWidget(containerToSelect->widget());
     }
 }
 

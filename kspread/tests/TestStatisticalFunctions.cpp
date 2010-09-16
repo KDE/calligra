@@ -1083,6 +1083,12 @@ void TestStatisticalFunctions::testSTEYX()
     CHECK_EVAL("STEYX(B4:B5;C4:C5)",     Value::errorNUM());  // at least three number per sequence
 }
 
+void TestStatisticalFunctions::testSUMPRODUCT()
+{
+    CHECK_EVAL("SUMPRODUCT(C19:C23;A19:A23)", Value(106));
+    CHECK_EVAL("SUMPRODUCT(C19:C23^2;2*A19:A23)", Value(820));
+}
+
 void TestStatisticalFunctions::testTDIST()
 {
     // mode

@@ -118,7 +118,7 @@ private slots:
     void testSTDEVPA();
     void testSTEYX();
 //     void testSUMXMY2(); // deprecated
-//     void testSUMPRODUCT();
+    void testSUMPRODUCT();
 //     void testSUMX2PY2();
 //     void testSUMX2MY2();
     void testTDIST();

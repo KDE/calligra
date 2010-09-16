@@ -124,6 +124,13 @@ Forms
 **select tab widget instead when clicking tab items
 **tab icon added for tab items
 **context menu has the same strategy as clicking tabs
+**select related item when widget is clicked on the form
+**right-clicking area of tab displays context menu of tab widget
+**adding and deleting widgets properly presented
+**tab page icons and names look as disabled
+**clicking on tab tab page items switched to them
+**clicking on child of a tab tab page switches to this tab
+TODO: fix delete widget/insert tab/delete tab/... actions in context menu
 Core
 *for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
 

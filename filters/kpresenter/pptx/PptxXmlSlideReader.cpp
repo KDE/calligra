@@ -185,7 +185,10 @@ PptxSlideMasterTextStyle* PptxSlideMasterPageProperties::textStyle(const QString
     else if (style == "dt") {
        return &dtStyle;
     }
-    return &otherStyle;
+    else if (style == "other") {
+       return &otherStyle;
+    }
+    return 0;
 }
 
 // -------------------
@@ -218,6 +221,7 @@ public:
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
     //! Used to index shapes in master slide when inheriting properties
     uint shapeNumber;
+    bool phRead;
     QString qualifiedNameOfMainElement;
     QString phType; //!< set by read_ph()
     QString phIdx; //!< set by read_ph()
@@ -914,7 +918,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_cSld()
 /*! This element specifies the mapping layer that transforms one color
  scheme definition to another. Each attribute
  represents a color name that can be referenced in this master, and the
- value is the corresponding color in the 	theme.
+ value is the corresponding color in the theme.
 
  Parent elements:
  - handoutMaster (§19.3.1.24)
@@ -1154,6 +1158,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     d->shapeNumber = 0;
 
+    // Adding extra 'inherited' frames from layout
+    if (m_context->type == Slide) {
+        int index = 0;
+        while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
+            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
+            ++index;
+        }
+    }
+
     QByteArray placeholderEl;
     QBuffer placeholderElBuffer(&placeholderEl);
     placeholderElBuffer.open(QIODevice::WriteOnly);
@@ -1171,15 +1184,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             ELSE_TRY_READ_IF(graphicFrame)
             ELSE_TRY_READ_IF(cxnSp)
 //! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-
-    // Adding extra 'inherited' frames from layout
-    if (m_context->type == Slide) {
-        int index = 0;
-        while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
-            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
-            ++index;
         }
     }
 
@@ -1217,6 +1221,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
+
+    d->phRead = true;
+
     // Specifies the placeholder index. This is used when applying templates or changing
     // layouts to match a placeholder on one template/master to another.
     TRY_READ_ATTR_WITHOUT_NS_INTO(idx, d->phIdx)
@@ -1441,6 +1448,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_nvPr()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    d->phRead = false;
     d->phType.clear();
     d->phIdx.clear();
     while (!atEnd()) {

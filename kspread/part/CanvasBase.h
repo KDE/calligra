@@ -174,6 +174,8 @@ public:
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;
     virtual void enableAutoScroll() = 0;
     virtual void disableAutoScroll() = 0;
+
+    virtual void showContextMenu(const QPoint& globalPos) = 0;
 private:
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget

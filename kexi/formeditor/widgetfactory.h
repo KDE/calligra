@@ -287,6 +287,13 @@ public:
      and the @a editor size needs to be updated. */
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
+    /*! @return selectable item for @a item item.
+     By default it is equal to @a item but e.g. for pages of QTabWidget,
+     item for the widget itself is returned.
+     Used when user clicks on the Widget Tree item or when parent of the current
+     widget should to be selected. Defaults can be overriden by reimplementing this method. */
+    virtual ObjectTreeItem* selectableItem(ObjectTreeItem* item);
+
 protected:
     /*! This function is called when we want to know whether the property should be visible.
      Implement it in the factory; don't forget to call implementation in the superclass.

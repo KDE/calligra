@@ -23,7 +23,7 @@
 
 #include <QTreeWidget>
 
-#include <kexi_export.h>
+#include "form.h"
 
 class QContextMenuEvent;
 
@@ -31,7 +31,6 @@ namespace KFormDesigner
 {
 
 class ObjectTreeItem;
-class Form;
 
 //! @short An item in WidgetTreeWidget associated with an ObjectTreeItem.
 class KFORMEDITOR_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
@@ -75,6 +74,7 @@ protected:
     void init();
     void initTextAndIcon();
 
+
 private:
     ObjectTreeItem *m_data;
     QString m_customSortingKey;
@@ -107,25 +107,26 @@ public:
 
     //2.0 virtual QSize sizeHint() const;
 
-    /*! Sets \a form as the current Form in the list. The list will automatically
-     be filled with an item for each widget in the Form, and selection will be synced.
-     Nothing happens if \a form is already the current Form.
-     */
-    void setForm(Form *form);
-
     //! \return the pixmap name for a given class, to be shown next to the widget name.
     QString iconNameForClass(const QByteArray &classname) const;
 
 public slots:
+    /*! Sets \a form as the current Form in the list. The list will automatically
+     be filled with an item for each widget in the Form, and selection will be synced.
+     Nothing happens if \a form is already the current Form.
+     */
+    void setForm(KFormDesigner::Form *form);
+
     /*! Sets the widget \a w as selected item, so it will be written bold.
-     It is added to current selection if \a add is true. */
-    void selectWidget(QWidget *w, bool add = false);
+     It replaces previous selection if \a flags & Form::ReplacePreviousSelection is true. */
+    void selectWidget(QWidget *w,
+                      KFormDesigner::Form::WidgetSelectionFlags flags = KFormDesigner::Form::ReplacePreviousSelection);
 
     /*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
-    void addItem(ObjectTreeItem *item);
+    void addItem(KFormDesigner::ObjectTreeItem *item);
 
     /*! Removess the ObjectTreeItem \a item from the list. */
-    void removeItem(ObjectTreeItem *item);
+    void removeItem(KFormDesigner::ObjectTreeItem *item);
 
     /*! Just renames the list item from \a oldname to \a newname. */
     void renameItem(const QByteArray &oldname, const QByteArray &newname);
@@ -137,11 +138,14 @@ protected slots:
 
     //2.0 void slotColumnSizeChanged(int);
 
-    /*! The selected list item has changed, so we emit a signal to update the Form. */
+    /*! The selected list item has changed. */
     void slotSelectionChanged();
 
     /*! Called before Form object is destroyed. */
     void slotBeforeFormDestroyed();
+
+//    /*! Selection on the current form has been changed. */
+//     void slotFormWidgetSelectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags)
 
 protected:
     //! Internal function to fill the list.
@@ -159,6 +163,10 @@ protected:
     //! Try to alter selection of the item is nonselectable item clicked and parent item is available.
     QTreeWidgetItem* tryToAlterSelection(QTreeWidgetItem* current);
 
+    //! If @a item is (grand)child of tab widget, activate proper tab page.
+    //! Do it recursively because there may be nested tab widgets.
+    void activateTabPageIfNeeded(QTreeWidgetItem* item);
+
 private:
     Form *m_form;
     //2.0 WidgetTreeWidgetItem *m_topItem;
@@ -166,6 +174,8 @@ private:
 
     //! Used to temporarily disable slotSelectionChanged() when reloading contents in setForm().
     bool m_slotSelectionChanged_enabled;
+    //! Used to temporarily disable selectWidget().
+    bool m_selectWidget_enabled;
 
     friend class TabStopDialog;
 };

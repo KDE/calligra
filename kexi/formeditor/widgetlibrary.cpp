@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@
 #include "form.h"
 #include "formIO.h"
 #include "FormWidgetInterface.h"
+#include "objecttree.h"
 
 #include "../kexi_global.h"
 
@@ -798,6 +799,15 @@ bool WidgetLibrary::propertySetShouldBeReloadedAfterPropertyChange(
     if (!winfo)
         return false;
     return winfo->factory()->propertySetShouldBeReloadedAfterPropertyChange(classname, w, property);
+}
+
+ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem* item)
+{
+    loadFactories();
+    WidgetInfo *wi = d->widgets.value(item->className().toLatin1());
+    if (!wi)
+        return item;
+    return wi->factory()->selectableItem(item);
 }
 
 #include "widgetlibrary.moc"
