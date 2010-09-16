@@ -731,7 +731,12 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         Hyperlink link = ic->hyperlink();
         if (link.isValid) {
             if (!link.location.isEmpty()) {
-                oc.setLink(link.location); // not sure if I should strip a leading # like KSpread does
+                if (link.location[0] == '#') {
+                    oc.setLink(link.location.mid(1));
+                } else {
+                    oc.setLink(link.location);
+                }
+
                 if (!link.displayName.trimmed().isEmpty())
                     txt = link.displayName.trimmed();
             }
