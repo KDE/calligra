@@ -572,7 +572,8 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
                             // TODO: this check is not quite correct, to really properly determine if the entire range is referenced
                             // or just a single cell we would need to actually have the compile formula, not just the tokenized one
                             // basically this is the same logic as Formula::Private::valueOrElement
-                            Region realRegion = region.intersected(Region(1, cell.row(), KS_colMax, 1, region.firstSheet()));
+
+                            Region realRegion = region.intersectedWithRow(cell.row());
                             if (!realRegion.isEmpty()) {
                                 region = realRegion;
                             }

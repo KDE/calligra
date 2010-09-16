@@ -268,7 +268,13 @@ public:
      * Intersects the region @p region and this region and
      * returns the result of the intersection as a new Region.
      */
-    Region intersected(const Region& region);
+    Region intersected(const Region& region) const;
+
+    /**
+     * Intersects this region with the row @p row and returns
+     * the result of the intersection as a new Region.
+     */
+    Region intersectedWithRow(int row) const;
 
     /**
      * @param point the point's location
