@@ -1276,65 +1276,79 @@ MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
 {
 }
 
+MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
+{
+    if (m_bulletChar == "" && m_type == ParagraphBulletProperties::BulletType) {
+        return true;
+    }
+    return false;
+}
 
-MSOOXML_EXPORT QString Utils::convertToListProperties(ParagraphBulletProperties properties)
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
+{
+    m_startValue = 0;
+    m_bulletChar = "";
+    m_type = ParagraphBulletProperties::BulletType;
+}
+
+MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
 {
     QString returnValue;
-    if (properties.m_type == ParagraphBulletProperties::NumberType) {
-        returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(properties.m_level);
+    if (m_type == ParagraphBulletProperties::NumberType) {
+        returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
 
         QString suffix;
         QString format;
-        if (properties.m_numbering == "arabicPeriod") {
+        if (m_numbering == "arabicPeriod") {
             suffix = ".";
             format = "1";
         }
-        else if (properties.m_numbering == "arabicParenR") {
+        else if (m_numbering == "arabicParenR") {
             suffix = ")";
             format = "1";
         }
-        else if (properties.m_numbering == "alphaUcPeriod") {
+        else if (m_numbering == "alphaUcPeriod") {
             suffix = ".";
             format = "A";
         }
-        else if (properties.m_numbering == "alphaLcPeriod") {
+        else if (m_numbering == "alphaLcPeriod") {
             suffix = ".";
             format = "a";
         }
-        else if (properties.m_numbering == "alphaUcParenR") {
+        else if (m_numbering == "alphaUcParenR") {
             suffix = ")";
             format = "A";
         }
-        else if (properties.m_numbering == "alphaLcParenR") {
+        else if (m_numbering == "alphaLcParenR") {
             suffix = ")";
             format = "a";
         }
-        else if (properties.m_numbering == "romanUcPeriod") {
+        else if (m_numbering == "romanUcPeriod") {
             suffix = ".";
             format = "I";
         }
-        else if (properties.m_numbering == "romanLcPeriod") {
+        else if (m_numbering == "romanLcPeriod") {
             suffix = ")";
             format = "i";
         }
-        else if (properties.m_numbering == "romanUcParenR") {
+        else if (m_numbering == "romanUcParenR") {
             suffix = ")";
             format = "I";
         }
-        else if (properties.m_numbering == "romanLcParenR") {
+        else if (m_numbering == "romanLcParenR") {
             suffix = ")";
             format = "i";
         }
 
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(suffix).arg(format);
-        if (properties.m_startValue != 0) {
-            returnValue += QString("style:start-value=\"%1\" ").arg(properties.m_startValue);
+        if (m_startValue != 0) {
+            returnValue += QString("style:start-value=\"%1\" ").arg(m_startValue);
         }
         returnValue += "/>";
     }
     else {
-        returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(properties.m_level);
-        returnValue += QString("text:bullet-char=\"%1\" ").arg(properties.m_bulletChar);
+        returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
+        returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
         returnValue += "/>";
     }
 

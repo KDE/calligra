@@ -69,6 +69,9 @@ public:
 
     //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > textStyles;
+
+    //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 };
 
 //! Data structure collecting information about single slide/master slide
@@ -119,12 +122,11 @@ public:
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > styles;
 
-    //! It is possible that layout defines a:ppr lvl=0, and the slide which uses it does not have lvl=0
-    //! even though it actually needs it, this boolean is for that use case
-    QMap<QString, bool> m_usesListStyle;
-
     //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > textStyles;
+
+    //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 
     // Extras frames such as pictures from layout, which should be put to the slide.
     QVector<QString> layoutFrames;
@@ -153,13 +155,14 @@ public:
     //! Map of text-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,KoGenStyle> > textStyles;
 
+    //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
+    QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
+
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
+    QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
 
     KoGenStyle m_drawingPageProperties;
-    QString m_titleList;
-    QString m_bodyList;
-    QString m_otherList;
 };
 
 //! A class reading MSOOXML PPTX markup - ppt/slides/slide*.xml part.
@@ -221,6 +224,11 @@ protected:
     // Saves current text and paragraph styles to slide(layout/master) memory where they
     // can be used later for inheritance purposes
     void saveCurrentStyles();
+
+    void saveCurrentListStyles();
+
+    // Inherits liststyle to m_currentCombinedBulletProperties
+    void inheritListStyles();
 
     // Inherits correct textstyle to m_currentTextStyle
     // First from default, then from master, layout, slide using those lvls which are needed

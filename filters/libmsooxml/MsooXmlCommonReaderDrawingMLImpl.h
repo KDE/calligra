@@ -1483,11 +1483,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     const read_p_args args = m_read_DrawingML_p_args;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
+    m_currentCombinedBulletProperties.clear();
 
 #ifdef PPTXXMLSLIDEREADER_H
+    inheritListStyles();
 #else
     m_prevListLevel = m_currentListLevel = 0;
 #endif
+
+    // Creating a list ouf of what we have, note that ppr maybe overwrite the list style if it wishes
+    m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+    QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_currentCombinedBulletProperties);
+    int index = 0;
+    while (i.hasNext()) {
+        index++;
+        i.next();
+        m_currentListStyle.addChildElement(QString("list-style-properties%1").arg(index),
+            i.value().convertToListProperties());
+    }
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
@@ -1536,14 +1549,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_H
     const QString styleId(d->phStyleId());
-        if (m_context->type == Slide) {
-            if (!styleId.isEmpty()) {
-                // Case where layout defines the shape to use a list (lvl=0), but it's not been defined in the slide
-                if (m_currentListLevel == 0 && m_context->slideLayoutProperties->m_usesListStyle[d->phIdx]) {
-                    m_currentListLevel = 1;
-                }
-            }
-        }
 
     if (!pprRead) {
         int copyLevel = 0;
@@ -1597,6 +1602,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             m_currentListLevel = 0;
             m_lstStyleFound = 0;
         }
+        // Checking whether we are in lvl 0 and there's empty bullet item -> No need to create a list
+        else if (m_currentListLevel == 0 && m_currentCombinedBulletProperties.value(1).isEmpty() && !m_listStylePropertiesAltered) {
+            m_listStylePropertiesAltered = false;
+            m_currentListLevel = 0;
+            m_lstStyleFound = 0;
+        }
+        else if (m_currentListLevel > 0 && m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
+            m_listStylePropertiesAltered = false;
+            m_currentListLevel = 0;
+            m_lstStyleFound = 0;
+        }
+        else {
+            m_lstStyleFound = true;
+        }
 
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
         // being a list-item. We need to handle that case and need to make sure that such paragraph's
@@ -1613,24 +1632,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                      body->startElement("text:list");
                      if (listDepth == 0) {
-                         QString listStyleName;
-                         if (m_currentListStyle.isEmpty()) {
-                             if (d->phType == "title") {
-                                 listStyleName = m_context->slideMasterPageProperties->m_titleList;
-                             }
-                             else if (styleId.isEmpty()) {
-                                 listStyleName = m_context->slideMasterPageProperties->m_otherList;
-                             }
-                             else {
-                                 // If no match, let's default this one.
-                                 listStyleName = m_context->slideMasterPageProperties->m_bodyList;
-                             }
-                         }
-                         else {
-                             listStyleName = mainStyles->insert(m_currentListStyle);
-                             if (m_context->type == SlideMaster) {
-                                 mainStyles->markStyleForStylesXml(listStyleName);
-                             }
+                         QString listStyleName = mainStyles->insert(m_currentListStyle);
+                         if (m_context->type == SlideMaster) {
+                             mainStyles->markStyleForStylesXml(listStyleName);
                          }
                          Q_ASSERT(!listStyleName.isEmpty());
                          body->addAttribute("text:style-name", listStyleName);
@@ -2120,6 +2124,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
+        m_lstStyleFound = true;
+        m_listStylePropertiesAltered = true;
         m_currentBulletProperties.m_bulletChar = '-';
         m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     }
@@ -2134,8 +2140,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         // For now we take a stand that any altered style makes its own list.
         m_currentBulletProperties.m_level = m_currentListLevel;
 
-        m_currentListStyle.addChildElement("list-style-properties", 
-            MSOOXML::Utils::convertToListProperties(m_currentBulletProperties));
+        m_currentListStyle.addChildElement("list-style-properties",
+            m_currentBulletProperties.convertToListProperties());
     }
     else if (m_customListMade) {
         // We come here in the case, that there was e.g buChar in the previous paragraph
@@ -3000,6 +3006,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     READ_PROLOGUE
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
+    m_currentCombinedBulletProperties.clear();
+    m_currentBulletProperties.clear();
+    m_currentCombinedTextStyles.clear();
+    m_currentCombinedParagraphStyles.clear();
+
+#ifdef PPTXXMLSLIDEREADER_H
+    inheritListStyles();
+    inheritParagraphAndTextStyles();
+#endif
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -3017,11 +3033,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_H
+    saveCurrentListStyles();
+    saveCurrentStyles();
+#endif
+
     // Should be zero to not mess anything
     m_currentListLevel = 0;
-
-    if (!m_currentListStyle.isEmpty())
-        m_lstStyleFound = true;
 
     READ_EPILOGUE
 }
@@ -4178,16 +4197,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         // Making the bullet character look ugly, thus defaulting to "-"
         m_currentBulletProperties.m_bulletChar = '-';
         m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_lstStyleFound = true;
+        m_listStylePropertiesAltered = true;
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
-    m_currentListStyle.addChildElement("list-style-properties",
-        MSOOXML::Utils::convertToListProperties(m_currentBulletProperties));
-
-#ifdef PPTXXMLSLIDEREADER_H
-    saveCurrentStyles();
-#endif
+    m_currentCombinedParagraphStyles[m_currentListLevel] = m_currentParagraphStyle;
+    m_currentCombinedTextStyles[m_currentListLevel] = m_currentTextStyle;
+    m_currentCombinedBulletProperties[m_currentListLevel] = m_currentBulletProperties;
 
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
@@ -4379,8 +4397,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buFont()
     TRY_READ_ATTR_WITHOUT_NS(typeface)
 
     if (!typeface.isEmpty()) {
-        m_lstStyleFound = true;
-        m_listStylePropertiesAltered = true;
         m_bulletFont = typeface;
     }
 
