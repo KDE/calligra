@@ -159,8 +159,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:end-line-spacing-horizontal
     // draw:end-line-spacing-vertical
 
-    // fFilled - a boolean property which specifies whether fill of the shape
-    // is render based on the properties of the "fill style" property set.
+    // NOTE: fFilled specifies whether fill of the shape is render based on the
+    // properties of the "fill style" property set.
     if (ds.fFilled()) {
         // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
         qint32 fillType = ds.fillType();
@@ -238,7 +238,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-    // fShadow property specifies whether the shape has a shadow.
+
+    // NOTE: fShadow property specifies whether the shape has a shadow.
     if (ds.fShadow()) {
         // draw:shadow
         style.addProperty("draw:shadow", "visible", gt);

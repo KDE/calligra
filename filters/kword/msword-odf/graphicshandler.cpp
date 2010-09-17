@@ -201,12 +201,15 @@ void KWordGraphicsHandler::init(Drawings * pDrawings, const wvWare::Word97::FIB 
     m_drawings = pDrawings;
     m_fib = const_cast<wvWare::Word97::FIB *>(&fib);
 
-    //provide the backgroud color information to the Document
+    //Provide the backgroud color information to the Document, if present.
     DrawStyle ds = getDrawingStyle();
     if (ds.fFilled()) {
         MSO::OfficeArtCOLORREF fc = ds.fillColor();
-        QColor color(fc.red, fc.green, fc.blue);
-        m_document->addBgColor(color.name());
+        QColor color = QColor(fc.red, fc.green, fc.blue);
+        QString tmp = color.name();
+        if (tmp != m_document->currentBgColor()) {
+            m_document->updateBgColor(tmp);
+        }
     }
     return;
 }
