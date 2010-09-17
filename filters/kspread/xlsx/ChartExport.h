@@ -75,6 +75,7 @@ private:
     QString genChartAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    void addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData = 1);
     QString generateGradientStyle( KoGenStyles& mainStyles, const Charting::Gradient* grad );
     QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
     void writeInternalTable ( KoXmlWriter* bodyWriter );

@@ -437,11 +437,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read(MSOOXML::MsooXmlReaderContex
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 m_autoTitleDeleted = val.toInt();
             }
-//            if (qualifiedName() == QLatin1String(QUALIFIED_NAME(style))) {
-//                const QXmlStreamAttributes attrs(attributes());
-//                TRY_READ_ATTR_WITHOUT_NS(val)
-//                m_context->m_chart->m_style = val.toInt();
-//            }
+           if (qualifiedName() == QLatin1String(QUALIFIED_NAME(style))) {
+               const QXmlStreamAttributes attrs(attributes());
+               TRY_READ_ATTR_WITHOUT_NS(val)
+               m_context->m_chart->m_style = val.toInt();
+           }
         }
     }
 
