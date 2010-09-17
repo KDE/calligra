@@ -694,6 +694,29 @@ bool CellStorage::isLocked(int column, int row) const
     return true;
 }
 
+bool CellStorage::hasLockedCells(const Region& region) const
+{
+    typedef QPair<QRectF, bool> RectBoolPair;
+    QList<QPair<QRectF, bool> > pairs = d->matrixStorage->intersectingPairs(region);
+    foreach (const RectBoolPair& pair, pairs) {
+        if (pair.first.isNull())
+            continue;
+        if (pair.second == false)
+            continue;
+        // more than just the master cell in the region?
+        const QPoint topLeft = pair.first.toRect().topLeft();
+        if (pair.first.width() >= 1) {
+            if (region.contains(topLeft + QPoint(1, 0), d->sheet))
+                return true;
+        }
+        if (pair.first.height() >= 1) {
+            if (region.contains(topLeft + QPoint(0, 1), d->sheet))
+                return true;
+        }
+    }
+    return false;
+}
+
 void CellStorage::lockCells(const QRect& rect)
 {
     // Start by unlocking the cells that we lock right now
