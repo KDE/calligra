@@ -1572,12 +1572,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                                                        m_currentParagraphStyle, KoGenStyle::ParagraphType);
         }
     }
-
-    if (!d->textBoxHasContent) {
-        body = textPBuf.releaseWriter();
-        READ_EPILOGUE
-    }
 #endif
+
     if (args & read_p_Skip) {
         //nothing
     } else {
@@ -1668,23 +1664,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
          body->startElement("text:p", false);
 #ifdef PPTXXMLSLIDEREADER_H
-         if(m_context->type == SlideLayout) {
-            //const QString styleId(d->phStyleId());
-            //kDebug() << "styleId:" << styleId;
-            //if (!styleId.isEmpty())
-            //    m_context->slideLayoutProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
-            //if (!m_cNvPrId.isEmpty())
-            //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
-         } else if (m_context->type == Slide) {
-             setupParagraphStyle();
-         }
-         else { //slidemaster
+         if (m_context->type == SlideMaster) {
              m_moveToStylesXml = true;
-             setupParagraphStyle();
          }
-#else
-         setupParagraphStyle();
 #endif
+
+         setupParagraphStyle();
+
          (void)textPBuf.releaseWriter();
          body->endElement(); //text:p
 #ifdef PPTXXMLSLIDEREADER_H
@@ -1754,7 +1740,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritTextStyles();
+    inheritTextStyle();
 #endif
 
     while (!atEnd()) {
@@ -2071,7 +2057,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritParagraphAndTextStyles();
+    inheritParagraphAndTextStyle();
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -3013,7 +2999,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_H
     inheritListStyles();
-    inheritParagraphAndTextStyles();
+    inheritAllTextAndParagraphStyles();
 #endif
 
     while (!atEnd()) {
@@ -4438,7 +4424,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     body = fldBuf.setWriter(body);
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritTextStyles();
+    inheritTextStyle();
 #endif
 
     while (!atEnd()) {

@@ -1499,22 +1499,22 @@ void PptxXmlSlideReader::saveCurrentStyles()
     }
 }
 
-void PptxXmlSlideReader::inheritParagraphAndTextStyles()
+void PptxXmlSlideReader::inheritParagraphAndTextStyle()
 {
-    inheritTextStyles();
+    inheritTextStyle();
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
     MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultParagraphStyles[copyLevel-1],
                                             m_currentParagraphStyle, KoGenStyle::ParagraphType);
 
-    if (!d->phType.isEmpty()) {
-        // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
-                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
-    }
     if (!d->phIdx.isEmpty()) {
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phIdx][copyLevel],
+                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
+    }
+    if (!d->phType.isEmpty()) {
+        // In all cases, we take them first from masterslide
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
                                                 m_currentParagraphStyle, KoGenStyle::ParagraphType);
     }
     if (!d->phType.isEmpty()) {
@@ -1546,6 +1546,21 @@ void PptxXmlSlideReader::inheritParagraphAndTextStyles()
                                                     m_currentParagraphStyle, KoGenStyle::ParagraphType);
         }
     }
+}
+
+void PptxXmlSlideReader::inheritAllTextAndParagraphStyles()
+{
+    int temp = m_currentListLevel;
+    m_currentListLevel = 1;
+    while (m_currentListLevel < 10) {
+        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle);
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle);
+        inheritParagraphAndTextStyle();
+        m_currentCombinedTextStyles[m_currentListLevel] = m_currentTextStyle;
+        m_currentCombinedParagraphStyles[m_currentListLevel] = m_currentParagraphStyle;
+        ++m_currentListLevel;
+    }
+    m_currentListLevel = temp;
 }
 
 void PptxXmlSlideReader::inheritListStyles()
@@ -1605,19 +1620,24 @@ void PptxXmlSlideReader::inheritListStyles()
     }
 }
 
-void PptxXmlSlideReader::inheritTextStyles()
+void PptxXmlSlideReader::inheritTextStyle()
 {
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
     MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultTextStyles[listLevel-1],
                                             m_currentTextStyle, KoGenStyle::TextType);
+    // Idx must be first for masterslide, due to initial use case
+    // e.g. bodyList -> shape with type body id 1, if we come to shape and type is first
+    // it will be overwritten by values from 1, and since it's the first time, it will be initialized to
+    // to empty
+    if (!d->phIdx.isEmpty()) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel],
+                                                m_currentTextStyle, KoGenStyle::TextType);
+    }
+
     if (!d->phType.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phType][listLevel],
-                                                m_currentTextStyle, KoGenStyle::TextType);
-    }
-    if (!d->phIdx.isEmpty()) {
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel],
                                                 m_currentTextStyle, KoGenStyle::TextType);
     }
     if (!d->phType.isEmpty()) {

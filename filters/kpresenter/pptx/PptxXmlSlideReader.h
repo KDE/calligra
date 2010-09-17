@@ -227,15 +227,18 @@ protected:
 
     void saveCurrentListStyles();
 
+    // Copies 9 lvls of text and paragraph styles to current styles
+    void inheritAllTextAndParagraphStyles();
+
     // Inherits liststyle to m_currentCombinedBulletProperties
     void inheritListStyles();
 
     // Inherits correct textstyle to m_currentTextStyle
     // First from default, then from master, layout, slide using those lvls which are needed
-    void inheritTextStyles();
+    void inheritTextStyle();
 
     // Inherits correct paragraph and text styles to m_currentTextStyle and m_currentParagraphStyle
-    void inheritParagraphAndTextStyles();
+    void inheritParagraphAndTextStyle();
 
     // True if we reading defaultStyles from PptxXmlDocumentReader
     bool documentReaderMode;
