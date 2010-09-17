@@ -241,7 +241,7 @@ const QList<BasicElement*> MultiscriptElement::childElements() const
         if (m_preScripts[i+1]) list << m_preScripts[i+1];
     }
 #endif
-    kDebug() << "number of children:" << list.size();
+
     return list;
 }
 
