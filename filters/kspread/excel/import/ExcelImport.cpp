@@ -51,6 +51,7 @@
 #include <KoDocumentInfo.h>
 
 #include <DocBase.h>
+#include <kspread/Sheet.h>
 #include <CalculationSettings.h>
 #include <CellStorage.h>
 #include <HeaderFooter.h>
