@@ -794,8 +794,30 @@ void TestLoadAndSave::subElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<msub></msub>" );
+    // Basic content
+    addRow( "<msub>\n <mrow></mrow>\n <mrow></mrow>\n</msub>",
+            "<msub>\n <mrow/>\n <mrow/>\n</msub>");
+    addRow( "<msub>\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+    addRow( "<msub>\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+    addRow( "<msub>\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+
+    // More complex content
+    addRow( "<msub>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mn>2</mn>\n"
+            "</msub>" );
+
+    // Attributes
+    addRow( "<msub subscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+    addRow( "<msub subscriptshift=\"1.5\">\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
 }
 
 void TestLoadAndSave::supElement_data()
@@ -803,8 +825,30 @@ void TestLoadAndSave::supElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<msup></msup>" );
+    // Basic content
+    addRow( "<msup>\n <mrow></mrow>\n <mrow></mrow>\n</msup>",
+            "<msup>\n <mrow/>\n <mrow/>\n</msup>");
+    addRow( "<msup>\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+    addRow( "<msup>\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+    addRow( "<msup>\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+
+    // More complex content
+    addRow( "<msup>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mn>2</mn>\n"
+            "</msup>" );
+
+    // Attributes
+    addRow( "<msup subscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+    addRow( "<msup subscriptshift=\"1.5\">\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
 }
 
 void TestLoadAndSave::subsupElement_data()
@@ -812,8 +856,32 @@ void TestLoadAndSave::subsupElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<msubsup></msubsup>" );
+    // Basic content
+    addRow( "<msubsup><mrow></mrow><mrow></mrow><mrow></mrow></msubsup>",
+            "<msubsup>\n <mrow/>\n <mrow/>\n <mrow/>\n</msubsup>");
+    addRow( "<msubsup>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>" );
+    addRow( "<msubsup><mrow><mi>x</mi></mrow><mi>y</mi><mi>z</mi></msubsup>",
+            "<msubsup>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>");
+    addRow( "<msubsup><mi>x</mi><mi>y</mi><mrow><mi>z</mi></mrow></msubsup>",
+            "<msubsup>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>");
+
+    addRow( "<msubsup>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mi>i</mi>\n"
+            " <mn>2</mn>\n"
+            "</msubsup>" );
+
+    // Attributes
+    addRow( "<msubsup subscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>" );
+    addRow( "<msubsup superscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>" );
 }
 
 void TestLoadAndSave::underElement_data()
