@@ -816,7 +816,7 @@ void TestLoad::trElement_data()
     addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
     addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 1, 2 );
 
-    // More complex ccontent
+    // More complex content
     addRow( "<mtr id='e-is-m-c-square'>"
             " <mtd>"
             "  <mrow>"
@@ -838,8 +838,8 @@ void TestLoad::trElement_data()
             "</mtr>", 2, 14 );
 
     // Be sure attributes don't break anything
-    addRow( "<mtr rowalign=\"top\"><mi>x</mi></mtr>", 1, 2 );
-    addRow( "<mtr groupalign=\"left\"><mi>x</mi></mtr>", 1, 2 );
+    addRow( "<mtr rowalign=\"top\"><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
+    addRow( "<mtr groupalign=\"left\"><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
 }
 /*
 void TestLoad::labeledtrElement_data()

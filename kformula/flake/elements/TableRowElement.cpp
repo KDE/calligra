@@ -253,14 +253,13 @@ bool TableRowElement::readMathMLContent( const KoXmlElement& element )
 {
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-    forEachElement( tmp, element )
-    {
+    forEachElement( tmp, element ) {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-    if( tmpElement->elementType() != TableData )
+        if (tmpElement->elementType() != TableData)
             return false;
 
         m_data << static_cast<TableDataElement*>( tmpElement );
-    tmpElement->readMathML( tmp );
+        tmpElement->readMathML( tmp );
     }
 
     return true;
