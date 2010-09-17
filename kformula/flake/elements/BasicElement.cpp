@@ -219,6 +219,8 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
     if (elementType() == Basic) {
         return;
     }
+
+    // Collapse a an <mrow> with only one child element to the child element itself.
     if ((elementType() == Row) && (childElements().count()==1)) {
         foreach( BasicElement* tmp, childElements() ) {
             tmp->writeMathML( writer );

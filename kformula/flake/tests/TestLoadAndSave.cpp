@@ -43,6 +43,7 @@
 #include "FencedElement.h"
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
+#include "SubSupElement.h"
 #include "UnderOverElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
@@ -666,8 +667,13 @@ void TestLoadAndSave::rowElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    addRow( "<mrow></mrow>" );
-    addRow( "<mrow>\n <mi>x</mi>\n</mrow>" );
+    addRow( "<mrow></mrow>",
+            "<mrow/>" );
+    addRow( "<mrow><mi>x</mi></mrow>", // Collapse mrow with only one child to the child only.
+            "<mi>x</mi>" );
+    addRow( "<mrow><mi>x</mi><mi>y</me></mrow>",
+            "<mrow>\n <mi>x</mi>\n <mi>y</mi>\n</mrow>" );
+
 }
 
 void TestLoadAndSave::fractionElement_data()
@@ -688,7 +694,8 @@ void TestLoadAndSave::rootElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>" );
+    addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>",
+            "<mroot>\n <mi>x</mi>\n <mn>2</mn>\n</mroot>");
 }
 
 void TestLoadAndSave::styleElement_data()
@@ -769,7 +776,7 @@ void TestLoadAndSave::subsupElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "<" );
+    addRow( "<msubsup></msubsup>" );
 }
 
 void TestLoadAndSave::underElement_data()
@@ -975,32 +982,32 @@ void TestLoadAndSave::encloseElement()
 
 void TestLoadAndSave::subElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubScript) );
 }
 
 void TestLoadAndSave::supElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SupScript) );
 }
 
 void TestLoadAndSave::subsupElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubSupScript) );
 }
 
 void TestLoadAndSave::underElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Under) );
 }
 
 void TestLoadAndSave::overElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Over) );
 }
 
 void TestLoadAndSave::underoverElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, UnderOver) );
 }
 
 void TestLoadAndSave::multiscriptsElement()
