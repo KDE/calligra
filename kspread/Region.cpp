@@ -344,7 +344,7 @@ void Region::sub(const Region& region)
     }
 }
 
-Region Region::intersected(const Region& region)
+Region Region::intersected(const Region& region) const
 {
     Region result;
     ConstIterator end(region.constEnd());
@@ -362,6 +362,26 @@ Region Region::intersected(const Region& region)
                     if(contains(p, element->sheet()))
                         result.add(p, element->sheet());
                 }
+            }
+        }
+    }
+    return result;
+}
+
+Region Region::intersectedWithRow(int row) const
+{
+    Region result;
+    ConstIterator end(constEnd());
+    for (ConstIterator it = constBegin(); it != end; ++it) {
+        Element *element = *it;
+        if (element->type() == Element::Point) {
+            Point* point = static_cast<Point*>(element);
+            if (point->pos().y() == row)
+                result.add(point->pos(), point->sheet());
+        } else {
+            QRect rect = element->rect();
+            if (rect.top() <= row && rect.bottom() >= row) {
+                result.add(QRect(rect.left(), row, rect.width(), 1), element->sheet());
             }
         }
     }

@@ -25,6 +25,7 @@
 #define PPTXXMLDOCREADER_H
 
 #include <MsooXmlThemesReader.h>
+#include "PptxXmlSlideReader.h"
 
 class PptxImport;
 class PptxSlideProperties;
@@ -45,10 +46,11 @@ public:
     const QString path;
     const QString file;
     MSOOXML::MsooXmlRelationships* relationships;
+    bool firstReadRound;
 };
 
 //! A class reading MSOOXML PPTX markup - presentation.xml part.
-class PptxXmlDocumentReader : public MSOOXML::MsooXmlReader
+class PptxXmlDocumentReader : public PptxXmlSlideReader
 {
 public:
     explicit PptxXmlDocumentReader(KoOdfWriters *writers);
@@ -67,6 +69,7 @@ protected:
     KoFilter::ConversionStatus read_sldIdLst();
     KoFilter::ConversionStatus read_sldId();
     KoFilter::ConversionStatus read_sldSz();
+    KoFilter::ConversionStatus read_defaultTextStyle();
 
     // Locates slide layout informaitons for given slide. Caches the result.
     PptxSlideLayoutProperties* slideLayoutProperties(const QString& slidePath, const QString& slideFile);
@@ -75,6 +78,7 @@ protected:
     PptxXmlDocumentReaderContext* m_context;
 
 private:
+
     void init();
 
     class Private;

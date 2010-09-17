@@ -1495,9 +1495,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         kDebug() << "SKIP!";
     } else {
         body = textPBuf.setWriter(body);
-        if (!m_currentParagraphStylePredefined) {
-            m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-        }
+        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     }
 
     bool pprRead = false;
@@ -1675,12 +1673,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             //    m_context->slideLayoutProperties->styles.insert(m_cNvPrId, m_currentParagraphStyle);
          } else if (m_context->type == Slide) {
              setupParagraphStyle();
-             m_currentParagraphStylePredefined = false;
          }
          else { //slidemaster
              m_moveToStylesXml = true;
              setupParagraphStyle();
-             m_currentParagraphStylePredefined = false;
          }
 #else
          setupParagraphStyle();
@@ -1751,61 +1747,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     body = rBuf.setWriter(body);
 
     m_currentTextStyleProperties = new KoCharacterStyle();
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    }
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
-    const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
-
-    // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-    if (m_context->type == Slide) {
-        // pass properties from master to slide
-//! @todo hardcoded list index (sebsauer; are there cases where another level needs to be applied? For reference see also bug #244363)
-        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-        }
-
-        if (!styleId.isEmpty()) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
-                                                m_currentTextStyle, KoGenStyle::TextType);
-        }
-        else { // Case that there's no style, we apply "other", maybe should read default and apply that?
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("other");
-            if (slideMasterTextStyle) {
-                MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-            }
-        }
-    }
-    else if (m_context->type == SlideLayout) {
-        PptxSlideMasterTextStyle *slideMasterTextStyle = 0;
-        if (styleId.isEmpty()) {
-            // If layout does not define any type, we assume it needs to use bodyStyle
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("other");
-        }
-        else {
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(styleId);
-        }
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-        }
-        // Needed in order to take changes from possible lvl1ppr textStyle.
-        if (!styleId.isEmpty()) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
-                                                m_currentTextStyle, KoGenStyle::TextType);
-        }
-    }
-    // Styles of texts for slidemaster are read in first round of reading slidemasterX.xml
-    // When we get here, we are in 2nd round, and can actually apply them.
-    else if (m_context->type == SlideMaster) {
-        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-        }
-    }
+    inheritTextStyles();
 #endif
 
     while (!atEnd()) {
@@ -1834,23 +1779,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideLayout) {
-        if (!(d->phType).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phType][m_currentListLevel] = m_currentTextStyle;
-        }
-        if (!(d->phIdx).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phIdx][m_currentListLevel] = m_currentTextStyle;
-        }
-    }
-
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
-        // It is possible, the slideMaster updates the style here
-        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, *slideMasterTextStyle->listStyle(listLevel), KoGenStyle::TextType);
-        }
     }
 #endif
 
@@ -2125,49 +2055,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     READ_PROLOGUE2(DrawingML_pPr)
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentListStyleProperties = new KoListLevelProperties;
     m_listStylePropertiesAltered = false;
 
     TRY_READ_ATTR_WITHOUT_NS(lvl)
 
     if (!lvl.isEmpty()) {
         m_currentListLevel = lvl.toInt() + 1;
-        m_currentListStyleProperties->setLevel(m_currentListLevel);
+        m_currentBulletProperties.m_level = m_currentListLevel;
     } else {
         m_currentListLevel = 0;
     }
 
-    // We take inherited properties before applying the local ones
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
-    int copyLevel = 0;
-    if (m_currentListLevel == 0) {
-        copyLevel = 1;
-    }
-    else {
-        copyLevel = m_currentListLevel;
-    }
-
-    if (!styleId.isEmpty()) {
-        if (m_context->type == SlideLayout) {
-            if (m_currentListLevel > 0) {
-                m_context->slideLayoutProperties->m_usesListStyle[styleId] = true;
-            }
-        }
-        // In all cases, we take them first from masterslide
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
-                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
-        // Perhaps we need to get the properties from layout
-        // Slidelayout needs to be here in case there was also lvl1ppr defined
-        if (m_context->type == Slide || m_context->type == SlideLayout) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
-                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
-        }
-    } else { // styleId is clear, getting par properties from "other", should perhaps get from default?
-        MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles["other"][copyLevel],
-                                                m_currentParagraphStyle, KoGenStyle::ParagraphType);
-    }
-
+    inheritParagraphAndTextStyles();
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -2220,27 +2120,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentListStyleProperties->setBulletCharacter(QChar('-'));
+        m_currentBulletProperties.m_bulletChar = '-';
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     }
-
-#ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideLayout) {
-        // Could there be cases where lvl1ppr defines something else for layout, and ppr something else?
-        if (!d->phIdx.isEmpty()) {
-            m_context->slideLayoutProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->slideLayoutProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
-        }
-    } else if (m_context->type == SlideMaster) {
-        if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterPageProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->slideMasterPageProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
-        }
-    }
-#endif
 
     if (m_listStylePropertiesAltered) {
         m_customListMade = true;
@@ -2250,15 +2132,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             m_currentListLevel = 1;
         }
         // For now we take a stand that any altered style makes its own list.
-        m_currentListStyleProperties->setLevel(m_currentListLevel);
+        m_currentBulletProperties.m_level = m_currentListLevel;
 
-        QBuffer listBuf;
-        KoXmlWriter listStyleWriter(&listBuf);
-
-        m_currentListStyleProperties->saveOdf(&listStyleWriter);
-        const QString elementContents = QString::fromUtf8(listBuf.buffer(),
-                                                          listBuf.buffer().size());
-        m_currentListStyle.addChildElement("list-style-properties", elementContents);
+        m_currentListStyle.addChildElement("list-style-properties", 
+            MSOOXML::Utils::convertToListProperties(m_currentBulletProperties));
     }
     else if (m_customListMade) {
         // We come here in the case, that there was e.g buChar in the previous paragraph
@@ -2269,9 +2146,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     else {
         m_customListMade = false;
     }
-
-    delete m_currentListStyleProperties;
-    m_currentListStyleProperties = 0;
 
     READ_EPILOGUE
 }
@@ -3143,6 +3017,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+    // Should be zero to not mess anything
+    m_currentListLevel = 0;
+
     if (!m_currentListStyle.isEmpty())
         m_lstStyleFound = true;
 
@@ -3175,6 +3052,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(typeface)
+
+#ifdef PPTXXMLSLIDEREADER_H
+    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    if (documentReaderMode) {
+        defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
+
+        SKIP_EVERYTHING
+        READ_EPILOGUE
+    }
+#endif
+
     if (!typeface.isEmpty()) {
         QString font = typeface;
         if (typeface.startsWith("+mj")) {
@@ -3317,6 +3205,7 @@ This element especifies a solid color fill.
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -3670,8 +3559,19 @@ Attributes
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
+
+#ifdef PPTXXMLSLIDEREADER_H
+    // We skip reading this one properly as we do not know the correct theme in the time of reading
+    if (documentReaderMode) {
+        defaultTextColors[defaultTextColors.size() - 1] = val;
+
+        SKIP_EVERYTHING
+        READ_EPILOGUE
+    }
+#endif
 
     m_currentTint = 0;
     m_currentShadeLevel = 0;
@@ -4209,17 +4109,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     Q_ASSERT(m_currentTextStyleProperties == 0);
     m_currentTextStyleProperties = new KoCharacterStyle();
 
-    Q_ASSERT(m_currentListStyleProperties == 0);
-    m_currentListStyleProperties = new KoListLevelProperties;
-
     // Number 3 makes eg. lvl4 -> 4
     m_currentListLevel = QString(level.at(3)).toInt();
 
     Q_ASSERT(m_currentListLevel > 0);
-    m_currentListStyleProperties->setLevel(m_currentListLevel);
-
-    // To prevent the default bullet, as MS2007 does have it
-    m_currentListStyleProperties->setBulletCharacter(QChar());
+    m_currentBulletProperties.m_level = m_currentListLevel;
 
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(marR)
@@ -4282,51 +4176,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentListStyleProperties->setBulletCharacter(QChar('-'));
+        m_currentBulletProperties.m_bulletChar = '-';
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
 
-    QBuffer listBuf;
-    KoXmlWriter listStyleWriter(&listBuf);
-    m_currentListStyleProperties->saveOdf(&listStyleWriter);
-    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-    m_currentListStyle.addChildElement("list-style-properties", elementContents);
+    m_currentListStyle.addChildElement("list-style-properties",
+        MSOOXML::Utils::convertToListProperties(m_currentBulletProperties));
 
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideMaster) {
-        if (d->currentSlideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, *d->currentSlideMasterTextStyle->listStyle(m_currentListLevel), KoGenStyle::TextType);
-        }
-        QString styleId(d->phStyleId());
-        // If it's empty, we're in slideMasters titleStyle, bodystyle, otherStyle
-        if (styleId.isEmpty()) {
-            styleId = m_context->slideMasterPageProperties->m_currentHandledList;
-            m_context->slideMasterPageProperties->styles[styleId][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phIdx.isEmpty()) {
-            m_context->slideMasterPageProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->slideMasterPageProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
-        }
-    }
-    else if (m_context->type == SlideLayout) {
-        if (!d->phIdx.isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phIdx][m_currentListLevel] = m_currentTextStyle;
-            m_context->slideLayoutProperties->styles[d->phIdx][m_currentListLevel] = m_currentParagraphStyle;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phType][m_currentListLevel] = m_currentTextStyle;
-            m_context->slideLayoutProperties->styles[d->phType][m_currentListLevel] = m_currentParagraphStyle;
-        }
-    }
+    saveCurrentStyles();
 #endif
 
     delete m_currentTextStyleProperties;
     m_currentTextStyleProperties = 0;
-    delete m_currentListStyleProperties;
-    m_currentListStyleProperties = 0;
 
     return KoFilter::OK;
 }
@@ -4477,7 +4341,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
 
     if (attrs.hasAttribute("char")) {
         // Effectively converts this to QChar
-        m_currentListStyleProperties->setBulletCharacter(attrs.value("char").toString().at(0));
+        m_currentBulletProperties.m_bulletChar = attrs.value("char").toString();
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
         // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
         m_lstStyleFound = true;
     }
@@ -4547,9 +4412,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     TRY_READ_ATTR(type)
 
     m_currentTextStyleProperties = new KoCharacterStyle();
-    if (!m_currentTextStylePredefined) {
-        m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-    }
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     if (!type.isEmpty()) {
 //! @todo support all possible fields here
@@ -4557,56 +4420,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
+
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
-    const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
-
-    // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
-    if (m_context->type == Slide) {
-        // pass properties from master to slide
-//! @todo hardcoded list index (sebsauer; are there cases where another level needs to be applied? For reference see also bug #244363)
-        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-        }
-
-        if (!styleId.isEmpty()) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
-                                                m_currentTextStyle, KoGenStyle::TextType);
-        }
-        else { // Case that there's no style, we apply "other", maybe should read default and apply that?
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("other");
-            if (slideMasterTextStyle) {
-                MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-            }
-        }
-    }
-    else if (m_context->type == SlideLayout) {
-        PptxSlideMasterTextStyle *slideMasterTextStyle = 0;
-        if ((d->phType).isEmpty()) {
-            // If layout does not define any type, we assume it needs to use bodyStyle
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle("body");
-        }
-        else {
-            slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-        }
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-        }
-        if (!styleId.isEmpty()) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->textStyles[styleId][listLevel],
-                                                m_currentTextStyle, KoGenStyle::TextType);
-        }
-    }
-    // Styles of texts for slidemaster are read in first round of reading slidemasterX.xml
-    // When we get here, we are in 2nd round, and can actually apply them.
-    else if (m_context->type == SlideMaster) {
-        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(*slideMasterTextStyle->listStyle(listLevel), m_currentTextStyle, KoGenStyle::TextType);
-        }
-    }
+    inheritTextStyles();
 #endif
 
     while (!atEnd()) {
@@ -4624,27 +4440,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     }
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
-
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-
 #ifdef PPTXXMLSLIDEREADER_H
-    if (m_context->type == SlideLayout) {
-        if (!(d->phType).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phType][m_currentListLevel] = m_currentTextStyle;
-        }
-        if (!(d->phIdx).isEmpty()) {
-            m_context->slideLayoutProperties->textStyles[d->phIdx][m_currentListLevel] = m_currentTextStyle;
-        }
-    }
-
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
-        // It is possible, the slideMaster updates the style here
-        PptxSlideMasterTextStyle *slideMasterTextStyle = m_context->slideMasterPageProperties->textStyle(d->phType);
-
-        if (slideMasterTextStyle) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, *slideMasterTextStyle->listStyle(listLevel), KoGenStyle::TextType);
-        }
     }
 #endif
 
@@ -4883,7 +4682,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
     m_lstStyleFound = true;
-    m_currentListStyleProperties->setBulletCharacter(QChar());
+    m_currentBulletProperties.m_bulletChar = "";
+    m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
     m_listStylePropertiesAltered = true;
     readNext();
     READ_EPILOGUE
@@ -4916,51 +4716,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 
     if (!type.isEmpty()) {
         m_lstStyleFound = true;
-        if (type == "arabicPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
-        }
-        else if (type == "arabicParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
-        }
-        else if (type == "alphaUcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
-        }
-        else if (type == "alphaLcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::AlphaLowerItem);
-        }
-        else if (type == "alphaUcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
-        }
-        else if (type == "alphaLcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
-        }
-        else if (type == "romanUcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
-        }
-        else if (type == "romanLcPeriod") {
-            m_currentListStyleProperties->setListItemSuffix(".");
-            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
-        }
-        else if (type == "romanUcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
-        }
-        else if (type == "romanLcParenR") {
-            m_currentListStyleProperties->setListItemSuffix(")");
-            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
-        }
+
+        m_currentBulletProperties.m_numbering = type;
+        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::NumberType;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(startAt)
     if (!startAt.isEmpty()) {
-        m_currentListStyleProperties->setStartValue(startAt.toInt());
+        m_currentBulletProperties.m_startValue = startAt.toInt();
     }
 
     m_listStylePropertiesAltered = true;

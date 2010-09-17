@@ -41,6 +41,9 @@ public:
      */
     const QList<BasicElement*> childElements() const;
 
+    /// inherited from BasicElement
+    virtual bool replaceChild ( BasicElement* oldElement, BasicElement* newElement );
+
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to

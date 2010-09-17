@@ -44,6 +44,7 @@
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
+#include "SubSupElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
 #include "TableDataElement.h"
@@ -107,9 +108,11 @@ void test( BasicElement* element )
     QFETCH(int, outputRecursive);
 
     load( element, input );
+    //element->writeElementTree();
     int numElements = count( element->childElements() );
 #if 0 // Set to 1 if you want to dump the xml tree if the test fails.
     if (numElements != outputRecursive) {
+        qDebug() << input;
         //dump(element->childElements());
         element->writeElementTree();
     }
@@ -504,8 +507,8 @@ void TestLoad::subElement_data()
             "  </mrow>"
             "  <mo> ) </mo>"
             " </mrow>"
-            " <mn> 2 </mn>"
-            "</msub>", 2, 8 );
+            " <mn> 2 </mn>" // An mrow is added here
+            "</msub>", 2, 9 );
 
     // Be sure attributes don't break anything
     addRow( "<msub subscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msub>", 2, 4 );
@@ -536,8 +539,8 @@ void TestLoad::supElement_data()
             "  </mrow>"
             "  <mo> ) </mo>"
             " </mrow>"
-            " <mn> 2 </mn>"
-            "</msup>", 2, 8 );
+            " <mn> 2 </mn>"  // An mrow is added here
+            "</msup>", 2, 9 );
 
     // Be sure attributes don't break anything
     addRow( "<msup superscriptshift=\"1.5ex\"><mi>x</mi><mi>y</mi></msup>", 2, 4 );
@@ -675,14 +678,14 @@ void TestLoad::multiscriptsElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>", 5, 10 );
-    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>", 5, 10 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 3 );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 3 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>", 2 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 1 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 1 ); // ?? Same as above
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>", 1 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>", 1 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>", 3 );
 
     // More complex content
     addRow( "<mmultiscripts>"
@@ -695,7 +698,7 @@ void TestLoad::multiscriptsElement_data()
             " <none/>"
             " <mi> l </mi>"
             " <none/>"
-            " </mmultiscripts>", 9, 18 );
+            "</mmultiscripts>", 5 );
 }
 
 void TestLoad::tableElement_data()
@@ -813,7 +816,7 @@ void TestLoad::trElement_data()
     addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
     addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>", 1, 2 );
 
-    // More complex ccontent
+    // More complex content
     addRow( "<mtr id='e-is-m-c-square'>"
             " <mtd>"
             "  <mrow>"
@@ -835,8 +838,8 @@ void TestLoad::trElement_data()
             "</mtr>", 2, 14 );
 
     // Be sure attributes don't break anything
-    addRow( "<mtr rowalign=\"top\"><mi>x</mi></mtr>", 1, 2 );
-    addRow( "<mtr groupalign=\"left\"><mi>x</mi></mtr>", 1, 2 );
+    addRow( "<mtr rowalign=\"top\"><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
+    addRow( "<mtr groupalign=\"left\"><mtd><mi>x</mi></mtd></mtr>", 1, 2 );
 }
 /*
 void TestLoad::labeledtrElement_data()
@@ -992,32 +995,32 @@ void TestLoad::encloseElement()
 
 void TestLoad::subElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubScript) );
 }
 
 void TestLoad::supElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SupScript) );
 }
 
 void TestLoad::subsupElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubSupScript) );
 }
 
 void TestLoad::underElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Under) );
 }
 
 void TestLoad::overElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Over) );
 }
 
 void TestLoad::underOverElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, UnderOver) );
 }
 
 void TestLoad::multiscriptsElement()

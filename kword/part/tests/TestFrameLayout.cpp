@@ -592,7 +592,8 @@ void TestFrameLayout::testPageBackground()
     bfl.createNewFramesForPage(4);
     QCOMPARE(bfl.m_backgroundFrameSet->frameCount(), 2);
 
-    foreach (KWFrame *frame, bfl.m_backgroundFrameSet->frames()) {
+    KWFrameSet *bfs = bfl.m_backgroundFrameSet;
+    foreach (KWFrame *frame, bfs->frames()) {
         QCOMPARE(frame->shape()->background(), page1.pageStyle().background());
     }
 

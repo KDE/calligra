@@ -13,7 +13,7 @@
    Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
    Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -176,7 +176,7 @@ public:
     virtual RowHeader* rowHeader() const;
     virtual void setCursor(const QCursor &cursor);
 
-    virtual void showContextMenu(const QPoint& globalPos) {}
+    virtual void showContextMenu(const QPoint& globalPos) { Q_UNUSED(globalPos); }
 private:
     Q_DISABLE_COPY(CanvasItem)
 

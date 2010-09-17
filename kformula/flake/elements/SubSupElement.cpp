@@ -26,15 +26,16 @@
 #include <QPainter>
 #include <kdebug.h>
 
-SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType ) : FixedElement( parent )
+SubSupElement::SubSupElement( BasicElement* parent, ElementType elementType )
+    : FixedElement( parent )
 {
     m_baseElement = new RowElement( this );
-    if (elementType!=SupScript) {
+    if (elementType != SupScript) {
         m_subScript = new RowElement( this );
     } else {
         m_subScript = 0;
     }
-    if (elementType!=SubScript) {
+    if (elementType != SubScript) {
         m_superScript = new RowElement( this );
     } else {
         m_superScript = 0;
@@ -109,12 +110,32 @@ const QList<BasicElement*> SubSupElement::childElements() const
 {
     QList<BasicElement*> tmp;
     tmp << m_baseElement;
-    if (m_superScript) {
-        tmp << m_superScript;
-    } if (m_subScript) {
+    if (m_subScript) {
         tmp << m_subScript;
     }
+    if (m_superScript) {
+        tmp << m_superScript;
+    }
     return tmp;
+}
+
+bool SubSupElement::replaceChild ( BasicElement* oldelement, BasicElement* newelement )
+{
+    //TODO: investigate, if we really need this check
+    if (newelement->elementType() == Row) {
+        RowElement* newrow = static_cast<RowElement*>(newelement);
+        if (oldelement == m_baseElement) {
+            m_baseElement = newrow;
+            return true;
+        } else if (oldelement == m_subScript ) {
+            m_subScript = newrow;
+            return true;
+        } else if (oldelement == m_superScript ) {
+            m_superScript = newrow;
+            return true;
+        }
+    }
+    return false;
 }
 
 QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
@@ -131,23 +152,43 @@ ElementType SubSupElement::elementType() const
 bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 {
     KoXmlElement tmp;
-    int counter=0;
+    int counter = 0;
     forEachElement( tmp, parent ) {
-        if (counter==0) {
-            loadElement(tmp,&m_baseElement);
-        } else if (counter==1 && m_elementType != SupScript) {
-            loadElement(tmp,&m_subScript);
-        } else if ((counter==2 && m_elementType==SubSupScript) || (counter==1 && m_elementType==SupScript)) {
-            loadElement(tmp,&m_superScript);
-        } else if ((counter==3 && m_elementType==SubSupScript) || (counter==2)) {
-            kDebug(39001) << "Too many arguments to " << ElementFactory::elementName(m_elementType);
+        switch (counter) {
+        case 0:
+            loadElement(tmp, &m_baseElement);
+            break;
+        case 1:
+            if (m_elementType == SupScript) {
+                loadElement(tmp, &m_superScript);
+            }
+            else {
+                // Valid for both Subscript and Subsupscript
+                loadElement(tmp, &m_subScript);
+            }
+            break;
+        case 2:
+            if (m_elementType==SubSupScript) {
+                loadElement(tmp, &m_superScript);
+            }
+            else {
+                kDebug(39001) << "Too many arguments to "
+                              << ElementFactory::elementName(m_elementType);
+            }
+            break;
+        default:
+            kDebug(39001) << "Too many arguments to "
+                          << ElementFactory::elementName(m_elementType);
         }
         counter++;
     }
-    if ((counter<3 && m_elementType==SubSupScript) || (counter<2)) {
+
+    // Check for too few arguments.
+    if ((counter < 3 && m_elementType == SubSupScript) || (counter < 2)) {
         kDebug(39001) << "Not enough arguments to "<< ElementFactory::elementName(m_elementType);
         return false;
     }
+
     return true;
 }
 
@@ -156,10 +197,10 @@ void SubSupElement::writeMathMLContent( KoXmlWriter* writer ) const
     // just save the children in the right order
     m_baseElement->writeMathML( writer );
 
-    if( m_elementType!= SupScript)
+    if (m_elementType != SupScript)
         m_subScript->writeMathML( writer );
 
-    if( m_elementType!= SubScript )
+    if (m_elementType != SubScript )
         m_superScript->writeMathML( writer );
 }
 

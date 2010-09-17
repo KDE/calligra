@@ -48,13 +48,14 @@ void MultiscriptElement::paint( QPainter& painter, AttributeManager* am )
     /*do nothing as this element has no visual representation*/
 }
 
-void MultiscriptElement::ensureEvenNumberElements() {
-    if(m_postScripts.size() % 2 == 1) {
-        //Odd number - at a None element on the end
+void MultiscriptElement::ensureEvenNumberElements()
+{
+    if (m_postScripts.size() % 2 == 1) {
+        // Odd number - add a None element to the end
         m_postScripts.append(NULL);
     }
-    if(m_preScripts.size() % 2 == 1) {
-        //Odd number - at a None element on the end
+    if (m_preScripts.size() % 2 == 1) {
+        // Odd number - add a None element to the end
         m_preScripts.append(NULL);
     }
 }
@@ -218,16 +219,28 @@ bool MultiscriptElement::acceptCursor( const FormulaCursor& cursor )
 const QList<BasicElement*> MultiscriptElement::childElements() const
 {
     QList<BasicElement*> list;
-    for (int i=m_preScripts.count()-2;i>=0; i-=2 ) {
-        if(m_preScripts[i]) list << m_preScripts[i];
-        if(m_preScripts[i+1]) list << m_preScripts[i+1];
-    }
+
     list << m_baseElement;
+
+    // postscript elements
     foreach( BasicElement* tmp, m_postScripts ) {
-        if(tmp)
+        if (tmp)
             list << tmp;
     }
 
+    // prescript elements
+#if 1
+    foreach( BasicElement* tmp, m_preScripts ) {
+        if (tmp)
+            list << tmp;
+    }
+#else
+    // What is this strange construction?
+    for (int i = m_preScripts.count() - 2; i >= 0; i -= 2 ) {
+        if (m_preScripts[i]) list << m_preScripts[i];
+        if (m_preScripts[i+1]) list << m_preScripts[i+1];
+    }
+#endif
 
     return list;
 }
@@ -249,9 +262,9 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     bool prescript = false; //When we see a mprescripts tag, we enable this
-    bool baseElement = true;
+    bool baseElement = false;   // True when the base element is read.
     forEachElement( tmp, parent ) { 
-        if(tmp.tagName() == "none") {
+        if (tmp.tagName() == "none") {
             //In mathml, we read subscript, then superscript, etc.  To skip one,
             //you use "none"
             //To represent "none" we use a NULL pointer
@@ -260,7 +273,7 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
             else
                 m_postScripts.append(NULL);
             continue;
-        } else if(tmp.tagName() == "mprescripts") {
+        } else if (tmp.tagName() == "mprescripts") {
             prescript = true;  
             //In mathml, when we see this tag, all the elements after it are
             // for prescripts
@@ -268,18 +281,21 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
         }
         
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        if( !tmpElement->readMathML( tmp ) )
+        if ( !tmpElement->readMathML( tmp ) )
             return false;
-        if( baseElement ) {  //Very first element is the base
+
+        // The very first element is the base
+        if ( !baseElement ) {
             delete m_baseElement; 
             m_baseElement = tmpElement;
             baseElement = true;
         }
-        else if( prescript)
+        else if (prescript)
             m_preScripts.append( tmpElement );
         else 
             m_postScripts.append( tmpElement );
     }
+
     ensureEvenNumberElements();
     Q_ASSERT(m_baseElement);  //We should have at least a BasicElement for the base
     return true;

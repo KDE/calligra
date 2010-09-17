@@ -2156,8 +2156,10 @@ QTextOption CellView::Private::textOptions() const
         break;
     case Style::Center:
         options.setAlignment(Qt::AlignHCenter);
+        break;
     case Style::Justified:
         options.setAlignment(Qt::AlignJustify);
+        break;
     }
     // The text consists of a single character, if it's vertical. Always center it.
     if (style.verticalText())

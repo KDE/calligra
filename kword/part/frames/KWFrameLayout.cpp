@@ -293,10 +293,23 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     foreach (KWFrame *frame, framesInPage(pageRect)) {
-        KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-        if (textFrameSet == 0 || textFrameSet->textFrameSetType() == KWord::OtherTextFrameSet)
+        KWTextFrameSet *textFrameSet = 0;
+        switch (frame->frameSet()->type()) {
+        case KWord::BackgroundFrameSet:
+            pageBackground = frame;
+            continue;
+        case KWord::TextFrameSet:
+            textFrameSet = static_cast<KWTextFrameSet*>(frame->frameSet());
+            if (textFrameSet->textFrameSetType() == KWord::OtherTextFrameSet) {
+                minZIndex = qMin(minZIndex, frame->shape()->zIndex());
+                continue;
+            }
+            break;
+        case KWord::OtherFrameSet:
             minZIndex = qMin(minZIndex, frame->shape()->zIndex());
-        if (textFrameSet == 0) continue;
+            continue;
+        }
+        Q_ASSERT(textFrameSet);
         switch (textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
         case KWord::EvenPagesHeaderTextFrameSet: {
@@ -349,8 +362,12 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             footer->shape()->setZIndex(--minZIndex);
         if (header)
             header->shape()->setZIndex(--minZIndex);
-        if (pageBackground)
-            pageBackground->shape()->setZIndex(--minZIndex);
+        if (pageBackground) {
+            KoShape *bs = pageBackground->shape();
+            bs->setZIndex(--minZIndex);
+            bs->setSize(pageRect.size());
+            bs->setPosition(pageRect.topLeft());
+        }
     }
 
     // spread space across items.
