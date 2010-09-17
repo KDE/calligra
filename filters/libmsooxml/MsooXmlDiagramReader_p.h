@@ -147,7 +147,7 @@ class PointNode : public AbstractNode
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level) {
-            DEBUG_DUMP << "modelId=" << m_modelId << "type=" << m_type << "cxnId=" << m_cxnId;
+            DEBUG_DUMP << "type=" << m_type << "modelId=" << m_modelId << "cxnId=" << m_cxnId;
             AbstractNode::dump(context, level);
         }
         virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
@@ -417,7 +417,7 @@ class LayoutNodeAtom : public AbstractAtom
 {
     public:
         QString m_name;
-        QMap<QString, int> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
+        QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
         explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true) {}
@@ -471,13 +471,13 @@ class LayoutNodeAtom : public AbstractAtom
         }
         QMap<QString, QString> variables() const { return m_variables; }
         void setVariable(const QString &name, const QString &value) { m_variables[name] = value; }
-        QMap<QString, int> finalValues() const {
+        QMap<QString, qreal> finalValues() const {
             //TODO cache
-            QMap<QString, int> result = m_values;
-            for(QMap<QString, int>::iterator it = result.begin(); it != result.end(); ++it) {
+            QMap<QString, qreal> result = m_values;
+            for(QMap<QString, qreal>::iterator it = result.begin(); it != result.end(); ++it) {
                 if(m_factors.contains(it.key())) {
                     //TODO figure our why the +1.0 and +1 provides better results and find a better way that makes more sense
-                    result[it.key()] = it.value() * ((m_factors[it.key()]+1.0) / qreal(m_countFactors[it.key()]+1));
+                    result[it.key()] = it.value() * ((m_factors[it.key()]+1.0) / qreal(m_countFactors[it.key()]+1.0));
                 }
             }
             return result;
@@ -641,32 +641,36 @@ class ShapeAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
             if(m_type.isEmpty()) return;
-if(m_hideGeom) return; // skip for now
+//if(m_hideGeom) return; // skip for now
 
-            QMap<QString, int> values = context->m_parentLayout->finalValues();
+            QMap<QString, qreal> values = context->m_parentLayout->finalValues();
             Q_ASSERT(values.contains("l"));
             Q_ASSERT(values.contains("t"));
             Q_ASSERT(values.contains("w"));
             Q_ASSERT(values.contains("h"));
             Q_ASSERT(values.contains("ctrX"));
             Q_ASSERT(values.contains("ctrY"));
-            int x  = values["l"];
-            int y  = values["t"];
-            int w  = values["w"];
-            int h  = values["h"];
-            int cx = values["ctrX"];
-            int cy = values["ctrY"];
+            qreal x  = values["l"];
+            qreal y  = values["t"];
+            qreal w  = values["w"];
+            qreal h  = values["h"];
+            qreal cx = values["ctrX"];
+            qreal cy = values["ctrY"];
 
-            // spacing between the siblings
-            int sibSp = values.value("sibSp");
-            if(sibSp > 0) {
-                Q_ASSERT(w > sibSp);
-                Q_ASSERT(h > sibSp);
-
-                x += sibSp;
-                y += sibSp;
-                w -= sibSp;
-                h -= sibSp;
+            //TODO can spacing between the siblings applied by shriking the shapes or is it needed to apply them along the used algorithm?
+            qreal sibSp = values.value("sibSp");
+            if(sibSp > 0.0) {
+                //Q_ASSERT(w >= sibSp);
+                //Q_ASSERT(h >= sibSp);
+                if(w >= sibSp && h >= sibSp) {
+                    x += sibSp;
+                    y += sibSp;
+                    w -= sibSp;
+                    h -= sibSp;
+                } else {
+                    kWarning()<<"Sibling spacing is bigger then width/height! Skipping sibSp-value! width="<<w<<"height="<<h<<"sibSp="<<sibSp;
+                    dump(context,10);
+                }
             }
             
             DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
@@ -992,7 +996,7 @@ class IfAtom : public AbstractAtom
                 }
             }
 
-            //kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
+            kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
             return istrue;
         }
     private:
@@ -1040,7 +1044,7 @@ class ChooseAtom : public AbstractAtom
             QVector< QExplicitlySharedDataPointer<AbstractAtom> > elseResult;
             while(!m_children.isEmpty()) {
                 QExplicitlySharedDataPointer<AbstractAtom> atom = m_children.first();
-                m_children.remove(0);
+                m_children.remove(0); // detach child
                 IfAtom* ifatom = static_cast<IfAtom*>(atom.data());
                 if(ifatom->isTrue()) {
                     if(ifatom->testAtom(context)) {
@@ -1050,20 +1054,18 @@ class ChooseAtom : public AbstractAtom
                     elseResult.append(atom);
                 }
             }
-
+kDebug()<<"###############"<<m_name;
             foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult) {
-                Q_ASSERT(dynamic_cast<IfAtom*>(atom.data()));
                 foreach(QExplicitlySharedDataPointer<AbstractAtom> a, atom->children()) {
                     atom->removeChild(a);
                     m_parent->addChild(a);
                     a->build(context);
                 }
             }
-            
-            // everything done so we can detach ourself now
+
+            // once everything is done we can detach ourself from our parent
             QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
             m_parent->removeChild(ptr);
-            m_children.clear(); // just to be sure
         }
 };
 
@@ -1113,6 +1115,7 @@ class ForEachAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void build(Context* context) {
+#if 0
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
             AbstractNode* oldCurrentNode = context->currentNode();
             foreach(AbstractNode* node, axis) {
@@ -1120,6 +1123,7 @@ class ForEachAtom : public AbstractAtom
                 foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
                     QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
                     m_parent->addChild(atomCopy);
+                    Q_ASSERT(atomCopy->parent().data() == parent().data());
                     atomCopy->build(context);
                 }
             }
@@ -1127,8 +1131,37 @@ class ForEachAtom : public AbstractAtom
 
             // everything done so we can detach ourself now since we are not needed any longer
             QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
+QExplicitlySharedDataPointer<AbstractAtom> prevParent=m_parent;
             m_parent->removeChild(ptr);
             m_children.clear(); // just to be sure
+#else
+            typedef QPair<AbstractNode*, QList<QExplicitlySharedDataPointer<AbstractAtom> > > NodePair;
+            QList<NodePair> newChildren;
+
+            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
+            foreach(AbstractNode* node, axis) {
+                QList<QExplicitlySharedDataPointer<AbstractAtom> > list;
+                foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
+                    QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
+                    list.append(atomCopy);
+                }
+                newChildren.append(NodePair(node, list));
+            }
+            
+            AbstractNode* oldCurrentNode = context->currentNode();
+            foreach(NodePair p, newChildren) {
+                context->setCurrentNode(p.first); // move on to the next node
+                foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, p.second) {
+                    m_parent->addChild(atom);
+                    atom->build(context);
+                }
+            }
+            context->setCurrentNode(oldCurrentNode);
+
+            // once everything is done we can detach ourself from our parent
+            QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
+            m_parent->removeChild(ptr);
+#endif
         }
 };
 
@@ -1230,6 +1263,8 @@ LayoutNodeAtom* LayoutNodeAtom::clone()
 
 void LayoutNodeAtom::layoutAtom(Context* context)
 {
+    kDebug() << "name=" << m_name;
+
     QExplicitlySharedDataPointer<LayoutNodeAtom> oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
     
@@ -1243,19 +1278,19 @@ void LayoutNodeAtom::layoutAtom(Context* context)
         m_factors = oldLayout->m_factors;
         m_countFactors = oldLayout->m_countFactors;
 
-        QMap<QString, int> values = oldLayout->finalValues();
+        QMap<QString, qreal> values = oldLayout->finalValues();
         Q_ASSERT(values.contains("l"));
         Q_ASSERT(values.contains("t"));
         Q_ASSERT(values.contains("w"));
         Q_ASSERT(values.contains("h"));
         Q_ASSERT(values.contains("ctrX"));
         Q_ASSERT(values.contains("ctrY"));
-        Q_ASSERT(values["l"] >= 0);
-        Q_ASSERT(values["t"] >= 0);
-        Q_ASSERT(values["w"] >= 0);
-        Q_ASSERT(values["h"] >= 0);
-        Q_ASSERT(values["ctrX"] >= 0);
-        Q_ASSERT(values["ctrY"] >= 0);
+        Q_ASSERT(values["l"] >= 0.0);
+        Q_ASSERT(values["t"] >= 0.0);
+        Q_ASSERT(values["w"] >= 0.0);
+        Q_ASSERT(values["h"] >= 0.0);
+        Q_ASSERT(values["ctrX"] >= 0.0);
+        Q_ASSERT(values["ctrY"] >= 0.0);
     }
 
     AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
@@ -1270,20 +1305,20 @@ void LayoutNodeAtom::layoutAtom(Context* context)
         m_needsRelayout = false;
         m_childNeedsRelayout = true;
 
-        QStringList axisnames;
-        foreach(AbstractNode* n, m_axis) axisnames.append(n->m_tagName);
-        kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
+        //QStringList axisnames;
+        //foreach(AbstractNode* n, m_axis) axisnames.append(n->m_tagName);
+        //kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
         //this->dump(context, 2);
 
         // evaluate the constraints responsible for positioning and sizing.
-        if(!m_constraints.isEmpty()) kDebug() << "Constraints for LayoutNodeAtom="<<m_name;
+        //if(!m_constraints.isEmpty()) kDebug() << "Constraints for LayoutNodeAtom="<<m_name;
         foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, m_constraints) {
             c->dump(context, 2);
 
-            int value = -1;
+            qreal value = -1.0;
             if(!c->m_value.isEmpty()) {
                 bool ok;
-                value = c->m_value.toInt(&ok);
+                value = c->m_value.toDouble(&ok);
                 Q_ASSERT(ok);
             } else {
                 LayoutNodeAtom* ref = c->m_refForName.isEmpty() ? this : context->m_layoutMap.value(c->m_refForName).data();
@@ -1303,12 +1338,17 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 }
 
                 if(!c->m_refType.isEmpty()) {
-                    Q_ASSERT(ref->finalValues().contains(c->m_refType));
-                    value = ref->finalValues()[c->m_refType];
-                    Q_ASSERT(value >= 0);
+                    QMap<QString, qreal> values = ref->finalValues();
+                    Q_ASSERT(values.contains(c->m_refType));
+                    value = values[c->m_refType];
+                    Q_ASSERT(value >= 0.0);
                 } else {
-                    kDebug()<<"TODO c->m_refType.isEmpty()";
-                    continue;
+                    //FIXME no refType and no value defined means use the default-value but the specs don't say what
+                    //the default values are. So, it's needed someone figures out what it means if standalone tags
+                    //like <dgm:constr type="connDist"/> are defined.
+                    kDebug()<<"TODO figure out defaults for constraints";
+                    c->dump(context,10);
+                    value = 0.0;
                 }
             }
 
@@ -1317,7 +1357,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 continue;
             }
 
-            if(value >= 0)
+            if(value >= 0.0)
                 m_values[c->m_type] = value;
             m_factors[c->m_type] += c->m_fact;
             m_countFactors[c->m_type] += 1;
@@ -1327,7 +1367,6 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     // layout the children if still requested
     if(m_childNeedsRelayout) {
         m_childNeedsRelayout = false;
-
         QList<LayoutNodeAtom*> childLayouts;
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
             atom->layoutAtom(context);
@@ -1336,10 +1375,10 @@ void LayoutNodeAtom::layoutAtom(Context* context)
         }
 
         Q_ASSERT(m_algorithm);
-        QList< QPair<int,int> > m_startCoordinates;
+        QList< QPair<qreal,qreal> > m_startCoordinates;
         switch(m_algorithm->m_type) {
             case AlgorithmAtom::UnknownAlg:
-                kWarning() << "Unknown algorithm defined";
+                kWarning() << "Unknown algorithm defined. Using composite algorithm.";
                 break;
             case AlgorithmAtom::CompositeAlg:
                 // nothing to do since composite means that the constraints define everything needed and
@@ -1350,19 +1389,19 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 kWarning() << "TODO implement AlgorithmAtom::ConnectorAlg";
                 break;
             case AlgorithmAtom::CycleAlg: {
-                int w = finalValues()["w"];
-                int h = finalValues()["h"];
-                const int rx = w / 2;
-                const int ry = h / 2;
+                qreal w = finalValues()["w"];
+                qreal h = finalValues()["h"];
+                const qreal rx = w / 2.0;
+                const qreal ry = h / 2.0;
                 Q_ASSERT(!childLayouts.isEmpty());
                 const int num = 360 / childLayouts.count();
                 for(int degree = 0; degree <= 360; degree += num) {
-                    qreal radian = (degree - 90) * (3.14 / 180);
-                    int x = rx + cos(radian) * rx;
-                    int y = ry + sin(radian) * ry;
+                    const qreal radian = (degree - 90) * (3.14 / 180);
+                    const qreal x = rx + cos(radian) * rx;
+                    const qreal y = ry + sin(radian) * ry;
                     Q_ASSERT(x >= 0);
                     Q_ASSERT(y >= 0);
-                    m_startCoordinates.append(QPair<int,int>(x, y));
+                    m_startCoordinates.append(QPair<qreal,qreal>(x, y));
                 }
             } break;
             case AlgorithmAtom::HierChildAlg:
@@ -1397,7 +1436,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 
         foreach(LayoutNodeAtom* l, childLayouts) {
             if(!m_startCoordinates.isEmpty()) {
-                QPair<int,int> coordinates = m_startCoordinates.takeFirst();
+                QPair<qreal,qreal> coordinates = m_startCoordinates.takeFirst();
                 l->m_values["ctrX"] += coordinates.first;
                 l->m_values["ctrY"] += coordinates.second;
 //kDebug()<<"w="<<m_values.value("w")<<"final-w="<<finalValues().value("w")<<"sibSp="<<m_values.value("sibSp")<<"final-sibSp="<<finalValues().value("sibSp");

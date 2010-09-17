@@ -115,12 +115,12 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         foreach(Diagram::AbstractNode* node, m_context->m_context->m_connections->children()) {
             if(Diagram::ConnectionNode* connection = dynamic_cast<Diagram::ConnectionNode*>(node)) {
                 if (connection->m_type != "parOf") continue;
+connection->dump(m_context->m_context,10);
 
                 Diagram::PointNode* source = 0;
                 if (pointTree.contains(connection->m_srcId)) {
                     source = pointTree[connection->m_srcId];
-                }
-                else {
+                } else {
                     if (!pointMap.contains(connection->m_srcId)) continue;
                     source = pointMap[connection->m_srcId];
                     pointTree[connection->m_srcId] = source;
@@ -130,8 +130,41 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
 
                 Diagram::PointNode* destination = pointMap[connection->m_destId];
                 rootList.removeChild(destination);
+
+                const bool isFirst = source->children().isEmpty();
+
+                // transition between the previous node with this node
+                if(!isFirst) {
+                    Diagram::PointNode* siblingTransition = new Diagram::PointNode;
+                    //siblingTransition->m_modelId = destination->m_modelId;
+                    siblingTransition->m_cxnId = connection->m_modelId;
+                    siblingTransition->m_type = "sibTrans";
+                    source->addChild(siblingTransition);
+                }
+
+                // transition between parent and child
+                Diagram::PointNode* parentTransition = new Diagram::PointNode;
+                //parentTransition->m_modelId = ;
+                parentTransition->m_cxnId = connection->m_modelId;
+                parentTransition->m_type = "parTrans";
+                source->addChild(parentTransition);
+
+                // attach the child node to the parent node
                 source->addChild(destination);
+                // remember the connection that was responsible for connecting the node with it's parent
+                Q_ASSERT(destination->m_cxnId.isEmpty());
+                destination->m_cxnId = connection->m_modelId;
+                // remember for future reference
                 pointTree[connection->m_destId] = destination;
+                
+                // transition between this node with the previous node
+                if(!isFirst) {
+                    Diagram::PointNode* siblingTransition = new Diagram::PointNode;
+                    //siblingTransition->m_modelId = ;
+                    siblingTransition->m_cxnId = connection->m_modelId;
+                    siblingTransition->m_type = "sibTrans";
+                    source->addChild(siblingTransition);
+                }
             }
         }
 
@@ -144,12 +177,17 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 }
             }
         }
-        Q_ASSERT(m_context->m_context->m_rootPoint);
+        if(!m_context->m_context->m_rootPoint) {
+            kWarning() << "Data-definition doesn't specify a root-node";
+            return KoFilter::WrongFormat;
+        }
         rootList.removeChild(m_context->m_context->m_rootPoint);
         m_context->m_context->setCurrentNode(m_context->m_context->m_rootPoint);
-
+// kDebug()<<"1x.................................";
         //for(QMap<QString, Diagram::PointNode*>::Iterator it = pointTree.begin(); it != pointTree.end(); ++it) (*it)->dump(m_context->m_context, 0);
-        //m_context->m_context->m_rootPoint->dump(0);
+        m_context->m_context->m_rootPoint->dump(m_context->m_context, 0);
+// kDebug()<<"2x.................................";
+//         Q_ASSERT(false);
     }
     else if (qualifiedName() == QLatin1String("dgm:layoutDef")) {
         m_type = LayoutDefType;
@@ -166,9 +204,11 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 //ELSE_TRY_READ_IF(styleData)
             }
         }
-        Q_ASSERT(m_context->m_context->m_rootPoint);
+        if(!m_context->m_context->m_rootPoint) {
+            kWarning() << "Layout-definition doesn't specify a root-point";
+            return KoFilter::WrongFormat;
+        }
         
-        //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
         m_context->m_context->m_rootLayout->build(m_context->m_context);
         //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
         //Q_ASSERT(false);
