@@ -1964,19 +1964,19 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
                           const IntervalMap<QString>& columnStyles,
                           const Styles& autoStyles)
 {
-    static const QString sStyleName             = QString::fromAscii("style-name");
-    static const QString sNumberRowsRepeated    = QString::fromAscii("number-rows-repeated");
-    static const QString sDefaultCellStyleName  = QString::fromAscii("default-cell-style-name");
-    static const QString sVisibility            = QString::fromAscii("visibility");
-    static const QString sVisible               = QString::fromAscii("visible");
-    static const QString sCollapse              = QString::fromAscii("collapse");
-    static const QString sFilter                = QString::fromAscii("filter");
-    static const QString sPage                  = QString::fromAscii("page");
-    static const QString sTableCell             = QString::fromAscii("table-cell");
-    static const QString sCoveredTableCell      = QString::fromAscii("covered-table-cell");
-    static const QString sNumberColumnsRepeated = QString::fromAscii("number-columns-repeated");
+    static const QString sStyleName             = QString::fromLatin1("style-name");
+    static const QString sNumberRowsRepeated    = QString::fromLatin1("number-rows-repeated");
+    static const QString sDefaultCellStyleName  = QString::fromLatin1("default-cell-style-name");
+    static const QString sVisibility            = QString::fromLatin1("visibility");
+    static const QString sVisible               = QString::fromLatin1("visible");
+    static const QString sCollapse              = QString::fromLatin1("collapse");
+    static const QString sFilter                = QString::fromLatin1("filter");
+    static const QString sPage                  = QString::fromLatin1("page");
+    static const QString sTableCell             = QString::fromLatin1("table-cell");
+    static const QString sCoveredTableCell      = QString::fromLatin1("covered-table-cell");
+    static const QString sNumberColumnsRepeated = QString::fromLatin1("number-columns-repeated");
 
-    static const QString nsTable = QString::fromAscii(KoXmlNS::table);
+    static const QString nsTable = QString::fromLatin1(KoXmlNS::table);
 
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
