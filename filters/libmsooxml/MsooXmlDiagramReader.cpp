@@ -133,6 +133,9 @@ connection->dump(m_context->m_context,10);
 
                 const bool isFirst = source->children().isEmpty();
 
+                //FIXME specs are missing details how sibling-transitions are mapped for >2 child-nodes. Let's assume for now
+                // that we only need to add in max 2 transitions, one for the sibling before and one for after the current node.
+                
                 // transition between the previous node with this node
                 if(!isFirst) {
                     Diagram::PointNode* siblingTransition = new Diagram::PointNode;
