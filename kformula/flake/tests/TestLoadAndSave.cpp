@@ -667,13 +667,50 @@ void TestLoadAndSave::rowElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
+    // Basic content
     addRow( "<mrow></mrow>",
             "<mrow/>" );
     addRow( "<mrow><mi>x</mi></mrow>", // Collapse mrow with only one child to the child only.
             "<mi>x</mi>" );
-    addRow( "<mrow><mi>x</mi><mi>y</me></mrow>",
+    addRow( "<mrow><mi>x</mi><mi>y</mi></mrow>",
             "<mrow>\n <mi>x</mi>\n <mi>y</mi>\n</mrow>" );
 
+    // More complex content
+    addRow( "<mrow><mrow></mrow></mrow>", // Collapse row with no children to nothing
+            "<mrow/>");
+    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>",
+            //"<mrow>\n <mi>x</mi>\n</mrow>");
+            "<mi>x</mi>");
+    addRow( "<mrow><mrow><mi>x</mi><mn>2</mn></mrow></mrow>", 
+            "<mrow>\n <mi>x</mi>\n <mn>2</mn>\n</mrow>");
+    addRow( "<mrow><mrow><mi>x</mi><mn>2</mn></mrow><mi>y</mi></mrow>", 
+            "<mrow>\n <mrow>\n  <mi>x</mi>\n  <mn>2</mn>\n </mrow>\n <mi>y</mi>\n</mrow>");
+
+#if 0  // Enable this when entities work (see &InvisibleTimes; below).
+    addRow( "<mrow>"
+            " <mrow>"
+            "  <mn> 2 </mn>"
+            "  <mo> &InvisibleTimes; </mo>"
+            "  <mi> x </mi>"
+            " </mrow>"
+            " <mo> + </mo>"
+            " <mi> y </mi>"
+            " <mo> - </mo>"
+            " <mi> z </mi>"
+            "</mrow>",
+
+            "<mrow>\n"
+            " <mrow>\n"
+            "  <mn>2</mn>\n"
+            "  <mo>&InvisibleTimes;</mo>\n"
+            "  <mi>x</mi>\n"
+            " </mrow>\n"
+            " <mo>+</mo>\n"
+            " <mi>y</mi>\n"
+            " <mo>-</mo>\n"
+            " <mi>z</mi>\n"
+            "</mrow>" );
+#endif
 }
 
 void TestLoadAndSave::fractionElement_data()
