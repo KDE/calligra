@@ -107,12 +107,12 @@ void test( BasicElement* element )
     QFETCH(int, output);
     QFETCH(int, outputRecursive);
 
-    //qDebug() << input;
     load( element, input );
     //element->writeElementTree();
     int numElements = count( element->childElements() );
 #if 0 // Set to 1 if you want to dump the xml tree if the test fails.
     if (numElements != outputRecursive) {
+        qDebug() << input;
         //dump(element->childElements());
         element->writeElementTree();
     }
@@ -678,14 +678,14 @@ void TestLoad::multiscriptsElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>", 3, 6 );
-    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>", 5, 10 );
-    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>", 5, 10 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 3 );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>", 3, 3 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>", 2 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 1 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>", 1 ); // ?? Same as above
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>", 1 );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>", 1 );
+    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>", 3 );
 
     // More complex content
     addRow( "<mmultiscripts>"
@@ -698,7 +698,7 @@ void TestLoad::multiscriptsElement_data()
             " <none/>"
             " <mi> l </mi>"
             " <none/>"
-            " </mmultiscripts>", 9, 18 );
+            "</mmultiscripts>", 5 );
 }
 
 void TestLoad::tableElement_data()
