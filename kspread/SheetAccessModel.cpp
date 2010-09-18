@@ -28,6 +28,7 @@
 
 // Qt
 #include <QList>
+#include <QMap>
 #include <QStandardItem>
 #include <QAbstractItemModel>
 #include <QVariant>
@@ -46,6 +47,10 @@ class SheetAccessModel::Private
 {
 public:
     Map *map;
+    /// Stores in what column each Sheet is. We need this because
+    /// a Sheet is removed from its Map before the sheetRemoved() signal
+    /// is emitted, thus we can't ask the Map what index it had.
+    QMap<Sheet*, int> cols;
 };
 
 SheetAccessModel::SheetAccessModel(Map *map)
@@ -74,6 +79,8 @@ SheetAccessModel::~SheetAccessModel()
 
 void SheetAccessModel::slotSheetAdded(Sheet *sheet)
 {
+    Q_ASSERT(!d->cols.contains(sheet));
+
     QStandardItem *item = new QStandardItem;
     QList<QStandardItem*> col;
     col.append(item);
@@ -85,6 +92,7 @@ void SheetAccessModel::slotSheetAdded(Sheet *sheet)
     item->setData( QVariant::fromValue( model ), Qt::DisplayRole );
 
     const int sheetIndex = d->map->indexOf( sheet );
+    d->cols.insert(sheet, sheetIndex);
 
     insertColumn( sheetIndex, col );
     setHeaderData( sheetIndex, Qt::Horizontal, sheet->sheetName() );
@@ -92,7 +100,9 @@ void SheetAccessModel::slotSheetAdded(Sheet *sheet)
 
 void SheetAccessModel::slotSheetRemoved(Sheet *sheet)
 {
-    removeColumn(d->map->indexOf(sheet), QModelIndex());
+    Q_ASSERT(d->cols.contains(sheet));
+    removeColumn(d->cols[sheet]);
+    d->cols.remove(sheet);
 }
 
 void SheetAccessModel::handleDamages(const QList<Damage*>& damages)
@@ -109,10 +119,11 @@ void SheetAccessModel::handleDamages(const QList<Damage*>& damages)
             kDebug(36007) << "Processing\t" << *sheetDamage;
 
             if (sheetDamage->changes() & SheetDamage::Name) {
-                const int sheetIndex = d->map->indexOf(sheetDamage->sheet());
+                Sheet *sheet = sheetDamage->sheet();
                 // We should never receive signals from sheets that are not in our model
-                Q_ASSERT( sheetIndex >= 0 );
-                setHeaderData(sheetIndex, Qt::Horizontal, sheetDamage->sheet()->sheetName());
+                Q_ASSERT(d->cols.contains(sheet));
+                const int sheetIndex = d->cols[sheet];
+                setHeaderData(sheetIndex, Qt::Horizontal, sheet->sheetName());
             }
             continue;
         }
