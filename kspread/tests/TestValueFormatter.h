@@ -39,6 +39,8 @@ private Q_SLOTS:
 
     void testFractionFormat_data();
     void testFractionFormat();
+    void testCreateNumberFormat_data();
+    void testCreateNumberFormat();
 private:
     CalculationSettings* m_calcsettings;
     ValueParser* m_parser;

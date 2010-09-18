@@ -349,6 +349,11 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
     }
 
+    // remove negative sign if prefix already ends with '-'
+    if (!prefix.isEmpty() && prefix[prefix.length()-1] == '-' && !localizedNumber.isEmpty() && localizedNumber[0] == '-') {
+        localizedNumber = localizedNumber.mid(1);
+    }
+
     return prefix + localizedNumber + postfix;
 }
 

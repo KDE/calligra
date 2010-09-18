@@ -27,6 +27,7 @@
 #include <qtest_kde.h>
 
 Q_DECLARE_METATYPE(KSpread::Format::Type)
+Q_DECLARE_METATYPE(KSpread::Style::FloatFormat)
 
 using namespace KSpread;
 
@@ -37,6 +38,7 @@ public:
             : ValueFormatter(converter) {}
 
     using ValueFormatter::fractionFormat;
+    using ValueFormatter::createNumberFormat;
 };
 
 void TestValueFormatter::initTestCase()
@@ -187,6 +189,35 @@ void TestValueFormatter::testFractionFormat()
     Number num(value);
     PublicValueFormatter fmt(m_converter);
     QCOMPARE(fmt.fractionFormat(num, formatType), result);
+}
+
+void TestValueFormatter::testCreateNumberFormat_data()
+{
+    QTest::addColumn<double>("value");
+    QTest::addColumn<int>("precision");
+    QTest::addColumn<Format::Type>("formatType");
+    QTest::addColumn<Style::FloatFormat>("floatFormat");
+    QTest::addColumn<QString>("currencySymbol");
+    QTest::addColumn<QString>("formatString");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("negative sign in format string") <<
+            -5.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "(-.)" << "(-5)";
+}
+
+void TestValueFormatter::testCreateNumberFormat()
+{
+    QFETCH(double, value);
+    QFETCH(int, precision);
+    QFETCH(Format::Type, formatType);
+    QFETCH(Style::FloatFormat, floatFormat);
+    QFETCH(QString, currencySymbol);
+    QFETCH(QString, formatString);
+    QFETCH(QString, result);
+
+    Number num(value);
+    PublicValueFormatter fmt(m_converter);
+    QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString), result);
 }
 
 
