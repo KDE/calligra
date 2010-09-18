@@ -271,8 +271,6 @@ void TestLoadAndSave::textElement_data()
             "<mtext>/* a comment */</mtext>" );
 }
 
-
-
 void TestLoadAndSave::spaceElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -335,7 +333,6 @@ void TestLoadAndSave::spaceElement_data()
     addRow( "<mspace linebreak=\"nobreak\"/>" );
     addRow( "<mspace linebreak=\"goodbreak\"/>" );
     addRow( "<mspace linebreak=\"badbreak\"/>" );
-
 }
 
 void TestLoadAndSave::stringElement_data()
@@ -343,8 +340,36 @@ void TestLoadAndSave::stringElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<ms>text</ms>",
+            "<ms>text</ms>" );
+    addRow( "<ms> more text </ms>",
+            "<ms>more text</ms>" );
+
+    // Glyph element contents
+    addRow( "<ms> foo </ms>");  // marker just to have a failing test.
+#if 0  // FIXME: These tests make the test program crash.  Investigate and fix.
+    addRow( "<ms>tex<mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/></ms>",
+            "<ms>tex<mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/></ms>");
+    addRow( "<ms> <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>",
+            "<ms> <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>" );
+    addRow( "<ms>te <mglyph fontfamily=\"serif\" alt=\"x\" index=\"120\"/> "
+            "     <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>",
+            "<ms>te <mglyph fontfamily=\"serif\" alt=\"x\" index=\"120\"/> " 
+            "     <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>" );
+#endif
+
+    // Attributes
+    addRow( "<ms mathvariant=\"bold\">text</ms>",
+            "<ms mathvariant=\"bold\">text</ms>" );
+    addRow( "<ms fontsize=\"18pt\">text</ms>",
+            "<ms fontsize=\"18pt\">text</ms>"  );
+
+    // Entities
+    addRow( "<ms> &amp; </ms>",
+            "<ms>&amp;</ms>" );
+    addRow( "<ms> &amp;amp; </ms>",
+            "<ms>&amp;amp;</ms>" );
 }
 
 void TestLoadAndSave::glyphElement_data()
@@ -1167,14 +1192,17 @@ void TestLoadAndSave::trElement_data()
             "<mtr groupalign=\"left\">\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
 }
 
+// labeledtr is not yet implemented
+#if 0
 void TestLoadAndSave::labeledtrElement_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    //addRow( "<labeledtr/>" );
 }
+#endif
 
 void TestLoadAndSave::tdElement_data()
 {
@@ -1369,11 +1397,12 @@ void TestLoadAndSave::trElement()
     test( new TableRowElement );
 }
 
+#if 0    // NYI
 void TestLoadAndSave::labeledtrElement()
 {
     test( new TableRowElement );
 }
-
+#endif
 void TestLoadAndSave::tdElement()
 {
     test( new TableDataElement );
