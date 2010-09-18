@@ -983,8 +983,34 @@ void TestLoadAndSave::multiscriptsElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mi>i</mi>\n <mi>j</mi>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mprescripts/>\n <mi>i</mi>\n <mi>j</mi>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mi>i</mi>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <none/>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mprescripts/>\n <none/>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <none/>\n <none/>\n <mprescripts/>\n <none/>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mi>x</mi>\n <none/>\n <mprescripts/>\n <mi>y</mi>\n <none/>\n</mmultiscripts>" );
+
+    // More complex content
+    addRow( "<mmultiscripts>\n"
+            " <mi>R</mi>\n"
+            " <mi>i</mi>\n"
+            " <none/>\n"
+            " <none/>\n"
+            " <mi>j</mi>\n"
+            " <mi>k</mi>\n"
+            " <none/>\n"
+            " <mi>l</mi>\n"
+            " <none/>\n"
+            "</mmultiscripts>" );
 }
 
 void TestLoadAndSave::tableElement_data()
