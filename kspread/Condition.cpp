@@ -75,6 +75,7 @@ class Conditions::Private : public QSharedData
 {
 public:
     QLinkedList<Conditional> conditionList;
+    Style defaultStyle;
 };
 
 Conditions::Conditions()
@@ -105,7 +106,7 @@ Style Conditions::testConditions( const Cell& cell ) const
         if (style)
             return *style;
     }
-    return Style();
+    return d->defaultStyle;
 }
 
 bool Conditions::currentCondition(const Cell& cell, Conditional & condition) const
@@ -190,6 +191,16 @@ QLinkedList<Conditional> Conditions::conditionList() const
 void Conditions::setConditionList(const QLinkedList<Conditional> & list)
 {
     d->conditionList = list;
+}
+
+Style Conditions::defaultStyle() const
+{
+    return d->defaultStyle;
+}
+
+void Conditions::setDefaultStyle(const Style &style)
+{
+    d->defaultStyle = style;
 }
 
 void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const

@@ -117,6 +117,18 @@ public:
     void setConditionList(const QLinkedList<Conditional> & list);
 
     /**
+     * Returns an optional default style, which is returned by testConditons if none of
+     * the conditions matches.
+     */
+    Style defaultStyle() const;
+
+    /**
+     * Set an optional default style. This style is returned by testConditions if none of
+     * the conditions matches.
+     */
+    void setDefaultStyle(const Style& style);
+
+    /**
      * \ingroup NativeFormat
      * Takes a parsed DOM element and recreates the conditions structure out of
      * it
