@@ -30,7 +30,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -282,46 +281,14 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
     // FIXME: Add saving of embedded document if m_isInline is false;
 
     kDebug() <<"Saving ODF in Formula";
-    KoXmlWriter& bodyWriter = context.xmlWriter();
-
-    // Check if we're saving to a formula document. If not, embed a
-    // formula document.  KoFormulaShape::saveOdf() will then be called
-    // again later, when the current document saves the embedded
-    // documents.
-    //
-    // FIXME: Checking the tag hierarchy is hardly the right way to do this
-    //
-    QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
-    if ( tagHierarchy.isEmpty()
-         || QString( tagHierarchy.last() ) != "office:formula" )
-    {
-        // Non-formula document, e.g. text or presentation
-        kDebug() <<"Not a formula document";
-
-        bodyWriter.startElement( "draw:frame" );
-        saveOdfAttributes(context, OdfAllAttributes);
-
-        // Check if it's supposed to be saved as an inline or embedded object
-        if (m_isInline) {
-            // Inline: Write it out directly.
-            kDebug() <<"Saving as an inline object";
-            formulaData()->formulaElement()->writeMathML( &context.xmlWriter() );
-        }
-        else {
-            // Embedded: write it to an embedded file.
-            kDebug() <<"Saving as an embedded object";
-            bodyWriter.startElement( "draw:object" );
-            context.embeddedSaver().embedDocument( bodyWriter, m_document );
-            bodyWriter.endElement(); // draw:object
-        }
-
-        bodyWriter.endElement(); // draw:frame
-        return;
-    }
-
-    // Actually save the formula.
-    kDebug() <<"Saving the formula";
+    KoXmlWriter& writer = context.xmlWriter();
+    writer.startElement("draw:frame");
+    saveOdfAttributes(context, OdfAllAttributes);
+    writer.startElement( "draw:object" );
+    // TODO add some namespace magic to avoid adding "math:" namespace everywhere
     formulaData()->formulaElement()->writeMathML( &context.xmlWriter() );
+    writer.endElement(); // draw:object
+    writer.endElement(); // draw:frame
 }
 
 KoResourceManager *KoFormulaShape::resourceManager() const

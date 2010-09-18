@@ -28,10 +28,6 @@
 #include <QDebug>
 #include <QPainter>
 
-// KDE
-#include <KComponentData>
-#include <KDebug>
-
 // KOffice
 #include <KoDocument.h>
 #include <KoXmlWriter.h>
@@ -45,6 +41,8 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoView.h>
+#include <KComponentData>
+#include <KDebug>
 
 // KFormula
 #include "KoFormulaShape.h"
@@ -121,8 +119,11 @@ bool FormulaDocument::loadXML( const KoXmlDocument &doc, KoStore *)
 
 bool FormulaDocument::saveOdf( SavingContext &context )
 {
+    // FIXME: This code is copied from ChartDocument, so it needs to
+    // be adapted to the needs of the KoFormulaShape.
+
     KoOdfWriteStore &odfStore = context.odfStore;
-    //KoStore *store = odfStore.store();
+    KoStore *store = odfStore.store();
     KoXmlWriter *manifestWriter = odfStore.manifestWriter();
     KoXmlWriter *contentWriter  = odfStore.contentWriter();
     if ( !contentWriter )
@@ -137,22 +138,21 @@ bool FormulaDocument::saveOdf( SavingContext &context )
 
     KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedSaver );
 
-    bodyWriter->startElement( "math:math" );
-    bodyWriter->startElement( "math:semantics" );
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:formula" );
 
     d->parent->saveOdf( savingContext );
 
-    bodyWriter->endElement(); // math:semantics
-    bodyWriter->endElement(); // math:math
+    bodyWriter->endElement(); // office:formula
+    bodyWriter->endElement(); // office:body
 
-    //mainStyles.saveOdfStyles( KoGenStyles::DocumentAutomaticStyles, contentWriter );
+    mainStyles.saveOdfStyles( KoGenStyles::DocumentAutomaticStyles, contentWriter );
     odfStore.closeContentWriter();
 
     // Add manifest line for content.xml and styles.xml
     manifestWriter->addManifestEntry( url().path() + "/content.xml", "text/xml" );
-    //manifestWriter->addManifestEntry( url().path() + "/styles.xml", "text/xml" );
+    manifestWriter->addManifestEntry( url().path() + "/styles.xml", "text/xml" );
 
-#if 0 // We don't need this for the formulas, right?
     // save the styles.xml
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
         return false;
@@ -160,7 +160,6 @@ bool FormulaDocument::saveOdf( SavingContext &context )
     if ( !savingContext.saveDataCenter( store, manifestWriter ) ) {
         return false;
     }
-#endif
 
     return true;
 }
