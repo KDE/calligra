@@ -332,6 +332,12 @@ void Sheet::removeShape(KoShape* shape)
     emit shapeRemoved(this, shape);
 }
 
+void Sheet::deleteShapes()
+{
+    qDeleteAll(d->shapes);
+    d->shapes.clear();
+}
+
 KoResourceManager* Sheet::resourceManager() const
 {
     return map()->resourceManager();

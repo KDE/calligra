@@ -137,6 +137,11 @@ public:
     virtual KoResourceManager* resourceManager() const;
 
     /**
+     * Deletes all shapes without emitting shapeRemoved()
+     */
+    void deleteShapes();
+
+    /**
      * \ingroup Embedding
      * Returns the sheet's shapes.
      * \return the shapes this sheet contains
