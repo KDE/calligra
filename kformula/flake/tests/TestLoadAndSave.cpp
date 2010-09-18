@@ -992,8 +992,107 @@ void TestLoadAndSave::tableElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mtable></mtable>",
+            "<mtable/>" );
+    addRow( "<mtable><mtr></mtr></mtable>",
+            "<mtable>\n <mtr/>\n</mtable>" );
+    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>",
+            "<mtable>\n <mtr>\n  <mtd/>\n </mtr>\n</mtable>" );
+    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>",
+            "<mtable>\n <mtr>\n  <mtd/>\n </mtr>\n</mtable>" ); // mtd is an inferred mrow
+    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>",
+            "<mtable>\n <mtr>\n  <mtd>\n   <mi>x</mi>\n  </mtd>\n </mtr>\n</mtable>" );
+//   addRow( "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>",
+//           "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>" );
+//   addRow( "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>",
+//           "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>" );
+
+    // More complex content (unity matrix)
+    addRow( "<mtable>\n"
+            " <mtr>\n"
+            "  <mtd>\n   <mn>1</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            " </mtr>\n"
+            " <mtr>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>1</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            " </mtr>\n"
+            " <mtr>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>1</mn>\n  </mtd>\n"
+            " </mtr>\n"
+            "</mtable>" );
+
+    // Attributes
+    addRow( "<mtable align=\"top\">\n <mtr>\n  <mtd>\n   <mi>x</mi>\n  </mtd>\n </mtr>\n</mtable>" );
+    addRow( "<mtable rowalign=\"center\">\n <mtr>\n  <mtd>\n   <mi>x</mi>\n  </mtd>\n </mtr>\n</mtable>" );
+
+    // Content with alignment elements
+/*    addRow( "<mtable groupalign=\"{decimalpoint left left decimalpoint left left decimalpoint}\">"
+            " <mtr>"
+            "  <mtd>"
+            "   <mrow>"
+            "    <mrow>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 8.44 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> x </mi>"
+            "     </mrow>"
+            "     <maligngroup/>"
+            "     <mo> + </mo>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 55 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> y </mi>"
+            "     </mrow>"
+            "    </mrow>"
+            "    <maligngroup/>"
+            "    <mo> = </mo>"
+            "    <maligngroup/>"
+            "    <mn> 0 </mn>"
+            "   </mrow>"
+            "  </mtd>"
+            " </mtr>"
+            " <mtr>"
+            "  <mtd>"
+            "   <mrow>"
+            "    <mrow>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 3.1 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> x </mi>"
+            "     </mrow>"
+            "     <maligngroup/>"
+            "     <mo> - </mo>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 0.7 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> y </mi>"
+            "     </mrow>"
+            "    </mrow>"
+            "    <maligngroup/>"
+            "    <mo> = </mo>"
+            "    <maligngroup/>"
+            "    <mrow>"
+            "     <mo> - </mo>"
+            "     <mn> 1.1 </mn>"
+            "    </mrow>"
+            "   </mrow>"
+            "  </mtd>"
+            " </mtr>"
+            "</mtable>" );*/
 }
 
 void TestLoadAndSave::trElement_data()
@@ -1001,8 +1100,45 @@ void TestLoadAndSave::trElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mtr></mtr>",
+            "<mtr/>" );
+    addRow( "<mtr><mtd></mtd></mtr>",
+            "<mtr>\n <mtd/>\n</mtr>" );
+    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>",
+            "<mtr>\n <mtd/>\n</mtr>" ); // <mtd> is an inferred <mrow>
+    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>",
+            "<mtr>\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
+    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>",
+            "<mtr>\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
+
+    // More complex content
+    addRow( "<mtr id=\"e-is-m-c-square\">\n"
+            " <mtd>\n"
+            "  <mrow>\n"
+            "   <mi>E</mi>\n"
+            "   <mo>=</mo>\n"
+            "   <mrow>\n"
+            "    <mi>m</mi>\n"
+            //"    <mo>&it;</mo>\n"  FIXME: When entities work again, switch the next line for this one.
+            "    <mo>*</mo>\n"
+            "    <msup>\n"
+            "     <mi>c</mi>\n"
+            "     <mn>2</mn>\n"
+            "    </msup>\n"
+            "   </mrow>\n"
+            "  </mrow>\n"
+            " </mtd>\n"
+            " <mtd>\n"
+            "  <mtext>(2.1)</mtext>\n"
+            " </mtd>\n"
+            "</mtr>" );
+
+    // Be sure attributes don't break anything
+    addRow( "<mtr rowalign=\"top\"><mtd><mi>x</mi></mtd></mtr>",
+            "<mtr rowalign=\"top\">\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
+    addRow( "<mtr groupalign=\"left\"><mtd><mi>x</mi></mtd></mtr>",
+            "<mtr groupalign=\"left\">\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
 }
 
 void TestLoadAndSave::labeledtrElement_data()
@@ -1019,8 +1155,18 @@ void TestLoadAndSave::tdElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mtd></mtd>",
+            "<mtd/>" );
+    addRow( "<mtd/><mrow></mrow></mtd>",
+            "<mtd/>" );
+    addRow( "<mtd>\n <mi>x</mi>\n</mtd>" );
+    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", // mrow with one element is deleted
+            "<mtd>\n <mi>x</mi>\n</mtd>");
+
+    // Be sure attributes don't break anything
+    addRow( "<mtd rowspan=\"3\">\n <mi>x</mi>\n</mtd>" );
+    addRow( "<mtd groupalign=\"left\">\n <mi>x</mi>\n</mtd>" );
 }
 
 void TestLoadAndSave::actionElement_data()
