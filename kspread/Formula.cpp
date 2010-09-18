@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2008-2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright (C) 2003,2004 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 

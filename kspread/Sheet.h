@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
    Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
