@@ -241,12 +241,6 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
         KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
         const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
         if(styleMaps.count() > 0) {
-            //TODO KSpread does not support conditional formatting yet. So, what we do is to
-            // just take the first style and apply that one in the hope it does match best.
-            const QString stylename = styleMaps.first().second;
-            if(stylesReader.dataFormats().contains(stylename))
-                dataStyle = stylesReader.dataFormats()[stylename];
-
             for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
                 const Conditional c = conditions.loadOdfCondition(it->first, it->second, parser);
                 if (styleManager->style(c.styleName) == 0) {
