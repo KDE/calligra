@@ -310,17 +310,10 @@ class AbstractAtom : public QSharedData
 
         QList<AbstractNode*> fetchAxis(Context* context, const QString& _axis, const QString &_ptType, const QString& _start, const QString& _count, const QString& _step) const {
             const QStringList axisList = _axis.split(' ', QString::SkipEmptyParts);
-
             const QStringList typeList = _ptType.split(' ', QString::SkipEmptyParts);
-            Q_ASSERT(axisList.count() <= 1 || axisList.count() == typeList.count());
-            
             const QStringList startList = _start.split(' ', QString::SkipEmptyParts);
             const QStringList countList = _count.split(' ', QString::SkipEmptyParts);
             const QStringList stepList = _step.split(' ', QString::SkipEmptyParts);
-            Q_ASSERT(startList.count() == countList.count() || startList.isEmpty() || countList.isEmpty());
-            Q_ASSERT(countList.count() == stepList.count() || countList.isEmpty() || stepList.isEmpty());
-            Q_ASSERT(startList.count() == stepList.count() || startList.isEmpty() || stepList.isEmpty());
-            
             QList<AbstractNode*> result;
             result << context->currentNode();
             for(int i = 0; i < axisList.count(); ++i) {
@@ -450,7 +443,7 @@ class LayoutNodeAtom : public AbstractAtom
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const { return m_constraints; }
         void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint) { m_constraints.append(constraint); setNeedsRelayout(true); }
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm) { m_algorithm = algorithm; setNeedsRelayout(true); }
-        //QList<AbstractNode*> axis() const { return m_axis; }
+        QList<AbstractNode*> axis() const { return m_axis; }
         void setAxis(const QList<AbstractNode*> &axis) { m_axis = axis; setNeedsRelayout(true); }
         void setNeedsRelayout(bool needsRelayout) {
             if(needsRelayout == m_needsRelayout) return;
@@ -568,7 +561,6 @@ class ConstraintAtom : public AbstractAtom
         }
         virtual void build(Context* context) {
             QExplicitlySharedDataPointer<LayoutNodeAtom> layout = m_forName.isEmpty() ? context->m_parentLayout : context->m_layoutMap.value(m_forName);
-            Q_ASSERT(layout);
             if(layout) {
                 QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
                 m_parent->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(this));
@@ -624,7 +616,7 @@ class ShapeAtom : public AbstractAtom
         }
         virtual void dump(Context* context, int level) {
             QExplicitlySharedDataPointer<LayoutNodeAtom> l = context->m_parentLayout;
-            DEBUG_DUMP << "type=" << m_type << "blip=" << m_blip;
+            DEBUG_DUMP << "type=" << m_type << "hideGeom=" << m_hideGeom << "blip=" << m_blip;
             AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -640,8 +632,7 @@ class ShapeAtom : public AbstractAtom
         //TODO use filters/libmso/ODrawToOdf.h
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
-            if(m_type.isEmpty()) return;
-//if(m_hideGeom) return; // skip for now
+            if(m_type.isEmpty() || m_hideGeom) return;
 
             QMap<QString, qreal> values = context->m_parentLayout->finalValues();
             Q_ASSERT(values.contains("l"));
@@ -669,17 +660,17 @@ class ShapeAtom : public AbstractAtom
                     h -= sibSp;
                 } else {
                     kWarning()<<"Sibling spacing is bigger then width/height! Skipping sibSp-value! width="<<w<<"height="<<h<<"sibSp="<<sibSp;
-                    dump(context,10);
+                    context->m_parentLayout->dump(context, 10);
                 }
             }
             
             DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
-            Q_ASSERT(x >= 0);
-            Q_ASSERT(y >= 0);
-            Q_ASSERT(w >= 0);
-            Q_ASSERT(h >= 0);
-            Q_ASSERT(cx >= 0);
-            Q_ASSERT(cy >= 0);
+            Q_ASSERT(x >= 0.0);
+            Q_ASSERT(y >= 0.0);
+            Q_ASSERT(w > 0.0);
+            Q_ASSERT(h > 0.0);
+            Q_ASSERT(cx >= 0.0);
+            Q_ASSERT(cy >= 0.0);
 
             xmlWriter->startElement("draw:custom-shape");
             xmlWriter->addAttribute("draw:layer", "layout");
@@ -688,11 +679,7 @@ class ShapeAtom : public AbstractAtom
 
             KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
             style.addProperty("draw:fill", "solid" /*none*/, KoGenStyle::GraphicType);
-            style.addProperty("draw:fill-color", "#6666ff"); //TODO needs to handle colors1.xml ...
             style.addProperty("draw:opacity", "50%");
-            const QString styleName = styles->insert(style);
-            xmlWriter->addAttribute("draw:style-name", styleName);
-            //xmlWriter->addAttribute("draw:text-style-name", "P2");
 
 kDebug()<<"################### context"<<context->m_parentLayout->m_name<<x+cx<<y+cy<<w<<h;
             xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
@@ -700,7 +687,54 @@ kDebug()<<"################### context"<<context->m_parentLayout->m_name<<x+cx<<
             xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
             xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
 
+            if (m_type == QLatin1String("conn")) {
+                //xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-0.62832) translate(3.12798in 0.91174in)");
+                // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-5.02655) translate(3.47562in 1.95573in)");
+                // xmlWriter->addAttribute("draw:transform", "");
+                // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-1.25664) translate(1.69526in 1.9687in)");
+                // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-5.65487) translate(2.02766in 0.91975in)");
+                /*
+                <draw:custom-shape draw:id="id1" draw:style-name="a5" draw:transform="translate(-0.12039in -0.15285in) rotate(-0.62832) translate(3.12798in 0.91174in)" svg:height="0.30569in" svg:width="0.24079in">
+                    <draw:enhanced-geometry draw:enhanced-path="M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"            draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
+                <draw:custom-shape draw:id="id3" draw:style-name="a11" draw:transform="translate(-0.12039in -0.15285in) rotate(-5.02655) translate(3.47562in 1.95573in)" svg:height="0.30569in" svg:width="0.24079in">
+                    <draw:enhanced-geometry draw:enhanced-path="M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N" draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
+                <draw:custom-shape draw:id="id5" draw:style-name="a17" svg:height="0.3057in" svg:width="0.24079in" svg:x="2.46976in" svg:y="2.45612in">
+                    <draw:enhanced-geometry draw:enhanced-path="M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N" draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
+                <draw:custom-shape draw:id="id7" draw:style-name="a23" draw:transform="translate(-0.12039in -0.15285in) rotate(-1.25664) translate(1.69526in 1.9687in)" svg:height="0.3057in" svg:width="0.24079in">
+                    <draw:enhanced-geometry draw:enhanced-path="M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N" draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
+                <draw:custom-shape draw:id="id9" draw:style-name="a29" draw:transform="translate(-0.12039in -0.15285in) rotate(-5.65487) translate(2.02766in 0.91975in)" svg:height="0.30569in" svg:width="0.24079in">
+                    <draw:enhanced-geometry draw:enhanced-path="M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"            draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
+                */
+
+                QList<AbstractNode*> axis = context->m_parentLayout->axis();
+                foreach(AbstractNode* n, axis) n->dump(context,10);        
+                Q_ASSERT(axis.count() == 1);
+                Q_ASSERT(static_cast<PointNode*>(axis.first())->m_type == "sibTrans");
+                const QString cxnId = static_cast<PointNode*>(axis.first())->m_cxnId;
+                Q_ASSERT(!static_cast<PointNode*>(axis.first())->m_cxnId.isEmpty());
+                ConnectionNode* connection = 0;
+                foreach(AbstractNode* node, context->m_connections->children()) {
+                    ConnectionNode* n = dynamic_cast<ConnectionNode*>(node);
+                    if(n && n->m_modelId == cxnId) {
+                        connection = n;
+                        break;
+                    }
+                }
+                Q_ASSERT(connection);
+                //connection->m_srcId;
+                //connection->m_destId;
+
+                style.addProperty("draw:fill-color", "#9999ff");
+            } else {
+                style.addProperty("draw:fill-color", "#3333ff");
+            }
+
+            const QString styleName = styles->insert(style);
+            xmlWriter->addAttribute("draw:style-name", styleName);
+            //xmlWriter->addAttribute("draw:text-style-name", "P2");
+            
             xmlWriter->startElement("text:p");
+            //xmlWriter->addTextNode(m_type);
             xmlWriter->endElement();
 
             if (m_type == QLatin1String("ellipse")) {
@@ -719,6 +753,16 @@ kDebug()<<"################### context"<<context->m_parentLayout->m_name<<x+cx<<
                 xmlWriter->addAttribute("draw:text-areas", "?f34 ?f36 ?f35 ?f37");
                 xmlWriter->addAttribute("draw:type", "circle");
                 xmlWriter->addAttribute("svg:viewBox", "0 0 828228 828228");
+                xmlWriter->endElement();
+            } else if (m_type == QLatin1String("conn")) { // Connection shape type
+                xmlWriter->startElement("draw:enhanced-geometry");
+                xmlWriter->addAttribute("draw:enhanced-path", "M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"); // arrow-right
+                //xmlWriter->addAttribute("draw:enhanced-path", "M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N"); // arrow-left
+                xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90");
+                xmlWriter->addAttribute("draw:glue-points", "?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17");
+                xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
+                xmlWriter->addAttribute("draw:type", "non-primitive");
+                xmlWriter->addAttribute("svg:viewBox", "0 0 220174 279527");
                 xmlWriter->endElement();
             } else /*if (m_type == QLatin1String("rect"))*/ {
                 //TODO
@@ -748,7 +792,7 @@ class AlgorithmAtom : public AbstractAtom
             TextAlg ///< The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
         };
         Algorithm m_type;
-        QList< QPair<QString,QString> > m_params; // list of type=value parameters that modify the default behavior of the algorithm.
+        QMap<QString, QString> m_params; // list of type=value parameters that modify the default behavior of the algorithm.
         explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
         virtual ~AlgorithmAtom() {}
         virtual AlgorithmAtom* clone() {
@@ -787,7 +831,7 @@ class AlgorithmAtom : public AbstractAtom
                     const QXmlStreamAttributes attrs(reader->attributes());
                     TRY_READ_ATTR_WITHOUT_NS(type)
                     TRY_READ_ATTR_WITHOUT_NS(val)
-                    m_params << QPair<QString,QString>(type, val);
+                    m_params[type] = val;
                 }
             }
         }
@@ -1054,7 +1098,7 @@ class ChooseAtom : public AbstractAtom
                     elseResult.append(atom);
                 }
             }
-kDebug()<<"###############"<<m_name;
+
             foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, ifResult.isEmpty() ? elseResult : ifResult) {
                 foreach(QExplicitlySharedDataPointer<AbstractAtom> a, atom->children()) {
                     atom->removeChild(a);
@@ -1115,26 +1159,6 @@ class ForEachAtom : public AbstractAtom
             AbstractAtom::readAll(context, reader);
         }
         virtual void build(Context* context) {
-#if 0
-            QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
-            AbstractNode* oldCurrentNode = context->currentNode();
-            foreach(AbstractNode* node, axis) {
-                context->setCurrentNode(node); // move on to the next node
-                foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
-                    QExplicitlySharedDataPointer<AbstractAtom> atomCopy(atom->clone());
-                    m_parent->addChild(atomCopy);
-                    Q_ASSERT(atomCopy->parent().data() == parent().data());
-                    atomCopy->build(context);
-                }
-            }
-            context->setCurrentNode(oldCurrentNode);
-
-            // everything done so we can detach ourself now since we are not needed any longer
-            QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
-QExplicitlySharedDataPointer<AbstractAtom> prevParent=m_parent;
-            m_parent->removeChild(ptr);
-            m_children.clear(); // just to be sure
-#else
             typedef QPair<AbstractNode*, QList<QExplicitlySharedDataPointer<AbstractAtom> > > NodePair;
             QList<NodePair> newChildren;
 
@@ -1161,7 +1185,6 @@ QExplicitlySharedDataPointer<AbstractAtom> prevParent=m_parent;
             // once everything is done we can detach ourself from our parent
             QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
             m_parent->removeChild(ptr);
-#endif
         }
 };
 
@@ -1211,7 +1234,7 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
                 }
             }
         } else {
-            kWarning()<<"TODO"<<reader->qualifiedName();
+            kDebug()<<"TODO atom="<<m_tagName<<"qualifiedName="<<reader->qualifiedName();
         }
         
         if (node) {
@@ -1221,25 +1244,6 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
         }
     }
 }
-
-// template<class U, class T> QList<U*> filterItems(Context* context, const QList<T*> &items) const
-// {
-//     QList<U*> results;
-//     foreach(T* atom, items) {
-//         if(ChooseAtom* chooseatom = dynamic_cast<ChooseAtom*>(atom)) {
-//             QList<U*> children = filterItems<U, AbstractAtom>(context, chooseatom->atomsMatchingToCondition(context));
-//             foreach(U* a, children)
-//                 results.append(a);
-//         } else if(ForEachAtom* foreachatom = dynamic_cast<ForEachAtom*>(atom)) {
-//             QList<U*> children = filterItems<U, AbstractAtom>(context, foreachatom->children());
-//             foreach(U* a, children)
-//                 results.append(a);
-//         } else if(U* a = dynamic_cast<U*>(atom)) {
-//             results.append(a);
-//         }
-//     }
-//     return results;
-// }
 
 LayoutNodeAtom* LayoutNodeAtom::clone()
 {
@@ -1279,22 +1283,16 @@ void LayoutNodeAtom::layoutAtom(Context* context)
         m_countFactors = oldLayout->m_countFactors;
 
         QMap<QString, qreal> values = oldLayout->finalValues();
-        Q_ASSERT(values.contains("l"));
-        Q_ASSERT(values.contains("t"));
-        Q_ASSERT(values.contains("w"));
-        Q_ASSERT(values.contains("h"));
-        Q_ASSERT(values.contains("ctrX"));
-        Q_ASSERT(values.contains("ctrY"));
         Q_ASSERT(values["l"] >= 0.0);
         Q_ASSERT(values["t"] >= 0.0);
-        Q_ASSERT(values["w"] >= 0.0);
-        Q_ASSERT(values["h"] >= 0.0);
+        Q_ASSERT(values["w"] > 0.0);
+        Q_ASSERT(values["h"] > 0.0);
         Q_ASSERT(values["ctrX"] >= 0.0);
         Q_ASSERT(values["ctrY"] >= 0.0);
     }
 
     AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
-    QList< QPair<QString,QString> > params;
+    QMap<QString,QString> params;
     if(m_algorithm) {
         algorithm = m_algorithm->m_type;
         params = m_algorithm->m_params;
@@ -1319,12 +1317,13 @@ void LayoutNodeAtom::layoutAtom(Context* context)
             if(!c->m_value.isEmpty()) {
                 bool ok;
                 value = c->m_value.toDouble(&ok);
-                Q_ASSERT(ok);
+                if(!ok) {
+                    kWarning() << "Layout with name=" << m_name << "defines none-double value=" << c->m_value;
+                    continue;
+                }
             } else {
                 LayoutNodeAtom* ref = c->m_refForName.isEmpty() ? this : context->m_layoutMap.value(c->m_refForName).data();
                 Q_ASSERT(ref);
-                //Q_ASSERT(!ref->m_needsRelayout);
-                //Q_ASSERT(!ref->m_childNeedsRelayout);
                 if(ref != this && (ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
                     ref->layoutAtom(context);
                     Q_ASSERT(!ref->m_needsRelayout && !ref->m_childNeedsRelayout);
@@ -1339,21 +1338,24 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 
                 if(!c->m_refType.isEmpty()) {
                     QMap<QString, qreal> values = ref->finalValues();
-                    Q_ASSERT(values.contains(c->m_refType));
+                    if(!values.contains(c->m_refType)) {
+                        kWarning() << "Layout with name=" << m_name << "defines constraint for non-existing refType=" << c->m_refType;
+                        continue;
+                    }
                     value = values[c->m_refType];
-                    Q_ASSERT(value >= 0.0);
                 } else {
                     //FIXME no refType and no value defined means use the default-value but the specs don't say what
                     //the default values are. So, it's needed someone figures out what it means if standalone tags
                     //like <dgm:constr type="connDist"/> are defined.
-                    kDebug()<<"TODO figure out defaults for constraints";
+                    kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << m_name;
                     c->dump(context,10);
-                    value = 0.0;
+                    //value = 0.0;
+                    continue; // skip for now
                 }
             }
 
             if(c->m_type.isEmpty()) {
-                kWarning() << "Unhandled constraint with empty type";
+                kWarning() << "Layout with name=" << m_name << "defines constraint with empty type";
                 continue;
             }
 
@@ -1367,42 +1369,55 @@ void LayoutNodeAtom::layoutAtom(Context* context)
     // layout the children if still requested
     if(m_childNeedsRelayout) {
         m_childNeedsRelayout = false;
+
+        // The specs say that the algorithm applies to *all* layout-children.
         QList<LayoutNodeAtom*> childLayouts;
         foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
             atom->layoutAtom(context);
-            if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data()))
+            if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
                 childLayouts.append(l);
+            }
         }
 
         Q_ASSERT(m_algorithm);
         QList< QPair<qreal,qreal> > m_startCoordinates;
         switch(m_algorithm->m_type) {
             case AlgorithmAtom::UnknownAlg:
-                kWarning() << "Unknown algorithm defined. Using composite algorithm.";
+                kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
                 break;
             case AlgorithmAtom::CompositeAlg:
                 // nothing to do since composite means that the constraints define everything needed and
                 // we don't need to do anything additionally...
                 break;
-            case AlgorithmAtom::ConnectorAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::ConnectorAlg";
-                break;
+            case AlgorithmAtom::ConnectorAlg: {
+                // The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
+                kDebug() << "TODO implement AlgorithmAtom::ConnectorAlg" << childLayouts.count() << params;
+                foreach(LayoutNodeAtom* a, childLayouts) kDebug()<<"    "<<a->m_name;
+
+                //context->m_rootLayout->dump(context,10);
+                //context->m_parentLayout->dump(context,10);
+                //Q_ASSERT(false);
+            } break;
             case AlgorithmAtom::CycleAlg: {
-                qreal w = finalValues()["w"];
-                qreal h = finalValues()["h"];
+                // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
+                int startAngel = (params.contains("stAng") ? params["stAng"].toInt() : 90) - 90;
+                // Specifies the angle the cycle spans. Final shapealign text is placed at stAng+spanAng, unless spanAng=360. In that case, the algorithm places the text so that shapes do not overlap.
+                int spanAngel = params.contains("spanAng") ? startAngel+params["spanAng"].toInt() : 360;
+                const qreal w = finalValues()["w"];
+                const qreal h = finalValues()["h"];
                 const qreal rx = w / 2.0;
                 const qreal ry = h / 2.0;
                 Q_ASSERT(!childLayouts.isEmpty());
-                const int num = 360 / childLayouts.count();
-                for(int degree = 0; degree <= 360; degree += num) {
+                const bool inverse = startAngel > spanAngel;
+                int num = 360 / childLayouts.count();
+                if(inverse) num = -num;
+                for(int degree = startAngel; inverse ? degree > spanAngel : degree <= spanAngel; degree += num) {
                     const qreal radian = (degree - 90) * (3.14 / 180);
                     const qreal x = rx + cos(radian) * rx;
                     const qreal y = ry + sin(radian) * ry;
-                    Q_ASSERT(x >= 0);
-                    Q_ASSERT(y >= 0);
                     m_startCoordinates.append(QPair<qreal,qreal>(x, y));
                 }
+                kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
             } break;
             case AlgorithmAtom::HierChildAlg:
                 //TODO
@@ -1439,8 +1454,8 @@ void LayoutNodeAtom::layoutAtom(Context* context)
                 QPair<qreal,qreal> coordinates = m_startCoordinates.takeFirst();
                 l->m_values["ctrX"] += coordinates.first;
                 l->m_values["ctrY"] += coordinates.second;
-//kDebug()<<"w="<<m_values.value("w")<<"final-w="<<finalValues().value("w")<<"sibSp="<<m_values.value("sibSp")<<"final-sibSp="<<finalValues().value("sibSp");
-//Q_ASSERT(false);
+                //kDebug()<<"w="<<m_values.value("w")<<"final-w="<<finalValues().value("w")<<"sibSp="<<m_values.value("sibSp")<<"final-sibSp="<<finalValues().value("sibSp");
+                //Q_ASSERT(false);
             }
         }
         //dump(context,10);
@@ -1455,7 +1470,7 @@ void LayoutNodeAtom::layoutAtom(Context* context)
 void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles)
 {
     AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
-    QList< QPair<QString,QString> > params;
+    QMap<QString, QString> params;
     if(m_algorithm) {
         algorithm = m_algorithm->m_type;
         params = m_algorithm->m_params;

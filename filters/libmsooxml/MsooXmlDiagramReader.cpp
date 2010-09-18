@@ -115,7 +115,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         foreach(Diagram::AbstractNode* node, m_context->m_context->m_connections->children()) {
             if(Diagram::ConnectionNode* connection = dynamic_cast<Diagram::ConnectionNode*>(node)) {
                 if (connection->m_type != "parOf") continue;
-connection->dump(m_context->m_context,10);
+                //connection->dump(m_context->m_context,10);
 
                 Diagram::PointNode* source = 0;
                 if (pointTree.contains(connection->m_srcId)) {
