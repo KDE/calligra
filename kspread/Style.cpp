@@ -238,9 +238,14 @@ void Style::loadOdfDataStyle(KoOdfStylesReader& stylesReader, const KoXmlElement
 void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser)
 {
     if (stylesReader.dataFormats().contains(styleName)) {
-        KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
+        Style* theStyle = this;
+
+        QPair<KoOdfNumberStyles::NumericStyleFormat, KoXmlElement*> dataStylePair = stylesReader.dataFormats()[styleName];
+
+        const KoOdfNumberStyles::NumericStyleFormat& dataStyle = dataStylePair.first;
         const QList<QPair<QString,QString> > styleMaps = dataStyle.styleMaps;
         if(styleMaps.count() > 0) {
+            theStyle = new Style();
             for (QList<QPair<QString,QString> >::const_iterator it = styleMaps.begin(); it != styleMaps.end(); ++it) {
                 const Conditional c = conditions.loadOdfCondition(it->first, it->second, parser);
                 if (styleManager->style(c.styleName) == 0) {
@@ -251,42 +256,47 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
             }
         }
 
+        KoStyleStack styleStack;
+        styleStack.push(*dataStylePair.second);
+        styleStack.setTypeProperties("text");
+        theStyle->loadOdfTextProperties(stylesReader, styleStack);
+
         QString tmp = dataStyle.prefix;
         if (!tmp.isEmpty()) {
-            setPrefix(tmp);
+            theStyle->setPrefix(tmp);
         }
         tmp = dataStyle.suffix;
         if (!tmp.isEmpty()) {
-            setPostfix(tmp);
+            theStyle->setPostfix(tmp);
         }
         // determine data formatting
         switch (dataStyle.type) {
         case KoOdfNumberStyles::Number:
-            setFormatType(Format::Number);
+            theStyle->setFormatType(Format::Number);
             if (!dataStyle.currencySymbol.isEmpty())
-                setCurrency(numberCurrency(dataStyle.currencySymbol));
+                theStyle->setCurrency(numberCurrency(dataStyle.currencySymbol));
             else
-                setCurrency(numberCurrency(dataStyle.formatStr));
+                theStyle->setCurrency(numberCurrency(dataStyle.formatStr));
             break;
         case KoOdfNumberStyles::Scientific:
-            setFormatType(Format::Scientific);
+            theStyle->setFormatType(Format::Scientific);
             break;
         case KoOdfNumberStyles::Currency:
             kDebug(36003) << " currency-symbol:" << dataStyle.currencySymbol;
             if (!dataStyle.currencySymbol.isEmpty())
-                setCurrency(numberCurrency(dataStyle.currencySymbol));
+                theStyle->setCurrency(numberCurrency(dataStyle.currencySymbol));
             else
-                setCurrency(numberCurrency(dataStyle.formatStr));
+                theStyle->setCurrency(numberCurrency(dataStyle.formatStr));
             break;
         case KoOdfNumberStyles::Percentage:
-            setFormatType(Format::Percentage);
+            theStyle->setFormatType(Format::Percentage);
             break;
         case KoOdfNumberStyles::Fraction:
             // determine format of fractions, dates and times by using the
             // formatting string
             tmp = dataStyle.formatStr;
             if (!tmp.isEmpty()) {
-                setFormatType(Style::fractionType(tmp));
+                theStyle->setFormatType(Style::fractionType(tmp));
             }
             break;
         case KoOdfNumberStyles::Date:
@@ -294,7 +304,7 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
             // formatting string
             tmp = dataStyle.formatStr;
             if (!tmp.isEmpty()) {
-                setFormatType(Style::dateType(tmp));
+                theStyle->setFormatType(Style::dateType(tmp));
             }
             break;
         case KoOdfNumberStyles::Time:
@@ -302,14 +312,14 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
             // formatting string
             tmp = dataStyle.formatStr;
             if (!tmp.isEmpty()) {
-                setFormatType(Style::timeType(tmp));
+                theStyle->setFormatType(Style::timeType(tmp));
             }
             break;
         case KoOdfNumberStyles::Boolean:
-            setFormatType(Format::Number);
+            theStyle->setFormatType(Format::Number);
             break;
         case KoOdfNumberStyles::Text:
-            setFormatType(Format::Text);
+            theStyle->setFormatType(Format::Text);
             break;
         }
 
@@ -321,10 +331,15 @@ void Style::loadOdfDataStyle(KoOdfStylesReader &stylesReader, const QString &sty
             int precision = dataStyle.precision;
             if (type() == AUTO && precision == 0)
                 precision = -11;
-            setPrecision(precision);
+            theStyle->setPrecision(precision);
         }
 
-        setCustomFormat(dataStyle.formatStr);
+        theStyle->setCustomFormat(dataStyle.formatStr);
+
+        if(styleMaps.count() > 0) {
+            conditions.setDefaultStyle(*theStyle);
+            delete theStyle;
+        }
     }
 }
 
