@@ -1095,7 +1095,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     if (m_context->type == Slide) {
         int index = 0;
         while (index < m_context->slideLayoutProperties->layoutFrames.size()) {
-            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toLatin1());
+            body->addCompleteElement(m_context->slideLayoutProperties->layoutFrames.at(index).toUtf8());
             ++index;
         }
     }
