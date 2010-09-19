@@ -263,6 +263,12 @@ void CellStorage::take(int col, int row)
 
         d->rowRepeatStorage->setRowRepeat(row, 1);
     }
+    // also trigger a relayout of the first non-empty cell to the left of this cell
+    int prevCol;
+    Value v = d->valueStorage->prevInRow(col, row, &prevCol);
+    if (!v.isEmpty())
+        d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
+
 
     // recording undo?
     if (d->undoData) {
