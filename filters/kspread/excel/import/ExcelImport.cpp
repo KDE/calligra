@@ -272,6 +272,10 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         d->shapesXml->startElement("table:table");
         d->shapesXml->addAttribute("table:id", i);
         Sheet* sheet = d->workbook->sheet(i);
+        if (i == 0) {
+            map->setDefaultColumnWidth(sheet->defaultColWidth());
+            map->setDefaultRowHeight(sheet->defaultRowHeight());
+        }
         KSpread::Sheet* ksheet = map->addNewSheet();
         d->processSheet(sheet, ksheet);
         d->shapesXml->endElement();
@@ -632,7 +636,13 @@ void ExcelImport::Private::processRow(Sheet* is, unsigned rowIndex, KSpread::She
 {
     Row *row = is->row(rowIndex, false);
 
-    if (!row) return;
+    if (!row) {
+        if (is->defaultRowHeight() != os->map()->defaultRowFormat()->height()) {
+            KSpread::RowFormat* orf = os->nonDefaultRowFormat(rowIndex+1);
+            orf->setHeight(is->defaultRowHeight());
+        }
+        return;
+    }
 
     KSpread::RowFormat* orf = os->nonDefaultRowFormat(rowIndex+1);
     orf->setHeight(row->height());
