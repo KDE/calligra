@@ -1125,6 +1125,21 @@ void ODrawToOdf::processFlowChartProcess(const MSO::OfficeArtSpContainer &o, Wri
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processFlowChartDecision(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "flowchart-decision");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:text-areas", "5400 5400 16200 16200");
+    out.xml.addAttribute("draw:enhanced-path", "M 0 10800 L 10800 0 21600 10800 10800 21600 0 10800 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -1211,6 +1226,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processFlowChartTerminator(o, out);
     } else if (shapeType == msosptFlowChartProcess) {
         processFlowChartProcess(o, out);
+    } else if (shapeType == msosptFlowChartDecision) {
+        processFlowChartDecision(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
