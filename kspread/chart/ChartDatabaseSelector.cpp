@@ -75,8 +75,13 @@ void ChartDatabaseSelector::open(KoShape* shape)
 
 void ChartDatabaseSelector::save()
 {
-    d->shape->setSheetAccessModel(d->selection->activeSheet()->doc()->sheetAccessModel());
-    d->shape->reset(d->widget.m_cellRegion->text(),
+    Sheet *sheet = d->selection->activeSheet();
+    const Region selectedRegion(d->widget.m_cellRegion->text(), d->map, sheet);
+    if(!selectedRegion.isValid())
+        return;
+
+    d->shape->setSheetAccessModel(sheet->doc()->sheetAccessModel());
+    d->shape->reset(selectedRegion.saveOdf(),
                     d->widget.m_firstRowAsLabel->isChecked(),
                     d->widget.m_firstColumnAsLabel->isChecked(),
                     d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical);
