@@ -115,6 +115,7 @@ private:
     void processSeal24(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processRibbon(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDoubleWave(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartTerminator(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
