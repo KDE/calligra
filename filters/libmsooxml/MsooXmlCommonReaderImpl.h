@@ -35,7 +35,6 @@ void MSOOXML_CURRENT_CLASS::initInternal()
     m_currentTextStylePredefined = false;
     m_currentParagraphStylePredefined = false;
     m_currentTextStyleProperties = 0;
-    m_fillImageRenderingStyleStretch = false;
 }
 
 void MSOOXML_CURRENT_CLASS::doneInternal()

@@ -62,6 +62,7 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_customListMade = false;
+    m_fillImageRenderingStyleStretch = false;
 }
 
 
