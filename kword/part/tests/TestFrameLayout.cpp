@@ -72,29 +72,29 @@ void TestFrameLayout::testGetOrCreateFrameSet()
 
 void TestFrameLayout::testCopyShapes()
 {
-//    Helper helper;
-//    m_frames.clear();
-//    KWPage page = helper.pageManager->page(1);
-//    KWFrameLayout bfl(helper.pageManager, m_frames);
-//    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
-//
-//    KWTextFrameSet *fs = bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page);
-//    m_frames.append(fs);
-//    bfl.m_setup = false;
-//
-//    helper.pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd);
-//
-//    KWTextFrame *tf = createFrame(QPointF(0,0), *fs);
-//    KWFrame *cf = createCopyFrame(QPointF(0,300), tf->shape(), *fs);
-//    QVERIFY(fs->frameCount()==2);
-//    //FIXME QVERIFY(bfl.hasFrameOn(fs, 1));
-//    delete tf->shape();
-//
-//    QVERIFY(fs->frameCount()==1);
-//    //FIXME QVERIFY(!bfl.hasFrameOn(fs, 1));
-//
-//    //now try and add a copyframe without crashing
-//    bfl.createNewFramesForPage(1);
+    Helper helper;
+    m_frames.clear();
+    KWPage page = helper.pageManager->page(1);
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWTextFrameSet *fs = bfl.getOrCreate(KWord::OddPagesHeaderTextFrameSet, page);
+    m_frames.append(fs);
+    bfl.m_setup = false;
+
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd);
+
+    KWTextFrame *tf = createFrame(QPointF(0,0), *fs);
+    KWFrame *cf = createCopyFrame(QPointF(0,300), tf->shape(), *fs);
+    QVERIFY(fs->frameCount()==2);
+    //FIXME QVERIFY(bfl.hasFrameOn(fs, 1));
+    delete tf->shape();
+
+    QVERIFY(fs->frameCount()==1);
+    //FIXME QVERIFY(!bfl.hasFrameOn(fs, 1));
+
+    //now try and add a copyframe without crashing
+    bfl.createNewFramesForPage(1);
 }
 
 void TestFrameLayout::testCreateNewFramesForPage()
