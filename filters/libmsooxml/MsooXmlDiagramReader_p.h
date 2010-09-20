@@ -71,6 +71,9 @@ class Context
         /// A identifier=>LayoutNodeAtom map used to access the layouts by there unique identifiers.
         QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_layoutMap;
 
+        /// A PointNode=>LayoutNodeAtom map used to know which datapoint maps to which layoutnode.
+        QMap<QString, QExplicitlySharedDataPointer<LayoutNodeAtom> > m_pointLayoutMap;
+
         explicit Context();
         ~Context();
         AbstractNode* currentNode() const { return m_currentNode; }
@@ -405,6 +408,53 @@ class AbstractAtom : public QSharedData
         }
 };
 
+/// The algorithm used by the containing layout node. The algorithm defines the behavior of the layout node along with the behavior and layout of the nested layout nodes.
+class AlgorithmAtom : public AbstractAtom
+{
+    public:
+        /// The used layout-algorithm.
+        enum Algorithm {
+            UnknownAlg, ///< Unknown algorithm. This should happen...
+            CompositeAlg, ///< The composite algorithm specifies the size and position for all child layout nodes. You can use it to create graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
+            ConnectorAlg, ///< The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
+            CycleAlg, ///< The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
+            HierChildAlg, ///< The hierarchy child algorithm works with the hierRoot algorithm to create hierarchical tree layouts. This algorithm aligns and positions its child layout nodes in a linear path under the hierRoot layout node.
+            HierRootAlg, ///< The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts. The hierRoot algorithm aligns and positions the hierRoot layout node in relation to the hierChild layout nodes.
+            LinearAlg, ///< The linear algorithm lays out child layout nodes along a linear path.
+            PyramidAlg, ///< The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid shape to create a pyramid.
+            SnakeAlg, ///< The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear flow to continue across multiple rows or columns.
+            SpaceAlg, ///< The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
+            TextAlg ///< The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
+        };
+        Algorithm m_type;
+        QMap<QString, QString> m_params; // list of type=value parameters that modify the default behavior of the algorithm.
+        explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
+        virtual ~AlgorithmAtom() {}
+        virtual AlgorithmAtom* clone() {
+            AlgorithmAtom* atom = new AlgorithmAtom;
+            atom->m_type = m_type;
+            atom->m_params = m_params;
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> a, m_children)
+                atom->addChild(a->clone());
+            return atom;
+        }
+        virtual void dump(Context* context, int level) {
+            DEBUG_DUMP << "type=" << m_type;
+            AbstractAtom::dump(context, level);
+        }
+        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
+            if (reader->isStartElement()) {
+                if (reader->qualifiedName() == QLatin1String("dgm:param")) {
+                    const QXmlStreamAttributes attrs(reader->attributes());
+                    TRY_READ_ATTR_WITHOUT_NS(type)
+                    TRY_READ_ATTR_WITHOUT_NS(val)
+                    m_params[type] = val;
+                }
+            }
+        }
+};
+
 /// The layout node is the basic building block of diagrams. The layout node is responsible for defining how shapes are arranged in a diagram and how the data maps to a particular shape in a diagram.
 class LayoutNodeAtom : public AbstractAtom
 {
@@ -413,6 +463,7 @@ class LayoutNodeAtom : public AbstractAtom
         QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
+        bool m_needsRelayout, m_childNeedsRelayout;
         explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true) {}
         virtual ~LayoutNodeAtom() {}
         virtual LayoutNodeAtom* clone();
@@ -442,9 +493,24 @@ class LayoutNodeAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const { return m_constraints; }
         void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint) { m_constraints.append(constraint); setNeedsRelayout(true); }
+        QExplicitlySharedDataPointer<AlgorithmAtom> algorithm() const { return m_algorithm; }
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm) { m_algorithm = algorithm; setNeedsRelayout(true); }
         QList<AbstractNode*> axis() const { return m_axis; }
-        void setAxis(const QList<AbstractNode*> &axis) { m_axis = axis; setNeedsRelayout(true); }
+        void setAxis(Context* context, const QList<AbstractNode*> &axis) {
+            m_axis = axis;
+            /*
+            QExplicitlySharedDataPointer<LayoutNodeAtom> ptr(this);
+            foreach(AbstractNode* node, axis) {
+                PointNode* n = dynamic_cast<PointNode*>(node);
+                Q_ASSERT(n);
+                if(n->m_type != "node") continue;
+                Q_ASSERT(!n->m_modelId.isEmpty());
+                Q_ASSERT(!context->m_pointLayoutMap.contains(n->m_modelId));
+                context->m_pointLayoutMap[n->m_modelId] = ptr;
+            }
+            */
+            setNeedsRelayout(true);
+        }
         void setNeedsRelayout(bool needsRelayout) {
             if(needsRelayout == m_needsRelayout) return;
             m_needsRelayout = needsRelayout;
@@ -452,6 +518,11 @@ class LayoutNodeAtom : public AbstractAtom
                 for(QExplicitlySharedDataPointer<AbstractAtom> parent = m_parent; parent.data(); parent = parent->parent())
                     if(LayoutNodeAtom* parentLayoutAtom = dynamic_cast<LayoutNodeAtom*>(parent.data()))
                         parentLayoutAtom->m_childNeedsRelayout = true;
+        }
+        AlgorithmAtom::Algorithm algorithmType() const { return m_algorithm ? m_algorithm->m_type : AlgorithmAtom::UnknownAlg; }
+        QMap<QString,QString> algorithmParams() const { return m_algorithm ? m_algorithm->m_params : QMap<QString,QString>(); }
+        QString algorithmParam(const QString &name, const QString &defaultValue = QString()) const {
+            return m_algorithm && m_algorithm->m_params.contains(name) ? m_algorithm->m_params[name] : defaultValue;
         }
         QString variable(const QString &name, bool checkParents = false) const {
             if(m_variables.contains(name))
@@ -479,11 +550,29 @@ class LayoutNodeAtom : public AbstractAtom
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
         QExplicitlySharedDataPointer<AlgorithmAtom> m_algorithm;
         QList<AbstractNode*> m_axis;
-        bool m_needsRelayout, m_childNeedsRelayout;
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
 };
 
+void AlgorithmAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
+    const QXmlStreamAttributes attrs(reader->attributes());
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    if(type == QLatin1String("composite")) m_type = CompositeAlg;
+    else if(type == QLatin1String("conn")) m_type = ConnectorAlg;
+    else if(type == QLatin1String("cycle")) m_type = CycleAlg;
+    else if(type == QLatin1String("hierChild")) m_type = HierChildAlg;
+    else if(type == QLatin1String("hierRoot")) m_type = HierRootAlg;
+    else if(type == QLatin1String("lin")) m_type = LinearAlg;
+    else if(type == QLatin1String("pyra")) m_type = PyramidAlg;
+    else if(type == QLatin1String("snake")) m_type = SnakeAlg;
+    else if(type == QLatin1String("sp")) m_type = SpaceAlg;
+    else if(type == QLatin1String("tx")) m_type = TextAlg;
+    else m_type = UnknownAlg;
+    QExplicitlySharedDataPointer<AlgorithmAtom> ptr(this);
+    context->m_parentLayout->setAlgorithm(ptr);
+    AbstractAtom::readAll(context, reader);
+}
+        
 /// Specify size and position of nodes, text values, and layout dependencies between nodes in a layout definition.
 class ConstraintAtom : public AbstractAtom
 {
@@ -651,6 +740,7 @@ class ShapeAtom : public AbstractAtom
             //TODO can spacing between the siblings applied by shriking the shapes or is it needed to apply them along the used algorithm?
             qreal sibSp = values.value("sibSp");
             if(sibSp > 0.0) {
+#if 0
                 //Q_ASSERT(w >= sibSp);
                 //Q_ASSERT(h >= sibSp);
                 if(w >= sibSp && h >= sibSp) {
@@ -662,6 +752,9 @@ class ShapeAtom : public AbstractAtom
                     kWarning()<<"Sibling spacing is bigger then width/height! Skipping sibSp-value! width="<<w<<"height="<<h<<"sibSp="<<sibSp;
                     context->m_parentLayout->dump(context, 10);
                 }
+#else
+                kWarning()<<"TODO Sibling spacing sibSp="<<sibSp;
+#endif
             }
             
             DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
@@ -681,14 +774,30 @@ class ShapeAtom : public AbstractAtom
             style.addProperty("draw:fill", "solid" /*none*/, KoGenStyle::GraphicType);
             style.addProperty("draw:opacity", "50%");
 
-kDebug()<<"################### context"<<context->m_parentLayout->m_name<<x+cx<<y+cy<<w<<h;
-            xmlWriter->addAttribute("svg:x", QString("%1px").arg(x+cx));
-            xmlWriter->addAttribute("svg:y", QString("%1px").arg(y+cy));
+            bool m_flipH = false;
+            bool m_flipV = false;
+            int m_svgX = x+cx;
+            int m_svgY = y+cy;
+
+            int rotateAngle = 0;
+
+            xmlWriter->addAttribute("svg:x", QString("%1px").arg(m_svgX));
+            xmlWriter->addAttribute("svg:y", QString("%1px").arg(m_svgY));
             xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
             xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
 
+            if(rotateAngle != 0) {
+                QMatrix matrix;
+                matrix.translate(m_svgX + 0.5 * w, m_svgY + 0.5 * h);
+                matrix.rotate(rotateAngle);
+                matrix.translate(-0.5 * w, -0.5 * h);
+                xmlWriter->addAttribute("draw:transform", QString("matrix(%1 %2 %3 %4 %5pt %6pt)").arg(matrix.m11()).arg(matrix.m12()).arg(matrix.m21()).arg(matrix.m22()).arg(matrix.dx()) .arg(matrix.dy()));
+            }
+
+            kDebug()<<"################### context"<<context->m_parentLayout->m_name<<m_svgX<<m_svgY<<w<<h<<rotateAngle;
+
             if (m_type == QLatin1String("conn")) {
-                //xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-0.62832) translate(3.12798in 0.91174in)");
+                // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-0.62832) translate(3.12798in 0.91174in)");
                 // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-5.02655) translate(3.47562in 1.95573in)");
                 // xmlWriter->addAttribute("draw:transform", "");
                 // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-1.25664) translate(1.69526in 1.9687in)");
@@ -773,70 +882,6 @@ kDebug()<<"################### context"<<context->m_parentLayout->m_name<<x+cx<<
         }
 };
 
-/// The algorithm used by the containing layout node. The algorithm defines the behavior of the layout node along with the behavior and layout of the nested layout nodes.
-class AlgorithmAtom : public AbstractAtom
-{
-    public:
-        /// The used layout-algorithm.
-        enum Algorithm {
-            UnknownAlg, ///< Unknown algorithm. This should happen...
-            CompositeAlg, ///< The composite algorithm specifies the size and position for all child layout nodes. You can use it to create graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
-            ConnectorAlg, ///< The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
-            CycleAlg, ///< The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
-            HierChildAlg, ///< The hierarchy child algorithm works with the hierRoot algorithm to create hierarchical tree layouts. This algorithm aligns and positions its child layout nodes in a linear path under the hierRoot layout node.
-            HierRootAlg, ///< The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts. The hierRoot algorithm aligns and positions the hierRoot layout node in relation to the hierChild layout nodes.
-            LinearAlg, ///< The linear algorithm lays out child layout nodes along a linear path.
-            PyramidAlg, ///< The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid shape to create a pyramid.
-            SnakeAlg, ///< The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear flow to continue across multiple rows or columns.
-            SpaceAlg, ///< The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
-            TextAlg ///< The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
-        };
-        Algorithm m_type;
-        QMap<QString, QString> m_params; // list of type=value parameters that modify the default behavior of the algorithm.
-        explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
-        virtual ~AlgorithmAtom() {}
-        virtual AlgorithmAtom* clone() {
-            AlgorithmAtom* atom = new AlgorithmAtom;
-            atom->m_type = m_type;
-            atom->m_params = m_params;
-            foreach(QExplicitlySharedDataPointer<AbstractAtom> a, m_children)
-                atom->addChild(a->clone());
-            return atom;
-        }
-        virtual void dump(Context* context, int level) {
-            DEBUG_DUMP << "type=" << m_type;
-            AbstractAtom::dump(context, level);
-        }
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
-            const QXmlStreamAttributes attrs(reader->attributes());
-            TRY_READ_ATTR_WITHOUT_NS(type)
-            if(type == QLatin1String("composite")) m_type = CompositeAlg;
-            else if(type == QLatin1String("conn")) m_type = ConnectorAlg;
-            else if(type == QLatin1String("cycle")) m_type = CycleAlg;
-            else if(type == QLatin1String("hierChild")) m_type = HierChildAlg;
-            else if(type == QLatin1String("hierRoot")) m_type = HierRootAlg;
-            else if(type == QLatin1String("lin")) m_type = LinearAlg;
-            else if(type == QLatin1String("pyra")) m_type = PyramidAlg;
-            else if(type == QLatin1String("snake")) m_type = SnakeAlg;
-            else if(type == QLatin1String("sp")) m_type = SpaceAlg;
-            else if(type == QLatin1String("tx")) m_type = TextAlg;
-            else m_type = UnknownAlg;
-            QExplicitlySharedDataPointer<AlgorithmAtom> ptr(this);
-            context->m_parentLayout->setAlgorithm(ptr);
-            AbstractAtom::readAll(context, reader);
-        }
-        virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
-            if (reader->isStartElement()) {
-                if (reader->qualifiedName() == QLatin1String("dgm:param")) {
-                    const QXmlStreamAttributes attrs(reader->attributes());
-                    TRY_READ_ATTR_WITHOUT_NS(type)
-                    TRY_READ_ATTR_WITHOUT_NS(val)
-                    m_params[type] = val;
-                }
-            }
-        }
-};
-
 /// This element specifies a particular data model point which is to be mapped to the containing layout node.
 class PresentationOfAtom : public AbstractAtom
 {
@@ -877,7 +922,7 @@ class PresentationOfAtom : public AbstractAtom
         }
         virtual void build(Context* context) {
             QList<AbstractNode*> axis = fetchAxis(context, m_axis, m_ptType, m_start, m_count, m_step);
-            context->m_parentLayout->setAxis(axis);
+            context->m_parentLayout->setAxis(context, axis);
             AbstractAtom::build(context);
         }
 };
@@ -1257,7 +1302,7 @@ LayoutNodeAtom* LayoutNodeAtom::clone()
     foreach(QExplicitlySharedDataPointer<ConstraintAtom> a, m_constraints)
         atom->addConstraint(QExplicitlySharedDataPointer<ConstraintAtom>(a->clone()));
     atom->m_algorithm = QExplicitlySharedDataPointer<AlgorithmAtom>(m_algorithm->clone());
-    atom->setAxis(m_axis);
+    atom->m_axis = m_axis;
     atom->m_needsRelayout = m_needsRelayout;
     atom->m_childNeedsRelayout = m_childNeedsRelayout;
     atom->m_variables = m_variables;
@@ -1265,206 +1310,343 @@ LayoutNodeAtom* LayoutNodeAtom::clone()
     return atom;
 }
 
+class AlgorithmBase {
+    public:
+        explicit AlgorithmBase() : m_context(0), m_oldCurrentNode(0) /*,m_inited(false)*/ {}
+        virtual ~AlgorithmBase() {
+            if(m_context) {
+                m_context->m_parentLayout = m_parentLayout;
+                m_context->setCurrentNode(m_oldCurrentNode);
+            }
+        }
+        Context* context() const { return m_context; }
+        LayoutNodeAtom* layout() const { return m_layout.data(); }
+        LayoutNodeAtom* parentLayout() const { return m_parentLayout.data(); }
+
+        void doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout) {
+            m_context = context;
+            m_layout = layout;
+            m_parentLayout = m_context->m_parentLayout;
+            m_context->m_parentLayout = m_layout;
+            m_oldCurrentNode = m_context->currentNode();
+            virtualDoInit();
+        }
+        void doLayout() {
+            virtualDoLayoutChildren();
+        }
+        void doLayoutChildren() {
+            virtualDoLayout();
+        }
+    protected:
+        //bool m_inited;
+        virtual void virtualDoInit() {
+            //if(!m_inited) { m_inited=true; } else { return ;}
+
+            layout()->m_values = parentLayout()->m_values;
+            layout()->m_factors = parentLayout()->m_factors;
+            layout()->m_countFactors = parentLayout()->m_countFactors;
+
+            QMap<QString, qreal> values = parentLayout()->finalValues();
+            Q_ASSERT(values["l"] >= 0.0);
+            Q_ASSERT(values["t"] >= 0.0);
+            Q_ASSERT(values["w"] > 0.0);
+            Q_ASSERT(values["h"] > 0.0);
+            Q_ASSERT(values["ctrX"] >= 0.0);
+            Q_ASSERT(values["ctrY"] >= 0.0);
+        }
+        virtual void virtualDoLayout() {
+            // QStringList axisnames;
+            // foreach(AbstractNode* n, m_axis) axisnames.append(n->m_tagName);
+            // kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
+            //this->dump(context, 10);
+
+            // evaluate the constraints responsible for positioning and sizing.
+            foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, layout()->constraints()) {
+                c->dump(context(), 2);
+
+                qreal value = -1.0;
+                if(!c->m_value.isEmpty()) {
+                    bool ok;
+                    value = c->m_value.toDouble(&ok);
+                    if(!ok) {
+                        kWarning() << "Layout with name=" << layout()->m_name << "defines none-double value=" << c->m_value;
+                        continue;
+                    }
+                } else {
+                    QExplicitlySharedDataPointer<LayoutNodeAtom> ref = c->m_refForName.isEmpty() ? m_layout : context()->m_layoutMap.value(c->m_refForName);
+                    if(ref && (ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
+                        Q_ASSERT(ref != m_layout);
+                        ref->layoutAtom(context());
+                        Q_ASSERT(!ref->m_needsRelayout && !ref->m_childNeedsRelayout);
+                    }
+
+                    if(!c->m_refType.isEmpty()) {
+                        QMap<QString, qreal> values = ref->finalValues();
+                        if(!values.contains(c->m_refType)) {
+                            kWarning() << "Layout with name=" << layout()->m_name << "defines constraint for non-existing refType=" << c->m_refType;
+                            continue;
+                        }
+                        value = values[c->m_refType];
+                    } else {
+                        //FIXME no refType and no value defined means use the default-value but the specs don't say what
+                        //the default values are. So, it's needed someone figures out what it means if standalone tags
+                        //like <dgm:constr type="connDist"/> are defined.
+                        kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << layout()->m_name;
+                        c->dump(context(),10);
+                        //if(c->m_type=="connDist") value = ref->finalValues()["w"]/5.0;
+                    }
+                }
+
+                if(value >= 0.0)
+                    layout()->m_values[c->m_type] = value;
+                layout()->m_factors[c->m_type] += c->m_fact;
+                layout()->m_countFactors[c->m_type] += 1;
+            }
+        }
+        virtual void virtualDoLayoutChildren() {
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
+                atom->layoutAtom(context());
+            }
+        }
+    private:
+        Context* m_context;
+        QExplicitlySharedDataPointer<LayoutNodeAtom> m_layout;
+        QExplicitlySharedDataPointer<LayoutNodeAtom> m_parentLayout;
+        AbstractNode* m_oldCurrentNode;
+};
+
+/// The composite algorithm specifies the size and position for all child layout nodes. You can use it to create graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
+class CompositeAlgorithm : public AlgorithmBase {
+    public:
+        explicit CompositeAlgorithm() : AlgorithmBase() {}
+        virtual ~CompositeAlgorithm() {}
+};
+
+/// The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
+class ConnectorAlgorithm : public AlgorithmBase {
+    public:
+        explicit ConnectorAlgorithm() : AlgorithmBase() {}
+        virtual ~ConnectorAlgorithm() {}
+        virtual void virtualDoLayout() {
+            AlgorithmBase::virtualDoLayout();
+
+            // Get a list of all child-layouts of our parent to apply the connector-algorithm on our direct
+            // neighbors. Also while on it also determinate our own position in that list.
+            QList<LayoutNodeAtom*> siblingLayouts;
+            int myindex = -1;
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, parentLayout()->children()) {
+                //atom->layoutAtom(context);
+                if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
+                    if(l == layout()) myindex = siblingLayouts.count();
+                    siblingLayouts.append(l);
+                }
+            }
+            Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
+            Q_ASSERT(siblingLayouts.count() >= 3); // a connector makes only sense if we have some neighbors
+            LayoutNodeAtom* srcAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
+            LayoutNodeAtom* dstAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
+
+#if 0 //TODO
+            QMap<QString, qreal> srcValues = srcAtom->m_values;
+            QMap<QString, qreal> dstValues = dstAtom->m_values;
+            QMap<QString, qreal> srcFactors = srcAtom->m_factors;
+            QMap<QString, qreal> dstFactors = dstAtom->m_factors;
+            QMap<QString, int> srcCountFactors = srcAtom->m_countFactors;
+            QMap<QString, int> dstCountFactors = dstAtom->m_countFactors;
+            qreal srcX = srcValues["l"];//+srcValues["ctrX"];
+            qreal srcY = srcValues["t"];//+srcValues["ctrY"];
+            qreal srcW = srcValues["w"];
+            qreal srcH = srcValues["h"];
+            qreal srcCX = srcX + srcW/2.0;
+            qreal srcCY = srcY + srcH/2.0;
+            qreal dstX = dstValues["l"];//+dstValues["ctrX"];
+            qreal dstY = dstValues["t"];//+dstValues["ctrY"];
+            qreal dstW = dstValues["w"];
+            qreal dstH = dstValues["h"];
+            qreal dstCX = dstX + dstW/2.0;
+            qreal dstCY = dstY + dstH/2.0;
+            // int connCX = srcCX>dstCX ? srcCX-dstCX : dstCX-srcCX;
+            // int connCY = srcCY>dstCY ? srcCY-dstCY : dstCY-srcCY;
+            int connX = 0;
+            int connY = 0;
+            int connW = 0;
+            int connH = 0;
+            if(srcCX < dstCX) {
+                int distance = dstCX - srcCX;
+                //connW = distance - (srcW/2.0+dstW/2.0);
+                //connX = (distance/2.0)+srcCX+(connW/2.0);
+                connX = (distance/2.0)+srcCX;
+                connW = qMax(50.0,distance - (srcW/2.0+dstW/2.0));
+                Q_ASSERT(distance >= 0);
+                Q_ASSERT(connW >= 0.0);
+                Q_ASSERT(connX >= 0.0);
+            } else {
+                int distance = srcCX - dstCX;
+                //connW = distance - (srcW/2.0+dstW/2.0);
+                //connX = (distance/2.0)+dstCX+(connW/2.0);
+                connW = qMax(50.0, distance - (srcW/2.0+dstW/2.0));
+                connX = (distance/2.0)+dstCX;
+                Q_ASSERT(distance >= 0);
+                Q_ASSERT(connW >= 0.0);
+                Q_ASSERT(connX >= 0.0);
+            }
+            if(srcCY < dstCY) {
+                int distance = dstCY - srcCY;
+                //connH = distance - (srcH/2.0+dstH/2.0);
+                //connY = (distance/2.0)+srcCY+(connH/2.0);
+                connH = qMax(50.0, distance - (srcH/2.0+dstH/2.0));
+                connY = (distance/2.0)+srcCY;
+                Q_ASSERT(distance >= 0);
+                Q_ASSERT(connH >= 0.0);
+                Q_ASSERT(connY >= 0.0);
+            } else {
+                int distance = srcCY - dstCY;
+                //connH = distance - (srcH/2.0+dstH/2.0);
+                //connY = (distance/2.0)+dstCY+(connH/2.0);
+                connH = qMax(50.0,distance - (srcH/2.0+dstH/2.0));
+                connY = (distance/2.0)+dstCY;
+                Q_ASSERT(distance >= 0);
+                Q_ASSERT(connH >= 0.0);
+                Q_ASSERT(connY >= 0.0);
+            }
+            foreach(const QString& key, QStringList()<<"l"<<"t"<<"w"<<"h"<<"ctrX"<<"ctrY") {
+                layout()->m_factors[key]      = srcFactors[key]      + dstFactors[key];
+                layout()->m_countFactors[key] = srcCountFactors[key] + dstCountFactors[key];
+            }
+            layout()->m_values["l"] = connX;
+            layout()->m_values["t"] = connY;
+            layout()->m_values["w"] = connW;
+            layout()->m_values["h"] = connH;
+            layout()->m_values["ctrX"] = 0;
+            layout()->m_values["ctrY"] = 0;
+#endif
+
+
+        }
+
+};
+
+/// The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
+class CycleAlgorithm : public AlgorithmBase {
+    public:
+        explicit CycleAlgorithm() : AlgorithmBase() {}
+        virtual ~CycleAlgorithm() {}
+    protected:
+        virtual void virtualDoInit() {
+            AlgorithmBase::virtualDoInit();
+        }
+        virtual void virtualDoLayoutChildren() {
+            AlgorithmBase::virtualDoLayoutChildren();
+        }
+        virtual void virtualDoLayout() {
+            AlgorithmBase::virtualDoLayout();
+            
+            // Get a list of all child-layouts to apply the circle-algorithm on them.
+            QList<LayoutNodeAtom*> childLayouts;
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
+                if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
+//if(l->algorithmType() == AlgorithmAtom::ConnectorAlg) continue;
+                    childLayouts.append(l);
+                }
+            }
+            const int childLayoutsCount = childLayouts.count();
+            Q_ASSERT(childLayoutsCount > 0);
+
+            // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
+            int startAngel = layout()->algorithmParam("stAng", "90").toInt() - 90;
+            // Specifies the angle the cycle spans. Final shapealign text is placed at stAng+spanAng, unless spanAng=360. In that case, the algorithm places the text so that shapes do not overlap.
+            int spanAngel = layout()->algorithmParam("spanAng", "360").toInt();
+
+            const qreal w = layout()->finalValues()["w"];
+            const qreal h = layout()->finalValues()["h"];
+            const qreal rx = w / 2.0;
+            const qreal ry = h / 2.0;
+            const bool inverse = startAngel > spanAngel;
+            int num = 360 / childLayoutsCount;
+            if(inverse) num = -num;
+
+            const qreal r = w/2.0;
+            const qreal d = (2.0*3.14*r)/childLayoutsCount;
+
+            QList< QPair<qreal,qreal> > m_startCoordinates;
+            for(int degree = startAngel; inverse ? degree > spanAngel : degree <= spanAngel; degree += num) {
+                const qreal radian = (degree - 90) * (3.14 / 180);
+                const qreal x = rx + cos(radian) * rx;
+                const qreal y = ry + sin(radian) * ry;
+                LayoutNodeAtom* l = childLayouts.takeFirst();
+                l->layoutAtom(context());
+
+                l->m_values["l"] = parentLayout()->m_values["l"];
+                l->m_values["t"] = parentLayout()->m_values["t"];
+                l->m_values["w"] = d;//parentLayout()->m_values["w"] / childLayoutsCount;
+                l->m_values["h"] = d;//parentLayout()->m_values["h"] / childLayoutsCount;
+
+                l->m_factors["l"] = l->m_factors["t"] = 1.0;
+                l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
+                
+                l->m_values["ctrX"] = x;
+                l->m_values["ctrY"] = y;
+            }
+
+            //kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
+        }
+};
+
+/// The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
+class SpaceAlg : public AlgorithmBase {
+    public:
+        explicit SpaceAlg() : AlgorithmBase() {}
+        virtual ~SpaceAlg() {}
+        
+};
+
+/// The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
+class TextAlgorithm : public AlgorithmBase {
+    public:
+        explicit TextAlgorithm() : AlgorithmBase() {}
+        virtual ~TextAlgorithm() {}
+};
+
 void LayoutNodeAtom::layoutAtom(Context* context)
 {
-    kDebug() << "name=" << m_name;
+    AlgorithmBase *algbase = 0;
 
-    QExplicitlySharedDataPointer<LayoutNodeAtom> oldLayout = context->m_parentLayout;
-    context->m_parentLayout = this;
-    
-    AbstractNode* oldCurrentNode = context->currentNode();
-
-    // Initially take over the layout coordinates from the parent layout. Constraints and rules attached to this
-    // layout and that are evaluated later in this method will then make sure to change this accordingly.
-    if(m_firstLayout) {
-        m_firstLayout = false;
-        m_values = oldLayout->m_values;
-        m_factors = oldLayout->m_factors;
-        m_countFactors = oldLayout->m_countFactors;
-
-        QMap<QString, qreal> values = oldLayout->finalValues();
-        Q_ASSERT(values["l"] >= 0.0);
-        Q_ASSERT(values["t"] >= 0.0);
-        Q_ASSERT(values["w"] > 0.0);
-        Q_ASSERT(values["h"] > 0.0);
-        Q_ASSERT(values["ctrX"] >= 0.0);
-        Q_ASSERT(values["ctrY"] >= 0.0);
+    switch(m_algorithm->m_type) {
+        case AlgorithmAtom::UnknownAlg: kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm."; break;
+        case AlgorithmAtom::CompositeAlg: algbase = new CompositeAlgorithm; break;
+        case AlgorithmAtom::ConnectorAlg: algbase = new ConnectorAlgorithm; break;
+        case AlgorithmAtom::CycleAlg: algbase = new CycleAlgorithm; break;
+        case AlgorithmAtom::HierChildAlg: kWarning() << "TODO AlgorithmAtom::HierChildAlg"; break;
+        case AlgorithmAtom::HierRootAlg: kWarning() << "TODO AlgorithmAtom::HierRootAlg"; break;
+        case AlgorithmAtom::LinearAlg: kWarning() << "TODO AlgorithmAtom::LinearAlg"; break;
+        case AlgorithmAtom::PyramidAlg: kWarning() << "TODO AlgorithmAtom::PyramidAlg"; break;
+        case AlgorithmAtom::SnakeAlg: kWarning() << "TODO AlgorithmAtom::SnakeAlg"; break;
+        case AlgorithmAtom::SpaceAlg: algbase = new SpaceAlg; break;
+        case AlgorithmAtom::TextAlg: algbase = new TextAlgorithm; break;
+        //default: break;
     }
 
-    AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
-    QMap<QString,QString> params;
-    if(m_algorithm) {
-        algorithm = m_algorithm->m_type;
-        params = m_algorithm->m_params;
+    if(algbase) {
+        QExplicitlySharedDataPointer<LayoutNodeAtom> thisPtr(this);
+        algbase->doInit(context, thisPtr);
     }
 
-    // layout ourself if requested
     if(m_needsRelayout) {
         m_needsRelayout = false;
         m_childNeedsRelayout = true;
-
-        //QStringList axisnames;
-        //foreach(AbstractNode* n, m_axis) axisnames.append(n->m_tagName);
-        //kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
-        //this->dump(context, 2);
-
-        // evaluate the constraints responsible for positioning and sizing.
-        //if(!m_constraints.isEmpty()) kDebug() << "Constraints for LayoutNodeAtom="<<m_name;
-        foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, m_constraints) {
-            c->dump(context, 2);
-
-            qreal value = -1.0;
-            if(!c->m_value.isEmpty()) {
-                bool ok;
-                value = c->m_value.toDouble(&ok);
-                if(!ok) {
-                    kWarning() << "Layout with name=" << m_name << "defines none-double value=" << c->m_value;
-                    continue;
-                }
-            } else {
-                LayoutNodeAtom* ref = c->m_refForName.isEmpty() ? this : context->m_layoutMap.value(c->m_refForName).data();
-                Q_ASSERT(ref);
-                if(ref != this && (ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
-                    ref->layoutAtom(context);
-                    Q_ASSERT(!ref->m_needsRelayout && !ref->m_childNeedsRelayout);
-                    m_needsRelayout = m_childNeedsRelayout = true;
-                    layoutAtom(context); // restart from the beginning since things may have completly changed now for us
-                    Q_ASSERT(!m_needsRelayout);
-                    Q_ASSERT(!m_childNeedsRelayout);
-                    context->setCurrentNode(oldCurrentNode);
-                    context->m_parentLayout = oldLayout;
-                    return;
-                }
-
-                if(!c->m_refType.isEmpty()) {
-                    QMap<QString, qreal> values = ref->finalValues();
-                    if(!values.contains(c->m_refType)) {
-                        kWarning() << "Layout with name=" << m_name << "defines constraint for non-existing refType=" << c->m_refType;
-                        continue;
-                    }
-                    value = values[c->m_refType];
-                } else {
-                    //FIXME no refType and no value defined means use the default-value but the specs don't say what
-                    //the default values are. So, it's needed someone figures out what it means if standalone tags
-                    //like <dgm:constr type="connDist"/> are defined.
-                    kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << m_name;
-                    c->dump(context,10);
-                    //value = 0.0;
-                    continue; // skip for now
-                }
-            }
-
-            if(c->m_type.isEmpty()) {
-                kWarning() << "Layout with name=" << m_name << "defines constraint with empty type";
-                continue;
-            }
-
-            if(value >= 0.0)
-                m_values[c->m_type] = value;
-            m_factors[c->m_type] += c->m_fact;
-            m_countFactors[c->m_type] += 1;
+        if(algbase) {
+            algbase->doLayout();
         }
     }
-
-    // layout the children if still requested
+    
     if(m_childNeedsRelayout) {
         m_childNeedsRelayout = false;
-
-        // The specs say that the algorithm applies to *all* layout-children.
-        QList<LayoutNodeAtom*> childLayouts;
-        foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_children) {
-            atom->layoutAtom(context);
-            if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
-                childLayouts.append(l);
-            }
+        if(algbase) {
+            algbase->doLayoutChildren();
         }
-
-        Q_ASSERT(m_algorithm);
-        QList< QPair<qreal,qreal> > m_startCoordinates;
-        switch(m_algorithm->m_type) {
-            case AlgorithmAtom::UnknownAlg:
-                kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
-                break;
-            case AlgorithmAtom::CompositeAlg:
-                // nothing to do since composite means that the constraints define everything needed and
-                // we don't need to do anything additionally...
-                break;
-            case AlgorithmAtom::ConnectorAlg: {
-                // The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
-                kDebug() << "TODO implement AlgorithmAtom::ConnectorAlg" << childLayouts.count() << params;
-                foreach(LayoutNodeAtom* a, childLayouts) kDebug()<<"    "<<a->m_name;
-
-                //context->m_rootLayout->dump(context,10);
-                //context->m_parentLayout->dump(context,10);
-                //Q_ASSERT(false);
-            } break;
-            case AlgorithmAtom::CycleAlg: {
-                // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
-                int startAngel = (params.contains("stAng") ? params["stAng"].toInt() : 90) - 90;
-                // Specifies the angle the cycle spans. Final shapealign text is placed at stAng+spanAng, unless spanAng=360. In that case, the algorithm places the text so that shapes do not overlap.
-                int spanAngel = params.contains("spanAng") ? startAngel+params["spanAng"].toInt() : 360;
-                const qreal w = finalValues()["w"];
-                const qreal h = finalValues()["h"];
-                const qreal rx = w / 2.0;
-                const qreal ry = h / 2.0;
-                Q_ASSERT(!childLayouts.isEmpty());
-                const bool inverse = startAngel > spanAngel;
-                int num = 360 / childLayouts.count();
-                if(inverse) num = -num;
-                for(int degree = startAngel; inverse ? degree > spanAngel : degree <= spanAngel; degree += num) {
-                    const qreal radian = (degree - 90) * (3.14 / 180);
-                    const qreal x = rx + cos(radian) * rx;
-                    const qreal y = ry + sin(radian) * ry;
-                    m_startCoordinates.append(QPair<qreal,qreal>(x, y));
-                }
-                kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
-            } break;
-            case AlgorithmAtom::HierChildAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::HierChildAlg";
-                break;
-            case AlgorithmAtom::HierRootAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::HierRootAlg";
-                break;
-            case AlgorithmAtom::LinearAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::LinearAlg";
-                break;
-            case AlgorithmAtom::PyramidAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::PyramidAlg";
-                break;
-            case AlgorithmAtom::SnakeAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::SnakeAlg";
-                break;
-            case AlgorithmAtom::SpaceAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::SpaceAlg";
-                break;
-            case AlgorithmAtom::TextAlg:
-                //TODO
-                kWarning() << "TODO implement AlgorithmAtom::TextAlg";
-                break;
-        }
-
-        foreach(LayoutNodeAtom* l, childLayouts) {
-            if(!m_startCoordinates.isEmpty()) {
-                QPair<qreal,qreal> coordinates = m_startCoordinates.takeFirst();
-                l->m_values["ctrX"] += coordinates.first;
-                l->m_values["ctrY"] += coordinates.second;
-                //kDebug()<<"w="<<m_values.value("w")<<"final-w="<<finalValues().value("w")<<"sibSp="<<m_values.value("sibSp")<<"final-sibSp="<<finalValues().value("sibSp");
-                //Q_ASSERT(false);
-            }
-        }
-        //dump(context,10);
     }
-
-    //TODO evaluate rules too
-
-    context->setCurrentNode(oldCurrentNode);
-    context->m_parentLayout = oldLayout;
+    
+    delete algbase;
 }
 
 void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles)

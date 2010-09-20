@@ -57,8 +57,9 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     // The root layout node always inherits the canvas dimensions by default.
     m_context->m_rootLayout->m_values["l"] = rect.x();
     m_context->m_rootLayout->m_values["t"] = rect.y();
-    m_context->m_rootLayout->m_values["w"] = rect.width();
-    m_context->m_rootLayout->m_values["h"] = rect.height();
+    // m_context->m_rootLayout->m_values["w"] = rect.width();
+    // m_context->m_rootLayout->m_values["h"] = rect.height();
+    m_context->m_rootLayout->m_values["w"] = m_context->m_rootLayout->m_values["h"] = qMin(rect.width(),rect.height()); // square
     m_context->m_rootLayout->m_values["ctrX"] = 0;
     m_context->m_rootLayout->m_values["ctrY"] = 0;
     // Do the (re-)layout.
@@ -213,7 +214,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         }
         
         m_context->m_context->m_rootLayout->build(m_context->m_context);
-        //m_context->m_context->m_rootLayout->dump(m_context->m_context,0);
+        //m_context->m_context->m_rootLayout->dump(m_context->m_context,10);
         //Q_ASSERT(false);
     }
     else if (qualifiedName() == QLatin1String("dgm:styleDef")) {
