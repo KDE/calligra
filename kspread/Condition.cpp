@@ -25,10 +25,14 @@
 #include <float.h>
 
 #include "Cell.h"
+#include "Formula.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
+#include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
@@ -177,11 +181,88 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
                 return true;
             }
             break;
+        case Conditional::IsTrueFormula:
+            // TODO: do some caching
+            if (isTrueFormula(cell, condition.value1.asString(), condition.baseCellAddress)) {
+                return true;
+            }
+            break;
         default:
             break;
         }
     }
     return false;
+}
+
+bool Conditions::isTrueFormula(const Cell &cell, const QString &formula, const QString &baseCellAddress) const
+{
+    Map* const map = cell.sheet()->map();
+    ValueCalc *const calc = map->calc();
+    Formula f(cell.sheet(), cell);
+    f.setExpression('=' + formula);
+    Region r(baseCellAddress, map, cell.sheet());
+    if (r.isValid() && r.isSingular()) {
+        QPoint basePoint = static_cast<Region::Point*>(*r.constBegin())->pos();
+        QString newFormula('=');
+        const Tokens tokens = f.tokens();
+        for (int t = 0; t < tokens.count(); ++t) {
+            const Token token = tokens[t];
+            if (token.type() == Token::Cell || token.type() == Token::Range) {
+                if (map->namedAreaManager()->contains(token.text())) {
+                    newFormula.append(token.text());
+                    continue;
+                }
+                const Region region(token.text(), map, cell.sheet());
+                if (!region.isValid() || !region.isContiguous()) {
+                    newFormula.append(token.text());
+                    continue;
+                }
+                if (region.firstSheet() != r.firstSheet()) {
+                    newFormula.append(token.text());
+                    continue;
+                }
+                Region::Element* element = *region.constBegin();
+                if (element->type() == Region::Element::Point) {
+                    Region::Point* point = static_cast<Region::Point*>(element);
+                    QPoint pos = point->pos();
+                    if (!point->isRowFixed()) {
+                        int delta = pos.y() - basePoint.y();
+                        pos.setY(cell.row() + delta);
+                    }
+                    if (!point->isColumnFixed()) {
+                        int delta = pos.x() - basePoint.x();
+                        pos.setX(cell.column() + delta);
+                    }
+                    newFormula.append(Region(pos, cell.sheet()).name());
+                } else {
+                    Region::Range* range = static_cast<Region::Range*>(element);
+                    QRect r = range->rect();
+                    if (!range->isTopFixed()) {
+                        int delta = r.top() - basePoint.y();
+                        r.setTop(cell.row() + delta);
+                    }
+                    if (!range->isBottomFixed()) {
+                        int delta = r.bottom() - basePoint.y();
+                        r.setBottom(cell.row() + delta);
+                    }
+                    if (!range->isLeftFixed()) {
+                        int delta = r.left() - basePoint.x();
+                        r.setLeft(cell.column() + delta);
+                    }
+                    if (!range->isRightFixed()) {
+                        int delta = r.right() - basePoint.x();
+                        r.setRight(cell.column() + delta);
+                    }
+                    newFormula.append(Region(r, cell.sheet()).name());
+                }
+            } else {
+                newFormula.append(token.text());
+            }
+        }
+        f.setExpression(newFormula);
+    }
+    Value val = f.eval();
+    return calc->conv()->asBoolean(val).asBoolean();
 }
 
 QLinkedList<Conditional> Conditions::conditionList() const
@@ -217,7 +298,8 @@ void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter 
         QMap<QString, QString> map;
         map.insert("style:condition", saveOdfConditionValue(condition, converter));
         map.insert("style:apply-style-name", condition.styleName);
-        //map.insert( ""style:base-cell-address", "..." );//todo
+        if (!condition.baseCellAddress.isEmpty())
+            map.insert("style:base-cell-address", condition.baseCellAddress);
         currentCellStyle.addStyleMap(map);
     }
 }
@@ -262,6 +344,10 @@ QString Conditions::saveOdfConditionValue(const Conditional &condition, ValueCon
         value += converter->asString(condition.value2).asString();
         value += ')';
         break;
+    case Conditional::IsTrueFormula:
+        value = "is-true-formula(";
+        value += Odf::encodeFormula(condition.value1.asString());
+        value += ")";
     }
     return value;
 }
@@ -316,7 +402,7 @@ QDomElement Conditions::saveConditions(QDomDocument &doc, ValueConverter *conver
 }
 
 Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
-                                         const ValueParser *parser)
+                                         const QString& baseCellAddress, const ValueParser *parser)
 {
     //kDebug(36003) << "\tcondition:" << conditionValue;
     Conditional newCondition;
@@ -325,6 +411,7 @@ Conditional Conditions::loadOdfCondition(const QString &conditionValue, const QS
         //kDebug(36003) << "\tstyle:" << applyStyleName;
         newCondition.styleName = applyStyleName;
     }
+    newCondition.baseCellAddress = baseCellAddress;
     d->conditionList.append(newCondition);
     return newCondition;
 }
@@ -345,7 +432,8 @@ void Conditions::loadOdfConditions(const KoXmlElement &element, const ValueParse
                 QString odfStyle = styleManager->openDocumentName(applyStyleName);
                 if (!odfStyle.isEmpty()) applyStyleName = odfStyle;
             }
-            loadOdfCondition(conditionValue, applyStyleName, parser);
+            QString baseCellAddress = elementItem.attributeNS(KoXmlNS::style, "base-cell-address");
+            loadOdfCondition(conditionValue, applyStyleName, baseCellAddress, parser);
         }
         node = node.nextSibling();
     }
@@ -376,6 +464,11 @@ void Conditions::loadOdfConditionValue(const QString &styleCondition, Conditiona
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadOdfValidationValue(listVal, newCondition, parser);
         newCondition.cond = Conditional::Different;
+    } else if (val.startsWith("is-true-formula(")) {
+        val = val.mid(16);
+        if (val.endsWith(")")) val = val.left(val.length() - 1);
+        newCondition.cond = Conditional::IsTrueFormula;
+        newCondition.value1 = Value(Odf::decodeFormula(val));
     }
 }
 

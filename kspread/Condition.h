@@ -56,13 +56,15 @@ class KSPREAD_EXPORT Conditional
 {
 public:
     enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
-                InferiorEqual, Between, Different, DifferentTo
+                InferiorEqual, Between, Different, DifferentTo,
+                IsTrueFormula
               };
 
     Value          value1;
     Value          value2;
     QString        styleName;
     Type           cond;
+    QString        baseCellAddress;
 
     Conditional();
 
@@ -148,7 +150,7 @@ public:
      * Loads the condtional formatting.
      */
     Conditional loadOdfCondition(const QString &conditionValue, const QString &applyStyleName,
-                                 const ValueParser *parser);
+                                 const QString &baseCellAddress, const ValueParser *parser);
 
     /**
      * \ingroup OpenDocument
@@ -184,6 +186,8 @@ private:
      * \return true if one of the conditions is true, false if not.
      */
     bool currentCondition(const Cell& cell, Conditional & condition) const;
+
+    bool isTrueFormula(const Cell& cell, const QString& formula, const QString& baseCellAddress) const;
 
     /**
      * \ingroup OpenDocument
