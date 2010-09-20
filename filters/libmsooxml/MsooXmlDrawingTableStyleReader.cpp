@@ -650,12 +650,12 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //     READ_EPILOGUE
 // }
 
-// #define blipFill_NS "a"
-// #define SETUP_PARA_STYLE_IN_READ_P
+#define blipFill_NS "a"
+#define SETUP_PARA_STYLE_IN_READ_P
 
-// #include <MsooXmlCommonReaderImpl.h>
+#include <MsooXmlCommonReaderImpl.h>
 
-// #define DRAWINGML_NS "a"
-// #define DRAWINGML_PIC_NS "p" // DrawingML/Picture
+#define DRAWINGML_NS "a"
+#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
 
-// #include <MsooXmlCommonReaderDrawingMLImpl.h>
+#include <MsooXmlCommonReaderDrawingMLImpl.h>
