@@ -1188,6 +1188,31 @@ void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processDonut(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:type", "ring");
+    out.xml.addAttribute("draw:glue-points", "10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163");
+    out.xml.addAttribute("draw:text-areas", "3163 3163 18437 18437");
+    processModifiers(o, out, QList<int>() << 5400);
+    out.xml.addAttribute("draw:enhanced-path", "U 10800 10800 10800 10800 0 360 Z U 10800 10800 ?f1 ?f1 0 360 N");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "10800-$0 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 10800");
+    out.xml.addAttribute("draw:handle-range-x-minimum", "0");
+    out.xml.addAttribute("draw:handle-range-x-maximum", "10800");
+    out.xml.endElement();
+
+
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -1280,6 +1305,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processFlowChartConnector(o, out);
     } else if (shapeType == msosptCallout2) {
         processCallout2(o, out);
+    } else if (shapeType == msosptDonut) {
+        processDonut(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
@@ -1315,10 +1342,10 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
     }
 }
 
-void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &out)
+void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &out, const QList<int>& defaults)
 {
     const AdjustValue* val1 = get<AdjustValue>(o);
-    if (!val1) return;
+    if (!val1 && defaults.isEmpty()) return;
     const Adjust2Value* val2 = get<Adjust2Value>(o);
     const Adjust3Value* val3 = get<Adjust3Value>(o);
     const Adjust4Value* val4 = get<Adjust4Value>(o);
@@ -1327,21 +1354,21 @@ void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &ou
     const Adjust7Value* val7 = get<Adjust7Value>(o);
     const Adjust8Value* val8 = get<Adjust8Value>(o);
 
-    QString modifiers = QString::number(val1->adjustvalue);
-    if (val2) {
-        modifiers += QString(" %1").arg(val2->adjust2value);
-        if (val3) {
-            modifiers += QString(" %1").arg(val3->adjust3value);
-            if (val4) {
-                modifiers += QString(" %1").arg(val4->adjust4value);
-                if (val5) {
-                    modifiers += QString(" %1").arg(val5->adjust5value);
-                    if (val6) {
-                        modifiers += QString(" %1").arg(val6->adjust6value);
-                        if (val7) {
-                            modifiers += QString(" %1").arg(val7->adjust7value);
-                            if (val8) {
-                                modifiers += QString(" %1").arg(val8->adjust8value);
+    QString modifiers = QString::number(val1 ? val1->adjustvalue : defaults[0]);
+    if (val2 || defaults.size() > 1) {
+        modifiers += QString(" %1").arg(val2 ? val2->adjust2value : defaults[1]);
+        if (val3 || defaults.size() > 2) {
+            modifiers += QString(" %1").arg(val3 ? val3->adjust3value : defaults[2]);
+            if (val4 || defaults.size() > 3) {
+                modifiers += QString(" %1").arg(val4 ? val4->adjust4value : defaults[3]);
+                if (val5 || defaults.size() > 4) {
+                    modifiers += QString(" %1").arg(val5 ? val5->adjust5value : defaults[4]);
+                    if (val6 || defaults.size() > 5) {
+                        modifiers += QString(" %1").arg(val6 ? val6->adjust6value : defaults[5]);
+                        if (val7 || defaults.size() > 6) {
+                            modifiers += QString(" %1").arg(val7 ? val7->adjust7value : defaults[6]);
+                            if (val8 || defaults.size() > 7) {
+                                modifiers += QString(" %1").arg(val8 ? val8->adjust8value : defaults[7]);
                             }
                         }
                     }
