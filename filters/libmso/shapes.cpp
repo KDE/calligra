@@ -1158,8 +1158,6 @@ void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer &o, W
 
 void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
 {
-    processRectangle(o, out);
-
     out.xml.startElement("draw:custom-shape");
     processStyleAndText(o, out);
 
