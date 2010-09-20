@@ -1156,6 +1156,40 @@ void ODrawToOdf::processFlowChartConnector(const MSO::OfficeArtSpContainer &o, W
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    processRectangle(o, out);
+
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:type", "mso-spt42");
+    processModifiers(o, out);
+    out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M");
+    equation(out, "f0", "$0 ");
+    equation(out, "f1", "$1 ");
+    equation(out, "f2", "$2 ");
+    equation(out, "f3", "$3 ");
+    equation(out, "f4", "$4 ");
+    equation(out, "f5", "$5 ");
+    equation(out, "f6", "$6 ");
+    equation(out, "f7", "$7 ");
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$0 $1");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$2 $3");
+    out.xml.endElement();
+    out.xml.startElement("draw:handle");
+    out.xml.addAttribute("draw:handle-position", "$4 $5");
+    out.xml.endElement();
+
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -1246,6 +1280,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processFlowChartDecision(o, out);
     } else if (shapeType == msosptFlowChartConnector) {
         processFlowChartConnector(o, out);
+    } else if (shapeType == msosptCallout2) {
+        processCallout2(o, out);
         //} else if (shapeType == msosptMin) {
         //    processFreeLine(o, out);
     } else if (shapeType == msosptPictureFrame
@@ -1261,6 +1297,7 @@ void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer& o,
     processStyle(o, out);
     processText(o, out);
 }
+
 void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
                                      Writer& out)
 {
@@ -1268,6 +1305,7 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
     out.xml.addAttribute("draw:layer", "layout");
     set2dGeometry(o, out);
 }
+
 void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
                                          Writer& out)
 {
@@ -1277,6 +1315,44 @@ void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
         client->processClientTextBox(*o.clientTextbox,
                                  o.clientData.data(), out);
     }
+}
+
+void ODrawToOdf::processModifiers(const MSO::OfficeArtSpContainer &o, Writer &out)
+{
+    const AdjustValue* val1 = get<AdjustValue>(o);
+    if (!val1) return;
+    const Adjust2Value* val2 = get<Adjust2Value>(o);
+    const Adjust3Value* val3 = get<Adjust3Value>(o);
+    const Adjust4Value* val4 = get<Adjust4Value>(o);
+    const Adjust5Value* val5 = get<Adjust5Value>(o);
+    const Adjust6Value* val6 = get<Adjust6Value>(o);
+    const Adjust7Value* val7 = get<Adjust7Value>(o);
+    const Adjust8Value* val8 = get<Adjust8Value>(o);
+
+    QString modifiers = QString::number(val1->adjustvalue);
+    if (val2) {
+        modifiers += QString(" %1").arg(val2->adjust2value);
+        if (val3) {
+            modifiers += QString(" %1").arg(val3->adjust3value);
+            if (val4) {
+                modifiers += QString(" %1").arg(val4->adjust4value);
+                if (val5) {
+                    modifiers += QString(" %1").arg(val5->adjust5value);
+                    if (val6) {
+                        modifiers += QString(" %1").arg(val6->adjust6value);
+                        if (val7) {
+                            modifiers += QString(" %1").arg(val7->adjust7value);
+                            if (val8) {
+                                modifiers += QString(" %1").arg(val8->adjust8value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    out.xml.addAttribute("draw:modifiers", modifiers);
 }
 
 void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
