@@ -950,8 +950,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgRef()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITHOUT_NS(idx)
     int index = idx.toInt();
-    // GradientColor is used temporarily to make schemeClr not to do anything
-    m_colorType = GradientColor;
+
     m_currentColor = QColor();
     while (!atEnd()) {
         readNext();
@@ -1002,7 +1001,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 {
     READ_PROLOGUE
 
-    m_colorType = BackgroundColor;
     QString fillImageName;
     m_currentColor = QColor();
 
@@ -1011,7 +1009,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF_NS(a, solidFill)
+            if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ_IF_NS(a, solidFill)
+                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+            }
             else if (qualifiedName() == QLatin1String("a:blipFill")) {
                 TRY_READ_IF_NS_IN_CONTEXT(a, blipFill)
                 KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
@@ -1037,11 +1039,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
             }*/
 //! @todo add ELSE_WRONG_FORMAT
         }
-    }
-
-    if (m_currentColor.isValid()) {
-        QBrush brush(m_currentColor, Qt::SolidPattern);
-        KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
     }
 
     if (!fillImageName.isEmpty()) {

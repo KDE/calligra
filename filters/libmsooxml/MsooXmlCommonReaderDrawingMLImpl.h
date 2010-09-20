@@ -57,7 +57,6 @@
 void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
     m_currentDoubleValue = 0;
-    m_colorType = BackgroundColor;
     m_hyperLink = false;
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
@@ -1240,7 +1239,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
 #ifdef PPTXXMLSLIDEREADER_H
                 d->textBoxHasContent = true; // We count normal fill and gardient as content
 #endif
-                m_colorType = BackgroundColor;
                 TRY_READ(solidFill)
                 // We must set the color immediately, otherwise currentColor may be modified by eg. ln
                 m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
@@ -1388,9 +1386,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
- - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
- - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
- - sysClr (System Color) §20.1.2.3.33
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
 
 */
 //! @todo support all child elements
@@ -1398,17 +1396,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 {
     READ_PROLOGUE
 
-    m_colorType = BackgroundColor;
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(srgbClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+
+    m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+    m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
 
     READ_EPILOGUE
 }
@@ -1430,16 +1433,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
  - prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
- - scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
- - srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
- - sysClr (System Color) §20.1.2.3.33
+ - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
+ - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
+ - [done] sysClr (System Color) §20.1.2.3.33
 */
 //! @todo support all child elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 {
     READ_PROLOGUE
-
-    m_colorType = OutlineColor;
 
     while (!atEnd()) {
         readNext();
@@ -1447,9 +1448,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(schemeClr)
+            ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(scrgbClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+#ifdef PPTXXMLSLIDEREADER_H
+    m_currentPen.setColor(m_currentColor);
+    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+#endif
 
     READ_EPILOGUE
 }
@@ -1859,8 +1868,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
 {
     READ_PROLOGUE2(DrawingML_rPr)
 
-    // Indicate that if any color is read, it's for text color.
-    m_colorType = TextColor;
     m_hyperLink = false;
 
     const QXmlStreamAttributes attrs(attributes());
@@ -3281,7 +3288,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_colorType = GradientColor;
     m_gradRotation = false;
     m_gradPosition = 0;
 
@@ -3297,6 +3303,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
             TRY_READ_IF(gsLst)
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -3317,6 +3324,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 
     QVector<QColor> colors;
     QVector<int> positions;
+    QVector<int> alphas;
 
     while (!atEnd()) {
         readNext();
@@ -3326,6 +3334,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
                 TRY_READ(gs)
                 colors.push_back(m_currentColor);
                 positions.push_back(m_gradPosition);
+                alphas.push_back(m_currentAlpha);
             }
         }
     }
@@ -3338,8 +3347,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
             colors.at(0) == colors.at(2) && colors.at(0) != colors.at(1)) {
             m_currentGradientStyle.addAttribute("draw:style", "axial");
             m_currentGradientStyle.addAttribute("draw:end-color", colors.at(0).name());
-            m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-            m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+            if (alphas.at(0) > 0) {
+                m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(alphas.at(0)));
+            }
+            else {
+                m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
+            }
+            if (alphas.at(2) > 0) {
+                m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(alphas.at(0)));
+            }
+            else {
+                m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+            }
             m_currentGradientStyle.addAttribute("draw:start-color", colors.at(1).name());
             gradFilled = true;
         }
@@ -3347,8 +3366,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
     // Currently used for all other encountered gradient types
     if (colors.size() > 1 && !gradFilled) {
         m_currentGradientStyle.addAttribute("draw:style", "linear");
-        m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
-        m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+        if (alphas.at(0) > 0) {
+            m_currentGradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(alphas.at(0)));
+        }
+        else {
+            m_currentGradientStyle.addAttribute("draw:start-intensity", "100%");
+        }
+        if (alphas.at(alphas.size()-1) > 0) {
+            m_currentGradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(alphas.at(alphas.size()-1)));
+        }
+        else {
+            m_currentGradientStyle.addAttribute("draw:end-intensity", "100%");
+        }
         m_currentGradientStyle.addAttribute("draw:start-color", colors.at(0).name());
         m_currentGradientStyle.addAttribute("draw:end-color", colors.at(colors.size()-1).name());
     }
@@ -3526,7 +3555,7 @@ Parent Elements
   - txLinClrLst (§21.4.4.14)
 
 Child elements:
-  - alpha (Alpha) §20.1.2.3.1
+  - [done] alpha (Alpha) §20.1.2.3.1
   - alphaMod (Alpha Modulation) §20.1.2.3.2
   - alphaOff (Alpha Offset) §20.1.2.3.3
   - blue (Blue) §20.1.2.3.4
@@ -3550,7 +3579,7 @@ Child elements:
   - redMod (Red Modulation) §20.1.2.3.24
   - redOff (Red Offset) §20.1.2.3.25
   - sat (Saturation) §20.1.2.3.26
-  - satMod (Saturation Modulation) §20.1.2.3.27
+  - [done] satMod (Saturation Modulation) §20.1.2.3.27
   - satOff (Saturation Offset) §20.1.2.3.28
   - shade (Shade) §20.1.2.3.31
   - [done] tint (Tint) §20.1.2.3.34
@@ -3580,6 +3609,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     m_currentTint = 0;
     m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
 //! @todo find proper theme, not just any
 #ifdef PPTXXMLSLIDEREADER_H
@@ -3610,66 +3641,105 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
             m_currentDoubleValue = &lumOff.value;
             TRY_READ(lumOff)
             lumOff.valid = true;
-        } else if (QUALIFIED_NAME_IS(tint)) {
-            TRY_READ(tint)
         }
         ELSE_TRY_READ_IF(shade)
+        ELSE_TRY_READ_IF(tint)
+        ELSE_TRY_READ_IF(satMod)
+        ELSE_TRY_READ_IF(alpha)
     }
 
     QColor col = Qt::white;
     if (colorItem) {
         col = colorItem->value();
     }
-    if (m_currentTint > 0) {
-        int red = (col.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        int green = (col.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        int blue = (col.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
 
-        col = QColor(red, green, blue);
-    }
-    if (m_currentShadeLevel > 0) {
-        int red = (col.red() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        int green = (col.green() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        int blue = (col.blue() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-
-        col = QColor(red, green, blue);
-    }
+    modifyColor();
 
     col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
 
-#ifdef PPTXXMLSLIDEREADER_H
-    switch (m_colorType) {
-        case BackgroundColor:
-        {
-            QBrush brush(col, Qt::SolidPattern);
-            KoOdfGraphicStyles::saveOdfFillStyle(*m_currentDrawStyle, *mainStyles, brush);
-        }
-        break;
-        case OutlineColor:
-        {
-            m_currentPen.setColor(col);
-            KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
-        }
-        break;
-        case TextColor:
-        {
-            if (m_currentTextStyleProperties) {
-                m_currentTextStyleProperties->setForeground(col);
-            }
-        }
-        break;
-        case GradientColor:
-        {
-            m_currentColor = col;
-        }
-        break;
-    }
-#endif
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
     m_currentPen.setColor(col);
 #endif
     m_currentColor = col;
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL satMod
+//! satMod (Saturation modulation value)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_satMod()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    if (!val.isEmpty()) {
+        bool ok = false;
+        int value = val.toInt(&ok);
+        if (!ok) {
+            value = 0;
+        }
+        m_currentSatMod = value/100000.0; // To get percentage in from 0.x
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+void MSOOXML_CURRENT_CLASS::modifyColor()
+{
+    int red = m_currentColor.red();
+    int green = m_currentColor.green();
+    int blue = m_currentColor.blue();
+
+    if (m_currentTint > 0) {
+        red = (red * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        green = (green * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        blue = (blue * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+    }
+    if (m_currentShadeLevel > 0) {
+        red = (red * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        green = (green * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        blue = (blue * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+    }
+    if (m_currentSatMod > 0) {
+        red = red * m_currentSatMod;
+        green = green * m_currentSatMod;
+        blue = blue * m_currentSatMod;
+        if (red > 255) {
+            red = 255;
+        }
+        if (green > 255) {
+            green = 255;
+        }
+        if (blue > 255) {
+            blue = 255;
+        }
+    }
+
+    m_currentColor = QColor(red, green, blue);
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL alpha
+//! alpha (alpha value)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_alpha()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    if (!val.isEmpty()) {
+        bool ok = false;
+        int value = val.toInt(&ok);
+        if (!ok) {
+            value = 0;
+        }
+        m_currentAlpha = value/1000; // To get percentage
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3791,7 +3861,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     READ_PROLOGUE
     QXmlStreamAttributes attrs(attributes());
 
-    m_colorType = OutlineColor;
     m_currentPen = QPen();
 
     //align
@@ -4008,7 +4077,7 @@ This element specifies a color in RGB notation.
     - redMod (Red Modulation) §20.1.2.3.24
     - redOff (Red Offset) §20.1.2.3.25
     - sat (Saturation) §20.1.2.3.26
-    - satMod (Saturation Modulation) §20.1.2.3.27
+    - [done] satMod (Saturation Modulation) §20.1.2.3.27
     - satOff (Saturation Offset) §20.1.2.3.28
     - [done] shade (Shade) §20.1.2.3.31
     - [done] tint (Tint) §20.1.2.3.34
@@ -4018,10 +4087,12 @@ This element specifies a color in RGB notation.
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentTint = 0;
     m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
 
     READ_ATTR_WITHOUT_NS(val)
 
@@ -4034,23 +4105,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
         }
     }
 
-    if (m_currentTint > 0) {
-        int red = (m_currentColor.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        int green = (m_currentColor.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        int blue = (m_currentColor.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-
-        m_currentColor = QColor(red, green, blue);
-    }
-    if (m_currentShadeLevel > 0) {
-        int red = (m_currentColor.red() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        int green = (m_currentColor.green() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        int blue = (m_currentColor.blue() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-
-        m_currentColor = QColor(red, green, blue);
-    }
+    modifyColor();
 
     READ_EPILOGUE
 }
@@ -4072,6 +4132,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
 
     m_currentTint = 0;
     m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
 
     TRY_READ_ATTR_WITHOUT_NS(lastClr)
 
@@ -4086,23 +4147,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
         }
     }
 
-    if (m_currentTint > 0) {
-        int red = (m_currentColor.red() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        int green = (m_currentColor.green() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        int blue = (m_currentColor.blue() * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-
-        m_currentColor = QColor(red, green, blue);
-    }
-    if (m_currentShadeLevel > 0) {
-        int red = (m_currentColor.red() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        int green = (m_currentColor.green() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        int blue = (m_currentColor.blue() * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-
-        m_currentColor = QColor(red, green, blue);
-    }
+    modifyColor();
 
     READ_EPILOGUE
 }
@@ -4783,7 +4833,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentColor = QColor();
-    m_colorType = TextColor;
 
     while (!atEnd()) {
         readNext();
