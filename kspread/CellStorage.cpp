@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2007, 2009 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -262,6 +263,12 @@ void CellStorage::take(int col, int row)
 
         d->rowRepeatStorage->setRowRepeat(row, 1);
     }
+    // also trigger a relayout of the first non-empty cell to the left of this cell
+    int prevCol;
+    Value v = d->valueStorage->prevInRow(col, row, &prevCol);
+    if (!v.isEmpty())
+        d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
+
 
     // recording undo?
     if (d->undoData) {
@@ -692,6 +699,29 @@ bool CellStorage::isLocked(int column, int row) const
     if (pair.first.toRect().topLeft() == QPoint(column, row))
         return false;
     return true;
+}
+
+bool CellStorage::hasLockedCells(const Region& region) const
+{
+    typedef QPair<QRectF, bool> RectBoolPair;
+    QList<QPair<QRectF, bool> > pairs = d->matrixStorage->intersectingPairs(region);
+    foreach (const RectBoolPair& pair, pairs) {
+        if (pair.first.isNull())
+            continue;
+        if (pair.second == false)
+            continue;
+        // more than just the master cell in the region?
+        const QPoint topLeft = pair.first.toRect().topLeft();
+        if (pair.first.width() >= 1) {
+            if (region.contains(topLeft + QPoint(1, 0), d->sheet))
+                return true;
+        }
+        if (pair.first.height() >= 1) {
+            if (region.contains(topLeft + QPoint(0, 1), d->sheet))
+                return true;
+        }
+    }
+    return false;
 }
 
 void CellStorage::lockCells(const QRect& rect)

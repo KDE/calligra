@@ -158,38 +158,41 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:end-guide
     // draw:end-line-spacing-horizontal
     // draw:end-line-spacing-vertical
-    // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-    qint32 fillType = ds.fillType();
+
+    // NOTE: fFilled specifies whether fill of the shape is render based on the
+    // properties of the "fill style" property set.
     if (ds.fFilled()) {
+        // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
+        qint32 fillType = ds.fillType();
         style.addProperty("draw:fill", getFillType(fillType), gt);
+        // draw:fill-color
+        // only set the color if the fill type is 'solid' because OOo ignores
+        // fill='none' if the color is set
+        if (fillType == 0 && client) {
+            style.addProperty("draw:fill-color",
+                              client->toQColor(ds.fillColor()).name(), gt);
+        }
+        // draw:fill-gradient-name
+        // draw:fill-hatch-name
+        // draw:fill-hatch-solid
+        // draw:fill-image-height
+        // draw:fill-image-name
+        quint32 fillBlip = ds.fillBlip();
+        QString fillImagePath;
+        if (client) {
+            fillImagePath = client->getPicturePath(fillBlip);
+        }
+        if (!fillImagePath.isEmpty()) {
+            style.addProperty("draw:fill-image-name",
+                              "fillImage" + QString::number(fillBlip), gt);
+        }
+        // draw:fill-image-ref-point
+        // draw:fill-image-ref-point-x
+        // draw:fill-image-ref-point-y
+        // draw:fill-image-width
     } else {
         style.addProperty("draw:fill", "none", gt);
     }
-    // draw:fill-color
-    // only set the color if the fill type is 'solid' because OOo ignores
-    // fill='none' if the color is set
-    if (fillType == 0 && client) {
-        style.addProperty("draw:fill-color",
-                          client->toQColor(ds.fillColor()).name(), gt);
-    }
-    // draw:fill-gradient-name
-    // draw:fill-hatch-name
-    // draw:fill-hatch-solid
-    // draw:fill-image-height
-    // draw:fill-image-name
-    quint32 fillBlip = ds.fillBlip();
-    QString fillImagePath;
-    if (client) {
-        fillImagePath = client->getPicturePath(fillBlip);
-    }
-    if (!fillImagePath.isEmpty()) {
-        style.addProperty("draw:fill-image-name",
-                          "fillImage" + QString::number(fillBlip), gt);
-    }
-    // draw:fill-image-ref-point
-    // draw:fill-image-ref-point-x
-    // draw:fill-image-ref-point-y
-    // draw:fill-image-width
     // draw:fit-to-contour
     // draw:fit-to-size
     // draw:frame-display-border
@@ -235,15 +238,22 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
-    // draw:shadow
-    // draw:shadow-color
-    // draw:shadow-offset-x
-    style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
-    // draw:shadow-offset-y
-    style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
-    // draw:shadow-opacity
-    float shadowOpacity = toQReal(ds.shadowOpacity());
-    style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+
+    // NOTE: fShadow property specifies whether the shape has a shadow.
+    if (ds.fShadow()) {
+        // draw:shadow
+        style.addProperty("draw:shadow", "visible", gt);
+        // draw:shadow-color
+        OfficeArtCOLORREF clr = ds.shadowColor();
+        style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
+        // draw:shadow-offset-x
+        style.addProperty("draw:shadow-offset-x", pt(ds.shadowOffsetX()/12700.),gt);
+        // draw:shadow-offset-y
+        style.addProperty("draw:shadow-offset-y", pt(ds.shadowOffsetY()/12700.),gt);
+        // draw:shadow-opacity
+        float shadowOpacity = toQReal(ds.shadowOpacity());
+        style.addProperty("draw:shadow-opacity", percent(100*shadowOpacity), gt);
+    }
     // draw:show-unit
     // draw:start-guide
     // draw:start-line-spacing-horizontal

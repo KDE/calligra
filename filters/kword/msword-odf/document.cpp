@@ -81,6 +81,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_wdocument_stream(wdocument)
 {
     kDebug(30513);
+    addBgColor("#ffffff"); //initialize the background-colors stack
 
     if (m_parser) { // 0 in case of major error (e.g. unsupported format)
 

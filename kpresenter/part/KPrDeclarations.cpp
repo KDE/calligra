@@ -66,7 +66,7 @@ bool KPrDeclarations::loadOdf(const KoXmlElement &body, KoPALoadingContext &cont
                     KoOdfStylesReader::DataFormatsMap::const_iterator it = context.odfLoadingContext().stylesReader().dataFormats().constFind(styleName);
                     if (it != context.odfLoadingContext().stylesReader().dataFormats().constEnd()) {
 
-                        QString formatString = (*it).prefix + (*it).formatStr + (*it).suffix;
+                        QString formatString = (*it).first.prefix + (*it).first.formatStr + (*it).first.suffix;
                         data["format"] = formatString;
                     }
                 }

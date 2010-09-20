@@ -71,6 +71,11 @@ KoFilter::ConversionStatus read_biLevel();
 KoFilter::ConversionStatus read_grayscl();
 KoFilter::ConversionStatus read_lum();
 KoFilter::ConversionStatus read_tint();
+KoFilter::ConversionStatus read_alpha();
+
+void modifyColor();
+
+KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_fillRect();
 KoFilter::ConversionStatus read_graphic();
@@ -117,6 +122,8 @@ KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
 int m_currentTint; // value of current tint
+int m_currentAlpha; // current alpha color value
+qreal m_currentSatMod; //value of current saturation modulation
 
 bool    m_isPlaceHolder; //! set by read_ph()
 
@@ -241,7 +248,6 @@ enum ColorType {
     TextColor,
     GradientColor
 };
-ColorType m_colorType;
 
 int m_currentShadeLevel;
 

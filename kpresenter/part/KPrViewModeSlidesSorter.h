@@ -60,28 +60,80 @@ public:
 protected:
 
     /**
-    * Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
-    */
+     * @brief Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
+     */
     void populate();
 
+    /**
+     * @brief Moves a page from pageNumber to pageAfterNumber
+     *
+     * @param pageNumber the number of the page to move
+     * @param pageAfterNumber the number of the place the page should move to
+     */
     void movePage( int pageNumber, int pageAfterNumber );
 
+    /**
+     * @brief Getter for the count of the page
+     *
+     * @return the m_pageCount
+     */
     int pageCount();
 
+    /**
+     * @brief Getter for the icon size
+     *
+     * @return the iconSize defined before
+     */
     QSize iconSize();
 
+    /**
+     * @brief Getter for the rect of an items
+     * Essentialy used to have the size of the full icon
+     *
+     * @return the rect of the item
+     */
     QRect itemSize();
 
+    /**
+     * @brief Setter of the size with a rect
+     *
+     * @param size which is a QRect
+     */
     void setItemSize(QRect size);
 
+    /**
+     * @brief Permit to know if a slide is draging
+     *
+     * @return boolean
+     */
     bool isDraging();
 
+    /**
+     * @brief Setter for the draging flag
+     *
+     * @param flag boolean
+     */
     void setDragingFlag(bool flag = true);
 
+    /**
+     * @brief Return the last item number it were on
+     *
+     * @return the last item number it was on
+     */
     int lastItemNumber();
 
+    /**
+     * @brief Setter of the last item number it were on
+     *
+     * @param number of the item number it is on
+     */
     void setLastItemNumber(int number);
 
+    /**
+     * This class manage the QListWidget itself.
+     * Use all the getters and setters of the KPrViewModeSlidesSorter.
+     * Most of the functions are Qt overrides to have the wished comportment.
+     */
     class KPrSlidesSorter : public QListWidget {
         public:
             KPrSlidesSorter ( KPrViewModeSlidesSorter * viewModeSlidesSorter, QWidget * parent = 0 )
@@ -103,8 +155,6 @@ protected:
 
             virtual void startDrag ( Qt::DropActions supportedActions );
 
-            // Skip internal dnd handling in QListWidget ---- how is one supposed to figure this out
-            // without reading the QListWidget code !?
             virtual void dropEvent(QDropEvent* ev);
 
             virtual void dragMoveEvent(QDragMoveEvent* ev);

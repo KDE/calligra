@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1998,1999 Torben Weis <weis@kde.org>
    Copyright 1999-2007 The KSpread Team <koffice-devel@kde.org>
@@ -134,6 +135,11 @@ public:
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
     virtual KoResourceManager* resourceManager() const;
+
+    /**
+     * Deletes all shapes without emitting shapeRemoved()
+     */
+    void deleteShapes();
 
     /**
      * \ingroup Embedding

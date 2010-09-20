@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
@@ -1320,31 +1321,31 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
 
 bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName)
 {
-    static const QString sFormula           = QString::fromAscii("formula");
-    static const QString sValidationName    = QString::fromAscii("validation-name");
-    static const QString sValueType         = QString::fromAscii("value-type");
-    static const QString sBoolean           = QString::fromAscii("boolean");
-    static const QString sBooleanValue      = QString::fromAscii("boolean-value");
-    static const QString sTrue              = QString::fromAscii("true");
-    static const QString sFalse             = QString::fromAscii("false");
-    static const QString sFloat             = QString::fromAscii("float");
-    static const QString sValue             = QString::fromAscii("value");
-    static const QString sCurrency          = QString::fromAscii("currency");
-    static const QString sPercentage        = QString::fromAscii("percentage");
-    static const QString sDate              = QString::fromAscii("date");
-    static const QString sDateValue         = QString::fromAscii("date-value");
-    static const QString sTime              = QString::fromAscii("time");
-    static const QString sTimeValue         = QString::fromAscii("time-value");
-    static const QString sString            = QString::fromAscii("string");    
-    static const QString sStringValue       = QString::fromAscii("string-value");
-    static const QString sNumberColumnsSpanned = QString::fromAscii("number-columns-spanned");
-    static const QString sNumberRowsSpanned = QString::fromAscii("number-rows-spanned");
-    static const QString sAnnotation        = QString::fromAscii("annotation");
-    static const QString sP                 = QString::fromAscii("p");
+    static const QString sFormula           = QString::fromLatin1("formula");
+    static const QString sValidationName    = QString::fromLatin1("validation-name");
+    static const QString sValueType         = QString::fromLatin1("value-type");
+    static const QString sBoolean           = QString::fromLatin1("boolean");
+    static const QString sBooleanValue      = QString::fromLatin1("boolean-value");
+    static const QString sTrue              = QString::fromLatin1("true");
+    static const QString sFalse             = QString::fromLatin1("false");
+    static const QString sFloat             = QString::fromLatin1("float");
+    static const QString sValue             = QString::fromLatin1("value");
+    static const QString sCurrency          = QString::fromLatin1("currency");
+    static const QString sPercentage        = QString::fromLatin1("percentage");
+    static const QString sDate              = QString::fromLatin1("date");
+    static const QString sDateValue         = QString::fromLatin1("date-value");
+    static const QString sTime              = QString::fromLatin1("time");
+    static const QString sTimeValue         = QString::fromLatin1("time-value");
+    static const QString sString            = QString::fromLatin1("string");
+    static const QString sStringValue       = QString::fromLatin1("string-value");
+    static const QString sNumberColumnsSpanned = QString::fromLatin1("number-columns-spanned");
+    static const QString sNumberRowsSpanned = QString::fromLatin1("number-rows-spanned");
+    static const QString sAnnotation        = QString::fromLatin1("annotation");
+    static const QString sP                 = QString::fromLatin1("p");
     
-    static const QString nsTable    = QString::fromAscii(KoXmlNS::table);
-    static const QString nsOffice   = QString::fromAscii(KoXmlNS::office);
-    static const QString nsText     = QString::fromAscii(KoXmlNS::text);
+    static const QString nsTable    = QString::fromLatin1(KoXmlNS::table);
+    static const QString nsOffice   = QString::fromLatin1(KoXmlNS::office);
+    static const QString nsText     = QString::fromLatin1(KoXmlNS::text);
 
     static const QStringList formulaNSPrefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
 

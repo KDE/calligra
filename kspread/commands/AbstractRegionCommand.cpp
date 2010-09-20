@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2005,2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -28,6 +29,7 @@
 #include <KoCanvasBase.h>
 
 #include "Cell.h"
+#include "CellStorage.h"
 #include "Damages.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -130,25 +132,25 @@ bool AbstractRegionCommand::isApproved() const
     const QList<Element *> elements = cells();
     const int begin = m_reverse ? elements.count() - 1 : 0;
     const int end = m_reverse ? -1 : elements.count();
-    for (int i = begin; i != end; m_reverse ? --i : ++i) {
-        const QRect range = elements[i]->rect();
+    if (m_checkLock && m_sheet->cellStorage()->hasLockedCells(*this)) {
+        KPassivePopup::message(i18n("Processing is not possible, because some "
+                                    "cells are locked as elements of a matrix."),
+                               QApplication::activeWindow());
+        return false;
+    }
+    if (m_sheet->isProtected()) {
+        for (int i = begin; i != end; m_reverse ? --i : ++i) {
+            const QRect range = elements[i]->rect();
 
-        for (int col = range.left(); col <= range.right(); ++col) {
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell(m_sheet, col, row);
-                if (m_sheet->isProtected() && !cell.style().notProtected()) {
-                    KPassivePopup::message(i18n("Processing is not possible, "
-                                                "because some cells are protected."),
-                                           QApplication::activeWindow());
-                    return false;
-                }
-
-                // check for matrix locks
-                if (m_checkLock && cell.isLocked()) {
-                    KPassivePopup::message(i18n("Processing is not possible, because some "
-                                                "cells are locked as elements of a matrix."),
-                                           QApplication::activeWindow());
-                    return false;
+            for (int col = range.left(); col <= range.right(); ++col) {
+                for (int row = range.top(); row <= range.bottom(); ++row) {
+                    Cell cell(m_sheet, col, row);
+                    if (!cell.style().notProtected()) {
+                        KPassivePopup::message(i18n("Processing is not possible, "
+                                                    "because some cells are protected."),
+                                               QApplication::activeWindow());
+                        return false;
+                    }
                 }
             }
         }

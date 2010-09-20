@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -180,6 +181,10 @@ Map::Map(DocBase* doc, int syntaxVersion)
 
 Map::~Map()
 {
+    // Because some of the shapes might be using a sheet in this map, delete
+    // all shapes in each sheet before all sheets are deleted together.
+    foreach(Sheet *sheet, d->lstSheets)
+        sheet->deleteShapes();
     // we have to explicitly delete the Sheets, not let QObject take care of that
     // as the sheet in its destructor expects the Map to still exist
     qDeleteAll(d->lstSheets);

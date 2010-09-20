@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2008-2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright (C) 2005-2007 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or

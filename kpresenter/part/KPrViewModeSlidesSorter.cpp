@@ -76,8 +76,12 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
     if (m_viewModeSlidesSorter->isDraging() && currentItemNumber >= 0) {
         QSize size(m_viewModeSlidesSorter->itemSize().width(), m_viewModeSlidesSorter->itemSize().height());
 
-        QPoint point1(currentItemNumber%4 * size.width(), (currentItemNumber - currentItemNumber%4) / 4 * size.height() );
-        QPoint point2(currentItemNumber%4 * size.width(), ((currentItemNumber - currentItemNumber%4) / 4 + 1) * size.height());
+        int numberMod = currentItemNumber%4;
+        if (numberMod == 0) {
+            numberMod = 4;
+        }
+        QPoint point1(numberMod * size.width(), (currentItemNumber - numberMod) / 4 * size.height() );
+        QPoint point2(numberMod * size.width(), ((currentItemNumber - numberMod) / 4 + 1) * size.height());
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
@@ -201,15 +205,19 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
     ev->setDropAction(Qt::IgnoreAction);
     ev->accept();
 
-    QListWidgetItem * itemNew = itemAt(ev->pos());
-    if (!(itemNew))
-    {
-        return;
-    }
-    int newIndex = row(itemNew);
-
+    int newIndex;
     QByteArray ssData = ev->mimeData()->data("application/x-koffice-sliderssorter");
     int oldIndex = ssData.toInt();
+
+    QListWidgetItem * itemNew = itemAt(ev->pos());
+    if (itemNew)
+    {
+        // Normal case
+        newIndex = row(itemNew);
+    } else {
+        // In case you point the end (no slides under the pointer)
+        newIndex = m_viewModeSlidesSorter->pageCount() - 1;
+    }
 
     m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
     QListWidgetItem *sourceItem = takeItem(oldIndex);
@@ -240,8 +248,9 @@ int KPrViewModeSlidesSorter::KPrSlidesSorter::pageBefore(QPoint point)
         m_viewModeSlidesSorter->setLastItemNumber(row(item) + 1);
         return row(item) + 1;
     }
-    m_viewModeSlidesSorter->setLastItemNumber(-1);
-    return -1;
+    int lastPage = m_viewModeSlidesSorter->pageCount();
+    m_viewModeSlidesSorter->setLastItemNumber(lastPage);
+    return lastPage;
 }
 
 void KPrViewModeSlidesSorter::populate()
@@ -254,6 +263,7 @@ void KPrViewModeSlidesSorter::populate()
     //Load the available slides
     foreach( KoPAPageBase* page, m_view->kopaDocument()->pages() )
     {
+        //TODO find the good name for the slides
         QString slideName = i18n("Slide %1", currentPage++);
         item = new QListWidgetItem( QIcon( page->thumbnail( m_iconSize ) ), slideName, m_slidesSorter );
         item->setFlags((item->flags() | Qt::ItemIsDragEnabled ) & ~Qt::ItemIsDropEnabled);

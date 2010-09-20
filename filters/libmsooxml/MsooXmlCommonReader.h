@@ -66,6 +66,10 @@ protected:
     KoGenStyle m_currentListStyle;
     KoListLevelProperties* m_currentListStyleProperties;
     MSOOXML::Utils::ParagraphBulletProperties m_currentBulletProperties;
+    // Properties for potentially all 9 lvls which are possible
+    QMap<int, MSOOXML::Utils::ParagraphBulletProperties> m_currentCombinedBulletProperties;
+    QMap<int, KoGenStyle> m_currentCombinedParagraphStyles;
+    QMap<int, KoGenStyle> m_currentCombinedTextStyles;
 
     //! Style (from styles.xml) to apply to the current paragraph or similar element, set by read_pStyle()
     QString m_currentStyleName;

@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
    Copyright 1998-2004 KSpread Team <koffice-devel@kde.org>
@@ -347,6 +348,11 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             decimalSymbol = '.';
 
         localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
+    }
+
+    // remove negative sign if prefix already ends with '-'
+    if (!prefix.isEmpty() && prefix[prefix.length()-1] == '-' && !localizedNumber.isEmpty() && localizedNumber[0] == '-') {
+        localizedNumber = localizedNumber.mid(1);
     }
 
     return prefix + localizedNumber + postfix;

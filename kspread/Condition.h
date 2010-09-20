@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 1998, 1999 Torben Weis <weis@kde.org>
    Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
@@ -115,6 +116,18 @@ public:
      * Replace the current list of conditions with this new one
      */
     void setConditionList(const QLinkedList<Conditional> & list);
+
+    /**
+     * Returns an optional default style, which is returned by testConditons if none of
+     * the conditions matches.
+     */
+    Style defaultStyle() const;
+
+    /**
+     * Set an optional default style. This style is returned by testConditions if none of
+     * the conditions matches.
+     */
+    void setDefaultStyle(const Style& style);
 
     /**
      * \ingroup NativeFormat

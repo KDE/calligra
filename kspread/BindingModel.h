@@ -21,6 +21,8 @@
 #ifndef KSPREAD_BINDING_MODEL
 #define KSPREAD_BINDING_MODEL
 
+#include "Region.h"
+
 #include <KoChartModel.h>
 
 #include <QAbstractTableModel>

@@ -68,6 +68,12 @@ public:
 
     ParagraphBulletProperties();
 
+    void clear();
+
+    QString convertToListProperties() const;
+
+    bool isEmpty() const;
+
     enum ParagraphBulletType {BulletType, NumberType};
     ParagraphBulletType m_type;
     QString m_bulletChar;
@@ -75,8 +81,6 @@ public:
     int m_level;
     int m_startValue;
 };
-
-QString convertToListProperties(ParagraphBulletProperties properties);
 
 //! Container autodeleter. Works for QList, QHash and QMap.
 //! @todo move to more generic place

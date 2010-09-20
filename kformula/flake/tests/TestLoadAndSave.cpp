@@ -43,6 +43,7 @@
 #include "FencedElement.h"
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
+#include "SubSupElement.h"
 #include "UnderOverElement.h"
 #include "TableElement.h"
 #include "TableRowElement.h"
@@ -270,8 +271,6 @@ void TestLoadAndSave::textElement_data()
             "<mtext>/* a comment */</mtext>" );
 }
 
-
-
 void TestLoadAndSave::spaceElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -334,7 +333,6 @@ void TestLoadAndSave::spaceElement_data()
     addRow( "<mspace linebreak=\"nobreak\"/>" );
     addRow( "<mspace linebreak=\"goodbreak\"/>" );
     addRow( "<mspace linebreak=\"badbreak\"/>" );
-
 }
 
 void TestLoadAndSave::stringElement_data()
@@ -342,8 +340,36 @@ void TestLoadAndSave::stringElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<ms>text</ms>",
+            "<ms>text</ms>" );
+    addRow( "<ms> more text </ms>",
+            "<ms>more text</ms>" );
+
+    // Glyph element contents
+    addRow( "<ms> foo </ms>");  // marker just to have a failing test.
+#if 0  // FIXME: These tests make the test program crash.  Investigate and fix.
+    addRow( "<ms>tex<mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/></ms>",
+            "<ms>tex<mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/></ms>");
+    addRow( "<ms> <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>",
+            "<ms> <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>" );
+    addRow( "<ms>te <mglyph fontfamily=\"serif\" alt=\"x\" index=\"120\"/> "
+            "     <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>",
+            "<ms>te <mglyph fontfamily=\"serif\" alt=\"x\" index=\"120\"/> " 
+            "     <mglyph fontfamily=\"serif\" alt=\"t\" index=\"116\"/> </ms>" );
+#endif
+
+    // Attributes
+    addRow( "<ms mathvariant=\"bold\">text</ms>",
+            "<ms mathvariant=\"bold\">text</ms>" );
+    addRow( "<ms fontsize=\"18pt\">text</ms>",
+            "<ms fontsize=\"18pt\">text</ms>"  );
+
+    // Entities
+    addRow( "<ms> &amp; </ms>",
+            "<ms>&amp;</ms>" );
+    addRow( "<ms> &amp;amp; </ms>",
+            "<ms>&amp;amp;</ms>" );
 }
 
 void TestLoadAndSave::glyphElement_data()
@@ -666,8 +692,50 @@ void TestLoadAndSave::rowElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    addRow( "<mrow></mrow>" );
-    addRow( "<mrow>\n <mi>x</mi>\n</mrow>" );
+    // Basic content
+    addRow( "<mrow></mrow>",
+            "<mrow/>" );
+    addRow( "<mrow><mi>x</mi></mrow>", // Collapse mrow with only one child to the child only.
+            "<mi>x</mi>" );
+    addRow( "<mrow><mi>x</mi><mi>y</mi></mrow>",
+            "<mrow>\n <mi>x</mi>\n <mi>y</mi>\n</mrow>" );
+
+    // More complex content
+    addRow( "<mrow><mrow></mrow></mrow>", // Collapse row with no children to nothing
+            "<mrow/>");
+    addRow( "<mrow><mrow><mi>x</mi></mrow></mrow>",
+            //"<mrow>\n <mi>x</mi>\n</mrow>");
+            "<mi>x</mi>");
+    addRow( "<mrow><mrow><mi>x</mi><mn>2</mn></mrow></mrow>", 
+            "<mrow>\n <mi>x</mi>\n <mn>2</mn>\n</mrow>");
+    addRow( "<mrow><mrow><mi>x</mi><mn>2</mn></mrow><mi>y</mi></mrow>", 
+            "<mrow>\n <mrow>\n  <mi>x</mi>\n  <mn>2</mn>\n </mrow>\n <mi>y</mi>\n</mrow>");
+
+#if 0  // Enable this when entities work (see &InvisibleTimes; below).
+    addRow( "<mrow>"
+            " <mrow>"
+            "  <mn> 2 </mn>"
+            "  <mo> &InvisibleTimes; </mo>"
+            "  <mi> x </mi>"
+            " </mrow>"
+            " <mo> + </mo>"
+            " <mi> y </mi>"
+            " <mo> - </mo>"
+            " <mi> z </mi>"
+            "</mrow>",
+
+            "<mrow>\n"
+            " <mrow>\n"
+            "  <mn>2</mn>\n"
+            "  <mo>&InvisibleTimes;</mo>\n"
+            "  <mi>x</mi>\n"
+            " </mrow>\n"
+            " <mo>+</mo>\n"
+            " <mi>y</mi>\n"
+            " <mo>-</mo>\n"
+            " <mi>z</mi>\n"
+            "</mrow>" );
+#endif
 }
 
 void TestLoadAndSave::fractionElement_data()
@@ -688,7 +756,8 @@ void TestLoadAndSave::rootElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>" );
+    addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>",
+            "<mroot>\n <mi>x</mi>\n <mn>2</mn>\n</mroot>");
 }
 
 void TestLoadAndSave::styleElement_data()
@@ -750,8 +819,30 @@ void TestLoadAndSave::subElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<msub></msub>" );
+    // Basic content
+    addRow( "<msub>\n <mrow></mrow>\n <mrow></mrow>\n</msub>",
+            "<msub>\n <mrow/>\n <mrow/>\n</msub>");
+    addRow( "<msub>\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+    addRow( "<msub>\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+    addRow( "<msub>\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+
+    // More complex content
+    addRow( "<msub>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mn>2</mn>\n"
+            "</msub>" );
+
+    // Attributes
+    addRow( "<msub subscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
+    addRow( "<msub subscriptshift=\"1.5\">\n <mi>x</mi>\n <mi>y</mi>\n</msub>" );
 }
 
 void TestLoadAndSave::supElement_data()
@@ -759,8 +850,30 @@ void TestLoadAndSave::supElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<msup></msup>" );
+    // Basic content
+    addRow( "<msup>\n <mrow></mrow>\n <mrow></mrow>\n</msup>",
+            "<msup>\n <mrow/>\n <mrow/>\n</msup>");
+    addRow( "<msup>\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+    addRow( "<msup>\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+    addRow( "<msup>\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+
+    // More complex content
+    addRow( "<msup>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mn>2</mn>\n"
+            "</msup>" );
+
+    // Attributes
+    addRow( "<msup subscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
+    addRow( "<msup subscriptshift=\"1.5\">\n <mi>x</mi>\n <mi>y</mi>\n</msup>" );
 }
 
 void TestLoadAndSave::subsupElement_data()
@@ -768,8 +881,32 @@ void TestLoadAndSave::subsupElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<" );
+    // Basic content
+    addRow( "<msubsup><mrow></mrow><mrow></mrow><mrow></mrow></msubsup>",
+            "<msubsup>\n <mrow/>\n <mrow/>\n <mrow/>\n</msubsup>");
+    addRow( "<msubsup>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>" );
+    addRow( "<msubsup><mrow><mi>x</mi></mrow><mi>y</mi><mi>z</mi></msubsup>",
+            "<msubsup>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>");
+    addRow( "<msubsup><mi>x</mi><mi>y</mi><mrow><mi>z</mi></mrow></msubsup>",
+            "<msubsup>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>");
+
+    addRow( "<msubsup>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mi>i</mi>\n"
+            " <mn>2</mn>\n"
+            "</msubsup>" );
+
+    // Attributes
+    addRow( "<msubsup subscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>" );
+    addRow( "<msubsup superscriptshift=\"1.5ex\">\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</msubsup>" );
 }
 
 void TestLoadAndSave::underElement_data()
@@ -778,7 +915,29 @@ void TestLoadAndSave::underElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<munder>\n <mrow></mrow>\n <mrow></mrow>\n</munder>",
+            "<munder>\n <mrow/>\n <mrow/>\n</munder>");
+    addRow( "<munder>\n <mi>x</mi>\n <mi>y</mi>\n</munder>" );
+    addRow( "<munder>\n <mi>x</mi>\n <mi>y</mi>\n</munder>" );
+    addRow( "<munder>\n <mi>x</mi>\n <mi>y</mi>\n</munder>" );
+
+    // More complex content
+    addRow( "<munder>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mn>2</mn>\n"
+            "</munder>" );
+
+    // Attributes
+    addRow( "<munder accentunder=\"true\">\n <mi>x</mi>\n <mi>y</mi>\n</munder>" );
 }
 
 void TestLoadAndSave::overElement_data()
@@ -786,8 +945,29 @@ void TestLoadAndSave::overElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mover>\n <mrow></mrow>\n <mrow></mrow>\n</mover>",
+            "<mover>\n <mrow/>\n <mrow/>\n</mover>");
+    addRow( "<mover>\n <mi>x</mi>\n <mi>y</mi>\n</mover>" );
+    addRow( "<mover>\n <mi>x</mi>\n <mi>y</mi>\n</mover>" );
+    addRow( "<mover>\n <mi>x</mi>\n <mi>y</mi>\n</mover>" );
+
+    // More complex content
+    addRow( "<mover>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mn>2</mn>\n"
+            "</mover>" );
+
+    // Attributes
+    addRow( "<mover accent=\"true\">\n <mi>x</mi>\n <mi>y</mi>\n</mover>" );
 }
 
 void TestLoadAndSave::underoverElement_data()
@@ -795,8 +975,32 @@ void TestLoadAndSave::underoverElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<munderover><mrow></mrow><mrow></mrow><mrow></mrow></munderover>",
+            "<munderover>\n <mrow/>\n <mrow/>\n <mrow/>\n</munderover>");
+    addRow( "<munderover>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</munderover>" );
+    addRow( "<munderover><mrow><mi>x</mi></mrow><mi>y</mi><mi>z</mi></munderover>",
+            "<munderover>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</munderover>");
+    addRow( "<munderover><mi>x</mi><mi>y</mi><mrow><mi>z</mi></mrow></munderover>",
+            "<munderover>\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</munderover>");
+
+    addRow( "<munderover>\n"
+            " <mrow>\n"
+            "  <mo>(</mo>\n"
+            "  <mrow>\n"
+            "   <mi>x</mi>\n"
+            "   <mo>+</mo>\n"
+            "   <mi>y</mi>\n"
+            "  </mrow>\n"
+            "  <mo>)</mo>\n"
+            " </mrow>\n"
+            " <mi>i</mi>\n"
+            " <mn>2</mn>\n"
+            "</munderover>" );
+
+    // Attributes
+    addRow( "<munderover accent=\"true\">\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</munderover>" );
+    addRow( "<munderover accentunder=\"true\">\n <mi>x</mi>\n <mi>y</mi>\n <mi>z</mi>\n</munderover>" );
 }
 
 void TestLoadAndSave::multiscriptsElement_data()
@@ -804,8 +1008,34 @@ void TestLoadAndSave::multiscriptsElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><mi>j</mi></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mi>i</mi>\n <mi>j</mi>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><mi>i</mi><mi>j</mi></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mprescripts/>\n <mi>i</mi>\n <mi>j</mi>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mi>i</mi><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mi>i</mi>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <none/>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mprescripts/><none/><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mprescripts/>\n <none/>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><none/><none/><mprescripts/><none/><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <none/>\n <none/>\n <mprescripts/>\n <none/>\n <none/>\n</mmultiscripts>" );
+    addRow( "<mmultiscripts><mi>x</mi><mi>x</mi><none/><mprescripts/><mi>y</mi><none/></mmultiscripts>",
+            "<mmultiscripts>\n <mi>x</mi>\n <mi>x</mi>\n <none/>\n <mprescripts/>\n <mi>y</mi>\n <none/>\n</mmultiscripts>" );
+
+    // More complex content
+    addRow( "<mmultiscripts>\n"
+            " <mi>R</mi>\n"
+            " <mi>i</mi>\n"
+            " <none/>\n"
+            " <none/>\n"
+            " <mi>j</mi>\n"
+            " <mi>k</mi>\n"
+            " <none/>\n"
+            " <mi>l</mi>\n"
+            " <none/>\n"
+            "</mmultiscripts>" );
 }
 
 void TestLoadAndSave::tableElement_data()
@@ -813,8 +1043,107 @@ void TestLoadAndSave::tableElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mtable></mtable>",
+            "<mtable/>" );
+    addRow( "<mtable><mtr></mtr></mtable>",
+            "<mtable>\n <mtr/>\n</mtable>" );
+    addRow( "<mtable><mtr><mtd></mtd></mtr></mtable>",
+            "<mtable>\n <mtr>\n  <mtd/>\n </mtr>\n</mtable>" );
+    addRow( "<mtable><mtr><mtd><mrow></mrow></mtd></mtr></mtable>",
+            "<mtable>\n <mtr>\n  <mtd/>\n </mtr>\n</mtable>" ); // mtd is an inferred mrow
+    addRow( "<mtable><mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr></mtable>",
+            "<mtable>\n <mtr>\n  <mtd>\n   <mi>x</mi>\n  </mtd>\n </mtr>\n</mtable>" );
+//   addRow( "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>",
+//           "<mtable><mlabeledtr><mrow></mrow></mlabeledtr></mtable>" );
+//   addRow( "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>",
+//           "<mtable><mlabeledtr><mrow></mrow><mtd></mtd></mlabeledtr></mtable>" );
+
+    // More complex content (unity matrix)
+    addRow( "<mtable>\n"
+            " <mtr>\n"
+            "  <mtd>\n   <mn>1</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            " </mtr>\n"
+            " <mtr>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>1</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            " </mtr>\n"
+            " <mtr>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>0</mn>\n  </mtd>\n"
+            "  <mtd>\n   <mn>1</mn>\n  </mtd>\n"
+            " </mtr>\n"
+            "</mtable>" );
+
+    // Attributes
+    addRow( "<mtable align=\"top\">\n <mtr>\n  <mtd>\n   <mi>x</mi>\n  </mtd>\n </mtr>\n</mtable>" );
+    addRow( "<mtable rowalign=\"center\">\n <mtr>\n  <mtd>\n   <mi>x</mi>\n  </mtd>\n </mtr>\n</mtable>" );
+
+    // Content with alignment elements
+/*    addRow( "<mtable groupalign=\"{decimalpoint left left decimalpoint left left decimalpoint}\">"
+            " <mtr>"
+            "  <mtd>"
+            "   <mrow>"
+            "    <mrow>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 8.44 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> x </mi>"
+            "     </mrow>"
+            "     <maligngroup/>"
+            "     <mo> + </mo>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 55 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> y </mi>"
+            "     </mrow>"
+            "    </mrow>"
+            "    <maligngroup/>"
+            "    <mo> = </mo>"
+            "    <maligngroup/>"
+            "    <mn> 0 </mn>"
+            "   </mrow>"
+            "  </mtd>"
+            " </mtr>"
+            " <mtr>"
+            "  <mtd>"
+            "   <mrow>"
+            "    <mrow>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 3.1 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> x </mi>"
+            "     </mrow>"
+            "     <maligngroup/>"
+            "     <mo> - </mo>"
+            "     <mrow>"
+            "      <maligngroup/>"
+            "      <mn> 0.7 </mn>"
+            "      <mo> &InvisibleTimes; </mo>"
+            "      <maligngroup/>"
+            "      <mi> y </mi>"
+            "     </mrow>"
+            "    </mrow>"
+            "    <maligngroup/>"
+            "    <mo> = </mo>"
+            "    <maligngroup/>"
+            "    <mrow>"
+            "     <mo> - </mo>"
+            "     <mn> 1.1 </mn>"
+            "    </mrow>"
+            "   </mrow>"
+            "  </mtd>"
+            " </mtr>"
+            "</mtable>" );*/
 }
 
 void TestLoadAndSave::trElement_data()
@@ -822,26 +1151,76 @@ void TestLoadAndSave::trElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mtr></mtr>",
+            "<mtr/>" );
+    addRow( "<mtr><mtd></mtd></mtr>",
+            "<mtr>\n <mtd/>\n</mtr>" );
+    addRow( "<mtr><mtd><mrow></mrow></mtd></mtr>",
+            "<mtr>\n <mtd/>\n</mtr>" ); // <mtd> is an inferred <mrow>
+    addRow( "<mtr><mtd><mi>x</mi></mtd></mtr>",
+            "<mtr>\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
+    addRow( "<mtr><mtd><mrow><mi>x</mi></mrow></mtd></mtr>",
+            "<mtr>\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
+
+    // More complex content
+    addRow( "<mtr id=\"e-is-m-c-square\">\n"
+            " <mtd>\n"
+            "  <mrow>\n"
+            "   <mi>E</mi>\n"
+            "   <mo>=</mo>\n"
+            "   <mrow>\n"
+            "    <mi>m</mi>\n"
+            //"    <mo>&it;</mo>\n"  FIXME: When entities work again, switch the next line for this one.
+            "    <mo>*</mo>\n"
+            "    <msup>\n"
+            "     <mi>c</mi>\n"
+            "     <mn>2</mn>\n"
+            "    </msup>\n"
+            "   </mrow>\n"
+            "  </mrow>\n"
+            " </mtd>\n"
+            " <mtd>\n"
+            "  <mtext>(2.1)</mtext>\n"
+            " </mtd>\n"
+            "</mtr>" );
+
+    // Be sure attributes don't break anything
+    addRow( "<mtr rowalign=\"top\"><mtd><mi>x</mi></mtd></mtr>",
+            "<mtr rowalign=\"top\">\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
+    addRow( "<mtr groupalign=\"left\"><mtd><mi>x</mi></mtd></mtr>",
+            "<mtr groupalign=\"left\">\n <mtd>\n  <mi>x</mi>\n </mtd>\n</mtr>" );
 }
 
+// labeledtr is not yet implemented
+#if 0
 void TestLoadAndSave::labeledtrElement_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    //addRow( "<labeledtr/>" );
 }
+#endif
 
 void TestLoadAndSave::tdElement_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<mtd></mtd>",
+            "<mtd/>" );
+    addRow( "<mtd/><mrow></mrow></mtd>",
+            "<mtd/>" );
+    addRow( "<mtd>\n <mi>x</mi>\n</mtd>" );
+    addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", // mrow with one element is deleted
+            "<mtd>\n <mi>x</mi>\n</mtd>");
+
+    // Be sure attributes don't break anything
+    addRow( "<mtd rowspan=\"3\">\n <mi>x</mi>\n</mtd>" );
+    addRow( "<mtd groupalign=\"left\">\n <mi>x</mi>\n</mtd>" );
 }
 
 void TestLoadAndSave::actionElement_data()
@@ -975,32 +1354,32 @@ void TestLoadAndSave::encloseElement()
 
 void TestLoadAndSave::subElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubScript) );
 }
 
 void TestLoadAndSave::supElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SupScript) );
 }
 
 void TestLoadAndSave::subsupElement()
 {
-    test( new MultiscriptElement );
+    test( new SubSupElement(0, SubSupScript) );
 }
 
 void TestLoadAndSave::underElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Under) );
 }
 
 void TestLoadAndSave::overElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, Over) );
 }
 
 void TestLoadAndSave::underoverElement()
 {
-    test( new UnderOverElement );
+    test( new UnderOverElement(0, UnderOver) );
 }
 
 void TestLoadAndSave::multiscriptsElement()
@@ -1018,11 +1397,12 @@ void TestLoadAndSave::trElement()
     test( new TableRowElement );
 }
 
+#if 0    // NYI
 void TestLoadAndSave::labeledtrElement()
 {
     test( new TableRowElement );
 }
-
+#endif
 void TestLoadAndSave::tdElement()
 {
     test( new TableDataElement );

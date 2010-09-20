@@ -201,12 +201,16 @@ void KWordGraphicsHandler::init(Drawings * pDrawings, const wvWare::Word97::FIB 
     m_drawings = pDrawings;
     m_fib = const_cast<wvWare::Word97::FIB *>(&fib);
 
-    //provide the backgroud color information to the Document
+    //Provide the backgroud color information to the Document, if present.
     DrawStyle ds = getDrawingStyle();
-    MSO::OfficeArtCOLORREF fc = ds.fillColor();
-    QColor color(fc.red, fc.green, fc.blue);
-    m_document->addBgColor(color.name());
-
+    if (ds.fFilled()) {
+        MSO::OfficeArtCOLORREF fc = ds.fillColor();
+        QColor color = QColor(fc.red, fc.green, fc.blue);
+        QString tmp = color.name();
+        if (tmp != m_document->currentBgColor()) {
+            m_document->updateBgColor(tmp);
+        }
+    }
     return;
 }
 
@@ -625,20 +629,21 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // draw:end-guide
     // draw:end-line-spacing-horizontal
     // draw:end-line-spacing-vertical
-    // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
-    qint32 fillType = ds.fillType();
+
+    // NOTE: fFilled specifies whether fill of the shape is render based on the
+    // properties of the "fill style" property set.
     if (ds.fFilled()) {
+        qint32 fillType = ds.fillType();
+        // draw:fill ("bitmap", "gradient", "hatch", "none" or "solid")
         style.addProperty("draw:fill", getFillType(fillType), gt);
+        // NOTE: only set the color if the fill type is 'solid' because OOo
+        // ignores fill='none' if the color is set
+        if (fillType == 0) {
+            clr = ds.fillColor();
+            style.addProperty("draw:fill-color", QColor(clr.red, clr.green, clr.blue).name(), gt);
+        }
     } else {
         style.addProperty("draw:fill", "none", gt);
-    }
-    // draw:fill-color
-    // NOTE: only set the color if the fill type is 'solid' because OOo ignores
-    // fill='none' if the color is set
-    if (fillType == 0) {
-        clr = ds.fillColor();
-        QColor fillColor(clr.red,clr.green,clr.blue);
-        style.addProperty("draw:fill-color", fillColor.name(), gt);
     }
     // draw:fill-gradient-name
     // draw:fill-hatch-name
@@ -692,6 +697,8 @@ void KWordGraphicsHandler::defineGraphicProperties(KoGenStyle& style, const Draw
     // draw:placing
     // draw:red
     // draw:secondary-fill-color
+
+    // NOTE: fShadow property specifies whether the shape has a shadow.
     if (ds.fShadow()) {
         // draw:shadow
         style.addProperty("draw:shadow", "visible", gt);

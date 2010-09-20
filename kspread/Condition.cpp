@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2010 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
    Copyright 1998, 1999 Torben Weis <weis@kde.org>
    Copyright 1999- 2006 The KSpread Team <koffice-devel@kde.org>
 
@@ -75,6 +76,7 @@ class Conditions::Private : public QSharedData
 {
 public:
     QLinkedList<Conditional> conditionList;
+    Style defaultStyle;
 };
 
 Conditions::Conditions()
@@ -105,7 +107,7 @@ Style Conditions::testConditions( const Cell& cell ) const
         if (style)
             return *style;
     }
-    return Style();
+    return d->defaultStyle;
 }
 
 bool Conditions::currentCondition(const Cell& cell, Conditional & condition) const
@@ -190,6 +192,16 @@ QLinkedList<Conditional> Conditions::conditionList() const
 void Conditions::setConditionList(const QLinkedList<Conditional> & list)
 {
     d->conditionList = list;
+}
+
+Style Conditions::defaultStyle() const
+{
+    return d->defaultStyle;
+}
+
+void Conditions::setDefaultStyle(const Style &style)
+{
+    d->defaultStyle = style;
 }
 
 void Conditions::saveOdfConditions(KoGenStyle &currentCellStyle, ValueConverter *converter) const
