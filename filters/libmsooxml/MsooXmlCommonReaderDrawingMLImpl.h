@@ -1288,6 +1288,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         }
         if (!props) { // It was not present in layout, we need to get the place from slideMaster
             props = m_context->slideProperties->shapesMap.value(styleId);
+            if (!props) {
+                // In case there was nothing for this even in slideMaster, let's default to 'body' text position
+                // Spec doesn't say anything about this case, but in reality there are such documents
+                props = m_context->slideProperties->shapesMap.value("body");
+            }
         }
         if (props) {
             m_svgX = props->x;
