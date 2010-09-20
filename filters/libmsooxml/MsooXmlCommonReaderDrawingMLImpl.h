@@ -1070,6 +1070,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 {
     READ_PROLOGUE
 
+    m_contentType.clear();
+
 #ifdef PPTXXMLSLIDEREADER_H
     // Ooxml supports slides getting items from layout slide, this is not supported in odf
     // Therefore we are buffering the potential item frames from layout and using them later in the slide

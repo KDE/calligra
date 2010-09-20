@@ -478,8 +478,10 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         body = drawPageBuf.originalWriter();
 
         body->startElement("draw:page"); // CASE #P300
-        //! @todo draw:master-page-name is hardcoded for now
-        body->addAttribute("draw:master-page-name", "Default"); // required; CASE #P301
+        QString masterName =  m_context->slideLayoutProperties->m_slideMasterName;
+        masterName.chop(4); //removes .xml
+        masterName.remove(0, masterName.lastIndexOf("slideMaster"));
+        body->addAttribute("draw:master-page-name", masterName);
         //! @todo draw:name can be pulled out of docProps/app.xml (TitlesOfParts)
         body->addAttribute("draw:name", i18n("Slide %1",m_context->slideNumber+1)); //optional; CASE #P303
         body->addAttribute("draw:id", QString("pid%1").arg(m_context->slideNumber)); //optional; unique ID; CASE #P305, #P306
@@ -657,6 +659,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
     TRY_READ_ATTR_WITHOUT_NS(imgW);
     TRY_READ_ATTR_WITHOUT_NS(imgH);
     TRY_READ_ATTR_WITHOUT_NS(progId);
+    TRY_READ_ATTR_WITHOUT_NS(name);
 
     while (!atEnd()) {
         readNext();
@@ -678,7 +681,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         body->addAttribute("xlink:href", destinationName);
         body->endElement(); // draw:object-ole
 
-        if (progId == "Paint.Picture") {
+        if (progId == "Paint.Picture" || name == "Bitmap Image") {
             body->startElement("draw:image");
             RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
             addManifestEntryForPicturesDir();
@@ -1245,11 +1248,15 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     }
 
     body = listBuf.originalWriter();
-    body->startElement("draw:text-box"); // CASE #P436
+    if (m_contentType != "line") {
+        body->startElement("draw:text-box"); // CASE #P436
+    }
 
     body = listBuf.releaseWriter();
 
-    body->endElement(); // draw:text-box
+    if (m_contentType != "line") {
+        body->endElement(); // draw:text-box
+    }
     READ_EPILOGUE
 }
 
