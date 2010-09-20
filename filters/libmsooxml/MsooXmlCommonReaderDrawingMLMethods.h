@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef MSOOXMLCOMMONREADERDRAWINGMLMETHODS_H
-#define MSOOXMLCOMMONREADERDRAWINGMLMETHODS_H
+// This is not a normail heder, *don't* add include guards to it.
+// This will cause the compiler to get wrong offsets and to corrupt the stack.
 
 // included by DocxXmlDocumentReader
 
@@ -260,4 +260,3 @@ qreal* m_currentDoubleValue;
 bool    m_hyperLink;
 QString m_hyperLinkTarget;
 
-#endif

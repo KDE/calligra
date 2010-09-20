@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef MSOOXMLCOMMONREADERMETHODS_H
-#define MSOOXMLCOMMONREADERMETHODS_H
+// This is not a normail heder, *don't* add include guards to it.
+// This will cause the compiler to get wrong offsets and to corrupt the stack.
 
 // included by DocxXmlDocumentReader and PptxXmlSlideReader
 
@@ -48,5 +48,3 @@ QString m_docPrDescr; //!< set by read_docPr()
 bool m_insideHdr; //!< used to indicate that we're parsing inside hdr (header)
 //! @todo set it
 bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
-
-#endif
