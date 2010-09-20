@@ -148,11 +148,14 @@ private:
 class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
-    // Simplified gradient constuctor, ignores e.g. saturation
-    DrawingMLGradientFill(QVector<int> colorModifier);
+    // Simplified gradient constuctor
+    DrawingMLGradientFill(QVector<int> colorModifier, QVector<qreal> satModifier, QVector<int> alphaModifier);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+
 private:
     QVector<int> m_colorModifier;
+    QVector<qreal> m_satModifier;
+    QVector<int> m_alphaModifier;
 };
 
 class MSOOXML_EXPORT DrawingMLFormatScheme

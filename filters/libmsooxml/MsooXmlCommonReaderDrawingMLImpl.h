@@ -3607,7 +3607,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 #endif
 
-    m_currentTint = 0;
+    m_currentTint = 100;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
     m_currentAlpha = 0;
@@ -3694,14 +3694,14 @@ void MSOOXML_CURRENT_CLASS::modifyColor()
     int blue = m_currentColor.blue();
 
     if (m_currentTint > 0) {
-        red = (red * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        green = (green * m_currentTint + 256 * (100 - m_currentTint)) / 100;
-        blue = (blue * m_currentTint + 256 * (100 - m_currentTint)) / 100;
+        red = (red * m_currentTint + 255 * (100 - m_currentTint)) / 100;
+        green = (green * m_currentTint + 255 * (100 - m_currentTint)) / 100;
+        blue = (blue * m_currentTint + 255 * (100 - m_currentTint)) / 100;
     }
     if (m_currentShadeLevel > 0) {
-        red = (red * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        green = (green * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
-        blue = (blue * (100 - m_currentShadeLevel) + 256 * m_currentShadeLevel) / 100;
+        red = (red * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
+        green = (green * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
+        blue = (blue * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
     }
     if (m_currentSatMod > 0) {
         red = red * m_currentSatMod;
@@ -4090,7 +4090,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentTint = 0;
+    m_currentTint = 100;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
 
@@ -4130,7 +4130,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentTint = 0;
+    m_currentTint = 100;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
 

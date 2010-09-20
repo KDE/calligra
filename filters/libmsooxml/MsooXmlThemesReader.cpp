@@ -39,36 +39,77 @@
 
 using namespace MSOOXML;
 
-DrawingMLGradientFill::DrawingMLGradientFill(QVector<int> colorModifier) : m_colorModifier(colorModifier)
+DrawingMLGradientFill::DrawingMLGradientFill(QVector<int> colorModifier, QVector<qreal> satModifier,
+    QVector<int> alphaModifier) : m_colorModifier(colorModifier), m_satModifier(satModifier), m_alphaModifier(alphaModifier)
 {
 }
 
 void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color)
 {
-
     KoGenStyle gradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
 
     // This is over-simplified gradient style
     gradientStyle.addAttribute("draw:style", "linear");
-    gradientStyle.addAttribute("draw:start-intensity", "100%");
-    gradientStyle.addAttribute("draw:end-intensity", "0%");
+    if (m_alphaModifier.at(0) > 0) {
+        gradientStyle.addAttribute("draw:start-intensity", QString("%1%").arg(m_alphaModifier.at(0)));
+    }
+    else {
+        gradientStyle.addAttribute("draw:start-intensity", "100%");
+    }
+    if (m_alphaModifier.at(m_alphaModifier.size()-1)) {
+        gradientStyle.addAttribute("draw:end-intensity", QString("%1%").arg(m_alphaModifier.at(m_alphaModifier.size() - 1)));
+    }
+    else {
+        gradientStyle.addAttribute("draw:end-intensity", "100%");
+    }
     int red = color.red();
     int green = color.green();
     int blue = color.blue();
-    int startModifier = m_colorModifier.at(0);
-    int startRed = (red * startModifier + 256 * (100 - startModifier)) / 100;
-    int startGreen = (green * startModifier + 256 * (100 - startModifier)) / 100;
-    int startBlue = (blue * startModifier + 256 * (100 - startModifier)) / 100;
-    QString startColor = QString("#%1%2%3").arg(QString::number(startRed, 16)).arg(QString::number(startGreen, 16))
-                                           .arg(QString::number(startBlue, 16));
-    int endModifier = m_colorModifier.at(m_colorModifier.size()-1);
-    int endRed = (red * endModifier + 256 * (100 - endModifier)) / 100;
-    int endGreen = (green * endModifier + 256 * (100 - endModifier)) / 100;
-    int endBlue = (blue * endModifier + 256 * (100 - endModifier)) / 100;
-    QString endColor = QString("#%1%2%3").arg(QString::number(endRed, 16)).arg(QString::number(endGreen, 16))
-                                           .arg(QString::number(endBlue, 16));
-    gradientStyle.addAttribute("draw:start-color", startColor);
-    gradientStyle.addAttribute("draw:end-color", endColor);
+    int colorModifier = m_colorModifier.at(0);
+    int startRed = (red * colorModifier + 255 * (100 - colorModifier)) / 100;
+    int startGreen = (green * colorModifier + 255 * (100 - colorModifier)) / 100;
+    int startBlue = (blue * colorModifier + 255 * (100 - colorModifier)) / 100;
+    qreal satModifier = m_satModifier.at(0);
+    if (satModifier > 0 ) {
+        startRed = startRed * satModifier;
+        startGreen = startGreen * satModifier;
+        startBlue = startBlue * satModifier;
+        if (startRed > 255) {
+            startRed = 255;
+        }
+        if (startGreen > 255) {
+            startGreen = 255;
+        }
+        if (startBlue > 255) {
+            startBlue = 255;
+        }
+    }
+    QColor startColor(startRed, startGreen, startBlue);
+
+    colorModifier = m_colorModifier.at(m_colorModifier.size() - 1);
+    int endRed = (red * colorModifier + 255 * (100 - colorModifier)) / 100;
+    int endGreen = (green * colorModifier + 255 * (100 - colorModifier)) / 100;
+    int endBlue = (blue * colorModifier + 255 * (100 - colorModifier)) / 100;
+
+    satModifier = m_satModifier.at(m_satModifier.size() - 1);
+    if (satModifier) {
+        endRed = endRed * satModifier;
+        endGreen = endGreen * satModifier;
+        endBlue = endBlue * satModifier;
+        if (endRed > 255) {
+            endRed = 255;
+        }
+        if (endGreen > 255) {
+            endGreen = 255;
+        }
+        if (endBlue > 255) {
+            endBlue = 255;
+        }
+    }
+    QColor endColor(endRed, endGreen, endBlue);
+
+    gradientStyle.addAttribute("draw:start-color", startColor.name());
+    gradientStyle.addAttribute("draw:end-color", endColor.name());
 
     graphicStyle->addProperty("draw:fill", "gradient");
     const QString gradName = styles.insert(gradientStyle);
@@ -826,26 +867,42 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
             }*/
             if (element == "a:gradFill") {
                 QVector<int> colorModifiers;
+                QVector<qreal> satModifiers;
+                QVector<int> alphaModifiers;
                 readNext(); // a:gsLst
                 while (true) {
                     readNext();
                     if (isStartElement() && qualifiedName() == "a:gs") {
                         readNext();
                         if (isStartElement() && qualifiedName() == "a:schemeClr") {
+                           int colorModifier = 100;
+                           qreal satModifier = 0;
+                           int alphaModifier = 0;
                            while (true) {
                                readNext();
                                if (isEndElement() && qualifiedName() == "a:schemeClr") {
                                    break;
                                }
-                               attrs = attributes();
-                               TRY_READ_ATTR_WITHOUT_NS(val)
-                               if (qualifiedName() == "a:tint") {
-                                   colorModifiers.push_back(val.toInt()/1000);
-                               }
-                               else if (qualifiedName() == "a:shade") {
-                                   colorModifiers.push_back(100 - val.toInt()/1000);
+                               if (isStartElement()) {
+                                   attrs = attributes();
+                                   TRY_READ_ATTR_WITHOUT_NS(val)
+                                   if (qualifiedName() == "a:tint") {
+                                       colorModifier = val.toInt()/1000;
+                                   }
+                                   else if (qualifiedName() == "a:shade") {
+                                       colorModifier = 100 - val.toInt()/1000;
+                                   }
+                                   else if (qualifiedName() == "a:satMod") {
+                                       satModifier = val.toDouble()/100000.0;
+                                   }
+                                   else if (qualifiedName() == "a:alpha") {
+                                      alphaModifier = val.toInt()/1000;
+                                   }
                                }
                            }
+                           colorModifiers.push_back(colorModifier);
+                           satModifiers.push_back(satModifier),
+                           alphaModifiers.push_back(alphaModifier);
                         }
                         else if (isEndElement() && qualifiedName() == "a:gs") {
                             break;
@@ -855,7 +912,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                         break;
                     }
                 }
-                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(colorModifiers);
+                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(colorModifiers, satModifiers, alphaModifiers);
                 while (true) {
                     readNext();
                     if (isEndElement() && qualifiedName() == element) {
