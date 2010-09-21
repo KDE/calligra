@@ -460,11 +460,13 @@ class LayoutNodeAtom : public AbstractAtom
 {
     public:
         QString m_name;
+        QString m_text; // the text displayed on the shape
         QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
-        bool m_needsRelayout, m_childNeedsRelayout;
-        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_algorithm(0), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true) {}
+        int m_rotateAngle;
+        bool m_needsReinit, m_needsRelayout, m_childNeedsRelayout;
+        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_rotateAngle(0), m_needsReinit(true), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true) {}
         virtual ~LayoutNodeAtom() {}
         virtual LayoutNodeAtom* clone();
         virtual void dump(Context* context, int level) {
@@ -497,6 +499,7 @@ class LayoutNodeAtom : public AbstractAtom
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm) { m_algorithm = algorithm; setNeedsRelayout(true); }
         QList<AbstractNode*> axis() const { return m_axis; }
         void setAxis(Context* context, const QList<AbstractNode*> &axis) {
+            Q_UNUSED(context);
             m_axis = axis;
             /*
             QExplicitlySharedDataPointer<LayoutNodeAtom> ptr(this);
@@ -510,6 +513,14 @@ class LayoutNodeAtom : public AbstractAtom
             }
             */
             setNeedsRelayout(true);
+        }
+        void setNeedsReinit(bool needsReinit) {
+            if(m_needsReinit == needsReinit) return;
+            m_needsReinit = needsReinit;
+            if(m_needsReinit) // if we need to be re-initialized then our children need to be too
+                foreach(QExplicitlySharedDataPointer<AbstractAtom> child, children())
+                    if(LayoutNodeAtom* childLayoutAtom = dynamic_cast<LayoutNodeAtom*>(child.data()))
+                        childLayoutAtom->setNeedsReinit(true);
         }
         void setNeedsRelayout(bool needsRelayout) {
             if(needsRelayout == m_needsRelayout) return;
@@ -774,18 +785,15 @@ class ShapeAtom : public AbstractAtom
             style.addProperty("draw:fill", "solid" /*none*/, KoGenStyle::GraphicType);
             style.addProperty("draw:opacity", "50%");
 
-            bool m_flipH = false;
-            bool m_flipV = false;
-            int m_svgX = x+cx;
-            int m_svgY = y+cy;
-
-            int rotateAngle = 0;
-
-            xmlWriter->addAttribute("svg:x", QString("%1px").arg(m_svgX));
-            xmlWriter->addAttribute("svg:y", QString("%1px").arg(m_svgY));
+            const int m_svgX = x+cx;
+            const int m_svgY = y+cy;
+            const int rotateAngle = context->m_parentLayout->m_rotateAngle; //0=right 45=bottom 90=left 135=top 180=right
+            if(rotateAngle == 0) {
+                xmlWriter->addAttribute("svg:x", QString("%1px").arg(m_svgX));
+                xmlWriter->addAttribute("svg:y", QString("%1px").arg(m_svgY));
+            }
             xmlWriter->addAttribute("svg:width", QString("%1px").arg(w));
             xmlWriter->addAttribute("svg:height", QString("%1px").arg(h));
-
             if(rotateAngle != 0) {
                 QMatrix matrix;
                 matrix.translate(m_svgX + 0.5 * w, m_svgY + 0.5 * h);
@@ -843,7 +851,9 @@ class ShapeAtom : public AbstractAtom
             //xmlWriter->addAttribute("draw:text-style-name", "P2");
             
             xmlWriter->startElement("text:p");
-            //xmlWriter->addTextNode(m_type);
+            const QString text = context->m_parentLayout->m_text;
+            if(!text.isEmpty())
+                xmlWriter->addTextNode(text);
             xmlWriter->endElement();
 
             if (m_type == QLatin1String("ellipse")) {
@@ -1303,6 +1313,8 @@ LayoutNodeAtom* LayoutNodeAtom::clone()
         atom->addConstraint(QExplicitlySharedDataPointer<ConstraintAtom>(a->clone()));
     atom->m_algorithm = QExplicitlySharedDataPointer<AlgorithmAtom>(m_algorithm->clone());
     atom->m_axis = m_axis;
+    atom->m_rotateAngle = m_rotateAngle;
+    atom->m_needsReinit = m_needsReinit;
     atom->m_needsRelayout = m_needsRelayout;
     atom->m_childNeedsRelayout = m_childNeedsRelayout;
     atom->m_variables = m_variables;
@@ -1312,7 +1324,7 @@ LayoutNodeAtom* LayoutNodeAtom::clone()
 
 class AlgorithmBase {
     public:
-        explicit AlgorithmBase() : m_context(0), m_oldCurrentNode(0) /*,m_inited(false)*/ {}
+        explicit AlgorithmBase() : m_context(0), m_oldCurrentNode(0) {}
         virtual ~AlgorithmBase() {
             if(m_context) {
                 m_context->m_parentLayout = m_parentLayout;
@@ -1332,20 +1344,19 @@ class AlgorithmBase {
             virtualDoInit();
         }
         void doLayout() {
-            virtualDoLayoutChildren();
-        }
-        void doLayoutChildren() {
             virtualDoLayout();
         }
+        void doLayoutChildren() {
+            virtualDoLayoutChildren();
+        }
     protected:
-        //bool m_inited;
         virtual void virtualDoInit() {
-            //if(!m_inited) { m_inited=true; } else { return ;}
-
-            layout()->m_values = parentLayout()->m_values;
-            layout()->m_factors = parentLayout()->m_factors;
-            layout()->m_countFactors = parentLayout()->m_countFactors;
-
+            if(layout()->m_needsReinit) {
+                layout()->m_needsReinit = false; // initialization done
+                layout()->m_values = parentLayout()->m_values;
+                layout()->m_factors = parentLayout()->m_factors;
+                layout()->m_countFactors = parentLayout()->m_countFactors;
+            }
             QMap<QString, qreal> values = parentLayout()->finalValues();
             Q_ASSERT(values["l"] >= 0.0);
             Q_ASSERT(values["t"] >= 0.0);
@@ -1374,10 +1385,9 @@ class AlgorithmBase {
                     }
                 } else {
                     QExplicitlySharedDataPointer<LayoutNodeAtom> ref = c->m_refForName.isEmpty() ? m_layout : context()->m_layoutMap.value(c->m_refForName);
-                    if(ref && (ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
-                        Q_ASSERT(ref != m_layout);
+                    if(ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
                         ref->layoutAtom(context());
-                        Q_ASSERT(!ref->m_needsRelayout && !ref->m_childNeedsRelayout);
+                        Q_ASSERT(!ref->m_needsReinit && !ref->m_needsRelayout && !ref->m_childNeedsRelayout);
                     }
 
                     if(!c->m_refType.isEmpty()) {
@@ -1397,8 +1407,9 @@ class AlgorithmBase {
                     }
                 }
 
-                if(value >= 0.0)
+                if(value >= 0.0) {
                     layout()->m_values[c->m_type] = value;
+                }
                 layout()->m_factors[c->m_type] += c->m_fact;
                 layout()->m_countFactors[c->m_type] += 1;
             }
@@ -1427,15 +1438,12 @@ class ConnectorAlgorithm : public AlgorithmBase {
     public:
         explicit ConnectorAlgorithm() : AlgorithmBase() {}
         virtual ~ConnectorAlgorithm() {}
-        virtual void virtualDoLayout() {
-            AlgorithmBase::virtualDoLayout();
-
+        virtual void virtualDoLayoutChildren() {
             // Get a list of all child-layouts of our parent to apply the connector-algorithm on our direct
             // neighbors. Also while on it also determinate our own position in that list.
             QList<LayoutNodeAtom*> siblingLayouts;
             int myindex = -1;
             foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, parentLayout()->children()) {
-                //atom->layoutAtom(context);
                 if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
                     if(l == layout()) myindex = siblingLayouts.count();
                     siblingLayouts.append(l);
@@ -1443,85 +1451,36 @@ class ConnectorAlgorithm : public AlgorithmBase {
             }
             Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
             Q_ASSERT(siblingLayouts.count() >= 3); // a connector makes only sense if we have some neighbors
-            LayoutNodeAtom* srcAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
-            LayoutNodeAtom* dstAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
+            LayoutNodeAtom* srcAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
+            LayoutNodeAtom* dstAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
 
-#if 0 //TODO
             QMap<QString, qreal> srcValues = srcAtom->m_values;
             QMap<QString, qreal> dstValues = dstAtom->m_values;
             QMap<QString, qreal> srcFactors = srcAtom->m_factors;
             QMap<QString, qreal> dstFactors = dstAtom->m_factors;
             QMap<QString, int> srcCountFactors = srcAtom->m_countFactors;
             QMap<QString, int> dstCountFactors = dstAtom->m_countFactors;
-            qreal srcX = srcValues["l"];//+srcValues["ctrX"];
-            qreal srcY = srcValues["t"];//+srcValues["ctrY"];
+            qreal srcX = srcValues["l"]+srcValues["ctrX"];
+            qreal srcY = srcValues["t"]+srcValues["ctrY"];
             qreal srcW = srcValues["w"];
             qreal srcH = srcValues["h"];
-            qreal srcCX = srcX + srcW/2.0;
-            qreal srcCY = srcY + srcH/2.0;
-            qreal dstX = dstValues["l"];//+dstValues["ctrX"];
-            qreal dstY = dstValues["t"];//+dstValues["ctrY"];
+            qreal dstX = dstValues["l"]+dstValues["ctrX"];
+            qreal dstY = dstValues["t"]+dstValues["ctrY"];
             qreal dstW = dstValues["w"];
             qreal dstH = dstValues["h"];
+            Q_ASSERT(srcX > 0.0);
+            Q_ASSERT(srcY > 0.0);
+            Q_ASSERT(dstX > 0.0);
+            Q_ASSERT(dstY > 0.0);
+            qreal srcCX = srcX + srcW/2.0;
+            qreal srcCY = srcY + srcH/2.0;
             qreal dstCX = dstX + dstW/2.0;
             qreal dstCY = dstY + dstH/2.0;
-            // int connCX = srcCX>dstCX ? srcCX-dstCX : dstCX-srcCX;
-            // int connCY = srcCY>dstCY ? srcCY-dstCY : dstCY-srcCY;
-            int connX = 0;
-            int connY = 0;
-            int connW = 0;
-            int connH = 0;
-            if(srcCX < dstCX) {
-                int distance = dstCX - srcCX;
-                //connW = distance - (srcW/2.0+dstW/2.0);
-                //connX = (distance/2.0)+srcCX+(connW/2.0);
-                connX = (distance/2.0)+srcCX;
-                connW = qMax(50.0,distance - (srcW/2.0+dstW/2.0));
-                Q_ASSERT(distance >= 0);
-                Q_ASSERT(connW >= 0.0);
-                Q_ASSERT(connX >= 0.0);
-            } else {
-                int distance = srcCX - dstCX;
-                //connW = distance - (srcW/2.0+dstW/2.0);
-                //connX = (distance/2.0)+dstCX+(connW/2.0);
-                connW = qMax(50.0, distance - (srcW/2.0+dstW/2.0));
-                connX = (distance/2.0)+dstCX;
-                Q_ASSERT(distance >= 0);
-                Q_ASSERT(connW >= 0.0);
-                Q_ASSERT(connX >= 0.0);
-            }
-            if(srcCY < dstCY) {
-                int distance = dstCY - srcCY;
-                //connH = distance - (srcH/2.0+dstH/2.0);
-                //connY = (distance/2.0)+srcCY+(connH/2.0);
-                connH = qMax(50.0, distance - (srcH/2.0+dstH/2.0));
-                connY = (distance/2.0)+srcCY;
-                Q_ASSERT(distance >= 0);
-                Q_ASSERT(connH >= 0.0);
-                Q_ASSERT(connY >= 0.0);
-            } else {
-                int distance = srcCY - dstCY;
-                //connH = distance - (srcH/2.0+dstH/2.0);
-                //connY = (distance/2.0)+dstCY+(connH/2.0);
-                connH = qMax(50.0,distance - (srcH/2.0+dstH/2.0));
-                connY = (distance/2.0)+dstCY;
-                Q_ASSERT(distance >= 0);
-                Q_ASSERT(connH >= 0.0);
-                Q_ASSERT(connY >= 0.0);
-            }
-            foreach(const QString& key, QStringList()<<"l"<<"t"<<"w"<<"h"<<"ctrX"<<"ctrY") {
-                layout()->m_factors[key]      = srcFactors[key]      + dstFactors[key];
-                layout()->m_countFactors[key] = srcCountFactors[key] + dstCountFactors[key];
-            }
-            layout()->m_values["l"] = connX;
-            layout()->m_values["t"] = connY;
-            layout()->m_values["w"] = connW;
-            layout()->m_values["h"] = connH;
-            layout()->m_values["ctrX"] = 0;
-            layout()->m_values["ctrY"] = 0;
-#endif
+            qreal angle = atan2(dstCY-srcCY,dstCX-srcCX)*180/M_PI;
 
+            layout()->m_rotateAngle = angle / 2.0;
 
+            AlgorithmBase::virtualDoLayoutChildren();
         }
 
 };
@@ -1540,12 +1499,13 @@ class CycleAlgorithm : public AlgorithmBase {
         }
         virtual void virtualDoLayout() {
             AlgorithmBase::virtualDoLayout();
-            
+
             // Get a list of all child-layouts to apply the circle-algorithm on them.
             QList<LayoutNodeAtom*> childLayouts;
             foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
+                //atom->layoutAtom(context());
                 if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
-//if(l->algorithmType() == AlgorithmAtom::ConnectorAlg) continue;
+                    //if(l->algorithmType() == AlgorithmAtom::ConnectorAlg) continue;
                     childLayouts.append(l);
                 }
             }
@@ -1574,18 +1534,18 @@ class CycleAlgorithm : public AlgorithmBase {
                 const qreal x = rx + cos(radian) * rx;
                 const qreal y = ry + sin(radian) * ry;
                 LayoutNodeAtom* l = childLayouts.takeFirst();
-                l->layoutAtom(context());
-
                 l->m_values["l"] = parentLayout()->m_values["l"];
                 l->m_values["t"] = parentLayout()->m_values["t"];
-                l->m_values["w"] = d;//parentLayout()->m_values["w"] / childLayoutsCount;
-                l->m_values["h"] = d;//parentLayout()->m_values["h"] / childLayoutsCount;
-
+                l->m_values["w"] = d;//d;//parentLayout()->m_values["w"] / childLayoutsCount;
+                l->m_values["h"] = d;//d;//parentLayout()->m_values["h"] / childLayoutsCount;
                 l->m_factors["l"] = l->m_factors["t"] = 1.0;
                 l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
-                
                 l->m_values["ctrX"] = x;
                 l->m_values["ctrY"] = y;
+
+                l->m_needsReinit = false; // we initialized things above already
+                l->m_needsRelayout = true; // but we clearly need a layout now
+                l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
             }
 
             //kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
