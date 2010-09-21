@@ -237,8 +237,8 @@ protected:
     // First from default, then from master, layout, slide using those lvls which are needed
     void inheritTextStyle();
 
-    // Inherits correct paragraph and text styles to m_currentTextStyle and m_currentParagraphStyle
-    void inheritParagraphAndTextStyle();
+    // Inherits correct paragraph styles to m_currentParagraphStyle
+    void inheritParagraphStyle();
 
     // True if we reading defaultStyles from PptxXmlDocumentReader
     bool documentReaderMode;

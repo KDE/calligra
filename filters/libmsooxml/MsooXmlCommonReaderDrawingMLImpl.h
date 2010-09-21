@@ -1574,29 +1574,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
-
     if (!pprRead) {
-        int copyLevel = 0;
-        if (m_currentListLevel == 0) {
-            copyLevel = 1;
-        }
-        else {
-            copyLevel = m_currentListLevel;
-        }
-        if (!styleId.isEmpty()) {
-            // In all cases, we take them first from masterslide
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
-                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
-
-            if (m_context->type == Slide || m_context->type == SlideLayout) {
-                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
-                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
-            }
-        } else { // styleId is clear, getting par properties from "other"
-                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles["other"][copyLevel],
-                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
-        }
+        inheritParagraphStyle();
+    }
+    if (!rRead) {
+        inheritTextStyle();
     }
 #endif
 
@@ -2055,7 +2037,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritParagraphAndTextStyle();
+    inheritParagraphStyle();
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
