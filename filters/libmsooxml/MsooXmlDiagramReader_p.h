@@ -1564,6 +1564,8 @@ class CycleAlgorithm : public AlgorithmBase {
                 const qreal x = rx + cos(radian) * rx;
                 const qreal y = ry + sin(radian) * ry;
                 LayoutNodeAtom* l = childLayouts.takeFirst();
+                
+                //TODO handle sibling-spacing and margins
                 l->m_values["l"] = parentLayout()->m_values["l"];
                 l->m_values["t"] = parentLayout()->m_values["t"];
                 l->m_values["w"] = d;//d;//parentLayout()->m_values["w"] / childLayoutsCount;
