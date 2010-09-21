@@ -61,7 +61,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
-    m_customListMade = false;
     m_fillImageRenderingStyleStretch = false;
 }
 
@@ -1500,7 +1499,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     const read_p_args args = m_read_DrawingML_p_args;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
+    m_listStylePropertiesAltered = false;
+
     m_currentCombinedBulletProperties.clear();
+    // Note that if buNone has been specified, we don't create a list
+    m_currentListLevel = 1; // By default we're in the first level
 
 #ifdef PPTXXMLSLIDEREADER_H
     inheritListStyles();
@@ -1611,20 +1614,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         if (!rRead) {
             // Making sure that if we were previously in a list and if there's an empty line, that
             // we don't output a bullet to it
-            m_listStylePropertiesAltered = false;
             m_currentListLevel = 0;
-            m_lstStyleFound = 0;
+            m_lstStyleFound = false;
         }
-        // Checking whether we are in lvl 0 and there's empty bullet item -> No need to create a list
-        else if (m_currentListLevel == 0 && m_currentCombinedBulletProperties.value(1).isEmpty() && !m_listStylePropertiesAltered) {
-            m_listStylePropertiesAltered = false;
+        else if (m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
             m_currentListLevel = 0;
-            m_lstStyleFound = 0;
-        }
-        else if (m_currentListLevel > 0 && m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
-            m_listStylePropertiesAltered = false;
-            m_currentListLevel = 0;
-            m_lstStyleFound = 0;
+            m_lstStyleFound = false;
         }
         else {
             m_lstStyleFound = true;
@@ -1633,8 +1628,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
         // being a list-item. We need to handle that case and need to make sure that such paragraph's
         // end as first-level list-items in ODF.
-        const bool makeList = (m_lstStyleFound && m_currentListLevel < 1);
-        if (makeList) ++m_currentListLevel;
         if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_H
              if (m_prevListLevel < m_currentListLevel) {
@@ -1697,21 +1690,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          }
 #endif
 
-        if (m_listStylePropertiesAltered) {
-            // If they were manually altered in last round, most likely not going to continue with same style.
-            m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
-        }
-
 #ifdef PPTXXMLSLIDEREADER_H
-         // In this case we have artificially created a list of level 1
-         if (makeList) {
-             body->endElement(); // text:list
-             m_prevListLevel = 0;
-             m_currentListLevel = 0;
-         }
-         else {
-             m_prevListLevel = m_currentListLevel;
-         }
+        m_prevListLevel = m_currentListLevel;
 #else
          // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
          // and excel filters still need to be adjusted to proper handle nested lists.
@@ -2066,9 +2046,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 
     if (!lvl.isEmpty()) {
         m_currentListLevel = lvl.toInt() + 1;
-        m_currentBulletProperties.m_level = m_currentListLevel;
-    } else {
-        m_currentListLevel = 0;
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -2132,26 +2109,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     if (m_listStylePropertiesAltered) {
-        m_customListMade = true;
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
-        if (m_currentListLevel == 0) {
-            m_currentListLevel = 1;
-        }
         // For now we take a stand that any altered style makes its own list.
         m_currentBulletProperties.m_level = m_currentListLevel;
 
         m_currentListStyle.addChildElement("list-style-properties",
             m_currentBulletProperties.convertToListProperties());
-    }
-    else if (m_customListMade) {
-        // We come here in the case, that there was e.g buChar in the previous paragraph
-        // and in this paragraph we want to continue with predefined list styles
-        m_listStylePropertiesAltered = true;
-        m_customListMade = false;
-    }
-    else {
-        m_customListMade = false;
     }
 
     READ_EPILOGUE
@@ -4948,7 +4912,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 {
     READ_PROLOGUE
-    m_customListMade = false;
     const QXmlStreamAttributes attrs(attributes());
     // wrap (Text Wrapping Type)
     // Specifies the wrapping options to be used for this text body. If this attribute is omitted,

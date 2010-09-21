@@ -143,7 +143,6 @@ KoFilter::ConversionStatus read_spcAft();
 KoFilter::ConversionStatus read_spcPts();
 
 bool m_listStylePropertiesAltered;
-bool m_customListMade;
 
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buNone();
