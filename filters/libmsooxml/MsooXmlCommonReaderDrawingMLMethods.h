@@ -121,7 +121,8 @@ KoFilter::ConversionStatus read_ln();
 KoFilter::ConversionStatus read_srgbClr();
 KoFilter::ConversionStatus read_scrgbClr();
 
-int m_currentTint; // value of current tint
+qreal m_currentShadeLevel;
+qreal m_currentTint; // value of current tint
 int m_currentAlpha; // current alpha color value
 qreal m_currentSatMod; //value of current saturation modulation
 
@@ -247,8 +248,6 @@ enum ColorType {
     TextColor,
     GradientColor
 };
-
-int m_currentShadeLevel;
 
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
 QColor m_currentColor;

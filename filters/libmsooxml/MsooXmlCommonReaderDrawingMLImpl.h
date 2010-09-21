@@ -1171,6 +1171,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 {
     READ_PROLOGUE
 
+    // We don't want to overlap the current style
+    if (!m_currentDrawStyle->isEmpty()) {
+        SKIP_EVERYTHING
+        READ_EPILOGUE
+    }
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -3579,7 +3585,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 #endif
 
-    m_currentTint = 100;
+    m_currentTint = 0;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
     m_currentAlpha = 0;
@@ -3625,14 +3631,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         col = colorItem->value();
     }
 
-    modifyColor();
-
     col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
 
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
     m_currentPen.setColor(col);
 #endif
     m_currentColor = col;
+
+    modifyColor();
 
     READ_EPILOGUE
 }
@@ -3666,14 +3672,14 @@ void MSOOXML_CURRENT_CLASS::modifyColor()
     int blue = m_currentColor.blue();
 
     if (m_currentTint > 0) {
-        red = (red * m_currentTint + 255 * (100 - m_currentTint)) / 100;
-        green = (green * m_currentTint + 255 * (100 - m_currentTint)) / 100;
-        blue = (blue * m_currentTint + 255 * (100 - m_currentTint)) / 100;
+        red = m_currentTint * red + (1 - m_currentTint) * 255;
+        green = m_currentTint * green + (1 - m_currentTint) * 255;
+        blue = m_currentTint * blue + (1 - m_currentTint) * 255;
     }
     if (m_currentShadeLevel > 0) {
-        red = (red * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
-        green = (green * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
-        blue = (blue * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
+        red = m_currentShadeLevel * red;
+        green = m_currentShadeLevel * green;
+        blue = m_currentShadeLevel * blue;
     }
     if (m_currentSatMod > 0) {
         red = red * m_currentSatMod;
@@ -3730,7 +3736,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tint()
         if (!ok) {
             value = 0;
         }
-        m_currentTint = value/1000; // To get percentage
+        m_currentTint = value/100000.0; // To get percentage (form 0.x)
     }
 
     readNext();
@@ -3752,7 +3758,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shade()
         if (!ok) {
             value = 0;
         }
-        m_currentShadeLevel = value/1000; // To get percentage
+        m_currentShadeLevel = value/100000.0; // To get percentage (form 0.x)
     }
 
     readNext();
@@ -3962,7 +3968,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 This element specifies a solid color fill.
 
  Child elements:
-    - alpha (Alpha) §20.1.2.3.1
+    - [done] alpha (Alpha) §20.1.2.3.1
     - alphaMod (Alpha Modulation) §20.1.2.3.2
     - alphaOff (Alpha Offset) §20.1.2.3.3
     - blue (Blue) §20.1.2.3.4
@@ -3977,7 +3983,7 @@ This element specifies a solid color fill.
     - hue (Hue) §20.1.2.3.14
     - hueMod (Hue Modulate) §20.1.2.3.15
     - hueOff (Hue Offset) §20.1.2.3.16
-    - inv (Inverse) §20.1.2.3.17
+    - [done] inv (Inverse) §20.1.2.3.17
     - invGamma (Inverse Gamma) §20.1.2.3.18
     - lum (Luminance) §20.1.2.3.19
     - lumMod (Luminance Modulation) §20.1.2.3.20
@@ -3997,6 +4003,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
 
     const QXmlStreamAttributes attrs(attributes());
 
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
+
     READ_ATTR_WITHOUT_NS(r)
     READ_ATTR_WITHOUT_NS(g)
     READ_ATTR_WITHOUT_NS(b)
@@ -4013,7 +4024,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
     while (true) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(alpha)
+        }
     }
+
+    modifyColor();
+
     READ_EPILOGUE
 }
 
@@ -4062,9 +4080,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentTint = 100;
+    m_currentTint = 0;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
     READ_ATTR_WITHOUT_NS(val)
 
@@ -4102,9 +4121,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentTint = 100;
+    m_currentTint = 0;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
     TRY_READ_ATTR_WITHOUT_NS(lastClr)
 
