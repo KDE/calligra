@@ -56,5 +56,7 @@
         <file>images/48x48/Edittoolbaricons/Insert.png</file>
         <file>images/48x48/Edittoolbaricons/Picture.png</file>
         <file>images/48x48/Edittoolbaricons/CCP.png</file>
+        <file>images/48x48/Edittoolbaricons/InsertTable.png</file>
+        <file>images/48x48/Edittoolbaricons/TextInsert.png</file>
     </qresource>
 </RCC>

@@ -30,7 +30,7 @@
 #include <KoDocument.h>
 #include <KWView.h>
 #include <styles/KoListStyle.h>
-#include <KoPAView.h>
+
 
 #include "Splash.h"
 #include "PreviewDialog.h"
@@ -44,6 +44,13 @@
 #include "VirtualKeyBoard.h"
 #include "FoCellToolFactory.h"
 #include "DigitalSignatureDialog.h"
+
+#include <KoPAView.h>
+#include <KoPACanvas.h>
+#include <KoTextShapeData.h>
+#include <KoTextDocument.h>
+#include <KoShapeFactoryBase.h>
+#include <KoShapeRegistry.h>
 
 #ifdef Q_WS_MAEMO_5
 #include "FoDocumentRdf.h"
@@ -122,6 +129,8 @@ protected:
 private:
     Ui::MainWindow *m_ui;
     FoCellToolFactory *m_cellToolFactory;
+
+
     
 ///////////////////////////
 // Collaborative editing //
@@ -156,6 +165,23 @@ private slots:
 /////////////////////////////
 /////////////////////////////
 
+    //presentation editing
+    private:
+        QTextDocument *document;
+        QPointer<KoTextEditor> m_pEditor;
+        KoShape *m_textShape;
+        KoShape *currentShapeSelected;
+        KoTextShapeData *currentSelectedTextShapeData;
+        QTextDocument *documentForCurrentShape;
+
+        KoPAView *m_kopaview;
+    private slots:
+        void insertNewTextShape();
+        void insertNewTable();
+//        void deleteSelection();
+
+
+    ////
 
 /////virtualkeyboard
 
@@ -1024,11 +1050,6 @@ signals:
      */
     void showCCP();
 
-private:
-    /*!
-     * Show Insert action
-     */
-    void showInsertAction();
 };
 
 #endif // MAINWINDOW_H

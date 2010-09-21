@@ -425,9 +425,14 @@ void MainWindow::init()
     connect(m_ui->actionSelect, SIGNAL(triggered()), this, SLOT(enableSelectTool()));
     connect(m_ui->actionShowCCP, SIGNAL(triggered()), this, SLOT(showCCP()));
     connect(m_ui->actionInsert, SIGNAL(triggered()), this, SLOT(insertButtonClicked()));
-    m_ui->actionInsertImage->setVisible(false);
     connect(m_ui->actionInsertImage, SIGNAL(triggered()), this, SLOT(insertImage()));
+    connect(m_ui->actionInsertTextShape, SIGNAL(triggered()), this, SLOT(insertNewTextShape()));
+    connect(m_ui->actionInsertTable, SIGNAL(triggered()), this, SLOT(insertNewTable()));
+    m_ui->actionInsertImage->setVisible(false);
+    m_ui->actionInsertTextShape->setVisible(false);
+    m_ui->actionInsertTable->setVisible(false);
     showCCP();
+    insertButtonClicked();
 }
 
 MainWindow::~MainWindow()
@@ -757,7 +762,10 @@ void MainWindow::doSubScript()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-
+    if(m_type == Presentation) {
+           KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+           m_kopaview->kopaCanvas()->toolProxy()->actions()["format_sub"]->trigger();
+    }
     if(setSubScript(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatSubScript);
 
@@ -781,7 +789,10 @@ void MainWindow::doSuperScript()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
-
+    if(m_type == Presentation) {
+           KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+           m_kopaview->kopaCanvas()->toolProxy()->actions()["format_super"]->trigger();
+    }
     if(setSuperScript(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatSuperScript);
     m_isDocModified = true;
@@ -891,6 +902,10 @@ void MainWindow::doBold()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(m_type == Presentation) {
+           KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+           m_kopaview->kopaCanvas()->toolProxy()->actions()["format_bold"]->trigger();
+    }
     if(m_type == Spreadsheet) {
         m_controller->canvas()->toolProxy()->actions()["bold"]->trigger();
     } else {
@@ -917,6 +932,10 @@ void MainWindow::doItalic()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(m_type == Presentation) {
+           KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+           m_kopaview->kopaCanvas()->toolProxy()->actions()["format_italic"]->trigger();
+    }
     if(m_type == Spreadsheet) {
         m_controller->canvas()->toolProxy()->actions()["italic"]->trigger();
     } else {
@@ -943,6 +962,10 @@ void MainWindow::doUnderLine()
 {
     if (m_fontstyleframe)
         m_fontstyleframe->hide();
+    if(m_type == Presentation) {
+           KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+           m_kopaview->kopaCanvas()->toolProxy()->actions()["format_underline"]->trigger();
+    }
     if(m_type == Spreadsheet) {
         m_controller->canvas()->toolProxy()->actions()["underline"]->trigger();
     } else {
@@ -970,6 +993,10 @@ void MainWindow::doLeftAlignment()
     if (m_formatframe) {
         m_formatframe->hide();
     }
+    if(m_type == Presentation) {
+            KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+            m_kopaview->kopaCanvas()->toolProxy()->actions()["format_alignleft"]->trigger();
+    }
     if(setLeftAlign(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignLeft);
 }
@@ -987,6 +1014,10 @@ void MainWindow::doJustify()
 {
     if (m_formatframe)
         m_formatframe->hide();
+    if(m_type == Presentation) {
+            KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+            m_kopaview->kopaCanvas()->toolProxy()->actions()["format_alignblock"]->trigger();
+    }
     if(setJustify(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignJustify);
 }
@@ -1004,6 +1035,10 @@ void MainWindow::doRightAlignment()
 {
     if (m_formatframe)
         m_formatframe->hide();
+    if(m_type == Presentation) {
+            KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+            m_kopaview->kopaCanvas()->toolProxy()->actions()["format_alignright"]->trigger();
+    }
     if(setRightAlign(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignRight);
 }
@@ -1021,6 +1056,10 @@ void MainWindow::doCenterAlignment()
 {
     if (m_formatframe)
         m_formatframe->hide();
+    if(m_type == Presentation) {
+            KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+            m_kopaview->kopaCanvas()->toolProxy()->actions()["format_aligncenter"]->trigger();
+    }
     if(setCenterAlign(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatAlignCenter);
 }
@@ -1035,6 +1074,49 @@ bool MainWindow::setCenterAlign(KoTextEditor *editor) {
 }
 
 void MainWindow::activeFormatOptionCheck() {
+    if(m_type == Presentation) {
+        KoCanvasBase *canvasForChecking = m_controller->canvas();
+        Q_CHECK_PTR(canvasForChecking);
+        if(canvasForChecking->toolProxy()->selection()->hasSelection())
+        {
+        m_kopaview = qobject_cast<KoPAView *>(m_view);
+        currentShapeSelected =m_kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
+        currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+        documentForCurrentShape = currentSelectedTextShapeData->document();
+        m_pEditor = new KoTextEditor(documentForCurrentShape);
+        KoTextDocument(documentForCurrentShape).setUndoStack(m_undostack);
+        KoTextDocument(documentForCurrentShape).setTextEditor(m_pEditor.data());
+        QTextBlockFormat blk = m_pEditor->blockFormat();
+        Qt::Alignment textblock_align = blk.alignment();
+        switch(textblock_align) {
+            case Qt::AlignLeft :
+                            m_alignleft->setChecked(true);
+                            m_alignjustify->setChecked(false);
+                            m_alignright->setChecked(false);
+                            m_aligncenter->setChecked(false);
+                            break;
+            case Qt::AlignRight :
+                            m_alignright->setChecked(true);
+                            m_alignjustify->setChecked(false);
+                            m_alignleft->setChecked(false);
+                            m_aligncenter->setChecked(false);
+                            break;
+            case Qt::AlignCenter :
+                            m_aligncenter->setChecked(true);
+                            m_alignjustify->setChecked(false);
+                            m_alignright->setChecked(false);
+                            m_alignleft->setChecked(false);
+                            break;
+            case Qt::AlignJustify :
+                            m_alignjustify->setChecked(true);
+                            m_alignleft->setChecked(false);
+                            m_alignright->setChecked(false);
+                            m_aligncenter->setChecked(false);
+                            break;
+        }
+    }
+    }
+    else {
     QTextBlockFormat blk = m_editor->blockFormat();
     Qt::Alignment textblock_align = blk.alignment();
     switch(textblock_align) {
@@ -1064,8 +1146,81 @@ void MainWindow::activeFormatOptionCheck() {
                         break;
     }
 }
+}
 
 void MainWindow::activeFontOptionCheck() {
+    if(m_type == Presentation) {
+        KoCanvasBase *canvasForChecking = m_controller->canvas();
+        Q_CHECK_PTR(canvasForChecking);
+        if(canvasForChecking->toolProxy()->selection()->hasSelection())
+        {
+          m_kopaview = qobject_cast<KoPAView *>(m_view);
+          currentShapeSelected =m_kopaview->shapeManager()->selection()->firstSelectedShape(KoFlake::StrippedSelection);
+          currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+          documentForCurrentShape = currentSelectedTextShapeData->document();
+          m_pEditor = new KoTextEditor(documentForCurrentShape);
+          KoTextDocument(documentForCurrentShape).setUndoStack(m_undostack);
+          KoTextDocument(documentForCurrentShape).setTextEditor(m_pEditor.data());
+          if(m_superscript) {
+
+            QTextCharFormat textchar = m_pEditor.data()->charFormat();
+            if(textchar.verticalAlignment() == QTextCharFormat::AlignSuperScript) {
+                m_superscript->setChecked(true);
+            } else {
+                m_superscript->setChecked(false);
+            }
+        }
+
+        if(m_subscript) {
+            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            if(textchar.verticalAlignment() == QTextCharFormat::AlignSubScript) {
+                m_subscript->setChecked(true);
+            } else {
+                m_subscript->setChecked(false);
+            }
+        }
+
+        if(m_fontsizebutton) {
+            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QFont font=textchar.font();
+            m_fontsizebutton->setText(QString().setNum(font.pointSize()));
+        }
+
+        if(m_fontcombobox) {
+            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            QString fonttype = textchar.fontFamily();
+            m_fontcombobox->setCurrentFont(QFont(fonttype));
+        }
+
+        if(m_bold) {
+            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            if (textchar.fontWeight()==QFont::Bold) {
+                m_bold->setChecked(true);
+            } else {
+                m_bold->setChecked(false);
+            }
+        }
+
+        if(m_italic) {
+            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            if (textchar.fontItalic()) {
+                m_italic->setChecked(true);
+            } else {
+                m_italic->setChecked(false);
+            }
+        }
+
+        if(m_underline) {
+            QTextCharFormat textchar = m_pEditor.data()->cursor()->charFormat();
+            if(textchar.property(KoCharacterStyle::UnderlineType).toBool()) {
+                m_underline->setChecked(true);
+            } else {
+                m_underline->setChecked(false);
+            }
+       }
+    }
+    }
+
     if(m_type == Text) {
         if(m_superscript) {
             QTextCharFormat textchar = m_editor->charFormat();
@@ -1167,6 +1322,16 @@ void MainWindow::doNumberList()
 {
     if(m_formatframe->isVisible())
         m_formatframe->hide();
+    if (m_type == Presentation) {
+            m_kopaview = qobject_cast<KoPAView *>(m_view);
+            currentShapeSelected =m_kopaview->shapeManager()->selection()->firstSelectedShape();
+            currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+            documentForCurrentShape = currentSelectedTextShapeData->document ();
+            m_pEditor = new KoTextEditor(documentForCurrentShape);
+            KoTextDocument(documentForCurrentShape).setTextEditor(m_pEditor.data());
+            setNumberList(m_pEditor);
+        }
+    
     if(setNumberList(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatListNumber);
 }
@@ -1185,6 +1350,15 @@ void MainWindow::doBulletList()
         m_formatframe->hide();
     if(setBulletList(m_editor) && m_collab)
         m_collab->sendFormat(m_editor->selectionStart(), m_editor->selectionEnd(), Collaborate::FormatListBullet);
+    if (m_type == Presentation) {
+        m_kopaview = qobject_cast<KoPAView *>(m_view);
+        currentShapeSelected =m_kopaview->shapeManager()->selection()->firstSelectedShape();
+        currentSelectedTextShapeData = qobject_cast<KoTextShapeData*>(currentShapeSelected->userData());
+        documentForCurrentShape = currentSelectedTextShapeData->document ();
+        m_pEditor = new KoTextEditor(documentForCurrentShape);
+        KoTextDocument(documentForCurrentShape).setTextEditor(m_pEditor.data());
+        setBulletList(m_pEditor);
+        }
 }
 
 bool MainWindow::setBulletList(KoTextEditor *editor) {
@@ -1676,6 +1850,12 @@ QToolButton * MainWindow ::addNewDocument(const QString &docname)
 
 void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
 {
+
+    if(m_type == Presentation)
+    {
+        m_ui->actionInsertTextShape->setVisible(true);
+        m_ui->actionInsertTable->setVisible(true);
+    }
     //check if the file exists
     if(!QFile(fileName).exists()) {
 #ifdef Q_WS_MAEMO_5
@@ -1809,7 +1989,8 @@ void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
         //set the central widget here
         setCentralWidget(m_controller);
     } else if(m_type == Presentation) {
-        m_ui->actionEdit->setVisible(false);
+        m_ui->actionFormat->setVisible(true);
+        m_ui->actionEdit->setVisible(true);
         m_ui->actionSlidingMotion->setVisible(true);
         //set the central widget here
         setCentralWidget(m_controller);
@@ -2069,7 +2250,7 @@ void MainWindow::doRedo()
 
 void MainWindow::copy()
 {
-    if(m_type != Spreadsheet && !m_controller->canvas()->toolProxy()->selection()->hasSelection())
+    if(m_type != Presentation && m_type != Spreadsheet && !m_controller->canvas()->toolProxy()->selection()->hasSelection())
         return;
     m_controller->canvas()->toolProxy()->copy();
 
@@ -2081,9 +2262,9 @@ void MainWindow::copy()
 
 void MainWindow::cut()
 {
-    if(m_type != Spreadsheet && !m_controller->canvas()->toolProxy()->selection()->hasSelection())
+    if(m_type != Presentation && m_type != Spreadsheet && !m_controller->canvas()->toolProxy()->selection()->hasSelection())
         return;
-    m_controller->canvas()->toolProxy()->copy();
+    m_controller->canvas()->toolProxy()->cut();
 
     if(m_fontstyleframe)
         m_fontstyleframe->hide();
@@ -3365,6 +3546,15 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         m_isDocModified = true;
         return false;
     }
+    if(event->type() == QEvent::MouseButtonDblClick && m_type == Presentation) {
+            if(m_ui->actionEdit->isChecked()){
+                     KoToolManager::instance()->switchToolRequested(TextTool_ID);
+                 }
+            else {
+              KoToolManager::instance()->switchToolRequested(PanTool_ID);
+          }
+          }
+
     return false;
     //return QMainWindow::eventFilter(watched, event);
 }
@@ -3955,14 +4145,21 @@ void MainWindow::insertImage()
         cmd = new KoShapeCreateCommand(m_prdoc, shape);
         m_prdoc->addCommand(cmd);
     }
-
-    showInsertAction();
 }
 
 void MainWindow::insertButtonClicked()
 {
-    m_ui->actionInsert->setVisible(false);
+    if(!m_ui->actionInsert->isChecked()) {
+        m_ui->actionInsert->setChecked(false);
+        m_ui->actionInsertImage->setVisible(false);
+        m_ui->actionInsertTextShape->setVisible(false);
+        m_ui->actionInsertTable->setVisible(false);
+        return;
+    }
+    m_ui->actionInsert->setChecked(true);
     m_ui->actionInsertImage->setVisible(true);
+    m_ui->actionInsertTextShape->setVisible(true);
+    m_ui->actionInsertTable->setVisible(true);
 }
 
 void MainWindow::showCCP()
@@ -3980,8 +4177,31 @@ void MainWindow::showCCP()
     m_ui->actionPaste->setVisible(true);
 }
 
-void MainWindow::showInsertAction()
+void MainWindow::insertNewTextShape()
 {
-    m_ui->actionInsert->setVisible(true);
-    m_ui->actionInsertImage->setVisible(false);
+    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
+    Q_ASSERT( factory );
+    m_textShape = factory->createDefaultShape();
+    KoCanvasBase *canvasForInserting = m_controller->canvas();
+    Q_CHECK_PTR(canvasForInserting);
+    int curPage = canvasForInserting->resourceManager()->resource(KoCanvasResource::CurrentPage).toInt() - 1;
+    KoPADocument* paDocForInserting = qobject_cast<KoPADocument*>(m_doc);
+    KoPAPageBase* paPageForInserting = paDocForInserting->pageByIndex(curPage, false);
+    KoShapeContainer *container =paPageForInserting;
+    m_textShape->setParent(container);
+   // m_textShape->setPosition (QPointF(m_xcordinate,m_ycordinate));
+    paDocForInserting->addShape(m_textShape);
+    m_textShape->setVisible(true);
+}
+
+void MainWindow::insertNewTable()
+{
+    KoCanvasBase *canvasForChecking = m_controller->canvas();
+    Q_CHECK_PTR(canvasForChecking);
+    qDebug()<<"selection:"<<canvasForChecking->toolProxy()->selection()->hasSelection();
+    if(canvasForChecking->toolProxy()->selection()->hasSelection())
+    {
+    KoPAView *m_kopaview = qobject_cast<KoPAView *>(m_view);
+    m_kopaview->kopaCanvas()->toolProxy()->actions()["insert_table"]->trigger();
+    }
 }

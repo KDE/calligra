@@ -117,6 +117,8 @@
    <addaction name="actionSelect"/>
    <addaction name="actionInsert"/>
    <addaction name="actionInsertImage"/>
+   <addaction name="actionInsertTextShape"/>
+   <addaction name="actionInsertTable"/>
    <addaction name="actionShowCCP"/>
    <addaction name="actionCut"/>
    <addaction name="actionCopy"/>
@@ -484,10 +486,13 @@
      <normaloff>:/images/48x48/Edittoolbaricons/Picture.png</normaloff>:/images/48x48/Edittoolbaricons/Picture.png</iconset>
    </property>
    <property name="text">
-    <string>InsertImage</string>
+    <string/>
    </property>
   </action>
   <action name="actionInsert">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="FreOffice.qrc">
      <normaloff>:/images/48x48/Edittoolbaricons/Insert.png</normaloff>:/images/48x48/Edittoolbaricons/Insert.png</iconset>
@@ -518,6 +523,27 @@
    </property>
    <property name="iconVisibleInMenu">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionInsertTextShape">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/TextInsert.png</normaloff>:/images/48x48/Edittoolbaricons/TextInsert.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>insert text shape</string>
+   </property>
+  </action>
+  <action name="actionInsertTable">
+   <property name="icon">
+    <iconset resource="FreOffice.qrc">
+     <normaloff>:/images/48x48/Edittoolbaricons/InsertTable.png</normaloff>:/images/48x48/Edittoolbaricons/InsertTable.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </action>
  </widget>
