@@ -147,7 +147,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
     }
 //! @todo expect other namespaces too...
 
-#if 0 // see bug #248991
     {
         PptxXmlCommentAuthorsReader autorsReader(this);
         const QString autorsFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::commentAuthors);
@@ -155,7 +154,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::readInternal()
         m_context->import->loadAndParseDocument(&autorsReader, autorsFilePath, &autorsContext);
         d->commentAuthors = autorsContext.authors;
     }
-#endif
 
     TRY_READ(presentation)
     kDebug() << "===========finished============";
