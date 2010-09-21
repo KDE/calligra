@@ -147,20 +147,21 @@ class PointNode : public AbstractNode
         QString m_modelId;
         QString m_type;
         QString m_cxnId;
+        QString m_text;
         explicit PointNode() : AbstractNode("dgm:pt") {}
         virtual ~PointNode() {}
         virtual void dump(Context* context, int level) {
             DEBUG_DUMP << "type=" << m_type << "modelId=" << m_modelId << "cxnId=" << m_cxnId;
             AbstractNode::dump(context, level);
         }
-        virtual void readElement(Context*, MsooXmlDiagramReader* reader) {
+        virtual void readElement(Context* context, MsooXmlDiagramReader* reader) {
             if (reader->isStartElement()) {
                 if (reader->qualifiedName() == QLatin1String("dgm:prSet")) {
                     //TODO
                 } else if (reader->qualifiedName() == QLatin1String("dgm:spPr")) {
                     //TODO
                 } else if (reader->qualifiedName() == QLatin1String("dgm:t")) {
-                    //TODO
+                    readTextBody(context, reader);
                 }
             }
         }
@@ -174,6 +175,35 @@ class PointNode : public AbstractNode
             else
                 m_cxnId.clear();
             AbstractNode::readAll(context, reader);
+        }
+    private:
+        void readTextBody(Context*, MsooXmlDiagramReader* reader) {
+            m_text.clear();
+            enum { Start, Paragraph, TextRun } s;
+            s = Start;
+            while (!reader->atEnd()) {
+                reader->readNext();
+                if(reader->isEndElement() && reader->qualifiedName() == QLatin1String("dgm:t")) break;
+                switch(s) {
+                    case Start:
+                        if (reader->isStartElement() && reader->qualifiedName() == QLatin1String("a:p")) s = Paragraph;
+                        break;
+                    case Paragraph:
+                        if (reader->qualifiedName() == QLatin1String("a:r")) // text run
+                        s = reader->isStartElement() ? TextRun : Start;
+                    break;
+                    case TextRun:
+                        if (reader->qualifiedName() == QLatin1String("a:t")) {
+                            if(reader->isStartElement()) {
+                                if(!m_text.isEmpty()) m_text += ' '; // concat multiple strings into one result
+                                m_text += reader->readElementText();
+                            } else
+                                s = Paragraph;
+                        }
+                        break;
+                }
+                
+            }
         }
 };
 
@@ -1565,6 +1595,15 @@ class TextAlgorithm : public AlgorithmBase {
     public:
         explicit TextAlgorithm() : AlgorithmBase() {}
         virtual ~TextAlgorithm() {}
+        virtual void virtualDoLayout() {
+            AlgorithmBase::virtualDoLayout();
+            layout()->m_text.clear();
+            foreach(AbstractNode* node, layout()->axis()) {
+                PointNode* n = dynamic_cast<PointNode*>(node);
+                Q_ASSERT(n);
+                layout()->m_text += n->m_text;
+            }
+        }
 };
 
 void LayoutNodeAtom::layoutAtom(Context* context)
