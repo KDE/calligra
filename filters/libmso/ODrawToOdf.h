@@ -119,11 +119,15 @@ private:
     void processFlowChartProcess(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartDecision(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
 
     void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processText(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processStyleAndText(const MSO::OfficeArtSpContainer& o, Writer& out);
+
+    void processModifiers(const MSO::OfficeArtSpContainer& o, Writer& out, const QList<int>& defaults = QList<int>());
     /**
     * @brief set the width, height rotation and starting point for the given container
     */

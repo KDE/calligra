@@ -102,6 +102,8 @@ public:
     qint16 position() const;
 };
 
+const MSO::TextCFRun* getCFRun(const MSO::TextContainer* tc, const quint32 start);
+
 const MSO::TextCFException*
 getTextCFException(const MSO::TextContainer* tc, const int start);
 

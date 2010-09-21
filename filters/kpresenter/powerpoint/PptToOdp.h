@@ -124,14 +124,26 @@ private:
     void defineTextProperties(KoGenStyle& style, const MSO::TextCFException* cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
-                              const MSO::TextSIException * si);
+                              const MSO::TextSIException* si,
+                              const MSO::TextContainer* tc = NULL);
 
     /* Extract data from TextPFException into the style */
     void defineParagraphProperties(KoGenStyle& style,
                                    const PptTextPFRun& pf);
-    /* Extract data into the style */
+
+    /**
+     * @brief Extract data into the style
+     *
+     * @param KoGenStyle
+     * @param DrawStyle
+     * @param pointer to a HeadersFootersAtom
+     * @param pointer to a MainMasterContainer or NotesContainer
+     * @param pointer to a SlideContainer or NotesContainer
+     */
     void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
-                                const MSO::HeadersFootersAtom* hf);
+                                const MSO::HeadersFootersAtom* hf,
+                                const MSO::StreamOffset* master = NULL,
+                                const MSO::StreamOffset* common = NULL);
 
     /**
      * Structure that influences all information that affects the style of a
@@ -326,7 +338,24 @@ private:
     * @return QColor value, may be undefined
     */
     QColor toQColor(const MSO::ColorIndexStruct &color);
-    QColor toQColor(const MSO::OfficeArtCOLORREF& c);
+
+    /**
+     * @brief Converts OfficeArtCOLORREF to QColor
+     *
+     * OfficeArtCOLORREF struct can either contain rgb values or an index to a
+     * color stored in a SlideSchemeColorSchemeAtom.  The main master slide or
+     * notes master slide SHOULD be provided if applicable.  The current
+     * presentation slide or notes slide SHOULD be provided if applicable.
+     * This method returns the rgb values the specified struct refers to.
+     *
+     * @param color atored as OfficeArtCOLORREF to convert
+     * @param pointer to a MainMasterContainer or NotesContainer
+     * @param pointer to a SlideContainer or NotesContainer
+     * @return QColor value, may be undefined
+     */
+    QColor toQColor(const MSO::OfficeArtCOLORREF& color,
+                    const MSO::StreamOffset* master = NULL,
+                    const MSO::StreamOffset* common = NULL);
 
     /**
     * TextAutoNumberSchemeEnum
@@ -432,9 +461,11 @@ private:
 
     const ParsedPresentation* p;
 
+    //Pointers to ppt specific information in case of a call from libmso.
+    //Avoid using these pointers in any other case.
     const MSO::SlideListWithTextSubContainerOrAtom* currentSlideTexts;
-
     const MSO::MasterOrSlideContainer* currentMaster;
+    const MSO::SlideContainer* currentSlide;
 
     bool parse(POLE::Storage& storage);
 

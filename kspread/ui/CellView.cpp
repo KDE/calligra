@@ -1903,10 +1903,12 @@ void CellView::drawText(QPainter& painter, const QPointF& location, const QStrin
 
     const bool tmpVerticalText = d->style.verticalText();
     const bool tmpAngled = fixAngle(d->style.angle()) != 0;
+    const qreal tmpIndent = cell.isEmpty() || d->style.halign() != Style::Left ? 0.0 : style().indentation();
     const qreal lineWidth = tmpAngled ? 1e9 : tmpVerticalText ? fontMetrics.maxWidth() :
                             (d->width - 2 * s_borderSpace
                              - 0.5 * d->style.leftBorderPen().width()
-                             - 0.5 * d->style.rightBorderPen().width());
+                             - 0.5 * d->style.rightBorderPen().width())
+                             - tmpIndent;
 
     qreal offset = 1.0 - fontMetrics.ascent();
     for (int i = 0; i < textLines.count(); ++i) {
@@ -2015,6 +2017,12 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
     const qreal leading = fontMetrics.leading();
     const QTextOption options = textOptions();
 
+    const qreal tmpIndent = style.halign() != Style::Left ? 0.0 : style.indentation();
+    const qreal lineWidth = (width - 2 * s_borderSpace
+                             - 0.5 * style.leftBorderPen().width()
+                             - 0.5 * style.rightBorderPen().width())
+                             - tmpIndent;
+
     textHeight = 0.0;
     textWidth = 0.0;
     textLinesCount = 0;
@@ -2029,7 +2037,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
             QTextLine line = textLayout.createLine();
             if (!line.isValid())
                 break; // forever
-            line.setLineWidth(width);
+            line.setLineWidth(lineWidth);
             textHeight += leading + line.height();
             if ((textHeight - fontMetrics.descent()) > (height - 2 * s_borderSpace
                     - 0.5 * style.topBorderPen().width()
@@ -2043,9 +2051,7 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
     }
     // The width fits, if the text is wrapped or all lines are smaller than the cell width.
     fittingWidth = style.wrapText() ||
-                   textWidth <= (width - 2 * s_borderSpace
-                                 - 0.5 * style.leftBorderPen().width()
-                                 - 0.5 * style.rightBorderPen().width());
+                   textWidth <= lineWidth;
 }
 
 void CellView::Private::calculateVerticalTextSize(const QFont& font, const QFontMetricsF& fontMetrics)

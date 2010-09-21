@@ -62,6 +62,8 @@ bool ResizeColumnManipulator::process(Element* element)
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
+    // TODO: only invalidate the cells that are actually effected by this resize (so everythin in this column, and everything that covers something in this column)
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(1, 1, KS_colMax, KS_rowMax, m_sheet), CellDamage::Appearance));
     return true;
 }
 
@@ -92,6 +94,8 @@ bool ResizeRowManipulator::process(Element* element)
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
+    // TODO: only invalidate the cells that are actually effected by this resize (so everythin in this row, and everything that covers something in this row)
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(1, 1, KS_colMax, KS_rowMax, m_sheet), CellDamage::Appearance));
     return true;
 }
 

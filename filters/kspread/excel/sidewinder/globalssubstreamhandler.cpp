@@ -455,6 +455,8 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
     alignment.setStackedLetters(xf.stackedLetters());
     alignment.setShrinkToFit(xf.isShrinkToFit());
 
+    alignment.setIndentLevel(xf.indentationLevel());
+
     format.setAlignment(alignment);
 
     FormatBorders borders;

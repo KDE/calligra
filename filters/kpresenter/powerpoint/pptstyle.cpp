@@ -112,13 +112,6 @@ const TextPFRun* getPFRun(const TextContainer* tc, quint32 start)
     }
     return 0;
 }
-const TextCFRun* getCFRun(const TextContainer* tc, quint32 start)
-{
-    if (tc && tc->style) {
-        return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
-    }
-    return 0;
-}
 const TextPFException* getLevelPF(const MasterOrSlideContainer* m,
                                   quint32 textType, quint16 level)
 {
@@ -339,7 +332,16 @@ void addStyle(const Style** list, const Style* style)
         *list = 0;
     }
 }
+} //namespace
+
+const TextCFRun* getCFRun(const TextContainer* tc, const quint32 start)
+{
+    if (tc && tc->style) {
+        return getRun<TextCFRun>(tc->style->rgTextCFRun, start);
+    }
+    return 0;
 }
+
 const TextCFException*
 getTextCFException(const MSO::TextContainer* tc, const int start)
 {
