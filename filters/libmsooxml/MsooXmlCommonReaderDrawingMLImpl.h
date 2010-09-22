@@ -2970,7 +2970,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_H
     inheritListStyles();
-    inheritAllTextAndParagraphStyles();
+    // Only slidemaster needs to inherit, this because first there is bodyStyle,
+    // then there can be a body frame, the frame must have properties from bodyStyle and it must not
+    // overwrite them, where as in case of slide/slideLayout there is no style in their files
+    if (m_context->type == SlideMaster) {
+        inheritAllTextAndParagraphStyles();
+    }
 #endif
 
     while (!atEnd()) {
