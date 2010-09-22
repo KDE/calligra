@@ -237,6 +237,7 @@ class ConnectionNode : public AbstractNode
         QString m_srcId;
         QString m_destId;
         QString m_presId;
+        QString m_parTransId;
         QString m_sibTransId;
         int m_srcOrd;
         int m_destOrd;
@@ -253,6 +254,7 @@ class ConnectionNode : public AbstractNode
             TRY_READ_ATTR_WITHOUT_NS_INTO(srcId, m_srcId)
             TRY_READ_ATTR_WITHOUT_NS_INTO(destId, m_destId)
             TRY_READ_ATTR_WITHOUT_NS_INTO(presId, m_presId)
+            TRY_READ_ATTR_WITHOUT_NS_INTO(parTransId, m_parTransId)
             TRY_READ_ATTR_WITHOUT_NS_INTO(sibTransId, m_sibTransId)
             TRY_READ_ATTR_WITHOUT_NS(srcOrd)
             TRY_READ_ATTR_WITHOUT_NS(destOrd)
