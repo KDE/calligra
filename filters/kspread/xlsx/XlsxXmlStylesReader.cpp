@@ -679,6 +679,8 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     case GeneralHorizontalAlignment: // ok?
         if (verticalTtb) // Excel centers vertical text by default, so mimic that
             cellStyle->addProperty("fo:text-align", "center", KoGenStyle::ParagraphType);
+        if (textRotation > 90 && textRotation < 180) // Excel right aligns rotated text for some angles
+            cellStyle->addProperty("fo:text-align", "end", KoGenStyle::ParagraphType);
         break;
     case LeftHorizontalAlignment:
         cellStyle->addProperty("fo:text-align", "start", KoGenStyle::ParagraphType);
