@@ -1509,17 +1509,33 @@ void PptxXmlSlideReader::saveBodyProperties()
     if (!documentReaderMode && m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterPageProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
+            m_context->slideMasterPageProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
+            m_context->slideMasterPageProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
+            m_context->slideMasterPageProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
+            m_context->slideMasterPageProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideMasterPageProperties->textShapePositions[d->phType] = m_shapeTextPosition;
+            m_context->slideMasterPageProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
+            m_context->slideMasterPageProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
+            m_context->slideMasterPageProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
+            m_context->slideMasterPageProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
         }
     }
     else if (!documentReaderMode && m_context->type == SlideLayout) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
+            m_context->slideLayoutProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
+            m_context->slideLayoutProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
+            m_context->slideLayoutProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
+            m_context->slideLayoutProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
+            m_context->slideLayoutProperties->textLeftBorders[d->phType] = m_shapeTextLeftOff;
+            m_context->slideLayoutProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
+            m_context->slideLayoutProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
+            m_context->slideLayoutProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
         }
     }
 }
@@ -1532,7 +1548,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
         return; // Nothing needed for slidemaster
     }
 
-    QString position;
+    QString position, left, right, top, bottom;
 
     if (!d->phIdx.isEmpty()) {
         // In all cases, we take them first from masterslide
@@ -1540,12 +1556,44 @@ void PptxXmlSlideReader::inheritBodyProperties()
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
         }
+        left = m_context->slideMasterPageProperties->textLeftBorders.value(d->phIdx);
+        if (!left.isEmpty()) {
+            m_shapeTextLeftOff = left;
+        }
+        right = m_context->slideMasterPageProperties->textRightBorders.value(d->phIdx);
+        if (!right.isEmpty()) {
+            m_shapeTextLeftOff = right;
+        }
+        top = m_context->slideMasterPageProperties->textTopBorders.value(d->phIdx);
+        if (!top.isEmpty()) {
+            m_shapeTextLeftOff = top;
+        }
+        bottom = m_context->slideMasterPageProperties->textBottomBorders.value(d->phIdx);
+        if (!bottom.isEmpty()) {
+            m_shapeTextLeftOff = bottom;
+        }
     }
     if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         position = m_context->slideMasterPageProperties->textShapePositions.value(d->phType);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
+        }
+        left = m_context->slideMasterPageProperties->textLeftBorders.value(d->phType);
+        if (!left.isEmpty()) {
+            m_shapeTextLeftOff = left;
+        }
+        right = m_context->slideMasterPageProperties->textRightBorders.value(d->phType);
+        if (!right.isEmpty()) {
+            m_shapeTextLeftOff = right;
+        }
+        top = m_context->slideMasterPageProperties->textTopBorders.value(d->phType);
+        if (!top.isEmpty()) {
+            m_shapeTextLeftOff = top;
+        }
+        bottom = m_context->slideMasterPageProperties->textBottomBorders.value(d->phType);
+        if (!bottom.isEmpty()) {
+            m_shapeTextLeftOff = bottom;
         }
     }
     if (m_context->type == SlideLayout) {
@@ -1556,12 +1604,43 @@ void PptxXmlSlideReader::inheritBodyProperties()
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
         }
-
+        left = m_context->slideLayoutProperties->textLeftBorders.value(d->phType);
+        if (!left.isEmpty()) {
+            m_shapeTextLeftOff = left;
+        }
+        right = m_context->slideLayoutProperties->textRightBorders.value(d->phType);
+        if (!right.isEmpty()) {
+            m_shapeTextLeftOff = right;
+        }
+        top = m_context->slideLayoutProperties->textTopBorders.value(d->phType);
+        if (!top.isEmpty()) {
+            m_shapeTextLeftOff = top;
+        }
+        bottom = m_context->slideLayoutProperties->textBottomBorders.value(d->phType);
+        if (!bottom.isEmpty()) {
+            m_shapeTextLeftOff = bottom;
+        }
     }
     if (!d->phIdx.isEmpty()) {
         position = m_context->slideLayoutProperties->textShapePositions.value(d->phIdx);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
+        }
+        left = m_context->slideLayoutProperties->textLeftBorders.value(d->phIdx);
+        if (!left.isEmpty()) {
+            m_shapeTextLeftOff = left;
+        }
+        right = m_context->slideLayoutProperties->textRightBorders.value(d->phIdx);
+        if (!right.isEmpty()) {
+            m_shapeTextLeftOff = right;
+        }
+        top = m_context->slideLayoutProperties->textTopBorders.value(d->phIdx);
+        if (!top.isEmpty()) {
+            m_shapeTextLeftOff = top;
+        }
+        bottom = m_context->slideLayoutProperties->textBottomBorders.value(d->phIdx);
+        if (!bottom.isEmpty()) {
+            m_shapeTextLeftOff = bottom;
         }
     }
 }

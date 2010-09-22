@@ -131,6 +131,12 @@ public:
     //! Position of the text
     QMap<QString, QString> textShapePositions;
 
+    //! Borders in the frame
+    QMap<QString, QString> textLeftBorders;
+    QMap<QString, QString> textRightBorders;
+    QMap<QString, QString> textBottomBorders;
+    QMap<QString, QString> textTopBorders;
+
     // Extras frames such as pictures from layout, which should be put to the slide.
     QVector<QString> layoutFrames;
 
@@ -166,6 +172,12 @@ public:
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
     //! Position of the text
     QMap<QString, QString> textShapePositions;
+
+    //! Borders in the frame
+    QMap<QString, QString> textLeftBorders;
+    QMap<QString, QString> textRightBorders;
+    QMap<QString, QString> textBottomBorders;
+    QMap<QString, QString> textTopBorders;
 
     KoGenStyle m_drawingPageProperties;
 };

@@ -710,6 +710,23 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
+    if (m_shapeTextPosition.isEmpty()) {
+        m_shapeTextPosition = "top"; // top is default according to spec
+    }
+    if (m_shapeTextLeftOff.isEmpty()) {
+        m_shapeTextLeftOff = "91440"; // spec default
+    }
+    if (m_shapeTextRightOff.isEmpty()) {
+        m_shapeTextRightOff = "91440"; // spec default
+    }
+    if (m_shapeTextTopOff.isEmpty()) {
+        m_shapeTextTopOff = "91440"; // spec default
+    }
+    if (m_shapeTextBottomOff.isEmpty()) {
+        m_shapeTextBottomOff = "91440"; // spec default
+    }
+
+    inheritBodyProperties(); // Properties may or may not override default ones.
 #else
 #endif
     if (m_contentType == "line") {
@@ -723,6 +740,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 
     m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
+    m_currentDrawStyle->addProperty("fo:margin-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:margin-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
@@ -4935,13 +4956,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     //        Determines whether we wrap words within the bounding rectangle.
     TRY_READ_ATTR_WITHOUT_NS(wrap)
     TRY_READ_ATTR_WITHOUT_NS(anchor)
+    TRY_READ_ATTR_WITHOUT_NS(lIns)
+    TRY_READ_ATTR_WITHOUT_NS(rIns)
+    TRY_READ_ATTR_WITHOUT_NS(bIns)
+    TRY_READ_ATTR_WITHOUT_NS(tIns)
 //TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
 
     m_shapeTextPosition.clear();
+    m_shapeTextTopOff.clear();
+    m_shapeTextBottomOff.clear();
+    m_shapeTextLeftOff.clear();
+    m_shapeTextRightOff.clear();
 
 #ifdef PPTXXMLSLIDEREADER_H
     inheritBodyProperties();
 #endif
+
+    if (!lIns.isEmpty()) {
+        m_shapeTextLeftOff = lIns;
+    }
+    if (!rIns.isEmpty()) {
+        m_shapeTextRightOff = rIns;
+    }
+    if (!tIns.isEmpty()) {
+        m_shapeTextTopOff = tIns;
+    }
+    if (!bIns.isEmpty()) {
+        m_shapeTextBottomOff = bIns;
+    }
 
     if (!anchor.isEmpty()) {
         if (anchor == "t") {
