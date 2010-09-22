@@ -1085,9 +1085,9 @@ void CellView::paintText(QPainter& painter,
         painter.rotate(tmpAngle);
         qreal x;
         if (tmpAngle > 0)
-            x = indent + coordinate.x();
+            x = indent + d->textX + coordinate.x();
         else
-            x = indent + coordinate.x()
+            x = indent + d->textX + coordinate.x()
                 - (fontMetrics.descent() + fontMetrics.ascent()) * ::sin(tmpAngle * M_PI / 180);
         qreal y;
         if (tmpAngle > 0)
