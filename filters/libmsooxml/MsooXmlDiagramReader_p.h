@@ -93,9 +93,9 @@ class AbstractNode
     public:
         const QString m_tagName;
         explicit AbstractNode(const QString &tagName) : m_tagName(tagName), m_parent(0) {}
-        virtual ~AbstractNode() { qDeleteAll(m_children); }
+        virtual ~AbstractNode() { qDeleteAll(children()); }
         virtual void dump(Context* context, int level) {
-            foreach(AbstractNode* node, m_children)
+            foreach(AbstractNode* node, children())
                 node->dump(context, level + 1);
         }
         virtual void readElement(Context*, MsooXmlDiagramReader*) {
@@ -109,20 +109,41 @@ class AbstractNode
             }
         }
         AbstractNode* parent() const { return m_parent; } 
-        QList<AbstractNode*> children() const { return m_children; }
+        QList<AbstractNode*> children() const {
+            if(m_cachedChildren.isEmpty()) {
+                const int count = m_appendedChildren.count()+m_orderedChildren.count();
+                for(int i = 0, k = -1; i < count; ++i)
+                    m_cachedChildren.append(m_orderedChildren.contains(i) ? m_orderedChildren[i] : m_appendedChildren[++k]);
+            }
+            return m_cachedChildren;
+        }
+        void insertChild(int index, AbstractNode* node) {
+            Q_ASSERT(!m_orderedChildren.contains(index));
+            Q_ASSERT(!m_orderedChildrenReverse.contains(node));
+            Q_ASSERT(!m_appendedChildren.contains(node));
+            m_orderedChildren[index] = node;
+            m_orderedChildrenReverse[node] = index;
+            m_cachedChildren.clear();
+        }
         void addChild(AbstractNode* node) {
             Q_ASSERT(!node->m_parent);
+            Q_ASSERT(!m_orderedChildrenReverse.contains(node));
             node->m_parent = this;
-            m_children.append(node);
+            m_appendedChildren.append(node);
+            m_cachedChildren.clear();
         }
         void removeChild(AbstractNode* node) {
             Q_ASSERT(node->m_parent == this);
             node->m_parent = 0;
-            m_children.removeAll(node);
+            if(m_orderedChildrenReverse.contains(node))
+                m_orderedChildren.take(m_orderedChildrenReverse.take(node));
+            else
+                m_appendedChildren.removeAll(node);
+            m_cachedChildren.clear();
         }
         QList<AbstractNode*> descendant() const {
-            QList<AbstractNode*> list = m_children;
-            foreach(AbstractNode* node, m_children)
+            QList<AbstractNode*> list = children();
+            foreach(AbstractNode* node, children())
                 foreach(AbstractNode* n, node->descendant())
                     list.append(n);
             return list;
@@ -130,14 +151,17 @@ class AbstractNode
         QList<AbstractNode*> peers() const {
             QList<AbstractNode*> list;
             if (m_parent)
-                foreach(AbstractNode* node, m_parent->m_children)
+                foreach(AbstractNode* node, m_parent->children())
                     if(node != this)
                         list.append(node);
             return list;
         }                
-    protected:
+    private:
         AbstractNode* m_parent;
-        QList<AbstractNode*> m_children;
+        mutable QList<AbstractNode*> m_cachedChildren;
+        QMap<int,AbstractNode*> m_orderedChildren;
+        QMap<AbstractNode*,int> m_orderedChildrenReverse;
+        QList<AbstractNode*> m_appendedChildren;
 };
 
 /// A point in the data-model.
@@ -1561,7 +1585,7 @@ class CycleAlgorithm : public AlgorithmBase {
             const qreal d = (2.0*3.14*r)/childLayoutsCount;
 
             QList< QPair<qreal,qreal> > m_startCoordinates;
-            for(int degree = startAngel; inverse ? degree > spanAngel : degree <= spanAngel; degree += num) {
+            for(qreal degree = startAngel; (!childLayouts.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
                 const qreal radian = (degree - 90) * (3.14 / 180);
                 const qreal x = rx + cos(radian) * rx;
                 const qreal y = ry + sin(radian) * ry;

@@ -122,7 +122,11 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 Diagram::PointNode* destination = pointMap.value(connection->m_destId);
                 Diagram::PointNode* parent = connection->m_parTransId.isEmpty() ? 0 : pointMap.value(connection->m_parTransId);
                 Diagram::PointNode* sibling = connection->m_sibTransId.isEmpty() ? 0 : pointMap.value(connection->m_sibTransId);
-                
+
+                const int srcOrd = connection->m_srcOrd;
+                const int destOrd = connection->m_destOrd;
+                Q_UNUSED(destOrd); //TODO how to apply that one?
+        
                 if(parent) {
                     // add a transition between parent and child
                     Q_ASSERT(parent->m_type == "parTrans");
@@ -142,7 +146,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 if(connection->m_type == QLatin1String("parOf")) {
                     // This defines a parent-child relationship in the sense that node X is a parent of node Y.
                     rootList.removeChild(destination);
-                    source->addChild(destination);
+                    source->insertChild(srcOrd, destination);
                 } else if(connection->m_type == QLatin1String("presOf")) {
                     // A presentation type relationship. This type of relationship exists to actually present data.
                     //TODO
