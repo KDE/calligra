@@ -1503,9 +1503,8 @@ void PptxXmlSlideReader::saveCurrentStyles()
     }
 }
 
-void PptxXmlSlideReader::inheritParagraphAndTextStyle()
+void PptxXmlSlideReader::inheritParagraphStyle()
 {
-    inheritTextStyle();
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
     MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultParagraphStyles[copyLevel-1],
@@ -1559,7 +1558,8 @@ void PptxXmlSlideReader::inheritAllTextAndParagraphStyles()
     while (m_currentListLevel < 10) {
         m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle);
         m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle);
-        inheritParagraphAndTextStyle();
+        inheritParagraphStyle();
+        inheritTextStyle();
         m_currentCombinedTextStyles[m_currentListLevel] = m_currentTextStyle;
         m_currentCombinedParagraphStyles[m_currentListLevel] = m_currentParagraphStyle;
         ++m_currentListLevel;

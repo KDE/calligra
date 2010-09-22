@@ -39,8 +39,8 @@
 
 using namespace MSOOXML;
 
-DrawingMLGradientFill::DrawingMLGradientFill(QVector<int> colorModifier, QVector<qreal> satModifier,
-    QVector<int> alphaModifier) : m_colorModifier(colorModifier), m_satModifier(satModifier), m_alphaModifier(alphaModifier)
+DrawingMLGradientFill::DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier, QVector<int> alphaModifier) 
+    : m_shadeModifier(shadeModifier),m_tintModifier(tintModifier), m_satModifier(satModifier), m_alphaModifier(alphaModifier)
 {
 }
 
@@ -65,48 +65,47 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
     int red = color.red();
     int green = color.green();
     int blue = color.blue();
-    int colorModifier = m_colorModifier.at(0);
-    int startRed = (red * colorModifier + 255 * (100 - colorModifier)) / 100;
-    int startGreen = (green * colorModifier + 255 * (100 - colorModifier)) / 100;
-    int startBlue = (blue * colorModifier + 255 * (100 - colorModifier)) / 100;
+    qreal currentTint = m_tintModifier.at(0);
+    qreal currentShadeLevel = m_shadeModifier.at(0);
     qreal satModifier = m_satModifier.at(0);
-    if (satModifier > 0 ) {
-        startRed = startRed * satModifier;
-        startGreen = startGreen * satModifier;
-        startBlue = startBlue * satModifier;
-        if (startRed > 255) {
-            startRed = 255;
-        }
-        if (startGreen > 255) {
-            startGreen = 255;
-        }
-        if (startBlue > 255) {
-            startBlue = 255;
-        }
-    }
-    QColor startColor(startRed, startGreen, startBlue);
 
-    colorModifier = m_colorModifier.at(m_colorModifier.size() - 1);
-    int endRed = (red * colorModifier + 255 * (100 - colorModifier)) / 100;
-    int endGreen = (green * colorModifier + 255 * (100 - colorModifier)) / 100;
-    int endBlue = (blue * colorModifier + 255 * (100 - colorModifier)) / 100;
+    QColor startColor;
+    QColor endColor;
 
-    satModifier = m_satModifier.at(m_satModifier.size() - 1);
-    if (satModifier) {
-        endRed = endRed * satModifier;
-        endGreen = endGreen * satModifier;
-        endBlue = endBlue * satModifier;
-        if (endRed > 255) {
-            endRed = 255;
+    int index = 0;
+    while (index < 2) {
+        if (currentTint > 0) {
+            red = currentTint * red + (1 - currentTint) * 255;
+            green = currentTint * green + (1 - currentTint) * 255;
+            blue = currentTint * blue + (1 - currentTint) * 255;
         }
-        if (endGreen > 255) {
-            endGreen = 255;
+        if (currentShadeLevel > 0) {
+            red = currentShadeLevel * red;
+            green = currentShadeLevel * green;
+            blue = currentShadeLevel * blue;
         }
-        if (endBlue > 255) {
-            endBlue = 255;
+        if (satModifier > 0 ) {
+            red = red * satModifier;
+            green = green * satModifier;
+            blue = blue * satModifier;
+            if (red > 255) {
+               red = 255;
+            }
+            if (green > 255) {
+               green = 255;
+            }
+            if (blue > 255) {
+                blue = 255;
+            }
         }
+        if (index == 0) {
+            startColor = QColor(red, green, blue);
+        }
+        else {
+            endColor = QColor(red, green, blue);
+        }
+        ++index;
     }
-    QColor endColor(endRed, endGreen, endBlue);
 
     gradientStyle.addAttribute("draw:start-color", startColor.name());
     gradientStyle.addAttribute("draw:end-color", endColor.name());
@@ -866,7 +865,8 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                 }
             }*/
             if (element == "a:gradFill") {
-                QVector<int> colorModifiers;
+                QVector<qreal> shadeModifiers;
+                QVector<qreal> tintModifiers;
                 QVector<qreal> satModifiers;
                 QVector<int> alphaModifiers;
                 readNext(); // a:gsLst
@@ -875,7 +875,8 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                     if (isStartElement() && qualifiedName() == "a:gs") {
                         readNext();
                         if (isStartElement() && qualifiedName() == "a:schemeClr") {
-                           int colorModifier = 100;
+                           qreal shadeModifier = 0;
+                           qreal tintModifier = 0;
                            qreal satModifier = 0;
                            int alphaModifier = 0;
                            while (true) {
@@ -887,10 +888,10 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                                    attrs = attributes();
                                    TRY_READ_ATTR_WITHOUT_NS(val)
                                    if (qualifiedName() == "a:tint") {
-                                       colorModifier = val.toInt()/1000;
+                                       tintModifier = val.toInt()/100000.0;
                                    }
                                    else if (qualifiedName() == "a:shade") {
-                                       colorModifier = 100 - val.toInt()/1000;
+                                       shadeModifier = 100 - val.toInt()/100000.0;
                                    }
                                    else if (qualifiedName() == "a:satMod") {
                                        satModifier = val.toDouble()/100000.0;
@@ -900,7 +901,8 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                                    }
                                }
                            }
-                           colorModifiers.push_back(colorModifier);
+                           tintModifiers.push_back(tintModifier);
+                           shadeModifiers.push_back(shadeModifier);
                            satModifiers.push_back(satModifier),
                            alphaModifiers.push_back(alphaModifier);
                         }
@@ -912,7 +914,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                         break;
                     }
                 }
-                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(colorModifiers, satModifiers, alphaModifiers);
+                m_context->theme->formatScheme.fillStyles[index] = new DrawingMLGradientFill(shadeModifiers, tintModifiers, satModifiers, alphaModifiers);
                 while (true) {
                     readNext();
                     if (isEndElement() && qualifiedName() == element) {

@@ -207,26 +207,28 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:image-opacity
     // draw:line-distance
     // draw:luminance
-    // draw:marker-end
-    quint32 lineEndArrowhead = ds.lineEndArrowhead();
-    if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
-        style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
+    qreal lineWidthPt = 0;
+    if (ds.fLine()) {
+        // draw:marker-end
+        quint32 lineEndArrowhead = ds.lineEndArrowhead();
+        if (lineEndArrowhead > 0 && lineEndArrowhead < 6) {
+            style.addProperty("draw:marker-end", arrowHeads[lineEndArrowhead], gt);
+        }
+        // draw:marker-end-center
+        // draw:marker-end-width
+        lineWidthPt = ds.lineWidth() / 12700.;
+        style.addProperty("draw:marker-end-width",
+                          pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
+        // draw:marker-start
+        quint32 lineStartArrowhead = ds.lineStartArrowhead();
+        if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
+            style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead], gt);
+        }
+        // draw:marker-start-center
+        // draw:marker-start-width
+        style.addProperty("draw:marker-start-width",
+                          pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
     }
-    // draw:marker-end-center
-    // draw:marker-end-width
-    qreal lineWidthPt = ds.lineWidth() / 12700.;
-    style.addProperty("draw:marker-end-width",
-                      pt(lineWidthPt*4*(1+ds.lineEndArrowWidth())), gt);
-    // draw:marker-start
-    quint32 lineStartArrowhead = ds.lineStartArrowhead();
-    if (lineStartArrowhead > 0 && lineStartArrowhead < 6) {
-        style.addProperty("draw:marker-start", arrowHeads[lineStartArrowhead],
-                          gt);
-    }
-    // draw:marker-start-center
-    // draw:marker-start-width
-    style.addProperty("draw:marker-start-width",
-                      pt(lineWidthPt*4*(1+ds.lineStartArrowWidth())), gt);
     // draw:measure-align
     // draw:measure-vertical-align
     // draw:ole-draw-aspect
@@ -258,25 +260,24 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:start-guide
     // draw:start-line-spacing-horizontal
     // draw:start-line-spacing-vertical
+
     // draw:stroke ('dash', 'none' or 'solid')
-    quint32 lineDashing = ds.lineDashing();
-    // OOo interprets solid line with with 0 as hairline, so if
-    // width == 0, stroke *must* be none to avoid OOo from
-    // displaying a line
-    if (lineWidthPt == 0) {
-        style.addProperty("draw:stroke", "none", gt);
-    } else if (ds.fLine() || ds.fNoLineDrawDash()) {
-        if (lineDashing > 0 && lineDashing < 11) {
+    // NOTE: OOo interprets solid line with width 0 as hairline, so if width ==
+    // 0, stroke *must* be none to avoid OOo from displaying a line
+    if (ds.fLine() || ds.fNoLineDrawDash()) {
+        quint32 lineDashing = ds.lineDashing();
+        if (lineWidthPt == 0) {
+            style.addProperty("draw:stroke", "none", gt);
+        } else if (lineDashing > 0 && lineDashing < 11) {
             style.addProperty("draw:stroke", "dash", gt);
+            // draw:stroke-dash from 2.3.8.17 lineDashing
+            style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
         } else {
             style.addProperty("draw:stroke", "solid", gt);
         }
+
     } else {
         style.addProperty("draw:stroke", "none", gt);
-    }
-    // draw:stroke-dash from 2.3.8.17 lineDashing
-    if (lineDashing > 0 && lineDashing < 11) {
-        style.addProperty("draw:stroke-dash", dashses[lineDashing], gt);
     }
     // draw:stroke-dash-names
     // draw:stroke-linejoin
@@ -339,16 +340,18 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // style:wrap-dynamic-treshold
     // svg:fill-rule
     // svg:height
-    // svg:stroke-color from 2.3.8.1 lineColor
-    if (client) {
-        style.addProperty("svg:stroke-color",
-                          client->toQColor(ds.lineColor()).name(), gt);
+    if (ds.fLine() || ds.fNoLineDrawDash()) {
+        if (client) {
+            // svg:stroke-color from 2.3.8.1 lineColor
+            style.addProperty("svg:stroke-color",
+                              client->toQColor(ds.lineColor()).name(), gt);
+        }
+        // svg:stroke-opacity from 2.3.8.2 lineOpacity
+        style.addProperty("svg:stroke-opacity",
+                          percent(100.0 * ds.lineOpacity() / 0x10000), gt);
+        // svg:stroke-width from 2.3.8.14 lineWidth
+        style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
     }
-    // svg:stroke-opacity from 2.3.8.2 lineOpacity
-    style.addProperty("svg:stroke-opacity",
-                      percent(100.0 * ds.lineOpacity() / 0x10000), gt);
-    // svg:stroke-width from 2.3.8.14 lineWidth
-    style.addProperty("svg:stroke-width", pt(lineWidthPt), gt);
     // svg:width
     // svg:x
     // svg:y

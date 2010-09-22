@@ -61,7 +61,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
-    m_customListMade = false;
     m_fillImageRenderingStyleStretch = false;
 }
 
@@ -1172,6 +1171,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 {
     READ_PROLOGUE
 
+    // We don't want to overlap the current style
+    if (!m_currentDrawStyle->isEmpty()) {
+        SKIP_EVERYTHING
+        READ_EPILOGUE
+    }
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -1500,7 +1505,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     const read_p_args args = m_read_DrawingML_p_args;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
+    m_listStylePropertiesAltered = false;
+
     m_currentCombinedBulletProperties.clear();
+    // Note that if buNone has been specified, we don't create a list
+    m_currentListLevel = 1; // By default we're in the first level
 
 #ifdef PPTXXMLSLIDEREADER_H
     inheritListStyles();
@@ -1565,29 +1574,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    const QString styleId(d->phStyleId());
-
     if (!pprRead) {
-        int copyLevel = 0;
-        if (m_currentListLevel == 0) {
-            copyLevel = 1;
-        }
-        else {
-            copyLevel = m_currentListLevel;
-        }
-        if (!styleId.isEmpty()) {
-            // In all cases, we take them first from masterslide
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[styleId][copyLevel],
-                                                    m_currentParagraphStyle, KoGenStyle::ParagraphType);
-
-            if (m_context->type == Slide || m_context->type == SlideLayout) {
-                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideLayoutProperties->styles[styleId][copyLevel],
-                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
-            }
-        } else { // styleId is clear, getting par properties from "other"
-                MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles["other"][copyLevel],
-                                                       m_currentParagraphStyle, KoGenStyle::ParagraphType);
-        }
+        inheritParagraphStyle();
+    }
+    if (!rRead) {
+        inheritTextStyle();
     }
 #endif
 
@@ -1611,20 +1602,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         if (!rRead) {
             // Making sure that if we were previously in a list and if there's an empty line, that
             // we don't output a bullet to it
-            m_listStylePropertiesAltered = false;
             m_currentListLevel = 0;
-            m_lstStyleFound = 0;
+            m_lstStyleFound = false;
         }
-        // Checking whether we are in lvl 0 and there's empty bullet item -> No need to create a list
-        else if (m_currentListLevel == 0 && m_currentCombinedBulletProperties.value(1).isEmpty() && !m_listStylePropertiesAltered) {
-            m_listStylePropertiesAltered = false;
+        else if (m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
             m_currentListLevel = 0;
-            m_lstStyleFound = 0;
-        }
-        else if (m_currentListLevel > 0 && m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
-            m_listStylePropertiesAltered = false;
-            m_currentListLevel = 0;
-            m_lstStyleFound = 0;
+            m_lstStyleFound = false;
         }
         else {
             m_lstStyleFound = true;
@@ -1633,8 +1616,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
         // being a list-item. We need to handle that case and need to make sure that such paragraph's
         // end as first-level list-items in ODF.
-        const bool makeList = (m_lstStyleFound && m_currentListLevel < 1);
-        if (makeList) ++m_currentListLevel;
         if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_H
              if (m_prevListLevel < m_currentListLevel) {
@@ -1697,21 +1678,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
          }
 #endif
 
-        if (m_listStylePropertiesAltered) {
-            // If they were manually altered in last round, most likely not going to continue with same style.
-            m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
-        }
-
 #ifdef PPTXXMLSLIDEREADER_H
-         // In this case we have artificially created a list of level 1
-         if (makeList) {
-             body->endElement(); // text:list
-             m_prevListLevel = 0;
-             m_currentListLevel = 0;
-         }
-         else {
-             m_prevListLevel = m_currentListLevel;
-         }
+        m_prevListLevel = m_currentListLevel;
 #else
          // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
          // and excel filters still need to be adjusted to proper handle nested lists.
@@ -2066,13 +2034,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 
     if (!lvl.isEmpty()) {
         m_currentListLevel = lvl.toInt() + 1;
-        m_currentBulletProperties.m_level = m_currentListLevel;
-    } else {
-        m_currentListLevel = 0;
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritParagraphAndTextStyle();
+    inheritParagraphStyle();
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -2132,26 +2097,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     if (m_listStylePropertiesAltered) {
-        m_customListMade = true;
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
-        if (m_currentListLevel == 0) {
-            m_currentListLevel = 1;
-        }
         // For now we take a stand that any altered style makes its own list.
         m_currentBulletProperties.m_level = m_currentListLevel;
 
         m_currentListStyle.addChildElement("list-style-properties",
             m_currentBulletProperties.convertToListProperties());
-    }
-    else if (m_customListMade) {
-        // We come here in the case, that there was e.g buChar in the previous paragraph
-        // and in this paragraph we want to continue with predefined list styles
-        m_listStylePropertiesAltered = true;
-        m_customListMade = false;
-    }
-    else {
-        m_customListMade = false;
     }
 
     READ_EPILOGUE
@@ -3615,7 +3567,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     }
 #endif
 
-    m_currentTint = 100;
+    m_currentTint = 0;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
     m_currentAlpha = 0;
@@ -3661,14 +3613,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         col = colorItem->value();
     }
 
-    modifyColor();
-
     col = MSOOXML::Utils::colorForLuminance(col, lumMod, lumOff);
 
 #ifdef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
     m_currentPen.setColor(col);
 #endif
     m_currentColor = col;
+
+    modifyColor();
 
     READ_EPILOGUE
 }
@@ -3702,14 +3654,14 @@ void MSOOXML_CURRENT_CLASS::modifyColor()
     int blue = m_currentColor.blue();
 
     if (m_currentTint > 0) {
-        red = (red * m_currentTint + 255 * (100 - m_currentTint)) / 100;
-        green = (green * m_currentTint + 255 * (100 - m_currentTint)) / 100;
-        blue = (blue * m_currentTint + 255 * (100 - m_currentTint)) / 100;
+        red = m_currentTint * red + (1 - m_currentTint) * 255;
+        green = m_currentTint * green + (1 - m_currentTint) * 255;
+        blue = m_currentTint * blue + (1 - m_currentTint) * 255;
     }
     if (m_currentShadeLevel > 0) {
-        red = (red * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
-        green = (green * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
-        blue = (blue * (100 - m_currentShadeLevel) + 255 * m_currentShadeLevel) / 100;
+        red = m_currentShadeLevel * red;
+        green = m_currentShadeLevel * green;
+        blue = m_currentShadeLevel * blue;
     }
     if (m_currentSatMod > 0) {
         red = red * m_currentSatMod;
@@ -3766,7 +3718,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tint()
         if (!ok) {
             value = 0;
         }
-        m_currentTint = value/1000; // To get percentage
+        m_currentTint = value/100000.0; // To get percentage (form 0.x)
     }
 
     readNext();
@@ -3788,7 +3740,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shade()
         if (!ok) {
             value = 0;
         }
-        m_currentShadeLevel = value/1000; // To get percentage
+        m_currentShadeLevel = value/100000.0; // To get percentage (form 0.x)
     }
 
     readNext();
@@ -3998,7 +3950,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
 This element specifies a solid color fill.
 
  Child elements:
-    - alpha (Alpha) §20.1.2.3.1
+    - [done] alpha (Alpha) §20.1.2.3.1
     - alphaMod (Alpha Modulation) §20.1.2.3.2
     - alphaOff (Alpha Offset) §20.1.2.3.3
     - blue (Blue) §20.1.2.3.4
@@ -4013,7 +3965,7 @@ This element specifies a solid color fill.
     - hue (Hue) §20.1.2.3.14
     - hueMod (Hue Modulate) §20.1.2.3.15
     - hueOff (Hue Offset) §20.1.2.3.16
-    - inv (Inverse) §20.1.2.3.17
+    - [done] inv (Inverse) §20.1.2.3.17
     - invGamma (Inverse Gamma) §20.1.2.3.18
     - lum (Luminance) §20.1.2.3.19
     - lumMod (Luminance Modulation) §20.1.2.3.20
@@ -4033,6 +3985,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
 
     const QXmlStreamAttributes attrs(attributes());
 
+    m_currentTint = 0;
+    m_currentShadeLevel = 0;
+    m_currentSatMod = 0;
+    m_currentAlpha = 0;
+
     READ_ATTR_WITHOUT_NS(r)
     READ_ATTR_WITHOUT_NS(g)
     READ_ATTR_WITHOUT_NS(b)
@@ -4049,7 +4006,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
     while (true) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(alpha)
+        }
     }
+
+    modifyColor();
+
     READ_EPILOGUE
 }
 
@@ -4098,9 +4062,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentTint = 100;
+    m_currentTint = 0;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
     READ_ATTR_WITHOUT_NS(val)
 
@@ -4138,9 +4103,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentTint = 100;
+    m_currentTint = 0;
     m_currentShadeLevel = 0;
     m_currentSatMod = 0;
+    m_currentAlpha = 0;
 
     TRY_READ_ATTR_WITHOUT_NS(lastClr)
 
@@ -4948,7 +4914,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 {
     READ_PROLOGUE
-    m_customListMade = false;
     const QXmlStreamAttributes attrs(attributes());
     // wrap (Text Wrapping Type)
     // Specifies the wrapping options to be used for this text body. If this attribute is omitted,
