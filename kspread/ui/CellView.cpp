@@ -1397,6 +1397,9 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
     if (style().wrapText() || d->richText) {
         // For wrapping text and richtext always draw all text
         return d->displayText;
+    } else if (style().angle() != 0) {
+        // Rotated text, return all text
+        return d->displayText;
     } else if (!style().verticalText()) {
         // Non-vertical text: the ordinary case.
 
