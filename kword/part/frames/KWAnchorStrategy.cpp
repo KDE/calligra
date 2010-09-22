@@ -49,8 +49,27 @@ KWAnchorStrategy::~KWAnchorStrategy()
 
 bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText, KWTextFrameSet *frameSet)
 {
+    m_nextShapeNeeded = false;
+
+    KoTextShapeData *data;
+    KoShape *shapeOfAnchor = 0;
+    foreach (KWFrame *frame, frameSet->frames()) { //find the frame for the anchor
+        KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
+        if(tmpData != 0) {
+            if(m_anchor->positionInDocument() > tmpData->position()) {
+                data = tmpData;
+                shapeOfAnchor = frame->shape();
+            }
+            if(m_anchor->positionInDocument() < tmpData->endPosition()) {
+                break;
+            }
+        }
+    }
+    Q_ASSERT(data);
+
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
-        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
+//        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
+        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(shapeOfAnchor);
         if (sc == 0) {
             kWarning(32002) << "Failed to attach the anchored shape to a text shape...";
             return false;
@@ -77,9 +96,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
     // exit when finished or when we can expect another call with a higher cursor position
     if (m_finished || (m_knowledgePoint > state->cursorPosition()))
         return false;
-
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
-    Q_ASSERT(data);
 
     // *** alter 'state' to relayout the part we want.
     QTextLayout *layout = block.layout();
@@ -156,6 +172,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         recalcFrom = qMax(recalcFrom, data->position());
         break;
     case KoTextAnchor::TopOfParagraph: {
+        qDebug() <<"top of paragraph";
         if (layout->lineCount() == 0) {
             m_finished = false;
             return false;
@@ -163,6 +180,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         qreal topOfParagraph = layout->lineAt(0).y();
         newPosition.setY(topOfParagraph - data->documentOffset());
         recalcFrom = qMax(recalcFrom, block.position());
+        qDebug() <<"at"<<topOfParagraph<<data->documentOffset();
         break;
     }
     case KoTextAnchor::AboveCurrentLine:
@@ -231,7 +249,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         if (tfs) {
             foreach (KWFrame *frame, tfs->frames()) { //find main frame for current page
                 KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
-                if(data != 0) {
+                if(tmpData != 0) {
                     KWPageTextInfo *tmpPageInfo = dynamic_cast<KWPageTextInfo *>(tmpData->page());
                     if (tmpPageInfo != 0) {
                         if (tmpPageInfo->pageNumber() == pageInfo->pageNumber()) {//found main frame for current page
@@ -254,7 +272,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         if (tfs) {
             foreach (KWFrame *frame, tfs->frames()) { //find main frame for current page
                 KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
-                if(data != 0) {
+                if(tmpData != 0) {
                     KWPageTextInfo *tmpPageInfo = dynamic_cast<KWPageTextInfo *>(tmpData->page());
                     if (tmpPageInfo != 0) {
                         if (tmpPageInfo->pageNumber() == pageInfo->pageNumber()) {//found main frame for current page
@@ -273,6 +291,15 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         Q_ASSERT(false); // new enum added?
     }
     newPosition = newPosition + m_anchor->offset();
+
+        qDebug() << "checking"<<newPosition.y()<<newPosition.y() + m_anchor->shape()->boundingRect().height()<<shapeOfAnchor->boundingRect().height();
+    //Check if the new position will place the anchor shape (even partly) beyond textframe
+    if (newPosition.y() + m_anchor->shape()->boundingRect().height()
+            > shapeOfAnchor->boundingRect().height()) {
+        m_nextShapeNeeded = true;
+        qDebug() << "SETTING NEEDED";
+    }
+
     QPointF diff = newPosition - m_anchor->shape()->position();
     const bool moved = qAbs(diff.x()) > 0.5 || qAbs(diff.y()) > 0.5;
     if (!m_finished && m_pass > 0) { // already been here

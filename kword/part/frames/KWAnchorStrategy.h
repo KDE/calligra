@@ -78,20 +78,21 @@ public:
         return m_anchor;
     }
 
-    bool nextShapeNeeded() {
+    bool extendsPastShape()
+    {
         return m_nextShapeNeeded;
     }
-    
+
 private:
     void calculateKnowledgePoint();
 
     KoTextAnchor *const m_anchor;
     int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
     bool m_finished;
+    bool m_nextShapeNeeded;
     qreal m_currentLineY;
     int m_pass;
     int m_lastknownPosInDoc;
-    bool m_nextShapeNeeded;
 
     QPointF m_lastOffset;
     KoTextAnchor::AnchorVertical m_lastVerticalAnchorAlignment;

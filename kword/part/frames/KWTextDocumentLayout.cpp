@@ -217,11 +217,17 @@ public:
         m_updateValidOutlines = false;
         m_horizontalPosition = 0;
         m_processingLine = false;
+        m_restartOnNextShape = false;
     }
     void createLine(KoTextDocumentLayout::LayoutState *state) {
         m_state = state;
         line = m_state->layout->createLine();
     }
+    void setRestartOnNextShape(bool restartOnNextShape)
+    {
+        m_restartOnNextShape = restartOnNextShape;
+    }
+
     bool isValid() const {
         return line.isValid();
     }
@@ -355,6 +361,7 @@ private:
     bool m_updateValidOutlines;
     bool m_processingLine;
     qreal m_textWidth;
+    bool m_restartOnNextShape;
 
     void validateOutlines() {
         m_validOutlines.clear();
@@ -582,15 +589,21 @@ void KWTextDocumentLayout::layout()
 
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
+        bool restartOnNextShape = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << "checking anchor";
+            qDebug() <<"checking anchor"<<strategy->anchor()->positionInDocument();
             QPointF old;
             if (strategy->anchoredShape())
                 old = strategy->anchoredShape()->position();
             if (strategy->checkState(m_state, startOfBlock, startOfBlockText, m_frameSet)) {
                 ADEBUG << "  restarting line";
                 restartLine = true;
+                qDebug() << "  restarting line";
             }
+                restartOnNextShape = strategy->extendsPastShape();
+            if (strategy->anchoredShape())
+                qDebug() << "nextshape="<<restartOnNextShape << " position "<<strategy->anchoredShape()->position();
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
                 // refresh outlines in case the shape moved.
                 foreach (Outline *outline, outlines) {
@@ -609,8 +622,9 @@ void KWTextDocumentLayout::layout()
                 break;
         }
 
-        if (restartLine)
+        if (restartLine) {
             continue;
+        }
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << " + isFinished?"<< strategy->isFinished();
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
@@ -747,7 +761,6 @@ void KWTextDocumentLayout::layout()
         while (m_state->addLine(line.line, line.processingLine())) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
-                line.line.setPosition(QPointF(0, m_state->y() + 10000)); // move it away from any place that we're likely going to paint
 
                 if (requestFrameResize) { // plenty more text, but first lets resize the shape.
                     TDEBUG << "  we need more space; we require at least:" << m_dummyShape->size().height();
@@ -809,6 +822,17 @@ void KWTextDocumentLayout::layout()
                     return; // done!
                 }
                 requestFrameResize = true;
+            }
+            if (m_state->shape != currentShape) {
+                // we are in a new shape, and line was not added !
+                currentShape->update();
+                KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_state->shape->userData());
+                if (data) { // reset layout.
+                    data->setEndPosition(-1);
+                    data->foul();
+                }
+                m_state->clearTillEnd();
+                break; //break so the next line (which contain the same) is fitted on new shape
             }
             line.fit(true);
             //line.tryFit();
