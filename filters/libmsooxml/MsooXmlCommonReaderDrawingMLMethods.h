@@ -143,6 +143,8 @@ KoFilter::ConversionStatus read_spcBef();
 KoFilter::ConversionStatus read_spcAft();
 KoFilter::ConversionStatus read_spcPts();
 
+QString m_shapeTextPosition;
+
 bool m_listStylePropertiesAltered;
 
 KoFilter::ConversionStatus read_buChar();

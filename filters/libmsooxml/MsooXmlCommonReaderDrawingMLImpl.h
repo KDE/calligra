@@ -709,6 +709,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     const QString styleId(d->phStyleId());
 
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
+
 #else
 #endif
     if (m_contentType == "line") {
@@ -720,6 +721,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     if (!m_cNvPrName.isEmpty()) {
         body->addAttribute("draw:name", m_cNvPrName);
     }
+
+    m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
+
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -4925,8 +4929,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // - square (Text Wrapping Type Enum ( Square ))
     //        Determines whether we wrap words within the bounding rectangle.
     TRY_READ_ATTR_WITHOUT_NS(wrap)
-
+    TRY_READ_ATTR_WITHOUT_NS(anchor)
 //TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
+
+    m_shapeTextPosition.clear();
+
+#ifdef PPTXXMLSLIDEREADER_H
+    inheritBodyProperties();
+#endif
+
+    if (!anchor.isEmpty()) {
+        if (anchor == "t") {
+            m_shapeTextPosition = "top";
+        }
+        else if (anchor == "b") {
+            m_shapeTextPosition = "bottom";
+        }
+        else if (anchor == "ctr") {
+            m_shapeTextPosition = "middle";
+        }
+        else if (anchor == "just") {
+            m_shapeTextPosition = "justify";
+        }
+    }
 
 //! @todo more atributes
 
@@ -4945,7 +4970,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
             }
         }
     }
+
 #ifdef PPTXXMLSLIDEREADER_H
+
+    saveBodyProperties();
+
     m_currentPresentationStyle.addProperty("draw:auto-grow-height",
             spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
     m_currentPresentationStyle.addProperty("draw:auto-grow-width",

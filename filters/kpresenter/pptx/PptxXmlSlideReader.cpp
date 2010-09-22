@@ -1503,6 +1503,69 @@ void PptxXmlSlideReader::saveCurrentStyles()
     }
 }
 
+void PptxXmlSlideReader::saveBodyProperties()
+{
+    // Todo: extend this in the future to save other peroperties too
+    if (!documentReaderMode && m_context->type == SlideMaster) {
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideMasterPageProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideMasterPageProperties->textShapePositions[d->phType] = m_shapeTextPosition;
+        }
+    }
+    else if (!documentReaderMode && m_context->type == SlideLayout) {
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
+        }
+    }
+}
+
+void PptxXmlSlideReader::inheritBodyProperties()
+{
+    // For now only text position is inherited, in the future
+    // stuff like fit-to-frame etc should be inherited most likely
+    if (m_context->type == SlideMaster) {
+        return; // Nothing needed for slidemaster
+    }
+
+    QString position;
+
+    if (!d->phIdx.isEmpty()) {
+        // In all cases, we take them first from masterslide
+        position = m_context->slideMasterPageProperties->textShapePositions.value(d->phIdx);
+        if (!position.isEmpty()) {
+            m_shapeTextPosition = position;
+        }
+    }
+    if (!d->phType.isEmpty()) {
+        // In all cases, we take them first from masterslide
+        position = m_context->slideMasterPageProperties->textShapePositions.value(d->phType);
+        if (!position.isEmpty()) {
+            m_shapeTextPosition = position;
+        }
+    }
+    if (m_context->type == SlideLayout) {
+        return; // No futher actions needed for layout
+    }
+    if (!d->phType.isEmpty()) {
+        position = m_context->slideLayoutProperties->textShapePositions.value(d->phType);
+        if (!position.isEmpty()) {
+            m_shapeTextPosition = position;
+        }
+
+    }
+    if (!d->phIdx.isEmpty()) {
+        position = m_context->slideLayoutProperties->textShapePositions.value(d->phIdx);
+        if (!position.isEmpty()) {
+            m_shapeTextPosition = position;
+        }
+    }
+}
+
 void PptxXmlSlideReader::inheritParagraphStyle()
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1

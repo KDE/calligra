@@ -128,6 +128,9 @@ public:
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 
+    //! Position of the text
+    QMap<QString, QString> textShapePositions;
+
     // Extras frames such as pictures from layout, which should be put to the slide.
     QVector<QString> layoutFrames;
 
@@ -161,6 +164,8 @@ public:
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
+    //! Position of the text
+    QMap<QString, QString> textShapePositions;
 
     KoGenStyle m_drawingPageProperties;
 };
@@ -239,6 +244,12 @@ protected:
 
     // Inherits correct paragraph styles to m_currentParagraphStyle
     void inheritParagraphStyle();
+
+    // Inherit correct body properties from slideMaster/slideLayout if needed
+    void inheritBodyProperties();
+
+    // Saves current body properties
+    void saveBodyProperties();
 
     // True if we reading defaultStyles from PptxXmlDocumentReader
     bool documentReaderMode;
