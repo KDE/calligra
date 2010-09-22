@@ -660,7 +660,9 @@ void XlsxCellFormat::setupCellStyleAlignment(KoGenStyle* cellStyle) const
     if (verticalTtb)
         cellStyle->addProperty("style:direction", "ttb");
     else if (textRotation != 0) {
-        //@todo map other cases (to style:text-rotate-angle? that one only allows 0, 90, 270)
+        unsigned angle = textRotation;
+        if (angle > 90) angle = 360 - (angle - 90);
+        cellStyle->addProperty("style:rotation-angle", QString::number(angle));
     }
 
     if (shrinkToFit)
