@@ -201,7 +201,8 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList
+        d->tableStyleList,
+        d->slideMasterPageProperties[slideMasterPathAndFile].colorMap
     );
 
     PptxXmlSlideReader slideLayoutReader(this);
@@ -263,7 +264,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList
+        d->tableStyleList,
+        d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap
     );
     PptxXmlSlideReader slideReader(this);
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
@@ -340,7 +342,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
          MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
                                                                           tableStylesFile, &m_context->theme, d->tableStyleList);
          m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
-     }
+    }
+
+    //empty map used here as slideMaster is the place where the map is created
+    QMap<QString, QString> dummyMap;
 
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
@@ -354,7 +359,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         &masterPageProperties,
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList
+        d->tableStyleList,
+        dummyMap
     );
 
     PptxXmlSlideReader slideMasterReader(this);
@@ -396,7 +402,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         ++defaultIndex;
     }
 
+    // In this context we already have the real colorMap
+    context.colorMap = masterPageProperties.colorMap;
     context.firstReadingRound = false;
+
     status = m_context->import->loadAndParseDocument(
         &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
     if (status != KoFilter::OK) {

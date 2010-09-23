@@ -147,13 +147,15 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
     MSOOXML::MsooXmlRelationships& _relationships,
     QMap<int, QString> _commentAuthors,
-    MSOOXML::TableStyleList *_tableStyleList)
+    MSOOXML::TableStyleList *_tableStyleList,
+    QMap<QString, QString> _colorMap)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
-        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList), firstReadingRound(false)
+        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList),
+        colorMap(_colorMap), firstReadingRound(false)
 {
 }
 
@@ -873,6 +875,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMap()
     while (index < attrs.size()) {
         const QString handledAttr = attrs.at(index).name().toString();
         const QString attrValue = attrs.value(handledAttr).toString();
+        m_context->colorMap[handledAttr] = attrValue;
         m_context->slideMasterPageProperties->colorMap[handledAttr] = attrValue;
         ++index;
     }

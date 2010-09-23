@@ -306,7 +306,9 @@ public:
         PptxSlideMasterPageProperties* _slideMasterPageProperties,
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
-        MSOOXML::TableStyleList *tableStyleList);
+        MSOOXML::TableStyleList *tableStyleList,
+        QMap<QString, QString> _colorMap);
+
     PptxImport* import;
     const QString path;
     const QString file;
@@ -321,9 +323,9 @@ public:
     // There could potentially be multiple of these...todo
     QString pageDrawStyleName; //!< written in read_sldInternal()
     QVector<QString> pageFrames; //! Frames which go to masterslide
-
     QMap<int, QString> commentAuthors;
     MSOOXML::TableStyleList *tableStyleList;
+    QMap<QString, QString> colorMap;
 
     // Used to keep track, whether we should skip elements
     // currently we need to read some slides twice

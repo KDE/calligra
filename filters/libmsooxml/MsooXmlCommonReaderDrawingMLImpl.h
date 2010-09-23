@@ -3595,18 +3595,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     m_currentSatMod = 0;
     m_currentAlpha = 0;
 
-//! @todo find proper theme, not just any
-#ifdef PPTXXMLSLIDEREADER_H
-
-    // Currently hardcoded to use clormappings from slidemaster
-    QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
-
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
-    colorItem = m_context->themes->colorScheme.value(valTransformed);
 
+#ifdef PPTXXMLSLIDEREADER_H
+    QString valTransformed = m_context->colorMap.value(val);
+    colorItem = m_context->themes->colorScheme.value(valTransformed);
 #else
     // This should most likely be checked from a color map, see above
-    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(val);
 #endif
     // Parse the child elements
