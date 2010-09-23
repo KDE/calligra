@@ -1,0 +1,7 @@
+[Desktop Entry]
+Icon=.icon/Basicproject.png
+Name=Basic project
+Type=Link
+Icon=template_timechart
+URL[$e]=.source/Basicproject.kplatot
+X-KDE-Hidden=false
