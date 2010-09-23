@@ -399,54 +399,45 @@ void TestRdf::addAndSage()
 
     const char* mimeType = "application/zip";
     QTemporaryFile file;
-    if (file.open()) {
-//        QString todt = "/tmp/testing.odt";
-        QString todt = file.fileName();
-        // QByteArray manifestBA;
-        // QBuffer manifestBuffer(&manifestBA);
-        // manifestBuffer.open(QBuffer::ReadWrite);
-        // KoXmlWriter* manifestWriter = new KoXmlWriter (&manifestBuffer);
-        KoStore *store = KoStore::createStore(todt, KoStore::Write, mimeType, KoStore::Zip);
-        store->disallowNameExpansion();
-        KoOdfWriteStore odfStore (store);
-        KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
-        QVERIFY (manifestWriter);
-        QVERIFY (rdf->saveOasis(store, manifestWriter));
-        odfStore.closeManifestWriter();
-        delete store;
+    QVERIFY(file.open());
+    QString todt = file.fileName();
+    KoStore *store = KoStore::createStore(todt, KoStore::Write, mimeType, KoStore::Zip);
+    store->disallowNameExpansion();
+    KoOdfWriteStore odfStore (store);
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
+    QVERIFY (manifestWriter);
+    QVERIFY (rdf->saveOasis(store, manifestWriter));
+    odfStore.closeManifestWriter();
+    delete store;
 
-        QByteArray ba = KoTextRdfCore::fileToByteArray(todt);
-        RDEBUG << "ba.sz:" << ba.size();
+    QByteArray ba = KoTextRdfCore::fileToByteArray(todt);
+    RDEBUG << "ba.sz:" << ba.size();
 
-        Soprano::StatementIterator it;
-        QList<Statement> allStatements;
+    Soprano::StatementIterator it;
+    QList<Statement> allStatements;
 
-        if (Soprano::Model* m = loadRDFXMLFromODT("zip:" + todt + "/manifest.rdf"))  {
-            it = m->listStatements(
-                Node::createResourceNode(QUrl("uri:test1")),
-                Node::createResourceNode(QUrl("uri:test2")),
-                Node());
-            allStatements = it.allElements();
-            QCOMPARE (allStatements.size(), 1);
-            foreach (Soprano::Statement s, allStatements) {
-                RDEBUG << "HAVE:" << s;
-                QVERIFY (s.object().toString() == "uri:test3");
-            }
-        }
+    m = loadRDFXMLFromODT("zip:" + todt + "/manifest.rdf");
+    QVERIFY(m);
+    it = m->listStatements(Node::createResourceNode(QUrl("uri:test1")),
+        Node::createResourceNode(QUrl("uri:test2")), Node());
+    allStatements = it.allElements();
+    QCOMPARE (allStatements.size(), 1);
+    foreach (Soprano::Statement s, allStatements) {
+        RDEBUG << "HAVE:" << s;
+        QVERIFY (s.object().toString() == "uri:test3");
+    }
 
-        if (Soprano::Model* m = loadRDFXMLFromODT("zip:" + todt + "/explicit.rdf"))  {
-            QCOMPARE (1, m->statementCount());
-            it = m->listStatements(
-                Node::createResourceNode(QUrl("uri:test4")),
-                Node::createResourceNode(QUrl("uri:test5")),
-                Node());
-            allStatements = it.allElements();
-            QCOMPARE (allStatements.size(), 1);
-            foreach (Soprano::Statement s, allStatements) {
-                RDEBUG << "HAVE:" << s;
-                QVERIFY (s.object().toString() == "uri:test6");
-            }
-        }
+    m = loadRDFXMLFromODT("zip:" + todt + "/explicit.rdf");
+    QCOMPARE (1, m->statementCount());
+    it = m->listStatements(
+        Node::createResourceNode(QUrl("uri:test4")),
+        Node::createResourceNode(QUrl("uri:test5")),
+        Node());
+    allStatements = it.allElements();
+    QCOMPARE (allStatements.size(), 1);
+    foreach (Soprano::Statement s, allStatements) {
+        RDEBUG << "HAVE:" << s;
+        QVERIFY (s.object().toString() == "uri:test6");
     }
 }
 
