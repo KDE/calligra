@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2010 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,112 +64,151 @@ public:
     void setParentStyle(QStyle* style);
 
     virtual void polish(QWidget *w) {
-        parentStyle()->polish(w);
+        parentStyle(1)->polish(w);
+        *m_method = 0;
     }
 
     virtual void unpolish(QWidget *w) {
-        parentStyle()->unpolish(w);
+        parentStyle(2)->unpolish(w);
+        *m_method = 0;
     }
 
     virtual void polish(QApplication *a) {
-        parentStyle()->polish(a);
+        parentStyle(3)->polish(a);
+        *m_method = 0;
     }
 
     virtual void unpolish(QApplication *a) {
-        parentStyle()->unpolish(a);
+        parentStyle(4)->unpolish(a);
+        *m_method = 0;
     }
 
     virtual void polish(QPalette &p) {
-        parentStyle()->polish(p);
+        parentStyle(5)->polish(p);
+        *m_method = 0;
     }
 
     virtual QRect itemTextRect(const QFontMetrics &fm, const QRect &r,
                                int flags, bool enabled, const QString &text) const {
-        return parentStyle()->itemTextRect(fm, r, flags, enabled, text);
+        QRect result = parentStyle(6)->itemTextRect(fm, r, flags, enabled, text);
+        *m_method = 0;
+        return result;
     }
 
     virtual QRect itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const {
-        return parentStyle()->itemPixmapRect(r, flags, pixmap);
+        QRect result = parentStyle(7)->itemPixmapRect(r, flags, pixmap);
+        *m_method = 0;
+        return result;
     }
 
     virtual void drawItemText(QPainter *painter, const QRect &rect,
                               int flags, const QPalette &pal, bool enabled,
                               const QString &text, QPalette::ColorRole textRole = QPalette::NoRole) const {
-        parentStyle()->drawItemText(painter, rect, flags, pal, enabled, text, textRole);
+        parentStyle(8)->drawItemText(painter, rect, flags, pal, enabled, text, textRole);
+        *m_method = 0;
     }
 
     virtual void drawPrimitive(PrimitiveElement element,
                                const QStyleOption * option, QPainter * painter,
                                const QWidget * widget = 0) const {
-        parentStyle()->drawPrimitive(element, option, painter, widget);
+        parentStyle(9)->drawPrimitive(element, option, painter, widget);
+        *m_method = 0;
     }
 
     virtual void drawItemPixmap(QPainter *painter, const QRect &rect,
                                 int alignment, const QPixmap &pixmap) const {
-        parentStyle()->drawItemPixmap(painter, rect, alignment, pixmap);
+        parentStyle(10)->drawItemPixmap(painter, rect, alignment, pixmap);
+        *m_method = 0;
     }
 
     virtual QPalette standardPalette() const {
-        return parentStyle()->standardPalette();
+        QPalette result = parentStyle(11)->standardPalette();
+        *m_method = 0;
+        return result;
     }
 
     virtual void drawControl(ControlElement element, const QStyleOption *opt,
                              QPainter *p, const QWidget *w = 0) const {
-        parentStyle()->drawControl(element, opt, p, w);
+        parentStyle(12)->drawControl(element, opt, p, w);
+        *m_method = 0;
     }
 
     virtual QRect subElementRect(SubElement subElement, const QStyleOption *option,
                                  const QWidget *widget = 0) const {
-        return parentStyle()->subElementRect(subElement, option, widget);
+        QRect result = parentStyle(13)->subElementRect(subElement, option, widget);
+        *m_method = 0;
+        return result;
     }
 
     virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
                                     QPainter *p, const QWidget *widget = 0) const {
-        parentStyle()->drawComplexControl(cc, opt, p, widget);
+        parentStyle(14)->drawComplexControl(cc, opt, p, widget);
+        *m_method = 0;
     }
 
     virtual SubControl hitTestComplexControl(ComplexControl cc,
             const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget = 0) const {
-        return parentStyle()->hitTestComplexControl(cc, opt, pt, widget);
+        SubControl result = parentStyle(15)->hitTestComplexControl(cc, opt, pt, widget);
+        *m_method = 0;
+        return result;
     }
 
     virtual QRect subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
                                  SubControl sc, const QWidget *widget = 0) const {
-        return parentStyle()->subControlRect(cc, opt, sc, widget);
+        QRect result = parentStyle(16)->subControlRect(cc, opt, sc, widget);
+        *m_method = 0;
+        return result;
     }
 
     virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0,
                             const QWidget *widget = 0) const {
-        return parentStyle()->pixelMetric(metric, option, widget);
+        int result = parentStyle(17)->pixelMetric(metric, option, widget);
+        *m_method = 0;
+        return result;
     }
 
     virtual QSize sizeFromContents(ContentsType ct, const QStyleOption *opt,
                                    const QSize &contentsSize, const QWidget *w = 0) const {
-        return parentStyle()->sizeFromContents(ct, opt, contentsSize, w);
+        QSize result = parentStyle(18)->sizeFromContents(ct, opt, contentsSize, w);
+        *m_method = 0;
+        return result;
     }
 
     virtual int styleHint(StyleHint stylehint, const QStyleOption *opt = 0,
                           const QWidget *widget = 0, QStyleHintReturn* returnData = 0) const {
-        return parentStyle()->styleHint(stylehint, opt, widget, returnData);
+        int result = parentStyle(19)->styleHint(stylehint, opt, widget, returnData);
+        *m_method = 0;
+        return result;
     }
 
     virtual QPixmap standardPixmap(StandardPixmap standardPixmap,
                                    const QStyleOption *opt = 0, const QWidget *widget = 0) const {
-        return parentStyle()->standardPixmap(standardPixmap, opt, widget);
+        QPixmap result = parentStyle(20)->standardPixmap(standardPixmap, opt, widget);
+        *m_method = 0;
+        return result;
     }
 
     QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = 0,
                        const QWidget *widget = 0) const {
-        return parentStyle()->standardIcon(standardIcon, option, widget);
+        QIcon result = parentStyle(21)->standardIcon(standardIcon, option, widget);
+        *m_method = 0;
+        return result;
     }
 
     virtual QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
                                         const QStyleOption *opt) const {
-        return parentStyle()->generatedIconPixmap(iconMode, pixmap, opt);
+        QPixmap result = parentStyle(22)->generatedIconPixmap(iconMode, pixmap, opt);
+        *m_method = 0;
+        return result;
     }
 
 protected:
+    //! Helper that returns m_style if not called recursively, otherwise returns QApplication::style()
+    //! to avoid infinite loop. *m_method is used to tracke two nested calls to the same method.
+    QStyle* parentStyle(int methodIndex) const;
+
     QPointer<QStyle> m_style;
+    int *m_method;
 };
 }
 
