@@ -1085,9 +1085,9 @@ void CellView::paintText(QPainter& painter,
         painter.rotate(tmpAngle);
         qreal x;
         if (tmpAngle > 0)
-            x = indent + coordinate.x();
+            x = indent + d->textX + coordinate.x();
         else
-            x = indent + coordinate.x()
+            x = indent + d->textX + coordinate.x()
                 - (fontMetrics.descent() + fontMetrics.ascent()) * ::sin(tmpAngle * M_PI / 180);
         qreal y;
         if (tmpAngle > 0)
@@ -1396,6 +1396,9 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
 
     if (style().wrapText() || d->richText) {
         // For wrapping text and richtext always draw all text
+        return d->displayText;
+    } else if (style().angle() != 0) {
+        // Rotated text, return all text
         return d->displayText;
     } else if (!style().verticalText()) {
         // Non-vertical text: the ordinary case.

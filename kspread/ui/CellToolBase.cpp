@@ -619,17 +619,17 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sort()));
     action->setToolTip(i18n("Sort a group of cells"));
 
-    action = new KAction(KIcon("this-sort-descending"), i18n("Sort &Decreasing"), this);
+    action = new KAction(KIcon("view-sort-descending"), i18n("Sort &Decreasing"), this);
     addAction("sortDec", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sortDec()));
     action->setToolTip(i18n("Sort a group of cells in decreasing(last to first) order"));
 
-    action = new KAction(KIcon("this-sort-ascending"), i18n("Sort &Increasing"), this);
+    action = new KAction(KIcon("view-sort-ascending"), i18n("Sort &Increasing"), this);
     addAction("sortInc", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sortInc()));
     action->setToolTip(i18n("Sort a group of cells in ascending(first to last) order"));
 
-    action = new KAction(KIcon("this-filter"), i18n("&Auto-Filter"), this);
+    action = new KAction(KIcon("view-filter"), i18n("&Auto-Filter"), this);
     addAction("autoFilter", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(autoFilter()));
     action->setToolTip(i18n("Add an automatic filter to a cell range"));

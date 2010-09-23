@@ -709,6 +709,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     const QString styleId(d->phStyleId());
 
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
+
+    inheritDefaultBodyProperties();
+    inheritBodyProperties(); // Properties may or may not override default ones.
 #else
 #endif
     if (m_contentType == "line") {
@@ -720,6 +723,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     if (!m_cNvPrName.isEmpty()) {
         body->addAttribute("draw:name", m_cNvPrName);
     }
+
+    m_currentDrawStyle->addProperty("draw:textarea-vertical-align", m_shapeTextPosition);
+    m_currentDrawStyle->addProperty("fo:margin-left", EMU_TO_CM_STRING(m_shapeTextLeftOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:margin-right", EMU_TO_CM_STRING(m_shapeTextRightOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:margin-top", EMU_TO_CM_STRING(m_shapeTextTopOff.toInt()));
+    m_currentDrawStyle->addProperty("fo:margin-bottom", EMU_TO_CM_STRING(m_shapeTextBottomOff.toInt()));
+
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
 #ifdef PPTXXMLSLIDEREADER_H
@@ -1575,10 +1585,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (!pprRead) {
-        inheritParagraphStyle();
+        inheritDefaultParagraphStyle(m_currentParagraphStyle);
+        inheritParagraphStyle(m_currentParagraphStyle);
     }
     if (!rRead) {
-        inheritTextStyle();
+        // We are inheriting to paragraph's text-properties because there is no text
+        // and thus m_currentTextStyle is not used
+        inheritDefaultTextStyle(m_currentParagraphStyle);
+        inheritTextStyle(m_currentParagraphStyle);
     }
 #endif
 
@@ -1725,7 +1739,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritTextStyle();
+    inheritDefaultTextStyle(m_currentTextStyle);
+    inheritTextStyle(m_currentTextStyle);
 #endif
 
     while (!atEnd()) {
@@ -2037,7 +2052,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritParagraphStyle();
+    inheritDefaultParagraphStyle(m_currentParagraphStyle);
+    inheritParagraphStyle(m_currentParagraphStyle);
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -2966,7 +2982,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_H
     inheritListStyles();
-    inheritAllTextAndParagraphStyles();
+    // Only slidemaster needs to inherit, this because first there is bodyStyle,
+    // then there can be a body frame, the frame must have properties from bodyStyle and it must not
+    // overwrite them, where as in case of slide/slideLayout there is no style in their files
+    // Note also that we do not inherit defaultStyles, we only save the changes that this lvl creates
+    // Default styles are used when we actually create the content
+    if (m_context->type == SlideMaster) {
+        inheritAllTextAndParagraphStyles();
+    }
 #endif
 
     while (!atEnd()) {
@@ -4448,7 +4471,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     body = fldBuf.setWriter(body);
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritTextStyle();
+    inheritDefaultTextStyle(m_currentTextStyle);
+    inheritTextStyle(m_currentTextStyle);
 #endif
 
     while (!atEnd()) {
@@ -4925,8 +4949,50 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // - square (Text Wrapping Type Enum ( Square ))
     //        Determines whether we wrap words within the bounding rectangle.
     TRY_READ_ATTR_WITHOUT_NS(wrap)
-
+    TRY_READ_ATTR_WITHOUT_NS(anchor)
+    TRY_READ_ATTR_WITHOUT_NS(lIns)
+    TRY_READ_ATTR_WITHOUT_NS(rIns)
+    TRY_READ_ATTR_WITHOUT_NS(bIns)
+    TRY_READ_ATTR_WITHOUT_NS(tIns)
 //TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
+
+    m_shapeTextPosition.clear();
+    m_shapeTextTopOff.clear();
+    m_shapeTextBottomOff.clear();
+    m_shapeTextLeftOff.clear();
+    m_shapeTextRightOff.clear();
+
+#ifdef PPTXXMLSLIDEREADER_H
+    inheritBodyProperties();
+#endif
+
+    if (!lIns.isEmpty()) {
+        m_shapeTextLeftOff = lIns;
+    }
+    if (!rIns.isEmpty()) {
+        m_shapeTextRightOff = rIns;
+    }
+    if (!tIns.isEmpty()) {
+        m_shapeTextTopOff = tIns;
+    }
+    if (!bIns.isEmpty()) {
+        m_shapeTextBottomOff = bIns;
+    }
+
+    if (!anchor.isEmpty()) {
+        if (anchor == "t") {
+            m_shapeTextPosition = "top";
+        }
+        else if (anchor == "b") {
+            m_shapeTextPosition = "bottom";
+        }
+        else if (anchor == "ctr") {
+            m_shapeTextPosition = "middle";
+        }
+        else if (anchor == "just") {
+            m_shapeTextPosition = "justify";
+        }
+    }
 
 //! @todo more atributes
 
@@ -4945,7 +5011,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
             }
         }
     }
+
 #ifdef PPTXXMLSLIDEREADER_H
+
+    saveBodyProperties();
+
     m_currentPresentationStyle.addProperty("draw:auto-grow-height",
             spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
     m_currentPresentationStyle.addProperty("draw:auto-grow-width",

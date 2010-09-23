@@ -2,6 +2,7 @@
 Version=1.0
 Type=Application
 Name=FreOffice
+Name[en_GB]=FreOffice
 Name[it]=FreOffice
 Name[pt]=FreOffice
 Name[pt_BR]=FreOffice

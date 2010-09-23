@@ -128,6 +128,15 @@ public:
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 
+    //! Position of the text
+    QMap<QString, QString> textShapePositions;
+
+    //! Borders in the frame
+    QMap<QString, QString> textLeftBorders;
+    QMap<QString, QString> textRightBorders;
+    QMap<QString, QString> textBottomBorders;
+    QMap<QString, QString> textTopBorders;
+
     // Extras frames such as pictures from layout, which should be put to the slide.
     QVector<QString> layoutFrames;
 
@@ -161,6 +170,14 @@ public:
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
+    //! Position of the text
+    QMap<QString, QString> textShapePositions;
+
+    //! Borders in the frame
+    QMap<QString, QString> textLeftBorders;
+    QMap<QString, QString> textRightBorders;
+    QMap<QString, QString> textBottomBorders;
+    QMap<QString, QString> textTopBorders;
 
     KoGenStyle m_drawingPageProperties;
 };
@@ -233,12 +250,27 @@ protected:
     // Inherits liststyle to m_currentCombinedBulletProperties
     void inheritListStyles();
 
+    // inherits default text style to target
+    void inheritDefaultTextStyle(KoGenStyle& targetStyle);
+
     // Inherits correct textstyle to m_currentTextStyle
     // First from default, then from master, layout, slide using those lvls which are needed
-    void inheritTextStyle();
+    void inheritTextStyle(KoGenStyle& targetStyle);
+
+    // Inherits default paragraphStyle
+    void inheritDefaultParagraphStyle(KoGenStyle& targetStyle);
 
     // Inherits correct paragraph styles to m_currentParagraphStyle
-    void inheritParagraphStyle();
+    void inheritParagraphStyle(KoGenStyle& targetStyle);
+
+    // Inherits default body properties
+    void inheritDefaultBodyProperties();
+
+    // Inherit correct body properties from slideMaster/slideLayout if needed
+    void inheritBodyProperties();
+
+    // Saves current body properties
+    void saveBodyProperties();
 
     // True if we reading defaultStyles from PptxXmlDocumentReader
     bool documentReaderMode;
