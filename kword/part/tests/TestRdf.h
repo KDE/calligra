@@ -27,16 +27,7 @@
 class TestRdf : public QObject
 {
     Q_OBJECT
-public:
-    TestRdf();
-    ~TestRdf();
-
 private slots:
-    void init();
-    void cleanup();
-    void initTestCase();
-    void cleanupTestCase();
-
     void basicload();
     void findStatements();
 #ifdef KDEPIMLIBS_FOUND
@@ -55,9 +46,6 @@ private slots:
     void removeStatementsIfTheyExist();
     void KoTextRdfCoreTripleFunctions();
     void createUserStylesheet();
-    
-    
-    
 };
 
 #endif
