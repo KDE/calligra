@@ -199,7 +199,7 @@ bool MergeCommand::preProcessing()
     }
     // Clear the associated selection, if any. The merge/dissociate process will restore
     // selections. This ensures that the selection isn't broken after merging.
-    if (m_selection) m_selection->clear();
+    if (m_selection) m_selection->Region::clear();
 
     return AbstractRegionCommand::preProcessing();
 }
