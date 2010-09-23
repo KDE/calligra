@@ -710,22 +710,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
-    if (m_shapeTextPosition.isEmpty()) {
-        m_shapeTextPosition = "top"; // top is default according to spec
-    }
-    if (m_shapeTextLeftOff.isEmpty()) {
-        m_shapeTextLeftOff = "91440"; // spec default
-    }
-    if (m_shapeTextRightOff.isEmpty()) {
-        m_shapeTextRightOff = "91440"; // spec default
-    }
-    if (m_shapeTextTopOff.isEmpty()) {
-        m_shapeTextTopOff = "91440"; // spec default
-    }
-    if (m_shapeTextBottomOff.isEmpty()) {
-        m_shapeTextBottomOff = "91440"; // spec default
-    }
-
+    inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
 #else
 #endif
@@ -1600,10 +1585,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (!pprRead) {
-        inheritParagraphStyle();
+        inheritDefaultParagraphStyle(m_currentParagraphStyle);
+        inheritParagraphStyle(m_currentParagraphStyle);
     }
     if (!rRead) {
-        inheritTextStyle();
+        // We are inheriting to paragraph's text-properties because there is no text
+        // and thus m_currentTextStyle is not used
+        inheritDefaultTextStyle(m_currentParagraphStyle);
+        inheritTextStyle(m_currentParagraphStyle);
     }
 #endif
 
@@ -1750,7 +1739,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritTextStyle();
+    inheritDefaultTextStyle(m_currentTextStyle);
+    inheritTextStyle(m_currentTextStyle);
 #endif
 
     while (!atEnd()) {
@@ -2062,7 +2052,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritParagraphStyle();
+    inheritDefaultParagraphStyle(m_currentParagraphStyle);
+    inheritParagraphStyle(m_currentParagraphStyle);
 #endif
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -2994,6 +2985,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     // Only slidemaster needs to inherit, this because first there is bodyStyle,
     // then there can be a body frame, the frame must have properties from bodyStyle and it must not
     // overwrite them, where as in case of slide/slideLayout there is no style in their files
+    // Note also that we do not inherit defaultStyles, we only save the changes that this lvl creates
+    // Default styles are used when we actually create the content
     if (m_context->type == SlideMaster) {
         inheritAllTextAndParagraphStyles();
     }
@@ -4478,7 +4471,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     body = fldBuf.setWriter(body);
 
 #ifdef PPTXXMLSLIDEREADER_H
-    inheritTextStyle();
+    inheritDefaultTextStyle(m_currentTextStyle);
+    inheritTextStyle(m_currentTextStyle);
 #endif
 
     while (!atEnd()) {

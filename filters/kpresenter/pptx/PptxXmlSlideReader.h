@@ -250,12 +250,21 @@ protected:
     // Inherits liststyle to m_currentCombinedBulletProperties
     void inheritListStyles();
 
+    // inherits default text style to target
+    void inheritDefaultTextStyle(KoGenStyle& targetStyle);
+
     // Inherits correct textstyle to m_currentTextStyle
     // First from default, then from master, layout, slide using those lvls which are needed
-    void inheritTextStyle();
+    void inheritTextStyle(KoGenStyle& targetStyle);
+
+    // Inherits default paragraphStyle
+    void inheritDefaultParagraphStyle(KoGenStyle& targetStyle);
 
     // Inherits correct paragraph styles to m_currentParagraphStyle
-    void inheritParagraphStyle();
+    void inheritParagraphStyle(KoGenStyle& targetStyle);
+
+    // Inherits default body properties
+    void inheritDefaultBodyProperties();
 
     // Inherit correct body properties from slideMaster/slideLayout if needed
     void inheritBodyProperties();
