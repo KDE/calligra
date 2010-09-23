@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -177,7 +177,7 @@ public:
     virtual int id() const { return 3; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -213,7 +213,7 @@ public:
     virtual int id() const { return 4; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -244,7 +244,7 @@ public:
     virtual int id() const { return 5; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -282,7 +282,7 @@ public:
     virtual int id() const { return 6; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     //! @return inserted widget's name
@@ -315,7 +315,7 @@ public:
     virtual int id() const { return 7; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -346,7 +346,7 @@ public:
     virtual int id() const { return 8; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -373,7 +373,7 @@ public:
     virtual int id() const { return 9; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -420,7 +420,7 @@ public:
     virtual int id() const { return 10; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -447,7 +447,7 @@ public:
     virtual int id() const { return 11; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -473,7 +473,7 @@ public:
     virtual int id() const { return 12; }
 
     virtual void execute();
-    
+
     virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
@@ -573,7 +573,7 @@ public:
     virtual bool mergeWith(const QUndoCommand * command);
 
     virtual void execute();
-    
+
     virtual void undo();
 
     Form* form() const;
@@ -588,6 +588,49 @@ protected:
 
 //! kDebug() stream operator. Writes command group @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InlineTextEditingCommand &c); 
+
+class KFORMEDITOR_EXPORT InsertPageCommand : public KFormDesigner::Command
+{
+public:
+    InsertPageCommand(KFormDesigner::Container *container, QWidget *widget);
+
+    virtual ~InsertPageCommand();
+
+    virtual int id() const { return 15; }
+
+    virtual void execute();
+
+    void execute(const QString& pageWidgetName, const QString& pageName, int pageIndex);
+
+    virtual void undo();
+
+    void undo(const QString& name);
+
+protected:
+    class Private;
+    Private * const d;
+};
+
+class KFORMEDITOR_EXPORT RemovePageCommand : public KFormDesigner::Command
+{
+public:
+    RemovePageCommand(KFormDesigner::Container *container, QWidget *widget);
+
+    virtual ~RemovePageCommand();
+
+    virtual int id() const { return 16; }
+
+    virtual void execute();
+
+    virtual void undo();
+
+    int pageIndex() const;
+    QString pageName() const;
+
+protected:
+    class Private;
+    Private * const d;
+};
 
 }
 

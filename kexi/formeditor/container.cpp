@@ -881,7 +881,7 @@ Container::deleteWidget(QWidget *w)
         return;
     QWidget *widgetoRemove = itemToRemove->widget();
     const ObjectTreeItem *parentItemToSelect = itemToRemove->parent()
-        ? itemToRemove->parent()->selectableItem() : 0;
+        ? d->form->library()->selectableItem(itemToRemove->parent()) : 0;
     QWidget *parentWidgetToSelect = parentItemToSelect ? parentItemToSelect->widget() : 0;
     d->form->objectTree()->removeItem(itemToRemove);
     d->form->selectWidget(parentWidgetToSelect);
@@ -1480,7 +1480,7 @@ void Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             else {
                 // multiple widgets: group them
 #if 0
-                PropertyCommand *propCmd = new PropertyCommand(*d->form, w->objectName().toLatin1(), w->geometry(), g, "geometry");
+                PropertyCommand *propCmd = new PropertyCommand(d->form, w->objectName().toLatin1(), w->geometry(), g, "geometry");
                 if (!commandGroup) {
                     commandGroup = new CommandGroup(*d->form, i18n("Move multiple widgets"));
                 }

@@ -282,6 +282,12 @@ public:
     void addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
                                  AddCommandOption addOption, uint idOfPropertyCommand = 0);
 
+    /*! @return Command that being executed through addCommand() or 0 if addCommand()
+     is not currently being executed.
+     Currently used by WidgetTreeWidget to check if tab page adding was
+     the original reason for adding widget. */
+    const Command* executingCommand() const;
+
     /*! \return tabstops list. It contains all the widgets that can have focus 
      (i.e. no labels, etc.) in the order of the tabs.*/
     ObjectTreeList* tabStops();

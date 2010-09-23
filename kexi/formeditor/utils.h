@@ -28,7 +28,7 @@
 #include <kexi_export.h>
 
 //! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
-#define TabWidgetBase QTabWidget
+typedef QTabWidget TabWidgetBase;
 //#define USE_KTabWidget //todo: uncomment
 
 class QMimeData;

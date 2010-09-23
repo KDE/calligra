@@ -804,7 +804,8 @@ bool WidgetLibrary::propertySetShouldBeReloadedAfterPropertyChange(
 ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem* item)
 {
     loadFactories();
-    WidgetInfo *wi = d->widgets.value(item->className().toLatin1());
+    kDebug() << item->widget()->metaObject()->className();
+    WidgetInfo *wi = d->widgets.value(item->widget()->metaObject()->className());
     if (!wi)
         return item;
     return wi->factory()->selectableItem(item);
