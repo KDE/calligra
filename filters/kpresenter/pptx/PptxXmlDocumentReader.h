@@ -77,6 +77,8 @@ protected:
     KoOdfWriters *m_writers;
     PptxXmlDocumentReaderContext* m_context;
 
+    void initializeContext(PptxXmlSlideReaderContext& context);
+
 private:
 
     void init();

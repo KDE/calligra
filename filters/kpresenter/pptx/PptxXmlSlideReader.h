@@ -167,9 +167,6 @@ public:
     //! Map of list-styles with the styleId as outer-key and the listlevel as inner-key.
     QMap<QString, QMap<int,MSOOXML::Utils::ParagraphBulletProperties> > listStyles;
 
-    QVector<KoGenStyle> defaultTextStyles;
-    QVector<KoGenStyle> defaultParagraphStyles;
-    QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
     //! Position of the text
     QMap<QString, QString> textShapePositions;
 
@@ -227,6 +224,7 @@ protected:
     KoFilter::ConversionStatus read_oleObj();
 
     KoFilter::ConversionStatus read_clrMap();
+    KoFilter::ConversionStatus read_clrMapOvr();
 
 //    KoGenStyle m_currentPageStyle;
     PptxXmlSlideReaderContext* m_context;
@@ -307,7 +305,7 @@ public:
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
         MSOOXML::TableStyleList *tableStyleList,
-        QMap<QString, QString> _colorMap);
+        QMap<QString, QString> masterColorMap);
 
     PptxImport* import;
     const QString path;
@@ -325,6 +323,9 @@ public:
     QVector<QString> pageFrames; //! Frames which go to masterslide
     QMap<int, QString> commentAuthors;
     MSOOXML::TableStyleList *tableStyleList;
+
+    // This value is always initialized with values from master slide, but it is possible
+    // that slide/layout override it with custom map
     QMap<QString, QString> colorMap;
 
     // Used to keep track, whether we should skip elements
@@ -332,6 +333,12 @@ public:
     // This because some elements from the later part of the document are needed
     // to fully understand cSld element
     bool firstReadingRound;
+
+    // These have to be in context, because each slide/layout/master may define their own colormap
+    // therefore the way default text is interpreted cannot be static
+    QVector<KoGenStyle> defaultTextStyles;
+    QVector<KoGenStyle> defaultParagraphStyles;
+    QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
 };
 
 #endif
