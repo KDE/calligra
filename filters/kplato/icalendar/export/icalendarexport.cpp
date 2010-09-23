@@ -126,31 +126,31 @@ KoFilter::ConversionStatus ICalendarExport::convert(const Project &project, QFil
 void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, long id, KCal::Todo *parent)
 {
     KCal::Todo *todo = new KCal::Todo();
+    todo->setUid( node->id() );
     todo->setSummary(node->name());
     todo->setDescription(node->description());
     todo->setCategories("KPlato");
     if (! node->projectNode()->leader().isEmpty()) {
         todo->setOrganizer(node->projectNode()->leader());
     }
-    if (! node->leader().isEmpty()) {
+    if ( node->type() != Node::Type_Project && ! node->leader().isEmpty()) {
         KCal::Person p = KCal::Person::fromFullName(node->leader());
         KCal::Attendee *a = new KCal::Attendee(p.name(), p.email());
         a->setRole(KCal::Attendee::NonParticipant);
         todo->addAttendee(a);
     }
-    if (node->type() == Node::Type_Project || node->type() == Node::Type_Summarytask) {
+    DateTime st = node->startTime(id);
+    DateTime et = node->endTime(id);
+    if (st.isValid()) {
         todo->setHasStartDate(true);
-        todo->setDtStart(node->startTime(id));
+        todo->setDtStart(st);
+    }
+    if (et.isValid()) {
         todo->setHasDueDate(true);
-        todo->setDtDue(node->endTime(id));
-    } else if (node->type() == Node::Type_Task) {
+        todo->setDtDue(et);
+    }
+    if (node->type() == Node::Type_Task) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
-        todo->setPercentComplete(task->completion().percentFinished());
-        todo->setHasStartDate(id >= 0);
-        todo->setDtStart(node->startTime(id));
-        todo->setHasDueDate(id >= 0);
-        todo->setDtDue(node->endTime(id));
-
         Schedule *s = task->schedule(id);
         if (id < 0 || s == 0) {
             // Not scheduled, use requests
@@ -170,10 +170,8 @@ void ICalendarExport::createTodos(KCal::CalendarLocal &cal, const Node *node, lo
         }
     } else if (node->type() == Node::Type_Milestone) {
         const Task *task = qobject_cast<Task*>(const_cast<Node*>(node));
+        todo->setHasStartDate(false);
         todo->setPercentComplete(task->completion().percentFinished());
-        todo->setDtStart(node->startTime(id));     //NOTE Needed to get time included in due
-        todo->setHasDueDate(id >= 0);
-        todo->setDtDue(node->endTime(id));
     }
     foreach(const Document *doc, node->documents().documents()) {
         todo->addAttachment(new KCal::Attachment(doc->url().url()));
