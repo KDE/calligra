@@ -121,6 +121,7 @@ class AbstractNode
             Q_ASSERT(!m_orderedChildren.contains(index));
             Q_ASSERT(!m_orderedChildrenReverse.contains(node));
             Q_ASSERT(!m_appendedChildren.contains(node));
+            Q_ASSERT(!node->m_parent);
             node->m_parent = this;
             m_orderedChildren[index] = node;
             m_orderedChildrenReverse[node] = index;
