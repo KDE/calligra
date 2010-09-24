@@ -740,10 +740,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                       }
                       else
                       {
-                          if ( m_areaContext == ChartArea )
-                              m_context->m_chart->m_areaFormat->m_foreground.setAlphaF( val.toDouble() / 100000.0 );
-                          else
+                          if ( m_areaContext == ChartArea ) {
+                              if (m_context->m_chart->m_areaFormat)
+                                  m_context->m_chart->m_areaFormat->m_foreground.setAlphaF( val.toDouble() / 100000.0 );
+                          } else {
                               m_context->m_chart->m_plotAreaFillColor.setAlphaF( val.toDouble() / 100000.0 );
+                          }
                       }
                   }
         } else if ( qualifiedName() == "a:gsLst" ) {
