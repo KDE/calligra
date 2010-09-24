@@ -490,6 +490,7 @@ namespace defines the contents of a DrawingML diagram.
 */
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
 {
+#if 0
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITH_NS(r, cs) // colors
@@ -526,7 +527,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
     }
     
     m_context->diagrams << context;
-
+#endif
     return KoFilter::OK;
 }
 
