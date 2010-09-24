@@ -1165,7 +1165,8 @@ void ODrawToOdf::processCallout2(const MSO::OfficeArtSpContainer &o, Writer &out
     out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
     out.xml.addAttribute("draw:type", "mso-spt42");
     processModifiers(o, out);
-    out.xml.addAttribute("draw:enhanced-path", "M 0 0 S L 21600 0 21600 21600 0 21600 Z N M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M");
+    // TODO: uncomment the bit of the path once EnhancedPathShape supports S
+    out.xml.addAttribute("draw:enhanced-path", "M 0 0 M 21600 21600 "/*S L 21600 0 21600 21600 0 21600 Z N*/ "M ?f0 ?f1 L ?f2 ?f3 N M ?f2 ?f3 L ?f4 ?f5 N M");
     equation(out, "f0", "$0 ");
     equation(out, "f1", "$1 ");
     equation(out, "f2", "$2 ");
