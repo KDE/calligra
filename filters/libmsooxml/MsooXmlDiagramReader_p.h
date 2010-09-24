@@ -121,6 +121,7 @@ class AbstractNode
             Q_ASSERT(!m_orderedChildren.contains(index));
             Q_ASSERT(!m_orderedChildrenReverse.contains(node));
             Q_ASSERT(!m_appendedChildren.contains(node));
+            node->m_parent = this;
             m_orderedChildren[index] = node;
             m_orderedChildrenReverse[node] = index;
             m_cachedChildren.clear();
@@ -427,7 +428,7 @@ class AbstractAtom : public QSharedData
                     result.append(node);
                 }
             }
-            
+
             // optionally filter the list
             if(!ptType.isEmpty()) {
                 QList<AbstractNode*> list = result;
@@ -1151,7 +1152,7 @@ class IfAtom : public AbstractAtom
                 }
             }
 
-            kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
+            //kDebug()<<"name="<<m_name<<"value1="<<funcValue<<"value2="<<m_value<<"operator="<<m_operator<<"istrue="<<istrue;
             return istrue;
         }
     private:
@@ -1507,8 +1508,8 @@ class ConnectorAlgorithm : public AlgorithmBase {
             }
             Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
             Q_ASSERT(siblingLayouts.count() >= 3); // a connector makes only sense if we have some neighbors
-            LayoutNodeAtom* srcAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
-            LayoutNodeAtom* dstAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
+            LayoutNodeAtom* srcAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
+            LayoutNodeAtom* dstAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
 
             QMap<QString, qreal> srcValues = srcAtom->m_values;
             QMap<QString, qreal> dstValues = dstAtom->m_values;
@@ -1550,9 +1551,6 @@ class CycleAlgorithm : public AlgorithmBase {
         virtual void virtualDoInit() {
             AlgorithmBase::virtualDoInit();
         }
-        virtual void virtualDoLayoutChildren() {
-            AlgorithmBase::virtualDoLayoutChildren();
-        }
         virtual void virtualDoLayout() {
             AlgorithmBase::virtualDoLayout();
 
@@ -1578,28 +1576,25 @@ class CycleAlgorithm : public AlgorithmBase {
             const qreal rx = w / 2.0;
             const qreal ry = h / 2.0;
             const bool inverse = startAngel > spanAngel;
-            int num = 360 / childLayoutsCount;
+            qreal num = 360.0 / childLayoutsCount;
             if(inverse) num = -num;
-
-            const qreal r = w/2.0;
-            const qreal d = (2.0*3.14*r)/childLayoutsCount;
-
-            QList< QPair<qreal,qreal> > m_startCoordinates;
+            qreal dw = ( (2.0 * M_PI * (w/2.0)) / childLayoutsCount );
+            qreal dh = ( (2.0 * M_PI * (h/2.0)) / childLayoutsCount );
+            dw *= 0.9; dh *= 0.9; //TODO proper handle margins, spacings, etc.
             for(qreal degree = startAngel; (!childLayouts.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
-                const qreal radian = (degree - 90) * (3.14 / 180);
+                const qreal radian = (degree - 90.0) * (M_PI / 180.0);
                 const qreal x = rx + cos(radian) * rx;
                 const qreal y = ry + sin(radian) * ry;
                 LayoutNodeAtom* l = childLayouts.takeFirst();
                 
-                //TODO handle sibling-spacing and margins
                 l->m_values["l"] = parentLayout()->m_values["l"];
                 l->m_values["t"] = parentLayout()->m_values["t"];
-                l->m_values["w"] = d;//d;//parentLayout()->m_values["w"] / childLayoutsCount;
-                l->m_values["h"] = d;//d;//parentLayout()->m_values["h"] / childLayoutsCount;
+                l->m_values["w"] = dw;
+                l->m_values["h"] = dh;
                 l->m_factors["l"] = l->m_factors["t"] = 1.0;
                 l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
-                l->m_values["ctrX"] = x;
-                l->m_values["ctrY"] = y;
+                l->m_values["ctrX"] = x;//*0.5;
+                l->m_values["ctrY"] = y;//*0.5;
 
                 l->m_needsReinit = false; // we initialized things above already
                 l->m_needsRelayout = true; // but we clearly need a layout now
@@ -1608,6 +1603,9 @@ class CycleAlgorithm : public AlgorithmBase {
 
             //kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
         }
+        virtual void virtualDoLayoutChildren() {
+            AlgorithmBase::virtualDoLayoutChildren();
+        }
 };
 
 /// The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
@@ -1615,7 +1613,9 @@ class SpaceAlg : public AlgorithmBase {
     public:
         explicit SpaceAlg() : AlgorithmBase() {}
         virtual ~SpaceAlg() {}
-        
+        virtual void virtualDoLayout() {
+            AlgorithmBase::virtualDoLayout();
+        }
 };
 
 /// The text algorithm sizes text to fit inside a shape and controls its margins and alignment.

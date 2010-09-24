@@ -126,7 +126,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                 const int srcOrd = connection->m_srcOrd;
                 const int destOrd = connection->m_destOrd;
                 Q_UNUSED(destOrd); //TODO how to apply that one?
-        
+
                 if(parent) {
                     // add a transition between parent and child
                     Q_ASSERT(parent->m_type == "parTrans");
@@ -134,7 +134,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                     rootList.removeChild(parent);
                     source->addChild(parent);
                 }
-                
+
                 if(sibling) {
                      // add a transition between siblings
                     Q_ASSERT(sibling->m_type == "sibTrans");
@@ -200,7 +200,6 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
         
         m_context->m_context->m_rootLayout->build(m_context->m_context);
         //m_context->m_context->m_rootLayout->dump(m_context->m_context,10);
-        //Q_ASSERT(false);
     }
     else if (qualifiedName() == QLatin1String("dgm:styleDef")) {
         m_type = StyleDefType;
