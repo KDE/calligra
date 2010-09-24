@@ -33,56 +33,77 @@
 #include "form.h"
 #include "container.h"
 #include "widgetlibrary.h"
+#include "commands.h"
 
 using namespace KFormDesigner;
 
-WidgetTreeWidgetItem::WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data)
+WidgetTreeWidgetItem::WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data,
+    LoadTreeFlags loadTreeFlags, int forcedTabPageIndex, const QString& forcedTabPageName)
         : QTreeWidgetItem(parent)
         , m_data(data)
+        , m_loadTreeFlags(loadTreeFlags)
 {
-    init();
+    init(forcedTabPageIndex, forcedTabPageName);
 }
 
-WidgetTreeWidgetItem::WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data)
+WidgetTreeWidgetItem::WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data,
+    LoadTreeFlags loadTreeFlags, int forcedTabPageIndex, const QString& forcedTabPageName)
         : QTreeWidgetItem(tree)
         , m_data(data)
+        , m_loadTreeFlags(loadTreeFlags)
 {
-    init();
+    init(forcedTabPageIndex, forcedTabPageName);
 }
 
 WidgetTreeWidgetItem::~WidgetTreeWidgetItem()
 {
 }
 
-void WidgetTreeWidgetItem::init()
+void WidgetTreeWidgetItem::init(int forcedTabPageIndex, const QString& forcedTabPageName)
 {
     if (m_data) {
-        initTextAndIcon();
+        initTextAndIcon(forcedTabPageIndex, forcedTabPageName);
     }
 }
 
-void WidgetTreeWidgetItem::initTextAndIcon()
+void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString& forcedTabPageName)
 {
     QString itemName;
     QString itemClass;
     QString itemIcon;
     Qt::ItemFlags itemFlags = flags();
-    ObjectTreeItem* selectable = m_data->selectableItem();
+    WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
+    ObjectTreeItem* selectable = widgetTreeWidget ? widgetTreeWidget->selectableItem(m_data) : m_data;
     if (selectable != m_data) {
+        kDebug() << "****" << (m_loadTreeFlags & LoadTreeForAddedTabPage) << selectable->widget();
         if (qobject_cast<QTabWidget*>(selectable->widget())) {
             // tab widget's page
             const QTabWidget* tabWidget = qobject_cast<QTabWidget*>(selectable->widget());
-            const int tabIndex = tabWidget->indexOf(m_data->widget());
+            int tabIndex = tabWidget->indexOf(m_data->widget());
+            if (tabIndex == -1 && (m_loadTreeFlags & LoadTreeForAddedTabPage)) { // tab appended
+                if (forcedTabPageIndex >= 0)
+                    tabIndex = forcedTabPageIndex;
+                else
+                    tabIndex = tabWidget->count();
+            }
+            kDebug() << tabIndex;
             if (tabIndex >= 0) {
-                itemName = tabWidget->tabText(tabIndex);
-                if (itemName.isEmpty()) {
-                    itemName = i18n("Tab %1", tabIndex + 1);
+                if (forcedTabPageName.isEmpty()) {
+                    itemName = tabWidget->tabText(tabIndex);
+                    if (itemName.isEmpty()) {
+                        itemName = forcedTabPageName;
+                        if (itemName.isEmpty())
+                            itemName = i18n("Page %1", tabIndex + 1);
+                    }
+                    else {
+                        itemName.replace('&', "");
+                    }
                 }
-                else {
-                    itemName.replace('&', "");
-                }
+                else
+                    itemName = forcedTabPageName;
                 itemClass = i18nc("Tab widget's page", "Tab Page");
                 m_customSortingKey = QString("tab%1").arg(tabIndex);
+                kDebug() << "m_customSortingKey" << m_customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
                 itemIcon = "tabwidget-tab";
@@ -97,7 +118,6 @@ void WidgetTreeWidgetItem::initTextAndIcon()
         itemClass = m_data->className();
     }
     if (itemIcon.isEmpty()) {
-        WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
         if (widgetTreeWidget) {
             itemIcon = widgetTreeWidget->iconNameForClass(m_data->widget()->metaObject()->className());
         }
@@ -134,7 +154,7 @@ bool WidgetTreeWidgetItem::operator<( const QTreeWidgetItem & other ) const
     const WidgetTreeWidgetItem *otherItem = dynamic_cast<const WidgetTreeWidgetItem*>(&other);
     if (!otherItem)
         return QTreeWidgetItem::operator<(other);
-    return true;
+    return m_customSortingKey < otherItem->customSortingKey();
 }
 
 #warning port WidgetTreeWidgetItem::paintCell 
@@ -255,10 +275,12 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
         connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
     }
 
-    header()->setStretchLastSection(true);
+    //header()->setStretchLastSection(true);
     setAllColumnsShowFocus(true);
     //2.0 setItemMargin(3);
     setSortingEnabled(true);
+    setExpandsOnDoubleClick(false);
+    setIndentation(indentation() / 2);
 }
 
 WidgetTreeWidget::~WidgetTreeWidget()
@@ -284,6 +306,11 @@ WidgetTreeWidgetItem* WidgetTreeWidget::selectedItem() const
 QString WidgetTreeWidget::iconNameForClass(const QByteArray& classname) const
 {
     return m_form->library()->iconName(classname);
+}
+
+ObjectTreeItem* WidgetTreeWidget::selectableItem(ObjectTreeItem* item)
+{
+    return m_form->library()->selectableItem(item);
 }
 
 // 2.0
@@ -315,12 +342,25 @@ void WidgetTreeWidget::contextMenuEvent(QContextMenuEvent* e)
     QAbstractScrollArea::contextMenuEvent(e);
 }
 
-WidgetTreeWidgetItem* WidgetTreeWidget::findItem(const QString &name)
+WidgetTreeWidgetItem* WidgetTreeWidget::findItem(const QString& name)
 {
     QTreeWidgetItemIterator it(this);
     while (*it) {
         WidgetTreeWidgetItem *item = static_cast<WidgetTreeWidgetItem*>(*it);
         if (item->name() == name) {
+            return item;
+        }
+        ++it;
+    }
+    return 0;
+}
+
+WidgetTreeWidgetItem* WidgetTreeWidget::findItemByFirstColumn(const QString& text)
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it) {
+        WidgetTreeWidgetItem *item = static_cast<WidgetTreeWidgetItem*>(*it);
+        if (item->text(0) == text) {
             return item;
         }
         ++it;
@@ -431,13 +471,25 @@ void WidgetTreeWidget::addItem(KFormDesigner::ObjectTreeItem *item)
     if (!parent)
         return;
 
-    loadTree(item, parent);
+    WidgetTreeWidgetItem::LoadTreeFlags flags;
+    if (dynamic_cast<const InsertPageCommand*>(m_form->executingCommand())) {
+        kDebug() << "InsertPageCommand";
+        flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
+    }
+    if (dynamic_cast<const RemovePageCommand*>(m_form->executingCommand())) {
+        kDebug() << "undoing RemovePageCommand";
+        flags |= WidgetTreeWidgetItem::LoadTreeForAddedTabPage;
+    }
+    loadTree(item, parent, flags);
 }
 
 void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
 {
     if (!item)
         return;
+    if (dynamic_cast<const RemovePageCommand*>(m_form->executingCommand())) {
+        kDebug() << "RemovePageCommand";
+    }
     WidgetTreeWidgetItem *it = findItem(item->name());
     QTreeWidgetItem *root = invisibleRootItem();
     root->takeChild(root->indexOfChild(it));
@@ -446,11 +498,11 @@ void WidgetTreeWidget::removeItem(KFormDesigner::ObjectTreeItem *item)
 
 void WidgetTreeWidget::renameItem(const QByteArray &oldname, const QByteArray &newname)
 {
-    if (findItem(newname)) {
-        qWarning() << "item with name" << newname << "already exists, cannot rename";
+    if (findItemByFirstColumn(newname)) {
+        kWarning() << "item with name" << newname << "already exists, cannot rename";
         return;
     }
-    WidgetTreeWidgetItem *item = findItem(oldname);
+    WidgetTreeWidgetItem *item = findItemByFirstColumn(oldname);
     if (!item)
         return;
     item->setText(0, newname);
@@ -467,6 +519,9 @@ void WidgetTreeWidget::setForm(Form *form)
             this, SLOT(removeItem(KFormDesigner::ObjectTreeItem*)));
         disconnect(m_form, SIGNAL(childAdded(KFormDesigner::ObjectTreeItem*)),
             this, SLOT(addItem(KFormDesigner::ObjectTreeItem*)));
+        disconnect(m_form, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
+            this, SLOT(renameItem(const QByteArray&, const QByteArray&)));
+
     }
     m_form = form;
     //2.0 m_topItem = 0;
@@ -482,6 +537,8 @@ void WidgetTreeWidget::setForm(Form *form)
         this, SLOT(removeItem(KFormDesigner::ObjectTreeItem*)));
     connect(m_form, SIGNAL(childAdded(KFormDesigner::ObjectTreeItem*)),
         this, SLOT(addItem(KFormDesigner::ObjectTreeItem*)));
+    connect(m_form, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
+        this, SLOT(renameItem(const QByteArray&, const QByteArray&)));
 
     // Creates the hidden top Item
     //2.0 m_topItem = new WidgetTreeWidgetItem(this);
@@ -506,11 +563,26 @@ void WidgetTreeWidget::slotBeforeFormDestroyed()
     setForm(0);
 }
 
-void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent)
+void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent,
+    WidgetTreeWidgetItem::LoadTreeFlags flags)
 {
     if (!item)
         return;
-    WidgetTreeWidgetItem *treeItem = new WidgetTreeWidgetItem(parent, item);
+
+    const RemovePageCommand* removePageCommand
+        = dynamic_cast<const RemovePageCommand*>(m_form->executingCommand());
+    int forcedTabPageIndex;
+    QString forcedTabPageName;
+    if (removePageCommand) {
+        kDebug() << "undoing RemovePageCommand - fixing item name and index";
+        forcedTabPageIndex = removePageCommand->pageIndex();
+        forcedTabPageName = removePageCommand->pageName();
+    }
+    else
+        forcedTabPageIndex = -1;
+
+    WidgetTreeWidgetItem *treeItem = new WidgetTreeWidgetItem(parent, item, flags,
+                                                              forcedTabPageIndex, forcedTabPageName);
     treeItem->setExpanded(true);
 
 //2.0
@@ -521,6 +593,8 @@ void WidgetTreeWidget::loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *pare
 //     treeItem->moveItem(last);
 
     ObjectTreeList *list = item->children();
+    if (flags & WidgetTreeWidgetItem::LoadTreeForAddedTabPage)
+        flags ^= WidgetTreeWidgetItem::LoadTreeForAddedTabPage; // this flag does not propagate to children
     foreach (ObjectTreeItem *titem, *list) {
         loadTree(titem, treeItem);
     }

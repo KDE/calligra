@@ -761,6 +761,8 @@ bool Part::completeLoading( KoStore *store )
     if ( m_loadingTemplate ) {
         //kDebug()<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
+        m_project->setConstraintStartTime( KDateTime::currentLocalDateTime() );
+        m_project->setConstraintEndTime( m_project->constraintStartTime().addYears( 2 ) );
     } else if ( isImporting() ) {
         // NOTE: I don't think this is a good idea.
         // Let the filter generate ids for non-kplato files.

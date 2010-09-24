@@ -100,6 +100,12 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
         }
         if (index == 0) {
             startColor = QColor(red, green, blue);
+            currentTint = m_tintModifier.at(m_tintModifier.size() - 1);
+            currentShadeLevel = m_shadeModifier.at(m_shadeModifier.size() - 1);
+            satModifier = m_satModifier.at(m_satModifier.size() - 1);
+            red = color.red();
+            green = color.green();
+            blue = color.blue();
         }
         else {
             endColor = QColor(red, green, blue);
@@ -891,7 +897,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_bgFillStyleLst()
                                        tintModifier = val.toInt()/100000.0;
                                    }
                                    else if (qualifiedName() == "a:shade") {
-                                       shadeModifier = 100 - val.toInt()/100000.0;
+                                       shadeModifier = val.toInt()/100000.0;
                                    }
                                    else if (qualifiedName() == "a:satMod") {
                                        satModifier = val.toDouble()/100000.0;

@@ -178,7 +178,7 @@ public:
 
     //! @return selectable item for @a item item.
     //! In most cases it is equal to @a item.
-    //! See WidgetFactory::selectableItem(ObjectTreeItem* item).
+    //! See WidgetFactory::selectableItem(ObjectTreeItem*).
     ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
 signals:

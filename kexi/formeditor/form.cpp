@@ -311,6 +311,8 @@ public:
     PropertyCommand  *lastCommand;
     PropertyCommandGroup  *lastCommandGroup;
     uint idOfPropertyCommand;
+    //! Command that being executed through Form::addCommand()
+    const Command *executingCommand;
 //    GeometryPropertyCommand  *lastGeoCommand;
     bool slotPropertyChangedEnabled : 1;
     bool slotPropertyChanged_addCommandEnabled : 1;
@@ -380,6 +382,7 @@ FormPrivate::FormPrivate(Form *form)
     designModeStyle = 0;
     idOfPropertyCommand = 0;
     selectWidgetEnabled = true;
+    executingCommand = 0;
 }
 
 FormPrivate::~FormPrivate()
@@ -996,6 +999,9 @@ QAction* Form::action(const QString& name)
         QAction *a = d->internalCollection.action( name );
         if (!a) {
             a = d->undoStack.createUndoAction(&d->internalCollection);
+            // connect this action to the form instead of stack
+            disconnect(a, SIGNAL(triggered()), &d->undoStack, SLOT(undo()));
+            connect(a, SIGNAL(triggered()), this, SLOT(undo()));
         }
         return a;
     }
@@ -1003,6 +1009,9 @@ QAction* Form::action(const QString& name)
         QAction *a = d->internalCollection.action( name );
         if (!a) {
             a = d->undoStack.createRedoAction(&d->internalCollection);
+            // connect this action to the form instead of stack
+            disconnect(a, SIGNAL(triggered()), &d->undoStack, SLOT(redo()));
+            connect(a, SIGNAL(triggered()), this, SLOT(redo()));
         }
         return a;
     }
@@ -1313,6 +1322,11 @@ void Form::emitChildRemoved(ObjectTreeItem *item)
     emit childRemoved(item);
 }
 
+const Command* Form::executingCommand() const
+{
+    return d->executingCommand;
+}
+
 bool Form::addCommand(Command *command, AddCommandOption option)
 {
     d->modified = true;
@@ -1321,7 +1335,14 @@ bool Form::addCommand(Command *command, AddCommandOption option)
         command->blockRedoOnce();
     }
     //const int count = d->undoStack.count();
+    const bool saveExecutingCommand = !d->executingCommand;
+    if (saveExecutingCommand)
+        d->executingCommand = command;
+
     d->undoStack.push(command);
+
+    if (saveExecutingCommand)
+        d->executingCommand = 0;
 /*    if ((count + 1) == d->undoStack.count()) {
         return false;
     }*/
@@ -1946,8 +1967,23 @@ void Form::undo()
 {
     if (!objectTree())
         return;
+    if (!d->undoStack.canUndo()) {
+        kWarning() << "cannot redo";
+        return;
+    }
+
+    const bool saveExecutingCommand = !d->executingCommand;
+    kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
+    if (saveExecutingCommand)
+        d->executingCommand = dynamic_cast<const Command*>(d->undoStack.command(0));
+    kDebug() << d->undoStack.index();
+    kDebug() << d->executingCommand;
+    //dynamic_cast<const Command*>
 
     d->undoStack.undo();
+
+    if (saveExecutingCommand)
+        d->executingCommand = 0;
 }
 
 // moved from FormManager
@@ -1955,9 +1991,22 @@ void Form::redo()
 {
     if (!objectTree())
         return;
-
+    if (!d->undoStack.canRedo()) {
+        kWarning() << "cannot redo";
+        return;
+    }
     d->isRedoing = true;
+    const bool saveExecutingCommand = !d->executingCommand;
+    kDebug() << "saveExecutingCommand:" << saveExecutingCommand;
+    if (saveExecutingCommand)
+        d->executingCommand = dynamic_cast<const Command*>(d->undoStack.command(d->undoStack.index()));
+    kDebug() << d->undoStack.index();
+    kDebug() << *d->executingCommand;
+
     d->undoStack.redo();
+
+    if (saveExecutingCommand)
+        d->executingCommand = 0;
     d->isRedoing = false;
 }
 

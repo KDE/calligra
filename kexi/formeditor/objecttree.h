@@ -146,13 +146,14 @@ public:
     }
     void setGridPos(int row, int col, int rowspan, int colspan);
 
+#if 0 // moved to WidgetLibrary
     //! @return selectable item for this item.
     //! In most cases it is equal to this item but e.g. for pages of QTabWidget,
     //! item for the widget itself is returned.
     //! Used when user clicks on widget tree item or when parent of the current
     //! widget should to be selected. Defaults can be overriden by widget factories.
     ObjectTreeItem* selectableItem();
-
+#endif
 protected:
     QString m_className;
     QString m_name;

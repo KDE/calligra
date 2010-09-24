@@ -201,16 +201,30 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList
+        d->tableStyleList,
+        d->slideMasterPageProperties[slideMasterPathAndFile].colorMap
     );
 
     PptxXmlSlideReader slideLayoutReader(this);
+    context.firstReadingRound = true;
+
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
         &slideLayoutReader, slideLayoutPath + "/" + slideLayoutFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideLayoutReader.errorString();
         return 0;
     }
+
+    initializeContext(context);
+
+    context.firstReadingRound = false;
+    status = m_context->import->loadAndParseDocument(
+        &slideLayoutReader, slideLayoutPath + "/" + slideLayoutFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << slideLayoutReader.errorString();
+        return 0;
+    }
+
     slideLayoutPropertiesSetter.release();
     d->slideLayoutPropertiesMap.insert(slideLayoutPathAndFile, result);
     return result;
@@ -263,19 +277,68 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList
+        d->tableStyleList,
+        d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap
     );
+
+    // In first round we only read possible colorMap override
     PptxXmlSlideReader slideReader(this);
+    context.firstReadingRound = true;
+
     KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
         &slideReader, slidePath + '/' + slideFile, &context);
     if (status != KoFilter::OK) {
         kDebug() << slideReader.errorString();
         return status;
     }
+
+    initializeContext(context);
+
+    // In this round we read rest
+    context.firstReadingRound = false;
+    status = m_context->import->loadAndParseDocument(
+        &slideReader, slidePath + '/' + slideFile, &context);
+    if (status != KoFilter::OK) {
+        kDebug() << slideReader.errorString();
+        return status;
+    }
+
     ++d->slideNumber;
 
     SKIP_EVERYTHING
     READ_EPILOGUE
+}
+
+void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context)
+{
+    // Only now, we can fully prepare default text styles, as we know the theme we are using
+    // And we have the mapping available
+    context.defaultTextStyles = defaultTextStyles;
+    context.defaultParagraphStyles = defaultParagraphStyles;
+    int defaultIndex = 0;
+
+    while (defaultIndex < defaultTextStyles.size()) {
+        if (!defaultTextColors.at(defaultIndex).isEmpty()) {
+            QString valTransformed = context.colorMap.value(defaultTextColors.at(defaultIndex));
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = m_context->theme.colorScheme.value(valTransformed);
+            QColor col = Qt::black;
+            if (colorItem) {
+                col = colorItem->value();
+            }
+            context.defaultTextStyles[defaultIndex].addProperty("fo:color", col.name());
+        }
+        if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
+            QString face = defaultLatinFonts.at(defaultIndex);
+            if (face.startsWith("+mj")) {
+                face = m_context->theme.fontScheme.majorFonts.latinTypeface;
+            }
+            else if (face.startsWith("+mn")) {
+                face = m_context->theme.fontScheme.minorFonts.latinTypeface;
+            }
+            context.defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
+        }
+        ++defaultIndex;
+    }
 }
 
 #undef CURRENT_EL
@@ -340,7 +403,10 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
          MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
                                                                           tableStylesFile, &m_context->theme, d->tableStyleList);
          m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
-     }
+    }
+
+    //empty map used here as slideMaster is the place where the map is created
+    QMap<QString, QString> dummyMap;
 
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
@@ -354,7 +420,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         &masterPageProperties,
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList
+        d->tableStyleList,
+        dummyMap
     );
 
     PptxXmlSlideReader slideMasterReader(this);
@@ -366,37 +433,11 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         return status;
     }
 
-    // Only now, we can fully prepare default text styles, as we know the theme we are using
-    // And we have the mapping available
-    masterPageProperties.defaultTextStyles = defaultTextStyles;
-    masterPageProperties.defaultParagraphStyles = defaultParagraphStyles;
-    int defaultIndex = 0;
+    initializeContext(context);
 
-    while (defaultIndex < defaultTextStyles.size()) {
-        if (!defaultTextColors.at(defaultIndex).isEmpty()) {
-            QString valTransformed = masterPageProperties.colorMap.value(defaultTextColors.at(defaultIndex));
-            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = m_context->theme.colorScheme.value(valTransformed);
-            QColor col = Qt::black;
-            if (colorItem) {
-                col = colorItem->value();
-            }
-            masterPageProperties.defaultTextStyles[defaultIndex].addProperty("fo:color", col.name());
-
-        }
-        if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
-            QString face = defaultLatinFonts.at(defaultIndex);
-            if (face.startsWith("+mj")) {
-                face = m_context->theme.fontScheme.majorFonts.latinTypeface;
-            }
-            else if (face.startsWith("+mn")) {
-                face = m_context->theme.fontScheme.minorFonts.latinTypeface;
-            }
-            masterPageProperties.defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
-        }
-        ++defaultIndex;
-    }
-
+    // In this context we already have the real colorMap
     context.firstReadingRound = false;
+
     status = m_context->import->loadAndParseDocument(
         &slideMasterReader, slideMasterPath + "/" + slideMasterFile, &context);
     if (status != KoFilter::OK) {

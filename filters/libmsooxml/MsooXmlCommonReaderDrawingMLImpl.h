@@ -1487,6 +1487,48 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL overrideClrMapping
+//! overrideClrMapping handler (Override Color Mapping)
+/* This element provides an override for the color mapping in a document. When defined, this color mapping is
+   used in place of the already defined color mapping, or master color mapping. This color mapping is defined in
+   the same manner as the other mappings within this document.
+
+ Parent elements:
+ - [done] clrMapOvr (§19.3.1.7)
+
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    int index = 0;
+    while (index < attrs.size()) {
+        const QString handledAttr = attrs.at(index).name().toString();
+        const QString attrValue = attrs.value(handledAttr).toString();
+#ifdef PPTXXMLSLIDEREADER_H
+        m_context->colorMap[handledAttr] = attrValue;
+#endif
+        ++index;
+    }
+
+    while (!atEnd()) {
+        readNext();
+        kDebug() << *this;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL p
 //! p handler (Text Paragraphs) ECMA-376, DrawingML 21.1.2.2.6, p. 3587.
 //!   This element specifies the presence of a paragraph of text within the containing text body.
@@ -3595,18 +3637,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     m_currentSatMod = 0;
     m_currentAlpha = 0;
 
-//! @todo find proper theme, not just any
+    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+
 #ifdef PPTXXMLSLIDEREADER_H
 
-    // Currently hardcoded to use clormappings from slidemaster
-    QString valTransformed = m_context->slideMasterPageProperties->colorMap.value(val);
-
-    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+    QString valTransformed = m_context->colorMap.value(val);
     colorItem = m_context->themes->colorScheme.value(valTransformed);
-
 #else
     // This should most likely be checked from a color map, see above
-    MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
     colorItem = m_context->themes->colorScheme.value(val);
 #endif
     // Parse the child elements

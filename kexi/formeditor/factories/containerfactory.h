@@ -38,21 +38,6 @@ class Form;
 class Container;
 }
 
-class InsertPageCommand : public KFormDesigner::Command
-{
-public:
-    InsertPageCommand(KFormDesigner::Container *container, QWidget *widget);
-
-    virtual void execute();
-    virtual void undo();
-
-protected:
-    KFormDesigner::Form *m_form;
-    QString  m_containername;
-    QString  m_name;
-    QString  m_parentname;
-};
-
 //! Helper widget (used when using 'Lay out horizontally')
 class HBox : public QFrame, public KFormDesigner::FormWidgetInterface
 {

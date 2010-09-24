@@ -110,7 +110,7 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
-2010-09-08..11
+2010-09-08..24
 Forms
 *Widgets Tree:
 **display items
@@ -130,7 +130,23 @@ Forms
 **tab page icons and names look as disabled
 **clicking on tab tab page items switched to them
 **clicking on child of a tab tab page switches to this tab
-TODO: fix delete widget/insert tab/delete tab/... actions in context menu
+**updating after widget renaming fixed
+**double clicking no longer expands/colapses items
+**indentation level reduced by 50%
+**fixed adding item when tab page is added
+**fix sorting
+TODO: fix delete widget action in context menu
+TODO: when undoing removing tab page, restore contents recursively
+
+*tab widget
+**removing page is now separate undoable/redoable command
+**make removed tab page appear on undo at proper index
+**make tree widget item have proper name, not basic container
+TODO:?? when adding tab page, ask for name
+
+*fix infinite recursion in line edits because of using style proxies
+BIG:247183
+
 Core
 *for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QDomDocument>
 #include <QDebug>
+#include <QStackedWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -2152,3 +2153,179 @@ KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InlineText
     return dbg.space();
 }
 
+///////  Tab related commands (to allow tab creation/deletion undoing)
+
+namespace KFormDesigner
+{
+class InsertPageCommand::Private
+{
+public:
+    Private()
+    {
+    }
+    KFormDesigner::Form *form;
+    QString containername;
+    QString name;
+    QString parentname;
+};
+}
+
+InsertPageCommand::InsertPageCommand(Container *container, QWidget *parent)
+        : Command()
+        , d(new Private)
+{
+    d->containername = container->widget()->objectName();
+    d->form = container->form();
+    d->parentname = parent->objectName();
+    setText( i18n("Add Page") );
+}
+
+InsertPageCommand::~InsertPageCommand()
+{
+    delete d;
+}
+
+void InsertPageCommand::execute()
+{
+    execute(QString(), QString(), -1);
+}
+
+void InsertPageCommand::execute(const QString& pageWidgetName, const QString& pageName, int pageIndex)
+{
+    Container *container = d->form->objectTree()->lookup(d->containername)->container();
+    QWidget *parent = d->form->objectTree()->lookup(d->parentname)->widget();
+    if (d->name.isEmpty()) {
+        if (pageWidgetName.isEmpty()) {
+            d->name = container->form()->objectTree()->generateUniqueName(
+                         container->form()->library()->displayName("QWidget").toLatin1(),
+                         /*!numberSuffixRequired*/false);
+        }
+        else {
+            d->name = pageWidgetName;
+        }
+    }
+
+    QWidget *page = container->form()->library()->createWidget(
+        "QWidget", parent, d->name.toLatin1(), container);
+    page->setAutoFillBackground(true);
+//    page->setPaletteBackgroundColor(Qt::red);
+    ObjectTreeItem *item = container->form()->objectTree()->lookup(d->name);
+
+    QByteArray classname = parent->metaObject()->className();
+    if (classname == "KFDTabWidget") {
+        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+        const QString realPageName = pageName.isEmpty() ?
+            i18n("Page %1", tab->count() + 1) : pageName;
+        if (pageIndex < 0)
+            pageIndex = tab->count();
+        tab->insertTab(pageIndex, page, realPageName);
+        tab->setCurrentWidget(page);
+        item->addModifiedProperty("title", realPageName);
+    } else if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
+        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(parent);
+        stack->addWidget(page);
+        stack->setCurrentWidget(page);
+        item->addModifiedProperty("stackIndex", stack->indexOf(page));
+    }
+}
+
+void InsertPageCommand::undo()
+{
+    undo(QString());
+}
+
+void InsertPageCommand::undo(const QString& name)
+{
+    if (!name.isEmpty()) {
+        d->name = name;
+    }
+    QWidget *page = d->form->objectTree()->lookup(d->name)->widget();
+    QWidget *parent = d->form->objectTree()->lookup(d->parentname)->widget();
+
+    QWidgetList list;
+    list.append(page);
+    Command *com = new DeleteWidgetCommand(*d->form, list);
+
+    QByteArray classname = parent->metaObject()->className();
+    if (classname == "KFDTabWidget") {
+        TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+        tab->removeTab(tab->indexOf(page));
+    } else if (classname == "QStackedWidget" || /* compat */ classname == "QWidgetStack") {
+        QStackedWidget *stack = dynamic_cast<QStackedWidget*>(parent);
+        int index = stack->indexOf(page);
+        if (index > 0)
+            index--;
+        else if (index < (stack->count()-1))
+            index++;
+        else
+            index = -1;
+
+        if (index >= 0)
+            stack->setCurrentIndex(index);
+        stack->removeWidget(page);
+    }
+
+    com->execute();
+    delete com;
+}
+
+namespace KFormDesigner
+{
+class RemovePageCommand::Private
+{
+public:
+    Private()
+    {
+    }
+    KFormDesigner::Form *form;
+    QString containername;
+    QString name;
+    QString pageName;
+    int pageIndex;
+    QString parentname;
+    InsertPageCommand *insertCommand;
+};
+}
+
+RemovePageCommand::RemovePageCommand(Container *container, QWidget *parent)
+        : Command()
+        , d(new Private)
+{
+    d->containername = container->widget()->objectName();
+    d->form = container->form();
+    TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
+    if (tab) {
+        d->name = tab->currentWidget()->objectName();
+        d->pageName = tab->tabText(tab->currentIndex());
+        d->pageIndex = tab->currentIndex();
+    }
+    d->parentname = parent->objectName();
+    d->insertCommand = new InsertPageCommand(container, parent);
+    setText( i18n("Remove Page") );
+}
+
+RemovePageCommand::~RemovePageCommand()
+{
+    delete d->insertCommand;
+    delete d;
+}
+
+void RemovePageCommand::execute()
+{
+    d->insertCommand->undo(d->name);
+}
+
+void RemovePageCommand::undo()
+{
+    d->insertCommand->execute(d->name, d->pageName, d->pageIndex);
+}
+
+int RemovePageCommand::pageIndex() const
+{
+    return d->pageIndex;
+}
+
+QString RemovePageCommand::pageName() const
+{
+    return d->pageName;
+}

@@ -130,6 +130,7 @@ ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
         m_span = false;
 }
 
+#if 0 // moved to WidgetLibrary
 ObjectTreeItem* ObjectTreeItem::selectableItem()
 {
     if (parent() && parent()->widget()) {
@@ -140,6 +141,7 @@ ObjectTreeItem* ObjectTreeItem::selectableItem()
     }
     return this;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///                      ObjectTree                                             /////////

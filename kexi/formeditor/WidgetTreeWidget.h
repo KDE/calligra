@@ -36,9 +36,21 @@ class ObjectTreeItem;
 class KFORMEDITOR_EXPORT WidgetTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data);
+    /*! Flags for loadTree() */
+    enum LoadTreeFlag {
+        NoLoadTreeFlags = 0,
+        LoadTreeForAddedTabPage = 1
+    };
+    Q_DECLARE_FLAGS(LoadTreeFlags, LoadTreeFlag)
+
+    //! Creates tree item. If @a forcedTabPageIndex >= 0, it is used as index for tab page.
+    WidgetTreeWidgetItem(WidgetTreeWidgetItem *parent, ObjectTreeItem *data,
+        LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
+        const QString& forcedTabPageName = QString());
     //! For TabStopDialog
-    WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0);
+    WidgetTreeWidgetItem(QTreeWidget *tree, ObjectTreeItem *data = 0,
+        LoadTreeFlags loadTreeFlags = NoLoadTreeFlags, int forcedTabPageIndex = -1,
+        const QString& forcedTabPageName = QString());
     virtual ~WidgetTreeWidgetItem();
 
     //! \return the item name, ie the ObjectTreeItem name
@@ -71,13 +83,14 @@ protected:
     //2.0 virtual void setup();
 
     //! Initializes text, icon, selectable flag, custom serting key
-    void init();
-    void initTextAndIcon();
+    void init(int forcedTabPageIndex, const QString& forcedTabPageName);
+    void initTextAndIcon(int forcedTabPageIndex, const QString& forcedTabPageName);
 
 
 private:
     ObjectTreeItem *m_data;
     QString m_customSortingKey;
+    LoadTreeFlags m_loadTreeFlags;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -110,6 +123,9 @@ public:
     //! \return the pixmap name for a given class, to be shown next to the widget name.
     QString iconNameForClass(const QByteArray &classname) const;
 
+    //! @see ObjectTreeItem* WidgetLibrary::selectableItem(ObjectTreeItem*)
+    ObjectTreeItem* selectableItem(ObjectTreeItem* item);
+
 public slots:
     /*! Sets \a form as the current Form in the list. The list will automatically
      be filled with an item for each widget in the Form, and selection will be synced.
@@ -128,7 +144,7 @@ public slots:
     /*! Removess the ObjectTreeItem \a item from the list. */
     void removeItem(KFormDesigner::ObjectTreeItem *item);
 
-    /*! Just renames the list item from \a oldname to \a newname. */
+    /*! Renames the list item from \a oldname to \a newname. */
     void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
 protected slots:
@@ -149,10 +165,14 @@ protected slots:
 
 protected:
     //! Internal function to fill the list.
-    void loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent);
+    void loadTree(ObjectTreeItem *item, WidgetTreeWidgetItem *parent,
+        WidgetTreeWidgetItem::LoadTreeFlags flags = WidgetTreeWidgetItem::NoLoadTreeFlags);
 
-    //! \return The item whose name is \a name.
+    //! @return the item whose name is @a name.
     WidgetTreeWidgetItem* findItem(const QString &name);
+
+    //! @return the item whose text in column 0 is @a text.
+    WidgetTreeWidgetItem* findItemByFirstColumn(const QString& text);
 
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
@@ -181,6 +201,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetTreeWidget::Options)
+Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetTreeWidgetItem::LoadTreeFlags)
 
 }
 

@@ -147,13 +147,15 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
     MSOOXML::MsooXmlRelationships& _relationships,
     QMap<int, QString> _commentAuthors,
-    MSOOXML::TableStyleList *_tableStyleList)
+    MSOOXML::TableStyleList *_tableStyleList,
+    QMap<QString, QString> masterColorMap)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
-        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList), firstReadingRound(false)
+        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList),
+        colorMap(masterColorMap), firstReadingRound(false)
 {
 }
 
@@ -399,42 +401,23 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
     // m_currentDrawStyle defined in "MsooXmlCommonReaderDrawingMLMethods.h"
     m_currentDrawStyle = new KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page"); // CASE #P109
 
-    if (m_context->type == Slide) {
-#if 0
-    QString slidePath, slideFile;
-    MSOOXML::Utils::splitPathAndFile(masterSlidePathAndFile, &slidePath, &slideFile);
-
-    PptxXmlSlideReaderContext context(
-        *m_context->import,
-        slidePath, slideFile,
-        0/*unused*/, *m_context->themes,
-        PptxXmlSlideReader::SlideMaster,
-        0, /*slideProperties*/
-        *m_context->relationships
-    );
-    PptxXmlSlideReader slideReader(this);
-    KoFilter::ConversionStatus status = m_context->import->loadAndParseDocument(
-        &slideReader, slidePath + "/" + slideFile, &context);
-    if (status != KoFilter::OK) {
-        kDebug() << slideReader.errorString();
-        return status;
-    }
-
-#endif
-
-    }
-    else if (m_context->type == SlideMaster && !m_context->firstReadingRound) {
-        m_currentDrawStyle->addProperty("presentation:visibility", "visible");
-        m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
-    }
-    else if (m_context->type == SlideLayout) {
-        m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
-    }
-
     MSOOXML::Utils::XmlWriteBuffer drawPageBuf; // buffer this draw:page, because we have to compute
-    // style before style name is known
-    if (m_context->type == Slide) {
-        body = drawPageBuf.setWriter(body);
+
+    if (!m_context->firstReadingRound) {
+        if (m_context->type == Slide) {
+        }
+        else if (m_context->type == SlideMaster && !m_context->firstReadingRound) {
+            m_currentDrawStyle->addProperty("presentation:visibility", "visible");
+            m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
+        }
+        else if (m_context->type == SlideLayout) {
+            m_currentPresentationPageLayoutStyle = KoGenStyle(KoGenStyle::PresentationPageLayoutStyle);
+        }
+
+        // style before style name is known
+        if (m_context->type == Slide) {
+            body = drawPageBuf.setWriter(body);
+        }
     }
 
     while (!atEnd()) {
@@ -465,6 +448,14 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                     skipCurrentElement();
                 }
             }
+            else if (m_context->type != SlideMaster && QUALIFIED_NAME_IS(clrMapOvr)) {
+                if (m_context->firstReadingRound) {
+                    TRY_READ(clrMapOvr)
+                }
+                else {
+                    skipCurrentElement();
+                }
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
         if (isEndElement()) {
@@ -474,7 +465,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         }
     }
 
-    if (m_context->type == Slide) {
+    if (m_context->type == Slide && !m_context->firstReadingRound) {
         body = drawPageBuf.originalWriter();
 
         body->startElement("draw:page"); // CASE #P300
@@ -521,7 +512,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
                                 m_context->slideLayoutProperties->pageLayoutStyleName);
         }
 
-//                body->addCompleteElement(&drawPageBuf);
         (void)drawPageBuf.releaseWriter();
 
         {
@@ -540,7 +530,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_sldInternal()
         kDebug() << "m_context->pageDrawStyleName:" << m_context->pageDrawStyleName
             << "m_context->type:" << m_context->type;
     }
-    else if (m_context->type == SlideLayout) {
+    else if (m_context->type == SlideLayout && !m_context->firstReadingRound) {
         if (!m_currentDrawStyle->isEmpty()) {
             m_currentDrawStyle->addProperty("presentation:visibility", "visible");
             m_currentDrawStyle->addProperty("presentation:background-objects-visible", true);
@@ -873,11 +863,38 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMap()
     while (index < attrs.size()) {
         const QString handledAttr = attrs.at(index).name().toString();
         const QString attrValue = attrs.value(handledAttr).toString();
+        m_context->colorMap[handledAttr] = attrValue;
         m_context->slideMasterPageProperties->colorMap[handledAttr] = attrValue;
         ++index;
     }
 
     SKIP_EVERYTHING
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL clrMapOvr
+// clrMapOvr handler (Color map override)
+/*
+ Parent elements:
+ - [done] sldLayout (§19.3.1.27)
+ - sld (§19.3.1.42)
+ Child elements:
+ - extLst (Extension List) §20.1.2.2.15
+
+*/
+KoFilter::ConversionStatus PptxXmlSlideReader::read_clrMapOvr()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF_NS(a, overrideClrMapping)
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -1668,7 +1685,7 @@ void PptxXmlSlideReader::inheritDefaultParagraphStyle(KoGenStyle& targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultParagraphStyles[copyLevel-1],
+    MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultParagraphStyles[copyLevel-1],
                                             targetStyle, KoGenStyle::ParagraphType);
 }
 
@@ -1795,7 +1812,7 @@ void PptxXmlSlideReader::inheritListStyles()
 void PptxXmlSlideReader::inheritDefaultTextStyle(KoGenStyle& targetStyle)
 {
     const int listLevel = qMax(1, m_currentListLevel);
-    MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->defaultTextStyles[listLevel-1],
+    MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultTextStyles[listLevel-1],
                                             targetStyle, KoGenStyle::TextType);
 }
 
