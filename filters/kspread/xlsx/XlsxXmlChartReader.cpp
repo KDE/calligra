@@ -1090,7 +1090,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
         } else if ( qualifiedName() == "a:alpha" ) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_ATTR_WITHOUT_NS(val)
-            if ( !val.isEmpty() )
+            if ( !val.isEmpty() ) {
                 if ( readingGradientStop ) {
                     currentStop.knownColorValue.setAlphaF( val.toDouble() / 100000.0 );
                 } else {
@@ -1102,6 +1102,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                         m_context->m_chart->m_plotAreaFillColor.setAlphaF( val.toDouble() / 100000.0 );
                     }
                 }
+            }
         } else if ( qualifiedName() == "a:gsLst" ) {
             if ( isStartElement() ) {
                 readingGradient = true;
