@@ -270,6 +270,8 @@ MSOOXML_EXPORT QString rgbColor(const QString& color);
 MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);
 
+MSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod);
+
 //! Converts shape types from ECMA-376 to ODF.
 /*! @return "Common Presentation Shape Attribute" value (ODF 1.1., 9.6.1)
             for presentation shape converted from ECMA-376 19.7.10

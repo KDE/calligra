@@ -62,56 +62,13 @@ void DrawingMLGradientFill::writeStyles(KoGenStyles& styles, KoGenStyle *graphic
     else {
         gradientStyle.addAttribute("draw:end-intensity", "100%");
     }
-    int red = color.red();
-    int green = color.green();
-    int blue = color.blue();
-    qreal currentTint = m_tintModifier.at(0);
-    qreal currentShadeLevel = m_shadeModifier.at(0);
-    qreal satModifier = m_satModifier.at(0);
 
-    QColor startColor;
-    QColor endColor;
+    QColor startColor = color;
+    QColor endColor = color;
 
-    int index = 0;
-    while (index < 2) {
-        if (currentTint > 0) {
-            red = currentTint * red + (1 - currentTint) * 255;
-            green = currentTint * green + (1 - currentTint) * 255;
-            blue = currentTint * blue + (1 - currentTint) * 255;
-        }
-        if (currentShadeLevel > 0) {
-            red = currentShadeLevel * red;
-            green = currentShadeLevel * green;
-            blue = currentShadeLevel * blue;
-        }
-        if (satModifier > 0 ) {
-            red = red * satModifier;
-            green = green * satModifier;
-            blue = blue * satModifier;
-            if (red > 255) {
-               red = 255;
-            }
-            if (green > 255) {
-               green = 255;
-            }
-            if (blue > 255) {
-                blue = 255;
-            }
-        }
-        if (index == 0) {
-            startColor = QColor(red, green, blue);
-            currentTint = m_tintModifier.at(m_tintModifier.size() - 1);
-            currentShadeLevel = m_shadeModifier.at(m_shadeModifier.size() - 1);
-            satModifier = m_satModifier.at(m_satModifier.size() - 1);
-            red = color.red();
-            green = color.green();
-            blue = color.blue();
-        }
-        else {
-            endColor = QColor(red, green, blue);
-        }
-        ++index;
-    }
+    MSOOXML::Utils::modifyColor(startColor, m_tintModifier.at(0), m_shadeModifier.at(0), m_satModifier.at(0));
+    MSOOXML::Utils::modifyColor(endColor, m_tintModifier.at(m_tintModifier.size() - 1), m_shadeModifier.at(m_shadeModifier.size() - 1),
+        m_satModifier.at(m_satModifier.size() - 1));
 
     gradientStyle.addAttribute("draw:start-color", startColor.name());
     gradientStyle.addAttribute("draw:end-color", endColor.name());
@@ -240,6 +197,26 @@ DrawingMLColorScheme::~DrawingMLColorScheme()
     qDeleteAll(set);
 }
 
+DrawingMLColorScheme& DrawingMLColorScheme::operator=(const DrawingMLColorScheme& scheme)
+{
+    QHashIterator<QString, DrawingMLColorSchemeItemBase*> i(scheme);
+    while (i.hasNext()) {
+        i.next();
+        insert(i.key(), i.value()->clone());
+    }
+
+    return *this;
+}
+
+DrawingMLColorScheme::DrawingMLColorScheme(const DrawingMLColorScheme& scheme) : QHash<QString, DrawingMLColorSchemeItemBase*>()
+{
+    QHashIterator<QString, DrawingMLColorSchemeItemBase*> i(scheme);
+    while (i.hasNext()) {
+        i.next();
+        insert(i.key(), i.value()->clone());
+    }
+}
+
 DrawingMLColorSchemeItemBase* DrawingMLColorScheme::value(int index) const
 {
     return DrawingMLColorSchemeItemHash::value( QString::number(index) );
@@ -260,6 +237,29 @@ DrawingMLFillBase::~DrawingMLFillBase()
 DrawingMLFormatScheme::~DrawingMLFormatScheme()
 {
     qDeleteAll(fillStyles);
+}
+
+DrawingMLFormatScheme::DrawingMLFormatScheme()
+{
+}
+
+DrawingMLFormatScheme::DrawingMLFormatScheme(const DrawingMLFormatScheme& format)
+{
+    QMapIterator<int, DrawingMLFillBase*> i(format.fillStyles);
+    while (i.hasNext()) {
+        i.next();
+        fillStyles.insert(i.key(), i.value()->clone());
+    }
+}
+
+DrawingMLFormatScheme& DrawingMLFormatScheme::operator=(const DrawingMLFormatScheme& format)
+{
+    QMapIterator<int, DrawingMLFillBase*> i(format.fillStyles);
+    while (i.hasNext()) {
+        i.next();
+        fillStyles.insert(i.key(), i.value()->clone());
+    }
+    return *this;
 }
 
 DrawingMLTheme::DrawingMLTheme()

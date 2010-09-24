@@ -3681,7 +3681,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 #endif
     m_currentColor = col;
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -3706,40 +3706,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_satMod()
 
     readNext();
     READ_EPILOGUE
-}
-
-void MSOOXML_CURRENT_CLASS::modifyColor()
-{
-    int red = m_currentColor.red();
-    int green = m_currentColor.green();
-    int blue = m_currentColor.blue();
-
-    if (m_currentTint > 0) {
-        red = m_currentTint * red + (1 - m_currentTint) * 255;
-        green = m_currentTint * green + (1 - m_currentTint) * 255;
-        blue = m_currentTint * blue + (1 - m_currentTint) * 255;
-    }
-    if (m_currentShadeLevel > 0) {
-        red = m_currentShadeLevel * red;
-        green = m_currentShadeLevel * green;
-        blue = m_currentShadeLevel * blue;
-    }
-    if (m_currentSatMod > 0) {
-        red = red * m_currentSatMod;
-        green = green * m_currentSatMod;
-        blue = blue * m_currentSatMod;
-        if (red > 255) {
-            red = 255;
-        }
-        if (green > 255) {
-            green = 255;
-        }
-        if (blue > 255) {
-            blue = 255;
-        }
-    }
-
-    m_currentColor = QColor(red, green, blue);
 }
 
 #undef CURRENT_EL
@@ -4073,7 +4039,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
         }
     }
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -4144,7 +4110,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
         }
     }
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -4187,7 +4153,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
         }
     }
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }

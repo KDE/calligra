@@ -194,7 +194,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideLayoutPath, slideLayoutFile,
-        0/*unused*/, &m_context->theme,
+        0/*unused*/, &d->slideMasterPageProperties[slideMasterPathAndFile].theme,
         PptxXmlSlideReader::SlideLayout,
         masterSlideProperties, //PptxSlideProperties
         result,
@@ -215,7 +215,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         return 0;
     }
 
-    initializeContext(context);
+    initializeContext(context, d->slideMasterPageProperties[slideMasterPathAndFile].theme);
 
     context.firstReadingRound = false;
     status = m_context->import->loadAndParseDocument(
@@ -270,7 +270,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         *m_context->import,
         slidePath, slideFile,
         d->slideNumber,
-        &m_context->theme,
+        &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme,
         PptxXmlSlideReader::Slide,
         masterSlideProperties,
         slideLayoutProperties,
@@ -292,7 +292,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         return status;
     }
 
-    initializeContext(context);
+    initializeContext(context, d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].theme);
 
     // In this round we read rest
     context.firstReadingRound = false;
@@ -309,7 +309,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     READ_EPILOGUE
 }
 
-void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context)
+void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context, const MSOOXML::DrawingMLTheme& theme)
 {
     // Only now, we can fully prepare default text styles, as we know the theme we are using
     // And we have the mapping available
@@ -320,7 +320,7 @@ void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context
     while (defaultIndex < defaultTextStyles.size()) {
         if (!defaultTextColors.at(defaultIndex).isEmpty()) {
             QString valTransformed = context.colorMap.value(defaultTextColors.at(defaultIndex));
-            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = m_context->theme.colorScheme.value(valTransformed);
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = theme.colorScheme.value(valTransformed);
             QColor col = Qt::black;
             if (colorItem) {
                 col = colorItem->value();
@@ -330,10 +330,10 @@ void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context
         if (!defaultLatinFonts.at(defaultIndex).isEmpty()) {
             QString face = defaultLatinFonts.at(defaultIndex);
             if (face.startsWith("+mj")) {
-                face = m_context->theme.fontScheme.majorFonts.latinTypeface;
+                face = theme.fontScheme.majorFonts.latinTypeface;
             }
             else if (face.startsWith("+mn")) {
-                face = m_context->theme.fontScheme.minorFonts.latinTypeface;
+                face = theme.fontScheme.minorFonts.latinTypeface;
             }
             context.defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
         }
@@ -381,7 +381,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     MSOOXML::Utils::splitPathAndFile(slideThemePathAndFile, &slideThemePath, &slideThemeFile);
 
     MSOOXML::MsooXmlThemesReader themesReader(m_writers);
-    MSOOXML::MsooXmlThemesReaderContext themecontext(m_context->theme, m_context->relationships, m_context->import,
+    MSOOXML::MsooXmlThemesReaderContext themecontext(masterPageProperties.theme, m_context->relationships, m_context->import,
         slideThemePath, slideThemeFile);
     themecontext.spreadMode = false; // In this mode, colors behave better with pptx
 
@@ -401,7 +401,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
          MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
          MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                          tableStylesFile, &m_context->theme, d->tableStyleList);
+                                                                          tableStylesFile, &masterPageProperties.theme, d->tableStyleList);
          m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
     }
 
@@ -413,7 +413,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideMasterPath, slideMasterFile,
-        0/*unused*/, &m_context->theme,
+        0/*unused*/, &masterPageProperties.theme,
         PptxXmlSlideReader::SlideMaster,
         masterSlideProperties,
         0,
@@ -433,7 +433,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         return status;
     }
 
-    initializeContext(context);
+    initializeContext(context, masterPageProperties.theme);
 
     // In this context we already have the real colorMap
     context.firstReadingRound = false;

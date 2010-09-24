@@ -1395,3 +1395,45 @@ MSOOXML_EXPORT void Utils::copyPropertiesFromStyle(const KoGenStyle& sourceStyle
         targetStyle.addProperty(propertyName, propertyValue, type);
     }
 }
+
+MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
+{
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+
+    if (tint > 0) {
+        red = tint * red + (1 - tint) * 255;
+        green = tint * green + (1 - tint) * 255;
+        blue = tint * blue + (1 - tint) * 255;
+    }
+    if (shade > 0) {
+        red = shade * red;
+        green = shade * green;
+        blue = shade * blue;
+    }
+
+    // FIXME: This calculation for sure is incorrect,
+    // According to MS forums, RGB should first be converted to linear RGB
+    // Then to HSL and then multiply saturation value by satMod
+    // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
+    // ADD INFO: MS document does not say that when calculating TINT and SHADE
+    // That whether one should use normal RGB or linear RGB, check it!
+    if (satMod > 0) {
+        red = red * satMod;
+        green = green * satMod;
+        blue = blue * satMod;
+        if (red > 255) {
+            red = 255;
+        }
+        if (green > 255) {
+            green = 255;
+        }
+        if (blue > 255) {
+            blue = 255;
+        }
+    }
+
+    color = QColor(red, green, blue);
+}
+
