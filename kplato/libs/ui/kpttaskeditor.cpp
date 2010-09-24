@@ -480,33 +480,33 @@ void TaskEditor::setupGui()
 {
     QString name = "taskeditor_add_list";
 
-    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), "Add Task...", this );
+    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), i18n( "Add Task" ), this );
     actionCollection()->addAction("add_task", menuAddTask );
     connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, menuAddTask );
 
-    actionAddTask  = new KAction( i18n("Add Task..."), this);
+    actionAddTask  = new KAction( i18n( "Add Task" ), this);
     actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     menuAddTask->addAction( actionAddTask );
 
-    actionAddMilestone  = new KAction( i18n("Add Milestone..."), this );
+    actionAddMilestone  = new KAction( i18n( "Add Milestone" ), this );
     actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
     menuAddTask->addAction( actionAddMilestone );
 
 
-    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), "Add Sub-Task...", this );
+    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), i18n( "Add Sub-Task" ), this );
     actionCollection()->addAction("add_subtask", menuAddTask );
     connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, menuAddSubTask );
 
-    actionAddSubtask  = new KAction( i18n("Add Sub-Task..."), this );
+    actionAddSubtask  = new KAction( i18n( "Add Sub-Task" ), this );
     actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     menuAddSubTask->addAction( actionAddSubtask );
 
-    actionAddSubMilestone = new KAction( i18n("Add Sub-Milestone..."), this );
+    actionAddSubMilestone = new KAction( i18n( "Add Sub-Milestone" ), this );
     actionAddSubMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_I ) );
     connect( actionAddSubMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddSubMilestone() ) );
     menuAddSubTask->addAction( actionAddSubMilestone );
