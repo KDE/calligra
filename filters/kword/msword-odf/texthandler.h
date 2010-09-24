@@ -285,6 +285,7 @@ private:
         PAGE = 33,
         PAGEREF = 37,
         EQ = 49,
+        MERGEFIELD = 59,
         HYPERLINK = 88,
         SHAPE = 95
     };
