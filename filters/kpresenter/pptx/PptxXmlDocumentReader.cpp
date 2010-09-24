@@ -244,7 +244,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    READ_ATTR_WITHOUT_NS(id)
+    TRY_READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITH_NS(r, id)
     kDebug() << "id:" << id << "r:id:" << r_id;
 
@@ -357,7 +357,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-    READ_ATTR_WITHOUT_NS(id)
+    TRY_READ_ATTR_WITHOUT_NS(id)
     READ_ATTR_WITH_NS(r, id)
     kDebug() << "id:" << id << "r:id:" << r_id;
 
