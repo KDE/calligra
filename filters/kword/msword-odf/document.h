@@ -74,17 +74,6 @@ public:
              LEInputStream* data, LEInputStream* table, LEInputStream* wdoc);
     virtual ~Document();
 
-    KWordTextHandler *textHandler() const {
-        return m_textHandler;
-    }
-
-    bool hasParser() const {
-        return m_parser != 0L;
-    }
-    bool bodyFound() const {
-        return m_bodyFound;
-    }
-
     virtual void bodyStart();
     virtual void bodyEnd();
 
@@ -122,6 +111,9 @@ public:
     bool omittMasterPage(void) const { return m_omittMasterPage; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
+    KWordTextHandler *textHandler(void) const { return m_textHandler; }
+    bool hasParser(void) const { return m_parser != 0L; }
+    bool bodyFound(void) const { return m_bodyFound; }
 
     /**
      * Add element val to the backgroud-color stack.

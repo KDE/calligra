@@ -111,8 +111,9 @@ protected:
     double rowHeight() const;
 
 private:
-    //We can have table in headers too. selecting correct writer
-    KoXmlWriter * currentWriter();
+    // Table can be present in {header, footer, footnote, endnote, body}.
+    // @return the correct writer.
+    KoXmlWriter* currentWriter() const;
 
     // The document owning this table handler.
     Document*     m_document;

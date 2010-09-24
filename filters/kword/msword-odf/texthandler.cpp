@@ -114,6 +114,28 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     }
 }
 
+KoXmlWriter* KWordTextHandler::currentWriter() const
+{
+    KoXmlWriter* writer = NULL;
+
+    if (document()->writingHeader()) {
+        writer = document()->headerWriter();
+    }
+    else if (m_insideFootnote) {
+        writer = m_footnoteWriter;
+    }
+    else if (m_insideDrawing) {
+        writer = m_drawingWriter;
+    }
+    else if (m_insideAnnotation) {
+        writer = m_annotationWriter;
+    }
+    else {
+        writer = m_bodyWriter;
+    }
+    return writer; 
+}
+
 //increment m_sectionNumber
 void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
@@ -302,7 +324,7 @@ void KWordTextHandler::footnoteFound(wvWare::FootnoteData::Type type,
     //autonumber or character
     m_footnoteWriter->startElement("text:note-citation");
     if (characters[0].unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
-        //Note: besides converting the number to text here the format is specified in section-properties -> notes-configuration too
+        //NOTE: besides converting the number to text here the format is specified in section-properties -> notes-configuration too
 
         int noteNumber = (type == wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber);
         QString noteNumberString;
@@ -724,22 +746,11 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
     }
 
     // Set correct writer and style location.
-    KoXmlWriter* writer;
+    KoXmlWriter* writer = currentWriter();
     bool inStylesDotXml = false;
-    if (m_insideFootnote) {
-        writer = m_footnoteWriter;
-    } else if (m_insideDrawing) {
-        writer = m_drawingWriter;
-        if (document()->writingHeader()) {
-            inStylesDotXml = true;
-        }
-    } else if (document()->writingHeader()) {
-        writer = document()->headerWriter();
+
+    if (document()->writingHeader()) {
         inStylesDotXml = true;
-    } else if (m_insideAnnotation) {
-        writer = m_annotationWriter;
-    } else {
-        writer = m_bodyWriter;
     }
 
     // Check list information, because that's bigger than a paragraph,

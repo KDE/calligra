@@ -102,6 +102,12 @@ public:
     virtual void bookmarkStart( const wvWare::BookmarkData& data );
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
+    /**
+     * Paragraph can be present in {header, footer, footnote, endnote,
+     * annotation, body}.  @return the actual writer.
+     */
+    KoXmlWriter* currentWriter() const;
+
     ///////// Our own interface, also used by processStyles
 
     Document* document() const {
