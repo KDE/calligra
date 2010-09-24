@@ -51,7 +51,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
 {
     m_nextShapeNeeded = false;
 
-    KoTextShapeData *data;
+    KoTextShapeData *data = 0;
     KoShape *shapeOfAnchor = 0;
     foreach (KWFrame *frame, frameSet->frames()) { //find the frame for the anchor
         KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
