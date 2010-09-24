@@ -74,12 +74,28 @@ public:
 
     bool isEmpty() const;
 
-    enum ParagraphBulletType {BulletType, NumberType};
-    ParagraphBulletType m_type;
-    QString m_bulletChar;
-    QString m_numbering;
+    void setBulletChar(const QString& bulletChar);
+
+    void setSuffix(const QString& suffixChar);
+
+    void setAlign(const QString& align);
+
+    void setNumFormat(const QString& numFormat);
+
+    void setIndent(qreal indent);
+
     int m_level;
     int m_startValue;
+
+private:
+    enum ParagraphBulletType {BulletType, NumberType};
+    ParagraphBulletType m_type;
+
+    QString m_bulletChar;
+    QString m_numFormat;
+    QString m_suffix;
+    QString m_align;
+    qreal m_indent;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.

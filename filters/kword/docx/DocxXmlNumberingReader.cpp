@@ -47,7 +47,7 @@ public:
 };
 
 DocxXmlNumberingReader::DocxXmlNumberingReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlReader(writers)
+    : MSOOXML::MsooXmlCommonReader(writers)
     , d(new Private)
 {
     init();
@@ -61,7 +61,6 @@ DocxXmlNumberingReader::~DocxXmlNumberingReader()
 void DocxXmlNumberingReader::init()
 {
     d->counter = 0;
-    m_currentListStyleProperties = 0;
 }
 
 KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -152,12 +151,11 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    m_currentListStyleProperties = new KoListLevelProperties;
-    m_currentListStyleProperties->setBulletCharacter(QChar());
+    m_currentBulletProperties.clear();
 
     TRY_READ_ATTR(ilvl)
     if (!ilvl.isEmpty()) {
-        m_currentListStyleProperties->setLevel(ilvl.toInt());
+        m_currentBulletProperties.m_level = ilvl.toInt();
     }
 
     m_bulletCharacter = QString();
@@ -185,22 +183,15 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
     // ODF does not support this, we replace those cases with default value '-'
     if (m_bulletStyle && !m_bulletCharacter.isEmpty()) {
         if (m_bulletFont == "Wingdings" || m_bulletFont == "Symbol") {
-            m_currentListStyleProperties->setBulletCharacter('-');
+            m_currentBulletProperties.setBulletChar("-");
         }
         else {
-            m_currentListStyleProperties->setBulletCharacter(m_bulletCharacter.at(0));
+            m_currentBulletProperties.setBulletChar(m_bulletCharacter.at(0));
         }
     }
 
-    QBuffer listBuf;
-    KoXmlWriter listStyleWriter(&listBuf);
-
-    m_currentListStyleProperties->saveOdf(&listStyleWriter);
-    const QString elementContents = QString::fromUtf8(listBuf.buffer(), listBuf.buffer().size());
-    m_currentListStyle.addChildElement("list-style-properties", elementContents);
-
-    delete m_currentListStyleProperties;
-    m_currentListStyleProperties = 0;
+    m_currentListStyle.addChildElement("list-style-properties",
+        m_currentBulletProperties.convertToListProperties());
 
     READ_EPILOGUE
 }
@@ -250,27 +241,27 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numFmt()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         if (val == "lowerRoman") {
-            m_currentListStyleProperties->setStyle(KoListStyle::RomanLowerItem);
+            m_currentBulletProperties.setNumFormat("i");
         }
         else if (val == "lowerLetter") {
-            m_currentListStyleProperties->setStyle(KoListStyle::AlphaLowerItem);
+            m_currentBulletProperties.setNumFormat("a");
         }
         else if (val == "decimal") {
-            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
+            m_currentBulletProperties.setNumFormat("1");
         }
         else if (val == "upperRoman") {
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperRomanItem);
+            m_currentBulletProperties.setNumFormat("I");
         }
         else if (val == "upperLetter") {
-            m_currentListStyleProperties->setStyle(KoListStyle::UpperAlphaItem);
+            m_currentBulletProperties.setNumFormat("A");
         }
         else if (val == "bullet") {
             m_bulletStyle = true;
         }
         else if (val == "ordinal") {
             // in ooxml this means having 1st, 2nd etc. but currently there's no real support for it
-            m_currentListStyleProperties->setStyle(KoListStyle::DecimalItem);
-            m_currentListStyleProperties->setListItemSuffix(".");
+            m_currentBulletProperties.setNumFormat("1");
+            m_currentBulletProperties.setSuffix(".");
         }
     }
 
@@ -296,7 +287,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_start()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentListStyleProperties->setStartValue(val.toInt());
+        m_currentBulletProperties.m_startValue = val.toInt();
     }
 
     readNext();
@@ -322,7 +313,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlText()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         if (!m_bulletStyle) {
-            m_currentListStyleProperties->setListItemSuffix(val.right(1));
+            m_currentBulletProperties.setSuffix(val.right(1));
         }
         else {
             m_bulletCharacter = val;
@@ -467,15 +458,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlJc()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        if (val == "left") {
-            m_currentListStyleProperties->setAlignment(Qt::AlignLeft);
-        }
-        else if (val == "center") {
-            m_currentListStyleProperties->setAlignment(Qt::AlignHCenter);
-        }
-        else if (val == "right") {
-            m_currentListStyleProperties->setAlignment(Qt::AlignRight);
-        }
+        m_currentBulletProperties.setAlign(val);
     }
 
     readNext();
@@ -503,7 +486,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
     bool ok = false;
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
-        m_currentListStyleProperties->setIndent(leftInd);
+        m_currentBulletProperties.setIndent(leftInd);
     }
 
     readNext();

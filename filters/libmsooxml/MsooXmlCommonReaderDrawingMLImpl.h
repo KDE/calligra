@@ -58,7 +58,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
     m_currentDoubleValue = 0;
     m_hyperLink = false;
-    m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_fillImageRenderingStyleStretch = false;
@@ -2150,8 +2149,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         // Making the bullet character look ugly, thus defaulting to "-"
         m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
-        m_currentBulletProperties.m_bulletChar = '-';
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_currentBulletProperties.setBulletChar("-");
     }
 
     if (m_listStylePropertiesAltered) {
@@ -4232,8 +4230,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentBulletProperties.m_bulletChar = '-';
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_currentBulletProperties.setBulletChar("-");
         m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
     }
@@ -4395,9 +4392,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     const QXmlStreamAttributes attrs(attributes());
 
     if (attrs.hasAttribute("char")) {
-        // Effectively converts this to QChar
-        m_currentBulletProperties.m_bulletChar = attrs.value("char").toString();
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_currentBulletProperties.setBulletChar(attrs.value("char").toString());
         // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
         m_lstStyleFound = true;
     }
@@ -4736,8 +4731,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
     m_lstStyleFound = true;
-    m_currentBulletProperties.m_bulletChar = "";
-    m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+    m_currentBulletProperties.setBulletChar("");
     m_listStylePropertiesAltered = true;
     readNext();
     READ_EPILOGUE
@@ -4770,9 +4764,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 
     if (!type.isEmpty()) {
         m_lstStyleFound = true;
-
-        m_currentBulletProperties.m_numbering = type;
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::NumberType;
+        if (type == "arabicPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "arabicParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "alphaUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaLcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "romanUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("I");
+        }
+        else if (type == "romanLcPeriod") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("I");
+        }
+        else if (type == "romanLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(startAt)

@@ -64,7 +64,6 @@ protected:
     KoCharacterStyle* m_currentTextStyleProperties;
 
     KoGenStyle m_currentListStyle;
-    KoListLevelProperties* m_currentListStyleProperties;
     MSOOXML::Utils::ParagraphBulletProperties m_currentBulletProperties;
     // Properties for potentially all 9 lvls which are possible
     QMap<int, MSOOXML::Utils::ParagraphBulletProperties> m_currentCombinedBulletProperties;
