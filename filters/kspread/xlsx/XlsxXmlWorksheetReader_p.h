@@ -28,6 +28,10 @@
 //! @todo the workboot was designed after filters/kspread/excel/sidewinder to allow to shared as much
 //!       logic as possible. Goal is to let them both share the same structures and OpenDocument logic
 //!       some day.
+
+#include <MsooXmlGlobal.h>
+#include "XlsxXmlDrawingReader.h"
+
 class Sheet;
 
 class Cell

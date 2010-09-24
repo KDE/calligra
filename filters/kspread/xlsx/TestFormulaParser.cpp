@@ -27,6 +27,7 @@
 #include "qtest_kde.h"
 
 #include "FormulaParser.h"
+#include "XlsxXmlWorksheetReader_p.h"
 
 void TestFormulaParser::testConvertFormula_data()
 {
@@ -62,6 +63,27 @@ void TestFormulaParser::testConvertFormula()
     QFETCH(QString, odf);
 
     QCOMPARE(MSOOXML::convertFormula(xlsx), odf);
+}
+
+void TestFormulaParser::testSharedFormulaReferences()
+{
+    Sheet s1;
+    Cell* c1 = s1.cell(2, 5, true);
+    c1->formula = "=D6-E7";
+    Cell* c2 = s1.cell(12, 43, true);
+    QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=N44-O45"));
+
+    c1->formula = "=SUM(D6-E7)";
+    QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=SUM(N44-O45)"));
+
+    c1->formula = "=D6";
+    QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=N44"));
+
+    c1->formula = "=SUM(D6)";
+    QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=SUM(N44)"));
+
+    c1->formula = "=F8(H12)";
+    QCOMPARE(MSOOXML::convertFormulaReference(c1, c2), QString("=F8(R50)"));
 }
 
 QTEST_KDEMAIN(TestFormulaParser, NoGUI)

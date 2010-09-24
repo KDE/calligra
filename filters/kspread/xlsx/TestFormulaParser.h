@@ -33,6 +33,7 @@ class TestFormulaParser : public QObject
 private Q_SLOTS:
     void testConvertFormula_data();
     void testConvertFormula();
+    void testSharedFormulaReferences();
 };
 
 #endif // TEST_FORMULAPARSER_H
