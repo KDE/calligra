@@ -26,6 +26,7 @@
 #include "globalssubstreamhandler.h"
 #include "excel.h"
 #include "cell.h"
+#include "objects.h"
 #include "sheet.h"
 #include <QPoint>
 
@@ -728,7 +729,7 @@ void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
     d->textObjects.push_back(record->m_text);
 
     if (d->lastOfficeArtObject) {
-        d->lastOfficeArtObject->setText(record->m_text);
+        d->lastOfficeArtObject->setText(*record);
         d->lastOfficeArtObject = 0;
     }
 }

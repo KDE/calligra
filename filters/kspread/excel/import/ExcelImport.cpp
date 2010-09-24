@@ -72,6 +72,7 @@
 #include <NumberFormatParser.h>
 
 #include "swinder.h"
+#include "objects.h"
 #include <iostream>
 #include "ODrawClient.h"
 #include "ImportUtils.h"

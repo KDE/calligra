@@ -29,6 +29,7 @@
 #include "cell.h"
 #include "sheet.h"
 #include "workbook.h"
+#include "excel.h"
 
 #include <string>
 #include <iostream>
@@ -212,13 +213,13 @@ public:
     explicit OfficeArtObject(const MSO::OfficeArtSpContainer& object);
     ~OfficeArtObject();
     MSO::OfficeArtSpContainer object() const;
-    void setText(const QString& text);
-    QString text() const;
+    void setText(const TxORecord& text);
+    TxORecord text() const;
     bool operator==(const OfficeArtObject& other) const { return this == &other; }
     bool operator!=(const OfficeArtObject& other) const { return !(*this == other); }
 private:
     MSO::OfficeArtSpContainer m_object;
-    QString m_text;
+    TxORecord m_text;
 };
 
 } // namespace Swinder

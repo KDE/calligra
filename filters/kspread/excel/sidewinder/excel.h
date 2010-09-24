@@ -28,7 +28,6 @@
 #include "swinder.h"
 #include "formulas.h"
 #include "records.h"
-#include "objects.h"
 
 // libmso
 //#include <generated/simpleParser.h>
@@ -41,6 +40,9 @@
 
 namespace Swinder
 {
+
+class Object;
+
 // rich-text, unicode, far-east support Excel string
 
 class EString
@@ -777,9 +779,28 @@ public:
 class TxORecord : public Record
 {
 public:
+    enum HorizontalAlignment {
+        Left = 1,
+        Centered = 2,
+        Right = 3,
+        Justified = 4,
+        Distributed = 7
+    };
+    enum VerticalAlignment {
+        Top = 1,
+        VCentered = 2,
+        Bottom = 3,
+        VJustified = 4,
+        VDistributed = 7
+    };
+
+
     QString m_text;
+    HorizontalAlignment halign;
+    VerticalAlignment valign;
+
     static const unsigned id;
-    TxORecord(Workbook *book);
+    TxORecord(Workbook *book=0);
     virtual ~TxORecord();
     virtual unsigned rtti() const {
         return this->id;
