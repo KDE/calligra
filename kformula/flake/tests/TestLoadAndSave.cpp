@@ -792,8 +792,18 @@ void TestLoadAndSave::phantomElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<mphantom></mphantom>" );
+    // Basic content
+    addRow( "<mphantom></mphantom>",
+            "<mphantom/>" );
+    addRow( "<mphantom><mrow></mrow></mphantom>",
+            "<mphantom/>" );
+    addRow( "<mphantom>\n <mi>x</mi>\n</mphantom>" );
+    addRow( "<mphantom><mrow><mi>x</mi></mrow></mphantom>",
+            "<mphantom>\n <mi>x</mi>\n</mphantom>" );
+
+    // Attributes
+    addRow( "<mphantom width=\"+0.8em\">\n <mi>x</mi>\n</mphantom>" );
+    addRow( "<mphantom depth=\"1.2\">\n <mi>x</mi>\n</mphantom>" );
 }
 
 void TestLoadAndSave::fencedElement_data()
@@ -801,8 +811,11 @@ void TestLoadAndSave::fencedElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<mfenced></mfenced>" );
+    // This is an inferred mrow element
+    addRow( "<mfenced></mfenced>",
+            "<mfenced/>" );
+    addRow( "<mfenced>\n <mi>x</mi>\n</mfenced>" );
+    addRow( "<mfenced>\n <mi>x</mi>\n <mn>2</mn>\n</mfenced>" );
 }
 
 void TestLoadAndSave::encloseElement_data()
@@ -810,8 +823,18 @@ void TestLoadAndSave::encloseElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<menclose></menclose>" );
+    // Basic content
+    addRow( "<menclose></menclose>",
+            "<menclose/>" );
+    addRow( "<menclose><mrow></mrow></menclose>",
+            "<menclose/>");
+    addRow( "<menclose>\n <mi>x</mi>\n</menclose>" );
+    addRow( "<menclose><mrow><mi>x</mi></mrow></menclose>",
+            "<menclose>\n <mi>x</mi>\n</menclose>");
+
+    // Attributes
+    addRow( "<menclose notation=\"longdiv\">\n <mi>x</mi>\n</menclose>" );
+    addRow( "<menclose notation=\"downdiagonalstrike\">\n <mi>x</mi>\n</menclose>" );
 }
 
 void TestLoadAndSave::subElement_data()
