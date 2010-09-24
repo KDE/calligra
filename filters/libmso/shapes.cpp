@@ -1390,22 +1390,18 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
  
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) {
-        qreal rotationAngle = toQReal(rotation->rotation) / 180 * M_PI;
-
-        QTransform t;
-        t.rotateRadians(-rotationAngle);
-
-        QPointF figureCenter(rect.width()/2.0, rect.height()/2.0);
-
-        QPointF originInDocument( rect.x(), rect.y() );
-
-        QPointF rotatedCenterPoint = t.map( figureCenter );
-
-        QPointF translatedPoint( figureCenter - rotatedCenterPoint + originInDocument );
-
         static const QString transformString("rotate(%1) translate(%2 %3)");
 
-        out.xml.addAttribute("draw:transform", transformString.arg(rotationAngle).arg( client->formatPos(out.hOffset(translatedPoint.x()))).arg(client->formatPos(out.vOffset(translatedPoint.y()))));
+        qreal xPos = out.hOffset(rect.x());
+        qreal yPos = out.vOffset(rect.y());
+        qreal angle = -(toQReal(rotation->rotation) / 180 * M_PI);;
+        qreal width = out.hLength(rect.width());
+        qreal height = out.hLength(rect.height());
+
+        qreal newX = xPos + width/2 - cos(-angle)*width/2 + sin(-angle)*height/2;
+        qreal newY = yPos + height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
+
+        out.xml.addAttribute("draw:transform", transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
     }
     else {
         out.xml.addAttribute("svg:x", client->formatPos(out.hOffset(rect.x())));
