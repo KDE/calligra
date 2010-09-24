@@ -292,12 +292,14 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
     }
     newPosition = newPosition + m_anchor->offset();
 
+    if (shapeOfAnchor) {
         qDebug() << "checking"<<newPosition.y()<<newPosition.y() + m_anchor->shape()->boundingRect().height()<<shapeOfAnchor->boundingRect().height();
-    //Check if the new position will place the anchor shape (even partly) beyond textframe
-    if (newPosition.y() + m_anchor->shape()->boundingRect().height()
-            > shapeOfAnchor->boundingRect().height()) {
-        m_nextShapeNeeded = true;
-        qDebug() << "SETTING NEEDED";
+        //Check if the new position will place the anchor shape (even partly) beyond textframe
+        if (newPosition.y() + m_anchor->shape()->boundingRect().height()
+                > shapeOfAnchor->boundingRect().height()) {
+            m_nextShapeNeeded = true;
+            qDebug() << "SETTING NEEDED";
+        }
     }
 
     QPointF diff = newPosition - m_anchor->shape()->position();
