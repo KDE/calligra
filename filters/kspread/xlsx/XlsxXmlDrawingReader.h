@@ -50,8 +50,8 @@ public:
     virtual ~XlsxXmlDrawingReaderContext();
 
     XlsxImport* import;
-    QString path;
-    QString file;
+    QString path; // contains the path to the file which is being processed (i.e. 'xl/drawings')
+    QString file; // contains the name of the file which is being processed (i.e. 'drawing1.xml')
     const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/* themes;
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
@@ -71,9 +71,6 @@ public:
     };
 
     QMap<AnchorType, Position> m_positions;
-
-    QString m_path;         // contains the path to the file which is being processed (i.e. 'xl/drawings')
-    QString m_file;         // contains the name of the file which is being processed (i.e. 'drawing1.xml')
 
     QRect positionRect() const;
 

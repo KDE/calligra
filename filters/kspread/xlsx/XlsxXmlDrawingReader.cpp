@@ -163,6 +163,14 @@ void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
         c->saveIndex(xmlWriter, positionRect());
         xmlWriter->endElement(); // draw:g
     }
+    foreach(XlsxXmlEmbeddedPicture* p, pictures) {
+        QString sourceName = p->path();
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        if(import->copyFile(sourceName, destinationName, false) == KoFilter::OK) {
+            p->setPath(destinationName);
+            p->saveXml(xmlWriter);
+        }
+    }   
 }
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
@@ -367,7 +375,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_pic()
                     const QString r_id = attrs.value("r:embed").toString();     // take r:embed attribute out of a:blip element
 
                     // now try to get the real file path from r_id (e:embed) attribute
-                    QString link = m_context->relationships->target(m_context->m_path, m_context->m_file, r_id);
+                    QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
                     /* Please note!
                     1. The picture->m_path will now contain a path in the xlsx (i.e. 'xl/media/image1.jpg')
