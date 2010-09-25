@@ -217,10 +217,11 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
         // In case you point the end (no slides under the pointer)
         newIndex = m_viewModeSlidesSorter->pageCount() - 1;
     }
-
-    m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
-    QListWidgetItem *sourceItem = takeItem(oldIndex);
-    insertItem(newIndex, sourceItem);
+    if (oldIndex != newIndex) {
+        m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
+        QListWidgetItem *sourceItem = takeItem(oldIndex);
+        insertItem(newIndex, sourceItem);
+    }
 }
 
 QMimeData* KPrViewModeSlidesSorter::KPrSlidesSorter::mimeData(const QList<QListWidgetItem*> items) const
