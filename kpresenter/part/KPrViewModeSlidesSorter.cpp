@@ -23,6 +23,7 @@
 #include <QtCore/QEvent>
 #include <QtGui/QPainter>
 #include <QVariant>
+#include <QScrollBar>
 
 #include <KoResourceManager.h>
 #include <KoRuler.h>
@@ -80,8 +81,8 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
         if (numberMod == 0) {
             numberMod = 4;
         }
-        QPoint point1(numberMod * size.width(), (currentItemNumber - numberMod) / 4 * size.height() );
-        QPoint point2(numberMod * size.width(), ((currentItemNumber - numberMod) / 4 + 1) * size.height());
+        QPoint point1(numberMod * size.width(), (currentItemNumber - numberMod) / 4 * size.height() - verticalScrollBar()->value() );
+        QPoint point2(numberMod * size.width(), ((currentItemNumber - numberMod) / 4 + 1) * size.height() - verticalScrollBar()->value() );
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
