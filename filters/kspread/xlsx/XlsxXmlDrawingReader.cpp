@@ -41,6 +41,8 @@
 #include <KoUnit.h>
 #include <QFontMetricsF>
 
+#include <kspread/Util.h>
+
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
@@ -482,8 +484,13 @@ bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all neede
 {
     xmlWriter->startElement("draw:frame");
 
-    xmlWriter->addAttributePt("svg:x", m_x);
-    xmlWriter->addAttributePt("svg:y", m_y);
+    if (m_fromCell.m_col > 0) {
+        xmlWriter->addAttributePt("svg:x", EMU_TO_POINT(m_fromCell.m_colOff));
+        xmlWriter->addAttributePt("svg:y", EMU_TO_POINT(m_fromCell.m_rowOff));
+    } else {
+        xmlWriter->addAttributePt("svg:x", m_x);
+        xmlWriter->addAttributePt("svg:y", m_y);
+    }
 
     // use width and height only if they are non-zero
     if (m_width > 0) {
@@ -491,6 +498,12 @@ bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all neede
     }
     if (m_height > 0) {
         xmlWriter->addAttributePt("svg:height", m_height);
+    }
+
+    if (m_toCell.m_col > 0) {
+        xmlWriter->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_toCell.m_col+1) + QString::number(m_toCell.m_row+1));
+        xmlWriter->addAttributePt("table:end-x", EMU_TO_POINT(m_toCell.m_colOff));
+        xmlWriter->addAttributePt("table:end-y", EMU_TO_POINT(m_toCell.m_rowOff));
     }
 
     xmlWriter->startElement("draw:image");
