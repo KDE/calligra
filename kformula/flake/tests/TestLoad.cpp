@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+
    Copyright 2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright 2010      Inge wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -417,7 +419,6 @@ void TestLoad::errorElement_data()
             " <mtext>  and  </mtext>"
             " <mn> 2 </mn>"
             "</merror>", 4, 8 );
-
 }
 
 void TestLoad::paddedElement_data()
