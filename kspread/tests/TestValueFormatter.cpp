@@ -203,7 +203,11 @@ void TestValueFormatter::testCreateNumberFormat_data()
 
     QTest::newRow("negative sign in format string") <<
             -5.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "(-.)" << "(-5)";
-}
+
+    QTest::newRow("unspecified precision 1") <<
+            1.0 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << "1";
+    QTest::newRow("unspecified precision 0.5") <<
+            0.5 << -1 << Format::Number << Style::DefaultFloatFormat << "" << "0" << "0.5";}
 
 void TestValueFormatter::testCreateNumberFormat()
 {
