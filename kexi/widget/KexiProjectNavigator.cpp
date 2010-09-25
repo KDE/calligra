@@ -277,6 +277,10 @@ void KexiProjectNavigator::slotExecuteItem(const QModelIndex& vitem)
 
 void KexiProjectNavigator::slotSelectionChanged(const QModelIndex& i)
 {
+    if (KexiMainWindowIface::global() && KexiMainWindowIface::global()->userMode()) {
+        return;
+    }
+    
     KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(i.internalPointer());
     if (!it) {
         m_openAction->setEnabled(false);
