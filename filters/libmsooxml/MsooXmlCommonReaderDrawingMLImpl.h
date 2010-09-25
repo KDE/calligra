@@ -2470,13 +2470,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(sourceName);
 
+        if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {  // if we got 'from' cell
+            XlsxXmlDrawingReaderContext::Position f_from, f_to;
+            f_from = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+
+            if (f_from.m_col > 0 && f_from.m_row > 0) {
+                picture->m_fromCell = f_from;           // store the starting cell
+                if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {   // if we got 'to' cell
+                    f_to = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
+                    if (f_to.m_col > 0 && f_to.m_row > 0){
+                        picture->m_toCell = f_to;       // store the ending cell
+                    }
+                }
+            }
+        }
+
+        // put this picture in the QList. It will be later used (stored) in XlsxXmlWorksheetReader.cpp
+        m_context->pictures << picture;
+#else
         QString destinationName;
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
 
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
+#endif
     }
 
     // Read child elements
@@ -2861,6 +2882,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         ns = QLatin1String("pic");
     }
     else {
+        ns = QChar((char)caller);
+    }
+#elif defined(XLSXXMLDRAWINGREADER_CPP)
+    if (caller == blipFill_pic) {
+        ns = QLatin1String("xdr");
+    } else {
         ns = QChar((char)caller);
     }
 #else
@@ -3499,7 +3526,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller calle
  - [done] spPr (§21.4.3.7)
  - [done] spPr (§20.1.2.2.35)
  - [done] spPr (§20.2.2.6)
- - [done] spPr (§20.5.2.30)
+ - [done] spPr (§20.5.2.30)
  - [done] spPr (§19.3.1.44)
 
  Child elements:

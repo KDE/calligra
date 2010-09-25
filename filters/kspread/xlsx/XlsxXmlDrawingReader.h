@@ -91,7 +91,6 @@ public:
 protected:
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
-    KoFilter::ConversionStatus read_pic();
     KoFilter::ConversionStatus read_col();
     KoFilter::ConversionStatus read_row();
     KoFilter::ConversionStatus read_colOff();
@@ -107,8 +106,8 @@ private:
 
     int m_chartNumber;
     
-// #include <MsooXmlCommonReaderMethods.h>
-// #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include <MsooXmlCommonReaderMethods.h>
+#include <MsooXmlCommonReaderDrawingMLMethods.h>
 // #include <MsooXmlDrawingReaderTableMethods.h>
 
     Q_DISABLE_COPY(XlsxXmlDrawingReader)
@@ -120,7 +119,7 @@ class XlsxXmlEmbeddedPicture
 {
 public:
     XlsxXmlEmbeddedPicture();
-    XlsxXmlEmbeddedPicture(QString &filePath);
+    XlsxXmlEmbeddedPicture(const QString &filePath);
 
     bool saveXml(KoXmlWriter *xmlWriter);   // save the .xml part of the picture (the picture itself isn't stored here)
     void setPath(QString &newPath);         // set the new path for the file
