@@ -3,6 +3,7 @@ Type=Service
 Name=KSpread Microsoft Excel Export Filter
 Name[en_GB]=KSpread Microsoft Excel Export Filter
 Name[it]=Filtro di esportazione Microsoft Excel per KSpread
+Name[ja]=KSpread Microsoft Excel エクスポートフィルタ
 Name[pt]=Filtro de Exportação de Microsoft Excel para o KSpread
 Name[pt_BR]=Filtro de Exportação Microsoft Excel para o KSpread
 Name[sv]=Microsoft Excel-exportfilter för Kspread
