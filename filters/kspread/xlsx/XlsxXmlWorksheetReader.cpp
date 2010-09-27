@@ -446,6 +446,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         // save the indexes of drawing objects anchored to this cell
                         drawing->saveIndexes(body);
                     }
+                    body->addCompleteElement(cell->drawingXml);
 
                     QPair<QString,QString> oleObject;
                     foreach( oleObject, cell->oleObjects ) {
@@ -1245,7 +1246,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
         QString filepath = path + "/" + file;
 
-        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, path, file);
+        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, d->sheet, path, file);
         XlsxXmlDrawingReader reader(this);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {

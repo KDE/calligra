@@ -842,6 +842,22 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("draw:transform", rotString);
         }
     }
+#elif defined(XLSXXMLDRAWINGREADER_CPP)
+    if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
+        XlsxXmlDrawingReaderContext::Position f_from, f_to;
+        f_from = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+        body->addAttributePt("svg:x", EMU_TO_POINT(f_from.m_colOff));
+        body->addAttributePt("svg:y", EMU_TO_POINT(f_from.m_rowOff));
+        if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
+            f_to = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
+            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(f_to.m_col+1) + QString::number(f_to.m_row+1));
+            body->addAttributePt("table:end-x", EMU_TO_POINT(f_to.m_colOff));
+            body->addAttributePt("table:end-y", EMU_TO_POINT(f_to.m_rowOff));
+        } else {
+            body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
+            body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
+        }
+    }
 #else
 #ifdef __GNUC__
 #warning TODO: docx
@@ -1091,6 +1107,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     if (m_context->type == SlideLayout) {
         body = &layoutWriter;
     }
+#elif defined(XLSXXMLDRAWINGREADER_CPP)
+    KoXmlWriter *bodyBackup = body;
+    body = m_context->body;
 #endif
 
     preReadSp();
@@ -1109,11 +1128,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF(style)
-#ifdef PPTXXMLSLIDEREADER_H
-            else {
-                TRY_READ_IF(txBody)
-            }
+#if defined(PPTXXMLSLIDEREADER_H)
+            ELSE_TRY_READ_IF(txBody)
 #endif
+            else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
+                KoXmlWriter* w = body;
+                body->startElement("draw:text-box");
+                TRY_READ(DrawingML_txBody)
+                w->endElement();
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1154,6 +1177,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
         }
         body = bodyBackup;
     }
+#elif defined(XLSXXMLDRAWINGREADER_CPP)
+    body = bodyBackup;
 #endif
 
     READ_EPILOGUE
@@ -5113,6 +5138,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
     SKIP_EVERYTHING
     READ_EPILOGUE
 }
+
+#undef MSOOXML_CURRENT_NS
+#ifdef DRAWINGML_TXBODY_NS
+#define MSOOXML_CURRENT_NS DRAWINGML_TXBODY_NS
+#else
+#define MSOOXML_CURRENT_NS DRAWINGML_NS
+#endif
 
 #undef CURRENT_EL
 #define CURRENT_EL txBody
