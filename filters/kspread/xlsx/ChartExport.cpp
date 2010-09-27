@@ -34,7 +34,7 @@
 using namespace Charting;
 
 ChartExport::ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const theme)
-    : m_width(0), m_height(0), m_chart(chart), m_theme(theme)
+    : m_width(0), m_height(0), m_chart(chart), m_theme(theme), sheetReplacement(true)
 {
     Q_ASSERT(m_chart);
     m_drawLayer = false;
@@ -283,6 +283,13 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyles& styles, K
     return genPlotAreaStyle( styleID, style, styles, mainStyles );
 }
 
+QString replaceSheet( const QString &originalString, const QString &replacementSheet )
+{
+    QStringList split = originalString.split( QString::fromLatin1( "!" ) );
+    split[0] = replacementSheet;
+    return split.join( QString::fromLatin1( "!" ) );
+}
+
 bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 {
     if(!chart() || !chart()->m_impl || m_href.isEmpty())
@@ -523,10 +530,20 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             }
         }
         if (!series->m_labelCell.isEmpty()) {
-            bodyWriter->addAttribute("chart:label-cell-address", normalizeCellRange(series->m_labelCell));
+            QString labelAddress = series->m_labelCell;
+            if ( sheetReplacement )
+                labelAddress = normalizeCellRange( replaceSheet( labelAddress, QString::fromLatin1( "local" ) ) );
+            else
+                labelAddress = normalizeCellRange( labelAddress );
+            bodyWriter->addAttribute("chart:label-cell-address", labelAddress );
         }
 
-        const QString valuesCellRangeAddress = normalizeCellRange(series->m_valuesCellRangeAddress);
+        QString valuesCellRangeAddress;
+        if ( sheetReplacement )
+            valuesCellRangeAddress = normalizeCellRange( replaceSheet( series->m_valuesCellRangeAddress, QString::fromLatin1( "local" ) ) );
+        else
+            valuesCellRangeAddress = normalizeCellRange( series->m_valuesCellRangeAddress );
+        
         if(!valuesCellRangeAddress.isEmpty()) {
             bodyWriter->addAttribute("chart:values-cell-range-address", valuesCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
         }
@@ -540,9 +557,14 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
 //             bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E5");
 //             bodyWriter->endElement();
 //         } else if (chart()->m_impl->name() == "bubble" ){
+            QString domainRange;
             Q_FOREACH( const QString& curRange, series->m_domainValuesCellRangeAddress ){
                 bodyWriter->startElement("chart:domain");
-                bodyWriter->addAttribute("table:cell-range-address", curRange); //"Sheet1.C2:Sheet1.E5");
+                if ( sheetReplacement )
+                    domainRange = normalizeCellRange( replaceSheet( curRange, QString::fromLatin1( "local" ) ) );
+                else
+                    domainRange = normalizeCellRange( curRange );
+                bodyWriter->addAttribute( "table:cell-range-address", domainRange ); //"Sheet1.C2:Sheet1.E5");
                 bodyWriter->endElement();
             }
 //             if ( series->m_domainValuesCellRangeAddress.count() == 1 ){
@@ -784,4 +806,9 @@ void ChartExport::writeInternalTable ( KoXmlWriter* bodyWriter )
         }
         bodyWriter->endElement();
     bodyWriter->endElement();
+}
+
+void ChartExport::setSheetReplacement( bool val )
+{
+    sheetReplacement = val;
 }
