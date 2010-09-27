@@ -74,7 +74,7 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
 
 
 ImportTableWizard::~ImportTableWizard() {
-
+  delete m_migrateManager;
 }
 
 void ImportTableWizard::back() {
@@ -270,10 +270,6 @@ void ImportTableWizard::arriveSrcConnPage()
 
 void ImportTableWizard::arriveTableSelectPage()
 {
-    if (m_migrateDriver) {
-        delete m_migrateDriver;
-        m_migrateDriver = 0;
-    }
     Kexi::ObjectStatus result;
     KexiUtils::WaitCursor wait;
     m_migrateDriver = prepareImport(result);
@@ -283,6 +279,7 @@ void ImportTableWizard::arriveTableSelectPage()
             return;
         
         QStringList tableNames;
+	m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }

@@ -28,26 +28,37 @@ KSpreadMigrate::KSpreadMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
   m_CurSheet = 0;
+  m_KSDoc = 0;
 }
 
 KSpreadMigrate::~KSpreadMigrate()
 {
+  if (m_KSDoc) {
+    m_KSDoc->closeUrl();
+    delete m_KSDoc;
+    m_KSDoc = 0;
+  }
 }
 
 bool KSpreadMigrate::drv_connect()
 {
+  drv_disconnect();
   m_FileName = m_migrateData->source->dbPath() + '/' + m_migrateData->source->dbFileName();
   
   if (!QFile::exists(m_FileName)) 
     return false;
   
-  m_KSDoc = new KSpread::Doc();
+  if (!m_KSDoc) {
+    m_KSDoc = new KSpread::Doc();
+  }
+  kDebug();
   return m_KSDoc->openUrl(m_FileName);
 }
 
 bool KSpreadMigrate::drv_disconnect()
 {
   if (m_KSDoc) {
+    m_KSDoc->closeUrl();
     delete m_KSDoc;
     m_KSDoc = 0;
   }
