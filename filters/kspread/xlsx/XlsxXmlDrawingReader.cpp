@@ -320,6 +320,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart2()
             }
         }
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+        chartexport->setSheetReplacement( false );
 
         KoStore* storeout = m_context->worksheetReaderContext->import->outputStore();
         XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(storeout, chartexport);

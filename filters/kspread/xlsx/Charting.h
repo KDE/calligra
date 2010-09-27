@@ -26,6 +26,7 @@
 #include <QtCore/QMap>
 #include <QtGui/QColor>
 #include <QtCore/QDebug>
+#include <MsooXmlGlobal.h>
 
 namespace Charting
 {
@@ -129,7 +130,6 @@ namespace Charting
         ChartImpl() {}
         virtual ~ChartImpl() {}
         virtual QByteArray name() const = 0;
-        virtual qint64 dimensions() const = 0;
     };
 
     class PieImpl : public ChartImpl
@@ -139,7 +139,6 @@ namespace Charting
         int m_anStart;
         PieImpl(int anStart = 0) : ChartImpl(), m_anStart(anStart) {}
         virtual QByteArray name() const { return "circle"; }
-        virtual qint64 dimensions() const { return 1; }
     };
 
     class RingImpl : public PieImpl
@@ -149,21 +148,18 @@ namespace Charting
         int m_pcDonut;
         RingImpl(int anStart = 0, int pcDonut = 0) : PieImpl(anStart), m_pcDonut(pcDonut) {}
         virtual QByteArray name() const { return "ring"; }
-        virtual qint64 dimensions() const { return 1; }
     };
 
     class BarImpl : public ChartImpl
     {
     public:
         virtual QByteArray name() const { return "bar"; }
-        virtual qint64 dimensions() const { return 1; }
     };
     
     class LineImpl : public ChartImpl
     {
     public:
         virtual QByteArray name() const { return "line"; }
-        virtual qint64 dimensions() const { return 1; }
     };
     
     class RadarImpl : public ChartImpl
@@ -171,7 +167,6 @@ namespace Charting
     public:
         RadarImpl() : ChartImpl() {}
         virtual QByteArray name() const { return "radar"; }
-        virtual qint64 dimensions() const { return 1; }
     };
 
     class AreaImpl : public ChartImpl
@@ -179,7 +174,6 @@ namespace Charting
     public:
         AreaImpl() : ChartImpl() {}
         virtual QByteArray name() const { return "area"; }
-        virtual qint64 dimensions() const { return 1; }
     };
 
     class StockImpl : public ChartImpl
@@ -187,7 +181,6 @@ namespace Charting
     public:
         StockImpl() : ChartImpl() {}
         virtual QByteArray name() const { return "stock"; }
-        virtual qint64 dimensions() const { return 1; }
     };
 
     class ScatterImpl : public ChartImpl
@@ -195,7 +188,6 @@ namespace Charting
     public:
         ScatterImpl() : ChartImpl() {}
         virtual QByteArray name() const { return "scatter"; }
-        virtual qint64 dimensions() const { return 2; }
     };
 
     class BubbleImpl : public ChartImpl
@@ -213,7 +205,6 @@ namespace Charting
         bool m_showNegativeBubbles;
         BubbleImpl(SizeType sizeType = Area, unsigned int sizeRatio = 100, bool showNegativeBubbles = true) : ChartImpl(), m_sizeType(sizeType), m_sizeRatio(sizeRatio), m_showNegativeBubbles(showNegativeBubbles) {}
         virtual QByteArray name() const { return "bubble"; }
-        virtual qint64 dimensions() const { return 3; }
     };
 
     class SurfaceImpl : public ChartImpl
@@ -223,7 +214,6 @@ namespace Charting
         bool m_fill;
         SurfaceImpl(bool fill = false) : ChartImpl(), m_fill(fill) {}
         virtual QByteArray name() const { return "surface"; }
-        virtual qint64 dimensions() const { return 2; }
     };
 
     class Obj
@@ -267,22 +257,53 @@ namespace Charting
         Axis(Type type) : Obj(), m_type(type) {}
         virtual ~Axis() {}
     };
-    
-    class InternalDataTable : public Obj
+
+    class Cell
     {
     public:
-        QVector< QVariant > xValues;
-        QVector< QVariant > yValues;
-        QVector< QVariant > zValues;
-        QVector< QString > horizontalHeader;
-        QVector< QString > verticalHeader;
-        explicit InternalDataTable() : Obj(){}
+        int m_column;
+        int m_row;
+        QString m_value;
+        QString m_valueType;
+        Cell(int columnIndex, int rowIndex) : m_column(columnIndex), m_row(rowIndex), m_valueType("string"){};
+    };
+
+    // cell data represetation of internal table
+    class InternalTable
+    {
+    public:
+        InternalTable():m_maxRow(0),m_maxColumn(0) {  }
+        ~InternalTable() { qDeleteAll(m_cells); }
+
+        Cell* cell(int columnIndex, int rowIndex, bool autoCreate)
+        {
+            const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
+            Cell* c = m_cells[ hashed ];
+            if (!c && autoCreate) {
+                c = new Cell(columnIndex, rowIndex);
+                m_cells[ hashed ] = c;
+                if (rowIndex > m_maxRow) m_maxRow = rowIndex;
+                if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
+                if (!m_maxCellsInRow.contains(rowIndex) || columnIndex > m_maxCellsInRow[rowIndex])
+                    m_maxCellsInRow[rowIndex] = columnIndex;
+            }
+            return c;
+        }
+
+        int maxCellsInRow(int rowIndex) const { return m_maxCellsInRow[rowIndex]; }
+        int maxRow() const { return m_maxRow; }
+        int maxColumn() const { return m_maxColumn; }
+
+    private:
+        int m_maxRow;
+        int m_maxColumn;
+        QHash<unsigned, Cell*> m_cells;
+        QHash<int, int> m_maxCellsInRow;
     };
 
     class Series : public Obj
     {
     public:
-        enum DomainIndexes{ YAxis = 0, XAxis = 1, ZAxis = 2, NONE };
         /// the type of data in categories, or horizontal values on bubble and scatter chart groups, in the series. MUST be either 0x0001=numeric or 0x0003=text.
         int m_dataTypeX;
         /// the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
@@ -296,18 +317,17 @@ namespace Charting
         /// Range that contains the values that should be visualized by the dataSeries.
         QString m_valuesCellRangeAddress;
         /// Ranges that contains the values that should be visualized by the dataSeries.
-        QVector< QString > m_domainValuesCellRangeAddress;
+        QStringList m_domainValuesCellRangeAddress;
         /// The referenced values used in the chart
         QMap<Value::DataId, Value*> m_datasetValue;
         /// The formatting for the referenced values
         QList<Format*> m_datasetFormat;
         /// List of text records attached to the series.
         QList<Text*> m_texts;
-        /// storage for internal table data used for default values and non ods chart data
-        InternalDataTable internalData;
+        // range that contains label
+        QString m_labelCell;
 
-//         explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false) {}
-        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false), m_domainValuesCellRangeAddress( QVector< QString >( 2 ) ) {}
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false) {}
         virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
     };
     
@@ -358,7 +378,10 @@ namespace Charting
         Gradient* m_plotAreaFillGradient;
         QColor m_plotAreaFillColor;
 
-        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(0), m_fillGradient(0), m_plotAreaFillGradient(0) {
+        // charts internal table
+        InternalTable m_internalTable;
+
+        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_fillGradient; delete m_plotAreaFillGradient; }

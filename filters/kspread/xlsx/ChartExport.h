@@ -42,32 +42,29 @@ namespace MSOOXML
 class ChartExport
 {
 public:
-    explicit ChartExport( Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL, bool maintainRefs = true );
+    explicit ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL);
     ~ChartExport();
     Charting::Chart* chart() const { return m_chart; }
+    void setSheetReplacement( bool val );
 
     bool m_drawLayer;
-    
     QString m_href;
     QString m_cellRangeAddress;
     QString m_endCellAddress;
     QString m_notifyOnUpdateOfRanges;
-    bool m_maintainReferences;
 #if 0
     /// anchored to sheet
     QString m_sheetName;
     /// anchored to cell
     //unsigned long m_colL, m_rwT;
 #endif
-    qreal m_x, m_y, m_width, m_height; //in pt
+    qreal m_x, m_y, m_width, m_height; //in pt    
 
     bool saveIndex(KoXmlWriter* xmlWriter);
     bool saveContent(KoStore* store, KoXmlWriter* manifestWriter);
 
 private:
     QString toPtString( int number );
-    void writeInternalTable( KoXmlWriter* bodyWriter );
-    void writeInternalTableCell( KoXmlWriter* bodyWriter, const QVariant& currentValue, double defaultValue, const QString& cellRef = QString() );    
     enum Orientation {
         vertical,
         horizontal
@@ -75,12 +72,15 @@ private:
     float sprcToPt( int sprc, Orientation orientation );
     Charting::Chart* m_chart;
     const MSOOXML::DrawingMLTheme* m_theme;
+    bool sheetReplacement;
     QString genChartAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genChartAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    void addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData = 1);
     QString generateGradientStyle( KoGenStyles& mainStyles, const Charting::Gradient* grad );
     QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
+    void writeInternalTable ( KoXmlWriter* bodyWriter );
 };
 
 #endif
