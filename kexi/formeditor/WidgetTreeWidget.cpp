@@ -413,6 +413,8 @@ void WidgetTreeWidget::selectWidgetForItem(QTreeWidgetItem *item)
 void WidgetTreeWidget::activateTabPageIfNeeded(QTreeWidgetItem* item)
 {
     WidgetTreeWidgetItem *childItem = dynamic_cast<WidgetTreeWidgetItem*>(item);
+    if (!childItem)
+        return;
     WidgetTreeWidgetItem *parentItem = dynamic_cast<WidgetTreeWidgetItem*>(item->parent());
     while (childItem && parentItem) {
         if (parentItem && qobject_cast<QTabWidget*>(parentItem->data()->widget())) {
