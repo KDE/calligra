@@ -94,7 +94,7 @@ int KPlatoRCPSScheduler::progress( int generations, int duration )
         return -1;
     }
     if ( m_stopScheduling ) {
-        m_schedule->logWarning( i18n( "Scheduling halted after %1 generations" ).arg( generations ), 1 );
+        m_schedule->logWarning( i18n( "Scheduling halted after %1 generations", generations ), 1 );
         qDebug()<<"KPlatoRCPSScheduler::progress:"<<"stop";
         return -1;
     }
@@ -207,7 +207,7 @@ void KPlatoRCPSScheduler::run()
 
         m_schedule->setPhaseName( 0, i18n( "Init" ) );
         if ( locale() ) {
-            m_schedule->logDebug( i18n( "Schedule project using RCPS Scheduler, starting at %1" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
+            m_schedule->logDebug( QString( "Schedule project using RCPS Scheduler, starting at %1" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
             m_schedule->logInfo( i18n( "Schedule project from start time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 0 );
         }
 
@@ -234,7 +234,7 @@ void KPlatoRCPSScheduler::run()
         return;
     }
     if ( result != 0 ) {
-        m_schedule->logError( i18n( "Invalid scheduling solution. Result: %1", result, 1 ) );
+        m_schedule->logError( i18n( "Invalid scheduling solution. Result: %1", result ), 1 );
     }
     kplatoFromRCPS();
     setProgress( PROGRESS_MAX_VALUE );

@@ -43,7 +43,7 @@ IntervalEdit::IntervalEdit( CalendarDay *day, QWidget *parent)
         if ( ! intervals.isEmpty() ) {
             startTime->setTime( intervals.last()->endTime() );
             double l = ( intervals.last()->endTime().msecsTo( QTime().addMSecs( -1 ) ) + 1 )  / (1000.0*60.0*60.0);
-            length->setValue( qMin( l, 8.0 ) );
+            length->setValue( qMin( l, (qreal) 8.0 ) );
         }
     }
     enableButtons();

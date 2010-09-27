@@ -1193,7 +1193,7 @@ QList<Node*> TaskWorkPackageView::selectedNodes() const {
     if ( sm == 0 ) {
         return lst;
     }
-    foreach ( QModelIndex i, sm->selectedRows() ) {
+    foreach ( const QModelIndex &i, sm->selectedRows() ) {
         Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( i ) );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
