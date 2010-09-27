@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+
    Copyright 2007-2009 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright 2010      Inge wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -377,8 +379,8 @@ void TestLoadAndSave::glyphElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Glyph element does not have content
+    addRow( "<mglyph fontfamily=\"serif\" index=\"97\" alt=\"a\"/>" );
 }
 
 void TestLoadAndSave::mathVariant_data()
@@ -743,7 +745,7 @@ void TestLoadAndSave::fractionElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
+    // Basic content
     addRow( "<mfrac><mi>x</mi><mi>y</mi></mfrac>",
             "<mfrac>\n"
             " <mi>x</mi>\n"
@@ -765,8 +767,18 @@ void TestLoadAndSave::styleElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<mstyle></mstyle>" );
+    // Basic content
+    addRow( "<mstyle></mstyle>",
+            "<mstyle/>" );
+    addRow( "<mstyle><mrow></mrow></mstyle>",
+            "<mstyle/>");
+    addRow( "<mstyle>\n <mi>x</mi>\n</mstyle>" );
+    addRow( "<mstyle><mrow><mi>x</mi></mrow></mstyle>",
+            "<mstyle>\n <mi>x</mi>\n</mstyle>");
+
+    // Be sure attributes don't break anything
+    addRow( "<mstyle mathvariant=\"bold\">\n <mi>x</mi>\n</mstyle>" );
+    addRow( "<mstyle thinmathspace=\"0.5em\">\n <mi>x</mi>\n</mstyle>" );
 }
 
 void TestLoadAndSave::errorElement_data()
@@ -774,8 +786,22 @@ void TestLoadAndSave::errorElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<merror></merror>" );
+    // Basic content
+    addRow( "<merror></merror>",
+            "<merror/>");
+    addRow( "<merror><mrow></mrow></merror>",
+            "<merror/>" );
+    addRow( "<merror>\n <mi>x</mi>\n</merror>" );
+    addRow( "<merror><mrow><mi>x</mi></mrow></merror>",
+            "<merror>\n <mi>x</mi>\n</merror>" );
+
+    // More complex content
+    addRow( "<merror>\n"
+            " <mtext>Unrecognized element: mfraction; arguments were:</mtext>\n"
+            " <mrow>\n  <mn>1</mn>\n  <mo>+</mo>\n  <msqrt>\n   <mn>5</mn>\n  </msqrt>\n </mrow>\n"
+            " <mtext>and</mtext>\n"
+            " <mn>2</mn>\n"
+            "</merror>" );
 }
 
 void TestLoadAndSave::paddedElement_data()
@@ -783,8 +809,18 @@ void TestLoadAndSave::paddedElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<mpadded></mpadded>" );
+    // Basic content
+    addRow( "<mpadded></mpadded>",
+            "<mpadded/>"  );
+    addRow( "<mpadded><mrow></mrow></mpadded>",
+            "<mpadded/>" );
+    addRow( "<mpadded>\n <mi>x</mi>\n</mpadded>" );
+    addRow( "<mpadded><mrow><mi>x</mi></mrow></mpadded>",
+            "<mpadded>\n <mi>x</mi>\n</mpadded>" );
+
+    // Be sure attributes don't break anything
+    addRow( "<mpadded width=\"+0.8em\">\n <mi>x</mi>\n</mpadded>" );
+    addRow( "<mpadded depth=\"1.2\">\n <mi>x</mi>\n</mpadded>" );
 }
 
 void TestLoadAndSave::phantomElement_data()
@@ -792,8 +828,18 @@ void TestLoadAndSave::phantomElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<mphantom></mphantom>" );
+    // Basic content
+    addRow( "<mphantom></mphantom>",
+            "<mphantom/>" );
+    addRow( "<mphantom><mrow></mrow></mphantom>",
+            "<mphantom/>" );
+    addRow( "<mphantom>\n <mi>x</mi>\n</mphantom>" );
+    addRow( "<mphantom><mrow><mi>x</mi></mrow></mphantom>",
+            "<mphantom>\n <mi>x</mi>\n</mphantom>" );
+
+    // Attributes
+    addRow( "<mphantom width=\"+0.8em\">\n <mi>x</mi>\n</mphantom>" );
+    addRow( "<mphantom depth=\"1.2\">\n <mi>x</mi>\n</mphantom>" );
 }
 
 void TestLoadAndSave::fencedElement_data()
@@ -801,8 +847,11 @@ void TestLoadAndSave::fencedElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<mfenced></mfenced>" );
+    // This is an inferred mrow element
+    addRow( "<mfenced></mfenced>",
+            "<mfenced/>" );
+    addRow( "<mfenced>\n <mi>x</mi>\n</mfenced>" );
+    addRow( "<mfenced>\n <mi>x</mi>\n <mn>2</mn>\n</mfenced>" );
 }
 
 void TestLoadAndSave::encloseElement_data()
@@ -810,8 +859,18 @@ void TestLoadAndSave::encloseElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "<menclose></menclose>" );
+    // Basic content
+    addRow( "<menclose></menclose>",
+            "<menclose/>" );
+    addRow( "<menclose><mrow></mrow></menclose>",
+            "<menclose/>");
+    addRow( "<menclose>\n <mi>x</mi>\n</menclose>" );
+    addRow( "<menclose><mrow><mi>x</mi></mrow></menclose>",
+            "<menclose>\n <mi>x</mi>\n</menclose>");
+
+    // Attributes
+    addRow( "<menclose notation=\"longdiv\">\n <mi>x</mi>\n</menclose>" );
+    addRow( "<menclose notation=\"downdiagonalstrike\">\n <mi>x</mi>\n</menclose>" );
 }
 
 void TestLoadAndSave::subElement_data()
@@ -914,7 +973,6 @@ void TestLoadAndSave::underElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
     // Basic content
     addRow( "<munder>\n <mrow></mrow>\n <mrow></mrow>\n</munder>",
             "<munder>\n <mrow/>\n <mrow/>\n</munder>");
@@ -1228,8 +1286,15 @@ void TestLoadAndSave::actionElement_data()
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
 
-    // TODO
-    addRow( "" );
+    // Basic content
+    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer\"><mrow></mrow><mrow></mrow></maction>",
+            "<maction actiontype=\"toggle\" selection=\"positive-integer\"/>" ); // 
+    addRow( "<maction actiontype=\"statusline\"><mrow></mrow><mrow></mrow></maction>",
+            "<maction actiontype=\"statusline\"/>" );
+    addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>",
+            "<maction actiontype=\"tooltip\"/>" );
+    addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>",
+            "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"/>" );
 }
 
 void TestLoadAndSave::identifierElement()

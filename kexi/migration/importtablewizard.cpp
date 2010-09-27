@@ -313,6 +313,9 @@ void ImportTableWizard::arriveAlterTablePage()
     }
 
     kDebug() << ts->fieldCount();
+    
+    setValid(m_alterTablePageItem, ts->fieldCount() > 0);
+    
     m_alterSchemaWidget->setTableSchema(ts);
 
     if (!m_migrateDriver->readFromTable(m_importTableName))

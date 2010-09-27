@@ -90,7 +90,7 @@ void AlterSchemaWidget::tableClicked(const QModelIndex& idx)
 {
     m_selectedColumn = idx.column();
     m_columnNumLabel->setText(i18n("Column %1",QString::number(m_selectedColumn + 1)));
-    if (m_newSchema) {
+    if (m_newSchema && m_selectedColumn < m_newSchema->fieldCount()) {
         kDebug() << m_newSchema->field(m_selectedColumn)->typeName() << m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName());
         m_columnType->setCurrentIndex(m_types.indexOf(m_newSchema->field(m_selectedColumn)->typeName()));
 

@@ -73,8 +73,6 @@ KoFilter::ConversionStatus read_lum();
 KoFilter::ConversionStatus read_tint();
 KoFilter::ConversionStatus read_alpha();
 
-void modifyColor();
-
 KoFilter::ConversionStatus read_satMod();
 KoFilter::ConversionStatus read_tile();
 KoFilter::ConversionStatus read_fillRect();

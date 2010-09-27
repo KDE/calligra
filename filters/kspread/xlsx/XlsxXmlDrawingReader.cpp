@@ -41,6 +41,8 @@
 #include <KoUnit.h>
 #include <QFontMetricsF>
 
+#include <kspread/Util.h>
+
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
@@ -163,6 +165,14 @@ void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
         c->saveIndex(xmlWriter, positionRect());
         xmlWriter->endElement(); // draw:g
     }
+    foreach(XlsxXmlEmbeddedPicture* p, pictures) {
+        QString sourceName = p->path();
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        if(import->copyFile(sourceName, destinationName, false) == KoFilter::OK) {
+            p->setPath(destinationName);
+            p->saveXml(xmlWriter);
+        }
+    }   
 }
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
@@ -329,85 +339,6 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart2()
 }
 
 #undef CURRENT_EL
-#define CURRENT_EL pic
-//! pic handler (Picture)
-/*! ECMA-376, 19.3.1.37, p. 2848; 20.1.2.2.30, p.3049 - DrawingML
-    This element specifies the existence of a picture object within the document.
-*/
-//! @todo reuse the read_pic() from MsooXmlCommonReaderDrawing* instead
-/*!
- Parent elements:
- - xdr:twoCellAnchor
- - xdr:wsDr
-
- Child elements:
- - [done] blipFill (Picture Fill) §19.3.1.4
- - [done] blipFill (Picture Fill) §20.1.8.14 - DrawingML
-*/
-
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_pic()
-{
-    Q_ASSERT(m_context);
-    Q_ASSERT(m_context->relationships);
-
-    if (!expectEl("xdr:pic")) {         // to read pic, we expect this element
-        return KoFilter::WrongFormat;
-    }
-
-    while (!atEnd()) {                  // go through the xml and watch for the right elements
-        readNext();                     // move to the next element
-
-        if (qualifiedName() == QString("xdr:blipFill")) {
-
-            while (!atEnd()) {          // try to read other elements if there are still some
-                readNext();
-
-                if (qualifiedName() == QString("a:blip")) {
-                    QXmlStreamAttributes attrs(attributes());
-                    const QString r_id = attrs.value("r:embed").toString();     // take r:embed attribute out of a:blip element
-
-                    // now try to get the real file path from r_id (e:embed) attribute
-                    QString link = m_context->relationships->target(m_context->m_path, m_context->m_file, r_id);
-
-                    /* Please note!
-                    1. The picture->m_path will now contain a path in the xlsx (i.e. 'xl/media/image1.jpg')
-                    you have to copy the file to .ods and replace it with the proper one in .ods (i.e. 'Pictures/image1.jpeg')
-                    2. The f_from and f_to contain from and to cell, this has to be recalculated to x,y, width,height in pt.
-                    The things mentioned above are done in XlsxXmlWorksheetReader.cpp and they have to be done before calling
-                    the picture->saveXml(...) method.
-                    */
-
-                    XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(link);
-
-                    if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {  // if we got 'from' cell
-                        XlsxXmlDrawingReaderContext::Position f_from, f_to;
-                        f_from = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
-
-                        if (f_from.m_col > 0 && f_from.m_row > 0) {
-                            picture->m_fromCell = f_from;           // store the starting cell
-                            if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {   // if we got 'to' cell
-                                f_to = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
-                                if (f_to.m_col > 0 && f_to.m_row > 0){
-                                    picture->m_toCell = f_to;       // store the ending cell
-                                }
-                            }
-                        }
-                    }
-
-                    // put this picture in the QList. It will be later used (stored) in XlsxXmlWorksheetReader.cpp
-                    m_context->pictures << picture;
-                    break;
-                }
-            }
-
-            break;
-        }
-    }
-
-    return KoFilter::OK;
-}
-
-#undef CURRENT_EL
 #define CURRENT_EL graphicFrame
 //! graphicFrame
 /*!
@@ -539,7 +470,7 @@ XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture()
 
 }
 
-XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture(QString &filePath)
+XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture(const QString &filePath)
     : m_x(0.0)
     , m_y(0.0)
     , m_width(0.0)
@@ -552,8 +483,13 @@ bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all neede
 {
     xmlWriter->startElement("draw:frame");
 
-    xmlWriter->addAttributePt("svg:x", m_x);
-    xmlWriter->addAttributePt("svg:y", m_y);
+    if (m_fromCell.m_col > 0) {
+        xmlWriter->addAttributePt("svg:x", EMU_TO_POINT(m_fromCell.m_colOff));
+        xmlWriter->addAttributePt("svg:y", EMU_TO_POINT(m_fromCell.m_rowOff));
+    } else {
+        xmlWriter->addAttributePt("svg:x", m_x);
+        xmlWriter->addAttributePt("svg:y", m_y);
+    }
 
     // use width and height only if they are non-zero
     if (m_width > 0) {
@@ -561,6 +497,12 @@ bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all neede
     }
     if (m_height > 0) {
         xmlWriter->addAttributePt("svg:height", m_height);
+    }
+
+    if (m_toCell.m_col > 0) {
+        xmlWriter->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_toCell.m_col+1) + QString::number(m_toCell.m_row+1));
+        xmlWriter->addAttributePt("table:end-x", EMU_TO_POINT(m_toCell.m_colOff));
+        xmlWriter->addAttributePt("table:end-y", EMU_TO_POINT(m_toCell.m_rowOff));
     }
 
     xmlWriter->startElement("draw:image");
@@ -585,10 +527,11 @@ void XlsxXmlEmbeddedPicture::setPath(QString &newPath)
     m_path = newPath;
 }
 
-// // in PPTX we do not have pPr, so p@text:style-name should be added earlier
-// //#define SETUP_PARA_STYLE_IN_READ_P
-// #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
-// #define DRAWINGML_NS "a"
-// #define DRAWINGML_PIC_NS "p" // DrawingML/Picture
-// #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
-// //#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl
+// in PPTX we do not have pPr, so p@text:style-name should be added earlier
+//#define SETUP_PARA_STYLE_IN_READ_P
+#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+#define DRAWINGML_NS "a"
+#define DRAWINGML_PIC_NS "xdr" // DrawingML/Picture
+#define XLSXXMLDRAWINGREADER_CPP
+#include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
+//#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl

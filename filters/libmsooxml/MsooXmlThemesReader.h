@@ -48,6 +48,7 @@ public:
     DrawingMLColorSchemeItem* toColorItem();
     DrawingMLColorSchemeSystemItem* toSystemItem();
     virtual QColor value() const = 0;
+    virtual DrawingMLColorSchemeItemBase* clone() const = 0;
 };
 
 class MSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeItemBase
@@ -56,6 +57,7 @@ public:
     DrawingMLColorSchemeItem();
     virtual QColor value() const { return color; }
     QColor color;
+    DrawingMLColorSchemeItem* clone() const { return new DrawingMLColorSchemeItem(*this); }
 };
 
 class MSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
@@ -67,6 +69,7 @@ public:
     QColor lastColor;
     QString systemColor; //!< ST_SystemColorVal (§20.1.10.58).
     bool spreadsheetMode;
+    DrawingMLColorSchemeSystemItem* clone() const { return new DrawingMLColorSchemeSystemItem(*this); }
 };
 
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
@@ -84,6 +87,8 @@ public:
                 XLSX uses lookup by index. When index is invalid, 0 is returned. */
     DrawingMLColorSchemeItemBase* value(int index) const;
 
+    DrawingMLColorScheme(const DrawingMLColorScheme& scheme);
+    DrawingMLColorScheme& operator=(const DrawingMLColorScheme& scheme);
     //! Name of the color scheme
     QString name;
 };
@@ -128,12 +133,16 @@ public:
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
     virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color) = 0;
+
+    virtual DrawingMLFillBase* clone() const = 0;
 };
 
 class MSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+
+    DrawingMLSolidFill* clone() const { return new DrawingMLSolidFill(*this); }
 };
 
 class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
@@ -141,6 +150,9 @@ class MSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 public:
     DrawingMLBlipFill(QString filePath);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+
+    DrawingMLBlipFill* clone() const { return new DrawingMLBlipFill(*this); }
+
 private:
     QString m_filePath;
 };
@@ -151,6 +163,8 @@ public:
     // Simplified gradient constuctor
     DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier, QVector<int> alphaModifier);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
+
+    DrawingMLGradientFill* clone() const { return new DrawingMLGradientFill(*this); }
 
 private:
     QVector<qreal> m_shadeModifier;
@@ -163,8 +177,12 @@ class MSOOXML_EXPORT DrawingMLFormatScheme
 {
 public:
 
+    DrawingMLFormatScheme();
     ~DrawingMLFormatScheme();
     QString name;
+
+    DrawingMLFormatScheme(const DrawingMLFormatScheme& format);
+    DrawingMLFormatScheme& operator=(const DrawingMLFormatScheme& format);
 
     QMap<int, DrawingMLFillBase*> fillStyles;
 };

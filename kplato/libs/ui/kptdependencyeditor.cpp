@@ -2106,7 +2106,7 @@ void DependencyEditor::setupGui()
 
     QString name = "taskeditor_add_list";
 
-    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), "Add Task...", this );
+    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), i18n( "Add Task" ), this );
     coll->addAction("add_task", menuAddTask );
     connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, menuAddTask );
@@ -2122,7 +2122,7 @@ void DependencyEditor::setupGui()
     menuAddTask->addAction( actionAddMilestone );
 
 
-    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), "Add Sub-Task...", this );
+    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), i18n( "Add Sub-Task" ), this );
     coll->addAction("add_subtask", menuAddTask );
     connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, menuAddSubTask );

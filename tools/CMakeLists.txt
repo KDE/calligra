@@ -6,11 +6,11 @@ macro_optional_add_subdirectory( slidecompare )
 
 macro_optional_find_package(Okular)
 
-if(OKULAR_FOUND)
+if(Okular_FOUND)
     add_subdirectory( okularodpgenerator )
-else(OKULAR_FOUND)
+else(Okular_FOUND)
     message(STATUS "Did NOT find Okular libraries, Okular generator will not be build")
-endif(OKULAR_FOUND)
+endif(Okular_FOUND)
 
 macro_optional_find_package(X11)
 macro_optional_find_package(Qt4)

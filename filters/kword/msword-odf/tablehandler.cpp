@@ -49,6 +49,11 @@ m_floatingTable(false)
     m_mainStyles = mainStyles; //for formatting styles
 }
 
+KoXmlWriter * KWordTableHandler::currentWriter() const
+{
+    return document()->textHandler()->currentWriter();
+}
+
 // Called by Document before invoking the table-row-functors
 void KWordTableHandler::tableStart(KWord::Table* table)
 {
@@ -350,14 +355,6 @@ void KWordTableHandler::tableRowEnd()
     KoXmlWriter*  writer = currentWriter();
     //end table row in content
     writer->endElement();//table:table-row
-}
-
-KoXmlWriter * KWordTableHandler::currentWriter()
-{
-    if (document()->writingHeader() && document()->headerWriter() != NULL)
-        return document()->headerWriter();
-    else
-        return m_bodyWriter;
 }
 
 static const wvWare::Word97::BRC& brcWinner(const wvWare::Word97::BRC& brc1, const wvWare::Word97::BRC& brc2)

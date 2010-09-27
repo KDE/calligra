@@ -1271,8 +1271,8 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 // </units> -------------------
 
 MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_type(ParagraphBulletProperties::BulletType), m_bulletChar(""),
-    m_startValue(0)
+    m_startValue(0), m_type(ParagraphBulletProperties::BulletType), m_bulletChar(""), 
+    m_align(""), m_indent(0)
 {
 }
 
@@ -1287,8 +1287,36 @@ MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
 {
     m_startValue = 0;
-    m_bulletChar = "";
+    setBulletChar("");
+    m_align = "";
+    m_indent = 0;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setAlign(const QString& align)
+{
+    m_align = align;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
+{
+    m_bulletChar = bulletChar;
     m_type = ParagraphBulletProperties::BulletType;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
+{
+    m_indent = indent;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
+{
+    m_suffix = suffixChar;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setNumFormat(const QString& numFormat)
+{
+    m_numFormat = numFormat;
+    m_type = ParagraphBulletProperties::NumberType;
 }
 
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
@@ -1296,61 +1324,22 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     QString returnValue;
     if (m_type == ParagraphBulletProperties::NumberType) {
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
-
-        QString suffix;
-        QString format;
-        if (m_numbering == "arabicPeriod") {
-            suffix = ".";
-            format = "1";
-        }
-        else if (m_numbering == "arabicParenR") {
-            suffix = ")";
-            format = "1";
-        }
-        else if (m_numbering == "alphaUcPeriod") {
-            suffix = ".";
-            format = "A";
-        }
-        else if (m_numbering == "alphaLcPeriod") {
-            suffix = ".";
-            format = "a";
-        }
-        else if (m_numbering == "alphaUcParenR") {
-            suffix = ")";
-            format = "A";
-        }
-        else if (m_numbering == "alphaLcParenR") {
-            suffix = ")";
-            format = "a";
-        }
-        else if (m_numbering == "romanUcPeriod") {
-            suffix = ".";
-            format = "I";
-        }
-        else if (m_numbering == "romanLcPeriod") {
-            suffix = ")";
-            format = "i";
-        }
-        else if (m_numbering == "romanUcParenR") {
-            suffix = ")";
-            format = "I";
-        }
-        else if (m_numbering == "romanLcParenR") {
-            suffix = ")";
-            format = "i";
-        }
-
-        returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(suffix).arg(format);
+        returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
         if (m_startValue != 0) {
             returnValue += QString("style:start-value=\"%1\" ").arg(m_startValue);
         }
-        returnValue += "/>";
     }
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
         returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
-        returnValue += "/>";
     }
+    if (!m_align.isEmpty()) {
+        returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
+    }
+    if (m_indent > 0) {
+        returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
+    }
+    returnValue += "/>";
 
     return returnValue;
 }
@@ -1395,3 +1384,45 @@ MSOOXML_EXPORT void Utils::copyPropertiesFromStyle(const KoGenStyle& sourceStyle
         targetStyle.addProperty(propertyName, propertyValue, type);
     }
 }
+
+MSOOXML_EXPORT void Utils::modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod)
+{
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+
+    if (tint > 0) {
+        red = tint * red + (1 - tint) * 255;
+        green = tint * green + (1 - tint) * 255;
+        blue = tint * blue + (1 - tint) * 255;
+    }
+    if (shade > 0) {
+        red = shade * red;
+        green = shade * green;
+        blue = shade * blue;
+    }
+
+    // FIXME: This calculation for sure is incorrect,
+    // According to MS forums, RGB should first be converted to linear RGB
+    // Then to HSL and then multiply saturation value by satMod
+    // SatMod can be for example 3.5 so converting RGB -> HSL is not an option
+    // ADD INFO: MS document does not say that when calculating TINT and SHADE
+    // That whether one should use normal RGB or linear RGB, check it!
+    if (satMod > 0) {
+        red = red * satMod;
+        green = green * satMod;
+        blue = blue * satMod;
+        if (red > 255) {
+            red = 255;
+        }
+        if (green > 255) {
+            green = 255;
+        }
+        if (blue > 255) {
+            blue = 255;
+        }
+    }
+
+    color = QColor(red, green, blue);
+}
+

@@ -42,7 +42,6 @@ public:
     PptxXmlDocumentReaderContext(PptxImport& _import, const QString& _path, const QString& _file,
                                  MSOOXML::MsooXmlRelationships& _relationships);
     PptxImport *import;
-    MSOOXML::DrawingMLTheme theme;
     const QString path;
     const QString file;
     MSOOXML::MsooXmlRelationships* relationships;
@@ -77,7 +76,7 @@ protected:
     KoOdfWriters *m_writers;
     PptxXmlDocumentReaderContext* m_context;
 
-    void initializeContext(PptxXmlSlideReaderContext& context);
+    void initializeContext(PptxXmlSlideReaderContext& context, const MSOOXML::DrawingMLTheme& theme);
 
 private:
 

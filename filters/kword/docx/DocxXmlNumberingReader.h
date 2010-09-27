@@ -26,7 +26,7 @@
 
 #include <KoGenStyle.h>
 #include <KoListLevelProperties.h>
-#include <MsooXmlReader.h>
+#include <MsooXmlCommonReader.h>
 #include <QMap>
 
 //! A context structure for DocxXmlNumberingReader
@@ -36,7 +36,7 @@ public:
 };
 
 //! A class reading MSOOXML numbering markup - numbering.xml part.
-class DocxXmlNumberingReader : public MSOOXML::MsooXmlReader
+class DocxXmlNumberingReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit DocxXmlNumberingReader(KoOdfWriters *writers);
@@ -63,9 +63,6 @@ protected:
     KoFilter::ConversionStatus read_rFonts_numbering();
 
     bool m_bulletStyle;
-
-    KoGenStyle m_currentListStyle;
-    KoListLevelProperties* m_currentListStyleProperties;
 
     QMap<QString, KoGenStyle> m_abstractListStyles;
 

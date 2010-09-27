@@ -72,6 +72,7 @@
 #include <NumberFormatParser.h>
 
 #include "swinder.h"
+#include "objects.h"
 #include <iostream>
 #include "ODrawClient.h"
 #include "ImportUtils.h"
@@ -513,11 +514,13 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
         ODrawClient client = ODrawClient(is);
         ODrawToOdf odraw(client);
         Writer writer(*shapesXml, *shapeStyles, false);
-        foreach (const OfficeArtObject* o, is->drawObjects()) {
+        const QList<OfficeArtObject*> objs = is->drawObjects();
+        for (int i = objs.size()-1; i >= 0; --i) {
+            OfficeArtObject* o = objs[i];
             client.setShapeText(o->text());
             odraw.processDrawingObject(o->object(), writer);
         }
-        for (int i = 0; i < is->drawObjectsGroupCount(); ++i) {
+        for (int i = is->drawObjectsGroupCount()-1; i >= 0; --i) {
             shapesXml->startElement("draw:g");
 
             const MSO::OfficeArtSpgrContainer& group = is->drawObjectsGroup(i);
@@ -526,12 +529,16 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
                 QRectF oldCoords = client.getGlobalRect(*first->clientAnchor);
                 QRectF newCoords = getRect(*first->shapeGroup);
                 Writer transw = writer.transform(oldCoords, newCoords);
-                foreach (const OfficeArtObject* o, is->drawObjects(i)) {
+                const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
+                for (int j = gobjs.size()-1; j >= 0; --j) {
+                    OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
                     odraw.processDrawingObject(o->object(), transw);
                 }
             } else {
-                foreach (const OfficeArtObject* o, is->drawObjects(i)) {
+                const QList<OfficeArtObject*> gobjs = is->drawObjects(i);
+                for (int j = gobjs.size()-1; j >= 0; --j) {
+                    OfficeArtObject* o = gobjs[j];
                     client.setShapeText(o->text());
                     odraw.processDrawingObject(o->object(), writer);
                 }
@@ -893,7 +900,8 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
         ODrawClient client = ODrawClient(ic->sheet());
         ODrawToOdf odraw(client);
         Writer writer(*shapesXml, *shapeStyles, false);
-        foreach (OfficeArtObject* o,objects) {
+        for (int i = objects.size()-1; i >= 0; --i) {
+            OfficeArtObject* o = objects[i];
             client.setShapeText(o->text());
             odraw.processDrawingObject(o->object(), writer);
         }

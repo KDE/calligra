@@ -120,12 +120,12 @@ MSO::OfficeArtSpContainer OfficeArtObject::object() const
     return m_object;
 }
 
-void OfficeArtObject::setText(const QString &text)
+void OfficeArtObject::setText(const TxORecord &text)
 {
     m_text = text;
 }
 
-QString OfficeArtObject::text() const
+TxORecord OfficeArtObject::text() const
 {
     return m_text;
 }

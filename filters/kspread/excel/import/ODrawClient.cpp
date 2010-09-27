@@ -112,13 +112,13 @@ QString ODrawClient::getPicturePath(int pib)
 bool ODrawClient::onlyClientData(const MSO::OfficeArtClientData &o)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    return !m_shapeText.isEmpty();
+    return !m_shapeText.m_text.isEmpty();
 }
 
 void ODrawClient::processClientData(const MSO::OfficeArtClientData &o, Writer &out)
 {
     qDebug() << "NOT YET IMPLEMENTED" << __PRETTY_FUNCTION__;
-    QStringList lines = m_shapeText.split(QRegExp("[\n\r]"));
+    QStringList lines = m_shapeText.m_text.split(QRegExp("[\n\r]"));
     foreach (const QString& line, lines) {
         out.xml.startElement("text:p", false);
         int pos = 0;
@@ -148,6 +148,31 @@ void ODrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox &ct, co
 KoGenStyle ODrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, Writer &out)
 {
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
+    if (!m_shapeText.m_text.isEmpty()) {
+        switch (m_shapeText.halign) {
+        case Swinder::TxORecord::Left:
+            style.addProperty("draw:textarea-horizontal-align", "left");
+            break;
+        case Swinder::TxORecord::Centered:
+            style.addProperty("draw:textarea-horizontal-align", "center");
+            break;
+        case Swinder::TxORecord::Right:
+            style.addProperty("draw:textarea-horizontal-align", "right");
+            break;
+        }
+        switch (m_shapeText.valign) {
+        case Swinder::TxORecord::Top:
+            style.addProperty("draw:textarea-vertical-align", "top");
+            break;
+        case Swinder::TxORecord::VCentered:
+            style.addProperty("draw:textarea-vertical-align", "middle");
+            break;
+        case Swinder::TxORecord::Bottom:
+            style.addProperty("draw:textarea-vertical-align", "bottom");
+            break;
+        }
+    }
+    //draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top"
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     return style;
 }
@@ -176,7 +201,7 @@ QString ODrawClient::formatPos(qreal v)
     return QString::number(v, 'f', 11) + "pt";
 }
 
-void ODrawClient::setShapeText(const QString &text)
+void ODrawClient::setShapeText(const Swinder::TxORecord &text)
 {
     m_shapeText = text;
 }

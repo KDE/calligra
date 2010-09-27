@@ -63,7 +63,6 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
         if (dlg->exec() != KPasswordDialog::Accepted) {
             return false;
         }
-        delete dlg;
 
         QByteArray hash;
         QString password = dlg->password();
@@ -71,6 +70,7 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
             SHA1::getHash(password, hash);
         }
         m_password = hash;
+        delete dlg;
     } else { /* Unlock */
         QPointer<KPasswordDialog> dlg = new KPasswordDialog(parent);
         dlg->setPrompt(i18n("Enter the password."));
@@ -78,7 +78,6 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
         if (dlg->exec() != KPasswordDialog::Accepted) {
             return false;
         }
-        delete dlg;
 
         QByteArray hash("");
         QString password(dlg->password());
@@ -90,6 +89,7 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
             return false;
         }
         m_password = QByteArray();
+        delete dlg;
     }
     return true;
 }

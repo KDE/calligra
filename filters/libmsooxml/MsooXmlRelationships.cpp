@@ -73,23 +73,6 @@ MsooXmlRelationships::~MsooXmlRelationships()
     delete d;
 }
 
-QString MsooXmlRelationships::linkTarget(const QString& id, const QString& path, const QString& file)
-{
-    if (!d->loadedFiles.contains(path + '/' + file)) {
-        d->loadRels(path, file);
-    }
-
-    // try to find link target from rels. Only data at right side of target is needed.
-    for (QMap<QString, QString>::ConstIterator it(d->rels.constBegin()); it!=d->rels.constEnd(); ++it) {
-        if (it.key().endsWith(id)) {
-            const int from_right = it.value().length() - (path.size() + 1);
-            return it.value().right(from_right);
-        }
-    }
-
-    return QString();
-}
-
 QString MsooXmlRelationships::target(const QString& path, const QString& file, const QString& id)
 {
     const QString key(MsooXmlRelationshipsReader::relKey(path, file, id));

@@ -23,6 +23,7 @@
 #include <QtCore/QEvent>
 #include <QtGui/QPainter>
 #include <QVariant>
+#include <QScrollBar>
 
 #include <KoResourceManager.h>
 #include <KoRuler.h>
@@ -76,12 +77,10 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
     if (m_viewModeSlidesSorter->isDraging() && currentItemNumber >= 0) {
         QSize size(m_viewModeSlidesSorter->itemSize().width(), m_viewModeSlidesSorter->itemSize().height());
 
-        int numberMod = currentItemNumber%4;
-        if (numberMod == 0) {
-            numberMod = 4;
-        }
-        QPoint point1(numberMod * size.width(), (currentItemNumber - numberMod) / 4 * size.height() );
-        QPoint point2(numberMod * size.width(), ((currentItemNumber - numberMod) / 4 + 1) * size.height());
+        int numberMod = currentItemNumber%4 > 0 ? currentItemNumber%4 : 0;
+        int verticalValue = (currentItemNumber - numberMod) / 4 * size.height() - verticalScrollBar()->value();
+        QPoint point1(numberMod * size.width(), verticalValue );
+        QPoint point2(numberMod * size.width(), verticalValue + size.height() );
         QLineF line(point1, point2);
 
         QPainter painter(this->viewport());
@@ -218,10 +217,11 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
         // In case you point the end (no slides under the pointer)
         newIndex = m_viewModeSlidesSorter->pageCount() - 1;
     }
-
-    m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
-    QListWidgetItem *sourceItem = takeItem(oldIndex);
-    insertItem(newIndex, sourceItem);
+    if (oldIndex != newIndex) {
+        m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
+        QListWidgetItem *sourceItem = takeItem(oldIndex);
+        insertItem(newIndex, sourceItem);
+    }
 }
 
 QMimeData* KPrViewModeSlidesSorter::KPrSlidesSorter::mimeData(const QList<QListWidgetItem*> items) const

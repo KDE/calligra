@@ -50,8 +50,8 @@ public:
     virtual ~XlsxXmlDrawingReaderContext();
 
     XlsxImport* import;
-    QString path;
-    QString file;
+    QString path; // contains the path to the file which is being processed (i.e. 'xl/drawings')
+    QString file; // contains the name of the file which is being processed (i.e. 'drawing1.xml')
     const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/* themes;
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
@@ -72,9 +72,6 @@ public:
 
     QMap<AnchorType, Position> m_positions;
 
-    QString m_path;         // contains the path to the file which is being processed (i.e. 'xl/drawings')
-    QString m_file;         // contains the name of the file which is being processed (i.e. 'drawing1.xml')
-
     QRect positionRect() const;
 
     QString cellAddress(const QString &sheetname, int row, int column) const;
@@ -94,7 +91,6 @@ public:
 protected:
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
-    KoFilter::ConversionStatus read_pic();
     KoFilter::ConversionStatus read_col();
     KoFilter::ConversionStatus read_row();
     KoFilter::ConversionStatus read_colOff();
@@ -110,8 +106,8 @@ private:
 
     int m_chartNumber;
     
-// #include <MsooXmlCommonReaderMethods.h>
-// #include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include <MsooXmlCommonReaderMethods.h>
+#include <MsooXmlCommonReaderDrawingMLMethods.h>
 // #include <MsooXmlDrawingReaderTableMethods.h>
 
     Q_DISABLE_COPY(XlsxXmlDrawingReader)
@@ -123,7 +119,7 @@ class XlsxXmlEmbeddedPicture
 {
 public:
     XlsxXmlEmbeddedPicture();
-    XlsxXmlEmbeddedPicture(QString &filePath);
+    XlsxXmlEmbeddedPicture(const QString &filePath);
 
     bool saveXml(KoXmlWriter *xmlWriter);   // save the .xml part of the picture (the picture itself isn't stored here)
     void setPath(QString &newPath);         // set the new path for the file

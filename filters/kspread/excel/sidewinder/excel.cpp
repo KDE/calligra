@@ -1669,14 +1669,15 @@ TxORecord::~TxORecord() {}
 void TxORecord::dump(std::ostream& out) const
 {
     out << "TxO" << std::endl;
+    out << "   " << m_text << " " << halign << " " << valign;
 }
 
 void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
-    //const unsigned long opts1 = readU16(data);
+    const unsigned long opts1 = readU16(data);
     //const bool reserved1 = opts1 & 0x01;
-    //const unsigned int hAlignment = opts1 & 0x000e; // 3 bits
-    //const unsigned int vAlignment = opts1 & 0x0070; // 3 bits
+    halign = static_cast<HorizontalAlignment>((opts1 & 0x000e) >> 1); // 3 bits
+    valign = static_cast<VerticalAlignment>((opts1 & 0x0070) >> 4); // 3 bits
     //const unsigned long rot = readU16(data + 2);
     // 4 bytes reserved
 

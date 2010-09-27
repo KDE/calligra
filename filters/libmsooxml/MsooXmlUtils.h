@@ -74,12 +74,28 @@ public:
 
     bool isEmpty() const;
 
-    enum ParagraphBulletType {BulletType, NumberType};
-    ParagraphBulletType m_type;
-    QString m_bulletChar;
-    QString m_numbering;
+    void setBulletChar(const QString& bulletChar);
+
+    void setSuffix(const QString& suffixChar);
+
+    void setAlign(const QString& align);
+
+    void setNumFormat(const QString& numFormat);
+
+    void setIndent(qreal indent);
+
     int m_level;
     int m_startValue;
+
+private:
+    enum ParagraphBulletType {BulletType, NumberType};
+    ParagraphBulletType m_type;
+
+    QString m_bulletChar;
+    QString m_numFormat;
+    QString m_suffix;
+    QString m_align;
+    qreal m_indent;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.
@@ -269,6 +285,8 @@ MSOOXML_EXPORT QString rgbColor(const QString& color);
 
 MSOOXML_EXPORT QColor colorForLuminance(const QColor& color,
     const DoubleModifier& modulation, const DoubleModifier& offset);
+
+MSOOXML_EXPORT void modifyColor(QColor& color, qreal tint, qreal shade, qreal satMod);
 
 //! Converts shape types from ECMA-376 to ODF.
 /*! @return "Common Presentation Shape Attribute" value (ODF 1.1., 9.6.1)

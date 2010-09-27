@@ -20,6 +20,7 @@
 #define ODRAWCLIENT_H
 
 #include <ODrawToOdf.h>
+#include <excel.h>
 
 namespace Swinder {
     class Sheet;
@@ -41,10 +42,10 @@ public:
     virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
     virtual QString formatPos(qreal v);
 
-    void setShapeText(const QString& text);
+    void setShapeText(const Swinder::TxORecord& text);
 private:
     Swinder::Sheet* m_sheet;
-    QString m_shapeText;
+    Swinder::TxORecord m_shapeText;
 };
 
 #endif // ODRAWCLIENT_H

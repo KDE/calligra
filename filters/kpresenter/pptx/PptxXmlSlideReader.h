@@ -176,6 +176,9 @@ public:
     QMap<QString, QString> textBottomBorders;
     QMap<QString, QString> textTopBorders;
 
+    // Them to which this masterslide refers to.
+    MSOOXML::DrawingMLTheme theme;
+
     KoGenStyle m_drawingPageProperties;
 };
 

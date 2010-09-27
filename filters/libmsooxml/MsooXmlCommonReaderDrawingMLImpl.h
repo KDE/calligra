@@ -58,7 +58,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
 {
     m_currentDoubleValue = 0;
     m_hyperLink = false;
-    m_currentListStyleProperties = 0;
     m_listStylePropertiesAltered = false;
     m_inGrpSpPr = false;
     m_fillImageRenderingStyleStretch = false;
@@ -2150,8 +2149,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         // Making the bullet character look ugly, thus defaulting to "-"
         m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
-        m_currentBulletProperties.m_bulletChar = '-';
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_currentBulletProperties.setBulletChar("-");
     }
 
     if (m_listStylePropertiesAltered) {
@@ -2472,13 +2470,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(sourceName);
 
+        if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {  // if we got 'from' cell
+            XlsxXmlDrawingReaderContext::Position f_from, f_to;
+            f_from = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+
+            if (f_from.m_col > 0 && f_from.m_row > 0) {
+                picture->m_fromCell = f_from;           // store the starting cell
+                if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {   // if we got 'to' cell
+                    f_to = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
+                    if (f_to.m_col > 0 && f_to.m_row > 0){
+                        picture->m_toCell = f_to;       // store the ending cell
+                    }
+                }
+            }
+        }
+
+        // put this picture in the QList. It will be later used (stored) in XlsxXmlWorksheetReader.cpp
+        m_context->pictures << picture;
+#else
         QString destinationName;
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
 
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
+#endif
     }
 
     // Read child elements
@@ -2863,6 +2882,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
         ns = QLatin1String("pic");
     }
     else {
+        ns = QChar((char)caller);
+    }
+#elif defined(XLSXXMLDRAWINGREADER_CPP)
+    if (caller == blipFill_pic) {
+        ns = QLatin1String("xdr");
+    } else {
         ns = QChar((char)caller);
     }
 #else
@@ -3501,7 +3526,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_noFill(noFillCaller calle
  - [done] spPr (§21.4.3.7)
  - [done] spPr (§20.1.2.2.35)
  - [done] spPr (§20.2.2.6)
- - [done] spPr (§20.5.2.30)
+ - [done] spPr (§20.5.2.30)
  - [done] spPr (§19.3.1.44)
 
  Child elements:
@@ -3681,7 +3706,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 #endif
     m_currentColor = col;
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -3706,40 +3731,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_satMod()
 
     readNext();
     READ_EPILOGUE
-}
-
-void MSOOXML_CURRENT_CLASS::modifyColor()
-{
-    int red = m_currentColor.red();
-    int green = m_currentColor.green();
-    int blue = m_currentColor.blue();
-
-    if (m_currentTint > 0) {
-        red = m_currentTint * red + (1 - m_currentTint) * 255;
-        green = m_currentTint * green + (1 - m_currentTint) * 255;
-        blue = m_currentTint * blue + (1 - m_currentTint) * 255;
-    }
-    if (m_currentShadeLevel > 0) {
-        red = m_currentShadeLevel * red;
-        green = m_currentShadeLevel * green;
-        blue = m_currentShadeLevel * blue;
-    }
-    if (m_currentSatMod > 0) {
-        red = red * m_currentSatMod;
-        green = green * m_currentSatMod;
-        blue = blue * m_currentSatMod;
-        if (red > 255) {
-            red = 255;
-        }
-        if (green > 255) {
-            green = 255;
-        }
-        if (blue > 255) {
-            blue = 255;
-        }
-    }
-
-    m_currentColor = QColor(red, green, blue);
 }
 
 #undef CURRENT_EL
@@ -4073,7 +4064,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
         }
     }
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -4144,7 +4135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
         }
     }
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -4187,7 +4178,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
         }
     }
 
-    modifyColor();
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
 
     READ_EPILOGUE
 }
@@ -4266,8 +4257,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_currentBulletProperties.m_bulletChar = '-';
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_currentBulletProperties.setBulletChar("-");
         m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
     }
@@ -4429,9 +4419,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     const QXmlStreamAttributes attrs(attributes());
 
     if (attrs.hasAttribute("char")) {
-        // Effectively converts this to QChar
-        m_currentBulletProperties.m_bulletChar = attrs.value("char").toString();
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+        m_currentBulletProperties.setBulletChar(attrs.value("char").toString());
         // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
         m_lstStyleFound = true;
     }
@@ -4770,8 +4758,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
     m_lstStyleFound = true;
-    m_currentBulletProperties.m_bulletChar = "";
-    m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::BulletType;
+    m_currentBulletProperties.setBulletChar("");
     m_listStylePropertiesAltered = true;
     readNext();
     READ_EPILOGUE
@@ -4804,9 +4791,46 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 
     if (!type.isEmpty()) {
         m_lstStyleFound = true;
-
-        m_currentBulletProperties.m_numbering = type;
-        m_currentBulletProperties.m_type = MSOOXML::Utils::ParagraphBulletProperties::NumberType;
+        if (type == "arabicPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "arabicParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("1");
+        }
+        else if (type == "alphaUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaLcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "alphaUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("A");
+        }
+        else if (type == "alphaLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("a");
+        }
+        else if (type == "romanUcPeriod") {
+            m_currentBulletProperties.setSuffix(".");
+            m_currentBulletProperties.setNumFormat("I");
+        }
+        else if (type == "romanLcPeriod") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
+        else if (type == "romanUcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("I");
+        }
+        else if (type == "romanLcParenR") {
+            m_currentBulletProperties.setSuffix(")");
+            m_currentBulletProperties.setNumFormat("i");
+        }
     }
 
     TRY_READ_ATTR_WITHOUT_NS(startAt)

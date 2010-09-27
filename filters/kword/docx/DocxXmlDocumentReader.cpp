@@ -1424,8 +1424,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
     }
     else {
         link_target = m_context->relationships->target(m_context->path, m_context->file, r_id);
+        // The return value also contains the path in the start and directory separator, we need to remove them
+        link_target.remove(0, m_context->path.size() + 1);
     }
-    kDebug() << "link_target:" << link_target;
 
     if (link_target.isEmpty()) {
         TRY_READ_ATTR(anchor)

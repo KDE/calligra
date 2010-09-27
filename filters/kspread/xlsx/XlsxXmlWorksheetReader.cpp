@@ -793,66 +793,6 @@ static bool valueIsNumeric(const QString& v)
     return ok;
 }
 
-static bool isCellnameCharacter(const QChar &c)
-{
-    return c.isDigit() || c.isLetter() || c == '$';
-}
-
-static QString convertFormulaReference(Cell* referencedCell, Cell* thisCell)
-{
-    QString result = referencedCell->formula;
-    if (result.isEmpty())
-        return QString();
-    enum { Start, InArguments, InCellReference, InString, InSheetOrAreaName } state;
-    state = Start;
-    int cellReferenceStart = 0;
-    for(int i = 1; i < result.length(); ++i) {
-        QChar ch = result[i];
-        switch (state) {
-        case Start:
-            if(ch == '(')
-                state = InArguments;
-            break;
-        case InArguments:
-            if (ch == '"')
-                state = InString;
-            else if (ch.unicode() == '\'')
-                state = InSheetOrAreaName;
-            else if (isCellnameCharacter(ch)) {
-                state = InCellReference;
-                cellReferenceStart = i;
-            }
-            break;
-        case InString:
-            if (ch == '"')
-                state = InArguments;
-            break;
-        case InSheetOrAreaName:
-            if (ch == '\'')
-                state = InArguments;
-            break;
-        case InCellReference:
-            if (!isCellnameCharacter(ch)) {
-                // We need to update cell-references according to the position of the referenced cell and this
-                // cell. This means that if the referenced cell is for example at C5 and contains the formula
-                // "=SUM(K22)" and if thisCell is at E6 then thisCell will get the formula "=SUM(L23)".
-                const QString ref = result.mid(cellReferenceStart, i - cellReferenceStart);
-                QRegExp rx("(|\\$)[A-Za-z]+[0-9]+");
-                if (rx.exactMatch(ref)) {
-                    const int c = KSpread::Util::decodeColumnLabelText(ref)
-                                  + thisCell->column - referencedCell->column;
-                    const int r = KSpread::Util::decodeRowLabelText(ref) + thisCell->row - referencedCell->row;
-                    result = result.replace(cellReferenceStart,
-                                            i - cellReferenceStart, encodeLabelText(c, r));
-                    state = InArguments;
-                }
-            }
-            break;
-        };
-    };
-    return result;
-}
-
 #undef CURRENT_EL
 #define CURRENT_EL c
 //! c handler (Cell)
@@ -1114,7 +1054,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
                 */
                 if (d->sharedFormulas.contains(sharedGroupIndex)) {
                     if (cell->formula.isEmpty()) // don't do anything if the cell already defines a formula
-                        cell->formula = convertFormulaReference(d->sharedFormulas[sharedGroupIndex], cell);
+                        cell->formula = MSOOXML::convertFormulaReference(d->sharedFormulas[sharedGroupIndex], cell);
                 } else if (!cell->formula.isEmpty()) { // is this cell the master cell?
                     d->sharedFormulas[sharedGroupIndex] = cell;
                 }
