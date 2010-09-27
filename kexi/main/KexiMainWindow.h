@@ -445,7 +445,7 @@ protected:
     /*! Performs lookup like in KexiSharedActionHost::focusWindow()
      but starting from \a w instead of a widget returned by QWidget::focusWidget().
      \return NULL if no widget matches acceptsSharedActions() or if \a w is NULL. */
-    QWidget* findWindow(QWidget *w);
+    virtual QWidget* findWindow(QWidget *w);
 
     /*! Updates application's caption - also shows project's name. */
     void updateAppCaption();

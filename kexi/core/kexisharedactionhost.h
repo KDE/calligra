@@ -62,6 +62,7 @@ public:
 
     virtual ~KexiSharedActionHost();
 
+#if 0
     /*! \return true if \a w can accept shared actions.
      This method is used by focusWindow() to look up widgets hierarchy
      for widget that can accept shared actions.
@@ -72,6 +73,12 @@ public:
      \endcode
      */
     virtual bool acceptsSharedActions(QObject *o);
+#endif
+
+    /*! Performs lookup like in KexiSharedActionHost::focusWindow()
+     but starting from \a w instead of a widget returned by QWidget::focusWidget().
+     \return NULL if no widget matches acceptsSharedActions() or if \a w is NULL. */
+    virtual QWidget* findWindow(QWidget *w);
 
     /*! \return window widget that is currently focused (using QWidget::focusWidget())
      and matches acceptsSharedActions(). If focused widget does not match,
