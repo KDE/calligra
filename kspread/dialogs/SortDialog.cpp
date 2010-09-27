@@ -440,10 +440,12 @@ void SortDialog::init()
             }
         }
 
-        if (d->mainWidget.m_sortHorizontal->isEnabled()) {
+        // create column indices, if data can be sorted vertically
+        if (d->mainWidget.m_sortVertical->isEnabled()) {
             d->createAvailableIndices(region, Qt::Horizontal);
         }
-        if (d->mainWidget.m_sortVertical->isEnabled()) {
+        // create row indices, if data can be sorted horizontally
+        if (d->mainWidget.m_sortHorizontal->isEnabled()) {
             d->createAvailableIndices(region, Qt::Vertical);
         }
     }
