@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/filters/
     ${CMAKE_SOURCE_DIR}/filters/libmso
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx # for Charting.h
+    ${CMAKE_SOURCE_DIR}/filters/libmsooxml  # for MsooXmlGlobal.h
     ${CMAKE_SOURCE_DIR}/kspread # for PointStorage.h
 )
 
