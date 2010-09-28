@@ -880,7 +880,7 @@ class ShapeAtom : public AbstractAtom
                 <draw:custom-shape draw:id="id9" draw:style-name="a29" draw:transform="translate(-0.12039in -0.15285in) rotate(-5.65487) translate(2.02766in 0.91975in)" svg:height="0.30569in" svg:width="0.24079in">
                     <draw:enhanced-geometry draw:enhanced-path="M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"            draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
                 */
-
+                /*
                 QList<AbstractNode*> axis = context->m_parentLayout->axis();
                 foreach(AbstractNode* n, axis) n->dump(context,10);        
                 Q_ASSERT(axis.count() == 1);
@@ -898,7 +898,7 @@ class ShapeAtom : public AbstractAtom
                 Q_ASSERT(connection);
                 //connection->m_srcId;
                 //connection->m_destId;
-
+                */
                 style.addProperty("draw:fill-color", "#9999ff");
             } else {
                 style.addProperty("draw:fill-color", "#3333ff");
