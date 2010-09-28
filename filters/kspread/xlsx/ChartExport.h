@@ -45,6 +45,7 @@ public:
     explicit ChartExport(Charting::Chart* chart, const MSOOXML::DrawingMLTheme* const contextWithThemeInformation = NULL);
     ~ChartExport();
     Charting::Chart* chart() const { return m_chart; }
+    void setSheetReplacement( bool val );
 
     bool m_drawLayer;
     QString m_href;
@@ -71,6 +72,7 @@ private:
     float sprcToPt( int sprc, Orientation orientation );
     Charting::Chart* m_chart;
     const MSOOXML::DrawingMLTheme* m_theme;
+    bool sheetReplacement;
     QString genChartAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genChartAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
