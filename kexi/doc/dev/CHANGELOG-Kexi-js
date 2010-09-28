@@ -135,7 +135,7 @@ Forms
 **indentation level reduced by 50%
 **fixed adding item when tab page is added
 **fix sorting
-TODO: fix delete widget action in context menu
+**fix delete widget action in context menu
 TODO: when undoing removing tab page, restore contents recursively
 
 *tab widget

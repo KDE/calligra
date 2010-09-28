@@ -28,11 +28,13 @@
 #include <MsooXmlThemesReader.h>
 #include <MsooXmlCommonReader.h>
 
-class KoXmlWriter;
+#include <KoXmlWriter.h>
+
 class XlsxImport;
 class XlsxXmlWorksheetReaderContext;
 class XlsxXmlChartReaderContext;
 class XlsxXmlEmbeddedPicture;
+class Sheet;
 
 //#include <KoGenStyle.h>
 //#include <styles/KoCharacterStyle.h>
@@ -46,7 +48,7 @@ class MsooXmlDiagramReaderContext;
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, const QString& _path, const QString& _file);
+    XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, Sheet* _sheet, const QString& _path, const QString& _file);
     virtual ~XlsxXmlDrawingReaderContext();
 
     XlsxImport* import;
@@ -55,6 +57,7 @@ public:
     const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/* themes;
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
+    Sheet* sheet;
     QList<XlsxXmlChartReaderContext*> charts;
     QList<MSOOXML::MsooXmlDiagramReaderContext*> diagrams;
     QList<XlsxXmlEmbeddedPicture*> pictures;      // list of all embedded pictures in this drawing
@@ -70,6 +73,8 @@ public:
         Position() : m_row(0), m_col(0), m_rowOff(0), m_colOff(0) {}
     };
 
+    KoXmlWriter* body;
+
     QMap<AnchorType, Position> m_positions;
 
     QRect positionRect() const;
@@ -77,6 +82,8 @@ public:
     QString cellAddress(const QString &sheetname, int row, int column) const;
     QString fromCellAddress() const;
     QString toCellAddress() const;
+
+    void saveCurrentCellData();
 
     void saveIndexes(KoXmlWriter* xmlWriter);
 };

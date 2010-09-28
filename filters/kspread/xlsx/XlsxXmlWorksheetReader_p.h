@@ -50,6 +50,7 @@ public:
     QString formula;
     QString hyperlink;
     QList<XlsxXmlDrawingReaderContext*> drawings;
+    QByteArray drawingXml;
 
     //QPair< oleObjectFile, imageReplacementFile>
     QList< QPair<QString,QString> > oleObjects;

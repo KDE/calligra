@@ -139,17 +139,15 @@ void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pag
     if (!value.isEmpty())
         m_shape->setAdditionalStyleAttribute("style:overflow-behavior", value);
 
-    if (frameBehavior() != KWord::IgnoreContentFrameBehavior) {
-        switch (newFrameBehavior()) {
-        case KWord::ReconnectNewFrame: value = "followup"; break;
-        case KWord::NoFollowupFrame: value.clear(); break; // "none" is the default
-        case KWord::CopyNewFrame: value = "copy"; break;
-        }
-        if (!value.isEmpty()) {
-            m_shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
-            if (!frameOnBothSheets())
-                m_shape->setAdditionalAttribute("koffice:frame-copy-to-facing-pages", "true");
-        }
+    switch (newFrameBehavior()) {
+    case KWord::ReconnectNewFrame: value = "followup"; break;
+    case KWord::NoFollowupFrame: value.clear(); break; // "none" is the default
+    case KWord::CopyNewFrame: value = "copy"; break;
+    }
+    if (!value.isEmpty()) {
+        m_shape->setAdditionalStyleAttribute("koffice:frame-behavior-on-new-page", value);
+        if (!frameOnBothSheets())
+            m_shape->setAdditionalAttribute("koffice:frame-copy-to-facing-pages", "true");
     }
 
     // shape properties

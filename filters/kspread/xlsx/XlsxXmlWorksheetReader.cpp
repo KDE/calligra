@@ -446,6 +446,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         // save the indexes of drawing objects anchored to this cell
                         drawing->saveIndexes(body);
                     }
+                    body->addCompleteElement(cell->drawingXml);
 
                     QPair<QString,QString> oleObject;
                     foreach( oleObject, cell->oleObjects ) {
@@ -1150,6 +1151,42 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_mergeCell()
                 Cell* cell = d->sheet->cell(fromCol, fromRow, true);
                 cell->rowsMerged = rx.cap(2).toInt() - fromRow;
                 cell->columnsMerged = KSpread::Util::decodeColumnLabelText(toCell) - fromCol;
+
+                // correctly take right/bottom borders from the cells that are merged into this one
+                const KoGenStyle* origCellStyle = mainStyles->style(cell->styleName);
+                KoGenStyle cellStyle;
+                if (origCellStyle) {
+                    cellStyle = *origCellStyle;
+                }
+                kDebug() << cell->rowsMerged << cell->columnsMerged << cell->styleName;
+                if (cell->rowsMerged > 1) {
+                    Cell* lastCell = d->sheet->cell(fromCol, fromRow + cell->rowsMerged - 1, false);
+                    kDebug() << lastCell;
+                    if (lastCell) {
+                        const KoGenStyle* style = mainStyles->style(lastCell->styleName);
+                        kDebug() << lastCell->styleName;
+                        if (style) {
+                            QString val = style->property("fo:border-bottom");
+                            kDebug() << val;
+                            if (!val.isEmpty()) cellStyle.addProperty("fo:border-bottom", val);
+                            val = style->property("fo:border-line-width-bottom");
+                            if (!val.isEmpty()) cellStyle.addProperty("fo:border-line-width-bottom", val);
+                        }
+                    }
+                }
+                if (cell->columnsMerged > 1) {
+                    Cell* lastCell = d->sheet->cell(fromCol + cell->columnsMerged - 1, fromRow, false);
+                    if (lastCell) {
+                        const KoGenStyle* style = mainStyles->style(lastCell->styleName);
+                        if (style) {
+                            QString val = style->property("fo:border-right");
+                            if (!val.isEmpty()) cellStyle.addProperty("fo:border-right", val);
+                            val = style->property("fo:border-line-width-right");
+                            if (!val.isEmpty()) cellStyle.addProperty("fo:border-line-width-right", val);
+                        }
+                    }
+                }
+                cell->styleName = mainStyles->insert(cellStyle, "ce");
             }
         }
     }
@@ -1209,7 +1246,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
         QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
         QString filepath = path + "/" + file;
 
-        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, path, file);
+        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, d->sheet, path, file);
         XlsxXmlDrawingReader reader(this);
         const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
         if (result != KoFilter::OK) {

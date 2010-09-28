@@ -144,8 +144,9 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
     Q_ASSERT( p == &(sm->project()) );
     QList<Schedule::Log> logs;
     //qDebug()<<"SchedulerPlugin::updateLog:"<<j<<logs.count();
-    foreach ( Schedule::Log l, j->log() ) {
+    foreach ( const Schedule::Log log, j->log() ) {
         // map log from temporary project to real project
+        Schedule::Log l = log;
         if ( l.resource ) {
             const Resource *r = l.resource;
             l.resource = sm->project().findResource( l.resource->id() );

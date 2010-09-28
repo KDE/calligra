@@ -676,7 +676,7 @@ bool SHD::write(OLEStreamWriter *stream, bool preservePos) const {
 
     //shifterU16=icoFore;
     //shifterU16|=icoBack << 5;
-    shifterU16|=ipat << 10;
+    shifterU16=ipat << 10;
     stream->write(shifterU16);
 
     if(preservePos)

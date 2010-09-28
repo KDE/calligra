@@ -3942,8 +3942,11 @@ void KexiMainWindow::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAut
 
 QWidget* KexiMainWindow::findWindow(QWidget *w)
 {
-    while (w && !acceptsSharedActions(w))
+    while (w && !acceptsSharedActions(w)) {
+        if (w == d->propEditorDockWidget)
+            return currentWindow();
         w = w->parentWidget();
+    }
     return w;
 }
 

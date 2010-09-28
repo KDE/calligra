@@ -572,7 +572,7 @@ void Part::checkForWorkPackage()
         // Merge our workpackages
         if ( ! m_workpackages.isEmpty() ) {
             QStringList lst;
-            foreach ( Package *p, m_workpackages.keys() ) {
+            foreach ( const Package *p, m_workpackages.keys() ) {
                 lst << QString( "%1: %2" ).arg( static_cast<Task*>( p->project->childNode( 0 ) )->workPackage().ownerName() ).arg( p->project->childNode( 0 )->name() );
             }
             int r = KMessageBox::questionYesNoList( 0, "New work packages detected. Merge data with existing tasks?", lst );

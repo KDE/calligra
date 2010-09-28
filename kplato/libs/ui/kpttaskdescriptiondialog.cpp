@@ -22,7 +22,6 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 
-#include <KTextEdit>
 #include <KLocale>
 #include <KTextEdit>
 #include <KActionCollection>

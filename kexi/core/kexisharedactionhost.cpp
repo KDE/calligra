@@ -211,9 +211,16 @@ KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
     return 0;
 }
 
+#if 0 // 2.x
 bool KexiSharedActionHost::acceptsSharedActions(QObject *)
 {
     return false;
+}
+#endif
+
+QWidget* KexiSharedActionHost::findWindow(QWidget *w)
+{
+    return 0;
 }
 
 QWidget* KexiSharedActionHost::focusWindow()
@@ -235,9 +242,10 @@ QWidget* KexiSharedActionHost::focusWindow()
     if (!aw)
         aw = dynamic_cast<QWidget*>(d->mainWin);
     QWidget *fw = aw->focusWidget();
-    while (fw && !acceptsSharedActions(fw))
+    return findWindow(fw);
+/*2.x    while (fw && !acceptsSharedActions(fw))
         fw = fw->parentWidget();
-    return fw;
+    return fw;*/
 #endif
 }
 

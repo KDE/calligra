@@ -24,6 +24,7 @@
 
 #include "XlsxXmlDrawingReader.h"
 #include "XlsxXmlWorksheetReader.h"
+#include "XlsxXmlWorksheetReader_p.h"
 #include "XlsxXmlChartReader.h"
 #include "XlsxImport.h"
 #include "Charting.h"
@@ -53,13 +54,15 @@
 #include <MsooXmlRelationships.h>
 #include <KoXmlWriter.h>
 
-XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, const QString& _path, const QString& _file)
+XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, Sheet* _sheet, const QString& _path, const QString& _file)
     : MSOOXML::MsooXmlReaderContext(_worksheetReaderContext->relationships)
     , import(_worksheetReaderContext->import)
     , path(_path)
     , file(_file)
     , themes((_worksheetReaderContext->themes))
     , worksheetReaderContext(_worksheetReaderContext)
+    , sheet(_sheet)
+    , body(new KoXmlWriter(new QBuffer))
 {
 }
 
@@ -74,6 +77,8 @@ XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
     foreach(XlsxXmlEmbeddedPicture* p, pictures) {  // delete all pictures from the QList
         delete p;
     }
+    delete body->device();
+    delete body;
 }
 
 // calculates the column width in pixels
@@ -148,6 +153,20 @@ QString XlsxXmlDrawingReaderContext::toCellAddress() const
     return cellAddress(worksheetReaderContext->worksheetName, f.m_row, f.m_col);
 }
     
+void XlsxXmlDrawingReaderContext::saveCurrentCellData()
+{
+    if (m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
+        XlsxXmlDrawingReaderContext::Position pos = m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+        Cell* cell = sheet->cell(pos.m_col, pos.m_row, true);
+        QByteArray b = static_cast<QBuffer*>(body->device())->buffer().constData();
+        QIODevice* d = body->device();
+        delete body;
+        delete d;
+        body = new KoXmlWriter(new QBuffer);
+        cell->drawingXml += b;
+    }
+}
+
 void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
 {
     foreach(XlsxXmlChartReaderContext* c, charts) {
@@ -173,6 +192,7 @@ void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
             p->saveXml(xmlWriter);
         }
     }   
+    xmlWriter->addCompleteElement(static_cast<QBuffer*>(body->device())->buffer().constData());
 }
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
@@ -208,12 +228,16 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
             ELSE_TRY_READ_IF(to)
+            // a shape
+            ELSE_TRY_READ_IF(sp)
             // the reference to a picture
             ELSE_TRY_READ_IF(pic)
             // a graphic-frame
             ELSE_TRY_READ_IF(graphicFrame)
         }
     }
+
+    m_context->saveCurrentCellData();
 
     m_context = 0;
     return KoFilter::OK;
@@ -224,6 +248,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
 {
     READ_PROLOGUE
+    m_context->saveCurrentCellData();
     m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
     while (!atEnd()) {
         readNext();
@@ -532,6 +557,7 @@ void XlsxXmlEmbeddedPicture::setPath(QString &newPath)
 #include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
 #define DRAWINGML_NS "a"
 #define DRAWINGML_PIC_NS "xdr" // DrawingML/Picture
+#define DRAWINGML_TXBODY_NS "xdr" // DrawingML/Picture
 #define XLSXXMLDRAWINGREADER_CPP
 #include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.
 //#include <MsooXmlDrawingReaderTableImpl.h> //this adds a:tbl

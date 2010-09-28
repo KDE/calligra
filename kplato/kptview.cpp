@@ -621,7 +621,7 @@ ViewInfo View::defaultViewInfo( const QString type ) const
 
 void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
 {
-    if ( url.url().startsWith("about:kplato") ) {
+    if ( url.url().startsWith( QLatin1String( "about:kplato" ) ) ) {
         getPart()->aboutPage().generatePage( v->htmlPart(), url );
         return;
     }

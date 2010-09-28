@@ -213,7 +213,7 @@ void Task::copyAppointments( const DateTime &start, const DateTime &end )
     DateTime st = start.isValid() ? start : ns->startTime;
     DateTime et = end.isValid() ? end : ns->endTime;
     //kDebug()<<m_name<<st.toString()<<et.toString()<<m_currentSchedule->calculationMode();
-    foreach ( Appointment *a, ns->appointments() ) {
+    foreach ( const Appointment *a, ns->appointments() ) {
         Resource *r = a->resource() == 0 ? 0 : a->resource()->resource();
         if ( r == 0 ) {
             kError()<<"No resource";
@@ -424,7 +424,7 @@ void Task::save(QDomElement &element)  const {
     if (!m_schedules.isEmpty()) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
         me.appendChild(schs);
-        foreach (Schedule *s, m_schedules) {
+        foreach (const Schedule *s, m_schedules) {
             if (!s->isDeleted()) {
                 s->saveXML(schs);
             }
@@ -440,7 +440,7 @@ void Task::save(QDomElement &element)  const {
     if (!m_packageLog.isEmpty()) {
         QDomElement log = me.ownerDocument().createElement("workpackage-log");
         me.appendChild(log);
-        foreach (WorkPackage *wp, m_packageLog) {
+        foreach (const WorkPackage *wp, m_packageLog) {
             wp->saveLoggedXML( log );
         }
     }
@@ -456,7 +456,7 @@ void Task::saveAppointments(QDomElement &element, long id) const {
     if (sch) {
         sch->saveAppointments(element);
     }
-    foreach (Node *n, m_nodes) {
+    foreach (const Node *n, m_nodes) {
         n->saveAppointments(element, id);
     }
 }
@@ -569,7 +569,7 @@ Duration Task::plannedEffort( long id ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             eff += n->plannedEffort( id );
         }
         return eff;
@@ -586,7 +586,7 @@ Duration Task::plannedEffort(const QDate &date, long id ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             eff += n->plannedEffort(date, id);
         }
         return eff;
@@ -603,7 +603,7 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
     //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             eff += n->plannedEffortTo(date, id);
         }
         return eff;
@@ -620,7 +620,7 @@ Duration Task::actualEffort() const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             eff += n->actualEffort();
         }
     }
@@ -632,7 +632,7 @@ Duration Task::actualEffort( const QDate &date ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             eff += n->actualEffort( date );
         }
         return eff;
@@ -645,7 +645,7 @@ Duration Task::actualEffortTo( const QDate &date ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             eff += n->actualEffortTo( date );
         }
         return eff;
@@ -670,7 +670,7 @@ double Task::plannedCost(const QDate &date, long id) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->plannedCost(date, id);
         }
         return c;
@@ -686,7 +686,7 @@ double Task::plannedCostTo(const QDate &date, long id) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->plannedCostTo(date, id);
         }
         return c;
@@ -702,7 +702,7 @@ double Task::actualCost() const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->actualCost();
         }
         return c;
@@ -714,7 +714,7 @@ double Task::actualCost( const QDate &date ) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->actualCost( date );
         }
         return c;
@@ -726,7 +726,7 @@ EffortCost Task::actualCostTo( const QDate &date ) const {
     //kDebug();
     EffortCost c;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->actualCostTo( date );
         }
         return c;
@@ -782,7 +782,7 @@ Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
     //kDebug();
     Duration e;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             e += n->budgetedWorkPerformed( date, id );
         }
         return e;
@@ -798,7 +798,7 @@ double Task::budgetedCostPerformed( const QDate &date, long id ) const
     //kDebug();
     double c = 0.0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->budgetedCostPerformed( date, id );
         }
         return c;
@@ -819,7 +819,7 @@ double Task::bcwp( const QDate &date, long id ) const
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
+        foreach (const Node *n, childNodeIterator()) {
             c += n->bcwp( date, id ); //FIXME
         }
         return c;
@@ -1164,7 +1164,7 @@ DateTime Task::calculateEarlyFinish(int use) {
     m_visitedForward = true;
     cs->insertForwardNode( this );
     cs->earlyFinish = cs->earlyStart + m_durationForward;
-    foreach ( Appointment *a, cs->appointments( Schedule::CalculateForward ) ) {
+    foreach ( const Appointment *a, cs->appointments( Schedule::CalculateForward ) ) {
         cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
     }
     // clean up temporary usage
@@ -1377,7 +1377,7 @@ DateTime Task::calculateLateStart(int use) {
     m_visitedBackward = true;
     cs->insertBackwardNode( this );
     cs->lateStart = cs->lateFinish - m_durationBackward;
-    foreach ( Appointment *a, cs->appointments( Schedule::CalculateBackward ) ) {
+    foreach ( const Appointment *a, cs->appointments( Schedule::CalculateBackward ) ) {
         cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
     }
     // clean up temporary usage
@@ -1728,7 +1728,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
         cs->logError( i18n( "Failed to schedule within project target time" ) );
     }
-    foreach ( Appointment *a, cs->appointments() ) {
+    foreach ( const Appointment *a, cs->appointments() ) {
         cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
     }
     if ( cs->startTime < cs->earlyStart ) {
@@ -2059,7 +2059,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
         cs->logError( i18n( "Failed to schedule within project target time" ) );
     }
-    foreach ( Appointment *a, cs->appointments() ) {
+    foreach ( const Appointment *a, cs->appointments() ) {
         cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
     }
     if ( cs->startTime < cs->earlyStart ) {
@@ -2854,7 +2854,7 @@ Duration Completion::actualEffort() const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort ) {
+        foreach( const UsedEffort *ue, m_usedEffort ) {
             foreach ( const QDate &d, ue->actualEffortMap().keys() ) {
                 eff += ue->actualEffortMap()[ d ]->effort();
             }
@@ -2882,7 +2882,7 @@ Duration Completion::actualEffort( const QDate &date ) const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort ) {
+        foreach( const UsedEffort *ue, m_usedEffort ) {
             if ( ue && ue->actualEffortMap().contains( date ) ) {
                 eff += ue->actualEffortMap().value( date )->effort();
             }
@@ -2901,7 +2901,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
     //kDebug()<<date;
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort ) {
+        foreach( const UsedEffort *ue, m_usedEffort ) {
             eff += ue->effortTo( date );
         }
     } else {
@@ -2927,7 +2927,7 @@ double Completion::averageCostPrHour( const QDate &date, long id ) const
     double cost = 0.0;
     double eff = 0.0;
     QList<double> cl;
-    foreach ( Appointment *a, s->appointments() ) {
+    foreach ( const Appointment *a, s->appointments() ) {
         cl << a->resource()->resource()->normalRate();
         double e = a->plannedEffort( date ).toDouble( Duration::Unit_h );
         if (  e > 0.0 ) {
@@ -3067,7 +3067,7 @@ double Completion::actualCost( const Resource *resource ) const
     double c = 0.0;
     double nc = resource->normalRate();
     double oc = resource->overtimeRate();
-    foreach ( UsedEffort::ActualEffort *a, ue->actualEffortMap() ) {
+    foreach ( const UsedEffort::ActualEffort *a, ue->actualEffortMap() ) {
         c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
         c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
     }
@@ -3352,7 +3352,7 @@ Duration Completion::UsedEffort::effortTo( const QDate &date ) const
 Duration Completion::UsedEffort::effort() const
 {
     Duration eff;
-    foreach ( ActualEffort *e, m_actual ) {
+    foreach ( const ActualEffort *e, m_actual ) {
         eff += e->effort();
     }
     return eff;
