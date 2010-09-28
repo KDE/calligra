@@ -101,6 +101,7 @@ const char* const MSOOXML::ContentTypes::presentationComments =      "applicatio
 
 // spreadsheetml-specific content types
 const char* const MSOOXML::ContentTypes::spreadsheetDocument =        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
+const char* const MSOOXML::ContentTypes::spreadsheetMacroDocument =   "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetPrinterSettings = "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings";
 const char* const MSOOXML::ContentTypes::spreadsheetStyles =          "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetWorksheet =       "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";

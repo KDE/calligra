@@ -115,6 +115,8 @@ protected:
         const QString& fileName, MsooXmlReader *reader, KoOdfWriters *writers,
         QString& errorMessage, MsooXmlReaderContext* context = 0);
 
+    //! @return all part names.
+    QMultiHash<QByteArray, QByteArray> partNames() const { return m_contentTypes; }
     //! @return part names associated with @a contentType
     QList<QByteArray> partNames(const QByteArray& contentType) const { return m_contentTypes.values(contentType); }
 private:
