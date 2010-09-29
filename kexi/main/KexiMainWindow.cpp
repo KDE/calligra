@@ -2247,6 +2247,7 @@ void KexiMainWindow::setupPropertyEditor()
         KexiUtils::setMargins(propEditorDockWidgetContentsLyr, KDialog::marginHint() / 2);
 
         d->propEditorTabWidget = new KTabWidget(propEditorDockWidgetContents);
+        d->propEditorTabWidget->setDocumentMode(true);
         propEditorDockWidgetContentsLyr->addWidget(d->propEditorTabWidget);
 //  d->propEditorTabWidget->hide();
         d->propEditor = new KexiPropertyEditorView(d->propEditorTabWidget);
