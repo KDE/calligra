@@ -237,7 +237,14 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     kDebug() << "Entry" << fileName << "has size" << f->size();
     status = KoFilter::OK;
-    return f->createDevice();
+    // There seem to be some problems with kde/zlib when trying to read
+    // multiple streams, this functionality is needed in the filter
+    // Until there's another solution for this, this avoids the problem
+    //return f->createDevice();
+    QBuffer *device = new QBuffer();
+    device->setData(f->data());
+    device->open(QIODevice::ReadOnly);
+    return device;
 }
 
 #define BLOCK_SIZE 4096
