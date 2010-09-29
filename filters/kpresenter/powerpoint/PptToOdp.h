@@ -198,6 +198,7 @@ private:
     void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
                          const MSO::TextContainer& tc, const QString& text,
                          int start, int end, QStack<QString>& levels);
+    void processGroupShape(const MSO::OfficeArtSpgrContainer* spgr, Writer& out);
 
     /**
      * @brief Write declaration in the content body presentation
