@@ -37,6 +37,7 @@ class XlsxXmlDocumentReaderContext;
 class XlsxComments;
 class XlsxStyles;
 class XlsxImport;
+class Sheet;
 
 //! A class reading MSOOXML XLSX markup - xl/worksheets/sheet*.xml part.
 class XlsxXmlWorksheetReader : public MSOOXML::MsooXmlCommonReader
@@ -122,7 +123,9 @@ public:
         MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import,
         int& numberOfOleObjects);
+    virtual ~XlsxXmlWorksheetReaderContext();
 
+    Sheet* sheet;
     const uint worksheetNumber;
     QString worksheetName;
     QString state;
