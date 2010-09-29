@@ -679,7 +679,7 @@ void PptToOdp::defineDefaultGraphicStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="graphic">
     KoGenStyle style(KoGenStyle::GraphicStyle, "graphic");
     style.setDefaultStyle(true);
-    defineDefaultGraphicProperties(style);
+    defineDefaultGraphicProperties(style, styles);
     defineDefaultParagraphProperties(style);
     defineDefaultTextProperties(style);
     styles.insert(style);
@@ -690,7 +690,7 @@ void PptToOdp::defineDefaultPresentationStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="presentation">
     KoGenStyle style(KoGenStyle::PresentationStyle, "presentation");
     style.setDefaultStyle(true);
-    defineDefaultGraphicProperties(style);
+    defineDefaultGraphicProperties(style, styles);
     defineDefaultParagraphProperties(style);
     defineDefaultTextProperties(style);
     styles.insert(style);
@@ -718,7 +718,7 @@ void PptToOdp::defineDefaultChartStyle(KoGenStyles& styles)
     // write style <style:default-style style:family="chart">
     KoGenStyle style(KoGenStyle::ChartStyle, "chart");
     style.setDefaultStyle(true);
-    defineDefaultGraphicProperties(style);
+    defineDefaultGraphicProperties(style, styles);
     defineDefaultParagraphProperties(style);
     defineDefaultTextProperties(style);
     styles.insert(style);
@@ -761,7 +761,7 @@ void PptToOdp::defineDefaultParagraphProperties(KoGenStyle& style) {
     defineParagraphProperties(style, pf);
 }
 
-void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
+void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles) {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     style.addProperty("svg:stroke-width", "0.75pt", gt); // 2.3.8.15
     style.addProperty("draw:fill", "none", gt); // 2.3.8.38
@@ -773,7 +773,7 @@ void PptToOdp::defineDefaultGraphicProperties(KoGenStyle& style) {
     const DrawStyle ds(drawingGroup);
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
-    odrawtoodf.defineGraphicProperties(style, ds);
+    odrawtoodf.defineGraphicProperties(style, ds, styles);
 }
 
 QString PptToOdp::getPicturePath(int pib) const

@@ -107,6 +107,7 @@ private:
     void processUturnArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processFreeLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
@@ -132,13 +133,13 @@ private:
     * @brief set the width, height rotation and starting point for the given container
     */
     void set2dGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out);
 
 public:
     ODrawToOdf(Client& c) :client(&c) {}
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
-    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
-                                           const QString& listStyle=QString());
+    void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 };
 

@@ -118,7 +118,7 @@ private:
     // we assume that these functions are the same for all style families
     void defineDefaultTextProperties(KoGenStyle& style);
     void defineDefaultParagraphProperties(KoGenStyle& style);
-    void defineDefaultGraphicProperties(KoGenStyle& style);
+    void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
 
     /* Extract data from TextCFException into the style */
     void defineTextProperties(KoGenStyle& style, const MSO::TextCFException* cf,

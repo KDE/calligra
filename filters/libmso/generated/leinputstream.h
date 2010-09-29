@@ -152,6 +152,12 @@ public:
         return (b << 4) | a;
     }
 
+    quint16 readuint13() {
+        quint8 a = getBits(5) & 0x1F;
+        quint8 b = readuint8();
+        return (b << 5) | a;
+    }
+
     quint16 readuint14() {
         quint16 v;
         if (bitfieldpos < 0) {
@@ -260,6 +266,7 @@ public:
     }
 
     qint64 getPosition() const { return input->pos(); }
+
     qint64 getMaxPosition() const { return qMax(input->pos(), maxPosition); }
     qint64 getSize() const { return input->size(); }
 };

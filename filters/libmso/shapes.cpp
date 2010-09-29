@@ -18,11 +18,13 @@
 */
 #include "ODrawToOdf.h"
 #include "drawstyle.h"
+#include "generated/leinputstream.h"
 
 #include <KoXmlWriter.h>
 #include <kdebug.h>
 
 #include <QTransform>
+#include <qbuffer.h>
 
 #include <cmath>
 
@@ -1243,6 +1245,19 @@ void ODrawToOdf::processPictureFrame(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); // image
     out.xml.endElement(); // frame
 }
+
+void ODrawToOdf::processNotPrimitive(const OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    setEnhancedGeometry(o, out);
+    out.xml.endElement(); //draw:enhanced-geometry
+
+    out.xml.endElement(); //draw:custom-shape
+}
+
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
@@ -1313,6 +1328,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     } else if (shapeType == msosptPictureFrame
                || shapeType == msosptHostControl) {
         processPictureFrame(o, out);
+    } else if (shapeType == msosptNotPrimitive) {
+        processNotPrimitive(o, out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }
@@ -1408,6 +1425,142 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         out.xml.addAttribute("svg:y", client->formatPos(out.vOffset(rect.y())));
     }
 }
+
+void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    const PVertices* pVertices = get<PVertices>(o);
+    const PSegmentInfo* pSegmentInfo = get<PSegmentInfo>(o);
+
+    if (pVertices && pVertices->pVertices != 0 && pSegmentInfo && pSegmentInfo->pSegmentInfo != 0) {
+
+        QVector<QPoint> verticesPoints;
+
+        // get the vertice data (pVertices - MS-ODRAW, page 174)
+        QByteArray* verticesData = NULL;
+        verticesData = getComplexData<PVertices>(o);
+
+        QBuffer verticesBuf(verticesData);
+        verticesBuf.open(QIODevice::ReadOnly);
+
+        LEInputStream inVertices(&verticesBuf);
+        PVertices_complex _v;
+        parsePVertices_complex(inVertices, _v);
+        verticesBuf.close();
+
+        //_v.data is an array of POINTs, MS-ODRAW, page 89
+        QByteArray xArray(sizeof(int),0), yArray(sizeof(int),0);
+        int step = _v.cbElem;
+        if (step == 0xfff0) {
+            step = 4;
+        }
+
+        int maxX=0,minX=INT_MAX,maxY=0,minY=INT_MAX;
+        int x,y;
+        //get vertice points
+        for (int i = 0, offset = 0; i < _v.nElems; i++, offset += step) {
+            // x coordinate of this point
+            xArray.replace(0,step/2,_v.data.mid(offset, step/2));
+            x = *(int*)xArray.data();
+
+           // y coordinate of this point
+            yArray.replace(0,step/2,_v.data.mid(offset + step/2, step/2));
+            y = *(int*)yArray.data();
+
+            verticesPoints.append(QPoint(x, y));
+
+            // find maximum and minimum coordinates
+            if (maxY < y) {
+                maxY = y;
+            }
+            if (minY > y) {
+                minY = y ;
+            }
+            if (maxX < x) {
+                maxX = x;
+            }
+            if (minX > x) {
+                minX = x;
+            }
+        }
+
+        QString viewBox = QString::number(minX) + " " + QString::number(minY) + " "
+                        + QString::number(maxX) + " " + QString::number(maxY);
+
+        //get segmentInfo Data (pSegmentInfo - MS-ODRAW, page 175)
+        QByteArray* segmentInfoData = NULL;
+        segmentInfoData = getComplexData<PSegmentInfo>(o);
+
+        QBuffer segmentInfoBuf(segmentInfoData);
+        segmentInfoBuf.open(QIODevice::ReadOnly);
+
+        LEInputStream inSegment(&segmentInfoBuf);
+        PSegmentInfo_complex _c;
+        parsePSegmentInfo_complex(inSegment, _c);
+        segmentInfoBuf.close();
+
+        // combine segmentationInfoData and verticePoints into enhanced-path string
+        int verticesIndex = 0;
+        QString enhancedPath;
+        for (int i = 0; i < _c.nElems; i++) {
+
+            switch((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) //MSOPATHINFO.type
+            {
+            case 0: //msopathLineTo
+            {
+                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex].y()) + " ";
+                verticesIndex++;
+                break;
+            }
+            case 1: // msopathCurveTo
+            {
+                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[verticesIndex].x()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex].y()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex+1].x()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex+1].y()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex+2].x()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex+2].y()) + " ";
+                verticesIndex = verticesIndex + 3;
+                break;
+            }
+            case 2: // msopathMoveTo
+            {
+                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[verticesIndex].x()) + " "
+                                                   + QString::number(verticesPoints[verticesIndex].y()) + " ";
+                verticesIndex++;
+                break;
+            }
+            case 3: // msopathClose
+            {
+                enhancedPath = enhancedPath + "Z ";
+                break;
+            }
+            case 4: // msopathEnd
+            {
+                enhancedPath = enhancedPath + "N ";
+                break;
+            }
+            case 5: // msopathEscape
+            {
+                break;
+            }
+            case 6: // msopathClientEscape
+            {
+                break;
+            }
+            }
+        }
+
+        delete verticesData;
+        delete segmentInfoData;
+
+        out.xml.addAttribute("svg:viewBox", viewBox);
+        out.xml.addAttribute("draw:type", "non-primitive");
+        out.xml.addAttribute("draw:enhanced-path", enhancedPath);
+    }
+
+}
+
 void defineArrow(KoGenStyles& styles)
 {
     KoGenStyle marker(KoGenStyle::MarkerStyle);
