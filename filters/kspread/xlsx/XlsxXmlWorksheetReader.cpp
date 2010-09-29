@@ -888,7 +888,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
         if (t == QLatin1String("s")) {
             bool ok;
             const int stringIndex = m_value.toInt(&ok);
-            if (!ok || stringIndex >= m_context->sharedStrings->size()) {
+            if (!ok || stringIndex < 0 || stringIndex >= m_context->sharedStrings->size()) {
                 return KoFilter::WrongFormat;
             }
             XlsxSharedString sharedstring = m_context->sharedStrings->at(stringIndex);

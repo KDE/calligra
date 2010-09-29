@@ -251,7 +251,7 @@ public:
      * The sheet is not added to the map nor added to the GUI.
      * @return a pointer to a new Sheet
      */
-    Sheet* createSheet();
+    Sheet* createSheet(const QString& name = QString());
 
     /**
      * Adds @p sheet to this map.
@@ -264,7 +264,7 @@ public:
      * Adds a new sheet to this map.
      * @return a pointer to the new sheet
      */
-    Sheet* addNewSheet();
+    Sheet* addNewSheet(const QString& name = QString());
 
     /**
      * @return a pointer to the sheet at index @p index in this map

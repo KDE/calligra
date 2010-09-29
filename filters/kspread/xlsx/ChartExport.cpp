@@ -400,7 +400,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     }
     bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( styleID, chartstyle, styles, mainStyles ) );
 
-    const QString verticalCellRangeAddress = normalizeCellRange(chart()->m_verticalCellRangeAddress);
+    QString verticalCellRangeAddress = chart()->m_verticalCellRangeAddress;
 
 //    if(!m_cellRangeAddress.isEmpty()) {
 //        bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
@@ -436,6 +436,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 bodyWriter->addAttribute("chart:name", QString("x%1").arg(++countXAxis));
                 if(countXAxis == 1 && definesCategories && !verticalCellRangeAddress.isEmpty()) {
                     bodyWriter->startElement("chart:categories");
+                    if ( sheetReplacement )
+                        verticalCellRangeAddress = normalizeCellRange( replaceSheet( verticalCellRangeAddress, QString::fromLatin1( "local" ) ) );
+                    else
+                        verticalCellRangeAddress = normalizeCellRange( verticalCellRangeAddress );
                     bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
                     bodyWriter->endElement();
                 }
@@ -460,7 +464,11 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         bodyWriter->addAttribute("chart:name", "primary-x");
         if(definesCategories && !verticalCellRangeAddress.isEmpty()) {
             bodyWriter->startElement("chart:categories");
-            bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress); //"Sheet1.C2:Sheet1.E2");
+            if ( sheetReplacement )
+                verticalCellRangeAddress = normalizeCellRange( replaceSheet( verticalCellRangeAddress, QString::fromLatin1( "local" ) ) );
+            else
+                verticalCellRangeAddress = normalizeCellRange( verticalCellRangeAddress );
+            bodyWriter->addAttribute("table:cell-range-address", verticalCellRangeAddress);
             bodyWriter->endElement();
         }
         bodyWriter->endElement(); // chart:axis

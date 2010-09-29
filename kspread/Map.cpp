@@ -331,10 +331,12 @@ CalculationSettings* Map::calculationSettings() const
     return d->calculationSettings;
 }
 
-Sheet* Map::createSheet()
+Sheet* Map::createSheet(const QString& name)
 {
-    QString name(i18n("Sheet%1", d->tableId++));
-    Sheet* sheet = new Sheet(this, name);
+    QString sheetName(i18n("Sheet%1", d->tableId++));
+    if ( !name.isEmpty() )
+        sheetName = name;
+    Sheet* sheet = new Sheet(this, sheetName);
     connect(sheet, SIGNAL(statusMessage(const QString &, int)),
             this, SIGNAL(statusMessage(const QString &, int)));
     return sheet;
@@ -346,9 +348,9 @@ void Map::addSheet(Sheet *_sheet)
     emit sheetAdded(_sheet);
 }
 
-Sheet *Map::addNewSheet()
+Sheet *Map::addNewSheet(const QString& name)
 {
-    Sheet *t = createSheet();
+    Sheet *t = createSheet(name);
     addSheet(t);
     return t;
 }
@@ -593,8 +595,9 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
 
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
-                    Sheet* sheet = addNewSheet();
-                    sheet->setSheetName(sheetElement.attributeNS(KoXmlNS::table, "name", QString()), true);
+                    const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
+                    Sheet* sheet = addNewSheet(sheetName);
+                    sheet->setSheetName(sheetName, true);
                     d->overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
             }

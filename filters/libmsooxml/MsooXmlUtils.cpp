@@ -101,6 +101,7 @@ const char* const MSOOXML::ContentTypes::presentationComments =      "applicatio
 
 // spreadsheetml-specific content types
 const char* const MSOOXML::ContentTypes::spreadsheetDocument =        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
+const char* const MSOOXML::ContentTypes::spreadsheetMacroDocument =   "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetPrinterSettings = "application/vnd.openxmlformats-officedocument.spreadsheetml.printerSettings";
 const char* const MSOOXML::ContentTypes::spreadsheetStyles =          "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml";
 const char* const MSOOXML::ContentTypes::spreadsheetWorksheet =       "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml";
@@ -236,7 +237,14 @@ QIODevice* Utils::openDeviceForFile(const KZip* zip, QString& errorMessage, cons
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     kDebug() << "Entry" << fileName << "has size" << f->size();
     status = KoFilter::OK;
-    return f->createDevice();
+    // There seem to be some problems with kde/zlib when trying to read
+    // multiple streams, this functionality is needed in the filter
+    // Until there's another solution for this, this avoids the problem
+    //return f->createDevice();
+    QBuffer *device = new QBuffer();
+    device->setData(f->data());
+    device->open(QIODevice::ReadOnly);
+    return device;
 }
 
 #define BLOCK_SIZE 4096

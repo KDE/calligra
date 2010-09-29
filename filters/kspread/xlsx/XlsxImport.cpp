@@ -64,7 +64,8 @@ K_EXPORT_COMPONENT_FACTORY(libxlsximport, XlsxImportFactory("kofficefilters"))
 
 enum XlsxDocumentType {
     XlsxDocument,
-    XlsxTemplate
+    XlsxTemplate,
+    XlsxMacroDocument
 };
 
 class XlsxImport::Private
@@ -75,6 +76,8 @@ public:
 
     const char* mainDocumentContentType() const
     {
+        if (type == XlsxMacroDocument)
+            return MSOOXML::ContentTypes::spreadsheetMacroDocument;
         if (type == XlsxTemplate)
             return MSOOXML::ContentTypes::spreadsheetTemplate;
         return MSOOXML::ContentTypes::spreadsheetDocument;
@@ -105,6 +108,10 @@ bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
         d->type = XlsxTemplate;
         d->macrosEnabled = false;
     }
+    else if (mime == "application/vnd.ms-excel.sheet.macroEnabled") {
+        d->type = XlsxMacroDocument;
+        d->macrosEnabled = true;
+    }
     else if (mime == "application/vnd.ms-excel.sheet.macroEnabled.12") {
         d->type = XlsxDocument;
         d->macrosEnabled = true;
@@ -113,8 +120,9 @@ bool XlsxImport::acceptsSourceMimeType(const QByteArray& mime) const
         d->type = XlsxTemplate;
         d->macrosEnabled = true;
     }
-    else
+    else {
         return false;
+    }
     return true;
 }
 
@@ -566,9 +574,19 @@ KoFilter::ConversionStatus XlsxImport::parseParts(KoOdfWriters *writers,
 //! @todo only support "xl/comments1.xml" filename for comments?
             "xl/comments1.xml", &commentsReader, writers, errorMessage, &context) )
     }
-    // 4. parse themes
 
+    // 4. parse themes
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
+    
+    // following is a workaround till the patch at https://bugs.freedesktop.org/show_bug.cgi?id=30417 is applied
+    // so we are able to proper handle this case already before using the mimetype.
+    if (partNames.isEmpty() && d->type != XlsxMacroDocument) {
+        QList<QByteArray> macroPartNames = this->partNames(MSOOXML::ContentTypes::spreadsheetMacroDocument);
+        if (macroPartNames.count() == 1 && acceptsSourceMimeType("application/vnd.ms-excel.sheet.macroEnabled")) {
+            partNames = macroPartNames;
+        }
+    }
+
     if (partNames.count() != 1) {
         errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
         return KoFilter::WrongFormat;

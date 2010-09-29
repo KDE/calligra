@@ -75,6 +75,7 @@ public:
 
     // spreadsheetml-specific content types
     static const char* const spreadsheetDocument;
+    static const char* const spreadsheetMacroDocument;
     static const char* const spreadsheetPrinterSettings;
     static const char* const spreadsheetStyles;
     static const char* const spreadsheetWorksheet;
