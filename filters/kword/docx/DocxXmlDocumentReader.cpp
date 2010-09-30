@@ -120,6 +120,10 @@ void DocxXmlDocumentReader::init()
     m_wasCaption = false;
     m_listFound = false;
     m_closeHyperlink = false;
+    m_createSectionStyle = true;
+    m_normalDocumentMode = true;
+    m_createSectionToNext = true;
+    m_currentSectionNumber = 1;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -345,16 +349,25 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     }
 
     QString pageLayoutStyleName("Mpm");
-    pageLayoutStyleName = mainStyles->insert(
-        m_currentPageStyle, pageLayoutStyleName, KoGenStyles::DontAddNumberToName);
+    pageLayoutStyleName = mainStyles->insert(m_currentPageStyle, pageLayoutStyleName);
 
-//! @todo works because paragraphs have Standard style assigned by default; fix for multiple page styles
     QString masterStyleName("Standard");
 //! @todo style:display-name
 //    masterStyle->addAttribute("style:display-name", masterStyleName);
     m_masterPageStyle.addAttribute("style:page-layout-name", pageLayoutStyleName);
-    /*masterStyleName =*/ mainStyles->insert(m_masterPageStyle, masterStyleName, KoGenStyles::DontAddNumberToName);
-//    masterStyle = mainStyles->styleForModification(masterStyleName);
+    QString currentMasterPageName = mainStyles->insert(m_masterPageStyle, masterStyleName);
+
+    // Because sectPr is always in the last bit of a section, it means that next paragraph/whatever
+    // Needs to have a style which is modified by next sectPr
+    m_createSectionToNext = true;
+
+    const QString sectionStyleName = QString("SectionStyle%1").arg(m_currentSectionNumber);
+    KoGenStyle *sectionStyle = mainStyles->styleForModification(sectionStyleName);
+    // There might not be a style to modify if the document is completely empty
+    if (sectionStyle) {
+        sectionStyle->addAttribute("style:master-page-name", currentMasterPageName);
+    }
+    ++ m_currentSectionNumber;
 
     READ_EPILOGUE
 }
@@ -366,8 +379,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
 
  Parent elements:
  - [done] sectPr (§17.6.17)
- - sectPr (§17.6.18)
- - sectPr (§17.6.19)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
 
  No child elements.
 */
@@ -379,15 +392,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
     TRY_READ_ATTR(w)
     if (!w.isEmpty()) {
         const QString s(MSOOXML::Utils::TWIP_to_ODF(w));
-        if (!s.isEmpty())
+        if (!s.isEmpty()) {
             m_currentPageStyle.addProperty("fo:page-width", s);
+        }
     }
     TRY_READ_ATTR(h)
     if (!h.isEmpty()) {
         const QString s(MSOOXML::Utils::TWIP_to_ODF(h));
-        if (!s.isEmpty())
+        if (!s.isEmpty()) {
             m_currentPageStyle.addProperty("fo:page-height", s);
+        }
     }
+    TRY_READ_ATTR(orient)
+    if (!orient.isEmpty()) {
+        m_currentPageStyle.addProperty("style:print-orientation", orient);
+    }
+
     readNext();
     READ_EPILOGUE
 }
@@ -399,8 +419,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgSz()
 
  Parent elements:
  - [done] sectPr (§17.6.17)
- - sectPr (§17.6.18)
- - sectPr (§17.6.19)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
 
  No child elements.
 */
@@ -428,8 +448,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_textDirection()
 
  Parent elements:
  - [done] sectPr (§17.6.17)
- - sectPr (§17.6.18)
- - sectPr (§17.6.19)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
 
  No child elements.
 */
@@ -472,8 +492,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
 /*!
 
  Parent elements:
- -[done] sectPr (§17.6.17)
- - sectPr (§17.6.8)
+ - [done] sectPr (§17.6.17)
+ - [done] sectPr (§17.6.8)
 
  Child elements:
  - None
@@ -542,8 +562,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 /*!
 
  Parent elements:
- -[done] sectPr (§17.6.17)
- - sectPr (§17.6.8)
+ - [done] sectPr (§17.6.17)
+ - [done] sectPr (§17.6.8)
 
  Child elements:
  - None
@@ -847,8 +867,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_cols()
 
  Parent elements:
  - [done] sectPr (§17.6.17)
- - sectPr (§17.6.18)
- - sectPr (§17.6.19)
+ - [done] sectPr (§17.6.18)
+ - [done] sectPr (§17.6.19)
 
  Child elements:
  - [done] bottom (Bottom Border) §17.6.2
@@ -1293,6 +1313,31 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldChar()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL br
+//! br handler
+/*
+ Parent elements:
+ - [done] r (§17.3.2.25)
+ - [done] r (§22.1.2.87)
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(type)
+
+    if (type == "column") {
+        m_currentParagraphStyle.addProperty("fo:break-before", "column");
+    }
+    else if (type == "page") {
+        m_currentParagraphStyle.addProperty("fo:break-before", "page");
+    }
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL lastRenderedPageBreak
 //! lastRenderedPageBreak handler
 /*
@@ -1611,18 +1656,28 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             }
             body->startElement("text:p", false);
             if (m_currentStyleName.isEmpty()) {
-                setupParagraphStyle();
+                QString currentParagraphStyleName;
+                if (m_createSectionStyle && m_normalDocumentMode) {
+                    // Hardcoded naming for the first paragraph of a section, needed, do not change
+                    currentParagraphStyleName = QString("SectionStyle%1").arg(m_currentSectionNumber);
+                    m_currentParagraphStyle.addAttribute("style:master-page-name", "placeholder");
+                    mainStyles->insert(m_currentParagraphStyle, currentParagraphStyleName,
+                        KoGenStyles::AllowDuplicates | KoGenStyles::DontAddNumberToName);
+                    m_createSectionStyle = false;
+                }
+                else {
+                    currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
+                }
+                if (m_moveToStylesXml) {
+                    mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+                }
+                body->addAttribute("text:style-name", currentParagraphStyleName);
             }
             else {
                 body->addAttribute("text:style-name", m_currentStyleName);
                 if (m_currentStyleName=="Caption")
                     m_wasCaption = true;
             }
-            /*        if (!m_paragraphStyleNameWritten) {
-                    // no style, set default
-                    body->addAttribute("text:style-name", "Standard");
-                }*/
-
             (void)textPBuf.releaseWriter();
             body->endElement(); //text:p
             if (m_listFound) {
@@ -1636,6 +1691,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             kDebug() << "/text:p";
         }
     }
+
+    // True if this was last paragraph of the section, if we were then it means that next paragraph/table
+    // should have a new section identifier
+    if (m_createSectionToNext) {
+        m_createSectionStyle = true;
+        m_createSectionToNext = false;
+    }
+
     m_currentStyleName.clear();
     READ_EPILOGUE
 }
@@ -1663,7 +1726,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
 
  Child elements:
  - annotationRef (Comment Information Block) §17.13.4.1
- - br (Break) §17.3.3.1
+ - [done] br (Break) §17.3.3.1
  - commentReference (Comment Content Reference Mark) §17.13.4.5
  - contentPart (Content Part) §17.3.3.2
  - continuationSeparator (Continuation Separator Mark) §17.11.1
@@ -1747,6 +1810,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(instrText)
             ELSE_TRY_READ_IF(fldChar)
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
+            ELSE_TRY_READ_IF(br)
             else  if (qualifiedName() == "w:tab") {
                 body->startElement("text:tab");
                 body->endElement(); // text:tab
@@ -2032,7 +2096,7 @@ void DocxXmlDocumentReader::setParentParagraphStyleName(const QXmlStreamAttribut
  - pPrChange (Revision Information for Paragraph Properties) §17.13.5.29
  - [done] pStyle (Referenced Paragraph Style) §17.3.1.27
  - [done] rPr (Run Properties for the Paragraph Mark) §17.3.1.29
- - sectPr (Section Properties) §17.6.18
+ - [done] sectPr (Section Properties) §17.6.18
  - [done] shd (Paragraph Shading) §17.3.1.31
  - snapToGrid (Use Document Grid Settings for Inter-Line Paragraph Spacing) §17.3.1.32
  - [done] spacing (Spacing Between Lines and Above/Below Paragraph) §17.3.1.33
@@ -2074,6 +2138,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(framePr)
             ELSE_TRY_READ_IF(ind)
             ELSE_TRY_READ_IF(suppressLineNumbers)
+            ELSE_TRY_READ_IF(sectPr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3598,6 +3663,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 {
     READ_PROLOGUE
+
     MSOOXML::Utils::XmlWriteBuffer tableBuf;
     body = tableBuf.setWriter(body);
 
@@ -3607,6 +3673,26 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
     m_currentTableWidth = 0.0;
     m_currentTableRowNumber = 0;
+
+    //! @todo fix hardcoded table:align
+    m_currentTableStyle.addProperty("table:align", "left");
+
+    QString currentTableStyleName;
+
+    if (m_createSectionStyle && m_normalDocumentMode) {
+        // Hardcoded naming for the first paragraph of a section, needed, do not change
+        currentTableStyleName = QString("SectionStyle%1").arg(m_currentSectionNumber);
+        m_currentTableStyle.addAttribute("style:master-page-name", "placeholder");
+        mainStyles->insert(m_currentTableStyle, currentTableStyleName,
+                        KoGenStyles::AllowDuplicates | KoGenStyles::DontAddNumberToName);
+        m_createSectionStyle = false;
+    }
+    else {
+        currentTableStyleName = mainStyles->insert(m_currentTableStyle, m_currentTableName, KoGenStyles::DontAddNumberToName);
+    }
+    if (m_moveToStylesXml) {
+        mainStyles->markStyleForStylesXml(currentTableStyleName);
+    }
 
     m_currentTableCellStyleLeft = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
     m_currentTableCellStyleRight = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -3632,22 +3718,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     m_currentTableStyle.addProperty(
         "style:width", QString::number(m_currentTableWidth) + QLatin1String("cm"),
         KoGenStyle::TableType);
-    //! @todo fix hardcoded table:align
-    m_currentTableStyle.addProperty("table:align", "left");
-
-    //! @todo fix hardcoded style:master-page-name
-    m_currentTableStyle.addAttribute("style:master-page-name", "Standard");
-    const QString tableStyleName(
-        mainStyles->insert(
-            m_currentTableStyle,
-            m_currentTableName,
-            KoGenStyles::DontAddNumberToName)
-    );
-    if (m_moveToStylesXml) {
-                mainStyles->markStyleForStylesXml(tableStyleName);
-    }
-
-    body->addAttribute("table:style-name", tableStyleName);
+    body->addAttribute("table:style-name", currentTableStyleName);
     uint column = 0;
     foreach (const ColumnStyleInfo& columnStyle, d->columnStyles) {
         body->startElement("table:table-column");
