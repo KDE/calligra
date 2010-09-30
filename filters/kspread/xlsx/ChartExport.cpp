@@ -152,7 +152,6 @@ QString ChartExport::generateGradientStyle ( KoGenStyles& mainStyles, const Char
 
 QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
     if( chart()->m_areaFormat && chart()->m_areaFormat->m_fill )
     {
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
@@ -165,6 +164,7 @@ QString ChartExport::genChartAreaStyle(const int styleID, KoGenStyle& style, KoG
     }
     else if ( m_theme )
     {        
+        const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
         style.addProperty( "draw:fill", "solid" );
         switch( styleID )
         {
@@ -215,7 +215,6 @@ QString ChartExport::genChartAreaStyle( const int styleID, KoGenStyles& styles, 
 
 QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles )
 {
-    const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
     if( chart()->m_plotAreaFillColor.isValid() )
     {
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
@@ -232,6 +231,7 @@ QString ChartExport::genPlotAreaStyle( const int styleID, KoGenStyle& style, KoG
     }
     else if ( m_theme )
     {        
+        const MSOOXML::DrawingMLColorScheme& colorScheme = m_theme->colorScheme;
         style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
         switch( styleID )
         {
@@ -695,6 +695,8 @@ inline QColor shadeColor( const QColor& col, qreal factor )
 
 void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData )
 {
+    if (!m_theme) return;
+
     const int patternOneIndexes[] = { 1, 9, 17, 25, 33 };
     const int patternTwoIndexes[] = { 42, 26, 18, 10, 2 };
     const int patternFourIndexes[] = { 41 };
