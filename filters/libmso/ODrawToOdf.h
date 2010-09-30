@@ -78,6 +78,13 @@ public:
          * relating to the drawings.
          **/
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() = 0;
+
+	/**
+	 * Retrieve the OfficeArtSpContainer of the master shape. 
+	 * @param spid identifier of the master shape.
+	 **/
+	virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
+
         /**
          * Convert the OfficeArtCOLORREF to a QColor.
          * This conversion requires color scheme information.

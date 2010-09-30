@@ -204,6 +204,7 @@ private:
             const MSO::OfficeArtClientData* clientData,
             Writer& out, KoGenStyle& style);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+    const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
 public:
@@ -422,13 +423,41 @@ PptToOdp::DrawClient::getOfficeArtDggContainer()
 {
     return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
 }
+
+const MSO::OfficeArtSpContainer* 
+PptToOdp::DrawClient::getMasterShapeContainer(quint32 spid)
+{
+    //NOTE: If hspMaster property (0x0301) is provided by the shape, the
+    //referred master shape belongs to the current main master slide. (uzak)
+    const MainMasterContainer* mm = 0;
+    const OfficeArtDgContainer* dg = 0;
+    const OfficeArtSpContainer* sp = 0;
+
+    if (!ppttoodp->currentMaster) return sp;
+
+    mm = ppttoodp->currentMaster->anon.get<MainMasterContainer>();
+    if (mm) {
+        dg = &mm->drawing.OfficeArtDg;
+        foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
+            if (co.anon.is<OfficeArtSpContainer>()) {
+                sp = co.anon.get<OfficeArtSpContainer>();
+                if (sp->shapeProp.spid == spid) {
+                    break;
+                }
+            }
+            //TODO: the shape could be located deeper in the hierarchy
+            sp = NULL;
+        }
+    }
+    return sp;
+}
+
 QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     //Have to handle the case when OfficeArtCOLORREF/fSchemeIndex == true.
-
-    //FIXME: If hspMaster property (0x0301) is provided, values from the
-    //OfficeArtDggContainer are used, which seems wrong.  However using the
-    //current color scheme works on test documents. (uzak)
+    
+    //NOTE: If hspMaster property (0x0301) is provided by the shape, the
+    //referred master shape belongs to the current main master slide. (uzak)
 
     const MSO::MainMasterContainer* mmc = NULL;
     if (ppttoodp->currentMaster) {

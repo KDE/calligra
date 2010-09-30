@@ -104,6 +104,7 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
 {
     KoGenStyle style;
     const OfficeArtDggContainer* drawingGroup = 0;
+    const OfficeArtSpContainer* master = 0; 
     if (client) {
         style = client->createGraphicStyle(o.clientTextbox.data(),
                                            o.clientData.data(), out);
@@ -111,7 +112,18 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
     }
     if (!drawingGroup) return;
 
-    const DrawStyle ds(*drawingGroup, &o);
+    //locate the OfficeArtSpContainer of the master shape
+    if (o.shapeProp.fHaveMaster) {
+        if (client) {
+            const DrawStyle tmp(*drawingGroup, &o);
+            quint32 spid = tmp.hspMaster();
+            master = client->getMasterShapeContainer(spid);
+            if (master) {
+                qDebug() << "Got the master";
+            }
+        }
+    }
+    const DrawStyle ds(*drawingGroup, master, &o);
     defineGraphicProperties(style, ds, out.styles);
 
     client->addTextStyles(o.clientTextbox.data(),
