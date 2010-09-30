@@ -45,7 +45,9 @@ public:
     // Fill properties
     quint32                fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
+    MSO::OfficeArtCOLORREF fillBackColor() const;
     qint32                 fillOpacity() const;
+    MSO::FixedPoint        fillAngle() const;
     quint32                fillBlip() const;
     qint32                 fillDztype() const;
 
@@ -236,17 +238,31 @@ getComplexData(const B& b)
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
         p = (MSO::OfficeArtFOPTE*) _c.anon.data();
         if (p->opid.fComplex) {
-            if (_c.anon.get<A>()) {
-                a = new QByteArray(b.complexData.mid(offset, p->op));
-                break;
+
+            // there is wrong offset inside PVertices
+            if (_c.anon.is<MSO::PVertices>()) {
+                if (_c.anon.get<A>()) {
+                    a = new QByteArray(b.complexData.mid(offset, p->op + 6));
+                    break;
+                }
+                else {
+                offset += p->op +6;
+                }
             }
             else {
-	        offset += p->op;
-	    }
+                if (_c.anon.get<A>()) {
+                a = new QByteArray(b.complexData.mid(offset, p->op));
+                break;
+                }
+                else {
+                offset += p->op;
+                }
+            }
         }
     }
     return a;
 }
+
 /**
  * Retrieve the complex data for an option from an OfficeArtSpContainer
  *

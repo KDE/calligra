@@ -2128,6 +2128,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(marR)
     TRY_READ_ATTR_WITHOUT_NS(indent)
+    TRY_READ_ATTR_WITHOUT_NS(defTabSz)
 
     bool ok = false;
 
@@ -2142,6 +2143,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (!indent.isEmpty()) {
         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    }
+    if (!defTabSz.isEmpty()) {
+        const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
     }
 
     m_bulletFont = "";
@@ -4224,6 +4229,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     TRY_READ_ATTR_WITHOUT_NS(marL)
     TRY_READ_ATTR_WITHOUT_NS(marR)
     TRY_READ_ATTR_WITHOUT_NS(indent)
+    TRY_READ_ATTR_WITHOUT_NS(defTabSz)
 
     bool ok = false;
 
@@ -4241,11 +4247,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
     }
+    if (!defTabSz.isEmpty()) {
+        const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
+    }
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
     algnToODF("fo:text-align", algn);
-
-    TRY_READ_ATTR(defTabSz)
 
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 

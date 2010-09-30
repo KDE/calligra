@@ -752,7 +752,7 @@ void KWTextDocumentLayout::layout()
         }
 #endif
         bottomOfText = line.line.y() + line.line.height();
-        if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1) {
+        if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1 && KWord::isHeaderFooter(m_frameSet)) {
             TDEBUG << "requestMoreFrames" << (bottomOfText - m_state->shape->size().height());
             m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
             cleanupAnchors();

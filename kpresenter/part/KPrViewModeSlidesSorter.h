@@ -60,12 +60,12 @@ public:
 protected:
 
     /**
-     * @brief Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
+     * Fills the editor with presentation slides and ordored them in the KPrSlidesSorter
      */
     void populate();
 
     /**
-     * @brief Moves a page from pageNumber to pageAfterNumber
+     * Moves a page from pageNumber to pageAfterNumber
      *
      * @param pageNumber the number of the page to move
      * @param pageAfterNumber the number of the place the page should move to
@@ -73,57 +73,56 @@ protected:
     void movePage( int pageNumber, int pageAfterNumber );
 
     /**
-     * @brief Getter for the count of the page
+     * The count of the page
      *
-     * @return the m_pageCount
+     * @return the count of the page
      */
-    int pageCount();
+    int pageCount() const;
 
     /**
-     * @brief Getter for the icon size
+     * The icon size
      *
-     * @return the iconSize defined before
+     * @return the icon size defined before
      */
-    QSize iconSize();
+    QSize iconSize() const;
 
     /**
-     * @brief Getter for the rect of an items
-     * Essentialy used to have the size of the full icon
+     * The rect of an items, essentialy used to have the size of the full icon
      *
      * @return the rect of the item
      */
-    QRect itemSize();
+    QRect itemSize() const;
 
     /**
-     * @brief Setter of the size with a rect
+     * Setter of the size with a rect
      *
      * @param size which is a QRect
      */
     void setItemSize(QRect size);
 
     /**
-     * @brief Permit to know if a slide is draging
+     * Permit to know if a slide is draging
      *
      * @return boolean
      */
-    bool isDraging();
+    bool isDraging() const;
 
     /**
-     * @brief Setter for the draging flag
+     * Setter for the draging flag
      *
      * @param flag boolean
      */
     void setDragingFlag(bool flag = true);
 
     /**
-     * @brief Return the last item number it were on
+     * Return the last item number it were on
      *
      * @return the last item number it was on
      */
-    int lastItemNumber();
+    int lastItemNumber() const;
 
     /**
-     * @brief Setter of the last item number it were on
+     * Setter of the last item number it were on
      *
      * @param number of the item number it is on
      */

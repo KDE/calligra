@@ -287,17 +287,17 @@ void KPrViewModeSlidesSorter::movePage(int pageNumber, int pageAfterNumber)
     }
 }
 
-int KPrViewModeSlidesSorter::pageCount()
+int KPrViewModeSlidesSorter::pageCount() const
 {
     return m_pageCount;
 }
 
-QSize KPrViewModeSlidesSorter::iconSize()
+QSize KPrViewModeSlidesSorter::iconSize() const
 {
     return m_iconSize;
 }
 
-QRect KPrViewModeSlidesSorter::itemSize()
+QRect KPrViewModeSlidesSorter::itemSize() const
 {
     return m_itemSize;
 }
@@ -307,7 +307,7 @@ void KPrViewModeSlidesSorter::setItemSize(QRect size)
     m_itemSize = size;
 }
 
-bool KPrViewModeSlidesSorter::isDraging()
+bool KPrViewModeSlidesSorter::isDraging() const
 {
     return m_dragingFlag;
 }
@@ -317,7 +317,7 @@ void KPrViewModeSlidesSorter::setDragingFlag(bool flag)
     m_dragingFlag = flag;
 }
 
-int KPrViewModeSlidesSorter::lastItemNumber()
+int KPrViewModeSlidesSorter::lastItemNumber() const
 {
     return m_lastItemNumber;
 }

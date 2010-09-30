@@ -23,6 +23,8 @@
 #include <QtCore/QtDebug>
 #include <QtGui/QColor>
 
+#include <cmath>
+
 using namespace MSO;
 
 /**
@@ -82,7 +84,7 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
     if (!drawingGroup) return;
 
     const DrawStyle ds(*drawingGroup, &o);
-    defineGraphicProperties(style, ds);
+    defineGraphicProperties(style, ds, out.styles);
 
     client->addTextStyles(o.clientTextbox.data(),
                           o.clientData.data(), out, style);
@@ -112,8 +114,7 @@ QString percent(double v) {
     return format(v) + '%';
 }
 }
-void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
-                                       const QString& listStyle)
+void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     // dr3d:ambient-color
@@ -173,6 +174,28 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
                               client->toQColor(ds.fillColor()).name(), gt);
         }
         // draw:fill-gradient-name
+        // if we have draw:fill gradient, draw:gradient style is needed
+        if (fillType >=4 && fillType <=8) {
+            KoGenStyle gradientStyle(KoGenStyle::GradientStyle);
+
+            // draw:style
+            gradientStyle.addAttribute("draw:style","axial");
+            //draw:start-color
+            gradientStyle.addAttribute("draw:start-color",client->toQColor(ds.fillColor()).name());
+            //draw:end-color
+            gradientStyle.addAttribute("draw:end-color",client->toQColor(ds.fillBackColor()).name());
+            //draw:start-intensity
+            gradientStyle.addAttribute("draw:start-intensity","100%");
+            //draw:end-intensity
+            gradientStyle.addAttribute("draw:end-intensity","100%");
+            //draw:angle
+            gradientStyle.addAttribute("draw:angle",QString::number(toQReal(ds.fillAngle()) * 10));
+            //draw:border
+            gradientStyle.addAttribute("draw:border","0%");
+
+            QString gradientStyleName = styles.insert(gradientStyle);
+            style.addProperty("draw:fill-gradient-name",gradientStyleName, gt);
+        }
         // draw:fill-hatch-name
         // draw:fill-hatch-solid
         // draw:fill-image-height
@@ -364,11 +387,6 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // text:animation-start-inside
     // text:animation-steps
     // text:animation-stop-inside
-
-    /* associate with a text:list-style element */
-    if (!listStyle.isNull()) {
-        style.addAttribute("style:list-style-name", listStyle);
-    }
 }
 const char* getFillType(quint32 fillType)
 {

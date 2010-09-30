@@ -194,21 +194,20 @@ private:
     /**
      * TODO:
      */
-    void drawObject(uint spid, MSO::OfficeArtDgContainer* dg, DrawingWriter& out,
-                    wvWare::Word97::FSPA* spa);
+    void locateDrawing(const MSO::OfficeArtSpgrContainer* o, DrawingWriter& out, wvWare::Word97::FSPA* spa, uint spid);
     /**
      * Check object types in a container of groups of shapes.
      * @param o container of groups of shapes
      * @param out drawing writer
      */
-    void processObjectContent(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
+    void processGroup(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out);
 
     /**
      * Check object type and call the appropriate method to process it.
      * @param o container for shapes
      * @param out drawing writer
      */
-    void processObjectContent(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
+    void processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out);
 
     /**
      * Process the properties of a text box, use wv2 to parse the content.

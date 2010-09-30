@@ -118,7 +118,7 @@ private:
     // we assume that these functions are the same for all style families
     void defineDefaultTextProperties(KoGenStyle& style);
     void defineDefaultParagraphProperties(KoGenStyle& style);
-    void defineDefaultGraphicProperties(KoGenStyle& style);
+    void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
 
     /* Extract data from TextCFException into the style */
     void defineTextProperties(KoGenStyle& style, const MSO::TextCFException* cf,
@@ -198,6 +198,7 @@ private:
     void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
                          const MSO::TextContainer& tc, const QString& text,
                          int start, int end, QStack<QString>& levels);
+    void processGroupShape(const MSO::OfficeArtSpgrContainer* spgr, Writer& out);
 
     /**
      * @brief Write declaration in the content body presentation

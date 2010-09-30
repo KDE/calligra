@@ -269,16 +269,12 @@ WidgetTreeWidget::WidgetTreeWidget(QWidget *parent, Options options)
     setHeaderLabels(QStringList() << i18n("Widget name") << i18nc("Widget's type", "Type"));
     installEventFilter(this);
 
-    //2.0 connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
     if (!(m_options & DisableSelection)) {
         setSelectionMode(ExtendedSelection);
         connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
     }
 
-    //header()->setStretchLastSection(true);
     setAllColumnsShowFocus(true);
-    //2.0 setItemMargin(3);
-    setSortingEnabled(true);
     setExpandsOnDoubleClick(false);
     setIndentation(indentation() / 2);
 }

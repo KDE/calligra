@@ -126,11 +126,11 @@ void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
 
 void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
 {
-    if(fspgr.xRight == fspgr.xLeft) {
+    if (fspgr.xRight == fspgr.xLeft) {
         return;
     }
 
-    if(fspgr.yBottom == fspgr.yTop)
+    if (fspgr.yBottom == fspgr.yTop)
         return;
 
     xOffset = xOffset + xLeft*scaleX;
@@ -272,7 +272,7 @@ void KWordGraphicsHandler::handleInlineObject(const wvWare::PictureData& data)
     out.m_rgbUid = ref.uid;
 
     OfficeArtSpContainer* o = &(co.shape);
-    processObjectContent(*o, out);
+    processDrawingObject(*o, out);
 }
 
 void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
@@ -296,7 +296,8 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
                 DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
                 out.m_pSpa = it.current();
                 out.m_bodyDrawing = true;
-                drawObject((uint) it.current()->spid, m_pOfficeArtBodyDgContainer, out, it.current());
+                locateDrawing((m_pOfficeArtBodyDgContainer->groupShape).data(), out,
+			      it.current(), (uint) it.current()->spid);
                 return;
             }
         }
@@ -314,7 +315,8 @@ void KWordGraphicsHandler::handleFloatingObject(unsigned int globalCP)
                 DrawingWriter out(*m_bodyWriter, *m_mainStyles, true, false);
                 out.m_pSpa = itHeader.current();
                 out.m_bodyDrawing = false;
-                drawObject((uint) itHeader.current()->spid, m_pOfficeArtHeaderDgContainer, out, itHeader.current());
+                locateDrawing((m_pOfficeArtHeaderDgContainer->groupShape).data(), out,
+                              itHeader.current(), (uint) itHeader.current()->spid);
                 return;
             }
         }
@@ -338,32 +340,47 @@ DrawStyle KWordGraphicsHandler::getDrawingStyle()
     return DrawStyle(m_OfficeArtDggContainer);
 }
 
-void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg, DrawingWriter& out, wvWare::Word97::FSPA* spa)
+void KWordGraphicsHandler::locateDrawing(const MSO::OfficeArtSpgrContainer* spgr, DrawingWriter& out, 
+                                         wvWare::Word97::FSPA* spa, uint spid)
 {
-    if (dg == NULL || dg->groupShape == NULL) {
+    if (spgr == NULL) {
         return;
     }
     m_zIndex = 0;
 
-    foreach (const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
-        //if spgr is in root, find out if his first item is sp with right spid
+    //FIXME: combine childAnchor, shapeGroup coordinates with information from
+    //clientAnchor pointing to the SPA structure!
+
+    //NOTE: The OfficeArtSpgrContainer record specifies a container for groups
+    //(4) of shapes.  The group (4) container contains a variable number of
+    //shape containers and other group (4) containers.  Each group (4) is a
+    //shape.  The first container MUST be an OfficeArtSpContainer record, which
+    //MUST contain shape information for the group. MS-ODRAW, 2.2.16
+
+    foreach (const OfficeArtSpgrContainerFileBlock& co, spgr->rgfb) {
+
         if (co.anon.is<OfficeArtSpgrContainer>()) {
             const OfficeArtSpContainer* first = 
                 (*co.anon.get<OfficeArtSpgrContainer>()).rgfb[0].anon.get<OfficeArtSpContainer>();
             if (first && first->shapeProp.spid == spid) {
                 out.SetRectangle(*spa);
-                processObjectContent(*co.anon.get<OfficeArtSpgrContainer>(), out); //draw group
+                processGroup(*co.anon.get<OfficeArtSpgrContainer>(), out);
                 break;
             } else {
                 m_zIndex = m_zIndex + (*co.anon.get<OfficeArtSpgrContainer>()).rgfb.size();
             }
-        }
-        //if sp is in root, find out if it has the right spid
-        else {
-            const OfficeArtSpContainer &spCo = *co.anon.get<OfficeArtSpContainer>();
-            if (spCo.shapeProp.spid == spid) {
+        } else {
+            const OfficeArtSpContainer &sp = *co.anon.get<OfficeArtSpContainer>();
+            if (sp.shapeProp.fGroup) {
+		if (sp.shapeGroup) {
+                    out.SetGroupRectangle(*sp.shapeGroup);
+                }
+                if (sp.shapeProp.spid == spid) {
+                    kDebug(30513) << "An unprocessed shape storing information for the group is referred from text!";
+                }
+            } else if (sp.shapeProp.spid == spid) {
                 out.SetRectangle(*spa);
-                processObjectContent(spCo, out); //draw object
+                processDrawingObject(sp, out);
                 break;
             }
             m_zIndex++;
@@ -371,7 +388,7 @@ void KWordGraphicsHandler::drawObject(uint spid, MSO::OfficeArtDgContainer * dg,
     }
 }
 
-void KWordGraphicsHandler::processObjectContent(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
+void KWordGraphicsHandler::processGroup(const MSO::OfficeArtSpgrContainer& o, DrawingWriter& out)
 {
     if (o.rgfb.size() < 2) {
         return;
@@ -381,22 +398,25 @@ void KWordGraphicsHandler::processObjectContent(const MSO::OfficeArtSpgrContaine
     const OfficeArtSpContainer *first = o.rgfb[0].anon.get<OfficeArtSpContainer>();
 
     if (first && first->shapeGroup) {
-        out.SetGroupRectangle(*first->shapeGroup); //set group rectangle
+        //process shape information for the group
+        out.SetGroupRectangle(*first->shapeGroup);
     }
 
     for (int i = 1; i < o.rgfb.size(); ++i) {
         if (o.rgfb[i].anon.is<OfficeArtSpContainer>()) {
-            OfficeArtSpContainer tempSp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
-            if (tempSp.childAnchor) {
-                out.SetClientRectangle(*tempSp.childAnchor); //set child rectangle
+            OfficeArtSpContainer sp = *o.rgfb[i].anon.get<OfficeArtSpContainer>();
+            if (sp.childAnchor) {
+                out.SetClientRectangle(*sp.childAnchor); //set child rectangle
             }
-            processObjectContent(tempSp, out); //draw objects
-        }
+            processDrawingObject(sp, out); //draw objects
+        } 
+	//TODO: another group shape can be here! We should call locateDrawing
+	//again!
     }
     out.xml.endElement(); // draw:g
 }
 
-void KWordGraphicsHandler::processObjectContent(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
+void KWordGraphicsHandler::processDrawingObject(const MSO::OfficeArtSpContainer& o, DrawingWriter out)
 {
     kDebug(30513);
 
@@ -1163,7 +1183,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
             LEInputStream in(&buf);
             PWrapPolygonVertices_complex _v;
             parsePWrapPolygonVertices_complex(in, _v);
-                buf.close();
+            buf.close();
 
             //_v.data is an array of POINTs, MS-ODRAW, page 89
             QByteArray a, a2;
