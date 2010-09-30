@@ -1488,8 +1488,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         body->addAttribute("xlink:href", QUrl(link_target).toEncoded());
     }
 
-    m_closeHyperlink = true;
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1501,6 +1499,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
+    body->endElement(); // text:bookmark, text.a
 
     READ_EPILOGUE
 }
