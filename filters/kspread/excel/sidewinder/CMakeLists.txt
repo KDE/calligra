@@ -29,6 +29,7 @@ set(sidewinder_SRCS
   utils.cpp
   objects.cpp
   decrypt.cpp
+  conditionals.cpp
   substreamhandler.cpp
   globalssubstreamhandler.cpp
   worksheetsubstreamhandler.cpp

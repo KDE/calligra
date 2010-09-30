@@ -37,6 +37,7 @@ class Column;
 class Row;
 struct VerticalPageBreak;
 struct HorizontalPageBreak;
+class ConditionalFormat;
 
 class Sheet
 {
@@ -181,6 +182,9 @@ public:
     QList<OfficeArtObject*> drawObjects(int groupId = -1) const;
     void addDrawObject(OfficeArtObject* drawObject, const MSO::OfficeArtSpgrContainer* group = 0);
 
+
+    void addConditionalFormat(ConditionalFormat* format);
+    QList<ConditionalFormat*> conditionalFormats() const;
 
 #ifdef SWINDER_XLS2RAW
     void dumpStats();
