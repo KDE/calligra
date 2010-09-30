@@ -150,6 +150,7 @@ public:
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
+    QString handleGradientStyle(const DrawStyle& ds, KoGenStyles& styles);
 };
 
 /**

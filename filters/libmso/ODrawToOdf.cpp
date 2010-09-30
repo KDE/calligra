@@ -212,29 +212,11 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         if (fillType == 0 && client) {
             style.addProperty("draw:fill-color",
                               client->toQColor(ds.fillColor()).name(), gt);
-        }
+        } 
         // draw:fill-gradient-name
-        // if we have draw:fill gradient, draw:gradient style is needed
-        if (fillType >=4 && fillType <=8) {
-            KoGenStyle gradientStyle(KoGenStyle::GradientStyle);
-
-            // draw:style
-            gradientStyle.addAttribute("draw:style","axial");
-            //draw:start-color
-            gradientStyle.addAttribute("draw:start-color",client->toQColor(ds.fillColor()).name());
-            //draw:end-color
-            gradientStyle.addAttribute("draw:end-color",client->toQColor(ds.fillBackColor()).name());
-            //draw:start-intensity
-            gradientStyle.addAttribute("draw:start-intensity","100%");
-            //draw:end-intensity
-            gradientStyle.addAttribute("draw:end-intensity","100%");
-            //draw:angle
-            gradientStyle.addAttribute("draw:angle",QString::number(toQReal(ds.fillAngle()) * 10));
-            //draw:border
-            gradientStyle.addAttribute("draw:border","0%");
-
-            QString gradientStyleName = styles.insert(gradientStyle);
-            style.addProperty("draw:fill-gradient-name",gradientStyleName, gt);
+        else if ((fillType >=4 && fillType <=8) && client) {
+            QString tmp = handleGradientStyle(ds, styles);
+            style.addProperty("draw:fill-gradient-name", tmp, gt);
         }
         // draw:fill-hatch-name
         // draw:fill-hatch-solid
@@ -428,6 +410,26 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // text:animation-steps
     // text:animation-stop-inside
 }
+QString ODrawToOdf::handleGradientStyle(const DrawStyle& ds, KoGenStyles& styles)
+{
+    KoGenStyle style(KoGenStyle::GradientStyle);
+    //draw:style
+    style.addAttribute("draw:style", "axial");
+    //draw:start-color
+    style.addAttribute("draw:start-color", client->toQColor(ds.fillColor()).name());
+    //draw:end-color
+    style.addAttribute("draw:end-color", client->toQColor(ds.fillBackColor()).name());
+    //draw:start-intensity
+    style.addAttribute("draw:start-intensity", "100%");
+    //draw:end-intensity
+    style.addAttribute("draw:end-intensity", "100%");
+    //draw:angle
+    style.addAttribute("draw:angle", QString::number(toQReal(ds.fillAngle()) * 10));
+    //draw:border
+    style.addAttribute("draw:border", "0%");
+    return styles.insert(style);
+}
+
 const char* getFillType(quint32 fillType)
 {
     switch (fillType) {

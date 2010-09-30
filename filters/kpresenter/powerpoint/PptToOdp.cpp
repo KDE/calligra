@@ -739,7 +739,7 @@ void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
     const OfficeArtDggContainer& drawingGroup
             = p->documentContainer->drawingGroup.OfficeArtDgg;
     DrawStyle ds(drawingGroup);
-    defineDrawingPageStyle(style, ds, (hf) ?&hf->hfAtom :0);
+    defineDrawingPageStyle(style, ds, styles, (hf) ?&hf->hfAtom :0);
     styles.insert(style);
 }
 
@@ -1022,7 +1022,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // text:number-lines
 }
 
-void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
+void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
                                       const MSO::HeadersFootersAtom* hf,
                                       const MSO::StreamOffset* master,
                                       const MSO::StreamOffset* common)
@@ -1030,6 +1030,9 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
     const MSO::SlideContainer* sc = NULL;
     const MSO::NotesContainer* nc = NULL;
     const MSO::SlideFlags* sf = NULL;
+
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
 
     if (common) {
         MSO::StreamOffset* c = const_cast<MSO::StreamOffset*>(common);
@@ -1063,6 +1066,10 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                 style.addProperty("draw:fill-color", toQColor(ds.fillColor(), master, common).name(), dp);
             }
             // draw:fill-gradient-name
+            else if (fillType >=4 && fillType <=8) {
+                QString tmp = odrawtoodf.handleGradientStyle(ds, styles);
+                style.addProperty("draw:fill-gradient-name", tmp, dp);
+            }
             // draw:fill-hatch-name
             // draw:fill-hatch-solid
             // draw:fill-image-height
@@ -1477,7 +1484,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, scp);
-        defineDrawingPageStyle(dp, ds, hf, mm);
+        defineDrawingPageStyle(dp, ds, styles, hf, mm);
         drawingPageStyles[m] = styles.insert(dp, "Mdp");
     }
     QString notesMasterPageStyle;
@@ -1494,7 +1501,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup,
                      p->notesMaster->drawing.OfficeArtDg.shape.data());
-        defineDrawingPageStyle(dp, ds, hf, p->notesMaster);
+        defineDrawingPageStyle(dp, ds, styles, hf, p->notesMaster);
         notesMasterPageStyle = styles.insert(dp, "Mdp");
         drawingPageStyles[p->notesMaster] = notesMasterPageStyle;
     }
@@ -1520,7 +1527,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
             slideShape = sc->drawing.OfficeArtDg.shape.data();
         }
         DrawStyle ds(drawingGroup, masterSlideShape, slideShape);
-        defineDrawingPageStyle(dp, ds, hf, mmc, sc);
+        defineDrawingPageStyle(dp, ds, styles, hf, mmc, sc);
         drawingPageStyles[sc] = styles.insert(dp, "dp");
     }
 
@@ -1539,7 +1546,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, nc->drawing.OfficeArtDg.shape.data());
-        defineDrawingPageStyle(dp, ds, hf, p->notesMaster, nc);
+        defineDrawingPageStyle(dp, ds, styles, hf, p->notesMaster, nc);
         drawingPageStyles[nc] = styles.insert(dp, "dp");
     }
 }
