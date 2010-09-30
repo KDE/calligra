@@ -107,12 +107,6 @@ getRect(const PptOfficeArtClientAnchor &a)
     }
 }
 
-QRect
-getRect(const OfficeArtFSPGR &r)
-{
-    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
-}
-
 QString
 getText(const TextContainer& tc)
 {
@@ -1521,28 +1515,6 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
     }
 }
 
-void PptToOdp::processGroupShape(const MSO::OfficeArtSpgrContainer* spgr, Writer& out)
-{
-    DrawClient drawclient(this);
-    ODrawToOdf odrawtoodf(drawclient);
-
-    //The first container MUST be an OfficeArtSpContainer record, which
-    //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
-    const OfficeArtSpContainer* sp = spgr->rgfb[0].anon.get<OfficeArtSpContainer>();
-
-    //An OfficeArtFSPGR record specifies the coordinate system of the group
-    //shape.  The anchors of the child shape are expressed in this
-    //coordinate system.  This record’s container MUST be a group shape.
-    if (sp->shapeProp.fGroup) {
-        if (sp->shapeGroup) {
-            out.transform(QRect(0, 0, 0, 0), getRect(*sp->shapeGroup));
-        }
-    }
-    for (int i = 1; i < spgr->rgfb.size(); ++i) {
-        odrawtoodf.processDrawing(spgr->rgfb[i], out);
-    }
-}
-
 void PptToOdp::createMainStyles(KoGenStyles& styles)
 {
     /* This function is follows the flow of the styles.xml file.
@@ -1643,6 +1615,9 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     /*
       Define the style:master-pages
      */
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+
     QBuffer notesBuffer;
     if (p->notesMaster) { // draw the notes master
         notesBuffer.open(QIODevice::WriteOnly);
@@ -1656,8 +1631,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         currentMaster = 0;
 
         if (p->notesMaster->drawing.OfficeArtDg.groupShape) {
-            const OfficeArtSpgrContainer* spgr = (p->notesMaster->drawing.OfficeArtDg.groupShape).data();
-            processGroupShape(spgr, out);
+            const OfficeArtSpgrContainer& spgr = *(p->notesMaster->drawing.OfficeArtDg.groupShape).data();
+            odrawtoodf.processGroupShape(spgr, out);
         }
         writer.endElement();
     }
@@ -1683,8 +1658,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
         if (drawing->OfficeArtDg.groupShape) {
-            const OfficeArtSpgrContainer* spgr = (drawing->OfficeArtDg.groupShape).data();
-            processGroupShape(spgr, out);
+            const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
+            odrawtoodf.processGroupShape(spgr, out);
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
                                                      buffer.buffer().size()));
@@ -2255,9 +2230,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     currentMaster = master;
     currentSlide = slide;
 
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+
     if (slide->drawing.OfficeArtDg.groupShape) {
-        const OfficeArtSpgrContainer* spgr = (slide->drawing.OfficeArtDg.groupShape).data();
-        processGroupShape(spgr, out);
+        const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
+        odrawtoodf.processGroupShape(spgr, out);
     }
 
     currentMaster = NULL;
@@ -2277,8 +2255,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
         if (!value.isEmpty()) {
             out.xml.addAttribute("draw:style-name", value);
         }
-        const OfficeArtSpgrContainer* spgr = (nc->drawing.OfficeArtDg.groupShape).data();
-        processGroupShape(spgr, out);
+        const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
+        odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }
 

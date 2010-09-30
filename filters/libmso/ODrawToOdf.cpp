@@ -36,6 +36,34 @@ ODrawToOdf::getRect(const OfficeArtFSPGR &r)
     return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
 }
 
+void ODrawToOdf::processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out)
+{
+    if (o.rgfb.size() < 2) return;
+
+    //The first container MUST be an OfficeArtSpContainer record, which
+    //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
+    const OfficeArtSpContainer* sp = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+
+    //An OfficeArtFSPGR record specifies the coordinate system of the group
+    //shape.  The anchors of the child shape are expressed in this coordinate
+    //system.  This record’s container MUST be a group shape.
+    if (sp && sp->shapeProp.fGroup) {
+        QRectF oldCoords;
+        if (sp->clientAnchor && sp->shapeGroup) {
+            oldCoords = client->getRect(*sp->clientAnchor);
+        }
+        if (oldCoords.isValid()) {
+            Writer out_trans = out.transform(oldCoords, getRect(*sp->shapeGroup));
+            for (int i = 1; i < o.rgfb.size(); ++i) {
+                processDrawing(o.rgfb[i], out_trans);
+            }
+        } else {
+            for (int i = 1; i < o.rgfb.size(); ++i) {
+                processDrawing(o.rgfb[i], out);
+            }
+        }
+    }
+}
 void ODrawToOdf::processDrawing(const OfficeArtSpgrContainerFileBlock& of,
                                 Writer& out)
 {

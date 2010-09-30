@@ -138,6 +138,7 @@ private:
 
 public:
     ODrawToOdf(Client& c) :client(&c) {}
+    void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
