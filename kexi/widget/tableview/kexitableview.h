@@ -390,10 +390,10 @@ public slots:
     }
 
 signals:
-    virtual void dataSet(KexiTableViewData *data);
+    void dataSet(KexiTableViewData *data);
 
-    virtual void itemSelected(KexiDB::RecordData *);
-    virtual void cellSelected(int col, int row);
+    void itemSelected(KexiDB::RecordData *);
+    void cellSelected(int col, int row);
 
     void itemReturnPressed(KexiDB::RecordData *, int row, int col);
     void itemDblClicked(KexiDB::RecordData *, int row, int col);
@@ -403,14 +403,14 @@ signals:
     void droppedAtRow(KexiDB::RecordData *record, int row, QDropEvent *e, KexiDB::RecordData*& newRecord);
 
     /*! Data has been refreshed on-screen - emitted from initDataContents(). */
-    virtual void dataRefreshed();
+    void dataRefreshed();
 
-    virtual void itemChanged(KexiDB::RecordData *, int row, int col);
-    virtual void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue);
-    virtual void itemDeleteRequest(KexiDB::RecordData *, int row, int col);
-    virtual void currentItemDeleteRequest();
+    void itemChanged(KexiDB::RecordData *, int row, int col);
+    void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue);
+    void itemDeleteRequest(KexiDB::RecordData *, int row, int col);
+    void currentItemDeleteRequest();
     //! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
-    virtual void newItemAppendedForAfterDeletingInSpreadSheetMode();
+    void newItemAppendedForAfterDeletingInSpreadSheetMode();
 // void addRecordRequest();
 // void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
     void sortedColumnChanged(int col);
