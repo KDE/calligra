@@ -121,9 +121,8 @@ void DocxXmlDocumentReader::init()
     m_listFound = false;
     m_closeHyperlink = false;
     m_createSectionStyle = true;
+    m_createSectionToNext = false;
     m_normalDocumentMode = true;
-    m_createSectionToNext = true;
-    m_currentSectionNumber = 1;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -361,13 +360,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
     // Needs to have a style which is modified by next sectPr
     m_createSectionToNext = true;
 
-    const QString sectionStyleName = QString("SectionStyle%1").arg(m_currentSectionNumber);
-    KoGenStyle *sectionStyle = mainStyles->styleForModification(sectionStyleName);
+    KoGenStyle *sectionStyle = mainStyles->styleForModification(m_currentSectionStyleName);
     // There might not be a style to modify if the document is completely empty
     if (sectionStyle) {
         sectionStyle->addAttribute("style:master-page-name", currentMasterPageName);
     }
-    ++ m_currentSectionNumber;
 
     READ_EPILOGUE
 }
@@ -1657,12 +1654,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             if (m_currentStyleName.isEmpty()) {
                 QString currentParagraphStyleName;
                 if (m_createSectionStyle && m_normalDocumentMode) {
-                    // Hardcoded naming for the first paragraph of a section, needed, do not change
-                    currentParagraphStyleName = QString("SectionStyle%1").arg(m_currentSectionNumber);
+                    // This is done to avoid the style to being duplicate to some other style
                     m_currentParagraphStyle.addAttribute("style:master-page-name", "placeholder");
-                    mainStyles->insert(m_currentParagraphStyle, currentParagraphStyleName,
-                        KoGenStyles::AllowDuplicates | KoGenStyles::DontAddNumberToName);
+                    currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
                     m_createSectionStyle = false;
+                    m_currentSectionStyleName = currentParagraphStyleName;
                 }
                 else {
                     currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
@@ -1814,7 +1810,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->startElement("text:tab");
                 body->endElement(); // text:tab
             }
-//            else { SKIP_EVERYTHING }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2603,7 +2598,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
         kDebug() << "pointSize:" << pointSize;
         m_currentTextStyleProperties->setFontPointSize(pointSize);
     }
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2694,7 +2689,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_spacing()
         }
     }
 
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }
 
@@ -3125,13 +3120,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
     TRY_READ_ATTR(instr)
     instr = instr.trimmed();
 
-    if (instr.startsWith("PAGE ")) {
+    bool closeElement = false;
+
+    if (instr == "PAGE") {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
+        closeElement = true;
     }
 
-    if (instr.startsWith("NUMPAGES ")) {
+    if (instr == "NUMPAGES") {
         body->startElement("text:page-count");
+        closeElement = true;
     }
 
 // @todo support all attributes
@@ -3146,7 +3145,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
         }
     }
 
-    if (instr.startsWith("PAGE ") || instr.startsWith("NUMPAGES ")) {
+    if (closeElement) {
         body->endElement(); // text:page-number | text:page-count
     }
 
@@ -3679,12 +3678,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     QString currentTableStyleName;
 
     if (m_createSectionStyle && m_normalDocumentMode) {
-        // Hardcoded naming for the first paragraph of a section, needed, do not change
-        currentTableStyleName = QString("SectionStyle%1").arg(m_currentSectionNumber);
+        // This is done to avoid the style to being duplicate to some other style
         m_currentTableStyle.addAttribute("style:master-page-name", "placeholder");
-        mainStyles->insert(m_currentTableStyle, currentTableStyleName,
-                        KoGenStyles::AllowDuplicates | KoGenStyles::DontAddNumberToName);
+        currentTableStyleName = mainStyles->insert(m_currentTableStyle, m_currentTableName, KoGenStyles::DontAddNumberToName);
         m_createSectionStyle = false;
+        m_currentSectionStyleName = currentTableStyleName;
     }
     else {
         currentTableStyleName = mainStyles->insert(m_currentTableStyle, m_currentTableName, KoGenStyles::DontAddNumberToName);
@@ -4956,11 +4954,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
     break;
     }
 
-    SKIP_EVERYTHING
-    /*    while (!atEnd()) {
-            readNext();
-            BREAK_IF_END_OF(CURRENT_EL);
-        }*/
+    readNext();
     READ_EPILOGUE
 }
 

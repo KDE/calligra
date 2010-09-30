@@ -1207,7 +1207,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
 
     // We don't want to overlap the current style
     if (!m_currentDrawStyle->isEmpty()) {
-        SKIP_EVERYTHING
+        skipCurrentElement();
         READ_EPILOGUE
     }
 
@@ -1291,7 +1291,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 TRY_READ(ln)
             }
             else if (qualifiedName() == QLatin1String("a:noFill")) {
-                SKIP_EVERYTHING // safely skip
                 m_noFill = true;
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
@@ -3150,7 +3149,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
     if (documentReaderMode) {
         defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
 
-        SKIP_EVERYTHING
+        skipCurrentElement();
         READ_EPILOGUE
     }
 #endif
@@ -3682,7 +3681,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     if (documentReaderMode) {
         defaultTextColors[defaultTextColors.size() - 1] = val;
 
-        SKIP_EVERYTHING
+        skipCurrentElement();
         READ_EPILOGUE
     }
 #endif
@@ -5143,7 +5142,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 {
     READ_PROLOGUE
-    SKIP_EVERYTHING
+    skipCurrentElement();
     READ_EPILOGUE
 }
 

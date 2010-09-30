@@ -181,7 +181,7 @@ protected:
 
     bool m_normalDocumentMode;
     bool m_createSectionStyle;
-    unsigned m_currentSectionNumber;
+    QString m_currentSectionStyleName;
     bool m_createSectionToNext;
     KoGenStyle m_currentPageStyle;
     KoGenStyle m_masterPageStyle;

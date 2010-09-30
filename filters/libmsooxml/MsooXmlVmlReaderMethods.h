@@ -21,9 +21,6 @@
  *
  */
 
-#ifndef MSOOXMLCMLREADERMETHODS_H
-#define MSOOXMLCMLREADERMETHODS_H
-
 /*! @file MsooXmlVmlReaderMethods.h
     @brief Collects MS VML parser code.
 
@@ -63,4 +60,3 @@ protected:
     QString m_shapeAltText; //!< set in read_shape()
     QString m_shapeTitle; //!< set in read_shape()
     QString m_shapeColor; //!< set in read_shape()
-#endif

@@ -497,11 +497,18 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_tblStylePr()
 #undef CURRENT_EL
 #define CURRENT_EL name
 //! 17.7.4.9 name (Primary Style Name)
+/*
+ Parent elements:
+ - style (§17.7.4.17)
+
+ Child elements:
+ - none
+*/
 KoFilter::ConversionStatus DocxXmlStylesReader::read_name()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_INTO(val, m_name)
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }
