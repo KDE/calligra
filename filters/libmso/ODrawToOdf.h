@@ -108,6 +108,7 @@ private:
     void processFreeLine(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processPictureFrame(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processNotPrimitive(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processWedgeRectCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processWedgeEllipseCallout(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out);

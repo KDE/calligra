@@ -1258,6 +1258,18 @@ void ODrawToOdf::processNotPrimitive(const OfficeArtSpContainer& o, Writer& out)
     out.xml.endElement(); //draw:custom-shape
 }
 
+void ODrawToOdf::processNotchedCircularArrow(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    setEnhancedGeometry(o, out);
+    out.xml.endElement(); //draw:enhanced-geometry
+
+    out.xml.endElement(); //draw:custom-shape
+}
+
 void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out)
 {
     quint16 shapeType = o.shapeProp.rh.recInstance;
@@ -1330,6 +1342,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processPictureFrame(o, out);
     } else if (shapeType == msosptNotPrimitive) {
         processNotPrimitive(o, out);
+    } else if (shapeType == msosptNotchedCircularArrow) {
+    	processNotchedCircularArrow(o, out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }
