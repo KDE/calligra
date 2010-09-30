@@ -764,7 +764,6 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 {
     if (!record) return;
-    if (!d->lastDrawingObject) return;
     if (!d->sheet) return;
 
     const unsigned long id = record->m_object ? record->m_object->id() : -1;
@@ -774,7 +773,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     d->lastOfficeArtObject = 0;
 
     bool handled = false;
-    if (record->m_object && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
+    if (record->m_object && d->lastDrawingObject && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
         handled = true;
         switch (record->m_object->type()) {
             case Object::Picture: {
@@ -800,7 +799,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                 handled = false;
         }
     }
-    if (!handled) {
+    if (!handled && d->lastDrawingObject) {
         //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
         foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
             if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
