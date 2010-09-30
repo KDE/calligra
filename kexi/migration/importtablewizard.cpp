@@ -237,7 +237,7 @@ void ImportTableWizard::setupFinishPage()
     m_finishLbl = new QLabel(m_finishPageWidget);
     m_finishLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     m_finishLbl->setWordWrap(true);
-    
+
     vbox->addWidget(m_finishLbl);
     vbox->addStretch(1);
 
@@ -273,19 +273,18 @@ void ImportTableWizard::arriveTableSelectPage()
     Kexi::ObjectStatus result;
     KexiUtils::WaitCursor wait;
     m_migrateDriver = prepareImport(result);
-    
+
     if (m_migrateDriver) {
         if (!m_migrateDriver->connectSource())
             return;
-        
+
         QStringList tableNames;
-	m_tableListWidget->clear();
+        m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }
     }
     KexiUtils::removeWaitCursor();
-    
 }
 
 void ImportTableWizard::arriveAlterTablePage()
