@@ -788,7 +788,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             oc.setRichText(doc);
         }
     } else if (value.isError()) {
-        KSpread::Value v(Value::Error);
+        KSpread::Value v(KSpread::Value::Error);
         v.setError(value.asString());
         oc.setValue(v);
     }
