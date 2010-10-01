@@ -592,6 +592,13 @@ private:
     * @param QString notes text to displayed.
     */
     void insertNotesDeclaration(DeclarationType type, const QString &name, const QString &text);
+
+    /**
+     * @brief retrieve the OfficeArtSpContainer of the master shape
+     * @param spid identifier of the master shape
+     * @return pointer to the OfficeArtSpContainer
+     */
+    const MSO::OfficeArtSpContainer* retrieveMasterShape(quint32 spid) const;
 };
 
 /**
