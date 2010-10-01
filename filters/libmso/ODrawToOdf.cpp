@@ -102,9 +102,9 @@ void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
                                             const OfficeArtSpContainer& o)
 {
-    KoGenStyle style;
     const OfficeArtDggContainer* drawingGroup = 0;
     const OfficeArtSpContainer* master = 0; 
+ 
     if (client) {
         style = client->createGraphicStyle(o.clientTextbox.data(),
                                            o.clientData.data(), out);
@@ -118,11 +118,9 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
             const DrawStyle tmp(*drawingGroup, &o);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
-            if (master) {
-                qDebug() << "Got the master";
-            }
         }
     }
+    KoGenStyle style;
     const DrawStyle ds(*drawingGroup, master, &o);
     defineGraphicProperties(style, ds, out.styles);
 
@@ -212,10 +210,12 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         if (fillType == 0 && client) {
             style.addProperty("draw:fill-color",
                               client->toQColor(ds.fillColor()).name(), gt);
-        } 
+        }
         // draw:fill-gradient-name
         else if ((fillType >=4 && fillType <=8) && client) {
-            QString tmp = handleGradientStyle(ds, styles);
+            KoGenStyle gs(KoGenStyle::GradientStyle);
+            defineGradientStyle(gs, ds);
+            QString tmp = styles.insert(gs);
             style.addProperty("draw:fill-gradient-name", tmp, gt);
         }
         // draw:fill-hatch-name
@@ -410,9 +410,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // text:animation-steps
     // text:animation-stop-inside
 }
-QString ODrawToOdf::handleGradientStyle(const DrawStyle& ds, KoGenStyles& styles)
+void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
-    KoGenStyle style(KoGenStyle::GradientStyle);
     //draw:style
     style.addAttribute("draw:style", "axial");
     //draw:start-color
@@ -427,7 +426,6 @@ QString ODrawToOdf::handleGradientStyle(const DrawStyle& ds, KoGenStyles& styles
     style.addAttribute("draw:angle", QString::number(toQReal(ds.fillAngle()) * 10));
     //draw:border
     style.addAttribute("draw:border", "0%");
-    return styles.insert(style);
 }
 
 const char* getFillType(quint32 fillType)

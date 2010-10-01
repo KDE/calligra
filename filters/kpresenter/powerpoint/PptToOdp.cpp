@@ -1067,7 +1067,9 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             }
             // draw:fill-gradient-name
             else if (fillType >=4 && fillType <=8) {
-                QString tmp = odrawtoodf.handleGradientStyle(ds, styles);
+                KoGenStyle gs(KoGenStyle::GradientStyle);
+                odrawtoodf.defineGradientStyle(gs, ds);
+                QString tmp = styles.insert(gs);
                 style.addProperty("draw:fill-gradient-name", tmp, dp);
             }
             // draw:fill-hatch-name
