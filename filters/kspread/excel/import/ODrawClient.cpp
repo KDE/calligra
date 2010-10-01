@@ -190,6 +190,7 @@ const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
 
 const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
 {
+    //TODO: locate the OfficeArtSpContainer with shapeProp/spid == spid
     MSO::OfficeArtSpContainer* sp = NULL;
     return sp;
 }
