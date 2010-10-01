@@ -50,6 +50,7 @@
 
 #include <MsooXmlReader.h>
 #include <MsooXmlCommonReader.h>
+#include <QScopedPointer>
 
 // ================================================================
 
@@ -843,16 +844,15 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         }
     }
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
-    if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
-        XlsxXmlDrawingReaderContext::Position f_from, f_to;
-        f_from = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
-        body->addAttributePt("svg:x", EMU_TO_POINT(f_from.m_colOff));
-        body->addAttributePt("svg:y", EMU_TO_POINT(f_from.m_rowOff));
-        if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
-            f_to = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
-            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(f_to.m_col+1) + QString::number(f_to.m_row+1));
-            body->addAttributePt("table:end-x", EMU_TO_POINT(f_to.m_colOff));
-            body->addAttributePt("table:end-y", EMU_TO_POINT(f_to.m_rowOff));
+    if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+        XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+        body->addAttributePt("svg:x", EMU_TO_POINT(f.m_colOff));
+        body->addAttributePt("svg:y", EMU_TO_POINT(f.m_rowOff));
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+            f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(f.m_col+1) + QString::number(f.m_row+1));
+            body->addAttributePt("table:end-x", EMU_TO_POINT(f.m_colOff));
+            body->addAttributePt("table:end-y", EMU_TO_POINT(f.m_rowOff));
         } else {
             body->addAttributePt("svg:width", EMU_TO_POINT(m_svgWidth));
             body->addAttributePt("svg:height", EMU_TO_POINT(m_svgHeight));
@@ -1109,7 +1109,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     }
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
     KoXmlWriter *bodyBackup = body;
-    body = m_context->body;
+    body = m_currentDrawingObject->setShape(new XlsxShape());
 #endif
 
     preReadSp();
@@ -1176,7 +1176,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
         }
         body = bodyBackup;
-    }
+    }    
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
     body = bodyBackup;
 #endif
@@ -1375,26 +1375,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
         const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
 
         Charting::Chart* chart = new Charting::Chart;
-
         ChartExport* chartexport = new ChartExport(chart, m_context->themes);
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
+        chartexport->setSheetReplacement( false );
+        if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+            XlsxDrawingObject::Position f = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            chart->m_fromRow = f.m_row;
+            chart->m_fromColumn = f.m_col;
+            if(m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {
+                f = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor];
+                chart->m_toRow = f.m_row;
+                chart->m_toColumn = f.m_col;
+            }
+        }
+#else
         chartexport->m_drawLayer = true;
         chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
         chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
         chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
         chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
-
-        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath<<"position="<<QString("%1:%2").arg(chartexport->m_x).arg(chartexport->m_y)<<"size="<<QString("%1x%2").arg(chartexport->m_width).arg(chartexport->m_height);
+#endif
         
         KoStore* storeout = m_context->import->outputStore();
-        XlsxXmlChartReaderContext context(storeout, chartexport );
+        QScopedPointer<XlsxXmlChartReaderContext> context(new XlsxXmlChartReaderContext(storeout, chartexport));
         XlsxXmlChartReader reader(this);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context.data());
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
             return result;
         }
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        m_currentDrawingObject->setChart(context.take());
+#else
         chartexport->saveIndex(body);
+#endif
     }
 
     while (!atEnd()) {
@@ -2500,25 +2516,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             return KoFilter::FileNotFound;
         }
 #if defined(XLSXXMLDRAWINGREADER_CPP)
-        XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(sourceName);
-
-        if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {  // if we got 'from' cell
-            XlsxXmlDrawingReaderContext::Position f_from, f_to;
-            f_from = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
-
-            if (f_from.m_col > 0 && f_from.m_row > 0) {
-                picture->m_fromCell = f_from;           // store the starting cell
-                if (m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {   // if we got 'to' cell
-                    f_to = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
-                    if (f_to.m_col > 0 && f_to.m_row > 0){
-                        picture->m_toCell = f_to;       // store the ending cell
-                    }
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        if(m_context->import->copyFile(sourceName, destinationName, false) == KoFilter::OK) {
+            XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(destinationName);
+            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {  // if we got 'from' cell
+                picture->m_fromCell = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor]; // store the starting cell
+                if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {   // if we got 'to' cell
+                    picture->m_toCell = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor]; // store the ending cell
                 }
             }
+            m_currentDrawingObject->setPicture(picture);
         }
-
-        // put this picture in the QList. It will be later used (stored) in XlsxXmlWorksheetReader.cpp
-        m_context->pictures << picture;
 #else
         QString destinationName;
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )

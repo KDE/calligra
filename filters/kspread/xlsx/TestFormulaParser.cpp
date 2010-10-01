@@ -67,7 +67,7 @@ void TestFormulaParser::testConvertFormula()
 
 void TestFormulaParser::testSharedFormulaReferences()
 {
-    Sheet s1;
+    Sheet s1("Sheet1");
     Cell* c1 = s1.cell(2, 5, true);
     c1->formula = "=D6-E7";
     Cell* c2 = s1.cell(12, 43, true);

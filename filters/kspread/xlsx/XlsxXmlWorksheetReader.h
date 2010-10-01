@@ -127,7 +127,7 @@ public:
 
     Sheet* sheet;
     const uint worksheetNumber;
-    QString worksheetName;
+    const QString worksheetName;
     QString state;
     /*QMap<QString, */MSOOXML::DrawingMLTheme*/*>**/ themes;
     const XlsxSharedStringVector *sharedStrings;
