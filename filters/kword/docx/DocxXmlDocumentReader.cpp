@@ -3077,8 +3077,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  Child elements:
 
  - bdo (Bidirectional Override) §17.3.2.3
- - bookmarkEnd (Bookmark End)   §17.13.6.1
- - bookmarkStart (Bookmark Start)                                                §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End)   §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start)                                                §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End)                                    §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start)                                §17.13.4.4
  - customXml (Inline-Level Custom XML Element)                                   §17.5.1.3
@@ -3101,8 +3101,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  - moveTo (Move Destination Run Content)                                         §17.13.5.25
  - moveToRangeEnd (Move Destination Location Container - End)                    §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start)                §17.13.5.28
- - oMath (Office Math)                                                           §22.1.2.77
- - oMathPara (Office Math Paragraph)                                             §22.1.2.78
+ - [done] oMath (Office Math)                                                           §22.1.2.77
+ - [done] oMathPara (Office Math Paragraph)                                             §22.1.2.78
  - permEnd (Range Permission End)                                                §17.13.7.1
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
@@ -3122,13 +3122,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 
     bool closeElement = false;
 
-    if (instr == "PAGE") {
+    if (instr == "PAGE" || instr.startsWith("PAGE ")) {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
         closeElement = true;
     }
 
-    if (instr == "NUMPAGES") {
+    if (instr == "NUMPAGES" || instr.startsWith("NUMPAGES ")) {
         body->startElement("text:page-count");
         closeElement = true;
     }
@@ -3142,6 +3142,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF(r)
             ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            else if (qualifiedName() == "m:oMathPara") {
+                TRY_READ(oMathPara)
+            }
+            else if (qualifiedName() == "m:oMath") {
+                TRY_READ(oMath)
+            }
         }
     }
 
