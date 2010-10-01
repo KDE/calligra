@@ -33,84 +33,23 @@ public:
               const MSO::OfficeArtSpContainer* sp_ = 0)
                   :d(d_), mastersp(mastersp_), sp(sp_) {}
 
-    // FillStyleBooleanProperties
-    bool fNoFillHitTest() const;
-    bool fillUseRect() const;
-    bool fillShape() const;
-    bool fHitTestFill() const;
-    bool fFilled() const;
-    bool fUseShapeAnchor() const;
-    bool fRecolorFillAsPicture() const;
-
-    // Fill properties
-    quint32                fillType() const;
-    MSO::OfficeArtCOLORREF fillColor() const;
-    MSO::OfficeArtCOLORREF fillBackColor() const;
-    qint32                 fillOpacity() const;
-    MSO::FixedPoint        fillAngle() const;
-    quint32                fillBlip() const;
-    qint32                 fillDztype() const;
-
-    // LineEndArrowhead
-    quint32 lineEndArrowhead() const;
-    // LineStartArrowhead
-    quint32 lineStartArrowhead() const;
-    // LineStartArrowWidth
-    quint32 lineStartArrowWidth() const;
-    // LineEndArrowWidth
-    quint32 lineEndArrowWidth() const;
-    // LineWidth
-    quint32 lineWidth() const;
-    // Shadow related
-    quint32 shadowType() const;
-    qint32 shadowOffsetX() const;
-    qint32 shadowOffsetY() const;
-    MSO::FixedPoint shadowOpacity() const;
-    MSO::OfficeArtCOLORREF shadowColor() const;
-    // ShadowStyleBooleanProperties
-    bool fShadowObscured() const;
-    bool fShadow() const;  
-    // LineDashing
-    quint32 lineDashing() const;
-    // LineStyleBooleanProperties
-    bool fNoLineDrawDash() const;
-    bool fLineFillShape() const;
-    bool fHitTestLine() const;
-    bool fLine() const;
-    bool fArrowHeadsOK() const;
-    bool fInsetPenOK() const;
-    bool fInsetPen() const;
-    bool fLineOpaqueBackColor() const;
-    // LineColor
-    MSO::OfficeArtCOLORREF lineColor() const;
-    // LineOpacity
-    qint32 lineOpacity() const;
-    // TxflTextFlow
-    qint32 txflTextFlow() const;
-    // PosH
-    qint32 posH() const;
-    // PosRelH
-    qint32 posRelH() const;
-    // PosV
-    qint32 posV() const;
-    // PosRelV
-    qint32 posRelV() const;
-    // Horizontal rule related
-    quint32 pctHR() const;
-    quint32 alignHR() const;
-    qint32 dxHeightHR() const;
-    qint32 dxWidthHR() const;
-    // Wrapping related
+    // Shape property set
+    quint32 hspMaster() const;
+    // ShapeBooleanProperties
+    // Group Shape property set
     quint32 pWrapPolygonVertices() const;
     qint32 dxWrapDistLeft() const;
     qint32 dyWrapDistTop() const;
     qint32 dxWrapDistRight() const;
     qint32 dyWrapDistBottom() const;
-    // Text margins related
-    qint32 dxTextLeft() const;
-    qint32 dyTextTop() const;
-    qint32 dxTextRight() const;
-    qint32 dyTextBottom() const;
+    qint32 posH() const;
+    qint32 posRelH() const;
+    qint32 posV() const;
+    qint32 posRelV() const;
+    quint32 pctHR() const;
+    quint32 alignHR() const;
+    qint32 dxHeightHR() const;
+    qint32 dxWidthHR() const;
     // GroupShapeBooleanProperties
     bool fPrint() const;
     bool fHidden() const;
@@ -144,6 +83,56 @@ public:
     bool fUsefStandardHR() const;
     bool fUsefIsBullet() const;
     bool fUsefLayoutInCell() const;
+    // Fill Style property set
+    quint32                fillType() const;
+    MSO::OfficeArtCOLORREF fillColor() const;
+    MSO::OfficeArtCOLORREF fillBackColor() const;
+    qint32                 fillOpacity() const;
+    MSO::FixedPoint        fillAngle() const;
+    quint32                fillBlip() const;
+    qint32                 fillDztype() const;
+    // FillStyleBooleanProperties
+    bool fNoFillHitTest() const;
+    bool fillUseRect() const;
+    bool fillShape() const;
+    bool fHitTestFill() const;
+    bool fFilled() const;
+    bool fUseShapeAnchor() const;
+    bool fRecolorFillAsPicture() const;
+    // Line Style property set
+    MSO::OfficeArtCOLORREF lineColor() const;
+    qint32 lineOpacity() const;
+    quint32 lineWidth() const;
+    quint32 lineDashing() const;
+    quint32 lineStartArrowhead() const;
+    quint32 lineEndArrowhead() const;
+    quint32 lineStartArrowWidth() const;
+    quint32 lineEndArrowWidth() const;
+    // LineStyleBooleanProperties
+    bool fNoLineDrawDash() const;
+    bool fLineFillShape() const;
+    bool fHitTestLine() const;
+    bool fLine() const;
+    bool fArrowHeadsOK() const;
+    bool fInsetPenOK() const;
+    bool fInsetPen() const;
+    bool fLineOpaqueBackColor() const;
+    // Shadow Style property set
+    quint32 shadowType() const;
+    MSO::OfficeArtCOLORREF shadowColor() const;
+    MSO::FixedPoint shadowOpacity() const;
+    qint32 shadowOffsetX() const;
+    qint32 shadowOffsetY() const;
+    // ShadowStyleBooleanProperties
+    bool fShadowObscured() const;
+    bool fShadow() const;  
+    // Text property set
+    qint32 txflTextFlow() const;
+    qint32 dxTextLeft() const;
+    qint32 dyTextTop() const;
+    qint32 dxTextRight() const;
+    qint32 dyTextBottom() const;
+    // Blip property set
     quint32 pib() const;
 };
 

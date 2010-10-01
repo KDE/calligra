@@ -188,6 +188,12 @@ const MSO::OfficeArtDggContainer* ODrawClient::getOfficeArtDggContainer()
     return m_sheet->workbook()->officeArtDggContainer();
 }
 
+const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 spid)
+{
+    MSO::OfficeArtSpContainer* sp = NULL;
+    return sp;
+}
+
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
 {
     if (c.fSchemeIndex) {

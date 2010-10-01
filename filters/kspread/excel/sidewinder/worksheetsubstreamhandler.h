@@ -73,6 +73,8 @@ class PasswordRecord;
 class BkHimRecord;
 class VerticalPageBreaksRecord;
 class HorizontalPageBreaksRecord;
+class CondFmtRecord;
+class CFRecord;
 
 class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
@@ -136,6 +138,8 @@ private:
     void handleBkHim(BkHimRecord* record);
     void handleVerticalPageBreaksRecord(Swinder::VerticalPageBreaksRecord* record);
     void handleHorizontalPageBreaksRecord(Swinder::HorizontalPageBreaksRecord* record);
+    void handleCondFmtRecord(Swinder::CondFmtRecord* record);
+    void handleCFRecord(Swinder::CFRecord* record);
 
     class Private;
     Private * const d;

@@ -28,6 +28,7 @@
 #include "cell.h"
 #include "objects.h"
 #include "sheet.h"
+#include "conditionals.h"
 #include <QPoint>
 
 //#define SWINDER_XLS2RAW
@@ -71,6 +72,9 @@ public:
 
     // list of id's with ChartObject's.
     std::vector<unsigned long> charts;
+
+    // current ConditionalFormat
+    ConditionalFormat* curConditionalFormat;
 };
 
 WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals)
@@ -84,6 +88,7 @@ WorksheetSubStreamHandler::WorksheetSubStreamHandler(Sheet* sheet, const Globals
     d->lastDrawingObject = 0;
     d->lastGroupObject = 0;
     d->lastOfficeArtObject = 0;
+    d->curConditionalFormat = 0;
 }
 
 WorksheetSubStreamHandler::~WorksheetSubStreamHandler()
@@ -230,6 +235,10 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
         handleVerticalPageBreaksRecord(static_cast<VerticalPageBreaksRecord*>(record));
     else if (type == HorizontalPageBreaksRecord::id)
         handleHorizontalPageBreaksRecord(static_cast<HorizontalPageBreaksRecord*>(record));
+    else if (type == CondFmtRecord::id)
+        handleCondFmtRecord(static_cast<CondFmtRecord*>(record));
+    else if (type == CFRecord::id)
+        handleCFRecord(static_cast<CFRecord*>(record));
     else {
         //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
     }
@@ -755,7 +764,6 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 {
     if (!record) return;
-    if (!d->lastDrawingObject) return;
     if (!d->sheet) return;
 
     const unsigned long id = record->m_object ? record->m_object->id() : -1;
@@ -765,7 +773,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
     d->lastOfficeArtObject = 0;
 
     bool handled = false;
-    if (record->m_object && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
+    if (record->m_object && d->lastDrawingObject && record->m_object->applyDrawing(*(d->lastDrawingObject))) {
         handled = true;
         switch (record->m_object->type()) {
             case Object::Picture: {
@@ -791,7 +799,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
                 handled = false;
         }
     }
-    if (!handled) {
+    if (!handled && d->lastDrawingObject) {
         //Q_ASSERT(!d->globals->drawing(record->m_object->id()));
         foreach (const MSO::OfficeArtSpgrContainerFileBlock& fb, d->lastDrawingObject->groupShape->rgfb) {
             if (fb.anon.is<MSO::OfficeArtSpgrContainer>()) {
@@ -975,6 +983,152 @@ void WorksheetSubStreamHandler::handleHorizontalPageBreaksRecord(HorizontalPageB
         pageBreak.colEnd = record->colEnd(i);
         d->sheet->addHorizontalPageBreak(pageBreak);
     }
+}
+
+void WorksheetSubStreamHandler::handleCondFmtRecord(Swinder::CondFmtRecord *record)
+{
+    QRegion region;
+    for (unsigned i = 0; i < record->refCount(); ++i) {
+        QRect rect(QPoint(record->firstColumn(i), record->firstRow(i)), QPoint(record->lastColumn(i), record->lastRow(i)));
+        region += rect;
+    }
+
+    d->curConditionalFormat = new ConditionalFormat;
+    d->curConditionalFormat->setRegion(region);
+    d->sheet->addConditionalFormat(d->curConditionalFormat);
+}
+
+void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
+{
+    if (!d->curConditionalFormat) return;
+
+    Conditional c;
+    if (record->conditionType() == record->Formula) {
+        c.cond = Conditional::Formula;
+        FormulaDecoder dec;
+        QByteArray rgce = record->rgce1();
+        unsigned size = rgce.size();
+        rgce.prepend((size >> 8) & 0xFF);
+        rgce.prepend(size & 0xFF);
+        FormulaTokens ts = dec.decodeFormula(rgce.size(), 0, reinterpret_cast<const unsigned char*>(rgce.data()), record->version());
+        QString f = dec.decodeFormula(d->curConditionalFormat->region().boundingRect().top(), d->curConditionalFormat->region().boundingRect().left(), false, ts);
+        c.value1 = Value(f);
+    } else {
+        int valcount = 1;
+        c.cond = Conditional::None;
+        switch (record->conditionFunction()) {
+        case CFRecord::Between:
+            c.cond = Conditional::Between;
+            valcount = 2;
+            break;
+        case CFRecord::Outside:
+            c.cond = Conditional::Outside;
+            valcount = 2;
+            break;
+        case CFRecord::Equal:
+            c.cond = Conditional::Equal;
+            break;
+        case CFRecord::NotEqual:
+            c.cond = Conditional::NotEqual;
+            break;
+        case CFRecord::Greater:
+            c.cond = Conditional::Greater;
+            break;
+        case CFRecord::Less:
+            c.cond = Conditional::Less;
+            break;
+        case CFRecord::GreaterOrEqual:
+            c.cond = Conditional::GreaterOrEqual;
+            break;
+        case CFRecord::LessOrEqual:
+            c.cond = Conditional::LessOrEqual;
+            break;
+        }
+        FormulaDecoder dec;
+        QByteArray rgce = record->rgce1();
+        unsigned size = rgce.size();
+        rgce.prepend((size >> 8) & 0xFF);
+        rgce.prepend(size & 0xFF);
+        FormulaTokens ts = dec.decodeFormula(rgce.size(), 0, reinterpret_cast<const unsigned char*>(rgce.data()), record->version());
+        if (ts.size() == 1 && (ts[0].id() == FormulaToken::ErrorCode || ts[0].id() == FormulaToken::Bool || ts[0].id() == FormulaToken::Integer || ts[0].id() == FormulaToken::Float || ts[0].id() == FormulaToken::String)) {
+            c.value1 = ts[0].value();
+        } else {
+            QString f = dec.decodeFormula(d->curConditionalFormat->region().boundingRect().top(), d->curConditionalFormat->region().boundingRect().left(), false, ts);
+            c.value1 = Value(f);
+        }
+        if (valcount > 1) {
+            rgce = record->rgce2();
+            size = rgce.size();
+            rgce.prepend((size >> 8) & 0xFF);
+            rgce.prepend(size & 0xFF);
+            ts = dec.decodeFormula(rgce.size(), 0, reinterpret_cast<const unsigned char*>(rgce.data()), record->version());
+            if (ts.size() == 1 && (ts[0].id() == FormulaToken::ErrorCode || ts[0].id() == FormulaToken::Bool || ts[0].id() == FormulaToken::Integer || ts[0].id() == FormulaToken::Float || ts[0].id() == FormulaToken::String)) {
+                c.value2 = ts[0].value();
+            } else {
+                QString f = dec.decodeFormula(d->curConditionalFormat->region().boundingRect().top(), d->curConditionalFormat->region().boundingRect().left(), false, ts);
+                c.value2 = Value(f);
+            }
+        }
+    }
+
+    if (record->isIbitAtrNum()) {
+        if (record->isFIfmtUser()) {
+            c.setValueFormat(record->formatString());
+        } else if (!record->isIfmtNinch()) {
+            c.setValueFormat(d->globals->valueFormat(record->ifmt()));
+        }
+    }
+    if (record->isIbitAtrFnt()) {
+        // TODO: fontName
+        // TODO: fontSize
+        if (!record->isFontItalicNinch()) {
+            c.setFontItalic(record->isFontItalic());
+        }
+        if (!record->isFontStrikeoutNinch()) {
+            c.setFontStrikeout(record->isFontStrikeout());
+        }
+        if (!record->isFontWeightNinch()) {
+            c.setFontBold(record->fontWeight() > 500);
+        }
+        if (!record->isSuperSubScriptNinch()) {
+            switch (record->fontSuperSubScript()) {
+            case CFRecord::SSS_Normal:
+                c.setFontSubscript(false);
+                c.setFontSuperscript(false);
+                break;
+            case CFRecord::SSS_Sub:
+                c.setFontSubscript(true);
+                c.setFontSuperscript(false);
+                break;
+            case CFRecord::SSS_Super:
+                c.setFontSubscript(false);
+                c.setFontSuperscript(true);
+                break;
+            default:
+                break;
+            }
+        }
+        if (!record->isUnderlineNinch() && record->underline() != CFRecord::UL_Ignore) {
+            c.setFontUnderline(record->underline() != CFRecord::UL_None);
+        }
+        if (record->fontColor() >= 0) {
+            c.setFontColor(d->globals->workbook()->color(record->fontColor()));
+        }
+    }
+    if (record->isIbitAtrAlc()) {
+        // TODO: alignment
+    }
+    if (record->isIbitAtrBdr()) {
+        // TODO: borders
+    }
+    if (record->isIbitAtrPat()) {
+        // TODO: background
+    }
+    if (record->isIbitAtrProt()) {
+        // TODO: protection
+    }
+
+    d->curConditionalFormat->addConditional(c);
 }
 
 } // namespace Swinder

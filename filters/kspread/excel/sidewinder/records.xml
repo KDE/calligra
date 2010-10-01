@@ -1583,4 +1583,251 @@
   <!-- not included creation time yet -->
 </record>
 
+<record name="CondFmt" id="0x01b0">
+  <field name="cfCount"         type="unsigned" size="16" />
+  <field name="toughRecalc"     type="bool" size="1" />
+  <field name="nID"             type="unsigned" size="15" />
+  <field name="bbFirstRow"      type="unsigned" size="16" />
+  <field name="bbLastRow"       type="unsigned" size="16" />
+  <field name="bbFirstColumn"   type="unsigned" size="16" />
+  <field name="bbLastColumn"    type="unsigned" size="16" />
+  <field name="refCount"        type="unsigned" size="16" />
+  <array length="refCount">
+    <field name="firstRow"      type="unsigned" size="16" />
+    <field name="lastRow"       type="unsigned" size="16" />
+    <field name="firstColumn"   type="unsigned" size="16" />
+    <field name="lastColumn"    type="unsigned" size="16" />  
+  </array>
+</record>
+
+<record name="CF" id="0x01b1">
+  <type name="BorderStyle" type="unsigned">
+    <enum name="NoLine"                  value="0" />
+    <enum name="Thin"                    value="1" />
+    <enum name="Medium"                  value="2" />
+    <enum name="Dashed"                  value="3" />
+    <enum name="Dotted"                  value="4" />
+    <enum name="Thick"                   value="5" />
+    <enum name="Double"                  value="6" />
+    <enum name="Hair"                    value="7" />
+    <enum name="MediumDashed"            value="8" />
+    <enum name="ThinDashDotted"          value="9" />
+    <enum name="MediumDashDotted"        value="10" />
+    <enum name="ThinDashDotDotted"       value="11" />
+    <enum name="MediumDashDotDotted"    value="12" />
+    <enum name="SlantedMediumDashDotted" value="13" />
+  </type>
+
+  <field name="conditionType" type="unsigned" size="8">
+    <enum name="Function"   value="0x01" />
+    <enum name="Formula"    value="0x02" />
+  </field>
+  <field name="conditionFunction" type="unsigned" size="8">
+    <enum name="Between" value="0x01" />
+    <enum name="Outside" value="0x02" />
+    <enum name="Equal" value="0x03" />
+    <enum name="NotEqual" value="0x04" />
+    <enum name="Greater" value="0x05" />
+    <enum name="Less" value="0x06" />
+    <enum name="GreaterOrEqual" value="0x07" />
+    <enum name="LessOrEqual" value="0x08" />
+  </field>
+  <field name="cce1" type="unsigned" size="16" />
+  <field name="cce2" type="unsigned" size="16" />
+  <!-- DXFN -->
+  <field name="alchNinch" type="bool" size="1" />
+  <field name="alcvNinch" type="bool" size="1" />
+  <field name="wrapNinch" type="bool" size="1" />
+  <field name="trotNinch" type="bool" size="1" />
+  <field name="kintoNinch" type="bool" size="1" />
+  <field name="cIndentNinch" type="bool" size="1" />
+  <field name="fShrinkNicnh" type="bool" size="1" />
+  <field name="fMergeCellNinch" type="bool" size="1" />
+  <field name="lockedNinch" type="bool" size="1" />
+  <field name="hiddenNinch" type="bool" size="1" />
+  <field name="glLeftNinch" type="bool" size="1" />
+  <field name="glRightNinch" type="bool" size="1" />
+  <field name="glTopNinch" type="bool" size="1" />
+  <field name="glBottomNinch" type="bool" size="1" />
+  <field name="glDiagDownNinch" type="bool" size="1" />
+  <field name="glDiagUpNinch" type="bool" size="1" />
+  <field name="fIsNinch" type="bool" size="1" />
+  <field name="icvFNinch" type="bool" size="1" />
+  <field name="icvBNinch" type="bool" size="1" />
+  <field name="ifmtNinch" type="bool" size="1" />
+  <field name="fIfntNinch" type="bool" size="1" />
+  <field name="reserved" size="1" />
+  <field name="reserved" size="3" />
+  <field name="ibitAtrNum" type="bool" size="1" />
+  <field name="ibitAtrFnt" type="bool" size="1" />
+  <field name="ibitAtrAlc" type="bool" size="1" />
+  <field name="ibitAtrBdr" type="bool" size="1" />
+  <field name="ibitAtrPat" type="bool" size="1" />
+  <field name="ibitAtrProt" type="bool" size="1" />
+  <field name="iReadingOrderNinch" type="bool" size="1" />
+  <field name="fIfmtUser" type="bool" size="1" />
+  <field name="reserved" size="1" />
+  <field name="fNewBorder" type="bool" size="1" />
+  <field name="reserved" size="12" />
+  <field name="fZeroInited" type="bool" size="1" />
+  <if predicate="isIbitAtrNum()">
+    <!-- DXFNum -->
+    <if predicate="!isFIfmtUser()">
+      <!-- DXFNumIFmt -->
+      <field name="reserved" size="8" />
+      <field name="ifmt" type="unsigned" size="8" />
+    </if>
+    <if predicate="isFIfmtUser()">
+      <!-- DXFNumUsr -->
+      <field name="dxfnumusr_cb" type="unsigned" size="16" />
+      <field name="formatStringLength" type="unsigned" size="16" />
+      <field name="formatString"       type="unicodestring" length="formatStringLength" />
+    </if>
+  </if>
+  <if predicate="isIbitAtrFnt()">
+    <!-- DXFFntD -->
+    <field name="cchFont" type="unsigned" size="8" />
+    <field name="fontNameIsUnicode" type="bool" size="1" />
+    <field name="reserved" size="7" />
+    <if predicate="isFontNameIsUnicode()">
+      <field name="fontName" type="unicodechars" length="cchFont" />
+    </if>
+    <if predicate="!isFontNameIsUnicode()">
+      <field name="fontName" type="bytestring" length="cchFont" />
+    </if>
+    <field name="filler" type="blob" length="63 - (isFontNameIsUnicode() ? 2 : 1) * cchFont - 1" />
+    <field name="fontHeight" type="signed" size="32" />
+    <field name="reserved" size="1" />
+    <field name="fontItalic" type="bool" size="1" />
+    <field name="reserved" size="5" />
+    <field name="fontStrikeout" type="bool" size="1" />
+    <field name="reserved" size="24" />
+    <field name="fontWeight" type="signed" size="16" />
+    <field name="fontSuperSubScript" type="signed" size="16">
+      <enum name="SSS_Ignore" value="-1" />
+      <enum name="SSS_Normal" value="0" />
+      <enum name="SSS_Super" value="1" />
+      <enum name="SSS_Sub" value="2" />
+    </field>
+    <field name="underline"   type="unsigned" size="8">
+      <enum name="UL_None"              value="0" />
+      <enum name="UL_Single"            value="1" />
+      <enum name="UL_Double"            value="2" />
+      <enum name="UL_SingleAccounting"  value="0x21" />
+      <enum name="UL_DoubleAccounting"  value="0x22" />
+      <enum name="UL_Ignore"            value="0xff" />
+    </field>
+    <field name="fontFamily"  type="unsigned" size="8">
+      <enum name="Unknown"     value="0" />
+      <enum name="Roman"       value="1" />
+      <enum name="Swiss"       value="2" />
+      <enum name="Modern"      value="3" />
+      <enum name="Script"      value="4" />
+      <enum name="Decorative"  value="5" />
+    </field>
+    <field name="characterSet" type="unsigned" size="8" />
+    <field name="reserved"                     size="8" />
+    <field name="fontColor" type="signed" size="32" />
+    <field name="reserved" size="32" />
+    <field name="reserved" size="1" />
+    <field name="fontItalicNinch" type="bool" size="1" />
+    <field name="reserved" size="5" />
+    <field name="fontStrikeoutNinch" type="bool" size="1" />
+    <field name="reserved" size="24" />
+    <field name="superSubScriptNinch" type="bool" size="32" />
+    <field name="underlineNinch" type="bool" size="32" />
+    <field name="fontWeightNinch" type="bool" size="32" />
+    <field name="reserved" size="32" />
+    <field name="fontFirstChar" type="signed" size="32" />
+    <field name="fontCharCount" type="signed" size="32" />
+    <field name="fontId" type="unsigned" size="16" />
+  </if>
+  <if predicate="isIbitAtrAlc()">
+    <!-- DXFALC -->
+    <field name="horizontalAlignment" type="unsigned" size="3" default="General" >
+      <enum name="Unspecified"  value="0xFF" />
+      <enum name="General"      value="0" />
+      <enum name="Left"         value="1" />
+      <enum name="Centered"     value="2" />
+      <enum name="Right"        value="3" />
+      <enum name="Filled"       value="4" />
+      <enum name="Justified"    value="5" />
+      <enum name="CenteredSelection" value="6" />
+      <enum name="Distributed"  value="7" />
+    </field>
+    <field name="textWrap"            type="bool"     size="1" />
+    <field name="verticalAlignment"   type="unsigned" size="3" default="Bottom" >
+      <enum name="Top"          value="0" />
+      <enum name="VCentered"    value="1" />
+      <enum name="Bottom"       value="2" />
+      <enum name="VJustified"   value="3" />
+      <enum name="VDistributed" value="4" />
+    </field>
+    <field name="lastLineJustified"   type="bool"     size="1" />
+    <field name="rawRotation" type="unsigned" size="8" />
+    <field name="indentationLevel"    type="unsigned" size="4" />
+    <field name="shrinkToFit"         type="bool"     size="1" />
+    <field name="mergeCell" type="bool"        size="1" />
+    <field name="readingOrder"        type="unsigned" size="2">
+      <enum name="Context"     value="0" />
+      <enum name="LeftToRight" value="1" />
+      <enum name="RightToLeft" value="2" />
+    </field>
+    <field name="reserved" size="8" />
+    <field name="relativeIndetationLevel" type="signed" size="32" />
+  </if>
+  <if predicate="isIbitAtrBdr()">
+    <!-- DXFBdr -->
+    <field name="leftBorderStyle" type="BorderStyle" size="4" />
+    <field name="rightBorderStyle" type="BorderStyle" size="4" />
+    <field name="topBorderStyle" type="BorderStyle" size="4" />
+    <field name="bottomBorderStyle" type="BorderStyle" size="4" />
+    <field name="leftBorderColor" type="unsigned" size="7" />
+    <field name="rightBorderColor" type="unsigned" size="7" />
+    <field name="diagonalTopLeftBorder"  type="bool"     size="1" />
+    <field name="diagonalBottomLeftBorder"    type="bool"     size="1" />
+    <field name="topBorderColor" type="unsigned" size="7" />
+    <field name="bottomBorderColor" type="unsigned" size="7" />
+    <field name="diagonalBorderColor" type="unsigned" size="7" />
+    <field name="diagonalBorderStyle" type="BorderStyle" size="4" />
+    <field name="reserved" size="7" />
+  </if>
+  <if predicate="isIbitAtrPat()">
+    <!-- DXFPat -->
+    <field name="reserved" size="10" />
+    <field name="fillPattern" type="unsigned" size="6">
+      <enum name="Null"              value="0" />
+      <enum name="Solid"             value="1" />
+      <enum name="MediumGray"        value="2" />
+      <enum name="DarkGray"          value="3" />
+      <enum name="LightGray"         value="4" />
+      <enum name="Horizontal"        value="5" />
+      <enum name="Vertical"          value="6" />
+      <enum name="DiagonalDown"      value="7" />
+      <enum name="DiagonalUp"        value="8" />
+      <enum name="DiagonalGrid"      value="9" />
+      <enum name="ThickDiagonalGrid" value="10" />
+      <enum name="ThinHorizontal"    value="11" />
+      <enum name="ThinVertical"      value="12" />
+      <enum name="ThinDiagonalDown"  value="13" />
+      <enum name="ThinDiagonalUp"    vlaue="14" />
+      <enum name="ThinGrid"          value="15" />
+      <enum name="ThinDiagonalGrid"  value="16" />
+      <enum name="Gray1250"          value="17" />
+      <enum name="Gray0625"          value="18" />
+    </field>
+    <field name="patternForeColor"    type="unsigned" size="7" />
+    <field name="patternBackColor"    type="unsigned" size="7" />
+    <field name="reserved"                            size="2" />
+  </if>
+  <if predicate="isIbitAtrProt()">
+    <!-- DXFProt -->
+    <field name="locked" type="bool" size="1" />
+    <field name="hidden" type="bool" size="1" />
+    <field name="reserved" size="14" />
+  </if>
+  <field name="rgce1" type="blob" length="cce1" />
+  <field name="rgce2" type="blob" length="cce2" />
+</record>
+
 </records>

@@ -60,6 +60,7 @@ DocxXmlEndnoteReader::~DocxXmlEndnoteReader()
 void DocxXmlEndnoteReader::init()
 {
     d->counter = 0;
+    m_normalDocumentMode = false;
 }
 
 KoFilter::ConversionStatus DocxXmlEndnoteReader::read(MSOOXML::MsooXmlReaderContext* context)

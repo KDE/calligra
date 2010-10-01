@@ -63,7 +63,7 @@ Q_OBJECT
         KexiConnSelectorWidget *m_srcConnSel;
         KexiMigration::MigrateManager *m_migrateManager;
         //KexiMigration::KexiMigrate *m_migrateDriver;
-	QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
+        QPointer<KexiMigration::KexiMigrate> m_migrateDriver;
         QListWidget *m_tableListWidget;
         AlterSchemaWidget *m_alterSchemaWidget;
 

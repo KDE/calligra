@@ -30,6 +30,7 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/utils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/objects.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/decrypt.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/conditionals.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/substreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/globalssubstreamhandler.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/worksheetsubstreamhandler.cpp

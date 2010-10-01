@@ -263,8 +263,7 @@ void KPrViewModeSlidesSorter::populate()
     //Load the available slides
     foreach( KoPAPageBase* page, m_view->kopaDocument()->pages() )
     {
-        //TODO find the good name for the slides
-        QString slideName = i18n("Slide %1", currentPage++);
+        QString slideName = page->name().isEmpty() ? i18n("Slide %1", ++currentPage) : page->name();
         item = new QListWidgetItem( QIcon( page->thumbnail( m_iconSize ) ), slideName, m_slidesSorter );
         item->setFlags((item->flags() | Qt::ItemIsDragEnabled ) & ~Qt::ItemIsDropEnabled);
     }

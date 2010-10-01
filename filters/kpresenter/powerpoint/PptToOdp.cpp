@@ -107,12 +107,6 @@ getRect(const PptOfficeArtClientAnchor &a)
     }
 }
 
-QRect
-getRect(const OfficeArtFSPGR &r)
-{
-    return QRect(r.xLeft, r.yTop, r.xRight - r.xLeft, r.yBottom - r.yTop);
-}
-
 QString
 getText(const TextContainer& tc)
 {
@@ -210,6 +204,7 @@ private:
             const MSO::OfficeArtClientData* clientData,
             Writer& out, KoGenStyle& style);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+    const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
 public:
@@ -428,13 +423,41 @@ PptToOdp::DrawClient::getOfficeArtDggContainer()
 {
     return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
 }
+
+const MSO::OfficeArtSpContainer* 
+PptToOdp::DrawClient::getMasterShapeContainer(quint32 spid)
+{
+    //NOTE: If hspMaster property (0x0301) is provided by the shape, the
+    //referred master shape belongs to the current main master slide. (uzak)
+    const MainMasterContainer* mm = 0;
+    const OfficeArtDgContainer* dg = 0;
+    const OfficeArtSpContainer* sp = 0;
+
+    if (!ppttoodp->currentMaster) return sp;
+
+    mm = ppttoodp->currentMaster->anon.get<MainMasterContainer>();
+    if (mm) {
+        dg = &mm->drawing.OfficeArtDg;
+        foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
+            if (co.anon.is<OfficeArtSpContainer>()) {
+                sp = co.anon.get<OfficeArtSpContainer>();
+                if (sp->shapeProp.spid == spid) {
+                    break;
+                }
+            }
+            //TODO: the shape could be located deeper in the hierarchy
+            sp = NULL;
+        }
+    }
+    return sp;
+}
+
 QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     //Have to handle the case when OfficeArtCOLORREF/fSchemeIndex == true.
-
-    //FIXME: If hspMaster property (0x0301) is provided, values from the
-    //OfficeArtDggContainer are used, which seems wrong.  However using the
-    //current color scheme works on test documents. (uzak)
+    
+    //NOTE: If hspMaster property (0x0301) is provided by the shape, the
+    //referred master shape belongs to the current main master slide. (uzak)
 
     const MSO::MainMasterContainer* mmc = NULL;
     if (ppttoodp->currentMaster) {
@@ -716,7 +739,7 @@ void PptToOdp::defineDefaultDrawingPageStyle(KoGenStyles& styles)
     const OfficeArtDggContainer& drawingGroup
             = p->documentContainer->drawingGroup.OfficeArtDgg;
     DrawStyle ds(drawingGroup);
-    defineDrawingPageStyle(style, ds, (hf) ?&hf->hfAtom :0);
+    defineDrawingPageStyle(style, ds, styles, (hf) ?&hf->hfAtom :0);
     styles.insert(style);
 }
 
@@ -999,7 +1022,7 @@ void PptToOdp::defineParagraphProperties(KoGenStyle& style,
     // text:number-lines
 }
 
-void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
+void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
                                       const MSO::HeadersFootersAtom* hf,
                                       const MSO::StreamOffset* master,
                                       const MSO::StreamOffset* common)
@@ -1007,6 +1030,9 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
     const MSO::SlideContainer* sc = NULL;
     const MSO::NotesContainer* nc = NULL;
     const MSO::SlideFlags* sf = NULL;
+
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
 
     if (common) {
         MSO::StreamOffset* c = const_cast<MSO::StreamOffset*>(common);
@@ -1040,6 +1066,10 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
                 style.addProperty("draw:fill-color", toQColor(ds.fillColor(), master, common).name(), dp);
             }
             // draw:fill-gradient-name
+            else if (fillType >=4 && fillType <=8) {
+                QString tmp = odrawtoodf.handleGradientStyle(ds, styles);
+                style.addProperty("draw:fill-gradient-name", tmp, dp);
+            }
             // draw:fill-hatch-name
             // draw:fill-hatch-solid
             // draw:fill-image-height
@@ -1454,7 +1484,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, scp);
-        defineDrawingPageStyle(dp, ds, hf, mm);
+        defineDrawingPageStyle(dp, ds, styles, hf, mm);
         drawingPageStyles[m] = styles.insert(dp, "Mdp");
     }
     QString notesMasterPageStyle;
@@ -1471,7 +1501,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup,
                      p->notesMaster->drawing.OfficeArtDg.shape.data());
-        defineDrawingPageStyle(dp, ds, hf, p->notesMaster);
+        defineDrawingPageStyle(dp, ds, styles, hf, p->notesMaster);
         notesMasterPageStyle = styles.insert(dp, "Mdp");
         drawingPageStyles[p->notesMaster] = notesMasterPageStyle;
     }
@@ -1497,7 +1527,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
             slideShape = sc->drawing.OfficeArtDg.shape.data();
         }
         DrawStyle ds(drawingGroup, masterSlideShape, slideShape);
-        defineDrawingPageStyle(dp, ds, hf, mmc, sc);
+        defineDrawingPageStyle(dp, ds, styles, hf, mmc, sc);
         drawingPageStyles[sc] = styles.insert(dp, "dp");
     }
 
@@ -1516,30 +1546,8 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, nc->drawing.OfficeArtDg.shape.data());
-        defineDrawingPageStyle(dp, ds, hf, p->notesMaster, nc);
+        defineDrawingPageStyle(dp, ds, styles, hf, p->notesMaster, nc);
         drawingPageStyles[nc] = styles.insert(dp, "dp");
-    }
-}
-
-void PptToOdp::processGroupShape(const MSO::OfficeArtSpgrContainer* spgr, Writer& out)
-{
-    DrawClient drawclient(this);
-    ODrawToOdf odrawtoodf(drawclient);
-
-    //The first container MUST be an OfficeArtSpContainer record, which
-    //MUST contain shape information for the group.  MS-ODRAW, 2.2.16
-    const OfficeArtSpContainer* sp = spgr->rgfb[0].anon.get<OfficeArtSpContainer>();
-
-    //An OfficeArtFSPGR record specifies the coordinate system of the group
-    //shape.  The anchors of the child shape are expressed in this
-    //coordinate system.  This record’s container MUST be a group shape.
-    if (sp->shapeProp.fGroup) {
-        if (sp->shapeGroup) {
-            out.transform(QRect(0, 0, 0, 0), getRect(*sp->shapeGroup));
-        }
-    }
-    for (int i = 1; i < spgr->rgfb.size(); ++i) {
-        odrawtoodf.processDrawing(spgr->rgfb[i], out);
     }
 }
 
@@ -1643,6 +1651,9 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     /*
       Define the style:master-pages
      */
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+
     QBuffer notesBuffer;
     if (p->notesMaster) { // draw the notes master
         notesBuffer.open(QIODevice::WriteOnly);
@@ -1656,8 +1667,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         currentMaster = 0;
 
         if (p->notesMaster->drawing.OfficeArtDg.groupShape) {
-            const OfficeArtSpgrContainer* spgr = (p->notesMaster->drawing.OfficeArtDg.groupShape).data();
-            processGroupShape(spgr, out);
+            const OfficeArtSpgrContainer& spgr = *(p->notesMaster->drawing.OfficeArtDg.groupShape).data();
+            odrawtoodf.processGroupShape(spgr, out);
         }
         writer.endElement();
     }
@@ -1683,8 +1694,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
         if (drawing->OfficeArtDg.groupShape) {
-            const OfficeArtSpgrContainer* spgr = (drawing->OfficeArtDg.groupShape).data();
-            processGroupShape(spgr, out);
+            const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
+            odrawtoodf.processGroupShape(spgr, out);
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
                                                      buffer.buffer().size()));
@@ -2255,9 +2266,12 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
     currentMaster = master;
     currentSlide = slide;
 
+    DrawClient drawclient(this);
+    ODrawToOdf odrawtoodf(drawclient);
+
     if (slide->drawing.OfficeArtDg.groupShape) {
-        const OfficeArtSpgrContainer* spgr = (slide->drawing.OfficeArtDg.groupShape).data();
-        processGroupShape(spgr, out);
+        const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
+        odrawtoodf.processGroupShape(spgr, out);
     }
 
     currentMaster = NULL;
@@ -2277,8 +2291,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
         if (!value.isEmpty()) {
             out.xml.addAttribute("draw:style-name", value);
         }
-        const OfficeArtSpgrContainer* spgr = (nc->drawing.OfficeArtDg.groupShape).data();
-        processGroupShape(spgr, out);
+        const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
+        odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }
 

@@ -136,11 +136,12 @@ private:
      *
      * @param KoGenStyle
      * @param DrawStyle
+     * @param KoGenStyles
      * @param pointer to a HeadersFootersAtom
      * @param pointer to a MainMasterContainer or NotesContainer
      * @param pointer to a SlideContainer or NotesContainer
      */
-    void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds,
+    void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
                                 const MSO::HeadersFootersAtom* hf,
                                 const MSO::StreamOffset* master = NULL,
                                 const MSO::StreamOffset* common = NULL);
@@ -198,7 +199,6 @@ private:
     void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
                          const MSO::TextContainer& tc, const QString& text,
                          int start, int end, QStack<QString>& levels);
-    void processGroupShape(const MSO::OfficeArtSpgrContainer* spgr, Writer& out);
 
     /**
      * @brief Write declaration in the content body presentation

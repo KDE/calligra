@@ -212,7 +212,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_family()
     READ_ATTR_WITH_NS_INTO(w, val, familyGeneric)
     m_currentFontFace.setFamilyGeneric(familyGeneric);
 
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }
 
@@ -237,6 +237,6 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_pitch()
     READ_ATTR_WITH_NS(w, val)
     m_currentFontFace.setPitch(w_val == "fixed" ? KoFontFace::FixedPitch : KoFontFace::VariablePitch);
 
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }

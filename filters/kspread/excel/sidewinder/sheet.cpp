@@ -89,6 +89,8 @@ public:
 
     QList<MSO::OfficeArtSpgrContainer> sheetDrawObjectsGroups;
     QMultiHash<int, OfficeArtObject*> sheetDrawObjects;
+
+    QList<ConditionalFormat*> conditionalFormats;
 };
 
 }
@@ -145,6 +147,9 @@ void Sheet::clear()
     // delete all rows
     qDeleteAll(d->rows);
     d->rows.clear();
+    // delete all conditional formats
+    qDeleteAll(d->conditionalFormats);
+    d->conditionalFormats.clear();
 
     d->name = "Sheet"; // FIXME better name ?
     d->maxRow = 0;
@@ -602,6 +607,16 @@ void Sheet::addDrawObject(OfficeArtObject* drawObject, const MSO::OfficeArtSpgrC
         }
     }
     d->sheetDrawObjects.insert(groupId, drawObject);
+}
+
+void Sheet::addConditionalFormat(ConditionalFormat *format)
+{
+    d->conditionalFormats.append(format);
+}
+
+QList<ConditionalFormat*> Sheet::conditionalFormats() const
+{
+    return d->conditionalFormats;
 }
 
 #ifdef SWINDER_XLS2RAW

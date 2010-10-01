@@ -78,6 +78,13 @@ public:
          * relating to the drawings.
          **/
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() = 0;
+
+	/**
+	 * Retrieve the OfficeArtSpContainer of the master shape. 
+	 * @param spid identifier of the master shape.
+	 **/
+	virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
+
         /**
          * Convert the OfficeArtCOLORREF to a QColor.
          * This conversion requires color scheme information.
@@ -138,10 +145,12 @@ private:
 
 public:
     ODrawToOdf(Client& c) :client(&c) {}
+    void processGroupShape(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processDrawing(const MSO::OfficeArtSpgrContainerFileBlock& o, Writer& out);
     void processDrawingObject(const MSO::OfficeArtSpContainer& o, Writer& out);
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
+    QString handleGradientStyle(const DrawStyle& ds, KoGenStyles& styles);
 };
 
 /**

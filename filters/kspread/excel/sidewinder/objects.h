@@ -202,6 +202,10 @@ public:
     virtual ~ChartObject() { delete m_chart; }
     bool operator==(const ChartObject &other) const { return this == &other; }
     bool operator!=(const ChartObject &other) const { return ! (*this == other); }
+
+private:
+    ChartObject(const ChartObject& co);
+    ChartObject& operator=(const ChartObject& co);
 };
 
 /**

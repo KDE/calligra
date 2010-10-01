@@ -177,7 +177,7 @@ std::ostream& operator<<(std::ostream& s, const QByteArray& d)
 {
     s << std::hex << std::setfill('0');
     for (int i = 0; i < d.size(); i++) s << " " << std::setw(2) << int((unsigned char)d[i]);
-    return s;
+    return s << std::dec;
 }
 
 std::ostream& operator<<(std::ostream& s, const QUuid& uuid)

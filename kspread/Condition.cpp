@@ -162,7 +162,7 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.greater(min) && value.less(max)) { // FIXME correct?
+            if (value.compare(min) >= 0 && value.compare(max) <= 0) {
                 return true;
             }
             break;
@@ -171,7 +171,7 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.greater(max) && value.less(min)) {
+            if (value.greater(max) || value.less(min)) {
                 return true;
             }
             break;

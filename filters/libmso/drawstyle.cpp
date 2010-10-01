@@ -72,7 +72,7 @@ GETTER(quint32,                FillType,             fillType,             0)   
 GETTER(MSO::OfficeArtCOLORREF, FillColor,            fillColor,            white()) // 2.3.7.2
 GETTER(MSO::OfficeArtCOLORREF, FillBackColor,        fillBackColor,        white()) // 2.3.7.4
 GETTER(qint32,                 FillOpacity,          fillOpacity,          0x10000) // 2.3.7.3
-GETTER(MSO::FixedPoint,        FillAngle,            fillAngle,            one())     // 2.3.7.14
+GETTER(MSO::FixedPoint,        FillAngle,            fillAngle,            one())   // 2.3.7.14
 GETTER(quint32,                FillBlip,             fillBlip,             0)       // 2.3.7.7
 GETTER(qint32,                 FillDztype,           fillDztype,           0)       // 2.3.7.24
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)
@@ -84,7 +84,7 @@ GETTER(quint32,                LineDashing,          lineDashing,          0)
 GETTER(MSO::OfficeArtCOLORREF, LineColor,            lineColor,            black())
 GETTER(qint32,                 LineOpacity,          lineOpacity,          0x10000)
 GETTER(quint32,                ShadowType,           shadowType,           0)
-GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray()) //2.3.13.2
+GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray()) // 2.3.13.2
 GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x6338)
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)
 GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())
@@ -107,6 +107,7 @@ GETTER(qint32,                 DyTextTop,            dyTextTop,            0)
 GETTER(qint32,                 DxTextRight,          dxTextRight,          0)
 GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)
 GETTER(quint32,                Pib,                  pib,                  0)
+GETTER(quint32,                HspMaster,            hspMaster,            0) // 2.3.2.1
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \

@@ -152,19 +152,19 @@ public slots:
     }*/
 
 signals:
-    virtual void itemChanged(KexiDB::RecordData*, int row, int col);
-    virtual void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
-    virtual void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
-    virtual void currentItemDeleteRequest();
-    virtual void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
-    virtual void dataRefreshed();
-    virtual void dataSet(KexiTableViewData *data);
-    virtual void itemSelected(KexiDB::RecordData*);
-    virtual void cellSelected(int col, int row);
-    virtual void sortedColumnChanged(int col);
-    virtual void rowEditStarted(int row);
-    virtual void rowEditTerminated(int row);
-    virtual void reloadActions();
+    void itemChanged(KexiDB::RecordData*, int row, int col);
+    void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
+    void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
+    void currentItemDeleteRequest();
+    void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
+    void dataRefreshed();
+    void dataSet(KexiTableViewData *data);
+    void itemSelected(KexiDB::RecordData*);
+    void cellSelected(int col, int row);
+    void sortedColumnChanged(int col);
+    void rowEditStarted(int row);
+    void rowEditTerminated(int row);
+    void reloadActions();
 
 protected slots:
     void slotResizingStarted();
