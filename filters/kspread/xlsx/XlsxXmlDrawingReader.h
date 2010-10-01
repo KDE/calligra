@@ -36,14 +36,57 @@ class XlsxXmlChartReaderContext;
 class XlsxXmlEmbeddedPicture;
 class Sheet;
 
+namespace MSOOXML
+{
+    class MsooXmlDiagramReaderContext;
+}
+
 //#include <KoGenStyle.h>
 //#include <styles/KoCharacterStyle.h>
 
-namespace MSOOXML
-{
-class MsooXmlRelationships;
-class MsooXmlDiagramReaderContext;
-}
+class XlsxShape {
+};
+
+class XlsxDrawingObject {
+    public:
+        Sheet* m_sheet;
+        enum Type {
+            Unknown,
+            Chart,
+            Diagram,
+            Picture,
+            Shape
+        };
+        Type m_type;
+        union {
+            XlsxXmlChartReaderContext* m_chart;
+            MSOOXML::MsooXmlDiagramReaderContext* m_diagram;
+            XlsxXmlEmbeddedPicture* m_picture;
+            XlsxShape* m_shape;
+        };
+        enum AnchorType {
+            NoAnchor,
+            FromAnchor,
+            ToAnchor
+        };
+        struct Position {
+            int m_row, m_col, m_rowOff, m_colOff;
+            Position() : m_row(0), m_col(0), m_rowOff(0), m_colOff(0) {}
+        };
+        QMap<AnchorType, Position> m_positions;
+        explicit XlsxDrawingObject(Sheet* sheet) : m_sheet(sheet), m_type(Unknown), m_shapeBody(0) {}
+        ~XlsxDrawingObject() { delete m_shapeBody; }
+        void setPicture(XlsxXmlEmbeddedPicture* picture) { m_type = Picture; m_picture = picture; }
+        void setChart(XlsxXmlChartReaderContext* chart) { m_type = Chart; m_chart = chart; }
+        KoXmlWriter* setShape(XlsxShape* shape);
+        void save(KoXmlWriter* xmlWriter);
+    private:
+        QRect positionRect() const;
+        QString cellAddress(const QString &sheetname, int row, int column) const;
+        QString fromCellAddress() const;
+        QString toCellAddress() const;
+        KoXmlWriter* m_shapeBody;
+};
 
 class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
@@ -54,38 +97,10 @@ public:
     XlsxImport* import;
     QString path; // contains the path to the file which is being processed (i.e. 'xl/drawings')
     QString file; // contains the name of the file which is being processed (i.e. 'drawing1.xml')
-    const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/* themes;
+    const MSOOXML::DrawingMLTheme* themes;
 
     XlsxXmlWorksheetReaderContext* worksheetReaderContext;
     Sheet* sheet;
-    QList<XlsxXmlChartReaderContext*> charts;
-    QList<MSOOXML::MsooXmlDiagramReaderContext*> diagrams;
-    QList<XlsxXmlEmbeddedPicture*> pictures;      // list of all embedded pictures in this drawing
-
-    enum AnchorType {
-        NoAnchor,
-        FromAnchor,
-        ToAnchor
-    };
-
-    struct Position {
-        int m_row, m_col, m_rowOff, m_colOff;
-        Position() : m_row(0), m_col(0), m_rowOff(0), m_colOff(0) {}
-    };
-
-    KoXmlWriter* body;
-
-    QMap<AnchorType, Position> m_positions;
-
-    QRect positionRect() const;
-
-    QString cellAddress(const QString &sheetname, int row, int column) const;
-    QString fromCellAddress() const;
-    QString toCellAddress() const;
-
-    void saveCurrentCellData();
-
-    void saveIndexes(KoXmlWriter* xmlWriter);
 };
 
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
@@ -96,6 +111,7 @@ public:
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
 protected:
+    KoFilter::ConversionStatus read_anchor(const QStringRef &name);
     KoFilter::ConversionStatus read_from();
     KoFilter::ConversionStatus read_to();
     KoFilter::ConversionStatus read_col();
@@ -109,8 +125,8 @@ protected:
     KoFilter::ConversionStatus read_diagram();
 private:
     XlsxXmlDrawingReaderContext *m_context;
-    XlsxXmlDrawingReaderContext::AnchorType m_anchorType;
-
+    XlsxDrawingObject *m_currentDrawingObject;
+    XlsxDrawingObject::AnchorType m_anchorType;
     int m_chartNumber;
     
 #include <MsooXmlCommonReaderMethods.h>
@@ -132,9 +148,9 @@ public:
     void setPath(QString &newPath);         // set the new path for the file
     QString path();
 
-    qreal m_x, m_y, m_width, m_height;                  // picture position and size in Pt
-    XlsxXmlDrawingReaderContext::Position m_fromCell, m_toCell; // picture position and size in cells (starting cell, ending cell)
-    QString m_path;                                     // path to the embedded file
+    qreal m_x, m_y, m_width, m_height;            // picture position and size in Pt
+    XlsxDrawingObject::Position m_fromCell, m_toCell; // picture position and size in cells (starting cell, ending cell)
+    QString m_path;                               // path to the embedded file
 };
 
 #endif

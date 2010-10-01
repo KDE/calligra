@@ -49,8 +49,7 @@ public:
     QString valueAttrValue;
     QString formula;
     QString hyperlink;
-    QList<XlsxXmlDrawingReaderContext*> drawings;
-    QByteArray drawingXml;
+    QList<XlsxDrawingObject*> drawings;
 
     //QPair< oleObjectFile, imageReplacementFile>
     QList< QPair<QString,QString> > oleObjects;
@@ -85,8 +84,9 @@ public:
 class Sheet
 {
 public:
+    QString m_name;
     double m_defaultRowHeight, m_defaultColWidth, m_baseColWidth;
-    explicit Sheet() : m_defaultRowHeight(-1.0), m_defaultColWidth(-1.0), m_baseColWidth(-1.0), m_maxRow(0), m_maxColumn(0), m_visible(true) {}
+    explicit Sheet(const QString &name) : m_name(name), m_defaultRowHeight(-1.0), m_defaultColWidth(-1.0), m_baseColWidth(-1.0), m_maxRow(0), m_maxColumn(0), m_visible(true) {}
     ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); qDeleteAll(m_cells); }
 
     Row* row(int rowIndex, bool autoCreate)

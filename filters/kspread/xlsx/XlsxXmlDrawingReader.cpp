@@ -54,33 +54,6 @@
 #include <MsooXmlRelationships.h>
 #include <KoXmlWriter.h>
 
-XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, Sheet* _sheet, const QString& _path, const QString& _file)
-    : MSOOXML::MsooXmlReaderContext(_worksheetReaderContext->relationships)
-    , import(_worksheetReaderContext->import)
-    , path(_path)
-    , file(_file)
-    , themes((_worksheetReaderContext->themes))
-    , worksheetReaderContext(_worksheetReaderContext)
-    , sheet(_sheet)
-    , body(new KoXmlWriter(new QBuffer))
-{
-}
-
-XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
-{
-    foreach(XlsxXmlChartReaderContext* c, charts) {
-        delete c;
-    }
-    foreach(MSOOXML::MsooXmlDiagramReaderContext* c, diagrams) {
-        delete c;
-    }
-    foreach(XlsxXmlEmbeddedPicture* p, pictures) {  // delete all pictures from the QList
-        delete p;
-    }
-    delete body->device();
-    delete body;
-}
-
 // calculates the column width in pixels
 int columnWidth2(unsigned long col, unsigned long dx = 0, qreal defaultColumnWidth = 8.43) {
     QFont font("Arial", 10);
@@ -109,7 +82,49 @@ QString columnName2(uint column)
     return s;
 }
 
-QRect XlsxXmlDrawingReaderContext::positionRect() const
+KoXmlWriter* XlsxDrawingObject::setShape(XlsxShape* shape)
+{
+    m_type = Shape;
+    m_shape = shape;
+    
+    delete m_shapeBody;
+    m_shapeBody = new KoXmlWriter(new QBuffer);
+    return m_shapeBody;
+}
+
+void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
+{
+    switch(m_type) {
+        case Unknown: {
+            // nothing to do for us
+        } break;
+        case Chart: {
+            m_chart->m_chartExport->saveIndex(xmlWriter);
+        } break;
+        case Diagram: {
+            xmlWriter->startElement("draw:g");
+            xmlWriter->addAttribute("draw:name", "SmartArt Shapes Group");
+            xmlWriter->addAttribute("draw:z-index", "0");
+            xmlWriter->addAttribute("table:end-cell-address", fromCellAddress());
+            //xmlWriter->addAttribute("table:end-x", "0.6016in");
+            //xmlWriter->addAttribute("table:end-y", "0.1339in");
+            m_diagram->saveIndex(xmlWriter, positionRect());
+            xmlWriter->endElement(); // draw:g
+        } break;
+        case Picture: {
+            m_picture->saveXml(xmlWriter);
+        } break;
+        case Shape: {
+            Q_ASSERT(m_shapeBody);
+            QByteArray data = static_cast<QBuffer*>(m_shapeBody->device())->buffer().constData();
+            xmlWriter->addCompleteElement(data);
+            delete m_shapeBody;
+            m_shapeBody = 0;
+        } break;
+    }
+}
+
+QRect XlsxDrawingObject::positionRect() const
 {
     QRect rect(QPoint(0,0),QSize(0,0));
     if(m_positions.contains(FromAnchor)) {
@@ -130,7 +145,7 @@ QRect XlsxXmlDrawingReaderContext::positionRect() const
     return rect;
 }
 
-QString XlsxXmlDrawingReaderContext::cellAddress(const QString &sheetname, int row, int column) const
+QString XlsxDrawingObject::cellAddress(const QString &sheetname, int row, int column) const
 {
     QString result;
     if(!sheetname.isEmpty())
@@ -139,71 +154,47 @@ QString XlsxXmlDrawingReaderContext::cellAddress(const QString &sheetname, int r
     return result;
 }
 
-QString XlsxXmlDrawingReaderContext::fromCellAddress() const
+QString XlsxDrawingObject::fromCellAddress() const
 {
     if(!m_positions.contains(FromAnchor)) return QString();
     Position f = m_positions[FromAnchor];
-    return cellAddress(worksheetReaderContext->worksheetName, f.m_row, f.m_col);
+    return cellAddress(m_sheet->m_name, f.m_row, f.m_col);
 }
 
-QString XlsxXmlDrawingReaderContext::toCellAddress() const
+QString XlsxDrawingObject::toCellAddress() const
 {
     if(!m_positions.contains(ToAnchor)) return QString();
     Position f = m_positions[ToAnchor];
-    return cellAddress(worksheetReaderContext->worksheetName, f.m_row, f.m_col);
-}
-    
-void XlsxXmlDrawingReaderContext::saveCurrentCellData()
-{
-    if (m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
-        XlsxXmlDrawingReaderContext::Position pos = m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
-        Cell* cell = sheet->cell(pos.m_col, pos.m_row, true);
-        QByteArray b = static_cast<QBuffer*>(body->device())->buffer().constData();
-        QIODevice* d = body->device();
-        delete body;
-        delete d;
-        body = new KoXmlWriter(new QBuffer);
-        cell->drawingXml += b;
-    }
+    return cellAddress(m_sheet->m_name, f.m_row, f.m_col);
 }
 
-void XlsxXmlDrawingReaderContext::saveIndexes(KoXmlWriter* xmlWriter)
+XlsxXmlDrawingReaderContext::XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, Sheet* _sheet, const QString& _path, const QString& _file)
+    : MSOOXML::MsooXmlReaderContext(_worksheetReaderContext->relationships)
+    , import(_worksheetReaderContext->import)
+    , path(_path)
+    , file(_file)
+    , themes((_worksheetReaderContext->themes))
+    , worksheetReaderContext(_worksheetReaderContext)
+    , sheet(_sheet)
 {
-    foreach(XlsxXmlChartReaderContext* c, charts) {
-        c->m_chartExport->saveIndex(xmlWriter);
-        // the embedded object file was written by the XlsxXmlChartReader already
-        //chart->m_chartExport->saveContent(m_context->import->outputStore(), manifest);
-    }
-    foreach(MSOOXML::MsooXmlDiagramReaderContext* c, diagrams) {
-        xmlWriter->startElement("draw:g");
-        xmlWriter->addAttribute("draw:name", "SmartArt Shapes Group");
-        xmlWriter->addAttribute("draw:z-index", "0");
-        xmlWriter->addAttribute("table:end-cell-address", fromCellAddress());
-        //xmlWriter->addAttribute("table:end-x", "0.6016in");
-        //xmlWriter->addAttribute("table:end-y", "0.1339in");
-        c->saveIndex(xmlWriter, positionRect());
-        xmlWriter->endElement(); // draw:g
-    }
-    foreach(XlsxXmlEmbeddedPicture* p, pictures) {
-        QString sourceName = p->path();
-        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-        if(import->copyFile(sourceName, destinationName, false) == KoFilter::OK) {
-            p->setPath(destinationName);
-            p->saveXml(xmlWriter);
-        }
-    }   
-    xmlWriter->addCompleteElement(static_cast<QBuffer*>(body->device())->buffer().constData());
+}
+
+XlsxXmlDrawingReaderContext::~XlsxXmlDrawingReaderContext()
+{
 }
 
 XlsxXmlDrawingReader::XlsxXmlDrawingReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
-    , m_anchorType(XlsxXmlDrawingReaderContext::NoAnchor)
+    , m_context(0)
+    , m_currentDrawingObject(0)
+    , m_anchorType(XlsxDrawingObject::NoAnchor)
     , m_chartNumber(0)
 {
 }
 
 XlsxXmlDrawingReader::~XlsxXmlDrawingReader()
 {
+    Q_ASSERT(!m_currentDrawingObject);
 }
 
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -225,6 +216,42 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
         QXmlStreamReader::TokenType tokenType = readNext();
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
         if (isStartElement()) {
+            const QStringRef s = qualifiedName();
+            if ( s == "xdr:oneCellAnchor" || s == "xdr:twoCellAnchor" || s == "xdr:absoluteAnchor" || s == "xdr:grpSp" ) {
+                read_anchor(s);
+            }
+        }
+    }
+#if 0
+    m_context->saveCurrentCellData();
+#endif
+    m_context = 0;
+    return KoFilter::OK;
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL twoCellAnchor
+KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
+{
+    READ_PROLOGUE
+    
+    class DrawingObjectGuard { // like QScopedPointer but sets the pointer to NULL afterwards
+        public:
+            DrawingObjectGuard(XlsxDrawingObject** obj) : m_obj(obj) {}
+            ~DrawingObjectGuard() { delete *m_obj; *m_obj = 0; }
+        private:
+            XlsxDrawingObject** m_obj;
+    };
+
+    Q_ASSERT(!m_currentDrawingObject);
+    m_currentDrawingObject = new XlsxDrawingObject(m_context->sheet);
+    DrawingObjectGuard _guard(&m_currentDrawingObject);
+    
+    while (!atEnd()) {
+        QXmlStreamReader::TokenType tokenType = readNext();
+        if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
             ELSE_TRY_READ_IF(to)
@@ -237,10 +264,16 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
         }
     }
 
-    m_context->saveCurrentCellData();
-
-    m_context = 0;
-    return KoFilter::OK;
+    if (m_currentDrawingObject->m_type != XlsxDrawingObject::Unknown) {
+        if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+            XlsxDrawingObject::Position pos = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
+            Cell* cell = m_context->sheet->cell(pos.m_col, pos.m_row, true);
+            cell->drawings.append(m_currentDrawingObject);
+            m_currentDrawingObject = 0;
+        }
+    }
+    
+    READ_EPILOGUE
 }
 
 #undef CURRENT_EL
@@ -248,8 +281,10 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
 {
     READ_PROLOGUE
+#if 0
     m_context->saveCurrentCellData();
-    m_anchorType = XlsxXmlDrawingReaderContext::FromAnchor;
+#endif
+    m_anchorType = XlsxDrawingObject::FromAnchor;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -260,7 +295,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
             ELSE_TRY_READ_IF(rowOff)
         }
     }
-    m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
+    m_anchorType = XlsxDrawingObject::NoAnchor;
     READ_EPILOGUE
 }
 
@@ -269,7 +304,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_from()
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
 {
     READ_PROLOGUE
-    m_anchorType = XlsxXmlDrawingReaderContext::ToAnchor;
+    m_anchorType = XlsxDrawingObject::ToAnchor;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -280,7 +315,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
             ELSE_TRY_READ_IF(rowOff)
         }
     }
-    m_anchorType = XlsxXmlDrawingReaderContext::NoAnchor;
+    m_anchorType = XlsxDrawingObject::NoAnchor;
     READ_EPILOGUE
 }
 
@@ -288,7 +323,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_to()
 #define CURRENT_EL col
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 {
-    m_context->m_positions[m_anchorType].m_col = readElementText().toInt(); // default value is zero
+    m_currentDrawingObject->m_positions[m_anchorType].m_col = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -296,7 +331,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_col()
 #define CURRENT_EL row
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 {
-    m_context->m_positions[m_anchorType].m_row = readElementText().toInt(); // default value is zero
+    m_currentDrawingObject->m_positions[m_anchorType].m_row = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -304,7 +339,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_row()
 #define CURRENT_EL colOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 {
-    m_context->m_positions[m_anchorType].m_colOff = readElementText().toInt(); // default value is zero
+    m_currentDrawingObject->m_positions[m_anchorType].m_colOff = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -312,55 +347,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_colOff()
 #define CURRENT_EL rowOff
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_rowOff()
 {
-    m_context->m_positions[m_anchorType].m_rowOff = readElementText().toInt(); // default value is zero
-    return KoFilter::OK;
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL chart
-KoFilter::ConversionStatus XlsxXmlDrawingReader::read_chart2()
-{
-    Q_ASSERT(m_context);
-    Q_ASSERT(m_context->worksheetReaderContext);
-    Q_ASSERT(m_context->worksheetReaderContext->import);
-
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITH_NS(r, id)
-    if(!r_id.isEmpty()) {
-        //! @todo use MSOOXML::MsooXmlRelationships
-        const QString path = "/xl/charts";
-        const QString file = QString("chart%1.xml").arg(++m_chartNumber);
-        const QString filepath = path + "/" + file;
-
-        Charting::Chart* chart = new Charting::Chart;
-        chart->m_sheetName = m_context->worksheetReaderContext->worksheetName;
-        if(m_context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
-            XlsxXmlDrawingReaderContext::Position f = m_context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
-            chart->m_fromRow = f.m_row;
-            chart->m_fromColumn = f.m_col;
-            if(m_context->m_positions.contains(XlsxXmlDrawingReaderContext::ToAnchor)) {
-                f = m_context->m_positions[XlsxXmlDrawingReaderContext::ToAnchor];
-                chart->m_toRow = f.m_row;
-                chart->m_toColumn = f.m_col;
-            }
-        }
-        ChartExport* chartexport = new ChartExport(chart, m_context->themes);
-        chartexport->setSheetReplacement( false );
-
-        KoStore* storeout = m_context->worksheetReaderContext->import->outputStore();
-        XlsxXmlChartReaderContext* context = new XlsxXmlChartReaderContext(storeout, chartexport);
-        
-        XlsxXmlChartReader reader(this);
-        const KoFilter::ConversionStatus result = m_context->worksheetReaderContext->import->loadAndParseDocument(&reader, filepath, context);
-        if (result != KoFilter::OK) {
-            raiseError(reader.errorString());
-            delete context;
-            return result;
-        }
-
-        m_context->charts << context;
-    }
-
+    m_currentDrawingObject->m_positions[m_anchorType].m_rowOff = readElementText().toInt(); // default value is zero
     return KoFilter::OK;
 }
 
@@ -427,8 +414,9 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_graphicData2()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             //TRY_READ_IF_NS(pic, pic)
+            TRY_READ_IF_NS(pic, pic)
             if (qualifiedName() == "c:chart") {
-                read_chart2();
+                read_chart();
             }
             else if (qualifiedName() == QLatin1String("dgm:relIds")) {
                 read_diagram(); // DrawingML diagram

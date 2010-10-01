@@ -89,7 +89,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     int& numberOfOleObjects
 )
         : MSOOXML::MsooXmlReaderContext(&_relationships)
-        , sheet(new Sheet)
+        , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
         , worksheetName(_worksheetName)
         , state(_state)
@@ -441,12 +441,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->endElement(); // text:p
                     }
 
-                    // handle objects like e.g. charts and diagrams
-                    foreach(XlsxXmlDrawingReaderContext* drawing, cell->drawings) {
-                        // save the indexes of drawing objects anchored to this cell
-                        drawing->saveIndexes(body);
+                    // handle drawing objects like e.g. charts, diagrams and pictures
+                    foreach(XlsxDrawingObject* drawing, cell->drawings) {
+                        drawing->save(body);
                     }
-                    body->addCompleteElement(cell->drawingXml);
 
                     QPair<QString,QString> oleObject;
                     foreach( oleObject, cell->oleObjects ) {
@@ -1255,13 +1253,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
             return result;
         }
 
-        if (context->m_positions.contains(XlsxXmlDrawingReaderContext::FromAnchor)) {
-            XlsxXmlDrawingReaderContext::Position pos = context->m_positions[XlsxXmlDrawingReaderContext::FromAnchor];
+#if 0 //TODO
+        if (context->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
+            XlsxDrawingObject::Position pos = context->m_positions[XlsxDrawingObject::FromAnchor];
             Cell* cell = m_context->sheet->cell(pos.m_col, pos.m_row, true);
             cell->drawings << context;
         } else {
             delete context;
         }
+#endif
     }
     while (!atEnd()) {
         readNext();
