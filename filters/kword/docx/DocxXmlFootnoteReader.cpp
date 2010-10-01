@@ -139,8 +139,8 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read_footnotes()
 
  Child elements:
  - altChunk (Anchor for Imported External Content) §17.17.2.1
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Block-Level Custom XML Element) §17.5.1.6
@@ -191,6 +191,8 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read_footnote()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
         }
     }
 
