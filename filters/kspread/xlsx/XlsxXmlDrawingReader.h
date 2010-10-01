@@ -78,6 +78,7 @@ class XlsxDrawingObject {
         ~XlsxDrawingObject() { delete m_shapeBody; }
         void setPicture(XlsxXmlEmbeddedPicture* picture) { m_type = Picture; m_picture = picture; }
         void setChart(XlsxXmlChartReaderContext* chart) { m_type = Chart; m_chart = chart; }
+        void setDiagram(MSOOXML::MsooXmlDiagramReaderContext* diagram) { m_type = Diagram; m_diagram = diagram; }
         KoXmlWriter* setShape(XlsxShape* shape);
         void save(KoXmlWriter* xmlWriter);
     private:
