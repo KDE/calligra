@@ -718,14 +718,14 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
         const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( ( dataNumber % 6 ) + 1 );
         
         const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
-        seriesColor = colorScheme.value( themeColorString )->toColorItem()->color;
+        seriesColor = colorScheme.value( themeColorString )->value();
         if ( rounds > 1 )
             seriesColor = tintColor( seriesColor, tintFactor );        
     }
     else if ( std::find( patternOneIndexes, patternOneIndexes + 5, styleID ) != patternOneIndexes + 5 )
     {
         const QString themeColorString = QString::fromLatin1( "dk1" );
-        seriesColor = colorScheme.value( themeColorString )->toColorItem()->color;
+        seriesColor = colorScheme.value( themeColorString )->value();
         const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
         seriesColor = tintColor( seriesColor, tintVals[ dataNumber % 6 ]);
         const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
@@ -735,7 +735,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
     else if ( std::find( patternFourIndexes, patternFourIndexes + 5, styleID ) != patternFourIndexes + 5 )
     {
         const QString themeColorString = QString::fromLatin1( "dk1" );
-        seriesColor = colorScheme.value( themeColorString )->toColorItem()->color;
+        seriesColor = colorScheme.value( themeColorString )->value();
         const qreal tintVals[] = { 0.885, 0.55, 0.78, 0.925, 0.7, 0.3 };
         seriesColor = tintColor( seriesColor, tintVals[ dataNumber % 6 ]);
         const qreal tintFactor = 1.0 - ( rounds / maxRounds * 2 );
@@ -749,7 +749,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
             if ( std::find( fadePatterns[ i ], fadePatterns[ i ] + 6, styleID ) != fadePatterns[ i ] + 6 )
             {
                 const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( i + 1 );
-                seriesColor = colorScheme.value( themeColorString )->toColorItem()->color;
+                seriesColor = colorScheme.value( themeColorString )->value();
                 qreal fadeValue = calculateFade( dataNumber, maxNumData ) / 100.0;
                 if ( fadeValue > 0.0 )
                     seriesColor = tintColor( seriesColor, 1 - fadeValue );
