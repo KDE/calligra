@@ -1372,7 +1372,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     //later we might convert it into ODF too.
     //Preview files exist only for some files, please add the program generator
     //for the files we will try to copy the preview image from
-    if(progId != "PowerPoint.Slide.12")
+    if(progId != "PowerPoint.Slide.12" && progId != "Word.Document.12")
         return KoFilter::OK;
 
     ++(m_context->numberOfOleObjects);
