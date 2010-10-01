@@ -102,6 +102,7 @@ void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
                                             const OfficeArtSpContainer& o)
 {
+    KoGenStyle style;
     const OfficeArtDggContainer* drawingGroup = 0;
     const OfficeArtSpContainer* master = 0; 
  
@@ -120,7 +121,6 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
             master = client->getMasterShapeContainer(spid);
         }
     }
-    KoGenStyle style;
     const DrawStyle ds(*drawingGroup, master, &o);
     defineGraphicProperties(style, ds, out.styles);
 
