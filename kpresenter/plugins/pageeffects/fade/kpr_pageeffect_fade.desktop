@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Fade
+Name[da]=Udtoning
 Name[en_GB]=Fade
 Name[eo]=Dissolvi
 Name[es]=Desvanecer
@@ -17,6 +18,7 @@ Name[uk]=Згасання
 Name[x-test]=xxFadexx
 Name[zh_TW]=淡出
 Comment=Fade Effect
+Comment[da]=Udtoningseffekt
 Comment[en_GB]=Fade Effect
 Comment[es]=Efecto de desvanecimiento
 Comment[et]=Hääbumisefekt

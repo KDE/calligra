@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=OpenDocument Presentation Document
+Name[da]=OpenDocument præsentationsdokument
 Name[en_GB]=OpenDocument Presentation Document
 Name[es]=Documento de presentación OpenDocument
 Name[et]=OpenDocumenti esitlusdokument
@@ -14,6 +15,7 @@ Name[sv]=OpenDocument presentationsdokument
 Name[uk]=Документ презентації OpenDocument
 Name[x-test]=xxOpenDocument Presentation Documentxx
 Comment=Odp for okular
+Comment[da]=ODP til Okular
 Comment[en_GB]=Odp for okular
 Comment[es]=Odp para Okular
 Comment[et]=ODP Okularile
