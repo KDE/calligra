@@ -104,6 +104,14 @@ void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
     m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
 }
 
+bool KWCanvas::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
+
 void KWCanvas::keyPressEvent(QKeyEvent *e)
 {
     m_toolProxy->keyPressEvent(e);

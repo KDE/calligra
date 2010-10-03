@@ -881,6 +881,11 @@ void CellToolBase::paintSelection(QPainter &painter, const QRectF &paintRect)
     d->paintSelection(painter, paintRect);
 }
 
+bool CellToolBase::isInTextMode() const
+{
+    return true;
+}
+
 void CellToolBase::mousePressEvent(KoPointerEvent* event)
 {
     KoInteractionTool::mousePressEvent(event);

@@ -283,6 +283,14 @@ void Canvas::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
+bool Canvas::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
+
 void Canvas::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);

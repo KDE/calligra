@@ -110,6 +110,7 @@ Q_SIGNALS:
     /* virtual */ void documentSizeChanged(const QSize&);
 
 protected:
+    virtual bool event(QEvent *e);
     virtual void keyPressEvent(QKeyEvent* _ev) {
         CanvasBase::keyPressed(_ev);
     }

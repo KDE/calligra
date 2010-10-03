@@ -82,6 +82,14 @@ void KFormulaCanvas::keyPressEvent( QKeyEvent* e )
     }
 }
 
+bool KFormulaCanvas::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
+
 void KFormulaCanvas::mousePressEvent( QMouseEvent* e )
 {
     m_toolProxy->mousePressEvent( e, viewConverter()->viewToDocument( e->pos() ) );
