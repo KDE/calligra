@@ -193,7 +193,7 @@ public:
         const QPixmap noIcon(KexiUtils::emptyIcon(KIconLoader::Small));
         item->setPixmap(0, noIcon);
         item = new ActionSelectorDialogListItem("kaction", this, i18n("Application actions"));
-//        item->setPixmap(0, SmallIcon("form_action"));
+        item->setPixmap(0, SmallIcon("kexi"));
 
         KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
         foreach(KexiPart::Info *info, *pl) {
