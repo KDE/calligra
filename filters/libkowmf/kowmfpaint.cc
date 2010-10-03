@@ -298,7 +298,6 @@ void KoWmfPaint::setWindowExt(int width, int height)
     mExtHeight = height;
 
     if (mRelativeCoord) {
-        QRect r = mPainter->window();
         qreal dx = mInternalWorldMatrix.dx();
         qreal dy = mInternalWorldMatrix.dy();
         qreal sx = mInternalWorldMatrix.m11();
@@ -310,14 +309,27 @@ void KoWmfPaint::setWindowExt(int width, int height)
         mInternalWorldMatrix.scale(1 / sx, 1 / sy);
         mPainter->scale(1 / sx, 1 / sy);
 
-        sx = (qreal)r.width()  / (qreal)width;
-        sy = (qreal)r.height() / (qreal)height;
+        //kDebug(31000) << "Scale  =" << sx << sy;
 
-        // Scale and translate into the new window
+        // Flip the wmf if necessary.
+        sx = (width < 0)  ? -1.0 : 1.0;
+        sy = (height < 0) ? -1.0 : 1.0;
+
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "Origin =" << mOrgX << mOrgY;
+        kDebug(31000) << "size   =" << width << height;
+        kDebug(31000) << "Scale  =" << sx << sy;
+#endif
+
+        // Now scale to the new values (=flip), and we want to flip in place.
+        qreal dx2 = (mOrgX + mOrgX + width) / 2.0;
+        qreal dy2 = (mOrgY + mOrgY + height) / 2.0;
+        mInternalWorldMatrix.translate(dx2, dy2);
         mInternalWorldMatrix.scale(sx, sy);
+        mInternalWorldMatrix.translate(-dx2, -dy2);
+        mPainter->translate(dx2, dy2);
         mPainter->scale(sx, sy);
-        mInternalWorldMatrix.translate(dx, dy);
-        mPainter->translate(dx, dy);
+        mPainter->translate(-dx2, -dy2);
     } else {
         QRect rec = mPainter->window();
         mPainter->setWindow(rec.left(), rec.top(), width, height);
