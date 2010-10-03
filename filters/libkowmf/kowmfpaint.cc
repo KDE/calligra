@@ -86,24 +86,23 @@ bool KoWmfPaint::begin()
 
     // If the painter is our own, we have to call begin() on it.
     // If it's external, we assume that it's already done for us.
-    if (mIsInternalPainter)
-        ret = mPainter->begin(mTarget);
-
-    if (ret) {
-        if (mRelativeCoord) {
-            mInternalWorldMatrix.reset();
-
-            // This window is used for scaling in setWindowExt().
-            mPainter->setWindow(boundingRect());
-        } else {
-            // Some WMF files don't call setwindowOrg and
-            // setWindowExt, so it's better to do it here.  Note that
-            // boundingRect() is the rect of the WMF file, not the device.
-            QRect rec = boundingRect();
-            //kDebug(31000) << "BoundingRect: " << rec;
-            mPainter->setWindow(rec);
-        }
+    if (mIsInternalPainter) {
+        if (!mPainter->begin(mTarget))
+            return false;
     }
+
+    if (mRelativeCoord) {
+        mInternalWorldMatrix.reset();
+    }
+
+    // This window is used for scaling in setWindowExt().
+    //
+    // Some WMF files don't call setwindowOrg and
+    // setWindowExt, so it's better to do it here.  Note that
+    // boundingRect() is the rect of the WMF file, not the device.
+    mPainter->setWindow(boundingRect());
+
+    mPainter->setBrush(QBrush(Qt::NoBrush));
 
 #if DEBUG_WMFPAINT
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
@@ -111,7 +110,7 @@ bool KoWmfPaint::begin()
     kDebug(31000) << "KoWmfPaint::begin returns " << ret;
 #endif
 
-    return ret;
+    return true;
 }
 
 
