@@ -50,7 +50,13 @@ bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
     mRelativeCoord = relativeCoord;
 
     // Play the wmf file
-    return KoWmfRead::play();
+    mSaveCount = 0;
+    bool ret = KoWmfRead::play();
+
+    // Make sure that the painter is in the same state as before KoWmfRead::play()
+    for (; mSaveCount > 0; mSaveCount--)
+        restore();
+    return ret;
 }
 
 bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
@@ -70,7 +76,7 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
     mSaveCount = 0;
     bool ret = KoWmfRead::play();
 
-    // Check that the painter is in the same state as before KoWmfRead::play()
+    // Make sure that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)
         restore();
     return ret;
