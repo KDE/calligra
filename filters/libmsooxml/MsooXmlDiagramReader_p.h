@@ -1526,10 +1526,12 @@ class ConnectorAlgorithm : public AlgorithmBase {
             qreal dstY = dstValues["t"]+dstValues["ctrY"];
             qreal dstW = dstValues["w"];
             qreal dstH = dstValues["h"];
+#if 0
             Q_ASSERT(srcX > 0.0);
             Q_ASSERT(srcY > 0.0);
             Q_ASSERT(dstX > 0.0);
             Q_ASSERT(dstY > 0.0);
+#endif
             qreal srcCX = srcX + srcW/2.0;
             qreal srcCY = srcY + srcH/2.0;
             qreal dstCX = dstX + dstW/2.0;
@@ -1558,19 +1560,26 @@ class CycleAlgorithm : public AlgorithmBase {
             // Get a list of all child-layouts to apply the circle-algorithm on them.
             QList<LayoutNodeAtom*> childLayouts;
             foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
-                //atom->layoutAtom(context());
                 if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
                     //if(l->algorithmType() == AlgorithmAtom::ConnectorAlg) continue;
+                    /*
+                    bool hasNode = false;
+                    foreach(AbstractNode* n, l->axis()) { if(static_cast<PointNode*>(n)->m_type == "node") { hasNode = true; break; } }
+                    if(!hasNode) continue;
+                    */
                     childLayouts.append(l);
                 }
             }
-            const int childLayoutsCount = childLayouts.count();
-            Q_ASSERT(childLayoutsCount > 0);
-
+            Q_ASSERT(!childLayouts.isEmpty());
+            
             // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
             int startAngel = layout()->algorithmParam("stAng", "90").toInt() - 90;
             // Specifies the angle the cycle spans. Final shapealign text is placed at stAng+spanAng, unless spanAng=360. In that case, the algorithm places the text so that shapes do not overlap.
             int spanAngel = layout()->algorithmParam("spanAng", "360").toInt();
+            // Specifies where to place nodes in relation to the center circle.
+            bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
+            LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childLayouts.takeFirst() : 0;
+            const int childLayoutsCount = qMax(1, childLayouts.count());
 
             const qreal w = layout()->finalValues()["w"];
             const qreal h = layout()->finalValues()["h"];
@@ -1579,33 +1588,40 @@ class CycleAlgorithm : public AlgorithmBase {
             const bool inverse = startAngel > spanAngel;
             qreal num = 360.0 / childLayoutsCount;
             if(inverse) num = -num;
-            qreal dw = ( (2.0 * M_PI * (w/2.0)) / childLayoutsCount );
-            qreal dh = ( (2.0 * M_PI * (h/2.0)) / childLayoutsCount );
+            qreal dw = ( (2.0 * M_PI * rx) / childLayoutsCount );
+            qreal dh = ( (2.0 * M_PI * ry) / childLayoutsCount );
             dw *= 0.9; dh *= 0.9; //TODO proper handle margins, spacings, etc.
+
+            if(nodeInCenter) {
+                setNodePosition(nodeInCenter, rx, ry, dw, dh);
+            }
+
             for(qreal degree = startAngel; (!childLayouts.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
                 const qreal radian = (degree - 90.0) * (M_PI / 180.0);
                 const qreal x = rx + cos(radian) * rx;
                 const qreal y = ry + sin(radian) * ry;
                 LayoutNodeAtom* l = childLayouts.takeFirst();
-                
-                l->m_values["l"] = parentLayout()->m_values["l"];
-                l->m_values["t"] = parentLayout()->m_values["t"];
-                l->m_values["w"] = dw;
-                l->m_values["h"] = dh;
-                l->m_factors["l"] = l->m_factors["t"] = 1.0;
-                l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
-                l->m_values["ctrX"] = x;//*0.5;
-                l->m_values["ctrY"] = y;//*0.5;
-
-                l->m_needsReinit = false; // we initialized things above already
-                l->m_needsRelayout = true; // but we clearly need a layout now
-                l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
+                setNodePosition(l, x, y, dw, dh);
             }
 
             //kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
         }
         virtual void virtualDoLayoutChildren() {
             AlgorithmBase::virtualDoLayoutChildren();
+        }
+    private:
+        void setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
+            l->m_values["l"] = parentLayout()->m_values["l"];
+            l->m_values["t"] = parentLayout()->m_values["t"];
+            l->m_values["w"] = w;
+            l->m_values["h"] = h;
+            l->m_factors["l"] = l->m_factors["t"] = 1.0;
+            l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
+            l->m_values["ctrX"] = x;
+            l->m_values["ctrY"] = y;
+            l->m_needsReinit = false; // we initialized things above already
+            l->m_needsRelayout = true; // but we clearly need a layout now
+            l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
         }
 };
 
