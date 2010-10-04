@@ -660,24 +660,33 @@ void GraphicsScene::print( QPainter* painter, const QRectF& target, const QRectF
   setSceneRect( itemsBoundingRect() );
   QRectF sourceRect = source;
   //qDebug()<<"GraphicsScene::print() 1"<<sceneRect()<<targetRect<<sourceRect;
+  //painter->drawRect( targetRect );
   if ( view ) {
-      Qt::AspectRatioMode mode = Qt::KeepAspectRatio;
-      QRectF s = sourceRect;
-      s.setHeight( view->headerHeight() );
-      qreal xr = targetRect.width() / sourceRect.width();
-      qreal yr = (qreal)1.0;
-      if ( sourceRect.height() > s.height() ) {
-          yr = targetRect.height() / sourceRect.height();
-      }
-      xr = yr = qMin( xr, yr );
-      QRectF t = targetRect;
-      t.setHeight( s.height() * yr );
-      view->renderHeader( painter, t, s, mode );
-      targetRect.translate( (qreal)0.0, t.height() );
-      //qDebug()<<"GraphicsScene::print() 2"<<"t="<<t<<"s="<<s<<"yr="<<yr<<(s.height() * yr)<<"targetRect="<<targetRect;
+    qreal height = sourceRect.height();
+    qreal width = sourceRect.width();
+    if ( view ) {
+        height += view->headerHeight();
+    }
+    qreal scale = 1.0;
+    if ( width > target.width() ) {
+        scale = target.width() / width;
+    }
+    if ( height > target.height() ) {
+        scale = qMin( scale, target.height() / height );
+    }
+    QRectF t = targetRect;
+    QRectF s = sourceRect;
+    s.setHeight( view->headerHeight() );
+    t.setWidth( s.width() * scale );
+    t.setHeight( s.height() * scale );
+    view->renderHeader( painter, t, s, Qt::KeepAspectRatio );
+    targetRect.translate( (qreal)0.0, t.height() );
+    targetRect.setHeight( targetRect.height() - t.height() );
   }
   //qDebug()<<"GraphicsScene::print() 3"<<sceneRect()<<targetRect<<sourceRect;
+  
   if ( targetRect.width() > sourceRect.width() && targetRect.height() > sourceRect.height() ) {
+      // do not scale up
       targetRect.setSize( sourceRect.size() );
       render( painter, targetRect, sourceRect, Qt::IgnoreAspectRatio );
   } else {

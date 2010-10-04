@@ -304,6 +304,8 @@ namespace Charting
     class Series : public Obj
     {
     public:
+        // TODO fill the missing marker types in
+        enum MarkerType{ None, Square, Diamond };
         /// the type of data in categories, or horizontal values on bubble and scatter chart groups, in the series. MUST be either 0x0001=numeric or 0x0003=text.
         int m_dataTypeX;
         /// the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
@@ -326,8 +328,10 @@ namespace Charting
         QList<Text*> m_texts;
         // range that contains label
         QString m_labelCell;
+        // marker type
+        MarkerType markerType;
 
-        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false) {}
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false), markerType( None ) {}
         virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
     };
     
@@ -377,11 +381,12 @@ namespace Charting
         Gradient* m_fillGradient;
         Gradient* m_plotAreaFillGradient;
         QColor m_plotAreaFillColor;
+        bool m_showMarker;
 
         // charts internal table
         InternalTable m_internalTable;
 
-        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0) {
+        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_fillGradient; delete m_plotAreaFillGradient; }

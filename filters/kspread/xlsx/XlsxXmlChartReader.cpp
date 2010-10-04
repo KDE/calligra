@@ -319,9 +319,11 @@ public:
     XVal *m_currentXVal;
     YVal *m_currentYVal;
     BubbleSize *m_currentBubbleSize;
+    int m_numReadSeries;
 };
 
 XlsxXmlChartReader::Private::Private ( )
+    : m_numReadSeries( 0 )
 {
     qDeleteAll(m_seriesData);
 }
@@ -1483,6 +1485,15 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
                 TRY_READ(lineChart_Ser)
             }
             ELSE_TRY_READ_IF(grouping)
+//             if ( qualifiedName() == "c:marker" )
+            {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val);
+                if ( val == "1" || val == "true" || val == "on " )
+                {                    
+                    m_context->m_chart->m_showMarker = true;
+                }
+            }
         }
     }
 
@@ -2245,6 +2256,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(val)
             ELSE_TRY_READ_IF(dLbls)
+            if ( qualifiedName() == "c:marker" )
+            {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val);
+                if ( val == "1" || val == "true" || val == "on " )
+                {                    
+                    if ( m_currentSeries->markerType == Charting::Series::None )
+                        switch ( d->m_numReadSeries )
+                        {
+                            case 0:
+                                m_currentSeries->markerType = Charting::Series::Square;
+                                break;
+                            case 1:
+                                m_currentSeries->markerType = Charting::Series::Diamond;
+                                break;
+                            default:
+                                break;
+                        }
+                    ++d->m_numReadSeries;
+                }
+            }
+                
         }
     }
 
