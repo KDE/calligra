@@ -520,7 +520,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 
     MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
 
-    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
+    QString fileName = link_target;
+    fileName.remove(0, m_context->path.length());
+
+    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
@@ -590,7 +593,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 
     MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
 
-    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
+    QString fileName = link_target;
+    fileName.remove(0, m_context->path.length());
+
+    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
@@ -1392,10 +1398,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction == "PAGE") {
+            else if (instruction.startsWith("PAGE")) {
                 m_complexCharType = CurrentPageComplexFieldCharType;
             }
-            else if (instruction == "NUMPAGES") {
+            else if (instruction.startsWith("NUMPAGES")) {
                 m_complexCharType = NumberOfPagesComplexFieldCharType;
             }
             //! @todo: Add rest of the instructions
