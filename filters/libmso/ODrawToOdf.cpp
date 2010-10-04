@@ -151,7 +151,8 @@ QString pt(double v) {
 QString percent(double v) {
     return format(v) + '%';
 }
-}
+} //namespace
+
 void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles)
 {
     const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
@@ -208,8 +209,8 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // only set the color if the fill type is 'solid' because OOo ignores
         // fill='none' if the color is set
         if (fillType == 0 && client) {
-            style.addProperty("draw:fill-color",
-                              client->toQColor(ds.fillColor()).name(), gt);
+            QColor tmp = processOfficeArtCOLORREF(ds.fillColor(), ds);
+            style.addProperty("draw:fill-color", tmp.name(), gt);
         }
         // draw:fill-gradient-name
         else if ((fillType >=4 && fillType <=8) && client) {
@@ -387,9 +388,9 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // svg:height
     if (ds.fLine() || ds.fNoLineDrawDash()) {
         if (client) {
+            QColor tmp = processOfficeArtCOLORREF(ds.lineColor(), ds);
             // svg:stroke-color from 2.3.8.1 lineColor
-            style.addProperty("svg:stroke-color",
-                              client->toQColor(ds.lineColor()).name(), gt);
+            style.addProperty("svg:stroke-color", tmp.name(), gt);
         }
         // svg:stroke-opacity from 2.3.8.2 lineOpacity
         style.addProperty("svg:stroke-opacity",
@@ -412,12 +413,15 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 }
 void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
+    QColor tmp;
     //draw:style
-    style.addAttribute("draw:style", "axial");
+    style.addAttribute("draw:style", getGradientRendering(ds.fillType()));
     //draw:start-color
-    style.addAttribute("draw:start-color", client->toQColor(ds.fillColor()).name());
+    tmp = processOfficeArtCOLORREF(ds.fillColor(), ds);
+    style.addAttribute("draw:start-color", tmp.name());
     //draw:end-color
-    style.addAttribute("draw:end-color", client->toQColor(ds.fillBackColor()).name());
+    tmp = processOfficeArtCOLORREF(ds.fillBackColor(), ds);
+    style.addAttribute("draw:end-color", tmp.name());
     //draw:start-intensity
     style.addAttribute("draw:start-intensity", "100%");
     //draw:end-intensity
@@ -426,6 +430,43 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     style.addAttribute("draw:angle", QString::number(toQReal(ds.fillAngle()) * 10));
     //draw:border
     style.addAttribute("draw:border", "0%");
+}
+
+QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds)
+{
+    //TODO: implement all cases!!!
+    QColor ret;
+    MSO::OfficeArtCOLORREF tmp;
+
+    // A value of 0x1 specifies that green and red will be treated as an
+    // unsigned 16-bit index into the system color table.  Values less than
+    // 0x00F0 map directly to system colors.  Table [1] specifies values that
+    // have special meaning, [1] MS-ODRAW 2.2.2
+    if (c.fSysIndex) {
+
+        // Use the fill color of the shape.
+	if (c.red == 0xF0) {
+            tmp = ds.fillColor();
+        }
+        ret = client->toQColor(tmp);
+
+        // Darken the color by the value that is specified in the blue field.
+        // A blue value of 0xFF specifies that the color is to be left
+        // unchanged, whereas a blue value of 0x00 specifies that the color is
+        // to be completely darkened.
+        if (c.green == 0x01) {
+	    if (c.blue == 0x00) {
+		ret = ret.darker(300);
+            } else if (c.blue != 0xFF) {
+                ret.setRed(ret.red() - c.blue);
+                ret.setGreen(ret.green() - c.blue);
+                ret.setBlue(ret.blue() - c.blue);
+            }
+        }
+    } else {
+        ret = client->toQColor(c);
+    }
+    return ret;
 }
 
 const char* getFillType(quint32 fillType)
@@ -468,5 +509,24 @@ const char* getRepeatStyle(quint32 fillType)
     case 2: // msofillTexture
     default:
         return "repeat";
+    }
+}
+
+const char* getGradientRendering(quint32 fillType)
+{
+    //TODO: Add the logic!!! 
+    switch(fillType) {
+    case 0: //msofillSolid
+    case 1: //msofillPattern
+    case 2: //msofillTexture
+    case 3: //msofillPicture
+    case 4: //msofillShade
+    case 5: //msofillShadeCenter
+    case 6: //msofillShadeShape
+    case 7: //msofillShadeScale
+    case 8: //msofillShadeTitle
+    case 9: //msofillBackground
+    default:
+        return "axial";
     }
 }
