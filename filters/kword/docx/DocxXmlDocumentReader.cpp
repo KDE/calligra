@@ -4066,7 +4066,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
         m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
     }
     else {
-        m_currentTableRowStyle.addProperty("style:row-height",s, KoGenStyle::TableRowType);
+        m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
     }
     readNext();
     READ_EPILOGUE
