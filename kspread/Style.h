@@ -451,7 +451,7 @@ private:
  * \ingroup Style
  * A single style attribute.
  */
-class SubStyle : public QSharedData
+class KSPREAD_TEST_EXPORT SubStyle : public QSharedData
 {
 public:
     SubStyle() {}
