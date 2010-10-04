@@ -523,8 +523,6 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m_legenddiagram.setModel( &m_chartmodel );
     m_legenddiagram.setObjectName( "Legend diagram" );
     m_legend->setDiagram( &m_legenddiagram );
-    m_legend->setBrushesFromDiagram( &m_legenddiagram );
-    kDebug()<<m_legend->brushes();
 
     // get rid of the default coordinate plane
     AbstractCoordinatePlane *p = ui_chart->coordinatePlane();
@@ -782,9 +780,6 @@ void PerformanceStatusBase::setProject( Project *project )
     m_chartmodel.setProject( project );
 
     slotLocaleChanged();
-
-    m_legend->setBrushesFromDiagram( &m_legenddiagram );
-    kDebug()<<"legend brushes set:"<<m_legend->brushes();
 }
 
 void PerformanceStatusBase::slotLocaleChanged()
