@@ -64,9 +64,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (qualifiedName() == "v:rect") {
-                TRY_READ(rect)
-            }
+            TRY_READ_IF_NS(v, rect)
+            ELSE_TRY_READ_IF_NS(v, roundrect)
             ELSE_TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
 //! @todo add ELSE_WRONG_FORMAT
@@ -79,6 +78,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
     const QString height(m_vmlStyle.value("height")); // already in "...cm" format
     const QString x_mar(m_vmlStyle.value("margin-left"));
     const QString y_mar(m_vmlStyle.value("margin-top"));
+    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
+    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
+    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
+    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
     if (!width.isEmpty()) {
         body->addAttribute("svg:width", width);
     }
@@ -93,6 +96,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
     }
     if (!m_shapeColor.isEmpty()) {
         m_currentDrawStyle->addProperty("fo:background-color", m_shapeColor);
+    }
+    if (!hor_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
     }
 
     if (!m_imagedataPath.isEmpty()) {
@@ -131,32 +146,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
     (void)drawFrameBuf.releaseWriter();
 
     body->endElement(); //draw:frame
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL txbxContent
-/*! txbxContent handler (Textbox content)
-
- Parent elements:
- - [done] textbox (§14.1.2.19)
-
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
-{
-    READ_PROLOGUE
-
-    const QXmlStreamAttributes attrs(attributes());
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF(p)
-        }
-    }
 
     READ_EPILOGUE
 }
@@ -221,7 +210,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
  - stroke (Line Stroke Settings) §14.1.2.21
- - textbox (Text Box) §14.1.2.22
+ - [done] textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
  - wrap (Text Wrapping) §14.3.2.6
@@ -240,6 +229,32 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(textbox)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+    READ_EPILOGUE
+}
+
+
+#undef CURRENT_EL
+#define CURRENT_EL roundrect
+//! roundrect handler (Rouned rectangle)
+// For parents, children, look from rect
+// Note: this is atm. simplified, should in reality make a round rectangle
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+//! @todo support more attrs
+    TRY_READ_ATTR_WITHOUT_NS(style)
+    RETURN_IF_ERROR(parseCSS(style))
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(fill)
+            ELSE_TRY_READ_IF(textbox)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

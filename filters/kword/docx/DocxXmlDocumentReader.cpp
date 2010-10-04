@@ -1505,6 +1505,33 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL txbxContent
+/*! txbxContent handler (Textbox content)
+
+ Parent elements:
+ - [done] textbox (§14.1.2.19)
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(tbl)
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL p
 //! [1] p handler (Paragraph) ECMA-376, WML 17.3.1.22, p. 251,
 //!       This element specifies a paragraph of content in the document.

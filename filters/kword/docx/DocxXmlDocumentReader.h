@@ -133,6 +133,7 @@ protected:
     KoFilter::ConversionStatus read_caps();
     KoFilter::ConversionStatus read_smallCaps();
     KoFilter::ConversionStatus read_w();
+    KoFilter::ConversionStatus read_txbxContent();
     KoFilter::ConversionStatus read_color();
     KoFilter::ConversionStatus read_highlight();
     KoFilter::ConversionStatus read_vertAlign();
