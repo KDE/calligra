@@ -7567,21 +7567,7 @@ void MSO::parseFillOpacity(LEInputStream& in, FillOpacity& _s) {
     if (!(_s.opid.fComplex == false)) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
-    _s.fillOpacity = in.readint32();
-}
-void MSO::parseFillAngle(LEInputStream& in, FillAngle& _s) {
-    _s.streamOffset = in.getPosition();
-    parseOfficeArtFOPTEOPID(in, _s.opid);
-    if (!(_s.opid.opid == 0x018B)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018B");
-    }
-    if (!(_s.opid.fBid == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
-    }
-    if (!(_s.opid.fComplex == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
-    }
-    parseFixedPoint(in, _s.fillAngle);
+    parseFixedPoint(in, _s.fillOpacity);
 }
 void MSO::parseFillBackColor(LEInputStream& in, FillBackColor& _s) {
     _s.streamOffset = in.getPosition();
@@ -7597,6 +7583,34 @@ void MSO::parseFillBackColor(LEInputStream& in, FillBackColor& _s) {
     }
     parseOfficeArtCOLORREF(in, _s.fillBackColor);
 }
+void MSO::parseFillBackOpacity(LEInputStream& in, FillBackOpacity& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0184)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0184");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillBackOpacity);
+}
+void MSO::parseFillCrMod(LEInputStream& in, FillCrMod& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0185)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0185");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseOfficeArtCOLORREF(in, _s.fillCrMod);
+}
 void MSO::parseFillBlip(LEInputStream& in, FillBlip& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -7604,6 +7618,146 @@ void MSO::parseFillBlip(LEInputStream& in, FillBlip& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0186");
     }
     _s.fillBlip = in.readuint32();
+}
+void MSO::parseFillWidth(LEInputStream& in, FillWidth& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0189)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0189");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillWidth = in.readint32();
+}
+void MSO::parseFillHeight(LEInputStream& in, FillHeight& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x018A)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018A");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillHeight = in.readint32();
+}
+void MSO::parseFillAngle(LEInputStream& in, FillAngle& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x018B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018B");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillAngle);
+}
+void MSO::parseFillFocus(LEInputStream& in, FillFocus& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x018C)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018C");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillFocus = in.readint32();
+}
+void MSO::parseFillToLeft(LEInputStream& in, FillToLeft& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x018D)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018D");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillToLeft);
+}
+void MSO::parseFillToTop(LEInputStream& in, FillToTop& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x018E)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018E");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillToTop);
+}
+void MSO::parseFillToRight(LEInputStream& in, FillToRight& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x018F)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x018F");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillToRight);
+}
+void MSO::parseFillToBottom(LEInputStream& in, FillToBottom& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0190)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0190");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillToBottom);
+}
+void MSO::parseFillRectLeft(LEInputStream& in, FillRectLeft& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0191)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0191");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillRectLeft = in.readint32();
+}
+void MSO::parseFillRectTop(LEInputStream& in, FillRectTop& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0192)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0192");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillRectTop = in.readint32();
 }
 void MSO::parseFillRectRight(LEInputStream& in, FillRectRight& _s) {
     _s.streamOffset = in.getPosition();
@@ -7647,6 +7801,104 @@ void MSO::parseFillDztype(LEInputStream& in, FillDztype& _s) {
     }
     _s.fillDztype = in.readint32();
 }
+void MSO::parseFillShadePreset(LEInputStream& in, FillShadePreset& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0196)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0196");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    _s.fillShadePreset = in.readint32();
+}
+void MSO::parseFillOriginX(LEInputStream& in, FillOriginX& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0198)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0198");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillOriginX);
+}
+void MSO::parseFillOriginY(LEInputStream& in, FillOriginY& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x0199)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0199");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillOriginY);
+}
+void MSO::parseFillShapeOriginX(LEInputStream& in, FillShapeOriginX& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x019A)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x019A");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillShapeOriginX);
+}
+void MSO::parseFillShapeOriginY(LEInputStream& in, FillShapeOriginY& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x019B)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x019B");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseFixedPoint(in, _s.fillShapeOriginY);
+}
+void MSO::parseFillColorExt(LEInputStream& in, FillColorExt& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x019E)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x019E");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseOfficeArtCOLORREF(in, _s.fillColorExt);
+}
+void MSO::parseFillBackColorExt(LEInputStream& in, FillBackColorExt& _s) {
+    _s.streamOffset = in.getPosition();
+    parseOfficeArtFOPTEOPID(in, _s.opid);
+    if (!(_s.opid.opid == 0x01A2)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x01A2");
+    }
+    if (!(_s.opid.fBid == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
+    }
+    if (!(_s.opid.fComplex == false)) {
+        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
+    }
+    parseOfficeArtCOLORREF(in, _s.fillBackColorExt);
+}
 void MSO::parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanProperties& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -7669,7 +7921,7 @@ void MSO::parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanPro
     _s.unused1a = in.readbit();
     _s.unused1b = in.readuint8();
     _s.fUseNoFillHitTest = in.readbit();
-    _s.fUseFillUseRext = in.readbit();
+    _s.fUseFillUseRect = in.readbit();
     _s.fUseFillShape = in.readbit();
     _s.fUseHitTestFill = in.readbit();
     _s.fUseFilled = in.readbit();

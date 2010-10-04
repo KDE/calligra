@@ -84,13 +84,33 @@ public:
     bool fUsefIsBullet() const;
     bool fUsefLayoutInCell() const;
     // Fill Style property set
-    quint32                fillType() const;
+    quint32 fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
+    MSO::FixedPoint fillOpacity() const;
     MSO::OfficeArtCOLORREF fillBackColor() const;
-    qint32                 fillOpacity() const;
-    MSO::FixedPoint        fillAngle() const;
-    quint32                fillBlip() const;
-    qint32                 fillDztype() const;
+    MSO::FixedPoint fillBackOpacity() const;
+    MSO::OfficeArtCOLORREF fillCrMod() const;
+    quint32 fillBlip() const;
+    qint32 fillWidth() const;
+    qint32 fillHeight() const;
+    MSO::FixedPoint fillAngle() const;
+    qint32 fillFocus() const;
+    MSO::FixedPoint fillToLeft() const;
+    MSO::FixedPoint fillToTop() const;
+    MSO::FixedPoint fillToRight() const;
+    MSO::FixedPoint fillToBottom() const;
+    qint32 fillRectLeft() const;
+    qint32 fillRectTop() const;
+    qint32 fillRectRight() const;
+    qint32 fillRectBottom() const;
+    qint32 fillDztype() const;
+    qint32 fillShadePreset() const;
+    MSO::FixedPoint fillOriginX() const;
+    MSO::FixedPoint fillOriginY() const;
+    MSO::FixedPoint fillShapeOriginX() const;
+    MSO::FixedPoint fillShapeOriginY() const;
+    MSO::OfficeArtCOLORREF fillColorExt() const;
+    MSO::OfficeArtCOLORREF fillBackColorExt() const;
     // FillStyleBooleanProperties
     bool fNoFillHitTest() const;
     bool fillUseRect() const;

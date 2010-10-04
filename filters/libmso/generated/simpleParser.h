@@ -656,18 +656,54 @@ class FillColor;
 void parseFillColor(LEInputStream& in, FillColor& _s);
 class FillOpacity;
 void parseFillOpacity(LEInputStream& in, FillOpacity& _s);
-class FillAngle;
-void parseFillAngle(LEInputStream& in, FillAngle& _s);
 class FillBackColor;
 void parseFillBackColor(LEInputStream& in, FillBackColor& _s);
+class FillBackOpacity;
+void parseFillBackOpacity(LEInputStream& in, FillBackOpacity& _s);
+class FillCrMod;
+void parseFillCrMod(LEInputStream& in, FillCrMod& _s);
 class FillBlip;
 void parseFillBlip(LEInputStream& in, FillBlip& _s);
+class FillWidth;
+void parseFillWidth(LEInputStream& in, FillWidth& _s);
+class FillHeight;
+void parseFillHeight(LEInputStream& in, FillHeight& _s);
+class FillAngle;
+void parseFillAngle(LEInputStream& in, FillAngle& _s);
+class FillFocus;
+void parseFillFocus(LEInputStream& in, FillFocus& _s);
+class FillToLeft;
+void parseFillToLeft(LEInputStream& in, FillToLeft& _s);
+class FillToTop;
+void parseFillToTop(LEInputStream& in, FillToTop& _s);
+class FillToRight;
+void parseFillToRight(LEInputStream& in, FillToRight& _s);
+class FillToBottom;
+void parseFillToBottom(LEInputStream& in, FillToBottom& _s);
+class FillRectLeft;
+void parseFillRectLeft(LEInputStream& in, FillRectLeft& _s);
+class FillRectTop;
+void parseFillRectTop(LEInputStream& in, FillRectTop& _s);
 class FillRectRight;
 void parseFillRectRight(LEInputStream& in, FillRectRight& _s);
 class FillRectBottom;
 void parseFillRectBottom(LEInputStream& in, FillRectBottom& _s);
 class FillDztype;
 void parseFillDztype(LEInputStream& in, FillDztype& _s);
+class FillShadePreset;
+void parseFillShadePreset(LEInputStream& in, FillShadePreset& _s);
+class FillOriginX;
+void parseFillOriginX(LEInputStream& in, FillOriginX& _s);
+class FillOriginY;
+void parseFillOriginY(LEInputStream& in, FillOriginY& _s);
+class FillShapeOriginX;
+void parseFillShapeOriginX(LEInputStream& in, FillShapeOriginX& _s);
+class FillShapeOriginY;
+void parseFillShapeOriginY(LEInputStream& in, FillShapeOriginY& _s);
+class FillColorExt;
+void parseFillColorExt(LEInputStream& in, FillColorExt& _s);
+class FillBackColorExt;
+void parseFillBackColorExt(LEInputStream& in, FillBackColorExt& _s);
 class FillStyleBooleanProperties;
 void parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanProperties& _s);
 class LineColor;
@@ -3871,14 +3907,8 @@ public:
 class FillOpacity : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
-    qint32 fillOpacity;
+    FixedPoint fillOpacity;
     FillOpacity(void* /*dummy*/ = 0) {}
-};
-class FillAngle : public StreamOffset {
-public:
-    OfficeArtFOPTEOPID opid;
-    FixedPoint fillAngle;
-    FillAngle(void* /*dummy*/ = 0) {}
 };
 class FillBackColor : public StreamOffset {
 public:
@@ -3886,11 +3916,83 @@ public:
     OfficeArtCOLORREF fillBackColor;
     FillBackColor(void* /*dummy*/ = 0) {}
 };
+class FillBackOpacity : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillBackOpacity;
+    FillBackOpacity(void* /*dummy*/ = 0) {}
+};
+class FillCrMod : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF fillCrMod;
+    FillCrMod(void* /*dummy*/ = 0) {}
+};
 class FillBlip : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
     quint32 fillBlip;
     FillBlip(void* /*dummy*/ = 0) {}
+};
+class FillWidth : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillWidth;
+    FillWidth(void* /*dummy*/ = 0) {}
+};
+class FillHeight : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillHeight;
+    FillHeight(void* /*dummy*/ = 0) {}
+};
+class FillAngle : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillAngle;
+    FillAngle(void* /*dummy*/ = 0) {}
+};
+class FillFocus : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillFocus;
+    FillFocus(void* /*dummy*/ = 0) {}
+};
+class FillToLeft : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillToLeft;
+    FillToLeft(void* /*dummy*/ = 0) {}
+};
+class FillToTop : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillToTop;
+    FillToTop(void* /*dummy*/ = 0) {}
+};
+class FillToRight : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillToRight;
+    FillToRight(void* /*dummy*/ = 0) {}
+};
+class FillToBottom : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillToBottom;
+    FillToBottom(void* /*dummy*/ = 0) {}
+};
+class FillRectLeft : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillRectLeft;
+    FillRectLeft(void* /*dummy*/ = 0) {}
+};
+class FillRectTop : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillRectTop;
+    FillRectTop(void* /*dummy*/ = 0) {}
 };
 class FillRectRight : public StreamOffset {
 public:
@@ -3910,6 +4012,48 @@ public:
     qint32 fillDztype;
     FillDztype(void* /*dummy*/ = 0) {}
 };
+class FillShadePreset : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    qint32 fillShadePreset;
+    FillShadePreset(void* /*dummy*/ = 0) {}
+};
+class FillOriginX : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillOriginX;
+    FillOriginX(void* /*dummy*/ = 0) {}
+};
+class FillOriginY : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillOriginY;
+    FillOriginY(void* /*dummy*/ = 0) {}
+};
+class FillShapeOriginX : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillShapeOriginX;
+    FillShapeOriginX(void* /*dummy*/ = 0) {}
+};
+class FillShapeOriginY : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    FixedPoint fillShapeOriginY;
+    FillShapeOriginY(void* /*dummy*/ = 0) {}
+};
+class FillColorExt : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF fillColorExt;
+    FillColorExt(void* /*dummy*/ = 0) {}
+};
+class FillBackColorExt : public StreamOffset {
+public:
+    OfficeArtFOPTEOPID opid;
+    OfficeArtCOLORREF fillBackColorExt;
+    FillBackColorExt(void* /*dummy*/ = 0) {}
+};
 class FillStyleBooleanProperties : public StreamOffset {
 public:
     OfficeArtFOPTEOPID opid;
@@ -3923,7 +4067,7 @@ public:
     bool unused1a;
     quint8 unused1b;
     bool fUseNoFillHitTest;
-    bool fUseFillUseRext;
+    bool fUseFillUseRect;
     bool fUseFillShape;
     bool fUseHitTestFill;
     bool fUseFilled;
