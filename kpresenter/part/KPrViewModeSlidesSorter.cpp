@@ -73,11 +73,22 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
     QListWidget::paintEvent(event);
 
     // Paint the line where the slide should go
-    int currentItemNumber = m_viewModeSlidesSorter->lastItemNumber();
+    bool before = true;
+    int lastItemNumber = m_viewModeSlidesSorter->lastItemNumber();
+    int currentItemNumber = lastItemNumber;
+    /* The page is going to the beginning */
+    if (lastItemNumber <= m_movingPageNumber) {
+        currentItemNumber = lastItemNumber - 1;
+    }
+
     if (m_viewModeSlidesSorter->isDraging() && currentItemNumber >= 0) {
         QSize size(m_viewModeSlidesSorter->itemSize().width(), m_viewModeSlidesSorter->itemSize().height());
 
-        int numberMod = currentItemNumber%4 > 0 ? currentItemNumber%4 : 0;
+        int numberMod = currentItemNumber%4;
+        /* The page is going to the end */
+        if (lastItemNumber > m_movingPageNumber) {
+            numberMod = currentItemNumber%4 > 0 ? currentItemNumber%4 : 4;
+        }
         int verticalValue = (currentItemNumber - numberMod) / 4 * size.height() - verticalScrollBar()->value();
         QPoint point1(numberMod * size.width(), verticalValue );
         QPoint point2(numberMod * size.width(), verticalValue + size.height() );
@@ -221,7 +232,11 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
         m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
         QListWidgetItem *sourceItem = takeItem(oldIndex);
         insertItem(newIndex, sourceItem);
+        // This selection helps the user
+        clearSelection();
+        item(newIndex)->setSelected(true);
     }
+    m_movingPageNumber = -1;
 }
 
 QMimeData* KPrViewModeSlidesSorter::KPrSlidesSorter::mimeData(const QList<QListWidgetItem*> items) const
@@ -244,13 +259,17 @@ QStringList KPrViewModeSlidesSorter::KPrSlidesSorter::mimeTypes() const
 int KPrViewModeSlidesSorter::KPrSlidesSorter::pageBefore(QPoint point)
 {
     QListWidgetItem *item = itemAt(point);
+    int pageBeforeNumber = -1;
     if (item) {
-        m_viewModeSlidesSorter->setLastItemNumber(row(item) + 1);
-        return row(item) + 1;
+        pageBeforeNumber = row(item) + 1;
+    } else {
+        pageBeforeNumber = m_viewModeSlidesSorter->pageCount();
     }
-    int lastPage = m_viewModeSlidesSorter->pageCount();
-    m_viewModeSlidesSorter->setLastItemNumber(lastPage);
-    return lastPage;
+    if (m_movingPageNumber == -1) {
+        m_movingPageNumber = pageBeforeNumber;
+    }
+    m_viewModeSlidesSorter->setLastItemNumber(pageBeforeNumber);
+    return pageBeforeNumber;
 }
 
 void KPrViewModeSlidesSorter::populate()
@@ -263,7 +282,8 @@ void KPrViewModeSlidesSorter::populate()
     //Load the available slides
     foreach( KoPAPageBase* page, m_view->kopaDocument()->pages() )
     {
-        QString slideName = page->name().isEmpty() ? i18n("Slide %1", ++currentPage) : page->name();
+        currentPage++;
+        QString slideName = page->name().isEmpty() ? i18n("Slide %1", currentPage) : page->name();
         item = new QListWidgetItem( QIcon( page->thumbnail( m_iconSize ) ), slideName, m_slidesSorter );
         item->setFlags((item->flags() | Qt::ItemIsDragEnabled ) & ~Qt::ItemIsDropEnabled);
     }
