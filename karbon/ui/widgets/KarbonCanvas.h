@@ -132,6 +132,7 @@ signals:
     void documentOriginChanged(const QPoint &origin);
 
 protected:
+    bool event(QEvent *);
     void paintEvent(QPaintEvent * ev);
     void mouseEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);

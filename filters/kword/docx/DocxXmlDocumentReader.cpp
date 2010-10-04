@@ -191,8 +191,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
 
  Child elements:
  - altChunk (Anchor for Imported External Content) §17.17.2.1
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Block-Level Custom XML Element) §17.5.1.6
@@ -238,6 +238,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(sectPr)
             ELSE_TRY_READ_IF(tbl)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1328,7 +1330,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
     else if (type == "page") {
-        m_currentParagraphStyle.addProperty("fo:break-before", "page");
+        m_currentParagraphStyle.addProperty("fo:break-after", "page");
     }
     readNext();
     READ_EPILOGUE
@@ -1410,7 +1412,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - bdo (§17.3.2.3)
  - customXml (§17.5.1.3)
  - dir (§17.3.2.8)
- - fldSimple (§17.16.19)
+ - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
  - sdtContent (§17.5.2.36)
@@ -1433,7 +1435,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
  - del (Deleted Run Content) §17.13.5.14
  - dir (Bidirectional Embedding Level) §17.3.2.8
- - fldSimple (Simple Field) §17.16.19
+ - [done] fldSimple (Simple Field) §17.16.19
  - [done] hyperlink (Hyperlink) §17.16.22
  - ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
@@ -1493,6 +1495,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(fldSimple)
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1548,7 +1551,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
  - moveTo (Move Destination Run Content) §17.13.5.25
  - moveToRangeEnd (Move Destination Location Container - End) §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start) §17.13.5.28
- - oMath (Office Math) §22.1.2.77
+ - [done] oMath (Office Math) §22.1.2.77
  - [done] oMathPara (Office Math Paragraph) §22.1.2.78
  - permEnd (Range Permission End) §17.13.7.1
  - permStart (Range Permission Start) §17.13.7.2
@@ -1617,6 +1620,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(fldSimple)
             else if (qualifiedName() == "m:oMathPara") {
                 TRY_READ(oMathPara)
+            }
+            else if (qualifiedName() == "m:oMath") {
+                TRY_READ(oMath)
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -3077,8 +3083,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  Child elements:
 
  - bdo (Bidirectional Override) §17.3.2.3
- - bookmarkEnd (Bookmark End)   §17.13.6.1
- - bookmarkStart (Bookmark Start)                                                §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End)   §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start)                                                §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End)                                    §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start)                                §17.13.4.4
  - customXml (Inline-Level Custom XML Element)                                   §17.5.1.3
@@ -3101,8 +3107,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  - moveTo (Move Destination Run Content)                                         §17.13.5.25
  - moveToRangeEnd (Move Destination Location Container - End)                    §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start)                §17.13.5.28
- - oMath (Office Math)                                                           §22.1.2.77
- - oMathPara (Office Math Paragraph)                                             §22.1.2.78
+ - [done] oMath (Office Math)                                                           §22.1.2.77
+ - [done] oMathPara (Office Math Paragraph)                                             §22.1.2.78
  - permEnd (Range Permission End)                                                §17.13.7.1
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
@@ -3122,13 +3128,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 
     bool closeElement = false;
 
-    if (instr == "PAGE") {
+    if (instr == "PAGE" || instr.startsWith("PAGE ")) {
         body->startElement("text:page-number");
         body->addAttribute("text:select-page", "current");
         closeElement = true;
     }
 
-    if (instr == "NUMPAGES") {
+    if (instr == "NUMPAGES" || instr.startsWith("NUMPAGES ")) {
         body->startElement("text:page-count");
         closeElement = true;
     }
@@ -3142,6 +3148,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF(r)
             ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            else if (qualifiedName() == "m:oMathPara") {
+                TRY_READ(oMathPara)
+            }
+            else if (qualifiedName() == "m:oMath") {
+                TRY_READ(oMath)
+            }
         }
     }
 
@@ -3626,8 +3640,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
  - [done] tc (§17.4.66)
 
  Child elements:
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Row-Level Custom XML Element) §17.5.1.5
@@ -3705,6 +3719,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3879,8 +3895,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridCol()
  - [done] tbl (§17.4.38)
 
  Child elements:
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Cell-Level Custom XML Element) §17.5.1.4
@@ -3926,6 +3942,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tr()
         if (isStartElement()) {
             TRY_READ_IF(tc)
             ELSE_TRY_READ_IF(trPr)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4035,8 +4053,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
 
  Child elements:
  - altChunk (Anchor for Imported External Content) §17.17.2.1
- - bookmarkEnd (Bookmark End) §17.13.6.1
- - bookmarkStart (Bookmark Start) §17.13.6.2
+ - [done] bookmarkEnd (Bookmark End) §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start) §17.13.6.2
  - commentRangeEnd (Comment Anchor Range End) §17.13.4.3
  - commentRangeStart (Comment Anchor Range Start) §17.13.4.4
  - customXml (Block-Level Custom XML Element) §17.5.1.6
@@ -4081,6 +4099,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(tcPr)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

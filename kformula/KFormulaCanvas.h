@@ -81,6 +81,7 @@ public:
     void setCursor(const QCursor &cursor);
 
 protected:
+    bool event(QEvent *);
     void mousePressEvent( QMouseEvent* event );
     void mouseReleaseEvent( QMouseEvent* event );
     void mouseDoubleClickEvent( QMouseEvent* event );

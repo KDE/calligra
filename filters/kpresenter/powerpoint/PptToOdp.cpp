@@ -427,28 +427,8 @@ PptToOdp::DrawClient::getOfficeArtDggContainer()
 const MSO::OfficeArtSpContainer* 
 PptToOdp::DrawClient::getMasterShapeContainer(quint32 spid)
 {
-    //NOTE: If hspMaster property (0x0301) is provided by the shape, the
-    //referred master shape belongs to the current main master slide. (uzak)
-    const MainMasterContainer* mm = 0;
-    const OfficeArtDgContainer* dg = 0;
     const OfficeArtSpContainer* sp = 0;
-
-    if (!ppttoodp->currentMaster) return sp;
-
-    mm = ppttoodp->currentMaster->anon.get<MainMasterContainer>();
-    if (mm) {
-        dg = &mm->drawing.OfficeArtDg;
-        foreach(const OfficeArtSpgrContainerFileBlock& co, dg->groupShape->rgfb) {
-            if (co.anon.is<OfficeArtSpContainer>()) {
-                sp = co.anon.get<OfficeArtSpContainer>();
-                if (sp->shapeProp.spid == spid) {
-                    break;
-                }
-            }
-            //TODO: the shape could be located deeper in the hierarchy
-            sp = NULL;
-        }
-    }
+    sp = ppttoodp->retrieveMasterShape(spid);
     return sp;
 }
 
@@ -456,8 +436,9 @@ QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     //Have to handle the case when OfficeArtCOLORREF/fSchemeIndex == true.
     
-    //NOTE: If hspMaster property (0x0301) is provided by the shape, the
-    //referred master shape belongs to the current main master slide. (uzak)
+    //NOTE: If the hspMaster property (0x0301) is provided by the shape, the
+    //colorScheme of the master slide containing the master shape could be
+    //required.  Testing required to implement the correct logic.
 
     const MSO::MainMasterContainer* mmc = NULL;
     if (ppttoodp->currentMaster) {
@@ -1067,7 +1048,9 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             }
             // draw:fill-gradient-name
             else if (fillType >=4 && fillType <=8) {
-                QString tmp = odrawtoodf.handleGradientStyle(ds, styles);
+                KoGenStyle gs(KoGenStyle::GradientStyle);
+                odrawtoodf.defineGradientStyle(gs, ds);
+                QString tmp = styles.insert(gs);
                 style.addProperty("draw:fill-gradient-name", tmp, dp);
             }
             // draw:fill-hatch-name
@@ -1674,9 +1657,6 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     }
     foreach (const MSO::MasterOrSlideContainer* m, p->masters) {
         const SlideContainer* sc = m->anon.get<SlideContainer>();
-        if (sc) {
-            qDebug() << "Bug: didn't expect a SlideContainer here!";
-        }
         const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
         const DrawingContainer* drawing = 0;
         if (sc) {
@@ -2743,5 +2723,84 @@ void PptToOdp::insertNotesDeclaration(DeclarationType type, const QString &name,
     notesDeclaration.insertMulti(type, item);
 }
 
+// @brief check if the provided groupShape contains the master shape 
+// @param spid identifier of the master shape
+// @return pointer to the OfficeArtSpContainer
+const OfficeArtSpContainer* checkGroupShape(const OfficeArtSpgrContainer& o, quint32 spid)
+{
+    if (o.rgfb.size() < 2) return NULL;
 
+    const OfficeArtSpContainer* sp = 0;
+    foreach(const OfficeArtSpgrContainerFileBlock& co, o.rgfb) {
+        if (co.anon.is<OfficeArtSpContainer>()) {
+	    sp = co.anon.get<OfficeArtSpContainer>();
+            if (sp->shapeProp.spid == spid) {
+                return sp;
+	    }
+	}
+        //TODO: the shape could be located deeper in the hierarchy
+    }
+    return NULL;
+}
+
+const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
+{
+    const OfficeArtSpContainer* sp = 0;
+
+    //check all main master slides
+    foreach (const MSO::MasterOrSlideContainer* m, p->masters) {
+        const SlideContainer* sc = m->anon.get<SlideContainer>();
+        const MainMasterContainer* mm = m->anon.get<MainMasterContainer>();
+        const DrawingContainer* drawing = 0;
+        if (sc) {
+            drawing = &sc->drawing;
+        } else if (mm) {
+            drawing = &mm->drawing;
+        }
+        if (drawing->OfficeArtDg.groupShape) {
+            const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
+            sp = checkGroupShape(spgr, spid);
+        }
+        if (sp) {
+            return sp;
+        }
+    }
+    //check all notes master slides
+    if (p->notesMaster) {
+        if (p->notesMaster->drawing.OfficeArtDg.groupShape) {
+            const OfficeArtSpgrContainer& spgr = *(p->notesMaster->drawing.OfficeArtDg.groupShape).data();
+            sp = checkGroupShape(spgr, spid);
+        }
+        if (sp) {
+            return sp;
+        }
+    }
+#ifdef CHECK_SLIDES
+    //check all presentation slides
+    for (int c = 0; c < p->slides.size(); c++) {
+        const SlideContainer* slide = p->slides[c];
+        if (slide->drawing.OfficeArtDg.groupShape) {
+            const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
+            sp = checkGroupShape(spgr, spid);
+        }
+        if (sp) {
+            return sp;
+        }
+    }
+#endif
+#ifdef CHECK_NOTES 
+    //check all notes slides
+    for (int c = 0; c < p->notes.size(); c++) {
+        const NotesContainer* notes = p->notes[c];
+        if (notes->drawing.OfficeArtDg.groupShape) {
+            const OfficeArtSpgrContainer& spgr = *(notes->drawing.OfficeArtDg.groupShape).data();
+            sp = checkGroupShape(spgr, spid);
+        }
+        if (sp) {
+            return sp;
+        }
+    }
+#endif
+    return NULL;
+}
 

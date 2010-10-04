@@ -131,6 +131,14 @@ const QWidget * KarbonCanvas::canvasWidget() const
     return this;
 }
 
+bool KarbonCanvas::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
+
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
 {
     QPainter painter(this);

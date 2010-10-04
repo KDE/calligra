@@ -50,7 +50,13 @@ bool KoWmfPaint::play(QPaintDevice& target, bool relativeCoord)
     mRelativeCoord = relativeCoord;
 
     // Play the wmf file
-    return KoWmfRead::play();
+    mSaveCount = 0;
+    bool ret = KoWmfRead::play();
+
+    // Make sure that the painter is in the same state as before KoWmfRead::play()
+    for (; mSaveCount > 0; mSaveCount--)
+        restore();
+    return ret;
 }
 
 bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
@@ -70,7 +76,7 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
     mSaveCount = 0;
     bool ret = KoWmfRead::play();
 
-    // Check that the painter is in the same state as before KoWmfRead::play()
+    // Make sure that the painter is in the same state as before KoWmfRead::play()
     for (; mSaveCount > 0; mSaveCount--)
         restore();
     return ret;
@@ -86,24 +92,24 @@ bool KoWmfPaint::begin()
 
     // If the painter is our own, we have to call begin() on it.
     // If it's external, we assume that it's already done for us.
-    if (mIsInternalPainter)
-        ret = mPainter->begin(mTarget);
-
-    if (ret) {
-        if (mRelativeCoord) {
-            mInternalWorldMatrix.reset();
-
-            // This window is used for scaling in setWindowExt().
-            mPainter->setWindow(boundingRect());
-        } else {
-            // Some WMF files don't call setwindowOrg and
-            // setWindowExt, so it's better to do it here.  Note that
-            // boundingRect() is the rect of the WMF file, not the device.
-            QRect rec = boundingRect();
-            //kDebug(31000) << "BoundingRect: " << rec;
-            mPainter->setWindow(rec);
-        }
+    if (mIsInternalPainter) {
+        if (!mPainter->begin(mTarget))
+            return false;
     }
+
+    if (mRelativeCoord) {
+        mInternalWorldMatrix.reset();
+    } else {
+
+        // This window is used for scaling in setWindowExt().
+        //
+        // Some WMF files don't call setwindowOrg and
+        // setWindowExt, so it's better to do it here.  Note that
+        // boundingRect() is the rect of the WMF file, not the device.
+        mPainter->setWindow(boundingRect());
+    }
+
+    mPainter->setBrush(QBrush(Qt::NoBrush));
 
 #if DEBUG_WMFPAINT
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
@@ -111,7 +117,7 @@ bool KoWmfPaint::begin()
     kDebug(31000) << "KoWmfPaint::begin returns " << ret;
 #endif
 
-    return ret;
+    return true;
 }
 
 
@@ -292,7 +298,6 @@ void KoWmfPaint::setWindowExt(int width, int height)
     mExtHeight = height;
 
     if (mRelativeCoord) {
-        QRect r = mPainter->window();
         qreal dx = mInternalWorldMatrix.dx();
         qreal dy = mInternalWorldMatrix.dy();
         qreal sx = mInternalWorldMatrix.m11();
@@ -304,26 +309,51 @@ void KoWmfPaint::setWindowExt(int width, int height)
         mInternalWorldMatrix.scale(1 / sx, 1 / sy);
         mPainter->scale(1 / sx, 1 / sy);
 
-        sx = (qreal)r.width()  / (qreal)width;
-        sy = (qreal)r.height() / (qreal)height;
+        //kDebug(31000) << "Scale  =" << sx << sy;
 
-        // Scale and translate into the new window
+        // Flip the wmf if necessary.
+        sx = (width < 0)  ? -1.0 : 1.0;
+        sy = (height < 0) ? -1.0 : 1.0;
+
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "Origin =" << mOrgX << mOrgY;
+        kDebug(31000) << "size   =" << width << height;
+        kDebug(31000) << "Scale  =" << sx << sy;
+#endif
+
+        // Now scale to the new values (=flip), and we want to flip in place.
+        qreal dx2 = (mOrgX + mOrgX + width) / 2.0;
+        qreal dy2 = (mOrgY + mOrgY + height) / 2.0;
+        mInternalWorldMatrix.translate(dx2, dy2);
         mInternalWorldMatrix.scale(sx, sy);
+        mInternalWorldMatrix.translate(-dx2, -dy2);
+        mPainter->translate(dx2, dy2);
         mPainter->scale(sx, sy);
-        mInternalWorldMatrix.translate(dx, dy);
-        mPainter->translate(dx, dy);
+        mPainter->translate(-dx2, -dy2);
     } else {
         QRect rec = mPainter->window();
         mPainter->setWindow(rec.left(), rec.top(), width, height);
     }
+
 #if 0
+    // Debug code.  Draw a rectangle with some decoration to show see
+    // if all the transformations work.
     mPainter->save();
+
     mPainter->setPen(Qt::black);
-    mPainter->drawRect(QRect(QPoint(mOrgX, mOrgY),
-                             QSize(mExtWidth, mExtHeight)));
+    QRect windowRect = QRect(QPoint(mOrgX, mOrgY),
+                             QSize(mExtWidth, mExtHeight));
+    mPainter->drawRect(windowRect);
+    mPainter->drawLine(QPoint(mOrgX, mOrgY), QPoint(0, 0));
+
     mPainter->setPen(Qt::red);
     mPainter->drawRect(boundingRect());
+
+    mPainter->drawLine(boundingRect().topLeft(), QPoint(0, 0));
     mPainter->restore();
+
+    kDebug(31000) << "Window rect: " << windowRect;
+    kDebug(31000) << "Bounding rect: " << boundingRect();
 #endif
 }
 

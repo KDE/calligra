@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Space Rotation
+Name[da]=Rotation i rum
 Name[en_GB]=Space Rotation
 Name[es]=Rotación del espacio
 Name[et]=Ruumiline pööramine
@@ -16,6 +17,7 @@ Name[uk]=Обертання у просторі
 Name[x-test]=xxSpace Rotationxx
 Name[zh_TW]=空間旋轉
 Comment=Space Rotation Page Effect
+Comment[da]=Rotation i rum-sideeffekt
 Comment[en_GB]=Space Rotation Page Effect
 Comment[es]=Efecto de página de rotación del espacio
 Comment[et]=Lehekülje ruumilise pööramise efekt

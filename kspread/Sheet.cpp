@@ -1458,7 +1458,7 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
 {
 
     QPointer<KoUpdater> updater;
-    if (doc()->progressUpdater()) {
+    if (doc() && doc()->progressUpdater()) {
         updater = doc()->progressUpdater()->startSubtask(1,
                                                      "KSpread::Sheet::loadOdf");
         updater->setProgress(0);

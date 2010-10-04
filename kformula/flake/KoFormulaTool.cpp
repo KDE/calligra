@@ -361,6 +361,11 @@ void KoFormulaTool::resetFormulaEditor() {
     }
 }
 
+bool KoFormulaTool::isInTextMode() const
+{
+    return true;
+}
+
 void KoFormulaTool::loadFormula()
 {
     // get an url
