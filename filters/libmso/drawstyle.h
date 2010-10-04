@@ -112,7 +112,7 @@ public:
     MSO::FixedPoint fillOriginY() const;
     MSO::FixedPoint fillShapeOriginX() const;
     MSO::FixedPoint fillShapeOriginY() const;
-    MSO::MSOSHADETYPE fillShadeType() const;
+/*     MSO::MSOSHADETYPE fillShadeType() const; */
     MSO::OfficeArtCOLORREF fillColorExt() const;
     MSO::OfficeArtCOLORREF fillBackColorExt() const;
     // FillStyleBooleanProperties

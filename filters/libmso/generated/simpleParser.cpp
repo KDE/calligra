@@ -2,6 +2,17 @@
 #include "simpleParser.h"
 using namespace MSO;
 #include "leinputstream.h"
+#include <QColor>
+
+#define DEBUG_COLORS
+//#define DEBUG_BULLETS
+int mmc = 0;
+int tmc = 0;
+int spgr = 0;
+int pib1 = 0;
+int pib2 = 0;
+int pibx = 0;
+
 void MSO::parseRecordHeader(LEInputStream& in, RecordHeader& _s) {
     _s.streamOffset = in.getPosition();
     _s.recVer = in.readuint4();
@@ -10,6 +21,7 @@ void MSO::parseRecordHeader(LEInputStream& in, RecordHeader& _s) {
     _s.recLen = in.readuint32();
 }
 void MSO::parseCurrentUserAtom(LEInputStream& in, CurrentUserAtom& _s) {
+    qDebug() << "|-- parseCurrentUserAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -104,6 +116,7 @@ void MSO::parseZeroByte(LEInputStream& in, ZeroByte& _s) {
     }
 }
 void MSO::parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s) {
+    qDebug() << "\n==> [ parseCurrentUserStream ]";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -126,6 +139,7 @@ void MSO::parseCurrentUserStream(LEInputStream& in, CurrentUserStream& _s) {
     }
 }
 void MSO::parseOfficeArtBStoreDelay(LEInputStream& in, OfficeArtBStoreDelay& _s) {
+    qDebug() << "parseOfficeArtBStoreDelay";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -154,6 +168,7 @@ void MSO::parseOfficeArtRecordHeader(LEInputStream& in, OfficeArtRecordHeader& _
     _s.recLen = in.readuint32();
 }
 void MSO::parseOfficeArtBlipJPEG(LEInputStream& in, OfficeArtBlipJPEG& _s) {
+    qDebug() << "parseOfficeArtBlipJPEG";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -182,6 +197,7 @@ void MSO::parseOfficeArtBlipJPEG(LEInputStream& in, OfficeArtBlipJPEG& _s) {
     in.readBytes(_s.BLIPFileData);
 }
 void MSO::parseOfficeArtBlipPNG(LEInputStream& in, OfficeArtBlipPNG& _s) {
+    qDebug() << "parseOfficeArtBlipPNG";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -210,6 +226,7 @@ void MSO::parseOfficeArtBlipPNG(LEInputStream& in, OfficeArtBlipPNG& _s) {
     in.readBytes(_s.BLIPFileData);
 }
 void MSO::parseOfficeArtBlipDIB(LEInputStream& in, OfficeArtBlipDIB& _s) {
+    qDebug() << "parseOfficeArtBlipDIB";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -238,6 +255,7 @@ void MSO::parseOfficeArtBlipDIB(LEInputStream& in, OfficeArtBlipDIB& _s) {
     in.readBytes(_s.BLIPFileData);
 }
 void MSO::parseOfficeArtBlipTIFF(LEInputStream& in, OfficeArtBlipTIFF& _s) {
+    qDebug() << "parseOfficeArtBlipTIFF";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -278,10 +296,12 @@ void MSO::parsePOINT(LEInputStream& in, POINT& _s) {
     _s.y = in.readint32();
 }
 void MSO::parsePowerPointStructs(LEInputStream& in, PowerPointStructs& _s) {
+    qDebug() << "\n==> [ parsePowerPointStructs ]";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
     _atend = false;
+    int n = 0;
     while (!_atend) {
         _m = in.setMark();
         try {
@@ -296,7 +316,12 @@ void MSO::parsePowerPointStructs(LEInputStream& in, PowerPointStructs& _s) {
             _atend = true;
             in.rewind(_m);
         }
+	++n;
     }
+    qDebug() << "PowerPointStruct #:" << n;
+    qDebug() << "main master slides #: " << mmc;
+    qDebug() << "title master | presentation slides #: " << tmc;
+    qDebug() << "pib1: " << pib1 << "| pib2: " << pib2 << "| pibx: " << pibx;
 }
 void MSO::parseSoundCollectionAtom(LEInputStream& in, SoundCollectionAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -539,6 +564,7 @@ void MSO::parseEndDocumentAtom(LEInputStream& in, EndDocumentAtom& _s) {
     }
 }
 void MSO::parseDocInfoListContainer(LEInputStream& in, DocInfoListContainer& _s) {
+    qDebug() << "parseDocInfoListContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -616,6 +642,7 @@ void MSO::parseGuideAtom(LEInputStream& in, GuideAtom& _s) {
     }
 }
 void MSO::parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s) {
+    qDebug() << "parseDocProgTagsContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -639,6 +666,7 @@ void MSO::parseDocProgTagsContainer(LEInputStream& in, DocProgTagsContainer& _s)
     }
 }
 void MSO::parseTextAutoNumberScheme(LEInputStream& in, TextAutoNumberScheme& _s) {
+    qDebug() << "parseTextAutoNumberScheme"; 
     _s.streamOffset = in.getPosition();
     _s.scheme = in.readuint16();
     if (!(((quint16)_s.scheme)<=40)) {
@@ -648,6 +676,7 @@ void MSO::parseTextAutoNumberScheme(LEInputStream& in, TextAutoNumberScheme& _s)
     if (!(((quint16)_s.startNum)>=1)) {
         throw IncorrectValueException(in.getPosition(), "((quint16)_s.startNum)>=1");
     }
+    qDebug() << "scheme:" << _s.scheme << "| startNum:" << _s.startNum;
 }
 void MSO::parseBlipCollection9Container(LEInputStream& in, BlipCollection9Container& _s) {
     _s.streamOffset = in.getPosition();
@@ -892,6 +921,7 @@ void MSO::parseBroadcastDocInfo9Container(LEInputStream& in, BroadcastDocInfo9Co
     in.readBytes(_s.todo);
 }
 void MSO::parseOutlineTextProps9Container(LEInputStream& in, OutlineTextProps9Container& _s) {
+    qDebug() << "parseOutlineTextProps9Container";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -938,6 +968,7 @@ void MSO::parseOutlineTextPropsHeaderExAtom(LEInputStream& in, OutlineTextPropsH
     _s.txType = in.readuint32();
 }
 void MSO::parseStyleTextProp9Atom(LEInputStream& in, StyleTextProp9Atom& _s) {
+    qDebug() << "parseStyleTextProp9Atom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1159,6 +1190,7 @@ void MSO::parseFilterPrivacyFlags10Atom(LEInputStream& in, FilterPrivacyFlags10A
     }
 }
 void MSO::parseOutlineTextProps10Container(LEInputStream& in, OutlineTextProps10Container& _s) {
+    qDebug() << "parseOutlineTextProps10Container";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1190,6 +1222,7 @@ void MSO::parseOutlineTextProps10Container(LEInputStream& in, OutlineTextProps10
     }
 }
 void MSO::parseStyleTextProp10Atom(LEInputStream& in, StyleTextProp10Atom& _s) {
+    qDebug() << "parseStyleTextProp10Atom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1384,6 +1417,7 @@ void MSO::parseBinaryTagDataBlob(LEInputStream& in, BinaryTagDataBlob& _s) {
     in.readBytes(_s.data);
 }
 void MSO::parsePP12DocBinaryTagExtension(LEInputStream& in, PP12DocBinaryTagExtension& _s) {
+    qDebug() << "parsePP12DocBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1461,6 +1495,7 @@ void MSO::parseVBAInfoAtom(LEInputStream& in, VBAInfoAtom& _s) {
     }
 }
 void MSO::parseMasterListWithTextContainer(LEInputStream& in, MasterListWithTextContainer& _s) {
+    qDebug() << "parseMasterListWithTextContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1484,6 +1519,7 @@ void MSO::parseMasterListWithTextContainer(LEInputStream& in, MasterListWithText
     }
 }
 void MSO::parseMasterPersistAtom(LEInputStream& in, MasterPersistAtom& _s) {
+    qDebug() << "parseMasterPersistAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -1527,6 +1563,7 @@ void MSO::parseMasterPersistAtom(LEInputStream& in, MasterPersistAtom& _s) {
     }
 }
 void MSO::parseSlideListWithTextContainer(LEInputStream& in, SlideListWithTextContainer& _s) {
+    qDebug() << "parseSlideListWithTextContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1558,6 +1595,7 @@ void MSO::parseSlideListWithTextContainer(LEInputStream& in, SlideListWithTextCo
     }
 }
 void MSO::parseNotesListWithTextContainer(LEInputStream& in, NotesListWithTextContainer& _s) {
+    qDebug() << "parseNotesListWithTextContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -1721,6 +1759,7 @@ void MSO::parseMasterTextPropRun(LEInputStream& in, MasterTextPropRun& _s) {
     }
 }
 void MSO::parseStyleTextPropAtom(LEInputStream& in, StyleTextPropAtom& _s) {
+    qDebug() << "parseStyleTextPropAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -1868,6 +1907,7 @@ void MSO::parseTextBookmarkAtom(LEInputStream& in, TextBookmarkAtom& _s) {
     _s.bookmarkID = in.readint32();
 }
 void MSO::parseTextRange(LEInputStream& in, TextRange& _s) {
+    qDebug() << "parseTextRange";
     _s.streamOffset = in.getPosition();
     _s.begin = in.readint32();
     _s.end = in.readint32();
@@ -1956,6 +1996,7 @@ void MSO::parseBulletFlags(LEInputStream& in, BulletFlags& _s) {
     _s.reserved = in.readuint12();
 }
 void MSO::parsePFMasks(LEInputStream& in, PFMasks& _s) {
+    qDebug() << "parsePFMasks";
     _s.streamOffset = in.getPosition();
     _s.hasBullet = in.readbit();
     _s.bulletHasFont = in.readbit();
@@ -1984,8 +2025,12 @@ void MSO::parsePFMasks(LEInputStream& in, PFMasks& _s) {
     _s.bulletScheme = in.readbit();
     _s.bulletHasScheme = in.readbit();
     _s.reserved2 = in.readuint6();
+#ifdef DEBUG_BULLETS
+    qDebug() << "hasBullet:" << _s.hasBullet << "| bulletChar:" << _s.bulletChar;
+#endif
 }
 void MSO::parseCFMasks(LEInputStream& in, CFMasks& _s) {
+    qDebug() << "parseCFMasks";
     _s.streamOffset = in.getPosition();
     _s.bold = in.readbit();
     _s.italic = in.readbit();
@@ -2011,8 +2056,10 @@ void MSO::parseCFMasks(LEInputStream& in, CFMasks& _s) {
     _s.csTypeface = in.readbit();
     _s.pp11ext = in.readbit();
     _s.reserved = in.readuint5();
+    qDebug() << "bold:" << _s.bold << "| italic:" << _s.italic << "| underline:" << _s.underline << "| color:" << _s.color;
 }
 void MSO::parseCFStyle(LEInputStream& in, CFStyle& _s) {
+    qDebug() << "parseCFStyle";
     _s.streamOffset = in.getPosition();
     _s.bold = in.readbit();
     _s.italic = in.readbit();
@@ -2170,6 +2217,7 @@ void MSO::parseKinsokuFollowingAtom(LEInputStream& in, KinsokuFollowingAtom& _s)
     }
 }
 void MSO::parseTextSpecialInfoAtom(LEInputStream& in, TextSpecialInfoAtom& _s) {
+    qDebug() << "parseTextSpecialInfoAtom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2241,6 +2289,9 @@ void MSO::parseRatioStruct(LEInputStream& in, RatioStruct& _s) {
     }
 }
 void MSO::parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parsePersistDirectoryAtom";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2264,6 +2315,7 @@ void MSO::parsePersistDirectoryAtom(LEInputStream& in, PersistDirectoryAtom& _s)
     }
 }
 void MSO::parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentContainerChild& _s) {
+    qDebug() << "parseUnknownDocumentContainerChild";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2276,6 +2328,7 @@ void MSO::parseUnknownDocumentContainerChild(LEInputStream& in, UnknownDocumentC
     in.readBytes(_s.unknown);
 }
 void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeArtClientDataChild& _s) {
+    qDebug() << "parseUnknownOfficeArtClientDataChild";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2294,6 +2347,7 @@ void MSO::parseUnknownOfficeArtClientDataChild(LEInputStream& in, UnknownOfficeA
     in.readBytes(_s.unknown);
 }
 void MSO::parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContainerChild& _s) {
+    qDebug() << "parseUnknownSlideContainerChild";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2312,6 +2366,7 @@ void MSO::parseUnknownSlideContainerChild(LEInputStream& in, UnknownSlideContain
     in.readBytes(_s.unknown);
 }
 void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainerChild& _s) {
+    qDebug() << "parseUnknownTextContainerChild";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2330,6 +2385,7 @@ void MSO::parseUnknownTextContainerChild(LEInputStream& in, UnknownTextContainer
     in.readBytes(_s.unknown);
 }
 void MSO::parsePersistDirectoryEntry(LEInputStream& in, PersistDirectoryEntry& _s) {
+    qDebug() << "parsePersistDirectoryEntry";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2410,6 +2466,7 @@ void MSO::parseSlideNameAtom(LEInputStream& in, SlideNameAtom& _s) {
     }
 }
 void MSO::parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer& _s) {
+    qDebug() << "==>parseSlideProgTagsContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2433,21 +2490,27 @@ void MSO::parseSlideProgTagsContainer(LEInputStream& in, SlideProgTagsContainer&
     }
 }
 void MSO::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagExtension& _s) {
+    qDebug() << "parsePP9SlideBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     bool _atend;
     parseRecordHeader(in, _s.rh);
+    qDebug() << hex << "recVer:" << _s.rh.recVer << "| recInstance:" << _s.rh.recInstance << "| recType:" << _s.rh.recType << "| recLen:" << _s.rh.recLen;
     if (!(_s.rh.recVer == 0)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0");
     }
     if (!(_s.rh.recInstance == 0)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
     if (!(_s.rh.recType == 0xFBA)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0xFBA");
     }
     if (!(_s.rh.recLen == 0xE)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0xE");
     }
     _c = 7;
@@ -2455,6 +2518,7 @@ void MSO::parsePP9SlideBinaryTagExtension(LEInputStream& in, PP9SlideBinaryTagEx
     for (int _i=0; _i<_c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
+    qDebug() << "tagName:" << _s.tagName;
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
@@ -2613,6 +2677,7 @@ void MSO::parseExtTimeNodeContainer(LEInputStream& in, ExtTimeNodeContainer& _s)
     in.readBytes(_s.todo);
 }
 void MSO::parseBuildListContainer(LEInputStream& in, BuildListContainer& _s) {
+    qDebug() << "parseBuildListContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2748,12 +2813,15 @@ void MSO::parseRoundTripSlideSyncInfo12Container(LEInputStream& in, RoundTripSli
     in.readBytes(_s.todo);
 }
 void MSO::parseSlideFlags(LEInputStream& in, SlideFlags& _s) {
+    qDebug() << "parseSlideFlags";
     _s.streamOffset = in.getPosition();
     _s.fMasterObjects = in.readbit();
     _s.fMasterScheme = in.readbit();
     _s.fMasterBackground = in.readbit();
     _s.unused1 = in.readuint5();
     _s.unused2 = in.readuint8();
+    qDebug() << "fMasterObjects:" << _s.fMasterObjects << "| fMasterScheme:" << _s.fMasterScheme <<
+	"| fMasterBackground:" << _s.fMasterBackground;
 }
 void MSO::parseNotesRoundTripAtom(LEInputStream& in, NotesRoundTripAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -2774,6 +2842,9 @@ void MSO::parseNotesRoundTripAtom(LEInputStream& in, NotesRoundTripAtom& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseHandoutContainer(LEInputStream& in, HandoutContainer& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseHandoutContainer";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2792,6 +2863,7 @@ void MSO::parseHandoutContainer(LEInputStream& in, HandoutContainer& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseExControlStg(LEInputStream& in, ExControlStg& _s) {
+    qDebug() << "parseExControlStg";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2810,6 +2882,9 @@ void MSO::parseExControlStg(LEInputStream& in, ExControlStg& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseExOleObjStg(LEInputStream& in, ExOleObjStg& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseExOleObjStg";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2828,6 +2903,9 @@ void MSO::parseExOleObjStg(LEInputStream& in, ExOleObjStg& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseUserEditAtom";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -2888,6 +2966,9 @@ void MSO::parseUserEditAtom(LEInputStream& in, UserEditAtom& _s) {
     }
 }
 void MSO::parseVbaProjectStg(LEInputStream& in, VbaProjectStg& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseVbaProjectStg";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2906,6 +2987,7 @@ void MSO::parseVbaProjectStg(LEInputStream& in, VbaProjectStg& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseSlideAtom(LEInputStream& in, SlideAtom& _s) {
+    qDebug() << "parseSlideAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -2930,6 +3012,14 @@ void MSO::parseSlideAtom(LEInputStream& in, SlideAtom& _s) {
     _s.notesIdRef = in.readuint32();
     parseSlideFlags(in, _s.slideFlags);
     _s.unused = in.readuint16();
+    qDebug() << "geom:" << hex << _s.geom;  
+    if (_s.masterIdRef) {
+        tmc++;
+	qDebug() << "masterIdRef: " << _s.masterIdRef;
+    } else {
+        mmc++;
+    }
+    qDebug() << "notesIdRef: " << _s.notesIdRef;
 }
 void MSO::parseSlideShowSlideInfoAtom(LEInputStream& in, SlideShowSlideInfoAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -2972,6 +3062,7 @@ void MSO::parseSlideShowSlideInfoAtom(LEInputStream& in, SlideShowSlideInfoAtom&
     in.readBytes(_s.unused);
 }
 void MSO::parseSlideShowDocInfoAtom(LEInputStream& in, SlideShowDocInfoAtom& _s) {
+    qDebug() << "parseSlideShowDocInfoAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3014,6 +3105,7 @@ void MSO::parseSlideShowDocInfoAtom(LEInputStream& in, SlideShowDocInfoAtom& _s)
     _s.unused = in.readuint16();
 }
 void MSO::parseSlideSchemeColorSchemeAtom(LEInputStream& in, SlideSchemeColorSchemeAtom& _s) {
+    qDebug() << "parseSlideSchemeColorSchemeAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3049,6 +3141,7 @@ void MSO::parseRoundTripSlideRecord(LEInputStream& in, RoundTripSlideRecord& _s)
     in.readBytes(_s.todo);
 }
 void MSO::parseNamedShowsContainer(LEInputStream& in, NamedShowsContainer& _s) {
+    qDebug() << "parseNamedShowsContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3067,6 +3160,7 @@ void MSO::parseNamedShowsContainer(LEInputStream& in, NamedShowsContainer& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseSummaryContainer(LEInputStream& in, SummaryContainer& _s) {
+    qDebug() << "parseSummaryContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3085,6 +3179,7 @@ void MSO::parseSummaryContainer(LEInputStream& in, SummaryContainer& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseDocRoutingSlipAtom(LEInputStream& in, DocRoutingSlipAtom& _s) {
+    qDebug() << "parseDocRoutingSlipAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3103,6 +3198,7 @@ void MSO::parseDocRoutingSlipAtom(LEInputStream& in, DocRoutingSlipAtom& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parsePrintOptionsAtom(LEInputStream& in, PrintOptionsAtom& _s) {
+    qDebug() << "parsePrintOptionsAtom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3124,6 +3220,7 @@ void MSO::parsePrintOptionsAtom(LEInputStream& in, PrintOptionsAtom& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseRoundTripCustomTableStyles12Atom(LEInputStream& in, RoundTripCustomTableStyles12Atom& _s) {
+    qDebug() << "parseRoundTripCustomTableStyles12Atom";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3164,6 +3261,9 @@ void MSO::parseColorStruct(LEInputStream& in, ColorStruct& _s) {
     _s.green = in.readuint8();
     _s.blue = in.readuint8();
     _s.unused = in.readuint8();
+#ifdef DEBUG_COLORS
+    qDebug() << "color:" << QColor(_s.red, _s.green, _s.blue).name();
+#endif
 }
 void MSO::parseExObjListAtom(LEInputStream& in, ExObjListAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -3543,6 +3643,7 @@ void MSO::parseMetafileBlob(LEInputStream& in, MetafileBlob& _s) {
     in.readBytes(_s.data);
 }
 void MSO::parseOfficeArtFDGG(LEInputStream& in, OfficeArtFDGG& _s) {
+    qDebug() << "parseOfficeArtFDGG";
     _s.streamOffset = in.getPosition();
     _s.spidMax = in.readuint32();
     if (!(((quint32)_s.spidMax)<67098623)) {
@@ -3556,6 +3657,7 @@ void MSO::parseOfficeArtFDGG(LEInputStream& in, OfficeArtFDGG& _s) {
     _s.cdgSaved = in.readuint32();
 }
 void MSO::parseOfficeArtFDG(LEInputStream& in, OfficeArtFDG& _s) {
+    qDebug() << "parseOfficeArtFDG";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -3574,6 +3676,7 @@ void MSO::parseOfficeArtFDG(LEInputStream& in, OfficeArtFDG& _s) {
     _s.spidCur = in.readuint32();
 }
 void MSO::parseOfficeArtFRITContainer(LEInputStream& in, OfficeArtFRITContainer& _s) {
+    qDebug() << "parseOfficeArtFRITContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3599,6 +3702,7 @@ void MSO::parseOfficeArtFRIT(LEInputStream& in, OfficeArtFRIT& _s) {
     _s.fridOld = in.readuint16();
 }
 void MSO::parseOfficeArtBStoreContainer(LEInputStream& in, OfficeArtBStoreContainer& _s) {
+    qDebug() << "parseOfficeArtBStoreContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -3619,6 +3723,7 @@ void MSO::parseOfficeArtBStoreContainer(LEInputStream& in, OfficeArtBStoreContai
     }
 }
 void MSO::parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer& _s) {
+    qDebug() << "parseOfficeArtSpgrContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -3635,13 +3740,16 @@ void MSO::parseOfficeArtSpgrContainer(LEInputStream& in, OfficeArtSpgrContainer&
     qint64 _startPos = in.getPosition();
     int _totalSize = qMin(_s.rh.recLen, quint32(in.getSize() - _startPos));
     _atend = in.getPosition() - _startPos >= _totalSize;
+    spgr++;
     while (!_atend) {
         _s.rgfb.append(OfficeArtSpgrContainerFileBlock(&_s));
         parseOfficeArtSpgrContainerFileBlock(in, _s.rgfb.last());
         _atend = in.getPosition() - _startPos >= _totalSize;
     }
+    --spgr;
 }
 void MSO::parseOfficeArtSolverContainer(LEInputStream& in, OfficeArtSolverContainer& _s) {
+    qDebug() << "parseOfficeArtSolverContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -3728,6 +3836,7 @@ void MSO::parseOfficeArtFCalloutRule(LEInputStream& in, OfficeArtFCalloutRule& _
     _s.spid = in.readuint32();
 }
 void MSO::parseOfficeArtFSPGR(LEInputStream& in, OfficeArtFSPGR& _s) {
+    qDebug() << "parseOfficeArtFSPGR";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x1)) {
@@ -3746,8 +3855,10 @@ void MSO::parseOfficeArtFSPGR(LEInputStream& in, OfficeArtFSPGR& _s) {
     _s.yTop = in.readint32();
     _s.xRight = in.readint32();
     _s.yBottom = in.readint32();
+    qDebug() << "> group coordinates:" << _s.xLeft << _s.yTop << _s.xRight << _s.yBottom;
 }
 void MSO::parseOfficeArtFSP(LEInputStream& in, OfficeArtFSP& _s) {
+    qDebug() << "parseOfficeArtFSP";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x2)) {
@@ -3776,8 +3887,12 @@ void MSO::parseOfficeArtFSP(LEInputStream& in, OfficeArtFSP& _s) {
     _s.fBackground = in.readbit();
     _s.fHaveSpt = in.readbit();
     _s.unused1 = in.readuint20();
+    qDebug() << "> spid" << _s.spid << "| fHaveMaster: " << _s.fHaveMaster;
+    qDebug() << "> fGroup: " << _s.fGroup;
+    qDebug() << "> fChild: " << _s.fChild;
 }
 void MSO::parseOfficeArtFOPT(LEInputStream& in, OfficeArtFOPT& _s) {
+    qDebug() << "parseOfficeArtFOPT";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3798,6 +3913,7 @@ void MSO::parseOfficeArtFOPT(LEInputStream& in, OfficeArtFOPT& _s) {
     in.readBytes(_s.complexData);
 }
 void MSO::parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT& _s) {
+    qDebug() << "parseOfficeArtSecondaryFOPT";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3818,6 +3934,7 @@ void MSO::parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT&
     in.readBytes(_s.complexData);
 }
 void MSO::parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _s) {
+    qDebug() << "parseOfficeArtTertiaryFOPT";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -3880,17 +3997,6 @@ void MSO::parseFillShadeColors_complex(LEInputStream& in, FillShadeColors_comple
     _s.data.resize(_c);
     in.readBytes(_s.data);
 }
-void MSO::parseMSOSHADETYPE(LEInputStream& in, MSOSHADETYPE& _s) {
-    _s.streamOffset = in.getPosition();
-    _s.msoshadeNone = in.readbit();
-    _s.msoshadeGamma = in.readbit();
-    _s.msoshadeSigma = in.readbit();
-    _s.msoshadeBand = in.readbit();
-    _s.msoshadeOneColor = in.readbit();
-    _s.unused1a = in.readuint13();
-    _s.unused1b = in.readuint13();
-    _s.unused1c = in.readbit();
-}
 void MSO::parsePWrapPolygonVertices_complex(LEInputStream& in, PWrapPolygonVertices_complex& _s) {
     _s.streamOffset = in.getPosition();
     int _c;
@@ -3915,8 +4021,12 @@ void MSO::parseOfficeArtCOLORREF(LEInputStream& in, OfficeArtCOLORREF& _s) {
     _s.unused1 = in.readbit();
     _s.unused2 = in.readbit();
     _s.unused3 = in.readbit();
+    qDebug() << "fPaletteIndex:" << _s.fPaletteIndex << "fPaletteRGB:" << _s.fPaletteRGB << 
+	"fSystemRGB:" <<_s.fSystemRGB;
+    qDebug() << "fSchemeIndex:" << _s.fSchemeIndex << "fSysIndex:" << _s.fSysIndex;
 }
 void MSO::parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s) {
+    qDebug() << "parseOfficeArtChildAnchor";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3935,8 +4045,10 @@ void MSO::parseOfficeArtChildAnchor(LEInputStream& in, OfficeArtChildAnchor& _s)
     _s.yTop = in.readint32();
     _s.xRight = in.readint32();
     _s.yBottom = in.readint32();
+    qDebug() << "> child coordinates:" << _s.xLeft << _s.yTop << _s.xRight << _s.yBottom;
 }
 void MSO::parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnchor& _s) {
+    qDebug() << "parseDocOfficeArtClientAnchor";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -3952,6 +4064,7 @@ void MSO::parseDocOfficeArtClientAnchor(LEInputStream& in, DocOfficeArtClientAnc
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x4");
     }
     _s.clientAnchor = in.readint32();
+    qDebug() << "> client anchor:" << _s.clientAnchor;
 }
 void MSO::parseXlsOfficeArtClientAnchor(LEInputStream& in, XlsOfficeArtClientAnchor& _s) {
     _s.streamOffset = in.getPosition();
@@ -4013,6 +4126,7 @@ void MSO::parseXlsOfficeArtClientAnchor(LEInputStream& in, XlsOfficeArtClientAnc
     }
 }
 void MSO::parseOfficeArtFPSPL(LEInputStream& in, OfficeArtFPSPL& _s) {
+    qDebug() << "parseOfficeArtFPSPL";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4046,6 +4160,7 @@ void MSO::parseSmallRectStruct(LEInputStream& in, SmallRectStruct& _s) {
     _s.bottom = in.readint16();
 }
 void MSO::parseDocOfficeArtClientData(LEInputStream& in, DocOfficeArtClientData& _s) {
+    qDebug() << "parseDocOfficeArtClientData";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4239,6 +4354,7 @@ void MSO::parseMacroNameAtom(LEInputStream& in, MacroNameAtom& _s) {
     in.readBytes(_s.macroName);
 }
 void MSO::parsePlaceholderAtom(LEInputStream& in, PlaceholderAtom& _s) {
+    qDebug() << "parsePlaceholderAtom";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4257,6 +4373,8 @@ void MSO::parsePlaceholderAtom(LEInputStream& in, PlaceholderAtom& _s) {
     _s.placementId = in.readuint8();
     _s.size = in.readuint8();
     _s.unused = in.readuint16();
+    qDebug() << "position:" << hex << _s.position << "| placementId:" << _s.placementId;
+
 }
 void MSO::parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s) {
     _s.streamOffset = in.getPosition();
@@ -4277,6 +4395,7 @@ void MSO::parseRecolorInfoAtom(LEInputStream& in, RecolorInfoAtom& _s) {
     in.readBytes(_s.todo);
 }
 void MSO::parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s) {
+    qDebug() << "parseOutlineTextRefAtom";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -4297,6 +4416,7 @@ void MSO::parseOutlineTextRefAtom(LEInputStream& in, OutlineTextRefAtom& _s) {
     }
 }
 void MSO::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer& _s) {
+    qDebug() << "parseShapeProgsTagContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -4328,6 +4448,7 @@ void MSO::parseShapeProgsTagContainer(LEInputStream& in, ShapeProgsTagContainer&
     }
 }
 void MSO::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagExtension& _s) {
+    qDebug() << "parsePP9ShapeBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4349,6 +4470,7 @@ void MSO::parsePP9ShapeBinaryTagExtension(LEInputStream& in, PP9ShapeBinaryTagEx
     for (int _i=0; _i<_c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
+    qDebug() << "tagName:" << _s.tagName;
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
@@ -4383,6 +4505,7 @@ void MSO::parsePP10ShapeBinaryTagExtension(LEInputStream& in, PP10ShapeBinaryTag
     for (int _i=0; _i<_c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
+    qDebug() << "tagName:" << _s.tagName;
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
@@ -4524,6 +4647,7 @@ void MSO::parseXlsOfficeArtClientTextBox(LEInputStream& in, XlsOfficeArtClientTe
     }
 }
 void MSO::parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTextBox& _s) {
+    qDebug() << "parseDocOfficeArtClientTextBox";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0 || _s.rh.recVer == 0xF)) {
@@ -4541,6 +4665,7 @@ void MSO::parseDocOfficeArtClientTextBox(LEInputStream& in, DocOfficeArtClientTe
     _s.clientTextBox = in.readuint32();
 }
 void MSO::parsePptOfficeArtClientTextBox(LEInputStream& in, PptOfficeArtClientTextBox& _s) {
+    qDebug() << "parsePptOfficeArtClientTextBox";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -4578,6 +4703,7 @@ void MSO::parseOfficeArtFOPTEOPID(LEInputStream& in, OfficeArtFOPTEOPID& _s) {
     _s.fComplex = in.readbit();
 }
 void MSO::parseOfficeArtColorMRUContainer(LEInputStream& in, OfficeArtColorMRUContainer& _s) {
+    qDebug() << "parseOfficeArtColorMRUContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -4607,6 +4733,7 @@ void MSO::parseMSOCR(LEInputStream& in, MSOCR& _s) {
     _s.unused2 = in.readuint4();
 }
 void MSO::parseOfficeArtSplitMenuColorContainer(LEInputStream& in, OfficeArtSplitMenuColorContainer& _s) {
+    qDebug() << "parseOfficeArtSplitMenuColorContainer";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -5369,6 +5496,7 @@ void MSO::parseDocumentSummaryInformationPropertySetStream(LEInputStream& in, Do
     }
 }
 void MSO::parsePicturesStream(LEInputStream& in, PicturesStream& _s) {
+    qDebug() << "\n==> [ parsePicturesStream ]";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -5400,6 +5528,7 @@ void MSO::parseOfficeArtMetafileHeader(LEInputStream& in, OfficeArtMetafileHeade
     _s.filter = in.readuint8();
 }
 void MSO::parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContainer& _s) {
+    qDebug() << "parseSoundCollectionContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _atend;
@@ -5424,6 +5553,7 @@ void MSO::parseSoundCollectionContainer(LEInputStream& in, SoundCollectionContai
     }
 }
 void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFootersContainer& _s) {
+    qDebug() << "parseSlideHeadersFootersContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -5484,6 +5614,7 @@ void MSO::parseSlideHeadersFootersContainer(LEInputStream& in, SlideHeadersFoote
     }
 }
 void MSO::parseNotesHeadersFootersContainer(LEInputStream& in, NotesHeadersFootersContainer& _s) {
+    qDebug() << "parseNotesHeadersFootersContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -5571,6 +5702,7 @@ void MSO::parseScalingStruct(LEInputStream& in, ScalingStruct& _s) {
     parseRatioStruct(in, _s.y);
 }
 void MSO::parseTextPFException9(LEInputStream& in, TextPFException9& _s) {
+    qDebug() << "parseTextPFException9";
     _s.streamOffset = in.getPosition();
     parsePFMasks(in, _s.masks);
     if (!(_s.masks.hasBullet == false)) {
@@ -5640,12 +5772,14 @@ void MSO::parseTextPFException9(LEInputStream& in, TextPFException9& _s) {
     if (_s._has_bulletBlipRef) {
         _s.bulletBlipRef = in.readuint16();
     }
+    qDebug() << "bulletHasScheme:" << _s.masks.bulletHasScheme << "| bulletScheme:" << _s.masks.bulletScheme;
     _s._has_fBulletHasAutoNumber = _s.masks.bulletHasScheme;
     if (_s._has_fBulletHasAutoNumber) {
         _s.fBulletHasAutoNumber = in.readuint16();
         if (!(((quint16)_s.fBulletHasAutoNumber) == 0 || ((quint16)_s.fBulletHasAutoNumber) == 1)) {
             throw IncorrectValueException(in.getPosition(), "((quint16)_s.fBulletHasAutoNumber) == 0 || ((quint16)_s.fBulletHasAutoNumber) == 1");
         }
+	qDebug() << "fBulletHasAutoNumber:" << _s.fBulletHasAutoNumber;
     }
     if (_s.masks.bulletScheme) {
         _s.bulletAutoNumberScheme = QSharedPointer<TextAutoNumberScheme>(new TextAutoNumberScheme(&_s));
@@ -5798,11 +5932,13 @@ void MSO::parseKinsoku9Container(LEInputStream& in, Kinsoku9Container& _s) {
     }
 }
 void MSO::parseOutlineTextProps9Entry(LEInputStream& in, OutlineTextProps9Entry& _s) {
+    qDebug() << "parseOutlineTextProps9Entry";
     _s.streamOffset = in.getPosition();
     parseOutlineTextPropsHeaderExAtom(in, _s.outlineTextHeaderAtom);
     parseStyleTextProp9Atom(in, _s.styleTextProp9Atom);
 }
 void MSO::parseTextCFException10(LEInputStream& in, TextCFException10& _s) {
+    qDebug() << "parseTextCFException10";
     _s.streamOffset = in.getPosition();
     parseCFMasks(in, _s.masks);
     if (!(_s.masks.bold == false)) {
@@ -5867,6 +6003,7 @@ void MSO::parseTextCFException10(LEInputStream& in, TextCFException10& _s) {
     }
 }
 void MSO::parseTextDefaults10Atom(LEInputStream& in, TextDefaults10Atom& _s) {
+    qDebug() << "parseTextDefaults10Atom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -5940,6 +6077,7 @@ void MSO::parseCommentIndex10Container(LEInputStream& in, CommentIndex10Containe
     }
 }
 void MSO::parseOutlineTextProps10Entry(LEInputStream& in, OutlineTextProps10Entry& _s) {
+    qDebug() << "parseOutlineTextProps10Entry";
     _s.streamOffset = in.getPosition();
     parseOutlineTextPropsHeaderExAtom(in, _s.outlineTextHeaderAtom);
     parseStyleTextProp10Atom(in, _s.styleTextProp10Atom);
@@ -6056,6 +6194,7 @@ void MSO::parseNormalViewSetInfoAtom(LEInputStream& in, NormalViewSetInfoAtom& _
     }
 }
 void MSO::parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s) {
+    qDebug() << "parseTextContainerMeta";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -6083,6 +6222,7 @@ void MSO::parseTextContainerMeta(LEInputStream& in, TextContainerMeta& _s) {
     }
 }
 void MSO::parseSlidePersistAtom(LEInputStream& in, SlidePersistAtom& _s) {
+    qDebug() << "parseSlidePersistAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -6200,6 +6340,7 @@ void MSO::parseTextRuler(LEInputStream& in, TextRuler& _s) {
     }
 }
 void MSO::parseTextPFException(LEInputStream& in, TextPFException& _s) {
+    qDebug() << "parseTextPFException";
     _s.streamOffset = in.getPosition();
     parsePFMasks(in, _s.masks);
     if (!(_s.masks.bulletBlip == false)) {
@@ -6275,8 +6416,12 @@ void MSO::parseTextPFException(LEInputStream& in, TextPFException& _s) {
     if (_s._has_textDirection) {
         _s.textDirection = in.readuint16();
     }
+#ifdef DEBUG_BULLETS
+    qDebug() << "bulletChar:" << _s.bulletChar;
+#endif
 }
 void MSO::parseTextCFException(LEInputStream& in, TextCFException& _s) {
+    qDebug() << "parseTextCFException";
     _s.streamOffset = in.getPosition();
     parseCFMasks(in, _s.masks);
     if (!(_s.masks.pp10ext == false)) {
@@ -6453,6 +6598,7 @@ void MSO::parseKinsokuContainer(LEInputStream& in, KinsokuContainer& _s) {
     }
 }
 void MSO::parseTextSIException(LEInputStream& in, TextSIException& _s) {
+    qDebug() << "parseTextSIException";
     _s.streamOffset = in.getPosition();
     _s.spell = in.readbit();
     _s.lang = in.readbit();
@@ -6511,11 +6657,13 @@ void MSO::parseTextSIException(LEInputStream& in, TextSIException& _s) {
     }
 }
 void MSO::parseTextMasterStyleLevel(LEInputStream& in, TextMasterStyleLevel& _s) {
+    qDebug() << "parseTextMasterStyleLevel";
     _s.streamOffset = in.getPosition();
     parseTextPFException(in, _s.pf);
     parseTextCFException(in, _s.cf);
 }
 void MSO::parseDocumentAtom(LEInputStream& in, DocumentAtom& _s) {
+    qDebug() << "parseDocumentAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 1)) {
@@ -6569,6 +6717,7 @@ void MSO::parseSlideTime10Atom(LEInputStream& in, SlideTime10Atom& _s) {
     parseFILETIME(in, _s.fileTime);
 }
 void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTagExtension& _s) {
+    qDebug() << "parsePP12SlideBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -6590,6 +6739,7 @@ void MSO::parsePP12SlideBinaryTagExtension(LEInputStream& in, PP12SlideBinaryTag
     for (int _i=0; _i<_c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
+    qDebug() << "tagName:" << _s.tagName;
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
@@ -6643,7 +6793,9 @@ void MSO::parseProgStringTagContainer(LEInputStream& in, ProgStringTagContainer&
         }
     }
 }
-void MSO::parseNotesAtom(LEInputStream& in, NotesAtom& _s) {
+void MSO::parseNotesAtom(LEInputStream& in, NotesAtom& _s) 
+{
+    qDebug() << "parseNotesAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 1)) {
@@ -6659,6 +6811,7 @@ void MSO::parseNotesAtom(LEInputStream& in, NotesAtom& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x8");
     }
     _s.slideIdRef = in.readuint32();
+    qDebug() << "slideIdRef:" << _s.slideIdRef;
     parseSlideFlags(in, _s.slideFlags);
     _s.unused = in.readuint16();
 }
@@ -7087,6 +7240,7 @@ void MSO::parseExOleEmbedContainer(LEInputStream& in, ExOleEmbedContainer& _s) {
     }
 }
 void MSO::parseOfficeArtFDGGBlock(LEInputStream& in, OfficeArtFDGGBlock& _s) {
+    qDebug() << "parseOfficeArtFDGGBlock";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -7108,6 +7262,7 @@ void MSO::parseOfficeArtFDGGBlock(LEInputStream& in, OfficeArtFDGGBlock& _s) {
     }
 }
 void MSO::parseOfficeArtSolverContainerFileBlock(LEInputStream& in, OfficeArtSolverContainerFileBlock& _s) {
+    qDebug() << "parseOfficeArtSolverContainerFileBlock";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -7377,6 +7532,15 @@ void MSO::parsePib(LEInputStream& in, Pib& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0104");
     }
     _s.pib = in.readuint32();
+    qDebug() << "> pib: " << _s.pib;
+    if (_s.pib == 1) {
+        pib1++;
+    }
+    else if (_s.pib == 2) {
+        pib2++;
+    } else {
+        pibx++;
+    } 
 }
 void MSO::parsePibName(LEInputStream& in, PibName& _s) {
     _s.streamOffset = in.getPosition();
@@ -7562,6 +7726,7 @@ void MSO::parseFillType(LEInputStream& in, FillType& _s) {
     if (!(((quint32)_s.fillType)<=9)) {
         throw IncorrectValueException(in.getPosition(), "((quint32)_s.fillType)<=9");
     }
+    qDebug() << ">fillType: 0x" << hex << _s.fillType;
 }
 void MSO::parseFillColor(LEInputStream& in, FillColor& _s) {
     _s.streamOffset = in.getPosition();
@@ -7576,6 +7741,9 @@ void MSO::parseFillColor(LEInputStream& in, FillColor& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     parseOfficeArtCOLORREF(in, _s.fillColor);
+#ifdef DEBUG_COLORS
+    qDebug() << "> fillColor:" << QColor(_s.fillColor.red, _s.fillColor.green, _s.fillColor.blue).name();
+#endif
 }
 void MSO::parseFillOpacity(LEInputStream& in, FillOpacity& _s) {
     _s.streamOffset = in.getPosition();
@@ -7604,6 +7772,9 @@ void MSO::parseFillBackColor(LEInputStream& in, FillBackColor& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     parseOfficeArtCOLORREF(in, _s.fillBackColor);
+#ifdef DEBUG_COLORS
+    qDebug() << "> fillBackColor:" << QColor(_s.fillBackColor.red, _s.fillBackColor.green, _s.fillBackColor.blue).name();
+#endif
 }
 void MSO::parseFillBackOpacity(LEInputStream& in, FillBackOpacity& _s) {
     _s.streamOffset = in.getPosition();
@@ -7640,6 +7811,8 @@ void MSO::parseFillBlip(LEInputStream& in, FillBlip& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x0186");
     }
     _s.fillBlip = in.readuint32();
+    qDebug() << ">opid.fComplex: 0x" << hex << _s.opid.fComplex;
+    qDebug() << ">fillBlip: 0x" << hex << _s.fillBlip;
 }
 void MSO::parseFillBlipName(LEInputStream& in, FillBlipName& _s) {
     _s.streamOffset = in.getPosition();
@@ -7718,6 +7891,7 @@ void MSO::parseFillFocus(LEInputStream& in, FillFocus& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.fillFocus = in.readint32();
+    qDebug() << "> fillFocus:" << hex << _s.fillFocus;
 }
 void MSO::parseFillToLeft(LEInputStream& in, FillToLeft& _s) {
     _s.streamOffset = in.getPosition();
@@ -7923,20 +8097,6 @@ void MSO::parseFillShapeOriginY(LEInputStream& in, FillShapeOriginY& _s) {
     }
     parseFixedPoint(in, _s.fillShapeOriginY);
 }
-void MSO::parseFillShadeType(LEInputStream& in, FillShadeType& _s) {
-    _s.streamOffset = in.getPosition();
-    parseOfficeArtFOPTEOPID(in, _s.opid);
-    if (!(_s.opid.opid == 0x019C)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.opid == 0x019C");
-    }
-    if (!(_s.opid.fBid == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fBid == false");
-    }
-    if (!(_s.opid.fComplex == false)) {
-        throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
-    }
-    parseMSOSHADETYPE(in, _s.fillShadeType);
-}
 void MSO::parseFillColorExt(LEInputStream& in, FillColorExt& _s) {
     _s.streamOffset = in.getPosition();
     parseOfficeArtFOPTEOPID(in, _s.opid);
@@ -7995,6 +8155,10 @@ void MSO::parseFillStyleBooleanProperties(LEInputStream& in, FillStyleBooleanPro
     _s.fUsefRecolorFillAsPicture = in.readbit();
     _s.unused2a = in.readbit();
     _s.unused2b = in.readuint8();
+#ifdef DEBUG_COLORS
+    qDebug() << "> fFilled:" << _s.fFilled << "| fUseFilled:" << _s.fUseFilled;
+    qDebug() << "> fillUseRect:" << _s.fillUseRect;
+#endif   
 }
 void MSO::parseLineColor(LEInputStream& in, LineColor& _s) {
     _s.streamOffset = in.getPosition();
@@ -8229,6 +8393,7 @@ void MSO::parseLineStyleBooleanProperties(LEInputStream& in, LineStyleBooleanPro
     _s.unused3 = in.readbit();
     _s.fUsefLineOpaqueBackColor = in.readbit();
     _s.unused4 = in.readuint6();
+    qDebug() << "fNoLineDrawDash:" << _s.fNoLineDrawDash << "fLine:" << _s.fLine;
 }
 void MSO::parseShadowType(LEInputStream& in, ShadowType& _s) {
     _s.streamOffset = in.getPosition();
@@ -8332,6 +8497,7 @@ void MSO::parseHspMaster(LEInputStream& in, HspMaster& _s) {
         throw IncorrectValueException(in.getPosition(), "_s.opid.fComplex == false");
     }
     _s.hspMaster = in.readuint32();
+    qDebug() << "> hspMaster:" << _s.hspMaster;
 }
 void MSO::parseBWMode(LEInputStream& in, BWMode& _s) {
     _s.streamOffset = in.getPosition();
@@ -8748,6 +8914,7 @@ void MSO::parseWzFillId(LEInputStream& in, WzFillId& _s) {
     _s.wzFillId = in.readint32();
 }
 void MSO::parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnchor& _s) {
+    qDebug() << "parsePptOfficeArtClientAnchor";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -8765,11 +8932,14 @@ void MSO::parsePptOfficeArtClientAnchor(LEInputStream& in, PptOfficeArtClientAnc
     if (_s.rh.recLen==0x8) {
         _s.rect1 = QSharedPointer<SmallRectStruct>(new SmallRectStruct(&_s));
         parseSmallRectStruct(in, *_s.rect1.data());
+	qDebug() << "client anchor:" << _s.rect1->top << _s.rect1->left << _s.rect1->right << _s.rect1->bottom; 
     }
     if (_s.rh.recLen==0x10) {
         _s.rect2 = QSharedPointer<RectStruct>(new RectStruct(&_s));
         parseRectStruct(in, *_s.rect2.data());
+	qDebug() << "client anchor:" << _s.rect2->top << _s.rect2->left << _s.rect2->right << _s.rect2->bottom; 
     }
+    
 }
 void MSO::parseAnimationInfoContainer(LEInputStream& in, AnimationInfoContainer& _s) {
     _s.streamOffset = in.getPosition();
@@ -8846,6 +9016,7 @@ void MSO::parseMouseOverInteractiveInfoContainer(LEInputStream& in, MouseOverInt
     }
 }
 void MSO::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, ShapeClientRoundtripDataSubcontainerOrAtom& _s) {
+    qDebug() << "parseShapeClientRoundtripDataSubcontainerOrAtom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -8870,6 +9041,7 @@ void MSO::parseShapeClientRoundtripDataSubcontainerOrAtom(LEInputStream& in, Sha
     }
 }
 void MSO::parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProgBinaryTagSubContainerOrAtom& _s) {
+    qDebug() << "parseShapeProgBinaryTagSubContainerOrAtom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -8896,11 +9068,13 @@ void MSO::parseShapeProgBinaryTagSubContainerOrAtom(LEInputStream& in, ShapeProg
     }}}
 }
 void MSO::parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox& _s) {
+    qDebug() << "parseOfficeArtClientTextBox" << "offset:" << in.getPosition();
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     OfficeArtRecordHeader _choice(&_s);
     parseOfficeArtRecordHeader(in, _choice);
+    qDebug() << hex << "recVer:" << _choice.recVer << "| recType" << _choice.recType << "| recLen:" << dec << _choice.recLen;
     in.rewind(_m);
     if ((_choice.recVer == 0)&&(_choice.recLen == 0)) {
         _s.anon = OfficeArtClientTextBox::choice2757443956(new XlsOfficeArtClientTextBox(&_s));
@@ -8914,6 +9088,7 @@ void MSO::parseOfficeArtClientTextBox(LEInputStream& in, OfficeArtClientTextBox&
     }
 }
 void MSO::parseTextRulerAtom(LEInputStream& in, TextRulerAtom& _s) {
+    qDebug() << "parseTextRulerAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
@@ -9027,6 +9202,7 @@ void MSO::parsePrm(LEInputStream& in, Prm& _s) {
     }
 }
 void MSO::parseOfficeArtBlipEMF(LEInputStream& in, OfficeArtBlipEMF& _s) {
+    qDebug() << "parseOfficeArtBlipEMF";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9055,6 +9231,7 @@ void MSO::parseOfficeArtBlipEMF(LEInputStream& in, OfficeArtBlipEMF& _s) {
     in.readBytes(_s.BLIPFileData);
 }
 void MSO::parseOfficeArtBlipWMF(LEInputStream& in, OfficeArtBlipWMF& _s) {
+    qDebug() << "parseOfficeArtBlipWMF";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9081,8 +9258,15 @@ void MSO::parseOfficeArtBlipWMF(LEInputStream& in, OfficeArtBlipWMF& _s) {
     _c = _s.rh.recLen-((_s.rh.recInstance==0x216)?50:66);
     _s.BLIPFileData.resize(_c);
     in.readBytes(_s.BLIPFileData);
+    qDebug() << "BLIPFileData (variable) size: " << _c;
+    qDebug() << "MetafileHeader (Dump)" <<
+	"\ncbSize: " << _s.metafileHeader.cbSize <<
+	"\ncbsave: " << _s.metafileHeader.cbsave <<
+	"\ncompression: 0x" << hex << _s.metafileHeader.compression <<
+        "\nfilter: 0x" << hex << _s.metafileHeader.filter;
 }
 void MSO::parseOfficeArtBlipPICT(LEInputStream& in, OfficeArtBlipPICT& _s) {
+    qDebug() << "parseOfficeArtBlipPICT";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9111,6 +9295,7 @@ void MSO::parseOfficeArtBlipPICT(LEInputStream& in, OfficeArtBlipPICT& _s) {
     in.readBytes(_s.BLIPFileData);
 }
 void MSO::parseOfficeArtBlip(LEInputStream& in, OfficeArtBlip& _s) {
+    qDebug() << "parseOfficeArtBlip";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -9170,27 +9355,34 @@ void MSO::parseZoomViewInfoAtom(LEInputStream& in, ZoomViewInfoAtom& _s) {
     _s.unused2 = in.readuint16();
 }
 void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtension& _s) {
+    qDebug() << "parsePP9DocBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
     bool _possiblyPresent;
     bool _atend;
     parseRecordHeader(in, _s.rh);
+    qDebug() << hex << "recVer:" << _s.rh.recVer << "| recInstance:" << _s.rh.recInstance << "| recType:" << _s.rh.recType << "| recLen:" << hex << _s.rh.recLen;
     if (!(_s.rh.recVer == 0x0)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recVer == 0x0");
     }
     if (!(_s.rh.recInstance == 0)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recInstance == 0");
     }
     if (!(_s.rh.recType == 0x0FBA)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0FBA");
     }
     if (!(_s.rh.recLen == 0x0E)) {
+	qDebug() << "> Fail!";
         throw IncorrectValueException(in.getPosition(), "_s.rh.recLen == 0x0E");
     }
     _c = 14;
     _s.tagName.resize(_c);
     in.readBytes(_s.tagName);
+    qDebug() << "tagName:" << hex << _s.tagName.toHex();
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0x0");
@@ -9449,11 +9641,13 @@ void MSO::parsePP9DocBinaryTagExtension(LEInputStream& in, PP9DocBinaryTagExtens
     }
 }
 void MSO::parseTextMasterStyle9Level(LEInputStream& in, TextMasterStyle9Level& _s) {
+    qDebug() << "parseTextMasterStyle9Level";
     _s.streamOffset = in.getPosition();
     parseTextPFException9(in, _s.pf9);
     parseTextCFException9(in, _s.cf9);
 }
 void MSO::parseStyleTextProp9(LEInputStream& in, StyleTextProp9& _s) {
+    qDebug() << "parseStyleTextProp9";
     _s.streamOffset = in.getPosition();
     parseTextPFException9(in, _s.pf9);
     parseTextCFException9(in, _s.cf9);
@@ -9472,6 +9666,7 @@ void MSO::parseStyleTextProp9(LEInputStream& in, StyleTextProp9& _s) {
     }
 }
 void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExtension& _s) {
+    qDebug() << "parsePP10DocBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -9493,6 +9688,7 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     _c = 16;
     _s.tagName.resize(_c);
     in.readBytes(_s.tagName);
+    qDebug() << "tagName:" << hex << _s.tagName.toHex();
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0x0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0x0");
@@ -9802,6 +9998,7 @@ void MSO::parsePP10DocBinaryTagExtension(LEInputStream& in, PP10DocBinaryTagExte
     }
 }
 void MSO::parseTextMasterStyle10Level(LEInputStream& in, TextMasterStyle10Level& _s) {
+    qDebug() << "parseTextMasterStyle10Level";
     _s.streamOffset = in.getPosition();
     parseTextCFException10(in, _s.cf10);
 }
@@ -9873,6 +10070,7 @@ void MSO::parseSlideListWithTextSubContainerOrAtom(LEInputStream& in, SlideListW
     }
 }
 void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
+    qDebug() << "parseTextContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -9924,12 +10122,14 @@ void MSO::parseTextContainer(LEInputStream& in, TextContainer& _s) {
         _s.style->rgTextPFRun.append(TextPFRun(_s.style.data()));
             parseTextPFRun(in, _s.style->rgTextPFRun.last());
             sum += _s.style->rgTextPFRun.last().count;
+	    qDebug() << "(PF) characters#:" << _s.style->rgTextPFRun.last().count; 
         } while (sum <= count);
         sum = 0;
         do {
             _s.style->rgTextCFRun.append(TextCFRun(_s.style.data()));
             parseTextCFRun(in, _s.style->rgTextCFRun.last());
             sum += _s.style->rgTextCFRun.last().count;
+	    qDebug() << "(CF) characters#:" << _s.style->rgTextCFRun.last().count; 
         } while (sum <= count);
     }
     _atend = false;
@@ -10102,6 +10302,7 @@ void MSO::parseMouseOverTextInfo(LEInputStream& in, MouseOverTextInfo& _s) {
     parseMouseOverTextInteractiveInfoAtom(in, _s.text);
 }
 void MSO::parseTextClientDataSubContainerOrAtom(LEInputStream& in, TextClientDataSubContainerOrAtom& _s) {
+    qDebug() << "parseTextClientDataSubContainerOrAtom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -10144,6 +10345,7 @@ void MSO::parseTextPFRun(LEInputStream& in, TextPFRun& _s) {
     }
 }
 void MSO::parseTextCFRun(LEInputStream& in, TextCFRun& _s) {
+    qDebug() << "parseTextCFRun";
     _s.streamOffset = in.getPosition();
     _s.count = in.readuint32();
     if (!(((quint32)_s.count)>0)) {
@@ -10152,6 +10354,7 @@ void MSO::parseTextCFRun(LEInputStream& in, TextCFRun& _s) {
     parseTextCFException(in, _s.cf);
 }
 void MSO::parseTextCFExceptionAtom(LEInputStream& in, TextCFExceptionAtom& _s) {
+    qDebug() << "parseTextCFExceptionAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10216,6 +10419,7 @@ void MSO::parseDefaultRulerAtom(LEInputStream& in, DefaultRulerAtom& _s) {
     }
 }
 void MSO::parseTextPFExceptionAtom(LEInputStream& in, TextPFExceptionAtom& _s) {
+    qDebug() << "parseTextPFExceptionAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10231,6 +10435,7 @@ void MSO::parseTextPFExceptionAtom(LEInputStream& in, TextPFExceptionAtom& _s) {
     parseTextPFException(in, _s.pf);
 }
 void MSO::parseTextSIRun(LEInputStream& in, TextSIRun& _s) {
+    qDebug() << "parseTextSIRun";
     _s.streamOffset = in.getPosition();
     _s.count = in.readuint32();
     if (!(((quint32)_s.count)>=1)) {
@@ -10239,6 +10444,7 @@ void MSO::parseTextSIRun(LEInputStream& in, TextSIRun& _s) {
     parseTextSIException(in, _s.si);
 }
 void MSO::parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s) {
+    qDebug() << "parseTextSIExceptionAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10262,6 +10468,7 @@ void MSO::parseTextSIExceptionAtom(LEInputStream& in, TextSIExceptionAtom& _s) {
     }
 }
 void MSO::parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s) {
+    qDebug() << "parseTextMasterStyleAtom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -10319,6 +10526,7 @@ void MSO::parseTextMasterStyleAtom(LEInputStream& in, TextMasterStyleAtom& _s) {
     }
 }
 void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTagExtension& _s) {
+    qDebug() << "parsePP10SlideBinaryTagExtension";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -10342,6 +10550,7 @@ void MSO::parsePP10SlideBinaryTagExtension(LEInputStream& in, PP10SlideBinaryTag
     for (int _i=0; _i<_c; ++_i) {
         _s.tagName[_i] = in.readuint16();
     }
+    qDebug() << "tagName:" << _s.tagName;
     parseRecordHeader(in, _s.rhData);
     if (!(_s.rhData.recVer == 0)) {
         throw IncorrectValueException(in.getPosition(), "_s.rhData.recVer == 0");
@@ -10598,6 +10807,9 @@ void MSO::parseExObjListSubContainer(LEInputStream& in, ExObjListSubContainer& _
     }
 }
 void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _s) {
+    qDebug() << "====================================";    
+    qDebug() << "parseOfficeArtDggContainer";
+    qDebug() << "====================================";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -10611,6 +10823,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     if (!(_s.rh.recType == 0x0F000)) {
         throw IncorrectValueException(in.getPosition(), "_s.rh.recType == 0x0F000");
     }
+    qDebug() << "|-- ";
     parseOfficeArtFDGGBlock(in, _s.drawingGroup);
     _m = in.setMark();
     try {
@@ -10623,6 +10836,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.blipStore = QSharedPointer<OfficeArtBStoreContainer>(new OfficeArtBStoreContainer(&_s));
             parseOfficeArtBStoreContainer(in, *_s.blipStore.data());
@@ -10645,6 +10859,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.drawingPrimaryOptions = QSharedPointer<OfficeArtFOPT>(new OfficeArtFOPT(&_s));
             parseOfficeArtFOPT(in, *_s.drawingPrimaryOptions.data());
@@ -10667,6 +10882,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.drawingTertiaryOptions = QSharedPointer<OfficeArtTertiaryFOPT>(new OfficeArtTertiaryFOPT(&_s));
             parseOfficeArtTertiaryFOPT(in, *_s.drawingTertiaryOptions.data());
@@ -10689,6 +10905,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.colorMRU = QSharedPointer<OfficeArtColorMRUContainer>(new OfficeArtColorMRUContainer(&_s));
             parseOfficeArtColorMRUContainer(in, *_s.colorMRU.data());
@@ -10700,6 +10917,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
             in.rewind(_m);
         }
     }
+    qDebug() << "|-- ";
     parseOfficeArtSplitMenuColorContainer(in, _s.splitColors);
     _m = in.setMark();
     try {
@@ -10712,6 +10930,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.blipStore2 = QSharedPointer<OfficeArtBStoreContainer>(new OfficeArtBStoreContainer(&_s));
             parseOfficeArtBStoreContainer(in, *_s.blipStore2.data());
@@ -10734,6 +10953,7 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.unknown = QSharedPointer<OfficeArtTertiaryFOPT>(new OfficeArtTertiaryFOPT(&_s));
             parseOfficeArtTertiaryFOPT(in, *_s.unknown.data());
@@ -10745,6 +10965,9 @@ void MSO::parseOfficeArtDggContainer(LEInputStream& in, OfficeArtDggContainer& _
             in.rewind(_m);
         }
     }
+    qDebug() << "====================================";
+    qDebug() << " END - parseOfficeArtDggContainer";
+    qDebug() << "====================================";
 }
 void MSO::parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s) {
     _s.streamOffset = in.getPosition();
@@ -10753,324 +10976,323 @@ void MSO::parseOfficeArtFOPTEChoice(LEInputStream& in, OfficeArtFOPTEChoice& _s)
     OfficeArtFOPTEOPID _choice(&_s);
     parseOfficeArtFOPTEOPID(in, _choice);
     in.rewind(_m);
+    qDebug() << "opid.opid: 0x" << hex << _choice.opid;
     if ((_choice.opid == 0x007F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ProtectionBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ProtectionBooleanProperties(&_s));
         parseProtectionBooleanProperties(in, *(ProtectionBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0080)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ITxid(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ITxid(&_s));
         parseITxid(in, *(ITxid*)_s.anon.data());
     } else if ((_choice.opid == 0x053F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DiagramBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DiagramBooleanProperties(&_s));
         parseDiagramBooleanProperties(in, *(DiagramBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0081)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxTextLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxTextLeft(&_s));
         parseDxTextLeft(in, *(DxTextLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0082)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DyTextTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DyTextTop(&_s));
         parseDyTextTop(in, *(DyTextTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0083)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxTextRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxTextRight(&_s));
         parseDxTextRight(in, *(DxTextRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0084)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DyTextBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DyTextBottom(&_s));
         parseDyTextBottom(in, *(DyTextBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0085)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new WrapText(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new WrapText(&_s));
         parseWrapText(in, *(WrapText*)_s.anon.data());
     } else if ((_choice.opid == 0x0087)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new AnchorText(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new AnchorText(&_s));
         parseAnchorText(in, *(AnchorText*)_s.anon.data());
     } else if ((_choice.opid == 0x00BF)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new TextBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new TextBooleanProperties(&_s));
         parseTextBooleanProperties(in, *(TextBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x008A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new HspNext(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new HspNext(&_s));
         parseHspNext(in, *(HspNext*)_s.anon.data());
     } else if ((_choice.opid == 0x0104)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Pib(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Pib(&_s));
         parsePib(in, *(Pib*)_s.anon.data());
     } else if ((_choice.opid == 0x0105)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PibName(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PibName(&_s));
         parsePibName(in, *(PibName*)_s.anon.data());
     } else if ((_choice.opid == 0x0144)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShapePath(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShapePath(&_s));
         parseShapePath(in, *(ShapePath*)_s.anon.data());
     } else if ((_choice.opid == 0x0147)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new AdjustValue(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new AdjustValue(&_s));
         parseAdjustValue(in, *(AdjustValue*)_s.anon.data());
     } else if ((_choice.opid == 0x0148)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust2Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust2Value(&_s));
         parseAdjust2Value(in, *(Adjust2Value*)_s.anon.data());
     } else if ((_choice.opid == 0x0149)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust3Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust3Value(&_s));
         parseAdjust3Value(in, *(Adjust3Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust4Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust4Value(&_s));
         parseAdjust4Value(in, *(Adjust4Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust5Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust5Value(&_s));
         parseAdjust5Value(in, *(Adjust5Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014C)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust6Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust6Value(&_s));
         parseAdjust6Value(in, *(Adjust6Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014D)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust7Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust7Value(&_s));
         parseAdjust7Value(in, *(Adjust7Value*)_s.anon.data());
     } else if ((_choice.opid == 0x014E)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Adjust8Value(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Adjust8Value(&_s));
         parseAdjust8Value(in, *(Adjust8Value*)_s.anon.data());
     } else if ((_choice.opid == 0x017F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new GeometryBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new GeometryBooleanProperties(&_s));
         parseGeometryBooleanProperties(in, *(GeometryBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0180)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillType(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillType(&_s));
         parseFillType(in, *(FillType*)_s.anon.data());
     } else if ((_choice.opid == 0x0181)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillColor(&_s));
         parseFillColor(in, *(FillColor*)_s.anon.data());
     } else if ((_choice.opid == 0x0182)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillOpacity(&_s));
         parseFillOpacity(in, *(FillOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0183)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillBackColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillBackColor(&_s));
         parseFillBackColor(in, *(FillBackColor*)_s.anon.data());
     } else if ((_choice.opid == 0x0184)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillBackOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillBackOpacity(&_s));
         parseFillBackOpacity(in, *(FillBackOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0185)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillCrMod(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillCrMod(&_s));
         parseFillCrMod(in, *(FillCrMod*)_s.anon.data());
     } else if ((_choice.opid == 0x0186)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillBlip(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillBlip(&_s));
         parseFillBlip(in, *(FillBlip*)_s.anon.data());
     } else if ((_choice.opid == 0x0187)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillBlipName(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillBlipName(&_s));
         parseFillBlipName(in, *(FillBlipName*)_s.anon.data());
     } else if ((_choice.opid == 0x0188)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillBlipFlags(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillBlipFlags(&_s));
         parseFillBlipFlags(in, *(FillBlipFlags*)_s.anon.data());
     } else if ((_choice.opid == 0x0189)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillWidth(&_s));
         parseFillWidth(in, *(FillWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x018A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillHeight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillHeight(&_s));
         parseFillHeight(in, *(FillHeight*)_s.anon.data());
     } else if ((_choice.opid == 0x018B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillAngle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillAngle(&_s));
         parseFillAngle(in, *(FillAngle*)_s.anon.data());
     } else if ((_choice.opid == 0x018C)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillFocus(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillFocus(&_s));
         parseFillFocus(in, *(FillFocus*)_s.anon.data());
     } else if ((_choice.opid == 0x018D)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillToLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillToLeft(&_s));
         parseFillToLeft(in, *(FillToLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x018E)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillToTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillToTop(&_s));
         parseFillToTop(in, *(FillToTop*)_s.anon.data());
     } else if ((_choice.opid == 0x018F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillToRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillToRight(&_s));
         parseFillToRight(in, *(FillToRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0190)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillToBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillToBottom(&_s));
         parseFillToBottom(in, *(FillToBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0191)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillRectLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillRectLeft(&_s));
         parseFillRectLeft(in, *(FillRectLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0192)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillRectTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillRectTop(&_s));
         parseFillRectTop(in, *(FillRectTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0193)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillRectRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillRectRight(&_s));
         parseFillRectRight(in, *(FillRectRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0194)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillRectBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillRectBottom(&_s));
         parseFillRectBottom(in, *(FillRectBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x0195)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillDztype(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillDztype(&_s));
         parseFillDztype(in, *(FillDztype*)_s.anon.data());
     } else if ((_choice.opid == 0x0196)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillShadePreset(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillShadePreset(&_s));
         parseFillShadePreset(in, *(FillShadePreset*)_s.anon.data());
     } else if ((_choice.opid == 0x0197)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillShadeColors(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillShadeColors(&_s));
         parseFillShadeColors(in, *(FillShadeColors*)_s.anon.data());
     } else if ((_choice.opid == 0x0198)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillOriginX(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillOriginX(&_s));
         parseFillOriginX(in, *(FillOriginX*)_s.anon.data());
     } else if ((_choice.opid == 0x0199)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillOriginY(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillOriginY(&_s));
         parseFillOriginY(in, *(FillOriginY*)_s.anon.data());
     } else if ((_choice.opid == 0x019A)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillShapeOriginX(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillShapeOriginX(&_s));
         parseFillShapeOriginX(in, *(FillShapeOriginX*)_s.anon.data());
     } else if ((_choice.opid == 0x019B)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillShapeOriginY(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillShapeOriginY(&_s));
         parseFillShapeOriginY(in, *(FillShapeOriginY*)_s.anon.data());
-    } else if ((_choice.opid == 0x019C)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillShadeType(&_s));
-        parseFillShadeType(in, *(FillShadeType*)_s.anon.data());
     } else if ((_choice.opid == 0x019E)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillColorExt(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillColorExt(&_s));
         parseFillColorExt(in, *(FillColorExt*)_s.anon.data());
     } else if ((_choice.opid == 0x01A2)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillBackColorExt(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillBackColorExt(&_s));
         parseFillBackColorExt(in, *(FillBackColorExt*)_s.anon.data());
     } else if ((_choice.opid == 0x01BF)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new FillStyleBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new FillStyleBooleanProperties(&_s));
         parseFillStyleBooleanProperties(in, *(FillStyleBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x01C0)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineColor(&_s));
         parseLineColor(in, *(LineColor*)_s.anon.data());
     } else if ((_choice.opid == 0x01C1)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineOpacity(&_s));
         parseLineOpacity(in, *(LineOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x01C2)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineBackColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineBackColor(&_s));
         parseLineBackColor(in, *(LineBackColor*)_s.anon.data());
     } else if ((_choice.opid == 0x01C5)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineFillBlip(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineFillBlip(&_s));
         parseLineFillBlip(in, *(LineFillBlip*)_s.anon.data());
     } else if ((_choice.opid == 0x01CB)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineWidth(&_s));
         parseLineWidth(in, *(LineWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x01CD)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineStyle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineStyle(&_s));
         parseLineStyle(in, *(LineStyle*)_s.anon.data());
     } else if ((_choice.opid == 0x01CE)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineDashing(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineDashing(&_s));
         parseLineDashing(in, *(LineDashing*)_s.anon.data());
     } else if ((_choice.opid == 0x0403)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new WzFillId(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new WzFillId(&_s));
         parseWzFillId(in, *(WzFillId*)_s.anon.data());
     } else if ((_choice.opid == 0x01FF)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineStyleBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineStyleBooleanProperties(&_s));
         parseLineStyleBooleanProperties(in, *(LineStyleBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x01D0)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineStartArrowhead(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineStartArrowhead(&_s));
         parseLineStartArrowhead(in, *(LineStartArrowhead*)_s.anon.data());
     } else if ((_choice.opid == 0x01D1)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineEndArrowhead(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineEndArrowhead(&_s));
         parseLineEndArrowhead(in, *(LineEndArrowhead*)_s.anon.data());
     } else if ((_choice.opid == 0x01D2)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineStartArrowWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineStartArrowWidth(&_s));
         parseLineStartArrowWidth(in, *(LineStartArrowWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x01D3)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineStartArrowLength(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineStartArrowLength(&_s));
         parseLineStartArrowLength(in, *(LineStartArrowLength*)_s.anon.data());
     } else if ((_choice.opid == 0x01D4)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineEndArrowWidth(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineEndArrowWidth(&_s));
         parseLineEndArrowWidth(in, *(LineEndArrowWidth*)_s.anon.data());
     } else if ((_choice.opid == 0x01D5)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineEndArrowLength(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineEndArrowLength(&_s));
         parseLineEndArrowLength(in, *(LineEndArrowLength*)_s.anon.data());
     } else if ((_choice.opid == 0x01D6)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LineJoinStyle(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LineJoinStyle(&_s));
         parseLineJoinStyle(in, *(LineJoinStyle*)_s.anon.data());
     } else if ((_choice.opid == 0x0201)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShadowColor(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShadowColor(&_s));
         parseShadowColor(in, *(ShadowColor*)_s.anon.data());
     } else if ((_choice.opid == 0x0204)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShadowOpacity(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShadowOpacity(&_s));
         parseShadowOpacity(in, *(ShadowOpacity*)_s.anon.data());
     } else if ((_choice.opid == 0x0205)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShadowOffsetX(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShadowOffsetX(&_s));
         parseShadowOffsetX(in, *(ShadowOffsetX*)_s.anon.data());
     } else if ((_choice.opid == 0x0206)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShadowOffsetY(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShadowOffsetY(&_s));
         parseShadowOffsetY(in, *(ShadowOffsetY*)_s.anon.data());
     } else if ((_choice.opid == 0x023F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShadowStyleBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShadowStyleBooleanProperties(&_s));
         parseShadowStyleBooleanProperties(in, *(ShadowStyleBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x033F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new ShapeBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new ShapeBooleanProperties(&_s));
         parseShapeBooleanProperties(in, *(ShapeBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0301)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new HspMaster(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new HspMaster(&_s));
         parseHspMaster(in, *(HspMaster*)_s.anon.data());
     } else if ((_choice.opid == 0x0004)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Rotation(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Rotation(&_s));
         parseRotation(in, *(Rotation*)_s.anon.data());
     } else if ((_choice.opid == 0x0341)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxyCalloutGap(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxyCalloutGap(&_s));
         parseDxyCalloutGap(in, *(DxyCalloutGap*)_s.anon.data());
     } else if ((_choice.opid == 0x0342)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Spcoa(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Spcoa(&_s));
         parseSpcoa(in, *(Spcoa*)_s.anon.data());
     } else if ((_choice.opid == 0x0343)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new Spcod(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new Spcod(&_s));
         parseSpcod(in, *(Spcod*)_s.anon.data());
     } else if ((_choice.opid == 0x0344)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxyCalloutDropSpecified(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxyCalloutDropSpecified(&_s));
         parseDxyCalloutDropSpecified(in, *(DxyCalloutDropSpecified*)_s.anon.data());
     } else if ((_choice.opid == 0x0345)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxyCalloutLengthSpecified(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxyCalloutLengthSpecified(&_s));
         parseDxyCalloutLengthSpecified(in, *(DxyCalloutLengthSpecified*)_s.anon.data());
     } else if ((_choice.opid == 0x037F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new CalloutBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new CalloutBooleanProperties(&_s));
         parseCalloutBooleanProperties(in, *(CalloutBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0393)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PctHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PctHR(&_s));
         parsePctHR(in, *(PctHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0394)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new AlignHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new AlignHR(&_s));
         parseAlignHR(in, *(AlignHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0395)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxHeightHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxHeightHR(&_s));
         parseDxHeightHR(in, *(DxHeightHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0396)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxWidthHR(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxWidthHR(&_s));
         parseDxWidthHR(in, *(DxWidthHR*)_s.anon.data());
     } else if ((_choice.opid == 0x0388)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new LidRegroup(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new LidRegroup(&_s));
         parseLidRegroup(in, *(LidRegroup*)_s.anon.data());
     } else if ((_choice.opid == 0x0304)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new BWMode(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new BWMode(&_s));
         parseBWMode(in, *(BWMode*)_s.anon.data());
     } else if ((_choice.opid == 0x0088)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new TxflTextFlow(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new TxflTextFlow(&_s));
         parseTxflTextFlow(in, *(TxflTextFlow*)_s.anon.data());
     } else if ((_choice.opid == 0x038F)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PosH(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PosH(&_s));
         parsePosH(in, *(PosH*)_s.anon.data());
     } else if ((_choice.opid == 0x0390)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PosRelH(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PosRelH(&_s));
         parsePosRelH(in, *(PosRelH*)_s.anon.data());
     } else if ((_choice.opid == 0x0391)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PosV(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PosV(&_s));
         parsePosV(in, *(PosV*)_s.anon.data());
     } else if ((_choice.opid == 0x0392)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PosRelV(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PosRelV(&_s));
         parsePosRelV(in, *(PosRelV*)_s.anon.data());
     } else if ((_choice.opid == 0x0383)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PWrapPolygonVertices(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PWrapPolygonVertices(&_s));
         parsePWrapPolygonVertices(in, *(PWrapPolygonVertices*)_s.anon.data());
     } else if ((_choice.opid == 0x0384)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxWrapDistLeft(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxWrapDistLeft(&_s));
         parseDxWrapDistLeft(in, *(DxWrapDistLeft*)_s.anon.data());
     } else if ((_choice.opid == 0x0385)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DyWrapDistTop(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DyWrapDistTop(&_s));
         parseDyWrapDistTop(in, *(DyWrapDistTop*)_s.anon.data());
     } else if ((_choice.opid == 0x0386)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DxWrapDistRight(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DxWrapDistRight(&_s));
         parseDxWrapDistRight(in, *(DxWrapDistRight*)_s.anon.data());
     } else if ((_choice.opid == 0x0387)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new DyWrapDistBottom(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new DyWrapDistBottom(&_s));
         parseDyWrapDistBottom(in, *(DyWrapDistBottom*)_s.anon.data());
     } else if ((_choice.opid == 0x03bf)&&(_choice.fBid == false)&&(_choice.fComplex == false)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new GroupShapeBooleanProperties(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new GroupShapeBooleanProperties(&_s));
         parseGroupShapeBooleanProperties(in, *(GroupShapeBooleanProperties*)_s.anon.data());
     } else if ((_choice.opid == 0x0145)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PVertices(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PVertices(&_s));
         parsePVertices(in, *(PVertices*)_s.anon.data());
     } else if ((_choice.opid == 0x0146)) {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new PSegmentInfo(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new PSegmentInfo(&_s));
         parsePSegmentInfo(in, *(PSegmentInfo*)_s.anon.data());
     } else {
-        _s.anon = OfficeArtFOPTEChoice::choice2038232332(new OfficeArtFOPTE(&_s));
+        _s.anon = OfficeArtFOPTEChoice::choice677423557(new OfficeArtFOPTE(&_s));
         parseOfficeArtFOPTE(in, *(OfficeArtFOPTE*)_s.anon.data());
     }
 }
 void MSO::parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _s) {
+    qDebug() << "parseOfficeArtClientAnchor";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11089,6 +11311,8 @@ void MSO::parseOfficeArtClientAnchor(LEInputStream& in, OfficeArtClientAnchor& _
     }
 }
 void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData& _s) {
+    qDebug() << "--------------------";
+    qDebug() << "parsePptOfficeArtClientData";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -11355,8 +11579,10 @@ void MSO::parsePptOfficeArtClientData(LEInputStream& in, PptOfficeArtClientData&
             in.rewind(_m);
         }
     }
+    qDebug() << "--------------------";
 }
 void MSO::parseShapeProgBinaryTagContainer(LEInputStream& in, ShapeProgBinaryTagContainer& _s) {
+    qDebug() << "parseShapeProgBinaryTagContainer";
     _s.streamOffset = in.getPosition();
     parseOfficeArtRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -11404,6 +11630,7 @@ void MSO::parsePcd(LEInputStream& in, Pcd& _s) {
     parsePrm(in, _s.prm);
 }
 void MSO::parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s) {
+    qDebug() << "parseOfficeArtFBSE";
     _s.streamOffset = in.getPosition();
     int _c;
     LEInputStream::Mark _m;
@@ -11442,6 +11669,7 @@ void MSO::parseOfficeArtFBSE(LEInputStream& in, OfficeArtFBSE& _s) {
     }
 }
 void MSO::parseOfficeArtBStoreContainerFileBlock(LEInputStream& in, OfficeArtBStoreContainerFileBlock& _s) {
+    qDebug() << "parseOfficeArtBStoreContainerFileBlock";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11512,7 +11740,8 @@ void MSO::parseSlideViewInfoInstance(LEInputStream& in, SlideViewInfoInstance& _
     }
 }
 void MSO::parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBinaryTagSubContainerOrAtom& _s) {
-    _s.streamOffset = in.getPosition();
+    qDebug() << "parseDocProgBinaryTagSubContainerOrAtom";
+     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
     try {
@@ -11544,6 +11773,7 @@ void MSO::parseDocProgBinaryTagSubContainerOrAtom(LEInputStream& in, DocProgBina
     }}}}
 }
 void MSO::parseTextMasterStyle9Atom(LEInputStream& in, TextMasterStyle9Atom& _s) {
+    qDebug() << "parseTextMasterStyle9Atom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -11600,6 +11830,7 @@ void MSO::parseBlipEntityAtom(LEInputStream& in, BlipEntityAtom& _s) {
     parseOfficeArtBStoreContainerFileBlock(in, _s.blip);
 }
 void MSO::parseTextMasterStyle10Atom(LEInputStream& in, TextMasterStyle10Atom& _s) {
+    qDebug() << "parseTextMasterStyle10Atom";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0x0)) {
@@ -11672,6 +11903,7 @@ void MSO::parseTextContainerInteractiveInfo(LEInputStream& in, TextContainerInte
     }
 }
 void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoContainer& _s) {
+    qDebug() << "parseDocumentTextInfoContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -11821,6 +12053,7 @@ void MSO::parseDocumentTextInfoContainer(LEInputStream& in, DocumentTextInfoCont
     }
 }
 void MSO::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProgBinaryTagSubContainerOrAtom& _s) {
+    qDebug() << "parseSlideProgBinaryTagSubContainerOrAtom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11847,6 +12080,7 @@ void MSO::parseSlideProgBinaryTagSubContainerOrAtom(LEInputStream& in, SlideProg
     }}}
 }
 void MSO::parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _s) {
+    qDebug() << "parseDrawingGroupContainer";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -11861,6 +12095,7 @@ void MSO::parseDrawingGroupContainer(LEInputStream& in, DrawingGroupContainer& _
     parseOfficeArtDggContainer(in, _s.OfficeArtDgg);
 }
 void MSO::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
+    qDebug() << "parseOfficeArtClientData";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11879,6 +12114,7 @@ void MSO::parseOfficeArtClientData(LEInputStream& in, OfficeArtClientData& _s) {
     }
 }
 void MSO::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsSubContainerOrAtom& _s) {
+    qDebug() << "parseShapeProgTagsSubContainerOrAtom";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -11894,6 +12130,9 @@ void MSO::parseShapeProgTagsSubContainerOrAtom(LEInputStream& in, ShapeProgTagsS
     }
 }
 void MSO::parseDocumentContainer(LEInputStream& in, DocumentContainer& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseDocumentContainer";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12361,6 +12600,7 @@ void MSO::parseDocInfoListSubContainerOrAtom(LEInputStream& in, DocInfoListSubCo
     }
 }
 void MSO::parseDocProgBinaryTagContainer(LEInputStream& in, DocProgBinaryTagContainer& _s) {
+    qDebug() << "parseDocProgBinaryTagContainer";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -12389,6 +12629,7 @@ void MSO::parseSlideProgBinaryTagContainer(LEInputStream& in, SlideProgBinaryTag
     parseSlideProgBinaryTagSubContainerOrAtom(in, _s.rec);
 }
 void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s) {
+    qDebug() << "parseOfficeArtSpContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12425,6 +12666,9 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
         }
     }
     parseOfficeArtFSP(in, _s.shapeProp);
+    qDebug() << "> ====================";
+    qDebug() << "> || shapeType:" << hex << _s.shapeProp.rh.recInstance << "||";
+    qDebug() << "> ====================";
     _m = in.setMark();
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
@@ -12648,6 +12892,7 @@ void MSO::parseOfficeArtSpContainer(LEInputStream& in, OfficeArtSpContainer& _s)
 }
 void MSO::parseOfficeArtInlineSpContainer(LEInputStream& in, OfficeArtInlineSpContainer& _s) {
     _s.streamOffset = in.getPosition();
+    qDebug() << "Current stream position:" << _s.streamOffset;
     LEInputStream::Mark _m;
     bool _atend;
     parseOfficeArtSpContainer(in, _s.shape);
@@ -12699,6 +12944,9 @@ void MSO::parseSlideProgTagsSubContainerOrAtom(LEInputStream& in, SlideProgTagsS
     }
 }
 void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s) {
+    qDebug() << "====================================";
+    qDebug() << "parseOfficeArtDgContainer";
+    qDebug() << "====================================";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -12724,6 +12972,7 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.drawingData = QSharedPointer<OfficeArtFDG>(new OfficeArtFDG(&_s));
             parseOfficeArtFDG(in, *_s.drawingData.data());
@@ -12746,6 +12995,7 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.regroupItems = QSharedPointer<OfficeArtFRITContainer>(new OfficeArtFRITContainer(&_s));
             parseOfficeArtFRITContainer(in, *_s.regroupItems.data());
@@ -12760,6 +13010,7 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     _m = in.setMark();
     try {
         OfficeArtRecordHeader _optionCheck(&_s);
+	qDebug() << "|-- ";
         parseOfficeArtRecordHeader(in, _optionCheck);
         _possiblyPresent = (_optionCheck.recVer == 0xF)&&(_optionCheck.recInstance == 0)&&(_optionCheck.recType == 0x0F003);
     } catch(EOFException _e) {
@@ -12790,10 +13041,12 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.shape = QSharedPointer<OfficeArtSpContainer>(new OfficeArtSpContainer(&_s));
             parseOfficeArtSpContainer(in, *_s.shape.data());
         } catch(IncorrectValueException _e) {
+	    qDebug() << "> FAILED";
             _s.shape.clear();
             in.rewind(_m);
         } catch(EOFException _e) {
@@ -12802,6 +13055,7 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
         }
     }
     _atend = false;
+    qDebug() << "|-- ";
     while (!_atend) {
         _m = in.setMark();
         try {
@@ -12828,6 +13082,7 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
     in.rewind(_m);
     _m = in.setMark();
     if (_possiblyPresent) {
+	qDebug() << "|-- ";
         try {
             _s.solvers = QSharedPointer<OfficeArtSolverContainer>(new OfficeArtSolverContainer(&_s));
             parseOfficeArtSolverContainer(in, *_s.solvers.data());
@@ -12839,8 +13094,18 @@ void MSO::parseOfficeArtDgContainer(LEInputStream& in, OfficeArtDgContainer& _s)
             in.rewind(_m);
         }
     }
+    qDebug() << "====================================";
+    qDebug() << " END - parseOfficeArtDgContainer";
+    qDebug() << "====================================";
 }
 void MSO::parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrContainerFileBlock& _s) {
+    QString tmp;
+    for (int i = 0; i < spgr; i++) {
+        tmp.append("==");
+    }
+    tmp.append(">");
+    qDebug() << tmp.toAscii().data() << "parseOfficeArtSpgrContainerFileBlock";
+
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -12848,12 +13113,14 @@ void MSO::parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrC
         _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtSpContainer(&_s));
         parseOfficeArtSpContainer(in, *(OfficeArtSpContainer*)_s.anon.data());
     } catch (IncorrectValueException _x) {
+	qDebug() << "> FAILED";
         _s.anon.clear();
         in.rewind(_m);
     try {
         _s.anon = OfficeArtSpgrContainerFileBlock::choice4117040(new OfficeArtSpgrContainer(&_s));
         parseOfficeArtSpgrContainer(in, *(OfficeArtSpgrContainer*)_s.anon.data());
     } catch (IncorrectValueException _xx) {
+	qDebug() << "> FAILED";
         _s.anon.clear();
         in.rewind(_m);
     try {
@@ -12879,6 +13146,7 @@ void MSO::parseOfficeArtSpgrContainerFileBlock(LEInputStream& in, OfficeArtSpgrC
     }}}}}
 }
 void MSO::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
+    qDebug() << "parseDrawingContainer";
     _s.streamOffset = in.getPosition();
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0xF)) {
@@ -12893,6 +13161,7 @@ void MSO::parseDrawingContainer(LEInputStream& in, DrawingContainer& _s) {
     parseOfficeArtDgContainer(in, _s.OfficeArtDg);
 }
 void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
+    qDebug() << "parseMainMasterContainer";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -13136,6 +13405,9 @@ void MSO::parseMainMasterContainer(LEInputStream& in, MainMasterContainer& _s) {
     }
 }
 void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseSlideContainer";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     bool _possiblyPresent;
@@ -13325,7 +13597,11 @@ void MSO::parseSlideContainer(LEInputStream& in, SlideContainer& _s) {
     }
 }
 void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseNotesContainer";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
+    qDebug() << "==> offset:" << _s.streamOffset;
     LEInputStream::Mark _m;
     bool _possiblyPresent;
     bool _atend;
@@ -13448,6 +13724,9 @@ void MSO::parseNotesContainer(LEInputStream& in, NotesContainer& _s) {
     }
 }
 void MSO::parseMasterOrSlideContainer(LEInputStream& in, MasterOrSlideContainer& _s) {
+    qDebug() << "------------------------------";
+    qDebug() << "parseMasterOrSlideContainer";
+    qDebug() << "------------------------------";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -13455,14 +13734,17 @@ void MSO::parseMasterOrSlideContainer(LEInputStream& in, MasterOrSlideContainer&
     parseRecordHeader(in, _choice);
     in.rewind(_m);
     if ((_choice.recInstance == 0x0)&&(_choice.recType == 0x03F8)) {
+	qDebug() << "||";
         _s.anon = MasterOrSlideContainer::choice2788643208(new MainMasterContainer(&_s));
         parseMainMasterContainer(in, *(MainMasterContainer*)_s.anon.data());
     } else {
+	qDebug() << "||";
         _s.anon = MasterOrSlideContainer::choice2788643208(new SlideContainer(&_s));
         parseSlideContainer(in, *(SlideContainer*)_s.anon.data());
     }
 }
 void MSO::parsePowerPointStruct(LEInputStream& in, PowerPointStruct& _s) {
+    qDebug() << "|-- parsePowerPointStruct";
     _s.streamOffset = in.getPosition();
     LEInputStream::Mark _m;
     _m = in.setMark();
@@ -13478,7 +13760,7 @@ void MSO::parsePowerPointStruct(LEInputStream& in, PowerPointStruct& _s) {
     } catch (IncorrectValueException _xx) {
         _s.anon.clear();
         in.rewind(_m);
-    try {
+	try {
         _s.anon = PowerPointStruct::choice394521820(new PersistDirectoryAtom(&_s));
         parsePersistDirectoryAtom(in, *(PersistDirectoryAtom*)_s.anon.data());
     } catch (IncorrectValueException _xxx) {

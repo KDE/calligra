@@ -61,15 +61,15 @@ const MSO::FixedPoint zero() {
     return zero;
 }
 //NOTE: msohadeDefault is not defined in MS-ODRAW, just guessing
-const MSO::MSOSHADETYPE msoshadeDefault() {
-    MSO::MSOSHADETYPE tmp;
-    tmp.msoshadeNone = 0;
-    tmp.msoshadeGamma = 0;
-    tmp.msoshadeSigma = 0;
-    tmp.msoshadeBand = 0;
-    tmp.msoshadeOneColor = 0;
-    return tmp;
-}
+// const MSO::MSOSHADETYPE msoshadeDefault() {
+//     MSO::MSOSHADETYPE tmp;
+//     tmp.msoshadeNone = 0;
+//     tmp.msoshadeGamma = 0;
+//     tmp.msoshadeSigma = 0;
+//     tmp.msoshadeBand = 0;
+//     tmp.msoshadeOneColor = 0;
+//     return tmp;
+// }
 }
 
 #define GETTER(TYPE, FOPT, NAME, DEFAULT) \
@@ -120,7 +120,7 @@ GETTER(MSO::FixedPoint,        FillOriginX,          fillOriginX,          0)   
 GETTER(MSO::FixedPoint,        FillOriginY,          fillOriginY,          0)              // 2.3.7.29
 GETTER(MSO::FixedPoint,        FillShapeOriginX,     fillShapeOriginX,     0)              // 2.3.7.30
 GETTER(MSO::FixedPoint,        FillShapeOriginY,     fillShapeOriginY,     0)              // 2.3.7.31
-GETTER(MSO::MSOSHADETYPE,      FillShadeType,        fillShadeType,        msoshadeDefault()) // 2.3.7.32
+// GETTER(MSO::MSOSHADETYPE,      FillShadeType,        fillShadeType,        msoshadeDefault()) // 2.3.7.32
 GETTER(MSO::OfficeArtCOLORREF, FillColorExt,         fillColorExt,         white())        // 2.3.7.33
 GETTER(MSO::OfficeArtCOLORREF, FillBackColorExt,     fillBackColorExt,     white())        // 2.3.7.37
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)
