@@ -28,6 +28,7 @@
 //#include <KoOdfNumberStyles.h>
 #include <KDebug>
 #include "XlsxXmlDrawingReader.h"
+#include "Charting.h"
 
 #include <algorithm>
 
@@ -508,8 +509,37 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     int curSerNum = 0;
     Q_FOREACH(Charting::Series* series, chart()->m_series) {
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
-
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
+        if ( series->markerType != Charting::Series::None )
+        {
+            QString markerName;
+            switch ( series->markerType )
+            {
+                case Charting::Series::Square:
+                    markerName = "square";
+                    break;
+                case Charting::Series::Diamond:
+                    markerName = "diamond";
+                default:
+                    markerName = "circle";
+            }
+            seriesstyle.addAttribute( "chart:symbol-type", "named-symbol"/*, KoGenStyle::ChartType*/ );
+            seriesstyle.addAttribute( "chart:symbol-name", markerName/*, KoGenStyle::ChartType*/ );
+        }
+        else if ( m_chart->m_showMarker )
+        {
+            const int resNum = curSerNum % 3;
+            QString markerName;
+            if ( resNum == 0 )
+                markerName = "square";
+            else if ( resNum == 1 )
+                markerName = "diamond";
+            else if ( resNum == 2 )
+                markerName = "circle";
+            seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
+            seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
+        }
+        
         if ( chart()->m_impl->name() != "circle" && chart()->m_impl->name() != "ring" )
             addDataThemeToStyle( styleID, seriesstyle, curSerNum, chart()->m_series.count() );
         //seriesstyle.addProperty("draw:stroke", "solid");
