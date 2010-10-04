@@ -261,7 +261,7 @@ private:
     DropCapStatus m_dropCapStatus;
 
     //! Buffer where first letters of drop cap are read
-    QBuffer m_dropCapBuffer;
+    QBuffer* m_dropCapBuffer;
     KoXmlWriter* m_dropCapWriter;
     QString m_dropCapLines;
     qreal   m_dropCapDistance;

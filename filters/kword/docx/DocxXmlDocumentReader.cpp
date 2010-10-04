@@ -1805,9 +1805,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     m_currentRunStyleName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
-    MSOOXML::Utils::XmlWriteBuffer buffer;
-    body = buffer.setWriter(body);
-
     KoXmlWriter* oldWriter = body;
 
     // DropCapRead means we have read the w:dropCap attribute on this
@@ -1816,16 +1813,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     //             the saved text to this paragraph.
     if (m_dropCapStatus == DropCapRead) {
        m_dropCapStatus = DropCapDone;
-       m_dropCapBuffer.open(QIODevice::ReadWrite);
-       m_dropCapWriter = new KoXmlWriter(&m_dropCapBuffer);
+       m_dropCapBuffer = new QBuffer;
+       m_dropCapBuffer->open(QIODevice::ReadWrite);
+       m_dropCapWriter = new KoXmlWriter(m_dropCapBuffer);
        body = m_dropCapWriter;
     }
     else if (m_dropCapStatus == DropCapDone) {
-        body->addCompleteElement(&m_dropCapBuffer);
+        body->addCompleteElement(m_dropCapBuffer);
         delete m_dropCapWriter;
+        delete m_dropCapBuffer;
+        m_dropCapBuffer = 0;
         m_dropCapWriter = 0;
         m_dropCapStatus = NoDropCap;
     }
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
 
     while (!atEnd()) {
 //kDebug() <<"[0]";
@@ -1854,10 +1857,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (m_dropCapStatus == DropCapDone) {
-        body = oldWriter;
-    }
-    else if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || 
+    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() ||
              m_complexCharType != NoComplexFieldCharType || !m_currentTextStyle.parentName().isEmpty()) {
         // We want to write to the higher body level
         body = buffer.originalWriter();
@@ -1945,6 +1945,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     else {
         // Writing the internal body of read_t now 
         body = buffer.releaseWriter();
+    }
+
+    if (m_dropCapStatus == DropCapDone) {
+        body = oldWriter;
     }
 
     READ_EPILOGUE
@@ -2635,13 +2639,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
     bool ok;
     const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0; /* half-points */
     if (ok) {
-        kDebug() << "pointSize:" << pointSize;
-        m_currentTextStyleProperties->setFontPointSize(pointSize);
+        // In case of drop cap, text size should not be read
+        if (m_dropCapStatus != DropCapDone) {
+            m_currentTextStyleProperties->setFontPointSize(pointSize);
+        }
     }
     readNext();
     READ_EPILOGUE
