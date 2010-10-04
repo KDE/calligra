@@ -86,15 +86,17 @@ public:
     // Fill Style property set
     quint32 fillType() const;
     MSO::OfficeArtCOLORREF fillColor() const;
-    MSO::FixedPoint fillOpacity() const;
+    MSO::FixedPoint        fillOpacity() const;
     MSO::OfficeArtCOLORREF fillBackColor() const;
-    MSO::FixedPoint fillBackOpacity() const;
+    MSO::FixedPoint        fillBackOpacity() const;
     MSO::OfficeArtCOLORREF fillCrMod() const;
     quint32 fillBlip() const;
+    quint32 fillBlipName() const;
+    quint32 fillBlipFlags() const;
     qint32 fillWidth() const;
     qint32 fillHeight() const;
-    MSO::FixedPoint fillAngle() const;
     qint32 fillFocus() const;
+    MSO::FixedPoint fillAngle() const;
     MSO::FixedPoint fillToLeft() const;
     MSO::FixedPoint fillToTop() const;
     MSO::FixedPoint fillToRight() const;
@@ -105,10 +107,12 @@ public:
     qint32 fillRectBottom() const;
     qint32 fillDztype() const;
     qint32 fillShadePreset() const;
+    quint32 fillShadeColors() const;
     MSO::FixedPoint fillOriginX() const;
     MSO::FixedPoint fillOriginY() const;
     MSO::FixedPoint fillShapeOriginX() const;
     MSO::FixedPoint fillShapeOriginY() const;
+    MSO::MSOSHADETYPE fillShadeType() const;
     MSO::OfficeArtCOLORREF fillColorExt() const;
     MSO::OfficeArtCOLORREF fillBackColorExt() const;
     // FillStyleBooleanProperties

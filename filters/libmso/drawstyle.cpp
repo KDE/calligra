@@ -26,12 +26,12 @@ const MSO::OfficeArtCOLORREF white() {
             = w.fSysIndex = false;
     return w;
 }
-const MSO::OfficeArtCOLORREF crMod() {
+// The default value for this property is 0x20000000
+const MSO::OfficeArtCOLORREF crmodDefault() {
     MSO::OfficeArtCOLORREF w;
-    w.red = 0x20;
-    w.green = w.blue = 0x00;
-    w.fPaletteIndex = w.fPaletteRGB = w.fSystemRGB = w.fSchemeIndex
-            = w.fSysIndex = false;
+    w.red = w.green = w.blue = 0x00;
+    w.fPaletteIndex = w.fPaletteRGB = w.fSchemeIndex = w.fSysIndex = false;
+    w.fSystemRGB = true;
     return w;
 }
 const MSO::OfficeArtCOLORREF black() {
@@ -55,10 +55,20 @@ const MSO::FixedPoint one() {
     return one;
 }
 const MSO::FixedPoint zero() {
-    MSO::FixedPoint one;
-    one.integral = 0;
-    one.fractional = 0;
-    return one;
+    MSO::FixedPoint zero;
+    zero.integral = 0;
+    zero.fractional = 0;
+    return zero;
+}
+//NOTE: msohadeDefault is not defined in MS-ODRAW, just guessing
+const MSO::MSOSHADETYPE msoshadeDefault() {
+    MSO::MSOSHADETYPE tmp;
+    tmp.msoshadeNone = 0;
+    tmp.msoshadeGamma = 0;
+    tmp.msoshadeSigma = 0;
+    tmp.msoshadeBand = 0;
+    tmp.msoshadeOneColor = 0;
+    return tmp;
 }
 }
 
@@ -81,34 +91,38 @@ TYPE DrawStyle::NAME() const \
     return DEFAULT; \
 }
 
-//     TYPE                    FOPT                  NAME                  DEFAULT  ODRAW Ref
-GETTER(quint32,                FillType,             fillType,             0)       // 2.3.7.1
-GETTER(MSO::OfficeArtCOLORREF, FillColor,            fillColor,            white()) // 2.3.7.2
-GETTER(MSO::FixedPoint,        FillOpacity,          fillOpacity,          one())   // 2.3.7.3
-GETTER(MSO::OfficeArtCOLORREF, FillBackColor,        fillBackColor,        white()) // 2.3.7.4
-GETTER(MSO::FixedPoint,        FillBackOpacity,      fillBackOpacity,      one())   // 2.3.7.5
-GETTER(MSO::OfficeArtCOLORREF, FillCrMod,            fillCrMod,            crMod()) // 2.3.7.6
-GETTER(quint32,                FillBlip,             fillBlip,             0)       // 2.3.7.7
-GETTER(qint32,                 FillWidth,            fillWidth,            0)       // 2.3.7.12
-GETTER(qint32,                 FillHeight,           fillHeight,           0)       // 2.3.7.13
-GETTER(MSO::FixedPoint,        FillAngle,            fillAngle,            zero())  // 2.3.7.14
-GETTER(qint32,                 FillFocus,            fillFocus,            0)       // 2.3.7.15
-GETTER(MSO::FixedPoint,        FillToLeft,           fillToLeft,           zero())  // 2.3.7.16
-GETTER(MSO::FixedPoint,        FillToTop,            fillToTop,            zero())  // 2.3.7.17
-GETTER(MSO::FixedPoint,        FillToRight,          fillToRight,          zero())  // 2.3.7.18
-GETTER(MSO::FixedPoint,        FillToBottom,         fillToBottom,         zero())  // 2.3.7.19
-GETTER(qint32,                 FillRectLeft,         fillRectLeft,         0)       // 2.3.7.20
-GETTER(qint32,                 FillRectTop,          fillRectTop,          0)       // 2.3.7.21
-GETTER(qint32,                 FillRectRight,        fillRectRight,        0)       // 2.3.7.22
-GETTER(qint32,                 FillRectBottom,       fillRectBottom,       0)       // 2.3.7.23
-GETTER(qint32,                 FillDztype,           fillDztype,           0)       // 2.3.7.24
-GETTER(qint32,                 FillShadePreset,      fillShadePreset,      0)       // 2.3.7.25
-GETTER(MSO::FixedPoint,        FillOriginX,          fillOriginX,          0)       // 2.3.7.28
-GETTER(MSO::FixedPoint,        FillOriginY,          fillOriginY,          0)       // 2.3.7.29
-GETTER(MSO::FixedPoint,        FillShapeOriginX,     fillShapeOriginX,     0)       // 2.3.7.30
-GETTER(MSO::FixedPoint,        FillShapeOriginY,     fillShapeOriginY,     0)       // 2.3.7.31
-GETTER(MSO::OfficeArtCOLORREF, FillColorExt,         fillColorExt,         white()) // 2.3.7.33
-GETTER(MSO::OfficeArtCOLORREF, FillBackColorExt,     fillBackColorExt,     white()) // 2.3.7.37
+//     TYPE                    FOPT                  NAME                  DEFAULT         ODRAW Ref
+GETTER(quint32,                FillType,             fillType,             0)              // 2.3.7.1
+GETTER(MSO::OfficeArtCOLORREF, FillColor,            fillColor,            white())        // 2.3.7.2
+GETTER(MSO::FixedPoint,        FillOpacity,          fillOpacity,          one())          // 2.3.7.3
+GETTER(MSO::OfficeArtCOLORREF, FillBackColor,        fillBackColor,        white())        // 2.3.7.4
+GETTER(MSO::FixedPoint,        FillBackOpacity,      fillBackOpacity,      one())          // 2.3.7.5
+GETTER(MSO::OfficeArtCOLORREF, FillCrMod,            fillCrMod,            crmodDefault()) // 2.3.7.6
+GETTER(quint32,                FillBlip,             fillBlip,             0)              // 2.3.7.7
+GETTER(quint32,                FillBlipName,         fillBlipName,         0)              // 2.3.7.9
+GETTER(quint32,                FillBlipFlags,        fillBlipFlags,        0)              // 2.3.7.11
+GETTER(qint32,                 FillWidth,            fillWidth,            0)              // 2.3.7.12
+GETTER(qint32,                 FillHeight,           fillHeight,           0)              // 2.3.7.13
+GETTER(MSO::FixedPoint,        FillAngle,            fillAngle,            zero())         // 2.3.7.14
+GETTER(qint32,                 FillFocus,            fillFocus,            0)              // 2.3.7.15
+GETTER(MSO::FixedPoint,        FillToLeft,           fillToLeft,           zero())         // 2.3.7.16
+GETTER(MSO::FixedPoint,        FillToTop,            fillToTop,            zero())         // 2.3.7.17
+GETTER(MSO::FixedPoint,        FillToRight,          fillToRight,          zero())         // 2.3.7.18
+GETTER(MSO::FixedPoint,        FillToBottom,         fillToBottom,         zero())         // 2.3.7.19
+GETTER(qint32,                 FillRectLeft,         fillRectLeft,         0)              // 2.3.7.20
+GETTER(qint32,                 FillRectTop,          fillRectTop,          0)              // 2.3.7.21
+GETTER(qint32,                 FillRectRight,        fillRectRight,        0)              // 2.3.7.22
+GETTER(qint32,                 FillRectBottom,       fillRectBottom,       0)              // 2.3.7.23
+GETTER(qint32,                 FillDztype,           fillDztype,           0)              // 2.3.7.24
+GETTER(qint32,                 FillShadePreset,      fillShadePreset,      0)              // 2.3.7.25
+GETTER(quint32,                FillShadeColors,      fillShadeColors,      0)              // 2.3.7.26
+GETTER(MSO::FixedPoint,        FillOriginX,          fillOriginX,          0)              // 2.3.7.28
+GETTER(MSO::FixedPoint,        FillOriginY,          fillOriginY,          0)              // 2.3.7.29
+GETTER(MSO::FixedPoint,        FillShapeOriginX,     fillShapeOriginX,     0)              // 2.3.7.30
+GETTER(MSO::FixedPoint,        FillShapeOriginY,     fillShapeOriginY,     0)              // 2.3.7.31
+GETTER(MSO::MSOSHADETYPE,      FillShadeType,        fillShadeType,        msoshadeDefault()) // 2.3.7.32
+GETTER(MSO::OfficeArtCOLORREF, FillColorExt,         fillColorExt,         white())        // 2.3.7.33
+GETTER(MSO::OfficeArtCOLORREF, FillBackColorExt,     fillBackColorExt,     white())        // 2.3.7.37
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)
 GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)
 GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)
