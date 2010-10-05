@@ -107,7 +107,6 @@ bool KoWmfPaint::begin()
 #if DEBUG_WMFPAINT
     kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
                   << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
-    kDebug(31000) << "KoWmfPaint::begin returns " << ret;
 #endif
 
     return true;
@@ -579,6 +578,9 @@ void KoWmfPaint::drawText(int x, int y, int w, int h, int textAlign, const QStri
         // (left, top) position = current logical position
         x = mLastPos.x();
         y = mLastPos.y();
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "Using current position:" << x << y;
+#endif
     }
 
     QFontMetrics  fm(mPainter->font(), mTarget);
