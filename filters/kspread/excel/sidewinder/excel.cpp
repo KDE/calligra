@@ -1871,6 +1871,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
             PictureReference ref = savePicture(fb, m_workbook->store());
             if (ref.name.length() == 0) {
                 std::cerr << "Empty name in picture reference for picture with uid=" << ref.uid << " mimetype=" << ref.mimetype << std::endl;
+                d->items << 0;
                 continue;
             }
             d->items << new MsoDrawingBlibItem(ref);
