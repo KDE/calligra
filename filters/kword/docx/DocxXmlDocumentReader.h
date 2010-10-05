@@ -133,6 +133,7 @@ protected:
     KoFilter::ConversionStatus read_caps();
     KoFilter::ConversionStatus read_smallCaps();
     KoFilter::ConversionStatus read_w();
+    KoFilter::ConversionStatus read_txbxContent();
     KoFilter::ConversionStatus read_color();
     KoFilter::ConversionStatus read_highlight();
     KoFilter::ConversionStatus read_vertAlign();
@@ -260,7 +261,7 @@ private:
     DropCapStatus m_dropCapStatus;
 
     //! Buffer where first letters of drop cap are read
-    QBuffer m_dropCapBuffer;
+    QBuffer* m_dropCapBuffer;
     KoXmlWriter* m_dropCapWriter;
     QString m_dropCapLines;
     qreal   m_dropCapDistance;

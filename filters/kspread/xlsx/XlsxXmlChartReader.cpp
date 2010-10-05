@@ -2256,27 +2256,28 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(val)
             ELSE_TRY_READ_IF(dLbls)
-            if ( qualifiedName() == "c:marker" )
-            {
-                const QXmlStreamAttributes attrs(attributes());
-                TRY_READ_ATTR_WITHOUT_NS(val);
-                if ( val == "1" || val == "true" || val == "on " )
-                {                    
-                    if ( m_currentSeries->markerType == Charting::Series::None )
-                        switch ( d->m_numReadSeries )
-                        {
-                            case 0:
-                                m_currentSeries->markerType = Charting::Series::Square;
-                                break;
-                            case 1:
-                                m_currentSeries->markerType = Charting::Series::Diamond;
-                                break;
-                            default:
-                                break;
-                        }
-                    ++d->m_numReadSeries;
-                }
-            }
+            ELSE_TRY_READ_IF(serMarker)
+//             if ( qualifiedName() == "c:marker" )
+//             {
+//                 const QXmlStreamAttributes attrs(attributes());
+//                 TRY_READ_ATTR_WITHOUT_NS(val);
+//                 if ( val == "1" || val == "true" || val == "on " )
+//                 {                    
+//                     if ( m_currentSeries->markerType == Charting::Series::None )
+//                         switch ( d->m_numReadSeries )
+//                         {
+//                             case 0:
+//                                 m_currentSeries->markerType = Charting::Series::Square;
+//                                 break;
+//                             case 1:
+//                                 m_currentSeries->markerType = Charting::Series::Diamond;
+//                                 break;
+//                             default:
+//                                 break;
+//                         }
+//                     ++d->m_numReadSeries;
+//                 }
+//             }
                 
         }
     }
@@ -2290,6 +2291,44 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart_Ser()
 
     m_context->m_chart->m_verticalCellRangeAddress = tempLineSeriesData->m_cat.writeRefToInternalTable(this);
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL marker
+KoFilter::ConversionStatus XlsxXmlChartReader::read_serMarker()
+{
+    using namespace Charting;
+    READ_PROLOGUE2( serMarker )
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if ( qualifiedName() == "c:symbol" )
+            {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val);
+                if ( val.toLower() == "star" )
+                    m_currentSeries->markerType = Series::Star;
+                else if ( val.toLower() == "dash" )
+                    m_currentSeries->markerType = Series::Dash;
+                else if ( val.toLower() == "dot" )
+                    m_currentSeries->markerType = Series::Dot;
+                else if ( val.toLower() == "plus" )
+                    m_currentSeries->markerType = Series::Plus;
+                else if ( val.toLower() == "circle" )
+                    m_currentSeries->markerType = Series::Circle;
+                else if ( val.toLower() == "x" )
+                    m_currentSeries->markerType = Series::SymbolX;
+                else if ( val.toLower() == "triangle" )
+                    m_currentSeries->markerType = Series::Triangle;
+                else if ( val.toLower() == "squre" )
+                    m_currentSeries->markerType = Series::Square;
+                else if ( val.toLower() == "diamond" )
+                    m_currentSeries->markerType = Series::Diamond;
+            }
+        }
+    }
     READ_EPILOGUE
 }
 

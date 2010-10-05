@@ -478,8 +478,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgMar()
     TRY_READ_ATTR(left)
     if (!left.isEmpty()) {
         const QString s(MSOOXML::Utils::TWIP_to_ODF(left));
-        if (!s.isEmpty())
+        if (!s.isEmpty()) {
             m_currentPageStyle.addProperty("fo:margin-left", s);
+        }
     }
     readNext();
     READ_EPILOGUE
@@ -519,7 +520,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footerReference()
 
     MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
 
-    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
+    QString fileName = link_target;
+    fileName.remove(0, m_context->path.length());
+
+    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
@@ -589,7 +593,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_headerReference()
 
     MSOOXML::MsooXmlRelationships relationships(*m_context->import, m_writers, errorMessage);
 
-    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, link_target,
+    QString fileName = link_target;
+    fileName.remove(0, m_context->path.length());
+
+    DocxXmlDocumentReaderContext context(*m_context->import, m_context->path, fileName,
         relationships, m_context->themes);
 
     const KoFilter::ConversionStatus status
@@ -1391,10 +1398,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
                 m_complexCharType = InternalHyperlinkComplexFieldCharType;
                 m_complexCharValue = instruction;
             }
-            else if (instruction == "PAGE") {
+            else if (instruction.startsWith("PAGE")) {
                 m_complexCharType = CurrentPageComplexFieldCharType;
             }
-            else if (instruction == "NUMPAGES") {
+            else if (instruction.startsWith("NUMPAGES")) {
                 m_complexCharType = NumberOfPagesComplexFieldCharType;
             }
             //! @todo: Add rest of the instructions
@@ -1500,6 +1507,33 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         }
     }
     body->endElement(); // text:bookmark, text.a
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL txbxContent
+/*! txbxContent handler (Textbox content)
+
+ Parent elements:
+ - [done] textbox (§14.1.2.19)
+
+*/
+//! @todo support all elements
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(tbl)
+        }
+    }
 
     READ_EPILOGUE
 }
@@ -1771,9 +1805,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     m_currentRunStyleName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
-    MSOOXML::Utils::XmlWriteBuffer buffer;
-    body = buffer.setWriter(body);
-
     KoXmlWriter* oldWriter = body;
 
     // DropCapRead means we have read the w:dropCap attribute on this
@@ -1782,16 +1813,22 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     //             the saved text to this paragraph.
     if (m_dropCapStatus == DropCapRead) {
        m_dropCapStatus = DropCapDone;
-       m_dropCapBuffer.open(QIODevice::ReadWrite);
-       m_dropCapWriter = new KoXmlWriter(&m_dropCapBuffer);
+       m_dropCapBuffer = new QBuffer;
+       m_dropCapBuffer->open(QIODevice::ReadWrite);
+       m_dropCapWriter = new KoXmlWriter(m_dropCapBuffer);
        body = m_dropCapWriter;
     }
     else if (m_dropCapStatus == DropCapDone) {
-        body->addCompleteElement(&m_dropCapBuffer);
+        body->addCompleteElement(m_dropCapBuffer);
         delete m_dropCapWriter;
+        delete m_dropCapBuffer;
+        m_dropCapBuffer = 0;
         m_dropCapWriter = 0;
         m_dropCapStatus = NoDropCap;
     }
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
 
     while (!atEnd()) {
 //kDebug() <<"[0]";
@@ -1820,10 +1857,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
         }
     }
 
-    if (m_dropCapStatus == DropCapDone) {
-        body = oldWriter;
-    }
-    else if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() || 
+    if (!m_currentTextStyle.isEmpty() || !m_currentRunStyleName.isEmpty() ||
              m_complexCharType != NoComplexFieldCharType || !m_currentTextStyle.parentName().isEmpty()) {
         // We want to write to the higher body level
         body = buffer.originalWriter();
@@ -1911,6 +1945,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
     else {
         // Writing the internal body of read_t now 
         body = buffer.releaseWriter();
+    }
+
+    if (m_dropCapStatus == DropCapDone) {
+        body = oldWriter;
     }
 
     READ_EPILOGUE
@@ -2506,7 +2544,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     bool ok = false;
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
+        // Note, kword does not support atm. displaying text in negative indents
+        // as a result, text is cut, this makes the indent of such text 0
+        // Remove ME once kword support is there.
+        if (leftInd > 0) {
+            m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
+        }
     }
 
     TRY_READ_ATTR(firstLine)
@@ -2596,13 +2639,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_u()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_sz()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
     bool ok;
     const qreal pointSize = qreal(val.toUInt(&ok)) / 2.0; /* half-points */
     if (ok) {
-        kDebug() << "pointSize:" << pointSize;
-        m_currentTextStyleProperties->setFontPointSize(pointSize);
+        // In case of drop cap, text size should not be read
+        if (m_dropCapStatus != DropCapDone) {
+            m_currentTextStyleProperties->setFontPointSize(pointSize);
+        }
     }
     readNext();
     READ_EPILOGUE
@@ -4033,7 +4079,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_trHeight()
         m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
     }
     else {
-        m_currentTableRowStyle.addProperty("style:row-height",s, KoGenStyle::TableRowType);
+        m_currentTableRowStyle.addProperty("style:min-row-height",s, KoGenStyle::TableRowType);
     }
     readNext();
     READ_EPILOGUE

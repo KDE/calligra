@@ -88,10 +88,12 @@ Style StyleStorage::contains(const QPoint& point) const
     }
     // not found, lookup in the tree
     QList<SharedSubStyle> subStyles = d->tree.contains(point);
+
     if (subStyles.isEmpty())
         return *styleManager()->defaultStyle();
     Style* style = new Style();
     (*style) = composeStyle(subStyles);
+
     // insert style into the cache
     d->cache.insert(point, style);
     d->cachedArea += QRect(point, point);
@@ -653,7 +655,7 @@ void StyleStorage::garbageCollection()
             kDebug(36006) << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
             << "used" << currentPair.second->ref << "times" << endl;
-            d->tree.remove(currentPair.first.toRect(), currentPair.second);
+            d->tree.remove(currentPair.first.toRect(), currentPair.second, currentZIndex);
 #if 0
             kDebug(36006) << "StyleStorage: usage of" << currentPair.second->debugData() << " is" << currentPair.second->ref;
             // FIXME Stefan: The usage of substyles used once should be

@@ -38,6 +38,7 @@ protected:
     KoFilter::ConversionStatus read_pict();
 
     // v namespace:
+    KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
     KoFilter::ConversionStatus read_VML_background();
@@ -45,7 +46,6 @@ protected:
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
     KoFilter::ConversionStatus read_textbox();
-    KoFilter::ConversionStatus read_txbxContent();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);

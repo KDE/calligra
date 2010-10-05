@@ -112,6 +112,7 @@ protected:
     KoFilter::ConversionStatus read_ptCount();
     KoFilter::ConversionStatus read_numLit();
     KoFilter::ConversionStatus read_strCache();
+    KoFilter::ConversionStatus read_serMarker();
 
 private:
 

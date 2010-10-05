@@ -1042,8 +1042,11 @@ void PptToOdp::defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, Ko
             style.addProperty("draw:fill", getFillType(fillType), dp);
             // draw:fill-color
             if (fillType == 0) {
+
+		//TODO: Start using  ODrawToOdf::processOfficeArtCOLORREF !!! 
+
                 // only set the color if the fill type is 'solid' because OOo ignores
-                // fill='non' if the color is set
+                // fill='none' if the color is set
                 style.addProperty("draw:fill-color", toQColor(ds.fillColor(), master, common).name(), dp);
             }
             // draw:fill-gradient-name

@@ -515,11 +515,29 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             QString markerName;
             switch ( series->markerType )
             {
-                case Charting::Series::Square:
+                using namespace Charting;
+                case Series::Square:
                     markerName = "square";
                     break;
-                case Charting::Series::Diamond:
+                case Series::Diamond:
                     markerName = "diamond";
+                    break;
+                case Series::Star:
+                    markerName = "star";
+                    break;
+                case Series::Triangle:
+                    markerName = "arrow-up";
+                    break;
+                case Series::Dot:
+                    markerName = "dot";
+                    break;
+                case Series::Plus:
+                    markerName = "plus";
+                    break;
+                case Series::SymbolX:
+                    markerName = "x";
+                    break;
+                case Series::Circle:
                 default:
                     markerName = "circle";
             }

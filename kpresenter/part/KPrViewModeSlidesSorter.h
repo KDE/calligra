@@ -138,6 +138,7 @@ protected:
             KPrSlidesSorter ( KPrViewModeSlidesSorter * viewModeSlidesSorter, QWidget * parent = 0 )
                 : QListWidget(parent)
                 , m_viewModeSlidesSorter(viewModeSlidesSorter)
+                , m_movingPageNumber(-1)
             {
                 setViewMode(QListView::IconMode);
                 setResizeMode(QListView::Adjust);
@@ -166,6 +167,7 @@ protected:
 
         private:
             KPrViewModeSlidesSorter * m_viewModeSlidesSorter;
+            int m_movingPageNumber;
     };
 
 private:

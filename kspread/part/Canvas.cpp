@@ -154,6 +154,10 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
+    foreach (QAction* action, actions()) {
+        removeAction(action);
+    }
+
     delete cd;
 }
 

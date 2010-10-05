@@ -1330,24 +1330,32 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setNumFormat(const QString
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
 {
     QString returnValue;
+    QString ending;
     if (m_type == ParagraphBulletProperties::NumberType) {
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
         if (m_startValue != 0) {
             returnValue += QString("style:start-value=\"%1\" ").arg(m_startValue);
         }
+        ending = "</text:list-level-style-number>";
     }
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
         returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
+        ending = "</text:list-level-style-bullet>";
     }
     if (!m_align.isEmpty()) {
         returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
     }
+    returnValue += ">";
+
     if (m_indent > 0) {
+        returnValue += "<style:list-level-properties ";
         returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
+        returnValue += "/>";
     }
-    returnValue += "/>";
+
+    returnValue += ending;
 
     return returnValue;
 }

@@ -151,6 +151,16 @@ public:
     void defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles);
     void addGraphicStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
     void defineGradientStyle(KoGenStyle& style, const DrawStyle& ds);
+
+    /**
+     * Apply the logic defined in MS-ODRAW subsection 2.2.2 to the provided
+     * OfficeArtCOLORREF record.
+     *
+     * @param c OfficeArtCOLORREF record
+     * @param ds DrawStyle to access shape properties and client specific f.
+     * @return final color
+     */
+    QColor processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, const DrawStyle& ds);
 };
 
 /**
@@ -162,5 +172,6 @@ inline qreal toQReal(const MSO::FixedPoint& f)
 }
 const char* getFillType(quint32 fillType);
 const char* getRepeatStyle(quint32 fillType);
+const char* getGradientRendering(quint32 fillType);
 
 #endif

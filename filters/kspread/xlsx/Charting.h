@@ -305,7 +305,7 @@ namespace Charting
     {
     public:
         // TODO fill the missing marker types in
-        enum MarkerType{ None, Square, Diamond };
+        enum MarkerType{ None, Square, Diamond, Star, Dot, Dash, Plus, Circle, SymbolX, Triangle };
         /// the type of data in categories, or horizontal values on bubble and scatter chart groups, in the series. MUST be either 0x0001=numeric or 0x0003=text.
         int m_dataTypeX;
         /// the count of categories (3), or horizontal values on bubble and scatter chart groups, in the series.
