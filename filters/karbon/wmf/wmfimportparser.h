@@ -75,6 +75,8 @@ private:
      */
     void  setWindowOrg(int left, int top);
     void  setWindowExt(int width, int height);
+    void  setViewportOrg(int left, int top);
+    void  setViewportExt(int width, int height);
 
     // Clipping
     // the 'CoordinateMode' is ommitted : always CoordPainter in wmf

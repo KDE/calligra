@@ -186,6 +186,20 @@ void WMFImportParser::setWindowExt(int width, int height)
     }
 }
 
+void WMFImportParser::setViewportOrg(int left, int top)
+{
+    // FIXME: Not Yet Implemented
+    //        See filters/libkowmf/kowmfpaint.cc for how to use this.
+}
+
+
+void WMFImportParser::setViewportExt(int width, int height)
+{
+    // FIXME: Not Yet Implemented
+    //        See filters/libkowmf/kowmfpaint.cc for how to use this.
+}
+
+
 
 void WMFImportParser::setMatrix(const QMatrix &matrix, bool combine)
 {
