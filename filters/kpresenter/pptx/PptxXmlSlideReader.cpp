@@ -183,6 +183,7 @@ public:
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
+    int numberOfOleObjects;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -207,6 +208,7 @@ void PptxXmlSlideReader::init()
     initDrawingML();
     documentReaderMode = false;
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
+    d->numberOfOleObjects = 0;
 }
 
 KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -651,6 +653,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
     TRY_READ_ATTR_WITHOUT_NS(progId);
     TRY_READ_ATTR_WITHOUT_NS(name);
 
+    /*
+    if(!imgW.isEmpty()) m_svgWidth = imgW.toInt();
+    if(!imgH.isEmpty()) m_svgHeight = imgH.toInt();
+    */
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -658,39 +665,58 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+    
+    ++d->numberOfOleObjects;
 
     if (!r_id.isEmpty()) {
         QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-        QString destinationName;
 
-        body->startElement("draw:object-ole");
-        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
-        body->addAttribute("xlink:href", destinationName);
-        body->endElement(); // draw:object-ole
+        if (progId == "PowerPoint.Show.12") {
+            // only copy over the preview-image for now
+            QString previewFileName = QString("image%1.emf").arg(d->numberOfOleObjects);
+            QString originalPreviewFilePath = "ppt/media/" + previewFileName;
+            if (copyFile(originalPreviewFilePath, "Pictures/", previewFileName) == KoFilter::OK) {
+                body->startElement("draw:image");
+                body->addAttribute("xlink:href", previewFileName);
+                body->addAttribute("xlink:show", "embed");
+                body->addAttribute("xlink:actuate", "onLoad");
+                body->endElement(); //draw:image
+            }
+        } else {
+            QString destinationName;
 
-        if (progId == "Paint.Picture" || name == "Bitmap Image") {
-            body->startElement("draw:image");
-            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
-            addManifestEntryForPicturesDir();
+            body->startElement("draw:object-ole");
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
             body->addAttribute("xlink:href", destinationName);
-            body->addAttribute("xlink:show", "embed");
-            body->addAttribute("xlink:actuate", "onLoad");
-            body->endElement(); //draw:image
-        }
-        else if (progId == "Package") {
-            body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
-            body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:plugin
-        }
-        else if (progId.contains("AcroExch")) { // PDF
-            body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
-            body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:object
+            body->endElement(); // draw:object-ole
+
+            if (progId == "Paint.Picture" || name == "Bitmap Image") {
+                body->startElement("draw:image");
+                RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
+                addManifestEntryForPicturesDir();
+                body->addAttribute("xlink:href", destinationName);
+                body->addAttribute("xlink:show", "embed");
+                body->addAttribute("xlink:actuate", "onLoad");
+                body->endElement(); //draw:image
+            }
+            else if (progId == "Package") {
+                body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
+                RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+                body->addAttribute("xlink:href", destinationName);
+                body->endElement(); // draw:plugin
+            }
+            else if (progId.contains("AcroExch")) { // PDF
+                body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
+                RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+                body->addAttribute("xlink:href", destinationName);
+                body->endElement(); // draw:object
+            }
+            else {
+                kWarning() << "Unhandled oleObj with progId=" << progId;
+            }
         }
     }
 

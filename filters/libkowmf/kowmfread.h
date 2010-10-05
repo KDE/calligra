@@ -115,6 +115,8 @@ public:
     // others doesn't call setWindow* at all
     virtual void  setWindowOrg(int left, int top) = 0;
     virtual void  setWindowExt(int width, int height) = 0;
+    virtual void  setViewportOrg(int left, int top) = 0;
+    virtual void  setViewportExt(int width, int height) = 0;
 
     // Clipping
     // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
