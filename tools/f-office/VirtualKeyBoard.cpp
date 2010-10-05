@@ -56,9 +56,9 @@ VirtualKeyBoard::VirtualKeyBoard(QWidget *parent) :
         }
     }
     if(!filepresent) {
-        if(directory.mkdir(".VirtualKeyBoardLanguages")); {
-            if(directory.cd(".VirtualKeyBoardLanguages"));
-            if(directory.mkdir(".headers"));
+        if (directory.mkdir(".VirtualKeyBoardLanguages")) {
+            directory.cd(".VirtualKeyBoardLanguages");
+            directory.mkdir(".headers");
         }
     }
     directory=QDir::home();
