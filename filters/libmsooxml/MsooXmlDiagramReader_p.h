@@ -112,18 +112,27 @@ class AbstractNode
         QList<AbstractNode*> children() const {
             if(m_cachedChildren.isEmpty()) {
                 const int count = m_appendedChildren.count()+m_orderedChildren.count();
-                for(int i = 0, k = -1; i < count; ++i)
-                    m_cachedChildren.append(m_orderedChildren.contains(i) ? m_orderedChildren[i] : m_appendedChildren[++k]);
+                for(int i = 0, k = -1; i < count; ++i) {
+                    if(m_orderedChildren.contains(i)) {
+                        foreach(AbstractNode* n, m_orderedChildren[i])
+                            m_cachedChildren.append(n);
+                    } else {
+                        m_cachedChildren.append(m_appendedChildren[++k]);
+                    }
+                }
             }
             return m_cachedChildren;
         }
         void insertChild(int index, AbstractNode* node) {
-            Q_ASSERT(!m_orderedChildren.contains(index));
+            //Q_ASSERT(!m_orderedChildren.contains(index));
             Q_ASSERT(!m_orderedChildrenReverse.contains(node));
             Q_ASSERT(!m_appendedChildren.contains(node));
             Q_ASSERT(!node->m_parent);
             node->m_parent = this;
-            m_orderedChildren[index] = node;
+            if(m_orderedChildren.contains(index))
+                m_orderedChildren[index].append(node);
+            else
+                m_orderedChildren[index] = QList<AbstractNode*>() << node;
             m_orderedChildrenReverse[node] = index;
             m_cachedChildren.clear();
         }
@@ -137,10 +146,14 @@ class AbstractNode
         void removeChild(AbstractNode* node) {
             Q_ASSERT(node->m_parent == this);
             node->m_parent = 0;
-            if(m_orderedChildrenReverse.contains(node))
-                m_orderedChildren.take(m_orderedChildrenReverse.take(node));
-            else
+            if(m_orderedChildrenReverse.contains(node)) {
+                int index = m_orderedChildrenReverse.take(node);
+                QList<AbstractNode*> nodes = m_orderedChildren[index];
+                nodes.removeAll(node);
+                m_orderedChildren[index] = nodes;
+            } else {
                 m_appendedChildren.removeAll(node);
+            }
             m_cachedChildren.clear();
         }
         QList<AbstractNode*> descendant() const {
@@ -161,7 +174,7 @@ class AbstractNode
     private:
         AbstractNode* m_parent;
         mutable QList<AbstractNode*> m_cachedChildren;
-        QMap<int,AbstractNode*> m_orderedChildren;
+        QMap<int,QList<AbstractNode*> > m_orderedChildren;
         QMap<AbstractNode*,int> m_orderedChildrenReverse;
         QList<AbstractNode*> m_appendedChildren;
 };
@@ -528,7 +541,7 @@ class LayoutNodeAtom : public AbstractAtom
         virtual ~LayoutNodeAtom() {}
         virtual LayoutNodeAtom* clone();
         virtual void dump(Context* context, int level) {
-            DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count() << "variables=" << m_variables << "values=" << finalValues();
+            DEBUG_DUMP << "name=" << m_name << "text=" << m_text << "constraintsCount=" << m_constraints.count() << "variables=" << m_variables << "values=" << finalValues();
             AbstractAtom::dump(context, level);
         }
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader) {
@@ -688,6 +701,7 @@ class ConstraintAtom : public AbstractAtom
             return atom;
         }
         virtual void dump(Context*, int level) {
+            /*
             QString s = QString("fact=%1 ").arg(m_fact);
             if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
             if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
@@ -700,6 +714,7 @@ class ConstraintAtom : public AbstractAtom
             if(!m_type.isEmpty()) s += QString("type=%1 ").arg(m_type);
             if(!m_value.isEmpty()) s += QString("val=%1 ").arg(m_value);
             DEBUG_DUMP << s;
+            */
         }
         virtual void readAll(Context*, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -1284,7 +1299,7 @@ class ForEachAtom : public AbstractAtom
                 }
                 newChildren.append(NodePair(node, list));
             }
-            
+
             AbstractNode* oldCurrentNode = context->currentNode();
             foreach(NodePair p, newChildren) {
                 context->setCurrentNode(p.first); // move on to the next node
@@ -1539,7 +1554,7 @@ class ConnectorAlgorithm : public AlgorithmBase {
             qreal angle = atan2(dstCY-srcCY,dstCX-srcCX)*180/M_PI;
 
             layout()->m_rotateAngle = angle / 2.0;
-
+            
             AlgorithmBase::virtualDoLayoutChildren();
         }
 
@@ -1562,18 +1577,13 @@ class CycleAlgorithm : public AlgorithmBase {
             foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
                 if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
                     //if(l->algorithmType() == AlgorithmAtom::ConnectorAlg) continue;
-                    /*
-                    bool hasNode = false;
-                    foreach(AbstractNode* n, l->axis()) { if(static_cast<PointNode*>(n)->m_type == "node") { hasNode = true; break; } }
-                    if(!hasNode) continue;
-                    */
                     childLayouts.append(l);
                 }
             }
             Q_ASSERT(!childLayouts.isEmpty());
             
             // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
-            int startAngel = layout()->algorithmParam("stAng", "90").toInt() - 90;
+            int startAngel = layout()->algorithmParam("stAng", "90").toInt() - 90; //-45;
             // Specifies the angle the cycle spans. Final shapealign text is placed at stAng+spanAng, unless spanAng=360. In that case, the algorithm places the text so that shapes do not overlap.
             int spanAngel = layout()->algorithmParam("spanAng", "360").toInt();
             // Specifies where to place nodes in relation to the center circle.
@@ -1585,8 +1595,8 @@ class CycleAlgorithm : public AlgorithmBase {
             const qreal h = layout()->finalValues()["h"];
             const qreal rx = w / 2.0;
             const qreal ry = h / 2.0;
-            const bool inverse = startAngel > spanAngel;
             qreal num = 360.0 / childLayoutsCount;
+            const bool inverse = startAngel > spanAngel;
             if(inverse) num = -num;
             qreal dw = ( (2.0 * M_PI * rx) / childLayoutsCount );
             qreal dh = ( (2.0 * M_PI * ry) / childLayoutsCount );

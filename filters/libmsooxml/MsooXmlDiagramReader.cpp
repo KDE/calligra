@@ -132,7 +132,7 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                     Q_ASSERT(parent->m_type == "parTrans");
                     Q_ASSERT(rootList.children().contains(parent));
                     rootList.removeChild(parent);
-                    source->addChild(parent);
+                    source->insertChild(srcOrd, parent);
                 }
 
                 if(sibling) {
@@ -140,11 +140,13 @@ KoFilter::ConversionStatus MsooXmlDiagramReader::read(MSOOXML::MsooXmlReaderCont
                     Q_ASSERT(sibling->m_type == "sibTrans");
                     Q_ASSERT(rootList.children().contains(sibling));
                     rootList.removeChild(sibling);
-                    source->addChild(sibling);
+                    source->insertChild(srcOrd, sibling);
                 }
 
                 if(connection->m_type == QLatin1String("parOf")) {
                     // This defines a parent-child relationship in the sense that node X is a parent of node Y.
+                    Q_ASSERT(rootList.children().contains(destination));
+                    //Q_ASSERT(rootList.children().at(destOrd) == destination);
                     rootList.removeChild(destination);
                     source->insertChild(srcOrd, destination);
                 } else if(connection->m_type == QLatin1String("presOf")) {
