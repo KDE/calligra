@@ -88,8 +88,6 @@ bool KoWmfPaint::play(QPainter &painter, bool relativeCoord)
 
 bool KoWmfPaint::begin()
 {
-    bool ret = true;
-
     // If the painter is our own, we have to call begin() on it.
     // If it's external, we assume that it's already done for us.
     if (mIsInternalPainter) {
@@ -97,17 +95,12 @@ bool KoWmfPaint::begin()
             return false;
     }
 
-    if (mRelativeCoord) {
-        mInternalWorldMatrix.reset();
-    } else {
-
-        // This window is used for scaling in setWindowExt().
-        //
-        // Some WMF files don't call setwindowOrg and
-        // setWindowExt, so it's better to do it here.  Note that
-        // boundingRect() is the rect of the WMF file, not the device.
-        mPainter->setWindow(boundingRect());
-    }
+    // For calculations of window / viewport during the painting
+    mWindowOrg = QPoint(0, 0);
+    mViewportOrg = QPoint(0, 0);
+    mWindowExtIsSet = false;
+    mViewportExtIsSet = false;
+    mWindowViewportIsSet = false;
 
     mPainter->setBrush(QBrush(Qt::NoBrush));
 
@@ -259,32 +252,60 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 // - negative width or height
 // and relative/absolute coordinate
 
-void KoWmfPaint::setWindowOrg(int orgX, int orgY) // Love that parameter name...
+
+// It would have been nice to be able to use the setWindow() and
+// setViewport() methods of QPainter directly, but these will place
+// the viewport in relation to the paintdevice and not the shape.  So
+// instead, we have to redo the calculations ourselves here.
+
+// Set Window and Viewport
+void KoWmfPaint::setWindowViewport()
+{
+    if (!mWindowExtIsSet && mViewportExtIsSet)
+        return;
+
+    if (mWindowExtIsSet && mViewportExtIsSet) {
+        // Both window and viewport are set.
+        mWindowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
+        mWindowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
+    } else {
+        // Only one of window and viewport ext is set: Use same width for window and viewport
+        mWindowViewportScaleX = qreal(1.0);
+        mWindowViewportScaleY = qreal(1.0);
+    }
+
+    mPainter->translate(-mWindowOrg);
+    mPainter->scale(mWindowViewportScaleX, mWindowViewportScaleY);
+    mPainter->translate(mViewportOrg);
+
+    mWindowViewportIsSet = true;
+}
+
+// Unset Window and Viewport.  This has to be called before we can
+// reset the window or viewport origin or extension.
+void KoWmfPaint::unsetWindowViewport()
+{
+    if (!mWindowViewportIsSet)
+        return;
+
+    mPainter->translate(-mViewportOrg);
+    mPainter->scale(qreal(1.0) / mWindowViewportScaleX, qreal(1.0) / mWindowViewportScaleY);
+    mPainter->translate(mWindowOrg);
+}
+
+
+
+void KoWmfPaint::setWindowOrg(int left, int top)
 {
 #if DEBUG_WMFPAINT
-    kDebug(31000) << orgX << " " << orgY;
+    kDebug(31000) << left << " " << top;
 #endif
 
-    mOrgX = orgX;
-    mOrgY = orgY;
+    unsetWindowViewport();
 
-    if (mRelativeCoord) {
-        // Translate back from last translation to the origin.
-        qreal dx = mInternalWorldMatrix.dx();
-        qreal dy = mInternalWorldMatrix.dy();
-        //kDebug(31000) << "old translation: " << dx << dy;
-        //kDebug(31000) << mInternalWorldMatrix;
-        //kDebug(31000) << "new translation: " << -orgX << -orgY;
-        mInternalWorldMatrix.translate(-dx, -dy);
-        mPainter->translate(-dx, -dy);
+    mWindowOrg = QPoint(left, top);
 
-        // Translate to the new origin.
-        mInternalWorldMatrix.translate(-orgX, -orgY);
-        mPainter->translate(-orgX, -orgY);
-    } else {
-        QRect rec = mPainter->window();
-        mPainter->setWindow(orgX, orgY, rec.width(), rec.height());
-    }
+    setWindowViewport();
 }
 
 
@@ -294,46 +315,12 @@ void KoWmfPaint::setWindowExt(int width, int height)
     kDebug(31000) << width << " " << height;
 #endif
 
-    mExtWidth = width;
-    mExtHeight = height;
+    unsetWindowViewport();
 
-    if (mRelativeCoord) {
-        qreal dx = mInternalWorldMatrix.dx();
-        qreal dy = mInternalWorldMatrix.dy();
-        qreal sx = mInternalWorldMatrix.m11();
-        qreal sy = mInternalWorldMatrix.m22();
+    mWindowExt = QSize(width, height);
+    mWindowExtIsSet = true;
 
-        // Translate and scale back from the last window.
-        mInternalWorldMatrix.translate(-dx, -dy);
-        mPainter->translate(-dx, -dy);
-        mInternalWorldMatrix.scale(1 / sx, 1 / sy);
-        mPainter->scale(1 / sx, 1 / sy);
-
-        //kDebug(31000) << "Scale  =" << sx << sy;
-
-        // Flip the wmf if necessary.
-        sx = (width < 0)  ? -1.0 : 1.0;
-        sy = (height < 0) ? -1.0 : 1.0;
-
-#if DEBUG_WMFPAINT
-        kDebug(31000) << "Origin =" << mOrgX << mOrgY;
-        kDebug(31000) << "size   =" << width << height;
-        kDebug(31000) << "Scale  =" << sx << sy;
-#endif
-
-        // Now scale to the new values (=flip), and we want to flip in place.
-        qreal dx2 = (mOrgX + mOrgX + width) / 2.0;
-        qreal dy2 = (mOrgY + mOrgY + height) / 2.0;
-        mInternalWorldMatrix.translate(dx2, dy2);
-        mInternalWorldMatrix.scale(sx, sy);
-        mInternalWorldMatrix.translate(-dx2, -dy2);
-        mPainter->translate(dx2, dy2);
-        mPainter->scale(sx, sy);
-        mPainter->translate(-dx2, -dy2);
-    } else {
-        QRect rec = mPainter->window();
-        mPainter->setWindow(rec.left(), rec.top(), width, height);
-    }
+    setWindowViewport();
 
 #if 0
     // Debug code.  Draw a rectangle with some decoration to show see
@@ -356,6 +343,36 @@ void KoWmfPaint::setWindowExt(int width, int height)
     kDebug(31000) << "Bounding rect: " << boundingRect();
 #endif
 }
+
+void KoWmfPaint::setViewportOrg( int left, int top )
+{
+#if DEBUG_WMFPAINT
+    kDebug(31000) << left << top;
+#endif
+
+    unsetWindowViewport();
+
+    mViewportOrg = QPoint(left, top);
+
+    setWindowViewport();
+}
+
+void KoWmfPaint::setViewportExt( int width, int height )
+{
+#if DEBUG_WMFPAINT
+    kDebug(31000) << width << height;
+#endif
+
+    unsetWindowViewport();
+
+    mViewportExt = QSize(width, height);
+    mViewportExtIsSet = true;
+
+    setWindowViewport();
+}
+
+
+// ----------------------------------------------------------------
 
 
 void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)

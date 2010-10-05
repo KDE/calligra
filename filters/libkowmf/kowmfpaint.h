@@ -72,6 +72,10 @@ private:
     void  save();
     void  restore();
 
+    // Windows and Viewports
+    void setWindowViewport();
+    void unsetWindowViewport();
+
     // Drawing tools
     void  setFont(const QFont& font);
     // the pen : the width of the pen is in logical coordinate
@@ -91,8 +95,10 @@ private:
      * others wmf files doesn't call setWindow* at all
      * negative width and height are possible
      */
-    void  setWindowOrg(int orgX, int orgY);
+    void  setWindowOrg(int left, int top);
     void  setWindowExt(int width, int height);
+    void  setViewportOrg(int left, int top);
+    void  setViewportExt(int width, int height);
 
     // Clipping
     // the 'CoordinateMode' is ommitted : always CoordPainter in wmf
@@ -133,15 +139,18 @@ protected:
     QPen  mTextPen;
     QPaintDevice *mTarget;
     bool  mRelativeCoord;
-    // memorisation of WMF matrix transformation (in relative coordinate)
-    QMatrix  mInternalWorldMatrix;
     QPoint mLastPos;
 
-    // For debug;
-    int  mOrgX;
-    int  mOrgY;
-    int  mExtWidth;
-    int  mExtHeight;
+    // Everything that has to do with window and viewport calculation
+    QPoint        mWindowOrg;
+    QSize         mWindowExt;
+    QPoint        mViewportOrg;
+    QSize         mViewportExt;
+    bool          mWindowExtIsSet;
+    bool          mViewportExtIsSet;
+    qreal         mWindowViewportScaleX;
+    qreal         mWindowViewportScaleY;
+    bool          mWindowViewportIsSet;
 
     int mSaveCount; //number of times Save() was called without Restore()
 };

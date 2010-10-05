@@ -86,7 +86,7 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     // read and check the header
     WmfEnhMetaHeader eheader;
     WmfMetaHeader header;
-    WmfPlaceableHeader pheader;
+    WmfPlaceableHeader pheader; // Contains a bounding box
     unsigned short checksum;
     int filePos;
 
@@ -118,6 +118,10 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     if (pheader.key == (quint32)APMHEADER_KEY) {
         //----- Read placeable metafile header
         mPlaceable = true;
+#if DEBUG_RECORDS
+        kDebug(31000) << "Placeable header!  Yessss!";
+#endif
+
         st >> pheader.handle;
         st >> pheader.left;
         st >> pheader.top;
@@ -348,11 +352,16 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
     // Set the output strategy.
     mReadWmf = readWmf;
 
-    // Set the full bounding box as the output window just to have something to go with.
-    mWindowTop    = mBBoxTop;
-    mWindowLeft   = mBBoxLeft;
-    mWindowWidth  = mBBoxRight - mBBoxLeft;
-    mWindowHeight = mBBoxBottom - mBBoxTop;
+    // Set some initial values.
+    mWindowTop    = 0;
+    mWindowLeft   = 0;
+    mWindowWidth  = 1;
+    mWindowHeight = 1;
+    mViewportTop    = 0;
+    mViewportLeft   = 0;
+    mViewportWidth  = 1;
+    mViewportHeight = 1;
+
     if (mReadWmf->begin()) {
         // play wmf functions
         mBuffer->seek(mOffsetFirstRecord);
@@ -499,9 +508,10 @@ void KoWmfReadPrivate::setViewportOrg(quint32, QDataStream& stream)
     qint16 top, left;
 
     stream >> top >> left;
-    //mReadWmf->setViewportOrg(left, top);
-    //mViewportLeft = left;
-    //mViewportTop = top;
+    mReadWmf->setViewportOrg(left, top);
+    mViewportLeft = left;
+    mViewportTop = top;
+
 #if DEBUG_RECORDS
     kDebug(31000) <<"Org: (" << left <<","  << top <<")";
 #endif
@@ -514,15 +524,15 @@ void KoWmfReadPrivate::setViewportExt(quint32, QDataStream& stream)
 {
     qint16 width, height;
 
-    // negative value allowed for width and height
+    // Negative value allowed for width and height
     stream >> height >> width;
 #if DEBUG_RECORDS
     kDebug(31000) <<"Ext: (" << width <<","  << height <<")";
 #endif
 
-    //mReadWmf->setViewportExt(width, height);
-    //mViewportWidth  = width;
-    //mViewportHeight = height;
+    mReadWmf->setViewportExt(width, height);
+    mViewportWidth  = width;
+    mViewportHeight = height;
 }
 
 
