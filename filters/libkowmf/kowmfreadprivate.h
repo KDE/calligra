@@ -181,6 +181,9 @@ private:
     //-----------------------------------------------------------------------------
     // Utilities and conversion Wmf -> Qt
 
+    // Create a boundingbox from all set{Window,Viewport}{Org,Ext} records.
+    void createBoundingBox(QDataStream &st);
+
     /** Handle win-object-handles */
     bool addHandle(KoWmfHandle*);
     void deleteHandle(int);
