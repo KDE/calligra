@@ -134,7 +134,8 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
     const KoFilter::ConversionStatus status = Utils::copyFile(
                 m_zip, errorMessage, sourceName, m_outputStore, destinationName, oleFile);
 //! @todo transmit the error to the GUI...
-    kDebug() << errorMessage;
+    if(status != KoFilter::OK)
+        kWarning() << "Failed to copyFile:" << errorMessage;
     return status;
 }
 
