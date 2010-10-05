@@ -25,133 +25,6 @@
 #define MSOOXMLVMLREADER_IMPL_H
 
 #undef MSOOXML_CURRENT_NS
-#define MSOOXML_CURRENT_NS "w"
-//#define MSOOXML_CALL_STACK m_vmlCalls
-#include "MsooXmlReader_p.h"
-#include "MsooXmlUtils.h"
-
-#undef CURRENT_EL
-#define CURRENT_EL pict
-//! pict handler (VML Object)
-/*! ECMA-376 Part 4, 9.2.2.2, p.31.
-
- This element specifies that an object is located at this position
- in the run’s contents. The layout properties of this object are specified using the VML syntax (§14.1).
-
- Parent elements:
- - r (Part 1, §22.1.2.87) - Shared ML
- - [done] r (Part 1, §17.3.2.25) - Shared ML
-
- Child elements:
- - control (Floating Embedded Control) §9.2.2.1
- - movie (Embedded Video) Part 1, §17.3.3.17
- - Any element in the urn:schemas-microsoft-com:vml namespace §14.1
- - Any element in the urn:schemas-microsoft-com:office:office namespace §14.2
-*/
-//! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
-{
-    READ_PROLOGUE
-
-    body->startElement("draw:frame");
-
-    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-
-    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
-    body = drawFrameBuf.setWriter(body);
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF_NS(v, rect)
-            ELSE_TRY_READ_IF_NS(v, roundrect)
-            ELSE_TRY_READ_IF_NS(v, shapetype)
-            ELSE_TRY_READ_IF_NS(v, shape)
-//! @todo add ELSE_WRONG_FORMAT
-        }
-    }
-
-    body = drawFrameBuf.originalWriter();
-
-    const QString width(m_vmlStyle.value("width")); // already in "...cm" format
-    const QString height(m_vmlStyle.value("height")); // already in "...cm" format
-    const QString x_mar(m_vmlStyle.value("margin-left"));
-    const QString y_mar(m_vmlStyle.value("margin-top"));
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
-    if (!width.isEmpty()) {
-        body->addAttribute("svg:width", width);
-    }
-    if (!height.isEmpty()) {
-        body->addAttribute("svg:height", height);
-    }
-    if (!x_mar.isEmpty()) {
-        body->addAttribute("svg:x", x_mar);
-    }
-    if (!y_mar.isEmpty()) {
-        body->addAttribute("svg:y", y_mar);
-    }
-    if (!m_shapeColor.isEmpty()) {
-        m_currentDrawStyle->addProperty("fo:background-color", m_shapeColor);
-    }
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
-
-    if (!m_imagedataPath.isEmpty()) {
-        body->startElement("draw:image");
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:show", "embed");
-        body->addAttribute("xlink:actuate", "onLoad");
-        body->addAttribute("xlink:href", m_imagedataPath);
-        body->endElement(); // draw:image
-    }
-
-    if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        body->addAttribute("draw:style-name", drawStyleName);
-    }
-
-    {
-        {
-            const QString rId(m_vmlStyle.value("v:fill@r:id"));
-            if (!rId.isEmpty()) {
-                body->startElement("draw:image");
-                const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
-                kDebug() << "sourceName:" << sourceName;
-                if (sourceName.isEmpty()) {
-                    return KoFilter::FileNotFound;
-                }
-                QString destinationName;
-                RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-                addManifestEntryForPicturesDir();
-                body->addAttribute("xlink:href", destinationName);
-                body->endElement(); //draw:image
-            }
-        }
-    }
-
-    (void)drawFrameBuf.releaseWriter();
-
-    body->endElement(); //draw:frame
-
-    READ_EPILOGUE
-}
-
-// ---------------------------------------------------------
-#undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "v"
 
 //! Used by read_rect() to parse CSS2.
@@ -363,8 +236,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-        QString destinationName;
-        RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
+        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+        RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
         addManifestEntryForPicturesDir();
         if (m_pDocBkgImageWriter) {
             delete m_pDocBkgImageWriter->device();
@@ -444,7 +317,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
  - background (Part 1, §17.2.1)
  - group (§14.1.2.7)
  - [done] object (Part 1, §17.3.3.19)
- - pict (§9.2.2.2); pict (§9.5.1)
+ - [done] pict (§9.2.2.2); pict (§9.5.1)
 
  Child elements:
  - anchorlock (Anchor Location Is Locked) §14.3.2.1
@@ -497,13 +370,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     if (!heightCm.isEmpty()) {
         m_currentObjectHeightCm = heightCm;
     }
-    const QString xCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-left")));
-    if (!xCmMar.isEmpty()) {
-        m_currentObjectXCm = xCmMar;
+    if (!m_vmlStyle.value("margin-left").isEmpty()) {
+        const QString xCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-left")));
+        if (!xCmMar.isEmpty()) {
+            m_currentObjectXCm = xCmMar;
+        }
     }
-    const QString yCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-top")));
-    if (!yCmMar.isEmpty()) {
-        m_currentObjectYCm = yCmMar;
+    if (!m_vmlStyle.value("margin-top").isEmpty()) {
+        const QString yCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-top")));
+        if (!yCmMar.isEmpty()) {
+            m_currentObjectYCm = yCmMar;
+        }
     }
     // override x or y after 'object' element is possible
     const QString xCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("left")));
@@ -523,14 +400,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
-    m_imagedataPath.clear();
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(imagedata)
-            ELSE_TRY_READ_IF_NS(v, textbox)
+            ELSE_TRY_READ_IF(textbox)
         }
     }
 
@@ -574,16 +449,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
     if (!r_id.isEmpty()) {
         imagedata = m_context->relationships->target(m_context->path, m_context->file, r_id);
     }
+    else {
+        TRY_READ_ATTR_WITH_NS(o, relid)
+        if (!o_relid.isEmpty()) {
+            imagedata = m_context->relationships->target(m_context->path, m_context->file, o_relid);
+        }
+    }
 
     kDebug() << "imagedata:" << imagedata;
-    m_imagedataPath.clear();
     if (!imagedata.isEmpty()) {
 //! @todo ooo saves binaries to the root dir; should we?
-        RETURN_IF_ERROR( copyFile(imagedata, QLatin1String("Pictures/"), m_imagedataPath) )
+        m_imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
+        RETURN_IF_ERROR( m_context->import->copyFile(imagedata, m_imagedataPath, false ) )
         m_imagedataFile = imagedata;
         addManifestEntryForPicturesDir();
     }
-    kDebug() << "m_imagedataPath:" << m_imagedataPath;
 
     while (!atEnd()) {
         readNext();
@@ -614,7 +494,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+#ifdef DOCXXMLDOCREADER_CPP
             TRY_READ_IF_NS(w, txbxContent)
+#endif
         }
     }
 

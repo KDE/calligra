@@ -195,7 +195,6 @@ KoFilter::ConversionStatus copyFile(
 QSize imageSize(const QString& sourceName);
 
 QList<KoGenStyle*>  m_drawStyleStack;
-KoGenStyle         *m_currentDrawStyle; //! used by all classes that need a graphics style.
 KoGenStyle m_currentGradientStyle;
 void pushCurrentDrawStyle(KoGenStyle *newStyle);
 void popCurrentDrawStyle();
@@ -242,7 +241,6 @@ QString m_cNvPrId; //!< set by read_cNvPr()
 QString m_cNvPrName; //!< set by read_cNvPr()
 QString m_cNvPrDescr; //!< set by read_cNvPr()
 
-QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
 QMap<QString, QSize> m_imageSizes; //!< collects image sizes to avoid multiple checks
 
 //! When dealing with colors there's no way to know what type of attribute

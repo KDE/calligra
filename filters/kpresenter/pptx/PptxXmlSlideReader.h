@@ -308,7 +308,8 @@ public:
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
         MSOOXML::TableStyleList *tableStyleList,
-        QMap<QString, QString> masterColorMap);
+        QMap<QString, QString> masterColorMap,
+        QVector<QString> _oleReplacements);
 
     PptxImport* import;
     const QString path;
@@ -330,6 +331,8 @@ public:
     // This value is always initialized with values from master slide, but it is possible
     // that slide/layout override it with custom map
     QMap<QString, QString> colorMap;
+
+    QVector<QString> oleReplacements;
 
     // Used to keep track, whether we should skip elements
     // currently we need to read some slides twice
