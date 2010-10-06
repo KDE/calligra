@@ -291,11 +291,11 @@ void KexiDataSourcePage::clearFormDataSourceSelection(bool alsoClearComboBox)
 
 void KexiDataSourcePage::clearWidgetDataSourceSelection()
 {
-    if (!m_widgetDataSourceCombo->currentText().isEmpty()) {
+//    if (!m_widgetDataSourceCombo->currentText().isEmpty()) {
 //2.0        m_widgetDataSourceCombo->setEditText(QString());
         m_widgetDataSourceCombo->setFieldOrExpression(QString());
         slotFieldSelected();
-    }
+//    }
 /*2.0: clear button is available in the combobox itself
     m_clearWidgetDSButton->setEnabled(false);*/
 }
