@@ -86,8 +86,8 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import,
-    int& numberOfOleObjects
-)
+    int numberOfOleObjects,
+    QVector<QString> _oleReplacements)
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
@@ -101,6 +101,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , path(_path)
         , file(_file)
         , numberOfOleObjects(numberOfOleObjects)
+        , oleReplacements(_oleReplacements)
 {
 }
 
@@ -1368,31 +1369,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     READ_ATTR_WITH_NS(r, id)
     READ_ATTR_WITHOUT_NS(progId);
 
-    //For now we just copy the preview emf file and the embeded document,
-    //later we might convert it into ODF too.
-    //Preview files exist only for some files, please add the program generator
-    //for the files we will try to copy the preview image from
-    if(progId != "PowerPoint.Slide.12" && progId != "Word.Document.12")
-        return KoFilter::OK;
-
-    ++(m_context->numberOfOleObjects);
-
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "", fileName) )
 
-    //In the OOXML specification the preview image would be represented as a relationship
-    //it is not specified how exactly that relationship is to be picked.
-    //However, to make things worse, the relationship seems that is not saved by MS2007,
-    //so, we must assume that the images in the media folder are ordered by appearance in the document
-    QString previewFileName = QString("image%1.emf").arg(m_context->numberOfOleObjects);
-    QString originalPreviewFilePath = "xl/media/" + previewFileName;
-    RETURN_IF_ERROR( copyFile(originalPreviewFilePath, "Pictures/", previewFileName) )
+    QString filePath;
+
+    if (m_context->oleReplacements.size() > m_context->numberOfOleObjects) {
+        filePath = m_context->oleReplacements.at(m_context->numberOfOleObjects);
+        ++(m_context->numberOfOleObjects);
+    }
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
 
-    cell->oleObjects << qMakePair<QString,QString>(fileName, previewFileName);
+    cell->oleObjects << qMakePair<QString,QString>(fileName, filePath);
 
     while (!atEnd()) {
         readNext();

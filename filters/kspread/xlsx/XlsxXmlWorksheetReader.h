@@ -122,7 +122,8 @@ public:
         const XlsxStyles& _styles,
         MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import,
-        int& numberOfOleObjects);
+        int numberOfOleObjects,
+        QVector<QString> _oleReplacements);
     virtual ~XlsxXmlWorksheetReaderContext();
 
     Sheet* sheet;
@@ -139,6 +140,7 @@ public:
     const QString file;
 
     int &numberOfOleObjects;
+    QVector<QString> oleReplacements;
 };
 
 #endif

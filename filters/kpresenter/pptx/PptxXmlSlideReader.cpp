@@ -682,7 +682,12 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         body->endElement(); // draw:object-ole
 
         if (m_context->oleReplacements.size() > d->numberOfOleObjects) {
-            body->addCompleteElement(m_context->oleReplacements.at(d->numberOfOleObjects).toUtf8());
+            body->startElement("draw:image");
+            body->addAttribute("xlink:type", "simple");
+            body->addAttribute("xlink:show", "embed");
+            body->addAttribute("xlink:actuate", "onLoad");
+            body->addAttribute("xlink:href", m_context->oleReplacements.at(d->numberOfOleObjects));
+            body->endElement(); // draw:image
             ++d->numberOfOleObjects;
         }
 
