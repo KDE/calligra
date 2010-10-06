@@ -98,8 +98,6 @@ select ob.o_id, o_sub_id, o_type, o_name, substr(o_data, 0, 40) from kexi__objec
 
 Git hints: http://blog.nuclearsquid.com/writings/git-new-workdir.html
 
-~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
-
 TODO: fix https://bugs.kde.org/show_bug.cgi?id=241144
 TODO: this causes crash:
 --- kexidb/queryschema.cpp      (revision 1135206)
@@ -110,7 +108,17 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
-2010-09-08..24
+~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
+
+TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
+
+2010-09-29
+Main Window
+*unclutter: remove extra borders from the side pane (http://www.kdedevelopers.org/node/4327)
+
+~~~~~~~~~~~~~~~~ 2.3 beta 1 ~~~~~~~~~~~~~~~~
+
+2010-09-08..27
 Forms
 *Widgets Tree:
 **display items
@@ -137,6 +145,7 @@ Forms
 **fix sorting
 **fix delete widget action in context menu
 TODO: when undoing removing tab page, restore contents recursively
+TODO: make "Assign Action" undoable/redoable
 
 *tab widget
 **removing page is now separate undoable/redoable command
@@ -144,8 +153,9 @@ TODO: when undoing removing tab page, restore contents recursively
 **make tree widget item have proper name, not basic container
 TODO:?? when adding tab page, ask for name
 
-*fix infinite recursion in line edits because of using style proxies
-BIG:247183
+*fix infinite recursion in line edits because of using style proxies (bug #247183)
+
+~~~~~~~~~~~~~~~~ 2.3 alpha 1 ~~~~~~~~~~~~~~~~
 
 Core
 *for --help fix warnings "Tag '....' is neither semantic nor HTML in message"
