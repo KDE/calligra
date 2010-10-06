@@ -35,22 +35,16 @@ int main( int argc, char **argv )
   KCmdLineArgs::init( argc, argv, about );
 
   KCmdLineOptions options;
-#ifndef NDEBUG
   options.add("no-unique", ki18n("Use this option when debugging so that braindump is not launched as a KUniqueApplication"));
-#endif
   KCmdLineArgs::addCmdLineOptions( options );
 
   KApplication* app = 0;
   
-#ifndef NDEBUG
   if(KCmdLineArgs::parsedArgs()->isSet("-unique")) {
-#endif
     app = new KUniqueApplication;
-#ifndef NDEBUG
   } else {
     app = new KApplication;
   }
-#endif
 
   KIconLoader::global()->addAppDir("koffice");
   Global::initialize();
