@@ -275,6 +275,7 @@ void View::createCanvas(Section* _currentSection)
 {
   Canvas* canvas = new Canvas( this, m_doc, _currentSection );
   m_canvasController->setCanvas( canvas );
+  // No need to delete the current canvas, it will be deleted in Viewport::setCanvas (flake/KoCanvasController_p.cpp)
   m_canvas = canvas;
   
   delete m_cutController;
