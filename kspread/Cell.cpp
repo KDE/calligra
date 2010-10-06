@@ -1297,7 +1297,7 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
         if (isTime()) {
             xmlWriter.addAttribute("office:value-type", "time");
             xmlWriter.addAttribute("office:time-value",
-                                   value().asTime(sheet()->map()->calculationSettings()).toString("PThhHmmMssS"));
+                                   value().asTime(sheet()->map()->calculationSettings()).toString("'PT'hh'H'mm'M'ss'S'"));
         } else {
             xmlWriter.addAttribute("office:value-type", "date");
             xmlWriter.addAttribute("office:date-value",
@@ -1308,7 +1308,7 @@ void Cell::saveOdfValue(KoXmlWriter &xmlWriter)
     case Value::fmt_Time: {
         xmlWriter.addAttribute("office:value-type", "time");
         xmlWriter.addAttribute("office:time-value",
-                               value().asTime(sheet()->map()->calculationSettings()).toString("PThhHmmMssS"));
+                               value().asTime(sheet()->map()->calculationSettings()).toString("'PT'hh'H'mm'M'ss'S'"));
         break;
     }
     case Value::fmt_String: {
