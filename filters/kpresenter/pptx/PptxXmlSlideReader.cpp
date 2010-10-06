@@ -148,14 +148,15 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     MSOOXML::MsooXmlRelationships& _relationships,
     QMap<int, QString> _commentAuthors,
     MSOOXML::TableStyleList *_tableStyleList,
-    QMap<QString, QString> masterColorMap)
+    QMap<QString, QString> masterColorMap,
+    QVector<QString> _oleReplacements)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
         commentAuthors(_commentAuthors), tableStyleList(_tableStyleList),
-        colorMap(masterColorMap), firstReadingRound(false)
+        colorMap(masterColorMap), oleReplacements(_oleReplacements), firstReadingRound(false)
 {
 }
 
@@ -665,8 +666,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    
-    ++d->numberOfOleObjects;
 
     if (!r_id.isEmpty()) {
         QString sourceName(m_context->relationships->target(m_context->path, m_context->file, r_id));
@@ -674,18 +673,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        if (progId == "PowerPoint.Show.12") {
-            // only copy over the preview-image for now
-            QString previewFileName = QString("image%1.emf").arg(d->numberOfOleObjects);
-            QString originalPreviewFilePath = "ppt/media/" + previewFileName;
-            if (copyFile(originalPreviewFilePath, "Pictures/", previewFileName) == KoFilter::OK) {
-                body->startElement("draw:image");
-                body->addAttribute("xlink:href", previewFileName);
-                body->addAttribute("xlink:show", "embed");
-                body->addAttribute("xlink:actuate", "onLoad");
-                body->endElement(); //draw:image
-            }
-        } else {
+        body->addCompleteElement(m_context->oleReplacements.at(d->numberOfOleObjects).toUtf8());
+
+        ++d->numberOfOleObjects;
+        // Question is, is there a reason to keep this, or should there be ole shape to handle oles
+        {
             QString destinationName;
 
             body->startElement("draw:object-ole");

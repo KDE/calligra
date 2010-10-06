@@ -210,106 +210,11 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
 
     // check bounding rectangle for standard meta file
     if (mStandard && mValid) {
-        quint16 numFunction = 1;
-        quint32 size;
-
-        // Search for records setWindowOrg and setWindowExt to
-        // determine what the total bounding box of this WMF is.
-        // This initialization assumes that setWindowOrg comes before setWindowExt.
-        qint16 curOrgX = 0;
-        qint16 curOrgY = 0;
-        while (numFunction) {
-
-            filePos = mBuffer->pos();
-            st >> size >> numFunction;
-
-            if (size == 0) {
-                kDebug(31000) << "KoWmfReadPrivate: incorrect file!";
-                mValid = 0;
-                break;
-            }
-
-            bool  isOrgOrExt = true;
-            numFunction &= 0xFF;
-            if (numFunction == 11) {
-                // setWindowOrg
-
-                st >> curOrgY >> curOrgX;
-#if DEBUG_RECORDS
-                kDebug(31000) << "setWindowOrg" << curOrgX << curOrgY;
-#endif
-                if (curOrgY < mBBoxTop)    mBBoxTop = curOrgY;
-                if (curOrgX < mBBoxLeft)   mBBoxLeft = curOrgX;
-                if (curOrgX > mBBoxRight)  mBBoxRight = curOrgX;
-                if (curOrgY > mBBoxBottom) mBBoxBottom = curOrgY;
-            }
-            else if (numFunction == 12) {
-                // setWindowExt
-                qint16 width;
-                qint16 height;
-
-                st >> height >> width;
-#if DEBUG_RECORDS
-                kDebug(31000) << "setWindowExt" << width << height
-                              << "(curOrg = " << curOrgX << curOrgY << ")";
-#endif
-
-                // Collect the maximum width and height.
-                //
-                // The spec is very vague about how to treat the set
-                // of Org/Ext pairs.  Should their combined areas be
-                // treated as a union?  Should they be treated
-                // individually?  The file
-                // msword_2003_embedded_wordpad_doc.doc suggests that
-                // they should be handled individually and shown in
-                // the available drawing area.
-                //
-                // FIXME: Find out how it really is.
-                if (abs(width - curOrgX) > mMaxWidth)
-                    mMaxWidth = abs(width - curOrgX);
-                if (abs(height - curOrgY) > mMaxHeight)
-                    mMaxHeight = abs(height - curOrgY);
-
-                // Negative values are allowed
-                if (width < 0) {
-                    if (curOrgX + width < mBBoxLeft) {
-                        mBBoxLeft = curOrgX + width;
-                    }
-                }
-                else {
-                    if (curOrgX + width > mBBoxRight) {
-                        mBBoxRight = curOrgX + width;
-                    }
-                }
-
-                if (height < 0) {
-                    if (curOrgY + height < mBBoxTop) {
-                        mBBoxTop = curOrgY + height;
-                    }
-                }
-                else {
-                    if (curOrgY + height > mBBoxBottom) {
-                        mBBoxBottom = curOrgY + height;
-                    }
-                }
-            }
-            else
-                isOrgOrExt = false;
-
-#if DEBUG_RECORDS
-            if (isOrgOrExt) {
-                kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
-                kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
-                kDebug(31000) << "           MBBoxBotton = " << mBBoxBottom;
-                kDebug(31000) << "Max width,height = " << mMaxWidth << mMaxHeight;
-            }
-#endif
-
-            mBuffer->seek(filePos + (size << 1));
-        }
+        // Note that this call can change mValid.
+        createBoundingBox(st);
     }
 
-    return (mValid);
+    return mValid;
 }
 
 
@@ -431,6 +336,194 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
     mObjHandleTab = 0;
 
     return true;
+}
+
+
+//-----------------------------------------------------------------------------
+
+
+void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
+{
+    // check bounding rectangle for standard meta file
+    if (!mStandard || !mValid) 
+        return;
+
+    bool windowExtIsSet = false;
+    bool viewportExtIsSet = false;
+
+    quint16 numFunction = 1;
+    quint32 size;
+
+    int filePos;
+
+    // Search for records setWindowOrg and setWindowExt to
+    // determine what the total bounding box of this WMF is.
+    // This initialization assumes that setWindowOrg comes before setWindowExt.
+    qint16 windowOrgX = 0;
+    qint16 windowOrgY = 0;
+    qint16 windowWidth = 0;
+    qint16 windowHeight = 0;
+    qint16 viewportOrgX = 0;
+    qint16 viewportOrgY = 0;
+    qint16 viewportWidth = 0;
+    qint16 viewportHeight = 0;
+    while (numFunction) {
+
+        filePos = mBuffer->pos();
+        st >> size >> numFunction;
+
+        if (size == 0) {
+            kDebug(31000) << "KoWmfReadPrivate: incorrect file!";
+            mValid = 0;
+            return;
+        }
+
+        bool  isOrgOrExt = true;
+        switch (numFunction &= 0xFF) {
+        case 11: // setWindowOrg
+            {
+                st >> windowOrgY >> windowOrgX;
+#if DEBUG_RECORDS
+                kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
+#endif
+                if (!windowExtIsSet)
+                    break;
+
+                // If there is actually a viewport, then the bounding
+                // box doesn't change just because we get a new
+                // window.  Remember we are working in device
+                // (viewport) coordinates when deciding the bounding box.
+                if (viewportExtIsSet)
+                    break;
+
+                // If there is no viewport, then use the window as a bounding box.
+                //
+                // Note that the windowOrg only will have an effect on
+                // the bounding box the first time it appears,
+                // immediately after the initialization of it.
+                //
+                // FIXME: Handle the case where the window is defined
+                //        first and then the viewport, without any
+                //        drawing in between.  If that happens, I
+                //        don't think that the window definition
+                //        should influence the bounding box.
+                if (viewportOrgY < mBBoxTop)    mBBoxTop = viewportOrgY;
+                if (viewportOrgX < mBBoxLeft)   mBBoxLeft = viewportOrgX;
+                if (viewportOrgX > mBBoxRight)  mBBoxRight = viewportOrgX;
+                if (viewportOrgY > mBBoxBottom) mBBoxBottom = viewportOrgY;
+
+                // FIXME: Handle negative width or height.
+            }
+            break;
+
+        case 12: // setWindowExt
+            {
+                qint16 width;
+                qint16 height;
+
+                st >> height >> width;
+                windowExtIsSet = true;
+#if DEBUG_RECORDS
+                kDebug(31000) << "setWindowExt" << width << height
+                              << "(viewportOrg = " << viewportOrgX << viewportOrgY << ")";
+#endif
+
+                // If the viewport is set, then a changed window
+                // changes nothing in the bounding box.
+                if (viewportExtIsSet)
+                    return;
+
+                // Collect the maximum width and height.
+                if (abs(width - windowOrgX) > mMaxWidth)
+                    mMaxWidth = abs(width - windowOrgX);
+                if (abs(height - windowOrgY) > mMaxHeight)
+                    mMaxHeight = abs(height - windowOrgY);
+
+                // Negative values are allowed
+                if (width < 0) {
+                    if (viewportOrgX + width < mBBoxLeft) {
+                        mBBoxLeft = viewportOrgX + width;
+                    }
+                }
+                else {
+                    if (viewportOrgX + width > mBBoxRight) {
+                        mBBoxRight = viewportOrgX + width;
+                    }
+                }
+
+                if (height < 0) {
+                    if (viewportOrgY + height < mBBoxTop) {
+                        mBBoxTop = viewportOrgY + height;
+                    }
+                }
+                else {
+                    if (viewportOrgY + height > mBBoxBottom) {
+                        mBBoxBottom = viewportOrgY + height;
+                    }
+                }
+            }
+        break;
+
+        case 13: //setViewportOrg
+            {
+                st >> viewportOrgY >> viewportOrgX;
+
+#if DEBUG_RECORDS
+                kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
+#endif
+                // Can't do anything without the viewport extensions.
+                if (!viewportExtIsSet)
+                    break;
+
+                // FIXME: Handle the case where the org changes but
+                //        there is no subsequent Ext change (should be
+                //        rather uncommon).
+            }
+            break;
+
+        case 14: //setViewportExt
+            {
+                st >> viewportHeight >> viewportWidth;
+                viewportExtIsSet = true;
+
+#if DEBUG_RECORDS
+                kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
+#endif
+                if (viewportHeight >= 0) {
+
+                    if (viewportOrgY < mBBoxTop)                     mBBoxTop    = viewportOrgY;
+                    if (viewportOrgY + viewportHeight > mBBoxBottom) mBBoxBottom = viewportOrgY + viewportHeight;
+                }
+                else {
+                    // FIXME: Handle negative viewport heights
+                }
+
+                if (viewportWidth >= 0) {
+
+                    if (viewportOrgX < mBBoxLeft)                   mBBoxLeft  = viewportOrgX;
+                    if (viewportOrgX + viewportWidth > mBBoxRight)  mBBoxRight = viewportOrgX + viewportWidth;
+                }
+                else {
+                    // FIXME: Handle negative viewport widths
+                }
+            }
+            break;
+
+        default:
+            isOrgOrExt = false;
+        }
+
+#if DEBUG_RECORDS
+        if (isOrgOrExt) {
+            kDebug(31000) << "              mBBoxTop = " << mBBoxTop;
+            kDebug(31000) << "mBBoxLeft = " << mBBoxLeft << "  mBBoxRight = " << mBBoxRight;
+            kDebug(31000) << "           MBBoxBotton = " << mBBoxBottom;
+            kDebug(31000) << "Max width,height = " << mMaxWidth << mMaxHeight;
+        }
+#endif
+
+        mBuffer->seek(filePos + (size << 1));
+    }
 }
 
 

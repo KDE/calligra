@@ -24,6 +24,7 @@
 #include "PptxXmlDocumentReader.h"
 #include "PptxXmlCommentAuthorsReader.h"
 #include "PptxImport.h"
+#include <VmlDrawingReader.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlSchemas.h>
 #include <MsooXmlUtils.h>
@@ -190,6 +191,8 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     result = new PptxSlideLayoutProperties();
     result->m_slideMasterName = slideMasterPathAndFile;
 
+    QVector<QString> dummyoles;
+
     MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
         *m_context->import,
@@ -202,7 +205,8 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         *m_context->relationships,
         d->commentAuthors,
         d->tableStyleList,
-        d->slideMasterPageProperties[slideMasterPathAndFile].colorMap
+        d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
+        dummyoles
     );
 
     PptxXmlSlideReader slideLayoutReader(this);
@@ -261,6 +265,27 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         return KoFilter::WrongFormat;
     }
 
+    VmlDrawingReader vmlreader(this);
+    QString vmlTarget = m_context->relationships->targetForType(slidePath, slideFile,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+
+    if (!vmlTarget.isEmpty()) {
+        QString errorMessage, vmlPath, vmlFile;
+
+        QString fileName = vmlTarget;
+        fileName.remove(0, m_context->path.length());
+        MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
+
+        VmlDrawingReaderContext vmlContext(*m_context->import,
+            vmlPath, vmlFile, *m_context->relationships);
+
+        const KoFilter::ConversionStatus status =
+            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        if (status != KoFilter::OK) {
+            vmlreader.raiseError(errorMessage);
+        }
+    }
+
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
@@ -278,7 +303,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         *m_context->relationships,
         d->commentAuthors,
         d->tableStyleList,
-        d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap
+        d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
+        vmlreader.content()
     );
 
     // In first round we only read possible colorMap override
@@ -407,6 +433,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     //empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
+    QVector<QString> dummyOles;
 
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);
@@ -421,7 +448,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         *m_context->relationships,
         d->commentAuthors,
         d->tableStyleList,
-        dummyMap
+        dummyMap,
+        dummyOles
     );
 
     PptxXmlSlideReader slideMasterReader(this);
