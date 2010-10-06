@@ -30,6 +30,7 @@
 
 #include <QByteArray>
 #include <QHash>
+#include <QVariant>
 
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
@@ -119,6 +120,9 @@ protected:
     QMultiHash<QByteArray, QByteArray> partNames() const { return m_contentTypes; }
     //! @return part names associated with @a contentType
     QList<QByteArray> partNames(const QByteArray& contentType) const { return m_contentTypes.values(contentType); }
+
+    QMap<QString, QVariant> documentProperties() const { return m_documentProperties; }
+    QVariant documentProperty(const QString& propertyName) const { return m_documentProperties.value(propertyName); }
 private:
     //! Opens file for converting and performs convertions.
     //! @return status of convertion.
@@ -144,8 +148,6 @@ private:
     //! Content types from m_contentTypesXML: ContentType -> PartName mapping
     QMultiHash<QByteArray, QByteArray> m_contentTypes;
 
-    //! XML with document-properties, typically /docProps/app.xml
-    KoXmlDocument m_appXML;
     //! Content types from m_appXML: tagName -> content mapping
     QMap<QString, QVariant> m_documentProperties;
     

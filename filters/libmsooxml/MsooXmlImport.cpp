@@ -267,9 +267,16 @@ KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QStrin
     }
     RETURN_IF_ERROR( Utils::loadContentTypes(m_contentTypesXML, m_contentTypes) )
 
+    static const char *docPropy_core_xml = "docProps/core.xml";
+    KoXmlDocument coreXML;
+    if (loadAndParse(docPropy_core_xml, coreXML, errorMessage) == KoFilter::OK) {
+        RETURN_IF_ERROR( Utils::loadDocumentProperties(coreXML, m_documentProperties) )
+    }
+
     static const char *docPropy_app_xml = "docProps/app.xml";
-    if (loadAndParse(docPropy_app_xml, m_appXML, errorMessage) == KoFilter::OK) {
-        RETURN_IF_ERROR( Utils::loadDocumentProperties(m_appXML, m_documentProperties) )
+    KoXmlDocument appXML;
+    if (loadAndParse(docPropy_app_xml, appXML, errorMessage) == KoFilter::OK) {
+        RETURN_IF_ERROR( Utils::loadDocumentProperties(appXML, m_documentProperties) )
     }
 
     MsooXmlRelationships relationships(*this, writers, errorMessage);

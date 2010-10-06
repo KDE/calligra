@@ -470,13 +470,6 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
 KoFilter::ConversionStatus Utils::loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties)
 {
     KoXmlElement typesEl(appXML.documentElement());
-    if (!checkTag(typesEl, "Properties", "documentElement")) {
-        return KoFilter::WrongFormat;
-    }
-    if (!checkNsUri(typesEl, "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties")) {
-        return KoFilter::WrongFormat;
-    }
-    
     KoXmlElement e, elem, element;
     forEachElement(element, typesEl) {
         QVariant v;
@@ -489,11 +482,9 @@ KoFilter::ConversionStatus Utils::loadDocumentProperties(const KoXmlDocument& ap
             }
         }
         if(!v.isValid())
-            v = elem.text();
+            v = element.text();
         properties[element.tagName()] = v;
-        kDebug()<<element.tagName()<<v;
     }
-
     return KoFilter::OK;
 }
 
