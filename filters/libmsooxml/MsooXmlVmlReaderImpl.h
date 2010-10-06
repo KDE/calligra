@@ -461,6 +461,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
 //! @todo ooo saves binaries to the root dir; should we?
         m_imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
         RETURN_IF_ERROR( m_context->import->copyFile(imagedata, m_imagedataPath, false ) )
+        addManifestEntryForFile(m_imagedataPath);
         m_imagedataFile = imagedata;
         addManifestEntryForPicturesDir();
     }
