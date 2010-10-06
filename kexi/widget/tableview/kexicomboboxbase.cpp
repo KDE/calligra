@@ -171,7 +171,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 //.trimmed() is not generic!
 
     const bool valueIsText = v.type() == QVariant::String || v.type() == QVariant::CString; //most common case
-    const QString txt(valueIsText ? v.toString().trimmed().toLower() : QString());
+    const QString txt(valueIsText ? v.toString().trimmed() : QString());
     KexiTableViewData *lookupData = popup()->tableView()->data();
     const int visibleColumn = lookupFieldSchema->visibleColumn(lookupData->columnsCount());
     if (-1 == visibleColumn)
@@ -180,7 +180,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
     int row;
     for (row = 0;it != lookupData->constEnd();++it, row++) {
         if (valueIsText) {
-            if ((*it)->at(visibleColumn).toString().trimmed().toLower() == txt)
+            if ((*it)->at(visibleColumn).toString().trimmed().compare(txt, Qt::CaseInsensitive) == 0)
                 break;
         } else {
             if ((*it)->at(visibleColumn) == v)
@@ -197,7 +197,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 
     m_setValueOrTextInInternalEditor_enabled = true;
 
-    return *it;
+    return it != lookupData->constEnd() ? *it : 0;
 }
 
 QString KexiComboBoxBase::valueForString(const QString& str, int* row,
@@ -210,14 +210,13 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     //-not effective for large sets: please cache it!
     //.trimmed() is not generic!
 
-    const QString txt = str.trimmed().toLower();
+    const QString txt(str.trimmed());
     KexiTableViewData::Iterator it(relData->constBegin());
     for (*row = 0;it != relData->constEnd();++it, (*row)++) {
-        if ((*it)->at(lookInColumn).toString().trimmed().toLower() == txt)
-            break;
+        const QString s((*it)->at(lookInColumn).toString());
+        if (s.trimmed().compare(txt, Qt::CaseInsensitive) == 0)
+            return s;
     }
-    if (it != relData->constEnd())
-        return (*it)->at(returnFromColumn).toString();
 
     *row = -1;
 
