@@ -37,6 +37,8 @@ class RootSection;
 class Section;
 class SectionsBoxDock;
 class SectionPropertiesDock;
+class KoCutController;
+class KoCopyController;
 
 class View : public QWidget, public KXMLGUIClient
 {
@@ -109,6 +111,11 @@ protected slots:
     ZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
 
+    KoCutController* m_cutController;
+    KoCopyController* m_copyController;
+    KAction* m_editCopy;
+    KAction* m_editCut;
+    
     KAction *m_editPaste;
     KAction *m_deleteSelectionAction;
     KAction* m_groupShapes;

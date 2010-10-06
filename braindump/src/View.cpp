@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009,2010 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -81,11 +81,15 @@ View::View( RootSection *document, MainWindow* parent )
 , m_canvas( 0 )
 , m_activeSection( 0 )
 , m_mainWindow(parent)
+, m_cutController( 0 )
+, m_copyController( 0 )
 {
   
   m_doc->viewManager()->addView(this);
   
   m_editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", this, SLOT( editPaste() ) );
+  m_editCut = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
+  m_editCopy = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
   initGUI();
   initActions();
   loadExtensions();
@@ -174,10 +178,6 @@ void View::initGUI()
 
 void View::initActions()
 {
-  KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
-  new KoCutController(canvas(), action);
-  action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
-  new KoCopyController(canvas(), action);
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
   clipboardDataChanged();
   actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
@@ -276,6 +276,11 @@ void View::createCanvas(Section* _currentSection)
   Canvas* canvas = new Canvas( this, m_doc, _currentSection );
   m_canvasController->setCanvas( canvas );
   m_canvas = canvas;
+  
+  delete m_cutController;
+  m_cutController = new KoCutController(m_canvas, m_editCut);
+  delete m_copyController;
+  m_copyController = new KoCopyController(m_canvas, m_editCopy);
 
   connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
   connect(m_canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
