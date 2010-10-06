@@ -184,6 +184,9 @@ MSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue =
 MSOOXML_EXPORT KoFilter::ConversionStatus loadContentTypes(const KoXmlDocument& contentTypesXML,
         QMultiHash<QByteArray, QByteArray>& contentTypes);
 
+//! Loads content types from "docProps/app.xml"
+MSOOXML_EXPORT KoFilter::ConversionStatus loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties);
+
 //! @return device for file @a fileName of @a zip archive. Status @a status is written on error.
 //! The device is already opened for reading and should be deleted after use.
 MSOOXML_EXPORT QIODevice* openDeviceForFile(const KZip* zip,

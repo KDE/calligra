@@ -144,6 +144,11 @@ private:
     //! Content types from m_contentTypesXML: ContentType -> PartName mapping
     QMultiHash<QByteArray, QByteArray> m_contentTypes;
 
+    //! XML with document-properties, typically /docProps/app.xml
+    KoXmlDocument m_appXML;
+    //! Content types from m_appXML: tagName -> content mapping
+    QMap<QString, QVariant> m_documentProperties;
+    
     //! XML with document contents, typically /word/document.xml
     KoXmlDocument m_documentXML;
 };

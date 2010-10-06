@@ -259,14 +259,19 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
 
 KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QString& errorMessage)
 {
-    static const char *Content_Types_xml =  "[Content_Types].xml";
+    static const char *Content_Types_xml = "[Content_Types].xml";
     KoFilter::ConversionStatus status = loadAndParse(Content_Types_xml, m_contentTypesXML, errorMessage);
     if (status != KoFilter::OK) {
         kDebug() << Content_Types_xml << "could not be parsed correctly! Aborting!";
         return status;
     }
-
     RETURN_IF_ERROR( Utils::loadContentTypes(m_contentTypesXML, m_contentTypes) )
+
+    static const char *docPropy_app_xml = "docProps/app.xml";
+    if (loadAndParse(docPropy_app_xml, m_appXML, errorMessage) == KoFilter::OK) {
+        RETURN_IF_ERROR( Utils::loadDocumentProperties(m_appXML, m_documentProperties) )
+    }
+
     MsooXmlRelationships relationships(*this, writers, errorMessage);
     RETURN_IF_ERROR( parseParts(writers, &relationships, errorMessage) )
 //! @todo sigProgress()
