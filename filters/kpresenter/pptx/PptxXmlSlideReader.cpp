@@ -673,42 +673,43 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
             return KoFilter::FileNotFound;
         }
 
-        body->addCompleteElement(m_context->oleReplacements.at(d->numberOfOleObjects).toUtf8());
+        // As it is primary an ole ole object, this one should have the highest priority
+        QString destinationName;
 
-        ++d->numberOfOleObjects;
-        // Question is, is there a reason to keep this, or should there be ole shape to handle oles
-        {
-            QString destinationName;
+        body->startElement("draw:object-ole");
+        RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
+        body->addAttribute("xlink:href", destinationName);
+        body->endElement(); // draw:object-ole
 
-            body->startElement("draw:object-ole");
-            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName))
+        if (m_context->oleReplacements.size() > d->numberOfOleObjects) {
+            body->addCompleteElement(m_context->oleReplacements.at(d->numberOfOleObjects).toUtf8());
+            ++d->numberOfOleObjects;
+        }
+
+        // These should be one day part of ole shape functionality wise
+        if (progId == "Paint.Picture" || name == "Bitmap Image") {
+            body->startElement("draw:image");
+            RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
+            addManifestEntryForPicturesDir();
             body->addAttribute("xlink:href", destinationName);
-            body->endElement(); // draw:object-ole
-
-            if (progId == "Paint.Picture" || name == "Bitmap Image") {
-                body->startElement("draw:image");
-                RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName, true) )
-                addManifestEntryForPicturesDir();
-                body->addAttribute("xlink:href", destinationName);
-                body->addAttribute("xlink:show", "embed");
-                body->addAttribute("xlink:actuate", "onLoad");
-                body->endElement(); //draw:image
-            }
-            else if (progId == "Package") {
-                body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
-                RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
-                body->addAttribute("xlink:href", destinationName);
-                body->endElement(); // draw:plugin
-            }
-            else if (progId.contains("AcroExch")) { // PDF
-                body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
-                RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
-                body->addAttribute("xlink:href", destinationName);
-                body->endElement(); // draw:object
-            }
-            else {
-                kWarning() << "Unhandled oleObj with progId=" << progId;
-            }
+            body->addAttribute("xlink:show", "embed");
+            body->addAttribute("xlink:actuate", "onLoad");
+            body->endElement(); //draw:image
+        }
+        else if (progId == "Package") {
+            body->startElement("draw:plugin"); // The mimetype is not told by the ole container, this is best guess
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            body->addAttribute("xlink:href", destinationName);
+            body->endElement(); // draw:plugin
+        }
+        else if (progId.contains("AcroExch")) { // PDF
+            body->startElement("draw:object"); // The mimetype is not told by the ole container, this is best guess
+            RETURN_IF_ERROR( copyFile(sourceName, "", destinationName, true ))
+            body->addAttribute("xlink:href", destinationName);
+            body->endElement(); // draw:object
+        }
+        else {
+            kWarning() << "Unhandled oleObj with progId=" << progId;
         }
     }
 
