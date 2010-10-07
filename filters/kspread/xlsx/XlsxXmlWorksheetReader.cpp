@@ -86,8 +86,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import,
-    int numberOfOleObjects,
-    QVector<QString> _oleReplacements)
+    QMap<QString, QString> _oleReplacements)
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
@@ -100,7 +99,6 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , import(_import)
         , path(_path)
         , file(_file)
-        , numberOfOleObjects(numberOfOleObjects)
         , oleReplacements(_oleReplacements)
 {
 }
@@ -122,8 +120,7 @@ public:
     Private( XlsxXmlWorksheetReader* qq )
      : q( qq ),
        warningAboutWorksheetSizeDisplayed(false),
-       drawingNumber(0),
-       numberOfOleObjects(0)
+       drawingNumber(0)
     {
     }
 
@@ -132,7 +129,6 @@ public:
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
     QHash<int, Cell*> sharedFormulas;
-    int numberOfOleObjects;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -1367,18 +1363,18 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITH_NS(r, id)
-    READ_ATTR_WITHOUT_NS(progId);
+    READ_ATTR_WITHOUT_NS(progId)
+    TRY_READ_ATTR_WITHOUT_NS(shapeId)
+
+    // In vmldrawing, the shape identifier has also the extra chars below, therefore
+    // we have to add them here for the match
+    shapeId = "_x0000_s" + shapeId;
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "", fileName) )
 
-    QString filePath;
-
-    if (m_context->oleReplacements.size() > m_context->numberOfOleObjects) {
-        filePath = m_context->oleReplacements.at(m_context->numberOfOleObjects);
-        ++(m_context->numberOfOleObjects);
-    }
+    QString filePath = m_context->oleReplacements.value(shapeId);
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);

@@ -149,7 +149,7 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     QMap<int, QString> _commentAuthors,
     MSOOXML::TableStyleList *_tableStyleList,
     QMap<QString, QString> masterColorMap,
-    QVector<QString> _oleReplacements)
+    QMap<QString, QString> _oleReplacements)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(_themes), type(_type),
@@ -184,7 +184,6 @@ public:
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
-    int numberOfOleObjects;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)
@@ -209,7 +208,6 @@ void PptxXmlSlideReader::init()
     initDrawingML();
     documentReaderMode = false;
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
-    d->numberOfOleObjects = 0;
 }
 
 KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -653,6 +651,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
     TRY_READ_ATTR_WITHOUT_NS(imgH);
     TRY_READ_ATTR_WITHOUT_NS(progId);
     TRY_READ_ATTR_WITHOUT_NS(name);
+    TRY_READ_ATTR_WITHOUT_NS(spid)
 
     /*
     if(!imgW.isEmpty()) m_svgWidth = imgW.toInt();
@@ -681,15 +680,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_oleObj()
         body->addAttribute("xlink:href", destinationName);
         body->endElement(); // draw:object-ole
 
-        if (m_context->oleReplacements.size() > d->numberOfOleObjects) {
-            body->startElement("draw:image");
-            body->addAttribute("xlink:type", "simple");
-            body->addAttribute("xlink:show", "embed");
-            body->addAttribute("xlink:actuate", "onLoad");
-            body->addAttribute("xlink:href", m_context->oleReplacements.at(d->numberOfOleObjects));
-            body->endElement(); // draw:image
-            ++d->numberOfOleObjects;
-        }
+        // Replacement
+        body->startElement("draw:image");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:show", "embed");
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->addAttribute("xlink:href", m_context->oleReplacements.value(spid));
+        body->endElement(); // draw:image
 
         // These should be one day part of ole shape functionality wise
         if (progId == "Paint.Picture" || name == "Bitmap Image") {

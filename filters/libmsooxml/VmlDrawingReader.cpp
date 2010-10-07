@@ -67,7 +67,7 @@ void VmlDrawingReader::init()
 {
 }
 
-QVector<QString> VmlDrawingReader::content()
+QMap<QString, QString> VmlDrawingReader::content()
 {
     return m_content;
 }
@@ -111,10 +111,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
         if (isStartElement()) {
             if (qualifiedName() == "v:shape") {
                 TRY_READ(shape) //from vml
-                if (!m_imagedataPath.isEmpty()) {
-                    m_content.push_back(m_imagedataPath);
-                }
-                m_content.push_back(m_imagedataPath);
+                m_content[m_currentShapeId] = m_imagedataPath;
                 ++index;
             }
         }

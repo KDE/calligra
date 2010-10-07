@@ -356,6 +356,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
            </v:shape>*/
     const QXmlStreamAttributes attrs(attributes());
 
+    TRY_READ_ATTR_WITHOUT_NS(id)
+    m_currentShapeId = id;
+
     // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))

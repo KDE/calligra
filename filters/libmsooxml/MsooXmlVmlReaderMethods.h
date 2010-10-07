@@ -73,3 +73,4 @@ protected:
     QString m_shapeAltText; //!< set in read_shape()
     QString m_shapeTitle; //!< set in read_shape()
     QString m_shapeColor; //!< set in read_shape()
+    QString m_currentShapeId; //!< set in read_shape()

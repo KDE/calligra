@@ -52,7 +52,6 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
         , sharedStrings(&_sharedStrings)
         , comments(&_comments)
         , styles(&_styles)
-        , numberOfOleObjects(0)
 {
 }
 
@@ -281,7 +280,6 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
                                           *m_context->comments,
                                           *m_context->styles,
                                           *m_context->relationships, m_context->import,
-                                          m_context->numberOfOleObjects,
                                           vmlreader.content());
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
                 &worksheetReader, filepath, &context);

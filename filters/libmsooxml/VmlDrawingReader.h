@@ -47,7 +47,7 @@ public:
     virtual ~VmlDrawingReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
-    QVector<QString> content();
+    QMap<QString, QString> content();
 
 #include <MsooXmlVmlReaderMethods.h>
 
@@ -61,7 +61,7 @@ private:
     class Private;
     Private* const d;
     // List of draw:images meant to be used as object replacements
-    QVector<QString> m_content;
+    QMap<QString, QString> m_content;
 };
 
 #endif //DOCXXMLHEADERREADER_H
