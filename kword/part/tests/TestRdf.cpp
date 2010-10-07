@@ -359,8 +359,12 @@ static Soprano::Model *loadRDFXMLFromODT(const QString &odt)
         Soprano::PluginManager::instance()->discoverParserForSerialization(
             Soprano::SerializationRdfXml);
 
-    KIO::StoredTransferJob *job = KIO::storedGet(KUrl (odt));
-    job->exec();
+    KIO::StoredTransferJob *job = KIO::storedGet(KUrl(odt), KIO::NoReload, KIO::HideProgressInfo);
+    const bool success = job->exec();
+    if (!success) {
+        qWarning() << "KIO failed; " << job->errorString();
+        return 0;
+    }
     QByteArray ba = job->data();
     RDEBUG << "rdfxml.sz:" << ba.size();
     Soprano::Model * ret = Soprano::createModel();
