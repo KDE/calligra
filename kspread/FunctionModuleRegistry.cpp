@@ -76,7 +76,7 @@ FunctionModuleRegistry::~FunctionModuleRegistry()
     foreach(QString id, keys()) {
         get(id)->deleteLater();
     }
-    
+    qDeleteAll(doubleEntries());
     delete d;
 }
 

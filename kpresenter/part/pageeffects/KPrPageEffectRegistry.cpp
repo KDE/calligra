@@ -90,6 +90,7 @@ KPrPageEffectRegistry::KPrPageEffectRegistry()
 
 KPrPageEffectRegistry::~KPrPageEffectRegistry()
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
     delete d;
 }
