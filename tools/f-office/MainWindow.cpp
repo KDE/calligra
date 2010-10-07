@@ -1803,6 +1803,7 @@ void MainWindow::selectedTemplatePreview(int number)
         store->close();
         m_templatepreview->setPixmap(thumbnail);
     }
+    delete store;
 }
 
 void MainWindow::openSelectedTemplate()
@@ -2072,6 +2073,7 @@ void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
            foDocumentRdf = 0;
            return;
        }
+       delete store;
        rdfShortcut= new QShortcut(QKeySequence(("Ctrl+R")),this);
        connect(rdfShortcut,SIGNAL(activated()),foDocumentRdf,SLOT(highlightRdf()));
    }

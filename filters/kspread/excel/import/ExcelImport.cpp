@@ -195,10 +195,12 @@ ExcelImport::ExcelImport(QObject* parent, const QStringList&)
         : KoFilter(parent)
 {
     d = new Private;
+    d->storeout = 0;
 }
 
 ExcelImport::~ExcelImport()
 {
+    delete d->storeout;
     delete d;
 }
 
@@ -231,6 +233,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     
     
     QBuffer storeBuffer; // TODO: use temporary file instead
+    delete d->storeout;
     d->storeout = KoStore::createStore(&storeBuffer, KoStore::Write);
 
     // open inputFile
@@ -318,6 +321,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     }
 
     delete d->storeout;
+    d->storeout = 0;
     storeBuffer.close();
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);

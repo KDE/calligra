@@ -217,6 +217,7 @@ void DigitalSignatureDialog::printChild(QDomNode element)
                 node.nextSibling();
                 store->close();
             }
+            delete store;
         }
         printChild(element.nextSibling());
 
@@ -302,9 +303,9 @@ bool DigitalSignatureDialog::verifySignature()
         store->close();
     }
     else{
+	delete store;
         return false;
     }
-
     xmlCleanupParser();
     xmlMemoryDump();
 
@@ -320,6 +321,7 @@ bool DigitalSignatureDialog::verifySignature()
         VLsignerInfoFrame->addWidget(button);
         connect(button,SIGNAL(clicked()),this,SLOT(showSignerInformation()));
     }
+    delete store;
     return true;
 }
 

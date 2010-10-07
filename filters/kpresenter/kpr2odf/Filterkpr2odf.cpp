@@ -81,6 +81,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     //Load the document
     //Load maindoc.xml
     if (!input->open("maindoc.xml")) {
+	delete input;
         return KoFilter::WrongFormat;
     }
     m_mainDoc.setContent(input->device(), false);
@@ -88,6 +89,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
 
     //Load documentinfo.xml
     if (!input->open("documentinfo.xml")) {
+	delete input;
         return KoFilter::WrongFormat;
     }
 
@@ -97,6 +99,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     //Load the preview picture
     QByteArray* preview = new QByteArray();
     if (!input->extractFile("preview.png", *preview)) {
+	delete input;
         return KoFilter::WrongFormat;
     }
 

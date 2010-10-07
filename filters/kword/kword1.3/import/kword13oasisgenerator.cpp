@@ -49,6 +49,7 @@ KWord13OasisGenerator::KWord13OasisGenerator(void) : m_kwordDocument(0),  m_stor
 
 KWord13OasisGenerator::~KWord13OasisGenerator(void)
 {
+    delete m_store;
 }
 
 void KWord13OasisGenerator::prepareTextFrameset(KWordTextFrameset* frameset)
@@ -849,7 +850,7 @@ bool KWord13OasisGenerator::generate(const QString& fileName, KWord13Document& k
     }
 
     m_kwordDocument = &kwordDocument;
-
+    delete m_store;
     m_store = KoStore::createStore(fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip);
     if (! m_store) {
         kError(30520) << "Cannot create output KoStore";
@@ -900,7 +901,6 @@ bool KWord13OasisGenerator::generate(const QString& fileName, KWord13Document& k
         m_store->close();
     }
 # endif
-
 
     delete m_store;
     m_store = 0;

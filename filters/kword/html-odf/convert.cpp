@@ -69,12 +69,13 @@ void Conversion::convert(QFile *cont1)
     myQuery.setQuery(temp1.readAll());
     myQuery.evaluateTo(cont1);
 
-
-
     temp1.close();
     contall.clear();
     met.clear();
     sty.clear();
     cont.clear();
 
+    delete storecont;
+  
+    
 }

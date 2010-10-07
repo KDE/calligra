@@ -114,6 +114,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
 
     if (!storeout) {
         kWarning() << "Couldn't open the requested file.";
+	delete storeout;
         return KoFilter::FileNotFound;
     }
 
@@ -128,6 +129,7 @@ KoFilter::ConversionStatus WPGImport::convert(const QByteArray& from, const QByt
 
     if (!storeout->open("content.xml")) {
         kWarning() << "Couldn't open the file 'content.xml'.";
+	delete storeout;
         return KoFilter::CreationError;
     }
     storeout->write(tmpStringStream.str().c_str());

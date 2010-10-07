@@ -125,6 +125,7 @@ KoFilter::ConversionStatus HancomWordImport::convert(const QByteArray& from, con
 
     if (!storeout->open("styles.xml")) {
         kWarning() << "Couldn't open the file 'styles.xml'.";
+	delete storeout;
         return KoFilter::CreationError;
     }
     storeout->write(d->createStyles());
@@ -132,6 +133,7 @@ KoFilter::ConversionStatus HancomWordImport::convert(const QByteArray& from, con
 
     if (!storeout->open("content.xml")) {
         kWarning() << "Couldn't open the file 'content.xml'.";
+	delete storeout;
         return KoFilter::CreationError;
     }
     storeout->write(d->createContent());
@@ -141,6 +143,7 @@ KoFilter::ConversionStatus HancomWordImport::convert(const QByteArray& from, con
     storeout->enterDirectory("META-INF");
     if (!storeout->open("manifest.xml")) {
         kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
+	delete storeout;
         return KoFilter::CreationError;
     }
     storeout->write(d->createManifest());

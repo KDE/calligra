@@ -2927,12 +2927,13 @@ bool CellToolBase::paste()
         QBuffer buffer(&arr);
         KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
 
-        KoOdfReadStore odfStore(store);
+        KoOdfReadStore odfStore(store); // does not delete the store on destruction
         KoXmlDocument doc;
         QString errorMessage;
         bool ok = odfStore.loadAndParse("content.xml", doc, errorMessage);
         if (!ok) {
             kError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+	    delete store;
             return false;
         }
 
@@ -2949,6 +2950,7 @@ bool CellToolBase::paste()
         KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
         if (realBody.isNull()) {
             kDebug(36005) << "Invalid OASIS OpenDocument file. No office:body tag found.";
+	    delete store;
             return false;
         }
         KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "spreadsheet");
@@ -2960,6 +2962,7 @@ bool CellToolBase::paste()
             forEachElement(childElem, realBody) {
                 localName = childElem.localName();
             }
+            delete store;
             return false;
         }
 
@@ -2972,10 +2975,12 @@ bool CellToolBase::paste()
         // all <sheet:sheet> goes to workbook
         bool result = selection()->activeSheet()->map()->loadOdf(body, context);
 
-        if (!result)
+        if (!result) {
+	    delete store;
             return false;
-
+	}
         selection()->activeSheet()->map()->namedAreaManager()->loadOdf(body);
+	delete store;
     }
 
     if (!editor()) {

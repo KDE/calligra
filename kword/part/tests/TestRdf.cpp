@@ -79,9 +79,11 @@ static KoDocumentRdf *loadDocument(const QString &odt)
     KoDocumentRdf *rdf = new KoDocumentRdf;
     QString error;
     if (!odfReadStore.loadAndParse(error)) {
+	delete store;
         return 0;
     }
     if (!rdf->loadOasis(store)) {
+	delete store;
         return 0;
     }
     delete store;
