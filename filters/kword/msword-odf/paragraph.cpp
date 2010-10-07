@@ -42,7 +42,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, bool inStylesDotXml, bool isHeadin
         m_dropCapStatus(NoDropCap),
         m_inHeaderFooter(inHeaderFooter),
         m_containsPageNumberField(false),
-	m_combinedCharacters(false)
+        m_combinedCharacters(false)
 {
     kDebug(30513);
     m_mainStyles = mainStyles;
@@ -165,7 +165,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
     // Set up the paragraph style.
     applyParagraphProperties(*m_paragraphProperties, m_odfParagraphStyle, m_paragraphStyle,
                              m_inHeaderFooter && m_containsPageNumberField, this);
- 
+
     // MS Word puts dropcap characters in its own paragraph with the
     // rest of the text in the subsequent paragraph. On the other
     // hand, ODF wants the whole paragraph to be one unit.
@@ -232,7 +232,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         const wvWare::Word97::PAP& pap = m_paragraphProperties->pap();
 
         //MS-DOC - sprmPDxaAbs - relative horizontal position to anchor
-        // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside 
+        // (-4) - center, (-8) - right, (-12) - inside, (-16) - outside
         if (pap.dxaAbs == -4) {
             userStyle.addProperty("style:horizontal-pos","center");
         }
@@ -250,8 +250,8 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             userStyle.addProperty("style:horizontal-pos","from-left");
         }
         //MS-DOC - sprmPDyaAbs - relative vertical position to anchor
-        // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside, 
-	// (-20) - outside
+        // (-4) - top, (-8) - middle, (-12) - bottom, (-16) - inside,
+        // (-20) - outside
         if (pap.dyaAbs == -4) {
             userStyle.addProperty("style:vertical-pos","top");
         }
@@ -272,7 +272,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             userStyle.addProperty("style:vertical-pos","from-top");
         }
         //MS-DOC - PositionCodeOperand - anchor vertical position
-	// 0 - margin, 1 - page, 2 - paragraph
+        // 0 - margin, 1 - page, 2 - paragraph
         if (pap.pcVert == 0) {
             userStyle.addProperty("style:vertical-rel","page-content");
         }
@@ -283,7 +283,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             userStyle.addProperty("style:vertical-rel","paragraph");
         }
         //MS-DOC - PositionCodeOperand - anchor horizontal position
-	// 0 - current column, 1 - margin, 2 - page
+        // 0 - current column, 1 - margin, 2 - page
         if (pap.pcHorz == 0) {
             userStyle.addProperty("style:horizontal-rel","paragraph");
         }
@@ -338,7 +338,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
                 //if style is null, we have an inner paragraph and add the
                 //complete paragraph element to writer need to get const char*
                 //from the QString
-                kDebug(30513) << "complete element: " << 
+                kDebug(30513) << "complete element: " <<
                                  m_textStrings[i].toLocal8Bit().constData();
                 writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
             } else {
@@ -911,7 +911,7 @@ void Paragraph::getDropCapData(QString *string, int *type, int *lines, qreal *di
 void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance, QString style)
 {
     kDebug(30513) << "combining drop cap paragraph: " << string;
-    if (m_dropCapStatus == IsDropCapPara) 
+    if (m_dropCapStatus == IsDropCapPara)
         kDebug(30513) << "This paragraph already has a dropcap set!";
 
     m_dropCapStatus = HasDropCapIntegrated;
@@ -952,7 +952,7 @@ void Paragraph::addDropCap(QString &string, int type, int lines, qreal distance,
         for (uint i = 0; i < m_textStrings.size(); ++i) {
             tempStrings.push_back(m_textStrings.[i]);
             tempStyles.push_back(m_textStyles.[i]);
-        }            
+        }
     }
 
     m_textStrings = tempStrings;
@@ -978,8 +978,7 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
     QString msTextStyleName = Conversion::styleNameString(msTextStyle->name());
     kDebug(30513) << "text based on characterstyle " << msTextStyleName;
 
-    KoGenStyle *textStyle;
-    textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+    KoGenStyle *textStyle = new KoGenStyle(KoGenStyle::TextAutoStyle, "text");
     if (m_inStylesDotXml) {
         textStyle->setAutoStyleInStylesDotXml(true);
     }
@@ -992,6 +991,7 @@ QString Paragraph::createTextStyle(wvWare::SharedPtr<const wvWare::Word97::CHP> 
 
     QString textStyleName('T');
     textStyleName = m_mainStyles->insert(*textStyle, textStyleName);
+    delete textStyle;
 
     return textStyleName;
 }
@@ -1006,9 +1006,9 @@ QString Paragraph::contrastFontColor(QString name)
     double a = 1 - (0.299 * color.red() + 0.587 * color.green() + 0.114 * color.blue()) / 255;
 
     if (a < 0.5) {
-	d = 0; // bright colors - black font
+        d = 0; // bright colors - black font
     } else {
-	d = 255; // dark colors - white font
+        d = 255; // dark colors - white font
     }
     return  QColor(d, d, d).name();
 }
