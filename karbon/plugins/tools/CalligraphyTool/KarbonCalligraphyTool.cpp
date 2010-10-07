@@ -56,7 +56,6 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
             SLOT(updateSelectedPath()));
 
     updateSelectedPath();
-    createOptionWidget(); // initialize the option widget
 }
 
 KarbonCalligraphyTool::~KarbonCalligraphyTool()
