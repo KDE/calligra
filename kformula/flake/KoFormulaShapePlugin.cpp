@@ -31,8 +31,8 @@ K_EXPORT_COMPONENT_FACTORY( formulashape,
 KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QStringList& )
                     : QObject( parent )
 {
-    KoToolRegistry::instance()->add( new KoFormulaToolFactory( parent ) );
-    KoShapeRegistry::instance()->add( new KoFormulaShapeFactory( parent ) );
+    KoToolRegistry::instance()->add( new KoFormulaToolFactory() );
+    KoShapeRegistry::instance()->add( new KoFormulaShapeFactory() );
 }
 
 KoFormulaShapePlugin::~KoFormulaShapePlugin()

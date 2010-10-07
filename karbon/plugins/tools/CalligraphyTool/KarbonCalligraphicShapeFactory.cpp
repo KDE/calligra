@@ -23,8 +23,8 @@
 #include <klocale.h>
 
 
-KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory(QObject *parent)
-        : KoShapeFactoryBase(parent, KarbonCalligraphicShapeId, i18n("A calligraphic shape"))
+KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory()
+        : KoShapeFactoryBase(KarbonCalligraphicShapeId, i18n("A calligraphic shape"))
 {
     setToolTip(i18n("Calligraphic Shape"));
     setIcon("calligraphy");

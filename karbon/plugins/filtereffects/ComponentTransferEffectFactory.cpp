@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-ComponentTransferEffectFactory::ComponentTransferEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, ComponentTransferEffectId, i18n("Component transfer"))
+ComponentTransferEffectFactory::ComponentTransferEffectFactory()
+        : KoFilterEffectFactoryBase(ComponentTransferEffectId, i18n("Component transfer"))
 {
 }
 

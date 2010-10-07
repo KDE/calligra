@@ -25,7 +25,7 @@
 class KexiRelationDesignToolFactory : public KoToolFactoryBase {
     public:
         
-        KexiRelationDesignToolFactory ( QObject* parent );
+        KexiRelationDesignToolFactory ();
         
         virtual KoToolBase* createTool ( KoCanvasBase* canvas );
 };

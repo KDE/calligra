@@ -29,8 +29,8 @@ K_EXPORT_COMPONENT_FACTORY ( kexirelationdesignshape,
 KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin ( QObject *parent, const QStringList& )
         : QObject ( parent ) {
     // register the shape's factory
-    KoShapeRegistry::instance()->add (new KexiRelationDesignFactory ( parent ) );
-    KoToolRegistry::instance()->add (new KexiRelationDesignToolFactory ( parent ) );
+    KoShapeRegistry::instance()->add (new KexiRelationDesignFactory () );
+    KoToolRegistry::instance()->add (new KexiRelationDesignToolFactory () );
     // we could register more things here in this same plugin.
 }
 #include "kexirelationdesignshapeplugin.moc"

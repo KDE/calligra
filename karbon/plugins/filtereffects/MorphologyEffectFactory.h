@@ -27,7 +27,7 @@ class KoFilterEffect;
 class MorphologyEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
-    explicit MorphologyEffectFactory(QObject *parent);
+    MorphologyEffectFactory();
     virtual KoFilterEffect * createFilterEffect() const;
     virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
 };

@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-MorphologyEffectFactory::MorphologyEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, MorphologyEffectId, i18n("Morphology"))
+MorphologyEffectFactory::MorphologyEffectFactory()
+        : KoFilterEffectFactoryBase(MorphologyEffectId, i18n("Morphology"))
 {
 }
 

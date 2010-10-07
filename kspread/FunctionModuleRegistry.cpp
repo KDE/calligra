@@ -73,6 +73,10 @@ FunctionModuleRegistry::FunctionModuleRegistry()
 
 FunctionModuleRegistry::~FunctionModuleRegistry()
 {
+    foreach(QString id, keys()) {
+        get(id)->deleteLater();
+    }
+    
     delete d;
 }
 
@@ -109,7 +113,7 @@ void FunctionModuleRegistry::loadFunctionModules()
                 kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
                 continue;
             }
-            FunctionModule* const module = factory->create<FunctionModule>(this);
+            FunctionModule* const module = factory->create<FunctionModule>();
             if (!module) {
                 kDebug(36002) << "Unable to create function module for" << pluginInfo.name();
                 continue;

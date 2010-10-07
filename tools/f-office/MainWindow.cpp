@@ -1922,7 +1922,7 @@ void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
     m_doc->setAutoSave(0);
 
     // registering tools
-    m_cellToolFactory=new FoCellToolFactory(KoToolRegistry::instance());
+    m_cellToolFactory=new FoCellToolFactory();
    // m_spreadEdit->setCellTool(m_focelltool);
     KoToolRegistry::instance()->add(m_cellToolFactory);
 

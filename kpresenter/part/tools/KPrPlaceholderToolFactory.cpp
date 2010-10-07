@@ -22,8 +22,8 @@
 #include "KPrPlaceholderTool.h"
 #include "KPrPlaceholderShape.h"
 
-KPrPlaceholderToolFactory::KPrPlaceholderToolFactory(QObject *parent)
-    : KoToolFactoryBase(parent, "Layout Tool")
+KPrPlaceholderToolFactory::KPrPlaceholderToolFactory()
+    : KoToolFactoryBase("Layout Tool")
 {
     setToolTip( i18n( "Layout Tool" ) );
     setToolType(dynamicToolType());

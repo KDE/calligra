@@ -24,8 +24,8 @@
 
 #include <KLocale>
 
-KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, "KarbonFilterEffectsTool")
+KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
+        : KoToolFactoryBase("KarbonFilterEffectsTool")
 {
     setToolTip(i18n("Filter Effects Editing Tool"));
     setToolType(mainToolType());
@@ -41,5 +41,3 @@ KoToolBase * KarbonFilterEffectsToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonFilterEffectsTool(canvas);
 }
-
-#include "KarbonFilterEffectsToolFactory.moc"

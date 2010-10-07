@@ -24,8 +24,8 @@
 
 #include "FoCellTool.h"
 
-FoCellToolFactory::FoCellToolFactory(QObject* parent)
-        : KoToolFactoryBase(parent, "FreOfficeCellToolId")
+FoCellToolFactory::FoCellToolFactory()
+        : KoToolFactoryBase("FreOfficeCellToolId")
 {
     setToolTip(i18n("Cell Tool"));
     setIcon("kspread");

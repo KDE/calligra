@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-BlendEffectFactory::BlendEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, BlendEffectId, i18n("Blend"))
+BlendEffectFactory::BlendEffectFactory()
+        : KoFilterEffectFactoryBase(BlendEffectId, i18n("Blend"))
 {
 }
 

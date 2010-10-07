@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KarbonPatternToolFactory::KarbonPatternToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, "KarbonPatternTool")
+KarbonPatternToolFactory::KarbonPatternToolFactory()
+        : KoToolFactoryBase("KarbonPatternTool")
 {
     setToolTip(i18n("Pattern Editing Tool"));
     setToolType(mainToolType());
@@ -42,5 +42,3 @@ KoToolBase * KarbonPatternToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KarbonPatternTool(canvas);
 }
-
-#include "KarbonPatternToolFactory.moc"

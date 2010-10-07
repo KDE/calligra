@@ -32,10 +32,9 @@
  * pattern.
  */
 class KoFormulaToolFactory : public KoToolFactoryBase {
-    Q_OBJECT
 public:
     /// The constructor - reimplemented from KoToolFactoryBase
-    explicit KoFormulaToolFactory( QObject* parent );
+    explicit KoFormulaToolFactory();
 
     /// The destructor - reimplemented from KoToolFactoryBase
     ~KoFormulaToolFactory();

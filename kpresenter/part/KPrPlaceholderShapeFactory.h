@@ -27,7 +27,7 @@ class KoShape;
 class KPrPlaceholderShapeFactory : public KoShapeFactoryBase
 {
 public:
-    explicit KPrPlaceholderShapeFactory( QObject *parent );
+    KPrPlaceholderShapeFactory();
     virtual ~KPrPlaceholderShapeFactory();
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

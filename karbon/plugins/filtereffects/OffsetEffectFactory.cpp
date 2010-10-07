@@ -22,8 +22,8 @@
 #include "OffsetEffectConfigWidget.h"
 #include <KLocale>
 
-OffsetEffectFactory::OffsetEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, OffsetEffectId, i18n("Offset"))
+OffsetEffectFactory::OffsetEffectFactory()
+        : KoFilterEffectFactoryBase(OffsetEffectId, i18n("Offset"))
 {
 }
 

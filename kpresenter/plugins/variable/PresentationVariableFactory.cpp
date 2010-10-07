@@ -31,9 +31,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-PresentationVariableFactory::PresentationVariableFactory(QObject *parent)
-    : KoInlineObjectFactoryBase(parent, "PresentationVariable", Other)
+PresentationVariableFactory::PresentationVariableFactory()
+    : KoInlineObjectFactoryBase("PresentationVariable", Other)
 {
+#if 0 // Unused and causes a leak
     KoInlineObjectTemplate var1;
     var1.id = "Header";
     var1.name = i18n("Header");
@@ -49,7 +50,7 @@ PresentationVariableFactory::PresentationVariableFactory(QObject *parent)
     props->setProperty("vartype", 2);
     var2.properties = props;
     //addTemplate(var2);
-
+#endif
     QStringList elementNames;
     elementNames << "footer" << "header" << "date-time";
     setOdfElementNames(KoXmlNS::presentation, elementNames);

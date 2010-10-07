@@ -27,7 +27,7 @@
 class KPrAnimationToolFactory : public KoToolFactoryBase {
 public:
     /// constructor
-    KPrAnimationToolFactory(QObject *parent);
+    KPrAnimationToolFactory();
     ~KPrAnimationToolFactory();
 
     bool canCreateTool(KoCanvasBase *canvas) const;

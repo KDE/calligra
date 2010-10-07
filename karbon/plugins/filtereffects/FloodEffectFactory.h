@@ -27,7 +27,7 @@ class KoFilterEffect;
 class FloodEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
-    explicit FloodEffectFactory(QObject *parent);
+    FloodEffectFactory();
     virtual KoFilterEffect * createFilterEffect() const;
     virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
 };

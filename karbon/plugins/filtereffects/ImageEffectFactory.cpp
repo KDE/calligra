@@ -22,8 +22,8 @@
 #include "ImageEffectConfigWidget.h"
 #include <KLocale>
 
-ImageEffectFactory::ImageEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, ImageEffectId, i18n("Image"))
+ImageEffectFactory::ImageEffectFactory()
+        : KoFilterEffectFactoryBase(ImageEffectId, i18n("Image"))
 {
 }
 

@@ -30,7 +30,7 @@
 class PresentationVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    PresentationVariableFactory(QObject *parent = 0);
+    PresentationVariableFactory();
 
     /// reimplemented
     virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;

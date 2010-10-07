@@ -29,7 +29,7 @@ class KarbonCalligraphicShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor
-    explicit KarbonCalligraphicShapeFactory(QObject *parent);
+    KarbonCalligraphicShapeFactory();
     virtual ~KarbonCalligraphicShapeFactory();
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     //virtual bool supports(const KoXmlElement & e) const;

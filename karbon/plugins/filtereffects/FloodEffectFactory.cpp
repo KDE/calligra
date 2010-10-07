@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-FloodEffectFactory::FloodEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, FloodEffectId, i18n("Flood fill"))
+FloodEffectFactory::FloodEffectFactory()
+        : KoFilterEffectFactoryBase(FloodEffectId, i18n("Flood fill"))
 {
 }
 

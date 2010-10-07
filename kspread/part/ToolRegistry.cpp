@@ -41,7 +41,7 @@ ToolRegistry::ToolRegistry()
         : d(new Private)
 {
     // Add the built-in cell tool.
-    KoToolRegistry::instance()->add(new CellToolFactory(this, "KSpreadCellToolId"));
+    KoToolRegistry::instance()->add(new CellToolFactory("KSpreadCellToolId"));
     // Load the tool plugins.
     loadTools();
 }
@@ -71,7 +71,7 @@ void ToolRegistry::loadTools()
             kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
             continue;
         }
-        CellToolFactory* toolFactory = factory->create<CellToolFactory>(this);
+        CellToolFactory* toolFactory = new CellToolFactory("KSpreadCellToolId");
         if (!toolFactory) {
             kDebug(36002) << "Unable to create tool factory for" << pluginInfo.name();
             continue;

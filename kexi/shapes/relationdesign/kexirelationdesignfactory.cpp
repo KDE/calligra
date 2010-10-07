@@ -21,8 +21,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KexiRelationDesignFactory::KexiRelationDesignFactory ( QObject* parent )
-        : KoShapeFactoryBase ( parent, "KexiRelationDesignShape",
+KexiRelationDesignFactory::KexiRelationDesignFactory()
+        : KoShapeFactoryBase ("KexiRelationDesignShape",
                            i18n ( "Kexi Relation Design" ) ) {
     setToolTip ( i18n ( "A kexi relation design shape" ) );
     setIcon( "kexi" );

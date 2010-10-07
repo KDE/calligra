@@ -66,6 +66,7 @@ KPrShapeAnimationOld * KPrShapeAnimationRegistry::createShapeAnimation( const Ko
 
 KPrShapeAnimationRegistry::KPrShapeAnimationRegistry()
 {
+    qDeleteAll(values());
 }
 
 KPrShapeAnimationRegistry::~KPrShapeAnimationRegistry()

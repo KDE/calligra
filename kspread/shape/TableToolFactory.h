@@ -28,9 +28,8 @@ namespace KSpread
 
 class TableToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit TableToolFactory(QObject* parent);
+    TableToolFactory();
     ~TableToolFactory();
 
     KoToolBase* createTool(KoCanvasBase* canvas);

@@ -27,7 +27,7 @@ class KoFilterEffect;
 class ConvolveMatrixEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
-    explicit ConvolveMatrixEffectFactory(QObject *parent);
+    ConvolveMatrixEffectFactory();
     virtual KoFilterEffect * createFilterEffect() const;
     virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
 };

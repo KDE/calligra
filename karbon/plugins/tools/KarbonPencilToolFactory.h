@@ -24,9 +24,8 @@
 
 class KarbonPencilToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit KarbonPencilToolFactory(QObject *parent);
+    KarbonPencilToolFactory();
     ~KarbonPencilToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

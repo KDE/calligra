@@ -40,17 +40,17 @@ K_EXPORT_PLUGIN(KarbonFilterEffectsPluginFacory("FilterEffects"))
 KarbonFilterEffectsPlugin::KarbonFilterEffectsPlugin(QObject *parent, const QList<QVariant>&)
         : QObject(parent)
 {
-    KoFilterEffectRegistry::instance()->add(new BlurEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new MergeEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new ColorMatrixEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new FloodEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new CompositeEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new BlendEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new ComponentTransferEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new ImageEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new MorphologyEffectFactory(parent));
-    KoFilterEffectRegistry::instance()->add(new ConvolveMatrixEffectFactory(parent));
+    KoFilterEffectRegistry::instance()->add(new BlurEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new OffsetEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new MergeEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new ColorMatrixEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new FloodEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new CompositeEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new BlendEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new ComponentTransferEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new ImageEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new MorphologyEffectFactory());
+    KoFilterEffectRegistry::instance()->add(new ConvolveMatrixEffectFactory());
 }
 
 #include "KarbonFilterEffectsPlugin.moc"

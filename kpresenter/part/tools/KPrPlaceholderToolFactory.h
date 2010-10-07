@@ -25,7 +25,7 @@
 class KPrPlaceholderToolFactory : public KoToolFactoryBase
 {
 public:
-    KPrPlaceholderToolFactory(QObject *parent);
+    KPrPlaceholderToolFactory();
     virtual ~KPrPlaceholderToolFactory();
 
     /// reimplemented

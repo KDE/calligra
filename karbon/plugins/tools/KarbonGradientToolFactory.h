@@ -24,9 +24,8 @@
 
 class KarbonGradientToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit KarbonGradientToolFactory(QObject *parent);
+    KarbonGradientToolFactory();
     ~KarbonGradientToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

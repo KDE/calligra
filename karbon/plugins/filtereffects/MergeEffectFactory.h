@@ -27,7 +27,7 @@ class KoFilterEffect;
 class MergeEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
-    explicit MergeEffectFactory(QObject *parent);
+    MergeEffectFactory();
     virtual KoFilterEffect * createFilterEffect() const;
     virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
 };

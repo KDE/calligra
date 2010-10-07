@@ -33,11 +33,9 @@ class KoShape;
  * createDefaultShape() and createShape() of KoShapeFactoryBase.
  */
 class KoFormulaShapeFactory : public KoShapeFactoryBase {
-    Q_OBJECT
-
 public:
     /// The constructor - reimplemented from KoShapeFactoryBase
-    explicit KoFormulaShapeFactory( QObject *parent );
+    explicit KoFormulaShapeFactory();
 
     /// The destructor - reimplemented from KoShapeFactoryBase
     ~KoFormulaShapeFactory();

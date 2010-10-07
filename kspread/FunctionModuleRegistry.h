@@ -35,7 +35,7 @@ namespace KSpread
  * \ingroup Value
  * Registry for function modules.
  */
-class KSPREAD_EXPORT FunctionModuleRegistry : public QObject, public KoGenericRegistry<FunctionModule*>
+class KSPREAD_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
 {
 public:
     /**

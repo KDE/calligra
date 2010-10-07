@@ -27,7 +27,7 @@ class KoFilterEffect;
 class ColorMatrixEffectFactory : public KoFilterEffectFactoryBase
 {
 public:
-    explicit ColorMatrixEffectFactory(QObject *parent);
+    ColorMatrixEffectFactory();
     virtual KoFilterEffect * createFilterEffect() const;
     virtual KoFilterEffectConfigWidgetBase * createConfigWidget() const;
 };

@@ -27,8 +27,8 @@
 
 #include <kdebug.h>
 
-KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory( QObject *parent )
-: KoShapeFactoryBase( parent, KPrPlaceholderShapeId, i18n( "Placeholder shape" ) )
+KPrPlaceholderShapeFactory::KPrPlaceholderShapeFactory()
+: KoShapeFactoryBase(KPrPlaceholderShapeId, i18n( "Placeholder shape" ) )
 {
     QStringList elementNames;
     elementNames << "text-box" << "object" << "image";

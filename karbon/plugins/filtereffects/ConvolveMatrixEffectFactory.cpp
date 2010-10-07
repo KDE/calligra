@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-ConvolveMatrixEffectFactory::ConvolveMatrixEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, ConvolveMatrixEffectId, i18n("Convolve Matrix"))
+ConvolveMatrixEffectFactory::ConvolveMatrixEffectFactory()
+        : KoFilterEffectFactoryBase(ConvolveMatrixEffectId, i18n("Convolve Matrix"))
 {
 }
 

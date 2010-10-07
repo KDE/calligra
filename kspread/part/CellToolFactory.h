@@ -32,9 +32,8 @@ namespace KSpread
  */
 class KSPREAD_EXPORT CellToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit CellToolFactory(QObject* parent, const QString& id);
+    explicit CellToolFactory(const QString& id);
     ~CellToolFactory();
 
     KoToolBase* createTool(KoCanvasBase* canvas);

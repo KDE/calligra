@@ -24,9 +24,8 @@
 
 class KarbonCalligraphyToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit KarbonCalligraphyToolFactory(QObject *parent);
+    KarbonCalligraphyToolFactory();
     ~KarbonCalligraphyToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

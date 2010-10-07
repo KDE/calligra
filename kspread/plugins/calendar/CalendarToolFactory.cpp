@@ -33,8 +33,8 @@ K_PLUGIN_FACTORY(CalendarToolPluginFactory,
 K_EXPORT_PLUGIN(CalendarToolPluginFactory("CalendarTool"))
 
 
-CalendarToolFactory::CalendarToolFactory(QObject* parent, const QVariantList&)
-        : CellToolFactory(parent, KSPREAD_CALENDAR_TOOL_ID)
+CalendarToolFactory::CalendarToolFactory(QObject *, const QVariantList&)
+        : CellToolFactory(KSPREAD_CALENDAR_TOOL_ID)
 {
     setToolTip(i18n("Calendar Tool"));
 }
@@ -47,5 +47,3 @@ KoToolBase* CalendarToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new CalendarTool(canvas);
 }
-
-#include "CalendarToolFactory.moc"

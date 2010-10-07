@@ -29,7 +29,7 @@ K_EXPORT_COMPONENT_FACTORY(kpresentertoolanimation, KGenericFactory<Plugin>( "kp
 Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new KPrAnimationToolFactory(parent));
+    KoToolRegistry::instance()->add(new KPrAnimationToolFactory());
 }
 
 #include "Plugin.moc"

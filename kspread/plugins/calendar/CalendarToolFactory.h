@@ -21,17 +21,18 @@
 #define KSPREAD_CALENDAR_TOOL_FACTORY
 
 #include <part/CellToolFactory.h>
+#include <QObject>
 
 #define KSPREAD_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
 
 namespace KSpread
 {
 
-class CalendarToolFactory : public CellToolFactory
+class CalendarToolFactory : public QObject, public CellToolFactory
 {
     Q_OBJECT
 public:
-    explicit CalendarToolFactory(QObject* parent, const QVariantList& args);
+    explicit CalendarToolFactory(QObject *parent, const QVariantList& args);
     ~CalendarToolFactory();
 
     KoToolBase* createTool(KoCanvasBase* canvas);

@@ -42,13 +42,14 @@ K_EXPORT_COMPONENT_FACTORY(spreadsheetshape, KGenericFactory<TableShapePlugin>("
 
 TableShapePlugin::TableShapePlugin(QObject * parent,  const QStringList&)
 {
-    KoShapeRegistry::instance()->add(new TableShapeFactory(parent));
-    KoToolRegistry::instance()->add(new TableToolFactory(parent));
+    Q_UNUSED(parent);
+    KoShapeRegistry::instance()->add(new TableShapeFactory());
+    KoToolRegistry::instance()->add(new TableToolFactory());
 }
 
 
-TableShapeFactory::TableShapeFactory(QObject* parent)
-        : KoShapeFactoryBase(parent, TableShapeId, i18n("Table"))
+TableShapeFactory::TableShapeFactory()
+        : KoShapeFactoryBase(TableShapeId, i18n("Table"))
 {
     setToolTip(i18n("Table Shape"));
     setIcon("spreadsheetshape");
@@ -84,9 +85,7 @@ void TableShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     Map* map = new Map();
     // Make the KoResourceManager manage this Map, since we cannot delete it ourselves
     map->setParent(manager);
-    connect(manager, SIGNAL(destroyed()), map, SLOT(deleteLater()));
+    QObject::connect(manager, SIGNAL(destroyed()), map, SLOT(deleteLater()));
     variant.setValue<void*>(map);
     manager->setResource(MapResourceId, variant);
 }
-
-#include "TableShapeFactory.moc"

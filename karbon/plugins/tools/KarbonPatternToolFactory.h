@@ -24,9 +24,8 @@
 
 class KarbonPatternToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit KarbonPatternToolFactory(QObject *parent);
+    KarbonPatternToolFactory();
     ~KarbonPatternToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

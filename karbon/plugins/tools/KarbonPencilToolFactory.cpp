@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KarbonPencilToolFactory::KarbonPencilToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, "KarbonPencilTool")
+KarbonPencilToolFactory::KarbonPencilToolFactory()
+        : KoToolFactoryBase("KarbonPencilTool")
 {
     setToolTip(i18n("Freehand Path Drawing Tool"));
     setToolType(mainToolType());

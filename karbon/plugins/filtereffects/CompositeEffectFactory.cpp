@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-CompositeEffectFactory::CompositeEffectFactory(QObject *parent)
-        : KoFilterEffectFactoryBase(parent, CompositeEffectId, i18n("Composite"))
+CompositeEffectFactory::CompositeEffectFactory()
+        : KoFilterEffectFactoryBase(CompositeEffectId, i18n("Composite"))
 {
 }
 

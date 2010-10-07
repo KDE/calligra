@@ -27,8 +27,8 @@
 #include "KoFormulaShape.h"
 
 
-KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
-    : KoShapeFactoryBase( parent, KoFormulaShapeId, i18n( "Formula" ) )
+KoFormulaShapeFactory::KoFormulaShapeFactory()
+    : KoShapeFactoryBase(KoFormulaShapeId, i18n( "Formula" ) )
 {
     setToolTip(i18n( "A formula"));
     setIcon( "x-shape-formula" );
@@ -80,6 +80,3 @@ bool KoFormulaShapeFactory::supports(const KoXmlElement& e) const
 
     return retval;
 }
-
-
-#include "KoFormulaShapeFactory.moc"

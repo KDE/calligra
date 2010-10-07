@@ -40,9 +40,8 @@ public:
 
 class TableShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
 public:
-    TableShapeFactory(QObject* parent);
+    TableShapeFactory();
     ~TableShapeFactory();
 
     virtual void newDocumentResourceManager(KoResourceManager *manager);

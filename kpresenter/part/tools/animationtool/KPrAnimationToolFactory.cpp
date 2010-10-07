@@ -26,8 +26,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KPrAnimationToolFactory::KPrAnimationToolFactory(QObject *parent)
-: KoToolFactoryBase(parent, "Animation Tool")
+KPrAnimationToolFactory::KPrAnimationToolFactory()
+    : KoToolFactoryBase("Animation Tool")
 {
     setToolTip(i18n("Animation tool"));
     setToolType(mainToolType());
