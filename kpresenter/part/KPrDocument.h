@@ -139,6 +139,14 @@ public:
      */
     KPrDeclarations * declarations() const;
 
+    /**
+     * Creates and shows the start up widget. Reimplemented from KoDocument.
+     *
+     * @param parent the KoMainWindow used as parent for the widget.
+     * @param alwaysShow always show the widget even if the user has configured it to not show.
+     */
+    void showStartUpWidget( KoMainWindow * parent, bool alwaysShow );
+
 public slots:
     virtual void initEmpty();
 
@@ -195,10 +203,16 @@ protected:
 
     KPrCustomSlideShows *m_customSlideShows;
 
+protected slots:
+    /// Quits KPresenter with error message from m_errorMessage.
+    void showErrorAndDie();
+
 private:
     int m_presentationMonitor;
     bool m_presenterViewEnabled;
     QString m_activeCustomSlideShow;
+    /// Message shown before KPresenter quits with an error if something is wrong
+    QString m_errorMessage;
     KPrDeclarations *m_declarations;
 };
 

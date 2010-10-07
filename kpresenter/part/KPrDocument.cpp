@@ -50,6 +50,10 @@
 #include <KConfigGroup>
 #include <KGlobal>
 #include <KStandardDirs>
+#include <KMessageBox>
+
+#include <QTimer>
+#include <QCoreApplication>
 
 class InitOnce
 {
@@ -371,6 +375,38 @@ KPrDeclarations * KPrDocument::declarations() const
     return m_declarations;
 }
 
+void KPrDocument::showStartUpWidget( KoMainWindow * parent, bool alwaysShow )
+{
+    // Go through all (optional) plugins we require and quit if necessary
+    bool error = false;
+    KoShapeFactoryBase * factory;
+
+    // TODO: Uncomment i18n calls after release of 2.3
+    factory = KoShapeRegistry::instance()->value( "TextShapeID" );
+    if ( !factory ) {
+        m_errorMessage = /*i18n(*/ "Can not find needed text component, KPresenter will quit now." /*)*/;
+        error = true;
+    }
+    factory = KoShapeRegistry::instance()->value( "PictureShape" );
+    if ( !factory ) {
+        m_errorMessage = /*i18n(*/ "Can not find needed picture component, KPresenter will quit now." /*)*/;
+        error = true;
+    }
+
+    if ( error ) {
+        QTimer::singleShot( 0, this, SLOT( showErrorAndDie() ) );
+    } else {
+        KoDocument::showStartUpWidget( parent, alwaysShow );
+    }
+}
+
+void KPrDocument::showErrorAndDie()
+{
+    KMessageBox::error( widget(), m_errorMessage, i18n( "Installation Error" ) );
+    // This means "the environment is incorrect" on Windows
+    // FIXME: Is this uniform on all platforms?
+    QCoreApplication::exit( 10 );
+}
 
 #include "KPrDocument.moc"
 
