@@ -356,6 +356,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
            </v:shape>*/
     const QXmlStreamAttributes attrs(attributes());
 
+    TRY_READ_ATTR_WITHOUT_NS(id)
+    m_currentShapeId = id;
+
     // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
@@ -461,6 +464,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
 //! @todo ooo saves binaries to the root dir; should we?
         m_imagedataPath = QLatin1String("Pictures/") + imagedata.mid(imagedata.lastIndexOf('/') + 1);;
         RETURN_IF_ERROR( m_context->import->copyFile(imagedata, m_imagedataPath, false ) )
+        addManifestEntryForFile(m_imagedataPath);
         m_imagedataFile = imagedata;
         addManifestEntryForPicturesDir();
     }

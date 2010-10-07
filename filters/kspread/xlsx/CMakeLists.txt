@@ -19,6 +19,7 @@ set(xlsximport_PART_SRCS
     ChartExport.cpp
     FormulaParser.cpp
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml/pole.cpp
+    ${CMAKE_SOURCE_DIR}/filters/libmsooxml/VmlDrawingReader.cpp
 )
 
 kde4_add_plugin(xlsximport WITH_PREFIX ${xlsximport_PART_SRCS})

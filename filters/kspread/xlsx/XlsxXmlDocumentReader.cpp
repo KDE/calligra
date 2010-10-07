@@ -30,6 +30,7 @@
 #include <MsooXmlRelationships.h>
 #include <KoXmlWriter.h>
 #include <KoFontFace.h>
+#include <VmlDrawingReader.h>
 
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_CLASS XlsxXmlDocumentReader
@@ -51,7 +52,6 @@ XlsxXmlDocumentReaderContext::XlsxXmlDocumentReaderContext(
         , sharedStrings(&_sharedStrings)
         , comments(&_comments)
         , styles(&_styles)
-        , numberOfOleObjects(0)
 {
 }
 
@@ -254,13 +254,33 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
     QString filepath = path + "/" + file;
     kDebug() << "path:" << path << "file:" << file;
 
+    // Loading potential ole replacements
+    VmlDrawingReader vmlreader(this);
+    QString vmlTarget = m_context->relationships->targetForType(path, file,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing");
+
+    if (!vmlTarget.isEmpty()) {
+        QString errorMessage, vmlPath, vmlFile;
+
+        MSOOXML::Utils::splitPathAndFile(vmlTarget, &vmlPath, &vmlFile);
+
+        VmlDrawingReaderContext vmlContext(*m_context->import,
+            vmlPath, vmlFile, *m_context->relationships);
+
+        const KoFilter::ConversionStatus status =
+            m_context->import->loadAndParseDocument(&vmlreader, vmlTarget, errorMessage, &vmlContext);
+        if (status != KoFilter::OK) {
+            vmlreader.raiseError(errorMessage);
+        }
+    }
+
     XlsxXmlWorksheetReader worksheetReader(this);
     XlsxXmlWorksheetReaderContext context(d->worksheetNumber, name, state, path, file,
                                           m_context->themes, *m_context->sharedStrings,
                                           *m_context->comments,
                                           *m_context->styles,
                                           *m_context->relationships, m_context->import,
-                                          m_context->numberOfOleObjects );
+                                          vmlreader.content());
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
                 &worksheetReader, filepath, &context);
     if (result != KoFilter::OK) {
@@ -268,7 +288,6 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
         return result;
     }
 
-
-    SKIP_EVERYTHING
+    readNext();
     READ_EPILOGUE
 }

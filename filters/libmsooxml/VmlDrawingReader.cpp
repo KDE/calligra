@@ -67,7 +67,7 @@ void VmlDrawingReader::init()
 {
 }
 
-QVector<QString> VmlDrawingReader::content()
+QMap<QString, QString> VmlDrawingReader::content()
 {
     return m_content;
 }
@@ -110,19 +110,8 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
         }
         if (isStartElement()) {
             if (qualifiedName() == "v:shape") {
-                QBuffer buffer;
-                buffer.open(QIODevice::WriteOnly);
-                KoXmlWriter body(&buffer);
                 TRY_READ(shape) //from vml
-                if (!m_imagedataPath.isEmpty()) {
-                    body.startElement("draw:image");
-                    body.addAttribute("xlink:type", "simple");
-                    body.addAttribute("xlink:show", "embed");
-                    body.addAttribute("xlink:actuate", "onLoad");
-                    body.addAttribute("xlink:href", m_imagedataPath);
-                    body.endElement(); // draw:image
-                }
-                m_content.push_back(QString::fromUtf8(buffer.buffer(), buffer.buffer().size()));
+                m_content[m_currentShapeId] = m_imagedataPath;
                 ++index;
             }
         }

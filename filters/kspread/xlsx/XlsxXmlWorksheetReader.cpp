@@ -86,8 +86,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import,
-    int& numberOfOleObjects
-)
+    QMap<QString, QString> _oleReplacements)
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
@@ -100,7 +99,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , import(_import)
         , path(_path)
         , file(_file)
-        , numberOfOleObjects(numberOfOleObjects)
+        , oleReplacements(_oleReplacements)
 {
 }
 
@@ -121,8 +120,7 @@ public:
     Private( XlsxXmlWorksheetReader* qq )
      : q( qq ),
        warningAboutWorksheetSizeDisplayed(false),
-       drawingNumber(0),
-       numberOfOleObjects(0)
+       drawingNumber(0)
     {
     }
 
@@ -131,7 +129,6 @@ public:
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
     QHash<int, Cell*> sharedFormulas;
-    int numberOfOleObjects;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -1366,33 +1363,23 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITH_NS(r, id)
-    READ_ATTR_WITHOUT_NS(progId);
+    READ_ATTR_WITHOUT_NS(progId)
+    TRY_READ_ATTR_WITHOUT_NS(shapeId)
 
-    //For now we just copy the preview emf file and the embeded document,
-    //later we might convert it into ODF too.
-    //Preview files exist only for some files, please add the program generator
-    //for the files we will try to copy the preview image from
-    if(progId != "PowerPoint.Slide.12" && progId != "Word.Document.12")
-        return KoFilter::OK;
-
-    ++(m_context->numberOfOleObjects);
+    // In vmldrawing, the shape identifier has also the extra chars below, therefore
+    // we have to add them here for the match
+    shapeId = "_x0000_s" + shapeId;
 
     const QString link = m_context->relationships->target(m_context->path, m_context->file, r_id);
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "", fileName) )
 
-    //In the OOXML specification the preview image would be represented as a relationship
-    //it is not specified how exactly that relationship is to be picked.
-    //However, to make things worse, the relationship seems that is not saved by MS2007,
-    //so, we must assume that the images in the media folder are ordered by appearance in the document
-    QString previewFileName = QString("image%1.emf").arg(m_context->numberOfOleObjects);
-    QString originalPreviewFilePath = "xl/media/" + previewFileName;
-    RETURN_IF_ERROR( copyFile(originalPreviewFilePath, "Pictures/", previewFileName) )
+    QString filePath = m_context->oleReplacements.value(shapeId);
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
 
-    cell->oleObjects << qMakePair<QString,QString>(fileName, previewFileName);
+    cell->oleObjects << qMakePair<QString,QString>(fileName, filePath);
 
     while (!atEnd()) {
         readNext();

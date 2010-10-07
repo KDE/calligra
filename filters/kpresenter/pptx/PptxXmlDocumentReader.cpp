@@ -191,7 +191,7 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
     result = new PptxSlideLayoutProperties();
     result->m_slideMasterName = slideMasterPathAndFile;
 
-    QVector<QString> dummyoles;
+    QMap<QString, QString> dummyoles;
 
     MSOOXML::Utils::AutoPtrSetter<PptxSlideLayoutProperties> slideLayoutPropertiesSetter(result);
     PptxXmlSlideReaderContext context(
@@ -433,7 +433,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
 
     //empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
-    QVector<QString> dummyOles;
+    QMap<QString, QString> dummyOles;
 
     PptxSlideProperties *masterSlideProperties = new PptxSlideProperties();
     MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> masterSlidePropertiesSetter(masterSlideProperties);

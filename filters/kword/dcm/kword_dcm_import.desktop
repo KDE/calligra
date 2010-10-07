@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KWord DICOM Structured Report Import Filter
-Name[da]=DICOM-struktureret rapport importfilter til KWord
+Name[da]=Importfilter til DICOM-strukturerede  rapporter til KWord
 Name[en_GB]=KWord DICOM Structured Report Import Filter
 Name[es]=Filtro de KWord de importación de informes estructurados de DICOM
 Name[et]=KWordi DICOM-i struktureeritud aruande impordifilter
@@ -12,6 +12,7 @@ Name[nb]=KWord DICOM importfilter for strukturert rapport
 Name[nl]=Importfilter voor KWord voor DICOM gestructureerd rapport
 Name[pt]=Filtro de Importação de Relatórios Estruturados DICOM para o KWord
 Name[pt_BR]=Filtro de Importação de Relatórios Estruturados DICOM para o KWord
+Name[ru]=Фильтр импорта отчётов DICOM в KWord
 Name[sv]=Kword-importfilter för DICOM strukturerad rapport
 Name[uk]=Фільтр імпорту структурованих звітів DICOM для KWord
 Name[x-test]=xxKWord DICOM Structured Report Import Filterxx

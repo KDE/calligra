@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,8 @@
 #include "kexidatasourcecombobox.h"
 
 #include <QPixmap>
+#include <QLineEdit>
+
 #include <kdebug.h>
 #include <kiconloader.h>
 
@@ -77,6 +79,7 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
     connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
     connect(this, SIGNAL(returnPressed(const QString &)),
             this, SLOT(slotReturnPressed(const QString &)));
+    connect(lineEdit(), SIGNAL(clearButtonClicked()), this, SLOT(slotClearButtonClicked()));
 
     d->tableIcon = SmallIcon("table");
     d->queryIcon = SmallIcon("query");
@@ -270,6 +273,12 @@ void KexiDataSourceComboBox::slotActivated(int index)
         d->prevIndex = currentIndex();
         emit dataSourceChanged();
     }
+}
+
+void KexiDataSourceComboBox::slotClearButtonClicked()
+{
+    setCurrentIndex(0);
+    slotActivated(0);
 }
 
 QString KexiDataSourceComboBox::selectedPartClass() const

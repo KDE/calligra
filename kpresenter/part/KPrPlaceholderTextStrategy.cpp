@@ -36,9 +36,11 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
+#include <KoTextSharedLoadingData.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoTextWriter.h>
 #include <KoStyleManager.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
@@ -46,14 +48,12 @@
 KPrPlaceholderTextStrategy::KPrPlaceholderTextStrategy( const QString & presentationClass )
 : KPrPlaceholderStrategy( presentationClass )
 , m_textShape( 0 )
-, m_paragraphStyle( 0 )
 {
 }
 
 KPrPlaceholderTextStrategy::~KPrPlaceholderTextStrategy()
 {
     delete m_textShape;
-    delete m_paragraphStyle;
 }
 
 KoShape *KPrPlaceholderTextStrategy::createShape(KoResourceManager *documentResources)
@@ -66,14 +66,11 @@ KoShape *KPrPlaceholderTextStrategy::createShape(KoResourceManager *documentReso
             QTextCursor cursor( data->document() );
             QTextCursor newCursor( newData->document() );
             KoTextDocument textDocument( newData->document() );
-            KoStyleManager * styleManager = textDocument.styleManager();
 
             QTextBlockFormat blockFormat( cursor.blockFormat() );
-            blockFormat.setProperty( KoParagraphStyle::StyleId, styleManager->defaultParagraphStyle()->styleId() );
             newCursor.setBlockFormat( blockFormat );
 
             QTextCharFormat chatFormat( cursor.blockCharFormat() );
-            chatFormat.setProperty( KoCharacterStyle::StyleId, styleManager->defaultParagraphStyle()->characterStyle()->styleId() );
             newCursor.setBlockCharFormat( chatFormat );
         }
     }
@@ -108,55 +105,56 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
 
 void KPrPlaceholderTextStrategy::saveOdf( KoShapeSavingContext & context )
 {
-    if ( m_paragraphStyle ) {
-        KoGenStyle style( KoGenStyle::ParagraphAutoStyle, "paragraph" );
-        m_paragraphStyle->saveOdf( style, context.mainStyles() );
-        QString displayName = m_paragraphStyle->name();
-        QString internalName = QString( QUrl::toPercentEncoding( displayName, "", " " ) ).replace( '%', '_' );
-        QString styleName = context.mainStyles().insert( style, internalName, KoGenStyles::DontAddNumberToName );
-        context.xmlWriter().addAttribute( "draw:text-style-name", styleName );
+    if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData())) {
+        KoStyleManager *styleManager = KoTextDocument(shapeData->document()).styleManager();
+        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData());
+        if (styleManager && shapeData) {
+            QTextDocument *document = shapeData->document();
+            QTextBlock block = document->begin();
+            QString styleName = KoTextWriter::saveParagraphStyle(block, styleManager, context);
+            context.xmlWriter().addAttribute("draw:text-style-name", styleName);
+        }
     }
     KPrPlaceholderStrategy::saveOdf( context );
 }
 
 bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-
-    const KoXmlElement * style = 0;
-    if ( element.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) ) {
-        context.odfLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
-        const QString styleName = element.attributeNS( KoXmlNS::draw, "text-style-name", QString() );
-        style = context.odfLoadingContext().stylesReader().findStyle( styleName, "paragraph", context.odfLoadingContext().useStylesAutoStyles() );
-    }
-    else {
-        const QString styleName = element.attributeNS( KoXmlNS::presentation, "style-name", QString() );
-        style = context.odfLoadingContext().stylesReader().findStyle( styleName, "presentation", context.odfLoadingContext().useStylesAutoStyles() );
-    }
-
-    if ( style ) {
-        KoParagraphStyle paragraphStyle;
-        paragraphStyle.loadOdf(style, context);
-
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
-        Q_ASSERT( factory );
+    if (KoTextSharedLoadingData *textSharedData = dynamic_cast<KoTextSharedLoadingData *>(context.sharedData(KOTEXT_SHARED_LOADING_ID))) {
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("TextShapeID");
+        Q_ASSERT(factory);
         m_textShape = factory->createDefaultShape(context.documentResourceManager());
 
-        KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
+        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData());
         shapeData->document()->setUndoRedoEnabled(false);
 
-        QTextDocument * document = shapeData->document();
-        QTextCursor cursor( document );
+        QTextDocument *document = shapeData->document();
+        QTextCursor cursor(document);
         QTextBlock block = cursor.block();
-        paragraphStyle.applyStyle( block, false );
-        cursor.insertText( text() );
+
+        const QString styleName = element.attributeNS(KoXmlNS::presentation, "style-name");
+        if (!styleName.isEmpty()) {
+            const KoXmlElement *style = context.odfLoadingContext().stylesReader().findStyle(styleName, "presentation", context.odfLoadingContext().useStylesAutoStyles());
+
+            if (style) {
+                KoParagraphStyle paragraphStyle;
+                paragraphStyle.loadOdf(style, context);
+                paragraphStyle.applyStyle(block, false); // TODO t.zachmann is the false correct?
+            }
+        }
+
+        const QString textStyleName = element.attributeNS(KoXmlNS::draw, "text-style-name");
+        if (!textStyleName.isEmpty()) {
+            KoParagraphStyle *style = textSharedData->paragraphStyle(textStyleName, context.odfLoadingContext().useStylesAutoStyles());
+            if (style) {
+                style->applyStyle(block, false); // TODO t.zachmann is the false correct?
+            }
+        }
+
+        cursor.insertText(text());
         shapeData->foul();
-        m_paragraphStyle = paragraphStyle.clone();
         shapeData->document()->setUndoRedoEnabled(true);
     }
-
-    styleStack.restore();
     return true;
 }
 

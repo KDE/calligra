@@ -467,6 +467,27 @@ KoFilter::ConversionStatus Utils::loadContentTypes(
     return KoFilter::OK;
 }
 
+KoFilter::ConversionStatus Utils::loadDocumentProperties(const KoXmlDocument& appXML, QMap<QString, QVariant>& properties)
+{
+    KoXmlElement typesEl(appXML.documentElement());
+    KoXmlElement e, elem, element;
+    forEachElement(element, typesEl) {
+        QVariant v;
+        forEachElement(elem, element) {
+            if(elem.tagName() == "vector") {
+                QVariantList list;
+                forEachElement(e, elem)
+                    list.append(e.text());
+                v = list;
+            }
+        }
+        if(!v.isValid())
+            v = element.text();
+        properties[element.tagName()] = v;
+    }
+    return KoFilter::OK;
+}
+
 bool Utils::ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country)
 {
     int indexForCountry =  value.indexOf('-');

@@ -48,7 +48,6 @@ protected:
     friend class KPrPlaceholderStrategy;
 
     KoShape * m_textShape;
-    KoParagraphStyle * m_paragraphStyle;
 };
 
 #endif /* KPRPLACEHOLDERTEXTSTRATEGY_H */
