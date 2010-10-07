@@ -5127,7 +5127,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
     if (normAutoFit) {
-        m_currentPresentationStyle.addProperty("draw:fit-to-size", "shrink-to-fit", KoGenStyle::GraphicType);
+        m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
     READ_EPILOGUE
