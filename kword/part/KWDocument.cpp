@@ -151,10 +151,10 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     connect(&m_frameLayout, SIGNAL(removedFrameSet(KWFrameSet*)), this, SLOT(removeFrameSet(KWFrameSet*)));
 
     // Init shape Factories with our frame based configuration panels.
-    QList<KoShapeConfigFactoryBase *> panels = KWFrameDialog::panels(this);
+    m_panelFactories = KWFrameDialog::panels(this);
     foreach (const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactoryBase *shapeFactory = KoShapeRegistry::instance()->value(id);
-        shapeFactory->setOptionPanels(panels);
+        shapeFactory->setOptionPanels(m_panelFactories);
     }
 
     resourceManager()->setUndoStack(undoStack());
@@ -175,6 +175,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
 
 KWDocument::~KWDocument()
 {
+    qDeleteAll(m_panelFactories);
     delete m_magicCurtain;
     m_config.setUnit(unit());
     saveConfig();

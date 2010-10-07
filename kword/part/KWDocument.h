@@ -44,6 +44,7 @@ class KWFrameSet;
 class MagicCurtain;
 
 class KoInlineTextObjectManager;
+class KoShapeConfigFactoryBase;
 
 class KLocalizedString;
 class QIODevice;
@@ -228,6 +229,9 @@ private:
 
     MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;
+
+
+    QList<KoShapeConfigFactoryBase *> m_panelFactories;
 };
 
 #endif
