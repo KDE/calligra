@@ -618,8 +618,6 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Down:
     case Qt::Key_PageDown:
     case Qt::Key_PageUp:
-    case Qt::Key_Tab:
-    case Qt::Key_Backtab:
         // Forward left/right arrows to parent, so that pressing left/right
         // in this editor leaves editing mode, unless this editor has been
         // set to capture arrow key events.
@@ -627,6 +625,13 @@ void CellEditor::keyPressEvent(QKeyEvent *event)
             break; // pass to KTextEdit
         }
         event->ignore(); // pass to parent
+        return;
+    case Qt::Key_Tab:
+    case Qt::Key_Backtab:
+        // Always forward tab/backtab to parent, so that pressing them leaves
+        // editing mode. To insert literal tabs you can always use the external
+        // editor.
+        event->ignore();
         return;
     case Qt::Key_Return:
     case Qt::Key_Enter:
