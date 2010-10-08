@@ -1799,8 +1799,6 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     Schedule *cs = m_currentSchedule;
     cs->setCalculationMode( Schedule::Scheduling );
 
-    cs->logDebug( QString( "ScheduleBackward: latest = %1, lateFinish = %2" ).arg( latest.toString() ).arg( cs->lateFinish.toString() ) );
-
     DateTime endTime = latest < cs->lateFinish ? latest : cs->lateFinish;
     // First, calculate all my own successors
     DateTime time = scheduleSuccessors(dependChildNodes(), use);
