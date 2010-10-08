@@ -185,6 +185,12 @@ QString getPresentationClass(const MSO::TextContainer* tc)
 
 }//namespace
 
+
+/*
+ * ************************************************
+ * DrawClient
+ * ************************************************
+ */
 class PptToOdp::DrawClient : public ODrawToOdf::Client {
 private:
     PptToOdp* const ppttoodp;
@@ -452,6 +458,11 @@ QString PptToOdp::DrawClient::formatPos(qreal v)
     return mm(v * (25.4 / 576));
 }
 
+/*
+ * ************************************************
+ * PptToOdp
+ * ************************************************
+ */  
 PptToOdp::PptToOdp()
 : p(0),
   currentSlideTexts(NULL),
@@ -1219,7 +1230,14 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
 
     QString elementName;
     bool imageBullet = i.pf.bulletBlipRef() != 65535;
-    if (imageBullet) {
+
+    //no bullet exists
+    if (!i.pf.fHasBullet()) {
+        elementName = "text:list-level-style-number";
+        out.startElement("text:list-level-style-number");
+        out.addAttribute("style:num-format", "");
+    }
+    else if (imageBullet) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
@@ -1248,6 +1266,13 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
             }
             //out.addAttribute("style:display-levels", "TODO");
             out.addAttribute("text:start-value", i.pf.startNum());
+
+            if (!numPrefix.isNull()) {
+                out.addAttribute("style:num-prefix", numPrefix);
+            }
+            if (!numSuffix.isNull()) {
+                out.addAttribute("style:num-suffix", numSuffix);
+            }
         } else {
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
@@ -1257,14 +1282,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                 out.addAttribute("text:bullet-relative-size", percent(relSize));
             }
         }
-        if (!numPrefix.isNull()) {
-            out.addAttribute("style:num-prefix", numPrefix);
-        }
-        if (!numSuffix.isNull()) {
-            out.addAttribute("style:num-suffix", numSuffix);
-        }
     }
-    out.addAttribute("text:level", level);
+    out.addAttribute("text:level", level?level:1);
 
     bool hasIndent = i.pf.level();
     out.startElement("style:list-level-properties");
@@ -2078,27 +2097,36 @@ void PptToOdp::processTextLine(Writer& out,
     }
     PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
                     &tc, start);
-    bool islist = pf.level() > 0 && start < end;
+    bool islist = ((pf.level() > 0) || pf.fHasBullet()) && start < end;
+    static bool first = true;
+
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf);
-        int level = pf.level() - 1;
-        // remove levels until the top level is the right indentation
-        if (levels.size() > level && levels[level] == listStyle) {
-            writeTextObjectDeIndent(out.xml, level + 1, levels);
-        } else {
-            writeTextObjectDeIndent(out.xml, level, levels);
+        int level = pf.level();
+
+	//check if we have the corresponding style for this level, if not then
+	//close the list and create a new one (K.I.S.S.)
+	if (!levels.isEmpty() && (levels.first() != listStyle)) {
+            writeTextObjectDeIndent(out.xml, 0, levels);
+            first = true;
         }
-        // add styleless levels up to the current level of indentation
+        if (levels.isEmpty()) {
+            addListElement(out.xml, levels, listStyle);
+        }
+        // add styleless levels to get the right level of indentation
         while (levels.size() < level) {
             addListElement(out.xml, levels, "");
         }
-        // at this point, levels.size() == paragraphIndent
-        if (level + 1 != levels.size()) {
-            addListElement(out.xml, levels, listStyle);
-        }
         out.xml.startElement("text:list-item");
+
+        //kpresenter requires the start-value here!
+        if (first && pf.fBulletHasAutoNumber()) {
+            out.xml.addAttribute("text:start-value", pf.startNum());
+            first = false;
+        }
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
+        first = true;
     }
 
     out.xml.startElement("text:p");
