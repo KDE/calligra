@@ -326,7 +326,8 @@ void Project::calculate()
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 2 );
-            cs->lateFinish = calculateForward( estType );
+            cs->lateFinish = qMax( m_constraintEndTime, calculateForward( estType ) );
+            cs->logInfo( i18n( "Late finish calculated: %1", locale->formatDateTime( cs->lateFinish ) ), 2 );
             cs->setPhaseName( 3, i18n( "Schedule" ) );
             cs->logInfo( i18n( "Schedule tasks backward" ), 3 );
             cs->startTime = scheduleBackward( cs->lateFinish, estType );

@@ -72,6 +72,7 @@ private slots:
 
     void resourceConflictALAP();
     void resourceConflictMustStartOn();
+    void resourceConflictMustFinishOn();
 
 private:
     Project *m_project;

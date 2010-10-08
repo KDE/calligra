@@ -2079,6 +2079,271 @@ void ProjectTester::resourceConflictMustStartOn()
     QCOMPARE( p.allTasks().at( 3 )->startTime(), st + Duration( 0, 8, 0 ) );
     QCOMPARE( p.allTasks().at( 3 )->endTime(), st + Duration( 0, 8, 0 ) + Duration( 0, 8, 0 ) );
 
+
+    s = "Schedule backwards, T1 MustStartOn, T2 ASAP -------";
+
+    p.takeTask( p.allTasks().at( 3 ), false );
+    p.takeTask( p.allTasks().at( 2 ), false );
+
+    Task *task1 = p.allTasks().at( 0 );
+    Task *task2 = p.allTasks().at( 1 );
+    DateTime et = p.constraintEndTime();
+    task1->setConstraint( Node::MustStartOn );
+    task1->setConstraintStartTime( et - Duration( 1, 16, 0 ) );
+    task2->setConstraint( Node::ASAP );
+
+    sm = p.createScheduleManager( "T1 MustStartOn, T2 ASAP" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->startTime(), task1->mustStartOn() );
+    QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
+
+    s = "Schedule backwards, T1 MustStartOn, T2 StartNotEarlier -------";
+
+    task2->setConstraint( Node::StartNotEarlier );
+    task2->setConstraintStartTime( task1->mustStartOn().addDays( -1 ) );
+
+    sm = p.createScheduleManager( "T1 MustStartOn, T2 StartNotEarlier" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->startTime(), task1->mustStartOn() );
+    QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
+
+    task2->setConstraintStartTime( task1->mustStartOn() );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->startTime(), task1->mustStartOn() );
+    QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
+
+    task2->setConstraintStartTime( task1->mustStartOn().addDays( 1 ) );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->startTime(), task1->mustStartOn() );
+    QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
+
+}
+
+void ProjectTester::resourceConflictMustFinishOn()
+{
+    Project p;
+    p.setName( "P1" );
+    DateTime st = p.constraintStartTime();
+    st = DateTime( st.addDays( 1 ) );
+    st.setTime( QTime ( 0, 0, 0 ) );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Task *task1 = p.createTask( &p );
+    task1->setName( "T1" );
+    task1->setConstraint( Node::MustFinishOn );
+    task1->setConstraintEndTime( st + Duration( 1, 16, 0 ) );
+    p.addSubTask( task1, &p );
+    task1->estimate()->setUnit( Duration::Unit_d );
+    task1->estimate()->setExpectedEstimate( 1.0 );
+    task1->estimate()->setType( Estimate::Type_Effort );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    task1->addRequest( gr );
+    ResourceRequest *tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    Task *task2 = p.createTask( &p );
+    task2->setName( "T2" );
+    p.addSubTask( task2, &p );
+    task2->estimate()->setUnit( Duration::Unit_d );
+    task2->estimate()->setExpectedEstimate( 1.0 );
+    task2->estimate()->setType( Estimate::Type_Effort );
+
+    gr = new ResourceGroupRequest( g );
+    task2->addRequest( gr );
+    tr = new ResourceRequest( r1, 100 );
+    gr->addResourceRequest( tr );
+
+    QString s = "Schedule T1 MustFinishOn, T2 ASAP -------";
+    qDebug()<<s;
+
+    ScheduleManager *sm = p.createScheduleManager( "T1 MustFinishOn" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->startTime(), p.constraintStartTime() + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1 MustFinishOn, T2 ALAP -------";
+    qDebug()<<s;
+
+    task2->setConstraint( Node::ALAP );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->startTime(), p.constraintStartTime() + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1 MustFinishOn, T2 StartNotEarlier -------";
+    qDebug()<<s;
+
+    task2->setConstraint( Node::StartNotEarlier );
+    task2->setConstraintStartTime( p.constraintStartTime() );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->startTime(), p.constraintStartTime() + Duration( 0, 8, 0 ) );
+
+    s = "Schedule T1 MustFinishOn, T2 StartNotEarlier -------";
+    qDebug()<<s;
+
+    task2->setConstraintStartTime( task1->mustFinishOn() - Duration( 0, 8, 0 ) );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->startTime(), task2->constraintStartTime() + Duration( 1, 0, 0 ) );
+
+    s = "Schedule T1 MustFinishOn, T2 StartNotEarlier -------";
+    qDebug()<<s;
+
+    task2->setConstraintStartTime( task1->mustFinishOn() );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->startTime(), task2->constraintStartTime() + Duration( 0, 16, 0 ) );
+
+    s = "Schedule backwards, T1 MustFinishOn, T2 ASAP -------";
+    qDebug()<<s;
+
+    task2->setConstraint( Node::ASAP );
+
+    sm->createSchedules();
+    sm->setSchedulingDirection( true );
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->startTime(), task1->mustFinishOn() + Duration( 0, 16, 0 ) );
+
+    s = "Schedule backwards, T1 MustFinishOn, T2 ALAP -------";
+    qDebug()<<s;
+
+    DateTime et = p.constraintEndTime();
+
+    task2->setConstraint( Node::ALAP );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+//    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->endTime(), et - Duration( 0, 8, 0 ) );
+
+    s = "Schedule backwards, T1 MustFinishOn, T2 StartNotEarlier -------";
+    qDebug()<<s;
+
+    task2->setConstraint( Node::StartNotEarlier );
+    task2->setConstraintStartTime( task1->mustFinishOn() );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+//    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->endTime(), et - Duration( 0, 8, 0 ) );
+
+    task2->setConstraintStartTime( p.constraintStartTime() );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+//    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->endTime(), et - Duration( 0, 8, 0 ) );
+
+    s = "Schedule backwards, T1 MustFinishOn, T2 FinishNotLater -------";
+    qDebug()<<s;
+
+    task2->setConstraint( Node::FinishNotLater );
+    task2->setConstraintEndTime( task1->mustFinishOn() );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+//    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->endTime(), task1->startTime() - Duration( 0, 16, 0 ) );
+
+    task2->setConstraintEndTime( task1->mustFinishOn().addDays( 2 ) );
+
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+//    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->endTime(), task1->mustFinishOn() );
+    QCOMPARE( task2->endTime(), task2->finishNotLater() );
 }
 
 } //namespace KPlato
