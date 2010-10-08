@@ -1498,10 +1498,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
     m_currentPen.setColor(m_currentColor);
     KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
-#endif
 
     READ_EPILOGUE
 }
@@ -4005,9 +4003,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
         m_currentPen = QPen();
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
     KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
-#endif
 
     READ_EPILOGUE
 }

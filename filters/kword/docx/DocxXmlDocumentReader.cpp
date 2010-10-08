@@ -33,6 +33,7 @@
 #include <MsooXmlUnits.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoOdfGraphicStyles.h>
 #include <Charting.h>
 #include <ChartExport.h>
 #include <XlsxXmlChartReader.h>
