@@ -128,7 +128,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart()
 
         body->addAttribute("draw:style-name", drawStyleName);
     }
-
 }
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
@@ -257,6 +256,37 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
+    body->startElement("draw:g");
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
+    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
+    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
+    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+
+    if (!hor_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+    }
+
+    if (!m_currentDrawStyle->isEmpty()) {
+        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
+        if (m_moveToStylesXml) {
+            mainStyles->markStyleForStylesXml(drawStyleName);
+        }
+
+        body->addAttribute("draw:style-name", drawStyleName);
+    }
+
     const QString width(m_vmlStyle.value("width"));
     const QString height(m_vmlStyle.value("height"));
 
@@ -284,8 +314,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     m_insideGroup = true;
 
-    body->startElement("draw:g");
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -298,6 +326,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
     body->endElement(); // draw:g
 
     m_insideGroup = false;
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
