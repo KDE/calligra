@@ -52,6 +52,10 @@ protected:
     read_p_args m_read_p_args;
 
     KoGenStyle* m_currentDrawStyle; //! used by all classes that need a graphics style.
+    QList<KoGenStyle*>  m_drawStyleStack;
+    KoGenStyle m_currentGradientStyle;
+    void pushCurrentDrawStyle(KoGenStyle *newStyle);
+    void popCurrentDrawStyle();
 
     //! Used for creating style in w:pPr (style:style/@style:name attr)
     KoGenStyle m_currentParagraphStyle;

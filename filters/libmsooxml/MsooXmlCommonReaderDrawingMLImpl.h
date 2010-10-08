@@ -64,25 +64,6 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     m_fillImageRenderingStyleStretch = false;
 }
 
-
-void MSOOXML_CURRENT_CLASS::pushCurrentDrawStyle(KoGenStyle *newStyle)
-{
-    m_drawStyleStack.append(m_currentDrawStyle);
-
-    // This step also takes ownership, so we have to delete it when popping.
-    m_currentDrawStyle = newStyle;
-}
-
-void MSOOXML_CURRENT_CLASS::popCurrentDrawStyle()
-{
-    Q_ASSERT(!m_drawStyleStack.isEmpty());
-
-    delete m_currentDrawStyle;
-    m_currentDrawStyle = m_drawStyleStack.last();
-    m_drawStyleStack.removeLast();
-}
-
-
 // ----------------------------------------------------------------
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& sourceName,

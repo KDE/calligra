@@ -49,6 +49,126 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
     return KoFilter::OK;
 }
 
+void MSOOXML_CURRENT_CLASS::createFrameStart()
+{
+    body->startElement("draw:frame");
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    QString width(m_vmlStyle.value("width")); // already in "...cm" format
+    QString height(m_vmlStyle.value("height")); // already in "...cm" format
+    QString x_mar(m_vmlStyle.value("margin-left"));
+    QString y_mar(m_vmlStyle.value("margin-top"));
+    QString leftPos(m_vmlStyle.value("left"));
+    QString topPos(m_vmlStyle.value("top"));
+    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
+    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
+    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
+    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+
+    if (!width.isEmpty()) {
+        if (m_insideGroup) {
+            width = QString("%1%2").arg(width.toInt() * m_real_groupWidth / m_groupWidth).arg(m_groupUnit);
+        }
+        body->addAttribute("svg:width", width);
+    }
+    if (!height.isEmpty()) {
+        if (m_insideGroup) {
+            height = QString("%1%2").arg(height.toInt() * m_real_groupHeight / m_groupHeight).arg(m_groupUnit);
+        }
+        body->addAttribute("svg:height", height);
+    }
+    if (!x_mar.isEmpty()) {
+        if (m_insideGroup) {
+            x_mar = QString("%1%2").arg((x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth).arg(m_groupUnit);
+        }
+        body->addAttribute("svg:x", x_mar);
+    }
+    else if (!leftPos.isEmpty()) {
+        if (m_insideGroup) {
+            leftPos = QString("%1%2").arg((leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth).arg(m_groupUnit);
+        }
+        body->addAttribute("svg:x", leftPos);
+    }
+    if (!y_mar.isEmpty()) {
+        if (m_insideGroup) {
+            y_mar = QString("%1%2").arg((y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight).arg(m_groupUnit);
+        }
+        body->addAttribute("svg:y", y_mar);
+    }
+    else if (!topPos.isEmpty()) {
+        if (m_insideGroup) {
+            topPos = QString("%1%2").arg((topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight).arg(m_groupUnit);
+        }
+        body->addAttribute("svg:y", topPos);
+    }
+    if (!m_shapeColor.isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:fill", "solid");
+        m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
+    }
+    if (!hor_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+    }
+
+    if (!m_currentDrawStyle->isEmpty()) {
+        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
+        if (m_moveToStylesXml) {
+            mainStyles->markStyleForStylesXml(drawStyleName);
+        }
+
+        body->addAttribute("draw:style-name", drawStyleName);
+    }
+
+}
+
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
+{
+    if (!m_imagedataPath.isEmpty()) {
+        body->startElement("draw:image");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:show", "embed");
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->addAttribute("xlink:href", m_imagedataPath);
+        body->endElement(); // draw:image
+    }
+
+    {
+        {
+            const QString rId(m_vmlStyle.value("v:fill@r:id"));
+            if (!rId.isEmpty()) {
+                body->startElement("draw:image");
+                const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
+                kDebug() << "sourceName:" << sourceName;
+                if (sourceName.isEmpty()) {
+                    return KoFilter::FileNotFound;
+                }
+
+                QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
+                RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+                addManifestEntryForFile(destinationName);
+                addManifestEntryForPicturesDir();
+                body->addAttribute("xlink:href", destinationName);
+                body->endElement(); //draw:image
+            }
+        }
+    }
+
+    body->endElement(); //draw:frame
+
+    popCurrentDrawStyle();
+
+    return KoFilter::OK;
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL rect
 //! rect handler (Rectangle)
@@ -93,10 +213,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 {
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
-//! @todo support more attrs
-    // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
+
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
+
+    TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+
+    if (!fillcolor.isEmpty()) {
+        // It is possible that fillcolor is eg #abcdef [adddd], this removes the extra end
+        if (fillcolor.indexOf(' ') > 0) {
+            fillcolor = fillcolor.left(fillcolor.indexOf(' '));
+        }
+        m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    createFrameStart();
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -106,9 +238,66 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    createFrameEnd();
+
     READ_EPILOGUE
 }
 
+#undef CURRENT_EL
+#define CURRENT_EL group
+//! Vml group handler
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(style)
+    RETURN_IF_ERROR(parseCSS(style))
+
+    const QString width(m_vmlStyle.value("width"));
+    const QString height(m_vmlStyle.value("height"));
+
+    m_groupUnit = width.right(2); // pt, cm etc.
+    m_real_groupWidth = width.left(width.length() - 2).toDouble();
+    m_real_groupHeight = height.left(height.length() - 2).toDouble();
+
+    m_groupX = 0;
+    m_groupY = 0;
+    m_groupWidth = 0;
+    m_groupHeight = 0;
+
+    TRY_READ_ATTR_WITHOUT_NS(coordsize)
+
+    if (!coordsize.isEmpty()) {
+        m_groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
+        m_groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(coordorigin)
+    if (!coordorigin.isEmpty()) {
+        m_groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
+        m_groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
+    }
+
+    m_insideGroup = true;
+
+    body->startElement("draw:g");
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(rect)
+//! @todo add ELSE_WRONG_FORMAT
+        }
+    }
+
+    body->endElement(); // draw:g
+
+    m_insideGroup = false;
+
+    READ_EPILOGUE
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL roundrect
@@ -122,6 +311,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 //! @todo support more attrs
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
+
+    createFrameStart();
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -131,6 +323,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    createFrameEnd();
+
     READ_EPILOGUE
 }
 
@@ -238,6 +433,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
         }
         QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
         RETURN_IF_ERROR( m_context->import->copyFile(sourceName, destinationName, false ) )
+        addManifestEntryForFile(destinationName);
         addManifestEntryForPicturesDir();
         if (m_pDocBkgImageWriter) {
             delete m_pDocBkgImageWriter->device();
@@ -403,6 +599,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
+    if (m_outputFrames) {
+        createFrameStart();
+    }
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -413,6 +613,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     }
 
     m_objectRectInitialized = true;
+
+    if (m_outputFrames) {
+        createFrameEnd();
+    }
 
     READ_EPILOGUE
 }

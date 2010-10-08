@@ -44,6 +44,10 @@ protected:
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
     KoFilter::ConversionStatus read_textbox();
+    KoFilter::ConversionStatus read_group();
+
+    void createFrameStart();
+    KoFilter::ConversionStatus createFrameEnd();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
@@ -74,3 +78,20 @@ protected:
     QString m_shapeTitle; //!< set in read_shape()
     QString m_shapeColor; //!< set in read_shape()
     QString m_currentShapeId; //!< set in read_shape()
+
+    bool m_outputFrames; // Whether read_shape should output something to shape
+
+    // For group shape situation
+    bool m_insideGroup;
+
+    // Relative group widths
+    int m_groupWidth;
+    int m_groupHeight;
+
+    // Relative group original
+    int m_groupX;
+    int m_groupY;
+
+    QString m_groupUnit; // pt, cm etc.
+    qreal m_real_groupWidth;
+    qreal m_real_groupHeight;

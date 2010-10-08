@@ -108,6 +108,23 @@ public:
     }
 };
 
+void MsooXmlCommonReader::pushCurrentDrawStyle(KoGenStyle *newStyle)
+{
+    m_drawStyleStack.append(m_currentDrawStyle);
+
+    // This step also takes ownership, so we have to delete it when popping.
+    m_currentDrawStyle = newStyle;
+}
+
+void MsooXmlCommonReader::popCurrentDrawStyle()
+{
+    Q_ASSERT(!m_drawStyleStack.isEmpty());
+
+    delete m_currentDrawStyle;
+    m_currentDrawStyle = m_drawStyleStack.last();
+    m_drawStyleStack.removeLast();
+}
+
 void MsooXmlCommonReader::addManifestEntryForFile(const QString& path)
 {
     if (path.isEmpty())

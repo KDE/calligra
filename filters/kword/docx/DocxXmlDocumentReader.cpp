@@ -123,6 +123,8 @@ void DocxXmlDocumentReader::init()
     m_createSectionStyle = true;
     m_createSectionToNext = false;
     m_normalDocumentMode = true;
+    m_insideGroup = false;
+    m_outputFrames = true;
 }
 
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -509,13 +511,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
 {
     READ_PROLOGUE
 
-    body->startElement("draw:frame");
-
-    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-
-    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf;
-    body = drawFrameBuf.setWriter(body);
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -524,83 +519,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, roundrect)
             ELSE_TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
+            ELSE_TRY_READ_IF_NS(v, group)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    body = drawFrameBuf.originalWriter();
-
-    const QString width(m_vmlStyle.value("width")); // already in "...cm" format
-    const QString height(m_vmlStyle.value("height")); // already in "...cm" format
-    const QString x_mar(m_vmlStyle.value("margin-left"));
-    const QString y_mar(m_vmlStyle.value("margin-top"));
-    const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
-    const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
-    const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
-    const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
-    if (!width.isEmpty()) {
-        body->addAttribute("svg:width", width);
-    }
-    if (!height.isEmpty()) {
-        body->addAttribute("svg:height", height);
-    }
-    if (!x_mar.isEmpty()) {
-        body->addAttribute("svg:x", x_mar);
-    }
-    if (!y_mar.isEmpty()) {
-        body->addAttribute("svg:y", y_mar);
-    }
-    if (!m_shapeColor.isEmpty()) {
-        m_currentDrawStyle->addProperty("fo:background-color", m_shapeColor);
-    }
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
-
-    if (!m_imagedataPath.isEmpty()) {
-        body->startElement("draw:image");
-        body->addAttribute("xlink:type", "simple");
-        body->addAttribute("xlink:show", "embed");
-        body->addAttribute("xlink:actuate", "onLoad");
-        body->addAttribute("xlink:href", m_imagedataPath);
-        body->endElement(); // draw:image
-    }
-
-    if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        body->addAttribute("draw:style-name", drawStyleName);
-    }
-
-    {
-        {
-            const QString rId(m_vmlStyle.value("v:fill@r:id"));
-            if (!rId.isEmpty()) {
-                body->startElement("draw:image");
-                const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));
-                kDebug() << "sourceName:" << sourceName;
-                if (sourceName.isEmpty()) {
-                    return KoFilter::FileNotFound;
-                }
-                QString destinationName;
-                RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-                addManifestEntryForPicturesDir();
-                body->addAttribute("xlink:href", destinationName);
-                body->endElement(); //draw:image
-            }
-        }
-    }
-
-    (void)drawFrameBuf.releaseWriter();
-
-    body->endElement(); //draw:frame
 
     READ_EPILOGUE
 }
