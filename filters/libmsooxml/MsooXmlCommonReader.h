@@ -105,6 +105,8 @@ protected:
 
     bool m_moveToStylesXml;
 
+    QPen m_currentPen;
+
     QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files
 
 //    //! Used for creating style names (style:style/@style:name attr)

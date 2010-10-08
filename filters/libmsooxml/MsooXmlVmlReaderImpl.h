@@ -106,6 +106,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart()
         m_currentDrawStyle->addProperty("draw:fill", "solid");
         m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
     }
+
     if (!hor_pos.isEmpty()) {
         m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
     }
@@ -218,6 +219,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     RETURN_IF_ERROR(parseCSS(style))
 
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+
+    m_shapeColor.clear();
 
     if (!fillcolor.isEmpty()) {
         // It is possible that fillcolor is eg #abcdef [adddd], this removes the extra end
@@ -594,9 +597,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+
+    m_shapeColor.clear();
+    m_strokeColor.clear();
 
     if (!fillcolor.isEmpty()) {
         m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
+    }
+
+    if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
     }
 
     if (m_outputFrames) {

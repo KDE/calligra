@@ -250,7 +250,6 @@ enum ColorType {
 
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
 QColor m_currentColor;
-QPen   m_currentPen;
 
 qreal* m_currentDoubleValue;
 

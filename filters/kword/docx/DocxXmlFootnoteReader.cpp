@@ -60,7 +60,6 @@ DocxXmlFootnoteReader::~DocxXmlFootnoteReader()
 void DocxXmlFootnoteReader::init()
 {
     d->counter = 0;
-    m_normalDocumentMode = false;
 }
 
 KoFilter::ConversionStatus DocxXmlFootnoteReader::read(MSOOXML::MsooXmlReaderContext* context)

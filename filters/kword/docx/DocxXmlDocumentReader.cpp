@@ -120,9 +120,8 @@ void DocxXmlDocumentReader::init()
     m_wasCaption = false;
     m_listFound = false;
     m_closeHyperlink = false;
-    m_createSectionStyle = true;
+    m_createSectionStyle = false;
     m_createSectionToNext = false;
-    m_normalDocumentMode = true;
     m_insideGroup = false;
     m_outputFrames = true;
 }
@@ -130,6 +129,7 @@ void DocxXmlDocumentReader::init()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
     m_context = dynamic_cast<DocxXmlDocumentReaderContext*>(context);
+    m_createSectionStyle = true;
     kDebug() << "=============================";
     readNext();
     if (!isStartDocument()) {
@@ -1649,6 +1649,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     m_listFound = false;
     m_closeHyperlink = false;
 
+    // It is possible that one of the child elements of p has p element
+    // Therefore we push the current style to vector and pop it out when we come out
+    // To make sure in that case we don't lose the previous style
+    QVector<KoGenStyle> activeStyles;
+    activeStyles.push_back(m_currentParagraphStyle);
+
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
     bool oldWasCaption = m_wasCaption;
@@ -1672,6 +1678,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             QString drop = QString::fromUtf8(frameBuffer.buffer(), frameBuffer.buffer().size());
             m_currentParagraphStyle.addChildElement("style:tab-stops", drop);
         }
+    }
+
+    // Whether section starts from this paragraph
+    bool sectionAdded = false;
+
+    if (m_createSectionStyle) {
+        // This is done to avoid the style to being duplicate to some other style
+        m_currentParagraphStyle.addAttribute("style:master-page-name", "placeholder");
+        m_createSectionStyle = false;
+        sectionAdded = true;
     }
 
     while (!atEnd()) {
@@ -1734,11 +1750,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             body->startElement("text:p", false);
             if (m_currentStyleName.isEmpty()) {
                 QString currentParagraphStyleName;
-                if (m_createSectionStyle && m_normalDocumentMode) {
-                    // This is done to avoid the style to being duplicate to some other style
-                    m_currentParagraphStyle.addAttribute("style:master-page-name", "placeholder");
+                if (sectionAdded) {
                     currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
-                    m_createSectionStyle = false;
                     m_currentSectionStyleName = currentParagraphStyleName;
                 }
                 else {
@@ -1776,6 +1789,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
     }
 
     m_currentStyleName.clear();
+
+    m_currentParagraphStyle = activeStyles.last();
+    activeStyles.pop_back();
+
     READ_EPILOGUE
 }
 
@@ -3778,7 +3795,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
 
     QString currentTableStyleName;
 
-    if (m_createSectionStyle && m_normalDocumentMode) {
+    if (m_createSectionStyle) {
         // This is done to avoid the style to being duplicate to some other style
         m_currentTableStyle.addAttribute("style:master-page-name", "placeholder");
         currentTableStyleName = mainStyles->insert(m_currentTableStyle, m_currentTableName, KoGenStyles::DontAddNumberToName);

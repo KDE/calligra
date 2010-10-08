@@ -50,7 +50,6 @@ DocxXmlCommentReader::DocxXmlCommentReader(KoOdfWriters *writers)
 {
     init();
     DocxXmlDocumentReader::m_moveToStylesXml = true;
-    m_normalDocumentMode = false;
 }
 
 DocxXmlCommentReader::~DocxXmlCommentReader()

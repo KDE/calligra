@@ -79,6 +79,8 @@ protected:
     QString m_shapeColor; //!< set in read_shape()
     QString m_currentShapeId; //!< set in read_shape()
 
+    QString m_strokeColor; // stroke color
+
     bool m_outputFrames; // Whether read_shape should output something to shape
 
     // For group shape situation

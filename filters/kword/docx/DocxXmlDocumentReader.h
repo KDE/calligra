@@ -182,7 +182,6 @@ protected:
     KoFilter::ConversionStatus read_graphicData2();
     KoFilter::ConversionStatus read_chart2();
 
-    bool m_normalDocumentMode;
     bool m_createSectionStyle;
     QString m_currentSectionStyleName;
     bool m_createSectionToNext;
