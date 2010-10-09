@@ -910,6 +910,8 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
         //get visible lookup value if available
         getVisibleLookupValue(cellValue, edit, record, tvcol);
 
+/*kDebug() << "edit->setupContents()" << (m_currentItem == record && col == m_curCol)
+        << cellValue << txt << align << x << y_offset << w << h;*/
         edit->setupContents(p, m_currentItem == record && col == m_curCol,
                             cellValue, txt, align, x, y_offset, w, h);
     }
@@ -1016,8 +1018,11 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
 
     // Subtract the table from it
 // reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,m_navPanel->isVisible() ? m_navPanel->height() : 0) ) );
+    const int scrollBarHeight = horizontalScrollBar()->isVisible()
+        ? horizontalScrollBar()->sizeHint().height() : 0;
+    
     reg = reg.subtract(QRect(QPoint(0, 0), ts
-                             - QSize(0, qMax((m_navPanel ? m_navPanel->height() : 0), horizontalScrollBar()->sizeHint().height())
+                             - QSize(0, qMax(((m_navPanel && m_navPanel->isVisible()) ? m_navPanel->height() : 0), scrollBarHeight)
                                      /*- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() / 2 : 0)
                                      + (horizontalScrollBar()->isVisible() ? 0 :
                                         d->internal_bottomMargin
