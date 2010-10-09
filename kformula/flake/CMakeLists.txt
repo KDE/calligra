@@ -44,6 +44,7 @@ set( kformulalib_PART_SRCS
    elements/StringElement.cpp
    elements/PhantomElement.cpp
    elements/SquareRootElement.cpp
+   elements/AnnotationElement.cpp
    elements/UnknownElement.cpp
 )
 
