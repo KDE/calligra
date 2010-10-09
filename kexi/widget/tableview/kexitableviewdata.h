@@ -121,7 +121,7 @@ public:
     }
 
     inline KexiTableViewColumn* column(uint c) {
-        return m_columns.at(c);
+        return m_columns.value(c);
     }
 
     /*! \return columns information */
@@ -180,7 +180,7 @@ public:
      like in table view, not like in form view. Don't use this with form views. */
     inline bool updateRowEditBuffer(KexiDB::RecordData *record, int colnum,
                                     QVariant newval, bool allowSignals = true) {
-        KexiTableViewColumn* col = m_columns.at(colnum);
+        KexiTableViewColumn* col = m_columns.value(colnum);
         return col ? updateRowEditBufferRef(record, colnum, col, newval, allowSignals) : false;
     }
 
