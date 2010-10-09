@@ -229,7 +229,11 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
         newIndex = m_viewModeSlidesSorter->pageCount() - 1;
     }
     if (oldIndex != newIndex) {
-        m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
+        if (oldIndex < newIndex) {
+            m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
+        } else {
+            m_viewModeSlidesSorter->movePage(oldIndex, newIndex - 1);
+        }
         QListWidgetItem *sourceItem = takeItem(oldIndex);
         insertItem(newIndex, sourceItem);
         // This selection helps the user
