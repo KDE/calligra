@@ -86,7 +86,6 @@ void KWFrame::copySettings(const KWFrame *frame)
     setRunAroundSide(frame->runAroundSide());
     setTextRunAround(frame->textRunAround());
     shape()->copySettings(frame->shape());
-    // TODO copy-shape
 }
 
 void KWFrame::saveOdf(KoShapeSavingContext &context, const KWPage &page, int pageZIndexOffset) const
