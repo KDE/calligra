@@ -1242,14 +1242,14 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
                          bulletPictureNames.value(i.pf.bulletBlipRef()));
-        if (bulletSize.isNull() || bulletSize.endsWith("%")) {
+        if (bulletSize.isNull() || bulletSize.endsWith('%')) {
             if (i.cf && i.cf->masks.size) {
                 bulletSize = pt(i.cf->fontSize);
             } else if (p.cf && p.cf->masks.size) {
                 bulletSize = pt(p.cf->fontSize);
             }
         }
-        if (bulletSize.isNull() || bulletSize.endsWith("%")) {
+        if (bulletSize.isNull() || bulletSize.endsWith('%')) {
             bulletSize = "20pt"; // fallback value
         }
     } else {
@@ -2265,11 +2265,11 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
                                usedDateTimeDeclaration[slideNo]);
     }
     if (!usedHeaderDeclaration.value(slideNo).isEmpty()) {
-        if(usedHeaderDeclaration[slideNo] != "")
+        if (!usedHeaderDeclaration[slideNo].isEmpty())
             out.xml.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
     }
     if (!usedFooterDeclaration.value(slideNo).isEmpty()) {
-        if(usedFooterDeclaration[slideNo] != "")
+        if (!usedFooterDeclaration[slideNo].isEmpty())
             out.xml.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
     }
 
@@ -2481,92 +2481,92 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
     switch (val) {
 
     case ANM_AlphaLcPeriod:         //Example: a., b., c., ...Lowercase Latin character followed by a period.
-        numFormat = "a";
-        numSuffix = ".";
+        numFormat = 'a';
+        numSuffix = '.';
         break;
 
     case ANM_AlphaUcPeriod:        //Example: A., B., C., ...Uppercase Latin character followed by a period.
-        numFormat = "A";
-        numSuffix = ".";
+        numFormat = 'A';
+        numSuffix = '.';
         break;
 
     case ANM_ArabicParenRight:     //Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
-        numFormat = "1";
-        numSuffix = ")";
+        numFormat = '1';
+        numSuffix = ')';
         break;
 
     case ANM_ArabicPeriod :        //Example: 1., 2., 3., ...Arabic numeral followed by a period.
-        numFormat = "1";
-        numSuffix = ".";
+        numFormat = '1';
+        numSuffix = '.';
         break;
 
     case ANM_RomanLcParenBoth:     //Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "i";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'i';
+        numSuffix = ')';
         break;
 
     case ANM_RomanLcParenRight:    //Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
-        numFormat = "i";
-        numSuffix = ")";
+        numFormat = 'i';
+        numSuffix = ')';
         break;
 
     case ANM_RomanLcPeriod :        //Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-        numFormat = "i";
-        numSuffix = ".";
+        numFormat = 'i';
+        numSuffix = '.';
         break;
 
     case ANM_RomanUcPeriod:         //Example: I., II., III., ...Uppercase Roman numeral followed by a period.
-        numFormat = "I";
-        numSuffix = ".";
+        numFormat = 'I';
+        numSuffix = '.';
         break;
 
     case ANM_AlphaLcParenBoth:      //Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "a";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'a';
+        numSuffix = ')';
         break;
 
     case ANM_AlphaLcParenRight:     //Example: a), b), c), ...Lowercase alphabetic character followed by a closing
-        numFormat = "a";
-        numSuffix = ")";
+        numFormat = 'a';
+        numSuffix = ')';
         break;
 
     case ANM_AlphaUcParenBoth:      //Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "A";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'A';
+        numSuffix = ')';
         break;
 
     case ANM_AlphaUcParenRight:     //Example: A), B), C), ...Uppercase alphabetic character followed by a closing
-        numFormat = "A";
-        numSuffix = ")";
+        numFormat = 'A';
+        numSuffix = ')';
         break;
 
     case ANM_ArabicParenBoth:       //Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "1";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = '1';
+        numSuffix = ')';
         break;
 
     case ANM_ArabicPlain:           //Example: 1, 2, 3, ...Arabic numeral.
-        numFormat = "1";
+        numFormat = '1';
         break;
 
     case ANM_RomanUcParenBoth:      //Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "I";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'I';
+        numSuffix = ')';
         break;
 
     case ANM_RomanUcParenRight:     //Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
-        numFormat = "I";
-        numSuffix = ")";
+        numFormat = 'I';
+        numSuffix = ')';
         break;
 
     default:
-        numFormat = "i";
-        numSuffix = ".";
+        numFormat = 'i';
+        numSuffix = '.';
         break;
     }
 }

@@ -26,13 +26,13 @@
    THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include "pole.h"
+
 #include <fstream>
 #include <iostream>
 #include <list>
 #include <string>
 #include <vector>
-
-#include "pole.h"
 
 #include <string.h>
 
