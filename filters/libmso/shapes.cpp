@@ -1497,8 +1497,8 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
         }
 
-        QString viewBox = QString::number(minX) + " " + QString::number(minY) + " "
-                        + QString::number(maxX) + " " + QString::number(maxY);
+        QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' '
+                        + QString::number(maxX) + ' ' + QString::number(maxY);
 
         //get segmentInfo Data (pSegmentInfo - MS-ODRAW, page 175)
         QByteArray* segmentInfoData = NULL;
@@ -1521,26 +1521,26 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             {
             case 0: //msopathLineTo
             {
-                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex].y()) + " ";
+                enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex].y()) + ' ';
                 verticesIndex++;
                 break;
             }
             case 1: // msopathCurveTo
             {
-                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[verticesIndex].x()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex].y()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex+1].x()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex+1].y()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex+2].x()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex+2].y()) + " ";
+                enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[verticesIndex].x()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex].y()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex+1].x()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex+1].y()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex+2].x()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex+2].y()) + ' ';
                 verticesIndex = verticesIndex + 3;
                 break;
             }
             case 2: // msopathMoveTo
             {
-                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[verticesIndex].x()) + " "
-                                                   + QString::number(verticesPoints[verticesIndex].y()) + " ";
+                enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[verticesIndex].x()) + ' '
+                                                   + QString::number(verticesPoints[verticesIndex].y()) + ' ';
                 verticesIndex++;
                 break;
             }

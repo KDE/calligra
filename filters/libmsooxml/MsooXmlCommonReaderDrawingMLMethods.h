@@ -194,11 +194,6 @@ KoFilter::ConversionStatus copyFile(
  This method caches the result for efficiency. */
 QSize imageSize(const QString& sourceName);
 
-QList<KoGenStyle*>  m_drawStyleStack;
-KoGenStyle m_currentGradientStyle;
-void pushCurrentDrawStyle(KoGenStyle *newStyle);
-void popCurrentDrawStyle();
-
 bool m_drawing_anchor; //! set by read_drawing() to indicate if we have encountered drawing/anchor, used by read_pic()
 bool m_drawing_inline; //! set by read_drawing() to indicate if we have encountered drawing/inline, used by read_pic()
 
@@ -255,7 +250,6 @@ enum ColorType {
 
 //! set by one of the color readers, read by read_solidFill. Read and set by one of the color transformations.
 QColor m_currentColor;
-QPen   m_currentPen;
 
 qreal* m_currentDoubleValue;
 

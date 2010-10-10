@@ -21,7 +21,6 @@
 #define KEXISHAREDACTIONHOST_P_H
 
 #include <qobject.h>
-#include <q3ptrdict.h>
 #include <qsignalmapper.h>
 
 //#include <kxmlguiwindow.h>

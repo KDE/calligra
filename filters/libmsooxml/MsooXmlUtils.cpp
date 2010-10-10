@@ -1280,7 +1280,7 @@ MSOOXML_EXPORT QString Utils::rgbColor(const QString& color)
         newColor = "#0000ff";
     }
     else if (color == "yellow") {
-        newColor = "#ffff00 ";
+        newColor = "#ffff00";
     }
     else {
         newColor = color;

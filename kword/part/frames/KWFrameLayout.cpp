@@ -214,7 +214,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                 Q_ASSERT(frame->newFrameBehavior() == KWord::CopyNewFrame);
                 Q_ASSERT(frame->frameSet());
                 Q_ASSERT(frame->frameSet()->frameCount() > 0);
-                f = new KWFrame(new KWCopyShape(frame->frameSet()->frames().first()->shape(), m_pageManager), frame->frameSet());
+                f = new KWFrame(new KWCopyShape(frame->frameSet()->frames().first()->shape(),
+                            m_pageManager), frame->frameSet());
             }
             const qreal y = frame->shape()->position().y();
             qreal offsetFromPage = y - pageRect.top();

@@ -181,7 +181,8 @@ void print( Task *t, bool full = true ) {
         return;
     }
     qDebug();
-    qDebug()<<"Estimate   :"<<t->estimate()->expectedEstimate()<<Duration::unitToString(t->estimate()->unit());
+    qDebug()<<"Estimate   :"<<t->estimate()->expectedEstimate()<<Duration::unitToString(t->estimate()->unit())
+			<<t->estimate()->typeToString()<<(t->estimate()->calendar()?t->estimate()->calendar()->name():"Fixed");
     foreach ( Appointment *a, s->appointments() ) {
         qDebug()<<"Resource:"<<a->resource()->resource()->name()<<a->startTime().toString()<<a->endTime().toString();
         if ( ! full ) { continue; }

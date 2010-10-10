@@ -48,10 +48,8 @@ TODO: (Windows-only?) when right-clicking again after context menu has been disp
  - setting alignment property (e.g. for text box) does not work because it is numeric now
 TODO: clearing widget's dataSource property sets datasource to "" in XML instead of clrearing it completely; the same for form's dataSource and dataSourcePartClass properties
 TODO: make label display data source name
-TODO: make data-aware widgets display a small icon indicating there is data source set
 TODO: use data-source-pkey-tag icon for fields with pkey [>k]
 TODO: use data-source-index-tag icon for fields with index [>/]
-TODO: image box widgets: add smooth scaling
 TODO: image box widgets: support transparency in clipboard (Windows)
 TODO: image box widgets: changing aspect or scale properties should repaint the widget immediately
 TODO: replace KexiDataItemChangesListener::handleAction(const QString& actionName) with signal/slot connections
@@ -68,26 +66,6 @@ Reports
 *batch mode: generates output from data and design or shows report in data mode with minimal gui; add appropriate startup options and alter main window
 *add support for mysql embedded
 *fix KDE's FindMySQL.cmake to support mysql embedded;see https://bugs.kde.org/show_bug.cgi?id=234941 and http://gitorious.org/amarok/amarok/blobs/history/master/cmake/modules/FindMySQLAmarok.cmake
-
-Forms:
-TODO: crashes on app exit:
-#5  0xb5c3c7a2 in QList<KexiActionProxy*>::indexOf (this=0x83e1bb4, t=@0xbf917734, from=0) at /usr/include/QtCore/qlist.h:637
-#6  0xb5c3ad67 in KexiActionProxy::takeActionProxyChild (this=0x83e1ba4, child=0x83e2bdc) at koffice/kexi/core/kexiactionproxy.cpp:279
-#7  0xb5c3c084 in ~KexiActionProxy (this=0x83e2bdc) at koffice/kexi/core/kexiactionproxy.cpp:106
-#8  0xb5c54360 in ~KexiView (this=0x83e2bc8) at koffice/kexi/core/KexiView.cpp:251
-#9  0xb5b8bbab in ~KexiDataAwareView (this=0x83e2bc8) at koffice/kexi/widget/kexidataawareview.cpp:44
-#10 0xb2368482 in ~KexiFormView (this=0x83e2bc8) at koffice/kexi/plugins/forms/kexiformview.cpp:220
-#11 0xb73cb32f in QObjectPrivate::deleteChildren () from /usr/lib/libQtCore.so.4
-#12 0xb6a536ab in QWidget::~QWidget () from /usr/lib/libQtGui.so.4
-#13 0xb6dea3e1 in QFrame::~QFrame () from /usr/lib/libQtGui.so.4
-#14 0xb6e5a875 in QStackedWidget::~QStackedWidget () from /usr/lib/libQtGui.so.4
-#15 0xb73cb32f in QObjectPrivate::deleteChildren () from /usr/lib/libQtCore.so.4
-#16 0xb6a536ab in QWidget::~QWidget () from /usr/lib/libQtGui.so.4
-#17 0xb5c5111d in ~KexiWindow (this=0x83e1b90) at koffice/kexi/core/KexiWindow.cpp:190
-#18 0xb73cb32f in QObjectPrivate::deleteChildren () from /usr/lib/libQtCore.so.4
-#19 0xb6a536ab in QWidget::~QWidget () from /usr/lib/libQtGui.so.4
-#20 0xb7b65b50 in ~KexiWindowContainer (this=0x8280058) at koffice/kexi/main/KexiMainWindow_p.h:79
-#21 0xb7b52ea9 in KexiMainWindow::closeWindow (this=0x8198090, window=0x83e1b90, layoutTaskBar=true, doNotSaveChanges=false)
 
 Display object data using sqlite:
 <sql>
@@ -111,6 +89,16 @@ TODO: this causes crash:
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
 TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
+
+2010-10-09
+Table View
+*fix displaying rows in combo boxes: last row was invisible; this fixes form combo boxes too
+
+2010-10-06
+Forms
+*clearing form data source selection in the combo box properly resets assignment, so selecting the same datasource later works properly
+Table View
+*fix crash when not matching entering text into the combo box line edit
 
 2010-09-29
 Main Window

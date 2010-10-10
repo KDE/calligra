@@ -33,13 +33,11 @@
 #include <qcheckbox.h>
 #include <qpoint.h>
 #include <qobject.h>
-#include <q3vgroupbox.h>
 #include <qapplication.h>
 #include <qtooltip.h>
 #include <q3widgetstack.h>
 #include <QPixmap>
 #include <QLabel>
-#include <Q3Frame>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QListView>

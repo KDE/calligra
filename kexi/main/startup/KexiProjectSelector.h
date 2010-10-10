@@ -24,8 +24,6 @@
 #include "kexiprojectset.h"
 
 #include <KPageDialog>
-#include <q3widgetstack.h>
-
 
 /*! Widget that allows to select a kexi project (or database)
 */

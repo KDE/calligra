@@ -26,7 +26,6 @@
 
 #include <KDialog>
 #include <kabstractfilewidget.h>
-#include <k3listview.h>
 
 #include <QPointer>
 

@@ -60,7 +60,6 @@ DocxXmlFooterReader::~DocxXmlFooterReader()
 void DocxXmlFooterReader::init()
 {
     d->counter = 0;
-    m_normalDocumentMode = false;
 }
 
 QString DocxXmlFooterReader::content()

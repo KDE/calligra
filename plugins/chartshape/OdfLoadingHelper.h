@@ -23,10 +23,18 @@
 #ifndef KCHART_ODF_LOADING_HELPER_H
 #define KCHART_ODF_LOADING_HELPER_H
 
+// Qt
 #include <QString>
-#include "KoSharedLoadingData.h"
 
+// KOffice
+#include "KoSharedLoadingData.h"
+#include "KoXmlReader.h"
+
+// KChart
 #include "TableSource.h"
+
+class KoStyleStack;
+class KoodfStylesReader;
 
 namespace KChart {
 
@@ -35,6 +43,10 @@ class OdfLoadingHelper : public KoSharedLoadingData
 public:
     TableSource *tableSource;
     bool         chartUsesInternalModelOnly;
+
+    static void fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader& stylesReader,
+                                const KoXmlElement& object, const char* nsURI,
+                                const char* attrName, const char* family );
 };
 
 } // namespace KChart

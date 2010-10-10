@@ -41,9 +41,9 @@ endif(QT_QMAEMO5_LIBRARY)
 
 
 if(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon xml2 ssl crypto soprano )
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QMAEMO5_LIBRARY} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon x${LIBXML2_LIBRARIES} ${OPENSSL_LIBRARIES} ${SOPRANO_LIBRARIES} )
 else(QT_QMAEMO5_LIBRARY)
-    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon xml2 ssl crypto)
+    target_link_libraries(FreOffice ${QT_LIBRARIES} ${QT_QTNETWORK_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} ${X11_X11_LIB} komain kopageapp kwordprivate kspreadcommon ${LIBXML2_LIBRARIES} ${OPENSSL_LIBRARIES} )
 endif(QT_QMAEMO5_LIBRARY)
 
 install(TARGETS FreOffice RUNTIME DESTINATION bin)

@@ -27,15 +27,15 @@ class PptTextPFRun {
     const MSO::TextPFException* pfs[6];
     const MSO::TextPFException9* pf9s[6];
 public:
-    PptTextPFRun(const MSO::DocumentContainer* d,
-                 const MSO::MasterOrSlideContainer* m,
-                 quint32 textType);
-    PptTextPFRun(const MSO::DocumentContainer* d = 0,
-                 const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
-                 const MSO::MasterOrSlideContainer* m = 0,
-                 const MSO::PptOfficeArtClientData* pcd = 0,
-                 const MSO::TextContainer* tc = 0,
-                 quint32 start = 0);
+    explicit PptTextPFRun(const MSO::DocumentContainer* d,
+                          const MSO::MasterOrSlideContainer* m,
+                          quint32 textType);
+    explicit PptTextPFRun(const MSO::DocumentContainer* d = 0,
+                          const MSO::SlideListWithTextSubContainerOrAtom* texts = 0,
+                          const MSO::MasterOrSlideContainer* m = 0,
+                          const MSO::PptOfficeArtClientData* pcd = 0,
+                          const MSO::TextContainer* tc = 0,
+                          quint32 start = 0);
 
     quint16 level() const { return level_; }
 

@@ -28,10 +28,10 @@ private:
     const MSO::OfficeArtSpContainer* mastersp;
     const MSO::OfficeArtSpContainer* sp;
 public:
-    DrawStyle(const MSO::OfficeArtDggContainer& d_,
-              const MSO::OfficeArtSpContainer* mastersp_ = 0,
-              const MSO::OfficeArtSpContainer* sp_ = 0)
-                  :d(d_), mastersp(mastersp_), sp(sp_) {}
+    explicit DrawStyle(const MSO::OfficeArtDggContainer& d_,
+                       const MSO::OfficeArtSpContainer* mastersp_ = 0,
+                       const MSO::OfficeArtSpContainer* sp_ = 0)
+        : d(d_), mastersp(mastersp_), sp(sp_) {}
 
     // Shape property set
     quint32 hspMaster() const;

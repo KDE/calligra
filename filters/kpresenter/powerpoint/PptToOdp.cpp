@@ -185,6 +185,12 @@ QString getPresentationClass(const MSO::TextContainer* tc)
 
 }//namespace
 
+
+/*
+ * ************************************************
+ * DrawClient
+ * ************************************************
+ */
 class PptToOdp::DrawClient : public ODrawToOdf::Client {
 private:
     PptToOdp* const ppttoodp;
@@ -452,6 +458,11 @@ QString PptToOdp::DrawClient::formatPos(qreal v)
     return mm(v * (25.4 / 576));
 }
 
+/*
+ * ************************************************
+ * PptToOdp
+ * ************************************************
+ */  
 PptToOdp::PptToOdp()
 : p(0),
   currentSlideTexts(NULL),
@@ -1219,19 +1230,26 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
 
     QString elementName;
     bool imageBullet = i.pf.bulletBlipRef() != 65535;
-    if (imageBullet) {
+
+    //no bullet exists
+    if (!i.pf.fHasBullet()) {
+        elementName = "text:list-level-style-number";
+        out.startElement("text:list-level-style-number");
+        out.addAttribute("style:num-format", "");
+    }
+    else if (imageBullet) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
                          bulletPictureNames.value(i.pf.bulletBlipRef()));
-        if (bulletSize.isNull() || bulletSize.endsWith("%")) {
+        if (bulletSize.isNull() || bulletSize.endsWith('%')) {
             if (i.cf && i.cf->masks.size) {
                 bulletSize = pt(i.cf->fontSize);
             } else if (p.cf && p.cf->masks.size) {
                 bulletSize = pt(p.cf->fontSize);
             }
         }
-        if (bulletSize.isNull() || bulletSize.endsWith("%")) {
+        if (bulletSize.isNull() || bulletSize.endsWith('%')) {
             bulletSize = "20pt"; // fallback value
         }
     } else {
@@ -1248,6 +1266,13 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
             }
             //out.addAttribute("style:display-levels", "TODO");
             out.addAttribute("text:start-value", i.pf.startNum());
+
+            if (!numPrefix.isNull()) {
+                out.addAttribute("style:num-prefix", numPrefix);
+            }
+            if (!numSuffix.isNull()) {
+                out.addAttribute("style:num-suffix", numSuffix);
+            }
         } else {
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
@@ -1257,14 +1282,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                 out.addAttribute("text:bullet-relative-size", percent(relSize));
             }
         }
-        if (!numPrefix.isNull()) {
-            out.addAttribute("style:num-prefix", numPrefix);
-        }
-        if (!numSuffix.isNull()) {
-            out.addAttribute("style:num-suffix", numSuffix);
-        }
     }
-    out.addAttribute("text:level", level);
+    out.addAttribute("text:level", level?level:1);
 
     bool hasIndent = i.pf.level();
     out.startElement("style:list-level-properties");
@@ -2078,27 +2097,36 @@ void PptToOdp::processTextLine(Writer& out,
     }
     PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
                     &tc, start);
-    bool islist = pf.level() > 0 && start < end;
+    bool islist = ((pf.level() > 0) || pf.fHasBullet()) && start < end;
+    static bool first = true;
+
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf);
-        int level = pf.level() - 1;
-        // remove levels until the top level is the right indentation
-        if (levels.size() > level && levels[level] == listStyle) {
-            writeTextObjectDeIndent(out.xml, level + 1, levels);
-        } else {
-            writeTextObjectDeIndent(out.xml, level, levels);
+        int level = pf.level();
+
+	//check if we have the corresponding style for this level, if not then
+	//close the list and create a new one (K.I.S.S.)
+	if (!levels.isEmpty() && (levels.first() != listStyle)) {
+            writeTextObjectDeIndent(out.xml, 0, levels);
+            first = true;
         }
-        // add styleless levels up to the current level of indentation
+        if (levels.isEmpty()) {
+            addListElement(out.xml, levels, listStyle);
+        }
+        // add styleless levels to get the right level of indentation
         while (levels.size() < level) {
             addListElement(out.xml, levels, "");
         }
-        // at this point, levels.size() == paragraphIndent
-        if (level + 1 != levels.size()) {
-            addListElement(out.xml, levels, listStyle);
-        }
         out.xml.startElement("text:list-item");
+
+        //kpresenter requires the start-value here!
+        if (first && pf.fBulletHasAutoNumber()) {
+            out.xml.addAttribute("text:start-value", pf.startNum());
+            first = false;
+        }
     } else {
         writeTextObjectDeIndent(out.xml, 0, levels);
+        first = true;
     }
 
     out.xml.startElement("text:p");
@@ -2237,11 +2265,11 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
                                usedDateTimeDeclaration[slideNo]);
     }
     if (!usedHeaderDeclaration.value(slideNo).isEmpty()) {
-        if(usedHeaderDeclaration[slideNo] != "")
+        if (!usedHeaderDeclaration[slideNo].isEmpty())
             out.xml.addAttribute("presentation:use-header-name", usedHeaderDeclaration[slideNo]);
     }
     if (!usedFooterDeclaration.value(slideNo).isEmpty()) {
-        if(usedFooterDeclaration[slideNo] != "")
+        if (!usedFooterDeclaration[slideNo].isEmpty())
             out.xml.addAttribute("presentation:use-footer-name", usedFooterDeclaration[slideNo]);
     }
 
@@ -2453,92 +2481,92 @@ void PptToOdp::processTextAutoNumberScheme(int val, QString& numFormat, QString&
     switch (val) {
 
     case ANM_AlphaLcPeriod:         //Example: a., b., c., ...Lowercase Latin character followed by a period.
-        numFormat = "a";
-        numSuffix = ".";
+        numFormat = 'a';
+        numSuffix = '.';
         break;
 
     case ANM_AlphaUcPeriod:        //Example: A., B., C., ...Uppercase Latin character followed by a period.
-        numFormat = "A";
-        numSuffix = ".";
+        numFormat = 'A';
+        numSuffix = '.';
         break;
 
     case ANM_ArabicParenRight:     //Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
-        numFormat = "1";
-        numSuffix = ")";
+        numFormat = '1';
+        numSuffix = ')';
         break;
 
     case ANM_ArabicPeriod :        //Example: 1., 2., 3., ...Arabic numeral followed by a period.
-        numFormat = "1";
-        numSuffix = ".";
+        numFormat = '1';
+        numSuffix = '.';
         break;
 
     case ANM_RomanLcParenBoth:     //Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "i";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'i';
+        numSuffix = ')';
         break;
 
     case ANM_RomanLcParenRight:    //Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
-        numFormat = "i";
-        numSuffix = ")";
+        numFormat = 'i';
+        numSuffix = ')';
         break;
 
     case ANM_RomanLcPeriod :        //Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-        numFormat = "i";
-        numSuffix = ".";
+        numFormat = 'i';
+        numSuffix = '.';
         break;
 
     case ANM_RomanUcPeriod:         //Example: I., II., III., ...Uppercase Roman numeral followed by a period.
-        numFormat = "I";
-        numSuffix = ".";
+        numFormat = 'I';
+        numSuffix = '.';
         break;
 
     case ANM_AlphaLcParenBoth:      //Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "a";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'a';
+        numSuffix = ')';
         break;
 
     case ANM_AlphaLcParenRight:     //Example: a), b), c), ...Lowercase alphabetic character followed by a closing
-        numFormat = "a";
-        numSuffix = ")";
+        numFormat = 'a';
+        numSuffix = ')';
         break;
 
     case ANM_AlphaUcParenBoth:      //Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "A";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'A';
+        numSuffix = ')';
         break;
 
     case ANM_AlphaUcParenRight:     //Example: A), B), C), ...Uppercase alphabetic character followed by a closing
-        numFormat = "A";
-        numSuffix = ")";
+        numFormat = 'A';
+        numSuffix = ')';
         break;
 
     case ANM_ArabicParenBoth:       //Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "1";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = '1';
+        numSuffix = ')';
         break;
 
     case ANM_ArabicPlain:           //Example: 1, 2, 3, ...Arabic numeral.
-        numFormat = "1";
+        numFormat = '1';
         break;
 
     case ANM_RomanUcParenBoth:      //Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
-        numPrefix = "(";
-        numFormat = "I";
-        numSuffix = ")";
+        numPrefix = '(';
+        numFormat = 'I';
+        numSuffix = ')';
         break;
 
     case ANM_RomanUcParenRight:     //Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
-        numFormat = "I";
-        numSuffix = ")";
+        numFormat = 'I';
+        numSuffix = ')';
         break;
 
     default:
-        numFormat = "i";
-        numSuffix = ".";
+        numFormat = 'i';
+        numSuffix = '.';
         break;
     }
 }

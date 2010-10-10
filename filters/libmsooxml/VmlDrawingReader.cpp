@@ -65,6 +65,8 @@ VmlDrawingReader::~VmlDrawingReader()
 
 void VmlDrawingReader::init()
 {
+    m_insideGroup = false;
+    m_outputFrames = false;
 }
 
 QMap<QString, QString> VmlDrawingReader::content()

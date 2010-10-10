@@ -408,7 +408,12 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
-    level_ = (level || fHasBullet()) ?level + 1 :0;
+//     level_ = (level || fHasBullet()) ?level + 1 :0;
+
+    //NOTE: the previous assumption is not true, there are cases when
+    //(indentLevel == 1 && fHasBullet == false).  We might add the
+    //corresponding indent for the pragraph instead of using a list.
+    level_ = level;
 }
 PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
                            const MasterOrSlideContainer* m,
@@ -440,14 +445,10 @@ TYPE PptTextPFRun::NAME() const \
 }
 
 //     TYPE      PARENT       PRE NAME             TEST            DEFAULT
-GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      false)
-GETTER(bool,     bulletFlags->,,  fBulletHasFont,  bulletHasFont,  false)
-GETTER(bool,     bulletFlags->,,  fBulletHasColor, bulletHasColor, false)
-GETTER(bool,     bulletFlags->,,  fBulletHasSize,  bulletHasSize,  false)
 GETTER(qint16,   ,             ,  bulletChar,      bulletChar,     0)
 GETTER(quint16,  ,             ,  bulletFontRef,   bulletFont,     0)
 GETTER(qint16,   ,             ,  bulletSize,      bulletSize,     0)
-GETTER(ColorIndexStruct,,      *, bulletColor,   bulletColor,ColorIndexStruct())
+GETTER(ColorIndexStruct,,      *, bulletColor,     bulletColor,    ColorIndexStruct())
 GETTER(quint16,  ,             ,  textAlignment,   align,          0)
 GETTER(qint16,   ,             ,  lineSpacing,     lineSpacing,    0)
 GETTER(qint16,   ,             ,  spaceBefore,     spaceBefore,    0)
@@ -461,6 +462,26 @@ GETTER(bool,     wrapFlags->,  ,  charWrap,        wordWrap,       false)
 GETTER(bool,     wrapFlags->,  ,  wordWrap,        wordWrap,       false)
 GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
 GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
+#undef GETTER
+
+#define GETTER(TYPE, NAME, DEFAULT) \
+TYPE PptTextPFRun::NAME() const \
+{ \
+    const MSO::TextPFException* const * p = pfs; \
+    while (*p) { \
+        if ((*p)->bulletFlags) { \
+            return (*p)->bulletFlags->NAME; \
+        } \
+        ++p; \
+    } \
+    return DEFAULT; \
+}
+
+//     TYPE    NAME             DEFAULT
+GETTER(bool,   fHasBullet,      false)
+GETTER(bool,   fBulletHasFont,  false)
+GETTER(bool,   fBulletHasColor, false)
+GETTER(bool,   fBulletHasSize,  false)
 #undef GETTER
 
 qint32 PptTextPFRun::bulletBlipRef() const {
@@ -533,4 +554,4 @@ GETTER(quint16,         ,           ,  symbolFontRef, masks.symbolTypeface,  0)
 GETTER(quint16,         ,           ,  fontSize,      masks.size,            0)
 GETTER(ColorIndexStruct,,           *, color,   masks.color, ColorIndexStruct())
 GETTER(qint16,          ,           ,  position,      masks.position,        0)
-
+#undef GETTER
