@@ -245,6 +245,8 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
     KWPage page;
     bool deleteSome = false;
     do {
+        if ((*iter)->isCopy())
+            continue;
         KWPage pageForFrame = m_pageManager->page((*iter)->shape());
         if (!page.isValid()) { // first loop
             page = pageForFrame;
