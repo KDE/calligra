@@ -23,6 +23,7 @@ private slots:
     void testFrameCreation();
     void testCreateNewFrameForPage_data();
     void testCreateNewFrameForPage();
+    void testCopyFramesForPage();
     void testLargeHeaders();
     void testLayoutPageSpread();
     void testPageStyle();

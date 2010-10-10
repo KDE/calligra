@@ -5,10 +5,12 @@
 #include "../KWPage.h"
 #include "../KWPageStyle.h"
 #include "../frames/KWFrameLayout.h"
+#include "../frames/KWCopyShape.h"
 #include "../frames/KWTextFrameSet.h"
 #include "../frames/KWTextFrame.h"
-#include "../KWDocument.h"
 #include "../KWord.h"
+#include <MockShapes.h>
+#include <MockTextShape.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoColorBackground.h>
@@ -366,6 +368,133 @@ void TestFrameLayout::testCreateNewFrameForPage()
     foreach(KWFrame *frame, tfs.frames()) {
         QVERIFY (page.rect().contains(frame->shape()->position()));
     }
+}
+
+void TestFrameLayout::testCopyFramesForPage()
+{
+    Helper helper;
+    m_frames.clear();
+    KWPage page = helper.pageManager->begin();
+
+    // copyShape
+    MockShape *copyShape = new MockShape();
+    copyShape->setPosition(QPointF(9, 13));
+    KWFrameSet *copyShapeFrameSet = new KWFrameSet();
+    KWFrame *frame = new KWFrame(copyShape, copyShapeFrameSet);
+    frame->setNewFrameBehavior(KWord::CopyNewFrame);
+    m_frames << copyShapeFrameSet;
+
+    // copyShapeOdd
+    MockShape *copyShapeOdd = new MockShape();
+    copyShapeOdd->setPosition(QPointF(7, 12));
+    KWFrameSet *copyShapeOddFrameSet = new KWFrameSet();
+    frame = new KWFrame(copyShapeOdd, copyShapeOddFrameSet);
+    frame->setNewFrameBehavior(KWord::CopyNewFrame);
+    frame->setFrameOnBothSheets(false);
+    m_frames << copyShapeOddFrameSet;
+
+    // textshapePlain
+    MockTextShape *textshapePlain = new MockTextShape();
+    textshapePlain->setPosition(QPointF(11, 15));
+    KWTextFrameSet *textshapePlainFS = new KWTextFrameSet(0, KWord::OtherTextFrameSet);
+    KWTextFrame *tFrame = new KWTextFrame(textshapePlain, textshapePlainFS);
+    tFrame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+    m_frames << textshapePlainFS;
+
+    // textShapeRotated
+    MockTextShape *textShapeRotated = new MockTextShape();
+    textShapeRotated->setPosition(QPointF(13, 107));
+    KWTextFrameSet *textshapeRotFS = new KWTextFrameSet(0, KWord::OtherTextFrameSet);
+    tFrame = new KWTextFrame(textShapeRotated, textshapeRotFS);
+    tFrame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+    tFrame->shape()->rotate(90);
+    m_frames << textshapeRotFS;
+
+    // textShapeGeometryProtected
+    MockTextShape *textShapeGeometryProtected = new MockTextShape();
+    textShapeGeometryProtected->setPosition(QPointF(3, 14));
+    KWTextFrameSet *textshapeGeometryProtectedFS = new KWTextFrameSet(0, KWord::OtherTextFrameSet);
+    tFrame = new KWTextFrame(textShapeGeometryProtected, textshapeGeometryProtectedFS);
+    tFrame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+    tFrame->shape()->setGeometryProtected(true);
+    m_frames << textshapeGeometryProtectedFS;
+
+    // textShapeContentProtected
+    MockTextShape *textShapeContentProtected = new MockTextShape();
+    textShapeContentProtected->setPosition(QPointF(19, 23));
+    KWTextFrameSet *textshapeContentProtectedFS = new KWTextFrameSet(0, KWord::OtherTextFrameSet);
+    tFrame = new KWTextFrame(textShapeContentProtected, textshapeContentProtectedFS);
+    tFrame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+    tFrame->shape()->setContentProtected(true);
+    m_frames << textshapeContentProtectedFS;
+
+    // textShapeUnselectable
+    MockTextShape *textShapeUnselectable = new MockTextShape();
+    textShapeUnselectable->setPosition(QPointF(7, 24));
+    KWTextFrameSet *textshapeUnselectableFS = new KWTextFrameSet(0, KWord::OtherTextFrameSet);
+    tFrame = new KWTextFrame(textShapeUnselectable, textshapeUnselectableFS);
+    tFrame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+    tFrame->shape()->setSelectable(false);
+    m_frames << textshapeUnselectableFS;
+
+    // layouter
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+    // new page
+    KWPage page2 = helper.pageManager->appendPage();
+    bfl.createNewFramesForPage(page2.pageNumber());
+
+    QCOMPARE(copyShapeFrameSet->frameCount(), 2);
+    KWCopyShape *copy = dynamic_cast<KWCopyShape*>(copyShapeFrameSet->frames()[1]->shape());
+    QVERIFY(copy);
+    QCOMPARE(copy->position().x(), 9.);
+    QCOMPARE(copy->position().y(), 13. + page2.offsetInDocument());
+
+    // copyShapeOddFrameSet is not copied
+    QCOMPARE(copyShapeOddFrameSet->frameCount(), 1);
+
+    // textshapePlain
+    QCOMPARE(textshapePlainFS->frameCount(), 2);
+    QVERIFY(!textshapePlainFS->frames()[1]->isCopy());
+    KoShape *shape = textshapePlainFS->frames()[1]->shape();
+    QCOMPARE(shape->position().x(), 11.);
+    QCOMPARE(shape->position().y(), 15. + page2.offsetInDocument());
+    // TODO test sizing
+
+    // textShapeRotated
+    QCOMPARE(textshapeRotFS->frameCount(), 2);
+    QVERIFY(!textshapeRotFS->frames()[1]->isCopy());
+    shape = textshapeRotFS->frames()[1]->shape();
+    QCOMPARE(shape->position().x(), 13.);
+    QCOMPARE(shape->position().y(), 107. + page2.offsetInDocument());
+    QCOMPARE(shape->absolutePosition(KoFlake::TopRightCorner), QPointF(13 + 50, 107 + 50
+        + page2.offsetInDocument())); // 90° around center moves the top-right down
+
+    // textShapeGeometryProtected
+    QCOMPARE(textshapeGeometryProtectedFS->frameCount(), 2);
+    QVERIFY(!textshapeGeometryProtectedFS->frames()[1]->isCopy());
+    shape = textshapeGeometryProtectedFS->frames()[1]->shape();
+    QCOMPARE(shape->position().x(), 3.);
+    QCOMPARE(shape->position().y(), 14. + page2.offsetInDocument());
+    QCOMPARE(shape->isGeometryProtected(), true);
+    QCOMPARE(shape->isContentProtected(), false);
+    QCOMPARE(shape->isSelectable(), true);
+
+    // textShapeContentProtected
+    QCOMPARE(textshapeContentProtectedFS->frameCount(), 2);
+    QVERIFY(!textshapeContentProtectedFS->frames()[1]->isCopy());
+    shape = textshapeContentProtectedFS->frames()[1]->shape();
+    QCOMPARE(shape->isGeometryProtected(), false);
+    QCOMPARE(shape->isContentProtected(), true);
+    QCOMPARE(shape->isSelectable(), true);
+
+    // textShapeUnselectable
+    QCOMPARE(textshapeUnselectableFS->frameCount(), 2);
+    QVERIFY(!textshapeUnselectableFS->frames()[1]->isCopy());
+    shape = textshapeUnselectableFS->frames()[1]->shape();
+    QCOMPARE(shape->isGeometryProtected(), false);
+    QCOMPARE(shape->isContentProtected(), false);
+    QCOMPARE(shape->isSelectable(), false);
 }
 
 void TestFrameLayout::testLargeHeaders()
