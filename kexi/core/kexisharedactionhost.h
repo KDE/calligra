@@ -21,7 +21,6 @@
 #define KEXISHAREDACTIONHOST_H
 
 #include <qpointer.h>
-#include <q3asciidict.h>
 #include <qobject.h>
 #include <qpair.h>
 

@@ -21,8 +21,6 @@
 #define KEXIBLOBBUFFER_H
 
 #include <qobject.h>
-#include <q3intdict.h>
-#include <q3dict.h>
 #include <qpixmap.h>
 
 #include <kurl.h>
