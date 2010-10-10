@@ -21,7 +21,6 @@
 #define KEXISIMPLEPRINTPREVIEWWINDOW_H
 
 #include <qpainter.h>
-#include <q3scrollview.h>
 //Added by qt3to4:
 #include <QEvent>
 #include <ktoolbar.h>
