@@ -125,7 +125,7 @@ public:
      * This property specifies how text from another textframe will behave when this frame
      * intersects with it.
      */
-    void setTextRunAround(KWord::TextRunAround runAround, KWord::Through runThrought = KWord::Background);
+    void setTextRunAround(KWord::TextRunAround runAround);
 
     /**
      * The space between this frames edge and the text when that text runs around this frame.
@@ -204,7 +204,6 @@ private:
     KWord::NewFrameBehavior m_newFrameBehavior;
     KWord::RunAroundSide m_runAroundSide;
     KWord::TextRunAround m_runAround;
-    KWord::Through m_runThrough;
     qreal m_runAroundDistance;
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.
