@@ -43,17 +43,4 @@ private:
     KoStyleManager *styleManager;
 };
 
-class MockTextShape : public KoShapeContainer
-{
-public:
-    MockTextShape() {
-        setUserData(new KoTextShapeData());
-    }
-    virtual void paintComponent(QPainter &, const KoViewConverter &) { }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
-        return false;
-    }
-};
-
 #endif

@@ -4,6 +4,7 @@
 #include "../frames/KWTextFrameSet.h"
 #include "../frames/KWTextDocumentLayout.h"
 
+#include <MockTextShape.h>
 #include <KoParagraphStyle.h>
 #include <KoListStyle.h>
 #include <KoTextBlockData.h>
