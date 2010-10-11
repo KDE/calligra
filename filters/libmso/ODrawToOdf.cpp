@@ -564,24 +564,102 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     // have special meaning, [1] MS-ODRAW 2.2.2
     if (c.fSysIndex) {
 
+        switch (c.red) {
         // Use the fill color of the shape.
-        if (c.red == 0xF0) {
+        case 0xF0:
             tmp = ds.fillColor();
+            break;
+        // If the shape contains a line, use the line color of the
+        // shape. Otherwise, use the fill color.
+        case 0xF1:
+        {
+            if (ds.fLine()) {
+                tmp = ds.lineColor();
+            } else {
+                tmp = ds.fillColor();
+            }
+            break;
+        }
+        // Use the line color of the shape.
+        case 0xF2:
+            tmp = ds.lineColor();
+            break;
+        // Use the shadow color of the shape.
+        case 0xF3:
+            tmp = ds.shadowColor();
+            break;
+        // TODO: Use the current, or last-used, color.
+        case 0xF4:
+            qWarning() << "red: Unhandled fSysIndex!";
+            break;
+        // Use the fill background color of the shape.
+        case 0xF5:
+            tmp  = ds.fillBackColor();
+            break;
+        // TODO: Use the line background color of the shape.
+        case 0xF6:
+            qWarning() << "red: Unhandled fSysIndex!";
+            break;
+        // If the shape contains a fill, use the fill color of the
+        // shape. Otherwise, use the line color.
+        case 0xF7:
+        {
+            if (ds.fFilled()) {
+                tmp = ds.fillColor();
+            } else {
+                tmp = ds.lineColor();
+            }
+            break;
+        }
+        default:
+            qWarning() << "red: Unhandled fSysIndex!";
+            break;
         }
         ret = client->toQColor(tmp);
+        qreal p = c.blue / (qreal) 255;
 
+        switch (c.green) {
         // Darken the color by the value that is specified in the blue field.
         // A blue value of 0xFF specifies that the color is to be left
         // unchanged, whereas a blue value of 0x00 specifies that the color is
         // to be completely darkened.
-        if (c.green == 0x01) {
+        case 0x01:
+        {
             if (c.blue == 0x00) {
-                ret = ret.darker(300);
+                ret = ret.darker(800);
             } else if (c.blue != 0xFF) {
-                ret.setRed(ret.red() - c.blue);
-                ret.setGreen(ret.green() - c.blue);
-                ret.setBlue(ret.blue() - c.blue);
+                ret.setRed(ceil(p * ret.red()));
+                ret.setGreen(ceil(p * ret.green()));
+                ret.setBlue(ceil(p * ret.blue()));
             }
+            break;
+        }
+        // Lighten the color by the value that is specified in the blue field.
+        // A blue value of 0xFF specifies that the color is to be left
+        // unchanged, whereas a blue value of 0x00 specifies that the color is
+        // to be completely lightened.
+        case 0x02:
+        {
+            if (c.blue == 0x00) {
+                ret = ret.lighter(150);
+            } else if (c.blue != 0xFF) {
+                ret.setRed(ret.red() + ceil(p * ret.red()));
+                ret.setGreen(ret.green() + ceil(p * ret.green()));
+                ret.setBlue(ret.blue() + ceil(p * ret.blue()));
+            }
+            break;
+	}
+        //TODO: 
+        case 0x03:
+        case 0x04:
+        case 0x05:
+        case 0x06:
+        case 0x20:
+        case 0x40:
+        case 0x80:
+        default:
+            qWarning() << "green: Unhandled fSysIndex!";
+            break;
         }
     } else {
         ret = client->toQColor(c);
