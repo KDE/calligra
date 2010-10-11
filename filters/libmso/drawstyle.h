@@ -22,6 +22,15 @@
 
 #include "generated/simpleParser.h"
 
+class IMsoArray {
+public:
+	quint16 nElems;
+	quint16 nElemsAlloc;
+	quint16 cbElem;
+	QByteArray data;
+	IMsoArray () :nElems(0), nElemsAlloc(0), cbElem(0) {}
+};
+
 class DrawStyle {
 private:
     const MSO::OfficeArtDggContainer& d;
@@ -158,6 +167,11 @@ public:
     qint32 dyTextBottom() const;
     // Blip property set
     quint32 pib() const;
+
+    IMsoArray fillShadeColors_complex() const;
+    IMsoArray pVertices_complex() const;
+    IMsoArray pSegmentInfo_complex() const;
+    IMsoArray pWrapPolygonVertices_complex() const;
 };
 
 /**
@@ -241,11 +255,12 @@ get(const T* o)
  * no complex data or the option of type A at all.
  */
 template <typename A, typename B>
-QByteArray*
+IMsoArray
 getComplexData(const B& b)
 {
     MSO::OfficeArtFOPTE* p = NULL;
-    QByteArray* a = NULL;
+	IMsoArray a;
+	const char* pData = b.complexData.data();
     uint offset = 0;
 
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
@@ -255,8 +270,13 @@ getComplexData(const B& b)
             // there is wrong offset inside PVertices
             if (_c.anon.is<MSO::PVertices>()) {
                 if (_c.anon.get<A>()) {
-                    a = new QByteArray(b.complexData.mid(offset, p->op + 6));
-                    break;
+                	if (b.complexData.size() - offset >= 6) {
+                    	a.nElems = *(quint16 *)(pData + offset);
+                    	a.nElemsAlloc = *(quint16 *)(pData + offset +2);
+                    	a.cbElem = *(quint16 *)(pData + offset + 4);
+                    	a.data = b.complexData.mid(offset+6, p->op);
+                        break;
+                	}
                 }
                 else {
                 offset += p->op +6;
@@ -264,8 +284,13 @@ getComplexData(const B& b)
             }
             else {
                 if (_c.anon.get<A>()) {
-                a = new QByteArray(b.complexData.mid(offset, p->op));
-                break;
+                	if (b.complexData.size() - offset >= 6) {
+                    	a.nElems = *(quint16 *)(pData + offset);
+                    	a.nElemsAlloc = *(quint16 *)(pData + offset +2);
+                    	a.cbElem = *(quint16 *)(pData + offset + 4);
+                    	a.data = b.complexData.mid(offset+6, p->op-6);
+                        break;
+                	}
                 }
                 else {
                 offset += p->op;
@@ -288,15 +313,15 @@ getComplexData(const B& b)
  * ownership of the array reference.
  */
 template <typename A>
-QByteArray*
+IMsoArray
 getComplexData(const MSO::OfficeArtSpContainer& o)
 {
-    QByteArray* a = NULL;
+	IMsoArray a;
     if (o.shapePrimaryOptions) a = getComplexData<A>(*o.shapePrimaryOptions);
-    if (!a && o.shapeSecondaryOptions1) a = getComplexData<A>(*o.shapeSecondaryOptions1);
-    if (!a && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);
-    if (!a && o.shapeTertiaryOptions1) a = getComplexData<A>(*o.shapeTertiaryOptions1);
-    if (!a && o.shapeTertiaryOptions2) a = getComplexData<A>(*o.shapeTertiaryOptions2);
+    if (!a.data.size() && o.shapeSecondaryOptions1) a = getComplexData<A>(*o.shapeSecondaryOptions1);
+    if (!a.data.size() && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);
+    if (!a.data.size() && o.shapeTertiaryOptions1) a = getComplexData<A>(*o.shapeTertiaryOptions1);
+    if (!a.data.size() && o.shapeTertiaryOptions2) a = getComplexData<A>(*o.shapeTertiaryOptions2);
     return a;
 }
 

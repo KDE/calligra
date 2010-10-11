@@ -222,3 +222,25 @@ GETTER(fLayoutInCell,         fUsefLayoutInCell,         true)
 GETTER(fShadowObscured,       fUsefShadowObscured,       false)
 GETTER(fShadow,               fUsefShadow,               false)
 #undef FOPT
+
+#define COMPLEX(FOPT, NAME) \
+IMsoArray DrawStyle::NAME() const \
+{ \
+	IMsoArray a;\
+    if (sp) { \
+        a = getComplexData<MSO::FOPT>(*sp); \
+        return a;\
+    } \
+    if (mastersp) { \
+        a = getComplexData<MSO::FOPT>(*mastersp); \
+        return a;\
+    } \
+	return a;\
+}
+        //FOPT                //NAME
+COMPLEX(FillShadeColors,      fillShadeColors_complex)
+COMPLEX(PVertices,            pVertices_complex)
+COMPLEX(PSegmentInfo,		  pSegmentInfo_complex)
+COMPLEX(PWrapPolygonVertices, pWrapPolygonVertices_complex)
+
+#undef COMPLEX
