@@ -150,6 +150,7 @@ QString m_shapeTextRightOff;
 bool m_listStylePropertiesAltered;
 
 KoFilter::ConversionStatus read_buChar();
+KoFilter::ConversionStatus read_buBlip();
 KoFilter::ConversionStatus read_buNone();
 QString m_bulletFont; // set by buFont;
 KoFilter::ConversionStatus read_buFont();
@@ -231,6 +232,7 @@ int m_rot; //! set by read_xfrm()
 bool m_noFill;
 
 QString m_xlinkHref; //!< set by read_blip()
+QSize m_imageSize; //!< set by read_blip()
 QString m_recentSourceName; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()
 QString m_cNvPrName; //!< set by read_cNvPr()

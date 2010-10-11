@@ -1348,6 +1348,17 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setNumFormat(const QString
     m_type = ParagraphBulletProperties::NumberType;
 }
 
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPicturePath(const QString& picturePath)
+{
+    m_picturePath = picturePath;
+    m_type = ParagraphBulletProperties::PictureType;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPictureSize(const QSize& size)
+{
+    m_pictureSize = size;
+}
+
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
 {
     QString returnValue;
@@ -1360,6 +1371,12 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
         }
         ending = "</text:list-level-style-number>";
     }
+    else if (m_type == ParagraphBulletProperties::PictureType) {
+        returnValue = QString("<text:list-level-style-image text:level=\"%1\" ").arg(m_level);
+        returnValue += QString("xlink:href=\"%1\" ").arg(m_picturePath);
+        returnValue += "xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" ";
+        ending = "</text:list-level-style-image>";
+    }
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
         returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
@@ -1370,11 +1387,18 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     }
     returnValue += ">";
 
+    returnValue += "<style:list-level-properties ";
+
     if (m_indent > 0) {
-        returnValue += "<style:list-level-properties ";
         returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
-        returnValue += "/>";
     }
+
+    if (m_type == ParagraphBulletProperties::PictureType) {
+        returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_pictureSize.width()))).
+            arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_pictureSize.height())));
+    }
+
+    returnValue += "/>";
 
     returnValue += ending;
 
