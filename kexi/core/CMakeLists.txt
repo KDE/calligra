@@ -30,13 +30,10 @@ set(kexicore_LIB_SRCS
    kexiprojectdata.cpp 
    kexiinternalpart.cpp 
    kexidragobjects.cpp 
- #  kexiuseraction.cpp 
- #  kexiuseractionmethod.cpp 
    kexistartupdata.cpp 
    kexiguimsghandler.cpp 
    kexitextmsghandler.cpp 
    kexidataiteminterface.cpp 
-#unused   kexievents.cpp 
    kexidbshortcutfile.cpp 
    kexiblobbuffer.cpp 
    kexistaticpart.cpp
