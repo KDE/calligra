@@ -12,7 +12,6 @@ set(pptximport_PART_SRCS
     PptxXmlSlideReader.cpp
     PptxXmlCommentsReader.cpp
     PptxXmlCommentAuthorsReader.cpp
-    ${CMAKE_SOURCE_DIR}/filters/libmsooxml/VmlDrawingReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/libmsooxml/pole.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp

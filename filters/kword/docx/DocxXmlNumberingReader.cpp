@@ -38,16 +38,14 @@
 class DocxXmlNumberingReader::Private
 {
 public:
-    Private() : counter(0) {
+    Private() {
     }
     ~Private() {
     }
-    QString pathAndFile;
-    int counter;
 };
 
 DocxXmlNumberingReader::DocxXmlNumberingReader(KoOdfWriters *writers)
-    : MSOOXML::MsooXmlCommonReader(writers)
+    : DocxXmlDocumentReader(writers)
     , d(new Private)
 {
     init();
@@ -60,13 +58,14 @@ DocxXmlNumberingReader::~DocxXmlNumberingReader()
 
 void DocxXmlNumberingReader::init()
 {
-    d->counter = 0;
+    m_insideGroup = false;
+    m_outputFrames = false;
 }
 
 KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
-    Q_UNUSED(context)
-    kDebug() << "=============================";
+    m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
+
     readNext();
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
@@ -197,6 +196,30 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL numPicBullet
+//! w:numPicBullet handler (Number picture bullet)
+/*!
+
+ Parent elements:
+
+ Child elements:
+*/
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            TRY_READ_IF(pict)
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL numbering
 //! w:numbering handler (Numbering)
 /*!
@@ -215,6 +238,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numbering()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(abstractNum)
+            ELSE_TRY_READ_IF(numPicBullet)
             ELSE_TRY_READ_IF(num)
         }
     }
@@ -354,8 +378,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_num()
         QString name = "NumStyle" + numId;
         KoGenStyles::InsertionFlags insertionFlags = KoGenStyles::DontAddNumberToName | KoGenStyles::AllowDuplicates;
         mainStyles->insert(m_currentListStyle, name, insertionFlags);
-        // Maybe this should go to styles.xml?
-        //mainStyles->markStyleForStylesXml(name);
     }
 
     READ_EPILOGUE

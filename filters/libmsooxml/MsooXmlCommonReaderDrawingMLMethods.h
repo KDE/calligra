@@ -232,13 +232,10 @@ int m_rot; //! set by read_xfrm()
 bool m_noFill;
 
 QString m_xlinkHref; //!< set by read_blip()
-QSize m_imageSize; //!< set by read_blip()
 QString m_recentSourceName; //!< set by read_blip()
 QString m_cNvPrId; //!< set by read_cNvPr()
 QString m_cNvPrName; //!< set by read_cNvPr()
 QString m_cNvPrDescr; //!< set by read_cNvPr()
-
-QMap<QString, QSize> m_imageSizes; //!< collects image sizes to avoid multiple checks
 
 //! When dealing with colors there's no way to know what type of attribute
 //! we are setting. While MSOOXML doesn't need to know the context in which a
