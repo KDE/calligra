@@ -12,6 +12,7 @@
 #include "../KWord.h"
 
 #include <MockShapes.h>
+#include <MockTextShape.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoColorBackground.h>
