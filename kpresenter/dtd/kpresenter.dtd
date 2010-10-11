@@ -349,8 +349,8 @@ TODO: finish documentation
 
 -->
 <!ELEMENT TEXT (#PCDATA)>
-<!ATTLIST TEXT
-		family	CDATA	#REQUIRED
+<!ENTITY % TEXTATTS
+		"family	CDATA	#REQUIRED
 		pointSize NMTOKEN #REQUIRED
 		underline ( 0 | 1 | single | double|single-bold|wave ) #REQUIRED
                 underlinestyleline CDATA #REQUIRED
@@ -366,9 +366,11 @@ TODO: finish documentation
                 relativetextsize CDATA #IMPLIED
                 offsetfrombaseline CDATA #IMPLIED
                 wordbyword CDATA #IMPLIED
-                fontattribute (none | upper | lower)#REQUIRED
+                fontattribute (none | upper | lower) #REQUIRED
                 language CDATA #IMPLIED
-                text-shadow CDATA #IMPLIED>
+                text-shadow CDATA #IMPLIED">
+
+<!ATTLIST TEXT %TEXTATTS;>
 
 <!-- 
         A paragraph and a style can have counter data.
@@ -704,10 +706,7 @@ TODO: finish documentation
 
 <!-- Description of text format inside a style -->
 <!ELEMENT FORMAT EMPTY>
-<!ATTLIST FORMAT
-    <!-- The exact same attributes as TEXT can have.
-         Is it possible to define an entity for a list of attributes? -->
->
+<!ATTLIST FORMAT %TEXTATTS; >
 
 <!ELEMENT PICTURES ( KEY* ) >
 
