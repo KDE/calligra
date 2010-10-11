@@ -446,11 +446,23 @@ QColor PptToOdp::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
     //colorScheme of the master slide containing the master shape could be
     //required.  Testing required to implement the correct logic.
 
-    const MSO::MainMasterContainer* mmc = NULL;
-    if (ppttoodp->currentMaster) {
-        mmc = ppttoodp->currentMaster->anon.get<MainMasterContainer>();
+    const MSO::MasterOrSlideContainer* m = ppttoodp->currentMaster;
+    const MSO::MainMasterContainer* mm = NULL;
+    const MSO::SlideContainer* tm = NULL;
+    QColor ret;
+
+    if (m) {
+        if (m->anon.is<MainMasterContainer>()) {
+            mm = m->anon.get<MainMasterContainer>();
+            ret = ppttoodp->toQColor(c, mm, ppttoodp->currentSlide);
+        } else if (m->anon.is<SlideContainer>()) {
+            tm = m->anon.get<SlideContainer>();
+            ret = ppttoodp->toQColor(c, tm, ppttoodp->currentSlide);
+        }
     }
-    return ppttoodp->toQColor(c, mmc, ppttoodp->currentSlide);
+    //TODO: hande the case of a notes master slide/notes slide pair
+
+    return ret;
 }
 
 QString PptToOdp::DrawClient::formatPos(qreal v)
@@ -827,22 +839,40 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // temporary OfficeArtCOLORREF to reuse the toQColor function.  The red
     // value will be treated as an index into the current color scheme table.
     else {
+        OfficeArtCOLORREF tmp;
         quint32 tt = Text::Other;
+        QColor color;
+
+        tmp.fSchemeIndex = true;
         if (tc) {
             tt = tc->textHeaderAtom.textType;
         }
-        OfficeArtCOLORREF tmp;
-        tmp.fSchemeIndex = true;
-        if ((tt == Text::Title) || (tt == Text::CenterTitle)) {
+        switch (tt) {
+        case Text::Title: 
+        case Text::CenterTitle:
             tmp.red = Color::TitleText;
-        } else {
+            break;
+        default:
             tmp.red = Color::Text;
+            break;
         }
-	const MainMasterContainer* m = NULL;
-        if (currentMaster) {
-            m = currentMaster->anon.get<MainMasterContainer>();
+
+	const MSO::MasterOrSlideContainer* m = currentMaster;
+	const MSO::MainMasterContainer* mm = NULL;
+	const MSO::SlideContainer* tm = NULL;
+
+        if (m) {
+            if (m->anon.is<MainMasterContainer>()) {
+                mm = m->anon.get<MainMasterContainer>();
+                color = toQColor(tmp, mm, currentSlide);
+            } else if (m->anon.is<SlideContainer>()) {
+                tm = m->anon.get<SlideContainer>();
+                color = toQColor(tmp, tm, currentSlide);
+            }
         }
-        style.addProperty("fo:color", toQColor(tmp, m, currentSlide).name(), text);
+        //TODO: hande the case of a notes master slide/notes slide pair
+
+        style.addProperty("fo:color", color.name(), text);
     }
     // fo:country
     // fo:font-family
@@ -1489,7 +1519,11 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, scp);
-        defineDrawingPageStyle(dp, ds, styles, hf, mm);
+        if (sc) {
+            defineDrawingPageStyle(dp, ds, styles, hf, sc);
+        } else if (mm) {
+            defineDrawingPageStyle(dp, ds, styles, hf, mm);
+        }
         drawingPageStyles[m] = styles.insert(dp, "Mdp");
     }
     QString notesMasterPageStyle;
@@ -1695,6 +1729,7 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
         buffer.open(QIODevice::WriteOnly);
         KoXmlWriter writer(&buffer);
         Writer out(writer, styles, true);
+
         if (drawing->OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
             odrawtoodf.processGroupShape(spgr, out);
@@ -2394,7 +2429,9 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
     }
 
     const QList<ColorStruct>* colorScheme;
-    // TODO: use the current master
+
+    // TODO: use the current master, curent slide approach!
+
     const MasterOrSlideContainer* m = p->masters[0];
     if (m->anon.is<MainMasterContainer>()) {
         const MainMasterContainer* n = m->anon.get<MainMasterContainer>();
@@ -2420,19 +2457,23 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
 
         const QList<ColorStruct>* lst = NULL;
         const MSO::MainMasterContainer* mmc = NULL;
+        const MSO::SlideContainer* tmc = NULL;
         const MSO::NotesContainer* nmc = NULL;
         const MSO::SlideContainer* sc = NULL;
         const MSO::NotesContainer* nc = NULL;
 
-        // Get the color scheme of the current main master or notes master slide.
+        // Get the color scheme of the current main master/title master or
+        // notes master slide.
         if (master) {
             MSO::StreamOffset* m = const_cast<MSO::StreamOffset*>(master);
             if ((mmc = dynamic_cast<MSO::MainMasterContainer*>(m))) {
                 lst = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else if ((nmc = dynamic_cast<MSO::NotesContainer*>(m))) {
                 lst = &nmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+            } else if ((tmc = dynamic_cast<MSO::SlideContainer*>(m))) {
+                lst = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else {
-                qWarning() << "Warning: Incorrect container! Provide MainMasterContainer or NotesContainer.";
+                qWarning() << "Warning: Incorrect container!";
             }
         }
         // Get the color scheme of the current presentation slide or notes
@@ -2451,14 +2492,19 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                 qWarning() << "Warning: Incorrect container! Provide SlideContainer of NotesContainer.";
             }
         }
-        //check for a valid color scheme
         if (!lst) {
-            //NOTE: Using color scheme of the first main master slide
-            if ((mmc = p->masters[0]->anon.get<MainMasterContainer>())) {
-                if (!(lst = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor)) {
-                    qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
-                    return ret;
-                }
+            //NOTE: Using color scheme of the first main master/title master slide
+            if (p->masters[0]->anon.is<MainMasterContainer>()) {
+                mmc = p->masters[0]->anon.get<MainMasterContainer>();
+                lst = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+            }
+            else if (p->masters[0]->anon.is<SlideContainer>()) {
+                tmc = p->masters[0]->anon.get<SlideContainer>();
+                lst = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+            }
+            if (!lst) {
+                qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
+                return ret;
             }
         }
         // Use the red color channel's value as index according to MS-ODRAW
