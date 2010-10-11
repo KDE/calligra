@@ -83,7 +83,7 @@ void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
        a new coordinate system is introduced.
        */
     const OfficeArtSpContainer* first
-        = o.rgfb[0].anon.get<OfficeArtSpContainer>();
+    = o.rgfb[0].anon.get<OfficeArtSpContainer>();
     QRectF oldCoords;
     if (first && first->shapeGroup && first->clientAnchor) {
         oldCoords = client->getRect(*first->clientAnchor);
@@ -102,12 +102,12 @@ void ODrawToOdf::processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out)
     out.xml.endElement(); // draw:g
 }
 void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
-                                            const OfficeArtSpContainer& o)
+        const OfficeArtSpContainer& o)
 {
     KoGenStyle style;
     const OfficeArtDggContainer* drawingGroup = 0;
-    const OfficeArtSpContainer* master = 0; 
- 
+    const OfficeArtSpContainer* master = 0;
+
     if (client) {
         style = client->createGraphicStyle(o.clientTextbox.data(),
                                            o.clientData.data(), out);
@@ -140,17 +140,20 @@ const char* arrowHeads[6] = {
     "", "msArrowEnd_20_5", "msArrowStealthEnd_20_5", "msArrowDiamondEnd_20_5",
     "msArrowOvalEnd_20_5", "msArrowOpenEnd_20_5"
 };
-QString format(double v) {
+QString format(double v)
+{
     static const QString f("%1");
     static const QString e("");
     static const QRegExp r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
-QString pt(double v) {
+QString pt(double v)
+{
     static const QString pt("pt");
     return format(v) + pt;
 }
-QString percent(double v) {
+QString percent(double v)
+{
     return format(v) + '%';
 }
 } //namespace
@@ -416,19 +419,19 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
 
 void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 {
-	// TODO another fill types
+    // TODO another fill types
 
-	// convert angle to two points representing crossing of the line with rectangle to use it in svg
+    // convert angle to two points representing crossing of the line with rectangle to use it in svg
     // size of rectangle is 100*100 with the middle in 0,0
     // line coordinates are x1,y1; 0,0; x2,y2
     int dx=0,dy=0;
-	int angle = ((int)toQReal(ds.fillAngle())-90)%360;
+    int angle = ((int)toQReal(ds.fillAngle())-90)%360;
 
-	if(angle < 0) {
-	    angle = angle + 360;
-	}
+    if (angle < 0) {
+        angle = angle + 360;
+    }
 
-	qreal cosA = cos(angle * M_PI / 180);
+    qreal cosA = cos(angle * M_PI / 180);
     qreal sinA = sin(angle * M_PI / 180);
 
     if ((angle >= 0 && angle < 45) || (angle >= 315 && angle <= 360)) {
@@ -445,11 +448,11 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
         dx = cosA/sinA * (-50);
     }
 
-	style.addAttribute("svg:spreadMethod", "reflect");
-	style.addAttribute("svg:x1", QString("%1\%").arg(50 - dx));
-	style.addAttribute("svg:x2", QString("%1\%").arg(50 + dx));
-	style.addAttribute("svg:y1", QString("%1\%").arg(50 + dy));
-	style.addAttribute("svg:y2", QString("%1\%").arg(50 - dy));
+    style.addAttribute("svg:spreadMethod", "reflect");
+    style.addAttribute("svg:x1", QString("%1\%").arg(50 - dx));
+    style.addAttribute("svg:x2", QString("%1\%").arg(50 + dx));
+    style.addAttribute("svg:y1", QString("%1\%").arg(50 + dy));
+    style.addAttribute("svg:y2", QString("%1\%").arg(50 - dy));
 
     QBuffer writerBuffer;
     writerBuffer.open(QIODevice::WriteOnly);
@@ -459,7 +462,7 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
     // if it is empty use the colors defined inside fillColor() and fillBackColor
 
     if (ds.fillShadeColors()) {
-	    IMsoArray a = ds.fillShadeColors_complex();
+        IMsoArray a = ds.fillShadeColors_complex();
 
         QBuffer streamBuffer(&a.data);
         streamBuffer.open(QIODevice::ReadOnly);
@@ -467,43 +470,43 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
 
         OfficeArtCOLORREF color;
         FixedPoint fixedPoint;
-    	for (int i=0; i<a.nElems; i++) {
-    	    parseOfficeArtCOLORREF(in,color);
-       		parseFixedPoint(in,fixedPoint);
+        for (int i=0; i<a.nElems; i++) {
+            parseOfficeArtCOLORREF(in,color);
+            parseFixedPoint(in,fixedPoint);
 
             elementWriter.startElement("svg:stop");
             elementWriter.addAttribute("svg:offset", QString("%1").arg(toQReal(fixedPoint)));
             elementWriter.addAttribute("svg:stop-color", processOfficeArtCOLORREF(color, ds).name());
             elementWriter.endElement();
-    	}
-    	streamBuffer.close();
-	} else {
+        }
+        streamBuffer.close();
+    } else {
 
         QColor fillColor = processOfficeArtCOLORREF(ds.fillColor(), ds);
         QColor backColor = processOfficeArtCOLORREF(ds.fillBackColor(), ds);
 
         // if the angle is negative the colors are swapped
         if (toQReal(ds.fillAngle()) >= 0) {
-	        QColor tempColor = fillColor;
-	        fillColor = backColor;
-	        backColor = tempColor;
-	    }
+            QColor tempColor = fillColor;
+            fillColor = backColor;
+            backColor = tempColor;
+        }
 
         // if fillFocus() is 0 or 100 than use only two colors for gradient fill
         // else place one of the colors at 0 and 1 position of gradient fill and the second color between them
-	    int fillFocus = ds.fillFocus();
-	    if(fillFocus == 100) {
-	        elementWriter.startElement("svg:stop");
-	        elementWriter.addAttribute("svg:offset", "0");
-	        elementWriter.addAttribute("svg:stop-color", backColor.name());
-	        elementWriter.endElement();
+        int fillFocus = ds.fillFocus();
+        if (fillFocus == 100) {
+            elementWriter.startElement("svg:stop");
+            elementWriter.addAttribute("svg:offset", "0");
+            elementWriter.addAttribute("svg:stop-color", backColor.name());
+            elementWriter.endElement();
 
-	        elementWriter.startElement("svg:stop");
-	        elementWriter.addAttribute("svg:offset", "1");
-	        elementWriter.addAttribute("svg:stop-color", fillColor.name());
-	        elementWriter.endElement();
-	    } else if (fillFocus == 0) {
-	        elementWriter.startElement("svg:stop");
+            elementWriter.startElement("svg:stop");
+            elementWriter.addAttribute("svg:offset", "1");
+            elementWriter.addAttribute("svg:stop-color", fillColor.name());
+            elementWriter.endElement();
+        } else if (fillFocus == 0) {
+            elementWriter.startElement("svg:stop");
             elementWriter.addAttribute("svg:offset", "0");
             elementWriter.addAttribute("svg:stop-color", fillColor.name());
             elementWriter.endElement();
@@ -512,8 +515,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
             elementWriter.addAttribute("svg:offset", "1");
             elementWriter.addAttribute("svg:stop-color", backColor.name());
             elementWriter.endElement();
-	    } else if (fillFocus < 0) {
-	        elementWriter.startElement("svg:stop");
+        } else if (fillFocus < 0) {
+            elementWriter.startElement("svg:stop");
             elementWriter.addAttribute("svg:offset", "0");
             elementWriter.addAttribute("svg:stop-color", fillColor.name());
             elementWriter.endElement();
@@ -527,7 +530,7 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
             elementWriter.addAttribute("svg:offset", "1");
             elementWriter.addAttribute("svg:stop-color", fillColor.name());
             elementWriter.endElement();
-	    } else {
+        } else {
             elementWriter.startElement("svg:stop");
             elementWriter.addAttribute("svg:offset", "0");
             elementWriter.addAttribute("svg:stop-color", backColor.name());
@@ -542,8 +545,8 @@ void ODrawToOdf::defineGradientStyle(KoGenStyle& style, const DrawStyle& ds)
             elementWriter.addAttribute("svg:offset", "1");
             elementWriter.addAttribute("svg:stop-color", backColor.name());
             elementWriter.endElement();
-	    }
-	}
+        }
+    }
 
     QString elementContents = QString::fromUtf8(writerBuffer.buffer(), writerBuffer.buffer().size());
     style.addChildElement("svg:stop", elementContents);
@@ -562,7 +565,7 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
     if (c.fSysIndex) {
 
         // Use the fill color of the shape.
-	if (c.red == 0xF0) {
+        if (c.red == 0xF0) {
             tmp = ds.fillColor();
         }
         ret = client->toQColor(tmp);
@@ -572,8 +575,8 @@ QColor ODrawToOdf::processOfficeArtCOLORREF(const MSO::OfficeArtCOLORREF& c, con
         // unchanged, whereas a blue value of 0x00 specifies that the color is
         // to be completely darkened.
         if (c.green == 0x01) {
-	    if (c.blue == 0x00) {
-		ret = ret.darker(300);
+            if (c.blue == 0x00) {
+                ret = ret.darker(300);
             } else if (c.blue != 0xFF) {
                 ret.setRed(ret.red() - c.blue);
                 ret.setGreen(ret.green() - c.blue);
@@ -611,7 +614,7 @@ const char* getFillType(quint32 fillType)
 
 const char* getRepeatStyle(quint32 fillType)
 {
-    switch(fillType) {
+    switch (fillType) {
     case 3: // msofillPicture
     case 7: // msofillShadeScale
         return "stretch";
@@ -631,8 +634,8 @@ const char* getRepeatStyle(quint32 fillType)
 
 const char* getGradientRendering(quint32 fillType)
 {
-    //TODO: Add the logic!!! 
-    switch(fillType) {
+    //TODO: Add the logic!!!
+    switch (fillType) {
     case 0: //msofillSolid
     case 1: //msofillPattern
     case 2: //msofillTexture
