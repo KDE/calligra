@@ -154,7 +154,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
 
     TRY_READ_ATTR(ilvl)
     if (!ilvl.isEmpty()) {
-        m_currentBulletProperties.m_level = ilvl.toInt();
+        m_currentBulletProperties.m_level = ilvl.toInt() + 1;
     }
 
     m_bulletCharacter = QString();
