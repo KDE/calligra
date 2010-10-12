@@ -139,14 +139,27 @@ KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,
     return status;
 }
 
-KoFilter::ConversionStatus MsooXmlImport::imageSize(const QString& sourceName, QSize* size)
+KoFilter::ConversionStatus MsooXmlImport::imageSize(const QString& sourceName, QSize& size)
 {
     if (!m_zip) {
         return KoFilter::UsageError;
     }
+
     QString errorMessage;
-    const KoFilter::ConversionStatus status = Utils::imageSize(
-        m_zip, errorMessage, sourceName, size);
+    KoFilter::ConversionStatus status = KoFilter::OK;
+
+    const QMap<QString, QSize>::ConstIterator it(m_imageSizes.constFind(sourceName));
+    if (it == m_imageSizes.constEnd()) {
+        status = Utils::imageSize(m_zip, errorMessage, sourceName, &size);
+
+        if (status != KoFilter::OK)
+            size = QSize(-1, -1);
+        m_imageSizes.insert(sourceName, size);
+    }
+    else {
+        size = it.value();
+    }
+
 //! @todo transmit the error to the GUI...
     kDebug() << errorMessage;
     return status;

@@ -55,6 +55,7 @@ protected:
     KoFilter::ConversionStatus read_num();
     KoFilter::ConversionStatus read_abstractNumId();
     KoFilter::ConversionStatus read_lvlJc();
+    KoFilter::ConversionStatus read_lvlPicBulletId();
     KoFilter::ConversionStatus read_numPicBullet();
 
     // Note we read pPr here for now because we are only interested in subset of pPr features
@@ -67,6 +68,8 @@ protected:
     bool m_bulletStyle;
 
     QMap<QString, KoGenStyle> m_abstractListStyles;
+    QMap<QString, QString> m_picBulletPaths;
+    QMap<QString, QSize> m_picBulletSizes;
 
     QString m_bulletCharacter;
     QString m_bulletFont;

@@ -90,21 +90,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& source
     return KoFilter::OK;
 }
 
-QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
-{
-    const QMap<QString, QSize>::ConstIterator it(m_imageSizes.constFind(sourceName));
-    if (it == m_imageSizes.constEnd()) {
-        QSize size;
-        const KoFilter::ConversionStatus status = m_context->import->imageSize(sourceName, &size);
-        if (status != KoFilter::OK)
-            size = QSize(-1, -1);
-        m_imageSizes.insert(sourceName, size);
-        return size;
-    }
-    return it.value();
-}
-
-
 // ================================================================
 // DrawingML tags
 // ================================================================
@@ -2493,7 +2478,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
 
-        m_imageSize = imageSize(sourceName);
+        m_context->import->imageSize(sourceName, m_imageSize);
 
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;

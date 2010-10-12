@@ -106,9 +106,7 @@ protected:
     bool m_moveToStylesXml;
 
     QSize m_imageSize;
-
-    QMap<QString, QSize> m_imageSizes; //!< collects image sizes to avoid multiple checks
-
+    QString m_recentSourceName; // recent image
     QPen m_currentPen;
 
     QSet<QString> m_copiedFiles; //!< collects source names to avoid multiple copying of media files

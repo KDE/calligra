@@ -1088,7 +1088,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageName, KoGenStyle::DrawingPageType);
         if (m_context->type != SlideMaster) {
             if (!m_recentSourceName.isEmpty()) {
-                const QSize size(imageSize(m_recentSourceName));
+                QSize size;
+                m_context->import->imageSize(m_recentSourceName, size);
                 kDebug() << "SIZE:" << size;
                 if (size.isValid()) {
                     m_currentDrawStyle->addProperty("draw:fill-image-width",

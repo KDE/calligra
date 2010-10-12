@@ -161,6 +161,8 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
     m_bulletFont = QString();
     m_bulletStyle = false;
 
+    bool pictureType = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -169,10 +171,14 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             ELSE_TRY_READ_IF(numFmt)
             ELSE_TRY_READ_IF(lvlText)
             ELSE_TRY_READ_IF(lvlJc)
-            else if ( qualifiedName() == QLatin1String("w:pPr") ) {
+            else if (qualifiedName() == QLatin1String("w:lvlPicBulletId")) {
+                TRY_READ(lvlPicBulletId)
+                pictureType = true;
+            }
+            else if (qualifiedName() == QLatin1String("w:pPr")) {
                 TRY_READ(pPr_numbering)
             }
-            else if ( qualifiedName() == QLatin1String("w:rPr") ) {
+            else if (qualifiedName() == QLatin1String("w:rPr")) {
                 TRY_READ(rPr_numbering)
             }
         }
@@ -180,7 +186,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
 
     // For some symbol bullets MS2007 sets the bullet char to wingdings/symbol  but since
     // ODF does not support this, we replace those cases with default value '-'
-    if (m_bulletStyle && !m_bulletCharacter.isEmpty()) {
+    if (!pictureType && m_bulletStyle && !m_bulletCharacter.isEmpty()) {
         if (m_bulletFont == "Wingdings" || m_bulletFont == "Symbol") {
             m_currentBulletProperties.setBulletChar("-");
         }
@@ -208,6 +214,10 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
 {
     READ_PROLOGUE
 
+    const QXmlStreamAttributes attrs(attributes());
+
+    READ_ATTR(numPicBulletId)
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
@@ -215,6 +225,9 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
             TRY_READ_IF(pict)
         }
     }
+
+    m_picBulletPaths[numPicBulletId] = m_imagedataPath;
+    m_picBulletSizes[numPicBulletId] = m_imageSize;
 
     READ_EPILOGUE
 }
@@ -456,6 +469,30 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNumId()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         m_currentListStyle = m_abstractListStyles[val];
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lvlPicBulletId
+//! w:lvlPicBulletID (Picture bullet id)
+/*!
+ Parent elements:
+
+ Child elements:
+*/
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlPicBulletId()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_currentBulletProperties.setPicturePath(m_picBulletPaths.value(val));
+        m_currentBulletProperties.setPictureSize(m_picBulletSizes.value(val));
     }
 
     readNext();
