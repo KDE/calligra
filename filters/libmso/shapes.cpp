@@ -1442,24 +1442,16 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 
 void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer& out)
 {
-    const PVertices* pVertices = get<PVertices>(o);
-    const PSegmentInfo* pSegmentInfo = get<PSegmentInfo>(o);
+    const OfficeArtDggContainer* drawingGroup = 0;
+    const OfficeArtSpContainer* master = 0;
+    const DrawStyle ds(*drawingGroup, master, &o);
 
-    if (pVertices && pVertices->pVertices != 0 && pSegmentInfo && pSegmentInfo->pSegmentInfo != 0) {
+    IMsoArray _v = ds.pVertices_complex();
+    IMsoArray _c = ds.pSegmentInfo_complex();
+
+    if (!_v.data.isEmpty() && !_c.data.isEmpty()) {
 
         QVector<QPoint> verticesPoints;
-
-        // get the vertice data (pVertices - MS-ODRAW, page 174)
-        QByteArray* verticesData = NULL;
-        verticesData = getComplexData<PVertices>(o);
-
-        QBuffer verticesBuf(verticesData);
-        verticesBuf.open(QIODevice::ReadOnly);
-
-        LEInputStream inVertices(&verticesBuf);
-        PVertices_complex _v;
-        parsePVertices_complex(inVertices, _v);
-        verticesBuf.close();
 
         //_v.data is an array of POINTs, MS-ODRAW, page 89
         QByteArray xArray(sizeof(int),0), yArray(sizeof(int),0);
@@ -1499,18 +1491,6 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
 
         QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' '
                         + QString::number(maxX) + ' ' + QString::number(maxY);
-
-        //get segmentInfo Data (pSegmentInfo - MS-ODRAW, page 175)
-        QByteArray* segmentInfoData = NULL;
-        segmentInfoData = getComplexData<PSegmentInfo>(o);
-
-        QBuffer segmentInfoBuf(segmentInfoData);
-        segmentInfoBuf.open(QIODevice::ReadOnly);
-
-        LEInputStream inSegment(&segmentInfoBuf);
-        PSegmentInfo_complex _c;
-        parsePSegmentInfo_complex(inSegment, _c);
-        segmentInfoBuf.close();
 
         // combine segmentationInfoData and verticePoints into enhanced-path string
         int verticesIndex = 0;
@@ -1564,10 +1544,6 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             }
             }
         }
-
-        delete verticesData;
-        delete segmentInfoData;
-
         out.xml.addAttribute("svg:viewBox", viewBox);
         out.xml.addAttribute("draw:type", "non-primitive");
         out.xml.addAttribute("draw:enhanced-path", enhancedPath);

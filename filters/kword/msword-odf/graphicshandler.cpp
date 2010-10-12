@@ -1175,16 +1175,8 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     //check for user edited wrap points
     if (ds.fEditedWrap()) {
         QString points;
-        QByteArray* data = NULL;
-        data = getComplexData<PWrapPolygonVertices>(o);
-        if (data) {
-            QBuffer buf(data);
-            buf.open(QIODevice::ReadOnly);
-            LEInputStream in(&buf);
-            PWrapPolygonVertices_complex _v;
-            parsePWrapPolygonVertices_complex(in, _v);
-            buf.close();
-
+        IMsoArray _v = ds.fillShadeColors_complex();
+        if (_v.data.size()) {
             //_v.data is an array of POINTs, MS-ODRAW, page 89
             QByteArray a, a2;
             int* p;
@@ -1207,7 +1199,6 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         out.xml.startElement("draw:contour-polygon");
         out.xml.addAttribute("draw:points", points);
         out.xml.endElement(); //draw:contour-polygon
-        delete data;
     }
     out.xml.endElement(); //draw:frame
     return;

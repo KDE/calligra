@@ -3837,17 +3837,6 @@ void MSO::parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _
     _s.complexData.resize(_c);
     in.readBytes(_s.complexData);
 }
-void MSO::parsePVertices_complex(LEInputStream& in, PVertices_complex& _s) {
-    _s.streamOffset = in.getPosition();
-    int _c;
-    LEInputStream::Mark _m;
-    _s.nElems = in.readuint16();
-    _s.nElemsAlloc = in.readuint16();
-    _s.cbElem = in.readuint16();
-    _c = (_s.cbElem==0xFFF0)?(4 * _s.nElems):(_s.cbElem * _s.nElems);
-    _s.data.resize(_c);
-    in.readBytes(_s.data);
-}
 void MSO::parsePSegmentInfo_complex(LEInputStream& in, PSegmentInfo_complex& _s) {
     _s.streamOffset = in.getPosition();
     int _c;

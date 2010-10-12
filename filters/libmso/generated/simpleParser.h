@@ -372,8 +372,6 @@ class OfficeArtSecondaryFOPT;
 void parseOfficeArtSecondaryFOPT(LEInputStream& in, OfficeArtSecondaryFOPT& _s);
 class OfficeArtTertiaryFOPT;
 void parseOfficeArtTertiaryFOPT(LEInputStream& in, OfficeArtTertiaryFOPT& _s);
-class PVertices_complex;
-void parsePVertices_complex(LEInputStream& in, PVertices_complex& _s);
 class PSegmentInfo_complex;
 void parsePSegmentInfo_complex(LEInputStream& in, PSegmentInfo_complex& _s);
 class MSOPATHINFO;
@@ -2350,14 +2348,6 @@ public:
     QList<OfficeArtFOPTEChoice> fopt;
     QByteArray complexData;
     OfficeArtTertiaryFOPT(void* /*dummy*/ = 0) {}
-};
-class PVertices_complex : public StreamOffset {
-public:
-    quint16 nElems;
-    quint16 nElemsAlloc;
-    quint16 cbElem;
-    QByteArray data;
-    PVertices_complex(void* /*dummy*/ = 0) {}
 };
 class PSegmentInfo_complex : public StreamOffset {
 public:

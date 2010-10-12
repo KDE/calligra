@@ -2080,7 +2080,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - rtl (Right To Left)
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet) §21.1.2.4.1
-  - buBlip (Picture Bullet) §21.1.2.4.2
+  - [done] buBlip (Picture Bullet) §21.1.2.4.2
   - [done] buChar (Character Bullet) §21.1.2.4.3
   - buClr (Color Specified) §21.1.2.4.4
   - buClrTx (Follow Text) §21.1.2.4.5
@@ -2153,6 +2153,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buChar)
             ELSE_TRY_READ_IF(buFont)
+            ELSE_TRY_READ_IF(buBlip)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -2448,7 +2449,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     - blipFill (§20.2.2.1) - DrawingML, p. 3456
     - blipFill (§20.5.2.2) - DrawingML, p. 3518
     - [done] blipFill (§19.3.1.4) - PresentationML, p. 2818
-    - buBlip (§21.1.2.4.2)
+    - [done] buBlip (§21.1.2.4.2)
 
  Child elements:
     - alphaBiLevel (Alpha Bi-Level Effect) §20.1.8.1
@@ -2491,6 +2492,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         const QString sourceName(m_context->relationships->target(m_context->path,
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
+
+        m_imageSize = imageSize(sourceName);
+
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
@@ -2509,7 +2513,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 #else
         QString destinationName;
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-
+        addManifestEntryForFile(destinationName);
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
@@ -4246,12 +4250,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
+        if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
+            break;
+        }
         if (isStartElement()) {
             TRY_READ_IF(defRPr) // fills m_currentTextStyleProperties
             ELSE_TRY_READ_IF(buNone)
             ELSE_TRY_READ_IF(buAutoNum)
             ELSE_TRY_READ_IF(buChar)
             ELSE_TRY_READ_IF(buFont)
+            ELSE_TRY_READ_IF(buBlip)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -4265,9 +4273,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
                 TRY_READ(lnSpc)
             }
 //! @todo add ELSE_WRONG_FORMAT
-        }
-        if (isEndElement() && qualifiedName() == QString("a:%1").arg(level)) {
-            break;
         }
     }
 
@@ -4306,7 +4311,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
  Child elements:
   - [done] buAutoNum (Auto-Numbered Bullet)     §21.1.2.4.1
-  - buBlip (Picture Bullet)              §21.1.2.4.2
+  - [done] buBlip (Picture Bullet)              §21.1.2.4.2
   - [done] buChar (Character Bullet)            §21.1.2.4.3
   - buClr (Color Specified)              §21.1.2.4.4
   - buClrTx (Follow Text)                §21.1.2.4.5
@@ -4409,6 +4414,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl9pPr()
 {
     READ_PROLOGUE
     lvlHelper("lvl9pPr");
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buBlip
+//! buBlip - bullet picture
+/*!
+ Parent elements:
+ - defPPr (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+ - [done] blip
+*/
+//! @todo support all attributes
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_xlinkHref.clear();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(blip)
+        }
+    }
+
+    if (!m_xlinkHref.isEmpty()) {
+        m_currentBulletProperties.setPicturePath(m_xlinkHref);
+        m_currentBulletProperties.setPictureSize(m_imageSize);
+        m_lstStyleFound = true;
+        m_listStylePropertiesAltered = true;
+    }
+
     READ_EPILOGUE
 }
 

@@ -28,6 +28,7 @@
 
 #include "msooxml_export.h"
 
+#include <QSize>
 #include <QColor>
 #include <QBuffer>
 #include <KoFilterChain.h>
@@ -84,11 +85,15 @@ public:
 
     void setIndent(qreal indent);
 
+    void setPicturePath(const QString& picturePath);
+
+    void setPictureSize(const QSize& size);
+
     int m_level;
     int m_startValue;
 
 private:
-    enum ParagraphBulletType {BulletType, NumberType};
+    enum ParagraphBulletType {BulletType, NumberType, PictureType};
     ParagraphBulletType m_type;
 
     QString m_bulletChar;
@@ -96,6 +101,8 @@ private:
     QString m_suffix;
     QString m_align;
     qreal m_indent;
+    QString m_picturePath;
+    QSize m_pictureSize;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.
