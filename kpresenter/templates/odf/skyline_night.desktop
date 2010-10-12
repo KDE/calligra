@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=skyline_night
 Name=Skyline Night
+Name[x-test]=xxSkyline Nightxx
 Comment=Skyline Night
+Comment[x-test]=xxSkyline Nightxx
 Type=Link
 URL=.source/skyline_night.otp
 X-KDE-Hidden=false

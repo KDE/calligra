@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=flood_light
 Name=Flood Light
+Name[x-test]=xxFlood Lightxx
 Comment=Flood Light
+Comment[x-test]=xxFlood Lightxx
 Type=Link
 URL=.source/flood_light.otp
 X-KDE-Hidden=false

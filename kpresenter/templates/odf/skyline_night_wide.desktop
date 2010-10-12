@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=skyline_night_wide
 Name=Skyline Night Wide
+Name[x-test]=xxSkyline Night Widexx
 Comment=Skyline Night Wide
+Comment[x-test]=xxSkyline Night Widexx
 Type=Link
 URL=.source/skyline_night_wide.otp
 X-KDE-Hidden=false

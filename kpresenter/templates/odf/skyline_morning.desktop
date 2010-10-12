@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=skyline_morning
 Name=Skyline Morning
+Name[x-test]=xxSkyline Morningxx
 Comment=Skyline Morning
+Comment[x-test]=xxSkyline Morningxx
 Type=Link
 URL=.source/skyline_morning.otp
 X-KDE-Hidden=false

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=skyline_monotone
 Name=Skyline Monotone
+Name[x-test]=xxSkyline Monotonexx
 Comment=Skyline Monotone
+Comment[x-test]=xxSkyline Monotonexx
 Type=Link
 URL=.source/skyline_monotone.otp
 X-KDE-Hidden=false

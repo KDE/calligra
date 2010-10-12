@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=burning_desire
 Name=Burning Desire
+Name[x-test]=xxBurning Desirexx
 Comment=Burning Desire
+Comment[x-test]=xxBurning Desirexx
 Type=Link
 URL=.source/burning_desire.otp
 X-KDE-Hidden=false

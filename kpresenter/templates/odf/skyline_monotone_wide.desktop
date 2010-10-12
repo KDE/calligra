@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=skyline_monotone_wide
 Name=Skyline Monotone Wide
+Name[x-test]=xxSkyline Monotone Widexx
 Comment=Skyline Monotone Wide
+Comment[x-test]=xxSkyline Monotone Widexx
 Type=Link
 URL=.source/skyline_monotone_wide.otp
 X-KDE-Hidden=false
