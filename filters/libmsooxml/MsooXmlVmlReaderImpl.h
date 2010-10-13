@@ -53,8 +53,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart()
 {
     body->startElement("draw:frame");
 
-    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
-
     QString width(m_vmlStyle.value("width")); // already in "...cm" format
     QString height(m_vmlStyle.value("height")); // already in "...cm" format
     QString x_mar(m_vmlStyle.value("margin-left"));
@@ -164,8 +162,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
 
     body->endElement(); //draw:frame
 
-    popCurrentDrawStyle();
-
     return KoFilter::OK;
 }
 
@@ -202,7 +198,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
  - shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
- - stroke (Line Stroke Settings) §14.1.2.21
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
  - [done] textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
@@ -218,18 +214,30 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     RETURN_IF_ERROR(parseCSS(style))
 
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_strokeWidth = 1 ; // This seems to be the default
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+    }
 
     m_shapeColor.clear();
+    m_strokeColor.clear();
 
     if (!fillcolor.isEmpty()) {
-        // It is possible that fillcolor is eg #abcdef [adddd], this removes the extra end
-        if (fillcolor.indexOf(' ') > 0) {
-            fillcolor = fillcolor.left(fillcolor.indexOf(' '));
-        }
         m_shapeColor = MSOOXML::Utils::rgbColor(fillcolor);
     }
 
-    createFrameStart();
+    if (!strokecolor.isEmpty()) {
+        m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
+    }
+
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     while (!atEnd()) {
         readNext();
@@ -237,12 +245,52 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
         if (isStartElement()) {
             TRY_READ_IF(fill)
             ELSE_TRY_READ_IF(textbox)
+            ELSE_TRY_READ_IF(stroke)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
+    body = frameBuf.originalWriter();
+
+    createFrameStart();
+
+    (void)frameBuf.releaseWriter();
+
     createFrameEnd();
 
+    popCurrentDrawStyle();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL stroke
+//! Stroke style handler
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_stroke()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_currentPen = QPen();
+
+    TRY_READ_ATTR_WITHOUT_NS(endcap)
+    Qt::PenCapStyle penCap = m_currentPen.capStyle();
+    if (endcap.isEmpty() || endcap == "sq") {
+       penCap = Qt::SquareCap;
+    }
+    else if (endcap == "round") {
+        penCap = Qt::RoundCap;
+    }
+    else if (endcap == "flat") {
+        penCap = Qt::FlatCap;
+    }
+    m_currentPen.setCapStyle(penCap);
+    m_currentPen.setWidthF(m_strokeWidth);
+    m_currentPen.setColor(QColor(m_strokeColor));
+
+    KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -345,7 +393,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
 
-    createFrameStart();
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
 
     while (!atEnd()) {
         readNext();
@@ -357,7 +408,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
         }
     }
 
+    body = frameBuf.originalWriter();
+
+    createFrameStart();
+
+    (void)frameBuf.releaseWriter();
+
     createFrameEnd();
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
@@ -570,7 +629,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
  - shadow (Shadow Effect) §14.1.2.18
  - signatureline (Digital Signature Line) §14.2.2.30
  - skew (Skew Transform) §14.2.2.31
- - stroke (Line Stroke Settings) §14.1.2.21
+ - [done] stroke (Line Stroke Settings) §14.1.2.21
  - [done] textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
@@ -628,6 +687,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
     TRY_READ_ATTR_WITHOUT_NS(fillcolor)
     TRY_READ_ATTR_WITHOUT_NS(strokecolor)
+    TRY_READ_ATTR_WITHOUT_NS(strokeweight)
+
+    m_strokeWidth = 1 ; // This seems to be the default
+
+    if (!strokeweight.isEmpty()) {
+        m_strokeWidth = strokeweight.left(strokeweight.length() - 2).toDouble(); // -2 removes 'pt'
+    }
 
     m_shapeColor.clear();
     m_strokeColor.clear();
@@ -640,9 +706,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_strokeColor = MSOOXML::Utils::rgbColor(strokecolor);
     }
 
-    if (m_outputFrames) {
-        createFrameStart();
-    }
+    MSOOXML::Utils::XmlWriteBuffer frameBuf;
+    body = frameBuf.setWriter(body);
+
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     while (!atEnd()) {
         readNext();
@@ -650,14 +717,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         if (isStartElement()) {
             TRY_READ_IF(imagedata)
             ELSE_TRY_READ_IF(textbox)
+            ELSE_TRY_READ_IF(stroke)
         }
     }
+
+    body = frameBuf.originalWriter();
+
+    if (m_outputFrames) {
+        createFrameStart();
+    }
+
+    (void)frameBuf.releaseWriter();
 
     m_objectRectInitialized = true;
 
     if (m_outputFrames) {
         createFrameEnd();
     }
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }

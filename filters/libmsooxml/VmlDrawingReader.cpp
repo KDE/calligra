@@ -28,6 +28,7 @@
 #include <MsooXmlUnits.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoOdfGraphicStyles.h>
 #include <limits.h>
 
 #define MSOOXML_CURRENT_NS empty // Without this, the vml methods won't have ns identifier in them

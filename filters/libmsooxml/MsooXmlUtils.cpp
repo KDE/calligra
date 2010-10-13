@@ -1267,8 +1267,13 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
-MSOOXML_EXPORT QString Utils::rgbColor(const QString& color)
+MSOOXML_EXPORT QString Utils::rgbColor(QString color)
 {
+    // It is possible that color is eg #abcdef [adddd], this removes the extra end
+    if (color.indexOf(' ') > 0) {
+        color = color.left(color.indexOf(' '));
+    }
+
     QString newColor;
     if (color == "red") {
         newColor = "#ff0000";
