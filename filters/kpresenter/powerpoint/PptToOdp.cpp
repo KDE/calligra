@@ -1261,13 +1261,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
     QString elementName;
     bool imageBullet = i.pf.bulletBlipRef() != 65535;
 
-    //no bullet exists
-    if (!i.pf.fHasBullet()) {
-        elementName = "text:list-level-style-number";
-        out.startElement("text:list-level-style-number");
-        out.addAttribute("style:num-format", "");
-    }
-    else if (imageBullet) {
+    if (imageBullet) {
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href",
@@ -1282,7 +1276,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
         if (bulletSize.isNull() || bulletSize.endsWith('%')) {
             bulletSize = "20pt"; // fallback value
         }
-    } else {
+    } else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
         QString numFormat("1"), numSuffix, numPrefix;
         processTextAutoNumberScheme(i.pf.scheme(),
                                     numFormat, numSuffix, numPrefix);
@@ -1312,6 +1306,12 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                 out.addAttribute("text:bullet-relative-size", percent(relSize));
             }
         }
+    }
+    //no bullet exists (i.pf.fHasBullet() == false) 
+    else {
+        elementName = "text:list-level-style-number";
+        out.startElement("text:list-level-style-number");
+        out.addAttribute("style:num-format", "");
     }
     out.addAttribute("text:level", level?level:1);
 
@@ -2113,6 +2113,7 @@ int PptToOdp::processTextSpans(const MSO::TextContainer& tc, Writer& out,
 QString PptToOdp::defineAutoListStyle(Writer& out, const PptTextPFRun& pf)
 {
     KoGenStyle list(KoGenStyle::ListAutoStyle);
+    list.setAutoStyleInStylesDotXml(out.stylesxml);
     ListStyleInput info;
     info.pf = pf;
     ListStyleInput parent;
@@ -2132,7 +2133,7 @@ void PptToOdp::processTextLine(Writer& out,
     }
     PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
                     &tc, start);
-    bool islist = ((pf.level() > 0) || pf.fHasBullet()) && start < end;
+    bool islist = (pf.isList() && (start < end));
     static bool first = true;
 
     if (islist) {
@@ -2880,4 +2881,3 @@ const OfficeArtSpContainer* PptToOdp::retrieveMasterShape(quint32 spid) const
 #endif
     return NULL;
 }
-
