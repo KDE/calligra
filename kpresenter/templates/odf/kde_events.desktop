@@ -1,0 +1,7 @@
+[Desktop Entry]
+Icon=kde_events
+Name=KDE Events
+Comment=KDE Events
+Type=Link
+URL=.source/kde_events.otp
+X-KDE-Hidden=false
