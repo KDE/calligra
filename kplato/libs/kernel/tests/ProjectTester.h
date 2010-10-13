@@ -73,6 +73,8 @@ private slots:
     void resourceConflictALAP();
     void resourceConflictMustStartOn();
     void resourceConflictMustFinishOn();
+    void fixedInterval();
+    void estimateDuration();
 
 private:
     Project *m_project;
