@@ -949,41 +949,49 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pgBorders()
             ELSE_WRONG_FORMAT
         }
     }
-    applyBorders(&m_currentPageStyle);
+    applyBorders(&m_currentPageStyle, m_borderStyles, m_borderPaddings);
     READ_EPILOGUE
 }
 
-void DocxXmlDocumentReader::applyBorders(KoGenStyle *style)
+void DocxXmlDocumentReader::applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding)
 {
-    if (m_borderStyles.count(m_borderStyles.key(TopBorder)) == 4) {
-        style->addProperty("fo:border", m_borderStyles.key(TopBorder)); // all sides the same
+    if (sourceBorder.count(sourceBorder.key(TopBorder)) == 4) {
+        style->addProperty("fo:border", sourceBorder.key(TopBorder)); // all sides the same
     }
     else {
-        if (!m_borderStyles.key(TopBorder).isEmpty())
-            style->addProperty("fo:border-top", m_borderStyles.key(TopBorder));
-        if (!m_borderStyles.key(LeftBorder).isEmpty())
-            style->addProperty("fo:border-left", m_borderStyles.key(LeftBorder));
-        if (!m_borderStyles.key(BottomBorder).isEmpty())
-            style->addProperty("fo:border-bottom", m_borderStyles.key(BottomBorder));
-        if (!m_borderStyles.key(RightBorder).isEmpty())
-            style->addProperty("fo:border-right", m_borderStyles.key(RightBorder));
+        if (!sourceBorder.key(TopBorder).isEmpty()) {
+            style->addProperty("fo:border-top", sourceBorder.key(TopBorder));
+        }
+        if (!sourceBorder.key(LeftBorder).isEmpty()) {
+            style->addProperty("fo:border-left", sourceBorder.key(LeftBorder));
+        }
+        if (!sourceBorder.key(BottomBorder).isEmpty()) {
+            style->addProperty("fo:border-bottom", sourceBorder.key(BottomBorder));
+        }
+        if (!sourceBorder.key(RightBorder).isEmpty()) {
+            style->addProperty("fo:border-right", sourceBorder.key(RightBorder));
+        }
     }
-    m_borderStyles.clear();
+    sourceBorder.clear();
 
-    if (m_borderPaddings.count(m_borderPaddings.key(TopBorder)) == 4) {
-        style->addProperty("fo:padding", m_borderPaddings.key(TopBorder)); // all sides the same
+    if (sourcePadding.count(sourcePadding.key(TopBorder)) == 4) {
+        style->addProperty("fo:padding", sourcePadding.key(TopBorder)); // all sides the same
     }
     else {
-        if (!m_borderPaddings.key(TopBorder).isEmpty())
-            style->addProperty("fo:padding-top", m_borderPaddings.key(TopBorder));
-        if (!m_borderPaddings.key(LeftBorder).isEmpty())
-            style->addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder));
-        if (!m_borderPaddings.key(BottomBorder).isEmpty())
-            style->addProperty("fo:padding-bottom", m_borderPaddings.key(BottomBorder));
-        if (!m_borderPaddings.key(RightBorder).isEmpty())
-            style->addProperty("fo:padding-right", m_borderPaddings.key(RightBorder));
+        if (!sourcePadding.key(TopBorder).isEmpty()) {
+            style->addProperty("fo:padding-top", sourcePadding.key(TopBorder));
+        }
+        if (!sourcePadding.key(LeftBorder).isEmpty()) {
+            style->addProperty("fo:padding-left", sourcePadding.key(LeftBorder));
+        }
+        if (!sourcePadding.key(BottomBorder).isEmpty()) {
+            style->addProperty("fo:padding-bottom", sourcePadding.key(BottomBorder));
+        }
+        if (!sourcePadding.key(RightBorder).isEmpty()) {
+            style->addProperty("fo:padding-right", sourcePadding.key(RightBorder));
+        }
     }
-    m_borderPaddings.clear();
+    sourcePadding.clear();
 }
 
 //! Converts 17.18.2 ST_Border (Border Styles, p. 1462, 4357) value to W3C CSS2 border-style value
@@ -2031,7 +2039,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  Child elements:
  - [done] b (Bold) §17.3.2.1
  - bCs (Complex Script Bold) §17.3.2.2
- - bdr (Text Border) §17.3.2.4
+ - [done] bdr (Text Border) §17.3.2.4
  - [done] caps (Display All Characters As Capital Letters) §17.3.2.5
  - [done] color (Run Content Color) §17.3.2.6
  - cs (Use Complex Script Formatting on Run) §17.3.2.7
@@ -2113,6 +2121,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(smallCaps)
             ELSE_TRY_READ_IF(w)
             ELSE_TRY_READ_IF(webHidden)
+            ELSE_TRY_READ_IF(bdr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2500,11 +2509,16 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 {
     READ_PROLOGUE
 
-    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
-    m_currentDrawStyle->addAttribute("style:parent-style-name", QLatin1String("Graphics"));
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    applyBorders(m_currentDrawStyle, m_textBorderStyles, m_textBorderPaddings);
 
     m_drawing_anchor = false;
     m_drawing_inline = false;
+
+    MSOOXML::Utils::XmlWriteBuffer buffer;
+    body = buffer.setWriter(body);
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2514,6 +2528,37 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
             ELSE_WRONG_FORMAT
         }
     }
+
+    body = buffer.originalWriter();
+    body->startElement("draw:frame");
+
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+    if (m_moveToStylesXml) {
+        mainStyles->markStyleForStylesXml(styleName);
+    }
+    body->addAttribute("draw:style-name", styleName);
+
+    if (m_drawing_inline) {
+        body->addAttribute("text:anchor-type", "as-char");
+    }
+    else {
+        body->addAttribute("text:anchor-type", "char");
+    }
+    if (!m_docPrName.isEmpty()) { // from docPr/@name
+        body->addAttribute("draw:name", m_docPrName);
+    }
+    body->addAttribute("draw:layer", "layout");
+    body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+    body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+
+    popCurrentDrawStyle();
+
+    (void)buffer.releaseWriter();
+
+    body->endElement(); // draw:frame
+
     m_drawing_anchor = false;
     m_drawing_inline = false;
     READ_EPILOGUE
@@ -3432,7 +3477,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
             }
             else if (QUALIFIED_NAME_IS(left)) {
                 RETURN_IF_ERROR(readBorderElement(LeftBorder, "left"));
-            } 
+            }
             else if (QUALIFIED_NAME_IS(bottom)) {
                 RETURN_IF_ERROR(readBorderElement(BottomBorder, "bottom"));
             }
@@ -3442,7 +3487,64 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    applyBorders(&m_currentParagraphStyle);
+    applyBorders(&m_currentParagraphStyle, m_borderStyles, m_borderPaddings);
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL bdr
+//! bbdr handler (Text Border)
+/*!
+
+ Parent elements:
+ - [done] rPr (§17.3.1.29);
+ - [done] rPr (§17.3.1.30);
+ - [done] rPr (§17.5.2.28);
+ - [done] rPr (§17.9.25);
+ - [done] rPr (§17.7.9.1);
+ - [done] rPr (§17.7.5.4);
+ - [done] rPr (§17.3.2.28);
+ - [done] rPr (§17.5.2.27);
+ - [done] rPr (§17.7.6.2);
+ - [done]  rPr (§17.3.2.27)
+
+ Child elements:
+ - none (?)
+
+ @todo support all elements
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    m_borderStyles.clear();
+    m_textBorderPaddings.clear();
+
+    READ_ATTR(val)
+    TRY_READ_ATTR(sz)
+    TRY_READ_ATTR(color)
+    createBorderStyle(sz, color, val, TopBorder);
+    createBorderStyle(sz, color, val, LeftBorder);
+    createBorderStyle(sz, color, val, BottomBorder);
+    createBorderStyle(sz, color, val, RightBorder);
+    TRY_READ_ATTR(space)
+    if (!space.isEmpty()) {
+        int sp;
+        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
+        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
+        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
+        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", BottomBorder);
+    }
+
+    m_textBorderStyles = m_borderStyles;
+
+    // Note that styles are not applied to anything, odf does not support
+    // border around normal text run, but ooxml uses this element also to determine
+    // borders for example to pictures
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -4619,117 +4721,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
     m_drawing_inline = true; // for pic
     m_svgX = m_svgY = m_svgWidth = m_svgHeight = 0;
     while (!atEnd()) {
-        readNext();        
+        readNext();
         BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {            
+        if (isStartElement()) {
             TRY_READ_IF_NS(wp, extent)
             ELSE_TRY_READ_IF(docPr)
-            if ( qualifiedName() == "a:graphic" )
-            {
-                read_graphic2();
-//                 if ( status != KoFilter::OK )
-//                     return status;
-            }
+            ELSE_TRY_READ_IF_NS(a, graphic)
 //! @todo add ELSE_WRONG_FORMAT
-        }        
+        }
     }
     READ_EPILOGUE
 }
-
-#undef CURRENT_EL
-#define CURRENT_EL graphic
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_graphic2()
-{
-//     READ_PROLOGUE
-      while (!atEnd()) {
-          readNext();
-//           BREAK_IF_END_OF(CURRENT_EL);
-          if (isStartElement()) {
-              if ( qualifiedName() == "a:graphicData" )
-              {   
-                  KoFilter::ConversionStatus status = read_graphicData2();
-                  return status;
-              }
-          }
-          else if ( qualifiedName() == "a:graphic" )
-              break;
-      }
-      return KoFilter::OK;
-//       READ_EPILOGUE
-}
-#undef CURRENT_EL
-#define CURRENT_EL graphicData
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_graphicData2()
-{
-//     READ_PROLOGUE
-    while (!atEnd()) {
-        readNext();
-//         BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            TRY_READ_IF_NS(pic, pic)
-#ifdef PPTXXMLSLIDEREADER_CPP
-            ELSE_TRY_READ_IF_NS(p, oleObj)
-            ELSE_TRY_READ_IF_NS(a, tbl)
-#endif
-#ifndef MSOOXMLDRAWINGTABLESTYLEREADER_CPP
-            if ( qualifiedName() == "c:chart" )
-            {   
-                KoFilter::ConversionStatus status = read_chart2();
-                if ( status != KoFilter::OK )
-                    return status;
-            }            
-#endif
-//! @todo add ELSE_WRONG_FORMAT
-        }
-        else if ( qualifiedName() == "a:graphicData" )
-            break;
-    }
-    return KoFilter::OK;
-//     READ_EPILOGUE
-}
-#undef CURRENT_EL
-#define CURRENT_EL chart
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_chart2()
-{
-//     READ_PROLOGUE
-
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITH_NS(r, id)
-    if (!r_id.isEmpty()) {
-        const QString filepath = m_context->relationships->target(m_context->path, m_context->file, r_id);
-
-        Charting::Chart* chart = new Charting::Chart;
-
-        ChartExport* chartexport = new ChartExport( chart, m_context->themes);
-        chartexport->m_x = EMU_TO_POINT(qMax(0, m_svgX));
-        chartexport->m_y = EMU_TO_POINT(qMax(0, m_svgY));
-        chartexport->m_width = m_svgWidth > 0 ? EMU_TO_POINT(m_svgWidth) : 100;
-        chartexport->m_height = m_svgHeight > 0 ? EMU_TO_POINT(m_svgHeight) : 100;
-
-        kDebug()<<"r:id="<<r_id<<"filepath="<<filepath<<"position="<<QString("%1:%2").arg(chartexport->m_x).arg(chartexport->m_y)<<"size="<<QString("%1x%2").arg(chartexport->m_width).arg(chartexport->m_height);
-
-        KoStore* storeout = m_context->import->outputStore();
-        XlsxXmlChartReaderContext context(storeout, chartexport );
-        XlsxXmlChartReader reader(this);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, &context);
-        if (result != KoFilter::OK) {
-            raiseError(reader.errorString());
-            return result;
-        }
-
-        chartexport->saveIndex(body);
-    }
-
-    while (!atEnd()) {
-        readNext();
-        if ( qualifiedName() == "c:chart" )
-              break;
-    }
-
-//     READ_EPILOGUE
-    return KoFilter::OK;
-}
-
 
 #undef CURRENT_EL
 #define CURRENT_EL extent

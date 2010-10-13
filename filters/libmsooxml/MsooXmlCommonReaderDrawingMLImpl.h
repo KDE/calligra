@@ -159,8 +159,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_rot = 0;
     m_isPlaceHolder = false;
 
+#ifndef DOCXXMLDOCREADER_H
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+#endif
 
     while (!atEnd()) {
         readNext();
@@ -186,6 +188,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 #endif
 
+#ifndef DOCXXMLDOCREADER_H
     body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -202,24 +205,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle->addAttribute("style:fill", constNone);
     }
 
-#ifdef DOCXXMLDOCREADER_H
-    //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-#endif
-#if defined(DOCXXMLDOCREADER_H)
-    //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
-    //body->addAttribute("draw:style-name", currentDrawStyleName);
-#endif
-
-//! @todo CASE #1341: images within w:hdr should be anchored as paragraph (!wp:inline) or as-char (wp:inline)
-    if (m_drawing_inline) {
-        body->addAttribute("text:anchor-type", "as-char");
-    }
-    else {
-        body->addAttribute("text:anchor-type", "char");
-    }
-    if (!m_docPrName.isEmpty()) { // from docPr/@name
-        body->addAttribute("draw:name", m_docPrName);
-    }
 //! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
     int realX = m_svgX;
     int realY = m_svgY;
@@ -247,13 +232,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("draw:transform", rotString);
     }
 
+    // Add style information
+    //! @todo: horizontal-on-{odd,even}?
+    const QString mirror(mirrorToOdf(m_flipH, m_flipV));
+    if (!mirror.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:mirror", mirror);
+    }
+
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
     body->addAttribute("draw:style-name", styleName);
+#endif
 
     // Now it's time to link to the actual picture.  Only do it if
     // there is an image to link to.  If so, this was created in
@@ -278,14 +272,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_xlinkHref.clear();
     }
 
-    // Add style information
-    //! @todo: horizontal-on-{odd,even}?
-    const QString mirror(mirrorToOdf(m_flipH, m_flipV));
-    if (!mirror.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:mirror", mirror);
-    }
-
+#ifndef DOCXXMLDOCREADER_H
     body->endElement(); //draw:frame
+#endif
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideLayout) {
@@ -297,7 +286,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 #endif
 
+#ifndef DOCXXMLDOCREADER_H
     popCurrentDrawStyle();
+#endif
 
     READ_EPILOGUE
 }
