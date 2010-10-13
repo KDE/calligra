@@ -146,10 +146,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     // Reset picture properties
     m_xlinkHref.clear();
-    m_hasPosOffsetH = false;
-    m_hasPosOffsetV = false;
-    m_posOffsetH = 0;
-    m_posOffsetV = 0;
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
@@ -205,20 +201,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle->addAttribute("style:fill", constNone);
     }
 
-//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
-    int realX = m_svgX;
-    int realY = m_svgY;
-    if (m_hasPosOffsetH) {
-        kDebug() << "m_posOffsetH" << m_posOffsetH;
-        realX += m_posOffsetH;
-    }
-    if (m_hasPosOffsetV) {
-        kDebug() << "m_posOffsetV" << m_posOffsetV;
-        realY += m_posOffsetV;
-    }
     if (m_rot == 0) {
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(realX));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
     }
     body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
     body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
@@ -2762,6 +2747,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);

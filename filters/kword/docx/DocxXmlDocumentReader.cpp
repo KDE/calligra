@@ -2509,6 +2509,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 {
     READ_PROLOGUE
 
+    m_hasPosOffsetH = false;
+    m_hasPosOffsetV = false;
+
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
     applyBorders(m_currentDrawStyle, m_textBorderStyles, m_textBorderPaddings);
@@ -2544,6 +2547,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     else {
         body->addAttribute("text:anchor-type", "char");
     }
+
+//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
+    if (m_hasPosOffsetH) {
+        kDebug() << "m_posOffsetH" << m_posOffsetH;
+        m_svgX += m_posOffsetH;
+    }
+    if (m_hasPosOffsetV) {
+        kDebug() << "m_posOffsetV" << m_posOffsetV;
+        m_svgY += m_posOffsetV;
+    }
+
     if (!m_docPrName.isEmpty()) { // from docPr/@name
         body->addAttribute("draw:name", m_docPrName);
     }
@@ -4616,8 +4630,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
 {
     READ_PROLOGUE
-    m_hasPosOffsetH = false;
-    m_hasPosOffsetV = false;
+
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_anchor = true; // for pic:pic
@@ -4673,8 +4686,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
         }
     }
 
-    m_hasPosOffsetH = false;
-    m_hasPosOffsetV = false;
     READ_EPILOGUE
 }
 
@@ -4716,6 +4727,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_inline()
 {
     READ_PROLOGUE
+
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_inline = true; // for pic
@@ -4838,6 +4850,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_positionH()
             ELSE_WRONG_FORMAT
         }
     }
+
     READ_EPILOGUE
 }
 
@@ -4923,10 +4936,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_posOffset(posOffsetCaller
     }
     ELSE_WRONG_FORMAT
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
