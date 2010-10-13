@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=skyline_night
 Name=Skyline Night
+Name[it]=Profilo notturno
+Name[pt]=Linha Celeste Nocturna
+Name[pt_BR]=Linha celeste noturna
+Name[sv]=Nattsiluett
+Name[uk]=Нічний горизонт
 Name[x-test]=xxSkyline Nightxx
 Comment=Skyline Night
+Comment[it]=Profilo notturno
+Comment[pt]=Linha Celeste Nocturna
+Comment[pt_BR]=Linha celeste noturna
+Comment[sv]=Nattsiluett
+Comment[uk]=Нічний горизонт
 Comment[x-test]=xxSkyline Nightxx
 Type=Link
 URL=.source/skyline_night.otp

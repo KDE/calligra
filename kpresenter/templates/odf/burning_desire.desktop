@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=burning_desire
 Name=Burning Desire
+Name[it]=Desiderio bruciante
+Name[pt]=Desejo Fogoso
+Name[pt_BR]=Desejo fogoso
+Name[sv]=Brännande önskan
+Name[uk]=Жагуче бажання
 Name[x-test]=xxBurning Desirexx
 Comment=Burning Desire
+Comment[it]=Desiderio bruciante
+Comment[pt]=Desejo Fogoso
+Comment[pt_BR]=Desejo fogoso
+Comment[sv]=Brännande önskan
+Comment[uk]=Жагуче бажання
 Comment[x-test]=xxBurning Desirexx
 Type=Link
 URL=.source/burning_desire.otp

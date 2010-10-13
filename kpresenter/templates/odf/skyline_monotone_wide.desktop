@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=skyline_monotone_wide
 Name=Skyline Monotone Wide
+Name[it]=Profilo monotono ampio
+Name[pt]=Monotónico Celeste Amplo
+Name[pt_BR]=Monotônico celeste amplo
+Name[sv]=Monoton siluett bred
+Name[uk]=Широкий однорідний горизонт
 Name[x-test]=xxSkyline Monotone Widexx
 Comment=Skyline Monotone Wide
+Comment[it]=Profilo monotono ampio
+Comment[pt]=Monotónico Celeste Amplo
+Comment[pt_BR]=Monotônico celeste amplo
+Comment[sv]=Monoton siluett bred
+Comment[uk]=Широкий однорідний горизонт
 Comment[x-test]=xxSkyline Monotone Widexx
 Type=Link
 URL=.source/skyline_monotone_wide.otp

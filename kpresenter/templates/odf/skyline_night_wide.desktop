@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=skyline_night_wide
 Name=Skyline Night Wide
+Name[it]=Profilo notturno ampio
+Name[pt]=Linha Celeste Nocturna Ampla
+Name[pt_BR]=Linha celeste noturna ampla
+Name[sv]=Nattsiluett bred
+Name[uk]=Широкий нічний горизонт
 Name[x-test]=xxSkyline Night Widexx
 Comment=Skyline Night Wide
+Comment[it]=Profilo notturno ampio
+Comment[pt]=Linha Celeste Nocturna Ampla
+Comment[pt_BR]=Linha celeste noturna ampla
+Comment[sv]=Nattsiluett bred
+Comment[uk]=Широкий нічний горизонт
 Comment[x-test]=xxSkyline Night Widexx
 Type=Link
 URL=.source/skyline_night_wide.otp

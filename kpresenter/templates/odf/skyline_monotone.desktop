@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=skyline_monotone
 Name=Skyline Monotone
+Name[it]=Profilo monotono
+Name[pt]=Monotónico Celeste
+Name[pt_BR]=Monotônico celeste
+Name[sv]=Monoton siluett
+Name[uk]=Монотонний горизонт
 Name[x-test]=xxSkyline Monotonexx
 Comment=Skyline Monotone
+Comment[it]=Profilo monotono
+Comment[pt]=Monotónico Celeste
+Comment[pt_BR]=Monotônico celeste
+Comment[sv]=Monoton siluett
+Comment[uk]=Монотонний горизонт
 Comment[x-test]=xxSkyline Monotonexx
 Type=Link
 URL=.source/skyline_monotone.otp

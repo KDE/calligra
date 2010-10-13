@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=skyline_morning
 Name=Skyline Morning
+Name[it]=Profilo mattutino
+Name[pt]=Linha Celeste Matinal
+Name[pt_BR]=Linha celeste matinal
+Name[sv]=Morgonsiluett
+Name[uk]=Вранішній горизонт
 Name[x-test]=xxSkyline Morningxx
 Comment=Skyline Morning
+Comment[it]=Profilo mattutino
+Comment[pt]=Linha Celeste Matinal
+Comment[pt_BR]=Linha celeste matinal
+Comment[sv]=Morgonsiluett
+Comment[uk]=Вранішній горизонт
 Comment[x-test]=xxSkyline Morningxx
 Type=Link
 URL=.source/skyline_morning.otp

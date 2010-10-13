@@ -1,8 +1,18 @@
 [Desktop Entry]
 Icon=skyline_morning_wide
 Name=Skyline Morning Wide
+Name[it]=Profilo mattutino ampio
+Name[pt]=Linha Celeste Matinal Ampla
+Name[pt_BR]=Linha celeste matinal ampla
+Name[sv]=Morgonsiluett bred
+Name[uk]=Широкий вранішній горизонт
 Name[x-test]=xxSkyline Morning Widexx
 Comment=Skyline Morning Wide
+Comment[it]=Profilo mattutino ampio
+Comment[pt]=Linha Celeste Matinal Ampla
+Comment[pt_BR]=Linha celeste matinal ampla
+Comment[sv]=Morgonsiluett bred
+Comment[uk]=Широкий вранішній горизонт
 Comment[x-test]=xxSkyline Morning Widexx
 Type=Link
 URL=.source/skyline_morning_wide.otp
