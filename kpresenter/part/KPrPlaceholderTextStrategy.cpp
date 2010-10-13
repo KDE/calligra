@@ -105,14 +105,16 @@ void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverte
 
 void KPrPlaceholderTextStrategy::saveOdf( KoShapeSavingContext & context )
 {
-    if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData())) {
-        KoStyleManager *styleManager = KoTextDocument(shapeData->document()).styleManager();
-        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData());
-        if (styleManager && shapeData) {
-            QTextDocument *document = shapeData->document();
-            QTextBlock block = document->begin();
-            QString styleName = KoTextWriter::saveParagraphStyle(block, styleManager, context);
-            context.xmlWriter().addAttribute("draw:text-style-name", styleName);
+    if (m_textShape) {
+        if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData())) {
+            KoStyleManager *styleManager = KoTextDocument(shapeData->document()).styleManager();
+            KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(m_textShape->userData());
+            if (styleManager && shapeData) {
+                QTextDocument *document = shapeData->document();
+                QTextBlock block = document->begin();
+                QString styleName = KoTextWriter::saveParagraphStyle(block, styleManager, context);
+                context.xmlWriter().addAttribute("draw:text-style-name", styleName);
+            }
         }
     }
     KPrPlaceholderStrategy::saveOdf( context );
