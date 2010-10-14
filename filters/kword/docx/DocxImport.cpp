@@ -244,7 +244,6 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
             MSOOXML::ContentTypes::wordFontTable, &fontTableReader, writers, errorMessage, &context) )
     }
 
-    // 2. parse styles
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
     if (partNames.count() != 1) {
         errorMessage = i18n("Unable to find part for type %1", d->mainDocumentContentType());
@@ -254,7 +253,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     QString documentPath, documentFile;
     MSOOXML::Utils::splitPathAndFile(documentPathAndFile, &documentPath, &documentFile);
 
-    // 3. parse theme for the document
+    // 2. parse theme for the document
     MSOOXML::DrawingMLTheme themes;
     const QString docThemePathAndFile(relationships->targetForType(
         documentPath, documentFile,
@@ -272,6 +271,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
 
+    // 3. parse styles
     {
         // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
         // ECMA-376, 11.3.12 Style Definitions Part, p. 65
@@ -279,20 +279,23 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
         // A package shall contain at most two Style Definitions parts. One instance of that part shall be
         // the target of an implicit relationship from the Main Document (§11.3.10) part, and the other shall
         // be the target of an implicit relationship in from the Glossary Document (§11.3.8) part.
-        const QString stylesPath(relationships->targetForType(documentPath, documentFile,
+        const QString stylesPathAndFile(relationships->targetForType(documentPath, documentFile,
             QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/styles"));
-        kDebug() << "stylesPath:" << stylesPath;
         DocxXmlStylesReader stylesReader(writers);
-        if (!stylesPath.isEmpty()) {
+        if (!stylesPathAndFile.isEmpty()) {
+            QString stylesPath, stylesFile;
+            MSOOXML::Utils::splitPathAndFile(stylesPathAndFile, &stylesPath, &stylesFile);
+            DocxXmlDocumentReaderContext context(*this, stylesPath, stylesFile, *relationships, &themes);
+
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
-                stylesPath, &stylesReader, writers, errorMessage) )
+                stylesPathAndFile, &stylesReader, writers, errorMessage, &context) )
         }
     }
 
     // 4. parse numbering
     {
         const QString numberingPathAndFile(relationships->targetForType(documentPath, documentFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
+            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/numbering"));
         DocxXmlNumberingReader numberingReader(writers);
         if (!numberingPathAndFile.isEmpty()) {
             QString numberingPath, numberingFile;
@@ -307,7 +310,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     // 5. parse footnotes
     {
         const QString footnotePathAndFile(relationships->targetForType(documentPath, documentFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/footnotes"));
+            QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/footnotes"));
         //! @todo use m_contentTypes.values() when multiple paths are expected, e.g. for ContentTypes::wordHeader
         DocxXmlFootnoteReader footnoteReader(writers);
         if (!footnotePathAndFile.isEmpty()) {
@@ -321,7 +324,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
     // 6. parse comments
         const QString commentPathAndFile(relationships->targetForType(documentPath, documentFile,
-        QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/comments"));
+           QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/comments"));
         DocxXmlCommentReader commentReader(writers);
         if (!commentPathAndFile.isEmpty()) {
             QString commentPath, commentFile;

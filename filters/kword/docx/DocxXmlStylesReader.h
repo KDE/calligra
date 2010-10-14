@@ -52,14 +52,6 @@ protected:
     KoFilter::ConversionStatus read_name();
     KoFilter::ConversionStatus read_tblStylePr();
 
-    //! Context used by methods like read_lang to know the parent element
-    enum DocxXmlStylesReadingContext {
-        NoContext,
-        DocDefaultsContext, //!< we're within read_docDefaults()
-        StyleContext //!< we're within read_style()
-    };
-    DocxXmlStylesReadingContext m_context;
-
     void createDefaultStyle(KoGenStyle::Type type, const char* family);
     QMap<QByteArray, KoGenStyle*> m_defaultStyles;
 

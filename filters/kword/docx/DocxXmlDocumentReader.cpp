@@ -2951,7 +2951,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rFonts()
     if (ascii.isEmpty()) {
         TRY_READ_ATTR(asciiTheme)
         if (!asciiTheme.isEmpty()) {
-            //! @todo
+            QString font = asciiTheme;
+            if (font.startsWith("major")) {
+                font = m_context->themes->fontScheme.majorFonts.latinTypeface;
+            }
+            else if (font.startsWith("minor")) {
+               font = m_context->themes->fontScheme.minorFonts.latinTypeface;
+            }
+            m_currentTextStyle.addProperty("style:font-name", font);
         }
     }
 // CASE #1155

@@ -36,7 +36,7 @@
 //#include <MsooXmlCommonReaderImpl.h> // this adds w:pPr, etc.
 
 DocxXmlStylesReader::DocxXmlStylesReader(KoOdfWriters *writers)
-        : DocxXmlDocumentReader(writers), m_context(NoContext) //, m_characterStyle(0)
+        : DocxXmlDocumentReader(writers)
 {
 }
 
@@ -62,7 +62,7 @@ void DocxXmlStylesReader::createDefaultStyle(KoGenStyle::Type type, const char* 
 //! @todo support latentStyles child (Latent Style Information) §17.7.4.5
 KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
-    Q_UNUSED(context)
+    m_context = static_cast<DocxXmlDocumentReaderContext*>(context);
     kDebug() << "=============================";
     readNext();
     if (!isStartDocument()) {
@@ -115,9 +115,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
         if (isStartElement()) {
             TRY_READ_IF(docDefaults)
             ELSE_TRY_READ_IF(style)
-            else {
-                m_context = NoContext;
-            }
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -166,7 +163,6 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
 KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
 {
     READ_PROLOGUE
-    m_context = DocDefaultsContext;
 
     m_currentTextStyle = KoGenStyle();
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
@@ -314,7 +310,6 @@ static QString ST_StyleType_to_ODF(const QString& type)
 KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
 {
     READ_PROLOGUE
-    m_context = StyleContext;
 
     const QXmlStreamAttributes attrs(attributes());
     m_name.clear();
