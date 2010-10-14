@@ -122,7 +122,7 @@ protected slots:
     virtual void goToPreviousSlide();
 
     //! Implemented for KoAbstractApplicationController
-    void resourceChanged(int key, const QVariant &value);
+    virtual void resourceChanged(int key, const QVariant &value);
 
     //! Implemented for KoAbstractApplicationController
     void addSheet();

@@ -362,9 +362,10 @@ protected:
     bool handleCloseEvent(QCloseEvent *event);
 
     /*!
-     * Slot
+     * Slot for reacting on resource changes in manager
+     * Can be reimplemented, do not forget about calling this implementation though.
      */
-    void resourceChanged(int key, const QVariant &value);
+    virtual void resourceChanged(int key, const QVariant& value);
 
     /*!
      * Slot

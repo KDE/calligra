@@ -2012,6 +2012,18 @@ bool MainWindow::doOpenDocument()
     return true;
 }
 
+// reimplemented
+void MainWindow::resourceChanged(int key, const QVariant& value)
+{
+#ifdef Q_WS_MAEMO_5
+    if (documentType() == TextDocument && m_ui->actionEdit->isChecked()) {
+        if (m_foDocumentRdf)
+            m_foDocumentRdf->findStatements(*textEditor()->cursor(), 1);
+    }
+#endif
+    KoAbstractApplication::resourceChanged(key, value);
+}
+
 void MainWindow::documentPageSetupChanged()
 {
     KoAbstractApplication::documentPageSetupChanged();

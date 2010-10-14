@@ -790,6 +790,11 @@ public slots:
      * Opens document @a fileName.
      */
     bool openDocument(const QString &fileName, bool isNewDocument);
+
+protected slots:
+    //! Reimplemented for KoAbstractApplication
+    virtual void resourceChanged(int key, const QVariant& value);
+
 private:
 
     QMap<QString, OfficeInterface*> loadedPlugins;
@@ -865,7 +870,7 @@ private:
     QShortcut *m_rdfShortcut;
 #endif
 
- public slots:
+public slots:
     /*!
      * Enable the select tool. This will allow shapes to be selected and moved around
      */

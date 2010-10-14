@@ -720,14 +720,8 @@ bool KoAbstractApplicationController::handleCloseEvent(QCloseEvent *event)
     return true;
 }
 
-void KoAbstractApplicationController::resourceChanged(int key, const QVariant &value)
+void KoAbstractApplicationController::resourceChanged(int key, const QVariant& value)
 {
-#ifdef Q_WS_MAEMO_5
-    if (documentType() == TextDocument && m_ui->actionEdit->isChecked()){
-        if (foDocumentRdf)
-            foDocumentRdf->findStatements(*textEditor()->cursor(), 1);
-    }
-#endif
     if (m_presentationTool && m_presentationTool->toolsActivated() && documentType() == PresentationDocument) {
         return;
     }
