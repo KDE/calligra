@@ -80,6 +80,7 @@ KoAbstractApplicationController::KoAbstractApplicationController()
       m_isLoading(false),
       m_type(NoDocument),
       m_currentPage(1),
+      m_prevCurrentPage(0),
       m_view(0),
       m_textDocument(0),
       m_editor(0),
@@ -601,10 +602,9 @@ void KoAbstractApplicationController::goToNextPage()
         }
         return;
     }
-    static int prev_curpage = 0;
-    if (prev_curpage != m_currentPage) {
+    if (m_prevCurrentPage != m_currentPage) {
         int cur_page = m_currentPage;
-        prev_curpage = m_currentPage;
+        m_prevCurrentPage = m_currentPage;
         triggerAction("page_next");
         if(cur_page == m_currentPage)
             goToNextPage();
@@ -617,7 +617,7 @@ void KoAbstractApplicationController::goToNextPage()
             m_controller->pan(QPoint(0, 1));
             cur_page = m_currentPage;
         }
-        prev_curpage = m_currentPage;
+        m_prevCurrentPage = m_currentPage;
         triggerAction("page_next");
         return;
     }

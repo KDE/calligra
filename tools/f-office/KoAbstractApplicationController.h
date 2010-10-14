@@ -455,9 +455,14 @@ private:
     DocumentType m_type;
 
     /*!
-     * Current page number. Saved in MainWindow::resourceChanged().
+     * Current page number. Saved in resourceChanged().
      */
     int m_currentPage;
+
+    /*!
+     * Previous page number. Used in goToNextPage().
+     */
+    int m_prevCurrentPage;
 
     /*!
      * Pointer to KoView
