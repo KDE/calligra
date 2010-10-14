@@ -1372,7 +1372,7 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
         if (m_startValue != 0) {
-            returnValue += QString("style:start-value=\"%1\" ").arg(m_startValue);
+            returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         }
         ending = "</text:list-level-style-number>";
     }
