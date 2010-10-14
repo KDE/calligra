@@ -211,7 +211,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
     if (!expectEl("xdr:wsDr")) {
         return KoFilter::WrongFormat;
     }
-    
+
     while (!atEnd()) {
         QXmlStreamReader::TokenType tokenType = readNext();
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
@@ -234,7 +234,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read(MSOOXML::MsooXmlReaderCont
 KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
 {
     READ_PROLOGUE
-    
+
     class DrawingObjectGuard { // like QScopedPointer but sets the pointer to NULL afterwards
         public:
             DrawingObjectGuard(XlsxDrawingObject** obj) : m_obj(obj) {}
@@ -246,7 +246,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
     Q_ASSERT(!m_currentDrawingObject);
     m_currentDrawingObject = new XlsxDrawingObject(m_context->sheet);
     DrawingObjectGuard _guard(&m_currentDrawingObject);
-    
+
     while (!atEnd()) {
         QXmlStreamReader::TokenType tokenType = readNext();
         if(tokenType == QXmlStreamReader::Invalid || tokenType == QXmlStreamReader::EndDocument) break;
@@ -272,7 +272,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
             m_currentDrawingObject = 0;
         }
     }
-    
+
     READ_EPILOGUE
 }
 
