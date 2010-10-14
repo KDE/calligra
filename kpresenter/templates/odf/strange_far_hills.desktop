@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=strange_far_hills
 Name=Strange Far Hills
+Name[x-test]=xxStrange Far Hillsxx
 Comment=Strange Far Hills
+Comment[x-test]=xxStrange Far Hillsxx
 Type=Link
 URL=.source/strange_far_hills.otp
 X-KDE-Hidden=false

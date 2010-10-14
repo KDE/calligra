@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=rounded_square
 Name=Rounded Square
+Name[x-test]=xxRounded Squarexx
 Comment=Rounded Square
+Comment[x-test]=xxRounded Squarexx
 Type=Link
 URL=.source/rounded_square.otp
 X-KDE-Hidden=false

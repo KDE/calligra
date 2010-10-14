@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=blue_orange_vector
 Name=Blue Orange Vector
+Name[x-test]=xxBlue Orange Vectorxx
 Comment=Blue Orange Vector
+Comment[x-test]=xxBlue Orange Vectorxx
 Type=Link
 URL=.source/blue_orange_vector.otp
 X-KDE-Hidden=false

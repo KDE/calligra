@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=flood_light
 Name=Flood Light
+Name[da]=Flood Light
 Name[it]=Sotto i riflettori
 Name[pt]=Inundado de Luz
 Name[pt_BR]=Inundado de luz
@@ -8,6 +9,7 @@ Name[sv]=Strålkastare
 Name[uk]=Заповнення світлом
 Name[x-test]=xxFlood Lightxx
 Comment=Flood Light
+Comment[da]=Flood Light
 Comment[it]=Sotto i riflettori
 Comment[pt]=Inundado de Luz
 Comment[pt_BR]=Inundado de luz

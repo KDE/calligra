@@ -1,7 +1,9 @@
 [Desktop Entry]
 Icon=curious_penguin
 Name=Curious Penguin
+Name[x-test]=xxCurious Penguinxx
 Comment=Curious Penguin
+Comment[x-test]=xxCurious Penguinxx
 Type=Link
 URL=.source/curious_penguin.otp
 X-KDE-Hidden=false
