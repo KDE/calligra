@@ -27,11 +27,14 @@
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
-#include <KoDocument.h>
-#include <KWView.h>
+
+typedef QMainWindow KoAbstractApplicationBase;
+#include <KoAbstractApplication.h>
+
 #include <styles/KoListStyle.h>
+#include <KoPAView.h>
 
-
+#include "OfficeInterface.h"
 #include "Splash.h"
 #include "PreviewDialog.h"
 #include "NotesDialog.h"
@@ -41,16 +44,7 @@
 #include "CollabDialog.h"
 #include "CollabServer.h"
 #include "FoCellTool.h"
-#include "VirtualKeyBoard.h"
-#include "FoCellToolFactory.h"
 #include "DigitalSignatureDialog.h"
-
-#include <KoPAView.h>
-#include <KoPACanvas.h>
-#include <KoTextShapeData.h>
-#include <KoTextDocument.h>
-#include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
 
 #ifdef Q_WS_MAEMO_5
 #include "FoDocumentRdf.h"
@@ -78,8 +72,10 @@ class QDialog;
 class QListWidget;
 class QListWidgetItem;
 class SlidingMotionDialog;
+class VirtualKeyBoard;
+#ifdef HAVE_OPENGL
 class GLPresenter;
-class FoCellTooFactory;
+#endif
 
 class KUndoStack;
 class KoTextEditor;
@@ -89,8 +85,6 @@ class KoCanvasController;
 class KoCanvasControllerWidget;
 class KoShape;
 class KoPAPageBase;
-
-class OfficeInterface;
 
 namespace Ui
 {
@@ -102,7 +96,7 @@ class MainWindow;
  * \brief Main window of the application. KoCanvasController is set as
  * the central widget. It displays the loaded documents.
  */
-class MainWindow : public QMainWindow
+class MainWindow : public KoAbstractApplication
 {
     Q_OBJECT
 
@@ -123,14 +117,8 @@ public:
     void enableFullScreenPresentationNavigation();
     void openNewDocumentType(QString type);
 
-protected:
-        void closeEvent(QCloseEvent *);
-
 private:
     Ui::MainWindow *m_ui;
-    FoCellToolFactory *m_cellToolFactory;
-
-
     
 ///////////////////////////
 // Collaborative editing //
@@ -162,40 +150,30 @@ private slots:
     void collabSaveFile(const QString &filename);
     void collabOpenFile(const QString &filename);
 
+    void insertNewTextShape();
+    void insertNewTable();
+
+    void spaceHandlerForVirtualKeyboard();
+
 /////////////////////////////
 /////////////////////////////
 
-    //presentation editing
-    private:
-        QTextDocument *document;
-        QPointer<KoTextEditor> m_pEditor;
-        KoShape *m_textShape;
-        KoShape *currentShapeSelected;
-        KoTextShapeData *currentSelectedTextShapeData;
-        QTextDocument *documentForCurrentShape;
+//presentation editing
+private:
+//unused    QTextDocument *document;
+    QPointer<KoTextEditor> m_pEditor;
+//global not needed:    KoShape *m_textShape;
+//global not needed:    KoShape *m_currentShapeSelected;
+//global not needed:    KoTextShapeData *currentSelectedTextShapeData;
+//global not needed:    QTextDocument *documentForCurrentShape;
 
-        KoPAView *m_kopaview;
-    private slots:
-        void insertNewTextShape();
-        void insertNewTable();
+    KoPAView *m_kopaview;
 //        void deleteSelection();
 
-
-    ////
-
 /////virtualkeyboard
-
-private:
-
-    QShortcut *shortcutForVirtualKeyBoard;
-    QShortcut *spaceHandlerShortcutForVirtualKeyBoard;
-    static bool virtualKeyBoardIsOnScreen;
-
-
-private slots:
-
-    void showVirtualKeyBoardOnScreen();
-    void spaceHandlerForVirtualKeyBoard();
+    QShortcut *m_shortcutForVirtualKeyBoard;
+    QShortcut *m_spaceHandlerShortcutForVirtualKeyBoard;
+    VirtualKeyBoard* m_virtualKeyBoard;
 
     ////////////////////
     ////////////////////////////////////
@@ -219,8 +197,6 @@ static bool enableAccelerator;
  */
 static bool enableScrolling;
 
-
-private:
 /*!
  *  For accessing the accelerator
  */
@@ -335,15 +311,6 @@ private:
     QStringList m_templatepath;
     QString newpresenter;
     /*!
-     * Confirmation dialog for closing new document
-     */
-    QDialog *m_confirmationdialog;
-    QGridLayout *m_confirmationdialoglayout;
-    QPushButton *m_yes;
-    QPushButton *m_no;
-    QPushButton *m_cancel;
-    QLabel *m_message;
-    /*!
      * Actions for spreadEditToolBar.
      */
     QAction *m_addAction;
@@ -370,38 +337,6 @@ private:
      * Checkbox to change between normal and exact match searches
      */
     QCheckBox *m_exactMatchCheckBox;
-    /*!
-     * Pointer to QTextDocument
-     */
-    QTextDocument *m_textDocument;
-    /*!
-     * Pointer to KoDocument
-     */
-    KoDocument *m_doc;
-    /*!
-     * Pointer to KoTextEditor
-     */
-    KoTextEditor *m_editor;
-    /*!
-     * Pointer to KWView
-     */
-    KWView * m_kwview;
-    /*!
-     * Pointer to KoView
-     */
-    KoView *m_view;
-    /*!
-     * Pointer to KoCanvasController
-     */
-    KoCanvasControllerWidget *m_controller;
-    /*!
-     * Pointer to KUndoStack
-     */
-    KUndoStack *m_undostack;
-    /*!
-     * Pointer to FreOffice CellTool
-     */
-    FoCellTool *m_focelltool;
     /*!
      * Integers about current page
      */
@@ -438,32 +373,6 @@ private:
     QPushButton *m_fsPPTForwardButton;
 
     /*!
-     * Current page number. Saved in MainWindow::resourceChanged() slot.
-     */
-    int m_currentPage;
-
-    /*!
-     * Index for moving between searched strings
-     */
-    int m_index;
-    /*!
-     * Positions for found text strings
-     */
-    QList<QPair<QPair<KoPAPageBase*, KoShape*>, QPair<int, int> > > m_positions;
-    /*!
-     * Flag for seeing if search is for whole words. false by default
-     */
-    bool m_wholeWord;
-    /*!
-     * flag for checking open document type
-     */
-    enum DocumentType { Text, Presentation, Spreadsheet };
-    DocumentType m_type;
-    /*!
-     * Pointer to splash class
-     */
-    Splash *m_splash;
-    /*!
      * Pointer to pen draw button
      */
     QPushButton *m_fsPPTDrawPenButton;
@@ -472,31 +381,15 @@ private:
      */
     QPushButton *m_fsPPTDrawHighlightButton;
     /*!
-     * Pointer to presentation drawing tools
-     */
-    PresentationTool *m_pptTool;
-    /*!
      *Pointer to the MainWindowAdaptor object
      */
     MainWindowAdaptor *m_dbus;
 
     void init();
     /*!
-     * close the document if it is open and reinit to 0
-     */
-    void closeDocument();
-    /*!
      * style formatting function
      */
     void doStyle(KoListStyle::Style, KoTextEditor* editor);
-    /*!
-     *opening a new document
-     */
-    void openNewDocument(DocumentType);
-    /*!
-     *Retrieves path for saving file
-     */
-    QString getFileSavePath(DocumentType);
     /*!
      *Function to add formatframe components
      */
@@ -514,10 +407,13 @@ private:
      * /param pointer to QTextDocument
      * /param reference to text to be searched
      */
+#ifdef HAVE_OPENGL
     GLPresenter *presenter;
+#endif
     /*!
      * Open GL Class , to handle the slide show.
      */
+
     void findText(QList<QTextDocument*> docs, QList<QPair<KoPAPageBase*, KoShape*> > shapes, const QString &aText);
     /*!
      * Find string from document
@@ -526,30 +422,10 @@ private:
     void highlightText(int aIndex);
 
     /*!
-     * Trigger an action from the action collection of the current KoView.
-     * /param name The name of the action to trigger
-     * /return bool Returns false if there was no action with the given name found
-     */
-    bool triggerAction(const char* name);
-
-    /*!
-     * Update the enabled/disabled state of actions depending on if a document is currently
-     * loaded.
-     */
-    void updateActions();
-
-    /*!
      * Event filter to catch all mouse events to be able to properly show and hide the fullscreen
      * button when in fullscreen mode.
      */
     bool eventFilter(QObject *watched, QEvent *event);
-
-    /*!
-     * Check filetype
-     * /param filename
-     * /return true if supported
-     */
-    bool checkFiletype(const QString &fileName);
 
     /*!
      * shows back and forward buttons in fullscreen presentation mode
@@ -571,18 +447,6 @@ private:
      */
     void activeFontOptionCheck();
     /*!
-     * Function for navigating to NextSheet
-     */
-    void nextSheet();
-    /*!
-     * Function for navigating to PreviousSheet
-     */
-    void prevSheet();
-    /*!
-     * Confirmation Dialog Destructor
-     */
-    void confirmationDialogDestructor();
-    /*!
      * Format Frame Destructor
      */
     void formatFrameDestructor();
@@ -594,10 +458,6 @@ private:
      * Template Chooser
      */
     void templateSelectionDialog();
-    /*!
-     *
-     */
-    bool m_firstChar;
     /*!
      * Set up tool bar.
      */
@@ -629,12 +489,67 @@ private:
      */
     void spreadSheetInfo();
 
-private slots:
+    //! Implemented for KoAbstractApplication
+    virtual void setWindowTitle(const QString& title);
 
+    //! Implemented for KoAbstractApplication
+    virtual void showMessage(KoAbstractApplication::MessageType type, const QString& messageText = QString());
+
+    //! Implemented for KoAbstractApplication
+    virtual QMessageBox::StandardButton askQuestion(QuestionType type, const QString& messageText = QString());
+
+    //! Implemented for KoAbstractApplication
+    virtual void startNewInstance(const QString& fileName, bool isNewDocument);
+
+    //! Implemented for KoAbstractApplication
+    virtual void setProgressIndicatorVisible(bool visible);
+
+    //! Implemented for KoAbstractApplication
+    virtual void showUiBeforeDocumentOpening(bool isNewDocument);
+
+    //! Implemented for KoAbstractApplication
+    virtual QString showGetOpenFileNameDialog(const QString& caption, const QString& dir, const QString& filter);
+
+    //! Implemented for KoAbstractApplication
+    virtual QString showGetSaveFileNameDialog(const QString& caption, const QString& dir, const QString& filter);
+
+    //! Implemented for KoAbstractApplication
+    virtual void updateActions();
+
+    //! Implemented for KoAbstractApplication
+    virtual void documentPageSetupChanged();
+
+    //! Implemented for KoAbstractApplication
+    virtual void setCentralWidget(QWidget *widget);
+
+    //! Implemented for KoAbstractApplication
+    virtual QWidget* centralWidget() const;
+
+    //! Implemented for KoAbstractApplication
+    virtual QString applicationName() const;
+
+    //! Implemented for KoAbstractApplication
+    virtual bool isVirtualKeyboardVisible() const;
+
+    //! Implemented for KoAbstractApplication
+    virtual void currentPageChanged();
+
+    //! Reimplemented for KoAbstractApplication
+    virtual bool setEditingMode(bool set);
+
+    //! Reimplemented for KoAbstractApplication
+    virtual void closeDocument();
+
+    //! Reimplemented for KoAbstractApplication
+    virtual bool openDocument();
+
+private slots:
+    //! Implemented for KoAbstractApplication
+    virtual void setVirtualKeyboardVisible(bool set);
+
+private slots:
     void menuClicked(QAction* action);
     void pluginOpen(bool newWindow, const QString& path);
-    void updateUI();
-    void resourceChanged(int key, const QVariant &value);
     void showFontSizeDialog();
     void fontSizeEntered();
     void fontSizeRowSelected(QListWidgetItem *item);
@@ -643,18 +558,6 @@ private slots:
      * Adds symbol for spreadEditToolBar
      */
     void addMathematicalOperator(QString mathSymbol);
-    /*!
-     * Remove a sheet.
-     */
-    void removeSheet();
-    /*!
-     * Add add a sheet.
-     */
-    void addSheet();
-    /*!
-     * Current sheet info.
-     */
-    QString currentSheetName();
     /*!
      * Slot to perform UndoAction
      */
@@ -667,16 +570,6 @@ private slots:
      * Slot to actionSearch toggled signal
      */
     void toggleToolBar(bool);
-    /*!
-     * Slot to actionEdit toggled signal
-     */
-    void editToolBar(bool status=true);
-    /*!
-     * Slot to actionClose signal
-     * @parm isWindowClosed set to true if you are calling it from the window
-     *       close event.
-     */
-    void closeDoc(bool isWindowClosed=false);
     /*!
      *  Slot to convert character into bold
      */
@@ -738,14 +631,6 @@ private slots:
      */
     void selectTextBackGroundColor();
     /*!
-     * Slot to discard newDocument without performing save operation
-     */
-    void discardNewDocument();
-    /*!
-     *    Slot to return back from closing new document
-     */
-    void returnToDoc();
-    /*!
      * Slot to display formatframe with all options
      */
     void openFormatFrame();
@@ -784,14 +669,6 @@ private slots:
     void zoomToPage();
     void zoomToPageWidth();
     /*!
-     * Slot to actionNextPage triggered signal
-     */
-    void nextPage();
-    /*!
-     * Slot to actionPrevPage triggered signal
-     */
-    void prevPage();
-    /*!
      * Slot to fullscreen toolbutton triggered signal
      * Logic for switching from  normal mode to full screen mode
      */
@@ -813,11 +690,11 @@ private slots:
     /*!
      * Slot for moving to previous found text string
      */
-    void previousWord();
+    void goToPreviousWord();
     /*!
      * Slot for moving to next found text string
      */
-    void nextWord();
+    void goToNextWord();
     /*!
      * Slot for toggleing between whole word search and part of word search
      */
@@ -838,14 +715,15 @@ private slots:
      * Slot that shows a hildonized application menu
      */
     void showApplicationMenu();
+//! @todo move to abstraction
     /*!
      * Slot that is invoked when the currently active tool changes.
      */
-    void activeToolChanged(KoCanvasControllerWidget *canvas, int uniqueToolId);
+    void activeToolChanged(KoCanvasController *canvas, int uniqueToolId);
     /*!
      * function for opening existing document.
      */
-    void doOpenDocument();
+    virtual bool doOpenDocument();
     /*!
      * Slot to actionAbout triggered signal
      */
@@ -877,26 +755,9 @@ private slots:
 
 public slots:
     /*!
-     * Slot to perform save operation
-     */
-    void saveFile();
-    /*!
-     * Slot to perform save as operation
-     */
-    void saveFileAs();
-    /*!
-     * Slot to  dialog fileSelected signal
-     * /param filename
-     */
-    void openDocument(const QString &fileName, bool isNewDocument=false);
-    /*!
      * Slot to choose new document
      */
     void chooseDocumentType();
-    /*!
-     * Slot to actionOpen triggered signal
-     */
-    void openFileDialog();
     /*!
      * Slot to check DBus activation, If document is not opened
      * then open filedialog
@@ -910,10 +771,6 @@ public slots:
      */
     void loadScrollAndQuit();
     /*!
-     * Slot to go to perticular page
-     */
-    void gotoPage(int page);
-    /*!
      * Slot to show the preview dialog
      */
     void showPreviewDialog();
@@ -924,19 +781,20 @@ public slots:
     /*!
      * Slot to update current slide in the presentation, when the slide changed in the notes dialog
      */
-    void moveSLideFromNotesSLide(bool flag);
-
+    void moveSlideFromNotesSlide(bool flag);
+#ifdef HAVE_OPENGL
     void glPresenter();
     void glPresenterSet(int,int);
+#endif
+    /*!
+     * Opens document @a fileName.
+     */
+    bool openDocument(const QString &fileName, bool isNewDocument);
 private:
 
     QMap<QString, OfficeInterface*> loadedPlugins;
 
     void setShowProgressIndicator(bool visible);
-    /*!
-     * true if document is modified
-     */
-    bool m_isDocModified;
     /*!
      * flag for new file to existing file conversion
      */
@@ -974,17 +832,9 @@ private:
      */
     bool m_slideChangePossible;
     /*!
-     * Is document is currently being loaded
-     */
-    bool m_isLoading;
-    /*!
-     * pointer to preview button store
-     */
-    StoreButtonPreview *storeButtonPreview;
-    /*!
      * view number used while dbus session creation
      */
-    int viewNumber;
+    int m_viewNumber;
     /*!
      * Pointer to show notes button
      */
@@ -996,7 +846,7 @@ private:
     /*!
      * Pointer to notes dialog
      */
-    NotesDialog *notesDialog;
+    NotesDialog *m_notesDialog;
     /*!
      * Pointer to sliding motion dialog
      */
@@ -1007,30 +857,13 @@ private:
      */
     QToolBar *m_spreadEditToolBar;
 
-    DigitalSignatureDialog *digitalSignatureDialog;
+    DigitalSignatureDialog *m_digitalSignatureDialog;
 
 #ifdef Q_WS_MAEMO_5
-    FoDocumentRdf *foDocumentRdf;
+    FoDocumentRdf *m_foDocumentRdf;
 
-    QShortcut *rdfShortcut;
+    QShortcut *m_rdfShortcut;
 #endif
-signals:
-    /*!
-     * Presentation has entered full screen mode.
-     */
-    void presentationStarted();
-    /*!
-     * Presentation has exited from full screen mode.
-     */
-    void presentationStopped();
-    /*!
-     * Presentation has moved to the next slide.
-     */
-    void nextSlide();
-    /*!
-     * Presentation has moved to the previous slide.
-     */
-    void previousSlide();
 
  public slots:
     /*!
@@ -1050,6 +883,7 @@ signals:
      */
     void showCCP();
 
+private:
 };
 
 #endif // MAINWINDOW_H

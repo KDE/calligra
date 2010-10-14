@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef PREVIEWDIALOG_H
+#define PREVIEWDIALOG_H
 
 #include <QWidget>
 #include <QLabel>
@@ -36,14 +36,14 @@ class PreviewWindow : public QDialog
     Q_OBJECT
 
 public:
-    PreviewWindow(KoDocument *m_doc,KoView *m_view,int m_currentPage,QList <QPixmap> *thumbnailList);
+    PreviewWindow(KoDocument *doc, KoView *view, int currentPage, QList <QPixmap> *thumbnailList);
 
 public:
    /*!
     * Preview images of the slides will be shown on the pushbutton
     */
     QList<PreviewButton *> previewScreenButton;
-    QList <QPixmap> *thumbnailList;
+    QList <QPixmap> *m_thumbnailList;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
     KoDocument *m_doc;
@@ -90,42 +90,52 @@ signals:
    /*!
     * This signal is emitted whenever the thumbnail is clicked
     */
-    void gotoPage(int page);
+    void goToPage(int page);
 };
 
 class StoreButtonPreview : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StoreButtonPreview(KoDocument *m_doc,KoView *m_view,QWidget *parent = 0);
-public slots:
-    void showDialog(int m_currentPage);
-    void addThumbnail();
-public:
-    /*!
-     * list of thumbnails in the preview dialog
-     */
-    QList<QPixmap> thumbnailList;
-    /*!
-     * pointer to the main document
-     */
-    KoDocument *m_doc;
-    KoView *m_view;
-    /*!
-     * pointer to the preview dialog
-     */
-    PreviewWindow *previewWindow;
-    /*!
-     * falg to check whether preview dialog is open
-     */
-    bool isPreviewDialogActive;
+    StoreButtonPreview(KoDocument *doc, KoView *view, QWidget *parent = 0);
 
-    QTimer *timer;
+    QList<QPixmap> thumbnailList() const { return m_thumbnailList; }
+
+public slots:
+    void showDialog(int currentPage);
+    void addThumbnail();
+
 signals:
     /*!
      * signal emmited when user cick a preview
      */
-    void gotoPage(int page);
+    void goToPage(int page);
+
+private:
+    /*!
+     * list of thumbnails in the preview dialog
+     */
+    QList<QPixmap> m_thumbnailList;
+
+    /*!
+     * pointer to the main document
+     */
+    KoDocument *m_doc;
+
+    KoView *m_view;
+
+    /*!
+     * pointer to the preview dialog
+     */
+    PreviewWindow *m_previewWindow;
+
+    /*!
+     * falg to check whether preview dialog is open
+     */
+    bool m_isPreviewDialogActive;
+
+    QTimer m_timer;
+    int m_value;
 };
 
 #endif

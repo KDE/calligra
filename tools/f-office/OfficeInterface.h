@@ -42,8 +42,11 @@ public:
     // Asks the plugin to create it's view for the main program to use
     virtual QWidget *view() = 0;
 
-    // Should return the name of the plugin
+    // Should return the name of the plugin (not translated)
     virtual QString pluginName() = 0;
+
+    // Should return the translated title of the plugin
+    virtual QString pluginTitle() = 0;
 
     // Should return list of document types in presence of which this plugin
     // should be shown in the menubar.
