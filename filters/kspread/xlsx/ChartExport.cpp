@@ -746,7 +746,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
     if (!m_theme) return;
 
     const int patternOneIndexes[] = { 1, 9, 17, 25, 33 };
-    const int patternTwoIndexes[] = { 42, 26, 18, 10, 2 };
+    const int patternTwoIndexes[] = { 42, 34, 26, 18, 10, 2 };
     const int patternFourIndexes[] = { 41 };
     
     const int fadepatternOne[] = { 3, 11, 19, 27, 35, 43 };
@@ -761,7 +761,7 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
     const int rounds = dataNumber / 6;
     const int maxRounds = maxNumData / 6 + 1;
     QColor seriesColor;
-    if ( std::find( patternTwoIndexes, patternTwoIndexes + 5, styleID ) != patternTwoIndexes + 5 )
+    if ( std::find( patternTwoIndexes, patternTwoIndexes + 6, styleID ) != patternTwoIndexes + 6 )
     {
         const QString themeColorString = QString::fromLatin1( "accent%1" ).arg( ( dataNumber % 6 ) + 1 );
         
