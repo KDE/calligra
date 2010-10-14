@@ -241,6 +241,10 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
         // draw:fill-image-ref-point-x
         // draw:fill-image-ref-point-y
         // draw:fill-image-width
+        // draw:opacity
+        style.addProperty("draw:opacity",
+                          percent(100.0 * toQReal(ds.fillOpacity()) / 0x10000), gt);
+        // draw:opacity-name
     } else {
         style.addProperty("draw:fill", "none", gt);
     }
@@ -283,10 +287,6 @@ void ODrawToOdf::defineGraphicProperties(KoGenStyle& style, const DrawStyle& ds,
     // draw:measure-align
     // draw:measure-vertical-align
     // draw:ole-draw-aspect
-    // draw:opacity
-    style.addProperty("draw:opacity",
-                      percent(100.0 * toQReal(ds.fillOpacity()) / 0x10000), gt);
-    // draw:opacity-name
     // draw:parallel
     // draw:placing
     // draw:red

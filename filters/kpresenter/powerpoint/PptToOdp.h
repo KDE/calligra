@@ -40,6 +40,8 @@
 #include <QtGui/QColor>
 #include <QtCore/QDebug>
 
+class ODrawToOdf;
+
 /**
  * Converts PPT files to ODP files.
  * This internal class is there to separate the koconverter plugin interface
@@ -132,19 +134,18 @@ private:
                                    const PptTextPFRun& pf);
 
     /**
-     * @brief Extract data into the style
-     *
+     * Extract data into the drawing-page style
      * @param KoGenStyle
      * @param DrawStyle
      * @param KoGenStyles
+     * @param ODrawToOdf
      * @param pointer to a HeadersFootersAtom
-     * @param pointer to a MainMasterContainer or NotesContainer
-     * @param pointer to a SlideContainer or NotesContainer
+     * @param pointer to SlideFlags of presentation or notes slide
      */
     void defineDrawingPageStyle(KoGenStyle& style, const DrawStyle& ds, KoGenStyles& styles,
+                                ODrawToOdf& odrawtoodf,
                                 const MSO::HeadersFootersAtom* hf,
-                                const MSO::StreamOffset* master = NULL,
-                                const MSO::StreamOffset* common = NULL);
+                                const MSO::SlideFlags* sf = NULL);
 
     /**
      * Structure that influences all information that affects the style of a
@@ -462,8 +463,7 @@ private:
 
     const ParsedPresentation* p;
 
-    //Pointers to ppt specific information in case of a call from libmso.
-    //Avoid using these pointers in any other case.
+    //Pointers to ppt specific information, try to avoid using those.
     const MSO::SlideListWithTextSubContainerOrAtom* currentSlideTexts;
     const MSO::MasterOrSlideContainer* currentMaster;
     const MSO::SlideContainer* currentSlide;
