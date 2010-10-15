@@ -73,7 +73,7 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
     QListWidget::paintEvent(event);
 
     // Paint the line where the slide should go
-    bool before = true;
+    //bool before = true;
     int lastItemNumber = m_viewModeSlidesSorter->lastItemNumber();
     int currentItemNumber = lastItemNumber;
     /* The page is going to the beginning */
