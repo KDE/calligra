@@ -380,11 +380,25 @@ void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString, 
 //! @todo implement more styling;
 //!       use XlsxColorStyle::automatic, XlsxColorStyle::indexed, XlsxColorStyle::theme...
     const XlsxColorStyle* realBackgroundColor = this->realBackgroundColor( themes );
-    if (realBackgroundColor) {
-kDebug() << patternType << realBackgroundColor->value(themes).name()
-         << realBackgroundColor->tint << realBackgroundColor->isValid(themes);
-        if (realBackgroundColor->isValid(themes)) {
-            cellStyle->addProperty("fo:background-color", realBackgroundColor->value(themes).name());
+    if ( realBackgroundColor )
+    {
+        // This is necessary because excel switches the indexes of 0 - 1 and 2 - 3 for theme colorindexes
+        // looks like it has a different internal indexing table
+        // i found the info here : http://blogs.msdn.com/b/excel/archive/2007/11/16/chart-pattern-fills.aspx
+        // and verified it
+        XlsxColorStyle changedColor( *realBackgroundColor );
+        if ( changedColor.theme == 0 )
+            changedColor.theme = 1;
+        else if ( changedColor.theme == 1 )
+            changedColor.theme = 0;
+        else if ( changedColor.theme == 2 )
+            changedColor.theme = 3;
+        else if ( changedColor.theme == 3 )
+            changedColor.theme = 2;
+        kDebug() << patternType << changedColor.value(themes).name()
+                << changedColor.tint << changedColor.isValid(themes);
+        if (changedColor.isValid(themes)) {
+            cellStyle->addProperty("fo:background-color", changedColor.value(themes).name());
         }
     }
 }
@@ -520,8 +534,21 @@ void XlsxFontStyle::setupCellTextStyle(
 //!@ todo reenable this        cellStyle->addProperty("style:font-name", name, KoGenStyle::TextType);
         cellStyle->addProperty("fo:font-family", name, KoGenStyle::TextType);
     }
-    if (color.isValid(themes)) {
-        const QColor c(color.value(themes));
+    // This is necessary because excel switches the indexes of 0 - 1 and 2 - 3 for theme colorindexes
+    // looks like it has a different internal indexing table
+    // i found the info here : http://blogs.msdn.com/b/excel/archive/2007/11/16/chart-pattern-fills.aspx
+    // and verified it
+    XlsxColorStyle changedColor( color );
+    if ( changedColor.theme == 0 )
+        changedColor.theme = 1;
+    else if ( changedColor.theme == 1 )
+        changedColor.theme = 0;
+    else if ( changedColor.theme == 2 )
+        changedColor.theme = 3;
+    else if ( changedColor.theme == 3 )
+        changedColor.theme = 2;
+    else if (changedColor.isValid(themes)) {
+        const QColor c(changedColor.value(themes));
         cellStyle->addProperty("fo:color", c.name(), KoGenStyle::TextType);
     }
     //! @todo implement more styling

@@ -109,37 +109,33 @@ DrawingMLColorSchemeItem::DrawingMLColorSchemeItem()
 {
 }
 
-DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem(bool spreadMode)
-    : spreadsheetMode(spreadMode)
+DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 {
 }
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-    // In this mode we prefer last color
-    if (!spreadsheetMode) {
-        if (lastColor.isValid()) {
-            return lastColor;
-        }
+    
+    if (lastColor.isValid()) {
+        return lastColor;
     }
-
     //! 20.1.10.58 ST_SystemColorVal (System Color Value)
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
     {
-        if (!spreadsheetMode) {
+//         if (!spreadsheetMode) {
             return QPalette().color(QPalette::Active, QPalette::WindowText);
-        }
-        return QPalette().color(QPalette::Active, QPalette::Window);
+//         }
+//         return QPalette().color(QPalette::Active, QPalette::Window);
     }
     else if (    systemColor == QLatin1String("window")
               || systemColor == QLatin1String("menu")
               || systemColor == QLatin1String("menuBar"))
     {
-        if (!spreadsheetMode) {
+//         if (!spreadsheetMode) {
             return QPalette().color(QPalette::Active, QPalette::Window);
-        }
-        return QPalette().color(QPalette::Active, QPalette::WindowText);
+//         }
+//         return QPalette().color(QPalette::Active, QPalette::WindowText);
     }
     else if (systemColor == QLatin1String("highlightText")) {
         return QPalette().color(QPalette::Active, QPalette::HighlightedText);
@@ -161,9 +157,6 @@ QColor DrawingMLColorSchemeSystemItem::value() const
     }
     else if (systemColor == QLatin1String("btnShadow")) {
         return QPalette().color(QPalette::Active, QPalette::Dark);
-    }
-    if (lastColor.isValid()) {
-        return lastColor;
     }
 //! @todo Use more of systemColor
     return QColor(Qt::black); // TODO; better default?
@@ -271,7 +264,7 @@ DrawingMLTheme::DrawingMLTheme()
 MsooXmlThemesReaderContext::MsooXmlThemesReaderContext(DrawingMLTheme& t, MSOOXML::MsooXmlRelationships* rel,
         MSOOXML::MsooXmlImport* imp, QString pathName, QString fileName)
         : MsooXmlReaderContext()
-        , theme(&t), spreadMode(true), relationships(rel), import(imp), path(pathName), file(fileName)
+        , theme(&t), relationships(rel), import(imp), path(pathName), file(fileName)
 {
 }
 
@@ -299,7 +292,6 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read(MsooXmlReaderContext* conte
 {
     m_context = dynamic_cast<MsooXmlThemesReaderContext*>(context);
     Q_ASSERT(m_context);
-    m_spreadMode = m_context->spreadMode;
     m_import = m_context->import;
     m_path = m_context->path;
     m_file = m_context->file;
@@ -785,7 +777,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_srgbClr()
 */
 KoFilter::ConversionStatus MsooXmlThemesReader::read_sysClr()
 {
-    std::auto_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem(m_spreadMode));
+    std::auto_ptr<DrawingMLColorSchemeSystemItem> color(new DrawingMLColorSchemeSystemItem);
     m_currentColor = 0;
     READ_PROLOGUE
     const QXmlStreamAttributes attrs(attributes());
