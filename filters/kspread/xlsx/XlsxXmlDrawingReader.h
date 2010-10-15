@@ -129,7 +129,7 @@ private:
     XlsxDrawingObject *m_currentDrawingObject;
     XlsxDrawingObject::AnchorType m_anchorType;
     int m_chartNumber;
-    
+
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
 // #include <MsooXmlDrawingReaderTableMethods.h>
@@ -143,15 +143,11 @@ class XlsxXmlEmbeddedPicture
 {
 public:
     XlsxXmlEmbeddedPicture();
-    XlsxXmlEmbeddedPicture(const QString &filePath);
 
     bool saveXml(KoXmlWriter *xmlWriter);   // save the .xml part of the picture (the picture itself isn't stored here)
-    void setPath(QString &newPath);         // set the new path for the file
-    QString path();
+    void setImageXml(const QString imageXml);
 
-    qreal m_x, m_y, m_width, m_height;            // picture position and size in Pt
-    XlsxDrawingObject::Position m_fromCell, m_toCell; // picture position and size in cells (starting cell, ending cell)
-    QString m_path;                               // path to the embedded file
+    QString m_imageXml;                               // draw:image of the image
 };
 
 #endif

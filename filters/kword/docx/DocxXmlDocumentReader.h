@@ -140,6 +140,7 @@ protected:
     KoFilter::ConversionStatus read_lang();
     KoFilter::ConversionStatus read_background();
     KoFilter::ConversionStatus read_pBdr();
+    KoFilter::ConversionStatus read_bdr();
     KoFilter::ConversionStatus read_tbl();
     KoFilter::ConversionStatus read_tblPr();
     KoFilter::ConversionStatus read_tblGrid();
@@ -177,11 +178,6 @@ protected:
     KoFilter::ConversionStatus read_wrapTight();
     KoFilter::ConversionStatus read_wrapThrough();
 
-    // docx specifix read_graphics and read_graphics data methods to ensure that draw:frame is written correclty
-    KoFilter::ConversionStatus read_graphic2();
-    KoFilter::ConversionStatus read_graphicData2();
-    KoFilter::ConversionStatus read_chart2();
-
     bool m_createSectionStyle;
     QString m_currentSectionStyleName;
     bool m_createSectionToNext;
@@ -208,9 +204,15 @@ protected:
     //! It is reversed map, so detecting duplicates is easy in applyBorders().
     QMap<QString, BorderSide> m_borderStyles;
 
+    //! Same as above but for r element
+    QMap<QString, BorderSide> m_textBorderStyles;
+
     //! Used for setting up properties for pages and paragraphs.
     //! It is reversed map, so detecting duplicates is easy in applyBorders().
     QMap<QString, BorderSide> m_borderPaddings;
+
+    // ! Same as above but for border padding
+    QMap<QString, BorderSide> m_textBorderPaddings;
 
 private:
     void init();
@@ -236,7 +238,7 @@ private:
 
     //! Applies border styles and paddings obtained in readBorderElement()
     //! to style @a style (paragraph or page...)
-    void applyBorders(KoGenStyle *style);
+    void applyBorders(KoGenStyle *style, QMap<QString, BorderSide> sourceBorder, QMap<QString, BorderSide> sourcePadding);
 
     enum ComplexFieldCharType {
        NoComplexFieldCharType, HyperlinkComplexFieldCharType, ReferenceComplexFieldCharType,

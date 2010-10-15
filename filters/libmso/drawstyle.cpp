@@ -18,43 +18,50 @@
 */
 #include "drawstyle.h"
 
-namespace {
-const MSO::OfficeArtCOLORREF white() {
+namespace
+{
+const MSO::OfficeArtCOLORREF white()
+{
     MSO::OfficeArtCOLORREF w;
     w.red = w.green = w.blue = 0xFF;
     w.fPaletteIndex = w.fPaletteRGB = w.fSystemRGB = w.fSchemeIndex
-            = w.fSysIndex = false;
+                                      = w.fSysIndex = false;
     return w;
 }
 // The default value for this property is 0x20000000
-const MSO::OfficeArtCOLORREF crmodDefault() {
+const MSO::OfficeArtCOLORREF crmodDefault()
+{
     MSO::OfficeArtCOLORREF w;
     w.red = w.green = w.blue = 0x00;
     w.fPaletteIndex = w.fPaletteRGB = w.fSchemeIndex = w.fSysIndex = false;
     w.fSystemRGB = true;
     return w;
 }
-const MSO::OfficeArtCOLORREF black() {
+const MSO::OfficeArtCOLORREF black()
+{
     MSO::OfficeArtCOLORREF b;
     b.red = b.green = b.blue = 0;
     b.fPaletteIndex = b.fPaletteRGB = b.fSystemRGB = b.fSchemeIndex
-            = b.fSysIndex = false;
+                                      = b.fSysIndex = false;
     return b;
 }
-const MSO::OfficeArtCOLORREF gray() {
+const MSO::OfficeArtCOLORREF gray()
+{
     MSO::OfficeArtCOLORREF b;
     b.red = b.green = b.blue = 0x80;
     b.fPaletteIndex = b.fPaletteRGB = b.fSystemRGB = b.fSchemeIndex
-            = b.fSysIndex = false;
+                                      = b.fSysIndex = false;
     return b;
 }
-const MSO::FixedPoint one() {
+const MSO::FixedPoint one()
+{
     MSO::FixedPoint one;
     one.integral = 1;
     one.fractional = 0;
     return one;
 }
-const MSO::FixedPoint zero() {
+const MSO::FixedPoint zero()
+{
     MSO::FixedPoint zero;
     zero.integral = 0;
     zero.fractional = 0;
@@ -73,23 +80,23 @@ const MSO::FixedPoint zero() {
 }
 
 #define GETTER(TYPE, FOPT, NAME, DEFAULT) \
-TYPE DrawStyle::NAME() const \
-{ \
-    const MSO::FOPT* p = 0; \
-    if (sp) { \
-        p = get<MSO::FOPT>(*sp); \
-    } \
-    if (!p && mastersp) { \
-        p = get<MSO::FOPT>(*mastersp); \
-    } \
-    if (!p) { \
-        p = get<MSO::FOPT>(d); \
-    } \
-    if (p) { \
-        return p->NAME; \
-    } \
-    return DEFAULT; \
-}
+    TYPE DrawStyle::NAME() const \
+    { \
+        const MSO::FOPT* p = 0; \
+        if (sp) { \
+            p = get<MSO::FOPT>(*sp); \
+        } \
+        if (!p && mastersp) { \
+            p = get<MSO::FOPT>(*mastersp); \
+        } \
+        if (!p) { \
+            p = get<MSO::FOPT>(d); \
+        } \
+        if (p) { \
+            return p->NAME; \
+        } \
+        return DEFAULT; \
+    }
 
 //     TYPE                    FOPT                  NAME                  DEFAULT         ODRAW Ref
 GETTER(quint32,                FillType,             fillType,             0)              // 2.3.7.1
@@ -159,27 +166,27 @@ GETTER(quint32,                HspMaster,            hspMaster,            0) //
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
-bool DrawStyle::NAME() const \
-{ \
-    const MSO::FOPT* p = 0; \
-    if (sp) { \
-        p = get<MSO::FOPT>(*sp); \
+    bool DrawStyle::NAME() const \
+    { \
+        const MSO::FOPT* p = 0; \
+        if (sp) { \
+            p = get<MSO::FOPT>(*sp); \
+            if (p && p->TEST) { \
+                return p->NAME; \
+            } \
+        } \
+        if (mastersp) { \
+            p = get<MSO::FOPT>(*mastersp); \
+            if (p && p->TEST) { \
+                return p->NAME; \
+            } \
+        } \
+        p = get<MSO::FOPT>(d); \
         if (p && p->TEST) { \
             return p->NAME; \
         } \
-    } \
-    if (mastersp) { \
-        p = get<MSO::FOPT>(*mastersp); \
-        if (p && p->TEST) { \
-            return p->NAME; \
-        } \
-    } \
-    p = get<MSO::FOPT>(d); \
-    if (p && p->TEST) { \
-        return p->NAME; \
-    } \
-    return DEFAULT; \
-}
+        return DEFAULT; \
+    }
 // FOPT        NAME           TEST                       DEFAULT
 #define FOPT FillStyleBooleanProperties
 GETTER(fNoFillHitTest,        fUseNoFillHitTest,         false)
@@ -224,23 +231,23 @@ GETTER(fShadow,               fUsefShadow,               false)
 #undef FOPT
 
 #define COMPLEX(FOPT, NAME) \
-IMsoArray DrawStyle::NAME() const \
-{ \
-	IMsoArray a;\
-    if (sp) { \
-        a = getComplexData<MSO::FOPT>(*sp); \
+    IMsoArray DrawStyle::NAME() const \
+    { \
+        IMsoArray a;\
+        if (sp) { \
+            a = getComplexData<MSO::FOPT>(*sp); \
+            return a;\
+        } \
+        if (mastersp) { \
+            a = getComplexData<MSO::FOPT>(*mastersp); \
+            return a;\
+        } \
         return a;\
-    } \
-    if (mastersp) { \
-        a = getComplexData<MSO::FOPT>(*mastersp); \
-        return a;\
-    } \
-	return a;\
-}
-        //FOPT                //NAME
+    }
+//FOPT                //NAME
 COMPLEX(FillShadeColors,      fillShadeColors_complex)
 COMPLEX(PVertices,            pVertices_complex)
-COMPLEX(PSegmentInfo,		  pSegmentInfo_complex)
+COMPLEX(PSegmentInfo,         pSegmentInfo_complex)
 COMPLEX(PWrapPolygonVertices, pWrapPolygonVertices_complex)
 
 #undef COMPLEX

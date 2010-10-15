@@ -26,8 +26,9 @@
 
 #include <KoGenStyle.h>
 #include <KoListLevelProperties.h>
-#include <MsooXmlCommonReader.h>
 #include <QMap>
+
+#include "DocxXmlDocumentReader.h"
 
 //! A context structure for DocxXmlNumberingReader
 class DocxXmlNumberingReaderContext : public MSOOXML::MsooXmlReaderContext
@@ -36,7 +37,7 @@ public:
 };
 
 //! A class reading MSOOXML numbering markup - numbering.xml part.
-class DocxXmlNumberingReader : public MSOOXML::MsooXmlCommonReader
+class DocxXmlNumberingReader : public DocxXmlDocumentReader
 {
 public:
     explicit DocxXmlNumberingReader(KoOdfWriters *writers);
@@ -54,6 +55,8 @@ protected:
     KoFilter::ConversionStatus read_num();
     KoFilter::ConversionStatus read_abstractNumId();
     KoFilter::ConversionStatus read_lvlJc();
+    KoFilter::ConversionStatus read_lvlPicBulletId();
+    KoFilter::ConversionStatus read_numPicBullet();
 
     // Note we read pPr here for now because we are only interested in subset of pPr features
     // which can be used with lists.
@@ -65,6 +68,8 @@ protected:
     bool m_bulletStyle;
 
     QMap<QString, KoGenStyle> m_abstractListStyles;
+    QMap<QString, QString> m_picBulletPaths;
+    QMap<QString, QSize> m_picBulletSizes;
 
     QString m_bulletCharacter;
     QString m_bulletFont;

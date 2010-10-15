@@ -30,7 +30,8 @@
 
 using namespace MSO;
 
-namespace {
+namespace
+{
 enum {
     msosptMin = 0,
     msosptNotPrimitive = msosptMin,
@@ -1343,7 +1344,7 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
     } else if (shapeType == msosptNotPrimitive) {
         processNotPrimitive(o, out);
     } else if (shapeType == msosptNotchedCircularArrow) {
-    	processNotchedCircularArrow(o, out);
+        processNotchedCircularArrow(o, out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }
@@ -1356,7 +1357,7 @@ void ODrawToOdf::processStyleAndText(const MSO::OfficeArtSpContainer& o,
 }
 
 void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
-                                     Writer& out)
+                              Writer& out)
 {
     addGraphicStyleToDrawElement(out, o);
     out.xml.addAttribute("draw:layer", "layout");
@@ -1364,13 +1365,13 @@ void ODrawToOdf::processStyle(const MSO::OfficeArtSpContainer& o,
 }
 
 void ODrawToOdf::processText(const MSO::OfficeArtSpContainer& o,
-                                         Writer& out)
+                             Writer& out)
 {
     if (o.clientData && client && client->onlyClientData(*o.clientData)) {
         client->processClientData(*o.clientData, out);
     } else if (o.clientTextbox) {
         client->processClientTextBox(*o.clientTextbox,
-                                 o.clientData.data(), out);
+                                     o.clientData.data(), out);
     }
 }
 
@@ -1418,7 +1419,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
 
     out.xml.addAttribute("svg:width", client->formatPos(out.hLength(rect.width())));
     out.xml.addAttribute("svg:height", client->formatPos(out.vLength(rect.height())));
- 
+
     const Rotation* rotation = get<Rotation>(o);
     if (rotation) {
         static const QString transformString("rotate(%1) translate(%2 %3)");
@@ -1433,8 +1434,7 @@ void ODrawToOdf::set2dGeometry(const OfficeArtSpContainer& o, Writer& out)
         qreal newY = yPos + height/2 - sin(-angle)*width/2 - cos(-angle)*height/2;
 
         out.xml.addAttribute("draw:transform", transformString.arg(angle).arg(client->formatPos(newX)).arg(client->formatPos(newY)));
-    }
-    else {
+    } else {
         out.xml.addAttribute("svg:x", client->formatPos(out.hOffset(rect.x())));
         out.xml.addAttribute("svg:y", client->formatPos(out.vOffset(rect.y())));
     }
@@ -1468,7 +1468,7 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
             xArray.replace(0,step/2,_v.data.mid(offset, step/2));
             x = *(int*)xArray.data();
 
-           // y coordinate of this point
+            // y coordinate of this point
             yArray.replace(0,step/2,_v.data.mid(offset + step/2, step/2));
             y = *(int*)yArray.data();
 
@@ -1490,56 +1490,48 @@ void ODrawToOdf::setEnhancedGeometry(const MSO::OfficeArtSpContainer& o, Writer&
         }
 
         QString viewBox = QString::number(minX) + ' ' + QString::number(minY) + ' '
-                        + QString::number(maxX) + ' ' + QString::number(maxY);
+                          + QString::number(maxX) + ' ' + QString::number(maxY);
 
         // combine segmentationInfoData and verticePoints into enhanced-path string
         int verticesIndex = 0;
         QString enhancedPath;
         for (int i = 0; i < _c.nElems; i++) {
 
-            switch((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) //MSOPATHINFO.type
-            {
-            case 0: //msopathLineTo
-            {
+            switch ((((*(ushort *)(_c.data.data()+i*2)) >> 13) & 0x7)) { //MSOPATHINFO.type
+            case 0: { //msopathLineTo
                 enhancedPath = enhancedPath + "L " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex].y()) + ' ';
+                               + QString::number(verticesPoints[verticesIndex].y()) + ' ';
                 verticesIndex++;
                 break;
             }
-            case 1: // msopathCurveTo
-            {
+            case 1: { // msopathCurveTo
                 enhancedPath = enhancedPath + "C " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex].y()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex+1].x()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex+1].y()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex+2].x()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex+2].y()) + ' ';
+                               + QString::number(verticesPoints[verticesIndex].y()) + ' '
+                               + QString::number(verticesPoints[verticesIndex+1].x()) + ' '
+                               + QString::number(verticesPoints[verticesIndex+1].y()) + ' '
+                               + QString::number(verticesPoints[verticesIndex+2].x()) + ' '
+                               + QString::number(verticesPoints[verticesIndex+2].y()) + ' ';
                 verticesIndex = verticesIndex + 3;
                 break;
             }
-            case 2: // msopathMoveTo
-            {
+            case 2: { // msopathMoveTo
                 enhancedPath = enhancedPath + "M " + QString::number(verticesPoints[verticesIndex].x()) + ' '
-                                                   + QString::number(verticesPoints[verticesIndex].y()) + ' ';
+                               + QString::number(verticesPoints[verticesIndex].y()) + ' ';
                 verticesIndex++;
                 break;
             }
-            case 3: // msopathClose
-            {
+            case 3: { // msopathClose
                 enhancedPath = enhancedPath + "Z ";
                 break;
             }
-            case 4: // msopathEnd
-            {
+            case 4: { // msopathEnd
                 enhancedPath = enhancedPath + "N ";
                 break;
             }
-            case 5: // msopathEscape
-            {
+            case 5: { // msopathEscape
                 break;
             }
-            case 6: // msopathClientEscape
-            {
+            case 6: { // msopathClientEscape
                 break;
             }
             }

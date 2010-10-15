@@ -1088,7 +1088,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
         m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageName, KoGenStyle::DrawingPageType);
         if (m_context->type != SlideMaster) {
             if (!m_recentSourceName.isEmpty()) {
-                const QSize size(imageSize(m_recentSourceName));
+                QSize size;
+                m_context->import->imageSize(m_recentSourceName, size);
                 kDebug() << "SIZE:" << size;
                 if (size.isValid()) {
                     m_currentDrawStyle->addProperty("draw:fill-image-width",
@@ -1341,6 +1342,13 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 
     body = buffer.originalWriter();
     body->startElement("draw:frame");
+
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+    if (m_context->type == SlideMaster) {
+        mainStyles->markStyleForStylesXml(styleName);
+    }
+    body->addAttribute("draw:style-name", styleName);
+
     body->addAttribute("draw:name", m_cNvPrName);
     body->addAttribute("draw:layer", "layout");
     body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
@@ -1350,7 +1358,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 
     (void)buffer.releaseWriter();
 
-    body->endElement();
+    body->endElement(); // draw:frame
 
     READ_EPILOGUE
 }

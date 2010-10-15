@@ -2346,6 +2346,128 @@ void ProjectTester::resourceConflictMustFinishOn()
     QCOMPARE( task2->endTime(), task2->finishNotLater() );
 }
 
+void ProjectTester::fixedInterval()
+{
+    Project p;
+    p.setName( "P1" );
+    DateTime st = DateTime::fromString( "2010-10-20 08:00" );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Task *task1 = p.createTask( &p );
+    task1->setName( "T1" );
+    task1->setConstraint( Node::FixedInterval );
+    task1->setConstraintStartTime( DateTime::fromString( "2010-10-21 08:00" ) );
+    task1->setConstraintEndTime( DateTime::fromString( "2010-10-22 08:00" ) );
+    p.addTask( task1, &p );
+
+    QString s = "Schedule T1 Fixed interval -------";
+    qDebug()<<s;
+
+    ScheduleManager *sm = p.createScheduleManager( "T1 Fixed interval" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), task1->constraintStartTime() );
+    QCOMPARE( task1->endTime(), task1->constraintEndTime() );
+
+    s = "Schedule backward: T1 Fixed interval -------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+    Debug::printSchedulingLog( *sm, s );
+
+    QCOMPARE( task1->startTime(), task1->constraintStartTime() );
+    QCOMPARE( task1->endTime(), task1->constraintEndTime() );
+
+}
+
+void ProjectTester::estimateDuration()
+{
+    Project p;
+    p.setName( "P1" );
+    DateTime st = DateTime::fromString( "2010-10-20 08:00" );
+    p.setConstraintStartTime( st );
+    p.setConstraintEndTime( st.addDays( 5 ) );
+
+    Calendar *c = new Calendar("Test");
+    QTime t1(8,0,0);
+    int length = 8*60*60*1000; // 8 hours
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c->weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    }
+    p.addCalendar( c );
+    p.setDefaultCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    p.addResourceGroup( g );
+    Resource *r1 = new Resource();
+    r1->setName( "R1" );
+    p.addResource( g, r1 );
+
+    Task *task1 = p.createTask( &p );
+    task1->setName( "T1" );
+    task1->setConstraint( Node::ASAP );
+    p.addTask( task1, &p );
+
+    task1->estimate()->setType( Estimate::Type_Duration );
+    task1->estimate()->setUnit( Duration::Unit_h );
+    task1->estimate()->setExpectedEstimate( 10 );
+
+    QString s = "Schedule T1 Estimate type Duration -------";
+    qDebug()<<s;
+
+    ScheduleManager *sm = p.createScheduleManager( "T1 Duration" );
+    p.addScheduleManager( sm );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->startTime(), p.constraintStartTime() );
+    QCOMPARE( task1->endTime(), task1->startTime() + Duration( 0, 10, 0 ) );
+    
+    s = "Schedule backward: T1 Estimate type Duration -------";
+    qDebug()<<s;
+
+    sm->setSchedulingDirection( true );
+    sm->createSchedules();
+    p.calculate( *sm );
+
+    Debug::print( &p, s, true );
+
+    QCOMPARE( task1->endTime(), p.constraintEndTime() );
+    QCOMPARE( task1->startTime(), task1->endTime() - Duration( 0, 10, 0 ) );
+}
+
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::ProjectTester )

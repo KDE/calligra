@@ -1232,18 +1232,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_drawing()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
     if(!r_id.isEmpty() && !this->m_context->path.isEmpty()) {
-        //! @todo use MSOOXML::MsooXmlRelationships
+        QString drawingPathAndFile = m_context->relationships->target(m_context->path, m_context->file, r_id);
+        QString drawingPath, drawingFile;
+        MSOOXML::Utils::splitPathAndFile(drawingPathAndFile, &drawingPath, &drawingFile);
 
-        QString path = this->m_context->path;
-        const int pos = path.indexOf('/', 1);
-        if( pos > 0 ) path = path.left(pos);
-        path += "/drawings";
-        QString file = QString("drawing%1.xml").arg(++d->drawingNumber);
-        QString filepath = path + "/" + file;
-
-        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, m_context->sheet, path, file);
+        XlsxXmlDrawingReaderContext* context = new XlsxXmlDrawingReaderContext(m_context, m_context->sheet, drawingPath, drawingFile);
         XlsxXmlDrawingReader reader(this);
-        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, filepath, context);
+        const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(&reader, drawingPathAndFile, context);
         if (result != KoFilter::OK) {
             raiseError(reader.errorString());
             delete context;

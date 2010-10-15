@@ -73,7 +73,7 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::paintEvent( QPaintEvent* event )
     QListWidget::paintEvent(event);
 
     // Paint the line where the slide should go
-    bool before = true;
+    //bool before = true;
     int lastItemNumber = m_viewModeSlidesSorter->lastItemNumber();
     int currentItemNumber = lastItemNumber;
     /* The page is going to the beginning */
@@ -230,16 +230,12 @@ void KPrViewModeSlidesSorter::KPrSlidesSorter::dropEvent(QDropEvent* ev)
     }
 
     if (oldIndex != newIndex) {
-        if (newIndex <= 0) {
-            // First page
-            m_viewModeSlidesSorter->movePage(oldIndex, 0);
-            m_viewModeSlidesSorter->movePage(0, 1);
-        } else if (oldIndex > newIndex) {
+        if (oldIndex > newIndex) {
             m_viewModeSlidesSorter->movePage(oldIndex, newIndex - 1);
         } else {
-            // Nominal case
             m_viewModeSlidesSorter->movePage(oldIndex, newIndex);
         }
+
         QListWidgetItem *sourceItem = takeItem(oldIndex);
         insertItem(newIndex, sourceItem);
         // This selection helps the user
@@ -308,10 +304,14 @@ void KPrViewModeSlidesSorter::movePage(int pageNumber, int pageAfterNumber)
     KoPAPageBase * page = 0;
     KoPAPageBase * pageAfter = 0;
 
-    page = m_view->kopaDocument()->pageByIndex(pageNumber,false);
-    pageAfter = m_view->kopaDocument()->pageByIndex(pageAfterNumber,false);
+    if (pageNumber >= 0) {
+        page = m_view->kopaDocument()->pageByIndex(pageNumber,false);
+    }
+    if (pageAfterNumber >= 0) {
+        pageAfter = m_view->kopaDocument()->pageByIndex(pageAfterNumber,false);
+    }
 
-    if (page && pageAfter) {
+    if (page) {
         KoPAPageMoveCommand *command = new KoPAPageMoveCommand( m_view->kopaDocument(), page, pageAfter );
         m_view->kopaDocument()->addCommand( command );
     }

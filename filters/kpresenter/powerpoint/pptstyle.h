@@ -38,6 +38,7 @@ public:
                           quint32 start = 0);
 
     quint16 level() const { return level_; }
+    bool isList() const;
 
     // TextPFException
     bool fHasBullet() const;

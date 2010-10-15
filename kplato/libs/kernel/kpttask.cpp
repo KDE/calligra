@@ -1340,6 +1340,9 @@ DateTime Task::calculateLateStart(int use) {
                     cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
                 }
                 m_durationBackward = m_constraintEndTime - m_constraintStartTime;
+                if ( cs->lateFinish > m_constraintEndTime ) {
+                    m_durationBackward = cs->lateFinish - m_constraintStartTime;
+                }
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = m_constraintStartTime;
                     cs->endTime = m_constraintEndTime;

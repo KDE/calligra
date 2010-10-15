@@ -223,7 +223,7 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     m->setProject( project );
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
-    map.insert( "resources", fm );
+    map.insert( "resources", sf );
 
     fm = new FlatProxyModel( parent );
     m = new CostBreakdownItemModel( fm );

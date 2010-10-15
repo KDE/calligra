@@ -395,8 +395,8 @@ void AllocTable::setChain(std::vector<unsigned long> chain)
 // TODO: optimize this with better search
 static bool already_exist(const std::vector<unsigned long>& chain, unsigned long item)
 {
-    for(unsigned i = 0; i < chain.size(); i++)
-        if(chain[i] == item) return true;
+    for (unsigned i = 0; i < chain.size(); i++)
+        if (chain[i] == item) return true;
     return false;
 }
 
@@ -689,7 +689,7 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         e.next = readU32(buffer + 0x48 + p);
         e.child = readU32(buffer + 0x4C + p);
         e.dir = (type != 2);
-        
+
         // sanity checks
         if ((type != 2) && (type != 1) && (type != 5)) e.valid = false;
         if (name_len < 1) e.valid = false;

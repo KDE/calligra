@@ -136,14 +136,15 @@ const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
                                   quint32 textType, quint16 level)
 {
     const TextMasterStyleAtom* ms = 0;
+    //Tx_TYPE_CENTERTITLE so let's inherit from Tx_TYPE_TITLE
     if (textType == 6) {
-        // inherit from Tx_TYPE_TITLE
         ms = getTextMasterStyleAtom(m, 0);
-    } else if (textType == 4 || textType == 5 || textType == 7
-               || textType == 8) {
-        // inherit from Tx_TYPE_BODY
+    }
+    //those are placeholder shapes so let's inherit from Tx_TYPE_BODY
+    else if (textType == 5 || textType == 7 || textType == 8) {
         ms = getTextMasterStyleAtom(m, 1);
     }
+    //NOTE: Tx_TYPE_NOTES and Tx_TYPE_OTHER do not inherit
     return getTextMasterStyleLevel(ms, level);
 }
 const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
@@ -395,9 +396,12 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
     *pfs = 0;
     addStyle(pfs, (pfrun) ?&pfrun->pf :0);
+    //check the main master/title master slide's TextMasterStyleAtom
     addStyle(pfs, getLevelPF(m, tc, level));
     addStyle(pfs, getBaseLevelPF(m, tc, level));
+    //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
     addStyle(pfs, getDefaultLevelPF(d, level));
+    //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
     addStyle(pfs, getDefaultPF(d));
 
     *pf9s = 0;
@@ -410,9 +414,10 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     // active, 1 is lowest list level, 5 is the highest list level
 //     level_ = (level || fHasBullet()) ?level + 1 :0;
 
-    //NOTE: the previous assumption is not true, there are cases when
-    //(indentLevel == 1 && fHasBullet == false).  We might add the
-    //corresponding indent for the pragraph instead of using a list.
+    //NOTE: The previous assumption is not true, there are cases when
+    //(indentLevel == 1 && fHasBullet == false).  We should interpret this text
+    //as content of a paragraph with corresponding indentLevel, thus avoid
+    //placing it into a text:list element.
     level_ = level;
 }
 PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
@@ -443,12 +448,12 @@ TYPE PptTextPFRun::NAME() const \
     } \
     return DEFAULT; \
 }
-
 //     TYPE      PARENT       PRE NAME             TEST            DEFAULT
+GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      false)
+GETTER(bool,     bulletFlags->,,  fBulletHasFont,  bulletHasFont,  false)
+GETTER(bool,     bulletFlags->,,  fBulletHasColor, bulletHasColor, false)
+GETTER(bool,     bulletFlags->,,  fBulletHasSize,  bulletHasSize,  false)
 GETTER(qint16,   ,             ,  bulletChar,      bulletChar,     0)
-GETTER(quint16,  ,             ,  bulletFontRef,   bulletFont,     0)
-GETTER(qint16,   ,             ,  bulletSize,      bulletSize,     0)
-GETTER(ColorIndexStruct,,      *, bulletColor,     bulletColor,    ColorIndexStruct())
 GETTER(quint16,  ,             ,  textAlignment,   align,          0)
 GETTER(qint16,   ,             ,  lineSpacing,     lineSpacing,    0)
 GETTER(qint16,   ,             ,  spaceBefore,     spaceBefore,    0)
@@ -464,24 +469,24 @@ GETTER(bool,     wrapFlags->,  ,  overflow,        overflow,       false)
 GETTER(quint16,  ,             ,  textDirection,   textDirection,  0)
 #undef GETTER
 
-#define GETTER(TYPE, NAME, DEFAULT) \
+#define GETTER(TYPE, PRE, NAME, TEST, VALID, DEFAULT) \
 TYPE PptTextPFRun::NAME() const \
 { \
     const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
-        if ((*p)->bulletFlags) { \
-            return (*p)->bulletFlags->NAME; \
+        if ((*p)->masks.TEST) { \
+	    if ((*p)->bulletFlags && (*p)->VALID) { \
+                return PRE (*p)->NAME; \
+            } \
         } \
         ++p; \
     } \
     return DEFAULT; \
 }
-
-//     TYPE    NAME             DEFAULT
-GETTER(bool,   fHasBullet,      false)
-GETTER(bool,   fBulletHasFont,  false)
-GETTER(bool,   fBulletHasColor, false)
-GETTER(bool,   fBulletHasSize,  false)
+//     TYPE             PRE NAME             TEST         VALIDITY TEST                 DEFAULT
+GETTER(quint16,          ,  bulletFontRef,   bulletFont,  bulletFlags->fBulletHasFont,  0)
+GETTER(qint16,           ,  bulletSize,      bulletSize,  bulletFlags->fBulletHasSize,  0)
+GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, bulletFlags->fBulletHasColor, ColorIndexStruct())
 #undef GETTER
 
 qint32 PptTextPFRun::bulletBlipRef() const {
@@ -523,6 +528,14 @@ qint16 PptTextPFRun::startNum() const {
         ++p;
     }
     return 1;
+}
+
+bool PptTextPFRun::isList() const {
+    bool ret = false;
+    if (fHasBullet() || fBulletHasAutoNumber() || (bulletBlipRef() != 65535)) {
+        ret = true;
+    }
+    return ret;
 }
 
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \

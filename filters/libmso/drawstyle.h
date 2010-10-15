@@ -22,16 +22,18 @@
 
 #include "generated/simpleParser.h"
 
-class IMsoArray {
+class IMsoArray
+{
 public:
-	quint16 nElems;
-	quint16 nElemsAlloc;
-	quint16 cbElem;
-	QByteArray data;
-	IMsoArray () :nElems(0), nElemsAlloc(0), cbElem(0) {}
+    quint16 nElems;
+    quint16 nElemsAlloc;
+    quint16 cbElem;
+    QByteArray data;
+    IMsoArray () :nElems(0), nElemsAlloc(0), cbElem(0) {}
 };
 
-class DrawStyle {
+class DrawStyle
+{
 private:
     const MSO::OfficeArtDggContainer& d;
     const MSO::OfficeArtSpContainer* mastersp;
@@ -40,7 +42,7 @@ public:
     explicit DrawStyle(const MSO::OfficeArtDggContainer& d_,
                        const MSO::OfficeArtSpContainer* mastersp_ = 0,
                        const MSO::OfficeArtSpContainer* sp_ = 0)
-        : d(d_), mastersp(mastersp_), sp(sp_) {}
+            : d(d_), mastersp(mastersp_), sp(sp_) {}
 
     // Shape property set
     quint32 hspMaster() const;
@@ -121,7 +123,7 @@ public:
     MSO::FixedPoint fillOriginY() const;
     MSO::FixedPoint fillShapeOriginX() const;
     MSO::FixedPoint fillShapeOriginY() const;
-/*     MSO::MSOSHADETYPE fillShadeType() const; */
+    /*     MSO::MSOSHADETYPE fillShadeType() const; */
     MSO::OfficeArtCOLORREF fillColorExt() const;
     MSO::OfficeArtCOLORREF fillBackColorExt() const;
     // FillStyleBooleanProperties
@@ -158,7 +160,7 @@ public:
     qint32 shadowOffsetY() const;
     // ShadowStyleBooleanProperties
     bool fShadowObscured() const;
-    bool fShadow() const;  
+    bool fShadow() const;
     // Text property set
     qint32 txflTextFlow() const;
     qint32 dxTextLeft() const;
@@ -248,19 +250,18 @@ get(const T* o)
  *
  * @p b must have a member fopt that is an array of type OfficeArtFOPTEChoice.
  * A is the type of the required option.  The option containers in PPT/DOC have
- * only one instance of each option in an option container.
+ * only one instance of each option in an osption container.
  *
  * @param b class that contains options.
- * @return pointer to an array storing the complex data or NULL if there were
- * no complex data or the option of type A at all.
+ * @return IMsoArray storing complex data
  */
 template <typename A, typename B>
 IMsoArray
 getComplexData(const B& b)
 {
     MSO::OfficeArtFOPTE* p = NULL;
-	IMsoArray a;
-	const char* pData = b.complexData.data();
+    IMsoArray a;
+    const char* pData = b.complexData.data();
     uint offset = 0;
 
     foreach(const MSO::OfficeArtFOPTEChoice& _c, b.fopt) {
@@ -270,30 +271,27 @@ getComplexData(const B& b)
             // there is wrong offset inside PVertices
             if (_c.anon.is<MSO::PVertices>()) {
                 if (_c.anon.get<A>()) {
-                	if (b.complexData.size() - offset >= 6) {
-                    	a.nElems = *(quint16 *)(pData + offset);
-                    	a.nElemsAlloc = *(quint16 *)(pData + offset +2);
-                    	a.cbElem = *(quint16 *)(pData + offset + 4);
-                    	a.data = b.complexData.mid(offset+6, p->op);
+                    if (b.complexData.size() - offset >= 6) {
+                        a.nElems = *(quint16 *)(pData + offset);
+                        a.nElemsAlloc = *(quint16 *)(pData + offset +2);
+                        a.cbElem = *(quint16 *)(pData + offset + 4);
+                        a.data = b.complexData.mid(offset+6, p->op);
                         break;
-                	}
+                    }
+                } else {
+                    offset += p->op +6;
                 }
-                else {
-                offset += p->op +6;
-                }
-            }
-            else {
+            } else {
                 if (_c.anon.get<A>()) {
-                	if (b.complexData.size() - offset >= 6) {
-                    	a.nElems = *(quint16 *)(pData + offset);
-                    	a.nElemsAlloc = *(quint16 *)(pData + offset +2);
-                    	a.cbElem = *(quint16 *)(pData + offset + 4);
-                    	a.data = b.complexData.mid(offset+6, p->op-6);
+                    if (b.complexData.size() - offset >= 6) {
+                        a.nElems = *(quint16 *)(pData + offset);
+                        a.nElemsAlloc = *(quint16 *)(pData + offset +2);
+                        a.cbElem = *(quint16 *)(pData + offset + 4);
+                        a.data = b.complexData.mid(offset+6, p->op-6);
                         break;
-                	}
-                }
-                else {
-                offset += p->op;
+                    }
+                } else {
+                    offset += p->op;
                 }
             }
         }
@@ -308,15 +306,13 @@ getComplexData(const B& b)
  *
  * @param o OfficeArtSpContainer instance which contains options.
 
- * @return pointer to an array storing the complex data or NULL if there were
- * no complex data or the option of type A at all.  The caller takes the
- * ownership of the array reference.
+ * @return IMsoArray storing complex data
  */
 template <typename A>
 IMsoArray
 getComplexData(const MSO::OfficeArtSpContainer& o)
 {
-	IMsoArray a;
+    IMsoArray a;
     if (o.shapePrimaryOptions) a = getComplexData<A>(*o.shapePrimaryOptions);
     if (!a.data.size() && o.shapeSecondaryOptions1) a = getComplexData<A>(*o.shapeSecondaryOptions1);
     if (!a.data.size() && o.shapeSecondaryOptions2) a = getComplexData<A>(*o.shapeSecondaryOptions2);

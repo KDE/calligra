@@ -1267,8 +1267,13 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_ODF(const QString& 
     return value; // the original is OK
 }
 
-MSOOXML_EXPORT QString Utils::rgbColor(const QString& color)
+MSOOXML_EXPORT QString Utils::rgbColor(QString color)
 {
+    // It is possible that color is eg #abcdef [adddd], this removes the extra end
+    if (color.indexOf(' ') > 0) {
+        color = color.left(color.indexOf(' '));
+    }
+
     QString newColor;
     if (color == "red") {
         newColor = "#ff0000";
@@ -1367,7 +1372,7 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
         if (m_startValue != 0) {
-            returnValue += QString("style:start-value=\"%1\" ").arg(m_startValue);
+            returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         }
         ending = "</text:list-level-style-number>";
     }

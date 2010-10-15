@@ -1175,7 +1175,7 @@ void KWordGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     //check for user edited wrap points
     if (ds.fEditedWrap()) {
         QString points;
-        IMsoArray _v = ds.fillShadeColors_complex();
+        IMsoArray _v = ds.pWrapPolygonVertices_complex();
         if (_v.data.size()) {
             //_v.data is an array of POINTs, MS-ODRAW, page 89
             QByteArray a, a2;

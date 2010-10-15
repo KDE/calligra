@@ -26,9 +26,11 @@
 class DrawStyle;
 class QColor;
 
-class ODrawToOdf {
+class ODrawToOdf
+{
 public:
-    class Client {
+    class Client
+    {
     public:
         virtual ~Client() {}
         /**
@@ -61,8 +63,8 @@ public:
          * or 'chart'.
          **/
         virtual KoGenStyle createGraphicStyle(
-                const MSO::OfficeArtClientTextBox* ct,
-                const MSO::OfficeArtClientData* cd, Writer& out) = 0;
+            const MSO::OfficeArtClientTextBox* ct,
+            const MSO::OfficeArtClientData* cd, Writer& out) = 0;
         /**
          * Add text properties to the style.
          * Host application specific style properties are added. These
@@ -70,20 +72,20 @@ public:
          * or style:text-properties.
          **/
         virtual void addTextStyles(
-                const MSO::OfficeArtClientTextBox* clientTextbox,
-                const MSO::OfficeArtClientData* clientData,
-                Writer& out, KoGenStyle& style) = 0;
+            const MSO::OfficeArtClientTextBox* clientTextbox,
+            const MSO::OfficeArtClientData* clientData,
+            Writer& out, KoGenStyle& style) = 0;
         /**
          * Retrieve the OfficeArtDggContainer that contains global information
          * relating to the drawings.
          **/
         virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() = 0;
 
-	/**
-	 * Retrieve the OfficeArtSpContainer of the master shape. 
-	 * @param spid identifier of the master shape.
-	 **/
-	virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
+        /**
+         * Retrieve the OfficeArtSpContainer of the master shape.
+         * @param spid identifier of the master shape.
+         **/
+        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
 
         /**
          * Convert the OfficeArtCOLORREF to a QColor.

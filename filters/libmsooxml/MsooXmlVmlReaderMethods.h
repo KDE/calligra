@@ -45,6 +45,7 @@ protected:
     KoFilter::ConversionStatus read_imagedata();
     KoFilter::ConversionStatus read_textbox();
     KoFilter::ConversionStatus read_group();
+    KoFilter::ConversionStatus read_stroke();
 
     void createFrameStart();
     KoFilter::ConversionStatus createFrameEnd();
@@ -80,6 +81,7 @@ protected:
     QString m_currentShapeId; //!< set in read_shape()
 
     QString m_strokeColor; // stroke color
+    qreal m_strokeWidth; // stroke width
 
     bool m_outputFrames; // Whether read_shape should output something to shape
 

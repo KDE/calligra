@@ -20,7 +20,6 @@
 
 #include "kexidragobjects.h"
 
-#include <q3cstring.h>
 #include <qdatastream.h>
 //Added by qt3to4:
 #include <QDragMoveEvent>
@@ -139,7 +138,6 @@ KexiDataProviderDrag::canDecode(QDragMoveEvent *e)
 bool
 KexiDataProviderDrag::decode(QDropEvent* e, QString& sourceMimeType, QString& sourceName)
 {
-    Q3CString tmp;
     QByteArray payload = e->encodedData("kexidataprovider");
     if (payload.size()) {
         e->accept();

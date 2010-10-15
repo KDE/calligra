@@ -83,7 +83,7 @@ public:
     Size of the image is returned in @a size.
     @return KoFilter::OK on success.
     On failure @a errorMessage is set. */
-    KoFilter::ConversionStatus imageSize(const QString& sourceName, QSize* size);
+    KoFilter::ConversionStatus imageSize(const QString& sourceName, QSize& size);
 
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
@@ -150,9 +150,11 @@ private:
 
     //! Content types from m_appXML: tagName -> content mapping
     QMap<QString, QVariant> m_documentProperties;
-    
+
     //! XML with document contents, typically /word/document.xml
     KoXmlDocument m_documentXML;
+
+    QMap<QString, QSize> m_imageSizes; //!< collects image sizes to avoid multiple checks
 };
 
 } // namespace MSOOXML

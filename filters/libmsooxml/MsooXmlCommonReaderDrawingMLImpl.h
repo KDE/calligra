@@ -90,21 +90,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::copyFile(const QString& source
     return KoFilter::OK;
 }
 
-QSize MSOOXML_CURRENT_CLASS::imageSize(const QString& sourceName)
-{
-    const QMap<QString, QSize>::ConstIterator it(m_imageSizes.constFind(sourceName));
-    if (it == m_imageSizes.constEnd()) {
-        QSize size;
-        const KoFilter::ConversionStatus status = m_context->import->imageSize(sourceName, &size);
-        if (status != KoFilter::OK)
-            size = QSize(-1, -1);
-        m_imageSizes.insert(sourceName, size);
-        return size;
-    }
-    return it.value();
-}
-
-
 // ================================================================
 // DrawingML tags
 // ================================================================
@@ -161,10 +146,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     // Reset picture properties
     m_xlinkHref.clear();
-    m_hasPosOffsetH = false;
-    m_hasPosOffsetV = false;
-    m_posOffsetH = 0;
-    m_posOffsetV = 0;
     m_cNvPrId.clear();
     m_cNvPrName.clear();
     m_cNvPrDescr.clear();
@@ -174,8 +155,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_rot = 0;
     m_isPlaceHolder = false;
 
+#ifndef DOCXXMLDOCREADER_H
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+#endif
 
     while (!atEnd()) {
         readNext();
@@ -201,6 +184,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 #endif
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    QBuffer picBuf;
+    KoXmlWriter picWriter(&picBuf);
+    KoXmlWriter *bodyBackup = body;
+    body = &picWriter;
+#endif
+
+#ifndef DOCXXMLDOCREADER_H
     body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -217,41 +208,36 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawStyle->addAttribute("style:fill", constNone);
     }
 
-#ifdef DOCXXMLDOCREADER_H
-    //QString currentDrawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
-#endif
-#if defined(DOCXXMLDOCREADER_H)
-    //kDebug() << "currentDrawStyleName:" << currentDrawStyleName;
-    //body->addAttribute("draw:style-name", currentDrawStyleName);
-#endif
-
-//! @todo CASE #1341: images within w:hdr should be anchored as paragraph (!wp:inline) or as-char (wp:inline)
-    if (m_drawing_inline) {
-        body->addAttribute("text:anchor-type", "as-char");
-    }
-    else {
-        body->addAttribute("text:anchor-type", "char");
-    }
-    if (!m_docPrName.isEmpty()) { // from docPr/@name
-        body->addAttribute("draw:name", m_docPrName);
-    }
-//! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
-    int realX = m_svgX;
-    int realY = m_svgY;
-    if (m_hasPosOffsetH) {
-        kDebug() << "m_posOffsetH" << m_posOffsetH;
-        realX += m_posOffsetH;
-    }
-    if (m_hasPosOffsetV) {
-        kDebug() << "m_posOffsetV" << m_posOffsetV;
-        realY += m_posOffsetV;
-    }
     if (m_rot == 0) {
-        body->addAttribute("svg:x", EMU_TO_CM_STRING(realX));
-        body->addAttribute("svg:y", EMU_TO_CM_STRING(realY));
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {  // if we got 'from' cell
+        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_col > 0) {
+            body->addAttributePt("svg:x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_colOff));
+            body->addAttributePt("svg:y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_rowOff));
+        }
+        else {
+            body->addAttribute("svg:x", EMU_TO_POINT(m_svgX));
+            body->addAttribute("svg:y", EMU_TO_POINT(m_svgY));
+        }
+        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col > 0) {
+            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
+                QString::number(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_row+1));
+            body->addAttributePt("table:end-x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_colOff));
+            body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
+        }
     }
-    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+
+#else
+        body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+        body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+#endif
+    }
+    if (m_svgWidth > 0) {
+        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+    }
+    if (m_svgHeight > 0) {
+        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+    }
 
     if (m_rot != 0) {
         // m_rot is in 1/60,000th of a degree
@@ -262,13 +248,22 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         body->addAttribute("draw:transform", rotString);
     }
 
+    // Add style information
+    //! @todo: horizontal-on-{odd,even}?
+    const QString mirror(mirrorToOdf(m_flipH, m_flipV));
+    if (!mirror.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:mirror", mirror);
+    }
+
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
     body->addAttribute("draw:style-name", styleName);
+#endif
 
     // Now it's time to link to the actual picture.  Only do it if
     // there is an image to link to.  If so, this was created in
@@ -283,6 +278,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         //! @todo xlink:actuate?
         body->addAttribute("xlink:actuate", "onLoad");
         body->endElement(); //draw:image
+
 #ifdef DOCXXMLDOCREADER_H
         if (!m_cNvPrName.isEmpty() || !m_cNvPrDescr.isEmpty()) {
             body->startElement("svg:title");
@@ -293,14 +289,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_xlinkHref.clear();
     }
 
-    // Add style information
-    //! @todo: horizontal-on-{odd,even}?
-    const QString mirror(mirrorToOdf(m_flipH, m_flipV));
-    if (!mirror.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:mirror", mirror);
-    }
-
+#ifndef DOCXXMLDOCREADER_H
     body->endElement(); //draw:frame
+#endif
 
 #ifdef PPTXXMLSLIDEREADER_H
     if (m_context->type == SlideLayout) {
@@ -312,7 +303,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 #endif
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        body = bodyBackup;
+
+        XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture;
+        picture->setImageXml(QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size()));
+        m_currentDrawingObject->setPicture(picture);
+#endif
+
+#ifndef DOCXXMLDOCREADER_H
     popCurrentDrawStyle();
+#endif
 
     READ_EPILOGUE
 }
@@ -1157,7 +1158,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
         }
         body = bodyBackup;
-    }    
+    }
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
     body = bodyBackup;
 #endif
@@ -2493,31 +2494,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
                                                                   m_context->file, r_embed));
         kDebug() << "sourceName:" << sourceName;
 
-        m_imageSize = imageSize(sourceName);
+        m_context->import->imageSize(sourceName, m_imageSize);
 
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-#if defined(XLSXXMLDRAWINGREADER_CPP)
-        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-        if(m_context->import->copyFile(sourceName, destinationName, false) == KoFilter::OK) {
-            XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(destinationName);
-            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {  // if we got 'from' cell
-                picture->m_fromCell = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor]; // store the starting cell
-                if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {   // if we got 'to' cell
-                    picture->m_toCell = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor]; // store the ending cell
-                }
-            }
-            m_currentDrawingObject->setPicture(picture);
-        }
-#else
         QString destinationName;
+
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
         addManifestEntryForFile(destinationName);
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
-#endif
     }
 
     // Read child elements
@@ -2786,6 +2774,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphic()
 {
     READ_PROLOGUE
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);

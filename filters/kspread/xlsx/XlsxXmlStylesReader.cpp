@@ -159,7 +159,7 @@ kDebug() << colorItemBase;
     return QColor();
 }
 
-QColor XlsxColorStyle::value(const /*QMap<QString,*/ MSOOXML::DrawingMLTheme/**>*/ *themes) const
+QColor XlsxColorStyle::value(const MSOOXML::DrawingMLTheme *themes) const
 {
     QColor realColor;
 kDebug() << "theme:" << theme;
@@ -172,7 +172,6 @@ kDebug() << "in theme found:" << realColor.name();
 kDebug() << "rgb found:" << realColor.name();
     }
 
-    //themes->value(theme);
     return tintedColor(realColor, tint);
 }
 
@@ -183,8 +182,29 @@ KoFilter::ConversionStatus XlsxColorStyle::readAttributes(
     QString indexedStr;
     TRY_READ_ATTR_WITHOUT_NS_INTO(indexed, indexedStr)
     STRING_TO_INT(indexedStr, indexed, QLatin1String(debugElement) + "@indexed")
-//! @todo handle indexed
-    rgb = readRgbAttribute(attrs);
+    // This is default array of colors from MS
+    // TODO: Move to class in case something tries to override a value or two?
+    const char* indexedArray[64] = {
+        "000000", "FFFFFF", "FF0000", "00FF00", "0000FF",
+        "FFFF00", "FF00FF", "00FFFF", "000000", "FFFFFF",
+        "FF0000", "00FF00", "0000FF", "FFFF00", "FF00FF",
+        "00FFFF", "800000", "008000", "000080", "808000",
+        "800080", "008080", "C0C0C0", "808080", "9999FF",
+        "993366", "FFFFCC", "CCFFFF", "660066", "FF8080",
+        "0066CC", "CCCCFF", "000080", "FF00FF", "FFFF00",
+        "00FFFF", "800080", "800000", "008080", "0000FF",
+        "00CCFF", "CCFFFF", "CCFFCC", "FFFF99", "99CCFF",
+        "FF99CC", "CC99FF", "FFCC99", "3366FF", "33CCCC",
+        "99CC00", "FFCC00", "FF9900", "FF6600", "666699",
+        "969696", "003366", "339966", "003300", "333300",
+        "993300", "993366", "333399", "333333"
+    };
+    if (indexed >= 0 && indexed < 64) {
+        rgb = QString("#%1").arg(indexedArray[indexed]);
+    }
+    else {
+        rgb = readRgbAttribute(attrs);
+    }
     tint = readTintAttribute(attrs, debugElement);
     QString themeStr;
     TRY_READ_ATTR_WITHOUT_NS_INTO(theme, themeStr)
@@ -380,11 +400,25 @@ void XlsxFillStyle::setupCellStyle(KoGenStyle* cellStyle, const /*QMap<QString, 
 //! @todo implement more styling;
 //!       use XlsxColorStyle::automatic, XlsxColorStyle::indexed, XlsxColorStyle::theme...
     const XlsxColorStyle* realBackgroundColor = this->realBackgroundColor( themes );
-    if (realBackgroundColor) {
-kDebug() << patternType << realBackgroundColor->value(themes).name()
-         << realBackgroundColor->tint << realBackgroundColor->isValid(themes);
-        if (realBackgroundColor->isValid(themes)) {
-            cellStyle->addProperty("fo:background-color", realBackgroundColor->value(themes).name());
+    if ( realBackgroundColor )
+    {
+        // This is necessary because excel switches the indexes of 0 - 1 and 2 - 3 for theme colorindexes
+        // looks like it has a different internal indexing table
+        // i found the info here : http://blogs.msdn.com/b/excel/archive/2007/11/16/chart-pattern-fills.aspx
+        // and verified it
+        XlsxColorStyle changedColor( *realBackgroundColor );
+        if ( changedColor.theme == 0 )
+            changedColor.theme = 1;
+        else if ( changedColor.theme == 1 )
+            changedColor.theme = 0;
+        else if ( changedColor.theme == 2 )
+            changedColor.theme = 3;
+        else if ( changedColor.theme == 3 )
+            changedColor.theme = 2;
+        kDebug() << patternType << changedColor.value(themes).name()
+                << changedColor.tint << changedColor.isValid(themes);
+        if (changedColor.isValid(themes)) {
+            cellStyle->addProperty("fo:background-color", changedColor.value(themes).name());
         }
     }
 }
@@ -520,8 +554,21 @@ void XlsxFontStyle::setupCellTextStyle(
 //!@ todo reenable this        cellStyle->addProperty("style:font-name", name, KoGenStyle::TextType);
         cellStyle->addProperty("fo:font-family", name, KoGenStyle::TextType);
     }
-    if (color.isValid(themes)) {
-        const QColor c(color.value(themes));
+    // This is necessary because excel switches the indexes of 0 - 1 and 2 - 3 for theme colorindexes
+    // looks like it has a different internal indexing table
+    // i found the info here : http://blogs.msdn.com/b/excel/archive/2007/11/16/chart-pattern-fills.aspx
+    // and verified it
+    XlsxColorStyle changedColor( color );
+    if ( changedColor.theme == 0 )
+        changedColor.theme = 1;
+    else if ( changedColor.theme == 1 )
+        changedColor.theme = 0;
+    else if ( changedColor.theme == 2 )
+        changedColor.theme = 3;
+    else if ( changedColor.theme == 3 )
+        changedColor.theme = 2;
+    else if (changedColor.isValid(themes)) {
+        const QColor c(changedColor.value(themes));
         cellStyle->addProperty("fo:color", c.name(), KoGenStyle::TextType);
     }
     //! @todo implement more styling
@@ -1685,10 +1732,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_bgColor()
     const QXmlStreamAttributes attrs(attributes());
     RETURN_IF_ERROR( m_currentFillStyle->bgColor.readAttributes(attrs, "bgColor") )
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1713,10 +1757,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_fgColor()
     const QXmlStreamAttributes attrs(attributes());
     RETURN_IF_ERROR( m_currentFillStyle->fgColor.readAttributes(attrs, "fgColor") )
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
