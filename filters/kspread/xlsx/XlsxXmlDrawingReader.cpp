@@ -86,7 +86,7 @@ KoXmlWriter* XlsxDrawingObject::setShape(XlsxShape* shape)
 {
     m_type = Shape;
     m_shape = shape;
-    
+
     delete m_shapeBody;
     m_shapeBody = new KoXmlWriter(new QBuffer);
     return m_shapeBody;
@@ -461,7 +461,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
        delete context;
        return dataReaderResult;
     }
-    
+
     // then read the layout definition
     MSOOXML::MsooXmlDiagramReader layoutReader(this);
     const KoFilter::ConversionStatus layoutReaderResult = m_context->import->loadAndParseDocument(&layoutReader, layoutfile, context);
@@ -470,76 +470,27 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_diagram()
        delete context;
        return layoutReaderResult;
     }
-    
+
     m_context->diagrams << context;
 #endif
     return KoFilter::OK;
 }
 
 XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture()
-    : m_x(0.0)
-    , m_y(0.0)
-    , m_width(0.0)
-    , m_height(0.0)
 {
 
 }
 
-XlsxXmlEmbeddedPicture::XlsxXmlEmbeddedPicture(const QString &filePath)
-    : m_x(0.0)
-    , m_y(0.0)
-    , m_width(0.0)
-    , m_height(0.0)
+void XlsxXmlEmbeddedPicture::setImageXml(const QString imageXml)
 {
-    m_path = filePath;
+   m_imageXml = imageXml;
 }
 
 bool XlsxXmlEmbeddedPicture::saveXml(KoXmlWriter *xmlWriter)   // save all needed attributes to .ods
 {
-    xmlWriter->startElement("draw:frame");
+    xmlWriter->addCompleteElement(m_imageXml.toUtf8());
 
-    if (m_fromCell.m_col > 0) {
-        xmlWriter->addAttributePt("svg:x", EMU_TO_POINT(m_fromCell.m_colOff));
-        xmlWriter->addAttributePt("svg:y", EMU_TO_POINT(m_fromCell.m_rowOff));
-    } else {
-        xmlWriter->addAttributePt("svg:x", m_x);
-        xmlWriter->addAttributePt("svg:y", m_y);
-    }
-
-    // use width and height only if they are non-zero
-    if (m_width > 0) {
-        xmlWriter->addAttributePt("svg:width", m_width);
-    }
-    if (m_height > 0) {
-        xmlWriter->addAttributePt("svg:height", m_height);
-    }
-
-    if (m_toCell.m_col > 0) {
-        xmlWriter->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_toCell.m_col+1) + QString::number(m_toCell.m_row+1));
-        xmlWriter->addAttributePt("table:end-x", EMU_TO_POINT(m_toCell.m_colOff));
-        xmlWriter->addAttributePt("table:end-y", EMU_TO_POINT(m_toCell.m_rowOff));
-    }
-
-    xmlWriter->startElement("draw:image");
-
-    xmlWriter->addAttribute("xlink:href", m_path);
-    xmlWriter->addAttribute("xlink:type", "simple");
-    xmlWriter->addAttribute("xlink:show", "embed");
-    xmlWriter->addAttribute("xlink:actuate", "onLoad");
-
-    xmlWriter->endElement(); // draw:object
-    xmlWriter->endElement(); // draw:frame
     return true;
-}
-
-QString XlsxXmlEmbeddedPicture::path()
-{
-    return m_path;
-}
-
-void XlsxXmlEmbeddedPicture::setPath(QString &newPath)
-{
-    m_path = newPath;
 }
 
 // in PPTX we do not have pPr, so p@text:style-name should be added earlier

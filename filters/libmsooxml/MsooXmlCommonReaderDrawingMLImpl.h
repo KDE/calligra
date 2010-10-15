@@ -184,6 +184,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 #endif
 
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    QBuffer picBuf;
+    KoXmlWriter picWriter(&picBuf);
+    KoXmlWriter *bodyBackup = body;
+    body = &picWriter;
+#endif
+
 #ifndef DOCXXMLDOCREADER_H
     body->startElement("draw:frame"); // CASE #P421
 #ifdef PPTXXMLSLIDEREADER_H
@@ -202,11 +209,35 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     }
 
     if (m_rot == 0) {
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+    if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {  // if we got 'from' cell
+        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_col > 0) {
+            body->addAttributePt("svg:x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_colOff));
+            body->addAttributePt("svg:y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_rowOff));
+        }
+        else {
+            body->addAttribute("svg:x", EMU_TO_POINT(m_svgX));
+            body->addAttribute("svg:y", EMU_TO_POINT(m_svgY));
+        }
+        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col > 0) {
+            body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
+                QString::number(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_row+1));
+            body->addAttributePt("table:end-x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_colOff));
+            body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
+        }
+    }
+
+#else
         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+#endif
     }
-    body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
-    body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+    if (m_svgWidth > 0) {
+        body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+    }
+    if (m_svgHeight > 0) {
+        body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+    }
 
     if (m_rot != 0) {
         // m_rot is in 1/60,000th of a degree
@@ -247,6 +278,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         //! @todo xlink:actuate?
         body->addAttribute("xlink:actuate", "onLoad");
         body->endElement(); //draw:image
+
 #ifdef DOCXXMLDOCREADER_H
         if (!m_cNvPrName.isEmpty() || !m_cNvPrDescr.isEmpty()) {
             body->startElement("svg:title");
@@ -269,6 +301,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
         body = bodyBackup;
     }
+#endif
+
+#if defined(XLSXXMLDRAWINGREADER_CPP)
+        body = bodyBackup;
+
+        XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture;
+        picture->setImageXml(QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size()));
+        m_currentDrawingObject->setPicture(picture);
 #endif
 
 #ifndef DOCXXMLDOCREADER_H
@@ -1118,7 +1158,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
         }
         body = bodyBackup;
-    }    
+    }
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
     body = bodyBackup;
 #endif
@@ -2459,26 +2499,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         if (sourceName.isEmpty()) {
             return KoFilter::FileNotFound;
         }
-#if defined(XLSXXMLDRAWINGREADER_CPP)
-        QString destinationName = QLatin1String("Pictures/") + sourceName.mid(sourceName.lastIndexOf('/') + 1);;
-        if(m_context->import->copyFile(sourceName, destinationName, false) == KoFilter::OK) {
-            XlsxXmlEmbeddedPicture *picture = new XlsxXmlEmbeddedPicture(destinationName);
-            if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {  // if we got 'from' cell
-                picture->m_fromCell = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor]; // store the starting cell
-                if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::ToAnchor)) {   // if we got 'to' cell
-                    picture->m_toCell = m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor]; // store the ending cell
-                }
-            }
-            m_currentDrawingObject->setPicture(picture);
-        }
-#else
         QString destinationName;
+
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
         addManifestEntryForFile(destinationName);
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
-#endif
     }
 
     // Read child elements
