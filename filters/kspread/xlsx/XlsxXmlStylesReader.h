@@ -50,7 +50,7 @@ public:
 
     //! @return value of this color style; for computing rgb, indexed, tint and theme attributes are used
 //! @todo use indexed
-    QColor value(const /*QMap<QString, */MSOOXML::DrawingMLTheme/**>*/ *themes) const;
+    QColor value(const MSOOXML::DrawingMLTheme *themes) const;
 
     KoFilter::ConversionStatus readAttributes(const QXmlStreamAttributes& attrs, const char* debugElement);
 
