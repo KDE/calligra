@@ -1,8 +1,16 @@
 [Desktop Entry]
 Icon=curious_penguin
 Name=Curious Penguin
+Name[pt]=Pinguim Curioso
+Name[pt_BR]=Pinguim curioso
+Name[sv]=Nyfiken pingvin
+Name[uk]=Допитливий пінгвін
 Name[x-test]=xxCurious Penguinxx
 Comment=Curious Penguin
+Comment[pt]=Pinguim Curioso
+Comment[pt_BR]=Pinguim curioso
+Comment[sv]=Nyfiken pingvin
+Comment[uk]=Допитливий пінгвін
 Comment[x-test]=xxCurious Penguinxx
 Type=Link
 URL=.source/curious_penguin.otp

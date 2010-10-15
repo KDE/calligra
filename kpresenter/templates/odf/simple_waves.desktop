@@ -1,8 +1,16 @@
 [Desktop Entry]
 Icon=simple_waves
 Name=Simple Waves
+Name[pt]=Ondas Simples
+Name[pt_BR]=Ondas simples
+Name[sv]=Enkla vågor
+Name[uk]=Прості хвилі
 Name[x-test]=xxSimple Wavesxx
 Comment=Simple Waves
+Comment[pt]=Ondas Simples
+Comment[pt_BR]=Ondas simples
+Comment[sv]=Enkla vågor
+Comment[uk]=Прості хвилі
 Comment[x-test]=xxSimple Wavesxx
 Type=Link
 URL=.source/simple_waves.otp

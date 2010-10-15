@@ -1,8 +1,16 @@
 [Desktop Entry]
 Icon=blue_orange_vector
 Name=Blue Orange Vector
+Name[pt]=Vector Azul-Laranja
+Name[pt_BR]=Vetor azul-laranja
+Name[sv]=Blåorange vektor
+Name[uk]=Синьо-помаранчевий векторний
 Name[x-test]=xxBlue Orange Vectorxx
 Comment=Blue Orange Vector
+Comment[pt]=Vector Azul-Laranja
+Comment[pt_BR]=Vetor azul-laranja
+Comment[sv]=Blåorange vektor
+Comment[uk]=Синьо-помаранчевий векторний
 Comment[x-test]=xxBlue Orange Vectorxx
 Type=Link
 URL=.source/blue_orange_vector.otp
