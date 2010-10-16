@@ -117,6 +117,18 @@
   <!--<Action name="border_color"/> Can't do that while we're sharing the action with paragraphs-->
   <Action name="border_backgroundcolor"/>
  </Menu>
+ <Menu name="tables"><text>Tables</text>
+  <Menu name="semantic_object_menu"><text>Insert</text>
+    <Action name="insert_tablerow_above"/>
+    <Action name="insert_tablerow_below"/>
+    <Action name="insert_tablecolumn_left"/>
+    <Action name="insert_tablecolumn_right"/>
+  </Menu>
+  <Menu name="semantic_object_menu"><text>Delete</text>
+    <Action name="delete_tablerow"/>
+    <Action name="delete_tablecolumn"/>
+  </Menu>
+ </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
   <Menu name="SpellCheck"><text>Spellcheck</text>
       <Action name="tool_auto_spellcheck"/>
