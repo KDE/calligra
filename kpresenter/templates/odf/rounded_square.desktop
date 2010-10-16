@@ -1,12 +1,14 @@
 [Desktop Entry]
 Icon=rounded_square
 Name=Rounded Square
+Name[it]=Quadrato smussato
 Name[pt]=Quadrado Arredondado
 Name[pt_BR]=Quadrado arredondado
 Name[sv]=Rundad fyrkant
 Name[uk]=Заокруглений квадрат
 Name[x-test]=xxRounded Squarexx
 Comment=Rounded Square
+Comment[it]=Quadrato smussato
 Comment[pt]=Quadrado Arredondado
 Comment[pt_BR]=Quadrado arredondado
 Comment[sv]=Rundad fyrkant
