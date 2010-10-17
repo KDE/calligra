@@ -849,6 +849,8 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     // connect on creation of the embedded editor
     action->setIconText(i18n("Permute fixation"));
     action->setToolTip(i18n("Permute the fixation of the reference at the text cursor"));
+
+    setTextMode(true);
 }
 
 CellToolBase::~CellToolBase()
@@ -879,11 +881,6 @@ void CellToolBase::paintReferenceSelection(QPainter &painter, const QRectF &pain
 void CellToolBase::paintSelection(QPainter &painter, const QRectF &paintRect)
 {
     d->paintSelection(painter, paintRect);
-}
-
-bool CellToolBase::isInTextMode() const
-{
-    return true;
 }
 
 void CellToolBase::mousePressEvent(KoPointerEvent* event)

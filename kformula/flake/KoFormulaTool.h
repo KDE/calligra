@@ -72,8 +72,6 @@ public:
     /// Reset the cursor
     void resetFormulaEditor();
 
-    bool isInTextMode() const;
-
 public slots:
     /// Called when this tool instance is activated and fills m_formulaShape
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
