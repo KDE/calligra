@@ -121,7 +121,7 @@
 // ui
 #include "ui/CellView.h"
 #include "ui/Selection.h"
-#include "ui/SheetView.h"
+#include "ui/PixmapCachingSheetView.h"
 #include "ui/RightToLeftPaintingStrategy.h"
 
 #define MIN_SIZE 10
@@ -264,7 +264,7 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
 {
     if (!d->sheetViews.contains(sheet)) {
         kDebug(36004) << "Creating SheetView for" << sheet->sheetName();
-        d->sheetViews.insert(sheet, new SheetView(sheet));
+        d->sheetViews.insert(sheet, new PixmapCachingSheetView(sheet));
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
         connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                 this, SLOT(setDocumentSize(const QSizeF&)));
