@@ -1924,7 +1924,10 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
 
     m_currentSeries->m_domainValuesCellRangeAddress << tempBubbleSeriesData->m_yVal.writeRefToInternalTable(this);
     
-    m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_bubbleSize.writeRefToInternalTable(this);
+    if ( tempBubbleSeriesData->m_bubbleSize.m_numRef.m_f.isEmpty() )
+        m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_bubbleSize.writeLitToInternalTable(this);
+    else
+        m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_bubbleSize.writeRefToInternalTable(this);
     
 
 //    m_currentSeries->m_domainValuesCellRangeAddress.push_back(tempBubbleSeriesData->m_xVal.writeRefToInternalTable(this));
@@ -2926,7 +2929,7 @@ QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > 
         return QString();
 
     //create range where to place the data
-    QString range("local-table.");
+    QString range("local");
     Charting::InternalTable *internalTable = &m_context->m_chart->m_internalTable;
 
     range += "!$" + columnName(internalTable->maxColumn()+1) +"$" + "1" + ":$" + columnName(internalTable->maxColumn()+1) +
