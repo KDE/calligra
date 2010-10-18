@@ -733,10 +733,12 @@ void CanvasBase::showToolTip(const QPoint& p)
                              yOffset()), ypos);
 
     Cell cell = Cell(sheet, col, row).masterCell();
-    CellView cellView = sheetView(sheet)->cellView(cell.column(), cell.row());
+    const CellView& baseCellView = sheetView(sheet)->cellView(cell.column(), cell.row());
+    const CellView& cellView = baseCellView.isObscured()
+               ? sheetView(sheet)->cellView(baseCellView.obscuringCell().x(), baseCellView.obscuringCell().y())
+               : baseCellView;
     if (cellView.isObscured()) {
         cell = Cell(sheet, cellView.obscuringCell());
-        cellView = sheetView(sheet)->cellView(cellView.obscuringCell().x(), cellView.obscuringCell().y());
     }
 
     // displayed tool tip, which has the following priorities:

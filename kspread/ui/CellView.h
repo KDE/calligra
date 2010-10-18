@@ -64,8 +64,7 @@ class KSPREAD_EXPORT CellView
 
 public:
     CellView(SheetView* sheetView, int col, int row);
-    CellView(const CellView& other);
-    ~CellView();
+    virtual ~CellView();
 
     enum Border {
         NoBorder     = 0x0,
@@ -162,13 +161,12 @@ public:
     qreal cellWidth() const;
 
     bool dimensionFits() const;
-
-    /**
-     * Assignment.
-     */
-    CellView& operator=(const CellView&);
-
 private:
+    /* no assignment or copy */
+    CellView& operator=(const CellView&);
+    CellView(const CellView& other);
+
+protected:
     /**
      * \ingroup Layout
      * Calculates the layout of the cell.

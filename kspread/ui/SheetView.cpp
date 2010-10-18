@@ -49,7 +49,7 @@ public:
 
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells);
-    CellView cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
+    const CellView& cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
                                SheetView* sheetView);
 };
 
@@ -79,12 +79,12 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
     return cell;
 }
 
-CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
+const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
         QSet<Cell>& processedObscuredCells, SheetView* sheetView)
 {
     const int col = cell.column();
     const int row = cell.row();
-    CellView cellView = sheetView->cellView(col, row);
+    const CellView& cellView = sheetView->cellView(col, row);
     if (cellView.isObscured()) {
         // if the rect of visible cells contains the obscuring cell, it was already painted
         if (visibleRect.contains(cellView.obscuringCell())) {
@@ -105,7 +105,7 @@ CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormat(r)->height());
         // use the CellView of the obscuring cell
-        cellView = sheetView->cellView(cell.column(), cell.row());
+        return sheetView->cellView(cell.column(), cell.row());
     }
     return cellView;
 }
@@ -263,7 +263,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             if (!cell)
                 continue;
             // figure out, which CellView to use (may be one for an obscuring cell)
-            CellView cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
+            const CellView& cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
             if (!cell)
                 continue;
             cellView.paintCellBackground(painter, coordinate);
@@ -295,7 +295,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             if (!cell)
                 continue;
             // figure out, which CellView to use (may be one for an obscuring cell)
-            CellView cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
+            const CellView& cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
             if (!cell)
                 continue;
             cellView.paintCellContents(paintRect, painter, coordinate, cell, this);
@@ -320,7 +320,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
                 continue;
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
-            CellView cellView = this->cellView(col, row);
+            const CellView& cellView = this->cellView(col, row);
             cellView.paintDefaultBorders(painter, paintRect, coordinate,
                                          CellView::LeftBorder | CellView::RightBorder |
                                          CellView::TopBorder | CellView::BottomBorder,
@@ -344,7 +344,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
                 continue;
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
-            CellView cellView = this->cellView(col, row);
+            const CellView& cellView = this->cellView(col, row);
             cellView.paintCellBorders(paintRect, painter, coordinate,
                                       d->visibleRect,
                                       Cell(sheet(), col, row), this);
@@ -364,7 +364,7 @@ void SheetView::invalidateRange(const QRect& range)
         for (int row = range.top(); row <= bottom; ++row) {
             if (!d->cache.contains(QPoint(col, row)))
                 continue;
-            const CellView cellView = this->cellView(col, row);
+            const CellView& cellView = this->cellView(col, row);
             if (cellView.obscuresCells()) {
                 // First, delete the obscuring CellView; otherwise: recursion.
                 d->cache.remove(QPoint(col, row));

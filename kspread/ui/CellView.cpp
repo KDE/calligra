@@ -261,15 +261,11 @@ CellView::CellView(SheetView* sheetView, int col, int row)
     if (cell.isFormula() && sheet->getShowFormula() && !(sheet->isProtected() && d->style.hideFormula()))
         d->style.setHAlign(Style::Left);
 
+
     // figure out what border each side of the cell has
     d->calculateCellBorders(cell, sheetView);
 
     makeLayout(sheetView, cell);
-}
-
-CellView::CellView(const CellView& other)
-        : d(other.d)
-{
 }
 
 CellView::~CellView()
@@ -2010,13 +2006,6 @@ bool CellView::dimensionFits() const
 {
     return d->fittingHeight && d->fittingWidth;
 }
-
-CellView& CellView::operator=(const CellView & other)
-{
-    d = other.d;
-    return *this;
-}
-
 
 void CellView::Private::checkForFilterButton(const Cell& cell)
 {

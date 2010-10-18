@@ -946,7 +946,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
         SheetView* const sheetView = this->sheetView(selection()->activeSheet());
 
         QString url;
-        const CellView cellView = sheetView->cellView(col, row);
+        const CellView& cellView = sheetView->cellView(col, row);
         if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
             url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
         } else {
@@ -1210,7 +1210,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 
             // Hyperlink hit.
             QString url;
-            const CellView cellView = sheetView->cellView(col, row);
+            const CellView& cellView = sheetView->cellView(col, row);
             if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
                 url = cellView.testAnchor(sheetView, cell, cell.width() - position.x() + xpos, position.y() - ypos);
             } else {
@@ -3420,7 +3420,7 @@ void CellToolBase::listChoosePopupMenu()
     double tx = selection()->activeSheet()->columnPosition(selection()->marker().x());
     double ty = selection()->activeSheet()->rowPosition(selection()->marker().y());
     double h = cursorCell.height();
-    const CellView cellView = sheetView(selection()->activeSheet())->cellView(selection()->marker().x(), selection()->marker().y());
+    const CellView& cellView = sheetView(selection()->activeSheet())->cellView(selection()->marker().x(), selection()->marker().y());
     if (cellView.obscuresCells()) {
         h = cellView.cellHeight();
     }
