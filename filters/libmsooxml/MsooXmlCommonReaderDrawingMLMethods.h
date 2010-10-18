@@ -148,11 +148,11 @@ QString m_shapeTextLeftOff;
 QString m_shapeTextRightOff;
 
 bool m_listStylePropertiesAltered;
+bool m_previousListWasAltered;
 
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
 KoFilter::ConversionStatus read_buNone();
-QString m_bulletFont; // set by buFont;
 KoFilter::ConversionStatus read_buFont();
 KoFilter::ConversionStatus read_buAutoNum();
 KoFilter::ConversionStatus lvlHelper(const QString& level);

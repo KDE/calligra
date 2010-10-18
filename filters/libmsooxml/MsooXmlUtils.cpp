@@ -1364,6 +1364,21 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPictureSize(const QSize
     m_pictureSize = size;
 }
 
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
+{
+    m_bulletFont = font;
+}
+
+MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletChar() const
+{
+    return m_bulletChar;
+}
+
+MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletFont() const
+{
+    return m_bulletFont;
+}
+
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
 {
     QString returnValue;
