@@ -4,6 +4,8 @@
 set(desktop_FILES
     burning_desire.desktop
     flood_light.desktop
+    simple_waves.desktop
+    rounded_square.desktop
     skyline_monotone.desktop
     skyline_monotone_wide.desktop
     skyline_morning.desktop
@@ -15,6 +17,8 @@ set(desktop_FILES
 set(otp_FILES
     burning_desire.otp
     flood_light.otp
+    rounded_square.otp
+    simple_waves.otp
     skyline_monotone.otp
     skyline_monotone_wide.otp
     skyline_morning.otp
