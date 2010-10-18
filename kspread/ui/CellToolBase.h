@@ -72,7 +72,6 @@ public:
     void paintReferenceSelection(QPainter &painter, const QRectF &paintRect);
     void paintSelection(QPainter &painter, const QRectF &paintRect);
 
-    bool isInTextMode() const;
     virtual void mousePressEvent(KoPointerEvent* event);
     virtual void mouseMoveEvent(KoPointerEvent* event);
     virtual void mouseReleaseEvent(KoPointerEvent* event);

@@ -59,6 +59,7 @@ KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoToolBase( canvas ),
 {
     m_signalMapper = new QSignalMapper(this);
     setupActions();
+    setTextMode(true);
 }
 
 KoFormulaTool::~KoFormulaTool()
@@ -359,11 +360,6 @@ void KoFormulaTool::resetFormulaEditor() {
     if ( !m_formulaEditor->cursor().isAccepted() ) {
         m_formulaEditor->cursor().move(MoveRight);
     }
-}
-
-bool KoFormulaTool::isInTextMode() const
-{
-    return true;
 }
 
 void KoFormulaTool::loadFormula()
