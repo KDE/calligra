@@ -119,7 +119,7 @@ SheetView::SheetView(const Sheet* sheet)
     d->viewConverter = 0;
     d->visibleRect = QRect(1, 1, 0, 0);
     d->cache.setMaxCost(10000);
-    d->defaultCellView = new CellView(this);
+    d->defaultCellView = createDefaultCellView();
     d->accessedCellRange =  sheet->usedArea().size().expandedTo(QSize(256, 256));
 }
 
@@ -151,7 +151,7 @@ const CellView& SheetView::cellView(int col, int row)
     Q_ASSERT(1 <= col && col <= KS_colMax);
     Q_ASSERT(1 <= row && col <= KS_rowMax);
     if (!d->cache.contains(QPoint(col, row))) {
-        d->cache.insert(QPoint(col, row), new CellView(this, col, row));
+        d->cache.insert(QPoint(col, row), createCellView(col, row));
         d->cachedArea += QRect(col, row, 1, 1);
     }
     return *d->cache.object(QPoint(col, row));
@@ -180,7 +180,7 @@ void SheetView::invalidateRegion(const Region& region)
 void SheetView::invalidate()
 {
     delete d->defaultCellView;
-    d->defaultCellView = new CellView(this);
+    d->defaultCellView = createDefaultCellView();
     d->cache.clear();
     d->cachedArea = QRegion();
 }
@@ -410,6 +410,16 @@ void SheetView::updateAccessedCellRange(const QPoint& location)
         const double height = sheet()->rowPosition(row) + sheet()->rowFormat(row)->height();
         emit visibleSizeChanged(QSizeF(width, height));
     }
+}
+
+CellView* SheetView::createDefaultCellView()
+{
+    return new CellView(this);
+}
+
+CellView* SheetView::createCellView(int col, int row)
+{
+    return new CellView(this, col, row);
 }
 
 #include "SheetView.moc"

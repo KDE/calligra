@@ -112,6 +112,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void visibleSizeChanged(const QSizeF&);
 
+protected:
+    virtual CellView* createDefaultCellView();
+    virtual CellView* createCellView(int col, int row);
 private:
     /**
      * Helper method for invalidateRegion().
