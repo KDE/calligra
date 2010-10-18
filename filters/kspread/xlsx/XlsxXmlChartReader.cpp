@@ -1920,9 +1920,12 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
     // set data ranges and write data to internal table
     m_currentSeries->m_labelCell = tempBubbleSeriesData->m_tx.writeRefToInternalTable(this);
 
-    m_currentSeries->m_countYValues = tempBubbleSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
+    m_currentSeries->m_countYValues = tempBubbleSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;    
 
-    m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_yVal.writeRefToInternalTable(this);
+    m_currentSeries->m_domainValuesCellRangeAddress << tempBubbleSeriesData->m_yVal.writeRefToInternalTable(this);
+    
+    m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_bubbleSize.writeRefToInternalTable(this);
+    
 
 //    m_currentSeries->m_domainValuesCellRangeAddress.push_back(tempBubbleSeriesData->m_xVal.writeRefToInternalTable(this));
 //
