@@ -1678,14 +1678,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             // Making sure that if we were previously in a list and if there's an empty line, that
             // we don't output a bullet to it
             m_currentListLevel = 0;
-            m_lstStyleFound = false;
         }
         else if (m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
             m_currentListLevel = 0;
-            m_lstStyleFound = false;
-        }
-        else {
-            m_lstStyleFound = true;
         }
 
         // In MSOffice it's possible that a paragraph defines a list-style that should be used without
@@ -1765,7 +1760,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                  body->endElement(); // text:list
              }
              m_prevListLevel = m_currentListLevel = 0;
-             m_lstStyleFound = false;
          } else {
              m_prevListLevel = m_currentListLevel;
          }
@@ -2112,6 +2106,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentListLevel = lvl.toInt() + 1;
     }
 
+    m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
+
 #ifdef PPTXXMLSLIDEREADER_H
     inheritDefaultParagraphStyle(m_currentParagraphStyle);
     inheritParagraphStyle(m_currentParagraphStyle);
@@ -2173,7 +2169,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     if (m_bulletFont == "Wingdings") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
         m_currentBulletProperties.setBulletChar("-");
     }
@@ -4269,7 +4264,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
         m_currentBulletProperties.setBulletChar("-");
-        m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
     }
 
@@ -4445,7 +4439,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
     if (!m_xlinkHref.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_xlinkHref);
         m_currentBulletProperties.setPictureSize(m_imageSize);
-        m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
     }
 
@@ -4478,7 +4471,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     if (attrs.hasAttribute("char")) {
         m_currentBulletProperties.setBulletChar(attrs.value("char").toString());
         // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
-        m_lstStyleFound = true;
     }
 
     m_listStylePropertiesAltered = true;
@@ -4814,7 +4806,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
-    m_lstStyleFound = true;
     m_currentBulletProperties.setBulletChar("");
     m_listStylePropertiesAltered = true;
     readNext();
@@ -4847,7 +4838,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
     TRY_READ_ATTR_WITHOUT_NS(type)
 
     if (!type.isEmpty()) {
-        m_lstStyleFound = true;
         if (type == "arabicPeriod") {
             m_currentBulletProperties.setSuffix(".");
             m_currentBulletProperties.setNumFormat("1");
@@ -5189,7 +5179,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
 {
     READ_PROLOGUE2(DrawingML_txBody)
 
-    m_lstStyleFound = false;
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;

@@ -604,6 +604,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     READ_PROLOGUE
 
     d->phType = "body";
+    inheritListStyles();
 
     while (!atEnd()) {
         readNext();
@@ -744,6 +745,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     READ_PROLOGUE
 
     d->phType = "title";
+    inheritListStyles();
 
     while (!atEnd()) {
         readNext();
@@ -795,6 +797,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     READ_PROLOGUE
 
     d->phType = "other";
+    inheritListStyles();
 
     while (!atEnd()) {
         readNext();
@@ -1253,7 +1256,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     READ_PROLOGUE
     kDebug() << "m_context->type:" << m_context->type;
 
-    m_lstStyleFound = false;
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
@@ -1502,11 +1504,9 @@ void PptxXmlSlideReader::saveCurrentListStyles()
         }
     }
     else if (!documentReaderMode && m_context->type == Slide) {
-        if (!d->phIdx.isEmpty()) {
-            m_context->currentSlideStyles.listStyles[d->phIdx] = m_currentCombinedBulletProperties;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->currentSlideStyles.listStyles[d->phType] = m_currentCombinedBulletProperties;
+        QString slideIdentifier = d->phType + d->phIdx;
+        if (!slideIdentifier.isEmpty()) {
+            m_context->currentSlideStyles.listStyles[slideIdentifier] = m_currentCombinedBulletProperties;
         }
     }
 }
@@ -1538,13 +1538,10 @@ void PptxXmlSlideReader::saveCurrentStyles()
         }
     }
     else if (!documentReaderMode && m_context->type == Slide) {
-        if (!d->phIdx.isEmpty()) {
-            m_context->currentSlideStyles.textStyles[d->phIdx] = m_currentCombinedTextStyles;
-            m_context->currentSlideStyles.styles[d->phIdx] = m_currentCombinedParagraphStyles;
-        }
-        if (!d->phType.isEmpty()) {
-            m_context->currentSlideStyles.textStyles[d->phType] = m_currentCombinedTextStyles;
-            m_context->currentSlideStyles.styles[d->phType] = m_currentCombinedParagraphStyles;
+        QString slideIdentifier = d->phType + d->phIdx;
+        if (!slideIdentifier.isEmpty()) {
+            m_context->currentSlideStyles.textStyles[slideIdentifier] = m_currentCombinedTextStyles;
+            m_context->currentSlideStyles.styles[slideIdentifier] = m_currentCombinedParagraphStyles;
         }
     }
 }
@@ -1748,16 +1745,12 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
-    if (!d->phType.isEmpty()) {
-        // This line is needed in case slide defined it's own lvl1ppr
-        if (m_context->type == Slide) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[d->phType][copyLevel],
-                                                    targetStyle, KoGenStyle::ParagraphType);
-        }
-    }
-    if (!d->phIdx.isEmpty()) {
-        if (m_context->type == Slide) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[d->phIdx][copyLevel],
+    // This line is needed in case slide defined it's own lvl1ppr
+    if (m_context->type == Slide) {
+        QString slideIdentifier = d->phType + d->phIdx;
+
+        if (!slideIdentifier.isEmpty()) {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.styles[slideIdentifier][copyLevel],
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
@@ -1817,19 +1810,14 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    // Slide layer
-    if (!d->phType.isEmpty()) {
-        if (m_context->type == Slide) {
-            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->currentSlideStyles.listStyles[d->phType]);
-            while (i.hasNext()) {
-                i.next();
-                m_currentCombinedBulletProperties.insert(i.key(), i.value());
-            }
-        }
-    }
-    if (!d->phIdx.isEmpty()) {
-        if (m_context->type == Slide) {
-            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->currentSlideStyles.listStyles[d->phIdx]);
+
+
+    if (m_context->type == Slide) {
+        QString slideIdentifier = d->phType + d->phIdx;
+
+        // Slide layer
+        if (!slideIdentifier.isEmpty()) {
+            QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->currentSlideStyles.listStyles[slideIdentifier]);
             while (i.hasNext()) {
                 i.next();
                 m_currentCombinedBulletProperties.insert(i.key(), i.value());
@@ -1876,15 +1864,11 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
-    if (!d->phType.isEmpty()) {
-        if (m_context->type == Slide) {
+    if (m_context->type == Slide) {
+        QString slideIdentifier = d->phType + d->phIdx;
+
+        if (!slideIdentifier.isEmpty()) {
             MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phType][listLevel],
-                                                targetStyle, KoGenStyle::TextType);
-        }
-    }
-    if (!d->phIdx.isEmpty()) {
-        if (m_context->type == Slide) {
-            MSOOXML::Utils::copyPropertiesFromStyle(m_context->currentSlideStyles.textStyles[d->phIdx][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
