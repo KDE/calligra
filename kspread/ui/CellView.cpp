@@ -139,6 +139,7 @@ public:
     QString displayText;
     QSharedPointer<QTextDocument> richText;
 public:
+    void calculateCellBorders(const Cell&, SheetView* sheetView);
     void checkForFilterButton(const Cell&);
     void calculateTextSize(const QFont& font, const QFontMetricsF& fontMetrics);
     void calculateHorizontalTextSize(const QFont& font, const QFontMetricsF& fontMetrics);
@@ -260,6 +261,9 @@ CellView::CellView(SheetView* sheetView, int col, int row)
     if (cell.isFormula() && sheet->getShowFormula() && !(sheet->isProtected() && d->style.hideFormula()))
         d->style.setHAlign(Style::Left);
 
+    // figure out what border each side of the cell has
+    d->calculateCellBorders(cell, sheetView);
+
     makeLayout(sheetView, cell);
 }
 
@@ -342,7 +346,7 @@ bool CellView::hitTestFilterButton(const Cell& cell, const QRect& cellRect, cons
 //
 void CellView::paintCellContents(const QRectF& paintRect, QPainter& painter,
                                  const QPointF& coordinate,
-                                 const Cell& cell, SheetView* sheetView)
+                                 const Cell& cell, SheetView* sheetView) const
 {
     if (d->hidden)
         return;
@@ -394,10 +398,41 @@ void CellView::paintCellContents(const QRectF& paintRect, QPainter& painter,
     }
 }
 
+void CellView::Private::calculateCellBorders(const Cell& cell, SheetView* sheetView)
+{
+    const int col = cell.column();
+    const int row = cell.row();
+    const Sheet* sheet = sheetView->sheet();
+
+    if (col != 1) {
+        Style otherStyle = Cell(sheet, col - 1, row).style();
+        if (style.leftPenValue() < otherStyle.rightPenValue())
+            style.setLeftBorderPen(otherStyle.rightBorderPen());
+    }
+
+    if (col != KS_colMax) {
+        Style otherStyle = Cell(sheet, col + 1, row).style();
+        if (style.rightPenValue() < otherStyle.leftPenValue())
+            style.setRightBorderPen(otherStyle.leftBorderPen());
+    }
+
+    if (row != 1) {
+        Style otherStyle = Cell(sheet, col, row - 1).style();
+        if (style.topPenValue() < otherStyle.bottomPenValue())
+            style.setTopBorderPen(otherStyle.bottomBorderPen());
+    }
+
+    if (row != KS_rowMax) {
+        Style otherStyle = Cell(sheet, col, row + 1).style();
+        if (style.bottomPenValue() < otherStyle.topPenValue())
+            style.setBottomBorderPen(otherStyle.topBorderPen());
+    }
+}
+
 void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter,
                                 const QPointF& coordinate,
                                 const QRect& cellRegion,
-                                const Cell& cell, SheetView* sheetView)
+                                const Cell& cell, SheetView* sheetView) const
 {
     // If the rect of this cell doesn't intersect the rect that should
     // be painted, we can skip the rest and return. (Note that we need
@@ -421,30 +456,26 @@ void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter,
     // NOTE Sebsauer: this won't work for merged cells
     if (col == 1)
         paintBorder |= LeftBorder;
-    else if (d->style.leftPenValue() < sheetView->cellView(col - 1, row).style().rightPenValue())
-        d->style.setLeftBorderPen(sheetView->cellView(col - 1, row).style().rightBorderPen());
-    else // if ( d->style.leftPenValue() >= sheetView->cellView( col - 1, row ).style().rightPenValue() )
+    else if (!(d->style.leftPenValue() < sheetView->cellView(col - 1, row).style().rightPenValue()))
+    // if ( d->style.leftPenValue() >= sheetView->cellView( col - 1, row ).style().rightPenValue() )
         paintBorder |= LeftBorder;
 
     if (col == KS_colMax)
         paintBorder |= CellView::RightBorder;
-    else if (d->style.rightPenValue() < sheetView->cellView(col + 1, row).style().leftPenValue())
-        d->style.setRightBorderPen(sheetView->cellView(col + 1, row).style().leftBorderPen());
-    else // if (d->style.rightPenValue() > sheetView->cellView(col + 1, row).style().leftPenValue())
+    else if (!(d->style.rightPenValue() < sheetView->cellView(col + 1, row).style().leftPenValue()))
+    // if (d->style.rightPenValue() > sheetView->cellView(col + 1, row).style().leftPenValue())
         paintBorder |= CellView::RightBorder;
 
     if (row == 1)
         paintBorder |= TopBorder;
-    else if (d->style.topPenValue() < sheetView->cellView(col, row - 1).style().bottomPenValue())
-        d->style.setTopBorderPen(sheetView->cellView(col, row - 1).style().bottomBorderPen());
-    else // if ( d->style.topPenValue() >= sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
+    else if (!(d->style.topPenValue() < sheetView->cellView(col, row - 1).style().bottomPenValue()))
+    // if ( d->style.topPenValue() >= sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
         paintBorder |= TopBorder;
 
     if (row == KS_rowMax)
         paintBorder |= BottomBorder;
-    else if (d->style.bottomPenValue() < sheetView->cellView(col, row + 1).style().topPenValue())
-        d->style.setBottomBorderPen(sheetView->cellView(col, row + 1).style().topBorderPen());
-    else // if (d->style.bottomPenValue() >= sheetView->cellView(col, row + 1).style().topPenValue())
+    else if (!(d->style.bottomPenValue() < sheetView->cellView(col, row + 1).style().topPenValue()))
+    // if (d->style.bottomPenValue() >= sheetView->cellView(col, row + 1).style().topPenValue())
         paintBorder |= BottomBorder;
 
     // Paint border if outermost cell or if the pen is more "worth"
@@ -488,7 +519,7 @@ void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter,
 //
 // Paint the background of this cell.
 //
-void CellView::paintCellBackground(QPainter& painter, const QPointF& coordinate)
+void CellView::paintCellBackground(QPainter& painter, const QPointF& coordinate) const
 {
     if (d->merged)
         return;
@@ -522,7 +553,7 @@ void CellView::paintCellBackground(QPainter& painter, const QPointF& coordinate)
 void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
                                    const QPointF &coordinate,
                                    Borders paintBorder, const QRect& cellRegion,
-                                   const Cell& cell, SheetView* sheetView)
+                                   const Cell& cell, SheetView* sheetView) const
 {
     // Should the default borders be shown?
     if (!cell.sheet()->getShowGrid())
@@ -577,28 +608,26 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
     //              that is painted.
     if (col == 1)
         paintBorder |= LeftBorder;
-    else if (d->style.leftPenValue() < sheetView->cellView(col - 1, row).style().rightPenValue())
-        d->style.setLeftBorderPen(sheetView->cellView(col - 1, row).style().rightBorderPen());
-    else // if ( d->style.leftPenValue() >= sheetView->cellView( col - 1, row ).style().rightPenValue() )
+    else if (!(d->style.leftPenValue() < sheetView->cellView(col - 1, row).style().rightPenValue()))
+    // if ( d->style.leftPenValue() >= sheetView->cellView( col - 1, row ).style().rightPenValue() )
         paintBorder |= LeftBorder;
     if (col == KS_colMax)
         paintBorder |= CellView::RightBorder;
-    else if (d->style.rightPenValue() < sheetView->cellView(col + cell.mergedXCells(), row).style().leftPenValue())
-        d->style.setRightBorderPen(sheetView->cellView(col + cell.mergedXCells(), row).style().leftBorderPen());
-    else if (d->style.rightPenValue() > sheetView->cellView(col + cell.mergedXCells(), row).style().leftPenValue())
-        paintBorder |= CellView::RightBorder;
+    else if (!(d->style.rightPenValue() < sheetView->cellView(col + cell.mergedXCells(), row).style().leftPenValue())) {
+        if (d->style.rightPenValue() > sheetView->cellView(col + cell.mergedXCells(), row).style().leftPenValue())
+            paintBorder |= CellView::RightBorder;
+    }
     if (row == 1)
         paintBorder |= TopBorder;
-    else if (d->style.topPenValue() < sheetView->cellView(col, row - 1).style().bottomPenValue())
-        d->style.setTopBorderPen(sheetView->cellView(col, row - 1).style().bottomBorderPen());
-    else // if ( d->style.topPenValue() >= sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
+    else if (!(d->style.topPenValue() < sheetView->cellView(col, row - 1).style().bottomPenValue()))
+    // if ( d->style.topPenValue() >= sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
         paintBorder |= TopBorder;
     if (row == KS_rowMax)
         paintBorder |= BottomBorder;
-    else if (d->style.bottomPenValue() < sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
-        d->style.setBottomBorderPen(sheetView->cellView(col, row + cell.mergedYCells()).style().topBorderPen());
-    else if (d->style.bottomPenValue() >= sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
-        paintBorder |= BottomBorder;
+    else if (!(d->style.bottomPenValue() < sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())) {
+        if (d->style.bottomPenValue() >= sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
+            paintBorder |= BottomBorder;
+    }
 
     // Check merging...
     if (d->merged) {
@@ -818,7 +847,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRectF& paintRect,
 //
 void CellView::paintCommentIndicator(QPainter& painter,
                                      const QPointF& coordinate,
-                                     const Cell& cell)
+                                     const Cell& cell) const
 {
     // Point the little corner if there is a comment attached
     // to this cell.
@@ -861,7 +890,7 @@ void CellView::paintCommentIndicator(QPainter& painter,
 //
 void CellView::paintFormulaIndicator(QPainter& painter,
                                      const QPointF& coordinate,
-                                     const Cell& cell)
+                                     const Cell& cell) const
 {
     if (cell.isFormula() &&
             cell.sheet()->getShowFormulaIndicator() &&
@@ -900,7 +929,7 @@ void CellView::paintFormulaIndicator(QPainter& painter,
 //
 void CellView::paintMatrixElementIndicator(QPainter& painter,
         const QPointF& coordinate,
-        const Cell& cell)
+        const Cell& cell) const
 {
     if (cell.isLocked() &&
             cell.sheet()->getShowFormulaIndicator() &&
@@ -937,7 +966,7 @@ void CellView::paintMatrixElementIndicator(QPainter& painter,
 
 // Paint an indicator that the text in the cell is cut.
 //
-void CellView::paintMoreTextIndicator(QPainter& painter, const QPointF& coordinate)
+void CellView::paintMoreTextIndicator(QPainter& painter, const QPointF& coordinate) const
 {
     if (d->style.shrinkToFit())
         return;
@@ -986,7 +1015,7 @@ static int fixAngle(int angle) {
 //
 void CellView::paintText(QPainter& painter,
                          const QPointF& coordinate,
-                         const Cell& cell)
+                         const Cell& cell) const
 {
     QColor textColorPrint = d->style.fontColor();
     // Resolve the text color if invalid (=default).
@@ -1157,7 +1186,7 @@ void CellView::paintText(QPainter& painter,
 // Paint page borders on the page.  Only do this on the screen.
 //
 void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
-                                Borders paintBorder, const Cell& cell)
+                                Borders paintBorder, const Cell& cell) const
 {
     // Not screen?  Return immediately.
     if (dynamic_cast<QPrinter*>(painter.device()))
@@ -1229,7 +1258,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 // Paint the cell borders.
 //
 void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
-                                  const QPointF& coordinate, Borders paintBorder)
+                                  const QPointF& coordinate, Borders paintBorder) const
 {
     //Sanity check: If we are not painting any of the borders then the function
     //really shouldn't be called at all.
@@ -1343,7 +1372,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
 
 // Paint diagonal lines through the cell.
 //
-void CellView::paintCellDiagonalLines(QPainter& painter, const QPointF& coordinate)
+void CellView::paintCellDiagonalLines(QPainter& painter, const QPointF& coordinate) const
 {
     if (d->merged)
         return;
@@ -1363,7 +1392,7 @@ void CellView::paintCellDiagonalLines(QPainter& painter, const QPointF& coordina
 }
 
 void CellView::paintFilterButton(QPainter& painter, const QPointF& coordinate,
-                                 const Cell& cell, SheetView* sheetView)
+                                 const Cell& cell, SheetView* sheetView) const
 {
     Q_UNUSED(cell);
     QStyleOptionComboBox options;
