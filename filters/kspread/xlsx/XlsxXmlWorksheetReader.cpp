@@ -239,6 +239,7 @@ void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
     body->endElement(); // office:annotation
 }
 
+
 #undef CURRENT_EL
 #define CURRENT_EL worksheet
 //! worksheet handler (Worksheet)
@@ -419,12 +420,15 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                             body->startElement("text:a");
                             body->addAttribute("xlink:href", cell->hyperlink);
                             //body->addAttribute("office:target-frame-name", targetFrameName);
-                            if(cell->text.isEmpty())
+                            if(cell->text.isEmpty()) {
                                 body->addTextNode(cell->hyperlink);
-                            else if(cell->isPlainText)
+                            }
+                            else if(cell->isPlainText) {
                                 body->addTextNode(cell->text);
-                            else 
+                            }
+                            else {
                                 body->addCompleteElement(cell->text.toUtf8());
+                            }
                             body->endElement(); // text:a
                         } else if (!cell->text.isEmpty()) {
                             if(cell->isPlainText)
@@ -507,11 +511,8 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetFormatPr()
     if(ok) m_context->sheet->m_defaultColWidth = dcw;
     const double bcw = baseColWidth.toDouble(&ok);
     if(ok) m_context->sheet->m_baseColWidth = bcw;
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1106,12 +1107,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_v()
     READ_PROLOGUE
     readNext();
     m_value = text().toString();
-    //kDebug() << m_value;
+
     while (!atEnd()) {
         readNext();
-        kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
     }
+
     READ_EPILOGUE
 }
 
