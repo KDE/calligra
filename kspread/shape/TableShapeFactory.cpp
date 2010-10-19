@@ -29,6 +29,7 @@
 #include <KoResourceManager.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
 #include <Map.h>
@@ -59,8 +60,9 @@ TableShapeFactory::~TableShapeFactory()
 {
 }
 
-bool TableShapeFactory::supports(const KoXmlElement &element) const
+bool TableShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
 

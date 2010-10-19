@@ -21,6 +21,7 @@
 #include "KarbonCalligraphicShape.h"
 
 #include <klocale.h>
+#include <KoShapeLoadingContext.h>
 
 
 KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory(QObject *parent)
@@ -46,13 +47,14 @@ KoShape *KarbonCalligraphicShapeFactory::createDefaultShape(KoResourceManager *)
     return path;
 }
 
-/*bool KarbonCalligraphicShapeFactory::supports(const KoXmlElement & e) const
+bool KarbonCalligraphicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
-    return ( e.localName() == "ellipse" || e.localName() == "circle" ) &&
-           ( e.namespaceURI() == KoXmlNS::draw );
+    Q_UNUSED(e);
+    Q_UNUSED(context);
+    return false;
 }
 
-QList<KoShapeConfigWidgetBase*> KarbonCalligraphicShapeFactory::createShapeOptionPanels()
+/*QList<KoShapeConfigWidgetBase*> KarbonCalligraphicShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*> panels;
     panels.append( new CalligraphicShapeConfigWidget() );

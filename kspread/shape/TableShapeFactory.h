@@ -46,7 +46,7 @@ public:
     ~TableShapeFactory();
 
     virtual void newDocumentResourceManager(KoResourceManager *manager);
-    virtual bool supports(const KoXmlElement &element) const;
+    virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 };
