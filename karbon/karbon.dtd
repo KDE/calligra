@@ -62,7 +62,7 @@
     A path.
 -->
 
-<!ELEMENT PATH MOVE ( LINE | CURVE )+ >
+<!ELEMENT PATH (MOVE, ( LINE | CURVE )+) >
 <!ATTLIST PATH isClosed ( 0 | 1 ) "1"
 >
 
