@@ -8,7 +8,7 @@
 #
 # Copyright 2010 Jos van den Oever <jos@vandenoever.info>
 
-import sys, os, tempfile, time, signal, subprocess, re
+import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 
 applications = {
   'kword': ['odt', 'doc', 'docx'],
@@ -81,6 +81,30 @@ class logger:
 			+ "' duration='" + str(duration) + "']"
 		self.testname = None
 
+class odfvalidator:
+	def __init__(self):
+		path = sys.path[0]
+		self.relaxNGValidator = lxml.etree.RelaxNG( \
+				lxml.etree.parse(open(os.path.join(path, \
+				'OpenDocument-v1.2-cd05-schema.rng'), 'r')))
+	# returns error string on error, None otherwise
+	def validate(self, odtpath): 
+		zip = zipfile.ZipFile(odtpath, 'r')
+		err = self.validateFile(zip, 'content.xml',
+				self.relaxNGValidator)
+		if (err):
+			return err
+		err = self.validateFile(zip, 'styles.xml',
+				self.relaxNGValidator)
+		if (err):
+			return err
+		return None
+
+	def validateFile(self, zip, file, validator):
+		xml = lxml.etree.XML(zip.read(file));
+		if not validator.validate(xml):
+			return validator.error_log.last_error
+
 def getExecutablePath(exe):
 	exepath = None
 	env = os.environ
@@ -135,7 +159,7 @@ def runCommand(exepath, arguments, captureStdOut):
 		os.remove(tmpfilename)
 	return r
 
-def profile(dir, file, logger):
+def profile(dir, file, logger, validator):
 	logger.startTest(file)
 	file = os.path.join(dir, file)
 	(path, ext) = os.path.splitext(file)
@@ -162,7 +186,7 @@ def profile(dir, file, logger):
 	r.lines = outfile.readlines()
 	outfile.close()
 	r.backtrace = None
-	if r.returnValue != 0:
+	if False and r.returnValue != 0:
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
 			"--eval-command=bt", "--args"] + [exepath] + args
@@ -172,6 +196,10 @@ def profile(dir, file, logger):
 		for l in r.backtrace:
 			print l.rstrip()
 		logger.failTest(r.backtrace)
+	else:
+		err = validator.validate(roundtripfilename);
+		if err != None:
+			logger.failTest(str(err))
 
 	os.remove(tmpfilename)
 	if roundtripfilename:
@@ -262,6 +290,7 @@ def profileAll(dir, loggername):
 	usedExts = getExtensions(officefiles)
 	results = {}
 	log = logger()
+	validator = odfvalidator()
 	for ext in usedExts:
 		if loggername:
 			log.startTestSuite(loggername + '-' + ext[1:])
@@ -269,7 +298,7 @@ def profileAll(dir, loggername):
 			(path, pathext) = os.path.splitext(f)
 			if pathext == ext:
 				relf = os.path.relpath(f, dir)
-				result = profile(dir, relf, log)
+				result = profile(dir, relf, log, validator)
 				results[f] = result
 		log.endTestSuite()
 	return results
