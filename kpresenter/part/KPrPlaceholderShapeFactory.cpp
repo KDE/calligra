@@ -47,8 +47,9 @@ KoShape *KPrPlaceholderShapeFactory::createDefaultShape(KoResourceManager *) con
     return new KPrPlaceholderShape();
 }
 
-bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e) const
+bool KPrPlaceholderShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     // check parent if placeholder is set to true
     KoXmlNode parent = e.parentNode();
     if ( !parent.isNull() ) {
