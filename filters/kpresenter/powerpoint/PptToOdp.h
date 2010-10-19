@@ -480,24 +480,20 @@ private:
                ? p->documentContainer->slideHF.data()
                : p->documentContainer->slideHF2.data();
     }
-    const MSO::HeadersFootersAtom* getSlideHFAtom(
+    const MSO::PerSlideHeadersFootersContainer* getPerSlideHF(
             const MSO::SlideContainer* slide) const {
-        const MSO::HeadersFootersAtom* hf = 0;
+        const MSO::PerSlideHeadersFootersContainer* hf = 0;
         const MSO::MasterOrSlideContainer* master = p->getMaster(slide);
         const MSO::MainMasterContainer* m1 =
                 (master) ?master->anon.get<MSO::MainMasterContainer>() :0;
         const MSO::SlideContainer* m2 =
                 (master) ?master->anon.get<MSO::SlideContainer>() :0;
         if (slide && slide->perSlideHFContainer) {
-            hf = &slide->perSlideHFContainer->hfAtom;
+            hf = slide->perSlideHFContainer.data();
         } else if (m1 && m1->perSlideHeadersFootersContainer) {
-            hf = &m1->perSlideHeadersFootersContainer->hfAtom;
+            hf = m1->perSlideHeadersFootersContainer.data();
         } else if (m2 && m2->perSlideHFContainer) {
-            hf = &m2->perSlideHFContainer->hfAtom;
-        } else if (p->documentContainer->slideHF) {
-            hf = &p->documentContainer->slideHF->hfAtom;
-        } else if (p->documentContainer->slideHF2) {
-            hf = &p->documentContainer->slideHF2->hfAtom;
+            hf = m2->perSlideHFContainer.data();
         }
         return hf;
     }

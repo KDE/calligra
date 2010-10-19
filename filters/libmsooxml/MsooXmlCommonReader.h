@@ -91,11 +91,6 @@ protected:
     //! Adds manifest entry for "Pictures/"
     void addManifestEntryForPicturesDir();
 
-    //! true if lstStyle element has been found within the current element.
-    //! Used for turning paragraphs (p) into list items instead of individual paragraphs.
-//! @todo when list style importing is implemented, this boolean could be replaced by a structure
-    bool m_lstStyleFound;
-
     //! value of recent pPr@lvl attribute; set by read_pPr()
     uint m_pPr_lvl;
 

@@ -1922,9 +1922,15 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart_Ser()
     // set data ranges and write data to internal table
     m_currentSeries->m_labelCell = tempBubbleSeriesData->m_tx.writeRefToInternalTable(this);
 
-    m_currentSeries->m_countYValues = tempBubbleSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
+    m_currentSeries->m_countYValues = tempBubbleSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;    
 
-    m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_yVal.writeRefToInternalTable(this);
+    m_currentSeries->m_domainValuesCellRangeAddress << tempBubbleSeriesData->m_yVal.writeRefToInternalTable(this);
+    
+    if ( tempBubbleSeriesData->m_bubbleSize.m_numRef.m_f.isEmpty() )
+        m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_bubbleSize.writeLitToInternalTable(this);
+    else
+        m_currentSeries->m_valuesCellRangeAddress = tempBubbleSeriesData->m_bubbleSize.writeRefToInternalTable(this);
+    
 
 //    m_currentSeries->m_domainValuesCellRangeAddress.push_back(tempBubbleSeriesData->m_xVal.writeRefToInternalTable(this));
 //
@@ -2925,7 +2931,7 @@ QString XlsxXmlChartReader::AlocateAndWriteIntoInternalTable(QVector< QString > 
         return QString();
 
     //create range where to place the data
-    QString range("local-table.");
+    QString range("local");
     Charting::InternalTable *internalTable = &m_context->m_chart->m_internalTable;
 
     range += "!$" + columnName(internalTable->maxColumn()+1) +"$" + "1" + ":$" + columnName(internalTable->maxColumn()+1) +

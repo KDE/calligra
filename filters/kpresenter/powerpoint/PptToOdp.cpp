@@ -1560,20 +1560,36 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         KoGenStyle dp(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
         dp.setAutoStyleInStylesDotXml(false);
         const MasterOrSlideContainer* m = p->getMaster(sc);
-        const HeadersFootersAtom* hf = getSlideHFAtom(sc);
+        const PerSlideHeadersFootersContainer* hfc = getPerSlideHF(sc);
+        HeadersFootersAtom hf;
+
+        //Default values saved by MS Office 2003 require corrections.
+        if (!hfc) {
+            const SlideHeadersFootersContainer* dhfc = getSlideHF();
+            if (dhfc) {
+                hf = dhfc->hfAtom;
+                if (hf.fHasUserDate && !dhfc->userDateAtom.data()) {
+                    hf.fHasUserDate = false;
+                }
+                if (hf.fHasDate && !hf.fHasUserDate && !hf.fHasTodayDate) {
+                    hf.fHasDate = false;
+                }
+                if (hf.fHasFooter && !dhfc->footerAtom.data()) {
+                    hf.fHasFooter = false;
+                }
+            }
+	} else {
+            hf = hfc->hfAtom;
+        }
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         const OfficeArtSpContainer* masterSlideShape
                 = getMasterShape(m);
-        // Inherit objects from the main master slide if
-        // slideContainer/slideAtom/slideFlags/fMasterObjects == true
-        const OfficeArtSpContainer* slideShape = NULL;
-        if (!sc->slideAtom.slideFlags.fMasterObjects) {
-            slideShape = sc->drawing.OfficeArtDg.shape.data();
-        }
+        const OfficeArtSpContainer* slideShape
+                = sc->drawing.OfficeArtDg.shape.data();
         DrawStyle ds(drawingGroup, masterSlideShape, slideShape);
         drawclient.setDrawClientData(m, sc, 0, 0);
-        defineDrawingPageStyle(dp, ds, styles, odrawtoodf, hf, &sc->slideAtom.slideFlags);
+        defineDrawingPageStyle(dp, ds, styles, odrawtoodf, &hf, &sc->slideAtom.slideFlags);
         drawingPageStyles[sc] = styles.insert(dp, "dp");
     }
 

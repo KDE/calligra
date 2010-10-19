@@ -89,6 +89,12 @@ public:
 
     void setPictureSize(const QSize& size);
 
+    void setBulletFont(const QString& font);
+
+    QString bulletChar() const;
+
+    QString bulletFont() const;
+
     int m_level;
     int m_startValue;
 
@@ -96,6 +102,7 @@ private:
     enum ParagraphBulletType {BulletType, NumberType, PictureType};
     ParagraphBulletType m_type;
 
+    QString m_bulletFont;
     QString m_bulletChar;
     QString m_numFormat;
     QString m_suffix;

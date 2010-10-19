@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include <KoShapeFactoryBase.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
 #include "KoFormulaShape.h"
@@ -67,8 +68,9 @@ KoShape *KoFormulaShapeFactory::createDefaultShape(KoResourceManager *resourceMa
     return formula;
 }
 
-bool KoFormulaShapeFactory::supports(const KoXmlElement& e) const
+bool KoFormulaShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     bool retval = ((e.localName() == "math"
                     && e.namespaceURI() == KoXmlNS::math)
                    || (e.localName() == "object"

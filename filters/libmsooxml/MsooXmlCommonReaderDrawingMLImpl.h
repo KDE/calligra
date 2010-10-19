@@ -1573,7 +1573,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 {
     READ_PROLOGUE2(DrawingML_p)
 
-    const read_p_args args = m_read_DrawingML_p_args;
     m_read_DrawingML_p_args = 0;
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
@@ -1601,12 +1600,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     MSOOXML::Utils::XmlWriteBuffer textPBuf;
 
-    if (args & read_p_Skip) {
-        kDebug() << "SKIP!";
-    } else {
-        body = textPBuf.setWriter(body);
-        m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
-    }
+    body = textPBuf.setWriter(body);
+    m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
     bool pprRead = false;
     bool rRead = false;
@@ -1616,13 +1611,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         kDebug() << "isStartElement:" << isStartElement();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if (QUALIFIED_NAME_IS(p)) {
-// CASE #301: avoid nested paragaraphs
-                kDebug() << "Nested" << qualifiedName() << "detected: skipping the inner element";
-                TRY_READ_WITH_ARGS(DrawingML_p, read_p_Skip;)
-            }
 // CASE #400.1
-            else if (QUALIFIED_NAME_IS(pPr)) {
+            if (QUALIFIED_NAME_IS(pPr)) {
                 TRY_READ(DrawingML_pPr)
                 pprRead = true;
             }
@@ -1657,120 +1647,114 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     }
 #endif
 
-    if (args & read_p_Skip) {
-        //nothing
-    } else {
-        body = textPBuf.originalWriter();
-        if (m_listStylePropertiesAltered) {
-            if (m_prevListLevel > 0) {
-                // Ending our current level
+    body = textPBuf.originalWriter();
+    if (m_listStylePropertiesAltered || m_previousListWasAltered) {
+        if (m_prevListLevel > 0) {
+            // Ending our current level
+            body->endElement(); // text:list
+            // Ending any additional levels needed
+            for(; m_prevListLevel > 1; --m_prevListLevel) {
+                body->endElement(); // text:list-item
                 body->endElement(); // text:list
-                // Ending any additional levels needed
-                for(; m_prevListLevel > 1; --m_prevListLevel) {
-                    body->endElement(); // text:list-item
-                    body->endElement(); // text:list
-                }
-                m_prevListLevel = 0;
             }
+            m_prevListLevel = 0;
         }
+        m_previousListWasAltered = false;
+    }
 
-        if (!rRead) {
-            // Making sure that if we were previously in a list and if there's an empty line, that
-            // we don't output a bullet to it
-            m_currentListLevel = 0;
-            m_lstStyleFound = false;
-        }
-        else if (m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
-            m_currentListLevel = 0;
-            m_lstStyleFound = false;
-        }
-        else {
-            m_lstStyleFound = true;
-        }
+    if (m_listStylePropertiesAltered) {
+        m_previousListWasAltered = true;
+    }
 
-        // In MSOffice it's possible that a paragraph defines a list-style that should be used without
-        // being a list-item. We need to handle that case and need to make sure that such paragraph's
-        // end as first-level list-items in ODF.
-        if (m_currentListLevel > 0 || m_prevListLevel > 0) {
+    if (!rRead) {
+        // Making sure that if we were previously in a list and if there's an empty line, that
+        // we don't output a bullet to it
+        m_currentListLevel = 0;
+    }
+    else if (m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
+        m_currentListLevel = 0;
+    }
+
+    // In MSOffice it's possible that a paragraph defines a list-style that should be used without
+    // being a list-item. We need to handle that case and need to make sure that such paragraph's
+    // end as first-level list-items in ODF.
+    if (m_currentListLevel > 0 || m_prevListLevel > 0) {
 #ifdef PPTXXMLSLIDEREADER_H
-             if (m_prevListLevel < m_currentListLevel) {
-                 if (m_prevListLevel > 0) {
-                     // Because there was an existing list, we need to start ours with list:item
-                     body->startElement("text:list-item");
-                 }
-                 for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
-                     body->startElement("text:list");
-                     if (listDepth == 0) {
-                         QString listStyleName = mainStyles->insert(m_currentListStyle);
-                         if (m_context->type == SlideMaster) {
-                             mainStyles->markStyleForStylesXml(listStyleName);
-                         }
-                         Q_ASSERT(!listStyleName.isEmpty());
-                         body->addAttribute("text:style-name", listStyleName);
-                         m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
-                    }
-                    body->startElement("text:list-item");
-                 }
-             } else if (m_prevListLevel > m_currentListLevel) {
-                 body->endElement(); // This ends the latest list text:list
-                 for(int listDepth = m_prevListLevel-1; listDepth > m_currentListLevel; --listDepth) {
-                     //Ending any additional list levels needed
-                     body->endElement(); // text:list-item
-                     body->endElement(); // text:list
-                 }
-                 // Starting our own stuff for this level
-                 if (m_currentListLevel > 0) {
-                     body->endElement(); // revoving last lists text:list-item
-                     body->startElement("text:list-item");
-                 }
-             } else { // m_prevListLevel==m_currentListLevel
+         if (m_prevListLevel < m_currentListLevel) {
+             if (m_prevListLevel > 0) {
+                 // Because there was an existing list, we need to start ours with list:item
                  body->startElement("text:list-item");
              }
-#else
-             for(int i = 0; i < m_currentListLevel; ++i) {
+             for(int listDepth = m_prevListLevel; listDepth < m_currentListLevel; ++listDepth) {
                  body->startElement("text:list");
-                 // Todo, should most likely add the name of the current list style
-                 body->startElement("text:list-item");
+                 if (listDepth == 0) {
+                     QString listStyleName = mainStyles->insert(m_currentListStyle);
+                     if (m_context->type == SlideMaster) {
+                         mainStyles->markStyleForStylesXml(listStyleName);
+                     }
+                     Q_ASSERT(!listStyleName.isEmpty());
+                     body->addAttribute("text:style-name", listStyleName);
+                     m_currentParagraphStyle.addProperty("style:list-style-name", listStyleName);
+                }
+                body->startElement("text:list-item");
              }
-#endif
-         }
-
-         body->startElement("text:p", false);
-#ifdef PPTXXMLSLIDEREADER_H
-         if (m_context->type == SlideMaster) {
-             m_moveToStylesXml = true;
-         }
-#endif
-
-         setupParagraphStyle();
-
-         (void)textPBuf.releaseWriter();
-         body->endElement(); //text:p
-#ifdef PPTXXMLSLIDEREADER_H
-         // We should end our own list level
-         if (m_currentListLevel > 0) {
-             body->endElement(); // text:list-item
-         }
-#endif
-
-#ifdef PPTXXMLSLIDEREADER_H
-        m_prevListLevel = m_currentListLevel;
-#else
-         // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
-         // and excel filters still need to be adjusted to proper handle nested lists.
-         const bool closeList = true;
-         if (closeList) {
-             for(int i = 0; i < m_currentListLevel; ++i) {
+         } else if (m_prevListLevel > m_currentListLevel) {
+             body->endElement(); // This ends the latest list text:list
+             for (int listDepth = m_prevListLevel - 1; listDepth > m_currentListLevel; --listDepth) {
+                 //Ending any additional list levels needed
                  body->endElement(); // text:list-item
                  body->endElement(); // text:list
              }
-             m_prevListLevel = m_currentListLevel = 0;
-             m_lstStyleFound = false;
-         } else {
-             m_prevListLevel = m_currentListLevel;
+             // Starting our own stuff for this level
+             if (m_currentListLevel > 0) {
+                 body->endElement(); // revoving last lists text:list-item
+                 body->startElement("text:list-item");
+             }
+         } else { // m_prevListLevel==m_currentListLevel
+             body->startElement("text:list-item");
+         }
+#else
+         for(int i = 0; i < m_currentListLevel; ++i) {
+             body->startElement("text:list");
+             // Todo, should most likely add the name of the current list style
+             body->startElement("text:list-item");
          }
 #endif
-    }
+     }
+
+     body->startElement("text:p", false);
+#ifdef PPTXXMLSLIDEREADER_H
+     if (m_context->type == SlideMaster) {
+         m_moveToStylesXml = true;
+     }
+#endif
+
+     setupParagraphStyle();
+
+     (void)textPBuf.releaseWriter();
+     body->endElement(); //text:p
+#ifdef PPTXXMLSLIDEREADER_H
+     // We should end our own list level
+     if (m_currentListLevel > 0) {
+         body->endElement(); // text:list-item
+     }
+
+     m_prevListLevel = m_currentListLevel;
+
+#else
+     // For !=powerpoint we create a new list for each paragraph rather then nesting the lists cause the word
+     // and excel filters still need to be adjusted to proper handle nested lists.
+     const bool closeList = true;
+     if (closeList) {
+         for(int i = 0; i < m_currentListLevel; ++i) {
+             body->endElement(); // text:list-item
+             body->endElement(); // text:list
+         }
+         m_prevListLevel = m_currentListLevel = 0;
+     } else {
+         m_prevListLevel = m_currentListLevel;
+     }
+#endif
     READ_EPILOGUE
 }
 
@@ -2020,11 +2004,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
  Parent elements:
  - cNvPr (§21.3.2.7)
  - cNvPr (§20.1.2.2.8)
- - cNvPr (§20.2.2.3) 
- - cNvPr (§20.5.2.8) 
+ - cNvPr (§20.2.2.3)
+ - cNvPr (§20.5.2.8)
  - cNvPr (§19.3.1.12)
  - defRPr (§21.1.2.3.2)
- - docPr (§20.4.2.5) 
+ - docPr (§20.4.2.5)
  - endParaRPr (§21.1.2.2.3)
  - [done] rPr (§21.1.2.3.9)
 
@@ -2112,6 +2096,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentListLevel = lvl.toInt() + 1;
     }
 
+    m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
+
 #ifdef PPTXXMLSLIDEREADER_H
     inheritDefaultParagraphStyle(m_currentParagraphStyle);
     inheritParagraphStyle(m_currentParagraphStyle);
@@ -2144,8 +2130,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
     }
 
-    m_bulletFont = "";
-
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -2170,10 +2154,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         }
     }
 
-    if (m_bulletFont == "Wingdings") {
+    if (m_currentBulletProperties.bulletFont() == "Wingdings" && m_currentBulletProperties.bulletChar() != "") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
-        m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
         m_currentBulletProperties.setBulletChar("-");
     }
@@ -4234,8 +4217,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
-    m_bulletFont = "";
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -4265,11 +4246,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
         }
     }
 
-    if (m_bulletFont == "Wingdings") {
+    if (m_currentBulletProperties.bulletFont() == "Wingdings" && m_currentBulletProperties.bulletChar() != "") {
         // Ooxml files have very often wingdings fonts, but usually they are not installed
         // Making the bullet character look ugly, thus defaulting to "-"
         m_currentBulletProperties.setBulletChar("-");
-        m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
     }
 
@@ -4445,7 +4425,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
     if (!m_xlinkHref.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_xlinkHref);
         m_currentBulletProperties.setPictureSize(m_imageSize);
-        m_lstStyleFound = true;
         m_listStylePropertiesAltered = true;
     }
 
@@ -4478,7 +4457,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
     if (attrs.hasAttribute("char")) {
         m_currentBulletProperties.setBulletChar(attrs.value("char").toString());
         // if such a char is defined then we have actually a list-item even if OOXML doesn't handle them as such
-        m_lstStyleFound = true;
     }
 
     m_listStylePropertiesAltered = true;
@@ -4513,7 +4491,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buFont()
     TRY_READ_ATTR_WITHOUT_NS(typeface)
 
     if (!typeface.isEmpty()) {
-        m_bulletFont = typeface;
+        m_currentBulletProperties.setBulletFont(attrs.value("typeface").toString());
     }
 
     readNext();
@@ -4814,7 +4792,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buNone()
 {
     READ_PROLOGUE
-    m_lstStyleFound = true;
     m_currentBulletProperties.setBulletChar("");
     m_listStylePropertiesAltered = true;
     readNext();
@@ -4847,7 +4824,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
     TRY_READ_ATTR_WITHOUT_NS(type)
 
     if (!type.isEmpty()) {
-        m_lstStyleFound = true;
         if (type == "arabicPeriod") {
             m_currentBulletProperties.setSuffix(".");
             m_currentBulletProperties.setNumFormat("1");
@@ -5189,7 +5165,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
 {
     READ_PROLOGUE2(DrawingML_txBody)
 
-    m_lstStyleFound = false;
     m_prevListLevel = 0;
     m_currentListLevel = 0;
     m_pPr_lvl = 0;

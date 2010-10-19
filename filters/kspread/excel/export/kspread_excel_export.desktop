@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KSpread Microsoft Excel Export Filter
+Name[ca]=Filtre d'importació Microsoft Excel per al KSpread
 Name[da]=KSpread Microsoft Excel eksportfilter
 Name[en_GB]=KSpread Microsoft Excel Export Filter
 Name[es]=Filtro de KSpread de exportación a Microsoft Excel
