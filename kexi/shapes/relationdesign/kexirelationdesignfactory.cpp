@@ -38,8 +38,9 @@ KoShape *KexiRelationDesignFactory::createDefaultShape(KoResourceManager *) cons
     return fooShape;
 }
 
-bool KexiRelationDesignFactory::supports(const KoXmlElement & e) const
+bool KexiRelationDesignFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     kDebug();
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/kexirelationdesign" );
 }
