@@ -887,7 +887,7 @@ class ST_PlaceholderType_to_ODFMapping : public QHash<QByteArray, QByteArray>
 {
 public:
     ST_PlaceholderType_to_ODFMapping() {
-        insert("body", "text");
+        insert("body", "outline");
         insert("chart", "chart");
         insert("clipArt", "graphic");
         insert("ctrTitle", "title");
@@ -914,7 +914,7 @@ QString Utils::ST_PlaceholderType_to_ODF(const QString& ecmaType)
     K_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
     QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType.toLatin1()));
     if (it == s_ST_PlaceholderType_to_ODF->constEnd())
-        return QLatin1String("outline");
+        return QLatin1String("text");
     return QString(it.value());
 }
 
