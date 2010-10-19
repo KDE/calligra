@@ -70,6 +70,7 @@ protected:
     };
     KoFilter::ConversionStatus read_rPr(rPrCaller caller);
     KoFilter::ConversionStatus read_pPr();
+    KoFilter::ConversionStatus read_vanish();
     KoFilter::ConversionStatus read_numPr();
     KoFilter::ConversionStatus read_numId();
     KoFilter::ConversionStatus read_ilvl();
