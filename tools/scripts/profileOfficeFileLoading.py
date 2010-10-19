@@ -186,7 +186,7 @@ def profile(dir, file, logger, validator):
 	r.lines = outfile.readlines()
 	outfile.close()
 	r.backtrace = None
-	if False and r.returnValue != 0:
+	if r.returnValue != 0:
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
 			"--eval-command=bt", "--args"] + [exepath] + args
