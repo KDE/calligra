@@ -196,7 +196,7 @@ def profile(dir, file, logger, validator):
 		for l in r.backtrace:
 			print l.rstrip()
 		logger.failTest(r.backtrace)
-	else if roundtripfilename:
+	elif roundtripfilename:
 		err = validator.validate(roundtripfilename);
 		if err != None:
 			logger.failTest(str(err))
