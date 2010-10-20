@@ -101,7 +101,10 @@ class odfvalidator:
 		return None
 
 	def validateFile(self, zip, file, validator):
-		xml = lxml.etree.XML(zip.read(file));
+		try:
+			xml = lxml.etree.XML(zip.read(file));
+		except lxml.etree.XMLSyntaxError as e:
+			return e
 		if not validator.validate(xml):
 			return validator.error_log.last_error
 
