@@ -113,6 +113,8 @@ class odfvalidator:
 			xml = lxml.etree.XML(zip.read(file));
 		except lxml.etree.XMLSyntaxError as e:
 			return e
+		except KeyError as e:
+			return e
 		if not validator.validate(xml):
 			return validator.error_log.last_error
 
