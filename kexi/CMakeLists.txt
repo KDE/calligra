@@ -93,6 +93,6 @@ install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(FILES kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(PROGRAMS kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )

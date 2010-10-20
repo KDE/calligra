@@ -16,5 +16,5 @@ install(TARGETS kthesaurus  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  KThesaurus.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  KThesaurus.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 

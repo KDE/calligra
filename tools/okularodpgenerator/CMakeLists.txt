@@ -14,4 +14,4 @@ install( TARGETS okularGenerator_odp DESTINATION ${PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
 install( FILES libokularGenerator_odp.desktop okularOdp.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES okularApplication_odp.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( PROGRAMS okularApplication_odp.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
