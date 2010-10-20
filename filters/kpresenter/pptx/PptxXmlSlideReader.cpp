@@ -1144,18 +1144,61 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
     delete m_placeholderElWriter;
     m_placeholderElWriter = new KoXmlWriter(&placeholderElBuffer, 0/*indentation*/);
     MSOOXML::Utils::AutoPtrSetter<KoXmlWriter> placeholderElWriterSetter(m_placeholderElWriter);
+
+    bool potentiallyAddToLayoutFrames = false;
+
+    QBuffer shapeBuf;
+    KoXmlWriter shapeWriter(&shapeBuf);
+    KoXmlWriter *bodyBackup = body;
+
+    if (m_context->type == SlideLayout) {
+        body = &shapeWriter;
+    }
+
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF(sp)
-            ELSE_TRY_READ_IF(grpSp)
-            ELSE_TRY_READ_IF(pic)
-            ELSE_TRY_READ_IF(graphicFrame)
-            ELSE_TRY_READ_IF(cxnSp)
+            if (qualifiedName() == "p:sp") {
+                TRY_READ(sp)
+                potentiallyAddToLayoutFrames = true;
+            }
+            else if (qualifiedName() == "p:grpSp") {
+                TRY_READ(grpSp)
+                potentiallyAddToLayoutFrames = true;
+            }
+            else if (qualifiedName() == "p:pic") {
+                TRY_READ(pic)
+                potentiallyAddToLayoutFrames = true;
+            }
+            else if (qualifiedName() == "p:graphicFrame") {
+                TRY_READ(graphicFrame)
+                potentiallyAddToLayoutFrames = true;
+            }
+            else if (qualifiedName() == "p:cxnSp") {
+                TRY_READ(cxnSp)
+                potentiallyAddToLayoutFrames = true;
+            }
+            else {
+                potentiallyAddToLayoutFrames = false;
+            }
+            // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
+            if (potentiallyAddToLayoutFrames) {
+                potentiallyAddToLayoutFrames = false;
+                if (m_context->type == SlideLayout) {
+                    if (!d->phRead) {
+                        const QString elementContents = QString::fromUtf8(shapeBuf.buffer(), shapeBuf.buffer().size());
+                        m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
+                    }
+                }
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
+    }
+
+    if (m_context->type == SlideLayout) {
+        body = bodyBackup;
     }
 
     placeholderElBuffer.close();
