@@ -604,7 +604,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bodyStyle()
     READ_PROLOGUE
 
     d->phType = "body";
-    inheritListStyles();
 
     while (!atEnd()) {
         readNext();
@@ -745,7 +744,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_titleStyle()
     READ_PROLOGUE
 
     d->phType = "title";
-    inheritListStyles();
 
     while (!atEnd()) {
         readNext();
@@ -797,7 +795,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_otherStyle()
     READ_PROLOGUE
 
     d->phType = "other";
-    inheritListStyles();
 
     while (!atEnd()) {
         readNext();

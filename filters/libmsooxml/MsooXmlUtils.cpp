@@ -1306,7 +1306,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_startValue(0), m_type(ParagraphBulletProperties::BulletType), m_bulletChar(""), 
-    m_align(""), m_indent(0)
+    m_align(""), m_indent(0), m_bulletColor("")
 {
 }
 
@@ -1369,6 +1369,11 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletFont(const QStrin
     m_bulletFont = font;
 }
 
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor)
+{
+    m_bulletColor = bulletColor;
+}
+
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletChar() const
 {
     return m_bulletChar;
@@ -1419,7 +1424,15 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     }
 
     returnValue += "/>";
+    
+    returnValue += "<style:text-properties ";
+        
+    if (!m_bulletColor.isEmpty()) {
+    	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
+    }
 
+    returnValue += "/>";
+   
     returnValue += ending;
 
     return returnValue;

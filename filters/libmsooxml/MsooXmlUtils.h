@@ -90,6 +90,8 @@ public:
     void setPictureSize(const QSize& size);
 
     void setBulletFont(const QString& font);
+    
+    void setBulletColor(const QString& bulletColor);
 
     QString bulletChar() const;
 
@@ -109,6 +111,7 @@ private:
     QString m_align;
     qreal m_indent;
     QString m_picturePath;
+    QString m_bulletColor;
     QSize m_pictureSize;
 };
 

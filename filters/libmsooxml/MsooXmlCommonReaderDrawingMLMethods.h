@@ -150,6 +150,7 @@ QString m_shapeTextRightOff;
 bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
+KoFilter::ConversionStatus read_buClr();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
 KoFilter::ConversionStatus read_buNone();
