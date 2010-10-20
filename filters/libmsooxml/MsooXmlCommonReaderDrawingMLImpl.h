@@ -117,8 +117,8 @@ static QString mirrorToOdf(bool flipH, bool flipV)
 /*!
  Parent elements:
  - control (§19.3.2.1)
- - grpSp (§19.3.1.22)
- - grpSp (§20.1.2.2.20) - DrawingML
+ - [done] grpSp (§19.3.1.22)
+ - [done] grpSp (§20.1.2.2.20) - DrawingML
  - lockedCanvas (§20.3.2.1) - DrawingML
  - oleObj (§19.3.2.4)
  - [done] spTree (§19.3.1.45)
@@ -171,18 +171,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    // Ooxml supports slides getting pictures from layout slide, this is not supported in odf
-    // Therefore we are buffering the picture frames from layout and using them later in the slide
-    QBuffer picBuf;
-    KoXmlWriter picWriter(&picBuf);
-    KoXmlWriter *bodyBackup = body;
-
-    if (m_context->type == SlideLayout) {
-        body = &picWriter;
-    }
-#endif
 
 #if defined(XLSXXMLDRAWINGREADER_CPP)
     QBuffer picBuf;
@@ -291,16 +279,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
 #ifndef DOCXXMLDOCREADER_H
     body->endElement(); //draw:frame
-#endif
-
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideLayout) {
-        if (!d->phRead) {
-            const QString elementContents = QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size());
-            m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
-        }
-        body = bodyBackup;
-    }
 #endif
 
 #if defined(XLSXXMLDRAWINGREADER_CPP)
@@ -509,7 +487,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 {
     READ_PROLOGUE
 
-    body->startElement("draw:g");
+    pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+
+    MSOOXML::Utils::XmlWriteBuffer drawFrameBuf; // buffer this draw:g, because we have
+    // to write after the child elements are generated
+    body = drawFrameBuf.setWriter(body);
 
     while (!atEnd()) {
         readNext();
@@ -526,10 +508,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
         //! @todo add ELSE_WRONG_FORMAT
         }
     }
+
+    body = drawFrameBuf.originalWriter();
+    body->startElement("draw:g");
+
+    const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    if (m_context->type == SlideMaster) {
+        mainStyles->markStyleForStylesXml(styleName);
+    }
+#endif
+    body->addAttribute("draw:style-name", styleName);
+
+    (void)drawFrameBuf.releaseWriter();
+
     body->endElement(); // draw:g
 
     // Properties are set in grpSpPr
     m_svgProp.pop_back();
+
+    popCurrentDrawStyle();
 
     READ_EPILOGUE
 }
@@ -547,12 +546,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
  - effectDag (Effect Container) §20.1.8.25
  - effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §20.1.2.2.15
- - gradFill (Gradient Fill) §20.1.8.33
+ - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
  - noFill (No Fill) §20.1.8.44
  - pattFill (Pattern Fill) §20.1.8.47
  - scene3d (3D Scene Properties) §20.1.4.1.26
- - solidFill (Solid Fill) §20.1.8.54
+ - [done] solidFill (Solid Fill) §20.1.8.54
  - [done] xfrm (2D Transform for Grouped Objects) §20.1.7.5
 */
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
@@ -567,11 +566,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_NS(a, xfrm)
+            else if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                // We must set the color immediately, otherwise currentColor may be modified by eg. ln
+                m_currentDrawStyle->addProperty("draw:fill", QLatin1String("solid"));
+                m_currentDrawStyle->addProperty("draw:fill-color", m_currentColor.name());
+                m_currentColor = QColor();
+            }
+            else if ( qualifiedName() == QLatin1String("a:ln") ) {
+                TRY_READ(ln)
+            }
+            else if (qualifiedName() == QLatin1String("a:gradFill")) {
+                m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
+                TRY_READ(gradFill)
+                m_currentDrawStyle->addProperty("draw:fill", "gradient");
+                const QString gradName = mainStyles->insert(m_currentGradientStyle);
+                m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
+            }
         //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
-    m_inGrpSpPr = false;
 
     GroupProp prop;
     prop.svgXOld = m_svgX;
@@ -584,6 +598,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
     prop.svgHeightChOld = m_svgChHeight;
 
     m_svgProp.push_back(prop);
+
+    m_inGrpSpPr = false;
 
     READ_EPILOGUE
 }
@@ -964,18 +980,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 {
     READ_PROLOGUE
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    // Ooxml supports slides getting items from layout slide, this is not supported in odf
-    // Therefore we are buffering the potential item frames from layout and using them later in the slide
-    QBuffer layoutBuf;
-    KoXmlWriter layoutWriter(&layoutBuf);
-    KoXmlWriter *bodyBackup = body;
-
-    if (m_context->type == SlideLayout) {
-        body = &layoutWriter;
-    }
-#endif
-
     preReadSp();
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
@@ -1028,16 +1032,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 
     popCurrentDrawStyle();
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideLayout) {
-        if (!d->phRead) {
-            const QString elementContents = QString::fromUtf8(layoutBuf.buffer(), layoutBuf.buffer().size());
-            m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
-        }
-        body = bodyBackup;
-    }
-#endif
-
     READ_EPILOGUE
 }
 
@@ -1079,17 +1073,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     m_contentType.clear();
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    // Ooxml supports slides getting items from layout slide, this is not supported in odf
-    // Therefore we are buffering the potential item frames from layout and using them later in the slide
-    QBuffer layoutBuf;
-    KoXmlWriter layoutWriter(&layoutBuf);
-    KoXmlWriter *bodyBackup = body;
-
-    if (m_context->type == SlideLayout) {
-        body = &layoutWriter;
-    }
-#elif defined(XLSXXMLDRAWINGREADER_CPP)
+#if defined(XLSXXMLDRAWINGREADER_CPP)
     KoXmlWriter *bodyBackup = body;
     body = m_currentDrawingObject->setShape(new XlsxShape());
 #endif
@@ -1151,15 +1135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     popCurrentDrawStyle();
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    if (m_context->type == SlideLayout) {
-        if (!d->phRead) {
-            const QString elementContents = QString::fromUtf8(layoutBuf.buffer(), layoutBuf.buffer().size());
-            m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
-        }
-        body = bodyBackup;
-    }
-#elif defined(XLSXXMLDRAWINGREADER_CPP)
+#if defined(XLSXXMLDRAWINGREADER_CPP)
     body = bodyBackup;
 #endif
 
