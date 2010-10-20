@@ -23,7 +23,7 @@ class odfvalidator:
 				self.relaxNGValidator)
 		if (err):
 			return err
-		err = self.validateFile(zip, 'META-INFO/manifest.xml',
+		err = self.validateFile(zip, 'META-INF/manifest.xml',
 				self.relaxNGManifextValidator)
 		if (err):
 			return err
@@ -34,6 +34,8 @@ class odfvalidator:
 			xml = lxml.etree.XML(zip.read(file));
 		except lxml.etree.XMLSyntaxError as e:
 			return file + ':' + str(e)
+		except KeyError as e:
+			return e
 		if not validator.validate(xml):
 			return file + ':' + str(validator.error_log.last_error)
 

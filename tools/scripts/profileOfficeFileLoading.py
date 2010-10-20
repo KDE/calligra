@@ -102,7 +102,7 @@ class odfvalidator:
 				self.relaxNGValidator)
 		if (err):
 			return err
-		err = self.validateFile(zip, 'META-INFO/manifest.xml',
+		err = self.validateFile(zip, 'META-INF/manifest.xml',
 				self.relaxNGManifextValidator)
 		if (err):
 			return err
