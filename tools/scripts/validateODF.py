@@ -8,6 +8,10 @@ class odfvalidator:
 		self.relaxNGValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
 				'OpenDocument-v1.2-cd05-schema.rng'), 'r')))
+		self.relaxNGManifextValidator = lxml.etree.RelaxNG( \
+				lxml.etree.parse(open(os.path.join(path, \
+				'OpenDocument-v1.2-cd05-manifest-schema.rng'), \
+				'r')))
 	# returns error string on error, None otherwise
 	def validate(self, odtpath): 
 		zip = zipfile.ZipFile(odtpath, 'r')
@@ -17,6 +21,10 @@ class odfvalidator:
 			return err
 		err = self.validateFile(zip, 'styles.xml',
 				self.relaxNGValidator)
+		if (err):
+			return err
+		err = self.validateFile(zip, 'META-INFO/manifest.xml',
+				self.relaxNGManifextValidator)
 		if (err):
 			return err
 		return None
