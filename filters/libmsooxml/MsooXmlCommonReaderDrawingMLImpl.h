@@ -155,7 +155,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     m_rot = 0;
     m_isPlaceHolder = false;
 
-#ifndef DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCREADER_CPP
     // Create a new drawing style for this picture
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 #endif
@@ -172,7 +172,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     // Ooxml supports slides getting pictures from layout slide, this is not supported in odf
     // Therefore we are buffering the picture frames from layout and using them later in the slide
     QBuffer picBuf;
@@ -193,7 +193,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
 #ifndef DOCXXMLDOCREADER_H
     body->startElement("draw:frame"); // CASE #P421
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == Slide || m_context->type == SlideLayout) {
         body->addAttribute("draw:layer", "layout");
     }
@@ -257,7 +257,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
@@ -293,7 +293,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     body->endElement(); //draw:frame
 #endif
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideLayout) {
         if (!d->phRead) {
             const QString elementContents = QString::fromUtf8(picBuf.buffer(), picBuf.buffer().size());
@@ -346,7 +346,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvPicPr()
         if (isStartElement()) {
             TRY_READ_IF(cNvPicPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(cNvPr)
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
 #endif
             ELSE_WRONG_FORMAT
@@ -476,7 +476,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvSpPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(cNvPr)
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
 #endif
             ELSE_TRY_READ_IF(cNvSpPr)
@@ -520,7 +520,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
             ELSE_TRY_READ_IF(pic)
             ELSE_TRY_READ_IF(sp)
             ELSE_TRY_READ_IF(grpSpPr)
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF(graphicFrame)
 #endif
         //! @todo add ELSE_WRONG_FORMAT
@@ -601,7 +601,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvCxnSpPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF_IN_CONTEXT(cNvPr)
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
 #endif
         }
@@ -659,7 +659,7 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
     m_flipV = false;
     m_rot = 0;
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     //We assume that the textbox is empty by default
     d->textBoxHasContent = false;
 
@@ -687,7 +687,7 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     const QString styleId(d->phStyleId());
 
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
@@ -714,14 +714,14 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(styleName);
     }
 #endif
     body->addAttribute("draw:style-name", styleName);
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
 
     const QString presentationClass(MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType));
 
@@ -849,7 +849,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::generatePlaceHolderSp()
 {
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     const QString styleId(d->phStyleId());
 
     kDebug() << "styleId:" << styleId << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
@@ -950,7 +950,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::generatePlaceHolderSp()
 
 #endif
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     m_currentShapeProperties = 0; // Making sure that nothing uses them.
 #endif
     return KoFilter::OK;
@@ -964,7 +964,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 {
     READ_PROLOGUE
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     // Ooxml supports slides getting items from layout slide, this is not supported in odf
     // Therefore we are buffering the potential item frames from layout and using them later in the slide
     QBuffer layoutBuf;
@@ -991,7 +991,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
             TRY_READ_IF(nvCxnSpPr)
             ELSE_TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF(style)
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
             else {
                 TRY_READ_IF(txBody)
             }
@@ -1002,7 +1002,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 
     m_outputDrawFrame = true;
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     const QString styleId(d->phStyleId());
     if (m_context->type == SlideLayout && !styleId.isEmpty()) {
         m_outputDrawFrame = false;
@@ -1028,7 +1028,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
 
     popCurrentDrawStyle();
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideLayout) {
         if (!d->phRead) {
             const QString elementContents = QString::fromUtf8(layoutBuf.buffer(), layoutBuf.buffer().size());
@@ -1079,7 +1079,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     m_contentType.clear();
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     // Ooxml supports slides getting items from layout slide, this is not supported in odf
     // Therefore we are buffering the potential item frames from layout and using them later in the slide
     QBuffer layoutBuf;
@@ -1110,7 +1110,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
             TRY_READ_IF(nvSpPr)
             ELSE_TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF(style)
-#if defined(PPTXXMLSLIDEREADER_H)
+#if defined(PPTXXMLSLIDEREADER_CPP)
             ELSE_TRY_READ_IF(txBody)
 #endif
             else if (qualifiedName() == QLatin1String(QUALIFIED_NAME(txBody))) {
@@ -1125,7 +1125,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     m_outputDrawFrame = true;
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     const QString styleId(d->phStyleId());
     if (m_context->type == SlideLayout && !styleId.isEmpty()) {
         m_outputDrawFrame = false;
@@ -1151,7 +1151,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     popCurrentDrawStyle();
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideLayout) {
         if (!d->phRead) {
             const QString elementContents = QString::fromUtf8(layoutBuf.buffer(), layoutBuf.buffer().size());
@@ -1260,7 +1260,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 m_xfrm_read = true;
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true; // We count normal fill and gardient as content
 #endif
                 TRY_READ(solidFill)
@@ -1279,7 +1279,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 TRY_READ(prstGeom)
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true;
 #endif
                 m_currentGradientStyle = KoGenStyle(KoGenStyle::GradientStyle);
@@ -1293,7 +1293,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     const QString styleId(d->phStyleId());
     kDebug() << "styleId:" << styleId;
 
@@ -1529,7 +1529,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
     while (index < attrs.size()) {
         const QString handledAttr = attrs.at(index).name().toString();
         const QString attrValue = attrs.value(handledAttr).toString();
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
         m_context->colorMap[handledAttr] = attrValue;
 #endif
         ++index;
@@ -1581,7 +1581,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // Note that if buNone has been specified, we don't create a list
     m_currentListLevel = 1; // By default we're in the first level
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
 #else
     m_prevListLevel = m_currentListLevel = 0;
@@ -1624,7 +1624,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 //! @todo add more conditions testing the parent
             else if (QUALIFIED_NAME_IS(r)) {
                 rRead = true;
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true;
 #endif
                 TRY_READ(DrawingML_r)
@@ -1634,7 +1634,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (!pprRead) {
         inheritDefaultParagraphStyle(m_currentParagraphStyle);
         inheritParagraphStyle(m_currentParagraphStyle);
@@ -1679,7 +1679,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // being a list-item. We need to handle that case and need to make sure that such paragraph's
     // end as first-level list-items in ODF.
     if (m_currentListLevel > 0 || m_prevListLevel > 0) {
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
          if (m_prevListLevel < m_currentListLevel) {
              if (m_prevListLevel > 0) {
                  // Because there was an existing list, we need to start ours with list:item
@@ -1723,7 +1723,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
      }
 
      body->startElement("text:p", false);
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
      if (m_context->type == SlideMaster) {
          m_moveToStylesXml = true;
      }
@@ -1733,7 +1733,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
      (void)textPBuf.releaseWriter();
      body->endElement(); //text:p
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
      // We should end our own list level
      if (m_currentListLevel > 0) {
          body->endElement(); // text:list-item
@@ -1783,7 +1783,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
     m_currentTextStyleProperties = new KoCharacterStyle();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
@@ -1813,7 +1813,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_r()
 
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
@@ -1957,7 +1957,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
         m_currentTextStyleProperties->setFontLetterSpacing(qreal(spcInt) / 100.0);
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     kDebug() << "d->phType ____" << d->phType;
 #endif
 
@@ -2098,7 +2098,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 
     m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     inheritDefaultParagraphStyle(m_currentParagraphStyle);
     inheritParagraphStyle(m_currentParagraphStyle);
 #endif
@@ -2247,7 +2247,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
                 kDebug() << "Inherited svg:width/height from master (m_currentShapeProperties)";
             }
         }*/
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) { // save
         if (!off_read) {
             raiseElNotFoundError("a:off");
@@ -3040,7 +3040,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
     m_currentCombinedTextStyles.clear();
     m_currentCombinedParagraphStyles.clear();
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
     // Only slidemaster needs to inherit, this because first there is bodyStyle,
     // then there can be a body frame, the frame must have properties from bodyStyle and it must not
@@ -3070,7 +3070,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     saveCurrentListStyles();
     saveCurrentStyles();
 #endif
@@ -3108,14 +3108,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
 
     TRY_READ_ATTR_WITHOUT_NS(typeface)
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLDOCUMENTREADER_CPP
     // We skip reading this one properly as we do not know the correct theme in the time of reading
-    if (documentReaderMode) {
-        defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
+    defaultLatinFonts[defaultLatinFonts.size() - 1] = typeface;
 
-        skipCurrentElement();
-        READ_EPILOGUE
-    }
+    skipCurrentElement();
+    READ_EPILOGUE
 #endif
 
     if (!typeface.isEmpty()) {
@@ -3640,14 +3638,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(val)
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLDOCUMENTREADER_CPP
     // We skip reading this one properly as we do not know the correct theme in the time of reading
-    if (documentReaderMode) {
-        defaultTextColors[defaultTextColors.size() - 1] = val;
+    defaultTextColors[defaultTextColors.size() - 1] = val;
 
-        skipCurrentElement();
-        READ_EPILOGUE
-    }
+    skipCurrentElement();
+    READ_EPILOGUE
 #endif
 
     m_currentTint = 0;
@@ -3657,7 +3653,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
 
     QString valTransformed = m_context->colorMap.value(val);
     colorItem = m_context->themes->colorScheme.value(valTransformed);
@@ -4580,7 +4576,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     inheritDefaultTextStyle(m_currentTextStyle);
     inheritTextStyle(m_currentTextStyle);
 #endif
@@ -4601,7 +4597,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     m_currentTextStyleProperties->saveOdf(m_currentTextStyle);
     const QString currentTextStyleName(mainStyles->insert(m_currentTextStyle));
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (m_context->type == SlideMaster) {
         mainStyles->markStyleForStylesXml(currentTextStyleName);
     }
@@ -5106,7 +5102,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
     inheritBodyProperties();
 #endif
 
@@ -5156,7 +5152,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
         }
     }
 
-#ifdef PPTXXMLSLIDEREADER_H
+#ifdef PPTXXMLSLIDEREADER_CPP
 
     saveBodyProperties();
 

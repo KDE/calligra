@@ -33,10 +33,12 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoPageLayout.h>
+#include <KoOdfGraphicStyles.h>
 
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
+#define PPTXXMLDOCUMENTREADER_CPP
 
 #include <MsooXmlReader_p.h>
 
@@ -79,7 +81,7 @@ private:
 };
 
 PptxXmlDocumentReader::PptxXmlDocumentReader(KoOdfWriters *writers)
-        : PptxXmlSlideReader(writers)
+        : MSOOXML::MsooXmlCommonReader(writers)
         , m_writers(writers)
         , m_context(0)
         , d(new Private)
@@ -95,7 +97,6 @@ PptxXmlDocumentReader::~PptxXmlDocumentReader()
 void PptxXmlDocumentReader::init()
 {
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
-    documentReaderMode = true;
 }
 
 KoFilter::ConversionStatus PptxXmlDocumentReader::read(MSOOXML::MsooXmlReaderContext* context)
@@ -704,3 +705,22 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
 
     READ_EPILOGUE
 }
+
+#define blipFill_NS "a"
+
+// END NAMESPACE p
+
+// BEGIN NAMESPACE a
+
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "a"
+
+// in PPTX we do not have pPr, so p@text:style-name should be added earlier
+#define SETUP_PARA_STYLE_IN_READ_P
+
+#include <MsooXmlCommonReaderImpl.h> // this adds a:p, a:pPr, a:t, a:r, etc.
+
+#define DRAWINGML_NS "a"
+#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
+
+#include <MsooXmlCommonReaderDrawingMLImpl.h> // this adds p:pic, etc.

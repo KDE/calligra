@@ -206,7 +206,6 @@ void PptxXmlSlideReader::init()
 {
     initInternal(); // MsooXmlCommonReaderImpl.h
     initDrawingML();
-    documentReaderMode = false;
     m_defaultNamespace = QLatin1String(MSOOXML_CURRENT_NS ":");
 }
 
@@ -1485,7 +1484,7 @@ void PptxXmlSlideReader::saveCurrentListStyles()
         return;
     }
 
-    if (!documentReaderMode && m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterPageProperties->listStyles[d->phIdx] = m_currentCombinedBulletProperties;
         }
@@ -1493,7 +1492,7 @@ void PptxXmlSlideReader::saveCurrentListStyles()
             m_context->slideMasterPageProperties->listStyles[d->phType] = m_currentCombinedBulletProperties;
         }
     }
-    else if (!documentReaderMode && m_context->type == SlideLayout) {
+    else if (m_context->type == SlideLayout) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideLayoutProperties->listStyles[d->phIdx] = m_currentCombinedBulletProperties;
         }
@@ -1501,7 +1500,7 @@ void PptxXmlSlideReader::saveCurrentListStyles()
             m_context->slideLayoutProperties->listStyles[d->phType] = m_currentCombinedBulletProperties;
         }
     }
-    else if (!documentReaderMode && m_context->type == Slide) {
+    else if (m_context->type == Slide) {
         QString slideIdentifier = d->phType + d->phIdx;
         if (!slideIdentifier.isEmpty()) {
             m_context->currentSlideStyles.listStyles[slideIdentifier] = m_currentCombinedBulletProperties;
@@ -1515,7 +1514,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
     {
         return;
     }
-    if (!documentReaderMode && m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterPageProperties->textStyles[d->phIdx] = m_currentCombinedTextStyles;
             m_context->slideMasterPageProperties->styles[d->phIdx] = m_currentCombinedParagraphStyles;
@@ -1525,7 +1524,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
             m_context->slideMasterPageProperties->styles[d->phType] = m_currentCombinedParagraphStyles;
         }
     }
-    else if (!documentReaderMode && m_context->type == SlideLayout) {
+    else if (m_context->type == SlideLayout) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideLayoutProperties->textStyles[d->phIdx] = m_currentCombinedTextStyles;
             m_context->slideLayoutProperties->styles[d->phIdx] = m_currentCombinedParagraphStyles;
@@ -1535,7 +1534,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
             m_context->slideLayoutProperties->styles[d->phType] = m_currentCombinedParagraphStyles;
         }
     }
-    else if (!documentReaderMode && m_context->type == Slide) {
+    else if (m_context->type == Slide) {
         QString slideIdentifier = d->phType + d->phIdx;
         if (!slideIdentifier.isEmpty()) {
             m_context->currentSlideStyles.textStyles[slideIdentifier] = m_currentCombinedTextStyles;
@@ -1547,7 +1546,7 @@ void PptxXmlSlideReader::saveCurrentStyles()
 void PptxXmlSlideReader::saveBodyProperties()
 {
     // Todo: extend this in the future to save other peroperties too
-    if (!documentReaderMode && m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideMasterPageProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
             m_context->slideMasterPageProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
@@ -1563,7 +1562,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterPageProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
         }
     }
-    else if (!documentReaderMode && m_context->type == SlideLayout) {
+    else if (m_context->type == SlideLayout) {
         if (!d->phIdx.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phIdx] = m_shapeTextPosition;
             m_context->slideLayoutProperties->textLeftBorders[d->phIdx] = m_shapeTextLeftOff;
