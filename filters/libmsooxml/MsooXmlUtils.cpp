@@ -887,7 +887,7 @@ class ST_PlaceholderType_to_ODFMapping : public QHash<QByteArray, QByteArray>
 {
 public:
     ST_PlaceholderType_to_ODFMapping() {
-        insert("body", "text");
+        insert("body", "outline");
         insert("chart", "chart");
         insert("clipArt", "graphic");
         insert("ctrTitle", "title");
@@ -914,7 +914,7 @@ QString Utils::ST_PlaceholderType_to_ODF(const QString& ecmaType)
     K_GLOBAL_STATIC(ST_PlaceholderType_to_ODFMapping, s_ST_PlaceholderType_to_ODF)
     QHash<QByteArray, QByteArray>::ConstIterator it(s_ST_PlaceholderType_to_ODF->constFind(ecmaType.toLatin1()));
     if (it == s_ST_PlaceholderType_to_ODF->constEnd())
-        return QLatin1String("outline");
+        return QLatin1String("text");
     return QString(it.value());
 }
 
@@ -1306,7 +1306,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 
 MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
     m_startValue(0), m_type(ParagraphBulletProperties::BulletType), m_bulletChar(""), 
-    m_align(""), m_indent(0)
+    m_align(""), m_indent(0), m_bulletColor("")
 {
 }
 
@@ -1369,6 +1369,11 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletFont(const QStrin
     m_bulletFont = font;
 }
 
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletColor(const QString& bulletColor)
+{
+    m_bulletColor = bulletColor;
+}
+
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletChar() const
 {
     return m_bulletChar;
@@ -1419,7 +1424,15 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     }
 
     returnValue += "/>";
+    
+    returnValue += "<style:text-properties ";
+        
+    if (!m_bulletColor.isEmpty()) {
+    	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
+    }
 
+    returnValue += "/>";
+   
     returnValue += ending;
 
     return returnValue;

@@ -29,15 +29,9 @@
 
 using namespace KChart;
 
-void OdfLoadingHelper::fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader &stylesReader,
-                                       const KoXmlElement& object, const char* nsURI,
-                                       const char* attrName, const char* family )
+OdfLoadingHelper::OdfLoadingHelper()
+    : tableSource( 0 )
+    , chartUsesInternalModelOnly( true )
+    , categoryRegionSpecifiedInXAxis( false )
 {
-    if ( !object.hasAttributeNS( nsURI, attrName ) )
-        return;
-
-    const QString styleName = object.attributeNS( nsURI, attrName, QString() );
-    const KoXmlElement *style = stylesReader.findStyle( styleName, family, false );
-    if ( style )
-        styleStack.push( *style );
 }

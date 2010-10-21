@@ -273,15 +273,6 @@ protected:
     // Saves current body properties
     void saveBodyProperties();
 
-    // True if we reading defaultStyles from PptxXmlDocumentReader
-    bool documentReaderMode;
-
-    // Default pptx styles
-    QVector<KoGenStyle> defaultParagraphStyles;
-    QVector<KoGenStyle> defaultTextStyles;
-    QVector<QString> defaultTextColors;
-    QVector<QString> defaultLatinFonts;
-
 private:
     void init();
     class Private;

@@ -2,6 +2,7 @@
 Icon=skyline_morning
 Name=Skyline Morning
 Name[da]=Skyline Morning
+Name[et]=Horisont hommikul
 Name[it]=Profilo mattutino
 Name[pt]=Linha Celeste Matinal
 Name[pt_BR]=Linha celeste matinal
@@ -10,6 +11,7 @@ Name[uk]=Вранішній горизонт
 Name[x-test]=xxSkyline Morningxx
 Comment=Skyline Morning
 Comment[da]=Skyline Morning
+Comment[et]=Horisont hommikul
 Comment[it]=Profilo mattutino
 Comment[pt]=Linha Celeste Matinal
 Comment[pt_BR]=Linha celeste matinal

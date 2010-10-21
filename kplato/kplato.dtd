@@ -51,7 +51,7 @@
 -->
 <!ELEMENT resource-group (resource)*>
 <!ATTLIST resource-group id CDATA #REQUIRED
-            type (work|material)
+            type (work|material) "work"
 			name CDATA #IMPLIED>
 
 <!-- Resource
@@ -69,7 +69,7 @@
 			description CDATA #IMPLIED
             earlieststart CDATA #IMPLIED
             latestfinish CDATA #IMPLIED
-            scheduling="0"
+            scheduling CDATA "0"
             start CDATA #IMPLIED
             end CDATA #IMPLIED
             duration CDATA #IMPLIED>
@@ -88,7 +88,7 @@
 <!ELEMENT relation EMPTY>
 <!ATTLIST relation	parent-id CDATA #REQUIRED
 			child-id CDATA #REQUIRED
-			type ("Finish-Start" | "Finish-Finish" | "Start-Start")
+			type (Finish-Start | Finish-Finish | Start-Start)
 				"Start-Start">
 
 <!--	Appointments between resources and tasks

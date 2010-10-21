@@ -97,17 +97,19 @@ Transaction::~Transaction()
 
 Transaction& Transaction::operator=(const Transaction & trans)
 {
-    if (m_data) {
-        m_data->refcount--;
-        Transaction::globalcount--;
-        KexiDBDbg << "Transaction::operator=: m_data->refcount==" << m_data->refcount;
-        if (m_data->refcount == 0)
-            delete m_data;
-    }
-    m_data = trans.m_data;
-    if (m_data) {
-        m_data->refcount++;
-        Transaction::globalcount++;
+    if (this != &trans) {
+        if (m_data) {
+            m_data->refcount--;
+            Transaction::globalcount--;
+            KexiDBDbg << "Transaction::operator=: m_data->refcount==" << m_data->refcount;
+            if (m_data->refcount == 0)
+                delete m_data;
+        }
+        m_data = trans.m_data;
+        if (m_data) {
+            m_data->refcount++;
+            Transaction::globalcount++;
+        }
     }
     return *this;
 }

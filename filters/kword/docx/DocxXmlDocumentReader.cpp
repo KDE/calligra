@@ -2036,6 +2036,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [2] ctrlPr (§22.1.2.23)
  - [2] r (§22.1.2.87) - Shared ML
  - [2] r (§17.3.2.25)
+
  Child elements:
  - [done] b (Bold) §17.3.2.1
  - bCs (Complex Script Bold) §17.3.2.2
@@ -2071,15 +2072,15 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - shd (Run Shading) §17.3.2.32
  - [done] smallCaps (Small Caps) §17.3.2.33
  - snapToGrid (Use Document Grid Settings For Inter-Character Spacing) §17.3.2.34
- - spacing (Character Spacing Adjustment) §17.3.2.35
+ - [done] spacing (Character Spacing Adjustment) §17.3.2.35
  - specVanish (Paragraph Mark Is Always Hidden) §17.3.2.36
  - [done] strike (Single Strikethrough) §17.3.2.37
  - [done] sz (Non-Complex Script Font Size) §17.3.2.38
  - szCs (Complex Script Font Size) §17.3.2.39
  - [done] u (Underline) §17.3.2.40
- - vanish (Hidden Text) §17.3.2.41
+ - [done] vanish (Hidden Text) §17.3.2.41
  - [done] vertAlign (Subscript/Superscript Text) §17.3.2.42
- - w (Expanded/Compressed Text) §17.3.2.43
+ - [done] w (Expanded/Compressed Text) §17.3.2.43
  - [done] webHidden (Web Hidden Text) §17.3.2.44
 */
 //! @todo support all elements
@@ -2122,6 +2123,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
             ELSE_TRY_READ_IF(w)
             ELSE_TRY_READ_IF(webHidden)
             ELSE_TRY_READ_IF(bdr)
+            ELSE_TRY_READ_IF(vanish)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3682,6 +3684,36 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_w()
         STRING_TO_INT(val, wNumber, "w@val")
         m_currentTextStyleProperties->setTextScale(wNumber);
     }
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL vanish
+//! vanish handler (Hidden text)
+/*
+
+ Parent elements:
+ - [done] rPr (§17.3.1.29);
+ - [done] rPr (§17.3.1.30);
+ - [done] rPr (§17.5.2.28);
+ - [done] rPr (§17.9.25);
+ . [done] rPr (§17.7.9.1);
+ - [done] rPr (§17.7.5.4);
+ - [done] rPr (§17.3.2.28);
+ - [done] rPr (§17.5.2.27);
+ - [done] rPr (§17.7.6.2);
+ - [done] rPr (§17.3.2.27)
+
+ No child elements
+
+*/
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_vanish()
+{
+    READ_PROLOGUE
+
+    m_currentTextStyle.addProperty("text:display", "none");
+
     readNext();
     READ_EPILOGUE
 }
