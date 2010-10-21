@@ -344,6 +344,11 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     delete store;
 
+    // ensure at least one sheet
+    if (d->outputDoc->map()->count() == 0) {
+        d->outputDoc->map()->addNewSheet();
+    }
+
     // active sheet
     kDebug() << "ACTIVE " << d->workbook->activeTab();
     d->outputDoc->map()->loadingInfo()->setInitialActiveSheet(d->outputDoc->map()->sheet(d->workbook->activeTab()));
