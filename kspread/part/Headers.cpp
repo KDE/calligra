@@ -482,7 +482,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
             painter.drawLine(1, yPos, 4, yPos + 3);
 #endif
             drawText(painter,
-                     normalFont,
+                     painter->font(),
                      QPointF((width - len) / 2,
                              yPos + (height - ascent) / 2),
 //                            yPos + ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
@@ -1056,7 +1056,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
             double len = painter->fontMetrics().width(colText);
             if (width >= len) {
                 drawText(painter,
-                         normalFont,
+                         painter->font(),
                          QPointF(xPos + (width - len) / 2,
                                  (height - painter->fontMetrics().ascent() - painter->fontMetrics().descent()) / 2),
                          colText,
@@ -1115,7 +1115,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
                 }
 #endif
                 drawText(painter,
-                         normalFont,
+                         painter->font(),
                          QPointF(xPos + (width - len) / 2,
                                  (height - painter->fontMetrics().ascent() - painter->fontMetrics().descent()) / 2),
                          colText,
