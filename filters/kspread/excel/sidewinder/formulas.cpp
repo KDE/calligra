@@ -773,7 +773,7 @@ static const FunctionEntry FunctionEntries[] = {
     { "FLOOR",           2, false },    // 285
     { "GAMMADIST",       4, false },    // 286
     { "GAMMAINV",        3, false },    // 287
-    { "CEIL",            2, false },    // 288
+    { "CEILING",         2, false },    // 288
     { "HYPGEOMDIST",     4, false },    // 289
     { "LOGNORMDIST",     3, false },    // 290
     { "LOGINV",          3, false },    // 291
