@@ -17,6 +17,7 @@ Name[ru]=Фильтр экспорта документов ODF в HTML (?)
 Name[sv]=Kword HTML-ODF-exportfilter
 Name[uk]=Фільтр експорту HTML-ODF для KWord
 Name[x-test]=xxKWord HTML-ODF Export Filterxx
+Name[zh_TW]=KWord HTML-ODF 匯出過濾程式
 X-KDE-Export=text/html
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Weight=50

@@ -17,6 +17,7 @@ Name[ru]=Фильтр экспорта таблиц Microsoft Excel в KSpread
 Name[sv]=Microsoft Excel-exportfilter för Kspread
 Name[uk]=Фільтр експорту до формату Microsoft Excel для KSpread
 Name[x-test]=xxKSpread Microsoft Excel Export Filterxx
+Name[zh_TW]=KSpread Microsoft Excel 匯出過濾程式
 X-KDE-Import=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Export=application/vnd.ms-excel
 X-KDE-Weight=1
