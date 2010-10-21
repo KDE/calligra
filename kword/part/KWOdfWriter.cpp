@@ -305,6 +305,10 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     tmpChangeFile.close();
     bodyWriter->addCompleteElement(&tmpChangeFile);
 
+/*  Do not write out text:page-sequence. It is only allowed when no text
+ *  elements like text:p or text:h are written. KOffice does not seem to use
+ *  text:page-sequence at all.
+
     bodyWriter->startElement("text:page-sequence");
     foreach (KWPage page, m_document->pageManager()->pages()) {
         Q_ASSERT(m_masterPages.contains(page.pageStyle()));
@@ -313,6 +317,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         bodyWriter->endElement(); // text:page
     }
     bodyWriter->endElement(); // text:page-sequence
+ */
 
     delete tmpBodyWriter;
     tmpBodyWriter = 0;

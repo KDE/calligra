@@ -112,7 +112,7 @@ install(TARGETS kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES  kplatoworkpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kplatowork.rc kplatowork_readonly.rc kplatowork_mainwindow.rc DESTINATION ${DATA_INSTALL_DIR}/kplatowork)
 install( FILES  kplatoworkrc DESTINATION ${CONFIG_INSTALL_DIR})
-install( FILES  kplatowork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  kplatowork.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 
 

@@ -1645,7 +1645,7 @@ bool Connection::createTable(KexiDB::TableSchema* tableSchema, bool replaceExist
     }
     const bool internalTable = dynamic_cast<InternalTableSchema*>(tableSchema);
 
-    const QString &tableName = tableSchema->name().toLower();
+    const QString tableName = tableSchema->name().toLower();
 
     if (!internalTable) {
         if (m_driver->isSystemObjectName(tableName)) {

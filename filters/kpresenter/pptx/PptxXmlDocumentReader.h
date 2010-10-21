@@ -46,10 +46,11 @@ public:
     const QString file;
     MSOOXML::MsooXmlRelationships* relationships;
     bool firstReadRound;
+    MSOOXML::DrawingMLTheme* themes;
 };
 
 //! A class reading MSOOXML PPTX markup - presentation.xml part.
-class PptxXmlDocumentReader : public PptxXmlSlideReader
+class PptxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit PptxXmlDocumentReader(KoOdfWriters *writers);
@@ -78,12 +79,21 @@ protected:
 
     void initializeContext(PptxXmlSlideReaderContext& context, const MSOOXML::DrawingMLTheme& theme);
 
+    // Default pptx styles
+    QVector<KoGenStyle> defaultParagraphStyles;
+    QVector<KoGenStyle> defaultTextStyles;
+    QVector<QString> defaultTextColors;
+    QVector<QString> defaultLatinFonts;
+
 private:
 
     void init();
 
     class Private;
     Private* const d;
+#include <MsooXmlCommonReaderMethods.h>
+#include <MsooXmlCommonReaderDrawingMLMethods.h>
+#include <MsooXmlDrawingReaderTableMethods.h>
 };
 
 #endif //PPTXXMLDOCREADER_H

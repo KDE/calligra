@@ -322,7 +322,7 @@ install(TARGETS kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  kspread.rc kspread_readonly.rc kspread.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kspread)
 install( FILES  kspreadpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kspread.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  kspread_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  kspreadrc DESTINATION ${CONFIG_INSTALL_DIR})
