@@ -513,7 +513,11 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
 
     o.rewriteRecord(ir);
 
-    o.writeRecord(Window2Record(0));
+    {
+        Window2Record w2(0);
+        w2.setHasSheetFields(true);
+        o.writeRecord(w2);
+    }
 
     // MergeCells
 
