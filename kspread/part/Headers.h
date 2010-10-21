@@ -154,7 +154,7 @@ protected:
     virtual void paintSizeIndicator(int mouseX) = 0;
     virtual void removeSizeIndicator() = 0;
 
-    void drawText(QPainter* painter, const QFont& font, const QPointF& location, const QString& text) const;
+    void drawText(QPainter* painter, const QFont& font, qreal ypos, qreal width, const QString& text) const;
 
     void doToolChanged(const QString& toolId);
 protected:

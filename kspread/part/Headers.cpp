@@ -483,9 +483,9 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
 #endif
             drawText(painter,
                      painter->font(),
-                     QPointF((width - len) / 2,
-                             yPos + (height - ascent) / 2),
+                     yPos + (height - ascent) / 2,
 //                            yPos + ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                     width,
                      rowText);
         }
 
@@ -502,7 +502,7 @@ void RowHeader::focusOut(QFocusEvent*)
 }
 
 void RowHeader::drawText(QPainter* painter, const QFont& font,
-                         const QPointF& location, const QString& text) const
+                         qreal ypos, qreal width, const QString& text) const
 {
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
@@ -517,14 +517,15 @@ void RowHeader::drawText(QPainter* painter, const QFont& font,
 
     QTextLayout textLayout(text, font);
     textLayout.beginLayout();
+    textLayout.setTextOption(QTextOption(Qt::AlignHCenter));
     forever {
         QTextLine line = textLayout.createLine();
         if (!line.isValid())
             break;
-        line.setLineWidth(width() * scaleX);
+        line.setLineWidth(width * scaleX);
     }
     textLayout.endLayout();
-    QPointF loc(location.x() * scaleX, location.y() * scaleY);
+    QPointF loc(0, ypos * scaleY);
     textLayout.draw(painter, loc);
 
     painter->restore();
@@ -1057,7 +1058,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
             if (width >= len) {
                 drawText(painter,
                          painter->font(),
-                         QPointF(xPos + (width - len) / 2,
+                         QPointF(xPos,
                                  (height - painter->fontMetrics().ascent() - painter->fontMetrics().descent()) / 2),
                          colText,
                          width);
@@ -1116,7 +1117,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
 #endif
                 drawText(painter,
                          painter->font(),
-                         QPointF(xPos + (width - len) / 2,
+                         QPointF(xPos,
                                  (height - painter->fontMetrics().ascent() - painter->fontMetrics().descent()) / 2),
                          colText,
                          width);
@@ -1152,6 +1153,7 @@ void ColumnHeader::drawText(QPainter* painter, const QFont& font,
 
     QTextLayout textLayout(text, font);
     textLayout.beginLayout();
+    textLayout.setTextOption(QTextOption(Qt::AlignHCenter));
     forever {
         QTextLine line = textLayout.createLine();
         if (!line.isValid())
