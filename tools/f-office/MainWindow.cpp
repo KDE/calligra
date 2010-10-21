@@ -2485,8 +2485,7 @@ void MainWindow::updateActions()
     m_ui->actionZoomLevel->setEnabled(docLoaded);
     m_ui->actionNextPage->setEnabled(docLoaded);
     m_ui->actionPrevPage->setEnabled(docLoaded);
-    m_ui->actionFormat->setVisible(documentType() == TextDocument || documentType() == PresentationDocument);
-    m_ui->actionEdit->setVisible(documentType() == TextDocument || documentType() == PresentationDocument);
+    m_ui->actionFormat->setVisible(docLoaded && (documentType() == TextDocument || documentType() == PresentationDocument));
     m_ui->actionSlidingMotion->setVisible(documentType() == PresentationDocument);
 }
 
