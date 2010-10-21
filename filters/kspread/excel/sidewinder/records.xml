@@ -584,7 +584,7 @@
   <field name="notCollapsed"    type="bool"     size="1" />
   <field name="hidden"          type="bool"     size="1" />
   <field name="reserved3"                       size="2" />
-  <field name="reserved4"                       size="8" />
+  <field name="reserved4"                       size="8" default="1" />
   <field name="xfIndex"         type="unsigned" size="12" />
   <field name="reserved5"                       size="4" />
 
