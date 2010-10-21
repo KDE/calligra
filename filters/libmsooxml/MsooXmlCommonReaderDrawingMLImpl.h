@@ -1605,7 +1605,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
                 TRY_READ(DrawingML_r)
             }
-            ELSE_TRY_READ_IF(fld)
+            else if (QUALIFIED_NAME_IS(fld)) {
+                rRead = true;
+                TRY_READ(fld)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -4540,14 +4543,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR(type)
+    TRY_READ_ATTR_WITHOUT_NS(type)
 
     m_currentTextStyleProperties = new KoCharacterStyle();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-
-    if (!type.isEmpty()) {
-//! @todo support all possible fields here
-    }
 
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
@@ -4581,11 +4580,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     body = fldBuf.originalWriter();
 
+//! @todo support all possible fields here
+
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
+    if (type == "slidenum") {
+        body->startElement("text:page-number");
+        body->addAttribute("text:select-page", "current");
+    }
+
     (void)fldBuf.releaseWriter();
 
+    if (type == "slidenum") {
+        body->endElement(); // text:page-number
+    }
     body->endElement(); //text:span
 
     delete m_currentTextStyleProperties;
