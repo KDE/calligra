@@ -1110,8 +1110,8 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
 #if 0
                 switch (x % 3) {
                 case 0: colText = QString::number(height) + 'h'; break;
-                case 1: colText = QString::number(painter.fontMetrics().ascent()) + 'a'; break;
-                case 2: colText = QString::number(painter.fontMetrics().descent()) + 'd'; break;
+                case 1: colText = QString::number(painter->fontMetrics().ascent()) + 'a'; break;
+                case 2: colText = QString::number(painter->fontMetrics().descent()) + 'd'; break;
                 }
 #endif
                 drawText(painter,
