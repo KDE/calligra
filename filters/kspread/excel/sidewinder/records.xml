@@ -1257,7 +1257,7 @@
 </record>
 
 <record name="MmsReserved" id="0x00c1">
-  <field name="reserved" size="32" />
+  <field name="reserved" size="16" />
 </record>
 
 <record name="InterfaceEnd" id="0x00e2">
