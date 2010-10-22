@@ -1747,6 +1747,15 @@ void PptxXmlSlideReader::inheritDefaultBodyProperties()
     }
 }
 
+void PptxXmlSlideReader::inheritDefaultListStyles()
+{
+    int index = 0;
+    while (index <  m_context->defaultListStyles.size()) {
+        m_currentCombinedBulletProperties.insert(index + 1, m_context->defaultListStyles.at(index));
+        ++index;
+    }
+}
+
 void PptxXmlSlideReader::inheritDefaultParagraphStyle(KoGenStyle& targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1

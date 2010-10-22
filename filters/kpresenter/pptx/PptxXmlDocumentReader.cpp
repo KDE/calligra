@@ -342,6 +342,7 @@ void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context
     // And we have the mapping available
     context.defaultTextStyles = defaultTextStyles;
     context.defaultParagraphStyles = defaultParagraphStyles;
+    context.defaultListStyles = defaultListStyles;
     int defaultIndex = 0;
 
     while (defaultIndex < defaultTextStyles.size()) {
@@ -363,6 +364,15 @@ void PptxXmlDocumentReader::initializeContext(PptxXmlSlideReaderContext& context
                 face = theme.fontScheme.minorFonts.latinTypeface;
             }
             context.defaultTextStyles[defaultIndex].addProperty("fo:font-family", face);
+        }
+        if (!defaultBulletColors.at(defaultIndex).isEmpty()) {
+            QString valTransformed = context.colorMap.value(defaultBulletColors.at(defaultIndex));
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = theme.colorScheme.value(valTransformed);
+            QColor col = Qt::black;
+            if (colorItem) {
+                col = colorItem->value();
+            }
+            context.defaultListStyles[defaultIndex].setBulletColor(col.name());
         }
         ++defaultIndex;
     }
@@ -596,6 +606,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
             if (qualifiedName().toString().startsWith("a:lvl")) {
                 defaultTextColors.push_back(QString());
                 defaultLatinFonts.push_back(QString());
+                defaultBulletColors.push_back(QString());
             }
         }
         if (isStartElement()) {
@@ -614,6 +625,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
             if (qualifiedName().toString().startsWith("a:lvl")) {
                 defaultParagraphStyles.push_back(m_currentParagraphStyle);
                 defaultTextStyles.push_back(m_currentTextStyle);
+                defaultListStyles.push_back(m_currentBulletProperties);
             }
         }
     }

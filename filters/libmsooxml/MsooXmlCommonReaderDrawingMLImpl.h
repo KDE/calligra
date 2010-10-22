@@ -1605,7 +1605,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #endif
                 TRY_READ(DrawingML_r)
             }
-            ELSE_TRY_READ_IF(fld)
+            else if (QUALIFIED_NAME_IS(fld)) {
+                rRead = true;
+                TRY_READ(fld)
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1858,7 +1861,7 @@ static QFont::Capitalization capToOdf(const QString& cap)
  - effectDag (Effect Container) §20.1.8.25
  - effectLst (Effect Container) §20.1.8.26
  - extLst (Extension List) §20.1.2.2.15
- - gradFill (Gradient Fill) §20.1.8.33
+ - [done] gradFill (Gradient Fill) §20.1.8.33
  - grpFill (Group Fill) §20.1.8.35
  - [done] highlight (Highlight Color) §21.1.2.3.4
  - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
@@ -1894,6 +1897,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
+            ELSE_TRY_READ_IF(gradFill)
             ELSE_TRY_READ_IF_IN_CONTEXT(noFill)
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
@@ -4540,14 +4544,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     const QXmlStreamAttributes attrs(attributes());
 
-    TRY_READ_ATTR(type)
+    TRY_READ_ATTR_WITHOUT_NS(type)
 
     m_currentTextStyleProperties = new KoCharacterStyle();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
-
-    if (!type.isEmpty()) {
-//! @todo support all possible fields here
-    }
 
     MSOOXML::Utils::XmlWriteBuffer fldBuf;
     body = fldBuf.setWriter(body);
@@ -4581,11 +4581,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
 
     body = fldBuf.originalWriter();
 
+//! @todo support all possible fields here
+
     body->startElement("text:span", false);
     body->addAttribute("text:style-name", currentTextStyleName);
 
+    if (type == "slidenum") {
+        body->startElement("text:page-number");
+        body->addAttribute("text:select-page", "current");
+    }
+
     (void)fldBuf.releaseWriter();
 
+    if (type == "slidenum") {
+        body->endElement(); // text:page-number
+    }
     body->endElement(); //text:span
 
     delete m_currentTextStyleProperties;
@@ -4913,7 +4923,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
      - [done] lvl6pPr (§21.1.2.4.18)
      - [done] lvl7pPr (§21.1.2.4.19)
      - [done] lvl8pPr (§21.1.2.4.20)
-     - [done] lvl9pPr (§21.1.2.4.21) 
+     - [done] lvl9pPr (§21.1.2.4.21)
      - pPr (§21.1.2.2.7)
 
  Child elements:
@@ -4923,7 +4933,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
      - effectDag (Effect Container)                    §20.1.8.25
      - effectLst (Effect Container)                    §20.1.8.26
      - extLst (Extension List)                         §20.1.2.2.15
-     - gradFill (Gradient Fill)                        §20.1.8.33
+     - [done] gradFill (Gradient Fill)                        §20.1.8.33
      - grpFill (Group Fill)                            §20.1.8.35
      - highlight (Highlight Color)                     §21.1.2.3.4
      - hlinkClick (Click Hyperlink)                    §21.1.2.3.5
@@ -4954,6 +4964,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(solidFill)
+            ELSE_TRY_READ_IF(gradFill) // we do not support this properly, at least we get the color
             ELSE_TRY_READ_IF(latin)
 //! @todo add ELSE_WRONG_FORMAT
         }

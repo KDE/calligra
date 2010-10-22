@@ -161,6 +161,13 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
         FontRecord fnt(0);
         fnt.setFontName("Arial");
         d->fontRecords.append(fnt);
+        fnt.setFontWeight(700);
+        d->fontRecords.append(fnt);
+        fnt.setFontWeight(400);
+        fnt.setItalic(true);
+        d->fontRecords.append(fnt);
+        fnt.setFontWeight(700);
+        d->fontRecords.append(fnt);
     }
     QList<XFRecord> xfs;
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
@@ -513,7 +520,11 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
 
     o.rewriteRecord(ir);
 
-    o.writeRecord(Window2Record(0));
+    {
+        Window2Record w2(0);
+        w2.setHasSheetFields(true);
+        o.writeRecord(w2);
+    }
 
     // MergeCells
 
@@ -1054,7 +1065,7 @@ void ExcelExport::Private::convertStyle(const KSpread::Style& style, XFRecord& x
     xf.setIsStyleXF(false);
     xf.setParentStyle(0);
     unsigned fontIdx = fontIndex(style.font(), style.fontColor(), fontMap);
-    xf.setFontIndex(fontIdx);
+    xf.setFontIndex(fontIdx < 4 ? fontIdx : fontIdx + 1);
     // TODO: number format
     switch (style.halign()) {
     case KSpread::Style::Left:

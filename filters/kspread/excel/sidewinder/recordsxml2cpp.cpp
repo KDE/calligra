@@ -593,7 +593,13 @@ static void processFieldElementForWrite(QString indent, QTextStream& out, QDomEl
             }
             out << ");\n";
         } else {
-            out << indent << "out.writeUnsigned(" << bits << ", 0);\n";
+            out << indent << "out.writeUnsigned(" << bits << ", ";
+            if (field.hasAttribute("default")) {
+                out << field.attribute("default");
+            } else {
+                out << "0";
+            }
+            out << ");\n";
         }
     } else if (field.tagName() == "if") {
         out << indent << "if (" << field.attribute("predicate") << ") {\n";
