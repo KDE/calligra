@@ -1374,6 +1374,11 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletColor(const QStri
     m_bulletColor = bulletColor;
 }
 
+MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletColor() const
+{
+    return m_bulletColor;
+}
+
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletChar() const
 {
     return m_bulletChar;
@@ -1382,6 +1387,17 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletChar() const
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletFont() const
 {
     return m_bulletFont;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
+{
+    // This function is intented for helping to inherit some values from other properties
+    if (!m_bulletColor.isEmpty()) {
+        m_bulletColor = properties.bulletColor();
+    }
+    if (m_type == ParagraphBulletProperties::BulletType && m_bulletChar.isEmpty()) {
+        m_bulletChar = properties.bulletChar();
+    }
 }
 
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
@@ -1424,15 +1440,15 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     }
 
     returnValue += "/>";
-    
+
     returnValue += "<style:text-properties ";
-        
+
     if (!m_bulletColor.isEmpty()) {
     	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
     }
 
     returnValue += "/>";
-   
+
     returnValue += ending;
 
     return returnValue;
