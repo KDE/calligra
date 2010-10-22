@@ -38,5 +38,15 @@ protected:
     KexiActionProxy *m_proxy;
 };
 
-#endif
+//! @internal a tool for emitting signal
+class KexiActionProxySignal : public QObject
+{
+    Q_OBJECT
+public:
+    KexiActionProxySignal(QObject *parent) : QObject(parent) {}
+    void activate() { emit invoke(); }
+signals:
+    void invoke();
+};
 
+#endif
