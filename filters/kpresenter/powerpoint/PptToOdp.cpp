@@ -1564,8 +1564,10 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         const PerSlideHeadersFootersContainer* hfc = getPerSlideHF(sc);
         HeadersFootersAtom hf;
 
-        //Default values saved by MS Office 2003 require corrections.
-        if (!hfc) {
+        if (hfc) {
+            hf = hfc->hfAtom;
+        } else {
+            //Default values saved by MS Office 2003 require corrections. 
             const SlideHeadersFootersContainer* dhfc = getSlideHF();
             if (dhfc) {
                 hf = dhfc->hfAtom;
@@ -1579,9 +1581,14 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                     hf.fHasFooter = false;
                 }
             }
-	} else {
-            hf = hfc->hfAtom;
-        }
+            //PerSlideHeadersFootersContainer and SlideHeadersFootersContainer
+            //are both optional, use default values for the drawing-page style
+            else {
+                hf.fHasDate = hf.fHasTodayDate = hf.fHasUserDate = false;
+                hf.fHasSlideNumber = hf.fHasHeader = hf.fHasFooter = false;
+                hf.formatId = -1;
+            }
+	}
         const OfficeArtDggContainer& drawingGroup
                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         const OfficeArtSpContainer* masterSlideShape
