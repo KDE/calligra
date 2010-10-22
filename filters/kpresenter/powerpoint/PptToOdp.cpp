@@ -1370,7 +1370,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
                            KoGenStyle::TextType);
             }
         }
-        if (hasIndent && i.pf.fBulletHasColor()) {
+        // a bullet exists and the bullet has a color
+        if (i.pf.fHasBullet() && i.pf.fBulletHasColor()) {
             const QColor color = toQColor(i.pf.bulletColor());
             if (color.isValid()) {
                 ls.addProperty("fo:color", color.name(), KoGenStyle::TextType);
@@ -2451,30 +2452,63 @@ QString PptToOdp::textAlignmentToString(unsigned int value) const
 
 QColor PptToOdp::toQColor(const ColorIndexStruct &color)
 {
+    QColor ret;
+
+    // MS-PPT 2.12.2 ColorIndexStruct
     if (color.index == 0xFE) {
         return QColor(color.red, color.green, color.blue);
     }
     if (color.index == 0xFF) { // color is undefined
-        return QColor();
+        return ret;
     }
 
-    const QList<ColorStruct>* colorScheme;
+    const QList<ColorStruct>* colorScheme = NULL;
+    const MSO::MasterOrSlideContainer* m = currentMaster;
+    const MSO::MainMasterContainer* mmc = NULL;
+    const MSO::SlideContainer* tmc = NULL;
+    const MSO::SlideContainer* sc = currentSlide;
 
-    // TODO: use the current master, curent slide approach!
+    //TODO: hande the case of a notes master slide/notes slide pair
+//     const MSO::NotesContainer* nmc = NULL;
+//     const MSO::NotesContainer* nc = NULL;
 
-    const MasterOrSlideContainer* m = p->masters[0];
-    if (m->anon.is<MainMasterContainer>()) {
-        const MainMasterContainer* n = m->anon.get<MainMasterContainer>();
-        colorScheme = &n->slideSchemeColorSchemeAtom.rgSchemeColor;
+    if (m) {
+        if (m->anon.is<MainMasterContainer>()) {
+            mmc = m->anon.get<MainMasterContainer>();
+            colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+        } else if (m->anon.is<SlideContainer>()) {
+            tmc = m->anon.get<SlideContainer>();
+            colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+        }
+    }
+    if (sc) {
+        if (!sc->slideAtom.slideFlags.fMasterScheme) {
+            colorScheme = &sc->slideSchemeColorSchemeAtom.rgSchemeColor;
+        }
+    }
+    if (!colorScheme) {
+        //NOTE: Using color scheme of the first main master/title master slide
+        if (p->masters[0]->anon.is<MainMasterContainer>()) {
+            mmc = p->masters[0]->anon.get<MainMasterContainer>();
+            colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+        }
+        else if (p->masters[0]->anon.is<SlideContainer>()) {
+            tmc = p->masters[0]->anon.get<SlideContainer>();
+            colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+        }
+        if (!colorScheme) {
+            qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
+            return ret;
+        }
+    }
+    if (colorScheme->size() <= color.index) {
+        qWarning() << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
     } else {
-        const SlideContainer* n = m->anon.get<SlideContainer>();
-        colorScheme = &n->slideSchemeColorSchemeAtom.rgSchemeColor;
+        const ColorStruct cs = colorScheme->at(color.index);
+        ret = QColor(cs.red, cs.green, cs.blue);
     }
-    if (colorScheme->size() > color.index) {
-        const ColorStruct c = colorScheme->at(color.index);
-        return QColor(c.red, c.green, c.blue);
-    }
-    return QColor();
+
+    return ret;
 }
 QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
                           const MSO::StreamOffset* master, const MSO::StreamOffset* common)
@@ -2485,11 +2519,11 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
     //defined color scheme will be used to determine the color (MS-ODRAW)
     if (c.fSchemeIndex) {
 
-        const QList<ColorStruct>* lst = NULL;
+        const QList<ColorStruct>* colorScheme = NULL;
         const MSO::MainMasterContainer* mmc = NULL;
         const MSO::SlideContainer* tmc = NULL;
-        const MSO::NotesContainer* nmc = NULL;
         const MSO::SlideContainer* sc = NULL;
+        const MSO::NotesContainer* nmc = NULL;
         const MSO::NotesContainer* nc = NULL;
 
         // Get the color scheme of the current main master/title master or
@@ -2497,11 +2531,11 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
         if (master) {
             MSO::StreamOffset* m = const_cast<MSO::StreamOffset*>(master);
             if ((mmc = dynamic_cast<MSO::MainMasterContainer*>(m))) {
-                lst = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else if ((nmc = dynamic_cast<MSO::NotesContainer*>(m))) {
-                lst = &nmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                colorScheme = &nmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else if ((tmc = dynamic_cast<MSO::SlideContainer*>(m))) {
-                lst = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             } else {
                 qWarning() << "Warning: Incorrect container!";
             }
@@ -2512,38 +2546,37 @@ QColor PptToOdp::toQColor(const MSO::OfficeArtCOLORREF& c,
             MSO::StreamOffset* c = const_cast<MSO::StreamOffset*>(common);
 	    if ((sc = dynamic_cast<MSO::SlideContainer*>(c))) {
                 if (!sc->slideAtom.slideFlags.fMasterScheme) {
-                    lst = &sc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                    colorScheme = &sc->slideSchemeColorSchemeAtom.rgSchemeColor;
                 }
 	    } else if ((nc = dynamic_cast<MSO::NotesContainer*>(c))) {
                 if (!nc->notesAtom.slideFlags.fMasterScheme) {
-                    lst = &nc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                    colorScheme = &nc->slideSchemeColorSchemeAtom.rgSchemeColor;
                 }
 	    } else {
                 qWarning() << "Warning: Incorrect container! Provide SlideContainer of NotesContainer.";
             }
         }
-        if (!lst) {
+        if (!colorScheme) {
             //NOTE: Using color scheme of the first main master/title master slide
             if (p->masters[0]->anon.is<MainMasterContainer>()) {
                 mmc = p->masters[0]->anon.get<MainMasterContainer>();
-                lst = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             }
             else if (p->masters[0]->anon.is<SlideContainer>()) {
                 tmc = p->masters[0]->anon.get<SlideContainer>();
-                lst = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+                colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
             }
-            if (!lst) {
+            if (!colorScheme) {
                 qWarning() << "Warning: Ivalid color scheme! Returning an invalid color!";
                 return ret;
             }
         }
         // Use the red color channel's value as index according to MS-ODRAW
-        if (lst->size() <= c.red) {
+        if (colorScheme->size() <= c.red) {
             qWarning() << "Warning: Incorrect size of rgSchemeColor! Returning an invalid color!";
             return ret;
         } else {
-	    ColorStruct cs;
-            cs = lst->value(c.red);
+            const ColorStruct cs = colorScheme->value(c.red);
             ret = QColor(cs.red, cs.green, cs.blue);
         }
     } else {
