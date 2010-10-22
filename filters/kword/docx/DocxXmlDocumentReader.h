@@ -149,6 +149,8 @@ protected:
     KoFilter::ConversionStatus read_tr();
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
+    KoFilter::ConversionStatus read_gridSpan();
+    int m_gridSpan;
 
     KoFilter::ConversionStatus read_oMath();
     KoFilter::ConversionStatus read_oMathPara();
