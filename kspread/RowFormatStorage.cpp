@@ -22,10 +22,10 @@ public:
 };
 
 RowFormatStorage::Private::Private()
-    : rowHeights(1, KS_rowMax, -1)
-    , hidden(1, KS_rowMax, false)
-    , filtered(1, KS_rowMax, false)
-    , hasPageBreak(1, KS_rowMax, false)
+    : rowHeights(1, KS_rowMax+1, -1)
+    , hidden(1, KS_rowMax+1, false)
+    , filtered(1, KS_rowMax+1, false)
+    , hasPageBreak(1, KS_rowMax+1, false)
 {
 }
 
