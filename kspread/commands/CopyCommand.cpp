@@ -77,19 +77,9 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
             const RowFormat* format;
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 if (!sheet->rowFormats()->isDefaultRow(row)) {
-                    QDomElement e = xmlDoc.createElement("row");
-                    e.setAttribute("height", sheet->rowFormats()->rowHeight(row));
-                    e.setAttribute("row", row - top + 1);
-                    if (sheet->rowFormats()->isHidden(row))
-                        e.setAttribute("hide", (int)true);
-
-                    const Style style = sheet->cellStorage()->style(QRect(1, row, KS_colMax, 1));
-                    if (!style.isEmpty()) {
-                        QDomElement format;
-                        style.saveXML(xmlDoc, format, sheet->map()->styleManager());
-                        e.appendChild(format);
-                    }
-                    rows.appendChild(e);
+                    QDomElement e = RowFormat(sheet->rowFormats(), row).save(xmlDoc, top - 1);
+                    if (!e.isNull()) {
+                        rows.appendChild(e);
                 }
             }
             continue;
