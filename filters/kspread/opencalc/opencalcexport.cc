@@ -52,6 +52,7 @@
 #include <kspread/NamedAreaManager.h>
 #include <kspread/PrintSettings.h>
 #include <kspread/RowColumnFormat.h>
+#include <kspread/RowFormatStorage.h>
 #include <kspread/Sheet.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
@@ -544,14 +545,13 @@ void OpenCalcExport::exportSheet(QDomDocument & doc, QDomElement & tabElem,
     }
 
     for (i = 1; i <= maxRows; ++i) {
-        const RowFormat * row = sheet->rowFormat(i);
         RowStyle rs;
         rs.breakB = ::Style::automatic;
-        rs.size   = POINT_TO_MM(row->height()) / 10;
+        rs.size   = POINT_TO_MM(sheet->rowFormats()->rowHeight(i)) / 10;
 
         QDomElement rowElem = doc.createElement("table:table-row");
         rowElem.setAttribute("table:style-name", m_styles.rowStyle(rs));
-        if (row->isHidden())
+        if (sheet->rowFormats()->isHidden(i))
             rowElem.setAttribute("table:visibility", "collapse");
 
         exportCells(doc, rowElem, sheet, i, maxCols);
