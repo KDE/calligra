@@ -34,8 +34,18 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    void testSetRowHeight();
+    void testRowHeight();
     void testHidden();
+    void testFiltered();
+    void testHiddenOrFiltered();
+    void testVisibleHeight();
+    void testTotalRowHeight();
+    void testTotalVisibleRowHeight();
+    void testPageBreak();
+    void testIsDefaultRow();
+    void testSetDefault();
+    void testLastNonDefaultRow();
+    void testRowsAreEqual();
     void testInsertRows();
     void testRemoveRows();
 private:
