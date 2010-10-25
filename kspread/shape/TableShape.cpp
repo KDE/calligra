@@ -196,9 +196,7 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         for (int col = 1; col <= d->columns; ++col) {
             size.rwidth() += sheet()->columnFormat(col)->visibleWidth();
         }
-        for (int row = 1; row <= d->rows; ++row) {
-            size.rheight() += sheet()->rowFormats()->visibleHeight(row);
-        }
+        size.rheight() = sheet()->rowFormats()->totalVisibleRowHeight(1, d->rows);
         KoShape::setSize(size);
         return true;
     }
@@ -248,9 +246,7 @@ void TableShape::setMap(Map *map)
     for (int col = 1; col <= d->columns; ++col) {
         size.rwidth() += sheet->columnFormat(col)->visibleWidth();
     }
-    for (int row = 1; row <= d->rows; ++row) {
-        size.rheight() += sheet->rowFormats()->visibleHeight(row);
-    }
+    size.rheight() = sheet->rowFormats()->totalVisibleRowHeight(1, d->rows);
     KoShape::setSize(size);
 }
 
