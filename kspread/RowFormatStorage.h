@@ -21,11 +21,6 @@ public:
     qreal rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setRowHeight(int firstRow, int lastRow, qreal height);
 
-    qreal visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
-
-    qreal totalRowHeight(int firstRow, int lastRow) const;
-    qreal totalVisibleRowHeight(int firstRow, int lastRow) const;
-
     bool isHidden(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setHidden(int firstRow, int lastRow, bool hidden);
 
@@ -34,14 +29,20 @@ public:
 
     bool isHiddenOrFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
 
+    qreal visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+
+    qreal totalRowHeight(int firstRow, int lastRow) const;
+    qreal totalVisibleRowHeight(int firstRow, int lastRow) const;
+
     bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
 
-    int lastNonDefaultRow() const;
-    bool rowsAreEqual(int row1, int row2) const;
-
     bool isDefaultRow(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setDefault(int firstRow, int lastRow);
+    int lastNonDefaultRow() const;
+
+    bool rowsAreEqual(int row1, int row2) const;
+
 
     /**
      * Insert \p number of rows at position \p row.

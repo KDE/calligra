@@ -13,6 +13,7 @@ class RowFormatStorage::Private
 {
 public:
     Private();
+    qreal rawRowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
 
     Sheet* sheet;
     mdds::flat_segment_tree<int, qreal> rowHeights;
@@ -53,18 +54,24 @@ Sheet* RowFormatStorage::sheet() const
 
 qreal RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
 {
-    qreal v;
-    if (!d->rowHeights.search(row, v, firstRow, lastRow)) {
-        if (firstRow) *firstRow = row;
-        if (lastRow) *lastRow = row;
+    qreal v = d->rawRowHeight(row, lastRow, firstRow);
+    if (v == -1) {
         return d->sheet->map()->defaultRowFormat()->height();
     } else {
+        return v;
+    }
+}
+
+qreal RowFormatStorage::Private::rawRowHeight(int row, int *lastRow, int *firstRow) const
+{
+    qreal v;
+    if (!rowHeights.search(row, v, firstRow, lastRow)) {
+        if (firstRow) *firstRow = row;
+        if (lastRow) *lastRow = row;
+        return -1;
+    } else {
         if (lastRow) (*lastRow)--;
-        if (v == -1) {
-            return d->sheet->map()->defaultRowFormat()->height();
-        } else {
-            return v;
-        }
+        return v;
     }
 }
 
@@ -148,7 +155,7 @@ bool RowFormatStorage::isHiddenOrFiltered(int row, int* lastRow, int* firstRow) 
 {
     int hLastRow, hFirstRow, fLastRow, fFirstRow;
     bool v = isHidden(row, &hLastRow, &hFirstRow);
-    v = v || isFiltered(row, &fLastRow, &fFirstRow);
+    v = isFiltered(row, &fLastRow, &fFirstRow) || v;
     if (lastRow) *lastRow = qMin(hLastRow, fLastRow);
     if (firstRow) *firstRow = qMax(hFirstRow, fFirstRow);
     return v;
@@ -169,30 +176,48 @@ bool RowFormatStorage::hasPageBreak(int row, int* lastRow, int* firstRow) const
 
 void RowFormatStorage::setPageBreak(int firstRow, int lastRow, bool pageBreak)
 {
-    d->hasPageBreak.insert_back(firstRow, lastRow, pageBreak);
+    d->hasPageBreak.insert_back(firstRow, lastRow+1, pageBreak);
 }
 
 int RowFormatStorage::lastNonDefaultRow() const
 {
-    // TODO
-    return KS_rowMax;
+    int row = KS_rowMax;
+    int firstRow;
+    while (row > 0 && isDefaultRow(row, 0, &firstRow)) {
+        row = firstRow-1;
+    }
+    if (row < 1) return 1;
+    return row;
 }
 
 bool RowFormatStorage::rowsAreEqual(int row1, int row2) const
 {
-    // TODO
-    return false;
+    return rowHeight(row1) == rowHeight(row2)
+            && isHidden(row1) == isHidden(row2)
+            && isFiltered(row1) == isFiltered(row2)
+            && hasPageBreak(row1) == hasPageBreak(row2);
 }
 
 bool RowFormatStorage::isDefaultRow(int row, int* lastRow, int* firstRow) const
 {
-    // TODO
-    return false;
+    bool isDef = true;
+    int l, f;
+    isDef = d->rawRowHeight(row, lastRow, firstRow) == -1 && isDef;
+    isDef = !isHiddenOrFiltered(row, &l, &f) && isDef;
+    if (lastRow) *lastRow = qMin(*lastRow, l);
+    if (firstRow) *firstRow = qMax(*firstRow, f);
+    isDef = !hasPageBreak(row, &l, &f) && isDef;
+    if (lastRow) *lastRow = qMin(*lastRow, l);
+    if (firstRow) *firstRow = qMax(*firstRow, f);
+    return isDef;
 }
 
 void RowFormatStorage::setDefault(int firstRow, int lastRow)
 {
-    // TODO
+    setRowHeight(firstRow, lastRow, -1);
+    setHidden(firstRow, lastRow, false);
+    setFiltered(firstRow, lastRow, false);
+    setPageBreak(firstRow, lastRow, false);
 }
 
 void RowFormatStorage::insertRows(int row, int number)
