@@ -37,6 +37,7 @@
 #include <kspread/Sheet.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
+#include <RowFormatStorage.h>
 #include <StyleStorage.h>
 #include <ValueStorage.h>
 #include <kspread_limits.h>
@@ -385,12 +386,11 @@ void ExcelExport::convertSheet(KSpread::Sheet* sheet, const QHash<QString, unsig
             if (first.isNull()) first = KSpread::Cell(sheet, 1, row);
             KSpread::Cell last = sheet->cellStorage()->lastInRow(row);
             if (last.isNull()) last = first;
-            const KSpread::RowFormat* format = sheet->rowFormat(row);
 
             rr.setRow(row-1);
             rr.setFirstColumn(first.column()-1);
             rr.setLastColumnPlus1(last.column());
-            rr.setHeight(format->height() * 20);
+            rr.setHeight(sheet->rowFormats()->rowHeight(row) * 20);
 
             o.writeRecord(rr);
             if (row == firstRow) lastStart = o.pos();

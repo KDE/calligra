@@ -60,6 +60,7 @@
 #include <Map.h>
 #include <NamedAreaManager.h>
 #include <RowColumnFormat.h>
+#include <RowFormatStorage.h>
 #include <Sheet.h>
 #include <SheetPrint.h>
 #include <Style.h>
@@ -758,15 +759,13 @@ void ExcelImport::Private::processRow(Sheet* is, unsigned rowIndex, KSpread::She
 
     if (!row) {
         if (is->defaultRowHeight() != os->map()->defaultRowFormat()->height()) {
-            KSpread::RowFormat* orf = os->nonDefaultRowFormat(rowIndex+1);
-            orf->setHeight(is->defaultRowHeight());
+            os->rowFormats()->setRowHeight(rowIndex+1, rowIndex+1, is->defaultRowHeight());
         }
         return;
     }
 
-    KSpread::RowFormat* orf = os->nonDefaultRowFormat(rowIndex+1);
-    orf->setHeight(row->height());
-    orf->setHidden(!row->visible());
+    os->rowFormats()->setRowHeight(rowIndex+1, rowIndex+1, row->height());
+    os->rowFormats()->setHidden(rowIndex+1, rowIndex+1, !row->visible());
     // TODO default cell style
 
     // find the column of the rightmost cell (if any)
