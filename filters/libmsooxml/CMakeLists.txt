@@ -1,4 +1,4 @@
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
+#add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
 
 include_directories(
     ${KOMAIN_INCLUDES}

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=strange_far_hills
 Name=Strange Far Hills
+Name[da]=Strange Far Hills
 Name[et]=Kauged kummalised künkad
 Name[it]=Strane colline lontane
 Name[pt]=Colinas Distantes
@@ -8,7 +9,9 @@ Name[pt_BR]=Colinas distantes
 Name[sv]=Underliga fjärran kullar
 Name[uk]=Дивні далекі пагорби
 Name[x-test]=xxStrange Far Hillsxx
+Name[zh_TW]=Strange Far Hills
 Comment=Strange Far Hills
+Comment[da]=Mærkelige bjerge i det fjerne
 Comment[et]=Kauged kummalised künkad
 Comment[it]=Strane colline lontane
 Comment[pt]=Colinas Distantes
@@ -16,6 +19,7 @@ Comment[pt_BR]=Colinas distantes
 Comment[sv]=Underliga fjärran kullar
 Comment[uk]=Дивні далекі пагорби
 Comment[x-test]=xxStrange Far Hillsxx
+Comment[zh_TW]=Strange Far Hills
 Type=Link
 URL=.source/strange_far_hills.otp
 X-KDE-Hidden=false

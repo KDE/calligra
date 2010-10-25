@@ -475,7 +475,7 @@ TYPE PptTextPFRun::NAME() const \
     const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
         if ((*p)->masks.TEST) { \
-	    if ((*p)->bulletFlags && (*p)->VALID) { \
+ 	    if (VALID()) { \
                 return PRE (*p)->NAME; \
             } \
         } \
@@ -483,10 +483,10 @@ TYPE PptTextPFRun::NAME() const \
     } \
     return DEFAULT; \
 }
-//     TYPE             PRE NAME             TEST         VALIDITY TEST                 DEFAULT
-GETTER(quint16,          ,  bulletFontRef,   bulletFont,  bulletFlags->fBulletHasFont,  0)
-GETTER(qint16,           ,  bulletSize,      bulletSize,  bulletFlags->fBulletHasSize,  0)
-GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, bulletFlags->fBulletHasColor, ColorIndexStruct())
+//     TYPE             PRE NAME             TEST         VALID                 DEFAULT
+GETTER(quint16,          ,  bulletFontRef,   bulletFont,  fBulletHasFont,  0)
+GETTER(qint16,           ,  bulletSize,      bulletSize,  fBulletHasSize,  0)
+GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, fBulletHasColor, ColorIndexStruct())
 #undef GETTER
 
 qint32 PptTextPFRun::bulletBlipRef() const {
@@ -509,6 +509,8 @@ qint16 PptTextPFRun::fBulletHasAutoNumber() const {
     }
     return 0;
 }
+
+#define ANM_Default 3
 quint16 PptTextPFRun::scheme() const {
     const MSO::TextPFException9* const * p = pf9s;
     while (*p) {
@@ -517,7 +519,8 @@ quint16 PptTextPFRun::scheme() const {
         }
         ++p;
     }
-    return 0;
+    
+    return ANM_Default;
 }
 qint16 PptTextPFRun::startNum() const {
     const MSO::TextPFException9* const * p = pf9s;
@@ -530,9 +533,15 @@ qint16 PptTextPFRun::startNum() const {
     return 1;
 }
 
+//NOTE: Logic exploited from test documents saved in MS PowerPoint 2003/2007
 bool PptTextPFRun::isList() const {
     bool ret = false;
-    if (fHasBullet() || fBulletHasAutoNumber() || (bulletBlipRef() != 65535)) {
+    if (fHasBullet() ||
+        fBulletHasAutoNumber() ||
+        (bulletBlipRef() != 65535)
+//         (bulletChar() > 0) ||
+//         fBulletHasFont() ||
+       ) {
         ret = true;
     }
     return ret;

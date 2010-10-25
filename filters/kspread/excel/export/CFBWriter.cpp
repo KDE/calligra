@@ -28,6 +28,7 @@
 
 static const quint32 ENDOFCHAIN = 0xFFFFFFFE;
 static const quint32 FATSECT = 0xFFFFFFFD;
+static const quint32 FREESECT = 0xFFFFFFFF;
 static const quint32 NOSTREAM = 0xFFFFFFFF;
 
 CFBWriter::CFBWriter(bool largeSectors)
@@ -110,7 +111,7 @@ void CFBWriter::StreamIODevice::close()
     QIODevice::close();
     if (m_buffer.size() > 0) {
         if (m_entry.streamSize == 0 && m_entry.id != 0) {
-            // smaller than a sector, so use minifat
+            // smaller than cutoff size, so use minifat
             m_entry.streamSize = m_buffer.size();
             int sector = -1;
             for (int i = 0; i < m_buffer.size(); i += 64) {
@@ -120,6 +121,16 @@ void CFBWriter::StreamIODevice::close()
                 if (i == 0) m_entry.firstSector = sector;
             }
         } else {
+            // write full sectors first
+            while (unsigned(m_buffer.size()) > m_writer.m_sectorSize) {
+                QByteArray sector = m_buffer.left(m_writer.m_sectorSize);
+                m_buffer = m_buffer.mid(m_writer.m_sectorSize);
+                m_lastSector = m_writer.writeSector(sector, m_lastSector);
+                if (m_entry.firstSector == quint32(-1)) {
+                    m_entry.firstSector = m_lastSector;
+                }
+                m_entry.streamSize += m_writer.m_sectorSize;
+            }
             m_entry.streamSize += m_buffer.size();
             m_buffer.append(QByteArray(m_writer.m_sectorSize - m_buffer.size(), '\0'));
             m_lastSector = m_writer.writeSector(m_buffer, m_lastSector);
@@ -144,6 +155,10 @@ qint64 CFBWriter::StreamIODevice::size() const
 void CFBWriter::StreamIODevice::appendData(const char *data, qint64 len)
 {
     m_buffer.append(data, len);
+
+    // cutoff for mini-fat
+    if (m_entry.streamSize == 0 && m_buffer.size() <= 4096) return;
+
     while (unsigned(m_buffer.size()) > m_writer.m_sectorSize) {
         QByteArray sector = m_buffer.left(m_writer.m_sectorSize);
         m_buffer = m_buffer.mid(m_writer.m_sectorSize);
@@ -359,7 +374,7 @@ void CFBWriter::close()
         QDataStream ds(m_device);
         ds.setByteOrder(QDataStream::LittleEndian);
         for (unsigned j = 0, idx = i*(m_sectorSize/4); j < m_sectorSize/4; j++, idx++) {
-            ds << quint32(idx < unsigned(m_fat.size()) ? m_fat[idx] : 0);
+            ds << quint32(idx < unsigned(m_fat.size()) ? m_fat[idx] : FREESECT);
         }
     }
 

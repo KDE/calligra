@@ -251,6 +251,9 @@ protected:
     // Inherits liststyle to m_currentCombinedBulletProperties
     void inheritListStyles();
 
+    // Inherits default styles to m_currentCombinedBulletProperties
+    void inheritDefaultListStyles();
+
     // inherits default text style to target
     void inheritDefaultTextStyle(KoGenStyle& targetStyle);
 

@@ -66,8 +66,19 @@ public:
     // TextPFException9
     qint32 bulletBlipRef() const;
     qint16 fBulletHasAutoNumber() const;
-    quint16 scheme() const;
     qint16 startNum() const;
+
+    /**
+     * Check the scheme field of the TextAutoNumberScheme structure, which
+     * specifies the automatic numbering scheme for text paragraphs.  The
+     * default value = ANM_ArabicPeriod was tested and discussed on the Office
+     * File Format Forum.
+     *
+     * @return the scheme describing the style of the number bullets
+     * corresponding to the TextAutoNumberSchemeEnum or the default value if
+     * TextAutoNumberScheme is not provided.
+     */
+    quint16 scheme() const;
 };
 
 class PptTextCFRun {

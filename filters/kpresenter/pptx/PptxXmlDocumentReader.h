@@ -82,8 +82,13 @@ protected:
     // Default pptx styles
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<KoGenStyle> defaultTextStyles;
+    QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
+    QVector<QString> defaultBulletColors;
     QVector<QString> defaultTextColors;
     QVector<QString> defaultLatinFonts;
+
+    enum ColorReadingState {rprState, buClrState};
+    ColorReadingState m_colorState;
 
 private:
 

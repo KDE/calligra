@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=simple_waves
 Name=Simple Waves
+Name[da]=Simple Waves
 Name[et]=Lihtsad lained
 Name[it]=Onde semplici
 Name[pt]=Ondas Simples
@@ -8,7 +9,9 @@ Name[pt_BR]=Ondas simples
 Name[sv]=Enkla vågor
 Name[uk]=Прості хвилі
 Name[x-test]=xxSimple Wavesxx
+Name[zh_TW]=簡單波浪
 Comment=Simple Waves
+Comment[da]=Simple bølger
 Comment[et]=Lihtsad lained
 Comment[it]=Onde semplici
 Comment[pt]=Ondas Simples
@@ -16,6 +19,7 @@ Comment[pt_BR]=Ondas simples
 Comment[sv]=Enkla vågor
 Comment[uk]=Прості хвилі
 Comment[x-test]=xxSimple Wavesxx
+Comment[zh_TW]=簡單波浪
 Type=Link
 URL=.source/simple_waves.otp
 X-KDE-Hidden=false

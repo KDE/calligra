@@ -584,7 +584,7 @@
   <field name="notCollapsed"    type="bool"     size="1" />
   <field name="hidden"          type="bool"     size="1" />
   <field name="reserved3"                       size="2" />
-  <field name="reserved4"                       size="8" />
+  <field name="reserved4"                       size="8" default="1" />
   <field name="xfIndex"         type="unsigned" size="12" />
   <field name="reserved5"                       size="4" />
 
@@ -1220,11 +1220,13 @@
   <field name="reserved1"                       size="4" />
   <field name="rwTop"           type="unsigned" size="16" />
   <field name="colLeft"         type="unsigned" size="16" />
+  <field name="icvHdr"        type="unsigned" size="16" default="64" />
+  <field name="reserved2"                     size="16" />
   <optional name="sheetFields">
-    <field name="icvHdr"        type="unsigned" size="16" default="64" />
-    <field name="reserved2"                     size="16" />
     <field name="wScaleSLV"     type="unsigned" size="16" />
     <field name="wScaleNormal"  type="unsigned" size="16" />
+    <field name="reserved"      type="unsigned" size="16" />
+    <field name="reserved3"     type="unsigned" size="16" />
   </optional>
 </record>
 
@@ -1257,7 +1259,7 @@
 </record>
 
 <record name="MmsReserved" id="0x00c1">
-  <field name="reserved" size="32" />
+  <field name="reserved" size="16" />
 </record>
 
 <record name="InterfaceEnd" id="0x00e2">

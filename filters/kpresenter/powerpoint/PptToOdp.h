@@ -333,9 +333,12 @@ private:
     /**
     * @brief Converts ColorIndexStruct to QColor
     *
-    * Color index struct can either contain rgb values or a index to color
-    * in MainMasterContainer's SlideSchemeColorSchemeAtom. This method
-    * returns the rgb values the specified struct refers to.
+    * ColorIndexStruct can either contain rgb values or an index into
+    * SlideSchemeColorSchemeAtom.  The main master/title master slide or notes
+    * master slide will be checked to choose the correct color scheme.  The
+    * presentation slide or notes slide will be checked if applicable.  This
+    * method returns the rgb values the specified struct refers to.
+    *
     * @param color Color to convert
     * @return QColor value, may be undefined
     */
@@ -344,11 +347,11 @@ private:
     /**
      * @brief Converts OfficeArtCOLORREF to QColor
      *
-     * OfficeArtCOLORREF struct can either contain rgb values or an index to a
-     * color stored in a SlideSchemeColorSchemeAtom.  The main master slide or
-     * notes master slide SHOULD be provided if applicable.  The current
-     * presentation slide or notes slide SHOULD be provided if applicable.
-     * This method returns the rgb values the specified struct refers to.
+     * OfficeArtCOLORREF struct can contain either rgb values or an index into
+     * SlideSchemeColorSchemeAtom.  The main master/title master slide or notes
+     * master slide MUST be provided to choose the correct color scheme.  The
+     * presentation slide or notes slide MUST be provided if applicable.  This
+     * method returns the rgb values the specified struct refers to.
      *
      * @param color atored as OfficeArtCOLORREF to convert
      * @param pointer to a MainMasterContainer or NotesContainer
@@ -366,24 +369,24 @@ private:
     * numbering.
     */
     enum {
-        ANM_AlphaLcPeriod,                  //0x0000     Example: a., b., c., ...Lowercase Latin character followed by a period.
-        ANM_AlphaUcPeriod ,                 //0x0001     Example: A., B., C., ...Uppercase Latin character followed by a period.
-        ANM_ArabicParenRight,               //0x0002     Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
-        ANM_ArabicPeriod,                   //0x0003     Example: 1., 2., 3., ...Arabic numeral followed by a period.
-        ANM_RomanLcParenBoth,               //0x0004     Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
-        ANM_RomanLcParenRight,              //0x0005     Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
-        ANM_RomanLcPeriod,                  //0x0006     Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
-        ANM_RomanUcPeriod ,                 //0x0007     Example: I., II., III., ...Uppercase Roman numeral followed by a period.
-        ANM_AlphaLcParenBoth,               //0x0008     Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
-        ANM_AlphaLcParenRight,              //0x0009     Example: a), b), c), ...Lowercase alphabetic character followed by a closing
-        ANM_AlphaUcParenBoth,               //0x000A     Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
-        ANM_AlphaUcParenRight,              //0x000B     Example: A), B), C), ...Uppercase alphabetic character followed by a closing
-        ANM_ArabicParenBoth,                //0x000C     Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
-        ANM_ArabicPlain,                    //0x000D     Example: 1, 2, 3, ...Arabic numeral.
-        ANM_RomanUcParenBoth,               //0x000E     Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
-        ANM_RomanUcParenRight,              //0x000F     Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
+        ANM_AlphaLcPeriod,      //0x0000  Example: a., b., c., ...Lowercase Latin character followed by a period.
+        ANM_AlphaUcPeriod ,     //0x0001  Example: A., B., C., ...Uppercase Latin character followed by a period.
+        ANM_ArabicParenRight,   //0x0002  Example: 1), 2), 3), ...Arabic numeral followed by a closing parenthesis.
+        ANM_ArabicPeriod,       //0x0003  Example: 1., 2., 3., ...Arabic numeral followed by a period.
+        ANM_RomanLcParenBoth,   //0x0004  Example: (i), (ii), (iii), ...Lowercase Roman numeral enclosed in parentheses.
+        ANM_RomanLcParenRight,  //0x0005  Example: i), ii), iii), ... Lowercase Roman numeral followed by a closing parenthesis.
+        ANM_RomanLcPeriod,      //0x0006  Example: i., ii., iii., ...Lowercase Roman numeral followed by a period.
+        ANM_RomanUcPeriod ,     //0x0007  Example: I., II., III., ...Uppercase Roman numeral followed by a period.
+        ANM_AlphaLcParenBoth,   //0x0008  Example: (a), (b), (c), ...Lowercase alphabetic character enclosed in parentheses.
+        ANM_AlphaLcParenRight,  //0x0009  Example: a), b), c), ...Lowercase alphabetic character followed by a closing
+        ANM_AlphaUcParenBoth,   //0x000A  Example: (A), (B), (C), ...Uppercase alphabetic character enclosed in parentheses.
+        ANM_AlphaUcParenRight,  //0x000B  Example: A), B), C), ...Uppercase alphabetic character followed by a closing
+        ANM_ArabicParenBoth,    //0x000C  Example: (1), (2), (3), ...Arabic numeral enclosed in parentheses.
+        ANM_ArabicPlain,        //0x000D  Example: 1, 2, 3, ...Arabic numeral.
+        ANM_RomanUcParenBoth,   //0x000E  Example: (I), (II), (III), ...Uppercase Roman numeral enclosed in parentheses.
+        ANM_RomanUcParenRight,  //0x000F  Example: I), II), III), ...Uppercase Roman numeral followed by a closing parenthesis.
         //Future
-    }TextAutoNumberSchemeEnum;
+    } TextAutoNumberSchemeEnum;
 
     /**
     * Declaration Type

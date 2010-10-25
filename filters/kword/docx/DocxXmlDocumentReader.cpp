@@ -1383,6 +1383,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_br()
 
     TRY_READ_ATTR(type)
 
+    if (type.isEmpty()) {
+        body->startElement("text:line-break");
+        body->endElement();
+    }
+
     if (type == "column") {
         m_currentParagraphStyle.addProperty("fo:break-before", "column");
     }
@@ -4351,6 +4356,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
     MSOOXML::Utils::XmlWriteBuffer cellBuf;
     body = cellBuf.setWriter(body);
     m_currentTableCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    m_gridSpan = 1;
 
     while (!atEnd()) {
         readNext();
@@ -4367,6 +4373,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
 
     body = cellBuf.originalWriter();
     body->startElement("table:table-cell");
+    if (m_gridSpan > 1) {
+       body->addAttribute("table:number-columns-spanned", m_gridSpan);
+    }
 
     bool lastColumn = false;
 
@@ -4486,7 +4495,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tc()
  - cellIns (Table Cell Insertion) §17.13.5.2
  - cellMerge (Vertically Merged/Split Table Cells) §17.13.5.3
  - cnfStyle (Table Cell Conditional Formatting) §17.4.8
- - gridSpan (Grid Columns Spanned by Current Table Cell) §17.4.17
+ - [done] gridSpan (Grid Columns Spanned by Current Table Cell) §17.4.17
  - headers (Header Cells Associated With Table Cell) §17.4.19
  - hideMark (Ignore End Of Cell Marker In Row Height Calculation) §17.4.21
  - hMerge (Horizontally Merged Cell) §17.4.22
@@ -4509,11 +4518,39 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tcPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-//            TRY_READ_IF(..)
-              TRY_READ_IF_IN_CONTEXT(shd)
+            TRY_READ_IF(gridSpan)
+            ELSE_TRY_READ_IF_IN_CONTEXT(shd)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL gridSpan
+//! gridSpan handler  (Grid Columns Spanned by Current Table Cell)
+/*!
+ Parent elements:
+ - [done]tcPr (§17.7.6.8);
+ - [done] tcPr (§17.7.6.9);
+ - [done] tcPr (§17.4.70);
+ - [done] tcPr (§17.4.71)
+
+ Child elements:
+ - none
+*/
+//! @todo support all child elements
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+    if (!val.isEmpty()) {
+        m_gridSpan = val.toInt();
+    }
+
+    readNext();
     READ_EPILOGUE
 }
 

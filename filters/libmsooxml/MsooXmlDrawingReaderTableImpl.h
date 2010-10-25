@@ -265,6 +265,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 {
     READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(gridSpan)
+    TRY_READ_ATTR_WITHOUT_NS(rowSpan)
+
     MSOOXML::Utils::XmlWriteBuffer cellBuf;
     body = cellBuf.setWriter(body);
     m_currentTableCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
@@ -283,7 +288,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
     }
 
     body = cellBuf.originalWriter();
+
     body->startElement("table:table-cell");
+
+    if (!gridSpan.isEmpty()) {
+        body->addAttribute("table:number-columns-spanned", gridSpan);
+    }
+    if (!rowSpan.isEmpty()) {
+        body->addAttribute("table:number-rows-spanned", rowSpan);
+    }
 
     bool lastColumn = false;
 

@@ -1666,7 +1666,8 @@ void View::setHeaderMinima()
     if (d->loading)   // "View Loading" not finished yet
         return;
     QFont font(KoGlobal::defaultFont());
-    d->columnHeader->setMinimumHeight(qRound(zoomHandler()->zoomItY(font.pointSizeF() + 3)));
+    QFontMetricsF fm(font);
+    d->columnHeader->setMinimumHeight(qRound(zoomHandler()->zoomItY(fm.ascent() + fm.descent())));
     d->rowHeader->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
     d->selectAllButton->setMinimumHeight(qRound(zoomHandler()->zoomItY(font.pointSizeF() + 3)));
     d->selectAllButton->setMinimumWidth(qRound(zoomHandler()->zoomItX(YBORDER_WIDTH)));
