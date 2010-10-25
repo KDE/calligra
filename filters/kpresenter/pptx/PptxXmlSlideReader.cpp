@@ -1428,7 +1428,7 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
             if (qualifiedName() == "p:cNvPr") {
                 read_cNvPr_p();
             }
-            ELSE_TRY_READ_IF(nvGraphicFramePr) // This should be fixed later
+            ELSE_TRY_READ_IF(nvPr)
         }
     }
     READ_EPILOGUE
