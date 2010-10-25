@@ -80,6 +80,7 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
                     QDomElement e = RowFormat(sheet->rowFormats(), row).save(xmlDoc, top - 1);
                     if (!e.isNull()) {
                         rows.appendChild(e);
+                    }
                 }
             }
             continue;

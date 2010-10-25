@@ -1055,7 +1055,7 @@ void Selection::emitChanged(const Region& region)
             do {
                 top--;
                 int firstHidden;
-                if (sheet->rowFormats()->isHiddenOrFiltered(top, 0, &firsHidden)) {
+                if (sheet->rowFormats()->isHiddenOrFiltered(top, 0, &firstHidden)) {
                     top = firstHidden;
                 } else {
                     break;
