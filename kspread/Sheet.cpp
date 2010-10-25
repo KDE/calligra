@@ -1147,19 +1147,12 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
     }
 
     // Save all RowFormat objects.
-    // TODO after row format storage porting
-    //RowFormat* rowFormat = firstRow();
     int styleIndex = styleStorage()->nextRowStyleIndex(0);
-    while (/*rowFormat || */styleIndex) {
-        /*if (rowFormat && (!styleIndex || rowFormat->row() <= styleIndex)) {
-            QDomElement e = rowFormat->save(dd);
-            if (e.isNull())
-                return QDomElement();
-            sheet.appendChild(e);
-            if (rowFormat->row() == styleIndex)
-                styleIndex = styleStorage()->nextRowStyleIndex(styleIndex);
-            rowFormat = rowFormat->next();
-        } else */if (styleIndex) {
+    int rowFormatRow = 0, lastRowFormatRow = rowFormats()->lastNonDefaultRow();
+    while (styleIndex || rowFormatRow <= lastRowFormatRow) {
+        int lastRow;
+        bool isDefault = rowFormats()->isDefaultRow(rowFormatRow, &lastRow);
+        if (isDefault && styleIndex <= lastRow) {
             RowFormat rowFormat(*map()->defaultRowFormat());
             rowFormat.setSheet(this);
             rowFormat.setRow(styleIndex);
@@ -1168,7 +1161,17 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
                 return QDomElement();
             sheet.appendChild(e);
             styleIndex = styleStorage()->nextRowStyleIndex(styleIndex);
+        } else if (!isDefault) {
+            RowFormat rowFormat(rowFormats(), rowFormatRow);
+            QDomElement e = rowFormat.save(dd);
+            if (e.isNull())
+                return QDomElement();
+            sheet.appendChild(e);
+            if (styleIndex == rowFormatRow)
+                styleIndex = styleStorage()->nextRowStyleIndex(styleIndex);
         }
+        if (isDefault) rowFormatRow = qMin(lastRow+1, styleIndex == 0 ? KS_rowMax : styleIndex);
+        else rowFormatRow++;
     }
 
     // Save all ColumnFormat objects.
