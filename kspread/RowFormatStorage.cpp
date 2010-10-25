@@ -96,7 +96,13 @@ qreal RowFormatStorage::Private::rawRowHeight(int row, int *lastRow, int *firstR
 
 void RowFormatStorage::setRowHeight(int firstRow, int lastRow, qreal height)
 {
+    // first get old row height to properly update documentSize
+    qreal deltaHeight = -totalVisibleRowHeight(firstRow, lastRow);
+
     d->rowHeights.insert_back(firstRow, lastRow+1, height);
+
+    deltaHeight += totalVisibleRowHeight(firstRow, lastRow);
+    d->sheet->adjustDocumentHeight(deltaHeight);
 }
 
 qreal RowFormatStorage::totalRowHeight(int firstRow, int lastRow) const
@@ -176,7 +182,11 @@ bool RowFormatStorage::isHidden(int row, int *lastRow, int *firstRow) const
 
 void RowFormatStorage::setHidden(int firstRow, int lastRow, bool hidden)
 {
+    qreal deltaHeight = 0;
+    if (hidden) deltaHeight -= totalVisibleRowHeight(firstRow, lastRow);
     d->hidden.insert_back(firstRow, lastRow+1, hidden);
+    if (!hidden) deltaHeight += totalVisibleRowHeight(firstRow, lastRow);
+    d->sheet->adjustDocumentHeight(deltaHeight);
 }
 
 bool RowFormatStorage::isFiltered(int row, int* lastRow, int *firstRow) const
@@ -194,7 +204,11 @@ bool RowFormatStorage::isFiltered(int row, int* lastRow, int *firstRow) const
 
 void RowFormatStorage::setFiltered(int firstRow, int lastRow, bool filtered)
 {
+    qreal deltaHeight = 0;
+    if (filtered) deltaHeight -= totalVisibleRowHeight(firstRow, lastRow);
     d->filtered.insert_back(firstRow, lastRow+1, filtered);
+    if (!filtered) deltaHeight += totalVisibleRowHeight(firstRow, lastRow);
+    d->sheet->adjustDocumentHeight(deltaHeight);
 }
 
 bool RowFormatStorage::isHiddenOrFiltered(int row, int* lastRow, int* firstRow) const
