@@ -49,6 +49,7 @@
 #include "MergeStrategy.h"
 #include "NamedAreaManager.h"
 #include "PasteStrategy.h"
+#include "RowFormatStorage.h"
 #include "SelectionStrategy.h"
 #include "Sheet.h"
 #include "SheetView.h"
@@ -1266,7 +1267,7 @@ void CellToolBase::selectionChanged(const Region& region)
         const int row = range.top();
         columnBreakChecked |= sheet->columnFormat(column)->hasPageBreak();
         columnBreakEnabled |= (column != 1);
-        rowBreakChecked |= sheet->rowFormat(row)->hasPageBreak();
+        rowBreakChecked |= sheet->rowFormats()->hasPageBreak(row);
         rowBreakEnabled |= (row != 1);
     }
     action("format_break_before_column")->setChecked(columnBreakChecked);
@@ -2295,12 +2296,11 @@ void CellToolBase::equalizeRow()
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
         const QRect range = selection()->lastRange();
-        const RowFormat* rowFormat = selection()->activeSheet()->rowFormat(range.top());
-        double size = rowFormat->height();
+        double size = selection()->activeSheet()->rowFormats()->rowHeight(range.top());
         if (range.top() == range.bottom())
             return;
         for (int i = range.top() + 1; i <= range.bottom(); ++i)
-            size = qMax(selection()->activeSheet()->rowFormat(i)->height(), size);
+            size = qMax(selection()->activeSheet()->rowFormats()->rowHeight(i), size);
 
         if (size != 0.0) {
             ResizeRowManipulator* command = new ResizeRowManipulator();

@@ -49,6 +49,7 @@
 #include "CellStorage.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -480,7 +481,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             row = marker.y() - 1;
             cell = Cell(sheet, cell.column(), row);
             while ((!cell.isNull()) && (row > 0) && (!cell.isEmpty())) {
-                if (!sheet->rowFormat(cell.row())->isHiddenOrFiltered()) {
+                if (!sheet->rowFormats()->isHiddenOrFiltered(cell.row())) {
                     lastCell = cell;
                     searchThroughEmpty = false;
                 }
@@ -494,7 +495,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             cell = sheet->cellStorage()->prevInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
 
             while ((!cell.isNull()) &&
-                    (cell.isEmpty() || (sheet->rowFormat(cell.row())->isHiddenOrFiltered()))) {
+                    (cell.isEmpty() || (sheet->rowFormats()->isHiddenOrFiltered(cell.row())))) {
                 cell = sheet->cellStorage()->prevInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
             }
         }
@@ -504,7 +505,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
         else
             row = cell.row();
 
-        while (sheet->rowFormat(row)->isHiddenOrFiltered()) {
+        while (sheet->rowFormats()->isHiddenOrFiltered(row)) {
             row++;
         }
 
@@ -521,7 +522,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             row = marker.y() + 1;
             cell = Cell(sheet, cell.column(), row);
             while ((!cell.isNull()) && (row < q->maxRow()) && (!cell.isEmpty())) {
-                if (!(sheet->rowFormat(cell.row())->isHiddenOrFiltered())) {
+                if (!(sheet->rowFormats()->isHiddenOrFiltered(cell.row()))) {
                     lastCell = cell;
                     searchThroughEmpty = false;
                 }
@@ -534,7 +535,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             cell = sheet->cellStorage()->nextInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
 
             while ((!cell.isNull()) &&
-                    (cell.isEmpty() || (sheet->rowFormat(cell.row())->isHiddenOrFiltered()))) {
+                    (cell.isEmpty() || (sheet->rowFormats()->isHiddenOrFiltered(cell.row())))) {
                 cell = sheet->cellStorage()->nextInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
             }
         }
@@ -544,7 +545,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
         else
             row = cell.row();
 
-        while (sheet->rowFormat(row)->isHiddenOrFiltered()) {
+        while (sheet->rowFormats()->isHiddenOrFiltered(row)) {
             row--;
         }
 
@@ -816,7 +817,6 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
 
     /* how many cells must we move to get to the next cell? */
     int offset = 0;
-    const RowFormat *rl = 0;
     const ColumnFormat *cl = 0;
     switch (direction)
         /* for each case, figure out how far away the next cell is and then keep
@@ -827,20 +827,16 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
     {
     case Bottom:
         offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
-        rl = sheet->rowFormat(cursor.y() + offset);
-        while (((cursor.y() + offset) <= q->maxRow()) && rl->isHiddenOrFiltered()) {
+        while (((cursor.y() + offset) <= q->maxRow()) && sheet->rowFormats()->isHiddenOrFiltered(cursor.y() + offset)) {
             offset++;
-            rl = sheet->rowFormat(cursor.y() + offset);
         }
 
         destination = QPoint(cursor.x(), qMin(cursor.y() + offset, q->maxRow()));
         break;
     case Top:
         offset = (cellCorner.y() - cursor.y()) - 1;
-        rl = sheet->rowFormat(cursor.y() + offset);
-        while (((cursor.y() + offset) >= 1) && rl->isHiddenOrFiltered()) {
+        while (((cursor.y() + offset) >= 1) && sheet->rowFormats()->isHiddenOrFiltered(cursor.y() + offset)) {
             offset--;
-            rl = sheet->rowFormat(cursor.y() + offset);
         }
         destination = QPoint(cursor.x(), qMax(cursor.y() + offset, 1));
         break;
@@ -864,10 +860,8 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
         break;
     case BottomFirst:
         offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
-        rl = sheet->rowFormat(cursor.y() + offset);
-        while (((cursor.y() + offset) <= q->maxRow()) && rl->isHiddenOrFiltered()) {
+        while (((cursor.y() + offset) <= q->maxRow()) && sheet->rowFormats()->isHiddenOrFiltered(cursor.y() + offset)) {
             ++offset;
-            rl = sheet->rowFormat(cursor.y() + offset);
         }
 
         destination = QPoint(1, qMin(cursor.y() + offset, q->maxRow()));
@@ -1211,14 +1205,12 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             actions.append(q->action("hideRow"));
 
             q->action("showSelRows")->setEnabled(false);
-            const RowFormat* rowFormat;
             Region::ConstIterator endOfList = q->selection()->constEnd();
             for (Region::ConstIterator it = q->selection()->constBegin(); it != endOfList; ++it) {
                 QRect range = (*it)->rect();
                 int row;
                 for (row = range.top(); row < range.bottom(); ++row) {
-                    rowFormat = q->selection()->activeSheet()->rowFormat(row);
-                    if (rowFormat->isHidden()) {
+                    if (q->selection()->activeSheet()->rowFormats()->isHidden(row)) {
                         q->action("showSelRows")->setEnabled(true);
                         actions.append(q->action("showSelRows"));
                         break;
@@ -1227,8 +1219,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
                 if (range.top() > 1 && row == range.bottom()) {
                     bool allHidden = true;
                     for (row = 1; row < range.top(); ++row) {
-                        rowFormat = q->selection()->activeSheet()->rowFormat(row);
-                        allHidden &= rowFormat->isHidden();
+                        allHidden &= q->selection()->activeSheet()->rowFormats()->isHidden(row);
                     }
                     if (allHidden) {
                         q->action("showSelRows")->setEnabled(true);

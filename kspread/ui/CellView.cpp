@@ -66,6 +66,7 @@
 #include "Map.h"
 #include "PrintSettings.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
@@ -203,9 +204,9 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         d->height = cell.height();
 
     if (sheet->columnFormat(col)->isHiddenOrFiltered() ||
-            sheet->rowFormat(row)->isHiddenOrFiltered() ||
+            sheet->rowFormats()->isHiddenOrFiltered(row) ||
             (sheet->columnFormat(col)->width() <= sheetView->viewConverter()->viewToDocumentY(2)) ||
-            (sheet->rowFormat(row)->height() <= sheetView->viewConverter()->viewToDocumentY(2))) {
+            (sheet->rowFormats()->rowHeight(row) <= sheetView->viewConverter()->viewToDocumentY(2))) {
         d->hidden = true;
         d->height = 0.0;
         d->width = 0.0;
@@ -1474,11 +1475,11 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
             if (fm.width(tmp) + tmpIndent < len - 4.0 - 1.0) {
                 if (style().angle() != 0) {
                     QString tmp2;
-                    const RowFormat *rl = cell.sheet()->rowFormat(cell.row());
-                    if (d->textHeight > rl->height()) {
+                    const qreal rowHeight = cell.sheet()->rowFormats()->rowHeight(cell.row());
+                    if (d->textHeight > rowHeight) {
                         for (int j = d->displayText.length(); j != 0; j--) {
                             tmp2 = d->displayText.left(j);
-                            if (fm.width(tmp2) < rl->height() - 1.0) {
+                            if (fm.width(tmp2) < rowHeight - 1.0) {
                                 return d->displayText.left(qMin(tmp.length(), tmp2.length()));
                             }
                         }
@@ -1493,7 +1494,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
     } else if (style().verticalText()) {
         // Vertical text.
 
-        const RowFormat  *rl = cell.sheet()->rowFormat(cell.row());
+        const qreal rowHeight = cell.sheet()->rowFormats()->rowHeight(cell.row());
         qreal      tmpIndent = 0.0;
 
         // Not enough space but align to left.
@@ -1516,7 +1517,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
             return QString("");
 
         for (int i = d->displayText.length(); i != 0; i--) {
-            if (fm.ascent() + fm.descent() * i < rl->height() - 1.0)
+            if (fm.ascent() + fm.descent() * i < rowHeight - 1.0)
                 return d->displayText.left(i);
         }
 

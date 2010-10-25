@@ -45,6 +45,7 @@
 #include <Localization.h>
 #include "Map.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "ui/Selection.h"
 #include <Sheet.h>
 
@@ -61,8 +62,7 @@ ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
     setButtons(Ok | Cancel | Default);
     m_selection = selection;
 
-    const RowFormat* rl = m_selection->activeSheet()->rowFormat(selection->lastRange().top());
-    rowHeight = rl->height();
+    rowHeight = m_selection->activeSheet()->rowFormats()->rowHeight(m_selection->lastRange().top());
 
     QWidget *page = new QWidget();
     setMainWidget(page);

@@ -28,6 +28,7 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 
 #include "commands/DataManipulators.h"
@@ -1007,7 +1008,6 @@ void Selection::emitChanged(const Region& region)
         QRect area = element->rect();
 
         const ColumnFormat *col;
-        const RowFormat *rl;
         //look at if column is hiding.
         //if it's hiding refreshing column+1 (or column -1 )
         int left = area.left();
@@ -1042,15 +1042,13 @@ void Selection::emitChanged(const Region& region)
         if (bottom < KS_rowMax) {
             do {
                 bottom++;
-                rl = sheet->rowFormat(bottom);
-            } while (rl->isHiddenOrFiltered() && bottom != KS_rowMax);
+            } while (sheet->rowFormats()->isHiddenOrFiltered(bottom) && bottom != KS_rowMax);
         }
 
         if (top > 1) {
             do {
                 top--;
-                rl = sheet->rowFormat(top);
-            } while (rl->isHiddenOrFiltered() && top != 1);
+            } while (sheet->rowFormats()->isHiddenOrFiltered(top) && top != 1);
         }
 
         area.setLeft(left);

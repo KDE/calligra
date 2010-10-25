@@ -23,6 +23,7 @@
 #include "kspread_limits.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 
@@ -65,40 +66,35 @@ void RowStyleCommand::setTemplate(const RowFormat &rowFormat)
 
 bool RowStyleCommand::mainProcessing()
 {
-    double deltaHeight = 0.0;
     const Region::ConstIterator end(constEnd());
     for (Region::ConstIterator it(constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        for (int row = range.top(); row <= range.bottom(); ++row) {
-            // Save the old style.
-            if (m_firstrun) {
-                const RowFormat *rowFormat = m_sheet->rowFormat(row);
-                if (!rowFormat->isDefault() && !m_rowFormats.contains(row)) {
-                    m_rowFormats.insert(row, new RowFormat(*rowFormat));
+        // Save the old style.
+        if (m_firstrun) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                if (!m_sheet->rowFormats()->isDefaultRow(row) && !m_rowFormats.contains(row)) {
+                    m_rowFormats.insert(row, new RowFormat(m_sheet->rowFormats(), row));
                 }
             }
-
-            // Set the new style.
-            deltaHeight -= m_sheet->rowFormat(row)->height();
-            if (m_reverse) {
+        }
+        if (m_reverse) {
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                // Set the new style.
                 if (m_rowFormats.contains(row)) {
                     m_sheet->insertRowFormat(m_rowFormats.value(row));
                 } else {
                     m_sheet->deleteRowFormat(row);
                 }
-            } else {
-                RowFormat *rowFormat = m_sheet->nonDefaultRowFormat(row);
-                rowFormat->setHeight(m_height);
-                rowFormat->setHidden(m_hidden);
-                rowFormat->setPageBreak(m_pageBreak);
             }
-            deltaHeight += m_sheet->rowFormat(row)->height();
+        } else {
+            m_sheet->rowFormats()->setRowHeight(range.top(), range.bottom(), m_height);
+            m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), m_hidden);
+            m_sheet->rowFormats()->setPageBreak(range.top(), range.bottom(), m_pageBreak);
         }
         // Possible visual cache invalidation due to dimension change; rebuild it.
         const Region region(1, range.top(), KS_colMax, KS_rowMax - range.bottom() + 1, m_sheet);
         m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
     }
-    m_sheet->adjustDocumentHeight(deltaHeight);
     m_sheet->print()->updateVerticalPageParameters(0);
     return true;
 }

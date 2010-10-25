@@ -32,6 +32,7 @@
 #include "Damages.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "Value.h"
 
@@ -86,11 +87,18 @@ ResizeRowManipulator::~ResizeRowManipulator()
 bool ResizeRowManipulator::process(Element* element)
 {
     QRect range = element->rect();
-    for (int row = range.bottom(); row >= range.top(); --row) {
-        RowFormat* rl = m_sheet->nonDefaultRowFormat(row);
-        if (m_firstrun)
-            m_oldSizes[row] = rl->height();
-        rl->setHeight(qMax(2.0, m_reverse ? m_oldSizes[row] : m_newSize));
+    // TODO: more efficiently store old sizes
+    if (m_firstrun) {
+        for (int row = range.bottom(); row >= range.top(); --row) {
+            m_oldSizes[row] = m_sheet->rowFormats()->rowHeight(row);
+        }
+    }
+    if (m_reverse) {
+        for (int row = range.bottom(); row >= range.top(); --row) {
+            m_sheet->rowFormats()->setRowHeight(row, row, m_oldSizes[row]);
+        }
+    } else {
+        m_sheet->rowFormats()->setRowHeight(range.top(), range.bottom(), m_newSize);
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
@@ -124,10 +132,7 @@ bool HideShowManipulator::process(Element* element)
         }
     }
     if (m_manipulateRows) {
-        for (int row = range.top(); row <= range.bottom(); ++row) {
-            RowFormat* format = m_sheet->nonDefaultRowFormat(row);
-            format->setHidden(!m_reverse);
-        }
+        m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), !m_reverse);
     }
     return true;
 }
@@ -162,8 +167,7 @@ bool HideShowManipulator::preProcessing()
                 if (range.top() > 1) {
                     int row;
                     for (row = 1; row < range.top(); ++row) {
-                        const RowFormat* format = m_sheet->rowFormat(row);
-                        if (!format->isHidden()) {
+                        if (!m_sheet->rowFormats()->isHidden(row)) {
                             break;
                         }
                     }
@@ -172,8 +176,7 @@ bool HideShowManipulator::preProcessing()
                     }
                 }
                 for (int row = range.top(); row <= range.bottom(); ++row) {
-                    const RowFormat* format = m_sheet->rowFormat(row);
-                    if (format->isHidden()) {
+                    if (!m_sheet->rowFormats()->isHidden(row)) {
                         region.add(QRect(1, row, KS_colMax, 1));
                     }
                 }
@@ -291,10 +294,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
                     int row = cell.row();
                     if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                         if (heights.contains(row) && heights[row] != -1.0) {
-                            RowFormat* format = sheet->nonDefaultRowFormat(row);
-                            if (qAbs(format->height() - heights[row]) > DBL_EPSILON) {
-                                format->setHeight(qMax(2.0, heights[row]));
-                            }
+                            sheet->rowFormats()->setRowHeight(row, row, heights[row]);
                         }
                     }
                     cell = sheet->cellStorage()->nextInColumn(col, row);
@@ -303,10 +303,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
         } else {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 if (heights.contains(row) && heights[row] != -1.0) {
-                    RowFormat* format = sheet->nonDefaultRowFormat(row);
-                    if (qAbs(format->height() - heights[row]) > DBL_EPSILON) {
-                        format->setHeight(qMax(2.0, heights[row]));
-                    }
+                    sheet->rowFormats()->setRowHeight(row, row, heights[row]);
                 }
             }
         }
@@ -353,8 +350,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                         if (m_adjustRow) {
                             if (!m_newHeights.contains(row)) {
                                 m_newHeights[row] = -1.0;
-                                const RowFormat* format = m_sheet->rowFormat(row);
-                                m_oldHeights[row] = format->height();
+                                m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
                             }
                             if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                                 m_newHeights[row] = qMax(adjustRowHelper(cell),
@@ -382,8 +378,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                         if (m_adjustRow) {
                             if (!m_newHeights.contains(row)) {
                                 m_newHeights[row] = -1.0;
-                                const RowFormat* format = m_sheet->rowFormat(row);
-                                m_oldHeights[row] = format->height();
+                                m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
                             }
                             if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                                 m_newHeights[row] = qMax(adjustRowHelper(cell),
@@ -411,8 +406,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                         if (m_adjustRow) {
                             if (!m_newHeights.contains(row)) {
                                 m_newHeights[row] = -1.0;
-                                const RowFormat* format = m_sheet->rowFormat(row);
-                                m_oldHeights[row] = format->height();
+                                m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
                             }
                             if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                                 m_newHeights[row] = qMax(adjustRowHelper(cell),

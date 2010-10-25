@@ -149,6 +149,12 @@ set(TestRowRepeatStorage_SRCS TestRowRepeatStorage.cpp)
 kde4_add_unit_test(TestRowRepeatStorage TESTNAME kspread-RowRepeatStorage ${TestRowRepeatStorage_SRCS})
 target_link_libraries(TestRowRepeatStorage kspreadcommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestRowFormatStorage_SRCS TestRowFormatStorage.cpp)
+kde4_add_unit_test(TestRowFormatStorage TESTNAME kspread-RowFormatStorage ${TestRowFormatStorage_SRCS})
+target_link_libraries(TestRowFormatStorage kspreadcommon ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility

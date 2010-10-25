@@ -22,8 +22,10 @@
 #include "CopyCommand.h"
 
 #include "CellStorage.h"
+#include "Map.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 
 using namespace KSpread;
@@ -74,12 +76,20 @@ QDomDocument CopyCommand::saveAsXml(const Region& region, bool era)
             // Save the row formats if there are any
             const RowFormat* format;
             for (int row = range.top(); row <= range.bottom(); ++row) {
-                format = sheet->rowFormat(row);
-                if (format && !format->isDefault()) {
-                    QDomElement e = format->save(xmlDoc, top - 1);
-                    if (!e.isNull()) {
-                        rows.appendChild(e);
+                if (!sheet->rowFormats()->isDefaultRow(row)) {
+                    QDomElement e = xmlDoc.createElement("row");
+                    e.setAttribute("height", sheet->rowFormats()->rowHeight(row));
+                    e.setAttribute("row", row - top + 1);
+                    if (sheet->rowFormats()->isHidden(row))
+                        e.setAttribute("hide", (int)true);
+
+                    const Style style = sheet->cellStorage()->style(QRect(1, row, KS_colMax, 1));
+                    if (!style.isEmpty()) {
+                        QDomElement format;
+                        style.saveXML(xmlDoc, format, sheet->map()->styleManager());
+                        e.appendChild(format);
                     }
+                    rows.appendChild(e);
                 }
             }
             continue;

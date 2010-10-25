@@ -26,6 +26,7 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 
 #include "database/Database.h"
 #include "database/Filter.h"
@@ -55,8 +56,8 @@ void ApplyFilterCommand::redo()
         const bool isFiltered = !database.filter().evaluate(database, i);
 //         kDebug() <<"Filtering column/row" << i <<"?" << isFiltered;
         if (database.orientation() == Qt::Vertical) {
-            m_undoData[i] = sheet->rowFormat(i)->isFiltered();
-            sheet->nonDefaultRowFormat(i)->setFiltered(isFiltered);
+            m_undoData[i] = sheet->rowFormats()->isFiltered(i);
+            sheet->rowFormats()->setFiltered(i, i, isFiltered);
         } else { // database.orientation() == Qt::Horizontal
             m_undoData[i] = sheet->columnFormat(i)->isFiltered();
             sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
@@ -83,7 +84,7 @@ void ApplyFilterCommand::undo()
     const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
     for (int i = start + 1; i <= end; ++i) {
         if (database.orientation() == Qt::Vertical)
-            sheet->nonDefaultRowFormat(i)->setFiltered(m_undoData[i]);
+            sheet->rowFormats()->setFiltered(i, i, m_undoData[i]);
         else // database.orientation() == Qt::Horizontal
             sheet->nonDefaultColumnFormat(i)->setFiltered(m_undoData[i]);
     }

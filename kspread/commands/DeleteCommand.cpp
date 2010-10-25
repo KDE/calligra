@@ -22,6 +22,7 @@
 #include "CellStorage.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "Validity.h"
 
@@ -90,13 +91,9 @@ bool DeleteCommand::process(Element* element)
             if (m_mode == OnlyCells) {
                 continue;
             }
-
-            const RowFormat* rowFormat = m_sheet->rowFormat(row);
-            if (m_firstrun && !rowFormat->isDefault()) {
-                RowFormat* oldRowFormat = new RowFormat(*rowFormat);
-                oldRowFormat->setNext(0);
-                oldRowFormat->setPrevious(0);
-                m_rowFormats.insert(oldRowFormat);
+            // TODO: better storing of row formats
+            if (m_firstrun && !m_sheet->rowFormats()->isDefaultRow(row)) {
+                m_rowFormats.insert(new RowFormat(m_sheet->rowFormats(), row));
             }
             m_sheet->deleteRowFormat(row);
         }

@@ -102,6 +102,7 @@
 #include "Localization.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "Util.h"
 #include "Validity.h"
@@ -567,7 +568,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos)
     double xpos = sheet->columnPosition(dragAnchor.x());
     double ypos = sheet->rowPosition(dragAnchor.y());
     double width  = sheet->columnFormat(dragAnchor.x())->width();
-    double height = sheet->rowFormat(dragAnchor.y())->height();
+    double height = sheet->rowFormats()->rowHeight(dragAnchor.y());
 
     // consider also the selection rectangle
     const QRectF noGoArea(xpos - 1, ypos - 1, width + 3, height + 3);
@@ -618,7 +619,7 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos)
     const double xpos = sheet->columnPosition(topLeft.x());
     const double ypos = sheet->rowPosition(topLeft.y());
     const double width  = sheet->columnFormat(topLeft.x())->width();
-    const double height = sheet->rowFormat(topLeft.y())->height();
+    const double height = sheet->rowFormats()->rowHeight(topLeft.y());
 
     const QRectF noGoArea(xpos - 1, ypos - 1, width + 3, height + 3);
 

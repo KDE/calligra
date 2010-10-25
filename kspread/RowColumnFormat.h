@@ -36,6 +36,7 @@ class KoGenStyle;
 namespace KSpread
 {
 class Sheet;
+class RowFormatStorage;
 
 /**
  * A row style.
@@ -45,6 +46,7 @@ class KSPREAD_EXPORT RowFormat
 public:
     RowFormat();
     RowFormat(const RowFormat& other);
+    RowFormat(const RowFormatStorage* rows, int row);
     ~RowFormat();
 
     void setSheet(Sheet* sheet);

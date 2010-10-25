@@ -22,6 +22,7 @@
 #include "Damages.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 
@@ -51,7 +52,7 @@ bool PageBreakCommand::process(Element *element)
     if (m_mode == BreakBeforeColumn && range.left() > 1) {
         sheet->nonDefaultColumnFormat(range.left())->setPageBreak(enable);
     } else if (m_mode == BreakBeforeRow && range.top() > 1) {
-        sheet->nonDefaultRowFormat(range.top())->setPageBreak(enable);
+        sheet->rowFormats()->setPageBreak(range.top(), range.top(), enable);
     }
     return true;
 }

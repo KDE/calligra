@@ -69,6 +69,7 @@
 #include "Doc.h"
 #include "kspread_limits.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 
 // commands
@@ -127,13 +128,13 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
 
     // Did the user click between two rows?
     while (y < (dHeight + m_pCanvas->yOffset()) && (!m_bResize) && row <= KS_rowMax) {
-        double h = sheet->rowFormat(row)->height();
+        double h = sheet->rowFormats()->rowHeight(row);
         row++;
         if (row > KS_rowMax)
             row = KS_rowMax;
         if ((ev_PosY >= y + h - 2) &&
                 (ev_PosY <= y + h + 1) &&
-                !(sheet->rowFormat(row)->isHiddenOrFiltered() && row == 1))
+                !(sheet->rowFormats()->isHiddenOrFiltered(row) && row == 1))
             m_bResize = true;
         y += h;
     }
@@ -142,7 +143,7 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
     //you mustn't resize it.
     double tmp2;
     int tmpRow = sheet->topRow(ev_PosY - 1, tmp2);
-    if (sheet->rowFormat(tmpRow)->isHiddenOrFiltered() && tmpRow == 1)
+    if (sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1)
         m_bResize = false;
 
     // So he clicked between two rows ?
@@ -256,7 +257,7 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
             QList<int> hiddenRows;
 
             for (i = rect.top(); i <= rect.bottom(); ++i) {
-                if (sheet->rowFormat(i)->isHidden()) {
+                if (sheet->rowFormats()->isHidden(i)) {
                     hiddenRows.append(i);
                 }
             }
@@ -357,9 +358,9 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
             m_pCanvas->setVertScrollBarPos(ev_PosY);
         else if (_ev->pos().y() > m_pCanvas->height()) {
             if (row < KS_rowMax) {
-                const RowFormat* rowFormat = sheet->rowFormat(row + 1);
+                const qreal rowHeight = sheet->rowFormats()->rowHeight(row + 1);
                 y = sheet->rowPosition(row + 1);
-                m_pCanvas->setVertScrollBarPos(ev_PosY + rowFormat->height() - dHeight);
+                m_pCanvas->setVertScrollBarPos(ev_PosY + rowHeight - dHeight);
             }
         }
     }
@@ -372,12 +373,12 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         int tmpRow = sheet->topRow(m_pCanvas->yOffset(), y);
 
         while (y < dHeight + m_pCanvas->yOffset() && tmpRow <= KS_rowMax) {
-            double h = sheet->rowFormat(tmpRow)->visibleHeight();
+            double h = sheet->rowFormats()->visibleHeight(tmpRow);
             //if col is hide and it's the first column
             //you mustn't resize it.
             if (ev_PosY >= y + h - 2 * unzoomedPixel &&
                     ev_PosY <= y + h + unzoomedPixel &&
-                    !(sheet->rowFormat(tmpRow)->isHiddenOrFiltered() && tmpRow == 1)) {
+                    !(sheet->rowFormats()->isHiddenOrFiltered(tmpRow) && tmpRow == 1)) {
                 setCursor(Qt::SplitVCursor);
                 return;
             }
@@ -442,12 +443,11 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         const bool selected = (selectedRows.contains(y));
         const bool highlighted = (!selected && affectedRows.contains(y));
 
-        const RowFormat* rowFormat = sheet->rowFormat(y);
-        if (rowFormat->isHiddenOrFiltered()) {
+        if (sheet->rowFormats()->isHiddenOrFiltered(y)) {
             ++y;
             continue;
         }
-        const double height = rowFormat->height();
+        const double height = sheet->rowFormats()->rowHeight(y);
 
         if (selected || highlighted) {
             painter->setPen(selectionColor.dark(150));
@@ -489,7 +489,7 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
                      rowText);
         }
 
-        yPos += rowFormat->height();
+        yPos += height;
         y++;
     }
 }

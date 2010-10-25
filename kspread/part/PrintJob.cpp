@@ -26,6 +26,7 @@
 #include "Map.h"
 #include "PrintSettings.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "View.h"
@@ -384,9 +385,7 @@ QRectF PrintJob::preparePage(int pageNumber)
     double repeatedHeight = 0.0;
     const QPair<int, int> repeatedRows = settings->repeatedRows();
     if (repeatedRows.first != 0 && cellRange.top() > repeatedRows.second) {
-        for (int row = repeatedRows.first; row <= repeatedRows.second; ++row) {
-            repeatedHeight += sheet->rowFormat(row)->visibleHeight();
-        }
+        repeatedHeight += sheet->rowFormats()->totalVisibleRowHeight(repeatedRows.first, repeatedRows.second);
     }
 
     // Center the table on the page.
@@ -477,9 +476,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     double repeatedHeight = 0.0;
     const QPair<int, int> repeatedRows = settings->repeatedRows();
     if (repeatedRows.first != 0 && cellRange.top() > repeatedRows.second) {
-        for (int row = repeatedRows.first; row <= repeatedRows.second; ++row) {
-            repeatedHeight += sheet->rowFormat(row)->visibleHeight();
-        }
+        repeatedHeight += sheet->rowFormats()->totalVisibleRowHeight(repeatedRows.first, repeatedRows.second);
     }
 
     // Paint top left part of the repeated columns/rows, if both are present.

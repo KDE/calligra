@@ -26,6 +26,7 @@
 #include "PrintSettings.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 
 using namespace KSpread;
@@ -185,7 +186,7 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
             _row > m_maxCheckedNewPageY) { //this columns hasn't been calculated before
         int startRow = end + 1;
         int row = startRow;
-        double y = m_pSheet->rowFormat(row)->height();
+        double y = m_pSheet->rowFormats()->rowHeight(row);
 
         // Add a new page.
         m_lnewPageListY.append(PrintNewPageEntry(startRow));
@@ -199,31 +200,31 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
 
         while ((row <= _row) && (row < printRange.bottom())) {
             // end of page?
-            if (y > printHeight || m_pSheet->rowFormat(row)->hasPageBreak()) {
+            if (y > printHeight || m_pSheet->rowFormats()->hasPageBreak(row)) {
                 //Now store into the previous entry the enditem and the width
                 m_lnewPageListY.last().setEndItem(row - 1);
-                m_lnewPageListY.last().setSize(y - m_pSheet->rowFormat(row)->height());
+                m_lnewPageListY.last().setSize(y - m_pSheet->rowFormats()->rowHeight(row));
                 m_lnewPageListY.last().setOffset(offset);
 
                 //start a new page
                 m_lnewPageListY.append(PrintNewPageEntry(row));
                 startRow = row;
-                y = m_pSheet->rowFormat(row)->height();
+                y = m_pSheet->rowFormats()->rowHeight(row);
                 if (row >= repeatedRows.first) {
                     y += m_dPrintRepeatRowsHeight;
                     offset = m_dPrintRepeatRowsHeight;
                 }
             }
             row++;
-            y += m_pSheet->rowFormat(row)->height();
+            y += m_pSheet->rowFormats()->rowHeight(row);
         }
 
         // Iterate to the end of the page.
         while (m_lnewPageListY.last().endItem() == 0) {
-            if (y > printHeight || m_pSheet->rowFormat(row)->hasPageBreak()) {
+            if (y > printHeight || m_pSheet->rowFormats()->hasPageBreak(row)) {
                 // Now store into the previous entry the enditem and the width
                 m_lnewPageListY.last().setEndItem(row - 1);
-                m_lnewPageListY.last().setSize(y - m_pSheet->rowFormat(row)->height());
+                m_lnewPageListY.last().setSize(y - m_pSheet->rowFormats()->rowHeight(row));
                 m_lnewPageListY.last().setOffset(offset);
 
                 if (row - 1 > m_maxCheckedNewPageY) {
@@ -232,7 +233,7 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
                 return;
             }
             ++row;
-            y += m_pSheet->rowFormat(row)->height();
+            y += m_pSheet->rowFormats()->rowHeight(row);
         }
     }
 
@@ -377,9 +378,7 @@ void SheetPrint::Private::updateRepeatedRowsHeight()
     m_dPrintRepeatRowsHeight = 0.0;
     const QPair<int, int> repeatedRows = m_settings->repeatedRows();
     if (repeatedRows.first != 0) {
-        for (int i = repeatedRows.first; i <= repeatedRows.second; i++) {
-            m_dPrintRepeatRowsHeight += m_pSheet->rowFormat(i)->height();
-        }
+        m_dPrintRepeatRowsHeight += m_pSheet->rowFormats()->totalRowHeight(repeatedRows.first, repeatedRows.second);
     }
 }
 

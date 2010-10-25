@@ -75,6 +75,7 @@ class OdfSavingContext;
 class PrintSettings;
 class Region;
 class RowFormat;
+class RowFormatStorage;
 class Sheet;
 class SheetPrint;
 class Style;
@@ -412,7 +413,7 @@ public:
      * \return the row format of row \p _row . The default row format,
      * if no special one exists.
      */
-    const RowFormat* rowFormat(int _row) const;
+    //const RowFormat* rowFormat(int _row) const;
 
     /**
      * \ingroup ColumnRowFormat
@@ -420,19 +421,21 @@ public:
      *
      * @return a non default RowFormat for this row.
      */
-    RowFormat* nonDefaultRowFormat(int _row, bool force_creation = true);
+    //RowFormat* nonDefaultRowFormat(int _row, bool force_creation = true);
 
     /**
      * \ingroup ColumnRowFormat
      * \return the first non-default row format
      */
-    RowFormat* firstRow() const;
+    //RowFormat* firstRow() const;
 
     /**
      * \ingroup ColumnRowFormat
      */
-    void setDefaultHeight(double height);
+    //void setDefaultHeight(double height);
 
+    const RowFormatStorage* rowFormats() const;
+    RowFormatStorage* rowFormats();
     //
     //END Methods related to row formats
     //
@@ -739,7 +742,7 @@ public:
 
     /**
      * \ingroup ColumnRowFormat
-     * Deletes the row format at \p row.
+     * Deletes the row format at \p row (changes the format of that row to be the default format).
      */
     void deleteRowFormat(int row);
 

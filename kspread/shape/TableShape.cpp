@@ -41,6 +41,7 @@
 #include <PrintSettings.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
+#include <RowFormatStorage.h>
 #include <Sheet.h>
 #include <SheetView.h>
 #include <StyleManager.h>
@@ -72,8 +73,7 @@ void TableShape::Private::adjustColumnDimensions(Sheet* sheet, double factor)
 void TableShape::Private::adjustRowDimensions(Sheet* sheet, double factor)
 {
     for (int row = 1; row <= rows; ++row) {
-        RowFormat* const rowFormat = sheet->nonDefaultRowFormat(row);
-        rowFormat->setHeight(rowFormat->height() * factor);
+        sheet->rowFormats()->setRowHeight(row, row, sheet->rowFormats()->rowHeight(row) * factor);
     }
 }
 
@@ -197,7 +197,7 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             size.rwidth() += sheet()->columnFormat(col)->visibleWidth();
         }
         for (int row = 1; row <= d->rows; ++row) {
-            size.rheight() += sheet()->rowFormat(row)->visibleHeight();
+            size.rheight() += sheet()->rowFormats()->visibleHeight(row);
         }
         KoShape::setSize(size);
         return true;
@@ -249,7 +249,7 @@ void TableShape::setMap(Map *map)
         size.rwidth() += sheet->columnFormat(col)->visibleWidth();
     }
     for (int row = 1; row <= d->rows; ++row) {
-        size.rheight() += sheet->rowFormat(row)->visibleHeight();
+        size.rheight() += sheet->rowFormats()->visibleHeight(row);
     }
     KoShape::setSize(size);
 }

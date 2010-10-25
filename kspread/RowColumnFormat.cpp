@@ -40,6 +40,7 @@
 #include "Global.h"
 #include "Map.h"
 #include "Region.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Style.h"
@@ -83,6 +84,18 @@ RowFormat::RowFormat()
 RowFormat::RowFormat(const RowFormat& other)
         : d(new Private(*other.d))
 {
+}
+
+RowFormat::RowFormat(const RowFormatStorage *rows, int row)
+        : d(new Private)
+{
+    d->sheet = rows->sheet();
+    d->row = row;
+    d->height = rows->rowHeight(row);
+    d->hide = rows->isHidden(row);
+    d->filtered = rows->isFiltered(row);
+    d->pageBreak = rows->hasPageBreak(row);
+    d->next = d->prev = 0;
 }
 
 RowFormat::~RowFormat()

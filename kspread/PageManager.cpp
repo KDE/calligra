@@ -22,6 +22,7 @@
 #include "PrintSettings.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 
 using namespace KSpread;
@@ -72,12 +73,12 @@ void PageManager::layoutPages()
             double height = 0.0;
             for (int row = printRange.top(); row <= printRange.bottom(); ++row) {
                 rows++;
-                height += sheet->rowFormat(row)->visibleHeight();
+                height += sheet->rowFormats()->visibleHeight(row);
 
                 // 1. find the number of rows per page
                 if (row == printRange.bottom()) // always iterate over the last 'page row'
                     ;
-                else if (height + sheet->rowFormat(row + 1)->visibleHeight() <= size(pageNumber).height())
+                else if (height + sheet->rowFormats()->visibleHeight(row + 1) <= size(pageNumber).height())
                     continue;
 
 //                 kDebug() << "1. done: row" << row << "rows" << rows << "height" << height;
@@ -151,10 +152,10 @@ void PageManager::layoutPages()
                 // 2. iterate over the rows and create the pages
                 for (int row = printRange.top(); row < printRange.bottom(); ++row) {
                     rows++;
-                    height += sheet->rowFormat(row)->visibleHeight();
+                    height += sheet->rowFormats()->visibleHeight(row);
 
                     // Does the next row fit too?
-                    if (height + sheet->rowFormat(row + 1)->visibleHeight() <= size(pageNumber).height())
+                    if (height + sheet->rowFormats()->visibleHeight(row + 1) <= size(pageNumber).height())
                         continue;
 
 //                     kDebug() << "row" << row << "rows" << rows << "height" << height;

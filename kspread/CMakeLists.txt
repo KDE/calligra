@@ -224,6 +224,7 @@ set (kspreadodf_LIB_SRCS
     RectStorage.cpp
     Region.cpp
     RowColumnFormat.cpp
+    RowFormatStorage.cpp
     RowRepeatStorage.cpp
     ShapeApplicationData.cpp
     Sheet.cpp

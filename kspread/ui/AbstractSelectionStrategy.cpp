@@ -22,6 +22,7 @@
 #include "CellToolBase.h"
 #include "kspread_limits.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -123,7 +124,7 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
     const double xpos = sheet->columnPosition(column);
     const double ypos = sheet->rowPosition(row);
     const double width = sheet->columnFormat(column)->width();
-    const double height = sheet->rowFormat(row)->height();
+    const double height = sheet->rowFormats()->rowHeight(row);
     return gripArea.translated(xpos + width, ypos + height).contains(position);
 }
 

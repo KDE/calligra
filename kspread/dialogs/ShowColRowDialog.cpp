@@ -35,6 +35,7 @@
 #include "kspread_limits.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
 
@@ -92,15 +93,16 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
         }
         list->addItems(listCol);
     } else if (_type == Row) {
-        RowFormat *row = m_selection->activeSheet()->firstRow();
-
         QString text;
         QStringList listRow;
-        for (; row; row = row->next()) {
-            if (row->isHidden())
-                listInt.append(row->row());
+        int lastRow, row = 1;
+        while (row <= KS_rowMax) {
+            if (m_selection->activeSheet()->rowFormats()->isHidden(row, &lastRow)) {
+                for (int i = row; i <= lastRow; ++i)
+                    listInt.append(i);
+            }
+            row = lastRow+1;
         }
-        qSort(listInt);
         QList<int>::Iterator it;
         for (it = listInt.begin(); it != listInt.end(); ++it)
             listRow += i18n("Row: %1", text.setNum(*it));

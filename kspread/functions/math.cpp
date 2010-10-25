@@ -42,6 +42,7 @@
 #include "Cell.h"
 #include "Sheet.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 
 // needed by MDETERM and MINVERSE
 #include <Eigen/LU>
@@ -1219,7 +1220,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
     Value empty;
     if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
         for (int r = r1; r <= r2; ++r) {
-            const bool setAllEmpty = excludeHiddenRows && e->sheet->rowFormat(r)->isHidden();
+            const bool setAllEmpty = excludeHiddenRows && e->sheet->rowFormats()->isHidden(r);
             for (int c = c1; c <= c2; ++c) {
                 // put an empty value to all cells in a hidden row
                 if(setAllEmpty) {

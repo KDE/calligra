@@ -65,6 +65,7 @@
 #include "CellStorage.h"
 #include "Localization.h"
 #include "Map.h"
+#include "RowFormatStorage.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -426,7 +427,6 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
 
     value = cell.value();
 
-    const RowFormat *rl;
     const ColumnFormat *cl;
     widthSize = 0.0;
     heightSize = 0.0;
@@ -471,8 +471,7 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
     // row height
     if (!isColumnSelected) {
         for (int y = top; y <= bottom; y++) {
-            rl = m_sheet->rowFormat(y);
-            heightSize = qMax(rl->height(), heightSize);
+            heightSize = qMax(m_sheet->rowFormats()->rowHeight(y), heightSize);
         }
     }
 

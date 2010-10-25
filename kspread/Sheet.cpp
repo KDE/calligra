@@ -82,6 +82,7 @@
 #include "PrintSettings.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "ShapeApplicationData.h"
 #include "SheetPrint.h"
 #include "RectStorage.h"
@@ -133,6 +134,8 @@ static QString createObjectName(const QString &sheetName)
 class Sheet::Private
 {
 public:
+    Private(Sheet* sheet) : rows(sheet) {}
+
     Map* workbook;
     SheetModel *model;
 
@@ -155,7 +158,8 @@ public:
 
     // clusters to hold objects
     CellStorage* cellStorage;
-    RowCluster rows;
+    //RowCluster rows;
+    RowFormatStorage rows;
     ColumnCluster columns;
     QList<KoShape*> shapes;
 
@@ -178,7 +182,7 @@ public:
 Sheet::Sheet(Map* map, const QString &sheetName)
         : KoShapeUserData(map)
         , KoShapeControllerBase()
-        , d(new Private)
+        , d(new Private(this))
 {
     d->workbook = map;
     if (map->doc()) {
@@ -197,7 +201,6 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     setObjectName(createObjectName(d->name));
 
     d->cellStorage = new CellStorage(this);
-    d->rows.setAutoDelete(true);
     d->columns.setAutoDelete(true);
 
     d->documentSize = QSizeF(KS_colMax * d->workbook->defaultColumnFormat()->width(),
@@ -230,7 +233,7 @@ Sheet::Sheet(const Sheet &other)
         : KoShapeUserData(other.d->workbook)
         , KoShapeControllerBase()
         , ProtectableObject(other)
-        , d(new Private)
+        , d(new Private(this))
 {
     d->workbook = other.d->workbook;
     d->model = new SheetModel(this);
@@ -482,7 +485,7 @@ const ColumnFormat* Sheet::columnFormat(int _column) const
 
     return map()->defaultColumnFormat();
 }
-
+/*
 const RowFormat* Sheet::rowFormat(int _row) const
 {
     const RowFormat *p = d->rows.lookup(_row);
@@ -491,7 +494,7 @@ const RowFormat* Sheet::rowFormat(int _row) const
 
     return map()->defaultRowFormat();
 }
-
+*/
 CellStorage* Sheet::cellStorage() const
 {
     return d->cellStorage;
@@ -603,21 +606,23 @@ int Sheet::rightColumn(double _xpos) const
 int Sheet::topRow(double _ypos, double & _top) const
 {
     _top = 0.0;
+    // TODO: faster implementation
     int row = 1;
-    double y = rowFormat(row)->visibleHeight();
+    double y = rowFormats()->visibleHeight(row);
     while (y < _ypos && row < KS_rowMax) {
-        _top += rowFormat(row)->visibleHeight();
-        y += rowFormat(++row)->visibleHeight();
+        _top += rowFormats()->visibleHeight(row);
+        y += rowFormats()->visibleHeight(++row);
     }
     return row;
 }
 
 int Sheet::bottomRow(double _ypos) const
 {
+    // TODO: faster implementation
     int row = 1;
-    double y = rowFormat(row)->visibleHeight();
+    double y = rowFormats()->visibleHeight(row);
     while (y <= _ypos && row < KS_rowMax)
-        y += rowFormat(++row)->visibleHeight();
+        y += rowFormats()->visibleHeight(++row);
     return row;
 }
 
@@ -628,7 +633,7 @@ QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
     rect.setLeft(columnPosition(cellRange.left()));
     rect.setRight(columnPosition(cellRange.right()) + columnFormat(cellRange.right())->width());
     rect.setTop(rowPosition(cellRange.top()));
-    rect.setBottom(rowPosition(cellRange.bottom()) + rowFormat(cellRange.bottom())->height());
+    rect.setBottom(rowPosition(cellRange.bottom()) + rowFormats()->rowHeight(cellRange.bottom()));
     return rect;
 }
 
@@ -642,12 +647,13 @@ QRect Sheet::documentToCellCoordinates(const QRectF &area) const
     while (width < area.right())
         width += columnFormat(++right)->visibleWidth();
     int top = 0;
+    // TODO: better implementation
     double height = 0.0;
     while (height <= area.top())
-        height += rowFormat(++top)->visibleHeight();
+        height += rowFormats()->visibleHeight(++top);
     int bottom = top;
     while (height < area.bottom())
-        height += rowFormat(++bottom)->visibleHeight();
+        height += rowFormats()->visibleHeight(++bottom);
     return QRect(left, top, right - left + 1, bottom - top + 1);
 }
 
@@ -664,18 +670,19 @@ double Sheet::columnPosition(int _col) const
 double Sheet::rowPosition(int _row) const
 {
     const int max = qMin(_row, KS_rowMax);
+    // TODO: better implementation
     double y = 0.0;
     for (int row = 1; row < max; ++row)
-        y += rowFormat(row)->visibleHeight();
+        y += rowFormats()->visibleHeight(row);
     return y;
 }
 
-
+/*
 RowFormat* Sheet::firstRow() const
 {
     return d->rows.first();
 }
-
+*/
 ColumnFormat* Sheet::firstCol() const
 {
     return d->columns.first();
@@ -696,7 +703,7 @@ ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
 
     return p;
 }
-
+/*
 RowFormat* Sheet::nonDefaultRowFormat(int _row, bool force_creation)
 {
     Q_ASSERT(_row >= 1 && _row <= KS_rowMax);
@@ -712,7 +719,7 @@ RowFormat* Sheet::nonDefaultRowFormat(int _row, bool force_creation)
 
     return p;
 }
-
+*/
 void Sheet::changeCellTabName(QString const & old_name, QString const & new_name)
 {
     for (int c = 0; c < formulaStorage()->count(); ++c) {
@@ -801,14 +808,7 @@ void Sheet::insertColumns(int col, int number)
 
 void Sheet::insertRows(int row, int number)
 {
-    double deltaHeight = 0.0;
-    for (int i = 0; i < number; i++) {
-        deltaHeight -= rowFormat(KS_rowMax)->height();
-        d->rows.insertRow(row);
-        deltaHeight += rowFormat(row)->height();
-    }
-    // Adjust document height (plus heights of new rows; minus heights of removed rows).
-    adjustDocumentHeight(deltaHeight);
+    d->rows.insertRows(row, number);
 
     foreach(Sheet* sheet, map()->sheetList()) {
         sheet->changeNameCellRef(QPoint(1, row), true,
@@ -841,14 +841,7 @@ void Sheet::removeColumns(int col, int number)
 
 void Sheet::removeRows(int row, int number)
 {
-    double deltaHeight = 0.0;
-    for (int i = 0; i < number; i++) {
-        deltaHeight -= rowFormat(row)->height();
-        d->rows.removeRow(row);
-        deltaHeight += rowFormat(KS_rowMax)->height();
-    }
-    // Adjust document height (plus heights of new rows; minus heights of removed rows).
-    adjustDocumentHeight(deltaHeight);
+    d->rows.removeRows(row, number);
 
     foreach(Sheet* sheet, map()->sheetList()) {
         sheet->changeNameCellRef(QPoint(1, row), true,
@@ -1200,10 +1193,11 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
     }
 
     // Save all RowFormat objects.
-    RowFormat* rowFormat = firstRow();
+    // TODO after row format storage porting
+    //RowFormat* rowFormat = firstRow();
     int styleIndex = styleStorage()->nextRowStyleIndex(0);
-    while (rowFormat || styleIndex) {
-        if (rowFormat && (!styleIndex || rowFormat->row() <= styleIndex)) {
+    while (/*rowFormat || */styleIndex) {
+        /*if (rowFormat && (!styleIndex || rowFormat->row() <= styleIndex)) {
             QDomElement e = rowFormat->save(dd);
             if (e.isNull())
                 return QDomElement();
@@ -1211,7 +1205,7 @@ QDomElement Sheet::saveXML(QDomDocument& dd)
             if (rowFormat->row() == styleIndex)
                 styleIndex = styleStorage()->nextRowStyleIndex(styleIndex);
             rowFormat = rowFormat->next();
-        } else if (styleIndex) {
+        } else */if (styleIndex) {
             RowFormat rowFormat(*map()->defaultRowFormat());
             rowFormat.setSheet(this);
             rowFormat.setRow(styleIndex);
@@ -2051,20 +2045,13 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
 
 //     kDebug(36003)<<" create non defaultrow format :"<<rowIndex<<" repeate :"<<number<<" height :"<<height;
     if (isNonDefaultRow) {
-        for (int r = 0; r < number; ++r) {
-            RowFormat* rowFormat = nonDefaultRowFormat(rowIndex + r);
-            if (height != -1.0)
-                rowFormat->setHeight(height);
-            if (insertPageBreak) {
-                rowFormat->setPageBreak(true);
-            }
-            if (visibility == Collapsed)
-                rowFormat->setHidden(true);
-            else if (visibility == Filtered)
-                rowFormat->setFiltered(true);
-
-            rowFormat->setPageBreak(insertPageBreak);
-        }
+        if (height != -1.0)
+            d->rows.setRowHeight(rowIndex, rowIndex + number - 1, height);
+        d->rows.setPageBreak(rowIndex, rowIndex + number - 1, insertPageBreak);
+        if (visibility == Collapsed)
+            d->rows.setHidden(rowIndex, rowIndex + number - 1, true);
+        else if (visibility == Filtered)
+            d->rows.setFiltered(rowIndex, rowIndex + number - 1, true);
     }
 
     int columnIndex = 1;
@@ -2140,13 +2127,7 @@ QRect Sheet::usedArea(bool onlyContent) const
     int maxRows = d->cellStorage->rows(!onlyContent);
 
     if (!onlyContent) {
-        const RowFormat * row = firstRow();
-        while (row) {
-            if (row->row() > maxRows)
-                maxRows = row->row();
-
-            row = row->next();
-        }
+        maxRows = qMax(maxRows, d->rows.lastNonDefaultRow());
 
         const ColumnFormat* col = firstCol();
         while (col) {
@@ -2170,7 +2151,7 @@ QRect Sheet::usedArea(bool onlyContent) const
 
 bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tableContext) const
 {
-    if (*rowFormat(row1) != *rowFormat(row2)) {
+    if (!d->rows.rowsAreEqual(row1, row2)) {
 //         kDebug(36003) <<"\t Formats of" << row1 <<" and" << row2 <<" are different";
         return false;
     }
@@ -2677,17 +2658,16 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
     // saving the rows and the cells
     // we have to loop through all rows of the used area
     for (i = 1; i <= maxRows; ++i) {
-        const RowFormat* row = rowFormat(i);
-
         // default cell style for row
         const Style style = tableContext.rowDefaultStyles.value(i);
 
         xmlWriter.startElement("table:table-row");
 
-        if (!row->isDefault()) {
+        const bool rowIsDefault = d->rows.isDefaultRow(i);
+        if (!rowIsDefault) {
             KoGenStyle currentRowStyle(KoGenStyle::TableRowAutoStyle, "table-row");
-            currentRowStyle.addPropertyPt("style:row-height", row->height());
-            if (row->hasPageBreak()) {
+            currentRowStyle.addPropertyPt("style:row-height", d->rows.rowHeight(i));
+            if (d->rows.hasPageBreak(i)) {
                 currentRowStyle.addProperty("fo:break-before", "page");
             }
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
@@ -2706,15 +2686,14 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
             // or
             //   next row with different Format
             while (j <= maxRows && !d->cellStorage->firstInRow(j) && !tableContext.rowHasCellAnchoredShapes(this, j)) {
-                const RowFormat* nextRow = rowFormat(j);
 //               kDebug(36003) <<"Sheet::saveOdfColRowCell: second row loop:"
 //                         << " j: " << j
 //                         << " row: " << nextRow->row();
 
                 // if the reference row has the default row format
-                if (row->isDefault() && style.isDefault()) {
+                if (rowIsDefault && style.isDefault()) {
                     // if the next is not default, stop here
-                    if (!nextRow->isDefault() || !tableContext.rowDefaultStyles.value(j).isDefault())
+                    if (!d->rows.isDefaultRow(j) || !tableContext.rowDefaultStyles.value(j).isDefault())
                         break;
                     // otherwise, jump to the next
                     j += cellStorage()->rowRepeat(j);
@@ -2722,7 +2701,7 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                 }
 
                 // stop, if the next row differs from the current one
-                if ((nextRow && *row != *nextRow) || (!nextRow && !row->isDefault()))
+                if (!d->rows.rowsAreEqual(i, j))
                     break;
                 if (style != tableContext.rowDefaultStyles.value(j))
                     break;
@@ -2739,9 +2718,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                                                    map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
-            if (row->isHidden())   // never true for the default row
+            if (d->rows.isHidden(i))   // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "collapse");
-            else if (row->isFiltered()) // never true for the default row
+            else if (d->rows.isFiltered(i)) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
             // NOTE Stefan: Even if paragraph 8.1 states, that rows may be empty, the
@@ -2769,9 +2748,9 @@ void Sheet::saveOdfColRowCell(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                                                    map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
-            if (row->isHidden())   // never true for the default row
+            if (d->rows.isHidden(i))   // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "collapse");
-            else if (row->isFiltered()) // never true for the default row
+            else if (d->rows.isFiltered(i)) // never true for the default row
                 xmlWriter.addAttribute("table:visibility", "filter");
 
             int j = i + repeated;
@@ -3218,7 +3197,11 @@ void Sheet::insertColumnFormat(ColumnFormat *l)
 
 void Sheet::insertRowFormat(RowFormat *l)
 {
-    d->rows.insertElement(l, l->row());
+    const int row = l->row();
+    d->rows.setRowHeight(row, row, l->height());
+    d->rows.setHidden(row, row, l->isHidden());
+    d->rows.setFiltered(row, row, l->isFiltered());
+    d->rows.setPageBreak(row, row, l->hasPageBreak());
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     }
@@ -3234,10 +3217,21 @@ void Sheet::deleteColumnFormat(int column)
 
 void Sheet::deleteRowFormat(int row)
 {
-    d->rows.removeElement(row);
+    d->rows.setDefault(row, row);
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     }
+}
+
+
+RowFormatStorage* Sheet::rowFormats()
+{
+    return &d->rows;
+}
+
+const RowFormatStorage* Sheet::rowFormats() const
+{
+    return &d->rows;
 }
 
 void Sheet::showStatusMessage(const QString &message, int timeout)

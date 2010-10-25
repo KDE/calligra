@@ -60,6 +60,7 @@
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
 #include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
 #include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -765,10 +766,7 @@ double Cell::width() const
 double Cell::height() const
 {
     const int bottomRow = d->row + mergedYCells();
-    double height = 0.0;
-    for (int row = d->row; row <= bottomRow; ++row)
-        height += sheet()->rowFormat(row)->height();
-    return height;
+    return sheet()->rowFormats()->totalRowHeight(d->row, bottomRow);
 }
 
 // parses the text
@@ -1765,8 +1763,8 @@ void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &sha
     double offsetY = position.y();
     for (int col = 1; col < column(); ++col)
         position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
-    for (int row = 1; row < this->row(); ++row)
-        position += QPointF(0.0, d->sheet->rowFormat(row)->height());
+    if (this->row() > 1)
+        position += QPointF(0.0, d->sheet->rowFormats()->totalRowHeight(1, this->row() - 1));
     shape->setPosition(position);
 
     dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
@@ -1803,8 +1801,8 @@ void Cell::loadOdfObject(const KoXmlElement &element, KoShapeLoadingContext &sha
     QSizeF size = QSizeF(endX - offsetX, endY - offsetY);
     for (int col = column(); col < endCell.firstRange().left(); ++col)
         size += QSizeF(d->sheet->columnFormat(col)->width(), 0.0);
-    for (int row = this->row(); row < endCell.firstRange().top(); ++row)
-        size += QSizeF(0.0, d->sheet->rowFormat(row)->height());
+    if (endCell.firstRange().top() > this->row())
+        size += QSizeF(0.0, d->sheet->rowFormats()->totalRowHeight(this->row(), endCell.firstRange().top() - 1));
     shape->setSize(size);
 }
 
