@@ -41,6 +41,7 @@ private slots:
     void testVisibleHeight();
     void testTotalRowHeight();
     void testTotalVisibleRowHeight();
+    void testRowForPosition();
     void testPageBreak();
     void testIsDefaultRow();
     void testSetDefault();

@@ -34,6 +34,8 @@ public:
     qreal totalRowHeight(int firstRow, int lastRow) const;
     qreal totalVisibleRowHeight(int firstRow, int lastRow) const;
 
+    int rowForPosition(qreal ypos, qreal * topOfRow = 0) const;
+
     bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
 

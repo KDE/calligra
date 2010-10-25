@@ -169,6 +169,24 @@ void TestRowFormatStorage::testTotalVisibleRowHeight()
     QCOMPARE(s.totalVisibleRowHeight(1, KS_rowMax), (KS_rowMax - 110) * 10.0 + 130.0 + 1700.0 - 40.0);
 }
 
+void TestRowFormatStorage::testRowForPosition()
+{
+    RowFormatStorage s(m_sheet);
+
+    s.setRowHeight(1, KS_rowMax, 10.0);
+    s.setRowHeight(10, 19, 13.0);
+    s.setHidden(5, 5, true);
+
+    qreal top;
+    QCOMPARE(s.rowForPosition(5.0), 1);
+    QCOMPARE(s.rowForPosition(15.0), 2);
+    QCOMPARE(s.rowForPosition(45.0), 6);
+    QCOMPARE(s.rowForPosition(55.0, &top), 7);
+    QCOMPARE(top, 50.0);
+    QCOMPARE(s.rowForPosition(95.0, &top), 11);
+    QCOMPARE(top, 93.0);
+}
+
 void TestRowFormatStorage::testPageBreak()
 {
     RowFormatStorage s(m_sheet);

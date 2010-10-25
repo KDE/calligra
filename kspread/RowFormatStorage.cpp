@@ -119,6 +119,29 @@ qreal RowFormatStorage::totalVisibleRowHeight(int firstRow, int lastRow) const
     return res;
 }
 
+int RowFormatStorage::rowForPosition(qreal ypos, qreal *topOfRow) const
+{
+    int row = 1;
+    qreal y = 0;
+    while (row < KS_rowMax) {
+        int last;
+        const qreal h = visibleHeight(row, &last);
+        if (h == 0) {
+            row = last+1;
+            continue;
+        }
+        const int cnt = last - row + 1;
+        const int maxcnt = qMin(int((ypos - y) / h), cnt);
+        y += maxcnt * h;
+        row += maxcnt;
+        if (maxcnt < cnt) {
+            if (topOfRow) *topOfRow = y;
+            return row;
+        }
+    }
+    return KS_rowMax;
+}
+
 bool RowFormatStorage::isHidden(int row, int *lastRow, int *firstRow) const
 {
     bool v;
