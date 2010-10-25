@@ -475,7 +475,7 @@ TYPE PptTextPFRun::NAME() const \
     const MSO::TextPFException* const * p = pfs; \
     while (*p) { \
         if ((*p)->masks.TEST) { \
-	    if ((*p)->bulletFlags && (*p)->VALID) { \
+ 	    if (VALID()) { \
                 return PRE (*p)->NAME; \
             } \
         } \
@@ -483,10 +483,10 @@ TYPE PptTextPFRun::NAME() const \
     } \
     return DEFAULT; \
 }
-//     TYPE             PRE NAME             TEST         VALIDITY TEST                 DEFAULT
-GETTER(quint16,          ,  bulletFontRef,   bulletFont,  bulletFlags->fBulletHasFont,  0)
-GETTER(qint16,           ,  bulletSize,      bulletSize,  bulletFlags->fBulletHasSize,  0)
-GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, bulletFlags->fBulletHasColor, ColorIndexStruct())
+//     TYPE             PRE NAME             TEST         VALID                 DEFAULT
+GETTER(quint16,          ,  bulletFontRef,   bulletFont,  fBulletHasFont,  0)
+GETTER(qint16,           ,  bulletSize,      bulletSize,  fBulletHasSize,  0)
+GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, fBulletHasColor, ColorIndexStruct())
 #undef GETTER
 
 qint32 PptTextPFRun::bulletBlipRef() const {

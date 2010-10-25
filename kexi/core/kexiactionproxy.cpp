@@ -28,7 +28,6 @@
 #include <kactioncollection.h>
 
 #include <qwidget.h>
-#include <q3signal.h>
 #include <qicon.h>
 #include <kexi_global.h>
 
@@ -76,8 +75,15 @@ void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
     m_proxy->plugSharedActionsToExternalGUI(action_names, client);
 }
 
-
 //=======================
+
+class KexiActionProxy::Private {
+public:
+    Private() {}
+
+    QMap<QString, QPair<KexiActionProxySignal*, bool>* > signalsMap;
+};
+
 
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
         : m_host(host ? host : KexiSharedActionHost::defaultHost())
@@ -86,9 +92,8 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
         , m_signal_parent(0)
         , m_KAction_setEnabled_helper(new KAction_setEnabled_Helper(this))
         , m_focusedChild(0)
+        , d(new Private)
 {
-kDebug() << this;
-kBacktrace();
     m_signal_parent.setObjectName("signal_parent");
     //m_sharedActionChildren.setAutoDelete(false); //TODO port logic to KDE4
     //m_alternativeActions.setAutoDelete(true); //TODO port logic to KDE4
@@ -97,9 +102,8 @@ kBacktrace();
 
 KexiActionProxy::~KexiActionProxy()
 {
-kDebug() << this;
-    qDeleteAll(m_signals);
-    m_signals.clear();
+    qDeleteAll(d->signalsMap);
+    d->signalsMap.clear();
     //detach myself from every child
     foreach(KexiActionProxy *proxy, m_sharedActionChildren) {
         proxy->setActionProxyParent_internal(0);
@@ -117,18 +121,18 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QObject* rece
 {
     if (action_name.isEmpty())// || !receiver || !slot)
         return;
-    QPair<Q3Signal*, bool> *p = m_signals.value(action_name);
+    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
     if (! p) {
-        p = new QPair<Q3Signal*, bool>(new Q3Signal(&m_signal_parent), true);
-        m_signals.insert(action_name, p);
+        p = new QPair<KexiActionProxySignal*, bool>(new KexiActionProxySignal(&m_signal_parent), true);
+        d->signalsMap.insert(action_name, p);
     }
     if (receiver && slot)
-        p->first->connect(receiver, slot);
+        QObject::connect(p->first, SIGNAL(invoke()), receiver, slot);
 }
 
 void KexiActionProxy::unplugSharedAction(const QString& action_name)
 {
-    QPair<Q3Signal*, bool> *p = m_signals.take(action_name);
+    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.take(action_name);
     if (! p)
         return;
     delete p->first;
@@ -204,7 +208,7 @@ void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names
 
 bool KexiActionProxy::activateSharedAction(const QString& action_name, bool alsoCheckInChildren)
 {
-    QPair<Q3Signal*, bool> *p = m_signals.value(action_name);
+    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
     if (!p || !p->second) {
         //try in children...
         if (alsoCheckInChildren) {
@@ -227,7 +231,7 @@ QAction* KexiActionProxy::sharedAction(const QString& action_name)
 
 bool KexiActionProxy::isSupported(const QString& action_name) const
 {
-    QPair<Q3Signal*, bool> *p = m_signals.value(action_name);
+    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
     if (!p) {
         //not supported explicitly - try in children...
         if (m_focusedChild)
@@ -243,7 +247,7 @@ bool KexiActionProxy::isSupported(const QString& action_name) const
 
 bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInChildren) const
 {
-    QPair<Q3Signal*, bool> *p = m_signals.value(action_name);
+    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
     if (!p) {
         //not supported explicitly - try in children...
         if (alsoCheckInChildren) {
@@ -262,7 +266,7 @@ bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInCh
 
 void KexiActionProxy::setAvailable(const QString& action_name, bool set)
 {
-    QPair<Q3Signal*, bool> *p = m_signals.value(action_name);
+    QPair<KexiActionProxySignal*, bool> *p = d->signalsMap.value(action_name);
     if (!p)
         return;
     p->second = set;

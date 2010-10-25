@@ -27,7 +27,6 @@
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"
 
-class Q3Signal;
 class QAction;
 class KAction;
 class KXMLGUIClient;
@@ -160,7 +159,6 @@ protected:
 
     KexiSharedActionHost *m_host;
     QPointer<QObject> m_receiver;
-    QHash<QString, QPair<Q3Signal*, bool>* > m_signals;
 
     QList<KexiActionProxy*> m_sharedActionChildren;
 
@@ -183,6 +181,10 @@ public:
     friend class KexiSharedActionHost;
     friend class KAction_setEnabled_Helper;
     friend class KexiSharedActionConnector;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

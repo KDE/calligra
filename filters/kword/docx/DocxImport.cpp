@@ -271,6 +271,9 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
     KoFilter::ConversionStatus status
         = loadAndParseDocument(&themesReader, docThemePathAndFile, errorMessage, &themecontext);
 
+    // Main document context, to which we collect footnotes, endnotes, comments
+    DocxXmlDocumentReaderContext mainContext(*this, documentPath, documentFile, *relationships, &themes);
+
     // 3. parse styles
     {
         // get styles path from document's relationships, not from content types; typically returns /word/styles.xml
@@ -320,6 +323,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 footnotePathAndFile, &footnoteReader, writers, errorMessage, &context) )
+            mainContext.m_footnotes = context.m_footnotes;
         }
 
     // 6. parse comments
@@ -333,6 +337,7 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 commentPathAndFile, &commentReader, writers, errorMessage, &context) )
+            mainContext.m_comments = context.m_comments;
         }
 
     // 7. parse endnotes
@@ -346,13 +351,13 @@ KoFilter::ConversionStatus DocxImport::parseParts(KoOdfWriters *writers, MSOOXML
 
             RETURN_IF_ERROR( loadAndParseDocumentFromFileIfExists(
                 endnotePathAndFile, &endnoteReader, writers, errorMessage, &context) )
+            mainContext.m_endnotes = context.m_endnotes;
         }
 
     // 8. parse document
         DocxXmlDocumentReader documentReader(writers);
-        DocxXmlDocumentReaderContext context(*this, documentPath, documentFile, *relationships, &themes);
         RETURN_IF_ERROR( loadAndParseDocument(
-            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &context) )
+            d->mainDocumentContentType(), &documentReader, writers, errorMessage, &mainContext) )
     }
     // more here...
     return KoFilter::OK;

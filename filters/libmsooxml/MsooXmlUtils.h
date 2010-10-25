@@ -90,12 +90,16 @@ public:
     void setPictureSize(const QSize& size);
 
     void setBulletFont(const QString& font);
-    
+
     void setBulletColor(const QString& bulletColor);
+
+    QString bulletColor() const;
 
     QString bulletChar() const;
 
     QString bulletFont() const;
+
+    void addInheritedValues(const ParagraphBulletProperties& properties);
 
     int m_level;
     int m_startValue;

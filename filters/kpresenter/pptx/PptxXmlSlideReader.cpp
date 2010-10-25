@@ -1825,19 +1825,31 @@ void PptxXmlSlideReader::inheritAllTextAndParagraphStyles()
 
 void PptxXmlSlideReader::inheritListStyles()
 {
+    inheritDefaultListStyles();
+
     // Masterslide layer
     if (!d->phType.isEmpty()) {
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phType]);
         while (i.hasNext()) {
             i.next();
-            m_currentCombinedBulletProperties.insert(i.key(), i.value());
+            if (i.value().isEmpty()) {
+                m_currentCombinedBulletProperties.insert(i.key(), i.value());
+            }
+            else {
+                m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
+            }
         }
     }
     if (!d->phIdx.isEmpty()) {
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phIdx]);
         while (i.hasNext()) {
             i.next();
-            m_currentCombinedBulletProperties.insert(i.key(), i.value());
+            if (i.value().isEmpty()) {
+                m_currentCombinedBulletProperties.insert(i.key(), i.value());
+            }
+            else {
+                m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
+            }
         }
     }
     // Layout layer
@@ -1846,7 +1858,12 @@ void PptxXmlSlideReader::inheritListStyles()
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phType]);
             while (i.hasNext()) {
                 i.next();
-                m_currentCombinedBulletProperties.insert(i.key(), i.value());
+                if (i.value().isEmpty()) {
+                    m_currentCombinedBulletProperties.insert(i.key(), i.value());
+                }
+                else {
+                    m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
+                }
             }
         }
     }
@@ -1855,7 +1872,12 @@ void PptxXmlSlideReader::inheritListStyles()
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phIdx]);
             while (i.hasNext()) {
                 i.next();
-                m_currentCombinedBulletProperties.insert(i.key(), i.value());
+                if (i.value().isEmpty()) {
+                    m_currentCombinedBulletProperties.insert(i.key(), i.value());
+                }
+                else {
+                    m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
+                }
             }
         }
     }
@@ -1869,7 +1891,12 @@ void PptxXmlSlideReader::inheritListStyles()
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->currentSlideStyles.listStyles[slideIdentifier]);
             while (i.hasNext()) {
                 i.next();
-                m_currentCombinedBulletProperties.insert(i.key(), i.value());
+                if (i.value().isEmpty()) {
+                    m_currentCombinedBulletProperties.insert(i.key(), i.value());
+                }
+                else {
+                    m_currentCombinedBulletProperties[i.key()].addInheritedValues(i.value());
+                }
             }
         }
     }

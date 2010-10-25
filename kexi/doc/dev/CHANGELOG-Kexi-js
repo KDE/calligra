@@ -86,9 +86,21 @@ TODO: this causes crash:
              , fieldsExpandedWithInternal(0)
 +            //, orderByColumnList(copy->orderByColumnList)
 
+TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
+
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
-TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
+2010-10-20
+Core
+*remove dependency on Q3Signal
+
+2010-10-20
+KexiDB
+*add sanity checks to assignment operators
+
+2010-10-11
+KexiDB
+*SQLite 3.7.3 is recommended now
 
 2010-10-09
 Table View

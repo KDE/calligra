@@ -333,9 +333,12 @@ private:
     /**
     * @brief Converts ColorIndexStruct to QColor
     *
-    * Color index struct can either contain rgb values or a index to color
-    * in MainMasterContainer's SlideSchemeColorSchemeAtom. This method
-    * returns the rgb values the specified struct refers to.
+    * ColorIndexStruct can either contain rgb values or an index into
+    * SlideSchemeColorSchemeAtom.  The main master/title master slide or notes
+    * master slide will be checked to choose the correct color scheme.  The
+    * presentation slide or notes slide will be checked if applicable.  This
+    * method returns the rgb values the specified struct refers to.
+    *
     * @param color Color to convert
     * @return QColor value, may be undefined
     */
@@ -344,11 +347,11 @@ private:
     /**
      * @brief Converts OfficeArtCOLORREF to QColor
      *
-     * OfficeArtCOLORREF struct can either contain rgb values or an index to a
-     * color stored in a SlideSchemeColorSchemeAtom.  The main master slide or
-     * notes master slide SHOULD be provided if applicable.  The current
-     * presentation slide or notes slide SHOULD be provided if applicable.
-     * This method returns the rgb values the specified struct refers to.
+     * OfficeArtCOLORREF struct can contain either rgb values or an index into
+     * SlideSchemeColorSchemeAtom.  The main master/title master slide or notes
+     * master slide MUST be provided to choose the correct color scheme.  The
+     * presentation slide or notes slide MUST be provided if applicable.  This
+     * method returns the rgb values the specified struct refers to.
      *
      * @param color atored as OfficeArtCOLORREF to convert
      * @param pointer to a MainMasterContainer or NotesContainer

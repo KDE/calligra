@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=kde_events
 Name=KDE Events
+Name[da]=KDE Events
 Name[et]=KDE sündmused
 Name[it]=Eventi di KDE
 Name[pt]=Eventos do KDE
@@ -10,6 +11,7 @@ Name[uk]=Події KDE
 Name[x-test]=xxKDE Eventsxx
 Name[zh_TW]=KDE 事件
 Comment=KDE Events
+Comment[da]=KDE-arrangementer
 Comment[et]=KDE sündmused
 Comment[it]=Eventi di KDE
 Comment[pt]=Eventos do KDE

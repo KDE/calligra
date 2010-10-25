@@ -3620,7 +3620,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
 #ifdef PPTXXMLDOCUMENTREADER_CPP
     // We skip reading this one properly as we do not know the correct theme in the time of reading
-    defaultTextColors[defaultTextColors.size() - 1] = val;
+    if (m_colorState == PptxXmlDocumentReader::rprState) {
+        defaultTextColors[defaultTextColors.size() - 1] = val;
+    }
+    else {
+        defaultBulletColors[defaultBulletColors.size() - 1] = val;
+    }
 
     skipCurrentElement();
     READ_EPILOGUE
@@ -4471,6 +4476,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
 {
     READ_PROLOGUE
+
+#ifdef PPTXXMLDOCUMENTREADER_CPP
+    m_colorState = PptxXmlDocumentReader::buClrState;
+#endif
+
     while (true) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -4957,6 +4967,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentColor = QColor();
+
+#ifdef PPTXXMLDOCUMENTREADER_CPP
+    m_colorState = PptxXmlDocumentReader::rprState;
+#endif
 
     while (!atEnd()) {
         readNext();

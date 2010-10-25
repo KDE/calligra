@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=simple_waves
 Name=Simple Waves
+Name[da]=Simple Waves
 Name[et]=Lihtsad lained
 Name[it]=Onde semplici
 Name[pt]=Ondas Simples
@@ -10,6 +11,7 @@ Name[uk]=Прості хвилі
 Name[x-test]=xxSimple Wavesxx
 Name[zh_TW]=簡單波浪
 Comment=Simple Waves
+Comment[da]=Simple bølger
 Comment[et]=Lihtsad lained
 Comment[it]=Onde semplici
 Comment[pt]=Ondas Simples
