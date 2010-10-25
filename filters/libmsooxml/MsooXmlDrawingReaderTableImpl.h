@@ -380,6 +380,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
     READ_PROLOGUE
 
     m_currentColor = QColor();
+    QColor backgroundColor = QColor();
 
     while (!atEnd()) {
         readNext();
@@ -391,22 +392,37 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 //            ELSE_TRY_READ_IF(gradFill)
 //            ELSE_TRY_READ_IF(grpFill)
 //            ELSE_TRY_READ_IF(headers)
-//            ELSE_TRY_READ_IF(lnB)
 //            ELSE_TRY_READ_IF(lnBlToTr)
-//            ELSE_TRY_READ_IF(lnL)
-//            ELSE_TRY_READ_IF(lnR)
 //            ELSE_TRY_READ_IF(lnTlToBr)
 //            ELSE_TRY_READ_IF(noFill)
 //            ELSE_TRY_READ_IF(pattFill)
               if (QUALIFIED_NAME_IS(solidFill)) {
                   TRY_READ(solidFill)
-                  if (m_currentColor.isValid()) {
-                      m_currentTableCellStyle.addProperty("fo:background-color", m_currentColor.name());
-                  }
+                  backgroundColor = m_currentColor;
+              } // Skipping these currently to not interfere with background color.
+              else if (QUALIFIED_NAME_IS(lnB)) {
+                  skipCurrentElement();
+              }
+              else if (QUALIFIED_NAME_IS(lnB)) {
+                  skipCurrentElement();
+              }
+              else if (QUALIFIED_NAME_IS(lnB)) {
+                  skipCurrentElement();
+              }
+              else if (QUALIFIED_NAME_IS(lnB)) {
+                  skipCurrentElement();
+              }
+              else if (QUALIFIED_NAME_IS(noFill)) {
+                  backgroundColor = QColor();
               }
 //             ELSE_WRONG_FORMAT
         }
     }
+
+    if (backgroundColor.isValid()) {
+        m_currentTableCellStyle.addProperty("fo:background-color", backgroundColor.name());
+    }
+
     READ_EPILOGUE
 }
 
