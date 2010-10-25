@@ -701,7 +701,6 @@ class ConstraintAtom : public AbstractAtom
             return atom;
         }
         virtual void dump(Context*, int level) {
-            /*
             QString s = QString("fact=%1 ").arg(m_fact);
             if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
             if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
@@ -714,7 +713,6 @@ class ConstraintAtom : public AbstractAtom
             if(!m_type.isEmpty()) s += QString("type=%1 ").arg(m_type);
             if(!m_value.isEmpty()) s += QString("val=%1 ").arg(m_value);
             DEBUG_DUMP << s;
-            */
         }
         virtual void readAll(Context*, MsooXmlDiagramReader* reader) {
             const QXmlStreamAttributes attrs(reader->attributes());
@@ -806,6 +804,8 @@ class ShapeAtom : public AbstractAtom
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
             Q_ASSERT(context->m_parentLayout);
             if(m_type.isEmpty() || m_hideGeom) return;
+
+            QMap<QString,QString> params = context->m_parentLayout->algorithmParams();
 
             QMap<QString, qreal> values = context->m_parentLayout->finalValues();
             Q_ASSERT(values.contains("l"));
@@ -946,19 +946,49 @@ class ShapeAtom : public AbstractAtom
                 xmlWriter->addAttribute("draw:type", "circle");
                 xmlWriter->addAttribute("svg:viewBox", "0 0 828228 828228");
                 xmlWriter->endElement();
-            } else if (m_type == QLatin1String("conn")) { // Connection shape type
+            /* } else if (m_type == QLatin1String("rect")) { */
+            } else if (m_type == QLatin1String("roundRect")) {
                 xmlWriter->startElement("draw:enhanced-geometry");
-                xmlWriter->addAttribute("draw:enhanced-path", "M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"); // arrow-right
-                //xmlWriter->addAttribute("draw:enhanced-path", "M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N"); // arrow-left
-                xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90");
-                xmlWriter->addAttribute("draw:glue-points", "?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17");
-                xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
+                xmlWriter->addAttribute("draw:enhanced-path", "M 0 97707 C 0 71793 10294 46941 28618 28618 46942 10294 71794 0 97707 0 L 804191 0 C 830105 0 854957 10294 873280 28618 891604 46942 901898 71794 901898 97707 L 901898 488526 C 901898 514440 891604 539292 873280 557615 854956 575939 830104 586233 804191 586233 L 97707 586233 C 71793 586233 46941 575939 28618 557615 10294 539291 0 514439 0 488526 L 0 97707 Z N");
+                xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
+                xmlWriter->addAttribute("draw:glue-points", "?f20 ?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f25 ?f27 ?f23 ?f28 ?f21 ?f28 ?f29 ?f27 ?f30 ?f26 ?f31 ?f24 ?f31 ?f22 ?f30 ?f20 ?f29 ?f20 ?f21");
+                xmlWriter->addAttribute("draw:text-areas", "?f32 ?f34 ?f33 ?f35");
                 xmlWriter->addAttribute("draw:type", "non-primitive");
-                xmlWriter->addAttribute("svg:viewBox", "0 0 220174 279527");
+                xmlWriter->addAttribute("svg:viewBox", "0 0 901898 586233");
                 xmlWriter->endElement();
-            } else /*if (m_type == QLatin1String("rect"))*/ {
-                //TODO
+            } else if (m_type == QLatin1String("conn")) { // Connection shape type
+                enum EndStyle { Arrow, Auto, NoArrow };
+                EndStyle endstyle = Arrow;
+                if(params.contains("endSty")) {
+                    const QString endStyle = params["endSty"];
+                    if(endStyle == "auto") {
+                        //TODO specs say that the algorithm needs to define the style but it misses details how...
+                    } else if(endStyle == "noArr") {
+                        endstyle = NoArrow;
+                    }
+                }
+                if(endstyle == NoArrow) { // just a connecting line without arrow
+                    xmlWriter->startElement("draw:enhanced-geometry");
+                    xmlWriter->addAttribute("draw:enhanced-path", "M 1627875 92938 A ?f54 ?f55 ?f56 ?f57 1627875 92938 ?f51 ?f53  W ?f58 ?f59 ?f60 ?f61 1627875 92938 ?f51 ?f53 N");
+                    //xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
+                    //xmlWriter->addAttribute("draw:glue-points", "?f20 ?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f25 ?f27 ?f23 ?f28 ?f21 ?f28 ?f29 ?f27 ?f30 ?f26 ?f31 ?f24 ?f31 ?f22 ?f30 ?f20 ?f29 ?f20 ?f21");
+                    xmlWriter->addAttribute("draw:text-areas", "?f11 ?f13 ?f12 ?f14");
+                    xmlWriter->addAttribute("draw:type", "non-primitive");
+                    xmlWriter->addAttribute("svg:viewBox", "0 0 2341473 2341473");
+                    xmlWriter->endElement();
+                } else { // arrow-right
+                    xmlWriter->startElement("draw:enhanced-geometry");
+                    xmlWriter->addAttribute("draw:enhanced-path", "M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N");
+                    xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90");
+                    xmlWriter->addAttribute("draw:glue-points", "?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17");
+                    xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
+                    xmlWriter->addAttribute("draw:type", "non-primitive");
+                    xmlWriter->addAttribute("svg:viewBox", "0 0 220174 279527");
+                    xmlWriter->endElement();
+                }
+            } else {
                 kWarning() << "TODO shape type=" << m_type;
+                //Q_ASSERT_X(false, __FUNCTION__, QString("Handle shape of type=%1").arg(m_type).toUtf8());
             }
 
             xmlWriter->endElement(); // draw:custom-shape
@@ -1463,20 +1493,39 @@ class AlgorithmBase {
                         Q_ASSERT(!ref->m_needsReinit && !ref->m_needsRelayout && !ref->m_childNeedsRelayout);
                     }
 
+                    QMap<QString, qreal> values = ref->finalValues();
                     if(!c->m_refType.isEmpty()) {
-                        QMap<QString, qreal> values = ref->finalValues();
                         if(!values.contains(c->m_refType)) {
                             kWarning() << "Layout with name=" << layout()->m_name << "defines constraint for non-existing refType=" << c->m_refType;
                             continue;
                         }
                         value = values[c->m_refType];
                     } else {
-                        //FIXME no refType and no value defined means use the default-value but the specs don't say what
-                        //the default values are. So, it's needed someone figures out what it means if standalone tags
-                        //like <dgm:constr type="connDist"/> are defined.
-                        kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << layout()->m_name;
-                        c->dump(context(),10);
-                        //if(c->m_type=="connDist") value = ref->finalValues()["w"]/5.0;
+                        // If there are no refType and no value defined then a default-value needs to be used.
+                        // See also http://social.msdn.microsoft.com/Forums/en/os_binaryfile/thread/7c823650-7913-4e63-970f-1c5dab3450c4
+                        if (c->m_type == "primFontSz") {
+                            value = 36;
+                        } else if (c->m_type == "tMarg") {
+                            value = values.contains("primFontSz") ? values["primFontSz"] * 0.56 : 0.0;
+                        } else if (c->m_type == "lMarg") {
+                            value = values.contains("primFontSz") ? values["primFontSz"] * 0.40 : 0.0;
+                        } else if (c->m_type == "rMarg") {
+                            value = values.contains("primFontSz") ? values["primFontSz"] * 0.42 : 0.0;
+                        } else if (c->m_type == "bMarg") {
+                            value = values.contains("primFontSz") ? values["primFontSz"] * 0.60 : 0.0;
+                        //} else if (c->m_type == "connDist") {
+                            //value = ;
+                        //} else if (c->m_type == "begPad") {
+                            //value = ;
+                        //} else if (c->m_type == "endPad") {
+                            //value = ;
+                        //} else if (c->m_type == "userA") {
+                            //value = ;
+                        } else {
+                            kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << layout()->m_name;
+                            //c->dump(context(),10);
+                            //Q_ASSERT_X(false, __FUNCTION__, QString("Set defaults for constraint=%1").arg(c->m_type).toUtf8());
+                        }
                     }
                 }
 
