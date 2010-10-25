@@ -54,6 +54,7 @@
 #include <kspread/PrintSettings.h>
 #include <kspread/Region.h>
 #include <kspread/RowColumnFormat.h>
+#include <kspread/RowFormatStorage.h>
 #include <kspread/Sheet.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
@@ -189,14 +190,11 @@ bool OpenCalcImport::readRowFormat(KoXmlElement & rowNode, KoXmlElement * rowSty
             number = 256;
     }
 
+    if (height != -1)
+        table->rowFormats()->setRowHeight(row, row+number-1, height);
     for (int i = 0; i < number; ++i) {
-        RowFormat * rowL = table->nonDefaultRowFormat(row);
         table->cellStorage()->setStyle(KSpread::Region(QRect(1, row, KS_colMax, 1)), layout);
 
-        if (height != -1) {
-            kDebug(30518) << "Setting row height to" << height;
-            rowL->setHeight(height);
-        }
 
         // if ( insertPageBreak ) TODO:
         //   rowL->setPageBreak( true )
@@ -456,8 +454,8 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
                                   */
                                 kDebug(30518) << "Rotation: height:" << textHeight;
 
-                                if (table->rowFormat(row)->height() < textHeight)
-                                    table->nonDefaultRowFormat(row)->setHeight(textHeight + 2);
+                                if (table->rowFormats()->rowHeight(row) < textHeight)
+                                    table->rowFormats()->setRowHeight(row, row, textHeight + 2);
                             }
                         }
                     }
@@ -796,11 +794,11 @@ bool OpenCalcImport::readRowsAndCells(KoXmlElement & content, Sheet * table)
         if (!readCells(r, table, backupRow, columns))
             return false;
 
-        RowFormat * srcLayout = table->nonDefaultRowFormat(backupRow);
+//        RowFormat * srcLayout = table->nonDefaultRowFormat(backupRow);
 //     RowFormat * layout = 0;
 
         if (collapsed)
-            srcLayout->setHidden(true);
+            table->rowFormats()->setHidden(backupRow, backupRow, true);
 
         for (i = 1; i < number; ++i) {
             // FIXME KSPREAD_NEW_STYLE_STORAGE
