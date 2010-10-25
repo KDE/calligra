@@ -83,10 +83,12 @@ void RowFormatStorage::setRowHeight(int firstRow, int lastRow, qreal height)
 qreal RowFormatStorage::totalRowHeight(int firstRow, int lastRow) const
 {
     if (lastRow < firstRow) return 0;
-    // TODO: better implementation
     qreal res = 0;
     for (int row = firstRow; row <= lastRow; ++row) {
-        res += rowHeight(row);
+        int last;
+        qreal h = rowHeight(row, &last);
+        res += (qMin(last, lastRow) - row + 1) * h;
+        row = last;
     }
     return res;
 }
@@ -107,10 +109,12 @@ qreal RowFormatStorage::visibleHeight(int row, int *lastRow, int *firstRow) cons
 qreal RowFormatStorage::totalVisibleRowHeight(int firstRow, int lastRow) const
 {
     if (lastRow < firstRow) return 0;
-    // TODO: better implementation
     qreal res = 0;
     for (int row = firstRow; row <= lastRow; ++row) {
-        res += visibleHeight(row);
+        int last;
+        qreal h = visibleHeight(row, &last);
+        res += (qMin(last, lastRow) - row + 1) * h;
+        row = last;
     }
     return res;
 }
