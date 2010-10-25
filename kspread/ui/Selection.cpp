@@ -1042,13 +1042,25 @@ void Selection::emitChanged(const Region& region)
         if (bottom < KS_rowMax) {
             do {
                 bottom++;
-            } while (sheet->rowFormats()->isHiddenOrFiltered(bottom) && bottom != KS_rowMax);
+                int lastHidden;
+                if (sheet->rowFormats()->isHiddenOrFiltered(bottom, &lastHidden)) {
+                    bottom = lastHidden;
+                } else {
+                    break;
+                }
+            } while (bottom != KS_rowMax);
         }
 
         if (top > 1) {
             do {
                 top--;
-            } while (sheet->rowFormats()->isHiddenOrFiltered(top) && top != 1);
+                int firstHidden;
+                if (sheet->rowFormats()->isHiddenOrFiltered(top, 0, &firsHidden)) {
+                    top = firstHidden;
+                } else {
+                    break;
+                }
+            } while (top != 1);
         }
 
         area.setLeft(left);

@@ -2299,8 +2299,11 @@ void CellToolBase::equalizeRow()
         double size = selection()->activeSheet()->rowFormats()->rowHeight(range.top());
         if (range.top() == range.bottom())
             return;
-        for (int i = range.top() + 1; i <= range.bottom(); ++i)
-            size = qMax(selection()->activeSheet()->rowFormats()->rowHeight(i), size);
+        for (int i = range.top() + 1; i <= range.bottom(); ++i) {
+            int lastRow;
+            size = qMax(selection()->activeSheet()->rowFormats()->rowHeight(i, &lastRow), size);
+            i = lastRow;
+        }
 
         if (size != 0.0) {
             ResizeRowManipulator* command = new ResizeRowManipulator();

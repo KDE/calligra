@@ -505,8 +505,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
         else
             row = cell.row();
 
-        while (sheet->rowFormats()->isHiddenOrFiltered(row)) {
-            row++;
+        int lastHiddenOrFiltered;
+        while (sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenOrFiltered)) {
+            row = lastHiddenOrFiltered + 1;
         }
 
         destination.setX(qBound(1, marker.x(), q->maxCol()));
@@ -545,8 +546,9 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
         else
             row = cell.row();
 
-        while (sheet->rowFormats()->isHiddenOrFiltered(row)) {
-            row--;
+        int firstHiddenOrFiltered;
+        while (row >= 1 && sheet->rowFormats()->isHiddenOrFiltered(row, 0, &firstHiddenOrFiltered)) {
+            row = firstHiddenOrFiltered - 1;
         }
 
         destination.setX(qBound(1, marker.x(), q->maxCol()));
