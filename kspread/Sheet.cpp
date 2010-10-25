@@ -158,7 +158,6 @@ public:
 
     // clusters to hold objects
     CellStorage* cellStorage;
-    //RowCluster rows;
     RowFormatStorage rows;
     ColumnCluster columns;
     QList<KoShape*> shapes;
@@ -485,16 +484,7 @@ const ColumnFormat* Sheet::columnFormat(int _column) const
 
     return map()->defaultColumnFormat();
 }
-/*
-const RowFormat* Sheet::rowFormat(int _row) const
-{
-    const RowFormat *p = d->rows.lookup(_row);
-    if (p != 0)
-        return p;
 
-    return map()->defaultRowFormat();
-}
-*/
 CellStorage* Sheet::cellStorage() const
 {
     return d->cellStorage;
@@ -663,12 +653,6 @@ double Sheet::rowPosition(int _row) const
     return rowFormats()->totalVisibleRowHeight(1, max-1);
 }
 
-/*
-RowFormat* Sheet::firstRow() const
-{
-    return d->rows.first();
-}
-*/
 ColumnFormat* Sheet::firstCol() const
 {
     return d->columns.first();
@@ -689,23 +673,7 @@ ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
 
     return p;
 }
-/*
-RowFormat* Sheet::nonDefaultRowFormat(int _row, bool force_creation)
-{
-    Q_ASSERT(_row >= 1 && _row <= KS_rowMax);
-    RowFormat *p = d->rows.lookup(_row);
-    if (p != 0 || !force_creation)
-        return p;
 
-    p = new RowFormat(*map()->defaultRowFormat());
-    p->setSheet(this);
-    p->setRow(_row);
-
-    d->rows.insertElement(p, _row);
-
-    return p;
-}
-*/
 void Sheet::changeCellTabName(QString const & old_name, QString const & new_name)
 {
     for (int c = 0; c < formulaStorage()->count(); ++c) {

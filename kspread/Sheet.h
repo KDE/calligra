@@ -27,7 +27,6 @@
 #include <QHash>
 #include <QList>
 #include <QRect>
-//#include <QWidget>
 
 #include <KoDocument.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
@@ -410,32 +409,11 @@ public:
 
     /**
      * \ingroup ColumnRowFormat
-     * \return the row format of row \p _row . The default row format,
-     * if no special one exists.
+     * \return the row format storage for this sheet.
      */
-    //const RowFormat* rowFormat(int _row) const;
-
-    /**
-     * \ingroup ColumnRowFormat
-     * If no special RowFormat exists for this row, then a new one is created.
-     *
-     * @return a non default RowFormat for this row.
-     */
-    //RowFormat* nonDefaultRowFormat(int _row, bool force_creation = true);
-
-    /**
-     * \ingroup ColumnRowFormat
-     * \return the first non-default row format
-     */
-    //RowFormat* firstRow() const;
-
-    /**
-     * \ingroup ColumnRowFormat
-     */
-    //void setDefaultHeight(double height);
-
     const RowFormatStorage* rowFormats() const;
     RowFormatStorage* rowFormats();
+
     //
     //END Methods related to row formats
     //
