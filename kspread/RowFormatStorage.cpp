@@ -51,13 +51,20 @@ Sheet* RowFormatStorage::sheet() const
     return d->sheet;
 }
 
-qreal RowFormatStorage::rowHeight(int row) const
+qreal RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
 {
     qreal v;
-    if (!d->rowHeights.search(row, v) || v == -1) {
+    if (!d->rowHeights.search(row, v, firstRow, lastRow)) {
+        if (firstRow) *firstRow = row;
+        if (lastRow) *lastRow = row;
         return d->sheet->map()->defaultRowFormat()->height();
     } else {
-        return v;
+        if (lastRow) (*lastRow)--;
+        if (v == -1) {
+            return d->sheet->map()->defaultRowFormat()->height();
+        } else {
+            return v;
+        }
     }
 }
 
@@ -77,12 +84,16 @@ qreal RowFormatStorage::totalRowHeight(int firstRow, int lastRow) const
     return res;
 }
 
-qreal RowFormatStorage::visibleHeight(int row) const
+qreal RowFormatStorage::visibleHeight(int row, int *lastRow, int *firstRow) const
 {
-    if (isHiddenOrFiltered(row)) {
+    if (isHiddenOrFiltered(row, lastRow, firstRow)) {
         return 0.0;
     } else {
-        return rowHeight(row);
+        int hLastRow, hFirstRow;
+        qreal height = rowHeight(row, &hLastRow, &hFirstRow);
+        if (lastRow) *lastRow = qMin(*lastRow, hLastRow);
+        if (firstRow) *firstRow = qMax(*firstRow, hFirstRow);
+        return height;
     }
 }
 
@@ -115,12 +126,15 @@ void RowFormatStorage::setHidden(int firstRow, int lastRow, bool hidden)
     d->hidden.insert_back(firstRow, lastRow+1, hidden);
 }
 
-bool RowFormatStorage::isFiltered(int row) const
+bool RowFormatStorage::isFiltered(int row, int* lastRow, int *firstRow) const
 {
     bool v;
-    if (!d->filtered.search(row, v)) {
+    if (!d->filtered.search(row, v, firstRow, lastRow)) {
+        if (firstRow) *firstRow = row;
+        if (lastRow) *lastRow = row;
         return false;
     } else {
+        if (lastRow) (*lastRow)--;
         return v;
     }
 }
@@ -130,17 +144,25 @@ void RowFormatStorage::setFiltered(int firstRow, int lastRow, bool filtered)
     d->filtered.insert_back(firstRow, lastRow+1, filtered);
 }
 
-bool RowFormatStorage::isHiddenOrFiltered(int row) const
+bool RowFormatStorage::isHiddenOrFiltered(int row, int* lastRow, int* firstRow) const
 {
-    return isHidden(row) || isFiltered(row);
+    int hLastRow, hFirstRow, fLastRow, fFirstRow;
+    bool v = isHidden(row, &hLastRow, &hFirstRow);
+    v = v || isFiltered(row, &fLastRow, &fFirstRow);
+    if (lastRow) *lastRow = qMin(hLastRow, fLastRow);
+    if (firstRow) *firstRow = qMax(hFirstRow, fFirstRow);
+    return v;
 }
 
-bool RowFormatStorage::hasPageBreak(int row) const
+bool RowFormatStorage::hasPageBreak(int row, int* lastRow, int* firstRow) const
 {
     bool v;
-    if (!d->hasPageBreak.search(row, v)) {
+    if (!d->hasPageBreak.search(row, v, firstRow, lastRow)) {
+        if (lastRow) *lastRow = row;
+        if (firstRow) *firstRow = row;
         return false;
     } else {
+        if (lastRow) (*lastRow)--;
         return v;
     }
 }
@@ -162,7 +184,7 @@ bool RowFormatStorage::rowsAreEqual(int row1, int row2) const
     return false;
 }
 
-bool RowFormatStorage::isDefaultRow(int row) const
+bool RowFormatStorage::isDefaultRow(int row, int* lastRow, int* firstRow) const
 {
     // TODO
     return false;

@@ -9,6 +9,7 @@ namespace KSpread {
 
 class Sheet;
 
+/** first and last row are both inclusive in all functions */
 class KSPREAD_EXPORT RowFormatStorage
 {
 public:
@@ -17,11 +18,10 @@ public:
 
     Sheet* sheet() const;
 
-    qreal rowHeight(int row) const;
-    /** first and last row are both inclusive */
+    qreal rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setRowHeight(int firstRow, int lastRow, qreal height);
 
-    qreal visibleHeight(int row) const;
+    qreal visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
 
     qreal totalRowHeight(int firstRow, int lastRow) const;
     qreal totalVisibleRowHeight(int firstRow, int lastRow) const;
@@ -29,18 +29,18 @@ public:
     bool isHidden(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setHidden(int firstRow, int lastRow, bool hidden);
 
-    bool isFiltered(int row) const;
+    bool isFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setFiltered(int firstRow, int lastRow, bool filtered);
 
-    bool isHiddenOrFiltered(int row) const;
+    bool isHiddenOrFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
 
-    bool hasPageBreak(int row) const;
+    bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
 
     int lastNonDefaultRow() const;
     bool rowsAreEqual(int row1, int row2) const;
 
-    bool isDefaultRow(int row) const;
+    bool isDefaultRow(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setDefault(int firstRow, int lastRow);
 
     /**
