@@ -50,6 +50,7 @@
 #include <kspread/PrintSettings.h>
 #include <kspread/Sheet.h>
 #include <kspread/RowColumnFormat.h>
+#include <kspread/RowFormatStorage.h>
 #include <kspread/Validity.h>
 #include <kspread/ValueConverter.h>
 #include <kspread/part/View.h>
@@ -1253,15 +1254,17 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
 
         /* Start ROWS */
-        RowFormat *rl = table->firstRow();
-        while (rl) {
+        for (int row = 1; row <= table->rowFormats()->lastNonDefaultRow(); ++row) {
+            int lastRow;
+            if (table->rowFormats()->isDefaultRow(row, &lastRow)) {
+                row = lastRow;
+                continue;
+            }
             QDomElement rowinfo = gnumeric_doc.createElement("gmr:RowInfo");
             rows.appendChild(rowinfo);
-            rowinfo.setAttribute("No", QString::number(rl->row() - 1));
-            rowinfo.setAttribute("Hidden", QString::number(rl->isHidden()));
-            rowinfo.setAttribute("Unit", QString::number(rl->height()));
-
-            rl = rl->next();
+            rowinfo.setAttribute("No", QString::number(row - 1));
+            rowinfo.setAttribute("Hidden", QString::number(table->rowFormats()->isHidden(row)));
+            rowinfo.setAttribute("Unit", QString::number(table->rowFormats()->rowHeight(row)));
         }
 
         /* End ROWS */
