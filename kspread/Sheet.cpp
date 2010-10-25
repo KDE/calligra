@@ -605,25 +605,15 @@ int Sheet::rightColumn(double _xpos) const
 
 int Sheet::topRow(double _ypos, double & _top) const
 {
-    _top = 0.0;
-    // TODO: faster implementation
-    int row = 1;
-    double y = rowFormats()->visibleHeight(row);
-    while (y < _ypos && row < KS_rowMax) {
-        _top += rowFormats()->visibleHeight(row);
-        y += rowFormats()->visibleHeight(++row);
-    }
+    qreal top;
+    int row = rowFormats()->rowForPosition(_ypos, &top);
+    _top = top;
     return row;
 }
 
 int Sheet::bottomRow(double _ypos) const
 {
-    // TODO: faster implementation
-    int row = 1;
-    double y = rowFormats()->visibleHeight(row);
-    while (y <= _ypos && row < KS_rowMax)
-        y += rowFormats()->visibleHeight(++row);
-    return row;
+    return rowFormats()->rowForPosition(_ypos+1e-9);
 }
 
 QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
