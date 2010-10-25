@@ -105,7 +105,7 @@ public:
 
     Sheet*  sheet;
     uint    column  : 17; // KS_colMax
-    uint    row     : 17; // KS_rowMax
+    uint    row     : 21; // KS_rowMax
 };
 
 

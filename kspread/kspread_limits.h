@@ -32,7 +32,7 @@
 
 /* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
 #ifndef KS_rowMax
-#define KS_rowMax 0xFFFF
+#define KS_rowMax 0xFFFFF
 #endif
 
 /* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
