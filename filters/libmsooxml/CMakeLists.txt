@@ -19,6 +19,7 @@ set(msooxml_LIB_SRCS
     MsooXmlImport.cpp
     MsooXmlDocPropertiesReader.cpp
     MsooXmlDiagramReader.cpp
+    MsooXmlDiagramReader_p.cpp
     pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     VmlDrawingReader.cpp
@@ -58,6 +59,7 @@ install( FILES
     MsooXmlDocPropertiesReader.h
     MsooXmlNotesReader.h
     MsooXmlDiagramReader.h
+    MsooXmlDiagramReader_p.h
     MsooXmlDrawingTableStyleReader.h
     VmlDrawingReader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
