@@ -669,12 +669,8 @@ double Sheet::columnPosition(int _col) const
 
 double Sheet::rowPosition(int _row) const
 {
-    const int max = qMin(_row, KS_rowMax);
-    // TODO: better implementation
-    double y = 0.0;
-    for (int row = 1; row < max; ++row)
-        y += rowFormats()->visibleHeight(row);
-    return y;
+    const int max = qMin(_row, KS_rowMax+1);
+    return rowFormats()->totalVisibleRowHeight(1, max-1);
 }
 
 /*
