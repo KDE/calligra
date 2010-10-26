@@ -554,7 +554,7 @@ LayoutNodeAtom* LayoutNodeAtom::clone() {
 }
 
 void LayoutNodeAtom::dump(Context* context, int level) {
-    DEBUG_DUMP << "name=" << m_name << "text=" << m_text << "constraintsCount=" << m_constraints.count() << "variables=" << m_variables << "values=" << finalValues();
+    DEBUG_DUMP << "name=" << m_name << "constraintsCount=" << m_constraints.count() << "variables=" << m_variables << "values=" << finalValues();
     AbstractAtom::dump(context, level);
 }
 
@@ -1051,12 +1051,23 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     const QString styleName = styles->insert(style);
     xmlWriter->addAttribute("draw:style-name", styleName);
     //xmlWriter->addAttribute("draw:text-style-name", "P2");
-    
-    xmlWriter->startElement("text:p");
-    const QString text = context->m_parentLayout->m_text;
-    if(!text.isEmpty())
-        xmlWriter->addTextNode(text);
-    xmlWriter->endElement();
+
+    QList<PointNode*> textlist;
+    foreach(AbstractNode* n, context->m_parentLayout->axis()) {
+        if(PointNode* pn = dynamic_cast<PointNode*>(n))
+            if(!pn->m_text.isEmpty())
+                textlist.append(pn);
+                
+    }
+    if(!textlist.isEmpty()) {
+        xmlWriter->startElement("text:p");
+        foreach(PointNode* pn, textlist) {
+            xmlWriter->startElement("text:span");
+            xmlWriter->addTextNode(pn->m_text);
+            xmlWriter->endElement();
+        }
+        xmlWriter->endElement();
+    }
 
     if (m_type == QLatin1String("ellipse")) {
         xmlWriter->startElement("draw:enhanced-geometry");
@@ -1756,8 +1767,11 @@ void LinearAlgorithm::virtualDoLayout()
         my = -(h / childsCount);
     }
 
+    qreal dw = w / childsCount;
+    qreal dh = h / childsCount;
+
     foreach(LayoutNodeAtom* l, childs) {
-        setNodePosition(l, x, y, w, h);
+        setNodePosition(l, x, y, dw, dh);
         x += mx;
         y += my;
     }
@@ -1773,10 +1787,4 @@ void SpaceAlg::virtualDoLayout() {
 
 void TextAlgorithm::virtualDoLayout() {
     AlgorithmBase::virtualDoLayout();
-    layout()->m_text.clear();
-    foreach(AbstractNode* node, layout()->axis()) {
-        PointNode* n = dynamic_cast<PointNode*>(node);
-        Q_ASSERT(n);
-        layout()->m_text += n->m_text;
-    }
 }

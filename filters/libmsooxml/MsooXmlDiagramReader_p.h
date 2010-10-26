@@ -248,7 +248,6 @@ class LayoutNodeAtom : public AbstractAtom
 {
     public:
         QString m_name;
-        QString m_text; // the text displayed on the shape
         QMap<QString, qreal> m_values; // map that contains values like l,t,w,h,ctrX and ctrY for positioning the layout
         QMap<QString, qreal> m_factors;
         QMap<QString, int> m_countFactors;
