@@ -65,6 +65,8 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
             }
         }
     }
+    if (!shapeOfAnchor)
+        return false;
     Q_ASSERT(data);
 
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
