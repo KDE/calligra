@@ -1404,7 +1404,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -1425,6 +1425,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1451,7 +1452,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -1471,6 +1472,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3159,7 +3161,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -3178,6 +3180,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3232,7 +3235,7 @@ This element especifies a solid color fill.
 
  Child elements:
     - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
-    - prstClr (Preset Color) §20.1.2.3.22
+    - [done] prstClr (Preset Color) §20.1.2.3.22
     - [done] schemeClr (Scheme Color) §20.1.2.3.29
     - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
     - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -3252,15 +3255,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            //scheme color
             TRY_READ_IF(schemeClr)
-//             rgb percentage
             ELSE_TRY_READ_IF(scrgbClr)
             //TODO hslClr hue, saturation, luminecence color
-            //TODO prstClr preset color
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
-            //TODO stsClr system color
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3423,7 +3423,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 
  Child Elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -3446,6 +3446,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(prstClr)
         }
     }
     READ_EPILOGUE
@@ -4121,6 +4122,73 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL prstClr
+//! prstClr (preset color)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    // TODO support all of them..
+    if (!val.isEmpty()) {
+        if (val == "aliceBlue") {
+            m_currentColor = QColor(240, 248, 255);
+        }
+        else if (val == "antiqueWhite") {
+            m_currentColor = QColor(250, 235, 215);
+        }
+        else if (val == "black") {
+            m_currentColor = QColor(0, 0, 0);
+        }
+        else if (val == "blue") {
+            m_currentColor = QColor(0, 0, 215);
+        }
+        else if (val == "green") {
+            m_currentColor = QColor(0, 255, 0);
+        }
+        else if (val == "red") {
+            m_currentColor = QColor(255, 0, 0);
+        }
+        else if (val == "violet") {
+            m_currentColor = QColor(238, 130, 238);
+        }
+        else if (val == "wheat") {
+            m_currentColor = QColor(245, 222, 179);
+        }
+        else if (val == "white") {
+            m_currentColor = QColor(255, 255, 255);
+        }
+        else if (val == "whiteSmoke") {
+            m_currentColor = QColor(245, 245, 245);
+        }
+        else if (val == "yellow") {
+            m_currentColor = QColor(255, 255, 0);
+        }
+        else if (val == "yellowGreen") {
+            m_currentColor = QColor(154, 205, 50);
+        }
+    }
+
+    //TODO: all the color transformations
+    while (true) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
+        }
+    }
+
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL sysClr
 //! sysClr handler
 // SysClr is bit controversial, it is supposed to use
@@ -4478,7 +4546,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done]schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done]srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -4500,6 +4568,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
             ELSE_TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
         }
     }
     if (m_currentColor.isValid()) {

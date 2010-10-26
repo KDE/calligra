@@ -111,6 +111,7 @@ enum noFillCaller {
 };
 KoFilter::ConversionStatus read_noFill(noFillCaller caller);
 KoFilter::ConversionStatus read_schemeClr();
+KoFilter::ConversionStatus read_prstClr();
 KoFilter::ConversionStatus read_sysClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
