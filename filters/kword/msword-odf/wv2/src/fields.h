@@ -29,6 +29,7 @@ namespace wvWare
         struct FIB;
     }
     template<class T> class PLCF;
+    template<class T> class PLCFMap;
     class OLEStreamReader;
 
     struct FLD
@@ -80,18 +81,18 @@ namespace wvWare
         Fields( const Fields& rhs );
         Fields& operator=( const Fields& rhs );
 
-        void read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCF<FLD>** plcf );
+        void read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCFMap<FLD>** plcf );
         void sanityCheck( const OLEStreamReader* tableStream, U32 nextFC, U32 lcb ) const;
-        const FLD* fldForCP( const PLCF<FLD>* plcf, U32 cp ) const;
+        const FLD* fldForCP( const PLCFMap<FLD>* plcf, U32 cp ) const;
 
-        PLCF<FLD>* m_main;
-        PLCF<FLD>* m_header;
-        PLCF<FLD>* m_footnote;
-        PLCF<FLD>* m_annotation;
-        PLCF<FLD>* m_endnote;
-        PLCF<FLD>* m_textbox;
-        PLCF<FLD>* m_headerTextbox;
-        PLCF<FLD>* m_bookmark;
+        PLCFMap<FLD>* m_main;
+        PLCFMap<FLD>* m_header;
+        PLCFMap<FLD>* m_footnote;
+        PLCFMap<FLD>* m_annotation;
+        PLCFMap<FLD>* m_endnote;
+        PLCFMap<FLD>* m_textbox;
+        PLCFMap<FLD>* m_headerTextbox;
+        PLCFMap<FLD>* m_bookmark;
     };
 
 } // namespace wvWare
