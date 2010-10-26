@@ -184,15 +184,8 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
         }
     }
 
-    // For some symbol bullets MS2007 sets the bullet char to wingdings/symbol  but since
-    // ODF does not support this, we replace those cases with default value '-'
     if (!pictureType && m_bulletStyle && !m_bulletCharacter.isEmpty()) {
-        if (m_bulletFont.startsWith("Wingdings") || m_bulletFont.startsWith("Symbol")) {
-            m_currentBulletProperties.setBulletChar("-");
-        }
-        else {
-            m_currentBulletProperties.setBulletChar(m_bulletCharacter.at(0));
-        }
+        m_currentBulletProperties.setBulletChar(m_bulletCharacter);
     }
 
     m_currentListStyle.addChildElement("list-style-properties",

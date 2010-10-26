@@ -1652,13 +1652,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
             m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
         }
     }
-    if (m_currentBulletProperties.bulletFont().startsWith("Wingdings") && m_currentBulletProperties.bulletChar() != "UNUSED") {
-        // Ooxml files have very often wingdings fonts, but usually they are not installed
-        // Making the bullet character look ugly, thus defaulting to "-"
-        m_listStylePropertiesAltered = true;
-        m_currentBulletProperties.setBulletChar("-");
-    }
-
     if (m_listStylePropertiesAltered) {
         m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
 
