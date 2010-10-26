@@ -27,10 +27,10 @@
 
 MSOOXML_EXPORT uint MSOOXML::maximumSpreadsheetColumns()
 {
-    return 32767;
+    return 0x7FFF;
 }
 
 MSOOXML_EXPORT uint MSOOXML::maximumSpreadsheetRows()
 {
-    return 32767;
+    return 0xFFFFF;
 }
