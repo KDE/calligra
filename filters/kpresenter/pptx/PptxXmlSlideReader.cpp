@@ -1840,6 +1840,7 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
+
     if (!d->phIdx.isEmpty()) {
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phIdx]);
         while (i.hasNext()) {
@@ -1881,7 +1882,6 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-
 
     if (m_context->type == Slide) {
         QString slideIdentifier = d->phType + d->phIdx;

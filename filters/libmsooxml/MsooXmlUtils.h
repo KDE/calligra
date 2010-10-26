@@ -39,7 +39,6 @@
 class QLocale;
 class QDomElement;
 class QDomDocument;
-class QSize;
 class KZip;
 struct KoOdfWriters;
 class KoCharacterStyle;
@@ -87,7 +86,7 @@ public:
 
     void setPicturePath(const QString& picturePath);
 
-    void setPictureSize(const QSize& size);
+    void setBulletSize(const QSize& size);
 
     void setBulletFont(const QString& font);
 
@@ -101,11 +100,15 @@ public:
 
     void addInheritedValues(const ParagraphBulletProperties& properties);
 
+    void setBulletRelativeSize(int size);
+
+    QString bulletRelativeSize() const;
+
     int m_level;
     int m_startValue;
 
 private:
-    enum ParagraphBulletType {BulletType, NumberType, PictureType};
+    enum ParagraphBulletType {BulletType, NumberType, PictureType, DefaultType};
     ParagraphBulletType m_type;
 
     QString m_bulletFont;
@@ -113,10 +116,11 @@ private:
     QString m_numFormat;
     QString m_suffix;
     QString m_align;
-    qreal m_indent;
+    QString m_indent;
     QString m_picturePath;
     QString m_bulletColor;
     QSize m_pictureSize;
+    QString m_bulletRelativeSize;
 };
 
 //! Container autodeleter. Works for QList, QHash and QMap.

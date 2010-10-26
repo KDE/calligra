@@ -157,6 +157,9 @@ const char* const MSOOXML::Schemas::officeDocument::sharedTypes =               
 // A.7 Custom XML Schema References
 const char* const MSOOXML::Schemas::schemaLibrary =                              "http://schemas.openxmlformats.org/schemaLibrary/2006/main";
 
+// Marks that the value has not been modified;
+const char* UNUSED = "UNUSED";
+
 using namespace MSOOXML;
 
 //-----------------------------------------
@@ -1305,14 +1308,15 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 // </units> -------------------
 
 MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_startValue(0), m_type(ParagraphBulletProperties::BulletType), m_bulletChar(""), 
-    m_align(""), m_indent(0), m_bulletColor("")
+    m_startValue(0), m_type(ParagraphBulletProperties::DefaultType), m_bulletFont(UNUSED),
+    m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
+    m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize(UNUSED)
 {
 }
 
 MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
 {
-    if (m_bulletChar == "" && m_type == ParagraphBulletProperties::BulletType) {
+    if (m_type == ParagraphBulletProperties::DefaultType) {
         return true;
     }
     return false;
@@ -1321,14 +1325,26 @@ MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
 {
     m_startValue = 0;
-    setBulletChar("");
-    m_align = "";
-    m_indent = 0;
+    m_type = ParagraphBulletProperties::DefaultType;
+    m_bulletFont = UNUSED;
+    m_bulletChar = UNUSED;
+    m_numFormat = UNUSED;
+    m_suffix = UNUSED;
+    m_align = UNUSED;
+    m_indent = UNUSED;
+    m_picturePath = UNUSED;
+    m_bulletColor = UNUSED;
+    m_bulletRelativeSize = UNUSED;
 }
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setAlign(const QString& align)
 {
     m_align = align;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletRelativeSize(int size)
+{
+    m_bulletRelativeSize = QString("%1").arg(size);
 }
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletChar(const QString& bulletChar)
@@ -1339,7 +1355,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletChar(const QStrin
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
 {
-    m_indent = indent;
+    m_indent = QString("%1").arg(indent);
 }
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setSuffix(const QString& suffixChar)
@@ -1359,7 +1375,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPicturePath(const QStri
     m_type = ParagraphBulletProperties::PictureType;
 }
 
-MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPictureSize(const QSize& size)
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletSize(const QSize& size)
 {
     m_pictureSize = size;
 }
@@ -1389,15 +1405,45 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletFont() const
     return m_bulletFont;
 }
 
+MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::bulletRelativeSize() const
+{
+    return m_bulletRelativeSize;
+}
+
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
 {
     // This function is intented for helping to inherit some values from other properties
-    if (!m_bulletColor.isEmpty()) {
-        m_bulletColor = properties.bulletColor();
+    if (properties.m_type != ParagraphBulletProperties::DefaultType) {
+        m_type = properties.m_type;
     }
-    if (m_type == ParagraphBulletProperties::BulletType && m_bulletChar.isEmpty()) {
-        m_bulletChar = properties.bulletChar();
+    if (properties.m_bulletFont != UNUSED) {
+        m_bulletFont = m_bulletFont;
     }
+    if (properties.m_bulletChar != UNUSED) {
+        m_bulletChar = properties.m_bulletChar;
+    }
+    if (properties.m_numFormat != UNUSED) {
+        m_numFormat = properties.m_numFormat;
+    }
+    if (properties.m_suffix != UNUSED) {
+        m_suffix = properties.m_suffix;
+    }
+    if (properties.m_align != UNUSED) {
+        m_align = properties.m_align;
+    }
+    if (properties.m_indent != UNUSED) {
+        m_indent = properties.m_indent;
+    }
+    if (properties.m_picturePath != UNUSED) {
+        m_picturePath = properties.m_picturePath;
+    }
+    if (properties.m_bulletColor != UNUSED) {
+        m_bulletColor = properties.m_bulletColor;
+    }
+    if (properties.m_bulletRelativeSize != UNUSED) {
+        m_bulletRelativeSize = properties.m_bulletRelativeSize;
+    }
+    m_pictureSize = properties.m_pictureSize;
 }
 
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
@@ -1423,14 +1469,14 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
         returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
         ending = "</text:list-level-style-bullet>";
     }
-    if (!m_align.isEmpty()) {
+    if (m_align != "UNUSED") {
         returnValue += QString("fo:text-align=\"%1\" ").arg(m_align);
     }
     returnValue += ">";
 
     returnValue += "<style:list-level-properties ";
 
-    if (m_indent > 0) {
+    if (m_indent != "UNUSED") {
         returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
     }
 
@@ -1443,7 +1489,7 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
 
     returnValue += "<style:text-properties ";
 
-    if (!m_bulletColor.isEmpty()) {
+    if (m_bulletColor != "UNUSED") {
     	returnValue += QString("fo:color=\"%1\" ").arg(m_bulletColor);
     }
 
