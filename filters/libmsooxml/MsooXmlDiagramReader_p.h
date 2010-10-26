@@ -31,6 +31,7 @@
 #include <QList>
 #include <QVector>
 #include <QMap>
+#include <QPair>
 #include <QExplicitlySharedDataPointer>
 
 namespace MSOOXML {
@@ -45,18 +46,20 @@ namespace MSOOXML { namespace Diagram {
  * The following classes where designed after the way the dmg-namespace is described in the
  * MSOOXML-specs and how it was done in oo.org.
  *
+ * Note that we cannot just translate the drawing1.xml cause there are cases where those file doesn't
+ * contain the content or all of the content. A typical example where it's needed to eval the whole
+ * data1.xml datamodel and the layout1.xml layout-definition are Venn diagrams. But seems it's also
+ * possible to just turn any drawing1.xml into a "redirect" to data1.xml+layout1.xml. So, all in all
+ * we cannot trust drawing1.xml to contain anything useful :-/
+ *
  * See also;
  * - http://wiki.services.openoffice.org/wiki/SmartArt
  * - http://msdn.microsoft.com/en-us/magazine/cc163470.aspx
  * - http://msdn.microsoft.com/en-us/library/dd439435(v=office.12).aspx
  * - http://msdn.microsoft.com/en-us/library/dd439443(v=office.12).aspx
  * - http://msdn.microsoft.com/en-us/library/dd439454(v=office.12).aspx
+ * - http://blogs.code-counsel.net/Wouter/Lists/Posts/Post.aspx?ID=36
  */
-
-#define DEBUG_DUMP \
-    qDebug() << QString("%1Dgm::%2::%3").arg(QString(' ').repeated(level)).arg(typeid(this).name()).arg(__FUNCTION__) << this << "atom=" << m_tagName
-#define DEBUG_WRITE \
-    qDebug() << QString("Dgm::%1::%2").arg(typeid(this).name()).arg(__FUNCTION__) << "atom=" << m_tagName
 
 class AbstractNode;
 class PointNode;
@@ -274,6 +277,8 @@ class LayoutNodeAtom : public AbstractAtom
         QMap<QString, QString> variables() const;
         void setVariable(const QString &name, const QString &value);
         QMap<QString, qreal> finalValues() const;
+        QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
+        qreal distanceTo(LayoutNodeAtom* otherAtom) const;
     private:
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
         QExplicitlySharedDataPointer<AlgorithmAtom> m_algorithm;
@@ -427,10 +432,12 @@ class AlgorithmBase {
         Context* context() const;
         LayoutNodeAtom* layout() const;
         LayoutNodeAtom* parentLayout() const;
+        QList<LayoutNodeAtom*> childLayouts() const;
         void doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout);
         void doLayout();
         void doLayoutChildren();
     protected:
+        void setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h);
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
@@ -465,8 +472,15 @@ class CycleAlgorithm : public AlgorithmBase {
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
-    private:
-        void setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h);
+};
+
+/// The linear algorithm lays out child layout nodes along a horizontal or vertical linear path.
+class LinearAlgorithm : public AlgorithmBase {
+    public:
+        explicit LinearAlgorithm() : AlgorithmBase() {}
+        virtual ~LinearAlgorithm() {}
+    protected:
+        virtual void virtualDoLayout();
 };
 
 /// The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.

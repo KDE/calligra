@@ -222,10 +222,14 @@ void PointNode::readTextBody(Context*, MsooXmlDiagramReader* reader) {
     }
 }
 
+/****************************************************************************************************/
+
 void PointListNode::dump(Context* context, int level) {
     //DEBUG_DUMP;
     AbstractNode::dump(context, level);
 }
+
+/****************************************************************************************************/
 
 void PointListNode::readElement(Context* context, MsooXmlDiagramReader* reader) {
     if (reader->isStartElement()) {
@@ -269,6 +273,8 @@ void ConnectionNode::readAll(Context* context, MsooXmlDiagramReader* reader) {
     AbstractNode::readAll(context, reader);
 }
 
+/****************************************************************************************************/
+
 void ConnectionListNode::dump(Context* context, int level) {
     //DEBUG_DUMP;
     AbstractNode::dump(context, level);
@@ -284,10 +290,7 @@ void ConnectionListNode::readElement(Context* context, MsooXmlDiagramReader* rea
     }
 }
 
-/****************************************************************************************************
- * So much for the nodes. Now the atoms are following which are used to add some logic to the
- * data-model and they do provide the functionality to build up a hierarchical layout tree.
- */
+/****************************************************************************************************/
 
 AbstractAtom::AbstractAtom(const QString &tagName) : QSharedData(), m_tagName(tagName) {}
 AbstractAtom::~AbstractAtom() {}
@@ -479,6 +482,7 @@ QList<AbstractNode*> AbstractAtom::foreachAxis(Context*, const QList<AbstractNod
     return result;
 }
 
+/****************************************************************************************************/
 
 AlgorithmAtom* AlgorithmAtom::clone() {
     AlgorithmAtom* atom = new AlgorithmAtom;
@@ -523,6 +527,8 @@ void AlgorithmAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
         }
     }
 }
+
+/****************************************************************************************************/
 
 LayoutNodeAtom* LayoutNodeAtom::clone() {
     LayoutNodeAtom* atom = new LayoutNodeAtom;
@@ -580,7 +586,7 @@ void LayoutNodeAtom::layoutAtom(Context* context) {
         case AlgorithmAtom::CycleAlg: algbase = new CycleAlgorithm; break;
         case AlgorithmAtom::HierChildAlg: kWarning() << "TODO AlgorithmAtom::HierChildAlg"; break;
         case AlgorithmAtom::HierRootAlg: kWarning() << "TODO AlgorithmAtom::HierRootAlg"; break;
-        case AlgorithmAtom::LinearAlg: kWarning() << "TODO AlgorithmAtom::LinearAlg"; break;
+        case AlgorithmAtom::LinearAlg: algbase = new LinearAlgorithm; break;
         case AlgorithmAtom::PyramidAlg: kWarning() << "TODO AlgorithmAtom::PyramidAlg"; break;
         case AlgorithmAtom::SnakeAlg: kWarning() << "TODO AlgorithmAtom::SnakeAlg"; break;
         case AlgorithmAtom::SpaceAlg: algbase = new SpaceAlg; break;
@@ -714,6 +720,45 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     return result;
 }
 
+QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
+{
+    LayoutNodeAtom* parentLayout = dynamic_cast<LayoutNodeAtom*>(parent().data());
+    Q_ASSERT(parentLayout);
+    QList<LayoutNodeAtom*> siblingLayouts;
+    int myindex = -1;
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, parentLayout->children()) {
+        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
+            if(l == this) myindex = siblingLayouts.count();
+            siblingLayouts.append(l);
+        }
+    }
+    Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
+    if(siblingLayouts.count() < 3) // if we don't have enough neighbors then abort and return NULL for both
+        return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
+    LayoutNodeAtom* srcAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
+    LayoutNodeAtom* dstAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
+    return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(srcAtom,dstAtom);
+}
+
+qreal LayoutNodeAtom::distanceTo(LayoutNodeAtom* otherAtom) const
+{
+    QMap<QString, qreal> srcValues = this->m_values;
+    QMap<QString, qreal> dstValues = otherAtom->m_values;
+    QMap<QString, qreal> srcFactors = this->m_factors;
+    QMap<QString, qreal> dstFactors = otherAtom->m_factors;
+    QMap<QString, int> srcCountFactors = this->m_countFactors;
+    QMap<QString, int> dstCountFactors = otherAtom->m_countFactors;
+    qreal srcX = srcValues["l"] + srcValues["ctrX"];
+    qreal srcY = srcValues["t"] + srcValues["ctrY"];
+    qreal dstX = dstValues["l"] + dstValues["ctrX"];
+    qreal dstY = dstValues["t"] + dstValues["ctrY"];
+    qreal diffX = dstX - srcX;
+    qreal diffY = dstY - srcY;
+    return sqrt(diffX*diffX + diffY*diffY);
+}
+
+/****************************************************************************************************/
+
 ConstraintAtom* ConstraintAtom::clone() {
     ConstraintAtom* atom = new ConstraintAtom;
     atom->m_fact = m_fact;
@@ -794,6 +839,8 @@ void ConstraintListAtom::readElement(Context* context, MsooXmlDiagramReader* rea
         }
     }
 }
+
+/****************************************************************************************************/
 
 ShapeAtom* ShapeAtom::clone() {
     ShapeAtom* atom = new ShapeAtom;
@@ -963,7 +1010,15 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
         xmlWriter->addAttribute("draw:type", "circle");
         xmlWriter->addAttribute("svg:viewBox", "0 0 828228 828228");
         xmlWriter->endElement();
-    /* } else if (m_type == QLatin1String("rect")) { */
+    } else if (m_type == QLatin1String("rect")) {
+        xmlWriter->startElement("draw:enhanced-geometry");
+        xmlWriter->addAttribute("draw:enhanced-path", "M 0 0 L 1393031 0 1393031 557212 0 557212 0 0 Z N");
+        xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90");
+        xmlWriter->addAttribute("draw:glue-points", "?f12 ?f13 ?f14 ?f13 ?f14 ?f15 ?f12 ?f15 ?f12 ?f13");
+        xmlWriter->addAttribute("draw:text-areas", "?f16 ?f18 ?f17 ?f19");
+        xmlWriter->addAttribute("draw:type", "non-primitive");
+        xmlWriter->addAttribute("svg:viewBox", "0 0 1393031 557212");
+        xmlWriter->endElement();
     } else if (m_type == QLatin1String("roundRect")) {
         xmlWriter->startElement("draw:enhanced-geometry");
         xmlWriter->addAttribute("draw:enhanced-path", "M 0 97707 C 0 71793 10294 46941 28618 28618 46942 10294 71794 0 97707 0 L 804191 0 C 830105 0 854957 10294 873280 28618 891604 46942 901898 71794 901898 97707 L 901898 488526 C 901898 514440 891604 539292 873280 557615 854956 575939 830104 586233 804191 586233 L 97707 586233 C 71793 586233 46941 575939 28618 557615 10294 539291 0 514439 0 488526 L 0 97707 Z N");
@@ -1011,6 +1066,8 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     xmlWriter->endElement(); // draw:custom-shape
 }
 
+/****************************************************************************************************/
+
 PresentationOfAtom* PresentationOfAtom::clone() {
     PresentationOfAtom* atom = new PresentationOfAtom;
     atom->m_axis = m_axis;
@@ -1045,6 +1102,8 @@ void PresentationOfAtom::build(Context* context) {
     context->m_parentLayout->setAxis(context, axis);
     AbstractAtom::build(context);
 }
+
+/****************************************************************************************************/
 
 IfAtom* IfAtom::clone() {
     IfAtom* atom = new IfAtom(m_isTrue);
@@ -1195,6 +1254,8 @@ bool IfAtom::testAtom(Context* context) {
     return istrue;
 }
 
+/****************************************************************************************************/
+
 ChooseAtom* ChooseAtom::clone() {
     ChooseAtom* atom = new ChooseAtom;
     atom->m_name = m_name;
@@ -1256,6 +1317,8 @@ void ChooseAtom::build(Context* context) {
     QExplicitlySharedDataPointer<AbstractAtom> ptr(this);
     m_parent->removeChild(ptr);
 }
+
+/****************************************************************************************************/
 
 ForEachAtom* ForEachAtom::clone() {
     ForEachAtom* atom = new ForEachAtom;
@@ -1320,6 +1383,8 @@ void ForEachAtom::build(Context* context) {
     m_parent->removeChild(ptr);
 }
 
+/****************************************************************************************************/
+
 AlgorithmBase::AlgorithmBase() : m_context(0), m_oldCurrentNode(0) {}
 
 AlgorithmBase::~AlgorithmBase() {
@@ -1332,6 +1397,31 @@ AlgorithmBase::~AlgorithmBase() {
 Context* AlgorithmBase::context() const { return m_context; }
 LayoutNodeAtom* AlgorithmBase::layout() const { return m_layout.data(); }
 LayoutNodeAtom* AlgorithmBase::parentLayout() const { return m_parentLayout.data(); }
+
+QList<LayoutNodeAtom*> AlgorithmBase::childLayouts() const
+{
+    QList<LayoutNodeAtom*> result;
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_layout->children()) {
+        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
+            result.append(l);
+        }
+    }
+    return result;
+}
+
+void AlgorithmBase::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
+    l->m_values["l"] = parentLayout()->m_values["l"];
+    l->m_values["t"] = parentLayout()->m_values["t"];
+    l->m_values["w"] = w;
+    l->m_values["h"] = h;
+    l->m_factors["l"] = l->m_factors["t"] = 1.0;
+    l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
+    l->m_values["ctrX"] = x;
+    l->m_values["ctrY"] = y;
+    l->m_needsReinit = false; // we initialized things above already
+    l->m_needsRelayout = true; // but we clearly need a layout now
+    l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
+}
 
 void AlgorithmBase::doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout) {
     m_context = context;
@@ -1403,6 +1493,14 @@ void AlgorithmBase::virtualDoLayout() {
                 // See also http://social.msdn.microsoft.com/Forums/en/os_binaryfile/thread/7c823650-7913-4e63-970f-1c5dab3450c4
                 if (c->m_type == "primFontSz") {
                     value = 36;
+                } else if (c->m_type == "l") {
+                    value = 0.0;
+                } else if (c->m_type == "t") {
+                    value = 0.0;
+                //} else if (c->m_type == "w") {
+                    //value = ;
+                //} else if (c->m_type == "h") {
+                    //value = ;
                 } else if (c->m_type == "tMarg") {
                     value = values.contains("primFontSz") ? values["primFontSz"] * 0.56 : 0.0;
                 } else if (c->m_type == "lMarg") {
@@ -1411,8 +1509,11 @@ void AlgorithmBase::virtualDoLayout() {
                     value = values.contains("primFontSz") ? values["primFontSz"] * 0.42 : 0.0;
                 } else if (c->m_type == "bMarg") {
                     value = values.contains("primFontSz") ? values["primFontSz"] * 0.60 : 0.0;
-                //} else if (c->m_type == "connDist") {
-                    //value = ;
+                } else if (c->m_type == "connDist") {
+                    QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
+                    LayoutNodeAtom* srcAtom = neighbors.first;
+                    LayoutNodeAtom* dstAtom = neighbors.second;
+                    value = (srcAtom && dstAtom) ? srcAtom->distanceTo(dstAtom) : 0.0;
                 //} else if (c->m_type == "begPad") {
                     //value = ;
                 //} else if (c->m_type == "endPad") {
@@ -1427,11 +1528,34 @@ void AlgorithmBase::virtualDoLayout() {
             }
         }
 
+//TODO 1) "op" isn't supported, 2) what happens if for=ch is defined but no forName? 3) etc.
+#if 0
+        QList<LayoutNodeAtom*> layouts;
+        layouts << layout();
+        if(!c->m_for.isEmpty() && c->m_forName.isEmpty()) {
+            if(c->m_for == "ch") { // Child
+            layouts.clear();
+            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children())
+                if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data()))
+                    layouts.append(l);
+            } else if(c->m_for == "des") { // Descendant
+                //layouts.clear();
+            } else if(c->m_for == "self") { // Ourself
+                // not needed to do anything cause layouts contains our layout() already.
+            }
+        }
+        foreach(LayoutNodeAtom* l, layouts) {
+            if(value >= 0.0) l->m_values[c->m_type] = value;
+            l->m_factors[c->m_type] += c->m_fact;
+            l->m_countFactors[c->m_type] += 1;
+        }  
+#else
         if(value >= 0.0) {
             layout()->m_values[c->m_type] = value;
         }
         layout()->m_factors[c->m_type] += c->m_fact;
         layout()->m_countFactors[c->m_type] += 1;
+#endif
     }
 }
 
@@ -1441,21 +1565,19 @@ void AlgorithmBase::virtualDoLayoutChildren() {
     }
 }
 
+/****************************************************************************************************/
+
 void ConnectorAlgorithm::virtualDoLayoutChildren() {
     // Get a list of all child-layouts of our parent to apply the connector-algorithm on our direct
     // neighbors. Also while on it also determinate our own position in that list.
-    QList<LayoutNodeAtom*> siblingLayouts;
-    int myindex = -1;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, parentLayout()->children()) {
-        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
-            if(l == layout()) myindex = siblingLayouts.count();
-            siblingLayouts.append(l);
-        }
+    QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
+    LayoutNodeAtom* srcAtom = neighbors.first;
+    LayoutNodeAtom* dstAtom = neighbors.second;
+    Q_ASSERT(srcAtom && dstAtom);
+    if(!srcAtom || !dstAtom) {
+        kWarning() << "The ConnectorAlgorithm attached to the layout with name=" << layout()->m_name << "cannot be applied cause if missing neighbors.";
+        return;
     }
-    Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
-    Q_ASSERT(siblingLayouts.count() >= 3); // a connector makes only sense if we have some neighbors
-    LayoutNodeAtom* srcAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
-    LayoutNodeAtom* dstAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
 
     QMap<QString, qreal> srcValues = srcAtom->m_values;
     QMap<QString, qreal> dstValues = dstAtom->m_values;
@@ -1488,6 +1610,8 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     AlgorithmBase::virtualDoLayoutChildren();
 }
 
+/****************************************************************************************************/
+
 void CycleAlgorithm::virtualDoInit() {
     AlgorithmBase::virtualDoInit();
 }
@@ -1495,15 +1619,8 @@ void CycleAlgorithm::virtualDoInit() {
 void CycleAlgorithm::virtualDoLayout() {
     AlgorithmBase::virtualDoLayout();
 
-    // Get a list of all child-layouts to apply the circle-algorithm on them.
-    QList<LayoutNodeAtom*> childLayouts;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
-        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
-            //if(l->algorithmType() == AlgorithmAtom::ConnectorAlg) continue;
-            childLayouts.append(l);
-        }
-    }
-    Q_ASSERT(!childLayouts.isEmpty());
+    QList<LayoutNodeAtom*> childs = childLayouts();
+    Q_ASSERT(!childs.isEmpty());
     
     // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
     int startAngel = layout()->algorithmParam("stAng", "90").toInt() - 90; //-45;
@@ -1511,56 +1628,83 @@ void CycleAlgorithm::virtualDoLayout() {
     int spanAngel = layout()->algorithmParam("spanAng", "360").toInt();
     // Specifies where to place nodes in relation to the center circle.
     bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
-    LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childLayouts.takeFirst() : 0;
-    const int childLayoutsCount = qMax(1, childLayouts.count());
+
+    LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childs.takeFirst() : 0;
+    const int childsCount = qMax(1, childs.count());
 
     const qreal w = layout()->finalValues()["w"];
     const qreal h = layout()->finalValues()["h"];
     const qreal rx = w / 2.0;
     const qreal ry = h / 2.0;
-    qreal num = 360.0 / childLayoutsCount;
+    qreal num = 360.0 / childsCount;
     const bool inverse = startAngel > spanAngel;
     if(inverse) num = -num;
-    qreal dw = ( (2.0 * M_PI * rx) / childLayoutsCount );
-    qreal dh = ( (2.0 * M_PI * ry) / childLayoutsCount );
+
+#if 1
+    qreal dw = ( (2.0 * M_PI * rx) / childsCount );
+    qreal dh = ( (2.0 * M_PI * ry) / childsCount );
     dw *= 0.9; dh *= 0.9; //TODO proper handle margins, spacings, etc.
+#else
+    qreal dw = w;
+    qreal dh = h;
+#endif
 
     if(nodeInCenter) {
         setNodePosition(nodeInCenter, rx, ry, dw, dh);
     }
-
-    for(qreal degree = startAngel; (!childLayouts.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
+    for(qreal degree = startAngel; (!childs.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
         const qreal radian = (degree - 90.0) * (M_PI / 180.0);
         const qreal x = rx + cos(radian) * rx;
         const qreal y = ry + sin(radian) * ry;
-        LayoutNodeAtom* l = childLayouts.takeFirst();
+        LayoutNodeAtom* l = childs.takeFirst();
         setNodePosition(l, x, y, dw, dh);
     }
-
-    //kDebug() << "AlgorithmAtom::CycleAlg layout=" << m_name << "childLayouts.count=" << childLayouts.count() << "params=" << params;
 }
 
 void CycleAlgorithm::virtualDoLayoutChildren() {
     AlgorithmBase::virtualDoLayoutChildren();
 }
 
-void CycleAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
-    l->m_values["l"] = parentLayout()->m_values["l"];
-    l->m_values["t"] = parentLayout()->m_values["t"];
-    l->m_values["w"] = w;
-    l->m_values["h"] = h;
-    l->m_factors["l"] = l->m_factors["t"] = 1.0;
-    l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
-    l->m_values["ctrX"] = x;
-    l->m_values["ctrY"] = y;
-    l->m_needsReinit = false; // we initialized things above already
-    l->m_needsRelayout = true; // but we clearly need a layout now
-    l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
+/****************************************************************************************************/
+
+void LinearAlgorithm::virtualDoLayout()
+{
+    QString direction = layout()->algorithmParam("linDir", "fromL");
+    const qreal w = layout()->finalValues()["w"];
+    const qreal h = layout()->finalValues()["h"];
+    
+    QList<LayoutNodeAtom*> childs = childLayouts();
+    Q_ASSERT(!childs.isEmpty());
+    const int childsCount = qMax(1, childs.count());
+
+    int x, y, mx, my;
+    x = y = mx = my = 0;
+    if(direction == "fromL") {
+        mx = w / childsCount;
+    } else if(direction == "fromR") {
+        x = w;
+        mx = -(w / childsCount);
+    } else if(direction == "fromT") {
+        my = h / childsCount;
+    } else if(direction == "fromB") {
+        y = h;
+        my = -(h / childsCount);
+    }
+
+    foreach(LayoutNodeAtom* l, childs) {
+        setNodePosition(l, x, y, w, h);
+        x += mx;
+        y += my;
+    }
 }
+
+/****************************************************************************************************/
 
 void SpaceAlg::virtualDoLayout() {
     AlgorithmBase::virtualDoLayout();
 }
+
+/****************************************************************************************************/
 
 void TextAlgorithm::virtualDoLayout() {
     AlgorithmBase::virtualDoLayout();
