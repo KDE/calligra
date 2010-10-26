@@ -331,6 +331,8 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
                     context->m_parentLayout->setVariable(reader->name().toString(), val);
                 }
             }
+        } else if (reader->qualifiedName() == QLatin1String("dgm:ruleLst")) {
+            node = new RuleListAtom;
         } else {
             kDebug()<<"TODO atom="<<m_tagName<<"qualifiedName="<<reader->qualifiedName();
         }
@@ -834,6 +836,69 @@ void ConstraintListAtom::readElement(Context* context, MsooXmlDiagramReader* rea
     if (reader->isStartElement()) {
         if (reader->qualifiedName() == QLatin1String("dgm:constr")) {
             QExplicitlySharedDataPointer<AbstractAtom> node(new ConstraintAtom);
+            addChild(node);
+            node->readAll(context, reader);
+        }
+    }
+}
+
+/****************************************************************************************************/
+
+RuleAtom* RuleAtom::clone()
+{
+    RuleAtom* atom = new RuleAtom;
+    atom->m_fact = m_fact;
+    atom->m_for = m_for;
+    atom->m_forName = m_forName;
+    atom->m_max = m_max;
+    atom->m_ptType = m_ptType;
+    atom->m_type = m_type;
+    atom->m_value = m_value;
+    return atom;
+}
+
+void RuleAtom::dump(Context*, int level)
+{
+    QString s = QString("fact=%1 ").arg(m_fact);
+    if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
+    if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
+    if(!m_max.isEmpty()) s += QString("max=%1 ").arg(m_max);
+    if(!m_ptType.isEmpty()) s += QString("ptType=%1 ").arg(m_ptType);
+    if(!m_type.isEmpty()) s += QString("type=%1 ").arg(m_type);
+    if(!m_value.isEmpty()) s += QString("val=%1 ").arg(m_value);
+    DEBUG_DUMP << s;
+}
+
+void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader)
+{
+    const QXmlStreamAttributes attrs(reader->attributes());
+    TRY_READ_ATTR_WITHOUT_NS_INTO(fact, m_fact)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(for, m_for)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(forName, m_forName)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(max, m_max)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(ptType, m_ptType)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
+    TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
+}
+        
+RuleListAtom* RuleListAtom::clone()
+{
+    RuleListAtom* atom = new RuleListAtom;
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> a, m_children)
+        atom->addChild(a->clone());
+    return atom;
+}
+
+void RuleListAtom::dump(Context* context, int level)
+{
+    AbstractAtom::dump(context, level);
+}
+
+void RuleListAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
+{
+    if (reader->isStartElement()) {
+        if (reader->qualifiedName() == QLatin1String("dgm:rule")) {
+            QExplicitlySharedDataPointer<AbstractAtom> node(new RuleAtom);
             addChild(node);
             node->readAll(context, reader);
         }

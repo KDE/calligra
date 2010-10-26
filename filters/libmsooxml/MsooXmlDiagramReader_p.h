@@ -332,6 +332,36 @@ class ConstraintListAtom : public AbstractAtom
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
 
+/// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.
+class RuleAtom : public AbstractAtom
+{
+    public:
+        QString m_fact;
+        QString m_for;
+        QString m_forName;
+        QString m_max;
+        QString m_ptType;
+        QString m_type;
+        QString m_value;
+        explicit RuleAtom() : AbstractAtom("dgm:rule") {}
+        virtual ~RuleAtom() {}
+        virtual RuleAtom* clone();
+        virtual void dump(Context* context, int level);
+        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+};
+
+
+/// List of rules.
+class RuleListAtom : public AbstractAtom
+{
+    public:
+        explicit RuleListAtom() : AbstractAtom("dgm:ruleLst") {}
+        virtual ~RuleListAtom() {}
+        virtual RuleListAtom* clone();
+        virtual void dump(Context* context, int level);
+        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+};
+
 /// The shape displayed by the containing layout node. Not all layout nodes display shapes.
 class ShapeAtom : public AbstractAtom
 {
