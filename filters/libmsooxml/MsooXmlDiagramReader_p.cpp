@@ -579,21 +579,22 @@ void LayoutNodeAtom::build(Context* context) {
 }
 
 void LayoutNodeAtom::layoutAtom(Context* context) {
-    AlgorithmBase *algbase = 0;
+    AbstractAlgorithm *algbase = 0;
 
     switch(m_algorithm->m_type) {
-        case AlgorithmAtom::UnknownAlg: kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm."; break;
+        case AlgorithmAtom::UnknownAlg:
+            kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
+            // fall through and use the composite-algorithm
         case AlgorithmAtom::CompositeAlg: algbase = new CompositeAlgorithm; break;
         case AlgorithmAtom::ConnectorAlg: algbase = new ConnectorAlgorithm; break;
         case AlgorithmAtom::CycleAlg: algbase = new CycleAlgorithm; break;
-        case AlgorithmAtom::HierChildAlg: kWarning() << "TODO AlgorithmAtom::HierChildAlg"; break;
-        case AlgorithmAtom::HierRootAlg: kWarning() << "TODO AlgorithmAtom::HierRootAlg"; break;
+        case AlgorithmAtom::HierChildAlg: algbase = new HierarchyAlgorithm(false); break;
+        case AlgorithmAtom::HierRootAlg: algbase = new HierarchyAlgorithm(true); break;
         case AlgorithmAtom::LinearAlg: algbase = new LinearAlgorithm; break;
-        case AlgorithmAtom::PyramidAlg: kWarning() << "TODO AlgorithmAtom::PyramidAlg"; break;
-        case AlgorithmAtom::SnakeAlg: kWarning() << "TODO AlgorithmAtom::SnakeAlg"; break;
+        case AlgorithmAtom::PyramidAlg: algbase = new LinearAlgorithm; break;
+        case AlgorithmAtom::SnakeAlg: algbase = new SnakeAlgorithm; break;
         case AlgorithmAtom::SpaceAlg: algbase = new SpaceAlg; break;
         case AlgorithmAtom::TextAlg: algbase = new TextAlgorithm; break;
-        //default: break;
     }
 
     if(algbase) {
@@ -955,8 +956,8 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     qreal cy = values["ctrY"];
 
     //TODO can spacing between the siblings applied by shriking the shapes or is it needed to apply them along the used algorithm?
-    qreal sibSp = values.value("sibSp");
-    if(sibSp > 0.0) {
+    if(values.contains("sibSp")) {
+        qreal sibSp = values["sibSp"];
         Q_ASSERT(w >= sibSp);
         Q_ASSERT(h >= sibSp);
         if(w >= sibSp && h >= sibSp) {
@@ -979,13 +980,17 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     Q_ASSERT(cy >= 0.0);
 
     xmlWriter->startElement("draw:custom-shape");
-    xmlWriter->addAttribute("draw:layer", "layout");
+    //xmlWriter->addAttribute("draw:layer", "layout");
+
     if (!context->m_parentLayout->m_name.isEmpty())
         xmlWriter->addAttribute("draw:name", context->m_parentLayout->m_name);
 
     KoGenStyle style = KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
     style.addProperty("draw:fill", "solid" /*none*/, KoGenStyle::GraphicType);
     style.addProperty("draw:opacity", "50%");
+    style.addProperty("draw:textarea-horizontal-align", "center");
+    style.addProperty("draw:textarea-vertical-align", "middle");
+    style.addProperty("fo:wrap-option", "wrap");
 
     const int m_svgX = x+cx;
     const int m_svgY = y+cy;
@@ -1051,6 +1056,9 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     const QString styleName = styles->insert(style);
     xmlWriter->addAttribute("draw:style-name", styleName);
     //xmlWriter->addAttribute("draw:text-style-name", "P2");
+
+    //xmlWriter->startElement("svg:desc");
+    //xmlWriter->endElement();
 
     QList<PointNode*> textlist;
     foreach(AbstractNode* n, context->m_parentLayout->axis()) {
@@ -1138,7 +1146,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
         kWarning() << "TODO shape type=" << m_type;
         //Q_ASSERT_X(false, __FUNCTION__, QString("Handle shape of type=%1").arg(m_type).toUtf8());
     }
-
+    
     xmlWriter->endElement(); // draw:custom-shape
 }
 
@@ -1461,20 +1469,20 @@ void ForEachAtom::build(Context* context) {
 
 /****************************************************************************************************/
 
-AlgorithmBase::AlgorithmBase() : m_context(0), m_oldCurrentNode(0) {}
+AbstractAlgorithm::AbstractAlgorithm() : m_context(0), m_oldCurrentNode(0) {}
 
-AlgorithmBase::~AlgorithmBase() {
+AbstractAlgorithm::~AbstractAlgorithm() {
     if(m_context) {
         m_context->m_parentLayout = m_parentLayout;
         m_context->setCurrentNode(m_oldCurrentNode);
     }
 }
 
-Context* AlgorithmBase::context() const { return m_context; }
-LayoutNodeAtom* AlgorithmBase::layout() const { return m_layout.data(); }
-LayoutNodeAtom* AlgorithmBase::parentLayout() const { return m_parentLayout.data(); }
+Context* AbstractAlgorithm::context() const { return m_context; }
+LayoutNodeAtom* AbstractAlgorithm::layout() const { return m_layout.data(); }
+LayoutNodeAtom* AbstractAlgorithm::parentLayout() const { return m_parentLayout.data(); }
 
-QList<LayoutNodeAtom*> AlgorithmBase::childLayouts() const
+QList<LayoutNodeAtom*> AbstractAlgorithm::childLayouts() const
 {
     QList<LayoutNodeAtom*> result;
     foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, m_layout->children()) {
@@ -1485,7 +1493,7 @@ QList<LayoutNodeAtom*> AlgorithmBase::childLayouts() const
     return result;
 }
 
-void AlgorithmBase::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
+void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
     l->m_values["l"] = parentLayout()->m_values["l"];
     l->m_values["t"] = parentLayout()->m_values["t"];
     l->m_values["w"] = w;
@@ -1499,7 +1507,7 @@ void AlgorithmBase::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w
     l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
 }
 
-void AlgorithmBase::doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout) {
+void AbstractAlgorithm::doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout) {
     m_context = context;
     m_layout = layout;
     m_parentLayout = m_context->m_parentLayout;
@@ -1508,15 +1516,15 @@ void AlgorithmBase::doInit(Context* context, QExplicitlySharedDataPointer<Layout
     virtualDoInit();
 }
 
-void AlgorithmBase::doLayout() {
+void AbstractAlgorithm::doLayout() {
     virtualDoLayout();
 }
 
-void AlgorithmBase::doLayoutChildren() {
+void AbstractAlgorithm::doLayoutChildren() {
     virtualDoLayoutChildren();
 }
 
-void AlgorithmBase::virtualDoInit() {
+void AbstractAlgorithm::virtualDoInit() {
     if(layout()->m_needsReinit) {
         layout()->m_needsReinit = false; // initialization done
         layout()->m_values = parentLayout()->m_values;
@@ -1532,7 +1540,7 @@ void AlgorithmBase::virtualDoInit() {
     Q_ASSERT(values["ctrY"] >= 0.0);
 }
 
-void AlgorithmBase::virtualDoLayout() {
+void AbstractAlgorithm::virtualDoLayout() {
     // QStringList axisnames;
     // foreach(AbstractNode* n, m_axis) axisnames.append(n->m_tagName);
     // kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
@@ -1590,12 +1598,12 @@ void AlgorithmBase::virtualDoLayout() {
                     LayoutNodeAtom* srcAtom = neighbors.first;
                     LayoutNodeAtom* dstAtom = neighbors.second;
                     value = (srcAtom && dstAtom) ? srcAtom->distanceTo(dstAtom) : 0.0;
-                //} else if (c->m_type == "begPad") {
-                    //value = ;
-                //} else if (c->m_type == "endPad") {
-                    //value = ;
-                //} else if (c->m_type == "userA") {
-                    //value = ;
+                } else if (c->m_type == "begPad" || c->m_type == "endPad") {
+                    value = 0.0;
+                } else if (c->m_type.startsWith("user")) { // userA, userB, userC, etc.
+                    bool ok;
+                    const qreal v = layout()->variable(c->m_type, true /* checkParents */).toDouble(&ok);
+                    value = ok ? v : 0.0;
                 } else {
                     kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << layout()->m_name;
                     //c->dump(context(),10);
@@ -1635,7 +1643,7 @@ void AlgorithmBase::virtualDoLayout() {
     }
 }
 
-void AlgorithmBase::virtualDoLayoutChildren() {
+void AbstractAlgorithm::virtualDoLayoutChildren() {
     foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children()) {
         atom->layoutAtom(context());
     }
@@ -1683,17 +1691,13 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
 
     layout()->m_rotateAngle = angle / 2.0;
     
-    AlgorithmBase::virtualDoLayoutChildren();
+    AbstractAlgorithm::virtualDoLayoutChildren();
 }
 
 /****************************************************************************************************/
 
-void CycleAlgorithm::virtualDoInit() {
-    AlgorithmBase::virtualDoInit();
-}
-
 void CycleAlgorithm::virtualDoLayout() {
-    AlgorithmBase::virtualDoLayout();
+    AbstractAlgorithm::virtualDoLayout();
 
     QList<LayoutNodeAtom*> childs = childLayouts();
     Q_ASSERT(!childs.isEmpty());
@@ -1706,7 +1710,7 @@ void CycleAlgorithm::virtualDoLayout() {
     bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
 
     LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childs.takeFirst() : 0;
-    const int childsCount = qMax(1, childs.count());
+    const qreal childsCount = qMax(1, childs.count());
 
     const qreal w = layout()->finalValues()["w"];
     const qreal h = layout()->finalValues()["h"];
@@ -1737,10 +1741,6 @@ void CycleAlgorithm::virtualDoLayout() {
     }
 }
 
-void CycleAlgorithm::virtualDoLayoutChildren() {
-    AlgorithmBase::virtualDoLayoutChildren();
-}
-
 /****************************************************************************************************/
 
 void LinearAlgorithm::virtualDoLayout()
@@ -1751,7 +1751,7 @@ void LinearAlgorithm::virtualDoLayout()
     
     QList<LayoutNodeAtom*> childs = childLayouts();
     Q_ASSERT(!childs.isEmpty());
-    const int childsCount = qMax(1, childs.count());
+    const qreal childsCount = qMax(1, childs.count());
 
     int x, y, mx, my;
     x = y = mx = my = 0;
@@ -1779,12 +1779,89 @@ void LinearAlgorithm::virtualDoLayout()
 
 /****************************************************************************************************/
 
+// http://msdn.microsoft.com/en-us/library/dd439436(v=office.12).aspx
+void SnakeAlgorithm::virtualDoLayout() {
+    // Specifies from which corner the snake grows. For example, if the algorithm uses a top left value, the snake grows from the top left.
+    const QString growDirection = layout()->algorithmParam("grDir", "tL");
+    // Specifies whether nodes are arranged in rows or columns.
+    const QString flowDirection = layout()->algorithmParam("flowDir");
+    // Specifies the direction of the subsequent row or column. For example, if the algorithm initially places the nodes from left to right, revDir places the nodes in the next row from right to left. However if the algorithm uses contDir, the nodes on the next row are arranged from left to right.
+    const QString continueDirection = layout()->algorithmParam("contDir");
+    // Specifies the offset.
+    const QString offset = layout()->algorithmParam("off");
+
+    QList<LayoutNodeAtom*> childs = childLayouts();
+    Q_ASSERT(!childs.isEmpty());
+    //const qreal childsCount = qMax(1, childs.count());
+
+    const qreal w = layout()->finalValues()["w"];
+    const qreal h = layout()->finalValues()["h"];
+
+    bool inRows = flowDirection != "column";
+    bool inSameDirection = continueDirection != "revDir";
+    
+    enum { TopLeft, TopRight, BottomLeft, BottomRight } direction = TopLeft;
+    if(growDirection == "tR") {
+        direction = TopRight;
+    } else if(growDirection == "bL") {
+        direction = BottomLeft;
+    } else if(growDirection == "bR") {
+        direction = BottomRight;
+    }
+
+    //TODO is hardcoding correct here? The specs say default is 100...
+    qreal dw = 100;
+    qreal dh = 100;
+    qreal x = 0;
+    qreal y = 0;
+    qreal mx = 110;
+    qreal my = 110;
+
+    //TODO use direction
+    foreach(LayoutNodeAtom* l, childs) {
+        if(l->algorithm()->m_type == AlgorithmAtom::SpaceAlg) continue; // specs says 'or does nothing' but not under which conditions :-/
+        setNodePosition(l, x, y, dw, dh);
+        if(!inSameDirection) inRows = !inRows;
+        if(inRows) {
+            y += my;
+            if(y+my > h) {
+                x += mx;
+                y = 0;
+            }
+        } else {
+            x += mx;
+            if(x+mx > w) {
+                x = 0;
+                y += my;
+            }
+        }
+    }
+}
+
+/****************************************************************************************************/
+
+void HierarchyAlgorithm::virtualDoLayout() {
+    kDebug()<<"TODO Implement algorithm";
+    AbstractAlgorithm::virtualDoLayout();
+}
+
+/****************************************************************************************************/
+
+void PyramidAlgorithm::virtualDoLayout() {
+    kDebug()<<"TODO Implement algorithm";
+    AbstractAlgorithm::virtualDoLayout();
+}
+
+/****************************************************************************************************/
+
 void SpaceAlg::virtualDoLayout() {
-    AlgorithmBase::virtualDoLayout();
+    // just don't do anything cause the space-algorithm is just a placeholder-algorithm
+    AbstractAlgorithm::virtualDoLayout();
 }
 
 /****************************************************************************************************/
 
 void TextAlgorithm::virtualDoLayout() {
-    AlgorithmBase::virtualDoLayout();
+    //TODO implement the text-layout logic
+    AbstractAlgorithm::virtualDoLayout();
 }

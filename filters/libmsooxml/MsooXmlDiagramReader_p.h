@@ -454,10 +454,11 @@ class ForEachAtom : public AbstractAtom
         virtual void build(Context* context);
 };
 
-class AlgorithmBase {
+/// The base class for layout-algorithms.
+class AbstractAlgorithm {
     public:
-        explicit AlgorithmBase();
-        virtual ~AlgorithmBase();
+        explicit AbstractAlgorithm();
+        virtual ~AbstractAlgorithm();
         Context* context() const;
         LayoutNodeAtom* layout() const;
         LayoutNodeAtom* parentLayout() const;
@@ -478,52 +479,79 @@ class AlgorithmBase {
 };
 
 /// The composite algorithm specifies the size and position for all child layout nodes. You can use it to create graphics with a predetermined layout or in combination with other algorithms to create more complex shapes.
-class CompositeAlgorithm : public AlgorithmBase {
+class CompositeAlgorithm : public AbstractAlgorithm {
     public:
-        explicit CompositeAlgorithm() : AlgorithmBase() {}
+        explicit CompositeAlgorithm() : AbstractAlgorithm() {}
         virtual ~CompositeAlgorithm() {}
 };
 
 /// The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
-class ConnectorAlgorithm : public AlgorithmBase {
+class ConnectorAlgorithm : public AbstractAlgorithm {
     public:
-        explicit ConnectorAlgorithm() : AlgorithmBase() {}
+        explicit ConnectorAlgorithm() : AbstractAlgorithm() {}
         virtual ~ConnectorAlgorithm() {}
         virtual void virtualDoLayoutChildren();
 };
 
 /// The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
-class CycleAlgorithm : public AlgorithmBase {
+class CycleAlgorithm : public AbstractAlgorithm {
     public:
-        explicit CycleAlgorithm() : AlgorithmBase() {}
+        explicit CycleAlgorithm() : AbstractAlgorithm() {}
         virtual ~CycleAlgorithm() {}
     protected:
-        virtual void virtualDoInit();
         virtual void virtualDoLayout();
-        virtual void virtualDoLayoutChildren();
 };
 
 /// The linear algorithm lays out child layout nodes along a horizontal or vertical linear path.
-class LinearAlgorithm : public AlgorithmBase {
+class LinearAlgorithm : public AbstractAlgorithm {
     public:
-        explicit LinearAlgorithm() : AlgorithmBase() {}
+        explicit LinearAlgorithm() : AbstractAlgorithm() {}
         virtual ~LinearAlgorithm() {}
     protected:
         virtual void virtualDoLayout();
 };
 
-/// The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
-class SpaceAlg : public AlgorithmBase {
+/// The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear flow to continue across multiple rows or columns.
+class SnakeAlgorithm : public AbstractAlgorithm {
     public:
-        explicit SpaceAlg() : AlgorithmBase() {}
+        explicit SnakeAlgorithm() : AbstractAlgorithm() {}
+        virtual ~SnakeAlgorithm() {}
+    protected:
+        virtual void virtualDoLayout();
+};
+
+/// The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts.
+class HierarchyAlgorithm : public AbstractAlgorithm {
+    public:
+        explicit HierarchyAlgorithm(bool isRoot) : AbstractAlgorithm(), m_isRoot(isRoot) {}
+        virtual ~HierarchyAlgorithm() {}
+    protected:
+        virtual void virtualDoLayout();
+    private:
+        bool m_isRoot; // root or child?
+};
+
+/// The pyramid algorithm lays out child layout nodes along a vertical path and works with the trapezoid shape to create a pyramid.
+class PyramidAlgorithm : public AbstractAlgorithm {
+    public:
+        explicit PyramidAlgorithm() : AbstractAlgorithm() {}
+        virtual ~PyramidAlgorithm() {}
+    protected:
+        virtual void virtualDoLayout();
+};
+
+/// The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
+class SpaceAlg : public AbstractAlgorithm {
+    public:
+        explicit SpaceAlg() : AbstractAlgorithm() {}
         virtual ~SpaceAlg() {}
         virtual void virtualDoLayout();
 };
 
 /// The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
-class TextAlgorithm : public AlgorithmBase {
+class TextAlgorithm : public AbstractAlgorithm {
     public:
-        explicit TextAlgorithm() : AlgorithmBase() {}
+        explicit TextAlgorithm() : AbstractAlgorithm() {}
         virtual ~TextAlgorithm() {}
         virtual void virtualDoLayout();
 };

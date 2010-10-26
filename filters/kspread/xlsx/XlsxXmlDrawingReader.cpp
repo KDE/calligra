@@ -105,7 +105,7 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
             xmlWriter->startElement("draw:g");
             xmlWriter->addAttribute("draw:name", "SmartArt Shapes Group");
             xmlWriter->addAttribute("draw:z-index", "0");
-            xmlWriter->addAttribute("table:end-cell-address", fromCellAddress());
+            //xmlWriter->addAttribute("table:end-cell-address", fromCellAddress());
             //xmlWriter->addAttribute("table:end-x", "0.6016in");
             //xmlWriter->addAttribute("table:end-y", "0.1339in");
             m_diagram->saveIndex(xmlWriter, positionRect());
