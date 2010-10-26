@@ -30,6 +30,7 @@
 #include "MsooXmlContentTypes.h"
 #include "MsooXmlRelationships.h"
 #include "MsooXmlThemesReader.h"
+#include "pole.h"
 
 #include <QColor>
 #include <QFile>
@@ -69,7 +70,7 @@ MsooXmlImport::~MsooXmlImport()
 }
 
 KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
-        KoOdfWriters *writers)
+                                                         KoOdfWriters *writers)
 {
     kDebug() << "######################## start ####################";
     KoFilter::ConversionStatus status = OK;
@@ -83,7 +84,15 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
         errorMessage = i18n("Could not open the requested file %1", m_chain->inputFile());
 //! @todo transmit the error to the GUI...
         kDebug() << errorMessage;
-        return KoFilter::FileNotFound;
+
+        // If the file can't be opened by the zip, it may be a
+        // password protected file.  In OOXML, this is stored as a
+        // standard OLE file with some special streams.
+        QString  inputFilename = m_chain->inputFile();
+        if (isPasswordProtectedFile(inputFilename))
+            return KoFilter::PasswordProtected;
+        else
+            return KoFilter::FileNotFound;
     }
 
     if (!zip.directory()) {
@@ -122,6 +131,45 @@ KoFilter::ConversionStatus MsooXmlImport::createDocument(KoStore *outputStore,
     }
     kDebug() << "######################## done ####################";
     return status;
+}
+
+bool MsooXmlImport::isPasswordProtectedFile(QString &filename)
+{
+    // Open the file.
+    QFile  file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        //kDebug() << "Cannot open " << filename;
+        return false;
+    }
+
+    // Open the OLE storage.
+    POLE::Storage storage(&file);
+    if (!storage.open()) {
+        //kDebug() << "Cannot open" << filename << "as storage";
+        file.close();
+        return false;
+    }
+
+    //kDebug() << "This seems to be an OLE file";
+
+    // Loop through the streams in the file and if one of them is named
+    // "EncryptionInfo", then we probably have a password protected file.
+    bool result = false;
+    std::list<std::string> entries = storage.entries();
+    std::list<std::string>::iterator it;
+    for (it = entries.begin(); it != entries.end(); ++it) {
+        kDebug() << it->c_str();
+        if (*it == "EncryptionInfo") {
+            result = true;
+            break;
+        }
+    }
+
+    // Clean up after us.
+    storage.close();
+    file.close();
+
+    return result;
 }
 
 KoFilter::ConversionStatus MsooXmlImport::copyFile(const QString& sourceName,

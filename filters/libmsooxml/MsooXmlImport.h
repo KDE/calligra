@@ -87,7 +87,9 @@ public:
 
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
-            KoOdfWriters *writers);
+                                                      KoOdfWriters *writers);
+
+    bool isPasswordProtectedFile(QString &filename);
 
     virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
             MsooXmlRelationships *relationships, QString& errorMessage) = 0;
