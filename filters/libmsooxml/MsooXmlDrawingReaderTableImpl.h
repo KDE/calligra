@@ -225,7 +225,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(h)
-    m_currentTableRowStyle.addProperty("style:row-height", MSOOXML::Utils::EMU_to_ODF(h), KoGenStyle::TableRowType);
+    m_currentTableRowStyle.addProperty("style:min-row-height", MSOOXML::Utils::EMU_to_ODF(h), KoGenStyle::TableRowType);
 
     while (!atEnd()) {
         readNext();
@@ -350,18 +350,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 //             m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(InsideH));
 //         }
 //     }
-// 
+//
 //     //! @todo real border style get from w:tblPr/w:tblStyle@w:val
 //     //m_currentTableCellStyle.addProperty("fo:border", "0.5pt solid #000000");
-// 
-//     const QString tableCellStyleName(
-//         mainStyles->insert(
-//             m_currentTableCellStyle,
-//             m_currentTableName + '.' + MSOOXML::Utils::columnName(m_currentTableColumnNumber)
-//                 + QString::number(m_currentTableRowNumber + 1),
-//             KoGenStyles::DontAddNumberToName)
-//     );
-//     body->addAttribute("table:style-name", tableCellStyleName);
+//
+     const QString tableCellStyleName(
+         mainStyles->insert(
+             m_currentTableCellStyle,
+             m_currentTableName + '.' + MSOOXML::Utils::columnName(m_currentTableColumnNumber)
+                 + QString::number(m_currentTableRowNumber + 1), KoGenStyles::DontAddNumberToName)
+     );
+     body->addAttribute("table:style-name", tableCellStyleName);
 
     body->addAttribute("office:value-type", "string");
 
@@ -374,11 +373,121 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL lnT
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnT()
+{
+    READ_PROLOGUE
+
+    QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+
+    TRY_READ_ATTR_WITHOUT_NS(w)
+    qreal penWidth = EMU_TO_POINT(w.toDouble());
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                m_currentTableCellStyle.addProperty("fo:border-top", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lnL
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnL()
+{
+    READ_PROLOGUE
+    QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+
+    TRY_READ_ATTR_WITHOUT_NS(w)
+    qreal penWidth = EMU_TO_POINT(w.toDouble());
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                m_currentTableCellStyle.addProperty("fo:border-left", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lnR
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnR()
+{
+    READ_PROLOGUE
+
+    QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+
+    TRY_READ_ATTR_WITHOUT_NS(w)
+    qreal penWidth = EMU_TO_POINT(w.toDouble());
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                m_currentTableCellStyle.addProperty("fo:border-right", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lnB
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnB()
+{
+    READ_PROLOGUE
+    QXmlStreamAttributes attrs(attributes());
+
+    m_currentColor = QColor();
+
+    TRY_READ_ATTR_WITHOUT_NS(w)
+    qreal penWidth = EMU_TO_POINT(w.toDouble());
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            if (qualifiedName() == QLatin1String("a:solidFill")) {
+                TRY_READ(solidFill)
+                m_currentTableCellStyle.addProperty("fo:border-bottom", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
+            }
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL tcPr
 //! tcPr handler  (Table Cell Properties) §21.1.3.17
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 {
     READ_PROLOGUE
+
+    m_currentColor = QColor();
+    QColor backgroundColor = QColor();
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -389,17 +498,29 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 //            ELSE_TRY_READ_IF(gradFill)
 //            ELSE_TRY_READ_IF(grpFill)
 //            ELSE_TRY_READ_IF(headers)
-//            ELSE_TRY_READ_IF(lnB)
 //            ELSE_TRY_READ_IF(lnBlToTr)
-//            ELSE_TRY_READ_IF(lnL)
-//            ELSE_TRY_READ_IF(lnR)
 //            ELSE_TRY_READ_IF(lnTlToBr)
 //            ELSE_TRY_READ_IF(noFill)
 //            ELSE_TRY_READ_IF(pattFill)
-//            ELSE_TRY_READ_IF(solidFill)
+              if (QUALIFIED_NAME_IS(solidFill)) {
+                  TRY_READ(solidFill)
+                  backgroundColor = m_currentColor;
+              } // Skipping these currently to not interfere with background color.
+              ELSE_TRY_READ_IF(lnB)
+              ELSE_TRY_READ_IF(lnT)
+              ELSE_TRY_READ_IF(lnR)
+              ELSE_TRY_READ_IF(lnL)
+              else if (QUALIFIED_NAME_IS(noFill)) {
+                  backgroundColor = QColor();
+              }
 //             ELSE_WRONG_FORMAT
         }
     }
+
+    if (backgroundColor.isValid()) {
+        m_currentTableCellStyle.addProperty("fo:background-color", backgroundColor.name());
+    }
+
     READ_EPILOGUE
 }
 

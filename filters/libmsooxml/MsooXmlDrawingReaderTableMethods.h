@@ -29,6 +29,10 @@ protected:
     KoFilter::ConversionStatus read_gridCol();
     KoFilter::ConversionStatus read_tc();
     KoFilter::ConversionStatus read_tcPr();
+    KoFilter::ConversionStatus read_lnT();
+    KoFilter::ConversionStatus read_lnB();
+    KoFilter::ConversionStatus read_lnR();
+    KoFilter::ConversionStatus read_lnL();
 
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()

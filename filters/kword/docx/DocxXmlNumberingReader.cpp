@@ -492,7 +492,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvlPicBulletId()
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_picBulletPaths.value(val));
-        m_currentBulletProperties.setPictureSize(m_picBulletSizes.value(val));
+        m_currentBulletProperties.setBulletSize(m_picBulletSizes.value(val));
     }
 
     readNext();
