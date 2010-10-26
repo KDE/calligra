@@ -65,7 +65,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
             }
         }
     }
-    if (!shapeOfAnchor)
+    if (!shapeOfAnchor) // can happen if the shape isn't there yet but will be added later
         return false;
     Q_ASSERT(data);
 
