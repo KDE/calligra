@@ -27,7 +27,7 @@
 #include <qfile.h>
 #include <qtimer.h>
 #include <qobject.h>
-#include <q3process.h>
+#include <QProcess>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qmutex.h>
@@ -3022,7 +3022,7 @@ KexiMainWindow::slotProjectNew()
         return;
 
     QStringList args;
-    args << qApp->applicationFilePath() << "-create-opendb";
+    args  << "-create-opendb";
     if (new_data->connectionData()->fileName().isEmpty()) {
         //server based - pass .kexic file
         if (fileName.isEmpty())
@@ -3037,11 +3037,13 @@ KexiMainWindow::slotProjectNew()
 //todo:   pass new_data->caption()
     //start new instance
 //! @todo use KProcess?
-    Q3Process proc(args, this, "process");
-    proc.setCommunication((Q3Process::Communication)0);
+#warning untested
+    QProcess proc(this);
+//    proc.setCommunication((Q3Process::Communication)0);
 //  proc.setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
-    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir());
-    if (!proc.start()) {
+    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir().absolutePath());
+    proc.start(qApp->applicationFilePath(), args);
+    if (!proc.waitForStarted()) {
         d->showStartProcessMsg(args);
     }
     delete new_data;
@@ -3233,7 +3235,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 {
     QString fileName(aFileName);
     QStringList args;
-    args << qApp->applicationFilePath();
+ 
     // open a file-based project or a server connection provided as a .kexic file
     // (we have no other simple way to provide the startup data to a new process)
     if (fileName.isEmpty()) { //try .kexic file
@@ -3252,10 +3254,13 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
         return false;
     }
 //! @todo use KRun
+//Can arguments be supplied to KRun like is used here? AP
+#warning untested
     args << fileName;
-    Q3Process proc(args, this, "process");
-    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir());
-    const bool ok = proc.start();
+    QProcess proc(this);
+    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir().absolutePath());
+    proc.start(qApp->applicationFilePath(), args);
+    const bool ok = proc.waitForStarted();
     if (!ok) {
         d->showStartProcessMsg(args);
     }
