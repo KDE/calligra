@@ -94,6 +94,7 @@ GlobalsSubStreamHandler::GlobalsSubStreamHandler(Workbook* workbook, unsigned ve
 GlobalsSubStreamHandler::~GlobalsSubStreamHandler()
 {
     delete d->decryption;
+    qDeleteAll(d->drawingTable);
     delete d;
 }
 

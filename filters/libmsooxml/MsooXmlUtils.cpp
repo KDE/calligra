@@ -1466,7 +1466,13 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     }
     else {
         returnValue = QString("<text:list-level-style-bullet text:level=\"%1\" ").arg(m_level);
-        returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
+        if ((m_bulletFont.startsWith("Wingdings") || m_bulletFont.startsWith("Symbol")) && m_bulletChar != "") {
+            // In case of wingdings we replace with 'best guess'
+            returnValue += QString("text:bullet-char=\"%1\" ").arg("-");
+        }
+        else {
+            returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
+        }
         ending = "</text:list-level-style-bullet>";
     }
     if (m_align != "UNUSED") {

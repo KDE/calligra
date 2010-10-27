@@ -30,6 +30,7 @@
 namespace Charting {
     class Series;
     class Chart;
+    class ShapeProperties;
 }
 
 class ChartExport;
@@ -120,6 +121,7 @@ private:
     enum ReadAreaContext{ PlotArea, ChartArea };
     XlsxXmlChartReaderContext *m_context;
     Charting::Series *m_currentSeries;
+    Charting::ShapeProperties* m_currentShapeProperties;
     QString m_cellRangeAddress;
     bool m_autoTitleDeleted;    
     ReadTxContext m_readTxContext;

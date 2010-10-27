@@ -507,7 +507,17 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     }
 
     int curSerNum = 0;
+    bool lines = true;
+    bool marker = false;
+    if ( chart()->m_impl->name() == "scatter" )
+    {
+        Charting::ScatterImpl* impl = static_cast< Charting::ScatterImpl* >( chart()->m_impl );
+        lines = impl->style == Charting::ScatterImpl::Line || Charting::ScatterImpl::LineMarker;
+        marker = impl->style == Charting::ScatterImpl::Marker || Charting::ScatterImpl::LineMarker;
+    }
     Q_FOREACH(Charting::Series* series, chart()->m_series) {
+        const bool noLineFill = ( series->spPr != 0 ) && series->spPr->lineFill.type != Charting::Fill::None;
+        lines = lines && !noLineFill;
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
         if ( series->markerType != Charting::Series::None )
@@ -541,10 +551,10 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
                 default:
                     markerName = "circle";
             }
-            seriesstyle.addAttribute( "chart:symbol-type", "named-symbol"/*, KoGenStyle::ChartType*/ );
-            seriesstyle.addAttribute( "chart:symbol-name", markerName/*, KoGenStyle::ChartType*/ );
+            seriesstyle.addProperty( "chart:symbol-type", "named-symbol", KoGenStyle::ChartType );
+            seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
         }
-        else if ( m_chart->m_showMarker )
+        else if ( m_chart->m_showMarker || marker)
         {
             const int resNum = curSerNum % 3;
             QString markerName;
@@ -558,8 +568,9 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             seriesstyle.addProperty( "chart:symbol-name", markerName, KoGenStyle::ChartType );
         }
         
+        
         if ( chart()->m_impl->name() != "circle" && chart()->m_impl->name() != "ring" )
-            addDataThemeToStyle( styleID, seriesstyle, curSerNum, chart()->m_series.count() );
+            addDataThemeToStyle( styleID, seriesstyle, curSerNum, chart()->m_series.count(), lines );
         //seriesstyle.addProperty("draw:stroke", "solid");
         //seriesstyle.addProperty("draw:fill-color", "#ff0000");
 
@@ -642,8 +653,8 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
             bodyWriter->startElement("chart:data-point");
             KoGenStyle gs(KoGenStyle::GraphicAutoStyle, "chart");
             if ( chart()->m_impl->name() == "circle" || chart()->m_impl->name() == "ring" )
-            {
-                addDataThemeToStyle( styleID, gs, j, series->m_countYValues );
+            {                   
+                addDataThemeToStyle( styleID, gs, j, series->m_countYValues, lines );
             }/*
             else
             {
@@ -741,7 +752,7 @@ inline QColor shadeColor( const QColor& col, qreal factor )
     return result;
 }
 
-void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData )
+void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData, bool strokes )
 {
     if (!m_theme) return;
 
@@ -809,6 +820,15 @@ void ChartExport::addDataThemeToStyle( const int styleID, KoGenStyle& style, int
     }
     style.addProperty( "draw:fill", "solid", KoGenStyle::GraphicType );
     style.addProperty( "draw:fill-color", seriesColor.name(), KoGenStyle::GraphicType );
+    if ( strokes )
+    {
+        style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );      
+        style.addProperty( "svg:stroke-color", seriesColor.name(), KoGenStyle::GraphicType );
+    }
+    else
+    {
+        style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );      
+    }
 }
 
 
