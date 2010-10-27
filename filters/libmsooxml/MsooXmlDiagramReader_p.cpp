@@ -738,8 +738,26 @@ QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
     Q_ASSERT(myindex >= 0); // our parent should know about us else something is fundamental broken
     if(siblingLayouts.count() < 3) // if we don't have enough neighbors then abort and return NULL for both
         return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
-    LayoutNodeAtom* srcAtom = siblingLayouts[ myindex>=1 ? myindex-1 : siblingLayouts.count()-1 ]; // warps around the list
-    LayoutNodeAtom* dstAtom = siblingLayouts[ myindex+1<siblingLayouts.count() ? myindex+1 : 0 ];
+
+    // Look if our index is the first or last in the list and if that's the case then wrap around the list
+    // if the used algorithm-type is expected to produced a "circle".
+    int srcIndex = myindex - 1;
+    int dstIndex = myindex + 1;
+    if(srcIndex < 0) {
+        if(parentLayout->algorithmType() != AlgorithmAtom::CycleAlg)
+            return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
+        srcIndex = siblingLayouts.count()-1;
+    }
+    if(dstIndex < siblingLayouts.count()) {
+        --myindex;
+    } else {
+        if(parentLayout->algorithmType() != AlgorithmAtom::CycleAlg)
+            return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
+        dstIndex = 0;
+    }
+    
+    LayoutNodeAtom* srcAtom = siblingLayouts[srcIndex];
+    LayoutNodeAtom* dstAtom = siblingLayouts[dstIndex];
     return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(srcAtom,dstAtom);
 }
 
@@ -1657,9 +1675,9 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
     LayoutNodeAtom* srcAtom = neighbors.first;
     LayoutNodeAtom* dstAtom = neighbors.second;
-    Q_ASSERT(srcAtom && dstAtom);
     if(!srcAtom || !dstAtom) {
-        kWarning() << "The ConnectorAlgorithm attached to the layout with name=" << layout()->m_name << "cannot be applied cause if missing neighbors.";
+        // If there is no source- or destination to connect with then hide our layout by detaching it.
+        parentLayout()->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(layout()));
         return;
     }
 
@@ -1689,7 +1707,7 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     qreal dstCY = dstY + dstH/2.0;
     qreal angle = atan2(dstCY-srcCY,dstCX-srcCX)*180/M_PI;
 
-    layout()->m_rotateAngle = angle / 2.0;
+    layout()->m_rotateAngle = angle;
     
     AbstractAlgorithm::virtualDoLayoutChildren();
 }
@@ -1819,7 +1837,7 @@ void SnakeAlgorithm::virtualDoLayout() {
 
     //TODO use direction
     foreach(LayoutNodeAtom* l, childs) {
-        if(l->algorithm()->m_type == AlgorithmAtom::SpaceAlg) continue; // specs says 'or does nothing' but not under which conditions :-/
+        if(l->algorithmType() == AlgorithmAtom::SpaceAlg) continue; // specs says 'or does nothing' but not under which conditions :-/
         setNodePosition(l, x, y, dw, dh);
         if(!inSameDirection) inRows = !inRows;
         if(inRows) {
