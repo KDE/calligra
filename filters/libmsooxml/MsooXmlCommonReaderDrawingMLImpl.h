@@ -1404,7 +1404,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chart()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -1425,6 +1425,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(srgbClr)
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1451,7 +1452,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -1471,6 +1472,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1617,6 +1619,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     if (!pprRead) {
         inheritDefaultParagraphStyle(m_currentParagraphStyle);
         inheritParagraphStyle(m_currentParagraphStyle);
+        m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
     if (!rRead) {
         // We are inheriting to paragraph's text-properties because there is no text
@@ -1640,8 +1643,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         }
         m_previousListWasAltered = false;
     }
-
+    if (m_currentBulletProperties.bulletRelativeSize() != "UNUSED") {
+        m_listStylePropertiesAltered = true;
+        QString textSize = m_currentTextStyle.property("fo:font-size");
+        if (!textSize.isEmpty()) {
+            textSize = textSize.left(textSize.length() - 2); // removes 'pt'
+            qreal convertedSize = textSize.toDouble() * m_currentBulletProperties.bulletRelativeSize().toDouble()/100;
+            m_currentBulletProperties.setBulletSize(QSize(convertedSize, convertedSize));
+        }
+    }
     if (m_listStylePropertiesAltered) {
+        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
+
+        // For now we take a stand that any altered style makes its own list.
+        m_currentBulletProperties.m_level = m_currentListLevel;
+
+        m_currentListStyle.addChildElement("list-style-properties",
+            m_currentBulletProperties.convertToListProperties());
         m_previousListWasAltered = true;
     }
 
@@ -1650,7 +1668,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         // we don't output a bullet to it
         m_currentListLevel = 0;
     }
-    else if (m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) {
+    else if ((m_currentCombinedBulletProperties.value(m_currentListLevel).isEmpty() && !m_listStylePropertiesAltered) ||
+             (m_currentBulletProperties.isEmpty() && m_listStylePropertiesAltered)) {
         m_currentListLevel = 0;
     }
 
@@ -2052,7 +2071,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
   - [done] buFont (Specified) §21.1.2.4.6
   - buFontTx (Follow text) §21.1.2.4.7
   - [done] buNone (No Bullet) §21.1.2.4.8
-  - buSzPct (Bullet Size Percentage) §21.1.2.4.9
+  - [done] buSzPct (Bullet Size Percentage) §21.1.2.4.9
   - buSzPts (Bullet Size Points) §21.1.2.4.10
   - buSzTx (Bullet Size Follows Text) §21.1.2.4.11
   - defRPr (Default Text Run Properties) §21.1.2.3.2
@@ -2120,6 +2139,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
             ELSE_TRY_READ_IF(buClr)
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
+            ELSE_TRY_READ_IF(buSzPct)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -2133,23 +2153,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
                 TRY_READ(lnSpc)
             }
         }
-    }
-
-    if (m_currentBulletProperties.bulletFont().startsWith("Wingdings") && m_currentBulletProperties.bulletChar() != "") {
-        // Ooxml files have very often wingdings fonts, but usually they are not installed
-        // Making the bullet character look ugly, thus defaulting to "-"
-        m_listStylePropertiesAltered = true;
-        m_currentBulletProperties.setBulletChar("-");
-    }
-
-    if (m_listStylePropertiesAltered) {
-        m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle, "list");
-
-        // For now we take a stand that any altered style makes its own list.
-        m_currentBulletProperties.m_level = m_currentListLevel;
-
-        m_currentListStyle.addChildElement("list-style-properties",
-            m_currentBulletProperties.convertToListProperties());
     }
 
     READ_EPILOGUE
@@ -3151,7 +3154,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -3170,6 +3173,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3224,7 +3228,7 @@ This element especifies a solid color fill.
 
  Child elements:
     - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
-    - prstClr (Preset Color) §20.1.2.3.22
+    - [done] prstClr (Preset Color) §20.1.2.3.22
     - [done] schemeClr (Scheme Color) §20.1.2.3.29
     - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
     - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -3244,15 +3248,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_solidFill()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            //scheme color
             TRY_READ_IF(schemeClr)
-//             rgb percentage
             ELSE_TRY_READ_IF(scrgbClr)
             //TODO hslClr hue, saturation, luminecence color
-            //TODO prstClr preset color
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
-            //TODO stsClr system color
+            ELSE_TRY_READ_IF(prstClr)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3415,7 +3416,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
 
  Child Elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done] schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done] srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -3438,6 +3439,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
+            ELSE_TRY_READ_IF(prstClr)
         }
     }
     READ_EPILOGUE
@@ -4113,6 +4115,73 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL prstClr
+//! prstClr (preset color)
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    // TODO support all of them..
+    if (!val.isEmpty()) {
+        if (val == "aliceBlue") {
+            m_currentColor = QColor(240, 248, 255);
+        }
+        else if (val == "antiqueWhite") {
+            m_currentColor = QColor(250, 235, 215);
+        }
+        else if (val == "black") {
+            m_currentColor = QColor(0, 0, 0);
+        }
+        else if (val == "blue") {
+            m_currentColor = QColor(0, 0, 215);
+        }
+        else if (val == "green") {
+            m_currentColor = QColor(0, 255, 0);
+        }
+        else if (val == "red") {
+            m_currentColor = QColor(255, 0, 0);
+        }
+        else if (val == "violet") {
+            m_currentColor = QColor(238, 130, 238);
+        }
+        else if (val == "wheat") {
+            m_currentColor = QColor(245, 222, 179);
+        }
+        else if (val == "white") {
+            m_currentColor = QColor(255, 255, 255);
+        }
+        else if (val == "whiteSmoke") {
+            m_currentColor = QColor(245, 245, 245);
+        }
+        else if (val == "yellow") {
+            m_currentColor = QColor(255, 255, 0);
+        }
+        else if (val == "yellowGreen") {
+            m_currentColor = QColor(154, 205, 50);
+        }
+    }
+
+    //TODO: all the color transformations
+    while (true) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(tint)
+            ELSE_TRY_READ_IF(shade)
+            ELSE_TRY_READ_IF(satMod)
+            ELSE_TRY_READ_IF(alpha)
+        }
+    }
+
+    MSOOXML::Utils::modifyColor(m_currentColor, m_currentTint, m_currentShadeLevel, m_currentSatMod);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL sysClr
 //! sysClr handler
 // SysClr is bit controversial, it is supposed to use
@@ -4165,6 +4234,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     // Number 3 makes eg. lvl4 -> 4
     m_currentListLevel = QString(level.at(3)).toInt();
 
+    m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
+
     Q_ASSERT(m_currentListLevel > 0);
     m_currentBulletProperties.m_level = m_currentListLevel;
 
@@ -4213,6 +4284,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
             ELSE_TRY_READ_IF(buFont)
             ELSE_TRY_READ_IF(buBlip)
             ELSE_TRY_READ_IF(buClr)
+            ELSE_TRY_READ_IF(buSzPct)
             else if (QUALIFIED_NAME_IS(spcBef)) {
                 m_currentSpacingType = spacingMarginTop;
                 TRY_READ(spcBef)
@@ -4270,7 +4342,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
   - [done] buFont (Specified)                   §21.1.2.4.6
   - buFontTx (Follow text)               §21.1.2.4.7
   - [done] buNone (No Bullet)                   §21.1.2.4.8
-  - buSzPct (Bullet Size Percentage)     §21.1.2.4.9
+  - [done] buSzPct (Bullet Size Percentage)     §21.1.2.4.9
   - buSzPts (Bullet Size Points)         §21.1.2.4.10
   - buSzTx (Bullet Size Follows Text)    §21.1.2.4.11
   - [done] defRPr (Default Text Run Properties) §21.1.2.3.2
@@ -4407,7 +4479,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
 
     if (!m_xlinkHref.isEmpty()) {
         m_currentBulletProperties.setPicturePath(m_xlinkHref);
-        m_currentBulletProperties.setPictureSize(m_imageSize);
+        m_currentBulletProperties.setBulletSize(m_imageSize);
         m_listStylePropertiesAltered = true;
     }
 
@@ -4467,7 +4539,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buChar()
 
  Child elements:
  - hslClr (Hue, Saturation, Luminance Color Model) §20.1.2.3.13
- - prstClr (Preset Color) §20.1.2.3.22
+ - [done] prstClr (Preset Color) §20.1.2.3.22
  - [done]schemeClr (Scheme Color) §20.1.2.3.29
  - [done] scrgbClr (RGB Color Model - Percentage Variant) §20.1.2.3.30
  - [done]srgbClr (RGB Color Model - Hex Variant) §20.1.2.3.32
@@ -4489,6 +4561,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
             ELSE_TRY_READ_IF(schemeClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
+            ELSE_TRY_READ_IF(prstClr)
         }
     }
     if (m_currentColor.isValid()) {
@@ -4496,6 +4569,42 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
         m_currentColor = QColor();
     	m_listStylePropertiesAltered = true;
     }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL buSzPct
+//! buSzPct - bullet size
+/*!
+ Parent elements:
+ - defPPr  (§21.1.2.2.2)
+ - [done] lvl1pPr (§21.1.2.4.13)
+ - [done] lvl2pPr (§21.1.2.4.14)
+ - [done] lvl3pPr (§21.1.2.4.15)
+ - [done] lvl4pPr (§21.1.2.4.16)
+ - [done] lvl5pPr (§21.1.2.4.17)
+ - [done] lvl6pPr (§21.1.2.4.18)
+ - [done] lvl7pPr (§21.1.2.4.19)
+ - [done] lvl8pPr (§21.1.2.4.20)
+ - [done] lvl9pPr (§21.1.2.4.21)
+ - [done] pPr (§21.1.2.2.7)
+
+ Child elements:
+ - none
+*/
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buSzPct()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR_WITHOUT_NS(val)
+
+    if (!val.isEmpty()) {
+        // As percentage
+        m_currentBulletProperties.setBulletRelativeSize(val.toInt()/1000);
+    }
+
+    readNext();
 
     READ_EPILOGUE
 }

@@ -176,12 +176,12 @@ const FLD* Fields::fldForCP( Parser::SubDocument subDocument, U32 cp ) const
     return 0; // make the compiler happy, never reached
 }
 
-void Fields::read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCF<FLD>** plcf )
+void Fields::read( U32 fc, U32 lcb, OLEStreamReader* tableStream, PLCFMap<FLD>** plcf )
 {
     if ( lcb == 0 )
         return;
     tableStream->seek( fc, G_SEEK_SET );
-    *plcf = new PLCF<FLD>( lcb, tableStream );
+    *plcf = new PLCFMap<FLD>( lcb, tableStream );
 }
 
 void Fields::sanityCheck( const OLEStreamReader* tableStream, U32 nextFC, U32 lcb ) const
@@ -190,14 +190,10 @@ void Fields::sanityCheck( const OLEStreamReader* tableStream, U32 nextFC, U32 lc
         wvlog << "Warning: Detected a hole within the table stream (next fc=" << nextFC << ")" << endl;
 }
 
-const FLD* Fields::fldForCP( const PLCF<FLD>* plcf, U32 cp ) const
+const FLD* Fields::fldForCP( const PLCFMap<FLD>* plcf, U32 cp ) const
 {
     if ( !plcf )
         return 0;
 
-    PLCFIterator<FLD> it( *plcf );
-    for ( ; it.current(); ++it )
-        if ( it.currentStart() == cp )
-            return it.current();
-    return 0;
+    return plcf->item( cp );
 }

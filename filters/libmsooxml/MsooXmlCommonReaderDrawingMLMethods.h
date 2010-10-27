@@ -111,6 +111,7 @@ enum noFillCaller {
 };
 KoFilter::ConversionStatus read_noFill(noFillCaller caller);
 KoFilter::ConversionStatus read_schemeClr();
+KoFilter::ConversionStatus read_prstClr();
 KoFilter::ConversionStatus read_sysClr();
 KoFilter::ConversionStatus read_lumMod();
 KoFilter::ConversionStatus read_lumOff();
@@ -151,6 +152,7 @@ bool m_listStylePropertiesAltered;
 bool m_previousListWasAltered;
 
 KoFilter::ConversionStatus read_buClr();
+KoFilter::ConversionStatus read_buSzPct();
 KoFilter::ConversionStatus read_buChar();
 KoFilter::ConversionStatus read_buBlip();
 KoFilter::ConversionStatus read_buNone();

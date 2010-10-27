@@ -22,6 +22,7 @@
 #include "olestream.h"
 #include "wvlog.h"
 
+#include <map>
 #include <vector>
 #include <string.h>
 #include "wv2_export.h"
@@ -329,7 +330,7 @@ namespace wvWare
         }
 
         unsigned int count() const { return m_plcf.m_items.count(); }
-        bool isEmpty() const { return m_plcf.m_items.count() == 0; }
+        bool isEmpty() const { return m_plcf.m_items.empty(); }
 
         T* toFirst();
         T* toLast();
@@ -403,6 +404,61 @@ namespace wvWare
             --m_indexIt;
         }
         return *this;
+    }
+
+
+    template<class T> class PLCFMap
+    {
+    public:
+        PLCFMap( U32 length, OLEStreamReader *reader, bool preservePos = false );
+        ~PLCFMap();
+
+        T* item( U32 index ) const;
+    private:
+        U32 calculateCount( U32 length ) const;
+
+        std::map<U32, T*> m_items;
+    };
+
+    template<class T>
+    PLCFMap<T>::PLCFMap( U32 length, OLEStreamReader* reader, bool preservePos )
+    {
+        if ( preservePos )
+            reader->push();
+        U32 count = calculateCount( length );
+        std::vector<U32> indices;
+        for ( U32 i = 0; i < count + 1; ++i )  // n+1 CPs/FCs
+            indices.push_back( reader->readU32() );
+        for ( U32 i = 0; i < count; ++i )  // n "T"s
+            m_items.insert(std::make_pair( indices[i], new T( reader, false ) ) );
+        if ( preservePos )
+            reader->pop();
+    }
+
+    template<class T>
+    PLCFMap<T>::~PLCFMap()
+    {
+        typename std::map<U32, T*>::const_iterator it = m_items.begin();
+        for ( ; it != m_items.end(); ++it )
+            delete it->second;
+    }
+
+    template<class T>
+    T* PLCFMap<T>::item( U32 index ) const
+    {
+        typename std::map<U32, T*>::const_iterator it( m_items.find( index ) );
+        return it != m_items.end() ? it->second: 0;
+    }
+
+    template<class T>
+    U32 PLCFMap<T>::calculateCount( U32 length ) const
+    {
+        if ( ( length - 4 ) % ( T::sizeOf + 4 ) ) {
+            wvlog << "Warning: PLCFMap size seems to be screwed" << endl;
+            wvlog << "Warning: length: " << length << ", size: " << T::sizeOf << ", mod: " << ( length - 4 ) % ( T::sizeOf + 4 ) << endl;
+            return 0;
+        }
+        return ( length - 4 ) / ( T::sizeOf + 4 );
     }
 
 
