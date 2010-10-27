@@ -496,7 +496,7 @@ AlgorithmAtom* AlgorithmAtom::clone() {
 }
 
 void AlgorithmAtom::dump(Context* context, int level) {
-    DEBUG_DUMP << "type=" << m_type;
+    DEBUG_DUMP << "type=" << m_type << "params=" << m_params;
     AbstractAtom::dump(context, level);
 }
 
@@ -514,8 +514,6 @@ void AlgorithmAtom::readAll(Context* context, MsooXmlDiagramReader* reader) {
     else if(type == QLatin1String("sp")) m_type = SpaceAlg;
     else if(type == QLatin1String("tx")) m_type = TextAlg;
     else m_type = UnknownAlg;
-    QExplicitlySharedDataPointer<AlgorithmAtom> ptr(this);
-    context->m_parentLayout->setAlgorithm(ptr);
     AbstractAtom::readAll(context, reader);
 }
 
@@ -542,7 +540,6 @@ LayoutNodeAtom* LayoutNodeAtom::clone() {
         atom->addChild(a->clone());
     foreach(QExplicitlySharedDataPointer<ConstraintAtom> a, m_constraints)
         atom->addConstraint(QExplicitlySharedDataPointer<ConstraintAtom>(a->clone()));
-    atom->m_algorithm = QExplicitlySharedDataPointer<AlgorithmAtom>(m_algorithm->clone());
     atom->m_axis = m_axis;
     atom->m_rotateAngle = m_rotateAngle;
     atom->m_needsReinit = m_needsReinit;
@@ -581,7 +578,7 @@ void LayoutNodeAtom::build(Context* context) {
 void LayoutNodeAtom::layoutAtom(Context* context) {
     AbstractAlgorithm *algbase = 0;
 
-    switch(m_algorithm->m_type) {
+    switch(algorithm()->m_type) {
         case AlgorithmAtom::UnknownAlg:
             kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
             // fall through and use the composite-algorithm
@@ -621,14 +618,6 @@ void LayoutNodeAtom::layoutAtom(Context* context) {
 }
 
 void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
-    AlgorithmAtom::Algorithm algorithm = AlgorithmAtom::UnknownAlg;
-    QMap<QString, QString> params;
-    if(m_algorithm) {
-        algorithm = m_algorithm->m_type;
-        params = m_algorithm->m_params;
-    }
-    DEBUG_WRITE << "name=" << m_name << "algorithm=" << algorithm << "params=" << params;
-
     QExplicitlySharedDataPointer<LayoutNodeAtom> oldLayout = context->m_parentLayout;
     context->m_parentLayout = this;
 
@@ -646,12 +635,10 @@ void LayoutNodeAtom::addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> 
 }
 
 QExplicitlySharedDataPointer<AlgorithmAtom> LayoutNodeAtom::algorithm() const {
-    return m_algorithm;
-}
-
-void LayoutNodeAtom::setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm) {
-    m_algorithm = algorithm;
-    setNeedsRelayout(true);
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> child, children())
+        if(AlgorithmAtom* alg = dynamic_cast<AlgorithmAtom*>(child.data()))
+            return QExplicitlySharedDataPointer<AlgorithmAtom>(alg);
+    return QExplicitlySharedDataPointer<AlgorithmAtom>();
 }
 
 QList<AbstractNode*> LayoutNodeAtom::axis() const { return m_axis; }
@@ -691,11 +678,21 @@ void LayoutNodeAtom::setNeedsRelayout(bool needsRelayout) {
                 parentLayoutAtom->m_childNeedsRelayout = true;
 }
 
-AlgorithmAtom::Algorithm LayoutNodeAtom::algorithmType() const { return m_algorithm ? m_algorithm->m_type : AlgorithmAtom::UnknownAlg; }
-QMap<QString,QString> LayoutNodeAtom::algorithmParams() const { return m_algorithm ? m_algorithm->m_params : QMap<QString,QString>(); }
+AlgorithmAtom::Algorithm LayoutNodeAtom::algorithmType() const {
+    if(QExplicitlySharedDataPointer<AlgorithmAtom> alg = algorithm())
+        return alg->m_type;
+    return AlgorithmAtom::UnknownAlg;
+}
+
+QMap<QString,QString> LayoutNodeAtom::algorithmParams() const {
+    if(QExplicitlySharedDataPointer<AlgorithmAtom> alg = algorithm())
+        return alg->m_params;
+    return QMap<QString,QString>();
+}
 
 QString LayoutNodeAtom::algorithmParam(const QString &name, const QString &defaultValue) const {
-    return m_algorithm && m_algorithm->m_params.contains(name) ? m_algorithm->m_params[name] : defaultValue;
+    QMap<QString,QString> params = algorithmParams();
+    return params.contains(name) ? params[name] : defaultValue;
 }
 
 QString LayoutNodeAtom::variable(const QString &name, bool checkParents) const {
@@ -1027,26 +1024,7 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
         xmlWriter->addAttribute("draw:transform", QString("matrix(%1 %2 %3 %4 %5pt %6pt)").arg(matrix.m11()).arg(matrix.m12()).arg(matrix.m21()).arg(matrix.m22()).arg(matrix.dx()) .arg(matrix.dy()));
     }
 
-    kDebug()<<"################### context"<<context->m_parentLayout->m_name<<m_svgX<<m_svgY<<w<<h<<rotateAngle;
-
     if (m_type == QLatin1String("conn")) {
-        // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-0.62832) translate(3.12798in 0.91174in)");
-        // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-5.02655) translate(3.47562in 1.95573in)");
-        // xmlWriter->addAttribute("draw:transform", "");
-        // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-1.25664) translate(1.69526in 1.9687in)");
-        // xmlWriter->addAttribute("draw:transform", "translate(-0.12039in -0.15285in) rotate(-5.65487) translate(2.02766in 0.91975in)");
-        /*
-        <draw:custom-shape draw:id="id1" draw:style-name="a5" draw:transform="translate(-0.12039in -0.15285in) rotate(-0.62832) translate(3.12798in 0.91174in)" svg:height="0.30569in" svg:width="0.24079in">
-            <draw:enhanced-geometry draw:enhanced-path="M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"            draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
-        <draw:custom-shape draw:id="id3" draw:style-name="a11" draw:transform="translate(-0.12039in -0.15285in) rotate(-5.02655) translate(3.47562in 1.95573in)" svg:height="0.30569in" svg:width="0.24079in">
-            <draw:enhanced-geometry draw:enhanced-path="M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N" draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
-        <draw:custom-shape draw:id="id5" draw:style-name="a17" svg:height="0.3057in" svg:width="0.24079in" svg:x="2.46976in" svg:y="2.45612in">
-            <draw:enhanced-geometry draw:enhanced-path="M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N" draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
-        <draw:custom-shape draw:id="id7" draw:style-name="a23" draw:transform="translate(-0.12039in -0.15285in) rotate(-1.25664) translate(1.69526in 1.9687in)" svg:height="0.3057in" svg:width="0.24079in">
-            <draw:enhanced-geometry draw:enhanced-path="M 220174 223622 L 110087 223622 110087 279527 0 139763 110087 0 110087 55905 220174 55905 220174 223622 Z N" draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
-        <draw:custom-shape draw:id="id9" draw:style-name="a29" draw:transform="translate(-0.12039in -0.15285in) rotate(-5.65487) translate(2.02766in 0.91975in)" svg:height="0.30569in" svg:width="0.24079in">
-            <draw:enhanced-geometry draw:enhanced-path="M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N"            draw:glue-point-leaving-directions="-90, -90, -90, -90, -90, -90, -90, -90" draw:glue-points="?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17" draw:text-areas="?f24 ?f26 ?f25 ?f27" draw:type="non-primitive" svg:viewBox="0 0 220174 279527" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0">
-        */
         /*
         QList<AbstractNode*> axis = context->m_parentLayout->axis();
         foreach(AbstractNode* n, axis) n->dump(context,10);        
@@ -1100,35 +1078,34 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
         xmlWriter->addAttribute("draw:enhanced-path", "U 10800 10800 10800 10800 0 360 Z N");
         xmlWriter->addAttribute("draw:glue-points", "10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163");
         xmlWriter->addAttribute("draw:type", "ellipse");
-        xmlWriter->addAttribute("svg:viewBox", "0 0 21600 21600");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 21600 21600");
         xmlWriter->endElement();
     } else if (m_type == QLatin1String("cycle")) {
         xmlWriter->startElement("draw:enhanced-geometry");
         xmlWriter->addAttribute("draw:enhanced-path", "M 0 414114 C 0 304284 43630 198953 121292 121291 198954 43630 304285 0 414115 0 523945 0 629276 43630 706938 121292 784599 198954 828229 304285 828229 414115 828229 523945 784599 629276 706938 706938 629277 784599 523945 828229 414115 828229 304285 828229 198954 784599 121292 706938 43631 629276 1 523945 1 414115 L 0 414114 Z N");
         xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
-        xmlWriter->addAttribute("draw:glue-points", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
-        xmlWriter->addAttribute("draw:type", "?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f27 ?f28 ?f29 ?f30 ?f27 ?f31 ?f25 ?f32 ?f23 ?f31 ?f33 ?f30 ?f21 ?f22");
-        xmlWriter->addAttribute("draw:text-areas", "?f34 ?f36 ?f35 ?f37");
+        xmlWriter->addAttribute("draw:glue-points", "?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f27 ?f28 ?f29 ?f30 ?f27 ?f31 ?f25 ?f32 ?f23 ?f31 ?f33 ?f30 ?f21 ?f22");
         xmlWriter->addAttribute("draw:type", "circle");
-        xmlWriter->addAttribute("svg:viewBox", "0 0 828228 828228");
+        //xmlWriter->addAttribute("draw:text-areas", "?f34 ?f36 ?f35 ?f37");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 828228 828228");
         xmlWriter->endElement();
     } else if (m_type == QLatin1String("rect")) {
         xmlWriter->startElement("draw:enhanced-geometry");
         xmlWriter->addAttribute("draw:enhanced-path", "M 0 0 L 1393031 0 1393031 557212 0 557212 0 0 Z N");
         xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90");
         xmlWriter->addAttribute("draw:glue-points", "?f12 ?f13 ?f14 ?f13 ?f14 ?f15 ?f12 ?f15 ?f12 ?f13");
-        xmlWriter->addAttribute("draw:text-areas", "?f16 ?f18 ?f17 ?f19");
         xmlWriter->addAttribute("draw:type", "non-primitive");
-        xmlWriter->addAttribute("svg:viewBox", "0 0 1393031 557212");
+        //xmlWriter->addAttribute("draw:text-areas", "?f16 ?f18 ?f17 ?f19");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 1393031 557212");
         xmlWriter->endElement();
     } else if (m_type == QLatin1String("roundRect")) {
         xmlWriter->startElement("draw:enhanced-geometry");
         xmlWriter->addAttribute("draw:enhanced-path", "M 0 97707 C 0 71793 10294 46941 28618 28618 46942 10294 71794 0 97707 0 L 804191 0 C 830105 0 854957 10294 873280 28618 891604 46942 901898 71794 901898 97707 L 901898 488526 C 901898 514440 891604 539292 873280 557615 854956 575939 830104 586233 804191 586233 L 97707 586233 C 71793 586233 46941 575939 28618 557615 10294 539291 0 514439 0 488526 L 0 97707 Z N");
         xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
         xmlWriter->addAttribute("draw:glue-points", "?f20 ?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f25 ?f27 ?f23 ?f28 ?f21 ?f28 ?f29 ?f27 ?f30 ?f26 ?f31 ?f24 ?f31 ?f22 ?f30 ?f20 ?f29 ?f20 ?f21");
-        xmlWriter->addAttribute("draw:text-areas", "?f32 ?f34 ?f33 ?f35");
         xmlWriter->addAttribute("draw:type", "non-primitive");
-        xmlWriter->addAttribute("svg:viewBox", "0 0 901898 586233");
+        //xmlWriter->addAttribute("draw:text-areas", "?f32 ?f34 ?f33 ?f35");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 901898 586233");
         xmlWriter->endElement();
     } else if (m_type == QLatin1String("conn")) { // Connection shape type
         enum EndStyle { Arrow, Auto, NoArrow };
@@ -1146,18 +1123,18 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
             xmlWriter->addAttribute("draw:enhanced-path", "M 1627875 92938 A ?f54 ?f55 ?f56 ?f57 1627875 92938 ?f51 ?f53  W ?f58 ?f59 ?f60 ?f61 1627875 92938 ?f51 ?f53 N");
             //xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90, -90");
             //xmlWriter->addAttribute("draw:glue-points", "?f20 ?f21 ?f22 ?f23 ?f24 ?f25 ?f26 ?f25 ?f27 ?f23 ?f28 ?f21 ?f28 ?f29 ?f27 ?f30 ?f26 ?f31 ?f24 ?f31 ?f22 ?f30 ?f20 ?f29 ?f20 ?f21");
-            xmlWriter->addAttribute("draw:text-areas", "?f11 ?f13 ?f12 ?f14");
             xmlWriter->addAttribute("draw:type", "non-primitive");
-            xmlWriter->addAttribute("svg:viewBox", "0 0 2341473 2341473");
+            //xmlWriter->addAttribute("draw:text-areas", "?f11 ?f13 ?f12 ?f14");
+            //xmlWriter->addAttribute("svg:viewBox", "0 0 2341473 2341473");
             xmlWriter->endElement();
         } else { // arrow-right
             xmlWriter->startElement("draw:enhanced-geometry");
             xmlWriter->addAttribute("draw:enhanced-path", "M 0 55905 L 110087 55905 110087 0 220174 139764 110087 279527 110087 223622 0 223622 0 55905 Z N");
             xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90, -90, -90, -90");
             xmlWriter->addAttribute("draw:glue-points", "?f16 ?f17 ?f18 ?f17 ?f18 ?f19 ?f20 ?f21 ?f18 ?f22 ?f18 ?f23 ?f16 ?f23 ?f16 ?f17");
-            xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
             xmlWriter->addAttribute("draw:type", "non-primitive");
-            xmlWriter->addAttribute("svg:viewBox", "0 0 220174 279527");
+            //xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
+            //xmlWriter->addAttribute("svg:viewBox", "0 0 220174 279527");
             xmlWriter->endElement();
         }
     } else {

@@ -280,7 +280,6 @@ class LayoutNodeAtom : public AbstractAtom
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
     private:
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
-        QExplicitlySharedDataPointer<AlgorithmAtom> m_algorithm;
         QList<AbstractNode*> m_axis;
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
