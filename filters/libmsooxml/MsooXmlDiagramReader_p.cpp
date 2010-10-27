@@ -319,7 +319,11 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
         } else if (reader->qualifiedName() == QLatin1String("dgm:forEach")) {
             node = new ForEachAtom;
         } else if (reader->qualifiedName() == QLatin1String("dgm:constrLst")) {
-            node = new ConstraintListAtom;
+            node = new ListAtom(reader->qualifiedName());
+        } else if (reader->qualifiedName() == QLatin1String("dgm:ruleLst")) {
+            node = new ListAtom(reader->qualifiedName());
+        } else if (reader->qualifiedName() == QLatin1String("dgm:adjLst")) {
+            node = new ListAtom(reader->qualifiedName());
         } else if (reader->qualifiedName() == QLatin1String("dgm:varLst")) {
             while (!reader->atEnd()) {
                 QXmlStreamReader::TokenType tokenType = reader->readNext();
@@ -331,8 +335,6 @@ void AbstractAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
                     context->m_parentLayout->setVariable(reader->name().toString(), val);
                 }
             }
-        } else if (reader->qualifiedName() == QLatin1String("dgm:ruleLst")) {
-            node = new RuleListAtom;
         } else {
             kDebug()<<"TODO atom="<<m_tagName<<"qualifiedName="<<reader->qualifiedName();
         }
@@ -837,27 +839,6 @@ void ConstraintAtom::build(Context* context) {
     AbstractAtom::build(context);
 }
 
-ConstraintListAtom* ConstraintListAtom::clone() {
-    ConstraintListAtom* atom = new ConstraintListAtom;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> a, m_children)
-        atom->addChild(a->clone());
-    return atom;
-}
-
-void ConstraintListAtom::dump(Context* context, int level) {
-    AbstractAtom::dump(context, level);
-}
-
-void ConstraintListAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
-    if (reader->isStartElement()) {
-        if (reader->qualifiedName() == QLatin1String("dgm:constr")) {
-            QExplicitlySharedDataPointer<AbstractAtom> node(new ConstraintAtom);
-            addChild(node);
-            node->readAll(context, reader);
-        }
-    }
-}
-
 /****************************************************************************************************/
 
 RuleAtom* RuleAtom::clone()
@@ -896,25 +877,55 @@ void RuleAtom::readElement(Context*, MsooXmlDiagramReader* reader)
     TRY_READ_ATTR_WITHOUT_NS_INTO(type, m_type)
     TRY_READ_ATTR_WITHOUT_NS_INTO(val, m_value)
 }
-        
-RuleListAtom* RuleListAtom::clone()
+
+/****************************************************************************************************/
+
+AdjustAtom* AdjustAtom::clone()
 {
-    RuleListAtom* atom = new RuleListAtom;
+    AdjustAtom* atom = new AdjustAtom;
+    atom->m_index = m_index;
+    atom->m_value = m_value;
+    return atom;
+}
+
+void AdjustAtom::dump(Context* context, int level)
+{
+    DEBUG_DUMP << "index=" << m_index << "value=" << m_value;
+}
+
+void AdjustAtom::readElement(Context*, MsooXmlDiagramReader* reader)
+{
+    const QXmlStreamAttributes attrs(reader->attributes());
+    TRY_READ_ATTR_WITHOUT_NS(idx)
+    m_index = idx.toInt();
+    TRY_READ_ATTR_WITHOUT_NS(val)
+    m_value = val.toDouble();
+}
+
+/****************************************************************************************************/
+
+ListAtom* ListAtom::clone() {
+    ListAtom* atom = new ListAtom(m_tagName);
     foreach(QExplicitlySharedDataPointer<AbstractAtom> a, m_children)
         atom->addChild(a->clone());
     return atom;
 }
 
-void RuleListAtom::dump(Context* context, int level)
-{
+void ListAtom::dump(Context* context, int level) {
     AbstractAtom::dump(context, level);
 }
 
-void RuleListAtom::readElement(Context* context, MsooXmlDiagramReader* reader)
-{
+void ListAtom::readElement(Context* context, MsooXmlDiagramReader* reader) {
     if (reader->isStartElement()) {
-        if (reader->qualifiedName() == QLatin1String("dgm:rule")) {
-            QExplicitlySharedDataPointer<AbstractAtom> node(new RuleAtom);
+        QExplicitlySharedDataPointer<AbstractAtom> node;
+        if (reader->qualifiedName() == QLatin1String("dgm:constr")) {
+            node = QExplicitlySharedDataPointer<AbstractAtom>(new ConstraintAtom);
+        } else if (reader->qualifiedName() == QLatin1String("dgm:rule")) {
+            node = QExplicitlySharedDataPointer<AbstractAtom>(new RuleAtom);
+        } else if (reader->qualifiedName() == QLatin1String("dgm:adj")) {
+            node = QExplicitlySharedDataPointer<AbstractAtom>(new AdjustAtom);
+        }
+        if(node) {
             addChild(node);
             node->readAll(context, reader);
         }
@@ -1106,6 +1117,15 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
         xmlWriter->addAttribute("draw:type", "non-primitive");
         //xmlWriter->addAttribute("draw:text-areas", "?f32 ?f34 ?f33 ?f35");
         //xmlWriter->addAttribute("svg:viewBox", "0 0 901898 586233");
+        xmlWriter->endElement();
+    } else if (m_type == QLatin1String("pie")) {
+        xmlWriter->startElement("draw:enhanced-geometry");
+        xmlWriter->addAttribute("draw:enhanced-path", "M 1152145 0 C 1563767 0 1944120 219599 2149931 576074 2355741 932549 2355740 1371744 2149929 1728219 L 1152144 1152144 C 1152144 768096 1152145 384048 1152145 0 Z N");
+        xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90");
+        xmlWriter->addAttribute("draw:glue-points", "?f16 ?f17 ?f18 ?f19 ?f20 ?f21 ?f22 ?f23 ?f16 ?f17");
+        xmlWriter->addAttribute("draw:type", "non-primitive");
+        //xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 2304288 2304288");
         xmlWriter->endElement();
     } else if (m_type == QLatin1String("conn")) { // Connection shape type
         enum EndStyle { Arrow, Auto, NoArrow };

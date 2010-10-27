@@ -319,17 +319,6 @@ class ConstraintAtom : public AbstractAtom
         virtual void build(Context* context);
 };
 
-/// List of constraints.
-class ConstraintListAtom : public AbstractAtom
-{
-    public:
-        explicit ConstraintListAtom() : AbstractAtom("dgm:constrLst") {}
-        virtual ~ConstraintListAtom() {}
-        virtual ConstraintListAtom* clone();
-        virtual void dump(Context* context, int level);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
-};
-
 /// Rules indicate the ranges of values that a layout algorithm can use to modify the constraint values if it cannot lay out the graphic by using the constraints.
 class RuleAtom : public AbstractAtom
 {
@@ -348,14 +337,27 @@ class RuleAtom : public AbstractAtom
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
 
-
-/// List of rules.
-class RuleListAtom : public AbstractAtom
+/// Shape adjust value. These can be used to modify the adjust handles supported on various auto shapes. It is only possible to set the initial value, not to modify it using constraints and rules.
+class AdjustAtom : public AbstractAtom
 {
     public:
-        explicit RuleListAtom() : AbstractAtom("dgm:ruleLst") {}
-        virtual ~RuleListAtom() {}
-        virtual RuleListAtom* clone();
+        int m_index;
+        qreal m_value;
+        explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
+        virtual ~AdjustAtom() {}
+        virtual AdjustAtom* clone();
+        virtual void dump(Context* context, int level);
+        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+};
+
+/// List of atoms.
+class ListAtom : public AbstractAtom
+{
+    public:
+        explicit ListAtom(const QString &tagName) : AbstractAtom(tagName) {}
+        explicit ListAtom(const QStringRef &tagName) : AbstractAtom(tagName.toString()) {}
+        virtual ~ListAtom() {}
+        virtual ListAtom* clone();
         virtual void dump(Context* context, int level);
         virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
 };
