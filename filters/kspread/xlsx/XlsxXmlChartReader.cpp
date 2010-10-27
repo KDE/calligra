@@ -1324,6 +1324,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
             if (QUALIFIED_NAME_IS(ser)) {
                 TRY_READ(areaChart_Ser)
             }
+            TRY_READ_IF(grouping)
         }
     }
 
@@ -1364,6 +1365,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_area3DChart()
             if (QUALIFIED_NAME_IS(ser)) {
                 TRY_READ(areaChart_Ser)
             }
+            TRY_READ_IF(grouping)
         }
     }
 
@@ -2172,7 +2174,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart_Ser()
             }
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(val)
-            ELSE_TRY_READ_IF(dLbls)
+            ELSE_TRY_READ_IF(dLbls)            
         }
     }
 
