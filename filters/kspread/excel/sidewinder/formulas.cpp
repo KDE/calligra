@@ -72,7 +72,6 @@ FormulaToken::FormulaToken(const FormulaToken& token)
 
 void FormulaToken::operator=(const FormulaToken& token)
 {
-    d = new Private;
     d->ver = token.d->ver;
     d->id = token.id();
 
