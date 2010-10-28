@@ -80,9 +80,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), m_animationCache,
-                                                       new KPrPageSelectStrategyActive( m_view ) ) );
+                                                       new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
     m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), m_animationCache,
-                                                             new KPrPageSelectStrategyActive( m_view ) ) );
+                                                             new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
 
     if ( hasAnimation() ) {
         startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
@@ -97,7 +97,7 @@ KPrAnimationDirector::~KPrAnimationDirector()
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
     m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager(),
-                                                             new KPrPageSelectStrategyActive( m_view ) ) );
+                                                             new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
 }
 
 

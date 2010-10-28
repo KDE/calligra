@@ -92,7 +92,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("configure")->setText(i18n("Configure KPresenter..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
-                                                   new KPrPageSelectStrategyActive( this ) ) );
+                                                   new KPrPageSelectStrategyActive( kopaCanvas() ) ) );
 
     KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
     if (canvas) {

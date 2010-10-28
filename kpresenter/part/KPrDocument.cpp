@@ -31,6 +31,8 @@
 #include "KPrPlaceholderShapeFactory.h"
 #include "KPrSoundCollection.h"
 #include "KPrDeclarations.h"
+#include "KPrShapeManagerDisplayMasterStrategy.h"
+#include "KPrPageSelectStrategyActive.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
 #include "commands/KPrSetCustomSlideShowsCommand.h"
@@ -115,6 +117,8 @@ KoView * KPrDocument::createViewInstance( QWidget *parent )
 QGraphicsItem *KPrDocument::createCanvasItem()
 {
     KoPACanvasItem *canvasItem = new KoPACanvasItem(this);
+    canvasItem->masterShapeManager()->setPaintingStrategy(new KPrShapeManagerDisplayMasterStrategy(canvasItem->masterShapeManager(),
+						  new KPrPageSelectStrategyActive(canvasItem)));
     return canvasItem;
 }
 
