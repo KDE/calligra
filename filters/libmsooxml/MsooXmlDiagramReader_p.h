@@ -261,23 +261,35 @@ class LayoutNodeAtom : public AbstractAtom
         virtual void build(Context* context);
         virtual void layoutAtom(Context* context);
         virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const;
         void addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint);
+
         QExplicitlySharedDataPointer<AlgorithmAtom> algorithm() const;
         void setAlgorithm(QExplicitlySharedDataPointer<AlgorithmAtom> algorithm);
+
         QList<AbstractNode*> axis() const;
         void setAxis(Context* context, const QList<AbstractNode*> &axis);
+
         void setNeedsReinit(bool needsReinit);
         void setNeedsRelayout(bool needsRelayout);
+
         AlgorithmAtom::Algorithm algorithmType() const;
         QMap<QString,QString> algorithmParams() const;
         QString algorithmParam(const QString &name, const QString &defaultValue = QString()) const;
+
         QString variable(const QString &name, bool checkParents = false) const;
         QMap<QString, QString> variables() const;
         void setVariable(const QString &name, const QString &value);
         QMap<QString, qreal> finalValues() const;
+        
+        QExplicitlySharedDataPointer<LayoutNodeAtom> parentLayout() const;
+        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > childrenLayouts() const;
+        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > descendantLayouts() const;
         QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors() const;
+
         qreal distanceTo(LayoutNodeAtom* otherAtom) const;
+
     private:
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > m_constraints;
         QList<AbstractNode*> m_axis;

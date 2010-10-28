@@ -55,6 +55,10 @@ MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
 void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)
 {
     // The root layout node always inherits the canvas dimensions by default.
+    Q_ASSERT(rect.x() >= 0);
+    Q_ASSERT(rect.y() >= 0);
+    Q_ASSERT(rect.width() >= 0);
+    Q_ASSERT(rect.height() >= 0);
     m_context->m_rootLayout->m_values["l"] = rect.x();
     m_context->m_rootLayout->m_values["t"] = rect.y();
     // m_context->m_rootLayout->m_values["w"] = rect.width();

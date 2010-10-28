@@ -580,7 +580,8 @@ void LayoutNodeAtom::build(Context* context) {
 void LayoutNodeAtom::layoutAtom(Context* context) {
     AbstractAlgorithm *algbase = 0;
 
-    switch(algorithm()->m_type) {
+    QExplicitlySharedDataPointer<AlgorithmAtom> alg = algorithm();
+    switch(alg ? alg->m_type : AlgorithmAtom::UnknownAlg) {
         case AlgorithmAtom::UnknownAlg:
             kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
             // fall through and use the composite-algorithm
@@ -675,9 +676,8 @@ void LayoutNodeAtom::setNeedsRelayout(bool needsRelayout) {
     if(needsRelayout == m_needsRelayout) return;
     m_needsRelayout = needsRelayout;
     if(m_needsRelayout) // let parent-layouts know that we need a relayout
-        for(QExplicitlySharedDataPointer<AbstractAtom> parent = m_parent; parent.data(); parent = parent->parent())
-            if(LayoutNodeAtom* parentLayoutAtom = dynamic_cast<LayoutNodeAtom*>(parent.data()))
-                parentLayoutAtom->m_childNeedsRelayout = true;
+        if(QExplicitlySharedDataPointer<LayoutNodeAtom> p = parentLayout())
+            p->m_childNeedsRelayout = true;
 }
 
 AlgorithmAtom::Algorithm LayoutNodeAtom::algorithmType() const {
@@ -701,9 +701,8 @@ QString LayoutNodeAtom::variable(const QString &name, bool checkParents) const {
     if(m_variables.contains(name))
         return m_variables[name];
     if(checkParents)
-        for(QExplicitlySharedDataPointer<AbstractAtom> parent = m_parent; parent.data(); parent = parent->parent())
-            if(LayoutNodeAtom* parentLayoutAtom = dynamic_cast<LayoutNodeAtom*>(parent.data()))
-                return parentLayoutAtom->variable(name, checkParents);
+        if(QExplicitlySharedDataPointer<LayoutNodeAtom> p = parentLayout())
+            return p->variable(name, checkParents);
     return QString();
 }
 
@@ -722,13 +721,37 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     return result;
 }
 
+QExplicitlySharedDataPointer<LayoutNodeAtom> LayoutNodeAtom::parentLayout() const {
+    LayoutNodeAtom* p = 0;
+    for(QExplicitlySharedDataPointer<AbstractAtom> a = parent(); a && !p; a = a->parent())
+        p = dynamic_cast<LayoutNodeAtom*>(a.data());
+    return QExplicitlySharedDataPointer<LayoutNodeAtom>(p);
+}
+
+QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > LayoutNodeAtom::childrenLayouts() const {
+    QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > result;
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, children())
+        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data()))
+            result.append(QExplicitlySharedDataPointer<LayoutNodeAtom>(l));
+    return result;
+}
+
+QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > LayoutNodeAtom::descendantLayouts() const {
+    QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > result = childrenLayouts();
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, children())
+        if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data()))
+            foreach(QExplicitlySharedDataPointer<LayoutNodeAtom> atom, l->descendantLayouts())
+                result.append(atom);
+    return result;
+}
+        
 QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
 {
-    LayoutNodeAtom* parentLayout = dynamic_cast<LayoutNodeAtom*>(parent().data());
-    Q_ASSERT(parentLayout);
+    QExplicitlySharedDataPointer<LayoutNodeAtom> parentlayout = parentLayout();
+    Q_ASSERT(parentlayout);
     QList<LayoutNodeAtom*> siblingLayouts;
     int myindex = -1;
-    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, parentLayout->children()) {
+    foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, parent()->children()) {
         if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data())) {
             if(l == this) myindex = siblingLayouts.count();
             siblingLayouts.append(l);
@@ -743,14 +766,14 @@ QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
     int srcIndex = myindex - 1;
     int dstIndex = myindex + 1;
     if(srcIndex < 0) {
-        if(parentLayout->algorithmType() != AlgorithmAtom::CycleAlg)
+        if(parentlayout->algorithmType() != AlgorithmAtom::CycleAlg)
             return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
         srcIndex = siblingLayouts.count()-1;
     }
     if(dstIndex < siblingLayouts.count()) {
         --myindex;
     } else {
-        if(parentLayout->algorithmType() != AlgorithmAtom::CycleAlg)
+        if(parentlayout->algorithmType() != AlgorithmAtom::CycleAlg)
             return QPair<LayoutNodeAtom*,LayoutNodeAtom*>(0,0);
         dstIndex = 0;
     }
@@ -1127,6 +1150,38 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
         //xmlWriter->addAttribute("draw:text-areas", "?f24 ?f26 ?f25 ?f27");
         //xmlWriter->addAttribute("svg:viewBox", "0 0 2304288 2304288");
         xmlWriter->endElement();
+    } else if (m_type == QLatin1String("diamond")) {
+        xmlWriter->startElement("draw:enhanced-geometry");
+        xmlWriter->addAttribute("draw:enhanced-path", "M ?f0 ?f7 L ?f11 ?f2 ?f1 ?f7 ?f11 ?f3 Z N");
+        //xmlWriter->addAttribute("draw:path-stretchpoint-x", "21600");
+        //xmlWriter->addAttribute("draw:path-stretchpoint-y", "21600");
+        xmlWriter->addAttribute("draw:type", "non-primitive");
+        //xmlWriter->addAttribute("draw:text-areas", "?f10 ?f6 ?f12 ?f13");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 21600 21600");
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "left"); xmlWriter->addAttribute("draw:name", "f0"); xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "right");  xmlWriter->addAttribute("draw:name", "f1");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "top");  xmlWriter->addAttribute("draw:name", "f2");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "bottom");  xmlWriter->addAttribute("draw:name", "f3");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f3 - ?f2");  xmlWriter->addAttribute("draw:name", "f4");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f4 / 2");  xmlWriter->addAttribute("draw:name", "f5");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f4 / 4");  xmlWriter->addAttribute("draw:name", "f6");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f2 + ?f5");  xmlWriter->addAttribute("draw:name", "f7");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f1 - ?f0");  xmlWriter->addAttribute("draw:name", "f8");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f8 / 2");  xmlWriter->addAttribute("draw:name", "f9");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f8 / 4");  xmlWriter->addAttribute("draw:name", "f10");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f0 + ?f9");  xmlWriter->addAttribute("draw:name", "f11");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f8 * 3 / 4");  xmlWriter->addAttribute("draw:name", "f12");xmlWriter->endElement();
+        xmlWriter->startElement("draw:equation"); xmlWriter->addAttribute("draw:formula", "?f4 * 3 / 4");  xmlWriter->addAttribute("draw:name", "f13");xmlWriter->endElement();
+        xmlWriter->endElement();
+    } else if (m_type == QLatin1String("trapezoid")) {
+        xmlWriter->startElement("draw:enhanced-geometry");
+        xmlWriter->addAttribute("draw:enhanced-path", "M 0 914400 L 761997 0 762003 0 1524000 914400 0 914400 Z N");
+        xmlWriter->addAttribute("draw:glue-point-leaving-directions", "-90, -90, -90, -90, -90");
+        xmlWriter->addAttribute("draw:glue-points", "?f14 ?f15 ?f16 ?f17 ?f18 ?f17 ?f19 ?f15 ?f14 ?f15");
+        xmlWriter->addAttribute("draw:type", "non-primitive");
+        //xmlWriter->addAttribute("draw:text-areas", "?f20 ?f22 ?f21 ?f23");
+        //xmlWriter->addAttribute("svg:viewBox", "0 0 1524000 914400");
+        xmlWriter->endElement();
     } else if (m_type == QLatin1String("conn")) { // Connection shape type
         enum EndStyle { Arrow, Auto, NoArrow };
         EndStyle endstyle = Arrow;
@@ -1253,35 +1308,35 @@ bool IfAtom::testAtom(Context* context) {
         funcValue = QString::number(axis.count());
     } else if(m_function == "depth") { // Specifies the depth.
         //int depth = 0;
-        //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
+        //for(AbstractNode* n = context->currentNode(); n; n = n->parent(), ++depth);
         //funcValue = depth;
         //TODO
         kWarning()<<"TODO func=depth";
     } else if(m_function == "maxDepth") { // Defines the maximum depth.
         //int depth = 0;
-        //for(AbstractNode* n = context->m_currentNode; n; n = n->parent(), ++depth);
+        //for(AbstractNode* n = context->currentNode(); n; n = n->parent(), ++depth);
         //funcValue = depth;
         //TODO
         kWarning()<<"TODO func=maxDepth";
     } else if(m_function == "pos") { // Retrieves the position of the node in the specified set of nodes.
-        //int index = axis.indexOf(context->m_currentNode)+1;
-        //istrue = index;
-        //TODO
-        kWarning()<<"TODO func=pos";
+        const int position = axis.indexOf(context->currentNode()) + 1;
+        funcValue = QString::number(position);
+        //TODO 1-based? what index for not-found?
+        kWarning()<<"TODO func=pos funcValue="<<funcValue;
     } else if(m_function == "posEven") { // Returns 1 if the specified node is at an even numbered position in the data model.
-        //int index = axis.indexOf(context->m_currentNode)+1;
-        //funcValue = index>=1 && index % 2 == 0 ? 1 : 0;
+        //const int position = axis.indexOf(context->currentNode())+1;
+        //funcValue = position>=1 && position % 2 == 0 ? 1 : 0;
         //TODO
         kWarning()<<"TODO func=posEven";
     } else if(m_function == "posOdd") { // Returns 1 if the specified node is in an odd position in the data model.
-        //int index = axis.indexOf(context->m_currentNode)+1;
-        //funcValue = index>=1 && index % 2 != 0 = 1 : 0;
+        //const int position = axis.indexOf(context->currentNode())+1;
+        //funcValue = position>=1 && position % 2 != 0 = 1 : 0;
         //TODO
         kWarning()<<"TODO func=posOdd";
     } else if(m_function == "revPos") { // Reverse position function.
-        //int index = axis.indexOf(context->m_currentNode)+1;
-        //istrue = axis.count()-index;
-        //TODO
+        const int position = axis.indexOf(context->currentNode()) + 1;
+        funcValue = axis.count()-position;
+        //TODO lastIndexOf? 1-based? what index for not-found?
         kWarning()<<"TODO func=revPos";
     } else if(m_function == "var") { // Used to reference a variable.
         if(m_argument == QLatin1String("animLvl")) { // Specifies the animation level
@@ -1577,7 +1632,11 @@ void AbstractAlgorithm::virtualDoLayout() {
             QExplicitlySharedDataPointer<LayoutNodeAtom> ref = c->m_refForName.isEmpty() ? m_layout : context()->m_layoutMap.value(c->m_refForName);
             if(ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
                 ref->layoutAtom(context());
-                Q_ASSERT(!ref->m_needsReinit && !ref->m_needsRelayout && !ref->m_childNeedsRelayout);
+                Q_ASSERT(!ref->m_needsReinit);
+                Q_ASSERT(!ref->m_needsRelayout);
+                Q_ASSERT(!ref->m_childNeedsRelayout);
+                if(ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)
+                    continue;
             }
 
             QMap<QString, qreal> values = ref->finalValues();
@@ -1629,21 +1688,16 @@ void AbstractAlgorithm::virtualDoLayout() {
 
 //TODO 1) "op" isn't supported, 2) what happens if for=ch is defined but no forName? 3) etc.
 #if 0
-        QList<LayoutNodeAtom*> layouts;
-        layouts << layout();
+        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > layouts;
+        layouts << m_layout;
         if(!c->m_for.isEmpty() && c->m_forName.isEmpty()) {
             if(c->m_for == "ch") { // Child
-            layouts.clear();
-            foreach(QExplicitlySharedDataPointer<AbstractAtom> atom, layout()->children())
-                if(LayoutNodeAtom* l = dynamic_cast<LayoutNodeAtom*>(atom.data()))
-                    layouts.append(l);
+                layouts = layout()->childrenLayouts();
             } else if(c->m_for == "des") { // Descendant
-                //layouts.clear();
-            } else if(c->m_for == "self") { // Ourself
-                // not needed to do anything cause layouts contains our layout() already.
+                layouts = layout()->descendantLayouts();
             }
         }
-        foreach(LayoutNodeAtom* l, layouts) {
+        foreach(QExplicitlySharedDataPointer<LayoutNodeAtom> l, layouts) {
             if(value >= 0.0) l->m_values[c->m_type] = value;
             l->m_factors[c->m_type] += c->m_fact;
             l->m_countFactors[c->m_type] += 1;
@@ -1673,8 +1727,10 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     LayoutNodeAtom* srcAtom = neighbors.first;
     LayoutNodeAtom* dstAtom = neighbors.second;
     if(!srcAtom || !dstAtom) {
-        // If there is no source- or destination to connect with then hide our layout by detaching it.
-        parentLayout()->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(layout()));
+        if(layout()->parent()) {
+            // If there is no source- or destination to connect with then hide our layout by detaching it.
+            layout()->parent()->removeChild(QExplicitlySharedDataPointer<AbstractAtom>(layout()));
+        }
         return;
     }
 

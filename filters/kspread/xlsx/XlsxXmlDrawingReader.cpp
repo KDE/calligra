@@ -106,8 +106,8 @@ void XlsxDrawingObject::save(KoXmlWriter* xmlWriter)
             xmlWriter->addAttribute("draw:name", "SmartArt Shapes Group");
             xmlWriter->addAttribute("draw:z-index", "0");
             //xmlWriter->addAttribute("table:end-cell-address", fromCellAddress());
-            //xmlWriter->addAttribute("table:end-x", "0.6016in");
-            //xmlWriter->addAttribute("table:end-y", "0.1339in");
+            //xmlWriter->addAttribute("table:end-x", rect.width());
+            //xmlWriter->addAttribute("table:end-y", rect.height());
             m_diagram->saveIndex(xmlWriter, positionRect());
             xmlWriter->endElement(); // draw:g
         } break;
@@ -130,17 +130,20 @@ QRect XlsxDrawingObject::positionRect() const
     if(m_positions.contains(FromAnchor)) {
         qreal defaultColumnWidth = 8.43;
         qreal defaultRowHeight = 12.75;
-
         Position f1 = m_positions[FromAnchor];
-        rect.setX( columnWidth2(f1.m_col-1, 0 /*f.m_colOff*/, defaultColumnWidth) );
-        rect.setY( rowHeight2(f1.m_row-1, 0 /*f.m_rowOff*/, defaultRowHeight) );
+        rect.setX( EMU_TO_POINT(f1.m_colOff) );
+        rect.setY( EMU_TO_POINT(f1.m_rowOff) );
         if(m_positions.contains(ToAnchor)) {
             Position f2 = m_positions[ToAnchor];
             if(f2.m_col > 0 && f2.m_row > 0) {
-                rect.setWidth( columnWidth2( f2.m_col - f1.m_col - 1, 0 /*t.m_colOff*/, defaultColumnWidth) );
-                rect.setHeight( rowHeight2( f2.m_row - f1.m_row - 1, 0 /*t.m_rowOff*/, defaultRowHeight) );
+                rect.setWidth( columnWidth2( f2.m_col - f1.m_col - 1, EMU_TO_POINT(f2.m_colOff), defaultColumnWidth) );
+                rect.setHeight( rowHeight2( f2.m_row - f1.m_row - 1, EMU_TO_POINT(f2.m_rowOff), defaultRowHeight) );
             }
         }
+        Q_ASSERT(rect.x() >= 0);
+        Q_ASSERT(rect.y() >= 0);
+        Q_ASSERT(rect.width() >= 0);
+        Q_ASSERT(rect.height() >= 0);
     }
     return rect;
 }
