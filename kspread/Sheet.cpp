@@ -1983,15 +1983,13 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     static const QString sCoveredTableCell      = QString::fromLatin1("covered-table-cell");
     static const QString sNumberColumnsRepeated = QString::fromLatin1("number-columns-repeated");
 
-    static const QString nsTable = QString::fromLatin1(KoXmlNS::table);
-
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
     KoOdfLoadingContext& odfContext = tableContext.odfContext;
     bool isNonDefaultRow = false;
 
     KoStyleStack styleStack;
-    if (row.hasAttributeNS(nsTable, sStyleName)) {
-        QString str = row.attributeNS(nsTable, sStyleName, QString());
+    if (row.hasAttributeNS(KoXmlNS::table, sStyleName)) {
+        QString str = row.attributeNS(KoXmlNS::table, sStyleName, QString());
         const KoXmlElement *style = odfContext.stylesReader().findStyle(str, "table-row");
         if (style) {
             styleStack.push(*style);
@@ -2001,9 +1999,9 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     styleStack.setTypeProperties("table-row");
 
     int number = 1;
-    if (row.hasAttributeNS(nsTable, sNumberRowsRepeated)) {
+    if (row.hasAttributeNS(KoXmlNS::table, sNumberRowsRepeated)) {
         bool ok = true;
-        int n = row.attributeNS(nsTable, sNumberRowsRepeated, QString()).toInt(&ok);
+        int n = row.attributeNS(KoXmlNS::table, sNumberRowsRepeated, QString()).toInt(&ok);
         if (ok)
             // Some spreadsheet programs may support more rows than KSpread so
             // limit the number of repeated rows.
@@ -2012,8 +2010,8 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     }
 
     QString rowCellStyleName;
-    if (row.hasAttributeNS(nsTable, sDefaultCellStyleName)) {
-        rowCellStyleName = row.attributeNS(nsTable, sDefaultCellStyleName, QString());
+    if (row.hasAttributeNS(KoXmlNS::table, sDefaultCellStyleName)) {
+        rowCellStyleName = row.attributeNS(KoXmlNS::table, sDefaultCellStyleName, QString());
         if (!rowCellStyleName.isEmpty()) {
             rowStyleRegions[rowCellStyleName] += QRect(1, rowIndex, KS_colMax, number);
         }
@@ -2027,8 +2025,8 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
     }
 
     enum { Visible, Collapsed, Filtered } visibility = Visible;
-    if (row.hasAttributeNS(nsTable, sVisibility)) {
-        const QString string = row.attributeNS(nsTable, sVisibility, sVisible);
+    if (row.hasAttributeNS(KoXmlNS::table, sVisibility)) {
+        const QString string = row.attributeNS(KoXmlNS::table, sVisibility, sVisible);
         if (string == sCollapse)
             visibility = Collapsed;
         else if (string == sFilter)
@@ -2073,14 +2071,14 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
 
     KoXmlElement cellElement;
     forEachElement(cellElement, row) {
-        if (cellElement.namespaceURI() != nsTable)
+        if (cellElement.namespaceURI() != KoXmlNS::table)
             continue;
         if (cellElement.localName() != sTableCell && cellElement.localName() != sCoveredTableCell)
             continue;
 
 
         bool ok = false;
-        const int n = cellElement.attributeNS(nsTable, sNumberColumnsRepeated, QString()).toInt(&ok);
+        const int n = cellElement.attributeNS(KoXmlNS::table, sNumberColumnsRepeated, QString()).toInt(&ok);
         // Some spreadsheet programs may support more columns than
         // KSpread so limit the number of repeated columns.
         // FIXME POSSIBLE DATA LOSS!
@@ -2088,7 +2086,7 @@ int Sheet::loadRowFormat(const KoXmlElement& row, int &rowIndex,
         columnMaximal = qMax(numberColumns, columnMaximal);
 
         // Styles are inserted at the end of the loading process, so check the XML directly here.
-        const QString styleName = cellElement.attributeNS(nsTable , sStyleName, QString());
+        const QString styleName = cellElement.attributeNS(KoXmlNS::table , sStyleName, QString());
         if (!styleName.isEmpty())
             cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
 
