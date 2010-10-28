@@ -582,5 +582,5 @@ uint KSpread::qHash(const Conditions &c)
 
 uint KSpread::qHash(const Conditional& c)
 {
-    return static_cast<uint>(c.cond) ^ qHash(c.value1) ^ qHash(c.value2) ^ qHash(c.styleName);
+    return qHash(c.value1);
 }
