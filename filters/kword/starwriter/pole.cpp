@@ -267,7 +267,7 @@ bool Header::valid()
     if ((num_bat < 109) && (num_mbat != 0)) return false;
     if (s_shift > b_shift) return false;
     if (b_shift <= 6) return false;
-    if (b_shift >= 31) return false;
+    if (b_shift > 12) return false;
 
     return true;
 }
@@ -1165,19 +1165,18 @@ unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned lo
 
         if (index >= blocks.size()) return 0;
 
-        unsigned char* buf = new unsigned char[ io->sbat->blockSize ];
+        unsigned char buf[4096];
         unsigned long offset = pos % io->sbat->blockSize;
         while (totalbytes < maxlen) {
             if (index >= blocks.size()) break;
-            io->loadSmallBlock(blocks[index], buf, io->bbat->blockSize);
+            io->loadSmallBlock(blocks[index], &buf[0], io->bbat->blockSize);
             unsigned long count = io->sbat->blockSize - offset;
             if (count > maxlen - totalbytes) count = maxlen - totalbytes;
-            memcpy(data + totalbytes, buf + offset, count);
+            memcpy(data + totalbytes, &buf[0] + offset, count);
             totalbytes += count;
             offset = 0;
             index++;
         }
-        delete[] buf;
 
     } else {
         // big file
@@ -1185,23 +1184,21 @@ unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned lo
 
         if (index >= blocks.size()) return 0;
 
-        unsigned char* buf = new unsigned char[ io->bbat->blockSize ];
+        unsigned char buf[4096];
         unsigned long offset = pos % io->bbat->blockSize;
         while (totalbytes < maxlen) {
             if (index >= blocks.size()) break;
-            unsigned long r = io->loadBigBlock(blocks[index], buf, io->bbat->blockSize);
+            unsigned long r = io->loadBigBlock(blocks[index], &buf[0], io->bbat->blockSize);
             if (r != io->bbat->blockSize) {
-                delete [] buf;
                 return 0;
             }
             unsigned long count = io->bbat->blockSize - offset;
             if (count > maxlen - totalbytes) count = maxlen - totalbytes;
-            memcpy(data + totalbytes, buf + offset, count);
+            memcpy(data + totalbytes, &buf[0] + offset, count);
             totalbytes += count;
             index++;
             offset = 0;
         }
-        delete [] buf;
 
     }
 
