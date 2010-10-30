@@ -43,26 +43,23 @@
 #include <kexidragobjects.h>
 #include <kexiproject.h>
 #include <kexi_global.h>
+#include "KexiFieldListModel.h"
 
 //! @internal
 class KexiFieldComboBox::Private
 {
 public:
     Private()
-//   : schema(0)
-            : keyIcon(SmallIcon("key"))
-            , noIcon(KexiUtils::emptyIcon(KIconLoader::Small))
-            , table(true) {
+            : table(true) {
     }
     ~Private() {
-//   delete schema;
     }
     QPointer<KexiProject> prj;
-//  KexiDB::TableOrQuerySchema* schema;
-    QPixmap keyIcon, noIcon;
+    QPointer<KexiFieldListModel> model;
+    
     QString tableOrQueryName;
     QString fieldOrExpression;
-    QMap<QString, QString> captions;
+
     bool table;
 };
 
@@ -74,14 +71,13 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent)
 {
     setInsertPolicy(NoInsert);
     setCompletionMode(KGlobalSettings::CompletionPopupAuto);
+
     setMaxVisibleItems(16);
     connect(this, SIGNAL(activated(int)),
             this, SLOT(slotActivated(int)));
     connect(this, SIGNAL(returnPressed(const QString &)),
             this, SLOT(slotReturnPressed(const QString &)));
 
-// setAcceptDrops(true);
-// viewport()->setAcceptDrops(true);
 }
 
 KexiFieldComboBox::~KexiFieldComboBox()
@@ -104,12 +100,11 @@ KexiProject* KexiFieldComboBox::project() const
 
 void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
 {
+
     d->tableOrQueryName = name;
     d->table = table;
     clear();
-    d->captions.clear();
-    addItem(""); // "", not null
-// delete d->schema;
+
     if (d->tableOrQueryName.isEmpty() || !d->prj)
         return;
 
@@ -117,20 +112,11 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
-// bool hasPKeys = true; //t->hasPrimaryKeys();
-    KexiDB::QueryColumnInfo::Vector columns = tableOrQuery.columns();
-    const int count = columns.count();
-    for (int i = 0; i < count; i++) {
-        KexiDB::QueryColumnInfo *colinfo = columns[i];
-        addItem(
-            (colinfo && (colinfo->field->isPrimaryKey() || colinfo->field->isUniqueKey()))
-            ? d->keyIcon
-            : d->noIcon
-            , colinfo->aliasOrName());
-        completionObject()->addItem(colinfo->aliasOrName());
-        //store user-friendly caption (used by fieldOrExpressionCaption())
-        d->captions.insert(colinfo->aliasOrName(), colinfo->captionOrAliasOrName());
-    }
+    delete d->model;
+    d->model = new KexiFieldListModel(this, KexiFieldListModel::ShowEmptyItem);
+    
+    d->model->setSchema(&tableOrQuery);
+    setModel(d->model);
 
     //update selection
     setFieldOrExpression(d->fieldOrExpression);
@@ -148,6 +134,7 @@ bool KexiFieldComboBox::isTableAssigned() const
 
 void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 {
+    kDebug() << string;
     const QString name(string);
     const int pos = name.indexOf('.');
     if (pos == -1) {
@@ -172,20 +159,13 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 //! @todo show 'the item doesn't match' info?
         return;
     }
+    
     setCurrentIndex(index);
-    /*
-      Q3ListBoxItem *item = listBox()->findItem(d->fieldOrExpression);
-      if (!item) {
-        setCurrentItem(0);
-        setEditText(d->fieldOrExpression);
-        //todo: show 'the item doesn't match' info?
-        return;
-      }
-      setCurrentItem( listBox()->index(item) );*/
 }
 
 void KexiFieldComboBox::setFieldOrExpression(int index)
 {
+    kDebug() << index;
     index++; //skip 1st empty item
     if (index >= count()) {
         kWarning() << QString("KexiFieldComboBox::setFieldOrExpression(int index): index %1 "
@@ -197,17 +177,19 @@ void KexiFieldComboBox::setFieldOrExpression(int index)
         d->fieldOrExpression.clear();
     } else {
         setCurrentIndex(index);
-        d->fieldOrExpression = currentText();
+        d->fieldOrExpression = itemData(currentIndex(), Qt::DisplayRole).toString();
     }
 }
 
 QString KexiFieldComboBox::fieldOrExpression() const
 {
+    kDebug() << d->fieldOrExpression;
     return d->fieldOrExpression;
 }
 
 int KexiFieldComboBox::indexOfField() const
 {
+    kDebug();
     KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.toLatin1(), d->table);
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return -1;
@@ -217,12 +199,15 @@ int KexiFieldComboBox::indexOfField() const
 
 QString KexiFieldComboBox::fieldOrExpressionCaption() const
 {
-    return d->captions[ d->fieldOrExpression ];
+    kDebug() << itemData(currentIndex()).toString();
+    return itemData(currentIndex()).toString();
 }
 
 void KexiFieldComboBox::slotActivated(int i)
 {
-    d->fieldOrExpression = itemText(i);
+    d->fieldOrExpression = itemData(i, Qt::DisplayRole).toString();
+    kDebug() << i << d->fieldOrExpression;
+    setFieldOrExpression(d->fieldOrExpression);
     emit selected();
 }
 

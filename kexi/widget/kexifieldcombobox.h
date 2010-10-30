@@ -40,12 +40,6 @@ public:
     KexiFieldComboBox(QWidget *parent = 0);
     virtual ~KexiFieldComboBox();
 
-//  /*! Sets table or query schema \a schema.
-//   The schema object will be owned by the KexiFieldComboBox object. */
-//  void setSchema(KexiDB::TableOrQuerySchema* schema);
-
-//  KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
-
 public slots:
     //! \return global project that is used to retrieve schema informationm for this combo box.
     KexiProject* project() const;
