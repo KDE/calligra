@@ -4,7 +4,7 @@ add_subdirectory( relations )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  ${CMAKE_SOURCE_DIR}/kexi/kexidb )
 
 
 ########### next target ###############
@@ -20,6 +20,8 @@ set(kexiextendedwidgets_LIB_SRCS
    kexidbconnectionwidget.cpp 
    kexidbdrivercombobox.cpp 
    kexieditor.cpp 
+   KexiFieldListModel.cpp
+   KexiFieldListModelItem.cpp
    kexifieldlistview.cpp 
    kexifieldcombobox.cpp 
    kexidatasourcecombobox.cpp 
