@@ -29,6 +29,8 @@
 #ifndef POLE_H
 #define POLE_H
 
+#include "msooxml_export.h"
+
 class QIODevice;
 
 #include <string>
@@ -41,7 +43,7 @@ class StorageIO;
 class Stream;
 class StreamIO;
 
-class Storage
+class MSOOXML_EXPORT Storage
 {
     friend class Stream;
     friend class StreamOut;
@@ -108,7 +110,7 @@ private:
 
 };
 
-class Stream
+class MSOOXML_EXPORT Stream
 {
     friend class Storage;
     friend class StorageIO;
