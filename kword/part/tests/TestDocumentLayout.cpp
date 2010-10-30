@@ -95,6 +95,11 @@ public:
     qreal documentOffsetInShape() {
         return 0;
     }
+
+    QRectF selectionBoundingBox(QTextCursor &) {
+        return QRectF();
+    }
+
     void draw(QPainter *, const KoTextDocumentLayout::PaintContext &) {}
 
     bool setFollowupShape(KoShape *) {
