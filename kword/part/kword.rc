@@ -175,19 +175,8 @@
   <Action name="edit_paste"/>
   <Separator/>
   <Action name="extra_spellcheck"/>
-  <Action name="view_zoom"/>
 </ToolBar>
 <!--
-<ToolBar hidden="true" name="table_toolbar" position="top"><Text>Table</Text>
-  <Action name="table_properties"/>
-  <Separator/>
-  <Action name="table_style"/>
-  <Separator/>
-  <Action name="table_insrow"/>
-  <Action name="table_inscol"/>
-  <Action name="table_delrow"/>
-  <Action name="table_delcol"/>
-</ToolBar>
 <ToolBar hidden="true" name="insert_toolbar" position="left"><Text>Insert</Text>
   <Action name="insert_table"/>
   <Action name="insert_picture"/>
@@ -196,37 +185,6 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
--->
-<ToolBar hidden="true" name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
-  <Action name="format_style"/>
-  <Separator/>
-  <Action name="format_alignleft"/>
-  <Action name="format_aligncenter"/>
-  <Action name="format_alignright"/>
-  <Action name="format_alignblock"/>
-  <Separator/>
-  <Action name="format_number"/>
-  <Action name="format_bullet"/>
-  <Separator/>
-  <Action name="format_decreaseindent"/>
-  <Action name="format_increaseindent"/>
-</ToolBar>
-<ToolBar hidden="true" name="format_toolbar" position="top"><Text>Font</Text>
-  <Action name="format_fontfamily"/>
-  <Action name="format_fontsize"/>
-  <Separator/>
-  <Action name="format_color"/>
-</ToolBar>
-<ToolBar hidden="true" name="charformat_toolbar" position="top"><Text>Format</Text>
-  <Action name="format_bold"/>
-  <Action name="format_italic"/>
-  <Action name="format_underline"/>
-  <Action name="format_strike"/>
-  <Separator/>
-  <Action name="format_super"/>
-  <Action name="format_sub"/>
-</ToolBar>
-<!--
 <ToolBar hidden="true" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="frame_style"/>
   <Action name="border_outline"/>
@@ -243,39 +201,6 @@
   <Action name="mailmerge_draglabel"/>
   <Action name="mailmerge_varchooser"/>
   <Action name="edit_sldatabase"/>
-</ToolBar>
-<ToolBar hidden="true" name="formula_toolbar" position="bottom"><Text>Formula</Text>
-  <Action name="formula_addtext"/>
-  <Action name="formula_addroot"/>
-  <Action name="formula_addfrac"/>
-  <Action name="formula_addbra"/>
-  <Action name="formula_addsqrbra"/>
-  <Action name="formula_addcurbra"/>
-  <Action name="formula_addabsbra"/>
-  <Action name="formula_addoverline"/>
-  <Action name="formula_addunderline"/>
-  <Action name="formula_addintegral"/>
-  <Action name="formula_addsum"/>
-  <Action name="formula_addproduct"/>
-  <Action name="formula_addmatrix"/>
-  <Action name="formula_addupperleft"/>
-  <Action name="formula_addlowerleft"/>
-  <Action name="formula_addupperindex"/>
-  <Action name="formula_addlowerindex"/>
-  <Action name="formula_addupperright"/>
-  <Action name="formula_addlowerright"/>
-  <Action name="formula_typeleft"/>
-  <Action name="formula_typeright"/>
-  <Separator/>
-  <Action name="formula_symbolnames"/>
-  <Action name="formula_insertsymbol"/>
-  <Separator/>
-  <Action name="formula_insertcolumn"/>
-  <Action name="formula_appendcolumn"/>
-  <Action name="formula_removecolumn"/>
-  <Action name="formula_insertrow"/>
-  <Action name="formula_appendrow"/>
-  <Action name="formula_removerow"/>
 </ToolBar>
 -->
 <Menu name="text_popup">

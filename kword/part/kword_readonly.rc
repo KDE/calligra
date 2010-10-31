@@ -31,9 +31,6 @@
   <Action name="select_bookmark"/>
  </Menu>
 </MenuBar>
-<ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
-  <Action name="view_zoom"/>
-</ToolBar>
 <Menu name="text_popup">
 </Menu>
 <Menu name="custom_var_popup">
