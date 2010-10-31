@@ -301,6 +301,11 @@ private:
             answer = outline->limit(answer);
         }
 
+        if (m_restartOnNextShape){
+            qDebug() << "limit" << rect.top();
+            answer.setWidth(0);
+        }
+
         return answer;
     }
     KoTextDocumentLayout::LayoutState *m_state;
@@ -589,7 +594,6 @@ void KWTextDocumentLayout::layout()
 
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
-        bool restartOnNextShape = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << "checking anchor";
             qDebug() <<"checking anchor"<<strategy->anchor()->positionInDocument();
@@ -601,9 +605,7 @@ void KWTextDocumentLayout::layout()
                 restartLine = true;
                 qDebug() << "  restarting line";
             }
-                restartOnNextShape = strategy->extendsPastShape();
-            if (strategy->anchoredShape())
-                qDebug() << "nextshape="<<restartOnNextShape << " position "<<strategy->anchoredShape()->position();
+            line.setRestartOnNextShape(strategy->extendsPastShape());
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
                 // refresh outlines in case the shape moved.
                 foreach (Outline *outline, outlines) {
@@ -758,7 +760,7 @@ void KWTextDocumentLayout::layout()
             cleanupAnchors();
             return;
         }
-        while (m_state->addLine(line.line, line.processingLine())) {
+        while (m_state->addLine(line.line, line.processingLine()) == false) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
 
@@ -793,9 +795,9 @@ void KWTextDocumentLayout::layout()
                 top = lastFrame->shape()->absoluteTransformation(0).map(top);
                 const qreal multiplier = qMax(pageRect.height(), pageRect.width()) / top.length();
                 QLineF down(top.p1(), QPointF(top.p1().x() - top.dy() * multiplier,
-                                              top.p1().y() + top.dx() * multiplier));
+                                                top.p1().y() + top.dx() * multiplier));
                 QLineF down2(top.p2(), QPointF(top.p2().x() - top.dy() * multiplier,
-                                               top.p2().y() + top.dx() * multiplier));
+                                                top.p2().y() + top.dx() * multiplier));
 
                 QList<QPointF> list = intersect(pageRect, down);
                 if (list.count() > 0)

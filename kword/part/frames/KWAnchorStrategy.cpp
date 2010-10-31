@@ -52,26 +52,24 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
     m_nextShapeNeeded = false;
 
     KoTextShapeData *data = 0;
-    KoShape *shapeOfAnchor = 0;
+    KoShape *shapeContainingAnchor = 0;
     foreach (KWFrame *frame, frameSet->frames()) { //find the frame for the anchor
         KoTextShapeData *tmpData = qobject_cast<KoTextShapeData*>(frame->shape()->userData());
         if(tmpData != 0) {
-            if(m_anchor->positionInDocument() > tmpData->position()) {
-                data = tmpData;
-                shapeOfAnchor = frame->shape();
-            }
-            if(m_anchor->positionInDocument() < tmpData->endPosition()) {
+            if(m_anchor->positionInDocument() < tmpData->position()) {
                 break;
             }
+            data = tmpData;
+            shapeContainingAnchor = frame->shape();
         }
     }
-    if (!shapeOfAnchor) // can happen if the shape isn't there yet but will be added later
+    if (!shapeContainingAnchor) // can happen if the shape isn't there yet but will be added later
         return false;
     Q_ASSERT(data);
 
     if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
 //        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
-        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(shapeOfAnchor);
+        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(shapeContainingAnchor);
         if (sc == 0) {
             kWarning(32002) << "Failed to attach the anchored shape to a text shape...";
             return false;
@@ -294,13 +292,20 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
     }
     newPosition = newPosition + m_anchor->offset();
 
-    if (shapeOfAnchor) {
-        qDebug() << "checking"<<newPosition.y()<<newPosition.y() + m_anchor->shape()->boundingRect().height()<<shapeOfAnchor->boundingRect().height();
-        //Check if the new position will place the anchor shape (even partly) beyond textframe
-        if (newPosition.y() + m_anchor->shape()->boundingRect().height()
-                > shapeOfAnchor->boundingRect().height()) {
-            m_nextShapeNeeded = true;
-            qDebug() << "SETTING NEEDED";
+    if (shapeContainingAnchor) {
+        KWPageTextInfo *tmpPageInfo = dynamic_cast<KWPageTextInfo *>(data->page());
+        if (tmpPageInfo != 0) {
+            //Check if the new position will place the anchored shape (even partly) beyond page
+            if (shapeContainingAnchor->position().y() + newPosition.y() + m_anchor->shape()->size().height() > tmpPageInfo->page().offsetInDocument() + tmpPageInfo->page().height()) {
+                newPosition.setY(tmpPageInfo->page().offsetInDocument() + tmpPageInfo->page().height() - m_anchor->shape()->size().height() - shapeContainingAnchor->position().y());
+                // The movement would have been past page border, so we will request another
+                // layout round (by setting m_finished=false). In the mean time the caller will
+                // have a chance to move the anchor to the next page. Note: On the following
+                // passes m_finished==false doesn't prevent stopping
+                //m_nextShapeNeeded = true;
+                m_finished = false;
+                qDebug() << "SETTING NEEDED";
+            }
         }
     }
 

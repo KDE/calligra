@@ -64,7 +64,7 @@ public:
             m_y += m_maxLineHeight;
             m_maxLineHeight = 0;
         }
-        return false;
+        return true;
     }
     bool nextParag() {
         if (layout)
