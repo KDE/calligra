@@ -2,6 +2,7 @@
 Icon=skyline_monotone
 Name=Skyline Monotone
 Name[da]=Skyline Monotone
+Name[en_GB]=Skyline Monotone
 Name[et]=Ühevärviline horisont
 Name[it]=Profilo monotono
 Name[pt]=Monotónico Celeste
@@ -12,6 +13,7 @@ Name[x-test]=xxSkyline Monotonexx
 Name[zh_TW]=Skyline Monotone
 Comment=Skyline Monotone
 Comment[da]=Skyline Monotone
+Comment[en_GB]=Skyline Monotone
 Comment[et]=Ühevärviline horisont
 Comment[it]=Profilo monotono
 Comment[pt]=Monotónico Celeste
