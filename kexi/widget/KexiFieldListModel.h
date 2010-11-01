@@ -56,6 +56,10 @@ public:
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     
+    virtual QStringList mimeTypes() const;
+    virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    
 private:
     KexiDB::TableOrQuerySchema* m_schema;
     int m_options;

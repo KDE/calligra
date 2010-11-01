@@ -35,6 +35,7 @@ public:
     QPixmap icon();
     QString caption();
     void setCaption(const QString &caption);
+    Qt::ItemFlags flags();
     
 private:
     QString m_fieldName;

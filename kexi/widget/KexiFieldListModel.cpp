@@ -25,6 +25,7 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/utils.h>
 #include <kdebug.h>
+#include <QMimeData>
 
 KexiFieldListModel::KexiFieldListModel(QObject* parent, int options): QAbstractTableModel(parent)
                                       , m_schema(0)
@@ -112,4 +113,53 @@ QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation
         return i18n("Field Name");
     else
         return QVariant();    
+}
+
+QStringList KexiFieldListModel::mimeTypes() const
+{
+    QStringList types;
+    types << "kexi/field" << "kexi/fields";
+    return types;
+}
+
+QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
+{
+    if (!m_schema) {
+        return new QMimeData();
+    }
+    
+    QString sourceMimeType;
+    QString sourceName;
+    QStringList fields;
+    
+    QMimeData *mimedata = new QMimeData();
+    QByteArray fielddata;
+    QDataStream stream1(&fielddata, QIODevice::WriteOnly);
+
+    if (m_schema->table()) {
+        sourceMimeType = "kexi/table";
+    } else if (m_schema->query()) {
+        sourceMimeType = "kexi/query";
+    }
+    
+    sourceName = m_schema->name();
+    
+    foreach (QModelIndex idx, indexes) {
+        fields << data(idx, Qt::DisplayRole).toString();
+    }
+    stream1 << sourceMimeType << sourceName << fields;
+    
+    mimedata->setData(indexes.count() > 0 ? "kexi/fields" : "kexi/field", fielddata);
+    
+    return mimedata;
+}
+
+Qt::ItemFlags KexiFieldListModel::flags(const QModelIndex& index) const
+{
+    Qt::ItemFlags defaultFlags = KexiFieldListModel::flags(index);
+
+    if (index.isValid())
+        return m_items[index.row()]->flags()| defaultFlags;
+    else
+        return defaultFlags;
 }

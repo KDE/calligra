@@ -20,6 +20,7 @@
 
 #include "KexiFieldListModelItem.h"
 #include <kexidb/utils.h>
+#include <klocalizedstring.h>
 
 KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname, const QString &dtype, bool pkey) : m_fieldName(fname), m_dateType(dtype)
 {
@@ -58,4 +59,12 @@ QString KexiFieldListModelItem::caption()
 void KexiFieldListModelItem::setCaption(const QString& caption)
 {
     m_caption = caption;
+}
+
+Qt::ItemFlags KexiFieldListModelItem::flags()
+{
+    if (!m_fieldName.isEmpty() && m_fieldName != i18n("* (All Columns)")){
+        return Qt::ItemIsDragEnabled;
+    }
+    return Qt::NoItemFlags;
 }
