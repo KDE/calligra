@@ -1593,6 +1593,58 @@ void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qre
     l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
 }
 
+qreal AbstractAlgorithm::defaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    qreal value = virtualGetDefaultValue(type, values);
+    if(value < 0.0) {
+        if (type == "primFontSz") {
+            value = 36;
+        } else if (type == "l") {
+            value = 0;
+        } else if (type == "t") {
+            value = 0;
+        } else if (type == "w") {
+            value = 100;
+        } else if (type == "h") {
+            value = 100;
+        } else if (type == "sibSp") {
+            value = 0;
+        } else if (type == "secSibSp") {
+            value = 0;
+        } else if (type == "alignOff") {
+            value = 0;
+        } else if (type == "sp") {
+            value = 0;
+        } else if (type == "begPad") {
+            value = 0;
+        } else if (type == "endPad") {
+            value = 0;
+        } else if (type == "tMarg") {
+            value = values.value("primFontSz") * 0.56;
+        } else if (type == "lMarg") {
+            value = values.value("primFontSz") * 0.40;
+        } else if (type == "rMarg") {
+            value = values.value("primFontSz") * 0.42;
+        } else if (type == "bMarg") {
+            value = values.value("primFontSz") * 0.60;
+        } else if (type == "connDist") {
+            QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
+            LayoutNodeAtom* srcAtom = neighbors.first;
+            LayoutNodeAtom* dstAtom = neighbors.second;
+            value = (srcAtom && dstAtom) ? srcAtom->distanceTo(dstAtom) : 0.0;
+        } else if (type.startsWith("user")) { // userA, userB, userC, etc.
+            bool ok;
+            const qreal v = layout()->variable(type, true /* checkParents */).toDouble(&ok);
+            value = ok ? v : 0.0;
+        } else {
+            kDebug() << "TODO figure out defaults for constraint=" << type << "at layout=" << layout()->m_name;
+            //c->dump(context(),10);
+            //Q_ASSERT_X(false, __FUNCTION__, QString("Set defaults for constraint=%1").arg(type).toUtf8());
+            value = 0.0;
+        }
+    }
+    return value;
+}
+
 void AbstractAlgorithm::doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout) {
     m_context = context;
     m_layout = layout;
@@ -1608,6 +1660,10 @@ void AbstractAlgorithm::doLayout() {
 
 void AbstractAlgorithm::doLayoutChildren() {
     virtualDoLayoutChildren();
+}
+
+qreal AbstractAlgorithm::virtualGetDefaultValue(const QString&, const QMap<QString, qreal>&) {
+    return -1.0;
 }
 
 void AbstractAlgorithm::virtualDoInit() {
@@ -1672,40 +1728,7 @@ void AbstractAlgorithm::virtualDoLayout() {
             } else {
                 // If there are no refType and no value defined then a default-value needs to be used.
                 // See also http://social.msdn.microsoft.com/Forums/en/os_binaryfile/thread/7c823650-7913-4e63-970f-1c5dab3450c4
-                if (c->m_type == "primFontSz") {
-                    value = 36;
-                } else if (c->m_type == "l") {
-                    value = 0.0;
-                } else if (c->m_type == "t") {
-                    value = 0.0;
-                //} else if (c->m_type == "w") {
-                    //value = ;
-                //} else if (c->m_type == "h") {
-                    //value = ;
-                } else if (c->m_type == "tMarg") {
-                    value = values.contains("primFontSz") ? values["primFontSz"] * 0.56 : 0.0;
-                } else if (c->m_type == "lMarg") {
-                    value = values.contains("primFontSz") ? values["primFontSz"] * 0.40 : 0.0;
-                } else if (c->m_type == "rMarg") {
-                    value = values.contains("primFontSz") ? values["primFontSz"] * 0.42 : 0.0;
-                } else if (c->m_type == "bMarg") {
-                    value = values.contains("primFontSz") ? values["primFontSz"] * 0.60 : 0.0;
-                } else if (c->m_type == "connDist") {
-                    QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
-                    LayoutNodeAtom* srcAtom = neighbors.first;
-                    LayoutNodeAtom* dstAtom = neighbors.second;
-                    value = (srcAtom && dstAtom) ? srcAtom->distanceTo(dstAtom) : 0.0;
-                } else if (c->m_type == "begPad" || c->m_type == "endPad") {
-                    value = 0.0;
-                } else if (c->m_type.startsWith("user")) { // userA, userB, userC, etc.
-                    bool ok;
-                    const qreal v = layout()->variable(c->m_type, true /* checkParents */).toDouble(&ok);
-                    value = ok ? v : 0.0;
-                } else {
-                    kDebug() << "TODO figure out defaults for constraint=" << c->m_type << "at layout=" << layout()->m_name;
-                    //c->dump(context(),10);
-                    //Q_ASSERT_X(false, __FUNCTION__, QString("Set defaults for constraint=%1").arg(c->m_type).toUtf8());
-                }
+                value = defaultValue(c->m_type, values);
             }
         }
         
@@ -1751,6 +1774,30 @@ void AbstractAlgorithm::virtualDoLayoutChildren() {
 
 /****************************************************************************************************/
 
+qreal ConnectorAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    qreal value = -1.0;
+    if (type == "stemThick") {
+        value = values.value("h") * 0.60;
+    } else if (type == "begMarg") {
+        value = 3.175;
+    } else if (type == "endMarg") {
+        value = 3.175;
+    } else if (type == "begPad") {
+        value = values.value("connDist") * 0.22;
+    } else if (type == "endPad") {
+        value = values.value("connDist") * 0.25;
+    } else if (type == "bendDist") {
+        value = values.value("connDist") * 0.50;
+    } else if (type == "hArH") {
+        value = values.value("h") * 1.00;
+    } else if (type == "wArH") {
+        value = values.value("h") * 0.50;
+    } else if (type == "diam") {
+        value = values.value("connDist") * 1.00;
+    }
+    return value;
+}
+
 void ConnectorAlgorithm::virtualDoLayoutChildren() {
     // Get a list of all child-layouts of our parent to apply the connector-algorithm on our direct
     // neighbors. Also while on it also determinate our own position in that list.
@@ -1795,6 +1842,14 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
 }
 
 /****************************************************************************************************/
+
+qreal CycleAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>&) {
+    qreal value = -1.0;
+    if (type == "diam") {
+        value = 0;
+    }
+    return value;
+}
 
 // http://msdn.microsoft.com/en-us/library/dd439451(v=office.12).aspx
 void CycleAlgorithm::virtualDoLayout() {
@@ -1949,6 +2004,14 @@ void HierarchyAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
+qreal PyramidAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>&) {
+    qreal value = -1.0;
+    if (type == "pyraAcctRatio") {
+        value = 0.33;
+    }
+    return value;
+}
+
 void PyramidAlgorithm::virtualDoLayout() {
     kDebug()<<"TODO Implement algorithm";
     AbstractAlgorithm::virtualDoLayout();
@@ -1962,6 +2025,24 @@ void SpaceAlg::virtualDoLayout() {
 }
 
 /****************************************************************************************************/
+
+qreal TextAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    qreal value = -1.0;
+    if (type == "primFontSz") {
+        value = 100;
+    } else if (type == "secFontSize") {
+        value = 100;
+    } else if (type == "tMarg") {
+        value = values.value("primFontSz") * 0.78;
+    } else if (type == "bMarg") {
+        value = values.value("primFontSz") * 0.60;
+    } else if (type == "lMarg") {
+        value = values.value("primFontSz") * 0.42;
+    } else if (type == "rMarg") {
+        value = values.value("primFontSz") * 0.42;
+    }
+    return value;
+}
 
 void TextAlgorithm::virtualDoLayout() {
     //TODO implement the text-layout logic

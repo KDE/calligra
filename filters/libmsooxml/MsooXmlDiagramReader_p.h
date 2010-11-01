@@ -476,11 +476,13 @@ class AbstractAlgorithm {
         LayoutNodeAtom* layout() const;
         LayoutNodeAtom* parentLayout() const;
         QList<LayoutNodeAtom*> childLayouts() const;
+        qreal defaultValue(const QString& type, const QMap<QString, qreal>& values);
         void doInit(Context* context, QExplicitlySharedDataPointer<LayoutNodeAtom> layout);
         void doLayout();
         void doLayoutChildren();
     protected:
         void setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h);
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoInit();
         virtual void virtualDoLayout();
         virtual void virtualDoLayoutChildren();
@@ -503,6 +505,8 @@ class ConnectorAlgorithm : public AbstractAlgorithm {
     public:
         explicit ConnectorAlgorithm() : AbstractAlgorithm() {}
         virtual ~ConnectorAlgorithm() {}
+    protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayoutChildren();
 };
 
@@ -512,6 +516,7 @@ class CycleAlgorithm : public AbstractAlgorithm {
         explicit CycleAlgorithm() : AbstractAlgorithm() {}
         virtual ~CycleAlgorithm() {}
     protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 
@@ -550,6 +555,7 @@ class PyramidAlgorithm : public AbstractAlgorithm {
         explicit PyramidAlgorithm() : AbstractAlgorithm() {}
         virtual ~PyramidAlgorithm() {}
     protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 
@@ -566,6 +572,8 @@ class TextAlgorithm : public AbstractAlgorithm {
     public:
         explicit TextAlgorithm() : AbstractAlgorithm() {}
         virtual ~TextAlgorithm() {}
+    protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 
