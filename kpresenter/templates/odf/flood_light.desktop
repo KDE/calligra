@@ -2,6 +2,7 @@
 Icon=flood_light
 Name=Flood Light
 Name[da]=Flood Light
+Name[en_GB]=Flood Light
 Name[et]=Õrn valing
 Name[it]=Sotto i riflettori
 Name[pt]=Inundado de Luz
@@ -12,6 +13,7 @@ Name[x-test]=xxFlood Lightxx
 Name[zh_TW]=Flood Light
 Comment=Flood Light
 Comment[da]=Flood Light
+Comment[en_GB]=Flood Light
 Comment[et]=Õrn valing
 Comment[it]=Sotto i riflettori
 Comment[pt]=Inundado de Luz

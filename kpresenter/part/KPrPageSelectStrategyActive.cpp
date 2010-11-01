@@ -19,10 +19,9 @@
 
 #include "KPrPageSelectStrategyActive.h"
 
-#include <KoPAView.h>
 
-KPrPageSelectStrategyActive::KPrPageSelectStrategyActive(KoPAView *view)
-: m_view(view)
+KPrPageSelectStrategyActive::KPrPageSelectStrategyActive(KoPACanvasBase *canvas)
+: m_canvas(canvas)
 {
 }
 
@@ -32,5 +31,7 @@ KPrPageSelectStrategyActive::~KPrPageSelectStrategyActive()
 
 const KoPAPageBase *KPrPageSelectStrategyActive::page() const
 {
-    return m_view->activePage();
+    KoPAViewBase *view = m_canvas->koPAView();
+    Q_ASSERT(view);
+    return view->activePage();
 }

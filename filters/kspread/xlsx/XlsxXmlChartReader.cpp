@@ -377,6 +377,7 @@ XlsxXmlChartReader::XlsxXmlChartReader(KoOdfWriters *writers)
     : MSOOXML::MsooXmlCommonReader(writers)
     , m_context(0)
     , m_currentSeries(0)
+    , m_currentShapeProperties(0)
     , m_autoTitleDeleted(false)
     , m_readTxContext( None )
     , m_areaContext( ChartArea )
@@ -1046,6 +1047,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     int level = 0;
     bool readingGradient = false;
     bool readingGradientStop = false;
+    bool readingOutline = false;
     Charting::Gradient* gradient = NULL;
     Charting::Gradient::GradientStop currentStop;
     while (!atEnd()) {
@@ -1155,12 +1157,19 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             TRY_READ_ATTR_WITHOUT_NS(val)
             if ( !val.isEmpty() )
                 currentStop.satVal = val.toDouble() / 1000.0;
-        }
-         else if ( qualifiedName() == "a:lin" && readingGradient ) {
+        } else if ( qualifiedName() == "a:lin" && readingGradient ) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_ATTR_WITHOUT_NS(ang)
             if ( !ang.isEmpty() )
                 gradient->angle = ang.toDouble() / 60000.0;
+        } else if ( qualifiedName() == "a:ln" ) {
+            if ( isStartElement() )
+                readingOutline = true;
+            else if ( isEndElement() )
+                readingOutline = false;
+        } else if ( qualifiedName() == "a:noFill" )
+        {
+            m_currentShapeProperties->lineFill.type = Charting::Fill::None;
         }
     }
     READ_EPILOGUE
@@ -1315,6 +1324,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
             if (QUALIFIED_NAME_IS(ser)) {
                 TRY_READ(areaChart_Ser)
             }
+            TRY_READ_IF(grouping)
         }
     }
 
@@ -1355,6 +1365,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_area3DChart()
             if (QUALIFIED_NAME_IS(ser)) {
                 TRY_READ(areaChart_Ser)
             }
+            TRY_READ_IF(grouping)
         }
     }
 
@@ -1561,8 +1572,9 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
 */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
 {
-    if(!m_context->m_chart->m_impl) {
-        m_context->m_chart->m_impl = new Charting::ScatterImpl();
+    Charting::ScatterImpl* impl = new Charting::ScatterImpl();
+    if(!m_context->m_chart->m_impl) {        
+        m_context->m_chart->m_impl = impl;
     }
 
     while (!atEnd()) {
@@ -1571,6 +1583,23 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
         if (isStartElement()) {
             if (QUALIFIED_NAME_IS(ser)) {
                 TRY_READ(scatterChart_Ser)
+            }
+            if ( QUALIFIED_NAME_IS(scatterStyle) )
+            {
+                const QXmlStreamAttributes attrs(attributes());
+                TRY_READ_ATTR_WITHOUT_NS(val);
+                if ( val == "none" )
+                    impl->style = Charting::ScatterImpl::None;
+                else if ( val == "line" )
+                    impl->style = Charting::ScatterImpl::Line;
+                else if ( val == "lineMarker" )
+                    impl->style = Charting::ScatterImpl::LineMarker;
+                else if ( val == "marker" )
+                    impl->style = Charting::ScatterImpl::Marker;
+                else if ( val == "smooth" )
+                    impl->style = Charting::ScatterImpl::Smooth;
+                else if ( val == "smoothMarker" )
+                    impl->style = Charting::ScatterImpl::SmoothMarker;
             }
         }
     }
@@ -1979,11 +2008,17 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
     d->m_currentTx = &tempScatterSeriesData->m_tx;
     d->m_currentXVal = &tempScatterSeriesData->m_xVal;
     d->m_currentYVal = &tempScatterSeriesData->m_yVal;
+    
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            if( QUALIFIED_NAME_IS(spPr) )
+            {
+                m_currentSeries->spPr = new Charting::ShapeProperties;
+                m_currentShapeProperties  = m_currentSeries->spPr;
+            }
             TRY_READ_IF(order)
             ELSE_TRY_READ_IF(idx)
             if (QUALIFIED_NAME_IS(tx)) {
@@ -1992,12 +2027,23 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
             ELSE_TRY_READ_IF(xVal)
             ELSE_TRY_READ_IF(yVal)
             ELSE_TRY_READ_IF(dLbls)
+            ELSE_TRY_READ_IF(spPr)
 //            ELSE_TRY_READ_IF(spPr)
         }
     }
 
     // set data ranges and write data to internal table
     m_currentSeries->m_labelCell = tempScatterSeriesData->m_tx.writeRefToInternalTable(this);
+    
+    m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_numLit.m_ptCount;
+    m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeLitToInternalTable(this);
+     
+    if (m_currentSeries->m_countXValues == 0 )
+    {
+          m_currentSeries->m_countXValues = tempScatterSeriesData->m_xVal.m_strRef.m_strCache.m_ptCount;
+          m_currentSeries->m_domainValuesCellRangeAddress << tempScatterSeriesData->m_xVal.writeRefToInternalTable(this);
+    }    
+    
 
     m_currentSeries->m_countYValues = tempScatterSeriesData->m_yVal.m_numRef.m_numCache.m_ptCount;
 
@@ -2128,7 +2174,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart_Ser()
             }
             ELSE_TRY_READ_IF(cat)
             ELSE_TRY_READ_IF(val)
-            ELSE_TRY_READ_IF(dLbls)
+            ELSE_TRY_READ_IF(dLbls)            
         }
     }
 

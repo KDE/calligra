@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,40 +17,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOPAPRINTJOB_H
-#define KOPAPRINTJOB_H
+#ifndef KPRPDFPRINTJOB_H
+#define KPRPDFPRINTJOB_H
 
-#include <KoPrintJob.h>
+#include <KoPAPrintJob.h>
 
 #include <QPrinter>
 
-#include "kopageapp_export.h"
-
-class KoPAView;
+class KPrView;
 class KoPAPageBase;
-class KoPAPageProvider;
 
-/**
- * For now we print to the center of the page honoring the margins.
- * The page is zoomed to be as big as possible.
- */
-class KOPAGEAPP_EXPORT KoPAPrintJob : public KoPrintJob
+class KPrPdfPrintJob : public KoPAPrintJob
 {
     Q_OBJECT
 public:
-    KoPAPrintJob(KoPAView * view);
-    virtual ~KoPAPrintJob();
-
-    virtual QPrinter & printer();
-    virtual QList<QWidget*> createOptionWidgets() const;
+    KPrPdfPrintJob(KPrView *view);
+    virtual ~KPrPdfPrintJob();
 
 public slots:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
-
-protected:
-    QPrinter m_printer;
-    QList<KoPAPageBase*> m_pages;
-    KoPAPageProvider *m_pageProvider;
 };
 
-#endif /* KOPAPRINTJOB_H */
+#endif // KPRPDFPRINTJOB_H

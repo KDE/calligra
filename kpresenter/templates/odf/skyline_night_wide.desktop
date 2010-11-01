@@ -2,6 +2,7 @@
 Icon=skyline_night_wide
 Name=Skyline Night Wide
 Name[da]=Skyline Night (bred)
+Name[en_GB]=Skyline Night Wide
 Name[et]=Lai horisont öösel
 Name[it]=Profilo notturno ampio
 Name[pt]=Linha Celeste Nocturna Ampla
@@ -12,6 +13,7 @@ Name[x-test]=xxSkyline Night Widexx
 Name[zh_TW]=Skyline Night Wide
 Comment=Skyline Night Wide
 Comment[da]=Skyline Night (bred)
+Comment[en_GB]=Skyline Night Wide
 Comment[et]=Lai horisont öösel
 Comment[it]=Profilo notturno ampio
 Comment[pt]=Linha Celeste Nocturna Ampla

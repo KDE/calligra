@@ -66,6 +66,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrHtmlExport.cpp
      KPrHtmlExportUiDelegate.cpp
      KPrPicturesImport.cpp
+     KPrPdfPrintJob.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp

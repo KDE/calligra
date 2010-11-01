@@ -2,6 +2,7 @@
 Icon=skyline_night
 Name=Skyline Night
 Name[da]=Skyline Night
+Name[en_GB]=Skyline Night
 Name[et]=Horisont öösel
 Name[it]=Profilo notturno
 Name[pt]=Linha Celeste Nocturna
@@ -12,6 +13,7 @@ Name[x-test]=xxSkyline Nightxx
 Name[zh_TW]=Skyline Night
 Comment=Skyline Night
 Comment[da]=Skyline Night
+Comment[en_GB]=Skyline Night
 Comment[et]=Horisont öösel
 Comment[it]=Profilo notturno
 Comment[pt]=Linha Celeste Nocturna

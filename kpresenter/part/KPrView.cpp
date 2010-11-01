@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.org>
-   Copyright (C) 2009 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2009-2010 Benjamin Port <port.benjamin@gmail.com>
    Copyright (C) 2009 Yannick Motta <yannick.motta@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -61,6 +61,8 @@
 #include "ui/KPrHtmlExportDialog.h"
 #include <QtGui/QDesktopWidget>
 
+#include "KPrPdfPrintJob.h"
+
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
   : KoPAView( document, parent )
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
@@ -92,7 +94,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("configure")->setText(i18n("Configure KPresenter..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
-                                                   new KPrPageSelectStrategyActive( this ) ) );
+                                                   new KPrPageSelectStrategyActive( kopaCanvas() ) ) );
 
     KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
     if (canvas) {
@@ -387,6 +389,12 @@ void KPrView::exportToHtml()
         }
    }
 }
+
+KoPrintJob *KPrView::createPdfPrintJob()
+{
+    return new KPrPdfPrintJob(this);
+}
+
 
 void KPrView::insertPictures()
 {

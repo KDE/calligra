@@ -1342,10 +1342,6 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     static const QString sNumberRowsSpanned = QString::fromLatin1("number-rows-spanned");
     static const QString sAnnotation        = QString::fromLatin1("annotation");
     static const QString sP                 = QString::fromLatin1("p");
-    
-    static const QString nsTable    = QString::fromLatin1(KoXmlNS::table);
-    static const QString nsOffice   = QString::fromLatin1(KoXmlNS::office);
-    static const QString nsText     = QString::fromLatin1(KoXmlNS::text);
 
     static const QStringList formulaNSPrefixes = QStringList() << "oooc:" << "kspr:" << "of:" << "msoxl:";
 
@@ -1356,9 +1352,9 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     // formula
     //
     bool isFormula = false;
-    if (element.hasAttributeNS(nsTable, sFormula)) {
+    if (element.hasAttributeNS(KoXmlNS::table, sFormula)) {
         isFormula = true;
-        QString oasisFormula(element.attributeNS(nsTable, sFormula, QString()));
+        QString oasisFormula(element.attributeNS(KoXmlNS::table, sFormula, QString()));
         // kDebug(36003) << "cell:" << name() << "formula :" << oasisFormula;
         // each spreadsheet application likes to safe formulas with a different namespace
         // prefix, so remove all of them
@@ -1378,8 +1374,8 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     // validation
     //
-    if (element.hasAttributeNS(nsTable, sValidationName)) {
-        const QString validationName = element.attributeNS(nsTable, sValidationName, QString());
+    if (element.hasAttributeNS(KoXmlNS::table, sValidationName)) {
+        const QString validationName = element.attributeNS(KoXmlNS::table, sValidationName, QString());
         kDebug(36003) << "cell:" << name() << sValidationName << validationName;
         Validity validity;
         validity.loadOdfValidation(this, validationName, tableContext);
@@ -1390,11 +1386,11 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     // value type
     //
-    if (element.hasAttributeNS(nsOffice, sValueType)) {
-        const QString valuetype = element.attributeNS(nsOffice, sValueType, QString());
+    if (element.hasAttributeNS(KoXmlNS::office, sValueType)) {
+        const QString valuetype = element.attributeNS(KoXmlNS::office, sValueType, QString());
         // kDebug(36003) << "cell:" << name() << "value-type:" << valuetype;
         if (valuetype == sBoolean) {
-            const QString val = element.attributeNS(nsOffice, sBooleanValue, QString()).toLower();
+            const QString val = element.attributeNS(KoXmlNS::office, sBooleanValue, QString()).toLower();
             if ((val == sTrue) || (val == sFalse))
                 setValue(Value(val == sTrue));
         }
@@ -1402,7 +1398,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
         // integer and floating-point value
         else if (valuetype == sFloat) {
             bool ok = false;
-            Value value(element.attributeNS(nsOffice, sValue, QString()).toDouble(&ok));
+            Value value(element.attributeNS(KoXmlNS::office, sValue, QString()).toDouble(&ok));
             if (ok) {
                 value.setFormat(Value::fmt_Number);
                 setValue(value);
@@ -1420,14 +1416,14 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
         // currency value
         else if (valuetype == sCurrency) {
             bool ok = false;
-            Value value(element.attributeNS(nsOffice, sValue, QString()).toDouble(&ok));
+            Value value(element.attributeNS(KoXmlNS::office, sValue, QString()).toDouble(&ok));
             if (ok) {
                 value.setFormat(Value::fmt_Money);
                 setValue(value);
 
                 Currency currency;
-                if (element.hasAttributeNS(nsOffice, sCurrency)) {
-                    currency = Currency(element.attributeNS(nsOffice, sCurrency, QString()));
+                if (element.hasAttributeNS(KoXmlNS::office, sCurrency)) {
+                    currency = Currency(element.attributeNS(KoXmlNS::office, sCurrency, QString()));
                 }
                 /* TODO: somehow make this work again, all setStyle calls here will be overwritten by cell styles later
                 if( style.isEmpty() ) {
@@ -1438,7 +1434,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
             }
         } else if (valuetype == sPercentage) {
             bool ok = false;
-            Value value(element.attributeNS(nsOffice, sValue, QString()).toDouble(&ok));
+            Value value(element.attributeNS(KoXmlNS::office, sValue, QString()).toDouble(&ok));
             if (ok) {
                 value.setFormat(Value::fmt_Percent);
                 setValue(value);
@@ -1452,7 +1448,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
 #endif
             }
         } else if (valuetype == sDate) {
-            QString value = element.attributeNS(nsOffice, sDateValue, QString());
+            QString value = element.attributeNS(KoXmlNS::office, sDateValue, QString());
 
             // "1980-10-15" or "2001-01-01T19:27:41"
             int year = 0, month = 0, day = 0, hours = 0, minutes = 0, seconds = 0;
@@ -1503,7 +1499,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 // kDebug(36003) << "cell:" << name() << "Type: date, value:" << value << "Date:" << year << " -" << month << " -" << day;
             }
         } else if (valuetype == sTime) {
-            QString value = element.attributeNS(nsOffice, sTimeValue, QString());
+            QString value = element.attributeNS(KoXmlNS::office, sTimeValue, QString());
 
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
@@ -1541,8 +1537,8 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
                 // kDebug(36003) << "cell:" << name() << "Type: time:" << value << "Hours:" << hours << "," << minutes << "," << seconds;
             }
         } else if (valuetype == sString) {
-            if (element.hasAttributeNS(nsOffice, sStringValue)) {
-                QString value = element.attributeNS(nsOffice, sStringValue, QString());
+            if (element.hasAttributeNS(KoXmlNS::office, sStringValue)) {
+                QString value = element.attributeNS(KoXmlNS::office, sStringValue, QString());
                 setValue(Value(value));
             } else {
                 // use the paragraph(s) read in before
@@ -1570,14 +1566,14 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     int colSpan = 1;
     int rowSpan = 1;
-    if (element.hasAttributeNS(nsTable, sNumberColumnsSpanned)) {
+    if (element.hasAttributeNS(KoXmlNS::table, sNumberColumnsSpanned)) {
         bool ok = false;
-        int span = element.attributeNS(nsTable, sNumberColumnsSpanned, QString()).toInt(&ok);
+        int span = element.attributeNS(KoXmlNS::table, sNumberColumnsSpanned, QString()).toInt(&ok);
         if (ok) colSpan = span;
     }
-    if (element.hasAttributeNS(nsTable, sNumberRowsSpanned)) {
+    if (element.hasAttributeNS(KoXmlNS::table, sNumberRowsSpanned)) {
         bool ok = false;
-        int span = element.attributeNS(nsTable, sNumberRowsSpanned, QString()).toInt(&ok);
+        int span = element.attributeNS(KoXmlNS::table, sNumberRowsSpanned, QString()).toInt(&ok);
         if (ok) rowSpan = span;
     }
     if (colSpan > 1 || rowSpan > 1)
@@ -1586,14 +1582,14 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
     //
     // cell comment/annotation
     //
-    KoXmlElement annotationElement = KoXml::namedItemNS(element, nsOffice, sAnnotation);
+    KoXmlElement annotationElement = KoXml::namedItemNS(element, KoXmlNS::office, sAnnotation);
     if (!annotationElement.isNull()) {
         QString comment;
         KoXmlNode node = annotationElement.firstChild();
         while (!node.isNull()) {
             KoXmlElement commentElement = node.toElement();
             if (!commentElement.isNull())
-                if (commentElement.localName() == sP && commentElement.namespaceURI() == nsText) {
+                if (commentElement.localName() == sP && commentElement.namespaceURI() == KoXmlNS::text) {
                     if (!comment.isEmpty()) comment.append('\n');
                     comment.append(commentElement.text());
                 }
@@ -1610,7 +1606,7 @@ bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext,
 }
 
 // Similar to KoXml::namedItemNS except that children of span tags will be evaluated too.
-KoXmlElement namedItemNSWithSpan(const KoXmlNode& node, const char* nsURI, const char* localName)
+KoXmlElement namedItemNSWithSpan(const KoXmlNode& node, const QString &nsURI, const QString &localName)
 {
     KoXmlNode n = node.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {

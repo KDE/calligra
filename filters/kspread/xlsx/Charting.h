@@ -123,6 +123,23 @@ namespace Charting
         bool m_fill;
         AreaFormat(const QColor &foreground = QColor(), const QColor &background = QColor(), bool fill = false) : Format(), m_foreground(foreground), m_background(background), m_fill(fill) {}
     };
+    
+    class Fill
+    {
+    public:
+        enum FillType{ Blip, Gradient, Group, None, Pattern, Solid };
+        QColor solidColor;
+        QString pixmapFile;
+        Charting::Gradient gradient;
+        FillType type;
+    };
+    
+    class ShapeProperties
+    {
+    public:
+        int lineWidth;
+        Fill lineFill;
+    };
 
     class ChartImpl
     {
@@ -186,8 +203,10 @@ namespace Charting
     class ScatterImpl : public ChartImpl
     {
     public:
-        ScatterImpl() : ChartImpl() {}
+        enum ScatterStyle{ None, Line, LineMarker, Marker, Smooth, SmoothMarker };
+        ScatterImpl() : ChartImpl(), style( LineMarker ) {}
         virtual QByteArray name() const { return "scatter"; }
+        ScatterStyle style;
     };
 
     class BubbleImpl : public ChartImpl
@@ -330,9 +349,10 @@ namespace Charting
         QString m_labelCell;
         // marker type
         MarkerType markerType;
+        ShapeProperties* spPr;
 
-        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false), markerType( None ) {}
-        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); }
+        explicit Series() : Obj(), m_dataTypeX(0), m_countXValues(0), m_countYValues(0), m_countBubbleSizeValues(0), m_showDataValues(false), markerType( None ),spPr(0) {}
+        virtual ~Series() { qDeleteAll(m_datasetValue); qDeleteAll(m_datasetFormat); delete spPr; }
     };
     
     class Legend : public Obj
