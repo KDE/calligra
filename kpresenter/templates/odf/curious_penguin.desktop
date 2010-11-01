@@ -2,6 +2,7 @@
 Icon=curious_penguin
 Name=Curious Penguin
 Name[da]=Curious Penguin
+Name[en_GB]=Curious Penguin
 Name[et]=Uudishimulik pingviin
 Name[it]=Pinguino curioso
 Name[pt]=Pinguim Curioso
@@ -12,6 +13,7 @@ Name[x-test]=xxCurious Penguinxx
 Name[zh_TW]=好奇的企鵝
 Comment=Curious Penguin
 Comment[da]=Nysgerrig pingvin
+Comment[en_GB]=Curious Penguin
 Comment[et]=Uudishimulik pingviin
 Comment[it]=Pinguino curioso
 Comment[pt]=Pinguim Curioso
