@@ -21,8 +21,6 @@
 #ifndef KEXI_DRAGOBJECTS_H_
 #define KEXI_DRAGOBJECTS_H_
 
-#include <q3dragobject.h>
-//Added by qt3to4:
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
@@ -33,22 +31,9 @@ class QStringList;
 class QWidget;
 
 //! Drag object containing information about field(s).
-class KEXICORE_EXPORT KexiFieldDrag : public Q3StoredDrag
+class KEXICORE_EXPORT KexiFieldDrag
 {
 public:
-    /*! Creates drag object for a single field \a field. */
-    KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName,
-                  const QString& field, QWidget *parent, const char *name);
-
-    /*! Creates drag object for multiple fields \a fields.
-     If there's less than two elements in the list, data is set up as for above ctor. */
-    KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName,
-                  const QStringList& field, QWidget *parent = 0, const char *name = 0);
-
-    ~KexiFieldDrag();
-
-    void addField(const QString& field);
-
     /*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
      can be decoded as "kexi/field" data */
     static bool canDecodeSingle(QMimeSource* e);
@@ -72,7 +57,7 @@ public:
                                QString& sourceName, QStringList& fields);
 };
 
-class KEXICORE_EXPORT KexiDataProviderDrag : public Q3StoredDrag
+class KEXICORE_EXPORT KexiDataProviderDrag : public QDrag
 {
 public:
     KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName,
