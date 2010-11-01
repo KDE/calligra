@@ -1726,9 +1726,7 @@ void AbstractAlgorithm::virtualDoLayout() {
             }
             if(value >= 0.0) {
                 if(aspectRatio != 0.0 && c->m_type == "w") {
-kDebug()<<value<<aspectRatio<<value*aspectRatio;
                     value *= aspectRatio;
-Q_ASSERT(false);
                 }
                 l->m_values[c->m_type] = value;
             }
@@ -1743,12 +1741,6 @@ Q_ASSERT(false);
         layout()->m_countFactors[c->m_type] += 1;
 #endif
     }
-    
-    if(aspectRatio != 0.0) {
-kDebug() << "################################### aspectRatio=" << aspectRatio;
-        //Q_ASSERT(aspectRatio != 1);
-    }
-
 }
 
 void AbstractAlgorithm::virtualDoLayoutChildren() {
