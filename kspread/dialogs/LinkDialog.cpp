@@ -127,6 +127,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     fLayout->addWidget(new QLabel(i18n("Recent file:"), d->filePage));
     KComboBox* recentFile = new KComboBox(d->filePage);
     recentFile->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    recentFile->setMinimumContentsLength(40);
     fLayout->addWidget(recentFile);
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     connect(d->fileText, SIGNAL(textChanged(const QString&)), this,
