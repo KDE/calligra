@@ -209,13 +209,14 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     }
 }
 
+const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
 class Line
 {
 public:
     Line() {
         m_lineRect = QRectF();
         m_updateValidOutlines = false;
-        m_horizontalPosition = -5E6;
+        m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_processingLine = false;
         m_restartOnNextShape = false;
     }
@@ -323,7 +324,7 @@ public:
     }
     void fit(const bool resetHorizontalPosition = false) {
         if (resetHorizontalPosition) {
-            m_horizontalPosition = -5E6;
+            m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
         }
         const qreal maxLineWidth = m_state->width();
@@ -349,7 +350,7 @@ public:
         while (!lineRectPart.isValid()) {
             lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
             if (!lineRectPart.isValid()) {
-                m_horizontalPosition = -5E6;
+                m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
                 lineRect = QRectF(m_state->x(), m_state->y() + movedDown, maxLineWidth, maxLineHeight);
                 movedDown += 10;
             }
@@ -367,7 +368,6 @@ private:
     bool m_processingLine;
     qreal m_textWidth;
     bool m_restartOnNextShape;
-
     void validateOutlines() {
         m_validOutlines.clear();
         foreach (Outline *outline, *m_outlines) {
@@ -480,7 +480,7 @@ private:
     }
     void checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
         if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
-            m_horizontalPosition = -5E6;
+            m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
         } else {
             m_horizontalPosition = lineRectPart.right();
