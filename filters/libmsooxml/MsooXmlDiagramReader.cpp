@@ -61,11 +61,12 @@ void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect 
     Q_ASSERT(rect.height() >= 0);
     m_context->m_rootLayout->m_values["l"] = rect.x();
     m_context->m_rootLayout->m_values["t"] = rect.y();
-    // m_context->m_rootLayout->m_values["w"] = rect.width();
-    // m_context->m_rootLayout->m_values["h"] = rect.height();
-    m_context->m_rootLayout->m_values["w"] = m_context->m_rootLayout->m_values["h"] = qMin(rect.width(),rect.height()); // square
-    m_context->m_rootLayout->m_values["ctrX"] = 0;
-    m_context->m_rootLayout->m_values["ctrY"] = 0;
+    m_context->m_rootLayout->m_values["w"] = rect.width();
+    m_context->m_rootLayout->m_values["h"] = rect.height();
+    //m_context->m_rootLayout->m_values["w"] = m_context->m_rootLayout->m_values["h"] = qMin(rect.width(),rect.height()); // square (not needed cause will be done by the "ar"-dgm:param)
+    m_context->m_rootLayout->m_values["ctrX"] = 0.0;
+    m_context->m_rootLayout->m_values["ctrY"] = 0.0;
+
     // Do the (re-)layout.
     m_context->m_rootLayout->layoutAtom(m_context);
     // Write the content.

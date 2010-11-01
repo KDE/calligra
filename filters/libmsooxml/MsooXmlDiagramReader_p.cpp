@@ -714,8 +714,7 @@ QMap<QString, qreal> LayoutNodeAtom::finalValues() const {
     QMap<QString, qreal> result = m_values;
     for(QMap<QString, qreal>::iterator it = result.begin(); it != result.end(); ++it) {
         if(m_factors.contains(it.key())) {
-            //TODO figure our why the +1.0 and +1 provides better results and find a better way that makes more sense
-            result[it.key()] = it.value() * ((m_factors[it.key()]+1.0) / qreal(m_countFactors[it.key()]+1.0));
+            result[it.key()] = it.value() * ((m_factors[it.key()]) / qreal(m_countFactors[it.key()]));
         }
     }
     return result;
@@ -785,18 +784,30 @@ QPair<LayoutNodeAtom*,LayoutNodeAtom*> LayoutNodeAtom::neighbors() const
 
 qreal LayoutNodeAtom::distanceTo(LayoutNodeAtom* otherAtom) const
 {
+    //TODO specs are missing details from which exact point to calc the distance from...
+#if 0
     QMap<QString, qreal> srcValues = this->m_values;
     QMap<QString, qreal> dstValues = otherAtom->m_values;
-    QMap<QString, qreal> srcFactors = this->m_factors;
-    QMap<QString, qreal> dstFactors = otherAtom->m_factors;
-    QMap<QString, int> srcCountFactors = this->m_countFactors;
-    QMap<QString, int> dstCountFactors = otherAtom->m_countFactors;
+    //QMap<QString, qreal> srcFactors = this->m_factors;
+    //QMap<QString, qreal> dstFactors = otherAtom->m_factors;
+    //QMap<QString, int> srcCountFactors = this->m_countFactors;
+    //QMap<QString, int> dstCountFactors = otherAtom->m_countFactors;
+#else
+    QMap<QString, qreal> srcValues = this->finalValues();
+    QMap<QString, qreal> dstValues = otherAtom->finalValues();
+#endif
     qreal srcX = srcValues["l"] + srcValues["ctrX"];
     qreal srcY = srcValues["t"] + srcValues["ctrY"];
     qreal dstX = dstValues["l"] + dstValues["ctrX"];
     qreal dstY = dstValues["t"] + dstValues["ctrY"];
+    // qreal srcX = srcValues["l"] + srcValues["ctrX"] + srcValues["w"] / 2;
+    // qreal srcY = srcValues["t"] + srcValues["ctrY"] + srcValues["h"] / 2;
+    // qreal dstX = dstValues["l"] + dstValues["ctrX"] + dstValues["w"] / 2;
+    // qreal dstY = dstValues["t"] + dstValues["ctrY"] + dstValues["h"] / 2;
     qreal diffX = dstX - srcX;
     qreal diffY = dstY - srcY;
+    //qreal diffX = dstX - srcX - srcValues["w"]/2 - dstValues["w"] / 2;
+    //qreal diffY = dstY - srcY - srcValues["h"]/2 - dstValues["h"] / 2;
     return sqrt(diffX*diffX + diffY*diffY);
 }
 
@@ -911,7 +922,7 @@ AdjustAtom* AdjustAtom::clone()
     return atom;
 }
 
-void AdjustAtom::dump(Context* context, int level)
+void AdjustAtom::dump(Context*, int level)
 {
     DEBUG_DUMP << "index=" << m_index << "value=" << m_value;
 }
@@ -1041,9 +1052,12 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     style.addProperty("draw:textarea-vertical-align", "middle");
     style.addProperty("fo:wrap-option", "wrap");
 
-    const int m_svgX = x+cx;
-    const int m_svgY = y+cy;
-    const int rotateAngle = context->m_parentLayout->m_rotateAngle; //0=right 45=bottom 90=left 135=top 180=right
+    //const qreal m_svgX = x + qMax(0.0, qMin(w, cx - w/2));
+    //const qreal m_svgY = y + qMax(0.0, qMin(h, cy - h/2));
+    const qreal m_svgX = x + cx;
+    const qreal m_svgY = y + cy;
+
+    const qreal rotateAngle = context->m_parentLayout->m_rotateAngle; //0=right 45=bottom 90=left 135=top 180=right
     if(rotateAngle == 0) {
         xmlWriter->addAttribute("svg:x", QString("%1px").arg(m_svgX));
         xmlWriter->addAttribute("svg:y", QString("%1px").arg(m_svgY));
@@ -1564,14 +1578,16 @@ QList<LayoutNodeAtom*> AbstractAlgorithm::childLayouts() const
 }
 
 void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
-    l->m_values["l"] = parentLayout()->m_values["l"];
-    l->m_values["t"] = parentLayout()->m_values["t"];
+    l->m_values["l"] = parentLayout()->m_values["l"] + x;
+    l->m_values["t"] = parentLayout()->m_values["t"] + y;
     l->m_values["w"] = w;
     l->m_values["h"] = h;
-    l->m_factors["l"] = l->m_factors["t"] = 1.0;
-    l->m_countFactors["l"] = l->m_countFactors["t"] = 1;
-    l->m_values["ctrX"] = x;
-    l->m_values["ctrY"] = y;
+    l->m_values["ctrX"] = 0.0;
+    l->m_values["ctrY"] = 0.0;
+    foreach(const QString &s, QStringList() << "l" << "t" << "ctrX" << "ctrY" << "w" << "h") {
+        l->m_factors[s] = 1.0;
+        l->m_countFactors[s] = 1;
+    }
     l->m_needsReinit = false; // we initialized things above already
     l->m_needsRelayout = true; // but we clearly need a layout now
     l->m_childNeedsRelayout = true; // and our children need to be relayouted too now
@@ -1610,11 +1626,18 @@ void AbstractAlgorithm::virtualDoInit() {
     Q_ASSERT(values["ctrY"] >= 0.0);
 }
 
+// http://msdn.microsoft.com/en-us/library/dd439461(v=office.12).aspx
 void AbstractAlgorithm::virtualDoLayout() {
-    // QStringList axisnames;
-    // foreach(AbstractNode* n, m_axis) axisnames.append(n->m_tagName);
-    // kDebug() << "################# name=" << m_name << "algorithm=" << algorithm << "constraintCount=" << m_constraints.count() << "axis=" << axisnames;
-    //this->dump(context, 10);
+
+    // Specifies the aspect ratio (width to height) of the composite node to use when determining child constraints. A value of 0 specifies to
+    // leave the width and height constraints unaltered. The algorithm may temporarily shrink one dimension to achieve the specified ratio.
+    // For example, if a composite node has a width constraint of 20 and height constraint of 10, and if the value of ar is 1.5, the composite
+    // algorithm uses a width value of 15 to calculate the composite node’s child constraints. However, the algorithm does not propagate this
+    // value to other nodes.
+    qreal aspectRatio = layout()->algorithmParam("ar", "0").toDouble();
+    if(aspectRatio != 0.0) {
+        layout()->m_values["w"] = layout()->m_values["h"] * aspectRatio;
+    }
 
     // evaluate the constraints responsible for positioning and sizing.
     foreach(QExplicitlySharedDataPointer<ConstraintAtom> c, layout()->constraints()) {
@@ -1685,7 +1708,7 @@ void AbstractAlgorithm::virtualDoLayout() {
                 }
             }
         }
-
+        
 //TODO 1) "op" isn't supported, 2) what happens if for=ch is defined but no forName? 3) etc.
 #if 0
         QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > layouts;
@@ -1698,7 +1721,17 @@ void AbstractAlgorithm::virtualDoLayout() {
             }
         }
         foreach(QExplicitlySharedDataPointer<LayoutNodeAtom> l, layouts) {
-            if(value >= 0.0) l->m_values[c->m_type] = value;
+            if(l->m_needsReinit) {
+                l->layoutAtom(context());
+            }
+            if(value >= 0.0) {
+                if(aspectRatio != 0.0 && c->m_type == "w") {
+kDebug()<<value<<aspectRatio<<value*aspectRatio;
+                    value *= aspectRatio;
+Q_ASSERT(false);
+                }
+                l->m_values[c->m_type] = value;
+            }
             l->m_factors[c->m_type] += c->m_fact;
             l->m_countFactors[c->m_type] += 1;
         }  
@@ -1710,6 +1743,12 @@ void AbstractAlgorithm::virtualDoLayout() {
         layout()->m_countFactors[c->m_type] += 1;
 #endif
     }
+    
+    if(aspectRatio != 0.0) {
+kDebug() << "################################### aspectRatio=" << aspectRatio;
+        //Q_ASSERT(aspectRatio != 1);
+    }
+
 }
 
 void AbstractAlgorithm::virtualDoLayoutChildren() {
@@ -1758,15 +1797,14 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
     qreal srcCY = srcY + srcH/2.0;
     qreal dstCX = dstX + dstW/2.0;
     qreal dstCY = dstY + dstH/2.0;
-    qreal angle = atan2(dstCY-srcCY,dstCX-srcCX)*180/M_PI;
-
-    layout()->m_rotateAngle = angle;
+    layout()->m_rotateAngle = atan2(dstCY - srcCY, dstCX - srcCX) * 180 / M_PI;
     
     AbstractAlgorithm::virtualDoLayoutChildren();
 }
 
 /****************************************************************************************************/
 
+// http://msdn.microsoft.com/en-us/library/dd439451(v=office.12).aspx
 void CycleAlgorithm::virtualDoLayout() {
     AbstractAlgorithm::virtualDoLayout();
 
@@ -1794,7 +1832,7 @@ void CycleAlgorithm::virtualDoLayout() {
 #if 1
     qreal dw = ( (2.0 * M_PI * rx) / childsCount );
     qreal dh = ( (2.0 * M_PI * ry) / childsCount );
-    dw *= 0.9; dh *= 0.9; //TODO proper handle margins, spacings, etc.
+    //dw *= 0.5; dh *= 0.5;
 #else
     qreal dw = w;
     qreal dh = h;
@@ -1803,6 +1841,7 @@ void CycleAlgorithm::virtualDoLayout() {
     if(nodeInCenter) {
         setNodePosition(nodeInCenter, rx, ry, dw, dh);
     }
+
     for(qreal degree = startAngel; (!childs.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
         const qreal radian = (degree - 90.0) * (M_PI / 180.0);
         const qreal x = rx + cos(radian) * rx;
