@@ -477,7 +477,7 @@ public:
 class SharedSubStyle
 {
 public:
-    inline SharedSubStyle() : d(new SubStyle()) {}
+    inline SharedSubStyle() : d(s_defaultStyle.d){}
     inline SharedSubStyle(SubStyle* subStyle) : d(subStyle) {}
     inline const SubStyle *operator->() const {
         return d.data();
@@ -497,6 +497,7 @@ public:
 
 private:
     QSharedDataPointer<SubStyle> d;
+    static SharedSubStyle s_defaultStyle;
 };
 
 class NamedStyle : public SubStyle
