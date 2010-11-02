@@ -10,7 +10,7 @@ set(mswordodf_import_PART_SRCS
    tablehandler.cpp
    graphicshandler.cpp )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 kde4_add_plugin(mswordodf_import WITH_PREFIX ${mswordodf_import_PART_SRCS})
 
