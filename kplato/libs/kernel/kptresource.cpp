@@ -322,6 +322,13 @@ Resource::Resource()
     m_calendar = 0;
     m_currentSchedule = 0;
     //kDebug()<<"("<<this<<")";
+    
+    // material: by default material is always available
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd = m_materialCalendar.weekday( i );
+        wd->setState( CalendarDay::Working );
+        wd->addInterval( TimeInterval( QTime( 0, 0, 0 ), 24*60*60*1000 ) );
+    }
 }
 
 Resource::Resource(Resource *resource)
@@ -451,10 +458,17 @@ void Resource::setUnits( int units )
 }
 
 Calendar *Resource::calendar( bool local ) const {
-    if ( m_type == Type_Work && !local && project() != 0 && m_calendar == 0 ) {
-        return project()->defaultCalendar();
+    if ( local || m_calendar ) {
+        return m_calendar;
     }
-    return m_calendar;
+    // No calendar is set, try default calendar
+    Calendar *c = 0;
+    if ( m_type == Type_Work && project() ) {
+        c =  project()->defaultCalendar();
+    } else if ( m_type == Type_Material ) {
+        c = const_cast<Calendar*>( &m_materialCalendar );
+    }
+    return c;
 }
 
 void Resource::setCalendar( Calendar *calendar )

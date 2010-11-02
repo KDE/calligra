@@ -761,7 +761,7 @@ bool Part::completeLoading( KoStore *store )
     if ( m_loadingTemplate ) {
         //kDebug()<<"Loading template, generate unique ids";
         m_project->generateUniqueIds();
-        m_project->setConstraintStartTime( KDateTime::currentLocalDateTime() );
+        m_project->setConstraintStartTime( KDateTime( KDateTime::currentLocalDateTime().date(), QTime( 0, 0, 0 ) ) );
         m_project->setConstraintEndTime( m_project->constraintStartTime().addYears( 2 ) );
     } else if ( isImporting() ) {
         // NOTE: I don't think this is a good idea.

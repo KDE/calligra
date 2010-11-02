@@ -327,6 +327,9 @@ void ResourceEditor::slotAddResource()
         return;
     }
     Resource *r = new Resource();
+    if ( g->type() == ResourceGroup::Type_Material ) {
+        r->setType( Resource::Type_Material );
+    }
     QModelIndex i = m_view->model()->insertResource( g, r );
     if ( i.isValid() ) {
         m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );

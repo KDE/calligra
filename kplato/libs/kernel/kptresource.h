@@ -27,6 +27,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptappointment.h"
+#include "kptcalendar.h"
 
 #include <qdom.h>
 #include <QHash>
@@ -54,7 +55,6 @@ class Project;
 class Resource;
 class ResourceRequest;
 class ResourceGroupRequest;
-class Calendar;
 class ResourceRequestCollection;
 class Schedule;
 class NodeSchedule;
@@ -538,6 +538,9 @@ private:
     Schedule *m_currentSchedule;
 
     mutable WorkInfoCache m_workinfocache;
+
+    // return this if resource has no calendar and is a material resource
+    Calendar m_materialCalendar;
 
 #ifndef NDEBUG
 public:
