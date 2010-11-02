@@ -370,7 +370,7 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
                     writer->addCompleteElement(m_textStrings[i].toLocal8Bit().constData());
                 }
                 //cleanup
-                //delete m_textStyles[i];
+                delete m_textStyles[i];
                 m_textStyles[i] = 0;
             }
         }
