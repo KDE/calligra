@@ -1117,20 +1117,20 @@ Appointment Resource::appointmentIntervals() const {
     return a;
 }
 
-EffortCostMap Resource::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id)
+EffortCostMap Resource::plannedEffortCostPrDay( const QDate &start, const QDate &end, long id, EffortCostCalculationType typ )
 {
     EffortCostMap ec;
     Schedule *s = findSchedule( id );
     if ( s == 0 ) {
         return ec;
     }
-    ec = s->plannedEffortCostPrDay(start, end);
+    ec = s->plannedEffortCostPrDay( start, end, typ );
     return ec;
 }
 
-Duration Resource::plannedEffort(const QDate &date) const
+Duration Resource::plannedEffort( const QDate &date, EffortCostCalculationType typ ) const
 {
-    return m_currentSchedule ? m_currentSchedule->plannedEffort(date) : Duration::zeroDuration;
+    return m_currentSchedule ? m_currentSchedule->plannedEffort( date, typ ) : Duration::zeroDuration;
 }
 
 void Resource::setProject( Project *project )

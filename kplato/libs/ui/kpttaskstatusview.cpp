@@ -807,7 +807,8 @@ void PerformanceStatusBase::drawValues()
     KLocale *locale = m_project->locale();
     const EffortCostMap &budget = m_chartmodel.bcwp();
     const EffortCostMap &actual = m_chartmodel.acwp();
-    bcwsCost->setText( locale->formatMoney( budget.totalCost() ) );
+
+    bcwsCost->setText( locale->formatMoney( budget.costTo( QDate::currentDate() ) ) );
     bcwpCost->setText( locale->formatMoney( budget.bcwpTotalCost() ) );
     acwpCost->setText( locale->formatMoney( actual.totalCost() ) );
 
@@ -817,7 +818,7 @@ void PerformanceStatusBase::drawValues()
     }
     cpi->setText( locale->formatNumber( cpi_ ) );
 
-    double bh = budget.totalEffort().toDouble( Duration::Unit_h);
+    double bh = budget.hoursTo( QDate::currentDate() );
     bcwsEffort->setText( locale->formatNumber( bh ) );
     bcwpEffort->setText( locale->formatNumber( budget.bcwpTotalEffort() ) );
     acwpEffort->setText( locale->formatNumber( actual.totalEffort().toDouble( Duration::Unit_h) ) );

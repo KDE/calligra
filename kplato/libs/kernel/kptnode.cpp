@@ -1203,11 +1203,11 @@ void Node::changed(Node *node) {
         m_parent->changed(node);
 }
 
-EffortCost Node::plannedCost( long id ) const
+EffortCost Node::plannedCost( long id, EffortCostCalculationType type ) const
 {
     EffortCost ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->plannedCost( id );
+        ec += n->plannedCost( id, type );
     }
     return ec;
 }

@@ -406,8 +406,8 @@ public:
     Appointment appointmentIntervals( long id ) const;
     Appointment appointmentIntervals() const;
     
-    EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id);
-    Duration plannedEffort( const QDate &date ) const;
+    EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id, EffortCostCalculationType = ECCT_All );
+    Duration plannedEffort( const QDate &date, EffortCostCalculationType = ECCT_All ) const;
 
     void setCurrentSchedulePtr( Schedule *schedule ) { m_currentSchedule = schedule; }
     void setCurrentSchedule( long id ) { m_currentSchedule = findSchedule( id ); }
