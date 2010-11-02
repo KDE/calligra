@@ -24,6 +24,7 @@
 #include <k3listview.h>
 #include <kexi_export.h>
 
+class QDrag;
 class K3ListViewItem;
 
 namespace KexiDB
@@ -72,7 +73,7 @@ protected slots:
     void slotDoubleClicked(Q3ListViewItem* item);
 
 protected:
-    virtual Q3DragObject *dragObject();
+    //virtual QDrag *dragObject();
 
     KexiDB::TableOrQuerySchema* m_schema;
     QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column

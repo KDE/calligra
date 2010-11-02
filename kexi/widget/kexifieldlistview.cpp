@@ -135,21 +135,8 @@ void KexiFieldListView::setReadOnly(bool b)
     setAcceptDrops(!b);
     viewport()->setAcceptDrops(!b);
 }
-#endif
 
-Q3DragObject* KexiFieldListView::dragObject()
-{
-    if (!schema())
-        return 0;
-    const QStringList selectedFields(selectedFieldNames());
-    return new KexiFieldDrag(m_schema->table() ? "kexi/table" : "kexi/query",
-                             m_schema->name(), selectedFields, this, "KexiFieldDrag");
-    /* if (selectedItem()) {
-        KexiFieldDrag *drag = new KexiFieldDrag("kexi/table", m_schema->name(),
-          selectedItem()->text(1), this, "KexiFieldDrag");
-          return drag;
-      }*/
-}
+#endif
 
 QStringList KexiFieldListView::selectedFieldNames() const
 {
