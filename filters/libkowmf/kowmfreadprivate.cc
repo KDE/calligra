@@ -150,6 +150,10 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
         mBBoxTop    = pheader.top;
         mBBoxRight  = pheader.right;
         mBBoxBottom = pheader.bottom;
+#if DEBUG_RECORDS
+        kDebug(31000) << "bounding box in header: " << mBBoxLeft << mBBoxTop << mBBoxRight << mBBoxBottom
+                      << "width, height: " << mBBoxRight - mBBoxLeft << mBBoxBottom - mBBoxTop;
+#endif
         mMaxWidth   = abs(pheader.right - pheader.left);
         mMaxHeight  = abs(pheader.bottom - pheader.top);
 

@@ -371,16 +371,21 @@ void KoWmfPaint::setViewportExt( int width, int height )
 }
 
 
-// ----------------------------------------------------------------
-
-
 void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
 {
 #if DEBUG_WMFPAINT
     kDebug(31000) << wm << " " << combine;
 #endif
+    unsetWindowViewport();
+
     mPainter->setMatrix(wm, combine);
+
+    setWindowViewport();
 }
+
+
+// ----------------------------------------------------------------
+//                         Drawing
 
 
 void KoWmfPaint::setClipRegion(const QRegion &rec)
