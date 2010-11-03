@@ -55,15 +55,16 @@ public:
 
 protected:
     QChar   specCharfind(QChar , QChar);
-    QString readTagLine(QTextStream &, QFile &);
+    QString readTagLine(QTextStream &);
     void    replaceSpecial(QString &);
     QString nextLine(QTextStream &);
-    int     readHeader(QTextStream &stream, QFile &);
+    int     readHeader(QTextStream &stream);
 
 private:
     int m_stepsize;
     int m_instep;
     int m_progress;
+    QString m_nextPendingLine;
 
 };
 #endif // APPLIXWORDIMPORT_H
