@@ -69,7 +69,7 @@ protected:
     void    filterSHFGBG(QString, int *, int *, int *);
     void    transPenFormat(QString, int *, int *);
     int     readHeader(QTextStream &);
-    int     translateColumnNumber(QString);
+    int     translateColumnNumber(const QString&);
 
 private:
     int m_stepsize;

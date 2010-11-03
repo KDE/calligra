@@ -85,9 +85,8 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     m_instep   = 0;
     m_progress = 0;
     int  pos;
-    int  irow, icol;
-    QString  tabctr ;  // Tab control
-    QString  mystr, typestr, cellnostr, tabnostr;
+    QString  tabctr ;  // Tab control (current tab name)
+    QString  tabnostr;
     QStringList typefacetab;
 
     //    QStringList rclist;
@@ -103,7 +102,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
     while (!stream.atEnd()) {
         // Read one line
-        mystr = nextLine(stream);
+        QString mystr = nextLine(stream);
 
         kDebug() << "INPUT :" << mystr;
 
@@ -131,25 +130,20 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
 
         /**********************************************************************
-         *   Detect ( at the first place of the Linie                         *
+         *   Detect ( at the first place of the Line                          *
          **********************************************************************/
         else if (mystr[0] == '(') {
-            int fg = -1; // fg = foregound
 
             // Delete  '('
             mystr.remove(0, 1);
 
-            int alllenght;
-            QString mystrn;
-
             // Remember length of the string
-            alllenght = mystr.length();
-            if (alllenght >= 80 - 1) {
+            if (mystr.length() >= 80 - 1) {
                 kDebug() << " Line >= 80 chars";
-                int ok = true;
+                bool ok = true;
                 do {
                     pos = in.pos();
-                    mystrn = nextLine(stream);
+                    QString mystrn = nextLine(stream);
                     if (mystrn[0] == ' ') {
                         mystrn.remove(0, 1);
                         mystr += mystrn;
@@ -157,30 +151,38 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                         in.seek(pos);
                         ok = false;
                     }
-                } while (ok == true);
-
+                } while (ok);
             }
-
 
             // Search for ')'
             pos = mystr.indexOf(')');
-            typestr = mystr.left(pos);
-
+            QString typestr = mystr.left(pos);
 
             // Delete typeformat infos incl. Space
             mystr.remove(0, pos + 1);
-            // alllenght = alllenght - pos - 1;
 
             // Search for ':'
             pos = mystr.indexOf(':');
+            bool isFormula = false;
+            // otherwise search for ';', as used for formulas
+            if (pos < 0) {
+                pos = mystr.indexOf(';');
+                isFormula = (pos >= 0);
+            }
 
             // Copy cellnumber information
-            cellnostr = mystr.left(pos);
+            QString cellnostr = mystr.left(pos);
 
             // Delete cellnumber information
             mystr.remove(0, pos + 1);
-            // alllenght = alllenght - pos - 1;
 
+            if (mystr.startsWith(' ')) {
+                mystr.remove(0, 1);
+            }
+
+            if (isFormula) {
+                mystr.prepend('=');
+            }
 
             // Split Table and Cell Number
             pos = cellnostr.indexOf('!');
@@ -188,38 +190,33 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             // Copy tabnumber information
             tabnostr = cellnostr.left(pos);
 
-            // Delete cellnumber information
+            // Delete tabnumber information
             cellnostr.remove(0, pos + 1);
 
-            int  len = cellnostr.length();
-            char tmp[300], tmp1[300];
-            int  leni;
-
-
+            // At this point cellnostr can look like "F17; 11.9183 +PRODUCT(PRODUCT(12,G17),0.0125)/12"
+            //int  len = cellnostr.length();
 
             pos = cellnostr.indexOf(QRegExp("[0-9]"));
             kDebug() << " findpos :" << pos;
 
-
-
-            QString rowstr;
+            const QString rowstr = cellnostr.mid(pos, cellnostr.length() - pos);
             bool ok;
-            int bla;
-            rowstr = cellnostr.mid(pos, cellnostr.length() - pos);
-            irow   = rowstr.toInt(&ok);
+            const int irow = rowstr.toInt(&ok);
 
             kDebug() << " findpos :" << rowstr << "" << irow;
+            int bla;
+            char tmp[300];
             sscanf(cellnostr.toLatin1(), "%299s%d", tmp, &bla);
-            sprintf(tmp1, "%d", irow);
-            leni = strlen(tmp1);
-            QString cellcolstr;
-            cellcolstr = cellnostr;
+            const QString tmp1 = QString::number(irow);
+            const int leni = tmp1.length();
+            QString cellcolstr = cellnostr;
             cellcolstr.remove(cellcolstr.length() - leni, leni);
 
-            kDebug() << " Info: length :" << len << " cellnostr :" << cellnostr << " tmp :" << tmp << " irow :" << irow << " cellcolstr :" << cellcolstr;
+
+            kDebug() << " Info: " << " cellnostr:" << cellnostr << " tmp:" << tmp << " irow:" << irow << " cellcolstr:" << cellcolstr;
 
             // Transformat ascii column to int column
-            icol = translateColumnNumber(cellcolstr);
+            int icol = translateColumnNumber(cellcolstr);
 
 
             //  sscanf (cellnostr.toLatin1(), "%c%d",&ccol, &irow);
@@ -228,7 +225,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             //  icol = ccol - 64;
 
             // Remove first whitespace
-            mystr.remove(0, 1);
             tabnostr.remove(0, 1);
 
 
@@ -239,14 +235,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
 
             // Replace part for Applix Characters
-            int   foundSpecialCharakter;
-            QChar newchar;
+            bool foundSpecialCharakter;
 
             do {
                 // initialize
                 foundSpecialCharakter = false;
 
-                pos = mystr.indexOf("^");
+                pos = mystr.indexOf('^');
 
                 // is there a special character ?
                 if (pos > -1) {
@@ -254,7 +249,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     foundSpecialCharakter = true;
 
                     // translate the applix special character
-                    newchar = specCharfind(mystr[pos+1], mystr[pos+2]);
+                    const QChar newchar = specCharfind(mystr[pos+1], mystr[pos+2]);
 
                     // replace the character
                     mystr.replace(pos, 3, newchar);
@@ -264,20 +259,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
 
             // examine the typestring
-            // splitt typestring in 3 parts by an |
-            QString typeFormStr;
-            QString typeCharStr;
-            QString typeCellStr;
+            // split typestring in 3 parts by an |
 
-            int pos1 = typestr.indexOf("|");
-            int pos2 = typestr.lastIndexOf("|");
-
-
-            typeFormStr = typestr.left(pos1);
-
-            typeCharStr = typestr.mid(pos1 + 1,  pos2 - pos1 - 1);
-
-            typeCellStr = typestr.right(typestr.length() - pos2 - 1);
+            const int pos1 = typestr.indexOf('|');
+            const int pos2 = typestr.lastIndexOf('|');
+            const QString typeFormStr = typestr.left(pos1);
+            const QString typeCharStr = typestr.mid(pos1 + 1,  pos2 - pos1 - 1);
+            const QString typeCellStr = typestr.right(typestr.length() - pos2 - 1);
 
             // Is it a new table
             if (tabctr != tabnostr) {
@@ -299,49 +287,45 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
 
             /********************************************************************
-             * examine charakter format String, splitt it up in basic parts     *
+             * examine character format String, split it up in basic parts      *
              ********************************************************************/
-            QStringList typeCharList;
             int bold = 0, italic = 0, underline = 0, nn = 0, fontsize = 12, fontnr = -1;
+            int fg = -1; // fg = foregound
 
-            typeCharList = typeCharStr.split(',');
-
-            for (QStringList::Iterator it = typeCharList.begin();
-                    it != typeCharList.end(); ++it) {
+            const QStringList typeCharList = typeCharStr.split(',');
+            Q_FOREACH(const QString& typeChar, typeCharList) {
                 // Output
-                kDebug() << " Char (" << nn << " )  >" << *it << "<";
-                nn++;
+                kDebug() << " Char (" << nn << " )  >" << typeChar << "<";
+                ++nn;
 
-                if ((*it) == "B") {
+                if (typeChar == "B") {
                     kDebug() << " bold";
                     bold  = 1;
-                } else if ((*it) == "I") {
+                } else if (typeChar == "I") {
 
                     kDebug() << "   = italic";
                     italic = 1;
-                } else if ((*it) == "U") {
+                } else if (typeChar == "U") {
                     kDebug() << "   = underline";
                     underline = 1;
-                } else if ((*it).startsWith("FG")) {
-                    sscanf((*it).toLatin1(), "FG%d", &fg);
+                } else if (typeChar.startsWith("FG")) {
+                    sscanf(typeChar.toLatin1(), "FG%d", &fg);
                     kDebug() << "  = Colornr" << fg;
-                } else if ((*it).startsWith("TF")) {
-                    sscanf((*it).toLatin1(), "TF%d", &fontnr);
+                } else if (typeChar.startsWith("TF")) {
+                    sscanf(typeChar.toLatin1(), "TF%d", &fontnr);
                     kDebug() << " = Font :" << fontnr << "" << typefacetab[fontnr];
-                } else if ((*it).startsWith('P')) {
-                    sscanf((*it).toLatin1(), "P%d", &fontsize);
+                } else if (typeChar.startsWith('P')) {
+                    sscanf(typeChar.toLatin1(), "P%d", &fontsize);
                     kDebug() << "   = Fontsize" << fontsize;
                 } else {
-
-                    kDebug() << "   = ???";
+                    kDebug() << "   = ???" << typeChar;
                 }
             }
-            kDebug() << "";
-
+            kDebug();
 
 
             /********************************************************************
-             * examine pos format String, splitt it up in basic parts           *
+             * examine pos format String, split it up in basic parts           *
              ********************************************************************/
             QStringList typeFormList;
             int align = 0, valign = 0;
@@ -382,7 +366,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
 
             /********************************************************************
-             * examine cell format String, splitt it up in basic parts          *
+             * examine cell format String, split it up in basic parts           *
              ********************************************************************/
             QStringList typeCellList;
             int topPenWidth = 0, bottomPenWidth = 0, leftPenWidth = 0, rightPenWidth = 0, fg_bg = -1;
@@ -1182,40 +1166,36 @@ APPLIXSPREADImport::readHeader(QTextStream &stream)
 
 
 /******************************************************************************
- *  function: translateRowNumber                                              *
+ *  function: translateColumnNumber                                           *
  ******************************************************************************/
 int
-APPLIXSPREADImport::translateColumnNumber(QString colstr)
+APPLIXSPREADImport::translateColumnNumber(const QString& colstr)
 {
     int icol = 0;
-    int p, x, len;
+    const int len = colstr.length();
+    int p = len - 1;
+    int x = 1;
 
-
-    len = colstr.length();
-    p = len - 1;
-    x = 1;
-
-    printf("HI 0 len:%d\n", len);
-    while ((p >= 0)) {
-        printf("HI 1 x:%d p:%d char:<%c>\n", x, p, colstr[p].toLatin1());
+    //kDebug() << "len=" << len;
+    while (p >= 0) {
+        //kDebug() << "x=" << x << "p=" << p << "char=" << colstr[p].toLatin1();
+        const char c = colstr[p].toLatin1();
         // Upper chars
-        if ((colstr[p] >= 'A') && (colstr[p] <= 'Z')) {
-            kDebug() << " UPPER";
-            icol = icol + ((int)pow((double)x, 26) * (colstr[p].toLatin1() - 'A' + 1));
-            x++;
+        if ((c >= 'A') && (c <= 'Z')) {
+            //kDebug() << " UPPER";
+            icol += ((int)pow((double)x, 26) * (c - 'A' + 1));
+            ++x;
         }
         // lower chars
-        else if ((colstr[p] >= 'a') && (colstr[p] <= 'z')) {
-            kDebug() << " lower";
-            icol = icol + ((int)pow((double)x, 26) * (colstr[p].toLatin1() - 'a' + 1));
-            x++;
+        else if ((c >= 'a') && (c <= 'z')) {
+            //kDebug() << " lower";
+            icol += ((int)pow((double)x, 26) * (c - 'a' + 1));
+            ++x;
         }
         p--;
-        kDebug() << "HI 2";
-
     }
 
-    printf("translateColumnNumber : <%s> -> %d\n", colstr.toLatin1().data(), icol);
+    kDebug() << colstr << "->" << icol;
     return icol;
 }
 
