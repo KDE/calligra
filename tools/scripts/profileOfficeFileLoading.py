@@ -16,6 +16,10 @@ applications = {
   'kspread': ['ods', 'xls', 'xlsx']
 }
 
+# limit how many backtraces are recordes, since it takes a lot of time
+maxbacktraces = 50
+backtracessofar = 0
+
 def scanDirectory(rootdir, extensions):
 	if os.path.isfile(rootdir):
 		return [rootdir]
@@ -199,7 +203,8 @@ def profile(dir, file, logger, validator):
 	r.lines = outfile.readlines()
 	outfile.close()
 	r.backtrace = None
-	if r.returnValue != 0:
+	if r.returnValue != 0 && backtracessofar < maxbacktraces:
+                backtracessofar += 1
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
 			"--eval-command=bt", "--args"] + [exepath] + args
