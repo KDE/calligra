@@ -289,6 +289,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
              ********************************************************************/
 
             if (contentType == ';') {
+
+                mystr = convertFormula(mystr);
+
                 const QString formulaRefLine = nextLine(stream); // "Formula: 358"
                 kDebug() << "shared formula: next line is" << formulaRefLine;
                 if (!formulaRefLine.startsWith("Formula: ")) {
@@ -1166,7 +1169,6 @@ APPLIXSPREADImport::readHeader(QTextStream &stream)
 }
 
 
-
 /******************************************************************************
  *  function: translateColumnNumber                                           *
  ******************************************************************************/
@@ -1201,4 +1203,13 @@ APPLIXSPREADImport::translateColumnNumber(const QString& colstr)
     return icol;
 }
 
-#include <applixspreadimport.moc>
+// Converts =SUM(F1,4) into =SUM(F1;4) -- well, plus possible nesting
+QString APPLIXSPREADImport::convertFormula(const QString& input) const
+{
+    // Let me be stupid for now
+    QString ret = input;
+    ret.replace(',', ';');
+    return ret;
+}
+
+#include "applixspreadimport.moc"

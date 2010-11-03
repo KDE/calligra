@@ -70,6 +70,7 @@ protected:
     void    transPenFormat(QString, int *, int *);
     int     readHeader(QTextStream &);
     int     translateColumnNumber(const QString&);
+    QString convertFormula(const QString& input) const;
 
 private:
     int m_stepsize;
