@@ -41,7 +41,7 @@ class KoShape;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_EXPORT KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
+class KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
 {
     Q_OBJECT
 
@@ -58,8 +58,6 @@ public:
 
     /// ask the widget to set the size this canvas takes to display all content
     void updateSize();
-
-    KoZoomHandler *zoomHandler() const;
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
@@ -105,7 +103,7 @@ signals:
      */
     void documentSize(const QSizeF &size);
 
-public: //QGraphicsWidget
+protected: //QGraphicsWidget
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);
 

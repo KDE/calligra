@@ -62,12 +62,6 @@ public:
     }
     virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
 
-    /**
-     * Set the gap between pages
-     * @param gap the gap in points
-     */
-    virtual void setGap(int gap);
-
 protected:
     void updatePageCache();
 
@@ -75,7 +69,6 @@ protected:
     QList<qreal> m_pageTops;
     bool m_pageSpreadMode;
     QSizeF m_contents;
-    int m_gap;
 };
 
 #endif

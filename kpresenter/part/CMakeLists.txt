@@ -180,10 +180,3 @@ install( PROGRAMS kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
 
 install( FILES kpresenterrc DESTINATION ${CONFIG_INSTALL_DIR} )
-
-install( FILES 
-    KPrDocument.h 
-    KPrCustomSlideShows.h
-    kpresenter_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
-
