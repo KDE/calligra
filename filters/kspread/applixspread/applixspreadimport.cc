@@ -86,7 +86,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     m_progress = 0;
     int  pos;
     QString  tabctr ;  // Tab control (current tab name)
-    QString  tabnostr;
     QStringList typefacetab;
 
     //    QStringList rclist;
@@ -139,7 +138,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
             // Remember length of the string
             if (mystr.length() >= 80 - 1) {
-                kDebug() << " Line >= 80 chars";
+                //kDebug() << " Line >= 80 chars";
                 bool ok = true;
                 do {
                     pos = in.pos();
@@ -152,6 +151,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                         ok = false;
                     }
                 } while (ok);
+                kDebug() << " Long line -> new input line:" << mystr;
             }
 
             // Search for ')'
@@ -161,20 +161,53 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             // Delete typeformat infos incl. Space
             mystr.remove(0, pos + 1);
 
-            // Search for ':'
-            pos = mystr.indexOf(':');
-            bool isFormula = false;
-            // otherwise search for ';', as used for formulas
-            if (pos < 0) {
-                pos = mystr.indexOf(';');
-                isFormula = (pos >= 0);
+            // At this point mystr looks like " A!E15: 10"
+            Q_ASSERT(mystr.startsWith(' '));
+
+            // Extract table number/name
+            pos = mystr.indexOf('!');
+
+            // Copy tabnumber information
+            QString tabnostr = mystr.left(pos).mid(1);
+
+            // Delete tabnumber information
+            mystr.remove(0, pos + 1);
+
+            // At this point mystr looks like "E15: 10"
+            pos = 0;
+            while (mystr[pos].isLetter()) {
+                ++pos;
+            }
+            const QString cellcolstr = mystr.mid(0, pos);
+            // Transform ascii column to int column
+            const int icol = translateColumnNumber(cellcolstr);
+
+            int endPos = pos;
+            while (mystr[endPos].isDigit()) {
+                ++endPos;
             }
 
-            // Copy cellnumber information
-            QString cellnostr = mystr.left(pos);
+            const QString rowstr = mystr.mid(pos, endPos - pos);
+            bool ok;
+            const int irow = rowstr.toInt(&ok);
+            Q_ASSERT(ok);
+
+            // OK, what do we have now?
+            const QChar contentType = mystr.at(endPos);
 
             // Delete cellnumber information
-            mystr.remove(0, pos + 1);
+            mystr.remove(0, endPos + 1);
+
+            // ';' // first instance of a shared formula
+            // '.' // instance of a shared formula
+            // ':' // simple value
+
+            // Search for ':'
+            bool isFormula = false;
+            // otherwise search for ';', as used for formulas
+            if (contentType == ';' || contentType == '.') {
+                isFormula = true;
+            }
 
             if (mystr.startsWith(' ')) {
                 mystr.remove(0, 1);
@@ -183,50 +216,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             if (isFormula) {
                 mystr.prepend('=');
             }
-
-            // Split Table and Cell Number
-            pos = cellnostr.indexOf('!');
-
-            // Copy tabnumber information
-            tabnostr = cellnostr.left(pos);
-
-            // Delete tabnumber information
-            cellnostr.remove(0, pos + 1);
-
-            // At this point cellnostr can look like "F17; 11.9183 +PRODUCT(PRODUCT(12,G17),0.0125)/12"
-            //int  len = cellnostr.length();
-
-            pos = cellnostr.indexOf(QRegExp("[0-9]"));
-            kDebug() << " findpos :" << pos;
-
-            const QString rowstr = cellnostr.mid(pos, cellnostr.length() - pos);
-            bool ok;
-            const int irow = rowstr.toInt(&ok);
-
-            kDebug() << " findpos :" << rowstr << "" << irow;
-            int bla;
-            char tmp[300];
-            sscanf(cellnostr.toLatin1(), "%299s%d", tmp, &bla);
-            const QString tmp1 = QString::number(irow);
-            const int leni = tmp1.length();
-            QString cellcolstr = cellnostr;
-            cellcolstr.remove(cellcolstr.length() - leni, leni);
-
-
-            kDebug() << " Info: " << " cellnostr:" << cellnostr << " tmp:" << tmp << " irow:" << irow << " cellcolstr:" << cellcolstr;
-
-            // Transformat ascii column to int column
-            int icol = translateColumnNumber(cellcolstr);
-
-
-            //  sscanf (cellnostr.toLatin1(), "%c%d",&ccol, &irow);
-
-            // Transformat ascii column to int column
-            //  icol = ccol - 64;
-
-            // Remove first whitespace
-            tabnostr.remove(0, 1);
-
 
             // Replace part for this characters: <, >, &
             mystr.replace(QRegExp("&"), "&amp;");
@@ -289,36 +278,34 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             /********************************************************************
              * examine character format String, split it up in basic parts      *
              ********************************************************************/
-            int bold = 0, italic = 0, underline = 0, nn = 0, fontsize = 12, fontnr = -1;
+            int bold = 0, italic = 0, underline = 0, fontsize = 12, fontnr = -1;
             int fg = -1; // fg = foregound
 
-            const QStringList typeCharList = typeCharStr.split(',');
+            const QStringList typeCharList = typeCharStr.split(',', QString::SkipEmptyParts);
             Q_FOREACH(const QString& typeChar, typeCharList) {
                 // Output
-                kDebug() << " Char (" << nn << " )  >" << typeChar << "<";
-                ++nn;
+                kDebug() << "typeChar: " << typeChar;
 
                 if (typeChar == "B") {
                     kDebug() << " bold";
                     bold  = 1;
                 } else if (typeChar == "I") {
-
                     kDebug() << "   = italic";
                     italic = 1;
                 } else if (typeChar == "U") {
                     kDebug() << "   = underline";
                     underline = 1;
                 } else if (typeChar.startsWith("FG")) {
-                    sscanf(typeChar.toLatin1(), "FG%d", &fg);
+                    fg = typeChar.mid(2).toInt();
                     kDebug() << "  = Colornr" << fg;
                 } else if (typeChar.startsWith("TF")) {
-                    sscanf(typeChar.toLatin1(), "TF%d", &fontnr);
+                    fontnr = typeChar.mid(2).toInt();
                     kDebug() << " = Font :" << fontnr << "" << typefacetab[fontnr];
                 } else if (typeChar.startsWith('P')) {
-                    sscanf(typeChar.toLatin1(), "P%d", &fontsize);
+                    fontsize = typeChar.mid(1).toInt();
                     kDebug() << "   = Fontsize" << fontsize;
                 } else {
-                    kDebug() << "   = ???" << typeChar;
+                    kDebug() << "   = ??? Unknown typeChar:" << typeChar;
                 }
             }
             kDebug();
@@ -327,40 +314,34 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             /********************************************************************
              * examine pos format String, split it up in basic parts           *
              ********************************************************************/
-            QStringList typeFormList;
             int align = 0, valign = 0;
 
-            typeFormList = typeFormStr.split(',');
-            nn = 0;
-            for (QStringList::Iterator it = typeFormList.begin(); it != typeFormList.end(); ++it) {
-                // Output
-                //kDebug()<<"   Type (%2d)   >%s<",
-                //    nn, (*it).toLatin1() );
-                nn++;
+            const QStringList typeFormList = typeFormStr.split(',', QString::SkipEmptyParts);
+            Q_FOREACH(const QString& typeFormat, typeFormList) {
                 // Grep horizontal alignment
-                if ((*it) == "1") {
+                if (typeFormat == "1") {
                     kDebug() << " = left align";
                     align = 1; // left
-                } else if ((*it) == "2") {
+                } else if (typeFormat == "2") {
                     kDebug() << " = right align";
                     align = 3; // right
-                } else if ((*it) == "3") {
+                } else if (typeFormat == "3") {
                     kDebug() << " = center align";
                     align = 2; // center
                 }
 
-                // Grep verticale alignment
-                else if ((*it) == "VT") {
+                // Grep vertical alignment
+                else if (typeFormat == "VT") {
                     kDebug() << " = top valign";
                     valign =  1; // top
-                } else if ((*it) == "VC") {
+                } else if (typeFormat == "VC") {
                     kDebug() << " = center valign";
                     valign =  0; // center - default (2)
-                } else if ((*it) == "VB") {
+                } else if (typeFormat == "VB") {
                     kDebug() << " = bottom valign";
                     valign =  3; // bottom
                 } else {
-                    kDebug() << "   = ???";
+                    kDebug() << "   = ??? unknown typeFormat" << typeFormat;
                 }
             }
 
@@ -368,7 +349,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             /********************************************************************
              * examine cell format String, split it up in basic parts           *
              ********************************************************************/
-            QStringList typeCellList;
             int topPenWidth = 0, bottomPenWidth = 0, leftPenWidth = 0, rightPenWidth = 0, fg_bg = -1;
             int topPenStyle = 0, bottomPenStyle = 0, leftPenStyle = 0, rightPenStyle = 0;
             int brushstyle = 0,     brushcolor = 1;
@@ -377,63 +357,58 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             int rightbrushstyle = 0, rightbrushcolor = 1, rightfg_bg = 1;
             int bottombrushstyle = 0, bottombrushcolor = 1, bottomfg_bg = 1;
 
-            typeCellList = typeCellStr.split(',');
-            nn = 0;
-            for (QStringList::Iterator it = typeCellList.begin(); it != typeCellList.end(); ++it) {
-                // Output
-                printf("   Cell (%2d)   >%s< ",
-                       nn, (*it).toLatin1().data());
-                nn++;
+            const QStringList typeCellList = typeCellStr.split(',', QString::SkipEmptyParts);
+            Q_FOREACH(/*can't use const QString&*/ QString typeCell, typeCellList) {
 
-                if ((*it)[0] == 'T') {
+                if (typeCell[0] == 'T') {
                     kDebug() << " = top";
-                    transPenFormat((*it), &topPenWidth, &topPenStyle);
+                    transPenFormat(typeCell, &topPenWidth, &topPenStyle);
 
-                    if ((*it).length() > 2) {
-                        (*it).remove(0, 2);
-                        filterSHFGBG((*it), &topbrushstyle, &topbrushcolor, &topfg_bg);
+                    if (typeCell.length() > 2) {
+                        typeCell.remove(0, 2);
+                        filterSHFGBG(typeCell, &topbrushstyle, &topbrushcolor, &topfg_bg);
                     }
 
                 }
 
-                else if ((*it)[0] == 'B') {
+                else if (typeCell[0] == 'B') {
                     kDebug() << " = bottom";
-                    transPenFormat((*it), &bottomPenWidth, &bottomPenStyle);
+                    transPenFormat(typeCell, &bottomPenWidth, &bottomPenStyle);
 
-                    if ((*it).length() > 2) {
-                        (*it).remove(0, 2);
-                        filterSHFGBG((*it), &bottombrushstyle, &bottombrushcolor, &bottomfg_bg);
+                    if (typeCell.length() > 2) {
+                        typeCell.remove(0, 2);
+                        filterSHFGBG(typeCell, &bottombrushstyle, &bottombrushcolor, &bottomfg_bg);
                     }
                 }
 
-                else if ((*it)[0] == 'L') {
+                else if (typeCell[0] == 'L') {
                     kDebug() << " = left";
-                    transPenFormat((*it), &leftPenWidth, &leftPenStyle);
+                    transPenFormat(typeCell, &leftPenWidth, &leftPenStyle);
 
-                    if ((*it).length() > 2) {
-                        (*it).remove(0, 2);
-                        filterSHFGBG((*it), &leftbrushstyle, &leftbrushcolor, &leftfg_bg);
+                    if (typeCell.length() > 2) {
+                        typeCell.remove(0, 2);
+                        filterSHFGBG(typeCell, &leftbrushstyle, &leftbrushcolor, &leftfg_bg);
                     }
                 }
 
-                else if ((*it)[0] == 'R') {
+                else if (typeCell[0] == 'R') {
                     kDebug() << " = right";
-                    transPenFormat((*it), &rightPenWidth, &rightPenStyle);
+                    transPenFormat(typeCell, &rightPenWidth, &rightPenStyle);
 
-                    if ((*it).length() > 2) {
-                        (*it).remove(0, 2);
-                        filterSHFGBG((*it), &rightbrushstyle, &rightbrushcolor, &rightfg_bg);
+                    if (typeCell.length() > 2) {
+                        typeCell.remove(0, 2);
+                        filterSHFGBG(typeCell, &rightbrushstyle, &rightbrushcolor, &rightfg_bg);
                     }
                 }
 
-                else if (((*it).startsWith("SH")) || ((*it).startsWith("FG")) ||
-                         ((*it).startsWith("BG"))) {
+                else if ((typeCell.startsWith("SH")) || (typeCell.startsWith("FG")) ||
+                         (typeCell.startsWith("BG"))) {
                     kDebug() << " =";
-                    filterSHFGBG((*it), &brushstyle, &fg_bg, &brushcolor);
+                    filterSHFGBG(typeCell, &brushstyle, &fg_bg, &brushcolor);
                 }
 
                 else {
-                    kDebug() << "   = ???";
+                    kDebug() << "   = ??? unknown typeCell" << typeCell;
                 }
 
             }
