@@ -29,6 +29,7 @@
 
 // koffice libs includes
 #include <KoShapeManager.h>
+#include <KoShapeManagerCachedPaintingStrategy.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
@@ -54,6 +55,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     m_viewConverter(0)
 {
     m_shapeManager = new KoShapeManager(this);
+    //m_shapeManager->setPaintingStrategy(new KoShapeManagerCachedPaintingStrategy(m_shapeManager));
     m_toolProxy = new KoToolProxy(this, parent);
 }
 
