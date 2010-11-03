@@ -75,5 +75,6 @@ private:
     int m_stepsize;
     int m_instep;
     int m_progress;
+    QString m_nextPendingLine;
 };
 #endif // APPLIXSPREADIMPORT_H

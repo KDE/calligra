@@ -40,6 +40,12 @@ APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QStringList&)
 
 QString APPLIXSPREADImport::nextLine(QTextStream & stream)
 {
+    if (!m_nextPendingLine.isNull()) {
+        const QString s = m_nextPendingLine;
+        m_nextPendingLine.clear();
+        return s;
+    }
+
     QString s = stream.readLine();
     m_instep += s.length();
     if (m_instep > m_stepsize) {
@@ -87,8 +93,8 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
     int  pos;
     QString  tabctr ;  // Tab control (current tab name)
     QStringList typefacetab;
+    QHash<QString, QString> sharedFormulas;
 
-    //    QStringList rclist;
     t_rc my_rc;
 
 
@@ -97,7 +103,6 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
      * Read header                                                            *
      **************************************************************************/
     if (! readHeader(stream)) return KoFilter::StupidError;
-
 
     while (!stream.atEnd()) {
         // Read one line
@@ -141,13 +146,12 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 //kDebug() << " Line >= 80 chars";
                 bool ok = true;
                 do {
-                    pos = in.pos();
                     QString mystrn = nextLine(stream);
                     if (mystrn[0] == ' ') {
                         mystrn.remove(0, 1);
                         mystr += mystrn;
                     } else {
-                        in.seek(pos);
+                        m_nextPendingLine = mystrn;
                         ok = false;
                     }
                 } while (ok);
@@ -197,24 +201,30 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
             // Delete cellnumber information
             mystr.remove(0, endPos + 1);
+            if (mystr.startsWith(' ')) {
+                mystr.remove(0, 1);
+            }
 
             // ';' // first instance of a shared formula
             // '.' // instance of a shared formula
             // ':' // simple value
 
-            // Search for ':'
             bool isFormula = false;
-            // otherwise search for ';', as used for formulas
             if (contentType == ';' || contentType == '.') {
                 isFormula = true;
-            }
-
-            if (mystr.startsWith(' ')) {
-                mystr.remove(0, 1);
-            }
-
-            if (isFormula) {
-                mystr.prepend('=');
+                // Skip the value
+                int pos = 0;
+                while (!mystr.at(pos).isSpace()) {
+                    ++pos;
+                }
+                while (mystr.at(pos).isSpace()) {
+                    ++pos;
+                }
+                kDebug() << "Skipping value" << mystr.mid(0, pos);
+                mystr.remove(0, pos);
+                if (mystr.at(0) == '+')
+                    mystr[0] = '=';
+                Q_ASSERT(mystr.at(0) == '=');
             }
 
             // Replace part for this characters: <, >, &
@@ -274,6 +284,23 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
             //kDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<""<< cellnostr <<"" <<ccol<<"" << irow<<""<< typeFormStr<<"" <<typeCharStr<<"" <<typeCellStr;
 
+            /********************************************************************
+             * Support for shared formulas                                      *
+             ********************************************************************/
+
+            if (contentType == ';') {
+                const QString formulaRefLine = nextLine(stream); // "Formula: 358"
+                kDebug() << "shared formula: next line is" << formulaRefLine;
+                if (!formulaRefLine.startsWith("Formula: ")) {
+                    kError() << "Missing formula ID after" << mystr;
+                } else {
+                    const QString key = formulaRefLine.mid(9);
+                    sharedFormulas.insert(key, mystr);
+                }
+            } else if (contentType == '.') {
+                const QString key = mystr;
+                mystr = sharedFormulas.value(key);
+            }
 
             /********************************************************************
              * examine character format String, split it up in basic parts      *
