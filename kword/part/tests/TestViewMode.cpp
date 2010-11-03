@@ -36,7 +36,8 @@ void TestViewMode::testBasicConversion()
     const int A4_HEIGHT = 842;
     KWPageManager pageManager;
     KoZoomHandler zoomer;
-    zoomer.setZoomAndResolution(100, 72, 72); // BORING :)
+    zoomer.setZoom(1);
+    zoomer.setDpi(72, 72); // BORING :)
     MyViewModeNormal viewMode;
     viewMode.setPageManager(&pageManager);
     viewMode.setViewConverter(&zoomer);
@@ -51,19 +52,19 @@ void TestViewMode::testBasicConversion()
     QCOMPARE(viewMode.pageSpreadMode(), false);
     QCOMPARE(viewMode.contents().toSize(), QSize(595, A4_HEIGHT)); // approximate size is ok
 
-    QCOMPARE(viewMode.documentToView(QPointF()), QPointF());
-    QCOMPARE(viewMode.documentToView(QPointF(10, 10)), QPointF(10, 10));
-    QCOMPARE(viewMode.documentToView(QPointF(590, 10)), QPointF(590, 10));
-    QCOMPARE(viewMode.documentToView(QPointF(590, 840)), QPointF(590, 840));
-    QCOMPARE(viewMode.documentToView(QPointF(600, 840)), QPointF(600, 840)); // no clipping horizontally
-    QCOMPARE(viewMode.documentToView(QPointF(50, 1000)), QPointF(50, 1000)); // no clipping vertically
+    QCOMPARE(viewMode.documentToView(QPointF()).toPoint(), QPoint());
+    QCOMPARE(viewMode.documentToView(QPointF(10, 10)).toPoint(), QPoint(10, 10));
+    QCOMPARE(viewMode.documentToView(QPointF(590, 10)).toPoint(), QPoint(590, 10));
+    QCOMPARE(viewMode.documentToView(QPointF(590, 840)).toPoint(), QPoint(590, 840));
+    QCOMPARE(viewMode.documentToView(QPointF(600, 840)).toPoint(), QPoint(600, 840)); // no clipping horizontally
+    QCOMPARE(viewMode.documentToView(QPointF(50, 1000)).toPoint(), QPoint(50, 1000)); // no clipping vertically
 
-    QCOMPARE(viewMode.viewToDocument(QPointF()), QPointF());
-    QCOMPARE(viewMode.viewToDocument(QPointF(10, 10)), QPointF(10, 10));
-    QCOMPARE(viewMode.viewToDocument(QPointF(590, 10)), QPointF(590, 10));
-    QCOMPARE(viewMode.viewToDocument(QPointF(590, 840)), QPointF(590, 840));
-    QCOMPARE(viewMode.viewToDocument(QPointF(600, 840)), QPointF(600, 840)); // no clipping horizontally
-    QCOMPARE(viewMode.viewToDocument(QPointF(50, 1000)), QPointF(50, 1000)); // no clipping vertically
+    QCOMPARE(viewMode.viewToDocument(QPointF()).toPoint(), QPoint());
+    QCOMPARE(viewMode.viewToDocument(QPointF(10, 10)).toPoint(), QPoint(10, 10));
+    QCOMPARE(viewMode.viewToDocument(QPointF(590, 10)).toPoint(), QPoint(590, 10));
+    QCOMPARE(viewMode.viewToDocument(QPointF(590, 840)).toPoint(), QPoint(590, 840));
+    QCOMPARE(viewMode.viewToDocument(QPointF(600, 840)).toPoint(), QPoint(600, 840)); // no clipping horizontally
+    QCOMPARE(viewMode.viewToDocument(QPointF(50, 1000)).toPoint(), QPoint(50, 1000)); // no clipping vertically
 
     KWPage page2 = pageManager.appendPage();
     page2.setPageSide(KWPage::PageSpread);
@@ -76,21 +77,21 @@ void TestViewMode::testBasicConversion()
     QCOMPARE(qRound(viewMode.pageTops()[1]), A4_HEIGHT + PAGEGAP);
     QCOMPARE(qRound(viewMode.pageTops()[2]), A4_HEIGHT + PAGEGAP); // for a pageSpread we don't move the top of page
 
-    QCOMPARE(viewMode.documentToView(QPointF()), QPointF());
-    QCOMPARE(viewMode.documentToView(QPointF(10, 10)), QPointF(10, 10));
-    QCOMPARE(viewMode.documentToView(QPointF(590, 10)), QPointF(590, 10));
-    QCOMPARE(viewMode.documentToView(QPointF(590, 840)), QPointF(590, 840));
-    QCOMPARE(viewMode.documentToView(QPointF(600, 840)), QPointF(600, 840));
-    QCOMPARE(viewMode.documentToView(QPointF(50, 1000)), QPointF(50, 1000 + PAGEGAP));
-    QCOMPARE(viewMode.documentToView(QPointF(1000, 1000)), QPointF(1000, 1000 + PAGEGAP)); // no clipping vertically
+    QCOMPARE(viewMode.documentToView(QPointF()).toPoint(), QPoint());
+    QCOMPARE(viewMode.documentToView(QPointF(10, 10)).toPoint(), QPoint(10, 10));
+    QCOMPARE(viewMode.documentToView(QPointF(590, 10)).toPoint(), QPoint(590, 10));
+    QCOMPARE(viewMode.documentToView(QPointF(590, 840)).toPoint(), QPoint(590, 840));
+    QCOMPARE(viewMode.documentToView(QPointF(600, 840)).toPoint(), QPoint(600, 840));
+    QCOMPARE(viewMode.documentToView(QPointF(50, 1000)).toPoint(), QPoint(50, 1000 + PAGEGAP));
+    QCOMPARE(viewMode.documentToView(QPointF(1000, 1000)).toPoint(), QPoint(1000, 1000 + PAGEGAP)); // no clipping vertically
 
-    QCOMPARE(viewMode.viewToDocument(QPointF()), QPointF());
-    QCOMPARE(viewMode.viewToDocument(QPointF(10, 10)), QPointF(10, 10));
-    QCOMPARE(viewMode.viewToDocument(QPointF(590, 10)), QPointF(590, 10));
-    QCOMPARE(viewMode.viewToDocument(QPointF(590, 840)), QPointF(590, 840));
-    QCOMPARE(viewMode.viewToDocument(QPointF(600, 840)), QPointF(600, 840));
-    QCOMPARE(viewMode.viewToDocument(QPointF(50, 1000 + PAGEGAP)), QPointF(50, 1000));
-    QCOMPARE(viewMode.viewToDocument(QPointF(1000, 1000 + PAGEGAP)), QPointF(1000, 1000)); // no clipping vertically
+    QCOMPARE(viewMode.viewToDocument(QPointF()).toPoint(), QPoint());
+    QCOMPARE(viewMode.viewToDocument(QPointF(10, 10)).toPoint(), QPoint(10, 10));
+    QCOMPARE(viewMode.viewToDocument(QPointF(590, 10)).toPoint(), QPoint(590, 10));
+    QCOMPARE(viewMode.viewToDocument(QPointF(590, 840)).toPoint(), QPoint(590, 840));
+    QCOMPARE(viewMode.viewToDocument(QPointF(600, 840)).toPoint(), QPoint(600, 840));
+    QCOMPARE(viewMode.viewToDocument(QPointF(50, 1000 + PAGEGAP)).toPoint(), QPoint(50, 1000));
+    QCOMPARE(viewMode.viewToDocument(QPointF(1000, 1000 + PAGEGAP)).toPoint(), QPoint(1000, 1000)); // no clipping vertically
 
     // rectangles are more tricky ;)
     QList<KWViewMode::ViewMap> answer;
@@ -122,7 +123,9 @@ void TestViewMode::testClipRectForPageSpread()
     pageManager.defaultPageStyle().setPageLayout(pageLayout);
 
     KoZoomHandler zoomer;
-    zoomer.setZoomAndResolution(100, 72, 72); // BORING :)
+    zoomer.setZoom(1.0);
+    zoomer.setDpi(72, 72); // BORING :)
+
     MyViewModeNormal viewMode;
     viewMode.setPageManager(&pageManager);
     viewMode.setViewConverter(&zoomer);
@@ -180,7 +183,9 @@ void TestViewMode::testPageSetupChanged()
     pageManager.defaultPageStyle().setPageLayout(pageLayout);
 
     KoZoomHandler zoomer;
-    zoomer.setZoomAndResolution(100, 72, 72); // BORING :)
+    zoomer.setZoom(1.0);
+    zoomer.setDpi(72, 72); // BORING :)
+
     MyViewModeNormal viewMode;
     viewMode.setPageManager(&pageManager);
     viewMode.setViewConverter(&zoomer);

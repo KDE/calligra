@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009-2010 Adam Pigg <adam@piggz.co.uk>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -49,7 +49,7 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
     KoXmlWriter& writer = context.xmlWriter();
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    
+
     writer.startElement("kexirelationdesign:shape");
     writer.addAttribute("xmlns:kexirelationdesign", "http://www.koffice.org/kexirelationdesign");
     writer.startElement("kexirelationdesign:relation");
@@ -73,9 +73,11 @@ void KexiRelationDesignShape::saveOdf ( KoShapeSavingContext& context ) const {
 
     //Fill to white
     painter.fillRect(QRectF(QPointF(0,0), imgSize), Qt::white);
-    
+
     KoZoomHandler converter;
-    converter.setZoomAndResolution(100, previewDPI, previewDPI);
+    converter.setZoom( 1.0 );
+    converter.setDpi( previewDPI, previewDPI);
+
     constPaint(painter, converter);
     writer.startElement("draw:image");
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
@@ -131,7 +133,7 @@ void KexiRelationDesignShape::paint ( QPainter& painter, const KoViewConverter& 
 
 void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConverter& converter ) const {
     applyConversion(painter, converter);
-    
+
     painter.save();
     //painter.setRenderHint(QPainter::Antialiasing, true);
     QPainterPath pp;
@@ -139,7 +141,7 @@ void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConver
 
     painter.setClipPath(pp);
     painter.setPen(QPen(Qt::black, 1.0));
-    
+
     //Draw user specified background
     if (background()) {
         background()->paint(painter, pp);
@@ -151,9 +153,9 @@ void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConver
     QFont f;
     f.setFamily("sans-serif");
     f.setPixelSize(10);
-    
+
     painter.setFont(f);
-    
+
     painter.drawText(QPointF(5.0, 11.0), m_database + " : " + m_relation);
 
     uint i = 0;
@@ -166,13 +168,13 @@ void KexiRelationDesignShape::constPaint ( QPainter& painter, const KoViewConver
             painter.drawEllipse(QPointF(8.0, offset - 4), 4,4);
         }
     }
-    
+
     painter.restore();
 }
 
 void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
     if (m_connectionData != cd) {
-        
+
         //Close any existing connection
         if (m_connection) {
             m_connection->disconnect();
@@ -180,9 +182,9 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
             m_connection = 0;
         }
         m_connectionData = cd;
-        
+
         KexiDB::DriverManager dm;
-        
+
         kDebug() << m_connectionData->driverName;
         KexiDB::Driver *_driver = dm.driver(m_connectionData->driverName);
 
@@ -207,7 +209,7 @@ void KexiRelationDesignShape::setConnectionData(KexiDB::ConnectionData* cd) {
             kDebug() << "No connection";
         }
         update();
-        
+
     }
 }
 

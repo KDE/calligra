@@ -142,7 +142,9 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
         float zh = (float)customSize.height() / (float)size.height();
         float z = qMin(zw, zh);
 
-        zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
+	converter.setZoom( z );
+	converter.setDpi( KoGlobal::dpiX(), KoGlobal::dpiY() );
+
         size = customSize;
     }
 
