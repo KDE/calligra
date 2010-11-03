@@ -18,7 +18,6 @@ applications = {
 
 # limit how many backtraces are recordes, since it takes a lot of time
 maxbacktraces = 50
-backtracessofar = 0
 
 def scanDirectory(rootdir, extensions):
 	if os.path.isfile(rootdir):
@@ -177,6 +176,7 @@ def runCommand(exepath, arguments, captureStdOut):
 	return r
 
 def profile(dir, file, logger, validator):
+	global maxbacktraces
 	logger.startTest(file)
 	file = os.path.join(dir, file)
 	(path, ext) = os.path.splitext(file)
@@ -203,8 +203,8 @@ def profile(dir, file, logger, validator):
 	r.lines = outfile.readlines()
 	outfile.close()
 	r.backtrace = None
-	if r.returnValue != 0 and backtracessofar < maxbacktraces:
-                backtracessofar += 1
+	if r.returnValue != 0 and maxbacktraces > 0:
+                maxbacktraces -= 1
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
 			"--eval-command=bt", "--args"] + [exepath] + args
