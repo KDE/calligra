@@ -104,8 +104,8 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     mEnhanced = false;
 
     // Initialize the bounding box.
-    mBBoxTop = 32767;           // Is there a constant for this?
-    mBBoxLeft = 32767;
+    mBBoxTop = 0;           // The default origin is (0, 0).
+    mBBoxLeft = 0;
     mBBoxRight = -32768;
     mBBoxBottom = -32768;
     mMaxWidth = 0;

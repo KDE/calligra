@@ -22,7 +22,8 @@
 #include "kowmfread.h"
 #include <kowmf_export.h>
 
-#include <QtGui/QPainter>
+#include <QPainter>
+#include <QTransform>
 
 class QPolygon;
 
@@ -72,9 +73,9 @@ private:
     void  save();
     void  restore();
 
-    // Windows and Viewports
-    void setWindowViewport();
-    void unsetWindowViewport();
+    /// Recalculate the world transform and then apply it to the painter
+    /// This must be called at the end of every function that changes the transform.
+    void recalculateWorldTransform();
 
     // Drawing tools
     void  setFont(const QFont& font);
@@ -151,7 +152,9 @@ protected:
     qreal         mWindowViewportScaleX;
     qreal         mWindowViewportScaleY;
     bool          mWindowViewportIsSet;
-
+    QTransform    mOutputTransform;
+    QTransform    mWorldTransform;
+    
     int mSaveCount; //number of times Save() was called without Restore()
 };
 
