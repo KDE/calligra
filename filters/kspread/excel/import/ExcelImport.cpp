@@ -975,6 +975,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
         }
 
         ChartExport *c = new ChartExport(chart->m_chart);
+        c->setSheetReplacement( false );
         c->m_href = QString("Chart%1").arg(this->charts.count()+1);
         c->m_endCellAddress = encodeAddress(sheet->name(), chart->m_colR, chart->m_rwB);
         c->m_notifyOnUpdateOfRanges = "Sheet1.D2:Sheet1.F2";
@@ -1337,7 +1338,7 @@ KoXmlDocument ExcelImport::Private::endMemoryXmlWriter(KoXmlWriter* writer)
     writer->endElement();
     writer->endDocument();
     QBuffer* b = static_cast<QBuffer*>(writer->device());
-    delete writer;
+    
 
     b->seek(0);
     KoXmlDocument doc;
@@ -1346,6 +1347,7 @@ KoXmlDocument ExcelImport::Private::endMemoryXmlWriter(KoXmlWriter* writer)
         kDebug() << errorMsg << errorLine << errorColumn;
     }
     delete b;
+    delete writer;
     return doc;
 }
 
