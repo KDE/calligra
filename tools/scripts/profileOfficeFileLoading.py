@@ -203,7 +203,7 @@ def profile(dir, file, logger, validator):
 	r.lines = outfile.readlines()
 	outfile.close()
 	r.backtrace = None
-	if r.returnValue != 0 && backtracessofar < maxbacktraces:
+	if r.returnValue != 0 and backtracessofar < maxbacktraces:
                 backtracessofar += 1
 		# generate a backtrace
 		args = ["--batch", "--eval-command=run",
