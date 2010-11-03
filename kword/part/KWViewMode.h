@@ -51,7 +51,7 @@ class KoCanvasBase;
  * This class provides a layer on top of the KoViewConverter and KWord should not use that
  * interface directly.
  */
-class KWORD_TEST_EXPORT KWViewMode : public QObject
+class KWORD_TEST_EXPORT     KWViewMode : public QObject
 {
     Q_OBJECT
 public:
@@ -132,6 +132,12 @@ public:
      * @return a list of clipping-rects as it maps to the internal document.
      */
     virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const = 0;
+
+    /**
+     * Set the gap between pages
+     * @param gap the gap in points
+     */
+    virtual void setGap(int gap) = 0;
 
 public slots:
     /**

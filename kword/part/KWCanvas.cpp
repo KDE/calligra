@@ -50,7 +50,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
-    m_viewConverter = m_view->viewConverter();
+    m_viewConverter = m_view->zoomHandler();
     m_viewMode = KWViewMode::create(viewMode, document, this);
 }
 

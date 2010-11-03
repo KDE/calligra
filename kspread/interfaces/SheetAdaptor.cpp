@@ -50,7 +50,7 @@ using namespace KSpread;
 SheetAdaptor::SheetAdaptor(Sheet* t)
         : QDBusAbstractAdaptor(t)
 {
-    setAutoRelaySignals(false);
+    //setAutoRelaySignals(false);
     m_sheet = t;
     connect(m_sheet->map(), SIGNAL(damagesFlushed(const QList<Damage*> &)),
             this, SLOT(handleDamages(const QList<Damage*> &)));

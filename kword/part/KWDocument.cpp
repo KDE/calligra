@@ -396,12 +396,27 @@ void KWDocument::addFrame(KWFrame *frame)
             canvas->shapeManager()->addShape(frame->shape());
         canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
+    if (viewCount() == 0) {
+        KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem());
+        if (canvas) {
+            canvas->shapeManager()->addShape(frame->shape());
+            canvas->resourceManager()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
+        }
+    }
     if (frame->loadingPageNumber() > 0) {
         if (m_magicCurtain == 0) {
             m_magicCurtain = new MagicCurtain();
             m_magicCurtain->setVisible(false);
-            foreach (KoView *view, views())
+            foreach (KoView *view, views()) {
                 static_cast<KWView*>(view)->canvasBase()->shapeManager()->addShape(m_magicCurtain);
+            }
+
+            if (viewCount() == 0) {
+                KoCanvasBase *canvas = dynamic_cast<KoCanvasBase *>(canvasItem());
+                if (canvas) {
+                    canvas->shapeManager()->addShape(m_magicCurtain);
+                }
+            }
         }
         m_magicCurtain->addFrame(frame);
     }

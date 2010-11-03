@@ -36,7 +36,7 @@
 #include <KoToolProxy.h>
 #include <KoGridData.h>
 #include <KoShape.h>
-#include <KoViewConverter.h>
+#include <KoZoomHandler.h>
 
 // KDE + Qt includes
 #include <KDebug>
@@ -54,6 +54,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     m_viewMode(0),
     m_viewConverter(0)
 {
+
     m_shapeManager = new KoShapeManager(this);
     //m_shapeManager->setPaintingStrategy(new KoShapeManagerCachedPaintingStrategy(m_shapeManager));
     m_toolProxy = new KoToolProxy(this, parent);

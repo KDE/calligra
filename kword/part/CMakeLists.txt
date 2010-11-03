@@ -160,10 +160,14 @@ KWPageStyle.h
 KWord.h
 KWCanvasBase.h
 KWCanvas.h
+KWView.h
 KWCanvasItem.h
 KWDocument.h
 KWApplicationConfig.h
-frames/KWFrameLayout.h
 KWViewMode.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+install (FILES
+    frames/KWFrameLayout.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/frames COMPONENT Devel)
 
