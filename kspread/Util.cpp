@@ -113,19 +113,17 @@ QDomElement KSpread::NativeFormat::createElement(const QString & tagname, const 
 
 QFont KSpread::NativeFormat::toFont(KoXmlElement & element)
 {
-    bool ok;
-    int size = element.attribute("size").toInt(&ok);
-    if (!ok)
-        return QFont();
-
     QFont f;
     f.setFamily(element.attribute("family"));
-    if (size > 0)
+
+    bool ok;
+    const int size = element.attribute("size").toInt(&ok);
+    if (ok)
         f.setPointSize(size);
 
-    f.setWeight(element.attribute("weight").toInt(&ok));
+    const int weight = element.attribute("weight").toInt(&ok);
     if (!ok)
-        return QFont();
+        f.setWeight(weight);
 
     if (element.hasAttribute("italic") && element.attribute("italic") == "yes")
         f.setItalic(true);
