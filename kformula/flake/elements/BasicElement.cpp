@@ -91,17 +91,17 @@ QLineF BasicElement::cursorLine(int position) const
     Q_UNUSED( position )
     QPointF top = absoluteBoundingRect().topLeft();
     QPointF bottom = top + QPointF( 0.0, height() );
-    return QLineF(top,bottom);   
+    return QLineF(top,bottom);
 }
 
-QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const 
+QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const
 {
 	QLineF l1=cursorLine(pos1);
 	QLineF l2=cursorLine(pos2);
 	//TODO: find out why doesn't work
 	//QRectF r1(l1.p1(),l1.p2());
 	//QRectF r2(l2.p1(),l2.p2());
-	
+
 	QRectF r1(l1.p1(),l2.p2());
 	QRectF r2(l2.p1(),l1.p2());
 	QPainterPath temp;
@@ -110,7 +110,7 @@ QPainterPath BasicElement::selectionRegion(const int pos1, const int pos2) const
 }
 
 
-const QRectF BasicElement::absoluteBoundingRect() const 
+const QRectF BasicElement::absoluteBoundingRect() const
 {
     QPointF neworigin = origin();
     BasicElement* tmp=parentElement();
@@ -229,7 +229,18 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
         const QByteArray name = ElementFactory::elementName( elementType() ).toLatin1();
         writer->startElement( name );
         writeMathMLAttributes( writer );
+        if ( elementType() == Formula ) {
+            /*
+             * This is a hack to make OOo compatible. It's mandatory
+             * for OOo requires a semantics element as math element's
+             * child
+             */
+            writer->startElement( "semantics" );
+        }
         writeMathMLContent( writer );
+        if ( elementType() == Formula ) {
+            writer->endElement();
+        }
         writer->endElement();
     }
 }
@@ -406,7 +417,7 @@ BasicElement* BasicElement::emptyDescendant()
 }
 
 //TODO: This should be cached
-BasicElement* BasicElement::formulaElement() 
+BasicElement* BasicElement::formulaElement()
 {
     if (parentElement()==0) {
         return this;
