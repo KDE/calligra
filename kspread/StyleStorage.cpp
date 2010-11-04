@@ -24,6 +24,7 @@
 #include <QCache>
 #include <QRegion>
 #include <QTimer>
+#include <QRunnable>
 
 #include "Global.h"
 #include "Map.h"
@@ -49,7 +50,112 @@ public:
     QMap<int, QPair<QRectF, SharedSubStyle> > possibleGarbage;
     QCache<QPoint, Style> cache;
     QRegion cachedArea;
+    StyleStorageLoaderJob* loader;
+
+    void ensureLoaded();
 };
+
+class KSpread::StyleStorageLoaderJob : public QRunnable
+{
+public:
+    StyleStorageLoaderJob(StyleStorage* storage, const QList<QPair<QRegion, Style> >& styles);
+    virtual void run();
+    void waitForFinished();
+    bool isFinished();
+private:
+    StyleStorage* m_storage;
+    QList<QPair<QRegion, Style> > m_styles;
+};
+
+StyleStorageLoaderJob::StyleStorageLoaderJob(StyleStorage *storage, const QList<QPair<QRegion, Style> > &styles)
+    : m_storage(storage), m_styles(styles)
+{
+
+}
+
+void StyleStorageLoaderJob::waitForFinished()
+{
+    run();
+}
+
+bool StyleStorageLoaderJob::isFinished()
+{
+    return false;
+}
+
+void StyleStorageLoaderJob::run()
+{
+    static int total = 0;
+    kDebug(36006) << "Loading styles";
+    QTime t; t.start();
+    StyleStorage::Private* d = m_storage->d;
+    QList<QPair<QRegion, SharedSubStyle> > subStyles;
+
+    d->usedArea = QRegion();
+    d->usedColumns.clear();
+    d->usedRows.clear();
+    d->cachedArea = QRegion();
+    d->cache.clear();
+    typedef QPair<QRegion, Style> StyleRegion;
+    foreach (const StyleRegion& styleArea, m_styles) {
+        const QRegion& reg = styleArea.first;
+        const Style& style = styleArea.second;
+        if (style.isEmpty()) continue;
+
+        // update used areas
+        QRect bound = reg.boundingRect();
+        if ((bound.top() == 1 && bound.bottom() >= KS_rowMax) || (bound.left() == 1 && bound.right() >= KS_colMax)) {
+            foreach (const QRect& rect, reg.rects()) {
+                if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
+                    for (int i = rect.left(); i <= rect.right(); ++i) {
+                        d->usedColumns.insert(i, true);
+                    }
+                } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
+                    for (int i = rect.top(); i <= rect.bottom(); ++i) {
+                        d->usedRows.insert(i, true);
+                    }
+                } else {
+                    d->usedArea += rect;
+                }
+            }
+        } else {
+            d->usedArea += reg;
+        }
+
+        // find substyles
+        foreach(const SharedSubStyle& subStyle, style.subStyles()) {
+            bool foundShared = false;
+            typedef const QList< SharedSubStyle> StoredSubStyleList;
+            StoredSubStyleList& storedSubStyles(d->subStyles.value(subStyle->type()));
+            StoredSubStyleList::ConstIterator end(storedSubStyles.end());
+            for (StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it) {
+                if (Style::compare(subStyle.data(), (*it).data())) {
+        //             kDebug(36006) <<"[REUSING EXISTING SUBSTYLE]";
+                    subStyles.append(qMakePair(reg, *it));
+                    foundShared = true;
+                    break;
+                }
+            }
+            if (!foundShared) {
+                // insert substyle and add to the used substyle list
+                subStyles.append(qMakePair(reg, subStyle));
+            }
+        }
+    }
+    d->tree.load(subStyles);
+    int e = t.elapsed();
+    total += e;
+    kDebug(36006) << "Time: " << e << total;
+}
+
+void StyleStorage::Private::ensureLoaded()
+{
+    if (loader) {
+        loader->waitForFinished();
+        delete loader;
+        loader = 0;
+    }
+}
 
 StyleStorage::StyleStorage(Map* map)
         : QObject(map)
@@ -57,6 +163,7 @@ StyleStorage::StyleStorage(Map* map)
 {
     d->map = map;
     d->cache.setMaxCost(g_maximumCachedStyles);
+    d->loader = 0;
 }
 
 StyleStorage::StyleStorage(const StyleStorage& other)
@@ -69,16 +176,19 @@ StyleStorage::StyleStorage(const StyleStorage& other)
     d->usedRows = other.d->usedRows;
     d->usedArea = other.d->usedArea;
     d->subStyles = other.d->subStyles;
+    d->loader = 0;
     // the other member variables are temporary stuff
 }
 
 StyleStorage::~StyleStorage()
 {
+    d->ensureLoaded();
     delete d;
 }
 
 Style StyleStorage::contains(const QPoint& point) const
 {
+    d->ensureLoaded();
     if (!d->usedArea.contains(point) && !d->usedColumns.contains(point.x()) && !d->usedRows.contains(point.y()))
         return *styleManager()->defaultStyle();
     // first, lookup point in the cache
@@ -102,18 +212,21 @@ Style StyleStorage::contains(const QPoint& point) const
 
 Style StyleStorage::contains(const QRect& rect) const
 {
+    d->ensureLoaded();
     QList<SharedSubStyle> subStyles = d->tree.contains(rect);
     return composeStyle(subStyles);
 }
 
 Style StyleStorage::intersects(const QRect& rect) const
 {
+    d->ensureLoaded();
     QList<SharedSubStyle> subStyles = d->tree.intersects(rect);
     return composeStyle(subStyles);
 }
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::undoData(const Region& region) const
 {
+    d->ensureLoaded();
     QList< QPair<QRectF, SharedSubStyle> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
@@ -131,6 +244,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::undoData(const Region& regi
 
 QRect StyleStorage::usedArea() const
 {
+    d->ensureLoaded();
     if (d->usedArea.isEmpty())
         return QRect(1, 1, 0, 0);
     return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
@@ -138,6 +252,7 @@ QRect StyleStorage::usedArea() const
 
 void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSavingContext& tableContext) const
 {
+    d->ensureLoaded();
 #if 0 // TODO
     // If we have both, column and row styles, we can take the short route.
     if (!d->usedColumns.isEmpty() && !d->usedRows.isEmpty()) {
@@ -188,30 +303,35 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSav
 
 int StyleStorage::nextColumnStyleIndex(int column) const
 {
+    d->ensureLoaded();
     QMap<int, bool>::iterator it = d->usedColumns.upperBound(column + 1);
     return (it == d->usedColumns.end()) ? 0 : it.key();
 }
 
 int StyleStorage::nextRowStyleIndex(int row) const
 {
+    d->ensureLoaded();
     QMap<int, bool>::iterator it = d->usedRows.upperBound(row + 1);
     return (it == d->usedRows.end()) ? 0 : it.key();
 }
 
 int StyleStorage::firstColumnIndexInRow(int row) const
 {
+    d->ensureLoaded();
     const QRect rect = (d->usedArea & QRect(QPoint(1, row), QPoint(KS_colMax, row))).boundingRect();
     return rect.isNull() ? 0 : rect.left();
 }
 
 int StyleStorage::nextColumnIndexInRow(int column, int row) const
 {
+    d->ensureLoaded();
     const QRect rect = (d->usedArea & QRect(QPoint(column + 1, row), QPoint(KS_colMax, row))).boundingRect();
     return rect.isNull() ? 0 : rect.left();
 }
 
 void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 {
+    d->ensureLoaded();
 //     kDebug(36006) <<"StyleStorage: inserting" << SubStyle::name(subStyle->type()) <<" into" << rect;
     // keep track of the used area
     const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
@@ -260,6 +380,7 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 
 void StyleStorage::insert(const Region& region, const Style& style)
 {
+    d->ensureLoaded();
     if (style.isEmpty())
         return;
     foreach(const SharedSubStyle& subStyle, style.subStyles()) {
@@ -274,64 +395,13 @@ void StyleStorage::insert(const Region& region, const Style& style)
 
 void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
 {
-    QList<QPair<QRegion, SharedSubStyle> > subStyles;
-
-    d->usedArea = QRegion();
-    d->usedColumns.clear();
-    d->usedRows.clear();
-    d->cachedArea = QRegion();
-    d->cache.clear();
-    typedef QPair<QRegion, Style> StyleRegion;
-    foreach (const StyleRegion& styleArea, styles) {
-        const QRegion& reg = styleArea.first;
-        const Style& style = styleArea.second;
-        if (style.isEmpty()) continue;
-
-        // update used areas
-        QRect bound = reg.boundingRect();
-        if ((bound.top() == 1 && bound.bottom() >= KS_rowMax) || (bound.left() == 1 && bound.right() >= KS_colMax)) {
-            foreach (const QRect& rect, reg.rects()) {
-                if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
-                    for (int i = rect.left(); i <= rect.right(); ++i) {
-                        d->usedColumns.insert(i, true);
-                    }
-                } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
-                    for (int i = rect.top(); i <= rect.bottom(); ++i) {
-                        d->usedRows.insert(i, true);
-                    }
-                } else {
-                    d->usedArea += rect;
-                }
-            }
-        } else {
-            d->usedArea += reg;
-        }
-
-        // find substyles
-        foreach(const SharedSubStyle& subStyle, style.subStyles()) {
-            bool foundShared = false;
-            typedef const QList< SharedSubStyle> StoredSubStyleList;
-            StoredSubStyleList& storedSubStyles(d->subStyles.value(subStyle->type()));
-            StoredSubStyleList::ConstIterator end(storedSubStyles.end());
-            for (StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it) {
-                if (Style::compare(subStyle.data(), (*it).data())) {
-        //             kDebug(36006) <<"[REUSING EXISTING SUBSTYLE]";
-                    subStyles.append(qMakePair(reg, *it));
-                    foundShared = true;
-                    break;
-                }
-            }
-            if (!foundShared) {
-                // insert substyle and add to the used substyle list
-                subStyles.append(qMakePair(reg, subStyle));
-            }
-        }
-    }
-    d->tree.load(subStyles);
+    Q_ASSERT(!d->loader);
+    d->loader = new StyleStorageLoaderJob(this, styles);
 }
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertRows(int position, int number)
 {
+    d->ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -362,6 +432,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertRows(int position, in
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertColumns(int position, int number)
 {
+    d->ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -392,6 +463,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertColumns(int position,
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeRows(int position, int number)
 {
+    d->ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -419,6 +491,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeRows(int position, in
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeColumns(int position, int number)
 {
+    d->ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -446,6 +519,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeColumns(int position,
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftRight(const QRect& rect)
 {
+    d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
     QList< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << qMakePair(QRectF(rect), SharedSubStyle());
@@ -472,6 +546,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftRight(const QRec
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftDown(const QRect& rect)
 {
+    d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
     QList< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << qMakePair(QRectF(rect), SharedSubStyle());
@@ -498,6 +573,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::insertShiftDown(const QRect
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftLeft(const QRect& rect)
 {
+    d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
     QList< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << qMakePair(QRectF(rect), SharedSubStyle());
@@ -519,6 +595,7 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftLeft(const QRect
 
 QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftUp(const QRect& rect)
 {
+    d->ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
     QList< QPair<QRectF, SharedSubStyle> > undoData;
     undoData << qMakePair(QRectF(rect), SharedSubStyle());
@@ -540,12 +617,20 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::removeShiftUp(const QRect& 
 
 void StyleStorage::invalidateCache()
 {
+    // still busy loading? no cache to invalidate
+    if (d->loader && !d->loader->isFinished())
+        return;
+
     d->cache.clear();
     d->cachedArea = QRegion();
 }
 
 void StyleStorage::garbageCollection()
 {
+    // still busy loading? no garbage to collect
+    if (d->loader && !d->loader->isFinished())
+        return;
+
     // any possible garbage left?
     if (d->possibleGarbage.isEmpty())
         return;
@@ -678,6 +763,9 @@ void StyleStorage::garbageCollection()
 
 void StyleStorage::regionChanged(const QRect& rect)
 {
+    // still busy loading? no garbage to collect
+    if (d->loader && !d->loader->isFinished())
+        return;
     if (d->map->isLoading())
         return;
     // mark the possible garbage
@@ -691,6 +779,10 @@ void StyleStorage::regionChanged(const QRect& rect)
 
 void StyleStorage::invalidateCache(const QRect& rect)
 {
+    // still busy loading? no cache to invalidate
+    if (d->loader && !d->loader->isFinished())
+        return;
+
 //     kDebug(36006) <<"StyleStorage: Invalidating" << rect;
     const QRegion region = d->cachedArea.intersected(rect);
     d->cachedArea = d->cachedArea.subtracted(rect);
@@ -706,6 +798,8 @@ void StyleStorage::invalidateCache(const QRect& rect)
 
 Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
 {
+    d->ensureLoaded();
+
     if (subStyles.isEmpty())
         return *styleManager()->defaultStyle();
 

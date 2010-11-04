@@ -36,6 +36,7 @@ class OdfSavingContext;
 class Style;
 class StyleManager;
 class SubStyle;
+class StyleStorageLoaderJob;
 
 /**
  * \ingroup Storage
@@ -223,6 +224,7 @@ protected:
     StyleManager* styleManager() const;
 
 private:
+    friend class StyleStorageLoaderJob;
     // disable assignment
     void operator=(const StyleStorage& other);
 
