@@ -42,7 +42,7 @@ public:
     * possible that multiple instances of this plugin exist the same time.
     * \param args The optional list of arguments.
     */
-    ScriptingPart(QObject* parent, const QStringList& args);
+    ScriptingPart(QObject* parent, const QVariantList& args);
 
     /**
     * Destructor.

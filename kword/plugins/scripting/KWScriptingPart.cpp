@@ -21,15 +21,17 @@
 #include "KWScriptingPart.h"
 #include "Module.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
+#include <kdebug.h>
 #include <kstandarddirs.h>
 
-typedef KGenericFactory<KWScriptingPart> KWordScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY(krossmodulekword, KWordScriptingFactory("krossmodulekword"))
+K_PLUGIN_FACTORY(KWordScriptingFactory, registerPlugin<KWScriptingPart>();)
+K_EXPORT_PLUGIN(KWordScriptingFactory("krossmodulekword"))
 
-KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)
-        : KoScriptingPart(new Scripting::Module(parent), args)
+KWScriptingPart::KWScriptingPart(QObject* parent, const QVariantList& args)
+        : KoScriptingPart(new Scripting::Module(parent))
 {
+    Q_UNUSED(args);
     setComponentData(KWScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data", "kword/kpartplugins/scripting.rc"), true);
     kDebug(32010) << "Parent:" << parent->metaObject()->className();

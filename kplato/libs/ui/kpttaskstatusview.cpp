@@ -558,7 +558,7 @@ void PerformanceStatusBase::createBarChart()
     m_barchart.effortplane->setObjectName( "Bar chart, Effort" );
     m_barchart.costplane = new CartesianCoordinatePlane( ui_chart );
     m_barchart.costplane->setReferenceCoordinatePlane( m_barchart.effortplane );
-    m_barchart.effortplane->setObjectName( "Bar chart, Cost" );
+    m_barchart.costplane->setObjectName( "Bar chart, Cost" );
 
     BarDiagram *effortdiagram = new BarDiagram( ui_chart, m_barchart.effortplane );
     effortdiagram->setObjectName( "Effort diagram" );
@@ -664,7 +664,7 @@ void PerformanceStatusBase::setupChart()
         CartesianCoordinatePlane *p = dynamic_cast<CartesianCoordinatePlane*>( pl );
         if ( p == 0 ) continue;
         GridAttributes ga = p->globalGridAttributes();
-        ga.setGridVisible( p->referenceCoordinatePlane() == 0 );
+        ga.setGridVisible( p->referenceCoordinatePlane() != 0 );
         p->setGlobalGridAttributes( ga );
     }
     m_legend->setDatasetHidden( 0, ! ( m_chartinfo.showCost && m_chartinfo.showBCWSCost ) );
@@ -683,23 +683,25 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
     kDebug()<<"cost="<<info.showCost<<"effort="<<info.showEffort;
     static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->takeAxis( cc.dateaxis );
     static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->takeAxis( cc.dateaxis );
+    cc.costplane->setReferenceCoordinatePlane( 0 );
     if ( info.showEffort ) {
         // column 0, 1 and 2 is reserved for cost if cost is shown
-        cc.effortplane->diagram()->setHidden( 0, false );
-        cc.effortplane->diagram()->setHidden( 1, false );
-        cc.effortplane->diagram()->setHidden( 2, false );
+        cc.effortplane->diagram()->setHidden( 0, true );
+        cc.effortplane->diagram()->setHidden( 1, true );
+        cc.effortplane->diagram()->setHidden( 2, true );
         // filter cost columns if cost is *not* shown
-        cc.effortproxy.setRejectColumns( info.showCost ? QList<int>() : QList<int>() << 0 << 1 << 2 );
+        //cc.effortproxy.setRejectColumns( info.showCost ? QList<int>() : QList<int>() << 0 << 1 << 2 );
+        cc.effortproxy.setRejectColumns( QList<int>() );
         // if cost is shown don't return a cost value or else it goes into the effort axis scale calculation
-        cc.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>()  );
+        //cc.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>() << 3 << 4 << 5  );
+        cc.effortproxy.setZeroColumns( QList<int>() << 0 << 1 << 2 );
         cc.effortaxis->setPosition( info.showCost ? CartesianAxis::Right : CartesianAxis::Left );
         ui_chart->addCoordinatePlane( cc.effortplane );
 
         static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->addAxis( cc.dateaxis );
         cc.effortplane->setGridNeedsRecalculate();
 
-        // If cost is shown, effort is column 3, 4, 5, else 0, 1, 2
-        int col = info.showCost ? 3 : 0;
+        int col = 3;//info.showCost ? 3 : 0;
         cc.effortplane->diagram()->setHidden( col, ! info.showBCWSEffort );
         cc.effortplane->diagram()->setHidden( ++col, ! info.showBCWPEffort );
         cc.effortplane->diagram()->setHidden( ++col, ! info.showACWPEffort );
@@ -723,20 +725,33 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
         cc.costplane->diagram()->setHidden( 5, true );
     }
     if ( info.showEffort ) {
+        cc.effortaxis->setCachedSizeDirty();
         cc.effortproxy.reset();
     }
     if ( info.showCost ) {
         cc.costaxis->setCachedSizeDirty();
         cc.costproxy.reset();
     }
-#if 0
-    kDebug()<<"Effort:"<<info.showEffort<<"reject="<<cc.effortproxy.rejectColumns()<<"zero="<<cc.effortproxy.zeroColumns()
-    <<endl<<0<<(cc.effortplane->diagram()->isHidden(0)?"hide":"show")<<cc.effortproxy.headerData(0,Qt::Horizontal).toString()
-    <<endl<<1<<(cc.effortplane->diagram()->isHidden(1)?"hide":"show")<<cc.effortproxy.headerData(1,Qt::Horizontal).toString()
-    <<endl<<2<<(cc.effortplane->diagram()->isHidden(2)?"hide":"show")<<cc.effortproxy.headerData(2,Qt::Horizontal).toString()
-    <<endl<<3<<(cc.effortplane->diagram()->isHidden(3)?"hide":"show")<<cc.effortproxy.headerData(3,Qt::Horizontal).toString()
-    <<endl<<4<<(cc.effortplane->diagram()->isHidden(4)?"hide":"show")<<cc.effortproxy.headerData(4,Qt::Horizontal).toString()
-    <<endl<<5<<(cc.effortplane->diagram()->isHidden(5)?"hide":"show")<<cc.effortproxy.headerData(5,Qt::Horizontal).toString();
+#if 1
+    int row = cc.effortproxy.rowCount()-1;
+    QString data0 = cc.effortproxy.index(row,0).data().toString();
+    QString data1 = cc.effortproxy.index(row,1).data().toString();
+    QString data2 = cc.effortproxy.index(row,2).data().toString();
+    QString data3 = cc.effortproxy.index(row,3).data().toString();
+    QString data4 = cc.effortproxy.index(row,4).data().toString();
+    QString data5 = cc.effortproxy.index(row,5).data().toString();
+    
+    kDebug()<<"Effort:"<<info.showEffort
+        <<"reject="<<cc.effortproxy.rejectColumns()
+        <<"zero="<<cc.effortproxy.zeroColumns()
+        <<endl<<0<<(cc.effortplane->diagram()->isHidden(0)?"hide":"show")
+        <<cc.effortproxy.headerData(0,Qt::Horizontal).toString()
+        <<data0
+    <<endl<<1<<(cc.effortplane->diagram()->isHidden(1)?"hide":"show")<<cc.effortproxy.headerData(1,Qt::Horizontal).toString()<<data1
+    <<endl<<2<<(cc.effortplane->diagram()->isHidden(2)?"hide":"show")<<cc.effortproxy.headerData(2,Qt::Horizontal).toString()<<data2
+    <<endl<<3<<(cc.effortplane->diagram()->isHidden(3)?"hide":"show")<<cc.effortproxy.headerData(3,Qt::Horizontal).toString()<<data3
+    <<endl<<4<<(cc.effortplane->diagram()->isHidden(4)?"hide":"show")<<cc.effortproxy.headerData(4,Qt::Horizontal).toString()<<data4
+    <<endl<<5<<(cc.effortplane->diagram()->isHidden(5)?"hide":"show")<<cc.effortproxy.headerData(5,Qt::Horizontal).toString()<<data5;
 
     kDebug()<<"Cost:"<<info.showCost<<"reject="<<cc.costproxy.rejectColumns()<<"zero="<<cc.costproxy.zeroColumns()
     <<endl<<0<<(cc.costplane->diagram()->isHidden(0)?"hide":"show")<<cc.costproxy.headerData(0,Qt::Horizontal).toString()
@@ -745,6 +760,13 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
     <<endl<<3<<(cc.costplane->diagram()->isHidden(3)?"hide":"show")<<cc.costproxy.headerData(3,Qt::Horizontal).toString()
     <<endl<<4<<(cc.costplane->diagram()->isHidden(4)?"hide":"show")<<cc.costproxy.headerData(4,Qt::Horizontal).toString()
     <<endl<<5<<(cc.costplane->diagram()->isHidden(5)?"hide":"show")<<cc.costproxy.headerData(5,Qt::Horizontal).toString();
+    
+    foreach( AbstractCoordinatePlane *p, ui_chart->coordinatePlanes() ) {
+        kDebug()<<p<<"refrences:"<<p->referenceCoordinatePlane();
+        foreach ( AbstractDiagram *d, p->diagrams() ) {
+            qDebug()<<p<<"diagram:"<<d;
+        }
+    }
 #endif
 }
 
@@ -807,7 +829,8 @@ void PerformanceStatusBase::drawValues()
     KLocale *locale = m_project->locale();
     const EffortCostMap &budget = m_chartmodel.bcwp();
     const EffortCostMap &actual = m_chartmodel.acwp();
-    bcwsCost->setText( locale->formatMoney( budget.totalCost() ) );
+
+    bcwsCost->setText( locale->formatMoney( budget.costTo( QDate::currentDate() ) ) );
     bcwpCost->setText( locale->formatMoney( budget.bcwpTotalCost() ) );
     acwpCost->setText( locale->formatMoney( actual.totalCost() ) );
 
@@ -817,7 +840,7 @@ void PerformanceStatusBase::drawValues()
     }
     cpi->setText( locale->formatNumber( cpi_ ) );
 
-    double bh = budget.totalEffort().toDouble( Duration::Unit_h);
+    double bh = budget.hoursTo( QDate::currentDate() );
     bcwsEffort->setText( locale->formatNumber( bh ) );
     bcwpEffort->setText( locale->formatNumber( budget.bcwpTotalEffort() ) );
     acwpEffort->setText( locale->formatNumber( actual.totalEffort().toDouble( Duration::Unit_h) ) );

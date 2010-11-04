@@ -29,7 +29,7 @@
 #include <Cell.h>
 
 class QObject;
-class QStringList;
+#include <QVariantList>
 
 namespace KSpread
 {
@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    Solver(QObject* parent, const QStringList& args);
+    Solver(QObject* parent, const QVariantList& args);
 
     /**
      * Destructor.

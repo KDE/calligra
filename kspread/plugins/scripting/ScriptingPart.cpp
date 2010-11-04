@@ -25,7 +25,7 @@
 // Qt
 #include <QFileInfo>
 // KDE
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kcmdlineargs.h>
@@ -38,8 +38,8 @@
 // Kross
 #include <kross/core/manager.h>
 
-typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY(krossmodulekspread, KSpreadScriptingFactory("krossmodulekspread"))
+K_PLUGIN_FACTORY(KSpreadScriptingFactory, registerPlugin< ScriptingPart >();)
+K_EXPORT_PLUGIN(KSpreadScriptingFactory("krossmodulekspread"))
 
 /// \internal d-pointer class.
 class ScriptingPart::Private
@@ -47,10 +47,11 @@ class ScriptingPart::Private
 public:
 };
 
-ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
-        : KoScriptingPart(new ScriptingModule(parent), list)
+ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
+        : KoScriptingPart(new ScriptingModule(parent))
         , d(new Private())
 {
+    Q_UNUSED(argList);
     setComponentData(ScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data", "kspread/kpartplugins/scripting.rc"), true);
     kDebug() << "Scripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();

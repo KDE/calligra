@@ -659,31 +659,37 @@ void Appointment::saveXML(QDomElement &element) const {
 }
 
 // Returns the total planned effort for this appointment
-Duration Appointment::plannedEffort() const {
+Duration Appointment::plannedEffort(EffortCostCalculationType type) const {
     Duration d;
-    foreach (const AppointmentInterval &i, m_intervals ) {
-        d += i.effort();
+    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+        foreach (const AppointmentInterval &i, m_intervals ) {
+            d += i.effort();
+        }
     }
     return d;
 }
 
 // Returns the planned effort on the date
-Duration Appointment::plannedEffort(const QDate &date) const {
+Duration Appointment::plannedEffort(const QDate &date, EffortCostCalculationType type) const {
     Duration d;
-    QDateTime s(date);
-    QDateTime e(date.addDays(1));
-    foreach (const AppointmentInterval &i, m_intervals ) {
-        d += i.effort(DateTime(s, i.startTime().timeSpec()), DateTime(e, i.startTime().timeSpec()));
+    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+        QDateTime s(date);
+        QDateTime e(date.addDays(1));
+        foreach (const AppointmentInterval &i, m_intervals ) {
+            d += i.effort(DateTime(s, i.startTime().timeSpec()), DateTime(e, i.startTime().timeSpec()));
+        }
     }
     return d;
 }
 
 // Returns the planned effort upto and including the date
-Duration Appointment::plannedEffortTo(const QDate& date) const {
+Duration Appointment::plannedEffortTo(const QDate& date, EffortCostCalculationType type) const {
     Duration d;
     QDate e(date.addDays(1));
-    foreach (const AppointmentInterval &i, m_intervals ) {
-        d += i.effort(e, true); // upto e, not including
+    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+        foreach (const AppointmentInterval &i, m_intervals ) {
+            d += i.effort(e, true); // upto e, not including
+        }
     }
     //kDebug()<<date<<d.toString();
     return d;
@@ -691,15 +697,16 @@ Duration Appointment::plannedEffortTo(const QDate& date) const {
 
 // Returns a list of efforts pr day for interval start, end inclusive
 // The list only includes days with any planned effort
-EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend) const {
+EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend, EffortCostCalculationType type) const {
     //kDebug()<<m_node->id()<<","<<m_resource->id();
     EffortCostMap ec;
-    Duration eff;
     QDate start = pstart.isValid() ? pstart : startTime().date();
     QDate end = pend.isValid() ? pend : endTime().date();
     QDate dt(start);
     QDate ndt(dt.addDays(1));
     double rate = m_resource ? m_resource->normalRatePrHour() : 0.0;
+    Resource::Type rt = m_resource->resource()->type();
+    Duration zero;
     //kDebug()<<rate<<m_intervals.count();
     foreach (const AppointmentInterval &i, m_intervals ) {
         DateTime st = i.startTime();
@@ -713,8 +720,23 @@ EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend) 
         ndt = dt.addDays(1);
         while (dt <= e.date() && dt <= end ) {
             //kDebug()<<start<<end<<dt;
-            eff = i.effort(DateTime(dt, QTime( 0, 0, 0 ), st.timeSpec()), DateTime(ndt, QTime( 0, 0, 0 ), st.timeSpec()));
-            ec.add(dt, eff, eff.toDouble(Duration::Unit_h) * rate);
+            Duration eff;
+            switch ( type ) {
+                case ECCT_All:
+                    eff = i.effort(DateTime(dt, QTime( 0, 0, 0 ), st.timeSpec()), DateTime(ndt, QTime( 0, 0, 0 ), st.timeSpec()));
+                    ec.add(dt, eff, eff.toDouble(Duration::Unit_h) * rate);
+                    break;
+                case ECCT_EffortWork:
+                    eff = i.effort(DateTime(dt, QTime( 0, 0, 0 ), st.timeSpec()), DateTime(ndt, QTime( 0, 0, 0 ), st.timeSpec()));
+                    ec.add(dt, (rt == Resource::Type_Work ? eff : zero), eff.toDouble(Duration::Unit_h) * rate);
+                    break;
+                case ECCT_Work:
+                    if ( rt == Resource::Type_Work ) {
+                        eff = i.effort(DateTime(dt, QTime( 0, 0, 0 ), st.timeSpec()), DateTime(ndt, QTime( 0, 0, 0 ), st.timeSpec()));
+                        ec.add(dt, eff, eff.toDouble(Duration::Unit_h) * rate);
+                    }
+                    break;
+            }
             if (dt < e.date() && dt < end) {
                 // loop trough the interval (it spans dates)
                 dt = ndt;
@@ -728,27 +750,52 @@ EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend) 
 }
 
 
-EffortCost Appointment::plannedCost() const {
+EffortCost Appointment::plannedCost(EffortCostCalculationType type) const {
     EffortCost ec;
-    ec.setEffort( plannedEffort() );
+    ec.setEffort( plannedEffort(type) );
     if (m_resource && m_resource->resource()) {
-        ec.setCost( ec.hours() * m_resource->resource()->normalRate() ); //FIXME overtime
+        switch ( type ) {
+            case ECCT_Work:
+                if ( m_resource->resource()->type() != Resource::Type_Work ) {
+                    break;
+                }
+                // fall through
+            default:
+                ec.setCost( ec.hours() * m_resource->resource()->normalRate() ); //FIXME overtime
+                break;
+        }
     }
     return ec;
 }
 
 //Calculates the planned cost on date
-double Appointment::plannedCost(const QDate &date) {
+double Appointment::plannedCost(const QDate &date, EffortCostCalculationType type) {
     if (m_resource && m_resource->resource()) {
-        return plannedEffort(date).toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
+        switch ( type ) {
+            case ECCT_Work:
+                if ( m_resource->resource()->type() != Resource::Type_Work ) {
+                    break;
+                }
+                // fall through
+            default:
+                return plannedEffort(date).toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
+        }
     }
     return 0.0;
 }
 
 //Calculates the planned cost upto and including date
-double Appointment::plannedCostTo(const QDate &date) {
+double Appointment::plannedCostTo(const QDate &date, EffortCostCalculationType type) {
     if (m_resource && m_resource->resource()) {
-        return plannedEffortTo(date).toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
+        switch ( type ) {
+            case ECCT_Work:
+                if ( m_resource->resource()->type() != Resource::Type_Work ) {
+                    break;
+                }
+                // fall through
+            default:
+                return plannedEffortTo(date).toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
+        }
     }
     return 0.0;
 }
@@ -776,22 +823,30 @@ void Appointment::detach() {
 }
 
 // Returns the effort from start to end
-Duration Appointment::effort(const DateTime &start, const DateTime &end) const {
-    return m_intervals.effort( start, end );
+Duration Appointment::effort(const DateTime &start, const DateTime &end, EffortCostCalculationType type) const {
+    Duration e;
+    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+        e = m_intervals.effort( start, end );
+    }
+    return e;
 }
 // Returns the effort from start for the duration
-Duration Appointment::effort(const DateTime &start, const Duration &duration) const {
+Duration Appointment::effort(const DateTime &start, const Duration &duration, EffortCostCalculationType type) const {
     Duration d;
-    foreach (const AppointmentInterval &i, m_intervals ) {
-        d += i.effort(start, start+duration);
+    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+        foreach (const AppointmentInterval &i, m_intervals ) {
+            d += i.effort(start, start+duration);
+        }
     }
     return d;
 }
 // Returns the effort upto time / from time
-Duration Appointment::effortFrom(const QDate &time) const {
+Duration Appointment::effortFrom(const QDate &time, EffortCostCalculationType type) const {
     Duration d;
-    foreach (const AppointmentInterval &i, m_intervals ) {
-        d += i.effort(time, false);
+    if ( type == ECCT_All || m_resource->resource()->type() == Resource::Type_Work ) {
+        foreach (const AppointmentInterval &i, m_intervals ) {
+            d += i.effort(time, false);
+        }
     }
     return d;
 }

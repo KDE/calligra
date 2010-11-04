@@ -188,14 +188,14 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
             }
             QString s = i18n( "None" );
             Calendar *cal = res->calendar( true ); // don't check for default calendar
-            if ( cal == 0 ) {
+            if ( cal ) {
+                s = cal->name();
+            } else if ( res->type() == Resource::Type_Work ) {
                 // Do we get a default calendar
                 cal = res->calendar();
                 if ( cal ) {
                     s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
                 }
-            } else {
-                s = cal->name();
             }
             return s;
         }
@@ -205,21 +205,21 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
             }
             QString s = i18nc( "@info:tooltip", "No calendar" );
             Calendar *cal = res->calendar( true ); // don't check for default calendar
-            if ( cal == 0 ) {
+            if ( cal ) {
+                s = cal->name();
+            } else if ( res->type() == Resource::Type_Work ) {
                 // Do we get a default calendar
                 cal = res->calendar();
                 if ( cal ) {
                     s = i18nc( "@info:tooltip 1=calendar name", "Using default calendar: %1", cal->name() );
                 }
-            } else {
-                s = cal->name();
             }
             return s;
         }
         case Role::EnumList: {
             Calendar *cal = m_project->defaultCalendar();
             QString s = i18n( "None" );
-            if ( cal ) {
+            if ( cal &&  res->type() == Resource::Type_Work ) {
                 s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
             }
             return QStringList() << s << m_project->calendarNames();

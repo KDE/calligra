@@ -129,6 +129,8 @@ QString SubStyle::name(Style::Key key)
     return name;
 }
 
+SharedSubStyle SharedSubStyle::s_defaultStyle(new SubStyle());
+
 } // namespace KSpread
 
 /////////////////////////////////////////////////////////////////////////////

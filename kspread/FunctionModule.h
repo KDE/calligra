@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QString>
+#include <KPluginFactory>
 
 #include "kspread_export.h"
 

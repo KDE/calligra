@@ -479,98 +479,98 @@ EffortCostMap Schedule::bcwsPrDay() const
     //kDebug()<<m_name<<m_appointments;
     EffortCostMap ec;
     foreach ( Appointment *a, m_appointments ) {
-        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date() );
+        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date(), ECCT_Work );
     }
     return ec;
 }
 
-EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end ) const
+EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type ) const
 {
     //kDebug()<<m_name<<m_appointments;
     EffortCostMap ec;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
         //kDebug()<<m_name;
-        ec += it.next() ->plannedPrDay( start, end );
+        ec += it.next() ->plannedPrDay( start, end, type );
     }
     return ec;
 }
 
-EffortCostMap Schedule::plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end ) const
+EffortCostMap Schedule::plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type ) const
 {
     //kDebug()<<m_name<<m_appointments;
     EffortCostMap ec;
     foreach ( Appointment *a, m_appointments ) {
         if ( a->resource() && a->resource()->resource() == resource ) {
-            ec += a->plannedPrDay( start, end );
+            ec += a->plannedPrDay( start, end, type );
             break;
         }
     }
     return ec;
 }
 
-Duration Schedule::plannedEffort() const
+Duration Schedule::plannedEffort( EffortCostCalculationType type ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        eff += it.next() ->plannedEffort();
+        eff += it.next() ->plannedEffort( type );
     }
     return eff;
 }
 
-Duration Schedule::plannedEffort( const QDate &date ) const
+Duration Schedule::plannedEffort( const QDate &date, EffortCostCalculationType type ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        eff += it.next() ->plannedEffort( date );
+        eff += it.next() ->plannedEffort( date, type );
     }
     return eff;
 }
 
-Duration Schedule::plannedEffortTo( const QDate &date ) const
+Duration Schedule::plannedEffortTo( const QDate &date, EffortCostCalculationType type ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        eff += it.next() ->plannedEffortTo( date );
+        eff += it.next() ->plannedEffortTo( date, type );
     }
     return eff;
 }
 
-EffortCost Schedule::plannedCost() const
+EffortCost Schedule::plannedCost( EffortCostCalculationType type ) const
 {
     //kDebug();
     EffortCost c;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        c += it.next() ->plannedCost();
+        c += it.next() ->plannedCost( type );
     }
     return c;
 }
 
-double Schedule::plannedCost( const QDate &date ) const
+double Schedule::plannedCost( const QDate &date, EffortCostCalculationType type ) const
 {
     //kDebug();
     double c = 0;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        c += it.next() ->plannedCost( date );
+        c += it.next() ->plannedCost( date, type );
     }
     return c;
 }
 
-double Schedule::plannedCostTo( const QDate &date ) const
+double Schedule::plannedCostTo( const QDate &date, EffortCostCalculationType type ) const
 {
     //kDebug();
     double c = 0;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        c += it.next() ->plannedCostTo( date );
+        c += it.next() ->plannedCostTo( date, type );
     }
     return c;
 }

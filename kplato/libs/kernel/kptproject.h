@@ -202,39 +202,39 @@ public:
     /// Returns a list of all resources
     QList<Resource*> resourceList() const { return resourceIdDict.values(); }
 
-    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
-    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     /// Returns the total planned effort for this project (or subproject)
-    virtual Duration plannedEffort( long id = -1 ) const;
+    virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this project (or subproject) on date
-    virtual Duration plannedEffort( const QDate &date, long id = -1  ) const;
+    virtual Duration plannedEffort( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo( const QDate &date, long id = -1  ) const;
+    virtual Duration plannedEffortTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
     /// Returns the actual effort
     virtual Duration actualEffort() const;
     /// Returns the actual effort on @p date
-    virtual Duration actualEffort( const QDate &date) const;
+    virtual Duration actualEffort( const QDate &date ) const;
     /// Returns the actual effort up to and including @p date
     virtual Duration actualEffortTo( const QDate &date ) const;
     /**
      * Returns the total planned cost for this project
      * @param id Identity of the schedule to be used
      */
-    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /**
      * Planned cost on date
      * @param date The cost is calulated for this date (only)
      * @param id Identity of the schedule to be used
      */
-    virtual double plannedCost( const QDate &date, long id = -1  ) const;
+    virtual double plannedCost( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
     /**
      * Planned cost up to and including date
      * @param date The cost is calculated from the start of the project upto including date.
      * @param id Identity of the schedule to be used.
      */
-    virtual double plannedCostTo( const QDate &date, long id = -1  ) const;
+    virtual double plannedCostTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
     /**
      * Returns the actually reported cost for this project
@@ -252,9 +252,9 @@ public:
      */
     virtual EffortCost actualCostTo( const QDate &date ) const;
     
-    virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
+    virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
-    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = -1 ) const;
+    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     double effortPerformanceIndex( const QDate &date, long id ) const;
     

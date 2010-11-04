@@ -27,6 +27,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptappointment.h"
+#include "kptcalendar.h"
 
 #include <qdom.h>
 #include <QHash>
@@ -54,7 +55,6 @@ class Project;
 class Resource;
 class ResourceRequest;
 class ResourceGroupRequest;
-class Calendar;
 class ResourceRequestCollection;
 class Schedule;
 class NodeSchedule;
@@ -406,8 +406,8 @@ public:
     Appointment appointmentIntervals( long id ) const;
     Appointment appointmentIntervals() const;
     
-    EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id);
-    Duration plannedEffort( const QDate &date ) const;
+    EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id, EffortCostCalculationType = ECCT_All );
+    Duration plannedEffort( const QDate &date, EffortCostCalculationType = ECCT_All ) const;
 
     void setCurrentSchedulePtr( Schedule *schedule ) { m_currentSchedule = schedule; }
     void setCurrentSchedule( long id ) { m_currentSchedule = findSchedule( id ); }
@@ -538,6 +538,9 @@ private:
     Schedule *m_currentSchedule;
 
     mutable WorkInfoCache m_workinfocache;
+
+    // return this if resource has no calendar and is a material resource
+    Calendar m_materialCalendar;
 
 #ifndef NDEBUG
 public:

@@ -21,7 +21,7 @@
 #include "Solver.h"
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <ktextedit.h>
 #include <kactioncollection.h>
 #include <Formula.h>
@@ -37,8 +37,8 @@
 using namespace KSpread::Plugins;
 
 // make the plugin available
-typedef KGenericFactory<KSpread::Plugins::Solver> SolverFactory;
-K_EXPORT_COMPONENT_FACTORY(libkspreadsolver, SolverFactory("kspreadsolver"))
+K_PLUGIN_FACTORY(SolverFactory, registerPlugin<KSpread::Plugins::Solver>();)
+K_EXPORT_PLUGIN(SolverFactory("kspreadsolver"))
 
 KSpread::View* s_view = 0;
 KSpread::Formula* s_formula = 0;
@@ -52,7 +52,7 @@ public:
     View* view;
 };
 
-Solver::Solver(QObject* parent, const QStringList& args)
+Solver::Solver(QObject* parent, const QVariantList& args)
         : KParts::Plugin(parent),
         d(new Private)
 {

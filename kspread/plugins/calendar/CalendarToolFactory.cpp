@@ -22,7 +22,7 @@
 
 #include "CalendarTool.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KLocale>
 
 using namespace KSpread;

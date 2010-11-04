@@ -492,72 +492,72 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
     m_documents.save( me ); // TODO: copying documents
 }
 
-EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
+EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
     //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
         QListIterator<Node*> it( childNodeIterator() );
         while ( it.hasNext() ) {
-            ec += it.next() ->plannedEffortCostPrDay( start, end, id );
+            ec += it.next() ->plannedEffortCostPrDay( start, end, id, typ );
         }
         return ec;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        return s->plannedEffortCostPrDay(start, end);
+        return s->plannedEffortCostPrDay( start, end, typ );
     }
     return EffortCostMap();
 }
 
-EffortCostMap Task::plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const {
+EffortCostMap Task::plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
     //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
         QListIterator<Node*> it( childNodeIterator() );
         while ( it.hasNext() ) {
-            ec += it.next() ->plannedEffortCostPrDay( resource, start, end, id );
+            ec += it.next() ->plannedEffortCostPrDay( resource, start, end, id, typ );
         }
         return ec;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        return s->plannedEffortCostPrDay(resource, start, end);
+        return s->plannedEffortCostPrDay( resource, start, end, typ );
     }
     return EffortCostMap();
 }
 
-EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
+EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
     //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
         QListIterator<Node*> it( childNodeIterator() );
         while ( it.hasNext() ) {
-            ec += it.next() ->actualEffortCostPrDay( start, end, id );
+            ec += it.next() ->actualEffortCostPrDay( start, end, id, typ );
         }
         return ec;
     }
     switch ( completion().entrymode() ) {
         case Completion::FollowPlan:
-            return plannedEffortCostPrDay( start, end, id );
+            return plannedEffortCostPrDay( start, end, id, typ );
         default:
             return completion().effortCostPrDay( start, end, id );
     }
     return EffortCostMap();
 }
 
-EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id ) const {
+EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id, EffortCostCalculationType typ ) const {
     //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
         QListIterator<Node*> it( childNodeIterator() );
         while ( it.hasNext() ) {
-            ec += it.next() ->actualEffortCostPrDay( resource, start, end, id );
+            ec += it.next() ->actualEffortCostPrDay( resource, start, end, id, typ );
         }
         return ec;
     }
     switch ( completion().entrymode() ) {
         case Completion::FollowPlan:
-            return plannedEffortCostPrDay( resource, start, end, id );
+            return plannedEffortCostPrDay( resource, start, end, id, typ );
         default:
             return completion().effortCostPrDay( resource, start, end );
     }
@@ -565,52 +565,52 @@ EffortCostMap Task::actualEffortCostPrDay(const Resource *resource, const QDate 
 }
 
 // Returns the total planned effort for this task (or subtasks)
-Duration Task::plannedEffort( long id ) const {
+Duration Task::plannedEffort( long id, EffortCostCalculationType typ ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (const Node *n, childNodeIterator()) {
-            eff += n->plannedEffort( id );
+            eff += n->plannedEffort( id, typ );
         }
         return eff;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        eff = s->plannedEffort();
+        eff = s->plannedEffort( typ );
     }
     return eff;
 }
 
 // Returns the total planned effort for this task (or subtasks) on date
-Duration Task::plannedEffort(const QDate &date, long id ) const {
+Duration Task::plannedEffort(const QDate &date, long id, EffortCostCalculationType typ ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (const Node *n, childNodeIterator()) {
-            eff += n->plannedEffort(date, id);
+            eff += n->plannedEffort( date, id, typ );
         }
         return eff;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        eff = s->plannedEffort(date);
+        eff = s->plannedEffort( date, typ );
     }
     return eff;
 }
 
 // Returns the total planned effort for this task (or subtasks) upto and including date
-Duration Task::plannedEffortTo(const QDate &date, long id) const {
+Duration Task::plannedEffortTo( const QDate &date, long id, EffortCostCalculationType typ ) const {
     //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (const Node *n, childNodeIterator()) {
-            eff += n->plannedEffortTo(date, id);
+            eff += n->plannedEffortTo( date, id, typ );
         }
         return eff;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        eff = s->plannedEffortTo(date);
+        eff = s->plannedEffortTo( date, typ );
     }
     return eff;
 }
@@ -653,47 +653,47 @@ Duration Task::actualEffortTo( const QDate &date ) const {
     return completion().actualEffortTo( date );
 }
 
-EffortCost Task::plannedCost( long id ) const {
+EffortCost Task::plannedCost( long id, EffortCostCalculationType typ ) const {
     //kDebug();
     if (type() == Node::Type_Summarytask) {
-        return Node::plannedCost( id );
+        return Node::plannedCost( id, typ );
     }
     EffortCost c;
     Schedule *s = schedule( id );
     if ( s ) {
-        c = s->plannedCost();
+        c = s->plannedCost( typ );
     }
     return c;
 }
 
-double Task::plannedCost(const QDate &date, long id) const {
+double Task::plannedCost( const QDate &date, long id, EffortCostCalculationType typ ) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (const Node *n, childNodeIterator()) {
-            c += n->plannedCost(date, id);
+            c += n->plannedCost( date, id, typ );
         }
         return c;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        c = s->plannedCost(date);
+        c = s->plannedCost( date, typ );
     }
     return c;
 }
 
-double Task::plannedCostTo(const QDate &date, long id) const {
+double Task::plannedCostTo( const QDate &date, long id, EffortCostCalculationType typ ) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (const Node *n, childNodeIterator()) {
-            c += n->plannedCostTo(date, id);
+            c += n->plannedCostTo( date, id, typ );
         }
         return c;
     }
     Schedule *s = schedule( id );
     if ( s ) {
-        c = s->plannedCostTo(date);
+        c = s->plannedCostTo( date, typ );
     }
     return c;
 }
