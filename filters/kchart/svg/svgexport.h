@@ -23,13 +23,14 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class SvgExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    SvgExport(QObject* parent, const QStringList&);
+    SvgExport(QObject* parent, const QVariantList&);
     virtual ~SvgExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

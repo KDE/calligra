@@ -22,6 +22,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class HancomWordImport : public KoFilter
 {
@@ -29,7 +30,7 @@ class HancomWordImport : public KoFilter
 
 public:
 
-    HancomWordImport(QObject *parent, const QStringList&);
+    HancomWordImport(QObject *parent, const QVariantList&);
     virtual ~HancomWordImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

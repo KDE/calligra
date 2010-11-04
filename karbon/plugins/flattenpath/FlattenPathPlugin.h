@@ -32,7 +32,7 @@ class FlattenPathPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    FlattenPathPlugin(QWidget *parent, const QStringList &);
+    FlattenPathPlugin(QObject *parent, const QVariantList &);
     virtual ~FlattenPathPlugin() {}
 
 private slots:

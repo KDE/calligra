@@ -21,7 +21,7 @@
 #include <xsltimport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <QTextCodec>
@@ -30,11 +30,11 @@
 #include "xsltimportdia.h"
 
 
-typedef KGenericFactory<XSLTImport> XSLTImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libxsltimport, XSLTImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XSLTImportFactory, registerPlugin<XSLTImport>();)
+K_EXPORT_PLUGIN(XSLTImportFactory("kofficefilters"))
 
 
-XSLTImport::XSLTImport(QObject* parent, const QStringList&) :
+XSLTImport::XSLTImport(QObject* parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KPrPageEffectRegistry.h>
 #include "KPrBarWipeEffectFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_barwipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
 
-Plugin::Plugin(QObject *parent, const QStringList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KPrPageEffectRegistry::instance()->add(new KPrBarWipeEffectFactory());

@@ -26,6 +26,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class AmiProImport : public KoFilter
 {
@@ -33,7 +34,7 @@ class AmiProImport : public KoFilter
 
 public:
 
-    AmiProImport(QObject* parent, const QStringList&);
+    AmiProImport(QObject* parent, const QVariantList&);
     AmiProImport();
 
     virtual ~AmiProImport() {}

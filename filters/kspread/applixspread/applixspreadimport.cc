@@ -27,13 +27,13 @@
 #include <kdebug.h>
 #include <math.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-typedef KGenericFactory<APPLIXSPREADImport> APPLIXSPREADImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libapplixspreadimport, APPLIXSPREADImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(APPLIXSPREADImportFactory, registerPlugin<APPLIXSPREADImport>();)
+K_EXPORT_PLUGIN(APPLIXSPREADImportFactory("kofficefilters"))
 
 
-APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QStringList&)
+APPLIXSPREADImport::APPLIXSPREADImport(QObject *parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

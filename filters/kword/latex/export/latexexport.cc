@@ -22,7 +22,7 @@
 #include <latexexport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <QTextCodec>
@@ -30,11 +30,11 @@
 #include <QByteArray>
 #include "kwordlatexexportdia.h"
 
-typedef KGenericFactory<LATEXExport> LATEXExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkwordlatexexport, LATEXExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
+K_EXPORT_PLUGIN(LATEXExportFactory("kofficefilters"))
 
 
-LATEXExport::LATEXExport(QObject* parent, const QStringList&) :
+LATEXExport::LATEXExport(QObject* parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

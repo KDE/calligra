@@ -35,18 +35,18 @@
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <ooutils.h>
 #include <KoDom.h>
 #include <KoOasisSettings.h>
 
-typedef KGenericFactory<OoImpressImport> OoImpressImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libooimpressimport, OoImpressImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(OoImpressImportFactory, registerPlugin<OoImpressImport>();)
+K_EXPORT_PLUGIN(OoImpressImportFactory("kofficefilters"))
 
 
-OoImpressImport::OoImpressImport(QObject*parent, const QStringList &)
+OoImpressImport::OoImpressImport(QObject*parent, const QVariantList &)
         : KoFilter(parent),
         m_numPicture(1),
         m_numSound(1),

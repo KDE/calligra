@@ -25,13 +25,14 @@
 #define PNGEXPORT_H
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class PngExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    PngExport(QObject* parent, const QStringList&);
+    PngExport(QObject* parent, const QVariantList&);
     virtual ~PngExport() {}
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 };

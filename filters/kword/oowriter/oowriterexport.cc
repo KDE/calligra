@@ -31,7 +31,7 @@
 */
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kimageio.h>
 
 #include <KoFilterChain.h>
@@ -41,15 +41,10 @@
 //Added by qt3to4:
 #include <QByteArray>
 
-class OOWRITERExportFactory : public KGenericFactory<OOWRITERExport>
-{
-public:
-    OOWRITERExportFactory(void) : KGenericFactory<OOWRITERExport> ("kwordoowriterexport") {}
-};
+K_PLUGIN_FACTORY(OOWRITERExportFactory, registerPlugin<OOWRITERExport>();)
+K_EXPORT_PLUGIN(OOWRITERExportFactory("kwordoowriterexport", "kofficefilters"))
 
-K_EXPORT_COMPONENT_FACTORY(liboowriterexport, OOWRITERExportFactory())
-
-OOWRITERExport::OOWRITERExport(QObject* parent , const QStringList &) :
+OOWRITERExport::OOWRITERExport(QObject* parent , const QVariantList &) :
         KoFilter(parent)
 {
 }

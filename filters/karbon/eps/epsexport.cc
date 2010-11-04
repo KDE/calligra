@@ -26,7 +26,7 @@
 #include <QTextStream>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoDocumentInfo.h>
 #include <KoFilter.h>
 #include <KoFilterChain.h>
@@ -62,24 +62,11 @@ static char l1_setrgbcolor = 'r';
 static char l1_gsave  = 'S';
 static char l1_grestore  = 'R';
 
-
-class EpsExportFactory : KGenericFactory<EpsExport>
-{
-public:
-    EpsExportFactory(void)
-            : KGenericFactory<EpsExport>("karbonepsexport") {}
-
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
+K_PLUGIN_FACTORY(EpsExportFactory, registerPlugin<EpsExport>();)
+K_EXPORT_PLUGIN(EpsExportFactory("kofficefilters"))
 
 
-K_EXPORT_COMPONENT_FACTORY(libkarbonepsexport, EpsExportFactory())
-
-
-EpsExport::EpsExport(QObject* parent, const QStringList&)
+EpsExport::EpsExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

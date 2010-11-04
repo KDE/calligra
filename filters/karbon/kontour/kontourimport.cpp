@@ -19,7 +19,7 @@
 
 #include <kontourimport.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
 #include <KoUnit.h>
 #include <KoGlobal.h>
@@ -38,10 +38,10 @@
 
 #define DPI 90
 
-typedef KGenericFactory<KontourImport> KontourImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonkontourimport, KontourImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KontourImportFactory, registerPlugin<KontourImport>();)
+K_EXPORT_PLUGIN(KontourImportFactory("kofficefilters"))
 
-KontourImport::KontourImport(QObject *parent, const QStringList&) :
+KontourImport::KontourImport(QObject *parent, const QVariantList&) :
         KoFilter(parent),
         outdoc("DOC")
 {

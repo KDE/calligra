@@ -22,6 +22,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class WPGImport : public KoFilter
 {
@@ -30,7 +31,7 @@ class WPGImport : public KoFilter
 
 public:
 
-    WPGImport(QObject *parent, const QStringList&);
+    WPGImport(QObject *parent, const QVariantList&);
     virtual ~WPGImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

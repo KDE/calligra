@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -32,8 +32,8 @@
 
 #include "palmdocexport.h"
 
-typedef KGenericFactory<PalmDocExport> PalmDocExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libpalmdocexport, PalmDocExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PalmDocExportFactory, registerPlugin<PalmDocExport>();)
+K_EXPORT_PLUGIN(PalmDocExportFactory("kofficefilters"))
 
 class PalmDocWorker : public KWEFBaseWorker
 {
@@ -102,7 +102,7 @@ bool PalmDocWorker::doFullParagraph(const QString& paraText,
     return true;
 }
 
-PalmDocExport::PalmDocExport(QObject* parent, const QStringList&):
+PalmDocExport::PalmDocExport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

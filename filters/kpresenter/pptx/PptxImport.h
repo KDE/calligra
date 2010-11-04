@@ -27,13 +27,14 @@
 #define PPTXIMPORT_H
 
 #include <MsooXmlImport.h>
+#include <QVariantList>
 
 //! PPTX to ODP import filter
 class PptxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    PptxImport(QObject * parent, const QStringList &);
+    PptxImport(QObject * parent, const QVariantList &);
     virtual ~PptxImport();
 
 protected:

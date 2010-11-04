@@ -23,6 +23,7 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class XSLTExport : public KoFilter
 {
@@ -30,7 +31,7 @@ class XSLTExport : public KoFilter
     Q_OBJECT
 
 public:
-    XSLTExport(QObject* parent, const QStringList&);
+    XSLTExport(QObject* parent, const QVariantList&);
     virtual ~XSLTExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

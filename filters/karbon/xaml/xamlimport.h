@@ -30,6 +30,7 @@
 #include <core/vfill.h>
 #include <core/vstroke.h>
 #include <core/vfillrule.h>
+#include <QVariantList>
 #include "xamlgraphiccontext.h"
 
 class VGroup;
@@ -40,7 +41,7 @@ class XAMLImport : public KoFilter
     Q_OBJECT
 
 public:
-    XAMLImport(QObject* parent, const QStringList&);
+    XAMLImport(QObject* parent, const QVariantList&);
     virtual ~XAMLImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

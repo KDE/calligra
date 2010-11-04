@@ -23,6 +23,7 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class CSVFilter : public KoFilter
 {
@@ -30,7 +31,7 @@ class CSVFilter : public KoFilter
     Q_OBJECT
 
 public:
-    CSVFilter(QObject* parent, const QStringList&);
+    CSVFilter(QObject* parent, const QVariantList&);
     virtual ~CSVFilter() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

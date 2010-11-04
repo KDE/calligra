@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -34,10 +34,10 @@
 #include <wp5.h>
 #include <wp6.h>
 
-typedef KGenericFactory<WPExport> WPExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwpexport, WPExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WPExportFactory, registerPlugin<WPExport>();)
+K_EXPORT_PLUGIN(WPExportFactory("kofficefilters"))
 
-WPExport::WPExport(QObject* parent, const QStringList&):
+WPExport::WPExport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

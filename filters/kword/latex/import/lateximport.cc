@@ -21,7 +21,7 @@
 #include <lateximport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <QTextCodec>
@@ -29,11 +29,11 @@
 #include <QByteArray>
 #include "lateximportdia.h"
 
-typedef KGenericFactory<LATEXImport> LATEXImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkwordlateximport, LATEXImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(LATEXImportFactory, registerPlugin<LATEXImport>();)
+K_EXPORT_PLUGIN(LATEXImportFactory("kofficefilters"))
 
 
-LATEXImport::LATEXImport(KoFilter *, const char *, const QStringList&) :
+LATEXImport::LATEXImport(KoFilter *, const QVariantList&) :
         KoFilter(parent)
 {
 }

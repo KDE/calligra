@@ -26,6 +26,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <QByteArray>
+#include <QVariantList>
 
 class QString;
 class QTextStream;
@@ -62,7 +63,7 @@ class ASCIIImport : public KoFilter
     Q_OBJECT
 
 public:
-    ASCIIImport(QObject *parent, const QStringList &);
+    ASCIIImport(QObject *parent, const QVariantList &);
     ASCIIImport();
     virtual ~ASCIIImport() {}
 

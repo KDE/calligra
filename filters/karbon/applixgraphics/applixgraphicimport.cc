@@ -24,13 +24,13 @@
 #include <QMessageBox>
 #include <Q3CString>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <math.h>
 
 #include <applixgraphicimport.h>
 
-typedef KGenericFactory<APPLIXGRAPHICImport> APPLIXGRAPHICImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libapplixgraphicimport, APPLIXGRAPHICImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(APPLIXGRAPHICImportFactory, registerPlugin<APPLIXGRAPHICImport>();)
+K_EXPORT_PLUGIN(APPLIXGRAPHICImportFactory("kofficefilters"))
 
 int s_area = 30517;
 
@@ -104,7 +104,7 @@ applixGraphicsRect::applixGraphicsRect() : applixGraphicsLine()
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-APPLIXGRAPHICImport::APPLIXGRAPHICImport(KoFilter *, const char *, const QStringList&) :
+APPLIXGRAPHICImport::APPLIXGRAPHICImport(KoFilter *, const char *, const QVariantList&) :
         KoFilter()
 {
 

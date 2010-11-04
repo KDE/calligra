@@ -32,7 +32,7 @@
 #include <QDir>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
@@ -45,11 +45,11 @@
 #include <convert.h>
 
 
-typedef KGenericFactory<HTMLOdfExport> HTMLOdfExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libhtmlodf_export, HTMLOdfExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(HTMLOdfExportFactory, registerPlugin<HTMLOdfExport>();)
+K_EXPORT_PLUGIN(HTMLOdfExportFactory("kofficefilters"))
 
 
-HTMLOdfExport::HTMLOdfExport(QObject* parent, const QStringList&) :
+HTMLOdfExport::HTMLOdfExport(QObject* parent, const QVariantList&) :
 KoFilter(parent), m_dialog(new ExportDialog())
 {
 }

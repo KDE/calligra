@@ -30,6 +30,7 @@
 #define SVGEXPORT_H
 
 #include <KoFilter.h>
+#include <QVariantList>
 #include <QtGui/QGradient>
 
 class KarbonDocument;
@@ -53,7 +54,7 @@ class SvgExport : public KoFilter
     Q_OBJECT
 
 public:
-    SvgExport(QObject* parent, const QStringList&);
+    SvgExport(QObject* parent, const QVariantList&);
     virtual ~SvgExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

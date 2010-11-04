@@ -24,12 +24,13 @@ class QByteArray;
 class QStringList;
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class KFormula13Import : public KoFilter
 {
     Q_OBJECT
 public:
-    KFormula13Import(QObject* parent, const QStringList&);
+    KFormula13Import(QObject* parent, const QVariantList&);
     ~KFormula13Import();
 
     KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

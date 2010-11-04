@@ -22,12 +22,13 @@
 #define POWERPOINTIMPORT_H
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class PowerPointImport : public KoFilter
 {
     Q_OBJECT
 public:
-    PowerPointImport(QObject *parent, const QStringList&) : KoFilter(parent) {}
+    PowerPointImport(QObject *parent, const QVariantList&) : KoFilter(parent) {}
     virtual ~PowerPointImport() {}
     virtual KoFilter::ConversionStatus convert(const QByteArray& from,
             const QByteArray& to);

@@ -20,11 +20,12 @@
 #define KEXIRELATIONDESIGNSHAPEPLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class KexiRelationDesignShapePlugin : public QObject {
     Q_OBJECT
     public:
-        KexiRelationDesignShapePlugin(QObject *parent, const QStringList&);
+        KexiRelationDesignShapePlugin(QObject *parent, const QVariantList&);
 };
 
 

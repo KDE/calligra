@@ -22,6 +22,7 @@
 
 #include <QtGui/QPen>
 #include <KoFilter.h>
+#include <QVariantList>
 
 class KoWmfWrite;
 class KarbonDocument;
@@ -34,7 +35,7 @@ class WmfExport : public KoFilter
     Q_OBJECT
 
 public:
-    WmfExport(QObject* parent, const QStringList&);
+    WmfExport(QObject* parent, const QVariantList&);
     virtual ~WmfExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

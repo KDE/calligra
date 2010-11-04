@@ -47,7 +47,7 @@
 #include <kdeversion.h>
 #include <KDebug>
 #include <KZip>
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KMessageBox>
 
 #include <KoOdfWriteStore.h>
@@ -59,8 +59,8 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 
-typedef KGenericFactory<XlsxImport> XlsxImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libxlsximport, XlsxImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XlsxImportFactory, registerPlugin<XlsxImport>();)
+K_EXPORT_PLUGIN(XlsxImportFactory("kofficefilters"))
 
 enum XlsxDocumentType {
     XlsxDocument,
@@ -87,7 +87,7 @@ public:
     bool macrosEnabled;
 };
 
-XlsxImport::XlsxImport(QObject* parent, const QStringList &)
+XlsxImport::XlsxImport(QObject* parent, const QVariantList &)
         : MSOOXML::MsooXmlImport(QLatin1String("spreadsheet"), parent), d(new Private)
 {
 }

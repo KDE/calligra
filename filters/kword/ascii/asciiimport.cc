@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoGlobal.h>
 #include <KoPageLayout.h>
@@ -45,19 +45,10 @@
 #include <asciiimport.moc>
 #include "ImportDialog.h"
 
-class ASCIIImportFactory : public KGenericFactory<ASCIIImport>
-{
-public:
-    ASCIIImportFactory(void) : KGenericFactory<ASCIIImport> ("kwordasciiimport") {}
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
+K_PLUGIN_FACTORY(ASCIIImportFactory, registerPlugin<ASCIIImport>();)
+K_EXPORT_PLUGIN(ASCIIImportFactory("kwordasciiimport", "kofficefilters"))
 
-K_EXPORT_COMPONENT_FACTORY(libasciiimport, ASCIIImportFactory())
-
-ASCIIImport::ASCIIImport(QObject *parent, const QStringList &) :
+ASCIIImport::ASCIIImport(QObject *parent, const QVariantList &) :
         KoFilter(parent)
 {
 }

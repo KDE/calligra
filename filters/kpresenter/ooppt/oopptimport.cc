@@ -25,16 +25,16 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KRun>
 #include <KProcess>
 #include <KShell>
 #include <KDebug>
 
-typedef KGenericFactory<OOPPTImport> OOPPTImportFactory;
-K_EXPORT_COMPONENT_FACTORY(liboopptimport, OOPPTImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(OOPPTImportFactory, registerPlugin<OOPPTImport>();)
+K_EXPORT_PLUGIN(OOPPTImportFactory("kofficefilters"))
 
-OOPPTImport::OOPPTImport(QObject*parent, const QStringList&)
+OOPPTImport::OOPPTImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

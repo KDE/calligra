@@ -35,6 +35,7 @@
 #include <QString>
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 
 class ABIWORDExport : public KoFilter
@@ -43,7 +44,7 @@ class ABIWORDExport : public KoFilter
     Q_OBJECT
 
 public:
-    ABIWORDExport(QObject* parent, const QStringList &);
+    ABIWORDExport(QObject* parent, const QVariantList &);
     virtual ~ABIWORDExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

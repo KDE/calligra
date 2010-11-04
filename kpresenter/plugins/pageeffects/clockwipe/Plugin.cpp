@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "Plugin.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KPrPageEffectRegistry.h>
 
 #include "clockwipe/KPrClockWipeEffectFactory.h"
@@ -31,9 +31,10 @@
 #include "windshieldwipe/KPrWindShieldWipeEffectFactory.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_clockwipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("KPrPageEffect"))
 
-Plugin::Plugin(QObject *parent, const QStringList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KPrPageEffectRegistry::instance()->add(new KPrClockWipeEffectFactory());

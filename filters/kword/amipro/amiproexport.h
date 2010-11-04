@@ -24,6 +24,7 @@
 #include <KoStore.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class AmiProExport : public KoFilter
 {
@@ -31,7 +32,7 @@ class AmiProExport : public KoFilter
 
 public:
 
-    AmiProExport(QObject* parent, const QStringList&);
+    AmiProExport(QObject* parent, const QVariantList&);
     AmiProExport();
 
     virtual ~AmiProExport() {}

@@ -24,6 +24,7 @@
 #include <KoStore.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class WMLExport : public KoFilter
 {
@@ -31,7 +32,7 @@ class WMLExport : public KoFilter
 
 public:
 
-    WMLExport(QObject* parent, const QStringList&);
+    WMLExport(QObject* parent, const QVariantList&);
     WMLExport();
 
     virtual ~WMLExport() {}

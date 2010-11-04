@@ -23,7 +23,7 @@
 #include "Module.h"
 
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
 #include <kparts/partmanager.h>

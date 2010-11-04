@@ -37,7 +37,7 @@
 #include <QFile>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kurl.h>
 
 #include <KoFilterChain.h>
@@ -46,10 +46,10 @@
 
 using namespace KPlato;
 
-typedef KGenericFactory<ICalendarExport> ICalendarExportFactory;
+K_PLUGIN_FACTORY(ICalendarExportFactory, registerPlugin<ICalendarExport>();)
 K_EXPORT_PLUGIN(ICalendarExportFactory("kofficefilters"))
 
-ICalendarExport::ICalendarExport(QObject* parent, const QStringList &)
+ICalendarExport::ICalendarExport(QObject* parent, const QVariantList &)
         : KoFilter(parent)
 {
 }

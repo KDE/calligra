@@ -39,7 +39,7 @@
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <KoFilterChain.h>
 #include <KoUnit.h>
@@ -47,10 +47,10 @@
 #include <Picture.h>
 #include "conversion.h"
 
-typedef KGenericFactory<OoWriterImport> OoWriterImportFactory;
-K_EXPORT_COMPONENT_FACTORY(liboowriterimport, OoWriterImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(OoWriterImportFactory, registerPlugin<OoWriterImport>();)
+K_EXPORT_PLUGIN(OoWriterImportFactory("kofficefilters"))
 
-OoWriterImport::OoWriterImport(QObject* parent, const QStringList &)
+OoWriterImport::OoWriterImport(QObject* parent, const QVariantList &)
         : KoFilter(parent),
         m_styleStack(ooNS::style, ooNS::fo),
         m_insideOrderedList(false), m_nextItemIsListItem(false),

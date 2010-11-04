@@ -24,13 +24,14 @@
 
 #include <KoFilter.h>
 #include <QString>
+#include <QVariantList>
 
 class StarWriterImport: public KoFilter
 {
     Q_OBJECT
 
 public:
-    StarWriterImport(QObject* parent, const QStringList&);
+    StarWriterImport(QObject* parent, const QVariantList&);
     virtual ~StarWriterImport();
     KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 

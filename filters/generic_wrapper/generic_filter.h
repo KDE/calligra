@@ -20,8 +20,8 @@
 #ifndef __GENERICFILTER_H__
 #define __GENERICFILTER_H__
 
-#include <q3cstring.h>
-#include <QStringList>
+#include <qstring.h>
+#include <QVariantList>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -31,7 +31,7 @@ class GenericFilter : public KoFilter
     Q_OBJECT
 
 public:
-    GenericFilter(QObject *parent, const QStringList&);
+    GenericFilter(QObject *parent, const QVariantList&);
     virtual ~GenericFilter() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from,

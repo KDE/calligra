@@ -23,7 +23,7 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kimageio.h>
 #include <ktemporaryfile.h>
 
@@ -36,11 +36,11 @@
 #include "kword13postparsing.h"
 #include "kword13import.h"
 
-typedef KGenericFactory<KWord13Import> KWord13ImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkwordkword1dot3import, KWord13ImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KWord13ImportFactory, registerPlugin<KWord13Import>();)
+K_EXPORT_PLUGIN(KWord13ImportFactory("kofficefilters"))
 
 
-KWord13Import::KWord13Import(QObject* parent, const QStringList &)
+KWord13Import::KWord13Import(QObject* parent, const QVariantList &)
         : KoFilter(parent)
 {
 }

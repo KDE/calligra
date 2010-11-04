@@ -25,6 +25,7 @@
 #include <q3cstring.h>
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class QIODevice;
 class KoStore;
@@ -36,7 +37,7 @@ class KWord13Import : public KoFilter
     Q_OBJECT
 
 public:
-    KWord13Import(QObject* parent, const QStringList &);
+    KWord13Import(QObject* parent, const QVariantList &);
     virtual ~KWord13Import() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

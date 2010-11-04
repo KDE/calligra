@@ -47,7 +47,7 @@
 #include <kdeversion.h>
 #include <KDebug>
 #include <KZip>
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KMessageBox>
 
 #include <KoOdfWriteStore.h>
@@ -59,8 +59,8 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 
-typedef KGenericFactory<DocxImport> DocxImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libdocximport, DocxImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(DocxImportFactory, registerPlugin<DocxImport>();)
+K_EXPORT_PLUGIN(DocxImportFactory("kofficefilters"))
 
 enum DocxDocumentType {
     DocxDocument,
@@ -84,7 +84,7 @@ public:
     bool macrosEnabled;
 };
 
-DocxImport::DocxImport(QObject* parent, const QStringList &)
+DocxImport::DocxImport(QObject* parent, const QVariantList &)
         : MSOOXML::MsooXmlImport(QLatin1String("text"), parent), d(new Private)
 {
 }

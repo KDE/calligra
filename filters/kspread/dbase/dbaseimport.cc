@@ -30,14 +30,14 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kmessagebox.h>
 
-typedef KGenericFactory<DBaseImport> DBaseImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libdbaseimport, DBaseImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(DBaseImportFactory, registerPlugin<DBaseImport>();)
+K_EXPORT_PLUGIN(DBaseImportFactory("kofficefilters"))
 
 
-DBaseImport::DBaseImport(QObject* parent, const QStringList&)
+DBaseImport::DBaseImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

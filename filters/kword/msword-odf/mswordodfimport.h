@@ -27,12 +27,13 @@
 #include <KoXmlWriter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class MSWordOdfImport : public KoFilter
 {
     Q_OBJECT
 public:
-    MSWordOdfImport(QObject* parent, const QStringList&);
+    MSWordOdfImport(QObject* parent, const QVariantList&);
     virtual ~MSWordOdfImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

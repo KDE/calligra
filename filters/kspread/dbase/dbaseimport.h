@@ -24,6 +24,7 @@
 #include <KoStore.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class DBaseImport : public KoFilter
 {
@@ -32,7 +33,7 @@ class DBaseImport : public KoFilter
 
 public:
 
-    DBaseImport(QObject *parent, const QStringList&);
+    DBaseImport(QObject *parent, const QVariantList&);
     virtual ~DBaseImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

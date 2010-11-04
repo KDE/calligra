@@ -41,6 +41,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class ABIWORDImport : public KoFilter
 {
@@ -48,7 +49,7 @@ class ABIWORDImport : public KoFilter
     Q_OBJECT
 
 public:
-    ABIWORDImport(QObject* parent, const QStringList &);
+    ABIWORDImport(QObject* parent, const QVariantList &);
     ABIWORDImport();
     virtual ~ABIWORDImport() {}
 

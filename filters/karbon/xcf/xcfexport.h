@@ -26,6 +26,7 @@
 #include "vvisitor.h"
 //Added by qt3to4:
 #include <Q3CString>
+#include <QVariantList>
 
 
 class QDataStream;
@@ -38,7 +39,7 @@ class XcfExport : public KoFilter, private VVisitor
     Q_OBJECT
 
 public:
-    XcfExport(QObject* parent, const QStringList&);
+    XcfExport(QObject* parent, const QVariantList&);
     virtual ~XcfExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -50,7 +50,8 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
 
-#include <KGenericFactory>
+#include <KDebug>
+#include <KPluginFactory>
 
 #include <QtGui/QTextCursor>
 

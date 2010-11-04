@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 
 #include <kspread/part/Doc.h>
@@ -42,8 +42,8 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<QpImport> QPROImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libqproimport, QPROImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(QPROImportFactory, registerPlugin<QpImport>();)
+K_EXPORT_PLUGIN(QPROImportFactory("kofficefilters"))
 
 // ---------------------------------------------------------------
 
@@ -77,7 +77,7 @@ QpTableList::table(unsigned pIdx)
 
 // ---------------------------------------------------------------
 
-QpImport::QpImport(QObject* parent, const QStringList&)
+QpImport::QpImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }
