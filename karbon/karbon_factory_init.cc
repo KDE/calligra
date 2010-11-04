@@ -19,5 +19,5 @@
 
 #include <KarbonFactory.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkarbonpart, KarbonFactory() )
+K_EXPORT_PLUGIN(KarbonFactory)
 

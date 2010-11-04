@@ -177,7 +177,7 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - kexipart.h: add KexiPart::AboutData : public KAboutData
   and 
   #define KEXIPART_EXPORT_COMPONENT_FACTORY( libname, partClass, aboutData ) \
-    K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(aboutData) )
+K_EXPORT_PLUGIN(KGenericFactory<partClass>(aboutData)
 - add gui for viewing full part information
 
 === General TODO ===
