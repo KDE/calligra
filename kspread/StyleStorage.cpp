@@ -62,6 +62,7 @@ public:
     virtual void run();
     void waitForFinished();
     bool isFinished();
+    QList<QPair<QRegion, Style> > data() const { return m_styles; }
 private:
     StyleStorage* m_storage;
     QList<QPair<QRegion, Style> > m_styles;
@@ -176,13 +177,17 @@ StyleStorage::StyleStorage(const StyleStorage& other)
     d->usedRows = other.d->usedRows;
     d->usedArea = other.d->usedArea;
     d->subStyles = other.d->subStyles;
-    d->loader = 0;
+    if (other.d->loader) {
+        d->loader = new StyleStorageLoaderJob(this, other.d->loader->data());
+    } else {
+        d->loader = 0;
+    }
     // the other member variables are temporary stuff
 }
 
 StyleStorage::~StyleStorage()
 {
-    d->ensureLoaded();
+    delete d->loader; // in a multi-threaded approach this needs more care
     delete d;
 }
 
