@@ -322,6 +322,13 @@ Resource::Resource()
     m_calendar = 0;
     m_currentSchedule = 0;
     //kDebug()<<"("<<this<<")";
+    
+    // material: by default material is always available
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd = m_materialCalendar.weekday( i );
+        wd->setState( CalendarDay::Working );
+        wd->addInterval( TimeInterval( QTime( 0, 0, 0 ), 24*60*60*1000 ) );
+    }
 }
 
 Resource::Resource(Resource *resource)
@@ -451,10 +458,17 @@ void Resource::setUnits( int units )
 }
 
 Calendar *Resource::calendar( bool local ) const {
-    if ( m_type == Type_Work && !local && project() != 0 && m_calendar == 0 ) {
-        return project()->defaultCalendar();
+    if ( local || m_calendar ) {
+        return m_calendar;
     }
-    return m_calendar;
+    // No calendar is set, try default calendar
+    Calendar *c = 0;
+    if ( m_type == Type_Work && project() ) {
+        c =  project()->defaultCalendar();
+    } else if ( m_type == Type_Material ) {
+        c = const_cast<Calendar*>( &m_materialCalendar );
+    }
+    return c;
 }
 
 void Resource::setCalendar( Calendar *calendar )
@@ -1103,20 +1117,20 @@ Appointment Resource::appointmentIntervals() const {
     return a;
 }
 
-EffortCostMap Resource::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id)
+EffortCostMap Resource::plannedEffortCostPrDay( const QDate &start, const QDate &end, long id, EffortCostCalculationType typ )
 {
     EffortCostMap ec;
     Schedule *s = findSchedule( id );
     if ( s == 0 ) {
         return ec;
     }
-    ec = s->plannedEffortCostPrDay(start, end);
+    ec = s->plannedEffortCostPrDay( start, end, typ );
     return ec;
 }
 
-Duration Resource::plannedEffort(const QDate &date) const
+Duration Resource::plannedEffort( const QDate &date, EffortCostCalculationType typ ) const
 {
-    return m_currentSchedule ? m_currentSchedule->plannedEffort(date) : Duration::zeroDuration;
+    return m_currentSchedule ? m_currentSchedule->plannedEffort( date, typ ) : Duration::zeroDuration;
 }
 
 void Resource::setProject( Project *project )

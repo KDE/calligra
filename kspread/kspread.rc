@@ -224,7 +224,7 @@
 </ToolBar>
 
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<   Format ToolBar   >>>>>>>>>>>>>>>>>>>>>>>>>> -->
-<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="fontPropertyToolBar"><text>Format</text>
+<ToolBar fullWidth="true" iconText="icontextbottom" hidden="true" name="fontPropertyToolBar"><text>Font</text>
  <Action name="font"/>
  <Action name="fontSize"/>
 </ToolBar>

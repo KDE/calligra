@@ -30,7 +30,6 @@
 #include <Formula.h>
 
 #include <kdebug.h>
-#include <KGenericFactory>
 #include <KLocale>
 
 // needed for MODE

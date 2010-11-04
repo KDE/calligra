@@ -154,29 +154,29 @@ public:
     virtual QStringList resourceNameList() const;
     
     virtual EffortCostMap bcwsPrDay() const;
-    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
-    virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end ) const;
+    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     
     /// Returns the total planned effort for this schedule
-    virtual Duration plannedEffort() const;
+    virtual Duration plannedEffort( EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule on date
-    virtual Duration plannedEffort( const QDate &date ) const;
+    virtual Duration plannedEffort( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo( const QDate &date ) const;
+    virtual Duration plannedEffortTo( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
 
     /**
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
-    virtual EffortCost plannedCost() const;
+    virtual EffortCost plannedCost( EffortCostCalculationType type = ECCT_All ) const;
 
     /// Planned cost on date
-    virtual double plannedCost( const QDate &date ) const;
+    virtual double plannedCost( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     /**
      * Planned cost from start of activity up to and including date
      * is the sum of all resource costs and other costs planned for this schedule.
      */
-    virtual double plannedCostTo( const QDate &date ) const;
+    virtual double plannedCostTo( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     
     virtual double normalRatePrHour() const { return 0.0; }
 

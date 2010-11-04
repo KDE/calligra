@@ -1822,82 +1822,82 @@ QStringList Project::resourceNameList() const
     return lst;
 }
 
-EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate &end, long id ) const
+EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
     //kDebug()<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        ec += it.next() ->plannedEffortCostPrDay( start, end, id );
+        ec += it.next() ->plannedEffortCostPrDay( start, end, id, typ );
     }
     return ec;
 }
 
-EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id ) const
+EffortCostMap Project::plannedEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
     //kDebug()<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        ec += it.next() ->plannedEffortCostPrDay( resource, start, end, id );
+        ec += it.next() ->plannedEffortCostPrDay( resource, start, end, id, typ );
     }
     return ec;
 }
 
-EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &end, long id ) const
+EffortCostMap Project::actualEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
     //kDebug()<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        ec += it.next() ->actualEffortCostPrDay( start, end, id );
+        ec += it.next() ->actualEffortCostPrDay( start, end, id, typ );
     }
     return ec;
 }
 
-EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id ) const
+EffortCostMap Project::actualEffortCostPrDay( const Resource *resource, const QDate & start, const QDate &end, long id,  EffortCostCalculationType typ ) const
 {
     //kDebug()<<start<<end<<id;
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        ec += it.next() ->actualEffortCostPrDay( resource, start, end, id );
+        ec += it.next() ->actualEffortCostPrDay( resource, start, end, id, typ );
     }
     return ec;
 }
 
 // Returns the total planned effort for this project (or subproject)
-Duration Project::plannedEffort( long id ) const
+Duration Project::plannedEffort( long id, EffortCostCalculationType typ ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        eff += it.next() ->plannedEffort(id);
+        eff += it.next() ->plannedEffort( id, typ );
     }
     return eff;
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-Duration Project::plannedEffort( const QDate &date, long id ) const
+Duration Project::plannedEffort( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        eff += it.next() ->plannedEffort( date, id );
+        eff += it.next() ->plannedEffort( date, id, typ );
     }
     return eff;
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-Duration Project::plannedEffortTo( const QDate &date, long id ) const
+Duration Project::plannedEffortTo( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        eff += it.next() ->plannedEffortTo( date, id );
+        eff += it.next() ->plannedEffortTo( date, id, typ );
     }
     return eff;
 }
@@ -1939,40 +1939,40 @@ Duration Project::actualEffortTo( const QDate &date ) const
     return eff;
 }
 
-EffortCost Project::plannedCost( long id ) const
+EffortCost Project::plannedCost( long id, EffortCostCalculationType typ ) const
 {
     //kDebug();
     EffortCost c;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        c += it.next() ->plannedCost(id);
+        c += it.next() ->plannedCost( id, typ );
     }
     return c;
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-double Project::plannedCost( const QDate &date, long id ) const
+double Project::plannedCost( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
     //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        c += it.next() ->plannedCost( date, id );
+        c += it.next() ->plannedCost( date, id, typ );
     }
     return c;
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double Project::plannedCostTo( const QDate &date, long id ) const
+double Project::plannedCostTo( const QDate &date, long id, EffortCostCalculationType typ ) const
 {
     //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        c += it.next() ->plannedCostTo( date, id );
+        c += it.next() ->plannedCostTo( date, id, typ );
     }
     return c;
 }
@@ -1989,7 +1989,7 @@ double Project::actualCost() const
     return c;
 }
 
-// Returns the total planned effort for this project (or subproject) on date
+// Returns the total actual cost for this project (or subproject) on date
 double Project::actualCost( const QDate &date ) const
 {
     //kDebug();
@@ -2002,7 +2002,7 @@ double Project::actualCost( const QDate &date ) const
     return c;
 }
 
-// Returns the total planned effort for this project (or subproject) upto and including date
+// Returns the total actual cost for this project (or subproject) upto and including date
 EffortCost Project::actualCostTo( const QDate &date ) const
 {
     //kDebug();
@@ -2065,7 +2065,7 @@ double Project::schedulePerformanceIndex( const QDate &date, long id ) const
 double Project::bcws( const QDate &date, long id ) const
 {
     //kDebug();
-    double c = plannedCostTo( date, id );
+    double c = plannedCostTo( date, id, ECCT_EffortWork );
     kDebug()<<c;
     return c;
 }
@@ -2081,7 +2081,7 @@ double Project::bcwp( const QDate &date, long id ) const
     kDebug()<<date<<id;
     QDate start = startTime( id ).date();
     QDate end = endTime( id ).date();
-    EffortCostMap plan = plannedEffortCostPrDay( start, end, id );
+    EffortCostMap plan = plannedEffortCostPrDay( start, end, id, ECCT_EffortWork );
     EffortCostMap actual = actualEffortCostPrDay( start, (end > date ? end : date), id );
 
     double budgetAtCompletion;

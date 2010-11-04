@@ -408,19 +408,19 @@ public:
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
      */
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /**
      * Returns a list of planned effort and cost for the @p resource
      * for the interval @p start, @p end inclusive, useing schedule with identity @p id
      */
-    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort( long id = CURRENTSCHEDULE ) const;
+    virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual Duration plannedEffort(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &date, long id = CURRENTSCHEDULE ) const;
+    virtual Duration plannedEffortTo(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const;
@@ -432,28 +432,28 @@ public:
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
-    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const;
+    virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Planned cost up to and including date
-    virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const;
+    virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /**
      * Returns the actaually reported cost for this task (or subtasks)
      */
     virtual double actualCost() const;
     /// Actual cost on @p date
-    virtual double actualCost(const QDate &date) const;
+    virtual double actualCost( const QDate &date ) const;
     /// Returns actual effort and cost up to and including @p date
-    virtual EffortCost actualCostTo(const QDate &date) const;
+    virtual EffortCost actualCostTo( const QDate &date ) const;
 
     /**
      * Returns a list of actual effort and cost for this task
      * for the interval start, end inclusive
      */
-    virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the actual effort and cost pr day used by @p resource
-    virtual EffortCostMap actualEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap actualEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;

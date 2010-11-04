@@ -25,7 +25,6 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 
-#include <KGenericFactory>
 #include <KLocale>
 
 using namespace KSpread;

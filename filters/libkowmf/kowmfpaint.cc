@@ -36,6 +36,7 @@ KoWmfPaint::KoWmfPaint()
     mTarget = 0;
     mIsInternalPainter = true;
     mPainter = 0;
+    mWorldTransform = QTransform();
 }
 
 
@@ -101,6 +102,8 @@ bool KoWmfPaint::begin()
     mWindowExtIsSet = false;
     mViewportExtIsSet = false;
     mWindowViewportIsSet = false;
+    mOutputTransform = mPainter->transform();
+    mWorldTransform = QTransform();
 
     mPainter->setBrush(QBrush(Qt::NoBrush));
 
@@ -125,8 +128,19 @@ bool KoWmfPaint::end()
 
 void KoWmfPaint::save()
 {
+    // A little trick here: Save the worldTransform in the painter.
+    // If we didn't do this, we would have to create a separate stack
+    // for these.
+    //
+    // FIXME: We should collect all the parts of the DC that are not
+    //        stored in the painter and save them separately.
+    QTransform  savedTransform = mPainter->worldTransform();
+    mPainter->setWorldTransform(mWorldTransform);
+
     mPainter->save();
-    mSaveCount++;
+    ++mSaveCount;
+
+    mPainter->setWorldTransform(savedTransform);
 }
 
 
@@ -136,6 +150,14 @@ void KoWmfPaint::restore()
         mPainter->restore();
         mSaveCount--;
     }
+    else {
+        kDebug(31000) << "restore(): try to restore painter without save";
+    }
+
+    // We used a trick in save() and stored the worldTransform in
+    // the painter.  Now restore the full transformation.
+    mWorldTransform = mPainter->worldTransform();
+    recalculateWorldTransform();
 }
 
 
@@ -244,6 +266,32 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 
 
 // ---------------------------------------------------------------------
+//                 World Transform, Window and Viewport
+
+
+// General note about coordinate spaces and transforms:
+//
+// There are several coordinate spaces in use when drawing an EMF file:
+//  1. The object space, in which the objects' coordinates are expressed inside the EMF.
+//     In general there are several of these.
+//  2. The page space, which is where they end up being painted in the EMF picture.
+//     The union of these form the bounding box of the EMF.
+//  3. (possibly) the output space, where the EMF picture itself is placed
+//     and/or scaled, rotated, etc
+//
+// The transform between spaces 1. and 2. is called the World Transform.
+// The world transform can be changed either through calls to change
+// the window or viewport or through calls to setWorldTransform() or
+// modifyWorldTransform().
+//
+// The transform between spaces 2. and 3. is the transform that the QPainter
+// already contains when it is given to us.  We need to save this and reapply
+// it after the world transform has changed. We call this transform the Output
+// Transform in lack of a better word. (Some sources call it the Device Transform.)
+//
+
+
+// FIXME:
 // To change those functions it's better to have
 // a large set of WMF files. WMF special case includes :
 // - without call to setWindowOrg and setWindowExt
@@ -252,17 +300,14 @@ void KoWmfPaint::setCompositionMode(QPainter::CompositionMode mode)
 // and relative/absolute coordinate
 
 
-// It would have been nice to be able to use the setWindow() and
-// setViewport() methods of QPainter directly, but these will place
-// the viewport in relation to the paintdevice and not the shape.  So
-// instead, we have to redo the calculations ourselves here.
-
-// Set Window and Viewport
-void KoWmfPaint::setWindowViewport()
+void KoWmfPaint::recalculateWorldTransform()
 {
-    if (!mWindowExtIsSet && mViewportExtIsSet)
+    mWorldTransform = QTransform();
+
+    if (!mWindowExtIsSet && !mViewportExtIsSet)
         return;
 
+    // FIXME: Check windowExt == 0 in any direction
     if (mWindowExtIsSet && mViewportExtIsSet) {
         // Both window and viewport are set.
         mWindowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
@@ -273,24 +318,21 @@ void KoWmfPaint::setWindowViewport()
         mWindowViewportScaleY = qreal(1.0);
     }
 
-    mPainter->translate(-mWindowOrg);
-    mPainter->scale(mWindowViewportScaleX, mWindowViewportScaleY);
-    mPainter->translate(mViewportOrg);
-
+    // Calculate the world transform...
+    mWorldTransform.translate(-mWindowOrg.x(), -mWindowOrg.y());
+    mWorldTransform.scale(mWindowViewportScaleX, mWindowViewportScaleY);
+    mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
+ 
+    // ...and apply it to the painter
+    mPainter->setWorldTransform(mWorldTransform);
     mWindowViewportIsSet = true;
+
+    // Apply the output transform.
+    QTransform currentMatrix = mPainter->worldTransform();
+    QTransform newMatrix = currentMatrix * mOutputTransform;
+    mPainter->setWorldTransform( newMatrix );
 }
 
-// Unset Window and Viewport.  This has to be called before we can
-// reset the window or viewport origin or extension.
-void KoWmfPaint::unsetWindowViewport()
-{
-    if (!mWindowViewportIsSet)
-        return;
-
-    mPainter->translate(-mViewportOrg);
-    mPainter->scale(qreal(1.0) / mWindowViewportScaleX, qreal(1.0) / mWindowViewportScaleY);
-    mPainter->translate(mWindowOrg);
-}
 
 
 
@@ -300,11 +342,9 @@ void KoWmfPaint::setWindowOrg(int left, int top)
     kDebug(31000) << left << " " << top;
 #endif
 
-    unsetWindowViewport();
-
     mWindowOrg = QPoint(left, top);
 
-    setWindowViewport();
+    recalculateWorldTransform();
 }
 
 
@@ -314,12 +354,10 @@ void KoWmfPaint::setWindowExt(int width, int height)
     kDebug(31000) << width << " " << height;
 #endif
 
-    unsetWindowViewport();
-
     mWindowExt = QSize(width, height);
     mWindowExtIsSet = true;
 
-    setWindowViewport();
+    recalculateWorldTransform();
 
 #if 0
     // Debug code.  Draw a rectangle with some decoration to show see
@@ -349,11 +387,9 @@ void KoWmfPaint::setViewportOrg( int left, int top )
     kDebug(31000) << left << top;
 #endif
 
-    unsetWindowViewport();
-
     mViewportOrg = QPoint(left, top);
 
-    setWindowViewport();
+    recalculateWorldTransform();
 }
 
 void KoWmfPaint::setViewportExt( int width, int height )
@@ -362,16 +398,11 @@ void KoWmfPaint::setViewportExt( int width, int height )
     kDebug(31000) << width << height;
 #endif
 
-    unsetWindowViewport();
-
     mViewportExt = QSize(width, height);
     mViewportExtIsSet = true;
 
-    setWindowViewport();
+    recalculateWorldTransform();
 }
-
-
-// ----------------------------------------------------------------
 
 
 void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
@@ -380,7 +411,13 @@ void KoWmfPaint::setMatrix(const QMatrix &wm, bool combine)
     kDebug(31000) << wm << " " << combine;
 #endif
     mPainter->setMatrix(wm, combine);
+
+    recalculateWorldTransform();
 }
+
+
+// ----------------------------------------------------------------
+//                         Drawing
 
 
 void KoWmfPaint::setClipRegion(const QRegion &rec)

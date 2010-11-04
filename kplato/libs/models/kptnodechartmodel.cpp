@@ -287,7 +287,7 @@ void ChartItemModel::calculate()
             }
         }
     }
-#if 1
+#if 0
     EffortCostDayMap::ConstIterator it;
     EffortCostDayMap::ConstIterator end = m_bcws.days().constEnd();
     for ( it = m_bcws.days().constBegin(); it != end; ++it ) {

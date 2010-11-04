@@ -69,11 +69,13 @@ protected:
     void    filterSHFGBG(QString, int *, int *, int *);
     void    transPenFormat(QString, int *, int *);
     int     readHeader(QTextStream &);
-    int     translateColumnNumber(QString);
+    int     translateColumnNumber(const QString&);
+    QString convertFormula(const QString& input) const;
 
 private:
     int m_stepsize;
     int m_instep;
     int m_progress;
+    QString m_nextPendingLine;
 };
 #endif // APPLIXSPREADIMPORT_H

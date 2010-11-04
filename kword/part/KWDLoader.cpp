@@ -95,8 +95,8 @@ bool KWDLoader::load(KoXmlElement &root)
         kDebug(32001) << " height=" << pgLayout.height;
         if (pgLayout.width <= 0 || pgLayout.height <= 0) {
             // Old document?
-            pgLayout.width = paper.attribute("width").toDouble();
-            pgLayout.height = paper.attribute("height").toDouble();
+            pgLayout.width = paper.attribute("ptWidth").toDouble();
+            pgLayout.height = paper.attribute("ptHeight").toDouble();
             kDebug(32001) << " width2=" << pgLayout.width;
             kDebug(32001) << " height2=" << pgLayout.height;
 

@@ -20,7 +20,7 @@
 #ifndef KSPREAD_TABLE_SHAPE_FACTORY
 #define KSPREAD_TABLE_SHAPE_FACTORY
 
-#include <QStringList>
+#include <QVariantList>
 
 #include <KoShapeFactoryBase.h>
 
@@ -34,7 +34,7 @@ class TableShapePlugin : public QObject
     Q_OBJECT
 public:
 
-    TableShapePlugin(QObject * parent,  const QStringList &);
+    TableShapePlugin(QObject * parent,  const QVariantList &);
     ~TableShapePlugin() {}
 };
 

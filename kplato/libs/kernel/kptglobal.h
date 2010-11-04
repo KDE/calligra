@@ -39,6 +39,13 @@
 namespace KPlato
 {
 
+/// EffortCostCalculationType controls how effort and cost is calculated
+enum EffortCostCalculationType {
+    ECCT_All, /// Include both work and material in both effort and cost calculations
+    ECCT_EffortWork, /// Include only Work in effort calculations, both work and material in cost calculations
+    ECCT_Work /// Inlcude only Work in both effort and cost calculations
+};
+
 enum ObjectType {
     OT_None = 0,
     OT_Project,

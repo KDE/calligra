@@ -686,7 +686,11 @@ void KPlatoRCPSScheduler::addRequest( rcps_job *job, Task *task )
     info->self = this;
     info->calls = 0;
     info->task = task;
-    info->estimate = task->estimate()->value( Estimate::Use_Expected, m_usePert );
+    if ( m_recalculate && task->completion().isStarted() ) {
+        info->estimate = task->completion().remainingEffort();
+    } else {
+        info->estimate = task->estimate()->value( Estimate::Use_Expected, m_usePert );
+    }
     info->requests = task->requests().resourceRequests(); // returns team members (not team resource itself)
     info->estimatetype = task->estimate()->type();
 

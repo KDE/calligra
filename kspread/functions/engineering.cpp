@@ -28,7 +28,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <KGenericFactory>
 #include <KLocale>
 
 // used by the CONVERT function
