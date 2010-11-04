@@ -22,13 +22,14 @@
 
 #include <KoFilter.h>
 #include <QObject>
+#include <QVariantList>
 
 class PdfImport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    PdfImport(QObject* parent, const QStringList&);
+    PdfImport(QObject* parent, const QVariantList&);
     virtual ~PdfImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

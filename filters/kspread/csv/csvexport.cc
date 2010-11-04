@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 #include <kmessagebox.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
@@ -44,8 +44,8 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<CSVExport> CSVExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libcsvexport, CSVExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(CSVExportFactory, registerPlugin<CSVExport>();)
+K_EXPORT_PLUGIN(CSVExportFactory("kofficefilters"))
 
 class Cell
 {
@@ -62,7 +62,7 @@ public:
 };
 
 
-CSVExport::CSVExport(QObject* parent, const QStringList &)
+CSVExport::CSVExport(QObject* parent, const QVariantList &)
         : KoFilter(parent), m_eol("\n")
 {
 }

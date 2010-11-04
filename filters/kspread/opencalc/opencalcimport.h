@@ -29,6 +29,7 @@
 #include <qdom.h>
 #include <QByteArray>
 #include <KoXmlReader.h>
+#include <QVariantList>
 
 class KoStyleStack;
 class KoStore;
@@ -48,7 +49,7 @@ class OpenCalcImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OpenCalcImport(QObject * parent, const QStringList &);
+    OpenCalcImport(QObject * parent, const QVariantList &);
     virtual ~OpenCalcImport();
 
     virtual KoFilter::ConversionStatus convert(QByteArray const & from, QByteArray const & to);

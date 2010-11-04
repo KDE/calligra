@@ -31,7 +31,7 @@
 #include <QMatrix>
 
 //KDE includes
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
 
 //KOffice includes
@@ -53,10 +53,10 @@ using std::cos;
 #define M_PI 3.14159265358979323846
 #endif
 
-typedef KGenericFactory<Filterkpr2odf> Filterkpr2odfFactory;
-K_EXPORT_COMPONENT_FACTORY(libFilterkpr2odf, Filterkpr2odfFactory("kofficefilters"))
+K_PLUGIN_FACTORY(Filterkpr2odfFactory, registerPlugin<Filterkpr2odf>();)
+K_EXPORT_PLUGIN(Filterkpr2odfFactory("kofficefilters"))
 
-Filterkpr2odf::Filterkpr2odf(QObject *parent, const QStringList&)
+Filterkpr2odf::Filterkpr2odf(QObject *parent, const QVariantList&)
         : KoFilter(parent)
         , m_currentPage(1)
         , m_objectIndex(1)

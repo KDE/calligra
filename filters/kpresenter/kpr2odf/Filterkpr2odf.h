@@ -31,6 +31,7 @@
 #include <KoDom.h>
 #include <KoFilter.h>
 #include <KoGenStyles.h>
+#include <QVariantList>
 
 class KoXmlWriter;
 class KoGenStyles;
@@ -40,7 +41,7 @@ class Filterkpr2odf : public KoFilter
     Q_OBJECT
 
 public:
-    Filterkpr2odf(QObject* parent, const QStringList&);
+    Filterkpr2odf(QObject* parent, const QVariantList&);
 
     virtual ~Filterkpr2odf() {}
 

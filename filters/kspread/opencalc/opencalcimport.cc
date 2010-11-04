@@ -34,7 +34,7 @@
 
 #include <kdebug.h>
 #include <KoDocumentInfo.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kmessagebox.h>
 #include <kcodecs.h>
 #include <KoFilterChain.h>
@@ -66,17 +66,8 @@
 
 using namespace KSpread;
 
-class OpenCalcImportFactory : public KGenericFactory<OpenCalcImport>
-{
-public:
-    OpenCalcImportFactory(void) : KGenericFactory<OpenCalcImport> ("kspreadopencalcimport") {}
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libopencalcimport, OpenCalcImportFactory())
+K_PLUGIN_FACTORY(OpenCalcImportFactory, registerPlugin<OpenCalcImport>();)
+K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","kofficefilters"))
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
         : isRange(false)
@@ -118,7 +109,7 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
 }
 
 
-OpenCalcImport::OpenCalcImport(QObject* parent, const QStringList &)
+OpenCalcImport::OpenCalcImport(QObject* parent, const QVariantList &)
         : KoFilter(parent)
 {
 }

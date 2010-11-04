@@ -27,7 +27,7 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KRun>
 #include <KProcess>
 #include <KShell>
@@ -36,10 +36,10 @@
 #include <poppler/PDFDoc.h>
 #include <poppler/GlobalParams.h>
 
-typedef KGenericFactory<PdfImport> PdfImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonpdfimport, PdfImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
+K_EXPORT_PLUGIN(PdfImportFactory("kofficefilters"))
 
-PdfImport::PdfImport(QObject*parent, const QStringList&)
+PdfImport::PdfImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
     kDebug(30516) << "PDF Import Filter";

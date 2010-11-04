@@ -32,6 +32,7 @@
 #include <core/KarbonDocument.h>
 #include <core/vcomposite.h>
 #include <core/vstroke.h>
+#include <QVariantList>
 
 class KZip;
 
@@ -41,7 +42,7 @@ class OoDrawImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoDrawImport(QObject* parent, const QStringList &);
+    OoDrawImport(QObject* parent, const QVariantList &);
     virtual ~OoDrawImport();
 
     virtual KoFilter::ConversionStatus convert(QByteArray const & from, QByteArray const & to);

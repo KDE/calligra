@@ -21,7 +21,7 @@
 #include "kexisimpleprintingpagesetup.h"
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KexiMainWindow.h>
 #include <core/KexiWindow.h>

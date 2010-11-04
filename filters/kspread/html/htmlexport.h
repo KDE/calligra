@@ -25,6 +25,7 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class ExportDialog;
 class KoDocument;
@@ -38,7 +39,7 @@ class HTMLExport : public KoFilter
 {
     Q_OBJECT
 public:
-    HTMLExport(QObject* parent, const QStringList&);
+    HTMLExport(QObject* parent, const QVariantList&);
     virtual ~HTMLExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

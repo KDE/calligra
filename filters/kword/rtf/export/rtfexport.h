@@ -30,6 +30,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 
 class RTFExport : public KoFilter
@@ -38,7 +39,7 @@ class RTFExport : public KoFilter
     Q_OBJECT
 
 public:
-    RTFExport(QObject* parent, const QStringList &);
+    RTFExport(QObject* parent, const QVariantList &);
     virtual ~RTFExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

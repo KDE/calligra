@@ -25,7 +25,7 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kmessagebox.h>
 
 #include <KoFilterChain.h>
@@ -37,11 +37,11 @@
 #include "pngexportdia.h"
 
 
-typedef KGenericFactory<PNGExport> PNGExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkfopngexport, PNGExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PNGExportFactory, registerPlugin<PNGExport>();)
+K_EXPORT_PLUGIN(PNGExportFactory("kofficefilters"))
 
 
-PNGExport::PNGExport(QObject* parent, const QStringList&)
+PNGExport::PNGExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

@@ -21,14 +21,14 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <xsltexportdia.h>
 //Added by qt3to4:
 #include <QByteArray>
 
-typedef KGenericFactory<XSLTExport> XSLTExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libxsltexport, XSLTExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XSLTExportFactory, registerPlugin<XSLTExport>();)
+K_EXPORT_PLUGIN(XSLTExportFactory("kofficefilters"))
 
 // Check for XSLT files
 extern "C"
@@ -39,7 +39,7 @@ extern "C"
 }
 
 
-XSLTExport::XSLTExport(QObject* parent, const QStringList&) :
+XSLTExport::XSLTExport(QObject* parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

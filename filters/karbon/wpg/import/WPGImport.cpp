@@ -28,7 +28,7 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoXmlWriter.h>
 
@@ -40,10 +40,10 @@
 
 #include <iostream>
 
-typedef KGenericFactory<WPGImport> WPGImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwpgimport, WPGImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
+K_EXPORT_PLUGIN(WPGImportFactory("kofficefilters"))
 
-WPGImport::WPGImport(QObject* parent, const QStringList&)
+WPGImport::WPGImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

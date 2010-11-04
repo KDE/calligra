@@ -29,6 +29,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class LATEXImport : public KoFilter
 {
@@ -36,7 +37,7 @@ class LATEXImport : public KoFilter
     Q_OBJECT
 
 public:
-    LATEXImport(QObject* parent, const QStringList&);
+    LATEXImport(QObject* parent, const QVariantList&);
     virtual ~LATEXImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

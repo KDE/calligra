@@ -26,6 +26,7 @@
 #include <QVector>
 #include <QStack>
 #include <QHash>
+#include <QVariantList>
 
 #include "rtfimport_dom.h"
 #include "rtfimport_tokenizer.h"
@@ -229,7 +230,7 @@ class RTFImport : public KoFilter
     Q_OBJECT
 
 public:
-    RTFImport(QObject* parent, const QStringList&);
+    RTFImport(QObject* parent, const QVariantList&);
 
     /**
      * Convert document from RTF to KWord format.

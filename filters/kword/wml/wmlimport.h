@@ -26,6 +26,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class WMLImport : public KoFilter
 {
@@ -33,7 +34,7 @@ class WMLImport : public KoFilter
 
 public:
 
-    WMLImport(QObject* parent, const QStringList&);
+    WMLImport(QObject* parent, const QVariantList&);
     WMLImport();
 
     virtual ~WMLImport() {}

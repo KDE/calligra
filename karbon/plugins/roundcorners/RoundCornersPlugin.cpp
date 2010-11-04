@@ -39,26 +39,27 @@
 #include <KoParameterToPathCommand.h>
 #include <KoUnitDoubleSpinBox.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <klocale.h>
 #include <kactioncollection.h>
 
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
 
-typedef KGenericFactory<RoundCornersPlugin, QWidget> RoundCornersPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(karbon_roundcornersplugin, RoundCornersPluginFactory("karbonroundcornersplugin"))
+K_PLUGIN_FACTORY(RoundCornersPluginFactory, registerPlugin<RoundCornersPlugin>();)
+K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
 
-RoundCornersPlugin::RoundCornersPlugin(QWidget * parent, const QStringList &)
+RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
         : Plugin(parent)
 {
     KAction *actionRoundCorners  = new KAction(KIcon("14_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
     connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
 
-    m_roundCornersDlg = new RoundCornersDlg();
+    m_roundCornersDlg = new RoundCornersDlg(qobject_cast<QWidget*>(parent));
     m_roundCornersDlg->setRadius(10.0);
 }
 

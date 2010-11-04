@@ -25,8 +25,8 @@
 #include <qdom.h>
 #include <KoFilter.h>
 #include <KoXmlWriter.h>
-//Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 
 namespace KWord
@@ -39,7 +39,7 @@ class HTMLOdfExport : public KoFilter
 {
     Q_OBJECT
 public:
-    HTMLOdfExport(QObject* parent, const QStringList&);
+    HTMLOdfExport(QObject* parent, const QVariantList&);
     virtual ~HTMLOdfExport();
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 

@@ -25,6 +25,7 @@
 
 #include <KoFilter.h>
 #include <QByteArray>
+#include <QVariantList>
 
 class QDomDocument;
 class QDomElement;
@@ -42,7 +43,7 @@ class OpenCalcExport : public KoFilter
     Q_OBJECT
 
 public:
-    OpenCalcExport(QObject* parent, const QStringList &);
+    OpenCalcExport(QObject* parent, const QVariantList &);
     virtual ~OpenCalcExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray & from,

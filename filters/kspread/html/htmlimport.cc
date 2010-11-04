@@ -30,7 +30,7 @@
 #include <QByteArray>
 #include <QEventLoop>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
@@ -49,10 +49,10 @@
 
 //using namespace KSpread;
 
-typedef KGenericFactory<HTMLImport> HTMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkspreadhtmlimport, HTMLImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
+K_EXPORT_PLUGIN(HTMLImportFactory("kofficefilters"))
 
-HTMLImport::HTMLImport(QObject* parent, const QStringList&)
+HTMLImport::HTMLImport(QObject* parent, const QVariantList&)
     : KoFilter(parent)
 {
 }

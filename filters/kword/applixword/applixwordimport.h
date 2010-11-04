@@ -21,7 +21,7 @@
 #define APPLIXWORDIMPORT_H
 
 #include <QString>
-#include <QStringList>
+#include <QVariantList>
 #include <QFile>
 #include <QObject>
 #include <QTextStream>
@@ -48,7 +48,7 @@ class APPLIXWORDImport : public KoFilter
     Q_OBJECT
 
 public:
-    APPLIXWORDImport(QObject *parent, const QStringList&);
+    APPLIXWORDImport(QObject *parent, const QVariantList&);
     virtual ~APPLIXWORDImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

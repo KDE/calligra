@@ -25,13 +25,14 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <core/KarbonDocument.h>
+#include <QVariantList>
 
 class KontourImport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    KontourImport(QObject* parent, const QStringList&);
+    KontourImport(QObject* parent, const QVariantList&);
     virtual ~KontourImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

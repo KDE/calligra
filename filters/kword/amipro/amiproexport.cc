@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -32,8 +32,8 @@
 
 #include <amiproexport.h>
 
-typedef KGenericFactory<AmiProExport> AmiProExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libamiproexport, AmiProExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(AmiProExportFactory, registerPlugin<AmiProExport>();)
+K_EXPORT_PLUGIN(AmiProExportFactory("kofficefilters"))
 class AmiProWorker : public KWEFBaseWorker
 {
 public:
@@ -165,7 +165,7 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
     return true;
 }
 
-AmiProExport::AmiProExport(QObject* parent, const QStringList&):
+AmiProExport::AmiProExport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

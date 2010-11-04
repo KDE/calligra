@@ -25,7 +25,7 @@
 #include <QMap>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoPostscriptPaintDevice.h>
@@ -47,8 +47,8 @@
 
 #include <CFBWriter.h>
 
-typedef KGenericFactory<ExcelExport> ExcelExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libexcelexport, ExcelExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExcelExportFactory, registerPlugin<ExcelExport>();)
+K_EXPORT_PLUGIN(ExcelExportFactory("kofficefilters"))
 
 static uint qHash(const QFont& f)
 {
@@ -75,7 +75,7 @@ public:
     unsigned fontIndex(const QFont& font, const QColor& color, QHash<QPair<QFont, QColor>, unsigned>& fontMap);
 };
 
-ExcelExport::ExcelExport(QObject* parent, const QStringList&)
+ExcelExport::ExcelExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
     d = new Private;

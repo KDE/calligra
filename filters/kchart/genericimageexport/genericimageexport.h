@@ -24,13 +24,14 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QByteArray>
+#include <QVariantList>
 
 class GenericImageExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    GenericImageExport(QObject* parent, const QStringList&);
+    GenericImageExport(QObject* parent, const QVariantList&);
     virtual ~GenericImageExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

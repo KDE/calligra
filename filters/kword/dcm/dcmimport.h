@@ -23,6 +23,7 @@
 #define DCMIMPORT_H
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class DCMImport : public KoFilter
 {
@@ -30,7 +31,7 @@ class DCMImport : public KoFilter
     Q_OBJECT
 
 public:
-    DCMImport(QObject *parent, QStringList const&)
+    DCMImport(QObject *parent, QVariantList const&)
             : KoFilter(parent)
     {
     }

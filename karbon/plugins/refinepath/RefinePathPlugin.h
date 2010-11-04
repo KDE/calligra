@@ -25,6 +25,7 @@
 
 #include <kparts/plugin.h>
 #include <kdialog.h>
+#include <QVariantList>
 
 class RefinePathDlg;
 
@@ -32,7 +33,7 @@ class RefinePathPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RefinePathPlugin(QWidget *parent, const QStringList &);
+    RefinePathPlugin(QObject *parent, const QVariantList &);
     virtual ~RefinePathPlugin() {}
 
 private slots:

@@ -38,26 +38,27 @@
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kicon.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
 
-typedef KGenericFactory<RefinePathPlugin, QWidget> RefinePathPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(karbon_refinepathplugin, RefinePathPluginFactory("karbonrefinepathplugin"))
+K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
+K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
 
-RefinePathPlugin::RefinePathPlugin(QWidget *parent, const QStringList &) : Plugin(parent)
+RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &) : Plugin(parent)
 {
     QAction *actionRefinePath  = new KAction(KIcon("14_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));
 
-    m_RefinePathDlg = new RefinePathDlg(parent);
+    m_RefinePathDlg = new RefinePathDlg(qobject_cast<QWidget*>(parent));
 }
 
 void RefinePathPlugin::slotRefinePath()

@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoStore.h>
@@ -51,11 +51,11 @@
 #include <kdebug.h>
 
 
-typedef KGenericFactory<XAMLExport> XAMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonxamlexport, XAMLExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XAMLExportFactory, registerPlugin<XAMLExport>();)
+K_EXPORT_PLUGIN(XAMLExportFactory("kofficefilters"))
 
 
-XAMLExport::XAMLExport(KoFilter*, const char*, const QStringList&)
+XAMLExport::XAMLExport(KoFilter*, const char*, const QVariantList&)
         : KoFilter(parent)
 {
     m_gc.setAutoDelete(true);

@@ -23,13 +23,14 @@
 #include <QObject>
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class EpsImport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    EpsImport(QObject* parent, const QStringList&);
+    EpsImport(QObject* parent, const QVariantList&);
     virtual ~EpsImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

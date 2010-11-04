@@ -24,6 +24,7 @@
 #include <KoStore.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class WPExport : public KoFilter
 {
@@ -31,7 +32,7 @@ class WPExport : public KoFilter
 
 public:
 
-    WPExport(QObject* parent, const QStringList&);
+    WPExport(QObject* parent, const QVariantList&);
     WPExport();
 
     virtual ~WPExport() {}

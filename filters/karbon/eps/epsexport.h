@@ -27,6 +27,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3CString>
+#include <QVariantList>
 
 class QTextStream;
 class VColor;
@@ -45,7 +46,7 @@ class EpsExport : public KoFilter, private VVisitor
     Q_OBJECT
 
 public:
-    EpsExport(QObject* parent, const QStringList&);
+    EpsExport(QObject* parent, const QVariantList&);
     virtual ~EpsExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

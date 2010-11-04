@@ -26,7 +26,7 @@
 
 #include <KoFilterChain.h>
 #include <KoStore.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"
@@ -34,10 +34,10 @@
 
 
 
-typedef KGenericFactory<SvgExport> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkpresentersvgexport, SvgExportFactory("svgexport"))
+K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
+K_EXPORT_PLUGIN(SvgExportFactory("svgexport"))
 
-SvgExport::SvgExport(QObject *parent, const QStringList&)
+SvgExport::SvgExport(QObject *parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

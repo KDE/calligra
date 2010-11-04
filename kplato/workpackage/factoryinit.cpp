@@ -19,5 +19,5 @@
 
 #include "factory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkplatoworkpart, KPlatoWork::Factory )
+K_EXPORT_PLUGIN(KPlatoWork::Factory )
 

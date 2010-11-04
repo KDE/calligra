@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QString>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoStore.h>
 
@@ -31,21 +31,10 @@
 #include "aiimport.h"
 #include "karbonaiparserbase.h"
 
-class AiImportFactory : KGenericFactory<AiImport>
-{
-public:
-    AiImportFactory(void)
-            : KGenericFactory<AiImport>("karbonaiimport") {}
+K_PLUGIN_FACTORY(AiImportFactory, registerPlugin<AiImport>(); )
+K_EXPORT_PLUGIN(AiImportFactory("karbonaiimport", "kofficefilters"))
 
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libkarbonaiimport, AiImportFactory())
-
-AiImport::AiImport(QObject*parent, const QStringList&)
+AiImport::AiImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
 }
@@ -82,8 +71,8 @@ AiImport::convert(const QByteArray& from, const QByteArray& to)
         return KoFilter::StorageCreationError;
     }
 
-    Q3CString cStr = result.toLatin1();
-    storeOut->write(cStr, cStr.size() - 1);
+    const QByteArray cStr = result.toLatin1();
+    storeOut->write(cStr.constData(), cStr.size());
 
     return KoFilter::OK;
 }

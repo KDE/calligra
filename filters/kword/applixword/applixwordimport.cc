@@ -25,10 +25,10 @@
 #include <applixwordimport.moc>
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-typedef KGenericFactory<APPLIXWORDImport> APPLIXWORDImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libapplixwordimport, APPLIXWORDImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
+K_EXPORT_PLUGIN(APPLIXWORDImportFactory("kofficefilters"))
 
 
 /******************************************************************************
@@ -39,7 +39,7 @@ K_EXPORT_COMPONENT_FACTORY(libapplixwordimport, APPLIXWORDImportFactory("koffice
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-APPLIXWORDImport::APPLIXWORDImport(QObject *parent, const QStringList&) :
+APPLIXWORDImport::APPLIXWORDImport(QObject *parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

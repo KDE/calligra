@@ -21,6 +21,7 @@
 #define KOFORMULASHAPEPLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 /**
  * @short A plugin for the formula shape and tool
@@ -35,7 +36,7 @@ class KoFormulaShapePlugin : public QObject {
     Q_OBJECT
 
 public:
-    KoFormulaShapePlugin( QObject* parent, const QStringList& );
+    KoFormulaShapePlugin( QObject* parent, const QVariantList& );
     ~KoFormulaShapePlugin();
 };
 

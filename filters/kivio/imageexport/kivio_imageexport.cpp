@@ -28,7 +28,7 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
 
 #include <KoStore.h>
@@ -42,8 +42,8 @@
 
 #include "kivio_imageexportdialog.h"
 
-typedef KGenericFactory<Kivio::ImageExport> KivioImageExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkivioimageexport, KivioImageExportFactory("KivioImageExport"))
+K_PLUGIN_FACTORY(KivioImageExportFactory, registerPlugin<Kivio::ImageExport>();)
+K_EXPORT_PLUGIN(KivioImageExportFactory("KivioImageExport"))
 
 namespace Kivio
 {

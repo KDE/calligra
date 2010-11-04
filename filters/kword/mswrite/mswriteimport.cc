@@ -41,7 +41,7 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoStore.h>
@@ -53,19 +53,8 @@
 #include "mswriteimport.h"
 
 
-class MSWriteImportFactory : public KGenericFactory <MSWriteImport>
-{
-public:
-    MSWriteImportFactory() : KGenericFactory <MSWriteImport> ("kwordmswriteimport") {
-    }
-
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libmswriteimport, MSWriteImportFactory())
+K_PLUGIN_FACTORY(MSWriteImportFactory, registerPlugin<MSWriteImport>();)
+K_EXPORT_PLUGIN(MSWriteImportFactory("kwordmswriteimport"))
 
 
 //
@@ -1239,7 +1228,7 @@ public:
 // KoFilter
 //
 
-MSWriteImport::MSWriteImport(QObject* parent, const QStringList &)
+MSWriteImport::MSWriteImport(QObject* parent, const QVariantList &)
         : KoFilter(parent), m_device(NULL), m_parser(NULL), m_generator(NULL)
 {
 }

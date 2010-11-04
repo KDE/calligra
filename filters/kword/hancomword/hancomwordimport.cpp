@@ -31,15 +31,15 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoXmlWriter.h>
 
 #include <iostream>
 #include "pole.h"
 
-typedef KGenericFactory<HancomWordImport> HancomWordImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libhancomwordimport, HancomWordImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(HancomWordImportFactory, registerPlugin<HancomWordImport>();)
+K_EXPORT_PLUGIN(HancomWordImportFactory("kofficefilters"))
 
 class HancomWordImport::Private
 {
@@ -54,7 +54,7 @@ public:
     QByteArray createManifest();
 };
 
-HancomWordImport::HancomWordImport(QObject* parent, const QStringList&)
+HancomWordImport::HancomWordImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
     d = new Private;

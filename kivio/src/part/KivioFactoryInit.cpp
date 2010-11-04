@@ -19,4 +19,4 @@
 
 #include "KivioFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(libkiviopart, KivioFactory)
+K_EXPORT_PLUGIN(KivioFactory)

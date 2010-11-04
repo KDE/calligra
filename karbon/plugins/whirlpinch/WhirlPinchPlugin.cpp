@@ -41,28 +41,29 @@
 #include <KoParameterShape.h>
 #include <KoSelection.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
 #include <kicon.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
+#include <klocale.h>
 
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
 #include <QtGui/QGridLayout>
 
 
-typedef KGenericFactory<WhirlPinchPlugin, QWidget> WhirlPinchPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(karbon_whirlpinchplugin, WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
+K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
+K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
 
-WhirlPinchPlugin::WhirlPinchPlugin(QWidget *parent, const QStringList &)
+WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
         : Plugin(parent)
 {
     QAction *a = new KAction(KIcon("14_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));
 
-    m_whirlPinchDlg = new WhirlPinchDlg(parent);
+    m_whirlPinchDlg = new WhirlPinchDlg(qobject_cast<QWidget*>(parent));
     m_whirlPinchDlg->setAngle(180.0);
     m_whirlPinchDlg->setPinch(0.0);
     m_whirlPinchDlg->setRadius(100.0);

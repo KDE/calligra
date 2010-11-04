@@ -36,7 +36,7 @@
 #include <QList>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <kowmfpaint.h>
@@ -49,20 +49,8 @@
 
 #include "mswriteexport.h"
 
-
-class MSWriteExportFactory : public KGenericFactory <MSWriteExport>
-{
-public:
-    MSWriteExportFactory() : KGenericFactory <MSWriteExport> ("kwordmswriteexport") {
-    }
-
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libmswriteexport, MSWriteExportFactory())
+K_PLUGIN_FACTORY(MSWriteExportFactory, registerPlugin<MSWriteExport>();)
+K_EXPORT_PLUGIN(MSWriteExportFactory("kwordmswriteexport", "kofficefilters"))
 
 
 class WRIDevice : public MSWrite::Device
@@ -1725,7 +1713,7 @@ public:
 };
 
 
-MSWriteExport::MSWriteExport(QObject* parent, const QStringList &)
+MSWriteExport::MSWriteExport(QObject* parent, const QVariantList &)
         : KoFilter(parent)
 {
 }

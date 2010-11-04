@@ -43,7 +43,7 @@
 #include <kdeversion.h>
 #include <KDebug>
 #include <KZip>
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KMessageBox>
 
 #include <KoOdfWriteStore.h>
@@ -57,8 +57,8 @@
 
 #include <memory>
 
-typedef KGenericFactory<PptxImport> PptxImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libpptximport, PptxImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PptxImportFactory, registerPlugin<PptxImport>();)
+K_EXPORT_PLUGIN(PptxImportFactory("kofficefilters"))
 
 enum PptxDocumentType {
     PptxDocumentPresentation,
@@ -85,7 +85,7 @@ public:
     bool macrosEnabled;
 };
 
-PptxImport::PptxImport(QObject* parent, const QStringList &)
+PptxImport::PptxImport(QObject* parent, const QVariantList &)
         : MSOOXML::MsooXmlImport(QLatin1String("presentation"), parent), d(new Private)
 {
 }

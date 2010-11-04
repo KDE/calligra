@@ -24,7 +24,7 @@
 
 #include <KoFilterChain.h>
 #include <KoStore.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoDocument.h>
 #include <exportsizedia.h>
 
@@ -33,10 +33,10 @@
 #include "KPrCanvas.h"
 #include "genericimageexport.h"
 
-typedef KGenericFactory<GenericImageExport> GenericImageExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkpresentergenericimageexport, GenericImageExportFactory("genericimageexport"))
+K_PLUGIN_FACTORY(GenericImageExportFactory, registerPlugin<GenericImageExport>();)
+K_EXPORT_PLUGIN(GenericImageExportFactory("genericimageexport"))
 
-GenericImageExport::GenericImageExport(QObject *parent, const QStringList&)
+GenericImageExport::GenericImageExport(QObject *parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

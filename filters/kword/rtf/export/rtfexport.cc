@@ -34,7 +34,7 @@
 */
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kimageio.h>
 #include <KoFilterChain.h>
 
@@ -48,14 +48,14 @@
 //Added by qt3to4:
 #include <QByteArray>
 
-typedef KGenericFactory<RTFExport> RTFExportFactory;
-K_EXPORT_COMPONENT_FACTORY(librtfexport, RTFExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(RTFExportFactory, registerPlugin<RTFExport>();)
+K_EXPORT_PLUGIN(RTFExportFactory("kofficefilters"))
 
 //
 // RTFExport
 //
 
-RTFExport::RTFExport(QObject* parent, const QStringList &) :
+RTFExport::RTFExport(QObject* parent, const QVariantList &) :
         KoFilter(parent)
 {
 }

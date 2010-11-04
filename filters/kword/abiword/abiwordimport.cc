@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kcodecs.h>
 #include <kfilterdev.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kmessagebox.h>
 
 #include <KoPageLayout.h>
@@ -39,17 +39,8 @@
 
 #include "abiwordimport.h"
 
-class ABIWORDImportFactory : public KGenericFactory<ABIWORDImport>
-{
-public:
-    ABIWORDImportFactory(void) : KGenericFactory<ABIWORDImport> ("kwordabiwordimport") {}
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libabiwordimport, ABIWORDImportFactory())
+K_PLUGIN_FACTORY(ABIWORDImportFactory, registerPlugin<ABIWORDImport>();)
+K_EXPORT_PLUGIN(ABIWORDImportFactory("kwordabiwordimport", "kofficefilters"))
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
@@ -1555,7 +1546,7 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
     }
 }
 
-ABIWORDImport::ABIWORDImport(QObject* parent, const QStringList &) :
+ABIWORDImport::ABIWORDImport(QObject* parent, const QVariantList &) :
         KoFilter(parent)
 {
 }

@@ -348,7 +348,8 @@ bool KoWmfReadPrivate::play(KoWmfRead* readWmf)
 
 void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 {
-    // check bounding rectangle for standard meta file
+    // Check bounding rectangle for standard meta file.
+    // This calculation is done in device coordinates.
     if (!mStandard || !mValid) 
         return;
 
@@ -383,6 +384,11 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
         }
 
         bool  isOrgOrExt = true;
+        bool  doRecalculateBBox = false;
+        qint16  orgX;
+        qint16  orgY;
+        qint16  extX;
+        qint16  extY;
         switch (numFunction &= 0xFF) {
         case 11: // setWindowOrg
             {
@@ -411,12 +417,11 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 //        drawing in between.  If that happens, I
                 //        don't think that the window definition
                 //        should influence the bounding box.
-                if (viewportOrgY < mBBoxTop)    mBBoxTop = viewportOrgY;
-                if (viewportOrgX < mBBoxLeft)   mBBoxLeft = viewportOrgX;
-                if (viewportOrgX > mBBoxRight)  mBBoxRight = viewportOrgX;
-                if (viewportOrgY > mBBoxBottom) mBBoxBottom = viewportOrgY;
-
-                // FIXME: Handle negative width or height.
+                orgX = windowOrgX;
+                orgY = windowOrgY;
+                extX = windowWidth;
+                extY = windowHeight;
+                doRecalculateBBox = true;
             }
             break;
 
@@ -443,30 +448,13 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 if (abs(height - windowOrgY) > mMaxHeight)
                     mMaxHeight = abs(height - windowOrgY);
 
-                // Negative values are allowed
-                if (width < 0) {
-                    if (viewportOrgX + width < mBBoxLeft) {
-                        mBBoxLeft = viewportOrgX + width;
-                    }
-                }
-                else {
-                    if (viewportOrgX + width > mBBoxRight) {
-                        mBBoxRight = viewportOrgX + width;
-                    }
-                }
-
-                if (height < 0) {
-                    if (viewportOrgY + height < mBBoxTop) {
-                        mBBoxTop = viewportOrgY + height;
-                    }
-                }
-                else {
-                    if (viewportOrgY + height > mBBoxBottom) {
-                        mBBoxBottom = viewportOrgY + height;
-                    }
-                }
+                orgX = windowOrgX;
+                orgY = windowOrgY;
+                extX = width;
+                extY = height;
+                doRecalculateBBox = true;
             }
-        break;
+            break;
 
         case 13: //setViewportOrg
             {
@@ -493,28 +481,35 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
 #if DEBUG_RECORDS
                 kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
 #endif
-                if (viewportHeight >= 0) {
-
-                    if (viewportOrgY < mBBoxTop)                     mBBoxTop    = viewportOrgY;
-                    if (viewportOrgY + viewportHeight > mBBoxBottom) mBBoxBottom = viewportOrgY + viewportHeight;
-                }
-                else {
-                    // FIXME: Handle negative viewport heights
-                }
-
-                if (viewportWidth >= 0) {
-
-                    if (viewportOrgX < mBBoxLeft)                   mBBoxLeft  = viewportOrgX;
-                    if (viewportOrgX + viewportWidth > mBBoxRight)  mBBoxRight = viewportOrgX + viewportWidth;
-                }
-                else {
-                    // FIXME: Handle negative viewport widths
-                }
+                orgX = viewportOrgX;
+                orgY = viewportOrgY;
+                extX = viewportWidth;
+                extY = viewportHeight;
+                doRecalculateBBox = true;
             }
             break;
 
         default:
             isOrgOrExt = false;
+        }
+
+        // Recalculate the BBox if it was indicated above that it should be.
+        if (doRecalculateBBox) {
+            // If ext < 0, switch the org and org+ext
+            if (extX < 0) {
+                orgX += extX;
+                extX = -extX;
+            }
+            if (extY < 0) {
+                orgY += extY;
+                extY = -extY;
+            }
+
+            // At this point, the ext is always >= 0, i.e. org <= org+ext
+            if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
+            if (orgY < mBBoxTop)           mBBoxTop  = orgY;
+            if (orgX + extX > mBBoxRight)  mBBoxRight  = orgX + extX;
+            if (orgY + extY > mBBoxBottom) mBBoxBottom = orgY + extY;
         }
 
 #if DEBUG_RECORDS

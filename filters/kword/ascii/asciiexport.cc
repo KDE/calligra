@@ -32,7 +32,7 @@
 #include <QList>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
@@ -45,20 +45,8 @@
 #include <ExportDialog.h>
 #include <asciiexport.h>
 
-
-class ASCIIExportFactory : public KGenericFactory<ASCIIExport>
-{
-public:
-    ASCIIExportFactory() : KGenericFactory<ASCIIExport>("kwordasciiexport") {
-    }
-
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libasciiexport, ASCIIExportFactory())
+K_PLUGIN_FACTORY(ASCIIExportFactory, registerPlugin<ASCIIExport>();)
+K_EXPORT_PLUGIN(ASCIIExportFactory("kwordasciiexport", "kofficefilters"))
 
 
 class ASCIIWorker : public KWEFBaseWorker
@@ -424,7 +412,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
 }
 
 
-ASCIIExport::ASCIIExport(QObject* parent, const QStringList&)
+ASCIIExport::ASCIIExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

@@ -22,7 +22,7 @@
 #include <htmlimport.moc>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 
 #include <KoStore.h>
@@ -30,11 +30,11 @@
 #include <khtmlreader.h>
 #include <kwdwriter.h>
 
-typedef KGenericFactory<HTMLImport> HTMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libhtmlimport, HTMLImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(HTMLImportFactory, registerPlugin<HTMLImport>();)
+K_EXPORT_PLUGIN(HTMLImportFactory("kofficefilters"))
 
 
-HTMLImport::HTMLImport(QObject* parent, const QStringList &) :
+HTMLImport::HTMLImport(QObject* parent, const QVariantList &) :
         KoFilter(parent)
 {
 // 123

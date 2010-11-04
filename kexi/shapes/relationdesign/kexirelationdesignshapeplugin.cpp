@@ -20,13 +20,13 @@
 #include "kexirelationdesignfactory.h"
 #include "kexirelationdesigntoolfactory.h"
 #include <KoShapeRegistry.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoToolRegistry.h>
 
-K_EXPORT_COMPONENT_FACTORY ( kexirelationdesignshape,
-                             KGenericFactory<KexiRelationDesignShapePlugin> ( "KexiRelationDesignShapePlugin" ) )
+K_PLUGIN_FACTORY(KexiRelationDesignShapePluginFactory, registerPlugin<KexiRelationDesignShapePlugin>();)
+K_EXPORT_PLUGIN(KexiRelationDesignShapePluginFactory("KexiRelationDesignShapePlugin"))
 
-KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin ( QObject *parent, const QStringList& )
+KexiRelationDesignShapePlugin::KexiRelationDesignShapePlugin ( QObject *parent, const QVariantList& )
         : QObject ( parent ) {
     // register the shape's factory
     KoShapeRegistry::instance()->add (new KexiRelationDesignFactory () );

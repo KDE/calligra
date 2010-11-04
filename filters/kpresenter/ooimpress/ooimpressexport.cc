@@ -24,16 +24,16 @@
 #include <QDateTime>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
 
-typedef KGenericFactory<OoImpressExport> OoImpressExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libooimpressexport, OoImpressExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(OoImpressExportFactory, registerPlugin<OoImpressExport>();)
+K_EXPORT_PLUGIN(OoImpressExportFactory("kofficefilters"))
 
 
-OoImpressExport::OoImpressExport(QObject *parent, const QStringList &)
+OoImpressExport::OoImpressExport(QObject *parent, const QVariantList &)
         : KoFilter(parent)
         , m_currentPage(0)
         , m_objectIndex(0)

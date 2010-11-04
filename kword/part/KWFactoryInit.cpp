@@ -19,5 +19,5 @@
 
 #include "KWFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(libkwordpart, KWFactory)
+K_EXPORT_PLUGIN(KWFactory)
 

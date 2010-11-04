@@ -26,6 +26,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3CString>
+#include <QVariantList>
 
 class QDomElement;
 class QTextStream;
@@ -35,7 +36,7 @@ class AiImport : public KoFilter
     Q_OBJECT
 
 public:
-    AiImport(QObject* parent, const QStringList&);
+    AiImport(QObject* parent, const QVariantList&);
     virtual ~AiImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

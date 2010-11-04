@@ -19,14 +19,14 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <wpimport.h>
 
 #include <QByteArray>
 
-typedef KGenericFactory<WPImport> WPImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwpimport, WPImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WPImportFactory, registerPlugin<WPImport>();)
+K_EXPORT_PLUGIN(WPImportFactory("kofficefilters"))
 
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXStream.h>
@@ -258,7 +258,7 @@ void KWordListener::insertLineBreak()
 {
 }
 
-WPImport::WPImport(QObject* parent, const QStringList&)
+WPImport::WPImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

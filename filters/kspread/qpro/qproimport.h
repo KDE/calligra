@@ -24,6 +24,7 @@
 #include <qpro/tablenames.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 namespace KSpread
 {
@@ -36,7 +37,7 @@ class QpImport : public KoFilter
     Q_OBJECT
 
 public:
-    QpImport(QObject* parent, const QStringList&);
+    QpImport(QObject* parent, const QVariantList&);
     virtual ~QpImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

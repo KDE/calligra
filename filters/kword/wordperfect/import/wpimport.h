@@ -28,6 +28,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class WPImport : public KoFilter
 {
@@ -40,7 +41,7 @@ protected:
 
 public:
 
-    WPImport(QObject* parent, const QStringList&);
+    WPImport(QObject* parent, const QVariantList&);
     WPImport();
 
     virtual ~WPImport() {}

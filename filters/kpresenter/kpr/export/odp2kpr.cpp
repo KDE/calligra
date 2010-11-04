@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
@@ -30,8 +30,8 @@
 #include <KoDocumentInfo.h>
 #include <KoOdfReadStore.h>
 
-typedef KGenericFactory<Odp2Kpr> Odp2KprFactory;
-K_EXPORT_COMPONENT_FACTORY(libodp2kpr, Odp2KprFactory("kofficefilters"))
+K_PLUGIN_FACTORY(Odp2KprFactory, registerPlugin<Odp2Kpr>();)
+K_EXPORT_PLUGIN(Odp2KprFactory("kofficefilters"))
 
 Odp2Kpr::Odp2Kpr(QObject *parent, const QStringList&) :
         KoFilter(parent)

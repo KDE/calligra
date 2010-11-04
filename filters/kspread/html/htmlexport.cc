@@ -29,7 +29,7 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoDocumentInfo.h>
 #include <kofficeversion.h>
@@ -42,8 +42,8 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<HTMLExport> HTMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkspreadhtmlexport, HTMLExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(HTMLExportFactory, registerPlugin<HTMLExport>();)
+K_EXPORT_PLUGIN(HTMLExportFactory("kofficefilters"))
 
 const QString html_table_tag = "table";
 const QString html_table_options = QString(" border=\"%1\" cellspacing=\"%2\"");
@@ -62,7 +62,7 @@ const QString html_bottom = "bottom";
 const QString html_middle = "middle";
 const QString html_h1 = "h1";
 
-HTMLExport::HTMLExport(QObject* parent, const QStringList&) :
+HTMLExport::HTMLExport(QObject* parent, const QVariantList&) :
         KoFilter(parent), m_dialog(new ExportDialog())
 {
 }

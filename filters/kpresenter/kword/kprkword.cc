@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
@@ -27,8 +27,8 @@
 #include <QList>
 #include <QColor>
 
-typedef KGenericFactory<KprKword> KprKwordFactory;
-K_EXPORT_COMPONENT_FACTORY(libkprkword, KprKwordFactory("kofficefilters"))
+K_PLUGIN_FACTORY(KprKwordFactory, registerPlugin<KprKword>();)
+K_EXPORT_PLUGIN(KprKwordFactory("kofficefilters"))
 
 KprKword::KprKword(QObject *parent, const QStringList&) :
         KoFilter(parent),

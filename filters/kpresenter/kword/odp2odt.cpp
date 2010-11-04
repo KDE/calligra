@@ -19,7 +19,7 @@
 
 #include "odp2odt.h"
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
@@ -29,8 +29,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-typedef KGenericFactory<Odp2Odt> Odp2OdtFactory;
-K_EXPORT_COMPONENT_FACTORY(libkodp2odt, Odp2OdtFactory("kofficefilters"))
+K_PLUGIN_FACTORY(Odp2OdtFactory, registerPlugin<Odp2Odt>();)
+K_EXPORT_PLUGIN(Odp2OdtFactory("kofficefilters"))
 
 Odp2Odt::Odp2Odt(QObject *parent, const QStringList&) :
         KoFilter(parent)

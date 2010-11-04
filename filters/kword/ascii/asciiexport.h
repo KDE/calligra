@@ -23,13 +23,14 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class ASCIIExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    ASCIIExport(QObject* parent, const QStringList&);
+    ASCIIExport(QObject* parent, const QVariantList&);
     virtual ~ASCIIExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
