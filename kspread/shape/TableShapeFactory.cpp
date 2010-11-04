@@ -23,7 +23,7 @@
 #include <QStringList>
 #include <QSharedPointer>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 
 #include <KoResourceManager.h>
@@ -39,9 +39,10 @@
 
 using namespace KSpread;
 
-K_EXPORT_COMPONENT_FACTORY(spreadsheetshape, KGenericFactory<TableShapePlugin>("TableShape"))
+K_PLUGIN_FACTORY(TableShapePluginFactory, registerPlugin<TableShapePlugin>();)
+K_EXPORT_PLUGIN(TableShapePluginFactory("TableShape"))
 
-TableShapePlugin::TableShapePlugin(QObject * parent,  const QStringList&)
+TableShapePlugin::TableShapePlugin(QObject * parent, const QVariantList&)
 {
     KoShapeRegistry::instance()->add(new TableShapeFactory(parent));
     KoToolRegistry::instance()->add(new TableToolFactory(parent));

@@ -32,7 +32,7 @@ class KWScriptingPart : public KoScriptingPart
 {
     Q_OBJECT
 public:
-    KWScriptingPart(QObject *parent, const QStringList&);
+    KWScriptingPart(QObject *parent, const QVariantList&);
     virtual ~KWScriptingPart();
 };
 

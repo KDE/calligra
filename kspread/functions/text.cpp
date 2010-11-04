@@ -33,7 +33,6 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <KGenericFactory>
 #include <KLocale>
 
 using namespace KSpread;

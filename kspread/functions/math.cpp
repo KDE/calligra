@@ -29,7 +29,6 @@
 #include <math.h>
 
 #include <kdebug.h>
-#include <KGenericFactory>
 #include <KLocale>
 
 #include "FunctionModuleRegistry.h"

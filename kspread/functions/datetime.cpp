@@ -30,7 +30,6 @@
 #include "ValueConverter.h"
 
 #include <kcalendarsystem.h>
-#include <KGenericFactory>
 #include <KLocale>
 
 using namespace KSpread;

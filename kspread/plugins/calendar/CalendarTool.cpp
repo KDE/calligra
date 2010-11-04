@@ -29,7 +29,6 @@
 #include <KoCanvasBase.h>
 
 #include <KCalendarSystem>
-#include <KGenericFactory>
 #include <KMessageBox>
 
 using namespace KSpread;

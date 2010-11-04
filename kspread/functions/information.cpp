@@ -27,7 +27,6 @@
 
 #include <QDir>
 #include <kdebug.h>
-#include <KGenericFactory>
 #include <KLocale>
 
 #include "CalculationSettings.h"
