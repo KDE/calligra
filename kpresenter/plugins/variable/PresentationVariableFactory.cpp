@@ -34,14 +34,13 @@
 PresentationVariableFactory::PresentationVariableFactory()
     : KoInlineObjectFactoryBase("PresentationVariable", Other)
 {
-#if 0 // Unused and causes a leak
     KoInlineObjectTemplate var1;
     var1.id = "Header";
     var1.name = i18n("Header");
     KoProperties *props = new KoProperties();
     props->setProperty("vartype", 1);
     var1.properties = props;
-    //addTemplate(var1);
+    addTemplate(var1);
 
     KoInlineObjectTemplate var2;
     var2.id = "Footer";
@@ -49,8 +48,8 @@ PresentationVariableFactory::PresentationVariableFactory()
     props = new KoProperties();
     props->setProperty("vartype", 2);
     var2.properties = props;
-    //addTemplate(var2);
-#endif
+    addTemplate(var2);
+
     QStringList elementNames;
     elementNames << "footer" << "header" << "date-time";
     setOdfElementNames(KoXmlNS::presentation, elementNames);
