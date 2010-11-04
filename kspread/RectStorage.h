@@ -24,6 +24,8 @@
 #include <QCache>
 #include <QRegion>
 #include <QTimer>
+#include <QRunnable>
+#include <QTime>
 
 #include "kspread_export.h"
 
@@ -35,6 +37,9 @@ static const int g_garbageCollectionTimeOut = 100;
 
 namespace KSpread
 {
+
+template<typename T>
+class RectStorageLoader;
 
 /**
  * \ingroup Storage
@@ -159,6 +164,10 @@ protected:
      */
     void invalidateCache(const QRect& rect);
 
+    /**
+     * Ensures that any load() operation has completed.
+     */
+    void ensureLoaded() const;
 private:
     Map* m_map;
     RTree<T> m_tree;
@@ -167,11 +176,28 @@ private:
     QList<T> m_storedData;
     mutable QCache<QPoint, T> m_cache;
     mutable QRegion m_cachedArea;
+
+    RectStorageLoader<T>* m_loader;
+    friend class RectStorageLoader<T>;
+};
+
+template<typename T>
+class RectStorageLoader : public QRunnable
+{
+public:
+    RectStorageLoader(RectStorage<T>* storage, const QList<QPair<QRegion, T> >& data);
+    virtual void run();
+    void waitForFinished();
+    bool isFinished() const;
+    QList<QPair<QRegion, T> > data() const;
+private:
+    RectStorage<T>* m_storage;
+    QList<QPair<QRegion, T> > m_data;
 };
 
 template<typename T>
 RectStorage<T>::RectStorage(Map* map)
-        : m_map(map)
+        : m_map(map), m_loader(0)
 {
 }
 
@@ -180,18 +206,24 @@ RectStorage<T>::RectStorage(const RectStorage& other)
         : m_map(other.m_map)
         , m_usedArea(other.m_usedArea)
         , m_storedData(other.m_storedData)
+        , m_loader(0)
 {
     m_tree = other.m_tree;
+    if (other.m_loader) {
+        m_loader = new RectStorageLoader<T>(this, other.m_loader->data());
+    }
 }
 
 template<typename T>
 RectStorage<T>::~RectStorage()
 {
+    delete m_loader; // needs fixing if this ever gets to be multithreaded
 }
 
 template<typename T>
 T RectStorage<T>::contains(const QPoint& point) const
 {
+    ensureLoaded();
     if (!usedArea().contains(point))
         return T();
     // first, lookup point in the cache
@@ -210,6 +242,7 @@ T RectStorage<T>::contains(const QPoint& point) const
 template<typename T>
 QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
 {
+    ensureLoaded();
     const QList< QPair<QRectF, T> > results = m_tree.intersectingPairs(QRect(point, point)).values();
     return results.isEmpty() ? qMakePair(QRectF(), T()) : results.last();
 }
@@ -217,6 +250,7 @@ QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region) const
 {
+    ensureLoaded();
     QList< QPair<QRectF, T> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
@@ -227,6 +261,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::undoData(const Region& region) const
 {
+    ensureLoaded();
     QList< QPair<QRectF, T> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
@@ -245,37 +280,21 @@ QList< QPair<QRectF, T> > RectStorage<T>::undoData(const Region& region) const
 template<typename T>
 QRect RectStorage<T>::usedArea() const
 {
+    ensureLoaded();
     return m_tree.boundingBox().toRect();
 }
 
 template<typename T>
 void RectStorage<T>::load(const QList<QPair<QRegion, T> >& data)
 {
-    QList<QPair<QRegion, T> > treeData;
-    typedef QPair<QRegion, T> TRegion;
-    QMap<T, int> indexCache;
-    foreach (const TRegion& tr, data) {
-        const QRegion& reg = tr.first;
-        const T& d = tr.second;
-
-        typename QMap<T, int>::iterator idx = indexCache.find(d);
-        int index = idx != indexCache.end() ? idx.value() : m_storedData.indexOf(d);
-        if (index != -1) {
-            treeData.append(qMakePair(reg, m_storedData[index]));
-            if (idx == indexCache.end()) indexCache.insert(d, index);
-        } else {
-            treeData.append(tr);
-            if (idx == indexCache.end()) indexCache.insert(d, m_storedData.size());
-            m_storedData.append(d);
-        }
-    }
-
-    m_tree.load(treeData);
+    Q_ASSERT(!m_loader);
+    m_loader = new RectStorageLoader<T>(this, data);
 }
 
 template<typename T>
 void RectStorage<T>::insert(const Region& region, const T& _data)
 {
+    ensureLoaded();
     T data;
     // lookup already used data
     int index = m_storedData.indexOf(_data);
@@ -297,6 +316,7 @@ void RectStorage<T>::insert(const Region& region, const T& _data)
 template<typename T>
 void RectStorage<T>::remove(const Region& region, const T& data)
 {
+    ensureLoaded();
     if (!m_storedData.contains(data)) {
         return;
     }
@@ -311,6 +331,7 @@ void RectStorage<T>::remove(const Region& region, const T& data)
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
 {
+    ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -324,6 +345,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number)
 {
+    ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -337,6 +359,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
 {
+    ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -350,6 +373,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number)
 {
+    ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
@@ -363,6 +387,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
 {
+    ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
@@ -374,6 +399,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
 {
+    ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
@@ -385,6 +411,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
 {
+    ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
@@ -396,6 +423,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
 template<typename T>
 QList< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
 {
+    ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
     QList< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
@@ -412,6 +440,9 @@ void RectStorage<T>::triggerGarbageCollection()
 template<typename T>
 void RectStorage<T>::garbageCollection()
 {
+    if (m_loader && !m_loader->isFinished())
+        return;
+
     // any possible garbage left?
     if (m_possibleGarbage.isEmpty())
         return;
@@ -470,6 +501,8 @@ void RectStorage<T>::garbageCollection()
 template<typename T>
 void RectStorage<T>::regionChanged(const QRect& rect)
 {
+    if (m_loader && !m_loader->isFinished())
+        return;
     if (m_map->isLoading())
         return;
     // mark the possible garbage
@@ -484,6 +517,8 @@ void RectStorage<T>::regionChanged(const QRect& rect)
 template<typename T>
 void RectStorage<T>::invalidateCache(const QRect& invRect)
 {
+    if (m_loader && !m_loader->isFinished())
+        return;
     const QVector<QRect> rects = m_cachedArea.intersected(invRect).rects();
     m_cachedArea = m_cachedArea.subtracted(invRect);
     foreach(const QRect& rect, rects) {
@@ -494,7 +529,72 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
     }
 }
 
+template<typename T>
+void RectStorage<T>::ensureLoaded() const
+{
+    if (m_loader) {
+        m_loader->waitForFinished();
+        delete m_loader;
+        const_cast<RectStorage<T>*>(this)->m_loader = 0;
+    }
+}
 
+template<typename T>
+RectStorageLoader<T>::RectStorageLoader(RectStorage<T> *storage, const QList<QPair<QRegion, T> > &data)
+    : m_storage(storage)
+    , m_data(data)
+{
+}
+
+template<typename T>
+void RectStorageLoader<T>::run()
+{
+    static int total = 0;
+    kDebug(36001) << "Loading conditional styles";
+    QTime t; t.start();
+
+    QList<QPair<QRegion, T> > treeData;
+    typedef QPair<QRegion, T> TRegion;
+    QMap<T, int> indexCache;
+    foreach (const TRegion& tr, m_data) {
+        const QRegion& reg = tr.first;
+        const T& d = tr.second;
+
+        typename QMap<T, int>::iterator idx = indexCache.find(d);
+        int index = idx != indexCache.end() ? idx.value() : m_storage->m_storedData.indexOf(d);
+        if (index != -1) {
+            treeData.append(qMakePair(reg, m_storage->m_storedData[index]));
+            if (idx == indexCache.end()) indexCache.insert(d, index);
+        } else {
+            treeData.append(tr);
+            if (idx == indexCache.end()) indexCache.insert(d, m_storage->m_storedData.size());
+            m_storage->m_storedData.append(d);
+        }
+    }
+
+    m_storage->m_tree.load(treeData);
+    int e = t.elapsed();
+    total += e;
+    kDebug(36001) << "Time: " << e << total;
+}
+
+template<typename T>
+void RectStorageLoader<T>::waitForFinished()
+{
+    run();
+}
+
+template<typename T>
+bool RectStorageLoader<T>::isFinished() const
+{
+    return false;
+}
+
+template<typename T>
+QList<QPair<QRegion, T> > RectStorageLoader<T>::data() const
+{
+     return m_data;
+}
 
 class CommentStorage : public QObject, public RectStorage<QString>
 {
