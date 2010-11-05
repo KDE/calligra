@@ -471,7 +471,7 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
     // row height
     if (!isColumnSelected) {
         for (int y = top; y <= bottom; y++) {
-            heightSize = qMax(m_sheet->rowFormats()->rowHeight(y), heightSize);
+            heightSize = qMax(m_sheet->rowFormats()->rowHeight(y), static_cast<qreal>(heightSize) );
         }
     }
 
