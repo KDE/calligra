@@ -96,7 +96,10 @@ class odfvalidator:
 				'r')))
 	# returns error string on error, None otherwise
 	def validate(self, odtpath): 
-		zip = zipfile.ZipFile(odtpath, 'r')
+		try:
+			zip = zipfile.ZipFile(odtpath, 'r')
+		except BadZipfile as e:
+			return str(e)
 		err = self.validateFile(zip, 'content.xml',
 				self.relaxNGValidator)
 		if (err):
