@@ -75,8 +75,14 @@ public:
     ElementType elementType() const;
 
 protected:
+    /// Read all attributes - reimplemented from BasicElement
+    bool readMathMLAttributes( const KoXmlElement& element );
+
     /// Read root contents - reimplemented from BasicElement
     bool readMathMLContent( const KoXmlElement& element );
+
+    /// Write element attributes - reimplemented from BasicElement
+    void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
     /// Write root contents - reimplemented from BasicElement
     void writeMathMLContent( KoXmlWriter* writer ) const;

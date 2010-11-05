@@ -216,7 +216,7 @@ bool BasicElement::readMathMLContent( const KoXmlElement& parent )
 
 void BasicElement::writeMathML( KoXmlWriter* writer ) const
 {
-    if (elementType() == Basic) {
+    if (elementType() == Basic || elementType() == Unknown) {
         return;
     }
 
