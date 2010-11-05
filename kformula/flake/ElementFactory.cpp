@@ -108,9 +108,11 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
           return new UnderOverElement( parent, UnderOver );
     else if ( tagName == "mmultiscripts" )
           return new MultiscriptElement( parent );
+    /*
     else if ( tagName == "annotation" )
           return new AnnotationElement( parent );
-    
+    */
+
     kWarning( DEBUGID ) << "Do not know how to create the following element: " << tagName;
     return new UnknownElement( parent );
 }
@@ -178,8 +180,10 @@ QString ElementFactory::elementName( ElementType type )
             return "mrow";
 	case Formula:
 	    return "math";
+        /*
         case Annotation:
-	    return "annotation";
+            return "annotation";
+        */
         default:
             kWarning( DEBUGID ) << "Invalid element type " << type;
     }
