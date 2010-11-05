@@ -750,6 +750,7 @@ void View::initView()
     d->calcLabel  = 0;
     d->vertScrollBar = new QScrollBar(this);
     canvasController->setVerticalScrollBar(d->vertScrollBar);
+    connect(d->vertScrollBar, SIGNAL(valueChanged(int)), canvasController, SLOT(updateCanvasOffsetY()));
     d->vertScrollBar->setOrientation(Qt::Vertical);
     d->vertScrollBar->setSingleStep(60);  //just random guess based on what feels okay
     d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
@@ -762,6 +763,7 @@ void View::initView()
     d->tabScrollBarLayout->addWidget(d->tabBar, 0, 0);
     d->horzScrollBar = new QScrollBar(0);
     canvasController->setHorizontalScrollBar(d->horzScrollBar);
+    connect(d->horzScrollBar, SIGNAL(valueChanged(int)), canvasController, SLOT(updateCanvasOffsetX()));
     d->tabScrollBarLayout->addWidget(d->horzScrollBar, 0, 1, 2, 1, Qt::AlignVCenter);
 
     d->horzScrollBar->setOrientation(Qt::Horizontal);
