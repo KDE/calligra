@@ -158,7 +158,7 @@ def runCommand(exepath, arguments, captureStdOut):
 	if waited >= maxwaittime:
 		# if the process did not end nicely, kill it
 		try:
-			os.kill(process.pid, signal.SIGKILL)
+			os.killpg(process.pid, signal.SIGKILL)
 		except:
 			pass
 		try:
