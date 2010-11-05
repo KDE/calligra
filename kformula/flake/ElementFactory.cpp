@@ -178,8 +178,8 @@ QString ElementFactory::elementName( ElementType type )
             return "maction";
         case Basic:
             return "mrow";
-	case Formula:
-	    return "math";
+        case Formula:
+            return "math";
         /*
         case Annotation:
             return "annotation";
