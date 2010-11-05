@@ -8,7 +8,7 @@ set(wmfimport_PART_SRCS
     wmfimportparser.cc
     ${SHAPES_SOURCES} )
 
-kde4_add_plugin(wmfimport WITH_PREFIX ${wmfimport_PART_SRCS})
+kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
 
 target_link_libraries(wmfimport kowmf karbonui)
 
@@ -18,7 +18,7 @@ install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(wmfexport_PART_SRCS wmfexport.cc )
 
-kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
+kde4_add_plugin(wmfexport ${wmfexport_PART_SRCS})
 
 target_link_libraries(
     wmfexport

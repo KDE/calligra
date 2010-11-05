@@ -61,5 +61,5 @@ Name[zh_TW]=KWord AmiPro 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-amipro
 X-KDE-Weight=1
-X-KDE-Library=libamiproimport
+X-KDE-Library=amiproimport
 X-KDE-ServiceTypes=KOfficeFilter

@@ -58,5 +58,5 @@ Name[zh_TW]=KChart SVG 匯出過濾程式
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
-X-KDE-Library=libkchartsvgexport
+X-KDE-Library=kchartsvgexport
 X-KDE-ServiceTypes=KOfficeFilter

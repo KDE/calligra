@@ -7,7 +7,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 set(applixwordimport_PART_SRCS applixwordimport.cc )
 
 
-kde4_add_plugin(applixwordimport WITH_PREFIX ${applixwordimport_PART_SRCS})
+kde4_add_plugin(applixwordimport ${applixwordimport_PART_SRCS})
 
 
 

@@ -4,7 +4,7 @@ kde4_add_ui_files(dcmimport_PART_SRCS DCMImportDialog.ui )
 INCLUDE_DIRECTORIES( ${DCMTK_INCLUDE_DIR} )
 add_definitions(-DHAVE_CONFIG_H)
 
-kde4_add_plugin(dcmimport WITH_PREFIX ${dcmimport_PART_SRCS})
+kde4_add_plugin(dcmimport ${dcmimport_PART_SRCS})
 
 target_link_libraries(dcmimport kwordexportfilters ${DCMTK_LIBRARIES})
 

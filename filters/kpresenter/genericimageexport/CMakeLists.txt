@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 set(kpresentergenericimageexport_PART_SRCS genericimageexport.cpp ${libdialogfilter_SRCS})
 
-kde4_add_plugin(kpresentergenericimageexport WITH_PREFIX ${kpresentergenericimageexport_PART_SRCS})
+kde4_add_plugin(kpresentergenericimageexport ${kpresentergenericimageexport_PART_SRCS})
 
 target_link_libraries(kpresentergenericimageexport  ${KDE4_KDECORE_LIBS} kpresenterprivate )
 

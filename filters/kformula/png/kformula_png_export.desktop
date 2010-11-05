@@ -64,4 +64,4 @@ Name[zh_CN]=KFormula PNG 导出过滤器
 Name[zh_TW]=KFormula PNG 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkfopngexport
+X-KDE-Library=kfopngexport

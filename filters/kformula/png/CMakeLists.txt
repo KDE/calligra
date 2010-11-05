@@ -8,7 +8,7 @@
 set(kfopngexport_PART_SRCS pngexport.cc pngexportdia.cc )
 
 
-kde4_add_plugin(kfopngexport WITH_PREFIX ${kfopngexport_PART_SRCS})
+kde4_add_plugin(kfopngexport ${kfopngexport_PART_SRCS})
 
 
 

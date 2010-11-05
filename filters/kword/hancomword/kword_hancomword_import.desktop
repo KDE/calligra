@@ -60,5 +60,5 @@ Name[zh_TW]=KWord HancomWord 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/x-hancomword
 X-KDE-Weight=1
-X-KDE-Library=libhancomwordimport
+X-KDE-Library=hancomwordimport
 X-KDE-ServiceTypes=KOfficeFilter

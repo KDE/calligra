@@ -21,5 +21,5 @@ Name[zh_TW]=KWord DICOM 結構報告匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/dicom
 X-KDE-Weight=1
-X-KDE-Library=libdcmimport
+X-KDE-Library=dcmimport
 X-KDE-ServiceTypes=KOfficeFilter

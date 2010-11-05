@@ -9,7 +9,7 @@ set(karbonpngexport_PART_SRCS PngExport.cpp PngExportOptionsWidget.cpp )
 
 kde4_add_ui_files( karbonpngexport_PART_SRCS PngExportOptionsWidget.ui )
 
-kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
+kde4_add_plugin(karbonpngexport ${karbonpngexport_PART_SRCS})
 
 target_link_libraries(karbonpngexport karbonui komain)
 

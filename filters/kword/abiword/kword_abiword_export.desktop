@@ -61,5 +61,5 @@ Name[zh_TW]=KWord AbiWord 匯出過濾程式
 X-KDE-Export=application/x-abiword
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
-X-KDE-Library=libabiwordexport
+X-KDE-Library=abiwordexport
 X-KDE-ServiceTypes=KOfficeFilter

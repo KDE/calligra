@@ -61,5 +61,5 @@ Name[zh_TW]=KWord SGML DocBook 匯出過濾程式
 X-KDE-Export=text/sgml
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
-X-KDE-Library=libdocbookexport
+X-KDE-Library=docbookexport
 X-KDE-ServiceTypes=KOfficeFilter

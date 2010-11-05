@@ -21,5 +21,5 @@ Name[zh_TW]=KWord HTML-ODF 匯出過濾程式
 X-KDE-Export=text/html
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Weight=50
-X-KDE-Library=libhtmlodf_export
+X-KDE-Library=htmlodf_export
 X-KDE-ServiceTypes=KOfficeFilter

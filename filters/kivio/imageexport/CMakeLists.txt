@@ -10,7 +10,7 @@ set(kivioimageexport_PART_SRCS kivio_imageexport.cpp kivio_imageexportdialog.cpp
 
 kde4_add_ui3_files(kivioimageexport_PART_SRCS kivio_imageexportwidget.ui )
 
-kde4_add_plugin(kivioimageexport WITH_PREFIX ${kivioimageexport_PART_SRCS})
+kde4_add_plugin(kivioimageexport ${kivioimageexport_PART_SRCS})
 
 
 

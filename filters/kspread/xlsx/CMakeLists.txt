@@ -20,7 +20,7 @@ set(xlsximport_PART_SRCS
     FormulaParser.cpp
 )
 
-kde4_add_plugin(xlsximport WITH_PREFIX ${xlsximport_PART_SRCS})
+kde4_add_plugin(xlsximport ${xlsximport_PART_SRCS})
 
 target_link_libraries(
     xlsximport

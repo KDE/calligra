@@ -1,6 +1,6 @@
 set(oopptimport_PART_SRCS oopptimport.cc)
 
-kde4_add_plugin(oopptimport WITH_PREFIX ${oopptimport_PART_SRCS})
+kde4_add_plugin(oopptimport ${oopptimport_PART_SRCS})
 
 target_link_libraries(oopptimport komain)
 

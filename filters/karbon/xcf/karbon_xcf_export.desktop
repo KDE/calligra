@@ -62,5 +62,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/x-xcf-gimp
 X-KDE-Import=application/x-karbon
-X-KDE-Library=libkarbonxcfexport
+X-KDE-Library=karbonxcfexport
 X-KDE-Weight=1

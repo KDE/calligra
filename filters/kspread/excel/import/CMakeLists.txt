@@ -45,7 +45,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 
-kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
+kde4_add_plugin(excelimport ${excelimport_PART_SRCS})
 
 
 target_link_libraries(excelimport msooxml komain mso koodf ${ZLIB_LIBRARIES})
@@ -56,7 +56,7 @@ endif(QCA2_FOUND)
 #install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(excelimport_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
-kde4_add_plugin(excelimporttodoc WITH_PREFIX ${excelimport_SRCS})
+kde4_add_plugin(excelimporttodoc ${excelimport_SRCS})
 target_link_libraries(excelimporttodoc kspreadodf msooxml komain mso koodf ${ZLIB_LIBRARIES})
 if(QCA2_FOUND)
    target_link_libraries(excelimporttodoc ${QCA2_LIBRARIES})

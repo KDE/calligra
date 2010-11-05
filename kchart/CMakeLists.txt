@@ -54,7 +54,7 @@ install(TARGETS kchartcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #set(kchartpart_PART_SRCS KChartFactoryInit.cpp )
 
-#kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})
+#kde4_add_plugin(kchartpart ${kchartpart_PART_SRCS})
 
 
 #target_link_libraries(kchartpart

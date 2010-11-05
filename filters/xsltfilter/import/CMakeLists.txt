@@ -8,7 +8,7 @@ set(xsltimport_PART_SRCS xsltimport.cc xsltimportdia.cc xsltproc.cc )
 
 kde4_add_ui3_files(xsltimport_PART_SRCS xsltdialog.ui )
 
-kde4_add_plugin(xsltimport WITH_PREFIX ${xsltimport_PART_SRCS})
+kde4_add_plugin(xsltimport ${xsltimport_PART_SRCS})
 
 
 

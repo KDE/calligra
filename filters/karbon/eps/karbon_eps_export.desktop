@@ -62,5 +62,5 @@ Name[zh_TW]=Karbon14 EPS 匯出過濾程式
 X-KDE-Export=image/x-eps
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1
-X-KDE-Library=libkarbonepsexport
+X-KDE-Library=karbonepsexport
 X-KDE-ServiceTypes=KOfficeFilter

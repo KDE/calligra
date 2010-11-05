@@ -8,7 +8,7 @@
 set(kfolatexexport_PART_SRCS latexexport.cc )
 
 
-kde4_add_plugin(kfolatexexport WITH_PREFIX ${kfolatexexport_PART_SRCS})
+kde4_add_plugin(kfolatexexport ${kfolatexexport_PART_SRCS})
 
 
 

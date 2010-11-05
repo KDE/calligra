@@ -61,5 +61,5 @@ Name[zh_TW]=KWord WordPerfect 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/wordperfect
 X-KDE-Weight=1
-X-KDE-Library=libwpimport
+X-KDE-Library=wpimport
 X-KDE-ServiceTypes=KOfficeFilter

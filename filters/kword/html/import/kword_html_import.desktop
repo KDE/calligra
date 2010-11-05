@@ -62,5 +62,5 @@ Name[zh_TW]=KWord HTML 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=text/html
 X-KDE-Weight=1
-X-KDE-Library=libhtmlimport
+X-KDE-Library=htmlimport
 X-KDE-ServiceTypes=KOfficeFilter

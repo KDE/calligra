@@ -9,7 +9,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 set(hancomwordimport_PART_SRCS pole.cpp hancomwordimport.cpp )
 
 
-kde4_add_plugin(hancomwordimport WITH_PREFIX ${hancomwordimport_PART_SRCS})
+kde4_add_plugin(hancomwordimport ${hancomwordimport_PART_SRCS})
 
 
 

@@ -144,7 +144,7 @@ install(TARGETS kpresenterprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ### kpresenterpart ###
 set(kpresenterpart_PART_SRCS KPrFactoryInit.cpp )
 
-kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
+kde4_add_plugin(kpresenterpart ${kpresenterpart_PART_SRCS})
 
 
 

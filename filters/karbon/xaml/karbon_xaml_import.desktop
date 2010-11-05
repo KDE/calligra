@@ -55,5 +55,5 @@ Name[zh_TW]=Karbon XAML 匯入過濾程式
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/wvg+xml
 X-KDE-Weight=1
-X-KDE-Library=libkarbonxamlimport
+X-KDE-Library=karbonxamlimport
 X-KDE-ServiceTypes=KOfficeFilter

@@ -36,7 +36,7 @@ install(TARGETS kformulaprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
 
 
-kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
+kde4_add_plugin(kformulapart ${kformulapart_PART_SRCS})
 
 target_link_libraries(kformulapart ${KDE4_KPARTS_LIBS} kformulaprivate)
 

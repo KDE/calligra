@@ -27,5 +27,5 @@ Name[zh_TW]=KSpread 的 HTML 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-Import=text/html
 X-KDE-Weight=50
-X-KDE-Library=libkspreadhtmlimport
+X-KDE-Library=kspreadhtmlimport
 X-KDE-ServiceTypes=KOfficeFilter

@@ -45,7 +45,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(excelexport_SRCS ExcelExport.cpp CFBWriter.cpp ${sidewinder_SRCS})
 
-kde4_add_plugin(excelexport WITH_PREFIX ${excelexport_SRCS})
+kde4_add_plugin(excelexport ${excelexport_SRCS})
 
 
 target_link_libraries(excelexport msooxml komain mso koodf ${ZLIB_LIBRARIES} kspreadcommon)

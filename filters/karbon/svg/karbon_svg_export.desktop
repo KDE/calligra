@@ -62,5 +62,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/svg+xml
 X-KDE-Import=application/vnd.oasis.opendocument.graphics
-X-KDE-Library=libkarbonsvgexport
+X-KDE-Library=karbonsvgexport
 X-KDE-Weight=1
