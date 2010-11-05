@@ -98,7 +98,7 @@ class odfvalidator:
 	def validate(self, odtpath): 
 		try:
 			zip = zipfile.ZipFile(odtpath, 'r')
-		except BadZipfile as e:
+		except zipfile.BadZipfile as e:
 			return str(e)
 		err = self.validateFile(zip, 'content.xml',
 				self.relaxNGValidator)
@@ -206,17 +206,20 @@ def profile(dir, file, logger, validator):
 	r.lines = outfile.readlines()
 	outfile.close()
 	r.backtrace = None
-	if r.returnValue != 0 and maxbacktraces > 0:
-                maxbacktraces -= 1
-		# generate a backtrace
-		args = ["--batch", "--eval-command=run",
-			"--eval-command=bt", "--args"] + [exepath] + args
-		exepath = getExecutablePath("gdb")
-		debugresult = runCommand(exepath, args, True)
-		r.backtrace = debugresult.stdout
-		for l in r.backtrace:
-			print l.rstrip()
-		logger.failTest(r.backtrace)
+	if r.returnValue != 0:
+		if maxbacktraces > 0:
+	                maxbacktraces -= 1
+			# generate a backtrace
+			args = ["--batch", "--eval-command=run",
+				"--eval-command=bt", "--args"] + [exepath] + args
+			exepath = getExecutablePath("gdb")
+			debugresult = runCommand(exepath, args, True)
+			r.backtrace = debugresult.stdout
+			for l in r.backtrace:
+				print l.rstrip()
+			logger.failTest(r.backtrace)
+		else:
+			logger.failTest("Crash, no backtrace: limit reached.")
 	elif roundtripfilename:
 		err = validator.validate(roundtripfilename);
 		if err != None:
