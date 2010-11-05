@@ -12,7 +12,7 @@ kde4_add_ui_files(htmlodf_export_PART_SRCS exportwidget.ui )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
 
-kde4_add_plugin(htmlodf_export WITH_PREFIX ${htmlodf_export_PART_SRCS})
+kde4_add_plugin(htmlodf_export ${htmlodf_export_PART_SRCS})
 
 target_link_libraries(
     htmlodf_export

@@ -8,7 +8,7 @@ set(icalendarexport_PART_SRCS
 )
 
 
-kde4_add_plugin(icalendarexport WITH_PREFIX ${icalendarexport_PART_SRCS})
+kde4_add_plugin(icalendarexport ${icalendarexport_PART_SRCS})
 
 target_link_libraries(icalendarexport kplatoprivate kplatokernel komain ${LIBKCAL_LIBRARY})
 

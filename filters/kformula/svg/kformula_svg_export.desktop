@@ -58,4 +58,4 @@ Name[zh_CN]=KFormula SVG 导出过滤器
 Name[zh_TW]=KFormula SVG 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkfosvgexport
+X-KDE-Library=kfosvgexport

@@ -8,7 +8,7 @@
 set(rtfimport_PART_SRCS rtfimport.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp )
 
 
-kde4_add_plugin(rtfimport WITH_PREFIX ${rtfimport_PART_SRCS})
+kde4_add_plugin(rtfimport ${rtfimport_PART_SRCS})
 
 
 

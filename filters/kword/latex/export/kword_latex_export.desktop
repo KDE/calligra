@@ -65,4 +65,4 @@ Name[zh_CN]=KWord LATEX 导出过滤器
 Name[zh_TW]=KWord LATEX 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkwordlatexexport
+X-KDE-Library=kwordlatexexport

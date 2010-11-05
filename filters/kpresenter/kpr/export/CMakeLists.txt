@@ -2,7 +2,7 @@
 set(odp2kpr_PART_SRCS odp2kpr.cpp )
 
 
-kde4_add_plugin(odp2kpr WITH_PREFIX ${odp2kpr_PART_SRCS})
+kde4_add_plugin(odp2kpr ${odp2kpr_PART_SRCS})
 
 target_link_libraries(odp2kpr komain)
 

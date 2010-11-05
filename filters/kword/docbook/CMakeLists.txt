@@ -9,7 +9,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 set(docbookexport_PART_SRCS docbookexport.cc )
 
 
-kde4_add_plugin(docbookexport WITH_PREFIX ${docbookexport_PART_SRCS})
+kde4_add_plugin(docbookexport ${docbookexport_PART_SRCS})
 
 
 

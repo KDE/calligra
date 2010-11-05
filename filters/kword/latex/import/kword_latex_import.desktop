@@ -63,4 +63,4 @@ Name[zh_CN]=KWord Latex 导入过滤器
 Name[zh_TW]=KWord Latex 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkwordlateximport
+X-KDE-Library=kwordlateximport

@@ -61,5 +61,5 @@ Name[zh_TW]=KWord Palm Doc 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.palm
 X-KDE-Weight=1
-X-KDE-Library=libpalmdocimport
+X-KDE-Library=palmdocimport
 X-KDE-ServiceTypes=KOfficeFilter

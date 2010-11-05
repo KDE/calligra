@@ -16,7 +16,7 @@ include_directories(
 set(kchartgenericimageexport_PART_SRCS genericimageexport.cpp ${libdialogfilter_SRCS})
 
 
-kde4_add_plugin(kchartgenericimageexport WITH_PREFIX ${kchartgenericimageexport_PART_SRCS})
+kde4_add_plugin(kchartgenericimageexport ${kchartgenericimageexport_PART_SRCS})
 
 target_link_libraries(kchartgenericimageexport kchartcommon komain)
 

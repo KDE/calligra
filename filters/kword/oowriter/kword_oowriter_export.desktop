@@ -59,5 +59,5 @@ Name[zh_TW]=KWord 的 OpenOffice.org Writer 匯出過濾程式
 X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
-X-KDE-Library=liboowriterexport
+X-KDE-Library=oowriterexport
 X-KDE-ServiceTypes=KOfficeFilter

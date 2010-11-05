@@ -5,7 +5,7 @@ set(asciiimport_PART_SRCS asciiimport.cc ImportDialog.cc )
 
 kde4_add_ui_files(asciiimport_PART_SRCS ImportDialogUI.ui )
 
-kde4_add_plugin(asciiimport WITH_PREFIX ${asciiimport_PART_SRCS})
+kde4_add_plugin(asciiimport ${asciiimport_PART_SRCS})
 
 target_link_libraries(asciiimport kwordexportfilters)
 
@@ -18,7 +18,7 @@ set(asciiexport_PART_SRCS asciiexport.cc ExportDialog.cc )
 
 kde4_add_ui_files(asciiexport_PART_SRCS ExportDialogUI.ui )
 
-kde4_add_plugin(asciiexport WITH_PREFIX ${asciiexport_PART_SRCS})
+kde4_add_plugin(asciiexport ${asciiexport_PART_SRCS})
 
 
 

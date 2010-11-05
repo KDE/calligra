@@ -61,5 +61,5 @@ Name[zh_TW]=KWord Microsoft Write 匯入過濾程式
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-mswrite
 X-KDE-Weight=1
-X-KDE-Library=libmswriteimport
+X-KDE-Library=mswriteimport
 X-KDE-ServiceTypes=KOfficeFilter

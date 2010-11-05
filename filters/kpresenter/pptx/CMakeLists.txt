@@ -16,7 +16,7 @@ set(pptximport_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp
 )
 
-kde4_add_plugin(pptximport WITH_PREFIX ${pptximport_PART_SRCS})
+kde4_add_plugin(pptximport ${pptximport_PART_SRCS})
 
 target_link_libraries(
     pptximport

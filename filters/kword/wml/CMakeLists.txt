@@ -9,7 +9,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 set(wmlimport_PART_SRCS wmlimport.cc wmlparser.cpp )
 
 
-kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
+kde4_add_plugin(wmlimport ${wmlimport_PART_SRCS})
 
 
 
@@ -22,7 +22,7 @@ install(TARGETS wmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(wmlexport_PART_SRCS wmlexport.cc )
 
-kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
+kde4_add_plugin(wmlexport ${wmlexport_PART_SRCS})
 
 
 

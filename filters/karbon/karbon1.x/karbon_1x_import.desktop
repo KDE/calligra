@@ -43,5 +43,5 @@ Name[zh_TW]=Karbon 1.x 匯入過濾器
 X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1
-X-KDE-Library=libkarbon1ximport
+X-KDE-Library=karbon1ximport
 X-KDE-ServiceTypes=KOfficeFilter

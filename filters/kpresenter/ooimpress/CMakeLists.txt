@@ -8,7 +8,7 @@ include_directories(${CMAKE_SOURCE_DIR}/filters/liboofilter/)
 set(ooimpressimport_PART_SRCS ooimpressimport.cc ${liboofilter_SRCS})
 
 
-kde4_add_plugin(ooimpressimport WITH_PREFIX ${ooimpressimport_PART_SRCS})
+kde4_add_plugin(ooimpressimport ${ooimpressimport_PART_SRCS})
 
 
 
@@ -21,7 +21,7 @@ install(TARGETS ooimpressimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(ooimpressexport_PART_SRCS ooimpressexport.cc stylefactory.cc ${liboofilter_SRCS})
 
-kde4_add_plugin(ooimpressexport WITH_PREFIX ${ooimpressexport_PART_SRCS})
+kde4_add_plugin(ooimpressexport ${ooimpressexport_PART_SRCS})
 
 
 

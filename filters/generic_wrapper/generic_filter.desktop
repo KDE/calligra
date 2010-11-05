@@ -61,4 +61,4 @@ X-KDE-Import=application/x-magicpoint
 X-KDE-Weight=1
 Type=Service
 X-KDE-ServiceTypes=KOfficeFilter
-X-KDE-Library=libgenerickofilter
+X-KDE-Library=generickofilter

@@ -65,4 +65,4 @@ Name[zh_CN]=KOffice XSLT 导入过滤器
 Name[zh_TW]=KOffice XSLT 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libxsltimport
+X-KDE-Library=xsltimport

@@ -62,5 +62,5 @@ Name[zh_TW]=Karbon14 Illustrator 匯入過濾程式
 X-KDE-Export=application/x-karbon
 X-KDE-Import=application/illustrator
 X-KDE-Weight=1
-X-KDE-Library=libkarbonaiimport
+X-KDE-Library=karbonaiimport
 X-KDE-ServiceTypes=KOfficeFilter

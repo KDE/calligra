@@ -16,7 +16,7 @@ set(mswriteimport_PART_SRCS
 
 kde4_add_ui3_files(mswriteimport_PART_SRCS ImportDialogUI.ui )
 
-kde4_add_plugin(mswriteimport WITH_PREFIX ${mswriteimport_PART_SRCS})
+kde4_add_plugin(mswriteimport ${mswriteimport_PART_SRCS})
 
 
 
@@ -35,7 +35,7 @@ set(mswriteexport_PART_SRCS
    structures.cpp 
    libmswrite.cpp )
 
-kde4_add_plugin(mswriteexport WITH_PREFIX ${mswriteexport_PART_SRCS})
+kde4_add_plugin(mswriteexport ${mswriteexport_PART_SRCS})
 
 
 

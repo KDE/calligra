@@ -33,5 +33,5 @@ Name[zh_TW]=KPresenter 的 PPT 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/vnd.ms-powerpoint
 X-KDE-Weight=1
-X-KDE-Library=liboopptimport
+X-KDE-Library=oopptimport
 X-KDE-ServiceTypes=KOfficeFilter

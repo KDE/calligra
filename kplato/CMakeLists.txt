@@ -98,7 +98,7 @@ install(TARGETS kplatoprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(kplatopart_PART_SRCS kptfactoryinit.cpp )
 
-kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
+kde4_add_plugin(kplatopart ${kplatopart_PART_SRCS})
 
 target_link_libraries(kplatopart ${KDE4_KPARTS_LIBS} kplatoprivate)
 

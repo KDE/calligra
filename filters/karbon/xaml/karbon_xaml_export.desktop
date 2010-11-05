@@ -56,5 +56,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/wvg+xml
 X-KDE-Import=application/x-karbon
-X-KDE-Library=libkarbonxamlexport
+X-KDE-Library=karbonxamlexport
 X-KDE-Weight=1

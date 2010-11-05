@@ -33,7 +33,7 @@ set(kwordlatexexport_PART_SRCS
 kde4_add_ui3_files(kwordlatexexport_PART_SRCS latexexportdia.ui )
 
 
-kde4_add_plugin(kwordlatexexport WITH_PREFIX ${kwordlatexexport_PART_SRCS})
+kde4_add_plugin(kwordlatexexport ${kwordlatexexport_PART_SRCS})
 
 
 

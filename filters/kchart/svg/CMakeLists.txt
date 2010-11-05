@@ -15,7 +15,7 @@ include_directories(
 set(kchartsvgexport_PART_SRCS svgexport.cc )
 
 
-kde4_add_plugin(kchartsvgexport WITH_PREFIX ${kchartsvgexport_PART_SRCS})
+kde4_add_plugin(kchartsvgexport ${kchartsvgexport_PART_SRCS})
 
 
 

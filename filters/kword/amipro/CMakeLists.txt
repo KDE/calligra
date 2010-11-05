@@ -9,7 +9,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 set(amiproimport_PART_SRCS amiproimport.cc amiproparser.cpp )
 
 
-kde4_add_plugin(amiproimport WITH_PREFIX ${amiproimport_PART_SRCS})
+kde4_add_plugin(amiproimport ${amiproimport_PART_SRCS})
 
 
 
@@ -22,7 +22,7 @@ install(TARGETS amiproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(amiproexport_PART_SRCS amiproexport.cc )
 
-kde4_add_plugin(amiproexport WITH_PREFIX ${amiproexport_PART_SRCS})
+kde4_add_plugin(amiproexport ${amiproexport_PART_SRCS})
 
 
 
