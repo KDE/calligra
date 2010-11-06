@@ -42,7 +42,7 @@ MultiscriptElement::~MultiscriptElement()
 }
 
 void MultiscriptElement::paint( QPainter& painter, AttributeManager* am )
-{ 
+{
     Q_UNUSED(painter)
     Q_UNUSED(am)
     /*do nothing as this element has no visual representation*/
@@ -63,7 +63,7 @@ void MultiscriptElement::ensureEvenNumberElements()
 void MultiscriptElement::layout( const AttributeManager* am )
 {
     // Get the minimum amount of shifting
-    qreal subscriptshift   = am->doubleOf( "subscriptshift", this ); 
+    qreal subscriptshift   = am->doubleOf( "subscriptshift", this );
     qreal superscriptshift = am->doubleOf( "superscriptshift", this );
     //Add half a thin space between both sup and superscript, so there is a minimum
     //of a whole thin space between them.
@@ -71,7 +71,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
 
     //First make sure that there are an even number of elements in both subscript and superscript
     ensureEvenNumberElements();
-    
+
     // Go through all the superscripts (pre and post) and find the maximum heights;
     // BaseLine is the distance from the top to the baseline.
     // Depth is the distance from the baseline to the bottom
@@ -115,10 +115,10 @@ void MultiscriptElement::layout( const AttributeManager* am )
     }
     // The yOffsetSub is the amount the subscript elements /baseline/ are moved down.
     qreal yOffsetSub = yOffsetBase + maxSubScriptBaseLine +
-                qMax( m_baseElement->height()/2 + halfthinspace, 
+                qMax( m_baseElement->height()/2 + halfthinspace,
                       m_baseElement->height() - maxSubScriptBaseLine
                           + subscriptshift );
-    
+
     qreal xOffset = 0.0;  //We increment this as we go along, to keep track of where to place elements
     qreal lastSuperScriptWidth= 0.0;
     // Now we have all the information needed to start putting elements in place.
@@ -134,8 +134,8 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 // For a given vertical line, this is processed after the superscript
                 qreal offset = qMax(qreal(0.0),
                                     (lastSuperScriptWidth - m_preScripts[i]->width()) / qreal(2.0));
-                m_preScripts[i]->setOrigin( QPointF( 
-                            offset + xOffset, 
+                m_preScripts[i]->setOrigin( QPointF(
+                            offset + xOffset,
                             yOffsetSub - m_preScripts[i]->baseLine() ) );
                 xOffset += qMax(lastSuperScriptWidth, m_preScripts[i]->width());
             }
@@ -143,7 +143,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 xOffset += halfthinspace;
         } else {
             // i is odd, so superscript
-            // For a given vertical line, we process the superscript first, then 
+            // For a given vertical line, we process the superscript first, then
             // the subscript.  We need to look at the subscript (i-1) as well
             // to find out how to align them
             if( !m_preScripts[i] )
@@ -151,7 +151,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
             else {
                 lastSuperScriptWidth = m_preScripts[i]->width();
                 qreal offset = 0.0;
-                if(m_preScripts[i-1]) //the subscript directly below us. 
+                if(m_preScripts[i-1]) //the subscript directly below us.
                     offset = qMax(0.0, (m_preScripts[i-1]->width() - lastSuperScriptWidth)/2.0);
                 m_preScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
@@ -171,19 +171,19 @@ void MultiscriptElement::layout( const AttributeManager* am )
         //m_preScripts[0] is subscript etc.  So even i is subscript, odd i is superscript
         if( i%2 == 0) {
             // i is even, so subscript
-            // For a given vertical line, we process the subscript first, then 
+            // For a given vertical line, we process the subscript first, then
             // the superscript.  We need to look at the superscript (i+1) as well
             // to find out how to align them
- 
+
             if(!m_postScripts[i]) {
                 lastSubScriptWidth = 0.0;
             } else {
                 lastSubScriptWidth = m_postScripts[i]->width();
                 // For a given vertical line, this is processed after the superscript
                 qreal offset = 0.0;
-                if(m_postScripts.size() > i+1 && m_postScripts[i+1] != NULL) //the subscript directly below us. 
+                if(m_postScripts.size() > i+1 && m_postScripts[i+1] != NULL) //the subscript directly below us.
                     offset = qMax(0.0, (m_postScripts[i+1]->width() - lastSubScriptWidth)/2.0);
-                m_postScripts[i]->setOrigin( QPointF( 
+                m_postScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
                             yOffsetSub - m_postScripts[i]->baseLine() ) );
             }
@@ -263,7 +263,7 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
     KoXmlElement tmp;
     bool prescript = false; //When we see a mprescripts tag, we enable this
     bool baseElement = false;   // True when the base element is read.
-    forEachElement( tmp, parent ) { 
+    forEachElement( tmp, parent ) {
         if (tmp.tagName() == "none") {
             //In mathml, we read subscript, then superscript, etc.  To skip one,
             //you use "none"
@@ -274,25 +274,25 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
                 m_postScripts.append(NULL);
             continue;
         } else if (tmp.tagName() == "mprescripts") {
-            prescript = true;  
+            prescript = true;
             //In mathml, when we see this tag, all the elements after it are
             // for prescripts
             continue;
         }
-        
+
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         if ( !tmpElement->readMathML( tmp ) )
             return false;
 
         // The very first element is the base
         if ( !baseElement ) {
-            delete m_baseElement; 
+            delete m_baseElement;
             m_baseElement = tmpElement;
             baseElement = true;
         }
         else if (prescript)
             m_preScripts.append( tmpElement );
-        else 
+        else
             m_postScripts.append( tmpElement );
     }
 
