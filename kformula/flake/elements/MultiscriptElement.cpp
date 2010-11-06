@@ -310,19 +310,19 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
             tmp->writeMathML( writer );
         else {
             //We need to use a none element for missing elements in the super/sub scripts
-            writer->startElement("none");
+            writer->startElement("math:none");
             writer->endElement();
         }
     }
     if( m_preScripts.isEmpty() ) return;
-    writer->startElement("mprescripts");
+    writer->startElement("math:mprescripts");
     writer->endElement();
     foreach( BasicElement* tmp, m_preScripts ) {
         if(tmp)
             tmp->writeMathML( writer );
         else {
             //We need to use a none element for missing elements in the super/sub scripts
-            writer->startElement("none");
+            writer->startElement("math:none");
             writer->endElement();
         }
     }
