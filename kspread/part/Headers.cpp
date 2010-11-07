@@ -471,8 +471,9 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
 
         const int ascent = painter->fontMetrics().ascent();
         if (height >= ascent - painter->fontMetrics().descent()) {
-            const double len = painter->fontMetrics().width(rowText);
 #if 0
+            const double len = painter->fontMetrics().width(rowText);
+
             switch (y % 3) {
             case 0: rowText = QString::number(height) + 'h'; break;
             case 1: rowText = QString::number(painter.fontMetrics().ascent()) + 'a'; break;
