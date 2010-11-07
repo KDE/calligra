@@ -378,6 +378,7 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     switch (tmp.cond) {
     case Conditional::None :
+    case Conditional::IsTrueFormula: // was unhandled
         break;
 
     case Conditional::Equal :

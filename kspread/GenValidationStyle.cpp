@@ -181,6 +181,7 @@ QString GenValidationStyle::createNumberValidationCondition(Validity* validity)
         result = "oooc:cell-content-is-decimal-number() and ";
     switch (validity->condition()) {
     case Conditional::None:
+    case Conditional::IsTrueFormula:
         //nothing
         break;
     case Conditional::Equal:
