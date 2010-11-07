@@ -248,13 +248,9 @@ protected:
     KoFilter::ConversionStatus read_majorFont();
     KoFilter::ConversionStatus read_minorFont();
 
-    //! Used for skipping a subtree - kust reads and shows each element.
+    //! Used for skipping a subtree - just reads and shows each element.
     //! called by BIND_READ_SKIP() macro.
     KoFilter::ConversionStatus read_SKIP();
-
-    //! Used for skipping a subtree - kust reads and shows each element.
-    //! called by BIND_READ_SKIP() macro.
-    KoFilter::ConversionStatus read_SKIP(QColor&);
 
 private:
     void init();

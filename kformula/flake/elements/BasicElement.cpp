@@ -226,7 +226,7 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
             tmp->writeMathML( writer );
         }
     } else {
-        const QByteArray name = ElementFactory::elementName( elementType() ).toLatin1();
+        const QByteArray name = "math:" + ElementFactory::elementName( elementType() ).toLatin1();
         writer->startElement( name );
         writeMathMLAttributes( writer );
         if ( elementType() == Formula ) {
@@ -235,7 +235,7 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
              * for OOo requires a semantics element as math element's
              * child
              */
-            writer->startElement( "semantics" );
+            writer->startElement( "math:semantics" );
         }
         writeMathMLContent( writer );
         if ( elementType() == Formula ) {
