@@ -61,7 +61,7 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
         }else if (i == -1) {
             if (!(m_options & ShowAsterisk))
                 continue;
-            item = new KexiFieldListModelItem(i18n("* (All Columns)"), "", false);
+            item = new KexiFieldListModelItem("*", "", false);
             m_allColumnsItem = item;
         } else {
             colinfo = columns[i];
@@ -149,14 +149,14 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
     }
     stream1 << sourceMimeType << sourceName << fields;
     
-    mimedata->setData(indexes.count() > 0 ? "kexi/fields" : "kexi/field", fielddata);
+    mimedata->setData(indexes.count() > 1 ? "kexi/fields" : "kexi/field", fielddata);
     
     return mimedata;
 }
 
 Qt::ItemFlags KexiFieldListModel::flags(const QModelIndex& index) const
 {
-    Qt::ItemFlags defaultFlags = KexiFieldListModel::flags(index);
+    Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);
 
     if (index.isValid())
         return m_items[index.row()]->flags()| defaultFlags;

@@ -40,7 +40,7 @@ KexiFieldListModelItem::~KexiFieldListModelItem()
 QVariant KexiFieldListModelItem::data(int column)
 {
     if (column == 0) {
-        return m_fieldName;
+        return m_fieldName == "*" ? i18n("* (All Columns)") : m_fieldName;
     } else {
         return m_dateType;
     }
@@ -63,8 +63,8 @@ void KexiFieldListModelItem::setCaption(const QString& caption)
 
 Qt::ItemFlags KexiFieldListModelItem::flags()
 {
-    if (!m_fieldName.isEmpty() && m_fieldName != i18n("* (All Columns)")){
-        return Qt::ItemIsDragEnabled;
+    if (m_fieldName.isEmpty() || m_fieldName == "*"){
+        return Qt::NoItemFlags;
     }
-    return Qt::NoItemFlags;
+    return Qt::ItemIsDragEnabled;
 }
