@@ -1240,7 +1240,7 @@ void KoWmfReadPrivate::createFontIndirect(quint32 size, QDataStream& stream)
         stream >> weight >> property >> arg >> arg;
         stream >> fixedPitch;
 
-        kDebug(31000) << height << width << weight << property;
+        //kDebug(31000) << height << width << weight << property;
         // text rotation (in 1/10 degree)
         // TODO: memorisation of rotation in object Font
         mTextRotation = -rotation / 10;
