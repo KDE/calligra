@@ -215,12 +215,13 @@ QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
     if ( s.isEmpty() ) {
         return validator.validate ( input, pos );
     }
-    if ( Duration::unitList( true ).contains( s ) ) {
-        s = extractValue( input );
-        int p = 0;
-        return validator.validate ( s, p ); // pos doesn't matter
+    int idx = Duration::unitList( true ).indexOf( s ); 
+    if ( idx < m_maxunit || idx > m_minunit ) {
+        return QValidator::Invalid;
     }
-    return QValidator::Invalid;
+    s = extractValue( input );
+    int p = 0;
+    return validator.validate ( s, p ); // pos doesn't matter
 }
 
 QString DurationSpinBox::extractUnit ( const QString &text ) const
