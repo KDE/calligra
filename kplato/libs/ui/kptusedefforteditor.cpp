@@ -389,6 +389,7 @@ void UsedEffortEditor::addResource()
 CompletionEntryItemModel::CompletionEntryItemModel ( QWidget *parent )
     : QAbstractItemModel( parent ),
     m_node( 0 ),
+    m_project( 0 ),
     m_manager( 0 ),
     m_completion( 0 )
 {
@@ -402,6 +403,15 @@ CompletionEntryItemModel::CompletionEntryItemModel ( QWidget *parent )
     m_flags[ 1 ] = Qt::ItemIsEditable;
     m_flags[ 3 ] = Qt::ItemIsEditable;
 
+}
+
+void CompletionEntryItemModel::setTask( Task *t )
+{
+    m_node = t;
+    m_project = 0;
+    if ( m_node && m_node->projectNode() ) {
+        m_project = static_cast<Project*>( m_node->projectNode() );
+    }
 }
 
 void CompletionEntryItemModel::slotDataChanged()
@@ -464,10 +474,9 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
             return e->remainingEffort.toDouble( Duration::Unit_h );
         case Role::DurationScales: {
             QVariantList lst; // TODO: week
-            if ( m_node && m_node->projectNode() ) {
-                Project *p = static_cast<Project*>( m_node->projectNode() );
+            if ( m_node && m_project ) {
                 if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-                    lst.append( p->standardWorktime()->day() );
+                    lst.append( m_project->standardWorktime()->day() );
                 }
             }
             if ( lst.isEmpty() ) {
@@ -478,6 +487,10 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
         }
         case Role::DurationUnit:
             return static_cast<int>( Duration::Unit_h );
+        case Role::Minimum:
+            return m_project->config().minimumDurationUnit();
+        case Role::Maximum:
+            return m_project->config().maximumDurationUnit();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -507,20 +520,23 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             return e->totalPerformed.toDouble( Duration::Unit_h );
         case Role::DurationScales: {
             QVariantList lst; // TODO: week
-            if ( m_node && m_node->projectNode() ) {
-                Project *p = static_cast<Project*>( m_node->projectNode() );
+            if ( m_node && m_project ) {
                 if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-                    lst.append( p->standardWorktime()->day() );
+                    lst.append( m_project->standardWorktime()->day() );
                 }
             }
             if ( lst.isEmpty() ) {
-                lst.append( 24.0 );
+                lst.append( 24 );
             }
-            lst << 60.0 << 60.0 << 1000.0;
+            lst << 60 << 60 << 1000;
             return lst;
         }
         case Role::DurationUnit:
             return static_cast<int>( Duration::Unit_h );
+        case Role::Minimum:
+            return m_project->config().minimumDurationUnit();
+        case Role::Maximum:
+            return m_project->config().maximumDurationUnit();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -544,10 +560,9 @@ QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
             return QVariant();
         case Role::DurationScales: {
             QVariantList lst; // TODO: week
-            if ( m_node && m_node->projectNode() ) {
-                Project *p = static_cast<Project*>( m_node->projectNode() );
+            if ( m_node && m_project ) {
                 if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-                    lst.append( p->standardWorktime()->day() );
+                    lst.append( m_project->standardWorktime()->day() );
                 }
             }
             if ( lst.isEmpty() ) {
@@ -558,6 +573,10 @@ QVariant CompletionEntryItemModel::plannedEffort ( int /*row*/, int role ) const
         }
         case Role::DurationUnit:
             return static_cast<int>( Duration::Unit_h );
+        case Role::Minimum:
+            return m_project->config().minimumDurationUnit();
+        case Role::Maximum:
+            return m_project->config().maximumDurationUnit();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -581,19 +600,17 @@ QVariant CompletionEntryItemModel::data ( const QModelIndex &index, int role ) c
     return QVariant();
 }
 
-QList<double> CompletionEntryItemModel::scales() const
+QList<qint64> CompletionEntryItemModel::scales() const
 {
-    QList<double> lst;
-    if ( m_node && m_node->projectNode() ) {
-        Project *p = static_cast<Project*>( m_node->projectNode() );
+    QList<qint64> lst;
+    if ( m_node && m_project ) {
         if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-            lst.append( p->standardWorktime()->day() );
+            lst = m_project->standardWorktime()->scales();
         }
     }
     if ( lst.isEmpty() ) {
-        lst.append( 24.0 );
+        lst = Estimate::defaultScales();
     }
-    lst << 60.0 << 60.0 << 1000.0;
     //kDebug()<<lst;
     return lst;
 

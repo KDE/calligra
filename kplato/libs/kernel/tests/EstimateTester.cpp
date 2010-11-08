@@ -167,11 +167,11 @@ void EstimateTester::ratio() {
 }
 
 void EstimateTester::scale() {
-    QList<double> s; s << 365.0 / 30 << 30.0 / 7.0 << 7.0 << 8.0;
+    QList<qint64> s; s << 365*24*60*60*1000 << 30*24*60*60*1000 << 7*24*60*60*1000 << 8*60*60*1000;
 
     Duration d = Estimate::scale( 1.0, Duration::Unit_d, s );
-    QVERIFY( d.milliseconds() == 1000*60*60 * 8 );
-    QVERIFY( 1.0 == Estimate::scale( d, Duration::Unit_d, s ) );
+    QCOMPARE( d.milliseconds(), (qint64)(8*60*60*1000) );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_d, s ) );
 }
 
 void EstimateTester::pert() {
