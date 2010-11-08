@@ -1471,7 +1471,12 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
             returnValue += QString("text:bullet-char=\"%1\" ").arg("-");
         }
         else {
-            returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
+            if (m_bulletChar == UNUSED) {
+                returnValue += QString("text:bullet-char=\"\" ");
+            }
+            else {
+                returnValue += QString("text:bullet-char=\"%1\" ").arg(m_bulletChar);
+            }
         }
         ending = "</text:list-level-style-bullet>";
     }
