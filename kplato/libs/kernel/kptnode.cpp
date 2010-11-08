@@ -1700,6 +1700,7 @@ QList<qint64> Estimate::defaultScales()
         << 60 * 1000                            // add milliseconds in minute
         << 1000                                 // add milliseconds in second
         << 1;                                   // add milliseconds in a millisecond
+    return lst;
 }
 
 QList<qint64> Estimate::scales() const
