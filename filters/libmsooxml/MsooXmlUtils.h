@@ -62,6 +62,10 @@ class MsooXmlReaderContext;
 
 namespace Utils {
 
+enum autoFitStatus {
+    autoFitUnUsed, autoFitOn, autoFitOff
+};
+
 class ParagraphBulletProperties
 {
 public:

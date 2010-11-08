@@ -710,7 +710,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
-#else
+
+    if (m_normAutoFit == MSOOXML::Utils::autoFitOn) {
+        m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
+    }
 #endif
     if (m_contentType == "line") {
         body->startElement("draw:line");
@@ -5178,7 +5181,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
  - flatTx (No text in 3D scene) §20.1.5.8
  - noAutofit (No AutoFit) §21.1.2.1.2
  - [done] normAutofit (Normal AutoFit) §21.1.2.1.3
- - prstTxWarp (Preset Text Warp) §20.1.9.19
+ - [done] prstTxWarp (Preset Text Warp) §20.1.9.19
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - sp3d (Apply 3D shape properties) §20.1.5.12
  - [done] spAutoFit (Shape AutoFit) §21.1.2.1.4
@@ -5212,9 +5215,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    inheritBodyProperties();
-#endif
+    m_normAutoFit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -5247,7 +5248,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 //! @todo more atributes
 
     bool spAutoFit = false;
-    bool normAutoFit = false;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -5257,7 +5257,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
                 spAutoFit = true;
             }
             else if (qualifiedName() == QLatin1String("a:normAutofit")) {
-                normAutoFit = true;
+                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+            }
+            else if (qualifiedName() == QLatin1String("a:prstTxWarp")) {
+                // The handling here is not correct but better than nothing
+                // Also normAutoFit = true seems to be correct for value 'textNoShape'
+                m_normAutoFit = MSOOXML::Utils::autoFitOn;
             }
         }
     }
@@ -5274,9 +5279,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // text in shape
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
-    if (normAutoFit) {
-        m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
-    }
 #endif
     READ_EPILOGUE
 }
