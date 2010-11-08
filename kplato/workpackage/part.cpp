@@ -133,7 +133,11 @@ void DocumentChild::setFileInfo( const KUrl &url )
     //kDebug()<<url;
     bool res = connect( KDirWatch::self(), SIGNAL( dirty( const QString & ) ), this, SLOT( slotDirty( const QString &) ) );
     //kDebug()<<res<<filePath();
+#ifndef NDEBUG
     Q_ASSERT( res );
+#else
+    Q_UNUSED( res );
+#endif
     KDirWatch::self()->addFile( filePath() );
 }
 

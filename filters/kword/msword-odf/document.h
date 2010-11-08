@@ -133,7 +133,7 @@ public:
     /**
      * @return the current background-color.
      */
-    QString currentBgColor(void) { return m_bgColors.top(); }
+    QString currentBgColor() { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
 
     /**
      * Checks if the header/footer content of the current section differs from
