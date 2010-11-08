@@ -28,6 +28,7 @@
 
 #include <kparts/plugin.h>
 #include <kdialog.h>
+#include <QVariantList>
 
 #include <QtGui/QUndoCommand>
 
@@ -38,7 +39,7 @@ class RoundCornersPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    RoundCornersPlugin(QWidget * parent, const QStringList &);
+    RoundCornersPlugin(QObject * parent, const QVariantList &);
     virtual ~RoundCornersPlugin();
 
 private slots:

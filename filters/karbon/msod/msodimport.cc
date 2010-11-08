@@ -23,7 +23,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <QFile>
 //Added by qt3to4:
@@ -31,8 +31,8 @@ DESCRIPTION
 #include <msodimport.h>
 #include <q3pointarray.h>
 
-typedef KGenericFactory<MSODImport> MSODImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libmsodimport, MSODImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(MSODImportFactory, registerPlugin<MSODImport>();)
+K_EXPORT_PLUGIN(MSODImportFactory("kofficefilters"))
 
 const int MSODImport::s_area = 30505;
 

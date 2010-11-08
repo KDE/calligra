@@ -16,7 +16,7 @@
 #include "rtfimport.h"
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kurl.h>
 #include <kmessagebox.h>
 
@@ -35,8 +35,8 @@
 #include <KoFilterManager.h>
 
 
-typedef KGenericFactory<RTFImport> RTFImportFactory;
-K_EXPORT_COMPONENT_FACTORY(librtfimport, RTFImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(RTFImportFactory, registerPlugin<RTFImport>();)
+K_EXPORT_PLUGIN(RTFImportFactory("kofficefilters"))
 
 // defines a property
 #define PROP(a,b,c,d,e)  { a, b, &RTFImport::c, d, e }
@@ -284,7 +284,7 @@ static const char *alignN[4] = { "left", "right", "justify", "center" };
 static const char *boolN[2] = { "false", "true" };
 static const char *borderN[4] = { "LEFTBORDER", "RIGHTBORDER", "TOPBORDER", "BOTTOMBORDER" };
 
-RTFImport::RTFImport(QObject* parent, const QStringList&)
+RTFImport::RTFImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
         , textCodec(0)
         , utf8TextCodec(0)

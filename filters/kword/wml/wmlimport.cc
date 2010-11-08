@@ -23,16 +23,16 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoGlobal.h>
 
 #include <wmlimport.h>
 #include <wmlparser.h>
 
-typedef KGenericFactory<WMLImport> WMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwmlimport, WMLImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WMLImportFactory, registerPlugin<WMLImport>();)
+K_EXPORT_PLUGIN(WMLImportFactory("kofficefilters"))
 
-WMLImport::WMLImport(QObject* parent, const QStringList&):
+WMLImport::WMLImport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

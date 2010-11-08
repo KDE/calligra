@@ -8,7 +8,7 @@ target_link_libraries(ppttoodplib koodf mso ${ZLIB_LIBRARIES})
 kde4_add_executable(ppttoodp ppttoodpmain.cpp)
 target_link_libraries(ppttoodp ppttoodplib)
 
-kde4_add_plugin(powerpointimport WITH_PREFIX PowerPointImport.cpp)
+kde4_add_plugin(powerpointimport PowerPointImport.cpp)
 target_link_libraries(powerpointimport ppttoodplib komain)
 
 install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})

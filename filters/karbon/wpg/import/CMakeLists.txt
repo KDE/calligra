@@ -8,7 +8,7 @@ OdgExporter.cxx
 FileOutputHandler.cxx
 GraphicsElement.cxx)
 
-kde4_add_plugin(wpgimport WITH_PREFIX ${wpgimport_PART_SRCS})
+kde4_add_plugin(wpgimport ${wpgimport_PART_SRCS})
 
 target_link_libraries(wpgimport komain ${LIBWPG_LIBRARIES} ${LIBWPG_STREAM_LIBRARIES})
 

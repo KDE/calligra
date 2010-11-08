@@ -34,7 +34,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kcodecs.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 
 #include <KoDocumentInfo.h>
@@ -62,17 +62,8 @@ using namespace KSpread;
 
 typedef QList<QString> AreaList;
 
-class OpenCalcExportFactory : public KGenericFactory<OpenCalcExport>
-{
-public:
-    OpenCalcExportFactory(void) : KGenericFactory<OpenCalcExport> ("kspreadopencalcexport") {}
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libopencalcexport, OpenCalcExportFactory())
+K_PLUGIN_FACTORY(OpenCalcExportFactory, registerPlugin<OpenCalcExport>();)
+K_EXPORT_PLUGIN(OpenCalcExportFactory("kspreadopencalcexport", "kofficefilters"))
 
 #define STOPEXPORT \
     do \
@@ -81,7 +72,7 @@ K_EXPORT_COMPONENT_FACTORY(libopencalcexport, OpenCalcExportFactory())
         return false; \
     } while(0)
 
-OpenCalcExport::OpenCalcExport(QObject* parent, const QStringList &)
+OpenCalcExport::OpenCalcExport(QObject* parent, const QVariantList &)
         : KoFilter(parent), m_locale(0)
 {
 }

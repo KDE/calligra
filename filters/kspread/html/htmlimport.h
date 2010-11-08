@@ -28,6 +28,7 @@
 #include <KUrl>
 #include <QByteArray>
 #include <QStack>
+#include <QVariantList>
 
 // namespace KSpread
 // {
@@ -48,7 +49,7 @@ class HTMLImport : public KoFilter
 {
     Q_OBJECT
 public:
-    HTMLImport(QObject* parent, const QStringList&);
+    HTMLImport(QObject* parent, const QVariantList&);
     virtual ~HTMLImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

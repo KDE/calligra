@@ -31,6 +31,7 @@
 
 #include <KoStyleStack.h>
 #include <liststylestack.h>
+#include <QVariantList>
 
 class KZip;
 
@@ -43,7 +44,7 @@ class OoImpressImport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoImpressImport(QObject * parent, const QStringList &);
+    OoImpressImport(QObject * parent, const QVariantList &);
     virtual ~OoImpressImport();
 
     virtual KoFilter::ConversionStatus convert(QByteArray const & from, QByteArray const & to);

@@ -30,6 +30,7 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class WRIDevice;
 class MSWrite::InternalParser;
@@ -45,7 +46,7 @@ private:
     KWordGenerator *m_generator;
 
 public:
-    MSWriteImport(QObject *parent, const QStringList &);
+    MSWriteImport(QObject *parent, const QVariantList &);
     virtual ~MSWriteImport();
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);

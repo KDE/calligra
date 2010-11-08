@@ -60,5 +60,5 @@ Name[zh_TW]=KWord WML 匯出過濾程式
 X-KDE-Export=text/vnd.wap.wml
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
-X-KDE-Library=libwmlexport
+X-KDE-Library=wmlexport
 X-KDE-ServiceTypes=KOfficeFilter

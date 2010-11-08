@@ -28,7 +28,7 @@
 #include <QtGui/QTextDocumentWriter>
 
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterManager.h>
 
 #include <dcmtk/config/osconfig.h>
@@ -40,8 +40,8 @@
 #include "dcmimport.h"
 #include "DCMImportDialog.h"
 
-typedef KGenericFactory<DCMImport> DCMImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libdcmimport, DCMImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(DCMImportFactory, registerPlugin<DCMImport>();)
+K_EXPORT_PLUGIN(DCMImportFactory("kofficefilters"))
 
 KoFilter::ConversionStatus DCMImport::convert(QByteArray const& from, QByteArray const& to)
 {

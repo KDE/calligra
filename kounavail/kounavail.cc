@@ -128,7 +128,7 @@ void KoUnavailView::paintEvent( QPaintEvent* ev )
     painter.end();
 }
 
-K_EXPORT_COMPONENT_FACTORY( libkounavailpart, KoUnavailFactory )
+K_EXPORT_PLUGIN(KoUnavailFactory )
 
 KComponentData* KoUnavailFactory::s_global = 0L;
 KAboutData* KoUnavailFactory::s_aboutData = 0L;

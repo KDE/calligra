@@ -19,5 +19,5 @@
 
 #include "KFormulaPartFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkformulapart, KFormulaPartFactory )
+K_EXPORT_PLUGIN(KFormulaPartFactory )
 

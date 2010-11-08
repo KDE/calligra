@@ -10,7 +10,7 @@ set(karbonsvgexport_PART_SRCS
     ${SHAPES_SOURCES} 
 )
 
-kde4_add_plugin(karbonsvgexport WITH_PREFIX ${karbonsvgexport_PART_SRCS})
+kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})
 
 target_link_libraries(karbonsvgexport karbonui)
 
@@ -29,7 +29,7 @@ set(karbonsvgimport_PART_SRCS
     ${SHAPES_SOURCES} 
 )
 
-kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
+kde4_add_plugin(karbonsvgimport ${karbonsvgimport_PART_SRCS})
 
 target_link_libraries(karbonsvgimport karbonui)
 

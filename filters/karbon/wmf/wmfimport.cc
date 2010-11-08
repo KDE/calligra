@@ -29,13 +29,13 @@ DESCRIPTION
 #include <KoFilterChain.h>
 
 #include <KDebug>
-#include <KGenericFactory>
+#include <KPluginFactory>
 
-typedef KGenericFactory<WMFImport> WMFImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwmfimport, WMFImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WMFImportFactory, registerPlugin<WMFImport>();)
+K_EXPORT_PLUGIN(WMFImportFactory("kofficefilters"))
 
 
-WMFImport::WMFImport(QObject *parent, const QStringList&) :
+WMFImport::WMFImport(QObject *parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

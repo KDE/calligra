@@ -38,7 +38,7 @@
 #include <ooutils.h>
 #include <KoDom.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
@@ -49,11 +49,11 @@
 #include <core/vfill.h>
 #include <core/vgroup.h>
 
-typedef KGenericFactory<OoDrawImport> OoDrawImportFactory;
-K_EXPORT_COMPONENT_FACTORY(liboodrawimport, OoDrawImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(OoDrawImportFactory, registerPlugin<OoDrawImport>();)
+K_EXPORT_PLUGIN(OoDrawImportFactory("kofficefilters"))
 
 
-OoDrawImport::OoDrawImport(QObject *parent, const QStringList &)
+OoDrawImport::OoDrawImport(QObject *parent, const QVariantList &)
         : KoFilter(parent),
         m_styles(23, true),
         m_styleStack(ooNS::style, ooNS::fo)

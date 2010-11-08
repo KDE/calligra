@@ -31,7 +31,7 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
@@ -47,11 +47,11 @@
 //function prototypes of local functions
 bool readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer);
 
-typedef KGenericFactory<MSWordOdfImport> MSWordOdfImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libmswordodf_import, MSWordOdfImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(MSWordOdfImportFactory, registerPlugin<MSWordOdfImport>();)
+K_EXPORT_PLUGIN(MSWordOdfImportFactory("kofficefilters"))
 
 
-MSWordOdfImport::MSWordOdfImport(QObject *parent, const QStringList&)
+MSWordOdfImport::MSWordOdfImport(QObject *parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

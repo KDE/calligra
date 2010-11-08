@@ -27,6 +27,7 @@
 #include <kcal/calendarlocal.h>
 
 #include <QObject>
+#include <QVariantList>
 
 class QFile;
 class QByteArray;
@@ -48,7 +49,7 @@ class ICalendarExport : public KoFilter
     Q_OBJECT
 
 public:
-    ICalendarExport(QObject* parent, const QStringList &);
+    ICalendarExport(QObject* parent, const QVariantList &);
     virtual ~ICalendarExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

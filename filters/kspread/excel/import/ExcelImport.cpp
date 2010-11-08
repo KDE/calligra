@@ -35,7 +35,7 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
@@ -84,8 +84,8 @@
 // enable this definition to make the filter output to an ods file instead of using m_chain.outputDocument() to write the spreadsheet to
 // #define OUTPUT_AS_ODS_FILE
 
-typedef KGenericFactory<ExcelImport> ExcelImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libexcelimporttodoc, ExcelImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
+K_EXPORT_PLUGIN(ExcelImportFactory("kofficefilters"))
 
 using namespace Swinder;
 using namespace XlsUtils;
@@ -192,7 +192,7 @@ public:
     KoXmlDocument endMemoryXmlWriter(KoXmlWriter* writer);
 };
 
-ExcelImport::ExcelImport(QObject* parent, const QStringList&)
+ExcelImport::ExcelImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
     d = new Private;

@@ -10,7 +10,7 @@ add_subdirectory( generator )
 
 set(kwordlateximport_PART_SRCS config.cc lateximport.cc lateximportdia.cc )
 
-kde4_add_plugin(kwordlateximport WITH_PREFIX ${kwordlateximport_PART_SRCS})
+kde4_add_plugin(kwordlateximport ${kwordlateximport_PART_SRCS})
 
 
 

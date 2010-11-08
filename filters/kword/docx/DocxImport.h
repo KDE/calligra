@@ -27,13 +27,14 @@
 #define DOCXIMPORT_H
 
 #include <MsooXmlImport.h>
+#include <QVariantList>
 
 //! DOCX to ODT import filter
 class DocxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    DocxImport(QObject * parent, const QStringList &);
+    DocxImport(QObject * parent, const QVariantList &);
     virtual ~DocxImport();
 
 protected:

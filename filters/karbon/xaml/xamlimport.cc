@@ -20,7 +20,7 @@
 #include "xamlimport.h"
 #include "color.h"
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kdebug.h>
 #include <KoUnit.h>
 #include <KoGlobal.h>
@@ -39,10 +39,10 @@
 #include <QList>
 #include <kfilterdev.h>
 
-typedef KGenericFactory<XAMLImport> XAMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonxamlimport, XAMLImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XAMLImportFactory, registerPlugin<XAMLImport>();)
+K_EXPORT_PLUGIN(XAMLImportFactory("kofficefilters"))
 
-XAMLImport::XAMLImport(KoFilter *, const char *, const QStringList&) :
+XAMLImport::XAMLImport(KoFilter *, const char *, const QVariantList&) :
         KoFilter(parent),
         outdoc("DOC")
 {

@@ -22,6 +22,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class ExcelImport : public KoFilter
 {
@@ -30,7 +31,7 @@ class ExcelImport : public KoFilter
 
 public:
 
-    ExcelImport(QObject *parent, const QStringList&);
+    ExcelImport(QObject *parent, const QVariantList&);
     virtual ~ExcelImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -23,7 +23,7 @@ set(docximport_PART_SRCS
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/XlsxXmlChartReader.cpp
 )
 
-kde4_add_plugin(docximport WITH_PREFIX ${docximport_PART_SRCS})
+kde4_add_plugin(docximport ${docximport_PART_SRCS})
 
 target_link_libraries(
     docximport
@@ -41,7 +41,7 @@ IF(FALSE) # not implemented yet
 
 set(docxexport_PART_SRCS DocxExport.cpp ExportFilter.cpp ${libcommon_SRCS} ${liboofilter_SRCS})
 
-kde4_add_plugin(docxexport WITH_PREFIX ${docxexport_PART_SRCS})
+kde4_add_plugin(docxexport ${docxexport_PART_SRCS})
 
 
 

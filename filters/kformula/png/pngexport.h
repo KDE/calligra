@@ -24,12 +24,13 @@ class QByteArray;
 class QStringList;
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class PNGExport : public KoFilter
 {
     Q_OBJECT
 public:
-    PNGExport(QObject* parent, const QStringList&);
+    PNGExport(QObject* parent, const QVariantList&);
     virtual ~PNGExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

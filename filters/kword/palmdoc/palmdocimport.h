@@ -26,6 +26,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class PalmDocImport : public KoFilter
 {
@@ -33,7 +34,7 @@ class PalmDocImport : public KoFilter
 
 public:
 
-    PalmDocImport(QObject* parent, const QStringList&);
+    PalmDocImport(QObject* parent, const QVariantList&);
     PalmDocImport();
 
     virtual ~PalmDocImport() {}

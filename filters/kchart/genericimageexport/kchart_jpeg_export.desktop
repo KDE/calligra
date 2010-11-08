@@ -54,5 +54,5 @@ Name[zh_TW]=KChart JPEG 匯出過濾程式
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/jpeg
 X-KDE-Weight=1
-X-KDE-Library=libkchartgenericimageexport
+X-KDE-Library=kchartgenericimageexport
 X-KDE-ServiceTypes=KOfficeFilter

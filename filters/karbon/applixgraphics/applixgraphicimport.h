@@ -23,6 +23,7 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <Q3CString>
+#include <QVariantList>
 
 
 class APPLIXGRAPHICImport : public KoFilter
@@ -31,7 +32,7 @@ class APPLIXGRAPHICImport : public KoFilter
     Q_OBJECT
 
 public:
-    APPLIXGRAPHICImport(QObject* parent, const QStringList&);
+    APPLIXGRAPHICImport(QObject* parent, const QVariantList&);
     virtual ~APPLIXGRAPHICImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

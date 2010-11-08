@@ -64,11 +64,22 @@ ElementType UnknownElement::elementType() const
     return Unknown;
 }
 
+bool UnknownElement::readMathMLAttributes( const KoXmlElement& element )
+{
+    Q_UNUSED( element )
+    return true;
+}
+
 bool UnknownElement::readMathMLContent( const KoXmlElement& element )
 {
 //TODO - save the mathml content in a string
     Q_UNUSED( element )
     return true;
+}
+
+void UnknownElement::writeMathMLAttributes( KoXmlWriter* writer ) const
+{
+    Q_UNUSED( writer )
 }
 
 void UnknownElement::writeMathMLContent( KoXmlWriter* writer ) const

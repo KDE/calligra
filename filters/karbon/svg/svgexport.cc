@@ -55,7 +55,7 @@
 #include "KoFilterEffectStack.h"
 #include "KoXmlWriter.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KMimeType>
 #include <KTemporaryFile>
 #include <KIO/NetAccess>
@@ -76,10 +76,10 @@ static void printIndentation(QTextStream *stream, unsigned int indent)
         *stream << INDENT;
 }
 
-typedef KGenericFactory<SvgExport> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonsvgexport, SvgExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
+K_EXPORT_PLUGIN(SvgExportFactory("kofficefilters"))
 
-SvgExport::SvgExport(QObject*parent, const QStringList&)
+SvgExport::SvgExport(QObject*parent, const QVariantList&)
         : KoFilter(parent), m_indent(0), m_indent2(0)
 {
     double scaleToUserSpace = SvgUtil::toUserSpace(1.0);

@@ -25,13 +25,14 @@
 #include <docbookexport.h>
 #include <docbookexport.moc>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <QDir>
 #include <qdom.h>
 //Added by qt3to4:
 #include <QList>
 #include <QByteArray>
 
+#include <KoStore.h>
 #include <KoFilterChain.h>
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -39,11 +40,10 @@
 #include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 
-typedef KGenericFactory<DocBookExport> DocBookExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libdocbookexport, DocBookExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(DocBookExportFactory, registerPlugin<DocBookExport>();)
+K_EXPORT_PLUGIN(DocBookExportFactory("kofficefilters"))
 
-DocBookExport::DocBookExport(QObject          *parent,
-                             const QStringList &) : KoFilter(parent)
+DocBookExport::DocBookExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
 }
 

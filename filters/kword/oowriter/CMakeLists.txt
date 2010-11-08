@@ -11,7 +11,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 set(oowriterimport_PART_SRCS oowriterimport.cc ${libcommon_SRCS} ${liboofilter_SRCS})
 
-kde4_add_plugin(oowriterimport WITH_PREFIX ${oowriterimport_PART_SRCS})
+kde4_add_plugin(oowriterimport ${oowriterimport_PART_SRCS})
 
 
 
@@ -24,7 +24,7 @@ install(TARGETS oowriterimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(oowriterexport_PART_SRCS oowriterexport.cc ExportFilter.cc ${libcommon_SRCS} ${liboofilter_SRCS})
 
-kde4_add_plugin(oowriterexport WITH_PREFIX ${oowriterexport_PART_SRCS})
+kde4_add_plugin(oowriterexport ${oowriterexport_PART_SRCS})
 
 
 

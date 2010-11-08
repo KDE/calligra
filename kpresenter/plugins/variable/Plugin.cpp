@@ -22,14 +22,15 @@
 *
 */
 #include "Plugin.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoInlineObjectRegistry.h>
 #include "PresentationVariableFactory.h"
 
 
-K_EXPORT_COMPONENT_FACTORY(kprvariables, KGenericFactory<Plugin>("kprvariables"))
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("kprvariables"))
 
-Plugin::Plugin(QObject *parent, const QStringList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoInlineObjectRegistry::instance()->add(new PresentationVariableFactory());

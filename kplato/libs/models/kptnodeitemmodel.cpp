@@ -2661,16 +2661,16 @@ bool NodeItemModel::setEstimateCalendar( Node *node, const QVariant &value, int 
     switch ( role ) {
         case Qt::EditRole:
             Calendar *c = 0;
+            Calendar *old = node->estimate()->calendar();
             if ( value.toInt() > 0 ) {
                 QStringList lst = m_nodemodel.estimateCalendar( node, Role::EnumList ).toStringList();
                 if ( value.toInt() < lst.count() ) {
                     c = m_project->calendarByName( lst.at( value.toInt() ) );
                 }
-                Calendar *old = node->estimate()->calendar();
-                if ( c != old ) {
-                    emit executeCommand( new ModifyEstimateCalendarCmd( *node, old, c, "Modify estimate calendar" ) );
-                    return true;
-                }
+            }
+            if ( c != old ) {
+                emit executeCommand( new ModifyEstimateCalendarCmd( *node, old, c, "Modify estimate calendar" ) );
+                return true;
             }
             return false;;
     }

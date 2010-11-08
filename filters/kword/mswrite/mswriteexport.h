@@ -30,13 +30,14 @@
 #include <KoFilter.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class MSWriteExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    MSWriteExport(QObject* parent, const QStringList &);
+    MSWriteExport(QObject* parent, const QVariantList &);
     virtual ~MSWriteExport();
 
     KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);

@@ -42,7 +42,6 @@
 #include <kdeversion.h>
 #include <KDebug>
 #include <KZip>
-#include <KGenericFactory>
 #include <KMessageBox>
 
 #include <KoOdfWriteStore.h>

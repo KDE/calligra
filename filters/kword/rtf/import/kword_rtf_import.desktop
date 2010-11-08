@@ -63,5 +63,5 @@ X-KDE-Weight=1
 ImportDescription=RTF
 X-KDE-Export=application/x-kword
 ExportDescription=KWord
-X-KDE-Library=librtfimport
+X-KDE-Library=rtfimport
 X-KDE-ServiceTypes=KOfficeFilter

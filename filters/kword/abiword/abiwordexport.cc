@@ -41,7 +41,7 @@
 #include <kdebug.h>
 #include <kcodecs.h>
 #include <kfilterdev.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kimageio.h>
 
 #include <KoPageLayout.h>
@@ -56,17 +56,8 @@
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
-class ABIWORDExportFactory : public KGenericFactory<ABIWORDExport>
-{
-public:
-    ABIWORDExportFactory(void) : KGenericFactory<ABIWORDExport> ("kwordabiwordexport") {}
-protected:
-    virtual void setupTranslations(void) {
-        KGlobal::locale()->insertCatalog("kofficefilters");
-    }
-};
-
-K_EXPORT_COMPONENT_FACTORY(libabiwordexport, ABIWORDExportFactory())
+K_PLUGIN_FACTORY(ABIWORDExportFactory, registerPlugin<ABIWORDExport>();)
+K_EXPORT_PLUGIN(ABIWORDExportFactory("kwordabiwordexport", "kofficefilters"))
 
 class StyleMap : public QMap<QString, LayoutData>
 {
@@ -1099,7 +1090,7 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 
 // ==========================================================================================
 
-ABIWORDExport::ABIWORDExport(QObject* parent, const QStringList &) :
+ABIWORDExport::ABIWORDExport(QObject* parent, const QVariantList &) :
         KoFilter(parent)
 {
 }

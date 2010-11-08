@@ -39,6 +39,7 @@ public:
     KoColumns columns() const { return m_columns; }
 
     void setShowPreview(bool on);
+    void setUnit(const KoUnit &unit);
 
 signals:
     void columnsChanged(const KoColumns &columns);
@@ -46,7 +47,6 @@ signals:
 public slots:
     void setTextAreaAvailable(bool available);
     void setColumns(const KoColumns &columns);
-    void setUnit(const KoUnit &unit);
 
 private slots:
     void optionsChanged();

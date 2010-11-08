@@ -39,15 +39,15 @@
 #include <KoFilterManager.h>
 #include <KoZoomHandler.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KDialog>
 #include <QImage>
 
-typedef KGenericFactory<PngExport> PngExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonpngexport, PngExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<PngExport>();)
+K_EXPORT_PLUGIN(PngExportFactory("kofficefilters"))
 
 
-PngExport::PngExport(QObject*parent, const QStringList&)
+PngExport::PngExport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

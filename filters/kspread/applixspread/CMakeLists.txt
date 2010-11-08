@@ -3,7 +3,7 @@ include_directories(${KDE4_INCLUDES} ${KOMAIN_INCLUDES})
 
 set(applixspreadimport_PART_SRCS applixspreadimport.cc )
 
-kde4_add_plugin(applixspreadimport WITH_PREFIX ${applixspreadimport_PART_SRCS})
+kde4_add_plugin(applixspreadimport ${applixspreadimport_PART_SRCS})
 
 target_link_libraries(applixspreadimport komain)
 

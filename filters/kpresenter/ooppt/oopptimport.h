@@ -23,13 +23,14 @@
 #include <QObject>
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class OOPPTImport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    OOPPTImport(QObject* parent, const QStringList&);
+    OOPPTImport(QObject* parent, const QVariantList&);
     virtual ~OOPPTImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 #include <KoFilter.h>
+#include <QVariantList>
 
 namespace KSpread
 {
@@ -37,7 +38,7 @@ class CSVExport : public KoFilter
     Q_OBJECT
 
 public:
-    CSVExport(QObject* parent, const QStringList &);
+    CSVExport(QObject* parent, const QVariantList &);
     virtual ~CSVExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to);

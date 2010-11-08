@@ -19,4 +19,4 @@
 
 #include "KChartFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkchartpart, KChart::KChartFactory )
+K_EXPORT_PLUGIN(KChart::KChartFactory )

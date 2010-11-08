@@ -3,7 +3,7 @@
 
 #set(karbonepsexport_PART_SRCS epsexport.cc epsexportdlg.cc )
 
-#kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
+#kde4_add_plugin(karbonepsexport ${karbonepsexport_PART_SRCS})
 
 
 
@@ -23,7 +23,7 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 set(karbonepsimport_PART_SRCS epsimport.cc pscommentlexer.cc )
 
-kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
+kde4_add_plugin(karbonepsimport ${karbonepsimport_PART_SRCS})
 
 target_link_libraries(karbonepsimport komain)
 

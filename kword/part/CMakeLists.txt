@@ -115,7 +115,7 @@ install(TARGETS kwordprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(kwordpart_PART_SRCS KWFactoryInit.cpp )
 
 
-kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
+kde4_add_plugin(kwordpart ${kwordpart_PART_SRCS})
 
 
 

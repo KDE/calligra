@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kfilterdev.h>
 #include <kmessagebox.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoZoomHandler.h>
 #include <QApplication>
@@ -56,10 +56,10 @@
 
 using namespace KSpread;
 
-typedef KGenericFactory<GNUMERICExport> GNUMERICExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libgnumericexport, GNUMERICExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
+K_EXPORT_PLUGIN(GNUMERICExportFactory("kofficefilters"))
 
-GNUMERICExport::GNUMERICExport(QObject* parent, const QStringList&)
+GNUMERICExport::GNUMERICExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
     isLink = false;

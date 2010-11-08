@@ -64,4 +64,4 @@ Name[zh_CN]=KFormula LaTeX 导出过滤器
 Name[zh_TW]=KFormula LaTeX 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
-X-KDE-Library=libkfolatexexport
+X-KDE-Library=kfolatexexport

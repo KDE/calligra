@@ -30,13 +30,12 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 
-typedef KGenericFactory<PowerPointImport> PowerPointImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libpowerpointimport,
-                           PowerPointImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PowerPointImportFactory, registerPlugin<PowerPointImport>();)
+K_EXPORT_PLUGIN(PowerPointImportFactory("kofficefilters"))
 
 KoFilter::ConversionStatus PowerPointImport::convert(const QByteArray& from, const QByteArray& to)
 {

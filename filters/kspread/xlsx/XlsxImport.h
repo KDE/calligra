@@ -27,13 +27,14 @@
 #define XLSXIMPORT_H
 
 #include <MsooXmlImport.h>
+#include <QVariantList>
 
 //! XLSX to ODS import filter
 class XlsxImport : public MSOOXML::MsooXmlImport
 {
     Q_OBJECT
 public:
-    XlsxImport(QObject * parent, const QStringList &);
+    XlsxImport(QObject * parent, const QVariantList &);
     virtual ~XlsxImport();
 
 protected:

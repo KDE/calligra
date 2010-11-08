@@ -36,6 +36,7 @@
 #include <q3cstring.h>
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 
 class OOWRITERExport : public KoFilter
@@ -44,7 +45,7 @@ class OOWRITERExport : public KoFilter
     Q_OBJECT
 
 public:
-    OOWRITERExport(QObject* parent, const QStringList &);
+    OOWRITERExport(QObject* parent, const QVariantList &);
     virtual ~OOWRITERExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

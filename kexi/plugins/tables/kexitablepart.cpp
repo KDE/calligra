@@ -306,7 +306,8 @@ AboutData( const char *programName,
 #define KEXIPART_EXPORT_FACTORY( libname, partClass, aboutData ) \
   static KexiPart::AboutData * libname ## updateAD(KexiPart::AboutData *ad) \
   { ad->setAppName( #libname ); return ad; } \
-  K_EXPORT_COMPONENT_FACTORY( libname, KGenericFactory<partClass>(libname ## updateAD(#libname)) )
+   K_PLUGIN_FACTORY( libname ## Factory, registerPlugin<partClass>(); )
+   K_EXPORT_PLUGIN( libname ## Factory )
 */
 
 K_EXPORT_KEXI_PLUGIN( KexiTablePart, table )

@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -32,8 +32,8 @@
 
 #include "wmlexport.h"
 
-typedef KGenericFactory<WMLExport> WMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwmlexport, WMLExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WMLExportFactory, registerPlugin<WMLExport>();)
+K_EXPORT_PLUGIN(WMLExportFactory("kofficefilters"))
 
 class WMLWorker : public KWEFBaseWorker
 {
@@ -131,7 +131,7 @@ bool WMLWorker::doFullParagraph(const QString& paraText,
     return true;
 }
 
-WMLExport::WMLExport(QObject* parent, const QStringList&):
+WMLExport::WMLExport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

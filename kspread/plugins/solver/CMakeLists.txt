@@ -21,7 +21,7 @@ kde4_add_ui_files( solver_PART_SRCS
 	SolverMainWidget.ui
 )
 
-kde4_add_plugin( kspreadsolver WITH_PREFIX ${solver_PART_SRCS} )
+kde4_add_plugin( kspreadsolver ${solver_PART_SRCS} )
 
 
 

@@ -28,6 +28,7 @@
 #include <kparts/plugin.h>
 
 #include <QtCore/QPointF>
+#include <QVariantList>
 
 class KarbonView;
 class WhirlPinchDlg;
@@ -36,7 +37,7 @@ class WhirlPinchPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    WhirlPinchPlugin(QWidget *parent, const QStringList &);
+    WhirlPinchPlugin(QObject *parent, const QVariantList &);
     virtual ~WhirlPinchPlugin() {}
 
 private slots:

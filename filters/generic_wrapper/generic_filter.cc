@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
@@ -33,11 +33,11 @@
 #include "generic_filter.h"
 #include <kshell.h>
 
-typedef KGenericFactory<GenericFilter> GenericFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(libgenerickofilter, GenericFilterFactory)
+K_PLUGIN_FACTORY(GenericFilterFactory, registerPlugin<GenericFilter>();)
+K_EXPORT_PLUGIN(GenericFilterFactory())
 
 
-GenericFilter::GenericFilter(QObject *parent, const QStringList&) :
+GenericFilter::GenericFilter(QObject *parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

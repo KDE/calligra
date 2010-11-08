@@ -32,7 +32,7 @@
 #include <kmessagebox.h>
 #include <kfilterdev.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
@@ -172,10 +172,10 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
     return time;
 }
 
-typedef KGenericFactory<GNUMERICFilter> GNUMERICFilterFactory;
-K_EXPORT_COMPONENT_FACTORY(libgnumericimport, GNUMERICFilterFactory("kofficefilters"))
+K_PLUGIN_FACTORY(GNUMERICFilterFactory, registerPlugin<GNUMERICFilter>();)
+K_EXPORT_PLUGIN(GNUMERICFilterFactory("kofficefilters"))
 
-GNUMERICFilter::GNUMERICFilter(QObject* parent, const QStringList &)
+GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
         : KoFilter(parent)
 {
 }

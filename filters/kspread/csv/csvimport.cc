@@ -28,7 +28,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoCsvImportDialog.h>
 #include <KoFilterChain.h>
@@ -55,10 +55,10 @@ using namespace KSpread;
  perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
 */
 
-typedef KGenericFactory<CSVFilter> CSVImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libcsvimport, CSVImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(CSVImportFactory, registerPlugin<CSVFilter>();)
+K_EXPORT_PLUGIN(CSVImportFactory("kofficefilters"))
 
-CSVFilter::CSVFilter(QObject* parent, const QStringList&) :
+CSVFilter::CSVFilter(QObject* parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

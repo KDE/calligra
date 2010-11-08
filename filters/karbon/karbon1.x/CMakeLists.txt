@@ -8,7 +8,7 @@ set(karbon1ximport_PART_SRCS
     Karbon1xImport.cpp
     ${SHAPES_SOURCES} )
 
-kde4_add_plugin(karbon1ximport WITH_PREFIX ${karbon1ximport_PART_SRCS})
+kde4_add_plugin(karbon1ximport ${karbon1ximport_PART_SRCS})
 
 target_link_libraries(karbon1ximport karboncommon karbonui)
 

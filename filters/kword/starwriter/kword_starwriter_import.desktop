@@ -61,5 +61,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.stardivision.writer
-X-KDE-Library=libstarwriterimport
+X-KDE-Library=starwriterimport
 X-KDE-Weight=1

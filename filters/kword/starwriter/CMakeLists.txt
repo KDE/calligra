@@ -8,7 +8,7 @@
 set(starwriterimport_PART_SRCS pole.cpp starwriterimport.cc )
 
 
-kde4_add_plugin(starwriterimport WITH_PREFIX ${starwriterimport_PART_SRCS})
+kde4_add_plugin(starwriterimport ${starwriterimport_PART_SRCS})
 
 
 

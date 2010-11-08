@@ -23,12 +23,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY( formulashape,
-                            KGenericFactory<KoFormulaShapePlugin>( "FormulaShape" ) )
+K_PLUGIN_FACTORY(KoFormulaShapePluginFactory, registerPlugin<KoFormulaShapePlugin>();)
+K_EXPORT_PLUGIN(KoFormulaShapePluginFactory("FormulaShape"))
 
-KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QStringList& )
+KoFormulaShapePlugin::KoFormulaShapePlugin( QObject* parent, const QVariantList& )
                     : QObject( parent )
 {
     KoToolRegistry::instance()->add( new KoFormulaToolFactory( parent ) );

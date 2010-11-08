@@ -37,7 +37,7 @@
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <kicon.h>
@@ -48,17 +48,17 @@
 #include <QtGui/QHBoxLayout>
 
 
-typedef KGenericFactory<FlattenPathPlugin, QWidget> FlattenPathPluginFactory;
-K_EXPORT_COMPONENT_FACTORY(karbon_flattenpathplugin, FlattenPathPluginFactory("karbonflattenpathplugin"))
+K_PLUGIN_FACTORY(FlattenPathPluginFactory, registerPlugin<FlattenPathPlugin>();)
+K_EXPORT_PLUGIN(FlattenPathPluginFactory("karbonflattenpathplugin"))
 
-FlattenPathPlugin::FlattenPathPlugin(QWidget *parent, const QStringList &)
+FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
         : Plugin(parent/*, name*/)
 {
     KAction *actionFlattenPath  = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
     connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
-    m_flattenPathDlg = new FlattenDlg(parent);
+    m_flattenPathDlg = new FlattenDlg(qobject_cast<QWidget *>(parent));
     m_flattenPathDlg->setFlatness(10.0);
 }
 

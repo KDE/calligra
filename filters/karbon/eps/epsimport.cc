@@ -26,16 +26,16 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KRun>
 #include <KProcess>
 #include <KShell>
 #include <KDebug>
 
-typedef KGenericFactory<EpsImport> EpsImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonepsimport, EpsImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(EpsImportFactory, registerPlugin<EpsImport>();)
+K_EXPORT_PLUGIN(EpsImportFactory("kofficefilters"))
 
-EpsImport::EpsImport(QObject*parent, const QStringList&)
+EpsImport::EpsImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
     kDebug() << "###   ###   EPS Import Filter";

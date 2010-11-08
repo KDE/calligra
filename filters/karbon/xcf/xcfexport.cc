@@ -24,7 +24,7 @@
 #include <QString>
 #include <QList>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoStore.h>
@@ -41,11 +41,11 @@ const unsigned XcfExport::m_tileWidth  = 64;
 const unsigned XcfExport::m_tileHeight = 64;
 
 
-typedef KGenericFactory<XcfExport> XcfExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkarbonxcfexport, XcfExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(XcfExportFactory, registerPlugin<XcfExport>();)
+K_EXPORT_PLUGIN(XcfExportFactory("kofficefilters"))
 
 
-XcfExport::XcfExport(QObject*parent, const QStringList&)
+XcfExport::XcfExport(QObject*parent, const QVariantList&)
         : KoFilter(parent)
 {
     m_zoomX = 1.0;

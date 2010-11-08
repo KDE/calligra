@@ -38,6 +38,9 @@ protected:
     void accept();
     void reject();
 
+private slots:
+    void distributeUnit(const KoUnit &unit);
+
 private:
     KWDocument *m_document;
     KWPage m_page;

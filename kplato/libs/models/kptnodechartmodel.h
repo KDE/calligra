@@ -60,7 +60,7 @@ public:
         //if ( role == Qt::DisplayRole ) kDebug()<<"fetch:"<<index.column()<<mapToSource( index ).column()<<m_rejects;
         return QSortFilterProxyModel::data( index, role );
     }
-    void setRejectColumns( const QList<int> &columns ) { m_rejects = columns; }
+    void setRejectColumns( const QList<int> &columns ) { m_rejects = columns; invalidateFilter(); }
     QList<int> rejectColumns() const { return m_rejects; }
     void setZeroColumns( const QList<int> &columns ) { m_zerocolumns = columns; }
     QList<int> zeroColumns() const { return m_zerocolumns; }
@@ -69,8 +69,7 @@ public:
 
 protected:
     bool filterAcceptsColumn ( int source_column, const QModelIndex &/*source_parent */) const {
-
-        //kDebug()<<this<<source_column<<m_columns<<(! m_columns.contains( source_column ));
+        //kDebug()<<this<<source_column<<m_rejects<<(! m_rejects.contains( source_column ));
         return ! m_rejects.contains( source_column );
     }
 

@@ -21,16 +21,16 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoGlobal.h>
 
 #include <amiproimport.h>
 #include <amiproparser.h>
 
-typedef KGenericFactory<AmiProImport> AmiProImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libamiproimport, AmiProImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(AmiProImportFactory, registerPlugin<AmiProImport>();)
+K_EXPORT_PLUGIN(AmiProImportFactory("kofficefilters"))
 
-AmiProImport::AmiProImport(QObject* parent, const QStringList&):
+AmiProImport::AmiProImport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

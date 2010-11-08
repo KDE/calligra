@@ -28,17 +28,17 @@
 #include <KoFilterChain.h>
 #include <KoStore.h>
 //#include <KoStoreDevice.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include "KChartPart.h"
 
 #include "svgexport.h"
 
 
-typedef KGenericFactory<SvgExport> SvgExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkchartsvgexport, SvgExportFactory("svgexport"))
+K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
+K_EXPORT_PLUGIN(SvgExportFactory("svgexport"))
 
-SvgExport::SvgExport(QObject* parent, const QStringList&)
+SvgExport::SvgExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
 }

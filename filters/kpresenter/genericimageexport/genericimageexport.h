@@ -22,6 +22,7 @@
 
 #include <KoFilter.h>
 #include <QPixmap>
+#include <QVariantList>
 
 class QPixmap;
 class GenericImageExport : public KoFilter
@@ -29,7 +30,7 @@ class GenericImageExport : public KoFilter
     Q_OBJECT
 
 public:
-    GenericImageExport(QObject* parent, const QStringList&);
+    GenericImageExport(QObject* parent, const QVariantList&);
     virtual ~GenericImageExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

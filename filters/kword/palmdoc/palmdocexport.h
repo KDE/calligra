@@ -24,6 +24,7 @@
 #include <KoStore.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 class PalmDocExport : public KoFilter
 {
@@ -31,7 +32,7 @@ class PalmDocExport : public KoFilter
 
 public:
 
-    PalmDocExport(QObject* parent, const QStringList&);
+    PalmDocExport(QObject* parent, const QVariantList&);
     PalmDocExport();
 
     virtual ~PalmDocExport() {}

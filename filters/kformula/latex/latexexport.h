@@ -26,12 +26,13 @@ class QByteArray;
 class QStringList;
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class LATEXExport : public KoFilter
 {
     Q_OBJECT
 public:
-    LATEXExport(QObject* parent, const QStringList&);
+    LATEXExport(QObject* parent, const QVariantList&);
     virtual ~LATEXExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

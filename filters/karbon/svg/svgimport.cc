@@ -36,7 +36,7 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoXmlReader.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KDebug>
 #include <kfilterdev.h>
 

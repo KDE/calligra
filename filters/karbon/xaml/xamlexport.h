@@ -30,6 +30,7 @@
 #include <QStack>
 #include <QTextStream>
 #include <QByteArray>
+#include <QVariantList>
 
 class QTextStream;
 class VColor;
@@ -48,7 +49,7 @@ class XAMLExport : public KoFilter, private VVisitor
     Q_OBJECT
 
 public:
-    XAMLExport(KoFilter* parent, const char* name, const QStringList&);
+    XAMLExport(KoFilter* parent, const char* name, const QVariantList&);
     virtual ~XAMLExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -288,7 +288,7 @@ install(TARGETS kspreadcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 SET (kspreadpart_PART_SRCS part/Factory_init.cpp )
 
-kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
+kde4_add_plugin(kspreadpart ${kspreadpart_PART_SRCS})
 
 
 

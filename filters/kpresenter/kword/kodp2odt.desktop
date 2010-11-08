@@ -57,5 +57,5 @@ Name[zh_TW]=KPresenter KWord 過濾程式
 X-KDE-Import=application/vnd.oasis.opendocument.presentation
 X-KDE-Weight=1
 X-KDE-Export=application/vnd.oasis.opendocument.text
-X-KDE-Library=libkodp2odt
+X-KDE-Library=kodp2odt
 X-KDE-ServiceTypes=KOfficeFilter

@@ -18,7 +18,7 @@ set(latexparser_PART_SRCS
    texscaner.cc )
 
 
-kde4_add_plugin(latexparser WITH_PREFIX ${latexparser_PART_SRCS})
+kde4_add_plugin(latexparser ${latexparser_PART_SRCS})
 
 
 

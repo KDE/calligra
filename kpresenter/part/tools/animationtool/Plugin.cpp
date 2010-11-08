@@ -22,11 +22,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kpresentertoolanimation, KGenericFactory<Plugin>( "kpresenter-animationtool" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("kpresenter-animationtool"))
 
-Plugin::Plugin(QObject * parent, const QStringList &)
+Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KPrAnimationToolFactory(parent));

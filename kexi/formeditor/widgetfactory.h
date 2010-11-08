@@ -446,11 +446,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetFactory::CreateWidgetOptions)
     K_EXPORT_PLUGIN(factory("kformdesigner_" # internal_name)) \
     K_EXPORT_PLUGIN_VERSION(KDE_MAKE_VERSION(KFORMDESIGNER_VERSION, 0, 0))
 
-#if 0
-//! macro to declare KFormDesigner-compatible widget factory as a KDE Component factory
-#define KFORMDESIGNER_WIDGET_FACTORY(factoryClassName, libraryName) \
-    K_EXPORT_COMPONENT_FACTORY(kformdesigner_ ## libraryName, KGenericFactory<factoryClassName>("kformdesigner_" # libraryName))
-#endif
-
 }
 #endif

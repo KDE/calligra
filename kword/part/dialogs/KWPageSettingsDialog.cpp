@@ -35,9 +35,11 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
         m_page(page)
 {
     Q_ASSERT(document);
+    showUnitchooser(true);
     Q_ASSERT(page.isValid());
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
     addPage(m_columns, i18n("Columns"));
+
     showPageSpread(true);
     showTextDirection(true); // TODO can we hide this in selected usecases? Use the resource manager bidi-check maybe?
     //showApplyToDocument(true); // TODO uncommand when we can handle it.
@@ -85,6 +87,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 
         */
     }
+
+    distributeUnit(document->unit());
+    connect (this, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(distributeUnit(const KoUnit&)));
 }
 
 void KWPageSettingsDialog::accept()
@@ -128,4 +133,11 @@ void KWPageSettingsDialog::accept()
 void KWPageSettingsDialog::reject()
 {
     KoPageLayoutDialog::reject();
+}
+
+void KWPageSettingsDialog::distributeUnit(const KoUnit &unit)
+{
+    setUnit(unit);
+    m_columns->setUnit(unit);
+    m_document->setUnit(unit);
 }

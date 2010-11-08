@@ -24,6 +24,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <QVariantList>
 
 namespace KSpread
 {
@@ -38,7 +39,7 @@ class GNUMERICExport : public KoFilter
     Q_OBJECT
 
 public:
-    GNUMERICExport(QObject *parent, const QStringList&);
+    GNUMERICExport(QObject *parent, const QVariantList&);
     virtual ~GNUMERICExport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

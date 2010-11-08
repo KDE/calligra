@@ -25,6 +25,7 @@
 #include <qdom.h>
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 class QDomElement;
 class KoStore;
@@ -33,7 +34,7 @@ class OoImpressExport : public KoFilter
 {
     Q_OBJECT
 public:
-    OoImpressExport(QObject * parent, const QStringList &);
+    OoImpressExport(QObject * parent, const QVariantList &);
     virtual ~OoImpressExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray & from,

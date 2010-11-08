@@ -38,7 +38,7 @@ add_subdirectory( templates )
 
 set(karbonpart_PART_SRCS karbon_factory_init.cc )
 
-kde4_add_plugin(karbonpart WITH_PREFIX ${karbonpart_PART_SRCS})
+kde4_add_plugin(karbonpart ${karbonpart_PART_SRCS})
 
 target_link_libraries(karbonpart karbonui)
 

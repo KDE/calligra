@@ -57,5 +57,5 @@ Name[zh_TW]=KPresenter KWord 過濾程式
 X-KDE-Import=application/x-kpresenter
 X-KDE-Weight=1
 X-KDE-Export=application/x-kword
-X-KDE-Library=libkprkword
+X-KDE-Library=kprkword
 X-KDE-ServiceTypes=KOfficeFilter

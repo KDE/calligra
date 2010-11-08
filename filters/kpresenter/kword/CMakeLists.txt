@@ -2,7 +2,7 @@
 
 set(kodp2odt_PART_SRCS odp2odt.cpp )
 
-kde4_add_plugin(kodp2odt WITH_PREFIX ${kodp2odt_PART_SRCS})
+kde4_add_plugin(kodp2odt ${kodp2odt_PART_SRCS})
 
 
 
@@ -17,7 +17,7 @@ install( FILES  kodp2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 set(kprkword_PART_SRCS kprkword.cc )
 
 
-kde4_add_plugin(kprkword WITH_PREFIX ${kprkword_PART_SRCS})
+kde4_add_plugin(kprkword ${kprkword_PART_SRCS})
 
 
 

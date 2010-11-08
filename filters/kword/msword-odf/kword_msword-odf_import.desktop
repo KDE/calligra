@@ -37,5 +37,5 @@ Name[zh_TW]=KWord MS Word-ODF 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword
 X-KDE-Weight=1
-X-KDE-Library=libmswordodf_import
+X-KDE-Library=mswordodf_import
 X-KDE-ServiceTypes=KOfficeFilter

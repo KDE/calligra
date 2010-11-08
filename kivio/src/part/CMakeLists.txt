@@ -22,7 +22,7 @@ install(TARGETS kivioprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ### kiviopart ###
 set(kiviopart_PART_SRCS KivioFactoryInit.cpp )
 
-kde4_add_plugin(kiviopart WITH_PREFIX ${kiviopart_PART_SRCS})
+kde4_add_plugin(kiviopart ${kiviopart_PART_SRCS})
 
 target_link_libraries(kiviopart kivioprivate)
 

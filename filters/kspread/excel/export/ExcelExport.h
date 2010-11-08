@@ -28,6 +28,7 @@
 #include <KoStore.h>
 
 #include <records.h>
+#include <QVariantList>
 
 namespace KSpread {
     class Sheet;
@@ -46,7 +47,7 @@ class ExcelExport : public KoFilter
 
 public:
 
-    ExcelExport(QObject *parent, const QStringList&);
+    ExcelExport(QObject *parent, const QVariantList&);
     virtual ~ExcelExport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

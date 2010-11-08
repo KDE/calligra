@@ -24,7 +24,7 @@
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoGlobal.h>
 
 #include <palmdb.h>
@@ -33,10 +33,10 @@
 #include "palmdocimport.h"
 #include "palmdoc.h"
 
-typedef KGenericFactory<PalmDocImport> PalmDocImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libpalmdocimport, PalmDocImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(PalmDocImportFactory, registerPlugin<PalmDocImport>();)
+K_EXPORT_PLUGIN(PalmDocImportFactory("kofficefilters"))
 
-PalmDocImport::PalmDocImport(QObject* parent, const QStringList&):
+PalmDocImport::PalmDocImport(QObject* parent, const QVariantList&):
         KoFilter(parent)
 {
 }

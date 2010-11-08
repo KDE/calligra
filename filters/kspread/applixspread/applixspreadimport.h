@@ -53,7 +53,7 @@ class APPLIXSPREADImport : public KoFilter
     Q_OBJECT
 
 public:
-    APPLIXSPREADImport(QObject *parent, const QStringList&);
+    APPLIXSPREADImport(QObject *parent, const QVariantList&);
     virtual ~APPLIXSPREADImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

@@ -33,7 +33,7 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoUnit.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
@@ -51,8 +51,8 @@
 #include "ODrawClient.h"
 #include "ImportUtils.h"
 
-typedef KGenericFactory<ExcelImport> ExcelImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libexcelimport, ExcelImportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
+K_EXPORT_PLUGIN(ExcelImportFactory("kofficefilters"))
 
 #define UNICODE_EUR 0x20AC
 #define UNICODE_GBP 0x00A3
@@ -187,7 +187,7 @@ public:
     QMap<QString,QString> manifestEntries;
 };
 
-ExcelImport::ExcelImport(QObject* parent, const QStringList&)
+ExcelImport::ExcelImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)
 {
     d = new Private;

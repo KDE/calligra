@@ -24,7 +24,7 @@
 #include <KarbonPart.h>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoLineBorder.h>
 #include <KoShape.h>
@@ -37,11 +37,11 @@
 TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
 */
 
-typedef KGenericFactory<WmfExport> WmfExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libwmfexport, WmfExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(WmfExportFactory, registerPlugin<WmfExport>();)
+K_EXPORT_PLUGIN(WmfExportFactory("kofficefilters"))
 
 
-WmfExport::WmfExport(QObject*parent, const QStringList&) :
+WmfExport::WmfExport(QObject*parent, const QVariantList&) :
         KoFilter(parent)
 {
 }

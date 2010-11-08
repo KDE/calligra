@@ -36,7 +36,7 @@
 #include <QByteArray>
 
 #include <kdebug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
@@ -52,14 +52,14 @@
 #include <htmlexport.h>
 #include <htmlexport.moc>
 
-typedef KGenericFactory<HTMLExport> HTMLExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libhtmlexport, HTMLExportFactory("kofficefilters"))
+K_PLUGIN_FACTORY(HTMLExportFactory, registerPlugin<HTMLExport>();)
+K_EXPORT_PLUGIN(HTMLExportFactory("kofficefilters"))
 
 //
 // HTMLExport
 //
 
-HTMLExport::HTMLExport(QObject* parent, const QStringList &) :
+HTMLExport::HTMLExport(QObject* parent, const QVariantList &) :
         KoFilter(parent)
 {
 }

@@ -29,6 +29,7 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+#include <QVariantList>
 
 class XSLTImport : public KoFilter
 {
@@ -36,7 +37,7 @@ class XSLTImport : public KoFilter
     Q_OBJECT
 
 public:
-    XSLTImport(QObject* parent, const QStringList&);
+    XSLTImport(QObject* parent, const QVariantList&);
     virtual ~XSLTImport() {}
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from,

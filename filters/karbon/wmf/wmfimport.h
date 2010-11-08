@@ -23,6 +23,7 @@ DESCRIPTION
 #define WMFIMPORT_H
 
 #include <KoFilter.h>
+#include <QVariantList>
 
 
 class WMFImport : public KoFilter
@@ -30,7 +31,7 @@ class WMFImport : public KoFilter
     Q_OBJECT
 
 public:
-    WMFImport(QObject* parent, const QStringList&);
+    WMFImport(QObject* parent, const QVariantList&);
     virtual ~WMFImport();
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
