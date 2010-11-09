@@ -1184,7 +1184,7 @@ KexiFormView::updateDataSourcePage()
 void
 KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 {
-    if (KexiFieldDrag::canDecodeMultiple(e)) {
+    if (KexiFieldDrag::canDecode(e)) {
         e->accept(true);
         //dirty: drawRect(QRect( e->pos(), QSize(50, 20)), 2);
     }
@@ -1197,10 +1197,10 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
     KFormDesigner::ObjectTreeItem *targetContainerWidgetItem = targetContainerWidget
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
     if (targetContainerWidgetItem && targetContainerWidgetItem->container()
-            && KexiFieldDrag::canDecodeMultiple(e)) {
+            && KexiFieldDrag::canDecode(e)) {
         QString sourcePartClass, sourceName;
         QStringList fields;
-        if (!KexiFieldDrag::decodeMultiple(e, sourcePartClass, sourceName, fields))
+        if (!KexiFieldDrag::decode(e, sourcePartClass, sourceName, fields))
             return;
         insertAutoFields(sourcePartClass, sourceName, fields,
                          targetContainerWidgetItem->container(), e->pos());
