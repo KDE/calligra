@@ -585,7 +585,7 @@ public:
 class KPLATOKERNEL_EXPORT StandardWorktime
 {
 public:
-    StandardWorktime( Project *project = 0 );
+    explicit StandardWorktime( Project *project = 0 );
     StandardWorktime(StandardWorktime* worktime);
     ~StandardWorktime();
 
