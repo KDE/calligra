@@ -131,6 +131,9 @@ public:
     //! Position of the text
     QMap<QString, QString> textShapePositions;
 
+    //! Possible text shrinkage
+    MSOOXML::Utils::autoFitStatus m_textAutoFit;
+
     //! Borders in the frame
     QMap<QString, QString> textLeftBorders;
     QMap<QString, QString> textRightBorders;
@@ -169,6 +172,9 @@ public:
 
     //! Position of the text
     QMap<QString, QString> textShapePositions;
+
+    //! Possible text shrinkage
+    MSOOXML::Utils::autoFitStatus m_textAutoFit;
 
     //! Borders in the frame
     QMap<QString, QString> textLeftBorders;

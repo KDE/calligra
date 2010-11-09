@@ -118,6 +118,7 @@ PptxPlaceholder::~PptxPlaceholder()
 PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 {
     m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
+    m_textAutoFit = MSOOXML::Utils::autoFitUnUsed;
 }
 
 PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
@@ -131,6 +132,7 @@ PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
 PptxSlideMasterPageProperties::PptxSlideMasterPageProperties()
 {
     m_drawingPageProperties = KoGenStyle(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
+    m_textAutoFit = MSOOXML::Utils::autoFitUnUsed;
 }
 
 void PptxSlideMasterPageProperties::clear()
@@ -1596,6 +1598,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterPageProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideMasterPageProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideMasterPageProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
+            m_context->slideMasterPageProperties->m_textAutoFit = m_normAutoFit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideMasterPageProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1603,6 +1606,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideMasterPageProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideMasterPageProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideMasterPageProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
+            m_context->slideMasterPageProperties->m_textAutoFit = m_normAutoFit;
         }
     }
     else if (m_context->type == SlideLayout) {
@@ -1612,6 +1616,7 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phIdx] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phIdx] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phIdx] = m_shapeTextBottomOff;
+            m_context->slideLayoutProperties->m_textAutoFit = m_normAutoFit;
         }
         if (!d->phType.isEmpty()) {
             m_context->slideLayoutProperties->textShapePositions[d->phType] = m_shapeTextPosition;
@@ -1619,14 +1624,13 @@ void PptxXmlSlideReader::saveBodyProperties()
             m_context->slideLayoutProperties->textRightBorders[d->phType] = m_shapeTextRightOff;
             m_context->slideLayoutProperties->textTopBorders[d->phType] = m_shapeTextTopOff;
             m_context->slideLayoutProperties->textBottomBorders[d->phType] = m_shapeTextBottomOff;
+            m_context->slideLayoutProperties->m_textAutoFit = m_normAutoFit;
         }
     }
 }
 
 void PptxXmlSlideReader::inheritBodyProperties()
 {
-    // For now only text position is inherited, in the future
-    // stuff like fit-to-frame etc should be inherited most likely
     if (m_context->type == SlideMaster) {
         return; // Nothing needed for slidemaster
     }
@@ -1635,6 +1639,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
 
     if (!d->phIdx.isEmpty()) {
         // In all cases, we take them first from masterslide
+
         position = m_context->slideMasterPageProperties->textShapePositions.value(d->phIdx);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
@@ -1654,6 +1659,11 @@ void PptxXmlSlideReader::inheritBodyProperties()
         bottom = m_context->slideMasterPageProperties->textBottomBorders.value(d->phIdx);
         if (!bottom.isEmpty()) {
             m_shapeTextLeftOff = bottom;
+        }
+        if (m_context->slideMasterPageProperties->m_textAutoFit != MSOOXML::Utils::autoFitUnUsed) {
+             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutoFit = m_context->slideMasterPageProperties->m_textAutoFit;
+             }
         }
     }
     if (!d->phType.isEmpty()) {
@@ -1677,6 +1687,11 @@ void PptxXmlSlideReader::inheritBodyProperties()
         bottom = m_context->slideMasterPageProperties->textBottomBorders.value(d->phType);
         if (!bottom.isEmpty()) {
             m_shapeTextLeftOff = bottom;
+        }
+        if (m_context->slideMasterPageProperties->m_textAutoFit != MSOOXML::Utils::autoFitUnUsed) {
+             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutoFit = m_context->slideMasterPageProperties->m_textAutoFit;
+             }
         }
     }
     if (m_context->type == SlideLayout) {
@@ -1703,6 +1718,11 @@ void PptxXmlSlideReader::inheritBodyProperties()
         if (!bottom.isEmpty()) {
             m_shapeTextLeftOff = bottom;
         }
+        if (m_context->slideLayoutProperties->m_textAutoFit != MSOOXML::Utils::autoFitUnUsed) {
+             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutoFit = m_context->slideMasterPageProperties->m_textAutoFit;
+             }
+        }
     }
     if (!d->phIdx.isEmpty()) {
         position = m_context->slideLayoutProperties->textShapePositions.value(d->phIdx);
@@ -1724,6 +1744,11 @@ void PptxXmlSlideReader::inheritBodyProperties()
         bottom = m_context->slideLayoutProperties->textBottomBorders.value(d->phIdx);
         if (!bottom.isEmpty()) {
             m_shapeTextLeftOff = bottom;
+        }
+        if (m_context->slideLayoutProperties->m_textAutoFit != MSOOXML::Utils::autoFitUnUsed) {
+             if (m_normAutoFit == MSOOXML::Utils::autoFitUnUsed) {
+                 m_normAutoFit = m_context->slideMasterPageProperties->m_textAutoFit;
+             }
         }
     }
 }

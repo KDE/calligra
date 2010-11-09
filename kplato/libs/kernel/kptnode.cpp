@@ -1416,7 +1416,7 @@ bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
     setRisktype(element.attribute("risk"));
     if ( status.version() <= "0.6" ) {
         m_unit = (Duration::Unit)(element.attribute("display-unit", QString().number(Duration::Unit_h) ).toInt());
-        QList<double> s; s << status.project().standardWorktime()->day();
+        QList<qint64> s = status.project().standardWorktime()->scales();
         m_expectedEstimate = scale( Duration::fromString(element.attribute("expected")), m_unit, s );
         m_optimisticEstimate = scale(  Duration::fromString(element.attribute("optimistic")), m_unit, s );
         m_pessimisticEstimate = scale( Duration::fromString(element.attribute("pessimistic")), m_unit, s );
@@ -1629,95 +1629,83 @@ Duration Estimate::expectedValue() const
     return m_expectedValue;
 }
 
-double Estimate::scale( const Duration &value, Duration::Unit unit, const QList<double> &scales )
+double Estimate::scale( const Duration &value, Duration::Unit unit, const QList<qint64> &scales )
 {
     //kDebug()<<value.toDouble( unit )<<","<<unit<<scales;
-    QList<double> lst = scales;
+    QList<qint64> lst = scales;
     switch ( lst.count() ) {
-        case 0:
-            lst << 365.0 / 30; // add months in a year
-        case 1:
-            lst << 30.0 / 7.0; // add weeks in a month
-        case 2:
-            lst << 7.0; // add days in a week
-        case 3:
-            lst << 24.0; // add hours in day
-        case 4:
-            lst << 60.0; // add minutes in hour
-        case 5:
-            lst << 60.0; // add seconds in minute
-        case 6:
-            lst << 1000.0; // add milliseconds in second
+        case Duration::Unit_Y:
+            lst << (qint64)(365 * 24) * 60 * 60 * 1000; // add milliseconds in a year
+        case Duration::Unit_M:
+            lst << (qint64)(30 * 24) * 60 * 60 * 1000; // add milliseconds in a month
+        case Duration::Unit_w:
+            lst << (qint64)(7 * 24) * 60 * 60 * 1000; // add milliseconds in a week
+        case Duration::Unit_d:
+            lst << 24 * 60 * 60 * 1000; // add milliseconds in day
+        case Duration::Unit_h:
+            lst << 60 * 60 * 1000; // add milliseconds in hour
+        case Duration::Unit_m:
+            lst << 60 * 1000; // add milliseconds in minute
+        case Duration::Unit_s:
+            lst << 1000; // add milliseconds in second
+        case Duration::Unit_ms:
+            lst << 1; // add milliseconds in a millisecond
         default:
             break;
     }
-    double v = (double)value.milliseconds();
-    if (unit == Duration::Unit_ms) return v;
-    v /= lst[6];
-    if (unit == Duration::Unit_s) return v;
-    v /= lst[5];
-    if (unit == Duration::Unit_m) return v;
-    v /= lst[4];
-    if (unit == Duration::Unit_h) return v;
-    v /= lst[3];
-    if (unit == Duration::Unit_d) return v;
-    v /= lst[2];
-    if (unit == Duration::Unit_w) return v;
-    v /= lst[1];
-    if (unit == Duration::Unit_M) return v;
-    v /= lst[0]; // Year
+    double v = ( double )( value.milliseconds() );
+    v /= lst[ unit ];
     //kDebug()<<value.toString()<<","<<unit<<"="<<v;
     return v;
 }
 
-Duration Estimate::scale( double value, Duration::Unit unit, const QList<double> &scales )
+Duration Estimate::scale( double value, Duration::Unit unit, const QList<qint64> &scales )
 {
     //kDebug()<<value<<","<<unit<<scales;
-    QList<double> lst = scales;
+    QList<qint64> lst = scales;
     switch ( lst.count() ) {
         case Duration::Unit_Y:
-            lst << 365.0 / 30.0; // add months in a year
+            lst << (qint64)(365 * 24) * 60 * 60 * 1000; // add milliseconds in a year
         case Duration::Unit_M:
-            lst << 30.0 / 7.0; // add weeks in a month
+            lst << (qint64)(30 * 24) * 60 * 60 * 1000; // add milliseconds in a month
         case Duration::Unit_w:
-            lst << 7.0; // add days in a week
+            lst << (qint64)(7 * 24) * 60 * 60 * 1000; // add milliseconds in a week
         case Duration::Unit_d:
-            lst << 24.0; // add hours in day
+            lst << 24 * 60 * 60 * 1000; // add milliseconds in day
         case Duration::Unit_h:
-            lst << 60.0; // add minutes in hour
+            lst << 60 * 60 * 1000; // add milliseconds in hour
         case Duration::Unit_m:
-            lst << 60.0; // add seconds in minute
+            lst << 60 * 1000; // add milliseconds in minute
         case Duration::Unit_s:
-            lst << 1000.0; // add milliseconds in second
+            lst << 1000; // add milliseconds in second
+        case Duration::Unit_ms:
+            lst << 1; // add milliseconds in a millisecond
         default:
             break;
     }
-    double v = value;
-    switch ( unit ) {
-        case Duration::Unit_Y:
-            v *= lst[0];
-        case Duration::Unit_M:
-            v *= lst[1];
-        case Duration::Unit_w:
-            v *= lst[2];
-        case Duration::Unit_d:
-            v *= lst[3];
-        case Duration::Unit_h:
-            v *= lst[4];
-        case Duration::Unit_m:
-            v *= lst[5];
-        case Duration::Unit_s:
-            v *= lst[6];
-        case Duration::Unit_ms:
-            break; // nothing
-    }
+    qint64 v = ( qint64 )( value * lst[ unit ] );
     //kDebug()<<value<<","<<unit<<"="<<v;
     return Duration( v, Duration::Unit_ms );
 }
 
-QList<double> Estimate::scales() const
+//static
+QList<qint64> Estimate::defaultScales()
 {
-    QList<double> s;
+    QList<qint64> lst;
+    lst << (qint64)(365 * 24) * 60 * 60 * 1000  // add milliseconds in a year
+        << (qint64)(30 * 24) * 60 * 60 * 1000   // add milliseconds in a month
+        << (qint64)(7 * 24) * 60 * 60 * 1000    // add milliseconds in a week
+        << 24 * 60 * 60 * 1000                  // add milliseconds in day
+        << 60 * 60 * 1000                       // add milliseconds in hour
+        << 60 * 1000                            // add milliseconds in minute
+        << 1000                                 // add milliseconds in second
+        << 1;                                   // add milliseconds in a millisecond
+    return lst;
+}
+
+QList<qint64> Estimate::scales() const
+{
+    QList<qint64> s;
     if ( m_type == Type_Duration && m_calendar == 0 ) {
         return s; // Use default scaling ( 24h a day...)
     }
