@@ -4,6 +4,8 @@ ColorSpaceExtensionsPluginsDisabled=krita_colorspaces_extensions
 ColorSpacePluginsDisabled=kolcmsengine,kritakscolorspacesplugin,krita_ctlcs_plugin
 FlakePluginsDisabled=
 TextEditingPluginsDisabled=thesaurustool
+TextInlinePluginsDisabled=kprvariables
+ToolPluginsDisabled=kpresentertoolanimation,kopabackgroundtool
 
 # Set which toolbars sholuld be hidden/visible per default.
 [DockerManager]
