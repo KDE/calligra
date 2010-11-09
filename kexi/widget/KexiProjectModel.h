@@ -54,15 +54,13 @@ public slots:
     void slotRemoveItem(const KexiPart::Item &item);
     
 private:
-    void clear();
+    class Private;  
+    Private * const d;
     
-    //!Part class to display
-    QString m_itemsPartClass;
+    void clear();
 
     KexiProjectModelItem* addGroup(KexiPart::Info& info, KexiProjectModelItem*) const;
     KexiProjectModelItem* addItem(KexiPart::Item& item, KexiPart::Info& info, KexiProjectModelItem*) const;
-
-    KexiProjectModelItem *m_rootItem;
 
 signals:
     void renameItem(KexiPart::Item *item, const QString& _newName, bool &succes);

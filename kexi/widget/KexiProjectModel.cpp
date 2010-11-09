@@ -26,19 +26,33 @@
 
 #include "KexiProjectModelItem.h"
 
-KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent)
+class KexiProjectModel::Private {
+public:
+    Private();
+    
+    //!Part class to display
+    QString m_itemsPartClass;
+    KexiProjectModelItem *m_rootItem;
+};
+
+KexiProjectModel::Private::Private() : m_rootItem(0)
+{
+    
+}
+
+KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent) , d(new Private())
 {
     kDebug();
-    m_rootItem = new KexiProjectModelItem(QString());
+    d->m_rootItem = new KexiProjectModelItem(QString());
 }
 
 void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
 {
     kDebug() << itemsPartClass << ".";
     clear();
-    m_itemsPartClass = itemsPartClass;
+    d->m_itemsPartClass = itemsPartClass;
 
-    m_rootItem = new KexiProjectModelItem(prj->data()->databaseName());
+    d->m_rootItem = new KexiProjectModelItem(prj->data()->databaseName());
     
     KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
     
@@ -46,7 +60,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         if (!info->isVisibleInNavigator())
             continue;
         
-        if (!m_itemsPartClass.isEmpty() && info->partClass() != m_itemsPartClass)
+        if (!d->m_itemsPartClass.isEmpty() && info->partClass() != d->m_itemsPartClass)
             continue;
 
 
@@ -56,15 +70,20 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
         KexiPart::Part *p = Kexi::partManager().part(info);
         if (p) {
             KexiProjectModelItem *groupItem = 0;
-            if (m_itemsPartClass.isEmpty() || m_itemsPartClass == info->partClass()) {
-                groupItem = addGroup(*info, m_rootItem);
+            if (d->m_itemsPartClass.isEmpty() /*|| m_itemsPartClass == info->partClass()*/) {
+                groupItem = addGroup(*info, d->m_rootItem);
                 if (!groupItem) {
                     continue;
                 } else {
-                    m_rootItem->appendChild(groupItem);
+                    d->m_rootItem->appendChild(groupItem);
                 }
                 
-            }
+            } else {
+		groupItem = d->m_rootItem;
+	    }
+	      
+	      
+            
             
             //lookup project's objects (part items)
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
@@ -80,7 +99,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
                 }
             }
 
-            if (!m_itemsPartClass.isEmpty()) {
+            if (!d->m_itemsPartClass.isEmpty()) {
                 break; //the only group added, so our work is completed
             }
             groupItem->sortChildren();
@@ -103,13 +122,13 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     if (partManagerErrorMessages && !partManagerErrorMessages->isEmpty())
         partManagerErrorMessages->append("</ul></p>");
 
-    m_rootItem->debugPrint();
+   d-> m_rootItem->debugPrint();
 }
 
 KexiProjectModel::~KexiProjectModel()
 {
-    if (m_rootItem) {
-        delete m_rootItem;
+    if (d->m_rootItem) {
+        delete d->m_rootItem;
     }
 }
 
@@ -134,7 +153,7 @@ int KexiProjectModel::columnCount(const QModelIndex& parent) const
      if (parent.isValid())
          return static_cast<KexiProjectModelItem*>(parent.internalPointer())->columnCount();
      else
-         return m_rootItem->columnCount();
+         return d->m_rootItem->columnCount();
 }
 
 int KexiProjectModel::rowCount(const QModelIndex& parent) const
@@ -144,7 +163,7 @@ int KexiProjectModel::rowCount(const QModelIndex& parent) const
          return 0;
 
      if (!parent.isValid())
-         parentItem = m_rootItem;
+         parentItem = d->m_rootItem;
      else
          parentItem = static_cast<KexiProjectModelItem*>(parent.internalPointer());
 
@@ -162,7 +181,7 @@ QModelIndex KexiProjectModel::parent(const QModelIndex& index) const
      if (!parentItem)
          return QModelIndex();
      
-     if (parentItem == m_rootItem)
+     if (parentItem == d->m_rootItem)
          return QModelIndex();
 
      return createIndex(parentItem->row(), 0, parentItem);
@@ -177,7 +196,7 @@ QModelIndex KexiProjectModel::index(int row, int column, const QModelIndex& pare
     KexiProjectModelItem *parentItem;
 
     if (!parent.isValid()) {
-        parentItem = m_rootItem;
+        parentItem = d->m_rootItem;
     } else {
         parentItem = static_cast<KexiProjectModelItem*>(parent.internalPointer());
     }
@@ -237,7 +256,7 @@ void KexiProjectModel::clear()
 
 QString KexiProjectModel::itemsPartClass() const
 {
-    return m_itemsPartClass;
+    return d->m_itemsPartClass;
 }
 
 KexiProjectModelItem *KexiProjectModel::addGroup(KexiPart::Info& info, KexiProjectModelItem *p) const
@@ -314,13 +333,13 @@ QModelIndex KexiProjectModel::indexFromItem(KexiProjectModelItem* item) const
 
 KexiProjectModelItem* KexiProjectModel::modelItemFromItem(const KexiPart::Item& item) const
 {
-    return m_rootItem->modelItemFromItem(item);
+    return d->m_rootItem->modelItemFromItem(item);
 }
 
 KexiProjectModelItem* KexiProjectModel::modelItemFromName(const QString& name) const
 {
     kDebug() << name;
-    return m_rootItem->modelItemFromName(name);
+    return d->m_rootItem->modelItemFromName(name);
 }
 
 void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
