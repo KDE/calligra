@@ -5255,6 +5255,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
             if (qualifiedName() == QLatin1String("a:spAutoFit")) {
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
+                m_normAutoFit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:normAutofit")) {
                 m_normAutoFit = MSOOXML::Utils::autoFitOn;
