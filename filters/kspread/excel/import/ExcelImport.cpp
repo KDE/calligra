@@ -500,7 +500,7 @@ void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
     columnStyles.clear();
     cellConditions.clear();
     const unsigned rowCount = qMin(maximalRowCount, is->maxRow());
-    for (unsigned i = 0; i <= rowCount; ++i) {
+    for (unsigned i = 0; i <= rowCount && i < KS_rowMax; ++i) {
         processRow(is, i, os);
     }
 
