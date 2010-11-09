@@ -113,7 +113,7 @@ void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
         return;
 
     delete d->model;
-    d->model = new KexiFieldListModel(this, KexiFieldListModel::ShowEmptyItem);
+    d->model = new KexiFieldListModel(this, ShowEmptyItem);
     
     d->model->setSchema(&tableOrQuery);
     setModel(d->model);

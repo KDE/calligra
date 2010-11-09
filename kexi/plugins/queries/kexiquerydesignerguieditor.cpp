@@ -1211,15 +1211,20 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiDB::RecordData * /*record*/, in
 {
     QString sourcePartClass;
     QString srcTable;
-    QString srcField;
-
-    if (!KexiFieldDrag::decodeSingle(ev, sourcePartClass, srcTable, srcField))
+    QStringList srcFields;
+    
+    if (!KexiFieldDrag::decode(ev, sourcePartClass, srcTable, srcFields))
         return;
+    
+    if (srcFields.count() != 1) {
+        return;
+    }
+    
     //insert new row at specific place
-    newRecord = createNewRow(srcTable, srcField, true /* visible*/);
+    newRecord = createNewRow(srcTable, srcFields[0], true /* visible*/);
     d->droppedNewRecord = newRecord;
     d->droppedNewTable = srcTable;
-    d->droppedNewField = srcField;
+    d->droppedNewField = srcFields[0];
     //TODO
 }
 

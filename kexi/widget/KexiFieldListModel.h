@@ -1,6 +1,6 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    This file is part of the KDE project
+    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@
 
 #include <QModelIndex>
 #include <QPixmap>
+#include <kexi_export.h>
 
 namespace KexiDB
 {
@@ -31,20 +32,24 @@ namespace KexiDB
 
 class KexiFieldListModelItem;
 
-class KexiFieldListModel : public QAbstractTableModel
-{
-Q_OBJECT
-public:
-    
-    //! Flags used to alter models behaviour and appearance
-    enum Options {
+//! Flags used to alter models behaviour and appearance
+enum KexiFieldListOption {
         ShowDataTypes = 1, //!< if set, 'data type' column is added
         ShowAsterisk = 2, //!< if set, asterisk ('*') item is prepended to the list
         AllowMultiSelection = 4, //!< if set, multiple selection is allowed
         ShowEmptyItem = 8 //!< if set, an empty item is prepended to the list
-    };
+};
+
+Q_DECLARE_FLAGS(KexiFieldListOptions, KexiFieldListOption);
+Q_DECLARE_OPERATORS_FOR_FLAGS ( KexiFieldListOptions )
+Q_FLAGS(KexiFieldListOption);
     
-    KexiFieldListModel(QObject* parent = 0, int options = ShowDataTypes | AllowMultiSelection);
+class KEXIEXTWIDGETS_EXPORT KexiFieldListModel : public QAbstractTableModel
+{
+Q_OBJECT
+public:
+    
+    KexiFieldListModel(QObject* parent = 0, KexiFieldListOptions options = ShowDataTypes | AllowMultiSelection);
     virtual ~KexiFieldListModel();
     
     /*! Sets table or query schema \a schema.
@@ -61,11 +66,8 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
     
 private:
-    KexiDB::TableOrQuerySchema* m_schema;
-    int m_options;
-    KexiFieldListModelItem *m_allColumnsItem;
-    QList<KexiFieldListModelItem*> m_items;
-    
+    class Private;
+    Private * const d;
 };
 
 #endif // KEXIFIELDLISTMODEL_H

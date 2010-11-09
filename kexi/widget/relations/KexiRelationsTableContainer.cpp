@@ -94,7 +94,7 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
     d->fieldList->setObjectName("KexiRelationsTableFieldList");
     //d->tableHeader->setFocusProxy( d->fieldList );
     d->fieldList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    d->fieldList->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+ //!TODO   d->fieldList->setHScrollBarMode(Q3ScrollView::AlwaysOff);
 
     d->fieldList->setMaximumSize(d->fieldList->sizeHint());
 
@@ -166,13 +166,15 @@ void KexiRelationsTableContainer::setFocus()
 {
     kDebug() << "SET FOCUS";
     //select 1st:
+//!TODO
+#if 0
     if (d->fieldList->firstChild()) {
         if (d->fieldList->selectedItems().isEmpty())
             d->fieldList->setSelected(d->fieldList->firstChild(), true);
     }
     d->tableHeader->setFocus();
     d->fieldList->setFocus();
-
+#endif
     raise();
     repaint();
     emit gotFocus();

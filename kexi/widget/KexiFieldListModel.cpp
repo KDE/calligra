@@ -1,6 +1,6 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    This file is part of the KDE project
+    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -25,11 +25,26 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/utils.h>
 #include <kdebug.h>
+#include <drivers/xbase/xbaseexport.h>
 #include <QMimeData>
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, int options): QAbstractTableModel(parent)
-                                      , m_schema(0)
-                                      , m_options(options)
+class KexiFieldListModel::Private
+{
+public:
+    Private();
+    KexiDB::TableOrQuerySchema* m_schema;
+    KexiFieldListOptions m_options;
+    KexiFieldListModelItem *m_allColumnsItem;
+    QList<KexiFieldListModelItem*> m_items;
+};
+    
+KexiFieldListModel::Private::Private() : m_schema(0), m_allColumnsItem(0)
+{
+
+}
+
+KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
+                                      , d(new Private())
 {
 
 }
@@ -41,34 +56,34 @@ KexiFieldListModel::~KexiFieldListModel()
 
 void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
 {
-    if (schema && m_schema == schema)
+    if (schema && d->m_schema == schema)
         return;
 
-    delete m_schema;
-    m_schema = schema;
-    if (!m_schema)
+    delete d->m_schema;
+    d->m_schema = schema;
+    if (!d->m_schema)
         return;
 
     KexiFieldListModelItem *item = 0;
-    KexiDB::QueryColumnInfo::Vector columns = m_schema->columns(true /*unique*/);
+    KexiDB::QueryColumnInfo::Vector columns = d->m_schema->columns(true /*unique*/);
     const int count = columns.count();
     for (int i = -2; i < count; i++) {
         KexiDB::QueryColumnInfo *colinfo = 0;
         if (i == -2) {
-            if (!(m_options & ShowEmptyItem))
+            if (!(d->m_options & ShowEmptyItem))
                 continue;
             item = new KexiFieldListModelItem(QString(), QString(), false);
         }else if (i == -1) {
-            if (!(m_options & ShowAsterisk))
+            if (!(d->m_options & ShowAsterisk))
                 continue;
             item = new KexiFieldListModelItem("*", "", false);
-            m_allColumnsItem = item;
+            d->m_allColumnsItem = item;
         } else {
             colinfo = columns[i];
             item = new KexiFieldListModelItem(colinfo->aliasOrName(), colinfo->field->typeName(), (colinfo->field->isPrimaryKey() || colinfo->field->isUniqueKey()));
             item->setCaption(colinfo->captionOrAliasOrName());
         }
-        m_items.append(item);
+        d->m_items.append(item);
         kDebug() << item->data(0);
     }
 }
@@ -77,8 +92,8 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 {    
     KexiFieldListModelItem *item = 0;
     
-    if (index.row() < m_items.count()) {
-        item = m_items[index.row()];
+    if (index.row() < d->m_items.count()) {
+        item = d->m_items[index.row()];
     }
     
     if (item) {
@@ -96,12 +111,12 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 
 int KexiFieldListModel::columnCount(const QModelIndex& parent) const
 {
-    return (m_options & ShowDataTypes) ? 2 : 1;
+    return (d->m_options & ShowDataTypes) ? 2 : 1;
 }
 
 int KexiFieldListModel::rowCount(const QModelIndex& parent) const
 {
-    return m_items.count();
+    return d->m_items.count();
 }
 
 QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -118,13 +133,13 @@ QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation
 QStringList KexiFieldListModel::mimeTypes() const
 {
     QStringList types;
-    types << "kexi/field" << "kexi/fields";
+    types << "kexi/fields";
     return types;
 }
 
 QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
 {
-    if (!m_schema) {
+    if (!d->m_schema) {
         return new QMimeData();
     }
     
@@ -136,20 +151,20 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
     QByteArray fielddata;
     QDataStream stream1(&fielddata, QIODevice::WriteOnly);
 
-    if (m_schema->table()) {
+    if (d->m_schema->table()) {
         sourceMimeType = "kexi/table";
-    } else if (m_schema->query()) {
+    } else if (d->m_schema->query()) {
         sourceMimeType = "kexi/query";
     }
     
-    sourceName = m_schema->name();
+    sourceName = d->m_schema->name();
     
     foreach (QModelIndex idx, indexes) {
         fields << data(idx, Qt::DisplayRole).toString();
     }
+
     stream1 << sourceMimeType << sourceName << fields;
-    
-    mimedata->setData(indexes.count() > 1 ? "kexi/fields" : "kexi/field", fielddata);
+    mimedata->setData("kexi/fields", fielddata);
     
     return mimedata;
 }
@@ -159,7 +174,7 @@ Qt::ItemFlags KexiFieldListModel::flags(const QModelIndex& index) const
     Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);
 
     if (index.isValid())
-        return m_items[index.row()]->flags()| defaultFlags;
+        return d->m_items[index.row()]->flags()| defaultFlags;
     else
         return defaultFlags;
 }

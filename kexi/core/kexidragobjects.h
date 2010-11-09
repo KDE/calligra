@@ -34,26 +34,17 @@ class QWidget;
 class KEXICORE_EXPORT KexiFieldDrag
 {
 public:
-    /*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
-     can be decoded as "kexi/field" data */
-    static bool canDecodeSingle(QMimeSource* e);
 
     /*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
      can be decoded as "kexi/fields" data. If decoding of "kexi/field"
      type is supported, decoding of "kexi/fields" is always supported.
      */
-    static bool canDecodeMultiple(QMimeSource* e);
-
-    /*! Decodes data of single-field drag ("kexi/field" mime type) coming with event \a e.
-     Sets \a sourceMimeType, \a sourceName and \a field.
-     \return true on successful decoding (\a e will be accepted in such case). */
-    static bool decodeSingle(QDropEvent* e, QString& sourceMimeType,
-                             QString& sourceName, QString& field);
+    static bool canDecode(QMimeSource* e);
 
     /*! Decodes data of multiple-field drag ("kexi/fields" mime type) coming with event \a e.
      Sets \a sourceMimeType, \a sourceName and \a fields. Also works with "kexi/field" data.
      \return true on successful decoding (\a e will be accepted in such case). */
-    static bool decodeMultiple(QDropEvent* e, QString& sourceMimeType,
+    static bool decode(QDropEvent* e, QString& sourceMimeType,
                                QString& sourceName, QStringList& fields);
 };
 

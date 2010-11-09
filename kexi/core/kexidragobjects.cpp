@@ -27,46 +27,18 @@
 #include <kdebug.h>
 
 bool
-KexiFieldDrag::canDecodeSingle(QMimeSource *e)
+KexiFieldDrag::canDecode(QMimeSource *e)
 {
-    return e->provides("kexi/field");
+    return e->provides("kexi/fields");
 }
 
 bool
-KexiFieldDrag::canDecodeMultiple(QMimeSource *e)
-{
-    return e->provides("kexi/field") || e->provides("kexi/fields");
-}
-
-bool
-KexiFieldDrag::decodeSingle(QDropEvent* e, QString& sourceMimeType,
-                            QString& sourceName, QString& field)
-{
-    QByteArray payload(e->encodedData("kexi/field"));
-    if (payload.isEmpty())
-        return false;
-    e->accept();
-    QDataStream stream1(&payload, QIODevice::ReadOnly);
-//    stream1.setVersion(QDataStream::Qt_3_1);
-    stream1 >> sourceMimeType;
-    stream1 >> sourceName;
-    stream1 >> field;
-// kDebug() << sourceMimeType<<"/"<<sourceName<<"/"<<field;
-    return true;
-}
-
-bool
-KexiFieldDrag::decodeMultiple(QDropEvent* e, QString& sourceMimeType,
+KexiFieldDrag::decode(QDropEvent* e, QString& sourceMimeType,
                               QString& sourceName, QStringList& fields)
 {
     QByteArray payload(e->encodedData("kexi/fields"));
     if (payload.isEmpty()) {//try single
-        QString field;
-        bool res = KexiFieldDrag::decodeSingle(e, sourceMimeType, sourceName, field);
-        if (!res)
-            return false;
-        fields.append(field);
-        return true;
+        return false;
     }
     e->accept();
     QDataStream stream1(&payload, QIODevice::ReadOnly);

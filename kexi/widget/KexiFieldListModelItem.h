@@ -1,6 +1,6 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    This file is part of the KDE project
+    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -31,11 +31,11 @@ class KexiFieldListModelItem
 public:
     KexiFieldListModelItem(const QString &fname, const QString &dtype, bool pkey);
     virtual ~KexiFieldListModelItem();
-    QVariant data(int column);
-    QPixmap icon();
-    QString caption();
+    QVariant data(int column) const;
+    QPixmap icon() const;
+    QString caption() const;
     void setCaption(const QString &caption);
-    Qt::ItemFlags flags();
+    Qt::ItemFlags flags() const;
     
 private:
     QString m_fieldName;

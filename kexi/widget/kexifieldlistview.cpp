@@ -19,7 +19,6 @@
 
 #include "kexifieldlistview.h"
 
-#include <q3header.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -44,17 +43,20 @@
 #include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 
-KexiFieldListView::KexiFieldListView(QWidget *parent, int options)
-        : K3ListView(parent)
+KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions options)
+        : QListView(parent)
         , m_schema(0)
-        , m_keyIcon(SmallIcon("key"))
-        , m_noIcon(KexiUtils::emptyIcon(KIconLoader::Small))
+        , m_model(0)
         , m_options(options)
-        , m_allColumnsItem(0)
+
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
-    setDropVisualizer(false);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
+    setAlternatingRowColors(true);
+    
+/*    setDropVisualizer(false);
     setDropHighlighter(true);
     setAllColumnsShowFocus(true);
     addColumn(i18n("Field Name"));
@@ -65,8 +67,7 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, int options)
     setResizeMode(Q3ListView::LastColumn);
 // header()->hide();
     setSorting(-1, true); // disable sorting
-    setDragEnabled(true);
-
+*/
     connect(this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint &, int)),
             this, SLOT(slotDoubleClicked(Q3ListViewItem*)));
 }
@@ -80,68 +81,28 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 {
     if (schema && m_schema == schema)
         return;
-    m_allColumnsItem = 0;
-    clear();
+
     delete m_schema;
     m_schema = schema;
     if (!m_schema)
         return;
 
-    int order = 0;
-    bool hasPKeys = true; //t->hasPrimaryKeys();
-    K3ListViewItem *item = 0;
-    KexiDB::QueryColumnInfo::Vector columns = m_schema->columns(true /*unique*/);
-    const int count = columns.count();
-    for (int i = -1; i < count; i++) {
-        KexiDB::QueryColumnInfo *colinfo = 0;
-        if (i == -1) {
-            if (!(m_options & ShowAsterisk))
-                continue;
-            item = new K3ListViewItem(this, item, i18n("* (All Columns)"));
-            m_allColumnsItem = item;
-        } else {
-            colinfo = columns[i];
-            item = new K3ListViewItem(this, item, colinfo->aliasOrName());
-            if (m_options & ShowDataTypes)
-                item->setText(1, colinfo->field->typeName());
-        }
-        if (colinfo && (colinfo->field->isPrimaryKey() || colinfo->field->isUniqueKey()))
-            item->setPixmap(0, m_keyIcon);
-        else if (hasPKeys) {
-            item->setPixmap(0, m_noIcon);
-        }
-        order++;
-    }
+    if (!schema->table() && !schema->query())
+        return;
 
-    setCurrentItem(firstChild());
+    delete m_model;
+   
+    m_model = new KexiFieldListModel(this, m_options);
+    
+    m_model->setSchema(schema);
+    setModel(m_model);
 }
-
-#if 0
-QSize KexiFieldListView::sizeHint()
-{
-    QFontMetrics fm(font());
-
-    kDebug() << m_table->name() << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table->name() + "  ");
-
-    QSize s(
-        qMax(columnWidth(1) + fm.width("i"), fm.width(m_table->name() + "  ")),
-        childCount()*firstChild()->totalHeight() + 4);
-// QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
-    return s;
-}
-
-void KexiFieldListView::setReadOnly(bool b)
-{
-    setAcceptDrops(!b);
-    viewport()->setAcceptDrops(!b);
-}
-
-#endif
 
 QStringList KexiFieldListView::selectedFieldNames() const
 {
     if (!schema())
         return QStringList();
+    /*
     QStringList selectedFields;
     for (Q3ListViewItem *item = firstChild(); item; item = item->nextSibling()) {
         if (item->isSelected()) {
@@ -153,8 +114,11 @@ QStringList KexiFieldListView::selectedFieldNames() const
         }
     }
     return selectedFields;
+    */
+    return QStringList();
 }
 
+#if 0
 void KexiFieldListView::slotDoubleClicked(Q3ListViewItem* item)
 {
     if (schema() && item) {
@@ -163,5 +127,6 @@ void KexiFieldListView::slotDoubleClicked(Q3ListViewItem* item)
                                 schema()->name(), item->text(0));
     }
 }
+#endif
 
 #include "kexifieldlistview.moc"

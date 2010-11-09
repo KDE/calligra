@@ -21,11 +21,10 @@
 #define KEXIFIELDLISTVIEW_H
 
 #include <qpixmap.h>
-#include <k3listview.h>
+#include <QListView>
 #include <kexi_export.h>
-
-class QDrag;
-class K3ListViewItem;
+#include <kexi.h>
+#include "KexiFieldListModel.h"
 
 namespace KexiDB
 {
@@ -34,19 +33,13 @@ class TableOrQuerySchema;
 
 /*! This widget provides a list of fields from a table or query.
 */
-class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
+class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public QListView
 {
     Q_OBJECT
 
 public:
-    //! Flags used to alter list's behaviour and appearance
-    enum Options {
-        ShowDataTypes = 1, //!< if set, 'data type' column is added
-        ShowAsterisk = 2, //!< if set, asterisk ('*') item is prepended to the list
-        AllowMultiSelection = 4 //!< if set, multiple selection is allowed
-    };
 
-    KexiFieldListView(QWidget *parent, int options = ShowDataTypes | AllowMultiSelection);
+    KexiFieldListView(QWidget *parent, KexiFieldListOptions options);
     virtual ~KexiFieldListView();
 
     /*! Sets table or query schema \a schema.
@@ -61,25 +54,19 @@ public:
     /*! \return list of selected field names. */
     QStringList selectedFieldNames() const;
 
-//  void setReadOnly(bool);
-//  virtual QSize sizeHint();
-
 signals:
     /*! Emitted when a field is double clicked */
     void fieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
                             const QString& fieldName);
 
 protected slots:
-    void slotDoubleClicked(Q3ListViewItem* item);
+    //void slotDoubleClicked(Q3ListViewItem* item);
 
 protected:
-    //virtual QDrag *dragObject();
 
     KexiDB::TableOrQuerySchema* m_schema;
-    QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column
-    QPixmap m_noIcon; //!< blank icon of the same size as m_keyIcon
-    int m_options;
-    K3ListViewItem *m_allColumnsItem;
+    KexiFieldListModel *m_model;
+    KexiFieldListOptions m_options;
 };
 
 #endif

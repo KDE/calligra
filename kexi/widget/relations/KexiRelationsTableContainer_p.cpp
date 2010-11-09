@@ -159,14 +159,14 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 KexiRelationsTableFieldList::KexiRelationsTableFieldList(
     KexiDB::TableOrQuerySchema* tableOrQuerySchema,
     KexiRelationsScrollArea *scrollArea, QWidget *parent)
-        : KexiFieldListView(parent, KexiFieldListView::ShowAsterisk)
+        : KexiFieldListView(parent, 0)
         , m_scrollArea(scrollArea)
 {
     setSchema(tableOrQuerySchema);
-    header()->hide();
+    setAcceptDrops(true);
 
-    connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)),
-            this, SLOT(slotDropped(QDropEvent *)));
+//    connect(this, SIGNAL(dropped(QDropEvent *, Q3ListViewItem *)),
+//            this, SLOT(slotDropped(QDropEvent *)));
     connect(this, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotContentsMoving(int, int)));
 
@@ -184,7 +184,9 @@ QSize KexiRelationsTableFieldList::sizeHint() const
 
 // kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i")
 //  << ", " << fm.width(schema()->name()+"  ");
-
+//!TODO
+#if 0
+    
     int maxWidth = -1;
     const int iconWidth = IconSize(KIconLoader::Small) + fm.width("i") + 30;
     for (Q3ListViewItem *item = firstChild(); item; item = item->nextSibling())
@@ -196,6 +198,8 @@ QSize KexiRelationsTableFieldList::sizeHint() const
         qMax(maxWidth, fm.width(schema()->name() + " ")),
         rowCount*firstChild()->totalHeight() + 8);
     return s;
+#endif
+    return KexiFieldListView::sizeHint();
 }
 
 #if 0
@@ -209,6 +213,33 @@ void KexiRelationsTableFieldList::setReadOnly(bool b)
 int
 KexiRelationsTableFieldList::globalY(const QString &item)
 {
+    QAbstractItemModel *themodel = model();
+    QModelIndex idx;
+    
+    for (int i = 0; i < themodel->rowCount(); ++i) {
+        idx = themodel->index(i, 0);
+        QVariant data = themodel->data(idx);
+        if (data.toString() == item) {
+            break;
+        }
+    }
+    
+    if (idx.isValid()) {
+        QRect r = this->rectForIndex(idx);
+        int y = r.y() + r.height()/2;
+        
+        //Not sure what this line is supposed to do...is it to check if the item is visible?
+        if (visualRect(idx).y() > viewport()->height()){   
+            y = 0;
+        } else if (y == 0) {
+            y = height();
+        }
+        return mapToGlobal(QPoint(0, y)).y();
+    }
+    return -1;
+    
+#if 0
+    QModelIndexList list = themodel->match()
     Q3ListViewItem *i = findItem(item, 0);
     if (!i)
         return -1;
@@ -218,47 +249,94 @@ KexiRelationsTableFieldList::globalY(const QString &item)
     else if (y == 0)
         y = height();
     return mapToGlobal(QPoint(0, y)).y();
+
+#endif
 }
 
-bool
-KexiRelationsTableFieldList::acceptDrag(QDropEvent *ev) const
+void KexiRelationsTableFieldList::dragEnterEvent(QDragEnterEvent* event)
 {
-// kDebug();
-    Q3ListViewItem *receiver = itemAt(ev->pos() - QPoint(0, contentsY()));
-    if (!receiver || !KexiFieldDrag::canDecodeSingle(ev))
-        return false;
+
+    KexiFieldListView::dragEnterEvent(event);
+#if 0
+    kDebug() << event->mimeData()->formats();
+    if (event->mimeData()->hasFormat("kexi/field")) {
+        kDebug() << "has supported format";
+        event->acceptProposedAction();
+    }
+#endif
+}
+
+void KexiRelationsTableFieldList::dragMoveEvent(QDragMoveEvent* event)
+{
+    QModelIndex receiver = indexAt(event->pos());
+    if (!receiver.isValid() || !KexiFieldDrag::canDecode(event))
+        return;
     QString sourceMimeType;
     QString srcTable;
+    QStringList srcFields;
     QString srcField;
-    if (!KexiFieldDrag::decodeSingle(ev, sourceMimeType, srcTable, srcField))
-        return false;
-    if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query")
-        return false;
-    QString f = receiver->text(0).trimmed();
-    if (!srcField.trimmed().startsWith("*") && !f.startsWith("*") && ev->source() != (QWidget*)this)
-        return true;
-
-    return false;
+    
+    if (!KexiFieldDrag::decode(event, sourceMimeType, srcTable, srcFields)) {
+        event->ignore();
+        return;
+    }
+    
+    if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query"){
+        event->ignore();
+        return;
+    }
+    
+    if (srcFields.count() != 1) {
+        event->ignore();
+        return;
+    }
+    
+    srcField = srcFields[0];
+    
+    if (srcTable == schema()->name()) {
+        event->ignore();
+        return;
+    }
+        
+    QString f = model()->data(receiver, Qt::DisplayRole).toString();
+    
+    kDebug() << "Source:" << srcTable << "Dest:" << schema()->name();
+    
+    if (!srcField.trimmed().startsWith("*") && !f.startsWith("*"))
+        event->acceptProposedAction();
 }
 
+
 void
-KexiRelationsTableFieldList::slotDropped(QDropEvent *ev)
+KexiRelationsTableFieldList::dropEvent(QDropEvent *event)
 {
-    Q3ListViewItem *recever = itemAt(ev->pos() - QPoint(0, contentsY()));
-    if (!recever || !KexiFieldDrag::canDecodeSingle(ev)) {
-        ev->ignore();
+    kDebug();
+    QModelIndex idx = indexAt(event->pos());
+    
+    if (!idx.isValid() || !KexiFieldDrag::canDecode(event)) {
+        event->ignore();
         return;
     }
     QString sourceMimeType;
     QString srcTable;
+    QStringList srcFields;
     QString srcField;
-    if (!KexiFieldDrag::decodeSingle(ev, sourceMimeType, srcTable, srcField))
+    
+    if (!KexiFieldDrag::decode(event, sourceMimeType, srcTable, srcFields)) {
         return;
-    if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query")
+    }
+    
+    if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query") {
         return;
+    }
+    
+    if (srcFields.count() != 1) {
+        return;
+    }
+    srcField = srcFields[0];
 //  kDebug() << "srcfield:" << srcField;
 
-    QString rcvField = recever->text(0);
+    QString rcvField = model()->data(idx, Qt::DisplayRole).toString();
 
     SourceConnection s;
     s.masterTable = srcTable;
@@ -269,7 +347,7 @@ KexiRelationsTableFieldList::slotDropped(QDropEvent *ev)
     m_scrollArea->addConnection(s);
 
     kDebug() << srcTable << ":" << srcField << schema()->name() << ":" << rcvField;
-    ev->accept();
+    event->accept();
 }
 
 void
@@ -282,7 +360,7 @@ void KexiRelationsTableFieldList::contentsMousePressEvent(QMouseEvent *ev)
 {
     // set focus before showing context menu because contents of the menu depend on focused table
     static_cast<KexiRelationsTableContainer*>(parentWidget())->setFocus();
-    K3ListView::contentsMousePressEvent(ev);
+//    QListView::contentsMousePressEvent(ev);
 //Qt 4 setFocus();
 // if (ev->button()==Qt::RightButton)
 //  static_cast<KexiRelationsScrollArea*>(parentWidget())->executePopup(ev->pos());
@@ -290,6 +368,7 @@ void KexiRelationsTableFieldList::contentsMousePressEvent(QMouseEvent *ev)
 
 QRect KexiRelationsTableFieldList::drawItemHighlighter(QPainter *painter, Q3ListViewItem *item)
 {
+#if 0
 #ifdef __GNUC__
 #warning TODO KexiRelationsTableFieldList::drawItemHighlighter() OK?
 #else
@@ -303,6 +382,8 @@ QRect KexiRelationsTableFieldList::drawItemHighlighter(QPainter *painter, Q3List
         style()->drawPrimitive(QStyle::PE_FrameFocusRect, &option, painter, this);
     }
     return itemRect(item);
+#endif
+return QRect();
 }
 
 bool KexiRelationsTableFieldList::eventFilter(QObject *o, QEvent *ev)

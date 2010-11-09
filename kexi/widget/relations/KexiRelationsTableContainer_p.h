@@ -58,12 +58,13 @@ signals:
     void tableScrolling();
 
 protected slots:
-    void slotDropped(QDropEvent *e);
     void slotContentsMoving(int, int);
 
 protected:
+    virtual void dragEnterEvent(QDragEnterEvent* event);
+    virtual void dragMoveEvent(QDragMoveEvent* e);
+    virtual void dropEvent(QDropEvent *e);
     virtual void contentsMousePressEvent(QMouseEvent * e);
-    virtual bool acceptDrag(QDropEvent *e) const;
     virtual QRect drawItemHighlighter(QPainter *painter, Q3ListViewItem *item);
     virtual bool eventFilter(QObject *o, QEvent *ev);
 

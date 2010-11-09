@@ -1,6 +1,6 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    This file is part of the KDE project
+    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -37,7 +37,7 @@ KexiFieldListModelItem::~KexiFieldListModelItem()
 
 }
 
-QVariant KexiFieldListModelItem::data(int column)
+QVariant KexiFieldListModelItem::data(int column) const
 {
     if (column == 0) {
         return m_fieldName == "*" ? i18n("* (All Columns)") : m_fieldName;
@@ -46,12 +46,12 @@ QVariant KexiFieldListModelItem::data(int column)
     }
 }
 
-QPixmap KexiFieldListModelItem::icon()
+QPixmap KexiFieldListModelItem::icon() const
 {
     return m_icon;
 }
 
-QString KexiFieldListModelItem::caption()
+QString KexiFieldListModelItem::caption() const
 {
     return m_caption;
 }
@@ -61,7 +61,7 @@ void KexiFieldListModelItem::setCaption(const QString& caption)
     m_caption = caption;
 }
 
-Qt::ItemFlags KexiFieldListModelItem::flags()
+Qt::ItemFlags KexiFieldListModelItem::flags() const
 {
     if (m_fieldName.isEmpty() || m_fieldName == "*"){
         return Qt::NoItemFlags;
