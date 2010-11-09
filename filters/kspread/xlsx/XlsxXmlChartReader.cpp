@@ -2014,11 +2014,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if( QUALIFIED_NAME_IS(spPr) )
-            {
-                m_currentSeries->spPr = new Charting::ShapeProperties;
-                m_currentShapeProperties  = m_currentSeries->spPr;
-            }
+//             if( QUALIFIED_NAME_IS(spPr) )
+//             {
+//                 m_currentSeries->spPr = new Charting::ShapeProperties;
+//                 m_currentShapeProperties  = m_currentSeries->spPr;
+//             }
             TRY_READ_IF(order)
             ELSE_TRY_READ_IF(idx)
             if (QUALIFIED_NAME_IS(tx)) {
