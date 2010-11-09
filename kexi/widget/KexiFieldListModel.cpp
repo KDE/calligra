@@ -32,13 +32,13 @@ class KexiFieldListModel::Private
 {
 public:
     Private();
-    KexiDB::TableOrQuerySchema* m_schema;
-    KexiFieldListOptions m_options;
-    KexiFieldListModelItem *m_allColumnsItem;
-    QList<KexiFieldListModelItem*> m_items;
+    KexiDB::TableOrQuerySchema* schema;
+    KexiFieldListOptions options;
+    KexiFieldListModelItem *allColumnsItem;
+    QList<KexiFieldListModelItem*> items;
 };
     
-KexiFieldListModel::Private::Private() : m_schema(0), m_allColumnsItem(0)
+KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 {
 
 }
@@ -56,34 +56,34 @@ KexiFieldListModel::~KexiFieldListModel()
 
 void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
 {
-    if (schema && d->m_schema == schema)
+    if (schema && d->schema == schema)
         return;
 
-    delete d->m_schema;
-    d->m_schema = schema;
-    if (!d->m_schema)
+    delete d->schema;
+    d->schema = schema;
+    if (!d->schema)
         return;
 
     KexiFieldListModelItem *item = 0;
-    KexiDB::QueryColumnInfo::Vector columns = d->m_schema->columns(true /*unique*/);
+    KexiDB::QueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
     const int count = columns.count();
     for (int i = -2; i < count; i++) {
         KexiDB::QueryColumnInfo *colinfo = 0;
         if (i == -2) {
-            if (!(d->m_options & ShowEmptyItem))
+            if (!(d->options & ShowEmptyItem))
                 continue;
             item = new KexiFieldListModelItem(QString(), QString(), false);
         }else if (i == -1) {
-            if (!(d->m_options & ShowAsterisk))
+            if (!(d->options & ShowAsterisk))
                 continue;
             item = new KexiFieldListModelItem("*", "", false);
-            d->m_allColumnsItem = item;
+            d->allColumnsItem = item;
         } else {
             colinfo = columns[i];
             item = new KexiFieldListModelItem(colinfo->aliasOrName(), colinfo->field->typeName(), (colinfo->field->isPrimaryKey() || colinfo->field->isUniqueKey()));
             item->setCaption(colinfo->captionOrAliasOrName());
         }
-        d->m_items.append(item);
+        d->items.append(item);
         kDebug() << item->data(0);
     }
 }
@@ -92,8 +92,8 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 {    
     KexiFieldListModelItem *item = 0;
     
-    if (index.row() < d->m_items.count()) {
-        item = d->m_items[index.row()];
+    if (index.row() < d->items.count()) {
+        item = d->items[index.row()];
     }
     
     if (item) {
@@ -111,12 +111,12 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 
 int KexiFieldListModel::columnCount(const QModelIndex& parent) const
 {
-    return (d->m_options & ShowDataTypes) ? 2 : 1;
+    return (d->options & ShowDataTypes) ? 2 : 1;
 }
 
 int KexiFieldListModel::rowCount(const QModelIndex& parent) const
 {
-    return d->m_items.count();
+    return d->items.count();
 }
 
 QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -139,7 +139,7 @@ QStringList KexiFieldListModel::mimeTypes() const
 
 QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
 {
-    if (!d->m_schema) {
+    if (!d->schema) {
         return new QMimeData();
     }
     
@@ -151,13 +151,13 @@ QMimeData* KexiFieldListModel::mimeData(const QModelIndexList& indexes) const
     QByteArray fielddata;
     QDataStream stream1(&fielddata, QIODevice::WriteOnly);
 
-    if (d->m_schema->table()) {
+    if (d->schema->table()) {
         sourceMimeType = "kexi/table";
-    } else if (d->m_schema->query()) {
+    } else if (d->schema->query()) {
         sourceMimeType = "kexi/query";
     }
     
-    sourceName = d->m_schema->name();
+    sourceName = d->schema->name();
     
     foreach (QModelIndex idx, indexes) {
         fields << data(idx, Qt::DisplayRole).toString();
@@ -174,7 +174,7 @@ Qt::ItemFlags KexiFieldListModel::flags(const QModelIndex& index) const
     Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);
 
     if (index.isValid())
-        return d->m_items[index.row()]->flags()| defaultFlags;
+        return d->items[index.row()]->flags()| defaultFlags;
     else
         return defaultFlags;
 }
