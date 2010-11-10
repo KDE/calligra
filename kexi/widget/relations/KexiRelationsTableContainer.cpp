@@ -103,8 +103,8 @@ KexiRelationsTableContainer::KexiRelationsTableContainer(
     connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
     connect(d->fieldList, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
             this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
-    connect(d->fieldList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
-            this, SLOT(slotFieldsDoubleClicked(Q3ListViewItem*, const QPoint&, int)));
+    connect(d->fieldList, SIGNAL(doubleClicked(const QModelIndex &)),
+            this, SLOT(slotFieldsDoubleClicked(const QModelIndex &)));
 }
 
 KexiRelationsTableContainer::~KexiRelationsTableContainer()
@@ -197,12 +197,13 @@ void KexiRelationsTableContainer::unsetFocus()
     repaint();
 }
 
-void KexiRelationsTableContainer::slotFieldsDoubleClicked(Q3ListViewItem *i, const QPoint&, int)
+void KexiRelationsTableContainer::slotFieldsDoubleClicked(const QModelIndex &idx)
 {
-    Q_UNUSED(i);
+    Q_UNUSED(idx);
     if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
         return;
     const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());
+    kDebug();
     emit fieldsDoubleClicked(*t->schema(), t->selectedFieldNames());
 }
 

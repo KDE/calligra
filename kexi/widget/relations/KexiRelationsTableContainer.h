@@ -82,7 +82,7 @@ public slots:
 protected slots:
     void moved();
     void slotContextMenu(K3ListView *lv, Q3ListViewItem *i, const QPoint& p);
-    void slotFieldsDoubleClicked(Q3ListViewItem *i, const QPoint&, int);
+    void slotFieldsDoubleClicked(const QModelIndex &idx);
 
     friend class KexiRelationViewTableContainerHeader;
 
