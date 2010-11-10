@@ -35,6 +35,12 @@
 #include <KoPageLayout.h>
 #include <KoOdfGraphicStyles.h>
 
+#include <KoTable.h>
+#include <KoRow.h>
+#include <KoColumn.h>
+#include <KoCell.h>
+#include <KoCellStyle.h>
+
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS

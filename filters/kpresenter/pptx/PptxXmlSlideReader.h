@@ -38,6 +38,8 @@ class MsooXmlRelationships;
 class TableStyleList;
 }
 
+class KoTable;
+
 //! Data structure collecting information about single slide's shape (p:sp)
 class PptxShapeProperties
 {

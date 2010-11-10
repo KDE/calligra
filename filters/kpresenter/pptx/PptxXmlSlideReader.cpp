@@ -53,6 +53,13 @@
 #include <MsooXmlReader_p.h>
 #include <MsooXmlContentTypes.h>
 
+#include <KoTable.h>
+#include <KoRow.h>
+#include <KoColumnStyle.h>
+#include <KoColumn.h>
+#include <KoCell.h>
+#include <KoRawCellChild.h>
+
 PptxShapeProperties::PptxShapeProperties()
 {
     x = 0;

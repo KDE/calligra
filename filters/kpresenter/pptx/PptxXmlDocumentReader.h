@@ -36,6 +36,8 @@ namespace MSOOXML
 class MsooXmlRelationships;
 }
 
+class KoTable;
+
 class PptxXmlDocumentReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
