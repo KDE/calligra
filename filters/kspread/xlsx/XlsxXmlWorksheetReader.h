@@ -122,7 +122,9 @@ public:
         const XlsxStyles& _styles,
         MSOOXML::MsooXmlRelationships& _relationships,
         XlsxImport* _import,
-        QMap<QString, QString> _oleReplacements);
+        QMap<QString, QString> _oleReplacements,
+        QMap<QString, QString> _oleBeginFrames);
+
     virtual ~XlsxXmlWorksheetReaderContext();
 
     Sheet* sheet;
@@ -139,6 +141,7 @@ public:
     const QString file;
 
     QMap<QString, QString> oleReplacements;
+    QMap<QString, QString> oleFrameBegins;
 };
 
 #endif
