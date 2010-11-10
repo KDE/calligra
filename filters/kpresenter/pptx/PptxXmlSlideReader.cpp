@@ -1421,6 +1421,11 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_graphicFrame()
 KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
 {
     READ_PROLOGUE
+
+    // Added to make sure these are 0 for tables etc.
+    d->phType.clear();
+    d->phIdx.clear();
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -1428,7 +1433,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_nvGraphicFramePr()
             if (qualifiedName() == "p:cNvPr") {
                 read_cNvPr_p();
             }
-            ELSE_TRY_READ_IF(nvPr)
+            // commented atm. for tables because it is not clear what idx type would mean for table
+            // ie. if this is uncommented then styles could be taken from bodystyle and that is not wanted
+            //ELSE_TRY_READ_IF(nvPr)
         }
     }
     READ_EPILOGUE
