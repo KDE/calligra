@@ -122,9 +122,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(w)
-    const QString widthCm(MSOOXML::Utils::EMU_to_ODF(w));
 
-    const qreal columnWidth = widthCm.left(widthCm.length()-2).toFloat();
+    const qreal columnWidth = EMU_TO_POINT(w.toFloat());
 
     KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
     KoColumnStyle::Ptr style = KoColumnStyle::create();
