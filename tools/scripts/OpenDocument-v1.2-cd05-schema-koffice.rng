@@ -6004,6 +6004,11 @@
                 <ref name="draw-glue-point"/>
             </zeroOrMore>
             <ref name="draw-text"/>
+            <optional>
+                <attribute name="koffice:nodeTypes">
+                    <ref name="string"/>
+                </attribute>
+            </optional>
         </element>
     </define>
     <define name="common-draw-path-data-attlist">
