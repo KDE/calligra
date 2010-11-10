@@ -752,6 +752,23 @@
 </record>
 
 <record name="MarkerFormat" id="0x1009">
+  <field name="redForeground" type="unsigned" size="8" />
+  <field name="greenForeground" type="unsigned" size="8" />
+  <field name="blueForeground" type="unsigned" size="8" />  
+  <field name="reservedForeground" type="unsigned" size="8" />
+  <field name="redBackground" type="unsigned" size="8" />
+  <field name="greenBackground" type="unsigned" size="8" />
+  <field name="blueBackground" type="unsigned" size="8" />  
+  <field name="reservedBackground" type="unsigned" size="8" />
+  <field name="imk" type="unsigned" size="16" />
+  <field name="fAuto" type="unsigned" size="1"/>
+  <field name="reserved1" type ="unsigned" size="3" />
+  <field name="fNotShowInt" type="unsigned" size="1" />
+  <field name="fNotShowBrd" type="unsigned" size="1" />
+  <field name="reserved2" type="unsigned" size="10" />
+  <field name="icvFore" type="unsigned" size="16" />
+  <field name="icvBack" type="unsigned" size="16" />
+  
 </record>
 
 <record name="AreaFormat" id="0x100a">

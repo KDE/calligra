@@ -126,12 +126,16 @@ namespace Charting
     
     class Fill
     {
-    public:
+    public:        
         enum FillType{ Blip, Gradient, Group, None, Pattern, Solid };
+        Fill():type( None ), valid( false ){};
+        void setColor( const QColor& color ){ solidColor = color; valid = true; type = Solid; }
+        void setType( FillType type ){ this->type = type; valid = true; }
         QColor solidColor;
         QString pixmapFile;
         Charting::Gradient gradient;
         FillType type;
+        bool valid;
     };
     
     class ShapeProperties
@@ -139,6 +143,7 @@ namespace Charting
     public:
         int lineWidth;
         Fill lineFill;
+        Fill areaFill;
     };
 
     class ChartImpl

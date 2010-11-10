@@ -46,6 +46,7 @@ public:
     ~ChartExport();
     Charting::Chart* chart() const { return m_chart; }
     void setSheetReplacement( bool val );
+    void set2003ColorPalette( QList< QColor > palette );
 
     bool m_drawLayer;
     QString m_href;
@@ -77,10 +78,13 @@ private:
     QString genChartAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyles& styles, KoGenStyles& mainStyles );
     QString genPlotAreaStyle( const int styleID, KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles );
+    void addShapePropertyStyle( /*const*/ Charting::Series* series, KoGenStyle& style, KoGenStyles& mainStyles );
     void addDataThemeToStyle( const int styleID, KoGenStyle& style, int dataNumber, int maxNumData = 1, bool strokes = true );
     QString generateGradientStyle( KoGenStyles& mainStyles, const Charting::Gradient* grad );
     QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
     void writeInternalTable ( KoXmlWriter* bodyWriter );
+    QList< QColor > m_palette;
+    bool paletteSet;
 };
 
 #endif

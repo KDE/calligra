@@ -1026,6 +1026,7 @@ void ExcelImport::Private::processCellObjects(Cell* ic, KSpread::Cell oc)
 void ExcelImport::Private::processCharts(KoXmlWriter* manifestWriter)
 {
     foreach(ChartExport *c, this->charts) {
+        c->set2003ColorPalette( workbook->colorTable() );
         c->saveContent(this->storeout, manifestWriter);
     }
 }
