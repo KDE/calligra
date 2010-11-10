@@ -68,8 +68,8 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions optio
 // header()->hide();
     setSorting(-1, true); // disable sorting
 */
-    connect(this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint &, int)),
-            this, SLOT(slotDoubleClicked(Q3ListViewItem*)));
+    connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
+            this, SLOT(slotDoubleClicked(const QModelIndex&)));
 }
 
 KexiFieldListView::~KexiFieldListView()
@@ -102,31 +102,32 @@ QStringList KexiFieldListView::selectedFieldNames() const
 {
     if (!schema())
         return QStringList();
-    /*
+    
     QStringList selectedFields;
-    for (Q3ListViewItem *item = firstChild(); item; item = item->nextSibling()) {
-        if (item->isSelected()) {
-//! @todo what about query fields/aliases? it.current()->text(0) can be not enough
-            if (item == m_allColumnsItem && m_allColumnsItem)
-                selectedFields.append("*");
-            else
-                selectedFields.append(item->text(0));
+    QModelIndexList idxlist = selectedIndexes();
+    
+    foreach (QModelIndex idx, idxlist) {
+        QString field = model()->data(idx).toString();
+        if (field.startsWith("*")) {
+            selectedFields.append("*");
+        }
+        else {
+            selectedFields.append(field);
         }
     }
+    
     return selectedFields;
-    */
-    return QStringList();
+
 }
 
-#if 0
-void KexiFieldListView::slotDoubleClicked(Q3ListViewItem* item)
+void KexiFieldListView::slotDoubleClicked(const QModelIndex &idx)
 {
-    if (schema() && item) {
+    kDebug();
+    if (schema() && idx.isValid()) {
         //! @todo what about query fields/aliases? it.current()->text(0) can be not enough
         emit fieldDoubleClicked(schema()->table() ? "kexi/table" : "kexi/query",
-                                schema()->name(), item->text(0));
+                                schema()->name(), model()->data(idx).toString());
     }
 }
-#endif
 
 #include "kexifieldlistview.moc"

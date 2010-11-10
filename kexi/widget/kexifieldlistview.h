@@ -60,7 +60,7 @@ signals:
                             const QString& fieldName);
 
 protected slots:
-    //void slotDoubleClicked(Q3ListViewItem* item);
+    void slotDoubleClicked(const QModelIndex &idx);
 
 protected:
 
