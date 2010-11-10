@@ -5326,9 +5326,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
 
-    MSOOXML::Utils::XmlWriteBuffer listBuf;
-    body = listBuf.setWriter(body);
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -5342,7 +5339,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
     if (m_prevListLevel > 0) {
         // Ending our current level
         body->endElement(); // text:list

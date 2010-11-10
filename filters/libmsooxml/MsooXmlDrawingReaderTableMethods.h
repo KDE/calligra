@@ -37,22 +37,9 @@ protected:
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
-    KoGenStyle m_currentTableRowStyle;
-    KoGenStyle m_currentTableCellStyle;
+
+    KoTable* m_table;
     QString m_currentTableName;
-    qreal m_currentTableWidth; //!< in cm
     QString m_styleId;
-
-    QList<QString> m_columnsWidth; //!< for collecting column sizes
-
-    QString m_defaultCellStyle;
-    QString m_oddColumnStyle;
-    QString m_evenColumnStyle;
-    QString m_oddRowStyle;
-    QString m_evenRowStyle;
-    QString m_firstColStyle;
-    QString m_firstRowStyle;
-    QString m_lastColStyle;
-    QString m_lastRowStyle;
 
 #endif

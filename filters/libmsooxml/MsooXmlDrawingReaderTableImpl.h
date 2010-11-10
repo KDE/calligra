@@ -30,13 +30,12 @@
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
     READ_PROLOGUE
-    MSOOXML::Utils::XmlWriteBuffer tableBuf;
-    body = tableBuf.setWriter(body);
 
-    m_currentTableName = QLatin1String("Table") + QString::number(m_currentTableNumber + 1);
-    m_currentTableStyle = KoGenStyle(KoGenStyle::TableAutoStyle, "table");
-    m_currentTableWidth = 0.0;
+    m_table = new KoTable;
+
+    m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber + 1));
     m_currentTableRowNumber = 0;
+    m_currentTableColumnNumber = 0;
 
     while (!atEnd()) {
         readNext();
@@ -45,56 +44,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
             TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblGrid)
             ELSE_TRY_READ_IF(tr)
-            ELSE_WRONG_FORMAT
+//             ELSE_WRONG_FORMAT
         }
     }
 
-    body = tableBuf.originalWriter();
-//TODO this seems to not be needed anymore, it seems it's taken care up in the hierarchy.
-//However, I'm not absolutely sure so I'll just comment it for now.
-//     body->startElement("draw:frame");
-//     body->addAttribute("svg:x", QString("%1pt").arg(EMU_TO_POINT(m_svgX)));
-//     body->addAttribute("svg:y", QString("%1pt").arg(EMU_TO_POINT(m_svgY)));
-//     body->addAttribute("svg:width", QString("%1pt").arg(EMU_TO_POINT(m_svgWidth)));
-//     body->addAttribute("svg:height", QString("%1pt").arg(EMU_TO_POINT(m_svgHeight)));
+    m_table->saveOdf(*body, *mainStyles);
 
-    body->startElement("table:table");
-    body->addAttribute("table:name", m_currentTableName);
-    m_currentTableStyle.addProperty(
-        "style:width", QString::number(m_currentTableWidth) + QLatin1String("cm"),
-        KoGenStyle::TableType);
-    //! @todo fix hardcoded table:align
-    m_currentTableStyle.addProperty("table:align", "left");
-
-    //! @todo fix hardcoded style:master-page-name
-    m_currentTableStyle.addAttribute("style:master-page-name", "Standard");
-    const QString tableStyleName(
-        mainStyles->insert(
-            m_currentTableStyle,
-            m_currentTableName,
-            KoGenStyles::DontAddNumberToName)
-    );
-    body->addAttribute("table:style-name", tableStyleName);
-
-    foreach (const QString columnWidth, m_columnsWidth) {
-        body->startElement("table:table-column");
-
-        KoGenStyle columnStyle = KoGenStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
-        columnStyle.addProperty("style:column-width", columnWidth);
-
-        const QString columnStyleName = mainStyles->insert(columnStyle, "col");
-
-        body->addAttribute("table:style-name", columnStyleName);
-        body->addAttribute("table:default-cell-style-name", m_defaultCellStyle);
-
-        body->endElement(); // table:table-column
-    }
-    m_columnsWidth.clear();
-
-    (void)tableBuf.releaseWriter();
-    body->endElement(); // table:table
-
-//     body->endElement(); // draw:frame
+    delete m_table;
 
     m_currentTableNumber++;
 
@@ -108,13 +64,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 {
     READ_PROLOGUE
 
-    const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(bandCol)
-    TRY_READ_ATTR(bandRow)
-    TRY_READ_ATTR(firstCol)
-    TRY_READ_ATTR(firstRow)
-    TRY_READ_ATTR(lastCol)
-    TRY_READ_ATTR(lastRow)
+//     const QXmlStreamAttributes attrs(attributes());
+//     TRY_READ_ATTR(bandCol)
+//     TRY_READ_ATTR(bandRow)
+//     TRY_READ_ATTR(firstCol)
+//     TRY_READ_ATTR(firstRow)
+//     TRY_READ_ATTR(lastCol)
+//     TRY_READ_ATTR(lastRow)
+//     TRY_READ_ATTR(rtl)
 
     while (!atEnd()) {
         readNext();
@@ -131,43 +88,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 //             ELSE_TRY_READ_IF(solidFill)
 //             ELSE_TRY_READ_IF(tableStyle)
 //             ELSE_TRY_READ_IF(tableStyle)
-            /*ELSE_*/TRY_READ_IF(tableStyleId)
+//             ELSE_TRY_READ_IF(tableStyleId)
 //             ELSE_WRONG_FORMAT
         }
     }
 
-    // Needed temporarily as there are no lists necessarily
-    if (m_context->tableStyleList) {
-        MSOOXML::TableStyle tableStyle = m_context->tableStyleList->tableStyle(m_styleId);
-
-        m_defaultCellStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::WholeTbl).saveStyle(*mainStyles);
-
-        if(bandCol == "1") {
-            m_oddColumnStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band1Horizontal).saveStyle(*mainStyles);
-            m_evenColumnStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band2Horizontal).saveStyle(*mainStyles);
-        }
-        if(bandRow == "1") {
-            m_oddRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band1Vertical).saveStyle(*mainStyles);
-            m_evenRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::Band2Vertical).saveStyle(*mainStyles);
-        }
-        if(firstCol == "1") {
-            m_firstColStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::FirstCol).saveStyle(*mainStyles);
-        }
-        if(firstRow == "1") {
-            m_firstRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::FirstRow).saveStyle(*mainStyles);
-        }
-        if(lastCol == "1") {
-            m_lastColStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::LastCol).saveStyle(*mainStyles);
-        }
-        if(firstCol == "1") {
-            m_lastRowStyle = tableStyle.propertiesForType(MSOOXML::TableStyleProperties::LastRow).saveStyle(*mainStyles);
-        }
-    }
-//     TRY_READ_ATTR(rtl)
-
     READ_EPILOGUE
 }
-
 
 #undef CURRENT_EL
 #define CURRENT_EL tblGrid
@@ -197,8 +124,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
     TRY_READ_ATTR_WITHOUT_NS(w)
     const QString widthCm(MSOOXML::Utils::EMU_to_ODF(w));
 
-    m_columnsWidth.append(widthCm);
-    m_currentTableWidth += widthCm.left(widthCm.length()-2).toFloat();
+    const qreal columnWidth = widthCm.left(widthCm.length()-2).toFloat();
+
+    KoColumn* column = m_table->columnAt(m_currentTableColumnNumber++);
+    KoColumnStyle::Ptr style = KoColumnStyle::create();
+    style->setWidth(columnWidth);
+    column->setStyle(style);
 
     while(!atEnd()) {
         readNext();
@@ -217,15 +148,16 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gridCol()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 {
     READ_PROLOGUE
-    MSOOXML::Utils::XmlWriteBuffer rowBuf;
-    body = rowBuf.setWriter(body);
+
     m_currentTableColumnNumber = 0;
-    m_currentTableRowStyle = KoGenStyle(KoGenStyle::TableRowAutoStyle, "table-row");
-    m_currentTableRowNumber = 0;
 
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(h)
-    m_currentTableRowStyle.addProperty("style:min-row-height", MSOOXML::Utils::EMU_to_ODF(h), KoGenStyle::TableRowType);
+    KoRow* row = m_table->rowAt(m_currentTableRowNumber);
+    KoRowStyle::Ptr style = KoRowStyle::create();
+    style->setHeight(EMU_TO_POINT(h.toFloat()));
+    style->setHeightType(KoRowStyle::MinimumHeight);
+    row->setStyle(style);
 
     while (!atEnd()) {
         readNext();
@@ -236,23 +168,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tr()
 //             ELSE_WRONG_FORMAT
         }
     }
-
-    body = rowBuf.originalWriter();
-    body->startElement("table:table-row");
-
-    //! @todo add style:keep-together property
-    //! @todo add fo:keep-together
-    const QString tableRowStyleName(
-        mainStyles->insert(
-            m_currentTableRowStyle,
-            m_currentTableName + '.' + QString::number(m_currentTableRowNumber + 1),
-            KoGenStyles::DontAddNumberToName)
-    );
-    body->addAttribute("table:style-name", tableRowStyleName);
-
-
-    (void)rowBuf.releaseWriter();
-    body->endElement(); // table:table-row
 
     m_currentTableRowNumber++;
 
@@ -270,270 +185,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
     TRY_READ_ATTR_WITHOUT_NS(gridSpan)
     TRY_READ_ATTR_WITHOUT_NS(rowSpan)
 
-    MSOOXML::Utils::XmlWriteBuffer cellBuf;
-    body = cellBuf.setWriter(body);
-    m_currentTableCellStyle = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
+    KoCell* cell = m_table->cellAt(m_currentTableRowNumber, m_currentTableColumnNumber);
+
+    if (!gridSpan.isEmpty()) {
+        cell->setColumnSpan(gridSpan.toInt());
+    }
+    if (!rowSpan.isEmpty()) {
+        cell->setRowSpan(rowSpan.toInt());
+    }
 
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             if(qualifiedName() == "a:txBody") {
+                QBuffer* buffer = new QBuffer;
+                KoXmlWriter* oldBody = body;
+                body = new KoXmlWriter(buffer, oldBody->indentLevel()+1);
+
                 TRY_READ(DrawingML_txBody);
+
+                KoRawCellChild* textChild = new KoRawCellChild(buffer);
+                cell->appendChild(textChild);
+                delete body;
+                body = oldBody;
             }
 //             ELSE_TRY_READ_IF(extLst)
-            ELSE_TRY_READ_IF(tcPr)
+//             ELSE_TRY_READ_IF(tcPr)
 //             ELSE_WRONG_FORMAT
         }
     }
-
-    body = cellBuf.originalWriter();
-
-    body->startElement("table:table-cell");
-
-    if (!gridSpan.isEmpty()) {
-        body->addAttribute("table:number-columns-spanned", gridSpan);
-    }
-    if (!rowSpan.isEmpty()) {
-        body->addAttribute("table:number-rows-spanned", rowSpan);
-    }
-
-    bool lastColumn = false;
-
-    READ_EPILOGUE_WITHOUT_RETURN
-
-    readNext();
-    if (QUALIFIED_NAME_IS(tr)) {
-        lastColumn = true;
-    }
-    undoReadNext();
-
-//     m_currentTableCellStyle.addProperty("fo:border-bottom", "0.5pt solid #000000");
-// 
-//     if (m_currentTableColumnNumber == 0) {
-//         if (!m_borderStyles.key(LeftBorder).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(LeftBorder));
-//         }
-//         if (!m_borderPaddings.key(LeftBorder).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(LeftBorder));
-//         }
-//     }
-//     else {
-//         if (!m_borderStyles.key(InsideV).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:border-left", m_borderStyles.key(InsideV));
-//         }
-//         if (!m_borderPaddings.key(InsideV).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:padding-left", m_borderPaddings.key(InsideV));
-//         }
-//     }
-//     if (lastColumn) {
-//         if (!m_borderStyles.key(RightBorder).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:border-right", m_borderStyles.key(RightBorder));
-//         }
-//         if (!m_borderPaddings.key(RightBorder).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:padding-right", m_borderPaddings.key(RightBorder));
-//         }
-//     }
-//     if (m_currentTableRowNumber == 0) {
-//         if (!m_borderStyles.key(TopBorder).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(TopBorder));
-//         }
-//         if (!m_borderPaddings.key(TopBorder).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(TopBorder));
-//         }
-//     }
-//     else {
-//         if (!m_borderStyles.key(InsideH).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:border-top", m_borderStyles.key(InsideH));
-//         }
-//         if (!m_borderPaddings.key(InsideH).isEmpty()) {
-//             m_currentTableCellStyle.addProperty("fo:padding-top", m_borderPaddings.key(InsideH));
-//         }
-//     }
-//
-//     //! @todo real border style get from w:tblPr/w:tblStyle@w:val
-//     //m_currentTableCellStyle.addProperty("fo:border", "0.5pt solid #000000");
-//
-     const QString tableCellStyleName(
-         mainStyles->insert(
-             m_currentTableCellStyle,
-             m_currentTableName + '.' + MSOOXML::Utils::columnName(m_currentTableColumnNumber)
-                 + QString::number(m_currentTableRowNumber + 1), KoGenStyles::DontAddNumberToName)
-     );
-     body->addAttribute("table:style-name", tableCellStyleName);
-
-    body->addAttribute("office:value-type", "string");
-
-    (void)cellBuf.releaseWriter();
-    body->endElement(); // table:table-cell
 
     m_currentTableColumnNumber++;
-
-    return KoFilter::OK;
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL lnT
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnT()
-{
-    READ_PROLOGUE
-
-    QXmlStreamAttributes attrs(attributes());
-
-    m_currentColor = QColor();
-
-    TRY_READ_ATTR_WITHOUT_NS(w)
-    qreal penWidth = EMU_TO_POINT(w.toDouble());
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("a:solidFill")) {
-                TRY_READ(solidFill)
-                m_currentTableCellStyle.addProperty("fo:border-top", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
-            }
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL lnL
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnL()
-{
-    READ_PROLOGUE
-    QXmlStreamAttributes attrs(attributes());
-
-    m_currentColor = QColor();
-
-    TRY_READ_ATTR_WITHOUT_NS(w)
-    qreal penWidth = EMU_TO_POINT(w.toDouble());
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("a:solidFill")) {
-                TRY_READ(solidFill)
-                m_currentTableCellStyle.addProperty("fo:border-left", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
-            }
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL lnR
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnR()
-{
-    READ_PROLOGUE
-
-    QXmlStreamAttributes attrs(attributes());
-
-    m_currentColor = QColor();
-
-    TRY_READ_ATTR_WITHOUT_NS(w)
-    qreal penWidth = EMU_TO_POINT(w.toDouble());
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("a:solidFill")) {
-                TRY_READ(solidFill)
-                m_currentTableCellStyle.addProperty("fo:border-right", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
-            }
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL lnB
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnB()
-{
-    READ_PROLOGUE
-    QXmlStreamAttributes attrs(attributes());
-
-    m_currentColor = QColor();
-
-    TRY_READ_ATTR_WITHOUT_NS(w)
-    qreal penWidth = EMU_TO_POINT(w.toDouble());
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-            if (qualifiedName() == QLatin1String("a:solidFill")) {
-                TRY_READ(solidFill)
-                m_currentTableCellStyle.addProperty("fo:border-bottom", QString("%1pt solid %2").arg(penWidth).arg(m_currentColor.name()));
-            }
-        }
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL tcPr
-//! tcPr handler  (Table Cell Properties) §21.1.3.17
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
-{
-    READ_PROLOGUE
-
-    m_currentColor = QColor();
-    QColor backgroundColor = QColor();
-
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-        if (isStartElement()) {
-//            TRY_READ_IF(blipFill)
-//            ELSE_TRY_READ_IF(cell3D)
-//            ELSE_TRY_READ_IF(extLst)
-//            ELSE_TRY_READ_IF(gradFill)
-//            ELSE_TRY_READ_IF(grpFill)
-//            ELSE_TRY_READ_IF(headers)
-//            ELSE_TRY_READ_IF(lnBlToTr)
-//            ELSE_TRY_READ_IF(lnTlToBr)
-//            ELSE_TRY_READ_IF(noFill)
-//            ELSE_TRY_READ_IF(pattFill)
-              if (QUALIFIED_NAME_IS(solidFill)) {
-                  TRY_READ(solidFill)
-                  backgroundColor = m_currentColor;
-              } // Skipping these currently to not interfere with background color.
-              ELSE_TRY_READ_IF(lnB)
-              ELSE_TRY_READ_IF(lnT)
-              ELSE_TRY_READ_IF(lnR)
-              ELSE_TRY_READ_IF(lnL)
-              else if (QUALIFIED_NAME_IS(noFill)) {
-                  backgroundColor = QColor();
-              }
-//             ELSE_WRONG_FORMAT
-        }
-    }
-
-    if (backgroundColor.isValid()) {
-        m_currentTableCellStyle.addProperty("fo:background-color", backgroundColor.name());
-    }
-
-    READ_EPILOGUE
-}
-
-#undef CURRENT_EL
-#define CURRENT_EL tableStyleId
-//! tableStyleId (Table Style ID) §21.1.3.12
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
-{
-    READ_PROLOGUE
-
-    readNext();
-    m_styleId = text().toString();
-    readNext();
 
     READ_EPILOGUE
 }
