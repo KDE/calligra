@@ -6514,6 +6514,11 @@
                 </attribute>
             </optional>
             <optional>
+                <attribute name="koffice:anchor-type">
+                    <ref name="string"/>
+                </attribute>
+            </optional>
+            <optional>
                 <attribute name="text:anchor-page-number">
                     <ref name="positiveInteger"/>
                 </attribute>
@@ -6635,11 +6640,6 @@
             </optional>
             <optional>
                 <ref name="svg-desc"/>
-            </optional>
-            <optional>
-                <attribute name="koffice:anchor-type">
-                    <ref name="string"/>
-                </attribute>
             </optional>
             <optional>
                 <choice>
