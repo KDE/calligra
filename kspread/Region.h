@@ -658,7 +658,7 @@ Q_DECLARE_TYPEINFO(KSpread::Region, Q_MOVABLE_TYPE);
   kDebug support
 ****************************************************************************/
 
-inline kdbgstream operator<<(kdbgstream str, const KSpread::Region& r)
+inline QDebug operator<<(QDebug str, const KSpread::Region& r)
 {
     return str << qPrintable(r.name());
 }

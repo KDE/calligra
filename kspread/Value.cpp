@@ -966,7 +966,7 @@ uint qHash(const Value& value)
   kDebug support
 ****************************************************************************/
 
-kdbgstream operator<<(kdbgstream str, const KSpread::Value& v)
+QDebug operator<<(QDebug str, const KSpread::Value& v)
 {
     QString string;
     QTextStream stream(&string);
@@ -975,7 +975,7 @@ kdbgstream operator<<(kdbgstream str, const KSpread::Value& v)
     return str;
 }
 
-kdbgstream operator<<(kdbgstream stream, const KSpread::Value::Format& f)
+QDebug operator<<(QDebug stream, const KSpread::Value::Format& f)
 {
     switch (f) {
     case KSpread::Value::fmt_None:     stream << "None";     break;
