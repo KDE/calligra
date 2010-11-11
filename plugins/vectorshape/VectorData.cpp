@@ -124,11 +124,10 @@ void VectorData::setVector(const QString &url, KoStore *store, VectorCollection 
 // FIXME: This isn't usable in the vector shape
 QUrl VectorData::playableUrl() const
 {
-    if (m_dataStoreState == StateSpooled) {
+    if (m_dataStoreState == StateSpooled)
         return QUrl(m_temporaryFile->fileName());
-    } else {
-        return m_vectorLocation;
-    }
+
+    return m_vectorLocation;
 }
 
 bool VectorData::isValid() const
@@ -165,7 +164,7 @@ bool VectorData::saveData(QIODevice &device)
                 if (bytes <= 0)
                     break; // done!
                 do {
-                    qint64 nWritten = device.write(buf, bytes);
+                    const qint64 nWritten = device.write(buf, bytes);
                     if (nWritten == -1) {
                         m_temporaryFile->close();
                         return false;
@@ -192,7 +191,7 @@ bool VectorData::saveData(QIODevice &device)
                 if (bytes <= 0)
                     break; // done!
                 do {
-                    qint64 nWritten = device.write(buf, bytes);
+                    const qint64 nWritten = device.write(buf, bytes);
                     if (nWritten == -1) {
                         file.close();
                         return false;
