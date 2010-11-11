@@ -33,7 +33,7 @@ class KWDocument;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
 class KWPageStyle;
-
+class QTextDocument;
 class QTextCursor;
 
 /**
@@ -72,7 +72,7 @@ private:
         LoadFooter
     };
 
-    void loadSettings(const KoXmlDocument &settings);
+    void loadSettings(const KoXmlDocument &settings, QTextDocument *textDoc);
     void loadMasterPageStyles(KoOdfLoadingContext& context, bool hasMainTextFS);
     void loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
     void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);

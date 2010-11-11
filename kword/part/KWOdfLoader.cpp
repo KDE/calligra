@@ -38,6 +38,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoTextShapeData.h>
+#include <KoTextDocument.h>
 #include <KoShapeLoadingContext.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
@@ -205,7 +206,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         }
     }
 
-    if (updater) updater->setProgress(60);
+    if (updater) updater->setProgress(50);
 
     KoTextShapeData textShapeData;
     if (hasMainText) {
@@ -216,7 +217,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         textShapeData.setDocument(mainFs->document(), false);
     }
 
-    if (updater) updater->setProgress(80);
+    if (updater) updater->setProgress(60);
 
     // Let the TextShape handle loading the body element.
     textShapeData.loadOdf(body, sc, m_document->documentRdfBase());
@@ -226,16 +227,17 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         rdf->updateInlineRdfStatements(textShapeData.document());
     }
 
-    if (updater) updater->setProgress(90);
+    if (updater) updater->setProgress(95);
 
-    loadSettings(odfStore.settingsDoc());
+    loadSettings(odfStore.settingsDoc(), textShapeData.document());
 
     if (updater) updater->setProgress(100);
     return true;
 }
 
-void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc)
+void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc, QTextDocument *textDoc)
 {
+    KoTextDocument(textDoc).setRelativeTabs(false);
     if (settingsDoc.isNull())
         return;
 
@@ -244,13 +246,14 @@ void KWOdfLoader::loadSettings(const KoXmlDocument &settingsDoc)
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
     if (!viewSettings.isNull())
         m_document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-
     //1.6: KWOasisLoader::loadOasisIgnoreList
     KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         kDebug(32001) << "Ignorelist:" << ignorelist;
         //1.6: m_document->setSpellCheckIgnoreList(QStringList::split(',', ignorelist));
+
+        KoTextDocument(textDoc).setRelativeTabs(configurationSettings.parseConfigItemBool("TabsRelativeToIndent", true));
     }
     //1.6: m_document->variableCollection()->variableSetting()->loadOasis(settings);
 }
