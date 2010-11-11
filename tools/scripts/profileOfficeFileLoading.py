@@ -87,7 +87,7 @@ class logger:
 def containsRealError(err):
 	# some errors reported by libxml2 are false positives, we filter them
 	# out
-	if err.find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content"):
+	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content"):
 		return None
 	return err
 
