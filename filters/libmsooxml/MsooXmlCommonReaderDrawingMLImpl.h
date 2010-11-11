@@ -204,8 +204,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             body->addAttributePt("svg:y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_rowOff));
         }
         else {
-            body->addAttribute("svg:x", EMU_TO_POINT(m_svgX));
-            body->addAttribute("svg:y", EMU_TO_POINT(m_svgY));
+            body->addAttributePt("svg:x", EMU_TO_POINT(m_svgX));
+            body->addAttributePt("svg:y", EMU_TO_POINT(m_svgY));
         }
         if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col >= 0) {
             body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
@@ -214,7 +214,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
         }
     }
-
 #else
         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
