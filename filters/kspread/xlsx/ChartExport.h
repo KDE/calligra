@@ -84,6 +84,7 @@ private:
     QColor calculateColorFromGradientStop( const Charting::Gradient::GradientStop& grad );
     void writeInternalTable ( KoXmlWriter* bodyWriter );
     QList< QColor > m_palette;
+    // tells if a 2003 color palette has been set
     bool paletteSet;
 };
 

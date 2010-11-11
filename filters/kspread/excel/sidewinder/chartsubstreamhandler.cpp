@@ -582,6 +582,29 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
           << " fillStyle=" << record->fls() << std::endl;
     m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background,
                                                           record->fls() != 0x0000);
+    DEBUG << "PREP DAAAAAAAAAAAAMNiiiiiiiiiiit" << std::endl;
+    Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj );
+    if ( series )
+    {
+        DEBUG << "DAAAAAAAAAAAAMNiiiiiiiiiiitAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+        const int index = m_chart->m_series.indexOf( series ) % 8;
+        if ( !series->spPr )
+        {
+            series->spPr = new Charting::ShapeProperties;
+        }
+        if ( record->isFAuto() )
+        {
+            series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 16 + index ) );
+            DEBUG << "DAAAAAAAAAAAAMN" << std::endl;
+        }
+        else
+        {
+            series->spPr->areaFill.setColor( foreground );
+            DEBUG << "DAAAAAAAAAAAAMNiiiiiiiiiiit " << globals()->workbook()->colorTable().at( record->icvBackground() ).name().toLatin1().data() << std::endl;
+            DEBUG << "DAAAAAAAAAAAAMNiiiiiiiiiiit " << globals()->workbook()->colorTable().at( 16 ).name().toLatin1().data() << std::endl;
+        }
+    }
+    
 //     if ( /*series = */dynamic_cast< Charting::Series* > ( m_currentObj ) )
         //Q_ASSERT( false );
 }
@@ -621,7 +644,8 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
     if ( record->fAuto() ) {
         if ( !m_disableAutoMarker )
             m_chart->m_showMarker = true;
-        series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 24 + index ) );
+        if ( !series->spPr->areaFill.valid )
+            series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 24 + index ) );
         switch ( index )
             {
                 case( 0x0000 ):
@@ -696,7 +720,8 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
                     series->markerType = Charting::Series::Square;
                     break;
             }
-            series->spPr->areaFill.setColor( QColor( record->redBackground(), record->greenBackground(), record->blueBackground() ) );
+            if ( !series->spPr->areaFill.valid )
+                series->spPr->areaFill.setColor( QColor( record->redBackground(), record->greenBackground(), record->blueBackground() ) );
         }
     }    
 }
