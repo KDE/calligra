@@ -84,6 +84,13 @@ class logger:
 			+ "' duration='" + str(duration) + "']"
 		self.testname = None
 
+def containsRealError(err):
+	# some errors reported by libxml2 are false positives, we filter them
+	# out
+	if err.find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content"):
+		return None
+	return err
+
 class odfvalidator:
 	def __init__(self):
 		path = sys.path[0]
@@ -103,15 +110,15 @@ class odfvalidator:
 			return str(e)
 		err = self.validateFile(zip, 'content.xml',
 				self.relaxNGValidator)
-		if (err):
+		if (containsRealError(err)):
 			return err
 		err = self.validateFile(zip, 'styles.xml',
 				self.relaxNGValidator)
-		if (err):
+		if (containsRealError(err)):
 			return err
 		err = self.validateFile(zip, 'META-INF/manifest.xml',
 				self.relaxNGManifextValidator)
-		if (err):
+		if (containsRealError(err)):
 			return err
 		return None
 
