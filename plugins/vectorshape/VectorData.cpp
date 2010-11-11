@@ -41,11 +41,11 @@
 
 VectorData::VectorData()
     : KoShapeUserData()
-    , key(0)
+    , m_key(0)
     , errorCode(VectorData::Success)
-    , collection(0)
-    , dataStoreState(StateEmpty)
-    , temporaryFile(0)
+    , m_collection(0)
+    , m_dataStoreState(StateEmpty)
+    , m_temporaryFile(0)
 {
 }
 
@@ -58,27 +58,27 @@ VectorData::VectorData(const VectorData &vectorData)
 
 VectorData::~VectorData()
 {
-    if (collection)
-        collection->removeOnKey(key);
+    if (m_collection)
+        m_collection->removeOnKey(m_key);
 
-    delete temporaryFile;
+    delete m_temporaryFile;
 }
 
 QString VectorData::tagForSaving(int &counter)
 {
-    if (!saveName.isEmpty())
-        return saveName;
+    if (!m_saveName.isEmpty())
+        return m_saveName;
 
     if (suffix.isEmpty()) {
-        return saveName = QString("Vectors/vector%1").arg(++counter);
+        return m_saveName = QString("Vectors/vector%1").arg(++counter);
     } else {
-        return saveName = QString("Vectors/vector%1.%2").arg(++counter).arg(suffix);
+        return m_saveName = QString("Vectors/vector%1.%2").arg(++counter).arg(suffix);
     }
 }
 
 void VectorData::setExternalVector(const QUrl &location, VectorCollection *col)
 {
-    if (collection) {
+    if (m_collection) {
         // Let the collection first check if it already has one of
         // these. If it doesn't it will call this method again and
         // we'll go to the other clause.
@@ -86,11 +86,11 @@ void VectorData::setExternalVector(const QUrl &location, VectorCollection *col)
         this->operator=(*other);
         delete other;
     } else {
-        vectorLocation = location;
+        m_vectorLocation = location;
         setSuffix(location.toEncoded());
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(location.toEncoded());
-        key = VectorData::generateKey(md5.result());
+        m_key = VectorData::generateKey(md5.result());
     }
 }
 
@@ -125,16 +125,16 @@ void VectorData::setVector(const QString &url, KoStore *store, VectorCollection 
 // FIXME: This isn't usable in the vector shape
 QUrl VectorData::playableUrl() const
 {
-    if (dataStoreState == StateSpooled) {
-        return QUrl(temporaryFile->fileName());
+    if (m_dataStoreState == StateSpooled) {
+        return QUrl(m_temporaryFile->fileName());
     } else {
-        return vectorLocation;
+        return m_vectorLocation;
     }
 }
 
 bool VectorData::isValid() const
 {
-    return dataStoreState != VectorData::StateEmpty
+    return m_dataStoreState != VectorData::StateEmpty
         && errorCode == Success;
 }
 
@@ -152,35 +152,35 @@ VectorData &VectorData::operator=(const VectorData &other)
 
 bool VectorData::saveData(QIODevice &device)
 {
-    if (dataStoreState == StateSpooled) {
-        Q_ASSERT(temporaryFile); // otherwise the collection should not have called this
-        if (temporaryFile) {
-            if (!temporaryFile->open()) {
+    if (m_dataStoreState == StateSpooled) {
+        Q_ASSERT(m_temporaryFile); // otherwise the collection should not have called this
+        if (m_temporaryFile) {
+            if (!m_temporaryFile->open()) {
                 kWarning(30006) << "Read file from temporary store failed";
                 return false;
             }
             char buf[8192];
             while (true) {
-                temporaryFile->waitForReadyRead(-1);
-                qint64 bytes = temporaryFile->read(buf, sizeof(buf));
+                m_temporaryFile->waitForReadyRead(-1);
+                qint64 bytes = m_temporaryFile->read(buf, sizeof(buf));
                 if (bytes <= 0)
                     break; // done!
                 do {
                     qint64 nWritten = device.write(buf, bytes);
                     if (nWritten == -1) {
-                        temporaryFile->close();
+                        m_temporaryFile->close();
                         return false;
                     }
                     bytes -= nWritten;
                 } while (bytes > 0);
             }
-            temporaryFile->close();
+            m_temporaryFile->close();
         }
         return true;
-    } else if (!vectorLocation.isEmpty()) {
+    } else if (!m_vectorLocation.isEmpty()) {
         if (true) { //later on this should check if the user wants us to do this
             // An external vector have been specified
-            QFile file(vectorLocation.toLocalFile());
+            QFile file(m_vectorLocation.toLocalFile());
 
             if (!file.open(QIODevice::ReadOnly)) {
                 kWarning(30006) << "Read file failed";
@@ -209,10 +209,10 @@ bool VectorData::saveData(QIODevice &device)
 
 void VectorData::copyToTemporary(QIODevice &device)
 {
-    delete temporaryFile;
-    temporaryFile = new KTemporaryFile();
-    temporaryFile->setPrefix("KoVectorData");
-    if (!temporaryFile->open()) {
+    delete m_temporaryFile;
+    m_temporaryFile = new KTemporaryFile();
+    m_temporaryFile->setPrefix("KoVectorData");
+    if (!m_temporaryFile->open()) {
         kWarning(30006) << "open temporary file for writing failed";
         errorCode = VectorData::StorageFailed;
         return;
@@ -226,14 +226,14 @@ void VectorData::copyToTemporary(QIODevice &device)
             break; // done!
         md5.addData(buf, bytes);
         do {
-            bytes -= temporaryFile->write(buf, bytes);
+            bytes -= m_temporaryFile->write(buf, bytes);
         } while (bytes > 0);
     }
-    key = VectorData::generateKey(md5.result());
-    temporaryFile->close();
+    m_key = VectorData::generateKey(md5.result());
+    m_temporaryFile->close();
 
-    QFileInfo fi(*temporaryFile);
-    dataStoreState = StateSpooled;
+    QFileInfo fi(*m_temporaryFile);
+    m_dataStoreState = StateSpooled;
 }
 
 void VectorData::setSuffix(const QString &name)

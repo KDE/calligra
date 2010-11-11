@@ -57,7 +57,7 @@ VectorCollection::VectorCollection(QObject *parent)
 VectorCollection::~VectorCollection()
 {
     foreach(VectorData *id, d->vectorFiles) {
-        id->collection = 0;
+        id->m_collection = 0;
     }
     delete d;
 }
@@ -78,19 +78,19 @@ bool VectorCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrite
     // Loop through the files in the collection and save them.
     QMap<qint64, VectorData *>::iterator  dataIt(d->vectorFiles.begin());
     while (dataIt != d->vectorFiles.end()) {
-        if (dataIt.value()->saveName.isEmpty())
+        if (dataIt.value()->m_saveName.isEmpty())
             continue;
 
         VectorData *videoData = dataIt.value();
-        if (store->open(videoData->saveName)) {
+        if (store->open(videoData->m_saveName)) {
             KoStoreDevice device(store);
             bool ok = videoData->saveData(device);
             store->close();
 
             // If all went well, write the mime type to the manifest.
             if (ok) {
-                const QString mimetype(KMimeType::findByPath(videoData->saveName, 0 , true)->name());
-                manifestWriter->addManifestEntry(videoData->saveName, mimetype);
+                const QString mimetype(KMimeType::findByPath(videoData->m_saveName, 0 , true)->name());
+                manifestWriter->addManifestEntry(videoData->m_saveName, mimetype);
             } else {
                 // TODO better error handling
                 kWarning(30006) << "saving vector file failed";
@@ -99,7 +99,7 @@ bool VectorCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrite
             // TODO better error handling
             kWarning(30006) << "saving vector file failed: open store failed";
         }
-        dataIt.value()->saveName.clear();
+        dataIt.value()->m_saveName.clear();
 
         ++dataIt;
     }
@@ -121,8 +121,8 @@ VectorData *VectorCollection::createExternalVectorData(const QUrl &url)
     // Otherwise create a new 
     VectorData *data = new VectorData();
     data->setExternalVector(url);
-    data->collection = this;
-    Q_ASSERT(data->key == key);
+    data->m_collection = this;
+    Q_ASSERT(data->m_key == key);
     d->vectorFiles.insert(key, data);
     return data;
 }
@@ -142,7 +142,7 @@ VectorData *VectorCollection::createVectorData(const QString &href, KoStore *sto
 
     VectorData *data = new VectorData();
     data->setVector(href, store);
-    data->collection = this;
+    data->m_collection = this;
 
     d->storeVectors.insert(storeKey, data);
     return data;

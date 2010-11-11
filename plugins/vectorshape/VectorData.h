@@ -85,7 +85,7 @@ public:
     /**
      * a unique key of the vector data generated as a MD5 hash.
      */
-    qint64 key;
+    qint64 m_key;
 
     QString suffix; // the suffix of the picture e.g. png  TODO use a QByteArray ?
 
@@ -96,7 +96,7 @@ public:
 
     QUrl playableUrl() const;
 
-    QString saveName;
+    QString m_saveName;
 
 protected:
     friend class VectorCollection;
@@ -116,13 +116,13 @@ protected:
         StateSpooled, ///< Vector data is spooled
     };
 
-    QUrl vectorLocation;
-    VectorCollection *collection;
+    QUrl m_vectorLocation;
+    VectorCollection *m_collection;
 
     // vector data store.
-    DataStoreState dataStoreState;
+    DataStoreState m_dataStoreState;
 
-    KTemporaryFile *temporaryFile;
+    KTemporaryFile *m_temporaryFile;
 };
 
 #endif
