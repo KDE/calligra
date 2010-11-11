@@ -802,25 +802,25 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
             QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
-        if (m_rot != 0) {
-            qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-            //! @todo, in case of connector, these should maybe be reversed?
-            x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
-            y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
-            x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
-            y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
-        }
-        if (m_flipV) {
-            QString temp = y2;
-            y2 = y1;
-            y1 = temp;
-        }
-        if (m_flipH) {
-            QString temp = x2;
-            x2 = x1;
-            x1 = temp;
-        }
+            if (m_rot != 0) {
+                qreal angle, xDiff, yDiff;
+                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                //! @todo, in case of connector, these should maybe be reversed?
+                x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
+                y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
+                x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
+                y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
+            }
+            if (m_flipV) {
+                QString temp = y2;
+                y2 = y1;
+                y1 = temp;
+            }
+            if (m_flipH) {
+                QString temp = x2;
+                x2 = x1;
+                x1 = temp;
+            }
             body->addAttribute("svg:x1", x1);
             body->addAttribute("svg:y1", y1);
             body->addAttribute("svg:x2", x2);
@@ -886,6 +886,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::generatePlaceHolderSp()
             m_currentShapeProperties = new PptxShapeProperties(*masterShapeProperties);
         } else { // Case where it was not present in master slide at all
             m_currentShapeProperties = new PptxShapeProperties;
+        }
+        if (m_xfrm_read) { // If element was present, then we can use values from the slidelayout
             m_currentShapeProperties->x = m_svgX;
             m_currentShapeProperties->y = m_svgY;
             m_currentShapeProperties->width = m_svgWidth;
