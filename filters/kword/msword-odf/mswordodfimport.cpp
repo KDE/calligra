@@ -142,8 +142,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         KoStore *m_store;
         KoGenStyles *m_genStyles;
         Document *m_document;
-        KoXmlWriter* m_contentWriter;
-        KoXmlWriter* m_bodyWriter;
+        KoXmlWriter *m_contentWriter;
+        KoXmlWriter *m_bodyWriter;
     };
 
     storeout = KoStore::createStore(outputFile, KoStore::Write,
@@ -221,7 +221,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     //now create real content/body writers & dump the information there
     KoXmlWriter* realContentWriter = oasisStore.contentWriter();
     realContentWriter->addCompleteElement(&contentBuf);
-    KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
+    KoXmlWriter *realBodyWriter = oasisStore.bodyWriter();
     realBodyWriter->addCompleteElement(&bodyBuf);
 
     //now close content & body writers
@@ -232,11 +232,37 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
 
     kDebug(30513) << "closed content & body writers.";
 
+    //create the settings file
+    storeout->open("settings.xml");
+    KoStoreDevice settingsDev(storeout);
+    KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "UseFormerLineSpacing");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
+    settingsWriter->endElement();
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
+    settingsWriter->endElement();
+    settingsWriter->endElement(); // config-item-set
+
+    settingsWriter->endElement(); // document-settings
+    settingsWriter->endDocument();
+    delete settingsWriter;
+    storeout->close();
+
+    kDebug(30513) << "created settings.xml";
+
     //create the manifest file
     KoXmlWriter *realManifestWriter = oasisStore.manifestWriter("application/vnd.oasis.opendocument.text");
     //create the styles.xml file
     mainStyles->saveOdfStylesDotXml(storeout, realManifestWriter);
     realManifestWriter->addManifestEntry("content.xml", "text/xml");
+    realManifestWriter->addManifestEntry("settings.xml", "text/xml");
     realManifestWriter->addCompleteElement(&manifestBuf);
 
     kDebug(30513) << "created manifest and styles.xml";
