@@ -69,11 +69,10 @@ QString VectorData::tagForSaving(int &counter)
     if (!m_saveName.isEmpty())
         return m_saveName;
 
-    if (suffix.isEmpty()) {
+    if (suffix.isEmpty())
         return m_saveName = QString("Vectors/vector%1").arg(++counter);
-    } else {
-        return m_saveName = QString("Vectors/vector%1.%2").arg(++counter).arg(suffix);
-    }
+
+    return m_saveName = QString("Vectors/vector%1.%2").arg(++counter).arg(suffix);
 }
 
 void VectorData::setExternalVector(const QUrl &location, VectorCollection *col)
