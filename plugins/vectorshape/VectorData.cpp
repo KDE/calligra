@@ -230,7 +230,6 @@ void VectorData::copyToTemporary(QIODevice &device)
     m_key = VectorData::generateKey(md5.result());
     m_temporaryFile->close();
 
-    QFileInfo fi(*m_temporaryFile);
     m_dataStoreState = StateSpooled;
 }
 
