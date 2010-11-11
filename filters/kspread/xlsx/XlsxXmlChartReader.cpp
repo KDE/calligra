@@ -1039,6 +1039,41 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_dLbls()
 #undef CURRENT_EL
 #define CURRENT_EL spPr
 // Visual shape properties that can be applied to a shape.
+/*!
+ * spPr Shape Properties
+ * ECMA-376, 5.7.2.98, p.4108.
+ * Parent Elements:
+ *  - backWall( §5.7.2.11 )
+ *  - bandFmt( §5.7.2.13 )
+ *  - catAx( §5.7.2.25 )
+ *  - chartspace( §5.7.2.29 )
+ *  - dataAx( §5.7.2.39 )
+ *  - dispUnitsLbl( §5.7.2.46 )
+ *  - dLbl( §5.7.2.47 )
+ *  - dLbls( §5.7.2.49 )
+ *  - downBars( §5.7.2.51)
+ *  - dPt( §5.7.2.52 )
+ * ...
+ * 
+ * Child elements:
+ *  - blipFill( Picture Fill ) §5.1.10.14
+ *  - customGeom( Custom Geometry ) §5.1.11.8
+ *  - effectDag( Effect Container ) §5.1.10.25
+ *  - effectLst( Effect Container ) §5.1.10.26
+ *  - gradFill ( Gradient Fill ) §5.1.10.33
+ *  - gradFill ( Group Fill ) §5.1.10.35
+ *  - ln ( Outline ) §5.1.2.1.24
+ *  - noFill( No Fill ) §5.1.10.44
+ *  - pattFill( Pattern Fill ) §5.1.10.47
+ *  - prstGeom( Preset geometry ) §5.1.11.18
+ *  - scene3d ( 3D Scene Properties ) §5.1.4.1.26
+ *  - solidFill( Solid Fill ) §5.1.10.54
+ *  - sp3d ( Apply 3D shape properties ) §5.1.7.12
+ *  - xrfm( 2D Transform for Individual Objects ) § 5.1.9.6
+ * 
+ *  attributes:
+ *  - bwMode ( Black and White Mode ) §5.1.12.10
+ */
 KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
 {
     enum State { Start, NoFill, InFill };
@@ -2015,11 +2050,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-//             if( QUALIFIED_NAME_IS(spPr) )
-//             {
-//                 m_currentSeries->spPr = new Charting::ShapeProperties;
-//                 m_currentShapeProperties  = m_currentSeries->spPr;
-//             }
+            if( QUALIFIED_NAME_IS(spPr) )
+            {
+                m_currentSeries->spPr = new Charting::ShapeProperties;
+                m_currentShapeProperties  = m_currentSeries->spPr;
+            }
             TRY_READ_IF(order)
             ELSE_TRY_READ_IF(idx)
             if (QUALIFIED_NAME_IS(tx)) {
