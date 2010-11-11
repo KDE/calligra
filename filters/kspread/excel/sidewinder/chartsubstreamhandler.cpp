@@ -517,13 +517,17 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
         }
         m_axisId = -1;
     } else if ( dynamic_cast< Charting::Legend* > ( m_currentObj ) ) {
-        return;
+        if ( record->lns() == 0x0005 )
+            m_chart->m_showLines = false;
+        else if ( record->lns() == 0x0000 )
+            m_chart->m_showLines = true;
 //     } else if ( dynamic_cast< Charting::Text* > ( m_currentObj ) ) {
 //         return;
     } else if ( ( series = dynamic_cast< Charting::Series* > ( m_currentObj/*m_currentSeries*/ ) ) ) {
         //Q_ASSERT( false );
         if ( !series->spPr )
             series->spPr = new Charting::ShapeProperties;
+        m_chart->m_showLines = false;
         const int index = m_chart->m_series.indexOf( series );
         const QColor color = record->isFAuto() ? globals()->workbook()->colorTable().at( 24 + index ) : QColor( record->red(), record->green(), record->blue() );
         series->spPr->lineFill.setColor( color );
@@ -535,14 +539,14 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
             case( 0x0005 ):
             {
                 series->spPr->lineFill.setType( Charting::Fill::None );
-                Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
-                if ( impl )
-                {
-                    if ( impl->style == Charting::ScatterImpl::Marker || impl->style == Charting::ScatterImpl::LineMarker )
-                        impl->style = Charting::ScatterImpl::Marker;
-                    else
-                        impl->style = Charting::ScatterImpl::None;
-                }
+//                 Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+//                 if ( impl )
+//                 {
+//                     if ( impl->style == Charting::ScatterImpl::Marker || impl->style == Charting::ScatterImpl::LineMarker )
+//                         impl->style = Charting::ScatterImpl::Marker;
+//                     else
+//                         impl->style = Charting::ScatterImpl::None;
+//                 }
             }
                 break;
             default:
@@ -553,14 +557,19 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
     else if ( dynamic_cast< Charting::ChartImpl* > ( m_currentObj ) )
         Q_ASSERT( false );
     else if ( dynamic_cast< Charting::Chart* > ( m_currentObj ) )
+    {
         DEBUG << "The color is :" << QColor( record->red(), record->green(), record->blue() ).name() << "\n";
+        DEBUG << "automatic " << record->isFAuto() << "\n";
+        //m_chart->m_showLines = record->isFAuto();
+        Q_ASSERT( !dynamic_cast< Charting::Series* > ( m_currentSeries ) );
+    }
     
         /*Q_ASSERT( false )*/
     
         /*Q_ASSERT( false )*/
-    else
-      return;
-//         Q_ASSERT( false );
+//     else
+//       return;
+//          Q_ASSERT( false );
 }
 
 void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
@@ -589,25 +598,29 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 {
     if (!record) return;
     DEBUG << std::endl;
+    const bool legend = dynamic_cast< Charting::Legend* >( m_currentObj );
+    if ( m_disableAutoMarker && legend )
+        return;
     m_chart->m_showMarker = false;
 //     Q_ASSERT ( !dynamic_cast< Charting::Text* >( m_currentObj ) );
 //     if( dynamic_cast< Charting::Legend* >( m_currentObj ) )
 //         return;
     
     Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentSeries );
-    Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
-    if ( impl )
-    {
-        if ( impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker )
-                                impl->style = Charting::ScatterImpl::LineMarker;
-        else
-            impl->style = Charting::ScatterImpl::Marker;
-    }
+//     Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+//     if ( impl )
+//     {
+//         if ( impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker )
+//                                 impl->style = Charting::ScatterImpl::LineMarker;
+//         else
+//             impl->style = Charting::ScatterImpl::Marker;
+//     }
     if ( !series->spPr )
             series->spPr = new Charting::ShapeProperties;
     const int index = m_chart->m_series.indexOf( series ) % 8;
     if ( record->fAuto() ) {
-        m_chart->m_showMarker = true;
+        if ( !m_disableAutoMarker )
+            m_chart->m_showMarker = true;
         series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 24 + index ) );
         switch ( index )
             {
@@ -647,13 +660,13 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
                 case( 0x0000 ):
                     series->markerType = Charting::Series::None;
                     m_disableAutoMarker = true;
-                    if ( impl )
-                    {
-                        if ( impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker )
-                            impl->style = Charting::ScatterImpl::Line;
-                        else
-                            impl->style = Charting::ScatterImpl::None;
-                    }
+//                     if ( impl )
+//                     {
+//                         if ( impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker )
+//                             impl->style = Charting::ScatterImpl::Line;
+//                         else
+//                             impl->style = Charting::ScatterImpl::None;
+//                     }
                     break;
                 case( 0x0001 ):
                     series->markerType = Charting::Series::Square;
@@ -879,9 +892,13 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
         m_chart->m_impl = new Charting::BubbleImpl(Charting::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
     else
         m_chart->m_impl = new Charting::ScatterImpl();
-    Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
-    if ( impl )
-        impl->style = Charting::ScatterImpl::LineMarker;
+    if ( !m_disableAutoMarker )
+    {
+        m_chart->m_showMarker = true;
+    }
+//     Charting::ScatterImpl* impl = dynamic_cast< Charting::ScatterImpl* >( m_chart->m_impl );
+//     if ( impl )
+//         impl->style = Charting::ScatterImpl::Marker;
     
 }
 

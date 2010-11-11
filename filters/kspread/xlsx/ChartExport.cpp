@@ -291,12 +291,14 @@ void ChartExport::addShapePropertyStyle( /*const*/ Charting::Series* series, KoG
         else if ( series->spPr->lineFill.type == Charting::Fill::None )
             style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );
     }
-    else if ( paletteSet )
+    else if ( paletteSet && ( m_chart->m_impl->name() != "scatter" ) || m_chart->m_showLines )
     {
         const int curSerNum = m_chart->m_series.indexOf( series );
-        style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );      
+        style.addProperty( "draw:stroke", "solid", KoGenStyle::GraphicType );
         style.addProperty( "svg:stroke-color", m_palette.at( 24 + curSerNum ).name(), KoGenStyle::GraphicType );
     }
+    else if ( paletteSet && m_chart->m_impl->name() == "scatter" )
+        style.addProperty( "draw:stroke", "none", KoGenStyle::GraphicType );
     if ( series->spPr->areaFill.valid )
     {
         if ( series->spPr->areaFill.type == Charting::Fill::Solid )
@@ -439,10 +441,13 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( styleID, chartstyle, styles, mainStyles ) );
 
     QString verticalCellRangeAddress = chart()->m_verticalCellRangeAddress;
-
-//    if(!m_cellRangeAddress.isEmpty()) {
-//        bodyWriter->addAttribute("table:cell-range-address", m_cellRangeAddress); //"Sheet1.C2:Sheet1.E5");
-//    }
+// FIXME microsoft treats the regions from this area in a different order, so dont use it or x and y values will be switched
+//     if( !chart()->m_cellRangeAddress.isEmpty() ) {
+//         if ( sheetReplacement )
+//             bodyWriter->addAttribute( "table:cell-range-address", replaceSheet( normalizeCellRange( m_cellRangeAddress ), QString::fromLatin1( "local" ) ) ); //"Sheet1.C2:Sheet1.E5");
+//         else
+//             bodyWriter->addAttribute( "table:cell-range-address", normalizeCellRange( m_cellRangeAddress ) ); //"Sheet1.C2:Sheet1.E5");
+//     }
 
     /*FIXME
     if(verticalCellRangeAddress.isEmpty()) {
@@ -549,7 +554,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     
     Q_FOREACH(Charting::Series* series, chart()->m_series) {
         lines = true;
-        if ( chart()->m_impl->name() == "scatter" )
+        if ( chart()->m_impl->name() == "scatter" && !paletteSet )
         {            
             Charting::ScatterImpl* impl = static_cast< Charting::ScatterImpl* >( chart()->m_impl );
             lines = impl->style == Charting::ScatterImpl::Line || impl->style == Charting::ScatterImpl::LineMarker;
@@ -557,6 +562,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
         }
         const bool noLineFill = ( series->spPr != 0 ) && series->spPr->lineFill.type == Charting::Fill::None;
         lines = lines && !noLineFill;
+        lines = lines || m_chart->m_showLines;
         
         bodyWriter->startElement("chart:series"); //<chart:series chart:style-name="ch7" chart:values-cell-range-address="Sheet1.C2:Sheet1.E2" chart:class="chart:circle">
         KoGenStyle seriesstyle(KoGenStyle::GraphicAutoStyle, "chart");
