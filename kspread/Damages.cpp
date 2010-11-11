@@ -162,7 +162,7 @@ const KSpread::Region& SelectionDamage::region() const
   kDebug support
 ****************************************************************************/
 
-kdbgstream operator<<(kdbgstream str, const KSpread::Damage& d)
+QDebug operator<<(QDebug str, const KSpread::Damage& d)
 {
     switch (d.type()) {
     case Damage::Nothing:   return str << "NoDamage";
@@ -176,7 +176,7 @@ kdbgstream operator<<(kdbgstream str, const KSpread::Damage& d)
     return str;
 }
 
-kdbgstream operator<<(kdbgstream str, const KSpread::CellDamage& d)
+QDebug operator<<(QDebug str, const KSpread::CellDamage& d)
 {
     str << "CellDamage: " << d.region().name(d.sheet());
     if (d.changes() & CellDamage::Appearance) str << " Appearance";
@@ -186,7 +186,7 @@ kdbgstream operator<<(kdbgstream str, const KSpread::CellDamage& d)
     return str;
 }
 
-kdbgstream operator<<(kdbgstream str, const KSpread::SheetDamage& d)
+QDebug operator<<(QDebug str, const KSpread::SheetDamage& d)
 {
     str << "SheetDamage: " << (d.sheet() ? d.sheet()->sheetName() : "NULL POINTER!");
     switch (d.changes()) {
@@ -202,7 +202,7 @@ kdbgstream operator<<(kdbgstream str, const KSpread::SheetDamage& d)
     return str;
 }
 
-kdbgstream operator<<(kdbgstream str, const KSpread::SelectionDamage& d)
+QDebug operator<<(QDebug str, const KSpread::SelectionDamage& d)
 {
     str << "SelectionDamage: " << d.region().name();
     return str;

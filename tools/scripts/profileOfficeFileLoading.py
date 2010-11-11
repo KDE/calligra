@@ -89,7 +89,8 @@ class odfvalidator:
 		path = sys.path[0]
 		self.relaxNGValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cd05-schema.rng'), 'r')))
+				'OpenDocument-v1.2-cd05-schema-koffice.rng'),
+				'r')))
 		self.relaxNGManifextValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
 				'OpenDocument-v1.2-cd05-manifest-schema.rng'), \

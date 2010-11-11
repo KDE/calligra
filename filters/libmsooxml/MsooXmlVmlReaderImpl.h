@@ -647,6 +647,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS(id)
     m_currentShapeId = id;
 
+    // For some shapes, it seems that this is the correct id.
+    TRY_READ_ATTR_WITH_NS(o, spid)
+    if (!o_spid.isEmpty()) {
+        m_currentShapeId = o_spid;
+    }
+
     // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))

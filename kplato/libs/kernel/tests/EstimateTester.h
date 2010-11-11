@@ -33,6 +33,7 @@ private slots:
     void optimistic();
     void pessimistic();
     void ratio();
+    void defaultScale();
     void scale();
     void pert();
 };

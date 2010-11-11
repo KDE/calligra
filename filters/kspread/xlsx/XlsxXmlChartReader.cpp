@@ -1060,6 +1060,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
             if (level == 1)
                 state = isStartElement() ? InFill : Start;
         } else if (qualifiedName() == "a:noFill") {
+            m_currentShapeProperties->lineFill.setType( Charting::Fill::None );
             if (level == 1)
                 state = isStartElement() ? NoFill : Start;
         } else if ((state == NoFill || state == InFill) && qualifiedName() == "a:srgbClr") {
@@ -1171,7 +1172,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
                 readingOutline = false;
         } else if ( qualifiedName() == "a:noFill" )
         {
-            m_currentShapeProperties->lineFill.type = Charting::Fill::None;
+            m_currentShapeProperties->lineFill.setType( Charting::Fill::None );
         }
     }
     READ_EPILOGUE
@@ -2016,11 +2017,11 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart_Ser()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            if( QUALIFIED_NAME_IS(spPr) )
-            {
-                m_currentSeries->spPr = new Charting::ShapeProperties;
-                m_currentShapeProperties  = m_currentSeries->spPr;
-            }
+//             if( QUALIFIED_NAME_IS(spPr) )
+//             {
+//                 m_currentSeries->spPr = new Charting::ShapeProperties;
+//                 m_currentShapeProperties  = m_currentSeries->spPr;
+//             }
             TRY_READ_IF(order)
             ELSE_TRY_READ_IF(idx)
             if (QUALIFIED_NAME_IS(tx)) {

@@ -280,7 +280,8 @@ KoFilter::ConversionStatus XlsxXmlDocumentReader::read_sheet()
                                           *m_context->comments,
                                           *m_context->styles,
                                           *m_context->relationships, m_context->import,
-                                          vmlreader.content());
+                                          vmlreader.content(),
+                                          vmlreader.frames());
     const KoFilter::ConversionStatus result = m_context->import->loadAndParseDocument(
                 &worksheetReader, filepath, &context);
     if (result != KoFilter::OK) {

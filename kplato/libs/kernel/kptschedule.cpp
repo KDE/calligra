@@ -1829,13 +1829,12 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     }
     setName( element.attribute( "name" ) );
     m_id = element.attribute( "id" );
-    m_usePert = (bool)(element.attribute( "distribution" ).toInt());
+    m_usePert = (element.attribute( "distribution" ).toInt()) == 1;
     m_allowOverbooking = (bool)(element.attribute( "overbooking" ).toInt());
     m_checkExternalAppointments = (bool)(element.attribute( "check-external-appointments" ).toInt());
     m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
     m_baselined = (bool)(element.attribute( "baselined" ).toInt());
     m_schedulerPluginId = element.attribute( "scheduler-plugin-id" );
-    m_usePert = (bool)(element.attribute( "use-pert" ).toInt());
     m_recalculate = (bool)(element.attribute( "recalculate" ).toInt());
     m_recalculateFrom = DateTime::fromString( element.attribute( "recalculate-from" ), status.projectSpec() );
     KoXmlNode n = element.firstChild();
@@ -1908,13 +1907,12 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     element.appendChild( el );
     el.setAttribute( "name", m_name );
     el.setAttribute( "id", m_id );
-    el.setAttribute( "distribution", m_usePert );
+    el.setAttribute( "distribution", m_usePert ? 1 : 0 );
     el.setAttribute( "overbooking", m_allowOverbooking );
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     el.setAttribute( "baselined", m_baselined );
     el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
-    el.setAttribute( "use-pert", m_usePert );
     el.setAttribute( "recalculate", m_recalculate );
     el.setAttribute( "recalculate-from", m_recalculateFrom.toString( KDateTime::ISODate ) );
     foreach ( MainSchedule *s, schedules() ) {
@@ -1938,7 +1936,7 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     element.appendChild( el );
     el.setAttribute( "name", m_name );
     el.setAttribute( "id", m_id );
-    el.setAttribute( "distribution", m_usePert );
+    el.setAttribute( "distribution", m_usePert ? 1 : 0 );
     el.setAttribute( "overbooking", m_allowOverbooking );
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );

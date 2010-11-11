@@ -86,7 +86,8 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
     const XlsxStyles& _styles,
     MSOOXML::MsooXmlRelationships& _relationships,
     XlsxImport* _import,
-    QMap<QString, QString> _oleReplacements)
+    QMap<QString, QString> _oleReplacements,
+    QMap<QString, QString> _oleBeginFrames)
         : MSOOXML::MsooXmlReaderContext(&_relationships)
         , sheet(new Sheet(_worksheetName))
         , worksheetNumber(_worksheetNumber)
@@ -100,6 +101,7 @@ XlsxXmlWorksheetReaderContext::XlsxXmlWorksheetReaderContext(
         , path(_path)
         , file(_file)
         , oleReplacements(_oleReplacements)
+        , oleFrameBegins(_oleBeginFrames)
 {
 }
 
@@ -448,15 +450,12 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     }
 
                     QPair<QString,QString> oleObject;
+                    int listIndex = 0;
                     foreach( oleObject, cell->oleObjects ) {
                         const QString olePath = oleObject.first;
                         const QString previewPath = oleObject.second;
-                        body->startElement("draw:frame");
-                        //TODO find out the proper values
-                        body->addAttribute("svg:x", "1cm");
-                        body->addAttribute("svg:y", "1cm");
-                        body->addAttribute("svg:width", "5cm");
-                        body->addAttribute("svg:height", "5cm");
+                        body->addCompleteElement(cell->oleFrameBegins.at(listIndex).toUtf8());
+                        ++listIndex;
 
                         body->startElement("draw:object-ole");
                         body->addAttribute("xlink:href", olePath);
@@ -472,7 +471,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         body->addAttribute("xlink:actuate", "onLoad");
                         body->endElement(); // draw:image
 
-                        body->endElement(); // draw:frame
+                        body->addCompleteElement("</draw:frame>");
                     }
                 }
                 body->endElement(); // table:table-cell
@@ -1370,12 +1369,11 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
     QString fileName = link.right( link.lastIndexOf('/') +1 );
     RETURN_IF_ERROR( copyFile(link, "", fileName) )
 
-    QString filePath = m_context->oleReplacements.value(shapeId);
-
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
 
-    cell->oleObjects << qMakePair<QString,QString>(fileName, filePath);
+    cell->oleObjects << qMakePair<QString,QString>(fileName, m_context->oleReplacements.value(shapeId));
+    cell->oleFrameBegins << m_context->oleFrameBegins.value(shapeId);
 
     while (!atEnd()) {
         readNext();
