@@ -274,7 +274,7 @@ target_link_libraries(kspreadcommon
     kspreadodf
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    ${KDE4_KUTILS_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
 

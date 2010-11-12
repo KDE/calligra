@@ -76,7 +76,7 @@ if(SHOULD_BUILD_KPLATO)
 endif(SHOULD_BUILD_KPLATO)
 
 if(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-#	add_subdirectory(xsltfilter)
+	add_subdirectory(xsltfilter)
 endif(NOT TINY AND LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32 AND NOT QT_MAC_USE_COCOA)
 
 ########### install files ###############
