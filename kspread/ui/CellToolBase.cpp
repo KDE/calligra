@@ -2301,7 +2301,7 @@ void CellToolBase::equalizeRow()
             return;
         for (int i = range.top() + 1; i <= range.bottom(); ++i) {
             int lastRow;
-            size = qMax(selection()->activeSheet()->rowFormats()->rowHeight(i, &lastRow), size);
+            size = qMax(selection()->activeSheet()->rowFormats()->rowHeight(i, &lastRow), static_cast<qreal>(size));
             i = lastRow;
         }
 
