@@ -1886,13 +1886,11 @@ void MainWindow::openDocument(const QString &fileName, bool isNewDocument)
 
     setShowProgressIndicator(true);
     QString mimetype = KMimeType::findByPath(fileName)->name();
-    int errorCode = 0;
     m_isLoading = true;
 
-    m_doc = KParts::ComponentFactory::createPartInstanceFromQuery<KoDocument>(
-                mimetype, QString(),
-                0, 0, QStringList(),
-                &errorCode);
+    QString error;
+    m_doc = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>(
+                mimetype, 0, 0, QString(), QVariantList(), &error);
 
     if (!m_doc) {
         setShowProgressIndicator(false);
