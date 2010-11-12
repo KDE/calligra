@@ -369,11 +369,16 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
     m_view->activePage()->paintBackground( painter, m_zoomHandler );
 
     if ( m_view->activePage()->displayMasterShapes() ) {
+        KoViewConverter::Options oldoptions = m_zoomHandler.options();
+        m_zoomHandler.setOptions(KoViewConverter::OnlyBackgroundObjects); // used for ODF presentation:background-objects-visible
+        
         foreach ( KoShape *shape, m_canvas->masterShapeManager()->shapes() ) {
             shape->waitUntilReady( m_zoomHandler, false );
         }
 
         m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, true );
+        
+        m_zoomHandler.setOptions(oldoptions);
     }
     foreach ( KoShape *shape, m_canvas->shapeManager()->shapes() ) {
         shape->waitUntilReady( m_zoomHandler, false );
