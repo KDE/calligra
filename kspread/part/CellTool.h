@@ -20,9 +20,9 @@
 #ifndef KSPREAD_CELL_TOOL
 #define KSPREAD_CELL_TOOL
 
-#include "ui/CellToolBase.h"
+#include <kspread/ui/CellToolBase.h>
 
-#include "kspread_export.h"
+#include <kspread/kspread_export.h>
 
 namespace KSpread
 {
