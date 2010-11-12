@@ -60,7 +60,6 @@ PptxShapeProperties::PptxShapeProperties()
     width = -1;
     height = -1;
     rot = 0;
-    isPlaceHolder = false;
 }
 
 PptxShapeProperties::PptxShapeProperties(const PptxShapeProperties &other)
@@ -75,7 +74,6 @@ PptxShapeProperties& PptxShapeProperties::operator=(const PptxShapeProperties &o
     width = other.width;
     height = other.height;
     rot = other.rot;
-    isPlaceHolder = other.isPlaceHolder;
     return *this;
 }
 
@@ -87,13 +85,10 @@ PptxSlideProperties::PptxSlideProperties()
 
 PptxSlideProperties::~PptxSlideProperties()
 {
-    qDeleteAll(shapes);
 }
 
 void PptxSlideProperties::clear()
 {
-    qDeleteAll(shapes);
-    shapes.clear();
     shapesMap.clear();
 }
 
@@ -122,8 +117,6 @@ PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 
 PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
 {
-    qDeleteAll(shapes);
-    qDeleteAll(placeholders);
 }
 
 // -------------------
@@ -1255,11 +1248,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
     // There is a hardcoded behaviour in MSoffice that ctrTitle refers also to "title"
     if (d->phType == "ctrTitle") {
         d->phType = "title";
-    }
-
-    if (m_context->type == SlideLayout) {
-        // Mark this shape as a place holder.
-        m_isPlaceHolder = true;
     }
 
     const QString styleId(d->phStyleId());

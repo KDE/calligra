@@ -125,8 +125,6 @@ qreal m_currentTint; // value of current tint
 int m_currentAlpha; // current alpha color value
 qreal m_currentSatMod; //value of current saturation modulation
 
-bool    m_isPlaceHolder; //! set by read_ph()
-
 QString m_contentType; // read in prstGeom
 
 KoFilter::ConversionStatus read_fld();
