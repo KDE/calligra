@@ -19,7 +19,7 @@
 */
 #ifndef KSPREAD_CELLEDITORBASE_H
 #define KSPREAD_CELLEDITORBASE_H
-#include "kspread_export.h"
+#include <kspread/kspread_export.h>
 
 class QFont;
 class KoViewConverter;
