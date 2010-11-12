@@ -52,9 +52,7 @@ KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
 KoFilter::ConversionStatus read_grpSpPr();
-bool m_outputDrawFrame; // used by read_sp()
 void preReadSp();
-KoFilter::ConversionStatus generatePlaceHolderSp();
 void generateFrameSp();
 KoFilter::ConversionStatus read_cxnSp();
 KoFilter::ConversionStatus read_sp();

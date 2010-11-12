@@ -274,6 +274,12 @@ protected:
     // Saves current body properties
     void saveBodyProperties();
 
+    // Saves current shape position etc. so that they can be used by slide/slideLayout
+    KoFilter::ConversionStatus generatePlaceHolderSp();
+
+    // Inherits shape x, y, width etc. from slideLayout/slideMaster
+    void inheritShapePosition();
+
 private:
     void init();
     class Private;
