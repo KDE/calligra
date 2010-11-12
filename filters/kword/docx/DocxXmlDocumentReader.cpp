@@ -3559,11 +3559,14 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
     createBorderStyle(sz, color, val, RightBorder);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
-        int sp;
-        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
-        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
-        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
-        m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", BottomBorder);
+        bool ok = false;
+        const qreal sp = qreal(TWIP_TO_POINT(space.toDouble(&ok)));
+        if (ok) {
+            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
+            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
+            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
+            m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", BottomBorder);
+        }
     }
 
     m_textBorderStyles = m_borderStyles;
