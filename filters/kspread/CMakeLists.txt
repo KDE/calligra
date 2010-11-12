@@ -12,7 +12,7 @@ add_subdirectory( excel )
 add_subdirectory( xlsx )
 
 if(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
-    add_subdirectory( html )
-    add_subdirectory( latex )
+#    add_subdirectory( html )
+#    add_subdirectory( latex )
 endif(NOT WIN32 AND NOT QT_MAC_USE_COCOA)
 
