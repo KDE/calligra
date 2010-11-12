@@ -75,6 +75,11 @@ QMap<QString, QString> VmlDrawingReader::content()
     return m_content;
 }
 
+QMap<QString, QString> VmlDrawingReader::frames()
+{
+    return m_frames;
+}
+
 KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext* context)
 {
     m_context = static_cast<VmlDrawingReaderContext*>(context);
@@ -105,6 +110,7 @@ KoFilter::ConversionStatus VmlDrawingReader::read(MSOOXML::MsooXmlReaderContext*
 KoFilter::ConversionStatus VmlDrawingReader::read_xml()
 {
     unsigned index = 0;
+    KoXmlWriter *oldBody = 0;
 
     while (!atEnd()) {
         readNext();
@@ -115,6 +121,15 @@ KoFilter::ConversionStatus VmlDrawingReader::read_xml()
             if (qualifiedName() == "v:shape") {
                 TRY_READ(shape) //from vml
                 m_content[m_currentShapeId] = m_imagedataPath;
+                oldBody = body; // Body protetion starts
+                QBuffer frameBuf;
+                KoXmlWriter frameWriter(&frameBuf);
+                body = &frameWriter;
+                pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+                createFrameStart();
+                popCurrentDrawStyle();
+                m_frames[m_currentShapeId] = QString::fromUtf8(frameBuf.buffer(), frameBuf.buffer().size()).append(">");
+                body = oldBody; // Body protection ends
                 ++index;
             }
         }

@@ -166,12 +166,81 @@ void EstimateTester::ratio() {
 
 }
 
-void EstimateTester::scale() {
-    QList<double> s; s << 365.0 / 30 << 30.0 / 7.0 << 7.0 << 8.0;
+void EstimateTester::defaultScale() {
+    QList<qint64> s = Estimate::defaultScales();
 
-    Duration d = Estimate::scale( 1.0, Duration::Unit_d, s );
-    QVERIFY( d.milliseconds() == 1000*60*60 * 8 );
-    QVERIFY( 1.0 == Estimate::scale( d, Duration::Unit_d, s ) );
+    QCOMPARE( s.count(), 8 );
+
+    Duration d = Estimate::scale( 1.0, Duration::Unit_Y, s );
+    QCOMPARE( d.milliseconds(), s[0] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_Y, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_M, s );
+    QCOMPARE( d.milliseconds(), s[1] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_M, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_w, s );
+    QCOMPARE( d.milliseconds(), s[2] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_w, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_d, s );
+    QCOMPARE( d.milliseconds(), s[3] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_d, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_h, s );
+    QCOMPARE( d.milliseconds(), s[4] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_h, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_m, s );
+    QCOMPARE( d.milliseconds(), s[5] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_m, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_s, s );
+    QCOMPARE( d.milliseconds(), s[6] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_s, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_ms, s );
+    QCOMPARE( d.milliseconds(), s[7] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_ms, s ) );
+}
+
+void EstimateTester::scale() {
+    StandardWorktime wt;
+    QList<qint64> s = wt.scales();
+
+    QCOMPARE( s.count(), 8 );
+
+    Duration d = Estimate::scale( 1.0, Duration::Unit_Y, s );
+    QCOMPARE( d.milliseconds(), s[0] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_Y, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_M, s );
+    QCOMPARE( d.milliseconds(), s[1] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_M, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_w, s );
+    QCOMPARE( d.milliseconds(), s[2] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_w, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_d, s );
+    QCOMPARE( d.milliseconds(), s[3] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_d, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_h, s );
+    QCOMPARE( d.milliseconds(), s[4] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_h, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_m, s );
+    QCOMPARE( d.milliseconds(), s[5] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_m, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_s, s );
+    QCOMPARE( d.milliseconds(), s[6] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_s, s ) );
+
+    d = Estimate::scale( 1.0, Duration::Unit_ms, s );
+    QCOMPARE( d.milliseconds(), s[7] );
+    QCOMPARE( 1.0, Estimate::scale( d, Duration::Unit_ms, s ) );
 }
 
 void EstimateTester::pert() {

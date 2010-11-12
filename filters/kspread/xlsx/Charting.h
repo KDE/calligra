@@ -126,12 +126,16 @@ namespace Charting
     
     class Fill
     {
-    public:
+    public:        
         enum FillType{ Blip, Gradient, Group, None, Pattern, Solid };
+        Fill():type( None ), valid( false ){};
+        void setColor( const QColor& color ){ solidColor = color; valid = true; type = Solid; }
+        void setType( FillType type ){ this->type = type; valid = true; }
         QColor solidColor;
         QString pixmapFile;
         Charting::Gradient gradient;
         FillType type;
+        bool valid;
     };
     
     class ShapeProperties
@@ -139,6 +143,7 @@ namespace Charting
     public:
         int lineWidth;
         Fill lineFill;
+        Fill areaFill;
     };
 
     class ChartImpl
@@ -402,11 +407,12 @@ namespace Charting
         Gradient* m_plotAreaFillGradient;
         QColor m_plotAreaFillColor;
         bool m_showMarker;
+        bool m_showLines;
 
         // charts internal table
         InternalTable m_internalTable;
 
-        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false) {
+        explicit Chart() : Obj(),  m_fromRow(0), m_fromColumn(0), m_toRow(0), m_toColumn(0), m_is3d(false), m_angleOffset(0), m_leftMargin(0), m_topMargin(0), m_rightMargin(0), m_bottomMargin(0), m_impl(0), m_transpose(false), m_stacked(false), m_f100(false), m_style(2), m_fillGradient(0), m_plotAreaFillGradient(0), m_showMarker(false), m_showLines( false ) {
             m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
         }
         virtual ~Chart() { qDeleteAll(m_series); qDeleteAll(m_texts); delete m_impl; delete m_fillGradient; delete m_plotAreaFillGradient; }

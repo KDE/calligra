@@ -199,22 +199,21 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
     if (m_rot == 0) {
 #if defined(XLSXXMLDRAWINGREADER_CPP)
     if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {  // if we got 'from' cell
-        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_col > 0) {
+        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_col >= 0) {
             body->addAttributePt("svg:x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_colOff));
             body->addAttributePt("svg:y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor].m_rowOff));
         }
         else {
-            body->addAttribute("svg:x", EMU_TO_POINT(m_svgX));
-            body->addAttribute("svg:y", EMU_TO_POINT(m_svgY));
+            body->addAttributePt("svg:x", EMU_TO_POINT(m_svgX));
+            body->addAttributePt("svg:y", EMU_TO_POINT(m_svgY));
         }
-        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col > 0) {
+        if (m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col >= 0) {
             body->addAttribute("table:end-cell-address", KSpread::Util::encodeColumnLabelText(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_col+1) +
                 QString::number(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_row+1));
             body->addAttributePt("table:end-x", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_colOff));
             body->addAttributePt("table:end-y", EMU_TO_POINT(m_currentDrawingObject->m_positions[XlsxDrawingObject::ToAnchor].m_rowOff));
         }
     }
-
 #else
         body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
         body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -710,7 +709,10 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     inheritDefaultBodyProperties();
     inheritBodyProperties(); // Properties may or may not override default ones.
-#else
+
+    if (m_normAutoFit == MSOOXML::Utils::autoFitOn) {
+        m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
+    }
 #endif
     if (m_contentType == "line") {
         body->startElement("draw:line");
@@ -800,25 +802,25 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
             QString x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth);
-        if (m_rot != 0) {
-            qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-            //! @todo, in case of connector, these should maybe be reversed?
-            x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
-            y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
-            x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
-            y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
-        }
-        if (m_flipV) {
-            QString temp = y2;
-            y2 = y1;
-            y1 = temp;
-        }
-        if (m_flipH) {
-            QString temp = x2;
-            x2 = x1;
-            x1 = temp;
-        }
+            if (m_rot != 0) {
+                qreal angle, xDiff, yDiff;
+                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                //! @todo, in case of connector, these should maybe be reversed?
+                x1 = EMU_TO_CM_STRING(m_svgX + xDiff);
+                y1 = EMU_TO_CM_STRING(m_svgY + yDiff);
+                x2 = EMU_TO_CM_STRING(m_svgX + m_svgWidth - xDiff);
+                y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight - yDiff);
+            }
+            if (m_flipV) {
+                QString temp = y2;
+                y2 = y1;
+                y1 = temp;
+            }
+            if (m_flipH) {
+                QString temp = x2;
+                x2 = x1;
+                x1 = temp;
+            }
             body->addAttribute("svg:x1", x1);
             body->addAttribute("svg:y1", y1);
             body->addAttribute("svg:x2", x2);
@@ -884,6 +886,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::generatePlaceHolderSp()
             m_currentShapeProperties = new PptxShapeProperties(*masterShapeProperties);
         } else { // Case where it was not present in master slide at all
             m_currentShapeProperties = new PptxShapeProperties;
+        }
+        if (m_xfrm_read) { // If element was present, then we can use values from the slidelayout
             m_currentShapeProperties->x = m_svgX;
             m_currentShapeProperties->y = m_svgY;
             m_currentShapeProperties->width = m_svgWidth;
@@ -5178,7 +5182,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
  - flatTx (No text in 3D scene) §20.1.5.8
  - noAutofit (No AutoFit) §21.1.2.1.2
  - [done] normAutofit (Normal AutoFit) §21.1.2.1.3
- - prstTxWarp (Preset Text Warp) §20.1.9.19
+ - [done] prstTxWarp (Preset Text Warp) §20.1.9.19
  - scene3d (3D Scene Properties) §20.1.4.1.26
  - sp3d (Apply 3D shape properties) §20.1.5.12
  - [done] spAutoFit (Shape AutoFit) §21.1.2.1.4
@@ -5212,9 +5216,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
 
-#ifdef PPTXXMLSLIDEREADER_CPP
-    inheritBodyProperties();
-#endif
+    m_normAutoFit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -5247,7 +5249,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 //! @todo more atributes
 
     bool spAutoFit = false;
-    bool normAutoFit = false;
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -5255,9 +5256,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
             if (qualifiedName() == QLatin1String("a:spAutoFit")) {
                 TRY_READ(spAutoFit)
                 spAutoFit = true;
+                m_normAutoFit = MSOOXML::Utils::autoFitOn;
             }
             else if (qualifiedName() == QLatin1String("a:normAutofit")) {
-                normAutoFit = true;
+                m_normAutoFit = MSOOXML::Utils::autoFitOn;
+            }
+            else if (qualifiedName() == QLatin1String("a:prstTxWarp")) {
+                // The handling here is not correct but better than nothing
+                // Also normAutoFit = true seems to be correct for value 'textNoShape'
+                m_normAutoFit = MSOOXML::Utils::autoFitOn;
             }
         }
     }
@@ -5274,9 +5281,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
     // text in shape
     m_currentPresentationStyle.addProperty("fo:wrap-option",
         wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
-    if (normAutoFit) {
-        m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
-    }
 #endif
     READ_EPILOGUE
 }

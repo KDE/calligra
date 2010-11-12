@@ -304,7 +304,7 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPa
     sharedData->loadOdfStyles(ctxt, styleManager);
     ctxt.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
 
-    KoTextLoader loader(ctxt);
+    KoTextLoader loader(ctxt, m_document->documentRdfBase());
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);
 

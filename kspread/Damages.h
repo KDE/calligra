@@ -209,9 +209,9 @@ private:
   kDebug support
 ****************************************************************************/
 
-KSPREAD_EXPORT kdbgstream operator<<(kdbgstream str, const KSpread::Damage& d);
-KSPREAD_EXPORT kdbgstream operator<<(kdbgstream str, const KSpread::CellDamage& d);
-KSPREAD_EXPORT kdbgstream operator<<(kdbgstream str, const KSpread::SheetDamage& d);
-KSPREAD_EXPORT kdbgstream operator<<(kdbgstream str, const KSpread::SelectionDamage& d);
+KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::Damage& d);
+KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::CellDamage& d);
+KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::SheetDamage& d);
+KSPREAD_EXPORT QDebug operator<<(QDebug str, const KSpread::SelectionDamage& d);
 
 #endif // KSPREAD_DAMAGES

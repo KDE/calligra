@@ -312,24 +312,65 @@ void KoWmfPaint::recalculateWorldTransform()
         // Both window and viewport are set.
         mWindowViewportScaleX = qreal(mViewportExt.width()) / qreal(mWindowExt.width());
         mWindowViewportScaleY = qreal(mViewportExt.height()) / qreal(mWindowExt.height());
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "Scale for Window -> Viewport"
+                      << mWindowViewportScaleX << mWindowViewportScaleY;
+#endif
     } else {
         // Only one of window and viewport ext is set: Use same width for window and viewport
         mWindowViewportScaleX = qreal(1.0);
         mWindowViewportScaleY = qreal(1.0);
+#if DEBUG_WMFPAINT
+        kDebug(31000) << "Only one of Window or Viewport set: scale = 1";
+#endif
     }
 
-    // Calculate the world transform...
+    // Negative window extensions mean flip the picture.  Handle this here.
+    bool  flip = false;
+    qreal midpointX = 0.0;
+    qreal midpointY = 0.0;
+    qreal scaleX = 1.0;
+    qreal scaleY = 1.0;
+    if (mWindowExt.width() < 0) {
+        midpointX = mWindowOrg.x() + mWindowExt.width() / qreal(2.0);
+        scaleX = -1.0;
+        flip = true;
+    }
+    if (mWindowExt.height() < 0) {
+        midpointY = mWindowOrg.y() + mWindowExt.height() / qreal(2.0);
+        scaleY = -1.0;
+        flip = true;
+    }
+    if (flip) {
+        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        mWorldTransform.translate(midpointX, midpointY);
+        mWorldTransform.scale(scaleX, scaleY);
+        mWorldTransform.translate(-midpointX, -midpointY);
+        //kDebug(31000) << "After flipping for window" << mWorldTransform;
+    }
+
+    // Calculate the world transform.
     mWorldTransform.translate(-mWindowOrg.x(), -mWindowOrg.y());
     mWorldTransform.scale(mWindowViewportScaleX, mWindowViewportScaleY);
-    mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
- 
-    // ...and apply it to the painter
+    if (mViewportExtIsSet) {
+        mWorldTransform.translate(mViewportOrg.x(), mViewportOrg.y());
+    } 
+    else {
+        mWorldTransform.translate(mWindowOrg.x(), mWindowOrg.y());
+    }
+    //kDebug(31000) << "After window viewport calculation" << mWorldTransform;
+
+    // FIXME: also handle negative viewport extensions?  If so, do it here.
+
+    // Apply the world transform to the painter.
     mPainter->setWorldTransform(mWorldTransform);
     mWindowViewportIsSet = true;
 
     // Apply the output transform.
     QTransform currentMatrix = mPainter->worldTransform();
     QTransform newMatrix = currentMatrix * mOutputTransform;
+    //kDebug(31000) << "Output transform" << mOutputTransform;
+    //kDebug(31000) << "Total  transform" << newMatrix;
     mPainter->setWorldTransform( newMatrix );
 }
 
@@ -345,6 +386,31 @@ void KoWmfPaint::setWindowOrg(int left, int top)
     mWindowOrg = QPoint(left, top);
 
     recalculateWorldTransform();
+
+#if 0
+    // Debug code.  Draw a rectangle with some decoration to show see
+    // if all the transformations work.
+    mPainter->save();
+
+    // Paint a black rectangle around the current window.
+    mPainter->setPen(Qt::green);
+    QRect windowRect = QRect(mWindowOrg, mWindowExt);
+    mPainter->drawRect(windowRect);
+
+#if 0
+    // Paint a black line from the Window origin to (0, 0)
+    mPainter->drawLine(mWindowOrg, QPoint(0, 0));
+
+    mPainter->setPen(Qt::red);
+    mPainter->drawRect(boundingRect());
+
+    mPainter->drawLine(boundingRect().topLeft(), QPoint(0, 0));
+#endif
+    mPainter->restore();
+
+    kDebug(31000) << "Window rect: " << windowRect;
+    kDebug(31000) << "Bounding rect: " << boundingRect();
+#endif
 }
 
 
@@ -364,13 +430,15 @@ void KoWmfPaint::setWindowExt(int width, int height)
     // if all the transformations work.
     mPainter->save();
 
-    mPainter->setPen(Qt::black);
-    QRect windowRect = QRect(QPoint(mOrgX, mOrgY),
-                             QSize(mExtWidth, mExtHeight));
-    mPainter->drawRect(windowRect);
-    mPainter->drawLine(QPoint(mOrgX, mOrgY), QPoint(0, 0));
-
+    // Paint a red rectangle around the current window.
     mPainter->setPen(Qt::red);
+    QRect windowRect = QRect(mWindowOrg, mWindowExt);
+    mPainter->drawRect(windowRect);
+
+    // Paint a line from the Window origin to (0, 0)
+    mPainter->drawLine(mWindowOrg, QPoint(0, 0));
+
+    mPainter->setPen(Qt::black);
     mPainter->drawRect(boundingRect());
 
     mPainter->drawLine(boundingRect().topLeft(), QPoint(0, 0));

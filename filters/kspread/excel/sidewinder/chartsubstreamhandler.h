@@ -72,6 +72,8 @@ private:
     int m_defaultTextId;
     int m_axisId;
     
+    bool m_disableAutoMarker;
+    
     void handleBOF(BOFRecord*);
     void handleEOF(EOFRecord *);
     void handleFooter(FooterRecord *);

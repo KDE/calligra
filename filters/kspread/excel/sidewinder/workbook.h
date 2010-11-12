@@ -133,6 +133,7 @@ public:
     MSO::OfficeArtDggContainer* officeArtDggContainer() const;
 
     void setColorTable(const QList<QColor>& colorTable);
+    QList< QColor > colorTable() const;
     QColor customColor(unsigned index) const;
     QColor color(unsigned index) const;
 

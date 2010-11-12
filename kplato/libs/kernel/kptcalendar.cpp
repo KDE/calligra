@@ -1366,9 +1366,9 @@ void StandardWorktime::changed()
     }
 }
 
-QList<double> StandardWorktime::scales() const
+QList<qint64> StandardWorktime::scales() const
 {
-    return QList<double>() << year() / month() << month() / week() << week() / day() << day();
+    return QList<qint64>() << m_year.milliseconds() << m_month.milliseconds() << m_week.milliseconds() << m_day.milliseconds() << 60*60*1000 << 60*1000 << 1000 << 1;
 }
 
 bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {

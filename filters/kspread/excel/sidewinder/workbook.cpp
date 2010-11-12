@@ -228,6 +228,11 @@ void Workbook::setColorTable(const QList<QColor> &colorTable)
     d->colorTable = colorTable;
 }
 
+QList< QColor > Workbook::colorTable() const
+{
+    return d->colorTable;
+}
+
 QColor Workbook::customColor(unsigned index) const
 {
     if (index < unsigned(d->colorTable.size()))

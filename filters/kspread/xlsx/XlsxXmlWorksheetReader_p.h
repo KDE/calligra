@@ -53,6 +53,7 @@ public:
 
     //QPair< oleObjectFile, imageReplacementFile>
     QList< QPair<QString,QString> > oleObjects;
+    QList<QString> oleFrameBegins;
 
     Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true) {}
     ~Cell() { qDeleteAll(drawings); }

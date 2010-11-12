@@ -585,7 +585,7 @@ public:
 class KPLATOKERNEL_EXPORT StandardWorktime
 {
 public:
-    StandardWorktime( Project *project = 0 );
+    explicit StandardWorktime( Project *project = 0 );
     StandardWorktime(StandardWorktime* worktime);
     ~StandardWorktime();
 
@@ -627,7 +627,7 @@ public:
     /// Set the work time of a normal day
     void setDay(double hours) { m_day = Duration(hours, Duration::Unit_h); changed(); }
     
-    QList<double> scales() const;
+    QList<qint64> scales() const;
 
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;

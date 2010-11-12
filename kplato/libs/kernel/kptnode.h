@@ -795,12 +795,14 @@ public:
     Duration pertPessimistic() const;
     
     /// Convert the duration @p value (in milliseconds) to a value in @p unit, using the scaling factors in @p scales
-    static double scale( const Duration &value, Duration::Unit unit, const QList<double> &scales );
+    static double scale( const Duration &value, Duration::Unit unit, const QList<qint64> &scales );
     /// Convert the duration @p value (in @p unit) to a value in milliseconds (base unit), using the scaling factors in @p scales
-    static Duration scale( double value, Duration::Unit unit, const QList<double> &scales );
+    static Duration scale( double value, Duration::Unit unit, const QList<qint64> &scales );
 
+    /// Return a list of default scales scaling factors
+    static QList<qint64> defaultScales();
     /// Return a list of scaling factors fetched from the projects standard worktime
-    QList<double> scales() const;
+    QList<qint64> scales() const;
     
     /// Load from xml document
     bool load(KoXmlElement &element, XMLLoaderObject &status);

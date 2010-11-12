@@ -104,7 +104,7 @@ class KPLATOUI_EXPORT CompletionEntryItemModel : public QAbstractItemModel
 public:
     CompletionEntryItemModel( QWidget *parent );
     
-    void setTask( Task *t ) { m_node = t; }
+    void setTask( Task *t );
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
@@ -148,10 +148,11 @@ protected:
     void addEntry( const QDate date );
     void refresh();
     
-    QList<double> scales() const;
+    QList<qint64> scales() const;
     
 private:
     Task *m_node;
+    Project *m_project;
     ScheduleManager *m_manager;
     Completion *m_completion;
     QList<QDate> m_dates;

@@ -48,6 +48,7 @@ public:
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 
     QMap<QString, QString> content();
+    QMap<QString, QString> frames();
 
 #include <MsooXmlVmlReaderMethods.h>
 
@@ -62,6 +63,10 @@ private:
     Private* const d;
     // List of draw:images meant to be used as object replacements
     QMap<QString, QString> m_content;
+
+    // List of beginning draw:frames meant to be used if the position is unknown otherwise
+    // Note that the ending draw:frame still needs to be added by the calling program
+    QMap<QString, QString> m_frames;
 };
 
 #endif //DOCXXMLHEADERREADER_H
