@@ -31,8 +31,8 @@
 
 #include <KoInteractionTool.h>
 
-#include "Cell.h"
-#include "kspread_export.h"
+#include <kspread/Cell.h>
+#include <kspread/kspread_export.h>
 #include "Selection.h"
 
 class KoColor;
