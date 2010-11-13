@@ -69,7 +69,7 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
 
     QString mimetype = KMimeType::findByPath( path )->name();
 
-    m_doc = KParts::ComponentFactory::createPartInstanceFromQuery<KoDocument>( mimetype, QString());
+    m_doc = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>( mimetype );
 
     if (!m_doc) return false;
 

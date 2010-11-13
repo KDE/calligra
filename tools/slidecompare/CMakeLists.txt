@@ -18,7 +18,7 @@ if(OOOSDK_FOUND)
 		slideview.cpp combinedview.cpp slidecompare.cpp
 		kpresenterslideloader.cpp oothread.cpp ${MOCFILES})
 	target_link_libraries(slidecompare ${OOOSDK_LIBRARIES} ${QT_LIBRARIES}
-		komain kopageapp ppttoodplib)
+		${QT_QTOPENGL_LIBRARY} komain kopageapp ppttoodplib)
 	# it would be nice if this explicit depencency was not needed
 	add_dependencies(slidecompare _oooheaders)
 endif(OOOSDK_FOUND)
