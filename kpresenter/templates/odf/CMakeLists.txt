@@ -4,6 +4,7 @@
 set(desktop_FILES
     blue_orange_vector.desktop
     burning_desire.desktop
+    business.desktop
     flood_light.desktop
     simple_waves.desktop
     rounded_square.desktop
@@ -19,6 +20,7 @@ set(desktop_FILES
 set(otp_FILES
     blue_orange_vector.otp
     burning_desire.otp
+    business.otp
     flood_light.otp
     rounded_square.otp
     simple_waves.otp
