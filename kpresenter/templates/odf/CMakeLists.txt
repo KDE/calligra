@@ -2,6 +2,7 @@
 # for now only install the desktop files of the templates that are ready
 # but include all templates so that the translation team can do their work
 set(desktop_FILES
+    blue_orange_vector.desktop
     burning_desire.desktop
     flood_light.desktop
     simple_waves.desktop
@@ -12,9 +13,11 @@ set(desktop_FILES
     skyline_morning_wide.desktop
     skyline_night.desktop
     skyline_night_wide.desktop
+    strange_far_hills.desktop
    )
 
 set(otp_FILES
+    blue_orange_vector.otp
     burning_desire.otp
     flood_light.otp
     rounded_square.otp
@@ -25,6 +28,7 @@ set(otp_FILES
     skyline_morning_wide.otp
     skyline_night.otp
     skyline_night_wide.otp
+    strange_far_hills.otp
    )
 #file(GLOB desktop_FILES *.desktop)
 #file(GLOB otp_FILES *.otp)
