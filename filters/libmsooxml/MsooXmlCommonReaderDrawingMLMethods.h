@@ -52,9 +52,7 @@ KoFilter::ConversionStatus read_nvCxnSpPr();
 KoFilter::ConversionStatus read_grpSp();
 
 KoFilter::ConversionStatus read_grpSpPr();
-bool m_outputDrawFrame; // used by read_sp()
 void preReadSp();
-KoFilter::ConversionStatus generatePlaceHolderSp();
 void generateFrameSp();
 KoFilter::ConversionStatus read_cxnSp();
 KoFilter::ConversionStatus read_sp();
@@ -124,8 +122,6 @@ qreal m_currentShadeLevel;
 qreal m_currentTint; // value of current tint
 int m_currentAlpha; // current alpha color value
 qreal m_currentSatMod; //value of current saturation modulation
-
-bool    m_isPlaceHolder; //! set by read_ph()
 
 QString m_contentType; // read in prstGeom
 

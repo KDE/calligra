@@ -869,6 +869,8 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
         if (tc) {
             tt = tc->textHeaderAtom.textType;
         }
+	//TODO: check TextTypeEnum (2.13.33) for all text types to be handled
+	//or provide TextCFException.
         switch (tt) {
         case Text::Title: 
         case Text::CenterTitle:
@@ -1988,18 +1990,26 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
     const TextCFException* cf = NULL;
     int count = 0;
 
+    //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
+    //TextMasterStyleLevel, handle this case.
+
     if (cfr) {
         cf = &cfr->cf;
         count = cfr->count;
     }
+    
+    //NOTE: At the moment, TextSIException data are not processed in the
+    //defineTextProperties function, so keep it simple! (uzak}
 
+    const TextSIException* si = 0;
+    int i = 0;
+
+#ifdef SI_EXCEPTION
     // get the right special info run
     const QList<TextSIRun>* tsi = 0;
     if (tc.specialinfo) tsi = &tc.specialinfo->rgSIRun;
     if (tc.specialinfo2) tsi = &tc.specialinfo2->rgSIRun;
-    const TextSIException* si = 0;
     int siend = 0;
-    int i = 0;
     if (tsi) {
         while (i < tsi->size()) {
             si = &(*tsi)[i].si;
@@ -2013,7 +2023,7 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
             si = 0;
         }
     }
-
+#endif
     // find a meta character
     const TextContainerMeta* meta = 0;
     for (i = 0; i<tc.meta.size(); ++i) {
@@ -2051,10 +2061,13 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
         }
     }
 
+#ifdef SI_EXCEPTION
     // determine the end of the range
     if (si && siend < end) {
         end = siend;
     }
+#endif
+
     if (meta) {
         end = start + 1; // meta is always one character
     }

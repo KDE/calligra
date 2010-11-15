@@ -56,8 +56,6 @@ public:
     int height;
     //! p:spPr/a:xfrm@rot value in 1/60,000th of a degree.
     int rot;
-    //! p:nvPr/p:ph
-    bool isPlaceHolder;
 };
 
 //! Styles valid for current slide
@@ -80,8 +78,6 @@ class PptxSlideProperties
 public:
     PptxSlideProperties();
     ~PptxSlideProperties();
-    //! Shapes ordered by position
-    QList<PptxShapeProperties*> shapes;
     //! Shapes map addressed by type
     QMap<QString, PptxShapeProperties*> shapesMap;
     //! Clear the shapes and shapesMap lists.
@@ -111,12 +107,8 @@ public:
     PptxSlideLayoutProperties();
     ~PptxSlideLayoutProperties();
 
-    //! Shapes ordered by position
-    QList<PptxShapeProperties*> shapes;
     //! Shapes map addressed by type
     QMap<QString, PptxShapeProperties*> shapesMap;
-    //! placeholders objects are owned by this object
-    QMap<QString, PptxPlaceholder*> placeholders;
     //! The presentation:presentation-page-layout-name
     QString pageLayoutStyleName;
     //! Map of paragraph-styles with the styleId as outer-key and the listlevel as inner-key.
@@ -281,6 +273,12 @@ protected:
 
     // Saves current body properties
     void saveBodyProperties();
+
+    // Saves current shape position etc. so that they can be used by slide/slideLayout
+    KoFilter::ConversionStatus generatePlaceHolderSp();
+
+    // Inherits shape x, y, width etc. from slideLayout/slideMaster
+    void inheritShapePosition();
 
 private:
     void init();

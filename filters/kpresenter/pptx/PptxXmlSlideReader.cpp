@@ -60,7 +60,6 @@ PptxShapeProperties::PptxShapeProperties()
     width = -1;
     height = -1;
     rot = 0;
-    isPlaceHolder = false;
 }
 
 PptxShapeProperties::PptxShapeProperties(const PptxShapeProperties &other)
@@ -75,7 +74,6 @@ PptxShapeProperties& PptxShapeProperties::operator=(const PptxShapeProperties &o
     width = other.width;
     height = other.height;
     rot = other.rot;
-    isPlaceHolder = other.isPlaceHolder;
     return *this;
 }
 
@@ -87,13 +85,10 @@ PptxSlideProperties::PptxSlideProperties()
 
 PptxSlideProperties::~PptxSlideProperties()
 {
-    qDeleteAll(shapes);
 }
 
 void PptxSlideProperties::clear()
 {
-    qDeleteAll(shapes);
-    shapes.clear();
     shapesMap.clear();
 }
 
@@ -122,8 +117,6 @@ PptxSlideLayoutProperties::PptxSlideLayoutProperties()
 
 PptxSlideLayoutProperties::~PptxSlideLayoutProperties()
 {
-    qDeleteAll(shapes);
-    qDeleteAll(placeholders);
 }
 
 // -------------------
@@ -1257,11 +1250,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
         d->phType = "title";
     }
 
-    if (m_context->type == SlideLayout) {
-        // Mark this shape as a place holder.
-        m_isPlaceHolder = true;
-    }
-
     const QString styleId(d->phStyleId());
     kDebug() << "styleId:" << styleId;
     if (m_context->type == Slide) {
@@ -1939,6 +1927,41 @@ void PptxXmlSlideReader::inheritDefaultTextStyle(KoGenStyle& targetStyle)
                                             targetStyle, KoGenStyle::TextType);
 }
 
+void PptxXmlSlideReader::inheritShapePosition()
+{
+    const QString styleId(d->phStyleId());
+
+    // Inheriting shape placement information
+    if (!m_xfrm_read) {
+        PptxShapeProperties* props = 0;
+        // Loading from slidelayout
+        if (m_context->type == Slide) {
+            props = m_context->slideLayoutProperties->shapesMap.value(styleId);
+        }
+        // Loading from master if needed
+        if (m_context->type == Slide || m_context->type == SlideLayout) {
+            if (!props) {
+                props = m_context->slideProperties->shapesMap.value(styleId);
+                if (!props) {
+                    // In case there was nothing for this even in slideMaster, let's default to 'body' text position
+                    // Spec doesn't say anything about this case, but in reality there are such documents
+                    props = m_context->slideProperties->shapesMap.value("body");
+                }
+            }
+        }
+        if (props) {
+            m_svgX = props->x;
+            m_svgY = props->y;
+            m_svgWidth = props->width;
+            m_svgHeight = props->height;
+            m_rot = props->rot;
+            kDebug() << "Copied from PptxShapeProperties:"
+                     << "m_svgWidth:" << m_svgWidth << "m_svgHeight:" << m_svgHeight
+                     << "m_svgX:" << m_svgX << "m_svgY:" << m_svgY;
+        }
+    }
+}
+
 void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 {
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
@@ -1978,6 +2001,89 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
                                                 targetStyle, KoGenStyle::TextType);
         }
     }
+}
+
+KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
+{
+    const QString styleId(d->phStyleId());
+
+    kDebug() << "styleId:" << styleId << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
+
+    if (m_context->type == SlideLayout) {
+        PptxShapeProperties* masterShapeProperties = 0;
+        if (!styleId.isEmpty()) {
+            masterShapeProperties = m_context->slideProperties->shapesMap.value(styleId);
+        }
+        kDebug() << "masterShapeProperties:" << masterShapeProperties;
+
+        if (masterShapeProperties) {
+            m_currentShapeProperties = new PptxShapeProperties(*masterShapeProperties);
+        } else { // Case where it was not present in master slide at all
+            m_currentShapeProperties = new PptxShapeProperties;
+        }
+        if (m_xfrm_read) { // If element was present, then we can use values from the slidelayout
+            m_currentShapeProperties->x = m_svgX;
+            m_currentShapeProperties->y = m_svgY;
+            m_currentShapeProperties->width = m_svgWidth;
+            m_currentShapeProperties->height = m_svgHeight;
+            m_currentShapeProperties->rot = m_rot;
+        }
+        if (!d->phType.isEmpty()) {
+            m_context->slideLayoutProperties->shapesMap[d->phType] = m_currentShapeProperties;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideLayoutProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
+        }
+    }
+    else if (m_context->type == SlideMaster) {
+        kDebug() << "m_context->slideProperties->shapesMap insert:" << styleId;
+        if (m_xfrm_read) { // If element was present, then we can use values from the actual slidemaster
+            m_currentShapeProperties->x = m_svgX;
+            m_currentShapeProperties->y = m_svgY;
+            m_currentShapeProperties->width = m_svgWidth;
+            m_currentShapeProperties->height = m_svgHeight;
+            m_currentShapeProperties->rot = m_rot;
+        }
+
+        if (!styleId.isEmpty()) {
+            m_context->slideProperties->shapesMap[styleId] = m_currentShapeProperties;
+        }
+        if (!d->phIdx.isEmpty()) {
+            m_context->slideProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
+        }
+    }
+    if (m_context->type == SlideLayout) {
+        // presentation:placeholder
+        Q_ASSERT(m_placeholderElWriter);
+        QString presentationObject = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType);
+        QString phStyleId = d->phType;
+        if (phStyleId.isEmpty()) {
+            // were indexing placeholders by id if type is not present, so shaped can refer to them by id
+            phStyleId = d->phIdx;
+        }
+
+        m_placeholderElWriter->startElement("presentation:placeholder");
+        m_placeholderElWriter->addAttribute("presentation:object", presentationObject);
+        if (m_rot == 0) {
+            m_placeholderElWriter->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
+            m_placeholderElWriter->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+        }
+        m_placeholderElWriter->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
+        m_placeholderElWriter->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
+        if (m_rot != 0) {
+            qreal angle, xDiff, yDiff;
+            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+            m_placeholderElWriter->addAttribute("draw:transform", rotString);
+
+        }
+
+        m_placeholderElWriter->endElement();
+    }
+
+    m_currentShapeProperties = 0; // Making sure that nothing uses them.
+    return KoFilter::OK;
 }
 
 #define blipFill_NS "a"

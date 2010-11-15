@@ -124,6 +124,9 @@ void DrawingWriter::SetRectangle(wvWare::Word97::FSPA& spa)
     yBottom = spa.yaBottom;
 }
 
+//FIXME: It doesn't make sense with current initialization, because when first
+//time called, scaleX and scaleY are both set to zero!  Both xOffset and
+//yOffset doesn't change!
 void DrawingWriter::SetGroupRectangle(MSO::OfficeArtFSPGR& fspgr)
 {
     if (fspgr.xRight == fspgr.xLeft) {
