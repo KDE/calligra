@@ -2542,18 +2542,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     body = buffer.originalWriter();
     body->startElement("draw:frame");
 
+    // Todo find out if this is always true
+    m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+
+    if (m_drawing_inline) {
+        body->addAttribute("text:anchor-type", "as-char");
+        m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
+    }
+    else {
+        body->addAttribute("text:anchor-type", "char");
+        m_currentDrawStyle->addProperty("style:vertical-rel", "char");
+    }
+
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     if (m_moveToStylesXml) {
         mainStyles->markStyleForStylesXml(styleName);
     }
     body->addAttribute("draw:style-name", styleName);
-
-    if (m_drawing_inline) {
-        body->addAttribute("text:anchor-type", "as-char");
-    }
-    else {
-        body->addAttribute("text:anchor-type", "char");
-    }
 
 //! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
     if (m_hasPosOffsetH) {
