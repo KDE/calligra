@@ -227,7 +227,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_rPrDefault()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF_IN_CONTEXT(rPr)
+            TRY_READ_IF(rPr)
             ELSE_WRONG_FORMAT
         }
     }
@@ -377,7 +377,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         if (isStartElement()) {
             const QXmlStreamAttributes attrs(attributes());
             TRY_READ_IF(name)
-            ELSE_TRY_READ_IF_IN_CONTEXT(rPr)
+            ELSE_TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(pPr)
             ELSE_TRY_READ_IF(tblPr)
             ELSE_TRY_READ_IF(tblStylePr)

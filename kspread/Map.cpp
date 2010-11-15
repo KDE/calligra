@@ -638,6 +638,11 @@ bool Map::loadOdf(const KoXmlElement& body, KoOdfLoadingContext& odfContext)
         sheetNode = sheetNode.nextSibling();
     }
 
+    // make sure always at least one sheet exists
+    if (count() == 0) {
+        addNewSheet();
+    }
+
     //delete any styles which were not used
     d->styleManager->releaseUnusedAutoStyles(autoStyles);
 

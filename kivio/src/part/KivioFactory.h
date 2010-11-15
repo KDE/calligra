@@ -20,13 +20,13 @@
 #ifndef KIVIOFACTORY_H
 #define KIVIOFACTORY_H
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 #include "kivio_export.h"
 
 class KComponentData;
 class KAboutData;
 
-class KIVIO_EXPORT KivioFactory : public KoFactory
+class KIVIO_EXPORT KivioFactory : public KPluginFactory
 {
   Q_OBJECT
 
@@ -34,10 +34,8 @@ class KIVIO_EXPORT KivioFactory : public KoFactory
     KivioFactory(QObject* parent = 0);
     ~KivioFactory();
 
-    virtual KParts::Part* createPartObject(QWidget* parentWidget = 0,
-                                           QObject* parent = 0,
-                                           const char* classname = "KoDocument",
-                                           const QStringList &args = QStringList());
+
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &componentData();
 

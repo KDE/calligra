@@ -83,19 +83,19 @@ protected:
     virtual void updateReadWrite( bool ) {}
 };
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 
 class KComponentData;
 class KAboutData;
 
-class KoUnavailFactory : public KoFactory
+class KoUnavailFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit KoUnavailFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KoUnavailFactory( QObject* parent = 0 );
     ~KoUnavailFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &global();
 

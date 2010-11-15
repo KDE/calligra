@@ -493,7 +493,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fill()
  - pict (§9.5.1)
 
  Child elements:
- - [Done]fill (Shape Fill Properties) §14.1.2.5
+ - [Done] fill (Shape Fill Properties) §14.1.2.5
 
  Attributes:
  - bwmode (Blackand- White Mode)

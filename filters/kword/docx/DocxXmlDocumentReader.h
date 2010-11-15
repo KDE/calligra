@@ -62,13 +62,7 @@ protected:
     KoFilter::ConversionStatus read_body();
     KoFilter::ConversionStatus read_p();
     KoFilter::ConversionStatus read_r();
-    enum rPrCaller {
-        rPr_r,
-        rPr_pPr,
-        rPr_rPrDefault, // styles
-        rPr_style // styles
-    };
-    KoFilter::ConversionStatus read_rPr(rPrCaller caller);
+    KoFilter::ConversionStatus read_rPr();
     KoFilter::ConversionStatus read_pPr();
     KoFilter::ConversionStatus read_vanish();
     KoFilter::ConversionStatus read_numPr();
@@ -154,8 +148,15 @@ protected:
 
     KoFilter::ConversionStatus read_oMath();
     KoFilter::ConversionStatus read_oMathPara();
+    KoFilter::ConversionStatus read_oMathParaPr();
+    KoFilter::ConversionStatus read_jc_m();
     KoFilter::ConversionStatus read_r_m();
     KoFilter::ConversionStatus read_t_m();
+
+    // 2010 specific, meant to offer a choice between vml/drawingML
+    KoFilter::ConversionStatus read_AlternateContent();
+    KoFilter::ConversionStatus read_Choice();
+    KoFilter::ConversionStatus read_Fallback();
 
     enum posOffsetCaller {
         posOffset_positionH,

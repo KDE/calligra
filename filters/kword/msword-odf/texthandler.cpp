@@ -926,7 +926,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     //NOTE: The content between fieldStart and fieldSeparator represents field
     //instructions and the content between fieldSeparator and fieldEnd
     //represents the field result.
-    kDebug(30513) << "fld->flt = " << hex << fld->flt;
+    kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
 
     //nested field
     if (m_insideField) {
@@ -964,6 +964,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case HYPERLINK:
         kDebug(30513) << "processing field... HYPERLINK";
         break;
+    case MACROBUTTON:
     case MERGEFIELD:
     case SHAPE:
         kWarning(30513) << "Warning: unsupported field, just outputting text into document...";
@@ -1081,6 +1082,16 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         }
         //else a frame or drawing shape acting as a hyperlink already processed
         break;
+    //TODO: Support for nested MACROBUTTON fields, test documents are required.
+    case MACROBUTTON:
+        {
+            QRegExp rx("MACROBUTTON\\s\\s?\\w+\\s\\s?(.+)$");
+            *str = str->trimmed();
+            if (rx.indexIn(*str) >= 0) {
+                m_paragraph->addRunOfText(rx.cap(1), chp, QString(""), m_parser->styleSheet());
+            }
+        }
+        break;
     default:
         break;
     }
@@ -1145,6 +1156,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case PAGEREF:
             case EQ:
             case HYPERLINK:
+            case MACROBUTTON:
                 m_fldInst.append(newText);
                 break;
             default:

@@ -21,22 +21,20 @@
 #ifndef KPRFACTORY_H
 #define KPRFACTORY_H
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 #include "kpresenter_export.h"
 
 class KAboutData;
 class KIconLoader;
 
-class KPRESENTER_EXPORT KPrFactory : public KoFactory
+class KPRESENTER_EXPORT KPrFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
     explicit KPrFactory( QObject* parent = 0, const char* name = 0 );
     ~KPrFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0,
-                                            const char *classname = "KoDocument",
-                                            const QStringList &args = QStringList() );
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
     static const KComponentData &componentData();
 
     // _Creates_ a KAboutData but doesn't keep ownership

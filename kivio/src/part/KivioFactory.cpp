@@ -31,7 +31,7 @@ KComponentData* KivioFactory::s_instance = 0;
 KAboutData* KivioFactory::s_aboutData = 0;
 
 KivioFactory::KivioFactory(QObject* parent)
-  : KoFactory(parent)
+  : KPluginFactory(*aboutData(), parent)
 {
   (void) componentData();
 }
@@ -44,12 +44,12 @@ KivioFactory::~KivioFactory()
   s_aboutData = 0;
 }
 
-KParts::Part* KivioFactory::createPartObject(QWidget* parentWidget,
-                                        QObject* parent, const char* classname,
-                                        const QStringList &args)
+QObject* KivioFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+                             const QVariantList& args, const QString& keyword )
 {
-  Q_UNUSED(args);
-  bool singleViewMode = (strcmp(classname, "KoDocument") != 0);
+  Q_UNUSED( args );
+  Q_UNUSED( keyword );
+  bool singleViewMode = (strcmp(iface, "KoDocument") != 0);
 
   KivioDocument* doc = new KivioDocument(parentWidget, parent, singleViewMode);
 

@@ -24,7 +24,7 @@
 #define KCHART_FACTORY_H
 
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 #include "kchart_export.h"
 
 class KComponentData;
@@ -34,17 +34,14 @@ class KAboutData;
 namespace KChart
 {
 
-class KCHARTCOMMON_EXPORT KChartFactory : public KoFactory
+class KCHARTCOMMON_EXPORT KChartFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit KChartFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KChartFactory( QObject* parent = 0 );
     virtual ~KChartFactory();
 
-    virtual KParts::Part  *createPartObject( QWidget* = 0,
-					     QObject* parent = 0,
-					     const char* classname = "KoDocument",
-					     const QStringList &args = QStringList() );
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &global();
 

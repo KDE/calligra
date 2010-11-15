@@ -32,8 +32,8 @@ using namespace KSpread;
 KComponentData* Factory::s_global = 0;
 KAboutData* Factory::s_aboutData = 0;
 
-Factory::Factory(QObject* parent, const char* name)
-        : KoFactory(parent, name)
+Factory::Factory(QObject* parent)
+        : KPluginFactory(*aboutData(), parent)
 {
     //kDebug(36001) <<"Factory::Factory()";
     // Create our instance, so that it becomes KGlobal::instance if the
@@ -50,9 +50,11 @@ Factory::~Factory()
     s_global = 0;
 }
 
-KParts::Part* Factory::createPartObject(QWidget *parentWidget, QObject* parent, const char* classname, const QStringList &)
+QObject* Factory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
 {
-    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
+    Q_UNUSED(args);
+    Q_UNUSED(keyword);
+    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
     Doc *doc = new Doc(parentWidget, parent, !bWantKoDocument);
 

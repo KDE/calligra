@@ -43,8 +43,8 @@ KIconLoader    *s_iconLoader = 0;
 KAboutData     *s_aboutData  = 0;
 
 
-KChartFactory::KChartFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+KChartFactory::KChartFactory( QObject* parent )
+    : KPluginFactory( *aboutData(), parent )
 {
     global();
 }
@@ -61,12 +61,12 @@ KChartFactory::~KChartFactory()
 }
 
 
-KParts::Part* KChartFactory::createPartObject( QWidget *parentWidget,
-					       QObject* parent,
-					       const char *classname,
-					       const QStringList & )
+QObject* KChartFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+                             const QVariantList& args, const QString& keyword )
 {
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    Q_UNUSED( args );
+    Q_UNUSED( keyword );
+    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
 
     KChartPart *part = new KChartPart( parentWidget, parent,
 				       !bWantKoDocument );
