@@ -2669,12 +2669,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     bool ok = false;
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
-        // Note, kword does not support atm. displaying text in negative indents
-        // as a result, text is cut, this makes the indent of such text 0
-        // Remove ME once kword support is there.
-        if (leftInd > 0) {
-            m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
-        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
     }
 
     TRY_READ_ATTR(firstLine)

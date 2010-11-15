@@ -287,7 +287,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         m_currentDrawingObject->setPicture(picture);
 #endif
 
-#ifndef DOCXXMLDOCREADER_H
+#ifndef DOCXXMLDOCREADER_CPP
     popCurrentDrawStyle();
 #endif
 
