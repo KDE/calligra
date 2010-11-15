@@ -1353,7 +1353,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_overrideClrMapping()
  - [done] br (Text Line Break) §21.1.2.2.1
  - endParaRPr (End Paragraph Run Properties) §21.1.2.2.3
  - [done] fld (Text Field) §21.1.2.2.4
- - pPr (Text Paragraph Properties) §21.1.2.2.7
+ - [done] pPr (Text Paragraph Properties) §21.1.2.2.7
  - [done] r (Text Run) §21.1.2.3.8
 */
 //! @todo support all elements
@@ -2037,19 +2037,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
     Effects on an object are not included in this bounding box.
 
  Parent elements:
-    - xfrm (§21.3.2.28)
-    - xfrm (§20.1.7.5)
+    - [done] xfrm (§21.3.2.28)
+    - [done] xfrm (§20.1.7.5)
     - [done] xfrm (§20.1.7.6)
-    - xfrm (§20.5.2.36)
-    - xfrm (§19.3.1.53)
+    - [done] xfrm (§20.5.2.36)
+    - [done] xfrm (§19.3.1.53)
 
  No child elements.
 
  Attributes:
     - [done] x (X-Axis Coordinate)
-    - [done] y (Y-Axis Coordinate)
-*/
-//! @todo support all elements
+    - [done] y (Y-Axis Coordinate) */ //! @todo support all elements
 #undef CURRENT_EL
 #define CURRENT_EL off
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
@@ -2073,11 +2071,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_off()
         }
     }
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2095,12 +2089,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
     READ_ATTR_WITHOUT_NS(y)
     STRING_TO_INT(y, m_svgChY, "chOff@y")
 
-
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2108,20 +2097,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chOff()
 //! DrawingML ECMA-376, 20.1.7.3, p. 3185.
 /*! This element specifies the size of the bounding box enclosing the referenced object.
  Parent elements:
- - xfrm (§21.3.2.28)
- - xfrm (§20.1.7.5)
+ - [done] xfrm (§21.3.2.28)
+ - [done] xfrm (§20.1.7.5)
  - [done] xfrm (§20.1.7.6)
- - xfrm (§20.5.2.36)
- - xfrm (§19.3.1.53)
+ - [done] xfrm (§20.5.2.36)
+ - [done] xfrm (§19.3.1.53)
 
  No child elements.
 
  Attributes:
- - cx (Extent Length) Specifies the length of the extents rectangle in EMUs. This rectangle shall dictate
+ - [done] cx (Extent Length) Specifies the length of the extents rectangle in EMUs. This rectangle shall dictate
       the size of the object as displayed (the result of any scaling to the original object).
- - cy (Extent Width) Specifies the width of the extents rectangle in EMUs.
+ - [done] cy (Extent Width) Specifies the width of the extents rectangle in EMUs.
 */
-//! @todo support all child elements
 #undef CURRENT_EL
 #define CURRENT_EL ext
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
@@ -2146,11 +2134,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ext()
         }
     }
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
-
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2168,10 +2152,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     READ_ATTR_WITHOUT_NS(cy)
     STRING_TO_INT(cy, m_svgChHeight, "chExt@cy")
 
-    while (true) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
 
     READ_EPILOGUE
 }
@@ -2415,11 +2396,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lum()
  is tiled across the bounding box to fill the entire area.
 
  Parent elements:
- - blipFill (§21.3.2.2)
- - blipFill (§20.1.8.14)
- - blipFill (§20.2.2.1)
- - blipFill (§20.5.2.2)
- - blipFill (§19.3.1.4)
+ - [done] blipFill (§21.3.2.2)
+ - [done] blipFill (§20.1.8.14)
+ - [done] blipFill (§20.2.2.1)
+ - [done] blipFill (§20.5.2.2)
+ - [done] blipFill (§19.3.1.4)
 
  No child elements.
 */
@@ -2438,10 +2419,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tile()
 //! @todo tx
 //! @todo ty
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2479,11 +2457,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 //MSOOXML_EXPORT qreal ST_Percentage_withMsooxmlFix_to_double(const QString& val, bool& ok);
 
     //m_fillImageRenderingStyle = QLatin1String("stretch");
-    while (!atEnd()) {
-        readNext();
-        kDebug() << *this;
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+
+    readNext();
     READ_EPILOGUE
 }
 
@@ -2500,10 +2475,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRect()
 
  Parent elements:
  - [done] anchor (§20.4.2.3)
- - graphicFrame (§21.3.2.12)
- - graphicFrame (§20.1.2.2.18)
- - graphicFrame (§20.5.2.16)
- - graphicFrame (§19.3.1.21)
+ - [done] graphicFrame (§21.3.2.12)
+ - [done] graphicFrame (§20.1.2.2.18)
+ - [done] graphicFrame (§20.5.2.16)
+ - [done] graphicFrame (§19.3.1.21)
  - [done] inline (§20.4.2.8)
 
  Child elements:
@@ -4375,7 +4350,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buSzPct()
     }
 
     readNext();
-
     READ_EPILOGUE
 }
 
@@ -5067,7 +5041,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spAutoFit()
 {
     READ_PROLOGUE
-    skipCurrentElement();
+    readNext();
     READ_EPILOGUE
 }
 

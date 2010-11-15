@@ -1420,8 +1420,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lastRenderedPageBreak()
 //! instrText handler
 /*
  Parent elements:
- - r (§17.3.2.25)
- - r (§22.1.2.87)
+ - [done] r (§17.3.2.25)
+ - [done] r (§22.1.2.87)
 */
 //! @todo support all attributes etc.
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
@@ -2791,10 +2791,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
     READ_ATTR(val)
     // Does ODF support high/low/medium kashida ?
     val = val.toLower();
-    if ((val == "both") || (val == "distribute"))
+    if ((val == "both") || (val == "distribute")) {
         m_currentParagraphStyle.addProperty("fo:text-align", "justify");
-    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center"))
+    }
+    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center")) {
         m_currentParagraphStyle.addProperty("fo:text-align", val);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3559,7 +3561,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
     createBorderStyle(sz, color, val, RightBorder);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
-        int sp;
+        int sp = 0;
         m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
         m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
         m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
@@ -3622,8 +3624,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_dstrike()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
 {
     READ_PROLOGUE
-    if (READ_BOOLEAN_VAL)
+    if (READ_BOOLEAN_VAL) {
         m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3651,8 +3654,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_outline()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_smallCaps()
 {
     READ_PROLOGUE
-    if (READ_BOOLEAN_VAL)
+    if (READ_BOOLEAN_VAL) {
         m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3778,10 +3782,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vertAlign()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
     val = val.toLower();
-    if (val == "superscript")
+    if (val == "superscript") {
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    else if (val == "subscript")
+    }
+    else if (val == "subscript") {
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    }
     readNext();
     READ_EPILOGUE
 }
