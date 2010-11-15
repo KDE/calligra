@@ -28,21 +28,21 @@
 #ifndef __KARBON_FACTORY_H__
 #define __KARBON_FACTORY_H__
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 #include <karbonui_export.h>
 
 class KAboutData;
 class KComponentData;
 
-class KARBONUI_EXPORT KarbonFactory : public KoFactory
+class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
 {
     Q_OBJECT
 
 public:
-    explicit KarbonFactory(QObject* parent = 0, const char* name = 0);
+    explicit KarbonFactory(QObject* parent = 0);
     ~KarbonFactory();
 
-    virtual KParts::Part* createPartObject(QWidget *parentWidget = 0, QObject* parent = 0L, const char* classname = "KoDocument", const QStringList& args = QStringList());
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &componentData();
     static KAboutData* aboutData();

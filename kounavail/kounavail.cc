@@ -133,8 +133,8 @@ K_EXPORT_PLUGIN(KoUnavailFactory )
 KComponentData* KoUnavailFactory::s_global = 0L;
 KAboutData* KoUnavailFactory::s_aboutData = 0L;
 
-KoUnavailFactory::KoUnavailFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+KoUnavailFactory::KoUnavailFactory( QObject* parent )
+    : KPluginFactory( *aboutData(), parent )
 {
     global();
 }
@@ -147,8 +147,12 @@ KoUnavailFactory::~KoUnavailFactory()
     s_global = 0L;
 }
 
-KParts::Part* KoUnavailFactory::createPartObject( QWidget *parentWidget, QObject* parent, const char*, const QStringList & )
+QObject* KoUnavailFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+                             const QVariantList& args, const QString& keyword )
 {
+    Q_UNUSED( args );
+    Q_UNUSED( keyword );
+    Q_UNUSED( iface );
     return new KoUnavailPart( parentWidget, parent );
 }
 
