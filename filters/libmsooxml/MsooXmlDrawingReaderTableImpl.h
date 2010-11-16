@@ -264,7 +264,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
-    m_tableStyle = m_context->tableStyleList->tableStyle(m_styleId);
+    m_tableStyle = m_context->tableStyleList->tableStyle(text().toString());
     readNext();
  
     READ_EPILOGUE
