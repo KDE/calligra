@@ -30,6 +30,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlImport.h>
+#include <MsooXmlUnits.h>
 
 #include <KoXmlWriter.h>
 
@@ -39,238 +40,224 @@
 
 using namespace MSOOXML;
 
-Border::Border()
-: m_color()
-, m_side(NoSide)
-, m_width(qreal(1.0))
-, m_style(None)
+TableStyleInstanceProperties::TableStyleInstanceProperties(int rowCount, int columnCount)
+: m_rowCount(rowCount)
+, m_columnCount(columnCount)
+, m_rowBandSize(1)
+, m_columnBandSize(1)
+, m_role(TableStyle::WholeTbl)
 {
 }
 
-Border::~Border()
+TableStyleInstanceProperties::~TableStyleInstanceProperties()
 {
 }
 
-Border::Side Border::side() const
+TableStyleInstanceProperties& TableStyleInstanceProperties::columnBandSize(int size)
 {
-    return m_side;
+    Q_ASSERT(size >= 0);
+    m_columnBandSize = size;
+
+    return *this;
 }
 
-
-void Border::setSide(Border::Side side)
+TableStyleInstanceProperties& TableStyleInstanceProperties::roles(TableStyleInstanceProperties::Roles roles)
 {
-    m_side = side;
+    m_role = roles;
+
+    return *this;
 }
 
-QColor Border::color() const
+TableStyleInstanceProperties& TableStyleInstanceProperties::rowBandSize(int size)
 {
-    return m_color;
+    m_rowBandSize = size;
+
+    return *this;
 }
 
-void Border::setColor(const QColor& color)
+TableStyleInstance::TableStyleInstance(TableStyle* style, TableStyleInstanceProperties properties)
+: m_style(style)
+, m_properties(properties)
 {
-    m_color = color;
+    Q_ASSERT(m_style);
 }
 
-QString Border::odfBorderName() const
+TableStyleInstance::~TableStyleInstance()
 {
-    switch(m_side) {
-        case NoSide:
-            return QString();
-        case Bottom:
-            return "fo:border-bottom";
-        case Left:
-            return "fo:border-left";
-        case Right:
-            return "fo:border-right";
-//         case TableStyleProperties::TopLeftToBottomRight:
-//             return "";
-        case Top:
-            return "fo:border-top";
-//         case TableStyleProperties::TopRightToBottomLeft:
-//             return "";
-    };
-
-    Q_ASSERT(false);
-    return QString();
 }
 
-void Border::setStyle(Border::Style style)
+KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
 {
-    m_style = style;
-}
+    Q_ASSERT(row >= 0);
+    Q_ASSERT(row < m_properties.m_rowCount);
+    Q_ASSERT(column >= 0);
+    Q_ASSERT(column < m_properties.m_columnCount);
 
-Border::Style Border::style() const
-{
-    return m_style;
-}
+    //TODO can we magically improve the creation of the styles?
+    //For now I'll take the naive approach and say no. There are
+    //way, way too many things to take into account so, reusing
+    //the styles doesn't seem feasible.
 
-QString Border::odfStyleName() const
-{
-    switch(m_style) {
-        case None:
-            return "none";
-        case Solid:
-            return "solid";
-        case Dashed:
-            return "dashed";
-        case Dotted:
-            return "dotted";
-        case DashDot:
-            return "dot-dash";
-        case DashDotDot:
-            return "dot-dot-dash";
+    KoCellStyle::Ptr cellStyle = KoCellStyle::create();
+
+    //This is a somehow tangled process.
+    //First we have to apply the properties in the following order:
+    //* Whole table
+    //* Banded columns, even column banding
+    //* Banded rows, even row banding
+    //* First row, last row
+    //* First column, last column
+    //* Top left, top right, bottom left, bottom right
+    //
+    //Note that Subsequent properties that apply override previous ones.
+    //
+    //Note the standard doesn't say what happens to colliding properties
+    //in the same hierarchy level (say, it's the first column and last column,
+    //or it's first row and last row at once, I assume left to right priority
+    //on the elements in the previous list.)
+    //
+    //See MSOOXML Table Styles §17.7.6 for details
+
+     const TableStyleInstanceProperties::Roles& role = m_properties.m_role;
+     const int& lastRow = m_properties.m_rowCount - 1 ;
+     const int& lastColumn = m_properties.m_columnCount - 1 ;
+
+    applyStyle(TableStyle::WholeTbl, cellStyle, row, column);
+
+    if(role & TableStyleInstanceProperties::ColumnBanded) {
+        //Is the column in the even band?
+        if( (column % (m_properties.m_columnBandSize * 2)) > m_properties.m_columnBandSize) {
+            applyStyle(TableStyle::Band1Vertical, cellStyle, row, column);
+        }
+        else {
+            applyStyle(TableStyle::Band2Vertical, cellStyle, row, column);
+        }
     }
 
-    Q_ASSERT(false);
-    return QString();
-}
-
-QString Border::odfStyleProperties() const
-{
-    return QString("%1pt %2 %3").arg(m_width)
-                                .arg(odfStyleName())
-                                .arg(m_color.name());
-}
-
-void Border::setWidth(qreal width)
-{
-    m_width = width;
-}
-
-qreal Border::width() const
-{
-    return m_width;
-}
-
-TableStyleProperties::TableStyleProperties()
-: m_borders()
-, m_type(NoType)
-{
-}
-
-TableStyleProperties::~TableStyleProperties()
-{
-}
-
-TableStyleProperties::Type TableStyleProperties::type() const
-{
-    return m_type;
-}
-
-void TableStyleProperties::setType(Type type)
-{
-    m_type = type;
-}
-
-void TableStyleProperties::addBorder(Border border)
-{
-    m_borders.insert(border.side(), border);
-}
-
-Border TableStyleProperties::borderForSide(Border::Side side) const
-{
-    return m_borders.value(side);
-}
-
-QString TableStyleProperties::stringFromType(Type type)
-{
-    switch(type) {
-    case NoType:
-        return QString();
-    case FirstRow:
-        return "firstRow";
-        break;
-    case FirstCol:
-        return "firstCol";
-        break;
-    case LastCol:
-        return "lastCol";
-        break;
-    case LastRow:
-        return "lastRow";
-        break;
-    case NeCell:
-        return "neCell";
-        break;
-    case NwCell:
-        return "nwCell";
-        break;
-    case SeCell:
-        return "seCell";
-        break;
-    case SwCell:
-        return "swCell";
-        break;
-    case WholeTbl:
-        return "wholeTbl";
-        break;
-    case Band1Horizontal:
-    case Band2Horizontal:
-    case Band1Vertical:
-    case Band2Vertical:
-    default:
-        qFatal("Encountered unhandled table style type");
-        return QString();
-
+    if(role & TableStyleInstanceProperties::RowBanded) {
+        //Is the row in the even band?
+        if( (row % (m_properties.m_rowBandSize * 2)) > m_properties.m_columnBandSize) {
+            applyStyle(TableStyle::Band1Horizontal, cellStyle, row, column);
+        }
+        else {
+            applyStyle(TableStyle::Band2Horizontal, cellStyle, row, column);
+        }
     }
 
-    //Shut up the compiler about not returning from a non-void function
-    //I know is impossible for it to figure out it will never happen
-    Q_ASSERT(false);
-    return QString();
+    if(role & TableStyleInstanceProperties::FirstRow) {
+        if(row == 0) {
+            applyStyle(TableStyle::FirstRow, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::LastRow) {
+        if(row == lastRow) {
+            applyStyle(TableStyle::FirstRow, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::FirstCol) {
+        if(column == 0) {
+            applyStyle(TableStyle::FirstCol, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::LastCol) {
+        if(column == lastColumn) {
+            applyStyle(TableStyle::LastCol, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::NeCell) {
+        if(row == 0 && column == 0) {
+            applyStyle(TableStyle::NwCell, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::NwCell) {
+        if(row == 0 && column == lastColumn) {
+            applyStyle(TableStyle::NeCell, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::SeCell) {
+        if(row == lastRow && column == 0) {
+            applyStyle(TableStyle::SwCell, cellStyle, row, column);
+        }
+    }
+
+    if(role & TableStyleInstanceProperties::SwCell) {
+        if(row == lastRow && column == lastColumn) {
+            applyStyle(TableStyle::SeCell, cellStyle, row, column);
+        }
+    }
+
+    return cellStyle;
 }
 
-TableStyleProperties::Type TableStyleProperties::typeFromString(const QString& string)
+void TableStyleInstance::applyStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
-    if(string == "firstRow") {
-        return FirstRow;
-    }
-    else if(string == "lastCol") {
-        return LastCol;
-    }
-    else if(string == "lastRow") {
-        return LastRow;
-    }
-    else if(string == "neCell") {
-        return NeCell;
-    }
-    else if(string == "nwCell") {
-        return NwCell;
-    }
-    else if(string == "seCell") {
-        return SeCell;
-    }
-    else if(string == "swCell") {
-        return SwCell;
-    }
-    else if(string == "wholeTbl") {
-        return WholeTbl;
+    if(!m_style->properties(type)) {
+        return;
     }
 
-    //Shut up the compiler about not returning from a non-void function
-    //I know is impossible for it to figure out it will never happen
-    Q_ASSERT(false);
-    return WholeTbl;
+    //TODO apply other properties
+
+    applyBordersStyle(type, style, row, column);
 }
 
-QString TableStyleProperties::saveStyle(KoGenStyles& styles)
+void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
-    if(m_type == NoType) {
-        return QString();
+    //Borders, are a bit tricky too; we have to take into account whether the cell 
+    //has borders facing other cells or facing the border of the table.
+
+    KoBorder::BorderData* topData;
+    if(row == 0) {
+        topData = &m_style->properties(type)->top;
     }
-
-    KoGenStyle style = KoGenStyle(KoGenStyle::TableCellAutoStyle, "table-cell");
-
-    //FIXME support actual background
-    //I just added it to play nice to OOo which adds a blue background of questionable taste
-    style.addProperty("draw:fill", "none", KoGenStyle::GraphicType);
-
-    foreach(const Border& border, m_borders) {
-        style.addProperty(border.odfBorderName(), border.odfStyleProperties(), KoGenStyle::ParagraphType);
+    else {
+        topData = &m_style->properties(type)->insideH;
     }
+    style->borders()->setTopBorderColor(topData->color);
+    style->borders()->setTopBorderSpacing(topData->spacing);
+    style->borders()->setTopBorderStyle(topData->style);
+    style->borders()->setTopBorderWidth(topData->width);
 
-    return styles.insert(style, "cell");
+    KoBorder::BorderData* bottomData;
+    if(row == m_properties.m_rowCount - 1) {
+        bottomData = &m_style->properties(type)->bottom;
+    }
+    else {
+        bottomData = &m_style->properties(type)->insideH;
+    }
+    style->borders()->setBottomBorderColor(bottomData->color);
+    style->borders()->setBottomBorderSpacing(bottomData->spacing);
+    style->borders()->setBottomBorderStyle(bottomData->style);
+    style->borders()->setBottomBorderWidth(bottomData->width);
+
+    KoBorder::BorderData* leftData;
+    if(column == 0) {
+        leftData = &m_style->properties(type)->left;
+    }
+    else {
+        leftData = &m_style->properties(type)->insideV;
+    }
+    style->borders()->setLeftBorderColor(leftData->color);
+    style->borders()->setLeftBorderSpacing(leftData->spacing);
+    style->borders()->setLeftBorderStyle(leftData->style);
+    style->borders()->setLeftBorderWidth(leftData->width);
+
+    KoBorder::BorderData* rightData;
+    if(column == m_properties.m_columnCount - 1) {
+        rightData = &m_style->properties(type)->right;
+    }
+    else {
+        rightData = &m_style->properties(type)->insideV;
+    }
+    style->borders()->setRightBorderColor(rightData->color);
+    style->borders()->setRightBorderSpacing(rightData->spacing);
+    style->borders()->setRightBorderStyle(rightData->style);
+    style->borders()->setRightBorderWidth(rightData->width);
 }
 
 TableStyle::TableStyle()
@@ -291,24 +278,14 @@ QString TableStyle::id() const
     return m_id;
 }
 
-TableStyleProperties TableStyle::propertiesForType(TableStyleProperties::Type type) const
+void TableStyle::addProperties(TableStyle::Type type, TableStyleProperties* properties)
 {
-    if(!m_properties.contains(type)) {
-        if(!m_properties.contains(TableStyleProperties::WholeTbl)) {
-            //Return at least something
-            return TableStyleProperties();
-        }
-
-        //Asume WholeTbl
-        return m_properties.value(TableStyleProperties::WholeTbl);
-    }
-
-    return m_properties.value(type);
+    m_properties.insert(type, properties);
 }
 
-void TableStyle::addProperties(TableStyleProperties properties)
+TableStyleProperties* TableStyle::properties(TableStyle::Type type) const
 {
-    m_properties.insert(properties.type(), properties);
+    return m_properties.value(type);
 }
 
 TableStyleList::TableStyleList()
@@ -429,8 +406,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
 {
     READ_PROLOGUE
 
-    m_currentStyleProperties.setType(TableStyleProperties::WholeTbl);
-
     while(!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -440,9 +415,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
             ELSE_WRONG_FORMAT
         }
     }
-
-    m_currentStyle.addProperties(m_currentStyleProperties);
-    m_currentStyleProperties = TableStyleProperties();
 
     READ_EPILOGUE
 }
@@ -512,18 +484,14 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-//             TRY_READ_IF(ln)
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties.bottom = m_currentBorder;
+            }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
     }
-
-    Border border;
-    border.setSide(Border::Bottom);
-//     border.setColor(m_currentPen.color());
-    //FIXME don't asume it's solid
-    border.setStyle(MSOOXML::Border::Solid);
-    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -538,18 +506,14 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-//             TRY_READ_IF(ln)
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties.top = m_currentBorder;
+            }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
     }
-
-    Border border;
-    border.setSide(Border::Top);
-//     border.setColor(m_currentPen.color());
-    //FIXME don't asume it's solid
-    border.setStyle(MSOOXML::Border::Solid);
-    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -564,18 +528,14 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-//             TRY_READ_IF(ln)
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties.left = m_currentBorder;
+            }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
     }
-
-    Border border;
-    border.setSide(Border::Left);
-//     border.setColor(m_currentPen.color());
-    //FIXME don't asume it's solid
-    border.setStyle(MSOOXML::Border::Solid);
-    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -590,18 +550,14 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-//             TRY_READ_IF(ln)
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties.right = m_currentBorder;
+            }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
         }
     }
-
-    Border border;
-    border.setSide(Border::Right);
-//     border.setColor(m_currentPen.color());
-    //FIXME don't asume it's solid
-    border.setStyle(MSOOXML::Border::Solid);
-    m_currentStyleProperties.addBorder(border);
 
     READ_EPILOGUE
 }
@@ -611,44 +567,113 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 // KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
 // {
 //     READ_PROLOGUE
-//
+// 
 //     while(!atEnd()) {
 //         if(isStartElement()) {
-//             TRY_READ_IF(ln)
+//             if(QUALIFIED_NAME_IS(ln)) {
+//                 TRY_READ(Table_ln)
+//                 m_currentTableStyleProperties.tl2br = m_currentBorder;
+//             }
 // //             ELSE_TRY_READ_IF(lnRef)
 // //             ELSE_WRONG_FORMAT
 //         }
 //         BREAK_IF_END_OF(CURRENT_EL);
 //     }
-//
-//     Border border;
-//     border.setColor(m_currentPen.color());
-//     m_currentStyleProperties.addBorder(border, Border::TopLeftToBottomRight);
-//
+// 
 //     READ_EPILOGUE
 // }
-
+// 
 // #undef CURRENT_EL
 // #define CURRENT_EL tr2bl
 // KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
 // {
 //     READ_PROLOGUE
-//
+// 
 //     while(!atEnd()) {
 //         if(isStartElement()) {
-//             TRY_READ_IF(ln)
+//             if(QUALIFIED_NAME_IS(ln)) {
+//                 TRY_READ(Table_ln)
+//                 m_currentTableStyleProperties.tr2bl = m_currentBorder;
+//             }
 // //             ELSE_TRY_READ_IF(lnRef)
 // //             ELSE_WRONG_FORMAT
 //         }
 //         BREAK_IF_END_OF(CURRENT_EL);
 //     }
-//
-//     Border border;
-//     border.setColor(m_currentPen.color());
-//     m_currentStyleProperties.addBorder(border, Border::TopRightToBottomLeft);
-//
+// 
 //     READ_EPILOGUE
 // }
+
+#undef CURRENT_EL
+#define CURRENT_EL ln
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
+{
+    READ_PROLOGUE2(Table_ln)
+
+    QXmlStreamAttributes attrs = attributes();
+
+    m_currentBorder = KoBorder::BorderData();
+
+    //compound line type
+    TRY_READ_ATTR_WITHOUT_NS(cmpd)
+    //double lines
+    if( cmpd.isEmpty() || cmpd == "sng" ) {
+        m_currentBorder.style = KoBorder::BorderSolid;
+    }
+    //single line
+    else if (cmpd == "dbl") {
+        m_currentBorder.style = KoBorder::BorderDouble;
+    }
+    //thick thin double lines
+    else if (cmpd == "thickThin") {
+        //FIXME it seem we don't support this properly. Use solid for now.
+        m_currentBorder.style = KoBorder::BorderDouble;
+    }
+    //thin thick double lines
+    else if (cmpd == "thinThick") {
+        //FIXME it doesn't seem we support this properly.
+        m_currentBorder.style = KoBorder::BorderDouble;
+    }
+    //thin thick thin triple lines
+    else if (cmpd == "tri") {
+        //NOTE: There is not triple in ODF
+        m_currentBorder.style = KoBorder::BorderSolid;
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(w) //width
+    m_currentBorder.width = EMU_TO_POINT(w.toDouble());
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            if(QUALIFIED_NAME_IS(solidFill)) {
+                TRY_READ(solidFill);
+                m_currentBorder.style = KoBorder::BorderSolid;
+                m_currentBorder.color = m_currentColor;
+            }
+            else if (QUALIFIED_NAME_IS(prstDash)) {
+                attrs = attributes();
+                //TODO find out how other colors are handled
+                m_currentBorder.color = Qt::black;
+                TRY_READ_ATTR_WITHOUT_NS(val)
+                //TODO support other dash types. Make it its own function.
+                if (val == "dash") {
+                    m_currentBorder.style = KoBorder::BorderDashed;
+                }
+                else if(val == "dashDot") {
+                    m_currentBorder.style = KoBorder::BorderDashDotPattern;
+                }
+                else if(val == "dot") {
+                    m_currentBorder.style = KoBorder::BorderDotted;
+                }
+            }
+//             ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
 
 #define blipFill_NS "a"
 #define SETUP_PARA_STYLE_IN_READ_P

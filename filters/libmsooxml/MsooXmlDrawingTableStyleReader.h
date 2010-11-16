@@ -24,9 +24,9 @@
 #include <MsooXmlThemesReader.h>
 
 class KoGenStyles;
+#include <KoCellStyle.h>
 
-#include <QPen>
-#include <QString>
+#include <QFlags>
 
 /**
 *   The following classes deal with the table styles part, specifically
@@ -36,59 +36,21 @@ class KoGenStyles;
 namespace MSOOXML
 {
 
-class MSOOXML_EXPORT Border {
-public:
-    Border();
-    ~Border();
-
-    enum Side {
-        NoSide,
-        Bottom,
-        Left,
-        Right,
-//         TopLeftToBottomRight,
-        Top,
-//         TopRightToBottomLeft
-    };
-
-    Side side() const;
-    void setSide(Side side);
-
-    QColor color() const;
-    void setColor(const QColor& color);
-
-    QString odfBorderName() const;
-
-    enum Style {
-        None,
-        Solid,
-        Dashed,
-        Dotted,
-        DashDot,
-        DashDotDot
-    };
-    void setStyle(Style style);
-    Style style() const;
-    QString odfStyleName() const;
-
-    void setWidth(qreal width);
-    qreal width() const;
-
-    QString odfStyleProperties() const;
-
-private:
-    QColor m_color;
-    Side m_side;
-    qreal m_width;
-    Style m_style;
+struct TableStyleProperties
+{
+    KoBorder::BorderData bottom;
+    KoBorder::BorderData insideH;
+    KoBorder::BorderData insideV;
+    KoBorder::BorderData left;
+    KoBorder::BorderData right;
+    KoBorder::BorderData tl2br;
+    KoBorder::BorderData top;
+    KoBorder::BorderData tr2bl;
 };
 
-class MSOOXML_EXPORT TableStyleProperties
+class MSOOXML_EXPORT TableStyle
 {
 public:
-    TableStyleProperties();
-    ~TableStyleProperties();
-
     enum Type {
         NoType,
         FirstRow,
@@ -106,45 +68,19 @@ public:
         WholeTbl
     };
 
-    Type type() const;
-    void setType(Type type);
-
-    Border borderForSide(Border::Side side) const;
-    void addBorder(Border border);
-
-    /** 
-    * @brief Save the style, note that the type of the style depends on the type 
-    * of this styleProperties
-    * @return the name of the saved style
-    */
-    QString saveStyle(KoGenStyles& styles);
-
-    static Type typeFromString(const QString& string);
-    static QString stringFromType(Type type);
-
-private:
-    //TODO see if we can take care of InsideH InsideV and how
-    QMap<Border::Side, Border> m_borders;
-    Type m_type;
-};
-
-class MSOOXML_EXPORT TableStyle
-{
-public:
-
     TableStyle();
     ~TableStyle();
 
-    QString id() const;
     void setId(const QString& id);
+    QString id() const;
 
-    TableStyleProperties propertiesForType(TableStyleProperties::Type type) const;
-    void addProperties(TableStyleProperties properties);
+    void addProperties(Type type, TableStyleProperties* properties);
+    TableStyleProperties* properties(Type type) const;
 
 private:
     QString m_id;
+    QMap<Type, TableStyleProperties*> m_properties;
     //TODO handle the table background stored in the element TblBg
-    QMap<TableStyleProperties::Type, TableStyleProperties> m_properties;
 };
 
 class MSOOXML_EXPORT TableStyleList
@@ -158,6 +94,57 @@ public:
 
 private:
     QMap<QString, TableStyle> m_styles;
+};
+
+class MSOOXML_EXPORT TableStyleInstanceProperties
+{
+    friend class TableStyleInstance;
+public:
+    TableStyleInstanceProperties(int rowCount, int columnCount);
+    ~TableStyleInstanceProperties();
+
+    TableStyleInstanceProperties& rowBandSize(int size);
+    TableStyleInstanceProperties& columnBandSize(int size);
+
+    enum Role {
+        FirstRow,
+        FirstCol,
+        LastCol,
+        LastRow,
+        NeCell,
+        NwCell,
+        SeCell,
+        SwCell,
+        RowBanded,
+        ColumnBanded,
+        WholeTbl
+    };
+    Q_DECLARE_FLAGS(Roles, Role)
+
+    TableStyleInstanceProperties& roles(Roles roles);
+
+private:
+    int m_rowCount;
+    int m_columnCount;
+    int m_rowBandSize;
+    int m_columnBandSize;
+    Roles m_role;
+};
+
+class MSOOXML_EXPORT TableStyleInstance
+{
+public:
+    TableStyleInstance(TableStyle* style, TableStyleInstanceProperties properties);
+    ~TableStyleInstance();
+
+    KoCellStyle::Ptr style(int row, int column);
+
+private:
+    void applyStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+    void applyBordersStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+
+    TableStyle* m_style;
+    TableStyleInstanceProperties m_properties;
 };
 
 class MsooXmlImport;
@@ -199,17 +186,21 @@ protected:
 //     KoFilter::ConversionStatus read_tl2br();
 //     KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcBdr();
+    KoFilter::ConversionStatus read_Table_ln();
 
     //get read_ln and friends, it's a shame I have to get a lot of crap alongside
     #include <MsooXmlCommonReaderMethods.h>
     #include <MsooXmlCommonReaderDrawingMLMethods.h>
-
 private:
     MsooXmlDrawingTableStyleContext* m_context;
 
-    TableStyleProperties m_currentStyleProperties;
     TableStyle m_currentStyle;
+    KoBorder::BorderData m_currentBorder;
+    TableStyleProperties m_currentTableStyleProperties;
 };
 
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::TableStyleInstanceProperties::Roles)
+
 #endif // MSOOXMLDRAWINGTABLESTYLEREADER_H
