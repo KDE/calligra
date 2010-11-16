@@ -81,8 +81,8 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
     //See MSOOXML Table Styles §17.7.6 for details
 
      const TableStyleInstanceProperties::Roles& role = m_properties.m_role;
-     const int& lastRow = m_properties.m_rowCount - 1 ;
-     const int& lastColumn = m_properties.m_columnCount - 1 ;
+     const int lastRow = m_properties.m_rowCount - 1 ;
+     const int lastColumn = m_properties.m_columnCount - 1 ;
 
     applyStyle(TableStyle::WholeTbl, cellStyle, row, column);
 
@@ -170,6 +170,9 @@ void TableStyleInstance::applyStyle(TableStyle::Type type, KoCellStyle::Ptr& sty
 
 void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
+    const int lastRow = m_properties.m_rowCount - 1;
+    const int lastColumn = m_properties.m_columnCount - 1;
+
     //Borders, are a bit tricky too; we have to take into account whether the cell 
     //has borders facing other cells or facing the border of the table.
 
@@ -186,7 +189,7 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     style->borders()->setTopBorderWidth(topData->width);
 
     KoBorder::BorderData* bottomData;
-    if(row == m_properties.m_rowCount - 1) {
+    if(row == lastRow) {
         bottomData = &m_style->properties(type)->bottom;
     }
     else {
@@ -210,7 +213,7 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     style->borders()->setLeftBorderWidth(leftData->width);
 
     KoBorder::BorderData* rightData;
-    if(column == m_properties.m_columnCount - 1) {
+    if(column == lastColumn) {
         rightData = &m_style->properties(type)->right;
     }
     else {
