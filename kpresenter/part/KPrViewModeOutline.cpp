@@ -143,7 +143,7 @@ void KPrViewModeOutline::updateActivePage( KoPAPageBase * page )
         m_view->setActivePage( page );
     }
     KoPAView *view = dynamic_cast<KoPAView *>(m_view);
-    setCursorTo(view->kopaDocument()->pageIndex(page), "title");
+    setCursorTo(view->kopaDocument()->pageIndex(page), Title);
     m_editor->setFocus(Qt::ActiveWindowFocusReason);
 }
 
@@ -181,7 +181,7 @@ void KPrViewModeOutline::populate()
 
                 // Copy relevant content of the title of the page in the frame
                 foreach (OutlinePair pair, page->placeholders().outlineData()) {
-                    if (pair.first == "title") {
+                    if (pair.first == Title) {
                         QTextFrame *frame = cursor.insertFrame(m_titleFrameFormat);
                         if (frame != 0 && pair.second != 0) {
                             FrameData frameData = {pair.second->document(), numSlide, pair.first};
@@ -196,7 +196,7 @@ void KPrViewModeOutline::populate()
 
                 // Copy relevant content of the text part of the page in the frame
                 foreach (OutlinePair pair, page->placeholders().outlineData()) {
-                    if (pair.first == "subtitle" || pair.first == "outline") {
+                    if (pair.first == Subtitle || pair.first == Outline) {
                         QTextFrame *frame = cursor.insertFrame(m_defaultFrameFormat);
                         if (frame != 0 && pair.second != 0) {
                             FrameData frameData = {pair.second->document(), numSlide, pair.first};
@@ -339,7 +339,7 @@ void KPrViewModeOutline::placeholderSwitch()
     QTextFrame* currentFrame = cur.currentFrame();
     const FrameData &currentFrameData = m_link.value(currentFrame);
 
-    if (!currentFrameData.textDocument || currentFrameData.type == "title") {
+    if (!currentFrameData.textDocument || currentFrameData.type == Title) {
         return;
     }
 
@@ -379,7 +379,7 @@ void KPrViewModeOutline::addSlide()
         }
         // Reload the editor
         populate();
-        setCursorTo(numSlide + 1, "title");
+        setCursorTo(numSlide + 1, Title);
     }
 }
 
@@ -394,12 +394,12 @@ void KPrViewModeOutline::deleteSlide()
             view->kopaDocument()->removePage(page);
 
             populate();
-            setCursorTo(numSlide-1, "title", false);
+            setCursorTo(numSlide-1, Title, false);
         }
     }
 }
 
-void KPrViewModeOutline::setCursorTo(int slide, QString type, bool atBegin)
+void KPrViewModeOutline::setCursorTo(int slide, PlaceholderType type, bool atBegin)
 {
     foreach (QTextFrame* frame, m_link.keys()) {
         if (m_link.value(frame).numSlide == slide && m_link.value(frame).type == type) {
@@ -469,7 +469,7 @@ void KPrViewModeOutline::KPrOutlineEditor::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Return:
             if (int(event->modifiers()) == 0) {
 
-                if (outline->m_link.value(outline->m_editor->textCursor().currentFrame()).type == "title") {
+                if (outline->m_link.value(outline->m_editor->textCursor().currentFrame()).type == Title) {
                     outline->addSlide();
                 } else {
                     // the native behaviour when adding an item is buggy as hell !
@@ -494,7 +494,7 @@ void KPrViewModeOutline::KPrOutlineEditor::keyPressEvent(QKeyEvent *event)
             }
             break;
         case Qt::Key_Backspace:
-            if (int(event->modifiers()) == 0 && outline->m_link.value(outline->currentFrame()).type == "title"
+            if (int(event->modifiers()) == 0 && outline->m_link.value(outline->currentFrame()).type == Title
                     && outline->currentFrame()->firstPosition() ==  textCursor().position()) {
                 outline->deleteSlide();
                 break;

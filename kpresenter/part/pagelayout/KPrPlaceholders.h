@@ -67,8 +67,14 @@ typedef boost::multi_index_container<
     >
 > Placeholders;
 
+enum PlaceholderType {
+    Title,
+    Subtitle,
+    Outline
+};
+
 typedef boost::multi_index::nth_index<Placeholders,2>::type PlaceholdersByShape;
-typedef QPair<QString, KoTextShapeData*> OutlinePair;
+typedef QPair<PlaceholderType, KoTextShapeData*> OutlinePair;
 typedef QList<OutlinePair> OutlineData;
 
 class KPrPlaceholders

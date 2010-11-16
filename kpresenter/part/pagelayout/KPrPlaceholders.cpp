@@ -229,7 +229,13 @@ OutlineData KPrPlaceholders::outlineData() const
     for (Placeholders::iterator it( m_placeholders.begin() ) ; it != m_placeholders.end(); ++it ) {
         KoTextShapeData * data = ( dynamic_cast<KPrPlaceholderShape *>( it->shape ) ) ?
         0 : qobject_cast<KoTextShapeData*>( it->shape->userData() );
-        outline.append(QPair<QString, KoTextShapeData*>(it->presentationClass, data));
+        if (it->presentationClass == "title") {
+            outline.append(QPair<PlaceholderType, KoTextShapeData*>(Title, data));
+        } else if (it->presentationClass == "subtitle") {
+            outline.append(QPair<PlaceholderType, KoTextShapeData*>(Subtitle, data));
+        } else if (it->presentationClass ==  "outline") {
+            outline.append(QPair<PlaceholderType, KoTextShapeData*>(Outline, data));
+        }
     }
     return outline;
 }

@@ -26,12 +26,16 @@
 #include <KoPAView.h>
 #include <KoPACanvas.h>
 #include <KoPAViewMode.h>
+
+#include "pagelayout/KPrPlaceholders.h"
+
 #include <QTextEdit>
 #include <QTextTableCell>
 
 class QKeyEvent;
 class QTextFrame;
 
+enum PlaceholderType;
 /**
 * @brief View for outline mode.
 */
@@ -93,7 +97,7 @@ class KPrViewModeOutline : public KoPAViewMode {
         * @param  type     shape's class
         * @param  atBegin  if true cursot will be on first frame position, otherwise on last position
         */
-        void setCursorTo(int slide, QString type, bool atBegin=true);
+        void setCursorTo(int slide, PlaceholderType type, bool atBegin=true);
 
         /**
         * Fills the editor with presentation data
@@ -126,7 +130,7 @@ class KPrViewModeOutline : public KoPAViewMode {
         struct FrameData {
             QTextDocument * textDocument;
             int             numSlide;
-            QString         type;
+            PlaceholderType type;
         };
 
         QTextFrameFormat m_titleFrameFormat;
