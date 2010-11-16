@@ -85,7 +85,7 @@ private:
 
     TableStyle m_currentStyle;
     KoBorder::BorderData m_currentBorder;
-    TableStyleProperties m_currentTableStyleProperties;
+    TableStyleProperties* m_currentTableStyleProperties;
 };
 
 }

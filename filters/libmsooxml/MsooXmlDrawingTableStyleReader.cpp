@@ -140,6 +140,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
 {
     READ_PROLOGUE
 
+    m_currentTableStyleProperties = new TableStyleProperties;
+
     while(!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -149,6 +151,8 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_wholeTbl()
             ELSE_WRONG_FORMAT
         }
     }
+
+    m_currentStyle.addProperties(TableStyle::WholeTbl, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }
@@ -220,7 +224,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
         if(isStartElement()) {
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
-                m_currentTableStyleProperties.bottom = m_currentBorder;
+                m_currentTableStyleProperties->bottom = m_currentBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -242,7 +246,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
         if(isStartElement()) {
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
-                m_currentTableStyleProperties.top = m_currentBorder;
+                m_currentTableStyleProperties->top = m_currentBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -264,7 +268,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
         if(isStartElement()) {
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
-                m_currentTableStyleProperties.left = m_currentBorder;
+                m_currentTableStyleProperties->left = m_currentBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -286,7 +290,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
         if(isStartElement()) {
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
-                m_currentTableStyleProperties.right = m_currentBorder;
+                m_currentTableStyleProperties->right = m_currentBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -306,7 +310,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //         if(isStartElement()) {
 //             if(QUALIFIED_NAME_IS(ln)) {
 //                 TRY_READ(Table_ln)
-//                 m_currentTableStyleProperties.tl2br = m_currentBorder;
+//                 m_currentTableStyleProperties->tl2br = m_currentBorder;
 //             }
 // //             ELSE_TRY_READ_IF(lnRef)
 // //             ELSE_WRONG_FORMAT
@@ -327,7 +331,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
 //         if(isStartElement()) {
 //             if(QUALIFIED_NAME_IS(ln)) {
 //                 TRY_READ(Table_ln)
-//                 m_currentTableStyleProperties.tr2bl = m_currentBorder;
+//                 m_currentTableStyleProperties->tr2bl = m_currentBorder;
 //             }
 // //             ELSE_TRY_READ_IF(lnRef)
 // //             ELSE_WRONG_FORMAT
