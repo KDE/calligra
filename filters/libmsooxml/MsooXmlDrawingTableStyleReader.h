@@ -20,132 +20,21 @@
 #ifndef MSOOXMLDRAWINGTABLESTYLEREADER_H
 #define MSOOXMLDRAWINGTABLESTYLEREADER_H
 
-#include <MsooXmlCommonReader.h>
-#include <MsooXmlThemesReader.h>
+#include "msooxml_export.h"
+
+#include "MsooXmlDrawingTableStyle.h"
+#include "MsooXmlCommonReader.h"
+#include "MsooXmlThemesReader.h"
 
 class KoGenStyles;
-#include <KoCellStyle.h>
-
-#include <QFlags>
 
 /**
-*   The following classes deal with the table styles part, specifically
-*   we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27, 
+*   The following classes deal with the creation of the table styles part, 
+*   specifically, we deal with the elements that start at the a:tblStyleLst §20.1.4.2.27, 
 *   you can find its part definition at Table Styles Part §14.2.9
 */
 namespace MSOOXML
 {
-
-struct TableStyleProperties
-{
-    KoBorder::BorderData bottom;
-    KoBorder::BorderData insideH;
-    KoBorder::BorderData insideV;
-    KoBorder::BorderData left;
-    KoBorder::BorderData right;
-    KoBorder::BorderData tl2br;
-    KoBorder::BorderData top;
-    KoBorder::BorderData tr2bl;
-};
-
-class MSOOXML_EXPORT TableStyle
-{
-public:
-    enum Type {
-        NoType,
-        FirstRow,
-        FirstCol,
-        LastCol,
-        LastRow,
-        NeCell,
-        NwCell,
-        SeCell,
-        SwCell,
-        Band1Horizontal,
-        Band2Horizontal,
-        Band1Vertical,
-        Band2Vertical,
-        WholeTbl
-    };
-
-    TableStyle();
-    ~TableStyle();
-
-    void setId(const QString& id);
-    QString id() const;
-
-    void addProperties(Type type, TableStyleProperties* properties);
-    TableStyleProperties* properties(Type type) const;
-
-private:
-    QString m_id;
-    QMap<Type, TableStyleProperties*> m_properties;
-    //TODO handle the table background stored in the element TblBg
-};
-
-class MSOOXML_EXPORT TableStyleList
-{
-public:
-    TableStyleList();
-    ~TableStyleList();
-
-    TableStyle tableStyle(const QString& id) const;
-    void insertStyle(QString id, MSOOXML::TableStyle style);
-
-private:
-    QMap<QString, TableStyle> m_styles;
-};
-
-class MSOOXML_EXPORT TableStyleInstanceProperties
-{
-    friend class TableStyleInstance;
-public:
-    TableStyleInstanceProperties(int rowCount, int columnCount);
-    ~TableStyleInstanceProperties();
-
-    TableStyleInstanceProperties& rowBandSize(int size);
-    TableStyleInstanceProperties& columnBandSize(int size);
-
-    enum Role {
-        FirstRow,
-        FirstCol,
-        LastCol,
-        LastRow,
-        NeCell,
-        NwCell,
-        SeCell,
-        SwCell,
-        RowBanded,
-        ColumnBanded,
-        WholeTbl
-    };
-    Q_DECLARE_FLAGS(Roles, Role)
-
-    TableStyleInstanceProperties& roles(Roles roles);
-
-private:
-    int m_rowCount;
-    int m_columnCount;
-    int m_rowBandSize;
-    int m_columnBandSize;
-    Roles m_role;
-};
-
-class MSOOXML_EXPORT TableStyleInstance
-{
-public:
-    TableStyleInstance(TableStyle* style, TableStyleInstanceProperties properties);
-    ~TableStyleInstance();
-
-    KoCellStyle::Ptr style(int row, int column);
-
-private:
-    void applyStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
-    void applyBordersStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
-
-    TableStyle* m_style;
-    TableStyleInstanceProperties m_properties;
-};
 
 class MsooXmlImport;
 class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
@@ -200,7 +89,5 @@ private:
 };
 
 }
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::TableStyleInstanceProperties::Roles)
 
 #endif // MSOOXMLDRAWINGTABLESTYLEREADER_H
