@@ -22,12 +22,10 @@
 * the table starts at tbl §21.1.3.13
 */
 
-#include <MsooXmlDrawingTableStyleReader.h>
-
 #undef CURRENT_EL
 #define CURRENT_EL tbl
 //! tbl (Table) §21.1.3.13
-KoFilter::ConversionStatus ::read_tbl()
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
     READ_PROLOGUE
 
@@ -64,14 +62,15 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     const int rowCount = m_table->rowCount();
     const int columnCount = m_table->columnCount();
 
-    const TableStyleInstanceProperties styleProperties(rowCount, columnCount).roles(m_activeRoles);
+    MSOOXML::TableStyleInstanceProperties styleProperties(rowCount, columnCount);
+    styleProperties.roles(m_activeRoles);
 
-    TableStyleInstance styleInstance(&m_tableStyle, styleProperties);
+    MSOOXML::TableStyleInstance styleInstance(&m_tableStyle, styleProperties);
 
     for(int row = 0; row < rowCount; ++row ) {
         for(int column = 0; column < columnCount; ++column ) {
-            KoCellStyle::Ptr& style = styleInstance.style(row, column);
-            table->cellAt(row, column)->setStyle(style);
+            KoCellStyle::Ptr style = styleInstance.style(row, column);
+            m_table->cellAt(row, column)->setStyle(style);
         }
     }
 }
@@ -86,27 +85,27 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(bandCol)
     if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
-        m_activeRoles |= TableStyleInstanceProperties::ColumnBanded;
+        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::ColumnBanded;
     }
     TRY_READ_ATTR(bandRow)
     if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
-        m_activeRoles |= TableStyleInstanceProperties::RowBanded;
+        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::RowBanded;
     }
     TRY_READ_ATTR(firstCol)
     if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
-        m_activeRoles |= TableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
     }
     TRY_READ_ATTR(firstRow)
     if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
-        m_activeRoles |= TableStyleInstanceProperties::FirstRow;
+        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstRow;
     }
     TRY_READ_ATTR(lastCol)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= TableStyleInstanceProperties::FirstCol;
+        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
     }
     TRY_READ_ATTR(lastRow)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
-        m_activeRoles |= TableStyleInstanceProperties::LastCol;
+        m_activeRoles |= MSOOXML::TableStyleInstanceProperties::LastCol;
     }
 //     TRY_READ_ATTR(rtl)
 
