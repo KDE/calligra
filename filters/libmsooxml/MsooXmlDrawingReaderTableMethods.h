@@ -34,12 +34,16 @@ protected:
     KoFilter::ConversionStatus read_lnR();
     KoFilter::ConversionStatus read_lnL();
 
+    void defineStyles();
+
     uint m_currentTableNumber; //!< table counter, from 0
     uint m_currentTableRowNumber; //!< row counter, from 0, initialized in read_tbl()
     uint m_currentTableColumnNumber; //!< column counter, from 0, initialized in read_tr()
 
     KoTable* m_table;
     QString m_currentTableName;
-    QString m_styleId;
+
+    MSOOXML::TableStyle m_tableStyle;
+    MSOOXML::TableStyleInstanceProperties::Roles m_activeRoles;
 
 #endif

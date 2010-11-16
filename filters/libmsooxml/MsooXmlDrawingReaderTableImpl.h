@@ -27,7 +27,7 @@
 #undef CURRENT_EL
 #define CURRENT_EL tbl
 //! tbl (Table) §21.1.3.13
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
+KoFilter::ConversionStatus ::read_tbl()
 {
     READ_PROLOGUE
 
@@ -48,6 +48,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
         }
     }
 
+    defineStyles();
+
     m_table->saveOdf(*body, *mainStyles);
 
     delete m_table;
@@ -57,6 +59,23 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
     READ_EPILOGUE
 }
 
+void MSOOXML_CURRENT_CLASS::defineStyles()
+{
+    const int rowCount = m_table->rowCount();
+    const int columnCount = m_table->columnCount();
+
+    const TableStyleInstanceProperties styleProperties(rowCount, columnCount).roles(m_activeRoles);
+
+    TableStyleInstance styleInstance(&m_tableStyle, styleProperties);
+
+    for(int row = 0; row < rowCount; ++row ) {
+        for(int column = 0; column < columnCount; ++column ) {
+            KoCellStyle::Ptr& style = styleInstance.style(row, column);
+            table->cellAt(row, column)->setStyle(style);
+        }
+    }
+}
+
 #undef CURRENT_EL
 #define CURRENT_EL tblPr
 //! tblPr handler (Table Properties) §21.1.3.15
@@ -64,13 +83,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 {
     READ_PROLOGUE
 
-//     const QXmlStreamAttributes attrs(attributes());
-//     TRY_READ_ATTR(bandCol)
-//     TRY_READ_ATTR(bandRow)
-//     TRY_READ_ATTR(firstCol)
-//     TRY_READ_ATTR(firstRow)
-//     TRY_READ_ATTR(lastCol)
-//     TRY_READ_ATTR(lastRow)
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(bandCol)
+    if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
+        m_activeRoles |= TableStyleInstanceProperties::ColumnBanded;
+    }
+    TRY_READ_ATTR(bandRow)
+    if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
+        m_activeRoles |= TableStyleInstanceProperties::RowBanded;
+    }
+    TRY_READ_ATTR(firstCol)
+    if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
+        m_activeRoles |= TableStyleInstanceProperties::FirstCol;
+    }
+    TRY_READ_ATTR(firstRow)
+    if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
+        m_activeRoles |= TableStyleInstanceProperties::FirstRow;
+    }
+    TRY_READ_ATTR(lastCol)
+    if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
+        m_activeRoles |= TableStyleInstanceProperties::FirstCol;
+    }
+    TRY_READ_ATTR(lastRow)
+    if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
+        m_activeRoles |= TableStyleInstanceProperties::LastCol;
+    }
 //     TRY_READ_ATTR(rtl)
 
     while (!atEnd()) {
@@ -87,8 +124,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
 //             ELSE_TRY_READ_IF(pattFill)
 //             ELSE_TRY_READ_IF(solidFill)
 //             ELSE_TRY_READ_IF(tableStyle)
-//             ELSE_TRY_READ_IF(tableStyle)
-//             ELSE_TRY_READ_IF(tableStyleId)
+            /*ELSE_*/TRY_READ_IF(tableStyleId)
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -217,5 +253,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
 
     m_currentTableColumnNumber++;
 
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tableStyleId
+//! tableStyleId (Table Style ID) §21.1.3.12
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
+{
+    READ_PROLOGUE
+
+    readNext();
+    m_tableStyle = m_context->tableStyleList->tableStyle(m_styleId);
+    readNext();
+ 
     READ_EPILOGUE
 }
