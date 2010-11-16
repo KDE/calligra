@@ -1778,8 +1778,10 @@ void PptxXmlSlideReader::inheritDefaultParagraphStyle(KoGenStyle& targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultParagraphStyles[copyLevel-1],
-                                            targetStyle, KoGenStyle::ParagraphType);
+    if (m_context->defaultParagraphStyles.size() >= copyLevel) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultParagraphStyles[copyLevel-1],
+                                                targetStyle, KoGenStyle::ParagraphType);
+    }
 }
 
 void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
@@ -1923,8 +1925,10 @@ void PptxXmlSlideReader::inheritListStyles()
 void PptxXmlSlideReader::inheritDefaultTextStyle(KoGenStyle& targetStyle)
 {
     const int listLevel = qMax(1, m_currentListLevel);
-    MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultTextStyles[listLevel-1],
-                                            targetStyle, KoGenStyle::TextType);
+    if (m_context->defaultTextStyles.size() >= listLevel) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultTextStyles[listLevel-1],
+                                                targetStyle, KoGenStyle::TextType);
+    }
 }
 
 void PptxXmlSlideReader::inheritShapePosition()
