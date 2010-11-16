@@ -233,7 +233,7 @@ TableStyle::TableStyle()
 
 TableStyle::~TableStyle()
 {
-    qDeleteAll(m_properties.values());
+//     qDeleteAll(m_properties.values());
 }
 
 void TableStyle::setId(const QString& id)
