@@ -33,7 +33,7 @@
 #include <MsooXmlUtils.h>
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
-#include <MsooXmlDrawingTableStyleReader.h>
+#include <MsooXmlDrawingTableStyle.h>
 #include <MsooXmlThemesReader.h>
 
 #include <KoXmlWriter.h>
