@@ -223,11 +223,14 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
 }
 
 TableStyle::TableStyle()
+: m_id()
+, m_properties()
 {
 }
 
 TableStyle::~TableStyle()
 {
+    qDeleteAll(m_properties.values());
 }
 
 void TableStyle::setId(const QString& id)
@@ -251,6 +254,7 @@ TableStyleProperties* TableStyle::properties(TableStyle::Type type) const
 }
 
 TableStyleList::TableStyleList()
+: m_styles()
 {
 }
 
