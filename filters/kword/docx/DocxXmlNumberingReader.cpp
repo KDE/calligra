@@ -70,7 +70,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read(MSOOXML::MsooXmlReaderCo
     if (!isStartDocument()) {
         return KoFilter::WrongFormat;
     }
-    //w:footnotes/w:endnotes
     readNext();
     kDebug() << *this << namespaceUri();
     if (!expectEl(QList<QByteArray>() << "w:numbering")) {
