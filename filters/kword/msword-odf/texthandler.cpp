@@ -925,7 +925,7 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 {
     //NOTE: The content between fieldStart and fieldSeparator represents field
     //instructions and the content between fieldSeparator and fieldEnd
-    //represents the field result.
+    //represents the field result.  Field result is optional.
     kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
 
     //nested field
@@ -943,13 +943,14 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 
     //check to see if we can process this field type or not
     switch (m_fieldType) {
-    case REF:
-        kWarning(30513) << "Warning: REF (Not supported yet)";
-        m_fieldType = UNSUPPORTED;
+    case EQ:
+        kDebug(30513) << "processing field... EQ (Combined Characters)";
         break;
-    case TOC:
-        kWarning(30513) << "Warning: TOC (Not supported yet)";
-        m_fieldType = UNSUPPORTED;
+    case HYPERLINK:
+        kDebug(30513) << "processing field... HYPERLINK";
+        break;
+    case MACROBUTTON:
+        kDebug(30513) << "processing field... MACROBUTTON";
         break;
     case NUMPAGES:
     case PAGE:
@@ -958,16 +959,20 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case PAGEREF:
         kDebug(30513) << "processing field... PAGEREF";
         break;
-    case EQ:
-        kDebug(30513) << "processing field... EQ (Combined Characters)";
+    case REF:
+        kWarning(30513) << "Warning: REF (Not supported yet)";
+        m_fieldType = UNSUPPORTED;
         break;
-    case HYPERLINK:
-        kDebug(30513) << "processing field... HYPERLINK";
+    case TOC:
+        kWarning(30513) << "Warning: TOC (Not supported yet)";
+        m_fieldType = UNSUPPORTED;
         break;
-    case MACROBUTTON:
+    case AUTHOR:
+    case EDITTIME:
+    case FILENAME:
     case MERGEFIELD:
     case SHAPE:
-        kWarning(30513) << "Warning: unsupported field, just outputting text into document...";
+        kWarning(30513) << "Warning: partially supported field, saving field result as text into document...";
         break;
     default:
         kWarning(30513) << "Warning: unrecognized field type, ignoring!";
@@ -1009,8 +1014,10 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
 //    Q_UNUSED(chp);
 
     kDebug(30513);
-    //process different fields
-    //we could be writing to content.xml or styles.xml (in a header)
+    //process different fields, we could be writing to content.xml or
+    //styles.xml (header/footer)
+
+    //TODO: Support for nested fields required: MACROBUTTON (uzak) 
 
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
@@ -1019,34 +1026,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     QString tmp;
 
     switch (m_fieldType) {
-    case NUMPAGES:
-        writer.startElement("text:page-count");
-        writer.endElement();
-        break;
-    case PAGE:
-        writer.startElement("text:page-number");
-        writer.addAttribute("text:select-page", "current");
-        writer.endElement();
-        break;
-    case PAGEREF:
-        //NOTE: reference-format can be: chapter, direction, page, text
-        if (str->contains("PAGEREF")) {
-            str->remove("PAGEREF");
-        }
-        //we should create a hyperlink to the bookmarked paragraph
-        if (str->contains("\\h")) {
-            str->remove("\\h");
-            tmp = "text";
-	} else {
-            tmp = "page";
-        }
-        *str = str->trimmed();
-        writer.startElement("text:bookmark-ref");
-        writer.addAttribute("text:reference-format", tmp);
-        writer.addAttribute("text:ref-name", *str);
-        writer.addTextNode(m_fldResult);
-        writer.endElement();
-        break;
     case EQ: // combined characters stored as 'equation'
         {
             QRegExp rx("eq \\\\o\\(\\\\s\\\\up 36\\(([^\\)]*)\\),\\\\s\\\\do 12\\(([^\\)]*)\\)\\)");
@@ -1082,7 +1061,6 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         }
         //else a frame or drawing shape acting as a hyperlink already processed
         break;
-    //TODO: Support for nested MACROBUTTON fields, test documents are required.
     case MACROBUTTON:
         {
             QRegExp rx("MACROBUTTON\\s\\s?\\w+\\s\\s?(.+)$");
@@ -1091,6 +1069,34 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
                 m_paragraph->addRunOfText(rx.cap(1), chp, QString(""), m_parser->styleSheet());
             }
         }
+        break;
+    case NUMPAGES:
+        writer.startElement("text:page-count");
+        writer.endElement();
+        break;
+    case PAGE:
+        writer.startElement("text:page-number");
+        writer.addAttribute("text:select-page", "current");
+        writer.endElement();
+        break;
+    case PAGEREF:
+        //NOTE: reference-format can be: chapter, direction, page, text
+        if (str->contains("PAGEREF")) {
+            str->remove("PAGEREF");
+        }
+        //we should create a hyperlink to the bookmarked paragraph
+        if (str->contains("\\h")) {
+            str->remove("\\h");
+            tmp = "text";
+	} else {
+            tmp = "page";
+        }
+        *str = str->trimmed();
+        writer.startElement("text:bookmark-ref");
+        writer.addAttribute("text:reference-format", tmp);
+        writer.addAttribute("text:ref-name", *str);
+        writer.addTextNode(m_fldResult);
+        writer.endElement();
         break;
     default:
         break;
@@ -1153,14 +1159,14 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         //processing field instructions
         if (!m_fieldAfterSeparator) {
             switch (m_fieldType) {
-            case PAGEREF:
             case EQ:
             case HYPERLINK:
             case MACROBUTTON:
+            case PAGEREF:
                 m_fldInst.append(newText);
                 break;
             default:
-                kDebug(30513) << "Ignoring field instructions.";
+                kDebug(30513) << "Ignoring field instructions!";
                 break;
             }
         }
@@ -1169,7 +1175,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             KoXmlWriter* writer = m_fldWriter;
 	    switch (m_fieldType) {
 	    case PAGEREF:
-                //bookmark support not required
+                //no bookmark support
                 m_fldResult.append(newText);
                 break;
             case HYPERLINK:
@@ -1180,6 +1186,9 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
                     writer->addTextNode(newText);
                 }
                 break;
+            case AUTHOR:
+            case EDITTIME:
+            case FILENAME:
             case MERGEFIELD:
             case SHAPE:
                 //Ignoring any nested fields around the result!

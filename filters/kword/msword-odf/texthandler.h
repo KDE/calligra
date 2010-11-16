@@ -279,16 +279,20 @@ private:
     enum fldType
     {
         UNSUPPORTED = 0,
-        REF = 3,
-        TOC = 13,
-        NUMPAGES = 26,
-        PAGE = 33,
-        PAGEREF = 37,
-        EQ = 49,
-        MACROBUTTON = 51,
-        MERGEFIELD = 59,
-        HYPERLINK = 88,
-        SHAPE = 95
+        REF = 0x03,
+        TOC = 0x0d,
+        AUTHOR = 0x11,
+        EDITTIME = 0x19,
+        NUMPAGES = 0x1a,
+        FILENAME = 0x1d,
+        PAGE = 0x21,
+        PAGEREF = 0x25,
+        EQ = 0x31,
+        MACROBUTTON = 0x33,
+        SYMBOL = 0x39,
+        MERGEFIELD = 0x3b,
+        HYPERLINK = 0x58,
+        SHAPE = 0x5f
     };
 
     //set to 0 for a field we can't handle, anything else is the field type
