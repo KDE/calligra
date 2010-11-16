@@ -4762,7 +4762,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 
     TRY_READ_ATTR_WITHOUT_NS(startAt)
     if (!startAt.isEmpty()) {
-        m_currentBulletProperties.m_startValue = startAt.toInt();
+        m_currentBulletProperties.setStartValue(startAt);
     }
 
     m_listStylePropertiesAltered = true;

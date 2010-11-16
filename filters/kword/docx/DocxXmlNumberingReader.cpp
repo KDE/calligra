@@ -158,7 +158,6 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
     }
 
     m_bulletCharacter = QString();
-    m_bulletFont = QString();
     m_bulletStyle = false;
 
     bool pictureType = false;
@@ -317,7 +316,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_start()
 
     TRY_READ_ATTR(val)
     if (!val.isEmpty()) {
-        m_currentBulletProperties.m_startValue = val.toInt();
+        m_currentBulletProperties.setStartValue(val);
     }
 
     readNext();
@@ -409,6 +408,9 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
         if (isStartElement()) {
             if (qualifiedName() == QLatin1String("w:rFonts")) {
                 TRY_READ(rFonts_numbering)
+            }
+            else if (qualifiedName() == QLatin1String("w:color")) {
+                TRY_READ(color_numbering)
             }
         }
     }
@@ -546,6 +548,25 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_ind_numbering()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL color
+//! w:color handler (bullet color)
+KoFilter::ConversionStatus DocxXmlNumberingReader::read_color_numbering()
+{
+    READ_PROLOGUE
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty())
+    {
+        m_currentBulletProperties.setBulletColor(QString("#").append(val));
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL rFonts
 //! w:rFonts handler (Run Fonts)
 /*!
@@ -564,7 +585,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_rFonts_numbering()
     TRY_READ_ATTR(ascii)
 
     if (!ascii.isEmpty()) {
-        m_bulletFont = ascii;
+        m_currentBulletProperties.setBulletFont(ascii);
     }
 
     readNext();

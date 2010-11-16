@@ -108,13 +108,15 @@ public:
 
     QString bulletRelativeSize() const;
 
+    void setStartValue(const QString& value);
+
     int m_level;
-    int m_startValue;
 
 private:
     enum ParagraphBulletType {BulletType, NumberType, PictureType, DefaultType};
     ParagraphBulletType m_type;
 
+    QString m_startValue;
     QString m_bulletFont;
     QString m_bulletChar;
     QString m_numFormat;

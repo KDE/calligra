@@ -1308,7 +1308,7 @@ MSOOXML_EXPORT QString Utils::ST_PositiveUniversalMeasure_to_cm(const QString& v
 // </units> -------------------
 
 MSOOXML_EXPORT Utils::ParagraphBulletProperties::ParagraphBulletProperties() :
-    m_startValue(0), m_type(ParagraphBulletProperties::DefaultType), m_bulletFont(UNUSED),
+    m_type(ParagraphBulletProperties::DefaultType), m_startValue(UNUSED), m_bulletFont(UNUSED),
     m_bulletChar(UNUSED), m_numFormat(UNUSED), m_suffix(UNUSED), m_align(UNUSED),
     m_indent(UNUSED), m_picturePath(UNUSED), m_bulletColor(UNUSED), m_bulletRelativeSize(UNUSED)
 {
@@ -1324,7 +1324,7 @@ MSOOXML_EXPORT bool Utils::ParagraphBulletProperties::isEmpty() const
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
 {
-    m_startValue = 0;
+    m_startValue = UNUSED;
     m_type = ParagraphBulletProperties::DefaultType;
     m_bulletFont = UNUSED;
     m_bulletChar = UNUSED;
@@ -1351,6 +1351,11 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletChar(const QStrin
 {
     m_bulletChar = bulletChar;
     m_type = ParagraphBulletProperties::BulletType;
+}
+
+MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setStartValue(const QString& value)
+{
+    m_startValue = value;
 }
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setIndent(const qreal indent)
@@ -1453,7 +1458,7 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
     if (m_type == ParagraphBulletProperties::NumberType) {
         returnValue = QString("<text:list-level-style-number text:level=\"%1\" ").arg(m_level);
         returnValue += QString("style:num-suffix=\"%1\" style:num-format=\"%2\" ").arg(m_suffix).arg(m_numFormat);
-        if (m_startValue != 0) {
+        if (m_startValue != UNUSED) {
             returnValue += QString("text:start-value=\"%1\" ").arg(m_startValue);
         }
         ending = "</text:list-level-style-number>";
