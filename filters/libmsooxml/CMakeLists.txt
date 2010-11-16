@@ -22,6 +22,7 @@ set(msooxml_LIB_SRCS
     MsooXmlDiagramReader_p.cpp
     pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
+    MsooXmlDrawingTableStyle.cpp
     VmlDrawingReader.cpp
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx/ChartExport.cpp
     # TODO: move back to kolibs
@@ -61,6 +62,7 @@ install( FILES
     MsooXmlDiagramReader.h
     MsooXmlDiagramReader_p.h
     MsooXmlDrawingTableStyleReader.h
+    MsooXmlDrawingTableStyle.h
     VmlDrawingReader.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
 )
