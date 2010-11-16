@@ -66,7 +66,6 @@ class KPrViewModeOutline : public KoPAViewMode {
         void disableSync();
     public slots:
         virtual void updateActivePage( KoPAPageBase * page );
-
     protected slots:
         /**
         * @brief Synchronize the editor with shapes.
@@ -74,6 +73,7 @@ class KPrViewModeOutline : public KoPAViewMode {
         */
         void synchronize(int position, int charsRemoved, int charsAdded);
 
+        void slotSelectionChanged();
         /**
         * Inserts the shape's document into text editor
         */

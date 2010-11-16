@@ -48,6 +48,7 @@ KPrViewModeOutline::KPrViewModeOutline( KoPAView * view, KoPACanvas * canvas )
 , m_link()
 {
     m_editor->hide();
+    connect(m_editor, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
     //m_editor->document()->setUndoRedoEnabled(false);
 
 
@@ -147,6 +148,13 @@ void KPrViewModeOutline::updateActivePage( KoPAPageBase * page )
     m_editor->setFocus(Qt::ActiveWindowFocusReason);
 }
 
+void KPrViewModeOutline::slotSelectionChanged()
+{
+    KoPAPageBase * page = m_view->kopaDocument()->pageByIndex(m_link.value(currentFrame()).numSlide, false);
+    if ( m_view->activePage() != page ) {
+        m_view->setActivePage(page);
+    }
+}
 
 void KPrViewModeOutline::enableSync()
 {
@@ -366,6 +374,7 @@ void KPrViewModeOutline::placeholderSwitch()
         m_editor->setTextCursor(cur);
     }
 }
+
 
 void KPrViewModeOutline::addSlide()
 {
