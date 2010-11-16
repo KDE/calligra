@@ -198,13 +198,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcBdr()
         if(isStartElement()) {
             TRY_READ_IF(bottom)
 //             ELSE_TRY_READ_IF(extLst)
-//             ELSE_TRY_READ_IF(insideH)
-//             ELSE_TRY_READ_IF(insideV)
+            ELSE_TRY_READ_IF(insideH)
+            ELSE_TRY_READ_IF(insideV)
             ELSE_TRY_READ_IF(left)
             ELSE_TRY_READ_IF(right)
-//             ELSE_TRY_READ_IF(tl2br)
+            ELSE_TRY_READ_IF(tl2br)
             ELSE_TRY_READ_IF(top)
-//             ELSE_TRY_READ_IF(tr2bl)
+            ELSE_TRY_READ_IF(tr2bl)
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -300,47 +300,91 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
     READ_EPILOGUE
 }
 
-// #undef CURRENT_EL
-// #define CURRENT_EL tl2br
-// KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
-// {
-//     READ_PROLOGUE
-// 
-//     while(!atEnd()) {
-//         if(isStartElement()) {
-//             if(QUALIFIED_NAME_IS(ln)) {
-//                 TRY_READ(Table_ln)
-//                 m_currentTableStyleProperties->tl2br = m_currentBorder;
-//             }
-// //             ELSE_TRY_READ_IF(lnRef)
-// //             ELSE_WRONG_FORMAT
-//         }
-//         BREAK_IF_END_OF(CURRENT_EL);
-//     }
-// 
-//     READ_EPILOGUE
-// }
-// 
-// #undef CURRENT_EL
-// #define CURRENT_EL tr2bl
-// KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
-// {
-//     READ_PROLOGUE
-// 
-//     while(!atEnd()) {
-//         if(isStartElement()) {
-//             if(QUALIFIED_NAME_IS(ln)) {
-//                 TRY_READ(Table_ln)
-//                 m_currentTableStyleProperties->tr2bl = m_currentBorder;
-//             }
-// //             ELSE_TRY_READ_IF(lnRef)
-// //             ELSE_WRONG_FORMAT
-//         }
-//         BREAK_IF_END_OF(CURRENT_EL);
-//     }
-// 
-//     READ_EPILOGUE
-// }
+#undef CURRENT_EL
+#define CURRENT_EL tl2br
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
+{
+    READ_PROLOGUE
+
+    while(!atEnd()) {
+        if(isStartElement()) {
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties->tl2br = m_currentBorder;
+            }
+//             ELSE_TRY_READ_IF(lnRef)
+//             ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL tr2bl
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
+{
+    READ_PROLOGUE
+
+    while(!atEnd()) {
+        if(isStartElement()) {
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties->tr2bl = m_currentBorder;
+            }
+//             ELSE_TRY_READ_IF(lnRef)
+//             ELSE_WRONG_FORMAT
+        }
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL insideV
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideV()
+{
+    READ_PROLOGUE
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties->insideV = m_currentBorder;
+            }
+//             ELSE_TRY_READ_IF(lnRef)
+//             ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL insideH
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
+{
+    READ_PROLOGUE
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            if(QUALIFIED_NAME_IS(ln)) {
+                TRY_READ(Table_ln)
+                m_currentTableStyleProperties->insideH = m_currentBorder;
+            }
+//             ELSE_TRY_READ_IF(lnRef)
+//             ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
 
 #undef CURRENT_EL
 #define CURRENT_EL ln
