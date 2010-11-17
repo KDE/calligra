@@ -75,7 +75,7 @@ QValidator::State LongLongValidator::validate(QString &str, int &) const
     if (m_max && m_min >= 0 && val < 0)
         return QValidator::Invalid;
 
-    return QValidator::Valid;
+    return QValidator::Intermediate;
 }
 
 void LongLongValidator::fixup(QString &str) const
