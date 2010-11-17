@@ -1140,19 +1140,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     bool potentiallyAddToLayoutFrames = false;
 
-    QBuffer shapeBuf;
-    KoXmlWriter shapeWriter(&shapeBuf);
+    QBuffer* shapeBuf;
+    KoXmlWriter *shapeWriter;
     KoXmlWriter *bodyBackup = body;
-
-    if (m_context->type == SlideLayout) {
-        body = &shapeWriter;
-    }
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            if (m_context->type == SlideLayout) {
+                shapeBuf = new QBuffer;
+                shapeWriter = new KoXmlWriter(shapeBuf);
+                body = shapeWriter;
+            }
             if (qualifiedName() == "p:sp") {
                 TRY_READ(sp)
                 potentiallyAddToLayoutFrames = true;
@@ -1176,15 +1177,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             else {
                 potentiallyAddToLayoutFrames = false;
             }
-            // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
-            if (potentiallyAddToLayoutFrames) {
-                potentiallyAddToLayoutFrames = false;
-                if (m_context->type == SlideLayout) {
+            if (m_context->type == SlideLayout) {
+                // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
+                // An alternative approach is to put these to masterslides, but it could in practise mean that there are
+                // slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
+                if (potentiallyAddToLayoutFrames) {
+                    potentiallyAddToLayoutFrames = false;
                     if (!d->phRead) {
-                        const QString elementContents = QString::fromUtf8(shapeBuf.buffer(), shapeBuf.buffer().size());
+                        const QString elementContents = QString::fromUtf8(shapeBuf->buffer(), shapeBuf->buffer().size());
                         m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
                     }
                 }
+                delete shapeBuf;
+                delete shapeWriter;
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
