@@ -89,7 +89,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& element );
 
     /// Write root contents - reimplemented from BasicElement
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
 
 private:
     /// The element that is the radicand of the root

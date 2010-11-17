@@ -265,10 +265,11 @@ bool TableRowElement::readMathMLContent( const KoXmlElement& element )
     return true;
 }
 
-void TableRowElement::writeMathMLContent( KoXmlWriter* writer ) const
+void TableRowElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
-    foreach( TableDataElement* tmpData, m_data )
-        tmpData->writeMathML( writer );
+    foreach( TableDataElement* tmpData, m_data ) {
+        tmpData->writeMathML( writer, ns );
+    }
 }
 
 ElementType TableRowElement::elementType() const

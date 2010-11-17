@@ -60,7 +60,7 @@ static QString loadAndSave( BasicElement* element, const QString& input )
     QBuffer device;
     device.open( QBuffer::ReadWrite );
     KoXmlWriter writer( &device );
-    element->writeMathML( &writer );
+    element->writeMathML( &writer, "" );
     device.seek( 0 );
     return device.readAll();
 }

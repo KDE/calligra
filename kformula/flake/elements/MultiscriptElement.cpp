@@ -301,28 +301,28 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 }
 
-void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
+void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
-    m_baseElement->writeMathML( writer );        // Just save the children in
+    m_baseElement->writeMathML( writer, ns );        // Just save the children in
                                                  // the right order
     foreach( BasicElement* tmp, m_postScripts ) {
         if(tmp)
-            tmp->writeMathML( writer );
+            tmp->writeMathML( writer, ns );
         else {
             //We need to use a none element for missing elements in the super/sub scripts
-            writer->startElement("math:none");
+            writer->startElement( ns.isEmpty() ? "none" : ns.toLatin1() + ":none" );
             writer->endElement();
         }
     }
     if( m_preScripts.isEmpty() ) return;
-    writer->startElement("math:mprescripts");
+    writer->startElement( ns.isEmpty() ? "mprescripts" : ns.toLatin1() + ":mprescripts" );
     writer->endElement();
     foreach( BasicElement* tmp, m_preScripts ) {
         if(tmp)
-            tmp->writeMathML( writer );
+            tmp->writeMathML( writer, ns );
         else {
             //We need to use a none element for missing elements in the super/sub scripts
-            writer->startElement("math:none");
+            writer->startElement( ns.isEmpty() ? "none" : ns.toLatin1() + ":none" );
             writer->endElement();
         }
     }

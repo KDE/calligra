@@ -105,7 +105,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& element );
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
 
 private:
     /// @return The base line computed out of the align attribute

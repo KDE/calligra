@@ -269,7 +269,7 @@ public:
     bool readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
-    void writeMathML( KoXmlWriter* writer ) const;
+    void writeMathML( KoXmlWriter* writer, const QString& ns = "math" ) const;
 
     /// @return true, if @p other is a descendant of this element
     bool hasDescendant(BasicElement* other) const;
@@ -310,7 +310,7 @@ protected:
     virtual void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
+    virtual void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
 
     static void cleanElementTree(BasicElement* element);
     
