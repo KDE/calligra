@@ -23,7 +23,6 @@
 #include "object.h"
 
 #include <qobject.h>
-#include <q3asciidict.h>
 
 namespace KexiDB
 {
