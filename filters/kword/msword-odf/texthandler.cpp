@@ -925,7 +925,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
 {
     //NOTE: The content between fieldStart and fieldSeparator represents field
     //instructions and the content between fieldSeparator and fieldEnd
-    //represents the field result.  Field result is optional.
+    //represents the field RESULT [optional].  In most cases the field RESULT
+    //stores the complete information (instruction are applied by msword).
     kDebug(30513) << "fld->flt:" << fld->flt << "(" << hex << fld->flt << ")";
 
     //nested field
@@ -960,11 +961,11 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         kDebug(30513) << "processing field... PAGEREF";
         break;
     case REF:
-        kWarning(30513) << "Warning: REF (Not supported yet)";
+        kWarning(30513) << "Warning: unsupported field (REF)";
         m_fieldType = UNSUPPORTED;
         break;
     case TOC:
-        kWarning(30513) << "Warning: TOC (Not supported yet)";
+        kWarning(30513) << "Warning: unsupported field (TOC)";
         m_fieldType = UNSUPPORTED;
         break;
     case AUTHOR:
@@ -972,7 +973,10 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case FILENAME:
     case MERGEFIELD:
     case SHAPE:
-        kWarning(30513) << "Warning: partially supported field, saving field result as text into document...";
+        kWarning(30513) << "Warning: field not fully supported, storing field result!";
+        break;
+    case SYMBOL:
+        kWarning(30513) << "Warning: processing only a subset of field instructions!";
         break;
     default:
         kWarning(30513) << "Warning: unrecognized field type, ignoring!";
@@ -1012,12 +1016,9 @@ void KWordTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
 void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp)
 {
 //    Q_UNUSED(chp);
-
     kDebug(30513);
     //process different fields, we could be writing to content.xml or
     //styles.xml (header/footer)
-
-    //TODO: Support for nested fields required: MACROBUTTON (uzak) 
 
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
@@ -1026,7 +1027,9 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     QString tmp;
 
     switch (m_fieldType) {
-    case EQ: // combined characters stored as 'equation'
+    case EQ:
+        //TODO: nested fields support required
+        //NOTE: actually combined characters stored as 'equation'
         {
             QRegExp rx("eq \\\\o\\(\\\\s\\\\up 36\\(([^\\)]*)\\),\\\\s\\\\do 12\\(([^\\)]*)\\)\\)");
             int where = rx.indexIn(*str);
@@ -1062,6 +1065,7 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         //else a frame or drawing shape acting as a hyperlink already processed
         break;
     case MACROBUTTON:
+        //TODO: nested fields support required
         {
             QRegExp rx("MACROBUTTON\\s\\s?\\w+\\s\\s?(.+)$");
             *str = str->trimmed();
@@ -1097,6 +1101,21 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
         writer.addAttribute("text:ref-name", *str);
         writer.addTextNode(m_fldResult);
         writer.endElement();
+        break;
+    case SYMBOL:
+        //TODO: nested fields support required
+        {
+            QRegExp rx("SYMBOL\\s+(\\d+)\\s+\\\\a\\s.+$");
+            *str = str->trimmed();
+            if (rx.indexIn(*str) >= 0) {
+                tmp = rx.cap(1);
+            } else {
+                tmp = "###"; //default value (check the corresponding test) 
+            }
+            if (!tmp.isEmpty()) {
+                m_paragraph->addRunOfText(tmp, chp, QString(""), m_parser->styleSheet());
+	    }
+        }
         break;
     default:
         break;
@@ -1163,6 +1182,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case HYPERLINK:
             case MACROBUTTON:
             case PAGEREF:
+            case SYMBOL:
                 m_fldInst.append(newText);
                 break;
             default:
