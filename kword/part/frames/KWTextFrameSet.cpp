@@ -337,6 +337,30 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
         return f1->sortingId() < f2->sortingId();
     }
 
+#if 1
+    // use a more performant way of sorting the frames
+    QPointF tl1 = frame1->shape()->absolutePosition(KoFlake::TopLeftCorner);
+    QPointF tl2 = frame2->shape()->absolutePosition(KoFlake::TopLeftCorner);
+
+    if (tl1.y() == tl2.y()) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
+        bool rtl = false; // right-to-left
+        if (tfs && tfs->pageManager()) { // check per page.
+            KWPage page1 = tfs->pageManager()->page(frame1->shape());
+            if (page1.isValid()) {
+                rtl = page1.directionHint() == KoText::RightLeftTopBottom;
+            }
+        }
+
+        if (rtl) {
+            QPointF br1 = frame1->shape()->absolutePosition(KoFlake::BottomRightCorner);
+            QPointF br2 = frame2->shape()->absolutePosition(KoFlake::BottomRightCorner);
+            return br2.x() < br1.x();
+        }
+        return tl1.x() < tl2.x();
+    }
+    return tl1.y() < tl2.y();
+#else
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
     bool rtl = false; // right-to-left
     if (tfs && tfs->pageManager()) { // check per page.
@@ -351,6 +375,7 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     }
     QRectF boundsF1 = frame1->shape()->boundingRect();
     QRectF boundsF2 = frame2->shape()->boundingRect();
+    //kDebug(32001) << "boundsF1:" << boundsF1 << "boundsF2:" << boundsF2;
 
     // support frame stacking.
     if (boundsF1.bottom() < boundsF2.top() && boundsF1.left() > boundsF2.right())
@@ -373,6 +398,7 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     // my center lies inside frame2. Lets check the topleft pos.
     if (frame1->shape()->boundingRect().top() > boundsF2.top())
         return false;
+#endif
     return true;
 }
 
