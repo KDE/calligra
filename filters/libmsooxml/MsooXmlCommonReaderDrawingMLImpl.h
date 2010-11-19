@@ -709,7 +709,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    if (m_contentType == "line" || m_contentType == "arc") { // Arc for now is simplified to be a line
+    // Arc and straight connector are now simpilified to be a line, fix later
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector")) {
         body->startElement("draw:line");
     }
     else {
@@ -773,7 +774,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType == "arc") {
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector")) {
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -802,7 +803,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:x2", x2);
             body->addAttribute("svg:y2", y2);
         }
-        if (m_contentType != "line" && m_contentType != "arc") {
+        if (m_contentType != "line" && m_contentType != "arc" && !m_contentType.startsWith("straightConnector")) {
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -810,7 +811,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         }
-        if (m_rot != 0 && m_contentType != "line" && m_contentType != "arc") {
+        if (m_rot != 0 && m_contentType != "line" && m_contentType != "arc" && !m_contentType.startsWith("straightConnector")) {
             // m_rot is in 1/60,000th of a degree
             qreal angle, xDiff, yDiff;
             MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
@@ -839,6 +840,17 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 #warning TODO: docx
 #endif
 #endif // PPTXXMLSLIDEREADER_H
+    // In case of a blipFill
+    if (!m_xlinkHref.isEmpty()) {
+        body->startElement("draw:image");
+        body->addAttribute("xlink:href", m_xlinkHref);
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:show", "embed");
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->endElement(); //draw:image
+        m_xlinkHref.clear();
+    }
+
 }
 
 #undef CURRENT_EL
@@ -1047,7 +1059,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
     - txDef (§20.1.4.1.28) - DrawingML
 
  Child elements:
-    - blipFill (Picture Fill) §20.1.8.14
+    - [done] blipFill (Picture Fill) §20.1.8.14
     - custGeom (Custom Geometry) §20.1.9.8
     - effectDag (Effect Container) §20.1.8.25
     - effectLst (Effect Container) §20.1.8.26
@@ -1098,6 +1110,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
+            }
+            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+                TRY_READ_IN_CONTEXT(blipFill)
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2592,7 +2607,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller caller)
 {
-    kDebug() << "Caller:" << (char)caller;
+    kDebug() << "Blip Caller:" << (char)caller;
     // we do not use READ_PROLOGUE because namespace depends on caller here
     PUSH_NAME_INTERNAL
     QString ns;
