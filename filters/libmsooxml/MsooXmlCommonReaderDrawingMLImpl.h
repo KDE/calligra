@@ -690,7 +690,6 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
         // moved down
         m_currentShapeProperties = 0;
     }
-    ++d->shapeNumber;
 #endif
 
     m_cNvPrId.clear();
@@ -701,8 +700,6 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
 #ifdef PPTXXMLSLIDEREADER_CPP
-    const QString styleId(d->phStyleId());
-
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
     inheritDefaultBodyProperties();
@@ -712,7 +709,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    if (m_contentType == "line") {
+    if (m_contentType == "line" || m_contentType == "arc") { // Arc for now is simplified to be a line
         body->startElement("draw:line");
     }
     else {
@@ -743,9 +740,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else {
         body->addAttribute("draw:layer", "backgroundobjects");
-        // StyleID will be empty for any text that is in masterslide that is wanted
+        // Phtype will be empty for any text that is in masterslide that is wanted
         // to be shown in the actual slides, such as company names etc.
-        if (!styleId.isEmpty()) {
+        if (!d->phType.isEmpty()) {
             body->addAttribute("presentation:placeholder", "true");
             body->addAttribute("presentation:class", presentationClass);
         }
@@ -776,7 +773,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line") {
+        if (m_contentType == "line" || m_contentType == "arc") {
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -805,7 +802,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:x2", x2);
             body->addAttribute("svg:y2", y2);
         }
-        if (m_contentType != "line") {
+        if (m_contentType != "line" && m_contentType != "arc") {
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -813,7 +810,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         }
-        if (m_rot != 0 && m_contentType != "line") {
+        if (m_rot != 0 && m_contentType != "line" && m_contentType != "arc") {
             // m_rot is in 1/60,000th of a degree
             qreal angle, xDiff, yDiff;
             MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
@@ -2772,12 +2769,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    // Only slidemaster needs to inherit, this because first there is bodyStyle,
-    // then there can be a body frame, the frame must have properties from bodyStyle and it must not
-    // overwrite them, where as in case of slide/slideLayout there is no style in their files
-    // Note also that we do not inherit defaultStyles, we only save the changes that this lvl creates
-    // Default styles are used when we actually create the content
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == SlideLayout) {
         inheritAllTextAndParagraphStyles();
     }
 #endif
@@ -3992,6 +3984,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     bool ok = false;
 
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
+
+#ifdef PPTXXMLSLIDEREADER_CPP
+    inheritDefaultTextStyle(m_currentTextStyle);
+    inheritTextStyle(m_currentTextStyle);
+#endif
 
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
@@ -4012,8 +4010,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
     algnToODF("fo:text-align", algn);
-
-    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
         readNext();
@@ -4118,7 +4114,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl2pPr()
 
 #undef CURRENT_EL
 #define CURRENT_EL lvl3pPr
-//! Look for lvl1pPr documentation  
+//! Look for lvl1pPr documentation
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl3pPr()
 {
     READ_PROLOGUE
