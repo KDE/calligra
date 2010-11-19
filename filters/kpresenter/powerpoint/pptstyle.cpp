@@ -483,7 +483,7 @@ TYPE PptTextPFRun::NAME() const \
     } \
     return DEFAULT; \
 }
-//     TYPE             PRE NAME             TEST         VALID                 DEFAULT
+//     TYPE             PRE NAME             TEST         VALID            DEFAULT
 GETTER(quint16,          ,  bulletFontRef,   bulletFont,  fBulletHasFont,  0)
 GETTER(qint16,           ,  bulletSize,      bulletSize,  fBulletHasSize,  0)
 GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, fBulletHasColor, ColorIndexStruct())
