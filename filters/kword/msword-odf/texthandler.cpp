@@ -973,7 +973,8 @@ void KWordTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case FILENAME:
     case MERGEFIELD:
     case SHAPE:
-        kWarning(30513) << "Warning: field not fully supported, storing field result!";
+    case TITLE:
+        kWarning(30513) << "Warning: field instructions not supported, storing field result!";
         break;
     case SYMBOL:
         kWarning(30513) << "Warning: processing only a subset of field instructions!";
@@ -1105,16 +1106,40 @@ void KWordTextHandler::fieldEnd(const wvWare::FLD* /*fld*/, wvWare::SharedPtr<co
     case SYMBOL:
         //TODO: nested fields support required
         {
-            QRegExp rx("SYMBOL\\s+(\\d+)\\s+\\\\a\\s.+$");
+            QRegExp rx_txt("SYMBOL\\s{2}(\\S+)\\s+.+$");
+            QString txt;
             *str = str->trimmed();
-            if (rx.indexIn(*str) >= 0) {
-                tmp = rx.cap(1);
-            } else {
-                tmp = "###"; //default value (check the corresponding test) 
+
+            //check for text in field instructions
+            if (rx_txt.indexIn(*str) >= 0) {
+                txt = rx_txt.cap(1);
+
+                //ascii code
+                if (str->contains("\\a")) {
+                    QRegExp rx16("0\\D.+");
+                    bool ok = false;
+                    int n;
+
+                    if (rx16.indexIn(txt) >= 0) {
+                        n = txt.toInt(&ok, 16);
+                    }
+                    else { 
+                        n = txt.toInt(&ok, 10);
+                    }
+                    if (ok) {
+                        tmp.append((char) n);
+                    }
+                }
+                //unicode
+                if (str->contains("\\u")) {
+     	            qDebug() << "Warning: unicode symbols not supported!";
+                }
             }
-            if (!tmp.isEmpty()) {
-                m_paragraph->addRunOfText(tmp, chp, QString(""), m_parser->styleSheet());
-	    }
+            //default value (check the corresponding test)
+            if (tmp.isEmpty()) {
+                tmp = "###";
+            }
+            m_paragraph->addRunOfText(tmp, chp, QString(""), m_parser->styleSheet());
         }
         break;
     default:
@@ -1211,6 +1236,7 @@ void KWordTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
             case FILENAME:
             case MERGEFIELD:
             case SHAPE:
+            case TITLE:
                 //Ignoring any nested fields around the result!
                 kDebug(30513) << "Processing field result as common text string.";
                 common_flag = true;

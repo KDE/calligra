@@ -281,6 +281,7 @@ private:
         UNSUPPORTED = 0,
         REF = 0x03,
         TOC = 0x0d,
+        TITLE = 0x0f,
         AUTHOR = 0x11,
         EDITTIME = 0x19,
         NUMPAGES = 0x1a,
