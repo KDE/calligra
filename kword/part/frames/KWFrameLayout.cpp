@@ -353,22 +353,20 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
 
-    if (minZIndex < INT_MAX) {
-        --minZIndex;
-        if (endnote)
-            endnote->shape()->setZIndex(minZIndex--);
-        for (int i = 0; i < columns; ++i)
-            main[i]->shape()->setZIndex(minZIndex);
-        if (footer)
-            footer->shape()->setZIndex(--minZIndex);
-        if (header)
-            header->shape()->setZIndex(--minZIndex);
-        if (pageBackground) {
-            KoShape *bs = pageBackground->shape();
-            bs->setZIndex(--minZIndex);
-            bs->setSize(pageRect.size());
-            bs->setPosition(pageRect.topLeft());
-        }
+    --minZIndex;
+    if (endnote)
+        endnote->shape()->setZIndex(minZIndex--);
+    for (int i = 0; i < columns; ++i)
+        main[i]->shape()->setZIndex(minZIndex);
+    if (footer)
+        footer->shape()->setZIndex(--minZIndex);
+    if (header)
+        header->shape()->setZIndex(--minZIndex);
+    if (pageBackground) {
+        KoShape *bs = pageBackground->shape();
+        bs->setZIndex(--minZIndex);
+        bs->setSize(pageRect.size());
+        bs->setPosition(pageRect.topLeft());
     }
 
     // spread space across items.
