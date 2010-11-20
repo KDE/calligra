@@ -2658,7 +2658,7 @@ static void addFieldPropertyToExtendedTableSchemaData(
     case QVariant::String:
         extendedTableSchemaFieldPropertyValueEl = doc.createElement("string");
         break;
-    case QVariant::CString:
+    case QVariant::ByteArray:
         extendedTableSchemaFieldPropertyValueEl = doc.createElement("cstring");
         break;
     case QVariant::Int:

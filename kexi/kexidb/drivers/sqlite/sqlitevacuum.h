@@ -25,7 +25,7 @@
 
 #include <kexiutils/tristate.h>
 
-class Q3Process;
+class QProcess;
 class KProgressDialog;
 
 //! @short Helper class performing interactive compacting (VACUUM) of the SQLite database
@@ -60,7 +60,7 @@ public slots:
 
 protected:
     QString m_filePath;
-    Q3Process *m_process;
+    QProcess *m_process;
     KProgressDialog* m_dlg;
     int m_percent;
     tristate m_result;

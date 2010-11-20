@@ -32,7 +32,7 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <qapplication.h>
-#include <q3process.h>
+#include <QProcess>
 #include <qcursor.h>
 
 #include <unistd.h>
@@ -69,12 +69,13 @@ tristate SQLiteVacuum::run()
     const uint origSize = fi.size();
 
     QStringList args;
-    args << ksqlite_app << "-verbose-vacuum" << m_filePath << "vacuum";
-    m_process = new Q3Process(args, this, "process");
-    m_process->setWorkingDirectory(QFileInfo(m_filePath).absoluteDir());
+    args << "-verbose-vacuum" << m_filePath << "vacuum";
+    m_process = new QProcess(this);
+    m_process->setWorkingDirectory(QFileInfo(m_filePath).absoluteDir().path());
     connect(m_process, SIGNAL(readyReadStdout()), this, SLOT(readFromStdout()));
     connect(m_process, SIGNAL(processExited()), this, SLOT(processExited()));
-    if (!m_process->start()) {
+    m_process->start(ksqlite_app, args); 
+    if (!m_process->waitForStarted()){
         m_result = false;
         return m_result;
     }
@@ -89,7 +90,7 @@ tristate SQLiteVacuum::run()
     m_dlg->setAutoClose(true);
     m_dlg->progressBar()->setRange(0, 100);
     m_dlg->exec();
-    while (m_process->isRunning()) {
+    while (m_process->state() == QProcess::Running) {
         readFromStdout();
         usleep(50000);
     }
@@ -106,7 +107,7 @@ tristate SQLiteVacuum::run()
 void SQLiteVacuum::readFromStdout()
 {
     while (true) {
-        QString s(m_process->readLineStdout());   //readStdout();
+        QString s(m_process->readLine());   //readStdout();
         if (s.isEmpty())
             break;
         m_dlg->progressBar()->setValue(m_percent);
@@ -124,7 +125,7 @@ void SQLiteVacuum::readFromStdout()
             } else if (s.mid(10, 1) == "%") {
                 m_percent = s.mid(8, 2).toInt();
             }
-            m_process->writeToStdin(QByteArray(" "));
+            m_process->write(" ");
         }
     }
 }
@@ -139,8 +140,8 @@ void SQLiteVacuum::processExited()
 
 void SQLiteVacuum::cancelClicked()
 {
-    if (!m_process->normalExit()) {
-        m_process->writeToStdin(QByteArray("q")); //quit
+    if (!(m_process->exitStatus() == QProcess::NormalExit)) {
+        m_process->write("q"); //quit
         m_result = cancelled;
     }
 }

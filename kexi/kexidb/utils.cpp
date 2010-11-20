@@ -1030,7 +1030,7 @@ struct KexiDB_NotEmptyValueForTypeCache {
 //! @todo blobs will contain other mime types too
                 QByteArray ba;
                 QBuffer buffer(&ba);
-                buffer.open(IO_WriteOnly);
+                buffer.open(QIODevice::WriteOnly);
                 QPixmap pm(SmallIcon("document-new"));
                 pm.save(&buffer, "PNG"/*! @todo default? */);
                 ADD(i, ba);
