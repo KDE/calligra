@@ -49,6 +49,7 @@ MySqlConnection::MySqlConnection(Driver *driver, ConnectionData &conn_data)
 MySqlConnection::~MySqlConnection()
 {
     destroy();
+    delete d;
 }
 
 bool MySqlConnection::drv_connect(KexiDB::ServerVersionInfo& version)

@@ -161,14 +161,14 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 } 
 
-void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
+void UnderOverElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
-    m_baseElement->writeMathML( writer );   // Just save the children in
+    m_baseElement->writeMathML( writer, ns );   // Just save the children in
     if(m_elementType != Over) {
-        m_underElement->writeMathML( writer );  // the right order
+        m_underElement->writeMathML( writer, ns );  // the right order
     }
     if(m_elementType != Under) {
-        m_overElement->writeMathML( writer );
+        m_overElement->writeMathML( writer, ns );
     }
 }
 

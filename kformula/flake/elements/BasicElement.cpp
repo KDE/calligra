@@ -214,7 +214,7 @@ bool BasicElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 }
 
-void BasicElement::writeMathML( KoXmlWriter* writer ) const
+void BasicElement::writeMathML( KoXmlWriter* writer, const QString& ns ) const
 {
     if (elementType() == Basic || elementType() == Unknown) {
         return;
@@ -223,10 +223,11 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
     // Collapse a an <mrow> with only one child element to the child element itself.
     if ((elementType() == Row) && (childElements().count()==1)) {
         foreach( BasicElement* tmp, childElements() ) {
-            tmp->writeMathML( writer );
+            tmp->writeMathML( writer, ns );
         }
     } else {
-        const QByteArray name = "math:" + ElementFactory::elementName( elementType() ).toLatin1();
+        const QByteArray name = ns.isEmpty() ? ElementFactory::elementName( elementType() ).toLatin1()
+            : ns.toLatin1() + ":" + ElementFactory::elementName( elementType() ).toLatin1();
         writer->startElement( name );
         writeMathMLAttributes( writer );
         if ( elementType() == Formula ) {
@@ -237,7 +238,7 @@ void BasicElement::writeMathML( KoXmlWriter* writer ) const
              */
             writer->startElement( "math:semantics" );
         }
-        writeMathMLContent( writer );
+        writeMathMLContent( writer, ns );
         if ( elementType() == Formula ) {
             writer->endElement();
         }
@@ -251,9 +252,10 @@ void BasicElement::writeMathMLAttributes( KoXmlWriter* writer ) const
         writer->addAttribute( m_attributes.key( value ).toLatin1(), value );
 }
 
-void BasicElement::writeMathMLContent( KoXmlWriter* writer ) const
+void BasicElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
     Q_UNUSED( writer )   // this is just to be reimplemented
+    Q_UNUSED( ns )   // this is just to be reimplemented
 }
 
 ElementType BasicElement::elementType() const

@@ -1720,15 +1720,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(pPr) // CASE #400.1
-//! @todo add more conditions testing the parent
             ELSE_TRY_READ_IF(r) // CASE #400.2
             ELSE_TRY_READ_IF(fldSimple)
-            else if (qualifiedName() == "m:oMathPara") {
-                TRY_READ(oMathPara)
-            }
-            else if (qualifiedName() == "m:oMath") {
-                TRY_READ(oMath)
-            }
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF_NS(m, oMath)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1778,8 +1773,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             }
             else {
                 body->addAttribute("text:style-name", m_currentStyleName);
-                if (m_currentStyleName=="Caption")
+                if (m_currentStyleName == "Caption") {
                     m_wasCaption = true;
+                }
             }
             (void)textPBuf.releaseWriter();
             body->endElement(); //text:p
@@ -3330,12 +3326,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
-            else if (qualifiedName() == "m:oMathPara") {
-                TRY_READ(oMathPara)
-            }
-            else if (qualifiedName() == "m:oMath") {
-                TRY_READ(oMath)
-            }
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF_NS(m, oMath)
         }
     }
 

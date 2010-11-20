@@ -85,7 +85,7 @@ protected:
     void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
     /// Write root contents - reimplemented from BasicElement
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
 
 private:
 };

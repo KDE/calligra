@@ -100,7 +100,8 @@ void GlyphElement::writeMathMLAttributes( KoXmlWriter* writer ) const
     writer->addAttribute( "alt", m_alt );
 }
 
-void GlyphElement::writeMathMLContent( KoXmlWriter* writer ) const
+void GlyphElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
     Q_UNUSED( writer )
+    Q_UNUSED( ns )
 }

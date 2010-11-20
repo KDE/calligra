@@ -1242,7 +1242,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 
     // We create and insert the ObjectTreeItem at the good place in the ObjectTree
     item = container->form()->objectTree()->lookup(wname);
-    kDebug() << wname << item << classname << (parent ? parent->objectName() : 0);
+    kDebug() << wname << item << classname << (parent ? parent->objectName() : QString());
     if (!item)  {
         // not yet created
         kDebug() << "Creating ObjectTreeItem:";

@@ -90,6 +90,12 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
+2010-11-19
+KexiDB
+*fix memory leak in the MySQL driver
+
+~~~~~~~~~~~~~~~~ 2.3 beta 4 ~~~~~~~~~~~~~~~~
+
 2010-10-20
 Core
 *remove dependency on Q3Signal

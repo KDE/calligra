@@ -690,7 +690,6 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
         // moved down
         m_currentShapeProperties = 0;
     }
-    ++d->shapeNumber;
 #endif
 
     m_cNvPrId.clear();
@@ -701,8 +700,6 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
 #ifdef PPTXXMLSLIDEREADER_CPP
-    const QString styleId(d->phStyleId());
-
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
     inheritDefaultBodyProperties();
@@ -712,7 +709,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         m_currentPresentationStyle.addProperty("draw:fit-to-size", "true", KoGenStyle::GraphicType);
     }
 #endif
-    if (m_contentType == "line") {
+    // Arc and straight connector are now simpilified to be a line, fix later
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector")) {
         body->startElement("draw:line");
     }
     else {
@@ -743,9 +741,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     else {
         body->addAttribute("draw:layer", "backgroundobjects");
-        // StyleID will be empty for any text that is in masterslide that is wanted
+        // Phtype will be empty for any text that is in masterslide that is wanted
         // to be shown in the actual slides, such as company names etc.
-        if (!styleId.isEmpty()) {
+        if (!d->phType.isEmpty()) {
             body->addAttribute("presentation:placeholder", "true");
             body->addAttribute("presentation:class", presentationClass);
         }
@@ -776,7 +774,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line") {
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector")) {
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -805,7 +803,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:x2", x2);
             body->addAttribute("svg:y2", y2);
         }
-        if (m_contentType != "line") {
+        if (m_contentType != "line" && m_contentType != "arc" && !m_contentType.startsWith("straightConnector")) {
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
@@ -813,7 +811,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
         }
-        if (m_rot != 0 && m_contentType != "line") {
+        if (m_rot != 0 && m_contentType != "line" && m_contentType != "arc" && !m_contentType.startsWith("straightConnector")) {
             // m_rot is in 1/60,000th of a degree
             qreal angle, xDiff, yDiff;
             MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
@@ -842,6 +840,17 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 #warning TODO: docx
 #endif
 #endif // PPTXXMLSLIDEREADER_H
+    // In case of a blipFill
+    if (!m_xlinkHref.isEmpty()) {
+        body->startElement("draw:image");
+        body->addAttribute("xlink:href", m_xlinkHref);
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:show", "embed");
+        body->addAttribute("xlink:actuate", "onLoad");
+        body->endElement(); //draw:image
+        m_xlinkHref.clear();
+    }
+
 }
 
 #undef CURRENT_EL
@@ -1050,7 +1059,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
     - txDef (§20.1.4.1.28) - DrawingML
 
  Child elements:
-    - blipFill (Picture Fill) §20.1.8.14
+    - [done] blipFill (Picture Fill) §20.1.8.14
     - custGeom (Custom Geometry) §20.1.9.8
     - effectDag (Effect Container) §20.1.8.25
     - effectLst (Effect Container) §20.1.8.26
@@ -1101,6 +1110,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             }
             else if (qualifiedName() == QLatin1String("a:prstGeom")) {
                 TRY_READ(prstGeom)
+            }
+            else if (qualifiedName() == QLatin1String("a:blipFill")) {
+                TRY_READ_IN_CONTEXT(blipFill)
             }
             else if (qualifiedName() == QLatin1String("a:gradFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2592,7 +2604,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller caller)
 {
-    kDebug() << "Caller:" << (char)caller;
+    kDebug() << "Blip Caller:" << (char)caller;
     // we do not use READ_PROLOGUE because namespace depends on caller here
     PUSH_NAME_INTERNAL
     QString ns;
@@ -2769,12 +2781,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
 
 #ifdef PPTXXMLSLIDEREADER_CPP
     inheritListStyles();
-    // Only slidemaster needs to inherit, this because first there is bodyStyle,
-    // then there can be a body frame, the frame must have properties from bodyStyle and it must not
-    // overwrite them, where as in case of slide/slideLayout there is no style in their files
-    // Note also that we do not inherit defaultStyles, we only save the changes that this lvl creates
-    // Default styles are used when we actually create the content
-    if (m_context->type == SlideMaster) {
+    if (m_context->type == SlideMaster || m_context->type == SlideLayout) {
         inheritAllTextAndParagraphStyles();
     }
 #endif
@@ -3989,16 +3996,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     bool ok = false;
 
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "text");
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
-    const qreal marginLeft = qreal(EMU_TO_POINT(marL.isEmpty() ? 347663.0 : marL.toDouble(&ok)));
-    m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginLeft);
+#ifdef PPTXXMLSLIDEREADER_CPP
+    inheritDefaultTextStyle(m_currentTextStyle);
+    inheritTextStyle(m_currentTextStyle);
+#endif
 
-    const qreal marginRight = qreal(EMU_TO_POINT(marR.isEmpty() ? 0.0 : marR.toDouble(&ok)));
-    m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginRight);
-
-    const qreal textIndent = qreal(EMU_TO_POINT(indent.isEmpty() ? -342900.0 : indent.toDouble(&ok)));
-    m_currentParagraphStyle.addPropertyPt("fo:text-indent", textIndent);
-    
+    if (!marR.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+    }
+    if (!marL.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+    }
+    if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
@@ -4006,8 +4022,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
     algnToODF("fo:text-align", algn);
-
-    m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
         readNext();
@@ -4112,7 +4126,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl2pPr()
 
 #undef CURRENT_EL
 #define CURRENT_EL lvl3pPr
-//! Look for lvl1pPr documentation  
+//! Look for lvl1pPr documentation
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lvl3pPr()
 {
     READ_PROLOGUE
@@ -4756,7 +4770,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buAutoNum()
 
     TRY_READ_ATTR_WITHOUT_NS(startAt)
     if (!startAt.isEmpty()) {
-        m_currentBulletProperties.m_startValue = startAt.toInt();
+        m_currentBulletProperties.setStartValue(startAt);
     }
 
     m_listStylePropertiesAltered = true;

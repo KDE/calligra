@@ -1246,6 +1246,8 @@ bulletSizeToSizeString(const PptTextPFRun& pf)
     if (pf.fBulletHasSize()) {
         qint16 size = pf.bulletSize();
         if (size >= 25 && size <= 400) {
+            //TODO: The value specifies bullet font size as a percentage of the
+            //font size of the first text run in the paragraph.  Check this!
             return percent(size);
         } else if (size >= -4000 && size <= -1) {
             return pt(size);
@@ -1309,9 +1311,16 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
             elementName = "text:list-level-style-bullet";
             out.startElement("text:list-level-style-bullet");
             out.addAttribute("text:bullet-char", getBulletChar(i.pf));
-            if (i.pf.fBulletHasSize() && i.cf) {
-                qreal relSize = 100.0 * i.pf.bulletSize() / i.cf->fontSize;
-                out.addAttribute("text:bullet-relative-size", percent(relSize));
+
+            if (i.pf.fBulletHasSize()) {
+                qint16 size = i.pf.bulletSize();
+                if ((size >= 25 && size <= 400) && i.cf) {
+                    qreal relSize = 100.0 * size / (qreal) i.cf->fontSize;
+                    out.addAttribute("text:bullet-relative-size", percent(relSize));
+                }
+                else if (size >= -4000 && size <= -1) {
+                    qDebug() << "Absolute value for the bullet font size, ignoring!";
+                }
             }
         }
     }

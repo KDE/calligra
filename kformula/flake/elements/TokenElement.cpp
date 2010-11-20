@@ -337,14 +337,14 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
     return true;
 }
 
-void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
+void TokenElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
     // split the m_rawString into text content chunks that are divided by glyphs 
     // which are represented as ObjectReplacementCharacter and write each chunk
     QStringList tmp = m_rawString.split( QChar( QChar::ObjectReplacementCharacter ) );
     for ( int i = 0; i < tmp.count(); i++ ) {
         if( m_rawString.startsWith( QChar( QChar::ObjectReplacementCharacter ) ) ) {
-            m_glyphs[ i ]->writeMathML( writer );
+            m_glyphs[ i ]->writeMathML( writer, ns );
             if (i + 1 < tmp.count()) {
                 writer->addTextNode( tmp[ i ] );
             }
@@ -352,7 +352,7 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
         else {
             writer->addTextNode( tmp[ i ] );
             if (i + 1 < tmp.count()) {
-                m_glyphs[ i ]->writeMathML( writer );
+                m_glyphs[ i ]->writeMathML( writer, ns );
             }
         }
     }

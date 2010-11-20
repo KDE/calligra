@@ -82,9 +82,10 @@ void UnknownElement::writeMathMLAttributes( KoXmlWriter* writer ) const
     Q_UNUSED( writer )
 }
 
-void UnknownElement::writeMathMLContent( KoXmlWriter* writer ) const
+void UnknownElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
     Q_UNUSED( writer )
+    Q_UNUSED( ns )
     //TODO - write the save mathml content back into writer
 }
 

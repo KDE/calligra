@@ -28,12 +28,17 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPainter>
 #include <QKeyEvent>
+#include <qabstracttextdocumentlayout.h>
+#include <qcursor.h>
+#include <qdesktopservices.h>
+#include <qurl.h>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoEventAction.h>
 #include <KoPACanvas.h>
+#include <KoTextShapeData.h>
 
 #include "KPrViewModePresentation.h"
 #include "KPrPresentationStrategy.h"
@@ -97,6 +102,12 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
         finishEventActions();
         KoShape * shapeClicked = canvas()->shapeManager()->shapeAt( event->point );
         if (shapeClicked) {
+            QString link;
+            if (checkHyperlink(event, shapeClicked, link)) {
+                runHyperlink(link);
+                return;
+            }
+
             m_eventActions = shapeClicked->eventActions();
             if (!m_eventActions.isEmpty()) {
                 foreach ( KoEventAction * eventAction, m_eventActions ) {
@@ -122,7 +133,15 @@ void KPrPresentationTool::mouseDoubleClickEvent( KoPointerEvent *event )
 
 void KPrPresentationTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    Q_UNUSED(event);
+    KoShape * shape = canvas()->shapeManager()->shapeAt(event->point);
+
+    QString link;
+    if (checkHyperlink(event, shape, link)) {
+        canvas()->setCursor(Qt::PointingHandCursor);
+        return;
+    }
+
+    canvas()->setCursor(Qt::ArrowCursor);
 }
 
 void KPrPresentationTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -266,6 +285,40 @@ bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
         }
     }
     return false;
+}
+
+bool KPrPresentationTool::checkHyperlink(KoPointerEvent *event, KoShape *shape, QString & hyperLink)
+{
+    if (!shape) {
+        return false;
+    }
+
+    KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
+    if (textShapeData) {
+        QPointF p = shape->absoluteTransformation(0).inverted().map(event->point);
+        p = p + QPointF(0.0, textShapeData->documentOffset());
+
+        int caretPos = textShapeData->document()->documentLayout()->hitTest(p, Qt::ExactHit);
+
+        if (textShapeData->endPosition() != -1 && caretPos != -1) {
+            QTextCursor mouseOver(textShapeData->document());
+            mouseOver.setPosition(caretPos);
+
+            QTextCharFormat fmt = mouseOver.charFormat();
+            hyperLink = fmt.anchorHref();
+            if (!hyperLink.isEmpty()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void KPrPresentationTool::runHyperlink(QString hyperLink)
+{
+    QUrl url = QUrl::fromUserInput(hyperLink);
+
+    QDesktopServices::openUrl(url);
 }
 
 KPrPresentationStrategyBase *KPrPresentationTool::strategy()

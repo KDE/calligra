@@ -33,7 +33,7 @@ class QUndoCommand;
 
 class KPrPicturesImport : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     KPrPicturesImport();
 
