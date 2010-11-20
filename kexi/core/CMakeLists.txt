@@ -46,7 +46,6 @@ set(kexicore_LIB_SRCS
 kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 
 target_link_libraries(kexicore
-  ${QT_QT3SUPPORT_LIBRARY}
   ${KDE4_KIO_LIBS}
   ${KDE4_KDEUI_LIBS}
   kexiutils
