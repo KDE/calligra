@@ -290,7 +290,10 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     }
 
     KexiMainWindow *win = new KexiMainWindow();
-    QApplication::setMainWidget(win); // FIXME: Deprecated method
+#ifndef KEXI_MOBILE
+    QApplication::setMainWidget(win);
+#endif
+
 #ifdef KEXI_DEBUG_GUI
     //if (debugWindow)
     //debugWindow->reparent(win, QPoint(1,1));
