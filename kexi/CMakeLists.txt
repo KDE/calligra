@@ -2,6 +2,8 @@ project(kexi)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
+option(KEXI_MOBILE "compile a mobile Kexi" OFF)
+
 IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
   INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
@@ -32,13 +34,11 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/libs
 )
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
-add_subdirectory( kexiutils )
-add_subdirectory( kexidb )
-add_subdirectory( core )
-add_subdirectory( widget )
-add_subdirectory( formeditor )
+IF(KEXI_MOBILE)
+  add_definitions(-DKEXI_MOBILE)
+ELSE(KEXI_MOBILE)
+  add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+ENDIF(KEXI_MOBILE)
 
 if(FALSE) #TODO ENABLE WEBFORMS
 if(WITH_WEBFORMS)
@@ -67,29 +67,40 @@ else(WITH_WEBFORMS)
 endif(WITH_WEBFORMS)
 endif(FALSE)
 
+add_subdirectory( kexiutils )
+add_subdirectory( kexidb )
+add_subdirectory( core )
+add_subdirectory( widget )
+add_subdirectory( formeditor )
 add_subdirectory( data )
 add_subdirectory( pics )
-
-add_subdirectory( main )
-
 add_subdirectory( migration )
 add_subdirectory( plugins )
 add_subdirectory( tests )
+add_subdirectory( shapes )
 
-add_subdirectory(shapes)
+IF(KEXI_MOBILE)
+
+ELSE(KEXI_MOBILE)
+  add_subdirectory( main )
+ENDIF(KEXI_MOBILE)
 
 ########### next target ###############
 
-set(kexi_SRCS main.cpp )
-kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")
-kde4_add_executable(kexi ${kexi_SRCS})
-target_link_libraries(kexi 
-  ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
-  kexidb
-  keximain
-  kexicore
-)
-install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
+IF(KEXI_MOBILE)
+  #Add Kexi mobile application subdir here
+ELSE(KEXI_MOBILE)
+  set(kexi_SRCS main.cpp )
+  kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")
+  kde4_add_executable(kexi ${kexi_SRCS})
+  target_link_libraries(kexi 
+    ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+    kexidb
+    keximain
+    kexicore
+  )
+  install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
+ENDIF(KEXI_MOBILE)
 
 ########### install files ###############
 

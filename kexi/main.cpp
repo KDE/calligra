@@ -33,7 +33,9 @@ int main(int argc, char *argv[])
 
     result = qApp->exec();
 //Qt4 K3StaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
-    delete qApp->mainWidget();
+#ifndef KEXI_MOBILE
+    delete qApp->mainWidget()
+#endif 
     delete qApp;
     return result;
 }
