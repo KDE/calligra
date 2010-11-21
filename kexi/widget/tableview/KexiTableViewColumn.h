@@ -101,12 +101,12 @@ public:
     }
 
     /*! Sets icon for displaying in the caption area (header). */
-    inline void setIcon(const QIconSet& icon) {
+    inline void setIcon(const QIcon& icon) {
         m_icon = icon;
     }
 
     /*! \return bame of icon displayed in the caption area (header). */
-    inline QIconSet icon() const {
+    inline QIcon icon() const {
         return m_icon;
     }
 
@@ -217,7 +217,7 @@ protected:
 
     QString m_captionAliasOrName;
 
-    QIconSet m_icon;
+    QIcon m_icon;
 
     KexiUtils::Validator* m_validator;
 

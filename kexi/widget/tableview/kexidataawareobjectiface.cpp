@@ -1705,7 +1705,7 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
     }
     else if (isInsertingEnabled()
                && (   (e->modifiers() == Qt::ControlModifier && k == Qt::Key_Equal)
-                   || (e->modifiers() == (Qt::ControlButton | Qt::ShiftButton) && k == Qt::Key_Equal)
+                   || (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && k == Qt::Key_Equal)
                   )
             )
     {

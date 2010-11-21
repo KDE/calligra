@@ -78,8 +78,10 @@ KexiDisplayUtils::DisplayParameters::DisplayParameters()
 
 KexiDisplayUtils::DisplayParameters::DisplayParameters(QWidget *w)
 {
-    textColor = w->palette().active().foreground();
-    selectedTextColor = w->palette().active().highlightedText();
+//!TODO check!
+    textColor = w->palette().foreground().color();
+
+    selectedTextColor = w->palette().highlightedText().color();
     font = w->font();
 }
 
@@ -99,7 +101,8 @@ void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWid
 void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget)
 {
     par.textColor = SPECIAL_TEXT_COLOR;
-    par.selectedTextColor = widget->palette().active().highlightedText();
+//!TODO check!
+    par.selectedTextColor = widget->palette().highlightedText().color();
     par.font = widget->font();
     par.font.setItalic(true);
 }

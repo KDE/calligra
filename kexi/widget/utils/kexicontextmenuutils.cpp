@@ -135,11 +135,13 @@ void KexiImageContextMenu::insertFromFile()
 //#endif
     if (!url.isValid()) {
         //focus the app again to avoid annoying the user with unfocused main window
+#ifndef KEXI_MOBILE
         if (qApp->mainWidget()) {
             //focusWidget->raise();
             //focusWidget->setFocus();
             qApp->mainWidget()->raise();
         }
+#endif
         return;
     }
     kDebug() << "fname=" << url.prettyUrl();
@@ -157,11 +159,13 @@ void KexiImageContextMenu::insertFromFile()
     #endif*/
 
     emit insertFromFileRequested(url);
+#ifndef KEXI_MOBILE
     if (qApp->mainWidget()) {
 //  focusWidget->raise();
 //  focusWidget->setFocus();
         qApp->mainWidget()->raise();
     }
+#endif
 }
 
 void KexiImageContextMenu::saveAs()
