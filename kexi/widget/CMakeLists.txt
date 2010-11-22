@@ -86,6 +86,7 @@ IF (KEXI_MOBILE)
 ELSE(KEXI_MOBILE)
   target_link_libraries(
     kexiextendedwidgets
+    kexidatatable
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
     )
