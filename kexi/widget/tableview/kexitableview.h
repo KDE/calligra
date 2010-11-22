@@ -549,7 +549,7 @@ protected:
     /*! Implementation for KexiDataAwareObjectInterface.
      Adds another section within the horizontal header. */
     virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIconSet& icon, int size);
+                                 const QIcon& icon, int size);
 
     /*! @internal \return true if the row defined by \a record has default
      value at column \a col. If this is the case and \a value is not NULL,
