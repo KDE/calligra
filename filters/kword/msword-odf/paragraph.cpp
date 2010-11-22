@@ -561,8 +561,8 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //
             // Get the proportion & turn it into a percentage for the
             // attribute.
-            QString proportionalLineSpacing(QString::number(((qreal)pap.lspd.dyaLine
-                                                  / (qreal)240.0)*(qreal)120.0));
+            QString proportionalLineSpacing(QString::number((qreal)pap.lspd.dyaLine
+                                                  / (qreal)2.4));
             style->addProperty("fo:line-height", proportionalLineSpacing.append("%"), KoGenStyle::ParagraphType);
         } else if (pap.lspd.fMultLinespace == 0) {
             // Magnitude of lspd.dyaLine specifies the amount of space
