@@ -215,7 +215,7 @@ protected:
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual void addHeaderColumn(const QString& caption, const QString& description,
-                                 const QIconSet& icon, int width);
+                                 const QIcon& icon, int width);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual int currentLocalSortingOrder() const;

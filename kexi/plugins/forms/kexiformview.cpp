@@ -1185,7 +1185,7 @@ void
 KexiFormView::slotHandleDragMoveEvent(QDragMoveEvent* e)
 {
     if (KexiFieldDrag::canDecode(e)) {
-        e->accept(true);
+        e->setAccepted(true);
         //dirty: drawRect(QRect( e->pos(), QSize(50, 20)), 2);
     }
 }

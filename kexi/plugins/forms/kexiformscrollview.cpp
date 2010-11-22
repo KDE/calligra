@@ -171,7 +171,7 @@ void KexiFormScrollView::clearColumnsInternal(bool repaint)
 }
 
 void KexiFormScrollView::addHeaderColumn(const QString& caption, const QString& description,
-        const QIconSet& icon, int width)
+        const QIcon& icon, int width)
 {
     Q_UNUSED(caption);
     Q_UNUSED(description);
