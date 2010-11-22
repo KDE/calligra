@@ -1,11 +1,16 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44021)
 
-add_subdirectory( tables )
-add_subdirectory( queries )
-add_subdirectory( forms )
-add_subdirectory( migration )
-add_subdirectory( importexport )
 add_subdirectory( reports )
+
+if (KEXI_MOBILE)
+
+else (KEXI_MOBILE)
+  add_subdirectory( tables )
+  add_subdirectory( queries )
+  add_subdirectory( forms )
+  add_subdirectory( migration )
+  add_subdirectory( importexport )
+endif (KEXI_MOBILE)
 
 if(SHOULD_BUILD_SCRIPTING)
     add_subdirectory(scripting)
