@@ -64,7 +64,7 @@ void PixmapCachingCellView::paintCellContents(const QRectF &paintRegion, QPainte
         QPainter pixmapPainter(d->pixmap);
         pixmapPainter.setClipRect(d->pixmap->rect());
         pixmapPainter.scale(t.m11(), t.m22());
-        CellView::paintCellContents(paintRegion.translated(-coordinate), d->pixmap->rect(), pixmapPainter.clipRegion(), QPointF(0, 0), cell, sheetView);
+        CellView::paintCellContents(paintRegion.translated(-coordinate), pixmapPainter, pixmapPainter.clipRegion(), QPointF(0, 0), cell, sheetView);
     }
     QPointF p = t.map(coordinate);
     painter.resetTransform();
