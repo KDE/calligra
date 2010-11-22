@@ -277,10 +277,10 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 }
 
-void FractionElement::writeMathMLContent( KoXmlWriter* writer ) const
+void FractionElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
-    m_numerator->writeMathML( writer );
-    m_denominator->writeMathML( writer );
+    m_numerator->writeMathML( writer, ns );
+    m_denominator->writeMathML( writer, ns );
 }
 
 ElementType FractionElement::elementType() const

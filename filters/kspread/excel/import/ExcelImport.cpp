@@ -282,7 +282,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
             map->setDefaultColumnWidth(sheet->defaultColWidth());
             map->setDefaultRowHeight(sheet->defaultRowHeight());
         }
-        KSpread::Sheet* ksheet = map->addNewSheet();
+        KSpread::Sheet* ksheet = map->addNewSheet(sheet->name());
         d->processSheet(sheet, ksheet);
         d->shapesXml->endElement();
     }
@@ -469,7 +469,6 @@ static QRectF getRect(const MSO::OfficeArtFSPGR &r)
 
 void ExcelImport::Private::processSheet(Sheet* is, KSpread::Sheet* os)
 {
-    os->setSheetName(is->name());
     os->setHidden(!is->visible());
     //os->setProtected(is->protect());
     os->setAutoCalculationEnabled(is->autoCalc());

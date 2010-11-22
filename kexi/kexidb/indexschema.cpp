@@ -90,7 +90,7 @@ FieldList& IndexSchema::addField(Field *field)
     if (field->table() != m_tableSchema) {
         KexiDBDbg << "IndexSchema::addField(" << (field ? field->name() : 0)
         << "): WARNING: field doas not belong to the same table '"
-        << (field && field->table() ? field->table()->name() : 0)
+        << (field && field->table() ? field->table()->name() : QString())
         << "'as index!";
         return *this;
     }

@@ -20,7 +20,7 @@
 #ifndef KWFACTORY_H
 #define KWFACTORY_H
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 #include "kword_export.h"
 
 class KAboutData;
@@ -29,20 +29,19 @@ class KAboutData;
  * Factory for the KWord application.
  * Will use the KWord library to create a new instance of the KWord doc.
  */
-class KWORD_EXPORT KWFactory : public KoFactory
+class KWORD_EXPORT KWFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
     /**
      * Constructor
      * @param parent the parent QObject
-     * @param name the name of the object
      */
-    explicit KWFactory(QObject *parent = 0, const char *name = 0);
+    explicit KWFactory(QObject *parent = 0);
     ~KWFactory();
 
     /// overwritten method from superclass
-    virtual KParts::Part* createPartObject(QWidget * = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList());
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     /// Return an instance
     static const KComponentData &componentData();

@@ -192,16 +192,16 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 }
 
-void SubSupElement::writeMathMLContent( KoXmlWriter* writer ) const
+void SubSupElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
     // just save the children in the right order
-    m_baseElement->writeMathML( writer );
+    m_baseElement->writeMathML( writer, ns );
 
     if (m_elementType != SupScript)
-        m_subScript->writeMathML( writer );
+        m_subScript->writeMathML( writer, ns );
 
     if (m_elementType != SubScript )
-        m_superScript->writeMathML( writer );
+        m_superScript->writeMathML( writer, ns );
 }
 
 

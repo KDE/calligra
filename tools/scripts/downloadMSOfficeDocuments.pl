@@ -92,7 +92,8 @@ my %done;
 sub addJob {
 #Shifts the first value of the array off and returns it, shortening the array by 1 and moving everything down. 
 	my $uri = shift;
-	if (exists $done{$uri}) {
+	my $scheme = $uri->scheme;
+	if (exists $done{$uri} || ($scheme ne "http" && $scheme ne "https")) {
 		return;
 	}
 	$done{$uri} = 1;
@@ -108,11 +109,25 @@ for (my $start=0; $start < $maxresults; $start = $start + 100) {
 		sleep 3; # do not query search engine too often
 	}
 	@pages = ();
-	my $url = "http://www.google.com/search?q=$term+filetype:$type&start=$start&num=100";
+	my $base = "http://www.google.com/";
+	my $url = $base . "search?q=$term+filetype:$type&start=$start&num=100";
 	my $res = $ua->request(HTTP::Request->new(GET => $url), sub {$p->parse($_[0])});
 	foreach (@pages) {
-		my $uri = $_;
-		if ($uri =~ m/^http/ && $uri !~ m/\.google\./) {
+		my $uri = URI->new_abs($_, $base);
+		if ($uri->host =~ m/google/) {
+			my @q = $uri->query_form;
+			if (!@q) {
+				next;
+			}
+			for (my $i = 0; $i <= @q; $i++) {
+				$uri = URI->new_abs($q[$i], $base);
+				if (($uri->scheme eq "http" ||
+						$uri->scheme eq "https") &&
+						$uri->host !~ m/google/) {
+					addJob($uri);
+				}
+			}
+		} else {
 			addJob($uri);
 		}
 	}

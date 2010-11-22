@@ -1420,8 +1420,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_lastRenderedPageBreak()
 //! instrText handler
 /*
  Parent elements:
- - r (§17.3.2.25)
- - r (§22.1.2.87)
+ - [done] r (§17.3.2.25)
+ - [done] r (§22.1.2.87)
 */
 //! @todo support all attributes etc.
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
@@ -1720,15 +1720,10 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(pPr) // CASE #400.1
-//! @todo add more conditions testing the parent
             ELSE_TRY_READ_IF(r) // CASE #400.2
             ELSE_TRY_READ_IF(fldSimple)
-            else if (qualifiedName() == "m:oMathPara") {
-                TRY_READ(oMathPara)
-            }
-            else if (qualifiedName() == "m:oMath") {
-                TRY_READ(oMath)
-            }
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF_NS(m, oMath)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1778,8 +1773,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             }
             else {
                 body->addAttribute("text:style-name", m_currentStyleName);
-                if (m_currentStyleName=="Caption")
+                if (m_currentStyleName == "Caption") {
                     m_wasCaption = true;
+                }
             }
             (void)textPBuf.releaseWriter();
             body->endElement(); //text:p
@@ -1909,7 +1905,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
 //kDebug() <<"[1]";
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF_IN_CONTEXT(rPr)
+            TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF(t)
             ELSE_TRY_READ_IF(ptab)
             ELSE_TRY_READ_IF(drawing)
@@ -1921,6 +1917,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             ELSE_TRY_READ_IF(fldChar)
             ELSE_TRY_READ_IF(lastRenderedPageBreak)
             ELSE_TRY_READ_IF(br)
+            ELSE_TRY_READ_IF_NS(mc, AlternateContent)
             else  if (qualifiedName() == "w:tab") {
                 body->startElement("text:tab");
                 body->endElement(); // text:tab
@@ -2089,9 +2086,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
  - [done] webHidden (Web Hidden Text) §17.3.2.44
 */
 //! @todo support all elements
-KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr(rPrCaller caller)
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
 {
-    Q_UNUSED(caller)
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
@@ -2240,7 +2236,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
-            TRY_READ_IF_IN_CONTEXT(rPr)
+            TRY_READ_IF(rPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(shd)
             ELSE_TRY_READ_IF(jc)
             ELSE_TRY_READ_IF(tabs)
@@ -2542,18 +2538,23 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     body = buffer.originalWriter();
     body->startElement("draw:frame");
 
+    // Todo find out if this is always true
+    m_currentDrawStyle->addProperty("style:vertical-pos", "top");
+
+    if (m_drawing_inline) {
+        body->addAttribute("text:anchor-type", "as-char");
+        m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
+    }
+    else {
+        body->addAttribute("text:anchor-type", "char");
+        m_currentDrawStyle->addProperty("style:vertical-rel", "char");
+    }
+
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
     if (m_moveToStylesXml) {
         mainStyles->markStyleForStylesXml(styleName);
     }
     body->addAttribute("draw:style-name", styleName);
-
-    if (m_drawing_inline) {
-        body->addAttribute("text:anchor-type", "as-char");
-    }
-    else {
-        body->addAttribute("text:anchor-type", "char");
-    }
 
 //! @todo add more cases for text:anchor-type! use m_drawing_inline and see CASE #1343
     if (m_hasPosOffsetH) {
@@ -2669,12 +2670,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ind()
     bool ok = false;
     const qreal leftInd = qreal(TWIP_TO_POINT(left.toDouble(&ok)));
     if (ok) {
-        // Note, kword does not support atm. displaying text in negative indents
-        // as a result, text is cut, this makes the indent of such text 0
-        // Remove ME once kword support is there.
-        if (leftInd > 0) {
-            m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
-        }
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", leftInd);
     }
 
     TRY_READ_ATTR(firstLine)
@@ -2791,10 +2787,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc()
     READ_ATTR(val)
     // Does ODF support high/low/medium kashida ?
     val = val.toLower();
-    if ((val == "both") || (val == "distribute"))
+    if ((val == "both") || (val == "distribute")) {
         m_currentParagraphStyle.addProperty("fo:text-align", "justify");
-    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center"))
+    }
+    else if ((val == "start") || (val == "left") || (val == "right") || (val == "center")) {
         m_currentParagraphStyle.addProperty("fo:text-align", val);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3328,12 +3326,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
-            else if (qualifiedName() == "m:oMathPara") {
-                TRY_READ(oMathPara)
-            }
-            else if (qualifiedName() == "m:oMath") {
-                TRY_READ(oMath)
-            }
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF_NS(m, oMath)
         }
     }
 
@@ -3559,7 +3553,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bdr()
     createBorderStyle(sz, color, val, RightBorder);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
-        int sp;
+        int sp = 0;
         m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", TopBorder);
         m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", LeftBorder);
         m_textBorderPaddings.insertMulti(QString::number(sp) + "pt", RightBorder);
@@ -3622,8 +3616,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_dstrike()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_caps()
 {
     READ_PROLOGUE
-    if (READ_BOOLEAN_VAL)
+    if (READ_BOOLEAN_VAL) {
         m_currentTextStyleProperties->setFontCapitalization(QFont::AllUppercase);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3651,8 +3646,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_outline()
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_smallCaps()
 {
     READ_PROLOGUE
-    if (READ_BOOLEAN_VAL)
+    if (READ_BOOLEAN_VAL) {
         m_currentTextStyleProperties->setFontCapitalization(QFont::SmallCaps);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -3778,10 +3774,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_vertAlign()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
     val = val.toLower();
-    if (val == "superscript")
+    if (val == "superscript") {
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-    else if (val == "subscript")
+    }
+    else if (val == "subscript") {
         m_currentTextStyleProperties->setVerticalAlignment(QTextCharFormat::AlignSubScript);
+    }
     readNext();
     READ_EPILOGUE
 }
@@ -5172,7 +5170,60 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
 }
 
 #undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "mc"
+
+#undef CURRENT_EL
+#define CURRENT_EL AlternateContent
+//! Alternate content handler
+// @todo, find out whether this is used outside docx
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_AlternateContent()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(Choice)
+            ELSE_TRY_READ_IF(Fallback)
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL Choice
+//! Choice handler
+// @todo implement if wanted..
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_Choice()
+{
+    READ_PROLOGUE
+    skipCurrentElement();
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL Fallback
+//! Fallback handler
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_Fallback()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF_NS(w, pict)
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "m"
+
 #undef CURRENT_EL
 #define CURRENT_EL oMathPara
 //! oMathPara handler
@@ -5183,11 +5234,34 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMathPara()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(oMath)
+            ELSE_TRY_READ_IF(oMathParaPr)
         }
     }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL oMathParaPr
+//! oMathParaPr handler (paragraph properties)
+// @todo support fully
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMathParaPr()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL)
+        if (isStartElement()) {
+            if (qualifiedName() == "m:jc") {
+                TRY_READ(jc_m)
+            }
+        }
+    }
+
     READ_EPILOGUE
 }
 
@@ -5201,13 +5275,39 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_oMath()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             if (qualifiedName() == "m:r") {
                 TRY_READ(r_m)
             }
         }
     }
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL jc
+//! jc handler for math
+// @todo implement..
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_jc_m()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+    TRY_READ_ATTR(val)
+
+    if (!val.isEmpty()) {
+        if (val == "centerGroup") {
+            m_currentParagraphStyle.addProperty("fo:text-align", "center");
+        }
+        else {
+            // Fix this based on possible values,
+            m_currentParagraphStyle.addProperty("fo:text-align", "left");
+        }
+    }
+
+    readNext();
+
     READ_EPILOGUE
 }
 
@@ -5221,7 +5321,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_t_m()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         kDebug() << *this;
         if (isCharacters()) {
             body->addTextSpan(text().toString());
@@ -5245,11 +5345,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r_m()
 
     while (!atEnd()) {
         readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
+        BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
-            if (qualifiedName() == "w:rPr") {
-                TRY_READ_IN_CONTEXT(rPr)
-            }
+            TRY_READ_IF_NS(w, rPr)
             else if (qualifiedName() == "m:t") {
                 TRY_READ(t_m)
             }

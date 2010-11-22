@@ -20,7 +20,7 @@
 #ifndef KFORMULAPARTFACTORY_H
 #define KFORMULAPARTFACTORY_H
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 #include "kformula_export.h"
 
 class KComponentData;
@@ -36,17 +36,15 @@ class KAboutData;
  * Use createPartObject() to obtain a pointer to a new instance of the KFormulaPart.
  * With global you can access the current @ref KComponentData of KFormula
  */
-class KFORMULAPRIVATE_EXPORT KFormulaPartFactory : public KoFactory
+class KFORMULAPRIVATE_EXPORT KFormulaPartFactory : public KPluginFactory
 {
     Q_OBJECT
 public:
     KFormulaPartFactory( QObject* parent = 0 );
     ~KFormulaPartFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0,
-		                            QObject *parent = 0,
-					    const char *classname = "KoDocument",
-   			                    const QStringList &args = QStringList() );
+
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
     static const KComponentData &global();
     static KAboutData* aboutData();
 

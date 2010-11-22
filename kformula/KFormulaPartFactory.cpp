@@ -33,7 +33,7 @@
 KComponentData* KFormulaPartFactory::s_global = 0;
 KAboutData* KFormulaPartFactory::s_aboutData = 0;
 
-KFormulaPartFactory::KFormulaPartFactory( QObject* parent ) : KoFactory( parent )
+KFormulaPartFactory::KFormulaPartFactory( QObject* parent ) : KPluginFactory( *aboutData(), parent )
 {
     // Create our instance, it becomes KGlobal::instance if the main app is KFormula
     (void)global();
@@ -47,12 +47,12 @@ KFormulaPartFactory::~KFormulaPartFactory()
     s_global = 0L;
 }
 
-KParts::Part* KFormulaPartFactory::createPartObject( QWidget *parentWidget,
-                                                     QObject* parent,
-                                                     const char* classname,
-						     const QStringList & )
+QObject* KFormulaPartFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+                             const QVariantList& args, const QString& keyword )
 {
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    Q_UNUSED( args );
+    Q_UNUSED( keyword );
+    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
     KFormulaPartDocument *doc = new KFormulaPartDocument( parentWidget,
 		                                          parent,
 							  !bWantKoDocument );

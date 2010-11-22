@@ -331,10 +331,11 @@ bool TableElement::readMathMLContent( const KoXmlElement& element )
     return true;
 }
 
-void TableElement::writeMathMLContent( KoXmlWriter* writer ) const
+void TableElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
-    foreach( TableRowElement* tmpRow, m_rows )  // write each mtr element
-    tmpRow->writeMathML( writer );
+    foreach( TableRowElement* tmpRow, m_rows ) {  // write each mtr element
+        tmpRow->writeMathML( writer, ns );
+    }
 }
 
 

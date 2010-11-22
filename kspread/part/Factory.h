@@ -20,7 +20,7 @@
 #ifndef KSPREAD_FACTORY_H
 #define KSPREAD_FACTORY_H
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 
 #include "kspread_export.h"
 
@@ -30,14 +30,14 @@ class KIconLoader;
 namespace KSpread
 {
 
-class KSPREAD_EXPORT Factory : public KoFactory
+class KSPREAD_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit Factory(QObject* parent = 0, const char* name = 0);
+    explicit Factory(QObject* parent = 0);
     ~Factory();
 
-    virtual KParts::Part *createPartObject(QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList());
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &global();
 

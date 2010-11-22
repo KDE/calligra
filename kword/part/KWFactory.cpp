@@ -18,6 +18,7 @@
 */
 
 #include "KWFactory.h"
+#include <kdebug.h>
 #include "KWAboutData.h"
 #include "KWDocument.h"
 #include <kcomponentdata.h>
@@ -28,8 +29,8 @@
 KComponentData *KWFactory::s_instance = 0;
 KAboutData *KWFactory::s_aboutData = 0;
 
-KWFactory::KWFactory(QObject *parent, const char *name)
-        : KoFactory(parent, name)
+KWFactory::KWFactory(QObject *parent)
+        : KPluginFactory(*aboutData(), parent)
 {
     // Create our instance, so that it becomes KGlobal::instance if the
     // main app is KWord.
@@ -44,9 +45,11 @@ KWFactory::~KWFactory()
     s_instance = 0;
 }
 
-KParts::Part *KWFactory::createPartObject(QWidget *parentWidget, QObject *parent, const char *classname, const QStringList &)
+QObject* KWFactory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
 {
-    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
+    Q_UNUSED(args);
+    Q_UNUSED(keyword);
+    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
     KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
 
@@ -77,4 +80,3 @@ const KComponentData &KWFactory::componentData()
     }
     return *s_instance;
 }
-

@@ -162,17 +162,10 @@ public:
     }
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
     //! Used to index shapes in master slide when inheriting properties
-    uint shapeNumber;
     bool phRead;
     QString qualifiedNameOfMainElement;
     QString phType; //!< set by read_ph()
     QString phIdx; //!< set by read_ph()
-    QString phStyleId() const
-    {
-        if (!phType.isEmpty())
-            return phType;
-        return phIdx;
-    }
 
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
@@ -217,26 +210,9 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read(MSOOXML::MsooXmlReaderContex
         d->qualifiedNameOfMainElement = "p:sldMaster";
         break;
     }
-#if 0
-    if (m_context->slideProperties) {
-        kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
-        if (m_context->type == SlideMaster) { // will be written
-            m_context->slideProperties->clear();
-        }
-    }
-#endif
     const KoFilter::ConversionStatus result = readInternal();
-    /*    if (m_context->type == SlideMaster) {
-            if (result == KoFilter::OK) {
-                m_context->slideProperties->clear();
-            }
-        }*/
-#if 0
-    if (m_context->slideProperties) {
-        kDebug() << "m_context->slideProperties->shapes.count()" << m_context->slideProperties->shapes.count();
-    }
-#endif
     m_context = 0;
+
     return result;
 }
 
@@ -1120,8 +1096,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 {
     READ_PROLOGUE
 
-    d->shapeNumber = 0;
-
     // Adding extra 'inherited' frames from layout
     if (m_context->type == Slide) {
         int index = 0;
@@ -1140,19 +1114,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     bool potentiallyAddToLayoutFrames = false;
 
-    QBuffer shapeBuf;
-    KoXmlWriter shapeWriter(&shapeBuf);
+    QBuffer* shapeBuf;
+    KoXmlWriter *shapeWriter;
     KoXmlWriter *bodyBackup = body;
-
-    if (m_context->type == SlideLayout) {
-        body = &shapeWriter;
-    }
 
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            if (m_context->type == SlideLayout) {
+                shapeBuf = new QBuffer;
+                shapeWriter = new KoXmlWriter(shapeBuf);
+                body = shapeWriter;
+            }
             if (qualifiedName() == "p:sp") {
                 TRY_READ(sp)
                 potentiallyAddToLayoutFrames = true;
@@ -1176,15 +1151,19 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
             else {
                 potentiallyAddToLayoutFrames = false;
             }
-            // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
-            if (potentiallyAddToLayoutFrames) {
-                potentiallyAddToLayoutFrames = false;
-                if (m_context->type == SlideLayout) {
+            if (m_context->type == SlideLayout) {
+                // Checking, whether we are in layout, if so, we may have to forward some shapes to slides
+                // An alternative approach is to put these to masterslides, but it could in practise mean that there are
+                // slidemaster * slideLayout masterslides, ie ~40, and it's bit trickier
+                if (potentiallyAddToLayoutFrames) {
+                    potentiallyAddToLayoutFrames = false;
                     if (!d->phRead) {
-                        const QString elementContents = QString::fromUtf8(shapeBuf.buffer(), shapeBuf.buffer().size());
+                        const QString elementContents = QString::fromUtf8(shapeBuf->buffer(), shapeBuf->buffer().size());
                         m_context->slideLayoutProperties->layoutFrames.push_back(elementContents);
                     }
                 }
+                delete shapeBuf;
+                delete shapeWriter;
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1250,14 +1229,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_ph()
         d->phType = "title";
     }
 
-    const QString styleId(d->phStyleId());
-    kDebug() << "styleId:" << styleId;
-    if (m_context->type == Slide) {
-    }
-    else if (m_context->type == SlideLayout) {
-    }
-    else { //SlideMaster
-    }
     readNext();
     READ_EPILOGUE
 }
@@ -1659,7 +1630,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
              }
         }
     }
-    if (!d->phType.isEmpty()) {
+    else if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         position = m_context->slideMasterPageProperties->textShapePositions.value(d->phType);
         if (!position.isEmpty()) {
@@ -1717,7 +1688,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
              }
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    else if (!d->phIdx.isEmpty()) {
         position = m_context->slideLayoutProperties->textShapePositions.value(d->phIdx);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
@@ -1778,8 +1749,10 @@ void PptxXmlSlideReader::inheritDefaultParagraphStyle(KoGenStyle& targetStyle)
 {
     const int copyLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
-    MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultParagraphStyles[copyLevel-1],
-                                            targetStyle, KoGenStyle::ParagraphType);
+    if (m_context->defaultParagraphStyles.size() >= copyLevel) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultParagraphStyles[copyLevel-1],
+                                                targetStyle, KoGenStyle::ParagraphType);
+    }
 }
 
 void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
@@ -1791,7 +1764,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phIdx][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    if (!d->phType.isEmpty()) {
+    else if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
@@ -1804,7 +1777,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
-    if (!d->phIdx.isEmpty()) {
+    else if (!d->phIdx.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -1858,8 +1831,7 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-
-    if (!d->phIdx.isEmpty()) {
+    else if (!d->phIdx.isEmpty()) {
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phIdx]);
         while (i.hasNext()) {
             i.next();
@@ -1885,8 +1857,7 @@ void PptxXmlSlideReader::inheritListStyles()
                 }
             }
         }
-    }
-    if (!d->phIdx.isEmpty()) {
+    } else if (!d->phIdx.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phIdx]);
             while (i.hasNext()) {
@@ -1923,25 +1894,31 @@ void PptxXmlSlideReader::inheritListStyles()
 void PptxXmlSlideReader::inheritDefaultTextStyle(KoGenStyle& targetStyle)
 {
     const int listLevel = qMax(1, m_currentListLevel);
-    MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultTextStyles[listLevel-1],
-                                            targetStyle, KoGenStyle::TextType);
+    if (m_context->defaultTextStyles.size() >= listLevel) {
+        MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultTextStyles[listLevel-1],
+                                                targetStyle, KoGenStyle::TextType);
+    }
 }
 
 void PptxXmlSlideReader::inheritShapePosition()
 {
-    const QString styleId(d->phStyleId());
-
     // Inheriting shape placement information
     if (!m_xfrm_read) {
         PptxShapeProperties* props = 0;
         // Loading from slidelayout
         if (m_context->type == Slide) {
-            props = m_context->slideLayoutProperties->shapesMap.value(styleId);
+            props = m_context->slideLayoutProperties->shapesMap.value(d->phType);
+            if (!props) {
+                props = m_context->slideLayoutProperties->shapesMap.value(d->phIdx);
+            }
         }
         // Loading from master if needed
         if (m_context->type == Slide || m_context->type == SlideLayout) {
             if (!props) {
-                props = m_context->slideProperties->shapesMap.value(styleId);
+                props = m_context->slideProperties->shapesMap.value(d->phType);
+                if (!props) {
+                    props = m_context->slideProperties->shapesMap.value(d->phIdx);
+                }
                 if (!props) {
                     // In case there was nothing for this even in slideMaster, let's default to 'body' text position
                     // Spec doesn't say anything about this case, but in reality there are such documents
@@ -1974,7 +1951,6 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phIdx][listLevel],
                                                 targetStyle, KoGenStyle::TextType);
     }
-
     if (!d->phType.isEmpty()) {
         // We must apply properties outside rpr, since it is possible that we do not enter rpr at all
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->textStyles[d->phType][listLevel],
@@ -2005,14 +1981,13 @@ void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 
 KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
 {
-    const QString styleId(d->phStyleId());
-
-    kDebug() << "styleId:" << styleId << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
+    kDebug() << "d->phType:" << d->phType << "d->phIdx:" << d->phIdx;
 
     if (m_context->type == SlideLayout) {
         PptxShapeProperties* masterShapeProperties = 0;
-        if (!styleId.isEmpty()) {
-            masterShapeProperties = m_context->slideProperties->shapesMap.value(styleId);
+        masterShapeProperties = m_context->slideProperties->shapesMap.value(d->phType);
+        if (!masterShapeProperties) {
+            masterShapeProperties = m_context->slideProperties->shapesMap.value(d->phIdx);
         }
         kDebug() << "masterShapeProperties:" << masterShapeProperties;
 
@@ -2036,7 +2011,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         }
     }
     else if (m_context->type == SlideMaster) {
-        kDebug() << "m_context->slideProperties->shapesMap insert:" << styleId;
         if (m_xfrm_read) { // If element was present, then we can use values from the actual slidemaster
             m_currentShapeProperties->x = m_svgX;
             m_currentShapeProperties->y = m_svgY;
@@ -2045,8 +2019,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
             m_currentShapeProperties->rot = m_rot;
         }
 
-        if (!styleId.isEmpty()) {
-            m_context->slideProperties->shapesMap[styleId] = m_currentShapeProperties;
+        if (!d->phType.isEmpty()) {
+            m_context->slideProperties->shapesMap[d->phType] = m_currentShapeProperties;
         }
         if (!d->phIdx.isEmpty()) {
             m_context->slideProperties->shapesMap[d->phIdx] = m_currentShapeProperties;
@@ -2056,11 +2030,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::generatePlaceHolderSp()
         // presentation:placeholder
         Q_ASSERT(m_placeholderElWriter);
         QString presentationObject = MSOOXML::Utils::ST_PlaceholderType_to_ODF(d->phType);
-        QString phStyleId = d->phType;
-        if (phStyleId.isEmpty()) {
-            // were indexing placeholders by id if type is not present, so shaped can refer to them by id
-            phStyleId = d->phIdx;
-        }
 
         m_placeholderElWriter->startElement("presentation:placeholder");
         m_placeholderElWriter->addAttribute("presentation:object", presentationObject);

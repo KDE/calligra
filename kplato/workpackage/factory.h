@@ -23,21 +23,21 @@
 
 #include "kplatowork_export.h"
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 
 class KAboutData;
 
 namespace KPlatoWork
 {
 
-class KPLATOWORK_EXPORT Factory : public KoFactory
+class KPLATOWORK_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:
-    explicit Factory( QObject* parent = 0, const char* name = 0 );
+    explicit Factory( QObject* parent = 0 );
     ~Factory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static const KComponentData &global();
 

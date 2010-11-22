@@ -288,10 +288,10 @@ int RowElement::positionOfChild(BasicElement* child) const {
     return m_childElements.indexOf(child);
 }
 
-void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
+void RowElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
     foreach( BasicElement* tmp, m_childElements )
-        tmp->writeMathML( writer );
+        tmp->writeMathML( writer, ns );
 }
 
 BasicElement* RowElement::elementAfter ( int position ) const

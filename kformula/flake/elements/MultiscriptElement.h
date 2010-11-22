@@ -77,7 +77,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& element );
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
 
     /// Make sure that there are an even number of elements, as the spec says
     /// there must be.

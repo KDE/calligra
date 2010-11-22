@@ -32,7 +32,7 @@ KAboutData* KPrFactory::s_aboutData = 0;
 KIconLoader* KPrFactory::s_iconLoader = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+    : KPluginFactory( *aboutData(), parent )
 {
     (void)componentData();
 }
@@ -45,10 +45,12 @@ KPrFactory::~KPrFactory()
     s_instance = 0;
 }
 
-KParts::Part* KPrFactory::createPartObject( QWidget *parentWidget, QObject* parent,
-                                                   const char* classname, const QStringList & )
+QObject* KPrFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+                             const QVariantList& args, const QString& keyword )
 {
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    Q_UNUSED( args );
+    Q_UNUSED( keyword );
+    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
 
     KPrDocument *doc = new KPrDocument( parentWidget, parent, !bWantKoDocument );
 

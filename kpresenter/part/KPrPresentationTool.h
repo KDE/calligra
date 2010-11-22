@@ -71,6 +71,20 @@ private:
     void switchStrategy( KPrPresentationStrategyBase * strategy );
     bool eventFilter( QObject * obj, QEvent * event );
 
+    /**
+     * Returns true if shape is a TextShape and event->point is over hyperlink
+     * @param event the mouse event
+     * @param shape the shape fhich is searched for hyperlink
+     * @param hyperLink the string which is filled with hyperlink url
+     */
+    bool checkHyperlink(KoPointerEvent *event, KoShape * shape, QString & hyperLink);
+
+    /**
+     * Runs url string defined inside hyperlink
+     * @param hyperLink the hyperlink string
+     */
+    void runHyperlink(QString hyperLink);
+
     KPrViewModePresentation & m_viewMode;
     QSet<KoEventAction *> m_eventActions;
 

@@ -91,7 +91,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& parent );
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer ) const;   
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;   
 
 private:
     /// Layout the fraction in a bevelled way

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2007, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -988,7 +988,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem)
     }
     element = formatElem.namedItem("UNDERLINE").toElement();
     if (!element.isNull()) {
-        KoCharacterStyle::LineStyle underline = KoCharacterStyle::NoLineStyle;
+        KoCharacterStyle::LineStyle underline;
         QString value = element.attribute("value", "0"); // "0" is NoUnderline
         if (value == "1" || value == "single")
             style->setUnderlineType(KoCharacterStyle::SingleLine);
@@ -1002,7 +1002,9 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem)
         }
 
         QString type = element.attribute("styleline", "solid");
-        if (type == "solid")
+        if (value == "0")
+            underline = KoCharacterStyle::NoLineStyle;// no underline, ignore the type.
+        else if (type == "solid")
             underline = KoCharacterStyle::SolidLine;
         else if (type == "dash")
             underline = KoCharacterStyle::DashLine;

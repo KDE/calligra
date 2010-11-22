@@ -79,7 +79,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& element );
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
 
 private:
     /// The base element 

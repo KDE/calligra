@@ -130,7 +130,7 @@ public slots:
         QTextDocument *doc = m_doc.data();
         if (doc)
             return doc->toPlainText();
-        return 0;
+        return QString();
     }
     /** Set the content of the document to the \p text plain-text. */
     void setText(const QString & text) {

@@ -160,6 +160,34 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     kDebug(30003) << "created manifest and styles.xml";
 
+    // create settings.xml, apparently it is used to note koffice that msoffice files should
+    // have different behavior with some things
+    if (!outputStore->open("settings.xml")) {
+        return KoFilter::CreationError;
+    }
+    KoStoreDevice settingsDev(outputStore.get());
+    KoXmlWriter* settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settings->addAttribute("xmlns:ooo", "http://openoffice.org/2004/office");
+    settings->startElement("config:config-item-set");
+    settings->addAttribute("config:name", "ooo:configuration-settings");
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "UseFormerLineSpacing");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false");
+    settings->endElement(); // config:config-item
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "TabsRelativeToIndent");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false");
+    settings->endElement(); // config:config-item
+    settings->endElement(); // config:config-item-set
+    settings->endElement(); // office:document-settings
+    settings->endDocument();
+    realManifestWriter->addManifestEntry("settings.xml", "text/xml");
+    if (!outputStore->close()) {
+        return KoFilter::CreationError;
+    }
+
     //create meta.xml
     if (!outputStore->open("meta.xml")) {
         return KoFilter::CreationError;

@@ -48,8 +48,8 @@
 KComponentData* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
 
-KarbonFactory::KarbonFactory(QObject* parent, const char* name)
-        : KoFactory(parent, name)
+KarbonFactory::KarbonFactory(QObject* parent)
+        : KPluginFactory(*aboutData(), parent)
 {
     componentData();
 }
@@ -62,12 +62,15 @@ KarbonFactory::~KarbonFactory()
     s_aboutData = 0L;
 }
 
-KParts::Part* KarbonFactory::createPartObject(QWidget* parentWidget, QObject* parent, const char* classname, const QStringList&)
+QObject* KarbonFactory::create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword)
 {
+    Q_UNUSED(args);
+    Q_UNUSED(keyword);
+
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and
     // single view.
-    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
+    bool bWantKoDocument = (strcmp(iface, "KoDocument") == 0);
 
     // parentWidget and widgetName are used by KoDocument for the
     // "readonly+singleView" case.
