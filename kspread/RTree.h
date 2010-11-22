@@ -30,6 +30,10 @@
 
 #include "kspread_limits.h"
 
+// Use dynamic_cast instead of cached root node
+// this is much slower but it is here so it is easy to check that still all works.
+//#define DYNAMIC_CAST
+
 namespace KSpread
 {
 
@@ -208,6 +212,12 @@ public:
      * Returns the bounding box for the entire tree.
      */
     QRectF boundingBox() const { return KoRTree<T>::m_root->boundingBox(); }
+
+    void clear() {
+        KoRTree<T>::clear();
+        m_castRoot = dynamic_cast<Node*>(this->m_root);
+    }
+
 protected:
     class Node;
     class NonLeafNode;
@@ -219,6 +229,16 @@ protected:
     }
     virtual NonLeafNode* createNonLeafNode(int capacity, int level, typename KoRTree<T>::Node * parent) {
         return new NonLeafNode(capacity, level, dynamic_cast<Node*>(parent));
+    }
+
+    void adjustTree(typename KoRTree<T>::Node *node1, typename KoRTree<T>::Node *node2) {
+        KoRTree<T>::adjustTree(node1, node2);
+        m_castRoot = dynamic_cast<Node*>(this->m_root);
+    }
+
+    void condenseTree(typename KoRTree<T>::Node * node, QVector<typename KoRTree<T>::Node *> & reinsert) {
+        KoRTree<T>::condenseTree(node, reinsert);
+        m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
 
 private:
@@ -247,6 +267,8 @@ private:
             return m_data[a].second < m_data[b].second;
         }
     };
+
+    Node* m_castRoot;
 };
 
 /**
@@ -359,6 +381,7 @@ RTree<T>::RTree()
 {
     delete this->m_root;
     this->m_root = new LeafNode(this->m_capacity + 1, 0, 0);
+    m_castRoot = dynamic_cast<Node*>(this->m_root);
 }
 
 template<typename T>
@@ -441,6 +464,7 @@ void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
         // set root node
         delete KoRTree<T>::m_root;
         KoRTree<T>::m_root = nodes.first().first;
+        m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
 }
 
@@ -451,7 +475,11 @@ void RTree<T>::remove(const QRectF& rect, const T& data, int id)
     Q_ASSERT(rect.y()      - (int)rect.y()      == 0.0);
     Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
     Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
+#ifdef DYNAMIC_CAST
     dynamic_cast<Node*>(this->m_root)->remove(rect.normalized().adjusted(0, 0, -0.1, -0.1), data, id);
+#else
+    m_castRoot->remove(rect.normalized().adjusted(0, 0, -0.1, -0.1), data, id);
+#endif
 }
 
 template<typename T>
@@ -468,7 +496,11 @@ QList<T> RTree<T>::contains(const QRectF& rect) const
     Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
     Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
     QMap<int, T> result;
+#ifdef DYNAMIC_CAST
     dynamic_cast<Node*>(this->m_root)->contains(rect.normalized().adjusted(0, 0, -0.1, -0.1), result);
+#else
+    m_castRoot->contains(rect.normalized().adjusted(0, 0, -0.1, -0.1), result);
+#endif
     return result.values();
 }
 
@@ -490,7 +522,11 @@ QMap<int, QPair<QRectF, T> > RTree<T>::intersectingPairs(const QRectF& rect) con
     Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
     Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
     QMap<int, QPair<QRectF, T> > result;
+#ifdef DYNAMIC_CAST
     dynamic_cast<Node*>(this->m_root)->intersectingPairs(rect.normalized().adjusted(0, 0, -0.1, -0.1), result);
+#else
+    m_castRoot->intersectingPairs(rect.normalized().adjusted(0, 0, -0.1, -0.1), result);
+#endif
     return result;
 }
 
@@ -501,7 +537,11 @@ QList< QPair<QRectF, T> > RTree<T>::insertRows(int position, int number, InsertM
     Q_ASSERT(position <= KS_rowMax);
     if (position < 1 || position > KS_rowMax)
         return QList< QPair<QRectF, T> >();
+#ifdef DYNAMIC_CAST
     return dynamic_cast<Node*>(this->m_root)->insertRows(position, number, mode).values();
+#else
+    return m_castRoot->insertRows(position, number, mode).values();
+#endif
 }
 
 template<typename T>
@@ -511,7 +551,11 @@ QList< QPair<QRectF, T> > RTree<T>::insertColumns(int position, int number, Inse
     Q_ASSERT(position <= KS_colMax);
     if (position < 1 || position > KS_colMax)
         return QList< QPair<QRectF, T> >();
+#ifdef DYNAMIC_CAST
     return dynamic_cast<Node*>(this->m_root)->insertColumns(position, number, mode).values();
+#else
+    return m_castRoot->insertColumns(position, number, mode).values();
+#endif
 }
 
 template<typename T>
@@ -521,7 +565,11 @@ QList< QPair<QRectF, T> > RTree<T>::removeRows(int position, int number)
     Q_ASSERT(position <= KS_rowMax);
     if (position < 1 || position > KS_rowMax)
         return QList< QPair<QRectF, T> >();
+#ifdef DYNAMIC_CAST
     return dynamic_cast<Node*>(this->m_root)->removeRows(position, number).values();
+#else
+    return m_castRoot->removeRows(position, number).values();
+#endif
 }
 
 template<typename T>
@@ -531,7 +579,11 @@ QList< QPair<QRectF, T> > RTree<T>::removeColumns(int position, int number)
     Q_ASSERT(position <= KS_colMax);
     if (position < 1 || position > KS_colMax)
         return QList< QPair<QRectF, T> >();
+#ifdef DYNAMIC_CAST
     return dynamic_cast<Node*>(this->m_root)->removeColumns(position, number).values();
+#else
+    return m_castRoot->removeColumns(position, number).values();
+#endif
 }
 
 template<typename T>
@@ -646,6 +698,7 @@ void RTree<T>::operator=(const RTree<T>& other)
         this->m_root = new NonLeafNode(this->m_capacity + 1, 0, 0);
         *dynamic_cast<NonLeafNode*>(this->m_root) = *dynamic_cast<NonLeafNode*>(other.m_root);
     }
+    m_castRoot = dynamic_cast<Node*>(this->m_root);
 }
 
 /////////////////////////////////////////////////////////////////////////////
