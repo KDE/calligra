@@ -329,3 +329,45 @@ install( PROGRAMS  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kspread.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES  kspread_plugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
 install( FILES  kspreadrc DESTINATION ${CONFIG_INSTALL_DIR})
+
+
+install( FILES
+    kspread_export.h
+    kspread_limits.h
+
+    Cell.h
+    CellStorage.h
+    Condition.h
+    Currency.h
+    DocBase.h
+    Format.h
+    Global.h
+    Map.h
+    Number.h
+    PointStorage.h
+    PrintSettings.h
+    ProtectableObject.h
+    Region.h
+    Sheet.h
+    Style.h
+    Value.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/kspread COMPONENT Devel)
+install( FILES
+    part/CanvasBase.h
+    part/CanvasItem.h
+    part/CellTool.h
+    part/Doc.h
+    part/HeaderItems.h
+    part/Headers.h
+    part/ToolRegistry.h
+    part/View.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/kspread/part COMPONENT Devel)
+install( FILES
+    ui/CellToolBase.h
+    ui/CellEditorBase.h
+    ui/Selection.h
+    ui/SheetView.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/kspread/ui COMPONENT Devel)
+install( FILES
+    database/Database.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/database COMPONENT Devel)
