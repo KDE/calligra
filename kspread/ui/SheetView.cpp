@@ -164,6 +164,16 @@ void SheetView::setPaintCellRange(const QRect& rect)
     d->cache.setMaxCost(2 * rect.width() * rect.height());
 }
 
+void SheetView::setVisibleRect(const QRect &rect)
+{
+    d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
+}
+
+QRect SheetView::visibleRect() const
+{
+    return d->visibleRect;
+}
+
 void SheetView::invalidateRegion(const Region& region)
 {
     QRegion qregion;
@@ -186,7 +196,7 @@ void SheetView::invalidate()
     d->cachedArea = QRegion();
 }
 
-void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft)
+void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase*)
 {
     // paintRect:   the canvas area, that should be painted; in document coordinates;
     //              no layout direction consideration; scrolling offset applied;

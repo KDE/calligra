@@ -39,6 +39,7 @@ namespace KSpread
 class CellView;
 class Region;
 class Sheet;
+class CanvasBase;
 
 /**
  * \ingroup Painting
@@ -94,17 +95,17 @@ public:
     /**
      * Invalidates all cached CellViews in \p region .
      */
-    void invalidateRegion(const Region& region);
+    virtual void invalidateRegion(const Region& region);
 
     /**
      * Invalidates all CellViews, the cached and the default.
      */
-    void invalidate();
+    virtual void invalidate();
 
     /**
      * Paints the cells.
      */
-    void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft);
+    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase* canvas = 0);
 
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
@@ -115,6 +116,8 @@ Q_SIGNALS:
 protected:
     virtual CellView* createDefaultCellView();
     virtual CellView* createCellView(int col, int row);
+    void setVisibleRect(const QRect& rect);
+    QRect visibleRect() const;
 private:
     /**
      * Helper method for invalidateRegion().
