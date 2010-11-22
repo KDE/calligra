@@ -1246,8 +1246,6 @@ bulletSizeToSizeString(const PptTextPFRun& pf)
     if (pf.fBulletHasSize()) {
         qint16 size = pf.bulletSize();
         if (size >= 25 && size <= 400) {
-            //TODO: The value specifies bullet font size as a percentage of the
-            //font size of the first text run in the paragraph.  Check this!
             return percent(size);
         } else if (size >= -4000 && size <= -1) {
             return pt(size);
@@ -1287,10 +1285,11 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
             bulletSize = "20pt"; // fallback value
         }
     } else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
+
         QString numFormat("1"), numSuffix, numPrefix;
-        processTextAutoNumberScheme(i.pf.scheme(),
-                                    numFormat, numSuffix, numPrefix);
-        // if there is no bulletChar or the bullet has autonumbering explicitly
+        processTextAutoNumberScheme(i.pf.scheme(), numFormat, numSuffix, numPrefix);
+
+        // If there is no bulletChar or the bullet has autonumbering explicitly
         // we assume the list is autonumbering
         if (i.pf.fBulletHasAutoNumber() || i.pf.bulletChar() == 0) {
             elementName = "text:list-level-style-number";
@@ -1314,13 +1313,19 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
 
             if (i.pf.fBulletHasSize()) {
                 qint16 size = i.pf.bulletSize();
-                if ((size >= 25 && size <= 400) && i.cf) {
-                    qreal relSize = 100.0 * size / (qreal) i.cf->fontSize;
+                //The value specifies bullet font size as a percentage of the
+                //font size of the first text run in the paragraph.
+                if (size >= 25 && size <= 400) {
+                    out.addAttribute("text:bullet-relative-size", percent(size));
+                }
+                //The absolute value specifies the bullet font size in points.
+                else if ((size >= -4000 && size <= -1)  && i.cf) {
+                    qreal relSize = 100.0 * qAbs(size) / (qreal) i.cf->fontSize;
                     out.addAttribute("text:bullet-relative-size", percent(relSize));
                 }
-                else if (size >= -4000 && size <= -1) {
-                    qDebug() << "Absolute value for the bullet font size, ignoring!";
-                }
+            }
+            else {
+                out.addAttribute("text:bullet-relative-size", percent(100));
             }
         }
     }
