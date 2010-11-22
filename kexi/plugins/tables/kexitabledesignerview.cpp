@@ -84,9 +84,9 @@ static bool isIntegerQVariant(QVariant::Type t)
 static bool canCastQVariant(QVariant::Type fromType, QVariant::Type toType)
 {
     return (fromType == QVariant::Int && toType == QVariant::UInt)
-           || (fromType == QVariant::CString && toType == QVariant::String)
+           || (fromType == QVariant::ByteArray && toType == QVariant::String)
            || (fromType == QVariant::LongLong && toType == QVariant::ULongLong)
-           || ((fromType == QVariant::String || fromType == QVariant::CString)
+           || ((fromType == QVariant::String || fromType == QVariant::ByteArray)
                && (isIntegerQVariant(toType) || toType == QVariant::Double));
 }
 
