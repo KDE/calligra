@@ -85,7 +85,7 @@ public:
      * \param painter the used painter
      * \param coordinate the top left coordinate (scroll offset dependent)
      */
-    void paintCellBackground(QPainter& painter, const QPointF& coordinate) const;
+    void paintCellBackground(QPainter& painter, const QRegion &clipRegion, const QPointF& coordinate) const;
 
     /**
      * Paints the cell.
@@ -94,7 +94,7 @@ public:
      * \param coordinate the top left coordinate (scroll offset dependent)
      * \param cell the Cell
      */
-    virtual void paintCellContents(const QRectF& paintRegion, QPainter& painter,
+    virtual void paintCellContents(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
                            const QPointF& coordinate,
                            const Cell& cell, SheetView* sheetView) const;
 
@@ -107,7 +107,7 @@ public:
      * \param cell the Cell
      * \param sheetView the SheetView
      */
-    void paintCellBorders(const QRectF& paintRegion, QPainter& painter,
+    void paintCellBorders(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
                           const QPointF& coordinate,
                           const QRect& cellRange,
                           const Cell& cell, SheetView* sheetView) const;
@@ -122,7 +122,7 @@ public:
      * \param cell the Cell
      * \param sheetView the SheetView
      */
-    void paintDefaultBorders(QPainter& painter, const QRectF &paintRegion,
+    void paintDefaultBorders(QPainter& painter, const QRegion &clipRegion, const QRectF &paintRegion,
                              const QPointF& coordinate,
                              Borders paintBorder, const QRect& cellRange,
                              const Cell& cell, SheetView* sheetView) const;

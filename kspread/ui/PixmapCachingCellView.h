@@ -35,7 +35,7 @@ public:
     ~PixmapCachingCellView();
     //PixmapCachingCellView& operator=(const PixmapCachingCellView&);
 
-    virtual void paintCellContents(const QRectF& paintRegion, QPainter& painter,
+    virtual void paintCellContents(const QRectF& paintRegion, QPainter& painter, const QRegion &clipRegion,
                            const QPointF& coordinate,
                            const Cell& cell, SheetView* sheetView) const;
 private:

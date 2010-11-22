@@ -202,6 +202,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 // kDebug() << "paintRect:" << paintRect;
 // kDebug() << "topLeft:" << topLeft;
 
+    QRegion clipRect(painter.clipRegion());
     // 0. Paint the sheet background
     if (!sheet()->backgroundImage().isNull()) {
         //TODO support all the different properties
@@ -270,7 +271,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             const CellView& cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
             if (!cell)
                 continue;
-            cellView.paintCellBackground(painter, coordinate);
+            cellView.paintCellBackground(painter, clipRect, coordinate);
             // restore coordinate
             coordinate = savedCoordinate;
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
@@ -305,7 +306,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             const CellView& cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
             if (!cell)
                 continue;
-            cellView.paintCellContents(paintRect, painter, coordinate, cell, this);
+            cellView.paintCellContents(paintRect, painter, clipRect, coordinate, cell, this);
             // restore coordinate
             coordinate = savedCoordinate;
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
@@ -331,7 +332,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
             const CellView& cellView = this->cellView(col, row);
-            cellView.paintDefaultBorders(painter, paintRect, coordinate,
+            cellView.paintDefaultBorders(painter, clipRect, paintRect, coordinate,
                                          CellView::LeftBorder | CellView::RightBorder |
                                          CellView::TopBorder | CellView::BottomBorder,
                                          d->visibleRect, Cell(d->sheet, col, row), this);
@@ -358,7 +359,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
             const CellView& cellView = this->cellView(col, row);
-            cellView.paintCellBorders(paintRect, painter, coordinate,
+            cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
                                       d->visibleRect,
                                       Cell(sheet(), col, row), this);
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));

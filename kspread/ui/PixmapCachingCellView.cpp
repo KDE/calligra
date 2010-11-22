@@ -53,7 +53,8 @@ PixmapCachingCellView::~PixmapCachingCellView()
     delete d;
 }
 
-void PixmapCachingCellView::paintCellContents(const QRectF &paintRegion, QPainter &painter, const QPointF &coordinate, const Cell &cell, SheetView *sheetView) const
+void PixmapCachingCellView::paintCellContents(const QRectF &paintRegion, QPainter &painter, const QRegion &clipRegion, const QPointF &coordinate,
+                                              const Cell &cell, SheetView *sheetView) const
 {
     QTransform t = painter.transform();
     if (!d->pixmap) {
@@ -63,7 +64,7 @@ void PixmapCachingCellView::paintCellContents(const QRectF &paintRegion, QPainte
         QPainter pixmapPainter(d->pixmap);
         pixmapPainter.setClipRect(d->pixmap->rect());
         pixmapPainter.scale(t.m11(), t.m22());
-        CellView::paintCellContents(paintRegion.translated(-coordinate), pixmapPainter, QPointF(0, 0), cell, sheetView);
+        CellView::paintCellContents(paintRegion.translated(-coordinate), pixmapPainter, clipRegion, QPointF(0, 0), cell, sheetView);
     }
     QPointF p = t.map(coordinate);
     painter.resetTransform();
