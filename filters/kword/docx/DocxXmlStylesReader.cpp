@@ -164,7 +164,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
 {
     READ_PROLOGUE
 
-    m_currentTextStyle = KoGenStyle();
+    m_currentTextStyle = KoGenStyle(KoGenStyle::TextStyle, "text");
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphStyle, "paragraph");
 
     while (!atEnd()) {
@@ -177,8 +177,10 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_docDefaults()
             ELSE_WRONG_FORMAT
         }
     }
-    m_defaultStyle = m_currentTextStyle;
-    m_currentTextStyle = KoGenStyle();
+
+    m_defaultTextStyle = m_currentTextStyle;
+    m_defaultParagraphStyle = m_currentParagraphStyle;
+
     READ_EPILOGUE
 }
 
@@ -340,9 +342,11 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         kDebug() << "Setting default style of family" << odfType << "...";
         if (type == "character") {
             m_currentTextStyle = *m_defaultStyles.value(odfType.toLatin1());
+            MSOOXML::Utils::copyPropertiesFromStyle(m_defaultTextStyle, m_currentTextStyle, KoGenStyle::TextType);
         }
         else if (type == "paragraph") {
             m_currentParagraphStyle = *m_defaultStyles.value(odfType.toLatin1());
+            MSOOXML::Utils::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
         }
     }
     else {

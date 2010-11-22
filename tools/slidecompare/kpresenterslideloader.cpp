@@ -49,9 +49,9 @@ KPresenterSlideLoader::open(const QString& path)
 
     KComponentData cd("KPresenterSlideLoader", QByteArray(),
                       KComponentData::SkipMainComponentRegistration);
-    KPluginFactory *factory = KPluginLoader("libkpresenterpart", cd).factory();
+    KPluginFactory *factory = KPluginLoader("kpresenterpart", cd).factory();
     if (!factory) {
-        qDebug() << "could not load libkpresenterpart";
+        qDebug() << "could not load kpresenterpart";
         close();
         return;
     }

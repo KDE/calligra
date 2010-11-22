@@ -75,8 +75,9 @@ public:
 
     const char* mainDocumentContentType() const
     {
-        if (type == DocxTemplate)
+        if (type == DocxTemplate) {
             return MSOOXML::ContentTypes::wordTemplate;
+        }
         return MSOOXML::ContentTypes::wordDocument;
     }
 

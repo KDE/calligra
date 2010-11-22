@@ -9,7 +9,7 @@ SET(QT_USE_QTMAEMO5 TRUE)
 SET(QT_USE_QTXML TRUE)
 INCLUDE(${QT_USE_FILE})
 
-include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kspread/part ${CMAKE_SOURCE_DIR}/kspread /usr/include/libxml2)
+include_directories(${CMAKE_BINARY_DIR} ${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kspread/part ${CMAKE_SOURCE_DIR}/kspread ${LIBXML2_INCLUDE_DIR})
 
 SET(FreOffice_RCCS FreOffice.qrc)
 QT4_ADD_RESOURCES(FreOffice_RCC_SRCS ${FreOffice_RCCS})

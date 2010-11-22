@@ -55,11 +55,11 @@ protected:
     void createDefaultStyle(KoGenStyle::Type type, const char* family);
     QMap<QByteArray, KoGenStyle*> m_defaultStyles;
 
-    //! provided by docDefaults element
-    //! @todo use it
-    KoGenStyle m_defaultStyle;
-
     QString m_name; //!< set by read_name()
+
+    // Styles which are applied to all styles
+    KoGenStyle m_defaultTextStyle;
+    KoGenStyle m_defaultParagraphStyle;
 
 private:
     void init();
