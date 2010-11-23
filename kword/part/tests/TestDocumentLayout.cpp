@@ -194,7 +194,7 @@ void TestDocumentLayout::placeAnchoredFrame()
     shape1->setPosition(QPointF(300, 300));
     layout->layout();
     QCOMPARE(picture->parent(), shape1);
-    QCOMPARE(picture->position(), QPointF(23, 59.4));
+    QVERIFY(qAbs(picture->position().x()-23)<0.0001 && qAbs(picture->position().y()-59.4)<0.0001);
 
     cursor.setPosition(0);
     cursor.insertText("foo"); // moves my anchors slightly to the right/down and gives line height
