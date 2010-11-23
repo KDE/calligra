@@ -128,7 +128,6 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     const qreal sy = sqrt(cos_sy*cos_sy + msin_sy*msin_sy);
 
     QPointF scale = QPointF(sx, sy);
-    kDebug() << t << scale;
     if (scale != d->lastScale) {
         d->tileCache.clear();
     }
