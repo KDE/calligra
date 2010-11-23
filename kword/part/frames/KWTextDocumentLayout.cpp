@@ -760,6 +760,7 @@ void KWTextDocumentLayout::layout()
             cleanupAnchors();
             return;
         }
+        qreal lineheight = line.line.height();
         while (m_state->addLine(line.line, line.processingLine()) == false) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
                 TDEBUG << "no more shape for our text; bottom is" << m_state->y();
@@ -771,8 +772,8 @@ void KWTextDocumentLayout::layout()
                     return; // done!
                 }
                 if (KWord::isHeaderFooter(m_frameSet)) { // more text, lets resize the header/footer.
-                    TDEBUG << "  header/footer is too small resize:" << line.line.height();
-                    m_frameSet->requestMoreFrames(line.line.height());
+                    TDEBUG << "  header/footer is too small resize:" << lineheight;
+                    m_frameSet->requestMoreFrames(lineheight);
                     return; // done!
                 }
 
