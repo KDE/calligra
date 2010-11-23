@@ -182,7 +182,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
     settings->startElement("config:config-item");
     settings->addAttribute("config:name", "TabsRelativeToIndent");
     settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false");
+    settings->addTextSpan("false"); // ODF=true, MSOffice=false
     settings->endElement(); // config:config-item
     settings->endElement(); // config:config-item-set
     settings->endElement(); // office:document-settings

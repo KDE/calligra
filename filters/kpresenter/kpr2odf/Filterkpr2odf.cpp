@@ -146,7 +146,16 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     output->open("settings.xml");
     KoStoreDevice device(output);
     KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter(&device, "office:document-settings");
-    //TODO: check which settings we still use in 2.0
+    
+    settings->startElement("config:config-item-set");
+    settings->addAttribute("config:name", "ooo:configuration-settings");
+    settings->startElement("config:config-item");
+    settings->addAttribute("config:name", "TabsRelativeToIndent");
+    settings->addAttribute("config:type", "boolean");
+    settings->addTextSpan("false"); // ODF=true, MSOffice=false
+    settings->endElement(); // config-item
+    settings->endElement(); // config-item-set
+    
     settings->endElement();//office:document-settings
     settings->endDocument();
     output->close();
