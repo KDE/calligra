@@ -211,6 +211,8 @@ private:
             Writer& out, KoGenStyle& style);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+    const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
+
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
 
@@ -219,10 +221,11 @@ private:
         const MSO::SlideContainer* presSlide;
         const MSO::NotesContainer* notesMasterSlide;
         const MSO::NotesContainer* notesSlide;
+        const MSO::OfficeArtSpContainer* defaultShape;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
 
         DrawClientData(): masterSlide(NULL), presSlide(NULL), notesMasterSlide(NULL),
-                          notesSlide(NULL), slideTexts (NULL) {};
+                          notesSlide(NULL), defaultShape(NULL), slideTexts(NULL) {};
     };
     DrawClientData dc_data[1];
 
@@ -230,12 +233,14 @@ public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
     void setDrawClientData(const MasterOrSlideContainer* mc, const SlideContainer* sc,
                            const NotesContainer* nmc, const NotesContainer* nc,
+                           const MSO::OfficeArtSpContainer* shape = NULL, 
                            const MSO::SlideListWithTextSubContainerOrAtom* stc = NULL)
     {
         dc_data->masterSlide = mc;
         dc_data->presSlide = sc;
         dc_data->notesMasterSlide = nmc;
         dc_data->notesSlide = nc;
+        dc_data->defaultShape = shape;
         dc_data->slideTexts = stc;
     }
 };
@@ -2380,7 +2385,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(master, slide, 0, 0, currentSlideTexts);
+        const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+        drawclient.setDrawClientData(master, slide, 0, 0, shape, currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 
@@ -2402,7 +2408,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
             out.xml.addAttribute("draw:style-name", value);
         }
         const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, currentSlideTexts);
+        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, NULL, currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }

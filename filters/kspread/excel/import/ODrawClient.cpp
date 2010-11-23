@@ -195,6 +195,13 @@ const MSO::OfficeArtSpContainer* ODrawClient::getMasterShapeContainer(quint32 sp
     return sp;
 }
 
+const MSO::OfficeArtSpContainer* ODrawClient::defaultShapeContainer()
+{
+    //TODO: provide the OfficeArtDgContainer.shape container if required
+    MSO::OfficeArtSpContainer* sp = NULL;
+    return sp;
+}
+
 QColor ODrawClient::toQColor(const MSO::OfficeArtCOLORREF &c)
 {
     if (c.fSchemeIndex) {
