@@ -117,7 +117,6 @@ void DocxXmlDocumentReader::init()
     m_dropCapStatus = NoDropCap;
     m_dropCapWriter = 0;
     m_currentTableNumber = 0;
-    m_objectRectInitialized = false;
     m_wasCaption = false;
     m_listFound = false;
     m_closeHyperlink = false;
@@ -1067,14 +1066,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
     kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
     TRY_READ_ATTR(dyaOrig)
     m_currentObjectHeightCm = MSOOXML::Utils::ST_TwipsMeasure_to_cm(dyaOrig);
-    //! @todo try to get position from object tag...
-    m_currentObjectXCm = "0cm";
-    m_currentObjectYCm = "0cm";
-    m_objectRectInitialized = false;
-    m_imagedataPath.clear();
-    m_shapeAltText.clear();
-
-    m_currentDrawStyle = new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic");
 
     while (!atEnd()) {
         readNext();
@@ -1087,60 +1078,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
-    if (m_objectRectInitialized) {
-#if 1
-        // The draw:fill with a fillImage as done in the #else branch
-        // is probably more correct, but KOffice (kword) cannot handle
-        // that yet.  Use draw:frame instead until it can.
 
-        if (!m_imagedataPath.isEmpty()) {
-            // Create the frame with the image contents.
-            // FIXME: There should be a utility for this.
-            body->startElement("draw:frame");
-            body->addAttribute("svg:x", m_currentObjectXCm.isEmpty() ? "0cm" : m_currentObjectXCm);
-            body->addAttribute("svg:y", m_currentObjectYCm.isEmpty() ? "0cm" : m_currentObjectYCm);
-            body->addAttribute("svg:width", m_currentObjectWidthCm.isEmpty() ? "2cm" : m_currentObjectWidthCm);
-            body->addAttribute("svg:height", m_currentObjectHeightCm.isEmpty() ? "2cm" : m_currentObjectHeightCm);
-
-            // Add the image itself.
-            body->startElement("draw:image");
-            body->addAttribute("xlink:href", m_imagedataPath);
-            body->addAttribute("xlink:type", "simple");
-            body->addAttribute("xlink:show", "embed");
-            body->addAttribute("xlink:actuate", "onLoad");
-            body->endElement(); // draw:image
-
-            body->endElement(); // draw:frame
-        }
-#else
-        m_currentDrawStyle->addProperty("draw:fill", "bitmap");
-        if (!m_imagedataPath.isEmpty()) {
-            // create bitmap fill-style for styles.xml
-            KoGenStyle fillImageStyle(KoGenStyle::FillImageStyle);
-            fillImageStyle.addAttribute("xlink:href", m_imagedataPath);
-            QString displayName = m_shapeAltText;
-            //! @todo use m_shapeTitle for mouse-over text
-            if (displayName.isEmpty()) {
-                displayName = m_shapeTitle;
-            }
-            if (!displayName.isEmpty()) {
-                fillImageStyle.addAttribute("draw:display-name", displayName);
-            }
-            fillImageStyle.addAttribute("xlink:type", "simple");
-            fillImageStyle.addAttribute("xlink:show", "embed");
-            fillImageStyle.addAttribute("xlink:actuate", "onLoad");
-            const QString fillImageStyleName(mainStyles->insert(fillImageStyle, "FillImage"));
-            if (m_moveToStylesXml) {
-                mainStyles->markStyleForStylesXml(fillImageStyleName);
-            }
-
-            m_currentDrawStyle->addProperty("draw:fill-image-name", fillImageStyleName);
-        }
-        writeRect();
-#endif
-    }
-
-    m_currentDrawStyle = new KoGenStyle();
     READ_EPILOGUE
 }
 
@@ -4562,61 +4500,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_gridSpan()
 
 // ---------------------------------------------------------------------------
 
-void DocxXmlDocumentReader::writeRect()
-{
-    //body->startElement("text:p");
-    // //! @todo fix hardcoded text:style-name=Standard?
-    //body->addAttribute("text:style-name", "Standard");
-    body->startElement("draw:rect");
-    if (!m_currentDrawStyle->isEmpty()) {
-        const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
-        if (m_moveToStylesXml) {
-            mainStyles->markStyleForStylesXml(drawStyleName);
-        }
-
-        body->addAttribute("draw:style-name", drawStyleName);
-    }
-
-    //! @todo fix hardcoded text:anchor-type=paragraph?
-    body->addAttribute("text:anchor-type", "paragraph");
-    //! @todo fix hardcoded draw:z-index=0?
-    body->addAttribute("draw:z-index", "0");
-//! todo    body->addAttribute"draw:style-name", styleName);
-/*eg.
-   <style:style style:name="gr1" style:family="graphic">
-      <style:graphic-properties svg:stroke-color="#000023" draw:fill="bitmap" draw:fill-color="#ffffff" draw:fill-image-name="Bitmape_20_1"
-       style:repeat="no-repeat" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" style:run-through="foreground".
-       style:wrap="none" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left".
-       style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" style:flow-with-text="false"/>
-    </style:style>*/
-    QString x(m_currentObjectXCm);
-    if (x.isEmpty()) {
-        x = "0cm";
-        kWarning() << "No x pos specified! Defaulting to" << x;
-    }
-    QString y(m_currentObjectYCm);
-    if (y.isEmpty()) {
-        y = "0cm";
-        kWarning() << "No y pos specified! Defaulting to" << y;
-    }
-    QString width(m_currentObjectWidthCm);
-    if (width.isEmpty()) {
-        width = "2cm";
-        kWarning() << "No width specified! Defaulting to" << width;
-    }
-    QString height(m_currentObjectHeightCm);
-    if (height.isEmpty()) {
-        height = "2cm";
-        kWarning() << "No height specified! Defaulting to" << height;
-    }
-    body->addAttribute("svg:x", x);
-    body->addAttribute("svg:y", y);
-    body->addAttribute("svg:width", width);
-    body->addAttribute("svg:height", height);
-    body->endElement(); //draw:rect
-    //body->endElement(); //text:p
-}
-
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "o" // urn:schemas-microsoft-com:office:office
 #undef CURRENT_EL
@@ -4642,8 +4525,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_OLEObject()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
     }
-
-    m_objectRectInitialized = true;
 
     READ_EPILOGUE
 }

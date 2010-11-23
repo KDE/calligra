@@ -735,8 +735,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
 
     (void)frameBuf.releaseWriter();
 
-    m_objectRectInitialized = true;
-
     if (m_outputFrames) {
         createFrameEnd();
     }
