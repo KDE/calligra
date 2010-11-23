@@ -941,6 +941,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     READ_PROLOGUE
 
     m_contentType.clear();
+    m_xlinkHref.clear();
 
 #if defined(XLSXXMLDRAWINGREADER_CPP)
     KoXmlWriter *bodyBackup = body;
@@ -2213,8 +2214,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 {
     READ_PROLOGUE
-
-    m_xlinkHref.clear();
 
     // Read attributes.
     const QXmlStreamAttributes attrs(attributes());
