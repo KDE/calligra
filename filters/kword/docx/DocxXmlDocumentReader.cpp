@@ -1745,49 +1745,51 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
         }
         else {
             body = textPBuf.originalWriter();
-            if (m_listFound) {
-                body->startElement("text:list");
-                if (!m_currentListStyleName.isEmpty()) {
-                    body->addAttribute("text:style-name", m_currentListStyleName);
-                }
-                body->startElement("text:list-item");
-                for (int i = 0; i < m_currentListLevel; ++i) {
+            if (!m_createSectionToNext) { // In ooxml it seems that nothing should be created if sectPr was present
+                if (m_listFound) {
                     body->startElement("text:list");
+                    if (!m_currentListStyleName.isEmpty()) {
+                        body->addAttribute("text:style-name", m_currentListStyleName);
+                    }
                     body->startElement("text:list-item");
+                    for (int i = 0; i < m_currentListLevel; ++i) {
+                        body->startElement("text:list");
+                        body->startElement("text:list-item");
+                    }
                 }
-            }
-            body->startElement("text:p", false);
-            if (m_currentStyleName.isEmpty()) {
-                QString currentParagraphStyleName;
-                if (sectionAdded) {
-                    currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
-                    m_currentSectionStyleName = currentParagraphStyleName;
+                body->startElement("text:p", false);
+                if (m_currentStyleName.isEmpty()) {
+                    QString currentParagraphStyleName;
+                    if (sectionAdded) {
+                        currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
+                        m_currentSectionStyleName = currentParagraphStyleName;
+                    }
+                    else {
+                        currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
+                    }
+                    if (m_moveToStylesXml) {
+                        mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+                    }
+                    body->addAttribute("text:style-name", currentParagraphStyleName);
                 }
                 else {
-                    currentParagraphStyleName = (mainStyles->insert(m_currentParagraphStyle));
+                    body->addAttribute("text:style-name", m_currentStyleName);
+                    if (m_currentStyleName == "Caption") {
+                        m_wasCaption = true;
+                    }
                 }
-                if (m_moveToStylesXml) {
-                    mainStyles->markStyleForStylesXml(currentParagraphStyleName);
+                (void)textPBuf.releaseWriter();
+                body->endElement(); //text:p
+                if (m_listFound) {
+                    for (int i = 0; i < m_currentListLevel; ++i) {
+                        body->endElement(); // text:list-item
+                        body->endElement(); // text:list
+                    }
+                    body->endElement(); //text:list-item
+                    body->endElement(); //text:list
                 }
-                body->addAttribute("text:style-name", currentParagraphStyleName);
+                kDebug() << "/text:p";
             }
-            else {
-                body->addAttribute("text:style-name", m_currentStyleName);
-                if (m_currentStyleName == "Caption") {
-                    m_wasCaption = true;
-                }
-            }
-            (void)textPBuf.releaseWriter();
-            body->endElement(); //text:p
-            if (m_listFound) {
-                for (int i = 0; i < m_currentListLevel; ++i) {
-                    body->endElement(); // text:list-item
-                    body->endElement(); // text:list
-                }
-                body->endElement(); //text:list-item
-                body->endElement(); //text:list
-            }
-            kDebug() << "/text:p";
         }
     }
 
