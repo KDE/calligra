@@ -1114,8 +1114,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     bool potentiallyAddToLayoutFrames = false;
 
-    QBuffer* shapeBuf;
-    KoXmlWriter *shapeWriter;
+    QBuffer* shapeBuf = 0;
+    KoXmlWriter *shapeWriter = 0;
     KoXmlWriter *bodyBackup = body;
 
     while (!atEnd()) {
