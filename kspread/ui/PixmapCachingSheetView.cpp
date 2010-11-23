@@ -117,7 +117,18 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     //              transformations
 
     QTransform t = painter.transform();
-    QPointF scale = QPointF(t.m11(), t.m22());
+
+    // figure out scaling from the transformation... not really perfect, but should work as long as rotation is in 90 degree steps I think
+    const qreal cos_sx = t.m11();
+    const qreal sin_sx = t.m12();
+    const qreal msin_sy = t.m21();
+    const qreal cos_sy = t.m22();
+
+    const qreal sx = sqrt(cos_sx*cos_sx + sin_sx*sin_sx);
+    const qreal sy = sqrt(cos_sy*cos_sy + msin_sy*msin_sy);
+
+    QPointF scale = QPointF(sx, sy);
+    kDebug() << t << scale;
     if (scale != d->lastScale) {
         d->tileCache.clear();
     }
@@ -136,19 +147,16 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     QRect savedVisRect = visibleRect();
 
     const Sheet* s = sheet();
-    painter.resetTransform();
     for (int x = tiles.left(); x < tiles.right(); x++) {
         for (int y = tiles.top(); y < tiles.bottom(); y++) {
             QPixmap *p = d->getTile(s, x, y);
             QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
-            painter.drawPixmap(t.map(pt), *p);
+            QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
+            painter.drawPixmap(r, *p, p->rect());
         }
     }
-    painter.setTransform(t);
 
     setVisibleRect(savedVisRect);
-
-    //SheetView::paintCells(painter, paintRect ,topLeft);
 }
 
 void PixmapCachingSheetView::invalidateRegion(const Region &region)
