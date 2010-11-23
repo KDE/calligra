@@ -283,22 +283,25 @@ static const struct KoWmfFunc {
     { &KoWmfReadPrivate::SetStretchBltMode, "SetStretchBltMode" }, // 7 0x07
     { &KoWmfReadPrivate::notyet, "notyet" }, // 8 0x08
     { &KoWmfReadPrivate::setTextColor, "setTextColor" }, // 9 0x09
-    { &KoWmfReadPrivate::ScaleWindowExt, "ScaleWindowExt" }, // 10 0x0a
+    //    { &KoWmfReadPrivate::ScaleWindowExt, "ScaleWindowExt" }, // 10 0x0a
+    { &KoWmfReadPrivate::notyet, "setTextJustification" }, // 10 0x0a
     { &KoWmfReadPrivate::setWindowOrg, "setWindowOrg" }, // 11 0x0b
     { &KoWmfReadPrivate::setWindowExt, "setWindowExt" }, // 12 0x0c
     { &KoWmfReadPrivate::setViewportOrg, "setViewportOrg" }, // 13 0x0d
     { &KoWmfReadPrivate::setViewportExt, "setViewportExt" }, // 14 0x0e
     { &KoWmfReadPrivate::OffsetWindowOrg, "OffsetWindowOrg" }, // 15 0x0f
-    { &KoWmfReadPrivate::notyet, "notyet" }, // 16 0x10
+    { &KoWmfReadPrivate::ScaleWindowExt, "ScaleWindowExt" }, // 16 0x10
+    //{ &KoWmfReadPrivate::notyet, "notyet" }, // 16 0x10
     { &KoWmfReadPrivate::notyet, "notyet" }, // 17 0x11
-    { &KoWmfReadPrivate::notyet, "notyet" }, // 18 0x12
+    //{ &KoWmfReadPrivate::notyet, "notyet" }, // 18 0x12
+    { &KoWmfReadPrivate::notyet, "ScaleViewportExt" }, // 18 0x12
     { &KoWmfReadPrivate::lineTo, "lineTo" }, // 19 0x13
     { &KoWmfReadPrivate::moveTo, "moveTo" }, // 20 0x14
     { &KoWmfReadPrivate::excludeClipRect, "excludeClipRect" }, // 21 0x15
     { &KoWmfReadPrivate::intersectClipRect, "intersectClipRect" }, // 22 0x16
     { &KoWmfReadPrivate::arc, "arc" }, // 23 0x17
     { &KoWmfReadPrivate::ellipse, "ellipse" }, // 24 0x18
-    { &KoWmfReadPrivate::notyet, "notyet" }, // 25 0x19
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 25 0x19  floodfill
     { &KoWmfReadPrivate::pie, "pie" }, // 26 0x1a
     { &KoWmfReadPrivate::rectangle, "rectangle" }, // 27 0x1b
     { &KoWmfReadPrivate::roundRect, "roundRect" }, // 28 0x1c
@@ -322,7 +325,7 @@ static const struct KoWmfFunc {
     { &KoWmfReadPrivate::setTextAlign, "setTextAlign" }, // 46 0x2e
     { 0, "unimplemented" }, // 47 0x2f
     { &KoWmfReadPrivate::chord, "chord" }, // 48 0x30
-    { &KoWmfReadPrivate::notyet, "notyet" }, // 49 0x31
+    { &KoWmfReadPrivate::notyet, "notyet" }, // 49 0x31  setmapperflags
     { &KoWmfReadPrivate::extTextOut, "extTextOut" }, // 50 0x32
     { &KoWmfReadPrivate::setDibToDev, "setDibToDev" }, // 51 0x33
     { &KoWmfReadPrivate::palette, "palette" }, // 52 0x34

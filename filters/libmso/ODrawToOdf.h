@@ -132,6 +132,7 @@ private:
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
 
     void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);

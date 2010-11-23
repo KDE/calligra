@@ -1217,6 +1217,21 @@ void ODrawToOdf::processDonut(const MSO::OfficeArtSpContainer &o, Writer &out)
     out.xml.endElement(); // draw:custom-shape
 }
 
+void ODrawToOdf::processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out)
+{
+    out.xml.startElement("draw:custom-shape");
+    processStyleAndText(o, out);
+
+    out.xml.startElement("draw:enhanced-geometry");
+    out.xml.addAttribute("draw:type", "flowchart-delay");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:glue-points", "10800 0 0 10800 10800 21600 21600 10800");
+    out.xml.addAttribute("draw:text-areas", "0 3100 18500 18500");
+    out.xml.addAttribute("draw:enhanced-path", "M 10800 0 X 21600 10800 10800 21600 L 0 21600 0 0 Z N");
+    out.xml.endElement(); // draw:enhanced-geometry
+    out.xml.endElement(); // draw:custom-shape
+}
+
 void ODrawToOdf::processFreeLine(const OfficeArtSpContainer& o, Writer& out)
 {
     out.xml.startElement("draw:path");
@@ -1345,6 +1360,8 @@ void ODrawToOdf::processDrawingObject(const OfficeArtSpContainer& o, Writer& out
         processNotPrimitive(o, out);
     } else if (shapeType == msosptNotchedCircularArrow) {
         processNotchedCircularArrow(o, out);
+    } else if (shapeType == msosptFlowChartDelay) {
+        processFlowChartDelay(o, out);
     } else {
         qDebug() << "cannot handle object of type " << shapeType;
     }

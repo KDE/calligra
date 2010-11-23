@@ -104,8 +104,10 @@ bool KoWmfReadPrivate::load(const QByteArray& array)
     mEnhanced = false;
 
     // Initialize the bounding box.
-    mBBoxTop = 0;           // The default origin is (0, 0).
-    mBBoxLeft = 0;
+    //mBBoxTop = 0;           // The default origin is (0, 0).
+    //mBBoxLeft = 0;
+    mBBoxTop = 32767;
+    mBBoxLeft = 32767;
     mBBoxRight = -32768;
     mBBoxBottom = -32768;
     mMaxWidth = 0;
@@ -372,6 +374,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
     qint16 viewportOrgY = 0;
     qint16 viewportWidth = 0;
     qint16 viewportHeight = 0;
+    bool   bboxRecalculated = false;
     while (numFunction) {
 
         filePos = mBuffer->pos();
@@ -393,6 +396,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
         case 11: // setWindowOrg
             {
                 st >> windowOrgY >> windowOrgX;
+                bboxRecalculated = false;
 #if DEBUG_RECORDS
                 kDebug(31000) << "setWindowOrg" << windowOrgX << windowOrgY;
 #endif
@@ -421,44 +425,44 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 orgY = windowOrgY;
                 extX = windowWidth;
                 extY = windowHeight;
-                doRecalculateBBox = true;
+                //doRecalculateBBox = true;
             }
             break;
 
         case 12: // setWindowExt
             {
-                qint16 width;
-                qint16 height;
-
-                st >> height >> width;
+                st >> windowHeight >> windowWidth;
                 windowExtIsSet = true;
+                bboxRecalculated = false;
+
 #if DEBUG_RECORDS
-                kDebug(31000) << "setWindowExt" << width << height
+                kDebug(31000) << "setWindowExt" << windowWidth << windowHeight
                               << "(viewportOrg = " << viewportOrgX << viewportOrgY << ")";
 #endif
 
                 // If the viewport is set, then a changed window
                 // changes nothing in the bounding box.
                 if (viewportExtIsSet)
-                    return;
+                    break;
 
                 // Collect the maximum width and height.
-                if (abs(width - windowOrgX) > mMaxWidth)
-                    mMaxWidth = abs(width - windowOrgX);
-                if (abs(height - windowOrgY) > mMaxHeight)
-                    mMaxHeight = abs(height - windowOrgY);
+                if (abs(windowWidth - windowOrgX) > mMaxWidth)
+                    mMaxWidth = abs(windowWidth - windowOrgX);
+                if (abs(windowHeight - windowOrgY) > mMaxHeight)
+                    mMaxHeight = abs(windowHeight - windowOrgY);
 
                 orgX = windowOrgX;
                 orgY = windowOrgY;
-                extX = width;
-                extY = height;
-                doRecalculateBBox = true;
+                extX = windowWidth;
+                extY = windowHeight;
+                //doRecalculateBBox = true;
             }
             break;
 
         case 13: //setViewportOrg
             {
                 st >> viewportOrgY >> viewportOrgX;
+                bboxRecalculated = false;
 
 #if DEBUG_RECORDS
                 kDebug(31000) << "setViewportOrg" << viewportOrgX << viewportOrgY;
@@ -477,6 +481,7 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             {
                 st >> viewportHeight >> viewportWidth;
                 viewportExtIsSet = true;
+                bboxRecalculated = false;
 
 #if DEBUG_RECORDS
                 kDebug(31000) << "setViewportExt" << viewportWidth << viewportHeight;
@@ -485,8 +490,48 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
                 orgY = viewportOrgY;
                 extX = viewportWidth;
                 extY = viewportHeight;
-                doRecalculateBBox = true;
+                //doRecalculateBBox = true;
             }
+            break;
+
+            // FIXME: Also support:
+            //          ScaleWindowExt, ScaleViewportExt, 
+            //          OffsetWindowOrg, OffsetViewportOrg
+
+            // The following are drawing commands.  It is only when
+            // there is an actual drawing command that we should check
+            // the bounding box. It seems that some WMF files have
+            // lots of changes of the window or viewports but without
+            // any drawing commands in between. These changes should
+            // not affect the bounding box.
+        case 19: // lineTo
+        //case 20: // moveTo
+        case 23: // arc
+        case 24: // ellipse
+        case 26: // pie
+        case 27: // rectangle
+        case 28: // roundRect
+        case 29: // patBlt
+        case 31: // setPixel
+        case 33: // textOut
+        case 34: // bitBlt
+        case 36: // polygon
+        case 37: // polyline
+        //case 38: // escape  FIXME: is this a drawing commmand?
+        case 40: // fillRegion
+        case 41:
+        case 42:
+        case 43:
+        case 44:
+        case 48: // chord
+        case 50: // extTextOut
+        case 56: // polyPolygon
+        case 64: // dibBitBlt
+        case 65: // dibStretchBlt
+        case 67: // stretchDib
+        case 72: // extFloodFill
+            kDebug(31000) << "drawing record: " << (numFunction & 0xff);
+            doRecalculateBBox = true;
             break;
 
         default:
@@ -494,7 +539,23 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
         }
 
         // Recalculate the BBox if it was indicated above that it should be.
-        if (doRecalculateBBox) {
+        if (doRecalculateBBox && !bboxRecalculated) {
+            kDebug(31000) << "Recalculating BBox";
+            // If we have a viewport, always use that one.
+            if (viewportExtIsSet) {
+                orgX = viewportOrgX;
+                orgY = viewportOrgY;
+                extX = viewportWidth;
+                extY = viewportHeight;
+            }
+            else {
+                // If there is no defined viewport, then use the window as the fallback viewport.
+                orgX = windowOrgX;
+                orgY = windowOrgY;
+                extX = windowWidth;
+                extY = windowHeight;
+            }
+
             // If ext < 0, switch the org and org+ext
             if (extX < 0) {
                 orgX += extX;
@@ -506,10 +567,13 @@ void KoWmfReadPrivate::createBoundingBox(QDataStream &st)
             }
 
             // At this point, the ext is always >= 0, i.e. org <= org+ext
+            kDebug(31000) << orgX << orgY << extX << extY;
             if (orgX < mBBoxLeft)          mBBoxLeft = orgX;
             if (orgY < mBBoxTop)           mBBoxTop  = orgY;
             if (orgX + extX > mBBoxRight)  mBBoxRight  = orgX + extX;
             if (orgY + extY > mBBoxBottom) mBBoxBottom = orgY + extY;
+
+            bboxRecalculated = true;
         }
 
 #if DEBUG_RECORDS
