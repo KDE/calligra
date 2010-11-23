@@ -424,6 +424,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             *m_defaultStyles.value(odfType.toLatin1()) = m_currentTextStyle;
         }
         else if (type == "paragraph") {
+            MSOOXML::Utils::copyPropertiesFromStyle(m_currentTextStyle, m_currentParagraphStyle, KoGenStyle::TextType);
             *m_defaultStyles.value(odfType.toLatin1()) = m_currentParagraphStyle;
         }
     }
