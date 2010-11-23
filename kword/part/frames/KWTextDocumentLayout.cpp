@@ -205,6 +205,8 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
                 return;
         }
         ADEBUG << "new anchor";
+        //initially place the shape far far down
+        anchor->shape()->setPosition(QPointF(0,100000000));
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
