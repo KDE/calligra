@@ -665,7 +665,9 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 
 void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
+#ifdef KEXITABLEVIEW_DEBUG
     kDebug() << "disable" << d->disableDrawContents << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
+#endif
 
     if (d->disableDrawContents)
         return;
@@ -679,7 +681,9 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
     int rowlast = rowAt(cy + ch - 1);
     if (rowfirst == -1 && (cy / d->rowHeight) == (int)rows()) {
         // make the insert row paint too when requested
+#ifdef KEXITABLEVIEW_DEBUG
         kDebug() << "rowfirst == -1 && (cy / d->rowHeight) == (int)rows()";
+#endif
         rowfirst = m_data->count();
         rowlast = rowfirst;
         paintOnlyInsertRow = true;
@@ -2018,7 +2022,9 @@ QSize KexiTableView::tableSize() const
         );
 
 //  kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s;
+#ifdef KEXITABLEVIEW_DEBUG
 kDebug() << s;
+#endif
         return s;
 //   +horizontalScrollBar()->sizeHint().height() + margin() );
     }
@@ -2051,7 +2057,9 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
     }
 
     QPoint pcenter = r.center();
+#ifdef KEXITABLEVIEW_DEBUG
     kDebug() << pcenter.x() << pcenter.y() << (r.width() / 2)  << (r.height() / 2);
+#endif
     ensureVisible(pcenter.x(), pcenter.y(), r.width() / 2, r.height() / 2);
 //    ensureVisible(r.x(), r.y(), 0, 0);
 //    ensureVisible(r.bottomRight().x(), r.bottomRight().y(), 0, 0);
@@ -2366,8 +2374,10 @@ void KexiTableView::triggerUpdate()
 
 void KexiTableView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
 {
+#ifdef KEXITABLEVIEW_DEBUG
     /*todo*/
     kDebug();
+#endif
     if (d->appearance.navigatorEnabled) {
         m_navPanel->setHBarGeometry(hbar, x, y, w, h);
     } else {
