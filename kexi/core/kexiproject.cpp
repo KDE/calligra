@@ -73,6 +73,7 @@ public:
             qDeleteAll(*dict);
             dict->clear();
         }
+        qDeleteAll(itemDicts);
         qDeleteAll(unstoredItems);
         unstoredItems.clear();
     }
