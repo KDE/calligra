@@ -88,6 +88,13 @@ public:
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
 
         /**
+         * Retrieve OfficeArtDgContainer.shape, which seems to contain
+         * additional properties to check before the default properties in the
+         * OfficeArtDggContainer are checked (MS Office 2003 specific).
+         **/
+        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer() = 0;
+
+        /**
          * Convert the OfficeArtCOLORREF to a QColor.
          * This conversion requires color scheme information.
          **/

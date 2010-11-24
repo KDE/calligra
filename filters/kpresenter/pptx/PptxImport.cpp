@@ -145,8 +145,8 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
     }
 
     // 1. temporary styles
-//! @todo create styles in PptxXmlDocumentReader (PPTX defines styles in presentation.xml)
 
+    /* // Not needed anymore
     writers->mainStyles->insertRawOdfStyles(
         KoGenStyles::DocumentStyles,
         "    <!-- COPIED -->"
@@ -759,7 +759,6 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n      </style:paragraph-properties>"
         "\n      <style:text-properties fo:color=\"#000000\" style:text-line-through-style=\"none\" style:text-position=\"0% 100%\" fo:font-family=\"Calibri\" style:font-family-generic=\"swiss\" style:font-pitch=\"variable\" fo:font-size=\"20pt\" fo:font-style=\"normal\" fo:text-shadow=\"none\" style:text-underline-style=\"none\" fo:font-weight=\"normal\" style:font-size-asian=\"20pt\" style:font-style-asian=\"normal\" style:font-weight-asian=\"normal\" style:font-size-complex=\"20pt\" style:font-style-complex=\"normal\" style:font-weight-complex=\"normal\" style:font-relief=\"none\"/>"
         "\n    </style:style>"
-/* 2010-06-04 no longer hardcoded
         "\n    <style:presentation-page-layout style:name=\"AL0T26\">"
         "\n      <presentation:placeholder presentation:object=\"handout\" svg:x=\"2.057cm\" svg:y=\"1.743cm\" svg:width=\"6.103cm\" svg:height=\"-0.233cm\"/>"
         "\n      <presentation:placeholder presentation:object=\"handout\" svg:x=\"10.96cm\" svg:y=\"1.743cm\" svg:width=\"6.103cm\" svg:height=\"-0.233cm\"/>"
@@ -771,9 +770,9 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n      <presentation:placeholder presentation:object=\"handout\" svg:x=\"10.96cm\" svg:y=\"5.481cm\" svg:width=\"6.103cm\" svg:height=\"-0.233cm\"/>"
         "\n      <presentation:placeholder presentation:object=\"handout\" svg:x=\"19.863cm\" svg:y=\"5.481cm\" svg:width=\"6.103cm\" svg:height=\"-0.233cm\"/>"
         "\n    </style:presentation-page-layout>"
-*/
         "\n    <!-- /COPIED -->"
     );
+    */
 
     writers->mainStyles->insertRawOdfStyles(
         KoGenStyles::MasterStyles,
@@ -820,10 +819,10 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n    <!-- /COPIED -->"
     );
 
+/*
     writers->mainStyles->insertRawOdfStyles(
         KoGenStyles::DocumentAutomaticStyles,
         "    <!-- COPIED -->"
-/* 2010-06-04 no longer hardcoded
         "\n    <style:style style:name=\"pr1\" style:family=\"presentation\" style:parent-style-name=\"Default-title\">"
         "\n      <style:graphic-properties draw:stroke=\"none\" draw:fill=\"none\" draw:fill-color=\"#ffffff\" draw:textarea-horizontal-align=\"justify\" draw:textarea-vertical-align=\"middle\" draw:auto-grow-height=\"true\" draw:auto-grow-width=\"false\" fo:min-height=\"2.922cm\" fo:min-width=\"0cm\" fo:padding-top=\"0.127cm\" fo:padding-bottom=\"0.127cm\" fo:padding-left=\"0.254cm\" fo:padding-right=\"0.254cm\" fo:wrap-option=\"no-wrap\" draw:shadow=\"hidden\"/>"
         "\n    </style:style>"
@@ -845,8 +844,6 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n    <style:style style:name=\"Ppredef4\" style:family=\"paragraph\">"
         "\n      <style:paragraph-properties fo:margin-left=\"2.063cm\" fo:margin-right=\"0cm\" fo:margin-top=\"0.246cm\" fo:margin-bottom=\"0cm\" text:enable-numbering=\"true\" fo:text-indent=\"-0.793cm\"/>"
         "\n    </style:style>"
-*/
-/* 2010-07-19 no longer hardcoded
         "\n    <text:list-style style:name=\"Lpredef1\">"
         "\n      <text:list-level-style-bullet text:level=\"1\" text:bullet-char=\"•\">"
         "\n        <style:text-properties fo:font-family=\"Calibri\" style:font-family-generic=\"swiss\" style:font-pitch=\"variable\" fo:color=\"#000000\" fo:font-size=\"100%\"/>"
@@ -954,14 +951,14 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n        <style:text-properties fo:font-family=\"Arial\" style:font-family-generic=\"swiss\" style:font-pitch=\"variable\" fo:color=\"#000000\" fo:font-size=\"100%\"/>"
         "\n      </text:list-level-style-bullet>"
         "\n    </text:list-style>"
-*/
         "\n    <!-- /COPIED -->"
     );
+*/
 
+/*
     writers->mainStyles->insertRawOdfStyles(
         KoGenStyles::StylesXmlAutomaticStyles,
         "    <!-- COPIED -->"
-/*        
         "\n    <style:page-layout style:name=\"PMpredef1\">"
         "\n      <style:page-layout-properties fo:margin-top=\"0cm\" fo:margin-bottom=\"0cm\" fo:margin-left=\"0cm\" fo:margin-right=\"0cm\" fo:page-width=\"25.4cm\" fo:page-height=\"19.05cm\" style:print-orientation=\"landscape\"/>"
         "\n    </style:page-layout>"
@@ -976,16 +973,14 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n    </style:style>"
         "\n    <style:style style:name=\"grpredef2\" style:family=\"graphic\" style:parent-style-name=\"standard\">"
         "\n      <style:graphic-properties draw:stroke=\"none\" draw:fill=\"none\" draw:fill-color=\"#ffffff\" draw:textarea-vertical-align=\"bottom\" draw:auto-grow-height=\"false\" fo:min-height=\"1.27cm\"/>"
-        "\n    </style:style>"*/
-/* 2010-06-04 no longer hardcoded
+        "\n    </style:style>"
         "\n    <style:style style:name=\"pr1\" style:family=\"presentation\" style:parent-style-name=\"Default-backgroundobjects\" style:list-style-name=\"Lpredef2\">"
         "\n      <style:graphic-properties draw:stroke=\"none\" draw:fill=\"none\" draw:fill-color=\"#ffffff\" draw:textarea-horizontal-align=\"justify\" draw:textarea-vertical-align=\"middle\" draw:auto-grow-height=\"false\" draw:auto-grow-width=\"false\" fo:min-height=\"1.016cm\" fo:min-width=\"0cm\" fo:padding-top=\"0.13cm\" fo:padding-bottom=\"0.13cm\" fo:padding-left=\"0.25cm\" fo:padding-right=\"0.25cm\" fo:wrap-option=\"no-wrap\" draw:shadow=\"hidden\"/>"
         "\n    </style:style>"
         "\n    <style:style style:name=\"pr2\" style:family=\"presentation\" style:parent-style-name=\"Default-backgroundobjects\">"
         "\n      <style:graphic-properties draw:stroke=\"none\" draw:fill=\"none\" draw:fill-color=\"#ffffff\" draw:textarea-horizontal-align=\"justify\" draw:textarea-vertical-align=\"middle\" draw:auto-grow-height=\"false\" draw:auto-grow-width=\"false\" fo:min-height=\"1.278cm\" fo:min-width=\"0cm\" fo:padding-top=\"0.13cm\" fo:padding-bottom=\"0.13cm\" fo:padding-left=\"0.25cm\" fo:padding-right=\"0.25cm\" fo:wrap-option=\"no-wrap\" draw:shadow=\"hidden\"/>"
         "\n    </style:style>"
-*/
-/*        "\n    <style:style style:name=\"prpredef3\" style:family=\"presentation\" style:parent-style-name=\"Default-backgroundobjects\" style:list-style-name=\"Lpredef2\">"
+        "\n    <style:style style:name=\"prpredef3\" style:family=\"presentation\" style:parent-style-name=\"Default-backgroundobjects\" style:list-style-name=\"Lpredef2\">"
         "\n      <style:graphic-properties draw:stroke=\"none\" draw:fill=\"none\" draw:fill-color=\"#ffffff\" draw:textarea-horizontal-align=\"justify\" draw:textarea-vertical-align=\"middle\" draw:auto-grow-height=\"false\" draw:auto-grow-width=\"false\" fo:min-height=\"1.016cm\" fo:min-width=\"0cm\" fo:padding-top=\"0.13cm\" fo:padding-bottom=\"0.13cm\" fo:padding-left=\"0.25cm\" fo:padding-right=\"0.25cm\" fo:wrap-option=\"no-wrap\" draw:shadow=\"hidden\"/>"
         "\n    </style:style>"
         "\n    <style:style style:name=\"Ppredef1\" style:family=\"paragraph\">"
@@ -1095,9 +1090,10 @@ KoFilter::ConversionStatus PptxImport::parseParts(KoOdfWriters *writers,
         "\n        <style:list-level-properties text:space-before=\"5.08cm\"/>"
         "\n        <style:text-properties fo:font-family=\"Calibri\" style:font-family-generic=\"swiss\" style:font-pitch=\"variable\" fo:color=\"#000000\" fo:font-size=\"100%\"/>"
         "\n      </text:list-level-style-bullet>"
-        "\n    </text:list-style>"*/
+        "\n    </text:list-style>"
         "\n    <!-- /COPIED -->"
     );
+*/
 
     QList<QByteArray> partNames = this->partNames(d->mainDocumentContentType());
     if (partNames.count() != 1) {

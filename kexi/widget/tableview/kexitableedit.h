@@ -176,7 +176,7 @@ public:
     virtual int widthForValue(const QVariant &val, const QFontMetrics &fm);
 
     /*! \return total size of this editor, including any buttons, etc. (if present).
-     Reimpelment this if you want to return more appropriate size. This impelmentation just
+     Reimplement this if you want to return more appropriate size. This impelmentation just
      returns QWidget::size(). */
     virtual QSize totalSize() const {
         return QWidget::size();
