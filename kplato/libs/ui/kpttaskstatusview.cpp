@@ -557,7 +557,6 @@ void PerformanceStatusBase::createBarChart()
     m_barchart.effortplane = new CartesianCoordinatePlane( ui_chart );
     m_barchart.effortplane->setObjectName( "Bar chart, Effort" );
     m_barchart.costplane = new CartesianCoordinatePlane( ui_chart );
-    m_barchart.costplane->setReferenceCoordinatePlane( m_barchart.effortplane );
     m_barchart.costplane->setObjectName( "Bar chart, Cost" );
 
     BarDiagram *effortdiagram = new BarDiagram( ui_chart, m_barchart.effortplane );
@@ -605,7 +604,6 @@ void PerformanceStatusBase::createLineChart()
     m_linechart.effortplane->setObjectName( "Line chart, Effort" );
     m_linechart.effortplane->setRubberBandZoomingEnabled( true );
     m_linechart.costplane = new CartesianCoordinatePlane( ui_chart );
-    m_linechart.costplane->setReferenceCoordinatePlane( m_linechart.effortplane );
     m_linechart.costplane->setObjectName( "Line chart, Cost" );
     m_linechart.costplane->setRubberBandZoomingEnabled( true );
 
@@ -667,7 +665,7 @@ void PerformanceStatusBase::setupChart()
         CartesianCoordinatePlane *p = dynamic_cast<CartesianCoordinatePlane*>( pl );
         if ( p == 0 ) continue;
         GridAttributes ga = p->globalGridAttributes();
-        ga.setGridVisible( p->referenceCoordinatePlane() != 0 );
+        ga.setGridVisible( p->referenceCoordinatePlane() == 0 );
         p->setGlobalGridAttributes( ga );
     }
     m_legend->setDatasetHidden( 0, ! ( m_chartinfo.showCost && m_chartinfo.showBCWSCost ) );
