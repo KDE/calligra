@@ -62,9 +62,6 @@ public:
     // the number of NoteObject's in this worksheet
     int noteCount;
 
-    // list of textobjects as received via TxO records
-    std::vector<QString> textObjects;
-
     // The last drawing object we got.
     MSO::OfficeArtDgContainer* lastDrawingObject;
     MSO::OfficeArtSpgrContainer* lastGroupObject;
@@ -734,9 +731,12 @@ void WorksheetSubStreamHandler::handleTxO(TxORecord* record)
 {
     if (!record) return;
 
-    std::cout << "WorksheetSubStreamHandler::handleTxO size=" << d->textObjects.size()+1 << " text=" << record->m_text << std::endl;
-    d->textObjects.push_back(record->m_text);
-
+    if (d->sharedObjects.rbegin() != d->sharedObjects.rend()) {
+        NoteObject* no = dynamic_cast<NoteObject*>(d->sharedObjects.rbegin()->second);
+        if (no) {
+            no->setNote(record->m_text);
+        }
+    }
     if (d->lastOfficeArtObject) {
         d->lastOfficeArtObject->setText(*record);
         d->lastOfficeArtObject = 0;
@@ -753,10 +753,7 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
         const unsigned long id = record->idObj();
         NoteObject *obj = dynamic_cast<NoteObject*>(d->sharedObjects[id]);
         if (obj) {
-            int offset = d->noteMap[id] - 1;
-            Q_ASSERT(offset>=0 && uint(offset)<d->textObjects.size());
-            cell->setNote(d->textObjects[offset]);
-            //cell->setNote(obj->note());
+            cell->setNote(obj->note());
         }
     }
 }
