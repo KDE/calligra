@@ -208,6 +208,10 @@ public:
             , autoIncrementedColumn(-2) {
     }
 
+    ~Private() {
+        delete pRowEditBuffer;
+    }
+
     //! (logical) sorted column number, set by setSorting()
     //! can differ from realSortedColumn if there's lookup column used
     int sortedColumn;
