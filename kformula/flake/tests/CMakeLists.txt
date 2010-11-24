@@ -21,9 +21,9 @@ target_link_libraries(TestLoadAndSave kformulalib ${QT_QTTEST_LIBRARY})
 
 ########### Layout Test ###############
 
-set(TestLayout_SRCS TestLayout.cpp)
-kde4_add_unit_test(TestLayout TESTNAME kformula-Layout  ${TestLayout_SRCS})
-target_link_libraries(TestLayout kformulalib ${QT_QTTEST_LIBRARY})
+#set(TestLayout_SRCS TestLayout.cpp)
+#kde4_add_unit_test(TestLayout TESTNAME kformula-Layout  ${TestLayout_SRCS})
+#target_link_libraries(TestLayout kformulalib ${QT_QTTEST_LIBRARY})
 
 ########### Cursor Test ###############
 
