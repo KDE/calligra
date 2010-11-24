@@ -69,7 +69,7 @@ public:
 
     virtual QVariant visibleValue();
 
-    //! Reimpemented because to avoid taking value from the internal editor (index is taken from the popup instead)
+    //! Reimplemented because to avoid taking value from the internal editor (index is taken from the popup instead)
     virtual bool valueChanged();
 
     virtual QSize sizeHint() const;

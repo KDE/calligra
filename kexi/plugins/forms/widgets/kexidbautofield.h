@@ -95,7 +95,7 @@ public:
     virtual bool valueChanged();
     virtual void clear();
 
-    //! Reimpelmented to also install \a listenter for internal editor
+    //! Reimplemented to also install \a listenter for internal editor
     virtual void installListener(KexiDataItemChangesListener* listener);
 
     WidgetType widgetType() const;

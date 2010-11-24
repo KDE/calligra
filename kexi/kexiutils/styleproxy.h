@@ -31,7 +31,7 @@ namespace KexiUtils
 
 //! @short a QStyle proxy allowing to customizing the currently used style
 /*! All you need is to reimplement one or more of the methods.
- For example, you can reimpelmente drawPrimitive() and temporary
+ For example, you can reimplement drawPrimitive() and temporary
  change the color in color group.
 
  You can change even the smallest part of the style for a selected widget
