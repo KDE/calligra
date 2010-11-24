@@ -160,8 +160,10 @@ void TableSchema::setPrimaryKey(IndexSchema *pkey)
 {
     if (m_pkey && m_pkey != pkey) {
         if (m_pkey->fieldCount() == 0) {//this is empty key, probably default - remove it
-            m_indices.removeAt(m_indices.indexOf(m_pkey));
-        } else {
+            m_indices.removeOne(m_pkey);
+            delete m_pkey;
+        }
+        else {
             m_pkey->setPrimaryKey(false); //there can be only one pkey..
             //thats ok, the old pkey is still on indices list, if not empty
         }
