@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -287,8 +287,13 @@ protected:
     virtual void initPartActions();
     virtual void initInstanceActions();
 
+    /*! Can be reimplemented if schema data is extended behind the default set of properties.
+     This is the case for table and query schema objects,
+     where object of KexiDB::SchemaData subclass is returned.
+     In this case value pointed by @a ownedByWindow is set to false.
+     Default implemenatation owned (value pointed by @a ownedByWindow is set to true). */
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window,
-            const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode);
+            const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode, bool *ownedByWindow);
 
     bool loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID = QString());
 
@@ -343,6 +348,11 @@ protected:
 //  KAction* sharedViewAction(const char* name) const;
 
 private:
+    //! Calls loadSchemaData() (virtual), updates ownership of schema data for @a window
+    //! and assigns the created data to @a window.
+    void loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+                              Kexi::ViewMode viewMode);
+
     class Private;
     Private * const d;
 

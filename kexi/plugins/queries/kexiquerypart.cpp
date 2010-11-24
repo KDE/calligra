@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004,2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -161,7 +161,8 @@ void KexiQueryPart::initInstanceActions()
 }
 
 KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
-    KexiWindow *window, const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode)
+    KexiWindow *window, const KexiDB::SchemaData& sdata, Kexi::ViewMode viewMode,
+    bool *ownedByWindow)
 {
     KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(window->data());
     QString sqlText;
@@ -176,7 +177,7 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
         if (viewMode == Kexi::TextViewMode) {
             //for SQL view, no parsing is initially needed:
             //-just make a copy:
-            return KexiPart::Part::loadSchemaData(window, sdata, viewMode);
+            return KexiPart::Part::loadSchemaData(window, sdata, viewMode, ownedByWindow);
         }
         /* Set this to true on data loading loadSchemaData() to indicate that TextView mode
          could be used instead of DataView or DesignView, because there are problems
@@ -189,6 +190,8 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
     (KexiDB::SchemaData&)*query = sdata; //copy main attributes
 
     temp->registerTableSchemaChanges(query);
+    if (ownedByWindow)
+        *ownedByWindow = false;
 
     query->debug();
     return query;

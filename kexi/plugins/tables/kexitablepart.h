@@ -77,7 +77,7 @@ protected:
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
-            Kexi::ViewMode viewMode);
+            Kexi::ViewMode viewMode, bool *ownedByWindow);
 
 private:
     class Private;

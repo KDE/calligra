@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -192,7 +192,13 @@ public:
 
     void setSchemaData(KexiDB::SchemaData* schemaData);
 
-    /*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
+    //! Sets 'owned' property for schema data.
+    //! If true, the window will delete the schema data before destruction.
+    //! By default schema data is not owned.
+    //! @see setSchemaData(), KexiPart::loadSchemaData(), KexiPart::loadAndSetSchemaData()
+    void setSchemaDataOwned(bool set);
+
+    /*! Reimplemented: "*" is added if for 'dirty' dialog's data. */
 //  QString caption() const;
 
     /*! Used by KexiView subclasses. \return temporary data shared between
