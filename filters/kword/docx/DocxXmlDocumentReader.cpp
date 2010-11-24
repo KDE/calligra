@@ -1041,8 +1041,20 @@ void DocxXmlDocumentReader::createBorderStyle(const QString& size, const QString
     border.append(odfLineStyle + " ");
 
     if (!color.isEmpty()) {
-        border.append('#');
-        border.append(color);
+        if (color == "auto") {
+            // The documentation for auto value says that it leaves the color up to the application
+            // to decide, here we make a decision to use window color text
+            MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
+            colorItem = m_context->themes->colorScheme.value("dk1");
+            QColor col = Qt::black;
+            if (colorItem) {
+                col = colorItem->value();
+            }
+            border.append(col.name());
+        } else {
+            border.append('#');
+            border.append(color);
+        }
     }
     else {
         border.append(QLatin1String("#000000"));
