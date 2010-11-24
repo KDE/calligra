@@ -217,6 +217,7 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
 
 KexiProjectNavigator::~KexiProjectNavigator()
 {
+    delete m_model;
 }
 
 
