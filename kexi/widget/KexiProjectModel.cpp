@@ -1,4 +1,7 @@
-/*
+/* This file is part of the KDE project
+   Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -38,6 +41,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     clear();
     m_itemsPartClass = itemsPartClass;
 
+    delete m_rootItem;
     m_rootItem = new KexiProjectModelItem(prj->data()->databaseName());
     
     KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
@@ -108,9 +112,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
 
 KexiProjectModel::~KexiProjectModel()
 {
-    if (m_rootItem) {
-        delete m_rootItem;
-    }
+    delete m_rootItem;
 }
 
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
