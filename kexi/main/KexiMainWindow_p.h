@@ -591,6 +591,8 @@ public:
     }
     ~Private() {
         qDeleteAll(m_openedCustomObjectsForItem);
+        delete dummy_KXMLGUIClient;
+        delete dummy_KXMLGUIFactory;
     }
 
 #ifndef KEXI_NO_PENDING_DIALOGS
