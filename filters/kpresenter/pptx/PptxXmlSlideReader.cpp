@@ -1764,7 +1764,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phIdx][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    else if (!d->phType.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
@@ -1777,7 +1777,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
-    else if (!d->phIdx.isEmpty()) {
+    if (!d->phIdx.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -1831,7 +1831,7 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    else if (!d->phIdx.isEmpty()) {
+    if (!d->phIdx.isEmpty()) {
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phIdx]);
         while (i.hasNext()) {
             i.next();
@@ -1857,7 +1857,8 @@ void PptxXmlSlideReader::inheritListStyles()
                 }
             }
         }
-    } else if (!d->phIdx.isEmpty()) {
+    }
+    if (!d->phIdx.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phIdx]);
             while (i.hasNext()) {
