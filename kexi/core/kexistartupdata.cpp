@@ -39,6 +39,7 @@ KexiStartupData::KexiStartupData()
 
 KexiStartupData::~KexiStartupData()
 {
+    delete m_projectData;
 }
 
 KexiProjectData *KexiStartupData::projectData() const
