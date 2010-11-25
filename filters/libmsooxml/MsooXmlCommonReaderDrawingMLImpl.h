@@ -5107,6 +5107,17 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
         m_prevListLevel = 0;
     }
 
+    body = listBuf.originalWriter();
+    if (m_contentType != "line") {
+        body->startElement("draw:text-box"); // CASE #P436
+    }
+
+    body = listBuf.releaseWriter();
+
+    if (m_contentType != "line") {
+        body->endElement(); // draw:text-box
+    }
+
     READ_EPILOGUE
 }
 
