@@ -797,7 +797,7 @@ void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphP
             outlineLevel = paragraphProperties->pap().ilvl + 1;
         } else {
             // List processing
-            // This takes car of all the cases:
+            // This takes care of all the cases:
             //  - A new list
             //  - A list with higher level than before
             //  - A list with lower level than before
@@ -861,10 +861,10 @@ void KWordTextHandler::paragraphEnd()
 
     //add nested field snippets to this paragraph
     if (m_fldStates.empty()) {
-        QList<QString>* list = &fld_snippets;
-        while (!list->isEmpty()) {
+        QList<QString>* flds = &fld_snippets;
+        while (!flds->isEmpty()) {
             //add writer content to m_paragraph as a runOfText with no text style
-            m_paragraph->addRunOfText(list->takeFirst(), 0, QString(""), m_parser->styleSheet());
+            m_paragraph->addRunOfText(flds->takeFirst(), 0, QString(""), m_parser->styleSheet());
         }
     }
 
