@@ -1935,15 +1935,18 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 
     bool ok = false;
 
-    const qreal marginLeft = qreal(EMU_TO_POINT(marL.isEmpty() ? 347663.0 : marL.toDouble(&ok)));
-    m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginLeft);
-
-    const qreal marginRight = qreal(EMU_TO_POINT(marR.isEmpty() ? 0.0 : marR.toDouble(&ok)));
-    m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginRight);
-
-    const qreal textIndent = qreal(EMU_TO_POINT(indent.isEmpty() ? -342900.0 : indent.toDouble(&ok)));
-    m_currentParagraphStyle.addPropertyPt("fo:text-indent", textIndent);
-
+    if (!marL.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
+    }
+    if (!marR.isEmpty()) {
+        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+    }
+    if (!indent.isEmpty()) {
+        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
+    }
     if (!defTabSz.isEmpty()) {
         const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
