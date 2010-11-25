@@ -1935,6 +1935,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
 
     bool ok = false;
 
+    // Following settings are only applied if defined so they don't overwrite defaults
+    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
@@ -4005,6 +4007,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     inheritTextStyle(m_currentTextStyle);
 #endif
 
+    // Following settings are only applied if defined so they don't overwrite defaults
+    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
     if (!marR.isEmpty()) {
         const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
