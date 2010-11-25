@@ -5079,9 +5079,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
 
-    MSOOXML::Utils::XmlWriteBuffer listBuf;
-    body = listBuf.setWriter(body);
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -5095,7 +5092,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
     if (m_prevListLevel > 0) {
         // Ending our current level
         body->endElement(); // text:list
@@ -5105,17 +5101,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
             body->endElement(); // text:list
         }
         m_prevListLevel = 0;
-    }
-
-    body = listBuf.originalWriter();
-    if (m_contentType != "line") {
-        body->startElement("draw:text-box"); // CASE #P436
-    }
-
-    body = listBuf.releaseWriter();
-
-    if (m_contentType != "line") {
-        body->endElement(); // draw:text-box
     }
 
     READ_EPILOGUE
