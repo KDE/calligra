@@ -459,6 +459,117 @@ void AccountsTester::shutdownAccount() {
     QCOMPARE( ec.totalCost(), 425.0 );
 }
 
+void AccountsTester::subaccounts()
+{
+    Account *a1 = new Account( "Account" );
+    project->accounts().insert( a1 );
+    
+    Account *a2 = new Account( "Sub-Account" );
+    project->accounts().insert( a2, a1 );
+
+    project->accounts().setDefaultAccount( a2 );
+    
+    EffortCostMap ec = project->accounts().plannedCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 800.0 );
+
+    ec = project->accounts().plannedCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 800.0 );
+
+    ec = project->accounts().actualCost( *a2 );
+    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 0.0 );
+
+    ec = project->accounts().actualCost( *a1 );
+    kDebug()<<t->startTime()<<t->endTime()<<ec.totalEffort().toDouble( Duration::Unit_h );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 0.0 );
+
+    t->completion().setEntrymode( Completion::FollowPlan );
+    ec = project->accounts().actualCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 800.0 );
+
+    ec = project->accounts().actualCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 800.0 );
+
+    t->completion().setEntrymode( Completion::EnterCompleted );
+    ec = project->accounts().actualCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 0.0 );
+    
+    ec = project->accounts().actualCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 0.0 );
+
+    t->completion().setEntrymode( Completion::EnterEffortPerTask );
+    t->completion().setStarted( true );
+    t->completion().setStartTime( DateTime( tomorrow, QTime() ) );
+    t->completion().setPercentFinished( tomorrow, 50 );
+    t->completion().setActualEffort( tomorrow, Duration( 0, 4, 0 ) );
+    ec = project->accounts().actualCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 4.0 );
+    QCOMPARE( ec.totalCost(), 400.0 );
+
+    ec = project->accounts().actualCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 4.0 );
+    QCOMPARE( ec.totalCost(), 400.0 );
+
+    t->setStartupCost( 25.0 );
+    a1->addStartup( *t );
+
+    ec = project->accounts().actualCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 4.0 );
+    QCOMPARE( ec.totalCost(), 400.0 );
+
+    ec = project->accounts().actualCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 4.0 );
+    QCOMPARE( ec.totalCost(), 425.0 );
+    
+    project->accounts().setDefaultAccount( a1 );
+    
+    ec = project->accounts().plannedCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 0.0 );
+
+    ec = project->accounts().plannedCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 825.0 );
+
+    ec = project->accounts().actualCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 0.0 );
+
+    ec = project->accounts().actualCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 4.0 );
+    QCOMPARE( ec.totalCost(), 425.0 );
+    
+    t->setShutdownCost( 1.0 );
+    a2->addShutdown( *t );
+    
+    ec = project->accounts().plannedCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 1.0 );
+
+    ec = project->accounts().plannedCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 8.0 );
+    QCOMPARE( ec.totalCost(), 826.0 );
+    
+    t->completion().setFinished( true );
+    t->completion().setFinishTime( DateTime( tomorrow, QTime() ) );
+    
+    ec = project->accounts().actualCost( *a2 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 0.0 );
+    QCOMPARE( ec.totalCost(), 1.0 );
+
+    ec = project->accounts().actualCost( *a1 );
+    QCOMPARE( ec.totalEffort().toDouble( Duration::Unit_h ), 4.0 );
+    QCOMPARE( ec.totalCost(), 426.0 );
+}
+
 } //namespace KPlato
 
 QTEST_KDEMAIN_CORE( KPlato::AccountsTester )

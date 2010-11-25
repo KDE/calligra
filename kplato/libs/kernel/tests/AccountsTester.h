@@ -43,6 +43,8 @@ private slots:
     
     void shutdownAccount();
 
+    void subaccounts();
+
 private:
     Project *project;
     Task *t;
