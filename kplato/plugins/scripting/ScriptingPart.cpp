@@ -41,7 +41,11 @@
 #include <kptview.h>
 
 int kplatoScriptingDebugArea() {
+#if KDE_IS_VERSION( 4, 3, 80 )
     static int s_area = KDebug::registerArea( "kplato (Scripting)" );
+#else
+    static int s_area = 32010;
+#endif
     return s_area;
 }
 

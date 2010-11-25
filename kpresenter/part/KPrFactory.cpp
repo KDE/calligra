@@ -31,7 +31,7 @@ KComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
 KIconLoader* KPrFactory::s_iconLoader = 0;
 
-KPrFactory::KPrFactory( QObject* parent, const char* name )
+KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
     : KPluginFactory( *aboutData(), parent )
 {
     (void)componentData();

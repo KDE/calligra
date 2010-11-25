@@ -657,37 +657,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
     kDebug() << "m_vmlStyle:" << m_vmlStyle;
-    // override width or height after 'object' element is possible
-    const QString widthCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("width")));
-    if (!widthCm.isEmpty()) {
-        m_currentObjectWidthCm = widthCm;
-        kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
-    }
-    const QString heightCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("height")));
-    if (!heightCm.isEmpty()) {
-        m_currentObjectHeightCm = heightCm;
-    }
-    if (!m_vmlStyle.value("margin-left").isEmpty()) {
-        const QString xCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-left")));
-        if (!xCmMar.isEmpty()) {
-            m_currentObjectXCm = xCmMar;
-        }
-    }
-    if (!m_vmlStyle.value("margin-top").isEmpty()) {
-        const QString yCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-top")));
-        if (!yCmMar.isEmpty()) {
-            m_currentObjectYCm = yCmMar;
-        }
-    }
-    // override x or y after 'object' element is possible
-    const QString xCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("left")));
-    if (!xCm.isEmpty()) {
-        m_currentObjectXCm = xCm;
-    }
-    const QString yCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("top")));
-    if (!yCm.isEmpty()) {
-        m_currentObjectYCm = yCm;
-    }
+
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)

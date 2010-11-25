@@ -714,8 +714,7 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
 
     tb->addSeparator();
 
-    foreach( QAction *a, m_designer->actions() ) {
-        a->setParent( this );
+    foreach( QAction *a, m_designer->actions(this) ) {
         tb->addAction( a );
         connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
     }
@@ -783,8 +782,7 @@ ReportDesignPanel::ReportDesignPanel( Project */*project*/, ScheduleManager */*m
 
     tb->addSeparator();
 
-    foreach( QAction *a, m_designer->actions() ) {
-        a->setParent( this );
+    foreach( QAction *a, m_designer->actions(this) ) {
         tb->addAction( a );
         connect( a, SIGNAL( triggered( bool ) ), SLOT( slotInsertAction() ) );
     }

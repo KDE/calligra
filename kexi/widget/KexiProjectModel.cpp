@@ -1,4 +1,7 @@
-/*
+/* This file is part of the KDE project
+   Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -37,7 +40,6 @@ public:
 
 KexiProjectModel::Private::Private() : rootItem(0)
 {
-    
 }
 
 KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent) , d(new Private())
@@ -52,14 +54,15 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     clear();
     d->itemsPartClass = itemsPartClass;
 
-    d->rootItem = new KexiProjectModelItem(prj->data()->databaseName());
-    
+    delete m_rootItem;
+    m_rootItem = new KexiProjectModelItem(prj->data()->databaseName());
+
     KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
-    
+
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
-        
+
         if (!d->itemsPartClass.isEmpty() && info->partClass() != d->itemsPartClass)
             continue;
 
@@ -127,9 +130,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
 
 KexiProjectModel::~KexiProjectModel()
 {
-    if (d->rootItem) {
-        delete d->rootItem;
-    }
+    delete m_rootItem;
 }
 
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const

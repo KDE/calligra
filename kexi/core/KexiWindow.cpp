@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,6 +57,7 @@ public:
     Private()
 //  : viewModeGroup(0)
             : schemaData(0)
+            , schemaDataOwned(false)
             , isRegistered(false)
             , dirtyChangedEnabled(true)
             , switchToViewModeEnabled(true) {
@@ -72,6 +73,8 @@ public:
 //   delete d->stack;
 //   d->stack = 0;
 //   qDeleteAll(sharedViewActions);
+        if (schemaDataOwned)
+            delete schemaData;
     }
 
     inline int indexForView(int mode) const {
@@ -105,6 +108,7 @@ public:
     KexiPart::Item *item;
 //  QString origCaption; //!< helper
     KexiDB::SchemaData* schemaData;
+    bool schemaDataOwned;
     QPointer<KexiView> newlySelectedView; //!< Used in isDirty(), temporary set in switchToViewMode()
     //!< during view setup, when a new view is not yet raised.
     //! Used in viewThatRecentlySetDirtyFlag(), modified in dirtyChanged().
@@ -769,6 +773,11 @@ void KexiWindow::setSchemaData(KexiDB::SchemaData* schemaData)
 KexiDB::SchemaData* KexiWindow::schemaData() const
 {
     return d->schemaData;
+}
+
+void KexiWindow::setSchemaDataOwned(bool set)
+{
+    d->schemaDataOwned = set;
 }
 
 KexiWindowData *KexiWindow::data() const

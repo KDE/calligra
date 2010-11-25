@@ -58,14 +58,6 @@ protected:
     //writer where style:background-image is stored for style:page-layout-properties
     KoXmlWriter* m_pDocBkgImageWriter;
 
-    //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-    //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-    QString m_currentObjectWidthCm;
-
-    QString m_currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
-    QString m_currentObjectXCm; //!< See m_currentObjectWidthCm for description
-    QString m_currentObjectYCm; //!< See m_currentObjectWidthCm for description
-
     QString m_imagedataPath; //!< set in read_shape()
     QString m_imagedataFile; //!< set in read_shape()
     QString m_shapeAltText; //!< set in read_shape()
@@ -75,6 +67,11 @@ protected:
 
     QString m_strokeColor; // stroke color
     qreal m_strokeWidth; // stroke width
+
+    //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
+    //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
+    QString m_currentObjectWidthCm;
+    QString m_currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
 
     bool m_outputFrames; // Whether read_shape should output something to shape
 

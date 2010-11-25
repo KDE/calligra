@@ -4235,6 +4235,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
         m_listStylePropertiesAltered = true;
     }
 
+    m_xlinkHref.clear();
+
     READ_EPILOGUE
 }
 
