@@ -84,6 +84,7 @@ KexiTableViewHeader::~KexiTableViewHeader()
 {
     if (m_privateStyle) {
         setStyle(0);
+#warning memory leak
         //delete (QObject*)m_privateStyle;
     }
 }
@@ -102,6 +103,7 @@ void KexiTableViewHeader::styleChanged()
     m_styleChangeEnabled = false;
     if (m_privateStyle) {
         setStyle(0);
+#warning memory leak
         //delete (QObject*)m_privateStyle;
     }
     setStyle(m_privateStyle = new KexiTableViewHeaderStyle(style(), this));
