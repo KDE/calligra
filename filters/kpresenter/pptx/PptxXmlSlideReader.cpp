@@ -1901,6 +1901,9 @@ void PptxXmlSlideReader::inheritListStyles()
 
 void PptxXmlSlideReader::inheritDefaultTextStyle(KoGenStyle& targetStyle)
 {
+    if(m_currentListLevel == 1)
+        return;
+
     const int listLevel = qMax(1, m_currentListLevel);
     if (m_context->defaultTextStyles.size() >= listLevel) {
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->defaultTextStyles[listLevel-1],
@@ -1949,6 +1952,9 @@ void PptxXmlSlideReader::inheritShapePosition()
 
 void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 {
+    if(m_currentListLevel == 1)
+        return;
+
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
 
     // Idx must be first for masterslide, due to initial use case
