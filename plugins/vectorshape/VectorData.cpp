@@ -202,7 +202,7 @@ bool VectorData::saveData(QIODevice &device)
             file.close();
         }
     }
-    return false;
+    return true;
 }
 
 void VectorData::copyToTemporary(QIODevice &device)
