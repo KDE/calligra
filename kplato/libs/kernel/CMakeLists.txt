@@ -7,6 +7,7 @@ include_directories(${KOODF_INCLUDES})
 
 set(kplatokernel_LIB_SRCS
     kptglobal.cpp
+    kpteffortcostmap.cpp
     kptdocuments.cpp
     kptaccount.cpp
     kptappointment.cpp
