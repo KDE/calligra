@@ -44,7 +44,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#define DEBUG_REPAINT
+//#define DEBUG_REPAINT
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     : KoCanvasBase(document),
@@ -282,6 +282,8 @@ void KWCanvasBase::paintBorderSide(QPainter &painter, const KoBorder::BorderData
 void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
 {
     painter.translate(-m_documentOffset);
+
+    qDebug() << "KWCanvasBase::PAINT" << m_documentOffset << paintRect;
 
     if (m_viewMode->hasPages()) {
         int pageContentArea = 0;
