@@ -2377,10 +2377,14 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             }
             break;
             default:
-              bytes_read = combObjStream->read( buffer, markerOrLength );
-              QString ansiString = readByteString(buffer, markerOrLength);
-              //TODO...
-              //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
+              if (markerOrLength > 65535) {
+                printf("invalid length reading compobj stream: %ul\n", markerOrLength);
+              } else {
+                bytes_read = combObjStream->read( buffer, markerOrLength );
+                QString ansiString = readByteString(buffer, markerOrLength);
+                //TODO...
+                //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
+              }
           }
           //TODO Reserved1, UnicodeMarker, UnicodeUserType, UnicodeClipboardFormat, Reserved2
       }
