@@ -230,6 +230,7 @@ public:
 protected:
     void copy( const Completion &copy);
     double averageCostPrHour( const QDate &date, long id ) const;
+    QPair<QDate, QDate> actualStartEndDates() const;
 
 private:
     Node *m_node;
