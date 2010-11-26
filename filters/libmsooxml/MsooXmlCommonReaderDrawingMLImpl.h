@@ -3395,7 +3395,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
 
     MSOOXML::DrawingMLColorSchemeItemBase *colorItem = 0;
 
-#ifdef PPTXXMLSLIDEREADER_CPP
+#if defined(PPTXXMLSLIDEREADER_CPP) or defined(MSOOXMLDRAWINGTABLESTYLEREADER_CPP)
 
     QString valTransformed = m_context->colorMap.value(val);
     colorItem = m_context->themes->colorScheme.value(valTransformed);

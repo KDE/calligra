@@ -61,13 +61,11 @@ class PptxXmlDocumentReader::Private
 {
 public:
     Private()
-        : tableStyleList(0)
     {
     }
     ~Private() {
         qDeleteAll(masterSlidePropertiesMap);
         qDeleteAll(slideLayoutPropertiesMap);
-        delete tableStyleList;
     }
     QMap<QString, PptxSlideProperties*> masterSlidePropertiesMap;
     QMap<QString, PptxSlideLayoutProperties*> slideLayoutPropertiesMap;
@@ -82,7 +80,6 @@ public:
 
     QMap<QString, PptxSlideMasterPageProperties> slideMasterPageProperties;
     QMap<int, QString> commentAuthors;
-    MSOOXML::TableStyleList* tableStyleList;
 private:
 };
 
@@ -211,7 +208,6 @@ PptxSlideLayoutProperties* PptxXmlDocumentReader::slideLayoutProperties(
         &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList,
         d->slideMasterPageProperties[slideMasterPathAndFile].colorMap,
         dummyoles
     );
@@ -309,7 +305,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         &d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName],
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList,
         d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
         vmlreader.content()
     );
@@ -432,20 +427,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&themesReader, slideThemePathAndFile, errorMessage, &themecontext);
 
-    // Moved this one here, because tablestyles shoudl be read only after reading the theme
-    {
-         d->tableStyleList = new MSOOXML::TableStyleList();
-
-         const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
-         QString tableStylesFile;
-         QString tableStylesPath;
-         MSOOXML::Utils::splitPathAndFile(tableStylesFilePath, &tableStylesPath, &tableStylesFile);
-
-         MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
-         MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
-                                                                          tableStylesFile, &masterPageProperties.theme, d->tableStyleList);
-         m_context->import->loadAndParseDocument(&tableStyleReader, tableStylesFilePath, &tableStyleReaderContext);
-    }
+    // Delay the reding of a tableStyle until we find a table as we need the clrMap from the master slide
+    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
 
     //empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
@@ -463,9 +446,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         &masterPageProperties,
         *m_context->relationships,
         d->commentAuthors,
-        d->tableStyleList,
         dummyMap,
-        dummyOles
+        dummyOles,
+        tableStylesFilePath
     );
 
     PptxXmlSlideReader slideMasterReader(this);

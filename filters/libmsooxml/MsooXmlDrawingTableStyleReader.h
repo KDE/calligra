@@ -40,7 +40,7 @@ class MsooXmlImport;
 class MSOOXML_EXPORT MsooXmlDrawingTableStyleContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, MSOOXML::DrawingMLTheme* _themes, MSOOXML::TableStyleList* _styleList);
+    MsooXmlDrawingTableStyleContext(MSOOXML::MsooXmlImport* _import, const QString& _path, const QString& _file, MSOOXML::DrawingMLTheme* _themes, MSOOXML::TableStyleList* _styleList, QMap< QString, QString > _colorMap);
     virtual ~MsooXmlDrawingTableStyleContext();
 
     TableStyleList* styleList;
@@ -50,6 +50,7 @@ public:
     QString path;
     QString file;
     MSOOXML::DrawingMLTheme* themes;
+    QMap<QString, QString> colorMap;
 };
 
 class MSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonReader

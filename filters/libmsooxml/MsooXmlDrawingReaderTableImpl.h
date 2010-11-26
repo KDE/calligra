@@ -29,6 +29,20 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tbl()
 {
     READ_PROLOGUE
 
+    if(!d->tableStyleList) {
+        d->tableStyleList = new MSOOXML::TableStyleList;
+
+        QString tableStylesFile;
+        QString tableStylesPath;
+        MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
+
+        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
+                                                                        tableStylesFile, &m_context->slideMasterPageProperties->theme,
+                                                                        d->tableStyleList, m_context->colorMap);
+        m_context->import->loadAndParseDocument(&tableStyleReader, m_context->tableStylesFilePath, &tableStyleReaderContext);
+    }
+
     m_table = new KoTable;
 
     m_table->setName(QLatin1String("Table") + QString::number(m_currentTableNumber + 1));
@@ -263,7 +277,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
-    m_tableStyle = m_context->tableStyleList->tableStyle(text().toString());
+    m_tableStyle = d->tableStyleList->tableStyle(text().toString());
     readNext();
  
     READ_EPILOGUE

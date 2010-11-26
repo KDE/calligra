@@ -34,6 +34,7 @@
 #include <MsooXmlRelationships.h>
 #include <MsooXmlUnits.h>
 #include <MsooXmlDrawingTableStyle.h>
+#include <MsooXmlDrawingTableStyleReader.h>
 #include <MsooXmlThemesReader.h>
 
 #include <KoXmlWriter.h>
@@ -147,25 +148,27 @@ PptxXmlSlideReaderContext::PptxXmlSlideReaderContext(
     PptxSlideMasterPageProperties* _slideMasterPageProperties,
     MSOOXML::MsooXmlRelationships& _relationships,
     QMap<int, QString> _commentAuthors,
-    MSOOXML::TableStyleList *_tableStyleList,
     QMap<QString, QString> masterColorMap,
-    QMap<QString, QString> _oleReplacements)
+    QMap<QString, QString> _oleReplacements,
+    QString _tableStylesFilePath)
         : MSOOXML::MsooXmlReaderContext(&_relationships),
         import(&_import), path(_path), file(_file),
         slideNumber(_slideNumber), themes(_themes), type(_type),
         slideProperties(_slideProperties), slideLayoutProperties(_slideLayoutProperties),
         slideMasterPageProperties(_slideMasterPageProperties),
-        commentAuthors(_commentAuthors), tableStyleList(_tableStyleList),
-        colorMap(masterColorMap), oleReplacements(_oleReplacements), firstReadingRound(false)
+        commentAuthors(_commentAuthors),
+        colorMap(masterColorMap), oleReplacements(_oleReplacements), firstReadingRound(false),
+        tableStylesFilePath(_tableStylesFilePath)
 {
 }
 
 class PptxXmlSlideReader::Private
 {
 public:
-    Private() {
+    Private() : tableStyleList(0) {
     }
     ~Private() {
+        delete tableStyleList;
     }
     KoXmlWriter *body; //!< Backup body pointer for SlideMaster mode
     //! Used to index shapes in master slide when inheriting properties
@@ -177,6 +180,8 @@ public:
     //!set by read_t as true whenever some characters are copied to a textbox,
     //!used to figure out if a shape is a placeholder or not
     bool textBoxHasContent;
+
+    MSOOXML::TableStyleList* tableStyleList;
 };
 
 PptxXmlSlideReader::PptxXmlSlideReader(KoOdfWriters *writers)

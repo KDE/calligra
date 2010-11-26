@@ -308,9 +308,9 @@ public:
         PptxSlideMasterPageProperties* _slideMasterPageProperties,
         MSOOXML::MsooXmlRelationships& _relationships,
         QMap<int, QString> _commentAuthors,
-        MSOOXML::TableStyleList *tableStyleList,
         QMap<QString, QString> masterColorMap,
-        QMap<QString, QString> _oleReplacements);
+        QMap<QString, QString> _oleReplacements,
+        QString _tableStylesFilePath = QString());
 
     PptxImport* import;
     const QString path;
@@ -327,7 +327,6 @@ public:
     QString pageDrawStyleName; //!< written in read_sldInternal()
     QVector<QString> pageFrames; //! Frames which go to masterslide
     QMap<int, QString> commentAuthors;
-    MSOOXML::TableStyleList *tableStyleList;
 
     // This value is always initialized with values from master slide, but it is possible
     // that slide/layout override it with custom map
@@ -346,6 +345,9 @@ public:
     QVector<KoGenStyle> defaultTextStyles;
     QVector<KoGenStyle> defaultParagraphStyles;
     QVector<MSOOXML::Utils::ParagraphBulletProperties> defaultListStyles;
+
+    // We need to know where to find the table styles when needed
+    QString tableStylesFilePath;
 };
 
 #endif
