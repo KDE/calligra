@@ -752,7 +752,10 @@ EffortCostMap Task::bcwsPrDay( long id ) const
     if ( s == 0 ) {
         return EffortCostMap();
     }
-    return s->bcwsPrDay();
+    EffortCostMap ec = s->bcwsPrDay();
+    ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
+    ec.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
+    return ec;
 }
 
 EffortCostMap Task::bcwpPrDay( long id ) const
@@ -773,6 +776,16 @@ EffortCostMap Task::bcwpPrDay( long id ) const
         double p = (double)(completion().percentFinished( it.key() )) / 100.0;
         const_cast<EffortCost&>(it.value()).setBcwpEffort( totEff  * p );
         const_cast<EffortCost&>(it.value()).setBcwpCost( totCost  * p );
+    }
+    if ( completion().isStarted() ) {
+        EffortCost ec;
+        ec.setBcwpCost( m_startupCost );
+        e.add( completion().startTime().date(), ec );
+    }
+    if ( completion().isFinished() ) {
+        EffortCost ec;
+        ec.setBcwpCost( m_shutdownCost );
+        e.add( completion().finishTime().date(), ec );
     }
     return e;
 }
@@ -837,8 +850,20 @@ EffortCostMap Task::acwp( long id ) const
             break;
         case Completion::EnterCompleted:
             //hmmm
-        default:
-            return completion().actualEffortCost( id );
+        default: {
+            EffortCostMap m = completion().actualEffortCost( id );
+            if ( completion().isStarted() ) {
+                EffortCost e;
+                e.setCost( m_startupCost );
+                m.add( completion().startTime().date(), e );
+            }
+            if ( completion().isFinished() ) {
+                EffortCost e;
+                e.setCost( m_shutdownCost );
+                m.add( completion().finishTime().date(), e );
+            }
+            return m;
+        }
     }
     return EffortCostMap();
 }
