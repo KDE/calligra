@@ -270,6 +270,11 @@ CellView::CellView(SheetView* sheetView, int col, int row)
     makeLayout(sheetView, cell);
 }
 
+CellView::CellView(const CellView& other)
+        : d(other.d)
+{
+}
+
 CellView::~CellView()
 {
 }

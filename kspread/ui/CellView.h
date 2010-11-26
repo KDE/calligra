@@ -61,9 +61,11 @@ class Style;
 class KSPREAD_EXPORT CellView
 {
     friend class SheetView;
+    friend class PixmapCachingSheetView;
 
 public:
     CellView(SheetView* sheetView, int col, int row);
+    CellView(const CellView& other);
     virtual ~CellView();
 
     enum Border {
@@ -166,7 +168,6 @@ public:
 private:
     /* no assignment or copy */
     CellView& operator=(const CellView&);
-    CellView(const CellView& other);
 
 protected:
     /**

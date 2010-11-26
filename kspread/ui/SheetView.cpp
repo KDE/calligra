@@ -36,6 +36,18 @@
 
 using namespace KSpread;
 
+struct CellPaintData
+{
+    CellPaintData(const CellView &cellView, const Cell &cell, const QPointF &coordinate)
+        : cellView(cellView)
+          , cell(cell)
+          , coordinate(coordinate)
+    {}
+    CellView cellView;
+    Cell cell;
+    QPointF coordinate;
+};
+
 class SheetView::Private
 {
 public:
@@ -259,6 +271,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 // kDebug() << "start coordinate:" << coordinate;
     QSet<Cell> processedMergedCells;
     QSet<Cell> processedObscuredCells;
+    QList<CellPaintData> cached_cells;
     for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
@@ -278,10 +291,11 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             if (!cell)
                 continue;
             // figure out, which CellView to use (may be one for an obscuring cell)
-            const CellView& cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
+            CellPaintData cpd(d->cellViewToProcess(cell, coordinate, processedObscuredCells, this), cell, coordinate);
             if (!cell)
                 continue;
-            cellView.paintCellBackground(painter, clipRect, coordinate);
+            cpd.cellView.paintCellBackground(painter, clipRect, coordinate);
+            cached_cells.append(cpd);
             // restore coordinate
             coordinate = savedCoordinate;
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
@@ -292,38 +306,8 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
-    processedMergedCells.clear();
-    processedObscuredCells.clear();
-    coordinate = startCoordinate;
-    for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
-        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
-            continue;
-        if (rightToLeft)
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
-        for (int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row) {
-            int lastHiddenRow;
-            if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
-                row = lastHiddenRow;
-                continue;
-            }
-            // save the coordinate
-            const QPointF savedCoordinate = coordinate;
-            // figure out, if any and which cell has to be painted (may be a master cell)
-            Cell cell = d->cellToProcess(col, row, coordinate, processedMergedCells);
-            if (!cell)
-                continue;
-            // figure out, which CellView to use (may be one for an obscuring cell)
-            const CellView& cellView = d->cellViewToProcess(cell, coordinate, processedObscuredCells, this);
-            if (!cell)
-                continue;
-            cellView.paintCellContents(paintRect, painter, clipRect, coordinate, cell, this);
-            // restore coordinate
-            coordinate = savedCoordinate;
-            coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
-        }
-        coordinate.setY(topLeft.y());
-        if (!rightToLeft)
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
+    for (QList<CellPaintData>::iterator it(cached_cells.begin()); it != cached_cells.end(); ++it) {
+        it->cellView.paintCellContents(paintRect, painter, clipRect, it->coordinate, it->cell, this);
     }
 
     // 3. Paint the default borders
