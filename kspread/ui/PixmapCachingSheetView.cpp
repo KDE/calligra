@@ -19,7 +19,7 @@
 
 #include "PixmapCachingSheetView.h"
 
-#include "PixmapCachingCellView.h"
+#include "CellView.h"
 
 #include "../Sheet.h"
 #include "../part/CanvasBase.h"
@@ -53,16 +53,6 @@ PixmapCachingSheetView::PixmapCachingSheetView(const Sheet* sheet)
 PixmapCachingSheetView::~PixmapCachingSheetView()
 {
     delete d;
-}
-
-CellView* PixmapCachingSheetView::createDefaultCellView()
-{
-    return new PixmapCachingCellView(this);
-}
-
-CellView* PixmapCachingSheetView::createCellView(int col, int row)
-{
-    return new PixmapCachingCellView(this, col, row);
 }
 
 QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int y)

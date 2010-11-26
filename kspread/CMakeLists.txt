@@ -172,7 +172,6 @@ SET (ui_DIR_SRCS
     ui/MapViewModel.cpp
     ui/MergeStrategy.cpp
     ui/PasteStrategy.cpp
-    ui/PixmapCachingCellView.cpp
     ui/PixmapCachingSheetView.cpp
     ui/RegionSelector.cpp
     ui/RightToLeftPaintingStrategy.cpp

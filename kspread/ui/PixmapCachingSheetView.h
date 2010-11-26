@@ -41,9 +41,6 @@ public:
     virtual void invalidateRegion(const Region& region);
     virtual void invalidate();
     virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase* canvas);
-protected:
-    virtual CellView* createDefaultCellView();
-    virtual CellView* createCellView(int col, int row);
 private:
     class Private;
     Private * const d;
