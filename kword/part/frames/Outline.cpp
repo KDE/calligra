@@ -268,12 +268,12 @@ QRectF Outline::getRightLinePart(const QRectF &lineRect) const
 
 bool Outline::textOnLeft() const
 {
-    return  m_side != Left;
+    return  m_side == Right || m_side == Both;
 }
 
 bool Outline::textOnRight() const
 {
-    return m_side != Right;
+    return m_side == Left || m_side == Both;
 }
 
 bool Outline::compareRectLeft(Outline *o1, Outline *o2)
