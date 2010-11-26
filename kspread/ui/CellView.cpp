@@ -374,8 +374,6 @@ void CellView::paintCellContents(const QRectF& paintRect, QPainter& painter, con
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
     const QRectF cellRect(coordinate, QSizeF(d->width, d->height));
-    if (!cellRect.intersects(paintRect))
-        return;
     // Does the cell intersect the clipped painting region?
     if (!clipRegion.intersects(cellRect.toRect()))
         return;
@@ -451,8 +449,6 @@ void CellView::paintCellBorders(const QRectF& paintRegion, QPainter& painter, co
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
     const QRectF  cellRect(coordinate.x(), coordinate.y(), d->width, d->height);
-    if (!cellRect.intersects(paintRegion))
-        return;
     // Does the cell intersect the clipped painting region?
     if (!clipRegion.intersects(cellRect.toRect()))
         return;
