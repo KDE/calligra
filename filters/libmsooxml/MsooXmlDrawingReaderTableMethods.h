@@ -17,9 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef MSOOXMLDRAWINGREADERTABLEMETHODS_H
-#define MSOOXMLDRAWINGREADERTABLEMETHODS_H
-
 protected:
     KoFilter::ConversionStatus read_tbl();
     KoFilter::ConversionStatus read_tblPr();
@@ -45,5 +42,3 @@ protected:
 
     MSOOXML::TableStyle m_tableStyle;
     MSOOXML::TableStyleInstanceProperties::Roles m_activeRoles;
-
-#endif
