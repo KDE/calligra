@@ -1906,7 +1906,7 @@ void PptxXmlSlideReader::inheritListStyles()
 
 void PptxXmlSlideReader::inheritDefaultTextStyle(KoGenStyle& targetStyle)
 {
-    if(m_currentListLevel == 1)
+    if(m_currentListLevel == 0)
         return;
 
     const int listLevel = qMax(1, m_currentListLevel);
@@ -1957,7 +1957,7 @@ void PptxXmlSlideReader::inheritShapePosition()
 
 void PptxXmlSlideReader::inheritTextStyle(KoGenStyle& targetStyle)
 {
-    if(m_currentListLevel == 1)
+    if(m_currentListLevel == 0)
         return;
 
     const int listLevel = qMax(1, m_currentListLevel); // if m_currentListLevel==0 then use level1
