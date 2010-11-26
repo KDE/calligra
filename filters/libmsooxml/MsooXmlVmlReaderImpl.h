@@ -49,9 +49,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
     return KoFilter::OK;
 }
 
-void MSOOXML_CURRENT_CLASS::createFrameStart()
+void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 {
-    body->startElement("draw:frame");
+    // Todo handle here all possible shape types
+    if (startType == RectStart) {
+        body->startElement("draw:rect");
+    }
+    else {
+        body->startElement("draw:frame");
+    }
 
     QString width(m_vmlStyle.value("width")); // already in "...cm" format
     QString height(m_vmlStyle.value("height")); // already in "...cm" format
@@ -160,7 +166,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
         }
     }
 
-    body->endElement(); //draw:frame
+    body->endElement(); //draw:frame or draw:rect
 
     return KoFilter::OK;
 }
@@ -239,12 +245,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
+    // Note that image fill is not yet supported in fill parameter, but this should be used
+    // when it's done
+    bool textBoxOrImage = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
-            ELSE_TRY_READ_IF(textbox)
+            else if (qualifiedName() == "v:textbox") {
+                TRY_READ(textbox)
+                textBoxOrImage = true;
+            }
             ELSE_TRY_READ_IF(stroke)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -252,7 +265,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     body = frameBuf.originalWriter();
 
-    createFrameStart();
+    // Idea here is that if we do not have a box child, we want to still produce a rect to make sure there's a visible output
+    if (!textBoxOrImage) {
+        createFrameStart(RectStart);
+    }
+    else {
+        createFrameStart();
+    }
 
     (void)frameBuf.releaseWriter();
 
@@ -398,19 +417,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
+    bool textBoxOrImage = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
-            ELSE_TRY_READ_IF(textbox)
+            else if (qualifiedName() == "v:textbox") {
+                TRY_READ(textbox)
+                textBoxOrImage = true;
+            }
+            ELSE_TRY_READ_IF(stroke)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
     body = frameBuf.originalWriter();
 
-    createFrameStart();
+    if (!textBoxOrImage) {
+        // This should be roundRect type at some point when it's supported
+        createFrameStart(RectStart);
+    }
+    else {
+        createFrameStart();
+    }
 
     (void)frameBuf.releaseWriter();
 
