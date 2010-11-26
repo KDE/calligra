@@ -55,7 +55,7 @@ KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     m_viewConverter(0)
 {
     m_shapeManager = new KoShapeManager(this);
-    m_shapeManager->setPaintingStrategy(new KoShapeManagerCachedPaintingStrategy(m_shapeManager));
+//    m_shapeManager->setPaintingStrategy(new KoShapeManagerCachedPaintingStrategy(m_shapeManager));
     m_toolProxy = new KoToolProxy(this, parent);
 }
 
