@@ -35,7 +35,7 @@
 #define KSPREAD_CELL_VIEW
 
 // Qt
-#include <QSharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 
 // KSpread
 #include "Global.h"
@@ -161,6 +161,8 @@ public:
     qreal cellWidth() const;
 
     bool dimensionFits() const;
+
+    void detach();
 private:
     /* no assignment or copy */
     CellView& operator=(const CellView&);
@@ -323,7 +325,7 @@ protected:
     CellView(SheetView* sheetView);
 
     class Private;
-    QSharedDataPointer<Private> d;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CellView::Borders)

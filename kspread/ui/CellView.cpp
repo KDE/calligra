@@ -173,6 +173,7 @@ CellView::CellView(SheetView* sheetView)
 CellView::CellView(SheetView* sheetView, int col, int row)
         : d(sheetView->defaultCellView().d)
 {
+    detach();
     Q_ASSERT(1 <= col && col <= KS_colMax);
     Q_ASSERT(1 <= row && row <= KS_rowMax);
 
@@ -271,6 +272,11 @@ CellView::CellView(SheetView* sheetView, int col, int row)
 
 CellView::~CellView()
 {
+}
+
+void CellView::detach()
+{
+    d.detach();
 }
 
 Style CellView::style() const
