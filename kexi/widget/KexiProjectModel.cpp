@@ -277,7 +277,7 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
 
 KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p) const
 {
-    return new KexiProjectModelItem(info, item, p);;
+    return new KexiProjectModelItem(info, item, p);
 }
 
 void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)

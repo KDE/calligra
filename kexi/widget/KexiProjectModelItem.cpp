@@ -111,7 +111,7 @@ int KexiProjectModelItem::row()
 {
      if (m_parentItem)
      {
-         //kDebug() << m_parentItem->m_childItems << this << data(0);;
+         //kDebug() << m_parentItem->m_childItems << this << data(0);
          return m_parentItem->m_childItems.indexOf(this);
      }
      kDebug() << "No parent item!";
