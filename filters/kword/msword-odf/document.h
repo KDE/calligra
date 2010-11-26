@@ -105,10 +105,13 @@ public:
     };
 
     // Provide access to private attributes for our handlers
-    QString masterPageName(void) const { return m_masterPageName_list.first(); }
+    QString masterPageName(void) const {
+        return m_masterPageName_list.size() ? m_masterPageName_list.first() : m_lastMasterPageName;
+    }
     void set_writeMasterPageName(bool val) { m_writeMasterPageName = val; }
     bool writeMasterPageName(void) const { return m_writeMasterPageName; }
     bool omittMasterPage(void) const { return m_omittMasterPage; }
+    bool useLastMasterPage(void) const { return m_useLastMasterPage; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
     KWordTextHandler *textHandler(void) const { return m_textHandler; }
@@ -225,11 +228,13 @@ private:
 
     bool m_writeMasterPageName; //whether to write the master-page name into a paragraph/table
     bool m_omittMasterPage; //whether master-page style for current section has been omitted
+    bool m_useLastMasterPage; //whether to use the last define master-page style for current section
 
     int m_initialFootnoteNumber;
     int m_initialEndnoteNumber;
 
     QString m_lineNumbersStyleName;
+    QString m_lastMasterPageName;
 
     //pointers to the POLE store content
     LEInputStream* m_data_stream;

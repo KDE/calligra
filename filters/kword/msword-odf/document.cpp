@@ -76,6 +76,7 @@ Document::Document(const std::string& fileName, KoFilterChain* chain, KoXmlWrite
         , m_bufferEven(0)
         , m_writeMasterPageName(false)
         , m_omittMasterPage(false)
+        , m_useLastMasterPage(false)
         , m_data_stream(data)
         , m_table_stream(table)
         , m_wdocument_stream(wdocument)
@@ -400,7 +401,8 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 {
     kDebug(30513) ;
     m_omittMasterPage = false;
-    static KoGenStyle prevStyle(KoGenStyle::PageLayoutStyle);
+    m_useLastMasterPage = false;
+    static KoGenStyle lastPLStyle(KoGenStyle::PageLayoutStyle);
 
     //does this section require a specific first page
     bool firstPage = sep->fTitlePage || sep->pgbApplyTo;
@@ -422,33 +424,43 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
 
     //TODO: Even page/Odd page section break support
 
-    //check changes in both the header/footer content and page-layout style
-    if ( !firstPage && (sep->bkc == 0) &&
-         (prevStyle == *pageLayoutStyle) &&
-         (headersChanged() == false) )
-    {
-        //FIXME: missing support for fo:break-before="page" in table properties
-        //so let's omitt the <style:master-page> element only in case of a
-        //continuous section break
+    //FIXME: missing support for fo:break-before="page" in table properties so
+    //let's omitt the <style:master-page> element only in case of a continuous
+    //section break
+
+    if ( !firstPage && !headersChanged() && (lastPLStyle == *pageLayoutStyle) ){
 
 //         if (sep->bkc != 0) {
 //             textHandler()->set_breakBeforePage(true);
 //         }
-        kDebug(30513) << "omitting page-layout & master-page creation";
-        m_omittMasterPage = true;
+
+        //A continuous section break. The next section starts on the next line.
+        if (sep->bkc == 0) {
+            kDebug(30513) << "omitting page-layout & master-page creation";
+            m_omittMasterPage = true;
+        }
+        //A new page section break. The next section starts on the next page.
+        else if (sep->bkc == 2) {
+            kDebug(30513) << "using the last defined master-page";
+            m_useLastMasterPage = true;
+            m_writeMasterPageName = true;
+        }
 
         //cleaning required!
         delete pageLayoutStyle;
     } else {
         //save the actual KoGenStyle!
-        prevStyle = *pageLayoutStyle;
+        lastPLStyle = *pageLayoutStyle;
 
         //add data into corresponding lists
         m_pageLayoutStyle_list.prepend(pageLayoutStyle);
     }
-    if (m_omittMasterPage) {
+
+    //yeah, we can omitt creation of a new master-page
+    if (m_omittMasterPage || m_useLastMasterPage) {
         return;
     }
+
     //check if a first-page specific page-layout has to be created
     if (firstPage) {
        pageLayoutStyle = new KoGenStyle(KoGenStyle::PageLayoutStyle);
@@ -508,6 +520,8 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     }
     //required by handlers
     m_writeMasterPageName = true;
+    //required by this module
+    m_lastMasterPageName = m_masterPageName_list.first();
 
     for (int i = 0; i < m_masterPageName_list.size(); i++) {
         kDebug(30513) << "prepared master-page style:" << m_masterPageName_list[i];

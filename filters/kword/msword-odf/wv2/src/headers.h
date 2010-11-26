@@ -39,7 +39,7 @@ namespace wvWare
     class Headers
     {
     public:
-        Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version );
+        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version );
         virtual ~Headers();
 
         /**

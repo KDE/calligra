@@ -145,7 +145,7 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     m_sep = sep; //store sep for section end
 
     //type of the section break
-    kDebug(30513) << "sep->bkc = " << sep->bkc;
+    kDebug(30513) << "section" << m_sectionNumber << "| sep->bkc:" << sep->bkc;
 
     //page layout could change
     if (sep->bkc != 1) {
@@ -289,8 +289,8 @@ void KWordTextHandler::headersFound(const wvWare::HeaderFunctor& parseHeaders)
 {
     kDebug(30513);
 
-    if (m_document->omittMasterPage()) {
-        kDebug(30513) << "Omitting headers/footers because master-page was omitted!";
+    if (m_document->omittMasterPage() || m_document->useLastMasterPage()) {
+        kDebug(30513) << "Processing of headers/footers cancelled, master-page creation omitted.";
         return;
     }
     //NOTE: only parse headers if we're in a section that can have new headers
