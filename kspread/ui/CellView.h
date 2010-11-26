@@ -67,6 +67,7 @@ public:
     CellView(SheetView* sheetView, int col, int row);
     CellView(const CellView& other);
     virtual ~CellView();
+    CellView& operator=(const CellView& other);
 
     enum Border {
         NoBorder     = 0x0,
@@ -165,10 +166,6 @@ public:
     bool dimensionFits() const;
 
     void detach();
-private:
-    /* no assignment or copy */
-    CellView& operator=(const CellView&);
-
 protected:
     /**
      * \ingroup Layout
