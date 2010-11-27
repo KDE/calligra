@@ -30,9 +30,11 @@ class ORODocument;
 class QScrollArea;
 class KoReportPage;
 class KexiReportViewPageSelect;
-class KexiRecordNavigator;
 class KexiScriptAdaptor;
 class KRScriptFunctions;
+#ifndef KEXI_MOBILE
+class KexiRecordNavigator;
+#endif
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
@@ -53,7 +55,9 @@ private:
     ORODocument *m_reportDocument;
     QScrollArea *m_scrollArea;
     KoReportPage *m_reportWidget;
+#ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
+#endif
     int m_currentPage;
     int m_pageCount;
     KexiReportPart::TempData* tempData() const;

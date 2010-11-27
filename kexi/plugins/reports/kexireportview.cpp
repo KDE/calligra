@@ -38,7 +38,10 @@
 #include <renderobjects.h>
 #include <KoReportPreRenderer.h>
 
+#ifndef KEXI_MOBILE
 #include <widget/utils/kexirecordnavigator.h>
+#endif
+
 #include <core/KexiWindow.h>
 #include <core/KexiMainWindowIface.h>
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
@@ -54,15 +57,16 @@ KexiReportView::KexiReportView(QWidget *parent)
     m_scrollArea->setBackgroundRole(QPalette::Dark);
     m_scrollArea->viewport()->setAutoFillBackground(true);
 
-    m_pageSelector = new KexiRecordNavigator(this, 0);
     layout()->addWidget(m_scrollArea);
+    
+#ifndef KEXI_MOBILE
+    m_pageSelector = new KexiRecordNavigator(this, 0);
     layout()->addWidget(m_pageSelector);
-
     m_pageSelector->setRecordCount(0);
     m_pageSelector->setInsertingButtonVisible(false);
     m_pageSelector->setLabelText(i18n("Page"));
-
-
+#endif
+    
     // -- setup local actions
     QList<QAction*> viewActions;
     QAction* a;
@@ -95,12 +99,12 @@ KexiReportView::KexiReportView(QWidget *parent)
 
     setViewActions(viewActions);
 
-
+#ifndef KEXI_MOBILE
     connect(m_pageSelector, SIGNAL(nextButtonClicked()), this, SLOT(nextPage()));
     connect(m_pageSelector, SIGNAL(prevButtonClicked()), this, SLOT(prevPage()));
     connect(m_pageSelector, SIGNAL(firstButtonClicked()), this, SLOT(firstPage()));
     connect(m_pageSelector, SIGNAL(lastButtonClicked()), this, SLOT(lastPage()));
-
+#endif
 }
 
 KexiReportView::~KexiReportView()
@@ -112,7 +116,9 @@ void KexiReportView::nextPage()
     if (m_currentPage < m_pageCount) {
         m_currentPage++;
         m_reportWidget->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
         m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
     }
 }
 
@@ -121,7 +127,9 @@ void KexiReportView::prevPage()
     if (m_currentPage > 1) {
         m_currentPage--;
         m_reportWidget->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
         m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
     }
 }
 
@@ -130,7 +138,9 @@ void KexiReportView::firstPage()
     if (m_currentPage != 1) {
         m_currentPage = 1;
         m_reportWidget->renderPage(m_currentPage);
-        m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#ifndef KEXI_MOBILE
+        m_pageSelector->setCurrentRecordNumber(m_currentPage);  
+#endif
     }
 }
 
@@ -139,7 +149,9 @@ void KexiReportView::lastPage()
     if (m_currentPage != m_pageCount) {
         m_currentPage = m_pageCount;
         m_reportWidget->renderPage(m_currentPage);
+#ifndef KEXI_MOBILE
         m_pageSelector->setCurrentRecordNumber(m_currentPage);
+#endif
     }
 }
 
@@ -306,7 +318,9 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_reportDocument = m_preRenderer->generate();
             if (m_reportDocument) {
                 m_pageCount = m_reportDocument->pages();
+#ifndef KEXI_MOBILE
                 m_pageSelector->setRecordCount(m_pageCount);
+#endif
             }
 
             m_reportWidget = new KoReportPage(this, m_reportDocument);
