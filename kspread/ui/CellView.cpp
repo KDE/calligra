@@ -278,6 +278,7 @@ CellView::CellView(const CellView& other)
 CellView& CellView::operator=(const CellView& other)
 {
     d = other.d;
+    return *this;
 }
 
 CellView::~CellView()
