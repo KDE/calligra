@@ -305,7 +305,6 @@ private:
         }
 
         if (m_restartOnNextShape){
-            qDebug() << "limit" << rect.top();
             answer.setWidth(0);
         }
 
@@ -598,14 +597,12 @@ void KWTextDocumentLayout::layout()
         bool restartLine = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << "checking anchor";
-            qDebug() <<"checking anchor"<<strategy->anchor()->positionInDocument();
             QPointF old;
             if (strategy->anchoredShape())
                 old = strategy->anchoredShape()->position();
             if (strategy->checkState(m_state, startOfBlock, startOfBlockText, m_frameSet)) {
                 ADEBUG << "  restarting line";
                 restartLine = true;
-                qDebug() << "  restarting line";
             }
             line.setRestartOnNextShape(strategy->extendsPastShape());
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {

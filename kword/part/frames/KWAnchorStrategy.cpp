@@ -172,7 +172,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         recalcFrom = qMax(recalcFrom, data->position());
         break;
     case KoTextAnchor::TopOfParagraph: {
-        qDebug() <<"top of paragraph";
         if (layout->lineCount() == 0) {
             m_finished = false;
             return false;
@@ -180,7 +179,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         qreal topOfParagraph = layout->lineAt(0).y();
         newPosition.setY(topOfParagraph - data->documentOffset());
         recalcFrom = qMax(recalcFrom, block.position());
-        qDebug() <<"at"<<topOfParagraph<<data->documentOffset();
         break;
     }
     case KoTextAnchor::AboveCurrentLine:
@@ -304,7 +302,6 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
                 // passes m_finished==false doesn't prevent stopping
                 //m_nextShapeNeeded = true;
                 m_finished = false;
-                qDebug() << "SETTING NEEDED";
             }
         }
     }
