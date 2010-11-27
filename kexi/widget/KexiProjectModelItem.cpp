@@ -48,6 +48,7 @@ KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &it
 
 KexiProjectModelItem::~KexiProjectModelItem()
 {
+    qDeleteAll(m_childItems);
 }
 
 void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
