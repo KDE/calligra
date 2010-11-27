@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -32,6 +32,7 @@
 class KexiProjectModel::Private {
 public:
     Private();
+    ~Private();
     
     //!Part class to display
     QString itemsPartClass;
@@ -40,7 +41,14 @@ public:
 
 KexiProjectModel::Private::Private() : rootItem(0)
 {
+    
 }
+
+KexiProjectModel::Private::~Private()
+{
+    delete rootItem;
+}
+
 
 KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent) , d(new Private())
 {
@@ -54,15 +62,15 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
     clear();
     d->itemsPartClass = itemsPartClass;
 
-    delete m_rootItem;
-    m_rootItem = new KexiProjectModelItem(prj->data()->databaseName());
-
+    delete d->rootItem;
+    d->rootItem = new KexiProjectModelItem(prj->data()->databaseName());
+    
     KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
-
+    
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
-
+        
         if (!d->itemsPartClass.isEmpty() && info->partClass() != d->itemsPartClass)
             continue;
 
@@ -82,12 +90,9 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
                 }
                 
             } else {
-		groupItem = d->rootItem;
-	    }
-	      
-	      
-            
-            
+                groupItem = d->rootItem;
+            }
+          
             //lookup project's objects (part items)
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
             KexiPart::ItemDict *item_dict = prj->items(info);
@@ -130,7 +135,7 @@ void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClas
 
 KexiProjectModel::~KexiProjectModel()
 {
-    delete m_rootItem;
+    delete d;
 }
 
 QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
@@ -295,7 +300,7 @@ void KexiProjectModel::slotAddItem(KexiPart::Item& item)
 
 KexiProjectModelItem* KexiProjectModel::addItem(KexiPart::Item &item, KexiPart::Info &info, KexiProjectModelItem *p) const
 {
-    return new KexiProjectModelItem(info, item, p);;
+    return new KexiProjectModelItem(info, item, p);
 }
 
 void KexiProjectModel::slotRemoveItem(const KexiPart::Item& item)
@@ -354,5 +359,4 @@ void KexiProjectModel::updateItemName(KexiPart::Item& item, bool dirty)
     bitem->setDirty(dirty);
     emit dataChanged(idx, idx);
 }
-
 
