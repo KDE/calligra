@@ -358,7 +358,7 @@ bool CellView::hitTestFilterButton(const Cell& cell, const QRect& cellRect, cons
 // `coordinate' is the origin (the upper left) of the cell in document
 //              coordinates.
 //
-void CellView::paintCellContents(const QRectF& paintRect, QPainter& painter, const QRegion &clipRegion,
+void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter, const QRegion &clipRegion,
                                  const QPointF& coordinate,
                                  const Cell& cell, SheetView* sheetView) const
 {
@@ -1893,7 +1893,7 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
             Cell nextCell = Cell(masterCell.sheet(), masterCell.column(), row + 1).masterCell();
 
             bool isEmpty = true;
-            
+
             for (int col = 0; col < masterCell.mergedXCells() + d->obscuredCellsX+1; col++) {
                 Cell cellNext = Cell(masterCell.sheet(), masterCell.column() + col, row + 1).masterCell();
                 if (!cellNext.isEmpty()) {
