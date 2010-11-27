@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>313</height>
+    <width>633</width>
+    <height>341</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="focusPolicy">
    <enum>Qt::NoFocus</enum>
@@ -16,7 +22,7 @@
   <property name="contextMenuPolicy">
    <enum>Qt::CustomContextMenu</enum>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="margin">
     <number>0</number>
    </property>
@@ -34,7 +40,7 @@
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <property name="margin">
        <number>0</number>
       </property>
@@ -53,9 +59,6 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QGridLayout" name="gridLayout">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
-         </property>
          <property name="margin">
           <number>0</number>
          </property>
@@ -63,12 +66,15 @@
           <number>0</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="labelDate">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
            <property name="text">
             <string/>
@@ -133,9 +139,25 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="QLabel" name="labelPI">
+          <widget class="QLabel" name="labelSPI">
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="text">
-            <string>PI</string>
+            <string extracomment="@title:column Schedule Performance Index">SPI</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QLabel" name="labelCPI">
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="text">
+            <string extracomment="@title:column Cost Performance Index">CPI</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -152,20 +174,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="bcwsCost">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::NoContextMenu</enum>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
+         <item row="1" column="2" rowspan="2">
           <widget class="QLineEdit" name="bcwpCost">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -181,7 +190,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="3">
+         <item row="1" column="3" rowspan="2">
           <widget class="QLineEdit" name="acwpCost">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -195,33 +204,45 @@
           </widget>
          </item>
          <item row="1" column="4">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLabel" name="labelCPI">
-             <property name="contextMenuPolicy">
-              <enum>Qt::NoContextMenu</enum>
-             </property>
-             <property name="text">
-              <string>CPI:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="cpi">
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="contextMenuPolicy">
-              <enum>Qt::NoContextMenu</enum>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QLineEdit" name="spiCost">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
-         <item row="2" column="0">
+         <item row="1" column="5">
+          <widget class="QLineEdit" name="cpiCost">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="4" rowspan="2">
+          <widget class="QLineEdit" name="spiEffort">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
           <widget class="QLabel" name="labelEffort">
            <property name="contextMenuPolicy">
             <enum>Qt::NoContextMenu</enum>
@@ -231,7 +252,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="3" column="1">
           <widget class="QLineEdit" name="bcwsEffort">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -244,7 +265,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
+         <item row="3" column="2">
           <widget class="QLineEdit" name="bcwpEffort">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -257,7 +278,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="3">
+         <item row="3" column="3">
           <widget class="QLineEdit" name="acwpEffort">
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
@@ -270,32 +291,31 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="4">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="labelSPI">
-             <property name="contextMenuPolicy">
-              <enum>Qt::NoContextMenu</enum>
-             </property>
-             <property name="text">
-              <string>SPI:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="spi">
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="contextMenuPolicy">
-              <enum>Qt::NoContextMenu</enum>
-             </property>
-             <property name="readOnly">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
+         <item row="2" column="5" rowspan="2">
+          <widget class="QLineEdit" name="cpiEffort">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" rowspan="2">
+          <widget class="QLineEdit" name="bcwsCost">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -303,12 +323,12 @@
       <item>
        <widget class="QFrame" name="frame">
         <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+         <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
+         <enum>QFrame::Sunken</enum>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="margin">
           <number>0</number>
          </property>
