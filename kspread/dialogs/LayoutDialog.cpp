@@ -920,7 +920,7 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     grid->addWidget(date, 7, 0);
 
     time = new QRadioButton(i18n("Time"), grp);
-    time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Time & Dates. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a time, KSpread will display 00:00 in the global format you have in System Settings."));
+    time->setWhatsThis(i18n("This formats your cell content as a time. To enter a time, you should enter it in the Time format set in System Settings -> Common Appearance and Behavior -> Locale -> Country/Region & Language -> Date & Time. In the Cell Format dialog box you can set how the time should be displayed by choosing one of the available time format options. The default format is the system format set in System Settings. When the number in the cell does not make sense as a time, KSpread will display 00:00 in the global format you have in System Settings."));
     grid->addWidget(time, 8, 0);
 
     datetime = new QRadioButton(i18n("Date and Time"), grp);
