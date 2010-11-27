@@ -163,6 +163,10 @@ void KPrViewModeOutline::populate()
     // No synchronization needed while the populate
     disableSync();
 
+    // Record the cursor position
+    QTextCursor cur = m_editor->textCursor();
+    int recordCursorPosition = m_editor->textCursor().position();
+
     m_editor->clear();
     m_link.clear();
     QTextCursor cursor = m_editor->document()->rootFrame()->lastCursorPosition();
@@ -189,6 +193,7 @@ void KPrViewModeOutline::populate()
                             cursor.setCharFormat(m_titleCharFormat);
                             // insert text (create lists where needed)
                             insertText(pair.second->document(), frame, &m_titleCharFormat);
+                            kDebug() << "title:" << pair.second->document()->toPlainText();
                         }
                         cursor.setPosition(slideFrame->lastPosition());
                     }
@@ -213,12 +218,19 @@ void KPrViewModeOutline::populate()
             numSlide++;
         }
     }
+
     // Do not forget to reactive the synchronize
     enableSync();
+
+    cur.setPosition((recordCursorPosition > 0) ? recordCursorPosition : 0);
+    m_editor->setTextCursor(cur);
+
 }
 
 void KPrViewModeOutline::insertText(QTextDocument* sourceShape, QTextFrame* destinationFrame, QTextCharFormat* charFormat)
 {
+
+    kDebug() << "title:" << sourceShape->toPlainText();
     // we  start by insert raw blocks
     QTextCursor destinationFrameCursor = destinationFrame->firstCursorPosition();
     for (QTextBlock currentBlock = sourceShape->begin(); currentBlock.isValid(); currentBlock = currentBlock.next()) {
@@ -232,8 +244,8 @@ void KPrViewModeOutline::insertText(QTextDocument* sourceShape, QTextFrame* dest
     QTextList *currentList = 0;
     int currentIndentation = -1;
     for (QTextBlock srcBlock = sourceShape->begin(), destinationBlock = destinationFrame->firstCursorPosition().block();
-    srcBlock.isValid() && destinationBlock.isValid();
-    srcBlock = srcBlock.next(), destinationBlock = destinationBlock.next()) {
+            srcBlock.isValid() && destinationBlock.isValid();
+                srcBlock = srcBlock.next(), destinationBlock = destinationBlock.next()) {
         if (srcBlock.textList()) {
             QTextCursor destinationCursor(destinationBlock);
             if (currentList) {
@@ -421,9 +433,9 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
 
     QTextDocument* targetDocument = m_link.value(frame).textDocument;
     if(!targetDocument) {  // event on an unknown frame (parasite blank line ?)
-    kDebug() << "Incorrect action";
-    populate();  // we can't just undo last action because frame stucture may be changed
-    return;
+        kDebug() << "Incorrect action";
+        populate();  // we can't just undo last action because frame stucture may be changed
+        return;
     }
 
     QTextCursor target(targetDocument);
@@ -441,6 +453,8 @@ void KPrViewModeOutline::synchronize(int position, int charsRemoved, int charsAd
         kDebug() << charsAdded << " chars added (" << cur.selectedText() << ")";
         target.setPosition(position - frameBegin);
         target.insertText(cur.selectedText());
+
+        populate();
     }
 }
 
