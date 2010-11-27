@@ -142,7 +142,7 @@ private:
             delete buffer;
         }
     };
-    QMap<Q_LLONG, Record*> m_modifiedrecords;
+    QMap<qint64, Record*> m_modifiedrecords;
     void clearBuffers();
 
     ::KexiDB::Cursor* m_cursor;
