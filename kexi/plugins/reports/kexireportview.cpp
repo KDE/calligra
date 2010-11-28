@@ -105,6 +105,7 @@ KexiReportView::KexiReportView(QWidget *parent)
 
 KexiReportView::~KexiReportView()
 {
+    delete m_preRenderer;
 }
 
 void KexiReportView::nextPage()
