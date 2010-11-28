@@ -90,6 +90,20 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
+2010-11-28
+KoReports
+*fix conditional jump depending on uninitialised value in KRDetailSectionData
+*fix conditional jump depending on uninitialised value in KoReportDesignerItemRectBase
+*fix memory leak in KexiReportView
+*fix memory leak in KoReportItemField::render
+KoProperty
+*fix conditional jump depending on uninitialised value in combobox
+Query Designer
+*fix conditional jump depending on uninitialised value in SQL History widget
+KexiDB
+*fix memory leak in Connection: for table schema listeners and obsolete queries
+**merged with Predicate
+
 2010-11-27
 Widgets
 *fix memory leak in table view header
