@@ -431,6 +431,8 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
 KexiCSVImportDialog::~KexiCSVImportDialog()
 {
     delete m_file;
+    delete m_inputStream;
+    qDeleteAll(m_uniquenessTest);
 }
 
 void KexiCSVImportDialog::initLater()

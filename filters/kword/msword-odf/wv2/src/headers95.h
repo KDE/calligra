@@ -33,7 +33,7 @@ namespace wvWare
     class Headers95 : public Headers
     {
     public:
-        Headers95( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, U8 dop_grpfIhdt );
+        Headers95( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, U8 dop_grpfIhdt );
 
         /**
          * Returns the header if there is any for the given mask. If we didn't find

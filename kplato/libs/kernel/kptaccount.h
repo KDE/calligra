@@ -181,12 +181,12 @@ public:
     EffortCostMap plannedCost(long id = BASELINESCHEDULE) const;
     EffortCostMap plannedCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
 
-    EffortCostMap actualCost(long id = BASELINESCHEDULE);
-    EffortCostMap actualCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
+    EffortCostMap actualCost(long id = BASELINESCHEDULE) const;
+    EffortCostMap actualCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
     
 protected:
     EffortCostMap plannedCost(const CostPlace &cp, const QDate &start, const QDate &end, long id ) const;
-    EffortCostMap actualCost(const Account::CostPlace &cp, const QDate &start, const QDate &end, long id);
+    EffortCostMap actualCost(const Account::CostPlace &cp, const QDate &start, const QDate &end, long id) const;
 
 private:
     QString m_name;
@@ -219,9 +219,19 @@ public:
     Account *defaultAccount() const { return m_defaultAccount; }
     void setDefaultAccount(Account *account);
     
-    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
+    /// Return the planned cost from all cost places of this account added to cost from all sub-accounts
+    EffortCostMap plannedCost(const Account &account, long id = BASELINESCHEDULE) const;
+
+    /// Return the planned cost from all cost places of this account added to cost from all sub-accounts
+    /// for the interval @p start to @p end inclusive
+    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
     
-    EffortCostMap actualCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
+    /// Return the actual cost from all cost places of this account added to cost from all sub-accounts
+    EffortCostMap actualCost(const Account &account, long id = BASELINESCHEDULE) const;
+
+    /// Return the actual cost from all cost places of this account added to cost from all sub-accounts
+    /// for the interval @p start to @p end inclusive
+    EffortCostMap actualCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
     
     void clear() { m_accountList.clear(); m_idDict.clear(); }
     void insert(Account *account, Account *parent=0, int index = -1);

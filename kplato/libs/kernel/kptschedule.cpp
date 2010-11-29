@@ -474,12 +474,12 @@ Appointment Schedule::appointmentIntervals( int which ) const
 }
 
 
-EffortCostMap Schedule::bcwsPrDay() const
+EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type ) const
 {
     //kDebug()<<m_name<<m_appointments;
     EffortCostMap ec;
     foreach ( Appointment *a, m_appointments ) {
-        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date(), ECCT_Work );
+        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
     }
     return ec;
 }

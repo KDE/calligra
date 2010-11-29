@@ -106,6 +106,8 @@ public:
     ~ConnectionPrivate() {
         qDeleteAll(cursors);
         delete m_parser;
+        qDeleteAll(tableSchemaChangeListeners);
+        qDeleteAll(obsoleteQueries);
     }
 
     void errorInvalidDBContents(const QString& details) {

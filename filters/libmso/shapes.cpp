@@ -289,11 +289,28 @@ void ODrawToOdf::processRoundRectangle(const OfficeArtSpContainer& o, Writer& ou
 
     out.xml.startElement("draw:enhanced-geometry");
     out.xml.addAttribute("draw:type", "round-rectangle");
-    equation(out, "f0", "$0 /3");
-    equation(out, "f1", "right-?f0");
-    equation(out, "f2", "bottom-?f0");
-    equation(out, "f3", "left+?f0");
-    equation(out, "f4", "top+?f0");
+    out.xml.addAttribute("svg:viewBox", "0 0 21600 21600");
+    out.xml.addAttribute("draw:path-stretchpoint-x", "10800");
+    out.xml.addAttribute("draw:path-stretchpoint-y", "10800");
+
+    const AdjustValue* adjustValue = get<AdjustValue>(o);
+    if (adjustValue) {
+        out.xml.addAttribute("draw:modifiers", adjustValue->adjustvalue);
+    }
+
+    out.xml.addAttribute("draw:enhanced-path", "M ?f7 0 X 0 ?f8 L 0 ?f9 Y ?f7 21600 L ?f10 21600 X 21600 ?f9 L 21600 ?f8 Y ?f10 0 Z N");
+
+    equation(out, "f0", "45");
+    equation(out, "f1", "$0 *sin(?f0 *(pi/180))");
+    equation(out, "f2", "?f1 *3163/7636");
+    equation(out, "f3", "left+?f2");
+    equation(out, "f4", "top+?f2");
+    equation(out, "f5", "right-?f2");
+    equation(out, "f6", "bottom-?f2");
+    equation(out, "f7", "left+$0");
+    equation(out, "f8", "top+$0");
+    equation(out, "f9", "bottom-$0");
+    equation(out, "f10", "right-$0");
     out.xml.endElement(); // draw:enhanced-geometry
     out.xml.endElement(); // draw:custom-shape
 }

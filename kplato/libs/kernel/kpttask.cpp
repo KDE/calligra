@@ -752,7 +752,10 @@ EffortCostMap Task::bcwsPrDay( long id ) const
     if ( s == 0 ) {
         return EffortCostMap();
     }
-    return s->bcwsPrDay();
+    EffortCostMap ec = s->bcwsPrDay();
+    ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
+    ec.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
+    return ec;
 }
 
 EffortCostMap Task::bcwpPrDay( long id ) const
@@ -773,6 +776,16 @@ EffortCostMap Task::bcwpPrDay( long id ) const
         double p = (double)(completion().percentFinished( it.key() )) / 100.0;
         const_cast<EffortCost&>(it.value()).setBcwpEffort( totEff  * p );
         const_cast<EffortCost&>(it.value()).setBcwpCost( totCost  * p );
+    }
+    if ( completion().isStarted() ) {
+        EffortCost ec;
+        ec.setBcwpCost( m_startupCost );
+        e.add( completion().startTime().date(), ec );
+    }
+    if ( completion().isFinished() ) {
+        EffortCost ec;
+        ec.setBcwpCost( m_shutdownCost );
+        e.add( completion().finishTime().date(), ec );
     }
     return e;
 }
@@ -805,6 +818,12 @@ double Task::budgetedCostPerformed( const QDate &date, long id ) const
     }
 
     c = plannedCost( id ).cost() * (double)completion().percentFinished( date ) / 100.0;
+    if ( completion().isStarted() && date >= completion().startTime().date() ) {
+        c += m_startupCost;
+    }
+    if ( completion().isFinished() && date <= completion().finishTime().date() ) {
+        c += m_shutdownCost;
+    }
     //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
     return c;
 }
@@ -816,17 +835,7 @@ double Task::bcwp( long id ) const
 
 double Task::bcwp( const QDate &date, long id ) const
 {
-    //kDebug();
-    double c = 0;
-    if (type() == Node::Type_Summarytask) {
-        foreach (const Node *n, childNodeIterator()) {
-            c += n->bcwp( date, id ); //FIXME
-        }
-        return c;
-    }
-    c = plannedCost( id ).cost() * (double)completion().percentFinished( date ) / 100.0;
-    //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
-    return c;
+    return budgetedCostPerformed( date, id );
 }
 
 EffortCostMap Task::acwp( long id ) const
@@ -841,8 +850,20 @@ EffortCostMap Task::acwp( long id ) const
             break;
         case Completion::EnterCompleted:
             //hmmm
-        default:
-            return completion().actualEffortCost( id );
+        default: {
+            EffortCostMap m = completion().actualEffortCost( id );
+            if ( completion().isStarted() ) {
+                EffortCost e;
+                e.setCost( m_startupCost );
+                m.add( completion().startTime().date(), e );
+            }
+            if ( completion().isFinished() ) {
+                EffortCost e;
+                e.setCost( m_shutdownCost );
+                m.add( completion().finishTime().date(), e );
+            }
+            return m;
+        }
     }
     return EffortCostMap();
 }
@@ -2988,21 +3009,26 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end, 
                 if ( d < st ) {
                     continue;
                 }
+                if ( et.isValid() && d > et ) {
+                    break;
+                }
                 Duration e = m_entries[ d ]->totalPerformed;
                 if ( e != Duration::zeroDuration && e != last ) {
                     Duration eff = e - last;
                     ec.insert( d, eff, eff.toDouble( Duration::Unit_h ) * averageCostPrHour( d, id ) );
                     last = e;
                 }
-                if ( et.isValid() && d > et ) {
-                    break;
-                }
             }
             break;
         }
         case EnterEffortPerResource: {
-            QDate st = start.isValid() ? start : m_startTime.date();
-            QDate et = end.isValid() ? end : m_finishTime.date();
+            QPair<QDate, QDate> dates = actualStartEndDates();
+            if ( ! dates.first.isValid() ) {
+                // no data, so just break
+                break;
+            }
+            QDate st = start.isValid() ? start : dates.first;
+            QDate et = end.isValid() ? end : dates.second;
             for ( QDate d = st; d <= et; d = d.addDays( 1 ) ) {
                 ec.add( d, actualEffort( d ), actualCost( d ) );
             }
@@ -3029,8 +3055,13 @@ EffortCostMap Completion::effortCostPrDay(const Resource *resource, const QDate 
             break;
         }
         case EnterEffortPerResource: {
-            QDate st = start.isValid() ? start : m_startTime.date();
-            QDate et = end.isValid() ? end : m_finishTime.date();
+            QPair<QDate, QDate> dates = actualStartEndDates();
+            if ( ! dates.first.isValid() ) {
+                // no data, so just break
+                break;
+            }
+            QDate st = start.isValid() ? start : dates.first;
+            QDate et = end.isValid() ? end : dates.second;
             for ( QDate d = st; d <= et; d = d.addDays( 1 ) ) {
                 ec.add( d, actualEffort( resource, d ), actualCost( resource, d ) );
             }
@@ -3063,6 +3094,20 @@ void Completion::setNote( const QString &str )
         m_entries.values().last()->note = str;
         changed();
     }
+}
+
+QPair<QDate, QDate> Completion::actualStartEndDates() const
+{
+    QPair<QDate, QDate> p;
+    foreach ( const Resource *r, m_usedEffort.keys() ) {
+        if ( ! m_usedEffort[ r ]->actualEffortMap().isEmpty() ) {
+            QDate d = m_usedEffort[ r ]->actualEffortMap().keys().first();
+            if ( ! p.first.isValid() || d < p.first ) p.first = d;
+            d = m_usedEffort[ r ]->actualEffortMap().keys().last();
+            if ( ! p.second.isValid() || d > p.second ) p.second = d;
+        }
+    }
+    return p;
 }
 
 double Completion::actualCost( const QDate &date ) const

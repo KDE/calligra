@@ -125,7 +125,7 @@ private:
     QString m_indent;
     QString m_picturePath;
     QString m_bulletColor;
-    QSize m_pictureSize;
+    QSize m_bulletSize;
     QString m_bulletRelativeSize;
 };
 

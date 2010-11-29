@@ -47,7 +47,9 @@ protected:
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
 
-    void createFrameStart();
+    enum FrameStartElement {FrameStart, RectStart};
+
+    void createFrameStart(FrameStartElement startType = FrameStart);
     KoFilter::ConversionStatus createFrameEnd();
 
     // utils:

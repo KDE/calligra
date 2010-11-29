@@ -566,13 +566,7 @@ long CostBreakdownItemModel::id() const
 EffortCostMap CostBreakdownItemModel::fetchPlannedCost( Account *account )
 {
     EffortCostMap ec;
-    if ( account->isElement() ) {
-        ec = account->plannedCost( id() );
-    } else {
-        foreach ( Account *a, account->accountList() ) {
-            ec += fetchPlannedCost( a );
-        }
-    }
+    ec = account->plannedCost( id() );
     m_plannedCostMap.insert( account, ec );
     QDate s = ec.startDate();
     if ( ! m_plannedStart.isValid() || s < m_plannedStart ) {
@@ -589,13 +583,7 @@ EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
 {
     kDebug()<<account->name();
     EffortCostMap ec;
-    if ( account->isElement() ) {
-        ec = account->actualCost( id() );
-    } else {
-        foreach ( Account *a, account->accountList() ) {
-            ec += fetchActualCost( a );
-        }
-    }
+    ec = account->actualCost( id() );
     m_actualCostMap.insert( account, ec );
     QDate s = ec.startDate();
     if ( ! m_actualStart.isValid() || s < m_actualStart ) {
@@ -605,8 +593,7 @@ EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
     if ( ! m_actualEnd.isValid() || e > m_actualEnd ) {
         m_actualEnd = e;
     }
-    kDebug()<<account->name()<<ec.totalEffort().toDouble(Duration
-::Unit_h)<<ec.totalCost();
+    kDebug()<<account->name()<<ec.totalEffort().toDouble(Duration::Unit_h)<<ec.totalCost();
     return ec;
 }
 
@@ -619,7 +606,7 @@ void CostBreakdownItemModel::fetchData()
     if ( m_project == 0 || m_manager == 0 ) {
         return;
     }
-    foreach ( Account *a, m_project->accounts().accountList() ) {
+    foreach ( Account *a, m_project->accounts().allAccounts() ) {
         fetchPlannedCost( a );
         fetchActualCost( a );
     }

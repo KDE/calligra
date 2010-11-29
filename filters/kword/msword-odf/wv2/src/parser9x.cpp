@@ -307,23 +307,21 @@ void Parser9x::parseTextBox( uint lid, bool bodyDrawing)
         plcftxbxTxt =  m_drawings->getHdrTxbxTxt();
     }
 
-    if(plcftxbxTxt == NULL) {
+    if (plcftxbxTxt == NULL) {
         return;
     }
+    //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
+    //characters that MUST be the last character in each range.
 
     PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( 0 ) );
 
     for (size_t i = 0; i < plcftxbxTxt->count(); i++, ++it) {
         if (it.current()->lid == (S32)lid) {
-            saveState( it.currentLim() - it.currentStart(), TextBox );
 
+            saveState( it.currentRun() - 1, TextBox );
             U32 offset = m_fib.ccpText + it.currentStart();
-
-            offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn
-                      + m_fib.ccpEdn;
-
+            offset += m_fib.ccpFtn + m_fib.ccpHdd + m_fib.ccpAtn + m_fib.ccpEdn;
             parseHelper( Position( offset, m_plcfpcd ) );
-
             restoreState();
         }
     }

@@ -244,7 +244,9 @@ protected:
     
     void createBarChart();
     void createLineChart();
-    
+    void setEffortValuesVisible( bool visible );
+    void setCostValuesVisible( bool visible );
+
     void drawValues();
 
 protected slots:

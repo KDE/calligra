@@ -34,11 +34,19 @@ class AccountsTester : public QObject
     Q_OBJECT
 private slots:
     void init();
+    void cleanup();
     void defaultAccount();
     void costPlaces();
 
+    void startupDefault();
+    void startupAccount();
+    
+    void shutdownAccount();
+
+    void subaccounts();
+
 private:
-    Project project;
+    Project *project;
     Task *t;
     Resource *r;
     ScheduleManager *sm;

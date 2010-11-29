@@ -351,7 +351,6 @@ EffortCostMap Account::plannedCost(const QDate &start, const QDate &end, long id
         foreach ( Account *a, m_accountList ) {
             ec += a->plannedCost( start, end, id );
         }
-        return ec;
     }
     foreach (Account::CostPlace *cp, m_costPlaces) {
         ec += plannedCost( *cp, start, end, id );
@@ -411,13 +410,19 @@ EffortCostMap Account::plannedCost( const Account::CostPlace &cp, const QDate &s
     return ec;
 }
 
-EffortCostMap Account::actualCost(long id)
+EffortCostMap Account::actualCost(long id) const
 {
     return actualCost( QDate(), QDate(), id );
 }
 
-EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id) {
+EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id) const
+{
     EffortCostMap ec;
+    if ( ! isElement() ) {
+        foreach ( Account *a, m_accountList ) {
+            ec += a->actualCost( start, end, id );
+        }
+    }
     foreach (Account::CostPlace *cp, costPlaces()) {
         ec += actualCost( *cp, start, end, id );
     }
@@ -431,18 +436,22 @@ EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id)
                 //kDebug()<<"default, running:"<<n->name();
                 ec += n->actualEffortCostPrDay(start, end, id);
             }
-            if (n->startupAccount() == 0) {
-                //kDebug()<<"default, starup:"<<n->name();
-                if ( ( ! start.isValid() || n->startTime( id ).date() >= start ) &&
-                     ( ! end.isValid() || n->startTime( id ).date() <= end ) ) {
-                    ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            Task *t = dynamic_cast<Task*>( n ); // only tasks have completion
+            if ( t ) {
+                if (n->startupAccount() == 0 && t->completion().isStarted()) {
+                    const QDate startDate = t->completion().startTime().date();
+                    if ( ( ! start.isValid() || startDate >= start ) &&
+                        ( ! end.isValid() || startDate <= end ) ) {
+                        ec.add(startDate, EffortCost(Duration::zeroDuration, n->startupCost()));
+                    }
                 }
-            }
-            if (n->shutdownAccount() == 0) {
-                //kDebug()<<"default, shutdown:"<<n->name();
-                if ( ( ! start.isValid() || n->endTime( id ).date() >= start ) &&
-                     ( ! end.isValid() || n->endTime( id ).date() <= end ) ) {
-                    ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+                if (n->shutdownAccount() == 0 && t->completion().isFinished()) {
+                    //kDebug()<<"default, shutdown:"<<n->name();
+                    const QDate finishDate = t->completion().finishTime().date();
+                    if ( ( ! start.isValid() || finishDate >= start ) &&
+                        ( ! end.isValid() || finishDate <= end ) ) {
+                        ec.add(finishDate, EffortCost(Duration::zeroDuration, n->shutdownCost()));
+                    }
                 }
             }
         }
@@ -450,7 +459,7 @@ EffortCostMap Account::actualCost(const QDate &start, const QDate &end, long id)
     return ec;
 }
 
-EffortCostMap Account::actualCost(const Account::CostPlace &cp, const QDate &start, const QDate &end, long id)
+EffortCostMap Account::actualCost(const Account::CostPlace &cp, const QDate &start, const QDate &end, long id) const
 {
     EffortCostMap ec;
     if ( cp.node() ) {
@@ -458,16 +467,21 @@ EffortCostMap Account::actualCost(const Account::CostPlace &cp, const QDate &sta
         if (cp.running()) {
             ec += node.actualEffortCostPrDay(start, end, id);
         }
-        if (cp.startup()) {
-            if ( ( ! start.isValid() || node.startTime( id ).date() >= start ) &&
-                 ( ! end.isValid() || node.startTime( id ).date() <= end ) ) {
-                ec.add(node.startTime( id ).date(), EffortCost(Duration::zeroDuration, node.startupCost()));
+        Task *t = dynamic_cast<Task*>( &node ); // only tasks have completion
+        if ( t ) {
+            if (cp.startup() && t->completion().isStarted()) {
+                const QDate startDate = t->completion().startTime().date();
+                if ( ( ! start.isValid() || startDate >= start ) &&
+                    ( ! end.isValid() || startDate <= end ) ) {
+                    ec.add(startDate, EffortCost(Duration::zeroDuration, node.startupCost()));
+                }
             }
-        }
-        if (cp.shutdown()) {
-            if ( ( ! start.isValid() || node.endTime( id ).date() >= start ) &&
-                 ( ! end.isValid() || node.endTime( id ).date() <= end ) ) {
-                ec.add(node.endTime( id ).date(), EffortCost(Duration::zeroDuration, node.shutdownCost()));
+            if (cp.shutdown() && t->completion().isFinished()) {
+                const QDate finishDate = t->completion().finishTime().date();
+                if ( ( ! start.isValid() || finishDate >= start ) &&
+                    ( ! end.isValid() || finishDate <= end ) ) {
+                    ec.add(finishDate, EffortCost(Duration::zeroDuration, node.shutdownCost()));
+                }
             }
         }
     } else if ( cp.resource() && m_list ) {
@@ -601,57 +615,24 @@ Accounts::~Accounts() {
     }
 }
 
-EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end, long id) {
+EffortCostMap Accounts::plannedCost(const Account &account, long id) const
+{
+    return account.plannedCost( id );
+}
+
+EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end, long id) const
+{
     return account.plannedCost( start, end, id );
 }
 
-EffortCostMap Accounts::actualCost(const Account &account, const QDate &start, const QDate &end, long id) {
-    EffortCostMap ec;
-    foreach (Account::CostPlace *cp, account.costPlaces()) {
-        Node *n = cp->node();
-        if (n == 0) {
-            continue;
-        }
-        //kDebug()<<"n="<<n->name();
-        if (cp->running()) {
-            ec += n->actualEffortCostPrDay(start, end, id);
-        }
-        if (cp->startup()) {
-            if (n->startTime( id ).date() >= start &&
-                n->startTime( id ).date() <= end)
-                ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
-        }
-        if (cp->shutdown()) {
-            if (n->endTime( id ).date() >= start &&
-                n->endTime( id ).date() <= end)
-                ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
-        }
-    }
-    if (&account == m_defaultAccount) {
-        QHash<QString, Node*> hash = m_project.nodeDict();
-        foreach (Node *n, hash) {
-            if ( n->numChildren() > 0 ) {
-                continue;
-            }
-            if (n->runningAccount() == 0) {
-                //kDebug()<<"default, running:"<<n->name();
-                ec += n->actualEffortCostPrDay(start, end, id);
-            }
-            if (n->startupAccount() == 0) {
-                //kDebug()<<"default, starup:"<<n->name();
-                if (n->startTime( id ).date() >= start &&
-                    n->startTime( id ).date() <= end)
-                    ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
-            }
-            if (n->shutdownAccount() == 0) {
-                //kDebug()<<"default, shutdown:"<<n->name();
-                if (n->endTime( id ).date() >= start &&
-                    n->endTime( id ).date() <= end)
-                    ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
-            }
-        }
-    }
-    return ec;
+EffortCostMap Accounts::actualCost(const Account &account, long id) const
+{
+    return account.actualCost( id );
+}
+
+EffortCostMap Accounts::actualCost(const Account &account, const QDate &start, const QDate &end, long id) const
+{
+    return account.actualCost( start, end, id );
 }
 
 void Accounts::insert(Account *account, Account *parent, int index) {
