@@ -44,11 +44,8 @@
 #include "../scripting/kexiscripting/kexiscriptadaptor.h"
 
 KexiReportView::KexiReportView(QWidget *parent)
-        : KexiView(parent)
-{
-    m_preRenderer = 0;
-    m_reportDocument = 0;
-    
+        : KexiView(parent), m_preRenderer(0), m_reportDocument(0), m_kexi(0), m_functions(0)
+{   
     setObjectName("KexiReportDesigner_DataView");
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setBackgroundRole(QPalette::Dark);
@@ -106,6 +103,9 @@ KexiReportView::KexiReportView(QWidget *parent)
 KexiReportView::~KexiReportView()
 {
     delete m_preRenderer;
+    delete m_kexi;
+    delete m_functions;
+    delete m_reportDocument;
 }
 
 void KexiReportView::nextPage()
@@ -292,12 +292,16 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
             m_currentPage = 1;
 
             //Add a kexi object to provide kexidb and extra functionality
-            m_kexi = new KexiScriptAdaptor();
+            if(!m_kexi) {
+                m_kexi = new KexiScriptAdaptor();
+            }
             m_preRenderer->registerScriptObject(m_kexi, "Kexi");
 
             //If using a kexidb source, add a functions scripting object
             if (tempData()->connectionDefinition.attribute("type") == "internal") {
-                m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
+                if (!m_functions) {
+                    m_functions = new KRScriptFunctions(reportData, KexiMainWindowIface::global()->project()->dbConnection());
+                }
                 m_preRenderer->registerScriptObject(m_functions, "field");
             }
 
