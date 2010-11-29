@@ -62,6 +62,7 @@ class Canvas : public QWidget, public KoCanvasBase
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     virtual bool snapToGrid() const;
+    virtual void setCursor(const QCursor &cursor);
   public slots:
     /**
      * Update the origin of the document.

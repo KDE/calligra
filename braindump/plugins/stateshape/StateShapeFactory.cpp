@@ -57,7 +57,7 @@ KoShape *StateShapeFactory::createShape(const KoProperties *params, KoResourceMa
   return fooShape;
 }
 
-bool StateShapeFactory::supports(const KoXmlElement & e) const
+bool StateShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
 {
   return ( e.localName() == "state" && e.namespaceURI() == "http://kde.org/braindump" );
 }

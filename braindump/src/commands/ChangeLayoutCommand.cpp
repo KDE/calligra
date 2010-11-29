@@ -32,7 +32,7 @@ ChangeLayoutCommand::ChangeLayoutCommand( Section* _section, const QString& _new
   m_section(_section),
   m_oldLayout(_section->layout()->id()),
   m_newLayout(_newLayout),
-  m_command(new RememberPositionCommand(_section->sectionContainer()->layer()->childShapes()))
+  m_command(new RememberPositionCommand(_section->sectionContainer()->layer()->shapes()))
 {
   
 }

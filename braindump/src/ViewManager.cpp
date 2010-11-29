@@ -43,7 +43,7 @@ void ViewManager::addShape(Section* section, KoShape* shape)
   foreach( View *view, m_views )
   {
     if ( section == view->activeSection() ) {
-      view->canvas()->shapeManager()->add( shape );
+      view->canvas()->shapeManager()->addShape( shape );
     }
   }
 }

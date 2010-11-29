@@ -25,12 +25,12 @@
 
 #include <KoZoomHandler.h>
 
+class KoCanvasControllerWidget;
 class Canvas;
 class MainWindow;
 class KAction;
 class KToggleAction;
 class ZoomAction;
-class KoCanvasController;
 class KoViewConverter;
 class ZoomController;
 class RootSection;
@@ -107,7 +107,7 @@ protected slots:
     SectionsBoxDock* m_sectionsBoxDock;
     SectionPropertiesDock* m_sectionPropertiesDock;
 
-    KoCanvasController * m_canvasController;
+    KoCanvasControllerWidget * m_canvasController;
     ZoomController * m_zoomController;
     KoZoomHandler m_zoomHandler;
 

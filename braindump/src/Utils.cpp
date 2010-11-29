@@ -38,7 +38,7 @@ void Utils::containerBoundRec( KoShape* shape, QRectF& b) {
   KoShapeContainer* cont = dynamic_cast<KoShapeContainer*>(shape);
   if(cont)
   {
-    containerBoundRec(cont->childShapes(), b);
+    containerBoundRec(cont->shapes(), b);
   }
 }
 

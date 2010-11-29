@@ -74,7 +74,7 @@ class SectionContainerShapePaste : public KoOdfPaste
 
 SectionContainer::SectionContainer(const SectionContainer& _rhs, Section* _section ) : m_section(0), m_layer(0) {
   initContainer(_section, _rhs.m_rootSection);
-  KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->childShapes());
+  KoShapeOdfSaveHelper saveHelper(_rhs.m_layer->shapes());
   KoDrag drag;
   drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
   QMimeData* mimeData = drag.mimeData();
@@ -121,7 +121,7 @@ bool SectionContainer::loadOdf(const KoXmlElement & element, KoShapeLoadingConte
   forEachElement(child, element) {
     KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
     if (shape) {
-      m_layer->addChild(shape);
+      m_layer->addShape(shape);
       shapes.push_back(shape);
     }
   }
@@ -132,7 +132,7 @@ void SectionContainer::saveOdf(KoShapeSavingContext & context) const
 {
   context.xmlWriter().startElement("braindump:section");
 
-  QList<KoShape*> shapes = m_layer->childShapes();
+  QList<KoShape*> shapes = m_layer->shapes();
   qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
   foreach(KoShape* shape, shapes) {
@@ -145,6 +145,6 @@ void SectionContainer::saveOdf(KoShapeSavingContext & context) const
 QRectF SectionContainer::containerBound() const
 {
   QRectF b;
-  Utils::containerBoundRec(m_layer->childShapes(), b);
+  Utils::containerBoundRec(m_layer->shapes(), b);
   return b;
 }

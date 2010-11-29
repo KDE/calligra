@@ -39,10 +39,17 @@ void SectionShapeContainerModel::add(KoShape *child) {
     }
 }
 
-void SectionShapeContainerModel::setClipping(const KoShape *, bool) {
+void SectionShapeContainerModel::setClipped(const KoShape *, bool) {
 }
 
-bool SectionShapeContainerModel::childClipped(const KoShape *) const {
+bool SectionShapeContainerModel::isClipped(const KoShape *) const {
+    return false;
+}
+
+void SectionShapeContainerModel::setInheritsTransform(const KoShape *, bool) {
+}
+
+bool SectionShapeContainerModel::inheritsTransform(const KoShape *) const {
     return false;
 }
 
@@ -57,11 +64,11 @@ int SectionShapeContainerModel::count() const {
     return m_members.count();
 }
 
-QList<KoShape*> SectionShapeContainerModel::childShapes() const {
+QList<KoShape*> SectionShapeContainerModel::shapes() const {
     return QList<KoShape*>(m_members);
 }
 
-void SectionShapeContainerModel::containerChanged(KoShapeContainer *) {
+void SectionShapeContainerModel::containerChanged(KoShapeContainer *, KoShape::ChangeType ) {
 }
 
 void SectionShapeContainerModel::childChanged(KoShape *, KoShape::ChangeType) {

@@ -30,12 +30,14 @@ class SectionShapeContainerModel: public KoShapeContainerModel
     SectionShapeContainerModel(Section* _section);
     ~SectionShapeContainerModel();
     void add(KoShape *child);
-    void setClipping(const KoShape *, bool);
-    bool childClipped(const KoShape *) const;
+    void setClipped(const KoShape *, bool);
+    bool isClipped(const KoShape *) const;
+    void setInheritsTransform(const KoShape *, bool);
+    bool inheritsTransform(const KoShape *) const;
     void remove(KoShape *child);
     int count() const;
-    QList<KoShape*> childShapes() const;
-    void containerChanged(KoShapeContainer *);
+    QList<KoShape*> shapes() const;
+    void containerChanged(KoShapeContainer *, KoShape::ChangeType type);
     void childChanged(KoShape *, KoShape::ChangeType);
     bool isChildLocked(const KoShape *child) const;
   public:

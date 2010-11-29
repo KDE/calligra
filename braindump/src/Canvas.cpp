@@ -296,11 +296,11 @@ void Canvas::updateOriginAndSize()
       if( controller )
       {
         // tell canvas controller the new document size in pixel
-        controller->setDocumentSize( viewRect.size() );
+        controller->updateDocumentSize( viewRect.size(), true );
         // make sure the actual selection is visible
         KoSelection * selection = m_shapeManager->selection();
         if( selection->count() )
-            controller->ensureVisible( selection->boundingRect() );
+            controller->ensureVisible( viewConverter()->documentToView( selection->boundingRect() ) );
         updateOffset();
       }
     }
@@ -323,6 +323,11 @@ void Canvas::gridSize(qreal *horizontal, qreal *vertical) const
 bool Canvas::snapToGrid() const
 {
   return false;
+}
+
+void Canvas::setCursor(const QCursor &cursor)
+{
+  QWidget::setCursor(cursor);
 }
 
 void Canvas::focusInEvent(QFocusEvent * event)

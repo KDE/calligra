@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QSizeF>
 
-class KoCanvasController;
+class KoCanvasControllerWidget;
 class ZoomAction;
 class KoZoomHandler;
 class KActionCollection;
@@ -67,7 +67,7 @@ public:
     * @param actionCollection the action collection where the KoZoomAction is added to
     * @param specialButtons controls which special buttons to show
     */
-    ZoomController(KoCanvasController *controller, KoZoomHandler *zoomHandler, KActionCollection *actionCollection, ZoomAction::SpecialButtons specialButtons = 0);
+    ZoomController(KoCanvasControllerWidget* co, KoZoomHandler* zh, KActionCollection* actionCollection, ZoomAction::SpecialButtons specialButtons = 0);
 
     /// destructor
     ~ZoomController();

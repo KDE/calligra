@@ -26,7 +26,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
@@ -134,7 +134,7 @@ void View::initGUI()
     setLayout( gridLayout );
 
     
-    m_canvasController = new KoCanvasController( this );
+    m_canvasController = new KoCanvasControllerWidget( this );
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     
     createCanvas(0);
@@ -247,7 +247,7 @@ void View::editSelectAll()
 
   KoShapeLayer *layer = activeSection()->sectionContainer()->layer();
 
-  QList<KoShape*> layerShapes( layer->childShapes() );
+  QList<KoShape*> layerShapes( layer->shapes() );
   foreach( KoShape *layerShape, layerShapes ) {
     selection->select( layerShape );
     layerShape->update();
@@ -388,7 +388,7 @@ void View::groupSelection() {
     }
     KoShapeGroup *group = new KoShapeGroup();
     if( selection->activeLayer() )
-        selection->activeLayer()->addChild( group );
+        selection->activeLayer()->addShape( group );
     QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
     new KoShapeCreateCommand( m_activeSection->sectionContainer(), group, cmd );
     new KoShapeGroupCommand( group, groupedShapes, cmd );
@@ -419,9 +419,9 @@ void View::ungroupSelection() {
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
     {
-      new KoShapeUngroupCommand( container, container->childShapes(), QList<KoShape*>(), cmd );
+      new KoShapeUngroupCommand( container, container->shapes(), QList<KoShape*>(), cmd );
       new KoShapeDeleteCommand( m_activeSection->sectionContainer(), container, cmd );
-      new RememberPositionCommand( container->childShapes(), cmd );
+      new RememberPositionCommand( container->shapes(), cmd );
     }
   }
   m_canvas->addCommand( cmd );

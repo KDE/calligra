@@ -25,6 +25,6 @@ class StateShapeFactory : public KoShapeFactoryBase {
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
-    bool supports(const KoXmlElement & e) const;
+    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

@@ -25,7 +25,7 @@
 #include <KDebug>
 
 #include <KoZoomHandler.h>
-#include <KoCanvasController.h>
+#include <KoCanvasControllerWidget.h>
 
 class ZoomController::Private
 {
@@ -64,7 +64,7 @@ public:
         parent->setZoom(mode, zoom);
     }
 
-    KoCanvasController *canvasController;
+    KoCanvasControllerWidget *canvasController;
     KoZoomHandler *zoomHandler;
     ZoomAction *action;
     QSizeF pageSize;
@@ -73,7 +73,7 @@ public:
     ZoomController *parent;
 };
 
-ZoomController::ZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, ZoomAction::SpecialButtons specialButtons)
+ZoomController::ZoomController(KoCanvasControllerWidget *co, KoZoomHandler *zh, KActionCollection *actionCollection, ZoomAction::SpecialButtons specialButtons)
     : d(new Private(this, specialButtons))
 {
     d->canvasController = co;
@@ -126,7 +126,7 @@ void ZoomController::setPageSize(const QSizeF &pageSize)
 void ZoomController::setDocumentSize( const QSizeF &documentSize )
 {
     d->documentSize = documentSize;
-    d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), false );
+    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), false );
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
@@ -174,7 +174,7 @@ void ZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         kWarning(30004) << "ZoomController; Your page size is larger than your document size (" << 
             d->pageSize << " > " << d->documentSize << ")\n";
 #endif
-    d->canvasController->setDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize() );
+    d->canvasController->updateDocumentSize( d->zoomHandler->documentToView(d->documentSize).toSize(), true );
 
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();

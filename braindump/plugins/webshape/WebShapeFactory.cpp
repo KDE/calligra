@@ -57,7 +57,7 @@ KoShape *WebShapeFactory::createShape(const KoProperties *params, KoResourceMana
   return fooShape;
 }
 
-bool WebShapeFactory::supports(const KoXmlElement & e) const
+bool WebShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
 {
   return ( e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump" );
 }
