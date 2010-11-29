@@ -1595,6 +1595,16 @@ void PptxXmlSlideReader::saveBodyProperties()
 
 void PptxXmlSlideReader::inheritBodyProperties()
 {
+    // TODO:This might not be 100% correct, it is here only temporary until it is figured out what is the correct action plan
+    // in the following case:
+    // slide phIdx = "2", no bodyPr, slideLayout phIdx = "2", no BodyPr, slideMaster phIdx = "2" phType = "dt", bodyPr
+    // For looking at msoffice behavior, the bodyPr from master was not used in the actual slide
+    // It was also noted that bullet character that was used in the slide, was either MSOffice default (mentioned nowhere)
+    // or somehow gotten from bodyStyles in slidemaster (also not mentioned anywhere why this would happen)
+    if (d->phType.isEmpty()) {
+        return;
+    }
+
     if (m_context->type == SlideMaster) {
         return; // Nothing needed for slidemaster
     }
@@ -1630,7 +1640,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
              }
         }
     }
-    else if (!d->phType.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         position = m_context->slideMasterPageProperties->textShapePositions.value(d->phType);
         if (!position.isEmpty()) {
@@ -1688,7 +1698,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
              }
         }
     }
-    else if (!d->phIdx.isEmpty()) {
+    if (!d->phIdx.isEmpty()) {
         position = m_context->slideLayoutProperties->textShapePositions.value(d->phIdx);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
