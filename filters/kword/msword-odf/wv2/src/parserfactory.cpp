@@ -34,13 +34,13 @@ namespace
         if ( buffer[0] == 0x31 && buffer[1] == 0xbe &&
              buffer[2] == 0x00 && buffer[3] == 0x00 )
             std::cerr << "This is a Word 3, 4, or 5 file. Right now we don't handle these versions.\n"
-                      << "Please send us the file, maybe we will implement it later on." << endl;
+                      << "Please send us the file, maybe we will implement it later on." << std::endl;
         else if ( buffer[0] == 0xdb && buffer[1] == 0xa5 &&
                   buffer[2] == 0x2d && buffer[3] == 0x00 )
-            std::cerr << "This is a Word 2 document. Right now we don't handle this version." << endl
-                      << "Please send us the file, maybe we will implement it later on." << endl;
+            std::cerr << "This is a Word 2 document. Right now we don't handle this version." << std::endl
+                      << "Please send us the file, maybe we will implement it later on." << std::endl;
         else
-            std::cerr << "That doesn't seem to be a Word document." << endl;
+            std::cerr << "That doesn't seem to be a Word document." << std::endl;
     }
 
     SharedPtr<Parser> setupParser( OLEStorage* storage )
@@ -48,7 +48,7 @@ namespace
         // Is it called WordDocument in all versions?
         OLEStreamReader* wordDocument = storage->createStreamReader( "WordDocument" );
         if ( !wordDocument || !wordDocument->isValid() ) {
-            std::cerr << "Error: No 'WordDocument' stream found. Are you sure this is a Word document?" << endl;
+            std::cerr << "Error: No 'WordDocument' stream found. Are you sure this is a Word document?" << std::endl;
             delete wordDocument;
             delete storage;
             return 0;
@@ -63,7 +63,7 @@ namespace
         wordDocument->seek( 0 );  // rewind the stream
 
         if ( nFib < 101 ) {
-            std::cerr << "+++ Don't know how to handle nFib=" << nFib << endl;
+            std::cerr << "+++ Don't know how to handle nFib=" << nFib << std::endl;
             delete wordDocument;
             delete storage;
             return 0;
@@ -94,8 +94,8 @@ namespace
                     << ", trying with the Word 8 parser." << endl;
             }
             else {
-            wvlog << "A document newer than Word 8 found"
-                  << ", trying with the Word 8 parser" << endl;
+                wvlog << "A document newer than Word 8 found"
+                    << ", trying with the Word 8 parser" << endl;
             }
             return new Parser97( storage, wordDocument );
         }
@@ -110,7 +110,7 @@ SharedPtr<Parser> ParserFactory::createParser( const std::string& fileName )
 
         FILE* file = fopen( fileName.c_str(), "r" );
         if ( !file ) {
-            std::cerr << "Couldn't open " << fileName.c_str() << " for reading." << endl;
+            std::cerr << "Couldn't open " << fileName.c_str() << " for reading." << std::endl;
             return 0;
         }
         unsigned char buffer[4];
