@@ -2377,6 +2377,18 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_bookmarkEnd()
 
 #undef CURRENT_EL
 #define CURRENT_EL numPr
+//! numPr handler (Numbering Definition Instance Reference)
+/*!
+ This element specifies that the current paragraph references a numbering definition instance in the current
+ document.
+
+ The presence of this element specifies that the paragraph will inherit the properties specified by the numbering
+ definition in the num element (§2.9.16) at the level specified by the level specified in the lvl element (§2.9.7)
+ and shall have an associated number positioned before the beginning of the text flow in this paragraph. When
+ this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
+ defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
+ numbering definition shall be used instead.
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 {
     READ_PROLOGUE
@@ -2400,6 +2412,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
 
 #undef CURRENT_EL
 #define CURRENT_EL ilvl
+//! ilvl handler (Numbering Level Reference)
+/*!
+ This element specifies the numbering level of the numbering definition instance which shall be applied to the
+ parent paragraph.
+ This numbering level is specified on either the abstract numbering definition's lvl element (§2.9.7), and may be
+ overridden by a numbering definition instance level override's lvl element (§2.9.6).
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
 {
     READ_PROLOGUE
@@ -2420,6 +2439,17 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_ilvl()
 
 #undef CURRENT_EL
 #define CURRENT_EL numId
+//! numPr handler (Numbering Definition Instance Reference)
+/*!
+ This element specifies that the current paragraph references a numbering definition instance in the current document.
+ 
+ The presence of this element specifies that the paragraph will inherit the properties specified by the numbering
+ definition in the num element (§2.9.16) at the level specified by the level specified in the lvl element (§2.9.7)
+ and shall have an associated number positioned before the beginning of the text flow in this paragraph. When
+ this element appears as part of the paragraph formatting for a paragraph style, then any numbering level
+ defined using the ilvl element shall be ignored, and the pStyle element (§2.9.25) on the associated abstract
+ numbering definition shall be used instead.
+*/
 KoFilter::ConversionStatus DocxXmlDocumentReader::read_numId()
 {
     READ_PROLOGUE
