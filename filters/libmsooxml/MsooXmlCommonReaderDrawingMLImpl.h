@@ -1739,7 +1739,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
-            ELSE_TRY_READ_IF(gradFill)
+            // As odf does not support gradFill for text, it's better to not use it at all, as relying on the first color
+            // can create bad results.
+            //ELSE_TRY_READ_IF(gradFill)
             ELSE_TRY_READ_IF_IN_CONTEXT(noFill)
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
