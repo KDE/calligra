@@ -1333,6 +1333,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::clear()
     m_align = UNUSED;
     m_indent = UNUSED;
     m_picturePath = UNUSED;
+    m_bulletSize = QSize();
     m_bulletColor = UNUSED;
     m_bulletRelativeSize = UNUSED;
 }
@@ -1382,7 +1383,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setPicturePath(const QStri
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletSize(const QSize& size)
 {
-    m_pictureSize = size;
+    m_bulletSize = size;
 }
 
 MSOOXML_EXPORT void Utils::ParagraphBulletProperties::setBulletFont(const QString& font)
@@ -1422,7 +1423,7 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const P
         m_type = properties.m_type;
     }
     if (properties.m_bulletFont != UNUSED) {
-        m_bulletFont = m_bulletFont;
+        m_bulletFont = properties.m_bulletFont;
     }
     if (properties.m_bulletChar != UNUSED) {
         m_bulletChar = properties.m_bulletChar;
@@ -1448,7 +1449,9 @@ MSOOXML_EXPORT void Utils::ParagraphBulletProperties::addInheritedValues(const P
     if (properties.m_bulletRelativeSize != UNUSED) {
         m_bulletRelativeSize = properties.m_bulletRelativeSize;
     }
-    m_pictureSize = properties.m_pictureSize;
+    if (!properties.m_bulletSize.isEmpty()) {
+        m_bulletSize = properties.m_bulletSize;
+    }
 }
 
 MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties() const
@@ -1496,9 +1499,9 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
         returnValue += QString("text:space-before=\"%1pt\" ").arg(m_indent);
     }
 
-    if (m_type == ParagraphBulletProperties::PictureType) {
-        returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_pictureSize.width()))).
-            arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_pictureSize.height())));
+    if (!m_bulletSize.isEmpty()) {
+        returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
+            arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
     }
 
     returnValue += "/>";
