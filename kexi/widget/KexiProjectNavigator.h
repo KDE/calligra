@@ -21,11 +21,12 @@
 #ifndef KEXIPROJECTNAVIGATOR_H
 #define KEXIPROJECTNAVIGATOR_H
 
-#include <k3listview.h>
 #include <QHash>
 #include <QEvent>
-#include <kexi.h>
+#include <QPointer>
 #include <KMenu>
+#include <kexi_export.h>
+#include <kexi.h>
 
 class KIcon;
 class KAction;

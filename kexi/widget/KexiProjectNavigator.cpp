@@ -23,8 +23,6 @@
 #include "KexiProjectModel.h"
 #include "KexiProjectModelItem.h"
 
-#include "KexiProjectListView_p.h" //TODO temp for Menus
-
 #include <QHeaderView>
 #include <qpoint.h>
 #include <qpixmapcache.h>
@@ -213,6 +211,11 @@ void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPart
     kDebug() << itemsPartClass << ".";
     m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
     m_list->expandAll();
+    if (itemsPartClass.isEmpty()) {
+	m_list->setRootIsDecorated(true);
+    } else {
+      m_list->setRootIsDecorated(false);
+    }
 }
 
 KexiProjectNavigator::~KexiProjectNavigator()

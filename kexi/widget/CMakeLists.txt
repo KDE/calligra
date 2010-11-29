@@ -34,6 +34,7 @@ set(kexiextendedwidgets_LIB_SRCS
     KexiProjectModel.cpp
     KexiProjectModelItem.cpp
     KexiProjectTreeView.cpp
+    KexiProjectNavigator.cpp
   )
 
 IF (KEXI_MOBILE)
@@ -47,7 +48,6 @@ ELSE (KEXI_MOBILE)
   #   pixmapcollection.cpp 
     KexiProjectListView.cpp 
     KexiProjectListViewItem.cpp
-    KexiProjectNavigator.cpp
     kexiprjtypeselector.cpp
   )
 ENDIF (KEXI_MOBILE)
