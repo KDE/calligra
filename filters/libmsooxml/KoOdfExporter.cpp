@@ -169,9 +169,9 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
         delete outputStore;
         return KoFilter::CreationError;
     }
+
     KoStoreDevice settingsDev(outputStore);
     KoXmlWriter* settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
-    settings->addAttribute("xmlns:ooo", "http://openoffice.org/2004/office");
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
     settings->startElement("config:config-item");
