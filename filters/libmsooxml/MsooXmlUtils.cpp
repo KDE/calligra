@@ -1503,7 +1503,8 @@ MSOOXML_EXPORT QString Utils::ParagraphBulletProperties::convertToListProperties
         //TODO sebsauer 2010-11-29; this does not work cause m_bulletSize is set in MsooXmlCommonReaderDrawingMLImpl.h to be the
         //size of the image but that's not correct cause the image can be much larger then the bullet itself (e.g. the same image
         //can be used in the document for different things like as background- and bullet-image and the sizes are independ of the
-        //original size of the picture. So, for now we are just hardcoding a width+height of 20pt.
+        //original size of the picture. So, for now we are just hardcoding a width+height of 20pt. I choosed 20pt cause that's the
+        //same value used at PptToOdp.cpp if a the size should be relative to the fontsize.
         
         //returnValue += QString("fo:width=\"%1\" fo:height=\"%2\" ").arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.width()))).
         //    arg(MSOOXML::Utils::cmString(POINT_TO_CM(m_bulletSize.height())));
