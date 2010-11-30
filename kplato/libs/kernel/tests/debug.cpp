@@ -66,7 +66,8 @@ QString printAvailable( Resource *r, const QString &lead = QString() ) {
         <<( r->availableUntil().isValid()
                 ? r->availableUntil().toString()
                 : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
-        <<QString::number( r->units() )<<"%";
+        <<QString::number( r->units() )<<"%"
+        <<"cost: normal"<<QString::number(r->normalRate() )<<" overtime"<<QString::number(r->overtimeRate() );
     return sl.join( " " );
 }
 static
