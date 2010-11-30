@@ -753,8 +753,12 @@ EffortCostMap Task::bcwsPrDay( long id ) const
         return EffortCostMap();
     }
     EffortCostMap ec = s->bcwsPrDay();
-    ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
-    ec.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
+    if ( m_startupCost > 0.0 ) {
+        ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
+    }
+    if ( m_shutdownCost > 0.0 ) {
+        ec.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
+    }
     return ec;
 }
 
@@ -768,7 +772,7 @@ EffortCostMap Task::bcwpPrDay( long id ) const
     if ( s == 0 ) {
         return EffortCostMap();
     }
-    EffortCostMap e = s->bcwsPrDay();
+    EffortCostMap e = bcwsPrDay( id );
     double totEff = e.totalEffort().toDouble( Duration::Unit_h );
     double totCost = e.totalCost();
     EffortCostDayMap::const_iterator it;
