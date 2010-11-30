@@ -153,7 +153,7 @@ void View::initGUI()
 
     gridLayout->addWidget( m_canvasController, 1, 1 );
 
-    connect(m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint&)),
+    connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint&)),
              this, SLOT(updateMousePosition(const QPoint&)));
 
     ToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools") );
@@ -285,7 +285,7 @@ void View::createCanvas(Section* _currentSection)
 
   connect(m_canvas, SIGNAL(canvasReceivedFocus()), SLOT(canvasReceivedFocus()));
   connect(m_canvas, SIGNAL(documentRect(const QRectF&)), SLOT(documentRectChanged(const QRectF&)));
-  connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+  connect(m_canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
           m_canvas, SLOT(setDocumentOffset(const QPoint&)));
   connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
   
