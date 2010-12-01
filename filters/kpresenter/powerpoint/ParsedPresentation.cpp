@@ -259,7 +259,11 @@ ParsedPresentation::parse(POLE::Storage& storage)
             }
         }
     }
-// Part 7: Identify the notes slide persist object
+// Part 7: Identify the notes slide persist object.  Notes are not that
+// important as presentation slides, so do not invoke a filter crash here!
+
+    //NOTE: MS Office XP stores invalid NotesPersistAtom records.
+
     if (documentContainer->notesList) {
         size = documentContainer->notesList->rgNotesPersistAtom.size();
         for (int i = 0; i < size; ++i) {
@@ -267,29 +271,29 @@ ParsedPresentation::parse(POLE::Storage& storage)
                     = documentContainer->notesList->rgNotesPersistAtom[i];
             persistId = atom.persistIdRef;
             if (!persistDirectory.contains(persistId)) {
-                qDebug() << "cannot load notes " << i;
-                return false;
+                qDebug() << "Invalid persistIdRef: cannot load notes";
+                continue;
             }
             const NotesContainer* nc
                = get<NotesContainer>(presentation, persistDirectory[persistId]);
             if (!nc) {
-                qDebug() << "cannot load notes " << i;
-                return false;
+                qDebug() << "NotesContainer missing: cannot load notes" << i;
+                continue;
             }
             // find the slide the note belongs to
             int pos = -1;
             for (int j=0; j < slides.size(); ++j) {
                 if (slides[j]->slideAtom.notesIdRef == atom.notesId) {
                     if (notes[j] != 0) {
-                        qDebug() << "slide " << j << " has more than one note";
-                        return false;
+                        qDebug() << "Invalid NotesContainer: slide " << j << " has already notes";
+                        continue;
                     }
                     pos = j;
                 }
             }
             if (pos == -1) {
-                qDebug() << "notes " << i << " do not belong to a slide";
-                return false;
+                qDebug() << "Invalid NotesContainer: notes " << i << " do not belong to a slide";
+                continue;
             }
             notes[pos] = nc;
         }

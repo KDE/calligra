@@ -221,10 +221,6 @@ protected:
 private:
     void init();
 
-    //! Writes text:p/draw:rect elements.
-    //! Uses m_currentObjectWidthCm and m_currentObjectHeightCm for size (defaults to 2cm/2cm)
-    void writeRect();
-
     QColor m_backgroundColor; //Documet background color
 
     //! Reads CT_Border complex type (p.392), used by children of pgBorders and children of pBdr

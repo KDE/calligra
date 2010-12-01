@@ -316,7 +316,7 @@ Resource::Resource()
 //     m_availableUntil = m_availableFrom.addYears(2);
 
     cost.normalRate = 100;
-    cost.overtimeRate = 200;
+    cost.overtimeRate = 0;
     cost.fixed = 0;
     cost.account = 0;
     m_calendar = 0;

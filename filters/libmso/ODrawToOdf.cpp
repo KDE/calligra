@@ -115,14 +115,18 @@ void ODrawToOdf::addGraphicStyleToDrawElement(Writer& out,
     }
     if (!drawingGroup) return;
 
-    //locate the OfficeArtSpContainer of the master shape
-    if (o.shapeProp.fHaveMaster) {
-        if (client) {
+    if (client) {
+        //locate the OfficeArtSpContainer of the master shape
+        if (o.shapeProp.fHaveMaster) {
             const DrawStyle tmp(*drawingGroup, &o);
             quint32 spid = tmp.hspMaster();
             master = client->getMasterShapeContainer(spid);
         }
+        else {
+            master = client->defaultShapeContainer();
+        }
     }
+
     const DrawStyle ds(*drawingGroup, master, &o);
     defineGraphicProperties(style, ds, out.styles);
 

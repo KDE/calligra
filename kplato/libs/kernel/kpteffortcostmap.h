@@ -27,6 +27,9 @@
 
 #include <kdebug.h>
 
+#include <QDebug>
+#include <QMetaType>
+
 namespace KPlato
 {
 
@@ -59,17 +62,16 @@ public:
     double bcwpEffort() const { return m_bcwpEffort; }
     void setBcwpCost( double value ) { m_bcwpCost = value; }
     double bcwpCost() const { return m_bcwpCost; }
-    void add(const Duration &effort, double cost, double bcwpEffort = 0.0, double bcwpCost = 0.0 ) {
-        m_effort += effort;
-        m_cost += cost;
-        m_bcwpEffort += bcwpEffort;
-        m_bcwpCost += bcwpCost;
-    }
+    void add(const Duration &effort, double cost, double bcwpEffort = 0.0, double bcwpCost = 0.0 );
     EffortCost &operator+=(const EffortCost &ec) {
         add(ec.m_effort, ec.m_cost, ec.m_bcwpEffort, ec.m_bcwpCost);
         return *this;
     }
     
+#ifndef QT_NO_DEBUG_STREAM
+    QDebug debug( QDebug dbg) const;
+#endif
+
 private:
     Duration m_effort;
     double m_cost;
@@ -78,13 +80,15 @@ private:
 };
 
 typedef QMap<QDate, EffortCost> EffortCostDayMap;
-class EffortCostMap
+class KPLATOKERNEL_EXPORT EffortCostMap
 {
 public:
     EffortCostMap()
         : m_days() {
         //kDebug(); 
     }
+    EffortCostMap( const EffortCostMap &map );
+    
     ~EffortCostMap() {
         //kDebug();
         m_days.clear();
@@ -136,6 +140,7 @@ public:
     
     const EffortCostDayMap &days() const { return m_days; }
     
+    EffortCostMap &operator=(const EffortCostMap &ec);
     EffortCostMap &operator+=(const EffortCostMap &ec) {
         //kDebug()<<"me="<<m_days.count()<<" ec="<<ec.days().count();
         if (ec.isEmpty()) {
@@ -192,6 +197,8 @@ public:
         }
         return 0.0;
     }
+    void addBcwpCost( const QDate &date, double cost );
+
     double bcwpCostOnDate(const QDate &date) const {
         if (!date.isValid()) {
             //kError()<<"Date not valid";
@@ -290,6 +297,10 @@ public:
     QDate startDate() const { return m_days.isEmpty() ? QDate() : m_days.keys().first(); }
     QDate endDate() const { return m_days.isEmpty() ? QDate() : m_days.keys().last(); }
     
+#ifndef QT_NO_DEBUG_STREAM
+    QDebug debug( QDebug dbg) const;
+#endif
+
 private:
     EffortCost &zero() { return m_zero; }
     
@@ -298,6 +309,16 @@ private:
     EffortCostDayMap m_days;
 };
 
+
 } //namespace KPlato
+
+Q_DECLARE_METATYPE( KPlato::EffortCost )
+Q_DECLARE_METATYPE( KPlato::EffortCostMap )
+
+#ifndef QT_NO_DEBUG_STREAM
+QDebug &operator<<( QDebug &dbg, const KPlato::EffortCost &ec );
+QDebug &operator<<( QDebug &dbg, const KPlato::EffortCost *ec );
+QDebug operator<<( QDebug dbg, const KPlato::EffortCostMap &i );
+#endif
 
 #endif

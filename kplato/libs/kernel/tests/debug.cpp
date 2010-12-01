@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,8 +36,8 @@ namespace KPlato
 
 class Debug
 {
-    public:
-        Debug() {}
+public:
+    Debug() {}
 static
 void print( Calendar *c, const QString &str, bool full = true ) {
     Q_UNUSED(full);
@@ -66,7 +66,8 @@ QString printAvailable( Resource *r, const QString &lead = QString() ) {
         <<( r->availableUntil().isValid()
                 ? r->availableUntil().toString()
                 : ( r->project() ? ("("+r->project()->constraintEndTime().toString()+")" ) : QString() ) )
-        <<QString::number( r->units() )<<"%";
+        <<QString::number( r->units() )<<"%"
+        <<"cost: normal"<<QString::number(r->normalRate() )<<" overtime"<<QString::number(r->overtimeRate() );
     return sl.join( " " );
 }
 static
@@ -198,6 +199,48 @@ void print( Task *t, bool full = true ) {
     }
     if ( t->shutdownAccount() ) {
         qDebug()<<"Shutdown account:"<<t->shutdownAccount()->name()<<" cost:"<<t->shutdownCost();
+    }
+}
+static
+void print( const Completion &c, const QString &name, const QString &s = QString() ) {
+    qDebug()<<"Completion:"<<name<<s;
+    qDebug()<<"  Entry mode:"<<c.entryModeToString();
+    qDebug()<<"     Started:"<<c.isStarted()<<c.startTime();
+    qDebug()<<"    Finished:"<<c.isFinished()<<c.finishTime();
+    qDebug()<<"  Completion:"<<c.percentFinished()<<"%";
+    
+    if ( ! c.usedEffortMap().isEmpty() ) {
+        qDebug()<<"     Used effort:";
+        foreach ( const Resource *r, c.usedEffortMap().keys() ) {
+            Completion::UsedEffort *ue = c.usedEffort( r );
+            foreach ( const QDate &d, ue->actualEffortMap().keys() ) {
+                qDebug()<<"         "<<r->name()<<":";
+                qDebug()<<"             "<<d.toString( Qt::ISODate )<<":"<<c.actualEffort( d ).toString()<<c.actualCost( d );
+            }
+        }
+    }
+}
+static
+void print( const EffortCostMap &m, const QString &s = QString() ) {
+    qDebug()<<"EffortCostMap"<<s;
+    if ( m.days().isEmpty() ) {
+        qDebug()<<"   Empty";
+        return;
+    }
+    qDebug()<<m.startDate().toString(Qt::ISODate)<<m.endDate().toString(Qt::ISODate)
+            <<" total="
+            <<m.totalEffort().toString()
+            <<m.totalCost()
+            <<"("
+            <<m.bcwpTotalEffort()
+            <<m.bcwpTotalCost()
+            <<")";
+
+    if ( ! m.days().isEmpty() ) {
+        foreach ( const QDate &d, m.days().keys() ) {
+            qDebug()<<"   "<<d.toString(Qt::ISODate)<<":"<<m.hoursOnDate( d )<<"h"<<m.costOnDate( d )
+                                                    <<"("<<m.bcwpEffortOnDate( d )<<"h"<<m.bcwpCostOnDate( d )<<")";
+        }
     }
 }
 static

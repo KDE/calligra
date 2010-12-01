@@ -50,6 +50,7 @@ using namespace KexiUtils;
 KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 {
     m_data = 0;
+    m_owner = false;
     m_readOnly = -1; //don't know
     m_insertingEnabled = -1; //don't know
     m_isSortingEnabled = true;

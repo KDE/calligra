@@ -49,9 +49,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
     return KoFilter::OK;
 }
 
-void MSOOXML_CURRENT_CLASS::createFrameStart()
+void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
 {
-    body->startElement("draw:frame");
+    // Todo handle here all possible shape types
+    if (startType == RectStart) {
+        body->startElement("draw:rect");
+    }
+    // Simplifying connector to be a line
+    else if (startType == StraightConnectorStart) {
+        body->startElement("draw:line");
+    }
+    else {
+        body->startElement("draw:frame");
+    }
 
     QString width(m_vmlStyle.value("width")); // already in "...cm" format
     QString height(m_vmlStyle.value("height")); // already in "...cm" format
@@ -64,42 +74,96 @@ void MSOOXML_CURRENT_CLASS::createFrameStart()
     const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
     const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
 
-    if (!width.isEmpty()) {
-        if (m_insideGroup) {
-            width = QString("%1%2").arg(width.toInt() * m_real_groupWidth / m_groupWidth).arg(m_groupUnit);
-        }
-        body->addAttribute("svg:width", width);
-    }
-    if (!height.isEmpty()) {
-        if (m_insideGroup) {
-            height = QString("%1%2").arg(height.toInt() * m_real_groupHeight / m_groupHeight).arg(m_groupUnit);
-        }
-        body->addAttribute("svg:height", height);
-    }
+    qreal x_position = 0;
+    QString x_pos_string, y_pos_string, widthString, heightString;
+    qreal y_position = 0;
+    qreal widthValue = 0;
+    qreal heightValue = 0;
+
     if (!x_mar.isEmpty()) {
         if (m_insideGroup) {
-            x_mar = QString("%1%2").arg((x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth).arg(m_groupUnit);
+            x_position = (x_mar.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupUnit);
+        } else {
+            x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
+            x_pos_string = x_mar;
         }
-        body->addAttribute("svg:x", x_mar);
     }
     else if (!leftPos.isEmpty()) {
         if (m_insideGroup) {
-            leftPos = QString("%1%2").arg((leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth).arg(m_groupUnit);
+            x_position = (leftPos.toInt() - m_groupX) * m_real_groupWidth / m_groupWidth;
+            x_pos_string = QString("%1%2").arg(x_position).arg(m_groupUnit);
+        } else {
+            x_position = leftPos.left(leftPos.length() - 2).toDouble();
+            x_pos_string = leftPos;
         }
-        body->addAttribute("svg:x", leftPos);
     }
     if (!y_mar.isEmpty()) {
         if (m_insideGroup) {
-            y_mar = QString("%1%2").arg((y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight).arg(m_groupUnit);
+            y_position = (y_mar.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupUnit);
+        } else {
+            y_position = y_mar.left(y_mar.length() -2).toDouble();
+            y_pos_string = y_mar;
         }
-        body->addAttribute("svg:y", y_mar);
     }
     else if (!topPos.isEmpty()) {
         if (m_insideGroup) {
-            topPos = QString("%1%2").arg((topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight).arg(m_groupUnit);
+            y_position = (topPos.toInt() - m_groupY) * m_real_groupHeight / m_groupHeight;
+            y_pos_string = QString("%1%2").arg(y_position).arg(m_groupUnit);
+        } else {
+            y_position = topPos.left(topPos.length() - 2).toDouble();
+            y_pos_string = topPos;
         }
-        body->addAttribute("svg:y", topPos);
     }
+    if (!width.isEmpty()) {
+        if (m_insideGroup) {
+            widthValue = width.toInt() * m_real_groupWidth / m_groupWidth;
+            widthString = QString("%1%2").arg(widthValue).arg(m_groupUnit);
+        } else {
+            widthValue = width.left(width.length() - 2).toDouble();
+            widthString = width;
+        }
+    }
+    if (!height.isEmpty()) {
+        if (m_insideGroup) {
+            heightValue = height.toInt() * m_real_groupHeight / m_groupHeight;
+            heightString = QString("%1%2").arg(heightValue).arg(m_groupUnit);
+        }
+        else {
+            heightValue = height.left(height.length() - 2).toDouble();
+            heightString = height;
+        }
+    }
+
+    if (startType == StraightConnectorStart) {
+        QString flip(m_vmlStyle.value("flip"));
+        QString y1 = y_pos_string;
+        QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2)); // right(2) takes the unit
+        QString x1 = x_pos_string;
+        QString y2 = QString("%1%2").arg(y_position + heightValue).arg(heightString.right(2));
+        if (flip == "x") {
+            QString temp = y2;
+            y2 = y1;
+            y1 = temp;
+        }
+        if (flip == "y") {
+            QString temp = x2;
+            x2 = x1;
+            x1 = temp;
+        }
+        body->addAttribute("svg:x1", x1);
+        body->addAttribute("svg:y1", y1);
+        body->addAttribute("svg:x2", x2);
+        body->addAttribute("svg:y2", y2);
+    }
+    else {
+        body->addAttribute("svg:x", x_pos_string);
+        body->addAttribute("svg:y", y_pos_string);
+        body->addAttribute("svg:width", widthString);
+        body->addAttribute("svg:height", heightString);
+    }
+
     if (!m_shapeColor.isEmpty()) {
         m_currentDrawStyle->addProperty("draw:fill", "solid");
         m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
@@ -160,7 +224,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
         }
     }
 
-    body->endElement(); //draw:frame
+    body->endElement(); //draw:frame or draw:rect
 
     return KoFilter::OK;
 }
@@ -239,12 +303,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
 
+    // Note that image fill is not yet supported in fill parameter, but this should be used
+    // when it's done
+    bool textBoxOrImage = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
-            ELSE_TRY_READ_IF(textbox)
+            else if (qualifiedName() == "v:textbox") {
+                TRY_READ(textbox)
+                textBoxOrImage = true;
+            }
             ELSE_TRY_READ_IF(stroke)
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -252,7 +323,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 
     body = frameBuf.originalWriter();
 
-    createFrameStart();
+    // Idea here is that if we do not have a box child, we want to still produce a rect to make sure there's a visible output
+    if (!textBoxOrImage) {
+        createFrameStart(RectStart);
+    }
+    else {
+        createFrameStart();
+    }
 
     (void)frameBuf.releaseWriter();
 
@@ -398,19 +475,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     MSOOXML::Utils::XmlWriteBuffer frameBuf;
     body = frameBuf.setWriter(body);
 
+    bool textBoxOrImage = false;
+
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
-            ELSE_TRY_READ_IF(textbox)
+            else if (qualifiedName() == "v:textbox") {
+                TRY_READ(textbox)
+                textBoxOrImage = true;
+            }
+            ELSE_TRY_READ_IF(stroke)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
 
     body = frameBuf.originalWriter();
 
-    createFrameStart();
+    if (!textBoxOrImage) {
+        // This should be roundRect type at some point when it's supported
+        createFrameStart(RectStart);
+    }
+    else {
+        createFrameStart();
+    }
 
     (void)frameBuf.releaseWriter();
 
@@ -653,41 +742,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         m_currentShapeId = o_spid;
     }
 
+    TRY_READ_ATTR_WITH_NS(o, connectortype)
+
     // CSS2 styling properties of the shape, http://www.w3.org/TR/REC-CSS2
     TRY_READ_ATTR_WITHOUT_NS(style)
     RETURN_IF_ERROR(parseCSS(style))
     kDebug() << "m_vmlStyle:" << m_vmlStyle;
-    // override width or height after 'object' element is possible
-    const QString widthCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("width")));
-    if (!widthCm.isEmpty()) {
-        m_currentObjectWidthCm = widthCm;
-        kDebug() << "m_currentObjectWidthCm" << m_currentObjectWidthCm;
-    }
-    const QString heightCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("height")));
-    if (!heightCm.isEmpty()) {
-        m_currentObjectHeightCm = heightCm;
-    }
-    if (!m_vmlStyle.value("margin-left").isEmpty()) {
-        const QString xCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-left")));
-        if (!xCmMar.isEmpty()) {
-            m_currentObjectXCm = xCmMar;
-        }
-    }
-    if (!m_vmlStyle.value("margin-top").isEmpty()) {
-        const QString yCmMar(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("margin-top")));
-        if (!yCmMar.isEmpty()) {
-            m_currentObjectYCm = yCmMar;
-        }
-    }
-    // override x or y after 'object' element is possible
-    const QString xCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("left")));
-    if (!xCm.isEmpty()) {
-        m_currentObjectXCm = xCm;
-    }
-    const QString yCm(MSOOXML::Utils::ST_PositiveUniversalMeasure_to_cm(m_vmlStyle.value("top")));
-    if (!yCm.isEmpty()) {
-        m_currentObjectYCm = yCm;
-    }
+
     //! @todo position (can be relative...)
     TRY_READ_ATTR_WITHOUT_NS_INTO(alt, m_shapeAltText)
     TRY_READ_ATTR_WITHOUT_NS_INTO(title, m_shapeTitle)
@@ -730,12 +791,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.originalWriter();
 
     if (m_outputFrames) {
-        createFrameStart();
+        if (o_connectortype.isEmpty()) {
+            createFrameStart();
+        } else {
+            createFrameStart(StraightConnectorStart);
+        }
     }
 
     (void)frameBuf.releaseWriter();
-
-    m_objectRectInitialized = true;
 
     if (m_outputFrames) {
         createFrameEnd();

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -294,7 +294,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
 
     if (!item.neverSaved()) {
         //we have to load schema data for this dialog
-        window->setSchemaData(loadSchemaData(window, sdata, viewMode));
+        loadAndSetSchemaData(window, sdata, viewMode);
         if (!window->schemaData()) {
             //last chance:
             if (false == d->askForOpeningInTextMode(
@@ -303,7 +303,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
                 return 0;
             }
             viewMode = Kexi::TextViewMode;
-            window->setSchemaData(loadSchemaData(window, sdata, viewMode));
+            loadAndSetSchemaData(window, sdata, viewMode);
         }
         if (!window->schemaData()) {
             if (!d->status.error())
@@ -382,13 +382,24 @@ void Part::slotCreate()
 }
 
 KexiDB::SchemaData* Part::loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
-        Kexi::ViewMode viewMode)
+        Kexi::ViewMode viewMode, bool *ownedByWindow)
 {
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
     KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
     *new_schema = sdata;
+    if (ownedByWindow)
+        *ownedByWindow = true;
     return new_schema;
+}
+
+void Part::loadAndSetSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
+    Kexi::ViewMode viewMode)
+{
+    bool schemaDataOwned = true;
+    KexiDB::SchemaData* sd = loadSchemaData(window, sdata, viewMode, &schemaDataOwned);
+    window->setSchemaData(sd);
+    window->setSchemaDataOwned(schemaDataOwned);
 }
 
 bool Part::loadDataBlock(KexiWindow *window, QString &dataString, const QString& dataID)

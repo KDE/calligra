@@ -79,11 +79,8 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 //! @todo remove?
     setSortedProperties(true);
 
-    QHBoxLayout *l = new QHBoxLayout(this);
-//Qt3 l->setAutoAdd(true);
-
-    m_scrollView = new KexiFormScrollView(this, viewMode() == Kexi::DataViewMode);
-    l->addWidget(m_scrollView);
+    m_scrollView = new KexiFormScrollView(         // will be added to layout
+        this, viewMode() == Kexi::DataViewMode);   // in KexiDataAwareView::init()
 
     initForm();
 

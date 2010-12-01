@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2010 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,50 +17,62 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPlato_AccountsTester_h
-#define KPlato_AccountsTester_h
+#ifndef KPlato_PerformanceTester_h
+#define KPlato_PerformanceTester_h
 
 #include <QtTest/QtTest>
 
+#include "kptdatetime.h"
 #include "kptproject.h"
+#include "kptduration.h"
+
+namespace QTest
+{
+    template<>
+    char *toString(const KPlato::DateTime &dt)
+    {
+        return toString( dt.toString() );
+    }
+    template<>
+    char *toString(const KPlato::Duration &d)
+    {
+        return toString( d.toString() );
+    }
+}
 
 namespace KPlato
 {
-
 class Task;
 
-class AccountsTester : public QObject
+class PerformanceTester : public QObject
 {
     Q_OBJECT
 private slots:
     void init();
     void cleanup();
-    void defaultAccount();
-    void costPlaces();
+    void bcwsPrDayTask();
+    void bcwpPrDayTask();
+    void acwpPrDayTask();
+    void bcwsMilestone();
+    void bcwpMilestone();
+    void acwpMilestone();
 
-    void startupDefault();
-    void startupAccount();
-    
-    void shutdownAccount();
+    void bcwsPrDayTaskMaterial();
+    void bcwpPrDayTaskMaterial();
+    void acwpPrDayTaskMaterial();
 
-    void subaccounts();
+    void bcwsPrDayProject();
+    void bcwpPrDayProject();
+    void acwpPrDayProject();
 
 private:
-    Project *project;
-    Task *t;
-    Resource *r;
-    ScheduleManager *sm;
-    Account *topaccount;
-    
-    QDate today;
-    QDate tomorrow;
-    QDate yesterday;
-    QDate nextweek;
-    QTime t1;
-    QTime t2;
-    int length;
+    Project *p1;
+    Resource *r1;
+    Resource *r2; // material
+    Task *t1;
+    Task *m1;
 };
 
-}
+} //namespace KPlato
 
 #endif

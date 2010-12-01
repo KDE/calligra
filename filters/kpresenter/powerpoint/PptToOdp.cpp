@@ -211,6 +211,8 @@ private:
             Writer& out, KoGenStyle& style);
     const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
     const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+    const MSO::OfficeArtSpContainer* defaultShapeContainer() { return dc_data->defaultShape; };
+
     QColor toQColor(const MSO::OfficeArtCOLORREF& c);
     QString formatPos(qreal v);
 
@@ -219,10 +221,11 @@ private:
         const MSO::SlideContainer* presSlide;
         const MSO::NotesContainer* notesMasterSlide;
         const MSO::NotesContainer* notesSlide;
+        const MSO::OfficeArtSpContainer* defaultShape;
         const MSO::SlideListWithTextSubContainerOrAtom* slideTexts;
 
         DrawClientData(): masterSlide(NULL), presSlide(NULL), notesMasterSlide(NULL),
-                          notesSlide(NULL), slideTexts (NULL) {};
+                          notesSlide(NULL), defaultShape(NULL), slideTexts(NULL) {};
     };
     DrawClientData dc_data[1];
 
@@ -230,12 +233,14 @@ public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
     void setDrawClientData(const MasterOrSlideContainer* mc, const SlideContainer* sc,
                            const NotesContainer* nmc, const NotesContainer* nc,
+                           const MSO::OfficeArtSpContainer* shape = NULL, 
                            const MSO::SlideListWithTextSubContainerOrAtom* stc = NULL)
     {
         dc_data->masterSlide = mc;
         dc_data->presSlide = sc;
         dc_data->notesMasterSlide = nmc;
         dc_data->notesSlide = nc;
+        dc_data->defaultShape = shape;
         dc_data->slideTexts = stc;
     }
 };
@@ -1246,8 +1251,6 @@ bulletSizeToSizeString(const PptTextPFRun& pf)
     if (pf.fBulletHasSize()) {
         qint16 size = pf.bulletSize();
         if (size >= 25 && size <= 400) {
-            //TODO: The value specifies bullet font size as a percentage of the
-            //font size of the first text run in the paragraph.  Check this!
             return percent(size);
         } else if (size >= -4000 && size <= -1) {
             return pt(size);
@@ -1287,10 +1290,11 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
             bulletSize = "20pt"; // fallback value
         }
     } else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
+
         QString numFormat("1"), numSuffix, numPrefix;
-        processTextAutoNumberScheme(i.pf.scheme(),
-                                    numFormat, numSuffix, numPrefix);
-        // if there is no bulletChar or the bullet has autonumbering explicitly
+        processTextAutoNumberScheme(i.pf.scheme(), numFormat, numSuffix, numPrefix);
+
+        // If there is no bulletChar or the bullet has autonumbering explicitly
         // we assume the list is autonumbering
         if (i.pf.fBulletHasAutoNumber() || i.pf.bulletChar() == 0) {
             elementName = "text:list-level-style-number";
@@ -1314,13 +1318,19 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 level,
 
             if (i.pf.fBulletHasSize()) {
                 qint16 size = i.pf.bulletSize();
-                if ((size >= 25 && size <= 400) && i.cf) {
-                    qreal relSize = 100.0 * size / (qreal) i.cf->fontSize;
+                //The value specifies bullet font size as a percentage of the
+                //font size of the first text run in the paragraph.
+                if (size >= 25 && size <= 400) {
+                    out.addAttribute("text:bullet-relative-size", percent(size));
+                }
+                //The absolute value specifies the bullet font size in points.
+                else if ((size >= -4000 && size <= -1)  && i.cf) {
+                    qreal relSize = 100.0 * qAbs(size) / (qreal) i.cf->fontSize;
                     out.addAttribute("text:bullet-relative-size", percent(relSize));
                 }
-                else if (size >= -4000 && size <= -1) {
-                    qDebug() << "Absolute value for the bullet font size, ignoring!";
-                }
+            }
+            else {
+                out.addAttribute("text:bullet-relative-size", percent(100));
             }
         }
     }
@@ -1776,7 +1786,8 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
 
         if (drawing->OfficeArtDg.groupShape) {
             const OfficeArtSpgrContainer& spgr = *(drawing->OfficeArtDg.groupShape).data();
-            drawclient.setDrawClientData(m, 0, 0, 0);
+            const OfficeArtSpContainer* shape = (drawing->OfficeArtDg.shape).data();
+            drawclient.setDrawClientData(m, 0, 0, 0, shape);
             odrawtoodf.processGroupShape(spgr, out);
         }
         master.addChildElement("", QString::fromUtf8(buffer.buffer(),
@@ -2375,7 +2386,8 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
 
     if (slide->drawing.OfficeArtDg.groupShape) {
         const OfficeArtSpgrContainer& spgr = *(slide->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(master, slide, 0, 0, currentSlideTexts);
+        const OfficeArtSpContainer* shape = (slide->drawing.OfficeArtDg.shape).data();
+        drawclient.setDrawClientData(master, slide, 0, 0, shape, currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
     }
 
@@ -2397,7 +2409,7 @@ void PptToOdp::processSlideForBody(unsigned slideNo, Writer& out)
             out.xml.addAttribute("draw:style-name", value);
         }
         const OfficeArtSpgrContainer& spgr = *(nc->drawing.OfficeArtDg.groupShape).data();
-        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, currentSlideTexts);
+        drawclient.setDrawClientData(0, 0, p->notesMaster, nc, 0, currentSlideTexts);
         odrawtoodf.processGroupShape(spgr, out);
         out.xml.endElement();
     }

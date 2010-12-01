@@ -88,6 +88,13 @@ public:
         virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) = 0;
 
         /**
+         * Retrieve OfficeArtDgContainer.shape, which seems to contain
+         * additional properties to check before the default properties in the
+         * OfficeArtDggContainer are checked (MS Office 2003 specific).
+         **/
+        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer() = 0;
+
+        /**
          * Convert the OfficeArtCOLORREF to a QColor.
          * This conversion requires color scheme information.
          **/
@@ -132,6 +139,7 @@ private:
     void processFlowChartConnector(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processCallout2(const MSO::OfficeArtSpContainer& o, Writer& out);
     void processDonut(const MSO::OfficeArtSpContainer& o, Writer& out);
+    void processFlowChartDelay(const MSO::OfficeArtSpContainer& o, Writer& out);
 
     void processGroup(const MSO::OfficeArtSpgrContainer& o, Writer& out);
     void processStyle(const MSO::OfficeArtSpContainer& o, Writer& out);

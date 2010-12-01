@@ -153,7 +153,7 @@ public:
     /// Return the resource names that has appointments to this schedule
     virtual QStringList resourceNameList() const;
     
-    virtual EffortCostMap bcwsPrDay() const;
+    virtual EffortCostMap bcwsPrDay( EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     

@@ -36,13 +36,13 @@
 
 KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent)
         : Q3ScrollView(parent)
+        , m_selected(0)
 {
     /*Qt 3 QPalette pal(viewport()->palette());
       pal.setBrush(QPalette::Active, QPalette::Background, QBrush(Qt::white));
       viewport()->setPalette(pal);*/
     viewport()->setBackgroundRole(QPalette::Base);
 
-    m_selected = 0;
     m_prevColorGroup = QPalette::Active;
     m_history = new History();
 

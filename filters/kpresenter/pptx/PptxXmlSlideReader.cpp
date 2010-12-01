@@ -1114,8 +1114,8 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_spTree()
 
     bool potentiallyAddToLayoutFrames = false;
 
-    QBuffer* shapeBuf;
-    KoXmlWriter *shapeWriter;
+    QBuffer* shapeBuf = 0;
+    KoXmlWriter *shapeWriter = 0;
     KoXmlWriter *bodyBackup = body;
 
     while (!atEnd()) {
@@ -1595,6 +1595,16 @@ void PptxXmlSlideReader::saveBodyProperties()
 
 void PptxXmlSlideReader::inheritBodyProperties()
 {
+    // TODO:This might not be 100% correct, it is here only temporary until it is figured out what is the correct action plan
+    // in the following case:
+    // slide phIdx = "2", no bodyPr, slideLayout phIdx = "2", no BodyPr, slideMaster phIdx = "2" phType = "dt", bodyPr
+    // For looking at msoffice behavior, the bodyPr from master was not used in the actual slide
+    // It was also noted that bullet character that was used in the slide, was either MSOffice default (mentioned nowhere)
+    // or somehow gotten from bodyStyles in slidemaster (also not mentioned anywhere why this would happen)
+    if (d->phType.isEmpty()) {
+        return;
+    }
+
     if (m_context->type == SlideMaster) {
         return; // Nothing needed for slidemaster
     }
@@ -1630,7 +1640,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
              }
         }
     }
-    else if (!d->phType.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         position = m_context->slideMasterPageProperties->textShapePositions.value(d->phType);
         if (!position.isEmpty()) {
@@ -1688,7 +1698,7 @@ void PptxXmlSlideReader::inheritBodyProperties()
              }
         }
     }
-    else if (!d->phIdx.isEmpty()) {
+    if (!d->phIdx.isEmpty()) {
         position = m_context->slideLayoutProperties->textShapePositions.value(d->phIdx);
         if (!position.isEmpty()) {
             m_shapeTextPosition = position;
@@ -1764,7 +1774,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phIdx][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
     }
-    else if (!d->phType.isEmpty()) {
+    if (!d->phType.isEmpty()) {
         // In all cases, we take them first from masterslide
         MSOOXML::Utils::copyPropertiesFromStyle(m_context->slideMasterPageProperties->styles[d->phType][copyLevel],
                                                 targetStyle, KoGenStyle::ParagraphType);
@@ -1777,7 +1787,7 @@ void PptxXmlSlideReader::inheritParagraphStyle(KoGenStyle& targetStyle)
                                                     targetStyle, KoGenStyle::ParagraphType);
         }
     }
-    else if (!d->phIdx.isEmpty()) {
+    if (!d->phIdx.isEmpty()) {
         // Perhaps we need to get the properties from layout
         // Slidelayout needs to be here in case there was also lvl1ppr defined
         if (m_context->type == Slide || m_context->type == SlideLayout) {
@@ -1831,7 +1841,7 @@ void PptxXmlSlideReader::inheritListStyles()
             }
         }
     }
-    else if (!d->phIdx.isEmpty()) {
+    if (!d->phIdx.isEmpty()) {
         QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideMasterPageProperties->listStyles[d->phIdx]);
         while (i.hasNext()) {
             i.next();
@@ -1857,7 +1867,8 @@ void PptxXmlSlideReader::inheritListStyles()
                 }
             }
         }
-    } else if (!d->phIdx.isEmpty()) {
+    }
+    if (!d->phIdx.isEmpty()) {
         if (m_context->type == SlideLayout || m_context->type == Slide) {
             QMapIterator<int, MSOOXML::Utils::ParagraphBulletProperties> i(m_context->slideLayoutProperties->listStyles[d->phIdx]);
             while (i.hasNext()) {

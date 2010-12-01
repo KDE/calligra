@@ -24,7 +24,7 @@ using namespace wvWare;
 
 const int Headers::headerTypes = 6;
 
-Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version )
+Headers::Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version )
 {
     if ( lcbPlcfhdd == 0 ) {
         return;
@@ -37,9 +37,9 @@ Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, W
     //number of stories in PlcfHdd, first six stories specify footnote and
     //endnote separators, MS-DOC, p.33
     if ( version == Word8 ) {
-	//second-to-last CP ends the last story, last CP must be ignored
-	int n = lcbPlcfhdd / 4 - 2;
-	wvlog << "num. of stories in PlcfHdd:" << n << endl; 
+        //second-to-last CP ends the last story, last CP must be ignored
+        int n = lcbPlcfhdd / 4 - 2;
+        wvlog << "num. of stories in PlcfHdd:" << n << endl;
         wvlog << "num. of header/footer stories:" << n - 6 << endl;
     }
 #endif
@@ -55,16 +55,50 @@ Headers::Headers( U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, W
     tableStream->seek( fcPlcfhdd, G_SEEK_SET );
 
     U32 i = 0;
+    QList<U32> tmp;
+
     if ( version == Word8 ) {
         //CPs of footnote/endnote separators related stories
         for ( ; i < 6 * sizeof( U32 ); i += sizeof( U32 ) ) {
             tableStream->readU32();
         }
     }
-    //CPs of header/footer related stories (last one has to be ignored)
+    //CPs of header/footer related stories 
     for ( ; i < lcbPlcfhdd; i += sizeof( U32 ) ) {
-        m_headers.push_back( tableStream->readU32() );
+        tmp.append( tableStream->readU32() );
     }
+
+    //NOTE: Except for the last CP, each CP of Plcfhdd MUST be greater than or
+    //equal to 0 and less than FibRgLw97.ccpHdd.  Each story ends immediately
+    //prior to the next CP.  Again second-to-last CP ends the last story, last
+    //CP must be ignored.
+
+    uint n = lcbPlcfhdd / sizeof( U32 ) - 2; //num. of stories in PlcfHdd
+    uint m = (n - 6) / 6; //num. of sections based on the num. of header/footer stories
+    QList<U32> sct[m];
+
+    //Validate CPs!
+    int l = 0;
+    for (int k = 0; l < (tmp.length() - 3); k++) {
+        for (int j = 0; j < 6; j++, l++) {
+            if ((tmp[l] <= tmp[l + 1]) && (tmp[l] < ccpHdd)) { 
+                sct[k].append(tmp[l]);
+            }
+        }
+        //section has invalid header/footer stories, simulate that the header
+        //or footer of the corresponding type of the previous section is used
+        if (sct[k].length() < 6) {
+            for (int j = 0; j < 6; j++) {
+                m_headers.append(sct[k - 1].last());
+            }
+        } else {
+            m_headers.append(sct[k]);
+	}
+    }
+
+    //append second-to-last and last CP
+    m_headers.append(tmp[l]);
+    m_headers.append(tmp[l + 1]);
 
     tableStream->pop();
 }
@@ -85,6 +119,9 @@ QList<bool> Headers::headersMask( void )
 
 #ifdef WV2_DEBUG_HEADERS
     for (U32 i = 0; i < (U32) m_headers.size(); i++) {
+        if (!(i % 6)) {
+            wvlog << "----";
+        }
         wvlog << "m_headers: " << m_headers[i];
     }
 #endif

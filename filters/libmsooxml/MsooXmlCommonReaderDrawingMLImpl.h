@@ -941,6 +941,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
     READ_PROLOGUE
 
     m_contentType.clear();
+    m_xlinkHref.clear();
 
 #if defined(XLSXXMLDRAWINGREADER_CPP)
     KoXmlWriter *bodyBackup = body;
@@ -1738,7 +1739,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             TRY_READ_IF(latin)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(solidFill)
-            ELSE_TRY_READ_IF(gradFill)
+            // As odf does not support gradFill for text, it's better to not use it at all, as relying on the first color
+            // can create bad results.
+            //ELSE_TRY_READ_IF(gradFill)
             ELSE_TRY_READ_IF_IN_CONTEXT(noFill)
             else if (QUALIFIED_NAME_IS(highlight)) {
                 TRY_READ(DrawingML_highlight)
@@ -2213,8 +2216,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
 {
     READ_PROLOGUE
-
-    m_xlinkHref.clear();
 
     // Read attributes.
     const QXmlStreamAttributes attrs(attributes());
@@ -4239,6 +4240,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
         m_listStylePropertiesAltered = true;
     }
 
+    m_xlinkHref.clear();
+
     READ_EPILOGUE
 }
 
@@ -5078,9 +5081,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
     m_currentListLevel = 0;
     m_pPr_lvl = 0;
 
-    MSOOXML::Utils::XmlWriteBuffer listBuf;
-    body = listBuf.setWriter(body);
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -5094,7 +5094,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
-
     if (m_prevListLevel > 0) {
         // Ending our current level
         body->endElement(); // text:list

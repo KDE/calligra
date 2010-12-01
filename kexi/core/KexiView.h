@@ -114,7 +114,7 @@ public:
     /*! \return the view mode for this view. */
     Kexi::ViewMode viewMode() const;
 
-    /*! Reimpelmented from KexiActionProxy.
+    /*! Reimplemented from KexiActionProxy.
      \return shared action with name \a action_name for this view.
      If there's no such action declared in Kexi Part (part()),
      global shared action is returned (if exists). */
@@ -190,7 +190,7 @@ protected:
      - makes a deep copy of \a sdata
      - stores object schema data \a sdata in 'kexi__objects' internal table
        using Connection::storeObjectSchemaData().
-     Reimpelment this for your needs.
+     Reimplement this for your needs.
      Requirements:
      - deep copy of \a sdata should be made
      - schema data should be created at the backend
@@ -222,7 +222,7 @@ protected:
      If \a dontAsk is true, no question dialog will
      be shown to the user. The default is false.
 
-     Reimpelment this for your needs. Should return true on success
+     Reimplement this for your needs. Should return true on success
      or cancelled when the task should be cancelled.
      \sa storeNewData() */
     virtual tristate storeData(bool dontAsk = false);

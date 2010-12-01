@@ -88,3 +88,9 @@ target_link_libraries(AccountsTester  ${KDE4_KDECORE_LIBS} kplatoprivate kplatok
  
 
 ########### next target ###############
+
+set(PerformanceTester_SRCS PerformanceTester.cpp )
+ 
+kde4_add_unit_test(PerformanceTester TESTNAME KPlato-PerformanceTester  ${PerformanceTester_SRCS})
+ 
+target_link_libraries(PerformanceTester  ${KDE4_KDECORE_LIBS} kplatoprivate kplatokernel ${QT_QTTEST_LIBRARY})
