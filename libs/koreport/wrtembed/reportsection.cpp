@@ -76,7 +76,7 @@ ReportSection::ReportSection(KoReportDesigner * rptdes, const char * name)
 {
     Q_UNUSED(name)
 
-    m_sectionData = new KRSectionData();
+    m_sectionData = new KRSectionData(this);
     connect(m_sectionData->propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
     int dpiY = KoDpi::dpiY();
