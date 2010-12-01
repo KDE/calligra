@@ -83,7 +83,8 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent)
 KexiTableViewHeader::~KexiTableViewHeader()
 {
     if (m_privateStyle) {
-        setStyle(0);
+        // moved to ~KexiTableView:
+        // setStyle(0);
         delete static_cast<QStyle*>(m_privateStyle);
     }
 }
