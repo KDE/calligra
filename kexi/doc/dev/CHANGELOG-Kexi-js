@@ -90,6 +90,19 @@ TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
+2010-12-01
+Core
+*fix memory leak in KexiActionProxy
+Table View
+*unset style in header earlier to avoid reading of uninitialized memory reported by valgrind
+KoReports
+*make KRDetailSectionData, KRSectionData, KoReportReportData, KoReportPreRenderer owned by parent QObect, this fixes memory leaks
+
+2010-11-30
+KexiDB
+*fix memory leak in RowEditBuffer
+**merged with Predicate's RecordEditBuffer
+
 2010-11-28
 KoReports
 *fix conditional jump depending on uninitialised value in KRDetailSectionData
