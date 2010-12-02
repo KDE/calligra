@@ -26,6 +26,10 @@
 #include <QTimer>
 #include <QRunnable>
 #include <QTime>
+#ifdef KSPREAD_MT
+#include <QMutex>
+#include <QMutexLocker>
+#endif
 
 #include "kspread_export.h"
 
@@ -175,6 +179,9 @@ private:
     QMap<int, QPair<QRectF, T> > m_possibleGarbage;
     QList<T> m_storedData;
     mutable QCache<QPoint, T> m_cache;
+#ifdef KSPREAD_MT
+    mutable QMutex m_mutex;
+#endif
     mutable QRegion m_cachedArea;
 
     RectStorageLoader<T>* m_loader;
@@ -224,6 +231,9 @@ template<typename T>
 T RectStorage<T>::contains(const QPoint& point) const
 {
     ensureLoaded();
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&m_mutex);
+#endif
     if (!usedArea().contains(point))
         return T();
     // first, lookup point in the cache
@@ -519,6 +529,9 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
 {
     if (m_loader && !m_loader->isFinished())
         return;
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&m_mutex);
+#endif
     const QVector<QRect> rects = m_cachedArea.intersected(invRect).rects();
     m_cachedArea = m_cachedArea.subtracted(invRect);
     foreach(const QRect& rect, rects) {
