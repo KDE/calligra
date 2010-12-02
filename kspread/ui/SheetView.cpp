@@ -61,19 +61,20 @@ public:
     QSize accessedCellRange;
 
 public:
-    Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells);
+    Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
     const CellView& cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
-                               SheetView* sheetView);
+                               SheetView* sheetView, const QRect& visRect);
 };
 
 Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
-                                       QSet<Cell>& processedMergedCells)
+                                       QSet<Cell>& processedMergedCells,
+                                       const QRect& visRect)
 {
     Cell cell(sheet, col, row);
     if (cell.isPartOfMerged()) {
         cell = cell.masterCell();
         // if the rect of visible cells contains this master cell, it was already painted
-        if (visibleRect.contains(cell.cellPosition())) {
+        if (visRect.contains(cell.cellPosition())) {
             coordinate.setY(coordinate.y() + sheet->rowFormats()->rowHeight(row));
             return Cell(); // next row
         }
@@ -93,14 +94,14 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
 }
 
 const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
-        QSet<Cell>& processedObscuredCells, SheetView* sheetView)
+        QSet<Cell>& processedObscuredCells, SheetView* sheetView, const QRect& visRect)
 {
     const int col = cell.column();
     const int row = cell.row();
     const CellView& cellView = sheetView->cellView(col, row);
     if (cellView.isObscured()) {
         // if the rect of visible cells contains the obscuring cell, it was already painted
-        if (visibleRect.contains(cellView.obscuringCell())) {
+        if (visRect.contains(cellView.obscuringCell())) {
             coordinate.setY(coordinate.y() + sheet->rowFormats()->rowHeight(row));
             cell = Cell();
             return cellView; // next row
@@ -176,16 +177,6 @@ void SheetView::setPaintCellRange(const QRect& rect)
     d->cache.setMaxCost(2 * rect.width() * rect.height());
 }
 
-void SheetView::setVisibleRect(const QRect &rect)
-{
-    d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
-}
-
-QRect SheetView::visibleRect() const
-{
-    return d->visibleRect;
-}
-
 void SheetView::invalidateRegion(const Region& region)
 {
     QRegion qregion;
@@ -208,8 +199,9 @@ void SheetView::invalidate()
     d->cachedArea = QRegion();
 }
 
-void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase*)
+void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase*, const QRect& visibleRect)
 {
+    const QRect& visRect = visibleRect.isValid() ? visibleRect : d->visibleRect;
     // paintRect:   the canvas area, that should be painted; in document coordinates;
     //              no layout direction consideration; scrolling offset applied;
     //              independent from painter transformations
@@ -230,8 +222,8 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
         //TODO support all the different properties
         Sheet::BackgroundImageProperties properties = sheet()->backgroundImageProperties();
         if( properties.repeat == Sheet::BackgroundImageProperties::Repeat ) {
-            const int firstCol = d->visibleRect.left();
-            const int firstRow = d->visibleRect.top();
+            const int firstCol = visRect.left();
+            const int firstRow = visRect.top();
             const int firstColPosition = d->sheet->columnPosition(firstCol);
             const int firstRowPosition = d->sheet->rowPosition(firstRow);
 
@@ -241,8 +233,8 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             int xBackground = firstColPosition - (firstColPosition % imageWidth);
             int yBackground = firstRowPosition - (firstRowPosition % imageHeight);
 
-            const int lastCol = d->visibleRect.right();
-            const int lastRow = d->visibleRect.bottom();
+            const int lastCol = visRect.right();
+            const int lastRow = visRect.bottom();
             const int lastColPosition = d->sheet->columnPosition(lastCol);
             const int lastRowPosition = d->sheet->rowPosition(lastRow);
 
@@ -272,13 +264,13 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     QSet<Cell> processedMergedCells;
     QSet<Cell> processedObscuredCells;
     QList<CellPaintData> cached_cells;
-    for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
+    for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if (rightToLeft)
             coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
 // kDebug() <<"coordinate:" << coordinate;
-        for (int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row) {
+        for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
             if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
                 row = lastHiddenRow;
@@ -287,11 +279,11 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             // save the coordinate
             const QPointF savedCoordinate = coordinate;
             // figure out, if any and which cell has to be painted (may be a master cell)
-            Cell cell = d->cellToProcess(col, row, coordinate, processedMergedCells);
+            Cell cell = d->cellToProcess(col, row, coordinate, processedMergedCells, visRect);
             if (!cell)
                 continue;
             // figure out, which CellView to use (may be one for an obscuring cell)
-            CellPaintData cpd(d->cellViewToProcess(cell, coordinate, processedObscuredCells, this), cell, coordinate);
+            CellPaintData cpd(d->cellViewToProcess(cell, coordinate, processedObscuredCells, this, visRect), cell, coordinate);
             if (!cell)
                 continue;
             cpd.cellView.paintCellBackground(painter, clipRect, coordinate);
@@ -312,12 +304,12 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
     // 3. Paint the default borders
     coordinate = startCoordinate;
-    for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
+    for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if (rightToLeft)
             coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
-        for (int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row) {
+        for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
             if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
                 row = lastHiddenRow;
@@ -329,7 +321,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             cellView.paintDefaultBorders(painter, clipRect, paintRect, coordinate,
                                          CellView::LeftBorder | CellView::RightBorder |
                                          CellView::TopBorder | CellView::BottomBorder,
-                                         d->visibleRect, Cell(d->sheet, col, row), this);
+                                         visRect, Cell(d->sheet, col, row), this);
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
         }
         coordinate.setY(topLeft.y());
@@ -339,12 +331,12 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
     // 4. Paint the custom borders, diagonal lines and page borders
     coordinate = startCoordinate;
-    for (int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col) {
+    for (int col = visRect.left(); col <= visRect.right(); ++col) {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if (rightToLeft)
             coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
-        for (int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row) {
+        for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
             if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
                 row = lastHiddenRow;
@@ -354,7 +346,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
             const CellView cellView = this->cellView(col, row);
             cellView.paintCellBorders(paintRect, painter, clipRect, coordinate,
-                                      d->visibleRect,
+                                      visRect,
                                       Cell(sheet(), col, row), this);
             coordinate.setY(coordinate.y() + d->sheet->rowFormats()->rowHeight(row));
         }

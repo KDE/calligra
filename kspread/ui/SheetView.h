@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QPointF>
+#include <QRect>
 
 #include "kspread_export.h"
 
@@ -105,7 +106,7 @@ public:
     /**
      * Paints the cells.
      */
-    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase* canvas = 0);
+    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas = 0, const QRect& visibleRect = QRect());
 
 public Q_SLOTS:
     void updateAccessedCellRange(const QPoint& location = QPoint());
@@ -116,8 +117,6 @@ Q_SIGNALS:
 protected:
     virtual CellView* createDefaultCellView();
     virtual CellView* createCellView(int col, int row);
-    void setVisibleRect(const QRect& rect);
-    QRect visibleRect() const;
 private:
     /**
      * Helper method for invalidateRegion().
