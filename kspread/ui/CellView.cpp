@@ -51,6 +51,11 @@
 #include <QTextLayout>
 #include <QTextCursor>
 #include <QAbstractTextDocumentLayout>
+#ifdef KSPREAD_MT
+#include <QMutex>
+#include <QMutexLocker>
+#include <QThread>
+#endif
 
 // KDE
 #include <KColorUtils>
@@ -100,7 +105,11 @@ public:
             , filterButton(false)
             , obscuredCellsX(0)
             , obscuredCellsY(0)
-            , richText(0) {}
+            , richText(0)
+#ifdef KSPREAD_MT
+            , mutex(new QMutex())
+#endif
+    {}
     ~Private() {
     }
 
@@ -139,6 +148,9 @@ public:
     // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
     QString displayText;
     QSharedPointer<QTextDocument> richText;
+#ifdef KSPREAD_MT
+    QSharedPointer<QMutex> mutex;
+#endif
 public:
     void calculateCellBorders(const Cell&, SheetView* sheetView);
     void checkForFilterButton(const Cell&);
@@ -288,6 +300,15 @@ CellView::~CellView()
 void CellView::detach()
 {
     d.detach();
+    if (!d->richText.isNull()) {
+#ifdef KSPREAD_MT
+        QMutexLocker(d->mutex.data());
+#endif
+        d->richText = QSharedPointer<QTextDocument>(d->richText->clone());
+    }
+#ifdef KSPREAD_MT
+    d->mutex = QSharedPointer<QMutex>(new QMutex());
+#endif
 }
 
 Style CellView::style() const
@@ -1176,7 +1197,10 @@ void CellView::paintText(QPainter& painter,
         }
     } else if (tmpRichText) {
         // Case 5: Rich text.
-        QSharedPointer<QTextDocument> doc = d->richText;
+#ifdef KSPREAD_MT
+        QMutexLocker(d->mutex.data());
+#endif
+        QTextDocument* doc = d->richText->clone();
         doc->setDefaultTextOption(d->textOptions());
         const QPointF position(coordinate.x() + indent,
                                coordinate.y() + d->textY - d->textHeight);
@@ -1185,7 +1209,7 @@ void CellView::paintText(QPainter& painter,
         QAbstractTextDocumentLayout::PaintContext ctx;
         ctx.palette.setColor(QPalette::Text, textColorPrint);
         doc->documentLayout()->draw(&painter, ctx);
-
+        delete doc;
 //        painter.drawRect(QRectF(QPointF(0, 0), QSizeF(d->textWidth, d->textHeight)));
     }
 
@@ -2117,7 +2141,9 @@ void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMe
 void CellView::Private::calculateRichTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
 {
     Q_UNUSED(fontMetrics);
-
+#ifdef KSPREAD_MT
+    QMutexLocker(mutex.data());
+#endif
     richText->setDefaultFont(font);
     richText->setDocumentMargin(0);
 
