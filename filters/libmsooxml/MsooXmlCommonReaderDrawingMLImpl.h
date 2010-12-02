@@ -1064,7 +1064,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
     - custGeom (Custom Geometry) §20.1.9.8
     - effectDag (Effect Container) §20.1.8.25
     - effectLst (Effect Container) §20.1.8.26
-    - extLst (Extension List) §20.1.2.2.15
+    - [done] extLst (Extension List) §20.1.2.2.15
     - [done] gradFill (Gradient Fill) §20.1.8.33
     - grpFill (Group Fill) §20.1.8.35
     - ln (Outline) §20.1.2.2.24
@@ -1092,6 +1092,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
             if (qualifiedName() == QLatin1String("a:xfrm")) {
                 TRY_READ(xfrm)
                 m_xfrm_read = true;
+            }
+            else if (qualifiedName() == QLatin1String("a:extLst")) {
+                TRY_READ(extLst)
             }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2200,7 +2203,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     - clrChange (Color Change Effect) §20.1.8.16
     - clrRepl (Solid Color Replacement) §20.1.8.18
     - duotone (Duotone Effect) §20.1.8.23
-    - extLst (Extension List) §20.1.2.2.15
+    - [done] extLst (Extension List) §20.1.2.2.15
     - fillOverlay (Fill Overlay Effect) §20.1.8.29
     - [done] grayscl (Gray Scale Effect) §20.1.8.34
     - hsl (Hue Saturation Luminance Effect) §20.1.8.39
@@ -2250,6 +2253,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
             ELSE_TRY_READ_IF(lum)
+            ELSE_TRY_READ_IF(extLst)
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3719,6 +3723,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
     }
 
     KoOdfGraphicStyles::saveOdfStrokeStyle(*m_currentDrawStyle, *mainStyles, m_currentPen);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL extLst
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_extLst()
+{
+    READ_PROLOGUE
+    // This element can contain all kinds of extensions, but we do not support any of them
+    // atm, and therefore skip it, reading this element however is needed in order to not
+    // read elements indside of this elemetn by accident
+    skipCurrentElement();
 
     READ_EPILOGUE
 }
