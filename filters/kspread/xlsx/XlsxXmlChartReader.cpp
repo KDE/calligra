@@ -325,7 +325,9 @@ public:
 XlsxXmlChartReader::Private::Private ( )
     : m_numReadSeries( 0 )
 {
+    //sebsauer; hmmmm... does that really make sense?
     qDeleteAll(m_seriesData);
+    m_seriesData.clear();
 }
 
 // calculates the column width in pixels
@@ -1246,6 +1248,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pieChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1290,6 +1293,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_pie3DChart()
 //    }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1328,6 +1332,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_doughnutChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1367,6 +1372,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_areaChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1408,6 +1414,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_area3DChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1451,6 +1458,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_barChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1495,6 +1503,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bar3DChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1547,6 +1556,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_lineChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1588,6 +1598,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_line3DChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1643,6 +1654,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_scatterChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1680,6 +1692,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_radarChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1716,6 +1729,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_surfaceChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1753,6 +1767,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_surface3DChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1804,6 +1819,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_bubbleChart()
 //    }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
@@ -1842,6 +1858,7 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_stockChart()
     }
 
     qDeleteAll(d->m_seriesData);
+    d->m_seriesData.clear();
 
     return KoFilter::OK;
 }
