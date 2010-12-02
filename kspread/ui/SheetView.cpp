@@ -23,7 +23,10 @@
 #include <QCache>
 #include <QRect>
 #include <QPainter>
-
+#ifdef KSPREAD_MT
+#include <QMutex>
+#include <QMutexLocker>
+#endif
 
 #include <KoViewConverter.h>
 
@@ -51,10 +54,18 @@ struct CellPaintData
 class SheetView::Private
 {
 public:
+    Private()
+#ifdef KSPREAD_MT
+        : cacheMutex(QMutex::Recursive)
+#endif
+    {}
     const Sheet* sheet;
     const KoViewConverter* viewConverter;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
+#ifdef KSPREAD_MT
+    QMutex cacheMutex;
+#endif
     QRegion cachedArea;
     CellView* defaultCellView;
     // The maximum accessed cell range used for the scrollbar ranges.
@@ -62,8 +73,13 @@ public:
 
 public:
     Cell cellToProcess(int col, int row, QPointF& coordinate, QSet<Cell>& processedMergedCells, const QRect& visRect);
+#ifdef KSPREAD_MT
+    CellView cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
+                               SheetView* sheetView, const QRect& visRect);
+#else
     const CellView& cellViewToProcess(Cell& cell, QPointF& coordinate, QSet<Cell>& processedObscuredCells,
                                SheetView* sheetView, const QRect& visRect);
+#endif
 };
 
 Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
@@ -93,12 +109,21 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
     return cell;
 }
 
+#ifdef KSPREAD_MT
+CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
+        QSet<Cell>& processedObscuredCells, SheetView* sheetView, const QRect& visRect)
+#else
 const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
         QSet<Cell>& processedObscuredCells, SheetView* sheetView, const QRect& visRect)
+#endif
 {
     const int col = cell.column();
     const int row = cell.row();
+#ifdef KSPREAD_MT
+    CellView cellView = sheetView->cellView(col, row);
+#else
     const CellView& cellView = sheetView->cellView(col, row);
+#endif
     if (cellView.isObscured()) {
         // if the rect of visible cells contains the obscuring cell, it was already painted
         if (visRect.contains(cellView.obscuringCell())) {
@@ -160,19 +185,35 @@ const KoViewConverter* SheetView::viewConverter() const
     return d->viewConverter;
 }
 
+#ifdef KSPREAD_MT
+CellView SheetView::cellView(int col, int row)
+#else
 const CellView& SheetView::cellView(int col, int row)
+#endif
 {
     Q_ASSERT(1 <= col && col <= KS_colMax);
     Q_ASSERT(1 <= row && col <= KS_rowMax);
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
     if (!d->cache.contains(QPoint(col, row))) {
-        d->cache.insert(QPoint(col, row), createCellView(col, row));
+        CellView *v = createCellView(col, row);
+        d->cache.insert(QPoint(col, row), v);
         d->cachedArea += QRect(col, row, 1, 1);
     }
+#ifdef KSPREAD_MT
+    CellView v = *d->cache.object(QPoint(col, row));
+    return v;
+#else
     return *d->cache.object(QPoint(col, row));
+#endif
 }
 
 void SheetView::setPaintCellRange(const QRect& rect)
 {
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
     d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
     d->cache.setMaxCost(2 * rect.width() * rect.height());
 }
@@ -193,6 +234,9 @@ void SheetView::invalidateRegion(const Region& region)
 
 void SheetView::invalidate()
 {
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
     delete d->defaultCellView;
     d->defaultCellView = createDefaultCellView();
     d->cache.clear();
@@ -358,6 +402,9 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
 
 void SheetView::invalidateRange(const QRect& range)
 {
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
     const int right  = range.right();
     for (int col = range.left(); col <= right; ++col) {
         const int bottom = range.bottom();
@@ -382,6 +429,9 @@ void SheetView::invalidateRange(const QRect& range)
 
 void SheetView::obscureCells(const QRect& range, const QPoint& position)
 {
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
     const int right = range.right();
     const int bottom = range.bottom();
     for (int col = range.left(); col <= right; ++col) {
@@ -394,7 +444,11 @@ void SheetView::obscureCells(const QRect& range, const QPoint& position)
     }
 }
 
+#ifdef KSPREAD_MT
+CellView SheetView::defaultCellView() const
+#else
 const CellView& SheetView::defaultCellView() const
+#endif
 {
     return *d->defaultCellView;
 }

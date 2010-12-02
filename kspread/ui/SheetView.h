@@ -85,7 +85,11 @@ public:
      *
      * \return the CellView for the position
      */
+#ifdef KSPREAD_MT
+    CellView cellView(int col, int row);
+#else
     const CellView& cellView(int col, int row);
+#endif
 
     /**
      * Set the cell range, that should be painted to \p rect .
@@ -135,7 +139,11 @@ private:
      * Returns the default CellView.
      * Used by CellView.
      */
+#ifdef KSPREAD_MT
+    CellView defaultCellView() const;
+#else
     const CellView& defaultCellView() const;
+#endif
 
     Q_DISABLE_COPY(SheetView)
 
