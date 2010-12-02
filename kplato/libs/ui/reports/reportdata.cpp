@@ -181,9 +181,13 @@ void ReportData::setSorting(const QList<SortedField>& lst )
 
 KoReportData* ReportData::data(const QString &source)
 {
-    KoReportData *rd = 0;
-    emit createReportData( source, rd );
-    return rd;
+    emit createReportData( source, this );
+    return m_datasource;
+}
+
+void ReportData::setDataSource( ReportData *source )
+{
+    m_datasource = source;
 }
 
 void ReportData::setModel( QAbstractItemModel *model )

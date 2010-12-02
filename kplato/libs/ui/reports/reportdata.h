@@ -111,16 +111,19 @@ public:
 public slots:
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
+    void setDataSource( ReportData *source );
 
 signals:
     void scheduleManagerChanged( ScheduleManager *sm );
-    void createReportData( const QString &type, KoReportData *rd );
+    void createReportData( const QString &type, ReportData *rd );
 
 protected:
     QSortFilterProxyModel m_model;
     long m_row;
     Project *m_project;
     ScheduleManager *m_schedulemanager;
+    
+    ReportData *m_datasource;
 };
 
 class KPLATOUI_EXPORT ChartReportData : public ReportData
