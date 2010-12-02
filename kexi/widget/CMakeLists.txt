@@ -58,14 +58,15 @@ ENDIF (KEXI_MOBILE)
 kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
   kexidbconnectionwidget.ui
   kexidbconnectionwidgetdetails.ui
+  kexiprjtypeselector.ui
 )
 
 IF (KEXI_MOBILE)
 
 ELSE(KEXI_MOBILE)
-  LIST(APPEND kexiextendedwidgets_LIB_SRCS
-    kexiprjtypeselector.ui
-  )
+  #LIST(APPEND kexiextendedwidgets_LIB_SRCS
+  #  kexiprjtypeselector.ui
+  #)
 ENDIF(KEXI_MOBILE)
 
 kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
