@@ -25,6 +25,10 @@
 #include <QRegion>
 #include <QTimer>
 #include <QRunnable>
+#ifdef KSPREAD_MT
+#include <QMutex>
+#include <QMutexLocker>
+#endif
 
 #include "Global.h"
 #include "Map.h"
@@ -41,6 +45,11 @@ using namespace KSpread;
 class KDE_NO_EXPORT StyleStorage::Private
 {
 public:
+    Private()
+#ifdef KSPREAD_MT
+        : cacheMutex(QMutex::Recursive)
+#endif
+    {}
     Map* map;
     RTree<SharedSubStyle> tree;
     QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and qUpperBound() for insertion.
@@ -51,6 +60,9 @@ public:
     QCache<QPoint, Style> cache;
     QRegion cachedArea;
     StyleStorageLoaderJob* loader;
+#ifdef KSPREAD_MT
+    QMutex cacheMutex;
+#endif
 
     void ensureLoaded();
 };
@@ -95,8 +107,13 @@ void StyleStorageLoaderJob::run()
     d->usedArea = QRegion();
     d->usedColumns.clear();
     d->usedRows.clear();
-    d->cachedArea = QRegion();
-    d->cache.clear();
+    {
+#ifdef KSPREAD_MT
+        QMutexLocker(&d->cacheMutex);
+#endif
+        d->cachedArea = QRegion();
+        d->cache.clear();
+    }
     typedef QPair<QRegion, Style> StyleRegion;
     foreach (const StyleRegion& styleArea, m_styles) {
         const QRegion& reg = styleArea.first;
@@ -196,10 +213,17 @@ Style StyleStorage::contains(const QPoint& point) const
     d->ensureLoaded();
     if (!d->usedArea.contains(point) && !d->usedColumns.contains(point.x()) && !d->usedRows.contains(point.y()))
         return *styleManager()->defaultStyle();
-    // first, lookup point in the cache
-    if (d->cache.contains(point)) {
-//         kDebug(36006) <<"StyleStorage: Using cached style for" << cellName;
-        return *d->cache.object(point);
+
+    {
+#ifdef KSPREAD_MT
+        QMutexLocker ml(&d->cacheMutex);
+#endif
+        // first, lookup point in the cache
+        if (d->cache.contains(point)) {
+    //         kDebug(36006) <<"StyleStorage: Using cached style for" << cellName;
+            Style st = *d->cache.object(point);
+            return st;
+        }
     }
     // not found, lookup in the tree
     QList<SharedSubStyle> subStyles = d->tree.contains(point);
@@ -209,9 +233,14 @@ Style StyleStorage::contains(const QPoint& point) const
     Style* style = new Style();
     (*style) = composeStyle(subStyles);
 
-    // insert style into the cache
-    d->cache.insert(point, style);
-    d->cachedArea += QRect(point, point);
+    {
+#ifdef KSPREAD_MT
+        QMutexLocker ml(&d->cacheMutex);
+#endif
+        // insert style into the cache
+        d->cache.insert(point, style);
+        d->cachedArea += QRect(point, point);
+    }
     return *style;
 }
 
@@ -626,6 +655,9 @@ void StyleStorage::invalidateCache()
     if (d->loader && !d->loader->isFinished())
         return;
 
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
     d->cache.clear();
     d->cachedArea = QRegion();
 }
@@ -788,6 +820,9 @@ void StyleStorage::invalidateCache(const QRect& rect)
     if (d->loader && !d->loader->isFinished())
         return;
 
+#ifdef KSPREAD_MT
+    QMutexLocker ml(&d->cacheMutex);
+#endif
 //     kDebug(36006) <<"StyleStorage: Invalidating" << rect;
     const QRegion region = d->cachedArea.intersected(rect);
     d->cachedArea = d->cachedArea.subtracted(rect);
