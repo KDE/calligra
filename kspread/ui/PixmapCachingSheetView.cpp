@@ -29,6 +29,11 @@
 
 #include <kdebug.h>
 
+#ifdef KSPREAD_MT
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/Weaver>
+#endif
+
 using namespace KSpread;
 
 #define TILESIZE 256
@@ -41,8 +46,75 @@ public:
     QCache<int, QPixmap> tileCache;
     QPointF lastScale;
 
-    QPixmap* getTile(const Sheet* sheet, int x, int y);
+    QPixmap* getTile(const Sheet* sheet, int x, int y, CanvasBase* canvas);
 };
+
+#ifdef KSPREAD_MT
+class TileDrawingJob : public ThreadWeaver::Job
+{
+public:
+    TileDrawingJob(const Sheet* sheet, SheetView* sheetView, CanvasBase* canvas, const QPointF& scale, int x, int y);
+    ~TileDrawingJob();
+protected:
+    virtual void run();
+private:
+    const Sheet* m_sheet;
+    SheetView* m_sheetView;
+public:
+    CanvasBase* m_canvas;
+    QPointF m_scale;
+    int m_x;
+    int m_y;
+    QImage m_image;
+};
+
+TileDrawingJob::TileDrawingJob(const Sheet *sheet, SheetView* sheetView, CanvasBase* canvas, const QPointF& scale, int x, int y)
+    : m_sheet(sheet), m_sheetView(sheetView), m_canvas(canvas), m_scale(scale), m_x(x), m_y(y)
+    , m_image(TILESIZE, TILESIZE, QImage::Format_ARGB32)
+{
+    kDebug() << "new job for " << x << "," << y << " " << m_scale;
+}
+
+TileDrawingJob::~TileDrawingJob()
+{
+    kDebug() << "end job for " << m_x << "," << m_y << " " << m_scale;
+}
+
+void TileDrawingJob::run()
+{
+    kDebug() << "start draw for " << m_x << "," << m_y << " " << m_scale;
+    m_image.fill(QColor(255, 255, 255, 0).rgba());
+    QPainter pixmapPainter(&m_image);
+    pixmapPainter.setClipRect(m_image.rect());
+    pixmapPainter.scale(m_scale.x(), m_scale.y());
+
+    QRect globalPixelRect(QPoint(m_x * TILESIZE, m_y * TILESIZE), QSize(TILESIZE, TILESIZE));
+    QRectF docRect(
+            globalPixelRect.x() / m_scale.x(),
+            globalPixelRect.y() / m_scale.y(),
+            globalPixelRect.width() / m_scale.x(),
+            globalPixelRect.height() / m_scale.y()
+    );
+
+    pixmapPainter.translate(-docRect.x(), -docRect.y());
+
+    double loffset, toffset;
+    const int left = m_sheet->leftColumn(docRect.left(), loffset);
+    const int right = m_sheet->rightColumn(docRect.right());
+    const int top = m_sheet->topRow(docRect.top(), toffset);
+    const int bottom = m_sheet->bottomRow(docRect.bottom());
+    QRect cellRect(left, top, right - left + 1, bottom - top + 1);
+
+    kDebug() << globalPixelRect << docRect;
+    kDebug() << cellRect;
+
+    // TODO
+    m_sheetView->SheetView::paintCells(pixmapPainter, docRect, QPointF(loffset, toffset), 0, cellRect);
+
+    //m_image.save(QString("/tmp/tile%1_%2.png").arg(m_x).arg(m_y));
+    kDebug() << "end draw for " << m_x << "," << m_y << " " << m_scale;
+}
+#endif
 
 PixmapCachingSheetView::PixmapCachingSheetView(const Sheet* sheet)
     : SheetView(sheet), d(new Private(this))
@@ -55,11 +127,34 @@ PixmapCachingSheetView::~PixmapCachingSheetView()
     delete d;
 }
 
-QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int y)
+void PixmapCachingSheetView::jobDone(ThreadWeaver::Job *tjob)
+{
+#ifdef KSPREAD_MT
+    TileDrawingJob* job = static_cast<TileDrawingJob*>(tjob);
+    if (job->m_scale == d->lastScale) {
+        int idx = job->m_x << 16 | job->m_y;
+        d->tileCache.insert(idx, new QPixmap(QPixmap::fromImage(job->m_image)));
+        // TODO: figure out what area to repaint
+        job->m_canvas->update();
+    }
+    job->deleteLater();
+#endif
+}
+
+QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int y, CanvasBase* canvas)
 {
     int idx = x << 16 | y;
     if (tileCache.contains(idx)) return tileCache.object(idx);
 
+#ifdef KSPREAD_MT
+    TileDrawingJob* job = new TileDrawingJob(sheet, q, canvas, lastScale, x, y);
+    QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)), q, SLOT(jobDone(ThreadWeaver::Job*)), Qt::QueuedConnection);
+    ThreadWeaver::Weaver::instance()->enqueue(job);
+    QPixmap* pm = new QPixmap(TILESIZE, TILESIZE);
+    pm->fill(QColor(255, 255, 255, 0));
+    tileCache.insert(idx, pm);
+    return pm;
+#else
     QPixmap* pm = new QPixmap(TILESIZE, TILESIZE);
     pm->fill(QColor(255, 255, 255, 0));
     QPainter pixmapPainter(pm);
@@ -86,17 +181,17 @@ QPixmap* PixmapCachingSheetView::Private::getTile(const Sheet* sheet, int x, int
     kDebug() << globalPixelRect << docRect;
     kDebug() << cellRect;
 
-    q->setVisibleRect(cellRect);
-    q->SheetView::paintCells(pixmapPainter, docRect, QPointF(loffset, toffset));
-    //pm->save(QString("/tmp/tile%1.png").arg(idx));
+    q->SheetView::paintCells(pixmapPainter, docRect, QPointF(loffset, toffset), 0, cellRect);
+    pm->save(QString("/tmp/tile%1.png").arg(idx));
     tileCache.insert(idx, pm);
     return pm;
+#endif
 }
 
-void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase* canvas)
+void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect)
 {
     if (!canvas) {
-        SheetView::paintCells(painter, paintRect, topLeft);
+        SheetView::paintCells(painter, paintRect, topLeft, canvas, visibleRect);
         return;
     }
     // paintRect:   the canvas area, that should be painted; in document coordinates;
@@ -133,19 +228,15 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     tiles.setBottom((pixelRect.bottom() + TILESIZE - 1) / TILESIZE);
     kDebug() << paintRect << pixelRect << tiles << topLeft << scale << o;
 
-    QRect savedVisRect = visibleRect();
-
     const Sheet* s = sheet();
     for (int x = tiles.left(); x < tiles.right(); x++) {
         for (int y = tiles.top(); y < tiles.bottom(); y++) {
-            QPixmap *p = d->getTile(s, x, y);
+            QPixmap *p = d->getTile(s, x, y, canvas);
             QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
             QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
             painter.drawPixmap(r, *p, p->rect());
         }
     }
-
-    setVisibleRect(savedVisRect);
 }
 
 void PixmapCachingSheetView::invalidateRegion(const Region &region)

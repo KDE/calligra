@@ -22,6 +22,10 @@
 
 #include "SheetView.h"
 
+namespace ThreadWeaver {
+    class Job;
+}
+
 namespace KSpread {
 
 class PixmapCachingSheetView : public SheetView
@@ -40,7 +44,9 @@ public:
 
     virtual void invalidateRegion(const Region& region);
     virtual void invalidate();
-    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, const CanvasBase* canvas);
+    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect);
+private slots:
+    void jobDone(ThreadWeaver::Job* job);
 private:
     class Private;
     Private * const d;
