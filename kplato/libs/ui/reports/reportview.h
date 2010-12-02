@@ -142,8 +142,11 @@ private slots:
     void slotExport();
     void slotExportFinished( int result );
 
+    void createReportData( const QString &type, ReportData *rd );
+
 private:
     ReportData *createReportData( const QDomElement &connection );
+    ReportData *createReportData( const QString &type );
     void exportToOds( KoReportRendererContext &context );
     void exportToHtml( KoReportRendererContext &context );
     void exportToXHtml( KoReportRendererContext &context );

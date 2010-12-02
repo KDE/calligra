@@ -351,6 +351,8 @@ KexiTableView::~KexiTableView()
             data->deleteLater();
     }
     delete d;
+    m_horizontalHeader->setStyle(0);
+    delete m_horizontalHeader;
 }
 
 void KexiTableView::clearVariables()

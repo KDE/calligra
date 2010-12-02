@@ -71,7 +71,7 @@ public slots:
     void slotInsertAction();
     
     void setReportData( const QString &tag );
-    void createReportData( const QString &type, KoReportData *rd );
+    void createReportData( const QString &type, ReportData *rd );
     
     void setModified() { m_modified = true; }
 

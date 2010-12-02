@@ -115,6 +115,7 @@ KexiActionProxy::~KexiActionProxy()
     m_host->takeActionProxyFor(m_receiver);
 
     delete m_KAction_setEnabled_helper;
+    delete d;
 }
 
 void KexiActionProxy::plugSharedAction(const QString& action_name, QObject* receiver, const char *slot)

@@ -781,16 +781,6 @@ EffortCostMap Task::bcwpPrDay( long id ) const
         const_cast<EffortCost&>(it.value()).setBcwpEffort( totEff  * p );
         const_cast<EffortCost&>(it.value()).setBcwpCost( totCost  * p );
     }
-    if ( completion().isStarted() ) {
-        EffortCost ec;
-        ec.setBcwpCost( m_startupCost );
-        e.add( completion().startTime().date(), ec );
-    }
-    if ( completion().isFinished() ) {
-        EffortCost ec;
-        ec.setBcwpCost( m_shutdownCost );
-        e.add( completion().finishTime().date(), ec );
-    }
     return e;
 }
 

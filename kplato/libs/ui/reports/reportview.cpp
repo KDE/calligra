@@ -428,16 +428,31 @@ ReportData *ReportView::createReportData( const QDomElement &element )
     QDomElement e = element.firstChildElement( "data-source" );
     QString modelname = e.attribute( "select-from" );
 
+    return createReportData( modelname );
+}
+
+void ReportView::createReportData( const QString &type, ReportData *rd )
+{
+    Q_ASSERT( rd );
+    rd->setDataSource( createReportData( type ) );
+}
+
+ReportData *ReportView::createReportData( const QString &type )
+{
+    kDebug()<<type;
     //FIXME a smarter report data creator
     ReportData *r = 0;
-    if ( modelname == "costbreakdown" ) {
+    if ( type == "costbreakdown" ) {
         r = new ChartReportData();
     } else {
         r = new ReportData();
     }
-    r->setModel( m_modelmap.value( modelname ) );
+    r->setModel( m_modelmap.value( type ) );
     r->setProject( project() );
     r->setScheduleManager( m_schedulemanager );
+    r->setObjectName( type );
+    connect( r, SIGNAL(createReportData(const QString&, ReportData*)), SLOT(createReportData(const QString&, ReportData*)));
+
     return r;
 }
 
@@ -827,9 +842,10 @@ QDomDocument ReportDesignPanel::document() const
     return document;
 }
 
-void ReportDesignPanel::createReportData( const QString &type, KoReportData *rd )
+void ReportDesignPanel::createReportData( const QString &type, ReportData *rd )
 {
-    rd = createReportData( type );
+    Q_ASSERT( rd );
+    rd->setDataSource( createReportData( type ) );
 }
 
 ReportData *ReportDesignPanel::createReportData( const QString &type )
@@ -841,7 +857,7 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
     } else {
         r = new ReportData();
     }
-    connect( r, SIGNAL( createReportData( const QString&, KoReportData* ) ), SLOT( createReportData( const QString&, KoReportData* ) ) );
+    connect( r, SIGNAL(createReportData(const QString&, ReportData*)), SLOT(createReportData(const QString&, ReportData*)));
     r->setModel( m_modelmap.value( type ) );
     Q_ASSERT( r );
     return r;

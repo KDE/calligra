@@ -254,7 +254,7 @@ void PerformanceTester::bcwpPrDayTask()
     d = t1->startTime().date();
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.5 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.05 ); //10% progress
 
     // add shutdown cost
     t1->setShutdownCost( 0.5 );
@@ -264,7 +264,7 @@ void PerformanceTester::bcwpPrDayTask()
     ecm = t1->bcwpPrDay();
     Debug::print( t1->completion(), t1->name(), "BCWP Performance with shutdown cost" );
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.5 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.5 ); //100% progress
 }
 
 void PerformanceTester::acwpPrDayTask()
@@ -600,7 +600,7 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
 //    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 + 0.4 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.05 + 0.4 ); // 10% progress
 
     // add shutdown cost
     t1->setShutdownCost( 0.25 );
@@ -611,7 +611,7 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     Debug::print( t1->completion(), t1->name(), "BCWP Material with shutdown cost" );
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
 //    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.25 + 4.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 + 4.0 ); // 100% progress
 }
 
 void PerformanceTester::acwpPrDayTaskMaterial()
@@ -874,7 +874,7 @@ void PerformanceTester::bcwpPrDayProject()
     d = p1->startTime().date();
     ecm = p1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.05 ); // 10% progress
 
     // add shutdown cost to task
     t1->setShutdownCost( 0.25 );
@@ -883,7 +883,7 @@ void PerformanceTester::bcwpPrDayProject()
     d = p1->endTime().date();
     ecm = p1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.25 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 ); // 100% progress
 }
 
 void PerformanceTester::acwpPrDayProject()
