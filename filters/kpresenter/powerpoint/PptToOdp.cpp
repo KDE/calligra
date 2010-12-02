@@ -845,7 +845,109 @@ QString PptToOdp::getPicturePath(int pib) const
 }
 
 void PptToOdp::defineTextProperties(KoGenStyle& style,
-                                    const TextCFException* cf,
+                                    const PptTextCFRun* cf,
+                                    const TextCFException9* /*cf9*/,
+                                    const TextCFException10* /*cf10*/,
+                                    const TextSIException* si)
+{
+    //getting information for all the possible attributes in
+    //style:text-properties for clarity in alphabetical order
+
+    const KoGenStyle::PropertyType text = KoGenStyle::TextType;
+
+    // fo:background-color
+    // fo:color
+    ColorIndexStruct cis = cf->color();
+    QColor color = toQColor(cis);
+    if (color.isValid()) {
+        style.addProperty("fo:color", color.name(), text);
+    }
+    // fo:country
+    // fo:font-family
+    const FontEntityAtom* font = getFont(cf->fontRef());
+    if (font) {
+        const QString name = QString::fromUtf16(font->lfFaceName.data(),
+                                                font->lfFaceName.size());
+        style.addProperty("fo:font-family", name, text);
+    }
+    // fo:font-size
+    style.addProperty("fo:font-size", pt(cf->fontSize()), text);
+    // fo:font-style: "italic", "normal" or "oblique
+    style.addProperty("fo:font-style", cf->italic() ?"italic" :"normal", text);
+    // fo:font-variant: "normal" or "small-caps"
+    // fo:font-weight: "100", "200", "300", "400", "500", "600", "700", "800", "900", "bold" or "normal"
+    style.addProperty("fo:font-weight", cf->bold() ?"bold" :"normal", text);
+    // fo:hyphenate
+    // fo:hyphenation-push-char
+    // fo:hyphenation-remain-char-count
+    // fo:language
+    if (si && si->lang) {
+        // TODO: get mapping from lid to language code
+    }
+    // fo:letter-spacing
+    // fo:text-shadow
+    style.addProperty("fo:text-shadow", cf->shadow() ?"1pt 1pt" :"none", text);
+    // fo:text-transform: "capitalize", "lowercase", "none" or "uppercase"
+    // style:country-asian
+    // style:country-complex
+    // style:font-charset
+    // style:font-family-asian
+    // style:font-family-complex
+    // style:font-family-generic
+    // style:font-family-generic-asian
+    // style:font-family-generic-complex
+    // style:font-name
+    // style:font-name-asian
+    // style:font-name-complex
+    // style:font-pitch
+    // style:font-pitch-asian
+    // style:font-pitch-complex
+    // style:font-relief: "embossed", "engraved" or "none"
+    style.addProperty("style:font-relief", cf->emboss() ?"embossed" :"none", text);
+    // style:font-size-asian
+    // style:font-size-complex
+    // style:font-size-rel
+    // style:font-size-rel-asian
+    // style:font-size-rel-complex
+    // style:font-style-asian
+    // style:font-style-complex
+    // style:font-style-name
+    // style:font-style-name-asian
+    // style:font-style-name-complex
+    // style:font-weight-asian
+    // style:font-weight-complex
+    // style:language-asian
+    // style:language-complex
+    // style:letter-kerning
+    // style:script-type
+    // style:text-blinking
+    // style:text-combine
+    // style:text-combine-end-char
+    // style:text-combine-start-char
+    // style:text-emphasize
+    // style:text-line-through-color
+    // style:text-line-through-mode
+    // style:text-line-through-style
+    // style:text-line-through-text
+    // style:text-line-through-text-style
+    // style:text-line-through-type
+    // style:text-line-through-width
+    // style:text-outline
+    // style:text-position
+    // style:text-rotation-angle
+    // style:text-rotation-scale
+    // style:text-scale
+    // style:text-underline-color
+    // style:text-underline-mode
+    // style:text-underline-style
+    // style:text-underline-type: "double", "none" or "single"
+    style.addProperty("style:text-underline-type", cf->underline() ?"single" :"none", text);
+    // style:text-underline-width
+    // style:use-window-font-color
+}
+
+void PptToOdp::defineTextProperties(KoGenStyle& style,
+                                    const MSO::TextCFException* cf,
                                     const TextCFException9* /*cf9*/,
                                     const TextCFException10* /*cf10*/,
                                     const TextSIException* si,
@@ -862,6 +964,12 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
             style.addProperty("fo:color", color.name(), text);
         }
     }
+
+    //NOTE: TOTALLY WRONG APPROACH !!!!!!!  You have to check the corresponding
+    //master shape if you don't have a color!!!  And check if there's a master
+    //slide for it!!! Check the previous implementation of defineTextProperties
+    
+
     // Use the color defined by the corresponding color scheme.  Let's create a
     // temporary OfficeArtCOLORREF to reuse the toQColor function.  The red
     // value will be treated as an index into the current color scheme table.
@@ -2000,26 +2108,17 @@ int getMeta(const TextContainerMeta& m, const TextContainerMeta*& meta,
     return end;
 }
 
-int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
+int PptToOdp::processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
                               const QString& text, const int start,
                               int end)
 {
-    // find all components that start at position start and get the right
-    // character run
-    const TextCFRun* cfr = getCFRun(&tc, start);
-    const TextCFException* cf = NULL;
-    int count = 0;
+    int count = cf->addCurrentCFRun(tc, start);
 
     //TODO: there's no TextCFRun in case we rely on TextCFExceptionAtom or
-    //TextMasterStyleLevel, handle this case.
-
-    if (cfr) {
-        cf = &cfr->cf;
-        count = cfr->count;
-    }
+    //TextMasterStyleLevel, handle this case. (uzak)
     
     //NOTE: At the moment, TextSIException data are not processed in the
-    //defineTextProperties function, so keep it simple! (uzak}
+    //defineTextProperties function, so keep it simple! (uzak)
 
     const TextSIException* si = 0;
     int i = 0;
@@ -2139,7 +2238,7 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
     }
     KoGenStyle style(KoGenStyle::TextAutoStyle, "text");
     style.setAutoStyleInStylesDotXml(out.stylesxml);
-    defineTextProperties(style, cf, 0, 0, si, &tc);
+    defineTextProperties(style, cf, 0, 0, si);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
     if (meta) {
@@ -2158,12 +2257,12 @@ int PptToOdp::processTextSpan(const MSO::TextContainer& tc, Writer& out,
     return end;
 }
 
-int PptToOdp::processTextSpans(const MSO::TextContainer& tc, Writer& out,
-                              const QString& text, int start, int end)
+int PptToOdp::processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
+			       const QString& text, int start, int end)
 {
     int pos = start;
     while (pos < end) {
-        int r = processTextSpan(tc, out, text, pos, end);
+        int r = processTextSpan(cf, tc, out, text, pos, end);
         if (r <= pos) {
             // some error
             qDebug() << "pos: " << pos << " end: " << end << " r: " << r;
@@ -2200,12 +2299,37 @@ void PptToOdp::processTextLine(Writer& out,
     }
     PptTextPFRun pf(p->documentContainer, currentSlideTexts, currentMaster, pcd,
                     &tc, start);
+
+    int level = pf.level();
+
+    //The current TextCFException located in the TextContainer will be
+    //prepended to the list in the processTextSpan function.
+    QList<const MasterOrSlideContainer*> mh;
+
+    //TODO: support for notes master slide required!
+
+    //prepare the masters hierarchy
+    if (currentMaster) {
+        const MasterOrSlideContainer* m = currentMaster;
+        while (m) {
+            mh.append(m);
+            //masterIdRef MUST be 0x00000000 if the record that contains this
+            //SlideAtom record is a MainMasterContainer record (MS-PPT 2.5.10)
+            if (m->anon.is<SlideContainer>()) {
+                m = p->getMaster(m->anon.get<SlideContainer>());
+            } else {
+                m = NULL;
+            }
+        }
+    }
+
+    PptTextCFRun cf(p->documentContainer, mh, tc, level);
+
     bool islist = (pf.isList() && (start < end));
     static bool first = true;
 
     if (islist) {
         QString listStyle = defineAutoListStyle(out, pf);
-        int level = pf.level();
 
 	//check if we have the corresponding style for this level, if not then
 	//close the list and create a new one (K.I.S.S.)
@@ -2237,7 +2361,7 @@ void PptToOdp::processTextLine(Writer& out,
     style.setAutoStyleInStylesDotXml(out.stylesxml);
     defineParagraphProperties(style, pf);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
-    processTextSpans(tc, out, text, start, end);
+    processTextSpans(&cf, tc, out, text, start, end);
     out.xml.endElement(); // text:p
 
     if (islist) {
@@ -2513,15 +2637,30 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
 //     const MSO::NotesContainer* nmc = NULL;
 //     const MSO::NotesContainer* nc = NULL;
 
-    if (m) {
-        if (m->anon.is<MainMasterContainer>()) {
+//     if (m) {
+//         if (m->anon.is<MainMasterContainer>()) {
+//             mmc = m->anon.get<MainMasterContainer>();
+//             colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+//         } else if (m->anon.is<SlideContainer>()) {
+//             tmc = m->anon.get<SlideContainer>();
+//             colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+//         }
+//     }
+
+    //a title master slide does not provide any additional text formatting
+    //information, use it's master's color scheme
+    while (m) {
+        //masterIdRef MUST be 0x00000000 if the record that contains this
+        //SlideAtom record is a MainMasterContainer record (MS-PPT 2.5.10)
+        if (m->anon.is<SlideContainer>()) {
+            m = p->getMaster(m->anon.get<SlideContainer>());
+        } else {
             mmc = m->anon.get<MainMasterContainer>();
             colorScheme = &mmc->slideSchemeColorSchemeAtom.rgSchemeColor;
-        } else if (m->anon.is<SlideContainer>()) {
-            tmc = m->anon.get<SlideContainer>();
-            colorScheme = &tmc->slideSchemeColorSchemeAtom.rgSchemeColor;
+            m = NULL;
         }
     }
+
     if (sc) {
         if (!sc->slideAtom.slideFlags.fMasterScheme) {
             colorScheme = &sc->slideSchemeColorSchemeAtom.rgSchemeColor;

@@ -82,20 +82,24 @@ public:
 };
 
 class PptTextCFRun {
+    QList<const MSO::TextCFException*> cfs;
     quint16 level_;
-    const MSO::TextCFException* cfs[6];
+    bool cfrun_rm;
 public:
-    PptTextCFRun() :level_(0)
-    {
-        *cfs = 0;
-    }
     PptTextCFRun(const MSO::DocumentContainer* d,
-                 const MSO::MasterOrSlideContainer* m,
+                 QList<const MSO::MasterOrSlideContainer*> &mh,
                  const MSO::TextContainer& tc,
-                 quint16 level,
-                 quint32 start);
+                 quint16 level);
 
-    const MSO::TextCFException* cf() const { return cfs[0]; }
+    /**
+     * Add the TextCFException structure present in the current TextContainer,
+     * which specifies character-level style and formatting, font information,
+     * coloring and positioninghe for the given run of text.
+     *
+     * @return the number of characters of the corresponding text to which this
+     * character formatting applies
+     */
+    int addCurrentCFRun(const MSO::TextContainer& tc, quint32 start);
 
     bool bold() const;
     bool italic() const;

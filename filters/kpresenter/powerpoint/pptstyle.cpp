@@ -141,9 +141,9 @@ const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
         ms = getTextMasterStyleAtom(m, 0);
     }
     //those are placeholder shapes so let's inherit from Tx_TYPE_BODY
-    else if (textType == 5 || textType == 7 || textType == 8) {
-        ms = getTextMasterStyleAtom(m, 1);
-    }
+//     else if (textType == 5 || textType == 7 || textType == 8) {
+//         ms = getTextMasterStyleAtom(m, 1);
+//     }
     //NOTE: Tx_TYPE_NOTES and Tx_TYPE_OTHER do not inherit
     return getTextMasterStyleLevel(ms, level);
 }
@@ -420,20 +420,44 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     //placing it into a text:list element.
     level_ = level;
 }
-PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
-                           const MasterOrSlideContainer* m,
-                           const TextContainer& tc,
-                           quint16 level,
-                           quint32 start)
-{
-    const TextCFRun* cfrun = getCFRun(&tc, start);
 
-    *cfs = 0;
-    addStyle(cfs, (cfrun) ?&cfrun->cf :0);
-    addStyle(cfs, getLevelCF(m, tc, level));
-    addStyle(cfs, getBaseLevelCF(m, &tc, level));
-    addStyle(cfs, getDefaultLevelCF(d, level));
-    addStyle(cfs, getDefaultCF(d));
+PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
+                           QList<const MSO::MasterOrSlideContainer*> &mh,
+                           const MSO::TextContainer& tc,
+                           quint16 level)
+{
+    //check the main master/title master slide's TextMasterStyleAtom
+    for (int i = 0; i < mh.size(); i++) {
+        cfs.append(getLevelCF(mh[i], tc, level));
+        cfs.append(getBaseLevelCF(mh[i], &tc, level));
+    }
+
+    //check DocumentContainer/DocumentTextInfoContainer/textMasterStyleAtom
+    cfs.append(getDefaultLevelCF(d, level));
+    //check DocumentContainer/DocumentTextInfoContainer/textCFDefaultsAtom
+    cfs.append(getDefaultCF(d));
+
+    level_ = level;
+    cfrun_rm = false;
+}
+
+int PptTextCFRun::addCurrentCFRun(const MSO::TextContainer& tc, quint32 start)
+{
+    int n = 0;
+
+    //remove pointer to TextCFException structure of the previous run of text
+    if (cfrun_rm) {
+        cfs.removeFirst();
+        cfrun_rm = false;
+    }
+
+    const TextCFRun* cfrun = getCFRun(&tc, start);
+    if (cfrun) {
+        cfs.prepend(&cfrun->cf);
+        n = cfrun->count;
+        cfrun_rm = true;
+    }
+    return n;
 }
 
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
@@ -550,12 +574,12 @@ bool PptTextPFRun::isList() const {
 #define GETTER(TYPE, PARENT, PRE, NAME, TEST, DEFAULT) \
 TYPE PptTextCFRun::NAME() const \
 { \
-    const MSO::TextCFException* const * c = cfs; \
-    while (*c) { \
-        if ((*c)->TEST) { \
-            return PRE (*c)->PARENT NAME; \
+    for (int i = 0; i < cfs.size(); i++) { \
+        if (cfs[i]) { \
+            if ((cfs[i])->TEST) { \
+                return PRE (cfs[i])->PARENT NAME; \
+            } \
         } \
-        ++c; \
     } \
     return DEFAULT; \
 }
