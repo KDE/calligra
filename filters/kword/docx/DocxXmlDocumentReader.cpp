@@ -5093,7 +5093,11 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_align(alignCaller caller)
     break;
     }
 
-    readNext();
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+    }
+
     READ_EPILOGUE
 }
 
