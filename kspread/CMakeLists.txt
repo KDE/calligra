@@ -7,6 +7,8 @@ add_subdirectory( plugins )
 add_subdirectory( dtd )
 add_subdirectory( functions )
 
+#add_definitions(-DKSPREAD_MT)
+
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${CMAKE_SOURCE_DIR}/kchart
                     ${KOMAIN_INCLUDES}
@@ -277,6 +279,7 @@ target_link_libraries(kspreadcommon
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_KUTILS_LIBS}
+    ${KDE4_THREADWEAVER_LIBS}
 #    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
