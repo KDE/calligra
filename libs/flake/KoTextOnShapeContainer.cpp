@@ -306,6 +306,7 @@ void KoTextOnShapeContainer::saveOdfChildElements(KoShapeSavingContext &context)
 // static
 void KoTextOnShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
+#if 0
     KoXmlElement text = KoXml::namedItemNS(element, KoXmlNS::text, "p");
     if (!text.isNull()) {
         KoShapeContainer *oldParent = shape->parent();
@@ -317,4 +318,5 @@ void KoTextOnShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement &el
             delete tos;
         }
     }
+#endif
 }
