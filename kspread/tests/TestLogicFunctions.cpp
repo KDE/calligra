@@ -125,6 +125,11 @@ void TestLogicFunctions::testIF()
     CHECK_EVAL("IF(FALSE();7;A1)", Value(Value::Empty));
     CHECK_EVAL("IF(TRUE();4;1/0)", Value(4));
     CHECK_EVAL("IF(FALSE();1/0;5)", Value(5));
+    // Empty vs *
+    CHECK_EVAL("IF(A1==2;2;4)", Value(4));
+    CHECK_EVAL("IF(A1==2.5;2;4)", Value(4));
+    CHECK_EVAL("IF(A1==TRUE();2;4)", Value(4));
+    CHECK_EVAL("IF(A1==\"BAD\";2;4)", Value(4));
 }
 
 void TestLogicFunctions::testNOT()
