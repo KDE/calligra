@@ -123,7 +123,15 @@ private:
     void defineDefaultGraphicProperties(KoGenStyle& style, KoGenStyles& styles);
 
     /* Extract data from TextCFException into the style */
-    void defineTextProperties(KoGenStyle& style, const MSO::TextCFException* cf,
+
+    void defineTextProperties(KoGenStyle& style,
+                              const PptTextCFRun* cf,
+                              const MSO::TextCFException9* cf9,
+                              const MSO::TextCFException10* cf10,
+                              const MSO::TextSIException* si);
+
+    void defineTextProperties(KoGenStyle& style,
+                              const MSO::TextCFException* cf,
                               const MSO::TextCFException9* cf9,
                               const MSO::TextCFException10* cf10,
                               const MSO::TextSIException* si,
@@ -193,9 +201,9 @@ private:
     void processTextForBody(const MSO::OfficeArtClientData* o,
                             const MSO::TextContainer& tc, Writer& out);
 
-    int processTextSpan(const MSO::TextContainer& tc, Writer& out,
+    int processTextSpan(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
                         const QString& text, const int start, int end);
-    int processTextSpans(const MSO::TextContainer& tc, Writer& out,
+    int processTextSpans(PptTextCFRun* cf, const MSO::TextContainer& tc, Writer& out,
                         const QString& text, int start, int end);
     void processTextLine(Writer& out, const MSO::OfficeArtClientData* o,
                          const MSO::TextContainer& tc, const QString& text,
