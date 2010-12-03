@@ -50,6 +50,8 @@ Outline::Outline(KWFrame *frame, const QTransform &matrix)
         m_side = Left;
     } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
         m_side = Both;
+    } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
+        m_side = Bigger;
     }
 }
 
@@ -76,6 +78,8 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
             m_side = Left;
         } else if (frame->runAroundSide() == KWord::BothRunAroundSide) {
             m_side = Both;
+        } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
+            m_side = Bigger;
         }
 
     }
@@ -267,13 +271,18 @@ QRectF Outline::getRightLinePart(const QRectF &lineRect) const
 }
 
 bool Outline::textOnLeft() const
-{
+{    
     return  m_side == Right || m_side == Both;
 }
 
 bool Outline::textOnRight() const
 {
     return m_side == Left || m_side == Both;
+}
+
+bool Outline::textOnBiggerSide() const
+{
+    return m_side == Bigger;
 }
 
 bool Outline::compareRectLeft(Outline *o1, Outline *o2)

@@ -45,8 +45,6 @@ public:
 
     void changeMatrix(const QTransform &matrix);
 
-    void switchSide();
-
     //-------------------------------------------------------------------------------
 
     QRectF cropToLine(const QRectF &lineRect);
@@ -59,9 +57,11 @@ public:
 
     bool textOnRight() const;
 
+    bool textOnBiggerSide() const;
+
     static bool compareRectLeft(Outline *o1, Outline *o2);
 private:
-    enum Side { None, Left, Right, Empty, Both }; // TODO support Auto
+    enum Side { None, Left, Right, Empty, Both, Bigger }; // TODO support Auto
     Side m_side;
     QRectF m_bounds;
     QPolygonF m_polygon;

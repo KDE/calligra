@@ -230,90 +230,12 @@ public:
     {
         m_restartOnNextShape = restartOnNextShape;
     }
-
     bool isValid() const {
         return line.isValid();
-    }
-    void tryFit() {
-        const qreal leftIndent = m_state->x();
-        const qreal width = m_state->width();
-        QRectF rect(leftIndent, m_state->y(), width, 1.);
-        line.setLineWidth(rect.width());
-        if (rect.width() <= 0. || line.textLength() == 0) {
-            // margin so small that the text can't fit.
-            if (m_state->layout->lineCount() > 1
-                    || m_state->layout->text().length() > 0) // parag not empty
-                line.setNumColumns(1); // allow at least one char.
-            line.setPosition(QPointF(rect.x(), rect.y()));
-            return;
-        }
-        rect = limit(rect);
-        qreal movedDown = 0;
-        qreal eligableTop = rect.top();
-        while (true) {
-            if (m_state->numColumns() > 0) {
-                line.setNumColumns(m_state->numColumns());
-                line.setPosition(QPointF(line.x(), rect.y()));
-            } else {
-                qreal x = rect.x();
-                qreal effectiveLineWidth = rect.width();
-                if (leftIndent < x) { // limit moved the left edge, keep the indent.
-                    x += leftIndent;
-                    effectiveLineWidth -= leftIndent;
-                }
-                line.setLineWidth(effectiveLineWidth);
-                line.setPosition(QPointF(x, rect.y()));
-            }
-            rect.setHeight(line.height());
-
-            QRectF newLine = limit(rect);
-            if (newLine.width() <= 0 || line.textLength() == 0
-                    || line.cursorToX(line.textStart()+1) > newLine.right()) {
-                const int Move = 10;
-                movedDown += Move;
-                if (movedDown > m_state->shape->size().height() * 1.3) {
-                    // TODO the magic number of shape height needs some history
-                    // investigation here.
-                    rect = QRectF(leftIndent, eligableTop, width, rect.height());
-                    break;
-                }
-                if (newLine.width() > 0) {
-                    // at least one char fits
-                    eligableTop = rect.top();
-                }
-
-                rect = QRectF(leftIndent, rect.top() + Move, width, rect.height());
-            } else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right()
-                        - rect.right()) < 1E-10) {
-                break;
-            } else if (newLine.isValid()) {
-                rect = newLine;
-            } else {
-                break;
-            }
-        }
     }
     void setOutlines(const QList<Outline*> &outlines) {
         m_outlines = &outlines;
     }
-    QTextLine line;
-private:
-    QRectF limit(const QRectF &rect) {
-        QRectF answer = rect;
-        foreach (Outline *outline, *m_outlines) {
-            answer = outline->limit(answer);
-        }
-
-        if (m_restartOnNextShape){
-            answer.setWidth(0);
-        }
-
-        return answer;
-    }
-    KoTextDocumentLayout::LayoutState *m_state;
-    const QList<Outline*> *m_outlines;
-//----------------------------------------------------------------------------------------------------------------
-public:
     bool processingLine() {
         return m_processingLine;
     }
@@ -360,7 +282,10 @@ public:
         line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
         checkEndOfLine(lineRectPart, maxNaturalTextWidth);
     }
+    QTextLine line;
 private:
+    KoTextDocumentLayout::LayoutState *m_state;
+    const QList<Outline*> *m_outlines;
     QList<Outline*> m_validOutlines;
     QList<QRectF> m_lineParts;
     QRectF m_lineRect;
@@ -387,26 +312,43 @@ private:
             //add whole line rect
             m_lineParts.append(m_lineRect);
         } else {
-            //add line rect parts
-            qSort(m_validOutlines.begin(), m_validOutlines.end(), Outline::compareRectLeft);
+            QList<QRectF> lineParts;
             QRectF rightLineRect = m_lineRect;
-            Outline *prevValidOutline = 0;
+            qSort(m_validOutlines.begin(), m_validOutlines.end(), Outline::compareRectLeft);
+            //devide rect to parts, part can be invalid when outlines are not disjunct
             foreach (Outline *validOutline, m_validOutlines) {
                 QRectF leftLineRect = validOutline->getLeftLinePart(rightLineRect);
-                if (leftLineRect.isValid() && validOutline->textOnLeft()) {
-                    if (!prevValidOutline || prevValidOutline->textOnRight()) {
-                        m_lineParts.append(leftLineRect);
+                lineParts.append(leftLineRect);
+                QRectF lineRect = validOutline->getRightLinePart(rightLineRect);
+                if (lineRect.isValid()) {
+                    rightLineRect = lineRect;
+                }
+            }
+            lineParts.append(rightLineRect);
+            Q_ASSERT(m_validOutlines.size() + 1 == lineParts.size());
+            //select invalid parts because of wrap
+            for (int i = 0; i < m_validOutlines.size(); i++) {
+                Outline *outline = m_validOutlines.at(i);
+                if (outline->textOnLeft()) {
+                    lineParts.replace(i + 1, QRect());
+                }
+                if (outline->textOnRight()) {
+                    lineParts.replace(i, QRectF());
+                }
+                if (outline->textOnBiggerSide()) {
+                    QRectF leftReft = outline->getLeftLinePart(m_lineRect);
+                    QRectF rightRect = outline->getRightLinePart(m_lineRect);
+                    if (leftReft.width() < rightRect.width()) {
+                        lineParts.replace(i, QRectF());
+                    } else {
+                        lineParts.replace(i + 1, QRectF());
                     }
                 }
-                rightLineRect = validOutline->getRightLinePart(rightLineRect);
-                if (!rightLineRect.isValid()) {
-                    break;
-                }
-                prevValidOutline = validOutline;
             }
-            if (rightLineRect.isValid()) {
-                if (!prevValidOutline || prevValidOutline->textOnRight()) {
-                    m_lineParts.append(rightLineRect);
+            //filter invalid parts
+            foreach (QRectF rect, lineParts) {
+                if (rect.isValid()) {
+                    m_lineParts.append(rect);
                 }
             }
         }
