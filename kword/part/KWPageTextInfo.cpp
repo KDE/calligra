@@ -56,3 +56,8 @@ KWPage KWPageTextInfo::page() const
     return m_page;
 }
 
+KWPage &KWPageTextInfo::page()
+{
+    return m_page;
+}
+

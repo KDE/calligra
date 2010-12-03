@@ -26,6 +26,7 @@
 class KWAnchorStrategy;
 class KWFrame;
 class KWTextFrameSet;
+class KWPageTextInfo;
 
 /**
  * Class for text layout of anchored frames.
@@ -86,6 +87,8 @@ public:
 private:
     void calculateKnowledgePoint();
 
+    bool checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect, KWPageTextInfo *pageInfo);
+
     KoTextAnchor *const m_anchor;
     int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
     bool m_finished;
@@ -95,8 +98,12 @@ private:
     int m_lastknownPosInDoc;
 
     QPointF m_lastOffset;
-    KoTextAnchor::AnchorVertical m_lastVerticalAnchorAlignment;
-    KoTextAnchor::AnchorHorizontal m_lastHorizontalAnchorAlignment;
+//    KoTextAnchor::AnchorVertical m_lastVerticalAnchorAlignment;
+//    KoTextAnchor::AnchorHorizontal m_lastHorizontalAnchorAlignment;
+    KoTextAnchor::VerticalPos m_lastVerticalPos;
+    KoTextAnchor::VerticalRel m_lastVerticalRel;
+    KoTextAnchor::HorizontalPos m_lastHorizontalPos;
+    KoTextAnchor::HorizontalRel m_lastHorizontalRel;
 };
 
 #endif

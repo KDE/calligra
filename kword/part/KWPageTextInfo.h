@@ -34,6 +34,8 @@ public:
 
     KWPage page() const;
 
+    KWPage &page();
+
 private:
     KWPage m_page;
 };
