@@ -702,6 +702,9 @@ bool Value::allowComparison(const Value& v) const
 
     if ((t1 == Empty) && (t2 == Empty)) return true;
     if ((t1 == Empty) && (t2 == String)) return true;
+    if ((t1 == Empty) && (t2 == Integer)) return true;
+    if ((t1 == Empty) && (t2 == Float)) return true;
+    if ((t1 == Empty) && (t2 == Boolean)) return true;
 
     if ((t1 == Boolean) && (t2 == Boolean)) return true;
     if ((t1 == Boolean) && (t2 == Integer)) return true;
@@ -760,6 +763,18 @@ int Value::compare(const Value& v) const
     // (except when the string is empty)
     if ((t1 == Empty) && (t2 == String))
         return(v.asString().isEmpty()) ? 0 : -1;
+
+    // empty vs integer
+    if ((t1 == Empty) && (t2 == Integer))
+        return -1;
+
+    // empty vs float
+    if ((t1  == Empty) && (t2 == Float))
+        return -1;
+
+    // empty vs boolean
+    if ((t1 == Empty) && (t2 == Boolean))
+        return -1;
 
     // boolean vs boolean
     if ((t1 == Boolean) && (t2 == Boolean)) {
