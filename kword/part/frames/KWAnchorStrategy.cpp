@@ -463,7 +463,8 @@ qDebug()<<"BOUNDING RECT"<<anchorBoundingRect;
         m_anchor->shape()->update();
         //kDebug() << "anchor positioned" << newPosition << "/" << m_anchor->shape()->position();
         //kDebug() << "finished" << m_finished;
-        m_anchor->shape()->setPosition(newPosition);
+qDebug()<<"setting shape position to"<<newPosition;
+m_anchor->shape()->setPosition(newPosition);
         m_anchor->shape()->update();
     }
 
@@ -549,6 +550,7 @@ void KWAnchorStrategy::calculateKnowledgePoint()
 
 bool KWAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect, KWPageTextInfo *pageInfo)
 {
+        return true;
     if (!pageInfo) {
         return false;
     }
