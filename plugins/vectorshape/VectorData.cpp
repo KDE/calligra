@@ -31,6 +31,8 @@
 #include <QFileInfo>
 #include <QPainter>
 
+#include "Debug.h"
+
 #include <kdebug.h>
 #include <KTemporaryFile>
 
@@ -47,6 +49,7 @@ VectorData::VectorData()
     , m_dataStoreState(StateEmpty)
     , m_temporaryFile(0)
 {
+    DEBUG_BLOCK
 }
 
 VectorData::VectorData(const VectorData &vectorData)
@@ -58,6 +61,8 @@ VectorData::VectorData(const VectorData &vectorData)
 
 VectorData::~VectorData()
 {
+    DEBUG_BLOCK
+
     if (m_collection)
         m_collection->removeOnKey(m_key);
 
@@ -150,6 +155,8 @@ VectorData &VectorData::operator=(const VectorData &other)
 
 bool VectorData::saveData(QIODevice &device)
 {
+    DEBUG_BLOCK
+
     if (m_dataStoreState == StateSpooled) {
         Q_ASSERT(m_temporaryFile); // otherwise the collection should not have called this
         if (m_temporaryFile) {

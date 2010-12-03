@@ -20,6 +20,8 @@ SET ( VectorShape_SRCS
     #VectorTool.cpp
     #VectorToolFactory.cpp
 
+    Debug.cpp
+
     libemf/EmfRecords.cpp
     libemf/EmfHeader.cpp
     libemf/BitmapHeader.cpp

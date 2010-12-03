@@ -24,6 +24,8 @@
 #include "VectorData.h"
 #include "KoShapeSavingContext.h"
 
+#include "Debug.h"
+
 #include <KoStoreDevice.h>
 #include <QCryptographicHash>
 #include <KoXmlWriter.h>
@@ -52,10 +54,13 @@ VectorCollection::VectorCollection(QObject *parent)
     , saveCounter(0)
     , d(new Private())
 {
+    DEBUG_BLOCK
 }
 
 VectorCollection::~VectorCollection()
 {
+    DEBUG_BLOCK
+
     foreach(VectorData *id, d->vectorFiles) {
         id->m_collection = 0;
     }
