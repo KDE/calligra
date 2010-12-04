@@ -39,6 +39,8 @@ struct MSOOXML_EXPORT TableStyleProperties
     KoBorder::BorderData tl2br;
     KoBorder::BorderData top;
     KoBorder::BorderData tr2bl;
+
+    QColor backgroundColor;
 };
 
 class MSOOXML_EXPORT TableStyle
@@ -135,6 +137,7 @@ public:
 private:
     void applyStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
     void applyBordersStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+    void applyBackground(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
 
     TableStyle* m_style;
     TableStyleInstanceProperties m_properties;

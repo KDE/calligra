@@ -166,6 +166,12 @@ void TableStyleInstance::applyStyle(TableStyle::Type type, KoCellStyle::Ptr& sty
     //TODO apply other properties
 
     applyBordersStyle(type, style, row, column);
+    applyBackground(type, style, row, column);
+}
+
+void TableStyleInstance::applyBackground(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
+{
+    style->setBackgroundColor(m_style->properties(type)->backgroundColor);
 }
 
 void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
