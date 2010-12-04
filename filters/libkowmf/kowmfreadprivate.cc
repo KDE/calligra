@@ -989,6 +989,13 @@ void KoWmfReadPrivate::textOut(quint32, QDataStream& stream)
     text.resize(textLength);
 
     stream.readRawData(text.data(), textLength);
+    // The string is always of even length, so if the actual data is
+    // of uneven length, read an extra byte.
+    if (textLength & 0x01) {
+        qint8 dummy;
+        stream >> dummy;
+    }
+        
 
     qint16 x, y;
 
