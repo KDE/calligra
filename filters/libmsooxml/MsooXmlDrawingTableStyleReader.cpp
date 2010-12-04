@@ -503,6 +503,7 @@ KoFilter::ConversionStatus MSOOXML::MsooXmlDrawingTableStyleReader::read_bottom(
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->bottom = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -525,6 +526,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_top()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->top = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::TopBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -547,6 +549,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_left()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->left = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -569,6 +572,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_right()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->right = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::RightBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -589,6 +593,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tl2br()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->tl2br = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::Tl2brBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -610,6 +615,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tr2bl()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->tr2bl = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::Tr2blBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -633,6 +639,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideV()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->insideV = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::InsideVBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -655,6 +662,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_insideH()
             if(QUALIFIED_NAME_IS(ln)) {
                 TRY_READ(Table_ln)
                 m_currentTableStyleProperties->insideH = m_currentBorder;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::InsideHBorder;
             }
 //             ELSE_TRY_READ_IF(lnRef)
 //             ELSE_WRONG_FORMAT
@@ -740,7 +748,6 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
 {
     READ_PROLOGUE
-                Q_ASSERT(false);
     while(!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
@@ -755,6 +762,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
             else if(QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill)
                 m_currentTableStyleProperties->backgroundColor = m_currentColor;
+                m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
             }
 //             ELSE_WRONG_FORMAT
         }

@@ -1,4 +1,5 @@
 #include "MsooXmlDrawingTableStyle.h"
+#include <QDebug>
 
 using namespace MSOOXML;
 
@@ -171,6 +172,13 @@ void TableStyleInstance::applyStyle(TableStyle::Type type, KoCellStyle::Ptr& sty
 
 void TableStyleInstance::applyBackground(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+
+    if(!m_style->properties(type)->setProperties & TableStyleProperties::BackgroundColor) {
+        return;
+    }
+
     style->setBackgroundColor(m_style->properties(type)->backgroundColor);
 }
 
@@ -182,53 +190,63 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     //Borders, are a bit tricky too; we have to take into account whether the cell 
     //has borders facing other cells or facing the border of the table.
 
-    KoBorder::BorderData* topData;
-    if(row == 0) {
-        topData = &m_style->properties(type)->top;
-    }
-    else {
-        topData = &m_style->properties(type)->insideH;
-    }
-    style->borders()->setTopBorderColor(topData->color);
-    style->borders()->setTopBorderSpacing(topData->spacing);
-    style->borders()->setTopBorderStyle(topData->style);
-    style->borders()->setTopBorderWidth(topData->width);
+    TableStyleProperties::Properties setProperties = m_style->properties(type)->setProperties;
 
-    KoBorder::BorderData* bottomData;
-    if(row == lastRow) {
-        bottomData = &m_style->properties(type)->bottom;
+    if(setProperties & TableStyleProperties::TopBorder) {
+        KoBorder::BorderData* topData;
+        if(row == 0) {
+            topData = &m_style->properties(type)->top;
+        }
+        else {
+            topData = &m_style->properties(type)->insideH;
+        }
+        style->borders()->setTopBorderColor(topData->color);
+        style->borders()->setTopBorderSpacing(topData->spacing);
+        style->borders()->setTopBorderStyle(topData->style);
+        style->borders()->setTopBorderWidth(topData->width);
     }
-    else {
-        bottomData = &m_style->properties(type)->insideH;
-    }
-    style->borders()->setBottomBorderColor(bottomData->color);
-    style->borders()->setBottomBorderSpacing(bottomData->spacing);
-    style->borders()->setBottomBorderStyle(bottomData->style);
-    style->borders()->setBottomBorderWidth(bottomData->width);
 
-    KoBorder::BorderData* leftData;
-    if(column == 0) {
-        leftData = &m_style->properties(type)->left;
+    if(setProperties & TableStyleProperties::BottomBorder) {
+        KoBorder::BorderData* bottomData;
+        if(row == lastRow) {
+            bottomData = &m_style->properties(type)->bottom;
+        }
+        else {
+            bottomData = &m_style->properties(type)->insideH;
+        }
+        style->borders()->setBottomBorderColor(bottomData->color);
+        style->borders()->setBottomBorderSpacing(bottomData->spacing);
+        style->borders()->setBottomBorderStyle(bottomData->style);
+        style->borders()->setBottomBorderWidth(bottomData->width);
     }
-    else {
-        leftData = &m_style->properties(type)->insideV;
-    }
-    style->borders()->setLeftBorderColor(leftData->color);
-    style->borders()->setLeftBorderSpacing(leftData->spacing);
-    style->borders()->setLeftBorderStyle(leftData->style);
-    style->borders()->setLeftBorderWidth(leftData->width);
 
-    KoBorder::BorderData* rightData;
-    if(column == lastColumn) {
-        rightData = &m_style->properties(type)->right;
+    if(setProperties & TableStyleProperties::LeftBorder) {
+        KoBorder::BorderData* leftData;
+        if(column == 0) {
+            leftData = &m_style->properties(type)->left;
+        }
+        else {
+            leftData = &m_style->properties(type)->insideV;
+        }
+        style->borders()->setLeftBorderColor(leftData->color);
+        style->borders()->setLeftBorderSpacing(leftData->spacing);
+        style->borders()->setLeftBorderStyle(leftData->style);
+        style->borders()->setLeftBorderWidth(leftData->width);
     }
-    else {
-        rightData = &m_style->properties(type)->insideV;
+
+    if(setProperties & TableStyleProperties::RightBorder) {
+        KoBorder::BorderData* rightData;
+        if(column == lastColumn) {
+            rightData = &m_style->properties(type)->right;
+        }
+        else {
+            rightData = &m_style->properties(type)->insideV;
+        }
+        style->borders()->setRightBorderColor(rightData->color);
+        style->borders()->setRightBorderSpacing(rightData->spacing);
+        style->borders()->setRightBorderStyle(rightData->style);
+        style->borders()->setRightBorderWidth(rightData->width);
     }
-    style->borders()->setRightBorderColor(rightData->color);
-    style->borders()->setRightBorderSpacing(rightData->spacing);
-    style->borders()->setRightBorderStyle(rightData->style);
-    style->borders()->setRightBorderWidth(rightData->width);
 }
 
 TableStyle::TableStyle()

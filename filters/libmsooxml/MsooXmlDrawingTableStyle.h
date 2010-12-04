@@ -31,6 +31,20 @@ namespace MSOOXML
 
 struct MSOOXML_EXPORT TableStyleProperties
 {
+    enum Property {
+        BottomBorder = 1,
+        InsideHBorder = 2,
+        InsideVBorder = 4,
+        LeftBorder = 8,
+        RightBorder = 16,
+        Tl2brBorder = 32,
+        TopBorder = 64,
+        Tr2blBorder = 128,
+        BackgroundColor = 256
+    };
+    Q_DECLARE_FLAGS(Properties, Property)
+    Properties setProperties;
+
     KoBorder::BorderData bottom;
     KoBorder::BorderData insideH;
     KoBorder::BorderData insideV;
@@ -146,5 +160,6 @@ private:
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::TableStyleInstanceProperties::Roles)
+Q_DECLARE_OPERATORS_FOR_FLAGS(MSOOXML::TableStyleProperties::Properties)
 
 #endif
