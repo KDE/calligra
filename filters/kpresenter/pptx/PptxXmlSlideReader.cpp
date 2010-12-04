@@ -1300,15 +1300,20 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_txBody()
     }
 
     body = listBuf.originalWriter();
-    if (!(m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-        m_contentType.startsWith("curvedConnector"))) {
+    bool createTextBox = true;
+
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
+        m_contentType.startsWith("curvedConnector") || m_contentType.startsWith("bentConnector")) {
+        createTextBox = false;
+    }
+
+    if (createTextBox) {
         body->startElement("draw:text-box"); // CASE #P436
     }
 
     body = listBuf.releaseWriter();
 
-    if (!(m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-        m_contentType.startsWith("curvedConnector"))) {
+    if (createTextBox) {
         body->endElement(); // draw:text-box
     }
     READ_EPILOGUE

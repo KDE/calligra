@@ -710,9 +710,13 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 #endif
     // Arc and straight connector are now simpilified to be a line, fix later
-    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-        m_contentType.startsWith("curvedConnector")) {
+    if (m_contentType == "line" || m_contentType == "arc") {
         body->startElement("draw:line");
+    }
+    else if (m_contentType.startsWith("straightConnector") || m_contentType.startsWith("curvedConnector") ||
+             m_contentType.startsWith("bentConnector")) {
+        body->startElement("draw:line"); // This should be maybe draw:connector but koffice doesn't seem to
+                                         // handle that element yet
     }
     else {
         body->startElement("draw:frame"); // CASE #P475
@@ -776,7 +780,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
         if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
-            m_contentType.startsWith("curvedConnector")) {
+            m_contentType.startsWith("curvedConnector") || m_contentType.startsWith("bentConnector")) {
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
