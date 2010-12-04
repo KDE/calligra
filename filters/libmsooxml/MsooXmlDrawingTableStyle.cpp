@@ -303,3 +303,24 @@ void TableStyleList::insertStyle(QString id, TableStyle style)
 {
     m_styles.insert(id, style);
 }
+
+LocalTableStyles::LocalTableStyles()
+{
+}
+
+LocalTableStyles::~LocalTableStyles()
+{
+}
+
+TableStyleProperties* LocalTableStyles::localStyle(int row, int column)
+{
+    const QPair<int,int> key(row,column);
+    return m_properties.value(key);
+}
+
+void LocalTableStyles::setLocalStyle(TableStyleProperties* properties, int row, int column)
+{
+    const QPair<int,int> key(row,column);
+    m_properties.insert(key, properties);
+}
+

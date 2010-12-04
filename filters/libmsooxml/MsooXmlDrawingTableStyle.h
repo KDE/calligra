@@ -52,6 +52,8 @@
 namespace MSOOXML
 {
 
+/// Reading and storage 
+
 struct MSOOXML_EXPORT TableStyleProperties
 {
     enum Property {
@@ -126,6 +128,21 @@ public:
 
 private:
     QMap<QString, TableStyle> m_styles;
+};
+
+/// Instantiation classes
+
+class MSOOXML_EXPORT LocalTableStyles
+{
+public:
+    LocalTableStyles();
+    ~LocalTableStyles();
+
+    TableStyleProperties* localStyle(int row, int column);
+    void setLocalStyle(MSOOXML::TableStyleProperties* properties, int row, int column);
+
+private:
+    QMap<QPair<int,int>, TableStyleProperties*> m_properties;
 };
 
 class MSOOXML_EXPORT TableStyleInstanceProperties
