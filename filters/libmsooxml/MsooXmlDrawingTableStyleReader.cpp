@@ -169,9 +169,9 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcStyle()
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
 //             TRY_READ_IF(cell3D)
-//             ELSE_TRY_READ_IF(fill)
+            /*ELSE_*/TRY_READ_IF(fill)
 //             ELSE_TRY_READ_IF(fillRef)
-            /*ELSE_*/TRY_READ_IF(tcBdr)
+            ELSE_TRY_READ_IF(tcBdr)
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -450,6 +450,34 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
                 else if(val == "dot") {
                     m_currentBorder.style = KoBorder::BorderDotted;
                 }
+            }
+//             ELSE_WRONG_FORMAT
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL fill
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
+{
+    READ_PROLOGUE
+                Q_ASSERT(false);
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+//             TRY_READ_IF(blipFill)
+//             ELSE_TRY_READ_IF(grandFill)
+//             ELSE_TRY_READ_IF(grpFill)
+            /*else */if(QUALIFIED_NAME_IS(noFill)) {
+                SKIP_EVERYTHING_AND_RETURN
+            }
+//             ELSE_TRY_READ_IF(pattFill)
+            else if(QUALIFIED_NAME_IS(solidFill)) {
+                TRY_READ(solidFill)
+                m_currentTableStyleProperties->backgroundColor = m_currentColor;
             }
 //             ELSE_WRONG_FORMAT
         }

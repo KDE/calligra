@@ -77,6 +77,7 @@ protected:
     KoFilter::ConversionStatus read_tr2bl();
     KoFilter::ConversionStatus read_tcBdr();
     KoFilter::ConversionStatus read_Table_ln();
+    KoFilter::ConversionStatus read_fill();
 
     //get read_ln and friends, it's a shame I have to get a lot of crap alongside
     #include <MsooXmlCommonReaderMethods.h>

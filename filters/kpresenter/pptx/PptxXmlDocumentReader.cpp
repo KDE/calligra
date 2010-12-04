@@ -294,6 +294,9 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
     PptxSlideProperties *masterSlideProperties = d->masterSlidePropertiesMap.contains(slideMasterPathAndFile) ? d->masterSlidePropertiesMap[slideMasterPathAndFile] : 0;
 
+    // Delay the reding of a tableStyle until we find a table as we need the clrMap from the master slide
+    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
+
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slidePath, slideFile,
@@ -306,7 +309,8 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
         *m_context->relationships,
         d->commentAuthors,
         d->slideMasterPageProperties[slideLayoutProperties->m_slideMasterName].colorMap,
-        vmlreader.content()
+        vmlreader.content(),
+        tableStylesFilePath
     );
 
     // In first round we only read possible colorMap override
@@ -427,9 +431,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
     KoFilter::ConversionStatus status
         = m_context->import->loadAndParseDocument(&themesReader, slideThemePathAndFile, errorMessage, &themecontext);
 
-    // Delay the reding of a tableStyle until we find a table as we need the clrMap from the master slide
-    const QString tableStylesFilePath = m_context->relationships->targetForType(m_context->path, m_context->file, MSOOXML::Relationships::tableStyles);
-
     //empty map used here as slideMaster is the place where the map is created
     QMap<QString, QString> dummyMap;
     QMap<QString, QString> dummyOles;
@@ -448,7 +449,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldMasterId()
         d->commentAuthors,
         dummyMap,
         dummyOles,
-        tableStylesFilePath
+        QString()
     );
 
     PptxXmlSlideReader slideMasterReader(this);
