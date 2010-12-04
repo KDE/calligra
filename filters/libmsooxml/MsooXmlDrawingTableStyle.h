@@ -102,17 +102,17 @@ public:
     TableStyleInstanceProperties& columnBandSize(int size);
 
     enum Role {
-        FirstRow,
-        FirstCol,
-        LastCol,
-        LastRow,
-        NeCell,
-        NwCell,
-        SeCell,
-        SwCell,
-        RowBanded,
-        ColumnBanded,
-        WholeTbl
+        FirstRow = 1,
+        FirstCol = 2,
+        LastCol = 4,
+        LastRow = 8,
+        NeCell = 16,
+        NwCell = 32,
+        SeCell = 64,
+        SwCell = 128,
+        RowBanded = 256,
+        ColumnBanded = 512,
+        WholeTbl = 1024
     };
     Q_DECLARE_FLAGS(Roles, Role)
 
