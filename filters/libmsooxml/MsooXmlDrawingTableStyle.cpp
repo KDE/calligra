@@ -88,7 +88,7 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
 
     if(role & TableStyleInstanceProperties::ColumnBanded) {
         //Is the column in the even band?
-        if( (column % (m_properties.m_columnBandSize * 2)) > m_properties.m_columnBandSize) {
+        if( (column % (m_properties.m_columnBandSize * 2)) < m_properties.m_columnBandSize) {
             applyStyle(TableStyle::Band1Vertical, cellStyle, row, column);
         }
         else {
@@ -98,7 +98,7 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
 
     if(role & TableStyleInstanceProperties::RowBanded) {
         //Is the row in the even band?
-        if( (row % (m_properties.m_rowBandSize * 2)) > m_properties.m_columnBandSize) {
+        if( (row % (m_properties.m_rowBandSize * 2)) < m_properties.m_columnBandSize) {
             applyStyle(TableStyle::Band1Horizontal, cellStyle, row, column);
         }
         else {
