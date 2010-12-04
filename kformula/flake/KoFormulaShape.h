@@ -26,6 +26,7 @@
 
 class KoStore;
 class KoResourceManager;
+class KoOdfLoadingContext;
 
 class BasicElement;
 class FormulaRenderer;
@@ -55,15 +56,15 @@ public:
 
     /// inherited from KoShape
     void paint( QPainter &painter, const KoViewConverter &converter );
-    
+
     void updateLayout();
-    
+
     /// @return The element at the point @p p
     BasicElement* elementAt( const QPointF& p );
 
     /// Resize the shape.
     void resize( const QSizeF &size );
-    
+
     /// @return Get the bounding box of the shape.
 //     QRectF boundingRect() const;
 
@@ -72,18 +73,16 @@ public:
 
     /// @return the formularenderer used to paint this shape
     FormulaRenderer* formulaRenderer() const;
-    
+
     /**
      * Load a shape from odf - reimplemented from KoShape
      * @param context the KoShapeLoadingContext used for loading
      * @param element element which represents the shape in odf
      * @return false if loading failed
-     */ 
+     */
     bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
 
     virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
-    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
-                              const KoXmlDocument &manifestDocument); // private?
     bool loadOdfEmbedded(const KoXmlElement &mathElement, KoShapeLoadingContext &context);
 
     /**
@@ -91,12 +90,15 @@ public:
      * This is the method that will be called when saving a shape as a described in
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
-     */ 
+     */
     void saveOdf( KoShapeSavingContext& context ) const;
 
     KoResourceManager *resourceManager() const;
 
 private:
+    bool loadEmbeddedDocument(KoStore *store,const KoXmlElement &objectElement,
+                              const KoOdfLoadingContext &odfLoadingContext);
+
     /// The data this shape displays
     FormulaData* m_formulaData;
 

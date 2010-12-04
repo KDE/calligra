@@ -110,7 +110,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
         // This calls loadOdfEmbedded().
         return loadEmbeddedDocument( context.odfLoadingContext().store(),
                                      element,
-                                     context.odfLoadingContext().manifestDocument() );
+                                     context.odfLoadingContext() );
     }
 
     // It's not a frame:object, so it must be inline.
@@ -134,7 +134,7 @@ bool KoFormulaShape::loadOdfFrameElement(const KoXmlElement &element,
 
 bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
                                            const KoXmlElement &objectElement,
-                                           const KoXmlDocument &manifestDocument )
+                                           const KoOdfLoadingContext &odfLoadingContext)
 {
     if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
         kError() << "Object element has no valid xlink:href attribute";
@@ -176,7 +176,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
     if ( !path.endsWith( '/' ) )
         path += '/';
 
-    const QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
+    const QString mimeType = odfLoadingContext.mimeTypeForPath( path );
     //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
         //kDebug(35001) << "Manifest doesn't have media-type for" << path;
