@@ -38,6 +38,11 @@ TableStyleInstanceProperties& TableStyleInstanceProperties::rowBandSize(int size
     return *this;
 }
 
+TableStyleInstanceProperties& TableStyleInstanceProperties::localStyles(const MSOOXML::LocalTableStyles& localStyles)
+{
+    m_localStyles = localStyles;
+}
+
 TableStyleInstance::TableStyleInstance(TableStyle* style, TableStyleInstanceProperties properties)
 : m_style(style)
 , m_properties(properties)
@@ -153,6 +158,11 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
         if(row == lastRow && column == lastColumn) {
             applyStyle(TableStyle::SeCell, cellStyle, row, column);
         }
+    }
+
+    TableStyleProperties* localStyle = m_properties.m_localStyles.localStyle(row, column);
+    if(localStyle) {
+        applyStyle(localStyle, cellStyle, row, column);
     }
 
     return cellStyle;

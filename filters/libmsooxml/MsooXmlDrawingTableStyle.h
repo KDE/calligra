@@ -154,6 +154,7 @@ public:
 
     TableStyleInstanceProperties& rowBandSize(int size);
     TableStyleInstanceProperties& columnBandSize(int size);
+    TableStyleInstanceProperties& localStyles(const LocalTableStyles& localStyles);
 
     enum Role {
         FirstRow = 1,
@@ -178,6 +179,7 @@ private:
     int m_rowBandSize;
     int m_columnBandSize;
     Roles m_role;
+    LocalTableStyles m_localStyles;
 };
 
 class MSOOXML_EXPORT TableStyleInstance
