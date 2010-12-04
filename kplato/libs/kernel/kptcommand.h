@@ -1484,8 +1484,8 @@ private:
 class KPLATOKERNEL_EXPORT AddScheduleManagerCmd : public NamedCommand
 {
 public:
-    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, int index = -1, const QString& name = 0 );
-    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index = -1, const QString& name = 0 );
+    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, int index = -1, const QString& name = QString() );
+    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, int index = -1, const QString& name = QString() );
     ~AddScheduleManagerCmd();
     void execute();
     void unexecute();
@@ -1502,7 +1502,7 @@ protected:
 class KPLATOKERNEL_EXPORT DeleteScheduleManagerCmd : public AddScheduleManagerCmd
 {
 public:
-    DeleteScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
+    DeleteScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1513,7 +1513,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerNameCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name = 0 );
+    ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1525,7 +1525,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerAllowOverbookingCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1537,7 +1537,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerDistributionCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1549,7 +1549,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerCalculateAllCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1561,7 +1561,7 @@ private:
 class KPLATOKERNEL_EXPORT CalculateScheduleCmd : public NamedCommand
 {
 public:
-    CalculateScheduleCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
+    CalculateScheduleCmd( Project &project, ScheduleManager *sm, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1580,7 +1580,7 @@ private:
 class KPLATOKERNEL_EXPORT BaselineScheduleCmd : public NamedCommand
 {
 public:
-    explicit BaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
+    explicit BaselineScheduleCmd( ScheduleManager &sm, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1591,7 +1591,7 @@ private:
 class KPLATOKERNEL_EXPORT ResetBaselineScheduleCmd : public NamedCommand
 {
 public:
-    explicit ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
+    explicit ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1602,7 +1602,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingDirectionCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -1614,7 +1614,7 @@ private:
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulerCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name = 0 );
+    ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name = QString() );
     void execute();
     void unexecute();
 
