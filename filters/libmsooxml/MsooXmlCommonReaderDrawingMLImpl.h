@@ -710,7 +710,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
 #endif
     // Arc and straight connector are now simpilified to be a line, fix later
-    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector")) {
+    if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
+        m_contentType.startsWith("curvedConnector")) {
         body->startElement("draw:line");
     }
     else {
@@ -774,7 +775,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
     }
     if (m_svgWidth > -1 && m_svgHeight > -1) {
         body->addAttribute("presentation:user-transformed", MsooXmlReader::constTrue);
-        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector")) {
+        if (m_contentType == "line" || m_contentType == "arc" || m_contentType.startsWith("straightConnector") ||
+            m_contentType.startsWith("curvedConnector")) {
             QString y1 = EMU_TO_CM_STRING(m_svgY);
             QString y2 = EMU_TO_CM_STRING(m_svgY + m_svgHeight);
             QString x1 = EMU_TO_CM_STRING(m_svgX);
@@ -803,21 +805,20 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
             body->addAttribute("svg:x2", x2);
             body->addAttribute("svg:y2", y2);
         }
-        if (m_contentType != "line" && m_contentType != "arc" && !m_contentType.startsWith("straightConnector")) {
+        else {
             if (m_rot == 0) {
                 body->addAttribute("svg:x", EMU_TO_CM_STRING(m_svgX));
                 body->addAttribute("svg:y", EMU_TO_CM_STRING(m_svgY));
+            } else {
+                // m_rot is in 1/60,000th of a degree
+                qreal angle, xDiff, yDiff;
+                MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
+                QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
+                                        .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+                body->addAttribute("draw:transform", rotString);
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-        }
-        if (m_rot != 0 && m_contentType != "line" && m_contentType != "arc" && !m_contentType.startsWith("straightConnector")) {
-            // m_rot is in 1/60,000th of a degree
-            qreal angle, xDiff, yDiff;
-            MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff, m_flipH, m_flipV);
-            QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                    .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
-            body->addAttribute("draw:transform", rotString);
         }
     }
 #elif defined(XLSXXMLDRAWINGREADER_CPP)
