@@ -43,6 +43,9 @@ SchedulerPlugin::SchedulerPlugin(QObject *parent)
     : QObject(parent),
     d( new SchedulerPlugin::Private() )
 {
+    // register Schedule::Log so it can be used in queued connections
+    qRegisterMetaType<Schedule::Log>("Schedule::Log");
+
     m_synctimer.setInterval( 500 );
     connect(&m_synctimer, SIGNAL(timeout()), SLOT(slotSyncData()));
 }
