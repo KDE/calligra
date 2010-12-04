@@ -110,27 +110,304 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if(isStartElement()) {
-//             TRY_READ_IF(band1H)
-//             ELSE_TRY_READ_IF(band1V)
-//             ELSE_TRY_READ_IF(band2H)
-//             ELSE_TRY_READ_IF(band2V)
+            TRY_READ_IF(band1H)
+            ELSE_TRY_READ_IF(band1V)
+            ELSE_TRY_READ_IF(band2H)
+            ELSE_TRY_READ_IF(band2V)
 //             ELSE_TRY_READ_IF(extLst)
-//             ELSE_TRY_READ_IF(firstCol)
-//             ELSE_TRY_READ_IF(firstRow)
-//             ELSE_TRY_READ_IF(lastCol)
-//             ELSE_TRY_READ_IF(lastRow)
-//             ELSE_TRY_READ_IF(neCell)
-//             ELSE_TRY_READ_IF(swCell)
-//             ELSE_TRY_READ_IF(seCell)
-//             ELSE_TRY_READ_IF(swCell)
+            ELSE_TRY_READ_IF(firstCol)
+            ELSE_TRY_READ_IF(firstRow)
+            ELSE_TRY_READ_IF(lastCol)
+            ELSE_TRY_READ_IF(lastRow)
+            ELSE_TRY_READ_IF(neCell)
+            ELSE_TRY_READ_IF(nwCell)
+            ELSE_TRY_READ_IF(seCell)
+            ELSE_TRY_READ_IF(swCell)
 //             ELSE_TRY_READ_IF(tblBg)
-            /*ELSE_*/TRY_READ_IF(wholeTbl)
+            ELSE_TRY_READ_IF(wholeTbl)
 //             ELSE_WRONG_FORMAT
         }
     }
 
     m_context->styleList->insertStyle(styleId, m_currentStyle);
     m_currentStyle = TableStyle();
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL band1H
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band1H()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::Band1Horizontal, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL band1V
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band1V()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::Band1Vertical, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL band2H
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band2H()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::Band2Horizontal, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL band2V
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_band2V()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::Band2Horizontal, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL firstCol
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_firstCol()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::FirstCol, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL firstRow
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_firstRow()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::FirstRow, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lastCol
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_lastCol()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::LastCol, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL lastRow
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_lastRow()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::LastRow, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL neCell
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_neCell()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::NeCell, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL nwCell
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_nwCell()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::NwCell, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL seCell
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_seCell()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::SeCell, m_currentTableStyleProperties);
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL swCell
+KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_swCell()
+{
+    READ_PROLOGUE
+
+    m_currentTableStyleProperties = new TableStyleProperties;
+
+    while(!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if(isStartElement()) {
+            TRY_READ_IF(tcStyle)
+            ELSE_TRY_READ_IF(tcTxStyle)
+            ELSE_WRONG_FORMAT
+        }
+    }
+
+    m_currentStyle.addProperties(TableStyle::SwCell, m_currentTableStyleProperties);
 
     READ_EPILOGUE
 }

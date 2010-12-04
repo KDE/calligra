@@ -64,6 +64,18 @@ public:
 protected:
     KoFilter::ConversionStatus read_tblStyleLst();
     KoFilter::ConversionStatus read_tblStyle();
+    KoFilter::ConversionStatus read_band1H();
+    KoFilter::ConversionStatus read_band1V();
+    KoFilter::ConversionStatus read_band2H();
+    KoFilter::ConversionStatus read_band2V();
+    KoFilter::ConversionStatus read_firstCol();
+    KoFilter::ConversionStatus read_firstRow();
+    KoFilter::ConversionStatus read_lastCol();
+    KoFilter::ConversionStatus read_lastRow();
+    KoFilter::ConversionStatus read_neCell();
+    KoFilter::ConversionStatus read_nwCell();
+    KoFilter::ConversionStatus read_seCell();
+    KoFilter::ConversionStatus read_swCell();
     KoFilter::ConversionStatus read_wholeTbl();
     KoFilter::ConversionStatus read_tcStyle();
     KoFilter::ConversionStatus read_tcTxStyle();
