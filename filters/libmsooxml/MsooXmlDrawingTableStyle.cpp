@@ -158,31 +158,36 @@ KoCellStyle::Ptr TableStyleInstance::style(int row, int column)
     return cellStyle;
 }
 
+void TableStyleInstance::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+{
+    applyBordersStyle(styleProperties, style, row, column);
+    applyBackground(styleProperties, style, row, column);
+}
+
 void TableStyleInstance::applyStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
 {
-    if(!m_style->properties(type)) {
+    TableStyleProperties* const styleProperties = m_style->properties(type);
+    if(!styleProperties) {
         return;
     }
 
     //TODO apply other properties
 
-    applyBordersStyle(type, style, row, column);
-    applyBackground(type, style, row, column);
+    applyBordersStyle(styleProperties, style, row, column);
+    applyBackground(styleProperties, style, row, column);
 }
 
-void TableStyleInstance::applyBackground(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleInstance::applyBackground(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
     Q_UNUSED(row);
     Q_UNUSED(column);
 
-    if(!m_style->properties(type)->setProperties & TableStyleProperties::BackgroundColor) {
-        return;
+    if(styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
+        style->setBackgroundColor(styleProperties->backgroundColor);
     }
-
-    style->setBackgroundColor(m_style->properties(type)->backgroundColor);
 }
 
-void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleInstance::applyBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
 {
     const int lastRow = m_properties.m_rowCount - 1;
     const int lastColumn = m_properties.m_columnCount - 1;
@@ -190,15 +195,15 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     //Borders, are a bit tricky too; we have to take into account whether the cell 
     //has borders facing other cells or facing the border of the table.
 
-    TableStyleProperties::Properties setProperties = m_style->properties(type)->setProperties;
+    TableStyleProperties::Properties setProperties = styleProperties->setProperties;
 
     if(setProperties & TableStyleProperties::TopBorder) {
         KoBorder::BorderData* topData;
         if(row == 0) {
-            topData = &m_style->properties(type)->top;
+            topData = &styleProperties->top;
         }
         else {
-            topData = &m_style->properties(type)->insideH;
+            topData = &styleProperties->insideH;
         }
         style->borders()->setTopBorderColor(topData->color);
         style->borders()->setTopBorderSpacing(topData->spacing);
@@ -209,10 +214,10 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     if(setProperties & TableStyleProperties::BottomBorder) {
         KoBorder::BorderData* bottomData;
         if(row == lastRow) {
-            bottomData = &m_style->properties(type)->bottom;
+            bottomData = &styleProperties->bottom;
         }
         else {
-            bottomData = &m_style->properties(type)->insideH;
+            bottomData = &styleProperties->insideH;
         }
         style->borders()->setBottomBorderColor(bottomData->color);
         style->borders()->setBottomBorderSpacing(bottomData->spacing);
@@ -223,10 +228,10 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     if(setProperties & TableStyleProperties::LeftBorder) {
         KoBorder::BorderData* leftData;
         if(column == 0) {
-            leftData = &m_style->properties(type)->left;
+            leftData = &styleProperties->left;
         }
         else {
-            leftData = &m_style->properties(type)->insideV;
+            leftData = &styleProperties->insideV;
         }
         style->borders()->setLeftBorderColor(leftData->color);
         style->borders()->setLeftBorderSpacing(leftData->spacing);
@@ -237,10 +242,10 @@ void TableStyleInstance::applyBordersStyle(TableStyle::Type type, KoCellStyle::P
     if(setProperties & TableStyleProperties::RightBorder) {
         KoBorder::BorderData* rightData;
         if(column == lastColumn) {
-            rightData = &m_style->properties(type)->right;
+            rightData = &styleProperties->right;
         }
         else {
-            rightData = &m_style->properties(type)->insideV;
+            rightData = &styleProperties->insideV;
         }
         style->borders()->setRightBorderColor(rightData->color);
         style->borders()->setRightBorderSpacing(rightData->spacing);

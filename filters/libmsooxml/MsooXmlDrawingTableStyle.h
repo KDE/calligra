@@ -172,9 +172,10 @@ public:
     KoCellStyle::Ptr style(int row, int column);
 
 private:
+    void applyStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
     void applyStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
-    void applyBordersStyle(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
-    void applyBackground(MSOOXML::TableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+    void applyBordersStyle(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
+    void applyBackground(MSOOXML::TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column);
 
     TableStyle* m_style;
     TableStyleInstanceProperties m_properties;
