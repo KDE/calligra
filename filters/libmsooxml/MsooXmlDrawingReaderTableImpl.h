@@ -97,31 +97,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tblPr()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR(bandCol)
+    TRY_READ_ATTR_WITHOUT_NS(bandCol)
     if(MSOOXML::Utils::convertBooleanAttr(bandCol)) {
         m_activeRoles |= MSOOXML::TableStyleInstanceProperties::ColumnBanded;
     }
-    TRY_READ_ATTR(bandRow)
+    TRY_READ_ATTR_WITHOUT_NS(bandRow)
     if(MSOOXML::Utils::convertBooleanAttr(bandRow)) {
         m_activeRoles |= MSOOXML::TableStyleInstanceProperties::RowBanded;
     }
-    TRY_READ_ATTR(firstCol)
+    TRY_READ_ATTR_WITHOUT_NS(firstCol)
     if(MSOOXML::Utils::convertBooleanAttr(firstCol)) {
         m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
     }
-    TRY_READ_ATTR(firstRow)
+    TRY_READ_ATTR_WITHOUT_NS(firstRow)
     if(MSOOXML::Utils::convertBooleanAttr(firstRow)) {
         m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstRow;
     }
-    TRY_READ_ATTR(lastCol)
+    TRY_READ_ATTR_WITHOUT_NS(lastCol)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
         m_activeRoles |= MSOOXML::TableStyleInstanceProperties::FirstCol;
     }
-    TRY_READ_ATTR(lastRow)
+    TRY_READ_ATTR_WITHOUT_NS(lastRow)
     if(MSOOXML::Utils::convertBooleanAttr(lastCol)) {
         m_activeRoles |= MSOOXML::TableStyleInstanceProperties::LastCol;
     }
-//     TRY_READ_ATTR(rtl)
+//     TRY_READ_ATTR_WITHOUT_NS(rtl)
 
     while (!atEnd()) {
         readNext();
