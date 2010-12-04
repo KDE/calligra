@@ -231,7 +231,7 @@ void KWordTableHandler::tableStart(KWord::Table* table)
     } 
     tableStyle.addProperty("table:align", align);
     tableStyle.addPropertyPt("style:width", (table->m_cellEdges[table->m_cellEdges.size()-1] - table->m_cellEdges[0]) / 20.0);
-    tableStyle.addProperty("style:border-model", "collapsing");
+    tableStyle.addProperty("table:border-model", "collapsing");
 
     //process the margin information 
     if (m_floatingTable != true) {
