@@ -77,7 +77,8 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     const int columnCount = m_table->columnCount();
 
     MSOOXML::TableStyleInstanceProperties styleProperties(rowCount, columnCount);
-    styleProperties.roles(m_activeRoles);
+    styleProperties.roles(m_activeRoles)
+                   .localStyles(m_localTableStyles);
 
     MSOOXML::TableStyleInstance styleInstance(&m_tableStyle, styleProperties);
 
@@ -259,7 +260,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tc()
                 body = oldBody;
             }
 //             ELSE_TRY_READ_IF(extLst)
-//             ELSE_TRY_READ_IF(tcPr)
+            ELSE_TRY_READ_IF(tcPr)
 //             ELSE_WRONG_FORMAT
         }
     }
@@ -282,3 +283,44 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
  
     READ_EPILOGUE
 }
+
+// Local styles
+
+#undef CURRENT_EL
+#define CURRENT_EL tcPr
+//! tcPR (Table Cell Properties) §21.1.3.17
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
+{
+    READ_PROLOGUE
+
+    m_currentLocalStyleProperties = new MSOOXML::TableStyleProperties();
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+//             TRY_READ_IF(blipFill)
+//             ELSE_TRY_READ_IF(cell3D)
+//             ELSE_TRY_READ_IF(extLst)
+//             ELSE_TRY_READ_IF(gradFill)
+//             ELSE_TRY_READ_IF(grpFill)
+//             ELSE_TRY_READ_IF(lnBlToTr)
+//             ELSE_TRY_READ_IF(lnB)
+//             ELSE_TRY_READ_IF(lnR)
+//             ELSE_TRY_READ_IF(lnT)
+//             ELSE_TRY_READ_IF(lnTlToBr)
+//             ELSE_TRY_READ_IF(pattFill)
+            /*else */if(QUALIFIED_NAME_IS(solidFill)) {
+                TRY_READ(solidFill)
+                m_currentLocalStyleProperties->backgroundColor = m_currentColor;
+                m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
+            }
+        }
+    }
+
+    m_localTableStyles.setLocalStyle(m_currentLocalStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
+
+    READ_EPILOGUE
+}
+
+

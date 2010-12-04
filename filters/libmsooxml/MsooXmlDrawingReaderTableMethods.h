@@ -42,3 +42,6 @@ protected:
 
     MSOOXML::TableStyle m_tableStyle;
     MSOOXML::TableStyleInstanceProperties::Roles m_activeRoles;
+
+    MSOOXML::TableStyleProperties* m_currentLocalStyleProperties;
+    MSOOXML::LocalTableStyles m_localTableStyles;
