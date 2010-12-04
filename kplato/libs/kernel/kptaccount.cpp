@@ -582,9 +582,12 @@ bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
             return false;
         }
     }
-    setRunning(element.attribute("running-cost").toInt());
-    setStartup(element.attribute("startup-cost").toInt());
-    setShutdown(element.attribute("shutdown-cost").toInt());
+    bool on = (bool)(element.attribute("running-cost").toInt());
+    if ( on ) setRunning( on );
+    on = (bool)(element.attribute("startup-cost").toInt());
+    if ( on ) setStartup( on );
+    on = (bool)(element.attribute("shutdown-cost").toInt());
+    if ( on ) setShutdown( on );
     return true;
 }
 

@@ -23,6 +23,17 @@ using namespace MSO;
 
 namespace {
 
+    enum TextTypeEnum {
+        Tx_TYPE_TITLE = 0,
+        Tx_TYPE_BODY,
+        Tx_TYPE_NOTES,
+        Tx_TYPE_OTHER = 4,
+        Tx_TYPE_CENTERBODY,
+        Tx_TYPE_CENTERTITLE,
+        Tx_TYPE_HALFBODY,
+        Tx_TYPE_QUARTERBODY
+    };
+
 const TextMasterStyleAtom*
 getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 texttype)
 {
@@ -133,19 +144,31 @@ const TextCFException* getLevelCF(const MasterOrSlideContainer* m,
     return (ml) ?&ml->cf :0;
 }
 const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
-                                  quint32 textType, quint16 level)
+                                         quint32 textType, quint16 level)
 {
     const TextMasterStyleAtom* ms = 0;
-    //Tx_TYPE_CENTERTITLE so let's inherit from Tx_TYPE_TITLE
-    if (textType == 6) {
-        ms = getTextMasterStyleAtom(m, 0);
+    const TextMasterStyleLevel* ml = 0;
+
+    if (textType == Tx_TYPE_CENTERTITLE) {
+        ms = getTextMasterStyleAtom(m, Tx_TYPE_TITLE);
+        ml = getTextMasterStyleLevel(ms, level); 
     }
     //those are placeholder shapes so let's inherit from Tx_TYPE_BODY
+    //NOTE: testing required!
 //     else if (textType == 5 || textType == 7 || textType == 8) {
 //         ms = getTextMasterStyleAtom(m, 1);
 //     }
-    //NOTE: Tx_TYPE_NOTES and Tx_TYPE_OTHER do not inherit
-    return getTextMasterStyleLevel(ms, level);
+
+    else if (textType == Tx_TYPE_OTHER) {
+        //MS Office 2007 specific at the moment 
+	if (level) {
+            ms = getTextMasterStyleAtom(m, Tx_TYPE_OTHER);
+            ml = getTextMasterStyleLevel(ms, 0);
+        }
+    }
+    //NOTE: Tx_TYPE_NOTES do not inherit at the moment
+
+    return ml;
 }
 const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
                                   const TextContainer* tc, quint16 level)
