@@ -423,6 +423,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             main[i]->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(KWord::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
+            shape->update();
             shape->setPosition(points[i]);
             shape->setSize(QSizeF(columnWidth -
                                   (first ? 0 : page.pageStyle().columns().columnSpacing),
