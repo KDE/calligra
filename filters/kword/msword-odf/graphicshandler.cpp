@@ -1088,6 +1088,8 @@ void KWordGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
         style.setAutoStyleInStylesDotXml(true);
     }
     defineGraphicProperties(style, ds);
+    style.addProperty("style:vertical-rel","baseline");
+    style.addProperty("style:vertical-pos","top");
     styleName = out.styles.insert(style);
 
     QString url;
