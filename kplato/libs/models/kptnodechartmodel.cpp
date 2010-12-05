@@ -21,6 +21,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kptschedule.h"
+#include "kptresource.h"
 
 #include <QPointF>
 #include <QVariant>
@@ -195,11 +196,13 @@ void ChartItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( resourceChanged( Node* ) ), this, SLOT( slotResourceChanged( Node* ) ) );
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     reset();
 }
@@ -247,6 +250,12 @@ void ChartItemModel::slotNodeChanged( Node *node )
             return;
         }
     }
+}
+
+void ChartItemModel::slotResourceChanged( Resource* resource )
+{
+    calculate();
+    reset();
 }
 
 QDate ChartItemModel::startDate() const

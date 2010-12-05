@@ -163,7 +163,7 @@ protected slots:
     void slotAccountToBeRemoved( const Account *account );
     void slotAccountRemoved( const Account *account );
     
-    void slotNodeChanged( Node *node );
+    void slotDataChanged();
 
 private:
     ScheduleManager *m_manager;

@@ -35,6 +35,7 @@
 namespace KPlato
 {
 
+class Resource;
 class Project;
 class ScheduleManager;
 class Node;
@@ -112,6 +113,7 @@ public:
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeChanged( Node *node );
+    void slotResourceChanged( Resource *resource );
 
 protected:
     double bcwsEffort( int day ) const;
