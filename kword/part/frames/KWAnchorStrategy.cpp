@@ -52,8 +52,6 @@ KWAnchorStrategy::~KWAnchorStrategy()
 
 bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText, KWTextFrameSet *frameSet)
 {
-    kDebug() << "start";
-    qDebug() << " ********************************************************************** shape pointer " << m_anchor->shape();
     m_nextShapeNeeded = false;
 
     KoTextShapeData *data = 0;
@@ -72,7 +70,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         return false;
     Q_ASSERT(data);
 
-    if (m_anchor->shape()->parent() == 0) { // it should be parented to our current shape
+    if (m_anchor->shape()->parent() != shapeContainingAnchor) { // it should be parented to our current shape
 //        KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(state->shape);
         KoShapeContainer *sc = dynamic_cast<KoShapeContainer*>(shapeContainingAnchor);
         if (sc == 0) {
@@ -329,7 +327,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         recalcFrom = qMax(recalcFrom, block.position());
         break;
 
-    case KoTextAnchor::VText:
+    case KoTextAnchor::VText: // same as char apparently only used when as-char
     case KoTextAnchor::VChar:
         if (layout->lineCount()) {
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
@@ -439,7 +437,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state, int 
         kDebug(32002) << "vertical-pos not handled";
     }
     newPosition = newPosition + m_anchor->offset();
-qDebug()<<"BOUNDING RECT"<<anchorBoundingRect;
+
     if (!checkPageBorder(newPosition, containerBoundingRect, pageInfo))
     {
         m_finished = false;
@@ -463,8 +461,7 @@ qDebug()<<"BOUNDING RECT"<<anchorBoundingRect;
         m_anchor->shape()->update();
         //kDebug() << "anchor positioned" << newPosition << "/" << m_anchor->shape()->position();
         //kDebug() << "finished" << m_finished;
-qDebug()<<"setting shape position to"<<newPosition;
-m_anchor->shape()->setPosition(newPosition);
+        m_anchor->shape()->setPosition(newPosition);
         m_anchor->shape()->update();
     }
 
