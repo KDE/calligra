@@ -41,6 +41,7 @@ TableStyleInstanceProperties& TableStyleInstanceProperties::rowBandSize(int size
 TableStyleInstanceProperties& TableStyleInstanceProperties::localStyles(const MSOOXML::LocalTableStyles& localStyles)
 {
     m_localStyles = localStyles;
+    return *this;
 }
 
 TableStyleInstance::TableStyleInstance(TableStyle* style, TableStyleInstanceProperties properties)
