@@ -237,6 +237,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     QBuffer storeBuffer; // TODO: use temporary file instead
     delete d->storeout;
     d->storeout = KoStore::createStore(&storeBuffer, KoStore::Write);
+    d->storeout->disallowNameExpansion();
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
@@ -327,6 +328,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     storeBuffer.close();
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
+    store->disallowNameExpansion();
 
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
     d->processEmbeddedObjects(xmlDoc.documentElement(), store);
@@ -1256,7 +1258,7 @@ QPen ExcelImport::Private::convertBorder(const Pen& pen)
 void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
 {
     QString mimeType;
-    const QString fileName = picture->fileName();
+    const QString fileName = "Pictures/" + picture->fileName();
     const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
     if( extension == "gif" ) {
