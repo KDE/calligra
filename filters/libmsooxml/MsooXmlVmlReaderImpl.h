@@ -169,6 +169,12 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
     }
 
+#ifdef DOCXXMLDOCREADER_H
+    // Let these be defaults
+    body->addAttribute("text:anchor-type", "char");
+    m_currentDrawStyle->addProperty("style:vertical-rel", "char");
+#endif
+
     if (!hor_pos.isEmpty()) {
         m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
     }
