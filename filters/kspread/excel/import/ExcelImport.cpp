@@ -1258,7 +1258,7 @@ QPen ExcelImport::Private::convertBorder(const Pen& pen)
 void ExcelImport::Private::insertPictureManifest(PictureObject* picture)
 {
     QString mimeType;
-    const QString fileName = picture->fileName();
+    const QString fileName = "Pictures/" + picture->fileName();
     const QString extension = fileName.right(fileName.size() - fileName.lastIndexOf('.') - 1);
 
     if( extension == "gif" ) {
