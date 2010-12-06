@@ -329,13 +329,14 @@ private:
             //select invalid parts because of wrap
             for (int i = 0; i < m_validOutlines.size(); i++) {
                 Outline *outline = m_validOutlines.at(i);
-                if (outline->textOnLeft()) {
-                    lineParts.replace(i + 1, QRect());
-                }
-                if (outline->textOnRight()) {
+                if (outline->noTextAround()) {
                     lineParts.replace(i, QRectF());
-                }
-                if (outline->textOnBiggerSide()) {
+                    lineParts.replace(i + 1, QRect());
+                } else if (outline->textOnLeft()) {
+                    lineParts.replace(i + 1, QRect());
+                } else if (outline->textOnRight()) {
+                    lineParts.replace(i, QRectF());
+                } else if (outline->textOnBiggerSide()) {
                     QRectF leftReft = outline->getLeftLinePart(m_lineRect);
                     QRectF rightRect = outline->getRightLinePart(m_lineRect);
                     if (leftReft.width() < rightRect.width()) {
