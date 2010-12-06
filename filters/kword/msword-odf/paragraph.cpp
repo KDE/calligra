@@ -733,7 +733,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
 
     //hps = font size in half points
     if (!suppressFontSize && (!refChp || refChp->hps != chp->hps)) {
-        style->addPropertyPt(QString("fo:font-size"), (int)(chp->hps / 2), KoGenStyle::TextType);
+        style->addPropertyPt(QString("fo:font-size"), ((qreal) chp->hps / 2), KoGenStyle::TextType);
     }
 
     //fBold = bold text if 1
