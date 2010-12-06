@@ -59,6 +59,8 @@ public:
 
     bool textOnBiggerSide() const;
 
+    bool noTextAround() const;
+
     static bool compareRectLeft(Outline *o1, Outline *o2);
 private:
     enum Side { None, Left, Right, Empty, Both, Bigger }; // TODO support Auto
