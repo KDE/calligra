@@ -237,6 +237,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     QBuffer storeBuffer; // TODO: use temporary file instead
     delete d->storeout;
     d->storeout = KoStore::createStore(&storeBuffer, KoStore::Write);
+    d->storeout->disallowNameExpansion();
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
@@ -327,6 +328,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     storeBuffer.close();
 
     KoStore *store = KoStore::createStore(&storeBuffer, KoStore::Read);
+    store->disallowNameExpansion();
 
     KoXmlDocument xmlDoc = d->endMemoryXmlWriter(d->shapesXml);
     d->processEmbeddedObjects(xmlDoc.documentElement(), store);
