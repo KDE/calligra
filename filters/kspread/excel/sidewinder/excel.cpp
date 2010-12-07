@@ -2399,6 +2399,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     d->workbook = workbook;
     d->globals = new GlobalsSubStreamHandler(workbook, streamVersion);
     d->handlerStack.clear();
+    unsigned long lastType = 0;
 
     while (stream->tell() < stream_size) {
         const int percent = int(stream->tell() / double(stream_size) * 100.0 + 0.5);
@@ -2418,6 +2419,15 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
         if (bytes_read != 4) break;
 
         unsigned long type = readU16(buffer);
+        // if the previous record is an Obj record, than the Continue record
+        // was supposed to be a MsoDrawingRecord (known bug in MS Excel...)
+        // a similar problem exists with TxO/Continue records, but there it is
+        // harder to find out which Continue records are part of the TxO and which
+        // are part of the MsoDrawing record
+        if (type == 0x3C && lastType == ObjRecord::id) {
+            type = MsoDrawingRecord::id;
+        }
+
         unsigned long size = readU16(buffer + 2);
         d->globals->decryptionSkipBytes(4);
 
@@ -2452,6 +2462,15 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     break;
             } else if(next_type == 0x3C) {
                 // 0x3C are continues records which are always just merged...
+
+                // if the previous record is an Obj record, than the Continue record
+                // was supposed to be a MsoDrawingRecord (known bug in MS Excel...)
+                // a similar problem exists with TxO/Continue records, but there it is
+                // harder to find out which Continue records are part of the TxO and which
+                // are part of the MsoDrawing record
+                if (type == ObjRecord::id) {
+                    break;
+                }
             } else {
                 break; // and abort merging of records
             }
@@ -2487,6 +2506,9 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
         // restore position in stream to the beginning of the next record
         stream->seek(saved_pos);
+
+        // remember type of previous record
+        lastType = type;
 
         // skip record type 0, this is just for filler
         if (type == 0) continue;
