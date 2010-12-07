@@ -225,6 +225,15 @@ public:
     void createLine(KoTextDocumentLayout::LayoutState *state) {
         m_state = state;
         line = m_state->layout->createLine();
+        if (line.isValid()) {
+            line.setNumColumns(1);
+        }
+        while (line.isValid() && line.textLength() == 1 && line.naturalTextWidth() == 0) {
+            //TODO korinpa: set anchor position at right place (lineRectPart position of next line)
+            line.setPosition(QPointF(m_state->x(), m_state->y()));
+            line = m_state->layout->createLine();
+            line.setNumColumns(1);
+        }
     }
     void setRestartOnNextShape(bool restartOnNextShape)
     {
@@ -245,7 +254,7 @@ public:
             m_updateValidOutlines = true;
         }
     }
-    void fit(const bool resetHorizontalPosition = false) {
+    void fit(const bool resetHorizontalPosition = false) {        
         if (resetHorizontalPosition) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
@@ -598,7 +607,6 @@ void KWTextDocumentLayout::layout()
         m_newAnchors.clear();
         if (restartLine)
             continue;
-
         line.createLine(m_state);
         if (!line.isValid()) { // end of parag
             const qreal posY = m_state->y();
@@ -660,11 +668,9 @@ void KWTextDocumentLayout::layout()
             return;
         }
         newParagraph = false;
-
         line.setOutlines(outlines);
         const int anchorCount = m_newAnchors.count();
         line.fit();
-        //line.tryFit();
         if (m_state->layout->lineCount() == 1 && anchorCount != m_newAnchors.count()) {
             // start parag over so we can correctly take the just found anchors into account.
             m_state->layout->endLayout();
@@ -766,7 +772,6 @@ void KWTextDocumentLayout::layout()
                 break; //break so the next line (which contain the same) is fitted on new shape
             }
             line.fit(true);
-            //line.tryFit();
 #ifdef DEBUG_TEXT
             if (line.line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());
