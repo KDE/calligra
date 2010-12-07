@@ -81,7 +81,6 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
         } else if (frame->runAroundSide() == KWord::BiggestRunAroundSide) {
             m_side = Bigger;
         }
-
     }
     init(matrix, shape->outline(), distance);
 }
@@ -126,63 +125,6 @@ void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal 
 
 }
 
-QRectF Outline::limit(const QRectF &content)
-{
-    if (m_side == Empty) {
-        if (content.intersects(m_bounds)) {
-            QRectF answer = content;
-            answer.setWidth((qreal)0.0);
-            return answer;
-        }
-        return content;
-    }
-
-    if (m_side == None) { // first time for this text;
-        qreal insetLeft = m_bounds.right() - content.left();
-        qreal insetRight = content.right() - m_bounds.left();
-
-        if (insetLeft < insetRight)
-            m_side = Left;
-        else
-            m_side = Right;
-    }
-    if (!m_bounds.intersects(content))
-        return content;
-
-    // two points, as we are checking a rect, not a line.
-    qreal points[2] = { content.top(), content.bottom() };
-    QRectF answer = content;
-    for (int i = 0; i < 2; i++) {
-        const qreal y = points[i];
-        qreal x = m_side == Left ? answer.left() : answer.right();
-        bool first = true;
-        QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
-        for (;iter != m_edges.constEnd(); ++iter) {
-            QLineF line = iter.value();
-            if (line.y2() < y) // not a section that will intersect with ou Y yet
-                continue;
-            if (line.y1() > y) // section is below our Y, so abort loop
-                break;
-            if (qAbs(line.dy()) < 1E-10)  // horizontal lines don't concern us.
-                continue;
-
-            qreal intersect = xAtY(iter.value(), y);
-            if (first) {
-                x = intersect;
-                first = false;
-            } else if ((m_side == Left && intersect > x) || (m_side == Right && intersect < x)) {
-                x = intersect;
-            }
-        }
-        if (m_side == Left)
-            answer.setLeft(qMax(answer.left(), x));
-        else
-            answer.setRight(qMin(answer.right(), x));
-    }
-
-    return answer;
-}
-
 qreal Outline::xAtY(const QLineF &line, qreal y)
 {
     if (line.dx() == 0)
@@ -195,8 +137,6 @@ void Outline::changeMatrix(const QTransform &matrix)
     m_edges.clear();
     init(matrix, m_shape->outline(), m_distance);
 }
-
-//----------------------------------------------------------------------------------------------------------------
 
 QRectF Outline::cropToLine(const QRectF &lineRect)
 {
