@@ -61,9 +61,9 @@ void ProgressObject::slotProgress(int /* progress */ )
 int main( int argc, char **argv )
 {
     KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), KOFFICE_VERSION_STRING,
-                          ki18n("KOffice Document Converter"),
+                          ki18n("Calligra Document Converter"),
                           KAboutData::License_GPL,
-                          ki18n("(c) 2001-2004 KOffice developers") );
+                          ki18n("(c) 2001-20011 Calligra developers") );
     aboutData.addAuthor(ki18n("David Faure"),KLocalizedString(), "faure@kde.org");
     aboutData.addAuthor(ki18n("Nicolas Goutte"),KLocalizedString(), "goutte@kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData);
