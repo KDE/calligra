@@ -39,8 +39,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
     </style></head><body style=\" font-family:'Sans Serif'; font-size:12pt; font-weight:400; \
     font-style:normal;\">\n <p>" +
 
-    i18n("Freoffice is a mobile edition of KOffice Open source project. <br/>"
-     "Freoffice code can be found in the KOffice Open Source project. <br/>"
+    i18n("Freoffice is a mobile edition of Calligra Open source project. <br/>"
+     "Freoffice code can be found in the Calligra Open Source project. <br/>"
      "Freoffice is in beta edition and it supports viewing of spreadsheet, presentation and document in both<br/>"
      "Open document format (ODF) and Microsoft format. <br/>"
      "The editing functionality is limited to ODF documents only.")+

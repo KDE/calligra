@@ -400,7 +400,7 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     }
     KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
     if ( store->bad() ) {
-//        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1", file );
+//        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
         kDebug()<<"bad store"<<url.prettyUrl();
         delete store;
 //        QApplication::restoreOverrideCursor();
