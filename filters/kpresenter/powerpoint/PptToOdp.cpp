@@ -569,7 +569,7 @@ KoFilter::ConversionStatus PptToOdp::convert(const QString& inputFile,
     }
     if (!parse(storage)) {
         qDebug() << "Parsing and setup failed.";
-        return KoFilter::StupidError;
+        return KoFilter::InvalidFormat;
     }
 
     // create output store
@@ -590,7 +590,7 @@ KoFilter::ConversionStatus PptToOdp::convert(POLE::Storage& storage,
 {
     if (!parse(storage)) {
         qDebug() << "Parsing and setup failed.";
-        return KoFilter::StupidError;
+        return KoFilter::InvalidFormat;
     }
     return doConversion(storage, storeout);
 }
