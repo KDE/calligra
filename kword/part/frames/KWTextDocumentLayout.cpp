@@ -225,15 +225,17 @@ public:
     void createLine(KoTextDocumentLayout::LayoutState *state) {
         m_state = state;
         line = m_state->layout->createLine();
-        if (line.isValid()) {
-            line.setNumColumns(1);
-        }
-        while (line.isValid() && line.textLength() == 1 && line.naturalTextWidth() == 0) {
-            //TODO korinpa: set anchor position at right place (lineRectPart position of next line)
-            line.setPosition(QPointF(m_state->x(), m_state->y()));
-            line = m_state->layout->createLine();
-            line.setNumColumns(1);
-        }
+//        if (line.isValid()) {
+//            line.setNumColumns(1);
+//        }
+//        while (line.isValid() && line.textLength() == 1 && line.naturalTextWidth() == 0) {
+//            //TODO korinpa: set anchor position at right place (lineRectPart position of next line)
+//            line.setPosition(QPointF(m_state->x(), m_state->y()));
+//            line = m_state->layout->createLine();
+//            if (line.isValid()) {
+//                line.setNumColumns(1);
+//            }
+//        }
     }
     void setRestartOnNextShape(bool restartOnNextShape)
     {
