@@ -34,12 +34,12 @@ namespace wvWare
 
     // Word97 so far. Is that different in Word95?
     const unsigned char CELL_MARK = 7;
-    const unsigned char ROW_MARK = 7;
+    const unsigned char TTP_MARK = 7; //(ROW_MARK)
     const unsigned char TAB = 9;
     const unsigned char HARD_LINE_BREAK = 11;
     const unsigned char PAGE_BREAK = 12;
     const unsigned char SECTION_MARK = 12;
-    const unsigned char PARAGRAPH_MARK = 13;
+    const unsigned char PARAGRAPH_MARK = 13; //(0x000D)
     const unsigned char COLUMN_BREAK = 14;
     const unsigned char FIELD_BEGIN_MARK = 19;
     const unsigned char FIELD_SEPARATOR = 20;
@@ -186,7 +186,7 @@ namespace wvWare
 
         // We have to keep track of the current parsing mode (e.g. are we skimming tables
         // or are we parsing them?)
-        enum ParsingMode { Default, Table };
+        enum ParsingMode { Default, Table, NestedTable };
 
         // "Callbacks" for the 95/97 parsers
         // ##### TODO
@@ -263,14 +263,6 @@ namespace wvWare
 
         void parseHeader( const HeaderData& data, unsigned char mask );
 
-        void parsePictureEscher( const PictureData& data, OLEStreamReader* stream,
-                int totalPicfSize, int picfStartPos );
-        void parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream );
-        void parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream );
-        void parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream );
-
-        void parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib);
-
         void saveState( U32 newRemainingChars, SubDocument newSubDocument, ParsingMode newParsingMode = Default );
         void restoreState();
 
@@ -281,6 +273,17 @@ namespace wvWare
         inline void realFC( U32& fc, bool& unicode ) const;
         // Helper method to use std::accumulate in the table handling code
         static int accumulativeLength( int len, const Chunk& chunk );
+
+#undef PARSER9X_OBSOLETE
+#ifdef PARSER9X_OBSOLETE
+        void parsePictureEscher( const PictureData& data, OLEStreamReader* stream,
+                int totalPicfSize, int picfStartPos );
+        void parsePictureExternalHelper( const PictureData& data, OLEStreamReader* stream );
+        void parsePictureBitmapHelper( const PictureData& data, OLEStreamReader* stream );
+        void parsePictureWmfHelper( const PictureData& data, OLEStreamReader* stream );
+
+        void parseOfficeArtFOPT(OLEStreamReader* stream, int dataSize, OfficeArtProperties *artProperties, U32* pib);
+#endif
 
         // Private variables, no access needed in 95/97 code
         // First all variables which don't change their state during
@@ -309,6 +312,7 @@ namespace wvWare
         U32 m_remainingChars;
         U32 m_sectionNumber;
 
+        bool m_table_skimming;
         // Keeps track of the current sub document
         SubDocument m_subDocument;
 

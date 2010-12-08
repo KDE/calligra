@@ -7087,15 +7087,61 @@ struct PAP : public Shared {
     U16 unused70;
 
     /**
-     * when 1, paragraph is contained in a table row
+     * A Bool8 value that specifies whether this paragraph is in a table.  The
+     * value MUST be 1 any time the table depth is greater than zero.  By
+     * default, paragraphs are not in tables.
      */
     S8 fInTable;
 
     /**
-     * when 1, paragraph consists only of the row mark special character and
-     * marks the end of a table row.
+     * A Bool8 that, when set to 1, specifies that the cell mark it is applied
+     * to is a Table Terminating Paragraph (TTP) mark.  The TTP mark MUST be
+     * immediately preceded by a cell mark.  By default, a cell mark is not a
+     * Table Terminating Paragraph Mark.
      */
     S8 fTtp;
+
+    /**
+     * An integer value that specifies the table depth of this paragraph.  This
+     * value, when present, MUST be a non-negative number.  By default,
+     * paragraphs are not in tables.
+     */
+    S32 itap;
+
+    /**
+     * A signed integer that specifies an addition or subtraction to the
+     * existing table depth of this paragraph.  It provides an alternate way of
+     * specifying table depth to sprmPItap or a way to increment or decrement
+     * any value that was already set by sprmPItap or sprmPDtap.  By default,
+     * paragraphs are not in tables.
+     */
+    S32 dtap;
+
+    /**
+     * A Bool8 value that specifies whether this paragraph is the final
+     * paragraph in a nested table cell.
+     *
+     * When true, the nesting level of this paragraph MUST be greater than 1,
+     * indicating that this paragraph is in a table which is nested within
+     * another table.
+     *
+     * When true, this is the last paragraph of a nested table cell and its
+     * paragraph mark is treated as if it were an end of cell mark. By default,
+     * paragraphs are not the last paragraph of a nested table cell.
+     */
+    U8 fInnerTableCell;
+
+    /**
+     * A Bool8 value that specifies whether this paragraph is the final
+     * paragraph in a nested table row.  When 1, the table depth of this
+     * paragraph MUST be greater than 1, indicating that this paragraph is in a
+     * table that is nested within another table.
+     *
+     * When 1, this is the last paragraph of a nested table row and its
+     * paragraph mark is treated as if it were a TTP mark.  By default,
+     * paragraphs are not the last paragraph of a nested table row.
+     */
+    U8 fInnerTtp;
 
     /**
      * Wrap Code for absolute objects

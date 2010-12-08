@@ -253,6 +253,11 @@ void TextHandler::tableRowFound( const TableRowFunctor& tableRow, SharedPtr<cons
     tableRow();
 }
 
+void TextHandler::tableEndFound( )
+{
+
+}
+
 void TextHandler::inlineObjectFound(const PictureData& /*data*/)
 {
 }
