@@ -169,19 +169,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
     }
 
-    if (!hor_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
-    }
-    if (!ver_pos.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
-    }
-    if (!hor_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
-    }
-    if (!ver_pos_rel.isEmpty()) {
-        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
-    }
-
 #ifdef DOCXXMLDOCREADER_H
     // These seem to be defaults
     if (!m_wrapRead) {
@@ -194,6 +181,19 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         body->addAttribute("text:anchor-type", m_anchorType);
     }
 #endif
+
+    if (!hor_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
+    }
+    if (!ver_pos.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-pos", ver_pos);
+    }
+    if (!hor_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", hor_pos_rel);
+    }
+    if (!ver_pos_rel.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
+    }
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
@@ -333,6 +333,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
                 m_wrapRead = true;
+                TRY_READ(wrap)
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -507,6 +508,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
                 m_wrapRead = true;
+                TRY_READ(wrap)
             }
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -809,6 +811,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             ELSE_TRY_READ_IF(stroke)
             else if (qualifiedName() == "w10:wrap") {
                 m_wrapRead = true;
+                TRY_READ(wrap)
             }
         }
     }
