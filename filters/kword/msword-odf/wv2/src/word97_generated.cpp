@@ -6850,6 +6850,7 @@ bool PAP::read(OLEStreamReader *stream, bool preservePos) {
     return true;
 }
 
+//TODO: update required!
 bool PAP::write(OLEStreamWriter *stream, bool preservePos) const {
 
     U8 shifterU8;
@@ -6941,6 +6942,7 @@ bool PAP::write(OLEStreamWriter *stream, bool preservePos) const {
     return true;
 }
 
+//TODO: update required!
 void PAP::clear() {
     istd=0;
     jc=0;
@@ -6989,6 +6991,10 @@ void PAP::clear() {
     unused70=0;
     fInTable=0;
     fTtp=0;
+    itap=0;
+    dtap=0;
+    fInnerTableCell=0;
+    fInnerTtp=0;
     wr=0;
     fLocked=0;
     ptap=0;
@@ -7119,10 +7125,6 @@ std::string PAP::toString() const
     s += uint2string( unused68_3 );
     s += "\nunused70=";
     s += uint2string( unused70 );
-    s += "\nfInTable=";
-    s += int2string( fInTable );
-    s += "\nfTtp=";
-    s += int2string( fTtp );
     s += "\nwr=";
     s += uint2string( wr );
     s += "\nfLocked=";
@@ -7179,6 +7181,20 @@ std::string PAP::toString() const
     s += int2string( itbdMac );
     s += "\nrgdxaTab=";
     // skipping the std::vector rgdxaTab
+    s += "\n------------------------------";
+    s += "\nfInTable=";
+    s += int2string( fInTable );
+    s += "\nfTtp=";
+    s += int2string( fTtp );
+    s += "\nitap=";
+    s += int2string( itap );
+    s += "\ndtap=";
+    s += int2string( dtap );
+    s += "\nfInnerTableCell=";
+    s += int2string( fInnerTableCell );
+    s += "\nfInnerTtp=";
+    s += int2string( fInnerTtp );
+    s += "\n------------------------------";
     s += "\nPAP Done.";
     return s;
 }
@@ -7230,8 +7246,6 @@ bool operator==(const PAP &lhs, const PAP &rhs) {
            lhs.fRotateFont==rhs.fRotateFont &&
            lhs.unused68_3==rhs.unused68_3 &&
            lhs.unused70==rhs.unused70 &&
-           lhs.fInTable==rhs.fInTable &&
-           lhs.fTtp==rhs.fTtp &&
            lhs.wr==rhs.wr &&
            lhs.fLocked==rhs.fLocked &&
            lhs.ptap==rhs.ptap &&
@@ -7259,7 +7273,13 @@ bool operator==(const PAP &lhs, const PAP &rhs) {
            lhs.dttmPropRMark==rhs.dttmPropRMark &&
            lhs.numrm==rhs.numrm &&
            lhs.itbdMac==rhs.itbdMac &&
-           lhs.rgdxaTab==rhs.rgdxaTab;
+           lhs.rgdxaTab==rhs.rgdxaTab &&
+           lhs.fInTable==rhs.fInTable &&
+           lhs.fTtp==rhs.fTtp &&
+           lhs.itap==rhs.itap &&
+           lhs.dtap==rhs.dtap &&
+           lhs.fInnerTableCell==rhs.fInnerTableCell &&
+           lhs.fInnerTtp==rhs.fInnerTtp;
 }
 
 bool operator!=(const PAP &lhs, const PAP &rhs) {

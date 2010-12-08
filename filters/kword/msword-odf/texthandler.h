@@ -93,6 +93,7 @@ public:
     virtual void runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
 
     virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
+    virtual void tableEndFound();
 
 #ifdef IMAGE_IMPORT
     virtual void inlineObjectFound(const wvWare::PictureData& data);
@@ -221,8 +222,6 @@ private:
 
     bool m_insideDrawing;
     KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
-
-    int m_maxColumns; //max number of columns in a table
 
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)

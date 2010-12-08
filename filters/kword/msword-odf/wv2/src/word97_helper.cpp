@@ -127,6 +127,8 @@ typedef enum
     sprmPCrLf = 0x2444,
     sprmPFUsePgsuSettings = 0x2447,
     sprmPFAdjustRight = 0x2448,
+    sprmPFInnerTableCell = 0x244B,
+    sprmPFInnerTtp = 0x244C,
     sprmPNLvlAnmFake = 0x25FF, // Fake entry!
     sprmPIncLvl = 0x2602,
     sprmPIlvl = 0x260A,
@@ -237,7 +239,8 @@ typedef enum
     sprmPBrcBar = 0x6629,
     sprmPHugePapx = 0x6645,
     sprmPHugePapx2 = 0x6646,
-    sprmPTableLevelUndoc = 0x6649, // Undocumented. According to OOo it's the table level
+    sprmPItap = 0x6649,
+    sprmPDtap = 0x664A,
     sprmCDttmRMark = 0x6805,
     sprmCObjLocation = 0x680E,
     sprmCDttmRMarkDel = 0x6864,
@@ -894,12 +897,6 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             //wvlog << "SPRM::sprmPChgTabs done ### " << rgdxaTab.size() << endl;
             break;
         }
-        case SPRM::sprmPFInTable:
-            fInTable = *ptr == 1;
-            break;
-        case SPRM::sprmPFTtp:
-            fTtp = *ptr == 1;
-            break;
         case SPRM::sprmPDxaAbs:
             dxaAbs = readS16( ptr );
             break;
@@ -1070,11 +1067,26 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         case SPRM::sprmPNLvlAnmFake:
             nLvlAnm = *ptr;
             break;
-        case SPRM::sprmPTableLevelUndoc:
-            // No idea if we have to use that one... for Word 2000 or newer it's there
-            if ( readU32( ptr ) != 1 )
-                wvlog << "++++++++++++++++ Table level=" << readU32( ptr ) << endl;
+        //START - table related SPRMs
+        case SPRM::sprmPFInTable:
+            fInTable = *ptr == 1;
             break;
+        case SPRM::sprmPFTtp:
+            fTtp = *ptr == 1;
+            break;
+        case SPRM::sprmPItap:
+            itap = readU32( ptr );
+            break;
+        case SPRM::sprmPDtap:
+            dtap = readS32( ptr );
+            break;
+        case SPRM::sprmPFInnerTableCell:
+            fInnerTableCell = *ptr == 1;
+            break;
+        case SPRM::sprmPFInnerTtp:
+            fInnerTtp = *ptr == 1;
+            break;
+        //END - table related SPRMs
         case SPRM::sprmPUndocumented1:
         case SPRM::sprmPUndocumented2:
         case SPRM::sprmPUndocumented3:

@@ -78,7 +78,6 @@ KWordTextHandler::KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoX
     , m_annotationBuffer(0)
     , m_insideDrawing(false)
     , m_drawingWriter(0)
-    , m_maxColumns(0)
     , m_currentListDepth(-1)
     , m_currentListID(0)
     , m_breakBeforePage(false)
@@ -256,19 +255,7 @@ void KWordTextHandler::sectionEnd()
 
     //check for a table to be parsed and processed
     if (m_currentTable) {
-        KWord::Table* table = m_currentTable;
-        //reset m_currentTable
-        m_currentTable = 0L;
-        //must delete table in Document!
-
-        //we cant have an open list when entering a table
-        if (listIsOpen()) {
-            //kDebug(30513) << "closing list " << m_currentListID;
-            closeList();
-        }
-
-        emit tableFound(table);
-        m_maxColumns = 0;
+        kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
 
     if (m_sep->bkc != 1) {
@@ -576,10 +563,13 @@ QDomElement KWordTextHandler::insertVariable(int type, wvWare::SharedPtr<const w
 
 void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap)
 {
-    if (m_insideAnnotation) // odf doesn't support tables in annotations
-        return;
-
     kDebug(30513) ;
+
+    //odf doesn't support tables in annotations
+    if (m_insideAnnotation) {
+        return;
+    }
+
     if (!m_currentTable) {
         // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
         //Q_ASSERT( !m_bInParagraph );
@@ -597,6 +587,35 @@ void KWordTextHandler::tableRowFound(const wvWare::TableRowFunctor& functor, wvW
 
     KWord::Row row(new wvWare::TableRowFunctor(functor), tap);
     m_currentTable->rows.append(row);
+}
+
+void KWordTextHandler::tableEndFound()
+{
+    kDebug(30513) ;
+
+    //odf doesn't support tables in annotations
+    if (m_insideAnnotation) {
+        return;
+    }
+
+    if (!m_currentTable) {
+        kWarning(30513) << "Looks like we lost a table somewhere: return";
+        return;
+    }
+
+    //TODO: FIX THE OPEN LIST PROBLEM !!!!!!
+    //we cant have an open list when entering a table
+    if (listIsOpen()) {
+        //kDebug(30513) << "closing list " << m_currentListID;
+        closeList();
+    }
+
+    KWord::Table* table = m_currentTable;
+    //reset m_currentTable
+    m_currentTable = 0L;
+    //must delete table in Document!
+
+    emit tableFound(table);
 }
 
 #ifdef IMAGE_IMPORT
@@ -728,21 +747,10 @@ QDomElement KWordTextHandler::insertAnchor(const QString& fsname)
 void KWordTextHandler::paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties)
 {
     kDebug(30513) << "**********************************************";
+
     //check for a table to be parsed and processed
     if (m_currentTable) {
-        KWord::Table* table = m_currentTable;
-        //reset m_currentTable
-        m_currentTable = 0L;
-        //must delete table in Document!
-
-        //we cant have an open list when entering a table
-        if (listIsOpen()) {
-            //kDebug(30513) << "closing list " << m_currentListID;
-            closeList();
-        }
-
-        emit tableFound(table);
-        m_maxColumns = 0;
+        kWarning(30513) << "==> WOW, unprocessed table: ignoring";
     }
 
     // Set correct writer and style location.

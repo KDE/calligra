@@ -199,6 +199,9 @@ namespace wvWare {
         virtual void tableCellEnd();
     };
 
+    //NOTE: PictureHandler is OBSOLETE, graphics are handled by the
+    //GraphicsHandler and msword-odf filter is using msoscheme to parse
+    //MS-ODRAW containers and structures.
 
     class OLEImageReader;
 
@@ -207,8 +210,7 @@ namespace wvWare {
      * callbacks. All the image data is passed to the consumer via this
      * interface.
      */
-    //NOTE: OBSOLETE, graphics are handled by the GraphicsHandler and we are
-    //using msoscheme to parse Office Drawing Binary File Format structures.
+
     class WV2_EXPORT PictureHandler
     {
     public:
@@ -443,16 +445,6 @@ namespace wvWare {
         virtual void fieldEnd( const FLD* fld, SharedPtr<const Word97::CHP> chp );
 
         /**
-         * This method is called every time we find a table row. The default
-         * implementation invokes the functor, which triggers the parsing
-         * process for the given table row.
-         * @param tap the table row properties. Those are the same as the
-         * ones you'll get when invoking the functor, but by having them here,
-         * you can do some preprocessing on the whole table first.
-         */
-        virtual void tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> tap );
-
-        /**
          * This method is called every time we find an inline object.
          * @param data the picture data as defined by functordata.
          */
@@ -469,7 +461,25 @@ namespace wvWare {
          */
         virtual void bookmarkStart( const BookmarkData& data );
         virtual void bookmarkEnd( const BookmarkData& data );
-    };
+
+        //NOTE: those two belong into the TableHandler !!!!!
+
+        /**
+         * This method is called every time we find a table row. The default
+         * implementation invokes the functor, which triggers the parsing
+         * process for the given table row.
+         * @param tap the table row properties. Those are the same as the
+         * ones you'll get when invoking the functor, but by having them here,
+         * you can do some preprocessing on the whole table first.
+         */
+        virtual void tableRowFound( const TableRowFunctor& tableRow, SharedPtr<const Word97::TAP> tap );
+
+        /**
+         * This method is called every time we find a table end. No default
+         * implementation at the moment!
+         */
+        virtual void tableEndFound( );
+   };
 
 } // namespace wvWare
 

@@ -71,7 +71,7 @@ Parser9x::Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Wo
         m_footnotes( 0 ), m_annotations( 0 ), m_fonts( 0 ), m_drawings( 0 ), m_bookmarks(0),
         m_plcfpcd( 0 ), m_tableRowStart( 0 ), m_tableRowLength( 0 ), m_cellMarkFound( false ),
         m_remainingCells( 0 ), m_currentParagraph( new Paragraph ), m_remainingChars( 0 ),
-        m_sectionNumber( 0 ), m_subDocument( None ), m_parsingMode( Default )
+        m_sectionNumber( 0 ), m_table_skimming( 0 ), m_subDocument( None ), m_parsingMode( Default )
 {
     if ( !isOk() )
         return;
@@ -274,8 +274,8 @@ void Parser9x::parseAnnotation( const AnnotationData& data )
 void Parser9x::parseTableRow( const TableRowData& data )
 {
 #ifdef WV2_DEBUG_TABLES
-    wvlog << "Parser9x::parseTableRow(): startPiece=" << data.startPiece << " startOffset="
-          << data.startOffset << " length=" << data.length << endl;
+    wvlog << "Parser9x::parseTableRow(): startPiece=" << data.startPiece <<
+             " startOffset=" << data.startOffset << " length=" << data.length << endl;
 #endif
 
     if ( data.length == 0 ) // idiot safe ;-)
@@ -555,6 +555,14 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
 
             SharedPtr<const Word97::SEP> sep( m_properties->sepForCP( m_fib.ccpText - m_remainingChars + index ) );
             if ( sep ) {
+
+                //Check if table skimming was active lately.  If yes, then this
+                //is the SECTION_MARK which follows a table.
+                if (m_table_skimming) {
+                    m_table_skimming = false;
+                    wvlog << "A table was identified lately: informing the texthandler.";
+                    m_textHandler->tableEndFound();
+                }
                 // It's not only a page break, it's a new section
                 m_textHandler->sectionEnd();
                 m_textHandler->sectionStart( sep );
@@ -566,7 +574,8 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             }
             break;
         }
-        case CELL_MARK: // same ASCII code as a ROW_MARK
+        // same ASCII code as TTP_MARK (0x0007), NOTE: table depth == 1
+        case CELL_MARK:
             m_cellMarkFound = true;
             // Fall-through intended. A row/cell end is also a paragraph end.
         case PARAGRAPH_MARK:
@@ -609,7 +618,7 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
             ++index;
             break;
         }
-    }
+    } //while
     if ( start < limit ) {
         // Finally we have to add the remaining text to the current paragraph
         // (if there is any)
@@ -634,22 +643,35 @@ void Parser9x::processParagraph( U32 fc )
     // Get the PAP structure as it was at the last full-save
     ParagraphProperties* props( m_properties->fullSavedPap( fc, m_data ) );
     // ...and apply the latest changes, then the PAP is completely restored
-    m_properties->applyClxGrpprl( m_plcfpcd->at( m_currentParagraph->back().m_position.piece ).current(), m_fib.fcClx, props );
+    m_properties->applyClxGrpprl( m_plcfpcd->at( m_currentParagraph->back().m_position.piece ).current(),
+                                  m_fib.fcClx, props );
 
     // Skim the tables first, as soon as the functor is invoked we have to
     // parse them and emit the text
     if ( m_parsingMode == Default && props->pap().fInTable ) {
+
+        //TODO: We could be already skimming a separate table, check TAP!  In
+        //case this is a new table inform the texthandler.
+
+        //TODO: Support for nested tables!
+
         if ( !m_tableRowStart ) {
             m_tableRowStart = new Position( m_currentParagraph->front().m_position );
             m_tableRowLength = 0;
+            m_table_skimming = true;
 
 #ifdef WV2_DEBUG_TABLES
-            wvlog << "Start of a table row: piece=" << m_tableRowStart->piece << " offset="
-                    << m_tableRowStart->offset << endl;
+            props->pap().dump();
+            wvlog << "Start of a table row: piece=" << m_tableRowStart->piece <<
+                     " offset=" << m_tableRowStart->offset << endl;
+
 #endif
         }
         // init == 1 because of the parag. mark!
-        m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(), 1, &Parser9x::accumulativeLength );
+        m_tableRowLength += std::accumulate( m_currentParagraph->begin(), m_currentParagraph->end(), 1, 
+                                             &Parser9x::accumulativeLength );
+
+        //check if this is a Table Terminating Paragraph Mark
         if ( props->pap().fTtp ) {
             // Restore the table properties of this row
             Word97::TAP* tap = m_properties->fullSavedTap( fc, m_data );
@@ -660,17 +682,30 @@ void Parser9x::processParagraph( U32 fc )
                                           m_fib.fcClx, tap, m_properties->styleByIndex( props->pap().istd ) );
 
             SharedPtr<const Word97::TAP> sharedTap( tap );
-            // We decrement the length by 1 that the trailing row mark doesn't emit
-            // one empty paragraph during parsing.
-            m_textHandler->tableRowFound( make_functor( *this, &Parser9x::parseTableRow,
-                                                        TableRowData( m_tableRowStart->piece, m_tableRowStart->offset, m_tableRowLength - 1, static_cast<int>( m_subDocument ), sharedTap ) ),
-                                          sharedTap );
+
+            // We decrement the length by 1 that the trailing row mark doesn't
+            // emit one empty paragraph during parsing.
+            TableRowData data( m_tableRowStart->piece, m_tableRowStart->offset, m_tableRowLength - 1,
+                               static_cast<int>( m_subDocument ), sharedTap );
+
+            m_textHandler->tableRowFound( make_functor( *this, &Parser9x::parseTableRow, data), sharedTap );
+
             delete m_tableRowStart;
             m_tableRowStart = 0;
         }
         delete props;
     }
     else {
+        //Check if table skimming was active lately.  If yes, then this is the
+        //paragraph behind the table (either a PARAGRAPH_MARK or a SECTION_MARK
+        //follows a table)!
+        if (m_table_skimming) {
+            m_table_skimming = false;
+            wvlog << "A table was identified lately: informing the texthandler.";
+            m_textHandler->tableEndFound();
+        }
+
+
         // Now that we have the complete PAP, let's see if this paragraph belongs to a list
         props->createListInfo( *m_lists );
 
@@ -715,8 +750,9 @@ void Parser9x::processParagraph( U32 fc )
 
         if ( m_cellMarkFound ) {
             m_tableHandler->tableCellEnd();
-            if ( --m_remainingCells )
+            if ( --m_remainingCells ) {
                 m_tableHandler->tableCellStart();
+            }
         }
     }
     m_currentParagraph->clear();
