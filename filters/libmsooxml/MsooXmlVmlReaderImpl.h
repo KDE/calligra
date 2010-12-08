@@ -169,12 +169,6 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
     }
 
-#ifdef DOCXXMLDOCREADER_H
-    // Let these be defaults
-    body->addAttribute("text:anchor-type", "char");
-    m_currentDrawStyle->addProperty("style:vertical-rel", "char");
-#endif
-
     if (!hor_pos.isEmpty()) {
         m_currentDrawStyle->addProperty("style:horizontal-pos", hor_pos);
     }
@@ -187,6 +181,19 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (!ver_pos_rel.isEmpty()) {
         m_currentDrawStyle->addProperty("style:vertical-rel", ver_pos_rel);
     }
+
+#ifdef DOCXXMLDOCREADER_H
+    // These seem to be defaults
+    if (!m_wrapRead) {
+        m_currentDrawStyle->addProperty("style:wrap", "none");
+        body->addAttribute("text:anchor-type", "paragraph");
+        m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+    }
+    else {
+        body->addAttribute("text:anchor-type", m_anchorType);
+    }
+#endif
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName( mainStyles->insert(*m_currentDrawStyle, "gr") );
@@ -272,7 +279,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::createFrameEnd()
  - [done] textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
- - wrap (Text Wrapping) §14.3.2.6
+ - [done] wrap (Text Wrapping) §14.3.2.6
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
@@ -312,6 +319,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
     // Note that image fill is not yet supported in fill parameter, but this should be used
     // when it's done
     bool textBoxOrImage = false;
+    m_wrapRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -323,6 +331,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
                 textBoxOrImage = true;
             }
             ELSE_TRY_READ_IF(stroke)
+            else if (qualifiedName() == "w10:wrap") {
+                m_wrapRead = true;
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -482,6 +493,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
     body = frameBuf.setWriter(body);
 
     bool textBoxOrImage = false;
+    m_wrapRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -493,6 +505,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
                 textBoxOrImage = true;
             }
             ELSE_TRY_READ_IF(stroke)
+            else if (qualifiedName() == "w10:wrap") {
+                m_wrapRead = true;
+            }
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -728,7 +743,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shapetype()
  - [done] textbox (Text Box) §14.1.2.22
  - textdata (VML Diagram Text) §14.5.2.2
  - textpath (Text Layout Path) §14.1.2.23
- - wrap (Text Wrapping) §14.3.2.6
+ - [done] wrap (Text Wrapping) §14.3.2.6
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
@@ -783,6 +798,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
     body = frameBuf.setWriter(body);
 
     pushCurrentDrawStyle(new KoGenStyle(KoGenStyle::GraphicAutoStyle, "graphic"));
+    m_wrapRead = false;
 
     while (!atEnd()) {
         readNext();
@@ -791,6 +807,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             TRY_READ_IF(imagedata)
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
+            else if (qualifiedName() == "w10:wrap") {
+                m_wrapRead = true;
+            }
         }
     }
 
@@ -909,5 +928,86 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
     READ_EPILOGUE
 }
 
+#undef MSOOXML_CURRENT_NS
+#define MSOOXML_CURRENT_NS "w10"
+
+#undef CURRENT_EL
+#define CURRENT_EL wrap
+// Wrap handler, todo fully..
+KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
+{
+    READ_PROLOGUE
+
+    const QXmlStreamAttributes attrs(attributes());
+
+    TRY_READ_ATTR_WITHOUT_NS(type)
+    TRY_READ_ATTR_WITHOUT_NS(side)
+
+    if (type.isEmpty()) {
+        m_currentDrawStyle->addProperty("style:wrap", "none");
+    }
+    else if (type == "through") {
+        m_currentDrawStyle->addProperty("style:wrap", "run-through");
+    }
+    else if (type == "topAndBottom") {
+        m_currentDrawStyle->addProperty("style:wrap", "none");
+    }
+    else {
+        if (side.isEmpty()) { // Note doc doesn't say which one is default
+            m_currentDrawStyle->addProperty("style:wrap", "biggest");
+        }
+        else if (side == "left") {
+            m_currentDrawStyle->addProperty("style:wrap", "left");
+        }
+        else if (side == "largest") {
+            m_currentDrawStyle->addProperty("style:wrap", "biggest");
+        }
+        else if (side == "right") {
+            m_currentDrawStyle->addProperty("style:wrap", "right");
+        }
+        else if (side == "both") {
+            m_currentDrawStyle->addProperty("style:wrap", "parallel");
+        }
+    }
+
+    TRY_READ_ATTR_WITHOUT_NS(anchorx)
+    TRY_READ_ATTR_WITHOUT_NS(anchory)
+
+        // "page" is default according to documentation
+    if (anchory.isEmpty() || anchory == "page") {
+        m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+        m_anchorType = "page";
+    }
+    else if (anchory == "text") {
+        m_anchorType = "as-char";
+        m_currentDrawStyle->addProperty("style:vertical-rel", "text");
+    }
+    else if (anchory == "line") {
+        m_anchorType = "as-char";
+        m_currentDrawStyle->addProperty("style:vertical-rel", "line");
+    }
+    else { // margin
+        m_anchorType = "paragraph";
+        m_currentDrawStyle->addProperty("text:anchor-type", "paragraph");
+        m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+    }
+
+    // "page" is default according to documentation
+    if (anchorx.isEmpty() || anchorx == "page") {
+        m_currentDrawStyle->addProperty("style-horizontal-rel", "page");
+    }
+    else if (anchorx == "margin") {
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "page-start-margin");
+    }
+    else if (anchorx == "text") {
+        // Empty, horizontal-rel cannot be anything
+    }
+    else {
+        m_currentDrawStyle->addProperty("style-horizontal-rel", "char");
+    }
+
+    readNext();
+    READ_EPILOGUE
+}
 
 #endif // MSOOXMLVMLREADER_IMPL_H

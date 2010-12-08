@@ -2520,9 +2520,6 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     body = buffer.originalWriter();
     body->startElement("draw:frame");
 
-    // Todo find out if this is always true
-    m_currentDrawStyle->addProperty("style:vertical-pos", "top");
-
     if (m_drawing_inline) {
         body->addAttribute("text:anchor-type", "as-char");
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
@@ -2530,6 +2527,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     else {
         body->addAttribute("text:anchor-type", "char");
         m_currentDrawStyle->addProperty("style:vertical-rel", "char");
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "char");
     }
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
