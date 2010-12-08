@@ -347,6 +347,9 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
         else if (type == "paragraph") {
             m_currentParagraphStyle = *m_defaultStyles.value(odfType.toLatin1());
             MSOOXML::Utils::copyPropertiesFromStyle(m_defaultParagraphStyle, m_currentParagraphStyle, KoGenStyle::TextType);
+            // Fixme: this value should be in fact read from settings.xml, in practise it most often it seems to be 720
+            // which equals to 36 pt
+            m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", 36);
         }
     }
     else {

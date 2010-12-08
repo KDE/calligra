@@ -47,6 +47,9 @@ protected:
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
 
+    // w:10 namespace:
+    KoFilter::ConversionStatus read_wrap();
+
     enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart};
 
     void createFrameStart(FrameStartElement startType = FrameStart);
@@ -76,6 +79,8 @@ protected:
     QString m_currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
 
     bool m_outputFrames; // Whether read_shape should output something to shape
+    bool m_wrapRead;
+    QString m_anchorType;
 
     // For group shape situation
     bool m_insideGroup;
