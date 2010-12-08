@@ -24,6 +24,10 @@
 
 class PptTextPFRun {
     quint16 level_;
+
+    //default values of bullet properties (text type specific)
+    bool d_fHasBullet; //
+
     const MSO::TextPFException* pfs[6];
     const MSO::TextPFException9* pf9s[6];
 public:

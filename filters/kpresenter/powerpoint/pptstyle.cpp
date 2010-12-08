@@ -149,19 +149,23 @@ const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
     const TextMasterStyleAtom* ms = 0;
     const TextMasterStyleLevel* ml = 0;
 
+    //NOTE: following rules were discussed at the Office File Formats Forum
+
     if (textType == Tx_TYPE_CENTERTITLE) {
         ms = getTextMasterStyleAtom(m, Tx_TYPE_TITLE);
-        ml = getTextMasterStyleLevel(ms, level); 
+        ml = getTextMasterStyleLevel(ms, level);
     }
-    //those are placeholder shapes so let's inherit from Tx_TYPE_BODY
-    //NOTE: testing required!
-//     else if (textType == 5 || textType == 7 || textType == 8) {
-//         ms = getTextMasterStyleAtom(m, 1);
-//     }
-
+    //TODO: fine tuning on test documents required
+    else if (textType == Tx_TYPE_CENTERBODY ||
+             textType == Tx_TYPE_HALFBODY ||
+             textType == Tx_TYPE_QUARTERBODY)
+    {
+        ms = getTextMasterStyleAtom(m, Tx_TYPE_BODY);
+        ml = getTextMasterStyleLevel(ms, 0);
+    }
     else if (textType == Tx_TYPE_OTHER) {
-        //MS Office 2007 specific at the moment 
-	if (level) {
+        //MS Office 2007 specific at the moment
+        if (level) {
             ms = getTextMasterStyleAtom(m, Tx_TYPE_OTHER);
             ml = getTextMasterStyleLevel(ms, 0);
         }
@@ -442,6 +446,26 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     //as content of a paragraph with corresponding indentLevel, thus avoid
     //placing it into a text:list element.
     level_ = level;
+
+    //NOTE: fine tuning on test documents required
+
+    //set the default values of bullet properties
+    if (tc) {
+        switch (tc->textHeaderAtom.textType) {
+        case Tx_TYPE_TITLE:
+        case Tx_TYPE_CENTERTITLE:
+            d_fHasBullet = false;
+            break;
+        case Tx_TYPE_BODY:
+            d_fHasBullet = true;
+            break;
+        default:
+            d_fHasBullet = false;
+            break;
+        }
+    } else {
+        d_fHasBullet = false;
+    }
 }
 
 PptTextCFRun::PptTextCFRun(const MSO::DocumentContainer* d,
@@ -496,7 +520,7 @@ TYPE PptTextPFRun::NAME() const \
     return DEFAULT; \
 }
 //     TYPE      PARENT       PRE NAME             TEST            DEFAULT
-GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      false)
+GETTER(bool,     bulletFlags->,,  fHasBullet,      hasBullet,      d_fHasBullet)
 GETTER(bool,     bulletFlags->,,  fBulletHasFont,  bulletHasFont,  false)
 GETTER(bool,     bulletFlags->,,  fBulletHasColor, bulletHasColor, false)
 GETTER(bool,     bulletFlags->,,  fBulletHasSize,  bulletHasSize,  false)
