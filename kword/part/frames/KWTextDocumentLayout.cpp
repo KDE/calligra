@@ -221,21 +221,11 @@ public:
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_processingLine = false;
         m_restartOnNextShape = false;
+        m_processingAnchor = false;
     }
     void createLine(KoTextDocumentLayout::LayoutState *state) {
         m_state = state;
         line = m_state->layout->createLine();
-//        if (line.isValid()) {
-//            line.setNumColumns(1);
-//        }
-//        while (line.isValid() && line.textLength() == 1 && line.naturalTextWidth() == 0) {
-//            //TODO korinpa: set anchor position at right place (lineRectPart position of next line)
-//            line.setPosition(QPointF(m_state->x(), m_state->y()));
-//            line = m_state->layout->createLine();
-//            if (line.isValid()) {
-//                line.setNumColumns(1);
-//            }
-//        }
     }
     void setRestartOnNextShape(bool restartOnNextShape)
     {
@@ -256,15 +246,20 @@ public:
             m_updateValidOutlines = true;
         }
     }
-    void fit(const bool resetHorizontalPosition = false) {        
+    void fit(const bool resetHorizontalPosition = false) {
+        //layout from left indent - used when same line need to be relayout
         if (resetHorizontalPosition) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
         }
+        //handle floating shape anchor - will not update baseline and horizontal position
+        line.setNumColumns(1);
+        if (line.textLength() == 1 && line.naturalTextWidth() == 0) {
+            m_processingAnchor = true;
+        } else {
+            m_processingAnchor = false;
+        }
         const qreal maxLineWidth = m_state->width();
-        line.setLineWidth(maxLineWidth);
-        const qreal maxLineHeight = line.height();
-        const qreal maxNaturalTextWidth = line.naturalTextWidth();
         if (maxLineWidth <= 0.) {
             // margin so small that the text can't fit.
             if (m_state->layout->lineCount() > 1
@@ -273,7 +268,14 @@ public:
             line.setPosition(QPointF(m_state->x(), m_state->y()));
             return;
         }
+        //set max line width to get max line height
+        line.setLineWidth(maxLineWidth);
+        const qreal maxLineHeight = line.height();
+        //get max natural text width to handle new line when do wrap
+        const qreal maxNaturalTextWidth = line.naturalTextWidth();
+        //get line rect, which can be devided by outlines
         QRectF lineRect(m_state->x(), m_state->y(), maxLineWidth, maxLineHeight);
+        //lineRectPart one part created by dividing of line rect
         QRectF lineRectPart;
         qreal movedDown = 0;
         if (m_state->maxLineHeight() > 0) {
@@ -282,15 +284,19 @@ public:
             movedDown = 10;
         }
         while (!lineRectPart.isValid()) {
+            //get line rect part where line can fit
             lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
+            //if line doesn't fit, move line rect down
             if (!lineRectPart.isValid()) {
                 m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
                 lineRect = QRectF(m_state->x(), m_state->y() + movedDown, maxLineWidth, maxLineHeight);
                 movedDown += 10;
             }
         }
+        //set result position and width for line
         line.setLineWidth(m_textWidth);
         line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
+        //if there are more line rect parts, than don't move baseline and update vertival position
         checkEndOfLine(lineRectPart, maxNaturalTextWidth);
     }
     QTextLine line;
@@ -305,6 +311,7 @@ private:
     bool m_processingLine;
     qreal m_textWidth;
     bool m_restartOnNextShape;
+    bool m_processingAnchor;
     void validateOutlines() {
         m_validOutlines.clear();
         foreach (Outline *outline, *m_outlines) {
@@ -414,8 +421,11 @@ private:
     }
     QRectF getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
         const qreal leftIndent = lineRect.left();
+        //get min line rect, where fit at least one char or as-char shape
         QRectF minLineRect = getMinLineRect(lineRect);
+        //count line parts of line rect using outlines
         updateLineParts(minLineRect);
+        //get first line part from line rect, which contains horizontal position
         QRectF lineRectPart = getLineRectPart();
         if (lineRectPart.isValid()) {
             qreal x = lineRectPart.x();
@@ -424,7 +434,9 @@ private:
                 x += leftIndent;
                 width -= leftIndent;
             }
+            //set width from line rect part
             line.setLineWidth(width);
+            //if height is bigger than can fit into line rect part, than get max text width
             if (line.height() > lineRectPart.height()) {
                 setMaxTextWidth(lineRectPart, leftIndent, maxNaturalTextWidth);
             } else {
@@ -437,6 +449,8 @@ private:
         if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
+        } else if(m_processingAnchor) {
+            m_processingLine = true;
         } else {
             m_horizontalPosition = lineRectPart.right();
             m_processingLine = true;
