@@ -24,9 +24,8 @@
 
 class StateToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
     public:
-        explicit StateToolFactory( QObject *parent );
+        explicit StateToolFactory( );
         ~StateToolFactory();
 
         KoToolBase * createTool( KoCanvasBase *canvas );

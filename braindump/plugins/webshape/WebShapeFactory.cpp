@@ -28,8 +28,8 @@
 
 #include "WebShape.h"
 
-WebShapeFactory::WebShapeFactory(QObject* parent) 
-   : KoShapeFactoryBase( parent, WEBSHAPEID,
+WebShapeFactory::WebShapeFactory() 
+   : KoShapeFactoryBase( WEBSHAPEID,
                      i18n("Web Shape") )
 {
   setToolTip( i18n("A web shape") );

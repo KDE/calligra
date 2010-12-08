@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-WebToolFactory::WebToolFactory( QObject *parent )
-    : KoToolFactoryBase(parent, "WebToolFactoryID")
+WebToolFactory::WebToolFactory( )
+    : KoToolFactoryBase( "WebToolFactoryID")
 {
     setToolTip( i18n("State Tool") );
     setToolType( dynamicToolType() );

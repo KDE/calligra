@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-StateToolFactory::StateToolFactory( QObject *parent )
-    : KoToolFactoryBase(parent, "StateToolFactoryID")
+StateToolFactory::StateToolFactory( )
+    : KoToolFactoryBase( "StateToolFactoryID")
 {
     setToolTip( i18n("State Tool") );
     setToolType( dynamicToolType() );

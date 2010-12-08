@@ -24,9 +24,8 @@
 
 class WebToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
     public:
-        explicit WebToolFactory( QObject *parent );
+        explicit WebToolFactory( );
         ~WebToolFactory();
 
         KoToolBase * createTool( KoCanvasBase *canvas );

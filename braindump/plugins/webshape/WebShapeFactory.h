@@ -21,7 +21,7 @@
 
 class WebShapeFactory : public KoShapeFactoryBase {
   public:
-    WebShapeFactory( QObject *parent );
+    WebShapeFactory();
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;

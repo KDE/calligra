@@ -34,9 +34,9 @@ StateShapePlugin::StateShapePlugin(QObject *parent, const QStringList&)
 {
     // register the shape's factory
     KoShapeRegistry::instance()->add(
-        new StateShapeFactory( parent ) );
+        new StateShapeFactory( ) );
     // we could register more things here in this same plugin.
-    KoToolRegistry::instance()->add( new StateToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new StateToolFactory( ) );
 }
 
 #include "StateShapePlugin.moc"

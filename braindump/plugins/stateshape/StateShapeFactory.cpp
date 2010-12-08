@@ -25,8 +25,8 @@
 
 #include "StateShape.h"
 
-StateShapeFactory::StateShapeFactory(QObject* parent) 
-   : KoShapeFactoryBase( parent, STATESHAPEID,
+StateShapeFactory::StateShapeFactory() 
+   : KoShapeFactoryBase( STATESHAPEID,
                      i18n("State Shape") )
 {
   setToolTip( i18n("A state shape") );

@@ -34,9 +34,9 @@ WebShapePlugin::WebShapePlugin(QObject *parent, const QStringList&)
 {
     // register the shape's factory
     KoShapeRegistry::instance()->add(
-        new WebShapeFactory( parent ) );
+        new WebShapeFactory( ) );
     // we could register more things here in this same plugin.
-    KoToolRegistry::instance()->add( new WebToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new WebToolFactory( ) );
 }
 
 #include "WebShapePlugin.moc"
