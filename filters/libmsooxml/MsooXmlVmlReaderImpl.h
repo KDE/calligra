@@ -976,8 +976,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     TRY_READ_ATTR_WITHOUT_NS(anchorx)
     TRY_READ_ATTR_WITHOUT_NS(anchory)
 
-        // "page" is default according to documentation
-    if (anchory.isEmpty() || anchory == "page") {
+    // Documentation says default to be 'page', however because these are always in a paragraph
+    // in a text run, a better default for odf purposes seems to be 'paragraph'
+
+    if (anchory == "page") {
         m_currentDrawStyle->addProperty("style:vertical-rel", "page");
         m_anchorType = "page";
     }
@@ -995,8 +997,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
     }
 
-    // "page" is default according to documentation
-    if (anchorx.isEmpty() || anchorx == "page") {
+    if (anchorx == "page") {
         m_currentDrawStyle->addProperty("style-horizontal-rel", "page");
     }
     else if (anchorx == "margin") {
@@ -1006,7 +1007,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         // Empty, horizontal-rel cannot be anything
     }
     else {
-        m_currentDrawStyle->addProperty("style-horizontal-rel", "char");
+        m_currentDrawStyle->addProperty("style-horizontal-rel", "paragraph");
     }
 
     readNext();

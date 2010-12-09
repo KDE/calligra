@@ -204,6 +204,9 @@ protected:
         TopBorder, BottomBorder, LeftBorder, RightBorder, InsideH, InsideV
     };
 
+    //! Whether the picture when run-through wrap is active should be in fore or background
+    bool m_behindDoc;
+
     //! Used for setting up properties for pages and paragraphs.
     //! It is reversed map, so detecting duplicates is easy in applyBorders().
     QMap<QString, BorderSide> m_borderStyles;

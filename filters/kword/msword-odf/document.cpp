@@ -964,18 +964,47 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
 
     DrawStyle ds = m_graphicsHandler->getDrawingStyle();
-    // TODO: use ds.fillType to enable fill efects for document background
 
-    // When more complete background-color implementation will be added to filter,
-    // PptToOdp::toQColor helper function can be used instead of this conversion
-    MSO::OfficeArtCOLORREF clr = ds.fillColor();
-    QColor color(clr.red, clr.green, clr.blue);
-    QString tmp = color.name();
-    pageLayoutStyle->addProperty("fo:background-color", tmp);
+    switch (ds.fillType()) {
+        case 0: //msofillSolid
+        {
+            // PptToOdp::toQColor helper function can be used instead of this conversion
+            MSO::OfficeArtCOLORREF clr = ds.fillColor();
+            QColor color(clr.red, clr.green, clr.blue);
+            QString tmp = color.name();
+            pageLayoutStyle->addProperty("fo:background-color", tmp);
 
-    //update the background-color information if required
-    if (tmp != currentBgColor()) {
-        updateBgColor(tmp);
+            //update the background-color information if required
+            if (tmp != currentBgColor()) {
+                updateBgColor(tmp);
+            }
+            break;
+        }
+        case 0x3: //msofillPicture
+        {
+            // picture can be stored in OfficeArtBStoreContainer or in fillBlip_complex if complex = true
+            // only picture in OfficeArtBStoreContainer is handled now
+            QString filePath = m_graphicsHandler->getPicturePath(ds.fillBlip());
+
+            if (!filePath.isEmpty()) {
+                QBuffer buffer;
+                KoXmlWriter bkgImageWriter(&buffer);
+
+                bkgImageWriter.startElement("style:background-image");
+                bkgImageWriter.addAttribute("xlink:href", filePath);
+                bkgImageWriter.addAttribute("xlink:type", "simple");
+                bkgImageWriter.addAttribute("xlink:actuate", "onLoad");
+                bkgImageWriter.endElement(); //style:background-image
+
+                QString contents = QString::fromUtf8(((QBuffer*)bkgImageWriter.device())->buffer(),
+                                             ((QBuffer*)bkgImageWriter.device())->buffer().size());
+
+                pageLayoutStyle->addChildElement("0", contents);
+            }
+        }
+            break;
+        default:
+            break;
     }
 
     //set the minimum height of header/footer to the full margin minus margin above header

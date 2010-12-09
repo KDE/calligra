@@ -2431,7 +2431,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
         xmlWriter.addAttribute("table:protection-key", QString(str));
     }
     QRect _printRange = printSettings()->printRegion().lastRange();
-    if (_printRange != (QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)))) {
+    if (!_printRange.isNull() &&_printRange != (QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)))) {
         const Region region(_printRange, this);
         if (region.isValid()) {
             kDebug(36003) << region;
