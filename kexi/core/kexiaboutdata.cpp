@@ -27,7 +27,7 @@
 
 static const char *description =
 #ifndef CUSTOM_VERSION
-    I18N_NOOP("Database creation for everyone\n\nThis application is a part of the KOffice suite.")
+    I18N_NOOP("Database creation for everyone\n\nThis application is a part of the Calligra Suite.")
 #else
     I18N_NOOP("Database creation for everyone")
 #endif
@@ -42,7 +42,7 @@ KAboutData* Kexi::createAboutData()
         ki18n(KEXI_APP_NAME),
         KEXI_VERSION_STRING
 #ifndef CUSTOM_VERSION
-        " (KOffice " KOFFICE_VERSION_STRING ")"
+        " (Calligra " KOFFICE_VERSION_STRING ")"
 #endif
         , ki18n(description),
         KAboutData::License_LGPL_V2,
