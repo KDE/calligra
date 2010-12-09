@@ -1,5 +1,10 @@
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30529)
 
+if(QCA2_FOUND)
+    add_definitions( -DHAVE_QCA2 )
+    include_directories(${QCA2_INCLUDE_DIR})
+endif(QCA2_FOUND)
+
 include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIRECTORY}
@@ -32,6 +37,9 @@ set(msooxml_LIB_SRCS
 kde4_add_library(msooxml SHARED ${msooxml_LIB_SRCS})
 
 target_link_libraries(msooxml koodf komain)
+if(QCA2_FOUND)
+   target_link_libraries(msooxml ${QCA2_LIBRARIES})
+endif(QCA2_FOUND)
 
 set_target_properties(msooxml PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS msooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
