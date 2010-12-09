@@ -247,12 +247,10 @@ public:
         }
     }
     void fit(const bool resetHorizontalPosition = false) {
-        //layout from left indent - used when same line need to be relayout
         if (resetHorizontalPosition) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
         }
-        //handle floating shape anchor - will not update baseline and horizontal position
         line.setNumColumns(1);
         if (line.textLength() == 1 && line.naturalTextWidth() == 0) {
             m_processingAnchor = true;
@@ -260,22 +258,20 @@ public:
             m_processingAnchor = false;
         }
         const qreal maxLineWidth = m_state->width();
+        // Make sure at least some text is fitted if the basic width (page, table cell, column)
+        // is too small
         if (maxLineWidth <= 0.) {
-            // margin so small that the text can't fit.
-            if (m_state->layout->lineCount() > 1
-                    || m_state->layout->text().length() > 0) // parag not empty
-                line.setNumColumns(1); // allow at least one char.
+            if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
+                line.setNumColumns(1);
             line.setPosition(QPointF(m_state->x(), m_state->y()));
             return;
         }
-        //set max line width to get max line height
+
+        // Too little width because of  wrapping is handled in the remainder of this method
         line.setLineWidth(maxLineWidth);
         const qreal maxLineHeight = line.height();
-        //get max natural text width to handle new line when do wrap
         const qreal maxNaturalTextWidth = line.naturalTextWidth();
-        //get line rect, which can be devided by outlines
         QRectF lineRect(m_state->x(), m_state->y(), maxLineWidth, maxLineHeight);
-        //lineRectPart one part created by dividing of line rect
         QRectF lineRectPart;
         qreal movedDown = 0;
         if (m_state->maxLineHeight() > 0) {
@@ -283,20 +279,25 @@ public:
         } else {
             movedDown = 10;
         }
+
         while (!lineRectPart.isValid()) {
-            //get line rect part where line can fit
+            // The line rect could be split into no further linerectpart, so we have
+            // to move the lineRect down a bit and try again
+            // No line rect part was enough big, to fit the line. Recreate line rect further down
+            // (and that is devided into new line parts). Line rect is at different position to
+            // outlines, so new parts are completely different. if there are no outlines, then we
+            // have only one line part which is full line rect
+
             lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
-            //if line doesn't fit, move line rect down
             if (!lineRectPart.isValid()) {
                 m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
                 lineRect = QRectF(m_state->x(), m_state->y() + movedDown, maxLineWidth, maxLineHeight);
                 movedDown += 10;
             }
         }
-        //set result position and width for line
+
         line.setLineWidth(m_textWidth);
         line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
-        //if there are more line rect parts, than don't move baseline and update vertival position
         checkEndOfLine(lineRectPart, maxNaturalTextWidth);
     }
     QTextLine line;
@@ -327,13 +328,13 @@ private:
     void createLineParts() {
         m_lineParts.clear();
         if (m_validOutlines.isEmpty()) {
-            //add whole line rect
+            // Add whole line rect
             m_lineParts.append(m_lineRect);
         } else {
             QList<QRectF> lineParts;
             QRectF rightLineRect = m_lineRect;
             qSort(m_validOutlines.begin(), m_validOutlines.end(), Outline::compareRectLeft);
-            //devide rect to parts, part can be invalid when outlines are not disjunct
+            // Devide rect to parts, part can be invalid when outlines are not disjunct.
             foreach (Outline *validOutline, m_validOutlines) {
                 QRectF leftLineRect = validOutline->getLeftLinePart(rightLineRect);
                 lineParts.append(leftLineRect);
@@ -344,7 +345,7 @@ private:
             }
             lineParts.append(rightLineRect);
             Q_ASSERT(m_validOutlines.size() + 1 == lineParts.size());
-            //select invalid parts because of wrap
+            // Select invalid parts because of wrap.
             for (int i = 0; i < m_validOutlines.size(); i++) {
                 Outline *outline = m_validOutlines.at(i);
                 if (outline->noTextAround()) {
@@ -364,7 +365,7 @@ private:
                     }
                 }
             }
-            //filter invalid parts
+            // Filter invalid parts.
             foreach (QRectF rect, lineParts) {
                 if (rect.isValid()) {
                     m_lineParts.append(rect);
@@ -372,13 +373,16 @@ private:
             }
         }
     }
-    QRectF getMinLineRect(const QRectF &lineRect) {
+    QRectF mimimizeHeightToLeastNeeded(const QRectF &lineRect) {
         QRectF lineRectBase = lineRect;
+        // Get width of one char or shape (as-char).
         m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
+        // Make sure width is not wider than state allows.
         if (m_textWidth > m_state->width()) {
             m_textWidth = m_state->width();
         }
         line.setLineWidth(m_textWidth);
+        // Base linerect height on the width calculated above.
         lineRectBase.setHeight(line.height());
         return lineRectBase;
     }
@@ -421,22 +425,26 @@ private:
     }
     QRectF getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
         const qreal leftIndent = lineRect.left();
-        //get min line rect, where fit at least one char or as-char shape
-        QRectF minLineRect = getMinLineRect(lineRect);
-        //count line parts of line rect using outlines
+        QRectF minLineRect = mimimizeHeightToLeastNeeded(lineRect);
         updateLineParts(minLineRect);
-        //get first line part from line rect, which contains horizontal position
+
+        // Get appropriate line rect part, to fit line,
+        // using horizontal position, minimal height and width of line.
         QRectF lineRectPart = getLineRectPart();
         if (lineRectPart.isValid()) {
             qreal x = lineRectPart.x();
             qreal width = lineRectPart.width();
-            if (leftIndent < x) { // limit moved the left edge, keep the indent.
+
+            // Limit moved the left edge, keep the indent.
+            if (leftIndent < x) {
                 x += leftIndent;
                 width -= leftIndent;
             }
-            //set width from line rect part
             line.setLineWidth(width);
-            //if height is bigger than can fit into line rect part, than get max text width
+
+            // Check if line rect is big enough to fit line.
+            // Otherwise find shorter width, what means also shorter height of line.
+            // Condition is reverted.
             if (line.height() > lineRectPart.height()) {
                 setMaxTextWidth(lineRectPart, leftIndent, maxNaturalTextWidth);
             } else {
