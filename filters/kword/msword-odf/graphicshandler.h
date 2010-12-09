@@ -130,6 +130,13 @@ public:
      */
     DrawStyle getDrawingStyle();
 
+    /**
+     * Get the path in the ODT document that corresponds to the picture
+     * generated from the picture with the given pib. (check
+     * libmso/ODrawToOdf.h)
+     */
+    QString getPicturePath(int pib) const;
+
     // Communication with Document, without having to know about Document
 signals:
     void textBoxFound( uint lid, bool bodyDrawing);
@@ -149,13 +156,6 @@ private:
      * Store floating pictures into ODT, write the appropriate manifest entry.
      */
     QMap<QByteArray, QString> createFloatingPictures(KoStore* store, KoXmlWriter* manifest);
-
-    /**
-     * Get the path in the ODT document that corresponds to the picture
-     * generated from the picture with the given pib. (check
-     * libmso/ODrawToOdf.h)
-     */
-    QString getPicturePath(int pib) const;
 
     /**
      * Process the default properties for all drawing objects stored in
