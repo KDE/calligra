@@ -229,6 +229,11 @@ private:
     };
     DrawClientData dc_data[1];
 
+    //an empty container passed to libmso in case we prefer default values of
+    //properties instead of drawingPrimaryOptions of the drawingGroup, looks
+    //like in case of PPT the drawingGroup container has to be ignored
+    const OfficeArtDggContainer drawingGroup_empty;
+
 public:
     DrawClient(PptToOdp* p) :ppttoodp(p) {}
     void setDrawClientData(const MasterOrSlideContainer* mc, const SlideContainer* sc,
@@ -451,7 +456,10 @@ void PptToOdp::DrawClient::addTextStyles(
 const MSO::OfficeArtDggContainer*
 PptToOdp::DrawClient::getOfficeArtDggContainer()
 {
-    return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
+    //NOTE: use default values of properties, looks like in case of PPT the
+    //drawingGroup container has to be ignored
+//     return &ppttoodp->p->documentContainer->drawingGroup.OfficeArtDgg;
+    return &drawingGroup_empty;
 }
 
 const MSO::OfficeArtSpContainer* 
@@ -1637,6 +1645,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
 {
     DrawClient drawclient(this);
     ODrawToOdf odrawtoodf(drawclient);
+    const OfficeArtDggContainer drawingGroup_empty;
 
     // define for master for use in <master-page style:name="...">
     foreach (const MSO::MasterOrSlideContainer* m, p->masters) {
@@ -1655,8 +1664,10 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 hf = &mm->perSlideHeadersFootersContainer->hfAtom;
             }
         }
-        const OfficeArtDggContainer& drawingGroup
-                = p->documentContainer->drawingGroup.OfficeArtDgg;
+        //NOTE: use default values of properties, looks like in case of PPT the
+        //drawingGroup container has to be ignored
+//         const OfficeArtDggContainer& drawingGroup
+//                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         DrawStyle ds(drawingGroup, scp);
         drawclient.setDrawClientData(m, 0, 0, 0);
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, hf);
@@ -1803,14 +1814,16 @@ void PptToOdp::createMainStyles(KoGenStyles& styles)
     defineDefaultTableColumnStyle(styles);
     defineDefaultTableRowStyle(styles);
     defineDefaultTableCellStyle(styles);
-    defineDefaultGraphicStyle(styles);
     defineDefaultPresentationStyle(styles);
-
-    //NOTE: kpresenter uses the default drawing-page style instead of that
-    //defined by the corresponding <master-page> element.
-//     defineDefaultDrawingPageStyle(styles);
-
     defineDefaultChartStyle(styles);
+
+    // NOTE: kpresenter specific: default graphic style and drawing-page style
+    // have higher precedence than those defined by the corresponding
+    // <master-page> element.  This is the case when the presentation slide
+    // inherits background objects from the master slide.
+
+//     defineDefaultGraphicStyle(styles);
+//     defineDefaultDrawingPageStyle(styles);
 
     /*
        Define the standard list style
