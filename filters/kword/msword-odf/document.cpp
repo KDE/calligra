@@ -402,7 +402,6 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     kDebug(30513) ;
     m_omittMasterPage = false;
     m_useLastMasterPage = false;
-    static KoGenStyle lastPLStyle(KoGenStyle::PageLayoutStyle);
 
     //does this section require a specific first page
     bool firstPage = sep->fTitlePage || sep->pgbApplyTo;
@@ -428,7 +427,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
     //let's omitt the <style:master-page> element only in case of a continuous
     //section break
 
-    if ( !firstPage && !headersChanged() && (lastPLStyle == *pageLayoutStyle) ){
+    if ( !firstPage && !headersChanged() && (m_pageLayoutStyle_last == *pageLayoutStyle) ){
 
 //         if (sep->bkc != 0) {
 //             textHandler()->set_breakBeforePage(true);
@@ -450,7 +449,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
         delete pageLayoutStyle;
     } else {
         //save the actual KoGenStyle!
-        lastPLStyle = *pageLayoutStyle;
+        m_pageLayoutStyle_last = *pageLayoutStyle;
 
         //add data into corresponding lists
         m_pageLayoutStyle_list.prepend(pageLayoutStyle);
