@@ -1668,7 +1668,7 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
         //drawingGroup container has to be ignored
 //         const OfficeArtDggContainer& drawingGroup
 //                 = p->documentContainer->drawingGroup.OfficeArtDgg;
-        DrawStyle ds(drawingGroup, scp);
+        DrawStyle ds(drawingGroup_empty, scp);
         drawclient.setDrawClientData(m, 0, 0, 0);
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, hf);
         drawingPageStyles[m] = styles.insert(dp, "Mdp");
@@ -1729,13 +1729,13 @@ void PptToOdp::defineAutomaticDrawingPageStyles(KoGenStyles& styles)
                 hf.formatId = -1;
             }
 	}
-        const OfficeArtDggContainer& drawingGroup
-                = p->documentContainer->drawingGroup.OfficeArtDgg;
+//         const OfficeArtDggContainer& drawingGroup
+//                 = p->documentContainer->drawingGroup.OfficeArtDgg;
         const OfficeArtSpContainer* masterSlideShape
                 = getMasterShape(m);
         const OfficeArtSpContainer* slideShape
                 = sc->drawing.OfficeArtDg.shape.data();
-        DrawStyle ds(drawingGroup, masterSlideShape, slideShape);
+        DrawStyle ds(drawingGroup_empty, masterSlideShape, slideShape);
         drawclient.setDrawClientData(m, sc, 0, 0);
         defineDrawingPageStyle(dp, ds, styles, odrawtoodf, &hf, &sc->slideAtom.slideFlags);
         drawingPageStyles[sc] = styles.insert(dp, "dp");
