@@ -69,6 +69,7 @@ class AbstractAtom;
 class LayoutNodeAtom;
 class ConstraintAtom;
 class AlgorithmAtom;
+class AbstractAlgorithm;
 
 /// The evaluation context that is passed around and contains all kind of state-informations.
 class Context
@@ -241,6 +242,8 @@ class AlgorithmAtom : public AbstractAtom
         virtual void dump(Context* context, int level);
         virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
         virtual void readElement(Context*, MsooXmlDiagramReader* reader);
+    private:
+        QString typeAsString() const;
 };
 
 /// The layout node is the basic building block of diagrams. The layout node is responsible for defining how shapes are arranged in a diagram and how the data maps to a particular shape in a diagram.
@@ -253,7 +256,7 @@ class LayoutNodeAtom : public AbstractAtom
         QMap<QString, int> m_countFactors;
         int m_rotateAngle;
         bool m_needsReinit, m_needsRelayout, m_childNeedsRelayout;
-        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_rotateAngle(0), m_needsReinit(true), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true) {}
+        explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_rotateAngle(0), m_needsReinit(true), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true), m_algorithmImpl(0) {}
         virtual ~LayoutNodeAtom() {}
         virtual LayoutNodeAtom* clone();
         virtual void dump(Context* context, int level);
@@ -274,6 +277,7 @@ class LayoutNodeAtom : public AbstractAtom
         void setNeedsReinit(bool needsReinit);
         void setNeedsRelayout(bool needsRelayout);
 
+        AbstractAlgorithm* algorithmImpl() const;
         AlgorithmAtom::Algorithm algorithmType() const;
         QMap<QString,QString> algorithmParams() const;
         QString algorithmParam(const QString &name, const QString &defaultValue = QString()) const;
@@ -295,6 +299,7 @@ class LayoutNodeAtom : public AbstractAtom
         QList<AbstractNode*> m_axis;
         QMap<QString, QString> m_variables;
         bool m_firstLayout;
+        AbstractAlgorithm* m_algorithmImpl;
 };
 
 /// Specify size and position of nodes, text values, and layout dependencies between nodes in a layout definition.
@@ -302,7 +307,7 @@ class ConstraintAtom : public AbstractAtom
 {
     public:
         /// Factor used in a reference constraint or a rule in order to modify a referenced value by the factor defined.
-        qreal m_fact;
+        QString m_fact;
         /// Specifies the axis of layout nodes to apply a constraint or rule to.
         QString m_for;
         /// Specifies the name of the layout node to apply a constraint or rule to.
@@ -323,7 +328,7 @@ class ConstraintAtom : public AbstractAtom
         QString m_type;
         /// Specifies an absolute value instead of reference another constraint.
         QString m_value;
-        explicit ConstraintAtom() : AbstractAtom("dgm:constr"), m_fact(1.0) {}
+        explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
         virtual ~ConstraintAtom() {}
         virtual ConstraintAtom* clone();
         virtual void dump(Context*, int level);
@@ -472,6 +477,7 @@ class AbstractAlgorithm {
     public:
         explicit AbstractAlgorithm();
         virtual ~AbstractAlgorithm();
+        virtual QString name() const = 0;
         Context* context() const;
         LayoutNodeAtom* layout() const;
         LayoutNodeAtom* parentLayout() const;
@@ -498,6 +504,9 @@ class CompositeAlgorithm : public AbstractAlgorithm {
     public:
         explicit CompositeAlgorithm() : AbstractAlgorithm() {}
         virtual ~CompositeAlgorithm() {}
+        virtual QString name() const { return "Composite"; }
+    protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
 };
 
 /// The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
@@ -505,9 +514,12 @@ class ConnectorAlgorithm : public AbstractAlgorithm {
     public:
         explicit ConnectorAlgorithm() : AbstractAlgorithm() {}
         virtual ~ConnectorAlgorithm() {}
+        virtual QString name() const { return "Connector"; }
     protected:
         virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayoutChildren();
+    private:
+        qreal connectorDistance() const;
 };
 
 /// The cycle algorithm lays out child layout nodes around a circle or portion of a circle using equal angle spacing.
@@ -515,6 +527,7 @@ class CycleAlgorithm : public AbstractAlgorithm {
     public:
         explicit CycleAlgorithm() : AbstractAlgorithm() {}
         virtual ~CycleAlgorithm() {}
+        virtual QString name() const { return "Cycle"; }
     protected:
         virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
@@ -525,6 +538,7 @@ class LinearAlgorithm : public AbstractAlgorithm {
     public:
         explicit LinearAlgorithm() : AbstractAlgorithm() {}
         virtual ~LinearAlgorithm() {}
+        virtual QString name() const { return "Linear"; }
     protected:
         virtual void virtualDoLayout();
 };
@@ -534,7 +548,9 @@ class SnakeAlgorithm : public AbstractAlgorithm {
     public:
         explicit SnakeAlgorithm() : AbstractAlgorithm() {}
         virtual ~SnakeAlgorithm() {}
+        virtual QString name() const { return "Snake"; }
     protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 
@@ -543,7 +559,9 @@ class HierarchyAlgorithm : public AbstractAlgorithm {
     public:
         explicit HierarchyAlgorithm(bool isRoot) : AbstractAlgorithm(), m_isRoot(isRoot) {}
         virtual ~HierarchyAlgorithm() {}
+        virtual QString name() const { return "Hierarchy"; }
     protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
     private:
         bool m_isRoot; // root or child?
@@ -554,6 +572,7 @@ class PyramidAlgorithm : public AbstractAlgorithm {
     public:
         explicit PyramidAlgorithm() : AbstractAlgorithm() {}
         virtual ~PyramidAlgorithm() {}
+        virtual QString name() const { return "Pyramid"; }
     protected:
         virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
@@ -564,6 +583,9 @@ class SpaceAlg : public AbstractAlgorithm {
     public:
         explicit SpaceAlg() : AbstractAlgorithm() {}
         virtual ~SpaceAlg() {}
+        virtual QString name() const { return "Space"; }
+    protected:
+        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();
 };
 
@@ -572,6 +594,7 @@ class TextAlgorithm : public AbstractAlgorithm {
     public:
         explicit TextAlgorithm() : AbstractAlgorithm() {}
         virtual ~TextAlgorithm() {}
+        virtual QString name() const { return "Text"; }
     protected:
         virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
         virtual void virtualDoLayout();

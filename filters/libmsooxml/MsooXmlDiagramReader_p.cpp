@@ -498,7 +498,7 @@ AlgorithmAtom* AlgorithmAtom::clone() {
 }
 
 void AlgorithmAtom::dump(Context* context, int level) {
-    DEBUG_DUMP << "type=" << m_type << "params=" << m_params;
+    DEBUG_DUMP << "type=" << typeAsString() << "params=" << m_params;
     AbstractAtom::dump(context, level);
 }
 
@@ -528,6 +528,24 @@ void AlgorithmAtom::readElement(Context*, MsooXmlDiagramReader* reader) {
             m_params[type] = val;
         }
     }
+}
+
+QString AlgorithmAtom::typeAsString() const {
+    QString s;
+    switch(m_type) {
+        case UnknownAlg: s = "Unknown"; break;
+        case CompositeAlg: s = "Composite"; break;
+        case ConnectorAlg: s = "Connector"; break;
+        case CycleAlg: s = "Cycle"; break;
+        case HierChildAlg: s = "HierChild"; break;
+        case HierRootAlg: s = "HierRoot"; break;
+        case LinearAlg: s = "Linear"; break;
+        case PyramidAlg: s = "Pyramid"; break;
+        case SnakeAlg: s = "Snake"; break;
+        case SpaceAlg: s = "Space"; break;
+        case TextAlg: s = "Text"; break;
+    }
+    return s;
 }
 
 /****************************************************************************************************/
@@ -578,46 +596,45 @@ void LayoutNodeAtom::build(Context* context) {
 }
 
 void LayoutNodeAtom::layoutAtom(Context* context) {
-    AbstractAlgorithm *algbase = 0;
+    delete m_algorithmImpl;
+    m_algorithmImpl = 0;
 
     QExplicitlySharedDataPointer<AlgorithmAtom> alg = algorithm();
     switch(alg ? alg->m_type : AlgorithmAtom::UnknownAlg) {
         case AlgorithmAtom::UnknownAlg:
             kWarning() << "Layout with name=" << m_name << "defines an unknown algorithm.";
             // fall through and use the composite-algorithm
-        case AlgorithmAtom::CompositeAlg: algbase = new CompositeAlgorithm; break;
-        case AlgorithmAtom::ConnectorAlg: algbase = new ConnectorAlgorithm; break;
-        case AlgorithmAtom::CycleAlg: algbase = new CycleAlgorithm; break;
-        case AlgorithmAtom::HierChildAlg: algbase = new HierarchyAlgorithm(false); break;
-        case AlgorithmAtom::HierRootAlg: algbase = new HierarchyAlgorithm(true); break;
-        case AlgorithmAtom::LinearAlg: algbase = new LinearAlgorithm; break;
-        case AlgorithmAtom::PyramidAlg: algbase = new LinearAlgorithm; break;
-        case AlgorithmAtom::SnakeAlg: algbase = new SnakeAlgorithm; break;
-        case AlgorithmAtom::SpaceAlg: algbase = new SpaceAlg; break;
-        case AlgorithmAtom::TextAlg: algbase = new TextAlgorithm; break;
+        case AlgorithmAtom::CompositeAlg: m_algorithmImpl = new CompositeAlgorithm; break;
+        case AlgorithmAtom::ConnectorAlg: m_algorithmImpl = new ConnectorAlgorithm; break;
+        case AlgorithmAtom::CycleAlg: m_algorithmImpl = new CycleAlgorithm; break;
+        case AlgorithmAtom::HierChildAlg: m_algorithmImpl = new HierarchyAlgorithm(false); break;
+        case AlgorithmAtom::HierRootAlg: m_algorithmImpl = new HierarchyAlgorithm(true); break;
+        case AlgorithmAtom::LinearAlg: m_algorithmImpl = new LinearAlgorithm; break;
+        case AlgorithmAtom::PyramidAlg: m_algorithmImpl = new LinearAlgorithm; break;
+        case AlgorithmAtom::SnakeAlg: m_algorithmImpl = new SnakeAlgorithm; break;
+        case AlgorithmAtom::SpaceAlg: m_algorithmImpl = new SpaceAlg; break;
+        case AlgorithmAtom::TextAlg: m_algorithmImpl = new TextAlgorithm; break;
     }
 
-    if(algbase) {
+    if(m_algorithmImpl) {
         QExplicitlySharedDataPointer<LayoutNodeAtom> thisPtr(this);
-        algbase->doInit(context, thisPtr);
+        m_algorithmImpl->doInit(context, thisPtr);
     }
 
     if(m_needsRelayout) {
         m_needsRelayout = false;
         m_childNeedsRelayout = true;
-        if(algbase) {
-            algbase->doLayout();
+        if(m_algorithmImpl) {
+            m_algorithmImpl->doLayout();
         }
     }
     
     if(m_childNeedsRelayout) {
         m_childNeedsRelayout = false;
-        if(algbase) {
-            algbase->doLayoutChildren();
+        if(m_algorithmImpl) {
+            m_algorithmImpl->doLayoutChildren();
         }
     }
-    
-    delete algbase;
 }
 
 void LayoutNodeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) {
@@ -635,6 +652,10 @@ QList< QExplicitlySharedDataPointer<ConstraintAtom> > LayoutNodeAtom::constraint
 void LayoutNodeAtom::addConstraint(QExplicitlySharedDataPointer<ConstraintAtom> constraint) {
     m_constraints.append(constraint);
     setNeedsRelayout(true);
+}
+
+AbstractAlgorithm* LayoutNodeAtom::algorithmImpl() const {
+    return m_algorithmImpl;
 }
 
 QExplicitlySharedDataPointer<AlgorithmAtom> LayoutNodeAtom::algorithm() const {
@@ -832,7 +853,8 @@ ConstraintAtom* ConstraintAtom::clone() {
 }
 
 void ConstraintAtom::dump(Context*, int level) {
-    QString s = QString("fact=%1 ").arg(m_fact);
+    QString s;
+    if(!m_fact.isEmpty()) s += QString("fact=%1 ").arg(m_fact);
     if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
     if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
     if(!m_op.isEmpty()) s += QString("op=%1 ").arg(m_op);
@@ -848,8 +870,7 @@ void ConstraintAtom::dump(Context*, int level) {
 
 void ConstraintAtom::readAll(Context*, MsooXmlDiagramReader* reader) {
     const QXmlStreamAttributes attrs(reader->attributes());
-    TRY_READ_ATTR_WITHOUT_NS(fact)
-    m_fact = fact.isEmpty() ? 1.0 : fact.toDouble();
+    TRY_READ_ATTR_WITHOUT_NS_INTO(fact, m_fact)
     TRY_READ_ATTR_WITHOUT_NS_INTO(for, m_for)
     TRY_READ_ATTR_WITHOUT_NS_INTO(forName, m_forName)
     TRY_READ_ATTR_WITHOUT_NS_INTO(op, m_op)
@@ -890,7 +911,8 @@ RuleAtom* RuleAtom::clone()
 
 void RuleAtom::dump(Context*, int level)
 {
-    QString s = QString("fact=%1 ").arg(m_fact);
+    QString s;
+    if(!m_fact.isEmpty()) s += QString("fact=%1 ").arg(m_fact);
     if(!m_for.isEmpty()) s += QString("for=%1 ").arg(m_for);
     if(!m_forName.isEmpty()) s += QString("forName=%1 ").arg(m_forName);
     if(!m_max.isEmpty()) s += QString("max=%1 ").arg(m_max);
@@ -1002,19 +1024,24 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
     QMap<QString,QString> params = context->m_parentLayout->algorithmParams();
 
     QMap<QString, qreal> values = context->m_parentLayout->finalValues();
-    Q_ASSERT(values.contains("l"));
-    Q_ASSERT(values.contains("t"));
+    //Q_ASSERT(values.contains("l"));
+    //Q_ASSERT(values.contains("t"));
+
+    //if(!values.contains("w")) values["w"]=100;
+    //if(!values.contains("h")) values["h"]=100;
     Q_ASSERT(values.contains("w"));
     Q_ASSERT(values.contains("h"));
-    Q_ASSERT(values.contains("ctrX"));
-    Q_ASSERT(values.contains("ctrY"));
-    qreal x  = values["l"];
-    qreal y  = values["t"];
-    qreal w  = values["w"];
-    qreal h  = values["h"];
-    qreal cx = values["ctrX"];
-    qreal cy = values["ctrY"];
+    
+    //Q_ASSERT(values.contains("ctrX"));
+    //Q_ASSERT(values.contains("ctrY"));
+    qreal x  = values.value("l");
+    qreal y  = values.value("t");
+    qreal w  = values.value("w");
+    qreal h  = values.value("h");
+    qreal cx = values.value("ctrX");
+    qreal cy = values.value("ctrY");
 
+#if 0
     //TODO can spacing between the siblings applied by shriking the shapes or is it needed to apply them along the used algorithm?
     if(values.contains("sibSp")) {
         qreal sibSp = values["sibSp"];
@@ -1030,7 +1057,8 @@ void ShapeAtom::writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles*
             context->m_parentLayout->dump(context, 10);
         }
     }
-    
+#endif
+
     DEBUG_WRITE << "type=" << m_type << "blip=" << m_blip << "hideGeom=" << m_hideGeom << "geometry=" << x+cx << y+cy << w << h;
     Q_ASSERT(x >= 0.0);
     Q_ASSERT(y >= 0.0);
@@ -1353,38 +1381,13 @@ bool IfAtom::testAtom(Context* context) {
         //TODO lastIndexOf? 1-based? what index for not-found?
         kWarning()<<"TODO func=revPos";
     } else if(m_function == "var") { // Used to reference a variable.
-        if(m_argument == QLatin1String("animLvl")) { // Specifies the animation level
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=animLvl";
-        } else if(m_argument == QLatin1String("animOne")) { // Specifies animate as one.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=animOne";
-        } else if(m_argument == QLatin1String("bulEnabled")) { // Specifies bullets enabled.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=bulEnabled";
-        } else if(m_argument == QLatin1String("chMax")) { // The maximum number of children.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=chMax";
-        } else if(m_argument == QLatin1String("chPref")) { // The preferred number of children.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=chPref";
-        } else if(m_argument == QLatin1String("dir")) { // Specifies the direction of the diagram.
-            const QString dirval = context->m_parentLayout->variable("dir", true /* check parents */);
-            funcValue = dirval.isEmpty() ? "norm" : dirval;
-        } else if(m_argument == QLatin1String("hierBranch")) { // The hierarchy branch.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=hierBranch";
-        } else if(m_argument == QLatin1String("none")) { // Unknown variable type.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=none";
-        } else if(m_argument == QLatin1String("orgChart")) { // Algorithm that lays out an org chart.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=orgChart";
-        } else if(m_argument == QLatin1String("resizeHandles")) { // Specifies the resize handles.
-            //TODO
-            kWarning()<<"TODO m_function=var m_argument=resizeHandles";
-        } else {
-            kWarning()<<"Unexpected argument="<<m_argument<<"name="<<m_name;
+        funcValue = context->m_parentLayout->variable(m_argument, true /* check parents */);
+        if(funcValue.isEmpty()) { // if not defined then use default variable-values
+            if(m_argument == QLatin1String("dir")) { // Specifies the direction of the diagram.
+                funcValue = "norm";
+            } else {
+                kWarning()<<"TODO figure out default for variable="<<m_argument;
+            }
         }
     }
 
@@ -1578,15 +1581,28 @@ QList<LayoutNodeAtom*> AbstractAlgorithm::childLayouts() const
 }
 
 void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qreal w, qreal h) {
+    QStringList removeList;
     l->m_values["l"] = parentLayout()->m_values["l"] + x;
     l->m_values["t"] = parentLayout()->m_values["t"] + y;
-    l->m_values["w"] = w;
-    l->m_values["h"] = h;
+    removeList << "l" << "t";
+    if (w >= 0.0) {
+        l->m_values["w"] = w;
+        removeList << "w";
+    }
+    if (h >= 0.0) {
+        l->m_values["h"] = h;
+        removeList << "h";
+    }
     l->m_values["ctrX"] = 0.0;
     l->m_values["ctrY"] = 0.0;
-    foreach(const QString &s, QStringList() << "l" << "t" << "ctrX" << "ctrY" << "w" << "h") {
-        l->m_factors[s] = 1.0;
-        l->m_countFactors[s] = 1;
+    //l->m_values.remove("ctrX");
+    //l->m_values.remove("ctrY");
+    removeList << "ctrX" << "ctrY";
+    foreach(const QString &s, removeList) {
+        //l->m_factors[s] = 1.0;
+        //l->m_countFactors[s] = 1;
+        l->m_factors.remove(s);
+        l->m_countFactors.remove(s);
     }
     l->m_needsReinit = false; // we initialized things above already
     l->m_needsRelayout = true; // but we clearly need a layout now
@@ -1596,50 +1612,26 @@ void AbstractAlgorithm::setNodePosition(LayoutNodeAtom* l, qreal x, qreal y, qre
 qreal AbstractAlgorithm::defaultValue(const QString& type, const QMap<QString, qreal>& values) {
     qreal value = virtualGetDefaultValue(type, values);
     if(value < 0.0) {
+        // If the layout-algorithm doesn't define a default-value then use one of the common default-values.
+        // See also http://social.msdn.microsoft.com/Forums/en/os_binaryfile/thread/7c823650-7913-4e63-970f-1c5dab3450c4
         if (type == "primFontSz") {
             value = 36;
-        } else if (type == "l") {
-            value = 0;
-        } else if (type == "t") {
-            value = 0;
-        } else if (type == "w") {
-            value = 100;
-        } else if (type == "h") {
-            value = 100;
-        } else if (type == "sibSp") {
-            value = 0;
-        } else if (type == "secSibSp") {
-            value = 0;
-        } else if (type == "alignOff") {
-            value = 0;
-        } else if (type == "sp") {
-            value = 0;
-        } else if (type == "begPad") {
-            value = 0;
-        } else if (type == "endPad") {
-            value = 0;
-        } else if (type == "tMarg") {
-            value = values.value("primFontSz") * 0.56;
-        } else if (type == "lMarg") {
-            value = values.value("primFontSz") * 0.40;
-        } else if (type == "rMarg") {
-            value = values.value("primFontSz") * 0.42;
-        } else if (type == "bMarg") {
-            value = values.value("primFontSz") * 0.60;
-        } else if (type == "connDist") {
-            QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
-            LayoutNodeAtom* srcAtom = neighbors.first;
-            LayoutNodeAtom* dstAtom = neighbors.second;
-            value = (srcAtom && dstAtom) ? srcAtom->distanceTo(dstAtom) : 0.0;
+//         } else if (type == "tMarg") {
+//             Q_ASSERT(values.contains("primFontSz"));
+//             value = values.value("primFontSz") * 0.56;
+//         } else if (type == "lMarg") {
+//             Q_ASSERT(values.contains("primFontSz"));
+//             value = values.value("primFontSz") * 0.40;
+//         } else if (type == "rMarg") {
+//             Q_ASSERT(values.contains("primFontSz"));
+//             value = values.value("primFontSz") * 0.42;
+//         } else if (type == "bMarg") {
+//             Q_ASSERT(values.contains("primFontSz"));
+//             value = values.value("primFontSz") * 0.60;
         } else if (type.startsWith("user")) { // userA, userB, userC, etc.
             bool ok;
             const qreal v = layout()->variable(type, true /* checkParents */).toDouble(&ok);
             value = ok ? v : 0.0;
-        } else {
-            kDebug() << "TODO figure out defaults for constraint=" << type << "at layout=" << layout()->m_name;
-            //c->dump(context(),10);
-            //Q_ASSERT_X(false, __FUNCTION__, QString("Set defaults for constraint=%1").arg(type).toUtf8());
-            value = 0.0;
         }
     }
     return value;
@@ -1669,22 +1661,23 @@ qreal AbstractAlgorithm::virtualGetDefaultValue(const QString&, const QMap<QStri
 void AbstractAlgorithm::virtualDoInit() {
     if(layout()->m_needsReinit) {
         layout()->m_needsReinit = false; // initialization done
-        layout()->m_values = parentLayout()->m_values;
-        layout()->m_factors = parentLayout()->m_factors;
-        layout()->m_countFactors = parentLayout()->m_countFactors;
+        //layout()->m_values = parentLayout()->m_values;
+        //layout()->m_factors = parentLayout()->m_factors;
+        //layout()->m_countFactors = parentLayout()->m_countFactors;
     }
-    QMap<QString, qreal> values = parentLayout()->finalValues();
-    Q_ASSERT(values["l"] >= 0.0);
-    Q_ASSERT(values["t"] >= 0.0);
-    Q_ASSERT(values["w"] > 0.0);
-    Q_ASSERT(values["h"] > 0.0);
-    Q_ASSERT(values["ctrX"] >= 0.0);
-    Q_ASSERT(values["ctrY"] >= 0.0);
+    //QMap<QString, qreal> values = parentLayout()->finalValues();
+    //Q_ASSERT(values["l"] >= 0.0);
+    //Q_ASSERT(values["t"] >= 0.0);
+    //Q_ASSERT(values["w"] > 0.0);
+    //Q_ASSERT(values["h"] > 0.0);
+    //Q_ASSERT(values["ctrX"] >= 0.0);
+    //Q_ASSERT(values["ctrY"] >= 0.0);
 }
 
 // http://msdn.microsoft.com/en-us/library/dd439461(v=office.12).aspx
 void AbstractAlgorithm::virtualDoLayout() {
-
+    kDebug() << "layout=" << layout()->m_name << "algorithm=" << name();
+    
     // Specifies the aspect ratio (width to height) of the composite node to use when determining child constraints. A value of 0 specifies to
     // leave the width and height constraints unaltered. The algorithm may temporarily shrink one dimension to achieve the specified ratio.
     // For example, if a composite node has a width constraint of 20 and height constraint of 10, and if the value of ar is 1.5, the composite
@@ -1702,12 +1695,11 @@ void AbstractAlgorithm::virtualDoLayout() {
         qreal value = -1.0;
         if(!c->m_value.isEmpty()) {
             bool ok;
-            value = c->m_value.toDouble(&ok);
-            if(!ok) {
-                kWarning() << "Layout with name=" << layout()->m_name << "defines none-double value=" << c->m_value;
-                continue;
-            }
+            qreal v = c->m_value.toDouble(&ok);
+            if(ok) value = v; else kWarning() << "Layout with name=" << layout()->m_name << "defines none-double value=" << c->m_value;
         } else {
+#if 0
+#if 0
             QExplicitlySharedDataPointer<LayoutNodeAtom> ref = c->m_refForName.isEmpty() ? m_layout : context()->m_layoutMap.value(c->m_refForName);
             if(ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
                 ref->layoutAtom(context());
@@ -1719,51 +1711,115 @@ void AbstractAlgorithm::virtualDoLayout() {
             }
 
             QMap<QString, qreal> values = ref->finalValues();
-            if(!c->m_refType.isEmpty()) {
-                if(!values.contains(c->m_refType)) {
-                    kWarning() << "Layout with name=" << layout()->m_name << "defines constraint for non-existing refType=" << c->m_refType;
-                    continue;
-                }
-                value = values[c->m_refType];
+            QString type = c->m_refType.isEmpty() ? c->m_type : c->m_refType;
+            if(values.contains(type)) {
+                value = values[type];
             } else {
-                // If there are no refType and no value defined then a default-value needs to be used.
-                // See also http://social.msdn.microsoft.com/Forums/en/os_binaryfile/thread/7c823650-7913-4e63-970f-1c5dab3450c4
-                value = defaultValue(c->m_type, values);
-            }
-        }
-        
-//TODO 1) "op" isn't supported, 2) what happens if for=ch is defined but no forName? 3) etc.
-#if 0
-        QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > layouts;
-        layouts << m_layout;
-        if(!c->m_for.isEmpty() && c->m_forName.isEmpty()) {
-            if(c->m_for == "ch") { // Child
-                layouts = layout()->childrenLayouts();
-            } else if(c->m_for == "des") { // Descendant
-                layouts = layout()->descendantLayouts();
-            }
-        }
-        foreach(QExplicitlySharedDataPointer<LayoutNodeAtom> l, layouts) {
-            if(l->m_needsReinit) {
-                l->layoutAtom(context());
-            }
-            if(value >= 0.0) {
-                if(aspectRatio != 0.0 && c->m_type == "w") {
-                    value *= aspectRatio;
+                // if the layout doesn't know about such a type then look if one of his parent-layouts does.
+                for(QExplicitlySharedDataPointer<LayoutNodeAtom> a = ref->parentLayout(); a; a = a->parentLayout()) {
+                    values = a->finalValues();
+                    if(values.contains(type)) {
+                        value = values[type];
+                        break;
+                    }
                 }
-                l->m_values[c->m_type] = value;
+                if (value < 0.0) {
+                    // if the type is still unknown then look if the layout-algorithm defines a default value for it.
+                    value = defaultValue(type, values);
+                }
+                kDebug()<<typeid(this).name()<<c->m_type<<value;
+                Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("No known value for the referenced type=%1.").arg(type).toUtf8());
             }
-            l->m_factors[c->m_type] += c->m_fact;
-            l->m_countFactors[c->m_type] += 1;
-        }  
 #else
-        if(value >= 0.0) {
+            QMap<QString, qreal> values;
+            if (!c->m_refForName.isEmpty()) {
+                QExplicitlySharedDataPointer<LayoutNodeAtom> ref = context()->m_layoutMap.value(c->m_refForName);
+                Q_ASSERT(ref);
+                Q_ASSERT(ref != m_layout);
+                if (ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
+                    ref->layoutAtom(context());
+                    Q_ASSERT(!ref->m_needsReinit);
+                    Q_ASSERT(!ref->m_needsRelayout);
+                    Q_ASSERT(!ref->m_childNeedsRelayout);
+                }
+                values = ref->finalValues();
+            } else {
+                values = m_layout->finalValues();
+            }
+            if(!c->m_refType.isEmpty()) {
+                if(values.contains(c->m_refType)) {
+                    value = values[c->m_refType];
+                    //kDebug()<<"1-AAAAAAAAAAAAAAA name="<<m_layout->m_name<<"refForName="<<c->m_refForName<<"type="<<c->m_type<<"refType="<<c->m_refType<<"value="<<value;
+                    //Probably  don't use addConstraint with forName cause we need the sender for the references?
+                }
+                if (value < 0.0) {
+                    value = defaultValue(c->m_refType, values); //TODO maybe ref->defaultValue(...) ?
+                }
+            } else {
+                //value = defaultValue(c->m_type, values);
+            }
+#endif
+        }
+//TODO 1) "op" isn't supported
+        if (value >= 0.0) {
+            layout()->m_values[c->m_type] = value;
+            //kDebug()<<"2-AAAAAAAAAAAAAAA name="<<m_layout->m_name<<"refForName="<<c->m_refForName<<"type="<<c->m_type<<"refType="<<c->m_refType<<"value="<<value<<"finalValues="<<layout()->finalValues()[c->m_type];
+        }
+        if (!c->m_fact.isEmpty()) {
+            bool ok;
+            qreal v = c->m_fact.toDouble(&ok);
+            if (ok) {
+                layout()->m_factors[c->m_type] += v;
+                layout()->m_countFactors[c->m_type] += 1;
+            }
+        }
+    }
+#else
+            QMap<QString, qreal> values;
+            QExplicitlySharedDataPointer<LayoutNodeAtom> ref;
+            if (!c->m_refForName.isEmpty()) {
+                ref = context()->m_layoutMap.value(c->m_refForName);
+                Q_ASSERT(ref);
+                Q_ASSERT(ref != m_layout);
+                if (ref && ref != m_layout && (ref->m_needsReinit || ref->m_needsRelayout || ref->m_childNeedsRelayout)) {
+                    ref->layoutAtom(context());
+                    Q_ASSERT(!ref->m_needsReinit);
+                    Q_ASSERT(!ref->m_needsRelayout);
+                    Q_ASSERT(!ref->m_childNeedsRelayout);
+                }
+                values = ref->finalValues();
+            } else {
+                values = m_layout->finalValues();
+            }
+            if(!c->m_refType.isEmpty()) {
+                if(values.contains(c->m_refType))
+                    value = values[c->m_refType];
+                if (value < 0.0) {
+                    Q_ASSERT( ! (ref && ref->algorithmImpl()) );
+                    AbstractAlgorithm* r = this;
+                    //AbstractAlgorithm* r = layout()->algorithmImpl();
+                    //AbstractAlgorithm* r = ref && ref->algorithmImpl() ? ref->algorithmImpl() : this;
+
+                    value = r->defaultValue(c->m_refType, values);
+                    Q_ASSERT_X(value >= 0.0, __FUNCTION__, QString("type=%1 refType=%2").arg(c->m_type).arg(c->m_refType).toLocal8Bit());
+                }
+            } else {
+                //if (value < 0.0) { value = defaultValue(c->m_type, values); Q_ASSERT(value >= 0.0); }
+            }
+        }
+        if (value >= 0.0) {
             layout()->m_values[c->m_type] = value;
         }
-        layout()->m_factors[c->m_type] += c->m_fact;
-        layout()->m_countFactors[c->m_type] += 1;
-#endif
+        if (!c->m_fact.isEmpty()) {
+            bool ok;
+            qreal v = c->m_fact.toDouble(&ok);
+            if (ok) {
+                layout()->m_factors[c->m_type] += v;
+                layout()->m_countFactors[c->m_type] += 1;
+            }
+        }
     }
+#endif
 }
 
 void AbstractAlgorithm::virtualDoLayoutChildren() {
@@ -1774,26 +1830,55 @@ void AbstractAlgorithm::virtualDoLayoutChildren() {
 
 /****************************************************************************************************/
 
+// http://msdn.microsoft.com/en-us/library/dd439461(v=office.12).aspx
+qreal CompositeAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    Q_UNUSED(values);
+    qreal value = -1.0;
+    if (type == "w" || type == "h") {
+        value = 100;
+    } else if (type == "l" || type == "t") {
+        value = 0;
+    } else if (type == "wOff" || type == "hOff" || type == "lOff" || type == "ctrXOff" || type == "rOff" || type == "tOff" || type == "ctrYOff" || type == "bOff") {
+        value = 0;
+    }
+    return value;
+}
+
+/****************************************************************************************************/
+
+qreal ConnectorAlgorithm::connectorDistance() const
+{
+    QPair<LayoutNodeAtom*,LayoutNodeAtom*> neighbors = layout()->neighbors();
+    LayoutNodeAtom* srcAtom = neighbors.first;
+    LayoutNodeAtom* dstAtom = neighbors.second;
+    return (srcAtom && dstAtom) ? srcAtom->distanceTo(dstAtom) : 0.0;
+}
+
 qreal ConnectorAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
     qreal value = -1.0;
-    if (type == "stemThick") {
+    if (type == "w" || type == "h") {
+        value = 100;
+    } else if (type == "connDist") {
+        value = connectorDistance();
+    } else if (type == "stemThick") {
         value = values.value("h") * 0.60;
-    } else if (type == "begMarg") {
-        value = 3.175;
-    } else if (type == "endMarg") {
+    } else if (type == "begMarg" || type == "endMarg") {
         value = 3.175;
     } else if (type == "begPad") {
-        value = values.value("connDist") * 0.22;
+        //Q_ASSERT(values.contains("connDist")); // can happen
+        //value = values.value("connDist") * 0.22;
+        //value = (values.contains("connDist") ? values.value("connDist") : connectorDistance()) * 0.22;
+        value = connectorDistance() * 0.22;
     } else if (type == "endPad") {
-        value = values.value("connDist") * 0.25;
+        value = connectorDistance() * 0.25;
     } else if (type == "bendDist") {
-        value = values.value("connDist") * 0.50;
+        value = connectorDistance() * 0.50;
     } else if (type == "hArH") {
         value = values.value("h") * 1.00;
     } else if (type == "wArH") {
         value = values.value("h") * 0.50;
     } else if (type == "diam") {
-        value = values.value("connDist") * 1.00;
+        value = connectorDistance() * 1.00;
     }
     return value;
 }
@@ -1811,6 +1896,22 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
         }
         return;
     }
+    
+    // Beginning and end points defines different connection sites available on a node. This can be one of the following values;
+    // * auto       Specifies that the algorithm will determine the best connection site to use.
+    // * bCtr       Specifies that the bottom, center connection site is to be used.
+    // * bL         Specifies that the bottom, left connection site is to be used.
+    // * bR         Specifies that the bottom right connection site is to be used.
+    // * ctr        Specifies that the center connection site is to be used.
+    // * midL       Specifies that the middle left connection site is to be used.
+    // * midR       Specifies that the middle right connection site is to be used.
+    // * radial     Specifies connections along a radial path to support the use of connections in cycle diagrams.
+    // * tCtr       Specifies that the top center connection site is to be used.
+    // * tL         Specifies that the top left connection site is to be used.
+    // * tR         Specifies that the top right connection site is to be used.
+    QString begPts = layout()->algorithmParam("begPts");
+    QString endPts = layout()->algorithmParam("endPts");
+    //if (!begPts.isEmpty() && !endPts.isEmpty()) kDebug()<<"begPts="<<begPts<<"endPts="<<endPts;
 
     QMap<QString, qreal> srcValues = srcAtom->m_values;
     QMap<QString, qreal> dstValues = dstAtom->m_values;
@@ -1845,7 +1946,13 @@ void ConnectorAlgorithm::virtualDoLayoutChildren() {
 
 qreal CycleAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>&) {
     qreal value = -1.0;
-    if (type == "diam") {
+    if (type == "w" || type == "h") {
+        value = 100;
+    } else if (type == "diam") {
+        value = 0;
+    } else if (type == "sibSp") {
+        value = 0;
+    } else if (type == "sp") {
         value = 0;
     }
     return value;
@@ -1857,39 +1964,39 @@ void CycleAlgorithm::virtualDoLayout() {
 
     QList<LayoutNodeAtom*> childs = childLayouts();
     Q_ASSERT(!childs.isEmpty());
-    
+
     // Specifies the angle at which the first shape is placed. Angles are in degrees, measured clockwise from a line pointing straight upward from the center of the cycle.
-    int startAngel = layout()->algorithmParam("stAng", "90").toInt() - 90; //-45;
+    int startAngel = layout()->algorithmParam("stAng", "0").toInt();
     // Specifies the angle the cycle spans. Final shapealign text is placed at stAng+spanAng, unless spanAng=360. In that case, the algorithm places the text so that shapes do not overlap.
     int spanAngel = layout()->algorithmParam("spanAng", "360").toInt();
+
     // Specifies where to place nodes in relation to the center circle.
     bool firstNodeInCenter = layout()->algorithmParam("ctrShpMap", "none") == "fNode";
 
     LayoutNodeAtom* nodeInCenter = firstNodeInCenter ? childs.takeFirst() : 0;
     const qreal childsCount = qMax(1, childs.count());
 
-    const qreal w = layout()->finalValues()["w"];
-    const qreal h = layout()->finalValues()["h"];
+    //const qreal w = layout()->finalValues()["w"];
+    //const qreal h = layout()->finalValues()["h"];
+    const qreal w = layout()->m_values["w"];
+    const qreal h = layout()->m_values["h"];
+
     const qreal rx = w / 2.0;
     const qreal ry = h / 2.0;
     qreal num = 360.0 / childsCount;
     const bool inverse = startAngel > spanAngel;
     if(inverse) num = -num;
 
-#if 1
-    qreal dw = ( (2.0 * M_PI * rx) / childsCount );
-    qreal dh = ( (2.0 * M_PI * ry) / childsCount );
-    //dw *= 0.5; dh *= 0.5;
-#else
-    qreal dw = w;
-    qreal dh = h;
-#endif
-
+    qreal spacing = 0.0;//layout()->m_values["sibSp"] * childsCount;
+    qreal dw = ( (2.0 * M_PI * rx - spacing) / childsCount );
+    qreal dh = ( (2.0 * M_PI * ry - spacing) / childsCount );
+    
     if(nodeInCenter) {
-        setNodePosition(nodeInCenter, rx, ry, dw, dh);
+        setNodePosition(nodeInCenter, rx, ry, -1, -1); //dw, dh);
     }
 
-    for(qreal degree = startAngel; (!childs.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
+    //for(qreal degree = startAngel; (!childs.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree -= num) {
+    for(qreal degree = startAngel; (!childs.isEmpty()) && (inverse ? degree > spanAngel : degree <= spanAngel); degree += num) {
         const qreal radian = (degree - 90.0) * (M_PI / 180.0);
         const qreal x = rx + cos(radian) * rx;
         const qreal y = ry + sin(radian) * ry;
@@ -1935,6 +2042,17 @@ void LinearAlgorithm::virtualDoLayout()
 }
 
 /****************************************************************************************************/
+
+qreal SnakeAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    Q_UNUSED(values);
+    qreal value = -1.0;
+    if (type == "w" || type == "h") {
+        value = 100;
+    } else if (type == "alignOff" || type == "sp" || type == "begPad" || type == "endPad") {
+        value = 0;
+    }
+    return value;
+}
 
 // http://msdn.microsoft.com/en-us/library/dd439436(v=office.12).aspx
 void SnakeAlgorithm::virtualDoLayout() {
@@ -1997,8 +2115,22 @@ void SnakeAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
+qreal HierarchyAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>&) {
+    qreal value = -1.0;
+    if (type == "w" || type == "h") {
+        value = 100;
+    } else if (m_isRoot && (type == "alignOff" || type == "sp")) {
+        value = 0;
+    } else if (!m_isRoot && (type == "sibSp" || type == "secSibSp")) {
+        value = 0;
+    }
+    return value;
+}
+
+// http://msdn.microsoft.com/en-us/library/dd439442(v=office.12).aspx
+// http://msdn.microsoft.com/en-us/library/dd439449(v=office.12).aspx
 void HierarchyAlgorithm::virtualDoLayout() {
-    kDebug()<<"TODO Implement algorithm";
+    kDebug()<<"TODO Implement algorithm isRoot="<<m_isRoot;
     AbstractAlgorithm::virtualDoLayout();
 }
 
@@ -2006,7 +2138,9 @@ void HierarchyAlgorithm::virtualDoLayout() {
 
 qreal PyramidAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>&) {
     qreal value = -1.0;
-    if (type == "pyraAcctRatio") {
+    if (type == "w" || type == "h") {
+        value = 100;
+    } else if (type == "pyraAcctRatio") {
         value = 0.33;
     }
     return value;
@@ -2019,6 +2153,22 @@ void PyramidAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
+//NOTE I start to assume that the parent layout-algorithms are also resposible for setting defaults at children
+//layout-algorithms. If that's the case then the question is how/where that happens. To bad the specs are
+//missing the most basic informations :-(
+qreal SpaceAlg::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
+    Q_UNUSED(values);
+    qreal value = -1.0;
+    if (type == "w" || type == "h") {
+        kDebug()<<"TODO type="<<type;
+        value = 100; //TODO what default value is expected here?
+    } else if (type == "sibSp") {
+        kDebug()<<"TODO type="<<type;
+        value = 0; //TODO what default value is expected here?
+    }
+    return value;
+}
+
 void SpaceAlg::virtualDoLayout() {
     // just don't do anything cause the space-algorithm is just a placeholder-algorithm
     AbstractAlgorithm::virtualDoLayout();
@@ -2028,9 +2178,9 @@ void SpaceAlg::virtualDoLayout() {
 
 qreal TextAlgorithm::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
     qreal value = -1.0;
-    if (type == "primFontSz") {
+    if (type == "w" || type == "h") {
         value = 100;
-    } else if (type == "secFontSize") {
+    } else if (type == "primFontSz" || type == "secFontSize") {
         value = 100;
     } else if (type == "tMarg") {
         value = values.value("primFontSz") * 0.78;
