@@ -2525,9 +2525,69 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
-        body->addAttribute("text:anchor-type", "char");
-        m_currentDrawStyle->addProperty("style:vertical-rel", "char");
-        m_currentDrawStyle->addProperty("style:horizontal-rel", "char");
+        // Note that many of these don't seem to have a good odf counterpart,
+        // and are thus just guesses
+        if (m_relativeFromV == "column") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
+        }
+        else  if (m_relativeFromV == "bottomMargin") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
+        }
+        else  if (m_relativeFromV == "insideMargin") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
+        }
+        else  if (m_relativeFromV == "line") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "line");
+            body->addAttribute("text:anchor-type", "as-char");
+        }
+        else  if (m_relativeFromV == "margin") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
+        }
+        else  if (m_relativeFromV == "outsideMargin") {
+             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+             body->addAttribute("text:anchor-type", "paragraph");
+        }
+        else  if (m_relativeFromV == "page") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "page");
+            body->addAttribute("text:anchor-type", "page");
+        }
+        else  if (m_relativeFromV == "paragraph") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
+        }
+        else  if (m_relativeFromV == "topMargin") {
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            body->addAttribute("text:anchor-type", "paragraph");
+        }
+
+        if (m_relativeFromH == "character") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "char");
+        }
+        else if (m_relativeFromH == "column") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
+        else if (m_relativeFromH == "insideMargin") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
+        else if (m_relativeFromH == "leftMargin") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
+        else if (m_relativeFromH == "margin") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
+        else if (m_relativeFromH == "outsideMargin") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
+        else if (m_relativeFromH == "page") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page");
+        }
+        else if (m_relativeFromH == "rightMargin") {
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
     }
 
     const QString styleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
@@ -4634,6 +4694,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     m_docPrName.clear();
     m_docPrDescr.clear();
     m_drawing_anchor = true; // for pic:pic
+    m_behindDoc = false;
 
     const QXmlStreamAttributes attrs(attributes());
 //! @todo parse 20.4.3.4 ST_RelFromH (Horizontal Relative Positioning), p. 3511
@@ -4646,7 +4707,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
     READ_ATTR_WITHOUT_NS(distR)
     distToODF("fo:margin-right", distR);
 
-    const bool behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
+    m_behindDoc = MSOOXML::Utils::convertBooleanAttr(attrs.value("behindDoc").toString());
 
     while (!atEnd()) {
         readNext();
@@ -4666,20 +4727,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_anchor()
                 // WordprocessingML document based on its display location.
                 // CASE #1410
                 readNext();
-                if (!expectElEnd(QUALIFIED_NAME(wrapNone)))
+                if (!expectElEnd(QUALIFIED_NAME(wrapNone))) {
                     return KoFilter::WrongFormat;
-                saveStyleWrap("run-through");
-                m_currentDrawStyle->addProperty(QLatin1String("style:run-through"),
-                                                (behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground",
-                                               KoGenStyle::GraphicType);
+                }
+                saveStyleWrap("none");
             } else if (QUALIFIED_NAME_IS(wrapTopAndBottom)) {
                 // 20.4.2.20 wrapTopAndBottom (Top and Bottom Wrapping)
                 // This element specifies that text shall wrap around the top
                 // and bottom of this object, but not its left or right edges.
                 // CASE #1410
                 readNext();
-                if (!expectElEnd(QUALIFIED_NAME(wrapTopAndBottom)))
+                if (!expectElEnd(QUALIFIED_NAME(wrapTopAndBottom))) {
                     return KoFilter::WrongFormat;
+                }
                 saveStyleWrap("none");
             }
 //! @todo add ELSE_WRONG_FORMAT
@@ -5040,6 +5100,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_wrapThrough()
     READ_PROLOGUE
     readWrap();
 
+    saveStyleWrap("run-through");
+    m_currentDrawStyle->addProperty(QLatin1String("style:run-through"),
+                                    (m_behindDoc || m_insideHdr || m_insideFtr) ? "background" : "foreground", KoGenStyle::GraphicType);
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
