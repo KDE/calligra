@@ -294,6 +294,11 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
             userStyle.addProperty("style:horizontal-rel","page");
         }
 
+        //in case a header or footer is processed, save the style into styles.xml
+        if (m_inStylesDotXml) {
+            userStyle.setAutoStyleInStylesDotXml(true);
+        }
+
         drawStyleName = "fr";
         drawStyleName = m_mainStyles->insert(userStyle, drawStyleName);
         writer->startElement("draw:frame");
