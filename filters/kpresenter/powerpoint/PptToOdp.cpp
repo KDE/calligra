@@ -1339,8 +1339,8 @@ void PptToOdp::defineListStyle(KoGenStyle& style, quint8 depth,
 
 QChar
 getBulletChar(const PptTextPFRun& pf) {
-    quint16 v = (quint16)pf.bulletChar();
-    if (v == 0xf06c) { // 0xF06C from windings is similar to ●
+    quint16 v = (quint16) pf.bulletChar();
+    if ((v == 0xf06c) || (v == 0x006c)) { // 0xF06C from windings is similar to ●
         return QChar(0x25cf); //  "●"
     }
     if (v == 0xf02d) { // 0xF02D from symbol is similar to –

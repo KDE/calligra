@@ -149,14 +149,16 @@ const TextMasterStyleLevel* getBaseLevel(const MasterOrSlideContainer* m,
     const TextMasterStyleAtom* ms = 0;
     const TextMasterStyleLevel* ml = 0;
 
-    //NOTE: following rules were discussed at the Office File Formats Forum
+    //NOTE: following rules were discussed at the Office File Formats Forum,
+    //fine tuning is still required
 
     if (textType == Tx_TYPE_CENTERTITLE) {
         ms = getTextMasterStyleAtom(m, Tx_TYPE_TITLE);
         ml = getTextMasterStyleLevel(ms, level);
     }
     //TODO: fine tuning on test documents required
-    else if (textType == Tx_TYPE_CENTERBODY ||
+    else if (textType == Tx_TYPE_BODY ||
+             textType == Tx_TYPE_CENTERBODY ||
              textType == Tx_TYPE_HALFBODY ||
              textType == Tx_TYPE_QUARTERBODY)
     {
