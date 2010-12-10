@@ -1,11 +1,10 @@
 ########### next target ###############
 
-set(asciiimport_PART_SRCS asciiimport.cc ImportDialog.cc )
+set(AsciiImport_PART_SRCS AsciiImport.cpp ImportDialog.cc )
 
+kde4_add_ui_files(AsciiImport_PART_SRCS ImportDialogUI.ui )
 
-kde4_add_ui_files(asciiimport_PART_SRCS ImportDialogUI.ui )
-
-kde4_add_plugin(asciiimport ${asciiimport_PART_SRCS})
+kde4_add_plugin(asciiimport ${AsciiImport_PART_SRCS})
 
 target_link_libraries(asciiimport kwordexportfilters)
 
@@ -29,7 +28,7 @@ install(TARGETS asciiexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kword_ascii_import.desktop kword_ascii_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kword_ascii_import.desktop kword_ascii_export.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
