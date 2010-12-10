@@ -2986,11 +2986,11 @@ struct CHP : public Shared {
     S16 unused52;
 
     /**
-     * index to character style descriptor in the stylesheet that tags this
-     * run of text When istd is istdNormalChar (10 decimal), characters in run
-     * are not affected by a character style. If chp.istd contains any other value,
-     * chpx of the specified character style are applied to CHP for this run before
-     * any other exceptional properties are applied.
+     * index to character style descriptor in the stylesheet that tags this run
+     * of text.  When istd is istdNormalChar (10 decimal), characters in run
+     * are not affected by a character style.  If chp.istd contains any other
+     * value, chpx of the specified character style are applied to CHP for this
+     * run before any other exceptional properties are applied.
      */
     U16 istd;
 
