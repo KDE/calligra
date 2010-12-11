@@ -193,6 +193,8 @@ private slots:
     void updateStatusBarAction();
     /// insert image
     void insertImage();
+    /// insert a footnote or an endnote
+    void insertFootEndNote();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);
     /// go to previous page

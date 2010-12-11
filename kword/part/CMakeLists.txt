@@ -56,6 +56,7 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
     dialogs/KWInsertPageDialog.cpp
+    dialogs/KWInsertInlineNoteDialog.cpp
     dockers/KWStatisticsDocker.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
@@ -88,6 +89,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertPageDialog.ui
+    dialogs/KWInsertInlineNoteDialog.ui
     dockers/KWStatisticsDocker.ui
 )
 if( Soprano_FOUND )
