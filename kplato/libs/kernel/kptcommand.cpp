@@ -757,6 +757,19 @@ SubtaskAddCmd::SubtaskAddCmd( Project *project, Node *node, Node *parent, const 
         if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
         m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
     }
+    // Also remove accounts
+    if ( parent->runningAccount() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new NodeModifyRunningAccountCmd( *parent, parent->runningAccount(), 0 ) );
+    }
+    if ( parent->startupAccount() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new NodeModifyStartupAccountCmd( *parent, parent->startupAccount(), 0 ) );
+    }
+    if ( parent->shutdownAccount() ) {
+        if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+        m_cmd->addCommand( new NodeModifyShutdownAccountCmd( *parent, parent->shutdownAccount(), 0 ) );
+    }
 }
 SubtaskAddCmd::~SubtaskAddCmd()
 {
@@ -1001,13 +1014,24 @@ void NodeIndentCmd::execute()
                 if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
                 m_cmd->addCommand( new RemoveResourceGroupRequestCmd( r ) );
             }
-        }
+            // Also remove accounts
+            if ( m_newparent->runningAccount() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new NodeModifyRunningAccountCmd( *m_newparent, m_newparent->runningAccount(), 0 ) );
+            }
+            if ( m_newparent->startupAccount() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new NodeModifyStartupAccountCmd( *m_newparent, m_newparent->startupAccount(), 0 ) );
+            }
+            if ( m_newparent->shutdownAccount() ) {
+                if ( m_cmd == 0 ) m_cmd = new MacroCommand( "" );
+                m_cmd->addCommand( new NodeModifyShutdownAccountCmd( *m_newparent, m_newparent->shutdownAccount(), 0 ) );
+            }
+       }
         if ( m_cmd ) {
             m_cmd->execute();
         }
     }
-
-
 }
 void NodeIndentCmd::unexecute()
 {
