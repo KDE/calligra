@@ -1267,17 +1267,22 @@ S16 CHP::applyCHPSPRM( const U8* ptr, const Style* paragraphStyle, const StyleSh
         case SPRM::sprmCKcd:
             kcd = *ptr;
             break;
-        case SPRM::sprmCFBold:              // handling of bold style property
-            if ( *ptr < 128 ) {             // if ToggleOperand == 1, the text is BOLD
+        case SPRM::sprmCFBold:
+            if ( *ptr < 128 ) {
                 fBold = *ptr == 1;
-            } else {                        // if ToggleOperand >= 128
-                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) ); // get CHP by the istd and parent (paragraph)
+            } else {
+                const Word97::CHP* chp( determineCHP( istd, paragraphStyle, styleSheet ) );
+                // use parent's value
                 if ( *ptr == 128 && chp ) {
-                    fBold = chp->fBold;     // for ToggleOperand == 128, the BOLD property of this equals the BOLD property of parent (paragraph)
-                } else if ( *ptr == 129 && chp ) {
-                    fBold = !chp->fBold;    // for ToggleOperand == 129, the BOLD property of this is oposite to BOLD property of parent (paragraph)
-                } else if ( !chp ) {
-                    fBold = 1;              // if we failed to get chp by istd and parent AND we should change the BOLD property, just make it BOLD
+                    fBold = chp->fBold;
+                }
+                // use opposite of parent's value
+                else if ( *ptr == 129 && chp ) {
+                    fBold = !chp->fBold;
+                }
+                // failed to get parent's chp, make it BOLD
+                else if ( !chp ) {
+                    fBold = 1;
                 }
             }
             break;
