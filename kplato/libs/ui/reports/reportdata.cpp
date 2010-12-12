@@ -151,13 +151,13 @@ qint64 ReportData::recordCount() const {
 QStringList ReportData::dataSources() const
 {
     //TODO
-    return QStringList() << "costbreakdown";
+    return QStringList() << "costbreakdown" << "earnedvalue";
 }
 
 QStringList ReportData::dataSourceNames() const
 {
     //TODO
-    return QStringList() << i18n( "Cost Breakdown" );
+    return QStringList() << i18n( "Cost Breakdown" ) << i18n( "Earned values" );
 }
 
 void ReportData::setSorting(const QList<SortedField>& lst )
@@ -291,12 +291,22 @@ QVariant ChartReportData::value ( unsigned int i ) const
         return QVariant();
     }
     QVariant value;
-    if ( i == 0 ) {
-        // x-axis labels
-        value = m_model.headerData( m_row + 3, Qt::Horizontal );
+    if ( cbs ) {
+        if ( i == 0 ) {
+            // x-axis labels
+            value = m_model.headerData( m_row + 3, Qt::Horizontal );
+        } else {
+            // data
+            value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
+        }
     } else {
-        // data
-        value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
+        if ( i == 0 ) {
+            // x-axis labels
+            value = m_model.headerData( i, Qt::Horizontal );
+        } else {
+            // data
+            value = m_model.index( m_row, i ).data();
+        }
     }
     return value;
 }

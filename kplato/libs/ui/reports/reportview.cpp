@@ -27,6 +27,8 @@
 #include "reportscripts.h"
 #include "reportexportpanel.h"
 
+#include "kptnodechartmodel.h"
+
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
@@ -232,6 +234,14 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
     map.insert( "costbreakdown", fm  );
+
+    fm = new FlatProxyModel( parent );
+    m = new ChartItemModel( fm );
+    fm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "earnedvalue", fm  );
 
     return map;
 }
@@ -442,7 +452,7 @@ ReportData *ReportView::createReportData( const QString &type )
     kDebug()<<type;
     //FIXME a smarter report data creator
     ReportData *r = 0;
-    if ( type == "costbreakdown" ) {
+    if ( type == "costbreakdown" || type =="earnedvalue" ) {
         r = new ChartReportData();
     } else {
         r = new ReportData();
@@ -852,7 +862,7 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
 {
     //FIXME a smarter report data creator
     ReportData *r = 0;
-    if ( type == "costbreakdown" ) {
+    if ( type == "costbreakdown" || type == "earnedvalue" ) {
         r = new ChartReportData();
     } else {
         r = new ReportData();
