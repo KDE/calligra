@@ -332,19 +332,19 @@ public:
     virtual double budgetedCostPerformed( const QDate &, long = CURRENTSCHEDULE ) const { return 0.0; };
 
     /// Return map of Budgeted Cost of Work Scheduled pr day
-    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
 
     /// Return map of Budgeted Cost of Work Scheduled pr day (also includes bcws pr day)
-    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
     
     /// Return a map of Actual effort and Cost of Work Performed
-    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Return Actual effort and Cost of Work Performed upto @date
     virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
     

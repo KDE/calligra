@@ -290,27 +290,14 @@ void ChartItemModel::calculate()
                     }
                 }
                 if ( ! skip ) {
-                    m_bcws += n->bcwpPrDay( m_manager->scheduleId() );
+                    m_bcws += n->bcwpPrDay( m_manager->scheduleId(), ECCT_EffortWork );
                     m_acwp += n->acwp( m_manager->scheduleId() );
                 }
             }
         }
     }
-#if 0
-    EffortCostDayMap::ConstIterator it;
-    EffortCostDayMap::ConstIterator end = m_bcws.days().constEnd();
-    for ( it = m_bcws.days().constBegin(); it != end; ++it ) {
-        kDebug()<<"Plan:"<<it.key()
-                <<"bcws: effort="<<it.value().effort().toString()<<"cost="<<it.value().cost()
-                <<"bcwp: effort="<<it.value().bcwpEffort()<<"cost="<<it.value().bcwpCost();
-    }
-    end = m_acwp.days().constEnd();
-    for ( it = m_acwp.days().constBegin(); it != end; ++it ) {
-        kDebug()<<"Actual:"<<it.key()
-        <<"acwp: effort="<<it.value().effort().toString()<<"cost="<<it.value().cost();
-    }
-#endif
-
+    //kDebug()<<"bcwp"<<m_bcws;
+    //kDebug()<<"acwp"<<m_acwp;
 }
 
 

@@ -205,7 +205,7 @@ public:
     /**
      * Returns a map of all actual effort and cost entered
      */
-    virtual EffortCostMap actualEffortCost( long id ) const;
+    virtual EffortCostMap actualEffortCost( long id, EffortCostCalculationType type = ECCT_All ) const;
 
     void addUsedEffort( const Resource *resource, UsedEffort *value = 0 );
     UsedEffort *takeUsedEffort( const Resource *r ) { return m_usedEffort.take( const_cast<Resource*>( r ) ); changed(); }
@@ -463,20 +463,20 @@ public:
     virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
     /// Return map of Budgeted Cost of Work Scheduled pr day
-    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
     /// Return map of Budgeted Cost of Work Performed pr day (also includes bcwsPrDay)
-    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
     /// Map of Actual Cost of Work Performed
-    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
     /// Actual Cost of Work Performed up to dat
     virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
