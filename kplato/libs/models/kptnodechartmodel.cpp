@@ -196,7 +196,7 @@ void ChartItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( resourceChanged( Node* ) ), this, SLOT( slotResourceChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     m_project = project;
     if ( m_project ) {
