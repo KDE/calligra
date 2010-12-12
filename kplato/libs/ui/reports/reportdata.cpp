@@ -241,6 +241,7 @@ void ReportData::setScheduleManager( ScheduleManager *sm )
 //---------------------------
 ChartReportData::ChartReportData()
     : ReportData()
+    cbs( false )
 {
 }
 
@@ -282,7 +283,10 @@ bool ChartReportData::moveLast()
 
 qint64 ChartReportData::recordCount() const
 {
-    return m_model.columnCount() - 4;
+    if ( cbs ) {
+        return m_model.columnCount() - 4;
+    }
+    return m_model.rowCount();
 }
 
 QVariant ChartReportData::value ( unsigned int i ) const
@@ -316,9 +320,16 @@ QStringList ChartReportData::fieldNames() const
     // Legends
     QStringList names;
     names << "";
-    int count = m_model.rowCount();
-    for ( int i = 0; i < count; ++i ) {
-        names << m_model.index( i, 0 ).data().toString();
+    if ( cbs ) {
+        int count = m_model.rowCount();
+        for ( int i = 0; i < count; ++i ) {
+            names << m_model.index( i, 0 ).data().toString();
+        }
+    } else {
+        int count = m_model.columnCount();
+        for ( int i = 0; i < count; ++i ) {
+            names << m_model.index( 0, i ).data().toString();
+        }
     }
     return names;
 }
