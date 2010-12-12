@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2010 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,6 +76,7 @@ KarbonBooleanCommand::~KarbonBooleanCommand()
 void KarbonBooleanCommand::redo()
 {
     if (! d->resultingPath) {
+        // transform input pathes to global coordinates
         QPainterPath pa = d->pathA->absoluteTransformation(0).map(d->pathA->outline());
         QPainterPath pb = d->pathB->absoluteTransformation(0).map(d->pathB->outline());
         QPainterPath pr;
@@ -95,13 +96,17 @@ void KarbonBooleanCommand::redo()
             break;
         }
 
-        QTransform transformation = d->pathA->transformation();
-        pr = transformation.inverted().map(pr);
+        QTransform transformationA = d->pathA->absoluteTransformation(0);
+        // transform resulting path to local coordinate system of input path A
+        pr = transformationA.inverted().map(pr);
+        // create a path shape from the resulting path in local coordinates
         d->resultingPath = KoPathShape::createShapeFromPainterPath(pr);
         d->resultingPath->setBorder(d->pathA->border());
         d->resultingPath->setBackground(d->pathA->background());
         d->resultingPath->setShapeId(d->pathA->shapeId());
-        d->resultingPath->setTransformation(transformation);
+        // the created shape has a transformation applied so we have to
+        // apply the original transformation instead of replacing with it
+        d->resultingPath->applyAbsoluteTransformation(transformationA);
         d->resultingPath->setName(d->pathA->name());
         d->resultingPath->setZIndex(d->pathA->zIndex());
         d->resultingPath->setFillRule(d->pathA->fillRule());
