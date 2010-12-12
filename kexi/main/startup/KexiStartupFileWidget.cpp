@@ -42,6 +42,14 @@
 #include <kurlcombobox.h>
 #include <KToolBar>
 #include <KActionCollection>
+#include <KFileDialog>
+
+// added because of lack of krecentdirs.hs
+class KDE_IMPORT KRecentDirs
+{
+public:
+    static void add(const QString &fileClass, const QString &directory);
+};
 
 //! @internal
 class KexiStartupFileWidget::Private
@@ -59,6 +67,7 @@ public:
     bool confirmOverwrites;
     bool filtersUpdated;
     KUrl highlightedUrl;
+    QString recentDirClass;
 };
 
 //------------------
@@ -68,6 +77,10 @@ KexiStartupFileWidget::KexiStartupFileWidget(
         :  KFileWidget(startDirOrVariable, parent)
         , d(new Private())
 {
+    kDebug() << startDirOrVariable.scheme();
+    if (startDirOrVariable.protocol() == "kfiledialog") {
+        KFileDialog::getStartUrl(startDirOrVariable, d->recentDirClass);
+    }
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setMode(mode);
     QAction *previewAction = actionCollection()->action("preview");
@@ -102,6 +115,23 @@ KexiStartupFileWidget::KexiStartupFileWidget(
 
 KexiStartupFileWidget::~KexiStartupFileWidget()
 {
+    kDebug() << d->recentDirClass;
+    if (!d->recentDirClass.isEmpty()) {
+        QString hf = highlightedFile();
+        KUrl dir;
+        if (hf.isEmpty()) {
+            dir = baseUrl();
+        }
+        else {
+            QFileInfo fi(hf);
+            QString dirStr = fi.isDir() ? fi.absoluteFilePath() : fi.dir().absolutePath();
+            dir = KUrl::fromPath(dirStr);
+        }
+        kDebug() << dir;
+        kDebug() << highlightedFile();
+        if (!dir.isEmpty())
+            KRecentDirs::add(d->recentDirClass, dir.url());
+    }
     delete d;
 //Qt4 #ifdef Q_WS_WIN
 // saveLastVisitedPath(currentFileName());
