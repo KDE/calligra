@@ -191,10 +191,11 @@ public:
     unsigned long tell();
     int getch();
     unsigned long read(unsigned char* data, unsigned long maxlen);
-    unsigned long read(unsigned long pos, unsigned char* data, unsigned long maxlen);
-
 
 private:
+    unsigned long readInternal(unsigned char* data, unsigned long maxlen);
+    unsigned long readInternal(unsigned long pos, unsigned char* data, unsigned long maxlen);
+
     std::vector<unsigned long> blocks;
 
     // no copy or assign
@@ -206,6 +207,7 @@ private:
 
     // simple cache system to speed-up getch()
     unsigned char* cache_data;
+    unsigned long base_cache_size;
     unsigned long cache_size;
     unsigned long cache_pos;
     void updateCache();
@@ -1109,8 +1111,8 @@ StreamIO::StreamIO(StorageIO* s, DirEntry* e)
 
     // prepare cache
     cache_pos = 0;
-    cache_size = 4096; // optimal ?
-    cache_data = new unsigned char[cache_size];
+    base_cache_size = cache_size = 4096; // optimal ?
+    cache_data = new unsigned char[base_cache_size];
     updateCache();
 }
 
@@ -1149,7 +1151,31 @@ int StreamIO::getch()
     return data;
 }
 
-unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned long maxlen)
+unsigned long StreamIO::read(unsigned char *data, unsigned long maxlen)
+{
+    // sanity checks
+    if (!data) return 0;
+    if (maxlen == 0) return 0;
+
+    unsigned long totalbytes = 0;
+
+    while (totalbytes < maxlen) {
+        // need to update cache ?
+        if (!cache_size || (m_pos < cache_pos) ||
+                (m_pos >= cache_pos + cache_size))
+            updateCache();
+        if (!cache_size) break;
+
+        const unsigned long remaining = cache_size - (m_pos - cache_pos);
+        const unsigned long count = std::min(remaining, maxlen - totalbytes);
+        memcpy(data + totalbytes, &cache_data[m_pos - cache_pos], count);
+        totalbytes += count;
+        m_pos += count;
+    }
+    return totalbytes;
+}
+
+unsigned long StreamIO::readInternal(unsigned long pos, unsigned char* data, unsigned long maxlen)
 {
     // sanity checks
     if (!data) return 0;
@@ -1203,9 +1229,9 @@ unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned lo
     return totalbytes;
 }
 
-unsigned long StreamIO::read(unsigned char* data, unsigned long maxlen)
+unsigned long StreamIO::readInternal(unsigned char* data, unsigned long maxlen)
 {
-    unsigned long bytes = read(tell(), data, maxlen);
+    unsigned long bytes = readInternal(tell(), data, maxlen);
     m_pos += bytes;
     return bytes;
 }
@@ -1215,10 +1241,14 @@ void StreamIO::updateCache()
     // sanity check
     if (!cache_data) return;
 
-    cache_pos = m_pos - (m_pos % cache_size);
-    unsigned long bytes = cache_size;
+    cache_pos = m_pos - (m_pos % base_cache_size);
+    unsigned long bytes = base_cache_size;
     if (cache_pos + bytes > entry->size) bytes = entry->size - cache_pos;
-    cache_size = read(cache_pos, cache_data, bytes);
+    if (cache_pos + bytes <= m_pos) {
+        cache_size = 0;
+    } else {
+        cache_size = readInternal(cache_pos, cache_data, bytes);
+    }
 }
 
 
