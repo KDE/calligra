@@ -30,7 +30,7 @@
 #include "MsooXmlContentTypes.h"
 #include "MsooXmlRelationships.h"
 #include "MsooXmlThemesReader.h"
-#include "pole.h"
+#include "ooxml_pole.h"
 
 #include <QColor>
 #include <QFile>
@@ -191,7 +191,7 @@ bool MsooXmlImport::isPasswordProtectedFile(QString &filename)
     }
 
     // Open the OLE storage.
-    POLE::Storage storage(&file);
+    OOXML_POLE::Storage storage(&file);
     if (!storage.open()) {
         //kDebug() << "Cannot open" << filename << "as storage";
         file.close();
@@ -259,14 +259,14 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
     }
 
     // Open the OLE storage.
-    POLE::Storage storage(&file);
+    OOXML_POLE::Storage storage(&file);
     if (!storage.open()) {
         //kDebug() << "Cannot open" << filename << "as storage";
         file.close();
         return 0;
     }
 
-    POLE::Stream infoStream(&storage, "/EncryptionInfo");
+    OOXML_POLE::Stream infoStream(&storage, "/EncryptionInfo");
     if (infoStream.size() < 50) {
         kDebug() << "Invalid encryption info";
         return 0;
@@ -376,7 +376,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
                 continue;
             }
 
-            POLE::Stream *dataStream = new POLE::Stream(&storage, "/EncryptedPackage");
+            OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
             KTemporaryFile* outf = new KTemporaryFile;
             outf->open();
 
@@ -491,7 +491,7 @@ KTemporaryFile* MsooXmlImport::tryDecryptFile(QString &filename)
             keyValue = keyValue.left(128/8);
             kDebug() << "key value:" << QCA::arrayToHex(keyValue);
 
-            POLE::Stream *dataStream = new POLE::Stream(&storage, "/EncryptedPackage");
+            OOXML_POLE::Stream *dataStream = new OOXML_POLE::Stream(&storage, "/EncryptedPackage");
             KTemporaryFile* outf = new KTemporaryFile;
             outf->open();
 

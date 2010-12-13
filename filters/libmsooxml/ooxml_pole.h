@@ -26,8 +26,8 @@
    THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef POLE_H
-#define POLE_H
+#ifndef OOXML_POLE_H
+#define OOXML_POLE_H
 
 #include "msooxml_export.h"
 
@@ -36,7 +36,7 @@ class QIODevice;
 #include <string>
 #include <list>
 
-namespace POLE
+namespace OOXML_POLE
 {
 
 class StorageIO;

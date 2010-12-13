@@ -32,7 +32,7 @@
 #include <string>
 #include <vector>
 
-#include "pole.h"
+#include "ooxml_pole.h"
 
 #include <QByteArray>
 #include <QIODevice>
@@ -42,7 +42,7 @@
 // enable to activate debugging output
 // #define POLE_DEBUG
 
-namespace POLE
+namespace OOXML_POLE
 {
 
 class Header
@@ -212,9 +212,9 @@ private:
     void updateCache();
 };
 
-} // namespace POLE
+} // namespace OOXML_POLE
 
-using namespace POLE;
+using namespace OOXML_POLE;
 
 static inline unsigned long readU16(const unsigned char* ptr)
 {
