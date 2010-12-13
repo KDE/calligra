@@ -315,6 +315,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
                 m_currentLocalStyleProperties->backgroundColor = m_currentColor;
                 m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
             }
+            else {
+                skipCurrentElement(); // Added to make sure that solidfill eg inside 'lnT' does not mess with the color
+            }
         }
     }
 

@@ -69,6 +69,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     QString y_mar(m_vmlStyle.value("margin-top"));
     QString leftPos(m_vmlStyle.value("left"));
     QString topPos(m_vmlStyle.value("top"));
+    QString position(m_vmlStyle.value("position"));
     const QString hor_pos(m_vmlStyle.value("mso-position-horizontal"));
     const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
     const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
@@ -170,12 +171,18 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     }
 
 #ifdef DOCXXMLDOCREADER_H
-    // These seem to be defaults
+    // These seem to be decent defaults
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
-        body->addAttribute("text:anchor-type", "paragraph");
-        m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-        m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        if (position.isEmpty() || position == "static") { // Default
+            body->addAttribute("text:anchor-type", "as-char");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "char"); // check this
+        }
+        else {
+            body->addAttribute("text:anchor-type", "char");
+            m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+        }
     }
     else {
         body->addAttribute("text:anchor-type", m_anchorType);
