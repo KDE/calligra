@@ -43,7 +43,7 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     kDebug()<<rcps_version();
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "kplatorcpsplugin" );
+        locale->insertCatalog( "planrcpsplugin" );
     }
 }
 

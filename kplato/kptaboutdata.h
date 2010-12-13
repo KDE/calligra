@@ -29,16 +29,16 @@
 namespace KPlato
 {
 
-static const char* KPLATO_DESCRIPTION=I18N_NOOP("KPlato - KDE Planning Tool");
+static const char* KPLATO_DESCRIPTION=I18N_NOOP("Plan - KDE Planning Tool");
 static const char* KPLATO_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kplato", QByteArray(), ki18n("KPlato"),
+    KAboutData * aboutData=new KAboutData( "plan", QByteArray(), ki18n("Plan"),
                                            KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
-                                           ki18n("(c) 1998-2010, The KPlato Team"),
+                                           ki18n("(c) 1998-2010, The Plan Team"),
                                            KLocalizedString(),
-                                           "http://www.koffice.org/kplato/" );
+                                           "http://www.calligra-suite.org/plan/" );
     aboutData->addAuthor(ki18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
     aboutData->addAuthor(ki18n("Bo Thorsen"), KLocalizedString(), "bo@sonofthor.dk");
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");

@@ -68,8 +68,8 @@ Module::Module(QObject* parent)
 
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "kplato" );
-        locale->insertCatalog( "kplatolibs" );
+        locale->insertCatalog( "plan" );
+        locale->insertCatalog( "planlibs" );
         locale->insertCatalog( "timezones4" );
     }
 }

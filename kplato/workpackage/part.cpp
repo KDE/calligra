@@ -315,7 +315,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "kplatolibs" );
+        locale->insertCatalog( "planlibs" );
         locale->insertCatalog( "kabc" );
     }
     if ( isReadWrite() ) {

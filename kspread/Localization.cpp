@@ -27,7 +27,7 @@ using namespace KSpread;
 Localization::Localization()
         : KLocale("kspread")
 {
-    insertCatalog("koffice");
+    insertCatalog("calligra");
 }
 
 void Localization::load(const KoXmlElement& element)

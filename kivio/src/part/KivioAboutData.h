@@ -24,15 +24,15 @@
 #include <klocale.h>
 #include <kofficeversion.h>
 
-static const char* KIVIO_DESCRIPTION = I18N_NOOP("KOffice Flowchart And Diagram Tool");
+static const char* KIVIO_DESCRIPTION = I18N_NOOP("Calligra Flowchart And Diagram Tool");
 static const char* KIVIO_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData* newKivioAboutData()
 {
-  KAboutData* aboutData = new KAboutData("kivio", 0, ki18n("Kivio"),
+  KAboutData* aboutData = new KAboutData("flow", 0, ki18n("Flow"),
                                 KIVIO_VERSION, ki18n(KIVIO_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("(C) 2000-2008, The Kivio Team"), KLocalizedString(),
-                                "http://www.koffice.org/kivio/");
+                                ki18n("(C) 2000-2010, The Flow Team"), KLocalizedString(),
+                                "http://www.calligra-suite.org/flow/");
   aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Maintainer"), "peter.simonsson@gmail.com");
 
   return aboutData;

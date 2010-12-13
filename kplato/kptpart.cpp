@@ -87,7 +87,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
-        locale->insertCatalog( "kplatolibs" );
+        locale->insertCatalog( "planlibs" );
         locale->insertCatalog( "kdgantt" );
         locale->insertCatalog( "kabc" );
         locale->insertCatalog( "timezones4" );

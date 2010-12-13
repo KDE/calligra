@@ -80,7 +80,7 @@ int main( int argc, char **argv )
     KApplication app;
 
     // Install the libkoffice* translations
-    KGlobal::locale()->insertCatalog("koffice");
+    KGlobal::locale()->insertCatalog("calligra");
 
 
 
