@@ -306,6 +306,16 @@ public:
     void setUserInput(const QString& text);
 
     /**
+     * Sets the user input without parsing it, without clearing existing formulas
+     * userinput or rich text. Used during loading of documents only!
+     * If \p text is a formula, creates a formula object and sets \p text as
+     * its expression. Otherwise, simply stores \p text as user input.
+     *
+     * \see parseUserInput, setValue
+     */
+    void setRawUserInput(const QString& text);
+
+    /**
      * Sets the user input and parses it.
      * If \p text is a formula, creates a formula object and sets \p text as
      * its expression. Otherwise, parses \p text, creates an appropriate value,
