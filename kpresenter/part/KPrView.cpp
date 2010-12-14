@@ -47,6 +47,7 @@
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "KPrViewModeSlidesSorter.h"
+#include "KPrViewModeOutline.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 #include "KPrPicturesImport.h"
@@ -70,6 +71,8 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
 //   , m_slidesSorterMode( new KPrViewModeSlidesSorter( this, kopaCanvas() ))
+//  , m_outlineMode( new KPrViewModeOutline( this, kopaCanvas() ))
+
   , m_dbus( new KPrViewAdaptor( this ) )
 {
     initGUI();
@@ -100,6 +103,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     KoPACanvas * canvas = dynamic_cast<KoPACanvas*>(kopaCanvas());
     if (canvas) {
         m_slidesSorterMode = new KPrViewModeSlidesSorter(this, canvas);
+	m_outlineMode = new KPrViewModeOutline(this, canvas);
     }
 }
 
@@ -207,6 +211,11 @@ void KPrView::initActions()
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
     connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
 
+    m_actionViewModeOutline = new KAction(i18n("Outline"), this);
+    m_actionViewModeOutline->setCheckable(true);
+    actionCollection()->addAction("view_outline", m_actionViewModeOutline);
+    connect(m_actionViewModeOutline, SIGNAL(triggered()), this, SLOT(showOutline()));
+
     m_actionViewModeSlidesSorter = new KAction(i18n("Slides Sorter"), this);
     m_actionViewModeSlidesSorter->setCheckable(true);
     m_actionViewModeSlidesSorter->setShortcut(QKeySequence("CTRL+F7"));
@@ -223,6 +232,7 @@ void KPrView::initActions()
     QActionGroup *viewModesGroup = new QActionGroup(this);
     viewModesGroup->addAction(m_actionViewModeNormal);
     viewModesGroup->addAction(m_actionViewModeNotes);
+    viewModesGroup->addAction(m_actionViewModeOutline);
     viewModesGroup->addAction(m_actionViewModeSlidesSorter);
 
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
@@ -349,6 +359,17 @@ void KPrView::showNotes()
         setMasterMode( false );
     }
     setViewMode(m_notesMode);
+}
+
+void KPrView::showOutline()
+{
+    // Make sure that we are not in master mode
+    // since notes master is not supported yet
+    if ( viewMode()->masterMode() ) {
+        actionCollection()->action( "view_masterpages" )->setChecked( false );
+        setMasterMode( false );
+    }
+    setViewMode(m_outlineMode);
 }
 
 void KPrView::showSlidesSorter()

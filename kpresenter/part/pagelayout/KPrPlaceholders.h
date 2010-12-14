@@ -29,6 +29,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QPair>
 
 class QSizeF;
 class KoShape;
@@ -67,6 +68,8 @@ typedef boost::multi_index_container<
 > Placeholders;
 
 typedef boost::multi_index::nth_index<Placeholders,2>::type PlaceholdersByShape;
+typedef QPair<QString, KoTextShapeData*> OutlinePair;
+typedef QList<OutlinePair> OutlineData;
 
 class KPrPlaceholders
 {
@@ -102,6 +105,15 @@ public:
     void debug() const;
 
     QMap<QString, KoTextShapeData *> styles() const;
+
+    /**
+     * Returns all TextShapes which should be displayed into outline mode
+     * If shapes are still placeholders, a pair is inserted with placeholder
+     * class and a NULL value.
+     */
+    OutlineData outlineData() const;
+
+    QList<KoShape *> placeholderShape();
 
 private:
     void add( const QList<KoShape *> & shapes );
