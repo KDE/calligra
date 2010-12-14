@@ -74,6 +74,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     const QString ver_pos(m_vmlStyle.value("mso-position-vertical"));
     const QString hor_pos_rel(m_vmlStyle.value("mso-position-horizontal-relative"));
     const QString ver_pos_rel(m_vmlStyle.value("mso-position-vertical-relative"));
+    const QString ver_align(m_vmlStyle.value("v-text-anchor"));
 
     qreal x_position = 0;
     QString x_pos_string, y_pos_string, widthString, heightString;
@@ -170,8 +171,14 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:fill-color", m_shapeColor);
     }
 
+    if (!ver_align.isEmpty()) {
+        m_currentDrawStyle->addProperty("draw:textarea-vertical-align", ver_align);
+    }
+
 #ifdef DOCXXMLDOCREADER_H
     // These seem to be decent defaults
+    m_currentDrawStyle->addProperty("style:horizonal-pos", "from-left");
+    m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
     if (!m_wrapRead) {
         m_currentDrawStyle->addProperty("style:wrap", "none");
         if (position.isEmpty() || position == "static") { // Default
@@ -181,7 +188,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         else {
             body->addAttribute("text:anchor-type", "char");
             m_currentDrawStyle->addProperty("style:vertical-rel", "paragraph");
-            m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
+            m_currentDrawStyle->addProperty("style:horizontal-rel", "page-content");
         }
     }
     else {
