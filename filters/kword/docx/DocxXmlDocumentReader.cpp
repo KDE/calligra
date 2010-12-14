@@ -2525,6 +2525,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
         // Note that many of these don't seem to have a good odf counterpart,
         // and are thus just guesses
         if (m_relativeFromV == "column") {
