@@ -227,6 +227,7 @@ void KPrViewModeOutline::populate()
         }
     }
 
+    setCursorTo(m_view->kopaDocument()->pageIndex(m_view->activePage()), Title);
     // Do not forget to reactive the synchronize
     enableSync();
 
