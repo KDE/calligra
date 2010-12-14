@@ -319,9 +319,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, const QVariantList & /*args*
         locale->insertCatalog( "kabc" );
     }
     if ( isReadWrite() ) {
-        setXMLFile( "kplatowork.rc" );
+        setXMLFile( "planwork.rc" );
     } else {
-        setXMLFile( "kplatowork_readonly.rc" );
+        setXMLFile( "planwork_readonly.rc" );
     }
 
     View *v = new View( this, parentWidget, actionCollection() );

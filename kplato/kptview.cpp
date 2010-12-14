@@ -145,9 +145,9 @@ View::View( Part* part, QWidget* parent )
 
     setComponentData( Factory::global() );
     if ( !part->isReadWrite() )
-        setXMLFile( "kplato_readonly.rc" );
+        setXMLFile( "plan_readonly.rc" );
     else
-        setXMLFile( "kplato.rc" );
+        setXMLFile( "plan.rc" );
 
     m_dbus = new ViewAdaptor( this );
     QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );

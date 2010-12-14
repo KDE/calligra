@@ -45,4 +45,4 @@ install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS kivio.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
-install( FILES kivio.rc DESTINATION ${DATA_INSTALL_DIR}/kivio)
+install( FILES flow.rc DESTINATION ${DATA_INSTALL_DIR}/flow)

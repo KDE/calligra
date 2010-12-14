@@ -100,7 +100,7 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     a->setEnabled( false );
     connect( m_part->undoStack(), SIGNAL( canRedoChanged( bool ) ), a, SLOT( setEnabled( bool ) ) );
     
-    setupGUI( KXmlGuiWindow::Default, "kplatowork_mainwindow.rc" );
+    setupGUI( KXmlGuiWindow::Default, "planwork_mainwindow.rc" );
 
     setCentralWidget( m_part->widget() );
     createGUI( m_part );

@@ -34,7 +34,7 @@ KivioView::KivioView(KivioDocument* document, QWidget* parent)
 {
     Q_ASSERT(m_document);
 
-    setXMLFile("kivio.rc");
+    setXMLFile("flow.rc");
 
     initializeActions();
     initializeGUI();

@@ -177,6 +177,6 @@ install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
-install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
+install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
 
 install( FILES kpresenterrc DESTINATION ${CONFIG_INSTALL_DIR} )

@@ -149,7 +149,7 @@ install(TARGETS kword  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES kword.rc kword_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kword)
+install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
 install( FILES wordspart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS kword.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES kwordrc DESTINATION ${CONFIG_INSTALL_DIR} )

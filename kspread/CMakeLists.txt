@@ -325,7 +325,7 @@ install(TARGETS kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  kspread.rc kspread_readonly.rc kspread.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kspread)
+install( FILES  tables.rc tables_readonly.rc tables.notifyrc DESTINATION ${DATA_INSTALL_DIR}/tables)
 install( FILES  tablespart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kspread.kcfg DESTINATION ${KCFG_INSTALL_DIR} )

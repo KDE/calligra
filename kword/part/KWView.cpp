@@ -136,7 +136,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     layout->addWidget(m_gui);
 
     setComponentData(KWFactory::componentData());
-    setXMLFile("kword.rc");
+    setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
 

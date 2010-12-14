@@ -569,9 +569,9 @@ View::View(QWidget *_parent, Doc *_doc)
 
     setComponentData(Factory::global());
     if (doc()->isReadWrite())
-        setXMLFile("kspread.rc");
+        setXMLFile("tables.rc");
     else
-        setXMLFile("kspread_readonly.rc");
+        setXMLFile("tables_readonly.rc");
 
     // GUI Initializations
     initView();
