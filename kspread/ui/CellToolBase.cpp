@@ -2296,7 +2296,7 @@ void CellToolBase::equalizeRow()
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
         const QRect range = selection()->lastRange();
-        double size = selection()->activeSheet()->rowFormats()->rowHeight(range.top());
+        qreal size = selection()->activeSheet()->rowFormats()->rowHeight(range.top());
         if (range.top() == range.bottom())
             return;
         for (int i = range.top() + 1; i <= range.bottom(); ++i) {
@@ -2308,7 +2308,7 @@ void CellToolBase::equalizeRow()
         if (size != 0.0) {
             ResizeRowManipulator* command = new ResizeRowManipulator();
             command->setSheet(selection()->activeSheet());
-            command->setSize(qMax(2.0, size));
+            command->setSize(qMax(qreal(2.0), size));
             command->add(*selection());
             if (!command->execute())
                 delete command;
