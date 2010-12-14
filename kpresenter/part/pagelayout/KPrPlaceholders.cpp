@@ -35,6 +35,8 @@
 
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QList>
+
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoParagraphStyle.h>
@@ -219,6 +221,28 @@ QMap<QString, KoTextShapeData *> KPrPlaceholders::styles() const
         }
     }
     return styles;
+}
+
+OutlineData KPrPlaceholders::outlineData() const
+{
+    OutlineData outline;
+    for (Placeholders::iterator it( m_placeholders.begin() ) ; it != m_placeholders.end(); ++it ) {
+        KoTextShapeData * data = ( dynamic_cast<KPrPlaceholderShape *>( it->shape ) ) ?
+        0 : qobject_cast<KoTextShapeData*>( it->shape->userData() );
+        outline.append(QPair<QString, KoTextShapeData*>(it->presentationClass, data));
+    }
+    return outline;
+}
+
+QList<KoShape *> KPrPlaceholders::placeholderShape() {
+    QList<KoShape *> shapes;
+    for ( Placeholders::iterator it( m_placeholders.begin() ) ; it != m_placeholders.end(); ++it ) {
+        KPrPlaceholderShape * shape = dynamic_cast<KPrPlaceholderShape *>(it->shape);
+        if ( shape ) {
+            shapes.append(shape);
+        }
+    }
+    return shapes;
 }
 
 void KPrPlaceholders::applyStyle( KPrPlaceholderShape * shape, const QString & presentationClass, const QMap<QString, KoTextShapeData*> & styles )

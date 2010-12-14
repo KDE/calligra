@@ -30,6 +30,7 @@
 class KPrDocument;
 class KPrViewAdaptor;
 class KPrViewModeNotes;
+class KPrViewModeOutline;
 class KPrViewModeSlidesSorter;
 class KPrViewModePresentation;
 class KPrViewModePresenterView;
@@ -90,6 +91,7 @@ protected slots:
     void createAnimation();
     void showNormal();
     void showNotes();
+    void showOutline();
     void showSlidesSorter();
     void dialogCustomSlideShows();
     void configureSlideShow();
@@ -105,6 +107,7 @@ private:
     KAction *m_actionCreateAnimation;
     KAction *m_actionViewModeNormal;
     KAction *m_actionViewModeNotes;
+    KAction *m_actionViewModeOutline;
     KAction *m_actionViewModeSlidesSorter;
     KAction *m_actionCreateCustomSlideShowsDialog;
     KAction *m_actionExportHtml;
@@ -116,6 +119,7 @@ private:
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
     KPrViewModeNotes *m_notesMode;
+    KPrViewModeOutline *m_outlineMode;
     KPrViewModeSlidesSorter *m_slidesSorterMode;
 
     KPrViewAdaptor *m_dbus;
