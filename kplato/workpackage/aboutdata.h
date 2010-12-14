@@ -28,17 +28,17 @@
 namespace KPlatoWork
 {
 
-static const char* KPLATOWORK_DESCRIPTION=I18N_NOOP("KPlatoWork - Work Package handler for the KPlato Project Planning Tool");
+static const char* KPLATOWORK_DESCRIPTION=I18N_NOOP("PlanWork - Work Package handler for the Plan Project Planning Tool");
 static const char* KPLATOWORK_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kplatowork", 0, ki18n("KPlato WorkPackage Handler"),
+    KAboutData * aboutData=new KAboutData( "planwork", 0, ki18n("Plan WorkPackage Handler"),
                                            KPLATOWORK_VERSION, ki18n(KPLATOWORK_DESCRIPTION),
                                            KAboutData::License_GPL,
-                                           ki18n("(c) 2007-2010, The KPlato Team"),
+                                           ki18n("(c) 2007-2010, The Plan Team"),
                                            KLocalizedString(),
-                                           "http://www.koffice.org/kplato/" );
+                                           "http://www.calligra-suite.org/plan/" );
     
     aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
     
