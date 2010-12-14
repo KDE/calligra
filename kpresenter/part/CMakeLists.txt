@@ -173,7 +173,7 @@ target_link_libraries(kpresenter kdeinit_kpresenter)
 install(TARGETS kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
-install( FILES kpresenterpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES stagepart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
