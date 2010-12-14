@@ -71,6 +71,7 @@ Module::Module(QObject* parent)
         locale->insertCatalog( "plan" );
         locale->insertCatalog( "planlibs" );
         locale->insertCatalog( "timezones4" );
+        locale->insertCatalog( "krossmoduleplan" );
     }
 }
 

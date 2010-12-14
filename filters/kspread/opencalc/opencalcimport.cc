@@ -67,7 +67,7 @@
 using namespace KSpread;
 
 K_PLUGIN_FACTORY(OpenCalcImportFactory, registerPlugin<OpenCalcImport>();)
-K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","kofficefilters"))
+K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","calligrafilters"))
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
         : isRange(false)

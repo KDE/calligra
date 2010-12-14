@@ -41,7 +41,7 @@
 #include "DCMImportDialog.h"
 
 K_PLUGIN_FACTORY(DCMImportFactory, registerPlugin<DCMImport>();)
-K_EXPORT_PLUGIN(DCMImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(DCMImportFactory("calligrafilters"))
 
 KoFilter::ConversionStatus DCMImport::convert(QByteArray const& from, QByteArray const& to)
 {

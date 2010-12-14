@@ -56,7 +56,7 @@ using namespace KSpread;
 */
 
 K_PLUGIN_FACTORY(CSVImportFactory, registerPlugin<CSVFilter>();)
-K_EXPORT_PLUGIN(CSVImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(CSVImportFactory("calligrafilters"))
 
 CSVFilter::CSVFilter(QObject* parent, const QVariantList&) :
         KoFilter(parent)

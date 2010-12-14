@@ -64,7 +64,7 @@ using namespace KSpread;
 typedef QList<QString> AreaList;
 
 K_PLUGIN_FACTORY(OpenCalcExportFactory, registerPlugin<OpenCalcExport>();)
-K_EXPORT_PLUGIN(OpenCalcExportFactory("kspreadopencalcexport", "kofficefilters"))
+K_EXPORT_PLUGIN(OpenCalcExportFactory("kspreadopencalcexport", "calligrafilters"))
 
 #define STOPEXPORT \
     do \

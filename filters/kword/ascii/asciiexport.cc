@@ -46,7 +46,7 @@
 #include <asciiexport.h>
 
 K_PLUGIN_FACTORY(ASCIIExportFactory, registerPlugin<ASCIIExport>();)
-K_EXPORT_PLUGIN(ASCIIExportFactory("kwordasciiexport", "kofficefilters"))
+K_EXPORT_PLUGIN(ASCIIExportFactory("kwordasciiexport", "calligrafilters"))
 
 
 class ASCIIWorker : public KWEFBaseWorker

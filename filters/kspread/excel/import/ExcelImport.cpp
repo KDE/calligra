@@ -86,7 +86,7 @@
 // #define OUTPUT_AS_ODS_FILE
 
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
-K_EXPORT_PLUGIN(ExcelImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
 using namespace Swinder;
 using namespace XlsUtils;

@@ -33,7 +33,7 @@
 #include <amiproexport.h>
 
 K_PLUGIN_FACTORY(AmiProExportFactory, registerPlugin<AmiProExport>();)
-K_EXPORT_PLUGIN(AmiProExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(AmiProExportFactory("calligrafilters"))
 class AmiProWorker : public KWEFBaseWorker
 {
 public:
