@@ -41,7 +41,7 @@ target_link_libraries(kivio kdeinit_kivio)
 install(TARGETS kivio ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
-install( FILES kiviopart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES flowpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS kivio.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###

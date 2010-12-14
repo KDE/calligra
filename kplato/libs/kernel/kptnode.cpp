@@ -988,6 +988,12 @@ void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime 
     node->addAppointment(resource, start, end, load);
 }
 
+bool Node::isBaselined( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->isBaselined() : false;
+}
+
 void Node::takeSchedule(const Schedule *schedule) {
     if (schedule == 0)
         return;
