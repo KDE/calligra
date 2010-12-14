@@ -456,6 +456,7 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc);
 
+    bool isBaselined( long int id ) const;
     /**
      * Return schedule with @p id
      * If @p id == CURRENTSCHEDULE, return m_currentSchedule
