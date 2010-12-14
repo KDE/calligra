@@ -49,7 +49,7 @@ KAboutData* Kexi::createAboutData()
         ki18n("(c) 2002-2010, Kexi Team"),
         ki18n("This software is developed by Kexi Team - an international group\n"
               "of independent developers."),
-        "http://www.koffice.org/kexi",
+        "http://www.calligra-suite.org/kexi",
         "submit@bugs.kde.org"
     );
     // authors sorted by last nontrivial contribution date
