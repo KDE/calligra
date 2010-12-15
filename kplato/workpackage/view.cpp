@@ -134,7 +134,7 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
 //     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
     //------ Settings
-    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlatoWork..."), this);
+    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure PlanWork..."), this);
     collection->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 

@@ -206,8 +206,8 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
     m_xmlLoader.setVersion( syntaxVersion );
     if ( syntaxVersion > KPLATO_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
-                      0, i18n( "This document was created with a newer version of KPlato (syntax version: %1)\n"
-                               "Opening it in this version of KPlato will lose some information.", syntaxVersion ),
+                      0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
+                               "Opening it in this version of Plan will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             setErrorMessage( "USER_CANCELED" );
