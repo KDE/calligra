@@ -34,10 +34,55 @@
 
 class Sheet;
 
+class EmbeddedObjects
+{
+public:
+    ~EmbeddedObjects(){ qDeleteAll(drawings); }
+    QList<XlsxDrawingObject*> drawings;
+
+    //QPair< oleObjectFile, imageReplacementFile>
+    QList< QPair<QString,QString> > oleObjects;
+    QList<QString> oleFrameBegins;
+    QString hyperlink;
+};
+
 class Cell
 {
 public:
-    Sheet* sheet;
+    void appendDrawing( XlsxDrawingObject* obj ){
+        if (!embedded)
+            embedded = new EmbeddedObjects;
+        embedded->drawings.append( obj );
+    }
+    void appendOleObject( const QPair<QString,QString>& oleObject, const QString& oleFrameBegin ){
+        if ( !embedded )
+            embedded = new EmbeddedObjects;
+        embedded->oleObjects.append( oleObject );
+        embedded->oleFrameBegins.append( oleFrameBegin );
+    }
+    void setHyperLink( const QString& link ) {
+        if ( !embedded )
+            embedded = new EmbeddedObjects;
+        embedded->hyperlink = link;
+    }
+    QList< QPair<QString,QString> > oleObjects() const {
+        if ( embedded )
+            return embedded->oleObjects;
+        else
+            return QList< QPair<QString,QString> >();
+    }
+    QString hyperlink() const {
+        if ( embedded )
+            return embedded->hyperlink;
+        else
+            return QString();
+    }
+//     appendDrawing( XlsxDrawingObject* obj ){
+//         if (!embedded)
+//             embedded = new EmbeddedObjects;
+//         embedded->drawings.append( obj );
+//     }
+    //Sheet* sheet;
     int column, row;
     int rowsMerged, columnsMerged;
     QString styleName;
@@ -47,27 +92,23 @@ public:
     QString valueType;
     QByteArray valueAttr;
     QString valueAttrValue;
-    QString formula;
-    QString hyperlink;
-    QList<XlsxDrawingObject*> drawings;
+    QString formula;    
+    EmbeddedObjects* embedded;
+    
 
-    //QPair< oleObjectFile, imageReplacementFile>
-    QList< QPair<QString,QString> > oleObjects;
-    QList<QString> oleFrameBegins;
-
-    Cell(Sheet* s, int columnIndex, int rowIndex) : sheet(s), column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true) {}
-    ~Cell() { qDeleteAll(drawings); }
+    Cell(/*Sheet* s,*/ int columnIndex, int rowIndex) : /*sheet(s),*/ column(columnIndex), row(rowIndex), rowsMerged(1), columnsMerged(1), isPlainText(true), embedded(0) {}
+    ~Cell() { delete embedded; }
 };
 
 class Row
 {
 public:
-    Sheet* sheet;
+//     Sheet* sheet;
     int rowIndex;
     bool hidden;
     QString styleName;
 
-    Row(Sheet* s, int index) : sheet(s), rowIndex(index), hidden(false) {}
+    Row(/*Sheet* s,*/ int index) : /*sheet(s),*/ rowIndex(index), hidden(false) {}
     ~Row() {}
 };
 
@@ -78,23 +119,23 @@ public:
     int columnIndex;
     bool hidden;
 
-    Column(Sheet* s, int index) : sheet(s), columnIndex(index), hidden(false) {}
+    Column(/*Sheet* s,*/ int index) : /*sheet(s),*/ columnIndex(index), hidden(false) {}
     ~Column() {}
 };
-
+#include <QSharedPointer>
 class Sheet
 {
 public:
     QString m_name;
     double m_defaultRowHeight, m_defaultColWidth, m_baseColWidth;
     explicit Sheet(const QString &name) : m_name(name), m_defaultRowHeight(-1.0), m_defaultColWidth(-1.0), m_baseColWidth(-1.0), m_maxRow(0), m_maxColumn(0), m_visible(true) {}
-    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); qDeleteAll(m_cells); }
+    ~Sheet() { qDeleteAll(m_rows); qDeleteAll(m_columns); /*qDeleteAll(m_cells);*/ }
 
     Row* row(int rowIndex, bool autoCreate)
     {
         Row* r = m_rows[ rowIndex ];
         if (!r && autoCreate) {
-            r = new Row(this, rowIndex);
+            r = new Row(/*this,*/ rowIndex);
             m_rows[ rowIndex ] = r;
             if (rowIndex > m_maxRow) m_maxRow = rowIndex;
         }
@@ -105,7 +146,7 @@ public:
     {
         Column* c = m_columns[ columnIndex ];
         if (!c && autoCreate) {
-            c = new Column(this, columnIndex);
+            c = new Column(/*this,*/ columnIndex);
             m_columns[ columnIndex ] = c;
             if (columnIndex > m_maxColumn) m_maxColumn = columnIndex;
         }
@@ -115,10 +156,10 @@ public:
     Cell* cell(int columnIndex, int rowIndex, bool autoCreate)
     {
         const unsigned hashed = (rowIndex + 1) * MSOOXML::maximumSpreadsheetColumns() + columnIndex + 1;
-        Cell* c = m_cells[ hashed ];
+        Cell* c = m_cells[ hashed ].data();
         if (!c && autoCreate) {
-            c = new Cell(this, columnIndex, rowIndex);
-            m_cells[ hashed ] = c;
+            c = new Cell(/*this,*/ columnIndex, rowIndex);
+            m_cells[ hashed ] = QSharedPointer< Cell > ( c );
             this->column(columnIndex, true);
             this->row(rowIndex, true);
             if (rowIndex > m_maxRow) m_maxRow = rowIndex;
@@ -142,7 +183,7 @@ public:
 private:
     QHash<int, Row*> m_rows;
     QHash<int, Column*> m_columns;
-    QHash<unsigned, Cell*> m_cells;
+    QHash<unsigned, QSharedPointer< Cell > > m_cells;
     int m_maxRow;
     int m_maxColumn;
     QHash<int, int> m_maxCellsInRow;
