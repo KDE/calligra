@@ -414,6 +414,19 @@ void Cell::setUserInput(const QString& string)
     }
 }
 
+void Cell::setRawUserInput(const QString& string)
+{
+    if (!string.isEmpty() && string[0] == '=') {
+        // set the formula
+        Formula formula(sheet(), *this);
+        formula.setExpression(string);
+        setFormula(formula);
+    } else {
+        // set the value
+        sheet()->cellStorage()->setUserInput(d->column, d->row, string);
+    }
+}
+
 
 // Return the out text, i.e. the text that is visible in the cells
 // square when shown.  This could, for instance, be the calculated

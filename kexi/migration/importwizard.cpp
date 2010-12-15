@@ -378,11 +378,15 @@ void ImportWizard::setupImporting()
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
     options_vbox->setSpacing(KDialog::spacingHint());
+    QHBoxLayout *importOptionsButtonLyr = new QHBoxLayout;
+    options_vbox->addLayout(importOptionsButtonLyr);
     m_importOptionsButton = new KPushButton(KIcon("configure"),
                                             i18n("Advanced Options"), options_widget);
     connect(m_importOptionsButton, SIGNAL(clicked()),
             this, SLOT(slotOptionsButtonClicked()));
-    options_vbox->addWidget(m_importOptionsButton);
+    importOptionsButtonLyr->addStretch(1);
+    importOptionsButtonLyr->addWidget(m_importOptionsButton);
+    importOptionsButtonLyr->addStretch(1);
     options_vbox->addStretch(1);
 
     vbox->addWidget(m_progressBar);

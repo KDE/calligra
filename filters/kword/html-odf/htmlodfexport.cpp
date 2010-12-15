@@ -46,7 +46,7 @@
 
 
 K_PLUGIN_FACTORY(HTMLOdfExportFactory, registerPlugin<HTMLOdfExport>();)
-K_EXPORT_PLUGIN(HTMLOdfExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(HTMLOdfExportFactory("calligrafilters"))
 
 
 HTMLOdfExport::HTMLOdfExport(QObject* parent, const QVariantList&) :

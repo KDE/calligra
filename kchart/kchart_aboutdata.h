@@ -37,7 +37,7 @@ KAboutData * newKChartAboutData()
                                            version, ki18n(description), KAboutData::License_GPL,
                                            ki18n("(c) 1998-2007, Kalle Dalheimer and Klarälvdalens Datakonsult AB"),
                                            ki18n("The drawing engine which forms the base of KChart\nis also available as a commercial product\nfrom Klarälvdalens Datakonsult AB.\nContact info@klaralvdalens-datakonsult.se\nfor more information."),
-					   "http://www.koffice.org/kchart/");
+					   "http://www.calligra-suite.org/kchart/");
     aboutData->addAuthor(ki18n("Kalle Dalheimer"), KLocalizedString(), "kalle@kde.org");
     aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "lmontel@mandrakesoft.com");
     aboutData->addAuthor(ki18n("Karl-Heinz Zimmer"), KLocalizedString(), "khz@kde.org");

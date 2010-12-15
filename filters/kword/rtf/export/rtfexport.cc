@@ -49,7 +49,7 @@
 #include <QByteArray>
 
 K_PLUGIN_FACTORY(RTFExportFactory, registerPlugin<RTFExport>();)
-K_EXPORT_PLUGIN(RTFExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(RTFExportFactory("calligrafilters"))
 
 //
 // RTFExport

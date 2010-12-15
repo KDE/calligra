@@ -99,7 +99,7 @@ CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formu
     : format(format), isGeneral(format->valueFormat() == "General"), decimalCount(-1)
 {
     if (!isGeneral) {
-        if (formula.startsWith("msoxl:=")) { // special cases
+        if (formula.startsWith(QLatin1String("msoxl:="))) { // special cases
             QRegExp roundRegExp( "^msoxl:=ROUND[A-Z]*\\(.*;[\\s]*([0-9]+)[\\s]*\\)$" );
             if (roundRegExp.indexIn(formula) >= 0) {
                 bool ok = false;
@@ -108,7 +108,7 @@ CellFormatKey::CellFormatKey(const Swinder::Format* format, const QString& formu
                     decimalCount = decimals;
                 }
             }
-        } else if (formula.startsWith("msoxl:=RAND(")) {
+        } else if (formula.startsWith(QLatin1String("msoxl:=RAND("))) {
             decimalCount = 9;
         }
     }

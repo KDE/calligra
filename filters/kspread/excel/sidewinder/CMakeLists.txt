@@ -21,7 +21,6 @@ set(sidewinder_SRCS
   cell.cpp
   excel.cpp
   format.cpp
-  pole.cpp
   sheet.cpp
   value.cpp
   workbook.cpp

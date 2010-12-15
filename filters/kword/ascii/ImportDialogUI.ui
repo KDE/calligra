@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
+    <width>518</width>
     <height>255</height>
    </rect>
   </property>
@@ -49,6 +49,9 @@
      </item>
      <item>
       <spacer name="Spacer2_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
        <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
@@ -92,9 +95,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioParagraphOldWay">
+       <widget class="QRadioButton" name="radioParagraphEmptyLine">
         <property name="text">
-         <string>Old &amp;method: If the line is empty or has less than 40 characters</string>
+         <string>&amp;Empty Line: If the line is empty</string>
         </property>
        </widget>
       </item>
@@ -103,6 +106,9 @@
    </item>
    <item>
     <spacer name="Spacer2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
      <property name="sizeType">
       <enum>QSizePolicy::Expanding</enum>
      </property>
@@ -121,7 +127,7 @@
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">kcombobox.h</header>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <includes>

@@ -988,6 +988,12 @@ void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime 
     node->addAppointment(resource, start, end, load);
 }
 
+bool Node::isBaselined( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->isBaselined() : false;
+}
+
 void Node::takeSchedule(const Schedule *schedule) {
     if (schedule == 0)
         return;
@@ -1212,29 +1218,29 @@ EffortCost Node::plannedCost( long id, EffortCostCalculationType type ) const
     return ec;
 }
 
-EffortCostMap Node::bcwsPrDay( long id ) const
+EffortCostMap Node::bcwsPrDay( long int id, KPlato::EffortCostCalculationType type ) const
 {
     EffortCostMap ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->bcwsPrDay( id );
+        ec += n->bcwsPrDay( id, type );
     }
     return ec;
 }
 
-EffortCostMap Node::bcwpPrDay( long id ) const
+EffortCostMap Node::bcwpPrDay( long int id, KPlato::EffortCostCalculationType type ) const
 {
     EffortCostMap ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->bcwpPrDay( id );
+        ec += n->bcwpPrDay( id, type );
     }
     return ec;
 }
 
-EffortCostMap Node::acwp( long id ) const
+EffortCostMap Node::acwp( long id, EffortCostCalculationType type ) const
 {
     EffortCostMap ec;
     foreach ( Node *n, m_nodes ) {
-        ec += n->acwp( id );
+        ec += n->acwp( id, type );
     }
     return ec;
 }

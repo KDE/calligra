@@ -69,7 +69,10 @@ private:
     Project *p1;
     Resource *r1;
     Resource *r2; // material
+    Resource *r3; // material
+    Task *s1;
     Task *t1;
+    Task *s2;
     Task *m1;
 };
 

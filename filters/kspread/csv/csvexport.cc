@@ -45,7 +45,7 @@
 using namespace KSpread;
 
 K_PLUGIN_FACTORY(CSVExportFactory, registerPlugin<CSVExport>();)
-K_EXPORT_PLUGIN(CSVExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(CSVExportFactory("calligrafilters"))
 
 class Cell
 {

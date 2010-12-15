@@ -1,3 +1,4 @@
+
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2009-2010 Sebastian Sauer <sebsauer@kdab.com>
    Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
@@ -582,11 +583,9 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
           << " fillStyle=" << record->fls() << std::endl;
     m_currentObj->m_areaFormat = new Charting::AreaFormat(foreground, background,
                                                           record->fls() != 0x0000);
-    DEBUG << "PREP DAAAAAAAAAAAAMNiiiiiiiiiiit" << std::endl;
     Charting::Series* series = dynamic_cast< Charting::Series* > ( m_currentObj );
     if ( series )
     {
-        DEBUG << "DAAAAAAAAAAAAMNiiiiiiiiiiitAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
         const int index = m_chart->m_series.indexOf( series ) % 8;
         if ( !series->spPr )
         {
@@ -595,13 +594,10 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
         if ( record->isFAuto() )
         {
             series->spPr->areaFill.setColor( globals()->workbook()->colorTable().at( 16 + index ) );
-            DEBUG << "DAAAAAAAAAAAAMN" << std::endl;
         }
         else
         {
             series->spPr->areaFill.setColor( foreground );
-            DEBUG << "DAAAAAAAAAAAAMNiiiiiiiiiiit " << globals()->workbook()->colorTable().at( record->icvBackground() ).name().toLatin1().data() << std::endl;
-            DEBUG << "DAAAAAAAAAAAAMNiiiiiiiiiiit " << globals()->workbook()->colorTable().at( 16 ).name().toLatin1().data() << std::endl;
         }
     }
     

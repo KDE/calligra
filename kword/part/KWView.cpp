@@ -46,6 +46,7 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWInsertPageDialog.h"
+#include "dialogs/KWInsertInlineNoteDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWCreateOutlineCommand.h"
@@ -135,7 +136,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     layout->addWidget(m_gui);
 
     setComponentData(KWFactory::componentData());
-    setXMLFile("kword.rc");
+    setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
 
@@ -203,8 +204,6 @@ QWidget *KWView::canvas() const
 
 void KWView::updateReadWrite(bool readWrite)
 {
-    m_canvas->setReadWrite(readWrite);
-    KoToolManager::instance()->updateReadWrite(m_gui->canvasController(), readWrite);
     m_actionFormatFrameSet->setEnabled(readWrite);
     m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);
@@ -338,11 +337,16 @@ void KWView::setupActions()
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
 
-    action = new KAction(i18n("Insert Picture..."), this);
+    action = new KAction(i18n("Picture..."), this);
     action->setToolTip(i18n("Insert a picture into document"));
     actionCollection()->addAction("insert_picture", action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertImage()));
 
+    action = new KAction(i18n("Footnote/Endnote..."), this);
+    action->setToolTip(i18n("Insert a footnote referencing the selected text"));
+    actionCollection()->addAction("insert_footendnote", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertFootEndNote()));
+    
     action = new KAction(i18n("Frame Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
@@ -1378,6 +1382,13 @@ void KWView::insertImage()
         selection->select(shape);
         m_document->addCommand(cmd);
     }
+}
+
+void KWView::insertFootEndNote()
+{
+    KWInsertInlineNoteDialog *diag = new KWInsertInlineNoteDialog(m_document, this);
+    connect(diag, SIGNAL(finished(int)), diag, SLOT(deleteLater()));
+    diag->show();
 }
 
 void KWView::setGuideVisibility(bool on)

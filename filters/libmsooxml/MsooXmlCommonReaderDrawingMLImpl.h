@@ -167,7 +167,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
             TRY_READ_IF(spPr)
             ELSE_TRY_READ_IF_IN_CONTEXT(blipFill)
             ELSE_TRY_READ_IF(nvPicPr)
-//! @todo add ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -504,6 +504,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSp()
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF(graphicFrame)
 #endif
+            SKIP_UNKNOWN
         //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -582,6 +583,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_grpSpPr()
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
                 m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
             }
+            SKIP_UNKNOWN
         //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -619,6 +621,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_nvCxnSpPr()
 #ifdef PPTXXMLSLIDEREADER_CPP
             ELSE_TRY_READ_IF(nvPr) // only §19.3.1.33
 #endif
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -978,6 +981,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
                 TRY_READ(DrawingML_txBody)
                 w->endElement();
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1039,6 +1043,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
         if (isStartElement()) {
             TRY_READ_IF_NS(a, fillRef)
             ELSE_TRY_READ_IF_NS(a, lnRef)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1098,9 +1103,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 TRY_READ(xfrm)
                 m_xfrm_read = true;
             }
-            else if (qualifiedName() == QLatin1String("a:extLst")) {
-                TRY_READ(extLst)
-            }
             else if (qualifiedName() == QLatin1String("a:solidFill")) {
 #ifdef PPTXXMLSLIDEREADER_CPP
                 d->textBoxHasContent = true; // We count normal fill and gardient as content
@@ -1133,6 +1135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
                 const QString gradName = mainStyles->insert(m_currentGradientStyle);
                 m_currentDrawStyle->addProperty("draw:fill-gradient-name", gradName);
             }
+            SKIP_UNKNOWN
 //! @todo a:prstGeom...
 //! @todo add ELSE_WRONG_FORMAT
         }
@@ -1258,6 +1261,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fillRef()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1304,6 +1308,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnRef()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1442,6 +1447,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 rRead = true;
                 TRY_READ(fld)
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1756,6 +1762,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_rPr()
             }
             ELSE_TRY_READ_IF(ln)
             ELSE_TRY_READ_IF(hlinkClick)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1987,6 +1994,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
                 m_currentSpacingType = spacingLines;
                 TRY_READ(lnSpc)
             }
+            SKIP_UNKNOWN
         }
     }
 
@@ -2015,9 +2023,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     - [done] chExt (Child extends) ..in case of a group shape
     - [done] chOff (Child offset) ..in case of a group shape
  Attributes:
-    - flipH (Horizontal Flip)
-    - flipV (Vertical Flip)
-    - rot (Rotation)
+    - [done] flipH (Horizontal Flip)
+    - [done] flipV (Vertical Flip)
+    - [done] rot (Rotation)
 */
 //! @todo support all child elements
 //! CASE #P476
@@ -2044,8 +2052,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_xfrm()
             }
             ELSE_TRY_READ_IF(chOff)
             ELSE_TRY_READ_IF(chExt)
+            ELSE_WRONG_FORMAT
         }
-//! @todo add ELSE_WRONG_FORMAT
     }
 
     kDebug() << "svg:x" << m_svgX << "svg:y" << m_svgY << "svg:width" << m_svgWidth << "svg:height" << m_svgHeight << "rotation" << m_rot;
@@ -2178,7 +2186,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_chExt()
     STRING_TO_INT(cy, m_svgChHeight, "chExt@cy")
 
     readNext();
-
     READ_EPILOGUE
 }
 
@@ -2245,7 +2252,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
         QString destinationName;
 
         RETURN_IF_ERROR( copyFile(sourceName, QLatin1String("Pictures/"), destinationName) )
-        addManifestEntryForFile(destinationName);
         m_recentSourceName = sourceName;
         addManifestEntryForPicturesDir();
         m_xlinkHref = destinationName;
@@ -2260,7 +2266,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blip()
             TRY_READ_IF(biLevel)
             ELSE_TRY_READ_IF(grayscl)
             ELSE_TRY_READ_IF(lum)
-            ELSE_TRY_READ_IF(extLst)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2558,6 +2564,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_graphicData()
             ELSE_TRY_READ_IF_NS(p, oleObj)
             ELSE_TRY_READ_IF_NS(a, tbl)
 #endif
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2655,6 +2662,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_blipFill(blipFillCaller c
             TRY_READ_IF(blip)
             ELSE_TRY_READ_IF(stretch)
             ELSE_TRY_READ_IF(tile)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2815,6 +2823,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lstStyle()
             ELSE_TRY_READ_IF_NS(a, lvl7pPr)
             ELSE_TRY_READ_IF_NS(a, lvl8pPr)
             ELSE_TRY_READ_IF_NS(a, lvl9pPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2940,6 +2949,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_highlight()
             ELSE_TRY_READ_IF(srgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3089,6 +3099,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gradFill()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(gsLst)
+            SKIP_UNKNOWN
         }
     }
 
@@ -3124,6 +3135,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gsLst()
                 positions.push_back(m_gradPosition);
                 alphas.push_back(m_currentAlpha);
             }
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -3206,6 +3218,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_gs()
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -3434,6 +3447,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_schemeClr()
         ELSE_TRY_READ_IF(tint)
         ELSE_TRY_READ_IF(satMod)
         ELSE_TRY_READ_IF(alpha)
+        SKIP_UNKNOWN
     }
 
     QColor col = Qt::white;
@@ -3716,6 +3730,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_ln()
                     m_currentPen.setStyle(Qt::DashLine);
                 }
             }
+            SKIP_UNKNOWN
             //tail line end style
 //             else if(qualifiedName() == QLatin1String("a:tailEnd")) {
 //             }
@@ -3812,6 +3827,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_scrgbClr()
         if (isStartElement()) {
             TRY_READ_IF(tint)
             ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
         }
     }
 
@@ -3883,6 +3899,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_srgbClr()
             ELSE_TRY_READ_IF(shade)
             ELSE_TRY_READ_IF(satMod)
             ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
         }
     }
 
@@ -3950,6 +3967,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_prstClr()
             ELSE_TRY_READ_IF(shade)
             ELSE_TRY_READ_IF(satMod)
             ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
         }
     }
 
@@ -3993,6 +4011,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sysClr()
             ELSE_TRY_READ_IF(shade)
             ELSE_TRY_READ_IF(satMod)
             ELSE_TRY_READ_IF(alpha)
+            SKIP_UNKNOWN
         }
     }
 
@@ -4080,7 +4099,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
                 m_currentSpacingType = spacingLines;
                 TRY_READ(lnSpc)
             }
-//! @todo add ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
 
@@ -4257,6 +4276,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buBlip()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(blip)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -4347,6 +4367,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_buClr()
             ELSE_TRY_READ_IF(scrgbClr)
             ELSE_TRY_READ_IF(sysClr)
             ELSE_TRY_READ_IF(prstClr)
+            SKIP_UNKNOWN
         }
     }
     if (m_currentColor.isValid()) {
@@ -4471,6 +4492,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_fld()
                 TRY_READ(DrawingML_pPr)
             }
             ELSE_TRY_READ_IF(t)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -4542,6 +4564,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcBef()
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
             ELSE_TRY_READ_IF(spcPct)
+            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -4582,6 +4605,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcAft()
         if (isStartElement()) {
             TRY_READ_IF(spcPts)
             ELSE_TRY_READ_IF(spcPct)
+            ELSE_WRONG_FORMAT
         }
     }
     READ_EPILOGUE
@@ -4631,7 +4655,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
 //! spcPts - spacing points
 /*!
  Parent elements:
- - lnSpc (§21.1.2.2.5)
+ - [done] lnSpc (§21.1.2.2.5)
  - [done] spcAft (§21.1.2.2.9)
  - [done] spcBef (§21.1.2.2.10)
 */
@@ -4873,6 +4897,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
             TRY_READ_IF(solidFill)
             ELSE_TRY_READ_IF(gradFill) // we do not support this properly, at least we get the color
             ELSE_TRY_READ_IF(latin)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -5046,6 +5071,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
                 // Also normAutoFit = true seems to be correct for value 'textNoShape'
                 m_normAutoFit = MSOOXML::Utils::autoFitOn;
             }
+            SKIP_UNKNOWN
         }
     }
 
@@ -5117,7 +5143,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody()
             else if (qualifiedName() == QLatin1String("a:p")) {
                 TRY_READ(DrawingML_p);
             }
-//! @todo add ELSE_WRONG_FORMAT
+            SKIP_UNKNOWN
         }
     }
     if (m_prevListLevel > 0) {

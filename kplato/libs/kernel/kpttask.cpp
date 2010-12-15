@@ -692,8 +692,15 @@ double Task::plannedCostTo( const QDate &date, long id, EffortCostCalculationTyp
         return c;
     }
     Schedule *s = schedule( id );
-    if ( s ) {
-        c = s->plannedCostTo( date, typ );
+    if ( s == 0 ) {
+        return c;
+    }
+    c = s->plannedCostTo( date, typ );
+    if ( date >= s->startTime.date() ) {
+        c += m_startupCost;
+    }
+    if ( date >= s->endTime.date() ) {
+        c += m_shutdownCost;
     }
     return c;
 }
@@ -742,7 +749,7 @@ double Task::bcws( const QDate &date, long id ) const
     return c;
 }
 
-EffortCostMap Task::bcwsPrDay( long id ) const
+EffortCostMap Task::bcwsPrDay( long int id, KPlato::EffortCostCalculationType typ ) const
 {
     //kDebug();
     if (type() == Node::Type_Summarytask) {
@@ -752,7 +759,7 @@ EffortCostMap Task::bcwsPrDay( long id ) const
     if ( s == 0 ) {
         return EffortCostMap();
     }
-    EffortCostMap ec = s->bcwsPrDay();
+    EffortCostMap ec = s->bcwsPrDay( typ );
     if ( m_startupCost > 0.0 ) {
         ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
     }
@@ -762,24 +769,67 @@ EffortCostMap Task::bcwsPrDay( long id ) const
     return ec;
 }
 
-EffortCostMap Task::bcwpPrDay( long id ) const
+EffortCostMap Task::bcwpPrDay( long int id, KPlato::EffortCostCalculationType typ ) const
 {
     //kDebug();
-    if (type() == Node::Type_Summarytask) {
-        return Node::bcwpPrDay( id );
+    if ( type() == Node::Type_Summarytask ) {
+        return Node::bcwpPrDay( id, typ );
     }
     Schedule *s = schedule( id );
     if ( s == 0 ) {
         return EffortCostMap();
     }
-    EffortCostMap e = bcwsPrDay( id );
-    double totEff = e.totalEffort().toDouble( Duration::Unit_h );
-    double totCost = e.totalCost();
-    EffortCostDayMap::const_iterator it;
-    for(it = e.days().constBegin(); it != e.days().constEnd(); ++it) {
-        double p = (double)(completion().percentFinished( it.key() )) / 100.0;
-        const_cast<EffortCost&>(it.value()).setBcwpEffort( totEff  * p );
-        const_cast<EffortCost&>(it.value()).setBcwpCost( totCost  * p );
+    EffortCostMap e = s->bcwsPrDay( typ );
+    if ( completion().isStarted() && ! e.isEmpty() ) {
+        // calculate bcwp on bases of bcws *without* startup/shutdown cost
+        double totEff = e.totalEffort().toDouble( Duration::Unit_h );
+        double totCost = e.totalCost();
+        QDate sd = completion().entries().keys().value( 0 );
+        if ( ! sd.isValid() || e.startDate() < sd ) {
+            sd = e.startDate();
+        }
+        QDate ed = qMax( e.endDate(), completion().entryDate() );
+        for ( QDate d = sd; d <= ed; d = d.addDays( 1 ) ) {
+            double p = (double)(completion().percentFinished( d )) / 100.0;
+            EffortCost ec = e.days()[ d ];
+            ec.setBcwpEffort( totEff  * p );
+            ec.setBcwpCost( totCost  * p );
+            e.insert( d, ec );
+        }
+    }
+    if ( typ != ECCT_Work ) {
+        // add bcws startup/shutdown cost
+        if ( m_startupCost > 0.0 ) {
+            e.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
+        }
+        if ( m_shutdownCost > 0.0 ) {
+            e.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
+        }
+        // add bcwp startup/shutdown cost
+        if ( m_shutdownCost > 0.0 && completion().isFinished() ) {
+            QDate finish = completion().finishTime().date();
+            e.addBcwpCost( finish, m_shutdownCost );
+            kDebug()<<"addBcwpCost:"<<finish<<m_shutdownCost;
+            // bcwp is cumulative so add to all entries after finish (in case task finished early)
+            for ( EffortCostDayMap::const_iterator it = e.days().constBegin(); it != e.days().constEnd(); ++it ) {
+                const QDate date = it.key();
+                if ( date > finish ) {
+                    e.addBcwpCost( date, m_shutdownCost );
+                    kDebug()<<"addBcwpCost:"<<date<<m_shutdownCost;
+                }
+            }
+        }
+        if ( m_startupCost > 0.0 && completion().isStarted() ) {
+            QDate start = completion().startTime().date();
+            e.addBcwpCost( start, m_startupCost );
+            // bcwp is cumulative so add to all entries after start
+            for ( EffortCostDayMap::const_iterator it = e.days().constBegin(); it != e.days().constEnd(); ++it ) {
+                const QDate date = it.key();
+                if ( date > start ) {
+                    e.addBcwpCost( date, m_startupCost );
+                }
+            }
+        }
     }
     return e;
 }
@@ -815,7 +865,7 @@ double Task::budgetedCostPerformed( const QDate &date, long id ) const
     if ( completion().isStarted() && date >= completion().startTime().date() ) {
         c += m_startupCost;
     }
-    if ( completion().isFinished() && date <= completion().finishTime().date() ) {
+    if ( completion().isFinished() && date >= completion().finishTime().date() ) {
         c += m_shutdownCost;
     }
     //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
@@ -832,10 +882,10 @@ double Task::bcwp( const QDate &date, long id ) const
     return budgetedCostPerformed( date, id );
 }
 
-EffortCostMap Task::acwp( long id ) const
+EffortCostMap Task::acwp( long int id, KPlato::EffortCostCalculationType typ ) const
 {
-    if (type() == Node::Type_Summarytask) {
-        return Node::acwp( id );
+    if ( type() == Node::Type_Summarytask ) {
+        return Node::acwp( id, typ );
     }
     //kDebug()<<m_name<<completion().entrymode();
     switch ( completion().entrymode() ) {
@@ -870,6 +920,12 @@ EffortCost Task::acwp( const QDate &date, long id ) const
     }
     EffortCost c;
     c = completion().actualCostTo( date );
+    if ( completion().isStarted() && date >= completion().startTime().date() ) {
+        c.add( Duration::zeroDuration, m_startupCost );
+    }
+    if ( completion().isFinished() && date >= completion().finishTime().date() ) {
+        c.add( Duration::zeroDuration, m_shutdownCost );
+    }
     return c;
 }
 
@@ -3160,7 +3216,7 @@ double Completion::actualCost( const Resource *resource, const QDate &date ) con
     return c;
 }
 
-EffortCostMap Completion::actualEffortCost( long id ) const
+EffortCostMap Completion::actualEffortCost( long int id, KPlato::EffortCostCalculationType type ) const
 {
     //kDebug();
     EffortCostMap map;
@@ -3176,14 +3232,26 @@ EffortCostMap Completion::actualEffortCost( long id ) const
         if ( m.isEmpty() ) {
             continue;
         }
+        if ( r->type() == Resource::Type_Material ) {
+            if ( type == ECCT_All ) {
+                lst.append( &m );
+                rate.append( r->normalRate() );
+            } else if ( type == ECCT_EffortWork ) {
+                lst.append( &m );
+                rate.append( 0.0 );
+            } else {
+                continue;
+            }
+        } else {
+            lst.append( &m );
+            rate.append( r->normalRate() );
+        }
         if ( ! start.isValid() || start > m.keys().first() ) {
             start = m.keys().first();
         }
         if ( ! end.isValid() || end < m.keys().last() ) {
             end = m.keys().last();
         }
-        lst.append( &m );
-        rate.append( r->normalRate() );
     }
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {

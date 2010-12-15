@@ -4,7 +4,6 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 Name=Kexi CSV Data Import/Export Plugin
 Name[ca]=Connector d'importació/Exportació de dades CSV per al Kexi
-Name[ca@valencia]=Connector d'importació/Exportació de dades CSV per al Kexi
 Name[da]=Kexi CSV data-import/eksport plugin
 Name[de]=Kexi-CSV-Daten-Import/Export-Modul
 Name[el]=Πρόσθετο εισαγωγής/εξαγωγής CSV δεδομένων του Kexi
@@ -41,7 +40,6 @@ Name[sv]=Kexi insticksprogram för import/export av CSV-data
 Name[tr]=Kexi CVS Verisi Alma/Aktarma Eklentisi
 Name[uk]=Додаток імпорту/експорту CSV-даних для Kexi
 Name[uz]=Kexi CSV maʼlumot import/eksport plagini
-Name[uz@cyrillic]=Kexi CSV маълумот импорт/экспорт плагини
 Name[wa]=Tchôke-divins d' abagaedje/ebagaedje di dnêyes CSV di Kexi
 Name[x-test]=xxKexi CSV Data Import/Export Pluginxx
 Name[zh_CN]=Kexi CSV 数据导入/导出插件

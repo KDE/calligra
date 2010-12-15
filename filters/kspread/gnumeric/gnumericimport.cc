@@ -173,7 +173,7 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
 }
 
 K_PLUGIN_FACTORY(GNUMERICFilterFactory, registerPlugin<GNUMERICFilter>();)
-K_EXPORT_PLUGIN(GNUMERICFilterFactory("kofficefilters"))
+K_EXPORT_PLUGIN(GNUMERICFilterFactory("calligrafilters"))
 
 GNUMERICFilter::GNUMERICFilter(QObject* parent, const QVariantList &)
         : KoFilter(parent)

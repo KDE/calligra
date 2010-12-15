@@ -34,7 +34,7 @@ KAboutData * newKFormulaAboutData()
     KAboutData * aboutData = new KAboutData( "kformula", 0, ki18n( "KFormula" ),
                                              version, ki18n(description), KAboutData::License_GPL,
                                              ki18n("(c) 1998-2008, The KFormula Team"), KLocalizedString(),
-					     "http://www.koffice.org/kformula/" );
+					     "http://www.calligra-suite.org/kformula/" );
     aboutData->addAuthor( ki18n("Andrea Rizzi"), ki18n( "original author" ), "rizzi@kde.org" );
     aboutData->addAuthor( ki18n("Ulrich Kuettler"), ki18n( "core developer" ), "ulrich.kuettler@gmx.de" );
     aboutData->addAuthor( ki18n("Heinrich Kuettler"), ki18n( "core developer" ), "heinrich.kuettler@gmx.de" );

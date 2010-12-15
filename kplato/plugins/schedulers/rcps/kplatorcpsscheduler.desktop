@@ -5,7 +5,6 @@ X-KDE-Library=kplatorcpsscheduler
 
 Name=RCPS Scheduler
 Name[ca]=Planificador RCPS
-Name[ca@valencia]=Planificador RCPS
 Name[da]=RCPS-skemalægning
 Name[de]=RCPS-Planer
 Name[el]=Προγραμματιστής RCPS
@@ -29,7 +28,6 @@ Name[zh_CN]=RCPS 调度器
 Name[zh_TW]=RCPS 排程器
 Comment=Genetics based Resource Conflict Project Scheduler
 Comment[ca]=Recurs de conflictes de planificador de projectes basat en la genètica
-Comment[ca@valencia]=Recurs de conflictes de planificador de projectes basat en la genètica
 Comment[da]=Genetikbaseret projektskemalægning med ressourcekonflikt (RCPS)
 Comment[de]=Genetisch basierte ressourcenbeschränkte Projektplanung
 Comment[el]=Γενετικά βασισμένα σε πόρους των συγκρούσεων του προγραμματιστή έργου

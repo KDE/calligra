@@ -195,13 +195,17 @@ void ChartItemModel::setProject( Project *project )
     m_acwp.clear();
     if ( m_project ) {
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( resourceChanged( Node* ) ), this, SLOT( slotResourceChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( resourceRemoved( Resource* ) ), this, SLOT( slotResourceRemoved( Resource* ) ) );
+        disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( resourceRemoved( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     reset();
@@ -236,6 +240,16 @@ void ChartItemModel::clearNodes()
     reset();
 }
 
+void ChartItemModel::slotNodeRemoved( Node *node )
+{
+    if ( m_nodes.contains( node ) ) {
+        m_nodes.removeAt( m_nodes.indexOf( node ) );
+        calculate();
+        reset();
+        return;
+    }
+}
+
 void ChartItemModel::slotNodeChanged( Node *node )
 {
     if ( m_nodes.contains( node ) ) {
@@ -252,7 +266,7 @@ void ChartItemModel::slotNodeChanged( Node *node )
     }
 }
 
-void ChartItemModel::slotResourceChanged( Resource* resource )
+void ChartItemModel::slotResourceChanged( Resource* )
 {
     calculate();
     reset();
@@ -290,27 +304,14 @@ void ChartItemModel::calculate()
                     }
                 }
                 if ( ! skip ) {
-                    m_bcws += n->bcwpPrDay( m_manager->scheduleId() );
+                    m_bcws += n->bcwpPrDay( m_manager->scheduleId(), ECCT_EffortWork );
                     m_acwp += n->acwp( m_manager->scheduleId() );
                 }
             }
         }
     }
-#if 0
-    EffortCostDayMap::ConstIterator it;
-    EffortCostDayMap::ConstIterator end = m_bcws.days().constEnd();
-    for ( it = m_bcws.days().constBegin(); it != end; ++it ) {
-        kDebug()<<"Plan:"<<it.key()
-                <<"bcws: effort="<<it.value().effort().toString()<<"cost="<<it.value().cost()
-                <<"bcwp: effort="<<it.value().bcwpEffort()<<"cost="<<it.value().bcwpCost();
-    }
-    end = m_acwp.days().constEnd();
-    for ( it = m_acwp.days().constBegin(); it != end; ++it ) {
-        kDebug()<<"Actual:"<<it.key()
-        <<"acwp: effort="<<it.value().effort().toString()<<"cost="<<it.value().cost();
-    }
-#endif
-
+    //kDebug()<<"bcwp"<<m_bcws;
+    //kDebug()<<"acwp"<<m_acwp;
 }
 
 

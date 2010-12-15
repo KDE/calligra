@@ -36,7 +36,10 @@ void PerformanceTester::cleanup()
     delete p1;
     p1 = 0;
     r1 = 0;
+    r2 = 0;
+    s1 = 0;
     t1 = 0;
+    s2 = 0;
     m1 = 0;
 }
 
@@ -59,17 +62,25 @@ void PerformanceTester::init()
     }
     p1->addCalendar( c );
 
-    t1 = p1->createTask( p1 );
+    s1 = p1->createTask( p1 );
+    s1->setName( "S1" );
+    p1->addTask( s1, p1 );
+
+    t1 = p1->createTask( s1 );
     t1->setName( "T1" );
     t1->estimate()->setUnit( Duration::Unit_d );
     t1->estimate()->setExpectedEstimate( 5.0 );
     t1->estimate()->setType( Estimate::Type_Effort );
-    p1->addTask( t1, p1 );
+    p1->addSubTask( t1, s1 );
     
-    m1 = p1->createTask( p1 );
+    s2 = p1->createTask( p1 );
+    s2->setName( "S2" );
+    p1->addTask( s2, p1 );
+
+    m1 = p1->createTask( s2 );
     m1->estimate()->setExpectedEstimate( 0 );
     m1->setName( "M1" );
-    p1->addTask( m1, p1 );
+    p1->addSubTask( m1, s2 );
     
     ResourceGroup *g = new ResourceGroup();
     g->setName( "G1" );
@@ -95,6 +106,12 @@ void PerformanceTester::init()
     r2->setCalendar( c ); // limit availablity to working hours
     r2->setNormalRate( 0.0 ); // NOTE
     p1->addResource( m, r2 );
+
+    r3 = new Resource();
+    r3->setName( "Material 2" );
+    r3->setType( Resource::Type_Material );
+    r3->setNormalRate( 6.0 );
+    p1->addResource( m, r3 );
 
     gr = new ResourceGroupRequest( m );
     t1->addRequest( gr );
@@ -167,6 +184,16 @@ void PerformanceTester::bcwsPrDayTask()
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
     QCOMPARE( ecm.costOnDate( d ), 8.5 );
 
+    // check sub-task
+    d = t1->startTime().date();
+    ecm = s1->bcwsPrDay();
+    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
+    QCOMPARE( ecm.costOnDate( d ), 8.5 );
+
+    d = s1->endTime().date();
+    ecm = s1->bcwsPrDay();
+    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
+    QCOMPARE( ecm.costOnDate( d ), 8.5 );
 }
 
 void PerformanceTester::bcwpPrDayTask()
@@ -254,7 +281,7 @@ void PerformanceTester::bcwpPrDayTask()
     d = t1->startTime().date();
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.05 ); //10% progress
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 ); //10% progress
 
     // add shutdown cost
     t1->setShutdownCost( 0.5 );
@@ -263,6 +290,18 @@ void PerformanceTester::bcwpPrDayTask()
     d = t1->endTime().date();
     ecm = t1->bcwpPrDay();
     Debug::print( t1->completion(), t1->name(), "BCWP Performance with shutdown cost" );
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.5 ); //100% progress
+
+    // check sub-task
+    d = s1->startTime().date();
+    ecm = s1->bcwpPrDay();
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 ); //10% progress
+
+    // add shutdown cost
+    d = s1->endTime().date();
+    ecm = s1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.5 ); //100% progress
 }
@@ -366,6 +405,18 @@ void PerformanceTester::acwpPrDayTask()
     Debug::print( t1->completion(), t1->name(), "ACWP Performance with shutdown cost" );
     QCOMPARE( eca.hoursOnDate( d ), 12.0 );
     QCOMPARE( eca.costOnDate( d ), 12.25 );
+
+    // check sub-task
+    d = s1->startTime().date();
+    eca = s1->acwp();
+    QCOMPARE( eca.hoursOnDate( d ), 8.0 );
+    QCOMPARE( eca.costOnDate( d ), 8.5 );
+
+    // add shutdown cost
+    d = s1->endTime().date();
+    eca = s1->acwp();
+    QCOMPARE( eca.hoursOnDate( d ), 12.0 );
+    QCOMPARE( eca.costOnDate( d ), 12.25 );
 }
 
 void PerformanceTester::bcwsMilestone()
@@ -432,6 +483,11 @@ void PerformanceTester::bcwpMilestone()
     Debug::print( ecm, "BCWP Milestone" );
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 0.0 );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 0.75 );
+
+    // check sub-milestone
+    d = s2->startTime().date();
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 0.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 0.75 );
 }
 
 void PerformanceTester::acwpMilestone()
@@ -463,6 +519,12 @@ void PerformanceTester::acwpMilestone()
     Debug::print( m1->completion(), m1->name(), "ACWP Milestone with shutdown cost" );
     QCOMPARE( eca.hoursOnDate( d ), 0.0 );
     QCOMPARE( eca.costOnDate( d ), 0.75 );
+
+    // check sub-milestone
+    d = s2->endTime().date();
+    eca = s2->acwp();
+    QCOMPARE( eca.hoursOnDate( d ), 0.0 );
+    QCOMPARE( eca.costOnDate( d ), 0.75 );
 }
 
 void PerformanceTester::bcwsPrDayTaskMaterial()
@@ -476,31 +538,26 @@ void PerformanceTester::bcwsPrDayTaskMaterial()
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) ); //material+work resource
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.8 );
     
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.8 );
 
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//     QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.8 );
 
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.8 );
 
     d = d.addDays( 1 );
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.8 );
 
     d = d.addDays( 1 );
@@ -514,7 +571,6 @@ void PerformanceTester::bcwsPrDayTaskMaterial()
     d = t1->startTime().date();
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.0 + 0.5 + 0.8 );
 
     // add shutdown cost
@@ -523,9 +579,18 @@ void PerformanceTester::bcwsPrDayTaskMaterial()
     d = t1->endTime().date();
     ecm = t1->bcwsPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.0 + 0.25 + 0.8 );
 
+    // check sub-task
+    d = s1->startTime().date();
+    ecm = s1->bcwsPrDay();
+    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
+    QCOMPARE( ecm.costOnDate( d ), 8.0 + 0.5 + 0.8 );
+
+    d = s1->endTime().date();
+    ecm = s1->bcwsPrDay();
+    QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
+    QCOMPARE( ecm.costOnDate( d ), 8.0 + 0.25 + 0.8 );
 }
 
 void PerformanceTester::bcwpPrDayTaskMaterial()
@@ -535,7 +600,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     QDate d = t1->startTime().date();
     EffortCostMap ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.costOnDate( d ), 8.0 + 0.8 );
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 0.0 );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 0.0 );
@@ -545,7 +609,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     delete cmd;
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.4 );
     
     d = d.addDays( 1 );
@@ -554,7 +617,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     delete cmd;
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 16.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 8.0 + 0.8 );
 
     d = d.addDays( 1 );
@@ -563,7 +625,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     delete cmd;
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 24.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 12.0 + 1.2 );
 
     d = d.addDays( 1 );
@@ -572,7 +633,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     delete cmd;
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 32.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 16.0 + 1.6 );
 
     d = d.addDays( 1 );
@@ -581,7 +641,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     delete cmd;
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 40.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 20.0 + 2.0 );
 
     // modify last day
@@ -590,7 +649,6 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     delete cmd;
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 4.0 );
 
     // add startup cost
@@ -599,8 +657,7 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     d = t1->startTime().date();
     ecm = t1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.05 + 0.4 ); // 10% progress
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 + 0.4 ); // 10% progress
 
     // add shutdown cost
     t1->setShutdownCost( 0.25 );
@@ -610,8 +667,19 @@ void PerformanceTester::bcwpPrDayTaskMaterial()
     ecm = t1->bcwpPrDay();
     Debug::print( t1->completion(), t1->name(), "BCWP Material with shutdown cost" );
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 + 4.0 ); // 100% progress
+
+    // check sub-task
+    d = s1->startTime().date();
+    ecm = s1->bcwpPrDay();
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 + 0.4 ); // 10% progress
+
+    d = s1->endTime().date();
+    ecm = s1->bcwpPrDay();
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 + 4.0 ); // 100% progress
+
 }
 
 void PerformanceTester::acwpPrDayTaskMaterial()
@@ -628,7 +696,6 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     EffortCostMap eca = t1->acwp();
 
     QCOMPARE( ecb.effortOnDate( d ), Duration( 0, 16, 0 ) );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecb.costOnDate( d ), 8.0 + 0.8 );
     QCOMPARE( ecb.bcwpEffortOnDate( d ), 0.0 );
     QCOMPARE( ecb.bcwpCostOnDate( d ), 0.0 );
@@ -644,7 +711,6 @@ void PerformanceTester::acwpPrDayTaskMaterial()
 //     Debug::print( t1->completion(), t1->name(), QString( "ACWP on date: %1" ).arg( d.toString( Qt::ISODate ) ) );
 //     Debug::print( eca, "ACWP" );
     QCOMPARE( ecb.bcwpEffortOnDate( d ), 8.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecb.bcwpCostOnDate( d ), 4.0 + 0.4 );
     QCOMPARE( eca.hoursOnDate( d ), 8.0 );
     QCOMPARE( eca.costOnDate( d ), 8.0 );
@@ -657,7 +723,6 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
     QCOMPARE( ecb.bcwpEffortOnDate( d ), 16.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecb.bcwpCostOnDate( d ), 8.0 + 0.8 );
     QCOMPARE( eca.hoursOnDate( d ), 6.0 );
     QCOMPARE( eca.costOnDate( d ), 6.0 );
@@ -670,7 +735,7 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
     QCOMPARE( ecb.bcwpEffortOnDate( d ), 24.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
+
     QCOMPARE( ecb.bcwpCostOnDate( d ), 12.0 + 1.2 );
     QCOMPARE( eca.hoursOnDate( d ), 8.0 );
     QCOMPARE( eca.costOnDate( d ), 8.0 );
@@ -683,7 +748,6 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
     QCOMPARE( ecb.bcwpEffortOnDate( d ), 40.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecb.bcwpCostOnDate( d ), 20.0 + 2.0 );
     QCOMPARE( eca.hoursOnDate( d ), 8.0 );
     QCOMPARE( eca.costOnDate( d ), 8.0 );
@@ -696,7 +760,6 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     ecb = t1->bcwpPrDay();
     eca = t1->acwp();
     QCOMPARE( ecb.bcwpEffortOnDate( d ), 64.0 );
-//    QEXPECT_FAIL( "", "Material resource cost is not included" , Continue );
     QCOMPARE( ecb.bcwpCostOnDate( d ), 32.0 + 3.2 );
     QCOMPARE( eca.hoursOnDate( d ), 12.0 );
     QCOMPARE( eca.costOnDate( d ), 12.0 );
@@ -719,6 +782,18 @@ void PerformanceTester::acwpPrDayTaskMaterial()
     t1->completion().setFinishTime( t1->endTime() );
     eca = t1->acwp();
     Debug::print( t1->completion(), t1->name(), "ACWP Performance with shutdown cost" );
+    QCOMPARE( eca.hoursOnDate( d ), 12.0 );
+    QCOMPARE( eca.costOnDate( d ), 12.0 + 0.25 ); //NOTE: material not included
+
+    // check sub-task
+    d = s1->startTime().date();
+    eca = s1->acwp();
+    QCOMPARE( eca.hoursOnDate( d ), 8.0 );
+    QCOMPARE( eca.costOnDate( d ), 8.0 + 0.5 ); //NOTE: material not included
+
+    // add shutdown cost
+    d = s1->endTime().date();
+    eca = s1->acwp();
     QCOMPARE( eca.hoursOnDate( d ), 12.0 );
     QCOMPARE( eca.costOnDate( d ), 12.0 + 0.25 ); //NOTE: material not included
 }
@@ -874,7 +949,7 @@ void PerformanceTester::bcwpPrDayProject()
     d = p1->startTime().date();
     ecm = p1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 8.0 );
-    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.05 ); // 10% progress
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 ); // 10% progress
 
     // add shutdown cost to task
     t1->setShutdownCost( 0.25 );
@@ -884,6 +959,61 @@ void PerformanceTester::bcwpPrDayProject()
     ecm = p1->bcwpPrDay();
     QCOMPARE( ecm.bcwpEffortOnDate( d ), 80.0 );
     QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 ); // 100% progress
+
+    // check with ECCT_EffortWork
+    
+    d = p1->startTime().date();
+    ecm = p1->bcwpPrDay( CURRENTSCHEDULE, ECCT_EffortWork );
+    QCOMPARE( ecm.totalEffort(), Duration( 40.0, Duration::Unit_h ) );
+    QCOMPARE( ecm.hoursOnDate( d ), 8.0 ); // hours from r1
+    QCOMPARE( ecm.costOnDate( d ), 8.0 + 0.5 ); // cost from r1 (1.0) + r2 (0.0) + startup cost (0.5)
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 4.0 ); // 10% progress
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 4.0 + 0.5 ); // 10% progress
+
+    d = p1->endTime().date();
+    ecm = p1->bcwpPrDay( CURRENTSCHEDULE, ECCT_EffortWork );
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 40.0 ); // hours from r1
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 ); // 100% progress
+
+    // add a new task with a material resource
+    Task *tt = p1->createTask( p1 );
+    tt->setName( "TT" );
+    p1->addTask( tt, p1 );
+    tt->estimate()->setUnit( Duration::Unit_d );
+    tt->estimate()->setExpectedEstimate( 5.0 );
+    tt->estimate()->setType( Estimate::Type_Duration );
+    tt->estimate()->setCalendar( p1->calendarAt( 0 ) );
+
+    r3->setNormalRate( 1.0 );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( r3->parentGroup() );
+    tt->addRequest( gr );
+    ResourceRequest *rr = new ResourceRequest( r3, 100 );
+    gr->addResourceRequest( rr );
+
+    ScheduleManager *sm = p1->createScheduleManager( "" );
+    p1->addScheduleManager( sm );
+    sm->createSchedules();
+    p1->calculate( *sm );
+
+    QString s = " Material resource, no progress ";
+    Debug::print( tt, s, true );
+
+    d = tt->endTime().date();
+    ecm = tt->bcwpPrDay( sm->scheduleId(), ECCT_EffortWork );
+    Debug::print( ecm, "BCWP: " + tt->name() + s );
+
+    QCOMPARE( ecm.hoursOnDate( d ), 0.0 );
+    QCOMPARE( ecm.costOnDate( d ), 16.0 );
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 0.0 );
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 0.0 ); // 0% progress
+
+    d = p1->endTime().date();
+    ecm = p1->bcwpPrDay( sm->scheduleId(), ECCT_EffortWork );
+    Debug::print( p1, s, true );
+    Debug::print( ecm, "BCWP Project: " + p1->name() + s );
+    QCOMPARE( ecm.bcwpEffortOnDate( d ), 40.0 ); // hours from r1
+    QCOMPARE( ecm.bcwpCostOnDate( d ), 40.0 + 0.5 + 0.25 );
 }
 
 void PerformanceTester::acwpPrDayProject()
@@ -968,7 +1098,7 @@ void PerformanceTester::acwpPrDayProject()
     t1->completion().setStartTime( t1->startTime() );
     t1->completion().setStarted( true );
     t1->setStartupCost( 0.5 );
-    d = t1->startTime().date();
+    d = p1->startTime().date();
     eca = p1->acwp();
     QCOMPARE( eca.hoursOnDate( d ), 8.0 );
     QCOMPARE( eca.costOnDate( d ), 8.0 + 0.5 );
@@ -980,10 +1110,10 @@ void PerformanceTester::acwpPrDayProject()
     cmd->execute(); delete cmd;
     t1->completion().setFinished( true );
     t1->completion().setFinishTime( t1->endTime() );
+    d = p1->endTime().date();
     eca = p1->acwp();
     QCOMPARE( eca.hoursOnDate( d ), 12.0 );
     QCOMPARE( eca.costOnDate( d ), 12.25 );
-
 }
 
 } //namespace KPlato

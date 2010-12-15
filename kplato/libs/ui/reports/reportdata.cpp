@@ -46,7 +46,8 @@ bool ReportData::open()
     ItemModelBase *m = itemModel();
     if ( m ) {
         m->setScheduleManager( m_schedulemanager );
-    }
+        kDebug()<<this<<m_schedulemanager;
+    } else kError()<<"No item model";
     return true;
 }
 
@@ -151,13 +152,13 @@ qint64 ReportData::recordCount() const {
 QStringList ReportData::dataSources() const
 {
     //TODO
-    return QStringList() << "costbreakdown";
+    return QStringList() << "costbreakdown" << "costperformance" << "effortperformance";
 }
 
 QStringList ReportData::dataSourceNames() const
 {
     //TODO
-    return QStringList() << i18n( "Cost Breakdown" );
+    return QStringList() << i18n( "Cost Breakdown" ) << i18n( "Cost Performance" ) << i18n( "Effort Performance" );
 }
 
 void ReportData::setSorting(const QList<SortedField>& lst )
@@ -198,6 +199,7 @@ void ReportData::setModel( QAbstractItemModel *model )
         m->setProject( m_project );
         m->setScheduleManager( m_schedulemanager );
     }
+    kDebug()<<this<<model<<m<<m_project<<m_schedulemanager;
 }
 
 QAbstractItemModel *ReportData::model() const
@@ -240,7 +242,8 @@ void ReportData::setScheduleManager( ScheduleManager *sm )
 
 //---------------------------
 ChartReportData::ChartReportData()
-    : ReportData()
+    : ReportData(),
+    cbs( false )
 {
 }
 
@@ -282,7 +285,14 @@ bool ChartReportData::moveLast()
 
 qint64 ChartReportData::recordCount() const
 {
-    return m_model.columnCount() - 4;
+    int rows = 0;
+    if ( cbs ) {
+        rows = m_model.columnCount() - 4;
+    } else {
+        rows = m_model.rowCount(); // number of days of data
+    }
+    kDebug()<<this<<rows;
+    return rows;
 }
 
 QVariant ChartReportData::value ( unsigned int i ) const
@@ -291,13 +301,24 @@ QVariant ChartReportData::value ( unsigned int i ) const
         return QVariant();
     }
     QVariant value;
-    if ( i == 0 ) {
-        // x-axis labels
-        value = m_model.headerData( m_row + 3, Qt::Horizontal );
+    if ( cbs ) {
+        if ( i == 0 ) {
+            // x-axis labels
+            value = m_model.headerData( m_row + 3, Qt::Horizontal );
+        } else {
+            // data
+            value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
+        }
     } else {
-        // data
-        value = m_model.index( i - 1, m_row + 2 ).data( Role::Planned );
+        if ( i == 0 ) {
+            // x-axis labels
+            value = m_model.headerData( m_row, Qt::Vertical );
+        } else {
+            // data
+            value = m_model.index( m_row, i -1 ).data();
+        }
     }
+    kDebug()<<this<<m_row<<i<<"="<<value;
     return value;
 }
 
@@ -305,11 +326,20 @@ QStringList ChartReportData::fieldNames() const
 {
     // Legends
     QStringList names;
-    names << "";
-    int count = m_model.rowCount();
-    for ( int i = 0; i < count; ++i ) {
-        names << m_model.index( i, 0 ).data().toString();
+    names << ""; // first row/column not used
+    if ( cbs ) {
+        int count = m_model.rowCount();
+        for ( int i = 0; i < count; ++i ) {
+            names << m_model.index( i, 0 ).data().toString();
+        }
+    } else {
+        int count = m_model.columnCount();
+        for ( int i = 0; i < count; ++i ) {
+            kDebug()<<this<<i<<"("<<count<<"):"<<m_model.headerData( i, Qt::Horizontal ).toString();
+            names << m_model.headerData( i, Qt::Horizontal ).toString();
+        }
     }
+    kDebug()<<this<<names;
     return names;
 }
 

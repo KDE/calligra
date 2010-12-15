@@ -1,9 +1,11 @@
 [Desktop Entry]
 Icon=curious_penguin
 Name=Curious Penguin
+Name[ca]=Pingüí curiós
 Name[da]=Curious Penguin
 Name[en_GB]=Curious Penguin
 Name[et]=Uudishimulik pingviin
+Name[fr]=Pingouin curieux
 Name[it]=Pinguino curioso
 Name[nb]=Nysgjerrig pingvin
 Name[nds]=Snaaksch Pinguin
@@ -16,9 +18,11 @@ Name[wa]=Drole di mantchot
 Name[x-test]=xxCurious Penguinxx
 Name[zh_TW]=好奇的企鵝
 Comment=Curious Penguin
+Comment[ca]=Pingüí curiós
 Comment[da]=Nysgerrig pingvin
 Comment[en_GB]=Curious Penguin
 Comment[et]=Uudishimulik pingviin
+Comment[fr]=Pingouin curieux
 Comment[it]=Pinguino curioso
 Comment[nb]=Nysgjerrig pingvin
 Comment[nds]=Snaaksch Pinguin

@@ -27,17 +27,17 @@
 namespace KSpread
 {
 
-static const char* description = I18N_NOOP("KOffice Spreadsheet Application");
+static const char* description = I18N_NOOP("Calligra Spreadsheet Application");
 
 // Always the same as the KOffice version
 static const char* version = KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData("kspread", 0, ki18n("KSpread"),
+    KAboutData * aboutData = new KAboutData("tables", 0, ki18n("Tables"),
                                             version, ki18n(description), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2008, The KSpread Team"), KLocalizedString(),
-                                            "http://www.koffice.org/kspread/");
+                                            ki18n("(c) 1998-2010, The Tables Team"), KLocalizedString(),
+                                            "http://www.calligra-suite.org/tables/");
     aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
     aboutData->addAuthor(ki18n("Marijn Kruisselbrink"), ki18n("Maintainer"), "m.kruisselbrink@student.tue.nl");
     aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("ODS and Excel, functions, scripting"), "mail@dipe.org");

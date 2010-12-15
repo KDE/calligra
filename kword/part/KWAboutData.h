@@ -34,10 +34,10 @@ static const char* KWORD_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {
-    KAboutData * aboutData = new KAboutData("kword", 0, ki18n("KWord"),
+    KAboutData * aboutData = new KAboutData("words", 0, ki18n("Words"),
                                             KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
-                                            ki18n("(c) 1998-2009, The KWord Team"), KLocalizedString(),
-                                            "http://www.koffice.org/kword/");
+                                            ki18n("(c) 1998-2010, The Words Team"), KLocalizedString(),
+                                            "http://www.calligra-suite.org/words/");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
     aboutData->addAuthor(ki18n("Girish Ramakrishnan"), ki18n("ODF Support"), "girish@forwardbias.in");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");

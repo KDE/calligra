@@ -88,6 +88,13 @@ TODO: this causes crash:
 
 TODO: port formeditor/kexiactionselectiondialog.cpp to Qt4
 
+===================== Kexi 2.4  =====================
+
+~~~~~~~~~~~~~~~~ 2.4 alpha 1 ~~~~~~~~~~~~~~~~
+
+Migration
+*fix saving recently visited directories for source and destination database in the migration wizard
+
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
 2010-12-01

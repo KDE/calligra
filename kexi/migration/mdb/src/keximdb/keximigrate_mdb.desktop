@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=MS Access
 Name[ca]=MS Access
-Name[ca@valencia]=MS Access
 Name[cs]=MS Access
 Name[da]=MS Access
 Name[de]=MS Access
@@ -38,7 +37,6 @@ Name[zh_CN]=MS Access
 Name[zh_TW]=MS Access
 Comment=MS Access (MDB) Migration Driver for Kexi
 Comment[ca]=Controlador de migració de MS Access (MDB) per al Kexi
-Comment[ca@valencia]=Controlador de migració de MS Access (MDB) per al Kexi
 Comment[cs]=Ovladač pro Kexi pro migraci MS Access (MDB)
 Comment[da]=Migrationsdriver til MS Access (MDB)  til Kexi
 Comment[de]=MS-Access (MDB) Migrationstreiber für Kexi

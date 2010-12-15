@@ -40,7 +40,7 @@
 #include "abiwordimport.h"
 
 K_PLUGIN_FACTORY(ABIWORDImportFactory, registerPlugin<ABIWORDImport>();)
-K_EXPORT_PLUGIN(ABIWORDImportFactory("kwordabiwordimport", "kofficefilters"))
+K_EXPORT_PLUGIN(ABIWORDImportFactory("kwordabiwordimport", "calligrafilters"))
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.

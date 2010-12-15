@@ -221,7 +221,6 @@ public:
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_processingLine = false;
         m_restartOnNextShape = false;
-        m_processingAnchor = false;
     }
     void createLine(KoTextDocumentLayout::LayoutState *state) {
         m_state = state;
@@ -250,12 +249,6 @@ public:
         if (resetHorizontalPosition) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
-        }
-        line.setNumColumns(1);
-        if (line.textLength() == 1 && line.naturalTextWidth() == 0) {
-            m_processingAnchor = true;
-        } else {
-            m_processingAnchor = false;
         }
         const qreal maxLineWidth = m_state->width();
         // Make sure at least some text is fitted if the basic width (page, table cell, column)
@@ -312,7 +305,6 @@ private:
     bool m_processingLine;
     qreal m_textWidth;
     bool m_restartOnNextShape;
-    bool m_processingAnchor;
     void validateOutlines() {
         m_validOutlines.clear();
         foreach (Outline *outline, *m_outlines) {
@@ -373,7 +365,7 @@ private:
             }
         }
     }
-    QRectF mimimizeHeightToLeastNeeded(const QRectF &lineRect) {
+    QRectF minimizeHeightToLeastNeeded(const QRectF &lineRect) {
         QRectF lineRectBase = lineRect;
         // Get width of one char or shape (as-char).
         m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
@@ -425,7 +417,7 @@ private:
     }
     QRectF getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
         const qreal leftIndent = lineRect.left();
-        QRectF minLineRect = mimimizeHeightToLeastNeeded(lineRect);
+        QRectF minLineRect = minimizeHeightToLeastNeeded(lineRect);
         updateLineParts(minLineRect);
 
         // Get appropriate line rect part, to fit line,
@@ -457,8 +449,6 @@ private:
         if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
             m_processingLine = false;
-        } else if(m_processingAnchor) {
-            m_processingLine = true;
         } else {
             m_horizontalPosition = lineRectPart.right();
             m_processingLine = true;

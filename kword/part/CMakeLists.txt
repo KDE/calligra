@@ -56,6 +56,7 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
     dialogs/KWInsertPageDialog.cpp
+    dialogs/KWInsertInlineNoteDialog.cpp
     dockers/KWStatisticsDocker.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
@@ -88,6 +89,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertPageDialog.ui
+    dialogs/KWInsertInlineNoteDialog.ui
     dockers/KWStatisticsDocker.ui
 )
 if( Soprano_FOUND )
@@ -147,8 +149,8 @@ install(TARGETS kword  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES kword.rc kword_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kword)
-install( FILES kwordpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES words.rc words_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/words)
+install( FILES wordspart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS kword.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES kwordrc DESTINATION ${CONFIG_INSTALL_DIR} )
 

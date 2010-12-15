@@ -68,7 +68,7 @@ Paragraph::~Paragraph()
     m_odfParagraphStyle = 0;
 }
 
-void Paragraph::addRunOfText(QString text,  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
+void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                              QString fontName, const wvWare::StyleSheet& styles,
                              bool addCompleteElement)
 {
@@ -292,6 +292,11 @@ void Paragraph::writeToFile(KoXmlWriter* writer)
         }
         else if (pap.pcHorz == 2) {
             userStyle.addProperty("style:horizontal-rel","page");
+        }
+
+        //in case a header or footer is processed, save the style into styles.xml
+        if (m_inStylesDotXml) {
+            userStyle.setAutoStyleInStylesDotXml(true);
         }
 
         drawStyleName = "fr";
@@ -719,6 +724,26 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
         refChp = 0;
     }
 
+    //TODO: The logic has to be reviewed!  Check the font-weight update.
+
+/*
+    According to [MS-DOC]:
+
+    sprmCIstd - An unsigned integer that specifies the istd of a character
+    style to apply (parentStyle in our case)
+
+    To apply the istd:
+
+    1. Reset the character properties of the text to match the results of
+    the paragraph style (in other words, revert any formatting that is
+    applied on top of the paragraph style).
+
+    2. Fetch the set of properties from the specified character style. (For
+    instructions, see Applying Properties.)
+
+    3. Apply those properties to the current text.
+*/
+
     //ico = color of text, but this has been replaced by cv
     if (!refChp || (refChp->cv != chp->cv) || (chp->cv == wvWare::Word97::cvAuto)) {
         QString color;
@@ -737,8 +762,10 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     }
 
     //fBold = bold text if 1
-    if (!refChp || refChp->fBold != chp->fBold)
+//     if (!refChp || refChp->fBold != chp->fBold) {
+    if (!refChp || (chp->istd == 10)) {
         style->addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
+    }
 
     //fItalic = italic text if 1
     if (!refChp || refChp->fItalic != chp->fItalic)

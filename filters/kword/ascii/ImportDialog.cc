@@ -39,10 +39,10 @@ AsciiImportDialog :: AsciiImportDialog(QWidget* parent)
     m_ui.setupUi(widget);
     m_radioGroup.addButton(m_ui.radioParagraphAsIs);
     m_radioGroup.addButton(m_ui.radioParagraphSentence);
-    m_radioGroup.addButton(m_ui.radioParagraphOldWay);
+    m_radioGroup.addButton(m_ui.radioParagraphEmptyLine);
 
     setButtons(Ok | Cancel);
-    setCaption(i18n("KWord's Plain Text Import Filter"));
+    setCaption(i18n("Words's Plain Text Import Filter"));
     qApp->restoreOverrideCursor();
 
     QStringList encodings;
@@ -98,10 +98,11 @@ int AsciiImportDialog::getParagraphStrategy() const
     if (m_ui.radioParagraphAsIs == checkedButton) {
         return 0;
     }
-    if (m_ui.radioParagraphSentence == checkedButton) {
+    else if (m_ui.radioParagraphSentence == checkedButton) {
         return 1;
-    } else if (m_ui.radioParagraphOldWay == checkedButton) {
-        return 999;
+    }
+    else if (m_ui.radioParagraphEmptyLine == checkedButton) {
+        return 2;
     }
     return 0;
 }

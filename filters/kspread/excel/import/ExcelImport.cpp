@@ -86,7 +86,7 @@
 // #define OUTPUT_AS_ODS_FILE
 
 K_PLUGIN_FACTORY(ExcelImportFactory, registerPlugin<ExcelImport>();)
-K_EXPORT_PLUGIN(ExcelImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ExcelImportFactory("calligrafilters"))
 
 using namespace Swinder;
 using namespace XlsUtils;
@@ -820,7 +820,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     if (isFormula) {
         const QString nsPrefix = cellFormulaNamespace(formula);
         const QString decodedFormula = KSpread::Odf::decodeFormula('=' + formula, oc.locale(), nsPrefix);
-        oc.setUserInput(decodedFormula);
+        oc.setRawUserInput(decodedFormula);
     }
 
     int styleId = convertStyle(&ic->format(), formula);
@@ -829,7 +829,7 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
     if (value.isBoolean()) {
         oc.setValue(KSpread::Value(value.asBoolean()));
         if (!isFormula)
-            oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
+            oc.setRawUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
     } else if (value.isNumber()) {
         const QString valueFormat = ic->format().valueFormat();
 
@@ -841,20 +841,23 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
             QDateTime date = convertDate(value.asFloat());
             oc.setValue(KSpread::Value(date, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
-            if (true /* TODO somehow determine if time should be included */) {
-                oc.setUserInput(locale->formatDate(date.date()));
-            } else {
-                oc.setUserInput(locale->formatDateTime(date));
+            if (!isFormula) {
+                if (true /* TODO somehow determine if time should be included */) {
+                    oc.setRawUserInput(locale->formatDate(date.date()));
+                } else {
+                    oc.setRawUserInput(locale->formatDateTime(date));
+                }
             }
         } else if (KSpread::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
             oc.setValue(KSpread::Value(time, outputDoc->map()->calculationSettings()));
             KLocale* locale = outputDoc->map()->calculationSettings()->locale();
-            oc.setUserInput(locale->formatTime(time, true));
+            if (!isFormula)
+                oc.setRawUserInput(locale->formatTime(time, true));
         } else /* fraction or normal */ {
             oc.setValue(KSpread::Value(value.asFloat()));
             if (!isFormula)
-                oc.setUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
+                oc.setRawUserInput(oc.sheet()->map()->converter()->asString(oc.value()).asString());
         }
     } else if (value.isText()) {
         QString txt = value.asString();
@@ -876,9 +879,9 @@ void ExcelImport::Private::processCell(Cell* ic, KSpread::Cell oc)
         oc.setValue(KSpread::Value(txt));
         if (!isFormula) {
             if (txt.startsWith('='))
-                oc.setUserInput('\'' + txt);
+                oc.setRawUserInput('\'' + txt);
             else
-                oc.setUserInput(txt);
+                oc.setRawUserInput(txt);
         }
         if (value.isRichText() || ic->format().font().subscript() || ic->format().font().superscript()) {
             std::map<unsigned, FormatFont> formatRuns = value.formatRuns();

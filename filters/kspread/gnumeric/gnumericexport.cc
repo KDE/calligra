@@ -58,7 +58,7 @@
 using namespace KSpread;
 
 K_PLUGIN_FACTORY(GNUMERICExportFactory, registerPlugin<GNUMERICExport>();)
-K_EXPORT_PLUGIN(GNUMERICExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(GNUMERICExportFactory("calligrafilters"))
 
 GNUMERICExport::GNUMERICExport(QObject* parent, const QVariantList&)
         : KoFilter(parent)

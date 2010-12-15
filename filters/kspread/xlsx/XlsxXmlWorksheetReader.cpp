@@ -382,7 +382,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
             for(int c = 0; c <= columnCount; ++c) {
                 body->startElement("table:table-cell");
                 if (Cell* cell = m_context->sheet->cell(c, r, false)) {
-                    const bool hasHyperlink = ! cell->hyperlink.isEmpty();
+                    const bool hasHyperlink = ! cell->hyperlink().isEmpty();
 
                     if (!cell->styleName.isEmpty()) {
                         body->addAttribute("table:style-name", cell->styleName);
@@ -420,10 +420,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                         }
                         if (hasHyperlink) {
                             body->startElement("text:a");
-                            body->addAttribute("xlink:href", cell->hyperlink);
+                            body->addAttribute("xlink:href", cell->hyperlink());
                             //body->addAttribute("office:target-frame-name", targetFrameName);
                             if(cell->text.isEmpty()) {
-                                body->addTextNode(cell->hyperlink);
+                                body->addTextNode(cell->hyperlink());
                             }
                             else if(cell->isPlainText) {
                                 body->addTextNode(cell->text);
@@ -445,33 +445,36 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_worksheet()
                     }
 
                     // handle drawing objects like e.g. charts, diagrams and pictures
-                    foreach(XlsxDrawingObject* drawing, cell->drawings) {
-                        drawing->save(body);
-                    }
+                    if ( cell->embedded ) {
+                        foreach(XlsxDrawingObject* drawing, cell->embedded->drawings) {
+                            drawing->save(body);
+                        }
+                    
 
-                    QPair<QString,QString> oleObject;
-                    int listIndex = 0;
-                    foreach( oleObject, cell->oleObjects ) {
-                        const QString olePath = oleObject.first;
-                        const QString previewPath = oleObject.second;
-                        body->addCompleteElement(cell->oleFrameBegins.at(listIndex).toUtf8());
-                        ++listIndex;
+                        QPair<QString,QString> oleObject;
+                        int listIndex = 0;
+                        foreach( oleObject, cell->embedded->oleObjects ) {
+                            const QString olePath = oleObject.first;
+                            const QString previewPath = oleObject.second;
+                            body->addCompleteElement(cell->embedded->oleFrameBegins.at(listIndex).toUtf8());
+                            ++listIndex;
 
-                        body->startElement("draw:object-ole");
-                        body->addAttribute("xlink:href", olePath);
-                        body->addAttribute("xlink:type", "simple");
-                        body->addAttribute("xlink:show", "embed");
-                        body->addAttribute("xlink:actuate", "onLoad");
-                        body->endElement(); // draw:object-ole
+                            body->startElement("draw:object-ole");
+                            body->addAttribute("xlink:href", olePath);
+                            body->addAttribute("xlink:type", "simple");
+                            body->addAttribute("xlink:show", "embed");
+                            body->addAttribute("xlink:actuate", "onLoad");
+                            body->endElement(); // draw:object-ole
 
-                        body->startElement("draw:image");
-                        body->addAttribute("xlink:href", previewPath);
-                        body->addAttribute("xlink:type", "simple");
-                        body->addAttribute("xlink:show", "embed");
-                        body->addAttribute("xlink:actuate", "onLoad");
-                        body->endElement(); // draw:image
+                            body->startElement("draw:image");
+                            body->addAttribute("xlink:href", previewPath);
+                            body->addAttribute("xlink:type", "simple");
+                            body->addAttribute("xlink:show", "embed");
+                            body->addAttribute("xlink:actuate", "onLoad");
+                            body->endElement(); // draw:image
 
-                        body->addCompleteElement("</draw:frame>");
+                            body->addCompleteElement("</draw:frame>");
+                        }
                     }
                 }
                 body->endElement(); // table:table-cell
@@ -1285,7 +1288,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_hyperlink()
             if (!location.isEmpty()) link += '#' + location;
 
             Cell* cell = m_context->sheet->cell(col, row, true);
-            cell->hyperlink = link;
+            cell->setHyperLink( link );
         }
     }
     while (!atEnd()) {
@@ -1371,9 +1374,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_oleObject()
 
     //TODO find out which cell to pick
     Cell* cell = m_context->sheet->cell(0, 0, true);
-
-    cell->oleObjects << qMakePair<QString,QString>(fileName, m_context->oleReplacements.value(shapeId));
-    cell->oleFrameBegins << m_context->oleFrameBegins.value(shapeId);
+    cell->appendOleObject( qMakePair<QString,QString>(fileName, m_context->oleReplacements.value(shapeId)), m_context->oleFrameBegins.value(shapeId));
 
     while (!atEnd()) {
         readNext();
