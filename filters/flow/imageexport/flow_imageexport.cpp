@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kivio_imageexport.h"
+#include "flow_imageexport.h"
 
 #include <qdom.h>
 #include <QPixmap>
@@ -35,17 +35,17 @@
 #include <KoFilterChain.h>
 #include <KoZoomHandler.h>
 
-#include "kivio_doc.h"
-#include "kivio_page.h"
-#include "kivio_map.h"
-#include "kivio_screen_painter.h"
+#include "flow_doc.h"
+#include "flow_page.h"
+#include "flow_map.h"
+#include "flow_screen_painter.h"
 
-#include "kivio_imageexportdialog.h"
+#include "flow_imageexportdialog.h"
 
-K_PLUGIN_FACTORY(KivioImageExportFactory, registerPlugin<Kivio::ImageExport>();)
-K_EXPORT_PLUGIN(KivioImageExportFactory("KivioImageExport"))
+K_PLUGIN_FACTORY(FlowImageExportFactory, registerPlugin<Flow::ImageExport>();)
+K_EXPORT_PLUGIN(FlowImageExportFactory("FlowImageExport"))
 
-namespace Kivio
+namespace Flow
 {
 
 ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
@@ -55,7 +55,7 @@ ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
 
 KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    if (from != "application/x-kivio") {
+    if (from != "application/x-flow") {
         return KoFilter::BadMimeType;
     }
 
@@ -96,7 +96,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     QDomDocument domIn;
     domIn.setContent(storeIn);
 
-    KivioDoc doc;
+    FlowDoc doc;
 
     if (!doc.loadXML(0, domIn)) {
         KMessageBox::error(0, i18n("Malformed XML data."), i18n("Export Error"));
@@ -106,16 +106,16 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
     ImageExportDialog dlg;
 
     QStringList pageNames;
-    QList<KivioPage*> pageList = doc.map()->pageList();
+    QList<FlowPage*> pageList = doc.map()->pageList();
 
-    foreach(KivioPage* page, pageList) {
+    foreach(FlowPage* page, pageList) {
         pageNames.append(page->pageName());
     }
 
     KoZoomHandler zoom;
 
     dlg.setPageList(pageNames);
-    KivioPage* page = doc.map()->firstPage();
+    FlowPage* page = doc.map()->firstPage();
     QSize size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
     dlg.setInitialCustomSize(size);
 
@@ -155,7 +155,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
 
     QPixmap pixmap = QPixmap(size);
     pixmap.fill(Qt::white);
-    KivioScreenPainter kpainter;
+    FlowScreenPainter kpainter;
     kpainter.start(&pixmap);
 
     int translationX = border;
@@ -179,4 +179,4 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
 
 }
 
-#include "kivio_imageexport.moc"
+#include "flow_imageexport.moc"

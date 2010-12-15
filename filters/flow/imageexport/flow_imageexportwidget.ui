@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>Kivio::ImageExportWidget</class>
+<class>Flow::ImageExportWidget</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>Kivio::ImageExportWidget</cstring>
+        <cstring>Flow::ImageExportWidget</cstring>
     </property>
     <property name="geometry">
         <rect>

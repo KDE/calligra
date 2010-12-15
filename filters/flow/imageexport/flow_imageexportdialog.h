@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIVIO_IMAGEEXPORTDIALOG_H
-#define KIVIO_IMAGEEXPORTDIALOG_H
+#ifndef FLOW_IMAGEEXPORTDIALOG_H
+#define FLOW_IMAGEEXPORTDIALOG_H
 
 #include <kdialogbase.h>
 
-namespace Kivio
+namespace Flow
 {
 
 class ImageExportWidget;

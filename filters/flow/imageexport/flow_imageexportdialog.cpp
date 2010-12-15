@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kivio_imageexportdialog.h"
+#include "flow_imageexportdialog.h"
 
 #include <QSpinBox>
 #include <QCheckBox>
@@ -26,9 +26,9 @@
 #include <klocale.h>
 #include <kapplication.h>
 
-#include "kivio_imageexportwidget.h"
+#include "flow_imageexportwidget.h"
 
-namespace Kivio
+namespace Flow
 {
 
 ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
@@ -82,4 +82,4 @@ int ImageExportDialog::margin() const
 
 }
 
-#include "kivio_imageexportdialog.moc"
+#include "flow_imageexportdialog.moc"

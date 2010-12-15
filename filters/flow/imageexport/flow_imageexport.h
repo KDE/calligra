@@ -17,12 +17,12 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KIVIO_IMAGEEXPORT_H
-#define KIVIO_IMAGEEXPORT_H
+#ifndef FLOW_IMAGEEXPORT_H
+#define FLOW_IMAGEEXPORT_H
 
 #include <KoFilter.h>
 
-namespace Kivio
+namespace Flow
 {
 
 class ImageExport : public KoFilter
