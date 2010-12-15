@@ -229,8 +229,8 @@ void PixmapCachingSheetView::paintCells(QPainter& painter, const QRectF& paintRe
     kDebug() << paintRect << pixelRect << tiles << topLeft << scale << o;
 
     const Sheet* s = sheet();
-    for (int x = tiles.left(); x < tiles.right(); x++) {
-        for (int y = tiles.top(); y < tiles.bottom(); y++) {
+    for (int x = qMax(0, tiles.left()); x < tiles.right(); x++) {
+        for (int y = qMax(0, tiles.top()); y < tiles.bottom(); y++) {
             QPixmap *p = d->getTile(s, x, y, canvas);
             QPointF pt(x * TILESIZE / scale.x(), y * TILESIZE / scale.y());
             QRectF r(pt, QSizeF(TILESIZE / sx, TILESIZE / sy));
