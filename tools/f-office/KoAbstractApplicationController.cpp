@@ -171,7 +171,6 @@ bool KoAbstractApplicationController::openDocument(const QString &fileName, bool
 
     setProgressIndicatorVisible(true);
     QString mimetype = KMimeType::findByPath(fileName)->name();
-    int errorCode = 0;
     m_isLoading = true;
 
 
