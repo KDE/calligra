@@ -125,12 +125,14 @@ public:
        drawingNumber(0)
     {
     }
+    //~Private(){ qDeleteAll( savedStyles ); }
 
     XlsxXmlWorksheetReader* const q;
     QString processValueFormat( const QString& valueFormat );
     bool warningAboutWorksheetSizeDisplayed;
     int drawingNumber;
     QHash<int, Cell*> sharedFormulas;
+    QHash<QString, QString > savedStyles;
 };
 
 XlsxXmlWorksheetReader::XlsxXmlWorksheetReader(KoOdfWriters *writers)
@@ -550,12 +552,21 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cols()
 //! Saves information about column style
 void XlsxXmlWorksheetReader::saveColumnStyle(const QString& widthString)
 {
-    KoGenStyle tableColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
-    tableColumnStyle.addProperty("style:column-width", widthString);
-    tableColumnStyle.addProperty("fo:break-before", "auto");
+    if ( !d->savedStyles.contains( widthString ) )
+    {
+        KoGenStyle tableColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
+        tableColumnStyle.addProperty("style:column-width", widthString);
+        tableColumnStyle.addProperty("fo:break-before", "auto");
 
-    const QString currentTableColumnStyleName(mainStyles->insert(tableColumnStyle, "co"));
-    body->addAttribute("table:style-name", currentTableColumnStyleName);
+        const QString currentTableColumnStyleName(mainStyles->insert(tableColumnStyle, "co"));
+        body->addAttribute("table:style-name", currentTableColumnStyleName);
+        d->savedStyles[widthString] = currentTableColumnStyleName;
+    }
+    else 
+    {
+        const QString currentTableColumnStyleName(d->savedStyles[widthString]);
+        body->addAttribute("table:style-name", currentTableColumnStyleName);
+    }    
 }
 
 //! @return value @a cm with cm suffix
@@ -893,6 +904,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_c()
             cell->text = sharedstring.data();
             cell->isPlainText = sharedstring.isPlainText();
             cell->valueType = MsooXmlReader::constString;
+            m_value = sharedstring.data();
             // no valueAttr
         } else if ((t.isEmpty() && !valueIsNumeric(m_value)) || t == QLatin1String("inlineStr")) {
 //! @todo handle value properly
