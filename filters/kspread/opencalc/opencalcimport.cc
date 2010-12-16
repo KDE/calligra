@@ -2196,7 +2196,6 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
 
 void OpenCalcImport::loadOasisValidationValue(Validity validity, const QStringList &listVal, const ValueParser *parser)
 {
-    bool ok = false;
     kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
 
     validity.setMinimumValue(parser->parse(listVal[0]));
