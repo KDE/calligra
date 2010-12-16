@@ -221,7 +221,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
  - permEnd (Range Permission End) §17.13.7.1
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
- - sdt (Block-Level Structured Document Tag) §17.5.2.29
+ - [done] sdt (Block-Level Structured Document Tag) §17.5.2.29
  - [done] sectPr (Document Final Section Properties) §17.6.17
  - [done] tbl (Table) §17.4.38
 */
@@ -239,6 +239,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(sectPr)
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
@@ -1434,7 +1435,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
- - sdtContent (§17.5.2.36)
+ - [done] sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
  Child elements:
@@ -1469,7 +1470,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] r (Text Run) §17.3.2.25
- - sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
  - smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
 */
@@ -1511,6 +1512,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
@@ -1525,6 +1527,57 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 }
 
 #undef CURRENT_EL
+#define CURRENT_EL sdtContent
+/*! sdt handler
+//! @todo support properly */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdtContent()
+{
+    READ_PROLOGUE
+
+    // This is not properly supported at all atm. todo: fix
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(tbl)
+            ELSE_TRY_READ_IF(sdt)
+            ELSE_TRY_READ_IF(fldSimple)
+            ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sdt
+/*! sdt handler
+//! @todo support properly */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdt()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(sdtContent)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
 #define CURRENT_EL txbxContent
 /*! txbxContent handler (Textbox content)
 
@@ -1533,7 +1586,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
 */
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 {
     READ_PROLOGUE
 
@@ -1545,6 +1598,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
+            ELSE_TRY_READ_IF(sdt)
             SKIP_UNKNOWN
         }
     }
@@ -1606,7 +1660,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
  - [done] pPr (Paragraph Properties) §17.3.1.26
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] r (Text Run) §17.3.2.25
- - sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
  - smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
 */
@@ -1674,6 +1728,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 TRY_READ_WITH_ARGS(p, read_p_Skip;)
             }
             //ELSE_TRY_READ_IF(commentRangeEnd)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(commentRangeStart)
             ELSE_TRY_READ_IF(bookmarkStart)
@@ -1786,7 +1841,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] p (§17.3.1.22)
  - rt (§17.3.3.24)
  - rubyBase (§17.3.3.27)
- - sdtContent (§17.5.2.36)
+ - [done] sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
  Child elements:
@@ -3318,7 +3373,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  - [done] fldSimple (§17.16.19)
  - hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
- - sdtContent (§17.5.2.36)
+ - [done] sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
  Child elements:
@@ -3354,7 +3409,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
  - [done] r (Text Run)                                                           §17.3.2.25
- - sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
+ - [done] sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
  - smartTag (Inline-Level Smart Tag)                                             §17.5.1.9
  - subDoc (Anchor for Subdocument Location)                                      §17.17.1.1
 
@@ -3388,6 +3443,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
         if (isStartElement()) {
             TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
