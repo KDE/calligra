@@ -58,7 +58,7 @@
 #include <math.h>
 
 K_PLUGIN_FACTORY(KarbonImportFactory, registerPlugin<KarbonImport>();)
-K_EXPORT_PLUGIN(KarbonImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KarbonImportFactory("calligrafilters"))
 
 KarbonImport::KarbonImport(QObject*parent, const QVariantList&)
         : KoFilter(parent), m_document(0)

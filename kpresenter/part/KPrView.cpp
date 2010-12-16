@@ -179,9 +179,9 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     if ( !kopaDocument()->isReadWrite() )
-       setXMLFile( "kpresenter_readonly.rc" );
+       setXMLFile( "stage_readonly.rc" );
     else
-       setXMLFile( "kpresenter.rc" );
+       setXMLFile( "stage.rc" );
 
     // do special kpresenter stuff here
     m_actionExportHtml = new KAction(i18n("Export as HTML..."), this);

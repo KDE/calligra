@@ -33,7 +33,7 @@
 #include "palmdocexport.h"
 
 K_PLUGIN_FACTORY(PalmDocExportFactory, registerPlugin<PalmDocExport>();)
-K_EXPORT_PLUGIN(PalmDocExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(PalmDocExportFactory("calligrafilters"))
 
 class PalmDocWorker : public KWEFBaseWorker
 {

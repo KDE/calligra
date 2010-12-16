@@ -171,6 +171,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
         if (isStartElement()) {
             TRY_READ_IF(body)
             ELSE_TRY_READ_IF(background)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -220,7 +221,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
  - permEnd (Range Permission End) §17.13.7.1
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
- - sdt (Block-Level Structured Document Tag) §17.5.2.29
+ - [done] sdt (Block-Level Structured Document Tag) §17.5.2.29
  - [done] sectPr (Document Final Section Properties) §17.6.17
  - [done] tbl (Table) §17.4.38
 */
@@ -238,10 +239,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(sectPr)
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -319,6 +322,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(footnotePr)
             ELSE_TRY_READ_IF(endnotePr)
             ELSE_TRY_READ_IF(lnNumType)
+            SKIP_UNKNOWN
         }
     }
 
@@ -520,6 +524,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(v, group)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -752,6 +757,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            SKIP_UNKNOWN
         }
     }
 
@@ -802,6 +808,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            SKIP_UNKNOWN
         }
     }
 
@@ -1087,6 +1094,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(o, OLEObject)
+            SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1281,8 +1289,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 /*! Complex field character
 
  Parent elements:
- - r (§17.3.2.25)
- - r (§22.1.2.87)
+ - [done] r (§17.3.2.25)
+ - [done] r (§22.1.2.87)
 
  Child elements:
  - ffData (Form Field Properties) §17.16.17
@@ -1427,7 +1435,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - [done] fldSimple (§17.16.19)
  - [done] hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
- - sdtContent (§17.5.2.36)
+ - [done] sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
  Child elements:
@@ -1462,7 +1470,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_instrText()
  - permStart (Range Permission Start) §17.13.7.2
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] r (Text Run) §17.3.2.25
- - sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
  - smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
 */
@@ -1504,14 +1512,67 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(fldSimple)
+            SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
     body->endElement(); // text:bookmark, text.a
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sdtContent
+/*! sdt handler
+//! @todo support properly */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdtContent()
+{
+    READ_PROLOGUE
+
+    // This is not properly supported at all atm. todo: fix
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(p)
+            ELSE_TRY_READ_IF(tbl)
+            ELSE_TRY_READ_IF(sdt)
+            ELSE_TRY_READ_IF(fldSimple)
+            ELSE_TRY_READ_IF(hyperlink)
+            ELSE_TRY_READ_IF_NS(m, oMath)
+            ELSE_TRY_READ_IF_NS(m, oMathPara)
+            ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(bookmarkStart)
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
+        }
+    }
+
+    READ_EPILOGUE
+}
+
+#undef CURRENT_EL
+#define CURRENT_EL sdt
+/*! sdt handler
+//! @todo support properly */
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_sdt()
+{
+    READ_PROLOGUE
+
+    while (!atEnd()) {
+        readNext();
+        BREAK_IF_END_OF(CURRENT_EL);
+        if (isStartElement()) {
+            TRY_READ_IF(sdtContent)
+            SKIP_UNKNOWN
+        }
+    }
 
     READ_EPILOGUE
 }
@@ -1525,7 +1586,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
 
 */
 //! @todo support all elements
-KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
+KoFilter::ConversionStatus DocxXmlDocumentReader::read_txbxContent()
 {
     READ_PROLOGUE
 
@@ -1537,6 +1598,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
+            ELSE_TRY_READ_IF(sdt)
+            SKIP_UNKNOWN
         }
     }
 
@@ -1597,7 +1660,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
  - [done] pPr (Paragraph Properties) §17.3.1.26
  - proofErr (Proofing Error Anchor) §17.13.8.1
  - [done] r (Text Run) §17.3.2.25
- - sdt (Inline-Level Structured Document Tag) §17.5.2.31
+ - [done] sdt (Inline-Level Structured Document Tag) §17.5.2.31
  - smartTag (Inline-Level Smart Tag) §17.5.1.9
  - subDoc (Anchor for Subdocument Location) §17.17.1.1
 */
@@ -1665,6 +1728,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                 TRY_READ_WITH_ARGS(p, read_p_Skip;)
             }
             //ELSE_TRY_READ_IF(commentRangeEnd)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(commentRangeStart)
             ELSE_TRY_READ_IF(bookmarkStart)
@@ -1674,6 +1738,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1776,7 +1841,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
  - [done] p (§17.3.1.22)
  - rt (§17.3.3.24)
  - rubyBase (§17.3.3.27)
- - sdtContent (§17.5.2.36)
+ - [done] sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
  Child elements:
@@ -1874,6 +1939,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->startElement("text:tab");
                 body->endElement(); // text:tab
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2077,6 +2143,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
             ELSE_TRY_READ_IF(webHidden)
             ELSE_TRY_READ_IF(bdr)
             ELSE_TRY_READ_IF(vanish)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2200,6 +2267,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(ind)
             ELSE_TRY_READ_IF(suppressLineNumbers)
             ELSE_TRY_READ_IF(sectPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2403,6 +2471,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
         if (isStartElement()) {
             TRY_READ_IF(numId)
             ELSE_TRY_READ_IF(ilvl)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2494,6 +2563,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 {
     READ_PROLOGUE
 
+    m_hyperLink = false;
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
 
@@ -2518,6 +2588,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
 
     body = buffer.originalWriter();
+
+    if (m_hyperLink) {
+        body->startElement("text:a");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
+    }
+
     body->startElement("draw:frame");
 
     if (m_drawing_inline) {
@@ -2525,6 +2602,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
         m_currentDrawStyle->addProperty("style:vertical-rel", "baseline");
     }
     else {
+        m_currentDrawStyle->addProperty("style:horizontal-pos", "from-left");
+        m_currentDrawStyle->addProperty("style:vertical-pos", "from-top");
         // Note that many of these don't seem to have a good odf counterpart,
         // and are thus just guesses
         if (m_relativeFromV == "column") {
@@ -2621,8 +2700,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 
     body->endElement(); // draw:frame
 
-    m_drawing_anchor = false;
-    m_drawing_inline = false;
+    if (m_hyperLink) {
+        body->endElement(); // text:a
+    }
     READ_EPILOGUE
 }
 
@@ -3293,7 +3373,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  - [done] fldSimple (§17.16.19)
  - hyperlink (§17.16.22)
  - [done] p (§17.3.1.22)
- - sdtContent (§17.5.2.36)
+ - [done] sdtContent (§17.5.2.36)
  - smartTag (§17.5.1.9)
 
  Child elements:
@@ -3329,7 +3409,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rStyle()
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
  - [done] r (Text Run)                                                           §17.3.2.25
- - sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
+ - [done] sdt (Inline-Level Structured Document Tag)                                    §17.5.2.31
  - smartTag (Inline-Level Smart Tag)                                             §17.5.1.9
  - subDoc (Anchor for Subdocument Location)                                      §17.17.1.1
 
@@ -3363,11 +3443,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
         if (isStartElement()) {
             TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF(r)
+            ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF(hyperlink)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            SKIP_UNKNOWN
         }
     }
 
@@ -3384,12 +3466,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 /*!
 
  Parent elements:
- - pPr (§17.3.1.26)
- - pPr (§17.3.1.25)
- - pPr (§17.7.5.2)
- - pPr (§17.7.6.1)
- - pPr (§17.9.23)
- - pPr (§17.7.8.2)
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
 
  Child elements:
  - [done] tab (§17.3.137)
@@ -3414,6 +3496,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tab)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -3478,8 +3561,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
 /*!
 
  Parent elements:
- - r (§22.1.2.87);
- - r (§17.3.2.25)
+ - [done] r (§22.1.2.87);
+ - [done] r (§17.3.2.25)
 
  Child elements:
  - none
@@ -3546,6 +3629,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
             else if (QUALIFIED_NAME_IS(right)) {
                 RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3922,6 +4006,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
                 TRY_READ(VML_background)
             }
             ELSE_TRY_READ_IF(drawing)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -4833,19 +4918,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_extent()
  These properties are specified as child elements of this element.
 
  Parent elements:
- - [done]anchor (§20.4.2.3)
- - inline (§20.4.2.8)
+ - [done] anchor (§20.4.2.3)
+ - [done] inline (§20.4.2.8)
 
  Child elements:
  - extLst (Extension List) §20.1.2.2.15
- - hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
  - hlinkHover (Hyperlink for Hover) §20.1.2.2.23
 
  Attributes:
- - descr (Alternative Text for Object)
+ - [done] descr (Alternative Text for Object)
  - hidden (Hidden)
  - id (Unique Identifier)
- - name (Name)
+ - [done] name (Name)
 */
 //! CASE #1340
 //! @todo support all elements
@@ -4862,6 +4947,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_docPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            TRY_READ_IF_NS(a, hlinkClick)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

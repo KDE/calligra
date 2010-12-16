@@ -37,7 +37,7 @@
 #include <poppler/GlobalParams.h>
 
 K_PLUGIN_FACTORY(PdfImportFactory, registerPlugin<PdfImport>();)
-K_EXPORT_PLUGIN(PdfImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(PdfImportFactory("calligrafilters"))
 
 PdfImport::PdfImport(QObject*parent, const QVariantList&)
         : KoFilter(parent)

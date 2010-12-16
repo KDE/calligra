@@ -271,7 +271,7 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QStringRef&)
         if (m_currentDrawingObject->m_positions.contains(XlsxDrawingObject::FromAnchor)) {
             XlsxDrawingObject::Position pos = m_currentDrawingObject->m_positions[XlsxDrawingObject::FromAnchor];
             Cell* cell = m_context->sheet->cell(pos.m_col, pos.m_row, true);
-            cell->drawings.append(m_currentDrawingObject);
+            cell->appendDrawing(m_currentDrawingObject);
             m_currentDrawingObject = 0;
         }
     }

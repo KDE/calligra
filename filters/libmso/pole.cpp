@@ -156,11 +156,13 @@ public:
     void load();
     void create();
 
-    unsigned long loadBigBlocks(std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadBigBlocks(const std::vector<unsigned long>& blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadBigBlocks(const unsigned long* blocks, unsigned blockCount, unsigned char* buffer, unsigned long maxlen);
 
     unsigned long loadBigBlock(unsigned long block, unsigned char* buffer, unsigned long maxlen);
 
-    unsigned long loadSmallBlocks(std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadSmallBlocks(const std::vector<unsigned long>& blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadSmallBlocks(const unsigned long* blocks, unsigned blockCount, unsigned char* buffer, unsigned long maxlen);
 
     unsigned long loadSmallBlock(unsigned long block, unsigned char* buffer, unsigned long maxlen);
 
@@ -189,10 +191,11 @@ public:
     unsigned long tell();
     int getch();
     unsigned long read(unsigned char* data, unsigned long maxlen);
-    unsigned long read(unsigned long pos, unsigned char* data, unsigned long maxlen);
-
 
 private:
+    unsigned long readInternal(unsigned char* data, unsigned long maxlen);
+    unsigned long readInternal(unsigned long pos, unsigned char* data, unsigned long maxlen);
+
     std::vector<unsigned long> blocks;
 
     // no copy or assign
@@ -204,6 +207,7 @@ private:
 
     // simple cache system to speed-up getch()
     unsigned char* cache_data;
+    unsigned long base_cache_size;
     unsigned long cache_size;
     unsigned long cache_pos;
     void updateCache();
@@ -392,14 +396,6 @@ void AllocTable::setChain(std::vector<unsigned long> chain)
     }
 }
 
-// TODO: optimize this with better search
-static bool already_exist(const std::vector<unsigned long>& chain, unsigned long item)
-{
-    for (unsigned i = 0; i < chain.size(); i++)
-        if (chain[i] == item) return true;
-    return false;
-}
-
 // follow
 std::vector<unsigned long> AllocTable::follow(unsigned long start)
 {
@@ -412,8 +408,8 @@ std::vector<unsigned long> AllocTable::follow(unsigned long start)
         if (p == (unsigned long)Eof) break;
         if (p == (unsigned long)Bat) break;
         if (p == (unsigned long)MetaBat) break;
-        if (already_exist(chain, p)) break;
         chain.push_back(p);
+        if (chain.size() > count()) break; // break if the chain is longer than the total sector count
         if (data[p] >= count()) break;
         p = data[ p ];
     }
@@ -515,7 +511,7 @@ int DirTree::parent(unsigned index)
     // and check if one of the children is 'index'
     for (unsigned j = 0; j < entryCount(); j++) {
         std::vector<unsigned> chi = children(j);
-        for (unsigned i = 0; i < chi.size();i++)
+        for (unsigned i = 0; i < chi.size(); i++)
             if (chi[i] == index)
                 return j;
     }
@@ -697,8 +693,8 @@ void DirTree::load(unsigned char* buffer, unsigned size)
         // CLSID, contains a object class GUI if this entry is a storage or root
         // storage or all zero if not.
 #ifdef POLE_DEBUG
-        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%i size=%i clsid=%i.%i.%i.%i\n",
-               name.c_str(),type,e.prev,e.next,e.child,e.start,e.size,readU32(buffer+0x50+p),readU32(buffer+0x54+p),readU32(buffer+0x58+p),readU32(buffer+0x5C+p));
+        printf("DirTree::load name=%s type=%i prev=%i next=%i child=%i start=%lu size=%lu clsid=%lu.%lu.%lu.%lu\n",
+               name.c_str(), type, e.prev, e.next, e.child, e.start, e.size, readU32(buffer + 0x50 + p), readU32(buffer + 0x54 + p), readU32(buffer + 0x58 + p), readU32(buffer + 0x5C + p));
 #endif
         entries.push_back(e);
     }
@@ -997,18 +993,25 @@ StreamIO* StorageIO::streamIO(const std::string& name)
     return result;
 }
 
-unsigned long StorageIO::loadBigBlocks(std::vector<unsigned long> blocks,
+unsigned long StorageIO::loadBigBlocks(const std::vector<unsigned long>& blocks,
                                        unsigned char* data, unsigned long maxlen)
+{
+    return loadBigBlocks(blocks.data(), blocks.size(), data, maxlen);
+}
+
+unsigned long StorageIO::loadBigBlocks(const unsigned long *blocks, unsigned blockCount,
+                                       unsigned char *data, unsigned long maxlen)
 {
     // sentinel
     if (!data) return 0;
     if (!file.good()) return 0;
-    if (blocks.size() < 1) return 0;
+    if (!blocks) return 0;
+    if (blockCount < 1) return 0;
     if (maxlen == 0) return 0;
 
     // read block one by one, seems fast enough
     unsigned long bytes = 0;
-    for (unsigned long i = 0; (i < blocks.size()) && (bytes < maxlen); i++) {
+    for (unsigned long i = 0; (i < blockCount) && (bytes < maxlen); i++) {
         unsigned long block = blocks[i];
         unsigned long pos =  bbat->blockSize * (block + 1);
         unsigned long p = (bbat->blockSize < maxlen - bytes) ? bbat->blockSize : maxlen - bytes;
@@ -1029,22 +1032,24 @@ unsigned long StorageIO::loadBigBlock(unsigned long block,
     if (!data) return 0;
     if (!file.good()) return 0;
 
-    // wraps call for loadBigBlocks
-    std::vector<unsigned long> blocks;
-    blocks.resize(1);
-    blocks[ 0 ] = block;
-
-    return loadBigBlocks(blocks, data, maxlen);
+    return loadBigBlocks(&block, 1, data, maxlen);
 }
 
 // return number of bytes which has been read
-unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
+unsigned long StorageIO::loadSmallBlocks(const std::vector<unsigned long>& blocks,
         unsigned char* data, unsigned long maxlen)
+{
+    return loadSmallBlocks(blocks.data(), blocks.size(), data, maxlen);
+}
+
+unsigned long StorageIO::loadSmallBlocks(const unsigned long *blocks, unsigned blockCount,
+                                         unsigned char *data, unsigned long maxlen)
 {
     // sentinel
     if (!data) return 0;
     if (!file.good()) return 0;
-    if (blocks.size() < 1) return 0;
+    if (!blocks) return 0;
+    if (blockCount < 1) return 0;
     if (maxlen == 0) return 0;
 
     // our own local buffer
@@ -1052,7 +1057,7 @@ unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
 
     // read small block one by one
     unsigned long bytes = 0;
-    for (unsigned long i = 0; (i < blocks.size()) && (bytes < maxlen); i++) {
+    for (unsigned long i = 0; (i < blockCount) && (bytes < maxlen); i++) {
         unsigned long block = blocks[i];
 
         // find where the small-block exactly is
@@ -1086,12 +1091,7 @@ unsigned long StorageIO::loadSmallBlock(unsigned long block,
     if (!data) return 0;
     if (!file.good()) return 0;
 
-    // wraps call for loadSmallBlocks
-    std::vector<unsigned long> blocks;
-    blocks.resize(1);
-    blocks.assign(1, block);
-
-    return loadSmallBlocks(blocks, data, maxlen);
+    return loadSmallBlocks(&block, 1, data, maxlen);
 }
 
 // =========== StreamIO ==========
@@ -1112,8 +1112,8 @@ StreamIO::StreamIO(StorageIO* s, DirEntry* e)
 
     // prepare cache
     cache_pos = 0;
-    cache_size = 4096; // optimal ?
-    cache_data = new unsigned char[cache_size];
+    base_cache_size = cache_size = 4096; // optimal ?
+    cache_data = new unsigned char[base_cache_size];
     updateCache();
 }
 
@@ -1152,7 +1152,31 @@ int StreamIO::getch()
     return data;
 }
 
-unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned long maxlen)
+unsigned long StreamIO::read(unsigned char *data, unsigned long maxlen)
+{
+    // sanity checks
+    if (!data) return 0;
+    if (maxlen == 0) return 0;
+
+    unsigned long totalbytes = 0;
+
+    while (totalbytes < maxlen) {
+        // need to update cache ?
+        if (!cache_size || (m_pos < cache_pos) ||
+                (m_pos >= cache_pos + cache_size))
+            updateCache();
+        if (!cache_size) break;
+
+        const unsigned long remaining = cache_size - (m_pos - cache_pos);
+        const unsigned long count = std::min(remaining, maxlen - totalbytes);
+        memcpy(data + totalbytes, &cache_data[m_pos - cache_pos], count);
+        totalbytes += count;
+        m_pos += count;
+    }
+    return totalbytes;
+}
+
+unsigned long StreamIO::readInternal(unsigned long pos, unsigned char* data, unsigned long maxlen)
 {
     // sanity checks
     if (!data) return 0;
@@ -1206,9 +1230,9 @@ unsigned long StreamIO::read(unsigned long pos, unsigned char* data, unsigned lo
     return totalbytes;
 }
 
-unsigned long StreamIO::read(unsigned char* data, unsigned long maxlen)
+unsigned long StreamIO::readInternal(unsigned char* data, unsigned long maxlen)
 {
-    unsigned long bytes = read(tell(), data, maxlen);
+    unsigned long bytes = readInternal(tell(), data, maxlen);
     m_pos += bytes;
     return bytes;
 }
@@ -1218,10 +1242,14 @@ void StreamIO::updateCache()
     // sanity check
     if (!cache_data) return;
 
-    cache_pos = m_pos - (m_pos % cache_size);
-    unsigned long bytes = cache_size;
+    cache_pos = m_pos - (m_pos % base_cache_size);
+    unsigned long bytes = base_cache_size;
     if (cache_pos + bytes > entry->size) bytes = entry->size - cache_pos;
-    cache_size = read(cache_pos, cache_data, bytes);
+    if (cache_pos + bytes <= m_pos) {
+        cache_size = 0;
+    } else {
+        cache_size = readInternal(cache_pos, cache_data, bytes);
+    }
 }
 
 

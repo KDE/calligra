@@ -27,7 +27,7 @@ class ResourcesImporter:
 
         #TODO add options page ( import Calendars? Select calendars, Select resources... )
         
-        openpage = self.dialog.addPage(i18n("Open"),i18n("KPlato Resources"),"document-open")
+        openpage = self.dialog.addPage(i18n("Open"),i18n("Plan Resources"),"document-open")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kplatresourcesimportopen")
         self.openwidget.setMode("Opening")
         self.openwidget.setFilter("*.kplato|%(1)s\n*|%(2)s" % { '1' : i18n("Resource Busy Information"), '2' : i18n("All Files") } )

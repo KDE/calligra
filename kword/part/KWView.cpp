@@ -136,7 +136,7 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     layout->addWidget(m_gui);
 
     setComponentData(KWFactory::componentData());
-    setXMLFile("kword.rc");
+    setXMLFile("words.rc");
 
     m_currentPage = m_document->pageManager()->begin();
 
@@ -204,8 +204,6 @@ QWidget *KWView::canvas() const
 
 void KWView::updateReadWrite(bool readWrite)
 {
-    m_canvas->setReadWrite(readWrite);
-    KoToolManager::instance()->updateReadWrite(m_gui->canvasController(), readWrite);
     m_actionFormatFrameSet->setEnabled(readWrite);
     m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);

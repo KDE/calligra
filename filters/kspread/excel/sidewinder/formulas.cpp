@@ -1373,6 +1373,8 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
 
 QString FormulaToken::array(unsigned row, unsigned col) const
 {
+    #warning TODO Implement FormulaToken::array()
+
     /*
     unsigned char buf[2];
     buf[0] = d->data[1]; // specs say this should be at the first byte but seems its not true...

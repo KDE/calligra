@@ -108,7 +108,7 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read(MSOOXML::MsooXmlReaderCon
 /*!
 
  Parent elements:
- - root element of Wordprocessing Header part
+ - [done] root element of Wordprocessing Header part
 
  Child elements:
  - [done] footnote (Footnote Content) §17.11.10
@@ -122,6 +122,7 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read_footnotes()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(footnote)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -192,6 +193,7 @@ KoFilter::ConversionStatus DocxXmlFootnoteReader::read_footnote()
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
         }
     }
 

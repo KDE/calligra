@@ -541,6 +541,18 @@ Account::CostPlace::~CostPlace() {
     }
 }
 
+void Account::CostPlace::setNode(Node* node)
+{
+    Q_ASSERT( ! m_node );
+    m_node = node;
+}
+
+void Account::CostPlace::setResource(Resource* resource)
+{
+    Q_ASSERT( ! m_resource );
+    m_resource = resource;
+}
+
 void Account::CostPlace::setRunning(bool on ) { 
     m_running = on;
     if (m_node) {
@@ -600,6 +612,16 @@ void Account::CostPlace::save(QDomElement &element) const {
     me.setAttribute("startup-cost", m_startup);
     me.setAttribute("shutdown-cost", m_shutdown);
     
+}
+
+void Account::CostPlace::setObjectId( const QString& id )
+{
+    m_objectId = id;
+}
+
+QString Account::CostPlace::objectId() const
+{
+    return m_objectId;
 }
 
 //---------------------------------

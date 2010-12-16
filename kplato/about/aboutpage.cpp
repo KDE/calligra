@@ -59,18 +59,18 @@ QString KPlatoAboutPage::main()
     else
     res = res.arg( "" );
 
-    res = res.arg( i18n( "KPlato" ) )
+    res = res.arg( i18n( "Plan" ) )
     .arg( i18nc("KDE 4 tag line, see http://kde.org/img/kde40.png", "Be free.") )
-    .arg( i18n("KPlato is a Project Planning and Management application.") )
+    .arg( i18n("Plan is a Project Planning and Management application.") )
     .arg( i18n( 
-        "<b>Welcome to KPlato.</b>"
-        "<br>These introductory pages should give you an idea of how to use KPlato and what you can use it for."
+        "<b>Welcome to Plan.</b>"
+        "<br>These introductory pages should give you an idea of how to use Plan and what you can use it for."
         ) )
     .arg( icon_path ).arg( i18n( "A short introduction." ) )
     .arg( icon_path ).arg( i18n( "Tips on how to manipulate and inspect data." ) )
     .arg( icon_path ).arg( i18n( "A small tutorial to get you started." ) )
     .arg( i18n(
-        "<em>Note:</em> To view these pages when you are in other parts of KPlato, choose the menu option <em>Help -> KPlato Introduction</em>."
+        "<em>Note:</em> To view these pages when you are in other parts of Plan, choose the menu option <em>Help -> Plan Introduction</em>."
         ) )
     ;
 
@@ -92,9 +92,9 @@ QString KPlatoAboutPage::intro()
     else
         res = res.arg( "" );
 
-    res = res.arg( i18n("KPlato is a Project Planning and Management application.") )
+    res = res.arg( i18n("Plan is a Project Planning and Management application.") )
     .arg( i18n( 
-        "KPlato is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, KPlato offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
+        "Plan is intended for managing moderately large projects with multiple resources. To enable you to model your project adequately, Plan offers different types of task dependencies and timing constraints. Usually you will define your tasks, estimate the effort needed to perform each task, allocate resources and then schedule the project according to the dependency network and resource availability."
         "<p>You can find more information in the <a href=\"help:kplato\">documentation</a> "
         "or online at <a href=\"http://www.koffice.org/kplato\">http://www.koffice.org/kplato</a></p>"
         ) )
@@ -213,7 +213,7 @@ QString KPlatoAboutPage::tutorial2()
             "Select the task editor <em>Editors->Tasks</em>:"
             "<ul>"
             "<li>Enter a name (e.g. 'John') in the <em>Allocation</em> column."
-            " (KPlato will automatically create a resource with name 'John' under resource group 'Resources'.</li>"
+            " (Plan will automatically create a resource with name 'John' under resource group 'Resources'.</li>"
             "<li>Set <em>Estimate Type</em> to <em>Effort</em>.</li>"
             "</ul>"
             "Now you need to schedule the project again with the new allocation:"

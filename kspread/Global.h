@@ -56,8 +56,9 @@ public:
     explicit ElapsedTime(QString const & name, OutputMode mode = Default)
             : m_name(name) {
         m_time.start();
-        if (mode != PrintOnlyTime)
+        if (mode != PrintOnlyTime) {
             kDebug(36001) << QString("*** (" + name + ")... Starting measuring...").toLatin1().data();
+        }
     }
 
     ~ElapsedTime() {

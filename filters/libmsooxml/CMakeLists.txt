@@ -25,7 +25,7 @@ set(msooxml_LIB_SRCS
     MsooXmlDocPropertiesReader.cpp
     MsooXmlDiagramReader.cpp
     MsooXmlDiagramReader_p.cpp
-    pole.cpp
+    ooxml_pole.cpp
     MsooXmlDrawingTableStyleReader.cpp
     MsooXmlDrawingTableStyle.cpp
     VmlDrawingReader.cpp

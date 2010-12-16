@@ -34,7 +34,7 @@
 #include "palmdoc.h"
 
 K_PLUGIN_FACTORY(PalmDocImportFactory, registerPlugin<PalmDocImport>();)
-K_EXPORT_PLUGIN(PalmDocImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(PalmDocImportFactory("calligrafilters"))
 
 PalmDocImport::PalmDocImport(QObject* parent, const QVariantList&):
         KoFilter(parent)

@@ -4,8 +4,8 @@ include_directories(
     ${CMAKE_BINARY_DIR}/filters/
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/filters/kspread/xlsx
-    ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/filters/libmso
+    ${CMAKE_SOURCE_DIR}/filters/libmsooxml
     ${CMAKE_SOURCE_DIR}/kspread # for PointStorage
 )
 
@@ -22,7 +22,6 @@ set(sidewinder_SRCS
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/cell.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/excel.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/format.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/pole.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/sheet.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/value.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/../sidewinder/workbook.cpp

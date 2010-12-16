@@ -44,7 +44,7 @@
 #include <QImage>
 
 K_PLUGIN_FACTORY(PngExportFactory, registerPlugin<PngExport>();)
-K_EXPORT_PLUGIN(PngExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(PngExportFactory("calligrafilters"))
 
 
 PngExport::PngExport(QObject*parent, const QVariantList&)

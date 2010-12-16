@@ -36,7 +36,7 @@
 
 
 K_PLUGIN_FACTORY(RTFImportFactory, registerPlugin<RTFImport>();)
-K_EXPORT_PLUGIN(RTFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(RTFImportFactory("calligrafilters"))
 
 // defines a property
 #define PROP(a,b,c,d,e)  { a, b, &RTFImport::c, d, e }

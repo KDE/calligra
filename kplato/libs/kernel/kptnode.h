@@ -39,6 +39,8 @@
 
 class QDomElement;
 
+class KPlatoXmlLoader;
+
 /// The main namespace.
 namespace KPlato
 {
@@ -456,6 +458,7 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc);
 
+    bool isBaselined( long int id ) const;
     /**
      * Return schedule with @p id
      * If @p id == CURRENTSCHEDULE, return m_currentSchedule
@@ -584,6 +587,7 @@ public slots:
     void slotStandardWorktimeChanged( StandardWorktime* );
 
 protected:
+    friend class KPlatoXmlLoader;
     /**
      * Calculates and returns the duration of the node.
      * Reimplement.

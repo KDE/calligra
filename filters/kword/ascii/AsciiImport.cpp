@@ -41,7 +41,7 @@
 #define MAXLINES 10000
 
 K_PLUGIN_FACTORY(AsciiImportFactory, registerPlugin<AsciiImport>();)
-K_EXPORT_PLUGIN(AsciiImportFactory("kwordasciiimportng", "kofficefilters"))
+K_EXPORT_PLUGIN(AsciiImportFactory("kwordasciiimportng", "calligrafilters"))
 
 AsciiImport::AsciiImport(QObject *parent, const QVariantList &)
 : KoFilter(parent)

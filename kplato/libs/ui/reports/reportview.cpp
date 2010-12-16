@@ -27,6 +27,8 @@
 #include "reportscripts.h"
 #include "reportexportpanel.h"
 
+#include "kptnodechartmodel.h"
+
 #include <KoReportPage.h>
 #include <KoReportPreRenderer.h>
 #include <KoReportPrintRenderer.h>
@@ -224,6 +226,30 @@ QMap<QString, QAbstractItemModel*> ReportView::createReportModels( Project *proj
     m->setScheduleManager( manager );
 //     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
     map.insert( "resources", sf );
+
+    ChartProxyModel *cpm = new ChartProxyModel( parent );
+    // hide effort
+    cpm->setRejectColumns( QList<int>() << 3 << 4 << 5 );
+    cpm->setZeroColumns( QList<int>() << 3 << 4 << 5 );
+    m = new ChartItemModel( cpm );
+    cpm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+    static_cast<ChartItemModel*>( m )->setNodes( QList<Node*>() << project );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "costperformance", cpm  );
+
+    cpm = new ChartProxyModel( parent );
+    // hide cost
+    cpm->setRejectColumns( QList<int>() << 0 << 1 << 2 );
+    cpm->setZeroColumns( QList<int>() << 0 << 1 << 2 );
+    m = new ChartItemModel( cpm );
+    cpm->setSourceModel( m );
+    m->setProject( project );
+    m->setScheduleManager( manager );
+    static_cast<ChartItemModel*>( m )->setNodes( QList<Node*>() << project );
+//     connect( this, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), m, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    map.insert( "effortperformance", cpm  );
 
     fm = new FlatProxyModel( parent );
     m = new CostBreakdownItemModel( fm );
@@ -442,8 +468,9 @@ ReportData *ReportView::createReportData( const QString &type )
     kDebug()<<type;
     //FIXME a smarter report data creator
     ReportData *r = 0;
-    if ( type == "costbreakdown" ) {
+    if ( type == "costbreakdown" || type =="costperformance" || type =="effortperformance" ) {
         r = new ChartReportData();
+        static_cast<ChartReportData*>( r )->cbs = ( type == "costbreakdown" ? true : false );
     } else {
         r = new ReportData();
     }
@@ -852,7 +879,7 @@ ReportData *ReportDesignPanel::createReportData( const QString &type )
 {
     //FIXME a smarter report data creator
     ReportData *r = 0;
-    if ( type == "costbreakdown" ) {
+    if ( type == "costbreakdown" || type == "earnedvalue" ) {
         r = new ChartReportData();
     } else {
         r = new ReportData();

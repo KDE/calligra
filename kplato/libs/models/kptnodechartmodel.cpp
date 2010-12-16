@@ -195,13 +195,17 @@ void ChartItemModel::setProject( Project *project )
     m_acwp.clear();
     if ( m_project ) {
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( resourceRemoved( Resource* ) ), this, SLOT( slotResourceRemoved( Resource* ) ) );
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( resourceRemoved( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         connect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
     }
     reset();
@@ -236,6 +240,16 @@ void ChartItemModel::clearNodes()
     reset();
 }
 
+void ChartItemModel::slotNodeRemoved( Node *node )
+{
+    if ( m_nodes.contains( node ) ) {
+        m_nodes.removeAt( m_nodes.indexOf( node ) );
+        calculate();
+        reset();
+        return;
+    }
+}
+
 void ChartItemModel::slotNodeChanged( Node *node )
 {
     if ( m_nodes.contains( node ) ) {
@@ -252,7 +266,7 @@ void ChartItemModel::slotNodeChanged( Node *node )
     }
 }
 
-void ChartItemModel::slotResourceChanged( Resource* resource )
+void ChartItemModel::slotResourceChanged( Resource* )
 {
     calculate();
     reset();

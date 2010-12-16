@@ -1,0 +1,2 @@
+All the default Odg shape collections are placed here, each subdir in shapecollection folder represent a shape collection family, the family names are defined 
+in a desktop file named collection.desktop, one subdir can contain multiple odg files, all of them will be read and stored in one KoStore instance.

@@ -71,6 +71,8 @@ set(kplatoprivate_LIB_SRCS
     kptinsertfiledlg.cpp
 
     about/aboutpage.cpp
+
+    KPlatoXmlLoader.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
@@ -128,8 +130,8 @@ install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  kplatopart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kplato.rc kplato_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kplato)
+install( FILES  planpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  plan.rc plan_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/plan)
 install( PROGRAMS  kplato.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kplatorc DESTINATION ${CONFIG_INSTALL_DIR})
 install(FILES kplatosettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})

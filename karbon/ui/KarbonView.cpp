@@ -1160,8 +1160,7 @@ void KarbonView::createLayersTabDock()
 
 void KarbonView::updateReadWrite(bool readwrite)
 {
-    canvasWidget()->setReadWrite(readwrite);
-    KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
+    Q_UNUSED(readwrite);
 }
 
 void KarbonView::updateUnit(const KoUnit &unit)

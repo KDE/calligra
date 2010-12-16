@@ -46,7 +46,7 @@
 #include "MsooXmlSchemas.h"
 #include "MsooXmlReader.h"
 
-#include "pole.h"
+#include "ooxml_pole.h"
 
 #include <KoOdfReadStore.h>
 #include <styles/KoCharacterStyle.h>
@@ -260,7 +260,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
     QIODevice* inputDevice = Utils::openDeviceForFile(zip, errorMessage, sourceName, status);
     inputDevice->open(QIODevice::ReadOnly);
 
-    POLE::Storage storage(inputDevice);
+    OOXML_POLE::Storage storage(inputDevice);
     if (!storage.open()) {
         kDebug(30513) << "Cannot open " << sourceName;
         return KoFilter::WrongFormat;
@@ -279,7 +279,7 @@ static KoFilter::ConversionStatus copyOle(QString& errorMessage,
         }
     }
 
-    POLE::Stream stream(&storage, oleType);
+    OOXML_POLE::Stream stream(&storage, oleType);
     QByteArray array;
     array.resize(stream.size());
 

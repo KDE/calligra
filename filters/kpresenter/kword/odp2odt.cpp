@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 K_PLUGIN_FACTORY(Odp2OdtFactory, registerPlugin<Odp2Odt>();)
-K_EXPORT_PLUGIN(Odp2OdtFactory("kofficefilters"))
+K_EXPORT_PLUGIN(Odp2OdtFactory("calligrafilters"))
 
 Odp2Odt::Odp2Odt(QObject *parent, const QStringList&) :
         KoFilter(parent)

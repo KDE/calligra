@@ -47,7 +47,7 @@ void MSOOXML_CURRENT_CLASS::doneInternal()
 //! t handler (Text)
 /*! ECMA-376, 17.3.3.31, p.389.
  Parent elements:
- - r (§22.1.2.87) - Shared ML
+ - [done] r (§22.1.2.87) - Shared ML
  - [done] r (§17.3.2.25)
  No child elements.
 */

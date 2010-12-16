@@ -621,7 +621,7 @@ void SHD::readSHDOperandPtr(const U8 *ptr) {
     U16 shifterU16;
     U8 r,g,b,cvauto;
 
-    U8 cb = readU8( ptr );      // read the cb property and do nothing with it
+    readU8( ptr );      // read the cb property and do nothing with it
 
     cvauto=readU8(ptr);
     ptr+=sizeof(U8);

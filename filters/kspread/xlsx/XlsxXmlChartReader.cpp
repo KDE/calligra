@@ -1090,6 +1090,8 @@ KoFilter::ConversionStatus XlsxXmlChartReader::read_spPr()
     while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
+        if ( !m_currentShapeProperties )
+            continue;
         if(isStartElement()) ++level;
         else if(isEndElement()) --level;
 

@@ -25,9 +25,9 @@
 using namespace KSpread;
 
 Localization::Localization()
-        : KLocale("kspread")
+        : KLocale("calligra")
 {
-    insertCatalog("koffice");
+    insertCatalog("calligra");
 }
 
 void Localization::load(const KoXmlElement& element)
@@ -100,7 +100,7 @@ QDomElement Localization::save(QDomDocument& doc) const
 
 void Localization::defaultSystemConfig()
 {
-    KLocale locale("kspread");
+    KLocale locale("tables");
     setWeekStartDay(locale.weekStartDay());
     setDecimalSymbol(locale.decimalSymbol());
     setThousandsSeparator(locale.thousandsSeparator());

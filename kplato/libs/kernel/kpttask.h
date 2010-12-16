@@ -393,8 +393,6 @@ public:
      */
     void calcResourceOverbooked();
     
-    void setConstraint(Node::ConstraintType type);
-
     /// Load from document
     virtual bool load(KoXmlElement &element, XMLLoaderObject &status );
     /// Save to document

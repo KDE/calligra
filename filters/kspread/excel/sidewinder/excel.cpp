@@ -36,7 +36,7 @@
 #include <QFile>
 #include <QtEndian>
 
-#include "pole.h"
+#include <pole.h>
 #include "swinder.h"
 #include "utils.h"
 #include "globalssubstreamhandler.h"

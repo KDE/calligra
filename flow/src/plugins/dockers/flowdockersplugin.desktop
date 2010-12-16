@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Flow Dockers plugin
+X-KDE-ServiceTypes=KOffice/Dock
+Type=Service
+X-KDE-Library=flowdockersplugin
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
