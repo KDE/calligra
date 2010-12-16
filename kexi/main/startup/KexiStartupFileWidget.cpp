@@ -44,11 +44,10 @@
 #include <KActionCollection>
 #include <KFileDialog>
 
-// added because of lack of krecentdirs.hs
-class KDE_IMPORT KRecentDirs
+// added because of lack of krecentdirs.h
+namespace KRecentDirs
 {
-public:
-    static void add(const QString &fileClass, const QString &directory);
+    KDE_IMPORT void add(const QString &fileClass, const QString &directory);
 };
 
 //! @internal
