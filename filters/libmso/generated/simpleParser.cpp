@@ -1722,7 +1722,7 @@ void MSO::parseMasterTextPropRun(LEInputStream& in, MasterTextPropRun& _s) {
 }
 void MSO::parseStyleTextPropAtom(LEInputStream& in, StyleTextPropAtom& _s) {
     _s.streamOffset = in.getPosition();
-    int _c;
+
     LEInputStream::Mark _m;
     parseRecordHeader(in, _s.rh);
     if (!(_s.rh.recVer == 0)) {
