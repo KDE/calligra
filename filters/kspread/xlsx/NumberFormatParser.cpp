@@ -585,8 +585,6 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
     // this is for the month vs. minutes-context
     bool justHadHours = false;
 
-    bool hadPlainText = false;
-
     for (int i = 0; i < numberFormat.length(); ++i) {
         const char c = numberFormat[ i ].toLatin1();
         bool isSpecial = true;
