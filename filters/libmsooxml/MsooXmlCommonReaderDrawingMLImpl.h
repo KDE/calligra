@@ -1866,10 +1866,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hlinkClick()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR_WITH_NS(r, id)
 
-    if (r_id.isEmpty()) {
-        m_hyperLinkTarget.clear();
-    }
-    else {
+    if (!r_id.isEmpty()) {
         m_hyperLink = true;
         m_hyperLinkTarget = m_context->relationships->target(m_context->path, m_context->file, r_id);
         m_hyperLinkTarget.remove(0, m_context->path.length() + 1);

@@ -171,6 +171,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read(MSOOXML::MsooXmlReaderCon
         if (isStartElement()) {
             TRY_READ_IF(body)
             ELSE_TRY_READ_IF(background)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -242,6 +243,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_body()
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -319,6 +321,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_sectPr()
             ELSE_TRY_READ_IF(footnotePr)
             ELSE_TRY_READ_IF(endnotePr)
             ELSE_TRY_READ_IF(lnNumType)
+            SKIP_UNKNOWN
         }
     }
 
@@ -520,6 +523,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pict()
             ELSE_TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(v, group)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -752,6 +756,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_endnotePr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            SKIP_UNKNOWN
         }
     }
 
@@ -802,6 +807,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnotePr()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(numFmt)
+            SKIP_UNKNOWN
         }
     }
 
@@ -1087,6 +1093,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_object()
             TRY_READ_IF_NS(v, shapetype)
             ELSE_TRY_READ_IF_NS(v, shape)
             ELSE_TRY_READ_IF_NS(o, OLEObject)
+            SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1281,8 +1288,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_footnoteReference()
 /*! Complex field character
 
  Parent elements:
- - r (§17.3.2.25)
- - r (§22.1.2.87)
+ - [done] r (§17.3.2.25)
+ - [done] r (§22.1.2.87)
 
  Child elements:
  - ffData (Form Field Properties) §17.16.17
@@ -1508,6 +1515,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_hyperlink()
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF(fldSimple)
+            SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1537,6 +1545,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_txbxContent()
         if (isStartElement()) {
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
+            SKIP_UNKNOWN
         }
     }
 
@@ -1674,6 +1683,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
             ELSE_TRY_READ_IF(fldSimple)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -1874,6 +1884,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
                 body->startElement("text:tab");
                 body->endElement(); // text:tab
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2077,6 +2088,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_rPr()
             ELSE_TRY_READ_IF(webHidden)
             ELSE_TRY_READ_IF(bdr)
             ELSE_TRY_READ_IF(vanish)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2200,6 +2212,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pPr()
             ELSE_TRY_READ_IF(ind)
             ELSE_TRY_READ_IF(suppressLineNumbers)
             ELSE_TRY_READ_IF(sectPr)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2403,6 +2416,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_numPr()
         if (isStartElement()) {
             TRY_READ_IF(numId)
             ELSE_TRY_READ_IF(ilvl)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -2494,6 +2508,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 {
     READ_PROLOGUE
 
+    m_hyperLink = false;
     m_hasPosOffsetH = false;
     m_hasPosOffsetV = false;
 
@@ -2518,6 +2533,13 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
     }
 
     body = buffer.originalWriter();
+
+    if (m_hyperLink) {
+        body->startElement("text:a");
+        body->addAttribute("xlink:type", "simple");
+        body->addAttribute("xlink:href", QUrl(m_hyperLinkTarget).toEncoded());
+    }
+
     body->startElement("draw:frame");
 
     if (m_drawing_inline) {
@@ -2623,8 +2645,9 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_drawing()
 
     body->endElement(); // draw:frame
 
-    m_drawing_anchor = false;
-    m_drawing_inline = false;
+    if (m_hyperLink) {
+        body->endElement(); // text:a
+    }
     READ_EPILOGUE
 }
 
@@ -3370,6 +3393,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
             ELSE_TRY_READ_IF(bookmarkEnd)
             ELSE_TRY_READ_IF_NS(m, oMathPara)
             ELSE_TRY_READ_IF_NS(m, oMath)
+            SKIP_UNKNOWN
         }
     }
 
@@ -3386,12 +3410,12 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_fldSimple()
 /*!
 
  Parent elements:
- - pPr (§17.3.1.26)
- - pPr (§17.3.1.25)
- - pPr (§17.7.5.2)
- - pPr (§17.7.6.1)
- - pPr (§17.9.23)
- - pPr (§17.7.8.2)
+ - [done] pPr (§17.3.1.26)
+ - [done] pPr (§17.3.1.25)
+ - [done] pPr (§17.7.5.2)
+ - [done] pPr (§17.7.6.1)
+ - [done] pPr (§17.9.23)
+ - [done] pPr (§17.7.8.2)
 
  Child elements:
  - [done] tab (§17.3.137)
@@ -3416,6 +3440,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tabs()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(tab)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -3480,8 +3505,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tab()
 /*!
 
  Parent elements:
- - r (§22.1.2.87);
- - r (§17.3.2.25)
+ - [done] r (§22.1.2.87);
+ - [done] r (§17.3.2.25)
 
  Child elements:
  - none
@@ -3548,6 +3573,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_pBdr()
             else if (QUALIFIED_NAME_IS(right)) {
                 RETURN_IF_ERROR(readBorderElement(RightBorder, "right"));
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -3924,6 +3950,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_background()
                 TRY_READ(VML_background)
             }
             ELSE_TRY_READ_IF(drawing)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -4835,19 +4862,19 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_extent()
  These properties are specified as child elements of this element.
 
  Parent elements:
- - [done]anchor (§20.4.2.3)
- - inline (§20.4.2.8)
+ - [done] anchor (§20.4.2.3)
+ - [done] inline (§20.4.2.8)
 
  Child elements:
  - extLst (Extension List) §20.1.2.2.15
- - hlinkClick (Click Hyperlink) §21.1.2.3.5
+ - [done] hlinkClick (Click Hyperlink) §21.1.2.3.5
  - hlinkHover (Hyperlink for Hover) §20.1.2.2.23
 
  Attributes:
- - descr (Alternative Text for Object)
+ - [done] descr (Alternative Text for Object)
  - hidden (Hidden)
  - id (Unique Identifier)
- - name (Name)
+ - [done] name (Name)
 */
 //! CASE #1340
 //! @todo support all elements
@@ -4864,6 +4891,8 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_docPr()
         readNext();
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
+            TRY_READ_IF_NS(a, hlinkClick)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

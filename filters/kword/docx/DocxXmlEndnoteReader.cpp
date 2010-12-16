@@ -108,7 +108,7 @@ KoFilter::ConversionStatus DocxXmlEndnoteReader::read(MSOOXML::MsooXmlReaderCont
 /*!
 
  Parent elements:
- - root element of Wordprocessing Header part
+ - [done] root element of Wordprocessing Header part
 
  Child elements:
  - [done] endnote (Endnote Content) §17.11.10
@@ -122,6 +122,7 @@ KoFilter::ConversionStatus DocxXmlEndnoteReader::read_endnotes()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(endnote)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -192,6 +193,7 @@ KoFilter::ConversionStatus DocxXmlEndnoteReader::read_endnote()
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
         }
     }
 

@@ -115,6 +115,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read(MSOOXML::MsooXmlReaderConte
         if (isStartElement()) {
             TRY_READ_IF(docDefaults)
             ELSE_TRY_READ_IF(style)
+            SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -400,6 +401,7 @@ KoFilter::ConversionStatus DocxXmlStylesReader::read_style()
             else if (QUALIFIED_NAME_IS(next)) {
                 READ_ATTR_INTO(val, nextStyleName)
             }
+            SKIP_UNKNOWN
             //! @todo add ELSE_WRONG_FORMAT
         }
     }

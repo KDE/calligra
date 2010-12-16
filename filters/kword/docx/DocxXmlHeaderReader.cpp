@@ -164,7 +164,8 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
-            ELSE_TRY_READ_IF(bookmarkEnd);
+            ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
         }
     }
 
