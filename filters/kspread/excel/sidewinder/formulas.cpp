@@ -1373,7 +1373,7 @@ QString FormulaToken::ref3d(const std::vector<QString>& externSheets, unsigned /
 
 QString FormulaToken::array(unsigned row, unsigned col) const
 {
-    #TODO Implement FormulaToken::array()
+    #warning TODO Implement FormulaToken::array()
 
     /*
     unsigned char buf[2];
