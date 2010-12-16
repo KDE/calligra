@@ -1391,6 +1391,7 @@ void OpenCalcImport::loadOasisAreaName(const KoXmlElement&body)
 
 void OpenCalcImport::loadOasisCellValidation(const KoXmlElement&body, const ValueParser *parser)
 {
+    Q_UNUSED(parser)
     KoXmlNode validation = KoXml::namedItemNS(body, ooNS::table, "content-validations");
     if (!validation.isNull()) {
         KoXmlElement element;
