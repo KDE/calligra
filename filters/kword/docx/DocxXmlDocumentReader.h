@@ -171,6 +171,9 @@ protected:
 
     KoFilter::ConversionStatus read_pict();
 
+    KoFilter::ConversionStatus read_sdt();
+    KoFilter::ConversionStatus read_sdtContent();
+
     KoFilter::ConversionStatus read_inline();
     KoFilter::ConversionStatus read_extent();
     KoFilter::ConversionStatus read_docPr();
