@@ -267,12 +267,6 @@ void Task::calcResourceOverbooked() {
         m_currentSchedule->calcResourceOverbooked();
 }
 
-// A new constraint means start/end times and duration must be recalculated
-void Task::setConstraint(Node::ConstraintType type) {
-    m_constraint = type;
-}
-
-
 bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     QString s;
     bool ok = false;

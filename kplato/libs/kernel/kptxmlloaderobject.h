@@ -54,6 +54,9 @@ public:
     QString workVersion() const { return m_workversion; }
     void setWorkVersion( const QString ver ) { m_workversion = ver; }
 
+    QString mimetype() const { return m_mimetype; }
+    void setMimetype( const QString &mime ) { m_mimetype = mime; }
+    
     const KDateTime::Spec &projectSpec() const { return m_projectSpec; }
     void setProjectSpec( const KDateTime::Spec &spec ) { m_projectSpec = spec; }
     
@@ -117,6 +120,7 @@ protected:
     int m_elapsed;
     QString m_version;
     QString m_workversion;
+    QString m_mimetype;
     KDateTime::Spec m_projectSpec;
     
     Calendar *m_baseCalendar; // help to handle version < 0.6
