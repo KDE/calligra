@@ -68,7 +68,7 @@ bool KPlatoXmlLoader::load( const KoXmlElement& plan )
     } else if ( syntaxVersion > KPLATO_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of KPlato than Plan can load.\n"
-                               "Syntax version: %1)\n"
+                               "Syntax version: %1\n"
                                "Opening it in this version of Plan may lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
