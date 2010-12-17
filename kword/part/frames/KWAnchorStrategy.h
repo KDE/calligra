@@ -27,6 +27,7 @@ class KWAnchorStrategy;
 class KWFrame;
 class KWTextFrameSet;
 class KWPageTextInfo;
+class KoTextShapeData;
 
 /**
  * Class for text layout of anchored frames.
@@ -53,13 +54,12 @@ public:
      * The layout state is reverted to an earlier paragraph if needed to account for the newly
      * placed shape.
      * @param state the state of the layout.
-     * @param startOfBlock the position in the document of the first character in a block.
-     * @param startOfBlockText the position in the document of the first non-anchor character in a block
+     * @param frameSet frames representing the document
+     * @param runThrough property that defines text wrapping
      * @return will return true if the layout state has been changed.
      * @see isFinished()
      */
-    bool checkState(KoTextDocumentLayout::LayoutState *state, int startOfBlock, int startOfBlockText,
-                    KWTextFrameSet *frameSet);
+    bool checkState(KoTextDocumentLayout::LayoutState *state, KWTextFrameSet *frameSet, bool runThrough);
 
     /**
      * @return if the anchor is placed properly and no more changes are required.
@@ -79,31 +79,38 @@ public:
         return m_anchor;
     }
 
-    bool extendsPastShape()
-    {
-        return m_nextShapeNeeded;
-    }
-
 private:
     void calculateKnowledgePoint();
 
-    bool checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect, KWPageTextInfo *pageInfo);
+    inline bool countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, KWPageTextInfo *pageInfo,
+                                   KoTextDocumentLayout::LayoutState *state, QTextBlock &block, QTextLayout *layout);
+    inline void countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect, KWPageTextInfo *pageInfo);
+    inline bool countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, KWPageTextInfo *pageInfo,
+                                 KWTextFrameSet *frameSet, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
+    inline void countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect);
+
+    //check the border of page an move the shape back to have it visible
+    inline void checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect, KWPageTextInfo *pageInfo);
+
+    // true if shape is inside layouted text area
+    inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextDocumentLayout::LayoutState *state,
+                                     KoTextShapeData *data);
+
+
+    inline void calculateRelayoutPosition(QPointF relayoutPos, KoTextDocumentLayout::LayoutState *state, KoTextShapeData *data);
 
     KoTextAnchor *const m_anchor;
     int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
     bool m_finished;
-    bool m_nextShapeNeeded;
-    qreal m_currentLineY;
-    int m_pass;
     int m_lastknownPosInDoc;
+    bool m_makeSecondPass;
 
     QPointF m_lastOffset;
-//    KoTextAnchor::AnchorVertical m_lastVerticalAnchorAlignment;
-//    KoTextAnchor::AnchorHorizontal m_lastHorizontalAnchorAlignment;
     KoTextAnchor::VerticalPos m_lastVerticalPos;
     KoTextAnchor::VerticalRel m_lastVerticalRel;
     KoTextAnchor::HorizontalPos m_lastHorizontalPos;
     KoTextAnchor::HorizontalRel m_lastHorizontalRel;
+    KoShape  *m_lastParent;
 };
 
 #endif

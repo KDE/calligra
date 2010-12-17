@@ -140,6 +140,8 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
 
 KWTextDocumentLayout::~KWTextDocumentLayout()
 {
+    qDeleteAll(m_anchors);
+    m_anchors.clear();
     m_frameSet = 0;
     delete m_dummyShape;
 }
@@ -204,10 +206,18 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             if (strategy->anchor() == anchor)
                 return;
         }
+        foreach (KWAnchorStrategy *strategy, m_anchors) {
+            if (strategy->anchor() == anchor) {
+                m_newAnchors.append(strategy);
+                return;
+            }
+        }
         ADEBUG << "new anchor";
         //initially place the shape far far down
         anchor->shape()->setPosition(QPointF(0,100000000));
-        m_newAnchors.append(new KWAnchorStrategy(anchor));
+        KWAnchorStrategy * strategy = new KWAnchorStrategy(anchor);
+        m_newAnchors.append(strategy);
+        m_anchors.append(strategy);
     }
 }
 
@@ -512,6 +522,12 @@ void KWTextDocumentLayout::layout()
                 qDeleteAll(outlines);
                 outlines.clear();
 
+                // if we are on new page than clean up anchors
+                cleanupAnchors();
+
+                // if part of page is already layouted than check if there are some anchored shapes and add them to outline
+                addOutlinesToPage(outlines,currentShape,m_state);
+
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
@@ -564,13 +580,21 @@ void KWTextDocumentLayout::layout()
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             ADEBUG << "checking anchor";
             QPointF old;
-            if (strategy->anchoredShape())
+            KWFrame *frame = 0;
+            if (strategy->anchoredShape()) {
                 old = strategy->anchoredShape()->position();
-            if (strategy->checkState(m_state, startOfBlock, startOfBlockText, m_frameSet)) {
+                frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
+            }
+
+            bool runThrough = false;
+            if (frame) {
+                runThrough = (frame->textRunAround() == KWord::RunThrough);
+            }
+
+            if (strategy->checkState(m_state, m_frameSet, runThrough)) {
                 ADEBUG << "  restarting line";
                 restartLine = true;
             }
-            line.setRestartOnNextShape(strategy->extendsPastShape());
             if (strategy->anchoredShape() && old != strategy->anchoredShape()->position()) {
                 // refresh outlines in case the shape moved.
                 foreach (Outline *outline, outlines) {
@@ -591,15 +615,6 @@ void KWTextDocumentLayout::layout()
 
         if (restartLine) {
             continue;
-        }
-        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
-            ADEBUG << " + isFinished?"<< strategy->isFinished();
-            if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
-                ADEBUG << "  is finished";
-                m_activeAnchors.removeAll(strategy);
-                m_newAnchors.removeAll(strategy);
-                delete strategy;
-            }
         }
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             ADEBUG << "  migrating strategy!";
@@ -805,8 +820,39 @@ void KWTextDocumentLayout::layout()
 
 void KWTextDocumentLayout::cleanupAnchors()
 {
-    qDeleteAll(m_activeAnchors);
     m_activeAnchors.clear();
-    qDeleteAll(m_newAnchors);
     m_newAnchors.clear();
+}
+
+void KWTextDocumentLayout::addOutlinesToPage(QList<Outline*> outlines, KoShape *currentShape,LayoutState *state)
+{
+    KoShapeContainer *pageShape = dynamic_cast<KoShapeContainer*>(currentShape);
+
+    if (!pageShape) {
+        return;
+    }
+
+    // check if page has already anchored shapes
+    foreach (KoShape * child,pageShape->shapes()) {
+        // check if the child shape has anchor strategy
+        foreach (KWAnchorStrategy *strategy, m_anchors) {
+            if (strategy->anchor()->shape() == child) {
+                // check if the shape is anchored to already layouted text
+                if (strategy->anchor()->positionInDocument() < state->cursorPosition()) {
+                    // add this shape to outlines
+                    if (strategy->anchoredShape()) {
+                        KWFrame *frame = dynamic_cast<KWFrame*>(strategy->anchoredShape()->applicationData());
+                        if (! frame || frame->textRunAround() != KWord::RunThrough) {
+                            QTransform matrix = strategy->anchoredShape()->absoluteTransformation(0);
+                            matrix = matrix * currentShape->absoluteTransformation(0).inverted();
+                            matrix.translate(0, m_state->documentOffsetInShape());
+                            Outline *outline = new Outline(strategy->anchoredShape(), matrix);
+                            outlines.append(outline);
+                        }
+                        m_activeAnchors.append(strategy);
+                    }
+                }
+            }
+        }
+    }
 }

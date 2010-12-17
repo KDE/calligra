@@ -57,12 +57,15 @@ private:
 
     void cleanupAnchors();
 
+    inline void addOutlinesToPage(QList<Outline*> outlines, KoShape *currentShape, LayoutState *state);
+
     KWTextFrameSet *m_frameSet;
     class DummyShape;
     DummyShape * const m_dummyShape;
 
     QList<KWAnchorStrategy*> m_activeAnchors;
     QList<KWAnchorStrategy*> m_newAnchors;
+    QList<KWAnchorStrategy*> m_anchors;
 
     int m_lastKnownFrameCount;
 };
