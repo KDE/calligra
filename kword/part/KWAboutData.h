@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kofficeversion.h>
 
-static const char* KWORD_DESCRIPTION = I18N_NOOP("KOffice Word Processor");
+static const char* KWORD_DESCRIPTION = I18N_NOOP("Calligra Word Processor");
 // First official public release Oct 2000 version 0.8
 // KOffice-1.1-beta1: version 0.9
 // KOffice-1.1-beta2: version 1.1 (to remove confusion)
@@ -38,6 +38,15 @@ KAboutData * newKWordAboutData()
                                             KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
                                             ki18n("(c) 1998-2010, The Words Team"), KLocalizedString(),
                                             "http://www.calligra-suite.org/words/");
+    aboutData->addAuthor(ki18n("Casper Boemann"), ki18n("Current maintainer"), "cbo@boemann.dk");
+    aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("Everything"), "mail@dipe.org");
+    aboutData->addAuthor(ki18n("Boudewijn Rempt"), ki18n("Notes and fixes"), "boud@kde.org");
+    aboutData->addAuthor(ki18n("Inge Wallin"), ki18n("Formatting stuff"), "inge@lysator.liu.se");
+    aboutData->addAuthor(ki18n("Thorsten Zachmann"), ki18n("<optimizations"), "zachmann@kde.org");
+    aboutData->addAuthor(ki18n("Matus Uzak"), ki18n("Filter stuff"), "matus.uzak@ixonos.com");
+    aboutData->addAuthor(ki18n("Pavol Korinek"), ki18n("Layout and Painting"), "pavol.korinek@ixonos.com");
+    aboutData->addAuthor(ki18n("Pierre Ducroque"), ki18n("Everything"), "");
+    aboutData->addAuthor(ki18n("Pierre Stirnweiss"), ki18n("Everything"), "");
     aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
     aboutData->addAuthor(ki18n("Girish Ramakrishnan"), ki18n("ODF Support"), "girish@forwardbias.in");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
