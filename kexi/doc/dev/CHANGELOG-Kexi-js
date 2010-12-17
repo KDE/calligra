@@ -97,6 +97,12 @@ Migration
 
 ~~~~~~~~~~~~~~~~ 2.3 rc 1 ~~~~~~~~~~~~~~~~
 
+2010-12-09
+Migration
+*Fix for MS Access import (did not honor encoding); this fixes using ICONV
+*a small fix for 'advanced options' button possition in the import wizard
+**BUG:259259
+
 2010-12-01
 Core
 *fix memory leak in KexiActionProxy
