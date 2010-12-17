@@ -30,7 +30,7 @@
 #include <wmlparser.h>
 
 K_PLUGIN_FACTORY(WMLImportFactory, registerPlugin<WMLImport>();)
-K_EXPORT_PLUGIN(WMLImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(WMLImportFactory("calligrafilters"))
 
 WMLImport::WMLImport(QObject* parent, const QVariantList&):
         KoFilter(parent)

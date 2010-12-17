@@ -349,6 +349,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -476,6 +477,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(rect)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -524,6 +526,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_roundrect()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }
@@ -640,6 +643,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(fill)
+            ELSE_WRONG_FORMAT
         }
     }
     const QString rId(m_vmlStyle.value("v:fill@r:id"));
@@ -827,6 +831,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
                 m_wrapRead = true;
                 TRY_READ(wrap)
             }
+            SKIP_UNKNOWN
         }
     }
 
@@ -873,6 +878,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
  - [done] shape (§14.1.2.19)
  - shapetype (§14.1.2.20)
 
+ Child elements:
+ - none
+
 */
 //! @todo support all elements
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
@@ -905,10 +913,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_imagedata()
         addManifestEntryForPicturesDir();
     }
 
-    while (!atEnd()) {
-        readNext();
-        BREAK_IF_END_OF(CURRENT_EL);
-    }
+    readNext();
     READ_EPILOGUE
 }
 
@@ -1012,7 +1017,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
 
     if (anchorx == "page") {
-        m_currentDrawStyle->addProperty("style-horizontal-rel", "page");
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "page");
     }
     else if (anchorx == "margin") {
         m_currentDrawStyle->addProperty("style:horizontal-rel", "page-start-margin");
@@ -1021,7 +1026,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         // Empty, horizontal-rel cannot be anything
     }
     else {
-        m_currentDrawStyle->addProperty("style-horizontal-rel", "paragraph");
+        m_currentDrawStyle->addProperty("style:horizontal-rel", "paragraph");
     }
 
     readNext();

@@ -33,7 +33,7 @@
 #include "wmlexport.h"
 
 K_PLUGIN_FACTORY(WMLExportFactory, registerPlugin<WMLExport>();)
-K_EXPORT_PLUGIN(WMLExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(WMLExportFactory("calligrafilters"))
 
 class WMLWorker : public KWEFBaseWorker
 {

@@ -4,6 +4,7 @@ X-KDE-ServiceType=Kexi/DBDriver
 Comment=Kexi SQL-Driver plugin
 Comment[br]=Lugent SQL-Driver evit Kexi
 Comment[ca]=Connector del controlador SQL del Kexi
+Comment[ca@valencia]=Connector del controlador SQL del Kexi
 Comment[cy]=Ategyn Gyrrydd-SQL Kexi
 Comment[da]=Kexi SQL-driver-plugin
 Comment[de]=Kexi-SQL-Treibermodul
@@ -47,8 +48,8 @@ Comment[ta]=கெக்ஸி எஸ்கியூஎல் இயக்கி
 Comment[tr]=Kexi SQl-Sürücüsü eki
 Comment[uk]=Додаток драйвера SQL Kexi
 Comment[uz]=Kexi SQL-drayver plagini
+Comment[uz@cyrillic]=Kexi SQL-драйвер плагини
 Comment[wa]=Tchôke-divins mineu di SQL di Kexi
-Comment[x-test]=xxKexi SQL-Driver pluginxx
 Comment[zh_CN]=Kexi SQL 驱动插件
 Comment[zh_TW]=Kexi SQL-驅動外掛程式
 

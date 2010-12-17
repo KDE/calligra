@@ -43,7 +43,7 @@
 using namespace KSpread;
 
 K_PLUGIN_FACTORY(QPROImportFactory, registerPlugin<QpImport>();)
-K_EXPORT_PLUGIN(QPROImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(QPROImportFactory("calligrafilters"))
 
 // ---------------------------------------------------------------
 

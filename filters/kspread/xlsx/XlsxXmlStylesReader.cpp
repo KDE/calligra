@@ -615,6 +615,8 @@ XlsxStyles::~XlsxStyles()
         delete fillStyles[i];
     for (int i = 0; i < cellFormats.size(); i++)
         delete cellFormats[i];
+    for (int i = 0; i < borderStyles.size(); i++)
+        delete borderStyles[i];
 }
 
 void XlsxStyles::setCellFormat(XlsxCellFormat *format, int cellFormatIndex)

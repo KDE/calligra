@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Slide Wipe
 Name[ca]=Esborrat de diapositiva
+Name[ca@valencia]=Esborrat de diapositiva
 Name[da]=Diasvisker
 Name[de]=Wischblende (Gleiten)
 Name[el]=Σβήσιμο κύλιση
@@ -24,10 +25,10 @@ Name[ta]=திரை நீக்கி
 Name[tr]=Saydam Temizleme
 Name[uk]=Ковзне витирання
 Name[wa]=Schover l' diya evoye
-Name[x-test]=xxSlide Wipexx
 Name[zh_TW]=滑動掃描
 Comment=Slide Wipe Page Effect
 Comment[ca]=Efectes d'esborrat de diapositiva de la pàgina
+Comment[ca@valencia]=Efectes d'esborrat de diapositiva de la pàgina
 Comment[da]=Diasvisker-sideeffekt
 Comment[de]=Wischblenden-Seiteneffekt (Gleiten)
 Comment[el]=Εφέ σελίδας σβήσιμο κύλιση
@@ -51,7 +52,6 @@ Comment[ta]=திரை நீக்கி பக்க விளைவு
 Comment[tr]=Saydam Temizleme Sayfa Efekti
 Comment[uk]=Ефект ковзного витирання сторінки
 Comment[wa]=Efet d' pådje schover l' diya evoye
-Comment[x-test]=xxSlide Wipe Page Effectxx
 Comment[zh_TW]=滑動掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service

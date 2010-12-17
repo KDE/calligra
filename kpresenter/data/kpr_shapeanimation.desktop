@@ -4,6 +4,7 @@ X-KDE-ServiceType=KPresenter/ShapeAnimation
 Comment=Shape animation plugin for KPresenter
 Comment[bg]=Приставка за анимация в KPresenter
 Comment[ca]=Connector d'animació de formes per al KPresenter
+Comment[ca@valencia]=Connector d'animació de formes per al KPresenter
 Comment[da]=Form-animationsplugin til KPresenter
 Comment[de]=Objektanimationsmodul für KPresenter
 Comment[el]=Πρόσθετο κίνησης σχήματος για το KPresenter
@@ -30,7 +31,6 @@ Comment[sv]=Insticksprogram med animeringsåtgärderför KPresenter
 Comment[tr]=KPresenter için hareketli şekil eklentisi
 Comment[uk]=Додаток анімації форм для KPresenter
 Comment[wa]=Tchôke-divins d' animåcions de fômes po KPresenter
-Comment[x-test]=xxShape animation plugin for KPresenterxx
 Comment[zh_CN]=KPresenter 形状动画插件
 Comment[zh_TW]=KPresenter 元件動畫外掛程式
 [PropertyDef::X-KPresenter-Version]

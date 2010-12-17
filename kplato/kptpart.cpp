@@ -32,13 +32,13 @@
 #include "kptcommand.h"
 #include "kplatosettings.h"
 #include "kpttask.h"
+#include "KPlatoXmlLoader.h"
 
 //#include "KDGanttViewTaskLink.h"
 
 #include <KoZoomHandler.h>
 #include <KoStore.h>
 #include <KoXmlReader.h>
-#include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoOdfReadStore.h>
 #include <KoUpdater.h>
@@ -197,17 +197,38 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
         kError() << "No mime type specified!";
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
-    } else if ( value != "application/x-vnd.kde.kplato" ) {
+    }
+    if ( value == "application/x-vnd.kde.kplato" ) {
+        if (updater) {
+            updater->setProgress(5);
+        }
+        m_xmlLoader.setMimetype( value );
+        QString message;
+        KPlatoXmlLoader loader( m_xmlLoader, m_config );
+        bool ok = loader.load( plan );
+        if ( ok ) {
+            setProject( &(m_xmlLoader.project()) );
+            setModified( false );
+        } else {
+            setErrorMessage( loader.errorMessage() );
+        }
+        if (updater) {
+            updater->setProgress(100); // the rest is only processing, not loading
+        }
+        emit changed();
+        return ok;
+    }
+    if ( value != "application/x-vnd.kde.plan" ) {
         kError() << "Unknown mime type " << value;
-        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1", value ) );
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.plan, got %1", value ) );
         return false;
     }
     QString syntaxVersion = plan.attribute( "version", KPLATO_FILE_SYNTAX_VERSION );
     m_xmlLoader.setVersion( syntaxVersion );
     if ( syntaxVersion > KPLATO_FILE_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
-                      0, i18n( "This document was created with a newer version of KPlato (syntax version: %1)\n"
-                               "Opening it in this version of KPlato will lose some information.", syntaxVersion ),
+                      0, i18n( "This document was created with a newer version of Plan (syntax version: %1)\n"
+                               "Opening it in this version of Plan will lose some information.", syntaxVersion ),
                       i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
         if ( ret == KMessageBox::Cancel ) {
             setErrorMessage( "USER_CANCELED" );

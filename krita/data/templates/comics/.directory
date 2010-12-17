@@ -2,6 +2,7 @@
 Name=Comic Templates
 Name[ca]=Plantilles per a còmics
 Name[da]=Tegneserieskabeloner
+Name[de]=Comic-Vorlagen
 Name[en_GB]=Comic Templates
 Name[es]=Plantillas de cómic
 Name[et]=Koomiksimallid
@@ -14,6 +15,7 @@ Name[nl]=Stripverhaalsjabloon
 Name[pt]=Modelos de Banda Desenhada
 Name[pt_BR]=Modelos de quadrinhos
 Name[sv]=Seriemallar
+Name[uk]=Шаблони коміксів
 Name[wa]=Modeles di bindes d' imådjes
 Name[zh_TW]=漫畫樣本
 X-KDE-DefaultTab=true

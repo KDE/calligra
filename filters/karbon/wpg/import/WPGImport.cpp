@@ -41,7 +41,7 @@
 #include <iostream>
 
 K_PLUGIN_FACTORY(WPGImportFactory, registerPlugin<WPGImport>();)
-K_EXPORT_PLUGIN(WPGImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(WPGImportFactory("calligrafilters"))
 
 WPGImport::WPGImport(QObject* parent, const QVariantList&)
         : KoFilter(parent)

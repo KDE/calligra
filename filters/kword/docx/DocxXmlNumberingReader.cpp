@@ -125,6 +125,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_abstractNum()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(lvl)
+            SKIP_UNKNOWN
         }
     }
 
@@ -179,6 +180,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
             else if (qualifiedName() == QLatin1String("w:rPr")) {
                 TRY_READ(rPr_numbering)
             }
+            SKIP_UNKNOWN
         }
     }
 
@@ -214,6 +216,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numPicBullet()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(pict)
+            SKIP_UNKNOWN
         }
     }
 
@@ -244,6 +247,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_numbering()
             TRY_READ_IF(abstractNum)
             ELSE_TRY_READ_IF(numPicBullet)
             ELSE_TRY_READ_IF(num)
+            SKIP_UNKNOWN
         }
     }
 
@@ -411,6 +415,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_rPr_numbering()
             else if (qualifiedName() == QLatin1String("w:color")) {
                 TRY_READ(color_numbering)
             }
+            SKIP_UNKNOWN
         }
     }
 
@@ -438,6 +443,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_pPr_numbering()
             if (qualifiedName() == QLatin1String("w:ind")) {
                 TRY_READ(ind_numbering)
             }
+            SKIP_UNKNOWN
         }
     }
 

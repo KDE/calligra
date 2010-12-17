@@ -183,6 +183,7 @@ KoFilter::ConversionStatus DocxXmlFontTableReader::read_font()
         if (isStartElement()) {
             TRY_READ_IF(family)
             ELSE_TRY_READ_IF(pitch)
+            SKIP_UNKNOWN
 //! @todo add ELSE_WRONG_FORMAT
         }
     }

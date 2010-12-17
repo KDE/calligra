@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Exploding Page
 Name[ca]=Explosió de pàgina
+Name[ca@valencia]=Explosió de pàgina
 Name[da]=Eksploderende side
 Name[de]=Explodierende Seite
 Name[el]=Έκρηξη σελίδας
@@ -26,10 +27,10 @@ Name[ta]=வெளியாகும் பக்கம்
 Name[tr]=Patlayan Sayfa
 Name[uk]=Вибух сторінки
 Name[wa]=Esplôzer l' pådje
-Name[x-test]=xxExploding Pagexx
 Name[zh_TW]=爆炸頁面
 Comment=Exploding Page Page Effect
 Comment[ca]=Efecte d'explosió de la pàgina
+Comment[ca@valencia]=Efecte d'explosió de la pàgina
 Comment[da]=Eksploderende side-sideeffekt
 Comment[de]=Seiteneffekt mit explodierender Seite
 Comment[el]=Εφέ σελίδας έκρηξη
@@ -55,7 +56,6 @@ Comment[ta]=வெளியாகும் பக்கத்தின் பக
 Comment[tr]=Patlayan Sayfa Efekti
 Comment[uk]=Ефект вибуху сторінки
 Comment[wa]=Efet d' pådje esplôzer l' pådje
-Comment[x-test]=xxExploding Page Page Effectxx
 Comment[zh_TW]=爆炸頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service

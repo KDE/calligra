@@ -2,6 +2,7 @@
 Name=Spray
 Name[bg]=Спрей
 Name[ca]=Esprai
+Name[ca@valencia]=Esprai
 Name[cs]=Sprej
 Name[da]=Spray
 Name[de]=Sprühen
@@ -22,6 +23,7 @@ Name[pt_BR]=Spray
 Name[sl]=Razpršilo
 Name[sv]=Sprej
 Name[tr]=Püskürtme aracı
+Name[uk]=Аерограф
 Name[wa]=Sipritchoûle
 Name[zh_TW]=噴霧
 X-KDE-ServiceTypes=Krita/Paintop

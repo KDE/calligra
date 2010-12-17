@@ -67,9 +67,9 @@ if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
-if(SHOULD_BUILD_KIVIO)
-    #macro_optional_add_subdirectory(kivio)
-endif(SHOULD_BUILD_KIVIO)
+if(SHOULD_BUILD_FLOW)
+    #macro_optional_add_subdirectory(flow)
+endif(SHOULD_BUILD_FLOW)
 
 if(SHOULD_BUILD_KPLATO)
     macro_optional_add_subdirectory(kplato)

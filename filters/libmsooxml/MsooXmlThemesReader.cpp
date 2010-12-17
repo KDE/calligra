@@ -115,7 +115,7 @@ DrawingMLColorSchemeSystemItem::DrawingMLColorSchemeSystemItem()
 
 QColor DrawingMLColorSchemeSystemItem::value() const
 {
-    
+
     if (lastColor.isValid()) {
         return lastColor;
     }
@@ -123,19 +123,13 @@ QColor DrawingMLColorSchemeSystemItem::value() const
     if (   systemColor == QLatin1String("windowText")
         || systemColor == QLatin1String("menuText"))
     {
-//         if (!spreadsheetMode) {
-            return QPalette().color(QPalette::Active, QPalette::WindowText);
-//         }
-//         return QPalette().color(QPalette::Active, QPalette::Window);
+        return QPalette().color(QPalette::Active, QPalette::WindowText);
     }
     else if (    systemColor == QLatin1String("window")
               || systemColor == QLatin1String("menu")
               || systemColor == QLatin1String("menuBar"))
     {
-//         if (!spreadsheetMode) {
-            return QPalette().color(QPalette::Active, QPalette::Window);
-//         }
-//         return QPalette().color(QPalette::Active, QPalette::WindowText);
+        return QPalette().color(QPalette::Active, QPalette::Window);
     }
     else if (systemColor == QLatin1String("highlightText")) {
         return QPalette().color(QPalette::Active, QPalette::HighlightedText);
@@ -820,6 +814,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fmtScheme()
         BREAK_IF_END_OF(CURRENT_EL);
         if (isStartElement()) {
             TRY_READ_IF(bgFillStyleLst)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -951,6 +946,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_fontScheme()
         if (isStartElement()) {
             TRY_READ_IF(majorFont)
             ELSE_TRY_READ_IF(minorFont)
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -981,6 +977,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_majorFont()
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.csTypeface = typeface;
             }
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE
@@ -1011,6 +1008,7 @@ KoFilter::ConversionStatus MsooXmlThemesReader::read_minorFont()
                 TRY_READ_ATTR_WITHOUT_NS(typeface)
                 m_context->theme->fontScheme.minorFonts.csTypeface = typeface;
             }
+            SKIP_UNKNOWN
         }
     }
     READ_EPILOGUE

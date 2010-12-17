@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=KFormDesigner/WidgetFactory
 Comment=Widget Factory Base
 Comment[ca]=Factoria base d'estris
+Comment[ca@valencia]=Factoria base d'estris
 Comment[cy]=Bâs Ffatri Celfigion
 Comment[da]=Widget Factory Base
 Comment[de]=Basis für die Erstellung von Bedienelementen
@@ -44,7 +45,6 @@ Comment[ta]=சாளர தொழிற்சாலை தளம்
 Comment[tr]=Widget Factory Base
 Comment[uk]=База фабрики віджетів
 Comment[wa]=Båze del fabrike d' ahesses
-Comment[x-test]=xxWidget Factory Basexx
 Comment[zh_CN]=基础组件工厂
 Comment[zh_TW]=視窗元件工廠基地
 

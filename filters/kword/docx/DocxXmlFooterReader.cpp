@@ -165,6 +165,7 @@ KoFilter::ConversionStatus DocxXmlFooterReader::read_ftr()
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            SKIP_UNKNOWN
         }
     }
 

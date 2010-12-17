@@ -77,7 +77,7 @@ static void printIndentation(QTextStream *stream, unsigned int indent)
 }
 
 K_PLUGIN_FACTORY(SvgExportFactory, registerPlugin<SvgExport>();)
-K_EXPORT_PLUGIN(SvgExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(SvgExportFactory("calligrafilters"))
 
 SvgExport::SvgExport(QObject*parent, const QVariantList&)
         : KoFilter(parent), m_indent(0), m_indent2(0)

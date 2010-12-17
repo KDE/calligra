@@ -33,7 +33,7 @@
 #include "pole.h"
 
 K_PLUGIN_FACTORY(StarWriterImportFactory, registerPlugin<StarWriterImport>();)
-K_EXPORT_PLUGIN(StarWriterImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(StarWriterImportFactory("calligrafilters"))
 
 // Get unsigned 24-bits integer at given offset
 static inline quint32 readU24(const QByteArray& array, quint32 p)

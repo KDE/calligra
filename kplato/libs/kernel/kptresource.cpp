@@ -559,6 +559,11 @@ void Resource::resolveRequiredResources( Project &project )
     m_requiredIds.clear();
 }
 
+void Resource::addRequiredId(const QString& id)
+{
+    m_requiredIds << id;
+}
+
 void Resource::setAccount( Account *account )
 {
     cost.account = account;
@@ -1141,6 +1146,14 @@ void Resource::setProject( Project *project )
         }
     }
     m_project = project;
+}
+
+void Resource::addExternalAppointment(const QString& id, Appointment* a)
+{
+    if ( m_externalAppointments.contains( id ) ) {
+        delete m_externalAppointments.take( id );
+    }
+    m_externalAppointments[ id ] = a;
 }
 
 void Resource::addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load )

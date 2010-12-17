@@ -30,7 +30,7 @@
 #include <applixgraphicimport.h>
 
 K_PLUGIN_FACTORY(APPLIXGRAPHICImportFactory, registerPlugin<APPLIXGRAPHICImport>();)
-K_EXPORT_PLUGIN(APPLIXGRAPHICImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(APPLIXGRAPHICImportFactory("calligrafilters"))
 
 int s_area = 30517;
 

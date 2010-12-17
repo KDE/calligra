@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=xBase
 Name[ca]=xBase
+Name[ca@valencia]=xBase
 Name[cs]=xBase
 Name[da]=xBase
 Name[de]=xBase
@@ -31,11 +32,11 @@ Name[tg]=xBase
 Name[tr]=xBase
 Name[uk]=xBase
 Name[wa]=xBase
-Name[x-test]=xxxBasexx
 Name[zh_CN]=xBase
 Name[zh_TW]=xBase
 Comment=xBase Migration Driver for Kexi
 Comment[ca]=Controlador de migració xBase per al Kexi
+Comment[ca@valencia]=Controlador de migració xBase per al Kexi
 Comment[da]=Migrationsdriver til xBase til Kexi
 Comment[de]=xBase-Migrationstreiber für Kexi
 Comment[el]=Οδηγός μεταφοράς xBase του Kexi
@@ -60,7 +61,6 @@ Comment[sv]=xBase-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için xBase Taşıma Sürücüsü
 Comment[uk]=Драйвер міграції xBase для Kexi
 Comment[wa]=Mineu d' migråcion d' xBase po Kexi
-Comment[x-test]=xxxBase Migration Driver for Kexixx
 Comment[zh_CN]=Kexi xBase 升迁驱动
 Comment[zh_TW]=Kexi 的 xBase 轉移驅動程式
 

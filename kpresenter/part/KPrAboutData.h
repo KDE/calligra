@@ -29,7 +29,7 @@ static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "stage", 0, ki18n("stage"),
+    KAboutData * aboutData=new KAboutData( "stage", 0, ki18n("Stage"),
                                            version, ki18n(description), KAboutData::License_LGPL,
                                            ki18n("(c) 1998-2010, The Stage Team"), KLocalizedString(),
                                            "http://www.calligra-suite.org/stage/");

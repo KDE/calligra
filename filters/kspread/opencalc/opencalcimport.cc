@@ -67,7 +67,7 @@
 using namespace KSpread;
 
 K_PLUGIN_FACTORY(OpenCalcImportFactory, registerPlugin<OpenCalcImport>();)
-K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","kofficefilters"))
+K_EXPORT_PLUGIN(OpenCalcImportFactory("kspreadopencalcimport","calligrafilters"))
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
         : isRange(false)
@@ -1391,6 +1391,7 @@ void OpenCalcImport::loadOasisAreaName(const KoXmlElement&body)
 
 void OpenCalcImport::loadOasisCellValidation(const KoXmlElement&body, const ValueParser *parser)
 {
+    Q_UNUSED(parser)
     KoXmlNode validation = KoXml::namedItemNS(body, ooNS::table, "content-validations");
     if (!validation.isNull()) {
         KoXmlElement element;
@@ -2196,7 +2197,6 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
 
 void OpenCalcImport::loadOasisValidationValue(Validity validity, const QStringList &listVal, const ValueParser *parser)
 {
-    bool ok = false;
     kDebug(30518) << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
 
     validity.setMinimumValue(parser->parse(listVal[0]));

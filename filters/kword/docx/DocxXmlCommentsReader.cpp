@@ -108,7 +108,7 @@ KoFilter::ConversionStatus DocxXmlCommentReader::read(MSOOXML::MsooXmlReaderCont
 /*!
 
  Parent elements:
- - root element of Wordprocessing Header part
+ - [done] root element of Wordprocessing Header part
 
  Child elements:
  - [done] comment (Comment Content)
@@ -122,6 +122,7 @@ KoFilter::ConversionStatus DocxXmlCommentReader::read_comments()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(comment)
+            ELSE_WRONG_FORMAT
         }
     }
 
@@ -207,6 +208,7 @@ KoFilter::ConversionStatus DocxXmlCommentReader::read_comment()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(p)
+            SKIP_UNKNOWN
         }
     }
 

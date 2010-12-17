@@ -28,7 +28,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(APPLIXWORDImportFactory, registerPlugin<APPLIXWORDImport>();)
-K_EXPORT_PLUGIN(APPLIXWORDImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(APPLIXWORDImportFactory("calligrafilters"))
 
 
 /******************************************************************************

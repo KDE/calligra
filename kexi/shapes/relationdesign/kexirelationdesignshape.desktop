@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Kexi Relation Design Shape
 Name[ca]=Forma de disseny de relació del Kexi
+Name[ca@valencia]=Forma de disseny de relació del Kexi
 Name[da]=Kexi form til relationsdesign
 Name[de]=Kexi-Beziehungsentwurf-Objekt
 Name[el]=Σχήμα σχεδιασμού συσχέτισης Kexi
@@ -20,7 +21,6 @@ Name[sv]=Kexi-relationskonstruktionsform
 Name[tr]=Kexi İlişki Tasarımı Şekli
 Name[uk]=Форма реляційного компонування Kexi
 Name[wa]=Fôme d' atuzlaedje des loyaedjes di Kexi
-Name[x-test]=xxKexi Relation Design Shapexx
 Name[zh_CN]=Kexi 关系设计形状
 Name[zh_TW]=Kexi 關係設計元件
 ServiceTypes=KOffice/Flake

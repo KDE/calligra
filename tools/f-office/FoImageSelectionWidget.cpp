@@ -38,6 +38,7 @@
 
 FoImageSelectionWidget::FoImageSelectionWidget(QWidget *parent)
 {
+    Q_UNUSED(parent)
 }
 
 KoShape *FoImageSelectionWidget::selectImageShape(KoResourceManager *documentResources, QWidget *parent)

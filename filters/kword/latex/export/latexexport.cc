@@ -31,7 +31,7 @@
 #include "kwordlatexexportdia.h"
 
 K_PLUGIN_FACTORY(LATEXExportFactory, registerPlugin<LATEXExport>();)
-K_EXPORT_PLUGIN(LATEXExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(LATEXExportFactory("calligrafilters"))
 
 
 LATEXExport::LATEXExport(QObject* parent, const QVariantList&) :

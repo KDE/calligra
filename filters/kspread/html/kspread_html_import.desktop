@@ -2,6 +2,7 @@
 Type=Service
 Name=HTML Import Filter for KSpread
 Name[ca]=Filtre d'importació HTML per al KSpread
+Name[ca@valencia]=Filtre d'importació HTML per al KSpread
 Name[da]=HTML-importfilter til KSpread
 Name[de]=KSpread HTML-Importfilter
 Name[en_GB]=HTML Import Filter for KSpread
@@ -20,7 +21,6 @@ Name[ru]=Фильтр импорта таблиц KSpread в HTML
 Name[sv]=HTML-importfilter för Kspread
 Name[uk]=Фільтр імпорту HTML для KSpread
 Name[wa]=Passete d' abagaedje HTML po KSpread
-Name[x-test]=xxHTML Import Filter for KSpreadxx
 Name[zh_CN]=KSpread 的 HTML 导入过滤器
 Name[zh_TW]=KSpread 的 HTML 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.spreadsheet
