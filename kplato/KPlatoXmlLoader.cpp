@@ -1093,6 +1093,13 @@ bool KPlatoXmlLoader::load( Document *document, const KoXmlElement &element, XML
     document->setType( ( Document::Type )( element.attribute( "type" ).toInt() ) );
     document->setStatus( element.attribute( "status" ) );
     document->setSendAs( ( Document::SendAs )( element.attribute( "sendas" ).toInt() ) );
+
+
+    return true; // FIXME What do we really need to return here?
+
+    #ifdef __GNUC__
+        #warning bool KPlatoXmlLoader::load() must return a bool that makes sense
+    #endif
 }
 
 bool KPlatoXmlLoader::load( Estimate* estimate, const KoXmlElement& element, XMLLoaderObject& status )
